@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://prefab/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://sprite/role/role7.png" type="Texture" id=2]
+[ext_resource path="res://src/RoomManager.cs" type="Script" id=3]
+[ext_resource path="res://prefab/Cursor.tscn" type="PackedScene" id=4]
+[ext_resource path="res://sprite/tile/DungeonTileset.png" type="Texture" id=5]
+[ext_resource path="res://sprite/tile/DungeonTileset2.png" type="Texture" id=6]
+
+[node name="Room" type="Node2D"]
+script = ExtResource( 3 )
+MouseCursor = ExtResource( 4 )
+UIPath = NodePath("")
+
+[node name="DungeonTileset" type="Sprite" parent="."]
+position = Vector2( 271, 155 )
+texture = ExtResource( 5 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 196, 128 )
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 196, 128 )
+collision_layer = 1
+collision_mask = 1
+Texture = ExtResource( 2 )
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Player"]
+remote_path = NodePath("../../Camera2D")
+
+[node name="DungeonTileset2" type="Sprite" parent="."]
+position = Vector2( 38, 144 )
+texture = ExtResource( 6 )

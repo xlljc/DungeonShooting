@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://prefab/Role.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/role/Player.cs" type="Script" id=2]
+[ext_resource path="res://sprite/role/role9.png" type="Texture" id=3]
+[ext_resource path="res://prefab/Gun.tscn" type="PackedScene" id=4]
+
+[node name="Player" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+Texture = ExtResource( 3 )
+GunPrefab = ExtResource( 4 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+frame = 2
