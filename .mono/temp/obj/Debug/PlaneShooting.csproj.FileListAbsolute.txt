@@ -1,9 +1,0 @@
-D:\GameProject\PlaneShooting\.mono\temp\bin\Debug\PlaneShooting.dll
-D:\GameProject\PlaneShooting\.mono\temp\bin\Debug\PlaneShooting.pdb
-D:\GameProject\PlaneShooting\.mono\temp\obj\Debug\PlaneShooting.csproj.AssemblyReference.cache
-D:\GameProject\PlaneShooting\.mono\temp\obj\Debug\PlaneShooting.GeneratedMSBuildEditorConfig.editorconfig
-D:\GameProject\PlaneShooting\.mono\temp\obj\Debug\PlaneShooting.AssemblyInfoInputs.cache
-D:\GameProject\PlaneShooting\.mono\temp\obj\Debug\PlaneShooting.AssemblyInfo.cs
-D:\GameProject\PlaneShooting\.mono\temp\obj\Debug\PlaneShooting.csproj.CoreCompileInputs.cache
-D:\GameProject\PlaneShooting\.mono\temp\obj\Debug\PlaneShooting.dll
-D:\GameProject\PlaneShooting\.mono\temp\obj\Debug\PlaneShooting.pdb

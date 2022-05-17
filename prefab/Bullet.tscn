@@ -6,7 +6,7 @@
 _data = [ Vector2( 0, 0.781588 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="Gradient" id=2]
-colors = PoolColorArray( 1, 1, 1, 0.196078, 1, 1, 1, 0.588235 )
+colors = PoolColorArray( 1, 1, 1, 0.313726, 1, 1, 1, 0.784314 )
 
 [node name="Line2D" type="Line2D"]
 points = PoolVector2Array( 0, 0, 100, 0 )

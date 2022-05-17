@@ -21,14 +21,6 @@ public class Cursor : Node2D
         rb = GetNode<Sprite>("RB");
     }
 
-    public override void _Input(InputEvent @event)
-    {
-        if (@event is InputEventMouse eve)
-        {
-            Position = eve.Position;
-        }
-    }
-
     public override void _Process(float delta)
     {
         if (TargetGun != null)
@@ -39,6 +31,7 @@ public class Cursor : Node2D
         {
             SetScope(0);
         }
+        SetCursorPos();
     }
 
     private void SetScope(float scope)
@@ -56,5 +49,10 @@ public class Cursor : Node2D
         lb.Position = new Vector2(-scope, scope);
         rt.Position = new Vector2(scope, -scope);
         rb.Position = new Vector2(scope, scope);
+    }
+
+    private void SetCursorPos()
+    {
+        Position = GetGlobalMousePosition();
     }
 }
