@@ -1,7 +1,10 @@
 using Godot;
 using System;
 
-public class Gun : Area2D
+/// <summary>
+/// 枪的基类
+/// </summary>
+public class Gun : Node2D
 {
     /// <summary>
     /// 开火回调事件
@@ -50,11 +53,24 @@ public class Gun : Area2D
 
     //是否按下
     private bool triggerFlag = false;
+    //扳机计时器
+    private float triggerTimer = 0;
+    //开火前延时时间
+    private float delayedTime = 0;
+    //开火间隙时间
     private float fireInterval = 0;
+    //开火枪口角度
     private float fireAngle = 0;
+    //攻击冷却计时
     private float attackTimer = 0;
+    //攻击状态
     private bool attackFlag = false;
-    private int downFrame = 0;
+    //按下的时间
+    private float downTimer = 0;
+    //松开的时间
+    private float upTimer = 0;
+    //连发次数
+    private float continuousCount = 0;
     //子弹
     private PackedScene bulletPacked;
 
@@ -67,21 +83,55 @@ public class Gun : Area2D
 
     public override void _Process(float delta)
     {
-        downFrame = triggerFlag ? downFrame : 0;
+        if (triggerFlag)
+        {
+            if (upTimer > 0) //第一帧按下扳机
+            {
+                upTimer = 0;
+                DownTrigger();
+            }
+            downTimer += delta;
+        }
+        else
+        {
+            if (downTimer > 0) //第一帧松开扳机
+            {
+                downTimer = 0;
+                UpTriggern();
+            }
+            upTimer += delta;
+        }
+
         // 攻击的计时器
         if (attackTimer > 0)
         {
             attackTimer -= delta;
+            if (attackTimer < 0)
+            {
+                delayedTime += attackTimer;
+                attackTimer = 0;
+            }
         }
-        else if (!attackFlag && attackTimer < 0)
+        else if (delayedTime > 0)
         {
-            attackTimer = 0;
+            delayedTime -= delta;
+            if (attackTimer < 0)
+            {
+                delayedTime = 0;
+            }
+        }
+
+        //连发判断
+        if (continuousCount > 0 && delayedTime <= 0 && attackTimer <= 0)
+        {
+            TriggernFire();
         }
 
         if (!attackFlag && attackTimer <= 0)
         {
             CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta, Attribute.StartScatteringRange);
         }
+        triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
         triggerFlag = false;
         attackFlag = false;
 
@@ -115,33 +165,70 @@ public class Gun : Area2D
     public void Trigger()
     {
         //是否第一帧按下
-        var justDown = downFrame++ == 0;
+        var justDown = downTimer == 0;
 
-        if (Attribute.ContinuousShoot || justDown)
+        if ((Attribute.ContinuousShoot || (justDown && triggerTimer <= 0)) && continuousCount <= 0)
         {
-            if (attackTimer <= 0)
+            if (justDown)
             {
-                fireInterval = 60 / Attribute.FiringSpeed;
-                attackTimer += fireInterval;
-                Fire();
-                //当前的散射半径
-                CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue, Attribute.FinalScatteringRange);
-                //枪的旋转角度
-                RotationDegrees -= Attribute.UpliftAngle;
-                fireAngle = RotationDegrees;
-                //枪身位置
-                Position = new Vector2(Mathf.Max(-Attribute.MaxBacklash, Position.x - MathUtils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash)), Position.y);
-
-                if (FireEvent != null)
+                //开火前延时
+                delayedTime = Attribute.DelayedTime;
+                //扳机按下间隔
+                triggerTimer += Attribute.TriggerInterval;
+                //连发数量
+                if (!Attribute.ContinuousShoot)
                 {
-                    FireEvent(this);
+                    continuousCount = Attribute.MinContinuousCount;
                 }
+            }
+            if (delayedTime <= 0 && attackTimer <= 0)
+            {
+                TriggernFire();
             }
             attackFlag = true;
         }
         triggerFlag = true;
     }
 
+    /// <summary>
+    /// 刚按下扳机
+    /// </summary>
+    private void DownTrigger()
+    {
+        
+    }
+
+    /// <summary>
+    /// 刚松开扳机
+    /// </summary>
+    private void UpTriggern()
+    {
+
+    }
+
+    private void TriggernFire()
+    {
+        continuousCount = continuousCount > 0 ? continuousCount - 1 : 0;
+        fireInterval = 60 / Attribute.FiringSpeed;
+        attackTimer += fireInterval;
+        Fire();
+        //当前的散射半径
+        CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue, Attribute.FinalScatteringRange);
+        //枪的旋转角度
+        RotationDegrees -= Attribute.UpliftAngle;
+        fireAngle = RotationDegrees;
+        //枪身位置
+        Position = new Vector2(Mathf.Max(-Attribute.MaxBacklash, Position.x - MathUtils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash)), Position.y);
+
+        if (FireEvent != null)
+        {
+            FireEvent(this);
+        }
+    }
+
+    /// <summary>
+    /// 开火
+    /// </summary>
     protected virtual void Fire()
     {
         //开火发射的子弹数量
@@ -156,15 +243,23 @@ public class Gun : Area2D
             Rotation = (float)GD.RandRange(-angle, angle);
 
             //创建子弹
-            var bullet = bulletPacked.Instance<Bullet>();
+            var bullet = CreateBullet<HighSpeedBullet>(bulletPacked);
+            //位置
             bullet.GlobalPosition = FirePoint.GlobalPosition;
+            //角度
             bullet.Rotation = (FirePoint.GlobalPosition - OriginPoint.GlobalPosition).Angle();
             GetTree().CurrentScene.AddChild(bullet);
-
             //飞行距离
             var distance = MathUtils.RandRange(Attribute.MinDistance, Attribute.MaxDistance);
             //初始化子弹数据
-            bullet.Init(TargetCamp, distance, Colors.White);
+            bullet.InitData(distance, Colors.White);
         }
+    }
+
+    public T CreateBullet<T>(PackedScene bulletPack) where T : Bullet
+    {
+        T bullet = bulletPack.Instance<T>();
+        bullet.Init(TargetCamp, this, null);
+        return bullet;
     }
 }

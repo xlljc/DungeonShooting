@@ -26,7 +26,7 @@ public class GunAttribute
     /// </summary>
     public int MaxContinuousCount = 3;
     /// <summary>
-    /// 放开扳机后需要多少时间才能再次按下扳机
+    /// 按下一次扳机后需要多长时间才能再次按下
     /// </summary>
     public float TriggerInterval = 0;
     /// <summary>

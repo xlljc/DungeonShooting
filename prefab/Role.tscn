@@ -20,22 +20,6 @@ region = Rect2( 32, 24, 16, 24 )
 atlas = ExtResource( 1 )
 region = Rect2( 48, 24, 16, 24 )
 
-[sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=22]
-atlas = ExtResource( 1 )
-region = Rect2( 16, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 1 )
-region = Rect2( 32, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 1 )
-region = Rect2( 48, 48, 16, 24 )
-
 [sub_resource type="AtlasTexture" id=25]
 atlas = ExtResource( 1 )
 region = Rect2( 48, 48, 16, 24 )
@@ -52,6 +36,22 @@ region = Rect2( 16, 48, 16, 24 )
 atlas = ExtResource( 1 )
 region = Rect2( 0, 48, 16, 24 )
 
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 48, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 48, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 48, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 48, 16, 24 )
+
 [sub_resource type="SpriteFrames" id=6]
 animations = [ {
 "frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ) ],
@@ -59,14 +59,14 @@ animations = [ {
 "name": "idle",
 "speed": 7.0
 }, {
-"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
-"loop": true,
-"name": "run",
-"speed": 10.0
-}, {
 "frames": [ SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ) ],
 "loop": true,
 "name": "reverseRun",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
+"loop": true,
+"name": "run",
 "speed": 10.0
 } ]
 
@@ -74,7 +74,7 @@ animations = [ {
 extents = Vector2( 5, 7.5 )
 
 [sub_resource type="RectangleShape2D" id=16]
-extents = Vector2( 5, 1.5 )
+extents = Vector2( 5, 4.5 )
 
 [node name="Role" type="KinematicBody2D"]
 collision_layer = 0
@@ -92,11 +92,12 @@ playing = true
 [node name="HitArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea"]
+visible = false
 position = Vector2( 0, -7.5 )
 shape = SubResource( 29 )
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -1.5 )
+position = Vector2( 0, -4.5 )
 shape = SubResource( 16 )
 
 [node name="MountPoint" type="Position2D" parent="."]

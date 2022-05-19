@@ -13,24 +13,24 @@ region_rect = Rect2( 3, 3, 2, 2 )
 
 [node name="LT" type="Sprite" parent="."]
 texture = ExtResource( 1 )
-offset = Vector2( -1.5, -1.5 )
+offset = Vector2( -0.5, -0.5 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 3, 3 )
 
 [node name="LB" type="Sprite" parent="."]
 texture = ExtResource( 1 )
-offset = Vector2( -1.5, 1.5 )
+offset = Vector2( -0.5, 0.5 )
 region_enabled = true
 region_rect = Rect2( 0, 5, 3, 3 )
 
 [node name="RT" type="Sprite" parent="."]
 texture = ExtResource( 1 )
-offset = Vector2( 1.5, -1.5 )
+offset = Vector2( 0.5, -0.5 )
 region_enabled = true
 region_rect = Rect2( 5, 0, 3, 3 )
 
 [node name="RB" type="Sprite" parent="."]
 texture = ExtResource( 1 )
-offset = Vector2( 1.5, 1.5 )
+offset = Vector2( 0.5, 0.5 )
 region_enabled = true
 region_rect = Rect2( 5, 5, 3, 3 )

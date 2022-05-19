@@ -30,23 +30,29 @@ public class Player : Role
 
         var attr = new GunAttribute();
         attr.FiringSpeed = 420;
-        attr.StartScatteringRange = 3;
-        attr.FinalScatteringRange = 30;
-        attr.ScatteringRangeAddValue = 15;
+        attr.StartScatteringRange = 0;
+        attr.FinalScatteringRange = 10;
+        attr.ScatteringRangeAddValue = 5;
         attr.ScatteringRangeBackSpeed = 20;
         //连发
         attr.ContinuousShoot = true;
+        //扳机检测间隔
+        attr.TriggerInterval = 1f;
+        //连发数量
+        attr.MinContinuousCount = 3;
+        //开火前延时
+        attr.DelayedTime = 0f;
         //攻击距离
         attr.MinDistance = 500;
         attr.MaxDistance = 600;
         //发射子弹数量
         attr.MinFireBulletCount = 1;
         attr.MaxFireBulletCount = 1;
-        //
+        //抬起角度
         attr.UpliftAngle = 10;
-
-        attr.BarrelLength = 10;
-        attr.Sprite = "res://resource/sprite/gun/gun3.png";
+        //枪身长度
+        attr.BarrelLength = 15;
+        attr.Sprite = "res://resource/sprite/gun/gun4.png";
         gun.Init(attr);
         gun.FireEvent += FireEvent_Func;
 
