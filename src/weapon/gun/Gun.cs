@@ -71,6 +71,7 @@ public class Gun : Node2D
     private float upTimer = 0;
     //连发次数
     private float continuousCount = 0;
+    private bool continuousShootFlag = false;
     //子弹
     private PackedScene bulletPacked;
 
@@ -166,19 +167,49 @@ public class Gun : Node2D
     {
         //是否第一帧按下
         var justDown = downTimer == 0;
+        //是否能发射
+        var flag = false;
+        if (continuousCount <= 0) //不能处于连发状态下
+        {
+            if (Attribute.ContinuousShoot) //自动射击
+            {
+                if (triggerTimer > 0)
+                {
+                    if (continuousShootFlag)
+                    {
+                        flag = true;
+                    }
+                }
+                else
+                {
+                    flag = true;
+                    if (delayedTime <= 0 && attackTimer <= 0)
+                    {
+                        continuousShootFlag = true;
+                    }
+                }
+            }
+            else //半自动
+            {
+                if (justDown && triggerTimer <= 0)
+                {
+                    flag = true;
+                }
+            }
+        }
 
-        if ((Attribute.ContinuousShoot || (justDown && triggerTimer <= 0)) && continuousCount <= 0)
+        if (flag)
         {
             if (justDown)
             {
                 //开火前延时
                 delayedTime = Attribute.DelayedTime;
                 //扳机按下间隔
-                triggerTimer += Attribute.TriggerInterval;
+                triggerTimer = Attribute.TriggerInterval;
                 //连发数量
                 if (!Attribute.ContinuousShoot)
                 {
-                    continuousCount = Attribute.MinContinuousCount;
+                    continuousCount = MathUtils.RandRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
                 }
             }
             if (delayedTime <= 0 && attackTimer <= 0)
@@ -195,7 +226,7 @@ public class Gun : Node2D
     /// </summary>
     private void DownTrigger()
     {
-        
+
     }
 
     /// <summary>
@@ -203,7 +234,7 @@ public class Gun : Node2D
     /// </summary>
     private void UpTriggern()
     {
-
+        continuousShootFlag = false;
     }
 
     private void TriggernFire()
