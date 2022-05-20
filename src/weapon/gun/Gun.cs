@@ -45,7 +45,6 @@ public class Gun : Node2D
     /// 原点
     /// </summary>
     public Position2D OriginPoint { get; private set; }
-
     /// <summary>
     /// 枪的当前散射半径
     /// </summary>

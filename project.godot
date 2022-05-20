@@ -24,6 +24,10 @@ window/dpi/allow_hidpi=true
 window/stretch/aspect="keep_width"
 window/stretch/shrink=4.0
 
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/vnen.tiled_importer/plugin.cfg" )
+
 [importer_defaults]
 
 texture={
@@ -115,3 +119,7 @@ common/enable_pause_aware_picking=true
 [rendering]
 
 environment/default_environment="res://default_env.tres"
+
+[tiled_importer]
+
+enable_json_format=true
