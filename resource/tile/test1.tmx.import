@@ -1,0 +1,22 @@
+[remap]
+
+importer="vnen.tiled_importer"
+type="PackedScene"
+path="res://.import/test1.tmx-e3ce99491fb83c74437325baf2d67b64.scn"
+
+[deps]
+
+source_file="res://resource/tile/test1.tmx"
+dest_files=[ "res://.import/test1.tmx-e3ce99491fb83c74437325baf2d67b64.scn" ]
+
+[params]
+
+custom_properties=true
+tile_metadata=false
+uv_clip=true
+image_flags=0
+collision_layer=1
+embed_internal_images=true
+save_tiled_properties=false
+add_background=true
+post_import_script=""
