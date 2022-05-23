@@ -19,15 +19,18 @@ public class RoomManager : Node2D
 
     public override void _EnterTree()
     {
-        Current = this;
-        Input.SetMouseMode(Input.MouseMode.Hidden);
-        // 初始化鼠标
-        Cursor = MouseCursor.Instance<Cursor>();
-        AddChild(Cursor);
+        // Current = this;
+        // Input.SetMouseMode(Input.MouseMode.Hidden);
+        // // 初始化鼠标
+        // Cursor = MouseCursor.Instance<Cursor>();
+        // AddChild(Cursor);
     }
 
     public override void _Ready()
     {
-
+        // Navigation2D navigation2D;
+        // navigation2D.GetSimplePath()
+        // TileMap tm = GetNode<TileMap>("图块层 1");
+        // tm.TileSet.gettile;
     }
 }

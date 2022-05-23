@@ -5,10 +5,10 @@
   <objectgroup draworder="index" id="3">
    <object id="25" x="0" y="0" width="16" height="16"/>
   </objectgroup>
-  <animation>
-   <frame tileid="138" duration="200"/>
-   <frame tileid="139" duration="200"/>
-   <frame tileid="140" duration="200"/>
-  </animation>
+ </tile>
+ <tile id="16">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="navigation" x="0" y="0" width="16" height="16"/>
+  </objectgroup>
  </tile>
 </tileset>

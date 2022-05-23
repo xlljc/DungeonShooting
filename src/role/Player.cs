@@ -29,7 +29,7 @@ public class Player : Role
         CurrGun = gun;
 
         var attr = new GunAttribute();
-        attr.FiringSpeed = 420;
+        attr.FiringSpeed = 600;
         attr.StartScatteringRange = 0;
         attr.FinalScatteringRange = 30;
         attr.ScatteringRangeAddValue = 5;
@@ -37,10 +37,10 @@ public class Player : Role
         //连发
         attr.ContinuousShoot = false;
         //扳机检测间隔
-        attr.TriggerInterval = 1f;
+        attr.TriggerInterval = 0.35f;
         //连发数量
-        attr.MinContinuousCount = 2;
-        attr.MaxContinuousCount = 5;
+        attr.MinContinuousCount = 3;
+        attr.MaxContinuousCount = 3;
         //开火前延时
         attr.DelayedTime = 0f;
         //攻击距离
@@ -48,7 +48,7 @@ public class Player : Role
         attr.MaxDistance = 600;
         //发射子弹数量
         attr.MinFireBulletCount = 1;
-        attr.MaxFireBulletCount = 3;
+        attr.MaxFireBulletCount = 1;
         //抬起角度
         attr.UpliftAngle = 10;
         //枪身长度
