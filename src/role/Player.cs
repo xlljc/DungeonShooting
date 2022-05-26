@@ -58,6 +58,7 @@ public class Player : Role
         gun.FireEvent += FireEvent_Func;
 
         RoomManager.Current.Cursor.TargetGun = gun;
+        //VisualServer.SetDefaultClearColor(new Color("1C1117"));
     }
 
     public override void _Process(float delta)
