@@ -1,0 +1,19 @@
+[remap]
+
+importer="vnen.tiled_tileset_importer"
+type="TileSet"
+path="res://.import/itch-io-DungeonTileset4.tsx-b6c599d7e258d91a298136a5a4002898.res"
+
+[deps]
+
+source_file="res://resource/map/itch-io-DungeonTileset4.tsx"
+dest_files=[ "res://.import/itch-io-DungeonTileset4.tsx-b6c599d7e258d91a298136a5a4002898.res" ]
+
+[params]
+
+custom_properties=true
+tile_metadata=false
+image_flags=3
+embed_internal_images=false
+save_tiled_properties=false
+post_import_script=""
