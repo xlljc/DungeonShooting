@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.8" tiledversion="1.8.5" name="itch-io-DungeonTileset4" tilewidth="16" tileheight="16" tilecount="192" columns="16">
  <image source="../sprite/package/itch-io-DungeonTileset4/16x16 dungeon ii wall reconfig v04 spritesheet.png" width="256" height="192"/>
+ <tile id="11">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="16"/>
+  </objectgroup>
+ </tile>
+ <tile id="13">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="16"/>
+  </objectgroup>
+ </tile>
  <tile id="17">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="16" height="12"/>
@@ -31,12 +41,12 @@
    <object id="1" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
- <tile id="38">
+ <tile id="43">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
- <tile id="40">
+ <tile id="45">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="16" height="16"/>
   </objectgroup>
@@ -52,16 +62,6 @@
   </objectgroup>
  </tile>
  <tile id="51">
-  <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="16"/>
-  </objectgroup>
- </tile>
- <tile id="69">
-  <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="16"/>
-  </objectgroup>
- </tile>
- <tile id="73">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="16" height="16"/>
   </objectgroup>
@@ -119,16 +119,16 @@
  <wangsets>
   <wangset name="wall" type="corner" tile="-1">
    <wangcolor name="wall" color="#ff0000" tile="-1" probability="1"/>
+   <wangtile tileid="11" wangid="0,1,0,0,0,1,0,1"/>
+   <wangtile tileid="13" wangid="0,1,0,1,0,0,0,1"/>
    <wangtile tileid="33" wangid="0,0,0,1,0,0,0,0"/>
    <wangtile tileid="34" wangid="0,0,0,1,0,1,0,0"/>
    <wangtile tileid="35" wangid="0,0,0,0,0,1,0,0"/>
-   <wangtile tileid="38" wangid="0,1,0,0,0,1,0,1"/>
-   <wangtile tileid="40" wangid="0,1,0,1,0,0,0,1"/>
+   <wangtile tileid="43" wangid="0,0,0,1,0,1,0,1"/>
+   <wangtile tileid="45" wangid="0,1,0,1,0,1,0,0"/>
    <wangtile tileid="49" wangid="0,1,0,1,0,0,0,0"/>
    <wangtile tileid="50" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="51" wangid="0,0,0,0,0,1,0,1"/>
-   <wangtile tileid="69" wangid="0,0,0,1,0,1,0,1"/>
-   <wangtile tileid="73" wangid="0,1,0,1,0,1,0,0"/>
    <wangtile tileid="97" wangid="0,1,0,0,0,0,0,0"/>
    <wangtile tileid="98" wangid="0,1,0,0,0,0,0,1"/>
    <wangtile tileid="99" wangid="0,0,0,0,0,0,0,1"/>

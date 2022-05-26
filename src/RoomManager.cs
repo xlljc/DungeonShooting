@@ -24,5 +24,10 @@ public class RoomManager : Node2D
         // 初始化鼠标
         Cursor = MouseCursor.Instance<Cursor>();
         AddChild(Cursor);
+
+        //初始化地图
+        var node = GetNode("MapRoot").GetChild(0).GetNode("Config");
+        Color color = (Color) node.GetMeta("ClearColor");
+        VisualServer.SetDefaultClearColor(color);
     }
 }

@@ -10,18 +10,18 @@ script = ExtResource( 3 )
 MouseCursor = ExtResource( 4 )
 UIPath = NodePath("")
 
-[node name="dungeon_test" parent="." instance=ExtResource( 2 )]
+[node name="MapRoot" type="Node2D" parent="."]
+
+[node name="dungeon_test" parent="MapRoot" instance=ExtResource( 2 )]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 196, 128 )
 current = true
-limit_left = 0
-limit_top = 0
-limit_right = 640
-limit_bottom = 640
+process_mode = 0
 drag_margin_h_enabled = true
 drag_margin_v_enabled = true
 smoothing_enabled = true
+smoothing_speed = 8.0
 editor_draw_limits = true
 editor_draw_drag_margin = true
 
