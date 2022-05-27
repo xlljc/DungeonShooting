@@ -92,7 +92,7 @@
 51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51
 </data>
  </layer>
- <objectgroup color="#000000" id="3" name="Config">
+ <objectgroup id="3" name="Config">
   <properties>
    <property name="ClearColor" type="color" value="#ff1c1117"/>
    <property name="Type" value="Area2D"/>

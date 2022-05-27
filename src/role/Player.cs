@@ -31,18 +31,18 @@ public class Player : Role
         var attr = new GunAttribute();
         attr.FiringSpeed = 600;
         attr.StartScatteringRange = 0;
-        attr.FinalScatteringRange = 30;
+        attr.FinalScatteringRange = 0;
         attr.ScatteringRangeAddValue = 5;
         attr.ScatteringRangeBackSpeed = 30;
         //连发
-        attr.ContinuousShoot = false;
+        attr.ContinuousShoot = true;
         //扳机检测间隔
-        attr.TriggerInterval = 0.35f;
+        attr.TriggerInterval = 0f;
         //连发数量
         attr.MinContinuousCount = 3;
         attr.MaxContinuousCount = 3;
         //开火前延时
-        attr.DelayedTime = 0f;
+        attr.DelayedTime = 0.5f;
         //攻击距离
         attr.MinDistance = 500;
         attr.MaxDistance = 600;
@@ -52,13 +52,12 @@ public class Player : Role
         //抬起角度
         attr.UpliftAngle = 10;
         //枪身长度
-        attr.BarrelLength = 15;
+        attr.FirePosition = new Vector2(15, 1.5f);
         attr.Sprite = "res://resource/sprite/gun/gun4.png";
         gun.Init(attr);
         gun.FireEvent += FireEvent_Func;
 
         RoomManager.Current.Cursor.TargetGun = gun;
-        //VisualServer.SetDefaultClearColor(new Color("1C1117"));
     }
 
     public override void _Process(float delta)

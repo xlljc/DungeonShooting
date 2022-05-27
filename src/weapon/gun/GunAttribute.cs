@@ -6,10 +6,6 @@ using Godot;
 public class GunAttribute
 {
     /// <summary>
-    /// 子弹对象
-    /// </summary>
-    public string Bullet = "res://prefab/Bullet.tscn";
-    /// <summary>
     /// 枪的图片
     /// </summary>
     public string Sprite = "res://resource/sprite/gun/gun1.png";
@@ -70,9 +66,13 @@ public class GunAttribute
     /// </summary>
     public float MinDistance = 800;
     /// <summary>
-    /// 枪管长度
+    /// 开火位置
     /// </summary>
-    public float BarrelLength = 11;
+    public Vector2 FirePosition = new Vector2(11, 0);
+    /// <summary>
+    /// 握把位置
+    /// </summary>
+    public Vector2 HoldPosition = new Vector2(4, -3);
     /// <summary>
     /// 重量
     /// </summary>
@@ -89,6 +89,10 @@ public class GunAttribute
     /// 开火后枪口上抬角度
     /// </summary>
     public float UpliftAngle = 30;
+    /// <summary>
+    /// 开火后枪口角度恢复速度倍数
+    /// </summary>
+    public float UpliftAngleRestore = 1;
 
     public GunAttribute() 
     {

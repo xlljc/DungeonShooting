@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://resource/sprite/gun/gun1.png" type="Texture" id=1]
-[ext_resource path="res://src/weapon/gun/Gun.cs" type="Script" id=2]
+[ext_resource path="res://src/weapon/gun/OrdinaryGun.cs" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9.5, 3.5 )
@@ -9,11 +9,10 @@ extents = Vector2( 9.5, 3.5 )
 [node name="Gun" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 1.49012e-08, -1.49012e-08 )
+[node name="GunSprite" type="Sprite" parent="."]
+position = Vector2( 4, -3 )
 scale = Vector2( 0.8, 0.8 )
 texture = ExtResource( 1 )
-offset = Vector2( 4, -3 )
 
 [node name="OriginPoint" type="Position2D" parent="."]
 position = Vector2( 0, -1.5 )

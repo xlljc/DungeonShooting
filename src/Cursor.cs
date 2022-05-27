@@ -34,6 +34,9 @@ public class Cursor : Node2D
         SetCursorPos();
     }
 
+    /// <summary>
+    /// 设置光标半径范围
+    /// </summary>
     private void SetScope(float scope)
     {
         if (TargetGun != null)
@@ -41,7 +44,7 @@ public class Cursor : Node2D
             var len = GlobalPosition.DistanceTo(TargetGun.GlobalPosition);
             if (TargetGun.Attribute != null)
             {
-                len = Mathf.Max(0, len - TargetGun.Attribute.BarrelLength);
+                len = Mathf.Max(0, len - TargetGun.Attribute.FirePosition.x);
             }
             scope = len / GameConfig.ScatteringDistance * scope;
         }

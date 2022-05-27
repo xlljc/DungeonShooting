@@ -4,7 +4,7 @@ using System;
 /// <summary>
 /// 枪的基类
 /// </summary>
-public class Gun : Node2D
+public abstract class Gun : Node2D
 {
     /// <summary>
     /// 开火回调事件
@@ -31,18 +31,18 @@ public class Gun : Node2D
     /// <summary>
     /// 枪的图片
     /// </summary>
-    public Sprite Sprite { get; private set; }
+    public Sprite GunSprite { get; private set; }
 
     /// <summary>
     /// 枪攻击的目标阵营
     /// </summary>
     public CampEnum TargetCamp { get; set; }
     /// <summary>
-    /// 开火点
+    /// 枪管的开火点
     /// </summary>
     public Position2D FirePoint { get; private set; }
     /// <summary>
-    /// 原点
+    /// 枪管的原点
     /// </summary>
     public Position2D OriginPoint { get; private set; }
     /// <summary>
@@ -71,12 +71,10 @@ public class Gun : Node2D
     //连发次数
     private float continuousCount = 0;
     private bool continuousShootFlag = false;
-    //子弹
-    private PackedScene bulletPacked;
 
     public override void _EnterTree()
     {
-        Sprite = GetNode<Sprite>("Sprite");
+        GunSprite = GetNode<Sprite>("GunSprite");
         FirePoint = GetNode<Position2D>("FirePoint");
         OriginPoint = GetNode<Position2D>("OriginPoint");
     }
@@ -112,7 +110,7 @@ public class Gun : Node2D
                 attackTimer = 0;
             }
         }
-        else if (delayedTime > 0)
+        else if (delayedTime > 0) //攻击延时
         {
             delayedTime -= delta;
             if (attackTimer < 0)
@@ -149,14 +147,22 @@ public class Gun : Node2D
 
     public void Init(GunAttribute attribute)
     {
+        if (_attribute != null)
+        {
+            throw new Exception("当前武器已经初始化过了!");
+        }
+
         Attribute = attribute;
         //更新图片
         var texture = ResourceLoader.Load<Texture>(attribute.Sprite);
-        Sprite.Texture = texture;
-        //子弹
-        bulletPacked = ResourceLoader.Load<PackedScene>(attribute.Bullet);
+        GunSprite.Texture = texture;
         //开火位置
-        FirePoint.Position = new Vector2(attribute.BarrelLength, FirePoint.Position.y);
+        FirePoint.Position = new Vector2(attribute.FirePosition.x, -attribute.FirePosition.y);
+        OriginPoint.Position = new Vector2(0, -attribute.FirePosition.y);
+        //握把位置
+        GunSprite.Position = attribute.HoldPosition;
+
+        Init();
     }
 
     /// <summary>
@@ -234,14 +240,38 @@ public class Gun : Node2D
     private void UpTriggern()
     {
         continuousShootFlag = false;
+        if (delayedTime > 0)
+        {
+            continuousCount = 0;
+        }
     }
 
+    /// <summary>
+    /// 触发开火
+    /// </summary>
     private void TriggernFire()
     {
         continuousCount = continuousCount > 0 ? continuousCount - 1 : 0;
         fireInterval = 60 / Attribute.FiringSpeed;
         attackTimer += fireInterval;
+        
+        //触发开火函数
         Fire();
+        
+        //开火发射的子弹数量
+        var bulletCount = MathUtils.RandRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
+        //枪口角度
+        var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
+
+        //创建子弹
+        for (int i = 0; i < bulletCount; i++)
+        {
+            //先算枪口方向
+            Rotation = (float)GD.RandRange(-angle, angle);
+            //发射子弹
+            ShootBullet();
+        }
+
         //当前的散射半径
         CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue, Attribute.FinalScatteringRange);
         //枪的旋转角度
@@ -257,39 +287,18 @@ public class Gun : Node2D
     }
 
     /// <summary>
-    /// 开火
+    /// 初始化时调用
     /// </summary>
-    protected virtual void Fire()
-    {
-        //开火发射的子弹数量
-        var bulletCount = MathUtils.RandRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
-        //枪口角度
-        var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
+    protected abstract void Init();
 
-        //创建子弹
-        for (int i = 0; i < bulletCount; i++)
-        {
-            //先算枪口方向
-            Rotation = (float)GD.RandRange(-angle, angle);
+    /// <summary>
+    /// 单次开火时调用的函数
+    /// </summary>
+    protected abstract void Fire();
 
-            //创建子弹
-            var bullet = CreateBullet<HighSpeedBullet>(bulletPacked);
-            //位置
-            bullet.GlobalPosition = FirePoint.GlobalPosition;
-            //角度
-            bullet.Rotation = (FirePoint.GlobalPosition - OriginPoint.GlobalPosition).Angle();
-            GetTree().CurrentScene.AddChild(bullet);
-            //飞行距离
-            var distance = MathUtils.RandRange(Attribute.MinDistance, Attribute.MaxDistance);
-            //初始化子弹数据
-            bullet.InitData(distance, Colors.White);
-        }
-    }
-
-    public T CreateBullet<T>(PackedScene bulletPack) where T : Bullet
-    {
-        T bullet = bulletPack.Instance<T>();
-        bullet.Init(TargetCamp, this, null);
-        return bullet;
-    }
+    /// <summary>
+    /// 发射子弹时调用的函数, 每发射一枚子弹调用一次,
+    /// 如果做霰弹枪效果, 一次开火发射5枚子弹, 则该函数调用5次
+    /// </summary>
+    protected abstract void ShootBullet();
 }
