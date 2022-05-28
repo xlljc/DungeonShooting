@@ -252,7 +252,7 @@ public abstract class Gun : Node2D
     private void TriggernFire()
     {
         continuousCount = continuousCount > 0 ? continuousCount - 1 : 0;
-        fireInterval = 60 / Attribute.FiringSpeed;
+        fireInterval = 60 / Attribute.StartFiringSpeed;
         attackTimer += fireInterval;
         
         //触发开火函数

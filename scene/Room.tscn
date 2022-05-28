@@ -18,12 +18,8 @@ UIPath = NodePath("")
 position = Vector2( 196, 128 )
 current = true
 process_mode = 0
-drag_margin_h_enabled = true
-drag_margin_v_enabled = true
 smoothing_enabled = true
 smoothing_speed = 8.0
-editor_draw_limits = true
-editor_draw_drag_margin = true
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 196, 128 )

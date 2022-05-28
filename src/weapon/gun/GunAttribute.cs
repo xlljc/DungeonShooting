@@ -14,6 +14,10 @@ public class GunAttribute
     /// </summary>
     public bool ContinuousShoot = true;
     /// <summary>
+    /// 是否为松发开火, 也就是松开扳机才开火, 若要启用该属性, 必须将 'ContinuousShoot' 设置为 false
+    /// </summary>
+    public bool LooseShoot = false;
+    /// <summary>
     /// 连续发射最小次数, 仅当ContinuousShoot为false时生效
     /// </summary>
     public int MinContinuousCount = 3;
@@ -26,9 +30,21 @@ public class GunAttribute
     /// </summary>
     public float TriggerInterval = 0;
     /// <summary>
-    /// 射速, 每秒分钟能发射多少发子弹
+    /// 初始射速, 初始每秒分钟能发射多少发子弹
     /// </summary>
-    public float FiringSpeed = 300;
+    public float StartFiringSpeed = 300;
+    /// <summary>
+    /// 最终射速, 最终每秒分钟能发射多少发子弹
+    /// </summary>
+    public float FinalFiringSpeed = 300;
+    /// <summary>
+    /// 按下扳机并开火后射速增加速率
+    /// </summary>
+    public float FiringSpeedAddSpeed = 2;
+    /// <summary>
+    /// 松开扳机后射速消散速率
+    /// </summary>
+    public float FiringSpeedBackSpeed = 10;
     /// <summary>
     /// 单次开火发射子弹最小数量
     /// </summary>

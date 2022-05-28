@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/weapon/bullet/HighSpeedBullet.cs" type="Script" id=1]
+[ext_resource path="res://prefab/effect/Hit.tscn" type="PackedScene" id=2]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0.781588 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
@@ -10,8 +11,10 @@ colors = PoolColorArray( 1, 1, 1, 0.313726, 1, 1, 1, 0.784314 )
 
 [node name="Bullet" type="Node2D"]
 script = ExtResource( 1 )
+Hit = ExtResource( 2 )
 
 [node name="Line" type="Line2D" parent="."]
+modulate = Color( 1, 0.937255, 0.843137, 1 )
 points = PoolVector2Array( 0, 0, 0, 10 )
 width = 1.0
 width_curve = SubResource( 1 )

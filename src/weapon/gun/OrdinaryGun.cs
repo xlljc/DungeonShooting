@@ -12,7 +12,7 @@ public class OrdinaryGun : Gun
     protected override void Init()
     {
         //子弹
-        bulletPacked = ResourceLoader.Load<PackedScene>("res://prefab/Bullet.tscn");
+        bulletPacked = ResourceLoader.Load<PackedScene>("res://prefab/bullet/Bullet.tscn");
     }
 
     protected override void Fire()

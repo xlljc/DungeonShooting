@@ -5,6 +5,7 @@ using Godot;
 /// </summary>
 public class HighSpeedBullet : Bullet
 {
+    [Export] public PackedScene Hit;
     //射线检测节点
     private RayCast2D RayCast2D;
     //最大飞行距离
@@ -24,9 +25,14 @@ public class HighSpeedBullet : Bullet
         //
         RayCast2D.CastTo = targetPos;
         RayCast2D.ForceRaycastUpdate();
-        if (RayCast2D.IsColliding()) {
+        if (RayCast2D.IsColliding()) { //碰到物体
+            Vector2 collPosition = RayCast2D.GetCollisionPoint();
+            Node2D hit = Hit.Instance<Node2D>();
+            hit.RotationDegrees = MathUtils.RandRangeInt(0, 360);
+            hit.GlobalPosition = collPosition;
+            GetTree().CurrentScene.AddChild(hit);
             //划线的点坐标
-            Line.SetPointPosition(1, new Vector2(Line.GlobalPosition.DistanceTo(RayCast2D.GetCollisionPoint()), 0));
+            Line.SetPointPosition(1, new Vector2(Line.GlobalPosition.DistanceTo(collPosition), 0));
         }
         else
         {
