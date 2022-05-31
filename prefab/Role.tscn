@@ -4,21 +4,21 @@
 [ext_resource path="res://src/role/Role.cs" type="Script" id=2]
 [ext_resource path="res://resource/sprite/role/role2.png" type="Texture" id=3]
 
-[sub_resource type="AtlasTexture" id=17]
+[sub_resource type="AtlasTexture" id=21]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 24, 16, 24 )
+region = Rect2( 0, 48, 16, 24 )
 
-[sub_resource type="AtlasTexture" id=18]
+[sub_resource type="AtlasTexture" id=22]
 atlas = ExtResource( 1 )
-region = Rect2( 16, 24, 16, 24 )
+region = Rect2( 16, 48, 16, 24 )
 
-[sub_resource type="AtlasTexture" id=19]
+[sub_resource type="AtlasTexture" id=23]
 atlas = ExtResource( 1 )
-region = Rect2( 32, 24, 16, 24 )
+region = Rect2( 32, 48, 16, 24 )
 
-[sub_resource type="AtlasTexture" id=20]
+[sub_resource type="AtlasTexture" id=24]
 atlas = ExtResource( 1 )
-region = Rect2( 48, 24, 16, 24 )
+region = Rect2( 48, 48, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=25]
 atlas = ExtResource( 1 )
@@ -36,38 +36,38 @@ region = Rect2( 16, 48, 16, 24 )
 atlas = ExtResource( 1 )
 region = Rect2( 0, 48, 16, 24 )
 
-[sub_resource type="AtlasTexture" id=21]
+[sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 48, 16, 24 )
+region = Rect2( 0, 24, 16, 24 )
 
-[sub_resource type="AtlasTexture" id=22]
+[sub_resource type="AtlasTexture" id=18]
 atlas = ExtResource( 1 )
-region = Rect2( 16, 48, 16, 24 )
+region = Rect2( 16, 24, 16, 24 )
 
-[sub_resource type="AtlasTexture" id=23]
+[sub_resource type="AtlasTexture" id=19]
 atlas = ExtResource( 1 )
-region = Rect2( 32, 48, 16, 24 )
+region = Rect2( 32, 24, 16, 24 )
 
-[sub_resource type="AtlasTexture" id=24]
+[sub_resource type="AtlasTexture" id=20]
 atlas = ExtResource( 1 )
-region = Rect2( 48, 48, 16, 24 )
+region = Rect2( 48, 24, 16, 24 )
 
 [sub_resource type="SpriteFrames" id=6]
 animations = [ {
-"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ) ],
+"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
 "loop": true,
-"name": "idle",
-"speed": 7.0
+"name": "run",
+"speed": 10.0
 }, {
 "frames": [ SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ) ],
 "loop": true,
 "name": "reverseRun",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
+"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ) ],
 "loop": true,
-"name": "run",
-"speed": 10.0
+"name": "idle",
+"speed": 7.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=29]
@@ -86,7 +86,7 @@ Texture = ExtResource( 3 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
-frame = 3
+frame = 2
 playing = true
 
 [node name="HitArea" type="Area2D" parent="."]
@@ -101,4 +101,4 @@ position = Vector2( 0, -4.5 )
 shape = SubResource( 16 )
 
 [node name="MountPoint" type="Position2D" parent="."]
-position = Vector2( 2, -6 )
+position = Vector2( 2, -4 )

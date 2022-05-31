@@ -5,6 +5,8 @@ using Godot;
 /// </summary>
 public class OrdinaryGun : Gun
 {
+    [Export] public PackedScene FirePrefab;
+
     //子弹
     private PackedScene bulletPacked;
 
@@ -33,6 +35,12 @@ public class OrdinaryGun : Gun
         var distance = MathUtils.RandRange(Attribute.MinDistance, Attribute.MaxDistance);
         //初始化子弹数据
         bullet.InitData(distance, Colors.White);
+
+        //枪口火焰
+        Node2D hit = FirePrefab.Instance<Node2D>();
+        hit.GlobalRotationDegrees = GlobalRotationDegrees;
+        hit.GlobalPosition = FirePoint.GlobalPosition;
+        GetTree().CurrentScene.AddChild(hit);
     }
 
     protected T CreateBullet<T>(PackedScene bulletPack) where T : Bullet

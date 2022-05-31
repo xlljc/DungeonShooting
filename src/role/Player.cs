@@ -52,7 +52,7 @@ public class Player : Role
         //抬起角度
         attr.UpliftAngle = 10;
         //枪身长度
-        attr.FirePosition = new Vector2(15, 1.5f);
+        attr.FirePosition = new Vector2(16, 1.5f);
         attr.Sprite = "res://resource/sprite/gun/gun4.png";
         gun.Init(attr);
         gun.FireEvent += FireEvent_Func;

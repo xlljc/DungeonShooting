@@ -7,6 +7,3 @@
 [node name="Player" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 GunPrefab = ExtResource( 4 )
-
-[node name="AnimatedSprite" parent="." index="0"]
-frame = 1

@@ -18,6 +18,7 @@ animations = [ {
 [node name="Hit" type="AnimatedSprite"]
 frames = SubResource( 1 )
 animation = "Hit"
+frame = 1
 playing = true
 offset = Vector2( 1, 11 )
 script = ExtResource( 6 )

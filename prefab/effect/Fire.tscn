@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://resource/sprite/effect/fire/fire1.png" type="Texture" id=1]
+[ext_resource path="res://resource/sprite/effect/fire/fire2.png" type="Texture" id=3]
+[ext_resource path="res://resource/sprite/effect/fire/fire3.png" type="Texture" id=4]
+[ext_resource path="res://src/effect/Hit.cs" type="Script" id=5]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "Fire",
+"speed": 20.0
+} ]
+
+[node name="Fire" type="AnimatedSprite"]
+modulate = Color( 1, 0.72549, 0.25098, 1 )
+frames = SubResource( 1 )
+animation = "Fire"
+frame = 2
+offset = Vector2( 3.5, 0 )
+script = ExtResource( 5 )
+
+[connection signal="animation_finished" from="." to="." method="_on_Hit_animation_finished"]
