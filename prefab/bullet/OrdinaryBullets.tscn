@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/bullet/OrdinaryBullets.cs" type="Script" id=1]
+[ext_resource path="res://resource/sprite/bullet/bullet.png" type="Texture" id=2]
+[ext_resource path="res://prefab/effect/Hit.tscn" type="PackedScene" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 0.5, 0.5 )
+
+[node name="OrdinaryBullets" type="KinematicBody2D"]
+collision_layer = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_horizontal_guides_": [  ],
+"_edit_vertical_guides_": [  ]
+}
+Hit = ExtResource( 3 )
+
+[node name="Bullet" type="Sprite" parent="."]
+position = Vector2( 1, 0 )
+scale = Vector2( 0.063, 1 )
+texture = ExtResource( 2 )
+offset = Vector2( -7.5, 0 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0.5, 0 )
+shape = SubResource( 1 )

@@ -2,14 +2,15 @@
 
 [ext_resource path="res://resource/sprite/gun/gun1.png" type="Texture" id=1]
 [ext_resource path="res://src/gun/OrdinaryGun.cs" type="Script" id=2]
-[ext_resource path="res://prefab/effect/Fire.tscn" type="PackedScene" id=3]
+[ext_resource path="res://prefab/bullet/OrdinaryBullets.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9.5, 3.5 )
 
 [node name="Gun" type="Node2D"]
+z_index = 5
 script = ExtResource( 2 )
-FirePrefab = ExtResource( 3 )
+bulletPacked = ExtResource( 3 )
 
 [node name="GunSprite" type="Sprite" parent="."]
 position = Vector2( 4, -3 )

@@ -29,7 +29,7 @@ public class Player : Role
         CurrGun = gun;
 
         var attr = new GunAttribute();
-        attr.StartFiringSpeed = 600;
+        attr.StartFiringSpeed = 360;
         attr.StartScatteringRange = 5;
         attr.FinalScatteringRange = 60;
         attr.ScatteringRangeAddValue = 2f;

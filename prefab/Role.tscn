@@ -78,7 +78,6 @@ extents = Vector2( 5, 4.5 )
 
 [node name="Role" type="KinematicBody2D"]
 collision_layer = 0
-collision_mask = 3
 script = ExtResource( 2 )
 Texture = ExtResource( 3 )
 
@@ -86,7 +85,6 @@ Texture = ExtResource( 3 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
-frame = 2
 playing = true
 
 [node name="HitArea" type="Area2D" parent="."]

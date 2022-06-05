@@ -7,9 +7,9 @@
 _data = [ Vector2( 0, 0.781588 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="Gradient" id=2]
-colors = PoolColorArray( 1, 1, 1, 0.313726, 1, 1, 1, 0.784314 )
+colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 0.705882 )
 
-[node name="Bullet" type="Node2D"]
+[node name="HighSpeedBullet" type="Node2D"]
 script = ExtResource( 1 )
 Hit = ExtResource( 2 )
 
