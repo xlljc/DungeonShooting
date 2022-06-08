@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://src/bullet/HighSpeedBullet.cs" type="Script" id=1]
+[ext_resource path="res://src/weapon/bullet/HighSpeedBullet.cs" type="Script" id=1]
 [ext_resource path="res://prefab/effect/Hit.tscn" type="PackedScene" id=2]
 
 [sub_resource type="Curve" id=1]

@@ -1,55 +1,55 @@
 [gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://resource/sprite/role/role1.png" type="Texture" id=1]
-[ext_resource path="res://src/role/Role.cs" type="Script" id=2]
-[ext_resource path="res://resource/sprite/role/role2.png" type="Texture" id=3]
+[ext_resource path="res://src/role/Role.cs" type="Script" id=1]
+[ext_resource path="res://resource/sprite/role/role2.png" type="Texture" id=2]
+[ext_resource path="res://resource/sprite/role/role1.png" type="Texture" id=3]
 
 [sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 0, 48, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=22]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 16, 48, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 32, 48, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 48, 48, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 48, 48, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 32, 48, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=27]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 16, 48, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=28]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 0, 48, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=17]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 0, 24, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=18]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 16, 24, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=19]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 32, 24, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 1 )
+atlas = ExtResource( 3 )
 region = Rect2( 48, 24, 16, 24 )
 
 [sub_resource type="SpriteFrames" id=6]
@@ -78,13 +78,14 @@ extents = Vector2( 5, 4.5 )
 
 [node name="Role" type="KinematicBody2D"]
 collision_layer = 0
-script = ExtResource( 2 )
-Texture = ExtResource( 3 )
+script = ExtResource( 1 )
+Texture = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
+frame = 1
 playing = true
 
 [node name="HitArea" type="Area2D" parent="."]

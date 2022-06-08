@@ -14,6 +14,10 @@ config/name="DungeonShooting"
 run/main_scene="res://scene/Room.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+GameManager="*res://src/manager/GameManager.cs"
+
 [display]
 
 window/size/width=480

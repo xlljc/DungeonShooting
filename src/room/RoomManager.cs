@@ -12,6 +12,8 @@ public class RoomManager : Node2D
 
     [Export] public NodePath UIPath;
 
+    [Export] public PackedScene ThrowNode;
+
     public static RoomManager Current { get; private set; }
 
     public CanvasLayer UI;
@@ -29,5 +31,18 @@ public class RoomManager : Node2D
         var node = GetNode("MapRoot").GetChild(0).GetNode("Config");
         Color color = (Color) node.GetMeta("ClearColor");
         VisualServer.SetDefaultClearColor(color);
+    }
+
+    public override void _Draw()
+    {
+        DrawLine(new Vector2(100, 100), new Vector2(200, 200), Colors.White);
+    }
+
+    public override void _Process(float delta)
+    {
+        if (Input.IsActionJustPressed("fire"))
+        {
+            //CommonNodeManager.CreateThrowNode();
+        }
     }
 }
