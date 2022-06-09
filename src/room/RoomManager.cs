@@ -12,12 +12,11 @@ public class RoomManager : Node2D
 
     [Export] public NodePath UIPath;
 
-    [Export] public PackedScene ThrowNode;
-
     public static RoomManager Current { get; private set; }
 
     public CanvasLayer UI;
     public Cursor Cursor { get; private set; }
+    public YSort ItemRoot { get; private set; }
 
     public override void _EnterTree()
     {
@@ -27,10 +26,13 @@ public class RoomManager : Node2D
         Cursor = MouseCursor.Instance<Cursor>();
         AddChild(Cursor);
 
+        ItemRoot = GetNode<YSort>("YSort");
+
         //初始化地图
         var node = GetNode("MapRoot").GetChild(0).GetNode("Config");
         Color color = (Color) node.GetMeta("ClearColor");
         VisualServer.SetDefaultClearColor(color);
+
     }
 
     public override void _Draw()

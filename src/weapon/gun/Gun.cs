@@ -37,6 +37,12 @@ public abstract class Gun : Node2D
     /// 枪攻击的目标阵营
     /// </summary>
     public CampEnum TargetCamp { get; set; }
+
+    /// <summary>
+    /// 该武器的拥有者
+    /// </summary>
+    public Node2D Master { get; }
+
     /// <summary>
     /// 枪管的开火点
     /// </summary>
@@ -322,7 +328,7 @@ public abstract class Gun : Node2D
         bullet.GlobalRotation = globalRotation;
         if (parent == null)
         {
-            GetTree().CurrentScene.AddChild(bullet);
+            RoomManager.Current.ItemRoot.AddChild(bullet);
         }
         else
         {

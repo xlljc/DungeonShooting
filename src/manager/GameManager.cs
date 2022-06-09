@@ -5,5 +5,9 @@ using Godot;
 /// </summary>
 public class GameManager : Node2D
 {
-    
+    public static GameManager Instance { get; private set; }
+    public GameManager()
+    {
+        GameManager.Instance = this;
+    }
 }

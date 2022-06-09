@@ -9,6 +9,8 @@ public class OrdinaryGun : Gun
 
     [Export] public PackedScene bulletPacked;
 
+    [Export] public PackedScene shell;
+
     protected override void Init()
     {
 
@@ -16,7 +18,10 @@ public class OrdinaryGun : Gun
 
     protected override void Fire()
     {
-        
+        //创建一个弹壳
+        var temp = new ThrowNode();
+        temp.InitThrow(GlobalPosition, 30, new Vector2(30, -100), shell.Instance<Node2D>());
+        RoomManager.Current.ItemRoot.AddChild(temp);
     }
 
     protected override void ShootBullet()

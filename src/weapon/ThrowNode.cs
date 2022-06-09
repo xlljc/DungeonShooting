@@ -6,42 +6,44 @@ using Godot;
 /// </summary>
 public class ThrowNode : Node2D
 {
-    public float MaxHeight = 30;
-    public float TargetHeight = 0;
-    public float StartHeight = 0;
+    public bool IsOver { get; protected set; } = true;
 
-    public Vector2 StartPos;
-    public Vector2 TargetPos = new Vector2(120, 100);
-    public Vector2 RealPosition = Vector2.Zero;
+    private Vector2 StartPosition;
+    private float Direction;
+    private Vector2 Velocity;
+    private Node2D Mount;
 
-
-    public override void _Ready()
+    public void InitThrow(Vector2 start, float direction, Vector2 velocity, Node2D mount)
     {
-        StartPos = GlobalPosition;
-        RealPosition = StartPos;
+        IsOver = false;
+        GlobalPosition = StartPosition = start;
+        Direction = direction;
+        Velocity = velocity;
+
+        Mount = mount;
+        AddChild(mount);
+        mount.Position = Vector2.Zero;
+    }
+
+    protected virtual void OnOver()
+    {
+
     }
 
     public override void _Process(float delta)
     {
-        if (RealPosition.DistanceSquaredTo(TargetPos) > 1)
+        if (!IsOver)
         {
-            float v = (StartPos.DistanceTo(RealPosition)) / (StartPos.DistanceTo(TargetPos));
-            float progress = Mathf.Sin(v * Mathf.Pi);
+            Position += new Vector2(Velocity.x * delta, 0).Rotated(Direction * Mathf.Pi / 180);
+            Mount.Position = new Vector2(0, Mount.Position.y + Velocity.y * delta);
+            Velocity.y += GameConfig.G * delta;
 
-            float y = 0;
-            if (v <= 0.5f)
+            if (Mount.Position.y >= 0)
             {
-                y = Mathf.Lerp(StartHeight, MaxHeight, progress);
+                Mount.Position = new Vector2(0, 0);
+                IsOver = true;
             }
-            else
-            {
-                y = Mathf.Lerp(TargetHeight, MaxHeight, progress);
-            }
-
-            RealPosition = RealPosition.MoveToward(TargetPos, 100 * delta);
-            GlobalPosition = RealPosition - new Vector2(0, y);
         }
-
     }
 
 }
