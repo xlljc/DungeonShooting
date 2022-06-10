@@ -52,6 +52,10 @@ public abstract class Gun : Node2D
     /// </summary>
     public Position2D OriginPoint { get; private set; }
     /// <summary>
+    /// 弹壳抛出的点
+    /// </summary>
+    public Position2D ShellPoint { get; private set; }
+    /// <summary>
     /// 枪的当前散射半径
     /// </summary>
     public float CurrScatteringRange { get; private set; } = 0;
@@ -83,6 +87,7 @@ public abstract class Gun : Node2D
         GunSprite = GetNode<Sprite>("GunSprite");
         FirePoint = GetNode<Position2D>("FirePoint");
         OriginPoint = GetNode<Position2D>("OriginPoint");
+        ShellPoint = GetNode<Position2D>("ShellPoint");
     }
 
     public override void _Process(float delta)

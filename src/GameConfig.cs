@@ -8,5 +8,5 @@ public static class GameConfig
     /// <summary>
     /// 重力加速度
     /// </summary>
-    public static readonly float G = 200f;
+    public static readonly float G = 250f;
 }

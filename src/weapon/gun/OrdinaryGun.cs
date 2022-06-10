@@ -20,7 +20,13 @@ public class OrdinaryGun : Gun
     {
         //创建一个弹壳
         var temp = new ThrowNode();
-        temp.InitThrow(GlobalPosition, 30, new Vector2(30, -100), shell.Instance<Node2D>());
+        var startPos = GlobalPosition + new Vector2(0, 5);
+        var startHeight = 16;
+        var direction = GlobalRotationDegrees + MathUtils.RandRangeInt(-30, 30) + 180;
+        var xf = MathUtils.RandRangeInt(20, 60);
+        var yf = MathUtils.RandRangeInt(60, 120);
+        var rotate = MathUtils.RandRangeInt(-720, 720);
+        temp.InitThrow(startPos, startHeight, direction, xf, yf, rotate, shell.Instance<Node2D>());
         RoomManager.Current.ItemRoot.AddChild(temp);
     }
 

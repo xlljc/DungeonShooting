@@ -21,11 +21,12 @@ texture = ExtResource( 3 )
 
 [node name="OriginPoint" type="Position2D" parent="."]
 position = Vector2( 0, -1.5 )
-scale = Vector2( 0.8, 0.8 )
+
+[node name="ShellPoint" type="Position2D" parent="."]
+position = Vector2( 1, -3 )
 
 [node name="FirePoint" type="Position2D" parent="."]
 position = Vector2( 11, -1.5 )
-scale = Vector2( 0.8, 0.8 )
 
 [node name="Area" type="Area2D" parent="."]
 collision_layer = 4

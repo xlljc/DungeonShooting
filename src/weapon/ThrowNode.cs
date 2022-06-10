@@ -8,21 +8,25 @@ public class ThrowNode : Node2D
 {
     public bool IsOver { get; protected set; } = true;
 
-    private Vector2 StartPosition;
-    private float Direction;
-    private Vector2 Velocity;
-    private Node2D Mount;
+    public Vector2 StartPosition { get; protected set; }
+    public float Direction { get; protected set; }
+    public float XForce { get; protected set; }
+    public float YForce { get; protected set; }
+    public float RotateSpeed { get; protected set; }
+    public Node2D Mount { get; protected set; }
 
-    public void InitThrow(Vector2 start, float direction, Vector2 velocity, Node2D mount)
+    public void InitThrow(Vector2 start, float startHeight, float direction, float xForce, float yForce, float rotate, Node2D mount)
     {
         IsOver = false;
         GlobalPosition = StartPosition = start;
         Direction = direction;
-        Velocity = velocity;
+        XForce = xForce;
+        YForce = -yForce;
+        RotateSpeed = rotate;
 
         Mount = mount;
         AddChild(mount);
-        mount.Position = Vector2.Zero;
+        mount.Position = new Vector2(0, -startHeight);
     }
 
     protected virtual void OnOver()
@@ -34,9 +38,10 @@ public class ThrowNode : Node2D
     {
         if (!IsOver)
         {
-            Position += new Vector2(Velocity.x * delta, 0).Rotated(Direction * Mathf.Pi / 180);
-            Mount.Position = new Vector2(0, Mount.Position.y + Velocity.y * delta);
-            Velocity.y += GameConfig.G * delta;
+            Position += new Vector2(XForce * delta, 0).Rotated(Direction * Mathf.Pi / 180);
+            Mount.Position = new Vector2(0, Mount.Position.y + YForce * delta);
+            Mount.GlobalRotationDegrees += RotateSpeed * delta;
+            YForce += GameConfig.G * delta;
 
             if (Mount.Position.y >= 0)
             {
