@@ -8,6 +8,10 @@ public class Player : Role
     public float Acceleration = 1500f;
 
     /// <summary>
+    /// 移动摩擦力
+    /// </summary>
+    public float Friction = 800f;
+    /// <summary>
     /// 移动速度
     /// </summary>
     public Vector2 Velocity = Vector2.Zero;
@@ -91,19 +95,29 @@ public class Player : Role
     private void Move(float delta)
     {
         //角色移动
-        var dir = new Vector2(
-            Input.GetActionRawStrength("move_right") - Input.GetActionRawStrength("move_left"),
-            Input.GetActionRawStrength("move_down") - Input.GetActionRawStrength("move_up")
-        ).Normalized();
-        if (dir.x * Velocity.x < 0)
-        {
-            Velocity.x = 0;
-        }
-        if (dir.y * Velocity.y < 0)
-        {
-            Velocity.y = 0;
-        }
-        Velocity = Velocity.MoveToward(dir * MoveSpeed, Acceleration * delta);
+        // var dir = new Vector2(
+        //     Input.GetActionRawStrength("move_right") - Input.GetActionRawStrength("move_left"),
+        //     Input.GetActionRawStrength("move_down") - Input.GetActionRawStrength("move_up")
+        // ).Normalized();
+        // if (dir.x * Velocity.x < 0)
+        // {
+        //     Velocity.x = 0;
+        // }
+        // if (dir.y * Velocity.y < 0)
+        // {
+        //     Velocity.y = 0;
+        // }
+        // Velocity = Velocity.MoveToward(dir * MoveSpeed, Acceleration * delta);
+        // 得到输入的 vector2  getvector方法返回值已经归一化过了noemalized
+        Vector2 dir = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+        // 移动. 如果移动的数值接近0(是用 摇杆可能出现 方向 可能会出现浮点)，就fricition的值 插值 到 0
+        // 如果 有输入 就以当前速度，用acceleration 插值到 对应方向 * 最大速度
+        if (Mathf.IsZeroApprox(dir.x)) Velocity.x = Mathf.MoveToward(Velocity.x, 0, Friction * delta);
+        else Velocity.x = Mathf.MoveToward(Velocity.x, dir.x * MoveSpeed, Acceleration * delta);
+
+        if (Mathf.IsZeroApprox(dir.y)) Velocity.y = Mathf.MoveToward(Velocity.y, 0, Friction * delta);
+        else Velocity.y = Mathf.MoveToward(Velocity.y, dir.y * MoveSpeed, Acceleration * delta);
+
         Velocity = MoveAndSlide(Velocity);
     }
 
