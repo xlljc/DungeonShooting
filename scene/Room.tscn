@@ -11,6 +11,7 @@ MouseCursor = ExtResource( 4 )
 UIPath = NodePath("")
 
 [node name="MapRoot" type="Node2D" parent="."]
+z_index = -10
 
 [node name="dungeon_test" parent="MapRoot" instance=ExtResource( 2 )]
 

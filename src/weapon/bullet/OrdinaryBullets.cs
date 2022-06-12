@@ -28,6 +28,8 @@ public class OrdinaryBullets : Node2D, IBullet
     private RayCast2D RayCast;
     //子弹的精灵
     private Sprite BulletSprite;
+    //绘制阴影的精灵
+    private Sprite ShadowSprite;
 
     private int frame = 0;
 
@@ -42,7 +44,15 @@ public class OrdinaryBullets : Node2D, IBullet
         BulletSprite = GetNode<Sprite>("Bullet");
         BulletSprite.Visible = false;
         RayCast = GetNode<RayCast2D>("RayCast2D");
-        
+
+        //创建阴影
+        ShadowSprite = new Sprite();
+        ShadowSprite.Visible = false;
+        ShadowSprite.ZIndex = -1;
+        ShadowSprite.Texture = BulletSprite.Texture;
+        ShadowSprite.Offset = BulletSprite.Offset;
+        ShadowSprite.Material = ResourceManager.ShadowMaterial;
+        AddChild(ShadowSprite);
     }
 
     public override void _PhysicsProcess(float delta)
@@ -50,6 +60,7 @@ public class OrdinaryBullets : Node2D, IBullet
         if (frame++ == 0)
         {
             BulletSprite.Visible = true;
+            ShadowSprite.Visible = true;
         }
         //碰到墙壁
         if (RayCast.IsColliding())
@@ -65,6 +76,7 @@ public class OrdinaryBullets : Node2D, IBullet
         }
         else //没有碰到, 继续移动
         {
+            ShadowSprite.GlobalPosition = GlobalPosition + new Vector2(0, 5);
             Position += new Vector2(FlySpeed * delta, 0).Rotated(Rotation);
 
             CurrFlyDistance += FlySpeed * delta;

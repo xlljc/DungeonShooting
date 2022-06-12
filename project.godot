@@ -25,6 +25,7 @@ window/size/height=270
 window/size/test_width=1920
 window/size/test_height=1080
 window/dpi/allow_hidpi=true
+window/vsync/vsync_via_compositor=true
 window/stretch/aspect="keep_width"
 window/stretch/shrink=4.0
 

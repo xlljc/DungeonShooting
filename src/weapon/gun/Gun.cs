@@ -60,6 +60,7 @@ public abstract class Gun : Node2D
     /// </summary>
     public float CurrScatteringRange { get; private set; } = 0;
 
+
     //是否按下
     private bool triggerFlag = false;
     //扳机计时器

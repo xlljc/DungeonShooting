@@ -35,11 +35,6 @@ public class RoomManager : Node2D
 
     }
 
-    public override void _Draw()
-    {
-        DrawLine(new Vector2(100, 100), new Vector2(200, 200), Colors.White);
-    }
-
     public override void _Process(float delta)
     {
         if (Input.IsActionJustPressed("fire"))

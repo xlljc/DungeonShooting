@@ -5,5 +5,9 @@
 [ext_resource path="res://prefab/weapon/Gun.tscn" type="PackedScene" id=4]
 
 [node name="Player" instance=ExtResource( 1 )]
+collision_layer = 8
 script = ExtResource( 2 )
 GunPrefab = ExtResource( 4 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+frame = 0
