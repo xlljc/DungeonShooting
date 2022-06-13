@@ -35,6 +35,11 @@ public class Role : KinematicBody2D
     /// </summary>
     public List<object> PropsPack { get; } = new List<object>();
 
+    /// <summary>
+    /// 角色携带的枪套
+    /// </summary>
+    public Holster Holster { get; private set; }
+
 	/// <summary>
 	/// 动画播放器
 	/// </summary>
@@ -61,7 +66,8 @@ public class Role : KinematicBody2D
         ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, Texture);
         ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, Texture);
         ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, Texture);
-
+        
+        Holster = new Holster(this);
         Face = FaceDirection.Right;
     }
 

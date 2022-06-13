@@ -16,11 +16,6 @@ public class Player : Role
     /// </summary>
     public Vector2 Velocity = Vector2.Zero;
 
-    /// <summary>
-    /// 当前的枪
-    /// </summary>
-    public Gun CurrGun { get; private set; }
-
     [Export] public PackedScene GunPrefab;
 
     public override void _Ready()
@@ -30,7 +25,6 @@ public class Player : Role
         //加载枪
         var gun = GunPrefab.Instance<Gun>();
         MountPoint.AddChild(gun);
-        CurrGun = gun;
 
         var attr = new GunAttribute();
         attr.StartFiringSpeed = 480;
@@ -60,6 +54,7 @@ public class Player : Role
         attr.Sprite = "res://resource/sprite/gun/gun4.png";
         gun.Init(attr);
         gun.FireEvent += FireEvent_Func;
+        Holster.PickupGun(gun);
 
         RoomManager.Current.Cursor.TargetGun = gun;
     }
@@ -95,19 +90,6 @@ public class Player : Role
     private void Move(float delta)
     {
         //角色移动
-        // var dir = new Vector2(
-        //     Input.GetActionRawStrength("move_right") - Input.GetActionRawStrength("move_left"),
-        //     Input.GetActionRawStrength("move_down") - Input.GetActionRawStrength("move_up")
-        // ).Normalized();
-        // if (dir.x * Velocity.x < 0)
-        // {
-        //     Velocity.x = 0;
-        // }
-        // if (dir.y * Velocity.y < 0)
-        // {
-        //     Velocity.y = 0;
-        // }
-        // Velocity = Velocity.MoveToward(dir * MoveSpeed, Acceleration * delta);
         // 得到输入的 vector2  getvector方法返回值已经归一化过了noemalized
         Vector2 dir = Input.GetVector("move_left", "move_right", "move_up", "move_down");
         // 移动. 如果移动的数值接近0(是用 摇杆可能出现 方向 可能会出现浮点)，就fricition的值 插值 到 0
@@ -125,7 +107,10 @@ public class Player : Role
     {
         if (Input.IsActionPressed("fire"))
         {
-            CurrGun.Trigger();
+            if (Holster.ActiveGun != null)
+            {
+                Holster.ActiveGun.Trigger();
+            }
         }
     }
 

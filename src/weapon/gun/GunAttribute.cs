@@ -6,6 +6,10 @@ using Godot;
 public class GunAttribute
 {
     /// <summary>
+    /// 主武器
+    /// </summary>
+    public GunWeightType WeightType = GunWeightType.MainWeapon;
+    /// <summary>
     /// 枪的图片
     /// </summary>
     public string Sprite = "res://resource/sprite/gun/gun1.png";
