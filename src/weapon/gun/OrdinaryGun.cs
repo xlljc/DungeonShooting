@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 
@@ -6,11 +7,6 @@ using Godot;
 /// </summary>
 public class OrdinaryGun : Gun
 {
-
-    [Export] public PackedScene bulletPacked;
-
-    [Export] public PackedScene shell;
-
     protected override void Init()
     {
 
@@ -26,7 +22,7 @@ public class OrdinaryGun : Gun
         var xf = MathUtils.RandRangeInt(20, 60);
         var yf = MathUtils.RandRangeInt(60, 120);
         var rotate = MathUtils.RandRangeInt(-720, 720);
-        var sprite = shell.Instance<Sprite>();
+        var sprite = Attribute.ShellPack.Instance<Sprite>();
         temp.InitThrow(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, sprite, sprite.Texture);
         RoomManager.Current.ItemRoot.AddChild(temp);
     }
@@ -34,6 +30,17 @@ public class OrdinaryGun : Gun
     protected override void ShootBullet()
     {
         //创建子弹
-        CreateBullet(bulletPacked, FirePoint.GlobalPosition, (FirePoint.GlobalPosition - OriginPoint.GlobalPosition).Angle());
+        CreateBullet(Attribute.BulletPack, FirePoint.GlobalPosition, (FirePoint.GlobalPosition - OriginPoint.GlobalPosition).Angle());
     }
+
+    protected override void OnPickUp(Role master)
+    {
+        
+    }
+
+    protected override void OnThrowOut()
+    {
+
+    }
+
 }

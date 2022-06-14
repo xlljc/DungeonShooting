@@ -28,11 +28,8 @@ public class Player : Role
     {
         base._Ready();
 
-
-        var gun = GunManager.GetGun1();
-        MountPoint.AddChild(gun);
-        gun.FireEvent += FireEvent_Func;
-        Holster.PickupGun(gun);
+        PickUpGun(GunManager.GetGun1());
+        PickUpGun(GunManager.GetGun2());
     }
 
     public override void _Process(float delta)
@@ -108,11 +105,5 @@ public class Player : Role
         {
             AnimatedSprite.Animation = AnimatorNames.Idle;
         }
-    }
-
-    //开火后
-    private void FireEvent_Func(Gun gun)
-    {
-
     }
 }

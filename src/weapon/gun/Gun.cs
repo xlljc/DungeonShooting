@@ -163,8 +163,7 @@ public abstract class Gun : Node2D
 
         Attribute = attribute;
         //更新图片
-        var texture = ResourceLoader.Load<Texture>(attribute.Sprite);
-        GunSprite.Texture = texture;
+        GunSprite.Texture = attribute.Sprite;
         //开火位置
         FirePoint.Position = new Vector2(attribute.FirePosition.x, -attribute.FirePosition.y);
         OriginPoint.Position = new Vector2(0, -attribute.FirePosition.y);
@@ -310,6 +309,17 @@ public abstract class Gun : Node2D
     /// 如果做霰弹枪效果, 一次开火发射5枚子弹, 则该函数调用5次
     /// </summary>
     protected abstract void ShootBullet();
+
+    /// <summary>
+    /// 当武器被拾起时调用
+    /// </summary>
+    /// <param name="master">拾起该武器的角色</param>
+    protected abstract void OnPickUp(Role master);
+
+    /// <summary>
+    /// 当武器被扔掉时调用
+    /// </summary>
+    protected abstract void OnThrowOut();
 
     /// <summary>
     /// 实例化并返回子弹对象

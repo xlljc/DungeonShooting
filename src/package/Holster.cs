@@ -57,10 +57,10 @@ public class Holster
     }
 
     /// <summary>
-    /// 拾起武器, 存入枪套中, 如果容不下这把武器, 则会返回 false
+    /// 拾起武器, 存入枪套中, 返回存放在枪套的位置, 如果容不下这把武器, 则会返回 -1
     /// </summary>
     /// <param name="gun">武器对象</param>
-    public bool PickupGun(Gun gun)
+    public int PickupGun(Gun gun)
     {
         for (int i = 0; i < SlotList.Length; i++)
         {
@@ -70,11 +70,11 @@ public class Holster
                 item.Gun = gun;
                 ActiveGun = gun;
                 ActiveIndex = i;
-                return true;
+                return i;
             }
         }
         GD.PrintErr("存入武器失败!");
-        return false;
+        return -1;
     }
 
     /// <summary>
@@ -91,5 +91,19 @@ public class Holster
     public void ExchangeNext()
     {
 
+    }
+
+    /// <summary>
+    /// 切换到指定索引的武器
+    /// </summary>
+    public bool ExchangeByIndex(int index)
+    {
+        if (index > SlotList.Length) return false;
+        var slot = SlotList[index];
+        if (slot == null || slot.Gun == null) return false;
+        Master.MountPoint.AddChild(slot.Gun);
+        ActiveGun = slot.Gun;
+        ActiveIndex = index;
+        return true;
     }
 }

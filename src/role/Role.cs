@@ -40,9 +40,9 @@ public class Role : KinematicBody2D
     /// </summary>
     public Holster Holster { get; private set; }
 
-	/// <summary>
-	/// 动画播放器
-	/// </summary>
+    /// <summary>
+    /// 动画播放器
+    /// </summary>
     public AnimatedSprite AnimatedSprite { get; private set; }
     /// <summary>
     /// 武器挂载点
@@ -66,9 +66,34 @@ public class Role : KinematicBody2D
         ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, Texture);
         ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, Texture);
         ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, Texture);
-        
+
         Holster = new Holster(this);
         Face = FaceDirection.Right;
+    }
+
+    /// <summary>
+    /// 拾起一个武器, 并且切换到这个武器
+    /// </summary>
+    /// <param name="gun">武器对象</param>
+    public void PickUpGun(Gun gun)
+    {
+        var index = Holster.PickupGun(gun);
+        SetActiveGun(index);
+    }
+
+    public void ExchangeNext()
+    {
+        Holster.ExchangeNext();
+    }
+
+    private void SetActiveGun(int index)
+    {
+        if (Holster.ActiveGun != null)
+        {
+            Holster.ActiveGun.Visible = false;
+        }
+        Holster.ExchangeByIndex(index);
+        Holster.ActiveGun.Visible = true;
     }
 
     private void SetFace(FaceDirection face)
