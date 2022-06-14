@@ -16,6 +16,7 @@ public class RoomManager : Node2D
 
     public CanvasLayer UI;
     public Cursor Cursor { get; private set; }
+    public Player Player { get; set; }
     public YSort ItemRoot { get; private set; }
 
     public override void _EnterTree()

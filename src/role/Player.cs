@@ -18,45 +18,21 @@ public class Player : Role
 
     [Export] public PackedScene GunPrefab;
 
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+        RoomManager.Current.Player = this;
+    }
+
     public override void _Ready()
     {
         base._Ready();
 
-        //加载枪
-        var gun = GunPrefab.Instance<Gun>();
-        MountPoint.AddChild(gun);
 
-        var attr = new GunAttribute();
-        attr.StartFiringSpeed = 480;
-        attr.StartScatteringRange = 5;
-        attr.FinalScatteringRange = 60;
-        attr.ScatteringRangeAddValue = 2f;
-        attr.ScatteringRangeBackSpeed = 40;
-        //连发
-        attr.ContinuousShoot = true;
-        //扳机检测间隔
-        attr.TriggerInterval = 0f;
-        //连发数量
-        attr.MinContinuousCount = 3;
-        attr.MaxContinuousCount = 3;
-        //开火前延时
-        attr.DelayedTime = 0f;
-        //攻击距离
-        attr.MinDistance = 500;
-        attr.MaxDistance = 600;
-        //发射子弹数量
-        attr.MinFireBulletCount = 1;
-        attr.MaxFireBulletCount = 1;
-        //抬起角度
-        attr.UpliftAngle = 10;
-        //枪身长度
-        attr.FirePosition = new Vector2(16, 1.5f);
-        attr.Sprite = "res://resource/sprite/gun/gun4.png";
-        gun.Init(attr);
+        var gun = GunManager.GetGun1();
+        MountPoint.AddChild(gun);
         gun.FireEvent += FireEvent_Func;
         Holster.PickupGun(gun);
-
-        RoomManager.Current.Cursor.TargetGun = gun;
     }
 
     public override void _Process(float delta)

@@ -6,8 +6,6 @@ using Godot;
 public class Cursor : Node2D
 {
 
-    public Gun TargetGun = null;
-
     private Sprite lt;
     private Sprite lb;
     private Sprite rt;
@@ -23,13 +21,14 @@ public class Cursor : Node2D
 
     public override void _Process(float delta)
     {
-        if (TargetGun != null)
+        var targetGun = RoomManager.Current?.Player?.Holster.ActiveGun;
+        if (targetGun != null)
         {
-            SetScope(TargetGun.CurrScatteringRange);
+            SetScope(targetGun.CurrScatteringRange, targetGun);
         }
         else
         {
-            SetScope(0);
+            SetScope(0, targetGun);
         }
         SetCursorPos();
     }
@@ -37,14 +36,14 @@ public class Cursor : Node2D
     /// <summary>
     /// 设置光标半径范围
     /// </summary>
-    private void SetScope(float scope)
+    private void SetScope(float scope, Gun targetGun)
     {
-        if (TargetGun != null)
+        if (targetGun != null)
         {
-            var len = GlobalPosition.DistanceTo(TargetGun.GlobalPosition);
-            if (TargetGun.Attribute != null)
+            var len = GlobalPosition.DistanceTo(targetGun.GlobalPosition);
+            if (targetGun.Attribute != null)
             {
-                len = Mathf.Max(0, len - TargetGun.Attribute.FirePosition.x);
+                len = Mathf.Max(0, len - targetGun.Attribute.FirePosition.x);
             }
             scope = len / GameConfig.ScatteringDistance * scope;
         }

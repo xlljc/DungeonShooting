@@ -83,14 +83,6 @@ public abstract class Gun : Node2D
     private float continuousCount = 0;
     private bool continuousShootFlag = false;
 
-    public override void _EnterTree()
-    {
-        GunSprite = GetNode<Sprite>("GunSprite");
-        FirePoint = GetNode<Position2D>("FirePoint");
-        OriginPoint = GetNode<Position2D>("OriginPoint");
-        ShellPoint = GetNode<Position2D>("ShellPoint");
-    }
-
     public override void _Process(float delta)
     {
         if (triggerFlag)
@@ -163,6 +155,11 @@ public abstract class Gun : Node2D
         {
             throw new Exception("当前武器已经初始化过了!");
         }
+
+        GunSprite = GetNode<Sprite>("GunSprite");
+        FirePoint = GetNode<Position2D>("FirePoint");
+        OriginPoint = GetNode<Position2D>("OriginPoint");
+        ShellPoint = GetNode<Position2D>("ShellPoint");
 
         Attribute = attribute;
         //更新图片
