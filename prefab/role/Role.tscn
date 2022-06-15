@@ -101,3 +101,8 @@ shape = SubResource( 16 )
 
 [node name="MountPoint" type="Position2D" parent="."]
 position = Vector2( 2, -4 )
+z_index = 1
+
+[node name="BackMountPoint" type="Position2D" parent="."]
+position = Vector2( 0, -5 )
+z_index = -1

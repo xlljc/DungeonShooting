@@ -28,8 +28,8 @@ public class Player : Role
     {
         base._Ready();
 
-        PickUpGun(GunManager.GetGun1());
-        PickUpGun(GunManager.GetGun2());
+        PickUpGun(GunManager.GetGun1()); //0
+        PickUpGun(GunManager.GetGun2()); //1
     }
 
     public override void _Process(float delta)

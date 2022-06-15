@@ -41,7 +41,7 @@ public abstract class Gun : Node2D
     /// <summary>
     /// 该武器的拥有者
     /// </summary>
-    public Node2D Master { get; }
+    public Role Master { get; private set; }
 
     /// <summary>
     /// 枪管的开火点
@@ -85,6 +85,10 @@ public abstract class Gun : Node2D
 
     public override void _Process(float delta)
     {
+        if (Master == null || Master.Holster.ActiveGun != this)
+        {
+            return;
+        }
         if (triggerFlag)
         {
             if (upTimer > 0) //第一帧按下扳机
@@ -321,13 +325,25 @@ public abstract class Gun : Node2D
     /// </summary>
     protected abstract void OnThrowOut();
 
+    public void _PickUpGun(Role master)
+    {
+        Master = master;
+        OnPickUp(master);
+    }
+
+    public void _ThrowOutGun()
+    {
+        Master = null;
+        OnThrowOut();
+    }
+
     /// <summary>
     /// 实例化并返回子弹对象
     /// </summary>
     /// <param name="bulletPack">子弹的预制体</param>
     protected T CreateBullet<T>(PackedScene bulletPack, Vector2 globalPostion, float globalRotation, Node parent = null) where T : Node2D, IBullet
     {
-        return (T) CreateBullet(bulletPack, globalPostion, globalRotation, parent);
+        return (T)CreateBullet(bulletPack, globalPostion, globalRotation, parent);
     }
 
 

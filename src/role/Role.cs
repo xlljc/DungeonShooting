@@ -48,6 +48,10 @@ public class Role : KinematicBody2D
     /// 武器挂载点
     /// </summary>
     public Position2D MountPoint { get; private set; }
+    /// <summary>
+    /// 背后武器的挂载点
+    /// </summary>
+    public Position2D BackMountPoint { get; private set; }
 
     /// <summary>
     /// 脸的朝向
@@ -62,6 +66,7 @@ public class Role : KinematicBody2D
         StartScele = Scale;
         AnimatedSprite = GetNode<AnimatedSprite>("AnimatedSprite");
         MountPoint = GetNode<Position2D>("MountPoint");
+        BackMountPoint = GetNode<Position2D>("BackMountPoint");
         // 更改纹理
         ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, Texture);
         ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, Texture);
@@ -83,21 +88,12 @@ public class Role : KinematicBody2D
 
     public void ExchangeNext()
     {
-        var index = Holster.ExchangeNext();
-        if (index != -1)
-        {
-            SetActiveGun(index);
-        }
+        Holster.ExchangeNext();
     }
 
     private void SetActiveGun(int index)
     {
-        if (Holster.ActiveGun != null)
-        {
-            Holster.ActiveGun.Visible = false;
-        }
         Holster.ExchangeByIndex(index);
-        Holster.ActiveGun.Visible = true;
     }
 
     private void SetFace(FaceDirection face)
