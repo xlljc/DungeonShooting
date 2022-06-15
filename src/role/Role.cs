@@ -83,7 +83,11 @@ public class Role : KinematicBody2D
 
     public void ExchangeNext()
     {
-        Holster.ExchangeNext();
+        var index = Holster.ExchangeNext();
+        if (index != -1)
+        {
+            SetActiveGun(index);
+        }
     }
 
     private void SetActiveGun(int index)

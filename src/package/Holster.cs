@@ -80,17 +80,45 @@ public class Holster
     /// <summary>
     /// 切换到上一个武器
     /// </summary>
-    public void ExchangePrev()
+    public int ExchangePrev()
     {
-
+        return 0;
     }
 
     /// <summary>
     /// 切换到下一个武器
     /// </summary>
-    public void ExchangeNext()
+    public int ExchangeNext()
     {
+        var index = ActiveIndex + 1;
+        while (index != ActiveIndex)
+        {
+            if (index >= SlotList.Length)
+            {
+                index = 0;
+            }
+            var slot = SlotList[index];
+            if (slot != null && slot.Gun != null)
+            {
+                //更改父节点
+                var parent = slot.Gun.GetParentOrNull<Node>();
+                if (parent == null)
+                {
+                    Master.MountPoint.AddChild(slot.Gun);
+                }
+                else if (parent != Master.MountPoint)
+                {
+                    parent.RemoveChild(slot.Gun);
+                    Master.MountPoint.AddChild(slot.Gun);
+                }
 
+                ActiveGun = slot.Gun;
+                ActiveIndex = index;
+                return index;
+            }
+            index++;
+        }
+        return -1;
     }
 
     /// <summary>
@@ -101,7 +129,18 @@ public class Holster
         if (index > SlotList.Length) return false;
         var slot = SlotList[index];
         if (slot == null || slot.Gun == null) return false;
-        Master.MountPoint.AddChild(slot.Gun);
+        //更改父节点
+        var parent = slot.Gun.GetParentOrNull<Node>();
+        if (parent == null)
+        {
+            Master.MountPoint.AddChild(slot.Gun);
+        }
+        else if (parent != Master.MountPoint)
+        {
+            parent.RemoveChild(slot.Gun);
+            Master.MountPoint.AddChild(slot.Gun);
+        }
+
         ActiveGun = slot.Gun;
         ActiveIndex = index;
         return true;

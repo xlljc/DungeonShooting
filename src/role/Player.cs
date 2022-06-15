@@ -48,6 +48,9 @@ public class Player : Role
         {
             Face = FaceDirection.Left;
         }
+        if (Input.IsActionJustPressed("exchange")) {
+            ExchangeNext();
+        }
         //攻击
         Attack();
     }
