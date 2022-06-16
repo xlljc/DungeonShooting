@@ -85,7 +85,7 @@ Texture = ExtResource( 2 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
-frame = 2
+frame = 3
 playing = true
 
 [node name="HitArea" type="Area2D" parent="."]

@@ -43,4 +43,14 @@ public class OrdinaryGun : Gun
 
     }
 
+    protected override void OnActive()
+    {
+        
+    }
+
+    protected override void OnConceal()
+    {
+        
+    }
+
 }

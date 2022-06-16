@@ -110,7 +110,8 @@ public class Holster
     /// </summary>
     public bool ExchangeByIndex(int index)
     {
-        if (index > SlotList.Length) return false;
+        if (index == ActiveIndex && ActiveGun != null) return true; 
+        if (index < 0 || index > SlotList.Length) return false;
         var slot = SlotList[index];
         if (slot == null || slot.Gun == null) return false;
 
@@ -127,6 +128,7 @@ public class Holster
             }
             else if (ActiveIndex == 1)
             {
+                ActiveGun.Position = new Vector2(0, 0);
                 ActiveGun.RotationDegrees = 120;
                 ActiveGun.Scale = new Vector2(1, -1);
             }
@@ -138,10 +140,11 @@ public class Holster
             }
             else if (ActiveIndex == 3)
             {
+                ActiveGun.Position = new Vector2(0, 0);
                 ActiveGun.RotationDegrees = 60;
                 ActiveGun.Scale = new Vector2(1, 1);
             }
-
+            ActiveGun._Conceal();
         }
 
         //更改父节点
@@ -161,6 +164,7 @@ public class Holster
         slot.Gun.RotationDegrees = 0;
         ActiveGun = slot.Gun;
         ActiveIndex = index;
+        ActiveGun._Active();
         return true;
     }
 }

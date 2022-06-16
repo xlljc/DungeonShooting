@@ -10,6 +10,8 @@ public static class GunManager
         var gun = ResourceManager.LoadGunAndInstance("res://prefab/weapon/Gun.tscn");
         //设置基础属性
         var attr = new GunAttribute();
+        attr.Id = "1";
+        attr.Name = "Gun1";
         attr.StartFiringSpeed = 480;
         attr.StartScatteringRange = 30;
         attr.FinalScatteringRange = 90;
@@ -47,6 +49,8 @@ public static class GunManager
         var gun = ResourceManager.LoadGunAndInstance("res://prefab/weapon/Gun.tscn");
         //设置基础属性
         var attr = new GunAttribute();
+        attr.Id = "2";
+        attr.Name = "Gun2";
         attr.WeightType = GunWeightType.DeputyWeapon;
         attr.StartFiringSpeed = 600;
         attr.StartScatteringRange = 5;

@@ -6,6 +6,14 @@ using Godot;
 public class GunAttribute
 {
     /// <summary>
+    /// 武器的唯一id
+    /// </summary>
+    public string Id = "1";
+    /// <summary>
+    /// 武器显示的名称
+    /// </summary>
+    public string Name = "Gun1";
+    /// <summary>
     /// 主武器
     /// </summary>
     public GunWeightType WeightType = GunWeightType.MainWeapon;

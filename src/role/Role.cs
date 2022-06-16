@@ -83,17 +83,12 @@ public class Role : KinematicBody2D
     public void PickUpGun(Gun gun)
     {
         var index = Holster.PickupGun(gun);
-        SetActiveGun(index);
+        Holster.ExchangeByIndex(index);
     }
 
     public void ExchangeNext()
     {
         Holster.ExchangeNext();
-    }
-
-    private void SetActiveGun(int index)
-    {
-        Holster.ExchangeByIndex(index);
     }
 
     private void SetFace(FaceDirection face)

@@ -60,7 +60,6 @@ public abstract class Gun : Node2D
     /// </summary>
     public float CurrScatteringRange { get; private set; } = 0;
 
-
     //是否按下
     private bool triggerFlag = false;
     //扳机计时器
@@ -83,73 +82,102 @@ public abstract class Gun : Node2D
     private float continuousCount = 0;
     private bool continuousShootFlag = false;
 
+    private float floodlightTimer = -1;
+
     public override void _Process(float delta)
     {
-        if (Master == null || Master.Holster.ActiveGun != this)
-        {
-            return;
-        }
-        if (triggerFlag)
-        {
-            if (upTimer > 0) //第一帧按下扳机
-            {
-                upTimer = 0;
-                DownTrigger();
-            }
-            downTimer += delta;
-        }
-        else
-        {
-            if (downTimer > 0) //第一帧松开扳机
-            {
-                downTimer = 0;
-                UpTriggern();
-            }
-            upTimer += delta;
-        }
 
-        // 攻击的计时器
-        if (attackTimer > 0)
+        if (Master == null) //这把武器被扔在地上
         {
-            attackTimer -= delta;
-            if (attackTimer < 0)
+            if (floodlightTimer < 0)
             {
-                delayedTime += attackTimer;
-                attackTimer = 0;
+                floodlightTimer = 3f;
             }
-        }
-        else if (delayedTime > 0) //攻击延时
-        {
-            delayedTime -= delta;
-            if (attackTimer < 0)
+            else
             {
-                delayedTime = 0;
+                if (floodlightTimer >= 2.5f) {
+                    // Mathf.Lerp();
+                }
+                else if (floodlightTimer >= 2f) {
+
+                }
+                floodlightTimer -= delta;
             }
-        }
 
-        //连发判断
-        if (continuousCount > 0 && delayedTime <= 0 && attackTimer <= 0)
-        {
-            TriggernFire();
         }
+        else if (Master.Holster.ActiveGun != this) //当前武器没有被使用
+        {
+            triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
+            triggerFlag = false;
+            attackFlag = false;
+            attackTimer = attackTimer > 0 ? attackTimer - delta : 0;
+            continuousCount = 0;
+            delayedTime = 0;
+        }
+        else //正在使用中
+        {
+            if (triggerFlag)
+            {
+                if (upTimer > 0) //第一帧按下扳机
+                {
+                    upTimer = 0;
+                    DownTrigger();
+                }
+                downTimer += delta;
+            }
+            else
+            {
+                if (downTimer > 0) //第一帧松开扳机
+                {
+                    downTimer = 0;
+                    UpTriggern();
+                }
+                upTimer += delta;
+            }
 
-        if (!attackFlag && attackTimer <= 0)
-        {
-            CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta, Attribute.StartScatteringRange);
-        }
-        triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
-        triggerFlag = false;
-        attackFlag = false;
+            // 攻击的计时器
+            if (attackTimer > 0)
+            {
+                attackTimer -= delta;
+                if (attackTimer < 0)
+                {
+                    delayedTime += attackTimer;
+                    attackTimer = 0;
+                }
+            }
+            else if (delayedTime > 0) //攻击延时
+            {
+                delayedTime -= delta;
+                if (attackTimer < 0)
+                {
+                    delayedTime = 0;
+                }
+            }
 
-        //枪身回归
-        Position = Position.MoveToward(Vector2.Zero, 35 * delta);
-        if (fireInterval == 0)
-        {
-            RotationDegrees = 0;
-        }
-        else
-        {
-            RotationDegrees = Mathf.Lerp(0, fireAngle, attackTimer / fireInterval);
+            //连发判断
+            if (continuousCount > 0 && delayedTime <= 0 && attackTimer <= 0)
+            {
+                TriggernFire();
+            }
+
+            if (!attackFlag && attackTimer <= 0)
+            {
+                CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta, Attribute.StartScatteringRange);
+            }
+            triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
+            triggerFlag = false;
+            attackFlag = false;
+
+            //枪身回归
+            Position = Position.MoveToward(Vector2.Zero, 35 * delta);
+            if (fireInterval == 0)
+            {
+                RotationDegrees = 0;
+            }
+            else
+            {
+                RotationDegrees = Mathf.Lerp(0, fireAngle, attackTimer / fireInterval);
+            }
         }
     }
 
@@ -325,6 +353,16 @@ public abstract class Gun : Node2D
     /// </summary>
     protected abstract void OnThrowOut();
 
+    /// <summary>
+    /// 当武器被激活时调用, 也就是使用当武器是调用
+    /// </summary>
+    protected abstract void OnActive();
+
+    /// <summary>
+    /// 当武器被收起时调用
+    /// </summary>
+    protected abstract void OnConceal();
+
     public void _PickUpGun(Role master)
     {
         Master = master;
@@ -335,6 +373,16 @@ public abstract class Gun : Node2D
     {
         Master = null;
         OnThrowOut();
+    }
+
+    public void _Active()
+    {
+        OnActive();
+    }
+
+    public void _Conceal()
+    {
+        OnConceal();
     }
 
     /// <summary>
