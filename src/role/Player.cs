@@ -27,9 +27,12 @@ public class Player : Role
     public override void _Ready()
     {
         base._Ready();
-
+        Holster.SlotList[2].Enable = true;
+        Holster.SlotList[3].Enable = true;
         PickUpGun(GunManager.GetGun1()); //0
         PickUpGun(GunManager.GetGun2()); //1
+        PickUpGun(GunManager.GetGun1()); //2
+        PickUpGun(GunManager.GetGun2()); //3
     }
 
     public override void _Process(float delta)

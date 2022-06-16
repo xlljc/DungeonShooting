@@ -85,7 +85,7 @@ Texture = ExtResource( 2 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
-frame = 3
+frame = 2
 playing = true
 
 [node name="HitArea" type="Area2D" parent="."]
@@ -104,5 +104,5 @@ position = Vector2( 2, -4 )
 z_index = 1
 
 [node name="BackMountPoint" type="Position2D" parent="."]
-position = Vector2( 0, -5 )
+position = Vector2( 0, -10 )
 z_index = -1

@@ -96,7 +96,8 @@ public class Holster
             {
                 index = 0;
             }
-            if (ExchangeByIndex(index)) {
+            if (ExchangeByIndex(index))
+            {
                 return index;
             }
             index++;
@@ -118,8 +119,29 @@ public class Holster
         {
             ActiveGun.GetParent().RemoveChild(ActiveGun);
             Master.BackMountPoint.AddChild(ActiveGun);
-            ActiveGun.RotationDegrees = 60;
-            ActiveGun.Scale = new Vector2(-1, 1);
+            if (ActiveIndex == 0)
+            {
+                ActiveGun.Position = new Vector2(0, 5);
+                ActiveGun.RotationDegrees = 50;
+                ActiveGun.Scale = new Vector2(-1, 1);
+            }
+            else if (ActiveIndex == 1)
+            {
+                ActiveGun.RotationDegrees = 120;
+                ActiveGun.Scale = new Vector2(1, -1);
+            }
+            else if (ActiveIndex == 2)
+            {
+                ActiveGun.Position = new Vector2(0, 5);
+                ActiveGun.RotationDegrees = 310;
+                ActiveGun.Scale = new Vector2(1, 1);
+            }
+            else if (ActiveIndex == 3)
+            {
+                ActiveGun.RotationDegrees = 60;
+                ActiveGun.Scale = new Vector2(1, 1);
+            }
+
         }
 
         //更改父节点
@@ -134,6 +156,7 @@ public class Holster
             Master.MountPoint.AddChild(slot.Gun);
         }
 
+        slot.Gun.Position = Vector2.Zero;
         slot.Gun.Scale = Vector2.One;
         slot.Gun.RotationDegrees = 0;
         ActiveGun = slot.Gun;
