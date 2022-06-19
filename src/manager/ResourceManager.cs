@@ -20,6 +20,22 @@ public static class ResourceManager
     }
     private static ShaderMaterial _shadowMaterial;
 
+    /// <summary>
+    /// 2D阴影的Shader
+    /// </summary>
+    public static Shader ShadowShader
+    {
+        get
+        {
+            if (_shadowShader == null)
+            {
+                _shadowShader = ResourceLoader.Load<Shader>("res://resource/materlal/Shadow.gdshader");
+            }
+            return _shadowShader;
+        }
+    }
+    private static Shader _shadowShader;
+
     private static readonly Dictionary<string, object> CachePack = new Dictionary<string, object>();
 
     /// <summary>

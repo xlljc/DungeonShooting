@@ -29,8 +29,15 @@ public class Holster
     /// </summary>
     public Role Master { get; }
 
+    /// <summary>
+    /// 当前使用的武器对象
+    /// </summary>
     public Gun ActiveGun { get; private set; }
-    public int ActiveIndex { get; private set; }
+
+    /// <summary>
+    /// 当前使用的武器的索引
+    /// </summary>
+    public int ActiveIndex { get; private set; } = 0;
 
     public GunSlot[] SlotList { get; } = new GunSlot[4];
 
@@ -68,6 +75,7 @@ public class Holster
             if (item.Enable && gun.Attribute.WeightType == item.Type && item.Gun == null)
             {
                 item.Gun = gun;
+                ExchangeByIndex(i);
                 gun._PickUpGun(Master);
                 return i;
             }
@@ -77,20 +85,64 @@ public class Holster
     }
 
     /// <summary>
+    /// 移除指定位置的武器, 并返回这个武器对象, 如果移除正在使用的这把武器, 则会自动切换到上一把武器
+    /// </summary>
+    /// <param name="index">所在枪套的位置索引</param>
+    public Gun RmoveGun(int index)
+    {
+        if (index < 0 || index >= SlotList.Length)
+        {
+            return null;
+        }
+        var slot = SlotList[index];
+        if (slot.Gun == null)
+        {
+            return null;
+        }
+        var gun = slot.Gun;
+        gun.GetParent().RemoveChild(gun);
+        slot.Gun = null;
+
+        //如果是当前手持的武器, 就需要调用切换武器操作
+        if (index == ActiveIndex)
+        {
+            //没有其他武器了
+            if (ExchangePrev() == index)
+            {
+                ActiveIndex = 0;
+                ActiveGun = null;
+            }
+        }
+        return gun;
+    }
+
+    /// <summary>
     /// 切换到上一个武器
     /// </summary>
     public int ExchangePrev()
     {
-        return 0;
+        var index = ActiveIndex - 1;
+        do
+        {
+            if (index < 0)
+            {
+                index = SlotList.Length - 1;
+            }
+            if (ExchangeByIndex(index))
+            {
+                return index;
+            }
+        } while (index-- != ActiveIndex);
+        return -1;
     }
 
     /// <summary>
-    /// 切换到下一个武器
+    /// 切换到下一个武器, 
     /// </summary>
     public int ExchangeNext()
     {
         var index = ActiveIndex + 1;
-        while (index != ActiveIndex)
+        do
         {
             if (index >= SlotList.Length)
             {
@@ -100,8 +152,8 @@ public class Holster
             {
                 return index;
             }
-            index++;
         }
+        while (index++ != ActiveIndex);
         return -1;
     }
 
@@ -110,7 +162,7 @@ public class Holster
     /// </summary>
     public bool ExchangeByIndex(int index)
     {
-        if (index == ActiveIndex && ActiveGun != null) return true; 
+        if (index == ActiveIndex && ActiveGun != null) return true;
         if (index < 0 || index > SlotList.Length) return false;
         var slot = SlotList[index];
         if (slot == null || slot.Gun == null) return false;
@@ -118,33 +170,37 @@ public class Holster
         //将上一把武器放到背后
         if (ActiveGun != null)
         {
-            ActiveGun.GetParent().RemoveChild(ActiveGun);
-            Master.BackMountPoint.AddChild(ActiveGun);
-            if (ActiveIndex == 0)
+            var tempParent = ActiveGun.GetParentOrNull<Node2D>();
+            if (tempParent != null)
             {
-                ActiveGun.Position = new Vector2(0, 5);
-                ActiveGun.RotationDegrees = 50;
-                ActiveGun.Scale = new Vector2(-1, 1);
+                tempParent.RemoveChild(ActiveGun);
+                Master.BackMountPoint.AddChild(ActiveGun);
+                if (ActiveIndex == 0)
+                {
+                    ActiveGun.Position = new Vector2(0, 5);
+                    ActiveGun.RotationDegrees = 50;
+                    ActiveGun.Scale = new Vector2(-1, 1);
+                }
+                else if (ActiveIndex == 1)
+                {
+                    ActiveGun.Position = new Vector2(0, 0);
+                    ActiveGun.RotationDegrees = 120;
+                    ActiveGun.Scale = new Vector2(1, -1);
+                }
+                else if (ActiveIndex == 2)
+                {
+                    ActiveGun.Position = new Vector2(0, 5);
+                    ActiveGun.RotationDegrees = 310;
+                    ActiveGun.Scale = new Vector2(1, 1);
+                }
+                else if (ActiveIndex == 3)
+                {
+                    ActiveGun.Position = new Vector2(0, 0);
+                    ActiveGun.RotationDegrees = 60;
+                    ActiveGun.Scale = new Vector2(1, 1);
+                }
+                ActiveGun._Conceal();
             }
-            else if (ActiveIndex == 1)
-            {
-                ActiveGun.Position = new Vector2(0, 0);
-                ActiveGun.RotationDegrees = 120;
-                ActiveGun.Scale = new Vector2(1, -1);
-            }
-            else if (ActiveIndex == 2)
-            {
-                ActiveGun.Position = new Vector2(0, 5);
-                ActiveGun.RotationDegrees = 310;
-                ActiveGun.Scale = new Vector2(1, 1);
-            }
-            else if (ActiveIndex == 3)
-            {
-                ActiveGun.Position = new Vector2(0, 0);
-                ActiveGun.RotationDegrees = 60;
-                ActiveGun.Scale = new Vector2(1, 1);
-            }
-            ActiveGun._Conceal();
         }
 
         //更改父节点

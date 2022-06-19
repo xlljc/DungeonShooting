@@ -82,13 +82,31 @@ public class Role : KinematicBody2D
     /// <param name="gun">武器对象</param>
     public void PickUpGun(Gun gun)
     {
-        var index = Holster.PickupGun(gun);
-        Holster.ExchangeByIndex(index);
+        Holster.PickupGun(gun);
     }
 
+    /// <summary>
+    /// 切换到下一个武器
+    /// </summary>
     public void ExchangeNext()
     {
         Holster.ExchangeNext();
+    }
+
+    /// <summary>
+    /// 切换到上一个武器
+    /// </summary>
+    public void ExchangePrev()
+    {
+        Holster.ExchangePrev();
+    }
+
+    /// <summary>
+    /// 扔掉当前使用的武器, 切换到上一个武器
+    /// </summary>
+    public void ThrowGun()
+    {
+        Holster.RmoveGun(Holster.ActiveIndex);
     }
 
     private void SetFace(FaceDirection face)

@@ -34,6 +34,10 @@ public class RoomManager : Node2D
         Color color = (Color) node.GetMeta("ClearColor");
         VisualServer.SetDefaultClearColor(color);
 
+
+        var gun = GunManager.GetGun2();
+        gun.Position = new Vector2(100, 100);
+        ItemRoot.AddChild(gun);
     }
 
     public override void _Process(float delta)
