@@ -12,6 +12,8 @@ public static class GunManager
         var attr = new GunAttribute();
         attr.Id = "1";
         attr.Name = "Gun1";
+        attr.Weight = 40;
+        attr.CenterPosition = new Vector2(0.4f, -2.6f);
         attr.StartFiringSpeed = 480;
         attr.StartScatteringRange = 30;
         attr.FinalScatteringRange = 90;
@@ -51,6 +53,8 @@ public static class GunManager
         var attr = new GunAttribute();
         attr.Id = "2";
         attr.Name = "Gun2";
+        attr.Weight = 20;
+        attr.CenterPosition = new Vector2(0.4f, -2.6f);
         attr.WeightType = GunWeightType.DeputyWeapon;
         attr.StartFiringSpeed = 600;
         attr.StartScatteringRange = 5;
@@ -91,6 +95,8 @@ public static class GunManager
         var attr = new GunAttribute();
         attr.Id = "3";
         attr.Name = "Gun3";
+        attr.Weight = 30;
+        attr.CenterPosition = new Vector2(0.4f, -2.6f);
         attr.StartFiringSpeed = 480;
         attr.StartScatteringRange = 30;
         attr.FinalScatteringRange = 90;
@@ -130,6 +136,8 @@ public static class GunManager
         var attr = new GunAttribute();
         attr.Id = "4";
         attr.Name = "Gun4";
+        attr.Weight = 10;
+        attr.CenterPosition = new Vector2(0.4f, -2.6f);
         attr.WeightType = GunWeightType.DeputyWeapon;
         attr.StartFiringSpeed = 600;
         attr.StartScatteringRange = 5;

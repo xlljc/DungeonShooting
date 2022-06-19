@@ -95,7 +95,7 @@ public abstract class Gun : Node2D
     {
         if (Master == null) //这把武器被扔在地上
         {
-            
+
         }
         else if (Master.Holster.ActiveGun != this) //当前武器没有被使用
         {
@@ -189,11 +189,10 @@ public abstract class Gun : Node2D
         Attribute = attribute;
         //更新图片
         GunSprite.Texture = attribute.Sprite;
+        GunSprite.Position = Attribute.CenterPosition;
         //开火位置
         FirePoint.Position = new Vector2(attribute.FirePosition.x, -attribute.FirePosition.y);
         OriginPoint.Position = new Vector2(0, -attribute.FirePosition.y);
-        //握把位置
-        GunSprite.Position = attribute.HoldPosition;
 
         Init();
     }
@@ -360,7 +359,10 @@ public abstract class Gun : Node2D
     {
         Master = master;
         _state = 1;
+        //握把位置
+        GunSprite.Position = Attribute.HoldPosition;
         AnimationPlayer.Play("RESET");
+        ZIndex = 0;
         OnPickUp(master);
     }
 
@@ -368,6 +370,7 @@ public abstract class Gun : Node2D
     {
         Master = null;
         _state = 0;
+        GunSprite.Position = Attribute.CenterPosition;
         AnimationPlayer.Play("Floodlight");
         OnThrowOut();
     }

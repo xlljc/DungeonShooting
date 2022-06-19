@@ -3,11 +3,13 @@ using Godot;
 /// <summary>
 /// 弹壳
 /// </summary>
-public class Shell : ThrowNode
+public class ThrowShell : ThrowNode
 {
-    protected override void OnInit()
-    {
 
+    public override void _Ready()
+    {
+        base._Ready();
+        ZIndex = 2;
     }
 
     protected override void OnOver()
@@ -27,8 +29,13 @@ public class Shell : ThrowNode
     private async void AwaitDestroy()
     {
         CollisionShape.Disabled = true;
-        //20秒后销毁
-        await ToSignal(GetTree().CreateTimer(20), "timeout");
+        //60秒后销毁
+        await ToSignal(GetTree().CreateTimer(60), "timeout");
         QueueFree();
+    }
+
+    protected override void OnMaxHeight(float height)
+    {
+        ZIndex = 0;
     }
 }

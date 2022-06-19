@@ -106,7 +106,25 @@ public class Role : KinematicBody2D
     /// </summary>
     public void ThrowGun()
     {
-        Holster.RmoveGun(Holster.ActiveIndex);
+        var gun = Holster.RmoveGun(Holster.ActiveIndex);
+        //播放抛出效果
+        if (gun != null)
+        {
+            if (Face == FaceDirection.Left) {
+                gun.Scale *= new Vector2(1, -1);
+                gun.RotationDegrees = 180;
+            }
+            gun.Position = Vector2.Zero;
+            var temp = new ThrowGun();
+            var startPos = GlobalPosition + new Vector2(0, 0);
+            var startHeight = 6;
+            var direction = GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
+            var xf = 30;
+            var yf = MathUtils.RandRangeInt(60, 120);
+            var rotate = MathUtils.RandRangeInt(-180, 180);
+            temp.InitThrow(new Vector2(16, 7), startPos, startHeight, direction, xf, yf, rotate, gun, gun.GunSprite);
+            RoomManager.Current.ObjectRoot.AddChild(temp);
+        }
     }
 
     private void SetFace(FaceDirection face)

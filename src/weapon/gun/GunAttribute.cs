@@ -102,6 +102,10 @@ public class GunAttribute
     /// </summary>
     public float MinDistance = 800;
     /// <summary>
+    /// 武器精灵的旋转中心坐标
+    /// </summary>
+    public Vector2 CenterPosition = new Vector2(0, 0);
+    /// <summary>
     /// 开火位置
     /// </summary>
     public Vector2 FirePosition = new Vector2(11, 0);

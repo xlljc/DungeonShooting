@@ -22,10 +22,12 @@ process_mode = 0
 smoothing_enabled = true
 smoothing_speed = 8.0
 
-[node name="YSort" type="YSort" parent="."]
+[node name="ObjectRoot" type="Node2D" parent="."]
 
-[node name="Player" parent="YSort" instance=ExtResource( 1 )]
+[node name="ItemRoot" type="YSort" parent="."]
+
+[node name="Player" parent="ItemRoot" instance=ExtResource( 1 )]
 position = Vector2( 196, 128 )
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="YSort/Player"]
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="ItemRoot/Player"]
 remote_path = NodePath("../../../Camera2D")

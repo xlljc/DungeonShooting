@@ -113,6 +113,7 @@ public class Holster
                 ActiveGun = null;
             }
         }
+        gun._ThrowOutGun();
         return gun;
     }
 

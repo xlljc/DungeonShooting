@@ -17,6 +17,7 @@ public class RoomManager : Node2D
     public CanvasLayer UI;
     public Cursor Cursor { get; private set; }
     public Player Player { get; set; }
+    public Node2D ObjectRoot { get; private set; }
     public YSort ItemRoot { get; private set; }
 
     public override void _EnterTree()
@@ -27,17 +28,13 @@ public class RoomManager : Node2D
         Cursor = MouseCursor.Instance<Cursor>();
         AddChild(Cursor);
 
-        ItemRoot = GetNode<YSort>("YSort");
+        ItemRoot = GetNode<YSort>("ItemRoot");
+        ObjectRoot = GetNode<Node2D>("ObjectRoot");
 
         //初始化地图
         var node = GetNode("MapRoot").GetChild(0).GetNode("Config");
         Color color = (Color) node.GetMeta("ClearColor");
         VisualServer.SetDefaultClearColor(color);
-
-
-        var gun = GunManager.GetGun2();
-        gun.Position = new Vector2(100, 100);
-        ItemRoot.AddChild(gun);
     }
 
     public override void _Process(float delta)
