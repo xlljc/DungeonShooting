@@ -31,8 +31,8 @@ public class Player : Role
         Holster.SlotList[3].Enable = true;
         PickUpGun(GunManager.GetGun1()); //0
         PickUpGun(GunManager.GetGun2()); //1
-        PickUpGun(GunManager.GetGun1()); //2
-        PickUpGun(GunManager.GetGun2()); //3
+        PickUpGun(GunManager.GetGun3()); //2
+        PickUpGun(GunManager.GetGun4()); //3
     }
 
     public override void _Process(float delta)
@@ -51,9 +51,16 @@ public class Player : Role
         {
             Face = FaceDirection.Left;
         }
-        if (Input.IsActionJustPressed("exchange")) {
+
+        if (Input.IsActionJustPressed("exchange")) //切换武器
+        {
             ExchangeNext();
         }
+        else if (Input.IsActionJustPressed("throw")) //扔掉武器
+        {
+            ThrowGun();
+        }
+
         //攻击
         Attack();
     }

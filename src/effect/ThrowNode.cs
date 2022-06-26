@@ -60,6 +60,10 @@ public class ThrowNode : KinematicBody2D
     /// </summary>
     public Sprite ShadowSprite { get; protected set; }
 
+    protected Sprite ShadowTarget { get; set; }
+
+    private bool inversionX = false;
+
     public override void _Ready()
     {
         //只与墙壁碰撞
@@ -71,8 +75,6 @@ public class ThrowNode : KinematicBody2D
         shape.Extents = Size * 0.5f;
         CollisionShape.Shape = shape;
         AddChild(CollisionShape);
-
-
     }
 
     /// <summary>
@@ -118,22 +120,31 @@ public class ThrowNode : KinematicBody2D
     /// <param name="ySpeed">纵轴速度</param>
     /// <param name="rotate">旋转速度</param>
     /// <param name="mount">需要挂载的节点</param>
-    /// <param name="texutre">抛射的节点显示的纹理, 用于渲染阴影用</param>
-    public void InitThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount, Texture texutre)
+    /// <param name="shadowTarget">抛射的节点显示的纹理, 用于渲染阴影用</param>
+    public void InitThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount, Sprite shadowTarget)
     {
         InitThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate, mount);
-        if (texutre != null)
+        ShadowTarget = shadowTarget;
+        if (shadowTarget != null)
         {
             if (ShadowSprite == null)
             {
                 //阴影
                 ShadowSprite = new Sprite();
-                ShadowSprite.ZIndex = -1;
+                ShadowSprite.ZIndex = -5;
                 ShadowSprite.Material = ResourceManager.ShadowMaterial;
-                ShadowSprite.Position = new Vector2(0, 1);
                 AddChild(ShadowSprite);
             }
-            ShadowSprite.Texture = texutre;
+            inversionX = mount.Scale.y < 0 ? true : false;
+            if (inversionX)
+            {
+                ShadowSprite.Scale = shadowTarget.Scale * new Vector2(1, -1);
+            }
+            else
+            {
+                ShadowSprite.Scale = shadowTarget.Scale;
+            }
+            ShadowSprite.Texture = shadowTarget.Texture;
         }
         else if (ShadowSprite != null)
         {
@@ -142,9 +153,9 @@ public class ThrowNode : KinematicBody2D
     }
 
     /// <summary>
-    /// 初始化时调用
+    /// 达到最高点时调用
     /// </summary>
-    protected virtual void OnInit()
+    protected virtual void OnMaxHeight(float height)
     {
 
     }
@@ -168,9 +179,17 @@ public class ThrowNode : KinematicBody2D
             if (ShadowSprite != null)
             {
                 ShadowSprite.GlobalRotationDegrees = rotate;
+                // ShadowSprite.GlobalRotationDegrees = rotate + (inversionX ? 180 : 0);
+                ShadowSprite.GlobalPosition = ShadowTarget.GlobalPosition + new Vector2(0, 1 - Mount.Position.y);
             }
+            var ysp = YSpeed;
             YSpeed -= GameConfig.G * delta;
-
+            //达到最高点
+            if (ysp * YSpeed < 0)
+            {
+                OnMaxHeight(-Mount.Position.y);
+            }
+            //落地判断
             if (Mount.Position.y >= 0)
             {
                 Mount.Position = new Vector2(0, 0);

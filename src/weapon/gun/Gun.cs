@@ -34,6 +34,12 @@ public abstract class Gun : Node2D
     public Sprite GunSprite { get; private set; }
 
     /// <summary>
+    /// 动画播放器
+    /// </summary>
+    /// <value></value>
+    public AnimationPlayer AnimationPlayer { get; private set; }
+
+    /// <summary>
     /// 枪攻击的目标阵营
     /// </summary>
     public CampEnum TargetCamp { get; set; }
@@ -82,27 +88,13 @@ public abstract class Gun : Node2D
     private float continuousCount = 0;
     private bool continuousShootFlag = false;
 
-    private float floodlightTimer = -1;
+    //状态 0 在地上, 1 被拾起
+    private int _state = 0;
 
     public override void _Process(float delta)
     {
-
         if (Master == null) //这把武器被扔在地上
         {
-            if (floodlightTimer < 0)
-            {
-                floodlightTimer = 3f;
-            }
-            else
-            {
-                if (floodlightTimer >= 2.5f) {
-                    // Mathf.Lerp();
-                }
-                else if (floodlightTimer >= 2f) {
-
-                }
-                floodlightTimer -= delta;
-            }
 
         }
         else if (Master.Holster.ActiveGun != this) //当前武器没有被使用
@@ -192,15 +184,15 @@ public abstract class Gun : Node2D
         FirePoint = GetNode<Position2D>("FirePoint");
         OriginPoint = GetNode<Position2D>("OriginPoint");
         ShellPoint = GetNode<Position2D>("ShellPoint");
+        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
         Attribute = attribute;
         //更新图片
         GunSprite.Texture = attribute.Sprite;
+        GunSprite.Position = Attribute.CenterPosition;
         //开火位置
         FirePoint.Position = new Vector2(attribute.FirePosition.x, -attribute.FirePosition.y);
         OriginPoint.Position = new Vector2(0, -attribute.FirePosition.y);
-        //握把位置
-        GunSprite.Position = attribute.HoldPosition;
 
         Init();
     }
@@ -366,12 +358,20 @@ public abstract class Gun : Node2D
     public void _PickUpGun(Role master)
     {
         Master = master;
+        _state = 1;
+        //握把位置
+        GunSprite.Position = Attribute.HoldPosition;
+        AnimationPlayer.Play("RESET");
+        ZIndex = 0;
         OnPickUp(master);
     }
 
     public void _ThrowOutGun()
     {
         Master = null;
+        _state = 0;
+        GunSprite.Position = Attribute.CenterPosition;
+        AnimationPlayer.Play("Floodlight");
         OnThrowOut();
     }
 
