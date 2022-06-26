@@ -72,7 +72,9 @@ tracks/1/keys = {
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 7.8, 3.5 )
 
-[node name="Gun" type="Node2D"]
+[node name="Gun" type="Area2D"]
+collision_layer = 4
+collision_mask = 0
 script = ExtResource( 1 )
 
 [node name="GunSprite" type="Sprite" parent="."]
@@ -96,12 +98,6 @@ position = Vector2( -2.60001, -2.60001 )
 [node name="FirePoint" type="Position2D" parent="."]
 position = Vector2( 7.39999, -1.1 )
 
-[node name="Area" type="Area2D" parent="."]
-position = Vector2( -3.60001, 0.399996 )
-collision_layer = 4
-collision_mask = 0
-
-[node name="Collision" type="CollisionShape2D" parent="Area"]
-position = Vector2( 4.2, -0.199999 )
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2( 0.59999, 0.199997 )
 shape = SubResource( 1 )
-disabled = true

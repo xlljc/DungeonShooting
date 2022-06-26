@@ -21,6 +21,8 @@ public class ThrowShell : ThrowNode
         }
         else
         {
+            GetParent().RemoveChild(this);
+            RoomManager.Current.ObjectRoot.AddChild(this);
             //等待被销毁
             AwaitDestroy();
         }

@@ -4,7 +4,7 @@ using System;
 /// <summary>
 /// 枪的基类
 /// </summary>
-public abstract class Gun : Node2D
+public abstract class Gun : Area2D
 {
     /// <summary>
     /// 开火回调事件
@@ -61,6 +61,11 @@ public abstract class Gun : Node2D
     /// 弹壳抛出的点
     /// </summary>
     public Position2D ShellPoint { get; private set; }
+    /// <summary>
+    /// 碰撞器节点
+    /// </summary>
+    /// <value></value>
+    public CollisionShape2D CollisionShape2D { get; private set; }
     /// <summary>
     /// 枪的当前散射半径
     /// </summary>
@@ -185,6 +190,7 @@ public abstract class Gun : Node2D
         OriginPoint = GetNode<Position2D>("OriginPoint");
         ShellPoint = GetNode<Position2D>("ShellPoint");
         AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+        CollisionShape2D = GetNode<CollisionShape2D>("Collision");
 
         Attribute = attribute;
         //更新图片
@@ -355,6 +361,18 @@ public abstract class Gun : Node2D
     /// </summary>
     protected abstract void OnConceal();
 
+    /// <summary>
+    /// 触发落到地面
+    /// </summary>
+    public void _FallToGround()
+    {
+        //启用碰撞
+        CollisionShape2D.Disabled = false;
+    }
+
+    /// <summary>
+    /// 触发拾起
+    /// </summary>
     public void _PickUpGun(Role master)
     {
         Master = master;
@@ -363,9 +381,14 @@ public abstract class Gun : Node2D
         GunSprite.Position = Attribute.HoldPosition;
         AnimationPlayer.Play("RESET");
         ZIndex = 0;
+        //禁用碰撞
+        CollisionShape2D.Disabled = true;
         OnPickUp(master);
     }
 
+    /// <summary>
+    /// 触发抛出
+    /// </summary>
     public void _ThrowOutGun()
     {
         Master = null;
@@ -375,11 +398,17 @@ public abstract class Gun : Node2D
         OnThrowOut();
     }
 
+    /// <summary>
+    /// 触发启用武器
+    /// </summary>
     public void _Active()
     {
         OnActive();
     }
 
+    /// <summary>
+    /// 触发收起武器
+    /// </summary>
     public void _Conceal()
     {
         OnConceal();
@@ -405,7 +434,7 @@ public abstract class Gun : Node2D
         bullet.GlobalRotation = globalRotation;
         if (parent == null)
         {
-            RoomManager.Current.ItemRoot.AddChild(bullet);
+            RoomManager.Current.SortRoot.AddChild(bullet);
         }
         else
         {

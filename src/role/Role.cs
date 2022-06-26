@@ -60,6 +60,7 @@ public class Role : KinematicBody2D
     private FaceDirection _face;
 
     private Vector2 StartScele;
+    private Gun InteractiveItem = null;
 
     public override void _Ready()
     {
@@ -110,7 +111,8 @@ public class Role : KinematicBody2D
         //播放抛出效果
         if (gun != null)
         {
-            if (Face == FaceDirection.Left) {
+            if (Face == FaceDirection.Left)
+            {
                 gun.Scale *= new Vector2(1, -1);
                 gun.RotationDegrees = 180;
             }
@@ -122,11 +124,38 @@ public class Role : KinematicBody2D
             var xf = 30;
             var yf = MathUtils.RandRangeInt(60, 120);
             var rotate = MathUtils.RandRangeInt(-180, 180);
-            temp.InitThrow(new Vector2(16, 7), startPos, startHeight, direction, xf, yf, rotate, gun, gun.GunSprite);
-            RoomManager.Current.ObjectRoot.AddChild(temp);
+            temp.InitThrow(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, gun, gun.GunSprite);
+            RoomManager.Current.SortRoot.AddChild(temp);
         }
     }
 
+    /// <summary>
+    /// 返回是否存在可互动的物体
+    /// </summary>
+    public bool HasTnteractive()
+    {
+        return InteractiveItem != null;
+    }
+
+    /// <summary>
+    /// 触发与碰撞的物体互动
+    /// </summary>
+    public void TriggerTnteractive()
+    {
+        if (HasTnteractive())
+        {
+            var tempItem = InteractiveItem;
+            //临时处理
+            var parent = tempItem.GetParent();
+            parent.RemoveChild(tempItem);
+            Holster.PickupGun(tempItem);
+            parent.QueueFree();
+        }
+    }
+
+    /// <summary>
+    /// 设置脸的朝向
+    /// </summary>
     private void SetFace(FaceDirection face)
     {
         if (_face != face)
@@ -159,6 +188,30 @@ public class Role : KinematicBody2D
                 AtlasTexture temp = spriteFrames.GetFrame(anim, i) as AtlasTexture;
                 temp.Atlas = Texture;
             }
+        }
+    }
+
+    /// <summary>
+    /// 连接信号: InteractiveArea.area_entered
+    /// </summary>
+    private void _OnPropsEnter(Area2D other)
+    {
+        if (other is Gun gun)
+        {
+            InteractiveItem = gun;
+            GD.Print("enter");
+        }
+    }
+
+    /// <summary>
+    /// 连接信号: InteractiveArea.area_exited
+    /// </summary>
+    private void _OnPropsExit(Area2D other)
+    {
+        if (other == InteractiveItem)
+        {
+            InteractiveItem = null;
+            GD.Print("exit");
         }
     }
 

@@ -4,22 +4,6 @@
 [ext_resource path="res://resource/sprite/role/role2.png" type="Texture" id=2]
 [ext_resource path="res://resource/sprite/role/role1.png" type="Texture" id=3]
 
-[sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=22]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 3 )
-region = Rect2( 32, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 3 )
-region = Rect2( 48, 48, 16, 24 )
-
 [sub_resource type="AtlasTexture" id=25]
 atlas = ExtResource( 3 )
 region = Rect2( 48, 48, 16, 24 )
@@ -35,6 +19,22 @@ region = Rect2( 16, 48, 16, 24 )
 [sub_resource type="AtlasTexture" id=28]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 48, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 48, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 3 )
+region = Rect2( 16, 48, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 3 )
+region = Rect2( 32, 48, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 3 )
+region = Rect2( 48, 48, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 3 )
@@ -54,14 +54,14 @@ region = Rect2( 48, 24, 16, 24 )
 
 [sub_resource type="SpriteFrames" id=6]
 animations = [ {
-"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
-"loop": true,
-"name": "run",
-"speed": 10.0
-}, {
 "frames": [ SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ) ],
 "loop": true,
 "name": "reverseRun",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
+"loop": true,
+"name": "run",
 "speed": 10.0
 }, {
 "frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ) ],
@@ -85,17 +85,28 @@ Texture = ExtResource( 2 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
-frame = 1
+frame = 3
 playing = true
 
 [node name="HitArea" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea"]
 visible = false
 position = Vector2( 0, -7.5 )
 shape = SubResource( 29 )
 
+[node name="InteractiveArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="Collision" type="CollisionShape2D" parent="InteractiveArea"]
+position = Vector2( 0, -4.5 )
+shape = SubResource( 16 )
+
 [node name="Collision" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 0, -4.5 )
 shape = SubResource( 16 )
 
@@ -106,3 +117,6 @@ z_index = 1
 [node name="BackMountPoint" type="Position2D" parent="."]
 position = Vector2( 0, -10 )
 z_index = -1
+
+[connection signal="area_entered" from="InteractiveArea" to="." method="_OnPropsEnter"]
+[connection signal="area_exited" from="InteractiveArea" to="." method="_OnPropsExit"]
