@@ -51,7 +51,8 @@ public static class ResourceManager
     public static Gun LoadGunAndInstance(string path)
     {
         var pack = Load<PackedScene>(path);
-        if (pack != null) {
+        if (pack != null)
+        {
             return pack.Instance<Gun>();
         }
         return null;
