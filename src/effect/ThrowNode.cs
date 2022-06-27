@@ -91,6 +91,11 @@ public class ThrowNode : KinematicBody2D
     /// <param name="texutre">抛射的节点显示的纹理, 用于渲染阴影用</param>
     public void InitThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount)
     {
+        if (CollisionShape != null)
+        {
+            CollisionShape.Disabled = false;
+        }
+
         IsOver = false;
         Size = size;
         GlobalPosition = StartPosition = start;
@@ -194,6 +199,7 @@ public class ThrowNode : KinematicBody2D
             {
                 Mount.Position = new Vector2(0, 0);
                 IsOver = true;
+                CollisionShape.Disabled = true;
                 OnOver();
             }
         }

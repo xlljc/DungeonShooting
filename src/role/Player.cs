@@ -60,6 +60,10 @@ public class Player : Role
         {
             ThrowGun();
         }
+        else if (Input.IsActionJustPressed("interactive")) //互动物体
+        {
+            TriggerTnteractive();
+        }
 
         //攻击
         Attack();

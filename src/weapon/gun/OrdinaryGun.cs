@@ -24,7 +24,7 @@ public class OrdinaryGun : Gun
         var rotate = MathUtils.RandRangeInt(-720, 720);
         var sprite = Attribute.ShellPack.Instance<Sprite>();
         temp.InitThrow(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, sprite, sprite);
-        RoomManager.Current.ObjectRoot.AddChild(temp);
+        RoomManager.Current.SortRoot.AddChild(temp);
     }
 
     protected override void ShootBullet()
