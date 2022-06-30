@@ -144,12 +144,7 @@ public class Role : KinematicBody2D
     {
         if (HasTnteractive())
         {
-            var tempItem = InteractiveItem;
-            //临时处理
-            var parent = tempItem.GetParent();
-            parent.RemoveChild(tempItem);
-            Holster.PickupGun(tempItem);
-            parent.QueueFree();
+            InteractiveItem.Tnteractive(this);
         }
     }
 

@@ -34,15 +34,35 @@ public class GunAttribute
     /// </summary>
     public bool ContinuousShoot = true;
     /// <summary>
+    /// 弹夹容量
+    /// </summary>
+    public int CartridgeCapacity = 30;
+    /// <summary>
+    /// 弹夹容量上限
+    /// </summary>
+    public int MaxCartridgeCapacity = 90;
+    /// <summary>
+    /// 装弹时间
+    /// </summary>
+    public float ReloadTime = 1.5f;
+    /// <summary>
+    /// 每粒子弹是否是单独装填, 如果是, 那么每上一发子弹的时间就是 ReloadTime, 可以做霰弹枪装填效果
+    /// </summary>
+    public bool AloneReload = false;
+    /// <summary>
+    /// 单独装填的子弹时可以立即射击, 必须要将 'AloneReload' 属性设置为 true
+    /// </summary>
+    public bool AloneReloadCanShoot = false;
+    /// <summary>
     /// 是否为松发开火, 也就是松开扳机才开火, 若要启用该属性, 必须将 'ContinuousShoot' 设置为 false
     /// </summary>
     public bool LooseShoot = false;
     /// <summary>
-    /// 连续发射最小次数, 仅当ContinuousShoot为false时生效
+    /// 连续发射最小次数, 仅当 ContinuousShoot 为 false 时生效
     /// </summary>
     public int MinContinuousCount = 3;
     /// <summary>
-    /// 连续发射最大次数, 仅当ContinuousShoot为false时生效
+    /// 连续发射最大次数, 仅当 ContinuousShoot 为 false 时生效
     /// </summary>
     public int MaxContinuousCount = 3;
     /// <summary>

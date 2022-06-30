@@ -4,7 +4,7 @@ using System;
 /// <summary>
 /// 枪的基类
 /// </summary>
-public abstract class Gun : Area2D
+public abstract class Gun : Area2D, IProp
 {
     /// <summary>
     /// 开火回调事件
@@ -50,6 +50,15 @@ public abstract class Gun : Area2D
     public Role Master { get; private set; }
 
     /// <summary>
+    /// 当前弹夹弹药剩余量
+    /// </summary>
+    public int CurrAmmo { get; private set; }
+    /// <summary>
+    /// 剩余弹药量
+    /// </summary>
+    public int ResidueAmmo { get; private set; }
+
+    /// <summary>
     /// 枪管的开火点
     /// </summary>
     public Position2D FirePoint { get; private set; }
@@ -91,16 +100,58 @@ public abstract class Gun : Area2D
     private float upTimer = 0;
     //连发次数
     private float continuousCount = 0;
+    //连发状态记录
     private bool continuousShootFlag = false;
 
-    //状态 0 在地上, 1 被拾起
-    private int _state = 0;
+
+    /// <summary>
+    /// 初始化时调用
+    /// </summary>
+    protected abstract void Init();
+
+    /// <summary>
+    /// 单次开火时调用的函数
+    /// </summary>
+    protected abstract void Fire();
+
+    /// <summary>
+    /// 发射子弹时调用的函数, 每发射一枚子弹调用一次,
+    /// 如果做霰弹枪效果, 一次开火发射5枚子弹, 则该函数调用5次
+    /// </summary>
+    protected abstract void ShootBullet();
+
+    /// <summary>
+    /// 当武器被拾起时调用
+    /// </summary>
+    /// <param name="master">拾起该武器的角色</param>
+    protected abstract void OnPickUp(Role master);
+
+    /// <summary>
+    /// 当武器被扔掉时调用
+    /// </summary>
+    protected abstract void OnThrowOut();
+
+    /// <summary>
+    /// 当武器被激活时调用, 也就是使用当武器是调用
+    /// </summary>
+    protected abstract void OnActive();
+
+    /// <summary>
+    /// 当武器被收起时调用
+    /// </summary>
+    protected abstract void OnConceal();
 
     public override void _Process(float delta)
     {
         if (Master == null) //这把武器被扔在地上
         {
-
+            triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
+            triggerFlag = false;
+            attackFlag = false;
+            attackTimer = attackTimer > 0 ? attackTimer - delta : 0;
+            CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta, Attribute.StartScatteringRange);
+            continuousCount = 0;
+            delayedTime = 0;
         }
         else if (Master.Holster.ActiveGun != this) //当前武器没有被使用
         {
@@ -108,6 +159,7 @@ public abstract class Gun : Area2D
             triggerFlag = false;
             attackFlag = false;
             attackTimer = attackTimer > 0 ? attackTimer - delta : 0;
+            CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta, Attribute.StartScatteringRange);
             continuousCount = 0;
             delayedTime = 0;
         }
@@ -199,6 +251,9 @@ public abstract class Gun : Area2D
         //开火位置
         FirePoint.Position = new Vector2(attribute.FirePosition.x, -attribute.FirePosition.y);
         OriginPoint.Position = new Vector2(0, -attribute.FirePosition.y);
+
+        //弹药量
+        CurrAmmo = attribute.CartridgeCapacity;
 
         Init();
     }
@@ -324,42 +379,13 @@ public abstract class Gun : Area2D
         }
     }
 
-    /// <summary>
-    /// 初始化时调用
-    /// </summary>
-    protected abstract void Init();
-
-    /// <summary>
-    /// 单次开火时调用的函数
-    /// </summary>
-    protected abstract void Fire();
-
-    /// <summary>
-    /// 发射子弹时调用的函数, 每发射一枚子弹调用一次,
-    /// 如果做霰弹枪效果, 一次开火发射5枚子弹, 则该函数调用5次
-    /// </summary>
-    protected abstract void ShootBullet();
-
-    /// <summary>
-    /// 当武器被拾起时调用
-    /// </summary>
-    /// <param name="master">拾起该武器的角色</param>
-    protected abstract void OnPickUp(Role master);
-
-    /// <summary>
-    /// 当武器被扔掉时调用
-    /// </summary>
-    protected abstract void OnThrowOut();
-
-    /// <summary>
-    /// 当武器被激活时调用, 也就是使用当武器是调用
-    /// </summary>
-    protected abstract void OnActive();
-
-    /// <summary>
-    /// 当武器被收起时调用
-    /// </summary>
-    protected abstract void OnConceal();
+    public void Tnteractive(Role master)
+    {
+        var parent = GetParent();
+        parent.RemoveChild(this);
+        master.Holster.PickupGun(this);
+        parent.QueueFree();
+    }
 
     /// <summary>
     /// 触发落到地面
@@ -376,7 +402,6 @@ public abstract class Gun : Area2D
     public void _PickUpGun(Role master)
     {
         Master = master;
-        _state = 1;
         //握把位置
         GunSprite.Position = Attribute.HoldPosition;
         AnimationPlayer.Play("RESET");
@@ -392,7 +417,6 @@ public abstract class Gun : Area2D
     public void _ThrowOutGun()
     {
         Master = null;
-        _state = 0;
         GunSprite.Position = Attribute.CenterPosition;
         AnimationPlayer.Play("Floodlight");
         OnThrowOut();
@@ -423,7 +447,10 @@ public abstract class Gun : Area2D
         return (T)CreateBullet(bulletPack, globalPostion, globalRotation, parent);
     }
 
-
+    /// <summary>
+    /// 实例化并返回子弹对象
+    /// </summary>
+    /// <param name="bulletPack">子弹的预制体</param>
     protected IBullet CreateBullet(PackedScene bulletPack, Vector2 globalPostion, float globalRotation, Node parent = null)
     {
         // 实例化子弹
