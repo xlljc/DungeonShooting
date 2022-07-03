@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 /// <summary>
@@ -33,8 +34,13 @@ public class RoomManager : Node2D
 
         //初始化地图
         var node = GetNode("MapRoot").GetChild(0).GetNode("Config");
-        Color color = (Color) node.GetMeta("ClearColor");
+        Color color = (Color)node.GetMeta("ClearColor");
         VisualServer.SetDefaultClearColor(color);
+    }
+
+    public override void _Ready()
+    {
+        SoundManager.PlayeMusic("intro.ogg", this, -17f);
     }
 
     public override void _Process(float delta)

@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 /// <summary>
@@ -53,6 +54,12 @@ public class OrdinaryBullets : Node2D, IBullet
         ShadowSprite.Offset = BulletSprite.Offset;
         ShadowSprite.Material = ResourceManager.ShadowMaterial;
         AddChild(ShadowSprite);
+    }
+
+    public override void _Ready()
+    {
+        //生成时播放音效
+        SoundManager.PlaySoundEffect("ordinaryBullet.ogg", this, 6f);
     }
 
     public override void _PhysicsProcess(float delta)
