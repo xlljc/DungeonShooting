@@ -7,6 +7,7 @@
 script = ExtResource( 2 )
 
 [node name="Center" type="Sprite" parent="."]
+visible = false
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 3, 3, 2, 2 )
