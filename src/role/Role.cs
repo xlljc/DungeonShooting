@@ -89,7 +89,7 @@ public class Role : KinematicBody2D
     /// <summary>
     /// 切换到下一个武器
     /// </summary>
-    public void ExchangeNext()
+    public void TriggerExchangeNext()
     {
         Holster.ExchangeNext();
     }
@@ -105,7 +105,7 @@ public class Role : KinematicBody2D
     /// <summary>
     /// 扔掉当前使用的武器, 切换到上一个武器
     /// </summary>
-    public void ThrowGun()
+    public void TriggerThrowGun()
     {
         var gun = Holster.RmoveGun(Holster.ActiveIndex);
         //播放抛出效果
@@ -145,6 +145,28 @@ public class Role : KinematicBody2D
         if (HasTnteractive())
         {
             InteractiveItem.Tnteractive(this);
+        }
+    }
+
+    /// <summary>
+    /// 触发换弹
+    /// </summary>
+    public void TriggerReload()
+    {
+        if (Holster.ActiveGun != null)
+        {
+            Holster.ActiveGun._Reload();
+        }
+    }
+
+    /// <summary>
+    /// 触发攻击
+    /// </summary>
+    public void TriggerAttack()
+    {
+        if (Holster.ActiveGun != null)
+        {
+            Holster.ActiveGun.Trigger();
         }
     }
 

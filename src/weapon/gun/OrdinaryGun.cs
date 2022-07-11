@@ -12,7 +12,7 @@ public class OrdinaryGun : Gun
 
     }
 
-    protected override void Fire()
+    protected override void OnFire()
     {
         //创建一个弹壳
         var temp = new ThrowShell();
@@ -27,10 +27,15 @@ public class OrdinaryGun : Gun
         RoomManager.Current.SortRoot.AddChild(temp);
     }
 
-    protected override void ShootBullet()
+    protected override void OnShootBullet()
     {
         //创建子弹
         CreateBullet(Attribute.BulletPack, FirePoint.GlobalPosition, (FirePoint.GlobalPosition - OriginPoint.GlobalPosition).Angle());
+    }
+
+    protected override void OnReload()
+    {
+        
     }
 
     protected override void OnPickUp(Role master)

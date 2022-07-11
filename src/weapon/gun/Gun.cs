@@ -102,6 +102,10 @@ public abstract class Gun : Area2D, IProp
     private float continuousCount = 0;
     //连发状态记录
     private bool continuousShootFlag = false;
+    //是否在换弹中
+    private bool reloading = false;
+    //换弹计时器
+    private float reloadTimer = 0;
 
 
     /// <summary>
@@ -112,13 +116,18 @@ public abstract class Gun : Area2D, IProp
     /// <summary>
     /// 单次开火时调用的函数
     /// </summary>
-    protected abstract void Fire();
+    protected abstract void OnFire();
+
+    /// <summary>
+    /// 换弹时调用
+    /// </summary>
+    protected abstract void OnReload();
 
     /// <summary>
     /// 发射子弹时调用的函数, 每发射一枚子弹调用一次,
     /// 如果做霰弹枪效果, 一次开火发射5枚子弹, 则该函数调用5次
     /// </summary>
-    protected abstract void ShootBullet();
+    protected abstract void OnShootBullet();
 
     /// <summary>
     /// 当武器被拾起时调用
@@ -145,6 +154,7 @@ public abstract class Gun : Area2D, IProp
     {
         if (Master == null) //这把武器被扔在地上
         {
+            reloading = false;
             triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
             triggerFlag = false;
             attackFlag = false;
@@ -155,6 +165,7 @@ public abstract class Gun : Area2D, IProp
         }
         else if (Master.Holster.ActiveGun != this) //当前武器没有被使用
         {
+            reloading = false;
             triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
             triggerFlag = false;
             attackFlag = false;
@@ -165,6 +176,17 @@ public abstract class Gun : Area2D, IProp
         }
         else //正在使用中
         {
+
+            //换弹
+            if (reloading)
+            {
+                reloadTimer -= delta;
+                if (reloadTimer <= 0)
+                {
+                    ReloadSuccess();
+                }
+            }
+
             if (triggerFlag)
             {
                 if (upTimer > 0) //第一帧按下扳机
@@ -206,6 +228,7 @@ public abstract class Gun : Area2D, IProp
             //连发判断
             if (continuousCount > 0 && delayedTime <= 0 && attackTimer <= 0)
             {
+                //开火
                 TriggernFire();
             }
 
@@ -254,6 +277,8 @@ public abstract class Gun : Area2D, IProp
 
         //弹药量
         CurrAmmo = attribute.CartridgeCapacity;
+        //剩余弹药量
+        ResidueAmmo = attribute.MaxCartridgeCapacity - attribute.CartridgeCapacity;
 
         Init();
     }
@@ -298,23 +323,37 @@ public abstract class Gun : Area2D, IProp
 
         if (flag)
         {
-            if (justDown)
+            if (reloading)
             {
-                //开火前延时
-                delayedTime = Attribute.DelayedTime;
-                //扳机按下间隔
-                triggerTimer = Attribute.TriggerInterval;
-                //连发数量
-                if (!Attribute.ContinuousShoot)
+                //换弹中
+                GD.Print("换弹中...");
+            }
+            else if (CurrAmmo <= 0)
+            {
+                //子弹不够
+                GD.Print("弹夹打空了, 按R换弹!");
+            }
+            else
+            {
+                if (justDown)
                 {
-                    continuousCount = MathUtils.RandRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
+                    //开火前延时
+                    delayedTime = Attribute.DelayedTime;
+                    //扳机按下间隔
+                    triggerTimer = Attribute.TriggerInterval;
+                    //连发数量
+                    if (!Attribute.ContinuousShoot)
+                    {
+                        continuousCount = MathUtils.RandRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
+                    }
                 }
+                if (delayedTime <= 0 && attackTimer <= 0)
+                {
+                    TriggernFire();
+                }
+                attackFlag = true;
             }
-            if (delayedTime <= 0 && attackTimer <= 0)
-            {
-                TriggernFire();
-            }
-            attackFlag = true;
+
         }
         triggerFlag = true;
     }
@@ -345,11 +384,16 @@ public abstract class Gun : Area2D, IProp
     private void TriggernFire()
     {
         continuousCount = continuousCount > 0 ? continuousCount - 1 : 0;
+
+        //减子弹数量
+        CurrAmmo--;
+        //开火间隙
         fireInterval = 60 / Attribute.StartFiringSpeed;
+        //攻击冷却
         attackTimer += fireInterval;
 
         //触发开火函数
-        Fire();
+        OnFire();
 
         //开火发射的子弹数量
         var bulletCount = MathUtils.RandRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
@@ -362,7 +406,7 @@ public abstract class Gun : Area2D, IProp
             //先算枪口方向
             Rotation = (float)GD.RandRange(-angle, angle);
             //发射子弹
-            ShootBullet();
+            OnShootBullet();
         }
 
         //当前的散射半径
@@ -376,6 +420,44 @@ public abstract class Gun : Area2D, IProp
         if (FireEvent != null)
         {
             FireEvent(this);
+        }
+    }
+
+    /// <summary>
+    /// 触发换弹
+    /// </summary>
+    public void _Reload()
+    {
+        if (CurrAmmo < Attribute.CartridgeCapacity && ResidueAmmo > 0 && !reloading)
+        {
+            reloading = true;
+            reloadTimer = Attribute.ReloadTime;
+            OnReload();
+        }
+    }
+
+    /// <summary>
+    /// 换弹计时器时间到, 执行换弹操作
+    /// </summary>
+    private void ReloadSuccess()
+    {
+        if (Attribute.AloneReload) //单独装填
+        {
+
+        }
+        else //换弹结束
+        {
+            reloading = false;
+            if (ResidueAmmo >= Attribute.CartridgeCapacity)
+            {
+                ResidueAmmo -= Attribute.CartridgeCapacity;
+                CurrAmmo = Attribute.CartridgeCapacity;
+            }
+            else
+            {
+                CurrAmmo = ResidueAmmo;
+                ResidueAmmo = 0;
+            }
         }
     }
 

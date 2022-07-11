@@ -54,19 +54,24 @@ public class Player : Role
 
         if (Input.IsActionJustPressed("exchange")) //切换武器
         {
-            ExchangeNext();
+            TriggerExchangeNext();
         }
         else if (Input.IsActionJustPressed("throw")) //扔掉武器
         {
-            ThrowGun();
+            TriggerThrowGun();
         }
         else if (Input.IsActionJustPressed("interactive")) //互动物体
         {
             TriggerTnteractive();
         }
-
-        //攻击
-        Attack();
+        else if (Input.IsActionJustPressed("reload")) //换弹
+        {
+            TriggerReload();
+        }
+        if (Input.IsActionPressed("fire")) //开火
+        {
+            TriggerAttack();
+        }
     }
 
     public override void _PhysicsProcess(float delta)
@@ -91,17 +96,6 @@ public class Player : Role
         else Velocity.y = Mathf.MoveToward(Velocity.y, dir.y * MoveSpeed, Acceleration * delta);
 
         Velocity = MoveAndSlide(Velocity);
-    }
-
-    private void Attack()
-    {
-        if (Input.IsActionPressed("fire"))
-        {
-            if (Holster.ActiveGun != null)
-            {
-                Holster.ActiveGun.Trigger();
-            }
-        }
     }
 
     // 播放动画

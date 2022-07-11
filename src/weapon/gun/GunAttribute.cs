@@ -38,7 +38,7 @@ public class GunAttribute
     /// </summary>
     public int CartridgeCapacity = 30;
     /// <summary>
-    /// 弹夹容量上限
+    /// 弹药容量上限
     /// </summary>
     public int MaxCartridgeCapacity = 90;
     /// <summary>
