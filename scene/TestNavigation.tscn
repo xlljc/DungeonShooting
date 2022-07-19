@@ -2,7 +2,7 @@
 
 [ext_resource path="res://src/TestNavigation.cs" type="Script" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
-[ext_resource path="res://resource/sprite/package/craftpix-net-248911/All Tileset/16x16.png" type="Texture" id=3]
+[ext_resource path="res://resource/sprite/package/craftpix-net-248911/16x16.png" type="Texture" id=3]
 
 [sub_resource type="NavigationPolygon" id=2]
 vertices = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )

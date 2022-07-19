@@ -60,7 +60,7 @@ public class Role : KinematicBody2D
     private FaceDirection _face;
 
     private Vector2 StartScele;
-    private Gun InteractiveItem = null;
+    private readonly List<IProp> InteractiveItemList = new List<IProp>();
 
     public override void _Ready()
     {
@@ -134,7 +134,7 @@ public class Role : KinematicBody2D
     /// </summary>
     public bool HasTnteractive()
     {
-        return InteractiveItem != null;
+        return InteractiveItemList.Count > 0;
     }
 
     /// <summary>
@@ -144,7 +144,8 @@ public class Role : KinematicBody2D
     {
         if (HasTnteractive())
         {
-            InteractiveItem.Tnteractive(this);
+            var item = InteractiveItemList[InteractiveItemList.Count - 1];
+            item.Tnteractive(this);
         }
     }
 
@@ -215,8 +216,10 @@ public class Role : KinematicBody2D
     {
         if (other is Gun gun)
         {
-            InteractiveItem = gun;
-            GD.Print("enter");
+            if (!InteractiveItemList.Contains(gun))
+            {
+                InteractiveItemList.Add(gun);
+            }
         }
     }
 
@@ -225,10 +228,12 @@ public class Role : KinematicBody2D
     /// </summary>
     private void _OnPropsExit(Area2D other)
     {
-        if (other == InteractiveItem)
+        if (other is Gun gun)
         {
-            InteractiveItem = null;
-            GD.Print("exit");
+            if (InteractiveItemList.Contains(gun))
+            {
+                InteractiveItemList.Remove(gun);
+            }
         }
     }
 
