@@ -25,6 +25,8 @@ public class OrdinaryGun : Gun
         var sprite = Attribute.ShellPack.Instance<Sprite>();
         temp.InitThrow(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, sprite, sprite);
         RoomManager.Current.SortRoot.AddChild(temp);
+        //创建抖动
+        MainCamera.Main.ProssesDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
     }
 
     protected override void OnShootBullet()
