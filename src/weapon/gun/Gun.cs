@@ -79,6 +79,15 @@ public abstract class Gun : Area2D, IProp
     /// 枪的当前散射半径
     /// </summary>
     public float CurrScatteringRange { get; private set; } = 0;
+    /// <summary>
+    /// 是否在换弹中
+    /// </summary>
+    /// <value></value>
+    public bool Reloading { get; private set; } = false;
+    /// <summary>
+    /// 换弹计时器
+    /// </summary>
+    public float ReloadTimer { get; private set; } = 0;
 
     //是否按下
     private bool triggerFlag = false;
@@ -102,11 +111,6 @@ public abstract class Gun : Area2D, IProp
     private float continuousCount = 0;
     //连发状态记录
     private bool continuousShootFlag = false;
-    //是否在换弹中
-    private bool reloading = false;
-    //换弹计时器
-    private float reloadTimer = 0;
-
 
     /// <summary>
     /// 初始化时调用
@@ -154,7 +158,7 @@ public abstract class Gun : Area2D, IProp
     {
         if (Master == null) //这把武器被扔在地上
         {
-            reloading = false;
+            Reloading = false;
             triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
             triggerFlag = false;
             attackFlag = false;
@@ -165,7 +169,7 @@ public abstract class Gun : Area2D, IProp
         }
         else if (Master.Holster.ActiveGun != this) //当前武器没有被使用
         {
-            reloading = false;
+            Reloading = false;
             triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
             triggerFlag = false;
             attackFlag = false;
@@ -178,11 +182,12 @@ public abstract class Gun : Area2D, IProp
         {
 
             //换弹
-            if (reloading)
+            if (Reloading)
             {
-                reloadTimer -= delta;
-                if (reloadTimer <= 0)
+                ReloadTimer -= delta;
+                if (ReloadTimer <= 0)
                 {
+                    ReloadTimer = 0;
                     ReloadSuccess();
                 }
             }
@@ -323,10 +328,10 @@ public abstract class Gun : Area2D, IProp
 
         if (flag)
         {
-            if (reloading)
+            if (Reloading)
             {
                 //换弹中
-                GD.Print("换弹中...");
+                GD.Print("换弹中..." + (ReloadTimer / Attribute.ReloadTime));
             }
             else if (CurrAmmo <= 0)
             {
@@ -428,10 +433,10 @@ public abstract class Gun : Area2D, IProp
     /// </summary>
     public void _Reload()
     {
-        if (CurrAmmo < Attribute.CartridgeCapacity && ResidueAmmo > 0 && !reloading)
+        if (CurrAmmo < Attribute.CartridgeCapacity && ResidueAmmo > 0 && !Reloading)
         {
-            reloading = true;
-            reloadTimer = Attribute.ReloadTime;
+            Reloading = true;
+            ReloadTimer = Attribute.ReloadTime;
             OnReload();
         }
     }
@@ -447,7 +452,7 @@ public abstract class Gun : Area2D, IProp
         }
         else //换弹结束
         {
-            reloading = false;
+            Reloading = false;
             if (ResidueAmmo >= Attribute.CartridgeCapacity)
             {
                 ResidueAmmo -= Attribute.CartridgeCapacity;
