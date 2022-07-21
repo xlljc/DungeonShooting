@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://resource/sprite/ui/Cursor.png" type="Texture" id=1]
+[ext_resource path="res://src/effect/Cursor.cs" type="Script" id=2]
+
+[node name="Cursor" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="LT" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+offset = Vector2( -2, -2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 4, 4 )
+
+[node name="LB" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+offset = Vector2( -2, 2 )
+region_enabled = true
+region_rect = Rect2( 0, 4, 4, 4 )
+
+[node name="RT" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+offset = Vector2( 2, -2 )
+region_enabled = true
+region_rect = Rect2( 4, 0, 4, 4 )
+
+[node name="RB" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+offset = Vector2( 2, 2 )
+region_enabled = true
+region_rect = Rect2( 4, 4, 4, 4 )
