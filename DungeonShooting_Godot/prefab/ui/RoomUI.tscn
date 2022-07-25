@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/ui/RoomUI.cs" type="Script" id=1]
 [ext_resource path="res://resource/sprite/ui/template-ui.png" type="Texture" id=2]
+[ext_resource path="res://resource/sprite/ui/RoomUi.png" type="Texture" id=3]
 
 [node name="RoomUI" type="Control"]
 anchor_right = 1.0
@@ -9,8 +10,12 @@ anchor_bottom = 1.0
 script = ExtResource( 1 )
 
 [node name="TextureRect" type="TextureRect" parent="."]
-margin_left = 13.0
-margin_top = 9.0
-margin_right = 90.0
-margin_bottom = 33.0
+margin_left = 26.0
+margin_top = -63.0
+margin_right = 103.0
+margin_bottom = -39.0
 texture = ExtResource( 2 )
+
+[node name="RoomUi" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+centered = false
