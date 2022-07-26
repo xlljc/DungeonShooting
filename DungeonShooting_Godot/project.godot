@@ -33,6 +33,11 @@ window/stretch/shrink=4.0
 
 enabled=PoolStringArray( "res://addons/vnen.tiled_importer/plugin.cfg" )
 
+[gui]
+
+theme/custom="res://resource/theme/mainTheme.tres"
+theme/custom_font="res://resource/font/cn_font_6.tres"
+
 [importer_defaults]
 
 texture={

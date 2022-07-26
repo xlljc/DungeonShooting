@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/ui/RoomUI.cs" type="Script" id=1]
 [ext_resource path="res://resource/sprite/ui/mapBar.png" type="Texture" id=2]
 [ext_resource path="res://resource/sprite/ui/RoomUi.png" type="Texture" id=3]
 [ext_resource path="res://resource/sprite/ui/healthBar.png" type="Texture" id=4]
+[ext_resource path="res://resource/sprite/gun/gun4.png" type="Texture" id=5]
+[ext_resource path="res://resource/sprite/ui/hpBar.png" type="Texture" id=6]
+[ext_resource path="res://resource/sprite/ui/shieldBar.png" type="Texture" id=7]
 
 [node name="RoomUI" type="Control"]
 anchor_right = 1.0
@@ -15,18 +18,62 @@ visible = false
 texture = ExtResource( 3 )
 centered = false
 
-[node name="TextureRect" type="TextureRect" parent="."]
-margin_left = 17.0
-margin_top = 14.0
-margin_right = 72.0
-margin_bottom = 28.0
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = -20.0
+
+[node name="HealthBar" type="TextureRect" parent="Control"]
+margin_right = 55.0
+margin_bottom = 14.0
 texture = ExtResource( 4 )
 
-[node name="TextureRect2" type="TextureRect" parent="."]
+[node name="HpBar" type="TextureRect" parent="Control/HealthBar"]
+margin_left = 14.0
+margin_top = 3.0
+margin_right = 53.0
+margin_bottom = 7.0
+texture = ExtResource( 6 )
+
+[node name="ShieldBar" type="TextureRect" parent="Control/HealthBar"]
+margin_left = 14.0
+margin_top = 9.0
+margin_right = 46.0
+margin_bottom = 12.0
+texture = ExtResource( 7 )
+
+[node name="MapBar" type="TextureRect" parent="Control"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -61.0
-margin_top = 12.0
-margin_right = -17.0
-margin_bottom = 56.0
+margin_left = -44.0
+margin_bottom = 44.0
 texture = ExtResource( 2 )
+
+[node name="Control" type="Control" parent="Control"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -50.0
+margin_right = 50.0
+
+[node name="GunBar" type="TextureRect" parent="Control/Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -33.0
+margin_top = -33.0
+margin_right = 33.0
+margin_bottom = 33.0
+texture = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="Control/Control"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -28.0
+margin_right = 28.0
+margin_bottom = 17.0
+text = "30/90"
+align = 1
