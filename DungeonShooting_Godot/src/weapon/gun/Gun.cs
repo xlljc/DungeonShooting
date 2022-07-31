@@ -455,7 +455,7 @@ public abstract class Gun : Area2D, IProp
             Reloading = false;
             if (ResidueAmmo >= Attribute.CartridgeCapacity)
             {
-                ResidueAmmo -= Attribute.CartridgeCapacity;
+                ResidueAmmo -= Attribute.CartridgeCapacity - CurrAmmo;
                 CurrAmmo = Attribute.CartridgeCapacity;
             }
             else
@@ -469,9 +469,10 @@ public abstract class Gun : Area2D, IProp
     public void Tnteractive(Role master)
     {
         var parent = GetParent();
-        parent.RemoveChild(this);
-        master.Holster.PickupGun(this);
-        parent.QueueFree();
+        if (master.Holster.PickupGun(this) != -1)
+        {
+            parent.QueueFree();
+        }
     }
 
     /// <summary>
@@ -491,7 +492,11 @@ public abstract class Gun : Area2D, IProp
         Master = master;
         //握把位置
         GunSprite.Position = Attribute.HoldPosition;
-        AnimationPlayer.Play("RESET");
+        //清除泛白效果
+        ShaderMaterial sm = GunSprite.Material as ShaderMaterial;
+        sm.SetShaderParam("schedule", 0);
+        //停止动画
+        AnimationPlayer.Stop();
         ZIndex = 0;
         //禁用碰撞
         CollisionShape2D.Disabled = true;

@@ -13,7 +13,7 @@ public enum FaceDirection
 /// <summary>
 /// 角色基类
 /// </summary>
-public class Role : KinematicBody2D
+public abstract class Role : KinematicBody2D
 {
     /// <summary>
     /// 重写的纹理
@@ -59,8 +59,47 @@ public class Role : KinematicBody2D
     public FaceDirection Face { get => _face; set => SetFace(value); }
     private FaceDirection _face;
 
+    /// <summary>
+    /// 血量
+    /// </summary>
+    public int Hp
+    {
+        get => _hp;
+        protected set
+        {
+            int temp = _hp;
+            _hp = value;
+            if (temp != _hp) OnChangeHp(_hp);
+        }
+    }
+    private int _hp = 0;
+
+    /// <summary>
+    /// 最大血量
+    /// </summary>
+    public int MaxHp
+    {
+        get => _maxHp;
+        protected set
+        {
+            int temp = _maxHp;
+            _maxHp = value;
+            if (temp != _maxHp) OnChangeMaxHp(_maxHp);
+        }
+    }
+    private int _maxHp = 0;
+
     private Vector2 StartScele;
     private readonly List<IProp> InteractiveItemList = new List<IProp>();
+
+    /// <summary>
+    /// 当血量改变时调用
+    /// </summary>
+    protected abstract void OnChangeHp(int hp);
+    /// <summary>
+    /// 当最大血量改变时调用
+    /// </summary>
+    protected abstract void OnChangeMaxHp(int maxHp);
 
     public override void _Ready()
     {
@@ -211,28 +250,30 @@ public class Role : KinematicBody2D
 
     /// <summary>
     /// 连接信号: InteractiveArea.area_entered
+    /// 与道具碰撞
     /// </summary>
     private void _OnPropsEnter(Area2D other)
     {
-        if (other is Gun gun)
+        if (other is IProp prop)
         {
-            if (!InteractiveItemList.Contains(gun))
+            if (!InteractiveItemList.Contains(prop))
             {
-                InteractiveItemList.Add(gun);
+                InteractiveItemList.Add(prop);
             }
         }
     }
 
     /// <summary>
     /// 连接信号: InteractiveArea.area_exited
+    /// 道具离开碰撞区域
     /// </summary>
     private void _OnPropsExit(Area2D other)
     {
-        if (other is Gun gun)
+        if (other is IProp prop)
         {
-            if (InteractiveItemList.Contains(gun))
+            if (InteractiveItemList.Contains(prop))
             {
-                InteractiveItemList.Remove(gun);
+                InteractiveItemList.Remove(prop);
             }
         }
     }

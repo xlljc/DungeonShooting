@@ -16,6 +16,37 @@ public class Player : Role
     /// </summary>
     public Vector2 Velocity = Vector2.Zero;
 
+    /// <summary>
+    /// 当前护盾值
+    /// </summary>
+    public int Shield
+    {
+        get => _shield;
+        protected set
+        {
+            int temp = _shield;
+            _shield = value;
+            if (temp != _shield) OnChangeShield(_shield);
+        }
+    }
+    private int _shield = 0;
+
+    /// <summary>
+    /// 最大护盾值
+    /// </summary>
+    public int MaxShield
+    {
+        get => _maxShield;
+        protected set
+        {
+            int temp = _maxShield;
+            _maxShield = value;
+            if (temp != _maxShield) OnChangeMaxShield(_maxShield);
+        }
+    }
+    private int _maxShield = 0;
+
+
     [Export] public PackedScene GunPrefab;
 
     public override void _EnterTree()
@@ -33,6 +64,12 @@ public class Player : Role
         PickUpGun(GunManager.GetGun2()); //1
         PickUpGun(GunManager.GetGun3()); //2
         PickUpGun(GunManager.GetGun4()); //3
+        RefreshGunTexture();
+
+        MaxHp = 50;
+        Hp = 40;
+        MaxShield = 30;
+        Shield = 10;
     }
 
     public override void _Process(float delta)
@@ -55,14 +92,17 @@ public class Player : Role
         if (Input.IsActionJustPressed("exchange")) //切换武器
         {
             TriggerExchangeNext();
+            RefreshGunTexture();
         }
         else if (Input.IsActionJustPressed("throw")) //扔掉武器
         {
             TriggerThrowGun();
+            RefreshGunTexture();
         }
         else if (Input.IsActionJustPressed("interactive")) //互动物体
         {
             TriggerTnteractive();
+            RefreshGunTexture();
         }
         else if (Input.IsActionJustPressed("reload")) //换弹
         {
@@ -72,6 +112,8 @@ public class Player : Role
         {
             TriggerAttack();
         }
+        //刷新显示的弹药剩余量
+        RefreshGunAmmunition();
     }
 
     public override void _PhysicsProcess(float delta)
@@ -80,6 +122,54 @@ public class Player : Role
         Move(delta);
         //播放动画
         PlayAnim();
+    }
+
+    protected override void OnChangeHp(int hp)
+    {
+        RoomUI.Current.SetHp(hp);
+    }
+
+    protected override void OnChangeMaxHp(int maxHp)
+    {
+        RoomUI.Current.SetMaxHp(maxHp);
+    }
+
+    protected void OnChangeShield(int shield)
+    {
+        RoomUI.Current.SetShield(shield);
+    }
+
+    protected void OnChangeMaxShield(int maxShield)
+    {
+        RoomUI.Current.SetMaxShield(maxShield);
+    }
+
+    /// <summary>
+    /// 刷新 ui 上手持的物体
+    /// </summary>
+    private void RefreshGunTexture()
+    {
+        var gun = Holster.ActiveGun;
+        if (gun != null)
+        {
+            RoomUI.Current.SetGunTexture(gun.Attribute.Sprite);
+        }
+        else
+        {
+            RoomUI.Current.SetGunTexture(null);
+        }
+    }
+
+    /// <summary>
+    /// 刷新 ui 上显示的弹药量
+    /// </summary>
+    private void RefreshGunAmmunition()
+    {
+        var gun = Holster.ActiveGun;
+        if (gun != null)
+        {
+            RoomUI.Current.SetAmmunition(gun.CurrAmmo, gun.ResidueAmmo);
+        }
     }
 
     private void Move(float delta)

@@ -36,7 +36,7 @@ texture = ExtResource( 4 )
 [node name="HpSlot" type="NinePatchRect" parent="Control/HealthBar"]
 margin_left = 13.0
 margin_top = 1.0
-margin_right = 81.0
+margin_right = 66.0
 margin_bottom = 9.0
 texture = ExtResource( 8 )
 patch_margin_left = 1
@@ -47,7 +47,7 @@ patch_margin_bottom = 1
 [node name="HpBar" type="TextureRect" parent="Control/HealthBar/HpSlot"]
 margin_left = 1.0
 margin_top = 2.0
-margin_right = 66.0
+margin_right = 51.0
 margin_bottom = 6.0
 texture = ExtResource( 6 )
 expand = true
@@ -55,7 +55,7 @@ expand = true
 [node name="ShieldSlot" type="NinePatchRect" parent="Control/HealthBar"]
 margin_left = 13.0
 margin_top = 8.0
-margin_right = 87.0
+margin_right = 65.0
 margin_bottom = 13.0
 texture = ExtResource( 9 )
 patch_margin_left = 1
@@ -66,7 +66,7 @@ patch_margin_bottom = 1
 [node name="ShieldBar" type="TextureRect" parent="Control/HealthBar/ShieldSlot"]
 margin_left = 1.0
 margin_top = 1.0
-margin_right = 73.0
+margin_right = 51.0
 margin_bottom = 4.0
 texture = ExtResource( 7 )
 expand = true
@@ -78,13 +78,13 @@ margin_left = -44.0
 margin_bottom = 44.0
 texture = ExtResource( 2 )
 
-[node name="Control" type="Control" parent="Control"]
+[node name="GunBar" type="Control" parent="Control"]
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_top = -43.0
 margin_right = 40.0
 
-[node name="GunBar" type="TextureRect" parent="Control/Control"]
+[node name="GunSprite" type="TextureRect" parent="Control/GunBar"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -95,7 +95,7 @@ margin_right = 33.0
 margin_bottom = 33.0
 texture = ExtResource( 5 )
 
-[node name="BulletBar" type="Label" parent="Control/Control"]
+[node name="BulletText" type="Label" parent="Control/GunBar"]
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -28.0
