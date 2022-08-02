@@ -468,10 +468,11 @@ public abstract class Gun : Area2D, IProp
 
     public void Tnteractive(Role master)
     {
-        var parent = GetParent();
-        if (master.Holster.PickupGun(this) != -1)
+        var parent = GetParentOrNull<ThrowNode>();
+        if (parent != null)
         {
-            parent.QueueFree();
+            parent.StopThrow();
+            master.Holster.PickupGun(this);
         }
     }
 

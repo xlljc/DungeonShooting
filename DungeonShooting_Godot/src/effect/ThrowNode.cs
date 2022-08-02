@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 /// <summary>
@@ -9,7 +8,6 @@ public class ThrowNode : KinematicBody2D
     /// <summary>
     /// 是否已经结束
     /// </summary>
-    /// <value></value>
     public bool IsOver { get; protected set; } = true;
     /// <summary>
     /// 物体大小
@@ -22,7 +20,6 @@ public class ThrowNode : KinematicBody2D
     /// <summary>
     /// 移动方向, 0 - 360
     /// </summary>
-    /// <value></value>
     public float Direction { get; protected set; }
     /// <summary>
     /// x速度, 也就是水平速度
@@ -31,12 +28,10 @@ public class ThrowNode : KinematicBody2D
     /// <summary>
     /// y轴速度, 也就是竖直速度
     /// </summary>
-    /// <value></value>
     public float YSpeed { get; protected set; }
     /// <summary>
     /// 初始x轴组队
     /// </summary>
-    /// <value></value>
     public float StartXSpeed { get; protected set; }
     /// <summary>
     /// 初始y轴速度
@@ -53,7 +48,6 @@ public class ThrowNode : KinematicBody2D
     /// <summary>
     /// 碰撞组件
     /// </summary>
-    /// <value></value>
     public CollisionShape2D CollisionShape { get; protected set; }
     /// <summary>
     /// 绘制阴影的精灵
@@ -64,6 +58,11 @@ public class ThrowNode : KinematicBody2D
 
     private bool inversionX = false;
 
+    public ThrowNode()
+    {
+        Name = "ThrowNode";
+    }
+
     public override void _Ready()
     {
         //只与墙壁碰撞
@@ -71,6 +70,7 @@ public class ThrowNode : KinematicBody2D
         CollisionLayer = 0;
         //创建碰撞器
         CollisionShape = new CollisionShape2D();
+        CollisionShape.Name = "Collision";
         var shape = new RectangleShape2D();
         shape.Extents = Size * 0.5f;
         CollisionShape.Shape = shape;
@@ -112,6 +112,10 @@ public class ThrowNode : KinematicBody2D
             AddChild(mount);
             mount.Position = new Vector2(0, -startHeight);
         }
+        if (GetParentOrNull<Node>() == null)
+        {
+            RoomManager.Current.SortRoot.AddChild(this);
+        }
     }
 
     /// <summary>
@@ -136,6 +140,7 @@ public class ThrowNode : KinematicBody2D
             {
                 //阴影
                 ShadowSprite = new Sprite();
+                ShadowSprite.Name = "Shadow";
                 ShadowSprite.ZIndex = -5;
                 ShadowSprite.Material = ResourceManager.ShadowMaterial;
                 AddChild(ShadowSprite);
@@ -157,6 +162,24 @@ public class ThrowNode : KinematicBody2D
         }
     }
 
+    public Node2D StopThrow()
+    {
+        var mount = Mount;
+        var parent = GetParentOrNull<Node>();
+        if (parent != null && mount != null)
+        {
+            var gp = mount.GlobalPosition;
+            var gr = mount.GlobalRotation;
+            Mount = null;
+            RemoveChild(mount);
+            parent.AddChild(mount);
+            mount.GlobalPosition = gp;
+            mount.GlobalRotation = gr;
+        }
+        QueueFree();
+        return mount;
+    }
+
     /// <summary>
     /// 达到最高点时调用
     /// </summary>
@@ -166,11 +189,12 @@ public class ThrowNode : KinematicBody2D
     }
 
     /// <summary>
-    /// 结束的调用
+    /// /// 结束的调用
     /// </summary>
     protected virtual void OnOver()
     {
-
+        GetParent().RemoveChild(this);
+        RoomManager.Current.ObjectRoot.AddChild(this);
     }
 
     public override void _Process(float delta)

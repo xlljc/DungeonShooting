@@ -164,7 +164,6 @@ public abstract class Role : KinematicBody2D
             var yf = MathUtils.RandRangeInt(60, 120);
             var rotate = MathUtils.RandRangeInt(-180, 180);
             temp.InitThrow(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, gun, gun.GunSprite);
-            RoomManager.Current.SortRoot.AddChild(temp);
         }
     }
 

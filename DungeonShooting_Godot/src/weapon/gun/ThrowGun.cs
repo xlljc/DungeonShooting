@@ -25,10 +25,9 @@ public class ThrowGun : ThrowNode
         {
             InitThrow(Size, GlobalPosition, 0, Direction, XSpeed * 0.8f, StartYSpeed * 0.5f, RotateSpeed * 0.5f, null);
         }
-        else
+        else //结束
         {
-            GetParent().RemoveChild(this);
-            RoomManager.Current.ObjectRoot.AddChild(this);
+            base.OnOver();
         }
     }
     protected override void OnMaxHeight(float height)
