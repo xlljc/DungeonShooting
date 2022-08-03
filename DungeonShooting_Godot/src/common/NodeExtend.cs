@@ -29,7 +29,12 @@ public static class NodeExtend
         return inst;
     }
 
-    public static bool StopThrow(this Node2D node)
+    public static ThrowNode PutDown(this Node2D node, Sprite shadowTarget)
+    {
+        return StartThrow(node, Vector2.Zero, node.Position, 0, 0, 0, 0, 0, shadowTarget);
+    }
+
+    public static bool Pickup(this Node2D node)
     {
         ThrowNode parent = node.GetParentOrNull<ThrowNode>();
         if (parent != null) {

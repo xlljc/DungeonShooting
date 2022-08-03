@@ -64,6 +64,34 @@ public class Holster
     }
 
     /// <summary>
+    /// 根据索引获取武器
+    /// </summary>
+    public Gun GetGun(int index) {
+        if (index >= SlotList.Length)
+        {
+            return null;
+        }
+        return SlotList[index].Gun;
+    }
+
+    /// <summary>
+    /// 根据武器id查找枪套中该武器所在的位置, 如果没有, 则返回 -1
+    /// </summary>
+    /// <param name="id">武器id</param>
+    public int FindGun(string id)
+    {
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            var item = SlotList[i];
+            if (item.Gun != null && item.Gun.Attribute.Id == id)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /// <summary>
     /// 拾起武器, 存入枪套中, 返回存放在枪套的位置, 如果容不下这把武器, 则会返回 -1
     /// </summary>
     /// <param name="gun">武器对象</param>

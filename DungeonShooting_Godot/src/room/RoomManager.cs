@@ -40,7 +40,20 @@ public class RoomManager : Node2D
 
     public override void _Ready()
     {
+        //播放bgm
         SoundManager.PlayeMusic("intro.ogg", this, -17f);
+        var gun1 = GunManager.GetGun1();
+        gun1.Position = new Vector2(80, 80);
+        gun1.PutDown(gun1.GunSprite);
+        var gun2 = GunManager.GetGun2();
+        gun2.Position = new Vector2(80, 120);
+        gun2.PutDown(gun2.GunSprite);
+        var gun3 = GunManager.GetGun3();
+        gun3.Position = new Vector2(120, 80);
+        gun3.PutDown(gun3.GunSprite);
+        var gun4 = GunManager.GetGun4();
+        gun4.Position = new Vector2(120, 120);
+        gun4.PutDown(gun4.GunSprite);
     }
 
     public override void _Process(float delta)

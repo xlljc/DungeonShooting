@@ -429,6 +429,17 @@ public abstract class Gun : Area2D, IProp
     }
 
     /// <summary>
+    /// 拾起的弹药数量, 如果到达容量上限, 则返回拾取完毕后剩余的弹药数量
+    /// </summary>
+    /// <param name="count">弹药数量</param>
+    public int PickUpAmmo(int count)
+    {
+        var num = ResidueAmmo;
+        ResidueAmmo = Mathf.Min(ResidueAmmo + count, Attribute.MaxCartridgeCapacity - CurrAmmo);
+        return count - ResidueAmmo + num;
+    }
+
+    /// <summary>
     /// 触发换弹
     /// </summary>
     public void _Reload()
@@ -468,9 +479,33 @@ public abstract class Gun : Area2D, IProp
 
     public void Tnteractive(Role master)
     {
-        if (this.StopThrow())
+        var index = master.Holster.FindGun(Attribute.Id);
+        if (index != -1) //如果有这个武器
         {
-            master.Holster.PickupGun(this);
+            if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
+            {
+                return;
+            }
+            var gun = master.Holster.GetGun(index);
+            var maxCount = Attribute.MaxCartridgeCapacity;
+
+            if (ResidueAmmo > 0 && gun.CurrAmmo + gun.ResidueAmmo < maxCount)
+            {
+                ResidueAmmo = gun.PickUpAmmo(ResidueAmmo);
+            }
+            if (CurrAmmo > 0 && gun.CurrAmmo + gun.ResidueAmmo < maxCount)
+            {
+                CurrAmmo = gun.PickUpAmmo(CurrAmmo);
+            }
+            //CurrAmmo
+            //ResidueAmmo
+        }
+        else//没有武器
+        {
+            if (this.Pickup())
+            {
+                master.Holster.PickupGun(this);
+            }
         }
     }
 

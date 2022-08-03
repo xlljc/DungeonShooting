@@ -69,12 +69,15 @@ public class ThrowNode : KinematicBody2D
         CollisionMask = 1;
         CollisionLayer = 0;
         //创建碰撞器
-        CollisionShape = new CollisionShape2D();
-        CollisionShape.Name = "Collision";
-        var shape = new RectangleShape2D();
-        shape.Extents = Size * 0.5f;
-        CollisionShape.Shape = shape;
-        AddChild(CollisionShape);
+        if (Size != Vector2.Zero)
+        {
+            CollisionShape = new CollisionShape2D();
+            CollisionShape.Name = "Collision";
+            var shape = new RectangleShape2D();
+            shape.Extents = Size * 0.5f;
+            CollisionShape.Shape = shape;
+            AddChild(CollisionShape);
+        }
     }
 
     /// <summary>
@@ -226,7 +229,10 @@ public class ThrowNode : KinematicBody2D
             {
                 Mount.Position = new Vector2(0, 0);
                 IsOver = true;
-                CollisionShape.Disabled = true;
+                if (CollisionShape != null)
+                {
+                    CollisionShape.Disabled = true;
+                }
                 OnOver();
             }
         }
