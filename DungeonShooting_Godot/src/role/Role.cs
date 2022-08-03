@@ -156,14 +156,13 @@ public abstract class Role : KinematicBody2D
                 gun.RotationDegrees = 180;
             }
             gun.Position = Vector2.Zero;
-            var temp = new ThrowGun();
             var startPos = GlobalPosition + new Vector2(0, 0);
             var startHeight = 6;
             var direction = GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
             var xf = 30;
             var yf = MathUtils.RandRangeInt(60, 120);
             var rotate = MathUtils.RandRangeInt(-180, 180);
-            temp.InitThrow(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, gun, gun.GunSprite);
+            gun.StartThrow<ThrowGun>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, gun.GunSprite);
         }
     }
 

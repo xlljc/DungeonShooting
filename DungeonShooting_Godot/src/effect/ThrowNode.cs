@@ -89,7 +89,7 @@ public class ThrowNode : KinematicBody2D
     /// <param name="rotate">旋转速度</param>
     /// <param name="mount">需要挂载的节点</param>
     /// <param name="texutre">抛射的节点显示的纹理, 用于渲染阴影用</param>
-    public void InitThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount)
+    public void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount)
     {
         if (CollisionShape != null)
         {
@@ -130,9 +130,9 @@ public class ThrowNode : KinematicBody2D
     /// <param name="rotate">旋转速度</param>
     /// <param name="mount">需要挂载的节点</param>
     /// <param name="shadowTarget">抛射的节点显示的纹理, 用于渲染阴影用</param>
-    public void InitThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount, Sprite shadowTarget)
+    public void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount, Sprite shadowTarget)
     {
-        InitThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate, mount);
+        StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate, mount);
         ShadowTarget = shadowTarget;
         if (shadowTarget != null)
         {
@@ -162,6 +162,9 @@ public class ThrowNode : KinematicBody2D
         }
     }
 
+    /// <summary>
+    /// 停止投抛运动
+    /// </summary>
     public Node2D StopThrow()
     {
         var mount = Mount;
