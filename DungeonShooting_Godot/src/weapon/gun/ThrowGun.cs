@@ -10,6 +10,13 @@ public class ThrowGun : ThrowNode
         base._Ready();
         ZIndex = 2;
     }
+
+    public override void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount)
+    {
+        base.StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate, mount);
+        fristOver = true;
+    }
+
     protected override void OnOver()
     {
         if (fristOver)

@@ -92,7 +92,7 @@ public class ThrowNode : KinematicBody2D
     /// <param name="rotate">旋转速度</param>
     /// <param name="mount">需要挂载的节点</param>
     /// <param name="texutre">抛射的节点显示的纹理, 用于渲染阴影用</param>
-    public void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount)
+    public virtual void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount)
     {
         if (CollisionShape != null)
         {
@@ -112,10 +112,19 @@ public class ThrowNode : KinematicBody2D
         if (mount != null)
         {
             Mount = mount;
-            AddChild(mount);
+            var parent = mount.GetParent();
+            if (parent == null)
+            {
+                AddChild(mount);
+            }
+            else if (parent != this)
+            {
+                parent.RemoveChild(mount);
+                AddChild(mount);
+            }
             mount.Position = new Vector2(0, -startHeight);
         }
-        if (GetParentOrNull<Node>() == null)
+        if (GetParent() == null)
         {
             RoomManager.Current.SortRoot.AddChild(this);
         }
@@ -133,7 +142,7 @@ public class ThrowNode : KinematicBody2D
     /// <param name="rotate">旋转速度</param>
     /// <param name="mount">需要挂载的节点</param>
     /// <param name="shadowTarget">抛射的节点显示的纹理, 用于渲染阴影用</param>
-    public void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount, Sprite shadowTarget)
+    public virtual void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount, Sprite shadowTarget)
     {
         StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate, mount);
         ShadowTarget = shadowTarget;
@@ -171,7 +180,7 @@ public class ThrowNode : KinematicBody2D
     public Node2D StopThrow()
     {
         var mount = Mount;
-        var parent = GetParentOrNull<Node>();
+        var parent = GetParent();
         if (parent != null && mount != null)
         {
             var gp = mount.GlobalPosition;

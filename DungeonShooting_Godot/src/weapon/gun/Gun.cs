@@ -487,18 +487,35 @@ public abstract class Gun : Area2D, IProp
                 return;
             }
             var gun = master.Holster.GetGun(index);
+            //子弹上限
             var maxCount = Attribute.MaxAmmoCapacity;
-
+            //是否捡到子弹
+            var flag = false;
             if (ResidueAmmo > 0 && gun.CurrAmmo + gun.ResidueAmmo < maxCount)
             {
-                ResidueAmmo = gun.PickUpAmmo(ResidueAmmo);
+                var count = gun.PickUpAmmo(ResidueAmmo);
+                if (count != ResidueAmmo)
+                {
+                    ResidueAmmo = count;
+                    flag = true;
+                }
             }
             if (CurrAmmo > 0 && gun.CurrAmmo + gun.ResidueAmmo < maxCount)
             {
-                CurrAmmo = gun.PickUpAmmo(CurrAmmo);
+                var count = gun.PickUpAmmo(CurrAmmo);
+                if (count != CurrAmmo)
+                {
+                    CurrAmmo = count;
+                    flag = true;
+                }
             }
-            //CurrAmmo
-            //ResidueAmmo
+            //播放互动效果
+            if (flag)
+            {
+                this.StartThrow<ThrowGun>(new Vector2(20, 20), GlobalPosition, 0, 0,
+                    MathUtils.RandRangeInt(-20, 20), MathUtils.RandRangeInt(20, 50),
+                    MathUtils.RandRangeInt(-180, 180), GunSprite);
+            }
         }
         else//没有武器
         {

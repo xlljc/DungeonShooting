@@ -11,10 +11,7 @@ public static class NodeExtend
 
     public static T StartThrow<T>(this Node2D node, Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate) where T : ThrowNode
     {
-        StartThrow<T>(node, size, start, startHeight, direction, xSpeed, ySpeed, rotate, null);
-        T inst = Activator.CreateInstance<T>();
-        inst.StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate, node);
-        return inst;
+        return StartThrow<T>(node, size, start, startHeight, direction, xSpeed, ySpeed, rotate, null);
     }
 
     public static ThrowNode StartThrow(this Node2D node, Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Sprite shadowTarget)
@@ -24,7 +21,21 @@ public static class NodeExtend
 
     public static T StartThrow<T>(this Node2D node, Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Sprite shadowTarget) where T : ThrowNode
     {
-        T inst = Activator.CreateInstance<T>();
+        ThrowNode throwNode = node.GetParentOrNull<ThrowNode>();
+        T inst;
+        if (throwNode == null)
+        {
+            inst = Activator.CreateInstance<T>();
+        }
+        else if (throwNode is T)
+        {
+            inst = throwNode as T;
+        }
+        else
+        {
+            throwNode.StopThrow();
+            inst = Activator.CreateInstance<T>();
+        }
         inst.StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate, node, shadowTarget);
         return inst;
     }
