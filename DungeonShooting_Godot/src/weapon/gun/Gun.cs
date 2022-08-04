@@ -281,9 +281,9 @@ public abstract class Gun : Area2D, IProp
         OriginPoint.Position = new Vector2(0, -attribute.FirePosition.y);
 
         //弹药量
-        CurrAmmo = attribute.CartridgeCapacity;
+        CurrAmmo = attribute.AmmoCapacity;
         //剩余弹药量
-        ResidueAmmo = attribute.MaxCartridgeCapacity - attribute.CartridgeCapacity;
+        ResidueAmmo = attribute.MaxAmmoCapacity - attribute.AmmoCapacity;
 
         Init();
     }
@@ -435,7 +435,7 @@ public abstract class Gun : Area2D, IProp
     public int PickUpAmmo(int count)
     {
         var num = ResidueAmmo;
-        ResidueAmmo = Mathf.Min(ResidueAmmo + count, Attribute.MaxCartridgeCapacity - CurrAmmo);
+        ResidueAmmo = Mathf.Min(ResidueAmmo + count, Attribute.MaxAmmoCapacity - CurrAmmo);
         return count - ResidueAmmo + num;
     }
 
@@ -444,7 +444,7 @@ public abstract class Gun : Area2D, IProp
     /// </summary>
     public void _Reload()
     {
-        if (CurrAmmo < Attribute.CartridgeCapacity && ResidueAmmo > 0 && !Reloading)
+        if (CurrAmmo < Attribute.AmmoCapacity && ResidueAmmo > 0 && !Reloading)
         {
             Reloading = true;
             ReloadTimer = Attribute.ReloadTime;
@@ -464,10 +464,10 @@ public abstract class Gun : Area2D, IProp
         else //换弹结束
         {
             Reloading = false;
-            if (ResidueAmmo >= Attribute.CartridgeCapacity)
+            if (ResidueAmmo >= Attribute.AmmoCapacity)
             {
-                ResidueAmmo -= Attribute.CartridgeCapacity - CurrAmmo;
-                CurrAmmo = Attribute.CartridgeCapacity;
+                ResidueAmmo -= Attribute.AmmoCapacity - CurrAmmo;
+                CurrAmmo = Attribute.AmmoCapacity;
             }
             else
             {
@@ -487,7 +487,7 @@ public abstract class Gun : Area2D, IProp
                 return;
             }
             var gun = master.Holster.GetGun(index);
-            var maxCount = Attribute.MaxCartridgeCapacity;
+            var maxCount = Attribute.MaxAmmoCapacity;
 
             if (ResidueAmmo > 0 && gun.CurrAmmo + gun.ResidueAmmo < maxCount)
             {
@@ -502,9 +502,15 @@ public abstract class Gun : Area2D, IProp
         }
         else//没有武器
         {
-            if (this.Pickup())
+            if (master.Holster.PickupGun(this) == -1)
             {
-                master.Holster.PickupGun(this);
+                var slot = master.Holster.SlotList[master.Holster.ActiveIndex];
+                if (slot.Type == Attribute.WeightType)
+                {
+                    var gun = master.Holster.RmoveGun(master.Holster.ActiveIndex);
+                    gun.StartThrowGun(master);
+                    master.Holster.PickupGun(this);
+                }
             }
         }
     }

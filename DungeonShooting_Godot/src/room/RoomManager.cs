@@ -54,6 +54,9 @@ public class RoomManager : Node2D
         var gun4 = GunManager.GetGun4();
         gun4.Position = new Vector2(120, 120);
         gun4.PutDown(gun4.GunSprite);
+        var gun5 = GunManager.GetGun5();
+        gun5.Position = new Vector2(160, 160);
+        gun5.PutDown(gun5.GunSprite);
     }
 
     public override void _Process(float delta)

@@ -176,6 +176,7 @@ public class ThrowNode : KinematicBody2D
         {
             var gp = mount.GlobalPosition;
             var gr = mount.GlobalRotation;
+            IsOver = true;
             Mount = null;
             RemoveChild(mount);
             parent.AddChild(mount);
@@ -207,6 +208,11 @@ public class ThrowNode : KinematicBody2D
     {
         if (!IsOver)
         {
+            if (Mount == null)
+            {
+                QueueFree();
+                return;
+            }
             MoveAndSlide(new Vector2(XSpeed, 0).Rotated(Direction * Mathf.Pi / 180));
             Mount.Position = new Vector2(0, Mount.Position.y - YSpeed * delta);
             var rotate = Mount.GlobalRotationDegrees + RotateSpeed * delta;

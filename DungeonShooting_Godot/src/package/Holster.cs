@@ -102,13 +102,13 @@ public class Holster
             var item = SlotList[i];
             if (item.Enable && gun.Attribute.WeightType == item.Type && item.Gun == null)
             {
+                gun.Pickup();
                 item.Gun = gun;
                 ExchangeByIndex(i);
                 gun._PickUpGun(Master);
                 return i;
             }
         }
-        GD.PrintErr("存入武器失败!");
         return -1;
     }
 

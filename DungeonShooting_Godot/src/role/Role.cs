@@ -150,19 +150,7 @@ public abstract class Role : KinematicBody2D
         //播放抛出效果
         if (gun != null)
         {
-            if (Face == FaceDirection.Left)
-            {
-                gun.Scale *= new Vector2(1, -1);
-                gun.RotationDegrees = 180;
-            }
-            gun.Position = Vector2.Zero;
-            var startPos = GlobalPosition + new Vector2(0, 0);
-            var startHeight = 6;
-            var direction = GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
-            var xf = 30;
-            var yf = MathUtils.RandRangeInt(60, 120);
-            var rotate = MathUtils.RandRangeInt(-180, 180);
-            gun.StartThrow<ThrowGun>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, gun.GunSprite);
+            gun.StartThrowGun(this);
         }
     }
 

@@ -14,7 +14,7 @@ public class GunAttribute
     /// </summary>
     public string Name = "Gun1";
     /// <summary>
-    /// 主武器
+    /// 武器类型
     /// </summary>
     public GunWeightType WeightType = GunWeightType.MainWeapon;
     /// <summary>
@@ -36,11 +36,11 @@ public class GunAttribute
     /// <summary>
     /// 弹夹容量
     /// </summary>
-    public int CartridgeCapacity = 30;
+    public int AmmoCapacity = 30;
     /// <summary>
     /// 弹药容量上限
     /// </summary>
-    public int MaxCartridgeCapacity = 90;
+    public int MaxAmmoCapacity = 90;
     /// <summary>
     /// 装弹时间
     /// </summary>
