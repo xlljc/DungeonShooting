@@ -112,20 +112,26 @@ public class ThrowNode : KinematicBody2D
         if (mount != null)
         {
             Mount = mount;
-            var parent = mount.GetParent();
-            if (parent == null)
+            var mountParent = mount.GetParent();
+            if (mountParent == null)
             {
                 AddChild(mount);
             }
-            else if (parent != this)
+            else if (mountParent != this)
             {
-                parent.RemoveChild(mount);
+                mountParent.RemoveChild(mount);
                 AddChild(mount);
             }
             mount.Position = new Vector2(0, -startHeight);
         }
-        if (GetParent() == null)
+        var parent = GetParent();
+        if (parent == null)
         {
+            RoomManager.Current.SortRoot.AddChild(this);
+        }
+        else if (parent == RoomManager.Current.SortRoot)
+        {
+            parent.RemoveChild(this);
             RoomManager.Current.SortRoot.AddChild(this);
         }
     }

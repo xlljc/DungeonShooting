@@ -92,6 +92,23 @@ public class Holster
     }
 
     /// <summary>
+    /// 返回是否能放入武器
+    /// </summary>
+    /// <param name="gun">武器对象</param>
+    public bool CanPickupGun(Gun gun)
+    {
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            var item = SlotList[i];
+            if (item.Enable && gun.Attribute.WeightType == item.Type && item.Gun == null)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
     /// 拾起武器, 存入枪套中, 返回存放在枪套的位置, 如果容不下这把武器, 则会返回 -1
     /// </summary>
     /// <param name="gun">武器对象</param>

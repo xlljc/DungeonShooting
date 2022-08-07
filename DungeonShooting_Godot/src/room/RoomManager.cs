@@ -24,7 +24,7 @@ public class RoomManager : Node2D
     public override void _EnterTree()
     {
         Current = this;
-        Input.SetMouseMode(Input.MouseMode.Hidden);
+        Input.MouseMode = Input.MouseModeEnum.Hidden;
         // 初始化鼠标
         Cursor = MouseCursor.Instance<Cursor>();
         AddChild(Cursor);

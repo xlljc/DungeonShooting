@@ -477,8 +477,30 @@ public abstract class Gun : Area2D, IProp
         }
     }
 
+    public bool CanTnteractive(Role master)
+    {
+        //查找是否有同类型武器
+        var index = master.Holster.FindGun(Attribute.Id);
+        if (index != -1) //如果有这个武器
+        {
+            if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
+            {
+                return false;
+            }
+        }
+        else //没有武器
+        {
+            if (!master.Holster.CanPickupGun(this))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void Tnteractive(Role master)
     {
+        //查找是否有同类型武器
         var index = master.Holster.FindGun(Attribute.Id);
         if (index != -1) //如果有这个武器
         {
