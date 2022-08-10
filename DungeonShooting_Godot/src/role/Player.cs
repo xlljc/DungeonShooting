@@ -134,6 +134,21 @@ public class Player : Role
         RoomUI.Current.SetMaxHp(maxHp);
     }
 
+    protected override void ChangeInteractiveItem()
+    {
+        if (InteractiveItem == null)
+        {
+            //GD.Print("没有可互动的道具了");
+        }
+        else
+        {
+            if (InteractiveItem is Gun gun)
+            {
+                //GD.Print("更新可互动的道具: " + gun.Attribute.Name);
+            }
+        }
+    }
+
     protected void OnChangeShield(int shield)
     {
         RoomUI.Current.SetShield(shield);

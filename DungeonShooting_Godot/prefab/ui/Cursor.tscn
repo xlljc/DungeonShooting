@@ -4,7 +4,7 @@
 [ext_resource path="res://src/effect/Cursor.cs" type="Script" id=2]
 
 [node name="Cursor" type="Node2D"]
-z_index = 15
+z_index = 10
 script = ExtResource( 2 )
 
 [node name="LT" type="Sprite" parent="."]

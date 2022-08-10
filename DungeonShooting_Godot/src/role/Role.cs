@@ -90,7 +90,12 @@ public abstract class Role : KinematicBody2D
     private int _maxHp = 0;
 
     private Vector2 StartScele;
+    //所有角色碰撞的道具
     private readonly List<IProp> InteractiveItemList = new List<IProp>();
+    /// <summary>
+    /// 可以互动的道具
+    /// </summary>
+    protected IProp InteractiveItem { get; private set; }
 
     /// <summary>
     /// 当血量改变时调用
@@ -100,6 +105,12 @@ public abstract class Role : KinematicBody2D
     /// 当最大血量改变时调用
     /// </summary>
     protected abstract void OnChangeMaxHp(int maxHp);
+
+    /// <summary>
+    /// 当可互动的物体改变时调用, 从 this.InteractiveItem 取值
+    /// </summary>
+    /// <param name="prop"></param>
+    protected abstract void ChangeInteractiveItem();
 
     public override void _Ready()
     {
@@ -115,6 +126,42 @@ public abstract class Role : KinematicBody2D
         Holster = new Holster(this);
         Face = FaceDirection.Right;
     }
+
+    public override void _Process(float delta)
+    {
+        //检查可互动的道具
+        bool findFlag = false;
+        for (int i = 0; i < InteractiveItemList.Count; i++)
+        {
+            var item = InteractiveItemList[i];
+            if (item == null)
+            {
+                InteractiveItemList.RemoveAt(i--);
+            }
+            else
+            {
+                //找到可互动的道具了
+                if (!findFlag && item.CanTnteractive(this))
+                {
+                    findFlag = true;
+                    if (InteractiveItem != item)
+                    {
+                        InteractiveItem = item;
+                        GD.Print("--------change");
+                        ChangeInteractiveItem();
+                    }
+                }
+            }
+        }
+        //没有可互动的道具
+        if (!findFlag && InteractiveItem != null)
+        {
+            InteractiveItem = null;
+            GD.Print("--------remove1");
+            ChangeInteractiveItem();
+        }
+    }
+
 
     /// <summary>
     /// 拾起一个武器, 并且切换到这个武器
@@ -159,7 +206,7 @@ public abstract class Role : KinematicBody2D
     /// </summary>
     public bool HasTnteractive()
     {
-        return InteractiveItemList.Count > 0;
+        return InteractiveItem != null;
     }
 
     /// <summary>
@@ -169,8 +216,7 @@ public abstract class Role : KinematicBody2D
     {
         if (HasTnteractive())
         {
-            var item = InteractiveItemList[InteractiveItemList.Count - 1];
-            item.Tnteractive(this);
+            InteractiveItem.Tnteractive(this);
         }
     }
 
@@ -236,30 +282,37 @@ public abstract class Role : KinematicBody2D
 
     /// <summary>
     /// 连接信号: InteractiveArea.area_entered
-    /// 与道具碰撞
+    /// 与物体碰撞
     /// </summary>
     private void _OnPropsEnter(Area2D other)
     {
-        if (other is IProp prop)
+        if (other is IProp prop) //道具类型
         {
             if (!InteractiveItemList.Contains(prop))
             {
                 InteractiveItemList.Add(prop);
+                GD.Print("--------add");
             }
         }
     }
 
     /// <summary>
     /// 连接信号: InteractiveArea.area_exited
-    /// 道具离开碰撞区域
+    /// 物体离开碰撞区域
     /// </summary>
     private void _OnPropsExit(Area2D other)
     {
-        if (other is IProp prop)
+        if (other is IProp prop) //道具类型
         {
             if (InteractiveItemList.Contains(prop))
             {
                 InteractiveItemList.Remove(prop);
+            }
+            if (InteractiveItem == prop)
+            {
+                InteractiveItem = null;
+                GD.Print("--------remove2");
+                ChangeInteractiveItem();
             }
         }
     }

@@ -11,8 +11,6 @@ public class RoomManager : Node2D
     /// </summary>
     [Export] public PackedScene MouseCursor;
 
-    [Export] public NodePath UIPath;
-
     public static RoomManager Current { get; private set; }
 
     public CanvasLayer UI;
@@ -25,6 +23,9 @@ public class RoomManager : Node2D
     {
         Current = this;
         Input.MouseMode = Input.MouseModeEnum.Hidden;
+
+        UI = GetNode<CanvasLayer>("UI");
+
         // 初始化鼠标
         Cursor = MouseCursor.Instance<Cursor>();
         AddChild(Cursor);
@@ -61,9 +62,6 @@ public class RoomManager : Node2D
 
     public override void _Process(float delta)
     {
-        if (Input.IsActionJustPressed("fire"))
-        {
-            //CommonNodeManager.CreateThrowNode();
-        }
+        
     }
 }
