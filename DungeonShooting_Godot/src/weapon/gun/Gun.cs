@@ -429,6 +429,22 @@ public abstract class Gun : Area2D, IProp
     }
 
     /// <summary>
+    /// 返回弹药是否到达上限
+    /// </summary>
+    public bool IsFullAmmo()
+    {
+        return CurrAmmo + ResidueAmmo >= Attribute.MaxAmmoCapacity;
+    }
+
+    /// <summary>
+    /// 返回是否弹药耗尽
+    /// </summary>
+    public bool IsEmptyAmmo()
+    {
+        return CurrAmmo + ResidueAmmo == 0;
+    }
+
+    /// <summary>
     /// 拾起的弹药数量, 如果到达容量上限, 则返回拾取完毕后剩余的弹药数量
     /// </summary>
     /// <param name="count">弹药数量</param>
@@ -479,6 +495,7 @@ public abstract class Gun : Area2D, IProp
 
     public bool CanTnteractive(Role master)
     {
+        var masterGun = master.Holster.ActiveGun;
         //查找是否有同类型武器
         var index = master.Holster.FindGun(Attribute.Id);
         if (index != -1) //如果有这个武器
@@ -487,10 +504,18 @@ public abstract class Gun : Area2D, IProp
             {
                 return false;
             }
+            else if (masterGun != null && masterGun.IsFullAmmo()) //子弹满了
+            {
+                return false;
+            }
         }
         else //没有武器
         {
-            if (!master.Holster.CanPickupGun(this))
+            if (masterGun != null && masterGun.Attribute.WeightType == Attribute.WeightType)
+            {
+                return true;
+            }
+            else if (!master.Holster.CanPickupGun(this))
             {
                 return false;
             }

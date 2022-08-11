@@ -138,13 +138,13 @@ public class Player : Role
     {
         if (InteractiveItem == null)
         {
-            //GD.Print("没有可互动的道具了");
+            GD.Print("没有可互动的道具了");
         }
         else
         {
             if (InteractiveItem is Gun gun)
             {
-                //GD.Print("更新可互动的道具: " + gun.Attribute.Name);
+                GD.Print("更新可互动的道具: " + gun.Attribute.Name);
             }
         }
     }

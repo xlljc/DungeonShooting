@@ -12,9 +12,6 @@ collision_layer = 8
 script = ExtResource( 2 )
 GunPrefab = ExtResource( 4 )
 
-[node name="AnimatedSprite" parent="." index="0"]
-frame = 3
-
 [node name="ColorRect" type="ColorRect" parent="." index="6"]
 visible = false
 margin_left = -9.0

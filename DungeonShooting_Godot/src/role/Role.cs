@@ -147,7 +147,7 @@ public abstract class Role : KinematicBody2D
                     if (InteractiveItem != item)
                     {
                         InteractiveItem = item;
-                        GD.Print("--------change");
+                        //GD.Print("--------change");
                         ChangeInteractiveItem();
                     }
                 }
@@ -157,7 +157,7 @@ public abstract class Role : KinematicBody2D
         if (!findFlag && InteractiveItem != null)
         {
             InteractiveItem = null;
-            GD.Print("--------remove1");
+            //GD.Print("--------remove1");
             ChangeInteractiveItem();
         }
     }
@@ -291,7 +291,7 @@ public abstract class Role : KinematicBody2D
             if (!InteractiveItemList.Contains(prop))
             {
                 InteractiveItemList.Add(prop);
-                GD.Print("--------add");
+                //GD.Print("--------add");
             }
         }
     }
@@ -307,11 +307,11 @@ public abstract class Role : KinematicBody2D
             if (InteractiveItemList.Contains(prop))
             {
                 InteractiveItemList.Remove(prop);
+                //GD.Print("--------remove2");
             }
             if (InteractiveItem == prop)
             {
                 InteractiveItem = null;
-                GD.Print("--------remove2");
                 ChangeInteractiveItem();
             }
         }

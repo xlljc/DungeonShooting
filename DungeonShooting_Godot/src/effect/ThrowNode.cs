@@ -211,12 +211,16 @@ public class ThrowNode : KinematicBody2D
     }
 
     /// <summary>
-    /// /// 结束的调用
+    /// 结束的调用
     /// </summary>
     protected virtual void OnOver()
     {
         GetParent().RemoveChild(this);
         RoomManager.Current.ObjectRoot.AddChild(this);
+        if (CollisionShape != null)
+        {
+            CollisionShape.Disabled = true;
+        }
     }
 
     public override void _Process(float delta)
@@ -250,10 +254,6 @@ public class ThrowNode : KinematicBody2D
             {
                 Mount.Position = new Vector2(0, 0);
                 IsOver = true;
-                if (CollisionShape != null)
-                {
-                    CollisionShape.Disabled = true;
-                }
                 OnOver();
             }
         }
