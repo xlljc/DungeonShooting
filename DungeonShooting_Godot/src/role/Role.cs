@@ -107,10 +107,10 @@ public abstract class Role : KinematicBody2D
     protected abstract void OnChangeMaxHp(int maxHp);
 
     /// <summary>
-    /// 当可互动的物体改变时调用, 从 this.InteractiveItem 取值
+    /// 当可互动的物体改变时调用, result 参数为 null 表示变为不可互动
     /// </summary>
-    /// <param name="prop"></param>
-    protected abstract void ChangeInteractiveItem();
+    /// <param name="result">检测是否可互动时的返回值</param>
+    protected abstract void ChangeInteractiveItem(CheckInteractiveResult result);
 
     public override void _Ready()
     {
@@ -141,14 +141,18 @@ public abstract class Role : KinematicBody2D
             else
             {
                 //找到可互动的道具了
-                if (!findFlag && item.CanTnteractive(this))
+                if (!findFlag)
                 {
-                    findFlag = true;
-                    if (InteractiveItem != item)
+                    var result = item.CheckInteractive(this);
+                    if (result.CanInteractive) //可以互动
                     {
-                        InteractiveItem = item;
-                        //GD.Print("--------change");
-                        ChangeInteractiveItem();
+                        findFlag = true;
+                        if (InteractiveItem != item)
+                        {
+                            InteractiveItem = item;
+                            //GD.Print("--------change");
+                            ChangeInteractiveItem(result);
+                        }
                     }
                 }
             }
@@ -158,7 +162,7 @@ public abstract class Role : KinematicBody2D
         {
             InteractiveItem = null;
             //GD.Print("--------remove1");
-            ChangeInteractiveItem();
+            ChangeInteractiveItem(null);
         }
     }
 
@@ -216,7 +220,7 @@ public abstract class Role : KinematicBody2D
     {
         if (HasTnteractive())
         {
-            InteractiveItem.Tnteractive(this);
+            InteractiveItem.Interactive(this);
         }
     }
 
@@ -312,7 +316,7 @@ public abstract class Role : KinematicBody2D
             if (InteractiveItem == prop)
             {
                 InteractiveItem = null;
-                ChangeInteractiveItem();
+                ChangeInteractiveItem(null);
             }
         }
     }

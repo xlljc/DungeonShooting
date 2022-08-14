@@ -1,13 +1,18 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://src/ui/RoomUI.cs" type="Script" id=1]
 [ext_resource path="res://resource/sprite/ui/mapBar.png" type="Texture" id=2]
+[ext_resource path="res://resource/sprite/ui/keyboard/e.png" type="Texture" id=3]
 [ext_resource path="res://resource/sprite/ui/healthBar.png" type="Texture" id=4]
 [ext_resource path="res://resource/sprite/gun/gun4.png" type="Texture" id=5]
 [ext_resource path="res://resource/sprite/ui/hpBar.png" type="Texture" id=6]
 [ext_resource path="res://resource/sprite/ui/shieldBar.png" type="Texture" id=7]
 [ext_resource path="res://resource/sprite/ui/hpSlot.png" type="Texture" id=8]
 [ext_resource path="res://resource/sprite/ui/shieldSlot.png" type="Texture" id=9]
+[ext_resource path="res://resource/sprite/ui/icon/icon_bullet.png" type="Texture" id=10]
+[ext_resource path="res://resource/font/cn_font_4.tres" type="DynamicFont" id=11]
+[ext_resource path="res://src/ui/InteractiveTipBar.cs" type="Script" id=12]
+[ext_resource path="res://resource/sprite/ui/font_bg.png" type="Texture" id=13]
 
 [node name="RoomUI" type="Control"]
 anchor_right = 1.0
@@ -97,3 +102,38 @@ margin_right = 28.0
 margin_bottom = 17.0
 text = "30/90"
 align = 1
+
+[node name="GlobalNode" type="Node" parent="."]
+
+[node name="InteractiveTipBar" type="Node2D" parent="GlobalNode"]
+z_index = 10
+script = ExtResource( 12 )
+
+[node name="Bg" type="Sprite" parent="GlobalNode/InteractiveTipBar"]
+position = Vector2( 14, -17 )
+scale = Vector2( 28, 7 )
+texture = ExtResource( 13 )
+
+[node name="Icon" type="Sprite" parent="GlobalNode/InteractiveTipBar"]
+position = Vector2( 0, -32 )
+texture = ExtResource( 10 )
+
+[node name="Message" type="Label" parent="GlobalNode/InteractiveTipBar"]
+margin_left = -18.0
+margin_top = -27.0
+margin_right = 18.0
+margin_bottom = -15.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 11 )
+text = "111111"
+align = 1
+valign = 1
+
+[node name="InteractiveIcon" type="Sprite" parent="GlobalNode/InteractiveTipBar"]
+visible = false
+position = Vector2( 0, -30 )
+texture = ExtResource( 3 )
+
+[node name="Line2D" type="Line2D" parent="GlobalNode/InteractiveTipBar"]
+points = PoolVector2Array( 0, -17, 0, 0 )
+width = 1.0

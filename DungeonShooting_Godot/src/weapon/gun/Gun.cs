@@ -493,8 +493,9 @@ public abstract class Gun : Area2D, IProp
         }
     }
 
-    public bool CanTnteractive(Role master)
+    public CheckInteractiveResult CheckInteractive(Role master)
     {
+        var result = new CheckInteractiveResult(this);
         var masterGun = master.Holster.ActiveGun;
         //查找是否有同类型武器
         var index = master.Holster.FindGun(Attribute.Id);
@@ -502,28 +503,39 @@ public abstract class Gun : Area2D, IProp
         {
             if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
             {
-                return false;
+                //不能互动
+                return result;
             }
             else if (masterGun != null && masterGun.IsFullAmmo()) //子弹满了
             {
-                return false;
+                //不能互动
+                return result;
             }
         }
         else //没有武器
         {
             if (masterGun != null && masterGun.Attribute.WeightType == Attribute.WeightType)
             {
-                return true;
+                //可以互动, 切换武器
+                result.CanInteractive = true;
+                result.Message = Attribute.Name;
+                result.ShowIcon = "res://resource/sprite/ui/icon/icon_replace.png";
+                return result;
             }
             else if (!master.Holster.CanPickupGun(this))
             {
-                return false;
+                //不能互动
+                return result;
             }
         }
-        return true;
+        //可以互动拾起弹药
+        result.CanInteractive = true;
+        result.Message = Attribute.Name;
+        result.ShowIcon = "res://resource/sprite/ui/icon/icon_bullet.png";
+        return result;
     }
 
-    public void Tnteractive(Role master)
+    public void Interactive(Role master)
     {
         //查找是否有同类型武器
         var index = master.Holster.FindGun(Attribute.Id);

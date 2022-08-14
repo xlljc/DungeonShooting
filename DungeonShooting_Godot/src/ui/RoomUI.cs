@@ -25,7 +25,10 @@ public class RoomUI : Control
     /// 最大护盾值
     /// </summary>
     public int MaxShield { get; private set; }
-
+    /// <summary>
+    /// 互动提示组件
+    /// </summary>
+    public InteractiveTipBar InteractiveTipBar { get; private set; }
 
     private NinePatchRect hpSlot;
     private NinePatchRect shieldSlot;
@@ -48,6 +51,20 @@ public class RoomUI : Control
 
         bulletText = GetNode<Label>("Control/GunBar/BulletText");
         gunSprite = GetNode<TextureRect>("Control/GunBar/GunSprite");
+
+        InteractiveTipBar = GetNode<InteractiveTipBar>("GlobalNode/InteractiveTipBar");
+        InteractiveTipBar.Visible = false;
+
+        //将 GlobalNode 节点下的 ui 节点放入全局坐标中
+        var tempNode = GetNode("GlobalNode");
+        var root = GetTree().CurrentScene;
+        for (int i = 0; i < tempNode.GetChildCount(); i++)
+        {
+            var node = tempNode.GetChild(i);
+            tempNode.RemoveChild(node);
+            root.CallDeferred("add_child", node);
+        }
+        tempNode.CallDeferred("queue_free");
     }
 
     /// <summary>

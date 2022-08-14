@@ -16,8 +16,6 @@ public class Player : Role
     /// </summary>
     public Vector2 Velocity = Vector2.Zero;
 
-    public Control TipBar;
-
     /// <summary>
     /// 当前护盾值
     /// </summary>
@@ -55,8 +53,6 @@ public class Player : Role
     {
         base._EnterTree();
         RoomManager.Current.Player = this;
-
-        TipBar = GetNode<Control>("TipBar");
     }
 
     public override void _Ready()
@@ -138,19 +134,19 @@ public class Player : Role
         RoomUI.Current.SetMaxHp(maxHp);
     }
 
-    protected override void ChangeInteractiveItem()
+    protected override void ChangeInteractiveItem(CheckInteractiveResult result)
     {
-        if (InteractiveItem == null)
+        if (result == null)
         {
-            GD.Print("没有可互动的道具了");
-            TipBar.Visible = false;
+            //隐藏互动提示
+            RoomUI.Current.InteractiveTipBar.HideBar();
         }
         else
         {
             if (InteractiveItem is Gun gun)
             {
-                GD.Print("更新可互动的道具: " + gun.Attribute.Name);
-                TipBar.Visible = true;
+                //显示互动提示
+                RoomUI.Current.InteractiveTipBar.ShowBar(result.Target.GlobalPosition, result.ShowIcon, result.Message);
             }
         }
     }
