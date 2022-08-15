@@ -146,7 +146,7 @@ public class Player : Role
             if (InteractiveItem is Gun gun)
             {
                 //显示互动提示
-                RoomUI.Current.InteractiveTipBar.ShowBar(result.Target.GlobalPosition, result.ShowIcon, result.Message);
+                RoomUI.Current.InteractiveTipBar.ShowBar(result.Target.GetItemPosition(), result.ShowIcon, result.Message);
             }
         }
     }

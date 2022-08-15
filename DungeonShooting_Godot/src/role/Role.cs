@@ -173,7 +173,11 @@ public abstract class Role : KinematicBody2D
     /// <param name="gun">武器对象</param>
     public void PickUpGun(Gun gun)
     {
-        Holster.PickupGun(gun);
+        if (Holster.PickupGun(gun) != -1)
+        {
+            //从可互动队列中移除
+            InteractiveItemList.Remove(gun);
+        }
     }
 
     /// <summary>

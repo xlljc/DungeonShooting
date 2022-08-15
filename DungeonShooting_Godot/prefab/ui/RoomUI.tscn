@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://src/ui/RoomUI.cs" type="Script" id=1]
 [ext_resource path="res://resource/sprite/ui/mapBar.png" type="Texture" id=2]
@@ -13,6 +13,9 @@
 [ext_resource path="res://resource/font/cn_font_4.tres" type="DynamicFont" id=11]
 [ext_resource path="res://src/ui/InteractiveTipBar.cs" type="Script" id=12]
 [ext_resource path="res://resource/sprite/ui/font_bg.png" type="Texture" id=13]
+
+[sub_resource type="Gradient" id=1]
+colors = PoolColorArray( 0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726 )
 
 [node name="RoomUI" type="Control"]
 anchor_right = 1.0
@@ -137,3 +140,4 @@ texture = ExtResource( 3 )
 [node name="Line2D" type="Line2D" parent="GlobalNode/InteractiveTipBar"]
 points = PoolVector2Array( 0, -17, 0, 0 )
 width = 1.0
+gradient = SubResource( 1 )

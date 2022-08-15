@@ -8,7 +8,7 @@ public interface IProp
     /// <summary>
     /// 获取道具所在的坐标
     /// </summary>
-    Vector2 GlobalPosition { get; }
+    Vector2 GetItemPosition();
 
     /// <summary>
     /// 返回是否能互动

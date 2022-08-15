@@ -516,15 +516,15 @@ public abstract class Gun : Area2D, IProp
         }
         else //没有武器
         {
-            if (masterGun != null && masterGun.Attribute.WeightType == Attribute.WeightType) //替换武器
+            if (master.Holster.CanPickupGun(this)) //能拾起武器
             {
-                //可以互动, 切换武器
+                //可以互动, 拾起武器
                 result.CanInteractive = true;
                 result.Message = Attribute.Name;
-                result.ShowIcon = "res://resource/sprite/ui/icon/icon_replace.png";
+                result.ShowIcon = "res://resource/sprite/ui/icon/icon_pickup.png";
                 return result;
             }
-            else if (master.Holster.CanPickupGun(this)) //能拾起武器
+            else if (masterGun != null && masterGun.Attribute.WeightType == Attribute.WeightType) //替换武器
             {
                 //可以互动, 切换武器
                 result.CanInteractive = true;
@@ -590,6 +590,11 @@ public abstract class Gun : Area2D, IProp
                 }
             }
         }
+    }
+
+    public Vector2 GetItemPosition()
+    {
+        return GlobalPosition;
     }
 
     /// <summary>

@@ -14,11 +14,20 @@ public class InteractiveTipBar : Node2D
         Bg = GetNode<Sprite>("Bg");
     }
 
+    /// <summary>
+    /// 隐藏互动提示ui
+    /// </summary>
     public void HideBar()
     {
         Visible = false;
     }
 
+    /// <summary>
+    /// 显示互动提示ui
+    /// </summary>
+    /// <param name="pos">所在坐标</param>
+    /// <param name="icon">显示图标</param>
+    /// <param name="message">显示文本</param>
 	public void ShowBar(Vector2 pos, string icon, string message)
     {
         GlobalPosition = pos;
