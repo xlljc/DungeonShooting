@@ -501,20 +501,22 @@ public abstract class Gun : Area2D, IProp
         var index = master.Holster.FindGun(Attribute.Id);
         if (index != -1) //如果有这个武器
         {
-            if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
+            if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
             {
-                //不能互动
-                return result;
-            }
-            else if (masterGun != null && masterGun.IsFullAmmo()) //子弹满了
-            {
-                //不能互动
-                return result;
+                var targetGun = master.Holster.GetGun(index);
+                if (!targetGun.IsFullAmmo()) //背包里面的武器子弹未满
+                {
+                    //可以互动拾起弹药
+                    result.CanInteractive = true;
+                    result.Message = Attribute.Name;
+                    result.ShowIcon = "res://resource/sprite/ui/icon/icon_bullet.png";
+                    return result;
+                }
             }
         }
         else //没有武器
         {
-            if (masterGun != null && masterGun.Attribute.WeightType == Attribute.WeightType)
+            if (masterGun != null && masterGun.Attribute.WeightType == Attribute.WeightType) //替换武器
             {
                 //可以互动, 切换武器
                 result.CanInteractive = true;
@@ -522,16 +524,15 @@ public abstract class Gun : Area2D, IProp
                 result.ShowIcon = "res://resource/sprite/ui/icon/icon_replace.png";
                 return result;
             }
-            else if (!master.Holster.CanPickupGun(this))
+            else if (master.Holster.CanPickupGun(this)) //能拾起武器
             {
-                //不能互动
+                //可以互动, 切换武器
+                result.CanInteractive = true;
+                result.Message = Attribute.Name;
+                result.ShowIcon = "res://resource/sprite/ui/icon/icon_replace.png";
                 return result;
             }
         }
-        //可以互动拾起弹药
-        result.CanInteractive = true;
-        result.Message = Attribute.Name;
-        result.ShowIcon = "res://resource/sprite/ui/icon/icon_bullet.png";
         return result;
     }
 
