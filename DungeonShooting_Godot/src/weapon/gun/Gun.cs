@@ -496,41 +496,44 @@ public abstract class Gun : Area2D, IProp
     public CheckInteractiveResult CheckInteractive(Role master)
     {
         var result = new CheckInteractiveResult(this);
-        var masterGun = master.Holster.ActiveGun;
-        //查找是否有同类型武器
-        var index = master.Holster.FindGun(Attribute.Id);
-        if (index != -1) //如果有这个武器
+        if (Master == null)
         {
-            if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
+            var masterGun = master.Holster.ActiveGun;
+            //查找是否有同类型武器
+            var index = master.Holster.FindGun(Attribute.Id);
+            if (index != -1) //如果有这个武器
             {
-                var targetGun = master.Holster.GetGun(index);
-                if (!targetGun.IsFullAmmo()) //背包里面的武器子弹未满
+                if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
                 {
-                    //可以互动拾起弹药
-                    result.CanInteractive = true;
-                    result.Message = Attribute.Name;
-                    result.ShowIcon = "res://resource/sprite/ui/icon/icon_bullet.png";
-                    return result;
+                    var targetGun = master.Holster.GetGun(index);
+                    if (!targetGun.IsFullAmmo()) //背包里面的武器子弹未满
+                    {
+                        //可以互动拾起弹药
+                        result.CanInteractive = true;
+                        result.Message = Attribute.Name;
+                        result.ShowIcon = "res://resource/sprite/ui/icon/icon_bullet.png";
+                        return result;
+                    }
                 }
             }
-        }
-        else //没有武器
-        {
-            if (master.Holster.CanPickupGun(this)) //能拾起武器
+            else //没有武器
             {
-                //可以互动, 拾起武器
-                result.CanInteractive = true;
-                result.Message = Attribute.Name;
-                result.ShowIcon = "res://resource/sprite/ui/icon/icon_pickup.png";
-                return result;
-            }
-            else if (masterGun != null && masterGun.Attribute.WeightType == Attribute.WeightType) //替换武器
-            {
-                //可以互动, 切换武器
-                result.CanInteractive = true;
-                result.Message = Attribute.Name;
-                result.ShowIcon = "res://resource/sprite/ui/icon/icon_replace.png";
-                return result;
+                if (master.Holster.CanPickupGun(this)) //能拾起武器
+                {
+                    //可以互动, 拾起武器
+                    result.CanInteractive = true;
+                    result.Message = Attribute.Name;
+                    result.ShowIcon = "res://resource/sprite/ui/icon/icon_pickup.png";
+                    return result;
+                }
+                else if (masterGun != null && masterGun.Attribute.WeightType == Attribute.WeightType) //替换武器
+                {
+                    //可以互动, 切换武器
+                    result.CanInteractive = true;
+                    result.Message = Attribute.Name;
+                    result.ShowIcon = "res://resource/sprite/ui/icon/icon_replace.png";
+                    return result;
+                }
             }
         }
         return result;
@@ -577,7 +580,7 @@ public abstract class Gun : Area2D, IProp
                     MathUtils.RandRangeInt(-180, 180), GunSprite);
             }
         }
-        else//没有武器
+        else //没有武器
         {
             if (master.Holster.PickupGun(this) == -1)
             {
@@ -586,7 +589,7 @@ public abstract class Gun : Area2D, IProp
                 {
                     var gun = master.Holster.RmoveGun(master.Holster.ActiveIndex);
                     gun.StartThrowGun(master);
-                    master.Holster.PickupGun(this);
+                    master.PickUpGun(this);
                 }
             }
         }

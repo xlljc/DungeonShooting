@@ -101,8 +101,11 @@ public class Player : Role
         }
         else if (Input.IsActionJustPressed("interactive")) //互动物体
         {
-            TriggerTnteractive();
-            RefreshGunTexture();
+            var item = TriggerTnteractive();
+            if (item is Gun)
+            {
+                RefreshGunTexture();
+            }
         }
         else if (Input.IsActionJustPressed("reload")) //换弹
         {

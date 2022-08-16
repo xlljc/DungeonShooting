@@ -92,6 +92,9 @@ public abstract class Role : KinematicBody2D
     private Vector2 StartScele;
     //所有角色碰撞的道具
     private readonly List<IProp> InteractiveItemList = new List<IProp>();
+
+    private CheckInteractiveResult TempResultData;
+
     /// <summary>
     /// 可以互动的道具
     /// </summary>
@@ -147,13 +150,17 @@ public abstract class Role : KinematicBody2D
                     if (result.CanInteractive) //可以互动
                     {
                         findFlag = true;
-                        if (InteractiveItem != item)
+                        if (InteractiveItem != item) //更改互动物体
                         {
                             InteractiveItem = item;
-                            //GD.Print("--------change");
+                            ChangeInteractiveItem(result);
+                        }
+                        else if (result.ShowIcon != TempResultData.ShowIcon) //切换状态
+                        {
                             ChangeInteractiveItem(result);
                         }
                     }
+                    TempResultData = result;
                 }
             }
         }
@@ -161,7 +168,6 @@ public abstract class Role : KinematicBody2D
         if (!findFlag && InteractiveItem != null)
         {
             InteractiveItem = null;
-            //GD.Print("--------remove1");
             ChangeInteractiveItem(null);
         }
     }
@@ -218,14 +224,17 @@ public abstract class Role : KinematicBody2D
     }
 
     /// <summary>
-    /// 触发与碰撞的物体互动
+    /// 触发与碰撞的物体互动, 并返回与其互动的物体
     /// </summary>
-    public void TriggerTnteractive()
+    public IProp TriggerTnteractive()
     {
         if (HasTnteractive())
         {
-            InteractiveItem.Interactive(this);
+            var item = InteractiveItem;
+            item.Interactive(this);
+            return item;
         }
+        return null;
     }
 
     /// <summary>
@@ -299,7 +308,6 @@ public abstract class Role : KinematicBody2D
             if (!InteractiveItemList.Contains(prop))
             {
                 InteractiveItemList.Add(prop);
-                //GD.Print("--------add");
             }
         }
     }
@@ -315,7 +323,6 @@ public abstract class Role : KinematicBody2D
             if (InteractiveItemList.Contains(prop))
             {
                 InteractiveItemList.Remove(prop);
-                //GD.Print("--------remove2");
             }
             if (InteractiveItem == prop)
             {

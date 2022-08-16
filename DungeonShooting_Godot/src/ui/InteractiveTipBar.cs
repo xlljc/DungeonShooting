@@ -1,11 +1,16 @@
 using Godot;
 
+/// <summary>
+/// 互动提示文本
+/// </summary>
 public class InteractiveTipBar : Node2D
 {
 
     private Label Message;
     private Sprite Icon;
     private Sprite Bg;
+
+    private string currImage;
 
     public override void _Ready()
     {
@@ -32,7 +37,11 @@ public class InteractiveTipBar : Node2D
     {
         GlobalPosition = pos;
         Message.Text = message;
-        Icon.Texture = ResourceManager.Load<Texture>(icon);
+        if (currImage != icon)
+        {
+            currImage = icon;
+            Icon.Texture = ResourceManager.Load<Texture>(icon);
+        }
         Visible = true;
     }
 }
