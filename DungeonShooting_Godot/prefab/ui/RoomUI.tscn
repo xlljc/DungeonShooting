@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://src/ui/RoomUI.cs" type="Script" id=1]
 [ext_resource path="res://resource/sprite/ui/mapBar.png" type="Texture" id=2]
@@ -13,6 +13,9 @@
 [ext_resource path="res://resource/font/cn_font_4.tres" type="DynamicFont" id=11]
 [ext_resource path="res://src/ui/InteractiveTipBar.cs" type="Script" id=12]
 [ext_resource path="res://resource/sprite/ui/font_bg.png" type="Texture" id=13]
+[ext_resource path="res://resource/sprite/ui/reloadBar.png" type="Texture" id=14]
+[ext_resource path="res://resource/sprite/ui/reloadBarBlock.png" type="Texture" id=15]
+[ext_resource path="res://src/ui/ReloadBar.cs" type="Script" id=16]
 
 [sub_resource type="Gradient" id=1]
 colors = PoolColorArray( 0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726 )
@@ -109,6 +112,7 @@ align = 1
 [node name="GlobalNode" type="Node" parent="."]
 
 [node name="InteractiveTipBar" type="Node2D" parent="GlobalNode"]
+visible = false
 z_index = 10
 script = ExtResource( 12 )
 
@@ -141,3 +145,13 @@ texture = ExtResource( 3 )
 points = PoolVector2Array( 0, -17, 0, 0 )
 width = 1.0
 gradient = SubResource( 1 )
+
+[node name="ReloadBar" type="Sprite" parent="GlobalNode"]
+visible = false
+position = Vector2( 0, -26 )
+texture = ExtResource( 14 )
+script = ExtResource( 16 )
+
+[node name="ReloadBarBlock" type="Sprite" parent="GlobalNode/ReloadBar"]
+position = Vector2( -13, 0 )
+texture = ExtResource( 15 )
