@@ -2,7 +2,7 @@
 /// <summary>
 /// 根据重量划分的武器类型
 /// </summary>
-public enum GunWeightType
+public enum WeaponWeightType
 {
     /// <summary>
     /// 副武器

@@ -8,7 +8,7 @@ public class OrdinaryBullets : Node2D, IBullet
 {
     public CampEnum TargetCamp { get; private set; }
 
-    public Gun Gun { get; private set; }
+    public Weapon Gun { get; private set; }
 
     public Node2D Master { get; private set; }
 
@@ -34,7 +34,7 @@ public class OrdinaryBullets : Node2D, IBullet
 
     private int frame = 0;
 
-    public void Init(CampEnum target, Gun gun, Node2D master)
+    public void Init(CampEnum target, Weapon gun, Node2D master)
     {
         TargetCamp = target;
         Gun = gun;

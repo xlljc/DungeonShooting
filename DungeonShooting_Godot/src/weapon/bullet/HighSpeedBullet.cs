@@ -7,7 +7,7 @@ public class HighSpeedBullet : Node2D, IBullet
 {
     public CampEnum TargetCamp { get; private set; }
 
-    public Gun Gun { get; private set; }
+    public Weapon Gun { get; private set; }
 
     public Node2D Master { get; private set; }
 
@@ -21,7 +21,7 @@ public class HighSpeedBullet : Node2D, IBullet
     private Line2D Line;
     private float ca = 1;
 
-    public void Init(CampEnum target, Gun gun, Node2D master)
+    public void Init(CampEnum target, Weapon gun, Node2D master)
     {
         TargetCamp = target;
         Gun = gun;

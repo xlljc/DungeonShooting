@@ -1,6 +1,6 @@
 using Godot;
 
-public class ThrowGun : ThrowNode
+public class ThrowWeapon : ThrowNode
 {
 
     private bool fristOver = true;
@@ -22,7 +22,7 @@ public class ThrowGun : ThrowNode
         if (fristOver)
         {
             fristOver = false;
-            if (Mount is Gun gun)
+            if (Mount is Weapon gun)
             {
                 gun._FallToGround();
             }

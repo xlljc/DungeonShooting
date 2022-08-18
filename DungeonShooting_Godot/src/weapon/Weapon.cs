@@ -2,36 +2,36 @@ using Godot;
 using System;
 
 /// <summary>
-/// 枪的基类
+/// 武器的基类
 /// </summary>
-public abstract class Gun : Area2D, IProp
+public abstract class Weapon : Area2D, IProp
 {
     /// <summary>
     /// 开火回调事件
     /// </summary>
-    public event Action<Gun> FireEvent;
+    public event Action<Weapon> FireEvent;
 
     /// <summary>
     /// 属性数据
     /// </summary>
-    public GunAttribute Attribute
+    public WeaponAttribute Attribute
     {
         get
         {
             if (_attribute == null)
             {
-                throw new Exception("请先调用Init来初始化枪的属性");
+                throw new Exception("请先调用Init来初始化武器的属性");
             }
             return _attribute;
         }
         private set => _attribute = value;
     }
-    private GunAttribute _attribute;
+    private WeaponAttribute _attribute;
 
     /// <summary>
-    /// 枪的图片
+    /// 武器的图片
     /// </summary>
-    public Sprite GunSprite { get; private set; }
+    public Sprite WeaponSprite { get; private set; }
 
     /// <summary>
     /// 动画播放器
@@ -40,7 +40,7 @@ public abstract class Gun : Area2D, IProp
     public AnimationPlayer AnimationPlayer { get; private set; }
 
     /// <summary>
-    /// 枪攻击的目标阵营
+    /// 武器攻击的目标阵营
     /// </summary>
     public CampEnum TargetCamp { get; set; }
 
@@ -59,11 +59,11 @@ public abstract class Gun : Area2D, IProp
     public int ResidueAmmo { get; private set; }
 
     /// <summary>
-    /// 枪管的开火点
+    /// 武器管的开火点
     /// </summary>
     public Position2D FirePoint { get; private set; }
     /// <summary>
-    /// 枪管的原点
+    /// 武器管的原点
     /// </summary>
     public Position2D OriginPoint { get; private set; }
     /// <summary>
@@ -76,7 +76,7 @@ public abstract class Gun : Area2D, IProp
     /// <value></value>
     public CollisionShape2D CollisionShape2D { get; private set; }
     /// <summary>
-    /// 枪的当前散射半径
+    /// 武器的当前散射半径
     /// </summary>
     public float CurrScatteringRange { get; private set; } = 0;
     /// <summary>
@@ -101,7 +101,7 @@ public abstract class Gun : Area2D, IProp
     private float delayedTime = 0;
     //开火间隙时间
     private float fireInterval = 0;
-    //开火枪口角度
+    //开火武器口角度
     private float fireAngle = 0;
     //攻击冷却计时
     private float attackTimer = 0;
@@ -133,7 +133,7 @@ public abstract class Gun : Area2D, IProp
 
     /// <summary>
     /// 发射子弹时调用的函数, 每发射一枚子弹调用一次,
-    /// 如果做霰弹枪效果, 一次开火发射5枚子弹, 则该函数调用5次
+    /// 如果做霰弹武器效果, 一次开火发射5枚子弹, 则该函数调用5次
     /// </summary>
     protected abstract void OnShootBullet();
 
@@ -171,7 +171,7 @@ public abstract class Gun : Area2D, IProp
             continuousCount = 0;
             delayedTime = 0;
         }
-        else if (Master.Holster.ActiveGun != this) //当前武器没有被使用
+        else if (Master.Holster.ActiveWeapon != this) //当前武器没有被使用
         {
             Reloading = false;
             triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
@@ -249,7 +249,7 @@ public abstract class Gun : Area2D, IProp
             triggerFlag = false;
             attackFlag = false;
 
-            //枪身回归
+            //武器身回归
             Position = Position.MoveToward(Vector2.Zero, 35 * delta);
             if (fireInterval == 0)
             {
@@ -262,14 +262,14 @@ public abstract class Gun : Area2D, IProp
         }
     }
 
-    public void Init(GunAttribute attribute)
+    public void Init(WeaponAttribute attribute)
     {
         if (_attribute != null)
         {
             throw new Exception("当前武器已经初始化过了!");
         }
 
-        GunSprite = GetNode<Sprite>("GunSprite");
+        WeaponSprite = GetNode<Sprite>("WeaponSprite");
         FirePoint = GetNode<Position2D>("FirePoint");
         OriginPoint = GetNode<Position2D>("OriginPoint");
         ShellPoint = GetNode<Position2D>("ShellPoint");
@@ -278,8 +278,8 @@ public abstract class Gun : Area2D, IProp
 
         Attribute = attribute;
         //更新图片
-        GunSprite.Texture = attribute.Sprite;
-        GunSprite.Position = Attribute.CenterPosition;
+        WeaponSprite.Texture = attribute.Sprite;
+        WeaponSprite.Position = Attribute.CenterPosition;
         //开火位置
         FirePoint.Position = new Vector2(attribute.FirePosition.x, -attribute.FirePosition.y);
         OriginPoint.Position = new Vector2(0, -attribute.FirePosition.y);
@@ -335,12 +335,12 @@ public abstract class Gun : Area2D, IProp
             if (Reloading)
             {
                 //换弹中
-                GD.Print("换弹中..." + ReloadProgress);
+                
             }
             else if (CurrAmmo <= 0)
             {
                 //子弹不够
-                GD.Print("弹夹打空了, 按R换弹!");
+                _Reload();
             }
             else
             {
@@ -406,13 +406,13 @@ public abstract class Gun : Area2D, IProp
 
         //开火发射的子弹数量
         var bulletCount = MathUtils.RandRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
-        //枪口角度
+        //武器口角度
         var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
 
         //创建子弹
         for (int i = 0; i < bulletCount; i++)
         {
-            //先算枪口方向
+            //先算武器口方向
             Rotation = (float)GD.RandRange(-angle, angle);
             //发射子弹
             OnShootBullet();
@@ -420,10 +420,10 @@ public abstract class Gun : Area2D, IProp
 
         //当前的散射半径
         CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue, Attribute.FinalScatteringRange);
-        //枪的旋转角度
+        //武器的旋转角度
         RotationDegrees -= Attribute.UpliftAngle;
         fireAngle = RotationDegrees;
-        //枪身位置
+        //武器身位置
         Position = new Vector2(Mathf.Max(-Attribute.MaxBacklash, Position.x - MathUtils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash)), Position.y);
 
         if (FireEvent != null)
@@ -502,15 +502,15 @@ public abstract class Gun : Area2D, IProp
         var result = new CheckInteractiveResult(this);
         if (Master == null)
         {
-            var masterGun = master.Holster.ActiveGun;
+            var masterWeapon = master.Holster.ActiveWeapon;
             //查找是否有同类型武器
-            var index = master.Holster.FindGun(Attribute.Id);
+            var index = master.Holster.FindWeapon(Attribute.Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
                 {
-                    var targetGun = master.Holster.GetGun(index);
-                    if (!targetGun.IsFullAmmo()) //背包里面的武器子弹未满
+                    var targetWeapon = master.Holster.GetWeapon(index);
+                    if (!targetWeapon.IsFullAmmo()) //背包里面的武器子弹未满
                     {
                         //可以互动拾起弹药
                         result.CanInteractive = true;
@@ -522,7 +522,7 @@ public abstract class Gun : Area2D, IProp
             }
             else //没有武器
             {
-                if (master.Holster.CanPickupGun(this)) //能拾起武器
+                if (master.Holster.CanPickupWeapon(this)) //能拾起武器
                 {
                     //可以互动, 拾起武器
                     result.CanInteractive = true;
@@ -530,7 +530,7 @@ public abstract class Gun : Area2D, IProp
                     result.ShowIcon = "res://resource/sprite/ui/icon/icon_pickup.png";
                     return result;
                 }
-                else if (masterGun != null && masterGun.Attribute.WeightType == Attribute.WeightType) //替换武器
+                else if (masterWeapon != null && masterWeapon.Attribute.WeightType == Attribute.WeightType) //替换武器
                 {
                     //可以互动, 切换武器
                     result.CanInteractive = true;
@@ -546,30 +546,30 @@ public abstract class Gun : Area2D, IProp
     public void Interactive(Role master)
     {
         //查找是否有同类型武器
-        var index = master.Holster.FindGun(Attribute.Id);
+        var index = master.Holster.FindWeapon(Attribute.Id);
         if (index != -1) //如果有这个武器
         {
             if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
             {
                 return;
             }
-            var gun = master.Holster.GetGun(index);
+            var weapon = master.Holster.GetWeapon(index);
             //子弹上限
             var maxCount = Attribute.MaxAmmoCapacity;
             //是否捡到子弹
             var flag = false;
-            if (ResidueAmmo > 0 && gun.CurrAmmo + gun.ResidueAmmo < maxCount)
+            if (ResidueAmmo > 0 && weapon.CurrAmmo + weapon.ResidueAmmo < maxCount)
             {
-                var count = gun.PickUpAmmo(ResidueAmmo);
+                var count = weapon.PickUpAmmo(ResidueAmmo);
                 if (count != ResidueAmmo)
                 {
                     ResidueAmmo = count;
                     flag = true;
                 }
             }
-            if (CurrAmmo > 0 && gun.CurrAmmo + gun.ResidueAmmo < maxCount)
+            if (CurrAmmo > 0 && weapon.CurrAmmo + weapon.ResidueAmmo < maxCount)
             {
-                var count = gun.PickUpAmmo(CurrAmmo);
+                var count = weapon.PickUpAmmo(CurrAmmo);
                 if (count != CurrAmmo)
                 {
                     CurrAmmo = count;
@@ -579,21 +579,21 @@ public abstract class Gun : Area2D, IProp
             //播放互动效果
             if (flag)
             {
-                this.StartThrow<ThrowGun>(new Vector2(20, 20), GlobalPosition, 0, 0,
+                this.StartThrow<ThrowWeapon>(new Vector2(20, 20), GlobalPosition, 0, 0,
                     MathUtils.RandRangeInt(-20, 20), MathUtils.RandRangeInt(20, 50),
-                    MathUtils.RandRangeInt(-180, 180), GunSprite);
+                    MathUtils.RandRangeInt(-180, 180), WeaponSprite);
             }
         }
         else //没有武器
         {
-            if (master.Holster.PickupGun(this) == -1)
+            if (master.Holster.PickupWeapon(this) == -1)
             {
                 var slot = master.Holster.SlotList[master.Holster.ActiveIndex];
                 if (slot.Type == Attribute.WeightType)
                 {
-                    var gun = master.Holster.RmoveGun(master.Holster.ActiveIndex);
-                    gun.StartThrowGun(master);
-                    master.PickUpGun(this);
+                    var weapon = master.Holster.RmoveWeapon(master.Holster.ActiveIndex);
+                    weapon.StartThrowWeapon(master);
+                    master.PickUpWeapon(this);
                 }
             }
         }
@@ -616,13 +616,13 @@ public abstract class Gun : Area2D, IProp
     /// <summary>
     /// 触发拾起
     /// </summary>
-    public void _PickUpGun(Role master)
+    public void _PickUpWeapon(Role master)
     {
         Master = master;
         //握把位置
-        GunSprite.Position = Attribute.HoldPosition;
+        WeaponSprite.Position = Attribute.HoldPosition;
         //清除泛白效果
-        ShaderMaterial sm = GunSprite.Material as ShaderMaterial;
+        ShaderMaterial sm = WeaponSprite.Material as ShaderMaterial;
         sm.SetShaderParam("schedule", 0);
         //停止动画
         AnimationPlayer.Stop();
@@ -635,10 +635,10 @@ public abstract class Gun : Area2D, IProp
     /// <summary>
     /// 触发抛出
     /// </summary>
-    public void _ThrowOutGun()
+    public void _ThrowOutWeapon()
     {
         Master = null;
-        GunSprite.Position = Attribute.CenterPosition;
+        WeaponSprite.Position = Attribute.CenterPosition;
         AnimationPlayer.Play("Floodlight");
         OnThrowOut();
     }

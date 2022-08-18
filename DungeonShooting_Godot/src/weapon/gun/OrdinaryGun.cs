@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 普通的枪
 /// </summary>
-public class OrdinaryGun : Gun
+public class OrdinaryGun : Weapon
 {
     protected override void Init()
     {
@@ -22,7 +22,7 @@ public class OrdinaryGun : Gun
         var yf = MathUtils.RandRangeInt(60, 120);
         var rotate = MathUtils.RandRangeInt(-720, 720);
         var sprite = Attribute.ShellPack.Instance<Sprite>();
-        sprite.StartThrow<ThrowGun>(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, sprite);
+        sprite.StartThrow<ThrowWeapon>(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, sprite);
         //创建抖动
         MainCamera.Main.ProssesDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
     }

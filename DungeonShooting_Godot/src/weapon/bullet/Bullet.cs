@@ -12,7 +12,7 @@ public interface IBullet
     /// <summary>
     /// 发射该子弹的武器
     /// </summary>
-    Gun Gun { get; }
+    Weapon Gun { get; }
     /// <summary>
     /// 发射该子弹的物体对象
     /// </summary>
@@ -23,5 +23,5 @@ public interface IBullet
     /// <param name="target">攻击的目标阵营</param>
     /// <param name="gun">发射该子弹的枪对象</param>
     /// <param name="master">发射该子弹的角色</param>
-    void Init(CampEnum target, Gun gun, Node2D master);
+    void Init(CampEnum target, Weapon gun, Node2D master);
 }

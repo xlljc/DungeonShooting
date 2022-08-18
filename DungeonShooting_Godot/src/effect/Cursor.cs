@@ -21,7 +21,7 @@ public class Cursor : Node2D
 
     public override void _Process(float delta)
     {
-        var targetGun = RoomManager.Current?.Player?.Holster.ActiveGun;
+        var targetGun = RoomManager.Current?.Player?.Holster.ActiveWeapon;
         if (targetGun != null)
         {
             SetScope(targetGun.CurrScatteringRange, targetGun);
@@ -36,7 +36,7 @@ public class Cursor : Node2D
     /// <summary>
     /// 设置光标半径范围
     /// </summary>
-    private void SetScope(float scope, Gun targetGun)
+    private void SetScope(float scope, Weapon targetGun)
     {
         if (targetGun != null)
         {

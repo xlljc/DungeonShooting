@@ -56,12 +56,12 @@ public static class NodeExtend
         return false;
     }
 
-    public static ThrowGun StartThrowGun(this Gun gun, Role master)
+    public static ThrowWeapon StartThrowWeapon(this Weapon weapon, Role master)
     {
         if (master.Face == FaceDirection.Left)
         {
-            gun.Scale *= new Vector2(1, -1);
-            gun.RotationDegrees = 180;
+            weapon.Scale *= new Vector2(1, -1);
+            weapon.RotationDegrees = 180;
         }
         var startPos = master.GlobalPosition;// + new Vector2(0, 0);
         var startHeight = 6;
@@ -69,7 +69,7 @@ public static class NodeExtend
         var xf = 30;
         var yf = MathUtils.RandRangeInt(60, 120);
         var rotate = MathUtils.RandRangeInt(-180, 180);
-        gun.Position = Vector2.Zero;
-        return gun.StartThrow<ThrowGun>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, gun.GunSprite);
+        weapon.Position = Vector2.Zero;
+        return weapon.StartThrow<ThrowWeapon>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, weapon.WeaponSprite);
     }
 }

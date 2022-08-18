@@ -1,15 +1,33 @@
 using System.Collections.Generic;
 using Godot;
 
-public static class GunManager
+public static class WeaponManager
 {
 
-    public static Gun GetGun1()
+    public static void RegisterWeapon()
+    {
+
+    }
+
+    public static Weapon GetGun(string id)
+    {
+        return null;
+    }
+
+    public static T GetGun<T>(string id) where T : Weapon
+    {
+        return (T)GetGun(id);
+    }
+
+
+    //----------------------------- 以下均为临时处理 -------------------------------
+
+    public static Weapon GetGun1()
     {
         //加载枪的 prefab
-        var gun = ResourceManager.LoadGunAndInstance("res://prefab/weapon/Gun.tscn");
+        var gun = ResourceManager.LoadWeaponAndInstance("res://prefab/weapon/Weapon.tscn");
         //设置基础属性
-        var attr = new GunAttribute();
+        var attr = new WeaponAttribute();
         attr.Id = "1";
         attr.Name = "Gun1";
         attr.Weight = 40;
@@ -45,17 +63,17 @@ public static class GunManager
         return gun;
     }
 
-    public static Gun GetGun2()
+    public static Weapon GetGun2()
     {
         //加载枪的 prefab
-        var gun = ResourceManager.LoadGunAndInstance("res://prefab/weapon/Gun.tscn");
+        var gun = ResourceManager.LoadWeaponAndInstance("res://prefab/weapon/Weapon.tscn");
         //设置基础属性
-        var attr = new GunAttribute();
+        var attr = new WeaponAttribute();
         attr.Id = "2";
         attr.Name = "Gun2";
         attr.Weight = 20;
         attr.CenterPosition = new Vector2(0.4f, -2.6f);
-        attr.WeightType = GunWeightType.DeputyWeapon;
+        attr.WeightType = WeaponWeightType.DeputyWeapon;
         attr.StartFiringSpeed = 600;
         attr.StartScatteringRange = 5;
         attr.FinalScatteringRange = 60;
@@ -87,12 +105,12 @@ public static class GunManager
         return gun;
     }
 
-    public static Gun GetGun3()
+    public static Weapon GetGun3()
     {
         //加载枪的 prefab
-        var gun = ResourceManager.LoadGunAndInstance("res://prefab/weapon/Gun.tscn");
+        var gun = ResourceManager.LoadWeaponAndInstance("res://prefab/weapon/Weapon.tscn");
         //设置基础属性
-        var attr = new GunAttribute();
+        var attr = new WeaponAttribute();
         attr.Id = "3";
         attr.Name = "Gun3";
         attr.Weight = 30;
@@ -128,17 +146,17 @@ public static class GunManager
         return gun;
     }
 
-    public static Gun GetGun4()
+    public static Weapon GetGun4()
     {
         //加载枪的 prefab
-        var gun = ResourceManager.LoadGunAndInstance("res://prefab/weapon/Gun.tscn");
+        var gun = ResourceManager.LoadWeaponAndInstance("res://prefab/weapon/Weapon.tscn");
         //设置基础属性
-        var attr = new GunAttribute();
+        var attr = new WeaponAttribute();
         attr.Id = "4";
         attr.Name = "Gun4";
         attr.Weight = 10;
         attr.CenterPosition = new Vector2(0.4f, -2.6f);
-        attr.WeightType = GunWeightType.DeputyWeapon;
+        attr.WeightType = WeaponWeightType.DeputyWeapon;
         attr.StartFiringSpeed = 600;
         attr.StartScatteringRange = 5;
         attr.FinalScatteringRange = 60;
@@ -170,17 +188,17 @@ public static class GunManager
         return gun;
     }
 
-    public static Gun GetGun5()
+    public static Weapon GetGun5()
     {
         //加载枪的 prefab
-        var gun = ResourceManager.LoadGunAndInstance("res://prefab/weapon/Gun.tscn");
+        var gun = ResourceManager.LoadWeaponAndInstance("res://prefab/weapon/Weapon.tscn");
         //设置基础属性
-        var attr = new GunAttribute();
+        var attr = new WeaponAttribute();
         attr.Id = "5";
         attr.Name = "Gun5";
         attr.Weight = 10;
         attr.CenterPosition = new Vector2(0.4f, -2.6f);
-        attr.WeightType = GunWeightType.DeputyWeapon;
+        attr.WeightType = WeaponWeightType.DeputyWeapon;
         attr.StartFiringSpeed = 480;
         attr.StartScatteringRange = 5;
         attr.FinalScatteringRange = 30;

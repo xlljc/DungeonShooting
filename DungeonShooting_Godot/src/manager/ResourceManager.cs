@@ -64,12 +64,12 @@ public static class ResourceManager
     /// 加载并实例化一个武器对象
     /// </summary>
     /// <param name="path">资源路径</param>
-    public static Gun LoadGunAndInstance(string path)
+    public static Weapon LoadWeaponAndInstance(string path)
     {
         var pack = Load<PackedScene>(path);
         if (pack != null)
         {
-            return pack.Instance<Gun>();
+            return pack.Instance<Weapon>();
         }
         return null;
     }

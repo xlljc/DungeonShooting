@@ -1,9 +1,9 @@
 using Godot;
 
 /// <summary>
-/// 枪上的属性
+/// 武器上的属性
 /// </summary>
-public class GunAttribute
+public class WeaponAttribute
 {
     /// <summary>
     /// 武器的唯一id
@@ -16,9 +16,9 @@ public class GunAttribute
     /// <summary>
     /// 武器类型
     /// </summary>
-    public GunWeightType WeightType = GunWeightType.MainWeapon;
+    public WeaponWeightType WeightType = WeaponWeightType.MainWeapon;
     /// <summary>
-    /// 枪的图片
+    /// 武器的图片
     /// </summary>
     public Texture Sprite;
     /// <summary>
@@ -46,7 +46,7 @@ public class GunAttribute
     /// </summary>
     public float ReloadTime = 1.5f;
     /// <summary>
-    /// 每粒子弹是否是单独装填, 如果是, 那么每上一发子弹的时间就是 ReloadTime, 可以做霰弹枪装填效果
+    /// 每粒子弹是否是单独装填, 如果是, 那么每上一发子弹的时间就是 ReloadTime, 可以做霰弹武器装填效果
     /// </summary>
     public bool AloneReload = false;
     /// <summary>
@@ -138,23 +138,23 @@ public class GunAttribute
     /// </summary>
     public float Weight = 11;
     /// <summary>
-    /// 最大后坐力 (仅用于开火后枪身抖动)
+    /// 最大后坐力 (仅用于开火后武器身抖动)
     /// </summary>
     public float MaxBacklash = 4;
     /// <summary>
-    /// 最小后坐力 (仅用于开火后枪身抖动)
+    /// 最小后坐力 (仅用于开火后武器身抖动)
     /// </summary>
     public float MinBacklash = 2;
     /// <summary>
-    /// 开火后枪口上抬角度
+    /// 开火后武器口上抬角度
     /// </summary>
     public float UpliftAngle = 30;
     /// <summary>
-    /// 开火后枪口角度恢复速度倍数
+    /// 开火后武器口角度恢复速度倍数
     /// </summary>
     public float UpliftAngleRestore = 1;
 
-    public GunAttribute() 
+    public WeaponAttribute() 
     {
         
     }

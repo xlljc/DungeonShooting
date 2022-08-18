@@ -176,13 +176,13 @@ public abstract class Role : KinematicBody2D
     /// <summary>
     /// 拾起一个武器, 并且切换到这个武器
     /// </summary>
-    /// <param name="gun">武器对象</param>
-    public void PickUpGun(Gun gun)
+    /// <param name="weapon">武器对象</param>
+    public void PickUpWeapon(Weapon weapon)
     {
-        if (Holster.PickupGun(gun) != -1)
+        if (Holster.PickupWeapon(weapon) != -1)
         {
             //从可互动队列中移除
-            InteractiveItemList.Remove(gun);
+            InteractiveItemList.Remove(weapon);
         }
     }
 
@@ -205,13 +205,13 @@ public abstract class Role : KinematicBody2D
     /// <summary>
     /// 扔掉当前使用的武器, 切换到上一个武器
     /// </summary>
-    public void TriggerThrowGun()
+    public void TriggerThrowWeapon()
     {
-        var gun = Holster.RmoveGun(Holster.ActiveIndex);
+        var weapon = Holster.RmoveWeapon(Holster.ActiveIndex);
         //播放抛出效果
-        if (gun != null)
+        if (weapon != null)
         {
-            gun.StartThrowGun(this);
+            weapon.StartThrowWeapon(this);
         }
     }
 
@@ -242,9 +242,9 @@ public abstract class Role : KinematicBody2D
     /// </summary>
     public void TriggerReload()
     {
-        if (Holster.ActiveGun != null)
+        if (Holster.ActiveWeapon != null)
         {
-            Holster.ActiveGun._Reload();
+            Holster.ActiveWeapon._Reload();
         }
     }
 
@@ -253,9 +253,9 @@ public abstract class Role : KinematicBody2D
     /// </summary>
     public void TriggerAttack()
     {
-        if (Holster.ActiveGun != null)
+        if (Holster.ActiveWeapon != null)
         {
-            Holster.ActiveGun.Trigger();
+            Holster.ActiveWeapon.Trigger();
         }
     }
 

@@ -60,10 +60,10 @@ public class Player : Role
         base._Ready();
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;
-        PickUpGun(GunManager.GetGun1()); //0
-        PickUpGun(GunManager.GetGun2()); //1
-        PickUpGun(GunManager.GetGun3()); //2
-        PickUpGun(GunManager.GetGun4()); //3
+        PickUpWeapon(WeaponManager.GetGun1()); //0
+        PickUpWeapon(WeaponManager.GetGun2()); //1
+        PickUpWeapon(WeaponManager.GetGun3()); //2
+        PickUpWeapon(WeaponManager.GetGun4()); //3
         RefreshGunTexture();
 
         MaxHp = 50;
@@ -96,13 +96,13 @@ public class Player : Role
         }
         else if (Input.IsActionJustPressed("throw")) //扔掉武器
         {
-            TriggerThrowGun();
+            TriggerThrowWeapon();
             RefreshGunTexture();
         }
         else if (Input.IsActionJustPressed("interactive")) //互动物体
         {
             var item = TriggerTnteractive();
-            if (item is Gun)
+            if (item is Weapon)
             {
                 RefreshGunTexture();
             }
@@ -118,9 +118,9 @@ public class Player : Role
         //刷新显示的弹药剩余量
         RefreshGunAmmunition();
 
-        if (Holster.ActiveGun != null && Holster.ActiveGun.Reloading)
+        if (Holster.ActiveWeapon != null && Holster.ActiveWeapon.Reloading)
         {
-            RoomUI.Current.ReloadBar.ShowBar(GlobalPosition);
+            RoomUI.Current.ReloadBar.ShowBar(GlobalPosition, 1 - Holster.ActiveWeapon.ReloadProgress);
         }
         else
         {
@@ -155,7 +155,7 @@ public class Player : Role
         }
         else
         {
-            if (InteractiveItem is Gun gun)
+            if (InteractiveItem is Weapon gun)
             {
                 //显示互动提示
                 RoomUI.Current.InteractiveTipBar.ShowBar(result.Target.GetItemPosition(), result.ShowIcon, result.Message);
@@ -178,7 +178,7 @@ public class Player : Role
     /// </summary>
     private void RefreshGunTexture()
     {
-        var gun = Holster.ActiveGun;
+        var gun = Holster.ActiveWeapon;
         if (gun != null)
         {
             RoomUI.Current.SetGunTexture(gun.Attribute.Sprite);
@@ -194,7 +194,7 @@ public class Player : Role
     /// </summary>
     private void RefreshGunAmmunition()
     {
-        var gun = Holster.ActiveGun;
+        var gun = Holster.ActiveWeapon;
         if (gun != null)
         {
             RoomUI.Current.SetAmmunition(gun.CurrAmmo, gun.ResidueAmmo);
