@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 普通的枪
 /// </summary>
-public class OrdinaryGun : Weapon
+public class Gun : Weapon
 {
     protected override void Init()
     {

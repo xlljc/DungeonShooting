@@ -108,30 +108,32 @@ public static class WeaponManager
     public static Weapon GetGun3()
     {
         //加载枪的 prefab
-        var gun = ResourceManager.LoadWeaponAndInstance("res://prefab/weapon/Weapon.tscn");
+        var gun = ResourceManager.LoadWeaponAndInstance("res://prefab/weapon/gun/Shotgun.tscn");
         //设置基础属性
         var attr = new WeaponAttribute();
         attr.Id = "3";
         attr.Name = "Gun3";
         attr.Weight = 30;
         attr.CenterPosition = new Vector2(0.4f, -2.6f);
-        attr.StartFiringSpeed = 480;
+        attr.StartFiringSpeed = 180;
         attr.StartScatteringRange = 30;
         attr.FinalScatteringRange = 90;
         attr.ScatteringRangeAddValue = 2f;
         attr.ScatteringRangeBackSpeed = 40;
         //连发
         attr.ContinuousShoot = false;
+        //单独装弹
+        attr.AloneReload = true;
         //扳机检测间隔
         attr.TriggerInterval = 0f;
         //连发数量
-        attr.MinContinuousCount = 3;
-        attr.MaxContinuousCount = 3;
+        attr.MinContinuousCount = 1;
+        attr.MaxContinuousCount = 1;
         //开火前延时
         attr.DelayedTime = 0f;
         //攻击距离
-        attr.MinDistance = 500;
-        attr.MaxDistance = 600;
+        attr.MinDistance = 150;
+        attr.MaxDistance = 200;
         //发射子弹数量
         attr.MinFireBulletCount = 1;
         attr.MaxFireBulletCount = 1;

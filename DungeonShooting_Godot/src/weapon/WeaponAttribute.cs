@@ -50,6 +50,10 @@ public class WeaponAttribute
     /// </summary>
     public bool AloneReload = false;
     /// <summary>
+    /// 单独装填时每次装填子弹数量, 必须要将 'AloneReload' 属性设置为 true
+    /// </summary>
+    public int AloneReloadCount = 1;
+    /// <summary>
     /// 单独装填的子弹时可以立即射击, 必须要将 'AloneReload' 属性设置为 true
     /// </summary>
     public bool AloneReloadCanShoot = false;

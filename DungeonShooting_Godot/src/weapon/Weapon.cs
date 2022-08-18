@@ -335,7 +335,7 @@ public abstract class Weapon : Area2D, IProp
             if (Reloading)
             {
                 //换弹中
-                
+
             }
             else if (CurrAmmo <= 0)
             {
@@ -479,7 +479,43 @@ public abstract class Weapon : Area2D, IProp
     {
         if (Attribute.AloneReload) //单独装填
         {
-
+            if (ResidueAmmo >= Attribute.AloneReloadCount) //剩余子弹充足
+            {
+                if (ResidueAmmo + CurrAmmo <= Attribute.AmmoCapacity)
+                {
+                    ResidueAmmo -= Attribute.AloneReloadCount;
+                    CurrAmmo += Attribute.AloneReloadCount;
+                }
+                else //子弹满了
+                {
+                    var num = Attribute.AmmoCapacity - CurrAmmo;
+                    CurrAmmo = Attribute.AmmoCapacity;
+                    ResidueAmmo -= num;
+                }
+            }
+            else if (ResidueAmmo != 0) //剩余子弹不足
+            {
+                if (ResidueAmmo + CurrAmmo <= Attribute.AmmoCapacity)
+                {
+                    CurrAmmo += ResidueAmmo;
+                    ResidueAmmo = 0;
+                }
+                else //子弹满了
+                {
+                    var num = Attribute.AmmoCapacity - CurrAmmo;
+                    CurrAmmo = Attribute.AmmoCapacity;
+                    ResidueAmmo -= num;
+                }
+            }
+            if (ResidueAmmo == 0 || CurrAmmo == Attribute.AmmoCapacity) //换弹结束
+            {
+                Reloading = false;
+            }
+            else
+            {
+                ReloadTimer = Attribute.ReloadTime;
+                OnReload();
+            }
         }
         else //换弹结束
         {
