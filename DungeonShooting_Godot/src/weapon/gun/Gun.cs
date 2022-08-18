@@ -88,6 +88,10 @@ public abstract class Gun : Area2D, IProp
     /// 换弹计时器
     /// </summary>
     public float ReloadTimer { get; private set; } = 0;
+    /// <summary>
+    /// 换弹进度 (0 - 1)
+    /// </summary>
+    public float ReloadProgress => ReloadTimer / Attribute.ReloadTime;
 
     //是否按下
     private bool triggerFlag = false;
@@ -331,7 +335,7 @@ public abstract class Gun : Area2D, IProp
             if (Reloading)
             {
                 //换弹中
-                GD.Print("换弹中..." + (ReloadTimer / Attribute.ReloadTime));
+                GD.Print("换弹中..." + ReloadProgress);
             }
             else if (CurrAmmo <= 0)
             {

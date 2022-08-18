@@ -117,6 +117,15 @@ public class Player : Role
         }
         //刷新显示的弹药剩余量
         RefreshGunAmmunition();
+
+        if (Holster.ActiveGun != null && Holster.ActiveGun.Reloading)
+        {
+            RoomUI.Current.ReloadBar.ShowBar(GlobalPosition);
+        }
+        else
+        {
+            RoomUI.Current.ReloadBar.HideBar();
+        }
     }
 
     public override void _PhysicsProcess(float delta)

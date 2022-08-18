@@ -29,6 +29,10 @@ public class RoomUI : Control
     /// 互动提示组件
     /// </summary>
     public InteractiveTipBar InteractiveTipBar { get; private set; }
+    /// <summary>
+    /// 换弹进度组件
+    /// </summary>
+    public ReloadBar ReloadBar { get; private set; }
 
     private NinePatchRect hpSlot;
     private NinePatchRect shieldSlot;
@@ -55,10 +59,14 @@ public class RoomUI : Control
         InteractiveTipBar = GetNode<InteractiveTipBar>("GlobalNode/InteractiveTipBar");
         InteractiveTipBar.Visible = false;
 
+        ReloadBar = GetNode<ReloadBar>("GlobalNode/ReloadBar");
+        ReloadBar.Visible = false;
+
         //将 GlobalNode 节点下的 ui 节点放入全局坐标中
         var tempNode = GetNode("GlobalNode");
         var root = GetTree().CurrentScene;
-        for (int i = 0; i < tempNode.GetChildCount(); i++)
+        var count = tempNode.GetChildCount();
+        for (int i = count - 1; i >= 0; i--)
         {
             var node = tempNode.GetChild(i);
             tempNode.RemoveChild(node);
