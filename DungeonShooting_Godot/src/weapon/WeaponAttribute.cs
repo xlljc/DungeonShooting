@@ -6,13 +6,13 @@ using Godot;
 public class WeaponAttribute
 {
     /// <summary>
-    /// 武器的唯一id
-    /// </summary>
-    public string Id = "1";
-    /// <summary>
     /// 武器显示的名称
     /// </summary>
     public string Name = "Gun1";
+    /// <summary>
+    /// 武器 Prefab, 必须继承场景 "res://prefab/weapon/Weapon.tscn"
+    /// </summary>
+    public string WeaponPrefab = "res://prefab/weapon/Weapon.tscn";
     /// <summary>
     /// 武器类型
     /// </summary>
@@ -20,15 +20,7 @@ public class WeaponAttribute
     /// <summary>
     /// 武器的图片
     /// </summary>
-    public Texture Sprite;
-    /// <summary>
-    /// 子弹预制体
-    /// </summary>
-    public PackedScene BulletPack;
-    /// <summary>
-    /// 弹壳预制体
-    /// </summary>
-    public PackedScene ShellPack;
+    public string Sprite = "res://resource/sprite/gun/gun4.png";
     /// <summary>
     /// 是否连续发射, 如果为false, 则每次发射都需要扣动扳机
     /// </summary>

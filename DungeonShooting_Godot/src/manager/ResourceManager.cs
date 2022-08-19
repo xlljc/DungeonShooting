@@ -46,7 +46,7 @@ public static class ResourceManager
     {
         if (CachePack.TryGetValue(path, out var pack))
         {
-            return (T)pack;
+            return pack as T;
         }
         else
         {
@@ -54,24 +54,9 @@ public static class ResourceManager
             if (pack != null)
             {
                 CachePack.Add(path, pack);
-                return (T)pack;
+                return pack as T;
             }
         }
         return default(T);
     }
-
-    /// <summary>
-    /// 加载并实例化一个武器对象
-    /// </summary>
-    /// <param name="path">资源路径</param>
-    public static Weapon LoadWeaponAndInstance(string path)
-    {
-        var pack = Load<PackedScene>(path);
-        if (pack != null)
-        {
-            return pack.Instance<Weapon>();
-        }
-        return null;
-    }
-
 }

@@ -72,4 +72,18 @@ public static class NodeExtend
         weapon.Position = Vector2.Zero;
         return weapon.StartThrow<ThrowWeapon>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, weapon.WeaponSprite);
     }
+
+    public static IProp AsProp(this Node2D node2d)
+    {
+        if (node2d is IProp p)
+        {
+            return p;
+        }
+        var parent = node2d.GetParent();
+        if (parent != null && parent is IProp p2)
+        {
+            return p2;
+        }
+        return null;
+    }
 }

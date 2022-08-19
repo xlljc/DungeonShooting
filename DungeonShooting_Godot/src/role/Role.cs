@@ -303,7 +303,8 @@ public abstract class Role : KinematicBody2D
     /// </summary>
     private void _OnPropsEnter(Area2D other)
     {
-        if (other is IProp prop) //道具类型
+        IProp prop = other.AsProp();
+        if (prop != null) //道具类型
         {
             if (!InteractiveItemList.Contains(prop))
             {
@@ -318,7 +319,8 @@ public abstract class Role : KinematicBody2D
     /// </summary>
     private void _OnPropsExit(Area2D other)
     {
-        if (other is IProp prop) //道具类型
+        IProp prop = other.AsProp();
+        if (prop != null) //道具类型
         {
             if (InteractiveItemList.Contains(prop))
             {
@@ -331,5 +333,4 @@ public abstract class Role : KinematicBody2D
             }
         }
     }
-
 }

@@ -4,8 +4,14 @@ using System;
 /// <summary>
 /// 武器的基类
 /// </summary>
-public abstract class Weapon : Area2D, IProp
+public abstract class Weapon : Node2D, IProp
 {
+
+    /// <summary>
+    /// 武器的唯一id
+    /// </summary>
+    public string Id { get; }
+
     /// <summary>
     /// 开火回调事件
     /// </summary>
@@ -14,19 +20,7 @@ public abstract class Weapon : Area2D, IProp
     /// <summary>
     /// 属性数据
     /// </summary>
-    public WeaponAttribute Attribute
-    {
-        get
-        {
-            if (_attribute == null)
-            {
-                throw new Exception("请先调用Init来初始化武器的属性");
-            }
-            return _attribute;
-        }
-        private set => _attribute = value;
-    }
-    private WeaponAttribute _attribute;
+    public WeaponAttribute Attribute { get; private set; }
 
     /// <summary>
     /// 武器的图片
@@ -127,6 +121,22 @@ public abstract class Weapon : Area2D, IProp
     //连发状态记录
     private bool continuousShootFlag = false;
 
+    public Weapon(string id, WeaponAttribute attribute)
+    {
+        Id = id;
+        Attribute = attribute;
+        //加载预制体
+        var tempPrefab = ResourceManager.Load<PackedScene>(Attribute.WeaponPrefab);
+        if (tempPrefab == null)
+        {
+            throw new Exception("WeaponAttribute中未设置'WeaponPrefab'属性!");
+        }
+        var tempNode = tempPrefab.Instance();
+        var body = tempNode.GetChild(0);
+        tempNode.RemoveChild(body);
+        AddChild(body);
+    }
+
     /// <summary>
     /// 初始化时调用
     /// </summary>
@@ -168,6 +178,30 @@ public abstract class Weapon : Area2D, IProp
     /// 当武器被收起时调用
     /// </summary>
     protected abstract void OnConceal();
+
+    public override void _Ready()
+    {
+        WeaponSprite = GetNode<Sprite>("WeaponBody/WeaponSprite");
+        FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
+        OriginPoint = GetNode<Position2D>("WeaponBody/OriginPoint");
+        ShellPoint = GetNode<Position2D>("WeaponBody/ShellPoint");
+        AnimationPlayer = GetNode<AnimationPlayer>("WeaponBody/AnimationPlayer");
+        CollisionShape2D = GetNode<CollisionShape2D>("WeaponBody/Collision");
+
+        //更新图片
+        WeaponSprite.Texture = ResourceLoader.Load<Texture>(Attribute.Sprite);
+        WeaponSprite.Position = Attribute.CenterPosition;
+        //开火位置
+        FirePoint.Position = new Vector2(Attribute.FirePosition.x, -Attribute.FirePosition.y);
+        OriginPoint.Position = new Vector2(0, -Attribute.FirePosition.y);
+
+        //弹药量
+        CurrAmmo = Attribute.AmmoCapacity;
+        //剩余弹药量
+        ResidueAmmo = Attribute.MaxAmmoCapacity - Attribute.AmmoCapacity;
+
+        Init();
+    }
 
     public override void _Process(float delta)
     {
@@ -274,36 +308,6 @@ public abstract class Weapon : Area2D, IProp
         }
     }
 
-    public void Init(WeaponAttribute attribute)
-    {
-        if (_attribute != null)
-        {
-            throw new Exception("当前武器已经初始化过了!");
-        }
-
-        WeaponSprite = GetNode<Sprite>("WeaponSprite");
-        FirePoint = GetNode<Position2D>("FirePoint");
-        OriginPoint = GetNode<Position2D>("OriginPoint");
-        ShellPoint = GetNode<Position2D>("ShellPoint");
-        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-        CollisionShape2D = GetNode<CollisionShape2D>("Collision");
-
-        Attribute = attribute;
-        //更新图片
-        WeaponSprite.Texture = attribute.Sprite;
-        WeaponSprite.Position = Attribute.CenterPosition;
-        //开火位置
-        FirePoint.Position = new Vector2(attribute.FirePosition.x, -attribute.FirePosition.y);
-        OriginPoint.Position = new Vector2(0, -attribute.FirePosition.y);
-
-        //弹药量
-        CurrAmmo = attribute.AmmoCapacity;
-        //剩余弹药量
-        ResidueAmmo = attribute.MaxAmmoCapacity - attribute.AmmoCapacity;
-
-        Init();
-    }
-
     /// <summary>
     /// 扳机函数, 调用即视为扣动扳机
     /// </summary>
@@ -363,8 +367,9 @@ public abstract class Weapon : Area2D, IProp
                 //子弹不够
                 _Reload();
             }
-            
-            if (fireFlag) {
+
+            if (fireFlag)
+            {
                 if (justDown)
                 {
                     //开火前延时
@@ -502,7 +507,7 @@ public abstract class Weapon : Area2D, IProp
         {
             if (ResidueAmmo >= Attribute.AloneReloadCount) //剩余子弹充足
             {
-                if ( CurrAmmo + Attribute.AloneReloadCount <= Attribute.AmmoCapacity)
+                if (CurrAmmo + Attribute.AloneReloadCount <= Attribute.AmmoCapacity)
                 {
                     ResidueAmmo -= Attribute.AloneReloadCount;
                     CurrAmmo += Attribute.AloneReloadCount;
@@ -563,7 +568,7 @@ public abstract class Weapon : Area2D, IProp
         {
             var masterWeapon = master.Holster.ActiveWeapon;
             //查找是否有同类型武器
-            var index = master.Holster.FindWeapon(Attribute.Id);
+            var index = master.Holster.FindWeapon(Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
@@ -605,7 +610,7 @@ public abstract class Weapon : Area2D, IProp
     public void Interactive(Role master)
     {
         //查找是否有同类型武器
-        var index = master.Holster.FindWeapon(Attribute.Id);
+        var index = master.Holster.FindWeapon(Id);
         if (index != -1) //如果有这个武器
         {
             if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
@@ -693,7 +698,7 @@ public abstract class Weapon : Area2D, IProp
 
     /// <summary>
     /// 触发抛出
-    /// </summary>
+    /// </summary>a
     public void _ThrowOutWeapon()
     {
         Master = null;

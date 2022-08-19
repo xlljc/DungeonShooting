@@ -43,21 +43,21 @@ public class RoomManager : Node2D
     {
         //播放bgm
         SoundManager.PlayeMusic("intro.ogg", this, -17f);
-        var gun1 = WeaponManager.GetGun1();
+        var gun1 = WeaponManager.GetGun("1001");
         gun1.Position = new Vector2(80, 80);
         gun1.PutDown(gun1.WeaponSprite);
-        var gun2 = WeaponManager.GetGun2();
-        gun2.Position = new Vector2(80, 120);
-        gun2.PutDown(gun2.WeaponSprite);
-        var gun3 = WeaponManager.GetGun3();
-        gun3.Position = new Vector2(120, 80);
-        gun3.PutDown(gun3.WeaponSprite);
-        var gun4 = WeaponManager.GetGun4();
-        gun4.Position = new Vector2(120, 120);
-        gun4.PutDown(gun4.WeaponSprite);
-        var gun5 = WeaponManager.GetGun5();
-        gun5.Position = new Vector2(160, 160);
-        gun5.PutDown(gun5.WeaponSprite);
+        // var gun2 = WeaponManager.GetGun2();
+        // gun2.Position = new Vector2(80, 120);
+        // gun2.PutDown(gun2.WeaponSprite);
+        // var gun3 = WeaponManager.GetGun3();
+        // gun3.Position = new Vector2(120, 80);
+        // gun3.PutDown(gun3.WeaponSprite);
+        // var gun4 = WeaponManager.GetGun4();
+        // gun4.Position = new Vector2(120, 120);
+        // gun4.PutDown(gun4.WeaponSprite);
+        // var gun5 = WeaponManager.GetGun5();
+        // gun5.Position = new Vector2(160, 160);
+        // gun5.PutDown(gun5.WeaponSprite);
     }
 
     public override void _Process(float delta)

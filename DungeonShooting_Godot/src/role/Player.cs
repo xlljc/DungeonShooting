@@ -60,10 +60,10 @@ public class Player : Role
         base._Ready();
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;
-        PickUpWeapon(WeaponManager.GetGun1()); //0
-        PickUpWeapon(WeaponManager.GetGun2()); //1
-        PickUpWeapon(WeaponManager.GetGun3()); //2
-        PickUpWeapon(WeaponManager.GetGun4()); //3
+        // PickUpWeapon(WeaponManager.GetGun1()); //0
+        // PickUpWeapon(WeaponManager.GetGun2()); //1
+        // PickUpWeapon(WeaponManager.GetGun3()); //2
+        // PickUpWeapon(WeaponManager.GetGun4()); //3
         RefreshGunTexture();
 
         MaxHp = 50;
@@ -181,7 +181,7 @@ public class Player : Role
         var gun = Holster.ActiveWeapon;
         if (gun != null)
         {
-            RoomUI.Current.SetGunTexture(gun.Attribute.Sprite);
+            RoomUI.Current.SetGunTexture(gun.WeaponSprite.Texture);
         }
         else
         {
