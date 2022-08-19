@@ -42,7 +42,7 @@ public class WeaponAttribute
     /// </summary>
     public int MaxAmmoCapacity = 90;
     /// <summary>
-    /// 装弹时间
+    /// 装弹时间, 单位: 秒
     /// </summary>
     public float ReloadTime = 1.5f;
     /// <summary>

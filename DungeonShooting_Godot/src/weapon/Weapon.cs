@@ -91,7 +91,18 @@ public abstract class Weapon : Area2D, IProp
     /// <summary>
     /// 换弹进度 (0 - 1)
     /// </summary>
-    public float ReloadProgress => ReloadTimer / Attribute.ReloadTime;
+    public float ReloadProgress
+    {
+        get
+        {
+            if (Attribute.AloneReload)
+            {
+                var num = 1f / Attribute.AmmoCapacity;
+                return num * (Attribute.AmmoCapacity - CurrAmmo - 1) + num * (ReloadTimer / Attribute.ReloadTime);
+            }
+            return ReloadTimer / Attribute.ReloadTime;
+        }
+    }
 
     //是否按下
     private bool triggerFlag = false;
@@ -163,6 +174,7 @@ public abstract class Weapon : Area2D, IProp
         if (Master == null) //这把武器被扔在地上
         {
             Reloading = false;
+            ReloadTimer = 0;
             triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
             triggerFlag = false;
             attackFlag = false;
@@ -174,6 +186,7 @@ public abstract class Weapon : Area2D, IProp
         else if (Master.Holster.ActiveWeapon != this) //当前武器没有被使用
         {
             Reloading = false;
+            ReloadTimer = 0;
             triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
             triggerFlag = false;
             attackFlag = false;
@@ -191,7 +204,6 @@ public abstract class Weapon : Area2D, IProp
                 ReloadTimer -= delta;
                 if (ReloadTimer <= 0)
                 {
-                    ReloadTimer = 0;
                     ReloadSuccess();
                 }
             }
@@ -332,18 +344,27 @@ public abstract class Weapon : Area2D, IProp
 
         if (flag)
         {
-            if (Reloading)
+            var fireFlag = true;
+            if (Reloading) //换弹中
             {
-                //换弹中
-
+                if (Attribute.AloneReload && Attribute.AloneReloadCanShoot) //立即停止换弹
+                {
+                    Reloading = false;
+                    ReloadTimer = 0;
+                }
+                else
+                {
+                    fireFlag = false;
+                }
             }
             else if (CurrAmmo <= 0)
             {
+                fireFlag = false;
                 //子弹不够
                 _Reload();
             }
-            else
-            {
+            
+            if (fireFlag) {
                 if (justDown)
                 {
                     //开火前延时
@@ -481,7 +502,7 @@ public abstract class Weapon : Area2D, IProp
         {
             if (ResidueAmmo >= Attribute.AloneReloadCount) //剩余子弹充足
             {
-                if (ResidueAmmo + CurrAmmo <= Attribute.AmmoCapacity)
+                if ( CurrAmmo + Attribute.AloneReloadCount <= Attribute.AmmoCapacity)
                 {
                     ResidueAmmo -= Attribute.AloneReloadCount;
                     CurrAmmo += Attribute.AloneReloadCount;
@@ -510,6 +531,7 @@ public abstract class Weapon : Area2D, IProp
             if (ResidueAmmo == 0 || CurrAmmo == Attribute.AmmoCapacity) //换弹结束
             {
                 Reloading = false;
+                ReloadTimer = 0;
             }
             else
             {
@@ -520,6 +542,7 @@ public abstract class Weapon : Area2D, IProp
         else //换弹结束
         {
             Reloading = false;
+            ReloadTimer = 0;
             if (ResidueAmmo >= Attribute.AmmoCapacity)
             {
                 ResidueAmmo -= Attribute.AmmoCapacity - CurrAmmo;

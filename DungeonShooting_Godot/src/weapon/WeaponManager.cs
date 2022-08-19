@@ -122,8 +122,12 @@ public static class WeaponManager
         attr.ScatteringRangeBackSpeed = 40;
         //连发
         attr.ContinuousShoot = false;
+        //装弹时间
+        attr.ReloadTime = 0.4f;
         //单独装弹
         attr.AloneReload = true;
+        attr.AloneReloadCount = 1;
+        attr.AloneReloadCanShoot = true;
         //扳机检测间隔
         attr.TriggerInterval = 0f;
         //连发数量
