@@ -121,6 +121,11 @@ public abstract class Weapon : Node2D, IProp
     //连发状态记录
     private bool continuousShootFlag = false;
 
+    /// <summary>
+    /// 根据属性创建一把武器
+    /// </summary>
+    /// <param name="id">武器唯一id</param>
+    /// <param name="attribute">属性</param>
     public Weapon(string id, WeaponAttribute attribute)
     {
         Id = id;
@@ -138,9 +143,19 @@ public abstract class Weapon : Node2D, IProp
     }
 
     /// <summary>
-    /// 初始化时调用
+    /// 初始化基础数据完成时调用
     /// </summary>
     protected abstract void Init();
+
+    /// <summary>
+    /// 当按下扳机时调用
+    /// </summary>
+    protected abstract void OnDownTrigger();
+
+    /// <summary>
+    /// 当松开扳机时调用
+    /// </summary>
+    protected abstract void OnUpTrigger();
 
     /// <summary>
     /// 单次开火时调用的函数
@@ -148,15 +163,20 @@ public abstract class Weapon : Node2D, IProp
     protected abstract void OnFire();
 
     /// <summary>
-    /// 换弹时调用
+    /// 发射子弹时调用的函数, 每发射一枚子弹调用一次,
+    /// 如果做霰弹武器效果, 一次开火发射5枚子弹, 则该函数调用5次
+    /// </summary>
+    protected abstract void OnShoot();
+
+    /// <summary>
+    /// 当开始换弹时调用
     /// </summary>
     protected abstract void OnReload();
 
     /// <summary>
-    /// 发射子弹时调用的函数, 每发射一枚子弹调用一次,
-    /// 如果做霰弹武器效果, 一次开火发射5枚子弹, 则该函数调用5次
+    /// 当换弹完成时调用
     /// </summary>
-    protected abstract void OnShootBullet();
+    protected abstract void OnReloadFinish();
 
     /// <summary>
     /// 当武器被拾起时调用
@@ -165,7 +185,7 @@ public abstract class Weapon : Node2D, IProp
     protected abstract void OnPickUp(Role master);
 
     /// <summary>
-    /// 当武器被扔掉时调用
+    /// 当武器从武器袋中扔掉时调用
     /// </summary>
     protected abstract void OnThrowOut();
 
@@ -348,10 +368,10 @@ public abstract class Weapon : Node2D, IProp
 
         if (flag)
         {
-            var fireFlag = true;
+            var fireFlag = true; //是否能开火
             if (Reloading) //换弹中
             {
-                if (Attribute.AloneReload && Attribute.AloneReloadCanShoot) //立即停止换弹
+                if (CurrAmmo > 0 && Attribute.AloneReload && Attribute.AloneReloadCanShoot) //立即停止换弹
                 {
                     Reloading = false;
                     ReloadTimer = 0;
@@ -398,7 +418,7 @@ public abstract class Weapon : Node2D, IProp
     /// </summary>
     private void DownTrigger()
     {
-
+        OnDownTrigger();
     }
 
     /// <summary>
@@ -411,6 +431,7 @@ public abstract class Weapon : Node2D, IProp
         {
             continuousCount = 0;
         }
+        OnUpTrigger();
     }
 
     /// <summary>
@@ -441,7 +462,7 @@ public abstract class Weapon : Node2D, IProp
             //先算武器口方向
             Rotation = (float)GD.RandRange(-angle, angle);
             //发射子弹
-            OnShootBullet();
+            OnShoot();
         }
 
         //当前的散射半径
@@ -537,6 +558,7 @@ public abstract class Weapon : Node2D, IProp
             {
                 Reloading = false;
                 ReloadTimer = 0;
+                OnReloadFinish();
             }
             else
             {
@@ -546,8 +568,6 @@ public abstract class Weapon : Node2D, IProp
         }
         else //换弹结束
         {
-            Reloading = false;
-            ReloadTimer = 0;
             if (ResidueAmmo >= Attribute.AmmoCapacity)
             {
                 ResidueAmmo -= Attribute.AmmoCapacity - CurrAmmo;
@@ -558,6 +578,9 @@ public abstract class Weapon : Node2D, IProp
                 CurrAmmo = ResidueAmmo;
                 ResidueAmmo = 0;
             }
+            Reloading = false;
+            ReloadTimer = 0;
+            OnReloadFinish();
         }
     }
 

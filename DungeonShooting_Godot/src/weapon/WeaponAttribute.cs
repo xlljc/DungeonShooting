@@ -20,7 +20,7 @@ public class WeaponAttribute
     /// <summary>
     /// 武器的图片
     /// </summary>
-    public string Sprite = "res://resource/sprite/gun/gun4.png";
+    public string Sprite = "res://resource/sprite/gun/gun1.png";
     /// <summary>
     /// 是否连续发射, 如果为false, 则每次发射都需要扣动扳机
     /// </summary>
@@ -149,9 +149,4 @@ public class WeaponAttribute
     /// 开火后武器口角度恢复速度倍数
     /// </summary>
     public float UpliftAngleRestore = 1;
-
-    public WeaponAttribute() 
-    {
-        
-    }
 }
