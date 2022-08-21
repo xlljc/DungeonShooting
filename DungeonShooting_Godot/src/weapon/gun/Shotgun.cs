@@ -59,11 +59,6 @@ public class Shotgun : Weapon
         ShellPack = ResourceManager.Load<PackedScene>("res://prefab/weapon/shell/ShellCase.tscn");
     }
 
-    protected override void Init()
-    {
-
-    }
-
     protected override void OnFire()
     {
         //创建一个弹壳

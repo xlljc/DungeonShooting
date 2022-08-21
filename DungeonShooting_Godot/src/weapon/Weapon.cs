@@ -140,12 +140,26 @@ public abstract class Weapon : Node2D, IProp
         var body = tempNode.GetChild(0);
         tempNode.RemoveChild(body);
         AddChild(body);
-    }
 
-    /// <summary>
-    /// 初始化基础数据完成时调用
-    /// </summary>
-    protected abstract void Init();
+        WeaponSprite = GetNode<Sprite>("WeaponBody/WeaponSprite");
+        FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
+        OriginPoint = GetNode<Position2D>("WeaponBody/OriginPoint");
+        ShellPoint = GetNode<Position2D>("WeaponBody/ShellPoint");
+        AnimationPlayer = GetNode<AnimationPlayer>("WeaponBody/AnimationPlayer");
+        CollisionShape2D = GetNode<CollisionShape2D>("WeaponBody/Collision");
+
+        //更新图片
+        WeaponSprite.Texture = ResourceLoader.Load<Texture>(Attribute.Sprite);
+        WeaponSprite.Position = Attribute.CenterPosition;
+        //开火位置
+        FirePoint.Position = new Vector2(Attribute.FirePosition.x, -Attribute.FirePosition.y);
+        OriginPoint.Position = new Vector2(0, -Attribute.FirePosition.y);
+
+        //弹药量
+        CurrAmmo = Attribute.AmmoCapacity;
+        //剩余弹药量
+        ResidueAmmo = Attribute.MaxAmmoCapacity - Attribute.AmmoCapacity;
+    }
 
     /// <summary>
     /// 当按下扳机时调用
@@ -198,30 +212,6 @@ public abstract class Weapon : Node2D, IProp
     /// 当武器被收起时调用
     /// </summary>
     protected abstract void OnConceal();
-
-    public override void _Ready()
-    {
-        WeaponSprite = GetNode<Sprite>("WeaponBody/WeaponSprite");
-        FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
-        OriginPoint = GetNode<Position2D>("WeaponBody/OriginPoint");
-        ShellPoint = GetNode<Position2D>("WeaponBody/ShellPoint");
-        AnimationPlayer = GetNode<AnimationPlayer>("WeaponBody/AnimationPlayer");
-        CollisionShape2D = GetNode<CollisionShape2D>("WeaponBody/Collision");
-
-        //更新图片
-        WeaponSprite.Texture = ResourceLoader.Load<Texture>(Attribute.Sprite);
-        WeaponSprite.Position = Attribute.CenterPosition;
-        //开火位置
-        FirePoint.Position = new Vector2(Attribute.FirePosition.x, -Attribute.FirePosition.y);
-        OriginPoint.Position = new Vector2(0, -Attribute.FirePosition.y);
-
-        //弹药量
-        CurrAmmo = Attribute.AmmoCapacity;
-        //剩余弹药量
-        ResidueAmmo = Attribute.MaxAmmoCapacity - Attribute.AmmoCapacity;
-
-        Init();
-    }
 
     public override void _Process(float delta)
     {

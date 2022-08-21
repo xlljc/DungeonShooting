@@ -13,7 +13,7 @@ public static class WeaponManager
     /// <summary>
     /// 从一个指定的程序集中扫描并注册武器对象
     /// </summary>
-    /// <param name="assembly">查询集</param>
+    /// <param name="assembly">数据集</param>
     public static void RegisterWeaponFromAssembly(Assembly assembly)
     {
         var types = assembly.GetTypes();

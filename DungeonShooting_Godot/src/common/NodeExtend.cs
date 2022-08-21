@@ -1,6 +1,9 @@
 using Godot;
 using System;
 
+/// <summary>
+/// 该类为 node 节点通用扩展函数类
+/// </summary>
 public static class NodeExtend
 {
 
@@ -40,11 +43,18 @@ public static class NodeExtend
         return inst;
     }
 
+    /// <summary>
+    /// 将一个节点扔到地上, 并设置显示的阴影, 函数返回根据该节点创建的 ThrowNode 节点
+    /// </summary>
+    /// <param name="shadowTarget">显示的阴影sprite</param>
     public static ThrowNode PutDown(this Node2D node, Sprite shadowTarget)
     {
         return StartThrow(node, Vector2.Zero, node.Position, 0, 0, 0, 0, 0, shadowTarget);
     }
 
+    /// <summary>
+    /// 拾起一个 node 节点, 返回是否拾起成功
+    /// </summary>
     public static bool Pickup(this Node2D node)
     {
         ThrowNode parent = node.GetParentOrNull<ThrowNode>();
@@ -56,6 +66,10 @@ public static class NodeExtend
         return false;
     }
 
+    /// <summary>
+    /// 触发扔掉武器操作
+    /// </summary>
+    /// <param name="master">触发扔掉该武器的的角色</param>
     public static ThrowWeapon StartThrowWeapon(this Weapon weapon, Role master)
     {
         if (master.Face == FaceDirection.Left)
@@ -73,6 +87,10 @@ public static class NodeExtend
         return weapon.StartThrow<ThrowWeapon>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, weapon.WeaponSprite);
     }
 
+
+    /// <summary>
+    /// 尝试将一个node2d节点转换成一个 IProp 类
+    /// </summary>
     public static IProp AsProp(this Node2D node2d)
     {
         if (node2d is IProp p)
