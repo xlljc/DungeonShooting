@@ -103,5 +103,6 @@ align = 1
 [node name="GlobalNode" type="Node" parent="."]
 
 [node name="InteractiveTipBar" parent="GlobalNode" instance=ExtResource( 10 )]
+visible = true
 
 [node name="ReloadBar" parent="GlobalNode" instance=ExtResource( 3 )]

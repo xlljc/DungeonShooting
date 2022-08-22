@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.8" tiledversion="1.8.5" name="itch-io-DungeonTileset4" tilewidth="16" tileheight="16" tilecount="192" columns="16">
- <image source="../sprite/package/itch-io-DungeonTileset4/16x16 dungeon ii wall reconfig v04 spritesheet.png" width="256" height="192"/>
+ <image source="../sprite/environment/itch-io-DungeonTileset4/16x16 dungeon ii wall reconfig v04 spritesheet.png" width="256" height="192"/>
  <tile id="11">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="16" height="16"/>
