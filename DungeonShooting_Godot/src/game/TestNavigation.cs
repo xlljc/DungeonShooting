@@ -27,13 +27,14 @@ public class TestNavigation : Node2D
             }
         }
     }
+
     public override void _Draw()
     {
-        if (points.Length >= 2) {
+        if (points.Length >= 2)
+        {
             GD.Print("绘制线段...");
             DrawPolyline(points, Colors.Red);
             // DrawMultiline(points, Colors.Red);
         }
     }
-
 }

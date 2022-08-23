@@ -1,8 +1,9 @@
 [gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://src/role/Role.cs" type="Script" id=1]
+[ext_resource path="res://src/game/role/Role.cs" type="Script" id=1]
 [ext_resource path="res://resource/sprite/role/role2.png" type="Texture" id=2]
 [ext_resource path="res://resource/sprite/role/role1.png" type="Texture" id=3]
+
 
 [sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 3 )

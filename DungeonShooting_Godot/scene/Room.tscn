@@ -2,9 +2,9 @@
 
 [ext_resource path="res://prefab/role/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://resource/map/dungeon_test.tmx" type="PackedScene" id=2]
-[ext_resource path="res://src/room/RoomManager.cs" type="Script" id=3]
+[ext_resource path="res://src/game/room/RoomManager.cs" type="Script" id=3]
 [ext_resource path="res://prefab/ui/Cursor.tscn" type="PackedScene" id=4]
-[ext_resource path="res://src/camera/MainCamera.cs" type="Script" id=5]
+[ext_resource path="res://src/game/camera/MainCamera.cs" type="Script" id=5]
 [ext_resource path="res://prefab/ui/RoomUI.tscn" type="PackedScene" id=6]
 
 [node name="Room" type="Node2D"]

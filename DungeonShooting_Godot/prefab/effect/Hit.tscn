@@ -5,7 +5,8 @@
 [ext_resource path="res://resource/sprite/effect/hit/hit4.png" type="Texture" id=3]
 [ext_resource path="res://resource/sprite/effect/hit/hit0.png" type="Texture" id=4]
 [ext_resource path="res://resource/sprite/effect/hit/hit3.png" type="Texture" id=5]
-[ext_resource path="res://src/effect/Hit.cs" type="Script" id=6]
+[ext_resource path="res://src/game/effect/Hit.cs" type="Script" id=6]
+
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {

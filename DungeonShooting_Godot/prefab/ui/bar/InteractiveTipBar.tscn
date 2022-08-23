@@ -1,10 +1,11 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://src/ui/InteractiveTipBar.cs" type="Script" id=1]
+[ext_resource path="res://src/game/ui/InteractiveTipBar.cs" type="Script" id=1]
 [ext_resource path="res://resource/sprite/ui/keyboard/e.png" type="Texture" id=2]
 [ext_resource path="res://resource/sprite/ui/icon/icon_bullet.png" type="Texture" id=3]
 [ext_resource path="res://resource/sprite/ui/font_bg.png" type="Texture" id=4]
 [ext_resource path="res://resource/font/cn_font_4.tres" type="DynamicFont" id=5]
+
 
 [sub_resource type="Gradient" id=1]
 colors = PoolColorArray( 0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726 )
