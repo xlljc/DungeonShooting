@@ -1,68 +1,122 @@
 using System.Collections.Generic;
 using Godot;
 
-public abstract class GameObject<T> : IProcess where T : Node2D
+public class GameObject<T> : Node, IDestroy where T : Node2D
 {
-    public Vector3 Position { get; set; }
-    public Vector2 Position2D { get; set; }
+    public float Altitude { get; set; }
 
-    public T Node;
+    public Vector2 Position
+    {
+        get => Node.Position;
+        set => Node.Position = value;
+    }
 
-    private List<IComponent<T>> _components = new List<IComponent<T>>();
-    private bool _isDestroy = false;
+    public Vector2 GlobalPosition
+    {
+        get => Node.GlobalPosition;
+        set => Node.GlobalPosition = value;
+    }
+    
+    public bool Visible
+    {
+        get => Node.Visible;
+        set => Node.Visible = value;
+    }
+
+    public bool IsDestroyed { get; private set; }
+
+    public T Node { get; private set; }
+
+    private List<Component<T>> _components = new List<Component<T>>();
 
     public GameObject(T node)
     {
+        Name = "ComponentControl";
         Node = node;
+        node.AddChild(this);
     }
 
-    public void AddComponent<TN>(Component<TN, T> component) where TN : Node
+    public void AddComponent<TN>(NodeComponent<T, TN> nodeComponent) where TN : Node
     {
-        if (!_components.Contains(component))
+        if (!_components.Contains(nodeComponent))
         {
-            component.SetGameObject(this);
-            Node.AddChild(component.Node);
+            _components.Add(nodeComponent);
+            nodeComponent.SetGameObject(this);
+            Node.AddChild(nodeComponent.Node);
+            nodeComponent.OnMount();
         }
     }
 
-    public void RemoveComponent<TN>(Component<TN, T> component) where TN : Node
+    public void RemoveComponent<TN>(NodeComponent<T, TN> nodeComponent) where TN : Node
+    {
+        if (_components.Remove(nodeComponent))
+        {
+            nodeComponent.SetGameObject(null);
+            Node.RemoveChild(nodeComponent.Node);
+            nodeComponent.OnUnMount();
+        }
+    }
+    
+    public void AddComponent(Component<T> component)
+    {
+        if (!_components.Contains(component))
+        {
+            _components.Add(component);
+            component.SetGameObject(this);
+            component.OnMount();
+        }
+    }
+
+    public void RemoveComponent(Component<T> component)
     {
         if (_components.Remove(component))
         {
             component.SetGameObject(null);
-            Node.RemoveChild(component.Node);
+            component.OnUnMount();
         }
     }
 
-    public void Process(float delta)
+    public override void _Process(float delta)
     {
         var arr = _components.ToArray();
         for (int i = 0; i < arr.Length; i++)
         {
-            arr[i].Process(delta);
+            if (IsDestroyed) return;
+            var temp = arr[i];
+            if (temp != null && temp.GameObject == this && temp.Enable)
+            {
+                temp._TriggerProcess(delta);
+            }
         }
     }
 
-    public void PhysicsProcess(float delta)
+    public override void _PhysicsProcess(float delta)
     {
         var arr = _components.ToArray();
         for (int i = 0; i < arr.Length; i++)
         {
-            arr[i].PhysicsProcess(delta);
+            if (IsDestroyed) return;
+            var temp = arr[i];
+            if (temp != null && temp.GameObject == this && temp.Enable)
+            {
+                temp._TriggerPhysicsProcess(delta);
+            }
         }
     }
 
     public void Destroy()
     {
-        if (_isDestroy)
+        if (IsDestroyed)
         {
             return;
         }
-        _isDestroy = true;
-    }
 
-    public bool IsDestroy()
-    {
-        return _isDestroy;
+        IsDestroyed = true;
+        Node.QueueFree();
+        var arr = _components.ToArray();
+        for (int i = 0; i < arr.Length; i++)
+        {
+            arr[i].Destroy();
+        }
     }
 }
