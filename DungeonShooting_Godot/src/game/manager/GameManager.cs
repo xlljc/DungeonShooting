@@ -5,7 +5,6 @@ using Godot;
 /// </summary>
 public class GameManager : Node2D
 {
-
     public static GameManager Instance { get; private set; }
 
     public GameManager()
@@ -15,5 +14,4 @@ public class GameManager : Node2D
         //扫描并注册当前程序集下的武器
         WeaponManager.RegisterWeaponFromAssembly(GetType().Assembly);
     }
-
 }

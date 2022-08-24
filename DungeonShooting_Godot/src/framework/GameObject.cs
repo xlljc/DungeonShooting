@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using Godot;
 
-public class GameObject<T> where T : Node2D
+public abstract class GameObject<T> : IProcess where T : Node2D
 {
     public Vector3 Position { get; set; }
     public Vector2 Position2D { get; set; }
 
     public T Node;
 
-    private List<IProcess> _components = new List<IProcess>();
+    private List<IComponent<T>> _components = new List<IComponent<T>>();
+    private bool _isDestroy = false;
 
     public GameObject(T node)
     {
@@ -49,5 +50,19 @@ public class GameObject<T> where T : Node2D
         {
             arr[i].PhysicsProcess(delta);
         }
+    }
+
+    public void Destroy()
+    {
+        if (_isDestroy)
+        {
+            return;
+        }
+        _isDestroy = true;
+    }
+
+    public bool IsDestroy()
+    {
+        return _isDestroy;
     }
 }
