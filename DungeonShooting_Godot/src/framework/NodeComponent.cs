@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-public abstract class NodeComponent<TG, TN> : Component<TG> where TN : Node where TG : Node2D
+public abstract class NodeComponent<TG, TN> : Component<TG> where TN : Node where TG : KinematicBody2D
 {
     public TN Node { get; }
 

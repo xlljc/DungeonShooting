@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-public class GameObject<T> : Node, IDestroy where T : Node2D
+public class ComponentControl<T> : Node, IDestroy where T : KinematicBody2D
 {
     public float Altitude { get; set; }
 
@@ -29,7 +29,7 @@ public class GameObject<T> : Node, IDestroy where T : Node2D
 
     private List<Component<T>> _components = new List<Component<T>>();
 
-    public GameObject(T node)
+    public ComponentControl(T node)
     {
         Name = "ComponentControl";
         Node = node;
@@ -42,7 +42,16 @@ public class GameObject<T> : Node, IDestroy where T : Node2D
         {
             _components.Add(nodeComponent);
             nodeComponent.SetGameObject(this);
-            Node.AddChild(nodeComponent.Node);
+            var parent = nodeComponent.Node.GetParent();
+            if (parent == null)
+            {
+                Node.AddChild(nodeComponent.Node);
+            }
+            else if (parent != Node)
+            {
+                parent.RemoveChild(nodeComponent.Node);
+                Node.AddChild(nodeComponent.Node);
+            }
             nodeComponent.OnMount();
         }
     }
@@ -83,7 +92,7 @@ public class GameObject<T> : Node, IDestroy where T : Node2D
         {
             if (IsDestroyed) return;
             var temp = arr[i];
-            if (temp != null && temp.GameObject == this && temp.Enable)
+            if (temp != null && temp.ComponentControl == this && temp.Enable)
             {
                 temp._TriggerProcess(delta);
             }
@@ -97,7 +106,7 @@ public class GameObject<T> : Node, IDestroy where T : Node2D
         {
             if (IsDestroyed) return;
             var temp = arr[i];
-            if (temp != null && temp.GameObject == this && temp.Enable)
+            if (temp != null && temp.ComponentControl == this && temp.Enable)
             {
                 temp._TriggerPhysicsProcess(delta);
             }

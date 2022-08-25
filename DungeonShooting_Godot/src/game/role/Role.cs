@@ -2,18 +2,9 @@ using System.Collections.Generic;
 using Godot;
 
 /// <summary>
-/// 脸的朝向
-/// </summary>
-public enum FaceDirection
-{
-    Left,
-    Right,
-}
-
-/// <summary>
 /// 角色基类
 /// </summary>
-public abstract class Role : KinematicBody2D
+public abstract class Role : ActivityObject<Role>
 {
     /// <summary>
     /// 重写的纹理
@@ -88,17 +79,18 @@ public abstract class Role : KinematicBody2D
         }
     }
     private int _maxHp = 0;
-
+    
+    //初始缩放
     private Vector2 StartScele;
     //所有角色碰撞的道具
-    private readonly List<IProp> InteractiveItemList = new List<IProp>();
+    private readonly List<ActivityObject> InteractiveItemList = new List<ActivityObject>();
 
     private CheckInteractiveResult TempResultData;
 
     /// <summary>
     /// 可以互动的道具
     /// </summary>
-    protected IProp InteractiveItem { get; private set; }
+    protected ActivityObject InteractiveItem { get; private set; }
 
     /// <summary>
     /// 当血量改变时调用
@@ -115,6 +107,21 @@ public abstract class Role : KinematicBody2D
     /// <param name="result">检测是否可互动时的返回值</param>
     protected abstract void ChangeInteractiveItem(CheckInteractiveResult result);
 
+    public override ComponentControl<Role> CreateComponentControl()
+    {
+        return new ComponentControl<Role>(this);
+    }
+    
+    public override CheckInteractiveResult CheckInteractive<TU>(ActivityObject<TU> master)
+    {
+        return null;
+    }
+
+    public override void Interactive<TU>(ActivityObject<TU> master)
+    {
+        
+    }
+    
     public override void _Ready()
     {
         StartScele = Scale;
@@ -218,7 +225,7 @@ public abstract class Role : KinematicBody2D
     /// <summary>
     /// 返回是否存在可互动的物体
     /// </summary>
-    public bool HasTnteractive()
+    public bool HasInteractive()
     {
         return InteractiveItem != null;
     }
@@ -226,9 +233,9 @@ public abstract class Role : KinematicBody2D
     /// <summary>
     /// 触发与碰撞的物体互动, 并返回与其互动的物体
     /// </summary>
-    public IProp TriggerTnteractive()
+    public ActivityObject TriggerInteractive()
     {
-        if (HasTnteractive())
+        if (HasInteractive())
         {
             var item = InteractiveItem;
             item.Interactive(this);
@@ -303,12 +310,12 @@ public abstract class Role : KinematicBody2D
     /// </summary>
     private void _OnPropsEnter(Area2D other)
     {
-        IProp prop = other.AsProp();
-        if (prop != null) //道具类型
+        ActivityObject propObject = other.AsActivityObject();
+        if (propObject != null) //道具类型
         {
-            if (!InteractiveItemList.Contains(prop))
+            if (!InteractiveItemList.Contains(propObject))
             {
-                InteractiveItemList.Add(prop);
+                InteractiveItemList.Add(propObject);
             }
         }
     }
@@ -319,14 +326,14 @@ public abstract class Role : KinematicBody2D
     /// </summary>
     private void _OnPropsExit(Area2D other)
     {
-        IProp prop = other.AsProp();
-        if (prop != null) //道具类型
+        ActivityObject propObject = other.AsActivityObject();
+        if (propObject != null) //道具类型
         {
-            if (InteractiveItemList.Contains(prop))
+            if (InteractiveItemList.Contains(propObject))
             {
-                InteractiveItemList.Remove(prop);
+                InteractiveItemList.Remove(propObject);
             }
-            if (InteractiveItem == prop)
+            if (InteractiveItem == propObject)
             {
                 InteractiveItem = null;
                 ChangeInteractiveItem(null);

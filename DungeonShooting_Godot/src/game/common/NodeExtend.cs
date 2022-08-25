@@ -89,16 +89,16 @@ public static class NodeExtend
 
 
     /// <summary>
-    /// 尝试将一个node2d节点转换成一个 IProp 类
+    /// 尝试将一个node2d节点转换成一个 ActivityObject 类
     /// </summary>
-    public static IProp AsProp(this Node2D node2d)
+    public static ActivityObject AsActivityObject(this Node2D node2d)
     {
-        if (node2d is IProp p)
+        if (node2d is ActivityObject p)
         {
             return p;
         }
         var parent = node2d.GetParent();
-        if (parent != null && parent is IProp p2)
+        if (parent != null && parent is ActivityObject p2)
         {
             return p2;
         }

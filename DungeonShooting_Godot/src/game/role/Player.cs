@@ -97,7 +97,7 @@ public class Player : Role
         }
         else if (Input.IsActionJustPressed("interactive")) //互动物体
         {
-            var item = TriggerTnteractive();
+            var item = TriggerInteractive();
             if (item is Weapon)
             {
                 RefreshGunTexture();
@@ -154,7 +154,7 @@ public class Player : Role
             if (InteractiveItem is Weapon gun)
             {
                 //显示互动提示
-                RoomUI.Current.InteractiveTipBar.ShowBar(result.Target.GetItemPosition(), result.ShowIcon, result.Message);
+                RoomUI.Current.InteractiveTipBar.ShowBar(result.Target.GlobalPosition, result.ShowIcon, result.Message);
             }
         }
     }

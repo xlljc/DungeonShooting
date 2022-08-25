@@ -7,7 +7,7 @@ public class CheckInteractiveResult
     /// <summary>
     /// 互动物体
     /// </summary>
-    public IProp Target;
+    public ActivityObject Target;
     /// <summary>
     /// 是否可以互动
     /// </summary>
@@ -21,7 +21,7 @@ public class CheckInteractiveResult
     /// </summary>
     public string ShowIcon;
 
-    public CheckInteractiveResult(IProp target)
+    public CheckInteractiveResult(ActivityObject target)
     {
         Target = target;
     }

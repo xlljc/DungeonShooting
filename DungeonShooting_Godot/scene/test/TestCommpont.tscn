@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
-[ext_resource path="res://src/test/TestPlayer.cs" type="Script" id=2]
 
 [node name="Node2D" type="Node2D"]
 
@@ -9,4 +8,3 @@
 position = Vector2( 200, 102 )
 scale = Vector2( 0.3, 0.3 )
 texture = ExtResource( 1 )
-script = ExtResource( 2 )

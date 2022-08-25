@@ -4,7 +4,7 @@ using System;
 /// <summary>
 /// 武器的基类
 /// </summary>
-public abstract class Weapon : Node2D, IProp
+public abstract class Weapon : ActivityObject<Weapon>
 {
 
     /// <summary>
@@ -213,6 +213,11 @@ public abstract class Weapon : Node2D, IProp
     /// </summary>
     protected abstract void OnConceal();
 
+    public override ComponentControl<Weapon> CreateComponentControl()
+    {
+        return new ComponentControl<Weapon>(this);
+    }
+
     public override void _Process(float delta)
     {
         if (Master == null) //这把武器被扔在地上
@@ -266,7 +271,7 @@ public abstract class Weapon : Node2D, IProp
                 if (downTimer > 0) //第一帧松开扳机
                 {
                     downTimer = 0;
-                    UpTriggern();
+                    UpTrigger();
                 }
                 upTimer += delta;
             }
@@ -294,7 +299,7 @@ public abstract class Weapon : Node2D, IProp
             if (continuousCount > 0 && delayedTime <= 0 && attackTimer <= 0)
             {
                 //开火
-                TriggernFire();
+                TriggerFire();
             }
 
             if (!attackFlag && attackTimer <= 0)
@@ -394,7 +399,7 @@ public abstract class Weapon : Node2D, IProp
                 }
                 if (delayedTime <= 0 && attackTimer <= 0)
                 {
-                    TriggernFire();
+                    TriggerFire();
                 }
                 attackFlag = true;
             }
@@ -414,7 +419,7 @@ public abstract class Weapon : Node2D, IProp
     /// <summary>
     /// 刚松开扳机
     /// </summary>
-    private void UpTriggern()
+    private void UpTrigger()
     {
         continuousShootFlag = false;
         if (delayedTime > 0)
@@ -427,7 +432,7 @@ public abstract class Weapon : Node2D, IProp
     /// <summary>
     /// 触发开火
     /// </summary>
-    private void TriggernFire()
+    private void TriggerFire()
     {
         continuousCount = continuousCount > 0 ? continuousCount - 1 : 0;
 
@@ -574,103 +579,114 @@ public abstract class Weapon : Node2D, IProp
         }
     }
 
-    public CheckInteractiveResult CheckInteractive(Role master)
+    public override CheckInteractiveResult CheckInteractive<TU>(ActivityObject<TU> master)
     {
         var result = new CheckInteractiveResult(this);
-        if (Master == null)
+        
+        if (master is Role roleMaster) //碰到角色
         {
-            var masterWeapon = master.Holster.ActiveWeapon;
-            //查找是否有同类型武器
-            var index = master.Holster.FindWeapon(Id);
-            if (index != -1) //如果有这个武器
+            if (Master == null)
             {
-                if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
+                var masterWeapon = roleMaster.Holster.ActiveWeapon;
+                //查找是否有同类型武器
+                var index = roleMaster.Holster.FindWeapon(Id);
+                if (index != -1) //如果有这个武器
                 {
-                    var targetWeapon = master.Holster.GetWeapon(index);
-                    if (!targetWeapon.IsFullAmmo()) //背包里面的武器子弹未满
+                    if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
                     {
-                        //可以互动拾起弹药
+                        var targetWeapon = roleMaster.Holster.GetWeapon(index);
+                        if (!targetWeapon.IsFullAmmo()) //背包里面的武器子弹未满
+                        {
+                            //可以互动拾起弹药
+                            result.CanInteractive = true;
+                            result.Message = Attribute.Name;
+                            result.ShowIcon = "res://resource/sprite/ui/icon/icon_bullet.png";
+                            return result;
+                        }
+                    }
+                }
+                else //没有武器
+                {
+                    if (roleMaster.Holster.CanPickupWeapon(this)) //能拾起武器
+                    {
+                        //可以互动, 拾起武器
                         result.CanInteractive = true;
                         result.Message = Attribute.Name;
-                        result.ShowIcon = "res://resource/sprite/ui/icon/icon_bullet.png";
+                        result.ShowIcon = "res://resource/sprite/ui/icon/icon_pickup.png";
+                        return result;
+                    }
+                    else if (masterWeapon != null && masterWeapon.Attribute.WeightType == Attribute.WeightType) //替换武器
+                    {
+                        //可以互动, 切换武器
+                        result.CanInteractive = true;
+                        result.Message = Attribute.Name;
+                        result.ShowIcon = "res://resource/sprite/ui/icon/icon_replace.png";
                         return result;
                     }
                 }
             }
-            else //没有武器
-            {
-                if (master.Holster.CanPickupWeapon(this)) //能拾起武器
-                {
-                    //可以互动, 拾起武器
-                    result.CanInteractive = true;
-                    result.Message = Attribute.Name;
-                    result.ShowIcon = "res://resource/sprite/ui/icon/icon_pickup.png";
-                    return result;
-                }
-                else if (masterWeapon != null && masterWeapon.Attribute.WeightType == Attribute.WeightType) //替换武器
-                {
-                    //可以互动, 切换武器
-                    result.CanInteractive = true;
-                    result.Message = Attribute.Name;
-                    result.ShowIcon = "res://resource/sprite/ui/icon/icon_replace.png";
-                    return result;
-                }
-            }
         }
+        
         return result;
     }
 
-    public void Interactive(Role master)
+    public override void Interactive<TU>(ActivityObject<TU> master)
     {
-        //查找是否有同类型武器
-        var index = master.Holster.FindWeapon(Id);
-        if (index != -1) //如果有这个武器
+        if (master is Role roleMaster) //与role碰撞
         {
-            if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
+            //查找是否有同类型武器
+            var index = roleMaster.Holster.FindWeapon(Id);
+            if (index != -1) //如果有这个武器
             {
-                return;
-            }
-            var weapon = master.Holster.GetWeapon(index);
-            //子弹上限
-            var maxCount = Attribute.MaxAmmoCapacity;
-            //是否捡到子弹
-            var flag = false;
-            if (ResidueAmmo > 0 && weapon.CurrAmmo + weapon.ResidueAmmo < maxCount)
-            {
-                var count = weapon.PickUpAmmo(ResidueAmmo);
-                if (count != ResidueAmmo)
+                if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
                 {
-                    ResidueAmmo = count;
-                    flag = true;
+                    return;
+                }
+
+                var weapon = roleMaster.Holster.GetWeapon(index);
+                //子弹上限
+                var maxCount = Attribute.MaxAmmoCapacity;
+                //是否捡到子弹
+                var flag = false;
+                if (ResidueAmmo > 0 && weapon.CurrAmmo + weapon.ResidueAmmo < maxCount)
+                {
+                    var count = weapon.PickUpAmmo(ResidueAmmo);
+                    if (count != ResidueAmmo)
+                    {
+                        ResidueAmmo = count;
+                        flag = true;
+                    }
+                }
+
+                if (CurrAmmo > 0 && weapon.CurrAmmo + weapon.ResidueAmmo < maxCount)
+                {
+                    var count = weapon.PickUpAmmo(CurrAmmo);
+                    if (count != CurrAmmo)
+                    {
+                        CurrAmmo = count;
+                        flag = true;
+                    }
+                }
+
+                //播放互动效果
+                if (flag)
+                {
+                    this.StartThrow<ThrowWeapon>(new Vector2(20, 20), GlobalPosition, 0, 0,
+                        MathUtils.RandRangeInt(-20, 20), MathUtils.RandRangeInt(20, 50),
+                        MathUtils.RandRangeInt(-180, 180), WeaponSprite);
                 }
             }
-            if (CurrAmmo > 0 && weapon.CurrAmmo + weapon.ResidueAmmo < maxCount)
+            else //没有武器
             {
-                var count = weapon.PickUpAmmo(CurrAmmo);
-                if (count != CurrAmmo)
+                if (roleMaster.Holster.PickupWeapon(this) == -1)
                 {
-                    CurrAmmo = count;
-                    flag = true;
-                }
-            }
-            //播放互动效果
-            if (flag)
-            {
-                this.StartThrow<ThrowWeapon>(new Vector2(20, 20), GlobalPosition, 0, 0,
-                    MathUtils.RandRangeInt(-20, 20), MathUtils.RandRangeInt(20, 50),
-                    MathUtils.RandRangeInt(-180, 180), WeaponSprite);
-            }
-        }
-        else //没有武器
-        {
-            if (master.Holster.PickupWeapon(this) == -1)
-            {
-                var slot = master.Holster.SlotList[master.Holster.ActiveIndex];
-                if (slot.Type == Attribute.WeightType)
-                {
-                    var weapon = master.Holster.RmoveWeapon(master.Holster.ActiveIndex);
-                    weapon.StartThrowWeapon(master);
-                    master.PickUpWeapon(this);
+                    var slot = roleMaster.Holster.SlotList[roleMaster.Holster.ActiveIndex];
+                    if (slot.Type == Attribute.WeightType)
+                    {
+                        var weapon = roleMaster.Holster.RmoveWeapon(roleMaster.Holster.ActiveIndex);
+                        weapon.StartThrowWeapon(roleMaster);
+                        roleMaster.PickUpWeapon(this);
+                    }
                 }
             }
         }
