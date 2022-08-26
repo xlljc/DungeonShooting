@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 角色基类
 /// </summary>
-public abstract class Role : ActivityObject<Role>
+public abstract class Role : ActivityObject
 {
     /// <summary>
     /// 重写的纹理
@@ -107,12 +107,12 @@ public abstract class Role : ActivityObject<Role>
     /// <param name="result">检测是否可互动时的返回值</param>
     protected abstract void ChangeInteractiveItem(CheckInteractiveResult result);
 
-    public override CheckInteractiveResult CheckInteractive<TU>(ActivityObject<TU> master)
+    public override CheckInteractiveResult CheckInteractive(ActivityObject master)
     {
         return null;
     }
 
-    public override void Interactive<TU>(ActivityObject<TU> master)
+    public override void Interactive(ActivityObject master)
     {
         
     }

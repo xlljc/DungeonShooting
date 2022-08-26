@@ -1,7 +1,7 @@
 ﻿
 using Godot;
 
-public class ThrowComponent : Component<ActivityObject>
+public class ThrowComponent : Component
 {
     public override void Ready()
     {

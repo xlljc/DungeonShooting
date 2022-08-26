@@ -107,11 +107,11 @@ public static class NodeExtend
     
     public static T StartThrow<T>(this ActivityObject node, Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate) where T : ThrowComponent
     {
-        T throwNode = node.ComponentControl.GetComponent<T>();
+        T throwNode = node.GetComponent<T>();
         if (throwNode == null)
         {
             throwNode = Activator.CreateInstance<T>();
-            node.ComponentControl.AddComponent(throwNode);
+            node.AddComponent(throwNode);
         }
         else
         {

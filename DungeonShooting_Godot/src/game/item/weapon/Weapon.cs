@@ -4,7 +4,7 @@ using System;
 /// <summary>
 /// 武器的基类
 /// </summary>
-public abstract class Weapon : ActivityObject<Weapon>
+public abstract class Weapon : ActivityObject
 {
 
     /// <summary>
@@ -574,7 +574,7 @@ public abstract class Weapon : ActivityObject<Weapon>
         }
     }
 
-    public override CheckInteractiveResult CheckInteractive<TU>(ActivityObject<TU> master)
+    public override CheckInteractiveResult CheckInteractive(ActivityObject master)
     {
         var result = new CheckInteractiveResult(this);
         
@@ -625,7 +625,7 @@ public abstract class Weapon : ActivityObject<Weapon>
         return result;
     }
 
-    public override void Interactive<TU>(ActivityObject<TU> master)
+    public override void Interactive(ActivityObject master)
     {
         if (master is Role roleMaster) //与role碰撞
         {

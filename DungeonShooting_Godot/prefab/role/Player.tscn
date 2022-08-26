@@ -10,4 +10,4 @@ script = ExtResource( 2 )
 GunPrefab = ExtResource( 4 )
 
 [node name="AnimatedSprite" parent="." index="1"]
-frame = 3
+frame = 2
