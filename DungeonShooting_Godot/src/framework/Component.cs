@@ -4,9 +4,9 @@ using Godot;
 /// <summary>
 /// 组件基类
 /// </summary>
-public abstract class Component<TG> : Component where TG : KinematicBody2D
+public abstract class Component<TG> : Component where TG : ActivityObject
 {
-    public ComponentControl<TG> ComponentControl { get; private set; }
+    public new ComponentControl<TG> ComponentControl { get; private set; }
 
     public Vector2 Position
     {
@@ -25,6 +25,10 @@ public abstract class Component<TG> : Component where TG : KinematicBody2D
         get => ComponentControl.Visible;
         set => ComponentControl.Visible = value;
     }
+    
+    public Sprite Sprite => ComponentControl.Sprite;
+
+    public CollisionShape2D Collision => ComponentControl.Collision;
 
     public bool Enable { get; set; } = true;
 
@@ -33,7 +37,7 @@ public abstract class Component<TG> : Component where TG : KinematicBody2D
     /// <summary>
     /// 当组件销毁
     /// </summary>
-    public override void Destroy()
+    public new void Destroy()
     {
         if (IsDestroyed)
         {
@@ -60,18 +64,20 @@ public abstract class Component<TG> : Component where TG : KinematicBody2D
 /// </summary>
 public abstract class Component : IProcess, IDestroy
 {
+    public ComponentControl<ActivityObject> ComponentControl { get; }
+    
     /// <summary>
-    /// 该组件所绑定的GameObject的坐标
+    /// 该组件所绑定的ComponentControl的坐标
     /// </summary>
     Vector2 Position { get; set; }
 
     /// <summary>
-    /// 该组件所绑定的GameObject的全局坐标
+    /// 该组件所绑定的ComponentControl的全局坐标
     /// </summary>
     Vector2 GlobalPosition { get; set; }
 
     /// <summary>
-    /// 该组件所绑定的GameObject的显示状态
+    /// 该组件所绑定的ComponentControl的显示状态
     /// </summary>
     bool Visible { get; set; }
 
@@ -80,9 +86,23 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     bool Enable { get; set; }
 
+    /// <summary>
+    /// 该组件所绑定的ComponentControl显示的精灵
+    /// </summary>
+    Sprite Sprite { get; }
+    
+    /// <summary>
+    /// 该组件所绑定的ComponentControl的碰撞器
+    /// </summary>
+    CollisionShape2D Collision { get; }
+
     public bool IsDestroyed { get; }
     
     private bool _isReady = false;
+
+    public Component()
+    {
+    }
     
     /// <summary>
     /// 第一次调用 Process 或 PhysicsProcess 之前调用
@@ -116,8 +136,10 @@ public abstract class Component : IProcess, IDestroy
     public virtual void OnUnMount()
     {
     }
-    
-    public abstract void Destroy();
+
+    public void Destroy()
+    {
+    }
 
     internal void _TriggerProcess(float delta)
     {

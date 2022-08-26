@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://resource/materlal/Shadow.gdshader" type="Shader" id=2]
 
@@ -71,7 +71,9 @@ tracks/1/keys = {
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 7.8, 3.5 )
 
-[node name="Weapon" type="Node2D"]
+[sub_resource type="RectangleShape2D" id=10]
+
+[node name="Weapon" type="KinematicBody2D"]
 
 [node name="WeaponBody" type="Area2D" parent="."]
 collision_layer = 4
@@ -101,3 +103,7 @@ position = Vector2( 7.39999, -1.1 )
 [node name="Collision" type="CollisionShape2D" parent="WeaponBody"]
 position = Vector2( 0.59999, 0.199997 )
 shape = SubResource( 1 )
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource( 10 )
+disabled = true

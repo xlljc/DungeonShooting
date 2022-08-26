@@ -107,11 +107,6 @@ public abstract class Role : ActivityObject<Role>
     /// <param name="result">检测是否可互动时的返回值</param>
     protected abstract void ChangeInteractiveItem(CheckInteractiveResult result);
 
-    public override ComponentControl<Role> CreateComponentControl()
-    {
-        return new ComponentControl<Role>(this);
-    }
-    
     public override CheckInteractiveResult CheckInteractive<TU>(ActivityObject<TU> master)
     {
         return null;

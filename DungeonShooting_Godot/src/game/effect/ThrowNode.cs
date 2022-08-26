@@ -148,7 +148,8 @@ public class ThrowNode : KinematicBody2D
     /// <param name="rotate">旋转速度</param>
     /// <param name="mount">需要挂载的节点</param>
     /// <param name="shadowTarget">抛射的节点显示的纹理, 用于渲染阴影用</param>
-    public virtual void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Node2D mount, Sprite shadowTarget)
+    public virtual void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed,
+        float ySpeed, float rotate, Node2D mount, Sprite shadowTarget)
     {
         StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate, mount);
         ShadowTarget = shadowTarget;
@@ -163,6 +164,7 @@ public class ThrowNode : KinematicBody2D
                 ShadowSprite.Material = ResourceManager.ShadowMaterial;
                 AddChild(ShadowSprite);
             }
+
             inversionX = mount.Scale.y < 0 ? true : false;
             if (inversionX)
             {
@@ -172,6 +174,7 @@ public class ThrowNode : KinematicBody2D
             {
                 ShadowSprite.Scale = shadowTarget.Scale;
             }
+
             ShadowSprite.Texture = shadowTarget.Texture;
         }
         else if (ShadowSprite != null)

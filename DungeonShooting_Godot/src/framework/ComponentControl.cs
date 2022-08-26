@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
-public class ComponentControl<T> : Node, IDestroy where T : KinematicBody2D
+public class ComponentControl<T> : Node, IDestroy where T : ActivityObject
 {
+
     public float Altitude { get; set; }
 
     public Vector2 Position
@@ -23,11 +25,15 @@ public class ComponentControl<T> : Node, IDestroy where T : KinematicBody2D
         set => Node.Visible = value;
     }
 
+    public Sprite Sprite => Node.Sprite;
+
+    public CollisionShape2D Collision => Node.Collision;
+
     public bool IsDestroyed { get; private set; }
 
     public T Node { get; private set; }
 
-    private List<Component<T>> _components = new List<Component<T>>();
+    private List<KeyValuePair<Type, Component<T>>> _components = new List<KeyValuePair<Type, Component<T>>>();
 
     public ComponentControl(T node)
     {
@@ -36,41 +42,11 @@ public class ComponentControl<T> : Node, IDestroy where T : KinematicBody2D
         node.AddChild(this);
     }
 
-    public void AddComponent<TN>(NodeComponent<T, TN> nodeComponent) where TN : Node
-    {
-        if (!_components.Contains(nodeComponent))
-        {
-            _components.Add(nodeComponent);
-            nodeComponent.SetGameObject(this);
-            var parent = nodeComponent.Node.GetParent();
-            if (parent == null)
-            {
-                Node.AddChild(nodeComponent.Node);
-            }
-            else if (parent != Node)
-            {
-                parent.RemoveChild(nodeComponent.Node);
-                Node.AddChild(nodeComponent.Node);
-            }
-            nodeComponent.OnMount();
-        }
-    }
-
-    public void RemoveComponent<TN>(NodeComponent<T, TN> nodeComponent) where TN : Node
-    {
-        if (_components.Remove(nodeComponent))
-        {
-            nodeComponent.SetGameObject(null);
-            Node.RemoveChild(nodeComponent.Node);
-            nodeComponent.OnUnMount();
-        }
-    }
-    
     public void AddComponent(Component<T> component)
     {
-        if (!_components.Contains(component))
+        if (!ContainsComponent(component))
         {
-            _components.Add(component);
+            _components.Add(new KeyValuePair<Type, Component<T>>(component.GetType(), component));
             component.SetGameObject(this);
             component.OnMount();
         }
@@ -78,11 +54,32 @@ public class ComponentControl<T> : Node, IDestroy where T : KinematicBody2D
 
     public void RemoveComponent(Component<T> component)
     {
-        if (_components.Remove(component))
+        if (ContainsComponent(component))
         {
             component.SetGameObject(null);
             component.OnUnMount();
         }
+    }
+
+    public Component<T> GetComponent(Type type)
+    {
+        for (int i = 0; i < _components.Count; i++)
+        {
+            var temp = _components[i];
+            if (temp.Key == type)
+            {
+                return temp.Value;
+            }
+        }
+
+        return null;
+    }
+
+    public TC GetComponent<TC>() where TC : Component<T>
+    {
+        var component = GetComponent(typeof(TC));
+        if (component == null) return null;
+        return (TC)component;
     }
 
     public override void _Process(float delta)
@@ -91,7 +88,7 @@ public class ComponentControl<T> : Node, IDestroy where T : KinematicBody2D
         for (int i = 0; i < arr.Length; i++)
         {
             if (IsDestroyed) return;
-            var temp = arr[i];
+            var temp = arr[i].Value;
             if (temp != null && temp.ComponentControl == this && temp.Enable)
             {
                 temp._TriggerProcess(delta);
@@ -105,7 +102,7 @@ public class ComponentControl<T> : Node, IDestroy where T : KinematicBody2D
         for (int i = 0; i < arr.Length; i++)
         {
             if (IsDestroyed) return;
-            var temp = arr[i];
+            var temp = arr[i].Value;
             if (temp != null && temp.ComponentControl == this && temp.Enable)
             {
                 temp._TriggerPhysicsProcess(delta);
@@ -125,7 +122,19 @@ public class ComponentControl<T> : Node, IDestroy where T : KinematicBody2D
         var arr = _components.ToArray();
         for (int i = 0; i < arr.Length; i++)
         {
-            arr[i].Destroy();
+            arr[i].Value?.Destroy();
         }
+    }
+
+    private bool ContainsComponent(Component<T> component)
+    {
+        for (int i = 0; i < _components.Count; i++)
+        {
+            if (_components[i].Value == component)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

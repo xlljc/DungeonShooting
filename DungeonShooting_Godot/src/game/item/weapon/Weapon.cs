@@ -213,11 +213,6 @@ public abstract class Weapon : ActivityObject<Weapon>
     /// </summary>
     protected abstract void OnConceal();
 
-    public override ComponentControl<Weapon> CreateComponentControl()
-    {
-        return new ComponentControl<Weapon>(this);
-    }
-
     public override void _Process(float delta)
     {
         if (Master == null) //这把武器被扔在地上
