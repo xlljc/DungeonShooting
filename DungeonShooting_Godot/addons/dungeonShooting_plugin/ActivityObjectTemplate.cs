@@ -19,6 +19,12 @@ namespace Plugin
         /// </summary>
         [Export(PropertyHint.Layers2dPhysics)]
         public uint CollisionMask;
+        
+        /// <summary>
+        /// 当前物体渲染层级
+        /// </summary>
+        [Export]
+        public int ZIndex;
 
         public override void _Ready()
         {
@@ -42,16 +48,7 @@ namespace Plugin
                     {
                         owner = parent;
                     }
-
-                    //创建 Sprite
-                    if (GetNodeOrNull("AnimatedSprite") == null)
-                    {
-                        var sp = new AnimatedSprite();
-                        sp.Name = "AnimatedSprite";
-                        AddChild(sp);
-                        sp.Owner = owner;
-                    }
-
+                    
                     //创建Shadow
                     if (GetNodeOrNull("ShadowSprite") == null)
                     {
@@ -60,6 +57,15 @@ namespace Plugin
                         sd.Material = ResourceManager.ShadowMaterial;
                         AddChild(sd);
                         sd.Owner = owner;
+                    }
+                    
+                    //创建 Sprite
+                    if (GetNodeOrNull("AnimatedSprite") == null)
+                    {
+                        var sp = new AnimatedSprite();
+                        sp.Name = "AnimatedSprite";
+                        AddChild(sp);
+                        sp.Owner = owner;
                     }
 
                     //创建Collision

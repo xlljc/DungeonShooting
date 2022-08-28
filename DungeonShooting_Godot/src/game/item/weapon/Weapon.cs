@@ -205,6 +205,7 @@ public abstract class Weapon : ActivityObject
 
     public override void _Process(float delta)
     {
+        base._Process(delta);
         if (Master == null) //这把武器被扔在地上
         {
             Reloading = false;

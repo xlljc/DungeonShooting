@@ -113,12 +113,13 @@ public abstract class Role : ActivityObject
         
     }
     
-    protected Role(string scenePath) : base(scenePath)
+    public Role() : base("res://prefab/role/Role.tscn")
     {
     }
     
     public override void _Ready()
     {
+        base._Ready();
         StartScele = Scale;
         MountPoint = GetNode<Position2D>("MountPoint");
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
@@ -133,6 +134,7 @@ public abstract class Role : ActivityObject
 
     public override void _Process(float delta)
     {
+        base._Process(delta);
         //检查可互动的道具
         bool findFlag = false;
         for (int i = 0; i < InteractiveItemList.Count; i++)

@@ -1,9 +1,8 @@
 [gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://src/game/role/Role.cs" type="Script" id=1]
-[ext_resource path="res://resource/sprite/role/role2.png" type="Texture" id=2]
+[ext_resource path="res://resource/materlal/Shadow.tres" type="Material" id=1]
+[ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=2]
 [ext_resource path="res://resource/sprite/role/role1.png" type="Texture" id=3]
-
 
 [sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 3 )
@@ -77,10 +76,12 @@ extents = Vector2( 5, 4.5 )
 [sub_resource type="RectangleShape2D" id=29]
 extents = Vector2( 5, 7.5 )
 
-[node name="Role" type="KinematicBody2D"]
-collision_layer = 0
-script = ExtResource( 1 )
-Texture = ExtResource( 2 )
+[node name="Role" type="Node"]
+script = ExtResource( 2 )
+ZIndex = 3
+
+[node name="ShadowSprite" type="Sprite" parent="."]
+material = ExtResource( 1 )
 
 [node name="BackMountPoint" type="Position2D" parent="."]
 position = Vector2( 0, -10 )
@@ -89,6 +90,7 @@ position = Vector2( 0, -10 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
+frame = 1
 playing = true
 
 [node name="Collision" type="CollisionShape2D" parent="."]
@@ -115,6 +117,3 @@ shape = SubResource( 29 )
 
 [node name="MountPoint" type="Position2D" parent="."]
 position = Vector2( 2, -4 )
-
-[connection signal="area_entered" from="InteractiveArea" to="." method="_OnPropsEnter"]
-[connection signal="area_exited" from="InteractiveArea" to="." method="_OnPropsExit"]

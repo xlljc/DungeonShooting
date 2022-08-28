@@ -37,6 +37,11 @@ public class RoomManager : Node2D
         var node = GetNode("MapRoot").GetChild(0).GetNode("Config");
         Color color = (Color)node.GetMeta("ClearColor");
         VisualServer.SetDefaultClearColor(color);
+        
+        //创建玩家
+        var player = new Player();
+        player.Name = "Player";
+        SortRoot.AddChild(player);
     }
 
     public override void _Ready()

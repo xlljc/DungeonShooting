@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Plugin;
 
 /// <summary>
 /// 房间内活动物体基类
@@ -12,7 +13,7 @@ public abstract class ActivityObject : KinematicBody2D
     /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite", 类型为 AnimatedSprite
     /// </summary>
     public AnimatedSprite AnimatedSprite { get; }
-    
+
     /// <summary>
     /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite
     /// </summary>
@@ -22,13 +23,13 @@ public abstract class ActivityObject : KinematicBody2D
     /// 当前物体碰撞器节点, 节点名称必须叫 "Collision", 类型为 CollisionShape2D
     /// </summary>
     public CollisionShape2D Collision { get; }
-    
-    
+
+
     /// <summary>
     /// 是否调用过 Destroy() 函数
     /// </summary>
     public bool IsDestroyed { get; private set; }
-    
+
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
 
     public ActivityObject(string scenePath)
@@ -40,7 +41,12 @@ public abstract class ActivityObject : KinematicBody2D
             throw new Exception("创建 ActivityObject 的参数 scenePath 为 null !");
         }
 
-        var tempNode = tempPrefab.Instance<ActivityObject>();
+        var tempNode = tempPrefab.Instance<ActivityObjectTemplate>();
+        ZIndex = tempNode.ZIndex;
+        CollisionLayer = tempNode.CollisionLayer;
+        CollisionMask = tempNode.CollisionMask;
+
+        //移动子节点
         var count = tempNode.GetChildCount();
         for (int i = 0; i < count; i++)
         {
@@ -74,7 +80,7 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     /// <param name="master">触发者</param>
     public abstract void Interactive(ActivityObject master);
-    
+
     public void AddComponent(Component component)
     {
         if (!ContainsComponent(component))
@@ -112,7 +118,7 @@ public abstract class ActivityObject : KinematicBody2D
         if (component == null) return null;
         return (TC)component;
     }
-    
+
     public override void _Process(float delta)
     {
         var arr = _components.ToArray();
@@ -140,7 +146,7 @@ public abstract class ActivityObject : KinematicBody2D
             }
         }
     }
-    
+
     public void Destroy()
     {
         if (IsDestroyed)
@@ -166,6 +172,7 @@ public abstract class ActivityObject : KinematicBody2D
                 return true;
             }
         }
+
         return false;
     }
 }
