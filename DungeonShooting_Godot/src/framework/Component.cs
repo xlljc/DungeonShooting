@@ -6,29 +6,29 @@ using Godot;
 /// </summary>
 public abstract class Component : IProcess, IDestroy
 {
-    public ActivityObject Master { get; private set; }
+    public ActivityObject ActivityObject { get; private set; }
 
     public Vector2 Position
     {
-        get => Master.Position;
-        set => Master.Position = value;
+        get => ActivityObject.Position;
+        set => ActivityObject.Position = value;
     }
 
     public Vector2 GlobalPosition
     {
-        get => Master.GlobalPosition;
-        set => Master.GlobalPosition = value;
+        get => ActivityObject.GlobalPosition;
+        set => ActivityObject.GlobalPosition = value;
     }
 
     public bool Visible
     {
-        get => Master.Visible;
-        set => Master.Visible = value;
+        get => ActivityObject.Visible;
+        set => ActivityObject.Visible = value;
     }
 
-    public Sprite Sprite => Master.Sprite;
-
-    public CollisionShape2D Collision => Master.Collision;
+    public AnimatedSprite AnimatedSprite => ActivityObject.AnimatedSprite;
+    public Sprite ShadowSprite => ActivityObject.ShadowSprite;
+    public CollisionShape2D Collision => ActivityObject.Collision;
 
     public bool Enable { get; set; } = true;
 
@@ -84,9 +84,9 @@ public abstract class Component : IProcess, IDestroy
         }
 
         IsDestroyed = true;
-        if (Master != null)
+        if (ActivityObject != null)
         {
-            Master.RemoveComponent(this);
+            ActivityObject.RemoveComponent(this);
         }
 
         OnDestroy();
@@ -114,8 +114,8 @@ public abstract class Component : IProcess, IDestroy
         PhysicsProcess(delta);
     }
 
-    internal void _SetMaster(ActivityObject master)
+    internal void _SetActivityObject(ActivityObject activityObject)
     {
-        Master = master;
+        ActivityObject = activityObject;
     }
 }

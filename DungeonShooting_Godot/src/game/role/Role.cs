@@ -32,10 +32,6 @@ public abstract class Role : ActivityObject
     public Holster Holster { get; private set; }
 
     /// <summary>
-    /// 动画播放器
-    /// </summary>
-    public AnimatedSprite AnimatedSprite { get; private set; }
-    /// <summary>
     /// 武器挂载点
     /// </summary>
     public Position2D MountPoint { get; private set; }
@@ -109,7 +105,7 @@ public abstract class Role : ActivityObject
 
     public override CheckInteractiveResult CheckInteractive(ActivityObject master)
     {
-        return null;
+        return new CheckInteractiveResult(this);
     }
 
     public override void Interactive(ActivityObject master)
@@ -117,10 +113,13 @@ public abstract class Role : ActivityObject
         
     }
     
+    protected Role(string scenePath) : base(scenePath)
+    {
+    }
+    
     public override void _Ready()
     {
         StartScele = Scale;
-        AnimatedSprite = GetNode<AnimatedSprite>("AnimatedSprite");
         MountPoint = GetNode<Position2D>("MountPoint");
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
         // 更改纹理

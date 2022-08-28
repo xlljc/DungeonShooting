@@ -9,34 +9,57 @@ using Godot;
 public abstract class ActivityObject : KinematicBody2D
 {
     /// <summary>
-    /// 当前物体显示的精灵图像, 节点名称必须叫 "Sprite"
+    /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite", 类型为 AnimatedSprite
     /// </summary>
-    public Sprite Sprite { get; }
+    public AnimatedSprite AnimatedSprite { get; }
+    
+    /// <summary>
+    /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite
+    /// </summary>
+    public Sprite ShadowSprite { get; }
 
     /// <summary>
-    /// 当前物体碰撞器节点, 节点名称必须叫 "Collision"
+    /// 当前物体碰撞器节点, 节点名称必须叫 "Collision", 类型为 CollisionShape2D
     /// </summary>
     public CollisionShape2D Collision { get; }
-
+    
+    
     /// <summary>
     /// 是否调用过 Destroy() 函数
     /// </summary>
     public bool IsDestroyed { get; private set; }
     
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
-    
-    public ActivityObject()
+
+    public ActivityObject(string scenePath)
     {
-        Sprite = GetNodeOrNull<Sprite>("Sprite");
-        if (Sprite == null)
+        //加载预制体
+        var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
+        if (tempPrefab == null)
         {
-            GD.PrintErr("ActivityObject节点下必须要有一个'Sprite'节点!");
+            throw new Exception("创建 ActivityObject 的参数 scenePath 为 null !");
         }
 
-        Collision = GetNodeOrNull<CollisionShape2D>("Collision");
-        if (Collision == null)
+        var tempNode = tempPrefab.Instance<ActivityObject>();
+        var count = tempNode.GetChildCount();
+        for (int i = 0; i < count; i++)
         {
-            GD.PrintErr("ActivityObject节点下必须要有一个'Collision'节点!");
+            var body = tempNode.GetChild(0);
+            tempNode.RemoveChild(body);
+            AddChild(body);
+
+            switch (body.Name)
+            {
+                case "AnimatedSprite":
+                    AnimatedSprite = body as AnimatedSprite;
+                    break;
+                case "ShadowSprite":
+                    ShadowSprite = body as Sprite;
+                    break;
+                case "Collision":
+                    Collision = body as CollisionShape2D;
+                    break;
+            }
         }
     }
 
@@ -97,7 +120,7 @@ public abstract class ActivityObject : KinematicBody2D
         {
             if (IsDestroyed) return;
             var temp = arr[i].Value;
-            if (temp != null && temp.Master == this && temp.Enable)
+            if (temp != null && temp.ActivityObject == this && temp.Enable)
             {
                 temp._TriggerProcess(delta);
             }
@@ -111,7 +134,7 @@ public abstract class ActivityObject : KinematicBody2D
         {
             if (IsDestroyed) return;
             var temp = arr[i].Value;
-            if (temp != null && temp.Master == this && temp.Enable)
+            if (temp != null && temp.ActivityObject == this && temp.Enable)
             {
                 temp._TriggerPhysicsProcess(delta);
             }

@@ -31,7 +31,7 @@ window/stretch/shrink=4.0
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/vnen.tiled_importer/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/dungeonShooting_plugin/plugin.cfg", "res://addons/vnen.tiled_importer/plugin.cfg" )
 
 [gui]
 

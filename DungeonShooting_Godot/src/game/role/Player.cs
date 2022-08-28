@@ -49,6 +49,11 @@ public class Player : Role
 
     [Export] public PackedScene GunPrefab;
 
+    public Player(string scenePath) : base(scenePath)
+    {
+        
+    }
+    
     public override void _EnterTree()
     {
         base._EnterTree();

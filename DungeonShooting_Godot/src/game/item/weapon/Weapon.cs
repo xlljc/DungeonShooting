@@ -126,20 +126,10 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     /// <param name="id">武器唯一id</param>
     /// <param name="attribute">属性</param>
-    public Weapon(string id, WeaponAttribute attribute)
+    public Weapon(string id, WeaponAttribute attribute): base(attribute.WeaponPrefab)
     {
         Id = id;
         Attribute = attribute;
-        //加载预制体
-        var tempPrefab = ResourceManager.Load<PackedScene>(Attribute.WeaponPrefab);
-        if (tempPrefab == null)
-        {
-            throw new Exception("WeaponAttribute中未设置'WeaponPrefab'属性!");
-        }
-        var tempNode = tempPrefab.Instance();
-        var body = tempNode.GetChild(0);
-        tempNode.RemoveChild(body);
-        AddChild(body);
 
         WeaponSprite = GetNode<Sprite>("WeaponBody/WeaponSprite");
         FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
