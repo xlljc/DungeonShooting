@@ -78,7 +78,7 @@ extents = Vector2( 5, 7.5 )
 
 [node name="Role" type="Node"]
 script = ExtResource( 2 )
-ZIndex = 3
+ZIndex = 1
 
 [node name="ShadowSprite" type="Sprite" parent="."]
 material = ExtResource( 1 )

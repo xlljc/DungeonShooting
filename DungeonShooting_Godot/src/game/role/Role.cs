@@ -9,17 +9,17 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 重写的纹理
     /// </summary>
-    [Export] public Texture Texture;
+    public Texture Texture { get; protected set; }
 
     /// <summary>
     /// 移动速度
     /// </summary>
-    [Export] public float MoveSpeed = 150f;
+    public float MoveSpeed = 150f;
 
     /// <summary>
     /// 所属阵营
     /// </summary>
-    [Export] public CampEnum Camp;
+    public CampEnum Camp;
 
     /// <summary>
     /// 携带的道具包裹
@@ -123,10 +123,13 @@ public abstract class Role : ActivityObject
         StartScele = Scale;
         MountPoint = GetNode<Position2D>("MountPoint");
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
-        // 更改纹理
-        ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, Texture);
-        ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, Texture);
-        ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, Texture);
+        if (Texture != null)
+        {
+            // 更改纹理
+            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, Texture);
+            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, Texture);
+            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, Texture);
+        }
 
         Holster = new Holster(this);
         Face = FaceDirection.Right;
@@ -288,7 +291,7 @@ public abstract class Role : ActivityObject
     /// </summary>
     private void ChangeFrameTexture(string anim, AnimatedSprite animatedSprite, Texture texture)
     {
-        SpriteFrames spriteFrames = animatedSprite.Frames as SpriteFrames;
+        SpriteFrames spriteFrames = animatedSprite.Frames;
         if (spriteFrames != null)
         {
             int count = spriteFrames.GetFrameCount(anim);

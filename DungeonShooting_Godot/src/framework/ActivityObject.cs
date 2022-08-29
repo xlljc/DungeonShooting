@@ -53,7 +53,6 @@ public abstract class ActivityObject : KinematicBody2D
             var body = tempNode.GetChild(0);
             tempNode.RemoveChild(body);
             AddChild(body);
-
             switch (body.Name)
             {
                 case "AnimatedSprite":
