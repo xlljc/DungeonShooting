@@ -78,6 +78,7 @@ extents = Vector2( 5, 7.5 )
 
 [node name="Role" type="Node"]
 script = ExtResource( 2 )
+CollisionMask = 1
 ZIndex = 1
 
 [node name="ShadowSprite" type="Sprite" parent="."]
@@ -90,7 +91,7 @@ position = Vector2( 0, -10 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
-frame = 1
+frame = 2
 playing = true
 
 [node name="Collision" type="CollisionShape2D" parent="."]

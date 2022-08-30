@@ -40,6 +40,7 @@ public class RoomManager : Node2D
         
         //创建玩家
         var player = new Player();
+        player.Position = new Vector2(100, 100);
         player.Name = "Player";
         SortRoot.AddChild(player);
     }
