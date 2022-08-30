@@ -5,3 +5,6 @@
 /Script_Runtime/.idea
 /Script_Runtime/Script_Runtime/bin
 /Script_Runtime/Script_Runtime_Test/bin
+/Script_Compiler/Script_Compiler/obj
+/Script_Runtime/Script_Runtime/obj
+/Script_Runtime/Script_Runtime_Test/obj

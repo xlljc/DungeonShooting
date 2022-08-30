@@ -1,7 +1,0 @@
-D:\GameProject\DungeonShooting\Script_Compiler\Script_Compiler\bin\Debug\Script_Compiler.exe
-D:\GameProject\DungeonShooting\Script_Compiler\Script_Compiler\bin\Debug\Script_Compiler.pdb
-D:\GameProject\DungeonShooting\Script_Compiler\Script_Compiler\obj\Debug\Script_Compiler.csproj.AssemblyReference.cache
-D:\GameProject\DungeonShooting\Script_Compiler\Script_Compiler\obj\Debug\Script_Compiler.csproj.SuggestedBindingRedirects.cache
-D:\GameProject\DungeonShooting\Script_Compiler\Script_Compiler\obj\Debug\Script_Compiler.csproj.CoreCompileInputs.cache
-D:\GameProject\DungeonShooting\Script_Compiler\Script_Compiler\obj\Debug\Script_Compiler.exe
-D:\GameProject\DungeonShooting\Script_Compiler\Script_Compiler\obj\Debug\Script_Compiler.pdb
