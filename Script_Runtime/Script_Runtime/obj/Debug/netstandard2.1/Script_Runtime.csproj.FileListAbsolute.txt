@@ -1,0 +1,10 @@
+D:\GameProject\DungeonShooting\Script_Runtime\Script_Runtime\obj\Debug\netstandard2.1\Script_Runtime.csproj.AssemblyReference.cache
+D:\GameProject\DungeonShooting\Script_Runtime\Script_Runtime\obj\Debug\netstandard2.1\Script_Runtime.GeneratedMSBuildEditorConfig.editorconfig
+D:\GameProject\DungeonShooting\Script_Runtime\Script_Runtime\obj\Debug\netstandard2.1\Script_Runtime.AssemblyInfoInputs.cache
+D:\GameProject\DungeonShooting\Script_Runtime\Script_Runtime\obj\Debug\netstandard2.1\Script_Runtime.AssemblyInfo.cs
+D:\GameProject\DungeonShooting\Script_Runtime\Script_Runtime\obj\Debug\netstandard2.1\Script_Runtime.csproj.CoreCompileInputs.cache
+D:\GameProject\DungeonShooting\Script_Runtime\Script_Runtime\bin\Debug\netstandard2.1\Script_Runtime.deps.json
+D:\GameProject\DungeonShooting\Script_Runtime\Script_Runtime\bin\Debug\netstandard2.1\Script_Runtime.dll
+D:\GameProject\DungeonShooting\Script_Runtime\Script_Runtime\bin\Debug\netstandard2.1\Script_Runtime.pdb
+D:\GameProject\DungeonShooting\Script_Runtime\Script_Runtime\obj\Debug\netstandard2.1\Script_Runtime.dll
+D:\GameProject\DungeonShooting\Script_Runtime\Script_Runtime\obj\Debug\netstandard2.1\Script_Runtime.pdb
