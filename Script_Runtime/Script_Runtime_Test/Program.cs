@@ -28,8 +28,7 @@
 
         public SValue add(SValue other)
         {
-            return new SValue(new Vector2(x + other.__GetValue__("x"), y + other.__GetValue__("y")),
-                SValue.SValueType.Object);
+            return new SValue(new Vector2(x + other.__GetValue__("x"), y + other.__GetValue__("y")));
         }
 
         public override SValue __GetValue__(string key)
@@ -42,7 +41,7 @@
                     return y;
             }
 
-            return new SValue(null, SValue.SValueType.Null);
+            return SValue.Null;
         }
 
         public override SValue __Invoke__(string funcName, params SValue[] ps)
@@ -60,7 +59,7 @@
             }
 
             //报错, 没有找到对应的函数
-            return new SValue(null, SValue.SValueType.Null);
+            return SValue.Null;
         }
     }
 
