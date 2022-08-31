@@ -2,65 +2,39 @@
 {
     public static void Main(string[] args)
     {
-        SValue v1 = "111";
-        SValue v2 = true;
-        SValue v3 = "aaabbb";
 
-        SValue v4 = v1 + (v2 + v3);
-        Console.WriteLine(v4.Value);
+        new TestArray();
 
-        SValue vect1 = new Vector2(1, 1);
-        SValue vect2 = new Vector2(2, 3);
-        SValue vect3 = vect1.__Invoke__("add", vect2);
-        Console.WriteLine(vect3.Value);
     }
 
-    public class Vector2 : SObjectBase
+    /// <summary>
+    /// 对比包裹代码与原生C#代码运行效率对比
+    /// </summary>
+    public static void Test1()
     {
-        public SValue x;
-        public SValue y;
-
-        public Vector2(SValue x, SValue y)
+        var time = DateTime.Now.Ticks;
+        for (int i = 0; i < 100000; i++)
         {
-            this.x = x;
-            this.y = y;
+            SValue vect1 = new Vector2(1, 1);
+            SValue vect2 = new Vector2(2, 3);
+            SValue vect3 = vect1.__Invoke__("add", vect2);
+            var v = vect3.__Invoke__("squareLengtn").Value;
+            //Console.WriteLine();
         }
-
-        public SValue add(SValue other)
+        var time2 = DateTime.Now.Ticks;
+        Console.WriteLine("耗时1: " + (time2 - time) / 1000000f + "毫秒");
+        
+        var time3 = DateTime.Now.Ticks;
+        for (int i = 0; i < 100000; i++)
         {
-            return new SValue(new Vector2(x + other.__GetValue__("x"), y + other.__GetValue__("y")));
+            Vector2Cs vect1 = new Vector2Cs(1, 1);
+            Vector2Cs vect2 = new Vector2Cs(2, 3);
+            Vector2Cs vect3 = vect1.add(vect2);
+            var v = vect3.squareLengtn();
+            //Console.WriteLine();
         }
-
-        public override SValue __GetValue__(string key)
-        {
-            switch (key)
-            {
-                case "x":
-                    return x;
-                case "y":
-                    return y;
-            }
-
-            return SValue.Null;
-        }
-
-        public override SValue __Invoke__(string funcName, params SValue[] ps)
-        {
-            switch (funcName)
-            {
-                case "add":
-                    switch (ps.Length)
-                    {
-                        case 1:
-                            return add(ps[0]);
-                    }
-
-                    break;
-            }
-
-            //报错, 没有找到对应的函数
-            return SValue.Null;
-        }
+        var time4 = DateTime.Now.Ticks;
+        Console.WriteLine("耗时2: " + (time4 - time3) / 1000000f + "毫秒");
     }
 
 }

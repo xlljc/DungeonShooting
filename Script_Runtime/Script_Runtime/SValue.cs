@@ -10,6 +10,7 @@ public struct SValue
         BooleanTrue,
         BooleanFalse,
         String,
+        Function,
         Object,
     }
 
@@ -27,9 +28,7 @@ public struct SValue
 
     private SObjectType objectType;
 
-    private int count;
-
-    #region constructor
+    #region 创建SValue
 
     public SValue(SValue v)
     {
@@ -38,18 +37,25 @@ public struct SValue
         objectType = v.objectType;
     }
 
-    public SValue(SObjectBase v)
+    public SValue(SObject v)
     {
-        if (v == null)
-        {
-            Type = SValueType.Null;
-        }
-        else
-        {
-            Type = SValueType.Object;
-        }
+        Type = SValueType.Object;
         Value = v;
         objectType = SObjectType.Class;
+    }
+
+    public SValue(SArray v)
+    {
+        Type = SValueType.Object;
+        Value = v;
+        objectType = SObjectType.Array;
+    }
+
+    public SValue(SMap v)
+    {
+        Type = SValueType.Object;
+        Value = v;
+        objectType = SObjectType.Map;
     }
 
     public SValue(double v)
@@ -66,6 +72,126 @@ public struct SValue
         objectType = SObjectType.Other;
     }
 
+    public SValue(Func<SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(Func<SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(Func<SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(Func<SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(Func<SValue, SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue,
+            SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue,
+            SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
+    public SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue,
+            SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Other;
+    }
+
     public static SValue Null
     {
         get
@@ -75,9 +201,11 @@ public struct SValue
                 _initNullValue = true;
                 _null.Type = SValueType.Null;
             }
+
             return _null;
         }
     }
+
     private static bool _initNullValue;
     private static SValue _null;
 
@@ -91,9 +219,11 @@ public struct SValue
                 _true.Type = SValueType.BooleanTrue;
                 _true.Value = 1;
             }
+
             return _true;
         }
     }
+
     private static bool _initTrueValue;
     private static SValue _true;
 
@@ -107,28 +237,55 @@ public struct SValue
                 _false.Type = SValueType.BooleanFalse;
                 _false.Value = 0;
             }
+
             return _false;
         }
     }
+
     private static bool _initFalseValue;
     private static SValue _false;
 
     #endregion
 
-    #region property
+    #region 属性和方法的操作
 
     public SValue __GetValue__(string key)
     {
-        if (objectType == SObjectType.Class)
+        switch (objectType)
         {
-            return ((SObjectBase)Value).__GetValue__(key);
+            case SObjectType.Class:
+                return ((SObject)Value).__GetValue__(key);
+            case SObjectType.Array:
+                return ((SArray)Value).__GetValue__(key);
+            case SObjectType.Map:
+                return ((SMap)Value).__GetValue__(key);
         }
-        return new SValue();
+
+        if (Type == SValueType.Null)
+        {
+            //空指针异常
+        }
+
+        return Null;
+    }
+
+    public SValue __GetValue__(double key)
+    {
+        if (objectType == SObjectType.Array)
+        {
+            return ((SArray)Value).__GetValue__((int)key);
+        }
+        else
+        {
+            //只有array支持number类型索引取值
+        }
+
+        return Null;
     }
 
     public SValue __GetValue__(SValue key)
     {
-        return new SValue();
+        return Null;
     }
 
     public void __SetValue__()
@@ -138,14 +295,20 @@ public struct SValue
 
     public SValue __Invoke__(string key, params SValue[] ps)
     {
-        if (objectType == SObjectType.Class)
+        switch (objectType)
         {
-            return ((SObjectBase)Value).__Invoke__(key, ps);
+            case SObjectType.Class:
+                return ((SObject)Value).__Invoke__(key, ps);
+            case SObjectType.Array:
+                return ((SArray)Value).__Invoke__(key, ps);
         }
+
         return new SValue();
     }
 
     #endregion
+
+    #region 自动转型
 
     public static implicit operator SValue(double value)
     {
@@ -162,10 +325,117 @@ public struct SValue
         return new SValue(value);
     }
 
-    public static implicit operator SValue(SObjectBase value)
+    public static implicit operator SValue(SObject value)
     {
         return new SValue(value);
     }
+
+    public static implicit operator SValue(SArray value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(SMap value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Func<SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Func<SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Func<SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Func<SValue, SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Func<SValue, SValue, SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>
+            value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue,
+            SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue,
+            SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue,
+            SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
+
+    #endregion
+
+    #region 运算符重载
 
     public static SValue operator +(SValue v1, double num)
     {
@@ -176,6 +446,7 @@ public struct SValue
             case SValueType.String:
                 return new SValue(v1.Value + num.ToString());
             case SValueType.Object:
+            case SValueType.Function:
             case SValueType.Null:
                 return new SValue(double.NaN);
             case SValueType.BooleanTrue:
@@ -186,6 +457,27 @@ public struct SValue
                 if (num > 0)
                     return True;
                 return False;
+        }
+
+        return Null;
+    }
+
+    public static SValue operator +(SValue v1, string v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+            case SValueType.Object:
+            case SValueType.String:
+                return new SValue(v1.Value + v2);
+            case SValueType.Null:
+                return new SValue("null" + v1.Value);
+            case SValueType.Function:
+                return new SValue("[Function]" + v1.Value);
+            case SValueType.BooleanTrue:
+                return new SValue("true" + v1.Value);
+            case SValueType.BooleanFalse:
+                return new SValue("false" + v1.Value);
         }
 
         return Null;
@@ -203,6 +495,7 @@ public struct SValue
                     case SValueType.String:
                         return new SValue(v1.Value.ToString() + v2.Value);
                     case SValueType.Object:
+                    case SValueType.Function:
                     case SValueType.Null:
                         return new SValue(double.NaN);
                     case SValueType.BooleanTrue:
@@ -222,6 +515,8 @@ public struct SValue
                         return new SValue(v1.Value + (string)v2.Value);
                     case SValueType.Null:
                         return new SValue(v1.Value + "null");
+                    case SValueType.Function:
+                        return new SValue(v1.Value + "[Function]");
                     case SValueType.BooleanTrue:
                         return new SValue(v1.Value + "true");
                     case SValueType.BooleanFalse:
@@ -243,6 +538,8 @@ public struct SValue
                         return new SValue("nulltrue");
                     case SValueType.BooleanFalse:
                         return new SValue("nullfalse");
+                    case SValueType.Function:
+                        return new SValue("null[Function]");
                 }
 
                 break;
@@ -261,6 +558,8 @@ public struct SValue
                         return new SValue("true" + v2.Value);
                     case SValueType.BooleanFalse:
                         return new SValue("false" + v2.Value);
+                    case SValueType.Function:
+                        return new SValue("[Function]" + v2.Value);
                 }
 
                 break;
@@ -272,6 +571,8 @@ public struct SValue
                     case SValueType.Object:
                     case SValueType.String:
                         return new SValue("true" + v2.Value);
+                    case SValueType.Function:
+                        return new SValue("true[Function]");
                     case SValueType.Null:
                         return new SValue("truenull");
                     case SValueType.BooleanTrue:
@@ -288,12 +589,33 @@ public struct SValue
                     case SValueType.Object:
                     case SValueType.String:
                         return new SValue("false" + v2.Value);
+                    case SValueType.Function:
+                        return new SValue("false[Function]");
                     case SValueType.Null:
                         return new SValue("falsenull");
                     case SValueType.BooleanTrue:
                         return True;
                     case SValueType.BooleanFalse:
                         return False;
+                }
+
+                break;
+            case SValueType.Function:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return new SValue(double.NaN);
+                    case SValueType.Object:
+                    case SValueType.String:
+                        return new SValue("[Function]" + v2.Value);
+                    case SValueType.Function:
+                        return new SValue("[Function][Function]");
+                    case SValueType.Null:
+                        return new SValue("[Function]null");
+                    case SValueType.BooleanTrue:
+                        return new SValue("[Function]true");
+                    case SValueType.BooleanFalse:
+                        return new SValue("[Function]false");
                 }
 
                 break;
@@ -309,8 +631,8 @@ public struct SValue
             case SValueType.Number:
                 return new SValue((double)v1.Value - num);
             case SValueType.String:
-                return new SValue(double.NaN);
             case SValueType.Object:
+            case SValueType.Function:
             case SValueType.Null:
                 return new SValue(double.NaN);
             case SValueType.BooleanTrue:
@@ -337,6 +659,7 @@ public struct SValue
                         return new SValue((double)v1.Value - (double)v2.Value);
                     case SValueType.String:
                     case SValueType.Object:
+                    case SValueType.Function:
                     case SValueType.Null:
                         return new SValue(double.NaN);
                     case SValueType.BooleanTrue:
@@ -347,44 +670,13 @@ public struct SValue
 
                 break;
             case SValueType.String:
-                switch (v2.Type)
-                {
-                    case SValueType.Number:
-                    case SValueType.Object:
-                    case SValueType.String:
-                    case SValueType.Null:
-                    case SValueType.BooleanTrue:
-                    case SValueType.BooleanFalse:
-                        return new SValue(double.NaN);
-                }
-
-                break;
+                return new SValue(double.NaN);
             case SValueType.Null:
-                switch (v2.Type)
-                {
-                    case SValueType.Number:
-                    case SValueType.Object:
-                    case SValueType.String:
-                    case SValueType.Null:
-                    case SValueType.BooleanTrue:
-                    case SValueType.BooleanFalse:
-                        return new SValue(double.NaN);
-                }
-
-                break;
+                return new SValue(double.NaN);
             case SValueType.Object:
-                switch (v2.Type)
-                {
-                    case SValueType.Number:
-                    case SValueType.Object:
-                    case SValueType.String:
-                    case SValueType.Null:
-                    case SValueType.BooleanTrue:
-                    case SValueType.BooleanFalse:
-                        return new SValue(double.NaN);
-                }
-
-                break;
+                return new SValue(double.NaN);
+            case SValueType.Function:
+                return new SValue(double.NaN);
             case SValueType.BooleanTrue:
                 switch (v2.Type)
                 {
@@ -394,9 +686,10 @@ public struct SValue
                         return False;
                     case SValueType.Object:
                     case SValueType.String:
-                    case SValueType.Null:
+                    case SValueType.Function:
                     case SValueType.BooleanTrue:
                         return False;
+                    case SValueType.Null:
                     case SValueType.BooleanFalse:
                         return True;
                 }
@@ -412,6 +705,7 @@ public struct SValue
                     case SValueType.Object:
                     case SValueType.String:
                     case SValueType.Null:
+                    case SValueType.Function:
                     case SValueType.BooleanTrue:
                     case SValueType.BooleanFalse:
                         return False;
@@ -423,5 +717,229 @@ public struct SValue
         return Null;
     }
 
+    public static SValue operator *(SValue v1, double num)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                return new SValue((double)v1.Value * num);
+            case SValueType.String:
+            case SValueType.Object:
+            case SValueType.Function:
+            case SValueType.Null:
+                return new SValue(double.NaN);
+            case SValueType.BooleanTrue:
+                if (num > 0)
+                    return True;
+                return False;
+            case SValueType.BooleanFalse:
+                return False;
+        }
+
+        return Null;
+    }
+
+    public static SValue operator *(SValue v1, SValue v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return new SValue((double)v1.Value * (double)v2.Value);
+                    case SValueType.String:
+                    case SValueType.Object:
+                    case SValueType.Function:
+                    case SValueType.Null:
+                        return new SValue(double.NaN);
+                    case SValueType.BooleanTrue:
+                        return new SValue(v1);
+                    case SValueType.BooleanFalse:
+                        return new SValue(0);
+                }
+
+                break;
+            case SValueType.String:
+                return new SValue(double.NaN);
+            case SValueType.Null:
+                return new SValue(double.NaN);
+            case SValueType.Object:
+                return new SValue(double.NaN);
+            case SValueType.Function:
+                return new SValue(double.NaN);
+            case SValueType.BooleanTrue:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        if ((double)v2.Value > 0)
+                            return True;
+                        return False;
+                    case SValueType.Object:
+                    case SValueType.String:
+                    case SValueType.Function:
+                    case SValueType.BooleanTrue:
+                        return True;
+                    case SValueType.Null:
+                    case SValueType.BooleanFalse:
+                        return False;
+                }
+
+                break;
+            case SValueType.BooleanFalse:
+                return False;
+        }
+
+        return Null;
+    }
+
+
+    public static SValue operator /(SValue v1, double num)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                return new SValue((double)v1.Value / num);
+            case SValueType.String:
+            case SValueType.Object:
+            case SValueType.Function:
+            case SValueType.Null:
+                return new SValue(double.NaN);
+            case SValueType.BooleanTrue:
+                if (num > 0)
+                    return True;
+                return False;
+            case SValueType.BooleanFalse:
+                return False;
+        }
+
+        return Null;
+    }
+
+    public static SValue operator /(SValue v1, SValue v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return new SValue((double)v1.Value / (double)v2.Value);
+                    case SValueType.String:
+                    case SValueType.Object:
+                    case SValueType.Function:
+                    case SValueType.Null:
+                    case SValueType.BooleanFalse:
+                        return new SValue(double.NaN);
+                    case SValueType.BooleanTrue:
+                        return new SValue(v1);
+                }
+
+                break;
+            case SValueType.String:
+                return new SValue(double.NaN);
+            case SValueType.Null:
+                return new SValue(double.NaN);
+            case SValueType.Object:
+                return new SValue(double.NaN);
+            case SValueType.Function:
+                return new SValue(double.NaN);
+            case SValueType.BooleanTrue:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        if ((double)v2.Value > 0)
+                            return True;
+                        return False;
+                    case SValueType.Object:
+                    case SValueType.String:
+                    case SValueType.Function:
+                    case SValueType.BooleanTrue:
+                        return True;
+                    case SValueType.Null:
+                    case SValueType.BooleanFalse:
+                        return new SValue(double.NaN);
+                }
+
+                break;
+            case SValueType.BooleanFalse:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                    case SValueType.Object:
+                    case SValueType.String:
+                    case SValueType.Function:
+                    case SValueType.BooleanTrue:
+                        return False;
+                    case SValueType.Null:
+                    case SValueType.BooleanFalse:
+                        return new SValue(double.NaN);
+                }
+
+                break;
+        }
+
+        return Null;
+    }
+
+    public static bool operator ==(SValue v1, double v2)
+    {
+        if (v1.Type == SValueType.Number)
+        {
+            return (double)v1.Value == v2;
+        }
+
+        return false;
+    }
+
+    public static bool operator !=(SValue v1, double v2)
+    {
+        if (v1.Type == SValueType.Number)
+        {
+            return (double)v1.Value != v2;
+        }
+
+        return true;
+    }
+
+    public static bool operator ==(SValue v1, string v2)
+    {
+        if (v1.Type == SValueType.String)
+        {
+            return (string)v1.Value == v2;
+        }
+
+        return false;
+    }
+
+    public static bool operator !=(SValue v1, string v2)
+    {
+        if (v1.Type == SValueType.String)
+        {
+            return (string)v1.Value != v2;
+        }
+
+        return true;
+    }
+
+    public static bool operator ==(SValue v1, SValue v2)
+    {
+        if (v1.Type == SValueType.Number && v2.Type == SValueType.Number)
+        {
+            return (double)v1.Value == (double)v2.Value;
+        }
+        return v1.Value == v2.Value;
+    }
+
+    public static bool operator !=(SValue v1, SValue v2)
+    {
+        if (v1.Type == SValueType.Number && v2.Type == SValueType.Number)
+        {
+            return (double)v1.Value != (double)v2.Value;
+        }
+        return v1.Value != v2.Value;
+    }
+
+    #endregion
 
 }
