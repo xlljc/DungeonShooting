@@ -15,7 +15,8 @@ public struct SValue
 
     private enum SObjectType
     {
-        SObjectBase,
+        Class,
+        Map,
         Array,
         Other
     }
@@ -25,6 +26,10 @@ public struct SValue
     public object Value;
 
     private SObjectType objectType;
+
+    private int count;
+
+    #region constructor
 
     public SValue(SValue v)
     {
@@ -44,7 +49,7 @@ public struct SValue
             Type = SValueType.Object;
         }
         Value = v;
-        objectType = SObjectType.SObjectBase;
+        objectType = SObjectType.Class;
     }
 
     public SValue(double v)
@@ -108,9 +113,13 @@ public struct SValue
     private static bool _initFalseValue;
     private static SValue _false;
 
+    #endregion
+
+    #region property
+
     public SValue __GetValue__(string key)
     {
-        if (objectType == SObjectType.SObjectBase)
+        if (objectType == SObjectType.Class)
         {
             return ((SObjectBase)Value).__GetValue__(key);
         }
@@ -129,13 +138,14 @@ public struct SValue
 
     public SValue __Invoke__(string key, params SValue[] ps)
     {
-        if (objectType == SObjectType.SObjectBase)
+        if (objectType == SObjectType.Class)
         {
             return ((SObjectBase)Value).__Invoke__(key, ps);
         }
         return new SValue();
     }
 
+    #endregion
 
     public static implicit operator SValue(double value)
     {

@@ -1,7 +1,13 @@
 ﻿
 public abstract class SObjectBase
 {
-    public abstract SValue __GetValue__(string key);
+    public virtual SValue __GetValue__(string key)
+    {
+        return new SValue();
+    }
 
-    public abstract SValue __Invoke__(string funcName,  params SValue[] ps);
+    public virtual SValue __Invoke__(string funcName,  params SValue[] ps)
+    {
+        return new SValue();
+    }
 }
