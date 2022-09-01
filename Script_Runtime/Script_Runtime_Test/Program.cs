@@ -3,8 +3,8 @@
     public static void Main(string[] args)
     {
 
-        new TestArray();
-
+        //new TestArray();
+        Test1();
     }
 
     /// <summary>
@@ -13,7 +13,7 @@
     public static void Test1()
     {
         var time = DateTime.Now.Ticks;
-        for (int i = 0; i < 100000; i++)
+        for (SValue i = 0; i < 999999; i++)
         {
             SValue vect1 = new Vector2(1, 1);
             SValue vect2 = new Vector2(2, 3);
@@ -22,10 +22,10 @@
             //Console.WriteLine();
         }
         var time2 = DateTime.Now.Ticks;
-        Console.WriteLine("耗时1: " + (time2 - time) / 1000000f + "毫秒");
+        Console.WriteLine("脚本运行耗时: " + (time2 - time) / 1000000f + "毫秒");
         
         var time3 = DateTime.Now.Ticks;
-        for (int i = 0; i < 100000; i++)
+        for (int i = 0; i < 999999; i++)
         {
             Vector2Cs vect1 = new Vector2Cs(1, 1);
             Vector2Cs vect2 = new Vector2Cs(2, 3);
@@ -34,7 +34,7 @@
             //Console.WriteLine();
         }
         var time4 = DateTime.Now.Ticks;
-        Console.WriteLine("耗时2: " + (time4 - time3) / 1000000f + "毫秒");
+        Console.WriteLine("原生C#运行耗时: " + (time4 - time3) / 1000000f + "毫秒");
     }
 
 }

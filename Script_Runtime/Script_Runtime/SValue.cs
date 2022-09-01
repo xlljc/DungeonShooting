@@ -303,7 +303,7 @@ public struct SValue
                 return ((SArray)Value).__Invoke__(key, ps);
         }
 
-        return new SValue();
+        return Null;
     }
 
     #endregion
@@ -938,6 +938,254 @@ public struct SValue
             return (double)v1.Value != (double)v2.Value;
         }
         return v1.Value != v2.Value;
+    }
+
+    public static bool operator <(SValue v1, double v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                return (double)v1.Value < v2;
+            case SValueType.BooleanTrue:
+                return (double)v1.Value < 1d;
+            case SValueType.BooleanFalse:
+                return (double)v1.Value < 0d;
+        }
+        return false;
+    }
+
+    public static bool operator <(SValue v1, SValue v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return (double)v1.Value < (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return (double)v1.Value < 1d;
+                    case SValueType.BooleanFalse:
+                        return (double)v1.Value < 0d;
+                }
+                break;
+            case SValueType.BooleanTrue:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return 1d < (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return false;
+                    case SValueType.BooleanFalse:
+                        return false;
+                }
+                break;
+            case SValueType.BooleanFalse:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return 0d < (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return true;
+                    case SValueType.BooleanFalse:
+                        return false;
+                }
+                break;
+        }
+        return false;
+    }
+
+    public static bool operator >(SValue v1, double v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                return (double)v1.Value > v2;
+            case SValueType.BooleanTrue:
+                return (double)v1.Value > 1d;
+            case SValueType.BooleanFalse:
+                return (double)v1.Value > 0d;
+        }
+        return false;
+    }
+
+    public static bool operator >(SValue v1, SValue v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return (double)v1.Value > (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return (double)v1.Value > 1d;
+                    case SValueType.BooleanFalse:
+                        return (double)v1.Value > 0d;
+                }
+                break;
+            case SValueType.BooleanTrue:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return 1d > (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return false;
+                    case SValueType.BooleanFalse:
+                        return true;
+                }
+                break;
+            case SValueType.BooleanFalse:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return 0d > (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return false;
+                    case SValueType.BooleanFalse:
+                        return false;
+                }
+                break;
+        }
+        return false;
+    }
+
+    public static bool operator <=(SValue v1, double v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                return (double)v1.Value <= v2;
+            case SValueType.BooleanTrue:
+                return (double)v1.Value <= 1d;
+            case SValueType.BooleanFalse:
+                return (double)v1.Value <= 0d;
+        }
+        return false;
+    }
+
+    public static bool operator <=(SValue v1, SValue v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return (double)v1.Value <= (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return (double)v1.Value <= 1d;
+                    case SValueType.BooleanFalse:
+                        return (double)v1.Value <= 0d;
+                }
+                break;
+            case SValueType.BooleanTrue:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return 1d <= (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return true;
+                    case SValueType.BooleanFalse:
+                        return false;
+                }
+                break;
+            case SValueType.BooleanFalse:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return 0d < (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return true;
+                    case SValueType.BooleanFalse:
+                        return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    public static bool operator >=(SValue v1, double v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                return (double)v1.Value >= v2;
+            case SValueType.BooleanTrue:
+                return (double)v1.Value >= 1d;
+            case SValueType.BooleanFalse:
+                return (double)v1.Value >= 0d;
+        }
+        return false;
+    }
+
+    public static bool operator >=(SValue v1, SValue v2)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return (double)v1.Value >= (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return (double)v1.Value >= 1d;
+                    case SValueType.BooleanFalse:
+                        return (double)v1.Value >= 0d;
+                }
+                break;
+            case SValueType.BooleanTrue:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return 1d >= (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return true;
+                    case SValueType.BooleanFalse:
+                        return true;
+                }
+                break;
+            case SValueType.BooleanFalse:
+                switch (v2.Type)
+                {
+                    case SValueType.Number:
+                        return 0d >= (double)v2.Value;
+                    case SValueType.BooleanTrue:
+                        return false;
+                    case SValueType.BooleanFalse:
+                        return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    public static SValue operator ++(SValue v1)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                v1.Value = (double)v1.Value + 1d;
+                return v1;
+            case SValueType.BooleanTrue:
+            case SValueType.BooleanFalse:
+                return True;
+        }
+        return new SValue(double.NaN);
+    }
+
+    public static SValue operator --(SValue v1)
+    {
+        switch (v1.Type)
+        {
+            case SValueType.Number:
+                v1.Value = (double)v1.Value - 1d;
+                return v1;
+            case SValueType.BooleanTrue:
+            case SValueType.BooleanFalse:
+                return False;
+        }
+        return new SValue(double.NaN);
     }
 
     #endregion
