@@ -4,8 +4,15 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        //Test1();
-        Test3();
+        var time = DateTime.Now.Ticks;
+        for (SValue i = 0; i < 999999; i++)
+        {
+            SValue v = new Vector2(1, 1);
+            var b = "1" + v + "11" + "222" + "333" + v + "444";
+            //var b = "1" + v;
+        }
+        var time2 = DateTime.Now.Ticks;
+        Console.WriteLine("脚本运行耗时: " + (time2 - time) / 1000000f + "毫秒");
     }
 
     /// <summary>
@@ -16,12 +23,12 @@ public class Program
         var time = DateTime.Now.Ticks;
         for (SValue i = 0; i < 999999; i++)
         {
-            SValue a = new Func<SValue, SValue>((b) =>
+            SValue a = new SValue.Function_2((b, c) =>
             {
-                SValue c = b += 1;
+                SValue d = b + 1 + c;
                 return SValue.Null;
             });
-            a.__Invoke__(1);
+            a.__Invoke__(1, 2);
         }
         var time2 = DateTime.Now.Ticks;
         Console.WriteLine("脚本运行耗时: " + (time2 - time) / 1000000f + "毫秒");

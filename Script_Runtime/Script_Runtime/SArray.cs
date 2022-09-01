@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 
-public class SArray : ICall
+public class SArray : IObject
 {
 
     private List<SValue> _arr;
@@ -81,6 +81,16 @@ public class SArray : ICall
         return _arr[key];
     }
 
+    public SValue toString()
+    {
+        return new SValue("[object: object]");
+    }
+
+    public override string ToString()
+    {
+        return (string)toString().Value;
+    }
+    
     public SValue __InvokeMethod__(string funcName, params SValue[] ps)
     {
         switch (funcName)
@@ -130,6 +140,14 @@ public class SArray : ICall
                 {
                     case 0:
                         return clear();
+                }
+
+                break;
+            case "toString":
+                switch (ps.Length)
+                {
+                    case 0:
+                        return toString();
                 }
 
                 break;

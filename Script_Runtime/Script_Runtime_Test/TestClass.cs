@@ -1,4 +1,6 @@
-﻿public class Vector2Cs
+﻿using System.Text;
+
+public class Vector2Cs
 {
     public double x;
     public double y;
@@ -43,6 +45,11 @@ public class Vector2 : SObject
         return num * num;
     }
 
+    public override SValue toString()
+    {
+        return $"[x :{x}, y: {y}]";
+    }
+    
     public override SValue __GetValue__(string key)
     {
         switch (key)
