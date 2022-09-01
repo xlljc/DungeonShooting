@@ -56,7 +56,7 @@ public class Vector2 : SObject
         return SValue.Null;
     }
 
-    public override SValue __Invoke__(string funcName, params SValue[] ps)
+    public override SValue __InvokeMethod__(string funcName, params SValue[] ps)
     {
         switch (funcName)
         {

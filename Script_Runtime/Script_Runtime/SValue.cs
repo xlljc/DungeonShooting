@@ -16,9 +16,89 @@ public struct SValue
 
     private enum SObjectType
     {
+        /// <summary>
+        /// 类
+        /// </summary>
         Class,
+        /// <summary>
+        /// 字典
+        /// </summary>
         Map,
+        /// <summary>
+        /// 数组
+        /// </summary>
         Array,
+        /// <summary>
+        /// 参数数量为0的函数
+        /// </summary>
+        Function_0,
+        /// <summary>
+        /// 参数数量为1的函数
+        /// </summary>
+        Function_1,
+        /// <summary>
+        /// 参数数量为2的函数
+        /// </summary>
+        Function_2,
+        /// <summary>
+        /// 参数数量为3的函数
+        /// </summary>
+        Function_3,
+        /// <summary>
+        /// 参数数量为4的函数
+        /// </summary>
+        Function_4,
+        /// <summary>
+        /// 参数数量为5的函数
+        /// </summary>
+        Function_5,
+        /// <summary>
+        /// 参数数量为6的函数
+        /// </summary>
+        Function_6,
+        /// <summary>
+        /// 参数数量为7的函数
+        /// </summary>
+        Function_7,
+        /// <summary>
+        /// 参数数量为8的函数
+        /// </summary>
+        Function_8,
+        /// <summary>
+        /// 参数数量为9的函数
+        /// </summary>
+        Function_9,
+        /// <summary>
+        /// 参数数量为10的函数
+        /// </summary>
+        Function_10,
+        /// <summary>
+        /// 参数数量为11的函数
+        /// </summary>
+        Function_11,
+        /// <summary>
+        /// 参数数量为12的函数
+        /// </summary>
+        Function_12,
+        /// <summary>
+        /// 参数数量为13的函数
+        /// </summary>
+        Function_13,
+        /// <summary>
+        /// 参数数量为14的函数
+        /// </summary>
+        Function_14,
+        /// <summary>
+        /// 参数数量为15的函数
+        /// </summary>
+        Function_15,
+        /// <summary>
+        /// 参数数量为16的函数
+        /// </summary>
+        Function_16,
+        /// <summary>
+        /// 其他类型
+        /// </summary>
         Other
     }
 
@@ -76,77 +156,77 @@ public struct SValue
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_0;
     }
 
     public SValue(Func<SValue, SValue> v)
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_1;
     }
 
     public SValue(Func<SValue, SValue, SValue> v)
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_2;
     }
 
     public SValue(Func<SValue, SValue, SValue, SValue> v)
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_3;
     }
 
     public SValue(Func<SValue, SValue, SValue, SValue, SValue> v)
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_4;
     }
 
     public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue> v)
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_5;
     }
 
     public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_6;
     }
 
     public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_7;
     }
 
     public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_8;
     }
 
     public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_9;
     }
 
     public SValue(Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue> v)
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_10;
     }
 
     public SValue(
@@ -154,7 +234,7 @@ public struct SValue
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_11;
     }
 
     public SValue(
@@ -162,7 +242,7 @@ public struct SValue
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_12;
     }
 
     public SValue(
@@ -171,7 +251,7 @@ public struct SValue
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_13;
     }
 
     public SValue(
@@ -180,7 +260,7 @@ public struct SValue
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_14;
     }
 
     public SValue(
@@ -189,7 +269,16 @@ public struct SValue
     {
         Type = SValueType.Function;
         Value = v;
-        objectType = SObjectType.Other;
+        objectType = SObjectType.Function_15;
+    }
+
+    public SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue,
+            SValue, SValue, SValue, SValue> v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_16;
     }
 
     public static SValue Null
@@ -293,16 +382,76 @@ public struct SValue
 
     }
 
-    public SValue __Invoke__(string key, params SValue[] ps)
+    public SValue __InvokeMethod__(string key, params SValue[] ps)
     {
         switch (objectType)
         {
             case SObjectType.Class:
-                return ((SObject)Value).__Invoke__(key, ps);
+                return ((SObject)Value).__InvokeMethod__(key, ps);
             case SObjectType.Array:
-                return ((SArray)Value).__Invoke__(key, ps);
+                return ((SArray)Value).__InvokeMethod__(key, ps);
         }
+        //不可执行函数, 报错
+        return Null;
+    }
 
+    public SValue __Invoke__(params SValue[] ps)
+    {
+        switch (objectType)
+        {
+            case SObjectType.Function_0:
+                AssertUtils.AssertParamsLength(0, ps.Length);
+                return ((Func<SValue>)Value)();
+            case SObjectType.Function_1:
+                AssertUtils.AssertParamsLength(1, ps.Length);
+                return ((Func<SValue, SValue>)Value)(ps[0]);
+            case SObjectType.Function_2:
+                AssertUtils.AssertParamsLength(2, ps.Length);
+                return ((Func<SValue, SValue, SValue>)Value)(ps[0], ps[1]);
+            case SObjectType.Function_3:
+                AssertUtils.AssertParamsLength(3, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2]);
+            case SObjectType.Function_4:
+                AssertUtils.AssertParamsLength(4, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3]);
+            case SObjectType.Function_5:
+                AssertUtils.AssertParamsLength(5, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4]);
+            case SObjectType.Function_6:
+                AssertUtils.AssertParamsLength(6, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5]);
+            case SObjectType.Function_7:
+                AssertUtils.AssertParamsLength(7, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6]);
+            case SObjectType.Function_8:
+                AssertUtils.AssertParamsLength(8, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7]);
+            case SObjectType.Function_9:
+                AssertUtils.AssertParamsLength(9, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8]);
+            case SObjectType.Function_10:
+                AssertUtils.AssertParamsLength(10, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9]);
+            case SObjectType.Function_11:
+                AssertUtils.AssertParamsLength(11, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9], ps[10]);
+            case SObjectType.Function_12:
+                AssertUtils.AssertParamsLength(12, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9], ps[10], ps[11]);
+            case SObjectType.Function_13:
+                AssertUtils.AssertParamsLength(13, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9], ps[10], ps[11], ps[12]);
+            case SObjectType.Function_14:
+                AssertUtils.AssertParamsLength(14, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9], ps[10], ps[11], ps[12], ps[13]);
+            case SObjectType.Function_15:
+                AssertUtils.AssertParamsLength(15, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9], ps[10], ps[11], ps[12], ps[13], ps[14]);
+            case SObjectType.Function_16:
+                AssertUtils.AssertParamsLength(16, ps.Length);
+                return ((Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue>)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9], ps[10], ps[11], ps[12], ps[13], ps[14], ps[15]);
+        }
+        //不是function, 报错
         return Null;
     }
 
@@ -433,6 +582,13 @@ public struct SValue
     }
 
 
+    public static implicit operator SValue(
+        Func<SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue, SValue,
+            SValue, SValue, SValue, SValue> value)
+    {
+        return new SValue(value);
+    }
+
     #endregion
 
     #region 运算符重载
@@ -462,6 +618,27 @@ public struct SValue
         return Null;
     }
 
+    public static SValue operator +(double num, SValue v2)
+    {
+        switch (v2.Type)
+        {
+            case SValueType.Number:
+                return new SValue(num + (double)v2.Value);
+            case SValueType.String:
+                return new SValue(num.ToString() + v2.Value);
+            case SValueType.Object:
+            case SValueType.Function:
+            case SValueType.Null:
+                return new SValue(double.NaN);
+            case SValueType.BooleanTrue:
+                return new SValue(num + 1);
+            case SValueType.BooleanFalse:
+                return new SValue(num);
+        }
+
+        return Null;
+    }
+
     public static SValue operator +(SValue v1, string v2)
     {
         switch (v1.Type)
@@ -478,6 +655,27 @@ public struct SValue
                 return new SValue("true" + v1.Value);
             case SValueType.BooleanFalse:
                 return new SValue("false" + v1.Value);
+        }
+
+        return Null;
+    }
+
+    public static SValue operator +(string v1, SValue v2)
+    {
+        switch (v2.Type)
+        {
+            case SValueType.Number:
+            case SValueType.Object:
+            case SValueType.String:
+                return new SValue(v1 + v2.Value);
+            case SValueType.Null:
+                return new SValue(v1 + "null");
+            case SValueType.Function:
+                return new SValue(v1 + "[Function]");
+            case SValueType.BooleanTrue:
+                return new SValue(v1 + "true");
+            case SValueType.BooleanFalse:
+                return new SValue(v1 + "false");
         }
 
         return Null;

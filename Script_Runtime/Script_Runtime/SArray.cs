@@ -81,7 +81,7 @@ public class SArray : ICall
         return _arr[key];
     }
 
-    public SValue __Invoke__(string funcName, params SValue[] ps)
+    public SValue __InvokeMethod__(string funcName, params SValue[] ps)
     {
         switch (funcName)
         {

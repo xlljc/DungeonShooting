@@ -1,8 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Script_Runtime", "Script_Runtime\Script_Runtime.csproj", "{1952FC9B-303B-45DA-B33E-18C936791AD9}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Script_Runtime", "Script_Runtime\Script_Runtime.csproj", "{1952FC9B-303B-45DA-B33E-18C936791AD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Script_Runtime_Test", "Script_Runtime_Test\Script_Runtime_Test.csproj", "{4E12415E-FC95-4D98-AC0A-D78874568E75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Script_Runtime_Test", "Script_Runtime_Test\Script_Runtime_Test.csproj", "{4E12415E-FC95-4D98-AC0A-D78874568E75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +21,11 @@ Global
 		{4E12415E-FC95-4D98-AC0A-D78874568E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E12415E-FC95-4D98-AC0A-D78874568E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E12415E-FC95-4D98-AC0A-D78874568E75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3CA97B12-63BA-4540-A9E9-CF53999F26A6}
 	EndGlobalSection
 EndGlobal

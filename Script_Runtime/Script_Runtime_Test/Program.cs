@@ -1,10 +1,38 @@
-﻿public class Program
+﻿using System;
+
+public class Program
 {
     public static void Main(string[] args)
     {
+        //Test1();
+        Test3();
+    }
 
-        //new TestArray();
-        Test1();
+    /// <summary>
+    /// 测试函数调用
+    /// </summary>
+    public static void Test3()
+    {
+        var time = DateTime.Now.Ticks;
+        for (SValue i = 0; i < 999999; i++)
+        {
+            SValue a = new Func<SValue, SValue>((b) =>
+            {
+                SValue c = b += 1;
+                return SValue.Null;
+            });
+            a.__Invoke__(1);
+        }
+        var time2 = DateTime.Now.Ticks;
+        Console.WriteLine("脚本运行耗时: " + (time2 - time) / 1000000f + "毫秒");
+    }
+
+    /// <summary>
+    /// 测试array基础api
+    /// </summary>
+    public static void Test2()
+    {
+        new TestArray();
     }
 
     /// <summary>
@@ -17,8 +45,8 @@
         {
             SValue vect1 = new Vector2(1, 1);
             SValue vect2 = new Vector2(2, 3);
-            SValue vect3 = vect1.__Invoke__("add", vect2);
-            var v = vect3.__Invoke__("squareLengtn").Value;
+            SValue vect3 = vect1.__InvokeMethod__("add", vect2);
+            var v = vect3.__InvokeMethod__("squareLengtn").Value;
             //Console.WriteLine();
         }
         var time2 = DateTime.Now.Ticks;
