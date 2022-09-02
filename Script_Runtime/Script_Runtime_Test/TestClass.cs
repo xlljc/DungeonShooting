@@ -45,10 +45,12 @@ public class Vector2 : SObject
         return num * num;
     }
 
-    public override SValue toString()
+    /*public override SValue toString()
     {
-        return $"[x :{x}, y: {y}]";
-    }
+        //return $"[x :{x}, y: {y}]";
+        //return $"[x :{x}, y: {y}]";
+        return base.toString();
+    }*/
     
     public override SValue __GetValue__(string key)
     {

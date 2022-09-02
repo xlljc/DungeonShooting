@@ -11,8 +11,16 @@ public class Program
             Console.WriteLine("start");
 
             //Test3();
-            Test2();
+            //Test2();
             //Test1();
+            SValue func = new SValue.Function_1_Params((a, ps) =>
+            {
+                var len = ps.Length;
+                return SValue.Null;
+            });
+            func.__Invoke__(1, 2, 3, 4);
+            
+            Test4();
         }).Start();
 
         Console.Read();
@@ -20,12 +28,23 @@ public class Program
 
     public static void Test4()
     {
+        var time3 = DateTime.Now.Ticks;
+        for (int i = 0; i < 999999; i++)
+        {
+            Vector2Cs v = new Vector2Cs(1, 1);
+            Vector2Cs v2 = new Vector2Cs(2, 3);
+            var b = "1" + v + "11" + "222" + "333" + v2 + "444" + (v.ToString() + v2);
+            //Console.WriteLine();
+        }
+        var time4 = DateTime.Now.Ticks;
+        Console.WriteLine("原生C#运行耗时: " + (time4 - time3) / 10000f + "毫秒");
+        
         var time = DateTime.Now.Ticks;
         for (SValue i = 0; i < 999999; i++)
         {
             SValue v = new Vector2(1, 1);
             SValue v2 = new Vector2(3, 3);
-            var b = $"1" + v + "11" + "222" + "333" + v2 + "444" + (v + v2);
+            var b = "1" + v + "11" + "222" + "333" + v2 + "444" + (v + v2);
             //var b = "1" + v;
         }
         var time2 = DateTime.Now.Ticks;

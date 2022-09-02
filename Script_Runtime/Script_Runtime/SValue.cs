@@ -49,6 +49,47 @@ public struct SValue
 
     public delegate SValue Function_0_Params(params SValue[] ps);
 
+    public delegate SValue Function_1_Params(SValue p0, params SValue[] ps);
+
+    public delegate SValue Function_2_Params(SValue p0, SValue p1, params SValue[] ps);
+
+    public delegate SValue Function_3_Params(SValue p0, SValue p1, SValue p2, params SValue[] ps);
+
+    public delegate SValue Function_4_Params(SValue p0, SValue p1, SValue p2, SValue p3, params SValue[] ps);
+
+    public delegate SValue Function_5_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, params SValue[] ps);
+
+    public delegate SValue Function_6_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+        params SValue[] ps);
+
+    public delegate SValue Function_7_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+        SValue p6, params SValue[] ps);
+
+    public delegate SValue Function_8_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+        SValue p6, SValue p7, params SValue[] ps);
+
+    public delegate SValue Function_9_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+        SValue p6, SValue p7, SValue p8, params SValue[] ps);
+
+    public delegate SValue Function_10_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+        SValue p6, SValue p7, SValue p8, SValue p9, params SValue[] ps);
+
+    public delegate SValue Function_11_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+        SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, params SValue[] ps);
+
+    public delegate SValue Function_12_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+        SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, params SValue[] ps);
+
+    public delegate SValue Function_13_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+        SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, params SValue[] ps);
+
+    public delegate SValue Function_14_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+        SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, params SValue[] ps);
+
+    public delegate SValue Function_15_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+        SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, SValue p14,
+        params SValue[] ps);
+
     #endregion
 
     public enum SValueType
@@ -190,6 +231,86 @@ public struct SValue
         /// 参数数量为16的函数
         /// </summary>
         Function_16,
+
+        /// <summary>
+        /// 参数数量为1的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_0_Params,
+
+        /// <summary>
+        /// 参数数量为2的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_1_Params,
+
+        /// <summary>
+        /// 参数数量为3的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_2_Params,
+
+        /// <summary>
+        /// 参数数量为4的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_3_Params,
+
+        /// <summary>
+        /// 参数数量为5的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_4_Params,
+
+        /// <summary>
+        /// 参数数量为6的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_5_Params,
+
+        /// <summary>
+        /// 参数数量为7的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_6_Params,
+
+        /// <summary>
+        /// 参数数量为8的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_7_Params,
+
+        /// <summary>
+        /// 参数数量为9的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_8_Params,
+
+        /// <summary>
+        /// 参数数量为10的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_9_Params,
+
+        /// <summary>
+        /// 参数数量为11的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_10_Params,
+
+        /// <summary>
+        /// 参数数量为12的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_11_Params,
+
+        /// <summary>
+        /// 参数数量为13的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_12_Params,
+
+        /// <summary>
+        /// 参数数量为14的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_13_Params,
+
+        /// <summary>
+        /// 参数数量为15的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_14_Params,
+
+        /// <summary>
+        /// 参数数量为16的函数, 但最后一个参数为可变参数
+        /// </summary>
+        Function_15_Params,
 
         /// <summary>
         /// 其他类型
@@ -375,6 +496,118 @@ public struct SValue
         objectType = SObjectType.Function_16;
     }
 
+    public SValue(Function_0_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_0_Params;
+    }
+
+    public SValue(Function_1_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_1_Params;
+    }
+
+    public SValue(Function_2_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_2_Params;
+    }
+
+    public SValue(Function_3_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_3_Params;
+    }
+
+    public SValue(Function_4_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_4_Params;
+    }
+
+    public SValue(Function_5_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_5_Params;
+    }
+
+    public SValue(Function_6_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_6_Params;
+    }
+
+    public SValue(Function_7_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_7_Params;
+    }
+
+    public SValue(Function_8_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_8_Params;
+    }
+
+    public SValue(Function_9_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_9_Params;
+    }
+
+    public SValue(Function_10_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_10_Params;
+    }
+
+    public SValue(Function_11_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_11_Params;
+    }
+
+    public SValue(Function_12_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_12_Params;
+    }
+
+    public SValue(Function_13_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_13_Params;
+    }
+
+    public SValue(Function_14_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_14_Params;
+    }
+
+    public SValue(Function_15_Params v)
+    {
+        Type = SValueType.Function;
+        Value = v;
+        objectType = SObjectType.Function_15_Params;
+    }
+
     public static SValue Null
     {
         get
@@ -554,10 +787,79 @@ public struct SValue
                 AssertUtils.AssertParamsLength(16, ps.Length);
                 return ((Function_16)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
                     ps[10], ps[11], ps[12], ps[13], ps[14], ps[15]);
+            case SObjectType.Function_0_Params:
+                return ((Function_0_Params)Value)(ps);
+            case SObjectType.Function_1_Params:
+                AssertUtils.AssertParamsLength(0, ps.Length);
+                return ((Function_1_Params)Value)(ps[0], CutParams(ps, 1));
+            case SObjectType.Function_2_Params:
+                AssertUtils.AssertParamsLength(1, ps.Length);
+                return ((Function_2_Params)Value)(ps[0], ps[1], CutParams(ps, 2));
+            case SObjectType.Function_3_Params:
+                AssertUtils.AssertParamsLength(2, ps.Length);
+                return ((Function_3_Params)Value)(ps[0], ps[1], ps[2], CutParams(ps, 3));
+            case SObjectType.Function_4_Params:
+                AssertUtils.AssertParamsLength(3, ps.Length);
+                return ((Function_4_Params)Value)(ps[0], ps[1], ps[2], ps[3], CutParams(ps, 4));
+            case SObjectType.Function_5_Params:
+                AssertUtils.AssertParamsLength(4, ps.Length);
+                return ((Function_5_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], CutParams(ps, 5));
+            case SObjectType.Function_6_Params:
+                AssertUtils.AssertParamsLength(5, ps.Length);
+                return ((Function_6_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], CutParams(ps, 6));
+            case SObjectType.Function_7_Params:
+                AssertUtils.AssertParamsLength(6, ps.Length);
+                return ((Function_7_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], CutParams(ps, 7));
+            case SObjectType.Function_8_Params:
+                AssertUtils.AssertParamsLength(7, ps.Length);
+                return ((Function_8_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7],
+                    CutParams(ps, 8));
+            case SObjectType.Function_9_Params:
+                AssertUtils.AssertParamsLength(8, ps.Length);
+                return ((Function_9_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8],
+                    CutParams(ps, 9));
+            case SObjectType.Function_10_Params:
+                AssertUtils.AssertParamsLength(9, ps.Length);
+                return ((Function_10_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+                    CutParams(ps, 10));
+            case SObjectType.Function_11_Params:
+                AssertUtils.AssertParamsLength(10, ps.Length);
+                return ((Function_11_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+                    ps[10], CutParams(ps, 11));
+            case SObjectType.Function_12_Params:
+                AssertUtils.AssertParamsLength(11, ps.Length);
+                return ((Function_12_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+                    ps[10], ps[11], CutParams(ps, 12));
+            case SObjectType.Function_13_Params:
+                AssertUtils.AssertParamsLength(12, ps.Length);
+                return ((Function_13_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+                    ps[10], ps[11], ps[12], CutParams(ps, 13));
+            case SObjectType.Function_14_Params:
+                AssertUtils.AssertParamsLength(13, ps.Length);
+                return ((Function_14_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+                    ps[10], ps[11], ps[12], ps[13], CutParams(ps, 14));
+            case SObjectType.Function_15_Params:
+                AssertUtils.AssertParamsLength(14, ps.Length);
+                return ((Function_15_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+                    ps[10], ps[11], ps[12], ps[13], ps[14], CutParams(ps, 15));
         }
 
         //不是function, 报错
         return Null;
+    }
+
+    /// <summary>
+    /// 剪切参数
+    /// </summary>
+    private SValue[] CutParams(SValue[] ps, int index)
+    {
+        SValue[] arr = new SValue[ps.Length - index];
+        for (int i = 0; index < ps.Length; index++, i++)
+        {
+            arr[i] = ps[index];
+        }
+
+        return arr;
     }
 
     #endregion
@@ -675,6 +977,86 @@ public struct SValue
     }
 
     public static implicit operator SValue(Function_16 value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_0_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_1_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_2_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_3_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_4_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_5_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_6_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_7_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_8_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_9_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_10_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_11_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_12_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_13_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_14_Params value)
+    {
+        return new SValue(value);
+    }
+
+    public static implicit operator SValue(Function_15_Params value)
     {
         return new SValue(value);
     }
