@@ -59,6 +59,18 @@ public class Program
         var arr = new SArray();
         arr.__InvokeMethod__("add", 1);
         arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 5);
+        arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 2);
+        arr.__InvokeMethod__("add", 2);
         arr.__InvokeMethod__("add", "3");
 
         var time = DateTime.Now.Ticks;
