@@ -47,6 +47,8 @@ public struct SValue
     public delegate SValue Function_16(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
         SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, SValue p14, SValue p15);
 
+    public delegate SValue Function_0_Params(params SValue[] ps);
+
     #endregion
 
     public enum SValueType

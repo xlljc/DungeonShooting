@@ -25,8 +25,8 @@ public class Vector2Cs
     
 public class Vector2 : SObject
 {
-    public SValue x;
-    public SValue y;
+    public SValue x = SValue.Null;
+    public SValue y = SValue.Null;
 
     public Vector2(SValue x, SValue y)
     {
