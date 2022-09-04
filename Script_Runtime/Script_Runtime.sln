@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Script_Runtime", "Script_Ru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Script_Runtime_Test", "Script_Runtime_Test\Script_Runtime_Test.csproj", "{4E12415E-FC95-4D98-AC0A-D78874568E75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Script_Runtime_Generate", "Script_Runtime_Generate\Script_Runtime_Generate.csproj", "{EA007EAC-275E-4221-A9BA-D062C4348E03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4E12415E-FC95-4D98-AC0A-D78874568E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E12415E-FC95-4D98-AC0A-D78874568E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E12415E-FC95-4D98-AC0A-D78874568E75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA007EAC-275E-4221-A9BA-D062C4348E03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA007EAC-275E-4221-A9BA-D062C4348E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA007EAC-275E-4221-A9BA-D062C4348E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA007EAC-275E-4221-A9BA-D062C4348E03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

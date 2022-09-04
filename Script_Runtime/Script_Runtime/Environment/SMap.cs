@@ -1,7 +1,8 @@
 ﻿
-public abstract class SObject : IObject
+public class SMap : IObject
 {
-    public virtual SValue toString()
+    
+    public SValue toString()
     {
         return new SValue("[object: object]");
     }
@@ -10,13 +11,18 @@ public abstract class SObject : IObject
     {
         return (string)toString().Value;
     }
-
-    public virtual SValue __GetValue__(string key)
+    
+    public SValue __GetValue(string key)
     {
         return SValue.Null;
     }
 
-    public virtual SValue __InvokeMethod__(string funcName, params SValue[] ps)
+    public void __SetValue(string key, SValue value)
+    {
+        
+    }
+
+    public SValue __InvokeMethod(string funcName, params SValue[] ps)
     {
         switch (funcName)
         {
@@ -29,7 +35,6 @@ public abstract class SObject : IObject
 
                 break;
         }
-
         return SValue.Null;
     }
 }

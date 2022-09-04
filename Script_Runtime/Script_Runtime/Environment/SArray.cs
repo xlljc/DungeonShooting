@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class SArray : IObject
 {
-
     private List<SValue> _arr;
 
     public SArray(params SValue[] values)
@@ -11,10 +10,7 @@ public class SArray : IObject
         _arr = new List<SValue>(values);
     }
 
-    public SValue length()
-    {
-        return _arr.Count;
-    }
+    public SValue length => _arr.Count;
 
     public SValue indexOf(SValue v)
     {
@@ -66,12 +62,23 @@ public class SArray : IObject
         return SValue.Null;
     }
 
-    public SValue __GetValue__(string key)
+    public SValue __GetValue(string key)
     {
+        switch (key)
+        {
+            case "length":
+                return length;
+        }
         return SValue.Null;
     }
 
-    public SValue __GetValue__(int key)
+    public virtual void __SetValue(string key, SValue value)
+    {
+
+    }
+
+
+    public SValue __GetValue(int key)
     {
         if (key < 0 || key >= _arr.Count)
         {
@@ -81,7 +88,7 @@ public class SArray : IObject
         return _arr[key];
     }
 
-    public SValue toString()
+    public virtual SValue toString()
     {
         return new SValue("[object: object]");
     }
@@ -91,25 +98,18 @@ public class SArray : IObject
         return (string)toString().Value;
     }
     
-    public SValue __InvokeMethod__(string funcName, params SValue[] ps)
+    public virtual SValue __InvokeMethod(string key, params SValue[] ps)
     {
-        switch (funcName)
+        switch (key)
         {
             case "length":
-                switch (ps.Length)
-                {
-                    case 0:
-                        return length();
-                }
-
-                break;
+                return length.Invoke(ps);
             case "indexOf":
                 switch (ps.Length)
                 {
                     case 1:
                         return indexOf(ps[0]);
                 }
-
                 break;
             case "lastIndexOf":
                 switch (ps.Length)
@@ -117,7 +117,6 @@ public class SArray : IObject
                     case 1:
                         return lastIndexOf(ps[0]);
                 }
-
                 break;
             case "add":
                 switch (ps.Length)
@@ -125,7 +124,6 @@ public class SArray : IObject
                     case 1:
                         return add(ps[0]);
                 }
-
                 break;
             case "delete":
                 switch (ps.Length)
@@ -133,7 +131,6 @@ public class SArray : IObject
                     case 1:
                         return delete(ps[0]);
                 }
-
                 break;
             case "clear":
                 switch (ps.Length)
@@ -141,7 +138,6 @@ public class SArray : IObject
                     case 0:
                         return clear();
                 }
-
                 break;
             case "toString":
                 switch (ps.Length)
@@ -149,10 +145,9 @@ public class SArray : IObject
                     case 0:
                         return toString();
                 }
-
                 break;
         }
-
         return SValue.Null;
     }
+
 }

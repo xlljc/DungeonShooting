@@ -668,16 +668,16 @@ public struct SValue
 
     #region 属性和方法的操作
 
-    public SValue __GetValue__(string key)
+    public SValue GetValue(string key)
     {
         switch (objectType)
         {
             case SObjectType.Class:
-                return ((SObject)Value).__GetValue__(key);
+                return ((SObject)Value).__GetValue(key);
             case SObjectType.Array:
-                return ((SArray)Value).__GetValue__(key);
+                return ((SArray)Value).__GetValue(key);
             case SObjectType.Map:
-                return ((SMap)Value).__GetValue__(key);
+                return ((SMap)Value).__GetValue(key);
         }
 
         if (Type == SValueType.Null)
@@ -688,11 +688,11 @@ public struct SValue
         return Null;
     }
 
-    public SValue __GetValue__(double key)
+    public SValue GetValue(double key)
     {
         if (objectType == SObjectType.Array)
         {
-            return ((SArray)Value).__GetValue__((int)key);
+            return ((SArray)Value).__GetValue((int)key);
         }
         else
         {
@@ -702,31 +702,31 @@ public struct SValue
         return Null;
     }
 
-    public SValue __GetValue__(SValue key)
+    public SValue GetValue(SValue key)
     {
         return Null;
     }
 
-    public void __SetValue__()
+    public void SetValue()
     {
 
     }
 
-    public SValue __InvokeMethod__(string key, params SValue[] ps)
+    public SValue InvokeMethod(string key, params SValue[] ps)
     {
         switch (objectType)
         {
             case SObjectType.Class:
-                return ((SObject)Value).__InvokeMethod__(key, ps);
+                return ((SObject)Value).__InvokeMethod(key, ps);
             case SObjectType.Array:
-                return ((SArray)Value).__InvokeMethod__(key, ps);
+                return ((SArray)Value).__InvokeMethod(key, ps);
         }
 
         //不可执行函数, 报错
         return Null;
     }
 
-    public SValue __Invoke__(params SValue[] ps)
+    public SValue Invoke(params SValue[] ps)
     {
         switch (objectType)
         {
@@ -846,20 +846,6 @@ public struct SValue
 
         //不是function, 报错
         return Null;
-    }
-
-    /// <summary>
-    /// 剪切参数
-    /// </summary>
-    private SValue[] CutParams(SValue[] ps, int index)
-    {
-        SValue[] arr = new SValue[ps.Length - index];
-        for (int i = 0; index < ps.Length; index++, i++)
-        {
-            arr[i] = ps[index];
-        }
-
-        return arr;
     }
 
     #endregion
@@ -2147,4 +2133,19 @@ public struct SValue
 
         return Value.ToString();
     }
+    
+    /// <summary>
+    /// 剪切参数
+    /// </summary>
+    internal static SValue[] CutParams(SValue[] ps, int index)
+    {
+        SValue[] arr = new SValue[ps.Length - index];
+        for (int i = 0; index < ps.Length; index++, i++)
+        {
+            arr[i] = ps[index];
+        }
+
+        return arr;
+    }
+    
 }

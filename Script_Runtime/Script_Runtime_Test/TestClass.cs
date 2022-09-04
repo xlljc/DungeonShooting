@@ -36,7 +36,7 @@ public class Vector2 : SObject
 
     public SValue add(SValue other)
     {
-        return new Vector2(x + other.__GetValue__("x"), y + other.__GetValue__("y"));
+        return new Vector2(x + other.GetValue("x"), y + other.GetValue("y"));
     }
 
     public SValue squareLengtn()
@@ -52,7 +52,7 @@ public class Vector2 : SObject
         return base.toString();
     }*/
     
-    public override SValue __GetValue__(string key)
+    public override SValue __GetValue(string key)
     {
         switch (key)
         {
@@ -65,7 +65,7 @@ public class Vector2 : SObject
         return SValue.Null;
     }
 
-    public override SValue __InvokeMethod__(string funcName, params SValue[] ps)
+    public override SValue __InvokeMethod(string funcName, params SValue[] ps)
     {
         switch (funcName)
         {

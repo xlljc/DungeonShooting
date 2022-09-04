@@ -10,13 +10,13 @@ public class TestArray : SObject
         
     }
     
-    public override SValue __InvokeMethod__(string funcName, params SValue[] ps)
+    public override SValue __InvokeMethod(string funcName, params SValue[] ps)
     {
-        return base.__InvokeMethod__(funcName, ps);
+        return base.__InvokeMethod(funcName, ps);
     }
 
-    public override SValue __GetValue__(string key)
+    public override SValue __GetValue(string key)
     {
-        return base.__GetValue__(key);
+        return base.__GetValue(key);
     }
 }

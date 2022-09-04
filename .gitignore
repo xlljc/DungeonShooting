@@ -9,3 +9,6 @@
 /Script_Runtime/Script_Runtime/obj
 /Script_Runtime/Script_Runtime_Test/obj
 /Script_Runtime/.vs
+/Script_Runtime/Script_Runtime/Backups
+/Script_Runtime/Script_Runtime_Generate/bin
+/Script_Runtime/Script_Runtime_Generate/obj

@@ -18,7 +18,7 @@ public class Program
                 var len = ps.Length;
                 return SValue.Null;
             });
-            func.__Invoke__(1, 2, 3, 4);
+            func.Invoke(1, 2, 3, 4);
             
             Test4();
         }).Start();
@@ -64,7 +64,7 @@ public class Program
                 SValue d = b + 1 + c;
                 return SValue.Null;
             });
-            a.__Invoke__(1, 2);
+            a.Invoke(1, 2);
         }
         var time2 = DateTime.Now.Ticks;
         Console.WriteLine("脚本运行耗时: " + (time2 - time) / 10000f + "毫秒");
@@ -76,28 +76,28 @@ public class Program
     public static void Test2()
     {
         var arr = new SArray();
-        arr.__InvokeMethod__("add", 1);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 5);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", 2);
-        arr.__InvokeMethod__("add", "3");
+        arr.__InvokeMethod("add", 1);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 5);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", 2);
+        arr.__InvokeMethod("add", "3");
 
         var time = DateTime.Now.Ticks;
         for (SValue i = 0; i < 999999; i++)
         {
-            arr.__InvokeMethod__("indexOf", 2);
-            arr.__InvokeMethod__("indexOf", "3");
-            arr.__InvokeMethod__("indexOf", "4");
+            arr.__InvokeMethod("indexOf", 2);
+            arr.__InvokeMethod("indexOf", "3");
+            arr.__InvokeMethod("indexOf", "4");
         }
         var time2 = DateTime.Now.Ticks;
         Console.WriteLine("脚本运行耗时: " + (time2 - time) / 10000f + "毫秒");
@@ -125,8 +125,8 @@ public class Program
         {
             SValue vect1 = new Vector2(1, 1);
             SValue vect2 = new Vector2(2, 3);
-            SValue vect3 = vect1.__InvokeMethod__("add", vect2);
-            var v = vect3.__InvokeMethod__("squareLengtn").Value;
+            SValue vect3 = vect1.InvokeMethod("add", vect2);
+            var v = vect3.InvokeMethod("squareLengtn").Value;
         }
         var time2 = DateTime.Now.Ticks;
         Console.WriteLine("脚本运行耗时: " + (time2 - time) / 10000f + "毫秒");
