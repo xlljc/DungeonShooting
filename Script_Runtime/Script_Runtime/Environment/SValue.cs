@@ -2111,6 +2111,148 @@ public struct SValue
 
     #endregion
 
+    #region 公共函数
+
+    public bool IsNumber()
+    {
+        return Type == SValueType.Number;
+    }
+    
+    public bool IsString()
+    {
+        return Type == SValueType.String;
+    }
+
+    public bool IsObject()
+    {
+        return Type == SValueType.Object;
+    }
+    
+    public bool IsBoolean()
+    {
+        return Type == SValueType.BooleanTrue || Type == SValueType.BooleanFalse;
+    }
+    
+    public bool IsNull()
+    {
+        return Type == SValueType.Null;
+    }
+    
+    public bool IsFunction()
+    {
+        return Type == SValueType.Function;
+    }
+    
+    public bool IsArray()
+    {
+        return Value is SArray;
+    }
+    
+    public bool IsMap()
+    {
+        return Value is SMap;
+    }
+    
+    public int GetParamLength()
+    {
+        switch (objectType)
+        {
+            case SObjectType.Function_0:
+                return 0;
+            case SObjectType.Function_1:
+                return 1;
+            case SObjectType.Function_2:
+                return 2;
+            case SObjectType.Function_3:
+                return 3;
+            case SObjectType.Function_4:
+                return 4;
+            case SObjectType.Function_5:
+                return 5;
+            case SObjectType.Function_6:
+                return 6;
+            case SObjectType.Function_7:
+                return 7;
+            case SObjectType.Function_8:
+                return 8;
+            case SObjectType.Function_9:
+                return 9;
+            case SObjectType.Function_10:
+                return 10;
+            case SObjectType.Function_11:
+                return 11;
+            case SObjectType.Function_12:
+                return 12;
+            case SObjectType.Function_13:
+                return 13;
+            case SObjectType.Function_14:
+                return 14;
+            case SObjectType.Function_15:
+                return 15;
+            case SObjectType.Function_16:
+                return 16;
+            case SObjectType.Function_0_Params:
+                return 1;
+            case SObjectType.Function_1_Params:
+                return 2;
+            case SObjectType.Function_2_Params:
+                return 3;
+            case SObjectType.Function_3_Params:
+                return 4;
+            case SObjectType.Function_4_Params:
+                return 5;
+            case SObjectType.Function_5_Params:
+                return 6;
+            case SObjectType.Function_6_Params:
+                return 7;
+            case SObjectType.Function_7_Params:
+                return 8;
+            case SObjectType.Function_8_Params:
+                return 9;
+            case SObjectType.Function_9_Params:
+                return 10;
+            case SObjectType.Function_10_Params:
+                return 11;
+            case SObjectType.Function_11_Params:
+                return 12;
+            case SObjectType.Function_12_Params:
+                return 13;
+            case SObjectType.Function_13_Params:
+                return 14;
+            case SObjectType.Function_14_Params:
+                return 15;
+            case SObjectType.Function_15_Params:
+                return 16;
+        }
+        return 0;
+    }
+
+    public bool HasDynamicParam()
+    {
+        switch (objectType)
+        {
+            case SObjectType.Function_0_Params:
+            case SObjectType.Function_1_Params:
+            case SObjectType.Function_2_Params:
+            case SObjectType.Function_3_Params:
+            case SObjectType.Function_4_Params:
+            case SObjectType.Function_5_Params:
+            case SObjectType.Function_6_Params:
+            case SObjectType.Function_7_Params:
+            case SObjectType.Function_8_Params:
+            case SObjectType.Function_9_Params:
+            case SObjectType.Function_10_Params:
+            case SObjectType.Function_11_Params:
+            case SObjectType.Function_12_Params:
+            case SObjectType.Function_13_Params:
+            case SObjectType.Function_14_Params:
+            case SObjectType.Function_15_Params:
+                return true;
+        }
+
+        return false;
+    }
+    
     public override string ToString()
     {
         switch (Type)
@@ -2134,6 +2276,8 @@ public struct SValue
         return Value.ToString();
     }
     
+    #endregion
+
     /// <summary>
     /// 剪切参数
     /// </summary>
