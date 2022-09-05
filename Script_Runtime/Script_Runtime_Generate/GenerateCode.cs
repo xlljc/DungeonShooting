@@ -72,7 +72,7 @@ public static class GenerateCode
         for (int i = 0; i < fieldInfos.Length; i++)
         {
             var temp = fieldInfos[i];
-            if (temp.IsPublic)
+            if (temp.IsPublic && !temp.Name.EndsWith("k__BackingField"))
             {
                 caseStr += indentationStr + $"        case \"{temp.Name}\":\n";
                 caseStr += indentationStr + $"            {temp.Name} = value;\n";
@@ -118,7 +118,7 @@ public static class GenerateCode
         for (int i = 0; i < fieldInfos.Length; i++)
         {
             var temp = fieldInfos[i];
-            if (temp.IsPublic)
+            if (temp.IsPublic && !temp.Name.EndsWith("k__BackingField"))
             {
                 caseStr += indentationStr + $"        case \"{temp.Name}\":\n";
                 caseStr += indentationStr + $"            return {temp.Name};\n";
@@ -163,7 +163,7 @@ public static class GenerateCode
         for (int i = 0; i < fieldInfos.Length; i++)
         {
             var temp = fieldInfos[i];
-            if (temp.IsPublic)
+            if (temp.IsPublic && !temp.Name.EndsWith("k__BackingField"))
             {
                 caseStr += indentationStr + $"        case \"{temp.Name}\":\n";
                 caseStr += indentationStr + $"            return {temp.Name}.Invoke(ps);\n";
@@ -195,7 +195,8 @@ public static class GenerateCode
                 methodMap.Add(temp.GetParameters().Length, temp);
             }
         }
-
+        
+        //拼接函数
         foreach (var item in dic)
         {
             caseStr += indentationStr + $"        case \"{item.Key}\":\n";
