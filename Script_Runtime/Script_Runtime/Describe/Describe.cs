@@ -19,7 +19,7 @@ public abstract class Describe
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; }
+    public string Name { get; protected set; }
     
     /// <summary>
     /// 返回成员是否被排除

@@ -97,7 +97,7 @@ public class SArray : IObject
     {
         return (string)toString().Value;
     }
-    
+    //
     public virtual SValue __InvokeMethod(string key, params SValue[] ps)
     {
         switch (key)
@@ -149,5 +149,5 @@ public class SArray : IObject
         }
         return SValue.Null;
     }
-
+    //
 }

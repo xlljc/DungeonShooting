@@ -3,30 +3,69 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// 描述类数据
+/// </summary>
 public class ClassDescribe : Describe
 {
+    /// <summary>
+    /// 包含的字段
+    /// </summary>
     public Dictionary<string, FieldDescribe> Fields { get; } = new Dictionary<string, FieldDescribe>();
-
+    
+    /// <summary>
+    /// 包含的get属性
+    /// </summary>
     public Dictionary<string, GetPropertyDescribe> GetProperties { get; } =
         new Dictionary<string, GetPropertyDescribe>();
 
+    /// <summary>
+    /// 包含的set属性
+    /// </summary>
     public Dictionary<string, SetPropertyDescribe> SetProperties { get; } =
         new Dictionary<string, SetPropertyDescribe>();
 
+    /// <summary>
+    /// 包含的函数
+    /// </summary>
     public Dictionary<string, List<MethodDescribe>> Methods { get; } = new Dictionary<string, List<MethodDescribe>>();
 
+    /// <summary>
+    /// 父类
+    /// </summary>
+    public ClassDescribe BaseClass { get; set; }
 
+    private static Dictionary<Type, ClassDescribe> _classDescribeMap = new Dictionary<Type, ClassDescribe>();
+
+    /// <summary>
+    /// 根据一个type创建一个 ClassDescribe, 并自动解析 type 中的成员
+    /// </summary>
+    public static ClassDescribe CreateFromType(string name, Type type)
+    {
+        if (_classDescribeMap.TryGetValue(type, out ClassDescribe classDescribe))
+        {
+            classDescribe.Name = name;
+            return classDescribe;
+        }
+
+        classDescribe = new ClassDescribe(name, type);
+        _classDescribeMap.Add(type, classDescribe);
+        return classDescribe;
+    }
+    
     public ClassDescribe(string name): base(name)
     {
         
     }
 
-    public ClassDescribe(string name, Type type) : this(name)
+
+    private ClassDescribe(string name, Type type) : this(name)
     {
         var fields = type.GetFields(InstanceBindFlags);
         var propertyInfos = type.GetProperties(InstanceBindFlags);
         var methodInfos = type.GetMethods(InstanceBindFlags);
 
+        //解析字段
         foreach (var item in fields)
         {
             if (!item.IsSpecialName && !item.Name.EndsWith("k__BackingField") && !IsExclude(item.Name))
@@ -38,6 +77,7 @@ public class ClassDescribe : Describe
             }
         }
 
+        //解析属性
         foreach (var item in propertyInfos)
         {
             if (!item.IsSpecialName && !item.Name.EndsWith("k__BackingField") && !IsExclude(item.Name))
@@ -61,6 +101,7 @@ public class ClassDescribe : Describe
             }
         }
         
+        //解析函数
         foreach (var item in methodInfos)
         {
             if (!item.IsSpecialName && !item.Name.EndsWith("k__BackingField") && !IsExclude(item.Name))
@@ -78,9 +119,18 @@ public class ClassDescribe : Describe
             }
         }
 
+        //父类
+        if (type.BaseType != null && type.BaseType != typeof(object))
+        {
+            BaseClass = CreateFromType(type.BaseType.Name, type.BaseType);
+        }
     }
 
 
+    /// <summary>
+    /// 添加一个字段
+    /// </summary>
+    /// <exception cref="RepeatMemberException"></exception>
     public void AddFields(FieldDescribe fieldDescribe)
     {
         if (Fields.ContainsKey(fieldDescribe.Name))
@@ -91,6 +141,10 @@ public class ClassDescribe : Describe
         Fields.Add(fieldDescribe.Name, fieldDescribe);
     }
 
+    /// <summary>
+    /// 添加一个get属性
+    /// </summary>
+    /// <exception cref="RepeatMemberException"></exception>
     public void AddGetProperty(GetPropertyDescribe getPropertyDescribe)
     {
         if (GetProperties.ContainsKey(getPropertyDescribe.Name))
@@ -101,6 +155,10 @@ public class ClassDescribe : Describe
         GetProperties.Add(getPropertyDescribe.Name, getPropertyDescribe);
     }
 
+    /// <summary>
+    /// 添加一个set属性
+    /// </summary>
+    /// <exception cref="RepeatMemberException"></exception>
     public void AddSetProperty(SetPropertyDescribe setPropertyDescribe)
     {
         if (SetProperties.ContainsKey(setPropertyDescribe.Name))
@@ -111,6 +169,10 @@ public class ClassDescribe : Describe
         SetProperties.Add(setPropertyDescribe.Name, setPropertyDescribe);
     }
 
+    /// <summary>
+    /// 添加一个函数
+    /// </summary>
+    /// <exception cref="RepeatMemberException"></exception>
     public void AddMethod(MethodDescribe methodDescribe)
     {
         List<MethodDescribe> list;

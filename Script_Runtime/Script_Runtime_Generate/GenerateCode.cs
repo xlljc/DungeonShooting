@@ -5,11 +5,13 @@ using System.Text.RegularExpressions;
 public static class GenerateCode
 {
     //IObject口下所有函数名称, 生成代码时会忽略这些函数
-    private static readonly string[] Methods = { "__GetValue", "__SetValue", "__InvokeMethod", "ToString", "GetType", "Equals", "GetHashCode" };
-    
-    
-    private const BindingFlags InstanceBindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly;
-    
+    private static readonly string[] Methods =
+        { "__GetValue", "__SetValue", "__InvokeMethod", "ToString", "GetType", "Equals", "GetHashCode" };
+
+
+    private const BindingFlags InstanceBindFlags =
+        BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly;
+
     //开始执行生成代码操作
     public static void StartGenerate(Uri projectPath)
     {
@@ -22,7 +24,8 @@ public static class GenerateCode
             if (type != typeof(IObject) && typeof(IObject).IsAssignableFrom(type))
             {
                 //Console.WriteLine(type.FullName + ", " + (type.BaseType == typeof(object)));
-                string clsPath = FindFileByClsName(new DirectoryInfo(projectPath.AbsolutePath + "/Environment/"), type.Name + ".cs");
+                string clsPath = FindFileByClsName(new DirectoryInfo(projectPath.AbsolutePath + "/Environment/"),
+                    type.Name + ".cs");
                 if (!string.IsNullOrEmpty(clsPath))
                 {
                     GenerateFileCode(clsPath, type);
@@ -34,214 +37,106 @@ public static class GenerateCode
     private static void GenerateFileCode(string clsPath, Type type)
     {
         //代码缩进数量
-        var indentation = string.IsNullOrEmpty(type.Namespace) ? 4 : 8;
-        
+        var indentation = 4;
+        var classIndentation = 0;
+        if (!string.IsNullOrEmpty(type.Namespace))
+        {
+            indentation = 8;
+            classIndentation = 4;
+        }
+
         string clsStr = File.ReadAllText(clsPath);
-        //字段
-        var fields = type.GetFields(InstanceBindFlags).Where(m => !m.IsSpecialName).ToArray();
-        //属性
-        var properties = type.GetProperties(InstanceBindFlags).Where(m => !m.IsSpecialName).ToArray();
-        //函数
-        var methods = type.GetMethods(InstanceBindFlags).Where(m => !m.IsSpecialName).ToArray();
+        var classDescribe = ClassDescribe.CreateFromType(type.Name, type);
+
+        var setCode = GenerateCodeUtils.GenerateSetValueCode(classDescribe, indentation);
+        //Console.WriteLine("------------- setCode: " + type.Name + "\n" + setCode);
+
+        var getCode = GenerateCodeUtils.GenerateGetValueCode(classDescribe, indentation);
+        //Console.WriteLine("------------- getCode: " + type.Name + "\n" + getCode);
+
+        var invokeCode = GenerateCodeUtils.GenerateInvokeCode(classDescribe, indentation);
+        //Console.WriteLine("------------- invokeCode: " + type.Name + "\n" + invokeCode);
+
+        //替换字符串
+        var matchMethod = MatchMethod(clsStr, GenerateCodeUtils.InvokeMethodName);
+        if (matchMethod.Success)
+        {
+            clsStr = clsStr.Substring(0, matchMethod.Index) + invokeCode +
+                     clsStr.Substring(matchMethod.Index + matchMethod.Length);
+        }
+        else
+        {
+            var matchClass = MatchClass(clsStr, classDescribe.Name);
+            if (matchClass.Success)
+            {
+                var tempStr = matchClass.Value;
+                var index = tempStr.LastIndexOf('}');
+                tempStr = tempStr.Substring(0, index - classIndentation) + invokeCode + tempStr.Substring(index - classIndentation);
+                
+                clsStr = clsStr.Substring(0, matchClass.Index) + tempStr +
+                         clsStr.Substring(matchClass.Index + matchClass.Length);
+            }
+        }
         
-        var setCode = GenerateSetCode(indentation, "__SetValue", fields, properties);
-        Console.WriteLine("------------- setCode: " + type.Name + "\n" + setCode);
+        matchMethod = MatchMethod(clsStr, GenerateCodeUtils.GetValueMethodName);
+        if (matchMethod.Success)
+        {
+            clsStr = clsStr.Substring(0, matchMethod.Index) + getCode +
+                     clsStr.Substring(matchMethod.Index + matchMethod.Length);
+        }
+        else
+        {
+            var matchClass = MatchClass(clsStr, classDescribe.Name);
+            if (matchClass.Success)
+            {
+                var tempStr = matchClass.Value;
+                var index = tempStr.LastIndexOf('}');
+                tempStr = tempStr.Substring(0, index - classIndentation) + getCode + tempStr.Substring(index - classIndentation);
+                
+                clsStr = clsStr.Substring(0, matchClass.Index) + tempStr +
+                         clsStr.Substring(matchClass.Index + matchClass.Length);
+            }
+        }
         
-        var getCode = GenerateGetCode(indentation, "__GetValue", fields, properties);
-        Console.WriteLine("------------- getCode: " + type.Name + "\n" + getCode);
-        
-        var invokeCode = GenerateInvokeCode(indentation, "__InvokeMethod", fields, properties, methods);
-        Console.WriteLine("------------- invokeCode: " + type.Name + "\n" + invokeCode);
-        
-        var match = MatchMethod(clsStr, "__InvokeMethod");
+        matchMethod = MatchMethod(clsStr, GenerateCodeUtils.SetValueMethodName);
+        if (matchMethod.Success)
+        {
+            clsStr = clsStr.Substring(0, matchMethod.Index) + setCode +
+                     clsStr.Substring(matchMethod.Index + matchMethod.Length);
+        }
+        else
+        {
+            var matchClass = MatchClass(clsStr, classDescribe.Name);
+            if (matchClass.Success)
+            {
+                var tempStr = matchClass.Value;
+                var index = tempStr.LastIndexOf('}');
+                tempStr = tempStr.Substring(0, index - classIndentation) + setCode + tempStr.Substring(index - classIndentation);
+                
+                clsStr = clsStr.Substring(0, matchClass.Index) + tempStr +
+                         clsStr.Substring(matchClass.Index + matchClass.Length);
+            }
+        }
+
+        Console.WriteLine("--------------------- class\n" + clsStr);
         //Console.WriteLine(match.Value);
     }
 
-    private static string GenerateSetCode(int indentation, string method, FieldInfo[] fieldInfos, PropertyInfo[] propertyInfos)
-    {
-        var indentationStr = "";
-        for (int i = 0; i < indentation; i++)
-        {
-            indentationStr += ' ';
-        }
-        var str = indentationStr + "public virtual void " + method + "(string key, SValue value)\n";
-        str += indentationStr + "{\n";
-        
-        string caseStr = "";
 
-        for (int i = 0; i < fieldInfos.Length; i++)
-        {
-            var temp = fieldInfos[i];
-            if (temp.IsPublic && !temp.Name.EndsWith("k__BackingField"))
-            {
-                caseStr += indentationStr + $"        case \"{temp.Name}\":\n";
-                caseStr += indentationStr + $"            {temp.Name} = value;\n";
-                caseStr += indentationStr + $"            break;\n";
-            }
-        }
-        for (int i = 0; i < propertyInfos.Length; i++)
-        {
-            var temp = propertyInfos[i];
-            var setMethod = temp.SetMethod;
-            if (setMethod != null && setMethod.IsPublic)
-            {
-                caseStr += indentationStr + $"        case \"{temp.Name}\":\n";
-                caseStr += indentationStr + $"            {temp.Name} = value;\n";
-                caseStr += indentationStr + $"            break;\n";
-            }
-        }
-
-        if (!string.IsNullOrEmpty(caseStr))
-        {
-            str += indentationStr + "    switch (key)\n";
-            str += indentationStr + "    {\n";
-            str += caseStr;
-            str += indentationStr + "    }\n";
-        }
-        
-        str += indentationStr + "}\n";
-        return str;
-    }
-    
-    private static string GenerateGetCode(int indentation, string method, FieldInfo[] fieldInfos, PropertyInfo[] propertyInfos)
-    {
-        var indentationStr = "";
-        for (int i = 0; i < indentation; i++)
-        {
-            indentationStr += ' ';
-        }
-        var str = indentationStr + "public virtual SValue " + method + "(string key)\n";
-        str += indentationStr + "{\n";
-        
-        string caseStr = "";
-
-        for (int i = 0; i < fieldInfos.Length; i++)
-        {
-            var temp = fieldInfos[i];
-            if (temp.IsPublic && !temp.Name.EndsWith("k__BackingField"))
-            {
-                caseStr += indentationStr + $"        case \"{temp.Name}\":\n";
-                caseStr += indentationStr + $"            return {temp.Name};\n";
-            }
-        }
-        for (int i = 0; i < propertyInfos.Length; i++)
-        {
-            var temp = propertyInfos[i];
-            var getMethod = temp.GetMethod;
-            if (getMethod != null && getMethod.IsPublic)
-            {
-                caseStr += indentationStr + $"        case \"{temp.Name}\":\n";
-                caseStr += indentationStr + $"            return {temp.Name};\n";
-            }
-        }
-
-        if (!string.IsNullOrEmpty(caseStr))
-        {
-            str += indentationStr + "    switch (key)\n";
-            str += indentationStr + "    {\n";
-            str += caseStr;
-            str += indentationStr + "    }\n";
-        }
-        
-        str += indentationStr + "    return SValue.Null;\n";
-        str += indentationStr + "}\n";
-        return str;
-    }
-    
-    private static string GenerateInvokeCode(int indentation, string method, FieldInfo[] fieldInfos, PropertyInfo[] propertyInfos, MethodInfo[] methodInfos)
-    {
-        var indentationStr = "";
-        for (int i = 0; i < indentation; i++)
-        {
-            indentationStr += ' ';
-        }
-        var str = indentationStr + "public virtual SValue " + method + "(string key, params SValue[] ps)\n";
-        str += indentationStr + "{\n";
-        
-        string caseStr = "";
-
-        for (int i = 0; i < fieldInfos.Length; i++)
-        {
-            var temp = fieldInfos[i];
-            if (temp.IsPublic && !temp.Name.EndsWith("k__BackingField"))
-            {
-                caseStr += indentationStr + $"        case \"{temp.Name}\":\n";
-                caseStr += indentationStr + $"            return {temp.Name}.Invoke(ps);\n";
-            }
-        }
-        for (int i = 0; i < propertyInfos.Length; i++)
-        {
-            var temp = propertyInfos[i];
-            var getMethod = temp.GetMethod;
-            if (getMethod != null && getMethod.IsPublic)
-            {
-                caseStr += indentationStr + $"        case \"{temp.Name}\":\n";
-                caseStr += indentationStr + $"            return {temp.Name}.Invoke(ps);\n";
-            }
-        }
-
-        //将函数归类排列
-        var dic = new Dictionary<string, Dictionary<int, MethodInfo>>();
-        for (int i = 0; i < methodInfos.Length; i++)
-        {
-            var temp = methodInfos[i];
-            if (temp.IsPublic && !Methods.Contains(temp.Name))
-            {
-                if (!dic.TryGetValue(temp.Name, out var methodMap))
-                {
-                    methodMap = new Dictionary<int, MethodInfo>();
-                    dic.Add(temp.Name, methodMap);
-                }
-                methodMap.Add(temp.GetParameters().Length, temp);
-            }
-        }
-        
-        //拼接函数
-        foreach (var item in dic)
-        {
-            caseStr += indentationStr + $"        case \"{item.Key}\":\n";
-            caseStr += indentationStr + $"            switch (ps.Length)\n";
-            caseStr += indentationStr + "            {\n";
-            foreach (var mi in item.Value)
-            {
-                caseStr += indentationStr + $"                case {mi.Key}:\n";
-                var paramsStr = "";
-                for (int i = 0; i < mi.Key; i++)
-                {
-                    if (i > 0)
-                    {
-                        paramsStr += ", ";
-                    }
-
-                    paramsStr += "ps[" + i + "]";
-                }
-                caseStr += indentationStr + $"                    return {item.Key}({paramsStr});\n";
-            }
-            caseStr += indentationStr + "            }\n";
-            caseStr += indentationStr + "            break;\n";
-        }
-
-        if (!string.IsNullOrEmpty(caseStr))
-        {
-            str += indentationStr + "    switch (key)\n";
-            str += indentationStr + "    {\n";
-            str += caseStr;
-            str += indentationStr + "    }\n";
-        }
-        
-        str += indentationStr + "    return SValue.Null;\n";
-        str += indentationStr + "}\n";
-        return str;
-    }
-
-    
     //匹配函数代码
     private static Match MatchMethod(string code, string method)
     {
         var len = Regex.Match(Regex.Match(code, @$"[^\n]+{method}\(").Value, @"\s+").Value.Length;
-        return Regex.Match(code, @$"[^\n]+{method}\([\s\S]+\s{{{len}}}}}");
+        return Regex.Match(code, @$"[^\n]+{method}\([\s\S]+\s{{{len}}}\}}\r?\n?");
     }
     
+    //匹配函数代码
+    private static Match MatchClass(string code, string className)
+    {
+        var len = Regex.Match(Regex.Match(code, @$"[^\n]+class[\w\s]+{className}").Value, @"\s+").Value.Length;
+        return Regex.Match(code, @$"[^\n]+class[\w\s]+{className}[\s\S]+\s{{{len}}}\}}\r?\n?");
+    }
+
     //根据类名寻找源文件路径
     private static string FindFileByClsName(DirectoryInfo directoryInfo, string clsName)
     {
@@ -254,7 +149,7 @@ public static class GenerateCode
                 return item.FullName;
             }
         }
-        
+
         var directories = directoryInfo.GetDirectories();
         foreach (var item in directories)
         {
@@ -264,6 +159,7 @@ public static class GenerateCode
                 return result;
             }
         }
+
         return null;
     }
 }
