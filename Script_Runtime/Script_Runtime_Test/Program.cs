@@ -1,88 +1,7 @@
-﻿using System;
+﻿
+using System;
+using System.Collections.Generic;
 using System.Threading;
-
-public interface ISvalue
-{
-    public enum SValueType
-    {
-        /// <summary>
-        /// 空类型
-        /// </summary>
-        Null,
-
-        /// <summary>
-        /// 数字类型
-        /// </summary>
-        Number,
-
-        /// <summary>
-        /// 值为 true
-        /// </summary>
-        BooleanTrue,
-
-        /// <summary>
-        /// 值为 false
-        /// </summary>
-        BooleanFalse,
-
-        /// <summary>
-        /// 字符串类型
-        /// </summary>
-        String,
-
-        /// <summary>
-        /// 函数类型
-        /// </summary>
-        Function,
-
-        /// <summary>
-        /// 对象类型
-        /// </summary>
-        Object,
-    }
-    
-    SValueType GetValueType();
-    object GetValue();
-
-    public static ISvalue From(double num)
-    {
-        return new Number_Value();
-    }
-}
-
-public struct Func_0_Value : ISvalue
-{
-    private Func<SValue> _value;
-    public ISvalue.SValueType GetValueType()
-    {
-        return ISvalue.SValueType.Function;
-    }
-
-    public object GetValue()
-    {
-        return _value;
-    }
-}
-
-public struct Number_Value : ISvalue
-{
-    private double _value;
-    
-    public Number_Value(double value)
-    {
-        _value = value;
-    }
-    
-    public ISvalue.SValueType GetValueType()
-    {
-        return ISvalue.SValueType.Number;
-    }
-
-    public object GetValue()
-    {
-        return _value;
-    }
-}
 
 public class Program
 {
@@ -97,13 +16,83 @@ public class Program
             //Test2();
             //Test1();
             //Test4();
-            Test5();
+            //Test5();
+            Test6();
 
         }).Start();
 
         Console.Read();
     }
 
+    public static string GetKey(int i)
+    {
+        string[] keys = { "444", "555" };
+        return keys[i];
+    }
+    
+    public static void Test6()
+    {
+        string key = GetKey(1);
+        Dictionary<string, Func<object, ISValue>> obj = new Dictionary<string, Func<object, ISValue>>();
+        obj.Add("111", o => ISValue.Null);
+        obj.Add("222", o => ISValue.Null);
+        obj.Add("333", o => ISValue.Null);
+        obj.Add("444", o => ISValue.Null);
+        obj.Add("555", o => ISValue.Null);
+
+        var time5 = DateTime.Now.Ticks;
+        for (int i = 0; i < 999999; i++)
+        {
+            if (key == "111")
+            {
+
+            }
+            else if (key == "222")
+            {
+
+            }
+            else if (key == "333")
+            {
+
+            }
+            else if (key == "444")
+            {
+
+            }
+            else if (key == "555")
+            {
+
+            }
+        }
+
+        var time6 = DateTime.Now.Ticks;
+        Console.WriteLine("if 速度: " + (time6 - time5) / 10000f + "毫秒");
+        
+        var time3 = DateTime.Now.Ticks;
+        for (int i = 0; i < 999999; i++)
+        {
+            switch (key)
+            {
+                case "111": break;
+                case "222": break;
+                case "333": break;
+                case "444": break;
+                case "555": break;
+            }
+        }
+
+        var time4 = DateTime.Now.Ticks;
+        Console.WriteLine("switch 速度: " + (time4 - time3) / 10000f + "毫秒");
+
+        var time = DateTime.Now.Ticks;
+        for (int i = 0; i < 999999; i++)
+        {
+            var temp = obj[key];
+        }
+        var time2 = DateTime.Now.Ticks;
+        Console.WriteLine("字典速度: " + (time2 - time) / 10000f + "毫秒");
+    }
+    
     public static void Test5()
     {
         var time5 = DateTime.Now.Ticks;
@@ -114,19 +103,9 @@ public class Program
 
         var time6 = DateTime.Now.Ticks;
         Console.WriteLine("原生C#运行耗时(原生): " + (time6 - time5) / 10000f + "毫秒");
-        
-        var time3 = DateTime.Now.Ticks;
-        object fun = new Func<SValue>(Test);
-        for (int i = 0; i < 999999; i++)
-        {
-            ((Func<SValue>)fun)();
-        }
-
-        var time4 = DateTime.Now.Ticks;
-        Console.WriteLine("原生C#运行耗时(转型): " + (time4 - time3) / 10000f + "毫秒");
 
         var time = DateTime.Now.Ticks;
-        var test = new SValue(Test);
+        var test = ISValue.Create(Test);
         for (int i = 0; i < 999999; i++)
         {
             test.Invoke();
@@ -240,9 +219,9 @@ public class Program
         Console.WriteLine("脚本运行耗时: " + (time2 - time) / 10000f + "毫秒");
     }
 
-    public static SValue Test()
+    public static ISValue Test()
     {
-        return SValue.Null;
+        return ISValue.Null;
     }
 
 }
