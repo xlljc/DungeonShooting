@@ -1,4 +1,7 @@
 ﻿
+using System;
+using System.Collections.Generic;
+
 public struct SValue
 {
 
@@ -726,123 +729,139 @@ public struct SValue
         return Null;
     }
 
+    private static Func<object, SValue[], SValue>[] list;
+    
+    static SValue()
+    {
+        list = new Func<object, SValue[], SValue>[36];
+        list[3] = (value, ps) =>
+        {
+            AssertUtils.AssertParamsLength(0, ps.Length);
+            return ((Function_0)value)();
+        };
+    }
+    
     public SValue Invoke(params SValue[] ps)
     {
-        switch (objectType)
-        {
-            case SObjectType.Function_0:
-                AssertUtils.AssertParamsLength(0, ps.Length);
-                return ((Function_0)Value)();
-            case SObjectType.Function_1:
-                AssertUtils.AssertParamsLength(1, ps.Length);
-                return ((Function_1)Value)(ps[0]);
-            case SObjectType.Function_2:
-                AssertUtils.AssertParamsLength(2, ps.Length);
-                return ((Function_2)Value)(ps[0], ps[1]);
-            case SObjectType.Function_3:
-                AssertUtils.AssertParamsLength(3, ps.Length);
-                return ((Function_3)Value)(ps[0], ps[1], ps[2]);
-            case SObjectType.Function_4:
-                AssertUtils.AssertParamsLength(4, ps.Length);
-                return ((Function_4)Value)(ps[0], ps[1], ps[2], ps[3]);
-            case SObjectType.Function_5:
-                AssertUtils.AssertParamsLength(5, ps.Length);
-                return ((Function_5)Value)(ps[0], ps[1], ps[2], ps[3], ps[4]);
-            case SObjectType.Function_6:
-                AssertUtils.AssertParamsLength(6, ps.Length);
-                return ((Function_6)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5]);
-            case SObjectType.Function_7:
-                AssertUtils.AssertParamsLength(7, ps.Length);
-                return ((Function_7)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6]);
-            case SObjectType.Function_8:
-                AssertUtils.AssertParamsLength(8, ps.Length);
-                return ((Function_8)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7]);
-            case SObjectType.Function_9:
-                AssertUtils.AssertParamsLength(9, ps.Length);
-                return ((Function_9)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8]);
-            case SObjectType.Function_10:
-                AssertUtils.AssertParamsLength(10, ps.Length);
-                return ((Function_10)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9]);
-            case SObjectType.Function_11:
-                AssertUtils.AssertParamsLength(11, ps.Length);
-                return ((Function_11)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10]);
-            case SObjectType.Function_12:
-                AssertUtils.AssertParamsLength(12, ps.Length);
-                return ((Function_12)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10], ps[11]);
-            case SObjectType.Function_13:
-                AssertUtils.AssertParamsLength(13, ps.Length);
-                return ((Function_13)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10], ps[11], ps[12]);
-            case SObjectType.Function_14:
-                AssertUtils.AssertParamsLength(14, ps.Length);
-                return ((Function_14)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10], ps[11], ps[12], ps[13]);
-            case SObjectType.Function_15:
-                AssertUtils.AssertParamsLength(15, ps.Length);
-                return ((Function_15)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10], ps[11], ps[12], ps[13], ps[14]);
-            case SObjectType.Function_16:
-                AssertUtils.AssertParamsLength(16, ps.Length);
-                return ((Function_16)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10], ps[11], ps[12], ps[13], ps[14], ps[15]);
-            case SObjectType.Function_0_Params:
-                return ((Function_0_Params)Value)(ps);
-            case SObjectType.Function_1_Params:
-                AssertUtils.AssertParamsLength(0, ps.Length);
-                return ((Function_1_Params)Value)(ps[0], CutParams(ps, 1));
-            case SObjectType.Function_2_Params:
-                AssertUtils.AssertParamsLength(1, ps.Length);
-                return ((Function_2_Params)Value)(ps[0], ps[1], CutParams(ps, 2));
-            case SObjectType.Function_3_Params:
-                AssertUtils.AssertParamsLength(2, ps.Length);
-                return ((Function_3_Params)Value)(ps[0], ps[1], ps[2], CutParams(ps, 3));
-            case SObjectType.Function_4_Params:
-                AssertUtils.AssertParamsLength(3, ps.Length);
-                return ((Function_4_Params)Value)(ps[0], ps[1], ps[2], ps[3], CutParams(ps, 4));
-            case SObjectType.Function_5_Params:
-                AssertUtils.AssertParamsLength(4, ps.Length);
-                return ((Function_5_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], CutParams(ps, 5));
-            case SObjectType.Function_6_Params:
-                AssertUtils.AssertParamsLength(5, ps.Length);
-                return ((Function_6_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], CutParams(ps, 6));
-            case SObjectType.Function_7_Params:
-                AssertUtils.AssertParamsLength(6, ps.Length);
-                return ((Function_7_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], CutParams(ps, 7));
-            case SObjectType.Function_8_Params:
-                AssertUtils.AssertParamsLength(7, ps.Length);
-                return ((Function_8_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7],
-                    CutParams(ps, 8));
-            case SObjectType.Function_9_Params:
-                AssertUtils.AssertParamsLength(8, ps.Length);
-                return ((Function_9_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8],
-                    CutParams(ps, 9));
-            case SObjectType.Function_10_Params:
-                AssertUtils.AssertParamsLength(9, ps.Length);
-                return ((Function_10_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    CutParams(ps, 10));
-            case SObjectType.Function_11_Params:
-                AssertUtils.AssertParamsLength(10, ps.Length);
-                return ((Function_11_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10], CutParams(ps, 11));
-            case SObjectType.Function_12_Params:
-                AssertUtils.AssertParamsLength(11, ps.Length);
-                return ((Function_12_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10], ps[11], CutParams(ps, 12));
-            case SObjectType.Function_13_Params:
-                AssertUtils.AssertParamsLength(12, ps.Length);
-                return ((Function_13_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10], ps[11], ps[12], CutParams(ps, 13));
-            case SObjectType.Function_14_Params:
-                AssertUtils.AssertParamsLength(13, ps.Length);
-                return ((Function_14_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10], ps[11], ps[12], ps[13], CutParams(ps, 14));
-            case SObjectType.Function_15_Params:
-                AssertUtils.AssertParamsLength(14, ps.Length);
-                return ((Function_15_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
-                    ps[10], ps[11], ps[12], ps[13], ps[14], CutParams(ps, 15));
-        }
+        return list[3](Value, ps);
+        
+        // switch (objectType)
+        // {
+        //     case SObjectType.Function_0:
+        //         AssertUtils.AssertParamsLength(0, ps.Length);
+        //         return ((Function_0)Value)();
+        //     case SObjectType.Function_1:
+        //         AssertUtils.AssertParamsLength(1, ps.Length);
+        //         return ((Function_1)Value)(ps[0]);
+        //     case SObjectType.Function_2:
+        //         AssertUtils.AssertParamsLength(2, ps.Length);
+        //         return ((Function_2)Value)(ps[0], ps[1]);
+        //     case SObjectType.Function_3:
+        //         AssertUtils.AssertParamsLength(3, ps.Length);
+        //         return ((Function_3)Value)(ps[0], ps[1], ps[2]);
+        //     case SObjectType.Function_4:
+        //         AssertUtils.AssertParamsLength(4, ps.Length);
+        //         return ((Function_4)Value)(ps[0], ps[1], ps[2], ps[3]);
+        //     case SObjectType.Function_5:
+        //         AssertUtils.AssertParamsLength(5, ps.Length);
+        //         return ((Function_5)Value)(ps[0], ps[1], ps[2], ps[3], ps[4]);
+        //     case SObjectType.Function_6:
+        //         AssertUtils.AssertParamsLength(6, ps.Length);
+        //         return ((Function_6)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5]);
+        //     case SObjectType.Function_7:
+        //         AssertUtils.AssertParamsLength(7, ps.Length);
+        //         return ((Function_7)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6]);
+        //     case SObjectType.Function_8:
+        //         AssertUtils.AssertParamsLength(8, ps.Length);
+        //         return ((Function_8)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7]);
+        //     case SObjectType.Function_9:
+        //         AssertUtils.AssertParamsLength(9, ps.Length);
+        //         return ((Function_9)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8]);
+        //     case SObjectType.Function_10:
+        //         AssertUtils.AssertParamsLength(10, ps.Length);
+        //         return ((Function_10)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9]);
+        //     case SObjectType.Function_11:
+        //         AssertUtils.AssertParamsLength(11, ps.Length);
+        //         return ((Function_11)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10]);
+        //     case SObjectType.Function_12:
+        //         AssertUtils.AssertParamsLength(12, ps.Length);
+        //         return ((Function_12)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10], ps[11]);
+        //     case SObjectType.Function_13:
+        //         AssertUtils.AssertParamsLength(13, ps.Length);
+        //         return ((Function_13)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10], ps[11], ps[12]);
+        //     case SObjectType.Function_14:
+        //         AssertUtils.AssertParamsLength(14, ps.Length);
+        //         return ((Function_14)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10], ps[11], ps[12], ps[13]);
+        //     case SObjectType.Function_15:
+        //         AssertUtils.AssertParamsLength(15, ps.Length);
+        //         return ((Function_15)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10], ps[11], ps[12], ps[13], ps[14]);
+        //     case SObjectType.Function_16:
+        //         AssertUtils.AssertParamsLength(16, ps.Length);
+        //         return ((Function_16)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10], ps[11], ps[12], ps[13], ps[14], ps[15]);
+        //     case SObjectType.Function_0_Params:
+        //         return ((Function_0_Params)Value)(ps);
+        //     case SObjectType.Function_1_Params:
+        //         AssertUtils.AssertParamsLength(0, ps.Length);
+        //         return ((Function_1_Params)Value)(ps[0], CutParams(ps, 1));
+        //     case SObjectType.Function_2_Params:
+        //         AssertUtils.AssertParamsLength(1, ps.Length);
+        //         return ((Function_2_Params)Value)(ps[0], ps[1], CutParams(ps, 2));
+        //     case SObjectType.Function_3_Params:
+        //         AssertUtils.AssertParamsLength(2, ps.Length);
+        //         return ((Function_3_Params)Value)(ps[0], ps[1], ps[2], CutParams(ps, 3));
+        //     case SObjectType.Function_4_Params:
+        //         AssertUtils.AssertParamsLength(3, ps.Length);
+        //         return ((Function_4_Params)Value)(ps[0], ps[1], ps[2], ps[3], CutParams(ps, 4));
+        //     case SObjectType.Function_5_Params:
+        //         AssertUtils.AssertParamsLength(4, ps.Length);
+        //         return ((Function_5_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], CutParams(ps, 5));
+        //     case SObjectType.Function_6_Params:
+        //         AssertUtils.AssertParamsLength(5, ps.Length);
+        //         return ((Function_6_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], CutParams(ps, 6));
+        //     case SObjectType.Function_7_Params:
+        //         AssertUtils.AssertParamsLength(6, ps.Length);
+        //         return ((Function_7_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], CutParams(ps, 7));
+        //     case SObjectType.Function_8_Params:
+        //         AssertUtils.AssertParamsLength(7, ps.Length);
+        //         return ((Function_8_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7],
+        //             CutParams(ps, 8));
+        //     case SObjectType.Function_9_Params:
+        //         AssertUtils.AssertParamsLength(8, ps.Length);
+        //         return ((Function_9_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8],
+        //             CutParams(ps, 9));
+        //     case SObjectType.Function_10_Params:
+        //         AssertUtils.AssertParamsLength(9, ps.Length);
+        //         return ((Function_10_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             CutParams(ps, 10));
+        //     case SObjectType.Function_11_Params:
+        //         AssertUtils.AssertParamsLength(10, ps.Length);
+        //         return ((Function_11_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10], CutParams(ps, 11));
+        //     case SObjectType.Function_12_Params:
+        //         AssertUtils.AssertParamsLength(11, ps.Length);
+        //         return ((Function_12_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10], ps[11], CutParams(ps, 12));
+        //     case SObjectType.Function_13_Params:
+        //         AssertUtils.AssertParamsLength(12, ps.Length);
+        //         return ((Function_13_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10], ps[11], ps[12], CutParams(ps, 13));
+        //     case SObjectType.Function_14_Params:
+        //         AssertUtils.AssertParamsLength(13, ps.Length);
+        //         return ((Function_14_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10], ps[11], ps[12], ps[13], CutParams(ps, 14));
+        //     case SObjectType.Function_15_Params:
+        //         AssertUtils.AssertParamsLength(14, ps.Length);
+        //         return ((Function_15_Params)Value)(ps[0], ps[1], ps[2], ps[3], ps[4], ps[5], ps[6], ps[7], ps[8], ps[9],
+        //             ps[10], ps[11], ps[12], ps[13], ps[14], CutParams(ps, 15));
+        //     default:
+        //         break;
+        // }
 
         //不是function, 报错
         return Null;
