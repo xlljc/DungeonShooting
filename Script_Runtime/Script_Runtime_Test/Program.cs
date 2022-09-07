@@ -26,7 +26,7 @@ public class Program
 
     public static string GetKey(int i)
     {
-        string[] keys = { "444", "555" };
+        string[] keys = { "111", "999" };
         return keys[i];
     }
     
@@ -39,30 +39,56 @@ public class Program
         obj.Add("333", o => ISValue.Null);
         obj.Add("444", o => ISValue.Null);
         obj.Add("555", o => ISValue.Null);
+        obj.Add("666", o => ISValue.Null);
+        obj.Add("777", o => ISValue.Null);
+        obj.Add("888", o => ISValue.Null);
+        obj.Add("999", o => ISValue.Null);
 
         var time5 = DateTime.Now.Ticks;
         for (int i = 0; i < 999999; i++)
         {
-            if (key == "111")
+            var v = new Func<ISValue>(() =>
             {
+                if (key == "111")
+                {
+                    return ISValue.Null;
+                }
+                else if (key == "222")
+                {
+                    return ISValue.Null;
+                }
+                else if (key == "333")
+                {
+                    return ISValue.Null;
+                }
+                else if (key == "444")
+                {
+                    return ISValue.Null;
+                }
+                else if (key == "555")
+                {
+                    return ISValue.Null;
+                }
+                else if (key == "666")
+                {
+                    return ISValue.Null;
+                }
+                else if (key == "777")
+                {
+                    return ISValue.Null;
+                }
+                else if (key == "888")
+                {
+                    return ISValue.Null;
+                }
+                else if (key == "999")
+                {
+                    return ISValue.Null;
+                }
 
-            }
-            else if (key == "222")
-            {
+                return ISValue.Null;
+            })();
 
-            }
-            else if (key == "333")
-            {
-
-            }
-            else if (key == "444")
-            {
-
-            }
-            else if (key == "555")
-            {
-
-            }
         }
 
         var time6 = DateTime.Now.Ticks;
@@ -71,14 +97,23 @@ public class Program
         var time3 = DateTime.Now.Ticks;
         for (int i = 0; i < 999999; i++)
         {
-            switch (key)
+            var v = new Func<ISValue>(() =>
             {
-                case "111": break;
-                case "222": break;
-                case "333": break;
-                case "444": break;
-                case "555": break;
-            }
+                switch (key)
+                {
+                    case "111": return ISValue.Null;
+                    case "222": return ISValue.Null;
+                    case "333": return ISValue.Null;
+                    case "444": return ISValue.Null;
+                    case "555": return ISValue.Null;
+                    case "666": return ISValue.Null;
+                    case "777": return ISValue.Null;
+                    case "888": return ISValue.Null;
+                    case "999": return ISValue.Null;
+                }
+                return ISValue.Null;
+            })();
+
         }
 
         var time4 = DateTime.Now.Ticks;
@@ -87,7 +122,10 @@ public class Program
         var time = DateTime.Now.Ticks;
         for (int i = 0; i < 999999; i++)
         {
-            var temp = obj[key];
+            var v = new Func<ISValue>(() =>
+            {
+                return obj[key](1);
+            })();
         }
         var time2 = DateTime.Now.Ticks;
         Console.WriteLine("字典速度: " + (time2 - time) / 10000f + "毫秒");
