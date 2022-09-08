@@ -1,26 +1,24 @@
-﻿
-using System;
 
 /// <summary>
-/// 0参数回调函数
+/// 字符串
 /// </summary>
-internal class Function_0_SValue : ISValue
+internal class String_SValue : ISValue
 {
-    private Function_0 _value;
-    
-    public Function_0_SValue(Function_0 value)
+    private string _value;
+
+    public String_SValue(string value)
     {
         _value = value;
     }
     
     public SValueType GetValueType()
     {
-        return SValueType.Function;
+        return SValueType.String;
     }
 
     public SDataType GetDataType()
     {
-        return SDataType.Function_0;
+        return SDataType.String;
     }
 
     public object GetValue()
@@ -30,26 +28,26 @@ internal class Function_0_SValue : ISValue
 
     void ISValue.SetValue(object value)
     {
-        _value = (Function_0)value;
+        _value = (string)value;
     }
 
     public ISValue Invoke(params ISValue[] ps)
     {
-        return _value();
+        throw new System.NotImplementedException();
     }
 
     public ISValue InvokeMethod(string key, params ISValue[] ps)
     {
-        throw new Exception($"Property {key} is not a function!");
+        throw new System.NotImplementedException();
     }
 
     public ISValue GetProperty(string key)
     {
-        return NullSValue.Instance;
+        throw new System.NotImplementedException();
     }
 
     public void SetProperty(string key, ISValue value)
     {
-        throw new Exception($"Property {key} is not define!");
+        throw new System.NotImplementedException();
     }
 }

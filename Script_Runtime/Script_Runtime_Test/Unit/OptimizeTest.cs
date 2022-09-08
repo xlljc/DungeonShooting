@@ -13,7 +13,7 @@ public class OptimizeTest : UnitTest
     }
 
     private SDataType test1_type = SDataType.Function_15_Params;
-    //测试枚举是否影响switch性能
+    //测试枚举是否影响switch性能, 结果: 并不影响
     [Fact]
     public void Test1()
     {
@@ -92,5 +92,70 @@ public class OptimizeTest : UnitTest
                 }
             }
         });
+    }
+
+    [Fact]
+    public void Test2()
+    {
+        ExecuteTime.Run("test2", () =>
+        {
+            SValue a = new SValue(() =>
+            {
+                return SValue.Null;
+            });
+
+            for (int i = 0; i < 999999; i++)
+            {
+                a.Invoke();
+            }
+            
+        });
+    }
+
+    [Fact]
+    public void Test3()
+    {
+        ExecuteTime.Run("test3 原生C#", () =>
+        {
+            for (int i = 0; i < 999999; i++)
+            {
+                Test3_Func1("11");
+            }
+        });
+        
+        ExecuteTime.Run("test3 老写法", () =>
+        {
+            SValue func = new SValue(Test3_Func2);
+            SValue v = "11";
+            for (int i = 0; i < 999999; i++)
+            {
+                func.Invoke(v);
+            }
+        });
+        
+        ExecuteTime.Run("test3 新写法", () =>
+        {
+            var func = ISValue.Create(Test3_Func3);
+            var v = ISValue.Create("11");
+            for (int i = 0; i < 999999; i++)
+            {
+                func.Invoke(v);
+            }
+        });
+    }
+    
+    private object Test3_Func1(string str)
+    {
+        return null;
+    }
+    
+    private SValue Test3_Func2(SValue str)
+    {
+        return SValue.Null;
+    }
+    
+    private ISValue Test3_Func3(ISValue str)
+    {
+        return ISValue.Null;
     }
 }

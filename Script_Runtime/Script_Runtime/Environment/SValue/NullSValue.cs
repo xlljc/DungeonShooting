@@ -1,30 +1,22 @@
 ﻿
 using System;
 
+/// <summary>
+/// null类型
+/// </summary>
 internal class NullSValue : ISValue
 {
+    public static NullSValue Instance { get; }
 
-    public static NullSValue Instance
+    static NullSValue()
     {
-        get
-        {
-            if (_init == false)
-            {
-                _init = true;
-                _inst = new NullSValue();
-            }
-
-            return _inst;
-        }
+        Instance = new NullSValue();
     }
 
-    private static NullSValue _inst;
-    private static bool _init;
-    
     private NullSValue()
     {
     }
-    
+
     public SValueType GetValueType()
     {
         return SValueType.Null;
@@ -39,6 +31,12 @@ internal class NullSValue : ISValue
     {
         throw new NullReferenceException();
     }
+
+    void ISValue.SetValue(object value)
+    {
+        
+    }
+
 
     public ISValue Invoke(params ISValue[] ps)
     {

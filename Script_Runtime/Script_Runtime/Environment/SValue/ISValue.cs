@@ -20,6 +20,11 @@ public interface ISValue
     object GetValue();
 
     /// <summary>
+    /// 设置数据对象
+    /// </summary>
+    internal void SetValue(object value);
+
+    /// <summary>
     /// 把自己当成函数执行
     /// </summary>
     ISValue Invoke(params ISValue[] ps);
@@ -44,9 +49,25 @@ public interface ISValue
     //
     // }
 
+    #region 运算符重载
+
+    public static ISValue operator ++(ISValue v1)
+    {
+        if (v1.GetDataType() == SDataType.Number)
+        {
+            return Create((double)v1.GetValue() + 1);
+        }
+
+        return Null;
+    }
+
+    #endregion
+    
+    #region 创建ISValue
+
     public static ISValue Null => NullSValue.Instance;
 
-    public static ISValue Create(ISValue value)
+    public static ISValue Create(ref ISValue value)
     {
         return value;
     }
@@ -54,6 +75,11 @@ public interface ISValue
     public static ISValue Create(double value)
     {
         return new Number_SValue(value);
+    }
+    
+    public static ISValue Create(string value)
+    {
+        return new String_SValue(value);
     }
     
     public static ISValue Create(IObject value)
@@ -65,4 +91,11 @@ public interface ISValue
     {
         return new Function_0_SValue(value);
     }
+    
+    public static ISValue Create(Function_1 value)
+    {
+        return new Function_1_SValue(value);
+    }
+    
+    #endregion
 }

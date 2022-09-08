@@ -1,14 +1,11 @@
-﻿
+
 using System;
 
-/// <summary>
-/// 0参数回调函数
-/// </summary>
-internal class Function_0_SValue : ISValue
+public class Function_1_SValue : ISValue
 {
-    private Function_0 _value;
+    private Function_1 _value;
     
-    public Function_0_SValue(Function_0 value)
+    public Function_1_SValue(Function_1 value)
     {
         _value = value;
     }
@@ -30,12 +27,12 @@ internal class Function_0_SValue : ISValue
 
     void ISValue.SetValue(object value)
     {
-        _value = (Function_0)value;
+        _value = (Function_1)value;
     }
 
     public ISValue Invoke(params ISValue[] ps)
     {
-        return _value();
+        return _value(ps[0]);
     }
 
     public ISValue InvokeMethod(string key, params ISValue[] ps)

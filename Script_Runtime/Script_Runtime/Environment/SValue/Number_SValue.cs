@@ -4,7 +4,7 @@ using System;
 /// <summary>
 /// 数字类型
 /// </summary>
-internal struct Number_SValue : ISValue
+internal class Number_SValue : ISValue
 {
     private double _value;
     
@@ -26,6 +26,11 @@ internal struct Number_SValue : ISValue
     public object GetValue()
     {
         return _value;
+    }
+
+    void ISValue.SetValue(object value)
+    {
+        _value = (double)value;
     }
 
     public ISValue Invoke(params ISValue[] ps)

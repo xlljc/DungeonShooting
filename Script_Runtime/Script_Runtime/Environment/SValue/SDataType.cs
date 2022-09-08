@@ -24,6 +24,11 @@
     /// 数字类型
     /// </summary>
     Number,
+    
+    /// <summary>
+    /// 字符串类型
+    /// </summary>
+    String,
 
     /// <summary>
     /// true

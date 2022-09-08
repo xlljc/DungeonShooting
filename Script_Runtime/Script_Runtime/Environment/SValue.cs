@@ -610,7 +610,7 @@ public struct SValue
         objectType = SObjectType.Function_15_Params;
     }
 
-    public static SValue Null
+    public static ref readonly SValue Null
     {
         get
         {
@@ -621,14 +621,14 @@ public struct SValue
                 _false.objectType = SObjectType.Other;
             }
 
-            return _null;
+            return ref _null;
         }
     }
 
     private static bool _initNullValue;
     private static SValue _null;
 
-    public static SValue True
+    public static ref readonly SValue True
     {
         get
         {
@@ -640,14 +640,14 @@ public struct SValue
                 _true.Value = 1;
             }
 
-            return _true;
+            return ref _true;
         }
     }
 
     private static bool _initTrueValue;
     private static SValue _true;
 
-    public static SValue False
+    public static ref readonly SValue False
     {
         get
         {
@@ -659,7 +659,7 @@ public struct SValue
                 _false.Value = 0;
             }
 
-            return _false;
+            return ref _false;
         }
     }
 
@@ -742,6 +742,11 @@ public struct SValue
     
     public SValue Invoke(params SValue[] ps)
     {
+        if (objectType == SObjectType.Function_1)
+        {
+            return ((Function_1)Value)(ps[0]);
+        }
+
         switch (objectType)
         {
             case SObjectType.Function_0:
