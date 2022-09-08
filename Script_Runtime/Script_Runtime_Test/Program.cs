@@ -5,25 +5,6 @@ using System.Threading;
 
 public class Program
 {
-    public static void Main(string[] args)
-    {
-        new Thread(() =>
-        {
-            Thread.Sleep(2000);
-            Console.WriteLine("start");
-
-            //Test3();
-            //Test2();
-            //Test1();
-            //Test4();
-            //Test5();
-            Test6();
-
-        }).Start();
-
-        Console.Read();
-    }
-
     public static string GetKey(int i)
     {
         string[] keys = { "111", "999" };
