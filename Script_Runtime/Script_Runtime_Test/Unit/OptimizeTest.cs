@@ -122,7 +122,7 @@ public class OptimizeTest : UnitTest
                 Test3_Func1("11");
             }
         });
-        
+
         ExecuteTime.Run("test3 老写法", () =>
         {
             SValue func = new SValue(Test3_Func2);
@@ -142,6 +142,27 @@ public class OptimizeTest : UnitTest
                 func.Invoke(v);
             }
         });
+        
+        ExecuteTime.Run("test3 包裹回调", () =>
+        {
+            var v = ISValue.Create("11");
+            var cls = new Test3_class();
+            cls.cb = Test3_Func3;
+            for (int i = 0; i < 999999; i++)
+            {
+                cls.Invoke(v);
+            }
+        });
+    }
+
+    class Test3_class
+    {
+        public Function_1 cb;
+
+        public ISValue Invoke(ISValue ps)
+        {
+            return cb(ps);
+        }
     }
     
     private object Test3_Func1(string str)

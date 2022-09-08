@@ -26,21 +26,6 @@ internal class String_SValue : ISValue
         return _value;
     }
 
-    void ISValue.SetValue(object value)
-    {
-        _value = (string)value;
-    }
-
-    public ISValue Invoke(params ISValue[] ps)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public ISValue InvokeMethod(string key, params ISValue[] ps)
-    {
-        throw new System.NotImplementedException();
-    }
-
     public ISValue GetProperty(string key)
     {
         throw new System.NotImplementedException();

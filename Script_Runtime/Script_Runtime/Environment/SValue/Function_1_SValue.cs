@@ -25,19 +25,9 @@ public class Function_1_SValue : ISValue
         return _value;
     }
 
-    void ISValue.SetValue(object value)
+    public ISValue Invoke(ISValue v0)
     {
-        _value = (Function_1)value;
-    }
-
-    public ISValue Invoke(params ISValue[] ps)
-    {
-        return _value(ps[0]);
-    }
-
-    public ISValue InvokeMethod(string key, params ISValue[] ps)
-    {
-        throw new Exception($"Property {key} is not a function!");
+        return _value(v0);
     }
 
     public ISValue GetProperty(string key)

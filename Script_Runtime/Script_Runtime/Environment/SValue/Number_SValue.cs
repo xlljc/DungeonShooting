@@ -28,21 +28,6 @@ internal class Number_SValue : ISValue
         return _value;
     }
 
-    void ISValue.SetValue(object value)
-    {
-        _value = (double)value;
-    }
-
-    public ISValue Invoke(params ISValue[] ps)
-    {
-        return NullSValue.Instance;
-    }
-
-    public ISValue InvokeMethod(string key, params ISValue[] ps)
-    {
-        throw new Exception($"Property {key} is not a function!");
-    }
-
     public ISValue GetProperty(string key)
     {
         return NullSValue.Instance;

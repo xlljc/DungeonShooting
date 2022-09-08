@@ -6,12 +6,7 @@ using System;
 /// </summary>
 internal class NullSValue : ISValue
 {
-    public static NullSValue Instance { get; }
-
-    static NullSValue()
-    {
-        Instance = new NullSValue();
-    }
+    public static NullSValue Instance = new NullSValue();
 
     private NullSValue()
     {
@@ -28,22 +23,6 @@ internal class NullSValue : ISValue
     }
 
     public object GetValue()
-    {
-        throw new NullReferenceException();
-    }
-
-    void ISValue.SetValue(object value)
-    {
-        
-    }
-
-
-    public ISValue Invoke(params ISValue[] ps)
-    {
-        throw new NullReferenceException();
-    }
-
-    public ISValue InvokeMethod(string key, params ISValue[] ps)
     {
         throw new NullReferenceException();
     }

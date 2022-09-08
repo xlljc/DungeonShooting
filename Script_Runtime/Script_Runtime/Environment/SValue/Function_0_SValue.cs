@@ -27,20 +27,10 @@ internal class Function_0_SValue : ISValue
     {
         return _value;
     }
-
-    void ISValue.SetValue(object value)
-    {
-        _value = (Function_0)value;
-    }
-
-    public ISValue Invoke(params ISValue[] ps)
+    
+    public ISValue Invoke()
     {
         return _value();
-    }
-
-    public ISValue InvokeMethod(string key, params ISValue[] ps)
-    {
-        throw new Exception($"Property {key} is not a function!");
     }
 
     public ISValue GetProperty(string key)

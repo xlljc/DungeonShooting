@@ -4,6 +4,8 @@
 /// </summary>
 public interface ISValue
 {
+    #region 基础函数
+
     /// <summary>
     /// 获取该类在脚本中的数据类型
     /// </summary>
@@ -20,21 +22,6 @@ public interface ISValue
     object GetValue();
 
     /// <summary>
-    /// 设置数据对象
-    /// </summary>
-    internal void SetValue(object value);
-
-    /// <summary>
-    /// 把自己当成函数执行
-    /// </summary>
-    ISValue Invoke(params ISValue[] ps);
-
-    /// <summary>
-    /// 执行该对象的成员函数
-    /// </summary>
-    ISValue InvokeMethod(string key, params ISValue[] ps);
-
-    /// <summary>
     /// 获取成员属性
     /// </summary>
     ISValue GetProperty(string key);
@@ -43,13 +30,51 @@ public interface ISValue
     /// 设置成员属性
     /// </summary>
     void SetProperty(string key, ISValue value);
+    
+    #endregion
 
-    // public static SValue operator +(ISValue v1, double num)
-    // {
-    //
-    // }
+    #region 执行函数
 
-    #region 运算符重载
+    /// <summary>
+    /// 把自己当成函数执行
+    /// </summary>
+    public ISValue Invoke()
+    {
+        return _null;
+    }
+    
+    /// <summary>
+    /// 把自己当成函数执行
+    /// </summary>
+    public ISValue Invoke(ISValue v0)
+    {
+        return _null;
+    }
+
+    /// <summary>
+    /// 执行该对象的成员函数
+    /// </summary>
+    ISValue InvokeMethod(string key)
+    {
+        return _null;
+    }
+    
+    /// <summary>
+    /// 执行该对象的成员函数
+    /// </summary>
+    ISValue InvokeMethod(string key, ISValue v0)
+    {
+        return _null;
+    }
+
+    #endregion
+
+    #region 内部执行的重载处理
+
+    
+    #endregion
+
+    #region 外部调用的运算符重载
 
     public static ISValue operator ++(ISValue v1)
     {
@@ -65,7 +90,8 @@ public interface ISValue
     
     #region 创建ISValue
 
-    public static ISValue Null => NullSValue.Instance;
+    private static ISValue _null = NullSValue.Instance;
+    public static ISValue Null => _null;
 
     public static ISValue Create(ref ISValue value)
     {
