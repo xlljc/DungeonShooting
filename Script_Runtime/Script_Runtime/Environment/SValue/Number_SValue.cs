@@ -4,7 +4,7 @@ using System;
 /// <summary>
 /// 数字类型
 /// </summary>
-internal class Number_SValue : ISValue
+internal struct Number_SValue : ISValue
 {
     private double _value;
     
@@ -27,14 +27,14 @@ internal class Number_SValue : ISValue
     {
         return _value;
     }
-
-    public ISValue GetProperty(string key)
+    
+    public ISValue SinceAdd()
     {
-        return NullSValue.Instance;
+        return new Number_SValue(_value + 1);
     }
-
-    public void SetProperty(string key, ISValue value)
+    
+    public ISValue SinceReduction()
     {
-        throw new Exception($"Property {key} is not define!");
+        return new Number_SValue(_value - 1);
     }
 }

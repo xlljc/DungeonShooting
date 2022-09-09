@@ -14,12 +14,12 @@ public enum SValueType
     /// <summary>
     /// 值为 true
     /// </summary>
-    BooleanTrue,
+    True,
 
     /// <summary>
     /// 值为 false
     /// </summary>
-    BooleanFalse,
+    False,
 
     /// <summary>
     /// 字符串类型

@@ -25,14 +25,4 @@ internal class String_SValue : ISValue
     {
         return _value;
     }
-
-    public ISValue GetProperty(string key)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void SetProperty(string key, ISValue value)
-    {
-        throw new System.NotImplementedException();
-    }
 }

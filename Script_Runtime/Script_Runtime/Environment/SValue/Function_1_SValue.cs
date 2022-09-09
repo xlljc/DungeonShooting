@@ -1,6 +1,4 @@
 
-using System;
-
 public class Function_1_SValue : ISValue
 {
     private Function_1 _value;
@@ -28,15 +26,5 @@ public class Function_1_SValue : ISValue
     public ISValue Invoke(ISValue v0)
     {
         return _value(v0);
-    }
-
-    public ISValue GetProperty(string key)
-    {
-        return NullSValue.Instance;
-    }
-
-    public void SetProperty(string key, ISValue value)
-    {
-        throw new Exception($"Property {key} is not define!");
     }
 }

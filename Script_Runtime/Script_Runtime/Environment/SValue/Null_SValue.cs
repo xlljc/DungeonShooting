@@ -4,14 +4,8 @@ using System;
 /// <summary>
 /// null类型
 /// </summary>
-internal class NullSValue : ISValue
+internal class Null_SValue : ISValue
 {
-    public static NullSValue Instance = new NullSValue();
-
-    private NullSValue()
-    {
-    }
-
     public SValueType GetValueType()
     {
         return SValueType.Null;
@@ -24,15 +18,15 @@ internal class NullSValue : ISValue
 
     public object GetValue()
     {
-        throw new NullReferenceException();
+        return null;
     }
 
-    public ISValue GetProperty(string key)
+    public ISValue GetMember(string key)
     {
         throw new NullReferenceException();
     }
 
-    public void SetProperty(string key, ISValue value)
+    public void SetMember(string key, ISValue value)
     {
         throw new NullReferenceException();
     }

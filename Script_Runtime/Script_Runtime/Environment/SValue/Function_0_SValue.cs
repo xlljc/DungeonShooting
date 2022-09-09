@@ -32,14 +32,4 @@ internal class Function_0_SValue : ISValue
     {
         return _value();
     }
-
-    public ISValue GetProperty(string key)
-    {
-        return NullSValue.Instance;
-    }
-
-    public void SetProperty(string key, ISValue value)
-    {
-        throw new Exception($"Property {key} is not define!");
-    }
 }

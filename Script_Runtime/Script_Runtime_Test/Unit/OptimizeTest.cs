@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Reflection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -13,6 +14,7 @@ public class OptimizeTest : UnitTest
     }
 
     private SDataType test1_type = SDataType.Function_15_Params;
+    
     //测试枚举是否影响switch性能, 结果: 并不影响
     [Fact]
     public void Test1()
@@ -94,25 +96,57 @@ public class OptimizeTest : UnitTest
         });
     }
 
-    [Fact]
+    [Fact(DisplayName = "测试自加自减性能")]
     public void Test2()
     {
-        ExecuteTime.Run("test2", () =>
+        ExecuteTime.Run("test3 原生C#", () =>
         {
-            SValue a = new SValue(() =>
-            {
-                return SValue.Null;
-            });
-
+            var a = 0;
             for (int i = 0; i < 999999; i++)
             {
-                a.Invoke();
+                a++;
             }
-            
+        });
+        
+        ExecuteTime.Run("test3 创建对象", () =>
+        {
+            SValue a = 0;
+            for (int i = 0; i < 999999; i++)
+            {
+                new Test2_Class(i);
+            }
+        });
+        
+        ExecuteTime.Run("test3 老写法", () =>
+        {
+            SValue a = 0;
+            for (int i = 0; i < 999999; i++)
+            {
+                a++;
+            }
+        });
+        
+        ExecuteTime.Run("test3 新写法", () =>
+        {
+            var a = ISValue.Create(0);
+            for (int i = 0; i < 999999; i++)
+            {
+                a++;
+            }
         });
     }
 
-    [Fact]
+    private struct Test2_Class
+    {
+        private double i;
+
+        public Test2_Class(double i)
+        {
+            this.i = i;
+        }
+    }
+
+    [Fact(DisplayName = "测试函数执行性能")]
     public void Test3()
     {
         ExecuteTime.Run("test3 原生C#", () =>
@@ -120,6 +154,15 @@ public class OptimizeTest : UnitTest
             for (int i = 0; i < 999999; i++)
             {
                 Test3_Func1("11");
+            }
+        });
+        
+        ExecuteTime.Run("test3 反射C#", () =>
+        {
+            var method = GetType().GetMethod("Test3_Func1", BindingFlags.Instance | BindingFlags.NonPublic);
+            for (int i = 0; i < 999999; i++)
+            {
+                method.Invoke(this, new object[]{ "11" });
             }
         });
 
@@ -142,29 +185,9 @@ public class OptimizeTest : UnitTest
                 func.Invoke(v);
             }
         });
-        
-        ExecuteTime.Run("test3 包裹回调", () =>
-        {
-            var v = ISValue.Create("11");
-            var cls = new Test3_class();
-            cls.cb = Test3_Func3;
-            for (int i = 0; i < 999999; i++)
-            {
-                cls.Invoke(v);
-            }
-        });
     }
 
-    class Test3_class
-    {
-        public Function_1 cb;
 
-        public ISValue Invoke(ISValue ps)
-        {
-            return cb(ps);
-        }
-    }
-    
     private object Test3_Func1(string str)
     {
         return null;
