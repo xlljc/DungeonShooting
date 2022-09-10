@@ -4,7 +4,7 @@
 /// </summary>
 internal class String_SValue : ISValue
 {
-    private string _value;
+    internal string _value;
 
     public String_SValue(string value)
     {

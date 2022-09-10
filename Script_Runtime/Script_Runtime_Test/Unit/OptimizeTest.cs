@@ -107,7 +107,7 @@ public class OptimizeTest : UnitTest
                 a++;
             }
         });
-        
+
         ExecuteTime.Run("test3 创建对象", () =>
         {
             SValue a = 0;
@@ -116,7 +116,7 @@ public class OptimizeTest : UnitTest
                 new Test2_Class(i);
             }
         });
-        
+
         ExecuteTime.Run("test3 老写法", () =>
         {
             SValue a = 0;
@@ -125,7 +125,7 @@ public class OptimizeTest : UnitTest
                 a++;
             }
         });
-        
+
         ExecuteTime.Run("test3 新写法", () =>
         {
             var a = ISValue.Create(0);
@@ -201,5 +201,33 @@ public class OptimizeTest : UnitTest
     private ISValue Test3_Func3(ISValue str)
     {
         return ISValue.Null;
+    }
+    
+    [Fact(DisplayName = "测试循环性能")]
+    public void Test4()
+    {
+        ExecuteTime.Run("test4 原生C#", () =>
+        {
+            for (int i = 0; i < 999999; i++)
+            {
+                
+            }
+        });
+
+        ExecuteTime.Run("test4 老写法", () =>
+        {
+            for (SValue i = 0; i < 999999; i++)
+            {
+
+            }
+        });
+
+        ExecuteTime.Run("test4 新写法", () =>
+        {
+            for (ISValue i = ISValue.Create(0); i < 999999; i++)
+            {
+
+            }
+        });
     }
 }

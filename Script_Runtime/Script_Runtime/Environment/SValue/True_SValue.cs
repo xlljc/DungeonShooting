@@ -18,4 +18,15 @@ internal class True_SValue : ISValue
     {
         return true;
     }
+    
+    public bool Operator_True()
+    {
+        return true;
+    }
+
+    public bool Operator_False()
+    {
+        return false;
+    }
+    
 }

@@ -88,7 +88,7 @@ public interface ISValue
     /// <summary>
     /// 自加
     /// </summary>
-    ISValue SinceAdd()
+    ISValue Operator_SinceAdd()
     {
         return NaN;
     }
@@ -96,9 +96,113 @@ public interface ISValue
     /// <summary>
     /// 自减
     /// </summary>
-    ISValue SinceReduction()
+    ISValue Operator_SinceReduction()
     {
         return NaN;
+    }
+    
+    /// <summary>
+    /// 大于
+    /// </summary>
+    ISValue Operator_Greater_ISValue_Double(double v2)
+    {
+        return False;
+    }
+    
+    /// <summary>
+    /// 小于
+    /// </summary>
+    ISValue Operator_Less_ISValue_Double(double v2)
+    {
+        return False;
+    }    
+    /// <summary>
+    /// 大于
+    /// </summary>
+    ISValue Operator_Greater_ISValue_ISValue(ISValue v2)
+    {
+        return False;
+    }
+    
+    /// <summary>
+    /// 小于
+    /// </summary>
+    ISValue Operator_Less_ISValue_ISValue(ISValue v2)
+    {
+        return False;
+    }
+    
+    //
+    /// <summary>
+    /// 大于等于
+    /// </summary>
+    ISValue Operator_Greater_Equal_ISValue_Double(double v2)
+    {
+        return False;
+    }
+    
+    /// <summary>
+    /// 小于等于
+    /// </summary>
+    ISValue Operator_Less_Equal_ISValue_Double(double v2)
+    {
+        return False;
+    }    
+    /// <summary>
+    /// 大于等于
+    /// </summary>
+    ISValue Operator_Greater_Equal_ISValue_ISValue(ISValue v2)
+    {
+        return False;
+    }
+    
+    /// <summary>
+    /// 正数
+    /// </summary>
+    ISValue Operator_Positive()
+    {
+        return this;
+    }
+    
+    /// <summary>
+    /// 负数
+    /// </summary>
+    ISValue Operator_Negative()
+    {
+        return NaN;
+    }
+    
+    /// <summary>
+    /// 取反
+    /// </summary>
+    ISValue Operator_Not()
+    {
+        return True;
+    }
+    
+    /// <summary>
+    /// 小于等于
+    /// </summary>
+    ISValue Operator_Less_Equal_ISValue_ISValue(ISValue v2)
+    {
+        return False;
+    }
+    //
+
+    /// <summary>
+    /// 判断true
+    /// </summary>
+    bool Operator_True()
+    {
+        return true;
+    }
+    
+    /// <summary>
+    /// 判断false
+    /// </summary>
+    bool Operator_False()
+    {
+        return false;
     }
     
     #endregion
@@ -107,14 +211,101 @@ public interface ISValue
 
     public static ISValue operator ++(ISValue v1)
     {
-        return v1.SinceAdd();
+        return v1.Operator_SinceAdd();
     }
     
     public static ISValue operator --(ISValue v1)
     {
-        return v1.SinceReduction();
+        return v1.Operator_SinceReduction();
     }
 
+    public static ISValue operator >(ISValue v1, double v2)
+    {
+        return v1.Operator_Greater_ISValue_Double(v2);
+    }
+    
+    public static ISValue operator >(double v1, ISValue v2)
+    {
+        return v2.Operator_Less_Equal_ISValue_Double(v1);
+    }
+
+    public static ISValue operator >(ISValue v1, ISValue v2)
+    {
+        return v1.Operator_Greater_ISValue_ISValue(v2);
+    }
+    
+    public static ISValue operator <(ISValue v1, double v2)
+    {
+        return v1.Operator_Less_ISValue_Double(v2);
+    }
+    
+    public static ISValue operator <(double v1, ISValue v2)
+    {
+        return v2.Operator_Greater_Equal_ISValue_Double(v1);
+    }
+    
+    public static ISValue operator <(ISValue v1, ISValue v2)
+    {
+        return v1.Operator_Less_ISValue_ISValue(v2);
+    }
+
+    //
+    public static ISValue operator >=(ISValue v1, double v2)
+    {
+        return v1.Operator_Greater_Equal_ISValue_Double(v2);
+    }
+    
+    public static ISValue operator >=(double v1, ISValue v2)
+    {
+        return v2.Operator_Less_ISValue_Double(v1);
+    }
+
+    public static ISValue operator >=(ISValue v1, ISValue v2)
+    {
+        return v1.Operator_Greater_Equal_ISValue_ISValue(v2);
+    }
+    
+    public static ISValue operator <=(ISValue v1, double v2)
+    {
+        return v1.Operator_Less_Equal_ISValue_Double(v2);
+    }
+    
+    public static ISValue operator <=(double v1, ISValue v2)
+    {
+        return v2.Operator_Greater_ISValue_Double(v1);
+    }
+    
+    public static ISValue operator <=(ISValue v1, ISValue v2)
+    {
+        return v1.Operator_Less_Equal_ISValue_ISValue(v2);
+    }
+    //
+    
+    public static ISValue operator +(ISValue v1)
+    {
+        return v1.Operator_Positive();
+    }
+    
+    public static ISValue operator -(ISValue v1)
+    {
+        return v1.Operator_Negative();
+    }
+    
+    public static ISValue operator !(ISValue v1)
+    {
+        return v1.Operator_Not();
+    }
+    
+    public static bool operator true(ISValue v1)
+    {
+        return v1.Operator_True();
+    }
+
+    public static bool operator false(ISValue v1)
+    {
+        return v1.Operator_False();
+    }
+    
     #endregion
     
     #region 创建ISValue
@@ -157,6 +348,11 @@ public interface ISValue
     public static ISValue Create(string value)
     {
         return new String_SValue(value);
+    }
+    
+    public static ISValue Create(bool value)
+    {
+        return value ? True : False;
     }
     
     public static ISValue Create(IObject value)
