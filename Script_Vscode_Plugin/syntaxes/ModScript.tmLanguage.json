@@ -1,0 +1,55 @@
+{
+  "fileTypes": [
+    "ms",
+    "msd"
+  ],
+  "scopeName": "source.ModScript",
+  "name": "ModScript",
+  "patterns": [
+    {
+      "match": "(//).*$\\n?",
+      "name": "comment.line.number-sign.ModScript"
+    },
+    {
+      "begin": "/\\*",
+      "end": "\\*/",
+      "name": "comment.block.number-sign.ModScript"
+    },
+    {
+      "include": "#comment-block"
+    },
+    {
+      "match": "\\b(?i:var|namespace|this|class|extends|func|get|set|import|static|new|return|for|switch|case|break|default|while|do|is|repeat|null|true|false|readonly|enum|private|super|if|else|continue|any|object|number|boolean|typeof|string)\\b",
+      "name": "keyword.letter"
+    },
+    {
+      "begin": "\\\"",
+      "end": "\\\"",
+      "name": "string.quoted.ModScript"
+    },
+    {
+      "match": "\\b(?i:0x\\h*)\\b",
+      "name": "constant.numeric.integer.hexadecimal.ModScript"
+    },
+    {
+      "match": "\\b(?i:(\\d+\\.\\d*(e[\\-\\+]?\\d+)?))\\b",
+      "name": "constant.numeric.float.ModScript"
+    },
+    {
+      "match": "\\b(?i:(\\.\\d+(e[\\-\\+]?\\d+)?))\\b",
+      "name": "constant.numeric.float.ModScript"
+    },
+    {
+      "match": "\\b(?i:(\\d+e[\\-\\+]?\\d+))\\b",
+      "name": "constant.numeric.float.ModScript"
+    },
+    {
+      "match": "\\b\\d+\\b",
+      "name": "constant.numeric.integer.ModScript"
+    },
+    {
+      "match": "\\b([A-Za-z_]\\w*)\\b(?=\\s*(?:[(]))",
+      "name": "entity.name.function.ModScript"
+    }
+  ]
+}

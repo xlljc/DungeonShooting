@@ -9,7 +9,6 @@ import system;
 
 //除导入语句外, 脚本第一句必须是这个, 定义该文件所属的命名空间, 但是可以忽略, 默认为 global 命名空间
 namespace example.defineClass;
-
 /*
 这一句也必须写在文件的开头, 在声明 namespace 之后, 
 在命名空间 example.defineClass 下声明一个叫 MyClass 的类, 继承自 Behavior 类
@@ -19,23 +18,23 @@ class MyClass extends Behavior;
 
 //在类中声明一个 a 变量, a 如果不赋值的话就默认为 null
 var a;
-var b = 1.5;
+var b: number = 1.5;
 var c = null;
 private var d = true; //私有属性
 readonly var e = false; //只读属性
 
 //在类中声明一个叫 length 的 get 属性, get 属性必须有返回值
-get length {
+get length() {
     return b;
 }
 //在类中声明一个叫 length 的 set 属性, set 属性设置的数据变量叫 param
 //param 关键字只能出现在 set 属性中, 并且只读
-set length {
-    b = param;
+set length(val: object) {
+    b = val;
 }
 
 //在类中声明一个 say 的函数, 并且支持传入一个参数
-func say(str) {
+func say(str: string) {
     var message = "say: " + str;
     print(message);
 }
@@ -47,7 +46,7 @@ func say() {
 //声明可变参数类型重载
 //因为重载是根据参数长度来的, 可变参数就意味着参数至少为 0 个至多为无限个, 因此如果声明了可变参数, 声明的其他重载参数长度必须要小于等于可变参数的位置索引
 //例如: 声明了 say(a, ...b), 那么就不能再声明参数长度为2或者更长的重载了
-func say(target, ...args) {
+func say(target: string, ...args: string[]) {
     var length = args.length;
     print("length: " + length);
 }
@@ -58,7 +57,7 @@ func new() {
 
 }
 //构造继承, 构造函数继承该类的无参构造函数
-func new(message) extends new() {
+func new(message: string) extends new() {
     print("创建了MyClass, message: " + message);
 }
 
@@ -91,7 +90,7 @@ private func grammarExample() {
 	//执行函数
 	f1(1);
 	//将成员函数存入变量
-	var f2 = expression(say, 0);
+	var f2: func(string) = func(say, string);
 	////数组
 	var array = [1, 2, "str"];
 	//匿名对象, 无法扩展和删除属性, 只能对已有的属性进行赋值

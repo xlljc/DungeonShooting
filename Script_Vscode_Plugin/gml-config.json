@@ -1,0 +1,488 @@
+{
+  "fileTypes": ["gml"],
+	"name": "GameMaker Language(GameMaker Studio 2)",
+  "scopeName": "source.gml-gms2",
+	"patterns": [
+      {
+         "match": "^///.*$",
+         "name": "comment.block.documentation.gml"
+      },
+      {
+         "match": "//.*$",
+         "name": "comment.line.double-slash.gml"
+      },
+      {
+         "begin": "/\\*",
+         "end": "\\*/",
+         "name": "comment.block.gml"
+      },
+      {
+        "match": "#\\b(region|endregion).*$",
+        "name": "comment.region.block.gml"
+      },
+      {
+         "begin": "\\'",
+         "end": "\\'",
+         "name": "string.quoted.single.gml"
+      },
+      {
+         "begin": "\\\"",
+         "end": "\\\"",
+         "name": "string.quoted.double.gml"
+      },
+      {
+         "match": "(?i)\\b(argument_(relitive|count)|argument(9|8|7|6|5|4|3|2|15|14|13|12|11|10|1|0)|argument)\\b",
+         "name": "variable.parameter.gml"
+      },
+      {
+         "match": "\\b(\\$[0-9]*)\\b",
+         "name": "constant.numeric.hex.gml"
+      },
+      {
+         "match": "\\b([0-9]+[.][0-9]+)\\b",
+         "name": "constant.numeric.real.gml"
+      },
+      {
+         "match": "\\b([0-9]+)\\b",
+         "name": "constant.numeric.gml"
+      },
+      {
+         "match": "(?i)\\b(if|else|switch|case|default|break|for|repeat|while|do|until|continue|exit|return|with)\\b",
+         "name": "keyword.control.gml"
+      },
+      {
+         "match": "\\[\\#|\\[\\?|\\[@|\\[|\\]|\\-|\\+|\\||=|%|\\^|&|\\*|!|<|>|:|/",
+         "name": "keyword.operator.character.gml"
+      },
+      {
+         "match": "\\b(and|or|xor|not)\\b",
+         "name": "keyword.operator.word.gml"
+      },
+      {
+         "match": ";|,|\\(|\\)|\\{|\\}|\\.",
+         "name": "keyword.other.gml"
+      },
+      {
+         "match": "(?i)\\b(all|noone|true|false|undefined)\\b",
+         "name": "constant.language.gml"
+      },
+      {
+         "begin": "\\b(((global)?var)|(enum))\\b",
+         "beginCaptures": {
+           "1": {
+             "name": "storage.type.gml"
+           }
+         },
+         "end": "(?=\\S)",
+         "endCaptures": {
+            "0": {
+              "name": "variable.other.gml"
+            }
+         }
+      },
+      {
+         "match": "(?i)\\b(global|local|self|other)\\b",
+         "name": "varable.language.gml"
+      },
+      {
+         "match": "(?i)\\b((obj|scr|spr|rm)_\\w+)\\b",
+         "name": "variable.other.gml"
+      },
+      {
+        "match": "(?i)\\b((obj|scr|spr|rm)\\w+)\\b",
+        "name": "variable.other.gml"
+      },
+      {
+         "match": "(?x)\\b(is_(real|string|array|undefined|int32|int64|ptr|vec3|vec4|matrix|bool))\\b",
+         "name": "support.function.is.gml"
+     },
+     {
+         "match": "(?x)\\b(variable_global_exists|variable_global_get|variable_global_set|variable_instance_exists|variable_instance_get|variable_instance_set)\\b",
+         "name": "support.function.variable.gml"
+     },
+     {
+         "match": "(?x)\\b(random|random_range|irandom|irandom_range|random_set_seed|random_get_seed|randomize|randomise)\\b",
+         "name": "support.function.random.gml"
+     },
+     {
+         "match": "(?x)\\b(array_(length_1d|length_2d|height_2d|equals|create|copy))\\b",
+         "name": "support.function.array.gml"
+     },
+     {
+         "match": "(?x)\\b(dot_product|dot_product_3d|dot_product_normalised|dot_product_3d_normalised|dot_product_normalized|dot_product_3d_normalized)\\b",
+         "name": "support.function.dot.gml"
+     },
+     {
+         "match": "(?x)\\b(lengthdir_(x|y)|real|string|int64|ptr|chr|ansi_char|ord|string_(format|length|byte_length|pos|copy|char_at|ord_at|byte_at|set_byte_at|delete|insert|lower|upper|repeat|letters|digits|lettersdigits|replace|replace_all|count|hash_to_newline))\\b",
+         "name": "support.function.string.gml"
+     },
+     {
+         "match": "(?x)\\b(date_(current_datetime|create_datetime|valid_datetime|inc_year|inc_month|inc_week|inc_day|inc_hour|inc_minute|inc_second|get_year|get_month|get_week|get_day|get_hour|get_minute|get_second|get_weekday|get_day_of_year|get_hour_of_year|get_minute_of_year|get_second_of_year|year_span|month_span|week_span|day_span|hour_span|minute_span|second_span|compare_datetime|compare_date|compare_time|of|time_of|datetime_string|string|time_string|days_in_month|days_in_year|leap_year|is_today|set_timezone|get_timezone))\\b",
+         "name": "support.function.date.gml"
+     },
+     {
+         "match": "(?x)\\b(motion_(set|add)|place_(free|empty|meeting|snapped)|move_(random|snap|towards_point|contact_solid|contact_all|outside_solid|outside_all|bounce_solid|bounce_all|wrap)|distance_(to_point|to_object)|position_(empty|meeting)|path_(start|end)|mp_(linear_step|potential_step|linear_step_object|potential_step_object|potential_settings|linear_path|potential_path|linear_path_object|potential_path_object|grid_create|grid_destroy|grid_clear_all|grid_clear_cell|grid_clear_rectangle|grid_add_cell|grid_get_cell|grid_add_rectangle|grid_add_instances|grid_path|grid_draw|grid_to_ds_grid))\\b",
+         "name": "support.function.motion.gml"
+     },
+     {
+         "match": "(?x)\\b(collision_(point|rectangle|circle|ellipse|line))\\b",
+         "name": "support.function.collision.gml"
+     },
+     {
+         "match": "(?x)\\b(instance_(find|exists|number|position|nearest|furthest|place|create_depth|create_layer|copy|change|destroy|position_destroy|position_change|id_get|deactivate_all|deactivate_object|deactivate_region|activate_all|activate_object|activate_region))\\b",
+         "name": "support.function.instance.gml"
+     },
+     {
+         "match": "(?x)\\b(room_(goto|goto_previous|goto_next|previous|next|restart))\\b",
+         "name": "support.function.room.gml"
+     },
+     {
+         "match": "(?x)\\b(draw_(self|sprite|sprite_pos|sprite_ext|sprite_stretched|sprite_stretched_ext|sprite_tiled|sprite_tiled_ext|sprite_part|sprite_part_ext|sprite_general|clear|clear_alpha|point|line|line_width|rectangle|roundrect|roundrect_ext|triangle|circle|ellipse|set_circle_precision|arrow|button|path|healthbar|getpixel|getpixel_ext|set_colour|set_color|set_alpha|get_colour|get_color|get_alpha|set_font|set_halign|set_valign|text|text_ext|text_transformed|text_ext_transformed|text_colour|text_ext_colour|text_transformed_colour|text_ext_transformed_colour|text_color|text_ext_color|text_transformed_color|text_ext_transformed_color|point_colour|line_colour|line_width_colour|rectangle_colour|roundrect_colour|roundrect_colour_ext|triangle_colour|circle_colour|ellipse_colour|point_color|line_color|line_width_color|rectangle_color|roundrect_color|roundrect_color_ext|triangle_color|circle_color|ellipse_color|primitive_begin|vertex|vertex_colour|vertex_color|primitive_end|texture_flush|flush))\\b",
+         "name": "support.function.draw.gml"
+     },
+     {
+         "match": "(?x)\\b(window_(set_fullscreen|get_fullscreen|set_caption|set_min_width|set_max_width|set_min_height|set_max_height|get_visible_rects|get_caption|set_cursor|get_cursor|set_colour|get_colour|set_color|get_color|set_position|set_size|set_rectangle|center|get_x|get_y|get_width|get_height|mouse_get_x|mouse_get_y|mouse_set|view_mouse_get_x|view_mouse_get_y|views_mouse_get_x|views_mouse_get_y))\\b",
+         "name": "support.function.window.gml"
+     },
+     {
+         "match": "(?x)\\b(audio_(listener_position|listener_velocity|listener_orientation|emitter_position|emitter_create|emitter_free|emitter_exists|emitter_pitch|emitter_velocity|emitter_falloff|emitter_gain|play_sound|play_sound_on|play_sound_at|stop_sound|resume_music|music_is_playing|resume_sound|pause_sound|pause_music|channel_num|sound_length|get_type|falloff_set_model|play_music|stop_music|master_gain|music_gain|sound_gain|sound_pitch|stop_all|resume_all|pause_all|is_playing|is_paused|exists|emitter_get_gain|emitter_get_pitch|emitter_get_x|emitter_get_y|emitter_get_z|emitter_get_vx|emitter_get_vy|emitter_get_vz|listener_set_position|listener_set_velocity|listener_set_orientation|listener_get_data|set_master_gain|get_master_gain|sound_get_gain|sound_get_pitch|get_name|sound_set_track_position|sound_get_track_position|create_stream|destroy_stream|create_sync_group|destroy_sync_group|play_in_sync_group|start_sync_group|stop_sync_group|pause_sync_group|resume_sync_group|sync_group_get_track_pos|sync_group_debug|sync_group_is_playing|debug|group_load|group_unload|group_is_loaded|group_load_progress|group_name|group_stop_all|group_set_gain|create_buffer_sound|free_buffer_sound|create_play_queue|free_play_queue|queue_sound|get_recorder_count|get_recorder_info|start_recording|stop_recording|sound_get_listener_mask|emitter_get_listener_mask|get_listener_mask|sound_set_listener_mask|emitter_set_listener_mask|set_listener_mask|get_listener_count|get_listener_info|system))\\b",
+         "name": "support.function.audio.gml"
+     },
+     {
+         "match": "(?x)\\b(win8_(livetile_tile_notification|livetile_tile_clear|livetile_badge_notification|livetile_badge_clear|livetile_queue_enable|secondarytile_pin|secondarytile_badge_notification|secondarytile_delete|livetile_notification_begin|livetile_notification_secondary_begin|livetile_notification_expiry|livetile_notification_tag|livetile_notification_text_add|livetile_notification_image_add|livetile_notification_end|appbar_enable|appbar_add_element|appbar_remove_element|settingscharm_add_entry|settingscharm_add_html_entry|settingscharm_add_xaml_entry|settingscharm_set_xaml_property|settingscharm_get_xaml_property|settingscharm_remove_entry|share_image|share_screenshot|share_file|share_url|share_text|search_enable|search_disable|search_add_suggestions|device_touchscreen_available|license_initialize_sandbox|license_trial_version)|winphone_(license_trial_version|tile_title|tile_count|tile_back_title|tile_back_content|tile_back_content_wide|tile_front_image|tile_front_image_small|tile_front_image_wide|tile_back_image|tile_back_image_wide|tile_background_colour|tile_background_color|tile_icon_image|tile_small_icon_image|tile_wide_content|tile_cycle_images|tile_small_background_image))\\b",
+         "name": "support.function.winphone.gml"
+     },
+     {
+         "match": "(?x)\\b(physics_(world_create|world_gravity|world_update_speed|world_update_iterations|world_draw_debug|pause_enable|fixture_create|fixture_set_kinematic|fixture_set_density|fixture_set_awake|fixture_set_restitution|fixture_set_friction|fixture_set_collision_group|fixture_set_sensor|fixture_set_linear_damping|fixture_set_angular_damping|fixture_set_circle_shape|fixture_set_box_shape|fixture_set_edge_shape|fixture_set_polygon_shape|fixture_set_chain_shape|fixture_add_point|fixture_bind|fixture_bind_ext|fixture_delete|apply_force|apply_impulse|apply_angular_impulse|apply_local_force|apply_local_impulse|apply_torque|mass_properties|draw_debug|test_overlap|remove_fixture|set_friction|set_density|set_restitution|get_friction|get_density|get_restitution|joint_distance_create|joint_rope_create|joint_revolute_create|joint_prismatic_create|joint_pulley_create|joint_wheel_create|joint_weld_create|joint_friction_create|joint_gear_create|joint_enable_motor|joint_get_value|joint_set_value|joint_delete|particle_create|particle_delete|particle_delete_region_circle|particle_delete_region_box|particle_delete_region_poly|particle_set_flags|particle_set_category_flags|particle_draw|particle_draw_ext|particle_count|particle_get_data|particle_get_data_particle|particle_group_begin|particle_group_circle|particle_group_box|particle_group_polygon|particle_group_add_point|particle_group_end|particle_group_join|particle_group_delete|particle_group_count|particle_group_get_data|particle_group_get_mass|particle_group_get_inertia|particle_group_get_centre_x|particle_group_get_centre_y|particle_group_get_vel_x|particle_group_get_vel_y|particle_group_get_ang_vel|particle_group_get_x|particle_group_get_y|particle_group_get_angle|particle_set_group_flags|particle_get_group_flags|particle_get_max_count|particle_get_radius|particle_get_density|particle_get_damping|particle_get_gravity_scale|particle_set_max_count|particle_set_radius|particle_set_density|particle_set_damping|particle_set_gravity_scale))\\b",
+         "name": "support.function.physics.gml"
+     },
+     {
+         "match": "(?x)\\b(layer_(get_id|get_id_at_depth|get_depth|create|destroy|destroy_instances|add_instance|has_instance|set_visible|get_visible|exists|x|y|get_x|get_y|hspeed|vspeed|get_hspeed|get_vspeed|script_begin|script_end|shader|get_script_begin|get_script_end|get_shader|set_target_room|get_target_room|reset_target_room|get_all|get_all_elements|get_name|depth|get_element_layer|get_element_type|element_move|force_draw_depth|is_draw_depth_forced|get_forced_depth|background_get_id|background_exists|background_create|background_destroy|background_visible|background_change|background_htiled|background_vtiled|background_xscale|background_yscale|background_blend|background_alpha|background_index|background_speed|background_get_visible|background_get_sprite|background_get_htiled|background_get_vtiled|background_get_xscale|background_get_yscale|background_get_blend|background_get_alpha|background_get_index|background_get_speed|sprite_get_id|sprite_exists|sprite_create|sprite_destroy|sprite_change|sprite_index|sprite_speed|sprite_xscale|sprite_yscale|sprite_angle|sprite_blend|sprite_alpha|sprite_x|sprite_y|sprite_get_sprite|sprite_get_index|sprite_get_speed|sprite_get_xscale|sprite_get_yscale|sprite_get_angle|sprite_get_blend|sprite_get_alpha|sprite_get_x|sprite_get_y|tilemap_get_id|tilemap_exists|tilemap_create|tilemap_destroy))\\b",
+         "name": "support.function.layer.gml"
+     },
+     {
+         "match": "(?x)\\b(skeleton_(animation_set|animation_get|animation_mix|animation_set_ext|animation_get_ext|animation_get_duration|animation_get_frames|animation_clear|skin_set|skin_get|attachment_set|attachment_get|attachment_create|collision_draw_set|bone_data_get|bone_data_set|bone_state_get|bone_state_set|get_minmax|get_num_bounds|get_bounds|animation_get_frame|animation_set_frame|animation_list|skeleton_skin_list|skeleton_slot_data))\\b",
+         "name": "support.function.skeleton.gml"
+     },
+     {
+         "match": "(?x)\\b(steam_(activate_overlay|is_overlay_enabled|is_overlay_activated|get_persona_name|initialised|is_cloud_enabled_for_app|is_cloud_enabled_for_account|file_persisted|get_quota_total|get_quota_free|file_write|file_write_file|file_read|file_delete|file_exists|file_size|file_share|is_screenshot_requested|send_screenshot|is_user_logged_on|get_user_id|user_owns_dlc|user_installed_dlc|set_achievement|get_achievement|clear_achievement|set_stat_int|set_stat_float|set_stat_avg_rate|get_stat_int|get_stat_float|get_stat_avg_rate|reset_all_stats|reset_all_stats_achievements|stats_ready|create_leaderboard|upload_score|upload_score_ext|download_scores_around_user|download_scores|download_friends_scores|upload_score_buffer|upload_score_buffer_ext|current_game_language|available_languages|activate_overlay_browser|activate_overlay_user|activate_overlay_store|get_user_persona_name|get_app_id|get_user_account_id))\\b",
+         "name": "support.function.steam.gml"
+     },
+     {
+         "match": "(?x)\\b(steam_ugc_(download|create_item|start_item_update|set_item_title|set_item_description|set_item_visibility|set_item_tags|set_item_content|set_item_preview|submit_item_update|get_item_update_progress|subscribe_item|unsubscribe_item|num_subscribed_items|get_subscribed_items|get_item_install_info|get_item_update_info|request_item_details|create_query_user|create_query_user_ex|create_query_all|create_query_all_ex|query_set_cloud_filename_filter|query_set_match_any_tag|query_set_search_text|query_set_ranked_by_trend_days|query_add_required_tag|query_add_excluded_tag|query_set_return_long_description|query_set_return_total_only|query_set_allow_cached_response|send_query))\\b",
+         "name": "support.function.steam.ugc.gml"
+     },
+     {
+         "match": "(?x)\\b(ds_(set_precision|exists|stack_create|stack_destroy|stack_clear|stack_copy|stack_size|stack_empty|stack_push|stack_pop|stack_top|stack_write|stack_read|queue_create|queue_destroy|queue_clear|queue_copy|queue_size|queue_empty|queue_enqueue|queue_dequeue|queue_head|queue_tail|queue_write|queue_read|list_create|list_destroy|list_clear|list_copy|list_size|list_empty|list_add|list_insert|list_replace|list_delete|list_find_index|list_find_value|list_mark_as_list|list_mark_as_map|list_sort|list_shuffle|list_write|list_read|map_create|map_destroy|map_clear|map_copy|map_size|map_empty|map_add|map_add_list|map_add_map|map_replace|map_replace_map|map_replace_list|map_delete|map_exists|map_find_value|map_find_previous|map_find_next|map_find_first|map_find_last|map_write|map_read|map_secure_save|map_secure_load|map_secure_load_buffer|map_secure_save_buffer|priority_create|priority_destroy|priority_clear|priority_copy|priority_size|priority_empty|priority_add|priority_change_priority|priority_find_priority|priority_delete_value|priority_delete_min|priority_find_min|priority_delete_max|priority_find_max|priority_write|priority_read|grid_create|grid_destroy|grid_copy|grid_resize|grid_width|grid_height|grid_clear|grid_set|grid_add|grid_multiply|grid_set_region|grid_add_region|grid_multiply_region|grid_set_disk|grid_add_disk|grid_multiply_disk|grid_set_grid_region|grid_add_grid_region|grid_multiply_grid_region|grid_get|grid_get_sum|grid_get_max|grid_get_min|grid_get_mean|grid_get_disk_sum|grid_get_disk_min|grid_get_disk_max|grid_get_disk_mean|grid_value_exists|grid_value_x|grid_value_y|grid_value_disk_exists|grid_value_disk_x|grid_value_disk_y|grid_shuffle|grid_write|grid_read|grid_sort))\\b",
+         "name": "support.function.ds.gml"
+     },
+     {
+         "match": "(?x)\\b(part_(type_create|type_destroy|type_exists|type_clear|type_shape|type_sprite|type_size|type_scale|type_orientation|type_life|type_step|type_death|type_speed|type_direction|type_gravity|type_colour1|type_colour2|type_colour3|type_colour_mix|type_colour_rgb|type_colour_hsv|type_color1|type_color2|type_color3|type_color_mix|type_color_rgb|type_color_hsv|type_alpha1|type_alpha2|type_alpha3|type_blend|system_create|system_create_layer|system_destroy|system_exists|system_clear|system_draw_order|system_depth|system_position|system_automatic_update|system_automatic_draw|system_update|system_drawit|system_get_layer|system_layer|particles_create|particles_create_colour|particles_create_color|particles_clear|particles_count|emitter_create|emitter_destroy|emitter_destroy_all|emitter_exists|emitter_clear|emitter_region|emitter_burst|emitter_stream))\\b",
+         "name": "support.function.part.gml"
+     },
+     {
+         "match": "(?x)\\b(gpu_(set_blendenable|set_ztestenable|set_zfunc|set_zwriteenable|set_fog|set_cullmode|set_blendmode|set_blendmode_ext|set_blendmode_ext_sepalpha|set_colorwriteenable|set_colourwriteenable|set_alphatestenable|set_alphatestref|set_alphatestfunc|set_texfilter|set_texfilter_ext|set_texrepeat|set_texrepeat_ext|get_blendenable|get_ztestenable|get_zfunc|get_zwriteenable|get_fog|get_cullmode|get_blendmode|get_blendmode_ext|get_blendmode_ext_sepalpha|get_blendmode_src|get_blendmode_dest|get_blendmode_srcalpha|get_blendmode_destalpha|get_colorwriteenable|get_colourwriteenable|get_alphatestenable|get_alphatestref|get_alphatestfunc|get_texfilter|get_texfilter_ext|get_texrepeat|get_texrepeat_ext|push_state|pop_state|get_state|set_state))\\b",
+         "name": "support.function.gpu.gml"
+     },
+     {
+         "match": "(?x)\\b(sprite_(exists|get_name|get_number|get_width|get_height|get_xoffset|get_yoffset|get_bbox_left|get_bbox_right|get_bbox_top|get_bbox_bottom|save|save_strip|set_cache_size|set_cache_size_ext|get_tpe|prefetch|prefetch_multi|flush|flush_multi|set_speed|get_speed_type|get_speed|set_offset|duplicate|assign|merge|add|replace|create_from_surface|add_from_surface|delete|set_alpha_from_sprite|collision_mask))\\b",
+         "name": "support.function.sprite.gml"
+     },
+     {
+         "match": "(?x)\\b(file_(text_open_from_string|text_open_read|text_open_write|text_open_append|text_close|text_write_string|text_write_real|text_writeln|text_read_string|text_read_real|text_readln|text_eof|text_eoln|exists|delete|rename|copy|find_first|find_next|find_close|attributes|bin_open|bin_rewrite|bin_close|bin_position|bin_size|bin_seek|bin_write_byte|bin_read_byte)|directory_(exists|create|destroy)|filename_(name|path|dir|drive|ext|change_ext))\\b",
+         "name": "support.function.file.gml"
+     },
+     {
+         "match": "(?x)\\b(matrix_(get|set|build_identity|build|build_lookat|build_projection_ortho|build_projection_perspective|build_projection_perspective_fov|multiply|transform_vertex|stack_push|stack_pop|stack_set|stack_clear|stack_top|stack_is_empty))\\b",
+         "name": "support.function.matrix.gml"
+     },
+     {
+         "match": "(?x)\\b(buffer_(create|write|read|seek|get_surface|set_surface|delete|exists|get_type|get_alignment|poke|peek|save|save_ext|load|load_ext|load_partial|copy|fill|get_size|tell|resize|md5|sha1|base64_encode|base64_decode|base64_decode_ext|sizeof|get_address|create_from_vertex_buffer|create_from_vertex_ext|copy_from_vertex_buffer|async_group_begin|async_group_option|async_group_end|load_async|save_async))\\b",
+         "name": "support.function.buffer.gml"
+     },
+     {
+         "match": "(?x)\\b(network_(create_socket|create_socket_ext|create_server|create_server_raw|connect|connect_raw|send_packet|send_raw|send_broadcast|send_udp|send_udp_raw|set_timeout|set_config|resolve|destroy))\\b",
+         "name": "support.function.network.gml"
+     },
+     {
+         "match": "(?x)\\b(shader_(set|reset|current|is_compiled|get_sampler_index|get_uniform|set_uniform_i|set_uniform_i_array|set_uniform_f|set_uniform_f_array|set_uniform_matrix|set_uniform_matrix_array|enable_corner_id))\\b",
+         "name": "support.function.shader.gml"
+     },
+     {
+         "match": "(?x)\\b(vertex_(format_begin|format_end|format_delete|format_add_position|format_add_position_3d|format_add_colour|format_add_color|format_add_normal|format_add_texcoord|format_add_textcoord|format_add_custom|create_buffer|create_buffer_ext|delete_buffer|begin|end|position|position_3d|colour|color|argb|texcoord|normal|float1|float2|float3|float4|ubyte4|submit|freeze|get_number|get_buffer_size|create_buffer_from_buffer|create_buffer_from_buffer_ext))\\b",
+         "name": "support.function.vertex.gml"
+     },
+     {
+         "match": "(?x)\\b(tilemap_(tileset|x|y|set|set_at_pixel|get_tileset|get_tile_width|get_tile_height|get_width|get_height|get_x|get_y|get|get_at_pixel|get_cell_x_at_pixel|get_cell_y_at_pixel|clear||set_global_mask|get_global_mask|set_mask|get_mask|get_frame))\\b",
+         "name": "support.function.tilemap.gml"
+     },
+     {
+         "match": "(?x)\\b(draw_(tilemap|tile))\\b",
+         "name": "support.function.draw.tile.gml"
+     },
+     {
+         "match": "(?x)\\b(tile_(set_empty|set_index|set_flip|set_mirror|set_rotate|get_empty|get_index|get_flip|get_mirror|get_rotate))\\b",
+         "name": "support.function.tile.gml"
+     },
+     {
+         "match": "(?x)\\b(layer_tile_(exists|create|destroy|change|xscale|yscale|blend|alpha|x|y|region|visible|get_sprite|get_xscale|get_yscale|get_blend|get_alpha|get_x|get_y|get_region|get_visible))\\b",
+         "name": "support.function.layer.tile.gml"
+     },
+     {
+         "match": "(?x)\\b(layer_instance_get_instance|instance_(activate|deactivate)_layer)\\b",
+         "name": "support.function.layer.instance.gml"
+     },
+     {
+         "match": "(?x)\\b(camera_(create|create_view|destroy|apply|get_active|get_default|set_default|set_view_mat|set_proj_mat|set_update_script|set_begin_script|set_end_script|set_view_pos|set_view_size|set_view_speed|set_view_border|set_view_angle|set_view_target|get_view_mat|get_proj_mat|get_update_script|get_begin_script|get_end_script|get_view_x|get_view_y|get_view_width|get_view_height|get_view_speed_x|get_view_speed_y|get_view_border_x|get_view_border_y|get_view_angle|get_view_target))\\b",
+         "name": "support.function.camera.gml"
+     },
+     {
+         "match": "(?x)\\b(view_(get_camera|get_visible|get_xport|get_yport|get_wport|get_hport|get_surface_id|set_camera|set_visible|set_xport|set_yport|set_wport|set_hport|set_surface_id))\\b",
+         "name": "support.function.view.gml"
+     },
+     {
+         "match": "(?x)\\b(facebook_(init|login|status|graph_request|dialog|logout|launch_offerwall|post_message|send_invite|user_id|accesstoken|check_permission|request_read_permissions|request_publish_permissions))\\b",
+         "name": "support.function.facebook.gml"
+     },
+     {
+         "match": "(?x)\\b(gamepad_(is_supported|get_device_count|is_connected|get_description|get_button_threshold|set_button_threshold|get_axis_deadzone|set_axis_deadzone|button_count|button_check|button_check_pressed|button_check_released|button_value|axis_count|axis_value|set_vibration|set_colour|set_color))\\b",
+         "name": "support.function.gamepad.gml"
+     },
+     {
+         "match": "(?x)\\b(device_(get_tilt_x|get_tilt_y|get_tilt_z|is_keypad_open|mouse_check_button|mouse_check_button_pressed|mouse_check_button_released|mouse_x|mouse_y|mouse_raw_x|mouse_raw_y|mouse_x_to_gui|mouse_y_to_gui|mouse_dbclick_enable))\\b",
+         "name": "support.function.device.gml"
+     },
+     {
+         "match": "(?x)\\b(achievement_(login|logout|post|increment|post_score|available|show_achievements|show_leaderboards|load_friends|load_leaderboard|send_challenge|load_progress|reset|login_status|get_pic|show_challenge_notifications|get_challenges|event|show|get_info))\\b",
+         "name": "support.function.achievement.gml"
+     },
+     {
+         "match": "(?x)\\b(keyboard_(set_map|get_map|unset_map|check|check_pressed|check_released|check_direct|get_numlock|set_numlock|key_press|key_release|clear))\\b",
+         "name": "support.function.keyboard.gml"
+     },
+     {
+         "match": "(?x)\\b(path_(set_kind|set_closed|set_precision|add|assign|duplicate|append|delete|add_point|insert_point|change_point|delete_point|clear_points|reverse|mirror|flip|rotate|rescale|shift|exists|get_name|get_length|get_time|get_kind|get_closed|get_precision|get_number|get_point_x|get_point_y|get_point_speed|get_x|get_y|get_speed))\\b",
+         "name": "support.function.path.gml"
+     },
+     {
+         "match": "(?x)\\b(room_(set_width|set_height|set_persistent|set_background_colour|set_background_color|set_viewport|get_viewport|set_view_enabled|add|duplicate|assign|instance_add|instance_clear|get_camera|set_camera|exists|get_name))\\b",
+         "name": "support.function.room.gml"
+     },
+     {
+         "match": "(?x)\\b(draw_light_(define_ambient|define_direction|define_point|enable|get_ambient|get)|draw_(set|get)_lighting)\\b",
+         "name": "support.function.draw.light.gml"
+     },
+     {
+         "match": "(?x)\\b(ini_(open_from_string|open|close|read_string|read_real|write_string|write_real|key_exists|section_exists|key_delete|section_delete))\\b",
+         "name": "support.function.ini.gml"
+     },
+     {
+         "match": "(?x)\\b(font_(exists|get_name|get_fontname|get_bold|get_italic|get_first|get_last|get_size|set_cache_size|add|add_sprite|add_sprite_ext|replace|replace_sprite|replace_sprite_ext|delete))\\b",
+         "name": "support.function.font.gml"
+     },
+     {
+         "match": "(?x)\\b(display_(get_width|get_height|get_orientation|get_gui_width|get_gui_height|reset|mouse_get_x|mouse_get_y|mouse_set|get_dpi_x|get_dpi_y|set_gui_size|set_gui_maximise))\\b",
+         "name": "support.function.display.gml"
+     },
+     {
+         "match": "(?x)\\b(ads_(enable|disable|setup|engagement_launch|engagement_available|engagement_active|event|event_preload|set_reward_callback|get_display_height|get_display_width|move|interstitial_available|interstitial_display))\\b",
+         "name": "support.function.ads.gml"
+     },
+     {
+         "match": "(?x)\\b(iap_(activate|status|enumerate_products|restore_all|acquire|consume|product_details|purchase_details))\\b",
+         "name": "support.function.iap.gml"
+     },
+     {
+         "match": "(?x)\\b(merge_(color|colour)|make_(color|colour)_(rgb|hsv)|(color|colour)_get_(red|green|blue|hue|saturation|value))\\b",
+         "name": "support.function.color.gml"
+     },
+     {
+         "match": "(?x)\\b(timeline_(add|delete|clear|exists|get_name|moment_clear|moment_add_script|size|max_moment))\\b",
+         "name": "support.function.timeline.gml"
+     },
+     {
+         "match": "(?x)\\b(window_(handle|device|has_focus))\\b",
+         "name": "support.function.window.gml"
+     },
+     {
+         "match": "(?x)\\b(show_(debug_message|debug_overlay|message|message_async|question|question_async|error))\\b",
+         "name": "support.function.show.gml"
+     },
+     {
+         "match": "(?x)\\b(object_(exists|get_name|get_sprite|get_solid|get_visible|get_persistent|get_mask|get_parent|get_physics|is_ancestor|script_execute|set_sprite|set_solid|set_visible|set_persistent|set_mask))\\b",
+         "name": "support.function.object.gml"
+     },
+     {
+         "match": "(?x)\\b(get_(integer|string|integer_async|string_async|login_async|open_filename|save_filename|open_filename_ext|save_filename_ext|timer))\\b",
+         "name": "support.function.get.gml"
+     },
+     {
+         "match": "(?x)\\b(application_(surface_draw_enable|get_position|surface_enable|surface_is_enabled))\\b",
+         "name": "support.function.application.gml"
+     },
+     {
+         "match": "(?x)\\b(clickable_(add|add_ext|change|change_ext|delete|exists|set_style))\\b",
+         "name": "support.function.clickable.gml"
+     },
+     {
+         "match": "(?x)\\b(typeof|choose|abs|round|floor|ceil|sign|frac|sqrt|sqr|exp|ln|log2|log10|sin|cos|tan|arcsin|arccos|arctan|arctan2|dsin|dcos|dtan|darcsin|darccos|darctan|darctan2|degtorad|radtodeg|power|logn|min|max|mean|median|clamp|lerp)\\b",
+         "name": "support.function.word.gml"
+     },
+     {
+         "match": "(?x)\\b((set_speed|get_speed|end|restart|load|save|save_buffer|load_buffer))\\b",
+         "name": "support.function.game.gml"
+     },
+     {
+         "match": "(?x)\\b(surface_(getpixel|getpixel_ext|save|save_part|copy|copy_part))\\b",
+         "name": "support.function.surface.gml"
+     },
+     {
+         "match": "(?x)\\b(os_get_(config|info|language|region)|os_(lock_orientation|powersave_enable)|os_is_(paused|network_connected))\\b",
+         "name": "support.function.os.gml"
+     },
+     {
+         "match": "(?x)\\b(highscore_(clear|add|value|name)|draw_highscore)\\b",
+         "name": "support.function.highscore.gml"
+     },
+     {
+         "match": "(?x)\\b(external_(call|define|free))\\b",
+         "name": "support.function.external.gml"
+     },
+     {
+         "match": "(?x)\\b(effect_(create_(below|above)|clear))\\b",
+         "name": "support.function.effect.gml"
+     },
+     {
+         "match": "(?x)\\b(math_(set|get)_epsilon)\\b",
+         "name": "support.function.math.epsilon.gml"
+     },
+     {
+         "match": "(?x)\\b(point_(distance_3d|distance|direction))\\b",
+         "name": "support.function.point.gml"
+     },
+     {
+         "match": "(?x)\\b(point_in_(rectangle|triangle|circle))\\b",
+         "name": "support.function.point.in.gml"
+     },
+     {
+         "match": "(?x)\\b(rectangle_in_(rectangle|triangle|circle))\\b",
+         "name": "support.function.rectangle.in.gml"
+     },
+     {
+         "match": "(?x)\\b(clipboard_(has|set|get)_text)\\b",
+         "name": "support.function.clipboard.text.gml"
+     },
+     {
+         "match": "(?x)\\b(push_local_notification|push_get_first_local_notification|push_get_next_local_notification|push_cancel_local_notification)\\b",
+         "name": "support.function.push.notification.gml"
+     },
+     {
+         "match": "(?x)\\b(event_(perform|user|perform_object|inherited))\\b",
+         "name": "support.function.event.gml"
+     },
+     {
+         "match": "(?x)\\b(string_(width|height)?(_ext))\\b",
+         "name": "support.function.string.gml"
+     },
+     {
+         "match": "(?x)\\b(mouse_(check_button|check_button_pressed|check_button_released|wheel_up|wheel_down|clear))\\b",
+         "name": "support.function.mouse.gml"
+     },
+     {
+         "match": "(?x)\\b(alarm_(get|set))\\b",
+         "name": "support.function.alarm.gml"
+     },
+     {
+         "match": "(?x)\\b(http_(get|get_file|post_string|request))\\b",
+         "name": "support.function.http.gml"
+     },
+     {
+         "match": "(?x)\\b(json_(encode|decode))\\b",
+         "name": "support.function.json.gml"
+     },
+     {
+         "match": "(?x)\\b(base64_(encode|decode)|(md5|sha1)_string_(unicode|utf8)|(md5|sha1)_file)\\b",
+         "name": "support.function.encode.gml"
+     },
+     {
+         "match": "(?x)\\b(virtual_key_(add|hide|delete|show))\\b",
+         "name": "support.function.virtual.key.gml"
+     },
+     {
+         "match": "(?x)\\b(draw_enable_(drawevent|swf_aa)|draw_(set|get)_swf_aa_level)\\b",
+         "name": "support.function.draw.advance.gml"
+     },
+     {
+         "match": "(?x)\\b((draw_skeleton)?(_time|_instance|_collision))\\b",
+         "name": "support.function.draw.skeleton.gml"
+     },
+     {
+         "match": "(?x)\\b((screen_save)?_part)\\b",
+         "name": "support.function.screen.save.gml"
+     },
+     {
+         "match": "(?x)\\b(cloud_(file_save|string_save|synchronise))\\b",
+         "name": "support.function.cloud.gml"
+     },
+     {
+         "match": "(?x)\\b(texture_(get_(width|height|uvs|texel_(width|height)))|set_stage)\\b",
+         "name": "support.function.texture.gml"
+     },
+     {
+         "match": "(?x)\\b(url_(get_domain|(open)?(_ext|_full)))\\b",
+         "name": "support.function.url.gml"
+     },
+     {
+         "match": "(?x)\\b((sprite|font)_get_(uvs|texture))\\b",
+         "name": "support.function.uvs.texture.gml"
+     },
+     {
+         "match": "(?x)\\b(script_(exists|get_name))\\b",
+         "name": "support.function.script.gml"
+     },
+     {
+         "match": "(?x)\\b(gml_(release_mode|pragma))\\b",
+         "name": "support.function.gml.gml"
+     },
+     {
+         "match": "(?x)\\b((analytics_event)?_ext)\\b",
+         "name": "support.function.analytics.event.gml"
+     },
+     {
+         "match": "(?x)\\b(parameter_(count|string))\\b",
+         "name": "support.function.parameter.gml"
+     },
+     {
+         "match": "(?x)\\b(asset_get_(index|type))\\b",
+         "name": "support.function.asset.get.gml"
+     },
+     {
+         "match": "(?x)\\b(angle_difference|debug_event|io_clear|environment_get_variable|browser_input_capture|shop_leave_rating|code_is_compiled|zip_unzip|load_csv|shaders_are_supported)\\b",
+         "name": "support.function.others.gml"
+     },     
+      {
+        "include": "source.gml-thirdparty",
+        "name": "source.gml-thirdparty.gml"
+      },
+      {
+        "include": "source.gml-extra",
+        "name": "source.gml-extra.gml"
+      },
+      {
+        "include": "source.lua",
+        "name": "source.lua.gml"
+      },
+      {
+         "match": "(?i)\\b(self|other|all|noone|global|local|undefined|pointer_invalid|pointer_null|path_action_stop|path_action_restart|path_action_continue|path_action_reverse|true|false|pi|GM_build_date|GM_version|timezone_local|timezone_utc|gamespeed_fps|gamespeed_microseconds|ev_create|ev_destroy|ev_step|ev_alarm|ev_keyboard|ev_mouse|ev_collision|ev_other|ev_draw|ev_draw_begin|ev_draw_end|ev_draw_pre|ev_draw_post|ev_keypress|ev_keyrelease|ev_trigger|ev_left_button|ev_right_button|ev_middle_button|ev_no_button|ev_left_press|ev_right_press|ev_middle_press|ev_left_release|ev_right_release|ev_middle_release|ev_mouse_enter|ev_mouse_leave|ev_mouse_wheel_up|ev_mouse_wheel_down|ev_global_left_button|ev_global_right_button|ev_global_middle_button|ev_global_left_press|ev_global_right_press|ev_global_middle_press|ev_global_left_release|ev_global_right_release|ev_global_middle_release|ev_joystick1_left|ev_joystick1_right|ev_joystick1_up|ev_joystick1_down|ev_joystick1_button1|ev_joystick1_button2|ev_joystick1_button3|ev_joystick1_button4|ev_joystick1_button5|ev_joystick1_button6|ev_joystick1_button7|ev_joystick1_button8|ev_joystick2_left|ev_joystick2_right|ev_joystick2_up|ev_joystick2_down|ev_joystick2_button1|ev_joystick2_button2|ev_joystick2_button3|ev_joystick2_button4|ev_joystick2_button5|ev_joystick2_button6|ev_joystick2_button7|ev_joystick2_button8|ev_outside|ev_boundary|ev_game_start|ev_game_end|ev_room_start|ev_room_end|ev_no_more_lives|ev_animation_end|ev_end_of_path|ev_no_more_health|ev_user0|ev_user1|ev_user2|ev_user3|ev_user4|ev_user5|ev_user6|ev_user7|ev_user8|ev_user9|ev_user10|ev_user11|ev_user12|ev_user13|ev_user14|ev_user15|ev_step_normal|ev_step_begin|ev_step_end|ev_gui|ev_gui_begin|ev_gui_end|vk_nokey|vk_anykey|vk_enter|vk_return|vk_shift|vk_control|vk_alt|vk_escape|vk_space|vk_backspace|vk_tab|vk_pause|vk_printscreen|vk_left|vk_right|vk_up|vk_down|vk_home|vk_end|vk_delete|vk_insert|vk_pageup|vk_pagedown|vk_f1|vk_f2|vk_f3|vk_f4|vk_f5|vk_f6|vk_f7|vk_f8|vk_f9|vk_f10|vk_f11|vk_f12|vk_numpad0|vk_numpad1|vk_numpad2|vk_numpad3|vk_numpad4|vk_numpad5|vk_numpad6|vk_numpad7|vk_numpad8|vk_numpad9|vk_divide|vk_multiply|vk_subtract|vk_add|vk_decimal|vk_lshift|vk_lcontrol|vk_lalt|vk_rshift|vk_rcontrol|vk_ralt|mb_any|mb_none|mb_left|mb_right|mb_middle|c_aqua|c_black|c_blue|c_dkgray|c_fuchsia|c_gray|c_green|c_lime|c_ltgray|c_maroon|c_navy|c_olive|c_purple|c_red|c_silver|c_teal|c_white|c_yellow|c_orange|fa_left|fa_center|fa_right|fa_top|fa_middle|fa_bottom|pr_pointlist|pr_linelist|pr_linestrip|pr_trianglelist|pr_trianglestrip|pr_trianglefan|bm_complex|bm_normal|bm_add|bm_max|bm_subtract|bm_zero|bm_one|bm_src_colour|bm_inv_src_colour|bm_src_color|bm_inv_src_color|bm_src_alpha|bm_inv_src_alpha|bm_dest_alpha|bm_inv_dest_alpha|bm_dest_colour|bm_inv_dest_colour|bm_dest_color|bm_inv_dest_color|bm_src_alpha_sat|audio_falloff_none|audio_falloff_inverse_distance|audio_falloff_inverse_distance_clamped|audio_falloff_linear_distance|audio_falloff_linear_distance_clamped|audio_falloff_exponent_distance|audio_falloff_exponent_distance_clamped|audio_old_system|audio_new_system|audio_mono|audio_stereo|audio_3d|cr_default|cr_none|cr_arrow|cr_cross|cr_beam|cr_size_nesw|cr_size_ns|cr_size_nwse|cr_size_we|cr_uparrow|cr_hourglass|cr_drag|cr_appstart|cr_handpoint|cr_size_all|spritespeed_framespersecond|spritespeed_framespergameframe|asset_object|asset_unknown|asset_sprite|asset_sound|asset_room|asset_path|asset_script|asset_font|asset_timeline|asset_tiles|asset_shader|fa_readonly|fa_hidden|fa_sysfile|fa_volumeid|fa_directory|fa_archive|ds_type_map|ds_type_list|ds_type_stack|ds_type_queue|ds_type_grid|ds_type_priority|ef_explosion|ef_ring|ef_ellipse|ef_firework|ef_smoke|ef_smokeup|ef_star|ef_spark|ef_flare|ef_cloud|ef_rain|ef_snow|pt_shape_pixel|pt_shape_disk|pt_shape_square|pt_shape_line|pt_shape_star|pt_shape_circle|pt_shape_ring|pt_shape_sphere|pt_shape_flare|pt_shape_spark|pt_shape_explosion|pt_shape_cloud|pt_shape_smoke|pt_shape_snow|ps_distr_linear|ps_distr_gaussian|ps_distr_invgaussian|ps_shape_rectangle|ps_shape_ellipse|ps_shape_diamond|ps_shape_line|ty_real|ty_string|dll_cdel|dll_cdecl|dll_stdcall|matrix_view|matrix_projection|matrix_world|os_win32|os_windows|os_macosx|os_ios|os_android|os_linux|os_unknown|os_winphone|os_win8native|os_psvita|os_ps4|os_xboxone|os_ps3|os_uwp|browser_not_a_browser|browser_unknown|browser_ie|browser_firefox|browser_chrome|browser_safari|browser_safari_mobile|browser_opera|browser_tizen|browser_windows_store|browser_ie_mobile|device_ios_unknown|device_ios_iphone|device_ios_iphone_retina|device_ios_ipad|device_ios_ipad_retina|device_ios_iphone5|device_ios_iphone6|device_ios_iphone6plus|device_emulator|device_tablet|display_landscape|display_landscape_flipped|display_portrait|display_portrait_flipped|of_challenge_win|ge_lose|of_challenge_tie|leaderboard_type_number|leaderboard_type_time_mins_secs|cmpfunc_never|cmpfunc_less|cmpfunc_equal|cmpfunc_lessequal|cmpfunc_greater|cmpfunc_notequal|cmpfunc_greaterequal|cmpfunc_always|cull_noculling|cull_clockwise|cull_counterclockwise|lighttype_dir|lighttype_point|iap_ev_storeload|iap_ev_product|iap_ev_purchase|iap_ev_consume|iap_ev_restore|iap_storeload_ok|iap_storeload_failed|iap_status_uninitialised|iap_status_unavailable|iap_status_loading|iap_status_available|iap_status_processing|iap_status_restoring|iap_failed|iap_unavailable|iap_available|iap_purchased|iap_canceled|iap_refunded|fb_login_default|fb_login_fallback_to_webview|fb_login_no_fallback_to_webview|fb_login_forcing_webview|fb_login_use_system_account|fb_login_forcing_safari|phy_joint_anchor_1_x|phy_joint_anchor_1_y|phy_joint_anchor_2_x|phy_joint_anchor_2_y|phy_joint_reaction_force_x|phy_joint_reaction_force_y|phy_joint_reaction_torque|phy_joint_motor_speed|phy_joint_angle|phy_joint_motor_torque|phy_joint_max_motor_torque|phy_joint_translation|phy_joint_speed|phy_joint_motor_force|phy_joint_max_motor_force|phy_joint_length_1|phy_joint_length_2|phy_joint_damping_ratio|phy_joint_frequency|phy_joint_lower_angle_limit|phy_joint_upper_angle_limit|phy_joint_angle_limits|phy_joint_max_length|phy_joint_max_torque|phy_joint_max_force|phy_debug_render_aabb|phy_debug_render_collision_pairs|phy_debug_render_coms|phy_debug_render_core_shapes|phy_debug_render_joints|phy_debug_render_obb|phy_debug_render_shapes|phy_particle_flag_water|phy_particle_flag_zombie|phy_particle_flag_wall|phy_particle_flag_spring|phy_particle_flag_elastic|phy_particle_flag_viscous|phy_particle_flag_powder|phy_particle_flag_tensile|phy_particle_flag_colourmixing|phy_particle_flag_colormixing|phy_particle_group_flag_solid|phy_particle_group_flag_rigid|phy_particle_data_flag_typeflags|phy_particle_data_flag_position|phy_particle_data_flag_velocity|phy_particle_data_flag_colour|phy_particle_data_flag_color|phy_particle_data_flag_category|achievement_our_info|achievement_friends_info|achievement_leaderboard_info|achievement_achievement_info|achievement_filter_all_players|achievement_filter_friends_only|achievement_filter_favorites_only|achievement_type_achievement_challenge|achievement_type_score_challenge|achievement_pic_loaded|achievement_show_ui|achievement_show_profile|achievement_show_leaderboard|achievement_show_achievement|achievement_show_bank|achievement_show_friend_picker|achievement_show_purchase_prompt|network_socket_tcp|network_socket_udp|network_socket_bluetooth|network_type_connect|network_type_disconnect|network_type_data|network_type_non_blocking_connect|network_config_connect_timeout|network_config_use_non_blocking_socket|network_config_enable_reliable_udp|network_config_disable_reliable_udp|buffer_fixed|buffer_grow|buffer_wrap|buffer_fast|buffer_vbuffer|buffer_network|buffer_u8|buffer_s8|buffer_u16|buffer_s16|buffer_u32|buffer_s32|buffer_u64|buffer_f16|buffer_f32|buffer_f64|buffer_bool|buffer_text|buffer_string|buffer_seek_start|buffer_seek_relative|buffer_seek_end|buffer_generalerror|buffer_outofspace|buffer_outofbounds|buffer_invalidtype|gp_face1|gp_face2|gp_face3|gp_face4|gp_shoulderl|gp_shoulderr|gp_shoulderlb|gp_shoulderrb|gp_select|gp_start|gp_stickl|gp_stickr|gp_padu|gp_padd|gp_padl|gp_padr|gp_axislh|gp_axislv|gp_axisrh|gp_axisrv|ov_friends|ov_community|ov_players|ov_settings|ov_gamegroup|ov_achievements|lb_sort_none|lb_sort_ascending|lb_sort_descending|lb_disp_none|lb_disp_numeric|lb_disp_time_sec|lb_disp_time_ms|ugc_result_success|ugc_filetype_community|ugc_filetype_microtrans|ugc_visibility_public|ugc_visibility_friends_only|ugc_visibility_private|ugc_query_RankedByVote|ugc_query_RankedByPublicationDate|ugc_query_AcceptedForGameRankedByAcceptanceDate|ugc_query_RankedByTrend|ugc_query_FavoritedByFriendsRankedByPublicationDate|ugc_query_CreatedByFriendsRankedByPublicationDate|ugc_query_RankedByNumTimesReported|ugc_query_NotYetRated|ugc_query_RankedByTotalVotesAsc|ugc_query_RankedByVotesUp|ugc_query_RankedByTextSearch|ugc_sortorder_CreationOrderDesc|ugc_sortorder_CreationOrderAsc|ugc_sortorder_TitleAsc|ugc_sortorder_LastUpdatedDesc|ugc_sortorder_SubscriptionDateDesc|ugc_sortorder_VoteScoreDesc|ugc_sortorder_ForModeration|ugc_list_Published|ugc_list_VotedOn|ugc_list_VotedUp|ugc_list_VotedDown|ugc_list_WillVoteLater|ugc_list_Favorited|ugc_list_Subscribed|ugc_list_UsedOrPlayed|ugc_list_Followed|ugc_match_Items|ugc_match_Items_Mtx|ugc_match_Items_ReadyToUse|ugc_match_Collections|ugc_match_Artwork|ugc_match_Videos|ugc_match_Screenshots|ugc_match_AllGuides|ugc_match_WebGuides|ugc_match_IntegratedGuides|ugc_match_UsableInGame|ugc_match_ControllerBindings|vertex_usage_position|vertex_usage_colour|vertex_usage_color|vertex_usage_normal|vertex_usage_texcoord|vertex_usage_textcoord|vertex_usage_blendweight|vertex_usage_blendindices|vertex_usage_psize|vertex_usage_tangent|vertex_usage_binormal|vertex_usage_fog|vertex_usage_depth|vertex_usage_sample|vertex_type_float1|vertex_type_float2|vertex_type_float3|vertex_type_float4|vertex_type_colour|vertex_type_color|vertex_type_ubyte4|layerelementtype_undefined|layerelementtype_background|layerelementtype_instance|layerelementtype_oldtilemap|layerelementtype_sprite|layerelementtype_tilemap|layerelementtype_particlesystem|layerelementtype_tile|tile_rotate|tile_flip|tile_mirror|tile_index_mask)\\b",
+         "name": "constant.language.gml"
+      },
+      {
+         "match": "(?i)\\b(x|y|xprevious|yprevious|xstart|ystart|hspeed|vspeed|direction|speed|friction|gravity|gravity_direction|path_index|path_position|path_positionprevious|path_speed|path_scale|path_orientation|path_endaction|object_index|id|solid|persistent|mask_index|instance_count|instance_id|alarm|timeline_index|timeline_position|timeline_speed|timeline_running|timeline_loop|visible|sprite_index|sprite_width|sprite_height|sprite_xoffset|sprite_yoffset|image_number|image_index|image_speed|depth|image_xscale|image_yscale|image_angle|image_alpha|image_blend|bbox_left|bbox_right|bbox_top|bbox_bottom|layer|phy_rotation|phy_position_x|phy_position_y|phy_angular_velocity|phy_linear_velocity_x|phy_linear_velocity_y|phy_speed_x|phy_speed_y|phy_speed|phy_angular_damping|phy_linear_damping|phy_bullet|phy_fixed_rotation|phy_active|phy_mass|phy_inertia|phy_com_x|phy_com_y|phy_dynamic|phy_kinematic|phy_sleeping|phy_collision_points|phy_collision_x|phy_collision_y|phy_col_normal_x|phy_col_normal_y|phy_position_xprevious|phy_position_yprevious)\\b",
+         "name": "support.variable.local.gml"
+      },
+      {
+         "match": "(?i)\\b(working_directory|webgl_enabled|view_yview|view_yport|view_xview|view_xport|view_wview|view_wport|view_vspeed|view_visible|view_vborder|view_surface_id|view_object|view_hview|view_hspeed|view_hport|view_hborder|view_enabled|view_current|view_angle|undefined|transition_steps|transition_kind|transition_color|temp_directory|show_score|show_lives|show_health|secure_mode|score|room_width|room_speed|room_persistent|room_last|room_height|room_first|room_caption|room|pointer_null|pointer_invalid|os_version|os_type|os_device|os_browser|mouse_y|mouse_x|mouse_lastbutton|mouse_button|lives|keyboard_string|keyboard_lastkey|keyboard_lastchar|keyboard_key|instance_id|instance_count|iap_data|health|gamemaker_version|gamemaker_registered|gamemaker_pro|game_save_id|game_project_name|game_id|game_display_name|fps_real|fps|event_type|event_object|event_number|event_action|error_occurred|error_last|display_aa|delta_time|debug_mode|cursor_sprite|current_year|current_weekday|current_time|current_second|current_month|current_minute|current_hour|current_day|caption_score|caption_lives|caption_health|browser_width|browser_height|background_yscale|background_y|background_xscale|background_x|background_width|background_vtiled|background_vspeed|background_visible|background_showcolour|background_showcolor|background_index|background_htiled|background_hspeed|background_height|background_foreground|background_colour|background_color|background_blend|background_alpha|async_load|application_surface)\\b",
+         "name": "support.variable.global.gml"
+      }
+   ]
+}
