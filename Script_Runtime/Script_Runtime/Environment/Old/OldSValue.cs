@@ -1,96 +1,96 @@
 ﻿
 using System;
 
-public struct SValue
+public struct OldSValue
 {
 
     #region 定义函数委托
 
-    public delegate SValue Function_0();
+    public delegate OldSValue Function_0();
 
-    public delegate SValue Function_1(SValue p0);
+    public delegate OldSValue Function_1(OldSValue p0);
 
-    public delegate SValue Function_2(SValue p0, SValue p1);
+    public delegate OldSValue Function_2(OldSValue p0, OldSValue p1);
 
-    public delegate SValue Function_3(SValue p0, SValue p1, SValue p2);
+    public delegate OldSValue Function_3(OldSValue p0, OldSValue p1, OldSValue p2);
 
-    public delegate SValue Function_4(SValue p0, SValue p1, SValue p2, SValue p3);
+    public delegate OldSValue Function_4(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3);
 
-    public delegate SValue Function_5(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4);
+    public delegate OldSValue Function_5(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4);
 
-    public delegate SValue Function_6(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5);
+    public delegate OldSValue Function_6(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5);
 
-    public delegate SValue Function_7(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6);
+    public delegate OldSValue Function_7(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5, OldSValue p6);
 
-    public delegate SValue Function_8(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
-        SValue p7);
+    public delegate OldSValue Function_8(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5, OldSValue p6,
+        OldSValue p7);
 
-    public delegate SValue Function_9(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
-        SValue p7, SValue p8);
+    public delegate OldSValue Function_9(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5, OldSValue p6,
+        OldSValue p7, OldSValue p8);
 
-    public delegate SValue Function_10(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
-        SValue p7, SValue p8, SValue p9);
+    public delegate OldSValue Function_10(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5, OldSValue p6,
+        OldSValue p7, OldSValue p8, OldSValue p9);
 
-    public delegate SValue Function_11(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
-        SValue p7, SValue p8, SValue p9, SValue p10);
+    public delegate OldSValue Function_11(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5, OldSValue p6,
+        OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10);
 
-    public delegate SValue Function_12(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
-        SValue p7, SValue p8, SValue p9, SValue p10, SValue p11);
+    public delegate OldSValue Function_12(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5, OldSValue p6,
+        OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10, OldSValue p11);
 
-    public delegate SValue Function_13(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
-        SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12);
+    public delegate OldSValue Function_13(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5, OldSValue p6,
+        OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10, OldSValue p11, OldSValue p12);
 
-    public delegate SValue Function_14(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
-        SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13);
+    public delegate OldSValue Function_14(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5, OldSValue p6,
+        OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10, OldSValue p11, OldSValue p12, OldSValue p13);
 
-    public delegate SValue Function_15(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
-        SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, SValue p14);
+    public delegate OldSValue Function_15(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5, OldSValue p6,
+        OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10, OldSValue p11, OldSValue p12, OldSValue p13, OldSValue p14);
 
-    public delegate SValue Function_16(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
-        SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, SValue p14, SValue p15);
+    public delegate OldSValue Function_16(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5, OldSValue p6,
+        OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10, OldSValue p11, OldSValue p12, OldSValue p13, OldSValue p14, OldSValue p15);
 
-    public delegate SValue Function_0_Params(params SValue[] ps);
+    public delegate OldSValue Function_0_Params(params OldSValue[] ps);
 
-    public delegate SValue Function_1_Params(SValue p0, params SValue[] ps);
+    public delegate OldSValue Function_1_Params(OldSValue p0, params OldSValue[] ps);
 
-    public delegate SValue Function_2_Params(SValue p0, SValue p1, params SValue[] ps);
+    public delegate OldSValue Function_2_Params(OldSValue p0, OldSValue p1, params OldSValue[] ps);
 
-    public delegate SValue Function_3_Params(SValue p0, SValue p1, SValue p2, params SValue[] ps);
+    public delegate OldSValue Function_3_Params(OldSValue p0, OldSValue p1, OldSValue p2, params OldSValue[] ps);
 
-    public delegate SValue Function_4_Params(SValue p0, SValue p1, SValue p2, SValue p3, params SValue[] ps);
+    public delegate OldSValue Function_4_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, params OldSValue[] ps);
 
-    public delegate SValue Function_5_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, params SValue[] ps);
+    public delegate OldSValue Function_5_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, params OldSValue[] ps);
 
-    public delegate SValue Function_6_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
-        params SValue[] ps);
+    public delegate OldSValue Function_6_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5,
+        params OldSValue[] ps);
 
-    public delegate SValue Function_7_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
-        SValue p6, params SValue[] ps);
+    public delegate OldSValue Function_7_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5,
+        OldSValue p6, params OldSValue[] ps);
 
-    public delegate SValue Function_8_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
-        SValue p6, SValue p7, params SValue[] ps);
+    public delegate OldSValue Function_8_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5,
+        OldSValue p6, OldSValue p7, params OldSValue[] ps);
 
-    public delegate SValue Function_9_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
-        SValue p6, SValue p7, SValue p8, params SValue[] ps);
+    public delegate OldSValue Function_9_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5,
+        OldSValue p6, OldSValue p7, OldSValue p8, params OldSValue[] ps);
 
-    public delegate SValue Function_10_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
-        SValue p6, SValue p7, SValue p8, SValue p9, params SValue[] ps);
+    public delegate OldSValue Function_10_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5,
+        OldSValue p6, OldSValue p7, OldSValue p8, OldSValue p9, params OldSValue[] ps);
 
-    public delegate SValue Function_11_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
-        SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, params SValue[] ps);
+    public delegate OldSValue Function_11_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5,
+        OldSValue p6, OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10, params OldSValue[] ps);
 
-    public delegate SValue Function_12_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
-        SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, params SValue[] ps);
+    public delegate OldSValue Function_12_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5,
+        OldSValue p6, OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10, OldSValue p11, params OldSValue[] ps);
 
-    public delegate SValue Function_13_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
-        SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, params SValue[] ps);
+    public delegate OldSValue Function_13_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5,
+        OldSValue p6, OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10, OldSValue p11, OldSValue p12, params OldSValue[] ps);
 
-    public delegate SValue Function_14_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
-        SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, params SValue[] ps);
+    public delegate OldSValue Function_14_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5,
+        OldSValue p6, OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10, OldSValue p11, OldSValue p12, OldSValue p13, params OldSValue[] ps);
 
-    public delegate SValue Function_15_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
-        SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, SValue p14,
-        params SValue[] ps);
+    public delegate OldSValue Function_15_Params(OldSValue p0, OldSValue p1, OldSValue p2, OldSValue p3, OldSValue p4, OldSValue p5,
+        OldSValue p6, OldSValue p7, OldSValue p8, OldSValue p9, OldSValue p10, OldSValue p11, OldSValue p12, OldSValue p13, OldSValue p14,
+        params OldSValue[] ps);
 
     #endregion
 
@@ -337,280 +337,280 @@ public struct SValue
 
     #region 创建SValue
 
-    public SValue(SValue v)
+    public OldSValue(OldSValue v)
     {
         Type = v.Type;
         Value = v.Value;
         objectType = v.objectType;
     }
 
-    public SValue(SObject v)
+    public OldSValue(SObject v)
     {
         Type = SValueType.Object;
         Value = v;
         objectType = SObjectType.Class;
     }
 
-    public SValue(SArray v)
+    public OldSValue(SArray v)
     {
         Type = SValueType.Object;
         Value = v;
         objectType = SObjectType.Array;
     }
 
-    public SValue(SMap v)
+    public OldSValue(SMap v)
     {
         Type = SValueType.Object;
         Value = v;
         objectType = SObjectType.Map;
     }
 
-    public SValue(double v)
+    public OldSValue(double v)
     {
         Type = SValueType.Number;
         Value = v;
         objectType = SObjectType.Other;
     }
 
-    public SValue(string v)
+    public OldSValue(string v)
     {
         Type = SValueType.String;
         Value = v;
         objectType = SObjectType.Other;
     }
 
-    public SValue(Function_0 v)
+    public OldSValue(Function_0 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_0;
     }
 
-    public SValue(Function_1 v)
+    public OldSValue(Function_1 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_1;
     }
 
-    public SValue(Function_2 v)
+    public OldSValue(Function_2 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_2;
     }
 
-    public SValue(Function_3 v)
+    public OldSValue(Function_3 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_3;
     }
 
-    public SValue(Function_4 v)
+    public OldSValue(Function_4 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_4;
     }
 
-    public SValue(Function_5 v)
+    public OldSValue(Function_5 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_5;
     }
 
-    public SValue(Function_6 v)
+    public OldSValue(Function_6 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_6;
     }
 
-    public SValue(Function_7 v)
+    public OldSValue(Function_7 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_7;
     }
 
-    public SValue(Function_8 v)
+    public OldSValue(Function_8 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_8;
     }
 
-    public SValue(Function_9 v)
+    public OldSValue(Function_9 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_9;
     }
 
-    public SValue(Function_10 v)
+    public OldSValue(Function_10 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_10;
     }
 
-    public SValue(Function_11 v)
+    public OldSValue(Function_11 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_11;
     }
 
-    public SValue(Function_12 v)
+    public OldSValue(Function_12 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_12;
     }
 
-    public SValue(Function_13 v)
+    public OldSValue(Function_13 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_13;
     }
 
-    public SValue(Function_14 v)
+    public OldSValue(Function_14 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_14;
     }
 
-    public SValue(Function_15 v)
+    public OldSValue(Function_15 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_15;
     }
 
-    public SValue(Function_16 v)
+    public OldSValue(Function_16 v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_16;
     }
 
-    public SValue(Function_0_Params v)
+    public OldSValue(Function_0_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_0_Params;
     }
 
-    public SValue(Function_1_Params v)
+    public OldSValue(Function_1_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_1_Params;
     }
 
-    public SValue(Function_2_Params v)
+    public OldSValue(Function_2_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_2_Params;
     }
 
-    public SValue(Function_3_Params v)
+    public OldSValue(Function_3_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_3_Params;
     }
 
-    public SValue(Function_4_Params v)
+    public OldSValue(Function_4_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_4_Params;
     }
 
-    public SValue(Function_5_Params v)
+    public OldSValue(Function_5_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_5_Params;
     }
 
-    public SValue(Function_6_Params v)
+    public OldSValue(Function_6_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_6_Params;
     }
 
-    public SValue(Function_7_Params v)
+    public OldSValue(Function_7_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_7_Params;
     }
 
-    public SValue(Function_8_Params v)
+    public OldSValue(Function_8_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_8_Params;
     }
 
-    public SValue(Function_9_Params v)
+    public OldSValue(Function_9_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_9_Params;
     }
 
-    public SValue(Function_10_Params v)
+    public OldSValue(Function_10_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_10_Params;
     }
 
-    public SValue(Function_11_Params v)
+    public OldSValue(Function_11_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_11_Params;
     }
 
-    public SValue(Function_12_Params v)
+    public OldSValue(Function_12_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_12_Params;
     }
 
-    public SValue(Function_13_Params v)
+    public OldSValue(Function_13_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_13_Params;
     }
 
-    public SValue(Function_14_Params v)
+    public OldSValue(Function_14_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_14_Params;
     }
 
-    public SValue(Function_15_Params v)
+    public OldSValue(Function_15_Params v)
     {
         Type = SValueType.Function;
         Value = v;
         objectType = SObjectType.Function_15_Params;
     }
 
-    public static ref readonly SValue Null
+    public static ref readonly OldSValue Null
     {
         get
         {
@@ -626,9 +626,9 @@ public struct SValue
     }
 
     private static bool _initNullValue;
-    private static SValue _null;
+    private static OldSValue _null;
 
-    public static ref readonly SValue True
+    public static ref readonly OldSValue True
     {
         get
         {
@@ -645,9 +645,9 @@ public struct SValue
     }
 
     private static bool _initTrueValue;
-    private static SValue _true;
+    private static OldSValue _true;
 
-    public static ref readonly SValue False
+    public static ref readonly OldSValue False
     {
         get
         {
@@ -664,13 +664,13 @@ public struct SValue
     }
 
     private static bool _initFalseValue;
-    private static SValue _false;
+    private static OldSValue _false;
 
     #endregion
 
     #region 属性和方法的操作
 
-    public SValue GetValue(string key)
+    public OldSValue GetValue(string key)
     {
         switch (objectType)
         {
@@ -690,7 +690,7 @@ public struct SValue
         return Null;
     }
 
-    public SValue GetValue(double key)
+    public OldSValue GetValue(double key)
     {
         if (objectType == SObjectType.Array)
         {
@@ -704,7 +704,7 @@ public struct SValue
         return Null;
     }
 
-    public SValue GetValue(SValue key)
+    public OldSValue GetValue(OldSValue key)
     {
         return Null;
     }
@@ -714,7 +714,7 @@ public struct SValue
 
     }
 
-    public SValue InvokeMethod(string key, params SValue[] ps)
+    public OldSValue InvokeMethod(string key, params OldSValue[] ps)
     {
         switch (objectType)
         {
@@ -728,11 +728,11 @@ public struct SValue
         return Null;
     }
 
-    private static Func<object, SValue[], SValue>[] list;
+    private static Func<object, OldSValue[], OldSValue>[] list;
     
-    static SValue()
+    static OldSValue()
     {
-        list = new Func<object, SValue[], SValue>[36];
+        list = new Func<object, OldSValue[], OldSValue>[36];
         list[3] = (value, ps) =>
         {
             AssertUtils.AssertParamsLength(0, ps.Length);
@@ -740,7 +740,7 @@ public struct SValue
         };
     }
     
-    public SValue Invoke(params SValue[] ps)
+    public OldSValue Invoke(params OldSValue[] ps)
     {
         if (objectType == SObjectType.Function_1)
         {
@@ -871,217 +871,217 @@ public struct SValue
 
     #region 自动转型
 
-    public static implicit operator SValue(double value)
+    public static implicit operator OldSValue(double value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(bool value)
+    public static implicit operator OldSValue(bool value)
     {
         return value ? True : False;
     }
 
-    public static implicit operator SValue(string value)
+    public static implicit operator OldSValue(string value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(SObject value)
+    public static implicit operator OldSValue(SObject value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(SArray value)
+    public static implicit operator OldSValue(SArray value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(SMap value)
+    public static implicit operator OldSValue(SMap value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_0 value)
+    public static implicit operator OldSValue(Function_0 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_1 value)
+    public static implicit operator OldSValue(Function_1 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_2 value)
+    public static implicit operator OldSValue(Function_2 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_3 value)
+    public static implicit operator OldSValue(Function_3 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_4 value)
+    public static implicit operator OldSValue(Function_4 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_5 value)
+    public static implicit operator OldSValue(Function_5 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_6 value)
+    public static implicit operator OldSValue(Function_6 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_7 value)
+    public static implicit operator OldSValue(Function_7 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_8 value)
+    public static implicit operator OldSValue(Function_8 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_9 value)
+    public static implicit operator OldSValue(Function_9 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_10 value)
+    public static implicit operator OldSValue(Function_10 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_11 value)
+    public static implicit operator OldSValue(Function_11 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_12 value)
+    public static implicit operator OldSValue(Function_12 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_13 value)
+    public static implicit operator OldSValue(Function_13 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_14 value)
+    public static implicit operator OldSValue(Function_14 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_15 value)
+    public static implicit operator OldSValue(Function_15 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_16 value)
+    public static implicit operator OldSValue(Function_16 value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_0_Params value)
+    public static implicit operator OldSValue(Function_0_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_1_Params value)
+    public static implicit operator OldSValue(Function_1_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_2_Params value)
+    public static implicit operator OldSValue(Function_2_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_3_Params value)
+    public static implicit operator OldSValue(Function_3_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_4_Params value)
+    public static implicit operator OldSValue(Function_4_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_5_Params value)
+    public static implicit operator OldSValue(Function_5_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_6_Params value)
+    public static implicit operator OldSValue(Function_6_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_7_Params value)
+    public static implicit operator OldSValue(Function_7_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_8_Params value)
+    public static implicit operator OldSValue(Function_8_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_9_Params value)
+    public static implicit operator OldSValue(Function_9_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_10_Params value)
+    public static implicit operator OldSValue(Function_10_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_11_Params value)
+    public static implicit operator OldSValue(Function_11_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_12_Params value)
+    public static implicit operator OldSValue(Function_12_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_13_Params value)
+    public static implicit operator OldSValue(Function_13_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_14_Params value)
+    public static implicit operator OldSValue(Function_14_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
-    public static implicit operator SValue(Function_15_Params value)
+    public static implicit operator OldSValue(Function_15_Params value)
     {
-        return new SValue(value);
+        return new OldSValue(value);
     }
 
     #endregion
 
     #region 运算符重载
 
-    public static SValue operator +(SValue v1, double num)
+    public static OldSValue operator +(OldSValue v1, double num)
     {
         switch (v1.Type)
         {
             case SValueType.Number:
-                return new SValue((double)v1.Value + num);
+                return new OldSValue((double)v1.Value + num);
             case SValueType.String:
-                return new SValue(v1.Value + num.ToString());
+                return new OldSValue(v1.Value + num.ToString());
             case SValueType.Object:
             case SValueType.Function:
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
                 if (1 + num > 0)
                     return True;
@@ -1095,70 +1095,70 @@ public struct SValue
         return Null;
     }
 
-    public static SValue operator +(double num, SValue v2)
+    public static OldSValue operator +(double num, OldSValue v2)
     {
         switch (v2.Type)
         {
             case SValueType.Number:
-                return new SValue(num + (double)v2.Value);
+                return new OldSValue(num + (double)v2.Value);
             case SValueType.String:
-                return new SValue(num.ToString() + v2.Value);
+                return new OldSValue(num.ToString() + v2.Value);
             case SValueType.Object:
             case SValueType.Function:
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
-                return new SValue(num + 1);
+                return new OldSValue(num + 1);
             case SValueType.BooleanFalse:
-                return new SValue(num);
+                return new OldSValue(num);
         }
 
         return Null;
     }
 
-    public static SValue operator +(SValue v1, string v2)
+    public static OldSValue operator +(OldSValue v1, string v2)
     {
         switch (v1.Type)
         {
             case SValueType.Number:
             case SValueType.Object:
             case SValueType.String:
-                return new SValue(v1.Value + v2);
+                return new OldSValue(v1.Value + v2);
             case SValueType.Null:
-                return new SValue("null" + v1.Value);
+                return new OldSValue("null" + v1.Value);
             case SValueType.Function:
-                return new SValue("[function]" + v1.Value);
+                return new OldSValue("[function]" + v1.Value);
             case SValueType.BooleanTrue:
-                return new SValue("true" + v1.Value);
+                return new OldSValue("true" + v1.Value);
             case SValueType.BooleanFalse:
-                return new SValue("false" + v1.Value);
+                return new OldSValue("false" + v1.Value);
         }
 
         return Null;
     }
 
-    public static SValue operator +(string v1, SValue v2)
+    public static OldSValue operator +(string v1, OldSValue v2)
     {
         switch (v2.Type)
         {
             case SValueType.Number:
             case SValueType.Object:
             case SValueType.String:
-                return new SValue(v1 + v2.Value);
+                return new OldSValue(v1 + v2.Value);
             case SValueType.Null:
-                return new SValue(v1 + "null");
+                return new OldSValue(v1 + "null");
             case SValueType.Function:
-                return new SValue(v1 + "[function]");
+                return new OldSValue(v1 + "[function]");
             case SValueType.BooleanTrue:
-                return new SValue(v1 + "true");
+                return new OldSValue(v1 + "true");
             case SValueType.BooleanFalse:
-                return new SValue(v1 + "false");
+                return new OldSValue(v1 + "false");
         }
 
         return Null;
     }
 
-    public static SValue operator +(SValue v1, SValue v2)
+    public static OldSValue operator +(OldSValue v1, OldSValue v2)
     {
         switch (v1.Type)
         {
@@ -1166,17 +1166,17 @@ public struct SValue
                 switch (v2.Type)
                 {
                     case SValueType.Number:
-                        return new SValue((double)v1.Value + (double)v2.Value);
+                        return new OldSValue((double)v1.Value + (double)v2.Value);
                     case SValueType.String:
-                        return new SValue(v1.Value.ToString() + v2.Value);
+                        return new OldSValue(v1.Value.ToString() + v2.Value);
                     case SValueType.Object:
                     case SValueType.Function:
                     case SValueType.Null:
-                        return new SValue(double.NaN);
+                        return new OldSValue(double.NaN);
                     case SValueType.BooleanTrue:
-                        return new SValue((double)v1.Value + 1);
+                        return new OldSValue((double)v1.Value + 1);
                     case SValueType.BooleanFalse:
-                        return new SValue(v1);
+                        return new OldSValue(v1);
                 }
 
                 break;
@@ -1185,17 +1185,17 @@ public struct SValue
                 {
                     case SValueType.Number:
                     case SValueType.Object:
-                        return new SValue(v1.Value + v2.Value.ToString());
+                        return new OldSValue(v1.Value + v2.Value.ToString());
                     case SValueType.String:
-                        return new SValue(v1.Value + (string)v2.Value);
+                        return new OldSValue(v1.Value + (string)v2.Value);
                     case SValueType.Null:
-                        return new SValue(v1.Value + "null");
+                        return new OldSValue(v1.Value + "null");
                     case SValueType.Function:
-                        return new SValue(v1.Value + "[function]");
+                        return new OldSValue(v1.Value + "[function]");
                     case SValueType.BooleanTrue:
-                        return new SValue(v1.Value + "true");
+                        return new OldSValue(v1.Value + "true");
                     case SValueType.BooleanFalse:
-                        return new SValue(v1.Value + "false");
+                        return new OldSValue(v1.Value + "false");
                 }
 
                 break;
@@ -1203,18 +1203,18 @@ public struct SValue
                 switch (v2.Type)
                 {
                     case SValueType.Number:
-                        return new SValue(double.NaN);
+                        return new OldSValue(double.NaN);
                     case SValueType.Object:
                     case SValueType.String:
-                        return new SValue("null" + v2.Value);
+                        return new OldSValue("null" + v2.Value);
                     case SValueType.Null:
                         return Null;
                     case SValueType.BooleanTrue:
-                        return new SValue("nulltrue");
+                        return new OldSValue("nulltrue");
                     case SValueType.BooleanFalse:
-                        return new SValue("nullfalse");
+                        return new OldSValue("nullfalse");
                     case SValueType.Function:
-                        return new SValue("null[function]");
+                        return new OldSValue("null[function]");
                 }
 
                 break;
@@ -1222,19 +1222,19 @@ public struct SValue
                 switch (v2.Type)
                 {
                     case SValueType.Number:
-                        return new SValue(double.NaN);
+                        return new OldSValue(double.NaN);
                     case SValueType.Object:
-                        return new SValue(v1.Value.ToString() + v2.Value);
+                        return new OldSValue(v1.Value.ToString() + v2.Value);
                     case SValueType.String:
-                        return new SValue(v1.Value + (string)v2.Value);
+                        return new OldSValue(v1.Value + (string)v2.Value);
                     case SValueType.Null:
-                        return new SValue("null" + v2.Value);
+                        return new OldSValue("null" + v2.Value);
                     case SValueType.BooleanTrue:
-                        return new SValue("true" + v2.Value);
+                        return new OldSValue("true" + v2.Value);
                     case SValueType.BooleanFalse:
-                        return new SValue("false" + v2.Value);
+                        return new OldSValue("false" + v2.Value);
                     case SValueType.Function:
-                        return new SValue("[function]" + v2.Value);
+                        return new OldSValue("[function]" + v2.Value);
                 }
 
                 break;
@@ -1242,14 +1242,14 @@ public struct SValue
                 switch (v2.Type)
                 {
                     case SValueType.Number:
-                        return new SValue((double)v1.Value + 1);
+                        return new OldSValue((double)v1.Value + 1);
                     case SValueType.Object:
                     case SValueType.String:
-                        return new SValue("true" + v2.Value);
+                        return new OldSValue("true" + v2.Value);
                     case SValueType.Function:
-                        return new SValue("true[function]");
+                        return new OldSValue("true[function]");
                     case SValueType.Null:
-                        return new SValue("truenull");
+                        return new OldSValue("truenull");
                     case SValueType.BooleanTrue:
                     case SValueType.BooleanFalse:
                         return True;
@@ -1260,14 +1260,14 @@ public struct SValue
                 switch (v2.Type)
                 {
                     case SValueType.Number:
-                        return new SValue(v1);
+                        return new OldSValue(v1);
                     case SValueType.Object:
                     case SValueType.String:
-                        return new SValue("false" + v2.Value);
+                        return new OldSValue("false" + v2.Value);
                     case SValueType.Function:
-                        return new SValue("false[function]");
+                        return new OldSValue("false[function]");
                     case SValueType.Null:
-                        return new SValue("falsenull");
+                        return new OldSValue("falsenull");
                     case SValueType.BooleanTrue:
                         return True;
                     case SValueType.BooleanFalse:
@@ -1279,18 +1279,18 @@ public struct SValue
                 switch (v2.Type)
                 {
                     case SValueType.Number:
-                        return new SValue(double.NaN);
+                        return new OldSValue(double.NaN);
                     case SValueType.Object:
                     case SValueType.String:
-                        return new SValue("[function]" + v2.Value);
+                        return new OldSValue("[function]" + v2.Value);
                     case SValueType.Function:
-                        return new SValue("[function][function]");
+                        return new OldSValue("[function][function]");
                     case SValueType.Null:
-                        return new SValue("[function]null");
+                        return new OldSValue("[function]null");
                     case SValueType.BooleanTrue:
-                        return new SValue("[function]true");
+                        return new OldSValue("[function]true");
                     case SValueType.BooleanFalse:
-                        return new SValue("[function]false");
+                        return new OldSValue("[function]false");
                 }
 
                 break;
@@ -1299,17 +1299,17 @@ public struct SValue
         return Null;
     }
 
-    public static SValue operator -(SValue v1, double num)
+    public static OldSValue operator -(OldSValue v1, double num)
     {
         switch (v1.Type)
         {
             case SValueType.Number:
-                return new SValue((double)v1.Value - num);
+                return new OldSValue((double)v1.Value - num);
             case SValueType.String:
             case SValueType.Object:
             case SValueType.Function:
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
                 if (1 - num > 0)
                     return True;
@@ -1323,27 +1323,27 @@ public struct SValue
         return Null;
     }
 
-    public static SValue operator -(double num, SValue v2)
+    public static OldSValue operator -(double num, OldSValue v2)
     {
         switch (v2.Type)
         {
             case SValueType.Number:
-                return new SValue(num - (double)v2.Value);
+                return new OldSValue(num - (double)v2.Value);
             case SValueType.String:
             case SValueType.Object:
             case SValueType.Function:
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
-                return new SValue(num - 1);
+                return new OldSValue(num - 1);
             case SValueType.BooleanFalse:
-                return new SValue(num);
+                return new OldSValue(num);
         }
 
         return Null;
     }
 
-    public static SValue operator -(SValue v1, SValue v2)
+    public static OldSValue operator -(OldSValue v1, OldSValue v2)
     {
         switch (v1.Type)
         {
@@ -1351,27 +1351,27 @@ public struct SValue
                 switch (v2.Type)
                 {
                     case SValueType.Number:
-                        return new SValue((double)v1.Value - (double)v2.Value);
+                        return new OldSValue((double)v1.Value - (double)v2.Value);
                     case SValueType.String:
                     case SValueType.Object:
                     case SValueType.Function:
                     case SValueType.Null:
-                        return new SValue(double.NaN);
+                        return new OldSValue(double.NaN);
                     case SValueType.BooleanTrue:
-                        return new SValue((double)v1.Value - 1);
+                        return new OldSValue((double)v1.Value - 1);
                     case SValueType.BooleanFalse:
-                        return new SValue(v1);
+                        return new OldSValue(v1);
                 }
 
                 break;
             case SValueType.String:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.Object:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.Function:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
                 switch (v2.Type)
                 {
@@ -1412,17 +1412,17 @@ public struct SValue
         return Null;
     }
 
-    public static SValue operator *(SValue v1, double num)
+    public static OldSValue operator *(OldSValue v1, double num)
     {
         switch (v1.Type)
         {
             case SValueType.Number:
-                return new SValue((double)v1.Value * num);
+                return new OldSValue((double)v1.Value * num);
             case SValueType.String:
             case SValueType.Object:
             case SValueType.Function:
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
                 if (num > 0)
                     return True;
@@ -1434,27 +1434,27 @@ public struct SValue
         return Null;
     }
 
-    public static SValue operator *(double num, SValue v2)
+    public static OldSValue operator *(double num, OldSValue v2)
     {
         switch (v2.Type)
         {
             case SValueType.Number:
-                return new SValue(num * (double)v2.Value);
+                return new OldSValue(num * (double)v2.Value);
             case SValueType.String:
             case SValueType.Object:
             case SValueType.Function:
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
-                return new SValue(num);
+                return new OldSValue(num);
             case SValueType.BooleanFalse:
-                return new SValue(0);
+                return new OldSValue(0);
         }
 
         return Null;
     }
 
-    public static SValue operator *(SValue v1, SValue v2)
+    public static OldSValue operator *(OldSValue v1, OldSValue v2)
     {
         switch (v1.Type)
         {
@@ -1462,27 +1462,27 @@ public struct SValue
                 switch (v2.Type)
                 {
                     case SValueType.Number:
-                        return new SValue((double)v1.Value * (double)v2.Value);
+                        return new OldSValue((double)v1.Value * (double)v2.Value);
                     case SValueType.String:
                     case SValueType.Object:
                     case SValueType.Function:
                     case SValueType.Null:
-                        return new SValue(double.NaN);
+                        return new OldSValue(double.NaN);
                     case SValueType.BooleanTrue:
-                        return new SValue(v1);
+                        return new OldSValue(v1);
                     case SValueType.BooleanFalse:
-                        return new SValue(0);
+                        return new OldSValue(0);
                 }
 
                 break;
             case SValueType.String:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.Object:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.Function:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
                 switch (v2.Type)
                 {
@@ -1508,17 +1508,17 @@ public struct SValue
         return Null;
     }
 
-    public static SValue operator /(SValue v1, double num)
+    public static OldSValue operator /(OldSValue v1, double num)
     {
         switch (v1.Type)
         {
             case SValueType.Number:
-                return new SValue((double)v1.Value / num);
+                return new OldSValue((double)v1.Value / num);
             case SValueType.String:
             case SValueType.Object:
             case SValueType.Function:
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
                 if (num > 0)
                     return True;
@@ -1530,27 +1530,27 @@ public struct SValue
         return Null;
     }
 
-    public static SValue operator /(double num, SValue v2)
+    public static OldSValue operator /(double num, OldSValue v2)
     {
         switch (v2.Type)
         {
             case SValueType.Number:
-                return new SValue(num / (double)v2.Value);
+                return new OldSValue(num / (double)v2.Value);
             case SValueType.String:
             case SValueType.Object:
             case SValueType.Function:
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
-                return new SValue(num);
+                return new OldSValue(num);
             case SValueType.BooleanFalse:
-                return new SValue(num / 0);
+                return new OldSValue(num / 0);
         }
 
         return Null;
     }
 
-    public static SValue operator /(SValue v1, SValue v2)
+    public static OldSValue operator /(OldSValue v1, OldSValue v2)
     {
         switch (v1.Type)
         {
@@ -1558,26 +1558,26 @@ public struct SValue
                 switch (v2.Type)
                 {
                     case SValueType.Number:
-                        return new SValue((double)v1.Value / (double)v2.Value);
+                        return new OldSValue((double)v1.Value / (double)v2.Value);
                     case SValueType.String:
                     case SValueType.Object:
                     case SValueType.Function:
                     case SValueType.Null:
                     case SValueType.BooleanFalse:
-                        return new SValue(double.NaN);
+                        return new OldSValue(double.NaN);
                     case SValueType.BooleanTrue:
-                        return new SValue(v1);
+                        return new OldSValue(v1);
                 }
 
                 break;
             case SValueType.String:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.Null:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.Object:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.Function:
-                return new SValue(double.NaN);
+                return new OldSValue(double.NaN);
             case SValueType.BooleanTrue:
                 switch (v2.Type)
                 {
@@ -1592,7 +1592,7 @@ public struct SValue
                         return True;
                     case SValueType.Null:
                     case SValueType.BooleanFalse:
-                        return new SValue(double.NaN);
+                        return new OldSValue(double.NaN);
                 }
 
                 break;
@@ -1607,7 +1607,7 @@ public struct SValue
                         return False;
                     case SValueType.Null:
                     case SValueType.BooleanFalse:
-                        return new SValue(double.NaN);
+                        return new OldSValue(double.NaN);
                 }
 
                 break;
@@ -1616,7 +1616,7 @@ public struct SValue
         return Null;
     }
 
-    public static bool operator ==(SValue v1, double v2)
+    public static bool operator ==(OldSValue v1, double v2)
     {
         if (v1.Type == SValueType.Number)
         {
@@ -1626,7 +1626,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator ==(double v1, SValue v2)
+    public static bool operator ==(double v1, OldSValue v2)
     {
         if (v2.Type == SValueType.Number)
         {
@@ -1636,7 +1636,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator ==(SValue v1, string v2)
+    public static bool operator ==(OldSValue v1, string v2)
     {
         if (v1.Type == SValueType.String)
         {
@@ -1646,7 +1646,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator ==(string v1, SValue v2)
+    public static bool operator ==(string v1, OldSValue v2)
     {
         if (v2.Type == SValueType.String)
         {
@@ -1656,7 +1656,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator ==(SValue v1, SValue v2)
+    public static bool operator ==(OldSValue v1, OldSValue v2)
     {
         if (v1.Type == SValueType.Number && v2.Type == SValueType.Number)
         {
@@ -1667,7 +1667,7 @@ public struct SValue
     }
 
 
-    public static bool operator !=(SValue v1, double v2)
+    public static bool operator !=(OldSValue v1, double v2)
     {
         if (v1.Type == SValueType.Number)
         {
@@ -1677,7 +1677,7 @@ public struct SValue
         return true;
     }
 
-    public static bool operator !=(double v1, SValue v2)
+    public static bool operator !=(double v1, OldSValue v2)
     {
         if (v2.Type == SValueType.Number)
         {
@@ -1687,7 +1687,7 @@ public struct SValue
         return true;
     }
 
-    public static bool operator !=(SValue v1, string v2)
+    public static bool operator !=(OldSValue v1, string v2)
     {
         if (v1.Type == SValueType.String)
         {
@@ -1697,7 +1697,7 @@ public struct SValue
         return true;
     }
 
-    public static bool operator !=(string v1, SValue v2)
+    public static bool operator !=(string v1, OldSValue v2)
     {
         if (v2.Type == SValueType.String)
         {
@@ -1707,7 +1707,7 @@ public struct SValue
         return true;
     }
 
-    public static bool operator !=(SValue v1, SValue v2)
+    public static bool operator !=(OldSValue v1, OldSValue v2)
     {
         if (v1.Type == SValueType.Number && v2.Type == SValueType.Number)
         {
@@ -1718,7 +1718,7 @@ public struct SValue
     }
 
 
-    public static bool operator <(SValue v1, double v2)
+    public static bool operator <(OldSValue v1, double v2)
     {
         switch (v1.Type)
         {
@@ -1733,7 +1733,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator <(double v1, SValue v2)
+    public static bool operator <(double v1, OldSValue v2)
     {
         switch (v2.Type)
         {
@@ -1748,7 +1748,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator <(SValue v1, SValue v2)
+    public static bool operator <(OldSValue v1, OldSValue v2)
     {
         switch (v1.Type)
         {
@@ -1793,7 +1793,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator >(SValue v1, double v2)
+    public static bool operator >(OldSValue v1, double v2)
     {
         switch (v1.Type)
         {
@@ -1808,7 +1808,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator >(double v1, SValue v2)
+    public static bool operator >(double v1, OldSValue v2)
     {
         switch (v2.Type)
         {
@@ -1823,7 +1823,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator >(SValue v1, SValue v2)
+    public static bool operator >(OldSValue v1, OldSValue v2)
     {
         switch (v1.Type)
         {
@@ -1868,7 +1868,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator <=(SValue v1, double v2)
+    public static bool operator <=(OldSValue v1, double v2)
     {
         switch (v1.Type)
         {
@@ -1883,7 +1883,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator <=(double v1, SValue v2)
+    public static bool operator <=(double v1, OldSValue v2)
     {
         switch (v2.Type)
         {
@@ -1898,7 +1898,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator <=(SValue v1, SValue v2)
+    public static bool operator <=(OldSValue v1, OldSValue v2)
     {
         switch (v1.Type)
         {
@@ -1943,7 +1943,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator >=(SValue v1, double v2)
+    public static bool operator >=(OldSValue v1, double v2)
     {
         switch (v1.Type)
         {
@@ -1958,7 +1958,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator >=(double v1, SValue v2)
+    public static bool operator >=(double v1, OldSValue v2)
     {
         switch (v2.Type)
         {
@@ -1973,7 +1973,7 @@ public struct SValue
         return false;
     }
 
-    public static bool operator >=(SValue v1, SValue v2)
+    public static bool operator >=(OldSValue v1, OldSValue v2)
     {
         switch (v1.Type)
         {
@@ -2018,7 +2018,7 @@ public struct SValue
         return false;
     }
 
-    public static SValue operator ++(SValue v1)
+    public static OldSValue operator ++(OldSValue v1)
     {
         switch (v1.Type)
         {
@@ -2030,10 +2030,10 @@ public struct SValue
                 return True;
         }
 
-        return new SValue(double.NaN);
+        return new OldSValue(double.NaN);
     }
 
-    public static SValue operator --(SValue v1)
+    public static OldSValue operator --(OldSValue v1)
     {
         switch (v1.Type)
         {
@@ -2045,39 +2045,39 @@ public struct SValue
                 return False;
         }
 
-        return new SValue(double.NaN);
+        return new OldSValue(double.NaN);
     }
 
-    public static SValue operator -(SValue v1)
+    public static OldSValue operator -(OldSValue v1)
     {
         switch (v1.Type)
         {
             case SValueType.Number:
-                return new SValue(-(double)v1.Value);
+                return new OldSValue(-(double)v1.Value);
             case SValueType.BooleanTrue:
             case SValueType.BooleanFalse:
                 return False;
         }
 
-        return new SValue(double.NaN);
+        return new OldSValue(double.NaN);
     }
 
-    public static SValue operator +(SValue v1)
+    public static OldSValue operator +(OldSValue v1)
     {
         switch (v1.Type)
         {
             case SValueType.Number:
-                return new SValue(v1);
+                return new OldSValue(v1);
             case SValueType.BooleanTrue:
                 return True;
             case SValueType.BooleanFalse:
                 return False;
         }
 
-        return new SValue(double.NaN);
+        return new OldSValue(double.NaN);
     }
 
-    public static SValue operator !(SValue v1)
+    public static OldSValue operator !(OldSValue v1)
     {
         switch (v1.Type)
         {
@@ -2092,7 +2092,7 @@ public struct SValue
         return False;
     }
 
-    public static bool operator true(SValue v1)
+    public static bool operator true(OldSValue v1)
     {
         switch (v1.Type)
         {
@@ -2110,7 +2110,7 @@ public struct SValue
         return true;
     }
 
-    public static bool operator false(SValue v1)
+    public static bool operator false(OldSValue v1)
     {
         switch (v1.Type)
         {
@@ -2300,9 +2300,9 @@ public struct SValue
     /// <summary>
     /// 剪切参数
     /// </summary>
-    internal static SValue[] CutParams(SValue[] ps, int index)
+    internal static OldSValue[] CutParams(OldSValue[] ps, int index)
     {
-        SValue[] arr = new SValue[ps.Length - index];
+        OldSValue[] arr = new OldSValue[ps.Length - index];
         for (int i = 0; index < ps.Length; index++, i++)
         {
             arr[i] = ps[index];

@@ -14,60 +14,60 @@ public class Program
     public static void Test6()
     {
         string key = GetKey(1);
-        Dictionary<string, Func<object, ISValue>> obj = new Dictionary<string, Func<object, ISValue>>();
-        obj.Add("111", o => ISValue.Null);
-        obj.Add("222", o => ISValue.Null);
-        obj.Add("333", o => ISValue.Null);
-        obj.Add("444", o => ISValue.Null);
-        obj.Add("555", o => ISValue.Null);
-        obj.Add("666", o => ISValue.Null);
-        obj.Add("777", o => ISValue.Null);
-        obj.Add("888", o => ISValue.Null);
-        obj.Add("999", o => ISValue.Null);
+        Dictionary<string, Func<object, SValue>> obj = new Dictionary<string, Func<object, SValue>>();
+        obj.Add("111", o => SValue.Null);
+        obj.Add("222", o => SValue.Null);
+        obj.Add("333", o => SValue.Null);
+        obj.Add("444", o => SValue.Null);
+        obj.Add("555", o => SValue.Null);
+        obj.Add("666", o => SValue.Null);
+        obj.Add("777", o => SValue.Null);
+        obj.Add("888", o => SValue.Null);
+        obj.Add("999", o => SValue.Null);
 
         var time5 = DateTime.Now.Ticks;
         for (int i = 0; i < 999999; i++)
         {
-            var v = new Func<ISValue>(() =>
+            var v = new Func<SValue>(() =>
             {
                 if (key == "111")
                 {
-                    return ISValue.Null;
+                    return SValue.Null;
                 }
                 else if (key == "222")
                 {
-                    return ISValue.Null;
+                    return SValue.Null;
                 }
                 else if (key == "333")
                 {
-                    return ISValue.Null;
+                    return SValue.Null;
                 }
                 else if (key == "444")
                 {
-                    return ISValue.Null;
+                    return SValue.Null;
                 }
                 else if (key == "555")
                 {
-                    return ISValue.Null;
+                    return SValue.Null;
                 }
                 else if (key == "666")
                 {
-                    return ISValue.Null;
+                    return SValue.Null;
                 }
                 else if (key == "777")
                 {
-                    return ISValue.Null;
+                    return SValue.Null;
                 }
                 else if (key == "888")
                 {
-                    return ISValue.Null;
+                    return SValue.Null;
                 }
                 else if (key == "999")
                 {
-                    return ISValue.Null;
+                    return SValue.Null;
                 }
 
-                return ISValue.Null;
+                return SValue.Null;
             })();
 
         }
@@ -78,21 +78,21 @@ public class Program
         var time3 = DateTime.Now.Ticks;
         for (int i = 0; i < 999999; i++)
         {
-            var v = new Func<ISValue>(() =>
+            var v = new Func<SValue>(() =>
             {
                 switch (key)
                 {
-                    case "111": return ISValue.Null;
-                    case "222": return ISValue.Null;
-                    case "333": return ISValue.Null;
-                    case "444": return ISValue.Null;
-                    case "555": return ISValue.Null;
-                    case "666": return ISValue.Null;
-                    case "777": return ISValue.Null;
-                    case "888": return ISValue.Null;
-                    case "999": return ISValue.Null;
+                    case "111": return SValue.Null;
+                    case "222": return SValue.Null;
+                    case "333": return SValue.Null;
+                    case "444": return SValue.Null;
+                    case "555": return SValue.Null;
+                    case "666": return SValue.Null;
+                    case "777": return SValue.Null;
+                    case "888": return SValue.Null;
+                    case "999": return SValue.Null;
                 }
-                return ISValue.Null;
+                return SValue.Null;
             })();
 
         }
@@ -103,7 +103,7 @@ public class Program
         var time = DateTime.Now.Ticks;
         for (int i = 0; i < 999999; i++)
         {
-            var v = new Func<ISValue>(() =>
+            var v = new Func<SValue>(() =>
             {
                 return obj[key](1);
             })();
@@ -124,7 +124,7 @@ public class Program
         Console.WriteLine("原生C#运行耗时(原生): " + (time6 - time5) / 10000f + "毫秒");
 
         var time = DateTime.Now.Ticks;
-        var test = ISValue.Create(Test);
+        var test = SValue.Create(Test);
         for (int i = 0; i < 999999; i++)
         {
             test.Invoke();
@@ -147,10 +147,10 @@ public class Program
         Console.WriteLine("原生C#运行耗时: " + (time4 - time3) / 10000f + "毫秒");
         
         var time = DateTime.Now.Ticks;
-        for (SValue i = 0; i < 999999; i++)
+        for (OldSValue i = 0; i < 999999; i++)
         {
-            SValue v = new Vector2(1, 1);
-            SValue v2 = new Vector2(3, 3);
+            OldSValue v = new Vector2(1, 1);
+            OldSValue v2 = new Vector2(3, 3);
             var b = "1" + v + "11" + "222" + "333" + v2 + "444" + (v + v2);
             //var b = "1" + v;
         }
@@ -164,12 +164,12 @@ public class Program
     public static void Test3()
     {
         var time = DateTime.Now.Ticks;
-        for (SValue i = 0; i < 999999; i++)
+        for (OldSValue i = 0; i < 999999; i++)
         {
-            SValue a = new SValue.Function_2((b, c) =>
+            OldSValue a = new OldSValue.Function_2((b, c) =>
             {
-                SValue d = b + 1 + c;
-                return SValue.Null;
+                OldSValue d = b + 1 + c;
+                return OldSValue.Null;
             });
             a.Invoke(1, 2);
         }
@@ -200,7 +200,7 @@ public class Program
         arr.__InvokeMethod("add", "3");
 
         var time = DateTime.Now.Ticks;
-        for (SValue i = 0; i < 999999; i++)
+        for (OldSValue i = 0; i < 999999; i++)
         {
             arr.__InvokeMethod("indexOf", 2);
             arr.__InvokeMethod("indexOf", "3");
@@ -227,20 +227,20 @@ public class Program
         Console.WriteLine("原生C#运行耗时: " + (time4 - time3) / 10000f + "毫秒");
 
         var time = DateTime.Now.Ticks;
-        for (SValue i = 0; i < 999999; i++)
+        for (OldSValue i = 0; i < 999999; i++)
         {
-            SValue vect1 = new Vector2(1, 1);
-            SValue vect2 = new Vector2(2, 3);
-            SValue vect3 = vect1.InvokeMethod("add", vect2);
+            OldSValue vect1 = new Vector2(1, 1);
+            OldSValue vect2 = new Vector2(2, 3);
+            OldSValue vect3 = vect1.InvokeMethod("add", vect2);
             var v = vect3.InvokeMethod("squareLengtn").Value;
         }
         var time2 = DateTime.Now.Ticks;
         Console.WriteLine("脚本运行耗时: " + (time2 - time) / 10000f + "毫秒");
     }
 
-    public static ISValue Test()
+    public static SValue Test()
     {
-        return ISValue.Null;
+        return SValue.Null;
     }
 
 }

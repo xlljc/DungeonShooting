@@ -110,7 +110,7 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test3 创建对象", () =>
         {
-            SValue a = 0;
+            OldSValue a = 0;
             for (int i = 0; i < 999999; i++)
             {
                 new Test2_Class(i);
@@ -119,7 +119,7 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test3 老写法", () =>
         {
-            SValue a = 0;
+            OldSValue a = 0;
             for (int i = 0; i < 999999; i++)
             {
                 a++;
@@ -128,7 +128,7 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test3 新写法", () =>
         {
-            var a = ISValue.Create(0);
+            var a = SValue.Create(0);
             for (int i = 0; i < 999999; i++)
             {
                 a++;
@@ -168,8 +168,8 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test3 老写法", () =>
         {
-            SValue func = new SValue(Test3_Func2);
-            SValue v = "11";
+            OldSValue func = new OldSValue(Test3_Func2);
+            OldSValue v = "11";
             for (int i = 0; i < 999999; i++)
             {
                 func.Invoke(v);
@@ -178,8 +178,8 @@ public class OptimizeTest : UnitTest
         
         ExecuteTime.Run("test3 新写法", () =>
         {
-            var func = ISValue.Create(Test3_Func3);
-            var v = ISValue.Create("11");
+            var func = SValue.Create(Test3_Func3);
+            var v = SValue.Create("11");
             for (int i = 0; i < 999999; i++)
             {
                 func.Invoke(v);
@@ -193,14 +193,14 @@ public class OptimizeTest : UnitTest
         return null;
     }
     
-    private SValue Test3_Func2(SValue str)
+    private OldSValue Test3_Func2(OldSValue str)
     {
-        return SValue.Null;
+        return OldSValue.Null;
     }
     
-    private ISValue Test3_Func3(ISValue str)
+    private SValue Test3_Func3(SValue str)
     {
-        return ISValue.Null;
+        return SValue.Null;
     }
     
     [Fact(DisplayName = "测试循环性能")]
@@ -216,7 +216,7 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test4 老写法", () =>
         {
-            for (SValue i = 0; i < 999999; i++)
+            for (OldSValue i = 0; i < 999999; i++)
             {
 
             }
@@ -224,9 +224,23 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test4 新写法", () =>
         {
-            for (ISValue i = ISValue.Create(0); i < 999999; i++)
+            for (SValue i = SValue.Create(0); i < 999999; i++)
             {
 
+            }
+        });
+    }
+
+    [Fact(DisplayName = "测试创建SValue对象性能")]
+    public void Test5()
+    {
+        ExecuteTime.Run("test5", () =>
+        {
+            //23 - 25
+            for (int i = 0; i < 999999; i++)
+            {
+                var item1 = SValue.Create("22");
+                var item2 = SValue.Create(111);
             }
         });
     }

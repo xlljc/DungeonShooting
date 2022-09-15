@@ -1,86 +1,86 @@
 ﻿
-public delegate ISValue Function_0();
+public delegate SValue Function_0();
 
-public delegate ISValue Function_1(ISValue p0);
+public delegate SValue Function_1(SValue p0);
 
-public delegate ISValue Function_2(ISValue p0, ISValue p1);
+public delegate SValue Function_2(SValue p0, SValue p1);
 
-public delegate ISValue Function_3(ISValue p0, ISValue p1, ISValue p2);
+public delegate SValue Function_3(SValue p0, SValue p1, SValue p2);
 
-public delegate ISValue Function_4(ISValue p0, ISValue p1, ISValue p2, ISValue p3);
+public delegate SValue Function_4(SValue p0, SValue p1, SValue p2, SValue p3);
 
-public delegate ISValue Function_5(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4);
+public delegate SValue Function_5(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4);
 
-public delegate ISValue Function_6(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5);
+public delegate SValue Function_6(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5);
 
-public delegate ISValue Function_7(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5, ISValue p6);
+public delegate SValue Function_7(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6);
 
-public delegate ISValue Function_8(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5, ISValue p6,
-    ISValue p7);
+public delegate SValue Function_8(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
+    SValue p7);
 
-public delegate ISValue Function_9(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5, ISValue p6,
-    ISValue p7, ISValue p8);
+public delegate SValue Function_9(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
+    SValue p7, SValue p8);
 
-public delegate ISValue Function_10(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5, ISValue p6,
-    ISValue p7, ISValue p8, ISValue p9);
+public delegate SValue Function_10(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
+    SValue p7, SValue p8, SValue p9);
 
-public delegate ISValue Function_11(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5, ISValue p6,
-    ISValue p7, ISValue p8, ISValue p9, ISValue p10);
+public delegate SValue Function_11(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
+    SValue p7, SValue p8, SValue p9, SValue p10);
 
-public delegate ISValue Function_12(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5, ISValue p6,
-    ISValue p7, ISValue p8, ISValue p9, ISValue p10, ISValue p11);
+public delegate SValue Function_12(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
+    SValue p7, SValue p8, SValue p9, SValue p10, SValue p11);
 
-public delegate ISValue Function_13(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5, ISValue p6,
-    ISValue p7, ISValue p8, ISValue p9, ISValue p10, ISValue p11, ISValue p12);
+public delegate SValue Function_13(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
+    SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12);
 
-public delegate ISValue Function_14(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5, ISValue p6,
-    ISValue p7, ISValue p8, ISValue p9, ISValue p10, ISValue p11, ISValue p12, ISValue p13);
+public delegate SValue Function_14(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
+    SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13);
 
-public delegate ISValue Function_15(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5, ISValue p6,
-    ISValue p7, ISValue p8, ISValue p9, ISValue p10, ISValue p11, ISValue p12, ISValue p13, ISValue p14);
+public delegate SValue Function_15(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
+    SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, SValue p14);
 
-public delegate ISValue Function_16(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5, ISValue p6,
-    ISValue p7, ISValue p8, ISValue p9, ISValue p10, ISValue p11, ISValue p12, ISValue p13, ISValue p14, ISValue p15);
+public delegate SValue Function_16(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5, SValue p6,
+    SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, SValue p14, SValue p15);
 
-public delegate ISValue Function_0_Params(params ISValue[] ps);
+public delegate SValue Function_0_Params(params SValue[] ps);
 
-public delegate ISValue Function_1_Params(ISValue p0, params ISValue[] ps);
+public delegate SValue Function_1_Params(SValue p0, params SValue[] ps);
 
-public delegate ISValue Function_2_Params(ISValue p0, ISValue p1, params ISValue[] ps);
+public delegate SValue Function_2_Params(SValue p0, SValue p1, params SValue[] ps);
 
-public delegate ISValue Function_3_Params(ISValue p0, ISValue p1, ISValue p2, params ISValue[] ps);
+public delegate SValue Function_3_Params(SValue p0, SValue p1, SValue p2, params SValue[] ps);
 
-public delegate ISValue Function_4_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, params ISValue[] ps);
+public delegate SValue Function_4_Params(SValue p0, SValue p1, SValue p2, SValue p3, params SValue[] ps);
 
-public delegate ISValue Function_5_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, params ISValue[] ps);
+public delegate SValue Function_5_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, params SValue[] ps);
 
-public delegate ISValue Function_6_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5,
-    params ISValue[] ps);
+public delegate SValue Function_6_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+    params SValue[] ps);
 
-public delegate ISValue Function_7_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5,
-    ISValue p6, params ISValue[] ps);
+public delegate SValue Function_7_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+    SValue p6, params SValue[] ps);
 
-public delegate ISValue Function_8_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5,
-    ISValue p6, ISValue p7, params ISValue[] ps);
+public delegate SValue Function_8_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+    SValue p6, SValue p7, params SValue[] ps);
 
-public delegate ISValue Function_9_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5,
-    ISValue p6, ISValue p7, ISValue p8, params ISValue[] ps);
+public delegate SValue Function_9_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+    SValue p6, SValue p7, SValue p8, params SValue[] ps);
 
-public delegate ISValue Function_10_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5,
-    ISValue p6, ISValue p7, ISValue p8, ISValue p9, params ISValue[] ps);
+public delegate SValue Function_10_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+    SValue p6, SValue p7, SValue p8, SValue p9, params SValue[] ps);
 
-public delegate ISValue Function_11_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5,
-    ISValue p6, ISValue p7, ISValue p8, ISValue p9, ISValue p10, params ISValue[] ps);
+public delegate SValue Function_11_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+    SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, params SValue[] ps);
 
-public delegate ISValue Function_12_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5,
-    ISValue p6, ISValue p7, ISValue p8, ISValue p9, ISValue p10, ISValue p11, params ISValue[] ps);
+public delegate SValue Function_12_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+    SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, params SValue[] ps);
 
-public delegate ISValue Function_13_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5,
-    ISValue p6, ISValue p7, ISValue p8, ISValue p9, ISValue p10, ISValue p11, ISValue p12, params ISValue[] ps);
+public delegate SValue Function_13_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+    SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, params SValue[] ps);
 
-public delegate ISValue Function_14_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5,
-    ISValue p6, ISValue p7, ISValue p8, ISValue p9, ISValue p10, ISValue p11, ISValue p12, ISValue p13, params ISValue[] ps);
+public delegate SValue Function_14_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+    SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, params SValue[] ps);
 
-public delegate ISValue Function_15_Params(ISValue p0, ISValue p1, ISValue p2, ISValue p3, ISValue p4, ISValue p5,
-    ISValue p6, ISValue p7, ISValue p8, ISValue p9, ISValue p10, ISValue p11, ISValue p12, ISValue p13, ISValue p14,
-    params ISValue[] ps);
+public delegate SValue Function_15_Params(SValue p0, SValue p1, SValue p2, SValue p3, SValue p4, SValue p5,
+    SValue p6, SValue p7, SValue p8, SValue p9, SValue p10, SValue p11, SValue p12, SValue p13, SValue p14,
+    params SValue[] ps);

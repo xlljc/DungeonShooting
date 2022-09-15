@@ -3,19 +3,19 @@
 public class TestArray : SObject
 {
 
-    public SValue arr = SValue.Null;
+    public OldSValue arr = OldSValue.Null;
     
     public TestArray()
     {
         
     }
     
-    public override SValue __InvokeMethod(string funcName, params SValue[] ps)
+    public override OldSValue __InvokeMethod(string funcName, params OldSValue[] ps)
     {
         return base.__InvokeMethod(funcName, ps);
     }
 
-    public override SValue __GetValue(string key)
+    public override OldSValue __GetValue(string key)
     {
         return base.__GetValue(key);
     }

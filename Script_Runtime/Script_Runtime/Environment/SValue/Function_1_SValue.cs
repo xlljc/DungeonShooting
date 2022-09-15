@@ -1,5 +1,5 @@
 
-public class Function_1_SValue : ISValue
+public class Function_1_SValue : SValue
 {
     private Function_1 _value;
     
@@ -8,22 +8,22 @@ public class Function_1_SValue : ISValue
         _value = value;
     }
     
-    public SValueType GetValueType()
+    public override SValueType GetValueType()
     {
         return SValueType.Function;
     }
 
-    public SDataType GetDataType()
+    public override SDataType GetDataType()
     {
         return SDataType.Function_0;
     }
 
-    public object GetValue()
+    public override object GetValue()
     {
         return _value;
     }
 
-    public ISValue Invoke(ISValue v0)
+    public override SValue Invoke(SValue v0)
     {
         return _value(v0);
     }

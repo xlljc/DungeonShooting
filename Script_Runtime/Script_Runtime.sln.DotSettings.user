@@ -13,5 +13,7 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test1&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test3&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test5&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test2&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

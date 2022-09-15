@@ -2,29 +2,29 @@
 /// <summary>
 /// true值
 /// </summary>
-internal class True_SValue : ISValue
+internal class True_SValue : SValue
 {
-    public SValueType GetValueType()
+    public override SValueType GetValueType()
     {
         return SValueType.True;
     }
 
-    public SDataType GetDataType()
+    public override SDataType GetDataType()
     {
         return SDataType.True;
     }
 
-    public object GetValue()
+    public override object GetValue()
     {
         return true;
     }
     
-    public bool Operator_True()
+    public override bool Operator_True()
     {
         return true;
     }
 
-    public bool Operator_False()
+    public override bool Operator_False()
     {
         return false;
     }

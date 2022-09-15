@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 public class SArray : IObject
 {
-    private List<SValue> _arr;
+    private List<OldSValue> _arr;
 
-    public SArray(params SValue[] values)
+    public SArray(params OldSValue[] values)
     {
-        _arr = new List<SValue>(values);
+        _arr = new List<OldSValue>(values);
     }
 
-    public SValue length => _arr.Count;
+    public OldSValue length => _arr.Count;
 
-    public SValue indexOf(SValue v)
+    public OldSValue indexOf(OldSValue v)
     {
         for (int i = 0; i < _arr.Count; i++)
         {
@@ -24,7 +24,7 @@ public class SArray : IObject
         return -1;
     }
 
-    public SValue lastIndexOf(SValue v)
+    public OldSValue lastIndexOf(OldSValue v)
     {
         for (int i = _arr.Count - 1; i >= 0; i--)
         {
@@ -36,19 +36,19 @@ public class SArray : IObject
         return -1;
     }
 
-    public SValue add(SValue v)
+    public OldSValue add(OldSValue v)
     {
         _arr.Add(v);
-        return SValue.Null;
+        return OldSValue.Null;
     }
 
-    public SValue delete(SValue index)
+    public OldSValue delete(OldSValue index)
     {
         AssertUtils.AssertIsNumber(index);
         var i = (int)(double)index.Value;
         if (i < 0 || i >= _arr.Count)
         {
-            return SValue.Null;
+            return OldSValue.Null;
         }
 
         var v = _arr[i];
@@ -56,41 +56,41 @@ public class SArray : IObject
         return v;
     }
 
-    public SValue clear()
+    public OldSValue clear()
     {
         _arr.Clear();
-        return SValue.Null;
+        return OldSValue.Null;
     }
 
-    public SValue __GetValue(string key)
+    public OldSValue __GetValue(string key)
     {
         switch (key)
         {
             case "length":
                 return length;
         }
-        return SValue.Null;
+        return OldSValue.Null;
     }
 
-    public virtual void __SetValue(string key, SValue value)
+    public virtual void __SetValue(string key, OldSValue value)
     {
 
     }
 
 
-    public SValue __GetValue(int key)
+    public OldSValue __GetValue(int key)
     {
         if (key < 0 || key >= _arr.Count)
         {
-            return SValue.Null;
+            return OldSValue.Null;
         }
 
         return _arr[key];
     }
 
-    public virtual SValue toString()
+    public virtual OldSValue toString()
     {
-        return new SValue("[object: object]");
+        return new OldSValue("[object: object]");
     }
 
     public override string ToString()
@@ -98,7 +98,7 @@ public class SArray : IObject
         return (string)toString().Value;
     }
     //
-    public virtual SValue __InvokeMethod(string key, params SValue[] ps)
+    public virtual OldSValue __InvokeMethod(string key, params OldSValue[] ps)
     {
         switch (key)
         {
@@ -147,7 +147,7 @@ public class SArray : IObject
                 }
                 break;
         }
-        return SValue.Null;
+        return OldSValue.Null;
     }
     //
 }

@@ -2,7 +2,7 @@
 /// <summary>
 /// 字符串
 /// </summary>
-internal class String_SValue : ISValue
+internal class String_SValue : SValue
 {
     internal string _value;
 
@@ -11,17 +11,17 @@ internal class String_SValue : ISValue
         _value = value;
     }
     
-    public SValueType GetValueType()
+    public override SValueType GetValueType()
     {
         return SValueType.String;
     }
 
-    public SDataType GetDataType()
+    public override SDataType GetDataType()
     {
         return SDataType.String;
     }
 
-    public object GetValue()
+    public override object GetValue()
     {
         return _value;
     }

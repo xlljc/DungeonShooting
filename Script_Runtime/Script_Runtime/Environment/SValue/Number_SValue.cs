@@ -4,7 +4,7 @@ using System;
 /// <summary>
 /// 数字类型
 /// </summary>
-internal class Number_SValue : ISValue
+internal class Number_SValue : SValue
 {
     internal double _value;
     
@@ -13,107 +13,107 @@ internal class Number_SValue : ISValue
         _value = value;
     }
     
-    public SValueType GetValueType()
+    public override SValueType GetValueType()
     {
         return SValueType.Number;
     }
 
-    public SDataType GetDataType()
+    public override SDataType GetDataType()
     {
         return SDataType.Number;
     }
 
-    public object GetValue()
+    public override object GetValue()
     {
         return _value;
     }
     
-    public ISValue Operator_SinceAdd()
+    public override SValue Operator_SinceAdd()
     {
         return new Number_SValue(_value + 1);
     }
     
-    public ISValue Operator_SinceReduction()
+    public override SValue Operator_SinceReduction()
     {
         return new Number_SValue(_value - 1);
     }
     
-    public ISValue Operator_Greater_Double(double v2)
+    public override SValue Operator_Greater_Double(double v2)
     {
-        return _value > v2 ? ISValue.True : ISValue.False;
+        return _value > v2 ? SValue.True : SValue.False;
     }
 
-    public ISValue Operator_Less_Double(double v2)
+    public override SValue Operator_Less_Double(double v2)
     {
-        return _value < v2 ? ISValue.True : ISValue.False;
+        return _value < v2 ? SValue.True : SValue.False;
     }
 
-    public ISValue Operator_Greater_ISValue(ISValue v2)
+    public override SValue Operator_Greater_SValue(SValue v2)
     {
         switch (v2.GetDataType())
         {
             case SDataType.Number:
-                return _value > ((Number_SValue)v2)._value ? ISValue.True : ISValue.False;
+                return _value > ((Number_SValue)v2)._value ? SValue.True : SValue.False;
         }
-        return ISValue.False;
+        return SValue.False;
     }
     
-    public ISValue Operator_Less_ISValue(ISValue v2)
+    public override SValue Operator_Less_SValue(SValue v2)
     {
         switch (v2.GetDataType())
         {
             case SDataType.Number:
-                return _value < ((Number_SValue)v2)._value ? ISValue.True : ISValue.False;
+                return _value < ((Number_SValue)v2)._value ? SValue.True : SValue.False;
         }
-        return ISValue.False;
+        return SValue.False;
     }
 
-    public ISValue Operator_Greater_Equal_Double(double v2)
+    public override SValue Operator_Greater_Equal_Double(double v2)
     {
-        return _value >= v2 ? ISValue.True : ISValue.False;
+        return _value >= v2 ? SValue.True : SValue.False;
     }
 
-    public ISValue Operator_Less_Equal_Double(double v2)
+    public override SValue Operator_Less_Equal_Double(double v2)
     {
-        return _value <= v2 ? ISValue.True : ISValue.False;
+        return _value <= v2 ? SValue.True : SValue.False;
     }
     
-    public ISValue Operator_Greater_Equal_ISValue(ISValue v2)
+    public override SValue Operator_Greater_Equal_SValue(SValue v2)
     {
         switch (v2.GetDataType())
         {
             case SDataType.Number:
-                return _value >= ((Number_SValue)v2)._value ? ISValue.True : ISValue.False;
+                return _value >= ((Number_SValue)v2)._value ? SValue.True : SValue.False;
         }
-        return ISValue.False;
+        return SValue.False;
     }
     
-    public ISValue Operator_Less_Equal_ISValue(ISValue v2)
+    public override SValue Operator_Less_Equal_SValue(SValue v2)
     {
         switch (v2.GetDataType())
         {
             case SDataType.Number:
-                return _value <= ((Number_SValue)v2)._value ? ISValue.True : ISValue.False;
+                return _value <= ((Number_SValue)v2)._value ? SValue.True : SValue.False;
         }
-        return ISValue.False;
+        return SValue.False;
     }
 
-    public ISValue Operator_Negative()
+    public override SValue Operator_Negative()
     {
         return new Number_SValue(-_value);
     }
     
-    public ISValue Operator_Not()
+    public override SValue Operator_Not()
     {
-        return _value > 0 ? ISValue.False : ISValue.True;
+        return _value > 0 ? SValue.False : SValue.True;
     }
     
-    public bool Operator_True()
+    public override bool Operator_True()
     {
         return _value > 0;
     }
     
-    public bool Operator_False()
+    public override bool Operator_False()
     {
         return _value <= 0;
     }

@@ -25,23 +25,23 @@ public class Vector2Cs
     
 public class Vector2 : SObject
 {
-    public SValue x = SValue.Null;
-    public SValue y = SValue.Null;
+    public OldSValue x = OldSValue.Null;
+    public OldSValue y = OldSValue.Null;
 
-    public Vector2(SValue x, SValue y)
+    public Vector2(OldSValue x, OldSValue y)
     {
         this.x = x;
         this.y = y;
     }
 
-    public SValue add(SValue other)
+    public OldSValue add(OldSValue other)
     {
         return new Vector2(x + other.GetValue("x"), y + other.GetValue("y"));
     }
 
-    public SValue squareLengtn()
+    public OldSValue squareLengtn()
     {
-        SValue num = x + y;
+        OldSValue num = x + y;
         return num * num;
     }
 
@@ -52,7 +52,7 @@ public class Vector2 : SObject
         return base.toString();
     }*/
     
-    public override SValue __GetValue(string key)
+    public override OldSValue __GetValue(string key)
     {
         switch (key)
         {
@@ -62,10 +62,10 @@ public class Vector2 : SObject
                 return y;
         }
 
-        return SValue.Null;
+        return OldSValue.Null;
     }
 
-    public override SValue __InvokeMethod(string funcName, params SValue[] ps)
+    public override OldSValue __InvokeMethod(string funcName, params OldSValue[] ps)
     {
         switch (funcName)
         {
@@ -88,6 +88,6 @@ public class Vector2 : SObject
         }
 
         //报错, 没有找到对应的函数
-        return SValue.Null;
+        return OldSValue.Null;
     }
 }

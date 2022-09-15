@@ -2,9 +2,9 @@
 public class SMap : IObject
 {
     
-    public SValue toString()
+    public OldSValue toString()
     {
-        return new SValue("[object: object]");
+        return new OldSValue("[object: object]");
     }
 
     public override string ToString()
@@ -12,17 +12,17 @@ public class SMap : IObject
         return (string)toString().Value;
     }
     
-    public SValue __GetValue(string key)
+    public OldSValue __GetValue(string key)
     {
-        return SValue.Null;
+        return OldSValue.Null;
     }
 
-    public void __SetValue(string key, SValue value)
+    public void __SetValue(string key, OldSValue value)
     {
         
     }
 
-    public SValue __InvokeMethod(string funcName, params SValue[] ps)
+    public OldSValue __InvokeMethod(string funcName, params OldSValue[] ps)
     {
         switch (funcName)
         {
@@ -35,6 +35,6 @@ public class SMap : IObject
 
                 break;
         }
-        return SValue.Null;
+        return OldSValue.Null;
     }
 }

@@ -4,7 +4,7 @@ using System;
 /// <summary>
 /// 0参数回调函数
 /// </summary>
-internal class Function_0_SValue : ISValue
+internal class Function_0_SValue : SValue
 {
     private Function_0 _value;
     
@@ -13,22 +13,22 @@ internal class Function_0_SValue : ISValue
         _value = value;
     }
     
-    public SValueType GetValueType()
+    public override SValueType GetValueType()
     {
         return SValueType.Function;
     }
 
-    public SDataType GetDataType()
+    public override SDataType GetDataType()
     {
         return SDataType.Function_0;
     }
 
-    public object GetValue()
+    public override object GetValue()
     {
         return _value;
     }
     
-    public ISValue Invoke()
+    public override SValue Invoke()
     {
         return _value();
     }

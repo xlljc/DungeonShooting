@@ -1,9 +1,9 @@
 ﻿
 public abstract class SObject : IObject
 {
-    public virtual SValue toString()
+    public virtual OldSValue toString()
     {
-        return new SValue("[object: object]");
+        return new OldSValue("[object: object]");
     }
 
     public override string ToString()
@@ -11,22 +11,22 @@ public abstract class SObject : IObject
         return (string)toString().Value;
     }
 
-    public virtual SValue __GetValue(string key)
+    public virtual OldSValue __GetValue(string key)
     {
         switch (key)
         {
             case "toString":
-                return new SValue(toString);
+                return new OldSValue(toString);
         }
-        return SValue.Null;
+        return OldSValue.Null;
     }
 
-    public void __SetValue(string key, SValue value)
+    public void __SetValue(string key, OldSValue value)
     {
         
     }
 
-    public virtual SValue __InvokeMethod(string funcName, params SValue[] ps)
+    public virtual OldSValue __InvokeMethod(string funcName, params OldSValue[] ps)
     {
         switch (funcName)
         {
@@ -40,6 +40,6 @@ public abstract class SObject : IObject
                 break;
         }
 
-        return SValue.Null;
+        return OldSValue.Null;
     }
 }

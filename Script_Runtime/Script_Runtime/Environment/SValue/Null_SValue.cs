@@ -4,29 +4,29 @@ using System;
 /// <summary>
 /// null类型
 /// </summary>
-internal class Null_SValue : ISValue
+internal class Null_SValue : SValue
 {
-    public SValueType GetValueType()
+    public override SValueType GetValueType()
     {
         return SValueType.Null;
     }
 
-    public SDataType GetDataType()
+    public override SDataType GetDataType()
     {
         return SDataType.Null;
     }
 
-    public object GetValue()
+    public override object GetValue()
     {
         return null;
     }
 
-    public ISValue GetMember(string key)
+    public override SValue GetMember(string key)
     {
         throw new NullReferenceException();
     }
 
-    public void SetMember(string key, ISValue value)
+    public override void SetMember(string key, SValue value)
     {
         throw new NullReferenceException();
     }
