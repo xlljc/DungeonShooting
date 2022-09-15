@@ -38,17 +38,17 @@ internal class Number_SValue : ISValue
         return new Number_SValue(_value - 1);
     }
     
-    public ISValue Operator_Greater_ISValue_Double(double v2)
+    public ISValue Operator_Greater_Double(double v2)
     {
         return _value > v2 ? ISValue.True : ISValue.False;
     }
 
-    public ISValue Operator_Less_ISValue_Double(double v2)
+    public ISValue Operator_Less_Double(double v2)
     {
         return _value < v2 ? ISValue.True : ISValue.False;
     }
 
-    public ISValue Operator_Greater_ISValue_ISValue(ISValue v2)
+    public ISValue Operator_Greater_ISValue(ISValue v2)
     {
         switch (v2.GetDataType())
         {
@@ -58,7 +58,7 @@ internal class Number_SValue : ISValue
         return ISValue.False;
     }
     
-    public ISValue Operator_Less_ISValue_ISValue(ISValue v2)
+    public ISValue Operator_Less_ISValue(ISValue v2)
     {
         switch (v2.GetDataType())
         {
@@ -68,17 +68,17 @@ internal class Number_SValue : ISValue
         return ISValue.False;
     }
 
-    public ISValue Operator_Greater_Equal_ISValue_Double(double v2)
+    public ISValue Operator_Greater_Equal_Double(double v2)
     {
         return _value >= v2 ? ISValue.True : ISValue.False;
     }
 
-    public ISValue Operator_Less_Equal_ISValue_Double(double v2)
+    public ISValue Operator_Less_Equal_Double(double v2)
     {
         return _value <= v2 ? ISValue.True : ISValue.False;
     }
     
-    public ISValue Operator_Greater_Equal_ISValue_ISValue(ISValue v2)
+    public ISValue Operator_Greater_Equal_ISValue(ISValue v2)
     {
         switch (v2.GetDataType())
         {
@@ -88,7 +88,7 @@ internal class Number_SValue : ISValue
         return ISValue.False;
     }
     
-    public ISValue Operator_Less_Equal_ISValue_ISValue(ISValue v2)
+    public ISValue Operator_Less_Equal_ISValue(ISValue v2)
     {
         switch (v2.GetDataType())
         {

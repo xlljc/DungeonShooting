@@ -86,6 +86,30 @@ public interface ISValue
     #region 内部执行的重载处理
 
     /// <summary>
+    /// 判断等于, 和 double 比较
+    /// </summary>
+    ISValue Operator_Equal_Double(double v2)
+    {
+        return False;
+    }
+    
+    /// <summary>
+    /// 判断等于, 和 string 比较
+    /// </summary>
+    ISValue Operator_Equal_String(string v2)
+    {
+        return False;
+    }
+    
+    /// <summary>
+    /// 判断等于, 和 ISValue 比较
+    /// </summary>
+    ISValue Operator_Equal_ISValue(ISValue v2)
+    {
+        return GetValue() == v2.GetValue() ? True : False;
+    }
+    
+    /// <summary>
     /// 自加
     /// </summary>
     ISValue Operator_SinceAdd()
@@ -104,7 +128,7 @@ public interface ISValue
     /// <summary>
     /// 大于
     /// </summary>
-    ISValue Operator_Greater_ISValue_Double(double v2)
+    ISValue Operator_Greater_Double(double v2)
     {
         return False;
     }
@@ -112,14 +136,14 @@ public interface ISValue
     /// <summary>
     /// 小于
     /// </summary>
-    ISValue Operator_Less_ISValue_Double(double v2)
+    ISValue Operator_Less_Double(double v2)
     {
         return False;
     }    
     /// <summary>
     /// 大于
     /// </summary>
-    ISValue Operator_Greater_ISValue_ISValue(ISValue v2)
+    ISValue Operator_Greater_ISValue(ISValue v2)
     {
         return False;
     }
@@ -127,7 +151,7 @@ public interface ISValue
     /// <summary>
     /// 小于
     /// </summary>
-    ISValue Operator_Less_ISValue_ISValue(ISValue v2)
+    ISValue Operator_Less_ISValue(ISValue v2)
     {
         return False;
     }
@@ -136,7 +160,7 @@ public interface ISValue
     /// <summary>
     /// 大于等于
     /// </summary>
-    ISValue Operator_Greater_Equal_ISValue_Double(double v2)
+    ISValue Operator_Greater_Equal_Double(double v2)
     {
         return False;
     }
@@ -144,14 +168,14 @@ public interface ISValue
     /// <summary>
     /// 小于等于
     /// </summary>
-    ISValue Operator_Less_Equal_ISValue_Double(double v2)
+    ISValue Operator_Less_Equal_Double(double v2)
     {
         return False;
     }    
     /// <summary>
     /// 大于等于
     /// </summary>
-    ISValue Operator_Greater_Equal_ISValue_ISValue(ISValue v2)
+    ISValue Operator_Greater_Equal_ISValue(ISValue v2)
     {
         return False;
     }
@@ -183,7 +207,7 @@ public interface ISValue
     /// <summary>
     /// 小于等于
     /// </summary>
-    ISValue Operator_Less_Equal_ISValue_ISValue(ISValue v2)
+    ISValue Operator_Less_Equal_ISValue(ISValue v2)
     {
         return False;
     }
@@ -209,6 +233,56 @@ public interface ISValue
 
     #region 外部调用的运算符重载
 
+    // public static ISValue operator ==(ISValue v1, double v2)
+    // {
+    //     return v1.Operator_Equal_Double(v2);
+    // }
+    //
+    // public static ISValue operator ==(double v1, ISValue v2)
+    // {
+    //     return v2.Operator_Equal_Double(v1);
+    // }
+    //
+    // public static ISValue operator ==(ISValue v1, string v2)
+    // {
+    //     return v1.Operator_Equal_String(v2);
+    // }
+    //
+    // public static ISValue operator ==(string v1, ISValue v2)
+    // {
+    //     return v2.Operator_Equal_String(v1);
+    // }
+    //
+    // public static ISValue operator ==(ISValue v1, ISValue v2)
+    // {
+    //     return v1.Operator_Equal_ISValue(v2);
+    // }
+    //
+    // public static ISValue operator !=(ISValue v1, double v2)
+    // {
+    //     return v1.Operator_Equal_Double(v2);
+    // }
+    //
+    // public static ISValue operator !=(double v1, ISValue v2)
+    // {
+    //     return v2.Operator_Equal_Double(v1);
+    // }
+    //
+    // public static ISValue operator !=(ISValue v1, string v2)
+    // {
+    //     return v1.Operator_Equal_String(v2);
+    // }
+    //
+    // public static ISValue operator !=(string v1, ISValue v2)
+    // {
+    //     return v2.Operator_Equal_String(v1);
+    // }
+    //
+    // public static ISValue operator !=(ISValue v1, ISValue v2)
+    // {
+    //     return v1.Operator_Equal_ISValue(v2);
+    // }
+    
     public static ISValue operator ++(ISValue v1)
     {
         return v1.Operator_SinceAdd();
@@ -221,63 +295,63 @@ public interface ISValue
 
     public static ISValue operator >(ISValue v1, double v2)
     {
-        return v1.Operator_Greater_ISValue_Double(v2);
+        return v1.Operator_Greater_Double(v2);
     }
     
     public static ISValue operator >(double v1, ISValue v2)
     {
-        return v2.Operator_Less_Equal_ISValue_Double(v1);
+        return v2.Operator_Less_Equal_Double(v1);
     }
 
     public static ISValue operator >(ISValue v1, ISValue v2)
     {
-        return v1.Operator_Greater_ISValue_ISValue(v2);
+        return v1.Operator_Greater_ISValue(v2);
     }
     
     public static ISValue operator <(ISValue v1, double v2)
     {
-        return v1.Operator_Less_ISValue_Double(v2);
+        return v1.Operator_Less_Double(v2);
     }
     
     public static ISValue operator <(double v1, ISValue v2)
     {
-        return v2.Operator_Greater_Equal_ISValue_Double(v1);
+        return v2.Operator_Greater_Equal_Double(v1);
     }
     
     public static ISValue operator <(ISValue v1, ISValue v2)
     {
-        return v1.Operator_Less_ISValue_ISValue(v2);
+        return v1.Operator_Less_ISValue(v2);
     }
 
     //
     public static ISValue operator >=(ISValue v1, double v2)
     {
-        return v1.Operator_Greater_Equal_ISValue_Double(v2);
+        return v1.Operator_Greater_Equal_Double(v2);
     }
     
     public static ISValue operator >=(double v1, ISValue v2)
     {
-        return v2.Operator_Less_ISValue_Double(v1);
+        return v2.Operator_Less_Double(v1);
     }
 
     public static ISValue operator >=(ISValue v1, ISValue v2)
     {
-        return v1.Operator_Greater_Equal_ISValue_ISValue(v2);
+        return v1.Operator_Greater_Equal_ISValue(v2);
     }
     
     public static ISValue operator <=(ISValue v1, double v2)
     {
-        return v1.Operator_Less_Equal_ISValue_Double(v2);
+        return v1.Operator_Less_Equal_Double(v2);
     }
     
     public static ISValue operator <=(double v1, ISValue v2)
     {
-        return v2.Operator_Greater_ISValue_Double(v1);
+        return v2.Operator_Greater_Double(v1);
     }
     
     public static ISValue operator <=(ISValue v1, ISValue v2)
     {
-        return v1.Operator_Less_Equal_ISValue_ISValue(v2);
+        return v1.Operator_Less_Equal_ISValue(v2);
     }
     //
     

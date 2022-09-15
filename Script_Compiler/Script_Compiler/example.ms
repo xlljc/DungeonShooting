@@ -91,7 +91,7 @@ private func grammarExample() {
 	f1(1);
 	//将成员函数存入变量
 	var f2: func(string) = func(say, string);
-	////数组
+	//数组
 	var array = [1, 2, "str"];
 	//匿名对象, 无法扩展和删除属性, 只能对已有的属性进行赋值
 	var obj = {
