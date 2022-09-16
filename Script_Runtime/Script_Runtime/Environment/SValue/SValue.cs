@@ -29,34 +29,200 @@ public abstract class SValue
     /// </summary>
     public abstract SValue HasMember(string key);
 
-    //throw new OperationMemberException($"Member '{key}' not defined.");
     /// <summary>
     /// 设置成员属性
     /// </summary>
     public abstract void SetMember(string key, SValue value);
 
-    //throw new InvokeMethodException("Instance is not a function.");
     /// <summary>
-    /// 把自己当成函数执行
+    /// 把自己当成函数执行, 参数 0 个
     /// </summary>
     public abstract SValue Invoke();
 
-    //throw new InvokeMethodException("Instance is not a function.");
     /// <summary>
-    /// 把自己当成函数执行
+    /// 把自己当成函数执行, 参数 1 个
     /// </summary>
     public abstract SValue Invoke(SValue v0);
 
     /// <summary>
-    /// 执行该对象的成员函数
+    /// 把自己当成函数执行, 参数 2 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 3 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 4 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 5 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 6 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 7 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 8 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 9 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 10 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8, SValue v9);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 11 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8, SValue v9, SValue v10);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 12 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8, SValue v9, SValue v10, SValue v11);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 13 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 14 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 15 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14);
+
+    /// <summary>
+    /// 把自己当成函数执行, 参数 16 个
+    /// </summary>
+    public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 0 个参数
     /// </summary>
     public abstract SValue InvokeMethod(string key);
 
-    //throw new InvokeMethodException("No overloaded member function was found.");
     /// <summary>
-    /// 执行该对象的成员函数
+    /// 执行该对象的成员函数, 传入 1 个参数
     /// </summary>
     public abstract SValue InvokeMethod(string key, SValue v0);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 2 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 3 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 4 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 5 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 6 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 7 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 8 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 9 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7, SValue v8);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 10 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7, SValue v8, SValue v9);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 11 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 12 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 13 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 14 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 15 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14);
+
+    /// <summary>
+    /// 执行该对象的成员函数, 传入 16 个参数
+    /// </summary>
+    public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue
+            v15);
 
     #region 子类需重写的运算函数
 

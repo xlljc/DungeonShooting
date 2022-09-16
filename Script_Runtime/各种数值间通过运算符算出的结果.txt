@@ -1,0 +1,1356 @@
+
+------------------------------------------------------------------
+                         加法
+------------------------------------------------------------------
+
+2 + 2 => 4   ------   number + number => number
+2 + -2 => 0   ------   number + number => number
+2 + 0 => 2   ------   number + number => number
+2 + 2.5 => 4.5   ------   number + number => number
+2 + -2.5 => -0.5   ------   number + number => number
+2 + abc => 2abc   ------   number + string => string
+2 + true => 3   ------   number + boolean => number
+2 + false => 2   ------   number + boolean => number
+2 + null => 2   ------   number + object => number
+2 + [object Object] => 2[object Object]   ------   number + object => string
+2 + function() {} => 2function() {}   ------   number + function => string
+-2 + 2 => 0   ------   number + number => number
+-2 + -2 => -4   ------   number + number => number
+-2 + 0 => -2   ------   number + number => number
+-2 + 2.5 => 0.5   ------   number + number => number
+-2 + -2.5 => -4.5   ------   number + number => number
+-2 + abc => -2abc   ------   number + string => string
+-2 + true => -1   ------   number + boolean => number
+-2 + false => -2   ------   number + boolean => number
+-2 + null => -2   ------   number + object => number
+-2 + [object Object] => -2[object Object]   ------   number + object => string
+-2 + function() {} => -2function() {}   ------   number + function => string
+0 + 2 => 2   ------   number + number => number
+0 + -2 => -2   ------   number + number => number
+0 + 0 => 0   ------   number + number => number
+0 + 2.5 => 2.5   ------   number + number => number
+0 + -2.5 => -2.5   ------   number + number => number
+0 + abc => 0abc   ------   number + string => string
+0 + true => 1   ------   number + boolean => number
+0 + false => 0   ------   number + boolean => number
+0 + null => 0   ------   number + object => number
+0 + [object Object] => 0[object Object]   ------   number + object => string
+0 + function() {} => 0function() {}   ------   number + function => string
+2.5 + 2 => 4.5   ------   number + number => number
+2.5 + -2 => 0.5   ------   number + number => number
+2.5 + 0 => 2.5   ------   number + number => number
+2.5 + 2.5 => 5   ------   number + number => number
+2.5 + -2.5 => 0   ------   number + number => number
+2.5 + abc => 2.5abc   ------   number + string => string
+2.5 + true => 3.5   ------   number + boolean => number
+2.5 + false => 2.5   ------   number + boolean => number
+2.5 + null => 2.5   ------   number + object => number
+2.5 + [object Object] => 2.5[object Object]   ------   number + object => string
+2.5 + function() {} => 2.5function() {}   ------   number + function => string
+-2.5 + 2 => -0.5   ------   number + number => number
+-2.5 + -2 => -4.5   ------   number + number => number
+-2.5 + 0 => -2.5   ------   number + number => number
+-2.5 + 2.5 => 0   ------   number + number => number
+-2.5 + -2.5 => -5   ------   number + number => number
+-2.5 + abc => -2.5abc   ------   number + string => string
+-2.5 + true => -1.5   ------   number + boolean => number
+-2.5 + false => -2.5   ------   number + boolean => number
+-2.5 + null => -2.5   ------   number + object => number
+-2.5 + [object Object] => -2.5[object Object]   ------   number + object => string
+-2.5 + function() {} => -2.5function() {}   ------   number + function => string
+abc + 2 => abc2   ------   string + number => string
+abc + -2 => abc-2   ------   string + number => string
+abc + 0 => abc0   ------   string + number => string
+abc + 2.5 => abc2.5   ------   string + number => string
+abc + -2.5 => abc-2.5   ------   string + number => string
+abc + abc => abcabc   ------   string + string => string
+abc + true => abctrue   ------   string + boolean => string
+abc + false => abcfalse   ------   string + boolean => string
+abc + null => abcnull   ------   string + object => string
+abc + [object Object] => abc[object Object]   ------   string + object => string
+abc + function() {} => abcfunction() {}   ------   string + function => string
+true + 2 => 3   ------   boolean + number => number
+true + -2 => -1   ------   boolean + number => number
+true + 0 => 1   ------   boolean + number => number
+true + 2.5 => 3.5   ------   boolean + number => number
+true + -2.5 => -1.5   ------   boolean + number => number
+true + abc => trueabc   ------   boolean + string => string
+true + true => 2   ------   boolean + boolean => number
+true + false => 1   ------   boolean + boolean => number
+true + null => 1   ------   boolean + object => number
+true + [object Object] => true[object Object]   ------   boolean + object => string
+true + function() {} => truefunction() {}   ------   boolean + function => string
+false + 2 => 2   ------   boolean + number => number
+false + -2 => -2   ------   boolean + number => number
+false + 0 => 0   ------   boolean + number => number
+false + 2.5 => 2.5   ------   boolean + number => number
+false + -2.5 => -2.5   ------   boolean + number => number
+false + abc => falseabc   ------   boolean + string => string
+false + true => 1   ------   boolean + boolean => number
+false + false => 0   ------   boolean + boolean => number
+false + null => 0   ------   boolean + object => number
+false + [object Object] => false[object Object]   ------   boolean + object => string
+false + function() {} => falsefunction() {}   ------   boolean + function => string
+null + 2 => 2   ------   object + number => number
+null + -2 => -2   ------   object + number => number
+null + 0 => 0   ------   object + number => number
+null + 2.5 => 2.5   ------   object + number => number
+null + -2.5 => -2.5   ------   object + number => number
+null + abc => nullabc   ------   object + string => string
+null + true => 1   ------   object + boolean => number
+null + false => 0   ------   object + boolean => number
+null + null => 0   ------   object + object => number
+null + [object Object] => null[object Object]   ------   object + object => string
+null + function() {} => nullfunction() {}   ------   object + function => string
+[object Object] + 2 => [object Object]2   ------   object + number => string
+[object Object] + -2 => [object Object]-2   ------   object + number => string
+[object Object] + 0 => [object Object]0   ------   object + number => string
+[object Object] + 2.5 => [object Object]2.5   ------   object + number => string
+[object Object] + -2.5 => [object Object]-2.5   ------   object + number => string
+[object Object] + abc => [object Object]abc   ------   object + string => string
+[object Object] + true => [object Object]true   ------   object + boolean => string
+[object Object] + false => [object Object]false   ------   object + boolean => string
+[object Object] + null => [object Object]null   ------   object + object => string
+[object Object] + [object Object] => [object Object][object Object]   ------   object + object => string
+[object Object] + function() {} => [object Object]function() {}   ------   object + function => string
+function() {} + 2 => function() {}2   ------   function + number => string
+function() {} + -2 => function() {}-2   ------   function + number => string
+function() {} + 0 => function() {}0   ------   function + number => string
+function() {} + 2.5 => function() {}2.5   ------   function + number => string
+function() {} + -2.5 => function() {}-2.5   ------   function + number => string
+function() {} + abc => function() {}abc   ------   function + string => string
+function() {} + true => function() {}true   ------   function + boolean => string
+function() {} + false => function() {}false   ------   function + boolean => string
+function() {} + null => function() {}null   ------   function + object => string
+function() {} + [object Object] => function() {}[object Object]   ------   function + object => string
+function() {} + function() {} => function() {}function() {}   ------   function + function => string
+
+------------------------------------------------------------------
+                         减法
+------------------------------------------------------------------
+
+2 - 2 => 0   ------   number - number => number
+2 - -2 => 4   ------   number - number => number
+2 - 0 => 2   ------   number - number => number
+2 - 2.5 => -0.5   ------   number - number => number
+2 - -2.5 => 4.5   ------   number - number => number
+2 - abc => NaN   ------   number - string => number
+2 - true => 1   ------   number - boolean => number
+2 - false => 2   ------   number - boolean => number
+2 - null => 2   ------   number - object => number
+2 - [object Object] => NaN   ------   number - object => number
+2 - function() {} => NaN   ------   number - function => number
+-2 - 2 => -4   ------   number - number => number
+-2 - -2 => 0   ------   number - number => number
+-2 - 0 => -2   ------   number - number => number
+-2 - 2.5 => -4.5   ------   number - number => number
+-2 - -2.5 => 0.5   ------   number - number => number
+-2 - abc => NaN   ------   number - string => number
+-2 - true => -3   ------   number - boolean => number
+-2 - false => -2   ------   number - boolean => number
+-2 - null => -2   ------   number - object => number
+-2 - [object Object] => NaN   ------   number - object => number
+-2 - function() {} => NaN   ------   number - function => number
+0 - 2 => -2   ------   number - number => number
+0 - -2 => 2   ------   number - number => number
+0 - 0 => 0   ------   number - number => number
+0 - 2.5 => -2.5   ------   number - number => number
+0 - -2.5 => 2.5   ------   number - number => number
+0 - abc => NaN   ------   number - string => number
+0 - true => -1   ------   number - boolean => number
+0 - false => 0   ------   number - boolean => number
+0 - null => 0   ------   number - object => number
+0 - [object Object] => NaN   ------   number - object => number
+0 - function() {} => NaN   ------   number - function => number
+2.5 - 2 => 0.5   ------   number - number => number
+2.5 - -2 => 4.5   ------   number - number => number
+2.5 - 0 => 2.5   ------   number - number => number
+2.5 - 2.5 => 0   ------   number - number => number
+2.5 - -2.5 => 5   ------   number - number => number
+2.5 - abc => NaN   ------   number - string => number
+2.5 - true => 1.5   ------   number - boolean => number
+2.5 - false => 2.5   ------   number - boolean => number
+2.5 - null => 2.5   ------   number - object => number
+2.5 - [object Object] => NaN   ------   number - object => number
+2.5 - function() {} => NaN   ------   number - function => number
+-2.5 - 2 => -4.5   ------   number - number => number
+-2.5 - -2 => -0.5   ------   number - number => number
+-2.5 - 0 => -2.5   ------   number - number => number
+-2.5 - 2.5 => -5   ------   number - number => number
+-2.5 - -2.5 => 0   ------   number - number => number
+-2.5 - abc => NaN   ------   number - string => number
+-2.5 - true => -3.5   ------   number - boolean => number
+-2.5 - false => -2.5   ------   number - boolean => number
+-2.5 - null => -2.5   ------   number - object => number
+-2.5 - [object Object] => NaN   ------   number - object => number
+-2.5 - function() {} => NaN   ------   number - function => number
+abc - 2 => NaN   ------   string - number => number
+abc - -2 => NaN   ------   string - number => number
+abc - 0 => NaN   ------   string - number => number
+abc - 2.5 => NaN   ------   string - number => number
+abc - -2.5 => NaN   ------   string - number => number
+abc - abc => NaN   ------   string - string => number
+abc - true => NaN   ------   string - boolean => number
+abc - false => NaN   ------   string - boolean => number
+abc - null => NaN   ------   string - object => number
+abc - [object Object] => NaN   ------   string - object => number
+abc - function() {} => NaN   ------   string - function => number
+true - 2 => -1   ------   boolean - number => number
+true - -2 => 3   ------   boolean - number => number
+true - 0 => 1   ------   boolean - number => number
+true - 2.5 => -1.5   ------   boolean - number => number
+true - -2.5 => 3.5   ------   boolean - number => number
+true - abc => NaN   ------   boolean - string => number
+true - true => 0   ------   boolean - boolean => number
+true - false => 1   ------   boolean - boolean => number
+true - null => 1   ------   boolean - object => number
+true - [object Object] => NaN   ------   boolean - object => number
+true - function() {} => NaN   ------   boolean - function => number
+false - 2 => -2   ------   boolean - number => number
+false - -2 => 2   ------   boolean - number => number
+false - 0 => 0   ------   boolean - number => number
+false - 2.5 => -2.5   ------   boolean - number => number
+false - -2.5 => 2.5   ------   boolean - number => number
+false - abc => NaN   ------   boolean - string => number
+false - true => -1   ------   boolean - boolean => number
+false - false => 0   ------   boolean - boolean => number
+false - null => 0   ------   boolean - object => number
+false - [object Object] => NaN   ------   boolean - object => number
+false - function() {} => NaN   ------   boolean - function => number
+null - 2 => -2   ------   object - number => number
+null - -2 => 2   ------   object - number => number
+null - 0 => 0   ------   object - number => number
+null - 2.5 => -2.5   ------   object - number => number
+null - -2.5 => 2.5   ------   object - number => number
+null - abc => NaN   ------   object - string => number
+null - true => -1   ------   object - boolean => number
+null - false => 0   ------   object - boolean => number
+null - null => 0   ------   object - object => number
+null - [object Object] => NaN   ------   object - object => number
+null - function() {} => NaN   ------   object - function => number
+[object Object] - 2 => NaN   ------   object - number => number
+[object Object] - -2 => NaN   ------   object - number => number
+[object Object] - 0 => NaN   ------   object - number => number
+[object Object] - 2.5 => NaN   ------   object - number => number
+[object Object] - -2.5 => NaN   ------   object - number => number
+[object Object] - abc => NaN   ------   object - string => number
+[object Object] - true => NaN   ------   object - boolean => number
+[object Object] - false => NaN   ------   object - boolean => number
+[object Object] - null => NaN   ------   object - object => number
+[object Object] - [object Object] => NaN   ------   object - object => number
+[object Object] - function() {} => NaN   ------   object - function => number
+function() {} - 2 => NaN   ------   function - number => number
+function() {} - -2 => NaN   ------   function - number => number
+function() {} - 0 => NaN   ------   function - number => number
+function() {} - 2.5 => NaN   ------   function - number => number
+function() {} - -2.5 => NaN   ------   function - number => number
+function() {} - abc => NaN   ------   function - string => number
+function() {} - true => NaN   ------   function - boolean => number
+function() {} - false => NaN   ------   function - boolean => number
+function() {} - null => NaN   ------   function - object => number
+function() {} - [object Object] => NaN   ------   function - object => number
+function() {} - function() {} => NaN   ------   function - function => number
+
+------------------------------------------------------------------
+                         乘法
+------------------------------------------------------------------
+
+2 * 2 => 4   ------   number * number => number
+2 * -2 => -4   ------   number * number => number
+2 * 0 => 0   ------   number * number => number
+2 * 2.5 => 5   ------   number * number => number
+2 * -2.5 => -5   ------   number * number => number
+2 * abc => NaN   ------   number * string => number
+2 * true => 2   ------   number * boolean => number
+2 * false => 0   ------   number * boolean => number
+2 * null => 0   ------   number * object => number
+2 * [object Object] => NaN   ------   number * object => number
+2 * function() {} => NaN   ------   number * function => number
+-2 * 2 => -4   ------   number * number => number
+-2 * -2 => 4   ------   number * number => number
+-2 * 0 => 0   ------   number * number => number
+-2 * 2.5 => -5   ------   number * number => number
+-2 * -2.5 => 5   ------   number * number => number
+-2 * abc => NaN   ------   number * string => number
+-2 * true => -2   ------   number * boolean => number
+-2 * false => 0   ------   number * boolean => number
+-2 * null => 0   ------   number * object => number
+-2 * [object Object] => NaN   ------   number * object => number
+-2 * function() {} => NaN   ------   number * function => number
+0 * 2 => 0   ------   number * number => number
+0 * -2 => 0   ------   number * number => number
+0 * 0 => 0   ------   number * number => number
+0 * 2.5 => 0   ------   number * number => number
+0 * -2.5 => 0   ------   number * number => number
+0 * abc => NaN   ------   number * string => number
+0 * true => 0   ------   number * boolean => number
+0 * false => 0   ------   number * boolean => number
+0 * null => 0   ------   number * object => number
+0 * [object Object] => NaN   ------   number * object => number
+0 * function() {} => NaN   ------   number * function => number
+2.5 * 2 => 5   ------   number * number => number
+2.5 * -2 => -5   ------   number * number => number
+2.5 * 0 => 0   ------   number * number => number
+2.5 * 2.5 => 6.25   ------   number * number => number
+2.5 * -2.5 => -6.25   ------   number * number => number
+2.5 * abc => NaN   ------   number * string => number
+2.5 * true => 2.5   ------   number * boolean => number
+2.5 * false => 0   ------   number * boolean => number
+2.5 * null => 0   ------   number * object => number
+2.5 * [object Object] => NaN   ------   number * object => number
+2.5 * function() {} => NaN   ------   number * function => number
+-2.5 * 2 => -5   ------   number * number => number
+-2.5 * -2 => 5   ------   number * number => number
+-2.5 * 0 => 0   ------   number * number => number
+-2.5 * 2.5 => -6.25   ------   number * number => number
+-2.5 * -2.5 => 6.25   ------   number * number => number
+-2.5 * abc => NaN   ------   number * string => number
+-2.5 * true => -2.5   ------   number * boolean => number
+-2.5 * false => 0   ------   number * boolean => number
+-2.5 * null => 0   ------   number * object => number
+-2.5 * [object Object] => NaN   ------   number * object => number
+-2.5 * function() {} => NaN   ------   number * function => number
+abc * 2 => NaN   ------   string * number => number
+abc * -2 => NaN   ------   string * number => number
+abc * 0 => NaN   ------   string * number => number
+abc * 2.5 => NaN   ------   string * number => number
+abc * -2.5 => NaN   ------   string * number => number
+abc * abc => NaN   ------   string * string => number
+abc * true => NaN   ------   string * boolean => number
+abc * false => NaN   ------   string * boolean => number
+abc * null => NaN   ------   string * object => number
+abc * [object Object] => NaN   ------   string * object => number
+abc * function() {} => NaN   ------   string * function => number
+true * 2 => 2   ------   boolean * number => number
+true * -2 => -2   ------   boolean * number => number
+true * 0 => 0   ------   boolean * number => number
+true * 2.5 => 2.5   ------   boolean * number => number
+true * -2.5 => -2.5   ------   boolean * number => number
+true * abc => NaN   ------   boolean * string => number
+true * true => 1   ------   boolean * boolean => number
+true * false => 0   ------   boolean * boolean => number
+true * null => 0   ------   boolean * object => number
+true * [object Object] => NaN   ------   boolean * object => number
+true * function() {} => NaN   ------   boolean * function => number
+false * 2 => 0   ------   boolean * number => number
+false * -2 => 0   ------   boolean * number => number
+false * 0 => 0   ------   boolean * number => number
+false * 2.5 => 0   ------   boolean * number => number
+false * -2.5 => 0   ------   boolean * number => number
+false * abc => NaN   ------   boolean * string => number
+false * true => 0   ------   boolean * boolean => number
+false * false => 0   ------   boolean * boolean => number
+false * null => 0   ------   boolean * object => number
+false * [object Object] => NaN   ------   boolean * object => number
+false * function() {} => NaN   ------   boolean * function => number
+null * 2 => 0   ------   object * number => number
+null * -2 => 0   ------   object * number => number
+null * 0 => 0   ------   object * number => number
+null * 2.5 => 0   ------   object * number => number
+null * -2.5 => 0   ------   object * number => number
+null * abc => NaN   ------   object * string => number
+null * true => 0   ------   object * boolean => number
+null * false => 0   ------   object * boolean => number
+null * null => 0   ------   object * object => number
+null * [object Object] => NaN   ------   object * object => number
+null * function() {} => NaN   ------   object * function => number
+[object Object] * 2 => NaN   ------   object * number => number
+[object Object] * -2 => NaN   ------   object * number => number
+[object Object] * 0 => NaN   ------   object * number => number
+[object Object] * 2.5 => NaN   ------   object * number => number
+[object Object] * -2.5 => NaN   ------   object * number => number
+[object Object] * abc => NaN   ------   object * string => number
+[object Object] * true => NaN   ------   object * boolean => number
+[object Object] * false => NaN   ------   object * boolean => number
+[object Object] * null => NaN   ------   object * object => number
+[object Object] * [object Object] => NaN   ------   object * object => number
+[object Object] * function() {} => NaN   ------   object * function => number
+function() {} * 2 => NaN   ------   function * number => number
+function() {} * -2 => NaN   ------   function * number => number
+function() {} * 0 => NaN   ------   function * number => number
+function() {} * 2.5 => NaN   ------   function * number => number
+function() {} * -2.5 => NaN   ------   function * number => number
+function() {} * abc => NaN   ------   function * string => number
+function() {} * true => NaN   ------   function * boolean => number
+function() {} * false => NaN   ------   function * boolean => number
+function() {} * null => NaN   ------   function * object => number
+function() {} * [object Object] => NaN   ------   function * object => number
+function() {} * function() {} => NaN   ------   function * function => number
+
+------------------------------------------------------------------
+                         除法
+------------------------------------------------------------------
+
+2 / 2 => 1   ------   number / number => number
+2 / -2 => -1   ------   number / number => number
+2 / 0 => Infinity   ------   number / number => number
+2 / 2.5 => 0.8   ------   number / number => number
+2 / -2.5 => -0.8   ------   number / number => number
+2 / abc => NaN   ------   number / string => number
+2 / true => 2   ------   number / boolean => number
+2 / false => Infinity   ------   number / boolean => number
+2 / null => Infinity   ------   number / object => number
+2 / [object Object] => NaN   ------   number / object => number
+2 / function() {} => NaN   ------   number / function => number
+-2 / 2 => -1   ------   number / number => number
+-2 / -2 => 1   ------   number / number => number
+-2 / 0 => -Infinity   ------   number / number => number
+-2 / 2.5 => -0.8   ------   number / number => number
+-2 / -2.5 => 0.8   ------   number / number => number
+-2 / abc => NaN   ------   number / string => number
+-2 / true => -2   ------   number / boolean => number
+-2 / false => -Infinity   ------   number / boolean => number
+-2 / null => -Infinity   ------   number / object => number
+-2 / [object Object] => NaN   ------   number / object => number
+-2 / function() {} => NaN   ------   number / function => number
+0 / 2 => 0   ------   number / number => number
+0 / -2 => 0   ------   number / number => number
+0 / 0 => NaN   ------   number / number => number
+0 / 2.5 => 0   ------   number / number => number
+0 / -2.5 => 0   ------   number / number => number
+0 / abc => NaN   ------   number / string => number
+0 / true => 0   ------   number / boolean => number
+0 / false => NaN   ------   number / boolean => number
+0 / null => NaN   ------   number / object => number
+0 / [object Object] => NaN   ------   number / object => number
+0 / function() {} => NaN   ------   number / function => number
+2.5 / 2 => 1.25   ------   number / number => number
+2.5 / -2 => -1.25   ------   number / number => number
+2.5 / 0 => Infinity   ------   number / number => number
+2.5 / 2.5 => 1   ------   number / number => number
+2.5 / -2.5 => -1   ------   number / number => number
+2.5 / abc => NaN   ------   number / string => number
+2.5 / true => 2.5   ------   number / boolean => number
+2.5 / false => Infinity   ------   number / boolean => number
+2.5 / null => Infinity   ------   number / object => number
+2.5 / [object Object] => NaN   ------   number / object => number
+2.5 / function() {} => NaN   ------   number / function => number
+-2.5 / 2 => -1.25   ------   number / number => number
+-2.5 / -2 => 1.25   ------   number / number => number
+-2.5 / 0 => -Infinity   ------   number / number => number
+-2.5 / 2.5 => -1   ------   number / number => number
+-2.5 / -2.5 => 1   ------   number / number => number
+-2.5 / abc => NaN   ------   number / string => number
+-2.5 / true => -2.5   ------   number / boolean => number
+-2.5 / false => -Infinity   ------   number / boolean => number
+-2.5 / null => -Infinity   ------   number / object => number
+-2.5 / [object Object] => NaN   ------   number / object => number
+-2.5 / function() {} => NaN   ------   number / function => number
+abc / 2 => NaN   ------   string / number => number
+abc / -2 => NaN   ------   string / number => number
+abc / 0 => NaN   ------   string / number => number
+abc / 2.5 => NaN   ------   string / number => number
+abc / -2.5 => NaN   ------   string / number => number
+abc / abc => NaN   ------   string / string => number
+abc / true => NaN   ------   string / boolean => number
+abc / false => NaN   ------   string / boolean => number
+abc / null => NaN   ------   string / object => number
+abc / [object Object] => NaN   ------   string / object => number
+abc / function() {} => NaN   ------   string / function => number
+true / 2 => 0.5   ------   boolean / number => number
+true / -2 => -0.5   ------   boolean / number => number
+true / 0 => Infinity   ------   boolean / number => number
+true / 2.5 => 0.4   ------   boolean / number => number
+true / -2.5 => -0.4   ------   boolean / number => number
+true / abc => NaN   ------   boolean / string => number
+true / true => 1   ------   boolean / boolean => number
+true / false => Infinity   ------   boolean / boolean => number
+true / null => Infinity   ------   boolean / object => number
+true / [object Object] => NaN   ------   boolean / object => number
+true / function() {} => NaN   ------   boolean / function => number
+false / 2 => 0   ------   boolean / number => number
+false / -2 => 0   ------   boolean / number => number
+false / 0 => NaN   ------   boolean / number => number
+false / 2.5 => 0   ------   boolean / number => number
+false / -2.5 => 0   ------   boolean / number => number
+false / abc => NaN   ------   boolean / string => number
+false / true => 0   ------   boolean / boolean => number
+false / false => NaN   ------   boolean / boolean => number
+false / null => NaN   ------   boolean / object => number
+false / [object Object] => NaN   ------   boolean / object => number
+false / function() {} => NaN   ------   boolean / function => number
+null / 2 => 0   ------   object / number => number
+null / -2 => 0   ------   object / number => number
+null / 0 => NaN   ------   object / number => number
+null / 2.5 => 0   ------   object / number => number
+null / -2.5 => 0   ------   object / number => number
+null / abc => NaN   ------   object / string => number
+null / true => 0   ------   object / boolean => number
+null / false => NaN   ------   object / boolean => number
+null / null => NaN   ------   object / object => number
+null / [object Object] => NaN   ------   object / object => number
+null / function() {} => NaN   ------   object / function => number
+[object Object] / 2 => NaN   ------   object / number => number
+[object Object] / -2 => NaN   ------   object / number => number
+[object Object] / 0 => NaN   ------   object / number => number
+[object Object] / 2.5 => NaN   ------   object / number => number
+[object Object] / -2.5 => NaN   ------   object / number => number
+[object Object] / abc => NaN   ------   object / string => number
+[object Object] / true => NaN   ------   object / boolean => number
+[object Object] / false => NaN   ------   object / boolean => number
+[object Object] / null => NaN   ------   object / object => number
+[object Object] / [object Object] => NaN   ------   object / object => number
+[object Object] / function() {} => NaN   ------   object / function => number
+function() {} / 2 => NaN   ------   function / number => number
+function() {} / -2 => NaN   ------   function / number => number
+function() {} / 0 => NaN   ------   function / number => number
+function() {} / 2.5 => NaN   ------   function / number => number
+function() {} / -2.5 => NaN   ------   function / number => number
+function() {} / abc => NaN   ------   function / string => number
+function() {} / true => NaN   ------   function / boolean => number
+function() {} / false => NaN   ------   function / boolean => number
+function() {} / null => NaN   ------   function / object => number
+function() {} / [object Object] => NaN   ------   function / object => number
+function() {} / function() {} => NaN   ------   function / function => number
+
+------------------------------------------------------------------
+                         取模
+------------------------------------------------------------------
+
+2 % 2 => 0   ------   number % number => number
+2 % -2 => 0   ------   number % number => number
+2 % 0 => NaN   ------   number % number => number
+2 % 2.5 => 2   ------   number % number => number
+2 % -2.5 => 2   ------   number % number => number
+2 % abc => NaN   ------   number % string => number
+2 % true => 0   ------   number % boolean => number
+2 % false => NaN   ------   number % boolean => number
+2 % null => NaN   ------   number % object => number
+2 % [object Object] => NaN   ------   number % object => number
+2 % function() {} => NaN   ------   number % function => number
+-2 % 2 => 0   ------   number % number => number
+-2 % -2 => 0   ------   number % number => number
+-2 % 0 => NaN   ------   number % number => number
+-2 % 2.5 => -2   ------   number % number => number
+-2 % -2.5 => -2   ------   number % number => number
+-2 % abc => NaN   ------   number % string => number
+-2 % true => 0   ------   number % boolean => number
+-2 % false => NaN   ------   number % boolean => number
+-2 % null => NaN   ------   number % object => number
+-2 % [object Object] => NaN   ------   number % object => number
+-2 % function() {} => NaN   ------   number % function => number
+0 % 2 => 0   ------   number % number => number
+0 % -2 => 0   ------   number % number => number
+0 % 0 => NaN   ------   number % number => number
+0 % 2.5 => 0   ------   number % number => number
+0 % -2.5 => 0   ------   number % number => number
+0 % abc => NaN   ------   number % string => number
+0 % true => 0   ------   number % boolean => number
+0 % false => NaN   ------   number % boolean => number
+0 % null => NaN   ------   number % object => number
+0 % [object Object] => NaN   ------   number % object => number
+0 % function() {} => NaN   ------   number % function => number
+2.5 % 2 => 0.5   ------   number % number => number
+2.5 % -2 => 0.5   ------   number % number => number
+2.5 % 0 => NaN   ------   number % number => number
+2.5 % 2.5 => 0   ------   number % number => number
+2.5 % -2.5 => 0   ------   number % number => number
+2.5 % abc => NaN   ------   number % string => number
+2.5 % true => 0.5   ------   number % boolean => number
+2.5 % false => NaN   ------   number % boolean => number
+2.5 % null => NaN   ------   number % object => number
+2.5 % [object Object] => NaN   ------   number % object => number
+2.5 % function() {} => NaN   ------   number % function => number
+-2.5 % 2 => -0.5   ------   number % number => number
+-2.5 % -2 => -0.5   ------   number % number => number
+-2.5 % 0 => NaN   ------   number % number => number
+-2.5 % 2.5 => 0   ------   number % number => number
+-2.5 % -2.5 => 0   ------   number % number => number
+-2.5 % abc => NaN   ------   number % string => number
+-2.5 % true => -0.5   ------   number % boolean => number
+-2.5 % false => NaN   ------   number % boolean => number
+-2.5 % null => NaN   ------   number % object => number
+-2.5 % [object Object] => NaN   ------   number % object => number
+-2.5 % function() {} => NaN   ------   number % function => number
+abc % 2 => NaN   ------   string % number => number
+abc % -2 => NaN   ------   string % number => number
+abc % 0 => NaN   ------   string % number => number
+abc % 2.5 => NaN   ------   string % number => number
+abc % -2.5 => NaN   ------   string % number => number
+abc % abc => NaN   ------   string % string => number
+abc % true => NaN   ------   string % boolean => number
+abc % false => NaN   ------   string % boolean => number
+abc % null => NaN   ------   string % object => number
+abc % [object Object] => NaN   ------   string % object => number
+abc % function() {} => NaN   ------   string % function => number
+true % 2 => 1   ------   boolean % number => number
+true % -2 => 1   ------   boolean % number => number
+true % 0 => NaN   ------   boolean % number => number
+true % 2.5 => 1   ------   boolean % number => number
+true % -2.5 => 1   ------   boolean % number => number
+true % abc => NaN   ------   boolean % string => number
+true % true => 0   ------   boolean % boolean => number
+true % false => NaN   ------   boolean % boolean => number
+true % null => NaN   ------   boolean % object => number
+true % [object Object] => NaN   ------   boolean % object => number
+true % function() {} => NaN   ------   boolean % function => number
+false % 2 => 0   ------   boolean % number => number
+false % -2 => 0   ------   boolean % number => number
+false % 0 => NaN   ------   boolean % number => number
+false % 2.5 => 0   ------   boolean % number => number
+false % -2.5 => 0   ------   boolean % number => number
+false % abc => NaN   ------   boolean % string => number
+false % true => 0   ------   boolean % boolean => number
+false % false => NaN   ------   boolean % boolean => number
+false % null => NaN   ------   boolean % object => number
+false % [object Object] => NaN   ------   boolean % object => number
+false % function() {} => NaN   ------   boolean % function => number
+null % 2 => 0   ------   object % number => number
+null % -2 => 0   ------   object % number => number
+null % 0 => NaN   ------   object % number => number
+null % 2.5 => 0   ------   object % number => number
+null % -2.5 => 0   ------   object % number => number
+null % abc => NaN   ------   object % string => number
+null % true => 0   ------   object % boolean => number
+null % false => NaN   ------   object % boolean => number
+null % null => NaN   ------   object % object => number
+null % [object Object] => NaN   ------   object % object => number
+null % function() {} => NaN   ------   object % function => number
+[object Object] % 2 => NaN   ------   object % number => number
+[object Object] % -2 => NaN   ------   object % number => number
+[object Object] % 0 => NaN   ------   object % number => number
+[object Object] % 2.5 => NaN   ------   object % number => number
+[object Object] % -2.5 => NaN   ------   object % number => number
+[object Object] % abc => NaN   ------   object % string => number
+[object Object] % true => NaN   ------   object % boolean => number
+[object Object] % false => NaN   ------   object % boolean => number
+[object Object] % null => NaN   ------   object % object => number
+[object Object] % [object Object] => NaN   ------   object % object => number
+[object Object] % function() {} => NaN   ------   object % function => number
+function() {} % 2 => NaN   ------   function % number => number
+function() {} % -2 => NaN   ------   function % number => number
+function() {} % 0 => NaN   ------   function % number => number
+function() {} % 2.5 => NaN   ------   function % number => number
+function() {} % -2.5 => NaN   ------   function % number => number
+function() {} % abc => NaN   ------   function % string => number
+function() {} % true => NaN   ------   function % boolean => number
+function() {} % false => NaN   ------   function % boolean => number
+function() {} % null => NaN   ------   function % object => number
+function() {} % [object Object] => NaN   ------   function % object => number
+function() {} % function() {} => NaN   ------   function % function => number
+
+------------------------------------------------------------------
+                         二进制左移
+------------------------------------------------------------------
+
+2 << 2 => 8   ------   number << number => number
+2 << -2 => -2147483648   ------   number << number => number
+2 << 0 => 2   ------   number << number => number
+2 << 2.5 => 8   ------   number << number => number
+2 << -2.5 => -2147483648   ------   number << number => number
+2 << abc => 2   ------   number << string => number
+2 << true => 4   ------   number << boolean => number
+2 << false => 2   ------   number << boolean => number
+2 << null => 2   ------   number << object => number
+2 << [object Object] => 2   ------   number << object => number
+2 << function() {} => 2   ------   number << function => number
+-2 << 2 => -8   ------   number << number => number
+-2 << -2 => -2147483648   ------   number << number => number
+-2 << 0 => -2   ------   number << number => number
+-2 << 2.5 => -8   ------   number << number => number
+-2 << -2.5 => -2147483648   ------   number << number => number
+-2 << abc => -2   ------   number << string => number
+-2 << true => -4   ------   number << boolean => number
+-2 << false => -2   ------   number << boolean => number
+-2 << null => -2   ------   number << object => number
+-2 << [object Object] => -2   ------   number << object => number
+-2 << function() {} => -2   ------   number << function => number
+0 << 2 => 0   ------   number << number => number
+0 << -2 => 0   ------   number << number => number
+0 << 0 => 0   ------   number << number => number
+0 << 2.5 => 0   ------   number << number => number
+0 << -2.5 => 0   ------   number << number => number
+0 << abc => 0   ------   number << string => number
+0 << true => 0   ------   number << boolean => number
+0 << false => 0   ------   number << boolean => number
+0 << null => 0   ------   number << object => number
+0 << [object Object] => 0   ------   number << object => number
+0 << function() {} => 0   ------   number << function => number
+2.5 << 2 => 8   ------   number << number => number
+2.5 << -2 => -2147483648   ------   number << number => number
+2.5 << 0 => 2   ------   number << number => number
+2.5 << 2.5 => 8   ------   number << number => number
+2.5 << -2.5 => -2147483648   ------   number << number => number
+2.5 << abc => 2   ------   number << string => number
+2.5 << true => 4   ------   number << boolean => number
+2.5 << false => 2   ------   number << boolean => number
+2.5 << null => 2   ------   number << object => number
+2.5 << [object Object] => 2   ------   number << object => number
+2.5 << function() {} => 2   ------   number << function => number
+-2.5 << 2 => -8   ------   number << number => number
+-2.5 << -2 => -2147483648   ------   number << number => number
+-2.5 << 0 => -2   ------   number << number => number
+-2.5 << 2.5 => -8   ------   number << number => number
+-2.5 << -2.5 => -2147483648   ------   number << number => number
+-2.5 << abc => -2   ------   number << string => number
+-2.5 << true => -4   ------   number << boolean => number
+-2.5 << false => -2   ------   number << boolean => number
+-2.5 << null => -2   ------   number << object => number
+-2.5 << [object Object] => -2   ------   number << object => number
+-2.5 << function() {} => -2   ------   number << function => number
+abc << 2 => 0   ------   string << number => number
+abc << -2 => 0   ------   string << number => number
+abc << 0 => 0   ------   string << number => number
+abc << 2.5 => 0   ------   string << number => number
+abc << -2.5 => 0   ------   string << number => number
+abc << abc => 0   ------   string << string => number
+abc << true => 0   ------   string << boolean => number
+abc << false => 0   ------   string << boolean => number
+abc << null => 0   ------   string << object => number
+abc << [object Object] => 0   ------   string << object => number
+abc << function() {} => 0   ------   string << function => number
+true << 2 => 4   ------   boolean << number => number
+true << -2 => 1073741824   ------   boolean << number => number
+true << 0 => 1   ------   boolean << number => number
+true << 2.5 => 4   ------   boolean << number => number
+true << -2.5 => 1073741824   ------   boolean << number => number
+true << abc => 1   ------   boolean << string => number
+true << true => 2   ------   boolean << boolean => number
+true << false => 1   ------   boolean << boolean => number
+true << null => 1   ------   boolean << object => number
+true << [object Object] => 1   ------   boolean << object => number
+true << function() {} => 1   ------   boolean << function => number
+false << 2 => 0   ------   boolean << number => number
+false << -2 => 0   ------   boolean << number => number
+false << 0 => 0   ------   boolean << number => number
+false << 2.5 => 0   ------   boolean << number => number
+false << -2.5 => 0   ------   boolean << number => number
+false << abc => 0   ------   boolean << string => number
+false << true => 0   ------   boolean << boolean => number
+false << false => 0   ------   boolean << boolean => number
+false << null => 0   ------   boolean << object => number
+false << [object Object] => 0   ------   boolean << object => number
+false << function() {} => 0   ------   boolean << function => number
+null << 2 => 0   ------   object << number => number
+null << -2 => 0   ------   object << number => number
+null << 0 => 0   ------   object << number => number
+null << 2.5 => 0   ------   object << number => number
+null << -2.5 => 0   ------   object << number => number
+null << abc => 0   ------   object << string => number
+null << true => 0   ------   object << boolean => number
+null << false => 0   ------   object << boolean => number
+null << null => 0   ------   object << object => number
+null << [object Object] => 0   ------   object << object => number
+null << function() {} => 0   ------   object << function => number
+[object Object] << 2 => 0   ------   object << number => number
+[object Object] << -2 => 0   ------   object << number => number
+[object Object] << 0 => 0   ------   object << number => number
+[object Object] << 2.5 => 0   ------   object << number => number
+[object Object] << -2.5 => 0   ------   object << number => number
+[object Object] << abc => 0   ------   object << string => number
+[object Object] << true => 0   ------   object << boolean => number
+[object Object] << false => 0   ------   object << boolean => number
+[object Object] << null => 0   ------   object << object => number
+[object Object] << [object Object] => 0   ------   object << object => number
+[object Object] << function() {} => 0   ------   object << function => number
+function() {} << 2 => 0   ------   function << number => number
+function() {} << -2 => 0   ------   function << number => number
+function() {} << 0 => 0   ------   function << number => number
+function() {} << 2.5 => 0   ------   function << number => number
+function() {} << -2.5 => 0   ------   function << number => number
+function() {} << abc => 0   ------   function << string => number
+function() {} << true => 0   ------   function << boolean => number
+function() {} << false => 0   ------   function << boolean => number
+function() {} << null => 0   ------   function << object => number
+function() {} << [object Object] => 0   ------   function << object => number
+function() {} << function() {} => 0   ------   function << function => number
+
+------------------------------------------------------------------
+                         二进制右移
+------------------------------------------------------------------
+
+2 >> 2 => 0   ------   number >> number => number
+2 >> -2 => 0   ------   number >> number => number
+2 >> 0 => 2   ------   number >> number => number
+2 >> 2.5 => 0   ------   number >> number => number
+2 >> -2.5 => 0   ------   number >> number => number
+2 >> abc => 2   ------   number >> string => number
+2 >> true => 1   ------   number >> boolean => number
+2 >> false => 2   ------   number >> boolean => number
+2 >> null => 2   ------   number >> object => number
+2 >> [object Object] => 2   ------   number >> object => number
+2 >> function() {} => 2   ------   number >> function => number
+-2 >> 2 => -1   ------   number >> number => number
+-2 >> -2 => -1   ------   number >> number => number
+-2 >> 0 => -2   ------   number >> number => number
+-2 >> 2.5 => -1   ------   number >> number => number
+-2 >> -2.5 => -1   ------   number >> number => number
+-2 >> abc => -2   ------   number >> string => number
+-2 >> true => -1   ------   number >> boolean => number
+-2 >> false => -2   ------   number >> boolean => number
+-2 >> null => -2   ------   number >> object => number
+-2 >> [object Object] => -2   ------   number >> object => number
+-2 >> function() {} => -2   ------   number >> function => number
+0 >> 2 => 0   ------   number >> number => number
+0 >> -2 => 0   ------   number >> number => number
+0 >> 0 => 0   ------   number >> number => number
+0 >> 2.5 => 0   ------   number >> number => number
+0 >> -2.5 => 0   ------   number >> number => number
+0 >> abc => 0   ------   number >> string => number
+0 >> true => 0   ------   number >> boolean => number
+0 >> false => 0   ------   number >> boolean => number
+0 >> null => 0   ------   number >> object => number
+0 >> [object Object] => 0   ------   number >> object => number
+0 >> function() {} => 0   ------   number >> function => number
+2.5 >> 2 => 0   ------   number >> number => number
+2.5 >> -2 => 0   ------   number >> number => number
+2.5 >> 0 => 2   ------   number >> number => number
+2.5 >> 2.5 => 0   ------   number >> number => number
+2.5 >> -2.5 => 0   ------   number >> number => number
+2.5 >> abc => 2   ------   number >> string => number
+2.5 >> true => 1   ------   number >> boolean => number
+2.5 >> false => 2   ------   number >> boolean => number
+2.5 >> null => 2   ------   number >> object => number
+2.5 >> [object Object] => 2   ------   number >> object => number
+2.5 >> function() {} => 2   ------   number >> function => number
+-2.5 >> 2 => -1   ------   number >> number => number
+-2.5 >> -2 => -1   ------   number >> number => number
+-2.5 >> 0 => -2   ------   number >> number => number
+-2.5 >> 2.5 => -1   ------   number >> number => number
+-2.5 >> -2.5 => -1   ------   number >> number => number
+-2.5 >> abc => -2   ------   number >> string => number
+-2.5 >> true => -1   ------   number >> boolean => number
+-2.5 >> false => -2   ------   number >> boolean => number
+-2.5 >> null => -2   ------   number >> object => number
+-2.5 >> [object Object] => -2   ------   number >> object => number
+-2.5 >> function() {} => -2   ------   number >> function => number
+abc >> 2 => 0   ------   string >> number => number
+abc >> -2 => 0   ------   string >> number => number
+abc >> 0 => 0   ------   string >> number => number
+abc >> 2.5 => 0   ------   string >> number => number
+abc >> -2.5 => 0   ------   string >> number => number
+abc >> abc => 0   ------   string >> string => number
+abc >> true => 0   ------   string >> boolean => number
+abc >> false => 0   ------   string >> boolean => number
+abc >> null => 0   ------   string >> object => number
+abc >> [object Object] => 0   ------   string >> object => number
+abc >> function() {} => 0   ------   string >> function => number
+true >> 2 => 0   ------   boolean >> number => number
+true >> -2 => 0   ------   boolean >> number => number
+true >> 0 => 1   ------   boolean >> number => number
+true >> 2.5 => 0   ------   boolean >> number => number
+true >> -2.5 => 0   ------   boolean >> number => number
+true >> abc => 1   ------   boolean >> string => number
+true >> true => 0   ------   boolean >> boolean => number
+true >> false => 1   ------   boolean >> boolean => number
+true >> null => 1   ------   boolean >> object => number
+true >> [object Object] => 1   ------   boolean >> object => number
+true >> function() {} => 1   ------   boolean >> function => number
+false >> 2 => 0   ------   boolean >> number => number
+false >> -2 => 0   ------   boolean >> number => number
+false >> 0 => 0   ------   boolean >> number => number
+false >> 2.5 => 0   ------   boolean >> number => number
+false >> -2.5 => 0   ------   boolean >> number => number
+false >> abc => 0   ------   boolean >> string => number
+false >> true => 0   ------   boolean >> boolean => number
+false >> false => 0   ------   boolean >> boolean => number
+false >> null => 0   ------   boolean >> object => number
+false >> [object Object] => 0   ------   boolean >> object => number
+false >> function() {} => 0   ------   boolean >> function => number
+null >> 2 => 0   ------   object >> number => number
+null >> -2 => 0   ------   object >> number => number
+null >> 0 => 0   ------   object >> number => number
+null >> 2.5 => 0   ------   object >> number => number
+null >> -2.5 => 0   ------   object >> number => number
+null >> abc => 0   ------   object >> string => number
+null >> true => 0   ------   object >> boolean => number
+null >> false => 0   ------   object >> boolean => number
+null >> null => 0   ------   object >> object => number
+null >> [object Object] => 0   ------   object >> object => number
+null >> function() {} => 0   ------   object >> function => number
+[object Object] >> 2 => 0   ------   object >> number => number
+[object Object] >> -2 => 0   ------   object >> number => number
+[object Object] >> 0 => 0   ------   object >> number => number
+[object Object] >> 2.5 => 0   ------   object >> number => number
+[object Object] >> -2.5 => 0   ------   object >> number => number
+[object Object] >> abc => 0   ------   object >> string => number
+[object Object] >> true => 0   ------   object >> boolean => number
+[object Object] >> false => 0   ------   object >> boolean => number
+[object Object] >> null => 0   ------   object >> object => number
+[object Object] >> [object Object] => 0   ------   object >> object => number
+[object Object] >> function() {} => 0   ------   object >> function => number
+function() {} >> 2 => 0   ------   function >> number => number
+function() {} >> -2 => 0   ------   function >> number => number
+function() {} >> 0 => 0   ------   function >> number => number
+function() {} >> 2.5 => 0   ------   function >> number => number
+function() {} >> -2.5 => 0   ------   function >> number => number
+function() {} >> abc => 0   ------   function >> string => number
+function() {} >> true => 0   ------   function >> boolean => number
+function() {} >> false => 0   ------   function >> boolean => number
+function() {} >> null => 0   ------   function >> object => number
+function() {} >> [object Object] => 0   ------   function >> object => number
+function() {} >> function() {} => 0   ------   function >> function => number
+
+------------------------------------------------------------------
+                         二进制与
+------------------------------------------------------------------
+
+2 & 2 => 2   ------   number & number => number
+2 & -2 => 2   ------   number & number => number
+2 & 0 => 0   ------   number & number => number
+2 & 2.5 => 2   ------   number & number => number
+2 & -2.5 => 2   ------   number & number => number
+2 & abc => 0   ------   number & string => number
+2 & true => 0   ------   number & boolean => number
+2 & false => 0   ------   number & boolean => number
+2 & null => 0   ------   number & object => number
+2 & [object Object] => 0   ------   number & object => number
+2 & function() {} => 0   ------   number & function => number
+-2 & 2 => 2   ------   number & number => number
+-2 & -2 => -2   ------   number & number => number
+-2 & 0 => 0   ------   number & number => number
+-2 & 2.5 => 2   ------   number & number => number
+-2 & -2.5 => -2   ------   number & number => number
+-2 & abc => 0   ------   number & string => number
+-2 & true => 0   ------   number & boolean => number
+-2 & false => 0   ------   number & boolean => number
+-2 & null => 0   ------   number & object => number
+-2 & [object Object] => 0   ------   number & object => number
+-2 & function() {} => 0   ------   number & function => number
+0 & 2 => 0   ------   number & number => number
+0 & -2 => 0   ------   number & number => number
+0 & 0 => 0   ------   number & number => number
+0 & 2.5 => 0   ------   number & number => number
+0 & -2.5 => 0   ------   number & number => number
+0 & abc => 0   ------   number & string => number
+0 & true => 0   ------   number & boolean => number
+0 & false => 0   ------   number & boolean => number
+0 & null => 0   ------   number & object => number
+0 & [object Object] => 0   ------   number & object => number
+0 & function() {} => 0   ------   number & function => number
+2.5 & 2 => 2   ------   number & number => number
+2.5 & -2 => 2   ------   number & number => number
+2.5 & 0 => 0   ------   number & number => number
+2.5 & 2.5 => 2   ------   number & number => number
+2.5 & -2.5 => 2   ------   number & number => number
+2.5 & abc => 0   ------   number & string => number
+2.5 & true => 0   ------   number & boolean => number
+2.5 & false => 0   ------   number & boolean => number
+2.5 & null => 0   ------   number & object => number
+2.5 & [object Object] => 0   ------   number & object => number
+2.5 & function() {} => 0   ------   number & function => number
+-2.5 & 2 => 2   ------   number & number => number
+-2.5 & -2 => -2   ------   number & number => number
+-2.5 & 0 => 0   ------   number & number => number
+-2.5 & 2.5 => 2   ------   number & number => number
+-2.5 & -2.5 => -2   ------   number & number => number
+-2.5 & abc => 0   ------   number & string => number
+-2.5 & true => 0   ------   number & boolean => number
+-2.5 & false => 0   ------   number & boolean => number
+-2.5 & null => 0   ------   number & object => number
+-2.5 & [object Object] => 0   ------   number & object => number
+-2.5 & function() {} => 0   ------   number & function => number
+abc & 2 => 0   ------   string & number => number
+abc & -2 => 0   ------   string & number => number
+abc & 0 => 0   ------   string & number => number
+abc & 2.5 => 0   ------   string & number => number
+abc & -2.5 => 0   ------   string & number => number
+abc & abc => 0   ------   string & string => number
+abc & true => 0   ------   string & boolean => number
+abc & false => 0   ------   string & boolean => number
+abc & null => 0   ------   string & object => number
+abc & [object Object] => 0   ------   string & object => number
+abc & function() {} => 0   ------   string & function => number
+true & 2 => 0   ------   boolean & number => number
+true & -2 => 0   ------   boolean & number => number
+true & 0 => 0   ------   boolean & number => number
+true & 2.5 => 0   ------   boolean & number => number
+true & -2.5 => 0   ------   boolean & number => number
+true & abc => 0   ------   boolean & string => number
+true & true => 1   ------   boolean & boolean => number
+true & false => 0   ------   boolean & boolean => number
+true & null => 0   ------   boolean & object => number
+true & [object Object] => 0   ------   boolean & object => number
+true & function() {} => 0   ------   boolean & function => number
+false & 2 => 0   ------   boolean & number => number
+false & -2 => 0   ------   boolean & number => number
+false & 0 => 0   ------   boolean & number => number
+false & 2.5 => 0   ------   boolean & number => number
+false & -2.5 => 0   ------   boolean & number => number
+false & abc => 0   ------   boolean & string => number
+false & true => 0   ------   boolean & boolean => number
+false & false => 0   ------   boolean & boolean => number
+false & null => 0   ------   boolean & object => number
+false & [object Object] => 0   ------   boolean & object => number
+false & function() {} => 0   ------   boolean & function => number
+null & 2 => 0   ------   object & number => number
+null & -2 => 0   ------   object & number => number
+null & 0 => 0   ------   object & number => number
+null & 2.5 => 0   ------   object & number => number
+null & -2.5 => 0   ------   object & number => number
+null & abc => 0   ------   object & string => number
+null & true => 0   ------   object & boolean => number
+null & false => 0   ------   object & boolean => number
+null & null => 0   ------   object & object => number
+null & [object Object] => 0   ------   object & object => number
+null & function() {} => 0   ------   object & function => number
+[object Object] & 2 => 0   ------   object & number => number
+[object Object] & -2 => 0   ------   object & number => number
+[object Object] & 0 => 0   ------   object & number => number
+[object Object] & 2.5 => 0   ------   object & number => number
+[object Object] & -2.5 => 0   ------   object & number => number
+[object Object] & abc => 0   ------   object & string => number
+[object Object] & true => 0   ------   object & boolean => number
+[object Object] & false => 0   ------   object & boolean => number
+[object Object] & null => 0   ------   object & object => number
+[object Object] & [object Object] => 0   ------   object & object => number
+[object Object] & function() {} => 0   ------   object & function => number
+function() {} & 2 => 0   ------   function & number => number
+function() {} & -2 => 0   ------   function & number => number
+function() {} & 0 => 0   ------   function & number => number
+function() {} & 2.5 => 0   ------   function & number => number
+function() {} & -2.5 => 0   ------   function & number => number
+function() {} & abc => 0   ------   function & string => number
+function() {} & true => 0   ------   function & boolean => number
+function() {} & false => 0   ------   function & boolean => number
+function() {} & null => 0   ------   function & object => number
+function() {} & [object Object] => 0   ------   function & object => number
+function() {} & function() {} => 0   ------   function & function => number
+
+------------------------------------------------------------------
+                         二进制或
+------------------------------------------------------------------
+
+2 | 2 => 2   ------   number | number => number
+2 | -2 => -2   ------   number | number => number
+2 | 0 => 2   ------   number | number => number
+2 | 2.5 => 2   ------   number | number => number
+2 | -2.5 => -2   ------   number | number => number
+2 | abc => 2   ------   number | string => number
+2 | true => 3   ------   number | boolean => number
+2 | false => 2   ------   number | boolean => number
+2 | null => 2   ------   number | object => number
+2 | [object Object] => 2   ------   number | object => number
+2 | function() {} => 2   ------   number | function => number
+-2 | 2 => -2   ------   number | number => number
+-2 | -2 => -2   ------   number | number => number
+-2 | 0 => -2   ------   number | number => number
+-2 | 2.5 => -2   ------   number | number => number
+-2 | -2.5 => -2   ------   number | number => number
+-2 | abc => -2   ------   number | string => number
+-2 | true => -1   ------   number | boolean => number
+-2 | false => -2   ------   number | boolean => number
+-2 | null => -2   ------   number | object => number
+-2 | [object Object] => -2   ------   number | object => number
+-2 | function() {} => -2   ------   number | function => number
+0 | 2 => 2   ------   number | number => number
+0 | -2 => -2   ------   number | number => number
+0 | 0 => 0   ------   number | number => number
+0 | 2.5 => 2   ------   number | number => number
+0 | -2.5 => -2   ------   number | number => number
+0 | abc => 0   ------   number | string => number
+0 | true => 1   ------   number | boolean => number
+0 | false => 0   ------   number | boolean => number
+0 | null => 0   ------   number | object => number
+0 | [object Object] => 0   ------   number | object => number
+0 | function() {} => 0   ------   number | function => number
+2.5 | 2 => 2   ------   number | number => number
+2.5 | -2 => -2   ------   number | number => number
+2.5 | 0 => 2   ------   number | number => number
+2.5 | 2.5 => 2   ------   number | number => number
+2.5 | -2.5 => -2   ------   number | number => number
+2.5 | abc => 2   ------   number | string => number
+2.5 | true => 3   ------   number | boolean => number
+2.5 | false => 2   ------   number | boolean => number
+2.5 | null => 2   ------   number | object => number
+2.5 | [object Object] => 2   ------   number | object => number
+2.5 | function() {} => 2   ------   number | function => number
+-2.5 | 2 => -2   ------   number | number => number
+-2.5 | -2 => -2   ------   number | number => number
+-2.5 | 0 => -2   ------   number | number => number
+-2.5 | 2.5 => -2   ------   number | number => number
+-2.5 | -2.5 => -2   ------   number | number => number
+-2.5 | abc => -2   ------   number | string => number
+-2.5 | true => -1   ------   number | boolean => number
+-2.5 | false => -2   ------   number | boolean => number
+-2.5 | null => -2   ------   number | object => number
+-2.5 | [object Object] => -2   ------   number | object => number
+-2.5 | function() {} => -2   ------   number | function => number
+abc | 2 => 2   ------   string | number => number
+abc | -2 => -2   ------   string | number => number
+abc | 0 => 0   ------   string | number => number
+abc | 2.5 => 2   ------   string | number => number
+abc | -2.5 => -2   ------   string | number => number
+abc | abc => 0   ------   string | string => number
+abc | true => 1   ------   string | boolean => number
+abc | false => 0   ------   string | boolean => number
+abc | null => 0   ------   string | object => number
+abc | [object Object] => 0   ------   string | object => number
+abc | function() {} => 0   ------   string | function => number
+true | 2 => 3   ------   boolean | number => number
+true | -2 => -1   ------   boolean | number => number
+true | 0 => 1   ------   boolean | number => number
+true | 2.5 => 3   ------   boolean | number => number
+true | -2.5 => -1   ------   boolean | number => number
+true | abc => 1   ------   boolean | string => number
+true | true => 1   ------   boolean | boolean => number
+true | false => 1   ------   boolean | boolean => number
+true | null => 1   ------   boolean | object => number
+true | [object Object] => 1   ------   boolean | object => number
+true | function() {} => 1   ------   boolean | function => number
+false | 2 => 2   ------   boolean | number => number
+false | -2 => -2   ------   boolean | number => number
+false | 0 => 0   ------   boolean | number => number
+false | 2.5 => 2   ------   boolean | number => number
+false | -2.5 => -2   ------   boolean | number => number
+false | abc => 0   ------   boolean | string => number
+false | true => 1   ------   boolean | boolean => number
+false | false => 0   ------   boolean | boolean => number
+false | null => 0   ------   boolean | object => number
+false | [object Object] => 0   ------   boolean | object => number
+false | function() {} => 0   ------   boolean | function => number
+null | 2 => 2   ------   object | number => number
+null | -2 => -2   ------   object | number => number
+null | 0 => 0   ------   object | number => number
+null | 2.5 => 2   ------   object | number => number
+null | -2.5 => -2   ------   object | number => number
+null | abc => 0   ------   object | string => number
+null | true => 1   ------   object | boolean => number
+null | false => 0   ------   object | boolean => number
+null | null => 0   ------   object | object => number
+null | [object Object] => 0   ------   object | object => number
+null | function() {} => 0   ------   object | function => number
+[object Object] | 2 => 2   ------   object | number => number
+[object Object] | -2 => -2   ------   object | number => number
+[object Object] | 0 => 0   ------   object | number => number
+[object Object] | 2.5 => 2   ------   object | number => number
+[object Object] | -2.5 => -2   ------   object | number => number
+[object Object] | abc => 0   ------   object | string => number
+[object Object] | true => 1   ------   object | boolean => number
+[object Object] | false => 0   ------   object | boolean => number
+[object Object] | null => 0   ------   object | object => number
+[object Object] | [object Object] => 0   ------   object | object => number
+[object Object] | function() {} => 0   ------   object | function => number
+function() {} | 2 => 2   ------   function | number => number
+function() {} | -2 => -2   ------   function | number => number
+function() {} | 0 => 0   ------   function | number => number
+function() {} | 2.5 => 2   ------   function | number => number
+function() {} | -2.5 => -2   ------   function | number => number
+function() {} | abc => 0   ------   function | string => number
+function() {} | true => 1   ------   function | boolean => number
+function() {} | false => 0   ------   function | boolean => number
+function() {} | null => 0   ------   function | object => number
+function() {} | [object Object] => 0   ------   function | object => number
+function() {} | function() {} => 0   ------   function | function => number
+
+------------------------------------------------------------------
+                         二进制异或
+------------------------------------------------------------------
+
+2 ^ 2 => 0   ------   number ^ number => number
+2 ^ -2 => -4   ------   number ^ number => number
+2 ^ 0 => 2   ------   number ^ number => number
+2 ^ 2.5 => 0   ------   number ^ number => number
+2 ^ -2.5 => -4   ------   number ^ number => number
+2 ^ abc => 2   ------   number ^ string => number
+2 ^ true => 3   ------   number ^ boolean => number
+2 ^ false => 2   ------   number ^ boolean => number
+2 ^ null => 2   ------   number ^ object => number
+2 ^ [object Object] => 2   ------   number ^ object => number
+2 ^ function() {} => 2   ------   number ^ function => number
+-2 ^ 2 => -4   ------   number ^ number => number
+-2 ^ -2 => 0   ------   number ^ number => number
+-2 ^ 0 => -2   ------   number ^ number => number
+-2 ^ 2.5 => -4   ------   number ^ number => number
+-2 ^ -2.5 => 0   ------   number ^ number => number
+-2 ^ abc => -2   ------   number ^ string => number
+-2 ^ true => -1   ------   number ^ boolean => number
+-2 ^ false => -2   ------   number ^ boolean => number
+-2 ^ null => -2   ------   number ^ object => number
+-2 ^ [object Object] => -2   ------   number ^ object => number
+-2 ^ function() {} => -2   ------   number ^ function => number
+0 ^ 2 => 2   ------   number ^ number => number
+0 ^ -2 => -2   ------   number ^ number => number
+0 ^ 0 => 0   ------   number ^ number => number
+0 ^ 2.5 => 2   ------   number ^ number => number
+0 ^ -2.5 => -2   ------   number ^ number => number
+0 ^ abc => 0   ------   number ^ string => number
+0 ^ true => 1   ------   number ^ boolean => number
+0 ^ false => 0   ------   number ^ boolean => number
+0 ^ null => 0   ------   number ^ object => number
+0 ^ [object Object] => 0   ------   number ^ object => number
+0 ^ function() {} => 0   ------   number ^ function => number
+2.5 ^ 2 => 0   ------   number ^ number => number
+2.5 ^ -2 => -4   ------   number ^ number => number
+2.5 ^ 0 => 2   ------   number ^ number => number
+2.5 ^ 2.5 => 0   ------   number ^ number => number
+2.5 ^ -2.5 => -4   ------   number ^ number => number
+2.5 ^ abc => 2   ------   number ^ string => number
+2.5 ^ true => 3   ------   number ^ boolean => number
+2.5 ^ false => 2   ------   number ^ boolean => number
+2.5 ^ null => 2   ------   number ^ object => number
+2.5 ^ [object Object] => 2   ------   number ^ object => number
+2.5 ^ function() {} => 2   ------   number ^ function => number
+-2.5 ^ 2 => -4   ------   number ^ number => number
+-2.5 ^ -2 => 0   ------   number ^ number => number
+-2.5 ^ 0 => -2   ------   number ^ number => number
+-2.5 ^ 2.5 => -4   ------   number ^ number => number
+-2.5 ^ -2.5 => 0   ------   number ^ number => number
+-2.5 ^ abc => -2   ------   number ^ string => number
+-2.5 ^ true => -1   ------   number ^ boolean => number
+-2.5 ^ false => -2   ------   number ^ boolean => number
+-2.5 ^ null => -2   ------   number ^ object => number
+-2.5 ^ [object Object] => -2   ------   number ^ object => number
+-2.5 ^ function() {} => -2   ------   number ^ function => number
+abc ^ 2 => 2   ------   string ^ number => number
+abc ^ -2 => -2   ------   string ^ number => number
+abc ^ 0 => 0   ------   string ^ number => number
+abc ^ 2.5 => 2   ------   string ^ number => number
+abc ^ -2.5 => -2   ------   string ^ number => number
+abc ^ abc => 0   ------   string ^ string => number
+abc ^ true => 1   ------   string ^ boolean => number
+abc ^ false => 0   ------   string ^ boolean => number
+abc ^ null => 0   ------   string ^ object => number
+abc ^ [object Object] => 0   ------   string ^ object => number
+abc ^ function() {} => 0   ------   string ^ function => number
+true ^ 2 => 3   ------   boolean ^ number => number
+true ^ -2 => -1   ------   boolean ^ number => number
+true ^ 0 => 1   ------   boolean ^ number => number
+true ^ 2.5 => 3   ------   boolean ^ number => number
+true ^ -2.5 => -1   ------   boolean ^ number => number
+true ^ abc => 1   ------   boolean ^ string => number
+true ^ true => 0   ------   boolean ^ boolean => number
+true ^ false => 1   ------   boolean ^ boolean => number
+true ^ null => 1   ------   boolean ^ object => number
+true ^ [object Object] => 1   ------   boolean ^ object => number
+true ^ function() {} => 1   ------   boolean ^ function => number
+false ^ 2 => 2   ------   boolean ^ number => number
+false ^ -2 => -2   ------   boolean ^ number => number
+false ^ 0 => 0   ------   boolean ^ number => number
+false ^ 2.5 => 2   ------   boolean ^ number => number
+false ^ -2.5 => -2   ------   boolean ^ number => number
+false ^ abc => 0   ------   boolean ^ string => number
+false ^ true => 1   ------   boolean ^ boolean => number
+false ^ false => 0   ------   boolean ^ boolean => number
+false ^ null => 0   ------   boolean ^ object => number
+false ^ [object Object] => 0   ------   boolean ^ object => number
+false ^ function() {} => 0   ------   boolean ^ function => number
+null ^ 2 => 2   ------   object ^ number => number
+null ^ -2 => -2   ------   object ^ number => number
+null ^ 0 => 0   ------   object ^ number => number
+null ^ 2.5 => 2   ------   object ^ number => number
+null ^ -2.5 => -2   ------   object ^ number => number
+null ^ abc => 0   ------   object ^ string => number
+null ^ true => 1   ------   object ^ boolean => number
+null ^ false => 0   ------   object ^ boolean => number
+null ^ null => 0   ------   object ^ object => number
+null ^ [object Object] => 0   ------   object ^ object => number
+null ^ function() {} => 0   ------   object ^ function => number
+[object Object] ^ 2 => 2   ------   object ^ number => number
+[object Object] ^ -2 => -2   ------   object ^ number => number
+[object Object] ^ 0 => 0   ------   object ^ number => number
+[object Object] ^ 2.5 => 2   ------   object ^ number => number
+[object Object] ^ -2.5 => -2   ------   object ^ number => number
+[object Object] ^ abc => 0   ------   object ^ string => number
+[object Object] ^ true => 1   ------   object ^ boolean => number
+[object Object] ^ false => 0   ------   object ^ boolean => number
+[object Object] ^ null => 0   ------   object ^ object => number
+[object Object] ^ [object Object] => 0   ------   object ^ object => number
+[object Object] ^ function() {} => 0   ------   object ^ function => number
+function() {} ^ 2 => 2   ------   function ^ number => number
+function() {} ^ -2 => -2   ------   function ^ number => number
+function() {} ^ 0 => 0   ------   function ^ number => number
+function() {} ^ 2.5 => 2   ------   function ^ number => number
+function() {} ^ -2.5 => -2   ------   function ^ number => number
+function() {} ^ abc => 0   ------   function ^ string => number
+function() {} ^ true => 1   ------   function ^ boolean => number
+function() {} ^ false => 0   ------   function ^ boolean => number
+function() {} ^ null => 0   ------   function ^ object => number
+function() {} ^ [object Object] => 0   ------   function ^ object => number
+function() {} ^ function() {} => 0   ------   function ^ function => number
+
+------------------------------------------------------------------
+                         自加
+------------------------------------------------------------------
+
+2 ++ => 2   ------   number ++ => number
+-2 ++ => -2   ------   number ++ => number
+0 ++ => 0   ------   number ++ => number
+2.5 ++ => 2.5   ------   number ++ => number
+-2.5 ++ => -2.5   ------   number ++ => number
+abc ++ => NaN   ------   string ++ => number
+true ++ => 1   ------   boolean ++ => number
+false ++ => 0   ------   boolean ++ => number
+null ++ => 0   ------   object ++ => number
+[object Object] ++ => NaN   ------   object ++ => number
+function() {} ++ => NaN   ------   function ++ => number
+
+------------------------------------------------------------------
+                         自减
+------------------------------------------------------------------
+
+2 -- => 2   ------   number -- => number
+-2 -- => -2   ------   number -- => number
+0 -- => 0   ------   number -- => number
+2.5 -- => 2.5   ------   number -- => number
+-2.5 -- => -2.5   ------   number -- => number
+abc -- => NaN   ------   string -- => number
+true -- => 1   ------   boolean -- => number
+false -- => 0   ------   boolean -- => number
+null -- => 0   ------   object -- => number
+[object Object] -- => NaN   ------   object -- => number
+function() {} -- => NaN   ------   function -- => number
+
+------------------------------------------------------------------
+                         正数
+------------------------------------------------------------------
+
+2 + => 2   ------   number + => number
+-2 + => -2   ------   number + => number
+0 + => 0   ------   number + => number
+2.5 + => 2.5   ------   number + => number
+-2.5 + => -2.5   ------   number + => number
+abc + => NaN   ------   string + => number
+true + => 1   ------   boolean + => number
+false + => 0   ------   boolean + => number
+null + => 0   ------   object + => number
+[object Object] + => NaN   ------   object + => number
+function() {} + => NaN   ------   function + => number
+
+------------------------------------------------------------------
+                         负数
+------------------------------------------------------------------
+
+2 - => -2   ------   number - => number
+-2 - => 2   ------   number - => number
+0 - => 0   ------   number - => number
+2.5 - => -2.5   ------   number - => number
+-2.5 - => 2.5   ------   number - => number
+abc - => NaN   ------   string - => number
+true - => -1   ------   boolean - => number
+false - => 0   ------   boolean - => number
+null - => 0   ------   object - => number
+[object Object] - => NaN   ------   object - => number
+function() {} - => NaN   ------   function - => number
+
+------------------------------------------------------------------
+                         取反
+------------------------------------------------------------------
+
+2 ! => false   ------   number ! => boolean
+-2 ! => false   ------   number ! => boolean
+0 ! => true   ------   number ! => boolean
+2.5 ! => false   ------   number ! => boolean
+-2.5 ! => false   ------   number ! => boolean
+abc ! => false   ------   string ! => boolean
+true ! => false   ------   boolean ! => boolean
+false ! => true   ------   boolean ! => boolean
+null ! => true   ------   object ! => boolean
+[object Object] ! => false   ------   object ! => boolean
+function() {} ! => false   ------   function ! => boolean
+
+------------------------------------------------------------------
+                         二进制非运算
+------------------------------------------------------------------
+
+2 ~ => -3   ------   number ~ => number
+-2 ~ => 1   ------   number ~ => number
+0 ~ => -1   ------   number ~ => number
+2.5 ~ => -3   ------   number ~ => number
+-2.5 ~ => 1   ------   number ~ => number
+abc ~ => -1   ------   string ~ => number
+true ~ => -2   ------   boolean ~ => number
+false ~ => -1   ------   boolean ~ => number
+null ~ => -1   ------   object ~ => number
+[object Object] ~ => -1   ------   object ~ => number
+function() {} ~ => -1   ------   function ~ => number

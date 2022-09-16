@@ -13,7 +13,7 @@ public class OptimizeTest : UnitTest
     {
     }
 
-    private SDataType test1_type = SDataType.Function_15_Params;
+    private SDataType test1_type = SDataType.Function_16;
     
     //测试枚举是否影响switch性能, 结果: 并不影响
     [Fact]
@@ -58,38 +58,6 @@ public class OptimizeTest : UnitTest
                     case SDataType.Function_15:
                         break;
                     case SDataType.Function_16:
-                        break;
-                    case SDataType.Function_0_Params:
-                        break;
-                    case SDataType.Function_1_Params:
-                        break;
-                    case SDataType.Function_2_Params:
-                        break;
-                    case SDataType.Function_3_Params:
-                        break;
-                    case SDataType.Function_4_Params:
-                        break;
-                    case SDataType.Function_5_Params:
-                        break;
-                    case SDataType.Function_6_Params:
-                        break;
-                    case SDataType.Function_7_Params:
-                        break;
-                    case SDataType.Function_8_Params:
-                        break;
-                    case SDataType.Function_9_Params:
-                        break;
-                    case SDataType.Function_10_Params:
-                        break;
-                    case SDataType.Function_11_Params:
-                        break;
-                    case SDataType.Function_12_Params:
-                        break;
-                    case SDataType.Function_13_Params:
-                        break;
-                    case SDataType.Function_14_Params:
-                        break;
-                    case SDataType.Function_15_Params:
                         break;
                 }
             }

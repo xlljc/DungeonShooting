@@ -33,7 +33,7 @@ internal class Null_SValue : SValue
 
     public override void SetMember(string key, SValue value)
     {
-        throw new NullReferenceException();
+        throw new NotImplementedException();
     }
 
     public override SValue Invoke()
@@ -46,12 +46,177 @@ internal class Null_SValue : SValue
         throw new NotImplementedException();
     }
 
+    public override SValue Invoke(SValue v0, SValue v1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+        SValue v9)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+        SValue v9, SValue v10)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+        SValue v9, SValue v10, SValue v11)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+        SValue v9, SValue v10, SValue v11, SValue v12)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+        SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+        SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+        SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
+    {
+        throw new NotImplementedException();
+    }
+
     public override SValue InvokeMethod(string key)
     {
         throw new NotImplementedException();
     }
 
     public override SValue InvokeMethod(string key, SValue v0)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+        SValue v8)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+        SValue v8, SValue v9)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+        SValue v8, SValue v9, SValue v10)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+        SValue v8, SValue v9, SValue v10, SValue v11)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+        SValue v8, SValue v9, SValue v10, SValue v11, SValue v12)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+        SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+        SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+        SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
     {
         throw new NotImplementedException();
     }
