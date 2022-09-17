@@ -8,7 +8,7 @@ internal class Function_0_SValue : SValue
 {
     private Function_0 _value;
     
-    internal Function_0_SValue(Function_0 value)
+    public Function_0_SValue(Function_0 value)
     {
         _value = value;
     }
@@ -33,7 +33,7 @@ internal class Function_0_SValue : SValue
         throw new NotImplementedException();
     }
 
-    public override SValue HasMember(string key)
+    public override bool HasMember(string key)
     {
         throw new NotImplementedException();
     }

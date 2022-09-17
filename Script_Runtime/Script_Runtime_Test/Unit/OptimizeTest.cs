@@ -127,7 +127,7 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test3 新写法", () =>
         {
-            SValue func = new Function_1_SValue(Test3_Func3);
+            SValue func = new Function_1(Test3_Func3);
             SValue v = "11";
             for (int i = 0; i < 999999; i++)
             {
@@ -229,5 +229,37 @@ public class OptimizeTest : UnitTest
                 a = i + b + c;
             }
         });
+    }
+    
+    [Fact(DisplayName = "测试转型和调用函数性能")]
+    public void Test7()
+    {
+        ExecuteTime.Run("test7 转型", () =>
+        {
+            object obj = new Test7_Cls();
+            for (int i = 0; i < 999999; i++)
+            {
+                string temp = ((Test7_Cls)obj).obj;
+            }
+        });
+
+        ExecuteTime.Run("test7 调用函数", () =>
+        {
+            Test7_Cls obj = new Test7_Cls();
+            for (int i = 0; i < 999999; i++)
+            {
+                string temp = obj.GetValue().ToString();
+            }
+        });
+    }
+
+    public class Test7_Cls
+    {
+        public string obj = "abc";
+
+        public object GetValue()
+        {
+            return obj;
+        }
     }
 }

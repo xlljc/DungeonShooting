@@ -24,7 +24,7 @@ internal class False_SValue : SValue
         throw new System.NotImplementedException();
     }
 
-    public override SValue HasMember(string key)
+    public override bool HasMember(string key)
     {
         throw new System.NotImplementedException();
     }

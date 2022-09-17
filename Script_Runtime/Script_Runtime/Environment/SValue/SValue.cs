@@ -27,7 +27,7 @@ public abstract class SValue
     /// <summary>
     /// 返回是否存在属性
     /// </summary>
-    public abstract SValue HasMember(string key);
+    public abstract bool HasMember(string key);
 
     /// <summary>
     /// 设置成员属性

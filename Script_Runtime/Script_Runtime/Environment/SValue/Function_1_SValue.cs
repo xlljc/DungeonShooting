@@ -1,5 +1,5 @@
 
-public class Function_1_SValue : SValue
+internal class Function_1_SValue : SValue
 {
     private Function_1 _value;
     
@@ -28,7 +28,7 @@ public class Function_1_SValue : SValue
         throw new System.NotImplementedException();
     }
 
-    public override SValue HasMember(string key)
+    public override bool HasMember(string key)
     {
         throw new System.NotImplementedException();
     }
