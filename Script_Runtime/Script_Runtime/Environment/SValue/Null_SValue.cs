@@ -439,17 +439,17 @@ internal class Null_SValue : SValue
 
     internal override SValue Operator_Positive()
     {
-        throw new NotImplementedException();
+        return Zero;
     }
 
     internal override SValue Operator_Negative()
     {
-        throw new NotImplementedException();
+        return Zero;
     }
 
     internal override bool Operator_Not()
     {
-        throw new NotImplementedException();
+        return true;
     }
 
     internal override bool Operator_Less_Equal_SValue(SValue v2)
@@ -469,86 +469,110 @@ internal class Null_SValue : SValue
 
     internal override bool Operator_True()
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     internal override bool Operator_False()
     {
-        throw new NotImplementedException();
+        return true;
     }
 
     internal override SValue Operator_Modulus_Double(double v2)
     {
-        throw new NotImplementedException();
+        return Zero;
     }
 
     internal override SValue Operator_Append_Modulus_Double(double v1)
     {
-        throw new NotImplementedException();
+        return NaN;
     }
 
     internal override SValue Operator_Modulus_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetScriptType())
+        {
+            case ScriptType.Number:
+                return new Number_SValue(0 % ((Number_SValue)v2)._value);
+            case ScriptType.True:
+                return Zero;
+        }
+
+        return NaN;
     }
 
     internal override SValue Operator_Shift_Negation()
     {
-        throw new NotImplementedException();
+        return NegativeOne;
     }
 
     internal override SValue Operator_Shift_Right(int v1)
     {
-        throw new NotImplementedException();
+        return Zero;
     }
 
     internal override SValue Operator_Shift_Left(int v1)
     {
-        throw new NotImplementedException();
+        return Zero;
     }
 
     internal override SValue Operator_Shift_Or_Double(double v2)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)v2);
     }
 
     internal override SValue Operator_Append_Shift_Or_Double(double v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)v1);
     }
 
     internal override SValue Operator_Shift_Or_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetScriptType())
+        {
+            case ScriptType.Number:
+                return new Number_SValue((int)((Number_SValue)v2)._value);
+            case ScriptType.True:
+                return One;
+        }
+
+        return Zero;
     }
 
     internal override SValue Operator_Shift_And_Double(double v2)
     {
-        throw new NotImplementedException();
+        return Zero;
     }
 
     internal override SValue Operator_Append_Shift_And_Double(double v1)
     {
-        throw new NotImplementedException();
+        return Zero;
     }
 
     internal override SValue Operator_Shift_And_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        return Zero;
     }
 
     internal override SValue Operator_Shift_Xor_Double(double v2)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)v2);
     }
 
     internal override SValue Operator_Append_Shift_Xor_Double(double v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)v1);
     }
 
     internal override SValue Operator_Shift_Xor_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetScriptType())
+        {
+            case ScriptType.Number:
+                return new Number_SValue((int)(double)v2.GetValue());
+            case ScriptType.True:
+                return One;
+        }
+
+        return Zero;
     }
 }
