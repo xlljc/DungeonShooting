@@ -228,32 +228,32 @@ internal class Function_0_SValue : SValue
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Equal_Double(double v2)
+    internal override bool Operator_Equal_Double(double v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Equal_String(string v2)
+    internal override bool Operator_Equal_String(string v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Equal_SValue(SValue v2)
+    internal override bool Operator_Equal_SValue(SValue v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Not_Equal_Double(double v2)
+    internal override bool Operator_Not_Equal_Double(double v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Not_Equal_String(string v2)
+    internal override bool Operator_Not_Equal_String(string v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Not_Equal_SValue(SValue v2)
+    internal override bool Operator_Not_Equal_SValue(SValue v2)
     {
         throw new NotImplementedException();
     }
@@ -338,37 +338,37 @@ internal class Function_0_SValue : SValue
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Greater_Double(double v2)
+    internal override bool Operator_Greater_Double(double v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Less_Double(double v2)
+    internal override bool Operator_Less_Double(double v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Greater_SValue(SValue v2)
+    internal override bool Operator_Greater_SValue(SValue v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Less_SValue(SValue v2)
+    internal override bool Operator_Less_SValue(SValue v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Greater_Equal_Double(double v2)
+    internal override bool Operator_Greater_Equal_Double(double v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Less_Equal_Double(double v2)
+    internal override bool Operator_Less_Equal_Double(double v2)
     {
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Greater_Equal_SValue(SValue v2)
+    internal override bool Operator_Greater_Equal_SValue(SValue v2)
     {
         throw new NotImplementedException();
     }
@@ -388,7 +388,7 @@ internal class Function_0_SValue : SValue
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Less_Equal_SValue(SValue v2)
+    internal override bool Operator_Less_Equal_SValue(SValue v2)
     {
         throw new NotImplementedException();
     }

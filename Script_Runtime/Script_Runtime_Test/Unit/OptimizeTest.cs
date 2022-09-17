@@ -192,7 +192,7 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test4 新写法", () =>
         {
-            for (SValue i = SValue.Create(0); i < 999999; i++)
+            for (SValue i = SValue.Create(0);i < 999999; i++)
             {
 
             }

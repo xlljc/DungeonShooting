@@ -128,6 +128,7 @@ public abstract class SValue
     public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15);
 
+    //throw new InvokeMethodException($"No member function overload {_value}.{key} with argument 0 was found.");
     /// <summary>
     /// 执行该对象的成员函数, 传入 0 个参数
     /// </summary>
@@ -229,32 +230,32 @@ public abstract class SValue
     /// <summary>
     /// 判断等于, 和 double 比较
     /// </summary>
-    internal abstract SValue Operator_Equal_Double(double v2);
+    internal abstract bool Operator_Equal_Double(double v2);
 
     /// <summary>
     /// 判断等于, 和 string 比较
     /// </summary>
-    internal abstract SValue Operator_Equal_String(string v2);
+    internal abstract bool Operator_Equal_String(string v2);
 
     /// <summary>
     /// 判断等于, 和 SValue 比较
     /// </summary>
-    internal abstract SValue Operator_Equal_SValue(SValue v2);
+    internal abstract bool Operator_Equal_SValue(SValue v2);
 
     /// <summary>
     /// 判断不等于, 和 double 比较
     /// </summary>
-    internal abstract SValue Operator_Not_Equal_Double(double v2);
+    internal abstract bool Operator_Not_Equal_Double(double v2);
 
     /// <summary>
     /// 判断不等于, 和 string 比较
     /// </summary>
-    internal abstract SValue Operator_Not_Equal_String(string v2);
+    internal abstract bool Operator_Not_Equal_String(string v2);
 
     /// <summary>
     /// 判断不等于, 和 SValue 比较
     /// </summary>
-    internal abstract SValue Operator_Not_Equal_SValue(SValue v2);
+    internal abstract bool Operator_Not_Equal_SValue(SValue v2);
 
     /// <summary>
     /// 和 double 相加
@@ -339,37 +340,37 @@ public abstract class SValue
     /// <summary>
     /// 大于
     /// </summary>
-    internal abstract SValue Operator_Greater_Double(double v2);
+    internal abstract bool Operator_Greater_Double(double v2);
 
     /// <summary>
     /// 小于
     /// </summary>
-    internal abstract SValue Operator_Less_Double(double v2);
+    internal abstract bool Operator_Less_Double(double v2);
 
     /// <summary>
     /// 大于
     /// </summary>
-    internal abstract SValue Operator_Greater_SValue(SValue v2);
+    internal abstract bool Operator_Greater_SValue(SValue v2);
 
     /// <summary>
     /// 小于
     /// </summary>
-    internal abstract SValue Operator_Less_SValue(SValue v2);
+    internal abstract bool Operator_Less_SValue(SValue v2);
 
     /// <summary>
     /// 大于等于
     /// </summary>
-    internal abstract SValue Operator_Greater_Equal_Double(double v2);
+    internal abstract bool Operator_Greater_Equal_Double(double v2);
 
     /// <summary>
     /// 小于等于
     /// </summary>
-    internal abstract SValue Operator_Less_Equal_Double(double v2);
+    internal abstract bool Operator_Less_Equal_Double(double v2);
 
     /// <summary>
     /// 大于等于
     /// </summary>
-    internal abstract SValue Operator_Greater_Equal_SValue(SValue v2);
+    internal abstract bool Operator_Greater_Equal_SValue(SValue v2);
 
     /// <summary>
     /// 正数
@@ -389,7 +390,7 @@ public abstract class SValue
     /// <summary>
     /// 小于等于
     /// </summary>
-    internal abstract SValue Operator_Less_Equal_SValue(SValue v2);
+    internal abstract bool Operator_Less_Equal_SValue(SValue v2);
 
     /// <summary>
     /// 判断true
@@ -417,62 +418,62 @@ public abstract class SValue
     internal abstract SValue Operator_Modulus_SValue(SValue v2);
 
     /// <summary>
-    /// 位运算取反, 符号 ~
+    /// 二进制位运算取反, 符号 ~
     /// </summary>
     internal abstract SValue Operator_Shift_Negation();
 
     /// <summary>
-    /// 位运算, 右移
+    /// 二进制位运算, 右移
     /// </summary>
     internal abstract SValue Operator_Shift_Right(int v1);
 
     /// <summary>
-    /// 位运算, 左移
+    /// 二进制位运算, 左移
     /// </summary>
     internal abstract SValue Operator_Shift_Left(int v1);
 
     /// <summary>
-    /// 或运算, 单位: |
+    /// 二进制或运算, 单位: |
     /// </summary>
     internal abstract SValue Operator_Shift_Or_Double(double v2);
 
     /// <summary>
-    /// 或运算, 单位: |, v1 在前
+    /// 二进制或运算, 单位: |, v1 在前
     /// </summary>
     internal abstract SValue Operator_Append_Shift_Or_Double(double v1);
 
     /// <summary>
-    /// 或运算, 单位: |
+    /// 二进制或运算, 单位: |
     /// </summary>
     internal abstract SValue Operator_Shift_Or_SValue(SValue v2);
 
     /// <summary>
-    /// 与运算, 单位: &
+    /// 二进制与运算
     /// </summary>
     internal abstract SValue Operator_Shift_And_Double(double v2);
 
     /// <summary>
-    /// 与运算, 单位: &, v1 在前
+    /// 二进制与运算, v1 在前
     /// </summary>
     internal abstract SValue Operator_Append_Shift_And_Double(double v1);
 
     /// <summary>
-    /// 与运算, 单位: &
+    /// 二进制与运算
     /// </summary>
     internal abstract SValue Operator_Shift_And_SValue(SValue v2);
 
     /// <summary>
-    /// 异或运算, 单位: ^
+    /// 二进制异或运算, 单位: ^
     /// </summary>
     internal abstract SValue Operator_Shift_Xor_Double(double v2);
 
     /// <summary>
-    /// 异或运算, 单位: ^, v1 在前
+    /// 二进制异或运算, 单位: ^, v1 在前
     /// </summary>
     internal abstract SValue Operator_Append_Shift_Xor_Double(double v1);
 
     /// <summary>
-    /// 异或运算, 单位: ^
+    /// 二进制异或运算, 单位: ^
     /// </summary>
     internal abstract SValue Operator_Shift_Xor_SValue(SValue v2);
 
@@ -550,52 +551,52 @@ public abstract class SValue
         return v1.Operator_Divide_SValue(v2);
     }
 
-    public static SValue operator ==(SValue v1, double v2)
+    public static bool operator ==(SValue v1, double v2)
     {
         return v1.Operator_Equal_Double(v2);
     }
 
-    public static SValue operator ==(double v1, SValue v2)
+    public static bool operator ==(double v1, SValue v2)
     {
         return v2.Operator_Equal_Double(v1);
     }
 
-    public static SValue operator ==(SValue v1, string v2)
+    public static bool operator ==(SValue v1, string v2)
     {
         return v1.Operator_Equal_String(v2);
     }
 
-    public static SValue operator ==(string v1, SValue v2)
+    public static bool operator ==(string v1, SValue v2)
     {
         return v2.Operator_Equal_String(v1);
     }
 
-    public static SValue operator ==(SValue v1, SValue v2)
+    public static bool operator ==(SValue v1, SValue v2)
     {
         return v1.Operator_Equal_SValue(v2);
     }
 
-    public static SValue operator !=(SValue v1, double v2)
+    public static bool operator !=(SValue v1, double v2)
     {
         return v1.Operator_Not_Equal_Double(v2);
     }
 
-    public static SValue operator !=(double v1, SValue v2)
+    public static bool operator !=(double v1, SValue v2)
     {
         return v2.Operator_Not_Equal_Double(v1);
     }
 
-    public static SValue operator !=(SValue v1, string v2)
+    public static bool operator !=(SValue v1, string v2)
     {
         return v1.Operator_Not_Equal_String(v2);
     }
 
-    public static SValue operator !=(string v1, SValue v2)
+    public static bool operator !=(string v1, SValue v2)
     {
         return v2.Operator_Not_Equal_String(v1);
     }
 
-    public static SValue operator !=(SValue v1, SValue v2)
+    public static bool operator !=(SValue v1, SValue v2)
     {
         return v1.Operator_Not_Equal_SValue(v2);
     }
@@ -610,62 +611,62 @@ public abstract class SValue
         return v1.Operator_SinceReduction();
     }
 
-    public static SValue operator >(SValue v1, double v2)
+    public static bool operator >(SValue v1, double v2)
     {
         return v1.Operator_Greater_Double(v2);
     }
 
-    public static SValue operator >(double v1, SValue v2)
+    public static bool operator >(double v1, SValue v2)
     {
         return v2.Operator_Less_Equal_Double(v1);
     }
 
-    public static SValue operator >(SValue v1, SValue v2)
+    public static bool operator >(SValue v1, SValue v2)
     {
         return v1.Operator_Greater_SValue(v2);
     }
 
-    public static SValue operator <(SValue v1, double v2)
+    public static bool operator <(SValue v1, double v2)
     {
         return v1.Operator_Less_Double(v2);
     }
 
-    public static SValue operator <(double v1, SValue v2)
+    public static bool operator <(double v1, SValue v2)
     {
         return v2.Operator_Greater_Equal_Double(v1);
     }
 
-    public static SValue operator <(SValue v1, SValue v2)
+    public static bool operator <(SValue v1, SValue v2)
     {
         return v1.Operator_Less_SValue(v2);
     }
 
-    public static SValue operator >=(SValue v1, double v2)
+    public static bool operator >=(SValue v1, double v2)
     {
         return v1.Operator_Greater_Equal_Double(v2);
     }
 
-    public static SValue operator >=(double v1, SValue v2)
+    public static bool operator >=(double v1, SValue v2)
     {
         return v2.Operator_Less_Double(v1);
     }
 
-    public static SValue operator >=(SValue v1, SValue v2)
+    public static bool operator >=(SValue v1, SValue v2)
     {
         return v1.Operator_Greater_Equal_SValue(v2);
     }
 
-    public static SValue operator <=(SValue v1, double v2)
+    public static bool operator <=(SValue v1, double v2)
     {
         return v1.Operator_Less_Equal_Double(v2);
     }
 
-    public static SValue operator <=(double v1, SValue v2)
+    public static bool operator <=(double v1, SValue v2)
     {
         return v2.Operator_Greater_Double(v1);
     }
 
-    public static SValue operator <=(SValue v1, SValue v2)
+    public static bool operator <=(SValue v1, SValue v2)
     {
         return v1.Operator_Less_Equal_SValue(v2);
     }
@@ -801,6 +802,31 @@ public abstract class SValue
     /// 正无穷大
     /// </summary>
     public static readonly SValue PositiveInfinity = new Number_SValue(double.PositiveInfinity);
+
+    /// <summary>
+    /// -2
+    /// </summary>
+    internal static readonly SValue NegativeTwo = new Number_SValue(-2);
+
+    /// <summary>
+    /// -1
+    /// </summary>
+    internal static readonly SValue NegativeOne = new Number_SValue(-1);
+
+    /// <summary>
+    /// 0
+    /// </summary>
+    internal static readonly SValue Zero = new Number_SValue(0);
+
+    /// <summary>
+    /// 1
+    /// </summary>
+    internal static readonly SValue One = new Number_SValue(1);
+
+    /// <summary>
+    /// 2
+    /// </summary>
+    internal static readonly SValue Two = new Number_SValue(2);
 
     public static SValue Create(ref SValue value)
     {

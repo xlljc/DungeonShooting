@@ -30,37 +30,37 @@ internal class Number_SValue : SValue
 
     public override SValue GetMember(string key)
     {
-        throw new NotImplementedException();
+        return Null;
     }
 
     public override SValue HasMember(string key)
     {
-        throw new NotImplementedException();
+        return False;
     }
 
     public override void SetMember(string key, SValue value)
     {
-        throw new NotImplementedException();
+        throw new OperationMemberException($"Member '{key}' not defined.");
     }
 
     public override SValue Invoke()
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3)
@@ -70,281 +70,347 @@ internal class Number_SValue : SValue
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue InvokeMethod(string key)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6, SValue v7)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6, SValue v7,
         SValue v8)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6, SValue v7,
         SValue v8, SValue v9)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"The member function {_value}.{key} was not found");
     }
 
-    internal override SValue Operator_Equal_Double(double v2)
+    internal override bool Operator_Equal_Double(double v2)
     {
-        throw new NotImplementedException();
+        return _value == v2;
     }
 
-    internal override SValue Operator_Equal_String(string v2)
+    internal override bool Operator_Equal_String(string v2)
     {
-        throw new NotImplementedException();
+        return false;
     }
 
-    internal override SValue Operator_Equal_SValue(SValue v2)
+    internal override bool Operator_Equal_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetDataType())
+        {
+            case SDataType.Number:
+                return _value == ((Number_SValue)v2)._value;
+            case SDataType.True:
+                return _value == 1;
+            case SDataType.False:
+                return _value == 0;
+        }
+
+        return false;
     }
 
-    internal override SValue Operator_Not_Equal_Double(double v2)
+    internal override bool Operator_Not_Equal_Double(double v2)
     {
-        throw new NotImplementedException();
+        return _value != v2;
     }
 
-    internal override SValue Operator_Not_Equal_String(string v2)
+    internal override bool Operator_Not_Equal_String(string v2)
     {
-        throw new NotImplementedException();
+        return true;
     }
 
-    internal override SValue Operator_Not_Equal_SValue(SValue v2)
+    internal override bool Operator_Not_Equal_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetDataType())
+        {
+            case SDataType.Number:
+                return _value != ((Number_SValue)v2)._value;
+            case SDataType.True:
+                return _value != 1;
+            case SDataType.False:
+                return _value != 0;
+        }
+
+        return true;
     }
 
     internal override SValue Operator_Add_Double(double v2)
     {
-        throw new NotImplementedException();
+        return new Number_SValue(_value + v2);
     }
 
     internal override SValue Operator_Append_Add_Double(double v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue(v1 + _value);
     }
 
     internal override SValue Operator_Add_String(string v2)
     {
-        throw new NotImplementedException();
+        return new String_SValue(_value + v2);
     }
 
     internal override SValue Operator_Append_Add_String(string v1)
     {
-        throw new NotImplementedException();
+        return new String_SValue(v1 + _value);
     }
 
     internal override SValue Operator_Add_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetDataType())
+        {
+            case SDataType.Number:
+                return new Number_SValue(_value + ((Number_SValue)v2)._value);
+            case SDataType.String:
+                return new String_SValue(_value + (string)v2.GetValue());
+            case SDataType.True:
+                return new Number_SValue(_value + 1);
+            case SDataType.False:
+            case SDataType.Null:
+                return this;
+        }
+
+        return new String_SValue(_value + v2.GetValue().ToString());
     }
 
     internal override SValue Operator_Subtract_Double(double v2)
     {
-        throw new NotImplementedException();
+        return new Number_SValue(_value - v2);
     }
 
     internal override SValue Operator_Append_Subtract_Double(double v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue(v1 - _value);
     }
 
     internal override SValue Operator_Subtract_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetDataType())
+        {
+            case SDataType.Number:
+                return new Number_SValue(_value - ((Number_SValue)v2)._value);
+            case SDataType.True:
+                return new Number_SValue(_value - 1);
+            case SDataType.False:
+            case SDataType.Null:
+                return this;
+        }
+
+        return NaN;
     }
 
     internal override SValue Operator_Multiply_Double(double v2)
     {
-        throw new NotImplementedException();
+        return new Number_SValue(_value * v2);
     }
 
     internal override SValue Operator_Append_Multiply_Double(double v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue(v1 * _value);
     }
 
     internal override SValue Operator_Multiply_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetDataType())
+        {
+            case SDataType.Number:
+                return new Number_SValue(_value * ((Number_SValue)v2)._value);
+            case SDataType.True:
+                return this;
+            case SDataType.False:
+            case SDataType.Null:
+                return Zero;
+        }
+
+        return NaN;
     }
 
     internal override SValue Operator_Divide_Double(double v2)
     {
-        throw new NotImplementedException();
+        return new Number_SValue(_value / v2);
     }
 
     internal override SValue Operator_Append_Divide_Double(double v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue(v1 / _value);
     }
 
     internal override SValue Operator_Divide_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetDataType())
+        {
+            case SDataType.Number:
+                return new Number_SValue(_value / ((Number_SValue)v2)._value);
+            case SDataType.True:
+                return this;
+            case SDataType.False:
+            case SDataType.Null:
+                return _value == 0 ? NaN : (_value > 0 ? PositiveInfinity : NegativeInfinity);
+        }
+
+        return NaN;
     }
 
     internal override SValue Operator_SinceAdd()
@@ -357,73 +423,89 @@ internal class Number_SValue : SValue
         return new Number_SValue(_value - 1);
     }
 
-    internal override SValue Operator_Greater_Double(double v2)
+    internal override bool Operator_Greater_Double(double v2)
     {
-        return _value > v2 ? SValue.True : SValue.False;
+        return _value > v2;
     }
 
-    internal override SValue Operator_Less_Double(double v2)
+    internal override bool Operator_Less_Double(double v2)
     {
-        return _value < v2 ? SValue.True : SValue.False;
+        return _value < v2;
     }
 
-    internal override SValue Operator_Greater_SValue(SValue v2)
+    internal override bool Operator_Greater_SValue(SValue v2)
     {
         switch (v2.GetDataType())
         {
             case SDataType.Number:
-                return _value > ((Number_SValue)v2)._value ? SValue.True : SValue.False;
+                return _value > ((Number_SValue)v2)._value;
+            case SDataType.True:
+                return _value > 1;
+            case SDataType.False:
+                return _value > 0;
         }
 
-        return SValue.False;
+        return false;
     }
 
-    internal override SValue Operator_Less_SValue(SValue v2)
+    internal override bool Operator_Less_SValue(SValue v2)
     {
         switch (v2.GetDataType())
         {
             case SDataType.Number:
-                return _value < ((Number_SValue)v2)._value ? SValue.True : SValue.False;
+                return _value < ((Number_SValue)v2)._value;
+            case SDataType.True:
+                return _value < 1;
+            case SDataType.False:
+                return _value < 0;
         }
 
-        return SValue.False;
+        return false;
     }
 
-    internal override SValue Operator_Greater_Equal_Double(double v2)
+    internal override bool Operator_Greater_Equal_Double(double v2)
     {
-        return _value >= v2 ? SValue.True : SValue.False;
+        return _value >= v2;
     }
 
-    internal override SValue Operator_Less_Equal_Double(double v2)
+    internal override bool Operator_Less_Equal_Double(double v2)
     {
-        return _value <= v2 ? SValue.True : SValue.False;
+        return _value <= v2;
     }
 
-    internal override SValue Operator_Greater_Equal_SValue(SValue v2)
+    internal override bool Operator_Greater_Equal_SValue(SValue v2)
     {
         switch (v2.GetDataType())
         {
             case SDataType.Number:
-                return _value >= ((Number_SValue)v2)._value ? SValue.True : SValue.False;
+                return _value >= ((Number_SValue)v2)._value;
+            case SDataType.True:
+                return _value >= 1;
+            case SDataType.False:
+                return _value >= 0;
         }
 
-        return SValue.False;
+        return false;
     }
 
     internal override SValue Operator_Positive()
     {
-        throw new NotImplementedException();
+        return this;
     }
 
-    internal override SValue Operator_Less_Equal_SValue(SValue v2)
+    internal override bool Operator_Less_Equal_SValue(SValue v2)
     {
         switch (v2.GetDataType())
         {
             case SDataType.Number:
-                return _value <= ((Number_SValue)v2)._value ? SValue.True : SValue.False;
+                return _value <= ((Number_SValue)v2)._value;
+            case SDataType.True:
+                return _value <= 1;
+            case SDataType.False:
+                return _value <= 0;
         }
 
-        return SValue.False;
+        return false;
     }
 
     internal override SValue Operator_Negative()
@@ -433,7 +515,7 @@ internal class Number_SValue : SValue
 
     internal override SValue Operator_Not()
     {
-        return _value > 0 ? SValue.False : SValue.True;
+        return _value == 0 ? True : False;
     }
 
     internal override bool Operator_True()
@@ -448,76 +530,108 @@ internal class Number_SValue : SValue
 
     internal override SValue Operator_Modulus_Double(double v2)
     {
-        throw new NotImplementedException();
+        return new Number_SValue(_value % v2);
     }
 
     internal override SValue Operator_Append_Modulus_Double(double v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue(v1 % _value);
     }
 
     internal override SValue Operator_Modulus_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetDataType())
+        {
+            case SDataType.Number:
+                return new Number_SValue(_value % ((Number_SValue)v2)._value);
+            case SDataType.True:
+                return new Number_SValue(_value % 1);
+        }
+
+        return NaN;
     }
 
     internal override SValue Operator_Shift_Negation()
     {
-        throw new NotImplementedException();
+        return new Number_SValue(~(int)_value);
     }
 
     internal override SValue Operator_Shift_Right(int v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)_value >> v1);
     }
 
     internal override SValue Operator_Shift_Left(int v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)_value << v1);
     }
 
     internal override SValue Operator_Shift_Or_Double(double v2)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)_value | (int)v2);
     }
 
     internal override SValue Operator_Append_Shift_Or_Double(double v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)v1 | (int)_value);
     }
 
     internal override SValue Operator_Shift_Or_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetDataType())
+        {
+            case SDataType.Number:
+                return new Number_SValue((int)_value | (int)((Number_SValue)v2)._value);
+            case SDataType.True:
+                return new Number_SValue((int)_value | 1);
+        }
+
+        return new Number_SValue((int)_value | 0);
     }
 
     internal override SValue Operator_Shift_And_Double(double v2)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)_value & (int)v2);
     }
 
     internal override SValue Operator_Append_Shift_And_Double(double v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)v1 & (int)_value);
     }
 
     internal override SValue Operator_Shift_And_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetDataType())
+        {
+            case SDataType.Number:
+                return new Number_SValue((int)_value & (int)((Number_SValue)v2)._value);
+            case SDataType.True:
+                return new Number_SValue((int)_value & 1);
+        }
+
+        return new Number_SValue((int)_value & 0);
     }
 
     internal override SValue Operator_Shift_Xor_Double(double v2)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)_value ^ (int)v2);
     }
 
     internal override SValue Operator_Append_Shift_Xor_Double(double v1)
     {
-        throw new NotImplementedException();
+        return new Number_SValue((int)v1 ^ (int)_value);
     }
 
     internal override SValue Operator_Shift_Xor_SValue(SValue v2)
     {
-        throw new NotImplementedException();
+        switch (v2.GetDataType())
+        {
+            case SDataType.Number:
+                return new Number_SValue((int)_value ^ (int)((Number_SValue)v2)._value);
+            case SDataType.True:
+                return new Number_SValue((int)_value ^ 1);
+        }
+
+        return new Number_SValue((int)_value ^ 0);
     }
 }
