@@ -13,8 +13,8 @@ public class OptimizeTest : UnitTest
     {
     }
 
-    private SDataType test1_type = SDataType.Function_16;
-    
+    private DataType test1_type = DataType.Function_16;
+
     //测试枚举是否影响switch性能, 结果: 并不影响
     [Fact]
     public void Test1()
@@ -25,39 +25,39 @@ public class OptimizeTest : UnitTest
             {
                 switch (test1_type)
                 {
-                    case SDataType.Function_0:
+                    case DataType.Function_0:
                         break;
-                    case SDataType.Function_1:
+                    case DataType.Function_1:
                         break;
-                    case SDataType.Function_2:
+                    case DataType.Function_2:
                         break;
-                    case SDataType.Function_3:
+                    case DataType.Function_3:
                         break;
-                    case SDataType.Function_4:
+                    case DataType.Function_4:
                         break;
-                    case SDataType.Function_5:
+                    case DataType.Function_5:
                         break;
-                    case SDataType.Function_6:
+                    case DataType.Function_6:
                         break;
-                    case SDataType.Function_7:
+                    case DataType.Function_7:
                         break;
-                    case SDataType.Function_8:
+                    case DataType.Function_8:
                         break;
-                    case SDataType.Function_9:
+                    case DataType.Function_9:
                         break;
-                    case SDataType.Function_10:
+                    case DataType.Function_10:
                         break;
-                    case SDataType.Function_11:
+                    case DataType.Function_11:
                         break;
-                    case SDataType.Function_12:
+                    case DataType.Function_12:
                         break;
-                    case SDataType.Function_13:
+                    case DataType.Function_13:
                         break;
-                    case SDataType.Function_14:
+                    case DataType.Function_14:
                         break;
-                    case SDataType.Function_15:
+                    case DataType.Function_15:
                         break;
-                    case SDataType.Function_16:
+                    case DataType.Function_16:
                         break;
                 }
             }
@@ -76,15 +76,6 @@ public class OptimizeTest : UnitTest
             }
         });
 
-        ExecuteTime.Run("test3 创建对象", () =>
-        {
-            OldSValue a = 0;
-            for (int i = 0; i < 999999; i++)
-            {
-                new Test2_Class(i);
-            }
-        });
-
         ExecuteTime.Run("test3 老写法", () =>
         {
             OldSValue a = 0;
@@ -96,22 +87,12 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test3 新写法", () =>
         {
-            var a = SValue.Create(0);
+            SValue a = 0;
             for (int i = 0; i < 999999; i++)
             {
                 a++;
             }
         });
-    }
-
-    private struct Test2_Class
-    {
-        private double i;
-
-        public Test2_Class(double i)
-        {
-            this.i = i;
-        }
     }
 
     [Fact(DisplayName = "测试函数执行性能")]
@@ -124,13 +105,13 @@ public class OptimizeTest : UnitTest
                 Test3_Func1("11");
             }
         });
-        
+
         ExecuteTime.Run("test3 反射C#", () =>
         {
             var method = GetType().GetMethod("Test3_Func1", BindingFlags.Instance | BindingFlags.NonPublic);
             for (int i = 0; i < 999999; i++)
             {
-                method.Invoke(this, new object[]{ "11" });
+                method.Invoke(this, new object[] { "11" });
             }
         });
 
@@ -143,11 +124,11 @@ public class OptimizeTest : UnitTest
                 func.Invoke(v);
             }
         });
-        
+
         ExecuteTime.Run("test3 新写法", () =>
         {
-            var func = SValue.Create(Test3_Func3);
-            var v = SValue.Create("11");
+            SValue func = new Function_1_SValue(Test3_Func3);
+            SValue v = "11";
             for (int i = 0; i < 999999; i++)
             {
                 func.Invoke(v);
@@ -160,17 +141,17 @@ public class OptimizeTest : UnitTest
     {
         return null;
     }
-    
+
     private OldSValue Test3_Func2(OldSValue str)
     {
         return OldSValue.Null;
     }
-    
+
     private SValue Test3_Func3(SValue str)
     {
         return SValue.Null;
     }
-    
+
     [Fact(DisplayName = "测试循环性能")]
     public void Test4()
     {
@@ -178,7 +159,7 @@ public class OptimizeTest : UnitTest
         {
             for (int i = 0; i < 999999; i++)
             {
-                
+
             }
         });
 
@@ -192,7 +173,7 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test4 新写法", () =>
         {
-            for (SValue i = SValue.Create(0);i < 999999; i++)
+            for (SValue i = 0; i < 999999; i++)
             {
 
             }
@@ -207,8 +188,45 @@ public class OptimizeTest : UnitTest
             //23 - 25
             for (int i = 0; i < 999999; i++)
             {
-                var item1 = SValue.Create("22");
-                var item2 = SValue.Create(111);
+                SValue item1 = "22";
+                SValue item2 = 111;
+            }
+        });
+    }
+
+    [Fact(DisplayName = "测试string性能")]
+    public void Test6()
+    {
+        ExecuteTime.Run("test6 原生C#", () =>
+        {
+            string a = "";
+            for (int i = 0; i < 999999; i++)
+            {
+                string b = "1";
+                string c = "2";
+                a = i + b + c;
+            }
+        });
+
+        ExecuteTime.Run("test6 老写法", () =>
+        {
+            OldSValue a = "";
+            for (int i = 0; i < 999999; i++)
+            {
+                OldSValue b = "1";
+                OldSValue c = "2";
+                a = i + b + c;
+            }
+        });
+
+        ExecuteTime.Run("test6 新写法", () =>
+        {
+            SValue a = "";
+            for (int i = 0; i < 999999; i++)
+            {
+                SValue b = "1";
+                SValue c = "2";
+                a = i + b + c;
             }
         });
     }

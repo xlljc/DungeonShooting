@@ -1,5 +1,5 @@
 ﻿
-public enum SValueType
+public enum ScriptType
 {
     /// <summary>
     /// 空类型

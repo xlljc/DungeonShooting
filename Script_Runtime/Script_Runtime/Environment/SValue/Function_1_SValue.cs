@@ -8,14 +8,14 @@ public class Function_1_SValue : SValue
         _value = value;
     }
     
-    public override SValueType GetValueType()
+    public override ScriptType GetScriptType()
     {
-        return SValueType.Function;
+        return ScriptType.Function;
     }
 
-    public override SDataType GetDataType()
+    public override DataType GetDataType()
     {
-        return SDataType.Function_0;
+        return DataType.Function_0;
     }
 
     public override object GetValue()
@@ -378,7 +378,7 @@ public class Function_1_SValue : SValue
         throw new System.NotImplementedException();
     }
 
-    internal override SValue Operator_Not()
+    internal override bool Operator_Not()
     {
         throw new System.NotImplementedException();
     }

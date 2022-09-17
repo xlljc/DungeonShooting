@@ -4,14 +4,14 @@
 /// </summary>
 internal class True_SValue : SValue
 {
-    public override SValueType GetValueType()
+    public override ScriptType GetScriptType()
     {
-        return SValueType.True;
+        return ScriptType.True;
     }
 
-    public override SDataType GetDataType()
+    public override DataType GetDataType()
     {
-        return SDataType.True;
+        return DataType.True;
     }
 
     public override object GetValue()
@@ -374,7 +374,7 @@ internal class True_SValue : SValue
         throw new System.NotImplementedException();
     }
 
-    internal override SValue Operator_Not()
+    internal override bool Operator_Not()
     {
         throw new System.NotImplementedException();
     }

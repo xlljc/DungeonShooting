@@ -1,4 +1,5 @@
 
+
 ------------------------------------------------------------------
                          加法
 ------------------------------------------------------------------
@@ -628,6 +629,510 @@ function() {} % false => NaN   ------   function % boolean => number
 function() {} % null => NaN   ------   function % object => number
 function() {} % [object Object] => NaN   ------   function % object => number
 function() {} % function() {} => NaN   ------   function % function => number
+
+------------------------------------------------------------------
+                         大于判断
+------------------------------------------------------------------
+
+2 > 2 => false   ------   number > number => boolean
+2 > -2 => true   ------   number > number => boolean
+2 > 0 => true   ------   number > number => boolean
+2 > 2.5 => false   ------   number > number => boolean
+2 > -2.5 => true   ------   number > number => boolean
+2 > abc => false   ------   number > string => boolean
+2 > true => true   ------   number > boolean => boolean
+2 > false => true   ------   number > boolean => boolean
+2 > null => true   ------   number > object => boolean
+2 > [object Object] => false   ------   number > object => boolean
+2 > function() {} => false   ------   number > function => boolean
+-2 > 2 => false   ------   number > number => boolean
+-2 > -2 => false   ------   number > number => boolean
+-2 > 0 => false   ------   number > number => boolean
+-2 > 2.5 => false   ------   number > number => boolean
+-2 > -2.5 => true   ------   number > number => boolean
+-2 > abc => false   ------   number > string => boolean
+-2 > true => false   ------   number > boolean => boolean
+-2 > false => false   ------   number > boolean => boolean
+-2 > null => false   ------   number > object => boolean
+-2 > [object Object] => false   ------   number > object => boolean
+-2 > function() {} => false   ------   number > function => boolean
+0 > 2 => false   ------   number > number => boolean
+0 > -2 => true   ------   number > number => boolean
+0 > 0 => false   ------   number > number => boolean
+0 > 2.5 => false   ------   number > number => boolean
+0 > -2.5 => true   ------   number > number => boolean
+0 > abc => false   ------   number > string => boolean
+0 > true => false   ------   number > boolean => boolean
+0 > false => false   ------   number > boolean => boolean
+0 > null => false   ------   number > object => boolean
+0 > [object Object] => false   ------   number > object => boolean
+0 > function() {} => false   ------   number > function => boolean
+2.5 > 2 => true   ------   number > number => boolean
+2.5 > -2 => true   ------   number > number => boolean
+2.5 > 0 => true   ------   number > number => boolean
+2.5 > 2.5 => false   ------   number > number => boolean
+2.5 > -2.5 => true   ------   number > number => boolean
+2.5 > abc => false   ------   number > string => boolean
+2.5 > true => true   ------   number > boolean => boolean
+2.5 > false => true   ------   number > boolean => boolean
+2.5 > null => true   ------   number > object => boolean
+2.5 > [object Object] => false   ------   number > object => boolean
+2.5 > function() {} => false   ------   number > function => boolean
+-2.5 > 2 => false   ------   number > number => boolean
+-2.5 > -2 => false   ------   number > number => boolean
+-2.5 > 0 => false   ------   number > number => boolean
+-2.5 > 2.5 => false   ------   number > number => boolean
+-2.5 > -2.5 => false   ------   number > number => boolean
+-2.5 > abc => false   ------   number > string => boolean
+-2.5 > true => false   ------   number > boolean => boolean
+-2.5 > false => false   ------   number > boolean => boolean
+-2.5 > null => false   ------   number > object => boolean
+-2.5 > [object Object] => false   ------   number > object => boolean
+-2.5 > function() {} => false   ------   number > function => boolean
+abc > 2 => false   ------   string > number => boolean
+abc > -2 => false   ------   string > number => boolean
+abc > 0 => false   ------   string > number => boolean
+abc > 2.5 => false   ------   string > number => boolean
+abc > -2.5 => false   ------   string > number => boolean
+abc > abc => false   ------   string > string => boolean
+abc > true => false   ------   string > boolean => boolean
+abc > false => false   ------   string > boolean => boolean
+abc > null => false   ------   string > object => boolean
+abc > [object Object] => true   ------   string > object => boolean
+abc > function() {} => false   ------   string > function => boolean
+true > 2 => false   ------   boolean > number => boolean
+true > -2 => true   ------   boolean > number => boolean
+true > 0 => true   ------   boolean > number => boolean
+true > 2.5 => false   ------   boolean > number => boolean
+true > -2.5 => true   ------   boolean > number => boolean
+true > abc => false   ------   boolean > string => boolean
+true > true => false   ------   boolean > boolean => boolean
+true > false => true   ------   boolean > boolean => boolean
+true > null => true   ------   boolean > object => boolean
+true > [object Object] => false   ------   boolean > object => boolean
+true > function() {} => false   ------   boolean > function => boolean
+false > 2 => false   ------   boolean > number => boolean
+false > -2 => true   ------   boolean > number => boolean
+false > 0 => false   ------   boolean > number => boolean
+false > 2.5 => false   ------   boolean > number => boolean
+false > -2.5 => true   ------   boolean > number => boolean
+false > abc => false   ------   boolean > string => boolean
+false > true => false   ------   boolean > boolean => boolean
+false > false => false   ------   boolean > boolean => boolean
+false > null => false   ------   boolean > object => boolean
+false > [object Object] => false   ------   boolean > object => boolean
+false > function() {} => false   ------   boolean > function => boolean
+null > 2 => false   ------   object > number => boolean
+null > -2 => true   ------   object > number => boolean
+null > 0 => false   ------   object > number => boolean
+null > 2.5 => false   ------   object > number => boolean
+null > -2.5 => true   ------   object > number => boolean
+null > abc => false   ------   object > string => boolean
+null > true => false   ------   object > boolean => boolean
+null > false => false   ------   object > boolean => boolean
+null > null => false   ------   object > object => boolean
+null > [object Object] => false   ------   object > object => boolean
+null > function() {} => false   ------   object > function => boolean
+[object Object] > 2 => false   ------   object > number => boolean
+[object Object] > -2 => false   ------   object > number => boolean
+[object Object] > 0 => false   ------   object > number => boolean
+[object Object] > 2.5 => false   ------   object > number => boolean
+[object Object] > -2.5 => false   ------   object > number => boolean
+[object Object] > abc => false   ------   object > string => boolean
+[object Object] > true => false   ------   object > boolean => boolean
+[object Object] > false => false   ------   object > boolean => boolean
+[object Object] > null => false   ------   object > object => boolean
+[object Object] > [object Object] => false   ------   object > object => boolean
+[object Object] > function() {} => false   ------   object > function => boolean
+function() {} > 2 => false   ------   function > number => boolean
+function() {} > -2 => false   ------   function > number => boolean
+function() {} > 0 => false   ------   function > number => boolean
+function() {} > 2.5 => false   ------   function > number => boolean
+function() {} > -2.5 => false   ------   function > number => boolean
+function() {} > abc => true   ------   function > string => boolean
+function() {} > true => false   ------   function > boolean => boolean
+function() {} > false => false   ------   function > boolean => boolean
+function() {} > null => false   ------   function > object => boolean
+function() {} > [object Object] => true   ------   function > object => boolean
+function() {} > function() {} => false   ------   function > function => boolean
+
+------------------------------------------------------------------
+                         大于等于判断
+------------------------------------------------------------------
+
+2 >= 2 => true   ------   number >= number => boolean
+2 >= -2 => true   ------   number >= number => boolean
+2 >= 0 => true   ------   number >= number => boolean
+2 >= 2.5 => false   ------   number >= number => boolean
+2 >= -2.5 => true   ------   number >= number => boolean
+2 >= abc => false   ------   number >= string => boolean
+2 >= true => true   ------   number >= boolean => boolean
+2 >= false => true   ------   number >= boolean => boolean
+2 >= null => true   ------   number >= object => boolean
+2 >= [object Object] => false   ------   number >= object => boolean
+2 >= function() {} => false   ------   number >= function => boolean
+-2 >= 2 => false   ------   number >= number => boolean
+-2 >= -2 => true   ------   number >= number => boolean
+-2 >= 0 => false   ------   number >= number => boolean
+-2 >= 2.5 => false   ------   number >= number => boolean
+-2 >= -2.5 => true   ------   number >= number => boolean
+-2 >= abc => false   ------   number >= string => boolean
+-2 >= true => false   ------   number >= boolean => boolean
+-2 >= false => false   ------   number >= boolean => boolean
+-2 >= null => false   ------   number >= object => boolean
+-2 >= [object Object] => false   ------   number >= object => boolean
+-2 >= function() {} => false   ------   number >= function => boolean
+0 >= 2 => false   ------   number >= number => boolean
+0 >= -2 => true   ------   number >= number => boolean
+0 >= 0 => true   ------   number >= number => boolean
+0 >= 2.5 => false   ------   number >= number => boolean
+0 >= -2.5 => true   ------   number >= number => boolean
+0 >= abc => false   ------   number >= string => boolean
+0 >= true => false   ------   number >= boolean => boolean
+0 >= false => true   ------   number >= boolean => boolean
+0 >= null => true   ------   number >= object => boolean
+0 >= [object Object] => false   ------   number >= object => boolean
+0 >= function() {} => false   ------   number >= function => boolean
+2.5 >= 2 => true   ------   number >= number => boolean
+2.5 >= -2 => true   ------   number >= number => boolean
+2.5 >= 0 => true   ------   number >= number => boolean
+2.5 >= 2.5 => true   ------   number >= number => boolean
+2.5 >= -2.5 => true   ------   number >= number => boolean
+2.5 >= abc => false   ------   number >= string => boolean
+2.5 >= true => true   ------   number >= boolean => boolean
+2.5 >= false => true   ------   number >= boolean => boolean
+2.5 >= null => true   ------   number >= object => boolean
+2.5 >= [object Object] => false   ------   number >= object => boolean
+2.5 >= function() {} => false   ------   number >= function => boolean
+-2.5 >= 2 => false   ------   number >= number => boolean
+-2.5 >= -2 => false   ------   number >= number => boolean
+-2.5 >= 0 => false   ------   number >= number => boolean
+-2.5 >= 2.5 => false   ------   number >= number => boolean
+-2.5 >= -2.5 => true   ------   number >= number => boolean
+-2.5 >= abc => false   ------   number >= string => boolean
+-2.5 >= true => false   ------   number >= boolean => boolean
+-2.5 >= false => false   ------   number >= boolean => boolean
+-2.5 >= null => false   ------   number >= object => boolean
+-2.5 >= [object Object] => false   ------   number >= object => boolean
+-2.5 >= function() {} => false   ------   number >= function => boolean
+abc >= 2 => false   ------   string >= number => boolean
+abc >= -2 => false   ------   string >= number => boolean
+abc >= 0 => false   ------   string >= number => boolean
+abc >= 2.5 => false   ------   string >= number => boolean
+abc >= -2.5 => false   ------   string >= number => boolean
+abc >= abc => true   ------   string >= string => boolean
+abc >= true => false   ------   string >= boolean => boolean
+abc >= false => false   ------   string >= boolean => boolean
+abc >= null => false   ------   string >= object => boolean
+abc >= [object Object] => true   ------   string >= object => boolean
+abc >= function() {} => false   ------   string >= function => boolean
+true >= 2 => false   ------   boolean >= number => boolean
+true >= -2 => true   ------   boolean >= number => boolean
+true >= 0 => true   ------   boolean >= number => boolean
+true >= 2.5 => false   ------   boolean >= number => boolean
+true >= -2.5 => true   ------   boolean >= number => boolean
+true >= abc => false   ------   boolean >= string => boolean
+true >= true => true   ------   boolean >= boolean => boolean
+true >= false => true   ------   boolean >= boolean => boolean
+true >= null => true   ------   boolean >= object => boolean
+true >= [object Object] => false   ------   boolean >= object => boolean
+true >= function() {} => false   ------   boolean >= function => boolean
+false >= 2 => false   ------   boolean >= number => boolean
+false >= -2 => true   ------   boolean >= number => boolean
+false >= 0 => true   ------   boolean >= number => boolean
+false >= 2.5 => false   ------   boolean >= number => boolean
+false >= -2.5 => true   ------   boolean >= number => boolean
+false >= abc => false   ------   boolean >= string => boolean
+false >= true => false   ------   boolean >= boolean => boolean
+false >= false => true   ------   boolean >= boolean => boolean
+false >= null => true   ------   boolean >= object => boolean
+false >= [object Object] => false   ------   boolean >= object => boolean
+false >= function() {} => false   ------   boolean >= function => boolean
+null >= 2 => false   ------   object >= number => boolean
+null >= -2 => true   ------   object >= number => boolean
+null >= 0 => true   ------   object >= number => boolean
+null >= 2.5 => false   ------   object >= number => boolean
+null >= -2.5 => true   ------   object >= number => boolean
+null >= abc => false   ------   object >= string => boolean
+null >= true => false   ------   object >= boolean => boolean
+null >= false => true   ------   object >= boolean => boolean
+null >= null => true   ------   object >= object => boolean
+null >= [object Object] => false   ------   object >= object => boolean
+null >= function() {} => false   ------   object >= function => boolean
+[object Object] >= 2 => false   ------   object >= number => boolean
+[object Object] >= -2 => false   ------   object >= number => boolean
+[object Object] >= 0 => false   ------   object >= number => boolean
+[object Object] >= 2.5 => false   ------   object >= number => boolean
+[object Object] >= -2.5 => false   ------   object >= number => boolean
+[object Object] >= abc => false   ------   object >= string => boolean
+[object Object] >= true => false   ------   object >= boolean => boolean
+[object Object] >= false => false   ------   object >= boolean => boolean
+[object Object] >= null => false   ------   object >= object => boolean
+[object Object] >= [object Object] => true   ------   object >= object => boolean
+[object Object] >= function() {} => false   ------   object >= function => boolean
+function() {} >= 2 => false   ------   function >= number => boolean
+function() {} >= -2 => false   ------   function >= number => boolean
+function() {} >= 0 => false   ------   function >= number => boolean
+function() {} >= 2.5 => false   ------   function >= number => boolean
+function() {} >= -2.5 => false   ------   function >= number => boolean
+function() {} >= abc => true   ------   function >= string => boolean
+function() {} >= true => false   ------   function >= boolean => boolean
+function() {} >= false => false   ------   function >= boolean => boolean
+function() {} >= null => false   ------   function >= object => boolean
+function() {} >= [object Object] => true   ------   function >= object => boolean
+function() {} >= function() {} => true   ------   function >= function => boolean
+
+------------------------------------------------------------------
+                         小于判断
+------------------------------------------------------------------
+
+2 < 2 => false   ------   number < number => boolean
+2 < -2 => false   ------   number < number => boolean
+2 < 0 => false   ------   number < number => boolean
+2 < 2.5 => true   ------   number < number => boolean
+2 < -2.5 => false   ------   number < number => boolean
+2 < abc => false   ------   number < string => boolean
+2 < true => false   ------   number < boolean => boolean
+2 < false => false   ------   number < boolean => boolean
+2 < null => false   ------   number < object => boolean
+2 < [object Object] => false   ------   number < object => boolean
+2 < function() {} => false   ------   number < function => boolean
+-2 < 2 => true   ------   number < number => boolean
+-2 < -2 => false   ------   number < number => boolean
+-2 < 0 => true   ------   number < number => boolean
+-2 < 2.5 => true   ------   number < number => boolean
+-2 < -2.5 => false   ------   number < number => boolean
+-2 < abc => false   ------   number < string => boolean
+-2 < true => true   ------   number < boolean => boolean
+-2 < false => true   ------   number < boolean => boolean
+-2 < null => true   ------   number < object => boolean
+-2 < [object Object] => false   ------   number < object => boolean
+-2 < function() {} => false   ------   number < function => boolean
+0 < 2 => true   ------   number < number => boolean
+0 < -2 => false   ------   number < number => boolean
+0 < 0 => false   ------   number < number => boolean
+0 < 2.5 => true   ------   number < number => boolean
+0 < -2.5 => false   ------   number < number => boolean
+0 < abc => false   ------   number < string => boolean
+0 < true => true   ------   number < boolean => boolean
+0 < false => false   ------   number < boolean => boolean
+0 < null => false   ------   number < object => boolean
+0 < [object Object] => false   ------   number < object => boolean
+0 < function() {} => false   ------   number < function => boolean
+2.5 < 2 => false   ------   number < number => boolean
+2.5 < -2 => false   ------   number < number => boolean
+2.5 < 0 => false   ------   number < number => boolean
+2.5 < 2.5 => false   ------   number < number => boolean
+2.5 < -2.5 => false   ------   number < number => boolean
+2.5 < abc => false   ------   number < string => boolean
+2.5 < true => false   ------   number < boolean => boolean
+2.5 < false => false   ------   number < boolean => boolean
+2.5 < null => false   ------   number < object => boolean
+2.5 < [object Object] => false   ------   number < object => boolean
+2.5 < function() {} => false   ------   number < function => boolean
+-2.5 < 2 => true   ------   number < number => boolean
+-2.5 < -2 => true   ------   number < number => boolean
+-2.5 < 0 => true   ------   number < number => boolean
+-2.5 < 2.5 => true   ------   number < number => boolean
+-2.5 < -2.5 => false   ------   number < number => boolean
+-2.5 < abc => false   ------   number < string => boolean
+-2.5 < true => true   ------   number < boolean => boolean
+-2.5 < false => true   ------   number < boolean => boolean
+-2.5 < null => true   ------   number < object => boolean
+-2.5 < [object Object] => false   ------   number < object => boolean
+-2.5 < function() {} => false   ------   number < function => boolean
+abc < 2 => false   ------   string < number => boolean
+abc < -2 => false   ------   string < number => boolean
+abc < 0 => false   ------   string < number => boolean
+abc < 2.5 => false   ------   string < number => boolean
+abc < -2.5 => false   ------   string < number => boolean
+abc < abc => false   ------   string < string => boolean
+abc < true => false   ------   string < boolean => boolean
+abc < false => false   ------   string < boolean => boolean
+abc < null => false   ------   string < object => boolean
+abc < [object Object] => false   ------   string < object => boolean
+abc < function() {} => true   ------   string < function => boolean
+true < 2 => true   ------   boolean < number => boolean
+true < -2 => false   ------   boolean < number => boolean
+true < 0 => false   ------   boolean < number => boolean
+true < 2.5 => true   ------   boolean < number => boolean
+true < -2.5 => false   ------   boolean < number => boolean
+true < abc => false   ------   boolean < string => boolean
+true < true => false   ------   boolean < boolean => boolean
+true < false => false   ------   boolean < boolean => boolean
+true < null => false   ------   boolean < object => boolean
+true < [object Object] => false   ------   boolean < object => boolean
+true < function() {} => false   ------   boolean < function => boolean
+false < 2 => true   ------   boolean < number => boolean
+false < -2 => false   ------   boolean < number => boolean
+false < 0 => false   ------   boolean < number => boolean
+false < 2.5 => true   ------   boolean < number => boolean
+false < -2.5 => false   ------   boolean < number => boolean
+false < abc => false   ------   boolean < string => boolean
+false < true => true   ------   boolean < boolean => boolean
+false < false => false   ------   boolean < boolean => boolean
+false < null => false   ------   boolean < object => boolean
+false < [object Object] => false   ------   boolean < object => boolean
+false < function() {} => false   ------   boolean < function => boolean
+null < 2 => true   ------   object < number => boolean
+null < -2 => false   ------   object < number => boolean
+null < 0 => false   ------   object < number => boolean
+null < 2.5 => true   ------   object < number => boolean
+null < -2.5 => false   ------   object < number => boolean
+null < abc => false   ------   object < string => boolean
+null < true => true   ------   object < boolean => boolean
+null < false => false   ------   object < boolean => boolean
+null < null => false   ------   object < object => boolean
+null < [object Object] => false   ------   object < object => boolean
+null < function() {} => false   ------   object < function => boolean
+[object Object] < 2 => false   ------   object < number => boolean
+[object Object] < -2 => false   ------   object < number => boolean
+[object Object] < 0 => false   ------   object < number => boolean
+[object Object] < 2.5 => false   ------   object < number => boolean
+[object Object] < -2.5 => false   ------   object < number => boolean
+[object Object] < abc => true   ------   object < string => boolean
+[object Object] < true => false   ------   object < boolean => boolean
+[object Object] < false => false   ------   object < boolean => boolean
+[object Object] < null => false   ------   object < object => boolean
+[object Object] < [object Object] => false   ------   object < object => boolean
+[object Object] < function() {} => true   ------   object < function => boolean
+function() {} < 2 => false   ------   function < number => boolean
+function() {} < -2 => false   ------   function < number => boolean
+function() {} < 0 => false   ------   function < number => boolean
+function() {} < 2.5 => false   ------   function < number => boolean
+function() {} < -2.5 => false   ------   function < number => boolean
+function() {} < abc => false   ------   function < string => boolean
+function() {} < true => false   ------   function < boolean => boolean
+function() {} < false => false   ------   function < boolean => boolean
+function() {} < null => false   ------   function < object => boolean
+function() {} < [object Object] => false   ------   function < object => boolean
+function() {} < function() {} => false   ------   function < function => boolean
+
+------------------------------------------------------------------
+                         小于等于判断
+------------------------------------------------------------------
+
+2 <= 2 => true   ------   number <= number => boolean
+2 <= -2 => false   ------   number <= number => boolean
+2 <= 0 => false   ------   number <= number => boolean
+2 <= 2.5 => true   ------   number <= number => boolean
+2 <= -2.5 => false   ------   number <= number => boolean
+2 <= abc => false   ------   number <= string => boolean
+2 <= true => false   ------   number <= boolean => boolean
+2 <= false => false   ------   number <= boolean => boolean
+2 <= null => false   ------   number <= object => boolean
+2 <= [object Object] => false   ------   number <= object => boolean
+2 <= function() {} => false   ------   number <= function => boolean
+-2 <= 2 => true   ------   number <= number => boolean
+-2 <= -2 => true   ------   number <= number => boolean
+-2 <= 0 => true   ------   number <= number => boolean
+-2 <= 2.5 => true   ------   number <= number => boolean
+-2 <= -2.5 => false   ------   number <= number => boolean
+-2 <= abc => false   ------   number <= string => boolean
+-2 <= true => true   ------   number <= boolean => boolean
+-2 <= false => true   ------   number <= boolean => boolean
+-2 <= null => true   ------   number <= object => boolean
+-2 <= [object Object] => false   ------   number <= object => boolean
+-2 <= function() {} => false   ------   number <= function => boolean
+0 <= 2 => true   ------   number <= number => boolean
+0 <= -2 => false   ------   number <= number => boolean
+0 <= 0 => true   ------   number <= number => boolean
+0 <= 2.5 => true   ------   number <= number => boolean
+0 <= -2.5 => false   ------   number <= number => boolean
+0 <= abc => false   ------   number <= string => boolean
+0 <= true => true   ------   number <= boolean => boolean
+0 <= false => true   ------   number <= boolean => boolean
+0 <= null => true   ------   number <= object => boolean
+0 <= [object Object] => false   ------   number <= object => boolean
+0 <= function() {} => false   ------   number <= function => boolean
+2.5 <= 2 => false   ------   number <= number => boolean
+2.5 <= -2 => false   ------   number <= number => boolean
+2.5 <= 0 => false   ------   number <= number => boolean
+2.5 <= 2.5 => true   ------   number <= number => boolean
+2.5 <= -2.5 => false   ------   number <= number => boolean
+2.5 <= abc => false   ------   number <= string => boolean
+2.5 <= true => false   ------   number <= boolean => boolean
+2.5 <= false => false   ------   number <= boolean => boolean
+2.5 <= null => false   ------   number <= object => boolean
+2.5 <= [object Object] => false   ------   number <= object => boolean
+2.5 <= function() {} => false   ------   number <= function => boolean
+-2.5 <= 2 => true   ------   number <= number => boolean
+-2.5 <= -2 => true   ------   number <= number => boolean
+-2.5 <= 0 => true   ------   number <= number => boolean
+-2.5 <= 2.5 => true   ------   number <= number => boolean
+-2.5 <= -2.5 => true   ------   number <= number => boolean
+-2.5 <= abc => false   ------   number <= string => boolean
+-2.5 <= true => true   ------   number <= boolean => boolean
+-2.5 <= false => true   ------   number <= boolean => boolean
+-2.5 <= null => true   ------   number <= object => boolean
+-2.5 <= [object Object] => false   ------   number <= object => boolean
+-2.5 <= function() {} => false   ------   number <= function => boolean
+abc <= 2 => false   ------   string <= number => boolean
+abc <= -2 => false   ------   string <= number => boolean
+abc <= 0 => false   ------   string <= number => boolean
+abc <= 2.5 => false   ------   string <= number => boolean
+abc <= -2.5 => false   ------   string <= number => boolean
+abc <= abc => true   ------   string <= string => boolean
+abc <= true => false   ------   string <= boolean => boolean
+abc <= false => false   ------   string <= boolean => boolean
+abc <= null => false   ------   string <= object => boolean
+abc <= [object Object] => false   ------   string <= object => boolean
+abc <= function() {} => true   ------   string <= function => boolean
+true <= 2 => true   ------   boolean <= number => boolean
+true <= -2 => false   ------   boolean <= number => boolean
+true <= 0 => false   ------   boolean <= number => boolean
+true <= 2.5 => true   ------   boolean <= number => boolean
+true <= -2.5 => false   ------   boolean <= number => boolean
+true <= abc => false   ------   boolean <= string => boolean
+true <= true => true   ------   boolean <= boolean => boolean
+true <= false => false   ------   boolean <= boolean => boolean
+true <= null => false   ------   boolean <= object => boolean
+true <= [object Object] => false   ------   boolean <= object => boolean
+true <= function() {} => false   ------   boolean <= function => boolean
+false <= 2 => true   ------   boolean <= number => boolean
+false <= -2 => false   ------   boolean <= number => boolean
+false <= 0 => true   ------   boolean <= number => boolean
+false <= 2.5 => true   ------   boolean <= number => boolean
+false <= -2.5 => false   ------   boolean <= number => boolean
+false <= abc => false   ------   boolean <= string => boolean
+false <= true => true   ------   boolean <= boolean => boolean
+false <= false => true   ------   boolean <= boolean => boolean
+false <= null => true   ------   boolean <= object => boolean
+false <= [object Object] => false   ------   boolean <= object => boolean
+false <= function() {} => false   ------   boolean <= function => boolean
+null <= 2 => true   ------   object <= number => boolean
+null <= -2 => false   ------   object <= number => boolean
+null <= 0 => true   ------   object <= number => boolean
+null <= 2.5 => true   ------   object <= number => boolean
+null <= -2.5 => false   ------   object <= number => boolean
+null <= abc => false   ------   object <= string => boolean
+null <= true => true   ------   object <= boolean => boolean
+null <= false => true   ------   object <= boolean => boolean
+null <= null => true   ------   object <= object => boolean
+null <= [object Object] => false   ------   object <= object => boolean
+null <= function() {} => false   ------   object <= function => boolean
+[object Object] <= 2 => false   ------   object <= number => boolean
+[object Object] <= -2 => false   ------   object <= number => boolean
+[object Object] <= 0 => false   ------   object <= number => boolean
+[object Object] <= 2.5 => false   ------   object <= number => boolean
+[object Object] <= -2.5 => false   ------   object <= number => boolean
+[object Object] <= abc => true   ------   object <= string => boolean
+[object Object] <= true => false   ------   object <= boolean => boolean
+[object Object] <= false => false   ------   object <= boolean => boolean
+[object Object] <= null => false   ------   object <= object => boolean
+[object Object] <= [object Object] => true   ------   object <= object => boolean
+[object Object] <= function() {} => true   ------   object <= function => boolean
+function() {} <= 2 => false   ------   function <= number => boolean
+function() {} <= -2 => false   ------   function <= number => boolean
+function() {} <= 0 => false   ------   function <= number => boolean
+function() {} <= 2.5 => false   ------   function <= number => boolean
+function() {} <= -2.5 => false   ------   function <= number => boolean
+function() {} <= abc => false   ------   function <= string => boolean
+function() {} <= true => false   ------   function <= boolean => boolean
+function() {} <= false => false   ------   function <= boolean => boolean
+function() {} <= null => false   ------   function <= object => boolean
+function() {} <= [object Object] => false   ------   function <= object => boolean
+function() {} <= function() {} => true   ------   function <= function => boolean
 
 ------------------------------------------------------------------
                          二进制左移

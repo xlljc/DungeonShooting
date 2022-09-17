@@ -6,14 +6,14 @@ using System;
 /// </summary>
 internal class Null_SValue : SValue
 {
-    public override SValueType GetValueType()
+    public override ScriptType GetScriptType()
     {
-        return SValueType.Null;
+        return ScriptType.Null;
     }
 
-    public override SDataType GetDataType()
+    public override DataType GetDataType()
     {
-        return SDataType.Null;
+        return DataType.Null;
     }
 
     public override object GetValue()
@@ -376,7 +376,7 @@ internal class Null_SValue : SValue
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Not()
+    internal override bool Operator_Not()
     {
         throw new NotImplementedException();
     }

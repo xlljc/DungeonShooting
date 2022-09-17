@@ -13,14 +13,14 @@ internal class Number_SValue : SValue
         _value = value;
     }
 
-    public override SValueType GetValueType()
+    public override ScriptType GetScriptType()
     {
-        return SValueType.Number;
+        return ScriptType.Number;
     }
 
-    public override SDataType GetDataType()
+    public override DataType GetDataType()
     {
-        return SDataType.Number;
+        return DataType.Number;
     }
 
     public override object GetValue()
@@ -65,7 +65,7 @@ internal class Number_SValue : SValue
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3)
     {
-        throw new NotImplementedException();
+        throw new InvokeMethodException($"{_value} is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
@@ -261,11 +261,11 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return _value == ((Number_SValue)v2)._value;
-            case SDataType.True:
+            case DataType.True:
                 return _value == 1;
-            case SDataType.False:
+            case DataType.False:
                 return _value == 0;
         }
 
@@ -286,11 +286,11 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return _value != ((Number_SValue)v2)._value;
-            case SDataType.True:
+            case DataType.True:
                 return _value != 1;
-            case SDataType.False:
+            case DataType.False:
                 return _value != 0;
         }
 
@@ -321,14 +321,14 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return new Number_SValue(_value + ((Number_SValue)v2)._value);
-            case SDataType.String:
+            case DataType.String:
                 return new String_SValue(_value + (string)v2.GetValue());
-            case SDataType.True:
+            case DataType.True:
                 return new Number_SValue(_value + 1);
-            case SDataType.False:
-            case SDataType.Null:
+            case DataType.False:
+            case DataType.Null:
                 return this;
         }
 
@@ -349,12 +349,12 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return new Number_SValue(_value - ((Number_SValue)v2)._value);
-            case SDataType.True:
+            case DataType.True:
                 return new Number_SValue(_value - 1);
-            case SDataType.False:
-            case SDataType.Null:
+            case DataType.False:
+            case DataType.Null:
                 return this;
         }
 
@@ -375,12 +375,12 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return new Number_SValue(_value * ((Number_SValue)v2)._value);
-            case SDataType.True:
+            case DataType.True:
                 return this;
-            case SDataType.False:
-            case SDataType.Null:
+            case DataType.False:
+            case DataType.Null:
                 return Zero;
         }
 
@@ -401,12 +401,12 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return new Number_SValue(_value / ((Number_SValue)v2)._value);
-            case SDataType.True:
+            case DataType.True:
                 return this;
-            case SDataType.False:
-            case SDataType.Null:
+            case DataType.False:
+            case DataType.Null:
                 return _value == 0 ? NaN : (_value > 0 ? PositiveInfinity : NegativeInfinity);
         }
 
@@ -437,11 +437,12 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return _value > ((Number_SValue)v2)._value;
-            case SDataType.True:
+            case DataType.True:
                 return _value > 1;
-            case SDataType.False:
+            case DataType.False:
+            case DataType.Null:
                 return _value > 0;
         }
 
@@ -452,11 +453,12 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return _value < ((Number_SValue)v2)._value;
-            case SDataType.True:
+            case DataType.True:
                 return _value < 1;
-            case SDataType.False:
+            case DataType.False:
+            case DataType.Null:
                 return _value < 0;
         }
 
@@ -477,11 +479,12 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return _value >= ((Number_SValue)v2)._value;
-            case SDataType.True:
+            case DataType.True:
                 return _value >= 1;
-            case SDataType.False:
+            case DataType.False:
+            case DataType.Null:
                 return _value >= 0;
         }
 
@@ -497,11 +500,12 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return _value <= ((Number_SValue)v2)._value;
-            case SDataType.True:
+            case DataType.True:
                 return _value <= 1;
-            case SDataType.False:
+            case DataType.False:
+            case DataType.Null:
                 return _value <= 0;
         }
 
@@ -513,9 +517,9 @@ internal class Number_SValue : SValue
         return new Number_SValue(-_value);
     }
 
-    internal override SValue Operator_Not()
+    internal override bool Operator_Not()
     {
-        return _value == 0 ? True : False;
+        return _value <= 0;
     }
 
     internal override bool Operator_True()
@@ -542,9 +546,9 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return new Number_SValue(_value % ((Number_SValue)v2)._value);
-            case SDataType.True:
+            case DataType.True:
                 return new Number_SValue(_value % 1);
         }
 
@@ -580,9 +584,9 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return new Number_SValue((int)_value | (int)((Number_SValue)v2)._value);
-            case SDataType.True:
+            case DataType.True:
                 return new Number_SValue((int)_value | 1);
         }
 
@@ -603,9 +607,9 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return new Number_SValue((int)_value & (int)((Number_SValue)v2)._value);
-            case SDataType.True:
+            case DataType.True:
                 return new Number_SValue((int)_value & 1);
         }
 
@@ -626,9 +630,9 @@ internal class Number_SValue : SValue
     {
         switch (v2.GetDataType())
         {
-            case SDataType.Number:
+            case DataType.Number:
                 return new Number_SValue((int)_value ^ (int)((Number_SValue)v2)._value);
-            case SDataType.True:
+            case DataType.True:
                 return new Number_SValue((int)_value ^ 1);
         }
 

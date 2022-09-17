@@ -7,12 +7,12 @@ public abstract class SValue
     /// <summary>
     /// 获取该类在脚本中的数据类型
     /// </summary>
-    public abstract SValueType GetValueType();
+    public abstract ScriptType GetScriptType();
 
     /// <summary>
     /// 获取该类存放的数据类型
     /// </summary>
-    public abstract SDataType GetDataType();
+    public abstract DataType GetDataType();
 
     /// <summary>
     /// 获取数据对象
@@ -385,7 +385,7 @@ public abstract class SValue
     /// <summary>
     /// 取反
     /// </summary>
-    internal abstract SValue Operator_Not();
+    internal abstract bool Operator_Not();
 
     /// <summary>
     /// 小于等于
@@ -681,7 +681,7 @@ public abstract class SValue
         return v1.Operator_Negative();
     }
 
-    public static SValue operator !(SValue v1)
+    public static bool operator !(SValue v1)
     {
         return v1.Operator_Not();
     }
@@ -773,6 +773,40 @@ public abstract class SValue
 
     #endregion
 
+    #region 自动转型
+
+    public static implicit operator SValue(double value)
+    {
+        return new Number_SValue(value);
+    }
+
+    public static implicit operator SValue(string value)
+    {
+        if (value == null)
+        {
+            return Null;
+        }
+
+        return new String_SValue(value);
+    }
+
+    public static implicit operator SValue(bool value)
+    {
+        return value ? True : False;
+    }
+
+    public static implicit operator SValue(Function_0 value)
+    {
+        return new Function_0_SValue(value);
+    }
+    
+    public static implicit operator SValue(Function_1 value)
+    {
+        return new Function_1_SValue(value);
+    }
+
+    #endregion
+    
     /// <summary>
     /// true
     /// </summary>
@@ -827,39 +861,4 @@ public abstract class SValue
     /// 2
     /// </summary>
     internal static readonly SValue Two = new Number_SValue(2);
-
-    public static SValue Create(ref SValue value)
-    {
-        return value;
-    }
-
-    public static SValue Create(double value)
-    {
-        return new Number_SValue(value);
-    }
-
-    public static SValue Create(string value)
-    {
-        return new String_SValue(value);
-    }
-
-    public static SValue Create(bool value)
-    {
-        return value ? True : False;
-    }
-
-    public static SValue Create(IObject value)
-    {
-        return Null;
-    }
-
-    public static SValue Create(Function_0 value)
-    {
-        return new Function_0_SValue(value);
-    }
-
-    public static SValue Create(Function_1 value)
-    {
-        return new Function_1_SValue(value);
-    }
 }

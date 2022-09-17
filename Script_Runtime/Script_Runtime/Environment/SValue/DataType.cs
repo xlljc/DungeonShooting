@@ -1,4 +1,4 @@
-﻿public enum SDataType
+﻿public enum DataType
 {
     /// <summary>
     /// 类

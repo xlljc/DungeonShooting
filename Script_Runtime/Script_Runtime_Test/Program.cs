@@ -124,7 +124,7 @@ public class Program
         Console.WriteLine("原生C#运行耗时(原生): " + (time6 - time5) / 10000f + "毫秒");
 
         var time = DateTime.Now.Ticks;
-        var test = SValue.Create(Test);
+        SValue test = new Function_0(Test);
         for (int i = 0; i < 999999; i++)
         {
             test.Invoke();

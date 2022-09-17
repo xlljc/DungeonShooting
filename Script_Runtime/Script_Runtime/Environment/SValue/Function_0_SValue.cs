@@ -8,19 +8,19 @@ internal class Function_0_SValue : SValue
 {
     private Function_0 _value;
     
-    public Function_0_SValue(Function_0 value)
+    internal Function_0_SValue(Function_0 value)
     {
         _value = value;
     }
     
-    public override SValueType GetValueType()
+    public override ScriptType GetScriptType()
     {
-        return SValueType.Function;
+        return ScriptType.Function;
     }
 
-    public override SDataType GetDataType()
+    public override DataType GetDataType()
     {
-        return SDataType.Function_0;
+        return DataType.Function_0;
     }
 
     public override object GetValue()
@@ -383,7 +383,7 @@ internal class Function_0_SValue : SValue
         throw new NotImplementedException();
     }
 
-    internal override SValue Operator_Not()
+    internal override bool Operator_Not()
     {
         throw new NotImplementedException();
     }
