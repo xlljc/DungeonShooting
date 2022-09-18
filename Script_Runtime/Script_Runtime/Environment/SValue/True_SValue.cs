@@ -21,232 +21,248 @@ internal class True_SValue : SValue
 
     public override SValue GetMember(string key)
     {
-        throw new System.NotImplementedException();
+        return Null;
     }
 
     public override bool HasMember(string key)
     {
-        throw new System.NotImplementedException();
+        return false;
     }
 
     public override void SetMember(string key, SValue value)
     {
-        throw new System.NotImplementedException();
+        throw new OperationMemberException($"Member '{key}' not defined.");
     }
 
     public override SValue Invoke()
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
         SValue v9)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
         SValue v9, SValue v10)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"'true' is not a function.");
     }
 
     public override SValue InvokeMethod(string key)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
         SValue v8)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
         SValue v8, SValue v9)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
     {
-        throw new System.NotImplementedException();
+        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
     }
 
     internal override bool Operator_Equal_Double(double v2)
     {
-        throw new System.NotImplementedException();
+        return 1 == v2;
     }
 
     internal override bool Operator_Equal_String(string v2)
     {
-        throw new System.NotImplementedException();
+        return false;
     }
 
     internal override bool Operator_Equal_SValue(SValue v2)
     {
-        throw new System.NotImplementedException();
+        switch (v2.GetScriptType())
+        {
+            case ScriptType.Number:
+                return 1 == ((Number_SValue)v2)._value;
+            case ScriptType.True:
+                return true;
+        }
+
+        return false;
     }
 
     internal override bool Operator_Not_Equal_Double(double v2)
     {
-        throw new System.NotImplementedException();
+        return 1 != v2;
     }
 
     internal override bool Operator_Not_Equal_String(string v2)
     {
-        throw new System.NotImplementedException();
+        return true;
     }
 
     internal override bool Operator_Not_Equal_SValue(SValue v2)
     {
-        throw new System.NotImplementedException();
+        switch (v2.GetScriptType())
+        {
+            case ScriptType.Number:
+                return 1 != ((Number_SValue)v2)._value;
+            case ScriptType.True:
+                return false;
+        }
+
+        return true;
     }
 
     internal override SValue Operator_Add_Double(double v2)
