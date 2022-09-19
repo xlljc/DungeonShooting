@@ -1,11 +1,11 @@
 ﻿
 using System.Collections.Generic;
 
-public class SArray : IObject
+public class OldSArray : OldIObject
 {
     private List<OldSValue> _arr;
 
-    public SArray(params OldSValue[] values)
+    public OldSArray(params OldSValue[] values)
     {
         _arr = new List<OldSValue>(values);
     }

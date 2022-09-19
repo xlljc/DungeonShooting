@@ -182,7 +182,7 @@ public class Program
     /// </summary>
     public static void Test2()
     {
-        var arr = new SArray();
+        var arr = new OldSArray();
         arr.__InvokeMethod("add", 1);
         arr.__InvokeMethod("add", 2);
         arr.__InvokeMethod("add", 2);

@@ -23,7 +23,7 @@ public class Vector2Cs
     }
 }
     
-public class Vector2 : SObject
+public class Vector2 : OldSObject
 {
     public OldSValue x = OldSValue.Null;
     public OldSValue y = OldSValue.Null;

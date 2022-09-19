@@ -1,246 +1,246 @@
-
+﻿
 /// <summary>
-/// true值
+/// 对象类型
 /// </summary>
-internal class True_SValue : SValue
+internal class Object_SValue : SValue
 {
+    internal SObject _value;
+
+    public Object_SValue(SObject value)
+    {
+        _value = value;
+    }
+
     public override ScriptType GetScriptType()
     {
-        return ScriptType.True;
+        return ScriptType.Object;
     }
 
     public override DataType GetDataType()
     {
-        return DataType.True;
+        return DataType.Object;
     }
 
     public override object GetValue()
     {
-        return true;
+        return _value;
     }
 
     public override SValue GetMember(string key)
     {
-        return Null;
+        return _value.__GetMember(key);
     }
 
     public override bool HasMember(string key)
     {
-        return false;
+        return _value.__HasMember(key);
     }
 
     public override void SetMember(string key, SValue value)
     {
-        throw new OperationMemberException($"Member '{key}' not defined.");
+        _value.__SetMember(key, value);
     }
 
     public override SValue Invoke()
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
         SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
     {
-        throw new InvokeMethodException($"'true' is not a function.");
+        throw new InvokeMethodException($"'{_value}' is not a function.");
     }
 
     public override SValue InvokeMethod(string key)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key);
     }
 
     public override SValue InvokeMethod(string key, SValue v0)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
         SValue v6, SValue v7)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
-        SValue v6, SValue v7,
-        SValue v8)
+        SValue v6, SValue v7, SValue v8)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
-        SValue v6, SValue v7,
-        SValue v8, SValue v9)
+        SValue v6, SValue v7, SValue v8, SValue v9)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
-        SValue v6, SValue v7,
-        SValue v8, SValue v9, SValue v10)
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
-        SValue v6, SValue v7,
-        SValue v8, SValue v9, SValue v10, SValue v11)
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
-        SValue v6, SValue v7,
-        SValue v8, SValue v9, SValue v10, SValue v11, SValue v12)
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
-        SValue v6, SValue v7,
-        SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
-        SValue v6, SValue v7,
-        SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14);
     }
 
     public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
-        SValue v6, SValue v7,
-        SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
+        SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14,
+        SValue v15)
     {
-        throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+        return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15);
     }
 
     internal override bool Operator_Equal_Double(double v2)
     {
-        return 1 == v2;
+        return false;
     }
 
     internal override bool Operator_Equal_String(string v2)
@@ -250,364 +250,245 @@ internal class True_SValue : SValue
 
     internal override bool Operator_Equal_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
+        if (v2.GetDataType() == DataType.Object)
         {
-            case ScriptType.Number:
-                return 1 == ((Number_SValue)v2)._value;
-            case ScriptType.True:
-                return true;
+            return _value == ((Object_SValue)v2)._value;
         }
-
-        return false;
+        return GetValue() == v2.GetValue();
     }
 
     internal override bool Operator_Not_Equal_Double(double v2)
     {
-        return 1 != v2;
+        throw new System.NotImplementedException();
     }
 
     internal override bool Operator_Not_Equal_String(string v2)
     {
-        return true;
+        throw new System.NotImplementedException();
     }
 
     internal override bool Operator_Not_Equal_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return 1 != ((Number_SValue)v2)._value;
-            case ScriptType.True:
-                return false;
-        }
-
-        return true;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Add_Double(double v2)
     {
-        return new Number_SValue(1 + v2);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Append_Add_Double(double v1)
     {
-        return new Number_SValue(v1 + 1);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Add_String(string v2)
     {
-        return new String_SValue("true" + v2);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Append_Add_String(string v1)
     {
-        return new String_SValue(v1 + "true");
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Add_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return new Number_SValue(1 + ((Number_SValue)v2)._value);
-            case ScriptType.String:
-                return new String_SValue("true" + ((String_SValue)v2)._value);
-            case ScriptType.False:
-            case ScriptType.Null:
-                return One;
-            case ScriptType.True:
-                return Two;
-        }
-
-        return new String_SValue("true" + v2.GetValue());
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Subtract_Double(double v2)
     {
-        return new Number_SValue(1 - v2);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Append_Subtract_Double(double v1)
     {
-        return new Number_SValue(v1 - 1);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Subtract_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return new Number_SValue(1 - ((Number_SValue)v2)._value);
-            case ScriptType.False:
-            case ScriptType.Null:
-                return One;
-            case ScriptType.True:
-                return Zero;
-        }
-
-        return NaN;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Multiply_Double(double v2)
     {
-        return new Number_SValue(1 * v2);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Append_Multiply_Double(double v1)
     {
-        return new Number_SValue(v1 * 1);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Multiply_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return new Number_SValue(1 * ((Number_SValue)v2)._value);
-            case ScriptType.False:
-            case ScriptType.Null:
-                return Zero;
-            case ScriptType.True:
-                return One;
-        }
-
-        return NaN;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Divide_Double(double v2)
     {
-        return new Number_SValue(1 / v2);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Append_Divide_Double(double v1)
     {
-        return new Number_SValue(v1 / 1);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Divide_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return new Number_SValue(1 / ((Number_SValue)v2)._value);
-            case ScriptType.False:
-            case ScriptType.Null:
-                return PositiveInfinity;
-            case ScriptType.True:
-                return One;
-        }
-
-        return NaN;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_SinceAdd()
     {
-        return Two;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_SinceReduction()
     {
-        return Zero;
+        throw new System.NotImplementedException();
     }
 
     internal override bool Operator_Greater_Double(double v2)
     {
-        return 1 > v2;
+        return false;
     }
 
     internal override bool Operator_Less_Double(double v2)
     {
-        return 1 < v2;
+        return false;
     }
 
     internal override bool Operator_Greater_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return 1 > ((Number_SValue)v2)._value;
-            case ScriptType.False:
-            case ScriptType.Null:
-                return true;
-        }
-
         return false;
     }
 
     internal override bool Operator_Less_SValue(SValue v2)
     {
-        if (v2.GetScriptType() == ScriptType.Number)
-        {
-            return 1 < ((Number_SValue)v2)._value;
-        }
-
         return false;
     }
 
     internal override bool Operator_Greater_Equal_Double(double v2)
     {
-        return 1 >= v2;
+        return false;
     }
 
     internal override bool Operator_Less_Equal_Double(double v2)
     {
-        return 1 <= v2;
+        return false;
     }
 
     internal override bool Operator_Greater_Equal_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return 1 >= ((Number_SValue)v2)._value;
-            case ScriptType.False:
-            case ScriptType.True:
-            case ScriptType.Null:
-                return true;
-        }
-
         return false;
     }
 
     internal override SValue Operator_Positive()
     {
-        return One;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Negative()
     {
-        return NegativeOne;
+        throw new System.NotImplementedException();
     }
 
     internal override bool Operator_Not()
     {
-        return false;
+        throw new System.NotImplementedException();
     }
 
     internal override bool Operator_Less_Equal_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return 1 <= ((Number_SValue)v2)._value;
-            case ScriptType.True:
-                return true;
-        }
-
         return false;
     }
 
     internal override bool Operator_True()
     {
-        return true;
+        throw new System.NotImplementedException();
     }
 
     internal override bool Operator_False()
     {
-        return false;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Modulus_Double(double v2)
     {
-        return new Number_SValue(1 % v2);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Append_Modulus_Double(double v1)
     {
-        return new Number_SValue(v1 % 1);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Modulus_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return new Number_SValue(1 % ((Number_SValue)v2)._value);
-            case ScriptType.True:
-                return Zero;
-        }
-
-        return NaN;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Shift_Negation()
     {
-        return NegativeTwo;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Shift_Right(int v1)
     {
-        return new Number_SValue(1 >> v1);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Shift_Left(int v1)
     {
-        return new Number_SValue(1 << v1);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Shift_Or_Double(double v2)
     {
-        return new Number_SValue(1 | (int)v2);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Append_Shift_Or_Double(double v1)
     {
-        return new Number_SValue((int)v1 | 1);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Shift_Or_SValue(SValue v2)
     {
-        if (v2.GetScriptType() == ScriptType.Number)
-        {
-            return new Number_SValue(1 | (int)((Number_SValue)v2)._value);
-        }
-
-        return One;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Shift_And_Double(double v2)
     {
-        return new Number_SValue(1 & (int)v2);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Append_Shift_And_Double(double v1)
     {
-        return new Number_SValue((int)v1 & 1);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Shift_And_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return new Number_SValue(1 & (int)((Number_SValue)v2)._value);
-            case ScriptType.True:
-                return One;
-        }
-
-        return Zero;
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Shift_Xor_Double(double v2)
     {
-        return new Number_SValue(1 ^ (int)v2);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Append_Shift_Xor_Double(double v1)
     {
-        return new Number_SValue((int)v1 ^ 1);
+        throw new System.NotImplementedException();
     }
 
     internal override SValue Operator_Shift_Xor_SValue(SValue v2)
     {
-        switch (v2.GetScriptType())
-        {
-            case ScriptType.Number:
-                return new Number_SValue(1 ^ (int)((Number_SValue)v2)._value);
-            case ScriptType.True:
-                return Zero;
-        }
-
-        return One;
+        throw new System.NotImplementedException();
     }
 }

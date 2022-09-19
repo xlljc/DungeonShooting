@@ -795,6 +795,11 @@ public abstract class SValue
         return value ? True : False;
     }
 
+    public static implicit operator SValue(SObject value)
+    {
+        return new Object_SValue(value);
+    }
+    
     public static implicit operator SValue(Function_0 value)
     {
         return new Function_0_SValue(value);

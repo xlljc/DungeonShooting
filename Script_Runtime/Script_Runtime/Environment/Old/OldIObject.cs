@@ -1,5 +1,5 @@
 ﻿
-public interface IObject
+public interface OldIObject
 {
     /// <summary>
     /// 获取属性值

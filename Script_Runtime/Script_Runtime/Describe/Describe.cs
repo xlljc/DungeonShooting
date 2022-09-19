@@ -39,7 +39,7 @@ public abstract class Describe
         ExcludeMember.Add("Equals");
         ExcludeMember.Add("GetHashCode");
         
-        var type = typeof(IObject);
+        var type = typeof(OldIObject);
         var fields = type.GetFields(InstanceBindFlags)
             .Where(m => !m.IsSpecialName).ToArray();
         var propertyInfos = type.GetProperties(InstanceBindFlags)

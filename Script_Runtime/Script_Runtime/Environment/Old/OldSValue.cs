@@ -344,21 +344,21 @@ public struct OldSValue
         objectType = v.objectType;
     }
 
-    public OldSValue(SObject v)
+    public OldSValue(OldSObject v)
     {
         Type = SValueType.Object;
         Value = v;
         objectType = SObjectType.Class;
     }
 
-    public OldSValue(SArray v)
+    public OldSValue(OldSArray v)
     {
         Type = SValueType.Object;
         Value = v;
         objectType = SObjectType.Array;
     }
 
-    public OldSValue(SMap v)
+    public OldSValue(OldSMap v)
     {
         Type = SValueType.Object;
         Value = v;
@@ -675,11 +675,11 @@ public struct OldSValue
         switch (objectType)
         {
             case SObjectType.Class:
-                return ((SObject)Value).__GetValue(key);
+                return ((OldSObject)Value).__GetValue(key);
             case SObjectType.Array:
-                return ((SArray)Value).__GetValue(key);
+                return ((OldSArray)Value).__GetValue(key);
             case SObjectType.Map:
-                return ((SMap)Value).__GetValue(key);
+                return ((OldSMap)Value).__GetValue(key);
         }
 
         if (Type == SValueType.Null)
@@ -694,7 +694,7 @@ public struct OldSValue
     {
         if (objectType == SObjectType.Array)
         {
-            return ((SArray)Value).__GetValue((int)key);
+            return ((OldSArray)Value).__GetValue((int)key);
         }
         else
         {
@@ -719,9 +719,9 @@ public struct OldSValue
         switch (objectType)
         {
             case SObjectType.Class:
-                return ((SObject)Value).__InvokeMethod(key, ps);
+                return ((OldSObject)Value).__InvokeMethod(key, ps);
             case SObjectType.Array:
-                return ((SArray)Value).__InvokeMethod(key, ps);
+                return ((OldSArray)Value).__InvokeMethod(key, ps);
         }
 
         //不可执行函数, 报错
@@ -886,17 +886,17 @@ public struct OldSValue
         return new OldSValue(value);
     }
 
-    public static implicit operator OldSValue(SObject value)
+    public static implicit operator OldSValue(OldSObject value)
     {
         return new OldSValue(value);
     }
 
-    public static implicit operator OldSValue(SArray value)
+    public static implicit operator OldSValue(OldSArray value)
     {
         return new OldSValue(value);
     }
 
-    public static implicit operator OldSValue(SMap value)
+    public static implicit operator OldSValue(OldSMap value)
     {
         return new OldSValue(value);
     }
@@ -2164,12 +2164,12 @@ public struct OldSValue
     
     public bool IsArray()
     {
-        return Value is SArray;
+        return Value is OldSArray;
     }
     
     public bool IsMap()
     {
-        return Value is SMap;
+        return Value is OldSMap;
     }
     
     public int GetParamLength()

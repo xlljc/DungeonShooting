@@ -1,7 +1,8 @@
 ﻿
-public abstract class SObject : IObject
+public class OldSMap : OldIObject
 {
-    public virtual OldSValue toString()
+    
+    public OldSValue toString()
     {
         return new OldSValue("[object: object]");
     }
@@ -10,14 +11,9 @@ public abstract class SObject : IObject
     {
         return (string)toString().Value;
     }
-
-    public virtual OldSValue __GetValue(string key)
+    
+    public OldSValue __GetValue(string key)
     {
-        switch (key)
-        {
-            case "toString":
-                return new OldSValue(toString);
-        }
         return OldSValue.Null;
     }
 
@@ -26,7 +22,7 @@ public abstract class SObject : IObject
         
     }
 
-    public virtual OldSValue __InvokeMethod(string funcName, params OldSValue[] ps)
+    public OldSValue __InvokeMethod(string funcName, params OldSValue[] ps)
     {
         switch (funcName)
         {
@@ -39,7 +35,6 @@ public abstract class SObject : IObject
 
                 break;
         }
-
         return OldSValue.Null;
     }
 }

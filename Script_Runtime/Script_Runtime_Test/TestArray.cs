@@ -1,6 +1,6 @@
 ﻿using System;
 
-public class TestArray : SObject
+public class TestArray : OldSObject
 {
 
     public OldSValue arr = OldSValue.Null;

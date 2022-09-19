@@ -76,53 +76,62 @@ internal class Null_SValue : SValue
         throw new InvokeMethodException($"'null' is not a function.");
     }
 
-    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7)
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7)
     {
         throw new InvokeMethodException($"'null' is not a function.");
     }
 
-    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8)
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8)
     {
         throw new InvokeMethodException($"'null' is not a function.");
     }
 
-    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8,
         SValue v9)
     {
         throw new InvokeMethodException($"'null' is not a function.");
     }
 
-    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8,
         SValue v9, SValue v10)
     {
         throw new InvokeMethodException($"'null' is not a function.");
     }
 
-    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11)
     {
         throw new InvokeMethodException($"'null' is not a function.");
     }
 
-    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12)
     {
         throw new InvokeMethodException($"'null' is not a function.");
     }
 
-    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
     {
         throw new InvokeMethodException($"'null' is not a function.");
     }
 
-    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
     {
         throw new InvokeMethodException($"'null' is not a function.");
     }
 
-    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7, SValue v8,
+    public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
+        SValue v7, SValue v8,
         SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
     {
         throw new InvokeMethodException($"'null' is not a function.");
@@ -163,59 +172,69 @@ internal class Null_SValue : SValue
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
     }
 
-    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6)
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6)
     {
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
     }
 
-    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7)
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7)
     {
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
     }
 
-    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7,
         SValue v8)
     {
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
     }
 
-    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7,
         SValue v8, SValue v9)
     {
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
     }
 
-    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10)
     {
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
     }
 
-    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11)
     {
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
     }
 
-    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12)
     {
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
     }
 
-    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
     {
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
     }
 
-    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
     {
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
     }
 
-    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6, SValue v7,
+    public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        SValue v6, SValue v7,
         SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
     {
         throw new InvokeMethodException($"The member function 'null.{key}' was not found");
@@ -237,6 +256,7 @@ internal class Null_SValue : SValue
         {
             return true;
         }
+
         return false;
     }
 
@@ -256,6 +276,7 @@ internal class Null_SValue : SValue
         {
             return false;
         }
+
         return true;
     }
 

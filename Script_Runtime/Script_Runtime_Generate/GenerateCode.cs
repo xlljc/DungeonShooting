@@ -16,12 +16,12 @@ public static class GenerateCode
     public static void StartGenerate(Uri projectPath)
     {
         //扫描程序集
-        var assembly = typeof(IObject).Assembly;
+        var assembly = typeof(OldIObject).Assembly;
         var types = assembly.GetTypes();
         for (int i = 0; i < types.Length; i++)
         {
             var type = types[i];
-            if (type != typeof(IObject) && typeof(IObject).IsAssignableFrom(type))
+            if (type != typeof(OldIObject) && typeof(OldIObject).IsAssignableFrom(type))
             {
                 //Console.WriteLine(type.FullName + ", " + (type.BaseType == typeof(object)));
                 string clsPath = FindFileByClsName(new DirectoryInfo(projectPath.AbsolutePath + "/Environment/"),

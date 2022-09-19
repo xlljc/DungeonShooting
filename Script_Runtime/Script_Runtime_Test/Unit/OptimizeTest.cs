@@ -262,4 +262,58 @@ public class OptimizeTest : UnitTest
             return obj;
         }
     }
+    
+    [Fact(DisplayName = "测试判断性能")]
+    public void Test8()
+    {
+        // object cs1 = 123;
+        // object cs2 = new SObject();
+        // object cs3 = "abb";
+        // ExecuteTime.Run("test8 原生C#", () =>
+        // {
+        //
+        //     for (int i = 0; i < 999999; i++)
+        //     {
+        //         var v1 = cs1 == cs2;
+        //         //var v2 = cs2 == cs3;
+        //         //var v3 = cs1 == cs3;
+        //         //var v4 = cs2 == cs2;
+        //     }
+        // });
+        
+        OldSValue oldobj1 = 123;
+        OldSValue oldobj2 = new OldSArray();
+        OldSValue oldobj3 = "abb";
+        ExecuteTime.Run("test8 老写法", () =>
+        {
+            for (int i = 0; i < 999999; i++)
+            {
+                //var v1 = oldobj1 == oldobj2;
+                //var v2 = oldobj2 == oldobj3;
+                //var v3 = oldobj1 == oldobj3;
+                var v4 = oldobj2 == oldobj2;
+                //var v21 = oldobj1 > oldobj2;
+                //var v22 = oldobj2 <= oldobj3;
+            }
+        });
+        
+        SValue obj1 = 123;
+        SValue obj2 = new SObject();
+        SValue obj3 = "abb";
+        ExecuteTime.Run("test8 新写法", () =>
+        {
+            for (int i = 0; i < 999999; i++)
+            {
+                //var v1 = obj1 == obj2;
+                //var v2 = obj2 == obj3;
+                //var v3 = obj1 == obj3;
+                var v4 = obj2 == obj2;
+                //var v21 = obj1 > obj2;
+                //var v22 = obj2 <= obj3;
+            }
+        });
+        
+
+    }
+
 }
