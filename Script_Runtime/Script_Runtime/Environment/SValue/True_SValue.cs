@@ -267,97 +267,152 @@ internal class True_SValue : SValue
 
     internal override SValue Operator_Add_Double(double v2)
     {
-        throw new System.NotImplementedException();
+        return new Number_SValue(1 + v2);
     }
 
     internal override SValue Operator_Append_Add_Double(double v1)
     {
-        throw new System.NotImplementedException();
+        return new Number_SValue(v1 + 1);
     }
 
     internal override SValue Operator_Add_String(string v2)
     {
-        throw new System.NotImplementedException();
+        return new String_SValue("true" + v2);
     }
 
     internal override SValue Operator_Append_Add_String(string v1)
     {
-        throw new System.NotImplementedException();
+        return new String_SValue(v1 + "true");
     }
 
     internal override SValue Operator_Add_SValue(SValue v2)
     {
-        throw new System.NotImplementedException();
+        switch (v2.GetScriptType())
+        {
+            case ScriptType.Number:
+                return new Number_SValue(1 + ((Number_SValue)v2)._value);
+            case ScriptType.String:
+                return new String_SValue("true" + ((String_SValue)v2)._value);
+            case ScriptType.False:
+            case ScriptType.Null:
+                return One;
+            case ScriptType.True:
+                return Two;
+        }
+
+        return new String_SValue("true" + v2.GetValue());
     }
 
     internal override SValue Operator_Subtract_Double(double v2)
     {
-        throw new System.NotImplementedException();
+        return new Number_SValue(1 - v2);
     }
 
     internal override SValue Operator_Append_Subtract_Double(double v1)
     {
-        throw new System.NotImplementedException();
+        return new Number_SValue(v1 - 1);
     }
 
     internal override SValue Operator_Subtract_SValue(SValue v2)
     {
-        throw new System.NotImplementedException();
+        switch (v2.GetScriptType())
+        {
+            case ScriptType.Number:
+                return new Number_SValue(1 - ((Number_SValue)v2)._value);
+            case ScriptType.False:
+            case ScriptType.Null:
+                return One;
+            case ScriptType.True:
+                return Zero;
+        }
+
+        return NaN;
     }
 
     internal override SValue Operator_Multiply_Double(double v2)
     {
-        throw new System.NotImplementedException();
+        return new Number_SValue(1 * v2);
     }
 
     internal override SValue Operator_Append_Multiply_Double(double v1)
     {
-        throw new System.NotImplementedException();
+        return new Number_SValue(v1 * 1);
     }
 
     internal override SValue Operator_Multiply_SValue(SValue v2)
     {
-        throw new System.NotImplementedException();
+        switch (v2.GetScriptType())
+        {
+            case ScriptType.Number:
+                return new Number_SValue(1 * ((Number_SValue)v2)._value);
+            case ScriptType.False:
+            case ScriptType.Null:
+                return Zero;
+            case ScriptType.True:
+                return One;
+        }
+
+        return NaN;
     }
 
     internal override SValue Operator_Divide_Double(double v2)
     {
-        throw new System.NotImplementedException();
+        return new Number_SValue(1 / v2);
     }
 
     internal override SValue Operator_Append_Divide_Double(double v1)
     {
-        throw new System.NotImplementedException();
+        return new Number_SValue(v1 / 1);
     }
 
     internal override SValue Operator_Divide_SValue(SValue v2)
     {
-        throw new System.NotImplementedException();
+        switch (v2.GetScriptType())
+        {
+            case ScriptType.Number:
+                return new Number_SValue(1 / ((Number_SValue)v2)._value);
+            case ScriptType.False:
+            case ScriptType.Null:
+                return PositiveInfinity;
+            case ScriptType.True:
+                return One;
+        }
+
+        return NaN;
     }
 
     internal override SValue Operator_SinceAdd()
     {
-        throw new System.NotImplementedException();
+        return Two;
     }
 
     internal override SValue Operator_SinceReduction()
     {
-        throw new System.NotImplementedException();
+        return Zero;
     }
 
     internal override bool Operator_Greater_Double(double v2)
     {
-        throw new System.NotImplementedException();
+        return 1 > v2;
     }
 
     internal override bool Operator_Less_Double(double v2)
     {
-        throw new System.NotImplementedException();
+        return 1 < v2;
     }
 
     internal override bool Operator_Greater_SValue(SValue v2)
     {
-        throw new System.NotImplementedException();
+        switch (v2.GetScriptType())
+        {
+            case ScriptType.Number:
+                return 1 > ((Number_SValue)v2)._value;
+            case ScriptType.False:
+            case ScriptType.Null:
+                return true;
+        }
+
+        return false;
     }
 
     internal override bool Operator_Less_SValue(SValue v2)
