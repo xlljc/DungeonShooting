@@ -90,7 +90,7 @@ public class OptimizeTest : UnitTest
             SValue a = 0;
             for (int i = 0; i < 999999; i++)
             {
-                a++;
+                a = a.Operator_SinceAdd();
             }
         });
     }
@@ -173,7 +173,7 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test4 新写法", () =>
         {
-            for (SValue i = 0; i < 999999; i++)
+            for (SValue i = 0; i.Operator_Less_Double(999999); i = i.Operator_SinceAdd())
             {
 
             }
@@ -226,7 +226,7 @@ public class OptimizeTest : UnitTest
             {
                 SValue b = "1";
                 SValue c = "2";
-                a = i + b + c;
+                a = b.Operator_Append_Add_Double(i).Operator_Add_SValue(c);
             }
         });
     }
@@ -288,9 +288,9 @@ public class OptimizeTest : UnitTest
         {
             for (int i = 0; i < 999999; i++)
             {
-                //var v1 = oldobj1 == oldobj2;
-                //var v2 = oldobj2 == oldobj3;
-                //var v3 = oldobj1 == oldobj3;
+                var v1 = oldobj1 == oldobj2;
+                var v2 = oldobj2 == oldobj3;
+                var v3 = oldobj1 == oldobj3;
                 var v4 = oldobj2 == oldobj2;
                 //var v21 = oldobj1 > oldobj2;
                 //var v22 = oldobj2 <= oldobj3;
@@ -304,10 +304,10 @@ public class OptimizeTest : UnitTest
         {
             for (int i = 0; i < 999999; i++)
             {
-                //var v1 = obj1 == obj2;
-                //var v2 = obj2 == obj3;
-                //var v3 = obj1 == obj3;
-                var v4 = obj2 == obj2;
+                var v1 = obj1.Operator_Equal_SValue(obj2);
+                var v2 = obj2.Operator_Equal_SValue(obj3);
+                var v3 = obj1.Operator_Equal_SValue(obj3);
+                var v4 = obj2.Operator_Equal_SValue(obj2);
                 //var v21 = obj1 > obj2;
                 //var v22 = obj2 <= obj3;
             }
