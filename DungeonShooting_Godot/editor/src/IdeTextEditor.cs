@@ -4,10 +4,12 @@ namespace Editor
 {
 	public class IdeTextEditor : TextEdit
 	{
-		private readonly Color KeyCodeColor = new Color(86 / 255f,156 / 255f,214 / 255f);
-		private readonly Color AnnotationColor = new Color(77 / 255f,144 / 255f,52 / 255f);
-		private readonly Color StringColor = new Color(214 / 255f,157 / 255f,133 / 255f);
-		private readonly string[] KeyCodes = {
+		private readonly Color KeyCodeColor = new Color(86 / 255f, 156 / 255f, 214 / 255f);
+		private readonly Color AnnotationColor = new Color(77 / 255f, 144 / 255f, 52 / 255f);
+		private readonly Color StringColor = new Color(214 / 255f, 157 / 255f, 133 / 255f);
+
+		private readonly string[] KeyCodes =
+		{
 			"var",
 			"namespace",
 			"this",
@@ -41,7 +43,10 @@ namespace Editor
 			"continue",
 			"typeof"
 		};
-		
+
+		private readonly string[] auto_compelete_right = { "'", "{", "\"", "(", "[" };
+		private readonly string[] auto_compelete_left = { "'", "}", "\"", ")", "]" };
+
 		public override void _Ready()
 		{
 			//添加关键字
@@ -49,6 +54,7 @@ namespace Editor
 			{
 				AddKeywordColor(KeyCodes[i], KeyCodeColor);
 			}
+
 			AddColorRegion("//", "", AnnotationColor, true);
 			AddColorRegion("/*", "*/", AnnotationColor);
 			AddColorRegion("\"", "\"", StringColor);
@@ -75,6 +81,23 @@ static test() {
 }
 
 ";
+		}
+
+		private void _on_TextEdit_text_changed()
+		{
+			GD.Print(GetWordUnderCursor());
+			GD.Print(GetPosAtLineColumn(1, 1));
+			Select(CursorGetLine(), CursorGetColumn() - 1, CursorGetLine(), CursorGetColumn());
+			var key = GetSelectionText();
+			Select(CursorGetLine(), CursorGetColumn(), CursorGetLine(), CursorGetColumn());
+			for (int i = 0; i < 5; i++)
+			{
+				if (key == auto_compelete_right[i])
+				{
+					InsertTextAtCursor(auto_compelete_left[i]);
+					CursorSetColumn(CursorGetColumn() - 1);
+				}
+			}
 		}
 	}
 }

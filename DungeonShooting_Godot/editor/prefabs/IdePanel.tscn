@@ -29,12 +29,14 @@ custom_fonts/font = ExtResource( 2 )
 highlight_current_line = true
 syntax_highlighting = true
 show_line_numbers = true
+draw_tabs = true
 bookmark_gutter = true
 fold_gutter = true
-wrap_enabled = true
+context_menu_enabled = false
 minimap_draw = true
 caret_blink = true
 caret_blink_speed = 0.4
 script = ExtResource( 1 )
 
 [connection signal="resized" from="ScalePanel" to="." method="_on_ScalePanel_resized"]
+[connection signal="text_changed" from="ScalePanel/TextEdit" to="ScalePanel/TextEdit" method="_on_TextEdit_text_changed"]
