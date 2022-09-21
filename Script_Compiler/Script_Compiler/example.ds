@@ -18,7 +18,7 @@ class MyClass extends Behavior;
 
 //在类中声明一个 a 变量, a 如果不赋值的话就默认为 null
 var a;
-var b: number = 1.5;
+var b = 1.5;
 var c = null;
 private var d = true; //私有属性
 readonly var e = false; //只读属性
@@ -29,12 +29,12 @@ get length() {
 }
 //在类中声明一个叫 length 的 set 属性, set 属性设置的数据变量叫 param
 //param 关键字只能出现在 set 属性中, 并且只读
-set length(val: object) {
+set length(val) {
     b = val;
 }
 
 //在类中声明一个 say 的函数, 并且支持传入一个参数
-func say(str: string) {
+func say(str) {
     var message = "say: " + str;
     print(message);
 }
@@ -44,13 +44,13 @@ func say() {
     say("hello");
 }
 
-//在类中声明构造函数, 其他地方调用 new MyClass(); 时就会调用该类的构造函数, 无参构造可省略
-//参数重载和函数的规范一致, new() 构造函数可以被视为一个特殊函数, 其他非构造函数不能调用 new() 函数
-func new() {
+//在类中声明构造函数, 其他地方调用 MyClass(); 时就会调用该类的构造函数, 无参构造可省略
+//参数重载和函数的规范一致, MyClass() 构造函数可以被视为一个特殊函数, 其他非构造函数不能调用 MyClass() 函数
+func MyClass() {
 
 }
 //构造继承, 构造函数继承该类的无参构造函数
-func new(message: string) extends new() {
+func MyClass(message) extends MyClass() {
     print("创建了MyClass, message: " + message);
 }
 
@@ -83,7 +83,7 @@ private func grammarExample() {
 	//执行函数
 	f1(1);
 	//将成员函数存入变量
-	var f2: func(string) = func(say, string);
+	var f2 = func(say, 1);
 	//数组
 	var array = [1, 2, "str"];
 	//匿名对象, 无法扩展和删除属性, 只能对已有的属性进行赋值
