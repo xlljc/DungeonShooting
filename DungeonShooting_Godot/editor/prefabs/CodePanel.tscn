@@ -23,6 +23,7 @@ anchor_bottom = 1.0
 custom_colors/member_variable_color = Color( 0.862745, 0.862745, 0.862745, 1 )
 custom_colors/function_color = Color( 0.862745, 0.862745, 0.666667, 1 )
 custom_colors/safe_line_number_color = Color( 1, 0.164706, 0.141176, 1 )
+custom_colors/caret_color = Color( 0, 0, 0, 0 )
 custom_colors/background_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 custom_colors/number_color = Color( 0.709804, 0.807843, 0.658824, 1 )
 custom_colors/current_line_color = Color( 0.0588235, 0.0588235, 0.0588235, 1 )
@@ -35,9 +36,8 @@ draw_tabs = true
 bookmark_gutter = true
 fold_gutter = true
 context_menu_enabled = false
+deselect_on_focus_loss_enabled = false
 minimap_draw = true
-caret_blink = true
-caret_blink_speed = 0.4
 script = ExtResource( 1 )
 
 [node name="TextEditPainter" type="Node2D" parent="ScalePanel/TextEdit"]

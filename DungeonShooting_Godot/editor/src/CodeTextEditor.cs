@@ -4,10 +4,23 @@ namespace Editor
 {
 	public class CodeTextEditor : TextEdit
 	{
+		/// <summary>
+		/// 关键字颜色
+		/// </summary>
 		private readonly Color KeyCodeColor = new Color(86 / 255f, 156 / 255f, 214 / 255f);
+		/// <summary>
+		/// 注释颜色
+		/// </summary>
 		private readonly Color AnnotationColor = new Color(77 / 255f, 144 / 255f, 52 / 255f);
+		/// <summary>
+		/// 字符串颜色
+		/// </summary>
 		private readonly Color StringColor = new Color(214 / 255f, 157 / 255f, 133 / 255f);
+		//------- 其他着色是在godot编辑器中设置的
 
+		/// <summary>
+		/// 关键字列表
+		/// </summary>
 		private readonly string[] KeyCodes =
 		{
 			"var",
@@ -47,6 +60,11 @@ namespace Editor
 		private readonly string[] auto_compelete_right = { "'", "{", "\"", "(", "[" };
 		private readonly string[] auto_compelete_left = { "'", "}", "\"", ")", "]" };
 
+		/// <summary>
+		/// 字体大小
+		/// </summary>
+		public int FontSize { get; private set; } = 15;
+		
 		private TextEditPainter _editPainter;
 		
 		public override void _Ready()
@@ -188,19 +206,17 @@ static func staticSay() {
 
 		private void _on_TextEdit_text_changed()
 		{
-			// GD.Print(GetWordUnderCursor());
-			// GD.Print(GetPosAtLineColumn(1, 1));
-			Select(CursorGetLine(), CursorGetColumn() - 1, CursorGetLine(), CursorGetColumn());
-			var key = GetSelectionText();
-			Select(CursorGetLine(), CursorGetColumn(), CursorGetLine(), CursorGetColumn());
-			for (int i = 0; i < 5; i++)
-			{
-				if (key == auto_compelete_right[i])
-				{
-					InsertTextAtCursor(auto_compelete_left[i]);
-					CursorSetColumn(CursorGetColumn() - 1);
-				}
-			}
+			// Select(CursorGetLine(), CursorGetColumn() - 1, CursorGetLine(), CursorGetColumn());
+			// var key = GetSelectionText();
+			// Select(CursorGetLine(), CursorGetColumn(), CursorGetLine(), CursorGetColumn());
+			// for (int i = 0; i < 5; i++)
+			// {
+			// 	if (key == auto_compelete_right[i])
+			// 	{
+			// 		InsertTextAtCursor(auto_compelete_left[i]);
+			// 		CursorSetColumn(CursorGetColumn() - 1);
+			// 	}
+			// }
 		}
 	}
 }
