@@ -68,34 +68,11 @@ namespace Editor
 		public override void _Draw()
 		{
 			if (_textEdit == null) return;
-			
-			var lineHeight = _textEdit.GetLineHeight();
-			
-			//绘制光标
-			var line = _textEdit.CursorGetLine();
-			var column = _textEdit.CursorGetColumn();
-			var str = _textEdit.GetLine(line);
-			if (str != null && str.Length == column)
-			{
-				var cursorPos = _textEdit.GetPosAtLineColumn(line, column - 1);
-				if (cursorPos.x > -1 && cursorPos.y > -1)
-				{
-					DrawRect(new Rect2(cursorPos.x + 10, cursorPos.y - lineHeight, 1.4f, lineHeight), Colors.White);
-				}
-			}
-			else
-			{
-				var cursorPos = _textEdit.GetPosAtLineColumn(line, column);
-				if (cursorPos.x > -1 && cursorPos.y > -1)
-				{
-					DrawRect(new Rect2(cursorPos.x, cursorPos.y - lineHeight, 1.4f, lineHeight), Colors.White);
-				}
-			}
 
-			
 			//绘制报错的行
 			if (_errorLines.Count > 0)
 			{
+				var lineHeight = _textEdit.GetLineHeight();
 				var width = _textEdit.RectSize.x - _textEdit.MinimapWidth;
 				for (int i = 0; i < _errorLines.Count; i++)
 				{
