@@ -1,10 +1,10 @@
 using Godot;
 
-public class HintPanel : Control
+public class HintPanel : Popup
 {
 	public override void _Ready()
 	{
-		var pop = GetNode<Popup>("Popup");
-		pop.Popup_();
+		CallDeferred("popup");
+		//Popup_();
 	}
 }
