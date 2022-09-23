@@ -3,21 +3,6 @@
     public enum DataType
     {
         /// <summary>
-        /// 类
-        /// </summary>
-        Class,
-
-        /// <summary>
-        /// 字典
-        /// </summary>
-        Map,
-
-        /// <summary>
-        /// 数组
-        /// </summary>
-        Array,
-
-        /// <summary>
         /// 对象类型
         /// </summary>
         Object,

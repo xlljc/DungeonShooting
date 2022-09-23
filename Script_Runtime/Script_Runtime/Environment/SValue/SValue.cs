@@ -125,7 +125,6 @@ namespace DScript.Runtime
         public abstract SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15);
 
-        //throw new InvokeMethodException($"No member function overload {_value}.{key} with argument 0 was found.");
         /// <summary>
         /// 执行该对象的成员函数, 传入 0 个参数
         /// </summary>

@@ -6,7 +6,7 @@ namespace DScript.Runtime
     /// </summary>
     internal class Object_SValue : SValue
     {
-        internal SObject _value;
+        internal readonly SObject _value;
 
         public Object_SValue(SObject value)
         {
@@ -243,27 +243,37 @@ namespace DScript.Runtime
 
         public override bool Operator_Equal_SValue(SValue v2)
         {
-            return GetValue() == v2.GetValue();
+            if (v2.dataType == DataType.Object)
+            {
+                return _value == ((Object_SValue)v2)._value;
+            }
+
+            return false;
         }
 
         public override bool Operator_Not_Equal_Double(double v2)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
         public override bool Operator_Not_Equal_String(string v2)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
         public override bool Operator_Not_Equal_SValue(SValue v2)
         {
-            throw new System.NotImplementedException();
+            if (v2.dataType == DataType.Object)
+            {
+                return _value != ((Object_SValue)v2)._value;
+            }
+
+            return true;
         }
 
         public override SValue Operator_Add_Double(double v2)
         {
-            throw new System.NotImplementedException();
+            return new String_SValue(string.Format("[object]{0}", v2));
         }
 
         public override SValue Operator_Append_Add_Double(double v1)

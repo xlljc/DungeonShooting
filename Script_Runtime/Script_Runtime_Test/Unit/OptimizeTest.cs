@@ -292,7 +292,10 @@ public class OptimizeTest : UnitTest
                 var v1 = oldobj1 == oldobj2;
                 var v2 = oldobj2 == oldobj3;
                 var v3 = oldobj1 == oldobj3;
-                var v4 = oldobj2 == oldobj2;
+                // var var1 = oldobj1 == oldobj3;
+                // var var2 = oldobj1 == oldobj3;
+                // var var3 = oldobj1 == oldobj3;
+                var v4 = oldobj2 == oldobj3;
                 //var v21 = oldobj1 > oldobj2;
                 //var v22 = oldobj2 <= oldobj3;
             }
@@ -308,7 +311,10 @@ public class OptimizeTest : UnitTest
                 var v1 = obj1.Operator_Equal_SValue(obj2);
                 var v2 = obj2.Operator_Equal_SValue(obj3);
                 var v3 = obj1.Operator_Equal_SValue(obj3);
-                var v4 = obj2.Operator_Equal_SValue(obj2);
+                // var var1 = obj1.Operator_Equal_SValue(obj3);
+                // var var2 = obj1.Operator_Equal_SValue(obj3);
+                // var var3 = obj1.Operator_Equal_SValue(obj3);
+                var v4 = obj2.Operator_Equal_SValue(obj3);
                 //var v21 = obj1 > obj2;
                 //var v22 = obj2 <= obj3;
             }

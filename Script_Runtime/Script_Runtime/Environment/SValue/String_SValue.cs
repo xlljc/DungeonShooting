@@ -1,4 +1,6 @@
 
+using System.Text;
+
 namespace DScript.Runtime
 {
     /// <summary>
