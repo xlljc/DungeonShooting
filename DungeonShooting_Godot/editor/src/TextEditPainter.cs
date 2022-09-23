@@ -67,6 +67,9 @@ namespace Editor
 		
 		public override void _Draw()
 		{
+			if (_textEdit == null) return;
+
+			//绘制报错的行
 			if (_errorLines.Count > 0)
 			{
 				var lineHeight = _textEdit.GetLineHeight();
@@ -80,12 +83,6 @@ namespace Editor
 					}
 				}
 			}
-		}
-
-		//提交绘制
-		private void CommitDrawLine(Vector2 start, Vector2 end, Color color, float width)
-		{
-			
 		}
 	}
 }

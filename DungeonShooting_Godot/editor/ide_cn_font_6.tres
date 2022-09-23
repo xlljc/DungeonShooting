@@ -3,7 +3,7 @@
 [ext_resource path="res://SourceHanSerifCN-SemiBold.otf" type="DynamicFontData" id=1]
 
 [resource]
-size = 15
+size = 12
 use_mipmaps = true
 use_filter = true
 extra_spacing_char = 1

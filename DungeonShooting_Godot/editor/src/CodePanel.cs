@@ -25,6 +25,8 @@ namespace Editor
 			
 			_editPainter.SetIdePanel(this);
 			_editPainter.SetTextEdit(_codeTextEditor);
+			
+			_on_ScalePanel_resized();
 		}
 
 		public override void _Process(float delta)
