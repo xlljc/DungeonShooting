@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-namespace Editor
+namespace DScript.GodotEditor
 {
 	/// <summary>
 	/// 负责代码编辑器内的绘制操作
@@ -59,7 +59,7 @@ namespace Editor
 		{
 			if (_codePanel != null)
 			{
-				return v / _codePanel.StartScale;
+				return v * _codePanel.StartScale;
 			}
 
 			return v;
