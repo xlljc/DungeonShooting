@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Reflection;
+using DScript.Runtime;
 using Xunit;
 using Xunit.Abstractions;
 

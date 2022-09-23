@@ -1,4 +1,6 @@
 ﻿
+using DScript.Runtime;
+
 public class SObject : IObject
 {
     public SValue __GetMember(string key)

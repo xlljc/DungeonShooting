@@ -1,4 +1,6 @@
 ﻿
+using DScript.Runtime;
+
 public interface IObject
 {
     /// <summary>
