@@ -26,6 +26,8 @@ namespace DScript.GodotEditor
 		}
 		private int _activeIndex = -1;
 
+		//滑动容器
+		private ScrollContainer _scrollContainer;
 		//提示项父容器
 		private VBoxContainer _itemContainer;
 
@@ -39,9 +41,10 @@ namespace DScript.GodotEditor
 
 		public override void _Ready()
 		{
-			_itemContainer = GetNode<VBoxContainer>("ScrollContainer/VBoxContainer");
+			_scrollContainer = GetNode<ScrollContainer>("ScrollContainer");
+			_itemContainer = _scrollContainer.GetNode<VBoxContainer>("VBoxContainer");
 
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 20; i++)
 			{
 				var item = CreateItem();
 				item.CodeText = i.ToString();
@@ -99,7 +102,23 @@ namespace DScript.GodotEditor
 			//启用现在的
 			if (index >= 0 && index < _activeItemList.Count)
 			{
-				_activeItemList[index].SetActive(true);
+				var item = _activeItemList[index];
+				item.SetActive(true);
+
+				//矫正滑动组件滑y轴值, 使其选中项不会跑到视野外
+				var vertical = _scrollContainer.ScrollVertical;
+				var scrollSize = _scrollContainer.GetVScrollbar().RectSize;
+				var itemPos = item.RectPosition;
+				var itemSize = item.RectSize;
+				itemPos.y -= vertical;
+				if (itemPos.y < 0)
+				{
+					_scrollContainer.ScrollVertical = (int)(index * itemSize.y);
+				}
+				else if (itemPos.y + itemSize.y > scrollSize.y)
+				{
+					_scrollContainer.ScrollVertical = (int)((index + 1) * itemSize.y - scrollSize.y);
+				}
 			}
 		}
 
