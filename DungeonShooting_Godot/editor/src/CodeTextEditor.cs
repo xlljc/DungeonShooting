@@ -1,7 +1,7 @@
 using Godot;
 using File = System.IO.File;
 
-namespace Editor
+namespace DScript.GodotEditor
 {
 	public class CodeTextEditor : TextEdit
 	{
@@ -92,18 +92,21 @@ namespace Editor
 		{
 			if (Input.IsMouseButtonPressed((int)ButtonList.Right))
 			{
-				GD.Print(GetTotalVisibleRows());
 				_editPainter.DrawTextEditErrorLine(CursorGetLine());
+				CodeHintPanel.Instance.ShowPanel(_editPainter.ToPainterPosition(GetPosAtLineColumn(CursorGetLine(), 0)));
+				CodeHintPanel.Instance.ActiveIndex = 1;
 			}
 		}
 
+		/// <summary>
+		/// 连接信号, 当文本改变时调用
+		/// </summary>
 		private void _on_TextEdit_text_changed()
 		{
 			var newLength = Text.Length;
 			if (newLength != prevTextLength)
 			{
 				//括号补全
-
 				if (newLength > prevTextLength)
 				{
 					var line = CursorGetLine();
