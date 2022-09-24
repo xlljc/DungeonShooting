@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://editor/src/CodeTextEditor.cs" type="Script" id=1]
-[ext_resource path="res://editor/ide_cn_font_6.tres" type="DynamicFont" id=2]
+[ext_resource path="res://editor/ide_cn_font_12.tres" type="DynamicFont" id=2]
 [ext_resource path="res://editor/src/CodePanel.cs" type="Script" id=3]
 [ext_resource path="res://editor/src/TextEditPainter.cs" type="Script" id=4]
 

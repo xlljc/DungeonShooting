@@ -83,7 +83,7 @@ namespace DScript.GodotEditor
 		//点击时调用
 		private void _on_click()
 		{
-			CodeHintPanel.Instance.ActiveIndex = Index;
+			CodeHintPanel.Instance.ConfirmInput(Index);
 		}
 	}
 }

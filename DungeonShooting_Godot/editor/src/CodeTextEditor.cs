@@ -22,7 +22,7 @@ namespace DScript.GodotEditor
 		/// <summary>
 		/// 关键字列表
 		/// </summary>
-		private readonly string[] KeyCodes =
+		public static readonly string[] KeyCodes =
 		{
 			"var",
 			"namespace",
@@ -92,9 +92,13 @@ namespace DScript.GodotEditor
 		{
 			if (Input.IsMouseButtonPressed((int)ButtonList.Right))
 			{
+				//绘制报错行
 				_editPainter.DrawTextEditErrorLine(CursorGetLine());
-				CodeHintPanel.Instance.ShowPanel(_editPainter.ToPainterPosition(GetPosAtLineColumn(CursorGetLine(), 0)));
-				CodeHintPanel.Instance.ActiveIndex = 1;
+				var pos = _editPainter.ToPainterPosition(GetPosAtLineColumn(CursorGetLine(), 0));
+				//弹出提示面板
+				CodeHintPanel.Instance.ShowPanel(this, pos);
+				//选中第一项
+				CodeHintPanel.Instance.ActiveIndex = 0;
 			}
 		}
 
