@@ -263,28 +263,14 @@ public class OptimizeTest : UnitTest
             return obj;
         }
     }
-    
+
     [Fact(DisplayName = "测试判断性能")]
     public void Test8()
     {
-        // object cs1 = 123;
-        // object cs2 = new SObject();
-        // object cs3 = "abb";
-        // ExecuteTime.Run("test8 原生C#", () =>
-        // {
-        //
-        //     for (int i = 0; i < 999999; i++)
-        //     {
-        //         var v1 = cs1 == cs2;
-        //         //var v2 = cs2 == cs3;
-        //         //var v3 = cs1 == cs3;
-        //         //var v4 = cs2 == cs2;
-        //     }
-        // });
-        
         OldSValue oldobj1 = 123;
         OldSValue oldobj2 = new OldSArray();
         OldSValue oldobj3 = "abb";
+        OldSValue oldobj4 = 456;
         ExecuteTime.Run("test8 老写法", () =>
         {
             for (int i = 0; i < 999999; i++)
@@ -292,18 +278,18 @@ public class OptimizeTest : UnitTest
                 var v1 = oldobj1 == oldobj2;
                 var v2 = oldobj2 == oldobj3;
                 var v3 = oldobj1 == oldobj3;
-                // var var1 = oldobj1 == oldobj3;
-                // var var2 = oldobj1 == oldobj3;
-                // var var3 = oldobj1 == oldobj3;
                 var v4 = oldobj2 == oldobj3;
-                //var v21 = oldobj1 > oldobj2;
-                //var v22 = oldobj2 <= oldobj3;
+                var v21 = oldobj1 > oldobj2;
+                var v22 = oldobj2 <= oldobj3;
+                var v23 = oldobj1 <= oldobj3;
+                var v24 = oldobj1 <= oldobj4;
             }
         });
-        
+
         SValue obj1 = 123;
         SValue obj2 = new SObject();
         SValue obj3 = "abb";
+        SValue obj4 = 456;
         ExecuteTime.Run("test8 新写法", () =>
         {
             for (int i = 0; i < 999999; i++)
@@ -311,16 +297,53 @@ public class OptimizeTest : UnitTest
                 var v1 = obj1.Operator_Equal_SValue(obj2);
                 var v2 = obj2.Operator_Equal_SValue(obj3);
                 var v3 = obj1.Operator_Equal_SValue(obj3);
-                // var var1 = obj1.Operator_Equal_SValue(obj3);
-                // var var2 = obj1.Operator_Equal_SValue(obj3);
-                // var var3 = obj1.Operator_Equal_SValue(obj3);
                 var v4 = obj2.Operator_Equal_SValue(obj3);
-                //var v21 = obj1 > obj2;
-                //var v22 = obj2 <= obj3;
+                var v21 = obj1.Operator_Greater_SValue(obj2);
+                var v22 = obj2.Operator_Less_Equal_SValue(obj3);
+                var v23 = obj1.Operator_Less_Equal_SValue(obj3);
+                var v24 = obj1.Operator_Less_Equal_SValue(obj4);
             }
         });
-        
+    }
 
+    [Fact(DisplayName = "测试string拼接性能")]
+    public void Test9()
+    {
+        ExecuteTime.Run("test9 string+string", () =>
+        {
+            string a = "";
+            for (int i = 0; i < 999999; i++)
+            {
+                a = "abc" + i;
+            }
+        });
+
+        ExecuteTime.Run("test9 string.Concat", () =>
+        {
+            string a = "";
+            for (int i = 0; i < 999999; i++)
+            {
+                a = string.Concat("abc" + i);
+            }
+        });
+
+        ExecuteTime.Run("test9 string.Format", () =>
+        {
+            string a = "";
+            for (int i = 0; i < 999999; i++)
+            {
+                a = string.Format("abc{0}", i);
+            }
+        });
+
+        ExecuteTime.Run("test9 $string", () =>
+        {
+            string a = "";
+            for (int i = 0; i < 999999; i++)
+            {
+                a = $"abc{i}";
+            }
+        });
     }
 
 }

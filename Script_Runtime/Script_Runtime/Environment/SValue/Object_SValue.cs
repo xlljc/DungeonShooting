@@ -273,22 +273,22 @@ namespace DScript.Runtime
 
         public override SValue Operator_Add_Double(double v2)
         {
-            return new String_SValue(string.Format("[object]{0}", v2));
+            return new String_SValue("[object]" + v2);
         }
 
         public override SValue Operator_Append_Add_Double(double v1)
         {
-            throw new System.NotImplementedException();
+            return new String_SValue(v1 + "[object]");
         }
 
         public override SValue Operator_Add_String(string v2)
         {
-            throw new System.NotImplementedException();
+            return new String_SValue("[object]" + v2);
         }
 
         public override SValue Operator_Append_Add_String(string v1)
         {
-            throw new System.NotImplementedException();
+            return new String_SValue(v1 + "[object]");
         }
 
         public override SValue Operator_Add_SValue(SValue v2)
