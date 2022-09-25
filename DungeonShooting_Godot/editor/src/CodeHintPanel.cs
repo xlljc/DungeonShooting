@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Godot;
 
 namespace DScript.GodotEditor
@@ -39,7 +40,9 @@ namespace DScript.GodotEditor
 		private bool _continuousFlag = false;
 
 		//当前的文本编辑器对象
-		private TextEdit _textEdit;
+		private CodeTextEdit _textEdit;
+		private int startLine;
+		private int startcColumn;
 		
 		public CodeHintPanel()
 		{
@@ -51,10 +54,10 @@ namespace DScript.GodotEditor
 			_scrollContainer = GetNode<ScrollContainer>("ScrollContainer");
 			_itemContainer = _scrollContainer.GetNode<VBoxContainer>("VBoxContainer");
 
-			for (int i = 0; i < CodeTextEditor.KeyCodes.Length; i++)
+			for (int i = 0; i < CodeTextEdit.KeyCodes.Length; i++)
 			{
 				var item = CreateItem();
-				item.CodeText = CodeTextEditor.KeyCodes[i];
+				item.CodeText = CodeTextEdit.KeyCodes[i];
 			}
 		}
 
@@ -76,10 +79,10 @@ namespace DScript.GodotEditor
 			if (down || up)
 			{
 				_clickTimer += delta;
-				if ((!_continuousFlag && _clickTimer > 0.5f) || (_continuousFlag && _clickTimer > 0.1f))
+				if ((!_continuousFlag && _clickTimer > 0.5f) || (_continuousFlag && _clickTimer > 0.06f))
 				{
 					_continuousFlag = true;
-					_clickTimer = 0;
+					_clickTimer %= 0.06f;
 					clickFlag = true;
 				}
 			}
@@ -112,11 +115,27 @@ namespace DScript.GodotEditor
 
 				ActiveIndex = index;
 			}
-			
-			//确认输入
-			if (Input.IsKeyPressed((int)KeyList.Enter))
+		}
+
+		public override void _Input(InputEvent @event)
+		{
+			if (!Visible) return;
+			if (@event is InputEventKey eventKey)
 			{
-				ConfirmInput(ActiveIndex);
+				if (eventKey.IsPressed())
+				{
+					//按下左,右,空格时隐藏提示框
+					if (eventKey.Scancode == (int)KeyList.Left || eventKey.Scancode == (int)KeyList.Right ||
+					    eventKey.Scancode == (int)KeyList.Space)
+					{
+						HidePanel();
+					}
+					//按下 enter 或者 tab 确认输入
+					else if (eventKey.Scancode == (int)KeyList.Enter || eventKey.Scancode == (int)KeyList.Tab)
+					{
+						ConfirmInput(ActiveIndex);
+					}
+				}
 			}
 		}
 
@@ -127,22 +146,45 @@ namespace DScript.GodotEditor
 		{
 			if (index >= 0 && _activeItemList.Count > 0 && index < _activeItemList.Count && _textEdit != null)
 			{
-				_textEdit.InsertTextAtCursor(_activeItemList[index].CodeText);
+				var line = _textEdit.CursorGetLine();
+				var column = _textEdit.CursorGetColumn();
+				var lineStr = _textEdit.GetLine(line);
+
+				var beforeStr = lineStr.Substring(0, column);
+
+				var result = Regex.Match(beforeStr, "[\\w]+$");
+				if (result.Success)
+				{
+					var text = _activeItemList[index].CodeText;
+					lineStr = beforeStr.Substring(0,
+						result.Index) + text + lineStr.Substring(column);
+					_textEdit.SetLine(line, lineStr);
+					_textEdit.CursorSetColumn(result.Index + text.Length);
+					_textEdit.TriggerTextChanged();
+				}
+				else
+				{
+					_textEdit.InsertTextAtCursor(_activeItemList[index].CodeText);
+				}
 			}
+
 			Hide();
+			CodeHintManager.EnterInput = true;
 		}
-		
+
 		/// <summary>
 		/// 显示提示面板
 		/// </summary>
-		public void ShowPanel(TextEdit textEdit, Vector2 pos)
+		public void ShowPanel(CodeTextEdit textEdit, Vector2 pos)
 		{
 			_textEdit = textEdit;
 			RectPosition = pos;
 			if (!Visible)
 			{
+				GD.Print("call ShowPanel()");
 				Popup_();
-				GD.Print(_textEdit.GetWordUnderCursor());
+				_textEdit.GrabFocus();
+				ActiveIndex = 0;
 			}
 		}
 
@@ -151,6 +193,7 @@ namespace DScript.GodotEditor
 		/// </summary>
 		public void HidePanel()
 		{
+			GD.Print("call HidePanel()");
 			Hide();
 			_textEdit = null;
 		}
@@ -174,7 +217,7 @@ namespace DScript.GodotEditor
 				var item = _activeItemList[index];
 				item.SetActive(true);
 
-				//矫正滑动组件滑y轴值, 使其选中项不会跑到视野外
+				//矫正滑动组件y轴值, 使其选中项不会跑到视野外
 				var vertical = _scrollContainer.ScrollVertical;
 				var scrollSize = _scrollContainer.GetVScrollbar().RectSize;
 				var itemPos = item.RectPosition;

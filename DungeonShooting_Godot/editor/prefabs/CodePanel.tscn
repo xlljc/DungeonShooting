@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://editor/src/CodeTextEditor.cs" type="Script" id=1]
+[ext_resource path="res://editor/src/CodeTextEdit.cs" type="Script" id=1]
 [ext_resource path="res://editor/ide_cn_font_12.tres" type="DynamicFont" id=2]
 [ext_resource path="res://editor/src/CodePanel.cs" type="Script" id=3]
 [ext_resource path="res://editor/src/TextEditPainter.cs" type="Script" id=4]
@@ -29,8 +29,10 @@ custom_fonts/font = ExtResource( 2 )
 highlight_current_line = true
 syntax_highlighting = true
 show_line_numbers = true
+draw_tabs = true
 bookmark_gutter = true
 context_menu_enabled = false
+virtual_keyboard_enabled = false
 deselect_on_focus_loss_enabled = false
 minimap_draw = true
 caret_blink = true
@@ -40,4 +42,5 @@ script = ExtResource( 1 )
 script = ExtResource( 4 )
 
 [connection signal="resized" from="ScalePanel" to="." method="_on_ScalePanel_resized"]
+[connection signal="cursor_changed" from="ScalePanel/TextEdit" to="ScalePanel/TextEdit" method="_on_TextEdit_cursor_changed"]
 [connection signal="text_changed" from="ScalePanel/TextEdit" to="ScalePanel/TextEdit" method="_on_TextEdit_text_changed"]
