@@ -4,6 +4,8 @@
         <OutputType>Exe</OutputType>
         <LangVersion>10</LangVersion>
         <TargetFramework>net6.0</TargetFramework>
+        <AssemblyName>DScript.Runtime.Test</AssemblyName>
+        <RootNamespace>DScript.Runtime.Test</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

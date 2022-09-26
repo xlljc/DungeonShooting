@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DScript_Runtime_Test", "DSc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DScript_Runtime_Generate", "DScript_Runtime_Generate\DScript_Runtime_Generate.csproj", "{EA007EAC-275E-4221-A9BA-D062C4348E03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DScript_Compiler", "DScript_Compiler\DScript_Compiler.csproj", "{27A6867E-EC53-404E-9CEE-F768B3BE85D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DScript_Compiler", "DScript_Compiler\DScript_Compiler.csproj", "{643E23B7-6F99-4DC6-9DC6-67BA14B0C149}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{EA007EAC-275E-4221-A9BA-D062C4348E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA007EAC-275E-4221-A9BA-D062C4348E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA007EAC-275E-4221-A9BA-D062C4348E03}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27A6867E-EC53-404E-9CEE-F768B3BE85D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27A6867E-EC53-404E-9CEE-F768B3BE85D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27A6867E-EC53-404E-9CEE-F768B3BE85D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27A6867E-EC53-404E-9CEE-F768B3BE85D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{643E23B7-6F99-4DC6-9DC6-67BA14B0C149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{643E23B7-6F99-4DC6-9DC6-67BA14B0C149}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{643E23B7-6F99-4DC6-9DC6-67BA14B0C149}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{643E23B7-6F99-4DC6-9DC6-67BA14B0C149}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
