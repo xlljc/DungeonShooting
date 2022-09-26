@@ -19,7 +19,7 @@ namespace DScript.GodotEditor
 		/// <summary>
 		/// 设置文本编辑器
 		/// </summary>
-		public void SetTextEdit(CodeTextEditor textEdit)
+		public void SetTextEdit(CodeTextEdit textEdit)
 		{
 			_textEdit = textEdit;
 		}

@@ -25,23 +25,23 @@ readonly var e = false; //只读属性
 
 //在类中声明一个叫 length 的 get 属性, get 属性必须有返回值
 get length() {
-    return b;
+	return b;
 }
 //在类中声明一个叫 length 的 set 属性, set 属性设置的数据变量叫 param
 //param 关键字只能出现在 set 属性中, 并且只读
 set length(val) {
-    b = val;
+	b = val;
 }
 
 //在类中声明一个 say 的函数, 并且支持传入一个参数
 func say(str) {
-    var message = "say: " + str;
-    print(message);
+	var message = "say: " + str;
+	print(message);
 }
 //在类中声明一个 say 的函数重载, 该重载为 0 个参数
 //注意, 因为脚本数据类型为弱类型, 无法通过数据类型判断重载, 所以函数重载是根据参数长度来进行重载
 func say() {
-    say("hello");
+	say("hello");
 }
 
 //在类中声明构造函数, 其他地方调用 MyClass(); 时就会调用该类的构造函数, 无参构造可省略
@@ -51,7 +51,7 @@ func MyClass() {
 }
 //构造继承, 构造函数继承该类的无参构造函数
 func MyClass(message) extends MyClass() {
-    print("创建了MyClass, message: " + message);
+	print("创建了MyClass, message: " + message);
 }
 
 //语法展示

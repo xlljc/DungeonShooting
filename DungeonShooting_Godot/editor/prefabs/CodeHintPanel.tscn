@@ -12,9 +12,9 @@ border_width_bottom = 1
 border_color = Color( 0.270588, 0.270588, 0.270588, 1 )
 
 [node name="CodeHintPanel" type="PopupPanel"]
-visible = true
 margin_right = 273.0
 margin_bottom = 130.0
+focus_mode = 1
 custom_styles/panel = SubResource( 4 )
 script = ExtResource( 2 )
 CodeHintItem = ExtResource( 1 )

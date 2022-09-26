@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://editor/src/CodeHintItem.cs" type="Script" id=1]
-[ext_resource path="res://editor/ide_cn_font_6.tres" type="DynamicFont" id=2]
+[ext_resource path="res://editor/ide_cn_font_12_hint.tres" type="DynamicFont" id=2]
 [ext_resource path="res://addons/dungeonShooting_plugin/ActivityObject.svg" type="Texture" id=3]
 
 [sub_resource type="StyleBoxFlat" id=3]

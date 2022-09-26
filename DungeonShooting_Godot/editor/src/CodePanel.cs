@@ -14,19 +14,19 @@ namespace DScript.GodotEditor
 		//绘制组件
 		private TextEditPainter _editPainter;
 		//文本编辑节点
-		private CodeTextEditor _codeTextEditor;
+		private CodeTextEdit _codeTextEdit;
 
 
 		public override void _Ready()
 		{
-			_codeTextEditor = GetNode<CodeTextEditor>("ScalePanel/TextEdit");
-			_editPainter = _codeTextEditor.GetNode<TextEditPainter>("TextEditPainter");
+			_codeTextEdit = GetNode<CodeTextEdit>("ScalePanel/TextEdit");
+			_editPainter = _codeTextEdit.GetNode<TextEditPainter>("TextEditPainter");
 
 			_scalePanel = GetNode<Control>("ScalePanel");
 			StartScale = _scalePanel.RectScale;
 
 			_editPainter.SetIdePanel(this);
-			_editPainter.SetTextEdit(_codeTextEditor);
+			_editPainter.SetTextEdit(_codeTextEdit);
 
 			//刷新大小
 			_on_ScalePanel_resized();
