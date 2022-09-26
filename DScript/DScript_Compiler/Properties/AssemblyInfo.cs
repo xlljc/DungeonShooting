@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Script_Compiler")]
+[assembly: AssemblyTitle("DScript_Compiler")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Script_Compiler")]
+[assembly: AssemblyProduct("DScript_Compiler")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("13E4E504-6C7F-4892-9D27-0F5AC6300A27")]
+[assembly: Guid("27A6867E-EC53-404E-9CEE-F768B3BE85D6")]
 
 // Version information for an assembly consists of the following four values:
 //
