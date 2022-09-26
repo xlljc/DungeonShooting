@@ -9,7 +9,7 @@ public class GameManager : Node2D
 
     public GameManager()
     {
-        GameManager.Instance = this;
+        Instance = this;
 
         //扫描并注册当前程序集下的武器
         WeaponManager.RegisterWeaponFromAssembly(GetType().Assembly);
