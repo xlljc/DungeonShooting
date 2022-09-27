@@ -88,7 +88,7 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test3 新写法", () =>
         {
-            SValue a = 0;
+            SValue a = new Number_SValue(0);
             for (int i = 0; i < 999999; i++)
             {
                 a = a.Operator_SinceAdd();
@@ -128,8 +128,8 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test3 新写法", () =>
         {
-            SValue func = new Function_1(Test3_Func3);
-            SValue v = "11";
+            SValue func = new Function_1_SValue(Test3_Func3);
+            SValue v = new String_SValue("11");
             for (int i = 0; i < 999999; i++)
             {
                 func.Invoke(v);
@@ -174,7 +174,7 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test4 新写法", () =>
         {
-            for (SValue i = 0; i.Operator_Less_Double(999999); i = i.Operator_SinceAdd())
+            for (SValue i = SValue.One; i.Operator_Less_Double(999999); i = i.Operator_SinceAdd())
             {
 
             }
@@ -189,8 +189,8 @@ public class OptimizeTest : UnitTest
             //23 - 25
             for (int i = 0; i < 999999; i++)
             {
-                SValue item1 = "22";
-                SValue item2 = 111;
+                SValue item1 = new String_SValue("22");
+                SValue item2 = new Number_SValue(111);
             }
         });
     }
@@ -222,11 +222,11 @@ public class OptimizeTest : UnitTest
 
         ExecuteTime.Run("test6 新写法", () =>
         {
-            SValue a = "";
+            SValue a = SValue.EmptyString;
             for (int i = 0; i < 999999; i++)
             {
-                SValue b = "1";
-                SValue c = "2";
+                SValue b = new String_SValue("1");
+                SValue c = new String_SValue("2");
                 a = b.Operator_Append_Add_Double(i).Operator_Add_SValue(c);
             }
         });
@@ -286,10 +286,10 @@ public class OptimizeTest : UnitTest
             }
         });
 
-        SValue obj1 = 123;
-        SValue obj2 = new SObject();
-        SValue obj3 = "abb";
-        SValue obj4 = 456;
+        SValue obj1 = new Number_SValue(123);
+        SValue obj2 = new Object_SValue(new SObject());
+        SValue obj3 = new String_SValue("abb");
+        SValue obj4 = new Number_SValue(456);
         ExecuteTime.Run("test8 新写法", () =>
         {
             for (int i = 0; i < 999999; i++)
@@ -342,6 +342,28 @@ public class OptimizeTest : UnitTest
             for (int i = 0; i < 999999; i++)
             {
                 a = $"abc{i}";
+            }
+        });
+    }
+    
+    [Fact(DisplayName = "测试SValue隐式转换是否影响性能")]
+    public void Test10()
+    {
+        ExecuteTime.Run("test10 隐式转换", () =>
+        {
+            for (int i = 0; i < 999999; i++)
+            {
+                SValue a = new String_SValue("123");
+                SValue b = SValue.One;
+            }
+        });
+        
+        ExecuteTime.Run("test10 禁用隐式转换", () =>
+        {
+            for (int i = 0; i < 999999; i++)
+            {
+                SValue a = new String_SValue("123");
+                SValue b = new Number_SValue(1);
             }
         });
     }

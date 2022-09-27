@@ -4,10 +4,11 @@ namespace DScript.Runtime
     /// <summary>
     /// true值
     /// </summary>
-    internal class True_SValue : SValue
+    public class True_SValue : SValue
     {
-
-        public True_SValue()
+        public readonly bool Value = true;
+        
+        internal True_SValue()
         {
             dataType = DataType.True;
         }
@@ -251,7 +252,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return 1 == ((Number_SValue)v2)._value;
+                    return 1 == ((Number_SValue)v2).Value;
                 case DataType.True:
                     return true;
             }
@@ -274,7 +275,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return 1 != ((Number_SValue)v2)._value;
+                    return 1 != ((Number_SValue)v2).Value;
                 case DataType.True:
                     return false;
             }
@@ -307,9 +308,9 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(1 + ((Number_SValue)v2)._value);
+                    return new Number_SValue(1 + ((Number_SValue)v2).Value);
                 case DataType.String:
-                    return new String_SValue("true" + ((String_SValue)v2)._value);
+                    return new String_SValue("true" + ((String_SValue)v2).Value);
                 case DataType.False:
                 case DataType.Null:
                     return One;
@@ -335,7 +336,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(1 - ((Number_SValue)v2)._value);
+                    return new Number_SValue(1 - ((Number_SValue)v2).Value);
                 case DataType.False:
                 case DataType.Null:
                     return One;
@@ -361,7 +362,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(1 * ((Number_SValue)v2)._value);
+                    return new Number_SValue(1 * ((Number_SValue)v2).Value);
                 case DataType.False:
                 case DataType.Null:
                     return Zero;
@@ -387,7 +388,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(1 / ((Number_SValue)v2)._value);
+                    return new Number_SValue(1 / ((Number_SValue)v2).Value);
                 case DataType.False:
                 case DataType.Null:
                     return PositiveInfinity;
@@ -423,7 +424,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return 1 > ((Number_SValue)v2)._value;
+                    return 1 > ((Number_SValue)v2).Value;
                 case DataType.False:
                 case DataType.Null:
                     return true;
@@ -436,7 +437,7 @@ namespace DScript.Runtime
         {
             if (v2.dataType == DataType.Number)
             {
-                return 1 < ((Number_SValue)v2)._value;
+                return 1 < ((Number_SValue)v2).Value;
             }
 
             return false;
@@ -457,7 +458,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return 1 >= ((Number_SValue)v2)._value;
+                    return 1 >= ((Number_SValue)v2).Value;
                 case DataType.False:
                 case DataType.True:
                 case DataType.Null:
@@ -487,7 +488,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return 1 <= ((Number_SValue)v2)._value;
+                    return 1 <= ((Number_SValue)v2).Value;
                 case DataType.True:
                     return true;
             }
@@ -520,7 +521,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(1 % ((Number_SValue)v2)._value);
+                    return new Number_SValue(1 % ((Number_SValue)v2).Value);
                 case DataType.True:
                     return Zero;
             }
@@ -557,7 +558,7 @@ namespace DScript.Runtime
         {
             if (v2.dataType == DataType.Number)
             {
-                return new Number_SValue(1 | (int)((Number_SValue)v2)._value);
+                return new Number_SValue(1 | (int)((Number_SValue)v2).Value);
             }
 
             return One;
@@ -578,7 +579,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(1 & (int)((Number_SValue)v2)._value);
+                    return new Number_SValue(1 & (int)((Number_SValue)v2).Value);
                 case DataType.True:
                     return One;
             }
@@ -601,7 +602,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(1 ^ (int)((Number_SValue)v2)._value);
+                    return new Number_SValue(1 ^ (int)((Number_SValue)v2).Value);
                 case DataType.True:
                     return Zero;
             }

@@ -4,231 +4,231 @@ namespace DScript.Runtime
     /// <summary>
     /// 对象类型
     /// </summary>
-    internal class Object_SValue : SValue
+    public class Object_SValue : SValue
     {
-        internal readonly SObject _value;
+        public readonly SObject Value;
 
         public Object_SValue(SObject value)
         {
-            _value = value;
+            Value = value;
             dataType = DataType.Object;
         }
 
         public override object GetValue()
         {
-            return _value;
+            return Value;
         }
 
         public override SValue GetMember(string key)
         {
-            return _value.__GetMember(key);
+            return Value.__GetMember(key);
         }
 
         public override bool HasMember(string key)
         {
-            return _value.__HasMember(key);
+            return Value.__HasMember(key);
         }
 
         public override void SetMember(string key, SValue value)
         {
-            _value.__SetMember(key, value);
+            Value.__SetMember(key, value);
         }
 
         public override SValue Invoke()
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue InvokeMethod(string key)
         {
-            return _value.__InvokeMethod(key);
+            return Value.__InvokeMethod(key);
         }
 
         public override SValue InvokeMethod(string key, SValue v0)
         {
-            return _value.__InvokeMethod(key, v0);
+            return Value.__InvokeMethod(key, v0);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1)
         {
-            return _value.__InvokeMethod(key, v0, v1);
+            return Value.__InvokeMethod(key, v0, v1);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2);
+            return Value.__InvokeMethod(key, v0, v1, v2);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7, SValue v8)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14);
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14,
             SValue v15)
         {
-            return _value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15);
+            return Value.__InvokeMethod(key, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15);
         }
 
         public override bool Operator_Equal_Double(double v2)
@@ -245,7 +245,7 @@ namespace DScript.Runtime
         {
             if (v2.dataType == DataType.Object)
             {
-                return _value == ((Object_SValue)v2)._value;
+                return Value == ((Object_SValue)v2).Value;
             }
 
             return false;
@@ -265,7 +265,7 @@ namespace DScript.Runtime
         {
             if (v2.dataType == DataType.Object)
             {
-                return _value != ((Object_SValue)v2)._value;
+                return Value != ((Object_SValue)v2).Value;
             }
 
             return true;

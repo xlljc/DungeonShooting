@@ -1,19 +1,22 @@
 
 namespace DScript.Runtime
 {
-    internal class Function_1_SValue : SValue
+    /// <summary>
+    /// 1参数回调函数
+    /// </summary>
+    public class Function_1_SValue : SValue
     {
-        private Function_1 _value;
+        public readonly Function_1 Value;
     
         public Function_1_SValue(Function_1 value)
         {
-            _value = value;
+            Value = value;
             dataType = DataType.Function_1;
         }
 
         public override object GetValue()
         {
-            return _value;
+            return Value;
         }
 
         public override SValue GetMember(string key)
@@ -38,7 +41,7 @@ namespace DScript.Runtime
 
         public override SValue Invoke(SValue v0)
         {
-            return _value(v0);
+            return Value(v0);
         }
 
         public override SValue Invoke(SValue v0, SValue v1)

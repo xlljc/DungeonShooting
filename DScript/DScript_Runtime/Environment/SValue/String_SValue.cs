@@ -6,19 +6,19 @@ namespace DScript.Runtime
     /// <summary>
     /// 字符串
     /// </summary>
-    internal class String_SValue : SValue
+    public class String_SValue : SValue
     {
-        internal readonly string _value;
+        public readonly string Value;
 
         public String_SValue(string value)
         {
-            _value = value;
+            Value = value;
             dataType = DataType.String;
         }
 
         public override object GetValue()
         {
-            return _value;
+            return Value;
         }
 
         public override SValue GetMember(string key)
@@ -38,206 +38,206 @@ namespace DScript.Runtime
 
         public override SValue Invoke()
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue InvokeMethod(string key)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override bool Operator_Equal_Double(double v2)
@@ -247,14 +247,14 @@ namespace DScript.Runtime
 
         public override bool Operator_Equal_String(string v2)
         {
-            return _value == v2;
+            return Value == v2;
         }
 
         public override bool Operator_Equal_SValue(SValue v2)
         {
             if (v2.dataType == DataType.String)
             {
-                return _value == ((String_SValue)v2)._value;
+                return Value == ((String_SValue)v2).Value;
             }
 
             return false;
@@ -267,14 +267,14 @@ namespace DScript.Runtime
 
         public override bool Operator_Not_Equal_String(string v2)
         {
-            return _value != v2;
+            return Value != v2;
         }
 
         public override bool Operator_Not_Equal_SValue(SValue v2)
         {
             if (v2.dataType == DataType.String)
             {
-                return _value != ((String_SValue)v2)._value;
+                return Value != ((String_SValue)v2).Value;
             }
 
             return true;
@@ -282,22 +282,22 @@ namespace DScript.Runtime
 
         public override SValue Operator_Add_Double(double v2)
         {
-            return new String_SValue(_value + v2);
+            return new String_SValue(Value + v2);
         }
 
         public override SValue Operator_Append_Add_Double(double v1)
         {
-            return new String_SValue(v1 + _value);
+            return new String_SValue(v1 + Value);
         }
 
         public override SValue Operator_Add_String(string v2)
         {
-            return new String_SValue(_value + v2);
+            return new String_SValue(Value + v2);
         }
 
         public override SValue Operator_Append_Add_String(string v1)
         {
-            return new String_SValue(v1 + _value);
+            return new String_SValue(v1 + Value);
         }
 
         public override SValue Operator_Add_SValue(SValue v2)
@@ -305,13 +305,13 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.String:
-                    return new String_SValue(_value + ((String_SValue)v2)._value);
+                    return new String_SValue(Value + ((String_SValue)v2).Value);
                 case DataType.Null:
-                    return new String_SValue(_value + "null");
+                    return new String_SValue(Value + "null");
                 case DataType.True:
-                    return new String_SValue(_value + "true");
+                    return new String_SValue(Value + "true");
                 case DataType.False:
-                    return new String_SValue(_value + "false");
+                    return new String_SValue(Value + "false");
                 case DataType.Function_0:
                 case DataType.Function_1:
                 case DataType.Function_2:
@@ -329,10 +329,10 @@ namespace DScript.Runtime
                 case DataType.Function_14:
                 case DataType.Function_15:
                 case DataType.Function_16:
-                    return new String_SValue(_value + "[function]");
+                    return new String_SValue(Value + "[function]");
             }
 
-            return new String_SValue(_value + v2.GetValue());
+            return new String_SValue(Value + v2.GetValue());
         }
 
         public override SValue Operator_Subtract_Double(double v2)
@@ -437,7 +437,7 @@ namespace DScript.Runtime
 
         public override bool Operator_Not()
         {
-            return _value.Length == 0;
+            return Value.Length == 0;
         }
 
         public override bool Operator_Less_Equal_SValue(SValue v2)
@@ -447,12 +447,12 @@ namespace DScript.Runtime
 
         public override bool Operator_True()
         {
-            return _value.Length > 0;
+            return Value.Length > 0;
         }
 
         public override bool Operator_False()
         {
-            return _value.Length == 0;
+            return Value.Length == 0;
         }
 
         public override SValue Operator_Modulus_Double(double v2)

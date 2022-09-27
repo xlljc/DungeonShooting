@@ -6,24 +6,24 @@ namespace DScript.Runtime
     /// <summary>
     /// 0参数回调函数
     /// </summary>
-    internal class Function_0_SValue : SValue
+    public class Function_0_SValue : SValue
     {
-        private Function_0 _value;
+        public readonly Function_0 Value;
     
         public Function_0_SValue(Function_0 value)
         {
-            _value = value;
+            Value = value;
             dataType = DataType.Function_0;
         }
 
         public override object GetValue()
         {
-            return _value;
+            return Value;
         }
 
         public override SValue GetMember(string key)
         {
-            throw new NotImplementedException();
+            return Null;
         }
 
         public override bool HasMember(string key)
@@ -38,7 +38,7 @@ namespace DScript.Runtime
 
         public override SValue Invoke()
         {
-            return _value();
+            return Value();
         }
 
         public override SValue Invoke(SValue v0)

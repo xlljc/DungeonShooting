@@ -769,45 +769,6 @@ namespace DScript.Runtime
 
         #endregion
 
-        #region 自动转型
-
-        public static implicit operator SValue(double value)
-        {
-            return new Number_SValue(value);
-        }
-
-        public static implicit operator SValue(string value)
-        {
-            if (value == null)
-            {
-                return Null;
-            }
-
-            return new String_SValue(value);
-        }
-
-        public static implicit operator SValue(bool value)
-        {
-            return value ? True : False;
-        }
-
-        public static implicit operator SValue(SObject value)
-        {
-            return new Object_SValue(value);
-        }
-    
-        public static implicit operator SValue(Function_0 value)
-        {
-            return new Function_0_SValue(value);
-        }
-    
-        public static implicit operator SValue(Function_1 value)
-        {
-            return new Function_1_SValue(value);
-        }
-
-        #endregion
-    
         /// <summary>
         /// true
         /// </summary>
@@ -829,6 +790,11 @@ namespace DScript.Runtime
         public static readonly SValue NaN = new Number_SValue(double.NaN);
 
         /// <summary>
+        /// 空的字符串
+        /// </summary>
+        public static readonly SValue EmptyString = new String_SValue("");
+        
+        /// <summary>
         /// 负无穷大
         /// </summary>
         public static readonly SValue NegativeInfinity = new Number_SValue(double.NegativeInfinity);
@@ -839,28 +805,28 @@ namespace DScript.Runtime
         public static readonly SValue PositiveInfinity = new Number_SValue(double.PositiveInfinity);
 
         /// <summary>
-        /// -2
+        /// 数字 -2
         /// </summary>
-        internal static readonly SValue NegativeTwo = new Number_SValue(-2);
+        public static readonly SValue NegativeTwo = new Number_SValue(-2);
 
         /// <summary>
-        /// -1
+        /// 数字 -1
         /// </summary>
-        internal static readonly SValue NegativeOne = new Number_SValue(-1);
+        public static readonly SValue NegativeOne = new Number_SValue(-1);
 
         /// <summary>
-        /// 0
+        /// 数字 0
         /// </summary>
-        internal static readonly SValue Zero = new Number_SValue(0);
+        public static readonly SValue Zero = new Number_SValue(0);
 
         /// <summary>
-        /// 1
+        /// 数字 1
         /// </summary>
-        internal static readonly SValue One = new Number_SValue(1);
+        public static readonly SValue One = new Number_SValue(1);
 
         /// <summary>
-        /// 2
+        /// 数字 2
         /// </summary>
-        internal static readonly SValue Two = new Number_SValue(2);
+        public static readonly SValue Two = new Number_SValue(2);
     }
 }

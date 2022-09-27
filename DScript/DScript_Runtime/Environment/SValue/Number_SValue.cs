@@ -4,19 +4,19 @@ namespace DScript.Runtime
     /// <summary>
     /// 数字类型
     /// </summary>
-    internal class Number_SValue : SValue
+    public class Number_SValue : SValue
     {
-        internal readonly double _value;
+        public readonly double Value;
 
         public Number_SValue(double value)
         {
-            _value = value;
+            Value = value;
             dataType = DataType.Number;
         }
 
         public override object GetValue()
         {
-            return _value;
+            return Value;
         }
 
         public override SValue GetMember(string key)
@@ -36,211 +36,211 @@ namespace DScript.Runtime
 
         public override SValue Invoke()
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5, SValue v6,
             SValue v7, SValue v8,
             SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
         {
-            throw new InvokeMethodException($"'{_value}' is not a function.");
+            throw new InvokeMethodException($"'{Value}' is not a function.");
         }
 
         public override SValue InvokeMethod(string key)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
         {
-            throw new InvokeMethodException($"The member function '{_value}.{key}' was not found");
+            throw new InvokeMethodException($"The member function '{Value}.{key}' was not found");
         }
 
         public override bool Operator_Equal_Double(double v2)
         {
-            return _value == v2;
+            return Value == v2;
         }
 
         public override bool Operator_Equal_String(string v2)
@@ -253,11 +253,11 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return _value == ((Number_SValue)v2)._value;
+                    return Value == ((Number_SValue)v2).Value;
                 case DataType.True:
-                    return _value == 1;
+                    return Value == 1;
                 case DataType.False:
-                    return _value == 0;
+                    return Value == 0;
             }
 
             return false;
@@ -265,7 +265,7 @@ namespace DScript.Runtime
 
         public override bool Operator_Not_Equal_Double(double v2)
         {
-            return _value != v2;
+            return Value != v2;
         }
 
         public override bool Operator_Not_Equal_String(string v2)
@@ -278,11 +278,11 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return _value != ((Number_SValue)v2)._value;
+                    return Value != ((Number_SValue)v2).Value;
                 case DataType.True:
-                    return _value != 1;
+                    return Value != 1;
                 case DataType.False:
-                    return _value != 0;
+                    return Value != 0;
             }
 
             return true;
@@ -290,22 +290,22 @@ namespace DScript.Runtime
 
         public override SValue Operator_Add_Double(double v2)
         {
-            return new Number_SValue(_value + v2);
+            return new Number_SValue(Value + v2);
         }
 
         public override SValue Operator_Append_Add_Double(double v1)
         {
-            return new Number_SValue(v1 + _value);
+            return new Number_SValue(v1 + Value);
         }
 
         public override SValue Operator_Add_String(string v2)
         {
-            return new String_SValue(_value + v2);
+            return new String_SValue(Value + v2);
         }
 
         public override SValue Operator_Append_Add_String(string v1)
         {
-            return new String_SValue(v1 + _value);
+            return new String_SValue(v1 + Value);
         }
 
         public override SValue Operator_Add_SValue(SValue v2)
@@ -313,27 +313,27 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(_value + ((Number_SValue)v2)._value);
+                    return new Number_SValue(Value + ((Number_SValue)v2).Value);
                 case DataType.String:
-                    return new String_SValue(_value + (string)v2.GetValue());
+                    return new String_SValue(Value + (string)v2.GetValue());
                 case DataType.True:
-                    return new Number_SValue(_value + 1);
+                    return new Number_SValue(Value + 1);
                 case DataType.False:
                 case DataType.Null:
                     return this;
             }
 
-            return new String_SValue(_value + v2.GetValue().ToString());
+            return new String_SValue(Value + v2.GetValue().ToString());
         }
 
         public override SValue Operator_Subtract_Double(double v2)
         {
-            return new Number_SValue(_value - v2);
+            return new Number_SValue(Value - v2);
         }
 
         public override SValue Operator_Append_Subtract_Double(double v1)
         {
-            return new Number_SValue(v1 - _value);
+            return new Number_SValue(v1 - Value);
         }
 
         public override SValue Operator_Subtract_SValue(SValue v2)
@@ -341,9 +341,9 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(_value - ((Number_SValue)v2)._value);
+                    return new Number_SValue(Value - ((Number_SValue)v2).Value);
                 case DataType.True:
-                    return new Number_SValue(_value - 1);
+                    return new Number_SValue(Value - 1);
                 case DataType.False:
                 case DataType.Null:
                     return this;
@@ -354,12 +354,12 @@ namespace DScript.Runtime
 
         public override SValue Operator_Multiply_Double(double v2)
         {
-            return new Number_SValue(_value * v2);
+            return new Number_SValue(Value * v2);
         }
 
         public override SValue Operator_Append_Multiply_Double(double v1)
         {
-            return new Number_SValue(v1 * _value);
+            return new Number_SValue(v1 * Value);
         }
 
         public override SValue Operator_Multiply_SValue(SValue v2)
@@ -367,7 +367,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(_value * ((Number_SValue)v2)._value);
+                    return new Number_SValue(Value * ((Number_SValue)v2).Value);
                 case DataType.True:
                     return this;
                 case DataType.False:
@@ -380,12 +380,12 @@ namespace DScript.Runtime
 
         public override SValue Operator_Divide_Double(double v2)
         {
-            return new Number_SValue(_value / v2);
+            return new Number_SValue(Value / v2);
         }
 
         public override SValue Operator_Append_Divide_Double(double v1)
         {
-            return new Number_SValue(v1 / _value);
+            return new Number_SValue(v1 / Value);
         }
 
         public override SValue Operator_Divide_SValue(SValue v2)
@@ -393,12 +393,12 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(_value / ((Number_SValue)v2)._value);
+                    return new Number_SValue(Value / ((Number_SValue)v2).Value);
                 case DataType.True:
                     return this;
                 case DataType.False:
                 case DataType.Null:
-                    return _value == 0 ? NaN : (_value > 0 ? PositiveInfinity : NegativeInfinity);
+                    return Value == 0 ? NaN : (Value > 0 ? PositiveInfinity : NegativeInfinity);
             }
 
             return NaN;
@@ -406,22 +406,22 @@ namespace DScript.Runtime
 
         public override SValue Operator_SinceAdd()
         {
-            return new Number_SValue(_value + 1);
+            return new Number_SValue(Value + 1);
         }
 
         public override SValue Operator_SinceReduction()
         {
-            return new Number_SValue(_value - 1);
+            return new Number_SValue(Value - 1);
         }
 
         public override bool Operator_Greater_Double(double v2)
         {
-            return _value > v2;
+            return Value > v2;
         }
 
         public override bool Operator_Less_Double(double v2)
         {
-            return _value < v2;
+            return Value < v2;
         }
 
         public override bool Operator_Greater_SValue(SValue v2)
@@ -429,12 +429,12 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return _value > ((Number_SValue)v2)._value;
+                    return Value > ((Number_SValue)v2).Value;
                 case DataType.True:
-                    return _value > 1;
+                    return Value > 1;
                 case DataType.False:
                 case DataType.Null:
-                    return _value > 0;
+                    return Value > 0;
             }
 
             return false;
@@ -445,12 +445,12 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return _value < ((Number_SValue)v2)._value;
+                    return Value < ((Number_SValue)v2).Value;
                 case DataType.True:
-                    return _value < 1;
+                    return Value < 1;
                 case DataType.False:
                 case DataType.Null:
-                    return _value < 0;
+                    return Value < 0;
             }
 
             return false;
@@ -458,12 +458,12 @@ namespace DScript.Runtime
 
         public override bool Operator_Greater_Equal_Double(double v2)
         {
-            return _value >= v2;
+            return Value >= v2;
         }
 
         public override bool Operator_Less_Equal_Double(double v2)
         {
-            return _value <= v2;
+            return Value <= v2;
         }
 
         public override bool Operator_Greater_Equal_SValue(SValue v2)
@@ -471,12 +471,12 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return _value >= ((Number_SValue)v2)._value;
+                    return Value >= ((Number_SValue)v2).Value;
                 case DataType.True:
-                    return _value >= 1;
+                    return Value >= 1;
                 case DataType.False:
                 case DataType.Null:
-                    return _value >= 0;
+                    return Value >= 0;
             }
 
             return false;
@@ -492,12 +492,12 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return _value <= ((Number_SValue)v2)._value;
+                    return Value <= ((Number_SValue)v2).Value;
                 case DataType.True:
-                    return _value <= 1;
+                    return Value <= 1;
                 case DataType.False:
                 case DataType.Null:
-                    return _value <= 0;
+                    return Value <= 0;
             }
 
             return false;
@@ -505,32 +505,32 @@ namespace DScript.Runtime
 
         public override SValue Operator_Negative()
         {
-            return new Number_SValue(-_value);
+            return new Number_SValue(-Value);
         }
 
         public override bool Operator_Not()
         {
-            return _value <= 0;
+            return Value <= 0;
         }
 
         public override bool Operator_True()
         {
-            return _value > 0;
+            return Value > 0;
         }
 
         public override bool Operator_False()
         {
-            return _value <= 0;
+            return Value <= 0;
         }
 
         public override SValue Operator_Modulus_Double(double v2)
         {
-            return new Number_SValue(_value % v2);
+            return new Number_SValue(Value % v2);
         }
 
         public override SValue Operator_Append_Modulus_Double(double v1)
         {
-            return new Number_SValue(v1 % _value);
+            return new Number_SValue(v1 % Value);
         }
 
         public override SValue Operator_Modulus_SValue(SValue v2)
@@ -538,9 +538,9 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue(_value % ((Number_SValue)v2)._value);
+                    return new Number_SValue(Value % ((Number_SValue)v2).Value);
                 case DataType.True:
-                    return new Number_SValue(_value % 1);
+                    return new Number_SValue(Value % 1);
             }
 
             return NaN;
@@ -548,27 +548,27 @@ namespace DScript.Runtime
 
         public override SValue Operator_Shift_Negation()
         {
-            return new Number_SValue(~(int)_value);
+            return new Number_SValue(~(int)Value);
         }
 
         public override SValue Operator_Shift_Right(int v1)
         {
-            return new Number_SValue((int)_value >> v1);
+            return new Number_SValue((int)Value >> v1);
         }
 
         public override SValue Operator_Shift_Left(int v1)
         {
-            return new Number_SValue((int)_value << v1);
+            return new Number_SValue((int)Value << v1);
         }
 
         public override SValue Operator_Shift_Or_Double(double v2)
         {
-            return new Number_SValue((int)_value | (int)v2);
+            return new Number_SValue((int)Value | (int)v2);
         }
 
         public override SValue Operator_Append_Shift_Or_Double(double v1)
         {
-            return new Number_SValue((int)v1 | (int)_value);
+            return new Number_SValue((int)v1 | (int)Value);
         }
 
         public override SValue Operator_Shift_Or_SValue(SValue v2)
@@ -576,22 +576,22 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue((int)_value | (int)((Number_SValue)v2)._value);
+                    return new Number_SValue((int)Value | (int)((Number_SValue)v2).Value);
                 case DataType.True:
-                    return new Number_SValue((int)_value | 1);
+                    return new Number_SValue((int)Value | 1);
             }
 
-            return new Number_SValue((int)_value | 0);
+            return new Number_SValue((int)Value | 0);
         }
 
         public override SValue Operator_Shift_And_Double(double v2)
         {
-            return new Number_SValue((int)_value & (int)v2);
+            return new Number_SValue((int)Value & (int)v2);
         }
 
         public override SValue Operator_Append_Shift_And_Double(double v1)
         {
-            return new Number_SValue((int)v1 & (int)_value);
+            return new Number_SValue((int)v1 & (int)Value);
         }
 
         public override SValue Operator_Shift_And_SValue(SValue v2)
@@ -599,22 +599,22 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue((int)_value & (int)((Number_SValue)v2)._value);
+                    return new Number_SValue((int)Value & (int)((Number_SValue)v2).Value);
                 case DataType.True:
-                    return new Number_SValue((int)_value & 1);
+                    return new Number_SValue((int)Value & 1);
             }
 
-            return new Number_SValue((int)_value & 0);
+            return new Number_SValue((int)Value & 0);
         }
 
         public override SValue Operator_Shift_Xor_Double(double v2)
         {
-            return new Number_SValue((int)_value ^ (int)v2);
+            return new Number_SValue((int)Value ^ (int)v2);
         }
 
         public override SValue Operator_Append_Shift_Xor_Double(double v1)
         {
-            return new Number_SValue((int)v1 ^ (int)_value);
+            return new Number_SValue((int)v1 ^ (int)Value);
         }
 
         public override SValue Operator_Shift_Xor_SValue(SValue v2)
@@ -622,12 +622,12 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue((int)_value ^ (int)((Number_SValue)v2)._value);
+                    return new Number_SValue((int)Value ^ (int)((Number_SValue)v2).Value);
                 case DataType.True:
-                    return new Number_SValue((int)_value ^ 1);
+                    return new Number_SValue((int)Value ^ 1);
             }
 
-            return new Number_SValue((int)_value ^ 0);
+            return new Number_SValue((int)Value ^ 0);
         }
     }
 }
