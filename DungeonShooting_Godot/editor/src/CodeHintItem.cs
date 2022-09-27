@@ -11,6 +11,7 @@ namespace DScript.GodotEditor
 		/// 活动时背景颜色
 		/// </summary>
 		private static Color ActiveColor = new Color(0.20784314F,0.30980393F,0.52156866F);
+		
 		/// <summary>
 		/// 非活动时背景颜色
 		/// </summary>

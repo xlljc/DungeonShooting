@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Script_Runtime\Script_Runtime.csproj" />
+      <PackageReference Include="ICSharpCode.SharpZipLib.dll" Version="0.85.4.369" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="ICSharpCode.SharpZipLib.dll" Version="0.85.4.369" />
+      <ProjectReference Include="..\DScript_Runtime\DScript_Runtime.csproj" />
     </ItemGroup>
 
 </Project>

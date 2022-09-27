@@ -9,6 +9,12 @@ namespace DScript.GodotEditor
 	/// </summary>
 	public class CodeHintPanel : Popup
 	{
+		private class CodeHintItemData
+		{
+			public CodeHintItem CodeHintItem;
+			public bool VisibleFlag;
+		}
+		
 		//补全选项
 		[Export] private PackedScene CodeHintItem;
 
@@ -32,8 +38,10 @@ namespace DScript.GodotEditor
 		//提示项父容器
 		private VBoxContainer _itemContainer;
 
+		//包含提示数据
+		private List<CodeHintData> _hintDataList = new List<CodeHintData>();
 		//当前已启用项的列表
-		private List<CodeHintItem> _activeItemList = new List<CodeHintItem>();
+		private List<CodeHintItemData> _activeItemList = new List<CodeHintItemData>();
 		
 		//长按计时器
 		private float _clickTimer = 0;
@@ -56,8 +64,9 @@ namespace DScript.GodotEditor
 
 			for (int i = 0; i < CodeTextEdit.KeyCodes.Length; i++)
 			{
-				var item = CreateItem();
-				item.CodeText = CodeTextEdit.KeyCodes[i];
+				_hintDataList.Add(new CodeHintData() { Text = CodeTextEdit.KeyCodes[i] });
+				// var item = CreateItem();
+				// item.CodeHintItem.CodeText = CodeTextEdit.KeyCodes[i];
 			}
 		}
 
@@ -155,7 +164,8 @@ namespace DScript.GodotEditor
 				var result = Regex.Match(beforeStr, "[\\w]+$");
 				if (result.Success)
 				{
-					var text = _activeItemList[index].CodeText;
+					var item = _activeItemList[index];
+					var text = item.CodeHintItem.CodeText;
 					lineStr = beforeStr.Substring(0,
 						result.Index) + text + lineStr.Substring(column);
 					_textEdit.SetLine(line, lineStr);
@@ -164,7 +174,8 @@ namespace DScript.GodotEditor
 				}
 				else
 				{
-					_textEdit.InsertTextAtCursor(_activeItemList[index].CodeText);
+					var item = _activeItemList[index];
+					_textEdit.InsertTextAtCursor(item.CodeHintItem.CodeText);
 				}
 			}
 
@@ -206,7 +217,8 @@ namespace DScript.GodotEditor
 			//禁用之前的
 			if (_activeIndex >= 0 && _activeIndex < _activeItemList.Count)
 			{
-				_activeItemList[_activeIndex].SetActive(false);
+				var item = _activeItemList[_activeIndex];
+				item.CodeHintItem.SetActive(false);
 			}
 
 			_activeIndex = index;
@@ -215,13 +227,13 @@ namespace DScript.GodotEditor
 			if (index >= 0 && index < _activeItemList.Count)
 			{
 				var item = _activeItemList[index];
-				item.SetActive(true);
+				item.CodeHintItem.SetActive(true);
 
 				//矫正滑动组件y轴值, 使其选中项不会跑到视野外
 				var vertical = _scrollContainer.ScrollVertical;
 				var scrollSize = _scrollContainer.GetVScrollbar().RectSize;
-				var itemPos = item.RectPosition;
-				var itemSize = item.RectSize;
+				var itemPos = item.CodeHintItem.RectPosition;
+				var itemSize = item.CodeHintItem.RectSize;
 				itemPos.y -= vertical;
 				if (itemPos.y < 0)
 				{
@@ -237,11 +249,13 @@ namespace DScript.GodotEditor
 		/// <summary>
 		/// 创建提示项
 		/// </summary>
-		private CodeHintItem CreateItem()
+		private CodeHintItemData CreateItem()
 		{
-			var item = CodeHintItem.Instance<CodeHintItem>();
-			_itemContainer.AddChild(item);
-			item.Index = _activeItemList.Count;
+			var codeHintItem = CodeHintItem.Instance<CodeHintItem>();
+			_itemContainer.AddChild(codeHintItem);
+			codeHintItem.Index = _activeItemList.Count;
+			var item = new CodeHintItemData();
+			item.CodeHintItem = codeHintItem;
 			_activeItemList.Add(item);
 			return item;
 		}
