@@ -584,7 +584,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue((int)(double)v2.GetValue());
+                    return new Number_SValue((int)((Number_SValue)v2)._value);
                 case DataType.True:
                     return One;
             }
