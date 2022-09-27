@@ -742,11 +742,6 @@ public struct OldSValue
     
     public OldSValue Invoke(params OldSValue[] ps)
     {
-        if (objectType == SObjectType.Function_1)
-        {
-            return ((Function_1)Value)(ps[0]);
-        }
-
         switch (objectType)
         {
             case SObjectType.Function_0:

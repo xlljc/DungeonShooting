@@ -158,67 +158,79 @@ namespace DScript.Runtime
         /// <summary>
         /// 执行该对象的成员函数, 传入 6 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5);
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5);
 
         /// <summary>
         /// 执行该对象的成员函数, 传入 7 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5,
             SValue v6);
 
         /// <summary>
         /// 执行该对象的成员函数, 传入 8 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5,
             SValue v6, SValue v7);
 
         /// <summary>
         /// 执行该对象的成员函数, 传入 9 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5,
             SValue v6, SValue v7, SValue v8);
 
         /// <summary>
         /// 执行该对象的成员函数, 传入 10 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9);
 
         /// <summary>
         /// 执行该对象的成员函数, 传入 11 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10);
 
         /// <summary>
         /// 执行该对象的成员函数, 传入 12 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11);
 
         /// <summary>
         /// 执行该对象的成员函数, 传入 13 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12);
 
         /// <summary>
         /// 执行该对象的成员函数, 传入 14 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13);
 
         /// <summary>
         /// 执行该对象的成员函数, 传入 15 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5,
             SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14);
 
         /// <summary>
         /// 执行该对象的成员函数, 传入 16 个参数
         /// </summary>
-        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
-            SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue
+        public abstract SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4,
+            SValue v5,
+            SValue v6, SValue v7, SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14,
+            SValue
                 v15);
 
         #region 子类需重写的运算函数
@@ -476,6 +488,7 @@ namespace DScript.Runtime
         #endregion
 
         #region 运算符重载
+
         //
         // public static SValue operator +(SValue v1, double v2)
         // {
@@ -793,7 +806,7 @@ namespace DScript.Runtime
         /// 空的字符串
         /// </summary>
         public static readonly SValue EmptyString = new String_SValue("");
-        
+
         /// <summary>
         /// 负无穷大
         /// </summary>
@@ -828,5 +841,75 @@ namespace DScript.Runtime
         /// 数字 2
         /// </summary>
         public static readonly SValue Two = new Number_SValue(2);
+
+        /// <summary>
+        /// 数字 3
+        /// </summary>
+        public static readonly SValue Three = new Number_SValue(3);
+
+        /// <summary>
+        /// 数字 4
+        /// </summary>
+        public static readonly SValue Four = new Number_SValue(4);
+
+        /// <summary>
+        /// 数字 5
+        /// </summary>
+        public static readonly SValue Five = new Number_SValue(5);
+
+        /// <summary>
+        /// 数字 6
+        /// </summary>
+        public static readonly SValue Six = new Number_SValue(6);
+
+        /// <summary>
+        /// 数字 7
+        /// </summary>
+        public static readonly SValue Seven = new Number_SValue(7);
+
+        /// <summary>
+        /// 数字 8
+        /// </summary>
+        public static readonly SValue Eight = new Number_SValue(8);
+
+        /// <summary>
+        /// 数字 9
+        /// </summary>
+        public static readonly SValue Nine = new Number_SValue(9);
+
+        /// <summary>
+        /// 数字 10
+        /// </summary>
+        public static readonly SValue Ten = new Number_SValue(10);
+
+        /// <summary>
+        /// 数字 11
+        /// </summary>
+        public static readonly SValue Eleven = new Number_SValue(11);
+
+        /// <summary>
+        /// 数字 12
+        /// </summary>
+        public static readonly SValue Twelve = new Number_SValue(12);
+
+        /// <summary>
+        /// 数字 13
+        /// </summary>
+        public static readonly SValue Thirteen = new Number_SValue(13);
+
+        /// <summary>
+        /// 数字 14
+        /// </summary>
+        public static readonly SValue Fourteen = new Number_SValue(14);
+
+        /// <summary>
+        /// 数字 15
+        /// </summary>
+        public static readonly SValue Fifteen = new Number_SValue(15);
+
+        /// <summary>
+        /// 数字 16
+        /// </summary>
+        public static readonly SValue Sixteen = new Number_SValue(16);
     }
 }

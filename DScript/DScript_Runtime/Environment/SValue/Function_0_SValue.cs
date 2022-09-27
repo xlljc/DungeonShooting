@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace DScript.Runtime
 {
     /// <summary>
@@ -23,16 +21,21 @@ namespace DScript.Runtime
 
         public override SValue GetMember(string key)
         {
-            return Null;
+            return key == "length" ? Zero : Null;
         }
 
         public override bool HasMember(string key)
         {
-            return false;
+            return key == "length";
         }
 
         public override void SetMember(string key, SValue value)
         {
+            if (key == "length")
+            {
+                throw new OperationMemberException($"Member 'length' is readonly.");
+            }
+
             throw new OperationMemberException($"Member '{key}' not defined.");
         }
 

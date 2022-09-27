@@ -23,14 +23,16 @@ var c = null;
 private var d = true; //私有属性
 readonly var e = false; //只读属性
 
-//在类中声明一个叫 length 的 get 属性, get 属性必须有返回值
-get length() {
-    return b;
-}
-//在类中声明一个叫 length 的 set 属性, set 属性设置的数据变量叫 param
-//param 关键字只能出现在 set 属性中, 并且只读
-set length(val) {
-    b = val;
+//在类中声明一个叫 length 的属性
+property length {
+    //get 属性必须有返回值
+    get() {
+        return b;
+    }
+    //set 属性必须有一个参数
+    set(value) {
+        b = value;
+    }
 }
 
 //在类中声明一个 say 的函数, 并且支持传入一个参数

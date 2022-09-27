@@ -1,17 +1,17 @@
-
+﻿
 namespace DScript.Runtime
 {
     /// <summary>
-    /// 1参数回调函数
+    /// 5参数回调函数
     /// </summary>
-    public class Function_1_SValue : SValue
+    public class Function_5_SValue : SValue
     {
-        public readonly Function_1 Value;
-    
-        public Function_1_SValue(Function_1 value)
+        public readonly Function_5 Value;
+
+        public Function_5_SValue(Function_5 value)
         {
             Value = value;
-            dataType = DataType.Function_1;
+            dataType = DataType.Function_5;
         }
 
         public override object GetValue()
@@ -21,7 +21,7 @@ namespace DScript.Runtime
 
         public override SValue GetMember(string key)
         {
-            return key == "length" ? One : Null;
+            return key == "length" ? Five : Null;
         }
 
         public override bool HasMember(string key)
@@ -35,6 +35,7 @@ namespace DScript.Runtime
             {
                 throw new OperationMemberException($"Member 'length' is readonly.");
             }
+
             throw new OperationMemberException($"Member '{key}' not defined.");
         }
 
@@ -45,7 +46,7 @@ namespace DScript.Runtime
 
         public override SValue Invoke(SValue v0)
         {
-            return Value(v0);
+            throw new InvokeMethodException("The function does not support passing in 1 argument.");
         }
 
         public override SValue Invoke(SValue v0, SValue v1)
@@ -65,7 +66,7 @@ namespace DScript.Runtime
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
         {
-            throw new InvokeMethodException("The function does not support passing in 5 argument.");
+            return Value(v0, v1, v2, v3, v4);
         }
 
         public override SValue Invoke(SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
@@ -255,9 +256,9 @@ namespace DScript.Runtime
 
         public override bool Operator_Equal_SValue(SValue v2)
         {
-            if (v2.dataType == DataType.Function_1)
+            if (v2.dataType == DataType.Function_5)
             {
-                return Value == ((Function_1_SValue)v2).Value;
+                return Value == ((Function_5_SValue)v2).Value;
             }
 
             return false;
@@ -275,9 +276,9 @@ namespace DScript.Runtime
 
         public override bool Operator_Not_Equal_SValue(SValue v2)
         {
-            if (v2.dataType == DataType.Function_1)
+            if (v2.dataType == DataType.Function_5)
             {
-                return Value != ((Function_1_SValue)v2).Value;
+                return Value != ((Function_5_SValue)v2).Value;
             }
 
             return true;
