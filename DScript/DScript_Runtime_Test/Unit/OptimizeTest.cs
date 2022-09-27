@@ -249,7 +249,7 @@ public class OptimizeTest : UnitTest
             Test7_Cls obj = new Test7_Cls();
             for (int i = 0; i < 999999; i++)
             {
-                string temp = obj.GetValue().ToString();
+                string temp = obj.GetValue() as string;
             }
         });
     }

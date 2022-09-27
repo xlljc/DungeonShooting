@@ -312,6 +312,8 @@ namespace DScript.Runtime
                     return new String_SValue(Value + "true");
                 case DataType.False:
                     return new String_SValue(Value + "false");
+                case DataType.Object:
+                    return new String_SValue(Value + "[object]");
                 case DataType.Function_0:
                 case DataType.Function_1:
                 case DataType.Function_2:
@@ -500,7 +502,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue((int)(double)v2.GetValue());
+                    return new Number_SValue((int)((Number_SValue)v2)._value);
                 case DataType.True:
                     return One;
             }
@@ -538,7 +540,7 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.Number:
-                    return new Number_SValue((int)(double)v2.GetValue());
+                    return new Number_SValue((int)((Number_SValue)v2)._value);
                 case DataType.True:
                     return One;
             }

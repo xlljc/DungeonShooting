@@ -315,7 +315,7 @@ namespace DScript.Runtime
                 case DataType.Number:
                     return new Number_SValue(Value + ((Number_SValue)v2).Value);
                 case DataType.String:
-                    return new String_SValue(Value + (string)v2.GetValue());
+                    return new String_SValue(Value + ((String_SValue)v2).Value);
                 case DataType.True:
                     return new Number_SValue(Value + 1);
                 case DataType.False:
