@@ -136,105 +136,105 @@ namespace DScript.Runtime
 
         public override SValue InvokeMethod(string key)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override SValue InvokeMethod(string key, SValue v0, SValue v1, SValue v2, SValue v3, SValue v4, SValue v5,
             SValue v6, SValue v7,
             SValue v8, SValue v9, SValue v10, SValue v11, SValue v12, SValue v13, SValue v14, SValue v15)
         {
-            throw new InvokeMethodException($"The member function 'true.{key}' was not found");
+            throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
         public override bool Operator_Equal_Double(double v2)
@@ -316,6 +316,26 @@ namespace DScript.Runtime
                     return One;
                 case DataType.True:
                     return Two;
+                case DataType.Object:
+                    return new String_SValue("true" + ((Object_SValue)v2).Value);
+                case DataType.Function_0:
+                case DataType.Function_1:
+                case DataType.Function_2:
+                case DataType.Function_3:
+                case DataType.Function_4:
+                case DataType.Function_5:
+                case DataType.Function_6:
+                case DataType.Function_7:
+                case DataType.Function_8:
+                case DataType.Function_9:
+                case DataType.Function_10:
+                case DataType.Function_11:
+                case DataType.Function_12:
+                case DataType.Function_13:
+                case DataType.Function_14:
+                case DataType.Function_15:
+                case DataType.Function_16:
+                    return String_SValue._trueFunction;
             }
 
             return new String_SValue("true" + v2.GetValue());

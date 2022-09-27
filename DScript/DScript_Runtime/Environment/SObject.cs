@@ -111,4 +111,9 @@ public class SObject : IObject
     {
         throw new System.NotImplementedException();
     }
+
+    public override string ToString()
+    {
+        return "[object]";
+    }
 }

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Reflection;
+using System.Threading;
 using DScript.Runtime;
 using Xunit;
 using Xunit.Abstractions;
@@ -171,7 +172,7 @@ public class OptimizeTest : UnitTest
 
             }
         });
-
+        
         ExecuteTime.Run("test4 新写法", () =>
         {
             for (SValue i = SValue.One; i.Operator_Less_Double(999999); i = i.Operator_SinceAdd())
@@ -219,7 +220,7 @@ public class OptimizeTest : UnitTest
                 a = i + b + c;
             }
         });
-
+        
         ExecuteTime.Run("test6 新写法", () =>
         {
             SValue a = SValue.EmptyString;
@@ -231,7 +232,7 @@ public class OptimizeTest : UnitTest
             }
         });
     }
-    
+
     [Fact(DisplayName = "测试转型和调用函数性能")]
     public void Test7()
     {
@@ -345,25 +346,49 @@ public class OptimizeTest : UnitTest
             }
         });
     }
-    
-    [Fact(DisplayName = "测试SValue隐式转换是否影响性能")]
-    public void Test10()
+
+    [Fact(DisplayName = "number和其他类型相加性能")]
+    public void Test11()
     {
-        ExecuteTime.Run("test10 隐式转换", () =>
+        ExecuteTime.Run("test11 原生C#", () =>
         {
+            object obj = new object();
+            var func = new OldSValue.Function_3((a, b, c) => { return OldSValue.Null; });
             for (int i = 0; i < 999999; i++)
             {
-                SValue a = new String_SValue("123");
-                SValue b = SValue.One;
+                int num = 1;
+                var a = num + "111";
+                var b = num.ToString() + obj;
+                var c = num.ToString() + func;
+                var d = num.ToString() + true;
+            }
+        });
+
+        ExecuteTime.Run("test11 老写法", () =>
+        {
+            OldSValue obj = new OldSArray();
+            var func = new OldSValue(new OldSValue.Function_3((a, b, c) => { return OldSValue.Null; }));
+            for (int i = 0; i < 999999; i++)
+            {
+                OldSValue num = 1;
+                var a = num + new OldSValue("111");
+                var b = num + obj;
+                var c = num + func;
+                var d = num + true;
             }
         });
         
-        ExecuteTime.Run("test10 禁用隐式转换", () =>
+        ExecuteTime.Run("test11 新写法", () =>
         {
+            var obj = new Object_SValue(new SObject());
+            var func = new Function_1_SValue(Test3_Func3);
+            Number_SValue num = new Number_SValue(1);
             for (int i = 0; i < 999999; i++)
             {
-                SValue a = new String_SValue("123");
-                SValue b = new Number_SValue(1);
+                var a = num.Operator_Add_SValue(new String_SValue("111"));
+                var b = num.Operator_Add_SValue(obj);
+                var c = num.Operator_Add_SValue(func);
+                var d = num.Operator_Add_SValue(SValue.True);
             }
         });
     }

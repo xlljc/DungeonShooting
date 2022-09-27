@@ -13,7 +13,7 @@ namespace DScript.Runtime
             Value = value;
             dataType = DataType.Object;
         }
-
+        
         public override object GetValue()
         {
             return Value;
@@ -284,22 +284,22 @@ namespace DScript.Runtime
 
         public override SValue Operator_Add_Double(double v2)
         {
-            return new String_SValue("[object]" + v2);
+            return new String_SValue(Value.ToString() + v2);
         }
 
         public override SValue Operator_Append_Add_Double(double v1)
         {
-            return new String_SValue(v1 + "[object]");
+            return new String_SValue(v1 + Value.ToString());
         }
 
         public override SValue Operator_Add_String(string v2)
         {
-            return new String_SValue("[object]" + v2);
+            return new String_SValue(Value.ToString() + v2);
         }
 
         public override SValue Operator_Append_Add_String(string v1)
         {
-            return new String_SValue(v1 + "[object]");
+            return new String_SValue(v1 + Value.ToString());
         }
 
         public override SValue Operator_Add_SValue(SValue v2)
@@ -307,15 +307,15 @@ namespace DScript.Runtime
             switch (v2.dataType)
             {
                 case DataType.String:
-                    return new String_SValue("[object]" + ((String_SValue)v2).Value);
+                    return new String_SValue(Value + ((String_SValue)v2).Value);
                 case DataType.Null:
-                    return new String_SValue("[object]null");
+                    return new String_SValue(Value + "null");
                 case DataType.True:
-                    return new String_SValue("[object]true");
+                    return new String_SValue(Value + "true");
                 case DataType.False:
-                    return new String_SValue("[object]false");
+                    return new String_SValue(Value + "false");
                 case DataType.Object:
-                    return new String_SValue("[object][object]");
+                    return new String_SValue(Value.ToString() + ((Object_SValue)v2).Value);
                 case DataType.Function_0:
                 case DataType.Function_1:
                 case DataType.Function_2:
@@ -333,10 +333,10 @@ namespace DScript.Runtime
                 case DataType.Function_14:
                 case DataType.Function_15:
                 case DataType.Function_16:
-                    return new String_SValue("[object][function]");
+                    return new String_SValue(Value + "[function]");
             }
 
-            return new String_SValue("[object]" + v2.GetValue());
+            return new String_SValue(Value.ToString() + v2.GetValue());
         }
 
         public override SValue Operator_Subtract_Double(double v2)

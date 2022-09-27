@@ -1169,8 +1169,10 @@ public struct OldSValue
                         return new OldSValue((double)v1.Value + (double)v2.Value);
                     case SValueType.String:
                         return new OldSValue(v1.Value.ToString() + v2.Value);
-                    case SValueType.Object:
                     case SValueType.Function:
+                        return new OldSValue(v1.Value + "[function]");
+                    case SValueType.Object:
+                        return new OldSValue(v1.Value + "[object]");
                     case SValueType.Null:
                         return new OldSValue(double.NaN);
                     case SValueType.BooleanTrue:
