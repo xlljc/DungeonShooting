@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <AssemblyName>DScript.Compiler.Test</AssemblyName>
+        <RootNamespace>DScript.Compiler.Test</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DScript_Compiler\DScript_Compiler.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="Script\**">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+      <PackageReference Include="xunit" Version="2.4.2" />
+    </ItemGroup>
+
+</Project>

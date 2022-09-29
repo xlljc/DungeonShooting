@@ -32,5 +32,6 @@
     &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test9&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test10&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test11&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test1&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

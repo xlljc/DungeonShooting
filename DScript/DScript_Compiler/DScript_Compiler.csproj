@@ -11,8 +11,4 @@
       <ProjectReference Include="..\DScript_Runtime\DScript_Runtime.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="example" />
-    </ItemGroup>
-
 </Project>

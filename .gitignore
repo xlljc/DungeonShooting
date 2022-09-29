@@ -10,3 +10,5 @@
 /DScript/DScript_Runtime_Generate/bin
 /DScript/DScript_Runtime_Test/obj
 /DScript/DScript_Runtime_Test/bin
+/DScript/DScript_Compiler_Test/bin
+/DScript/DScript_Compiler_Test/obj

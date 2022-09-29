@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DScript_Runtime_Generate", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DScript_Compiler", "DScript_Compiler\DScript_Compiler.csproj", "{643E23B7-6F99-4DC6-9DC6-67BA14B0C149}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DScript_Compiler_Test", "DScript_Compiler_Test\DScript_Compiler_Test.csproj", "{54E14824-3E65-4689-AABD-2EEC3A0921B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{643E23B7-6F99-4DC6-9DC6-67BA14B0C149}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{643E23B7-6F99-4DC6-9DC6-67BA14B0C149}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{643E23B7-6F99-4DC6-9DC6-67BA14B0C149}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54E14824-3E65-4689-AABD-2EEC3A0921B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54E14824-3E65-4689-AABD-2EEC3A0921B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54E14824-3E65-4689-AABD-2EEC3A0921B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54E14824-3E65-4689-AABD-2EEC3A0921B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

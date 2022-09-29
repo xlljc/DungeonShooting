@@ -51,8 +51,8 @@ func say() {
 func MyClass() {
 
 }
-//构造继承, 构造函数继承该类的无参构造函数
-func MyClass(message) extends MyClass() {
+//构造重载
+func MyClass(message) {
     print("创建了MyClass, message: " + message);
 }
 
