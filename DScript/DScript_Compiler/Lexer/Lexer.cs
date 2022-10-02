@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace DScript.Compiler
 {
@@ -9,11 +8,11 @@ namespace DScript.Compiler
     /// </summary>
     public class Lexer
     {
-        private string[] _lexerStrings;
+        private Token[] _lexerStrings;
 
         public void FromSource(string sourceName, string code)
         {
-            var list = new List<string>();
+            var list = new List<Token>();
 
             var length = code.Length;
             //分析词法
@@ -24,15 +23,19 @@ namespace DScript.Compiler
                 {
                     if (!IsEmpty(c))
                     {
-                        list.Add(c.ToString());
+                        list.Add(new Token(c.ToString(), i, 1));
                     }
                 }
 
                 if (IsSymbol(c)) //符号
                 {
-                    if (c == '"') //字符串
+                    if (c == ';') //跳过;
+                    {
+                    }
+                    else if (c == '"') //字符串
                     {
                         var sb = new StringBuilder();
+                        var index = i;
                         sb.Append(c);
                         var tempNum = 0; //碰到连续转义斜杠次数
                         //解析字符串
@@ -57,11 +60,11 @@ namespace DScript.Compiler
                             tempNum = cNext == '\\' ? (tempNum + 1) : 0;
                         }
 
-                        list.Add(sb.ToString());
+                        list.Add(new Token(sb.ToString(), index, sb.Length));
                     }
-                    else if (c == '/') //匹配
+                    else if (c == '/') //匹配 /
                     {
-                        if (i <= length - 2)
+                        if (i <= length - 2) //必须匹配两个字符
                         {
                             if (code[i + 1] == '/') //碰到单行注释 //
                             {
@@ -88,16 +91,74 @@ namespace DScript.Compiler
                         }
                         else
                         {
-                            list.Add(c.ToString());
+                            list.Add(new Token(c.ToString(), i, 1));
+                        }
+                    }
+                    else if (c == '=') //
+                    {
+                        if (i <= length - 2) //必须匹配两个字符
+                        {
+                            var cNext = code[i + 1];
+                            if (cNext == '=' || cNext == '>') //匹配 ==, =>
+                            {
+                                list.Add(new Token(c.ToString() + cNext, i++, 2));
+                            }
+                            else
+                            {
+                                list.Add(new Token(c.ToString(), i, 1));
+                            }
+                        }
+                        else
+                        {
+                            list.Add(new Token(c.ToString(), i, 1));
+                        }
+                    }
+                    else if (c == '>')
+                    {
+                        if (i <= length - 2) //必须匹配两个字符
+                        {
+                            var cNext = code[i + 1];
+                            if (cNext == '=' || cNext == '>') //匹配 >=, >>
+                            {
+                                list.Add(new Token(c.ToString() + cNext, i++, 2));
+                            }
+                            else
+                            {
+                                list.Add(new Token(c.ToString(), i, 1));
+                            }
+                        }
+                        else
+                        {
+                            list.Add(new Token(c.ToString(), i, 1));
+                        }
+                    }
+                    else if (c == '<')
+                    {
+                        if (i <= length - 2) //必须匹配两个字符
+                        {
+                            var cNext = code[i + 1];
+                            if (cNext == '=' || cNext == '<') //匹配 <=, <<
+                            {
+                                list.Add(new Token(c.ToString() + cNext, i++, 2));
+                            }
+                            else
+                            {
+                                list.Add(new Token(c.ToString(), i, 1));
+                            }
+                        }
+                        else
+                        {
+                            list.Add(new Token(c.ToString(), i, 1));
                         }
                     }
                     else
                     {
-                        list.Add(c.ToString());
+                        list.Add(new Token(c.ToString(), i, 1));
                     }
                 }
                 else if (!IsEmpty(c)) //单词
                 {
+                    var index = i;
                     var sb = new StringBuilder();
                     sb.Append(c);
                     //解析单词
@@ -113,14 +174,15 @@ namespace DScript.Compiler
                         sb.Append(cNext);
                     }
 
-                    list.Add(sb.ToString());
+                    list.Add(new Token(sb.ToString(), index, sb.Length));
                 }
 
-                _lexerStrings = list.ToArray();
             }
+
+            _lexerStrings = list.ToArray();
         }
 
-        public string[] GetLexerStrings()
+        public Token[] GetLexerStrings()
         {
             return _lexerStrings;
         }
