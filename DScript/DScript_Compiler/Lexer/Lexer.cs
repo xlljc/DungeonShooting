@@ -17,19 +17,34 @@ namespace DScript.Compiler
             //行
             var row = 1;
             //列
-            var column = 0;
+            var column = 1;
             //长度
             var length = code.Length;
+            var i = 0;
 
+            Action moveNext = () =>
+            {
+                //判断是否换行
+                if (code[i++] == '\n')
+                {
+                    row += 1;
+                    column = 1;
+                }
+                else
+                {
+                    column++;
+                }
+            };
+            
             //分析词法
-            for (var i = 0; i < length; i++)
+            for (;i < length; moveNext())
             {
                 char c = code[i];
-                if (c == length - 1)
+                if (i == length - 1)
                 {
                     if (!IsEmpty(c))
                     {
-                        list.Add(new Token(c.ToString(), i, 1));
+                        list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
                     }
                 }
 
@@ -45,13 +60,17 @@ namespace DScript.Compiler
                         sb.Append(c);
                         var tempNum = 0; //碰到连续转义斜杠次数
 
+                        var startRow = row;
+                        var startColumn = column;
+                        
                         //解析字符串
-                        for (; i < length - 1; i++)
+                        for (; i < length - 1; moveNext())
                         {
                             var cNext = code[i + 1];
                             if (cNext == '\n')
                             {
                                 sb.Append(cNext); //碰到换行, 停止
+                                moveNext();
                                 break;
                             }
                             else if (cNext == '"')
@@ -59,6 +78,7 @@ namespace DScript.Compiler
                                 if (tempNum % 2 == 0) // "未被成功转义, 直接停止
                                 {
                                     sb.Append(cNext);
+                                    moveNext();
                                     break;
                                 }
                             }
@@ -67,7 +87,7 @@ namespace DScript.Compiler
                             tempNum = cNext == '\\' ? (tempNum + 1) : 0;
                         }
 
-                        list.Add(new Token(sb.ToString(), index, sb.Length));
+                        list.Add(new Token(sb.ToString(), index, sb.Length, startRow, startColumn, TokenType.String));
                     }
                     else if (c == '/') //匹配 /
                     {
@@ -76,7 +96,7 @@ namespace DScript.Compiler
                             if (code[i + 1] == '/') //碰到单行注释 //
                             {
                                 //跳过注释这一行
-                                for (i = i + 2; i < length; i++)
+                                for (i = i + 2; i < length; moveNext())
                                 {
                                     if (code[i] == '\n')
                                     {
@@ -87,10 +107,11 @@ namespace DScript.Compiler
                             else if (code[i + 1] == '*') //碰到多行注释
                             {
                                 //跳过注释这一段
-                                for (i = i + 2; i < length - 1; i++)
+                                for (i = i + 2; i < length - 1; moveNext())
                                 {
                                     if (code[i] == '*' && code[i + 1] == '/')
                                     {
+                                        moveNext();
                                         break;
                                     }
                                 }
@@ -98,7 +119,7 @@ namespace DScript.Compiler
                         }
                         else
                         {
-                            list.Add(new Token(c.ToString(), i, 1));
+                            list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
                         }
                     }
                     else if (c == '=') //
@@ -108,16 +129,17 @@ namespace DScript.Compiler
                             var cNext = code[i + 1];
                             if (cNext == '=' || cNext == '>') //匹配 ==, =>
                             {
-                                list.Add(new Token(c.ToString() + cNext, i++, 2));
+                                list.Add(new Token(c.ToString() + cNext, i, 2, row, column, TokenType.Symbol));
+                                moveNext();
                             }
-                            else
+                            else //匹配 =
                             {
-                                list.Add(new Token(c.ToString(), i, 1));
+                                list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
                             }
                         }
-                        else
+                        else //匹配 =
                         {
-                            list.Add(new Token(c.ToString(), i, 1));
+                            list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
                         }
                     }
                     else if (c == '>')
@@ -127,16 +149,17 @@ namespace DScript.Compiler
                             var cNext = code[i + 1];
                             if (cNext == '=' || cNext == '>') //匹配 >=, >>
                             {
-                                list.Add(new Token(c.ToString() + cNext, i++, 2));
+                                list.Add(new Token(c.ToString() + cNext, i, 2, row, column, TokenType.Symbol));
+                                moveNext();
                             }
-                            else
+                            else //匹配 >
                             {
-                                list.Add(new Token(c.ToString(), i, 1));
+                                list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
                             }
                         }
-                        else
+                        else //匹配 >
                         {
-                            list.Add(new Token(c.ToString(), i, 1));
+                            list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
                         }
                     }
                     else if (c == '<')
@@ -146,41 +169,46 @@ namespace DScript.Compiler
                             var cNext = code[i + 1];
                             if (cNext == '=' || cNext == '<') //匹配 <=, <<
                             {
-                                list.Add(new Token(c.ToString() + cNext, i++, 2));
+                                list.Add(new Token(c.ToString() + cNext, i, 2, row, column, TokenType.Symbol));
+                                moveNext();
                             }
-                            else
+                            else //匹配 <
                             {
-                                list.Add(new Token(c.ToString(), i, 1));
+                                list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
                             }
                         }
-                        else
+                        else //匹配 <
                         {
-                            list.Add(new Token(c.ToString(), i, 1));
+                            list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
                         }
                     }
                     else
                     {
-                        list.Add(new Token(c.ToString(), i, 1));
+                        list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
                     }
                 }
                 else if (!IsEmpty(c)) //单词
                 {
+                    var startRow = row;
+                    var startColumn = column;
+                    
                     var index = i;
                     var sb = new StringBuilder();
                     sb.Append(c);
                     //解析单词
-                    for (; i < length - 1; i++)
+                    for (; i < length - 1; moveNext())
                     {
                         var cNext = code[i + 1];
                         if (IsEmpty(cNext) || IsSymbol(cNext))
                         {
+                            moveNext();
                             break;
                         }
 
                         sb.Append(cNext);
                     }
 
-                    list.Add(new Token(sb.ToString(), index, sb.Length));
+                    list.Add(new Token(sb.ToString(), index, sb.Length, startRow, startColumn, TokenType.Word));
                 }
             }
 
