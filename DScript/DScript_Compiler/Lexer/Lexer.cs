@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace DScript.Compiler
@@ -13,8 +14,13 @@ namespace DScript.Compiler
         public void FromSource(string sourceName, string code)
         {
             var list = new List<Token>();
-
+            //行
+            var row = 1;
+            //列
+            var column = 0;
+            //长度
             var length = code.Length;
+
             //分析词法
             for (var i = 0; i < length; i++)
             {
@@ -38,10 +44,11 @@ namespace DScript.Compiler
                         var index = i;
                         sb.Append(c);
                         var tempNum = 0; //碰到连续转义斜杠次数
+
                         //解析字符串
-                        for (i++; i < length; i++)
+                        for (; i < length - 1; i++)
                         {
-                            var cNext = code[i];
+                            var cNext = code[i + 1];
                             if (cNext == '\n')
                             {
                                 sb.Append(cNext); //碰到换行, 停止
@@ -162,12 +169,11 @@ namespace DScript.Compiler
                     var sb = new StringBuilder();
                     sb.Append(c);
                     //解析单词
-                    for (i++; i < length; i++)
+                    for (; i < length - 1; i++)
                     {
-                        var cNext = code[i];
+                        var cNext = code[i + 1];
                         if (IsEmpty(cNext) || IsSymbol(cNext))
                         {
-                            i--;
                             break;
                         }
 
@@ -176,7 +182,6 @@ namespace DScript.Compiler
 
                     list.Add(new Token(sb.ToString(), index, sb.Length));
                 }
-
             }
 
             _lexerStrings = list.ToArray();
