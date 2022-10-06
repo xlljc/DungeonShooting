@@ -25,5 +25,13 @@
         /// 各种符号
         /// </summary>
         Symbol,
+        /// <summary>
+        /// 换行
+        /// </summary>
+        LineFeed,
+        /// <summary>
+        /// 分号
+        /// </summary>
+        Semicolon,
     }
 }

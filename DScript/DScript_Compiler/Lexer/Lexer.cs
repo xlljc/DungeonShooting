@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace DScript.Compiler
 {
@@ -40,18 +41,32 @@ namespace DScript.Compiler
             for (;i < length; moveNext())
             {
                 char c = code[i];
-                if (i == length - 1)
-                {
-                    if (!IsEmpty(c))
-                    {
-                        list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
-                    }
-                }
 
                 if (IsSymbol(c)) //符号
                 {
-                    if (c == ';') //跳过;
+                    if (c == '\n') //换行
                     {
+                        if (list.Count > 0)
+                        {
+                            //去除多余的分号和换行符
+                            var prev = list[list.Count - 1];
+                            if (prev.Type != TokenType.LineFeed && prev.Code != ";")
+                            {
+                                list.Add(new Token(string.Empty, i, 1, row, column, TokenType.LineFeed));
+                            }
+                        }
+                    }
+                    else if (c == ';') //分号
+                    {
+                        if (list.Count > 0)
+                        {
+                            //去除多余的分号和换行符
+                            var prev = list[list.Count - 1];
+                            if (prev.Type != TokenType.LineFeed && prev.Code != ";")
+                            {
+                                list.Add(new Token(";", i, 1, row, column, TokenType.Semicolon));
+                            }
+                        }
                     }
                     else if (c == '"') //字符串
                     {
@@ -201,14 +216,25 @@ namespace DScript.Compiler
                         var cNext = code[i + 1];
                         if (IsEmpty(cNext) || IsSymbol(cNext))
                         {
-                            moveNext();
                             break;
                         }
 
                         sb.Append(cNext);
                     }
 
-                    list.Add(new Token(sb.ToString(), index, sb.Length, startRow, startColumn, TokenType.Word));
+                    var word = sb.ToString();
+                    if (Keyword.IsKeyword(word))
+                    {
+                        list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Keyword));
+                    }
+                    else if (Regex.IsMatch(word, "^[0-9]+$"))
+                    {
+                        list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Number));
+                    }
+                    else
+                    {
+                        list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Word));
+                    }
                 }
             }
 
@@ -225,7 +251,8 @@ namespace DScript.Compiler
         {
             return c == '|' || c == '&' || c == '>' || c == '<' || c == '=' || c == '"' || c == '(' || c == ')' ||
                    c == '{' || c == '}' || c == '[' || c == ']' || c == '+' || c == '-' || c == '*' || c == '/' ||
-                   c == '%' || c == ';' || c == '!' || c == '^' || c == '~' || c == '?' || c == ':' || c == '.';
+                   c == '%' || c == ';' || c == '!' || c == '^' || c == '~' || c == '?' || c == ':' || c == '.' ||
+                   c == '\n';
         }
 
         //返回是否为空
