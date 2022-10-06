@@ -12,7 +12,11 @@ namespace DScript.Compiler
     {
         private Token[] _lexerStrings;
 
-        public void FromSource(string sourceName, string code)
+        /// <summary>
+        /// 从源码解析词法
+        /// </summary>
+        /// <param name="code">源代码</param>
+        public void FromSource(string code)
         {
             var list = new List<Token>();
             //行
@@ -241,6 +245,9 @@ namespace DScript.Compiler
             _lexerStrings = list.ToArray();
         }
 
+        /// <summary>
+        /// 返回解析出来的所有词法token
+        /// </summary>
         public Token[] GetLexerStrings()
         {
             return _lexerStrings;
@@ -259,11 +266,6 @@ namespace DScript.Compiler
         private bool IsEmpty(char c)
         {
             return c == '\n' || c == ' ' || c == '\t' || c == '\r';
-        }
-
-        private bool IsWord(char c)
-        {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
         }
     }
 }
