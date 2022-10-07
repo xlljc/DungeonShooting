@@ -16,16 +16,9 @@ namespace DScript.Compiler
                 return null;
             }
 
-            var rootName = ns[0];
-            if (!RootNamespaceNodePool.TryGetValue(rootName, out var root))
-            {
-                root = new NamespaceNode(rootName, rootName, null);
-                RootNamespaceNodePool.Add(rootName, root);
-            }
-
-            NamespaceNode tempNode = root;
-            string fName = rootName;
-            for (var i = 1; i < ns.Length; i++)
+            NamespaceNode tempNode = RootNamespaceNode;
+            string fName = "global";
+            for (var i = ns[0] == "global" ? 1 : 0; i < ns.Length; i++)
             {
                 var name = ns[i];
                 fName += "." + name;
@@ -53,7 +46,7 @@ namespace DScript.Compiler
         /// <summary>
         /// 根命名空间
         /// </summary>
-        private static readonly Dictionary<string, NamespaceNode> RootNamespaceNodePool = new Dictionary<string, NamespaceNode>();
+        private static readonly NamespaceNode RootNamespaceNode = new NamespaceNode("global", "global", null);
 
         /// <summary>
         /// 命名空间包含的成员
