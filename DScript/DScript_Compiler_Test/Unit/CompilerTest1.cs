@@ -14,7 +14,7 @@ public class CompilerTest1 : UnitTest
     [Fact(DisplayName = "Test1, 测试解析词法")]
     public void Test1()
     {
-        var fileName = "Script/Test2.ds";
+        var fileName = "Script/example.ds";
         var text = File.ReadAllText(fileName);
         var tree = new Lexer();
         tree.FromSource(text);

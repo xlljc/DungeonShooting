@@ -29,15 +29,18 @@ namespace DScript.Compiler
 
             Action moveNext = () =>
             {
-                //判断是否换行
-                if (code[i++] == '\n')
+                if (i < length)
                 {
-                    row += 1;
-                    column = 1;
-                }
-                else
-                {
-                    column++;
+                    //判断是否换行
+                    if (code[i++] == '\n')
+                    {
+                        row += 1;
+                        column = 1;
+                    }
+                    else
+                    {
+                        column++;
+                    }
                 }
             };
             
@@ -108,7 +111,7 @@ namespace DScript.Compiler
 
                         list.Add(new Token(sb.ToString(), index, sb.Length, startRow, startColumn, TokenType.String));
                     }
-                    else if (c == '/') //匹配 /
+                    else if (c == '/') //匹配注释
                     {
                         if (i <= length - 2) //必须匹配两个字符
                         {
@@ -168,8 +171,18 @@ namespace DScript.Compiler
                             var cNext = code[i + 1];
                             if (cNext == '=' || cNext == '>') //匹配 >=, >>
                             {
-                                list.Add(new Token(c.ToString() + cNext, i, 2, row, column, TokenType.Symbol));
-                                moveNext();
+                                var cNext2 = code[i + 2];
+                                if (cNext == '>' && cNext2 == '=') //匹配 >>=
+                                {
+                                    list.Add(new Token(c.ToString() + cNext + cNext2, i, 3, row, column, TokenType.Symbol));
+                                    moveNext();
+                                    moveNext();
+                                }
+                                else
+                                {
+                                    list.Add(new Token(c.ToString() + cNext, i, 2, row, column, TokenType.Symbol));
+                                    moveNext();
+                                }
                             }
                             else //匹配 >
                             {
@@ -188,8 +201,18 @@ namespace DScript.Compiler
                             var cNext = code[i + 1];
                             if (cNext == '=' || cNext == '<') //匹配 <=, <<
                             {
-                                list.Add(new Token(c.ToString() + cNext, i, 2, row, column, TokenType.Symbol));
-                                moveNext();
+                                var cNext2 = code[i + 2];
+                                if (cNext == '<' && cNext2 == '=') //匹配 <<=
+                                {
+                                    list.Add(new Token(c.ToString() + cNext + cNext2, i, 3, row, column, TokenType.Symbol));
+                                    moveNext();
+                                    moveNext();
+                                }
+                                else
+                                {
+                                    list.Add(new Token(c.ToString() + cNext, i, 2, row, column, TokenType.Symbol));
+                                    moveNext();
+                                }
                             }
                             else //匹配 <
                             {
@@ -197,6 +220,66 @@ namespace DScript.Compiler
                             }
                         }
                         else //匹配 <
+                        {
+                            list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
+                        }
+                    }
+                    else if (c == '+')
+                    {
+                        if (i <= length - 2) //必须匹配两个字符
+                        {
+                            var cNext = code[i + 1];
+                            if (cNext == '+' || cNext == '=') //匹配 ++ +=
+                            {
+                                list.Add(new Token(c.ToString() + cNext, i, 2, row, column, TokenType.Symbol));
+                                moveNext();
+                            }
+                            else //匹配 +
+                            {
+                                list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
+                            }
+                        }
+                        else //匹配 +
+                        {
+                            list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
+                        }
+                    }
+                    else if (c == '-')
+                    {
+                        if (i <= length - 2) //必须匹配两个字符
+                        {
+                            var cNext = code[i + 1];
+                            if (cNext == '-' || cNext == '=') //匹配 -- -=
+                            {
+                                list.Add(new Token(c.ToString() + cNext, i, 2, row, column, TokenType.Symbol));
+                                moveNext();
+                            }
+                            else //匹配 -
+                            {
+                                list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
+                            }
+                        }
+                        else //匹配 -
+                        {
+                            list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
+                        }
+                    }
+                    else if (c == '*' || c == '/' || c == '%' || c == '!' || c == '&' || c == '^' || c == '|')
+                    {
+                        if (i <= length - 2) //必须匹配两个字符
+                        {
+                            var cNext = code[i + 1];
+                            if (cNext == '=') //匹配
+                            {
+                                list.Add(new Token(c.ToString() + cNext, i, 2, row, column, TokenType.Symbol));
+                                moveNext();
+                            }
+                            else //匹配
+                            {
+                                list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
+                            }
+                        }
+                        else //匹配
                         {
                             list.Add(new Token(c.ToString(), i, 1, row, column, TokenType.Symbol));
                         }
