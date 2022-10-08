@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-
+﻿
 namespace DScript.Compiler
 {
     /// <summary>
@@ -13,26 +11,29 @@ namespace DScript.Compiler
         /// </summary>
         public NamespaceNode Root { get; } = new NamespaceNode("global", "global", null);
 
-        
+        private SyntaxTreeParse _treeParse;
         private readonly Token[] _tokens;
-        private int _currIndex = 0;
+        private int _currIndex = -1;
         
         public SyntaxTree(Token[] tokens)
         {
-            var aTreeParse = new SyntaxTreeParse(this);
+            _treeParse = new SyntaxTreeParse(this);
             _tokens = tokens;
-            while (_currIndex < _tokens.Length)
+            while (HasNextToken())
             {
                 var current = GetNextToken();
                 
                 if (current.Type == TokenType.Keyword)
                 {
-                    aTreeParse.NextKeyword(current);
+                    _treeParse.NextKeyword(current);
                 }
                 
             }
         }
 
+        /// <summary>
+        /// 获取当前正在解析的token
+        /// </summary>
         internal Token? GetCurrentToken()
         {
             if (_currIndex < _tokens.Length)
@@ -43,6 +44,9 @@ namespace DScript.Compiler
             return null;
         }
         
+        /// <summary>
+        /// 获取下一个token, 会移动指针
+        /// </summary>
         internal Token? GetNextToken()
         {
             _currIndex++;
@@ -54,6 +58,10 @@ namespace DScript.Compiler
             return null;
         }
 
+        /// <summary>
+        /// 尝试获取下一个token, 不会移动指针
+        /// </summary>
+        /// <param name="offset">获取token的偏移量</param>
         internal Token? TryGetNextToken(int offset = 1)
         {
             if (_currIndex < _tokens.Length - offset)
@@ -63,6 +71,10 @@ namespace DScript.Compiler
 
             return null;
         }
-        
+
+        internal bool HasNextToken()
+        {
+            return _currIndex < _tokens.Length - 1;
+        }
     }
 }

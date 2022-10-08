@@ -8,6 +8,8 @@ namespace DScript.Runtime
     /// </summary>
     public class String_SValue : SValue
     {
+        internal static readonly String_SValue _false = new String_SValue("false");
+        internal static readonly String_SValue _true = new String_SValue("true");
         internal static readonly String_SValue _nullFunction = new String_SValue("null[function]");
         internal static readonly String_SValue _falseFunction = new String_SValue("false[function]");
         internal static readonly String_SValue _trueFunction = new String_SValue("true[function]");

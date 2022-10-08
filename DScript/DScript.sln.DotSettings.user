@@ -10,44 +10,17 @@
     &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test2&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5a1d6eb9_002D395e_002D4cbd_002D9b1d_002Dd60f529c73d4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="测试string性能" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test6&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8da66352_002D8233_002D4221_002Dbf09_002D13848700c87b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test1&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test2&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test3&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test4&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test9&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test8&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test10&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d6065d75_002D2f67_002D4d3c_002Db856_002Dc27b81cf89f7/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestCreateNamespace, 测试创建Namespace节点对象" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.TestCreateNamespace&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.TestCreateNode&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test1&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=de1e0581_002D924e_002D4d63_002Db926_002Db2a02941e9b8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;And&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test2&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;Project Location="D:\GameProject\DungeonShooting\DScript\DScript_Compiler_Test" Presentation="&amp;lt;DScript_Compiler_Test&amp;gt;" /&gt;&#xD;
+    &lt;Namespace&gt;DScript.Compiler.Test&lt;/Namespace&gt;&#xD;
+  &lt;/And&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fac061db_002Dd5fa_002D427e_002D9e95_002Dbb9543962290/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test1&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test3&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test5&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test2&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test4&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test6&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test7&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test8&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test9&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test10&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test11&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test1&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.TestCreateNamespace&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+	
+	
+	
+	</wpf:ResourceDictionary>

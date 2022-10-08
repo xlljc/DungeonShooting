@@ -136,6 +136,10 @@ namespace DScript.Runtime
 
         public override SValue InvokeMethod(string key)
         {
+            if (key == "toString")
+            {
+                return String_SValue._true;
+            }
             throw new InvokeMethodException($"The member function 'true.{key}' was not found.");
         }
 
