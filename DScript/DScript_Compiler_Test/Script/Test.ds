@@ -1,4 +1,10 @@
-﻿//这里是注释
-var a = 123.56; //number类型
-var b = "say:\"c\"" + "hello";
-print(a + b); //打印
+﻿import system;
+namespace test;
+
+func say(message) {
+    print("say: " + message)
+}
+
+func vec2Zero() {
+    return Vector2(0, 0)
+}

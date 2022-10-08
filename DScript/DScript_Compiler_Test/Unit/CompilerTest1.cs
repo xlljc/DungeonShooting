@@ -14,7 +14,7 @@ public class CompilerTest1 : UnitTest
     [Fact(DisplayName = "Test1, 测试解析词法")]
     public void Test1()
     {
-        var fileName = "Script/example.ds";
+        var fileName = "Script/Test.ds";
         var text = File.ReadAllText(fileName);
         var tree = new Lexer();
         tree.FromSource(text);
@@ -24,21 +24,15 @@ public class CompilerTest1 : UnitTest
             Console.WriteLine(arr[i].ToString());
         }
     }
-
-    [Fact(DisplayName = "TestCreateNamespace, 测试创建Namespace节点对象")]
-    public void TestCreateNamespace()
-    {
-        var namespaceNode1 = NamespaceNode.FromNamespace("a.b.c");
-        var namespaceNode2 = NamespaceNode.FromNamespace("a.b");
-        var namespaceNode3 = NamespaceNode.FromNamespace("a");
-        var namespaceNode4 = NamespaceNode.FromNamespace("a.b.d");
-    }
-
-    [Fact(DisplayName = "TestCreateNode, 测试创建节点对象")]
-    public void TestCreateNode()
-    {
-        var namespaceNode1 = NamespaceNode.FromNamespace("a.b.c");
-        var classNode = new ClassNode(namespaceNode1, "MyClass");
-    }
     
+    [Fact(DisplayName = "Test2, 测试解析语法树")]
+    public void Test2()
+    {
+        var fileName = "Script/Test.ds";
+        var text = File.ReadAllText(fileName);
+        var tree = new Lexer();
+        tree.FromSource(text);
+        var syntaxTree = new SyntaxTree(tree.GetLexerStrings());
+    }
+
 }

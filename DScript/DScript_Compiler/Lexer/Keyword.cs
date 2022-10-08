@@ -20,7 +20,6 @@ namespace DScript.Compiler
             "set",
             "import",
             "static",
-            "new",
             "return",
             "for",
             "switch",
@@ -41,7 +40,7 @@ namespace DScript.Compiler
             "if",
             "else",
             "continue",
-            "typeof"
+            "macro"
         };
 
         /// <summary>

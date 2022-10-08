@@ -8,7 +8,11 @@ namespace DScript.Compiler
     /// </summary>
     public class NamespaceNode : NodeBase
     {
-        public static NamespaceNode FromNamespace(string fullName)
+        /// <summary>
+        /// 从命名空间名称创建或者获取命名空间对象
+        /// </summary>
+        /// <param name="fullName">命名空间全称</param>
+        public static NamespaceNode FromNamespace(SyntaxTree syntaxTree, string fullName)
         {
             var ns = fullName.Split('.');
             if (ns == null || ns.Length == 0)
@@ -16,12 +20,12 @@ namespace DScript.Compiler
                 return null;
             }
 
-            NamespaceNode tempNode = RootNamespaceNode;
-            string fName = "global";
-            for (var i = ns[0] == "global" ? 1 : 0; i < ns.Length; i++)
+            NamespaceNode tempNode = syntaxTree.Root;
+            string fName = null;
+            for (int i = (ns[0] == tempNode.Name ? 1 : 0); i < ns.Length; i++)
             {
                 var name = ns[i];
-                fName += "." + name;
+                fName = (fName == null) ? name : (fName + "." + name);
                 var child = tempNode.GetChild(name);
                 if (child == null)
                 {
@@ -44,11 +48,6 @@ namespace DScript.Compiler
         }
 
         /// <summary>
-        /// 根命名空间
-        /// </summary>
-        private static readonly NamespaceNode RootNamespaceNode = new NamespaceNode("global", "global", null);
-
-        /// <summary>
         /// 命名空间包含的成员
         /// </summary>
         public readonly Dictionary<string, NodeBase> Children = new Dictionary<string, NodeBase>();
@@ -63,7 +62,10 @@ namespace DScript.Compiler
         /// </summary>
         public readonly NamespaceNode Parent;
 
-        private NamespaceNode(string fullName, string name, NamespaceNode parent) : base(name)
+        /// <summary>
+        /// 不要使用构造创建 NamespaceNode, 请使用 NamespaceNode.FromNamespace()
+        /// </summary>
+        internal NamespaceNode(string fullName, string name, NamespaceNode parent) : base(name)
         {
             FullName = fullName;
             Parent = parent;
