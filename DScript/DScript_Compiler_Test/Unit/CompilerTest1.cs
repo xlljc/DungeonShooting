@@ -32,7 +32,8 @@ public class CompilerTest1 : UnitTest
         var text = File.ReadAllText(fileName);
         var tree = new Lexer();
         tree.FromSource(text);
-        var syntaxTree = new SyntaxTree(tree.GetLexerStrings());
+        var syntaxTree = new SyntaxTree();
+        syntaxTree.ParseToken(fileName, tree.GetLexerStrings());
     }
 
 }

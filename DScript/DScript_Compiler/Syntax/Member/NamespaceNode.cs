@@ -9,8 +9,9 @@ namespace DScript.Compiler
     public class NamespaceNode : NodeBase
     {
         /// <summary>
-        /// 从命名空间名称创建或者获取命名空间对象
+        /// 根据命名空间名称创建或者获取命名空间对象
         /// </summary>
+        /// <param name="syntaxTree">语法树对象</param>
         /// <param name="fullName">命名空间全称</param>
         public static NamespaceNode FromNamespace(SyntaxTree syntaxTree, string fullName)
         {
@@ -41,6 +42,39 @@ namespace DScript.Compiler
                 {
                     //已经声明了该名称的成员了, 不能再次声明为命名空间
                     throw new Exception("xxx");
+                }
+            }
+
+            return tempNode;
+        }
+
+        /// <summary>
+        /// 根据命名空间名称获取命名空间对象, 如果没有找到该命名空间, 则返回 null
+        /// </summary>
+        /// <param name="syntaxTree">语法树对象</param>
+        /// <param name="fullName">命名空间全称</param>
+        public static NamespaceNode GetNamespaceNode(SyntaxTree syntaxTree, string fullName)
+        {
+            var ns = fullName.Split('.');
+            if (ns == null || ns.Length == 0)
+            {
+                return null;
+            }
+
+            NamespaceNode tempNode = syntaxTree.Root;
+            string fName = null;
+            for (int i = (ns[0] == tempNode.Name ? 1 : 0); i < ns.Length; i++)
+            {
+                var name = ns[i];
+                fName = (fName == null) ? name : (fName + "." + name);
+                var child = tempNode.GetChild(name);
+                if (child is NamespaceNode namespaceNode)
+                {
+                    tempNode = namespaceNode;
+                }
+                else
+                {
+                    return null;
                 }
             }
 
