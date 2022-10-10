@@ -172,7 +172,7 @@ namespace DScript.Compiler
             token = null;
             return flag;
         }
-        
+
         /// <summary>
         /// 返回是否有下一个token
         /// </summary>
@@ -185,6 +185,57 @@ namespace DScript.Compiler
 
             var tokens = _currFileToken.Tokens;
             return _currIndex < tokens.Length - 1;
+        }
+
+        /// <summary>
+        /// 回退解析索引
+        /// </summary>
+        internal int RollbackTokenIndex()
+        {
+            if (_currIndex == -1)
+            {
+                return -1;
+            }
+
+            if (_currIndex > 0)
+            {
+                _currIndex--;
+            }
+            else
+            {
+                _currIndex = 0;
+            }
+
+            return _currIndex;
+        }
+
+        /// <summary>
+        /// 获取解析索引
+        /// </summary>
+        internal int GetTokenIndex()
+        {
+            return _currIndex;
+        }
+
+        internal Token[] CopyTokens(int start, int end, bool ignoreLineFeed = true)
+        {
+            if (_currFileToken == null)
+            {
+                return null;
+            }
+
+            var tokens = _currFileToken.Tokens;
+            List<Token> newArr = new List<Token>();
+            for (int i = start; i < end; i++)
+            {
+                var temp = tokens[i];
+                if (!ignoreLineFeed || temp.Type != TokenType.LineFeed)
+                {
+                    newArr.Add(temp);
+                }
+            }
+
+            return newArr.ToArray();
         }
     }
 }

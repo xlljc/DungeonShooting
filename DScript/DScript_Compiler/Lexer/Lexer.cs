@@ -75,6 +75,10 @@ namespace DScript.Compiler
                             }
                         }
                     }
+                    else if (c == '.') //点
+                    {
+                        list.Add(new Token(".", i, 1, row, column, TokenType.Dot));
+                    }
                     else if (c == '"') //字符串
                     {
                         var sb = new StringBuilder();

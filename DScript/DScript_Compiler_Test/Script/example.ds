@@ -4,8 +4,6 @@
 import Behavior = example.framework.Behavior;
 //同样也可以直接导入简化名称的命名空间
 import myName = example.framework;
-//导入整个命名空间
-import system;
 
 //除导入语句外, 脚本第一句必须是这个, 定义该文件所属的命名空间, 但是可以忽略, 默认为 global 命名空间
 namespace example.defineClass;

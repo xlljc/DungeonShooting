@@ -1,6 +1,8 @@
-﻿import system;
-namespace test;
+﻿import Behavior =example.framework.Behavior
+import myName=example
 
+namespace test;
+/*
 func say(message) {
     print("say: " + message)
 }
@@ -8,3 +10,4 @@ func say(message) {
 func vec2Zero() {
     return Vector2(0, 0)
 }
+*/

@@ -33,5 +33,9 @@
         /// 分号
         /// </summary>
         Semicolon,
+        /// <summary>
+        /// 点
+        /// </summary>
+        Dot,
     }
 }
