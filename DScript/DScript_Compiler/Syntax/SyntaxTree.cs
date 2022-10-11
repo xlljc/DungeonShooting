@@ -15,6 +15,7 @@ namespace DScript.Compiler
         public NamespaceNode Root { get; } = new NamespaceNode("global", "global", null);
 
         private SyntaxTreeParse _treeParse;
+        //已经解析过的文件的信息
         private Dictionary<string, FileToken> _fileTokens = new Dictionary<string, FileToken>();
         private string _currFile;
         private FileToken _currFileToken;

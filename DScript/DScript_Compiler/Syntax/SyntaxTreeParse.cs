@@ -4,6 +4,8 @@ namespace DScript.Compiler
 {
     internal class SyntaxTreeParse
     {
+        private static readonly MarchData[] ImportMarchData = new[] { new MarchData(MarchType.Word), new MarchData("="), new MarchData(MarchType.FullWord) };
+        private static readonly MarchData[] NamespaceMarchData = new[] { new MarchData(MarchType.FullWord) };
 
         private SyntaxTree _syntaxTree;
 
@@ -25,11 +27,12 @@ namespace DScript.Compiler
                     ImportKeyword(token, fileToken);
                     break;
                 case "namespace": //命名空间
-
+                    NamespaceKeyword(token, fileToken);
                     break;
             }
         }
 
+        //解析导入
         private void ImportKeyword(Token token, FileToken fileToken)
         {
             /*
@@ -37,79 +40,66 @@ namespace DScript.Compiler
                  import n = a;
                  import n = a.b.c;
              */
-            _syntaxTree.GetNextTokenIgnoreLineFeed(out var nameToken); //匹配名称
-            _syntaxTree.GetNextTokenIgnoreLineFeed(out var nextToken2); //匹配 =
-            //记录起始位置
-            int startIndex = _syntaxTree.GetTokenIndex() + 1;
-            if (nameToken != null && nextToken2 != null && nameToken.Type == TokenType.Word && nextToken2.Code == "=")
-            {
-                //是否能结束匹配
-                bool canEnd = false;
-                Token tempToken;
-
-                while (_syntaxTree.HasNextToken())
+            MarchUtils.March(_syntaxTree, ImportMarchData,
+                (result) =>
                 {
-                    //获取下一个token
-                    var lineFeed = _syntaxTree.GetNextTokenIgnoreLineFeed(out tempToken);
-                    if (canEnd)
+                    if (result.Success)
                     {
-                        if (tempToken.Type == TokenType.Dot) //碰到逗号, 继续匹配
+                        var newArr = _syntaxTree.CopyTokens(result.Start, result.End);
+                        //添加导入名称
+                        var importName = newArr[0];
+                        if (!fileToken.Import.ContainsKey(importName.Code))
                         {
-                            canEnd = false;
+                            fileToken.Import.Add(importName.Code, new ImportNode(importName.Code, importName, newArr));
                         }
-                        else if (tempToken.Type == TokenType.Semicolon) //碰到分号, 直接结束
+                        else
                         {
-                            var newArr = _syntaxTree.CopyTokens(startIndex, _syntaxTree.GetTokenIndex());
-                            AddImportNode(fileToken, nameToken, newArr);
-                            break;
-                        }
-                        else if (lineFeed) //换了行, 结束
-                        {
-                            //回滚索引
-                            _syntaxTree.RollbackTokenIndex();
-                            var newArr = _syntaxTree.CopyTokens(startIndex, _syntaxTree.GetTokenIndex());
-                            AddImportNode(fileToken, nameToken, newArr);
-                            break;
-                        }
-                        else //语法错误
-                        {
-                            //import语法错误
+                            //导入了相同的名称 {nextToken.Code}
                             throw new Exception("xxx");
                         }
                     }
                     else
                     {
-                        if (tempToken.Type == TokenType.Word)
-                        {
-                            canEnd = true;
-                        }
-                        else //语法错误
-                        {
-                            //import语法错误
-                            throw new Exception("xxx");
-                        }
+                        //import语法错误
+                        throw new Exception("xxx");
                     }
-                }
-            }
-            else
-            {
-                //错误的语法, import 后面应接名称.
-                throw new Exception("xxx");
-            }
+                });
         }
 
-        private void AddImportNode(FileToken fileToken, Token importName, Token[] fullName)
+        //解析声明命名空间
+        private void NamespaceKeyword(Token token, FileToken fileToken)
         {
-            //到文件结尾
-            if (!fileToken.Import.ContainsKey(importName.Code))
-            {
-                fileToken.Import.Add(importName.Code, new ImportNode(importName.Code, importName, fullName));
-            }
-            else
-            {
-                //导入了相同的名称 {nextToken.Code}
-                throw new Exception("xxx");
-            }
+            /*
+             匹配:
+                 namespace test;
+                 namespace test.a;
+             */
+            MarchUtils.March(_syntaxTree, NamespaceMarchData,
+                (result) =>
+                {
+                    if (result.Success)
+                    {
+                        if (fileToken.NamespaceNode != null)
+                        {
+                            //该文件已经声明过命名空间了
+                            throw new Exception("xxx");
+                        }
+                        var newArr = _syntaxTree.CopyTokens(result.Start, result.End);
+                        string fullName = "";
+
+                        for (int i = 0; i < newArr.Length; i++)
+                        {
+                            fullName += newArr[i].Code;
+                        }
+                        //设置声明的命名空间
+                        fileToken.NamespaceNode = NamespaceNode.FromNamespace(_syntaxTree, fullName);
+                    }
+                    else
+                    {
+                        //namespace语法错误
+                        throw new Exception("xxx");
+                    }
+                });
         }
     }
 }
