@@ -68,7 +68,12 @@ namespace DScript.Compiler
                 var lineFeed = syntaxTree.GetNextTokenIgnoreLineFeed(out tempToken);
                 if (canEnd)
                 {
-                    if (tempToken.Type == TokenType.Dot) //碰到逗号, 继续匹配
+                    if (tempToken == null) //文件结束
+                    {
+                        //完成
+                        return true;
+                    }
+                    else if (tempToken.Type == TokenType.Dot) //碰到逗号, 继续匹配
                     {
                         canEnd = false;
                     }

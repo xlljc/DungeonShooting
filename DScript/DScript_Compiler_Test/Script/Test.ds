@@ -1,7 +1,7 @@
 ﻿import Behavior =example.framework.Behavior
 import myName=example
 
-namespace test.aaa;
+namespace test.aaa
 /*
 func say(message) {
     print("say: " + message)

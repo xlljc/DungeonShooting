@@ -42,7 +42,7 @@ namespace DScript.Compiler
             Token? current;
             while ((current = GetNextToken()) != null)
             {
-                if (current.Type == TokenType.Keyword)
+                if (current.Type == TokenType.Keyword) //关键字
                 {
                     _treeParse.NextKeyword(current, fileToken);
                 }

@@ -48,15 +48,7 @@ namespace DScript.Compiler
                         var newArr = _syntaxTree.CopyTokens(result.Start, result.End);
                         //添加导入名称
                         var importName = newArr[0];
-                        if (!fileToken.Import.ContainsKey(importName.Code))
-                        {
-                            fileToken.Import.Add(importName.Code, new ImportNode(importName.Code, importName, newArr));
-                        }
-                        else
-                        {
-                            //导入了相同的名称 {nextToken.Code}
-                            throw new Exception("xxx");
-                        }
+                        fileToken.AddImport(importName.Code, new ImportNode(importName.Code, importName, newArr));
                     }
                     else
                     {
@@ -79,11 +71,6 @@ namespace DScript.Compiler
                 {
                     if (result.Success)
                     {
-                        if (fileToken.NamespaceNode != null)
-                        {
-                            //该文件已经声明过命名空间了
-                            throw new Exception("xxx");
-                        }
                         var newArr = _syntaxTree.CopyTokens(result.Start, result.End);
                         string fullName = "";
 
@@ -92,7 +79,7 @@ namespace DScript.Compiler
                             fullName += newArr[i].Code;
                         }
                         //设置声明的命名空间
-                        fileToken.NamespaceNode = NamespaceNode.FromNamespace(_syntaxTree, fullName);
+                        fileToken.SetNamespace(NamespaceNode.FromNamespace(_syntaxTree, fullName));
                     }
                     else
                     {
