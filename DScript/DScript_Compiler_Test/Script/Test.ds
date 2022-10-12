@@ -2,6 +2,11 @@
 import myName=example
 
 namespace test.aaa
+
+class MyClass extends Behavior;
+
+var name = "MyClass";
+
 /*
 func say(message) {
     print("say: " + message)

@@ -20,5 +20,10 @@
             MarchType = type;
             IsCode = false;
         }
+
+        public MarchData(params MarchData[] marchDatas)
+        {
+            
+        }
     }
 }

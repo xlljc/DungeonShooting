@@ -6,6 +6,7 @@ namespace DScript.Compiler
     {
         private static readonly MarchData[] ImportMarchData = new[] { new MarchData(MarchType.Word), new MarchData("="), new MarchData(MarchType.FullWord) };
         private static readonly MarchData[] NamespaceMarchData = new[] { new MarchData(MarchType.FullWord) };
+        private static readonly MarchData[] ClassMarchData = new[] { new MarchData(MarchType.Word), new MarchData(new MarchData("extends"), new MarchData(MarchType.FullWord)) };
 
         private SyntaxTree _syntaxTree;
 
@@ -28,6 +29,12 @@ namespace DScript.Compiler
                     break;
                 case "namespace": //命名空间
                     NamespaceKeyword(token, fileToken);
+                    break;
+                case "class": //类
+                    ClassKeyword(token, fileToken);
+                    break;
+                case "func": //
+                    
                     break;
             }
         }
@@ -87,6 +94,11 @@ namespace DScript.Compiler
                         throw new Exception("xxx");
                     }
                 });
+        }
+
+        private void ClassKeyword(Token token, FileToken fileToken)
+        {
+            
         }
     }
 }
