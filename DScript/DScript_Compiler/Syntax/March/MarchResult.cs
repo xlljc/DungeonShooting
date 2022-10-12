@@ -8,5 +8,10 @@
         public bool Success;
         public int Start;
         public int End;
+
+        public bool IsEmpty()
+        {
+            return Start == End;
+        }
     }
 }

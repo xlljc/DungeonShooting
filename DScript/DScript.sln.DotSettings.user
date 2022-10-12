@@ -2,11 +2,31 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005Cwork2_005CCompilerCshap_005CRunCode_005CDScript_002ERuntime_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005Cwork2_005CCompilerCshap_005CRunCode_005Ctemp_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/ActualSeverity/@EntryValue">WARNING</s:String>
+	
+	
+	
+	
+	
+	
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5a1d6eb9_002D395e_002D4cbd_002D9b1d_002Dd60f529c73d4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="测试string性能" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test6&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8b8bbc68_002Df8ef_002D473e_002D81fd_002D40c54fbc8e57/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;And&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test2&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;Project Location="D:\GameProject\DungeonShooting\DScript\DScript_Compiler_Test" Presentation="&amp;lt;DScript_Compiler_Test&amp;gt;" /&gt;&#xD;
+    &lt;Namespace&gt;DScript.Compiler.Test&lt;/Namespace&gt;&#xD;
+  &lt;/And&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	
+	
 	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8da66352_002D8233_002D4221_002Dbf09_002D13848700c87b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
@@ -20,40 +40,11 @@
     &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test2&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a5e86bf5_002Dd4e6_002D43f9_002D9ed2_002D7d5e558163d0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Or&gt;&#xD;
-    &lt;And&gt;&#xD;
-      &lt;TestAncestor&gt;&#xD;
-        &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test2&lt;/TestId&gt;&#xD;
-      &lt;/TestAncestor&gt;&#xD;
-      &lt;Project Location="D:\GameProject\DungeonShooting\DScript\DScript_Compiler_Test" Presentation="&amp;lt;DScript_Compiler_Test&amp;gt;" /&gt;&#xD;
-      &lt;Namespace&gt;DScript.Compiler.Test&lt;/Namespace&gt;&#xD;
-    &lt;/And&gt;&#xD;
-    &lt;TestAncestor&gt;&#xD;
-      &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test1&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test11&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test5&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test4&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::4E12415E-FC95-4D98-AC0A-D78874568E75::net6.0::OptimizeTest.Test12&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test2&lt;/TestId&gt;&#xD;
-    &lt;/TestAncestor&gt;&#xD;
-  &lt;/Or&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=de1e0581_002D924e_002D4d63_002Db926_002Db2a02941e9b8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Or&gt;&#xD;
-    &lt;And&gt;&#xD;
-      &lt;TestAncestor&gt;&#xD;
-        &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test2&lt;/TestId&gt;&#xD;
-      &lt;/TestAncestor&gt;&#xD;
-      &lt;Project Location="D:\GameProject\DungeonShooting\DScript\DScript_Compiler_Test" Presentation="&amp;lt;DScript_Compiler_Test&amp;gt;" /&gt;&#xD;
-      &lt;Namespace&gt;DScript.Compiler.Test&lt;/Namespace&gt;&#xD;
-    &lt;/And&gt;&#xD;
-    &lt;TestAncestor&gt;&#xD;
-      &lt;TestId&gt;xUnit::54E14824-3E65-4689-AABD-2EEC3A0921B4::net6.0::DScript.Compiler.Test.CompilerTest1.Test1&lt;/TestId&gt;&#xD;
-    &lt;/TestAncestor&gt;&#xD;
-  &lt;/Or&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
 	
 	
 	

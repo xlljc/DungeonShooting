@@ -14,12 +14,18 @@
         /// 全名
         /// </summary>
         public readonly string FullName;
+
+        /// <summary>
+        /// 父类名称
+        /// </summary>
+        public readonly string ParentName;
         
-        public ClassNode(NamespaceNode namespaceNode, string name) : base(name)
+        public ClassNode(NamespaceNode namespaceNode, string name, string parent) : base(name)
         {
             NamespaceNode = namespaceNode;
             NamespaceNode.AddChild(this);
             FullName = NamespaceNode.FullName + "." + name;
+            ParentName = parent;
         }
     }
 }

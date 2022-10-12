@@ -13,7 +13,8 @@ namespace DScript.Compiler
             for (var i = 0; i < marchTypes.Length; i++)
             {
                 var item = marchTypes[i];
-                if (item.IsCode)
+                
+                if (item.DataType == MarchData.MarchDataType.Code) //匹配字符串
                 {
                     syntaxTree.GetNextTokenIgnoreLineFeed(out var tempToken);
                     if (tempToken.Code != item.Code) //匹配失败
@@ -24,7 +25,7 @@ namespace DScript.Compiler
                         return;
                     }
                 }
-                else
+                else if (item.DataType == MarchData.MarchDataType.MarchType) //根据枚举类型匹配
                 {
                     if (item.MarchType == MarchType.Word) //匹配单个单词
                     {
@@ -37,7 +38,7 @@ namespace DScript.Compiler
                             return;
                         }
                     }
-                    else if (item.MarchType == MarchType.FullWord)
+                    else if (item.MarchType == MarchType.FullWord) //匹配全路径
                     {
                         if (!MarchFullName(syntaxTree)) //匹配失败
                         {
@@ -47,15 +48,92 @@ namespace DScript.Compiler
                             return;
                         }
                     }
+                    else if (item.MarchType == MarchType.ParenthesesGroup) //匹配小括号
+                    {
+                        if (!MarchGroup(syntaxTree, TokenType.ParenthesesLeft, TokenType.ParenthesesRight)) //匹配失败
+                        {
+                            marchResult.Success = false;
+                            marchResult.End = syntaxTree.GetTokenIndex();
+                            callback(marchResult);
+                            return;
+                        }
+                    }
+                    else if (item.MarchType == MarchType.BracketGroup) //匹配中括号
+                    {
+                        if (!MarchGroup(syntaxTree, TokenType.BracketLeft, TokenType.BracketRight)) //匹配失败
+                        {
+                            marchResult.Success = false;
+                            marchResult.End = syntaxTree.GetTokenIndex();
+                            callback(marchResult);
+                            return;
+                        }
+                    }
+                    else if (item.MarchType == MarchType.BraceGroup) //匹配大括号
+                    {
+                        if (!MarchGroup(syntaxTree, TokenType.BraceLeft, TokenType.BraceRight)) //匹配失败
+                        {
+                            marchResult.Success = false;
+                            marchResult.End = syntaxTree.GetTokenIndex();
+                            callback(marchResult);
+                            return;
+                        }
+                    }
+                }
+                else //非必要数据
+                {
+                    var index = syntaxTree.GetTokenIndex();
+                    MarchResult tempResult = null;
+                    March(syntaxTree, item.MarchDatas, result =>
+                    {
+                        tempResult = result;
+                    });
+                    if (tempResult != null && !tempResult.Success) //匹配失败
+                    {
+                        if (IsEmptyOrLineFeed(syntaxTree, tempResult)) //回退索引
+                        {
+                            syntaxTree.RollbackTokenIndex(index);
+                        }
+                        else //匹配失败
+                        {
+                            marchResult.Success = false;
+                            marchResult.End = tempResult.End;
+                            callback(marchResult);
+                            return;
+                        }
+                    }
                 }
             }
 
             marchResult.Success = true;
-            marchResult.End = syntaxTree.GetTokenIndex();
+            marchResult.End = syntaxTree.GetTokenIndex() + 1;
             callback(marchResult);
         }
 
-        //返回是否匹配成功
+        private static bool IsEmptyOrLineFeed(SyntaxTree syntaxTree, MarchResult result)
+        {
+            if (result.Start == result.End)
+            {
+                return true;
+            }
+
+            for (int i = result.Start; i < result.End; i++)
+            {
+                var temp = syntaxTree.GetToken(i);
+                if (temp == null)
+                {
+                    return true;
+                }
+
+                if (temp.Type != TokenType.LineFeed)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        //匹配全路径名称, 返回是否匹配成功
         private static bool MarchFullName(SyntaxTree syntaxTree)
         {
             //是否能结束匹配
@@ -89,6 +167,12 @@ namespace DScript.Compiler
                         //完成
                         return true;
                     }
+                    else if (tempToken.Type != TokenType.Keyword && tempToken.Type != TokenType.Word)
+                    {
+                        //回滚索引
+                        syntaxTree.RollbackTokenIndex();
+                        return true;
+                    }
                     else //语法错误
                     {
                         return false;
@@ -110,5 +194,32 @@ namespace DScript.Compiler
             return false;
         }
         
+        //匹配组, 返回是否匹配成功
+        private static bool MarchGroup(SyntaxTree syntaxTree, TokenType left, TokenType right)
+        {
+            syntaxTree.GetNextTokenIgnoreLineFeed(out var tempToken);
+            if (tempToken.Type == left)
+            {
+                int count = 1;
+                while (syntaxTree.HasNextToken())
+                {
+                    syntaxTree.GetNextTokenIgnoreLineFeed(out tempToken);
+                    if (tempToken.Type == left)
+                    {
+                        count++;
+                    }
+                    else if (tempToken.Type == right)
+                    {
+                        count--;
+                        if (count == 0)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 }

@@ -37,5 +37,29 @@
         /// 点
         /// </summary>
         Dot,
+        /// <summary>
+        /// 大括号 (左)
+        /// </summary>
+        BraceLeft,
+        /// <summary>
+        /// 中括号 (左)
+        /// </summary>
+        BracketLeft,
+        /// <summary>
+        /// 小括号 (左)
+        /// </summary>
+        ParenthesesLeft,
+        /// <summary>
+        /// 大括号 (右)
+        /// </summary>
+        BraceRight,
+        /// <summary>
+        /// 中括号 (右)
+        /// </summary>
+        BracketRight,
+        /// <summary>
+        /// 小括号 (右)
+        /// </summary>
+        ParenthesesRight,
     }
 }

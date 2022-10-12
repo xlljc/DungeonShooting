@@ -26,7 +26,7 @@ namespace DScript.Compiler
             //长度
             var length = code.Length;
             var i = 0;
-
+            
             Action moveNext = () =>
             {
                 if (i < length)
@@ -43,9 +43,9 @@ namespace DScript.Compiler
                     }
                 }
             };
-            
+
             //分析词法
-            for (;i < length; moveNext())
+            for (; i < length; moveNext())
             {
                 char c = code[i];
 
@@ -79,6 +79,30 @@ namespace DScript.Compiler
                     {
                         list.Add(new Token(".", i, 1, row, column, TokenType.Dot));
                     }
+                    else if (c == '{') //大括号 (左)
+                    {
+                        list.Add(new Token("{", i, 1, row, column, TokenType.BraceLeft));
+                    }
+                    else if (c == '}') //大括号 (右)
+                    {
+                        list.Add(new Token("}", i, 1, row, column, TokenType.BraceRight));
+                    }
+                    else if (c == '[') //中括号 (左)
+                    {
+                        list.Add(new Token("]", i, 1, row, column, TokenType.BracketLeft));
+                    }
+                    else if (c == ']') //中括号 (右)
+                    {
+                        list.Add(new Token("]", i, 1, row, column, TokenType.BracketRight));
+                    }
+                    else if (c == '(') //小括号 (左)
+                    {
+                        list.Add(new Token("(", i, 1, row, column, TokenType.ParenthesesLeft));
+                    }
+                    else if (c == ')') //小括号 (右)
+                    {
+                        list.Add(new Token(")", i, 1, row, column, TokenType.ParenthesesRight));
+                    }
                     else if (c == '"') //字符串
                     {
                         var sb = new StringBuilder();
@@ -88,7 +112,7 @@ namespace DScript.Compiler
 
                         var startRow = row;
                         var startColumn = column;
-                        
+
                         //解析字符串
                         for (; i < length - 1; moveNext())
                         {
@@ -178,7 +202,8 @@ namespace DScript.Compiler
                                 var cNext2 = code[i + 2];
                                 if (cNext == '>' && cNext2 == '=') //匹配 >>=
                                 {
-                                    list.Add(new Token(c.ToString() + cNext + cNext2, i, 3, row, column, TokenType.Symbol));
+                                    list.Add(new Token(c.ToString() + cNext + cNext2, i, 3, row, column,
+                                        TokenType.Symbol));
                                     moveNext();
                                     moveNext();
                                 }
@@ -208,7 +233,8 @@ namespace DScript.Compiler
                                 var cNext2 = code[i + 2];
                                 if (cNext == '<' && cNext2 == '=') //匹配 <<=
                                 {
-                                    list.Add(new Token(c.ToString() + cNext + cNext2, i, 3, row, column, TokenType.Symbol));
+                                    list.Add(new Token(c.ToString() + cNext + cNext2, i, 3, row, column,
+                                        TokenType.Symbol));
                                     moveNext();
                                     moveNext();
                                 }
@@ -297,7 +323,7 @@ namespace DScript.Compiler
                 {
                     var startRow = row;
                     var startColumn = column;
-                    
+
                     var index = i;
                     var sb = new StringBuilder();
                     sb.Append(c);

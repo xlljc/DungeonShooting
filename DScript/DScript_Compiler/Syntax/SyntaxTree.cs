@@ -34,7 +34,8 @@ namespace DScript.Compiler
                 throw new Exception("xxx");
             }
 
-            FileToken fileToken = new FileToken(path, tokens);
+            FileToken fileToken = new FileToken(path, tokens, this);
+            _currFile = path;
             _fileTokens.Add(path, fileToken);
             _currFileToken = fileToken;
 
@@ -68,6 +69,25 @@ namespace DScript.Compiler
             return null;
         }
 
+        /// <summary>
+        /// 获取指定索引的token
+        /// </summary>
+        internal Token? GetToken(int index)
+        {
+            if (_currFile == null || !_fileTokens.ContainsKey(_currFile))
+            {
+                return null;
+            }
+
+            var tokens = _fileTokens[_currFile].Tokens;
+            if (index < tokens.Length)
+            {
+                return tokens[index];
+            }
+
+            return null;
+        }
+        
         /// <summary>
         /// 获取下一个token, 会移动指针
         /// </summary>
@@ -210,6 +230,14 @@ namespace DScript.Compiler
             return _currIndex;
         }
 
+        /// <summary>
+        /// 回退到指定的解析索引
+        /// </summary>
+        internal void RollbackTokenIndex(int index)
+        {
+            _currIndex = index;
+        }
+        
         /// <summary>
         /// 获取解析索引
         /// </summary>

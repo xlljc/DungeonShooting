@@ -3,16 +3,12 @@ import myName=example
 
 namespace test.aaa
 
-class MyClass extends Behavior;
+class MyClass extends  example.framework.Behavior
 
-var name = "MyClass";
-
-/*
 func say(message) {
     print("say: " + message)
 }
 
-func vec2Zero() {
+func vec2Zero(): void {
     return Vector2(0, 0)
 }
-*/
