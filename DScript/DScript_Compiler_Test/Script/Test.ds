@@ -3,10 +3,14 @@ import myName=example
 
 namespace test.aaa
 
-class MyClass extends  example.framework.Behavior
+class MyClass extends example.framework.Behavior
 
 func say(message) {
-    print("say: " + message)
+    if (message is number) {
+        print("say(number): " + message)
+    } else {
+        print("say: " + message)
+    }
 }
 
 func vec2Zero(): void {

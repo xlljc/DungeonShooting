@@ -13,9 +13,9 @@ namespace DScript.Compiler
         /// <summary>
         /// 导入前的全称
         /// </summary>
-        public Token[] FullName;
+        public string FullName;
 
-        public ImportNode(string name, Token importName, Token[] fullName) : base(name)
+        public ImportNode(string name, Token importName, string fullName) : base(name)
         {
             ImportName = importName;
             FullName = fullName;

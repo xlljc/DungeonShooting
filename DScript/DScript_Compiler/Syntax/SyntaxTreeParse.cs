@@ -61,9 +61,14 @@ namespace DScript.Compiler
                     if (result.Success)
                     {
                         var newArr = _syntaxTree.CopyTokens(result.Start, result.End);
+                        string fullName = "";
+                        for (var i = 2; i < newArr.Length; i++)
+                        {
+                            fullName += newArr[i].Code;
+                        }
                         //添加导入名称
                         var importName = newArr[0];
-                        fileToken.AddImport(importName.Code, new ImportNode(importName.Code, importName, newArr));
+                        fileToken.AddImport(importName.Code, new ImportNode(importName.Code, importName, fullName));
                     }
                     else
                     {
