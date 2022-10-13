@@ -5,8 +5,11 @@ namespace DScript.Compiler
     /// </summary>
     public class FunctionNode : NodeBase
     {
-        public FunctionNode(string name) : base(name)
+        public Token[] Body;
+        
+        public FunctionNode(string name, Token[] body) : base(name)
         {
+            Body = body;
         }
     }
 }

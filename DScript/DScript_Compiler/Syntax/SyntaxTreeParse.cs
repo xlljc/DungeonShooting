@@ -13,7 +13,7 @@ namespace DScript.Compiler
             new MarchData(new MarchData("extends"), new MarchData(MarchType.FullWord)) };
         //匹配函数声明
         private static readonly MarchData[] FunctionMarchData = new[] { new MarchData(MarchType.Word), new MarchData(MarchType.ParenthesesGroup), 
-            new MarchData(new MarchData(":"), new MarchData(MarchType.FullWord)),
+            new MarchData(new MarchData(":"), new MarchData(MarchType.FullKeyword)),
             new MarchData(MarchType.BraceGroup) };
 
         private SyntaxTree _syntaxTree;
@@ -68,7 +68,7 @@ namespace DScript.Compiler
                         }
                         //添加导入名称
                         var importName = newArr[0];
-                        fileToken.AddImport(importName.Code, new ImportNode(importName.Code, importName, fullName));
+                        fileToken.AddImport(new ImportNode(importName.Code, importName.Code, fullName));
                     }
                     else
                     {
@@ -132,14 +132,13 @@ namespace DScript.Compiler
                                 name += newArr[i].Code;
                             }
                             //有继承的父类
-                            classNode = new ClassNode(fileToken.GetOrCreateNamespace(), newArr[0].Code, name);
+                            classNode = new ClassNode(newArr[0].Code, name);
                         }
                         else
                         {
                             //没有显示继承的父类
-                            classNode = new ClassNode(fileToken.GetOrCreateNamespace(), newArr[0].Code, "Object");
+                            classNode = new ClassNode(newArr[0].Code, "Object");
                         }
-                        
                         fileToken.SetClass(classNode);
                     }
                     else
@@ -161,10 +160,11 @@ namespace DScript.Compiler
             MarchUtils.March(_syntaxTree, FunctionMarchData,
                 (result) =>
                 {
-                    var newArr = _syntaxTree.CopyTokens(result.Start, result.End);
                     if (result.Success)
                     {
-                        
+                        var newArr = _syntaxTree.CopyTokens(result.Start, result.End);
+                        var functionNode = new FunctionNode(newArr[0].Code, newArr);
+                        fileToken.AddFunction(functionNode);
                     }
                     else
                     {

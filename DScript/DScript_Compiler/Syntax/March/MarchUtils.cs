@@ -4,7 +4,7 @@ namespace DScript.Compiler
 {
     internal static class MarchUtils
     {
-        
+
         public static void March(SyntaxTree syntaxTree, MarchData[] marchTypes, Action<MarchResult> callback)
         {
             //记录起始位置
@@ -13,7 +13,7 @@ namespace DScript.Compiler
             for (var i = 0; i < marchTypes.Length; i++)
             {
                 var item = marchTypes[i];
-                
+
                 if (item.DataType == MarchData.MarchDataType.Code) //匹配字符串
                 {
                     syntaxTree.GetNextTokenIgnoreLineFeed(out var tempToken);
@@ -38,9 +38,9 @@ namespace DScript.Compiler
                             return;
                         }
                     }
-                    else if (item.MarchType == MarchType.FullWord) //匹配全路径
+                    else if (item.MarchType == MarchType.FullWord || item.MarchType == MarchType.FullKeyword) //匹配全路径
                     {
-                        if (!MarchFullName(syntaxTree)) //匹配失败
+                        if (!MarchFullName(syntaxTree, item.MarchType == MarchType.FullKeyword)) //匹配失败
                         {
                             marchResult.Success = false;
                             marchResult.End = syntaxTree.GetTokenIndex();
@@ -83,10 +83,7 @@ namespace DScript.Compiler
                 {
                     var index = syntaxTree.GetTokenIndex();
                     MarchResult tempResult = null;
-                    March(syntaxTree, item.MarchDatas, result =>
-                    {
-                        tempResult = result;
-                    });
+                    March(syntaxTree, item.MarchDatas, result => { tempResult = result; });
                     if (tempResult != null && !tempResult.Success) //匹配失败
                     {
                         if (IsEmptyOrLineFeed(syntaxTree, tempResult)) //回退索引
@@ -134,7 +131,7 @@ namespace DScript.Compiler
         }
 
         //匹配全路径名称, 返回是否匹配成功
-        private static bool MarchFullName(SyntaxTree syntaxTree)
+        private static bool MarchFullName(SyntaxTree syntaxTree, bool isFullKeyword)
         {
             //是否能结束匹配
             bool canEnd = false;
@@ -180,7 +177,7 @@ namespace DScript.Compiler
                 }
                 else
                 {
-                    if (tempToken.Type == TokenType.Word)
+                    if (Check(tempToken, isFullKeyword))
                     {
                         canEnd = true;
                     }
@@ -191,9 +188,9 @@ namespace DScript.Compiler
                 }
             }
 
-            return false;
+            return canEnd;
         }
-        
+
         //匹配组, 返回是否匹配成功
         private static bool MarchGroup(SyntaxTree syntaxTree, TokenType left, TokenType right)
         {
@@ -220,6 +217,16 @@ namespace DScript.Compiler
             }
 
             return false;
+        }
+
+        private static bool Check(Token token, bool isFullKeyword)
+        {
+            if (isFullKeyword)
+            {
+                return token.Type == TokenType.Keyword || token.Type == TokenType.Word;
+            }
+
+            return token.Type == TokenType.Word;
         }
     }
 }

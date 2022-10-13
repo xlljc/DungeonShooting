@@ -8,24 +8,38 @@
         /// <summary>
         /// 所属命名空间
         /// </summary>
-        public readonly NamespaceNode NamespaceNode;
+        public NamespaceNode NamespaceNode;
 
         /// <summary>
         /// 全名
         /// </summary>
-        public readonly string FullName;
+        public string FullName;
 
         /// <summary>
         /// 父类名称
         /// </summary>
         public readonly string ParentName;
         
-        public ClassNode(NamespaceNode namespaceNode, string name, string parent) : base(name)
+        public ClassNode(string name, string parent) : base(name)
+        {
+            ParentName = parent;
+            FullName = name;
+        }
+
+        /// <summary>
+        /// 设置该类的命名空间
+        /// </summary>
+        /// <param name="namespaceNode"></param>
+        public void SetNamespace(NamespaceNode namespaceNode)
         {
             NamespaceNode = namespaceNode;
             NamespaceNode.AddChild(this);
-            FullName = NamespaceNode.FullName + "." + name;
-            ParentName = parent;
+            FullName = NamespaceNode.FullName + "." + Name;
+        }
+
+        public void AddFunction(FunctionNode functionNode)
+        {
+            
         }
     }
 }

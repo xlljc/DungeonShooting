@@ -40,7 +40,7 @@ namespace DScript.Compiler
         /// <summary>
         /// 添加该文件中的导入语句
         /// </summary>
-        public void AddImport(string importName, ImportNode importNode)
+        public void AddImport(ImportNode importNode)
         {
             if (_hasNamespace) //已经存在命名空间
             {
@@ -48,9 +48,9 @@ namespace DScript.Compiler
                 throw new Exception("xxx");
             }
             
-            if (!Import.ContainsKey(importName))
+            if (!Import.ContainsKey(importNode.ImportName))
             {
-                Import.Add(importName, importNode);
+                Import.Add(importNode.ImportName, importNode);
                 _hasImport = true;
             }
             else
@@ -110,10 +110,25 @@ namespace DScript.Compiler
                 throw new Exception("xxx");
             }
 
-            GetOrCreateNamespace();
-            
+            var namespaceNode = GetOrCreateNamespace();
+            classNode.SetNamespace(namespaceNode);
+
             ClassNode = classNode;
             _hasClass = true;
+        }
+
+        public void AddFunction(FunctionNode functionNode)
+        {
+            if (_hasClass) //放入类中
+            {
+                ClassNode.AddFunction(functionNode);
+            }
+            else //放入命名空间中
+            {
+                _hasFunction = true;
+                var namespaceNode = GetOrCreateNamespace();
+                namespaceNode.AddChild(functionNode);
+            }
         }
     }
 }

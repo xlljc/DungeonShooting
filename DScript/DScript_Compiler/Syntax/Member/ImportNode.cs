@@ -8,14 +8,14 @@ namespace DScript.Compiler
         /// <summary>
         /// 导入时简化的名称
         /// </summary>
-        public Token ImportName;
+        public string ImportName;
         
         /// <summary>
         /// 导入前的全称
         /// </summary>
         public string FullName;
 
-        public ImportNode(string name, Token importName, string fullName) : base(name)
+        public ImportNode(string name, string importName, string fullName) : base(name)
         {
             ImportName = importName;
             FullName = fullName;

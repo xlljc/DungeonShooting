@@ -11,6 +11,10 @@
         /// </summary>
         FullWord,
         /// <summary>
+        /// 匹配全称, 名称路径中可以包含关键字, 类似于: a, a.b.c, a.b.class
+        /// </summary>
+        FullKeyword,
+        /// <summary>
         /// 匹配小括号组, 相当于 ()
         /// </summary>
         ParenthesesGroup,

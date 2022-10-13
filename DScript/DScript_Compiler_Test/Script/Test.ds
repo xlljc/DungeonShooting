@@ -2,7 +2,6 @@
 import myName=example
 
 namespace test.aaa
-
 class MyClass extends example.framework.Behavior
 
 func say(message) {
@@ -13,6 +12,6 @@ func say(message) {
     }
 }
 
-func vec2Zero(): void {
+func vec2Zero(): class {
     return Vector2(0, 0)
 }
