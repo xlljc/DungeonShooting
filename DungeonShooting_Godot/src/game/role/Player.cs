@@ -49,6 +49,10 @@ public class Player : Role
 
     [Export] public PackedScene GunPrefab;
 
+    public Player(): base("res://prefab/role/Player.tscn")
+    {
+    }
+    
     public override void _EnterTree()
     {
         base._EnterTree();
@@ -58,6 +62,14 @@ public class Player : Role
     public override void _Ready()
     {
         base._Ready();
+        
+        //让相机跟随玩家
+        var remoteTransform = new RemoteTransform2D();
+        AddChild(remoteTransform);
+        MainCamera.Main.GlobalPosition = GlobalPosition;
+        MainCamera.Main.ResetSmoothing();
+        remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
+        
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;
         RefreshGunTexture();

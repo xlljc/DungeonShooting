@@ -41,6 +41,11 @@ public abstract class Role : ActivityObject
     public Position2D BackMountPoint { get; private set; }
 
     /// <summary>
+    /// 互动碰撞区域
+    /// </summary>
+    public Area2D InteractiveArea { get; private set; }
+    
+    /// <summary>
     /// 脸的朝向
     /// </summary>
     public FaceDirection Face { get => _face; set => SetFace(value); }
@@ -117,6 +122,10 @@ public abstract class Role : ActivityObject
     {
     }
     
+    public Role(string scenePath) : base(scenePath)
+    {
+    }
+    
     public override void _Ready()
     {
         base._Ready();
@@ -133,6 +142,11 @@ public abstract class Role : ActivityObject
 
         Holster = new Holster(this);
         Face = FaceDirection.Right;
+
+        //连接互动物体信号
+        InteractiveArea = GetNode<Area2D>("InteractiveArea");
+        InteractiveArea.Connect("area_entered", this, nameof(_OnPropsEnter));
+        InteractiveArea.Connect("area_exited", this, nameof(_OnPropsExit));
     }
 
     public override void _Process(float delta)
