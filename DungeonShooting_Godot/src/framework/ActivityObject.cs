@@ -31,6 +31,7 @@ public abstract class ActivityObject : KinematicBody2D
     public bool IsDestroyed { get; private set; }
 
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
+    private bool initShadow;
 
     public ActivityObject(string scenePath)
     {
@@ -56,16 +57,34 @@ public abstract class ActivityObject : KinematicBody2D
             switch (body.Name)
             {
                 case "AnimatedSprite":
-                    AnimatedSprite = body as AnimatedSprite;
+                    AnimatedSprite = (AnimatedSprite)body;
                     break;
                 case "ShadowSprite":
-                    ShadowSprite = body as Sprite;
+                    ShadowSprite = (Sprite)body;
+                    ShadowSprite.Visible = false;
+                    ShadowSprite.ZIndex = -5;
                     break;
                 case "Collision":
-                    Collision = body as CollisionShape2D;
+                    Collision = (CollisionShape2D)body;
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// 显示阴影
+    /// </summary>
+    /// <param name="texture">用于绘制的纹理</param>
+    public void ShowShadowSprite(Texture texture)
+    {
+        if (!initShadow)
+        {
+            initShadow = true;
+            ShadowSprite.Material = ResourceManager.ShadowMaterial;
+        }
+
+        ShadowSprite.Texture = texture;
+        ShadowSprite.Visible = true;
     }
 
     /// <summary>
@@ -85,6 +104,7 @@ public abstract class ActivityObject : KinematicBody2D
         if (!ContainsComponent(component))
         {
             _components.Add(new KeyValuePair<Type, Component>(component.GetType(), component));
+            component._SetActivityObject(this);
             component.OnMount();
         }
     }
@@ -94,6 +114,7 @@ public abstract class ActivityObject : KinematicBody2D
         if (ContainsComponent(component))
         {
             component.OnUnMount();
+            component._SetActivityObject(null);
         }
     }
 
@@ -127,7 +148,11 @@ public abstract class ActivityObject : KinematicBody2D
             var temp = arr[i].Value;
             if (temp != null && temp.ActivityObject == this && temp.Enable)
             {
-                temp._TriggerProcess(delta);
+                if (!temp.IsStart)
+                {
+                    temp.Start();
+                }
+                temp.Update(delta);
             }
         }
     }
@@ -141,7 +166,11 @@ public abstract class ActivityObject : KinematicBody2D
             var temp = arr[i].Value;
             if (temp != null && temp.ActivityObject == this && temp.Enable)
             {
-                temp._TriggerPhysicsProcess(delta);
+                if (!temp.IsStart)
+                {
+                    temp.Start();
+                }
+                temp.PhysicsUpdate(delta);
             }
         }
     }

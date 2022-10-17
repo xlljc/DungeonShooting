@@ -47,9 +47,11 @@ public static class NodeExtend
     /// 将一个节点扔到地上, 并设置显示的阴影, 函数返回根据该节点创建的 ThrowNode 节点
     /// </summary>
     /// <param name="shadowTarget">显示的阴影sprite</param>
-    public static ThrowNode PutDown(this Node2D node, Sprite shadowTarget)
+    public static ThrowNode PutDown(this ActivityObject node, Sprite shadowTarget)
     {
-        return StartThrow(node, Vector2.Zero, node.Position, 0, 0, 0, 0, 0, shadowTarget);
+        //return StartThrow(node, Vector2.Zero, node.Position, 0, 0, 0, 0, 0, shadowTarget);
+        RoomManager.Current.ObjectRoot.AddChild(node);
+        return null;
     }
 
     /// <summary>
@@ -70,7 +72,7 @@ public static class NodeExtend
     /// 触发扔掉武器操作
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
-    public static ThrowWeapon StartThrowWeapon(this Weapon weapon, Role master)
+    public static ThrowComponent StartThrowWeapon(this Weapon weapon, Role master)
     {
         if (master.Face == FaceDirection.Left)
         {
@@ -82,9 +84,10 @@ public static class NodeExtend
         var direction = master.GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
         var xf = 30;
         var yf = MathUtils.RandRangeInt(60, 120);
-        var rotate = MathUtils.RandRangeInt(-180, 180);
+        var rotate = MathUtils.RandRangeInt(-360, -360);
         weapon.Position = Vector2.Zero;
-        return weapon.StartThrow<ThrowWeapon>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, weapon.WeaponSprite);
+        return weapon.StartThrow<ThrowComponent>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, weapon.WeaponSprite);
+        //return weapon.StartThrow<ThrowWeapon>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, weapon.WeaponSprite);
     }
 
 
@@ -105,7 +108,7 @@ public static class NodeExtend
         return null;
     }
     
-    public static T StartThrow<T>(this ActivityObject node, Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate) where T : ThrowComponent
+    public static T StartThrow<T>(this ActivityObject node, Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Sprite shadowSprite) where T : ThrowComponent
     {
         T throwNode = node.GetComponent<T>();
         if (throwNode == null)
@@ -117,7 +120,7 @@ public static class NodeExtend
         {
             throwNode.StopThrow();
         }
-        throwNode.StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate);
+        throwNode.StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate, shadowSprite);
         return throwNode;
     }
 }
