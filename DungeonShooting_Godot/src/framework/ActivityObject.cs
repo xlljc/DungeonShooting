@@ -24,7 +24,6 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     public CollisionShape2D Collision { get; }
 
-
     /// <summary>
     /// 是否调用过 Destroy() 函数
     /// </summary>
@@ -32,6 +31,7 @@ public abstract class ActivityObject : KinematicBody2D
 
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     private bool initShadow;
+    private string _prevAnimation;
 
     public ActivityObject(string scenePath)
     {
@@ -74,8 +74,7 @@ public abstract class ActivityObject : KinematicBody2D
     /// <summary>
     /// 显示阴影
     /// </summary>
-    /// <param name="texture">用于绘制的纹理</param>
-    public void ShowShadowSprite(Texture texture)
+    public void ShowShadowSprite()
     {
         if (!initShadow)
         {
@@ -83,8 +82,23 @@ public abstract class ActivityObject : KinematicBody2D
             ShadowSprite.Material = ResourceManager.ShadowMaterial;
         }
 
-        ShadowSprite.Texture = texture;
+        var anim = AnimatedSprite.Animation;
+        if (_prevAnimation != anim)
+        {
+            //切换阴影动画
+            ShadowSprite.Texture = AnimatedSprite.Frames.GetFrame(anim, AnimatedSprite.Frame);
+        }
+
+        _prevAnimation = anim;
         ShadowSprite.Visible = true;
+    }
+
+    /// <summary>
+    /// 隐藏阴影
+    /// </summary>
+    public void HideShadowSprite()
+    {
+        ShadowSprite.Visible = false;
     }
 
     /// <summary>
@@ -152,8 +166,21 @@ public abstract class ActivityObject : KinematicBody2D
                 {
                     temp.Start();
                 }
+
                 temp.Update(delta);
             }
+        }
+
+        if (ShadowSprite.Visible)
+        {
+            var anim = AnimatedSprite.Animation;
+            if (_prevAnimation != anim)
+            {
+                //切换阴影动画
+                ShadowSprite.Texture = AnimatedSprite.Frames.GetFrame(anim, AnimatedSprite.Frame);
+            }
+
+            _prevAnimation = anim;
         }
     }
 
@@ -170,6 +197,7 @@ public abstract class ActivityObject : KinematicBody2D
                 {
                     temp.Start();
                 }
+
                 temp.PhysicsUpdate(delta);
             }
         }

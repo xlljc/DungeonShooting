@@ -86,7 +86,7 @@ public static class NodeExtend
         var yf = MathUtils.RandRangeInt(60, 120);
         var rotate = MathUtils.RandRangeInt(-360, -360);
         weapon.Position = Vector2.Zero;
-        return weapon.StartThrow<ThrowComponent>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, weapon.WeaponSprite);
+        return weapon.StartThrow<ThrowComponent>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate);
         //return weapon.StartThrow<ThrowWeapon>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, weapon.WeaponSprite);
     }
 
@@ -108,7 +108,7 @@ public static class NodeExtend
         return null;
     }
     
-    public static T StartThrow<T>(this ActivityObject node, Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate, Sprite shadowSprite) where T : ThrowComponent
+    public static T StartThrow<T>(this ActivityObject node, Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate) where T : ThrowComponent
     {
         T throwNode = node.GetComponent<T>();
         if (throwNode == null)
@@ -120,7 +120,7 @@ public static class NodeExtend
         {
             throwNode.StopThrow();
         }
-        throwNode.StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate, shadowSprite);
+        throwNode.StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate);
         return throwNode;
     }
 }

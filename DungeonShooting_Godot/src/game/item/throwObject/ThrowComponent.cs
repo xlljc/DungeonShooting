@@ -105,7 +105,7 @@ public class ThrowComponent : Component
     }
 
     public virtual void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed,
-        float ySpeed, float rotate, Sprite shadowSprite)
+        float ySpeed, float rotate)
     {
         _collisionShape2D.Disabled = false;
 
@@ -145,8 +145,8 @@ public class ThrowComponent : Component
             RoomManager.Current.SortRoot.AddChild(_kinematicBody2D);
         }
         //显示阴影
-        ActivityObject.ShowShadowSprite(shadowSprite.Texture);
-        ShadowSprite.Scale = shadowSprite.Scale;
+        ActivityObject.ShowShadowSprite();
+        ShadowSprite.Scale = AnimatedSprite.Scale;
     }
 
     /// <summary>
