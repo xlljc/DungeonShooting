@@ -46,8 +46,7 @@ public static class NodeExtend
     /// <summary>
     /// 将一个节点扔到地上, 并设置显示的阴影, 函数返回根据该节点创建的 ThrowNode 节点
     /// </summary>
-    /// <param name="shadowTarget">显示的阴影sprite</param>
-    public static ThrowNode PutDown(this ActivityObject node, Sprite shadowTarget)
+    public static ThrowNode PutDown(this ActivityObject node)
     {
         //return StartThrow(node, Vector2.Zero, node.Position, 0, 0, 0, 0, 0, shadowTarget);
         RoomManager.Current.ObjectRoot.AddChild(node);
@@ -84,10 +83,9 @@ public static class NodeExtend
         var direction = master.GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
         var xf = 30;
         var yf = MathUtils.RandRangeInt(60, 120);
-        var rotate = MathUtils.RandRangeInt(-360, -360);
+        var rotate = MathUtils.RandRangeInt(-180, 180);
         weapon.Position = Vector2.Zero;
-        return weapon.StartThrow<ThrowComponent>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate);
-        //return weapon.StartThrow<ThrowWeapon>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate, weapon.WeaponSprite);
+        return weapon.StartThrow<ThrowWeapon>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate);
     }
 
 

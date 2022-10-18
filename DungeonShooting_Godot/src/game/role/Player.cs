@@ -189,7 +189,7 @@ public class Player : Role
         var gun = Holster.ActiveWeapon;
         if (gun != null)
         {
-            RoomUI.Current.SetGunTexture(gun.WeaponSprite.Texture);
+            RoomUI.Current.SetGunTexture(gun.GetDefaultTexture());
         }
         else
         {

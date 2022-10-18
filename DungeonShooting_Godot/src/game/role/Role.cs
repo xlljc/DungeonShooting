@@ -9,7 +9,7 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 重写的纹理
     /// </summary>
-    public Texture Texture { get; protected set; }
+    public Texture OverrideTexture { get; protected set; }
 
     /// <summary>
     /// 移动速度
@@ -132,12 +132,12 @@ public abstract class Role : ActivityObject
         StartScele = Scale;
         MountPoint = GetNode<Position2D>("MountPoint");
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
-        if (Texture != null)
+        if (OverrideTexture != null)
         {
             // 更改纹理
-            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, Texture);
-            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, Texture);
-            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, Texture);
+            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, OverrideTexture);
+            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, OverrideTexture);
+            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, OverrideTexture);
         }
 
         Holster = new Holster(this);
@@ -312,7 +312,7 @@ public abstract class Role : ActivityObject
             for (int i = 0; i < count; i++)
             {
                 AtlasTexture temp = spriteFrames.GetFrame(anim, i) as AtlasTexture;
-                temp.Atlas = Texture;
+                temp.Atlas = OverrideTexture;
             }
         }
     }

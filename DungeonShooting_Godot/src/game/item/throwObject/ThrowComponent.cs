@@ -49,43 +49,47 @@ public class ThrowComponent : Component
     /// </summary>
     public float RotateSpeed { get; protected set; }
 
-    //绑定的kinematicBody2D节点
-    private KinematicBody2D _kinematicBody2D;
-
-    //碰撞器形状
-    private CollisionShape2D _collisionShape2D;
-
-    private RectangleShape2D _rectangleShape2D;
+    /// <summary>
+    /// 绑定的kinematicBody2D节点
+    /// </summary>
+    protected KinematicBody2D KinematicBody;
+    /// <summary>
+    /// 碰撞器节点
+    /// </summary>
+    protected CollisionShape2D CollisionShape;
+    /// <summary>
+    /// 碰撞器形状
+    /// </summary>
+    protected RectangleShape2D RectangleShape;
 
     public ThrowComponent()
     {
-        _kinematicBody2D = new KinematicBody2D();
-        _kinematicBody2D.Name = nameof(ThrowComponent);
+        KinematicBody = new KinematicBody2D();
+        KinematicBody.Name = nameof(ThrowComponent);
         //只与墙壁碰撞
-        _kinematicBody2D.CollisionMask = 1;
-        _kinematicBody2D.CollisionLayer = 0;
+        KinematicBody.CollisionMask = 1;
+        KinematicBody.CollisionLayer = 0;
         //创建碰撞器
-        _collisionShape2D = new CollisionShape2D();
-        _collisionShape2D.Name = "Collision";
-        _rectangleShape2D = new RectangleShape2D();
-        _collisionShape2D.Shape = _rectangleShape2D;
-        _kinematicBody2D.AddChild(_collisionShape2D);
-        
-        _kinematicBody2D.ZIndex = 2;
+        CollisionShape = new CollisionShape2D();
+        CollisionShape.Name = "Collision";
+        RectangleShape = new RectangleShape2D();
+        CollisionShape.Shape = RectangleShape;
+        KinematicBody.AddChild(CollisionShape);
     }
 
     public override void Update(float delta)
     {
         if (!IsOver)
         {
-            _kinematicBody2D.MoveAndSlide(new Vector2(XSpeed, 0).Rotated(Direction * Mathf.Pi / 180));
+            KinematicBody.MoveAndSlide(new Vector2(XSpeed, 0).Rotated(Direction * Mathf.Pi / 180));
             Position = new Vector2(0, Position.y - YSpeed * delta);
             var rotate = ActivityObject.GlobalRotationDegrees + RotateSpeed * delta;
             ActivityObject.GlobalRotationDegrees = rotate;
 
+            //计算阴影位置
             ShadowSprite.GlobalRotationDegrees = rotate;
             // ShadowSprite.GlobalRotationDegrees = rotate + (inversionX ? 180 : 0);
-            ShadowSprite.GlobalPosition = AnimatedSprite.GlobalPosition + new Vector2(0, 1 - Position.y);
+            ShadowSprite.GlobalPosition = AnimatedSprite.GlobalPosition + new Vector2(0, 2 - Position.y);
             var ysp = YSpeed;
             YSpeed -= GameConfig.G * delta;
             //达到最高点
@@ -107,11 +111,11 @@ public class ThrowComponent : Component
     public virtual void StartThrow(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed,
         float ySpeed, float rotate)
     {
-        _collisionShape2D.Disabled = false;
+        CollisionShape.Disabled = false;
 
         IsOver = false;
         Size = size;
-        _kinematicBody2D.GlobalPosition = StartPosition = start;
+        KinematicBody.GlobalPosition = StartPosition = start;
         Direction = direction;
         XSpeed = xSpeed;
         YSpeed = ySpeed;
@@ -119,31 +123,33 @@ public class ThrowComponent : Component
         StartYSpeed = ySpeed;
         RotateSpeed = rotate;
 
-        _rectangleShape2D.Extents = Size * 0.5f;
-        
+        RectangleShape.Extents = Size * 0.5f;
+
         var mountParent = ActivityObject.GetParent();
         if (mountParent == null)
         {
-            _kinematicBody2D.AddChild(ActivityObject);
+            KinematicBody.AddChild(ActivityObject);
         }
         else if (mountParent != ActivityObject)
         {
             mountParent.RemoveChild(ActivityObject);
-            _kinematicBody2D.AddChild(ActivityObject);
+            KinematicBody.AddChild(ActivityObject);
         }
 
         Position = new Vector2(0, -startHeight);
 
-        var parent = _kinematicBody2D.GetParent();
+        var parent = KinematicBody.GetParent();
         if (parent == null)
         {
-            RoomManager.Current.SortRoot.AddChild(_kinematicBody2D);
+            RoomManager.Current.SortRoot.AddChild(KinematicBody);
         }
         else if (parent == RoomManager.Current.ObjectRoot)
         {
-            parent.RemoveChild(ActivityObject);
-            RoomManager.Current.SortRoot.AddChild(_kinematicBody2D);
+            GD.Print("1111");
+            parent.RemoveChild(KinematicBody);
+            RoomManager.Current.SortRoot.AddChild(KinematicBody);
         }
+
         //显示阴影
         ActivityObject.ShowShadowSprite();
         ShadowSprite.Scale = AnimatedSprite.Scale;
@@ -159,14 +165,14 @@ public class ThrowComponent : Component
             var gp = ActivityObject.GlobalPosition;
             var gr = ActivityObject.GlobalRotation;
             IsOver = true;
-            _kinematicBody2D.RemoveChild(ActivityObject);
-            var parent = _kinematicBody2D.GetParent();
+            KinematicBody.RemoveChild(ActivityObject);
+            var parent = KinematicBody.GetParent();
             parent.AddChild(ActivityObject);
             ActivityObject.GlobalPosition = gp;
             ActivityObject.GlobalRotation = gr;
         }
 
-        _collisionShape2D.Disabled = true;
+        CollisionShape.Disabled = true;
     }
 
     /// <summary>
@@ -182,9 +188,9 @@ public class ThrowComponent : Component
     /// </summary>
     protected virtual void OnOver()
     {
-        _kinematicBody2D.GetParent().RemoveChild(_kinematicBody2D);
-        RoomManager.Current.ObjectRoot.AddChild(_kinematicBody2D);
-        _collisionShape2D.Disabled = true;
+        KinematicBody.GetParent().RemoveChild(KinematicBody);
+        RoomManager.Current.ObjectRoot.AddChild(KinematicBody);
+        CollisionShape.Disabled = true;
     }
 
 }

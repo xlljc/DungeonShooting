@@ -101,6 +101,34 @@ public abstract class ActivityObject : KinematicBody2D
         ShadowSprite.Visible = false;
     }
 
+    public void SetDefaultTexture(Texture texture)
+    {
+        if (AnimatedSprite.Frames == null)
+        {
+            SpriteFrames spriteFrames = new SpriteFrames();
+            AnimatedSprite.Frames = spriteFrames;
+            spriteFrames.AddFrame("default", texture);
+        }
+        else
+        {
+            SpriteFrames spriteFrames = AnimatedSprite.Frames;
+            spriteFrames.SetFrame("default", 0, texture);
+        }
+
+        AnimatedSprite.Animation = "default";
+        AnimatedSprite.Playing = true;
+    }
+
+    public void GetCurrentTexture()
+    {
+        
+    }
+
+    public Texture GetDefaultTexture()
+    {
+        return AnimatedSprite.Frames.GetFrame("default", 0);
+    }
+    
     /// <summary>
     /// 返回是否能与其他ActivityObject互动
     /// </summary>

@@ -22,10 +22,10 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public WeaponAttribute Attribute { get; private set; }
 
-    /// <summary>
-    /// 武器的图片
-    /// </summary>
-    public Sprite WeaponSprite { get; private set; }
+    // /// <summary>
+    // /// 武器的图片
+    // /// </summary>
+    //public Sprite WeaponSprite { get; private set; }
 
     /// <summary>
     /// 动画播放器
@@ -131,7 +131,7 @@ public abstract class Weapon : ActivityObject
         Id = id;
         Attribute = attribute;
 
-        WeaponSprite = GetNode<Sprite>("WeaponBody/WeaponSprite");
+        //WeaponSprite = GetNode<Sprite>("WeaponBody/WeaponSprite");
         FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
         OriginPoint = GetNode<Position2D>("WeaponBody/OriginPoint");
         ShellPoint = GetNode<Position2D>("WeaponBody/ShellPoint");
@@ -139,8 +139,10 @@ public abstract class Weapon : ActivityObject
         CollisionShape2D = GetNode<CollisionShape2D>("WeaponBody/Collision");
 
         //更新图片
-        WeaponSprite.Texture = ResourceLoader.Load<Texture>(Attribute.Sprite);
-        WeaponSprite.Position = Attribute.CenterPosition;
+        var texture = ResourceLoader.Load<Texture>(Attribute.Sprite);
+        SetDefaultTexture(texture);
+        AnimatedSprite.Position = Attribute.CenterPosition;
+
         //开火位置
         FirePoint.Position = new Vector2(Attribute.FirePosition.x, -Attribute.FirePosition.y);
         OriginPoint.Position = new Vector2(0, -Attribute.FirePosition.y);
@@ -657,9 +659,9 @@ public abstract class Weapon : ActivityObject
                 //播放互动效果
                 if (flag)
                 {
-                    this.StartThrow<ThrowWeapon>(new Vector2(20, 20), GlobalPosition, 0, 0,
-                        MathUtils.RandRangeInt(-20, 20), MathUtils.RandRangeInt(20, 50),
-                        MathUtils.RandRangeInt(-180, 180), WeaponSprite);
+                    // this.StartThrow<ThrowWeapon>(new Vector2(20, 20), GlobalPosition, 0, 0,
+                    //     MathUtils.RandRangeInt(-20, 20), MathUtils.RandRangeInt(20, 50),
+                    //     MathUtils.RandRangeInt(-180, 180), WeaponSprite);
                 }
             }
             else //没有武器
@@ -699,12 +701,12 @@ public abstract class Weapon : ActivityObject
     {
         Master = master;
         //握把位置
-        WeaponSprite.Position = Attribute.HoldPosition;
-        //清除泛白效果
-        ShaderMaterial sm = WeaponSprite.Material as ShaderMaterial;
-        sm.SetShaderParam("schedule", 0);
+        AnimatedSprite.Position = Attribute.HoldPosition;
         //停止动画
         AnimationPlayer.Stop();
+        //清除泛白效果
+        ShaderMaterial sm = (ShaderMaterial) AnimatedSprite.Material;
+        sm.SetShaderParam("schedule", 0);
         ZIndex = 0;
         //禁用碰撞
         CollisionShape2D.Disabled = true;
@@ -717,7 +719,7 @@ public abstract class Weapon : ActivityObject
     public void _ThrowOutWeapon()
     {
         Master = null;
-        WeaponSprite.Position = Attribute.CenterPosition;
+        AnimatedSprite.Position = Attribute.CenterPosition;
         AnimationPlayer.Play("Floodlight");
         OnThrowOut();
     }

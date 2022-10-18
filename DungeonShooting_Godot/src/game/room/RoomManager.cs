@@ -51,13 +51,13 @@ public class RoomManager : Node2D
         SoundManager.PlayeMusic("intro.ogg", this, -17f);
         var gun1 = WeaponManager.GetGun("1001");
         gun1.Position = new Vector2(80, 80);
-        gun1.PutDown(gun1.WeaponSprite);
+        gun1.PutDown();
         var gun2 = WeaponManager.GetGun("1002");
         gun2.Position = new Vector2(80, 120);
-        gun2.PutDown(gun2.WeaponSprite);
+        gun2.PutDown();
         var gun3 = WeaponManager.GetGun("1003");
         gun3.Position = new Vector2(120, 80);
-        gun3.PutDown(gun3.WeaponSprite);
+        gun3.PutDown();
         // var gun4 = WeaponManager.GetGun4();
         // gun4.Position = new Vector2(120, 120);
         // gun4.PutDown(gun4.WeaponSprite);
