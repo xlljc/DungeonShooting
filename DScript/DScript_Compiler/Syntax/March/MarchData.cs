@@ -2,7 +2,7 @@
 {
 
     /// <summary>
-    /// 匹配token的数据, 可尝试匹配 string 或者 MarchType
+    /// 匹配token的数据
     /// </summary>
     internal class MarchData
     {
@@ -30,6 +30,9 @@
             DataType = MarchDataType.MarchType;
         }
 
+        /// <summary>
+        /// 尝试匹配 marchDatas
+        /// </summary>
         public MarchData(params MarchData[] marchDatas)
         {
             MarchDatas = marchDatas;

@@ -6,6 +6,8 @@ namespace DScript.Compiler
     public class FunctionNode : NodeBase
     {
         public Token[] Body;
+
+        public int ParamLength = 0;
         
         public FunctionNode(string name, Token[] body) : base(name)
         {
