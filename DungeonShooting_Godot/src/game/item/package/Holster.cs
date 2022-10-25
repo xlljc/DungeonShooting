@@ -133,7 +133,7 @@ public class Holster
     /// 移除指定位置的武器, 并返回这个武器对象, 如果移除正在使用的这把武器, 则会自动切换到上一把武器
     /// </summary>
     /// <param name="index">所在武器袋的位置索引</param>
-    public Weapon RmoveWeapon(int index)
+    public Weapon RemoveWeapon(int index)
     {
         if (index < 0 || index >= SlotList.Length)
         {

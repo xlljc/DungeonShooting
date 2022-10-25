@@ -71,21 +71,20 @@ public static class NodeExtend
     /// 触发扔掉武器操作
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
-    public static ThrowComponent StartThrowWeapon(this Weapon weapon, Role master)
+    public static void StartThrowWeapon(this Weapon weapon, Role master)
     {
         if (master.Face == FaceDirection.Left)
         {
             weapon.Scale *= new Vector2(1, -1);
             weapon.RotationDegrees = 180;
         }
-        var startPos = master.GlobalPosition;// + new Vector2(0, 0);
-        var startHeight = 6;
+        var startHeight = 0;
         var direction = master.GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
         var xf = 30;
         var yf = MathUtils.RandRangeInt(60, 120);
         var rotate = MathUtils.RandRangeInt(-180, 180);
-        weapon.Position = Vector2.Zero;
-        return weapon.StartThrow<ThrowWeapon>(new Vector2(20, 20), startPos, startHeight, direction, xf, yf, rotate);
+        //weapon.Position = Vector2.Zero;
+        weapon.Throw(new Vector2(20, 20), master.MountPoint.GlobalPosition, startHeight, direction, xf, yf, rotate);
     }
 
 

@@ -32,7 +32,7 @@ public abstract class ActivityObject : KinematicBody2D
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     private bool initShadow;
     private string _prevAnimation;
-    
+
     //存储投抛该物体时所产生的数据
     private ObjectThrowData _throwData;
 
@@ -124,14 +124,14 @@ public abstract class ActivityObject : KinematicBody2D
 
     public void GetCurrentTexture()
     {
-        
+
     }
 
     public Texture GetDefaultTexture()
     {
         return AnimatedSprite.Frames.GetFrame("default", 0);
     }
-    
+
     /// <summary>
     /// 返回是否能与其他ActivityObject互动
     /// </summary>
@@ -151,27 +151,66 @@ public abstract class ActivityObject : KinematicBody2D
     {
 
     }
-    
+
     public virtual void PickUp()
     {
-        
+
     }
 
     public virtual void PickDown()
     {
-        
+
     }
 
-    public virtual void Throw(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate)
+    public virtual void Throw(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed,
+        float ySpeed, float rotate)
     {
+
+        if (_throwData == null)
+        {
+            _throwData = new ObjectThrowData();
+        }
+        SetThrowCollision();
+
+        _throwData.IsOver = false;
+        _throwData.Size = size;
+        _throwData.StartPosition = _throwData.CurrPosition = start;
+        _throwData.Direction = direction;
+        _throwData.XSpeed = xSpeed;
+        _throwData.YSpeed = ySpeed;
+        _throwData.StartXSpeed = xSpeed;
+        _throwData.StartYSpeed = ySpeed;
+        _throwData.RotateSpeed = rotate;
+        _throwData.LinearVelocity = new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
+
+        _throwData.RectangleShape.Extents = _throwData.Size * 0.5f;
         
+        var parent = GetParent();
+        if (parent == null)
+        {
+            RoomManager.Current.SortRoot.AddChild(this);
+        }
+        else if (parent == RoomManager.Current.ObjectRoot)
+        {
+            parent.RemoveChild(this);
+            RoomManager.Current.SortRoot.AddChild(this);
+        }
+        GlobalPosition = start + new Vector2(0, -startHeight);
+
+        //显示阴影
+        ShowShadowSprite();
+        ShadowSprite.Scale = AnimatedSprite.Scale;
     }
 
+    /// <summary>
+    /// 强制停止投抛运动
+    /// </summary>
     public virtual void StopThrow()
     {
-        
+        _throwData.IsOver = true;
+        RestoreCollision();
     }
-    
+
     /// <summary>
     /// 结束的调用
     /// </summary>
@@ -179,7 +218,7 @@ public abstract class ActivityObject : KinematicBody2D
     {
         GetParent().RemoveChild(this);
         RoomManager.Current.ObjectRoot.AddChild(this);
-        Collision.Disabled = true;
+        RestoreCollision();
     }
 
     public void AddComponent(Component component)
@@ -243,36 +282,38 @@ public abstract class ActivityObject : KinematicBody2D
                 }
             }
         }
-        
+
         //投抛计算
         if (_throwData != null && !_throwData.IsOver)
         {
-            MoveAndSlide(new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180));
-            Position = new Vector2(0, Position.y - _throwData.YSpeed * delta);
+            MoveAndSlide(_throwData.LinearVelocity);
+            Position = new Vector2(Position.x, Position.y - _throwData.YSpeed * delta);
             var rotate = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
             GlobalRotationDegrees = rotate;
 
-            //计算阴影位置
-            ShadowSprite.GlobalRotationDegrees = rotate;
-            // ShadowSprite.GlobalRotationDegrees = rotate + (inversionX ? 180 : 0);
-            ShadowSprite.GlobalPosition = AnimatedSprite.GlobalPosition + new Vector2(0, 2 - Position.y);
-            var ysp = _throwData.YSpeed;
             _throwData.YSpeed -= GameConfig.G * delta;
-            //达到最高点
-            if (ysp * _throwData.YSpeed < 0)
-            {
-                OnMaxHeight(-Position.y);
-            }
-
-            //落地判断
-            if (Position.y >= 0)
-            {
-                Position = new Vector2(0, 0);
-                _throwData.IsOver = true;
-                OnOver();
-            }
+            //
+            // //计算阴影位置
+            // ShadowSprite.GlobalRotationDegrees = rotate;
+            // // ShadowSprite.GlobalRotationDegrees = rotate + (inversionX ? 180 : 0);
+            // ShadowSprite.GlobalPosition = AnimatedSprite.GlobalPosition + new Vector2(0, 2 + _throwData.Y);
+            // var ysp = _throwData.YSpeed;
+            // _throwData.YSpeed -= GameConfig.G * delta;
+            // //达到最高点
+            // if (ysp * _throwData.YSpeed < 0)
+            // {
+            //     OnMaxHeight(_throwData.Y);
+            // }
+            //
+            // //落地判断
+            // if (_throwData.Y <= 0)
+            // {
+            //     //Position = new Vector2(0, 0);
+            //     _throwData.IsOver = true;
+            //     OnOver();
+            // }
         }
-        
+
         //更新阴影贴图, 使其和动画一致
         if (ShadowSprite.Visible)
         {
@@ -289,19 +330,23 @@ public abstract class ActivityObject : KinematicBody2D
 
     public override void _PhysicsProcess(float delta)
     {
-        var arr = _components.ToArray();
-        for (int i = 0; i < arr.Length; i++)
+        //更新组件
+        if (_components.Count > 0)
         {
-            if (IsDestroyed) return;
-            var temp = arr[i].Value;
-            if (temp != null && temp.ActivityObject == this && temp.Enable)
+            var arr = _components.ToArray();
+            for (int i = 0; i < arr.Length; i++)
             {
-                if (!temp.IsStart)
+                if (IsDestroyed) return;
+                var temp = arr[i].Value;
+                if (temp != null && temp.ActivityObject == this && temp.Enable)
                 {
-                    temp.Start();
-                }
+                    if (!temp.IsStart)
+                    {
+                        temp.Start();
+                    }
 
-                temp.PhysicsUpdate(delta);
+                    temp.PhysicsUpdate(delta);
+                }
             }
         }
     }
@@ -333,5 +378,43 @@ public abstract class ActivityObject : KinematicBody2D
         }
 
         return false;
+    }
+
+    private void SetThrowCollision()
+    {
+        if (_throwData != null && _throwData.UseOrigin)
+        {
+            _throwData.OriginShape = Collision.Shape;
+            _throwData.OriginPosition = Collision.Position;
+            _throwData.OriginRotation = Collision.Rotation;
+            _throwData.OriginScale = Collision.Scale;
+            _throwData.OriginCollisionEnable = Collision.Disabled;
+
+            if (_throwData.RectangleShape == null)
+            {
+                _throwData.RectangleShape = new RectangleShape2D();
+            }
+
+            Collision.Shape = _throwData.RectangleShape;
+            //Collision.Position = Vector2.Zero;
+            Collision.Rotation = 0;
+            Collision.Scale = Vector2.One;
+            Collision.Disabled = false;
+            _throwData.UseOrigin = false;
+        }
+    }
+
+    private void RestoreCollision()
+    {
+        if (_throwData != null && !_throwData.UseOrigin)
+        {
+            Collision.Shape = _throwData.OriginShape;
+            Collision.Position = _throwData.OriginPosition;
+            Collision.Rotation = _throwData.OriginRotation;
+            Collision.Scale = _throwData.OriginScale;
+            Collision.Disabled = _throwData.OriginCollisionEnable;
+            
+            _throwData.UseOrigin = true;
+        }
     }
 }

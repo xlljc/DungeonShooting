@@ -671,7 +671,7 @@ public abstract class Weapon : ActivityObject
                     var slot = roleMaster.Holster.SlotList[roleMaster.Holster.ActiveIndex];
                     if (slot.Type == Attribute.WeightType)
                     {
-                        var weapon = roleMaster.Holster.RmoveWeapon(roleMaster.Holster.ActiveIndex);
+                        var weapon = roleMaster.Holster.RemoveWeapon(roleMaster.Holster.ActiveIndex);
                         weapon.StartThrowWeapon(roleMaster);
                         roleMaster.PickUpWeapon(this);
                     }

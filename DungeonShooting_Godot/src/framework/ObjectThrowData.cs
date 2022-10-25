@@ -51,4 +51,15 @@ public class ObjectThrowData
     /// 碰撞器形状
     /// </summary>
     public RectangleShape2D RectangleShape;
+
+    public Vector2 CurrPosition;
+    public Vector2 LinearVelocity;
+    
+    //----------- 用于记录原始信息 --------------
+    public bool UseOrigin = true;
+    public Shape2D OriginShape;
+    public Vector2 OriginPosition;
+    public float OriginRotation;
+    public Vector2 OriginScale;
+    public bool OriginCollisionEnable;
 }

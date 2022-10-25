@@ -227,7 +227,7 @@ public abstract class Role : ActivityObject
     /// </summary>
     public void TriggerThrowWeapon()
     {
-        var weapon = Holster.RmoveWeapon(Holster.ActiveIndex);
+        var weapon = Holster.RemoveWeapon(Holster.ActiveIndex);
         //播放抛出效果
         if (weapon != null)
         {
