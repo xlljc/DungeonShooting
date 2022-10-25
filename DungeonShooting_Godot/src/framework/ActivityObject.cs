@@ -32,6 +32,9 @@ public abstract class ActivityObject : KinematicBody2D
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     private bool initShadow;
     private string _prevAnimation;
+    
+    //存储投抛该物体时所产生的数据
+    private ObjectThrowData _throwData;
 
     public ActivityObject(string scenePath)
     {
@@ -141,6 +144,44 @@ public abstract class ActivityObject : KinematicBody2D
     /// <param name="master">触发者</param>
     public abstract void Interactive(ActivityObject master);
 
+    /// <summary>
+    /// 投抛该物体达到最高点时调用
+    /// </summary>
+    public virtual void OnMaxHeight(float height)
+    {
+
+    }
+    
+    public virtual void PickUp()
+    {
+        
+    }
+
+    public virtual void PickDown()
+    {
+        
+    }
+
+    public virtual void Throw(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate)
+    {
+        
+    }
+
+    public virtual void StopThrow()
+    {
+        
+    }
+    
+    /// <summary>
+    /// 结束的调用
+    /// </summary>
+    public virtual void OnOver()
+    {
+        GetParent().RemoveChild(this);
+        RoomManager.Current.ObjectRoot.AddChild(this);
+        Collision.Disabled = true;
+    }
+
     public void AddComponent(Component component)
     {
         if (!ContainsComponent(component))
@@ -183,22 +224,56 @@ public abstract class ActivityObject : KinematicBody2D
 
     public override void _Process(float delta)
     {
-        var arr = _components.ToArray();
-        for (int i = 0; i < arr.Length; i++)
+        //更新组件
+        if (_components.Count > 0)
         {
-            if (IsDestroyed) return;
-            var temp = arr[i].Value;
-            if (temp != null && temp.ActivityObject == this && temp.Enable)
+            var arr = _components.ToArray();
+            for (int i = 0; i < arr.Length; i++)
             {
-                if (!temp.IsStart)
+                if (IsDestroyed) return;
+                var temp = arr[i].Value;
+                if (temp != null && temp.ActivityObject == this && temp.Enable)
                 {
-                    temp.Start();
-                }
+                    if (!temp.IsStart)
+                    {
+                        temp.Start();
+                    }
 
-                temp.Update(delta);
+                    temp.Update(delta);
+                }
             }
         }
+        
+        //投抛计算
+        if (_throwData != null && !_throwData.IsOver)
+        {
+            MoveAndSlide(new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180));
+            Position = new Vector2(0, Position.y - _throwData.YSpeed * delta);
+            var rotate = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
+            GlobalRotationDegrees = rotate;
 
+            //计算阴影位置
+            ShadowSprite.GlobalRotationDegrees = rotate;
+            // ShadowSprite.GlobalRotationDegrees = rotate + (inversionX ? 180 : 0);
+            ShadowSprite.GlobalPosition = AnimatedSprite.GlobalPosition + new Vector2(0, 2 - Position.y);
+            var ysp = _throwData.YSpeed;
+            _throwData.YSpeed -= GameConfig.G * delta;
+            //达到最高点
+            if (ysp * _throwData.YSpeed < 0)
+            {
+                OnMaxHeight(-Position.y);
+            }
+
+            //落地判断
+            if (Position.y >= 0)
+            {
+                Position = new Vector2(0, 0);
+                _throwData.IsOver = true;
+                OnOver();
+            }
+        }
+        
+        //更新阴影贴图, 使其和动画一致
         if (ShadowSprite.Visible)
         {
             var anim = AnimatedSprite.Animation;
