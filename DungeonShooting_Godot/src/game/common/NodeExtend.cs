@@ -78,7 +78,7 @@ public static class NodeExtend
             weapon.Scale *= new Vector2(1, -1);
             weapon.RotationDegrees = 180;
         }
-        var startHeight = 0;
+        var startHeight = 6;
         var direction = master.GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
         var xf = 30;
         var yf = MathUtils.RandRangeInt(60, 120);

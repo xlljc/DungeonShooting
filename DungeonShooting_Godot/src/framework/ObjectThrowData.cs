@@ -3,6 +3,11 @@
 public class ObjectThrowData
 {
     /// <summary>
+    /// 是否是第一次结束
+    /// </summary>
+    public bool FirstOver = false;
+    
+    /// <summary>
     /// 是否已经结束
     /// </summary>
     public bool IsOver = true;
@@ -53,6 +58,7 @@ public class ObjectThrowData
     public RectangleShape2D RectangleShape;
 
     public Vector2 CurrPosition;
+    public float Y;
     public Vector2 LinearVelocity;
     
     //----------- 用于记录原始信息 --------------
@@ -62,4 +68,5 @@ public class ObjectThrowData
     public float OriginRotation;
     public Vector2 OriginScale;
     public bool OriginCollisionEnable;
+    public int OriginZIndex;
 }
