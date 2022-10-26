@@ -68,27 +68,6 @@ public static class NodeExtend
     }
 
     /// <summary>
-    /// 触发扔掉武器操作
-    /// </summary>
-    /// <param name="master">触发扔掉该武器的的角色</param>
-    public static void StartThrowWeapon(this Weapon weapon, Role master)
-    {
-        if (master.Face == FaceDirection.Left)
-        {
-            weapon.Scale *= new Vector2(1, -1);
-            weapon.RotationDegrees = 180;
-        }
-        var startHeight = 6;
-        var direction = master.GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
-        var xf = 30;
-        var yf = MathUtils.RandRangeInt(60, 120);
-        var rotate = MathUtils.RandRangeInt(-180, 180);
-        //weapon.Position = Vector2.Zero;
-        weapon.Throw(new Vector2(20, 20), master.MountPoint.GlobalPosition, startHeight, direction, xf, yf, rotate);
-    }
-
-
-    /// <summary>
     /// 尝试将一个node2d节点转换成一个 ActivityObject 类
     /// </summary>
     public static ActivityObject AsActivityObject(this Node2D node2d)

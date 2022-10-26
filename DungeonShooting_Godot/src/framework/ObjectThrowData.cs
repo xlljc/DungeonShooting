@@ -5,7 +5,7 @@ public class ObjectThrowData
     /// <summary>
     /// 是否是第一次结束
     /// </summary>
-    public bool FirstOver = false;
+    public bool FirstOver = true;
     
     /// <summary>
     /// 是否已经结束
@@ -57,6 +57,21 @@ public class ObjectThrowData
     /// </summary>
     public RectangleShape2D RectangleShape;
 
+    /// <summary>
+    /// 落地之后是否弹跳
+    /// </summary>
+    public bool Bounce;
+
+    /// <summary>
+    /// 回弹的强度
+    /// </summary>
+    public float BounceStrength = 0.5f;
+
+    /// <summary>
+    /// 回弹后的速度
+    /// </summary>
+    public float BounceSpeed = 0.8f;
+
     public Vector2 CurrPosition;
     public float Y;
     public Vector2 LinearVelocity;
@@ -67,6 +82,11 @@ public class ObjectThrowData
     public Vector2 OriginPosition;
     public float OriginRotation;
     public Vector2 OriginScale;
-    public bool OriginCollisionEnable;
     public int OriginZIndex;
+    public bool OriginCollisionEnable;
+    public Vector2 OriginCollisionPosition;
+    public float OriginCollisionRotation;
+    public Vector2 OriginCollisionScale;
+    public uint OriginCollisionMask;
+    public uint OriginCollisionLayer;
 }

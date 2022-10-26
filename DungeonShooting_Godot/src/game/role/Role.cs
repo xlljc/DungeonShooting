@@ -231,7 +231,7 @@ public abstract class Role : ActivityObject
         //播放抛出效果
         if (weapon != null)
         {
-            weapon.StartThrowWeapon(this);
+            weapon.TriggerThrowWeapon(this);
         }
     }
 

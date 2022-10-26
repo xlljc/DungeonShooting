@@ -6,7 +6,6 @@ using System;
 /// </summary>
 public abstract class Weapon : ActivityObject
 {
-
     /// <summary>
     /// 武器的唯一id
     /// </summary>
@@ -21,12 +20,7 @@ public abstract class Weapon : ActivityObject
     /// 属性数据
     /// </summary>
     public WeaponAttribute Attribute { get; private set; }
-
-    // /// <summary>
-    // /// 武器的图片
-    // /// </summary>
-    //public Sprite WeaponSprite { get; private set; }
-
+    
     /// <summary>
     /// 动画播放器
     /// </summary>
@@ -131,7 +125,6 @@ public abstract class Weapon : ActivityObject
         Id = id;
         Attribute = attribute;
 
-        //WeaponSprite = GetNode<Sprite>("WeaponBody/WeaponSprite");
         FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
         OriginPoint = GetNode<Position2D>("WeaponBody/OriginPoint");
         ShellPoint = GetNode<Position2D>("WeaponBody/ShellPoint");
@@ -622,8 +615,9 @@ public abstract class Weapon : ActivityObject
     {
         if (master is Role roleMaster) //与role碰撞
         {
+            var holster = roleMaster.Holster;
             //查找是否有同类型武器
-            var index = roleMaster.Holster.FindWeapon(Id);
+            var index = holster.FindWeapon(Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
@@ -631,7 +625,7 @@ public abstract class Weapon : ActivityObject
                     return;
                 }
 
-                var weapon = roleMaster.Holster.GetWeapon(index);
+                var weapon = holster.GetWeapon(index);
                 //子弹上限
                 var maxCount = Attribute.MaxAmmoCapacity;
                 //是否捡到子弹
@@ -666,13 +660,13 @@ public abstract class Weapon : ActivityObject
             }
             else //没有武器
             {
-                if (roleMaster.Holster.PickupWeapon(this) == -1)
+                if (holster.PickupWeapon(this) == -1)
                 {
-                    var slot = roleMaster.Holster.SlotList[roleMaster.Holster.ActiveIndex];
+                    var slot = holster.SlotList[holster.ActiveIndex];
                     if (slot.Type == Attribute.WeightType)
                     {
-                        var weapon = roleMaster.Holster.RemoveWeapon(roleMaster.Holster.ActiveIndex);
-                        weapon.StartThrowWeapon(roleMaster);
+                        var weapon = holster.RemoveWeapon(holster.ActiveIndex);
+                        weapon.TriggerThrowWeapon(roleMaster);
                         roleMaster.PickUpWeapon(this);
                     }
                 }
@@ -680,15 +674,26 @@ public abstract class Weapon : ActivityObject
         }
     }
 
-    public Vector2 GetItemPosition()
-    {
-        return GlobalPosition;
-    }
-
     /// <summary>
-    /// 触发落到地面
+    /// 触发扔掉武器操作
     /// </summary>
-    public void _FallToGround()
+    /// <param name="master">触发扔掉该武器的的角色</param>
+    public void TriggerThrowWeapon(Role master)
+    {
+        if (master.Face == FaceDirection.Left)
+        {
+            Scale *= new Vector2(1, -1);
+            RotationDegrees = 180;
+        }
+        var startHeight = 6;
+        var direction = master.GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
+        var xf = 30;
+        var yf = MathUtils.RandRangeInt(60, 120);
+        var rotate = MathUtils.RandRangeInt(-180, 180);
+        Throw(new Vector2(30, 15), master.MountPoint.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
+    }
+    
+    public override void OnThrowOver()
     {
         //启用碰撞
         CollisionShape2D.Disabled = false;

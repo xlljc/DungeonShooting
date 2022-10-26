@@ -147,28 +147,66 @@ public abstract class ActivityObject : KinematicBody2D
     /// <summary>
     /// 投抛该物体达到最高点时调用
     /// </summary>
-    public virtual void OnMaxHeight(float height)
+    public virtual void OnThrowMaxHeight(float height)
     {
 
     }
 
-    public virtual void PickUp()
+    /// <summary>
+    /// 投抛状态下第一次接触地面时调用, 之后的回弹落地将不会调用该函数
+    /// </summary>
+    public virtual void OnFirstFallToGround()
     {
 
     }
 
-    public virtual void PickDown()
+    /// <summary>
+    /// 投抛状态下每次接触地面时调用
+    /// </summary>
+    public virtual void OnFallToGround()
     {
 
     }
 
+    /// <summary>
+    /// 投抛结束时调用
+    /// </summary>
+    public virtual void OnThrowOver()
+    {
+
+    }
+    
+    public void PickUp()
+    {
+
+    }
+
+    public void PickDown()
+    {
+
+    }
+
+    /// <summary>
+    /// 将该节点投抛出去
+    /// </summary>
+    /// <param name="size">碰撞器大小</param>
+    /// <param name="start">起始坐标 (全局)</param>
+    /// <param name="startHeight">起始高度</param>
+    /// <param name="direction">投抛角度 (0-360)</param>
+    /// <param name="xSpeed">移动速度</param>
+    /// <param name="ySpeed">下坠速度</param>
+    /// <param name="rotate">旋转速度</param>
+    /// <param name="bounce">落地时是否回弹</param>
+    /// <param name="bounceStrength">落地回弹力度, 1为不消耗能量, 值越小回弹力度越小</param>
+    /// <param name="bounceSpeed">落地回弹后的速度, 1为不消速度, 值越小回弹速度消耗越大</param>
     public void Throw(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed,
-        float ySpeed, float rotate)
+        float ySpeed, float rotate, bool bounce = false, float bounceStrength = 0.5f, float bounceSpeed = 0.8f)
     {
         if (_throwData == null)
         {
             _throwData = new ObjectThrowData();
         }
+
         SetThrowCollision();
 
         _throwData.IsOver = false;
@@ -182,29 +220,13 @@ public abstract class ActivityObject : KinematicBody2D
         _throwData.RotateSpeed = rotate;
         _throwData.LinearVelocity = new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
         _throwData.Y = startHeight;
+        _throwData.Bounce = bounce;
+        _throwData.BounceStrength = bounceStrength;
+        _throwData.BounceSpeed = bounceSpeed;
 
         _throwData.RectangleShape.Extents = _throwData.Size * 0.5f;
 
         Throw();
-    }
-
-    private void Throw()
-    {
-        var parent = GetParent();
-        if (parent == null)
-        {
-            RoomManager.Current.SortRoot.AddChild(this);
-        }
-        else if (parent == RoomManager.Current.ObjectRoot)
-        {
-            parent.RemoveChild(this);
-            RoomManager.Current.SortRoot.AddChild(this);
-        }
-        GlobalPosition = _throwData.StartPosition + new Vector2(0, -_throwData.Y);
-
-        //显示阴影
-        ShowShadowSprite();
-        ShadowSprite.Scale = AnimatedSprite.Scale;
     }
 
     /// <summary>
@@ -214,39 +236,6 @@ public abstract class ActivityObject : KinematicBody2D
     {
         _throwData.IsOver = true;
         RestoreCollision();
-    }
-
-    /// <summary>
-    /// 结束的调用
-    /// </summary>
-    public void OnOver()
-    {
-        if (_throwData.FirstOver)
-        {
-            _throwData.FirstOver = false;
-            if (this is Weapon gun)
-            {
-                gun._FallToGround();
-            }
-        }
-        //如果落地高度不够低, 再抛一次
-        if (_throwData.StartYSpeed > 1)
-        {
-            _throwData.StartPosition = Position;
-            _throwData.Y = 0;
-            _throwData.XSpeed = _throwData.StartXSpeed = _throwData.StartXSpeed * 0.8f;
-            _throwData.YSpeed = _throwData.StartYSpeed = _throwData.StartYSpeed * 0.5f;
-            _throwData.RotateSpeed = _throwData.RotateSpeed * 0.5f;
-            _throwData.LinearVelocity = new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
-            _throwData.FirstOver = true;
-            _throwData.IsOver = false;
-        }
-        else //结束
-        {
-            GetParent().RemoveChild(this);
-            RoomManager.Current.ObjectRoot.AddChild(this);
-            RestoreCollision();
-        }
     }
 
     public void AddComponent(Component component)
@@ -314,14 +303,18 @@ public abstract class ActivityObject : KinematicBody2D
         //投抛计算
         if (_throwData != null && !_throwData.IsOver)
         {
-            MoveAndSlide(_throwData.LinearVelocity);
+            _throwData.LinearVelocity = MoveAndSlide(_throwData.LinearVelocity);
             Position = new Vector2(Position.x, Position.y - _throwData.YSpeed * delta);
             var rotate = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
             GlobalRotationDegrees = rotate;
 
             //计算阴影位置
+            var pos = AnimatedSprite.GlobalPosition + new Vector2(0, 2 + _throwData.Y);
             ShadowSprite.GlobalRotationDegrees = rotate;
-            ShadowSprite.GlobalPosition = AnimatedSprite.GlobalPosition + new Vector2(0, 2 + _throwData.Y);
+            ShadowSprite.GlobalPosition = pos;
+            //碰撞器位置
+            Collision.GlobalPosition = pos;
+            
             var ysp = _throwData.YSpeed;
 
             _throwData.Y += _throwData.YSpeed * delta;
@@ -330,15 +323,44 @@ public abstract class ActivityObject : KinematicBody2D
             //达到最高点
             if (ysp * _throwData.YSpeed < 0)
             {
-                OnMaxHeight(_throwData.Y);
+                ZIndex = 0;
+                OnThrowMaxHeight(_throwData.Y);
             }
-            
+
             //落地判断
             if (_throwData.Y <= 0)
             {
                 ShadowSprite.GlobalPosition = AnimatedSprite.GlobalPosition + new Vector2(0, 2);
                 _throwData.IsOver = true;
-                OnOver();
+
+                //第一次接触地面
+                if (_throwData.FirstOver)
+                {
+                    _throwData.FirstOver = false;
+                    OnFirstFallToGround();
+                }
+
+                //如果落地高度不够低, 再抛一次
+                if (_throwData.StartYSpeed > 1 && _throwData.Bounce)
+                {
+                    _throwData.StartPosition = Position;
+                    _throwData.Y = 0;
+                    _throwData.XSpeed = _throwData.StartXSpeed = _throwData.StartXSpeed * _throwData.BounceSpeed;
+                    _throwData.YSpeed = _throwData.StartYSpeed = _throwData.StartYSpeed * _throwData.BounceStrength;
+                    _throwData.RotateSpeed = _throwData.RotateSpeed * _throwData.BounceStrength;
+                    _throwData.LinearVelocity *= _throwData.BounceSpeed;
+                    // _throwData.LinearVelocity =
+                    //     new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
+                    _throwData.FirstOver = false;
+                    _throwData.IsOver = false;
+
+                    OnFallToGround();
+                }
+                else //结束
+                {
+                    OnFallToGround();
+                    ThrowOver();
+                }
             }
         }
 
@@ -408,6 +430,32 @@ public abstract class ActivityObject : KinematicBody2D
         return false;
     }
 
+    /// <summary>
+    /// 触发投抛动作
+    /// </summary>
+    private void Throw()
+    {
+        var parent = GetParent();
+        if (parent == null)
+        {
+            RoomManager.Current.SortRoot.AddChild(this);
+        }
+        else if (parent == RoomManager.Current.ObjectRoot)
+        {
+            parent.RemoveChild(this);
+            RoomManager.Current.SortRoot.AddChild(this);
+        }
+
+        GlobalPosition = _throwData.StartPosition + new Vector2(0, -_throwData.Y);
+
+        //显示阴影
+        ShowShadowSprite();
+        ShadowSprite.Scale = AnimatedSprite.Scale;
+    }
+    
+    /// <summary>
+    /// 设置投抛状态下的碰撞器
+    /// </summary>
     private void SetThrowCollision()
     {
         if (_throwData != null && _throwData.UseOrigin)
@@ -416,8 +464,13 @@ public abstract class ActivityObject : KinematicBody2D
             _throwData.OriginPosition = Collision.Position;
             _throwData.OriginRotation = Collision.Rotation;
             _throwData.OriginScale = Collision.Scale;
-            _throwData.OriginCollisionEnable = Collision.Disabled;
             _throwData.OriginZIndex = ZIndex;
+            _throwData.OriginCollisionEnable = Collision.Disabled;
+            _throwData.OriginCollisionPosition = Collision.Position;
+            _throwData.OriginCollisionRotation = Collision.Rotation;
+            _throwData.OriginCollisionScale = Collision.Scale;
+            _throwData.OriginCollisionMask = CollisionMask;
+            _throwData.OriginCollisionLayer = CollisionLayer;
 
             if (_throwData.RectangleShape == null)
             {
@@ -428,12 +481,20 @@ public abstract class ActivityObject : KinematicBody2D
             //Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
-            Collision.Disabled = false;
-            _throwData.UseOrigin = false;
             ZIndex = 2;
+            Collision.Disabled = false;
+            Collision.Position = Vector2.Zero;
+            Collision.Rotation = 0;
+            Collision.Scale = Vector2.One;
+            CollisionMask = 1;
+            CollisionLayer = 0;
+            _throwData.UseOrigin = false;
         }
     }
 
+    /// <summary>
+    /// 重置碰撞器
+    /// </summary>
     private void RestoreCollision()
     {
         if (_throwData != null && !_throwData.UseOrigin)
@@ -442,10 +503,27 @@ public abstract class ActivityObject : KinematicBody2D
             Collision.Position = _throwData.OriginPosition;
             Collision.Rotation = _throwData.OriginRotation;
             Collision.Scale = _throwData.OriginScale;
-            Collision.Disabled = _throwData.OriginCollisionEnable;
             ZIndex = _throwData.OriginZIndex;
-            
+            Collision.Disabled = _throwData.OriginCollisionEnable;
+            Collision.Position = _throwData.OriginCollisionPosition;
+            Collision.Rotation = _throwData.OriginCollisionRotation;
+            Collision.Scale = _throwData.OriginCollisionScale;
+            CollisionMask = _throwData.OriginCollisionMask;
+            CollisionLayer = _throwData.OriginCollisionLayer;
+
             _throwData.UseOrigin = true;
         }
+    }
+
+    /// <summary>
+    /// 投抛结束
+    /// </summary>
+    private void ThrowOver()
+    {
+        GetParent().RemoveChild(this);
+        RoomManager.Current.ObjectRoot.AddChild(this);
+        RestoreCollision();
+        
+        OnThrowOver();
     }
 }

@@ -20,7 +20,7 @@ public class ThrowWeapon : ThrowComponent
             fristOver = false;
             if (ActivityObject is Weapon gun)
             {
-                gun._FallToGround();
+                
             }
         }
         //如果落地高度不够低, 再抛一次
