@@ -653,9 +653,9 @@ public abstract class Weapon : ActivityObject
                 //播放互动效果
                 if (flag)
                 {
-                    // this.StartThrow<ThrowWeapon>(new Vector2(20, 20), GlobalPosition, 0, 0,
-                    //     MathUtils.RandRangeInt(-20, 20), MathUtils.RandRangeInt(20, 50),
-                    //     MathUtils.RandRangeInt(-180, 180), WeaponSprite);
+                    Throw(new Vector2(30, 15), GlobalPosition, 0, 0,
+                        MathUtils.RandRangeInt(-20, 20), MathUtils.RandRangeInt(20, 50),
+                        MathUtils.RandRangeInt(-180, 180));
                 }
             }
             else //没有武器

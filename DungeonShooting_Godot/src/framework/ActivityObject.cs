@@ -29,6 +29,16 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     public bool IsDestroyed { get; private set; }
 
+    /// <summary>
+    /// 是否正在投抛过程中
+    /// </summary>
+    public bool IsThrowing => _throwData != null && !_throwData.IsOver;
+
+    /// <summary>
+    /// 物体厚度, 影响阴影偏移
+    /// </summary>
+    public int Thickness { get; protected set; } = 2;
+    
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     private bool initShadow;
     private string _prevAnimation;
@@ -136,13 +146,19 @@ public abstract class ActivityObject : KinematicBody2D
     /// 返回是否能与其他ActivityObject互动
     /// </summary>
     /// <param name="master">触发者</param>
-    public abstract CheckInteractiveResult CheckInteractive(ActivityObject master);
+    public virtual CheckInteractiveResult CheckInteractive(ActivityObject master)
+    {
+        return new CheckInteractiveResult(this);
+    }
 
     /// <summary>
     /// 与其它ActivityObject互动时调用
     /// </summary>
     /// <param name="master">触发者</param>
-    public abstract void Interactive(ActivityObject master);
+    public virtual void Interactive(ActivityObject master)
+    {
+        
+    }
 
     /// <summary>
     /// 投抛该物体达到最高点时调用
@@ -308,13 +324,9 @@ public abstract class ActivityObject : KinematicBody2D
             var rotate = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
             GlobalRotationDegrees = rotate;
 
-            //计算阴影位置
-            var pos = AnimatedSprite.GlobalPosition + new Vector2(0, 2 + _throwData.Y);
+            var pos = AnimatedSprite.GlobalPosition;
             ShadowSprite.GlobalRotationDegrees = rotate;
-            ShadowSprite.GlobalPosition = pos;
-            //碰撞器位置
-            Collision.GlobalPosition = pos;
-            
+
             var ysp = _throwData.YSpeed;
 
             _throwData.Y += _throwData.YSpeed * delta;
@@ -330,7 +342,9 @@ public abstract class ActivityObject : KinematicBody2D
             //落地判断
             if (_throwData.Y <= 0)
             {
-                ShadowSprite.GlobalPosition = AnimatedSprite.GlobalPosition + new Vector2(0, 2);
+                ShadowSprite.GlobalPosition = pos + new Vector2(0, Thickness);
+                Collision.GlobalPosition = pos;
+                
                 _throwData.IsOver = true;
 
                 //第一次接触地面
@@ -361,6 +375,13 @@ public abstract class ActivityObject : KinematicBody2D
                     OnFallToGround();
                     ThrowOver();
                 }
+            }
+            else
+            {
+                //计算阴影位置
+                ShadowSprite.GlobalPosition = pos + new Vector2(0, Thickness + _throwData.Y);
+                //碰撞器位置
+                Collision.GlobalPosition = pos + new Vector2(0, _throwData.Y);
             }
         }
 

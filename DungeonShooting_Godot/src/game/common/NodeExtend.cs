@@ -83,20 +83,4 @@ public static class NodeExtend
         }
         return null;
     }
-    
-    public static T StartThrow<T>(this ActivityObject node, Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed, float ySpeed, float rotate) where T : ThrowComponent
-    {
-        T throwNode = node.GetComponent<T>();
-        if (throwNode == null)
-        {
-            throwNode = Activator.CreateInstance<T>();
-            node.AddComponent(throwNode);
-        }
-        else
-        {
-            throwNode.StopThrow();
-        }
-        throwNode.StartThrow(size, start, startHeight, direction, xSpeed, ySpeed, rotate);
-        return throwNode;
-    }
 }

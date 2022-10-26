@@ -1,6 +1,24 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://resource/sprite/shell/shellCase.png" type="Texture" id=1]
+[ext_resource path="res://resource/materlal/Shadow.tres" type="Material" id=2]
+[ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=3]
 
-[node name="ShellCase" type="Sprite"]
-texture = ExtResource( 1 )
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="ShellCase" type="Node"]
+script = ExtResource( 3 )
+
+[node name="ShadowSprite" type="Sprite" parent="."]
+material = ExtResource( 2 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 1 )
+
+[node name="Collision" type="CollisionShape2D" parent="."]
