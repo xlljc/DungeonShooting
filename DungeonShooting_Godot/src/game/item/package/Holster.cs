@@ -121,8 +121,8 @@ public class Holster
             {
                 weapon.Pickup();
                 item.Weapon = weapon;
-                ExchangeByIndex(i);
                 weapon._PickUpWeapon(Master);
+                ExchangeByIndex(i);
                 return i;
             }
         }

@@ -42,7 +42,8 @@ public class RoomManager : Node2D
         var player = new Player();
         player.Position = new Vector2(100, 100);
         player.Name = "Player";
-        SortRoot.AddChild(player);
+        //SortRoot.AddChild(player);
+        player.PutDown();
     }
 
     public override void _Ready()

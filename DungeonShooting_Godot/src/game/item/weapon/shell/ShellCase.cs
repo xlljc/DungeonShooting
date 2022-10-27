@@ -1,9 +1,11 @@
 ﻿
+using Godot;
+
 public class ShellCase : ActivityObject
 {
     public ShellCase() : base("res://prefab/weapon/shell/ShellCase.tscn")
     {
-        Thickness = 1;
+        ShadowOffset = new Vector2(0, 1);
     }
 
     public override void OnThrowOver()

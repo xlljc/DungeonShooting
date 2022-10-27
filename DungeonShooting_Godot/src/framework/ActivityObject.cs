@@ -35,13 +35,14 @@ public abstract class ActivityObject : KinematicBody2D
     public bool IsThrowing => _throwData != null && !_throwData.IsOver;
 
     /// <summary>
-    /// 物体厚度, 影响阴影偏移
+    /// 阴影偏移
     /// </summary>
-    public int Thickness { get; protected set; } = 2;
-    
+    public Vector2 ShadowOffset { get; protected set; } = new Vector2(0, 2);
+
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     private bool initShadow;
     private string _prevAnimation;
+    private int _prevAnimationFrame;
 
     //存储投抛该物体时所产生的数据
     private ObjectThrowData _throwData;
@@ -96,16 +97,16 @@ public abstract class ActivityObject : KinematicBody2D
         }
 
         var anim = AnimatedSprite.Animation;
-        if (_prevAnimation != anim)
+        var frame = AnimatedSprite.Frame;
+        if (_prevAnimation != anim || _prevAnimationFrame != frame)
         {
             //切换阴影动画
-            ShadowSprite.Texture = AnimatedSprite.Frames.GetFrame(anim, AnimatedSprite.Frame);
+            ShadowSprite.Texture = AnimatedSprite.Frames.GetFrame(anim, frame);
         }
-
         _prevAnimation = anim;
-        ShadowSprite.Scale = AnimatedSprite.Scale;
-        ShadowSprite.Rotation = AnimatedSprite.Rotation;
-        ShadowSprite.Position = AnimatedSprite.Position + new Vector2(0, Thickness);
+        _prevAnimationFrame = frame;
+        
+        CalcShadow();
         ShadowSprite.Visible = true;
     }
 
@@ -160,7 +161,7 @@ public abstract class ActivityObject : KinematicBody2D
     /// <param name="master">触发者</param>
     public virtual void Interactive(ActivityObject master)
     {
-        
+
     }
 
     /// <summary>
@@ -194,7 +195,7 @@ public abstract class ActivityObject : KinematicBody2D
     {
 
     }
-    
+
     /// <summary>
     /// 拾起一个 node 节点
     /// </summary>
@@ -207,6 +208,7 @@ public abstract class ActivityObject : KinematicBody2D
             {
                 StopThrow();
             }
+
             parent.RemoveChild(this);
         }
     }
@@ -226,10 +228,10 @@ public abstract class ActivityObject : KinematicBody2D
 
             RoomManager.Current.ObjectRoot.AddChild(this);
         }
-        
+
         ShowShadowSprite();
     }
-    
+
     /// <summary>
     /// 将一个节点扔到地上, 并设置显示的阴影
     /// </summary>
@@ -380,9 +382,8 @@ public abstract class ActivityObject : KinematicBody2D
             //落地判断
             if (_throwData.Y <= 0)
             {
-                ShadowSprite.GlobalPosition = pos + new Vector2(0, Thickness);
                 Collision.GlobalPosition = pos;
-                
+
                 _throwData.IsOver = true;
 
                 //第一次接触地面
@@ -416,24 +417,48 @@ public abstract class ActivityObject : KinematicBody2D
             }
             else
             {
-                //计算阴影位置
-                ShadowSprite.GlobalPosition = pos + new Vector2(0, Thickness + _throwData.Y);
                 //碰撞器位置
                 Collision.GlobalPosition = pos + new Vector2(0, _throwData.Y);
             }
         }
 
-        //更新阴影贴图, 使其和动画一致
         if (ShadowSprite.Visible)
         {
+            //更新阴影贴图, 使其和动画一致
             var anim = AnimatedSprite.Animation;
-            if (_prevAnimation != anim)
+            var frame = AnimatedSprite.Frame;
+            if (_prevAnimation != anim || _prevAnimationFrame != frame)
             {
                 //切换阴影动画
                 ShadowSprite.Texture = AnimatedSprite.Frames.GetFrame(anim, AnimatedSprite.Frame);
             }
-
             _prevAnimation = anim;
+            _prevAnimationFrame = frame;
+            
+            //计算阴影
+            CalcShadow();
+        }
+
+    }
+
+    /// <summary>
+    /// 重新计算物体阴影的位置和旋转信息, 无论是否显示阴影
+    /// </summary>
+    public void CalcShadow()
+    {
+        //缩放
+        ShadowSprite.Scale = AnimatedSprite.Scale;
+        //阴影角度
+        ShadowSprite.GlobalRotationDegrees = GlobalRotationDegrees;
+        //阴影位置计算
+        var pos = AnimatedSprite.GlobalPosition;
+        if (_throwData != null && !_throwData.IsOver)
+        {
+            ShadowSprite.GlobalPosition = new Vector2(pos.x + ShadowOffset.x, pos.y + ShadowOffset.y + _throwData.Y);
+        }
+        else
+        {
+            ShadowSprite.GlobalPosition = pos + ShadowOffset;
         }
     }
 
@@ -510,7 +535,7 @@ public abstract class ActivityObject : KinematicBody2D
         //显示阴影
         ShowShadowSprite();
     }
-    
+
     /// <summary>
     /// 设置投抛状态下的碰撞器
     /// </summary>
@@ -581,7 +606,7 @@ public abstract class ActivityObject : KinematicBody2D
         GetParent().RemoveChild(this);
         RoomManager.Current.ObjectRoot.AddChild(this);
         RestoreCollision();
-        
+
         OnThrowOver();
     }
 }

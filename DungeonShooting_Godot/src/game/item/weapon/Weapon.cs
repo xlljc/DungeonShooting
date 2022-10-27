@@ -680,6 +680,9 @@ public abstract class Weapon : ActivityObject
     /// <param name="master">触发扔掉该武器的的角色</param>
     public void TriggerThrowWeapon(Role master)
     {
+        //阴影偏移
+        ShadowOffset = new Vector2(0, 2);
+        
         if (master.Face == FaceDirection.Left)
         {
             Scale *= new Vector2(1, -1);
@@ -734,6 +737,8 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public void _Active()
     {
+        ShadowOffset = new Vector2(0, Master.GlobalPosition.y - GlobalPosition.y);
+        ShowShadowSprite();
         OnActive();
     }
 
@@ -742,6 +747,7 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public void _Conceal()
     {
+        HideShadowSprite();
         OnConceal();
     }
 
