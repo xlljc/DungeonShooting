@@ -324,7 +324,7 @@ public abstract class Role : ActivityObject
     private void _OnPropsEnter(Area2D other)
     {
         ActivityObject propObject = other.AsActivityObject();
-        if (propObject != null) //道具类型
+        if (propObject != null)
         {
             if (!InteractiveItemList.Contains(propObject))
             {
@@ -340,7 +340,7 @@ public abstract class Role : ActivityObject
     private void _OnPropsExit(Area2D other)
     {
         ActivityObject propObject = other.AsActivityObject();
-        if (propObject != null) //道具类型
+        if (propObject != null)
         {
             if (InteractiveItemList.Contains(propObject))
             {

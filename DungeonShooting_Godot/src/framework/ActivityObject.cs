@@ -228,8 +228,8 @@ public abstract class ActivityObject : KinematicBody2D
 
             RoomManager.Current.ObjectRoot.AddChild(this);
         }
-
-        ShowShadowSprite();
+        //注意需要延时调用
+        CallDeferred(nameof(ShowShadowSprite));
     }
 
     /// <summary>
