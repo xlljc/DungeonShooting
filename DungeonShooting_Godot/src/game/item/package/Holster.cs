@@ -158,7 +158,7 @@ public class Holster
                 ActiveWeapon = null;
             }
         }
-        weapon._ThrowOutWeapon();
+        weapon._Remove();
         return weapon;
     }
 

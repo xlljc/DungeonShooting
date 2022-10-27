@@ -108,7 +108,7 @@ public class Shotgun : Weapon
 
     }
 
-    protected override void OnThrowOut()
+    protected override void OnRemove()
     {
 
     }

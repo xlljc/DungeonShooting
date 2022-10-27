@@ -184,9 +184,9 @@ public abstract class Weapon : ActivityObject
     protected abstract void OnPickUp(Role master);
 
     /// <summary>
-    /// 当武器从武器袋中扔掉时调用
+    /// 当武器从武器袋中移除时调用
     /// </summary>
-    protected abstract void OnThrowOut();
+    protected abstract void OnRemove();
 
     /// <summary>
     /// 当武器被激活时调用, 也就是使用当武器是调用
@@ -475,7 +475,7 @@ public abstract class Weapon : ActivityObject
     /// 拾起的弹药数量, 如果到达容量上限, 则返回拾取完毕后剩余的弹药数量
     /// </summary>
     /// <param name="count">弹药数量</param>
-    public int PickUpAmmo(int count)
+    private int PickUpAmmo(int count)
     {
         var num = ResidueAmmo;
         ResidueAmmo = Mathf.Min(ResidueAmmo + count, Attribute.MaxAmmoCapacity - CurrAmmo);
@@ -719,14 +719,14 @@ public abstract class Weapon : ActivityObject
     }
 
     /// <summary>
-    /// 触发抛出
+    /// 触发移除
     /// </summary>a
-    public void _ThrowOutWeapon()
+    public void _Remove()
     {
         Master = null;
         AnimatedSprite.Position = Attribute.CenterPosition;
         AnimationPlayer.Play("Floodlight");
-        OnThrowOut();
+        OnRemove();
     }
 
     /// <summary>

@@ -103,6 +103,9 @@ public abstract class ActivityObject : KinematicBody2D
         }
 
         _prevAnimation = anim;
+        ShadowSprite.Scale = AnimatedSprite.Scale;
+        ShadowSprite.Rotation = AnimatedSprite.Rotation;
+        ShadowSprite.Position = AnimatedSprite.Position + new Vector2(0, Thickness);
         ShadowSprite.Visible = true;
     }
 
@@ -192,14 +195,49 @@ public abstract class ActivityObject : KinematicBody2D
 
     }
     
-    public void PickUp()
+    /// <summary>
+    /// 拾起一个 node 节点
+    /// </summary>
+    public void Pickup()
     {
-
+        var parent = GetParent();
+        if (parent != null)
+        {
+            if (IsThrowing)
+            {
+                StopThrow();
+            }
+            parent.RemoveChild(this);
+        }
     }
 
-    public void PickDown()
+    /// <summary>
+    /// 将一个节点扔到地上, 并设置显示的阴影
+    /// </summary>
+    public void PutDown()
     {
+        var parent = GetParent();
+        if (parent != RoomManager.Current.ObjectRoot)
+        {
+            if (parent != null)
+            {
+                parent.RemoveChild(this);
+            }
 
+            RoomManager.Current.ObjectRoot.AddChild(this);
+        }
+        
+        ShowShadowSprite();
+    }
+    
+    /// <summary>
+    /// 将一个节点扔到地上, 并设置显示的阴影
+    /// </summary>
+    /// <param name="position">放置的位置</param>
+    public void PutDown(Vector2 position)
+    {
+        PutDown();
+        Position = position;
     }
 
     /// <summary>
@@ -471,7 +509,6 @@ public abstract class ActivityObject : KinematicBody2D
 
         //显示阴影
         ShowShadowSprite();
-        ShadowSprite.Scale = AnimatedSprite.Scale;
     }
     
     /// <summary>
