@@ -9,7 +9,7 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 重写的纹理
     /// </summary>
-    public Texture Texture { get; protected set; }
+    public Texture OverrideTexture { get; protected set; }
 
     /// <summary>
     /// 移动速度
@@ -40,6 +40,11 @@ public abstract class Role : ActivityObject
     /// </summary>
     public Position2D BackMountPoint { get; private set; }
 
+    /// <summary>
+    /// 互动碰撞区域
+    /// </summary>
+    public Area2D InteractiveArea { get; private set; }
+    
     /// <summary>
     /// 脸的朝向
     /// </summary>
@@ -117,22 +122,31 @@ public abstract class Role : ActivityObject
     {
     }
     
+    public Role(string scenePath) : base(scenePath)
+    {
+    }
+    
     public override void _Ready()
     {
         base._Ready();
         StartScele = Scale;
         MountPoint = GetNode<Position2D>("MountPoint");
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
-        if (Texture != null)
+        if (OverrideTexture != null)
         {
             // 更改纹理
-            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, Texture);
-            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, Texture);
-            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, Texture);
+            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, OverrideTexture);
+            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, OverrideTexture);
+            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, OverrideTexture);
         }
 
         Holster = new Holster(this);
         Face = FaceDirection.Right;
+
+        //连接互动物体信号
+        InteractiveArea = GetNode<Area2D>("InteractiveArea");
+        InteractiveArea.Connect("area_entered", this, nameof(_OnPropsEnter));
+        InteractiveArea.Connect("area_exited", this, nameof(_OnPropsExit));
     }
 
     public override void _Process(float delta)
@@ -213,11 +227,11 @@ public abstract class Role : ActivityObject
     /// </summary>
     public void TriggerThrowWeapon()
     {
-        var weapon = Holster.RmoveWeapon(Holster.ActiveIndex);
+        var weapon = Holster.RemoveWeapon(Holster.ActiveIndex);
         //播放抛出效果
         if (weapon != null)
         {
-            weapon.StartThrowWeapon(this);
+            weapon.TriggerThrowWeapon(this);
         }
     }
 
@@ -298,7 +312,7 @@ public abstract class Role : ActivityObject
             for (int i = 0; i < count; i++)
             {
                 AtlasTexture temp = spriteFrames.GetFrame(anim, i) as AtlasTexture;
-                temp.Atlas = Texture;
+                temp.Atlas = OverrideTexture;
             }
         }
     }
@@ -310,7 +324,7 @@ public abstract class Role : ActivityObject
     private void _OnPropsEnter(Area2D other)
     {
         ActivityObject propObject = other.AsActivityObject();
-        if (propObject != null) //道具类型
+        if (propObject != null)
         {
             if (!InteractiveItemList.Contains(propObject))
             {
@@ -326,7 +340,7 @@ public abstract class Role : ActivityObject
     private void _OnPropsExit(Area2D other)
     {
         ActivityObject propObject = other.AsActivityObject();
-        if (propObject != null) //道具类型
+        if (propObject != null)
         {
             if (InteractiveItemList.Contains(propObject))
             {

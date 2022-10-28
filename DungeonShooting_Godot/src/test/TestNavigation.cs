@@ -1,5 +1,6 @@
 using Godot;
 
+//测试导航
 public class TestNavigation : Node2D
 {
 

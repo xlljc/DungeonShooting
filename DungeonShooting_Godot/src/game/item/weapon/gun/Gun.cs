@@ -86,15 +86,10 @@ public class Gun : Weapon
     /// 子弹预制体
     /// </summary>
     public PackedScene BulletPack;
-    /// <summary>
-    /// 弹壳预制体
-    /// </summary>
-    public PackedScene ShellPack;
 
     public Gun(string id, WeaponAttribute attribute): base(id, attribute)
     {
         BulletPack = ResourceManager.Load<PackedScene>("res://prefab/weapon/bullet/OrdinaryBullets.tscn");
-        ShellPack = ResourceManager.Load<PackedScene>("res://prefab/weapon/shell/ShellCase.tscn");
     }
 
     protected override void OnFire()
@@ -106,8 +101,8 @@ public class Gun : Weapon
         var xf = MathUtils.RandRangeInt(20, 60);
         var yf = MathUtils.RandRangeInt(60, 120);
         var rotate = MathUtils.RandRangeInt(-720, 720);
-        var sprite = ShellPack.Instance<Sprite>();
-        sprite.StartThrow<ThrowWeapon>(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, sprite);
+        var shell = new ShellCase();
+        shell.Throw(new Vector2(10, 5), startPos, startHeight, direction, xf, yf, rotate, true);
         //创建抖动
         MainCamera.Main.ProssesDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
     }
@@ -143,7 +138,7 @@ public class Gun : Weapon
         
     }
 
-    protected override void OnThrowOut()
+    protected override void OnRemove()
     {
 
     }

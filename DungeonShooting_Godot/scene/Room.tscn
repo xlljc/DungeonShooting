@@ -20,11 +20,12 @@ z_index = -10
 [node name="dungeon_test" parent="MapRoot" instance=ExtResource( 2 )]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 196, 128 )
+position = Vector2( 253, 219 )
 current = true
 process_mode = 0
 smoothing_enabled = true
 smoothing_speed = 8.0
+editor_draw_drag_margin = true
 script = ExtResource( 5 )
 
 [node name="ObjectRoot" type="Node2D" parent="."]

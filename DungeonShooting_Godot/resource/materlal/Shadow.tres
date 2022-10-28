@@ -5,5 +5,5 @@
 [resource]
 resource_local_to_scene = true
 shader = ExtResource( 1 )
-shader_param/shadowColor = Color( 0, 0, 0, 0.8 )
+shader_param/shadowColor = Color( 0, 0, 0, 0.470588 )
 shader_param/schedule = 1.0

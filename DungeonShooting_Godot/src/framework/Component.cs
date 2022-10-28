@@ -2,59 +2,94 @@
 using Godot;
 
 /// <summary>
-/// 组件基类
+/// 组件基类, 用于挂载到游戏物体上, 相比于原生 Node 更加轻量化, 可以大量添加组件
 /// </summary>
 public abstract class Component : IProcess, IDestroy
 {
+    /// <summary>
+    /// 当前组件所挂载的游戏对象
+    /// </summary>
     public ActivityObject ActivityObject { get; private set; }
 
+    /// <summary>
+    /// 当前组件所挂载的物体的坐标
+    /// </summary>
     public Vector2 Position
     {
         get => ActivityObject.Position;
         set => ActivityObject.Position = value;
     }
 
+    /// <summary>
+    /// 当前组件所挂载物体的全局坐标
+    /// </summary>
     public Vector2 GlobalPosition
     {
         get => ActivityObject.GlobalPosition;
         set => ActivityObject.GlobalPosition = value;
     }
 
+    /// <summary>
+    /// 当前组件是否显示
+    /// </summary>
     public bool Visible
     {
         get => ActivityObject.Visible;
         set => ActivityObject.Visible = value;
     }
 
+    /// <summary>
+    /// 挂载物体的动画节点
+    /// </summary>
     public AnimatedSprite AnimatedSprite => ActivityObject.AnimatedSprite;
+    /// <summary>
+    /// 挂载物体的阴影节点
+    /// </summary>
     public Sprite ShadowSprite => ActivityObject.ShadowSprite;
+    /// <summary>
+    /// 挂载物体的碰撞器节点
+    /// </summary>
     public CollisionShape2D Collision => ActivityObject.Collision;
 
+    /// <summary>
+    /// 是否启用当前组件
+    /// </summary>
     public bool Enable { get; set; } = true;
 
+    /// <summary>
+    /// 是否被销毁
+    /// </summary>
     public bool IsDestroyed { get; private set; }
 
-    private bool _isReady = false;
+    //是否调用过 start 函数
+    internal bool IsStart = false;
 
-    public Component()
+    /// <summary>
+    /// 第一次调用 Update 或 PhysicsUpdate 之前调用
+    /// </summary>
+    public virtual void Start()
     {
     }
 
     /// <summary>
-    /// 第一次调用 Process 或 PhysicsProcess 之前调用
+    /// 如果启用了组件, 则每帧会调用一次 Update
     /// </summary>
-    public virtual void Ready()
+    /// <param name="delta"></param>
+    public virtual void Update(float delta)
     {
     }
 
-    public virtual void Process(float delta)
+    /// <summary>
+    /// 如果启用了组件, 则每物理帧会调用一次 PhysicsUpdate
+    /// </summary>
+    /// <param name="delta"></param>
+    public virtual void PhysicsUpdate(float delta)
     {
     }
 
-    public virtual void PhysicsProcess(float delta)
-    {
-    }
-
+    /// <summary>
+    /// 当组件被销毁时调用
+    /// </summary>
     public virtual void OnDestroy()
     {
     }
@@ -76,7 +111,7 @@ public abstract class Component : IProcess, IDestroy
     /// <summary>
     /// 当组件销毁
     /// </summary>
-    public new void Destroy()
+    public void Destroy()
     {
         if (IsDestroyed)
         {
@@ -91,29 +126,7 @@ public abstract class Component : IProcess, IDestroy
 
         OnDestroy();
     }
-
-    internal void _TriggerProcess(float delta)
-    {
-        if (!_isReady)
-        {
-            _isReady = true;
-            Ready();
-        }
-
-        Process(delta);
-    }
-
-    internal void _TriggerPhysicsProcess(float delta)
-    {
-        if (!_isReady)
-        {
-            _isReady = true;
-            Ready();
-        }
-
-        PhysicsProcess(delta);
-    }
-
+    
     internal void _SetActivityObject(ActivityObject activityObject)
     {
         ActivityObject = activityObject;

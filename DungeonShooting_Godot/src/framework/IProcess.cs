@@ -7,10 +7,10 @@ public interface IProcess
     /// <summary>
     /// 普通帧每帧调用
     /// </summary>
-    void Process(float delta);
+    void Update(float delta);
 
     /// <summary>
     /// 物理帧每帧调用
     /// </summary>
-    void PhysicsProcess(float delta);
+    void PhysicsUpdate(float delta);
 }

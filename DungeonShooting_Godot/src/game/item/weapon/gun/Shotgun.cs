@@ -68,8 +68,8 @@ public class Shotgun : Weapon
         var xf = MathUtils.RandRangeInt(20, 60);
         var yf = MathUtils.RandRangeInt(60, 120);
         var rotate = MathUtils.RandRangeInt(-720, 720);
-        var sprite = ShellPack.Instance<Sprite>();
-        sprite.StartThrow<ThrowWeapon>(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, sprite);
+        var shell = new ShellCase();
+        shell.Throw(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, true);
         //创建抖动
         MainCamera.Main.ProssesDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
     }
@@ -108,7 +108,7 @@ public class Shotgun : Weapon
 
     }
 
-    protected override void OnThrowOut()
+    protected override void OnRemove()
     {
 
     }

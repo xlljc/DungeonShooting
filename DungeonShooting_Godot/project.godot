@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="DungeonShooting"
-run/main_scene="res://scene/Main.tscn"
+run/main_scene="res://scene/Room.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -170,6 +170,10 @@ reload={
 2d_physics/layer_3="props"
 2d_physics/layer_4="player"
 2d_physics/layer_5="enemy"
+
+[mono]
+
+project/assembly_name="DungeonShooting"
 
 [physics]
 

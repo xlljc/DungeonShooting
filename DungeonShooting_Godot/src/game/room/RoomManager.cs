@@ -42,7 +42,8 @@ public class RoomManager : Node2D
         var player = new Player();
         player.Position = new Vector2(100, 100);
         player.Name = "Player";
-        SortRoot.AddChild(player);
+        //SortRoot.AddChild(player);
+        player.PutDown();
     }
 
     public override void _Ready()
@@ -50,20 +51,18 @@ public class RoomManager : Node2D
         //播放bgm
         SoundManager.PlayeMusic("intro.ogg", this, -17f);
         var gun1 = WeaponManager.GetGun("1001");
-        gun1.Position = new Vector2(80, 80);
-        gun1.PutDown(gun1.WeaponSprite);
+        gun1.PutDown(new Vector2(80, 80));
         var gun2 = WeaponManager.GetGun("1002");
-        gun2.Position = new Vector2(80, 120);
-        gun2.PutDown(gun2.WeaponSprite);
+        gun2.PutDown(new Vector2(80, 120));
         var gun3 = WeaponManager.GetGun("1003");
-        gun3.Position = new Vector2(120, 80);
-        gun3.PutDown(gun3.WeaponSprite);
-        // var gun4 = WeaponManager.GetGun4();
-        // gun4.Position = new Vector2(120, 120);
-        // gun4.PutDown(gun4.WeaponSprite);
-        // var gun5 = WeaponManager.GetGun5();
-        // gun5.Position = new Vector2(160, 160);
-        // gun5.PutDown(gun5.WeaponSprite);
+        gun3.PutDown(new Vector2(120, 80));
+        
+        var gun4 = WeaponManager.GetGun("1003");
+        gun4.PutDown(new Vector2(180, 80));
+        var gun5 = WeaponManager.GetGun("1003");
+        gun5.PutDown(new Vector2(180, 180));
+        var gun6 = WeaponManager.GetGun("1002");
+        gun6.PutDown(new Vector2(180, 120));
     }
 
     public override void _Process(float delta)

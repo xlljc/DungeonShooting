@@ -6,7 +6,6 @@ using System;
 /// </summary>
 public abstract class Weapon : ActivityObject
 {
-
     /// <summary>
     /// 武器的唯一id
     /// </summary>
@@ -21,12 +20,7 @@ public abstract class Weapon : ActivityObject
     /// 属性数据
     /// </summary>
     public WeaponAttribute Attribute { get; private set; }
-
-    /// <summary>
-    /// 武器的图片
-    /// </summary>
-    public Sprite WeaponSprite { get; private set; }
-
+    
     /// <summary>
     /// 动画播放器
     /// </summary>
@@ -131,7 +125,6 @@ public abstract class Weapon : ActivityObject
         Id = id;
         Attribute = attribute;
 
-        WeaponSprite = GetNode<Sprite>("WeaponBody/WeaponSprite");
         FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
         OriginPoint = GetNode<Position2D>("WeaponBody/OriginPoint");
         ShellPoint = GetNode<Position2D>("WeaponBody/ShellPoint");
@@ -139,8 +132,10 @@ public abstract class Weapon : ActivityObject
         CollisionShape2D = GetNode<CollisionShape2D>("WeaponBody/Collision");
 
         //更新图片
-        WeaponSprite.Texture = ResourceLoader.Load<Texture>(Attribute.Sprite);
-        WeaponSprite.Position = Attribute.CenterPosition;
+        var texture = ResourceLoader.Load<Texture>(Attribute.Sprite);
+        SetDefaultTexture(texture);
+        AnimatedSprite.Position = Attribute.CenterPosition;
+
         //开火位置
         FirePoint.Position = new Vector2(Attribute.FirePosition.x, -Attribute.FirePosition.y);
         OriginPoint.Position = new Vector2(0, -Attribute.FirePosition.y);
@@ -189,9 +184,9 @@ public abstract class Weapon : ActivityObject
     protected abstract void OnPickUp(Role master);
 
     /// <summary>
-    /// 当武器从武器袋中扔掉时调用
+    /// 当武器从武器袋中移除时调用
     /// </summary>
-    protected abstract void OnThrowOut();
+    protected abstract void OnRemove();
 
     /// <summary>
     /// 当武器被激活时调用, 也就是使用当武器是调用
@@ -480,7 +475,7 @@ public abstract class Weapon : ActivityObject
     /// 拾起的弹药数量, 如果到达容量上限, 则返回拾取完毕后剩余的弹药数量
     /// </summary>
     /// <param name="count">弹药数量</param>
-    public int PickUpAmmo(int count)
+    private int PickUpAmmo(int count)
     {
         var num = ResidueAmmo;
         ResidueAmmo = Mathf.Min(ResidueAmmo + count, Attribute.MaxAmmoCapacity - CurrAmmo);
@@ -620,8 +615,9 @@ public abstract class Weapon : ActivityObject
     {
         if (master is Role roleMaster) //与role碰撞
         {
+            var holster = roleMaster.Holster;
             //查找是否有同类型武器
-            var index = roleMaster.Holster.FindWeapon(Id);
+            var index = holster.FindWeapon(Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
@@ -629,7 +625,7 @@ public abstract class Weapon : ActivityObject
                     return;
                 }
 
-                var weapon = roleMaster.Holster.GetWeapon(index);
+                var weapon = holster.GetWeapon(index);
                 //子弹上限
                 var maxCount = Attribute.MaxAmmoCapacity;
                 //是否捡到子弹
@@ -657,20 +653,20 @@ public abstract class Weapon : ActivityObject
                 //播放互动效果
                 if (flag)
                 {
-                    this.StartThrow<ThrowWeapon>(new Vector2(20, 20), GlobalPosition, 0, 0,
+                    Throw(new Vector2(30, 15), GlobalPosition, 0, 0,
                         MathUtils.RandRangeInt(-20, 20), MathUtils.RandRangeInt(20, 50),
-                        MathUtils.RandRangeInt(-180, 180), WeaponSprite);
+                        MathUtils.RandRangeInt(-180, 180));
                 }
             }
             else //没有武器
             {
-                if (roleMaster.Holster.PickupWeapon(this) == -1)
+                if (holster.PickupWeapon(this) == -1)
                 {
-                    var slot = roleMaster.Holster.SlotList[roleMaster.Holster.ActiveIndex];
+                    var slot = holster.SlotList[holster.ActiveIndex];
                     if (slot.Type == Attribute.WeightType)
                     {
-                        var weapon = roleMaster.Holster.RmoveWeapon(roleMaster.Holster.ActiveIndex);
-                        weapon.StartThrowWeapon(roleMaster);
+                        var weapon = holster.RemoveWeapon(holster.ActiveIndex);
+                        weapon.TriggerThrowWeapon(roleMaster);
                         roleMaster.PickUpWeapon(this);
                     }
                 }
@@ -678,15 +674,29 @@ public abstract class Weapon : ActivityObject
         }
     }
 
-    public Vector2 GetItemPosition()
-    {
-        return GlobalPosition;
-    }
-
     /// <summary>
-    /// 触发落到地面
+    /// 触发扔掉武器操作
     /// </summary>
-    public void _FallToGround()
+    /// <param name="master">触发扔掉该武器的的角色</param>
+    public void TriggerThrowWeapon(Role master)
+    {
+        //阴影偏移
+        ShadowOffset = new Vector2(0, 2);
+        
+        if (master.Face == FaceDirection.Left)
+        {
+            Scale *= new Vector2(1, -1);
+            RotationDegrees = 180;
+        }
+        var startHeight = 6;
+        var direction = master.GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
+        var xf = 30;
+        var yf = MathUtils.RandRangeInt(60, 120);
+        var rotate = MathUtils.RandRangeInt(-180, 180);
+        Throw(new Vector2(30, 15), master.MountPoint.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
+    }
+    
+    public override void OnThrowOver()
     {
         //启用碰撞
         CollisionShape2D.Disabled = false;
@@ -699,12 +709,12 @@ public abstract class Weapon : ActivityObject
     {
         Master = master;
         //握把位置
-        WeaponSprite.Position = Attribute.HoldPosition;
-        //清除泛白效果
-        ShaderMaterial sm = WeaponSprite.Material as ShaderMaterial;
-        sm.SetShaderParam("schedule", 0);
+        AnimatedSprite.Position = Attribute.HoldPosition;
         //停止动画
         AnimationPlayer.Stop();
+        //清除泛白效果
+        ShaderMaterial sm = (ShaderMaterial) AnimatedSprite.Material;
+        sm.SetShaderParam("schedule", 0);
         ZIndex = 0;
         //禁用碰撞
         CollisionShape2D.Disabled = true;
@@ -712,14 +722,14 @@ public abstract class Weapon : ActivityObject
     }
 
     /// <summary>
-    /// 触发抛出
+    /// 触发移除
     /// </summary>a
-    public void _ThrowOutWeapon()
+    public void _Remove()
     {
         Master = null;
-        WeaponSprite.Position = Attribute.CenterPosition;
+        AnimatedSprite.Position = Attribute.CenterPosition;
         AnimationPlayer.Play("Floodlight");
-        OnThrowOut();
+        OnRemove();
     }
 
     /// <summary>
@@ -727,6 +737,8 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public void _Active()
     {
+        ShadowOffset = new Vector2(0, Master.GlobalPosition.y - GlobalPosition.y);
+        ShowShadowSprite();
         OnActive();
     }
 
@@ -735,6 +747,7 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public void _Conceal()
     {
+        HideShadowSprite();
         OnConceal();
     }
 
