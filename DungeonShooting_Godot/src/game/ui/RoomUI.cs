@@ -64,7 +64,7 @@ public class RoomUI : Control
 
         //将 GlobalNode 节点下的 ui 节点放入全局坐标中
         var tempNode = GetNode("GlobalNode");
-        var root = GetTree().CurrentScene;
+        var root = RoomManager.Current;
         var count = tempNode.GetChildCount();
         for (int i = count - 1; i >= 0; i--)
         {

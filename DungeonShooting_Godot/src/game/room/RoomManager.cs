@@ -22,7 +22,7 @@ public class RoomManager : Node2D
     public override void _EnterTree()
     {
         Current = this;
-        Input.MouseMode = Input.MouseModeEnum.Hidden;
+        //Input.MouseMode = Input.MouseModeEnum.Hidden;
 
         UI = GetNode<CanvasLayer>("UI");
 

@@ -88,11 +88,12 @@ public class Player : Role
         //枪口跟随鼠标
         MountPoint.LookAt(mousePos);
         //脸的朝向
-        if (mousePos.x > GlobalPosition.x && Face == FaceDirection.Left)
+        var gPos = GlobalPosition;
+        if (mousePos.x > gPos.x && Face == FaceDirection.Left)
         {
             Face = FaceDirection.Right;
         }
-        else if (mousePos.x < GlobalPosition.x && Face == FaceDirection.Right)
+        else if (mousePos.x < gPos.x && Face == FaceDirection.Right)
         {
             Face = FaceDirection.Left;
         }
@@ -128,7 +129,7 @@ public class Player : Role
 
         if (Holster.ActiveWeapon != null && Holster.ActiveWeapon.Reloading)
         {
-            RoomUI.Current.ReloadBar.ShowBar(GlobalPosition, 1 - Holster.ActiveWeapon.ReloadProgress);
+            RoomUI.Current.ReloadBar.ShowBar(gPos, 1 - Holster.ActiveWeapon.ReloadProgress);
         }
         else
         {

@@ -106,7 +106,10 @@ public abstract class Role : ActivityObject
     /// 当可互动的物体改变时调用, result 参数为 null 表示变为不可互动
     /// </summary>
     /// <param name="result">检测是否可互动时的返回值</param>
-    protected abstract void ChangeInteractiveItem(CheckInteractiveResult result);
+    protected virtual void ChangeInteractiveItem(CheckInteractiveResult result)
+    {
+        
+    }
 
     public override CheckInteractiveResult CheckInteractive(ActivityObject master)
     {
