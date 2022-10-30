@@ -64,11 +64,11 @@ public class Player : Role
         base._Ready();
         
         //让相机跟随玩家
-        var remoteTransform = new RemoteTransform2D();
-        AddChild(remoteTransform);
-        MainCamera.Main.GlobalPosition = GlobalPosition;
-        MainCamera.Main.ResetSmoothing();
-        remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
+        // var remoteTransform = new RemoteTransform2D();
+        // AddChild(remoteTransform);
+        // MainCamera.Main.GlobalPosition = GlobalPosition;
+        // MainCamera.Main.ResetSmoothing();
+        // remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
         
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;
@@ -84,7 +84,7 @@ public class Player : Role
     {
         base._Process(delta);
 
-        Vector2 mousePos = GetGlobalMousePosition();
+        Vector2 mousePos = InputManager.GetMousePosition();
         //枪口跟随鼠标
         MountPoint.LookAt(mousePos);
         //脸的朝向

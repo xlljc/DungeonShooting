@@ -23,6 +23,8 @@ public class Gun : Weapon
             ScatteringRangeBackSpeed = 40;
             //连发
             ContinuousShoot = true;
+            AmmoCapacity = 120;
+            MaxAmmoCapacity = 120 * 70;
             //扳机检测间隔
             TriggerInterval = 0f;
             //连发数量

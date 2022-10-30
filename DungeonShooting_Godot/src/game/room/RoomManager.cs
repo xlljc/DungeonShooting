@@ -18,11 +18,13 @@ public class RoomManager : Node2D
     public Player Player { get; set; }
     public Node2D ObjectRoot { get; private set; }
     public YSort SortRoot { get; private set; }
+    public Viewport Viewport { get; private set; }
+    public ViewportContainer ViewportContainer { get; private set; }
 
     public override void _EnterTree()
     {
         Current = this;
-        //Input.MouseMode = Input.MouseModeEnum.Hidden;
+        Input.MouseMode = Input.MouseModeEnum.Hidden;
 
         UI = GetNode<CanvasLayer>("UI");
 
@@ -31,6 +33,12 @@ public class RoomManager : Node2D
         AddChild(Cursor);
 
         SortRoot = GetNode<YSort>("ItemRoot");
+        Viewport = GetParentOrNull<Viewport>();
+        if (Viewport != null)
+        {
+            ViewportContainer = Viewport.GetParentOrNull<ViewportContainer>();
+        }
+            
         ObjectRoot = GetNode<Node2D>("ObjectRoot");
 
         //初始化地图
@@ -50,19 +58,16 @@ public class RoomManager : Node2D
     {
         //播放bgm
         SoundManager.PlayeMusic("intro.ogg", this, -17f);
-        var gun1 = WeaponManager.GetGun("1001");
-        gun1.PutDown(new Vector2(80, 80));
-        var gun2 = WeaponManager.GetGun("1002");
-        gun2.PutDown(new Vector2(80, 120));
-        var gun3 = WeaponManager.GetGun("1003");
-        gun3.PutDown(new Vector2(120, 80));
-        
-        var gun4 = WeaponManager.GetGun("1003");
-        gun4.PutDown(new Vector2(180, 80));
-        var gun5 = WeaponManager.GetGun("1003");
-        gun5.PutDown(new Vector2(180, 180));
-        var gun6 = WeaponManager.GetGun("1002");
-        gun6.PutDown(new Vector2(180, 120));
+        WeaponManager.GetGun("1001").PutDown(new Vector2(100, 80));
+        WeaponManager.GetGun("1001").PutDown(new Vector2(80, 100));
+        WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
+        WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120));
+        WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80));
+
+        WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80));
+        WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));
+        WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120));
+
     }
 
     public override void _Process(float delta)

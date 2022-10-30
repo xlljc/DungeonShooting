@@ -5,7 +5,6 @@ using Godot;
 /// </summary>
 public class Cursor : Node2D
 {
-
     private Sprite lt;
     private Sprite lb;
     private Sprite rt;
@@ -33,6 +32,11 @@ public class Cursor : Node2D
         SetCursorPos();
     }
 
+    public Vector2 GetPos()
+    {
+        return Vector2.Zero;
+    }
+
     /// <summary>
     /// 设置光标半径范围
     /// </summary>
@@ -55,6 +59,6 @@ public class Cursor : Node2D
 
     private void SetCursorPos()
     {
-        Position = GetGlobalMousePosition();
+        Position = InputManager.GetMousePosition();
     }
 }

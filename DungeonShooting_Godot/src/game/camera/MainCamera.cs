@@ -19,34 +19,57 @@ public class MainCamera : Camera2D
     public bool Enable { get; set; } = true;
 
     private long _index = 0;
-    private Vector2 _prossesDistance = Vector2.Zero;
-    private Vector2 _prossesDirectiona = Vector2.Zero;
+    private Vector2 _processDistance = Vector2.Zero;
+    private Vector2 _processDirection = Vector2.Zero;
     private readonly Dictionary<long, Vector2> _shakeMap = new Dictionary<long, Vector2>();
-
+    
+    private Vector2 _camPos;
+    private Vector2 _shakeOffset = Vector2.Zero;
+    
     public override void _Ready()
     {
         Main = this;
-    }
-    public override void _PhysicsProcess(float delta)
-    {
-        _Shake(delta);
+        _camPos = GlobalPosition;
     }
 
+    //public override void _PhysicsProcess(float delta)
+
+    public override void _Process(float delta)
+    {
+        _Shake(delta);
+        
+        var player = RoomManager.Current.Player;
+        var viewportContainer = RoomManager.Current.ViewportContainer;
+        //var mousePos = InputManager.GetMousePosition();
+        // 使用lerp，相机的位置移动到鼠标的位置
+        var camPos = player.GlobalPosition;
+        //var camPos = player.GlobalPosition.LinearInterpolate(mousePos, 0);
+        // 用另一种方式使运动平稳
+        _camPos = _camPos.LinearInterpolate(camPos, 5 * delta) + _shakeOffset;
+        // 计算新相机的“亚像素”位置
+        var camSubpixelPos = _camPos.Round() - _camPos;
+        // 更新主要视图端口的shader参数
+        (viewportContainer.Material as ShaderMaterial)?.SetShaderParam("offset", camSubpixelPos);
+        // 把相机调到新位置，然后旋转。
+        GlobalPosition = _camPos.Round();
+    }
+
+    
     /// <summary>
     /// 设置帧抖动, 结束后自动清零, 需要每一帧调用
     /// </summary>
     /// <param name="value">抖动的力度</param>
     public void ProcessShake(Vector2 value)
     {
-        if (value.Length() > _prossesDistance.Length())
+        if (value.Length() > _processDistance.Length())
         {
-            _prossesDistance = value;
+            _processDistance = value;
         }
     }
 
     public void ProcessDirectionalShake(Vector2 value)
     {
-        _prossesDirectiona += value;
+        _processDirection += value;
     }
 
     /// <summary>
@@ -71,18 +94,17 @@ public class MainCamera : Camera2D
     {
         if (Enable)
         {
-            var _distance = _CalculateDistance();
-            Offset += new Vector2(
-                (float)GD.RandRange(-_distance.x, _distance.x) - Offset.x,
-                (float)GD.RandRange(-_distance.y, _distance.y) - Offset.y
+            var distance = _CalculateDistance();
+            _shakeOffset += _processDirection + new Vector2(
+                (float)GD.RandRange(-distance.x, distance.x) - _shakeOffset.x,
+                (float)GD.RandRange(-distance.y, distance.y) - _shakeOffset.y
             );
-            Offset += _prossesDirectiona;
-            _prossesDistance = Vector2.Zero;
-            _prossesDirectiona = Vector2.Zero;
+            _processDistance = Vector2.Zero;
+            _processDirection = Vector2.Zero;
         }
         else
         {
-            Offset = Offset.LinearInterpolate(Vector2.Zero, RecoveryCoefficient * delta);
+            _shakeOffset = _shakeOffset.LinearInterpolate(Vector2.Zero, RecoveryCoefficient * delta);
         }
     }
 
@@ -101,7 +123,7 @@ public class MainCamera : Camera2D
                 temp = value;
             }
         }
-        return _prossesDistance.Length() > length ? _prossesDistance : temp;
+        return _processDistance.Length() > length ? _processDistance : temp;
     }
 
 }

@@ -78,7 +78,7 @@ public class OrdinaryBullets : Node2D, IBullet
             Node2D hit = Hit.Instance<Node2D>();
             hit.RotationDegrees = MathUtils.RandRangeInt(0, 360);
             hit.GlobalPosition = pos;
-            GetTree().CurrentScene.AddChild(hit);
+            RoomManager.Current.SortRoot.AddChild(hit);
             QueueFree();
         }
         else //没有碰到, 继续移动
