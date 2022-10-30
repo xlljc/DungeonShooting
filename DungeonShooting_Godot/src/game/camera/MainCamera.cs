@@ -36,7 +36,7 @@ public class MainCamera : Camera2D
     /// 设置帧抖动, 结束后自动清零, 需要每一帧调用
     /// </summary>
     /// <param name="value">抖动的力度</param>
-    public void ProssesShake(Vector2 value)
+    public void ProcessShake(Vector2 value)
     {
         if (value.Length() > _prossesDistance.Length())
         {
@@ -44,7 +44,7 @@ public class MainCamera : Camera2D
         }
     }
 
-    public void ProssesDirectionalShake(Vector2 value)
+    public void ProcessDirectionalShake(Vector2 value)
     {
         _prossesDirectiona += value;
     }

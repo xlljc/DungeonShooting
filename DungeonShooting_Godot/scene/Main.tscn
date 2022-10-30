@@ -13,8 +13,9 @@ stretch = true
 
 [node name="Viewport" type="Viewport" parent="CanvasLayer/ViewportContainer"]
 size = Vector2( 480, 270 )
+own_world = true
 transparent_bg = true
-handle_input_locally = false
+debanding = true
 render_target_update_mode = 3
 
 [node name="Room" parent="CanvasLayer/ViewportContainer/Viewport" instance=ExtResource( 1 )]
