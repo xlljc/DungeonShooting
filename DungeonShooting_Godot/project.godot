@@ -175,7 +175,9 @@ project/assembly_name="DungeonShooting"
 
 [physics]
 
+common/physics_jitter_fix=0.0
 common/enable_pause_aware_picking=true
+common/physics_interpolation=true
 
 [rendering]
 

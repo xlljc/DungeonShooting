@@ -15,7 +15,7 @@ public class RoomManager : Node2D
 
     public CanvasLayer UI;
     public Cursor Cursor { get; private set; }
-    public Player Player { get; set; }
+    public Player Player { get; private set; }
     public Node2D ObjectRoot { get; private set; }
     public YSort SortRoot { get; private set; }
     public Viewport Viewport { get; private set; }
@@ -47,11 +47,11 @@ public class RoomManager : Node2D
         VisualServer.SetDefaultClearColor(color);
         
         //创建玩家
-        var player = new Player();
-        player.Position = new Vector2(100, 100);
-        player.Name = "Player";
+        Player = new Player();
+        Player.Position = new Vector2(100, 100);
+        Player.Name = "Player";
         //SortRoot.AddChild(player);
-        player.PutDown();
+        Player.PutDown();
     }
 
     public override void _Ready()

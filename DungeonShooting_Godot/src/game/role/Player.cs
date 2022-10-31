@@ -45,23 +45,21 @@ public class Player : Role
         }
     }
     private int _maxShield = 0;
-
+    
+    private Vector2 _v1;
+    private Vector2 _v2;
 
     [Export] public PackedScene GunPrefab;
 
     public Player(): base("res://prefab/role/Player.tscn")
     {
     }
-    
-    public override void _EnterTree()
-    {
-        base._EnterTree();
-        RoomManager.Current.Player = this;
-    }
 
     public override void _Ready()
     {
         base._Ready();
+
+        _v1 = _v2 = Position;
         
         //让相机跟随玩家
         // var remoteTransform = new RemoteTransform2D();
@@ -97,6 +95,10 @@ public class Player : Role
         {
             Face = FaceDirection.Left;
         }
+        
+        var f = Mathf.Clamp(Engine.GetPhysicsInterpolationFraction(), 0, 1);
+        Position = _v1.LinearInterpolate(_v2, f).Round();
+        // GD.Print($"Position: {_realPos}, f: {f}");
 
         if (Input.IsActionJustPressed("exchange")) //切换武器
         {
@@ -143,6 +145,7 @@ public class Player : Role
         Move(delta);
         //播放动画
         PlayAnim();
+        //AnimatedSprite.Playing = false;
     }
 
     protected override void OnChangeHp(int hp)
@@ -222,8 +225,11 @@ public class Player : Role
 
         if (Mathf.IsZeroApprox(dir.y)) Velocity.y = Mathf.MoveToward(Velocity.y, 0, Friction * delta);
         else Velocity.y = Mathf.MoveToward(Velocity.y, dir.y * MoveSpeed, Acceleration * delta);
-
+        
+        _v1 = Position = _v2;
         Velocity = MoveAndSlide(Velocity);
+        _v2 = Position;
+        Position = _v1.Round();
     }
 
     // 播放动画
