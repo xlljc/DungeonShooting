@@ -14,4 +14,9 @@ public class GameManager : Node2D
         //扫描并注册当前程序集下的武器
         WeaponManager.RegisterWeaponFromAssembly(GetType().Assembly);
     }
+
+    public override void _Process(float delta)
+    {
+        InputManager.Update(delta);
+    }
 }

@@ -1,20 +1,45 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scene/Room.tscn" type="PackedScene" id=1]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform vec2 offset = vec2(0.0 , 0.0);
+
+void vertex() {
+	
+	VERTEX += offset;
+	
+}
+
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/offset = Vector2( 0, 0 )
 
 [node name="Main" type="Node2D"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+offset = Vector2( -4, -4 )
+transform = Transform2D( 1, 0, 0, 1, -4, -4 )
 
 [node name="ViewportContainer" type="ViewportContainer" parent="CanvasLayer"]
+material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = -1438.0
+margin_bottom = -808.0
+rect_scale = Vector2( 4, 4 )
 stretch = true
 
 [node name="Viewport" type="Viewport" parent="CanvasLayer/ViewportContainer"]
-size = Vector2( 480, 270 )
+size = Vector2( 482, 272 )
+own_world = true
 transparent_bg = true
 handle_input_locally = false
+debanding = true
 render_target_update_mode = 3
 
 [node name="Room" parent="CanvasLayer/ViewportContainer/Viewport" instance=ExtResource( 1 )]
