@@ -47,6 +47,7 @@ public class MainCamera : Camera2D
         _camPos = _camPos.LinearInterpolate(camPos, Mathf.Min(5 * delta, 1)) + _shakeOffset;
         var camSubpixelPos = _camPos.Round() - _camPos;
         (viewportContainer.Material as ShaderMaterial)?.SetShaderParam("offset", camSubpixelPos);
+        //GlobalPosition = _camPos.Round();
         GlobalPosition = _camPos.Round();
     }
     

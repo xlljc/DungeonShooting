@@ -22,6 +22,7 @@ z_index = -10
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 253, 219 )
 current = true
+process_mode = 0
 limit_smoothed = true
 editor_draw_drag_margin = true
 script = ExtResource( 5 )

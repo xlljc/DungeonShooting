@@ -96,8 +96,8 @@ public class Player : Role
             Face = FaceDirection.Left;
         }
         
-        var f = Mathf.Clamp(Engine.GetPhysicsInterpolationFraction(), 0, 1);
-        Position = _v1.LinearInterpolate(_v2, f).Round();
+        //var f = Mathf.Clamp(Engine.GetPhysicsInterpolationFraction(), 0, 1);
+        //Position = _v1.LinearInterpolate(_v2, f).Round();
         // GD.Print($"Position: {_realPos}, f: {f}");
 
         if (Input.IsActionJustPressed("exchange")) //切换武器
@@ -145,6 +145,7 @@ public class Player : Role
         Move(delta);
         //播放动画
         PlayAnim();
+        //GlobalPosition = GlobalPosition.Round();
         //AnimatedSprite.Playing = false;
     }
 
@@ -226,10 +227,10 @@ public class Player : Role
         if (Mathf.IsZeroApprox(dir.y)) Velocity.y = Mathf.MoveToward(Velocity.y, 0, Friction * delta);
         else Velocity.y = Mathf.MoveToward(Velocity.y, dir.y * MoveSpeed, Acceleration * delta);
         
-        _v1 = Position = _v2;
+        //_v1 = Position = _v2;
         Velocity = MoveAndSlide(Velocity);
-        _v2 = Position;
-        Position = _v1.Round();
+        //_v2 = Position;
+        //Position = _v1.Round();
     }
 
     // 播放动画
