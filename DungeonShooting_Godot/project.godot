@@ -38,7 +38,7 @@ enabled=PoolStringArray( "res://addons/dungeonShooting_plugin/plugin.cfg", "res:
 [gui]
 
 theme/custom="res://resource/theme/mainTheme.tres"
-theme/custom_font="res://resource/font/cn_font_6.tres"
+theme/custom_font="res://resource/font/cn_font_18.tres"
 
 [importer_defaults]
 

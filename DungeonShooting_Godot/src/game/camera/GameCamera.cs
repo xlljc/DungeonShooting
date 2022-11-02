@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using Godot;
 
-public class MainCamera : Camera2D
+/// <summary>
+/// 游戏相机
+/// </summary>
+public class GameCamera : Camera2D
 {
     /// <summary>
     /// 当前场景的相机对象
     /// </summary>
-    public static MainCamera Main { get; private set; }
+    public static GameCamera Main { get; private set; }
 
     /// <summary>
     /// 恢复系数
@@ -38,8 +41,8 @@ public class MainCamera : Camera2D
     {
         _Shake(delta);
         
-        var player = RoomManager.Current.Player;
-        var viewportContainer = RoomManager.Current.ViewportContainer;
+        var player = GameApplication.Instance.Room.Player;
+        var viewportContainer = GameApplication.Instance.ViewportContainer;
         //var mousePos = InputManager.GetMousePosition();
         var camPos = player.GlobalPosition;
         //var camPos = player.GlobalPosition.LinearInterpolate(mousePos, 0);

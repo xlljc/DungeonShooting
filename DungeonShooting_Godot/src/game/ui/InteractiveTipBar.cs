@@ -35,7 +35,7 @@ public class InteractiveTipBar : Node2D
     /// <param name="message">显示文本</param>
 	public void ShowBar(Vector2 pos, string icon, string message)
     {
-        GlobalPosition = pos;
+        GlobalPosition = GameApplication.Instance.ViewToGlobalPosition(pos);
         Message.Text = message;
         if (currImage != icon)
         {

@@ -35,7 +35,7 @@ public class ReloadBar : Node2D
     public void ShowBar(Vector2 position, float progress)
     {
         Visible = true;
-        GlobalPosition = position;
+        GlobalPosition = GameApplication.Instance.ViewToGlobalPosition(position);
         progress = Mathf.Clamp(progress, 0, 1);
         block.Position = new Vector2(startX + (width - 3) * progress, 0);
     }

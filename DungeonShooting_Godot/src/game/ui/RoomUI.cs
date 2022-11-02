@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 /// <summary>
@@ -6,8 +5,7 @@ using Godot;
 /// </summary>
 public class RoomUI : Control
 {
-
-    public static RoomUI Current { get; private set; }
+    //public static RoomUI Current { get; private set; }
 
     /// <summary>
     /// 当前血量
@@ -43,11 +41,6 @@ public class RoomUI : Control
 
     public override void _EnterTree()
     {
-        Current = this;
-    }
-
-    public override void _Ready()
-    {
         hpSlot = GetNode<NinePatchRect>("Control/HealthBar/HpSlot");
         shieldSlot = GetNode<NinePatchRect>("Control/HealthBar/ShieldSlot");
         hpBar = GetNode<TextureRect>("Control/HealthBar/HpSlot/HpBar");
@@ -61,10 +54,13 @@ public class RoomUI : Control
 
         ReloadBar = GetNode<ReloadBar>("GlobalNode/ReloadBar");
         ReloadBar.Visible = false;
+    }
 
+    public override void _Ready()
+    {
         //将 GlobalNode 节点下的 ui 节点放入全局坐标中
         var tempNode = GetNode("GlobalNode");
-        var root = RoomManager.Current;
+        var root = GameApplication.Instance.GlobalNodeRoot;
         var count = tempNode.GetChildCount();
         for (int i = count - 1; i >= 0; i--)
         {

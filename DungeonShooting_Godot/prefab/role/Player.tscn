@@ -14,3 +14,6 @@ CollisionLayer = 8
 
 [node name="ShadowSprite" parent="." index="0"]
 material = SubResource( 1 )
+
+[node name="AnimatedSprite" parent="." index="2"]
+frame = 1

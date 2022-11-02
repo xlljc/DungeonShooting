@@ -131,11 +131,11 @@ public class Player : Role
 
         if (Holster.ActiveWeapon != null && Holster.ActiveWeapon.Reloading)
         {
-            RoomUI.Current.ReloadBar.ShowBar(gPos, 1 - Holster.ActiveWeapon.ReloadProgress);
+            GameApplication.Instance.Ui.ReloadBar.ShowBar(gPos, 1 - Holster.ActiveWeapon.ReloadProgress);
         }
         else
         {
-            RoomUI.Current.ReloadBar.HideBar();
+            GameApplication.Instance.Ui.ReloadBar.HideBar();
         }
     }
 
@@ -151,12 +151,12 @@ public class Player : Role
 
     protected override void OnChangeHp(int hp)
     {
-        RoomUI.Current.SetHp(hp);
+        GameApplication.Instance.Ui.SetHp(hp);
     }
 
     protected override void OnChangeMaxHp(int maxHp)
     {
-        RoomUI.Current.SetMaxHp(maxHp);
+        GameApplication.Instance.Ui.SetMaxHp(maxHp);
     }
 
     protected override void ChangeInteractiveItem(CheckInteractiveResult result)
@@ -164,26 +164,26 @@ public class Player : Role
         if (result == null)
         {
             //隐藏互动提示
-            RoomUI.Current.InteractiveTipBar.HideBar();
+            GameApplication.Instance.Ui.InteractiveTipBar.HideBar();
         }
         else
         {
             if (InteractiveItem is Weapon gun)
             {
                 //显示互动提示
-                RoomUI.Current.InteractiveTipBar.ShowBar(result.Target.GlobalPosition, result.ShowIcon, result.Message);
+                GameApplication.Instance.Ui.InteractiveTipBar.ShowBar(result.Target.GlobalPosition, result.ShowIcon, result.Message);
             }
         }
     }
 
     protected void OnChangeShield(int shield)
     {
-        RoomUI.Current.SetShield(shield);
+        GameApplication.Instance.Ui.SetShield(shield);
     }
 
     protected void OnChangeMaxShield(int maxShield)
     {
-        RoomUI.Current.SetMaxShield(maxShield);
+        GameApplication.Instance.Ui.SetMaxShield(maxShield);
     }
 
     /// <summary>
@@ -194,11 +194,11 @@ public class Player : Role
         var gun = Holster.ActiveWeapon;
         if (gun != null)
         {
-            RoomUI.Current.SetGunTexture(gun.GetDefaultTexture());
+            GameApplication.Instance.Ui.SetGunTexture(gun.GetDefaultTexture());
         }
         else
         {
-            RoomUI.Current.SetGunTexture(null);
+            GameApplication.Instance.Ui.SetGunTexture(null);
         }
     }
 
@@ -210,7 +210,7 @@ public class Player : Role
         var gun = Holster.ActiveWeapon;
         if (gun != null)
         {
-            RoomUI.Current.SetAmmunition(gun.CurrAmmo, gun.ResidueAmmo);
+            GameApplication.Instance.Ui.SetAmmunition(gun.CurrAmmo, gun.ResidueAmmo);
         }
     }
 
