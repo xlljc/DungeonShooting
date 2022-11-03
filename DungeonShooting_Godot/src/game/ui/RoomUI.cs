@@ -49,26 +49,38 @@ public class RoomUI : Control
         bulletText = GetNode<Label>("Control/GunBar/BulletText");
         gunSprite = GetNode<TextureRect>("Control/GunBar/GunSprite");
 
-        InteractiveTipBar = GetNode<InteractiveTipBar>("GlobalNode/InteractiveTipBar");
+        InteractiveTipBar = GetNode<InteractiveTipBar>("ViewNode/InteractiveTipBar");
         InteractiveTipBar.Visible = false;
 
-        ReloadBar = GetNode<ReloadBar>("GlobalNode/ReloadBar");
+        ReloadBar = GetNode<ReloadBar>("ViewNode/ReloadBar");
         ReloadBar.Visible = false;
     }
 
     public override void _Ready()
     {
         //将 GlobalNode 节点下的 ui 节点放入全局坐标中
-        var tempNode = GetNode("GlobalNode");
+        var globalNode = GetNode("GlobalNode");
         var root = GameApplication.Instance.GlobalNodeRoot;
-        var count = tempNode.GetChildCount();
+        var count = globalNode.GetChildCount();
         for (int i = count - 1; i >= 0; i--)
         {
-            var node = tempNode.GetChild(i);
-            tempNode.RemoveChild(node);
+            var node = globalNode.GetChild(i);
+            globalNode.RemoveChild(node);
             root.CallDeferred("add_child", node);
         }
-        tempNode.CallDeferred("queue_free");
+        globalNode.CallDeferred("queue_free");
+        
+        //将 ViewNode 节点放到 Viewport 下
+        var viewNode = GetNode("ViewNode");
+        var viewport = GameApplication.Instance.Viewport;
+        count = viewNode.GetChildCount();
+        for (int i = count - 1; i >= 0; i--)
+        {
+            var node = viewNode.GetChild(i);
+            viewNode.RemoveChild(node);
+            viewport.CallDeferred("add_child", node);
+        }
+        viewNode.CallDeferred("queue_free");
     }
 
     public override void _Process(float delta)

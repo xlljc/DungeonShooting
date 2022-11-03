@@ -123,11 +123,7 @@ public class Player : Role
         var reloadBar = GameApplication.Instance.Ui.ReloadBar;
         if (Holster.ActiveWeapon != null && Holster.ActiveWeapon.Reloading)
         {
-            if (!reloadBar.Visible)
-            {
-                reloadBar.ShowBar(gPos);
-            }
-            reloadBar.UpdateProcess(1 - Holster.ActiveWeapon.ReloadProgress);
+            reloadBar.ShowBar(gPos, 1 - Holster.ActiveWeapon.ReloadProgress);
         }
         else
         {
@@ -167,7 +163,7 @@ public class Player : Role
             if (InteractiveItem is Weapon gun)
             {
                 //显示互动提示
-                GameApplication.Instance.Ui.InteractiveTipBar.ShowBar(result.Target, result.ShowIcon, result.Message);
+                GameApplication.Instance.Ui.InteractiveTipBar.ShowBar(result.Target, result.ShowIcon);
             }
         }
     }
