@@ -71,6 +71,19 @@ public class RoomUI : Control
         tempNode.CallDeferred("queue_free");
     }
 
+    public override void _Process(float delta)
+    {
+        
+    }
+
+    public override void _PhysicsProcess(float delta)
+    {
+        // var colorRect = GetNode<ColorRect>("ColorRect");
+        // var pos = GameApplication.Instance.ViewToGlobalPosition(GameApplication.Instance.Room.Player.GlobalPosition);
+        // colorRect.SetGlobalPosition(pos);
+        //GD.Print("pos: " + pos + ", " + colorRect.RectGlobalPosition);
+    }
+
     /// <summary>
     /// 设置最大血量
     /// </summary>

@@ -6,6 +6,8 @@ using Godot;
 public class InteractiveTipBar : Node2D
 {
 
+    private ActivityObject Target;
+    
     private Label Message;
     private Sprite Icon;
     private Sprite Bg;
@@ -30,12 +32,13 @@ public class InteractiveTipBar : Node2D
     /// <summary>
     /// 显示互动提示ui
     /// </summary>
-    /// <param name="pos">所在坐标</param>
+    /// <param name="target">所在坐标</param>
     /// <param name="icon">显示图标</param>
     /// <param name="message">显示文本</param>
-	public void ShowBar(Vector2 pos, string icon, string message)
+	public void ShowBar(ActivityObject target, string icon, string message)
     {
-        GlobalPosition = GameApplication.Instance.ViewToGlobalPosition(pos);
+        Target = target;
+        GlobalPosition = GameApplication.Instance.ViewToGlobalPosition(target.GlobalPosition);
         Message.Text = message;
         if (currImage != icon)
         {
@@ -43,5 +46,21 @@ public class InteractiveTipBar : Node2D
             Icon.Texture = ResourceManager.Load<Texture>(icon);
         }
         Visible = true;
+    }
+
+    public override void _Process(float delta)
+    {
+        if (Visible)
+        {
+            var pos = GameApplication.Instance.ViewToGlobalPosition(Target.GlobalPosition);
+            GlobalPosition = pos.Round();
+
+        }
+    }
+
+    public override void _Draw()
+    {
+        DrawString(GameApplication.Instance.Font, new Vector2(0, 20), GlobalPosition.ToString(), Colors.Red);
+        GD.Print("draw...");
     }
 }

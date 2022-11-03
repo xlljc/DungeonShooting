@@ -31,13 +31,21 @@ public class ReloadBar : Node2D
     /// 显示换弹进度组件
     /// </summary>
     /// <param name="position">坐标</param>
-    /// <param name="progress">进度, 0 - 1</param>
-    public void ShowBar(Vector2 position, float progress)
+    public void ShowBar(Vector2 position)
     {
         Visible = true;
         GlobalPosition = GameApplication.Instance.ViewToGlobalPosition(position);
+        
+    }
+
+    /// <summary>
+    /// 更新进度
+    /// </summary>
+    /// <param name="progress">进度, 0 - 1</param>
+    public void UpdateProcess(float progress)
+    {
         progress = Mathf.Clamp(progress, 0, 1);
         block.Position = new Vector2(startX + (width - 3) * progress, 0);
     }
-
+    
 }
