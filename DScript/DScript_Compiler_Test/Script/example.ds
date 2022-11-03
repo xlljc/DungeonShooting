@@ -83,7 +83,7 @@ private func grammarExample() {
 	//执行函数
 	f1(1);
 	//将成员函数存入变量
-	var f2 = func(say, 1);
+	var f2 = this.func("say", 1);
 	//数组
 	var array = [1, 2, "str"];
 	//匿名对象, 无法扩展和删除属性, 只能对已有的属性进行赋值

@@ -15,6 +15,9 @@ namespace DScript.Compiler
             SyntaxTree = tree;
         }
         
+        /// <summary>
+        /// 该文件的路径
+        /// </summary>
         public string Path;
         public Token[] Tokens;
         public SyntaxTree SyntaxTree;
@@ -32,7 +35,6 @@ namespace DScript.Compiler
         /// </summary>
         public ClassNode ClassNode;
         
-        private bool _hasImport = false;
         private bool _hasNamespace = false;
         private bool _hasClass = false;
         private bool _hasFunction = false;
@@ -51,7 +53,6 @@ namespace DScript.Compiler
             if (!Import.ContainsKey(importNode.ImportName))
             {
                 Import.Add(importNode.ImportName, importNode);
-                _hasImport = true;
             }
             else
             {

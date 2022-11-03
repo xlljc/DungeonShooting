@@ -12,9 +12,12 @@ namespace DScript.Compiler
         private static readonly MarchData[] ClassMarchData = new[] { new MarchData(MarchType.Word),
             new MarchData(new MarchData("extends"), new MarchData(MarchType.FullWord)) };
         //匹配函数声明
-        private static readonly MarchData[] FunctionMarchData = new[] { new MarchData(MarchType.Word), new MarchData(MarchType.ParenthesesGroup), 
-            new MarchData(new MarchData(":"), new MarchData(MarchType.FullKeyword)),
-            new MarchData(MarchType.BraceGroup) };
+        private static readonly MarchData[] FunctionMarchData = new[] {
+            new MarchData(MarchType.Word),
+            new MarchData(MarchType.ParenthesesGroup), 
+            new MarchData(new MarchData(":"),new MarchData(MarchType.FullKeyword)),
+            new MarchData(MarchType.BraceGroup)
+        };
 
         private SyntaxTree _syntaxTree;
 
@@ -41,7 +44,7 @@ namespace DScript.Compiler
                 case "class": //类
                     ClassKeyword(token, fileToken);
                     break;
-                case "func": //
+                case "func": //函数
                     FunctionKeyword(token, fileToken);
                     break;
             }
@@ -156,6 +159,7 @@ namespace DScript.Compiler
              匹配:
                  func a() {}
                  func a(): void {}
+                 func a(): System.Float {}
              */
             MarchUtils.March(_syntaxTree, FunctionMarchData,
                 (result) =>

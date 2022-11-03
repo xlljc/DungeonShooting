@@ -22,10 +22,8 @@ namespace DScript.Compiler
         /// 父类名称
         /// </summary>
         public readonly string ParentName;
-        
-        public readonly Dictionary<string, Dictionary<int, FunctionNode>> Functions = new Dictionary<string, Dictionary<int, FunctionNode>>();
-        public readonly Dictionary<string, VariableNode> Variables = new Dictionary<string, VariableNode>();
-        public readonly Dictionary<string, PropertyNode> Properties = new Dictionary<string, PropertyNode>();
+
+        public readonly Dictionary<string, MemberData> Members = new Dictionary<string, MemberData>();
 
         public ClassNode(string name, string parent) : base(name)
         {
@@ -46,15 +44,23 @@ namespace DScript.Compiler
 
         public void AddFunction(FunctionNode functionNode)
         {
-            if (!Functions.TryGetValue(functionNode.Name, out var dictionary))
+            if (!Members.TryGetValue(functionNode.Name, out var memberData))
             {
-                dictionary = new Dictionary<int, FunctionNode>();
-                dictionary.Add(functionNode.ParamLength, functionNode);
-                Functions.Add(functionNode.Name, dictionary);
+                var methodNode = new MethodNode(functionNode.Name);
+                memberData = new MemberData(methodNode, false);
+                methodNode.Functions.Add(functionNode.ParamLength, functionNode);
+                Members.Add(methodNode.Name, memberData);
             }
             else
             {
-                if (!dictionary.TryAdd(functionNode.ParamLength, functionNode))
+                if (memberData.MemberType != MemberType.Method)
+                {
+                    //已经声明过 'xxx' 的成员了
+                    throw new Exception("xxx");
+                }
+
+                var methodNode = (MethodNode)memberData.Node;
+                if (!methodNode.Functions.TryAdd(functionNode.ParamLength, functionNode))
                 {
                     //已经声明了相同参数长度的函数 'xxx' 了
                     throw new Exception("xxx");
