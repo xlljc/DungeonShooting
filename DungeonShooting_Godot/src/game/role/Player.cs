@@ -45,23 +45,21 @@ public class Player : Role
         }
     }
     private int _maxShield = 0;
-
+    
+    private Vector2 _v1;
+    private Vector2 _v2;
 
     [Export] public PackedScene GunPrefab;
 
     public Player(): base("res://prefab/role/Player.tscn")
     {
     }
-    
-    public override void _EnterTree()
-    {
-        base._EnterTree();
-        RoomManager.Current.Player = this;
-    }
 
     public override void _Ready()
     {
         base._Ready();
+
+        _v1 = _v2 = Position;
         
         //让相机跟随玩家
         // var remoteTransform = new RemoteTransform2D();
@@ -97,6 +95,10 @@ public class Player : Role
         {
             Face = FaceDirection.Left;
         }
+        
+        //var f = Mathf.Clamp(Engine.GetPhysicsInterpolationFraction(), 0, 1);
+        //Position = _v1.LinearInterpolate(_v2, f).Round();
+        // GD.Print($"Position: {_realPos}, f: {f}");
 
         if (Input.IsActionJustPressed("exchange")) //切换武器
         {
@@ -129,11 +131,11 @@ public class Player : Role
 
         if (Holster.ActiveWeapon != null && Holster.ActiveWeapon.Reloading)
         {
-            RoomUI.Current.ReloadBar.ShowBar(gPos, 1 - Holster.ActiveWeapon.ReloadProgress);
+            GameApplication.Instance.Ui.ReloadBar.ShowBar(gPos, 1 - Holster.ActiveWeapon.ReloadProgress);
         }
         else
         {
-            RoomUI.Current.ReloadBar.HideBar();
+            GameApplication.Instance.Ui.ReloadBar.HideBar();
         }
     }
 
@@ -143,16 +145,18 @@ public class Player : Role
         Move(delta);
         //播放动画
         PlayAnim();
+        //GlobalPosition = GlobalPosition.Round();
+        //AnimatedSprite.Playing = false;
     }
 
     protected override void OnChangeHp(int hp)
     {
-        RoomUI.Current.SetHp(hp);
+        GameApplication.Instance.Ui.SetHp(hp);
     }
 
     protected override void OnChangeMaxHp(int maxHp)
     {
-        RoomUI.Current.SetMaxHp(maxHp);
+        GameApplication.Instance.Ui.SetMaxHp(maxHp);
     }
 
     protected override void ChangeInteractiveItem(CheckInteractiveResult result)
@@ -160,26 +164,26 @@ public class Player : Role
         if (result == null)
         {
             //隐藏互动提示
-            RoomUI.Current.InteractiveTipBar.HideBar();
+            GameApplication.Instance.Ui.InteractiveTipBar.HideBar();
         }
         else
         {
             if (InteractiveItem is Weapon gun)
             {
                 //显示互动提示
-                RoomUI.Current.InteractiveTipBar.ShowBar(result.Target.GlobalPosition, result.ShowIcon, result.Message);
+                GameApplication.Instance.Ui.InteractiveTipBar.ShowBar(result.Target.GlobalPosition, result.ShowIcon, result.Message);
             }
         }
     }
 
     protected void OnChangeShield(int shield)
     {
-        RoomUI.Current.SetShield(shield);
+        GameApplication.Instance.Ui.SetShield(shield);
     }
 
     protected void OnChangeMaxShield(int maxShield)
     {
-        RoomUI.Current.SetMaxShield(maxShield);
+        GameApplication.Instance.Ui.SetMaxShield(maxShield);
     }
 
     /// <summary>
@@ -190,11 +194,11 @@ public class Player : Role
         var gun = Holster.ActiveWeapon;
         if (gun != null)
         {
-            RoomUI.Current.SetGunTexture(gun.GetDefaultTexture());
+            GameApplication.Instance.Ui.SetGunTexture(gun.GetDefaultTexture());
         }
         else
         {
-            RoomUI.Current.SetGunTexture(null);
+            GameApplication.Instance.Ui.SetGunTexture(null);
         }
     }
 
@@ -206,7 +210,7 @@ public class Player : Role
         var gun = Holster.ActiveWeapon;
         if (gun != null)
         {
-            RoomUI.Current.SetAmmunition(gun.CurrAmmo, gun.ResidueAmmo);
+            GameApplication.Instance.Ui.SetAmmunition(gun.CurrAmmo, gun.ResidueAmmo);
         }
     }
 
@@ -222,8 +226,11 @@ public class Player : Role
 
         if (Mathf.IsZeroApprox(dir.y)) Velocity.y = Mathf.MoveToward(Velocity.y, 0, Friction * delta);
         else Velocity.y = Mathf.MoveToward(Velocity.y, dir.y * MoveSpeed, Acceleration * delta);
-
+        
+        //_v1 = Position = _v2;
         Velocity = MoveAndSlide(Velocity);
+        //_v2 = Position;
+        //Position = _v1.Round();
     }
 
     // 播放动画

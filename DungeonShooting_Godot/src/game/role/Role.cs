@@ -14,7 +14,7 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 移动速度
     /// </summary>
-    public float MoveSpeed = 150f;
+    public float MoveSpeed = 120f;
 
     /// <summary>
     /// 所属阵营

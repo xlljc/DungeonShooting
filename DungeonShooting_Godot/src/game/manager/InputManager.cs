@@ -8,9 +8,8 @@ public static class InputManager
     /// </summary>
     public static Vector2 GetMousePosition()
     {
-        var viewport = RoomManager.Current.Viewport;
-        return viewport.GetMousePosition() / GameConfig.WindowScale
-            - (GameConfig.ViewportSize / 2) + MainCamera.Main.GlobalPosition;
+        var application = GameApplication.Instance;
+        return application.GlobalToViewPosition(application.GetGlobalMousePosition());
     }
 
     /// <summary>
@@ -18,7 +17,7 @@ public static class InputManager
     /// </summary>
     public static void Update(float delta)
     {
-
+        
     }
 
 }

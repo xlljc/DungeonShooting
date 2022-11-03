@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 /// <summary>
@@ -6,39 +5,15 @@ using Godot;
 /// </summary>
 public class RoomManager : Node2D
 {
-    /// <summary>
-    /// 鼠标指针
-    /// </summary>
-    [Export] public PackedScene MouseCursor;
-
-    public static RoomManager Current { get; private set; }
-
-    public CanvasLayer UI;
-    public Cursor Cursor { get; private set; }
-    public Player Player { get; set; }
+    public Player Player { get; private set; }
     public Node2D ObjectRoot { get; private set; }
     public YSort SortRoot { get; private set; }
-    public Viewport Viewport { get; private set; }
-    public ViewportContainer ViewportContainer { get; private set; }
 
     public override void _EnterTree()
     {
-        Current = this;
         Input.MouseMode = Input.MouseModeEnum.Hidden;
 
-        UI = GetNode<CanvasLayer>("UI");
-
-        // 初始化鼠标
-        Cursor = MouseCursor.Instance<Cursor>();
-        AddChild(Cursor);
-
-        SortRoot = GetNode<YSort>("ItemRoot");
-        Viewport = GetParentOrNull<Viewport>();
-        if (Viewport != null)
-        {
-            ViewportContainer = Viewport.GetParentOrNull<ViewportContainer>();
-        }
-            
+        SortRoot = GetNode<YSort>("SortRoot");
         ObjectRoot = GetNode<Node2D>("ObjectRoot");
 
         //初始化地图
@@ -47,11 +22,11 @@ public class RoomManager : Node2D
         VisualServer.SetDefaultClearColor(color);
         
         //创建玩家
-        var player = new Player();
-        player.Position = new Vector2(100, 100);
-        player.Name = "Player";
+        Player = new Player();
+        Player.Position = new Vector2(100, 100);
+        Player.Name = "Player";
         //SortRoot.AddChild(player);
-        player.PutDown();
+        Player.PutDown();
     }
 
     public override void _Ready()

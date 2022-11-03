@@ -20,7 +20,7 @@ public class Cursor : Node2D
 
     public override void _Process(float delta)
     {
-        var targetGun = RoomManager.Current?.Player?.Holster.ActiveWeapon;
+        var targetGun = GameApplication.Instance.Room.Player?.Holster.ActiveWeapon;
         if (targetGun != null)
         {
             SetScope(targetGun.CurrScatteringRange, targetGun);
@@ -44,7 +44,8 @@ public class Cursor : Node2D
     {
         if (targetGun != null)
         {
-            var len = GlobalPosition.DistanceTo(targetGun.GlobalPosition);
+            var tunPos = GameApplication.Instance.ViewToGlobalPosition(targetGun.GlobalPosition);
+            var len = GlobalPosition.DistanceTo(tunPos);
             if (targetGun.Attribute != null)
             {
                 len = Mathf.Max(0, len - targetGun.Attribute.FirePosition.x);
@@ -59,6 +60,6 @@ public class Cursor : Node2D
 
     private void SetCursorPos()
     {
-        Position = InputManager.GetMousePosition();
+        GlobalPosition = GetGlobalMousePosition();
     }
 }

@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using Godot;
 
-public class MainCamera : Camera2D
+/// <summary>
+/// 游戏相机
+/// </summary>
+public class GameCamera : Camera2D
 {
     /// <summary>
     /// 当前场景的相机对象
     /// </summary>
-    public static MainCamera Main { get; private set; }
+    public static GameCamera Main { get; private set; }
 
     /// <summary>
     /// 恢复系数
@@ -25,35 +28,31 @@ public class MainCamera : Camera2D
     
     private Vector2 _camPos;
     private Vector2 _shakeOffset = Vector2.Zero;
-    
+
     public override void _Ready()
     {
         Main = this;
         _camPos = GlobalPosition;
     }
 
-    //public override void _PhysicsProcess(float delta)
+    //public override void _PhysicsProcess(float delta);
 
     public override void _Process(float delta)
     {
         _Shake(delta);
         
-        var player = RoomManager.Current.Player;
-        var viewportContainer = RoomManager.Current.ViewportContainer;
+        var player = GameApplication.Instance.Room.Player;
+        var viewportContainer = GameApplication.Instance.ViewportContainer;
         //var mousePos = InputManager.GetMousePosition();
-        // 使用lerp，相机的位置移动到鼠标的位置
         var camPos = player.GlobalPosition;
         //var camPos = player.GlobalPosition.LinearInterpolate(mousePos, 0);
-        // 用另一种方式使运动平稳
-        _camPos = _camPos.LinearInterpolate(camPos, 5 * delta) + _shakeOffset;
-        // 计算新相机的“亚像素”位置
+        //_camPos = camPos + _shakeOffset;
+        _camPos = _camPos.LinearInterpolate(camPos, Mathf.Min(5 * delta, 1)) + _shakeOffset;
         var camSubpixelPos = _camPos.Round() - _camPos;
-        // 更新主要视图端口的shader参数
         (viewportContainer.Material as ShaderMaterial)?.SetShaderParam("offset", camSubpixelPos);
-        // 把相机调到新位置，然后旋转。
+        //GlobalPosition = _camPos.Round();
         GlobalPosition = _camPos.Round();
     }
-
     
     /// <summary>
     /// 设置帧抖动, 结束后自动清零, 需要每一帧调用

@@ -774,7 +774,7 @@ public abstract class Weapon : ActivityObject
         bullet.GlobalRotation = globalRotation;
         if (parent == null)
         {
-            RoomManager.Current.SortRoot.AddChild(bullet);
+            GameApplication.Instance.Room.SortRoot.AddChild(bullet);
         }
         else
         {

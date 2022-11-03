@@ -219,15 +219,17 @@ public abstract class ActivityObject : KinematicBody2D
     public void PutDown()
     {
         var parent = GetParent();
-        if (parent != RoomManager.Current.ObjectRoot)
+        var root = GameApplication.Instance.Room.ObjectRoot;
+        if (parent != root)
         {
             if (parent != null)
             {
                 parent.RemoveChild(this);
             }
 
-            RoomManager.Current.ObjectRoot.AddChild(this);
+            root.AddChild(this);
         }
+
         //注意需要延时调用
         CallDeferred(nameof(ShowShadowSprite));
     }
@@ -520,14 +522,15 @@ public abstract class ActivityObject : KinematicBody2D
     private void Throw()
     {
         var parent = GetParent();
+        var room = GameApplication.Instance.Room;
         if (parent == null)
         {
-            RoomManager.Current.SortRoot.AddChild(this);
+            room.SortRoot.AddChild(this);
         }
-        else if (parent == RoomManager.Current.ObjectRoot)
+        else if (parent == room.ObjectRoot)
         {
             parent.RemoveChild(this);
-            RoomManager.Current.SortRoot.AddChild(this);
+            room.SortRoot.AddChild(this);
         }
 
         GlobalPosition = _throwData.StartPosition + new Vector2(0, -_throwData.Y);
@@ -604,7 +607,7 @@ public abstract class ActivityObject : KinematicBody2D
     private void ThrowOver()
     {
         GetParent().RemoveChild(this);
-        RoomManager.Current.ObjectRoot.AddChild(this);
+        GameApplication.Instance.Room.ObjectRoot.AddChild(this);
         RestoreCollision();
 
         OnThrowOver();

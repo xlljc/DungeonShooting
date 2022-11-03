@@ -106,7 +106,7 @@ public class Gun : Weapon
         var shell = new ShellCase();
         shell.Throw(new Vector2(10, 5), startPos, startHeight, direction, xf, yf, rotate, true);
         //创建抖动
-        MainCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
+        GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
     }
 
     protected override void OnShoot()
