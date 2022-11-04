@@ -45,9 +45,6 @@ public class Player : Role
         }
     }
     private int _maxShield = 0;
-    
-    private Vector2 _v1;
-    private Vector2 _v2;
 
     [Export] public PackedScene GunPrefab;
 
@@ -59,8 +56,6 @@ public class Player : Role
     {
         base._Ready();
 
-        _v1 = _v2 = Position;
-        
         //让相机跟随玩家
         // var remoteTransform = new RemoteTransform2D();
         // AddChild(remoteTransform);
@@ -95,10 +90,6 @@ public class Player : Role
         {
             Face = FaceDirection.Left;
         }
-        
-        //var f = Mathf.Clamp(Engine.GetPhysicsInterpolationFraction(), 0, 1);
-        //Position = _v1.LinearInterpolate(_v2, f).Round();
-        // GD.Print($"Position: {_realPos}, f: {f}");
 
         if (Input.IsActionJustPressed("exchange")) //切换武器
         {
@@ -129,13 +120,14 @@ public class Player : Role
         //刷新显示的弹药剩余量
         RefreshGunAmmunition();
 
+        var reloadBar = GameApplication.Instance.Ui.ReloadBar;
         if (Holster.ActiveWeapon != null && Holster.ActiveWeapon.Reloading)
         {
-            GameApplication.Instance.Ui.ReloadBar.ShowBar(gPos, 1 - Holster.ActiveWeapon.ReloadProgress);
+            reloadBar.ShowBar(gPos, 1 - Holster.ActiveWeapon.ReloadProgress);
         }
         else
         {
-            GameApplication.Instance.Ui.ReloadBar.HideBar();
+            reloadBar.HideBar();
         }
     }
 
@@ -171,7 +163,7 @@ public class Player : Role
             if (InteractiveItem is Weapon gun)
             {
                 //显示互动提示
-                GameApplication.Instance.Ui.InteractiveTipBar.ShowBar(result.Target.GlobalPosition, result.ShowIcon, result.Message);
+                GameApplication.Instance.Ui.InteractiveTipBar.ShowBar(result.Target, result.ShowIcon);
             }
         }
     }
@@ -227,10 +219,7 @@ public class Player : Role
         if (Mathf.IsZeroApprox(dir.y)) Velocity.y = Mathf.MoveToward(Velocity.y, 0, Friction * delta);
         else Velocity.y = Mathf.MoveToward(Velocity.y, dir.y * MoveSpeed, Acceleration * delta);
         
-        //_v1 = Position = _v2;
         Velocity = MoveAndSlide(Velocity);
-        //_v2 = Position;
-        //Position = _v1.Round();
     }
 
     // 播放动画

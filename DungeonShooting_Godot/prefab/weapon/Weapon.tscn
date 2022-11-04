@@ -14,7 +14,6 @@ shader_param/schedule = 0.0
 resource_name = "Floodlight"
 length = 3.0
 loop = true
-step = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("../AnimatedSprite:material:shader_param/schedule")
 tracks/0/interp = 1
@@ -22,10 +21,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 2, 2.4, 2.5, 3 ),
+"times": PoolRealArray( 0, 2.3, 2.6, 2.7, 3 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ 0.0, 0.0, 1.0, 1.0, 0.0 ]
+"values": [ 0.0, 0.0, 0.5, 0.4, 0.0 ]
 }
 
 [sub_resource type="Animation" id=4]

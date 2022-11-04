@@ -432,20 +432,21 @@ public abstract class Weapon : ActivityObject
         //武器口角度
         var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
 
-        //创建子弹
-        for (int i = 0; i < bulletCount; i++)
-        {
-            //先算武器口方向
-            Rotation = (float)GD.RandRange(-angle, angle);
-            //发射子弹
-            OnShoot();
+        //先算武器口方向
+        var tempAngle = Mathf.Rad2Deg((float)GD.RandRange(-angle, angle));
+                              //创建子弹
+                              for (int i = 0; i < bulletCount; i++)
+                              {
+                                  //发射子弹
+                                  OnShoot();
         }
 
         //当前的散射半径
         CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue, Attribute.FinalScatteringRange);
         //武器的旋转角度
-        RotationDegrees -= Attribute.UpliftAngle;
-        fireAngle = RotationDegrees;
+        tempAngle -= Attribute.UpliftAngle;
+        RotationDegrees = tempAngle;
+        fireAngle = tempAngle;
         //武器身位置
         Position = new Vector2(Mathf.Max(-Attribute.MaxBacklash, Position.x - MathUtils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash)), Position.y);
 

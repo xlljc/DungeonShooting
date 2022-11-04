@@ -6,17 +6,15 @@ using Godot;
 public class InteractiveTipBar : Node2D
 {
 
-    private Label Message;
+    private ActivityObject Target;
+    
     private Sprite Icon;
-    private Sprite Bg;
 
     private string currImage;
 
     public override void _Ready()
     {
-        Message = GetNode<Label>("Message");
         Icon = GetNode<Sprite>("Icon");
-        Bg = GetNode<Sprite>("Bg");
     }
 
     /// <summary>
@@ -30,13 +28,13 @@ public class InteractiveTipBar : Node2D
     /// <summary>
     /// 显示互动提示ui
     /// </summary>
-    /// <param name="pos">所在坐标</param>
+    /// <param name="target">所在坐标</param>
     /// <param name="icon">显示图标</param>
     /// <param name="message">显示文本</param>
-	public void ShowBar(Vector2 pos, string icon, string message)
+	public void ShowBar(ActivityObject target, string icon)
     {
-        GlobalPosition = GameApplication.Instance.ViewToGlobalPosition(pos);
-        Message.Text = message;
+        Target = target;
+        GlobalPosition = target.GlobalPosition;
         if (currImage != icon)
         {
             currImage = icon;

@@ -108,6 +108,8 @@ align = 1
 
 [node name="GlobalNode" type="Node" parent="."]
 
-[node name="InteractiveTipBar" parent="GlobalNode" instance=ExtResource( 10 )]
+[node name="ViewNode" type="Node" parent="."]
 
-[node name="ReloadBar" parent="GlobalNode" instance=ExtResource( 3 )]
+[node name="InteractiveTipBar" parent="ViewNode" instance=ExtResource( 10 )]
+
+[node name="ReloadBar" parent="ViewNode" instance=ExtResource( 3 )]

@@ -17,6 +17,8 @@ public class GameApplication : Node2D
 
     [Export] public NodePath GlobalNodeRootPath;
 
+    [Export] public Font Font;
+    
     /// <summary>
     /// 鼠标指针
     /// </summary>
@@ -70,6 +72,6 @@ public class GameApplication : Node2D
 
     public Vector2 ViewToGlobalPosition(Vector2 viewPos)
     {
-        return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale;
+        return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
     }
 }

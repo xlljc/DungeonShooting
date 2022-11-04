@@ -20,6 +20,8 @@ public class GameCamera : Camera2D
     /// 抖动开关
     /// </summary>
     public bool Enable { get; set; } = true;
+    
+    public Vector2 SubPixelPosition { get; private set; }
 
     private long _index = 0;
     private Vector2 _processDistance = Vector2.Zero;
@@ -48,8 +50,8 @@ public class GameCamera : Camera2D
         //var camPos = player.GlobalPosition.LinearInterpolate(mousePos, 0);
         //_camPos = camPos + _shakeOffset;
         _camPos = _camPos.LinearInterpolate(camPos, Mathf.Min(5 * delta, 1)) + _shakeOffset;
-        var camSubpixelPos = _camPos.Round() - _camPos;
-        (viewportContainer.Material as ShaderMaterial)?.SetShaderParam("offset", camSubpixelPos);
+        SubPixelPosition = _camPos.Round() - _camPos;
+        (viewportContainer.Material as ShaderMaterial)?.SetShaderParam("offset", SubPixelPosition);
         //GlobalPosition = _camPos.Round();
         GlobalPosition = _camPos.Round();
     }
