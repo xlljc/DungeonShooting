@@ -138,7 +138,6 @@ public abstract class ActivityObject : KinematicBody2D
 
     public void GetCurrentTexture()
     {
-
     }
 
     public Texture GetDefaultTexture()
@@ -156,12 +155,11 @@ public abstract class ActivityObject : KinematicBody2D
     }
 
     /// <summary>
-    /// 与其它ActivityObject互动时调用
+    /// 与其它ActivityObject互动时调用, 如果要检测是否能互动请 CheckInteractive() 函数, 如果直接调用该函数那么属于强制互动行为, 例如子弹碰到物体
     /// </summary>
     /// <param name="master">触发者</param>
     public virtual void Interactive(ActivityObject master)
     {
-
     }
 
     /// <summary>
@@ -169,7 +167,6 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     public virtual void OnThrowMaxHeight(float height)
     {
-
     }
 
     /// <summary>
@@ -177,7 +174,6 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     public virtual void OnFirstFallToGround()
     {
-
     }
 
     /// <summary>
@@ -185,7 +181,6 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     public virtual void OnFallToGround()
     {
-
     }
 
     /// <summary>
@@ -193,7 +188,6 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     public virtual void OnThrowOver()
     {
-
     }
 
     /// <summary>

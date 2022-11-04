@@ -2,7 +2,6 @@ using Godot;
 
 public class Hit : AnimatedSprite
 {
-
     public override void _Ready()
     {
         Frame = 0;

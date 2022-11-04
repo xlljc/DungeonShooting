@@ -7,6 +7,11 @@ using Godot;
 public abstract class Role : ActivityObject
 {
     /// <summary>
+    /// 动画播放器
+    /// </summary>
+    public AnimationPlayer AnimationPlayer { get; private set; }
+    
+    /// <summary>
     /// 重写的纹理
     /// </summary>
     public Texture OverrideTexture { get; protected set; }
@@ -29,7 +34,7 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 角色携带的枪套
     /// </summary>
-    public Holster Holster { get; private set; }
+    public Holster Holster { get; }
 
     /// <summary>
     /// 武器挂载点
@@ -96,11 +101,24 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 当血量改变时调用
     /// </summary>
-    protected abstract void OnChangeHp(int hp);
+    protected virtual void OnChangeHp(int hp)
+    {
+    }
+
     /// <summary>
     /// 当最大血量改变时调用
     /// </summary>
-    protected abstract void OnChangeMaxHp(int maxHp);
+    protected virtual void OnChangeMaxHp(int maxHp)
+    {
+    }
+
+    /// <summary>
+    /// 当受伤时调用
+    /// </summary>
+    /// <param name="damage">受到的伤害</param>
+    public virtual void OnHit(int damage)
+    {
+    }
 
     /// <summary>
     /// 当可互动的物体改变时调用, result 参数为 null 表示变为不可互动
@@ -108,34 +126,26 @@ public abstract class Role : ActivityObject
     /// <param name="result">检测是否可互动时的返回值</param>
     protected virtual void ChangeInteractiveItem(CheckInteractiveResult result)
     {
-        
     }
 
-    public override CheckInteractiveResult CheckInteractive(ActivityObject master)
-    {
-        return new CheckInteractiveResult(this);
-    }
-
-    public override void Interactive(ActivityObject master)
-    {
-        
-    }
-    
-    public Role() : base("res://prefab/role/Role.tscn")
+    public Role() : this(ResourcePath.prefab_role_Role_tscn)
     {
     }
     
     public Role(string scenePath) : base(scenePath)
     {
+        Holster = new Holster(this);
     }
     
     public override void _Ready()
     {
         base._Ready();
+        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         StartScele = Scale;
         MountPoint = GetNode<MountRotation>("MountPoint");
         MountPoint.Master = this;
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
+        //即将弃用
         if (OverrideTexture != null)
         {
             // 更改纹理
@@ -143,8 +153,6 @@ public abstract class Role : ActivityObject
             ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, OverrideTexture);
             ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, OverrideTexture);
         }
-
-        Holster = new Holster(this);
         Face = FaceDirection.Right;
 
         //连接互动物体信号
@@ -196,12 +204,11 @@ public abstract class Role : ActivityObject
         }
     }
 
-
     /// <summary>
     /// 拾起一个武器, 并且切换到这个武器
     /// </summary>
     /// <param name="weapon">武器对象</param>
-    public void PickUpWeapon(Weapon weapon)
+    public virtual void PickUpWeapon(Weapon weapon)
     {
         if (Holster.PickupWeapon(weapon) != -1)
         {
@@ -213,7 +220,7 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 切换到下一个武器
     /// </summary>
-    public void TriggerExchangeNext()
+    public virtual void ExchangeNext()
     {
         Holster.ExchangeNext();
     }
@@ -221,7 +228,7 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 切换到上一个武器
     /// </summary>
-    public void ExchangePrev()
+    public virtual void ExchangePrev()
     {
         Holster.ExchangePrev();
     }
@@ -229,13 +236,13 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 扔掉当前使用的武器, 切换到上一个武器
     /// </summary>
-    public void TriggerThrowWeapon()
+    public virtual void ThrowWeapon()
     {
         var weapon = Holster.RemoveWeapon(Holster.ActiveIndex);
         //播放抛出效果
         if (weapon != null)
         {
-            weapon.TriggerThrowWeapon(this);
+            weapon.ThrowWeapon(this);
         }
     }
 
@@ -264,23 +271,34 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 触发换弹
     /// </summary>
-    public void TriggerReload()
+    public virtual void Reload()
     {
         if (Holster.ActiveWeapon != null)
         {
-            Holster.ActiveWeapon._Reload();
+            Holster.ActiveWeapon.Reload();
         }
     }
 
     /// <summary>
     /// 触发攻击
     /// </summary>
-    public void TriggerAttack()
+    public virtual void Attack()
     {
         if (Holster.ActiveWeapon != null)
         {
             Holster.ActiveWeapon.Trigger();
         }
+    }
+
+    /// <summary>
+    /// 受到伤害
+    /// </summary>
+    /// <param name="damage">伤害的量</param>
+    public virtual void Hit(int damage)
+    {
+        Hp -= damage;
+        GD.Print("打到敌人了!");
+        OnHit(damage);
     }
 
     /// <summary>

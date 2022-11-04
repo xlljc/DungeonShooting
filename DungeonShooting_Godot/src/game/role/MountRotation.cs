@@ -7,6 +7,11 @@ using Godot;
 public class MountRotation : Position2D
 {
     /// <summary>
+    /// 吸附角度
+    /// </summary>
+    private int _adsorption = 5;
+    
+    /// <summary>
     /// 所在的角色
     /// </summary>
     public Role Master { get; set; }
@@ -14,16 +19,7 @@ public class MountRotation : Position2D
     /// <summary>
     /// 当前节点真实的旋转角度
     /// </summary>
-    public float RealAngle
-    {
-        get => _readAngle;
-        // set
-        // {
-        //     
-        // }
-    }
-
-    private float _readAngle = 0;
+    public float RealAngle { get; private set; }
 
     /// <summary>
     /// 设置看向的目标点
@@ -50,7 +46,7 @@ public class MountRotation : Position2D
             angle = Mathf.Clamp(angle, -100, 100);
         }
 
-        _readAngle = angle;
+        RealAngle = angle;
 
         if (Master.GlobalPosition.x >= target.x)
         {
@@ -62,6 +58,6 @@ public class MountRotation : Position2D
 
     private float AdsorptionAngle(float angle)
     {
-        return ((int)angle / 5) * 5;
+        return ((int)angle / _adsorption) * _adsorption;
     }
 }

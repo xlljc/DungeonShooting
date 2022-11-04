@@ -16,7 +16,7 @@ public class ReloadBar : Node2D
         slot = GetNode<Sprite>("Slot");
         block = GetNode<Sprite>("Slot/Block");
         width = slot.Texture.GetWidth();
-        startX = -(width - 3) / 2;
+        startX = -(width - 3) / 2f;
     }
 
     /// <summary>

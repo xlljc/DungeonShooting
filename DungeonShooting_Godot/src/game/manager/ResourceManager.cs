@@ -3,7 +3,6 @@ using Godot;
 
 public static class ResourceManager
 {
-
     /// <summary>
     /// 2D阴影的材质
     /// </summary>
