@@ -34,7 +34,7 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 武器挂载点
     /// </summary>
-    public Position2D MountPoint { get; private set; }
+    public MountRotation MountPoint { get; private set; }
     /// <summary>
     /// 背后武器的挂载点
     /// </summary>
@@ -133,7 +133,8 @@ public abstract class Role : ActivityObject
     {
         base._Ready();
         StartScele = Scale;
-        MountPoint = GetNode<Position2D>("MountPoint");
+        MountPoint = GetNode<MountRotation>("MountPoint");
+        MountPoint.Master = this;
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
         if (OverrideTexture != null)
         {

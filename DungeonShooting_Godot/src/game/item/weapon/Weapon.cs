@@ -165,7 +165,8 @@ public abstract class Weapon : ActivityObject
     /// 发射子弹时调用的函数, 每发射一枚子弹调用一次,
     /// 如果做霰弹武器效果, 一次开火发射5枚子弹, 则该函数调用5次
     /// </summary>
-    protected abstract void OnShoot();
+    /// <param name="fireRotation">开火时枪口旋转角度</param>
+    protected abstract void OnShoot(float fireRotation);
 
     /// <summary>
     /// 当开始换弹时调用
@@ -433,22 +434,29 @@ public abstract class Weapon : ActivityObject
         var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
 
         //先算武器口方向
-        var tempAngle = Mathf.Rad2Deg((float)GD.RandRange(-angle, angle));
-                              //创建子弹
-                              for (int i = 0; i < bulletCount; i++)
-                              {
-                                  //发射子弹
-                                  OnShoot();
+        var tempRotation = (float)GD.RandRange(-angle, angle);
+        var tempAngle = Mathf.Rad2Deg(tempRotation);
+        
+        //开火时枪口角度
+        var fireRotation = Mathf.Deg2Rad(Master.MountPoint.RealAngle) + tempRotation;
+        //创建子弹
+        for (int i = 0; i < bulletCount; i++)
+        {
+            //发射子弹
+            OnShoot(fireRotation);
         }
 
         //当前的散射半径
-        CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue, Attribute.FinalScatteringRange);
+        CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue,
+            Attribute.FinalScatteringRange);
         //武器的旋转角度
         tempAngle -= Attribute.UpliftAngle;
         RotationDegrees = tempAngle;
         fireAngle = tempAngle;
         //武器身位置
-        Position = new Vector2(Mathf.Max(-Attribute.MaxBacklash, Position.x - MathUtils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash)), Position.y);
+        Position = new Vector2(
+            Mathf.Max(-Attribute.MaxBacklash,
+                Position.x - MathUtils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash)), Position.y);
 
         if (FireEvent != null)
         {
@@ -675,6 +683,14 @@ public abstract class Weapon : ActivityObject
         }
     }
 
+    /// <summary>
+    /// 获取当前武器真实的旋转角度(弧度制), 由于武器旋转时加入了旋转吸附, 所以需要通过该函数来来知道当前武器的真实旋转角度
+    /// </summary>
+    public float GetRealGlobalRotation()
+    {
+        return Mathf.Deg2Rad(Master.MountPoint.RealAngle) + Rotation;
+    }
+    
     /// <summary>
     /// 触发扔掉武器操作
     /// </summary>

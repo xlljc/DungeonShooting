@@ -109,10 +109,10 @@ public class Gun : Weapon
         GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
     }
 
-    protected override void OnShoot()
+    protected override void OnShoot(float fireRotation)
     {
         //创建子弹
-        CreateBullet(BulletPack, FirePoint.GlobalPosition, (FirePoint.GlobalPosition - OriginPoint.GlobalPosition).Angle());
+        CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation);
     }
 
     protected override void OnReload()

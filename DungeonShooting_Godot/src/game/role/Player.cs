@@ -78,8 +78,6 @@ public class Player : Role
         base._Process(delta);
 
         Vector2 mousePos = InputManager.GetMousePosition();
-        //枪口跟随鼠标
-        MountPoint.LookAt(mousePos);
         //脸的朝向
         var gPos = GlobalPosition;
         if (mousePos.x > gPos.x && Face == FaceDirection.Left)
@@ -90,6 +88,8 @@ public class Player : Role
         {
             Face = FaceDirection.Left;
         }
+        //枪口跟随鼠标
+        MountPoint.SetLookAt(mousePos);
 
         if (Input.IsActionJustPressed("exchange")) //切换武器
         {
