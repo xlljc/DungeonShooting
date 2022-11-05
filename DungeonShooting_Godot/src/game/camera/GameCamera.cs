@@ -45,14 +45,12 @@ public class GameCamera : Camera2D
         
         var player = GameApplication.Instance.Room.Player;
         var viewportContainer = GameApplication.Instance.ViewportContainer;
-        //var mousePos = InputManager.GetMousePosition();
         var camPos = player.GlobalPosition;
         //var camPos = player.GlobalPosition.LinearInterpolate(mousePos, 0);
         //_camPos = camPos + _shakeOffset;
         _camPos = _camPos.LinearInterpolate(camPos, Mathf.Min(5 * delta, 1)) + _shakeOffset;
         SubPixelPosition = _camPos.Round() - _camPos;
         (viewportContainer.Material as ShaderMaterial)?.SetShaderParam("offset", SubPixelPosition);
-        //GlobalPosition = _camPos.Round();
         GlobalPosition = _camPos.Round();
     }
     

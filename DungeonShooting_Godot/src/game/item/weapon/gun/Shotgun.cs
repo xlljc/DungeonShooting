@@ -74,12 +74,12 @@ public class Shotgun : Weapon
         GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
     }
 
-    protected override void OnShoot()
+    protected override void OnShoot(float fireRotation)
     {
         for (int i = 0; i < 5; i++)
         {
             //创建子弹
-            CreateBullet(BulletPack, FirePoint.GlobalPosition, (FirePoint.GlobalPosition - OriginPoint.GlobalPosition).Angle() + MathUtils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi));
+            CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation + MathUtils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi));
         }
     }
 

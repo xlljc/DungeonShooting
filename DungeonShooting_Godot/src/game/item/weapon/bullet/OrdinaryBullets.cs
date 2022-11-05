@@ -74,6 +74,13 @@ public class OrdinaryBullets : Node2D, IBullet
         {
             //var target = RayCast.GetCollider();
             var pos = RayCast.GetCollisionPoint();
+            var collider = RayCast.GetCollider();
+
+            if (collider is Role role)
+            {
+                role.Hit(1);
+            }
+            
             //播放受击动画
             Node2D hit = Hit.Instance<Node2D>();
             hit.RotationDegrees = MathUtils.RandRangeInt(0, 360);

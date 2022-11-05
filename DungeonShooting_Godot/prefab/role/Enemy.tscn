@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://prefab/role/Role.tscn" type="PackedScene" id=1]
+
+[node name="Enemy" instance=ExtResource( 1 )]
+CollisionLayer = 16
+
+[node name="AnimatedSprite" parent="." index="2"]
+frame = 1

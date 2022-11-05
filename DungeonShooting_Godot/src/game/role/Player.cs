@@ -48,8 +48,9 @@ public class Player : Role
 
     [Export] public PackedScene GunPrefab;
 
-    public Player(): base("res://prefab/role/Player.tscn")
+    public Player(): base(ResourcePath.prefab_role_Player_tscn)
     {
+        Camp = CampEnum.Camp1;
     }
 
     public override void _Ready()
@@ -68,9 +69,9 @@ public class Player : Role
         RefreshGunTexture();
 
         MaxHp = 50;
-        Hp = 40;
+        Hp = 50;
         MaxShield = 30;
-        Shield = 10;
+        Shield = 30;
     }
 
     public override void _Process(float delta)
@@ -78,8 +79,6 @@ public class Player : Role
         base._Process(delta);
 
         Vector2 mousePos = InputManager.GetMousePosition();
-        //枪口跟随鼠标
-        MountPoint.LookAt(mousePos);
         //脸的朝向
         var gPos = GlobalPosition;
         if (mousePos.x > gPos.x && Face == FaceDirection.Left)
@@ -90,15 +89,17 @@ public class Player : Role
         {
             Face = FaceDirection.Left;
         }
+        //枪口跟随鼠标
+        MountPoint.SetLookAt(mousePos);
 
         if (Input.IsActionJustPressed("exchange")) //切换武器
         {
-            TriggerExchangeNext();
+            ExchangeNext();
             RefreshGunTexture();
         }
         else if (Input.IsActionJustPressed("throw")) //扔掉武器
         {
-            TriggerThrowWeapon();
+            ThrowWeapon();
             RefreshGunTexture();
         }
         else if (Input.IsActionJustPressed("interactive")) //互动物体
@@ -111,11 +112,11 @@ public class Player : Role
         }
         else if (Input.IsActionJustPressed("reload")) //换弹
         {
-            TriggerReload();
+            Reload();
         }
         if (Input.IsActionPressed("fire")) //开火
         {
-            TriggerAttack();
+            Attack();
         }
         //刷新显示的弹药剩余量
         RefreshGunAmmunition();

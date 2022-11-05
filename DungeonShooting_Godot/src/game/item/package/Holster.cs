@@ -121,7 +121,7 @@ public class Holster
             {
                 weapon.Pickup();
                 item.Weapon = weapon;
-                weapon._PickUpWeapon(Master);
+                weapon.PickUpWeapon(Master);
                 ExchangeByIndex(i);
                 return i;
             }
@@ -158,7 +158,7 @@ public class Holster
                 ActiveWeapon = null;
             }
         }
-        weapon._Remove();
+        weapon.Remove();
         return weapon;
     }
 
@@ -245,7 +245,7 @@ public class Holster
                     ActiveWeapon.RotationDegrees = 60;
                     ActiveWeapon.Scale = new Vector2(1, 1);
                 }
-                ActiveWeapon._Conceal();
+                ActiveWeapon.Conceal();
             }
         }
 
@@ -266,7 +266,7 @@ public class Holster
         slot.Weapon.RotationDegrees = 0;
         ActiveWeapon = slot.Weapon;
         ActiveIndex = index;
-        ActiveWeapon._Active();
+        ActiveWeapon.Active();
         return true;
     }
 }

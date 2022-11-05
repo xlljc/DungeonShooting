@@ -16,4 +16,4 @@ CollisionLayer = 8
 material = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." index="2"]
-frame = 1
+frame = 3

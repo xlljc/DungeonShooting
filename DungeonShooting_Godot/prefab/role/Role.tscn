@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://resource/materlal/Shadow.tres" type="Material" id=1]
 [ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=2]
 [ext_resource path="res://resource/sprite/role/role1.png" type="Texture" id=3]
+[ext_resource path="res://src/game/role/MountRotation.cs" type="Script" id=4]
 
 [sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 3 )
@@ -76,6 +77,9 @@ extents = Vector2( 5, 4.5 )
 [sub_resource type="RectangleShape2D" id=29]
 extents = Vector2( 5, 7.5 )
 
+[sub_resource type="Animation" id=30]
+resource_name = "hit"
+
 [node name="Role" type="Node"]
 script = ExtResource( 2 )
 CollisionMask = 1
@@ -118,3 +122,7 @@ shape = SubResource( 29 )
 
 [node name="MountPoint" type="Position2D" parent="."]
 position = Vector2( 2, -4 )
+script = ExtResource( 4 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/hit = SubResource( 30 )
