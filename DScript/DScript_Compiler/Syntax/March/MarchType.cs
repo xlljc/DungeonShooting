@@ -26,5 +26,9 @@
         /// 匹配大括号组, 相当于 {}
         /// </summary>
         BraceGroup,
+        /// <summary>
+        /// 表达式
+        /// </summary>
+        Expression
     }
 }

@@ -5,19 +5,43 @@ namespace DScript.Compiler
     internal class SyntaxTreeParse
     {
         //匹配导入类
-        private static readonly MarchData[] ImportMarchData = new[] { new MarchData(MarchType.Word), new MarchData("="), new MarchData(MarchType.FullWord) };
-        //匹配声明命名空间
-        private static readonly MarchData[] NamespaceMarchData = new[] { new MarchData(MarchType.FullWord) };
-        //匹配声明类
-        private static readonly MarchData[] ClassMarchData = new[] { new MarchData(MarchType.Word),
-            new MarchData(new MarchData("extends"), new MarchData(MarchType.FullWord)) };
-        //匹配函数声明
-        private static readonly MarchData[] FunctionMarchData = new[] {
+        private static readonly MarchData[] ImportMarchData = new[]
+        {
             new MarchData(MarchType.Word),
-            new MarchData(MarchType.ParenthesesGroup), 
-            new MarchData(new MarchData(":"),new MarchData(MarchType.FullKeyword)),
+            new MarchData("="),
+            new MarchData(MarchType.FullWord)
+        };
+
+        //匹配声明命名空间
+        private static readonly MarchData[] NamespaceMarchData = new[]
+        {
+            new MarchData(MarchType.FullWord)
+        };
+
+        //匹配声明类
+        private static readonly MarchData[] ClassMarchData = new[]
+        {
+            new MarchData(MarchType.Word),
+            new MarchData(new MarchData("extends"), new MarchData(MarchType.FullWord))
+        };
+
+        //匹配函数声明
+        private static readonly MarchData[] FunctionMarchData = new[]
+        {
+            new MarchData(MarchType.Word),
+            new MarchData(MarchType.ParenthesesGroup),
+            new MarchData(new MarchData(":"), new MarchData(MarchType.FullKeyword)),
             new MarchData(MarchType.BraceGroup)
         };
+        
+        //匹配变量声明
+        private static readonly MarchData[] VarMarchData = new[]
+        {
+            new MarchData(MarchType.Word),
+            new MarchData("="),
+            new MarchData(MarchType.Expression)
+        };
+
 
         private SyntaxTree _syntaxTree;
 
@@ -47,6 +71,9 @@ namespace DScript.Compiler
                 case "func": //函数
                     FunctionKeyword(token, fileToken);
                     break;
+                case "var": //字段
+                    VarKeyword(token, fileToken);
+                    break;
             }
         }
 
@@ -69,6 +96,7 @@ namespace DScript.Compiler
                         {
                             fullName += newArr[i].Code;
                         }
+
                         //添加导入名称
                         var importName = newArr[0];
                         fileToken.AddImport(new ImportNode(importName.Code, importName.Code, fullName));
@@ -101,6 +129,7 @@ namespace DScript.Compiler
                         {
                             fullName += newArr[i].Code;
                         }
+
                         //设置声明的命名空间
                         fileToken.SetNamespace(NamespaceNode.FromNamespace(_syntaxTree, fullName));
                     }
@@ -134,6 +163,7 @@ namespace DScript.Compiler
                             {
                                 name += newArr[i].Code;
                             }
+
                             //有继承的父类
                             classNode = new ClassNode(newArr[0].Code, name);
                         }
@@ -142,6 +172,7 @@ namespace DScript.Compiler
                             //没有显示继承的父类
                             classNode = new ClassNode(newArr[0].Code, "Object");
                         }
+
                         fileToken.SetClass(classNode);
                     }
                     else
@@ -151,7 +182,7 @@ namespace DScript.Compiler
                     }
                 });
         }
-        
+
         //解析声明函数
         private void FunctionKeyword(Token token, FileToken fileToken)
         {
@@ -176,6 +207,16 @@ namespace DScript.Compiler
                         throw new Exception("xxx");
                     }
                 });
+        }
+
+        //解析声明字段
+        private void VarKeyword(Token token, FileToken fileToken)
+        {
+            /*
+             匹配:
+                 var a = 表达式
+             */
+            
         }
     }
 }
