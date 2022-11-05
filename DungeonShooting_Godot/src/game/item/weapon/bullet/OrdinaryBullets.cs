@@ -52,7 +52,7 @@ public class OrdinaryBullets : Node2D, IBullet
         ShadowSprite.ZIndex = -1;
         ShadowSprite.Texture = BulletSprite.Texture;
         ShadowSprite.Offset = BulletSprite.Offset;
-        ShadowSprite.Material = ResourceManager.ShadowMaterial;
+        ShadowSprite.Material = ResourceManager.BlendMaterial;
         AddChild(ShadowSprite);
     }
 

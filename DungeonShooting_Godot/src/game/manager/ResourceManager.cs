@@ -4,15 +4,15 @@ using Godot;
 public static class ResourceManager
 {
     /// <summary>
-    /// 2D阴影的材质
+    /// 颜色混合材质
     /// </summary>
-    public static ShaderMaterial ShadowMaterial
+    public static ShaderMaterial BlendMaterial
     {
         get
         {
             if (_shadowMaterial == null)
             {
-                _shadowMaterial = ResourceLoader.Load<ShaderMaterial>("res://resource/materlal/Shadow.tres");
+                _shadowMaterial = ResourceLoader.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres);
             }
             return _shadowMaterial;
         }
@@ -20,15 +20,15 @@ public static class ResourceManager
     private static ShaderMaterial _shadowMaterial;
 
     /// <summary>
-    /// 2D阴影的Shader
+    /// 颜色混合Shader
     /// </summary>
-    public static Shader ShadowShader
+    public static Shader BlendShader
     {
         get
         {
             if (_shadowShader == null)
             {
-                _shadowShader = ResourceLoader.Load<Shader>("res://resource/materlal/Shadow.gdshader");
+                _shadowShader = ResourceLoader.Load<Shader>(ResourcePath.resource_materlal_Blend_gdshader);
             }
             return _shadowShader;
         }

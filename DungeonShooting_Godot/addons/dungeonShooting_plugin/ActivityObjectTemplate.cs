@@ -54,7 +54,7 @@ namespace Plugin
                     {
                         var sd = new Sprite();
                         sd.Name = "ShadowSprite";
-                        sd.Material = ResourceManager.ShadowMaterial;
+                        sd.Material = ResourceManager.BlendMaterial;
                         AddChild(sd);
                         sd.Owner = owner;
                     }

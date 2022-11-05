@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://resource/materlal/Shadow.tres" type="Material" id=1]
-[ext_resource path="res://resource/materlal/Shadow.gdshader" type="Shader" id=2]
+[ext_resource path="res://resource/materlal/Blend.tres" type="Material" id=1]
+[ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=2]
 [ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=3]
 
 [sub_resource type="ShaderMaterial" id=5]

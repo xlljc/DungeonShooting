@@ -25,3 +25,12 @@ public interface IBullet
     /// <param name="master">发射该子弹的角色</param>
     void Init(CampEnum target, Weapon gun, Node2D master);
 }
+
+
+public class Bullet : ActivityObject
+{
+    public Bullet(string scenePath) : base(scenePath)
+    {
+        
+    }
+}
