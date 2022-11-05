@@ -297,6 +297,7 @@ public abstract class Role : ActivityObject
     public virtual void Hit(int damage)
     {
         Hp -= damage;
+        AnimationPlayer.Stop();
         AnimationPlayer.Play("hit");
         OnHit(damage);
     }
