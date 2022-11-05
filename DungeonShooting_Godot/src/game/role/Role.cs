@@ -297,7 +297,7 @@ public abstract class Role : ActivityObject
     public virtual void Hit(int damage)
     {
         Hp -= damage;
-        GD.Print("打到敌人了!");
+        AnimationPlayer.Play("hit");
         OnHit(damage);
     }
 

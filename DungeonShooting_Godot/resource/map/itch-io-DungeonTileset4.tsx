@@ -13,17 +13,17 @@
  </tile>
  <tile id="17">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="12"/>
+   <object id="1" x="0" y="0" width="16" height="8"/>
   </objectgroup>
  </tile>
  <tile id="18">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="12"/>
+   <object id="1" x="0" y="0" width="16" height="8"/>
   </objectgroup>
  </tile>
  <tile id="19">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="12"/>
+   <object id="1" x="0" y="0" width="16" height="8"/>
   </objectgroup>
  </tile>
  <tile id="33">
@@ -83,37 +83,37 @@
  </tile>
  <tile id="116">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="12"/>
+   <object id="1" x="0" y="0" width="16" height="8"/>
   </objectgroup>
  </tile>
  <tile id="117">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="12"/>
+   <object id="1" x="0" y="0" width="16" height="8"/>
   </objectgroup>
  </tile>
  <tile id="118">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="12"/>
+   <object id="1" x="0" y="0" width="16" height="8"/>
   </objectgroup>
  </tile>
  <tile id="119">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="12"/>
+   <object id="1" x="0" y="0" width="16" height="8"/>
   </objectgroup>
  </tile>
  <tile id="120">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="12"/>
+   <object id="1" x="0" y="0" width="16" height="8"/>
   </objectgroup>
  </tile>
  <tile id="121">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="12"/>
+   <object id="1" x="0" y="0" width="16" height="8"/>
   </objectgroup>
  </tile>
  <tile id="122">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="12"/>
+   <object id="1" x="0" y="0" width="16" height="8"/>
   </objectgroup>
  </tile>
  <wangsets>

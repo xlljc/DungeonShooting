@@ -1,9 +1,15 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://resource/materlal/Shadow.tres" type="Material" id=1]
 [ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=2]
 [ext_resource path="res://resource/sprite/role/role1.png" type="Texture" id=3]
 [ext_resource path="res://src/game/role/MountRotation.cs" type="Script" id=4]
+[ext_resource path="res://resource/materlal/Shadow.gdshader" type="Shader" id=5]
+
+[sub_resource type="ShaderMaterial" id=31]
+shader = ExtResource( 5 )
+shader_param/shadowColor = Color( 1, 1, 1, 1 )
+shader_param/schedule = 0.0
 
 [sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 3 )
@@ -72,13 +78,39 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=16]
-extents = Vector2( 5, 4.5 )
+extents = Vector2( 5, 8.25 )
 
-[sub_resource type="RectangleShape2D" id=29]
-extents = Vector2( 5, 7.5 )
+[sub_resource type="Animation" id=32]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
 
 [sub_resource type="Animation" id=30]
 resource_name = "hit"
+length = 0.15
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.02, 0.15 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0, 0.0 ]
+}
 
 [node name="Role" type="Node"]
 script = ExtResource( 2 )
@@ -92,6 +124,7 @@ material = ExtResource( 1 )
 position = Vector2( 0, -10 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = SubResource( 31 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
@@ -99,30 +132,23 @@ frame = 2
 playing = true
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2( 0, -4.5 )
+position = Vector2( 0, -7.75 )
 shape = SubResource( 16 )
 
 [node name="InteractiveArea" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 collision_mask = 4
 monitorable = false
 
 [node name="Collision" type="CollisionShape2D" parent="InteractiveArea"]
-position = Vector2( 0, -4.5 )
+position = Vector2( 0, -5 )
 shape = SubResource( 16 )
-
-[node name="HitArea" type="Area2D" parent="."]
-visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea"]
-visible = false
-position = Vector2( 0, -7.5 )
-shape = SubResource( 29 )
 
 [node name="MountPoint" type="Position2D" parent="."]
 position = Vector2( 2, -4 )
 script = ExtResource( 4 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 32 )
 anims/hit = SubResource( 30 )
