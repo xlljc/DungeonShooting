@@ -114,7 +114,7 @@ public class Gun : Weapon
             MathUtils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,
             fireRotation,
-            PhysicsLayer.Wall | PhysicsLayer.Enemy
+            Master != null ? Master.AttackLayer : Role.DefaultAttackLayer
         );
         bullet.PutDown();
     }

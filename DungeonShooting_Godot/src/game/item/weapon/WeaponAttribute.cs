@@ -12,7 +12,7 @@ public class WeaponAttribute
     /// <summary>
     /// 武器 Prefab, 必须继承场景 "res://prefab/weapon/Weapon.tscn"
     /// </summary>
-    public string WeaponPrefab = "res://prefab/weapon/Weapon.tscn";
+    public string WeaponPrefab = ResourcePath.prefab_weapon_Weapon_tscn;
     /// <summary>
     /// 武器类型
     /// </summary>
@@ -20,7 +20,7 @@ public class WeaponAttribute
     /// <summary>
     /// 武器的图片
     /// </summary>
-    public string Sprite = "res://resource/sprite/gun/gun1.png";
+    public string Sprite = ResourcePath.resource_sprite_gun_gun1_png;
     /// <summary>
     /// 是否连续发射, 如果为false, 则每次发射都需要扣动扳机
     /// </summary>

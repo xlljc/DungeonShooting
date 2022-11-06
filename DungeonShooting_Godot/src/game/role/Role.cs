@@ -7,6 +7,11 @@ using Godot;
 public abstract class Role : ActivityObject
 {
     /// <summary>
+    /// 默认攻击对象层级
+    /// </summary>
+    public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Wall | PhysicsLayer.Props;
+    
+    /// <summary>
     /// 动画播放器
     /// </summary>
     public AnimationPlayer AnimationPlayer { get; private set; }
@@ -25,6 +30,11 @@ public abstract class Role : ActivityObject
     /// 所属阵营
     /// </summary>
     public CampEnum Camp;
+
+    /// <summary>
+    /// 攻击目标的碰撞器所属层级, 数据源自于: PhysicsLayer
+    /// </summary>
+    public uint AttackLayer { get; set; } = PhysicsLayer.Wall;
 
     /// <summary>
     /// 携带的道具包裹

@@ -50,6 +50,7 @@ public class Player : Role
 
     public Player(): base(ResourcePath.prefab_role_Player_tscn)
     {
+        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
     }
 

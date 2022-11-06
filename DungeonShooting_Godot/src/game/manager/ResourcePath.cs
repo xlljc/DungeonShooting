@@ -112,5 +112,4 @@ public class ResourcePath
     public const string default_env_tres = "res://default_env.tres";
     public const string icon_png = "res://icon.png";
     public const string SourceHanSerifCNSemiBold_otf = "res://SourceHanSerifCN-SemiBold.otf";
-    public const string testaaa_txt = "res://testaaa.txt";
 }

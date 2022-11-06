@@ -9,7 +9,7 @@ public class Shotgun : Weapon
         public ShotgunAttribute()
         {
             Name = "霰弹枪";
-            Sprite = "res://resource/sprite/gun/gun2.png";
+            Sprite = ResourcePath.resource_sprite_gun_gun2_png;
             Weight = 40;
             CenterPosition = new Vector2(0.4f, -2.6f);
             StartFiringSpeed = 120;
@@ -51,7 +51,7 @@ public class Shotgun : Weapon
 
     public Shotgun(string id, WeaponAttribute attribute) : base(id, attribute)
     {
-        ShellPack = ResourceManager.Load<PackedScene>("res://prefab/weapon/shell/ShellCase.tscn");
+        ShellPack = ResourceManager.Load<PackedScene>(ResourcePath.prefab_weapon_shell_ShellCase_tscn);
     }
 
     protected override void OnFire()
@@ -83,7 +83,7 @@ public class Shotgun : Weapon
                 MathUtils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
                 FirePoint.GlobalPosition,
                 fireRotation + MathUtils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
-                PhysicsLayer.Wall | PhysicsLayer.Enemy
+                Master != null ? Master.AttackLayer : Role.DefaultAttackLayer
             );
             bullet.PutDown();
         }
