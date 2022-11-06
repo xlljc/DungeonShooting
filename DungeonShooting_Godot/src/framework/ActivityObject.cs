@@ -15,6 +15,11 @@ public abstract class ActivityObject : KinematicBody2D
     public string ItemId { get; internal set; }
     
     /// <summary>
+    /// 是否放入 ySort 节点下
+    /// </summary>
+    public bool UseYSort { get; }
+    
+    /// <summary>
     /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite", 类型为 AnimatedSprite
     /// </summary>
     public AnimatedSprite AnimatedSprite { get; }
@@ -65,6 +70,7 @@ public abstract class ActivityObject : KinematicBody2D
         ZIndex = tempNode.ZIndex;
         CollisionLayer = tempNode.CollisionLayer;
         CollisionMask = tempNode.CollisionMask;
+        UseYSort = tempNode.UseYSort;
 
         //移动子节点
         var count = tempNode.GetChildCount();
@@ -215,10 +221,10 @@ public abstract class ActivityObject : KinematicBody2D
     /// <summary>
     /// 将一个节点扔到地上, 并设置显示的阴影
     /// </summary>
-    public void PutDown()
+    public virtual void PutDown()
     {
         var parent = GetParent();
-        var root = GameApplication.Instance.Room.ObjectRoot;
+        var root = GameApplication.Instance.Room.GetRoot(UseYSort);
         if (parent != root)
         {
             if (parent != null)
@@ -528,15 +534,17 @@ public abstract class ActivityObject : KinematicBody2D
     private void Throw()
     {
         var parent = GetParent();
-        var room = GameApplication.Instance.Room;
+        //投抛时必须要加入 sortRoot 节点下
+        var root = GameApplication.Instance.Room.GetRoot(false);
+        var sortRoot = GameApplication.Instance.Room.GetRoot(true);
         if (parent == null)
         {
-            room.SortRoot.AddChild(this);
+            sortRoot.AddChild(this);
         }
-        else if (parent == room.ObjectRoot)
+        else if (parent == root)
         {
             parent.RemoveChild(this);
-            room.SortRoot.AddChild(this);
+            sortRoot.AddChild(this);
         }
 
         GlobalPosition = _throwData.StartPosition + new Vector2(0, -_throwData.Y);
@@ -573,7 +581,8 @@ public abstract class ActivityObject : KinematicBody2D
             //Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
-            ZIndex = 2;
+            ZIndex = 0;
+            //ZIndex = 2;
             Collision.Disabled = false;
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
@@ -613,7 +622,7 @@ public abstract class ActivityObject : KinematicBody2D
     private void ThrowOver()
     {
         GetParent().RemoveChild(this);
-        GameApplication.Instance.Room.ObjectRoot.AddChild(this);
+        GameApplication.Instance.Room.GetRoot(UseYSort).AddChild(this);
         RestoreCollision();
 
         OnThrowOver();

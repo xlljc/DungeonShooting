@@ -9,6 +9,12 @@ namespace Plugin
     public class ActivityObjectTemplate : Node
     {
         /// <summary>
+        /// 是否放入 ySort 节点下
+        /// </summary>
+        [Export]
+        public bool UseYSort;
+        
+        /// <summary>
         /// 当前物体所属物理层
         /// </summary>
         [Export(PropertyHint.Layers2dPhysics)]

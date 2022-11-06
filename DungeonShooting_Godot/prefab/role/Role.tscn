@@ -115,8 +115,8 @@ tracks/0/keys = {
 
 [node name="Role" type="Node"]
 script = ExtResource( 2 )
+UseYSort = true
 CollisionMask = 1
-ZIndex = 1
 
 [node name="ShadowSprite" type="Sprite" parent="."]
 material = ExtResource( 1 )

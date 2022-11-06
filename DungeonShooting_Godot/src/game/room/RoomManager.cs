@@ -6,8 +6,8 @@ using Godot;
 public class RoomManager : Node2D
 {
     public Player Player { get; private set; }
-    public Node2D ObjectRoot { get; private set; }
-    public YSort SortRoot { get; private set; }
+    private Node2D ObjectRoot;
+    private YSort SortRoot;
 
 
     private Enemy _enemy;
@@ -31,9 +31,8 @@ public class RoomManager : Node2D
         Player.PutDown();
         
         _enemy = new Enemy();
+        _enemy.Name = "Enemy";
         _enemy.PutDown(new Vector2(150, 150));
-        
-        
     }
 
     public override void _Ready()
@@ -56,5 +55,15 @@ public class RoomManager : Node2D
     public override void _Process(float delta)
     {
         
+    }
+
+    /// <summary>
+    /// 获取房间根节点
+    /// </summary>
+    /// <param name="useYSort"></param>
+    /// <returns></returns>
+    public Node2D GetRoot(bool useYSort)
+    {
+        return useYSort ? SortRoot : ObjectRoot;
     }
 }

@@ -750,6 +750,13 @@ public abstract class Weapon : ActivityObject
     {
         //启用碰撞
         CollisionShape2D.Disabled = false;
+        AnimationPlayer.Play("Floodlight");
+    }
+
+    public override void PutDown()
+    {
+        base.PutDown();
+        AnimationPlayer.Play("Floodlight");
     }
 
     /// <summary>
@@ -778,7 +785,6 @@ public abstract class Weapon : ActivityObject
     {
         Master = null;
         AnimatedSprite.Position = Attribute.CenterPosition;
-        AnimationPlayer.Play("Floodlight");
         OnRemove();
     }
 
@@ -826,7 +832,7 @@ public abstract class Weapon : ActivityObject
         bullet.GlobalRotation = globalRotation;
         if (parent == null)
         {
-            GameApplication.Instance.Room.SortRoot.AddChild(bullet);
+            GameApplication.Instance.Room.GetRoot(true).AddChild(bullet);
         }
         else
         {

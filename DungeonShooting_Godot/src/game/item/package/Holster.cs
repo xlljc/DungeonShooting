@@ -114,6 +114,11 @@ public class Holster
     /// <param name="weapon">武器对象</param>
     public int PickupWeapon(Weapon weapon)
     {
+        //已经被拾起了
+        if (weapon.Master != null)
+        {
+            return -1;
+        }
         for (int i = 0; i < SlotList.Length; i++)
         {
             var item = SlotList[i];
