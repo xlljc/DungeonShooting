@@ -9,6 +9,8 @@ namespace Plugin
         public static Plugin Instance => _instance;
         private static Plugin _instance;
 
+        private Control dock;
+
         public override void _Process(float delta)
         {
             _instance = this;
@@ -20,11 +22,16 @@ namespace Plugin
             var script = GD.Load<Script>("res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs");
             var texture = GD.Load<Texture>("res://addons/dungeonShooting_plugin/ActivityObject.svg");
             AddCustomType("ActivityObjectTemplate", "Node", script, texture);
+            
+            dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/Automation.tscn").Instance<Control>();
+            AddControlToDock(DockSlot.LeftUr, dock);
         }
 
         public override void _ExitTree()
         {
             RemoveCustomType("ActivityObjectTemplate");
+            RemoveControlFromDocks(dock);
+            dock.Free();
         }
 
         /*public override bool Handles(Object @object)

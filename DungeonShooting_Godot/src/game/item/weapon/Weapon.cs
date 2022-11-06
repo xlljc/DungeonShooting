@@ -806,42 +806,42 @@ public abstract class Weapon : ActivityObject
         HideShadowSprite();
         OnConceal();
     }
-
-    /// <summary>
-    /// 实例化并返回子弹对象
-    /// </summary>
-    /// <param name="bulletPack">子弹的预制体</param>
-    protected T CreateBullet<T>(PackedScene bulletPack, Vector2 globalPostion, float globalRotation, Node parent = null)
-        where T : Node2D, IBullet
-    {
-        return (T)CreateBullet(bulletPack, globalPostion, globalRotation, parent);
-    }
-
-    /// <summary>
-    /// 实例化并返回子弹对象
-    /// </summary>
-    /// <param name="bulletPack">子弹的预制体</param>
-    protected IBullet CreateBullet(PackedScene bulletPack, Vector2 globalPostion, float globalRotation,
-        Node parent = null)
-    {
-        // 实例化子弹
-        Node2D bullet = bulletPack.Instance<Node2D>();
-        // 设置坐标
-        bullet.GlobalPosition = globalPostion;
-        // 旋转角度
-        bullet.GlobalRotation = globalRotation;
-        if (parent == null)
-        {
-            GameApplication.Instance.Room.GetRoot(true).AddChild(bullet);
-        }
-        else
-        {
-            parent.AddChild(bullet);
-        }
-
-        // 调用初始化
-        IBullet result = (IBullet)bullet;
-        result.Init(TargetCamp, this, null);
-        return result;
-    }
+    //
+    // /// <summary>
+    // /// 实例化并返回子弹对象
+    // /// </summary>
+    // /// <param name="bulletPack">子弹的预制体</param>
+    // protected T CreateBullet<T>(PackedScene bulletPack, Vector2 globalPostion, float globalRotation, Node parent = null)
+    //     where T : Node2D, IBullet
+    // {
+    //     return (T)CreateBullet(bulletPack, globalPostion, globalRotation, parent);
+    // }
+    //
+    // /// <summary>
+    // /// 实例化并返回子弹对象
+    // /// </summary>
+    // /// <param name="bulletPack">子弹的预制体</param>
+    // protected IBullet CreateBullet(PackedScene bulletPack, Vector2 globalPostion, float globalRotation,
+    //     Node parent = null)
+    // {
+    //     // 实例化子弹
+    //     Node2D bullet = bulletPack.Instance<Node2D>();
+    //     // 设置坐标
+    //     bullet.GlobalPosition = globalPostion;
+    //     // 旋转角度
+    //     bullet.GlobalRotation = globalRotation;
+    //     if (parent == null)
+    //     {
+    //         GameApplication.Instance.Room.GetRoot(true).AddChild(bullet);
+    //     }
+    //     else
+    //     {
+    //         parent.AddChild(bullet);
+    //     }
+    //
+    //     // 调用初始化
+    //     IBullet result = (IBullet)bullet;
+    //     result.Init(TargetCamp, this, null);
+    //     return result;
+    // }
 }

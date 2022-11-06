@@ -43,11 +43,7 @@ public class Shotgun : Weapon
             FirePosition = new Vector2(16, 1.5f);
         }
     }
-
-    /// <summary>
-    /// 子弹预制体
-    /// </summary>
-    public PackedScene BulletPack;
+    
     /// <summary>
     /// 弹壳预制体
     /// </summary>
@@ -55,7 +51,6 @@ public class Shotgun : Weapon
 
     public Shotgun(string id, WeaponAttribute attribute) : base(id, attribute)
     {
-        BulletPack = ResourceManager.Load<PackedScene>("res://prefab/weapon/bullet/OrdinaryBullets.tscn");
         ShellPack = ResourceManager.Load<PackedScene>("res://prefab/weapon/shell/ShellCase.tscn");
     }
 
@@ -72,6 +67,8 @@ public class Shotgun : Weapon
         shell.Throw(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, true);
         //创建抖动
         GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
+        //播放射击音效
+        SoundManager.PlaySoundEffect("ordinaryBullet.ogg", this, 6f);
     }
 
     protected override void OnShoot(float fireRotation)
@@ -79,7 +76,16 @@ public class Shotgun : Weapon
         for (int i = 0; i < 5; i++)
         {
             //创建子弹
-            CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation + MathUtils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi));
+            //CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation + MathUtils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi));
+            
+            var bullet = new Bullet(
+                ResourcePath.prefab_weapon_bullet_Bullet_tscn,
+                MathUtils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
+                FirePoint.GlobalPosition,
+                fireRotation + MathUtils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
+                PhysicsLayer.Wall | PhysicsLayer.Enemy
+            );
+            bullet.PutDown();
         }
     }
 

@@ -84,14 +84,8 @@ public class Gun : Weapon
         }
     }
 
-    /// <summary>
-    /// 子弹预制体
-    /// </summary>
-    public PackedScene BulletPack;
-
     public Gun(string id, WeaponAttribute attribute): base(id, attribute)
     {
-        BulletPack = ResourceManager.Load<PackedScene>("res://prefab/weapon/bullet/OrdinaryBullets.tscn");
     }
 
     protected override void OnFire()
@@ -107,12 +101,22 @@ public class Gun : Weapon
         shell.Throw(new Vector2(10, 5), startPos, startHeight, direction, xf, yf, rotate, true);
         //创建抖动
         GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
+        //播放射击音效
+        SoundManager.PlaySoundEffect("ordinaryBullet.ogg", this, 6f);
     }
 
     protected override void OnShoot(float fireRotation)
     {
         //创建子弹
-        CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation);
+        //CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation);
+        var bullet = new Bullet(
+            ResourcePath.prefab_weapon_bullet_Bullet_tscn,
+            MathUtils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
+            FirePoint.GlobalPosition,
+            fireRotation,
+            PhysicsLayer.Wall | PhysicsLayer.Enemy
+        );
+        bullet.PutDown();
     }
 
     protected override void OnReload()

@@ -3,7 +3,7 @@ using Godot;
 
 public class ShellCase : ActivityObject
 {
-    public ShellCase() : base("res://prefab/weapon/shell/ShellCase.tscn")
+    public ShellCase() : base(ResourcePath.prefab_weapon_shell_ShellCase_tscn)
     {
         ShadowOffset = new Vector2(0, 1);
     }

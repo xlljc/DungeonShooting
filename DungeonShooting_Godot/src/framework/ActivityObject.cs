@@ -202,6 +202,13 @@ public abstract class ActivityObject : KinematicBody2D
     }
 
     /// <summary>
+    /// 当前物体销毁时调用, 销毁物体请调用 Destroy() 函数
+    /// </summary>
+    public virtual void OnDestroy()
+    {
+    }
+
+    /// <summary>
     /// 拾起一个 node 节点
     /// </summary>
     public void Pickup()
@@ -499,6 +506,9 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
 
+    /// <summary>
+    /// 销毁物体
+    /// </summary>
     public void Destroy()
     {
         if (IsDestroyed)
@@ -507,12 +517,22 @@ public abstract class ActivityObject : KinematicBody2D
         }
 
         IsDestroyed = true;
+        
+        OnDestroy();
         QueueFree();
         var arr = _components.ToArray();
         for (int i = 0; i < arr.Length; i++)
         {
             arr[i].Value?.Destroy();
         }
+    }
+
+    /// <summary>
+    /// 延时销毁
+    /// </summary>
+    public void DelayDestroy()
+    {
+        CallDeferred(nameof(Destroy));
     }
 
     private bool ContainsComponent(Component component)
