@@ -79,19 +79,22 @@ public class Player : Role
     {
         base._Process(delta);
 
-        Vector2 mousePos = InputManager.GetMousePosition();
         //脸的朝向
         var gPos = GlobalPosition;
-        if (mousePos.x > gPos.x && Face == FaceDirection.Left)
+        if (LookTarget == null)
         {
-            Face = FaceDirection.Right;
+            Vector2 mousePos = InputManager.GetMousePosition();
+            if (mousePos.x > gPos.x && Face == FaceDirection.Left)
+            {
+                Face = FaceDirection.Right;
+            }
+            else if (mousePos.x < gPos.x && Face == FaceDirection.Right)
+            {
+                Face = FaceDirection.Left;
+            }
+            //枪口跟随鼠标
+            MountPoint.SetLookAt(mousePos);
         }
-        else if (mousePos.x < gPos.x && Face == FaceDirection.Right)
-        {
-            Face = FaceDirection.Left;
-        }
-        //枪口跟随鼠标
-        MountPoint.SetLookAt(mousePos);
 
         if (Input.IsActionJustPressed("exchange")) //切换武器
         {

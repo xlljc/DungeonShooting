@@ -39,9 +39,9 @@ public class RoomManager : Node2D
     {
         //播放bgm
         SoundManager.PlayeMusic("intro.ogg", this, -17f);
-        
+        _enemy.LookTarget = Player;
         _enemy.PickUpWeapon(WeaponManager.GetGun("1001"));
-        
+
         WeaponManager.GetGun("1001").PutDown(new Vector2(80, 100));
         WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
         WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120));

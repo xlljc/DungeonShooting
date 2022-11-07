@@ -95,6 +95,11 @@ public abstract class Role : ActivityObject
         }
     }
     private int _maxHp = 0;
+
+    /// <summary>
+    /// 当前角色所看向的对象, 也就是枪口指向的对象
+    /// </summary>
+    public ActivityObject LookTarget { get; set; }
     
     //初始缩放
     private Vector2 StartScele;
@@ -174,6 +179,25 @@ public abstract class Role : ActivityObject
     public override void _Process(float delta)
     {
         base._Process(delta);
+        
+        //看向目标
+        if (LookTarget != null)
+        {
+            Vector2 pos = LookTarget.GlobalPosition;
+            //脸的朝向
+            var gPos = GlobalPosition;
+            if (pos.x > gPos.x && Face == FaceDirection.Left)
+            {
+                Face = FaceDirection.Right;
+            }
+            else if (pos.x < gPos.x && Face == FaceDirection.Right)
+            {
+                Face = FaceDirection.Left;
+            }
+            //枪口跟随目标
+            MountPoint.SetLookAt(pos);
+        }
+        
         //检查可互动的道具
         bool findFlag = false;
         for (int i = 0; i < InteractiveItemList.Count; i++)
