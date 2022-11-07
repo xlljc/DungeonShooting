@@ -99,8 +99,12 @@ public class Gun : Weapon
         var rotate = MathUtils.RandRangeInt(-720, 720);
         var shell = new ShellCase();
         shell.Throw(new Vector2(10, 5), startPos, startHeight, direction, xf, yf, rotate, true);
-        //创建抖动
-        GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
+        
+        if (Master == GameApplication.Instance.Room.Player)
+        {
+            //创建抖动
+            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
+        }
         //播放射击音效
         SoundManager.PlaySoundEffect("ordinaryBullet.ogg", this, 6f);
     }
