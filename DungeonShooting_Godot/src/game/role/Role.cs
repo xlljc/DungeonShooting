@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -17,8 +18,9 @@ public abstract class Role : ActivityObject
     public AnimationPlayer AnimationPlayer { get; private set; }
     
     /// <summary>
-    /// 重写的纹理
+    /// 重写的纹理, 即将删除, 请直接更改 AnimatedSprite.Frames
     /// </summary>
+    [Obsolete]
     public Texture OverrideTexture { get; protected set; }
 
     /// <summary>
@@ -131,7 +133,7 @@ public abstract class Role : ActivityObject
     /// 当受伤时调用
     /// </summary>
     /// <param name="damage">受到的伤害</param>
-    public virtual void OnHit(int damage)
+    protected virtual void OnHit(int damage)
     {
     }
 
@@ -143,6 +145,13 @@ public abstract class Role : ActivityObject
     {
     }
 
+    /// <summary>
+    /// 死亡时调用
+    /// </summary>
+    protected virtual void OnDie()
+    {
+    }
+    
     public Role() : this(ResourcePath.prefab_role_Role_tscn)
     {
     }
@@ -160,13 +169,13 @@ public abstract class Role : ActivityObject
         MountPoint = GetNode<MountRotation>("MountPoint");
         MountPoint.Master = this;
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
-        //即将弃用
+        //即将删除
         if (OverrideTexture != null)
         {
             // 更改纹理
-            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, OverrideTexture);
-            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, OverrideTexture);
-            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, OverrideTexture);
+            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite);
+            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite);
+            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite);
         }
         Face = FaceDirection.Right;
 
@@ -358,9 +367,10 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
-    /// 更改指定动画的纹理
+    /// 更改指定动画的纹理, 即将删除
     /// </summary>
-    private void ChangeFrameTexture(string anim, AnimatedSprite animatedSprite, Texture texture)
+    [Obsolete]
+    private void ChangeFrameTexture(string anim, AnimatedSprite animatedSprite)
     {
         SpriteFrames spriteFrames = animatedSprite.Frames;
         if (spriteFrames != null)

@@ -122,45 +122,4 @@ public class Gun : Weapon
         );
         bullet.PutDown();
     }
-
-    protected override void OnReload()
-    {
-        
-    }
-
-    protected override void OnReloadFinish()
-    {
-        
-    }
-
-    protected override void OnDownTrigger()
-    {
-        
-    }
-
-    protected override void OnUpTrigger()
-    {
-        
-    }
-
-    protected override void OnPickUp(Role master)
-    {
-        
-    }
-
-    protected override void OnRemove()
-    {
-
-    }
-
-    protected override void OnActive()
-    {
-        
-    }
-
-    protected override void OnConceal()
-    {
-        
-    }
-
 }
