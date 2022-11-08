@@ -10,6 +10,16 @@ using Plugin;
 public abstract class ActivityObject : KinematicBody2D
 {
     /// <summary>
+    /// 当前物体类型id, 用于区分是否是同一种物体, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemId 为 null
+    /// </summary>
+    public string ItemId { get; internal set; }
+    
+    /// <summary>
+    /// 是否放入 ySort 节点下
+    /// </summary>
+    public bool UseYSort { get; }
+    
+    /// <summary>
     /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite", 类型为 AnimatedSprite
     /// </summary>
     public AnimatedSprite AnimatedSprite { get; }
@@ -39,6 +49,7 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     public Vector2 ShadowOffset { get; protected set; } = new Vector2(0, 2);
 
+    //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     private bool initShadow;
     private string _prevAnimation;
@@ -53,13 +64,14 @@ public abstract class ActivityObject : KinematicBody2D
         var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
         if (tempPrefab == null)
         {
-            throw new Exception("创建 ActivityObject 的参数 scenePath 为 null !");
+            throw new Exception("创建 ActivityObject 没有找到指定挂载的预制体: " + scenePath);
         }
 
         var tempNode = tempPrefab.Instance<ActivityObjectTemplate>();
         ZIndex = tempNode.ZIndex;
         CollisionLayer = tempNode.CollisionLayer;
         CollisionMask = tempNode.CollisionMask;
+        UseYSort = tempNode.UseYSort;
 
         //移动子节点
         var count = tempNode.GetChildCount();
@@ -93,7 +105,7 @@ public abstract class ActivityObject : KinematicBody2D
         if (!initShadow)
         {
             initShadow = true;
-            ShadowSprite.Material = ResourceManager.ShadowMaterial;
+            ShadowSprite.Material = ResourceManager.BlendMaterial;
         }
 
         var anim = AnimatedSprite.Animation;
@@ -118,6 +130,10 @@ public abstract class ActivityObject : KinematicBody2D
         ShadowSprite.Visible = false;
     }
 
+    /// <summary>
+    /// 设置默认序列帧动画的第一帧, 即将删除, 请直接设置 AnimatedSprite.Frames
+    /// </summary>
+    [Obsolete]
     public void SetDefaultTexture(Texture texture)
     {
         if (AnimatedSprite.Frames == null)
@@ -136,10 +152,17 @@ public abstract class ActivityObject : KinematicBody2D
         AnimatedSprite.Playing = true;
     }
 
-    public void GetCurrentTexture()
+    /// <summary>
+    /// 获取当前序列帧动画的 Texture
+    /// </summary>
+    public Texture GetCurrentTexture()
     {
+        return AnimatedSprite.Frames.GetFrame(AnimatedSprite.Name, AnimatedSprite.Frame);
     }
 
+    /// <summary>
+    /// 获取默认序列帧动画的第一帧
+    /// </summary>
     public Texture GetDefaultTexture()
     {
         return AnimatedSprite.Frames.GetFrame("default", 0);
@@ -165,28 +188,35 @@ public abstract class ActivityObject : KinematicBody2D
     /// <summary>
     /// 投抛该物体达到最高点时调用
     /// </summary>
-    public virtual void OnThrowMaxHeight(float height)
+    protected virtual void OnThrowMaxHeight(float height)
     {
     }
 
     /// <summary>
     /// 投抛状态下第一次接触地面时调用, 之后的回弹落地将不会调用该函数
     /// </summary>
-    public virtual void OnFirstFallToGround()
+    protected virtual void OnFirstFallToGround()
     {
     }
 
     /// <summary>
     /// 投抛状态下每次接触地面时调用
     /// </summary>
-    public virtual void OnFallToGround()
+    protected virtual void OnFallToGround()
     {
     }
 
     /// <summary>
     /// 投抛结束时调用
     /// </summary>
-    public virtual void OnThrowOver()
+    protected virtual void OnThrowOver()
+    {
+    }
+
+    /// <summary>
+    /// 当前物体销毁时调用, 销毁物体请调用 Destroy() 函数
+    /// </summary>
+    protected virtual void OnDestroy()
     {
     }
 
@@ -210,10 +240,10 @@ public abstract class ActivityObject : KinematicBody2D
     /// <summary>
     /// 将一个节点扔到地上, 并设置显示的阴影
     /// </summary>
-    public void PutDown()
+    public virtual void PutDown()
     {
         var parent = GetParent();
-        var root = GameApplication.Instance.Room.ObjectRoot;
+        var root = GameApplication.Instance.Room.GetRoot(UseYSort);
         if (parent != root)
         {
             if (parent != null)
@@ -224,8 +254,15 @@ public abstract class ActivityObject : KinematicBody2D
             root.AddChild(this);
         }
 
-        //注意需要延时调用
-        CallDeferred(nameof(ShowShadowSprite));
+        if (IsInsideTree())
+        {
+            ShowShadowSprite();
+        }
+        else
+        {
+            //注意需要延时调用
+            CallDeferred(nameof(ShowShadowSprite));
+        }
     }
 
     /// <summary>
@@ -481,6 +518,9 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
 
+    /// <summary>
+    /// 销毁物体
+    /// </summary>
     public void Destroy()
     {
         if (IsDestroyed)
@@ -489,12 +529,22 @@ public abstract class ActivityObject : KinematicBody2D
         }
 
         IsDestroyed = true;
+        
+        OnDestroy();
         QueueFree();
         var arr = _components.ToArray();
         for (int i = 0; i < arr.Length; i++)
         {
             arr[i].Value?.Destroy();
         }
+    }
+
+    /// <summary>
+    /// 延时销毁
+    /// </summary>
+    public void DelayDestroy()
+    {
+        CallDeferred(nameof(Destroy));
     }
 
     private bool ContainsComponent(Component component)
@@ -516,15 +566,17 @@ public abstract class ActivityObject : KinematicBody2D
     private void Throw()
     {
         var parent = GetParent();
-        var room = GameApplication.Instance.Room;
+        //投抛时必须要加入 sortRoot 节点下
+        var root = GameApplication.Instance.Room.GetRoot(false);
+        var sortRoot = GameApplication.Instance.Room.GetRoot(true);
         if (parent == null)
         {
-            room.SortRoot.AddChild(this);
+            sortRoot.AddChild(this);
         }
-        else if (parent == room.ObjectRoot)
+        else if (parent == root)
         {
             parent.RemoveChild(this);
-            room.SortRoot.AddChild(this);
+            sortRoot.AddChild(this);
         }
 
         GlobalPosition = _throwData.StartPosition + new Vector2(0, -_throwData.Y);
@@ -561,7 +613,8 @@ public abstract class ActivityObject : KinematicBody2D
             //Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
-            ZIndex = 2;
+            ZIndex = 0;
+            //ZIndex = 2;
             Collision.Disabled = false;
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
@@ -601,9 +654,17 @@ public abstract class ActivityObject : KinematicBody2D
     private void ThrowOver()
     {
         GetParent().RemoveChild(this);
-        GameApplication.Instance.Room.ObjectRoot.AddChild(this);
+        GameApplication.Instance.Room.GetRoot(UseYSort).AddChild(this);
         RestoreCollision();
 
         OnThrowOver();
+    }
+
+    /// <summary>
+    /// 通过 ItemId 实例化 ActivityObject 对象
+    /// </summary>
+    public static T Create<T>(string itemId) where T : ActivityObject
+    {
+        return null;
     }
 }

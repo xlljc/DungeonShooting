@@ -9,7 +9,7 @@ public class MountRotation : Position2D
     /// <summary>
     /// 吸附角度
     /// </summary>
-    private int _adsorption = 5;
+    private int _adsorption = 6;
     
     /// <summary>
     /// 所在的角色

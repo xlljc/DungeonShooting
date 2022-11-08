@@ -113,3 +113,4 @@ align = 1
 [node name="InteractiveTipBar" parent="ViewNode" instance=ExtResource( 10 )]
 
 [node name="ReloadBar" parent="ViewNode" instance=ExtResource( 3 )]
+z_index = 15

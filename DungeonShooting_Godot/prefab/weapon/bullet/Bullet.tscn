@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=1]
+[ext_resource path="res://resource/materlal/Blend.tres" type="Material" id=2]
+[ext_resource path="res://resource/sprite/bullet/bullet.png" type="Texture" id=3]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 5.5, 2 )
+
+[node name="Bullet" type="Node"]
+script = ExtResource( 1 )
+CollisionLayer = 2
+
+[node name="ShadowSprite" type="Sprite" parent="."]
+material = ExtResource( 2 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( -1, 0 )
+frames = SubResource( 1 )
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2( 1.5, 0 )
+shape = SubResource( 2 )

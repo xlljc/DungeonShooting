@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -7,13 +8,19 @@ using Godot;
 public abstract class Role : ActivityObject
 {
     /// <summary>
+    /// 默认攻击对象层级
+    /// </summary>
+    public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Wall | PhysicsLayer.Props;
+    
+    /// <summary>
     /// 动画播放器
     /// </summary>
     public AnimationPlayer AnimationPlayer { get; private set; }
     
     /// <summary>
-    /// 重写的纹理
+    /// 重写的纹理, 即将删除, 请直接更改 AnimatedSprite.Frames
     /// </summary>
+    [Obsolete]
     public Texture OverrideTexture { get; protected set; }
 
     /// <summary>
@@ -25,6 +32,11 @@ public abstract class Role : ActivityObject
     /// 所属阵营
     /// </summary>
     public CampEnum Camp;
+
+    /// <summary>
+    /// 攻击目标的碰撞器所属层级, 数据源自于: PhysicsLayer
+    /// </summary>
+    public uint AttackLayer { get; set; } = PhysicsLayer.Wall;
 
     /// <summary>
     /// 携带的道具包裹
@@ -85,6 +97,11 @@ public abstract class Role : ActivityObject
         }
     }
     private int _maxHp = 0;
+
+    /// <summary>
+    /// 当前角色所看向的对象, 也就是枪口指向的对象
+    /// </summary>
+    public ActivityObject LookTarget { get; set; }
     
     //初始缩放
     private Vector2 StartScele;
@@ -116,7 +133,7 @@ public abstract class Role : ActivityObject
     /// 当受伤时调用
     /// </summary>
     /// <param name="damage">受到的伤害</param>
-    public virtual void OnHit(int damage)
+    protected virtual void OnHit(int damage)
     {
     }
 
@@ -128,6 +145,13 @@ public abstract class Role : ActivityObject
     {
     }
 
+    /// <summary>
+    /// 死亡时调用
+    /// </summary>
+    protected virtual void OnDie()
+    {
+    }
+    
     public Role() : this(ResourcePath.prefab_role_Role_tscn)
     {
     }
@@ -145,13 +169,13 @@ public abstract class Role : ActivityObject
         MountPoint = GetNode<MountRotation>("MountPoint");
         MountPoint.Master = this;
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
-        //即将弃用
+        //即将删除
         if (OverrideTexture != null)
         {
             // 更改纹理
-            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite, OverrideTexture);
-            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite, OverrideTexture);
-            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite, OverrideTexture);
+            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite);
+            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite);
+            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite);
         }
         Face = FaceDirection.Right;
 
@@ -164,6 +188,25 @@ public abstract class Role : ActivityObject
     public override void _Process(float delta)
     {
         base._Process(delta);
+        
+        //看向目标
+        if (LookTarget != null)
+        {
+            Vector2 pos = LookTarget.GlobalPosition;
+            //脸的朝向
+            var gPos = GlobalPosition;
+            if (pos.x > gPos.x && Face == FaceDirection.Left)
+            {
+                Face = FaceDirection.Right;
+            }
+            else if (pos.x < gPos.x && Face == FaceDirection.Right)
+            {
+                Face = FaceDirection.Left;
+            }
+            //枪口跟随目标
+            MountPoint.SetLookAt(pos);
+        }
+        
         //检查可互动的道具
         bool findFlag = false;
         for (int i = 0; i < InteractiveItemList.Count; i++)
@@ -297,7 +340,8 @@ public abstract class Role : ActivityObject
     public virtual void Hit(int damage)
     {
         Hp -= damage;
-        GD.Print("打到敌人了!");
+        AnimationPlayer.Stop();
+        AnimationPlayer.Play("hit");
         OnHit(damage);
     }
 
@@ -323,9 +367,10 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
-    /// 更改指定动画的纹理
+    /// 更改指定动画的纹理, 即将删除
     /// </summary>
-    private void ChangeFrameTexture(string anim, AnimatedSprite animatedSprite, Texture texture)
+    [Obsolete]
+    private void ChangeFrameTexture(string anim, AnimatedSprite animatedSprite)
     {
         SpriteFrames spriteFrames = animatedSprite.Frames;
         if (spriteFrames != null)

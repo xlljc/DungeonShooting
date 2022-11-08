@@ -166,16 +166,6 @@ public abstract class Weapon : ActivityObject
     }
 
     /// <summary>
-    /// 当按下扳机时调用
-    /// </summary>
-    protected abstract void OnDownTrigger();
-
-    /// <summary>
-    /// 当松开扳机时调用
-    /// </summary>
-    protected abstract void OnUpTrigger();
-
-    /// <summary>
     /// 单次开火时调用的函数
     /// </summary>
     protected abstract void OnFire();
@@ -186,37 +176,63 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     /// <param name="fireRotation">开火时枪口旋转角度</param>
     protected abstract void OnShoot(float fireRotation);
+    
+    /// <summary>
+    /// 当按下扳机时调用
+    /// </summary>
+    protected virtual void OnDownTrigger()
+    {
+    }
+
+    /// <summary>
+    /// 当松开扳机时调用
+    /// </summary>
+    protected virtual void OnUpTrigger()
+    {
+    }
 
     /// <summary>
     /// 当开始换弹时调用
     /// </summary>
-    protected abstract void OnReload();
+    protected virtual void OnReload()
+    {
+    }
 
     /// <summary>
     /// 当换弹完成时调用
     /// </summary>
-    protected abstract void OnReloadFinish();
+    protected virtual void OnReloadFinish()
+    {
+    }
 
     /// <summary>
     /// 当武器被拾起时调用
     /// </summary>
     /// <param name="master">拾起该武器的角色</param>
-    protected abstract void OnPickUp(Role master);
+    protected virtual void OnPickUp(Role master)
+    {
+    }
 
     /// <summary>
     /// 当武器从武器袋中移除时调用
     /// </summary>
-    protected abstract void OnRemove();
+    protected virtual void OnRemove()
+    {
+    }
 
     /// <summary>
-    /// 当武器被激活时调用, 也就是使用当武器是调用
+    /// 当武器被激活时调用, 也就是使用当武器时调用
     /// </summary>
-    protected abstract void OnActive();
+    protected virtual void OnActive()
+    {
+    }
 
     /// <summary>
     /// 当武器被收起时调用
     /// </summary>
-    protected abstract void OnConceal();
+    protected virtual void OnConceal()
+    {
+    }
 
     public override void _Process(float delta)
     {
@@ -746,10 +762,17 @@ public abstract class Weapon : ActivityObject
         Throw(new Vector2(30, 15), master.MountPoint.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
     }
 
-    public override void OnThrowOver()
+    protected override void OnThrowOver()
     {
         //启用碰撞
         CollisionShape2D.Disabled = false;
+        AnimationPlayer.Play("Floodlight");
+    }
+
+    public override void PutDown()
+    {
+        base.PutDown();
+        AnimationPlayer.Play("Floodlight");
     }
 
     /// <summary>
@@ -778,7 +801,6 @@ public abstract class Weapon : ActivityObject
     {
         Master = null;
         AnimatedSprite.Position = Attribute.CenterPosition;
-        AnimationPlayer.Play("Floodlight");
         OnRemove();
     }
 
@@ -799,43 +821,5 @@ public abstract class Weapon : ActivityObject
     {
         HideShadowSprite();
         OnConceal();
-    }
-
-    /// <summary>
-    /// 实例化并返回子弹对象
-    /// </summary>
-    /// <param name="bulletPack">子弹的预制体</param>
-    protected T CreateBullet<T>(PackedScene bulletPack, Vector2 globalPostion, float globalRotation, Node parent = null)
-        where T : Node2D, IBullet
-    {
-        return (T)CreateBullet(bulletPack, globalPostion, globalRotation, parent);
-    }
-
-    /// <summary>
-    /// 实例化并返回子弹对象
-    /// </summary>
-    /// <param name="bulletPack">子弹的预制体</param>
-    protected IBullet CreateBullet(PackedScene bulletPack, Vector2 globalPostion, float globalRotation,
-        Node parent = null)
-    {
-        // 实例化子弹
-        Node2D bullet = bulletPack.Instance<Node2D>();
-        // 设置坐标
-        bullet.GlobalPosition = globalPostion;
-        // 旋转角度
-        bullet.GlobalRotation = globalRotation;
-        if (parent == null)
-        {
-            GameApplication.Instance.Room.SortRoot.AddChild(bullet);
-        }
-        else
-        {
-            parent.AddChild(bullet);
-        }
-
-        // 调用初始化
-        IBullet result = (IBullet)bullet;
-        result.Init(TargetCamp, this, null);
-        return result;
     }
 }

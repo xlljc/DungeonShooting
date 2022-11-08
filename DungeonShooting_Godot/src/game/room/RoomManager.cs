@@ -6,8 +6,11 @@ using Godot;
 public class RoomManager : Node2D
 {
     public Player Player { get; private set; }
-    public Node2D ObjectRoot { get; private set; }
-    public YSort SortRoot { get; private set; }
+    private Node2D ObjectRoot;
+    private YSort SortRoot;
+
+
+    private Enemy _enemy;
 
     public override void _EnterTree()
     {
@@ -26,16 +29,19 @@ public class RoomManager : Node2D
         Player.Position = new Vector2(100, 100);
         Player.Name = "Player";
         Player.PutDown();
-
-        var enemy1 = new Enemy();
-        enemy1.PutDown(new Vector2(150, 150));
+        
+        _enemy = new Enemy();
+        _enemy.Name = "Enemy";
+        _enemy.PutDown(new Vector2(150, 150));
     }
 
     public override void _Ready()
     {
         //播放bgm
         SoundManager.PlayeMusic("intro.ogg", this, -17f);
-        WeaponManager.GetGun("1001").PutDown(new Vector2(100, 80));
+        _enemy.LookTarget = Player;
+        _enemy.PickUpWeapon(WeaponManager.GetGun("1001"));
+
         WeaponManager.GetGun("1001").PutDown(new Vector2(80, 100));
         WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
         WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120));
@@ -44,11 +50,20 @@ public class RoomManager : Node2D
         WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80));
         WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));
         WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120));
-
     }
 
     public override void _Process(float delta)
     {
         
+    }
+
+    /// <summary>
+    /// 获取房间根节点
+    /// </summary>
+    /// <param name="useYSort"></param>
+    /// <returns></returns>
+    public Node2D GetRoot(bool useYSort)
+    {
+        return useYSort ? SortRoot : ObjectRoot;
     }
 }

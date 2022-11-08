@@ -4,7 +4,20 @@
 /// </summary>
 public static class AnimatorNames
 {
-    public static readonly string Idle = "idle";
-    public static readonly string Run = "run";
-    public static readonly string ReverseRun = "reverseRun";
+    /// <summary>
+    /// 静止不动
+    /// </summary>
+    public const string Idle = "idle";
+    /// <summary>
+    /// 奔跑
+    /// </summary>
+    public const string Run = "run";
+    /// <summary>
+    /// 倒退奔跑
+    /// </summary>
+    public const string ReverseRun = "reverseRun";
+    /// <summary>
+    /// 翻滚
+    /// </summary>
+    public const string Roll = "roll";
 }
