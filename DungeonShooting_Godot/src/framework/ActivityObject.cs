@@ -49,6 +49,7 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     public Vector2 ShadowOffset { get; protected set; } = new Vector2(0, 2);
 
+    //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     private bool initShadow;
     private string _prevAnimation;
@@ -63,7 +64,7 @@ public abstract class ActivityObject : KinematicBody2D
         var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
         if (tempPrefab == null)
         {
-            throw new Exception("创建 ActivityObject 的参数 scenePath 为 null !");
+            throw new Exception("创建 ActivityObject 没有找到指定挂载的预制体: " + scenePath);
         }
 
         var tempNode = tempPrefab.Instance<ActivityObjectTemplate>();
@@ -129,6 +130,10 @@ public abstract class ActivityObject : KinematicBody2D
         ShadowSprite.Visible = false;
     }
 
+    /// <summary>
+    /// 设置默认序列帧动画的第一帧, 即将删除, 请直接设置 AnimatedSprite.Frames
+    /// </summary>
+    [Obsolete]
     public void SetDefaultTexture(Texture texture)
     {
         if (AnimatedSprite.Frames == null)
@@ -147,10 +152,17 @@ public abstract class ActivityObject : KinematicBody2D
         AnimatedSprite.Playing = true;
     }
 
-    public void GetCurrentTexture()
+    /// <summary>
+    /// 获取当前序列帧动画的 Texture
+    /// </summary>
+    public Texture GetCurrentTexture()
     {
+        return AnimatedSprite.Frames.GetFrame(AnimatedSprite.Name, AnimatedSprite.Frame);
     }
 
+    /// <summary>
+    /// 获取默认序列帧动画的第一帧
+    /// </summary>
     public Texture GetDefaultTexture()
     {
         return AnimatedSprite.Frames.GetFrame("default", 0);
@@ -176,35 +188,35 @@ public abstract class ActivityObject : KinematicBody2D
     /// <summary>
     /// 投抛该物体达到最高点时调用
     /// </summary>
-    public virtual void OnThrowMaxHeight(float height)
+    protected virtual void OnThrowMaxHeight(float height)
     {
     }
 
     /// <summary>
     /// 投抛状态下第一次接触地面时调用, 之后的回弹落地将不会调用该函数
     /// </summary>
-    public virtual void OnFirstFallToGround()
+    protected virtual void OnFirstFallToGround()
     {
     }
 
     /// <summary>
     /// 投抛状态下每次接触地面时调用
     /// </summary>
-    public virtual void OnFallToGround()
+    protected virtual void OnFallToGround()
     {
     }
 
     /// <summary>
     /// 投抛结束时调用
     /// </summary>
-    public virtual void OnThrowOver()
+    protected virtual void OnThrowOver()
     {
     }
 
     /// <summary>
     /// 当前物体销毁时调用, 销毁物体请调用 Destroy() 函数
     /// </summary>
-    public virtual void OnDestroy()
+    protected virtual void OnDestroy()
     {
     }
 
@@ -646,5 +658,13 @@ public abstract class ActivityObject : KinematicBody2D
         RestoreCollision();
 
         OnThrowOver();
+    }
+
+    /// <summary>
+    /// 通过 ItemId 实例化 ActivityObject 对象
+    /// </summary>
+    public static T Create<T>(string itemId) where T : ActivityObject
+    {
+        return null;
     }
 }
