@@ -20,6 +20,6 @@ public class ShellCase : ActivityObject
     {
         //30秒后销毁
         await ToSignal(GetTree().CreateTimer(30), "timeout");
-        QueueFree();
+        Destroy();
     }
 }

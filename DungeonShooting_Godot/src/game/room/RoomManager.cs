@@ -38,7 +38,7 @@ public class RoomManager : Node2D
     public override void _Ready()
     {
         //播放bgm
-        SoundManager.PlayeMusic("intro.ogg", this, -17f);
+        SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
         _enemy.LookTarget = Player;
         _enemy.PickUpWeapon(WeaponManager.GetGun("1001"));
 

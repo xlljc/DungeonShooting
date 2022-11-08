@@ -10,10 +10,6 @@ public class Enemy : Role
     public override void _Process(float delta)
     {
         base._Process(delta);
-        
-        if (Holster.ActiveWeapon != null)
-        {
-            Holster.ActiveWeapon.Trigger();
-        }
+        Attack();
     }
 }
