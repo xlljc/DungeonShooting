@@ -26,7 +26,7 @@ public class Bullet : ActivityObject
     private float MaxDistance;
 
     // 子弹飞行速度
-    private float FlySpeed = 600;
+    private float FlySpeed = 450;
 
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;

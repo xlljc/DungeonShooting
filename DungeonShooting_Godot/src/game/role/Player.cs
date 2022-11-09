@@ -3,20 +3,6 @@ using Godot;
 public class Player : Role
 {
     /// <summary>
-    /// 移动加速度
-    /// </summary>
-    public float Acceleration = 1500f;
-
-    /// <summary>
-    /// 移动摩擦力
-    /// </summary>
-    public float Friction = 800f;
-    /// <summary>
-    /// 移动速度
-    /// </summary>
-    public Vector2 Velocity = Vector2.Zero;
-
-    /// <summary>
     /// 当前护盾值
     /// </summary>
     public int Shield
@@ -45,8 +31,6 @@ public class Player : Role
         }
     }
     private int _maxShield = 0;
-
-    [Export] public PackedScene GunPrefab;
 
     public Player(): base(ResourcePath.prefab_role_Player_tscn)
     {
@@ -142,8 +126,6 @@ public class Player : Role
         Move(delta);
         //播放动画
         PlayAnim();
-        //GlobalPosition = GlobalPosition.Round();
-        //AnimatedSprite.Playing = false;
     }
 
     protected override void OnChangeHp(int hp)
@@ -218,11 +200,23 @@ public class Player : Role
         Vector2 dir = Input.GetVector("move_left", "move_right", "move_up", "move_down");
         // 移动. 如果移动的数值接近0(是用 摇杆可能出现 方向 可能会出现浮点)，就fricition的值 插值 到 0
         // 如果 有输入 就以当前速度，用acceleration 插值到 对应方向 * 最大速度
-        if (Mathf.IsZeroApprox(dir.x)) Velocity.x = Mathf.MoveToward(Velocity.x, 0, Friction * delta);
-        else Velocity.x = Mathf.MoveToward(Velocity.x, dir.x * MoveSpeed, Acceleration * delta);
+        if (Mathf.IsZeroApprox(dir.x))
+        {
+            Velocity = new Vector2(Mathf.MoveToward(Velocity.x, 0, Friction * delta), Velocity.y);
+        }
+        else
+        {
+            Velocity = new Vector2(Mathf.MoveToward(Velocity.x, dir.x * MoveSpeed, Acceleration * delta), Velocity.y);
+        }
 
-        if (Mathf.IsZeroApprox(dir.y)) Velocity.y = Mathf.MoveToward(Velocity.y, 0, Friction * delta);
-        else Velocity.y = Mathf.MoveToward(Velocity.y, dir.y * MoveSpeed, Acceleration * delta);
+        if (Mathf.IsZeroApprox(dir.y))
+        {
+            Velocity = new Vector2(Velocity.x, Mathf.MoveToward(Velocity.y, 0, Friction * delta));
+        }
+        else
+        {
+            Velocity = new Vector2(Velocity.x, Mathf.MoveToward(Velocity.y, dir.y * MoveSpeed, Acceleration * delta));
+        }
         
         Velocity = MoveAndSlide(Velocity);
     }

@@ -69,6 +69,22 @@ public abstract class Role : ActivityObject
     private FaceDirection _face;
 
     /// <summary>
+    /// 移动加速度
+    /// </summary>
+    public float Acceleration { get; set; } = 1500f;
+
+    /// <summary>
+    /// 移动摩擦力
+    /// </summary>
+    public float Friction { get; set; } = 800f;
+    /// <summary>
+    /// 移动速度
+    /// </summary>
+    public Vector2 Velocity { get; set; } = Vector2.Zero;
+    
+    public Vector2 TargetVelocity { get; set; } = Vector2.Zero;
+    
+    /// <summary>
     /// 血量
     /// </summary>
     public int Hp
