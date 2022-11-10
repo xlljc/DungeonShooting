@@ -7,6 +7,7 @@ public class Enemy : Role
         Camp = CampEnum.Camp2;
 
         MoveSpeed = 20;
+        LookTarget = GameApplication.Instance.Room.Player;
     }
 
     public override void _Process(float delta)
@@ -19,16 +20,11 @@ public class Enemy : Role
     {
         base._PhysicsProcess(delta);
 
-        Move(delta);
-
-    }
-
-    public void Move(float delta)
-    {
-        var player = GameApplication.Instance.Room.Player;
-        var dir = (player.GlobalPosition - GlobalPosition).Normalized() * MoveSpeed;
-
-        MoveAndSlide(dir);
-
+        if (LookTarget != null)
+        {
+            AnimatedSprite.Animation = AnimatorNames.ReverseRun;
+            Velocity = (LookTarget.GlobalPosition - GlobalPosition).Normalized() * MoveSpeed;
+            CalcMove(delta);
+        }
     }
 }

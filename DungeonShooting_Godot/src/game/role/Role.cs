@@ -69,20 +69,14 @@ public abstract class Role : ActivityObject
     private FaceDirection _face;
 
     /// <summary>
-    /// 移动加速度
+    /// 是否启用角色移动
     /// </summary>
-    public float Acceleration { get; set; } = 1500f;
-
-    /// <summary>
-    /// 移动摩擦力
-    /// </summary>
-    public float Friction { get; set; } = 800f;
+    public bool EnableMove { get; set; } = true;
+    
     /// <summary>
     /// 移动速度
     /// </summary>
     public Vector2 Velocity { get; set; } = Vector2.Zero;
-    
-    public Vector2 TargetVelocity { get; set; } = Vector2.Zero;
     
     /// <summary>
     /// 血量
@@ -113,6 +107,36 @@ public abstract class Role : ActivityObject
         }
     }
     private int _maxHp = 0;
+    
+    /// <summary>
+    /// 当前护盾值
+    /// </summary>
+    public int Shield
+    {
+        get => _shield;
+        protected set
+        {
+            int temp = _shield;
+            _shield = value;
+            if (temp != _shield) OnChangeShield(_shield);
+        }
+    }
+    private int _shield = 0;
+
+    /// <summary>
+    /// 最大护盾值
+    /// </summary>
+    public int MaxShield
+    {
+        get => _maxShield;
+        protected set
+        {
+            int temp = _maxShield;
+            _maxShield = value;
+            if (temp != _maxShield) OnChangeMaxShield(_maxShield);
+        }
+    }
+    private int _maxShield = 0;
 
     /// <summary>
     /// 当前角色所看向的对象, 也就是枪口指向的对象
@@ -142,6 +166,20 @@ public abstract class Role : ActivityObject
     /// 当最大血量改变时调用
     /// </summary>
     protected virtual void OnChangeMaxHp(int maxHp)
+    {
+    }
+    
+    /// <summary>
+    /// 护盾值改变时调用
+    /// </summary>
+    protected virtual void OnChangeShield(int shield)
+    {
+    }
+
+    /// <summary>
+    /// 最大护盾值改变时调用
+    /// </summary>
+    protected virtual void OnChangeMaxShield(int maxShield)
     {
     }
 
@@ -260,6 +298,17 @@ public abstract class Role : ActivityObject
         {
             InteractiveItem = null;
             ChangeInteractiveItem(null);
+        }
+    }
+
+    /// <summary>
+    /// 计算角色移动
+    /// </summary>
+    public virtual void CalcMove(float delta)
+    {
+        if (EnableMove && Velocity != Vector2.Zero)
+        {
+            Velocity = MoveAndSlide(Velocity);
         }
     }
 

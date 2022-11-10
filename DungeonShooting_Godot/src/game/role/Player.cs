@@ -2,35 +2,16 @@ using Godot;
 
 public class Player : Role
 {
+    
     /// <summary>
-    /// 当前护盾值
+    /// 移动加速度
     /// </summary>
-    public int Shield
-    {
-        get => _shield;
-        protected set
-        {
-            int temp = _shield;
-            _shield = value;
-            if (temp != _shield) OnChangeShield(_shield);
-        }
-    }
-    private int _shield = 0;
-
+    public float Acceleration { get; set; } = 1500f;
+    
     /// <summary>
-    /// 最大护盾值
+    /// 移动摩擦力
     /// </summary>
-    public int MaxShield
-    {
-        get => _maxShield;
-        protected set
-        {
-            int temp = _maxShield;
-            _maxShield = value;
-            if (temp != _maxShield) OnChangeMaxShield(_maxShield);
-        }
-    }
-    private int _maxShield = 0;
+    public float Friction { get; set; } = 800f;
 
     public Player(): base(ResourcePath.prefab_role_Player_tscn)
     {
@@ -123,7 +104,7 @@ public class Player : Role
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
-        Move(delta);
+        HandleMoveInput(delta);
         //播放动画
         PlayAnim();
     }
@@ -155,12 +136,12 @@ public class Player : Role
         }
     }
 
-    protected void OnChangeShield(int shield)
+    protected override void OnChangeShield(int shield)
     {
         GameApplication.Instance.Ui.SetShield(shield);
     }
 
-    protected void OnChangeMaxShield(int maxShield)
+    protected override void OnChangeMaxShield(int maxShield)
     {
         GameApplication.Instance.Ui.SetMaxShield(maxShield);
     }
@@ -193,12 +174,13 @@ public class Player : Role
         }
     }
 
-    private void Move(float delta)
+    //处理角色移动的输入
+    private void HandleMoveInput(float delta)
     {
         //角色移动
         // 得到输入的 vector2  getvector方法返回值已经归一化过了noemalized
         Vector2 dir = Input.GetVector("move_left", "move_right", "move_up", "move_down");
-        // 移动. 如果移动的数值接近0(是用 摇杆可能出现 方向 可能会出现浮点)，就fricition的值 插值 到 0
+        // 移动. 如果移动的数值接近0(是用 摇杆可能出现 方向 可能会出现浮点)，就friction的值 插值 到 0
         // 如果 有输入 就以当前速度，用acceleration 插值到 对应方向 * 最大速度
         if (Mathf.IsZeroApprox(dir.x))
         {
@@ -217,8 +199,8 @@ public class Player : Role
         {
             Velocity = new Vector2(Velocity.x, Mathf.MoveToward(Velocity.y, dir.y * MoveSpeed, Acceleration * delta));
         }
-        
-        Velocity = MoveAndSlide(Velocity);
+
+        CalcMove(delta);
     }
 
     // 播放动画
