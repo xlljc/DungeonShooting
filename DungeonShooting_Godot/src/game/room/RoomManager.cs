@@ -5,7 +5,7 @@ using Godot;
 /// </summary>
 public class RoomManager : Node2D
 {
-    public Player Player { get; private set; }
+    public Role Player { get; private set; }
     private Node2D ObjectRoot;
     private YSort SortRoot;
 
@@ -53,7 +53,7 @@ public class RoomManager : Node2D
 
     public override void _Process(float delta)
     {
-        
+
     }
 
     /// <summary>
