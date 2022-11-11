@@ -69,6 +69,16 @@ public abstract class Role : ActivityObject
     private FaceDirection _face;
 
     /// <summary>
+    /// 是否启用角色移动
+    /// </summary>
+    public bool EnableMove { get; set; } = true;
+    
+    /// <summary>
+    /// 移动速度
+    /// </summary>
+    public Vector2 Velocity { get; set; } = Vector2.Zero;
+    
+    /// <summary>
     /// 血量
     /// </summary>
     public int Hp
@@ -97,18 +107,53 @@ public abstract class Role : ActivityObject
         }
     }
     private int _maxHp = 0;
+    
+    /// <summary>
+    /// 当前护盾值
+    /// </summary>
+    public int Shield
+    {
+        get => _shield;
+        protected set
+        {
+            int temp = _shield;
+            _shield = value;
+            if (temp != _shield) OnChangeShield(_shield);
+        }
+    }
+    private int _shield = 0;
+
+    /// <summary>
+    /// 最大护盾值
+    /// </summary>
+    public int MaxShield
+    {
+        get => _maxShield;
+        protected set
+        {
+            int temp = _maxShield;
+            _maxShield = value;
+            if (temp != _maxShield) OnChangeMaxShield(_maxShield);
+        }
+    }
+    private int _maxShield = 0;
 
     /// <summary>
     /// 当前角色所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    public StateCtr StateCtr { get; }
+    
     //初始缩放
-    private Vector2 StartScele;
+    private Vector2 _startScale;
     //所有角色碰撞的道具
-    private readonly List<ActivityObject> InteractiveItemList = new List<ActivityObject>();
+    private readonly List<ActivityObject> _interactiveItemList = new List<ActivityObject>();
 
-    private CheckInteractiveResult TempResultData;
+    private CheckInteractiveResult _tempResultData;
 
     /// <summary>
     /// 可以互动的道具
@@ -126,6 +171,20 @@ public abstract class Role : ActivityObject
     /// 当最大血量改变时调用
     /// </summary>
     protected virtual void OnChangeMaxHp(int maxHp)
+    {
+    }
+    
+    /// <summary>
+    /// 护盾值改变时调用
+    /// </summary>
+    protected virtual void OnChangeShield(int shield)
+    {
+    }
+
+    /// <summary>
+    /// 最大护盾值改变时调用
+    /// </summary>
+    protected virtual void OnChangeMaxShield(int maxShield)
     {
     }
 
@@ -165,7 +224,7 @@ public abstract class Role : ActivityObject
     {
         base._Ready();
         AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-        StartScele = Scale;
+        _startScale = Scale;
         MountPoint = GetNode<MountRotation>("MountPoint");
         MountPoint.Master = this;
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
@@ -209,12 +268,12 @@ public abstract class Role : ActivityObject
         
         //检查可互动的道具
         bool findFlag = false;
-        for (int i = 0; i < InteractiveItemList.Count; i++)
+        for (int i = 0; i < _interactiveItemList.Count; i++)
         {
-            var item = InteractiveItemList[i];
+            var item = _interactiveItemList[i];
             if (item == null)
             {
-                InteractiveItemList.RemoveAt(i--);
+                _interactiveItemList.RemoveAt(i--);
             }
             else
             {
@@ -230,12 +289,12 @@ public abstract class Role : ActivityObject
                             InteractiveItem = item;
                             ChangeInteractiveItem(result);
                         }
-                        else if (result.ShowIcon != TempResultData.ShowIcon) //切换状态
+                        else if (result.ShowIcon != _tempResultData.ShowIcon) //切换状态
                         {
                             ChangeInteractiveItem(result);
                         }
                     }
-                    TempResultData = result;
+                    _tempResultData = result;
                 }
             }
         }
@@ -248,6 +307,17 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
+    /// 计算角色移动
+    /// </summary>
+    public virtual void CalcMove(float delta)
+    {
+        if (EnableMove && Velocity != Vector2.Zero)
+        {
+            Velocity = MoveAndSlide(Velocity);
+        }
+    }
+
+    /// <summary>
     /// 拾起一个武器, 并且切换到这个武器
     /// </summary>
     /// <param name="weapon">武器对象</param>
@@ -256,7 +326,7 @@ public abstract class Role : ActivityObject
         if (Holster.PickupWeapon(weapon) != -1)
         {
             //从可互动队列中移除
-            InteractiveItemList.Remove(weapon);
+            _interactiveItemList.Remove(weapon);
         }
     }
 
@@ -356,12 +426,12 @@ public abstract class Role : ActivityObject
             if (face == FaceDirection.Right)
             {
                 RotationDegrees = 0;
-                Scale = StartScele;
+                Scale = _startScale;
             }
             else
             {
                 RotationDegrees = 180;
-                Scale = new Vector2(StartScele.x, -StartScele.y);
+                Scale = new Vector2(_startScale.x, -_startScale.y);
             }
         }
     }
@@ -393,9 +463,9 @@ public abstract class Role : ActivityObject
         ActivityObject propObject = other.AsActivityObject();
         if (propObject != null)
         {
-            if (!InteractiveItemList.Contains(propObject))
+            if (!_interactiveItemList.Contains(propObject))
             {
-                InteractiveItemList.Add(propObject);
+                _interactiveItemList.Add(propObject);
             }
         }
     }
@@ -409,9 +479,9 @@ public abstract class Role : ActivityObject
         ActivityObject propObject = other.AsActivityObject();
         if (propObject != null)
         {
-            if (InteractiveItemList.Contains(propObject))
+            if (_interactiveItemList.Contains(propObject))
             {
-                InteractiveItemList.Remove(propObject);
+                _interactiveItemList.Remove(propObject);
             }
             if (InteractiveItem == propObject)
             {

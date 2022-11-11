@@ -13,19 +13,26 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 5.5, 2 )
+extents = Vector2( 6, 2 )
 
 [node name="Bullet" type="Node"]
 script = ExtResource( 1 )
-CollisionLayer = 2
 
 [node name="ShadowSprite" type="Sprite" parent="."]
 material = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( -1, 0 )
+modulate = Color( 1.5, 1.5, 1.5, 1 )
+position = Vector2( 2.38419e-07, 0 )
 frames = SubResource( 1 )
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2( 1.5, 0 )
+
+[node name="CollisionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
+position = Vector2( 2, 0 )
 shape = SubResource( 2 )

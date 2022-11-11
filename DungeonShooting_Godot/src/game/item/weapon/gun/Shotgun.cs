@@ -72,7 +72,7 @@ public class Shotgun : Weapon
             GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
         }
         //播放射击音效
-        SoundManager.PlaySoundEffect("ordinaryBullet.ogg", this, 6f);
+        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet_ogg, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), 6f);
     }
 
     protected override void OnShoot(float fireRotation)

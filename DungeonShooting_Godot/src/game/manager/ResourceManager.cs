@@ -14,9 +14,11 @@ public static class ResourceManager
             {
                 _shadowMaterial = ResourceLoader.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres);
             }
+
             return _shadowMaterial;
         }
     }
+
     private static ShaderMaterial _shadowMaterial;
 
     /// <summary>
@@ -30,9 +32,11 @@ public static class ResourceManager
             {
                 _shadowShader = ResourceLoader.Load<Shader>(ResourcePath.resource_materlal_Blend_gdshader);
             }
+
             return _shadowShader;
         }
     }
+
     private static Shader _shadowShader;
 
     private static readonly Dictionary<string, object> CachePack = new Dictionary<string, object>();
@@ -55,7 +59,12 @@ public static class ResourceManager
                 CachePack.Add(path, pack);
                 return pack as T;
             }
+            else
+            {
+                GD.PrintErr("加载资源失败, 未找到资源: " + path);
+            }
         }
-        return default(T);
+
+        return default;
     }
 }

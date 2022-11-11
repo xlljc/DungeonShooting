@@ -23,8 +23,8 @@ public class Gun : Weapon
             ScatteringRangeBackSpeed = 40;
             //连发
             ContinuousShoot = true;
-            AmmoCapacity = 120;
-            MaxAmmoCapacity = 120 * 70;
+            AmmoCapacity = 30;
+            MaxAmmoCapacity = 30 * 70;
             //扳机检测间隔
             TriggerInterval = 0f;
             //连发数量
@@ -106,7 +106,7 @@ public class Gun : Weapon
             GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
         }
         //播放射击音效
-        SoundManager.PlaySoundEffect("ordinaryBullet.ogg", this, 6f);
+        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet_ogg, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), 6f);
     }
 
     protected override void OnShoot(float fireRotation)

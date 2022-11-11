@@ -44,6 +44,9 @@ public class GameApplication : Node2D
     /// </summary>
     public RoomUI Ui { get; private set; }
 
+    /// <summary>
+    /// 全局根节点
+    /// </summary>
     public Node2D GlobalNodeRoot { get; private set; }
 
     public GameApplication()

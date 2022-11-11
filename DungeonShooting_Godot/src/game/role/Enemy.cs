@@ -5,15 +5,26 @@ public class Enemy : Role
     {
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
+
+        MoveSpeed = 20;
+        LookTarget = GameApplication.Instance.Room.Player;
     }
 
     public override void _Process(float delta)
     {
         base._Process(delta);
-        
-        if (Holster.ActiveWeapon != null)
+        Attack();
+    }
+
+    public override void _PhysicsProcess(float delta)
+    {
+        base._PhysicsProcess(delta);
+
+        if (LookTarget != null)
         {
-            Holster.ActiveWeapon.Trigger();
+            AnimatedSprite.Animation = AnimatorNames.ReverseRun;
+            Velocity = (LookTarget.GlobalPosition - GlobalPosition).Normalized() * MoveSpeed;
+            CalcMove(delta);
         }
     }
 }
