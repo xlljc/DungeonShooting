@@ -48,7 +48,7 @@ public class Player : Role
         var gPos = GlobalPosition;
         if (LookTarget == null)
         {
-            Vector2 mousePos = InputManager.GetMousePosition();
+            Vector2 mousePos = InputManager.GetViewportMousePosition();
             if (mousePos.x > gPos.x && Face == FaceDirection.Left)
             {
                 Face = FaceDirection.Right;

@@ -69,12 +69,12 @@ public abstract class Role : ActivityObject
     private FaceDirection _face;
 
     /// <summary>
-    /// 是否启用角色移动
+    /// 是否启用角色移动, 如果禁用, 那么调用 CalcMove() 将不再有任何效果
     /// </summary>
     public bool EnableMove { get; set; } = true;
     
     /// <summary>
-    /// 移动速度
+    /// 移动速度, 通过调用 CalcMove() 函数来移动
     /// </summary>
     public Vector2 Velocity { get; set; } = Vector2.Zero;
     
@@ -144,9 +144,9 @@ public abstract class Role : ActivityObject
     public ActivityObject LookTarget { get; set; }
     
     /// <summary>
-    /// 
+    /// 角色身上的状态机
     /// </summary>
-    public StateCtr StateCtr { get; }
+    public StateController<Role> StateController { get; }
     
     //初始缩放
     private Vector2 _startScale;
@@ -218,6 +218,8 @@ public abstract class Role : ActivityObject
     public Role(string scenePath) : base(scenePath)
     {
         Holster = new Holster(this);
+        StateController = new StateController<Role>();
+        AddComponent(StateController);
     }
     
     public override void _Ready()
@@ -304,6 +306,16 @@ public abstract class Role : ActivityObject
             InteractiveItem = null;
             ChangeInteractiveItem(null);
         }
+    }
+
+    /// <summary>
+    /// 判断指定坐标是否在角色视野方向
+    /// </summary>
+    public bool IsPositionInForward(Vector2 pos)
+    {
+        var gps = GlobalPosition;
+        return (Face == FaceDirection.Left && pos.x <= gps.x) ||
+               (Face == FaceDirection.Right && pos.x >= gps.x);
     }
 
     /// <summary>

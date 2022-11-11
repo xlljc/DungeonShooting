@@ -59,10 +59,10 @@ public class Shotgun : Weapon
         //创建一个弹壳
         var startPos = GlobalPosition + new Vector2(0, 5);
         var startHeight = 6;
-        var direction = GlobalRotationDegrees + MathUtils.RandRangeInt(-30, 30) + 180;
-        var xf = MathUtils.RandRangeInt(20, 60);
-        var yf = MathUtils.RandRangeInt(60, 120);
-        var rotate = MathUtils.RandRangeInt(-720, 720);
+        var direction = GlobalRotationDegrees + Utils.RandRangeInt(-30, 30) + 180;
+        var xf = Utils.RandRangeInt(20, 60);
+        var yf = Utils.RandRangeInt(60, 120);
+        var rotate = Utils.RandRangeInt(-720, 720);
         var shell = new ShellCase();
         shell.Throw(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, true);
         
@@ -84,9 +84,9 @@ public class Shotgun : Weapon
             
             var bullet = new Bullet(
                 ResourcePath.prefab_weapon_bullet_Bullet_tscn,
-                MathUtils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
+                Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
                 FirePoint.GlobalPosition,
-                fireRotation + MathUtils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
+                fireRotation + Utils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
                 Master != null ? Master.AttackLayer : Role.DefaultAttackLayer
             );
             bullet.PutDown();

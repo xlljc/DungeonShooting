@@ -1,7 +1,7 @@
 /// <summary>
 /// 状态接口
 /// </summary>
-public interface IState
+public interface IState<T> where T : ActivityObject
 {
     /// <summary>
     /// 当前状态对象对应的状态枚举类型
@@ -11,12 +11,12 @@ public interface IState
     /// <summary>
     /// 当前状态对象挂载的角色对象
     /// </summary>
-    Role Role { get; set; }
+    T Master { get; set; }
 
     /// <summary>
     /// 当前状态对象所处的状态机对象
     /// </summary>
-    StateCtr StateController { get; set; }
+    StateController<T> StateController { get; set; }
 
     /// <summary>
     /// 当从其他状态进入到当前状态时调用

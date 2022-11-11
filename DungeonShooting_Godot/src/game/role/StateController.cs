@@ -2,20 +2,20 @@ using Godot;
 using System.Collections.Generic;
 
 /// <summary>
-/// 角色状态机控制器
+/// 对象状态机控制器
 /// </summary>
-public class StateCtr : Component
+public class StateController<T> : Component where T : ActivityObject
 {
     /// <summary>
     /// 当前活跃的状态
     /// </summary>
-    public IState CurrState => _currState;
-    private IState _currState;
+    public IState<T> CurrState => _currState;
+    private IState<T> _currState;
     
     /// <summary>
     /// 负责存放状态实例对象
     /// </summary>
-    private readonly Dictionary<StateEnum, IState> _states = new Dictionary<StateEnum, IState>();
+    private readonly Dictionary<StateEnum, IState<T>> _states = new Dictionary<StateEnum, IState<T>>();
 
     /// <summary>
     /// 记录下当前帧是否有改变的状态
@@ -39,14 +39,14 @@ public class StateCtr : Component
     /// <summary>
     /// 往状态机力注册一个新的状态
     /// </summary>
-    public void Register(IState state)
+    public void Register(IState<T> state)
     {
         if (GetStateInstance(state.StateType) != null)
         {
             GD.PrintErr("当前状态已经在状态机中注册:", state);
             return;
         }
-        state.Role = ActivityObject as Role;
+        state.Master = ActivityObject as T;
         state.StateController = this;
         _states.Add(state.StateType, state);
     }
@@ -70,7 +70,7 @@ public class StateCtr : Component
     /// <summary>
     /// 根据状态类型获取相应的状态对象
     /// </summary>
-    private IState GetStateInstance(StateEnum stateType)
+    private IState<T> GetStateInstance(StateEnum stateType)
     {
         _states.TryGetValue(stateType, out var v);
         return v;

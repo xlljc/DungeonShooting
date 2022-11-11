@@ -327,6 +327,10 @@ public abstract class ActivityObject : KinematicBody2D
         RestoreCollision();
     }
 
+    /// <summary>
+    /// 往当前物体上挂载一个组件
+    /// </summary>
+    /// <param name="component">组件对象</param>
     public void AddComponent(Component component)
     {
         if (!ContainsComponent(component))
@@ -337,6 +341,10 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
 
+    /// <summary>
+    /// 移除一个组件
+    /// </summary>
+    /// <param name="component">组件对象</param>
     public void RemoveComponent(Component component)
     {
         for (int i = 0; i < _components.Count; i++)
@@ -351,6 +359,9 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
 
+    /// <summary>
+    /// 根据类型获取一个组件
+    /// </summary>
     public Component GetComponent(Type type)
     {
         for (int i = 0; i < _components.Count; i++)
@@ -365,6 +376,9 @@ public abstract class ActivityObject : KinematicBody2D
         return null;
     }
 
+    /// <summary>
+    /// 根据类型获取一个组件
+    /// </summary>
     public TC GetComponent<TC>() where TC : Component
     {
         var component = GetComponent(typeof(TC));

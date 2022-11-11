@@ -2,7 +2,7 @@
 using Godot;
 
 /// <summary>
-/// 组件基类, 用于挂载到游戏物体上, 相比于原生 Node 更加轻量化, 可以大量添加组件
+/// 组件基类, 用于挂载到游戏物体上, 相比于原生 Node 更加轻量化, 实例化 Component 不会创建额外的 Node, 可以大量添加组件
 /// </summary>
 public abstract class Component : IProcess, IDestroy
 {

@@ -418,7 +418,7 @@ public abstract class Weapon : ActivityObject
                     if (!Attribute.ContinuousShoot)
                     {
                         continuousCount =
-                            MathUtils.RandRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
+                            Utils.RandRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
                     }
                 }
 
@@ -475,7 +475,7 @@ public abstract class Weapon : ActivityObject
         OnFire();
 
         //开火发射的子弹数量
-        var bulletCount = MathUtils.RandRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
+        var bulletCount = Utils.RandRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
         //武器口角度
         var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
 
@@ -502,7 +502,7 @@ public abstract class Weapon : ActivityObject
         //武器身位置
         Position = new Vector2(
             Mathf.Max(-Attribute.MaxBacklash,
-                Position.x - MathUtils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash)), Position.y);
+                Position.x - Utils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash)), Position.y);
 
         if (FireEvent != null)
         {
@@ -711,8 +711,8 @@ public abstract class Weapon : ActivityObject
                 if (flag)
                 {
                     Throw(new Vector2(30, 15), GlobalPosition, 0, 0,
-                        MathUtils.RandRangeInt(-20, 20), MathUtils.RandRangeInt(20, 50),
-                        MathUtils.RandRangeInt(-180, 180));
+                        Utils.RandRangeInt(-20, 20), Utils.RandRangeInt(20, 50),
+                        Utils.RandRangeInt(-180, 180));
                 }
             }
             else //没有武器
@@ -755,10 +755,10 @@ public abstract class Weapon : ActivityObject
         }
 
         var startHeight = 6;
-        var direction = master.GlobalRotationDegrees + MathUtils.RandRangeInt(-20, 20);
+        var direction = master.GlobalRotationDegrees + Utils.RandRangeInt(-20, 20);
         var xf = 30;
-        var yf = MathUtils.RandRangeInt(60, 120);
-        var rotate = MathUtils.RandRangeInt(-180, 180);
+        var yf = Utils.RandRangeInt(60, 120);
+        var rotate = Utils.RandRangeInt(-180, 180);
         Throw(new Vector2(30, 15), master.MountPoint.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
     }
 

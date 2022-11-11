@@ -60,7 +60,7 @@ public class Bullet : ActivityObject
 
         //播放受击动画
         Node2D hit = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Hit_tscn).Instance<Node2D>();
-        hit.RotationDegrees = MathUtils.RandRangeInt(0, 360);
+        hit.RotationDegrees = Utils.RandRangeInt(0, 360);
         hit.GlobalPosition = GlobalPosition;
         GameApplication.Instance.Room.GetRoot(true).AddChild(hit);
 
