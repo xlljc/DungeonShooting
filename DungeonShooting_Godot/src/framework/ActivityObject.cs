@@ -339,10 +339,15 @@ public abstract class ActivityObject : KinematicBody2D
 
     public void RemoveComponent(Component component)
     {
-        if (ContainsComponent(component))
+        for (int i = 0; i < _components.Count; i++)
         {
-            component.OnUnMount();
-            component._SetActivityObject(null);
+            if (_components[i].Value == component)
+            {
+                _components.RemoveAt(i);
+                component.OnUnMount();
+                component._SetActivityObject(null);
+                return;
+            }
         }
     }
 
@@ -381,10 +386,10 @@ public abstract class ActivityObject : KinematicBody2D
                 {
                     if (!temp.IsStart)
                     {
-                        temp.Start();
+                        temp.Ready();
                     }
 
-                    temp.Update(delta);
+                    temp.Process(delta);
                 }
             }
         }
@@ -509,10 +514,10 @@ public abstract class ActivityObject : KinematicBody2D
                 {
                     if (!temp.IsStart)
                     {
-                        temp.Start();
+                        temp.Ready();
                     }
 
-                    temp.PhysicsUpdate(delta);
+                    temp.PhysicsProcess(delta);
                 }
             }
         }
@@ -547,6 +552,7 @@ public abstract class ActivityObject : KinematicBody2D
         CallDeferred(nameof(Destroy));
     }
 
+    //返回该组件是否被挂载到当前物体上
     private bool ContainsComponent(Component component)
     {
         for (int i = 0; i < _components.Count; i++)

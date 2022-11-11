@@ -143,12 +143,17 @@ public abstract class Role : ActivityObject
     /// </summary>
     public ActivityObject LookTarget { get; set; }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    public StateCtr StateCtr { get; }
+    
     //初始缩放
-    private Vector2 StartScele;
+    private Vector2 _startScale;
     //所有角色碰撞的道具
-    private readonly List<ActivityObject> InteractiveItemList = new List<ActivityObject>();
+    private readonly List<ActivityObject> _interactiveItemList = new List<ActivityObject>();
 
-    private CheckInteractiveResult TempResultData;
+    private CheckInteractiveResult _tempResultData;
 
     /// <summary>
     /// 可以互动的道具
@@ -219,7 +224,7 @@ public abstract class Role : ActivityObject
     {
         base._Ready();
         AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-        StartScele = Scale;
+        _startScale = Scale;
         MountPoint = GetNode<MountRotation>("MountPoint");
         MountPoint.Master = this;
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
@@ -263,12 +268,12 @@ public abstract class Role : ActivityObject
         
         //检查可互动的道具
         bool findFlag = false;
-        for (int i = 0; i < InteractiveItemList.Count; i++)
+        for (int i = 0; i < _interactiveItemList.Count; i++)
         {
-            var item = InteractiveItemList[i];
+            var item = _interactiveItemList[i];
             if (item == null)
             {
-                InteractiveItemList.RemoveAt(i--);
+                _interactiveItemList.RemoveAt(i--);
             }
             else
             {
@@ -284,12 +289,12 @@ public abstract class Role : ActivityObject
                             InteractiveItem = item;
                             ChangeInteractiveItem(result);
                         }
-                        else if (result.ShowIcon != TempResultData.ShowIcon) //切换状态
+                        else if (result.ShowIcon != _tempResultData.ShowIcon) //切换状态
                         {
                             ChangeInteractiveItem(result);
                         }
                     }
-                    TempResultData = result;
+                    _tempResultData = result;
                 }
             }
         }
@@ -321,7 +326,7 @@ public abstract class Role : ActivityObject
         if (Holster.PickupWeapon(weapon) != -1)
         {
             //从可互动队列中移除
-            InteractiveItemList.Remove(weapon);
+            _interactiveItemList.Remove(weapon);
         }
     }
 
@@ -421,12 +426,12 @@ public abstract class Role : ActivityObject
             if (face == FaceDirection.Right)
             {
                 RotationDegrees = 0;
-                Scale = StartScele;
+                Scale = _startScale;
             }
             else
             {
                 RotationDegrees = 180;
-                Scale = new Vector2(StartScele.x, -StartScele.y);
+                Scale = new Vector2(_startScale.x, -_startScale.y);
             }
         }
     }
@@ -458,9 +463,9 @@ public abstract class Role : ActivityObject
         ActivityObject propObject = other.AsActivityObject();
         if (propObject != null)
         {
-            if (!InteractiveItemList.Contains(propObject))
+            if (!_interactiveItemList.Contains(propObject))
             {
-                InteractiveItemList.Add(propObject);
+                _interactiveItemList.Add(propObject);
             }
         }
     }
@@ -474,9 +479,9 @@ public abstract class Role : ActivityObject
         ActivityObject propObject = other.AsActivityObject();
         if (propObject != null)
         {
-            if (InteractiveItemList.Contains(propObject))
+            if (_interactiveItemList.Contains(propObject))
             {
-                InteractiveItemList.Remove(propObject);
+                _interactiveItemList.Remove(propObject);
             }
             if (InteractiveItem == propObject)
             {
