@@ -13,7 +13,7 @@ public class Gun : Weapon
         public RifleAttribute()
         {
             Name = "步枪";
-            Sprite = "res://resource/sprite/gun/gun4.png";
+            Sprite = ResourcePath.resource_sprite_gun_gun4_png;
             Weight = 40;
             CenterPosition = new Vector2(0.4f, -2.6f);
             StartFiringSpeed = 480;
@@ -51,7 +51,7 @@ public class Gun : Weapon
         public PistolAttribute()
         {
             Name = "手枪";
-            Sprite = "res://resource/sprite/gun/gun3.png";
+            Sprite = ResourcePath.resource_sprite_gun_gun3_png;
             Weight = 20;
             CenterPosition = new Vector2(0.4f, -2.6f);
             WeightType = WeaponWeightType.DeputyWeapon;

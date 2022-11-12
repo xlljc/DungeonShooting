@@ -337,11 +337,11 @@ public abstract class Weapon : ActivityObject
             Position = Position.MoveToward(Vector2.Zero, 35 * delta);
             if (fireInterval == 0)
             {
-                RotationDegrees = 0;
+                RotationDegrees = Attribute.DefaultAngle;
             }
             else
             {
-                RotationDegrees = Mathf.Lerp(0, fireAngle, attackTimer / fireInterval);
+                RotationDegrees = Mathf.Lerp(Attribute.DefaultAngle, fireAngle, attackTimer / fireInterval);
             }
         }
     }

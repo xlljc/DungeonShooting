@@ -21,6 +21,7 @@ public class ResourcePath
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_ui_bar_InteractiveTipBar_tscn = "res://prefab/ui/bar/InteractiveTipBar.tscn";
     public const string prefab_ui_bar_ReloadBar_tscn = "res://prefab/ui/bar/ReloadBar.tscn";
+    public const string prefab_weapon_Knife_tscn = "res://prefab/weapon/Knife.tscn";
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";
     public const string prefab_weapon_bullet_Bullet_tscn = "res://prefab/weapon/bullet/Bullet.tscn";
     public const string prefab_weapon_shell_ShellCase_tscn = "res://prefab/weapon/shell/ShellCase.tscn";
@@ -74,6 +75,7 @@ public class ResourcePath
     public const string resource_sprite_gun_gun6_png = "res://resource/sprite/gun/gun6.png";
     public const string resource_sprite_gun_gun7_png = "res://resource/sprite/gun/gun7.png";
     public const string resource_sprite_gun_gun8_png = "res://resource/sprite/gun/gun8.png";
+    public const string resource_sprite_gun_knife1_png = "res://resource/sprite/gun/knife1.png";
     public const string resource_sprite_gun_out_default_png = "res://resource/sprite/gun/out/default.png";
     public const string resource_sprite_role_role1_png = "res://resource/sprite/role/role1.png";
     public const string resource_sprite_role_role10_png = "res://resource/sprite/role/role10.png";

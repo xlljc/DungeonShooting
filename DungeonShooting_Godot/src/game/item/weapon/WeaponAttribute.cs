@@ -146,6 +146,10 @@ public class WeaponAttribute
     /// </summary>
     public float UpliftAngle = 30;
     /// <summary>
+    /// 武器默认角度
+    /// </summary>
+    public float DefaultAngle = 0;
+    /// <summary>
     /// 开火后武器口角度恢复速度倍数
     /// </summary>
     public float UpliftAngleRestore = 1;
