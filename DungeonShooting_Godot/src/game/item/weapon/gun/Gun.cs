@@ -24,6 +24,7 @@ public class Gun : Weapon
             //连发
             ContinuousShoot = true;
             AmmoCapacity = 30;
+            StandbyAmmoCapacity = 30 * 70;
             MaxAmmoCapacity = 30 * 70;
             //扳机检测间隔
             TriggerInterval = 0f;
@@ -63,6 +64,7 @@ public class Gun : Weapon
             //连发
             ContinuousShoot = false;
             AmmoCapacity = 12;
+            StandbyAmmoCapacity = 72;
             MaxAmmoCapacity = 72;
             //扳机检测间隔
             TriggerInterval = 0.1f;

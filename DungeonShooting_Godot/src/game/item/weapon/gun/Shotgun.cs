@@ -20,6 +20,7 @@ public class Shotgun : Weapon
             //连发
             ContinuousShoot = false;
             AmmoCapacity = 7;
+            StandbyAmmoCapacity = 42;
             MaxAmmoCapacity = 42;
             AloneReload = true;
             AloneReloadCanShoot = true;

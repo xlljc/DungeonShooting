@@ -102,38 +102,47 @@ public abstract class Weapon : ActivityObject
     }
 
     //是否按下
-    private bool triggerFlag = false;
+    private bool _triggerFlag = false;
 
     //扳机计时器
-    private float triggerTimer = 0;
+    private float _triggerTimer = 0;
 
     //开火前延时时间
-    private float delayedTime = 0;
+    private float _delayedTime = 0;
 
     //开火间隙时间
-    private float fireInterval = 0;
+    private float _fireInterval = 0;
 
     //开火武器口角度
-    private float fireAngle = 0;
+    private float _fireAngle = 0;
 
     //攻击冷却计时
-    private float attackTimer = 0;
+    private float _attackTimer = 0;
 
     //攻击状态
-    private bool attackFlag = false;
+    private bool _attackFlag = false;
 
     //按下的时间
-    private float downTimer = 0;
+    private float _downTimer = 0;
 
     //松开的时间
-    private float upTimer = 0;
+    private float _upTimer = 0;
 
     //连发次数
-    private float continuousCount = 0;
+    private float _continuousCount = 0;
 
     //连发状态记录
-    private bool continuousShootFlag = false;
+    private bool _continuousShootFlag = false;
 
+    //松开扳机是否开火
+    private bool _looseShootFlag = false;
+
+    //蓄力攻击时长
+    private float _chargeTime = 0;
+
+    //是否需要重置武器数据
+    private bool _dirtyFlag = false;
+    
     /// <summary>
     /// 根据属性创建一把武器
     /// </summary>
@@ -159,12 +168,17 @@ public abstract class Weapon : ActivityObject
         FirePoint.Position = new Vector2(Attribute.FirePosition.x, -Attribute.FirePosition.y);
         OriginPoint.Position = new Vector2(0, -Attribute.FirePosition.y);
 
+        if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
+        {
+            Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
+            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + id);
+        }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
         //剩余弹药量
-        ResidueAmmo = Attribute.MaxAmmoCapacity - Attribute.AmmoCapacity;
+        ResidueAmmo = Mathf.Min(Attribute.StandbyAmmoCapacity + CurrAmmo, Attribute.MaxAmmoCapacity) - CurrAmmo;
     }
-
+    
     /// <summary>
     /// 单次开火时调用的函数
     /// </summary>
@@ -234,38 +248,49 @@ public abstract class Weapon : ActivityObject
     {
     }
 
+    /// <summary>
+    /// 射击时调用, 返回消耗弹药数量, 默认为1, 如果返回为 0, 则不消耗弹药
+    /// </summary>
+    protected virtual int UseAmmoCount()
+    {
+        return 1;
+    }
+
     public override void _Process(float delta)
     {
         base._Process(delta);
-        if (Master == null) //这把武器被扔在地上
+        //这把武器被扔在地上, 或者当前武器没有被使用
+        if (Master == null || Master.Holster.ActiveWeapon != this)
         {
-            Reloading = false;
-            ReloadTimer = 0;
-            triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
-            triggerFlag = false;
-            attackFlag = false;
-            attackTimer = attackTimer > 0 ? attackTimer - delta : 0;
+            _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
+            _attackTimer = _attackTimer > 0 ? _attackTimer - delta : 0;
             CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
                 Attribute.StartScatteringRange);
-            continuousCount = 0;
-            delayedTime = 0;
-        }
-        else if (Master.Holster.ActiveWeapon != this) //当前武器没有被使用
-        {
-            Reloading = false;
-            ReloadTimer = 0;
-            triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
-            triggerFlag = false;
-            attackFlag = false;
-            attackTimer = attackTimer > 0 ? attackTimer - delta : 0;
-            CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
-                Attribute.StartScatteringRange);
-            continuousCount = 0;
-            delayedTime = 0;
+            //松开扳机
+            if (_triggerFlag || _downTimer > 0)
+            {
+                UpTrigger();
+                _triggerFlag = false;
+                _downTimer = 0;
+            }
+
+            //重置数据
+            if (_dirtyFlag)
+            {
+                _dirtyFlag = false;
+                Reloading = false;
+                ReloadTimer = 0;
+                _attackFlag = false;
+                _continuousCount = 0;
+                _delayedTime = 0;
+                _upTimer = 0;
+                _looseShootFlag = false;
+                _chargeTime = 0;
+            }
         }
         else //正在使用中
         {
-
+            _dirtyFlag = true;
             //换弹
             if (Reloading)
             {
@@ -276,92 +301,95 @@ public abstract class Weapon : ActivityObject
                 }
             }
 
-            if (triggerFlag)
+            if (_triggerFlag)
             {
-                if (upTimer > 0) //第一帧按下扳机
+                if (_looseShootFlag) //蓄力时长
                 {
-                    upTimer = 0;
-                    DownTrigger();
+                    _chargeTime += delta;
                 }
 
-                downTimer += delta;
+                _downTimer += delta;
+                if (_upTimer > 0) //第一帧按下扳机
+                {
+                    DownTrigger();
+                    _upTimer = 0;
+                }
             }
             else
             {
-                if (downTimer > 0) //第一帧松开扳机
+                _upTimer += delta;
+                if (_downTimer > 0) //第一帧松开扳机
                 {
-                    downTimer = 0;
                     UpTrigger();
+                    _downTimer = 0;
                 }
-
-                upTimer += delta;
             }
 
             // 攻击的计时器
-            if (attackTimer > 0)
+            if (_attackTimer > 0)
             {
-                attackTimer -= delta;
-                if (attackTimer < 0)
+                _attackTimer -= delta;
+                if (_attackTimer < 0)
                 {
-                    delayedTime += attackTimer;
-                    attackTimer = 0;
+                    _delayedTime += _attackTimer;
+                    _attackTimer = 0;
                 }
             }
-            else if (delayedTime > 0) //攻击延时
+            else if (_delayedTime > 0) //攻击延时
             {
-                delayedTime -= delta;
-                if (attackTimer < 0)
+                _delayedTime -= delta;
+                if (_attackTimer < 0)
                 {
-                    delayedTime = 0;
+                    _delayedTime = 0;
                 }
             }
 
             //连发判断
-            if (continuousCount > 0 && delayedTime <= 0 && attackTimer <= 0)
+            if (!_looseShootFlag && _continuousCount > 0 && _delayedTime <= 0 && _attackTimer <= 0)
             {
-                //开火
+                //连发开火
                 TriggerFire();
             }
 
-            if (!attackFlag && attackTimer <= 0)
+            if (!_attackFlag && _attackTimer <= 0)
             {
                 CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
                     Attribute.StartScatteringRange);
             }
 
-            triggerTimer = triggerTimer > 0 ? triggerTimer - delta : 0;
-            triggerFlag = false;
-            attackFlag = false;
+            _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
+            _triggerFlag = false;
+            _attackFlag = false;
 
             //武器身回归
             Position = Position.MoveToward(Vector2.Zero, 35 * delta);
-            if (fireInterval == 0)
+            if (_fireInterval == 0)
             {
-                RotationDegrees = Attribute.DefaultAngle;
+                RotationDegrees = -Attribute.DefaultAngle;
             }
             else
             {
-                RotationDegrees = Mathf.Lerp(Attribute.DefaultAngle, fireAngle, attackTimer / fireInterval);
+                RotationDegrees = Mathf.Lerp(-Attribute.DefaultAngle, _fireAngle, _attackTimer / _fireInterval);
             }
         }
     }
 
     /// <summary>
-    /// 扳机函数, 调用即视为扣动扳机
+    /// 扳机函数, 调用即视为按下扳机
     /// </summary>
     public void Trigger()
     {
         //是否第一帧按下
-        var justDown = downTimer == 0;
+        var justDown = _downTimer == 0;
         //是否能发射
         var flag = false;
-        if (continuousCount <= 0) //不能处于连发状态下
+        if (_continuousCount <= 0) //不能处于连发状态下
         {
             if (Attribute.ContinuousShoot) //自动射击
             {
-                if (triggerTimer > 0)
+                if (_triggerTimer > 0)
                 {
-                    if (continuousShootFlag)
+                    if (_continuousShootFlag)
                     {
                         flag = true;
                     }
@@ -369,15 +397,15 @@ public abstract class Weapon : ActivityObject
                 else
                 {
                     flag = true;
-                    if (delayedTime <= 0 && attackTimer <= 0)
+                    if (_delayedTime <= 0 && _attackTimer <= 0)
                     {
-                        continuousShootFlag = true;
+                        _continuousShootFlag = true;
                     }
                 }
             }
             else //半自动
             {
-                if (justDown && triggerTimer <= 0)
+                if (justDown && _triggerTimer <= 0)
                 {
                     flag = true;
                 }
@@ -411,30 +439,64 @@ public abstract class Weapon : ActivityObject
                 if (justDown)
                 {
                     //开火前延时
-                    delayedTime = Attribute.DelayedTime;
+                    _delayedTime = Attribute.DelayedTime;
                     //扳机按下间隔
-                    triggerTimer = Attribute.TriggerInterval;
+                    _triggerTimer = Attribute.TriggerInterval;
                     //连发数量
                     if (!Attribute.ContinuousShoot)
                     {
-                        continuousCount =
+                        _continuousCount =
                             Utils.RandRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
                     }
                 }
 
-                if (delayedTime <= 0 && attackTimer <= 0)
+                if (_delayedTime <= 0 && _attackTimer <= 0)
                 {
-                    TriggerFire();
+                    if (Attribute.LooseShoot) //松发开火
+                    {
+                        _looseShootFlag = true;
+                    }
+                    else
+                    {
+                        //开火
+                        TriggerFire();
+                    }
                 }
 
-                attackFlag = true;
+                _attackFlag = true;
             }
 
         }
 
-        triggerFlag = true;
+        _triggerFlag = true;
     }
 
+    /// <summary>
+    /// 返回是否按下扳机
+    /// </summary>
+    public bool IsPressTrigger()
+    {
+        return _triggerFlag;
+    }
+    
+    /// <summary>
+    /// 获取本次扳机按下的时长, 单位: 秒
+    /// </summary>
+    public float GetTriggerDownTime()
+    {
+        return _downTimer;
+    }
+
+    /// <summary>
+    /// 获取扳机蓄力时长, 计算按下扳机后从可以开火到当前一共经过了多长时间, 可用于计算蓄力攻击
+    /// 注意, 该函数仅在 Attribute.LooseShoot == false 时有正确的返回值, 否则返回 0
+    /// </summary>
+    /// <returns></returns>
+    public float GetTriggerChargeTime()
+    {
+        return _chargeTime;
+    }
+    
     /// <summary>
     /// 刚按下扳机
     /// </summary>
@@ -448,10 +510,18 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     private void UpTrigger()
     {
-        continuousShootFlag = false;
-        if (delayedTime > 0)
+        _continuousShootFlag = false;
+        if (_delayedTime > 0)
         {
-            continuousCount = 0;
+            _continuousCount = 0;
+        }
+
+        //松发开火执行
+        if (_looseShootFlag)
+        {
+            _looseShootFlag = false;
+            TriggerFire();
+            _chargeTime = 0;
         }
 
         OnUpTrigger();
@@ -462,14 +532,14 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     private void TriggerFire()
     {
-        continuousCount = continuousCount > 0 ? continuousCount - 1 : 0;
+        _continuousCount = _continuousCount > 0 ? _continuousCount - 1 : 0;
 
         //减子弹数量
-        CurrAmmo--;
+        CurrAmmo -= UseAmmoCount();
         //开火间隙
-        fireInterval = 60 / Attribute.StartFiringSpeed;
+        _fireInterval = 60 / Attribute.StartFiringSpeed;
         //攻击冷却
-        attackTimer += fireInterval;
+        _attackTimer += _fireInterval;
 
         //触发开火函数
         OnFire();
@@ -498,7 +568,7 @@ public abstract class Weapon : ActivityObject
         //武器的旋转角度
         tempAngle -= Attribute.UpliftAngle;
         RotationDegrees = tempAngle;
-        fireAngle = tempAngle;
+        _fireAngle = tempAngle;
         //武器身位置
         Position = new Vector2(
             Mathf.Max(-Attribute.MaxBacklash,
@@ -809,7 +879,10 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public void Active()
     {
+        //调整阴影
         ShadowOffset = new Vector2(0, Master.GlobalPosition.y - GlobalPosition.y);
+        //枪口默认抬起角度
+        RotationDegrees = -Attribute.DefaultAngle;
         ShowShadowSprite();
         OnActive();
     }

@@ -32,7 +32,11 @@ public class WeaponAttribute
     /// <summary>
     /// 弹药容量上限
     /// </summary>
-    public int MaxAmmoCapacity = 90;
+    public int MaxAmmoCapacity = 120;
+    /// <summary>
+    /// 备用弹药数量
+    /// </summary>
+    public int StandbyAmmoCapacity = 90;
     /// <summary>
     /// 装弹时间, 单位: 秒
     /// </summary>
@@ -56,11 +60,11 @@ public class WeaponAttribute
     /// <summary>
     /// 连续发射最小次数, 仅当 ContinuousShoot 为 false 时生效
     /// </summary>
-    public int MinContinuousCount = 3;
+    public int MinContinuousCount = 1;
     /// <summary>
     /// 连续发射最大次数, 仅当 ContinuousShoot 为 false 时生效
     /// </summary>
-    public int MaxContinuousCount = 3;
+    public int MaxContinuousCount = 1;
     /// <summary>
     /// 按下一次扳机后需要多长时间才能再次按下
     /// </summary>
@@ -146,7 +150,7 @@ public class WeaponAttribute
     /// </summary>
     public float UpliftAngle = 30;
     /// <summary>
-    /// 武器默认角度
+    /// 武器默认上抬角度
     /// </summary>
     public float DefaultAngle = 0;
     /// <summary>
