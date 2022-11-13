@@ -26,7 +26,6 @@ public class Knife : Weapon
             MaxBacklash = -8;
             MinBacklash = -8;
             BacklashRegressionSpeed = 24;
-            //UpliftAngleRestore = 2;
             UpliftAngle = -90;
         }
     }
@@ -35,13 +34,7 @@ public class Knife : Weapon
     {
         
     }
-
-    public override void _Process(float delta)
-    {
-        base._Process(delta);
-        
-    }
-
+    
     protected override void OnStartCharge()
     {
         RotationDegrees = -120;
@@ -49,7 +42,9 @@ public class Knife : Weapon
 
     protected override void OnFire()
     {
-        GD.Print("蓄力时长: " + GetTriggerChargeTime() + ", 扳机按下时长: " + GetTriggerDownTime());
+        GD.Print("近战武器攻击! 蓄力时长: " + GetTriggerChargeTime() + ", 扳机按下时长: " + GetTriggerDownTime());
+        
+        //这里写播放挥刀特效和碰撞检测代码
         
         if (Master == GameApplication.Instance.Room.Player)
         {
@@ -61,16 +56,6 @@ public class Knife : Weapon
     protected override void OnShoot(float fireRotation)
     {
         
-    }
-
-    protected override void OnUpTrigger()
-    {
-        GD.Print("松开扳机");
-    }
-
-    protected override void OnDownTrigger()
-    {
-        GD.Print("开始按下扳机");
     }
 
     protected override int UseAmmoCount()
