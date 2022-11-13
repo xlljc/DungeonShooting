@@ -17,14 +17,13 @@ public class MountRotation : Position2D
     public Role Master { get; set; }
 
     /// <summary>
-    /// 当前节点真实的旋转角度
+    /// 当前节点真实的旋转角度, 角度制
     /// </summary>
     public float RealAngle { get; private set; }
 
     /// <summary>
     /// 设置看向的目标点
     /// </summary>
-    /// <param name="target"></param>
     public void SetLookAt(Vector2 target)
     {
         var myPos = GlobalPosition;

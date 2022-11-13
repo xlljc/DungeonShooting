@@ -4,29 +4,30 @@ using Godot;
 [RegisterWeapon("1004", typeof(KnifeAttribute))]
 public class Knife : Weapon
 {
-
     private class KnifeAttribute : WeaponAttribute
     {
         public KnifeAttribute()
         {
             Sprite = ResourcePath.resource_sprite_gun_knife1_png;
             WeaponPrefab = ResourcePath.prefab_weapon_Knife_tscn;
-            //连发关闭
+            //攻速设置
+            StartFiringSpeed = 180;
+            FinalFiringSpeed = StartFiringSpeed;
+            //关闭连发
             ContinuousShoot = false;
-            //松发开火
+            //设置成松发开火
             LooseShoot = true;
-            //弹药量
+            //弹药量, 可以理解为耐久度
             AmmoCapacity = 180;
-            MaxAmmoCapacity = 180;
+            MaxAmmoCapacity = AmmoCapacity;
             //握把位置
             HoldPosition = new Vector2(10, 0);
-            //关闭后坐力
-            MaxBacklash = 0;
-            MinBacklash = 0;
-            //我们需要自己来控制角度
-            UpliftAngleRestore = 3;
-            UpliftAngle = -80;
-            DefaultAngle = 20;
+            //后坐力改为向前, 模拟手伸长的效果
+            MaxBacklash = -8;
+            MinBacklash = -8;
+            BacklashRegressionSpeed = 24;
+            //UpliftAngleRestore = 2;
+            UpliftAngle = -90;
         }
     }
     
@@ -35,9 +36,26 @@ public class Knife : Weapon
         
     }
 
+    public override void _Process(float delta)
+    {
+        base._Process(delta);
+        
+    }
+
+    protected override void OnStartCharge()
+    {
+        RotationDegrees = -120;
+    }
+
     protected override void OnFire()
     {
         GD.Print("蓄力时长: " + GetTriggerChargeTime() + ", 扳机按下时长: " + GetTriggerDownTime());
+        
+        if (Master == GameApplication.Instance.Room.Player)
+        {
+            //创建抖动
+            //GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation - Mathf.Pi * 0.5f) * 1.5f);
+        }
     }
 
     protected override void OnShoot(float fireRotation)

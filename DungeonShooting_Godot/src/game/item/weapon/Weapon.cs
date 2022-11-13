@@ -17,7 +17,7 @@ public abstract class Weapon : ActivityObject
     public event Action<Weapon> FireEvent;
 
     /// <summary>
-    /// 属性数据
+    /// 武器属性数据
     /// </summary>
     public WeaponAttribute Attribute { get; private set; }
 
@@ -101,6 +101,27 @@ public abstract class Weapon : ActivityObject
         }
     }
 
+    /// <summary>
+    /// 返回是否在蓄力中,
+    /// 注意, 属性仅在 Attribute.LooseShoot == false 时有正确的返回值, 否则返回 false
+    /// </summary>
+    public bool IsCharging => _looseShootFlag;
+
+    /// <summary>
+    /// 返回武器是否在武器袋中
+    /// </summary>
+    public bool IsInHolster => Master != null;
+
+    /// <summary>
+    /// 返回是否真正使用该武器
+    /// </summary>
+    public bool IsActive => Master != null && Master.Holster.ActiveWeapon == this;
+
+    
+    
+    
+    //--------------------------------------------------------------------------------------------
+    
     //是否按下
     private bool _triggerFlag = false;
 
@@ -142,6 +163,9 @@ public abstract class Weapon : ActivityObject
 
     //是否需要重置武器数据
     private bool _dirtyFlag = false;
+
+    //当前后坐力导致的偏移长度
+    private float _currBacklashLength = 0;
     
     /// <summary>
     /// 根据属性创建一把武器
@@ -202,6 +226,14 @@ public abstract class Weapon : ActivityObject
     /// 当松开扳机时调用
     /// </summary>
     protected virtual void OnUpTrigger()
+    {
+    }
+
+    /// <summary>
+    /// 开始蓄力时调用, 
+    /// 注意, 该函数仅在 Attribute.LooseShoot == false 时才能被调用
+    /// </summary>
+    protected virtual void OnStartCharge()
     {
     }
 
@@ -301,6 +333,28 @@ public abstract class Weapon : ActivityObject
                 }
             }
 
+            // 攻击的计时器
+            if (_attackTimer > 0)
+            {
+                _attackTimer -= delta;
+                if (_attackTimer < 0)
+                {
+                    _delayedTime += _attackTimer;
+                    _attackTimer = 0;
+                    //枪口默认角度
+                    RotationDegrees = -Attribute.DefaultAngle;
+                }
+            }
+            else if (_delayedTime > 0) //攻击延时
+            {
+                _delayedTime -= delta;
+                if (_attackTimer < 0)
+                {
+                    _delayedTime = 0;
+                }
+            }
+            
+            //扳机判定
             if (_triggerFlag)
             {
                 if (_looseShootFlag) //蓄力时长
@@ -325,25 +379,6 @@ public abstract class Weapon : ActivityObject
                 }
             }
 
-            // 攻击的计时器
-            if (_attackTimer > 0)
-            {
-                _attackTimer -= delta;
-                if (_attackTimer < 0)
-                {
-                    _delayedTime += _attackTimer;
-                    _attackTimer = 0;
-                }
-            }
-            else if (_delayedTime > 0) //攻击延时
-            {
-                _delayedTime -= delta;
-                if (_attackTimer < 0)
-                {
-                    _delayedTime = 0;
-                }
-            }
-
             //连发判断
             if (!_looseShootFlag && _continuousCount > 0 && _delayedTime <= 0 && _attackTimer <= 0)
             {
@@ -360,16 +395,17 @@ public abstract class Weapon : ActivityObject
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
             _triggerFlag = false;
             _attackFlag = false;
-
+            
             //武器身回归
-            Position = Position.MoveToward(Vector2.Zero, 35 * delta);
-            if (_fireInterval == 0)
+            //Position = Position.MoveToward(Vector2.Zero, Attribute.BacklashRegressionSpeed * delta).Rotated(Rotation);
+            _currBacklashLength = Mathf.MoveToward(_currBacklashLength, 0, Attribute.BacklashRegressionSpeed * delta);
+            Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
+            if (_attackTimer > 0)
             {
-                RotationDegrees = -Attribute.DefaultAngle;
-            }
-            else
-            {
-                RotationDegrees = Mathf.Lerp(-Attribute.DefaultAngle, _fireAngle, _attackTimer / _fireInterval);
+                RotationDegrees = Mathf.Lerp(
+                    _fireAngle, -Attribute.DefaultAngle,
+                    Mathf.Clamp((_fireInterval - _attackTimer) * Attribute.UpliftAngleRestore / _fireInterval, 0, 1)
+                );
             }
         }
     }
@@ -405,7 +441,7 @@ public abstract class Weapon : ActivityObject
             }
             else //半自动
             {
-                if (justDown && _triggerTimer <= 0)
+                if (justDown && _triggerTimer <= 0 && _attackTimer <= 0)
                 {
                     flag = true;
                 }
@@ -455,6 +491,7 @@ public abstract class Weapon : ActivityObject
                     if (Attribute.LooseShoot) //松发开火
                     {
                         _looseShootFlag = true;
+                        OnStartCharge();
                     }
                     else
                     {
@@ -520,7 +557,14 @@ public abstract class Weapon : ActivityObject
         if (_looseShootFlag)
         {
             _looseShootFlag = false;
-            TriggerFire();
+            if (_chargeTime >= Attribute.MinChargeTime) //判断蓄力是否够了
+            {
+                TriggerFire();
+            }
+            else //不能攻击
+            {
+                _continuousCount = 0;
+            }
             _chargeTime = 0;
         }
 
@@ -569,10 +613,14 @@ public abstract class Weapon : ActivityObject
         tempAngle -= Attribute.UpliftAngle;
         RotationDegrees = tempAngle;
         _fireAngle = tempAngle;
+        
         //武器身位置
-        Position = new Vector2(
-            Mathf.Max(-Attribute.MaxBacklash,
-                Position.x - Utils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash)), Position.y);
+        var max = Mathf.Abs(Mathf.Max(Attribute.MaxBacklash, Attribute.MinBacklash));
+        _currBacklashLength = Mathf.Clamp(
+            _currBacklashLength - Utils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash),
+            -max, max
+        );
+        Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
 
         if (FireEvent != null)
         {
