@@ -13,7 +13,7 @@ public class Bullet : ActivityObject
         CollisionArea.Connect("body_entered", this, nameof(_BodyEntered));
 
         Collision.Disabled = true;
-        
+
         MaxDistance = maxDistance;
         Position = position;
         Rotation = rotation;
@@ -21,7 +21,7 @@ public class Bullet : ActivityObject
     }
 
     public Area2D CollisionArea { get; }
-    
+
     // 最大飞行距离
     private float MaxDistance;
 
@@ -59,10 +59,13 @@ public class Bullet : ActivityObject
         }
 
         //播放受击动画
-        Node2D hit = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Hit_tscn).Instance<Node2D>();
-        hit.RotationDegrees = Utils.RandRangeInt(0, 360);
-        hit.GlobalPosition = GlobalPosition;
-        GameApplication.Instance.Room.GetRoot(true).AddChild(hit);
+        // Node2D hit = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Hit_tscn).Instance<Node2D>();
+        // hit.RotationDegrees = Utils.RandRangeInt(0, 360);
+        // hit.GlobalPosition = GlobalPosition;
+        // GameApplication.Instance.Room.GetRoot(true).AddChild(hit);
+
+        SpecialEffectManager.Play(ResourcePath.resource_effects_Hit_tres, "Hit", GlobalPosition,
+            Mathf.Deg2Rad(Utils.RandRangeInt(0, 360)), Vector2.One, new Vector2(1, 11), 0);
 
         Destroy();
     }
