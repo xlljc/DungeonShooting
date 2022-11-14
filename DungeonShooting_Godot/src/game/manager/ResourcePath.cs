@@ -10,6 +10,7 @@ public class ResourcePath
     public const string editor_prefabs_CodeHintPanel_tscn = "res://editor/prefabs/CodeHintPanel.tscn";
     public const string editor_prefabs_CodePanel_tscn = "res://editor/prefabs/CodePanel.tscn";
     public const string editor_prefabs_Editor_tscn = "res://editor/prefabs/Editor.tscn";
+    public const string prefab_FanCollisionShape_tscn = "res://prefab/FanCollisionShape.tscn";
     public const string prefab_effect_FirePart_tscn = "res://prefab/effect/FirePart.tscn";
     public const string prefab_effect_Hit_tscn = "res://prefab/effect/Hit.tscn";
     public const string prefab_role_CPlusPlus_tscn = "res://prefab/role/CPlusPlus.tscn";
@@ -26,6 +27,7 @@ public class ResourcePath
     public const string prefab_weapon_bullet_Bullet_tscn = "res://prefab/weapon/bullet/Bullet.tscn";
     public const string prefab_weapon_shell_ShellCase_tscn = "res://prefab/weapon/shell/ShellCase.tscn";
     public const string resource_effects_Hit_tres = "res://resource/effects/Hit.tres";
+    public const string resource_effects_KnifeHit1_tres = "res://resource/effects/KnifeHit1.tres";
     public const string resource_font_cn_font_12_tres = "res://resource/font/cn_font_12.tres";
     public const string resource_font_cn_font_18_tres = "res://resource/font/cn_font_18.tres";
     public const string resource_font_cn_font_35_tres = "res://resource/font/cn_font_35.tres";
@@ -38,6 +40,7 @@ public class ResourcePath
     public const string resource_sprite_bullet_arrow_png = "res://resource/sprite/bullet/arrow.png";
     public const string resource_sprite_bullet_bullet_png = "res://resource/sprite/bullet/bullet.png";
     public const string resource_sprite_bullet_bullet2_png = "res://resource/sprite/bullet/bullet2.png";
+    public const string resource_sprite_effect_KnifeHit1_png = "res://resource/sprite/effect/KnifeHit1.png";
     public const string resource_sprite_effect_Trajectory_png = "res://resource/sprite/effect/Trajectory.png";
     public const string resource_sprite_effect_hit_hit0_png = "res://resource/sprite/effect/hit/hit0.png";
     public const string resource_sprite_effect_hit_hit1_png = "res://resource/sprite/effect/hit/hit1.png";

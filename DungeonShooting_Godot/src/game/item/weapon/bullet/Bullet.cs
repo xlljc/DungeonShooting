@@ -55,7 +55,7 @@ public class Bullet : ActivityObject
     {
         if (other is Role role)
         {
-            role.Hit(1);
+            role.Hurt(1);
         }
 
         //播放受击动画

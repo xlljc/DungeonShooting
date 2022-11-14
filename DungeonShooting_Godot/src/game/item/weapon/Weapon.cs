@@ -117,9 +117,7 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public bool IsActive => Master != null && Master.Holster.ActiveWeapon == this;
 
-    
-    
-    
+
     //--------------------------------------------------------------------------------------------
     
     //是否按下
@@ -628,6 +626,15 @@ public abstract class Weapon : ActivityObject
         }
     }
 
+    /// <summary>
+    /// 获取武器攻击的目标层级
+    /// </summary>
+    /// <returns></returns>
+    public uint GetAttackLayer()
+    {
+        return Master != null ? Master.AttackLayer : Role.DefaultAttackLayer;
+    }
+    
     /// <summary>
     /// 返回弹药是否到达上限
     /// </summary>

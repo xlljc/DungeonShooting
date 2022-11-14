@@ -3,6 +3,6 @@
 /// </summary>
 public enum FaceDirection
 {
-    Left,
-    Right,
+    Left = -1,
+    Right = 1,
 }

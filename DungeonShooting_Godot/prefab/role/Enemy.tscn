@@ -23,7 +23,7 @@ material = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource( 2 )
-frame = 0
+frame = 2
 
 [node name="ViewRay" type="RayCast2D" parent="." index="7"]
 position = Vector2( 0, -8 )

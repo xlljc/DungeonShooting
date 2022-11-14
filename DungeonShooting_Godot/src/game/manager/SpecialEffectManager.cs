@@ -42,7 +42,7 @@ public static class SpecialEffectManager
     }
 
     /// <summary>
-    /// 在场景指定位置播放一个特效
+    /// 在场景指定位置播放一个特效, 特效必须是 SpriteFrames 类型
     /// </summary>
     /// <param name="path">特效SpriteFrames资源路径</param>
     /// <param name="animName">动画名称</param>
@@ -53,7 +53,7 @@ public static class SpecialEffectManager
     /// <param name="zIndex">层级</param>
     /// <param name="speed">播放速度</param>
     /// <param name="loopCount">循环次数, 到达该次数特效停止播放</param>
-    public static void Play(string path, string animName, Vector2 pos, float rotation, Vector2 scale, Vector2 offset, int zIndex, float speed = 1, int loopCount = 1)
+    public static void Play(string path, string animName, Vector2 pos, float rotation, Vector2 scale, Vector2 offset, int zIndex = 0, float speed = 1, int loopCount = 1)
     {
         var spriteFrames = ResourceManager.Load<SpriteFrames>(path);
         

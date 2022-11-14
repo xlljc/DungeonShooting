@@ -419,7 +419,7 @@ public abstract class Role : ActivityObject
     /// 受到伤害
     /// </summary>
     /// <param name="damage">伤害的量</param>
-    public virtual void Hit(int damage)
+    public virtual void Hurt(int damage)
     {
         Hp -= damage;
         AnimationPlayer.Stop();
