@@ -5,7 +5,7 @@ using Godot;
 /// </summary>
 public class RoomManager : Node2D
 {
-    public Player Player { get; private set; }
+    public Role Player { get; private set; }
     private Node2D ObjectRoot;
     private YSort SortRoot;
 
@@ -38,8 +38,7 @@ public class RoomManager : Node2D
     public override void _Ready()
     {
         //播放bgm
-        SoundManager.PlayeMusic("intro.ogg", this, -17f);
-        _enemy.LookTarget = Player;
+        SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
         _enemy.PickUpWeapon(WeaponManager.GetGun("1001"));
 
         WeaponManager.GetGun("1001").PutDown(new Vector2(80, 100));
@@ -50,11 +49,13 @@ public class RoomManager : Node2D
         WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80));
         WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));
         WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120));
+        
+        WeaponManager.GetGun("1004").PutDown(new Vector2(220, 120));
     }
 
     public override void _Process(float delta)
     {
-        
+
     }
 
     /// <summary>

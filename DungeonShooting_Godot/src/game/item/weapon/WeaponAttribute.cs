@@ -32,7 +32,11 @@ public class WeaponAttribute
     /// <summary>
     /// 弹药容量上限
     /// </summary>
-    public int MaxAmmoCapacity = 90;
+    public int MaxAmmoCapacity = 120;
+    /// <summary>
+    /// 备用弹药数量
+    /// </summary>
+    public int StandbyAmmoCapacity = 90;
     /// <summary>
     /// 装弹时间, 单位: 秒
     /// </summary>
@@ -54,23 +58,27 @@ public class WeaponAttribute
     /// </summary>
     public bool LooseShoot = false;
     /// <summary>
+    /// 最少需要蓄力多久才能开火, 必须将 'LooseShoot' 设置为 true
+    /// </summary>
+    public float MinChargeTime = 0f;
+    /// <summary>
     /// 连续发射最小次数, 仅当 ContinuousShoot 为 false 时生效
     /// </summary>
-    public int MinContinuousCount = 3;
+    public int MinContinuousCount = 1;
     /// <summary>
     /// 连续发射最大次数, 仅当 ContinuousShoot 为 false 时生效
     /// </summary>
-    public int MaxContinuousCount = 3;
+    public int MaxContinuousCount = 1;
     /// <summary>
-    /// 按下一次扳机后需要多长时间才能再次按下
+    /// 按下一次扳机后需要多长时间才能再次感应按下
     /// </summary>
     public float TriggerInterval = 0;
     /// <summary>
-    /// 初始射速, 初始每秒分钟能发射多少发子弹
+    /// 初始射速, 初始每分钟能开火次数
     /// </summary>
     public float StartFiringSpeed = 300;
     /// <summary>
-    /// 最终射速, 最终每秒分钟能发射多少发子弹
+    /// 最终射速, 最终每分钟能开火次数
     /// </summary>
     public float FinalFiringSpeed = 300;
     /// <summary>
@@ -142,11 +150,19 @@ public class WeaponAttribute
     /// </summary>
     public float MinBacklash = 2;
     /// <summary>
+    /// 后坐力偏移回归回归速度
+    /// </summary>
+    public float BacklashRegressionSpeed = 35f;
+    /// <summary>
     /// 开火后武器口上抬角度
     /// </summary>
     public float UpliftAngle = 30;
     /// <summary>
+    /// 武器默认上抬角度
+    /// </summary>
+    public float DefaultAngle = 0;
+    /// <summary>
     /// 开火后武器口角度恢复速度倍数
     /// </summary>
-    public float UpliftAngleRestore = 1;
+    public float UpliftAngleRestore = 1f;
 }

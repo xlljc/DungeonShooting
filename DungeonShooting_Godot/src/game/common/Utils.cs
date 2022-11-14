@@ -1,6 +1,9 @@
 using Godot;
 
-public static class MathUtils
+/// <summary>
+/// 常用函数工具类
+/// </summary>
+public static class Utils
 {
     /// <summary>
     /// 返回一个区间内的随机小数

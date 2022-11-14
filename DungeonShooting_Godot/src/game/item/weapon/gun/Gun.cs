@@ -13,7 +13,7 @@ public class Gun : Weapon
         public RifleAttribute()
         {
             Name = "步枪";
-            Sprite = "res://resource/sprite/gun/gun4.png";
+            Sprite = ResourcePath.resource_sprite_gun_gun4_png;
             Weight = 40;
             CenterPosition = new Vector2(0.4f, -2.6f);
             StartFiringSpeed = 480;
@@ -23,8 +23,9 @@ public class Gun : Weapon
             ScatteringRangeBackSpeed = 40;
             //连发
             ContinuousShoot = true;
-            AmmoCapacity = 120;
-            MaxAmmoCapacity = 120 * 70;
+            AmmoCapacity = 30;
+            StandbyAmmoCapacity = 30 * 70;
+            MaxAmmoCapacity = 30 * 70;
             //扳机检测间隔
             TriggerInterval = 0f;
             //连发数量
@@ -51,7 +52,7 @@ public class Gun : Weapon
         public PistolAttribute()
         {
             Name = "手枪";
-            Sprite = "res://resource/sprite/gun/gun3.png";
+            Sprite = ResourcePath.resource_sprite_gun_gun3_png;
             Weight = 20;
             CenterPosition = new Vector2(0.4f, -2.6f);
             WeightType = WeaponWeightType.DeputyWeapon;
@@ -63,6 +64,7 @@ public class Gun : Weapon
             //连发
             ContinuousShoot = false;
             AmmoCapacity = 12;
+            StandbyAmmoCapacity = 72;
             MaxAmmoCapacity = 72;
             //扳机检测间隔
             TriggerInterval = 0.1f;
@@ -93,10 +95,10 @@ public class Gun : Weapon
         //创建一个弹壳
         var startPos = GlobalPosition + new Vector2(0, 5);
         var startHeight = 6;
-        var direction = GlobalRotationDegrees + MathUtils.RandRangeInt(-30, 30) + 180;
-        var xf = MathUtils.RandRangeInt(20, 60);
-        var yf = MathUtils.RandRangeInt(60, 120);
-        var rotate = MathUtils.RandRangeInt(-720, 720);
+        var direction = GlobalRotationDegrees + Utils.RandRangeInt(-30, 30) + 180;
+        var xf = Utils.RandRangeInt(20, 60);
+        var yf = Utils.RandRangeInt(60, 120);
+        var rotate = Utils.RandRangeInt(-720, 720);
         var shell = new ShellCase();
         shell.Throw(new Vector2(10, 5), startPos, startHeight, direction, xf, yf, rotate, true);
         
@@ -106,7 +108,7 @@ public class Gun : Weapon
             GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
         }
         //播放射击音效
-        SoundManager.PlaySoundEffect("ordinaryBullet.ogg", this, 6f);
+        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet_ogg, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), 6f);
     }
 
     protected override void OnShoot(float fireRotation)
@@ -115,7 +117,7 @@ public class Gun : Weapon
         //CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation);
         var bullet = new Bullet(
             ResourcePath.prefab_weapon_bullet_Bullet_tscn,
-            MathUtils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
+            Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,
             fireRotation,
             Master != null ? Master.AttackLayer : Role.DefaultAttackLayer

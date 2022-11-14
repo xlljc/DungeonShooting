@@ -2,7 +2,7 @@
 using Godot;
 
 /// <summary>
-/// 组件基类, 用于挂载到游戏物体上, 相比于原生 Node 更加轻量化, 可以大量添加组件
+/// 组件基类, 用于挂载到游戏物体上, 相比于原生 Node 更加轻量化, 实例化 Component 不会创建额外的 Node, 可以大量添加组件
 /// </summary>
 public abstract class Component : IProcess, IDestroy
 {
@@ -30,6 +30,69 @@ public abstract class Component : IProcess, IDestroy
     }
 
     /// <summary>
+    /// 当前组件所挂载物体的缩放
+    /// </summary>
+    public Vector2 Scale
+    {
+        get => ActivityObject.Scale;
+        set => ActivityObject.Scale = value;
+    }
+    
+    /// <summary>
+    /// 当前组件所挂载物体的全局缩放
+    /// </summary>
+    public Vector2 GlobalScale
+    {
+        get => ActivityObject.GlobalScale;
+        set => ActivityObject.GlobalScale = value;
+    }
+
+    /// <summary>
+    /// 当前组件所挂载物体的旋转角度
+    /// </summary>
+    public float Rotation
+    {
+        get => ActivityObject.Rotation;
+        set => ActivityObject.Rotation = value;
+    }
+    
+    /// <summary>
+    /// 当前组件所挂载物体的全局旋转角度
+    /// </summary>
+    public float GlobalRotation
+    {
+        get => ActivityObject.GlobalRotation;
+        set => ActivityObject.GlobalRotation = value;
+    }
+
+    /// <summary>
+    /// 当前组件所挂载物体的角度制旋转角度
+    /// </summary>
+    public float RotationDegrees
+    {
+        get => ActivityObject.RotationDegrees;
+        set => ActivityObject.RotationDegrees = value;
+    }
+    
+    /// <summary>
+    /// 当前组件所挂载物体的全局角度制旋转角度
+    /// </summary>
+    public float GlobalRotationDegrees
+    {
+        get => ActivityObject.GlobalRotationDegrees;
+        set => ActivityObject.GlobalRotationDegrees = value;
+    }
+    
+    /// <summary>
+    /// 当前组件所挂载物体的ZIndex
+    /// </summary>
+    public int ZIndex
+    {
+        get => ActivityObject.ZIndex;
+        set => ActivityObject.ZIndex = value;
+    }
+    
+    /// <summary>
     /// 当前组件是否显示
     /// </summary>
     public bool Visible
@@ -52,9 +115,27 @@ public abstract class Component : IProcess, IDestroy
     public CollisionShape2D Collision => ActivityObject.Collision;
 
     /// <summary>
-    /// 是否启用当前组件
+    /// 是否启用当前组件, 如果禁用, 则不会调用 Process 和 PhysicsProcess
     /// </summary>
-    public bool Enable { get; set; } = true;
+    public bool Enable
+    {
+        get => _enable;
+        set
+        {
+            if (!_enable && value)
+            {
+                OnEnable();
+            }
+            else if (_enable && !value)
+            {
+                OnDisable();
+            }
+
+            _enable = value;
+        }
+    }
+
+    private bool _enable = true;
 
     /// <summary>
     /// 是否被销毁
@@ -65,25 +146,25 @@ public abstract class Component : IProcess, IDestroy
     internal bool IsStart = false;
 
     /// <summary>
-    /// 第一次调用 Update 或 PhysicsUpdate 之前调用
+    /// 第一次调用 Process 或 PhysicsProcess 之前调用
     /// </summary>
-    public virtual void Start()
+    public virtual void Ready()
     {
     }
 
     /// <summary>
-    /// 如果启用了组件, 则每帧会调用一次 Update
+    /// 如果启用了组件, 则每帧会调用一次 Process
     /// </summary>
     /// <param name="delta"></param>
-    public virtual void Update(float delta)
+    public virtual void Process(float delta)
     {
     }
 
     /// <summary>
-    /// 如果启用了组件, 则每物理帧会调用一次 PhysicsUpdate
+    /// 如果启用了组件, 则每物理帧会调用一次 PhysicsProcess
     /// </summary>
     /// <param name="delta"></param>
-    public virtual void PhysicsUpdate(float delta)
+    public virtual void PhysicsProcess(float delta)
     {
     }
 
@@ -108,6 +189,20 @@ public abstract class Component : IProcess, IDestroy
     {
     }
 
+    /// <summary>
+    /// 当组件启用时调用
+    /// </summary>
+    public virtual void OnEnable()
+    {
+    }
+
+    /// <summary>
+    /// 当组件禁用时调用
+    /// </summary>
+    public virtual void OnDisable()
+    {
+    }
+    
     /// <summary>
     /// 当组件销毁
     /// </summary>

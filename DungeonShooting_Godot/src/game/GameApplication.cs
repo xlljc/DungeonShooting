@@ -44,6 +44,9 @@ public class GameApplication : Node2D
     /// </summary>
     public RoomUI Ui { get; private set; }
 
+    /// <summary>
+    /// 全局根节点
+    /// </summary>
     public Node2D GlobalNodeRoot { get; private set; }
 
     public GameApplication()
@@ -65,11 +68,17 @@ public class GameApplication : Node2D
         Ui.AddChild(Cursor);
     }
 
+    /// <summary>
+    /// 将 viewport 以外的全局坐标 转换成 viewport 内的全局坐标
+    /// </summary>
     public Vector2 GlobalToViewPosition(Vector2 globalPos)
     {
         return globalPos / GameConfig.WindowScale - (GameConfig.ViewportSize / 2) + GameCamera.Main.GlobalPosition;
     }
 
+    /// <summary>
+    /// 将 viewport 以内的全局坐标 转换成 viewport 外的全局坐标
+    /// </summary>
     public Vector2 ViewToGlobalPosition(Vector2 viewPos)
     {
         return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
