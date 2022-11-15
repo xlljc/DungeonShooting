@@ -6,13 +6,13 @@
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
 shader = ExtResource( 2 )
-shader_param/shadowColor = Color( 0, 0, 0, 0.8 )
+shader_param/blend = Color( 1, 1, 1, 1 )
 shader_param/schedule = 1.0
 
 [sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
 shader = ExtResource( 2 )
-shader_param/shadowColor = Color( 1, 1, 1, 1 )
+shader_param/blend = Color( 1, 1, 1, 1 )
 shader_param/schedule = 0.0
 
 [node name="Player" instance=ExtResource( 1 )]
@@ -23,4 +23,4 @@ material = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource( 2 )
-frame = 0
+frame = 2

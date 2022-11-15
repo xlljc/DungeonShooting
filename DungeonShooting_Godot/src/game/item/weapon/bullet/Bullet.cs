@@ -64,7 +64,7 @@ public class Bullet : ActivityObject
         // hit.GlobalPosition = GlobalPosition;
         // GameApplication.Instance.Room.GetRoot(true).AddChild(hit);
 
-        SpecialEffectManager.Play(ResourcePath.resource_effects_Hit_tres, "Hit", GlobalPosition,
+        SpecialEffectManager.Play(ResourcePath.resource_effects_Hit_tres, "default", GlobalPosition,
             Mathf.Deg2Rad(Utils.RandRangeInt(0, 360)), Vector2.One, new Vector2(1, 11), 0);
 
         Destroy();

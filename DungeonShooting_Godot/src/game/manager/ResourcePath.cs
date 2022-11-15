@@ -12,7 +12,6 @@ public class ResourcePath
     public const string editor_prefabs_Editor_tscn = "res://editor/prefabs/Editor.tscn";
     public const string prefab_FanCollisionShape_tscn = "res://prefab/FanCollisionShape.tscn";
     public const string prefab_effect_FirePart_tscn = "res://prefab/effect/FirePart.tscn";
-    public const string prefab_effect_Hit_tscn = "res://prefab/effect/Hit.tscn";
     public const string prefab_role_CPlusPlus_tscn = "res://prefab/role/CPlusPlus.tscn";
     public const string prefab_role_Enemy_tscn = "res://prefab/role/Enemy.tscn";
     public const string prefab_role_Player_tscn = "res://prefab/role/Player.tscn";
