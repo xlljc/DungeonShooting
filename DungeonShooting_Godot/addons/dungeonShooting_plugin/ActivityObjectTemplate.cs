@@ -14,6 +14,11 @@ namespace Plugin
         [Export] public bool UseYSort;
 
         /// <summary>
+        /// 物体初始缩放
+        /// </summary>
+        [Export] public Vector2 Scale = Vector2.One;
+        
+        /// <summary>
         /// 当前物体所属物理层
         /// </summary>
         [Export(PropertyHint.Layers2dPhysics)] public uint CollisionLayer;

@@ -78,6 +78,7 @@ public abstract class ActivityObject : KinematicBody2D
         CollisionLayer = tempNode.CollisionLayer;
         CollisionMask = tempNode.CollisionMask;
         UseYSort = tempNode.UseYSort;
+        Scale = tempNode.Scale;
 
         //移动子节点
         var count = tempNode.GetChildCount();

@@ -142,12 +142,7 @@ public abstract class Role : ActivityObject
     /// 当前角色所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
-    
-    /// <summary>
-    /// 角色身上的状态机
-    /// </summary>
-    public StateController<Role> StateController { get; }
-    
+
     //初始缩放
     private Vector2 _startScale;
     //所有角色碰撞的道具
@@ -218,8 +213,6 @@ public abstract class Role : ActivityObject
     public Role(string scenePath) : base(scenePath)
     {
         Holster = new Holster(this);
-        StateController = new StateController<Role>();
-        AddComponent(StateController);
     }
     
     public override void _Ready()

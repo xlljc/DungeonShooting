@@ -25,6 +25,7 @@ public class ResourcePath
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";
     public const string prefab_weapon_bullet_Bullet_tscn = "res://prefab/weapon/bullet/Bullet.tscn";
     public const string prefab_weapon_shell_ShellCase_tscn = "res://prefab/weapon/shell/ShellCase.tscn";
+    public const string resource_effects_debug_arrows_png = "res://resource/effects/debug_arrows.png";
     public const string resource_effects_Hit_tres = "res://resource/effects/Hit.tres";
     public const string resource_effects_KnifeHit1_tres = "res://resource/effects/KnifeHit1.tres";
     public const string resource_font_cn_font_12_tres = "res://resource/font/cn_font_12.tres";

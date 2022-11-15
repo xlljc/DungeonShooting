@@ -85,7 +85,7 @@ public class Knife : Weapon
             //播放挥刀特效
             SpecialEffectManager.Play(
                 ResourcePath.resource_effects_KnifeHit1_tres, "default",
-                Master.MountPoint.GlobalPosition, GlobalRotation + Mathf.Pi * 0.5f, new Vector2((int)Master.Face, 1),
+                Master.MountPoint.GlobalPosition, GlobalRotation + Mathf.Pi * 0.5f, new Vector2((int)Master.Face, 1) * AnimatedSprite.Scale,
                 new Vector2(17, 4), 1
             );
         }

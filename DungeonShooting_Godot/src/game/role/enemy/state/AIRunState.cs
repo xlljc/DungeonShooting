@@ -2,11 +2,11 @@
 /// <summary>
 /// AI 奔跑行为
 /// </summary>
-public class AIRunState : IState<Role>
+public class AIRunState : IState<Enemy>
 {
     public StateEnum StateType { get; } = StateEnum.Run;
-    public Role Master { get; set; }
-    public StateController<Role> StateController { get; set; }
+    public Enemy Master { get; set; }
+    public StateController<Enemy> StateController { get; set; }
     public void Enter(StateEnum prev, params object[] args)
     {
         

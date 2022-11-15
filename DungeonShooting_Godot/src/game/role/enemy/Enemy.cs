@@ -20,6 +20,11 @@ public class Enemy : Role
 {
 
     /// <summary>
+    /// 敌人身上的状态机控制器
+    /// </summary>
+    public StateController<Enemy> StateController { get; }
+    
+    /// <summary>
     /// 视野半径, 单位像素
     /// </summary>
     public float ViewRange { get; set; } = 200;
@@ -36,6 +41,9 @@ public class Enemy : Role
     
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
+        StateController = new StateController<Enemy>();
+        AddComponent(StateController);
+        
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 

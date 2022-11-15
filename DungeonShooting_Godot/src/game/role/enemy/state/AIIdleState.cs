@@ -2,11 +2,11 @@
 /// <summary>
 /// AI 静止行为
 /// </summary>
-public class AIIdleState : IState<Role>
+public class AIIdleState : IState<Enemy>
 {
     public StateEnum StateType { get; } = StateEnum.Idle;
-    public Role Master { get; set; }
-    public StateController<Role> StateController { get; set; }
+    public Enemy Master { get; set; }
+    public StateController<Enemy> StateController { get; set; }
     public void Enter(StateEnum prev, params object[] args)
     {
         
