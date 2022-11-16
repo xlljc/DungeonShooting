@@ -302,6 +302,28 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
+    /// 使角色看向指定的坐标,
+    /// 注意, 调用该函数会清空 LookTarget, 因为拥有 LookTarget 会每帧更新玩家视野位置
+    /// </summary>
+    /// <param name="pos"></param>
+    public void LookTargetPosition(Vector2 pos)
+    {
+        LookTarget = null;
+        //脸的朝向
+        var gPos = GlobalPosition;
+        if (pos.x > gPos.x && Face == FaceDirection.Left)
+        {
+            Face = FaceDirection.Right;
+        }
+        else if (pos.x < gPos.x && Face == FaceDirection.Right)
+        {
+            Face = FaceDirection.Left;
+        }
+        //枪口跟随目标
+        MountPoint.SetLookAt(pos);
+    }
+    
+    /// <summary>
     /// 判断指定坐标是否在角色视野方向
     /// </summary>
     public bool IsPositionInForward(Vector2 pos)

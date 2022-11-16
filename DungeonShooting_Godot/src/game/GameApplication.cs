@@ -5,6 +5,11 @@ public class GameApplication : Node2D
 {
     public static GameApplication Instance { get; private set; }
 
+    /// <summary>
+    /// 是否开启调试
+    /// </summary>
+    [Export] public bool Debug = false;
+
     [Export] public PackedScene CursorPack;
 
     [Export] public NodePath RoomPath;

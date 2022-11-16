@@ -39,6 +39,15 @@ public class Enemy : Role
     /// </summary>
     public RayCast2D ViewRay { get; }
     
+    //------------------- 寻路相关 ---------------------------
+
+    
+    private PathSign _pathSign;
+    //上一帧玩家位置
+    private Vector2 _prevPlayerPos;
+    
+    //-------------------------------------------------------
+    
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
         StateController = new StateController<Enemy>();
@@ -57,6 +66,15 @@ public class Enemy : Role
         StateController.Register(new AIRunState());
         //默认状态
         StateController.ChangeState(StateEnum.Idle);
+    }
+
+    public override void _Process(float delta)
+    {
+        base._Process(delta);
+        if (GameApplication.Instance.Debug)
+        {
+            Update();
+        }
     }
 
     public override void _PhysicsProcess(float delta)
@@ -83,23 +101,45 @@ public class Enemy : Role
                 ViewRay.CastTo = localPos;
                 ViewRay.ForceRaycastUpdate();
 
-                if (ViewRay.IsColliding())
+                if (ViewRay.IsColliding()) //在视野范围内, 但是碰到墙壁
                 {
+                    if (_pathSign == null) //路径标记
+                    {
+                        _pathSign = new PathSign(_prevPlayerPos, ViewRange, player);
+                    }
                     LookTarget = null;
                     StateController.ChangeState(StateEnum.Idle);
                 }
-                else
+                else //视野无阻
                 {
+                    if (_pathSign != null) //删除路径标记
+                    {
+                        _pathSign.Destroy();
+                        _pathSign = null;
+                    }
+                    
                     LookTarget = player;
                     StateController.ChangeState(StateEnum.Run);
                 }
                 
                 ViewRay.Enabled = false;
             }
-            else
+            else //超出视野半径
             {
                 LookTarget = null;
                 StateController.ChangeState(StateEnum.Idle);
+            }
+            _prevPlayerPos = playerPos;
+        }
+    }
+
+    public override void _Draw()
+    {
+        if (GameApplication.Instance.Debug)
+        {
+            if (_pathSign != null)
+            {
+                DrawLine(Vector2.Zero,ToLocal(_pathSign.GlobalPosition), Colors.Red);
             }
         }
     }

@@ -14,15 +14,6 @@ public class Player : Role
     /// </summary>
     public float Friction { get; set; } = 800f;
 
-    //----------------------- 寻路相关 ----------------------------
-
-    //路径标记点总个数
-    private int _signLength = 15;
-    //存放所有路径点
-    private readonly List<PathSign> _pathSignList = new List<PathSign>();
-
-    //-------------------------------------------------------------
-    
     public Player(): base(ResourcePath.prefab_role_Player_tscn)
     {
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Enemy;
@@ -212,7 +203,7 @@ public class Player : Role
 
         CalcMove(delta);
     }
-
+    
     // 播放动画
     private void PlayAnim()
     {
