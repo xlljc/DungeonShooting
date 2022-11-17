@@ -41,11 +41,16 @@ public class Enemy : Role
     
     //------------------- 寻路相关 ---------------------------
 
-    
-    private PathSign _pathSign;
-    //上一帧玩家位置
-    private Vector2 _prevPlayerPos;
-    
+    /// <summary>
+    /// 移动目标标记
+    /// </summary>
+    public PathSign TargetSign { get; }
+
+    /// <summary>
+    /// 寻路标记线段总长度
+    /// </summary>
+    public float PathSignLength { get; set; } = 500;
+
     //-------------------------------------------------------
     
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
@@ -66,6 +71,8 @@ public class Enemy : Role
         StateController.Register(new AIRunState());
         //默认状态
         StateController.ChangeState(StateEnum.Idle);
+        
+        TargetSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
     }
 
     public override void _Process(float delta)
@@ -84,52 +91,39 @@ public class Enemy : Role
         var player = GameApplication.Instance.Room.Player;
         //玩家中心点坐标
         var playerPos = player.MountPoint.GlobalPosition;
-
-        //检测是否在视野内
-        var pos = GlobalPosition;
-
+        
         //玩家是否在前方
         var isForward = IsPositionInForward(playerPos);
         
         if (isForward) //脸朝向玩家
         {
-            if (pos.DistanceSquaredTo(playerPos) <= ViewRange * ViewRange) //没有超出视野半径
-            {
-                //射线检测墙体
-                ViewRay.Enabled = true;
-                var localPos = ViewRay.ToLocal(playerPos);
-                ViewRay.CastTo = localPos;
-                ViewRay.ForceRaycastUpdate();
-
-                if (ViewRay.IsColliding()) //在视野范围内, 但是碰到墙壁
-                {
-                    if (_pathSign == null) //路径标记
-                    {
-                        _pathSign = new PathSign(_prevPlayerPos, ViewRange, player);
-                    }
-                    LookTarget = null;
-                    StateController.ChangeState(StateEnum.Idle);
-                }
-                else //视野无阻
-                {
-                    if (_pathSign != null) //删除路径标记
-                    {
-                        _pathSign.Destroy();
-                        _pathSign = null;
-                    }
-                    
-                    LookTarget = player;
-                    StateController.ChangeState(StateEnum.Run);
-                }
-                
-                ViewRay.Enabled = false;
-            }
-            else //超出视野半径
-            {
-                LookTarget = null;
-                StateController.ChangeState(StateEnum.Idle);
-            }
-            _prevPlayerPos = playerPos;
+            // if (GlobalPosition.DistanceSquaredTo(playerPos) <= ViewRange * ViewRange) //没有超出视野半径
+            // {
+            //     //射线检测墙体
+            //     ViewRay.Enabled = true;
+            //     var localPos = ViewRay.ToLocal(playerPos);
+            //     ViewRay.CastTo = localPos;
+            //     ViewRay.ForceRaycastUpdate();
+            //
+            //     if (ViewRay.IsColliding()) //在视野范围内, 但是碰到墙壁
+            //     {
+            //         LookTarget = null;
+            //         StateController.ChangeState(StateEnum.Idle);
+            //     }
+            //     else //视野无阻
+            //     {
+            //         LookTarget = player;
+            //         StateController.ChangeState(StateEnum.Run);
+            //     }
+            //     
+            //     ViewRay.Enabled = false;
+            // }
+            // else //超出视野半径
+            // {
+            //     LookTarget = null;
+            //     StateController.ChangeState(StateEnum.Idle);
+            // }
+            // //_prevPlayerPos = playerPos;
         }
     }
 
@@ -137,9 +131,9 @@ public class Enemy : Role
     {
         if (GameApplication.Instance.Debug)
         {
-            if (_pathSign != null)
+            if (TargetSign != null)
             {
-                DrawLine(Vector2.Zero,ToLocal(_pathSign.GlobalPosition), Colors.Red);
+                DrawLine(Vector2.Zero,ToLocal(TargetSign.GlobalPosition), Colors.Red);
             }
         }
     }

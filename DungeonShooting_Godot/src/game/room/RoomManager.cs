@@ -61,9 +61,9 @@ public class RoomManager : Node2D
     /// <summary>
     /// 获取房间根节点
     /// </summary>
-    /// <param name="useYSort"></param>
+    /// <param name="useYSort">是否获取 YSort 节点</param>
     /// <returns></returns>
-    public Node2D GetRoot(bool useYSort)
+    public Node2D GetRoot(bool useYSort = false)
     {
         return useYSort ? SortRoot : ObjectRoot;
     }
