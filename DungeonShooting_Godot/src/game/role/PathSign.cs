@@ -58,6 +58,15 @@ public class PathSign : Node2D, IDestroy
         }
     }
 
+    /// <summary>
+    /// 目标出现过的位置
+    /// </summary>
+    public Vector2 TargetPosition
+    {
+        get => _targetPos;
+        set => _targetPos = value;
+    }
+
     //是否发现过目标
     private bool _isDiscoverTarget = false;
     //目标在视野范围内出现过的位置
@@ -133,6 +142,7 @@ public class PathSign : Node2D, IDestroy
                     var distance = Mathf.Sqrt(distanceSquared);
                     Next = new PathSign(GameApplication.Instance.Room.GetRoot(false), _targetPos, ViewRadius - distance, Target, Index + 1);
                     Next._targetPos = nowTargetPos;
+                    Next.Enable = true;
                 }
             }
             else //没有碰到墙

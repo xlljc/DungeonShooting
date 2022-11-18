@@ -4,7 +4,6 @@
 [ext_resource path="res://icon.png" type="Texture" id=2]
 [ext_resource path="res://resource/sprite/environment/craftpix-net-248911/16x16.png" type="Texture" id=3]
 
-
 [sub_resource type="NavigationPolygon" id=2]
 vertices = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
 polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
@@ -48,6 +47,7 @@ polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 0/z_index = 0
 
 [node name="TestNavigation" type="Node2D"]
+scale = Vector2( 4, 4 )
 script = ExtResource( 1 )
 
 [node name="Position2D" type="Position2D" parent="."]
