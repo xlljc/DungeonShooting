@@ -22,7 +22,7 @@ public class Enemy : Role
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
-    public StateController<Enemy> StateController { get; }
+    public StateController<Enemy, AIStateEnum> StateController { get; }
     
     /// <summary>
     /// 视野半径, 单位像素
@@ -55,7 +55,7 @@ public class Enemy : Role
     
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
-        StateController = new StateController<Enemy>();
+        StateController = new StateController<Enemy, AIStateEnum>();
         AddComponent(StateController);
         
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
@@ -67,10 +67,10 @@ public class Enemy : Role
         ViewRay = GetNode<RayCast2D>("ViewRay");
         
         //注册Ai状态机
-        StateController.Register(new AIIdleState());
-        StateController.Register(new AIRunState());
+        StateController.Register(new AINormalState());
+        StateController.Register(new AITailAfterState());
         //默认状态
-        StateController.ChangeState(StateEnum.Idle);
+        StateController.ChangeState(AIStateEnum.AINormal);
         
         TargetSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
     }
