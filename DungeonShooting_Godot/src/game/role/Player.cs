@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 public class Player : Role
@@ -202,7 +203,7 @@ public class Player : Role
 
         CalcMove(delta);
     }
-
+    
     // 播放动画
     private void PlayAnim()
     {

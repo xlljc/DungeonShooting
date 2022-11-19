@@ -142,12 +142,7 @@ public abstract class Role : ActivityObject
     /// 当前角色所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
-    
-    /// <summary>
-    /// 角色身上的状态机
-    /// </summary>
-    public StateController<Role> StateController { get; }
-    
+
     //初始缩放
     private Vector2 _startScale;
     //所有角色碰撞的道具
@@ -218,8 +213,6 @@ public abstract class Role : ActivityObject
     public Role(string scenePath) : base(scenePath)
     {
         Holster = new Holster(this);
-        StateController = new StateController<Role>();
-        AddComponent(StateController);
     }
     
     public override void _Ready()
@@ -308,6 +301,28 @@ public abstract class Role : ActivityObject
         }
     }
 
+    /// <summary>
+    /// 使角色看向指定的坐标,
+    /// 注意, 调用该函数会清空 LookTarget, 因为拥有 LookTarget 时也会每帧更新玩家视野位置
+    /// </summary>
+    /// <param name="pos"></param>
+    public void LookTargetPosition(Vector2 pos)
+    {
+        LookTarget = null;
+        //脸的朝向
+        var gPos = GlobalPosition;
+        if (pos.x > gPos.x && Face == FaceDirection.Left)
+        {
+            Face = FaceDirection.Right;
+        }
+        else if (pos.x < gPos.x && Face == FaceDirection.Right)
+        {
+            Face = FaceDirection.Left;
+        }
+        //枪口跟随目标
+        MountPoint.SetLookAt(pos);
+    }
+    
     /// <summary>
     /// 判断指定坐标是否在角色视野方向
     /// </summary>
@@ -419,7 +434,7 @@ public abstract class Role : ActivityObject
     /// 受到伤害
     /// </summary>
     /// <param name="damage">伤害的量</param>
-    public virtual void Hit(int damage)
+    public virtual void Hurt(int damage)
     {
         Hp -= damage;
         AnimationPlayer.Stop();

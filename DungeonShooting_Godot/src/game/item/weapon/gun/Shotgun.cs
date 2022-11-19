@@ -88,7 +88,7 @@ public class Shotgun : Weapon
                 Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
                 FirePoint.GlobalPosition,
                 fireRotation + Utils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
-                Master != null ? Master.AttackLayer : Role.DefaultAttackLayer
+                GetAttackLayer()
             );
             bullet.PutDown();
         }

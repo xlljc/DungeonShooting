@@ -1,36 +1,27 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://resource/materlal/Blend.tres" type="Material" id=1]
-[ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=2]
+[ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=1]
 [ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=3]
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="ShaderMaterial" id=7]
 resource_local_to_scene = true
-shader = ExtResource( 2 )
-shader_param/shadowColor = Color( 1, 1, 1, 1 )
+shader = ExtResource( 1 )
+shader_param/blend = Color( 0, 0, 0, 0.470588 )
+shader_param/schedule = 1
+
+[sub_resource type="ShaderMaterial" id=8]
+resource_local_to_scene = true
+shader = ExtResource( 1 )
+shader_param/blend = Color( 1, 1, 1, 1 )
 shader_param/schedule = 0.0
 
-[sub_resource type="Animation" id=3]
-resource_name = "Floodlight"
-length = 3.0
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("../AnimatedSprite:material:shader_param/schedule")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 2.3, 2.6, 2.7, 3 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
-"update": 0,
-"values": [ 0.0, 0.0, 0.5, 0.4, 0.0 ]
-}
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 7.8, 3.5 )
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=9]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("../AnimatedSprite:material:shader_param/schedule")
+tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -41,28 +32,67 @@ tracks/0/keys = {
 "update": 0,
 "values": [ 0.0 ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimatedSprite:material:shader_param/blend")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 7.8, 3.5 )
+[sub_resource type="Animation" id=11]
+resource_name = "floodlight"
+length = 3.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2.3, 2.6, 2.7, 3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0, 0.5, 0.5, 0.0 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "hit"
+length = 0.15
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.15 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0, 0.0 ]
+}
 
 [node name="Weapon" type="Node"]
 script = ExtResource( 3 )
 
 [node name="ShadowSprite" type="Sprite" parent="."]
-material = ExtResource( 1 )
+material = SubResource( 7 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-material = SubResource( 5 )
+material = SubResource( 8 )
 position = Vector2( 0.4, -2.6 )
 scale = Vector2( 0.8, 0.8 )
 
 [node name="WeaponBody" type="Area2D" parent="."]
 collision_layer = 4
 collision_mask = 0
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="WeaponBody"]
-anims/Floodlight = SubResource( 3 )
-anims/RESET = SubResource( 4 )
 
 [node name="OriginPoint" type="Position2D" parent="WeaponBody"]
 position = Vector2( -3.60001, -1.1 )
@@ -78,3 +108,8 @@ position = Vector2( 0.59999, 0.199997 )
 shape = SubResource( 1 )
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 9 )
+anims/floodlight = SubResource( 11 )
+anims/hit = SubResource( 10 )

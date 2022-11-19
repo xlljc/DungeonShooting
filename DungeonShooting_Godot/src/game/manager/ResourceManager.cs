@@ -45,8 +45,21 @@ public static class ResourceManager
     /// 加载资源对象, 并且缓存当前资源对象, 可频繁获取
     /// </summary>
     /// <param name="path">资源路径</param>
-    public static T Load<T>(string path) where T : class
+    /// <param name="useCache">是否使用缓存中的资源</param>
+    public static T Load<T>(string path, bool useCache = true) where T : class
     {
+        if (!useCache)
+        {
+            T res = ResourceLoader.Load<T>(path, null, true);
+            if (res == null)
+            {
+                GD.PrintErr("加载资源失败, 未找到资源: " + path);
+                return default;
+            }
+
+            return res;
+        }
+
         if (CachePack.TryGetValue(path, out var pack))
         {
             return pack as T;

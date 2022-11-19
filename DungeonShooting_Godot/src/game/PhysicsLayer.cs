@@ -23,4 +23,8 @@ public class PhysicsLayer
     /// 敌人
     /// </summary>
     public const uint Enemy = 16;
+    /// <summary>
+    /// 视野遮挡
+    /// </summary>
+    public const uint View = 32;
 }

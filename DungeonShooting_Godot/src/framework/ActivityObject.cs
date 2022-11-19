@@ -35,6 +35,12 @@ public abstract class ActivityObject : KinematicBody2D
     public CollisionShape2D Collision { get; }
 
     /// <summary>
+    /// 动画播放器
+    /// </summary>
+    /// <value></value>
+    public AnimationPlayer AnimationPlayer { get; }
+    
+    /// <summary>
     /// 是否调用过 Destroy() 函数
     /// </summary>
     public bool IsDestroyed { get; private set; }
@@ -72,6 +78,7 @@ public abstract class ActivityObject : KinematicBody2D
         CollisionLayer = tempNode.CollisionLayer;
         CollisionMask = tempNode.CollisionMask;
         UseYSort = tempNode.UseYSort;
+        Scale = tempNode.Scale;
 
         //移动子节点
         var count = tempNode.GetChildCount();
@@ -92,6 +99,9 @@ public abstract class ActivityObject : KinematicBody2D
                     break;
                 case "Collision":
                     Collision = (CollisionShape2D)body;
+                    break;
+                case "AnimationPlayer":
+                    AnimationPlayer = (AnimationPlayer)body;
                     break;
             }
         }

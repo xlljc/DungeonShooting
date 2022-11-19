@@ -22,12 +22,6 @@ public abstract class Weapon : ActivityObject
     public WeaponAttribute Attribute { get; private set; }
 
     /// <summary>
-    /// 动画播放器
-    /// </summary>
-    /// <value></value>
-    public AnimationPlayer AnimationPlayer { get; private set; }
-
-    /// <summary>
     /// 武器攻击的目标阵营
     /// </summary>
     public CampEnum TargetCamp { get; set; }
@@ -117,9 +111,7 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public bool IsActive => Master != null && Master.Holster.ActiveWeapon == this;
 
-    
-    
-    
+
     //--------------------------------------------------------------------------------------------
     
     //是否按下
@@ -180,7 +172,6 @@ public abstract class Weapon : ActivityObject
         FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
         OriginPoint = GetNode<Position2D>("WeaponBody/OriginPoint");
         ShellPoint = GetNode<Position2D>("WeaponBody/ShellPoint");
-        AnimationPlayer = GetNode<AnimationPlayer>("WeaponBody/AnimationPlayer");
         CollisionShape2D = GetNode<CollisionShape2D>("WeaponBody/Collision");
 
         //更新图片
@@ -629,6 +620,15 @@ public abstract class Weapon : ActivityObject
     }
 
     /// <summary>
+    /// 获取武器攻击的目标层级
+    /// </summary>
+    /// <returns></returns>
+    public uint GetAttackLayer()
+    {
+        return Master != null ? Master.AttackLayer : Role.DefaultAttackLayer;
+    }
+    
+    /// <summary>
     /// 返回弹药是否到达上限
     /// </summary>
     public bool IsFullAmmo()
@@ -884,13 +884,13 @@ public abstract class Weapon : ActivityObject
     {
         //启用碰撞
         CollisionShape2D.Disabled = false;
-        AnimationPlayer.Play("Floodlight");
+        AnimationPlayer.Play("floodlight");
     }
 
     public override void PutDown()
     {
         base.PutDown();
-        AnimationPlayer.Play("Floodlight");
+        AnimationPlayer.Play("floodlight");
     }
 
     /// <summary>

@@ -51,12 +51,11 @@ public class MountRotation : Position2D
         {
             angle = -angle;
         }
-
         GlobalRotationDegrees = AdsorptionAngle(angle);
     }
 
     private float AdsorptionAngle(float angle)
     {
-        return ((int)angle / _adsorption) * _adsorption;
+        return Mathf.Round(angle / _adsorption) * _adsorption;
     }
 }

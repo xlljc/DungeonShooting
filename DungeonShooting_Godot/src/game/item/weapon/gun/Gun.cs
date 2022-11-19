@@ -120,7 +120,7 @@ public class Gun : Weapon
             Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,
             fireRotation,
-            Master != null ? Master.AttackLayer : Role.DefaultAttackLayer
+            GetAttackLayer()
         );
         bullet.PutDown();
     }
