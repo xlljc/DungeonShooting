@@ -88,8 +88,10 @@ public class Enemy : Role
 
     public void OnObjectEnter(RID id, Node node, int shapeIndex, int localShapeIndex)
     {
+        GD.Print($"id: {id}, node: {node}, shapeIndex: {shapeIndex}, localShapeIndex: {localShapeIndex}.");
         if (node is TileMap tileMap)
         {
+            //tileMap.TileSet.id
             // var tileGetShape = tileMap.TileSet.TileGetShapeTransform(shapeIndex, localShapeIndex).;
             // GD.Print("enter: ", tileGetShape.GetType().FullName);
         }

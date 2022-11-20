@@ -177,6 +177,19 @@ public class PathSign : Node2D, IDestroy
         RayCast.ForceRaycastUpdate();
 
         var flag = RayCast.IsColliding();
+        // if (flag)
+        // {
+        //     var collider = RayCast.GetCollider();
+        //     if (collider is TileMap tileMap)
+        //     {
+        //         var tilesIds = tileMap.TileSet.GetTilesIds();
+        //         var collPos = RayCast.GetCollisionPoint();
+        //         // tileMap.TileSet.TileGetShape()
+        //         // var colliderShape = RayCast.GetColliderShape();
+        //         //GD.Print(fullName + ", " + colliderShape);
+        //     }
+        //     
+        // }
         RayCast.Enabled = false;
         return flag;
     }
