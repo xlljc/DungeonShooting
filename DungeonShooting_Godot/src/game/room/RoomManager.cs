@@ -3,12 +3,11 @@ using Godot;
 /// <summary>
 /// 房间管理器
 /// </summary>
-public class RoomManager : Node2D
+public class RoomManager : Navigation2D
 {
     public Role Player { get; private set; }
     private Node2D ObjectRoot;
     private YSort SortRoot;
-
 
     private Enemy _enemy;
 

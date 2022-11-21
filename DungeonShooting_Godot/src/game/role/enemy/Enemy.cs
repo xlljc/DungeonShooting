@@ -54,6 +54,7 @@ public class Enemy : Role
     //-------------------------------------------------------
 
     private Area2D _marginArea;
+    private NavigationAgent2D _navigationAgent2D;
     
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
@@ -68,6 +69,8 @@ public class Enemy : Role
         //视野射线
         ViewRay = GetNode<RayCast2D>("ViewRay");
         _marginArea = GetNode<Area2D>("MarginArea");
+
+        _navigationAgent2D = GetNode<NavigationAgent2D>("NavigationAgent2D");
         
         PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
         
@@ -84,6 +87,7 @@ public class Enemy : Role
         StateController.ChangeState(AIStateEnum.AINormal);
         
         _marginArea.Connect("body_shape_entered", this, nameof(OnObjectEnter));
+        _navigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
     }
 
     public void OnObjectEnter(RID id, Node node, int shapeIndex, int localShapeIndex)
@@ -110,44 +114,18 @@ public class Enemy : Role
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
+
+        if (_navigationAgent2D.IsNavigationFinished())
+        {
+            return;
+        }
         
-        // var player = GameApplication.Instance.Room.Player;
-        // //玩家中心点坐标
-        // var playerPos = player.MountPoint.GlobalPosition;
-        //
-        // //玩家是否在前方
-        // var isForward = IsPositionInForward(playerPos);
-        //
-        // if (isForward) //脸朝向玩家
-        // {
-        //     // if (GlobalPosition.DistanceSquaredTo(playerPos) <= ViewRange * ViewRange) //没有超出视野半径
-        //     // {
-        //     //     //射线检测墙体
-        //     //     ViewRay.Enabled = true;
-        //     //     var localPos = ViewRay.ToLocal(playerPos);
-        //     //     ViewRay.CastTo = localPos;
-        //     //     ViewRay.ForceRaycastUpdate();
-        //     //
-        //     //     if (ViewRay.IsColliding()) //在视野范围内, 但是碰到墙壁
-        //     //     {
-        //     //         LookTarget = null;
-        //     //         StateController.ChangeState(StateEnum.Idle);
-        //     //     }
-        //     //     else //视野无阻
-        //     //     {
-        //     //         LookTarget = player;
-        //     //         StateController.ChangeState(StateEnum.Run);
-        //     //     }
-        //     //     
-        //     //     ViewRay.Enabled = false;
-        //     // }
-        //     // else //超出视野半径
-        //     // {
-        //     //     LookTarget = null;
-        //     //     StateController.ChangeState(StateEnum.Idle);
-        //     // }
-        //     // //_prevPlayerPos = playerPos;
-        // }
+        _navigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
+        var nextPos = _navigationAgent2D.GetNextLocation();
+        LookTargetPosition(nextPos);
+        AnimatedSprite.Animation = AnimatorNames.Run;
+        Velocity = (nextPos - GlobalPosition).Normalized() * MoveSpeed;
+        CalcMove(delta);
     }
 
     public override void _Draw()

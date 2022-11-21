@@ -14,6 +14,7 @@ public class AITailAfterState : IState<Enemy, AIStateEnum>
 
     public void PhysicsProcess(float delta)
     {
+        return;
         var master = Master;
         var targetSign = master.PathSign;
         var enemyPos = master.GlobalPosition;

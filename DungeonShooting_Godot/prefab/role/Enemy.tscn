@@ -26,6 +26,7 @@ material = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource( 2 )
+frame = 0
 
 [node name="ViewRay" type="RayCast2D" parent="." index="6"]
 position = Vector2( 0, -8 )
@@ -36,3 +37,5 @@ collision_layer = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MarginArea" index="0"]
 position = Vector2( 0, -8 )
 shape = SubResource( 3 )
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." index="9"]
