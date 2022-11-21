@@ -52,9 +52,9 @@ public class Enemy : Role
     public float PathSignLength { get; set; } = 500;
 
     //-------------------------------------------------------
-
-    private Area2D _marginArea;
+    
     private NavigationAgent2D _navigationAgent2D;
+    private float _navigationUpdateTimer = 0;
     
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
@@ -68,8 +68,6 @@ public class Enemy : Role
         
         //视野射线
         ViewRay = GetNode<RayCast2D>("ViewRay");
-        _marginArea = GetNode<Area2D>("MarginArea");
-
         _navigationAgent2D = GetNode<NavigationAgent2D>("NavigationAgent2D");
         
         PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
@@ -86,19 +84,7 @@ public class Enemy : Role
         //默认状态
         StateController.ChangeState(AIStateEnum.AINormal);
         
-        _marginArea.Connect("body_shape_entered", this, nameof(OnObjectEnter));
         _navigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
-    }
-
-    public void OnObjectEnter(RID id, Node node, int shapeIndex, int localShapeIndex)
-    {
-        GD.Print($"id: {id}, node: {node}, shapeIndex: {shapeIndex}, localShapeIndex: {localShapeIndex}.");
-        if (node is TileMap tileMap)
-        {
-            //tileMap.TileSet.id
-            // var tileGetShape = tileMap.TileSet.TileGetShapeTransform(shapeIndex, localShapeIndex).;
-            // GD.Print("enter: ", tileGetShape.GetType().FullName);
-        }
     }
     
     public override void _Process(float delta)
@@ -119,10 +105,23 @@ public class Enemy : Role
         {
             return;
         }
+        var playerGlobalPosition = GameApplication.Instance.Room.Player.GlobalPosition;
+        //临时处理, 让敌人跟随玩家
+        if (_navigationUpdateTimer <= 0)
+        {
+            _navigationUpdateTimer = 0.2f;
+            if (_navigationAgent2D.GetTargetLocation() != playerGlobalPosition)
+            {
+                _navigationAgent2D.SetTargetLocation(playerGlobalPosition);
+            }
+        }
+        else
+        {
+            _navigationUpdateTimer -= delta;
+        }
         
-        _navigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
         var nextPos = _navigationAgent2D.GetNextLocation();
-        LookTargetPosition(nextPos);
+        LookTargetPosition(playerGlobalPosition);
         AnimatedSprite.Animation = AnimatorNames.Run;
         Velocity = (nextPos - GlobalPosition).Normalized() * MoveSpeed;
         CalcMove(delta);

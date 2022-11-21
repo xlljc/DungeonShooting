@@ -41,7 +41,7 @@ public class TestNavigation2 : Node2D
 		if (points != null && points.Length >= 2)
 		{
 			DrawPolyline(points, Colors.Red);
-			DrawMultiline(points, Colors.Red);
+			//DrawMultiline(points, Colors.Red);
 		}
 	}
 
