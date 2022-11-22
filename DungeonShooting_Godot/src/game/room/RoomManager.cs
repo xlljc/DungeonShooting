@@ -61,7 +61,9 @@ public class RoomManager : Navigation2D
 
     public override void _Ready()
     {
+        var nowTicks = DateTime.Now.Ticks;
         GenerateNavigationPolygon();
+        GD.Print("useTime: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
