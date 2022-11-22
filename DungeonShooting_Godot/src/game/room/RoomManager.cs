@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Godot;
 
 /// <summary>
@@ -22,8 +24,14 @@ public class RoomManager : Navigation2D
     private NavigationPolygonInstance _navigationPolygon;
     private Enemy _enemy;
 
+    //可行走区域的tileId
     private List<int> _wayIds = new List<int>(new[] { 129 });
-    private List<Vector2> _points = new List<Vector2>();
+
+    //已经标记过的点
+    private HashSet<Vector2> _usePoints = new HashSet<Vector2>();
+
+    //导航区域数据
+    private List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
 
     public override void _EnterTree()
     {
@@ -83,9 +91,13 @@ public class RoomManager : Navigation2D
     {
         if (GameApplication.Instance.Debug)
         {
-            if (_points != null && _points.Count >= 2)
+            for (var i = 0; i < _polygonDataList.Count; i++)
             {
-                DrawPolyline(_points.ToArray(), Colors.Red);
+                var item = _polygonDataList[i];
+                if (item.Points.Count >= 2)
+                {
+                    DrawPolyline(item.Points.ToArray(), Colors.Red);
+                }
             }
         }
     }
@@ -105,7 +117,6 @@ public class RoomManager : Navigation2D
     /// </summary>
     private void GenerateNavigationPolygon()
     {
-        //129
         var tileMap = _mapRoot.GetChild(0).GetNode<TileMap>("Wall");
         var size = tileMap.CellSize;
 
@@ -116,147 +127,519 @@ public class RoomManager : Navigation2D
         var w = (int)rect.Size.x;
         var h = (int)rect.Size.y;
 
-        for (int i = x; i < w; i++)
+        for (int j = y; j < h; j++)
         {
-            for (int j = y; j < h; j++)
+            for (int i = x; i < w; i++)
             {
                 var tileId = tileMap.GetCell(i, j);
-                if (tileId != -1 && _wayIds.Contains(tileId))
+                if (IsWayCell(tileId))
                 {
-                    //---------------------------------------
-
-                    // 0:右, 1:下, 2:左, 3:上
-                    var dir = 0;
-                    _points.Clear();
-                    //找到路, 向右开始找边界
-                    var startPos = new Vector2(i * size.x + size.x * 0.5f, j * size.y + size.y * 0.5f);
-                    _points.Add(startPos);
-
-                    var tempI = i;
-                    var tempJ = j;
-
-                    while (true)
+                    if (!_usePoints.Contains(new Vector2(i, j)))
                     {
-                        switch (dir)
+                        NavigationPolygonData polygonData = null;
+
+                        if (!IsWayCell(tileMap.GetCell(i, j - 1)))
                         {
-                            case 0: //右
-                            {
-                                if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //先向上找
-                                {
-                                    dir = 3;
-                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
-                                        tempJ * size.y + size.y * 0.5f);
-                                    _points.Add(pos);
-                                    if (pos == startPos) goto a;
-                                    tempJ--;
-                                }
-                                else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //再向右找
-                                {
-                                    tempI++;
-                                }
-                                else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //向下找
-                                {
-                                    dir = 1;
-                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
-                                        tempJ * size.y + size.y * 0.5f);
-                                    _points.Add(pos);
-                                    if (pos == startPos) goto a;
+                            polygonData = CalcOutline(i, j, tileMap, size);
+                        }
+                        else if (!IsWayCell(tileMap.GetCell(i, j + 1)))
+                        {
+                            polygonData = CalcInline(i, j, tileMap, size);
+                        }
 
-                                    tempJ++;
-                                }
-                            }
-                                break;
-                            case 1: //下
-                            {
-                                if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //先向右找
-                                {
-                                    dir = 0;
-                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
-                                        tempJ * size.y + size.y * 0.5f);
-                                    _points.Add(pos);
-                                    if (pos == startPos) goto a;
-
-                                    tempI++;
-                                }
-                                else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //再向下找
-                                {
-                                    tempJ++;
-                                }
-                                else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //向左找
-                                {
-                                    dir = 2;
-                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
-                                        tempJ * size.y + size.y * 0.5f);
-                                    _points.Add(pos);
-                                    if (pos == startPos) goto a;
-
-                                    tempI--;
-                                }
-                            }
-                                break;
-                            case 2: //左
-                            {
-                                if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //先向下找
-                                {
-                                    dir = 1;
-                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
-                                        tempJ * size.y + size.y * 0.5f);
-                                    _points.Add(pos);
-                                    if (pos == startPos) goto a;
-
-                                    tempJ++;
-                                }
-                                else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //再向左找
-                                {
-                                    tempI--;
-                                }
-                                else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //向上找
-                                {
-                                    dir = 3;
-                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
-                                        tempJ * size.y + size.y * 0.5f);
-                                    _points.Add(pos);
-                                    if (pos == startPos) goto a;
-
-                                    tempJ--;
-                                }
-                            }
-                                break;
-                            case 3: //上
-                            {
-                                if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //先向左找
-                                {
-                                    dir = 2;
-                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
-                                        tempJ * size.y + size.y * 0.5f);
-                                    _points.Add(pos);
-                                    if (pos == startPos) goto a;
-
-                                    tempI--;
-                                }
-                                else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //再向上找
-                                {
-                                    tempJ--;
-                                }
-                                else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //向右找
-                                {
-                                    dir = 0;
-                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
-                                        tempJ * size.y + size.y * 0.5f);
-                                    _points.Add(pos);
-                                    if (pos == startPos) goto a;
-
-                                    tempI++;
-                                }
-                            }
-                                break;
+                        if (polygonData != null)
+                        {
+                            _polygonDataList.Add(polygonData);
+                            //return;
                         }
                     }
-                    //---------------------------------------
                 }
             }
         }
-        a: ;
+    }
+
+    private NavigationPolygonData CalcOutline(int i, int j, TileMap tileMap, Vector2 size)
+    {
+        var polygonData = new NavigationPolygonData();
+        var points = polygonData.Points;
+        // 0:右, 1:下, 2:左, 3:上
+        var dir = 0;
+        var offset = new Vector2(size.x * 0.5f, size.y * 0.5f);
+        //找到路, 向右开始找边界
+        var startPos = new Vector2(i, j);
+
+        var tempI = i;
+        var tempJ = j;
+
+        while (true)
+        {
+            switch (dir)
+            {
+                case 0: //右
+                {
+                    if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //先向上找
+                    {
+                        dir = 3;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempJ--;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //再向右找
+                    {
+                        if (points.Count == 0)
+                        {
+                            points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        }
+
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(new Vector2(tempI, tempJ));
+                        tempI++;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //向下找
+                    {
+                        dir = 1;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempJ++;
+                        break;
+                    }
+
+                    return null;
+                }
+                case 1: //下
+                {
+                    if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //先向右找
+                    {
+                        dir = 0;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempI++;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //再向下找
+                    {
+                        if (points.Count == 0)
+                        {
+                            points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        }
+
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(new Vector2(tempI, tempJ));
+                        tempJ++;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //向左找
+                    {
+                        dir = 2;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempI--;
+                        break;
+                    }
+
+                    return null;
+                }
+                case 2: //左
+                {
+                    if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //先向下找
+                    {
+                        dir = 1;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempJ++;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //再向左找
+                    {
+                        if (points.Count == 0)
+                        {
+                            points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        }
+
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(new Vector2(tempI, tempJ));
+                        tempI--;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //向上找
+                    {
+                        dir = 3;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempJ--;
+                        break;
+                    }
+
+                    return null;
+                }
+                case 3: //上
+                {
+                    if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //先向左找
+                    {
+                        dir = 2;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempI--;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //再向上找
+                    {
+                        if (points.Count == 0)
+                        {
+                            points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        }
+
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(new Vector2(tempI, tempJ));
+                        tempJ--;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //向右找
+                    {
+                        dir = 0;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempI++;
+                        break;
+                    }
+
+                    return null;
+                }
+            }
+        }
+    }
+
+    private NavigationPolygonData CalcInline(int i, int j, TileMap tileMap, Vector2 size)
+    {
+        var polygonData = new NavigationPolygonData();
+        var points = polygonData.Points;
+        // 0:右, 1:下, 2:左, 3:上
+        var dir = 0;
+        var offset = new Vector2(size.x * 0.5f, size.y * 0.5f);
+        //找到路, 向右开始找边界
+        var startPos = new Vector2(i, j);
+
+        var tempI = i;
+        var tempJ = j;
+
+        while (true)
+        {
+            switch (dir)
+            {
+                case 0: //右
+                {
+                    if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //向下找
+                    {
+                        dir = 1;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempJ++;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //再向右找
+                    {
+                        if (points.Count == 0)
+                        {
+                            points.Add(new Vector2((tempI - 1) * size.x, tempJ * size.y) + offset);
+                        }
+
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(new Vector2(tempI, tempJ));
+                        tempI++;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //先向上找
+                    {
+                        dir = 3;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempJ--;
+                        break;
+                    }
+
+                    return null;
+                }
+                case 1: //下
+                {
+                    if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //向左找
+                    {
+                        dir = 2;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempI--;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //再向下找
+                    {
+                        if (points.Count == 0)
+                        {
+                            points.Add(new Vector2((tempI - 1) * size.x, tempJ * size.y) + offset);
+                        }
+
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(new Vector2(tempI, tempJ));
+                        tempJ++;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //先向右找
+                    {
+                        dir = 0;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempI++;
+                        break;
+                    }
+
+                    return null;
+                }
+                case 2: //左
+                {
+                    if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //向上找
+                    {
+                        dir = 3;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempJ--;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //再向左找
+                    {
+                        if (points.Count == 0)
+                        {
+                            points.Add(new Vector2((tempI - 1) * size.x, tempJ * size.y) + offset);
+                        }
+
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(new Vector2(tempI, tempJ));
+                        tempI--;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //先向下找
+                    {
+                        dir = 1;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempJ++;
+                        break;
+                    }
+
+                    return null;
+                }
+                case 3: //上
+                {
+                    if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //向右找
+                    {
+                        dir = 0;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempI++;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //再向上找
+                    {
+                        if (points.Count == 0)
+                        {
+                            points.Add(new Vector2((tempI - 1) * size.x, tempJ * size.y) + offset);
+                        }
+
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(new Vector2(tempI, tempJ));
+                        tempJ--;
+                        break;
+                    }
+                    else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //先向左找
+                    {
+                        dir = 2;
+
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        var pos = new Vector2(tempI, tempJ);
+                        if (points.Count > 1 && pos == startPos)
+                        {
+                            return polygonData;
+                        }
+
+                        PutUsePoint(pos);
+
+                        tempI--;
+                        break;
+                    }
+
+                    return null;
+                }
+            }
+        }
+    }
+
+    private void PutUsePoint(Vector2 pos)
+    {
+        if (_usePoints.Contains(pos))
+        {
+            throw new Exception("生成导航多边形发生错误! 点: " + pos + "发生交错!");
+        }
+
+        _usePoints.Add(pos);
     }
 
     private bool IsWayCell(int cellId)
