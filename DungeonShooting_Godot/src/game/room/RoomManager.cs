@@ -129,120 +129,137 @@ public class RoomManager : Navigation2D
                     var dir = 0;
                     _points.Clear();
                     //找到路, 向右开始找边界
-                    _points.Add(new Vector2(i * size.x + size.x * 0.5f, j * size.y + size.y * 0.5f));
+                    var startPos = new Vector2(i * size.x + size.x * 0.5f, j * size.y + size.y * 0.5f);
+                    _points.Add(startPos);
 
                     var tempI = i;
                     var tempJ = j;
 
-                    var prevI = i;
-                    var prevJ = j;
-
-                    var len = 1;
-                    
                     while (true)
                     {
                         switch (dir)
                         {
-                            case 0:
-                                tempI++;
-                                break;
-                            case 1:
-                                tempJ++;
-                                break;
-                            case 2:
-                                tempI--;
-                                break;
-                            case 3:
-                                tempJ--;
-                                break;
-                        }
-
-                        bool flag = true;
-                        int nextCellId = -1;
-
-                        switch (dir)
-                        {
                             case 0: //右
                             {
-                                //向右找
-                                nextCellId = tileMap.GetCell(tempI, tempJ);
-                                flag = isWayCell(nextCellId);
-                                if (!flag)
+                                if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //先向上找
                                 {
-                                    if (isWayCell(tileMap.GetCell(tempI, tempJ - 1))) //向上找
-                                    {
-                                        dir = 3 - 1;
-                                    }
+                                    dir = 3;
+                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
+                                        tempJ * size.y + size.y * 0.5f);
+                                    _points.Add(pos);
+                                    if (pos == startPos) goto a;
+                                    tempJ--;
+                                }
+                                else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //再向右找
+                                {
+                                    tempI++;
+                                }
+                                else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //向下找
+                                {
+                                    dir = 1;
+                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
+                                        tempJ * size.y + size.y * 0.5f);
+                                    _points.Add(pos);
+                                    if (pos == startPos) goto a;
+
+                                    tempJ++;
                                 }
                             }
                                 break;
                             case 1: //下
                             {
-                                nextCellId = tileMap.GetCell(tempI, tempJ);
-                                flag = isWayCell(nextCellId);
+                                if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //先向右找
+                                {
+                                    dir = 0;
+                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
+                                        tempJ * size.y + size.y * 0.5f);
+                                    _points.Add(pos);
+                                    if (pos == startPos) goto a;
+
+                                    tempI++;
+                                }
+                                else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //再向下找
+                                {
+                                    tempJ++;
+                                }
+                                else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //向左找
+                                {
+                                    dir = 2;
+                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
+                                        tempJ * size.y + size.y * 0.5f);
+                                    _points.Add(pos);
+                                    if (pos == startPos) goto a;
+
+                                    tempI--;
+                                }
                             }
                                 break;
                             case 2: //左
                             {
-                                // nextCellId = tileMap.GetCell(tempI, tempJ + 1);//向下找
-                                // flag = isWayCell(nextCellId);
-                                // if (flag)
-                                // {
-                                //     dir = 1 - 1;
-                                // }
-                                // else
-                                // {
-                                    nextCellId = tileMap.GetCell(tempI, tempJ); //向左找
-                                    flag = isWayCell(nextCellId); 
-                                //}
+                                if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //先向下找
+                                {
+                                    dir = 1;
+                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
+                                        tempJ * size.y + size.y * 0.5f);
+                                    _points.Add(pos);
+                                    if (pos == startPos) goto a;
+
+                                    tempJ++;
+                                }
+                                else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //再向左找
+                                {
+                                    tempI--;
+                                }
+                                else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //向上找
+                                {
+                                    dir = 3;
+                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
+                                        tempJ * size.y + size.y * 0.5f);
+                                    _points.Add(pos);
+                                    if (pos == startPos) goto a;
+
+                                    tempJ--;
+                                }
                             }
                                 break;
                             case 3: //上
                             {
-                                nextCellId = tileMap.GetCell(tempI, tempJ);
-                                flag = isWayCell(nextCellId);
+                                if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //先向左找
+                                {
+                                    dir = 2;
+                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
+                                        tempJ * size.y + size.y * 0.5f);
+                                    _points.Add(pos);
+                                    if (pos == startPos) goto a;
+
+                                    tempI--;
+                                }
+                                else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //再向上找
+                                {
+                                    tempJ--;
+                                }
+                                else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //向右找
+                                {
+                                    dir = 0;
+                                    var pos = new Vector2(tempI * size.x + size.x * 0.5f,
+                                        tempJ * size.y + size.y * 0.5f);
+                                    _points.Add(pos);
+                                    if (pos == startPos) goto a;
+
+                                    tempI++;
+                                }
                             }
                                 break;
                         }
-                        
-                        if (!flag) //下一个不是可行走区域
-                        {
-
-                            if (len <= 1)
-                            {
-                                //有问题, 不支持单格道路!
-                                GD.PrintErr("不支持单格道路: " + tempI + ", " + tempJ);
-                            }
-                            
-                            tempI = prevI;
-                            tempJ = prevJ;
-                            //转向
-                            dir++;
-                            //记录当前点
-                            _points.Add(new Vector2(tempI * size.x + size.x * 0.5f, tempJ * size.y + size.y * 0.5f));
-                            if (dir == 4)
-                            {
-                                goto a;
-                            }
-                        }
-                        else
-                        {
-                            len++;
-                        }
-
-                        prevI = tempI;
-                        prevJ = tempJ;
                     }
                     //---------------------------------------
                 }
             }
         }
-
         a: ;
-
     }
 
-    private bool isWayCell(int cellId)
+    private bool IsWayCell(int cellId)
     {
         return cellId != -1 && _wayIds.Contains(cellId);
     }
