@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/test/TestNavigationPolygon.cs" type="Script" id=1]
+
+[sub_resource type="NavigationPolygon" id=1]
+vertices = PoolVector2Array( 188, 156, 308, 236, 4, 236, 92, 156, 4, 4, 92, 84, 308, 4, 188, 84 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ), PoolIntArray( 3, 2, 4, 5 ), PoolIntArray( 5, 4, 6, 7 ), PoolIntArray( 7, 6, 1, 0 ) ]
+outlines = [ PoolVector2Array( 4, 4, 308, 4, 308, 236, 4, 236 ), PoolVector2Array( 92, 84, 92, 156, 188, 156, 188, 84 ) ]
+
+[node name="TestNavigationPolygon" type="Navigation2D"]
+position = Vector2( 100, 100 )
+script = ExtResource( 1 )
+
+[node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="."]
+navpoly = SubResource( 1 )

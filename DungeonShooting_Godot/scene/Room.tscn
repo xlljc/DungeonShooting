@@ -17,7 +17,9 @@ glow_enabled = true
 script = ExtResource( 3 )
 
 [node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="."]
+visible = false
 navpoly = SubResource( 2 )
+enabled = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )

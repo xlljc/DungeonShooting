@@ -52,7 +52,8 @@ public class Enemy : Role
     public float PathSignLength { get; set; } = 500;
 
     //-------------------------------------------------------
-    
+
+    private Node2D _navigationPoint;
     private NavigationAgent2D _navigationAgent2D;
     private float _navigationUpdateTimer = 0;
     
@@ -68,7 +69,8 @@ public class Enemy : Role
         
         //视野射线
         ViewRay = GetNode<RayCast2D>("ViewRay");
-        _navigationAgent2D = GetNode<NavigationAgent2D>("NavigationAgent2D");
+        _navigationPoint = GetNode<Node2D>("NavigationPoint");
+        _navigationAgent2D = _navigationPoint.GetNode<NavigationAgent2D>("NavigationAgent2D");
         
         PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
         
@@ -123,7 +125,7 @@ public class Enemy : Role
         var nextPos = _navigationAgent2D.GetNextLocation();
         LookTargetPosition(playerGlobalPosition);
         AnimatedSprite.Animation = AnimatorNames.Run;
-        Velocity = (nextPos - GlobalPosition).Normalized() * MoveSpeed;
+        Velocity = (nextPos - GlobalPosition - _navigationPoint.Position).Normalized() * MoveSpeed;
         CalcMove(delta);
     }
 

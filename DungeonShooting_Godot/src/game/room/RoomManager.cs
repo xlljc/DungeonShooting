@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -39,8 +40,10 @@ public class RoomManager : Navigation2D
 
         _sortRoot = GetNode<YSort>("SortRoot");
         _objectRoot = GetNode<Node2D>("ObjectRoot");
-
-        _navigationPolygon = GetNode<NavigationPolygonInstance>("NavigationPolygonInstance");
+        
+        //_navigationPolygon = GetNode<NavigationPolygonInstance>("NavigationPolygonInstance");
+        _navigationPolygon = new NavigationPolygonInstance();
+        AddChild(_navigationPolygon);
 
         //初始化地图
         _mapRoot = GetNode<Node2D>("MapRoot");
@@ -63,7 +66,15 @@ public class RoomManager : Navigation2D
     {
         var nowTicks = DateTime.Now.Ticks;
         GenerateNavigationPolygon();
-        GD.Print("useTime: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
+        GD.Print("计算NavigationPolygon用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
+        
+        var polygon = new NavigationPolygon();
+        foreach (var polygonData in _polygonDataList)
+        {
+            polygon.AddOutline(polygonData.Points.ToArray());
+        }
+        polygon.MakePolygonsFromOutlines();
+        _navigationPolygon.Navpoly = polygon;
 
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
@@ -98,7 +109,7 @@ public class RoomManager : Navigation2D
                 var item = _polygonDataList[i];
                 if (item.Points.Count >= 2)
                 {
-                    DrawPolyline(item.Points.ToArray(), Colors.Red);
+                    DrawPolyline(item.Points.Concat(new []{ item.Points[0] }).ToArray(), Colors.Red);
                 }
             }
         }
@@ -152,7 +163,6 @@ public class RoomManager : Navigation2D
                         if (polygonData != null)
                         {
                             _polygonDataList.Add(polygonData);
-                            //return;
                         }
                     }
                 }
@@ -163,6 +173,7 @@ public class RoomManager : Navigation2D
     private NavigationPolygonData CalcOutline(int i, int j, TileMap tileMap, Vector2 size)
     {
         var polygonData = new NavigationPolygonData();
+        polygonData.Type = NavigationPolygonType.Out;
         var points = polygonData.Points;
         // 0:右, 1:下, 2:左, 3:上
         var dir = 0;
@@ -183,13 +194,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 3;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -216,13 +227,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 1;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -237,13 +248,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 0;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempI++;
@@ -270,13 +281,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 2;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempI--;
@@ -291,13 +302,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 1;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -324,13 +335,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 3;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -345,13 +356,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 2;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempI--;
@@ -378,13 +389,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 0;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempI++;
@@ -400,12 +411,13 @@ public class RoomManager : Navigation2D
     private NavigationPolygonData CalcInline(int i, int j, TileMap tileMap, Vector2 size)
     {
         var polygonData = new NavigationPolygonData();
+        polygonData.Type = NavigationPolygonType.In;
         var points = polygonData.Points;
         // 0:右, 1:下, 2:左, 3:上
         var dir = 0;
         var offset = new Vector2(size.x * 0.5f, size.y * 0.5f);
         //找到路, 向右开始找边界
-        var startPos = new Vector2(i, j);
+        var startPos = new Vector2(i - 1, j);
 
         var tempI = i;
         var tempJ = j;
@@ -420,13 +432,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 1;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -453,13 +465,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 3;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -474,13 +486,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 2;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempI--;
@@ -507,13 +519,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 0;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempI++;
@@ -528,13 +540,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 3;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -561,13 +573,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 1;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -582,13 +594,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 0;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempI++;
@@ -615,13 +627,13 @@ public class RoomManager : Navigation2D
                     {
                         dir = 2;
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         var pos = new Vector2(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
+                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
                         PutUsePoint(pos);
 
                         tempI--;
