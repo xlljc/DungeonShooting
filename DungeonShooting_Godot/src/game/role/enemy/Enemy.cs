@@ -41,15 +41,15 @@ public class Enemy : Role
     
     //------------------- 寻路相关 ---------------------------
 
-    /// <summary>
-    /// 移动目标标记
-    /// </summary>
-    public PathSign PathSign { get; }
-
-    /// <summary>
-    /// 寻路标记线段总长度
-    /// </summary>
-    public float PathSignLength { get; set; } = 500;
+    // /// <summary>
+    // /// 移动目标标记
+    // /// </summary>
+    // public PathSign PathSign { get; }
+    //
+    // /// <summary>
+    // /// 寻路标记线段总长度
+    // /// </summary>
+    // public float PathSignLength { get; set; } = 500;
 
     //-------------------------------------------------------
 
@@ -75,7 +75,7 @@ public class Enemy : Role
         _navigationPoint = GetNode<Position2D>("NavigationPoint");
         _navigationAgent2D = _navigationPoint.GetNode<NavigationAgent2D>("NavigationAgent2D");
         
-        PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
+        //PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
         
         //注册Ai状态机
         StateController.Register(new AINormalState());
@@ -97,7 +97,7 @@ public class Enemy : Role
         base._Process(delta);
         if (GameApplication.Instance.Debug)
         {
-            PathSign.Scale = new Vector2((int)Face, 1);
+            // PathSign.Scale = new Vector2((int)Face, 1);
             Update();
         }
     }
@@ -136,10 +136,10 @@ public class Enemy : Role
     {
         if (GameApplication.Instance.Debug)
         {
-            if (PathSign != null)
-            {
-                DrawLine(Vector2.Zero,ToLocal(PathSign.GlobalPosition), Colors.Red);
-            }
+            // if (PathSign != null)
+            // {
+            //     DrawLine(Vector2.Zero,ToLocal(PathSign.GlobalPosition), Colors.Red);
+            // }
         }
     }
 }

@@ -75,13 +75,13 @@ public class RoomManager : Navigation2D
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
         var enemy1 = new Enemy();
         enemy1.Name = "Enemy";
-        enemy1.PutDown(new Vector2(150, 150));
+        enemy1.PutDown(new Vector2(150, 300));
         enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
         enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
         var enemy2 = new Enemy();
         enemy2.Name = "Enemy2";
-        enemy2.PutDown(new Vector2(190, 150));
+        enemy2.PutDown(new Vector2(540, 100));
         enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
         enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
         enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
