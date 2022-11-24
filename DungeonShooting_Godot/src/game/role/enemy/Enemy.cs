@@ -53,7 +53,7 @@ public class Enemy : Role
 
     //-------------------------------------------------------
 
-    private Node2D _navigationPoint;
+    private Position2D _navigationPoint;
     private NavigationAgent2D _navigationAgent2D;
     private float _navigationUpdateTimer = 0;
     
@@ -65,11 +65,14 @@ public class Enemy : Role
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
-        MoveSpeed = 20;
+        MoveSpeed = 30;
+        
+        Holster.SlotList[2].Enable = true;
+        Holster.SlotList[3].Enable = true;
         
         //视野射线
         ViewRay = GetNode<RayCast2D>("ViewRay");
-        _navigationPoint = GetNode<Node2D>("NavigationPoint");
+        _navigationPoint = GetNode<Position2D>("NavigationPoint");
         _navigationAgent2D = _navigationPoint.GetNode<NavigationAgent2D>("NavigationAgent2D");
         
         PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);

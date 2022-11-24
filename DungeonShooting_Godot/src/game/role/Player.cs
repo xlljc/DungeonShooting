@@ -18,6 +18,9 @@ public class Player : Role
     {
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
+        
+        Holster.SlotList[2].Enable = true;
+        Holster.SlotList[3].Enable = true;
     }
 
     public override void _Ready()
@@ -31,8 +34,6 @@ public class Player : Role
         // MainCamera.Main.ResetSmoothing();
         // remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
         
-        Holster.SlotList[2].Enable = true;
-        Holster.SlotList[3].Enable = true;
         RefreshGunTexture();
 
         MaxHp = 50;

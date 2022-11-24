@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Godot;
 
@@ -23,7 +22,6 @@ public class RoomManager : Navigation2D
     private Node2D _mapRoot;
 
     private NavigationPolygonInstance _navigationPolygon;
-    private Enemy _enemy;
 
     //可行走区域的tileId
     private List<int> _wayIds = new List<int>(new[] { 129 });
@@ -56,10 +54,7 @@ public class RoomManager : Navigation2D
         Player.Position = new Vector2(100, 100);
         Player.Name = "Player";
         Player.PutDown();
-
-        _enemy = new Enemy();
-        _enemy.Name = "Enemy";
-        _enemy.PutDown(new Vector2(150, 150));
+        
     }
 
     public override void _Ready()
@@ -78,7 +73,18 @@ public class RoomManager : Navigation2D
 
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
-        _enemy.PickUpWeapon(WeaponManager.GetGun("1001"));
+        var enemy1 = new Enemy();
+        enemy1.Name = "Enemy";
+        enemy1.PutDown(new Vector2(150, 150));
+        enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
+        enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        
+        var enemy2 = new Enemy();
+        enemy2.Name = "Enemy2";
+        enemy2.PutDown(new Vector2(190, 150));
+        enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
+        enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
+        enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
 
         WeaponManager.GetGun("1001").PutDown(new Vector2(80, 100));
         WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));

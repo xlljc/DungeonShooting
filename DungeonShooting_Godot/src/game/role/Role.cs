@@ -345,16 +345,19 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
-    /// 拾起一个武器, 并且切换到这个武器
+    /// 拾起一个武器, 并且切换到这个武器, 返回是否成功拾取
     /// </summary>
     /// <param name="weapon">武器对象</param>
-    public virtual void PickUpWeapon(Weapon weapon)
+    public virtual bool PickUpWeapon(Weapon weapon)
     {
         if (Holster.PickupWeapon(weapon) != -1)
         {
             //从可互动队列中移除
             _interactiveItemList.Remove(weapon);
+            return true;
         }
+
+        return false;
     }
 
     /// <summary>
