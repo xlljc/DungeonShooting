@@ -23,7 +23,7 @@ public class Enemy : Role
     /// 敌人身上的状态机控制器
     /// </summary>
     public StateController<Enemy, AIStateEnum> StateController { get; }
-    
+
     /// <summary>
     /// 视野半径, 单位像素
     /// </summary>
@@ -33,50 +33,36 @@ public class Enemy : Role
     /// 背后的视野半径, 单位像素
     /// </summary>
     public float BackViewRange { get; set; } = 50;
-    
+
     /// <summary>
     /// 视野检测射线, 朝玩家打射线, 检测是否碰到墙
     /// </summary>
     public RayCast2D ViewRay { get; }
-    
-    //------------------- 寻路相关 ---------------------------
-
-    // /// <summary>
-    // /// 移动目标标记
-    // /// </summary>
-    // public PathSign PathSign { get; }
-    //
-    // /// <summary>
-    // /// 寻路标记线段总长度
-    // /// </summary>
-    // public float PathSignLength { get; set; } = 500;
-
-    //-------------------------------------------------------
 
     private Position2D _navigationPoint;
     private NavigationAgent2D _navigationAgent2D;
     private float _navigationUpdateTimer = 0;
-    
+
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
         StateController = new StateController<Enemy, AIStateEnum>();
         AddComponent(StateController);
-        
+
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
         MoveSpeed = 30;
-        
+
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;
-        
+
         //视野射线
         ViewRay = GetNode<RayCast2D>("ViewRay");
         _navigationPoint = GetNode<Position2D>("NavigationPoint");
         _navigationAgent2D = _navigationPoint.GetNode<NavigationAgent2D>("NavigationAgent2D");
-        
+
         //PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
-        
+
         //注册Ai状态机
         StateController.Register(new AINormalState());
         StateController.Register(new AIProbeState());
@@ -88,58 +74,37 @@ public class Enemy : Role
         base._Ready();
         //默认状态
         StateController.ChangeState(AIStateEnum.AINormal);
-        
+
         _navigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
     }
-    
-    public override void _Process(float delta)
-    {
-        base._Process(delta);
-        if (GameApplication.Instance.Debug)
-        {
-            // PathSign.Scale = new Vector2((int)Face, 1);
-            Update();
-        }
-    }
 
-    public override void _PhysicsProcess(float delta)
+    /// <summary>
+    /// 返回目标点是否在视野范围内
+    /// </summary>
+    public bool IsInViewRange(Vector2 target)
     {
-        base._PhysicsProcess(delta);
-
-        if (_navigationAgent2D.IsNavigationFinished())
+        var isForward = IsPositionInForward(target);
+        if (isForward)
         {
-            return;
-        }
-        var playerGlobalPosition = GameApplication.Instance.Room.Player.GlobalPosition;
-        //临时处理, 让敌人跟随玩家
-        if (_navigationUpdateTimer <= 0)
-        {
-            _navigationUpdateTimer = 0.2f;
-            if (_navigationAgent2D.GetTargetLocation() != playerGlobalPosition)
+            if (GlobalPosition.DistanceSquaredTo(target) <= ViewRange * ViewRange) //没有超出视野半径
             {
-                _navigationAgent2D.SetTargetLocation(playerGlobalPosition);
+                return true;
             }
         }
-        else
-        {
-            _navigationUpdateTimer -= delta;
-        }
-        
-        var nextPos = _navigationAgent2D.GetNextLocation();
-        LookTargetPosition(playerGlobalPosition);
-        AnimatedSprite.Animation = AnimatorNames.Run;
-        Velocity = (nextPos - GlobalPosition - _navigationPoint.Position).Normalized() * MoveSpeed;
-        CalcMove(delta);
+
+        return false;
     }
 
-    public override void _Draw()
+    /// <summary>
+    /// 调用视野检测, 如果被墙壁和其它物体遮挡, 则返回被挡住视野的物体对象, 视野无阻则返回 null
+    /// </summary>
+    public Godot.Object TestViewRayCast(Vector2 target)
     {
-        if (GameApplication.Instance.Debug)
-        {
-            // if (PathSign != null)
-            // {
-            //     DrawLine(Vector2.Zero,ToLocal(PathSign.GlobalPosition), Colors.Red);
-            // }
-        }
+        ViewRay.Enabled = true;
+        ViewRay.CastTo = ViewRay.ToLocal(target);
+        ViewRay.ForceRaycastUpdate();
+        var collObj = ViewRay.GetCollider();
+        ViewRay.Enabled = false;
+        return collObj;
     }
 }

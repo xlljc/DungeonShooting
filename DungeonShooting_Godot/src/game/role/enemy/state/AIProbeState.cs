@@ -14,7 +14,7 @@ public class AIProbeState : IState<Enemy, AIStateEnum>
 
     public void PhysicsProcess(float delta)
     {
-        
+
     }
 
     public bool CanChangeState(AIStateEnum next)

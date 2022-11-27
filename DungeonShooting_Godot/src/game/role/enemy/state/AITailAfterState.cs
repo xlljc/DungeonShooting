@@ -9,13 +9,11 @@ public class AITailAfterState : IState<Enemy, AIStateEnum>
     public StateController<Enemy, AIStateEnum> StateController { get; set; }
     public void Enter(AIStateEnum prev, params object[] args)
     {
-        //临时处理
-        //Master.PathSign.Enable = true;
+        
     }
 
     public void PhysicsProcess(float delta)
     {
-        var master = Master;
         
     }
 
