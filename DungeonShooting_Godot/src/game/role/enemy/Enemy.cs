@@ -38,10 +38,16 @@ public class Enemy : Role
     /// 视野检测射线, 朝玩家打射线, 检测是否碰到墙
     /// </summary>
     public RayCast2D ViewRay { get; }
+    
+    /// <summary>
+    /// 导航代理
+    /// </summary>
+    public NavigationAgent2D NavigationAgent2D { get; }
 
-    private Position2D _navigationPoint;
-    private NavigationAgent2D _navigationAgent2D;
-    private float _navigationUpdateTimer = 0;
+    /// <summary>
+    /// 导航代理中点
+    /// </summary>
+    public Position2D NavigationPoint { get; }
 
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
@@ -58,15 +64,15 @@ public class Enemy : Role
 
         //视野射线
         ViewRay = GetNode<RayCast2D>("ViewRay");
-        _navigationPoint = GetNode<Position2D>("NavigationPoint");
-        _navigationAgent2D = _navigationPoint.GetNode<NavigationAgent2D>("NavigationAgent2D");
+        NavigationPoint = GetNode<Position2D>("NavigationPoint");
+        NavigationAgent2D = NavigationPoint.GetNode<NavigationAgent2D>("NavigationAgent2D");
 
         //PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
 
         //注册Ai状态机
-        StateController.Register(new AINormalState());
-        StateController.Register(new AIProbeState());
-        StateController.Register(new AITailAfterState());
+        StateController.Register(new AiNormalStateBase());
+        StateController.Register(new AiProbeStateBase());
+        StateController.Register(new AiTailAfterStateBase());
     }
 
     public override void _Ready()
@@ -75,7 +81,7 @@ public class Enemy : Role
         //默认状态
         StateController.ChangeState(AIStateEnum.AINormal);
 
-        _navigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
+        NavigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
     }
 
     /// <summary>
