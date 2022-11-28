@@ -2,12 +2,12 @@
 /// <summary>
 /// AI 发现玩家
 /// </summary>
-public class AiTailAfterStateBase : StateBase<Enemy, AIStateEnum>
+public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
 {
     
     private float _navigationUpdateTimer = 0;
     
-    public AiTailAfterStateBase() : base(AIStateEnum.AITailAfter)
+    public AiTailAfterState() : base(AIStateEnum.AITailAfter)
     {
     }
 

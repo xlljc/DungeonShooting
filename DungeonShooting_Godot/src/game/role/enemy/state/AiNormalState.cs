@@ -4,9 +4,9 @@ using Godot;
 /// <summary>
 /// AI 正常状态
 /// </summary>
-public class AiNormalStateBase : StateBase<Enemy, AIStateEnum>
+public class AiNormalState : StateBase<Enemy, AIStateEnum>
 {
-    public AiNormalStateBase() : base(AIStateEnum.AINormal)
+    public AiNormalState() : base(AIStateEnum.AINormal)
     {
     }
     

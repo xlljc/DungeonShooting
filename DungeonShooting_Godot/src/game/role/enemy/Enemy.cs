@@ -70,9 +70,9 @@ public class Enemy : Role
         //PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
 
         //注册Ai状态机
-        StateController.Register(new AiNormalStateBase());
-        StateController.Register(new AiProbeStateBase());
-        StateController.Register(new AiTailAfterStateBase());
+        StateController.Register(new AiNormalState());
+        StateController.Register(new AiProbeState());
+        StateController.Register(new AiTailAfterState());
     }
 
     public override void _Ready()
