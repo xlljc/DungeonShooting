@@ -20,7 +20,7 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
         if (Master.IsInViewRange(playerPos) && Master.TestViewRayCast(playerPos) == null)
         {
             //发现玩家
-            StateController.ChangeStateLate(AIStateEnum.AITailAfter);
+            ChangeStateLate(AIStateEnum.AITailAfter);
         }
     }
 }

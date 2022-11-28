@@ -30,6 +30,11 @@ public class Enemy : Role
     public float ViewRange { get; set; } = 200;
 
     /// <summary>
+    /// 发现玩家后的视野半径
+    /// </summary>
+    public float TailAfterViewRange { get; set; } = 250;
+
+    /// <summary>
     /// 背后的视野半径, 单位像素
     /// </summary>
     public float BackViewRange { get; set; } = 50;

@@ -142,8 +142,10 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     public bool IsDestroyed { get; private set; }
 
-    //是否调用过 start 函数
-    internal bool IsStart = false;
+    /// <summary>
+    /// 是否调用过 Ready 函数
+    /// </summary>
+    public bool IsReady { get; set; }
 
     /// <summary>
     /// 第一次调用 Process 或 PhysicsProcess 之前调用
@@ -200,6 +202,13 @@ public abstract class Component : IProcess, IDestroy
     /// 当组件禁用时调用
     /// </summary>
     public virtual void OnDisable()
+    {
+    }
+
+    /// <summary>
+    /// 如果开启 debug, 则每帧调用该函数, 可用于绘制文字线段等
+    /// </summary>
+    public virtual void DebugDraw()
     {
     }
     

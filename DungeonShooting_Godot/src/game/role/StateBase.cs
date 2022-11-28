@@ -6,9 +6,14 @@ using System;
 public abstract class StateBase<T, S> where T : ActivityObject where S : Enum
 {
     /// <summary>
-    /// 当前状态对象对应的状态枚举类型
+    /// 当前活跃的状态对象实例
     /// </summary>
-    public S StateType { get; }
+    public StateBase<T, S> CurrStateBase => StateController.CurrStateBase;
+    
+    /// <summary>
+    /// 当前对象对应的状态枚举
+    /// </summary>
+    public S State { get; }
 
     /// <summary>
     /// 当前状态对象挂载的角色对象
@@ -22,7 +27,7 @@ public abstract class StateBase<T, S> where T : ActivityObject where S : Enum
 
     public StateBase(S state)
     {
-        StateType = state;
+        State = state;
     }
     
     /// <summary>
@@ -36,7 +41,7 @@ public abstract class StateBase<T, S> where T : ActivityObject where S : Enum
     }
 
     /// <summary>
-    /// 物理帧每帧更新
+    /// 如果当前状态已被激活, 物理帧每帧更新
     /// </summary>
     public virtual void PhysicsProcess(float delta)
     {
@@ -59,5 +64,29 @@ public abstract class StateBase<T, S> where T : ActivityObject where S : Enum
     public virtual void Exit(S next)
     {
         
+    }
+    
+    /// <summary>
+    /// 当启用 debug 后调用该函数, 调试绘制, 需要调用 Master 身上的绘制函数
+    /// </summary>
+    public virtual void DebugDraw()
+    {
+        
+    }
+
+    /// <summary>
+    /// 立即切换到下一个指定状态, 并且这一帧会被调用 PhysicsProcess
+    /// </summary>
+    public void ChangeState(S next, params object[] args)
+    {
+        StateController.ChangeState(next, args);
+    }
+    
+    /// <summary>
+    /// 切换到下一个指定状态, 下一帧才会调用 PhysicsProcess
+    /// </summary>
+    public void ChangeStateLate(S next, params object[] args)
+    {
+        StateController.ChangeStateLate(next, args);
     }
 }
