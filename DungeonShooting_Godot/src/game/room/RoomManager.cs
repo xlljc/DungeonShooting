@@ -13,6 +13,11 @@ public class RoomManager : Navigation2D
     /// </summary>
     public Role Player { get; private set; }
 
+    /// <summary>
+    /// 导航区域形状
+    /// </summary>
+    public NavigationPolygonInstance NavigationPolygon { get; private set; }
+    
     //对象根节点
     private Node2D _objectRoot;
 
@@ -20,8 +25,6 @@ public class RoomManager : Navigation2D
     private YSort _sortRoot;
 
     private Node2D _mapRoot;
-
-    private NavigationPolygonInstance _navigationPolygon;
 
     //可行走区域的tileId
     private List<int> _wayIds = new List<int>(new[] { 129 });
@@ -32,6 +35,8 @@ public class RoomManager : Navigation2D
     //导航区域数据
     private List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
 
+    private TileMap _tileMap;
+
     public override void _EnterTree()
     {
         Input.MouseMode = Input.MouseModeEnum.Hidden;
@@ -39,13 +44,14 @@ public class RoomManager : Navigation2D
         _sortRoot = GetNode<YSort>("SortRoot");
         _objectRoot = GetNode<Node2D>("ObjectRoot");
         
-        //_navigationPolygon = GetNode<NavigationPolygonInstance>("NavigationPolygonInstance");
-        _navigationPolygon = new NavigationPolygonInstance();
-        AddChild(_navigationPolygon);
+        NavigationPolygon = new NavigationPolygonInstance();
+        AddChild(NavigationPolygon);
 
         //初始化地图
         _mapRoot = GetNode<Node2D>("MapRoot");
-        var node = _mapRoot.GetChild(0).GetNode("Config");
+        var child = _mapRoot.GetChild(0);
+        _tileMap = child.GetNode<TileMap>("Wall");
+        var node = child.GetNode("Config");
         Color color = (Color)node.GetMeta("ClearColor");
         VisualServer.SetDefaultClearColor(color);
 
@@ -69,7 +75,7 @@ public class RoomManager : Navigation2D
             polygon.AddOutline(polygonData.Points.ToArray());
         }
         polygon.MakePolygonsFromOutlines();
-        _navigationPolygon.Navpoly = polygon;
+        NavigationPolygon.Navpoly = polygon;
 
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
@@ -132,14 +138,31 @@ public class RoomManager : Navigation2D
     }
 
     /// <summary>
+    /// 返回指定位置的Tile是否为可以行走
+    /// </summary>
+    public bool IsWayTile(int x, int y)
+    {
+        var cellId = _tileMap.GetCell(x, y);
+        return cellId != -1 && _wayIds.Contains(cellId);
+    }
+
+    /// <summary>
+    /// 返回指定坐标下对应的Tile是否为可以行走
+    /// </summary>
+    public bool IsWayPosition(float x, float y)
+    {
+        var tileMapCellSize = _tileMap.CellSize;
+        return IsWayTile((int)(x / tileMapCellSize.x), (int)(y / tileMapCellSize.y));
+    }
+
+    /// <summary>
     /// 自动生成导航区域
     /// </summary>
     private void GenerateNavigationPolygon()
     {
-        var tileMap = _mapRoot.GetChild(0).GetNode<TileMap>("Wall");
-        var size = tileMap.CellSize;
+        var size = _tileMap.CellSize;
 
-        var rect = tileMap.GetUsedRect();
+        var rect = _tileMap.GetUsedRect();
 
         var x = (int)rect.Position.x;
         var y = (int)rect.Position.y;
@@ -150,20 +173,19 @@ public class RoomManager : Navigation2D
         {
             for (int i = x; i < w; i++)
             {
-                var tileId = tileMap.GetCell(i, j);
-                if (IsWayCell(tileId))
+                if (IsWayTile(i, j))
                 {
                     if (!_usePoints.Contains(new Vector2(i, j)))
                     {
                         NavigationPolygonData polygonData = null;
 
-                        if (!IsWayCell(tileMap.GetCell(i, j - 1)))
+                        if (!IsWayTile(i, j - 1))
                         {
-                            polygonData = CalcOutline(i, j, tileMap, size);
+                            polygonData = CalcOutline(i, j, _tileMap, size);
                         }
-                        else if (!IsWayCell(tileMap.GetCell(i, j + 1)))
+                        else if (!IsWayTile(i, j + 1))
                         {
-                            polygonData = CalcInline(i, j, tileMap, size);
+                            polygonData = CalcInline(i, j, _tileMap, size);
                         }
 
                         if (polygonData != null)
@@ -196,7 +218,7 @@ public class RoomManager : Navigation2D
             {
                 case 0: //右
                 {
-                    if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //先向上找
+                    if (IsWayTile(tempI, tempJ - 1)) //先向上找
                     {
                         dir = 3;
 
@@ -212,7 +234,7 @@ public class RoomManager : Navigation2D
                         tempJ--;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //再向右找
+                    else if (IsWayTile(tempI + 1, tempJ)) //再向右找
                     {
                         if (points.Count == 0)
                         {
@@ -229,7 +251,7 @@ public class RoomManager : Navigation2D
                         tempI++;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //向下找
+                    else if (IsWayTile(tempI, tempJ + 1)) //向下找
                     {
                         dir = 1;
 
@@ -250,7 +272,7 @@ public class RoomManager : Navigation2D
                 }
                 case 1: //下
                 {
-                    if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //先向右找
+                    if (IsWayTile(tempI + 1, tempJ)) //先向右找
                     {
                         dir = 0;
 
@@ -266,7 +288,7 @@ public class RoomManager : Navigation2D
                         tempI++;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //再向下找
+                    else if (IsWayTile(tempI, tempJ + 1)) //再向下找
                     {
                         if (points.Count == 0)
                         {
@@ -283,7 +305,7 @@ public class RoomManager : Navigation2D
                         tempJ++;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //向左找
+                    else if (IsWayTile(tempI - 1, tempJ)) //向左找
                     {
                         dir = 2;
 
@@ -304,7 +326,7 @@ public class RoomManager : Navigation2D
                 }
                 case 2: //左
                 {
-                    if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //先向下找
+                    if (IsWayTile(tempI, tempJ + 1)) //先向下找
                     {
                         dir = 1;
 
@@ -320,7 +342,7 @@ public class RoomManager : Navigation2D
                         tempJ++;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //再向左找
+                    else if (IsWayTile(tempI - 1, tempJ)) //再向左找
                     {
                         if (points.Count == 0)
                         {
@@ -337,7 +359,7 @@ public class RoomManager : Navigation2D
                         tempI--;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //向上找
+                    else if (IsWayTile(tempI, tempJ - 1)) //向上找
                     {
                         dir = 3;
 
@@ -358,7 +380,7 @@ public class RoomManager : Navigation2D
                 }
                 case 3: //上
                 {
-                    if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //先向左找
+                    if (IsWayTile(tempI - 1, tempJ)) //先向左找
                     {
                         dir = 2;
 
@@ -374,7 +396,7 @@ public class RoomManager : Navigation2D
                         tempI--;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //再向上找
+                    else if (IsWayTile(tempI, tempJ - 1)) //再向上找
                     {
                         if (points.Count == 0)
                         {
@@ -391,7 +413,7 @@ public class RoomManager : Navigation2D
                         tempJ--;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //向右找
+                    else if (IsWayTile(tempI + 1, tempJ)) //向右找
                     {
                         dir = 0;
 
@@ -434,7 +456,7 @@ public class RoomManager : Navigation2D
             {
                 case 0: //右
                 {
-                    if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //向下找
+                    if (IsWayTile(tempI, tempJ + 1)) //向下找
                     {
                         dir = 1;
 
@@ -450,7 +472,7 @@ public class RoomManager : Navigation2D
                         tempJ++;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //再向右找
+                    else if (IsWayTile(tempI + 1, tempJ)) //再向右找
                     {
                         if (points.Count == 0)
                         {
@@ -467,7 +489,7 @@ public class RoomManager : Navigation2D
                         tempI++;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //先向上找
+                    else if (IsWayTile(tempI, tempJ - 1)) //先向上找
                     {
                         dir = 3;
 
@@ -488,7 +510,7 @@ public class RoomManager : Navigation2D
                 }
                 case 1: //下
                 {
-                    if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //向左找
+                    if (IsWayTile(tempI - 1, tempJ)) //向左找
                     {
                         dir = 2;
 
@@ -504,7 +526,7 @@ public class RoomManager : Navigation2D
                         tempI--;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //再向下找
+                    else if (IsWayTile(tempI, tempJ + 1)) //再向下找
                     {
                         if (points.Count == 0)
                         {
@@ -521,7 +543,7 @@ public class RoomManager : Navigation2D
                         tempJ++;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //先向右找
+                    else if (IsWayTile(tempI + 1, tempJ)) //先向右找
                     {
                         dir = 0;
 
@@ -542,7 +564,7 @@ public class RoomManager : Navigation2D
                 }
                 case 2: //左
                 {
-                    if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //向上找
+                    if (IsWayTile(tempI, tempJ - 1)) //向上找
                     {
                         dir = 3;
 
@@ -558,7 +580,7 @@ public class RoomManager : Navigation2D
                         tempJ--;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //再向左找
+                    else if (IsWayTile(tempI - 1, tempJ)) //再向左找
                     {
                         if (points.Count == 0)
                         {
@@ -575,7 +597,7 @@ public class RoomManager : Navigation2D
                         tempI--;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ + 1))) //先向下找
+                    else if (IsWayTile(tempI, tempJ + 1)) //先向下找
                     {
                         dir = 1;
 
@@ -596,7 +618,7 @@ public class RoomManager : Navigation2D
                 }
                 case 3: //上
                 {
-                    if (IsWayCell(tileMap.GetCell(tempI + 1, tempJ))) //向右找
+                    if (IsWayTile(tempI + 1, tempJ)) //向右找
                     {
                         dir = 0;
 
@@ -612,7 +634,7 @@ public class RoomManager : Navigation2D
                         tempI++;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI, tempJ - 1))) //再向上找
+                    else if (IsWayTile(tempI, tempJ - 1)) //再向上找
                     {
                         if (points.Count == 0)
                         {
@@ -629,7 +651,7 @@ public class RoomManager : Navigation2D
                         tempJ--;
                         break;
                     }
-                    else if (IsWayCell(tileMap.GetCell(tempI - 1, tempJ))) //先向左找
+                    else if (IsWayTile(tempI - 1, tempJ)) //先向左找
                     {
                         dir = 2;
 
@@ -660,10 +682,5 @@ public class RoomManager : Navigation2D
         }
 
         _usePoints.Add(pos);
-    }
-
-    private bool IsWayCell(int cellId)
-    {
-        return cellId != -1 && _wayIds.Contains(cellId);
     }
 }

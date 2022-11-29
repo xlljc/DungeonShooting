@@ -26,12 +26,11 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
 
     public override void PhysicsProcess(float delta)
     {
-        var master = Master;
-        if (master.NavigationAgent2D.IsNavigationFinished())
+        if (Master.NavigationAgent2D.IsNavigationFinished())
         {
             return;
         }
-        var masterPos = master.GlobalPosition;
+        var masterPos = Master.GlobalPosition;
         var playerPos = GameApplication.Instance.Room.Player.GlobalPosition;
         
         //更新玩家位置
@@ -39,9 +38,9 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            if (master.NavigationAgent2D.GetTargetLocation() != playerPos)
+            if (Master.NavigationAgent2D.GetTargetLocation() != playerPos)
             {
-                master.NavigationAgent2D.SetTargetLocation(playerPos);
+                Master.NavigationAgent2D.SetTargetLocation(playerPos);
             }
         }
         else
@@ -50,14 +49,14 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
         }
         
         //计算移动
-        var nextPos = master.NavigationAgent2D.GetNextLocation();
-        master.LookTargetPosition(playerPos);
-        master.AnimatedSprite.Animation = AnimatorNames.Run;
-        master.Velocity = (nextPos - master.GlobalPosition - master.NavigationPoint.Position).Normalized() * master.MoveSpeed;
-        master.CalcMove(delta);
+        var nextPos = Master.NavigationAgent2D.GetNextLocation();
+        Master.LookTargetPosition(playerPos);
+        Master.AnimatedSprite.Animation = AnimatorNames.Run;
+        Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() * Master.MoveSpeed;
+        Master.CalcMove(delta);
 
         //检测玩家是否在视野内, 此时视野可穿墙, 直接检测距离即可
-        _isInView = masterPos.DistanceSquaredTo(playerPos) <= master.TailAfterViewRange * master.TailAfterViewRange;
+        _isInView = masterPos.DistanceSquaredTo(playerPos) <= Master.TailAfterViewRange * Master.TailAfterViewRange;
         if (_isInView)
         {
             _viewTimer = 0;

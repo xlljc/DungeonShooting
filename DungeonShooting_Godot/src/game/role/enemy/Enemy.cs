@@ -18,7 +18,6 @@ using Godot;
 /// </summary>
 public class Enemy : Role
 {
-
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
@@ -109,13 +108,19 @@ public class Enemy : Role
     /// <summary>
     /// 调用视野检测, 如果被墙壁和其它物体遮挡, 则返回被挡住视野的物体对象, 视野无阻则返回 null
     /// </summary>
-    public Godot.Object TestViewRayCast(Vector2 target)
+    public bool TestViewRayCast(Vector2 target)
     {
         ViewRay.Enabled = true;
         ViewRay.CastTo = ViewRay.ToLocal(target);
         ViewRay.ForceRaycastUpdate();
-        var collObj = ViewRay.GetCollider();
+        return ViewRay.IsColliding();
+    }
+
+    /// <summary>
+    /// 调用视野检测完毕后, 需要调用 TestViewRayCastOver() 来关闭视野检测射线
+    /// </summary>
+    public void TestViewRayCastOver()
+    {
         ViewRay.Enabled = false;
-        return collObj;
     }
 }
