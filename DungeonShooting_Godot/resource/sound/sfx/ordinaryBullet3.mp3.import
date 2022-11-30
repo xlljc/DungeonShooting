@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/ordinaryBullet3.mp3-071f70567ddf76a565a2dbe75703e424.mp3str"
+
+[deps]
+
+source_file="res://resource/sound/sfx/ordinaryBullet3.mp3"
+dest_files=[ "res://.import/ordinaryBullet3.mp3-071f70567ddf76a565a2dbe75703e424.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

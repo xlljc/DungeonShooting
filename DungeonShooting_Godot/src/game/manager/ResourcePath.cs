@@ -30,13 +30,16 @@ public class ResourcePath
     public const string resource_effects_KnifeHit1_tres = "res://resource/effects/KnifeHit1.tres";
     public const string resource_font_cn_font_12_tres = "res://resource/font/cn_font_12.tres";
     public const string resource_font_cn_font_18_tres = "res://resource/font/cn_font_18.tres";
-    public const string resource_font_cn_font_35_tres = "res://resource/font/cn_font_35.tres";
+    public const string resource_font_cn_font_36_tres = "res://resource/font/cn_font_36.tres";
     public const string resource_map_dungeon_test_tmx = "res://resource/map/dungeon_test.tmx";
     public const string resource_map_itchioDungeonTileset4_tsx = "res://resource/map/itch-io-DungeonTileset4.tsx";
     public const string resource_materlal_Blend_gdshader = "res://resource/materlal/Blend.gdshader";
     public const string resource_materlal_Blend_tres = "res://resource/materlal/Blend.tres";
     public const string resource_sound_bgm_Intro_ogg = "res://resource/sound/bgm/Intro.ogg";
     public const string resource_sound_sfx_ordinaryBullet_ogg = "res://resource/sound/sfx/ordinaryBullet.ogg";
+    public const string resource_sound_sfx_ordinaryBullet2_mp3 = "res://resource/sound/sfx/ordinaryBullet2.mp3";
+    public const string resource_sound_sfx_ordinaryBullet3_mp3 = "res://resource/sound/sfx/ordinaryBullet3.mp3";
+    public const string resource_sound_sfx_reloading_mp3 = "res://resource/sound/sfx/reloading.mp3";
     public const string resource_sprite_bullet_arrow_png = "res://resource/sprite/bullet/arrow.png";
     public const string resource_sprite_bullet_bullet_png = "res://resource/sprite/bullet/bullet.png";
     public const string resource_sprite_bullet_bullet2_png = "res://resource/sprite/bullet/bullet2.png";
@@ -114,6 +117,8 @@ public class ResourcePath
     public const string scene_Room_tscn = "res://scene/Room.tscn";
     public const string scene_test_TestCommpont_tscn = "res://scene/test/TestCommpont.tscn";
     public const string scene_test_TestNavigation_tscn = "res://scene/test/TestNavigation.tscn";
+    public const string scene_test_TestNavigation2_tscn = "res://scene/test/TestNavigation2.tscn";
+    public const string scene_test_TestNavigationPolygon_tscn = "res://scene/test/TestNavigationPolygon.tscn";
     public const string default_bus_layout_tres = "res://default_bus_layout.tres";
     public const string default_env_tres = "res://default_env.tres";
     public const string icon_png = "res://icon.png";
