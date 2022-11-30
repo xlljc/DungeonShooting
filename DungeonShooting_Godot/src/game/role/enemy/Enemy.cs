@@ -18,20 +18,26 @@ using Godot;
 /// </summary>
 public class Enemy : Role
 {
+    
+    /// <summary>
+    /// 公共属性, 是否找到玩家, 如果找到玩家, 则所有敌人都会知道玩家的位置
+    /// </summary>
+    public static bool IsFindPlayer { get; set; }
+    
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
     public StateController<Enemy, AIStateEnum> StateController { get; }
 
     /// <summary>
-    /// 视野半径, 单位像素
+    /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
     /// </summary>
-    public float ViewRange { get; set; } = 200;
+    public float ViewRange { get; set; } = 250;
 
     /// <summary>
     /// 发现玩家后的视野半径
     /// </summary>
-    public float TailAfterViewRange { get; set; } = 250;
+    public float TailAfterViewRange { get; set; } = 400;
 
     /// <summary>
     /// 背后的视野半径, 单位像素
@@ -53,6 +59,8 @@ public class Enemy : Role
     /// </summary>
     public Position2D NavigationPoint { get; }
 
+    private float _enemyAttackTimer = 0;
+    
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
         StateController = new StateController<Enemy, AIStateEnum>();
@@ -86,6 +94,36 @@ public class Enemy : Role
         StateController.ChangeState(AIStateEnum.AINormal);
 
         NavigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
+    }
+
+    public override void _PhysicsProcess(float delta)
+    {
+        base._PhysicsProcess(delta);
+
+        _enemyAttackTimer -= delta;
+    }
+
+    /// <summary>
+    /// Ai触发的攻击
+    /// </summary>
+    public void EnemyAttack()
+    {
+        var weapon = Holster.ActiveWeapon;
+        if (weapon != null)
+        {
+            if (weapon.Attribute.ContinuousShoot) //连发
+            {
+                Attack();
+            }
+            else //单发
+            {
+                if (_enemyAttackTimer <= 0)
+                {
+                    _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed;
+                    Attack();
+                }
+            }
+        }
     }
 
     /// <summary>

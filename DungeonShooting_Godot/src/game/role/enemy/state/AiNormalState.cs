@@ -8,11 +8,22 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
 {
     //是否发现玩家
     private bool _isFindPlayer;
+
     //下一个运动的角度
     private Vector2 _nextPos;
+
     //是否移动结束
     private bool _isMoveOver;
+
+    //上一次移动是否撞墙
+    private bool _againstWall;
     
+    //撞墙法线角度
+    private float _againstWallNormalAngle;
+
+    //移动停顿计时器
+    private float _pauseTimer;
+
     public AiNormalState() : base(AIStateEnum.AINormal)
     {
     }
@@ -21,6 +32,9 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
     {
         _isFindPlayer = false;
         _isMoveOver = true;
+        _againstWall = false;
+        _againstWallNormalAngle = 0;
+        _pauseTimer = 0;
     }
 
     public override void PhysicsProcess(float delta)
@@ -43,35 +57,65 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
                 //发现玩家
                 _isFindPlayer = true;
             }
+            else if (_pauseTimer >= 0)
+            {
+                _pauseTimer -= delta;
+            }
             else if (_isMoveOver) //没发现玩家, 且已经移动完成
             {
-                var angle = Utils.RandRange(0, Mathf.Pi * 2f);
-                var len = Utils.RandRangeInt(50, 500);
-                _nextPos = new Vector2(len, 0).Rotated(angle);
-                //获取射线碰到的坐标
-                if (Master.TestViewRayCast(_nextPos)) //碰到墙壁
-                {
-                    _nextPos = Master.ViewRay.GetCollisionPoint();
-                }
-                Master.NavigationAgent2D.SetTargetLocation(_nextPos);
+                RunOver();
                 _isMoveOver = false;
             }
             else //移动中
             {
                 //计算移动
                 var nextPos = Master.NavigationAgent2D.GetNextLocation();
-                Master.LookTargetPosition(_nextPos);
                 Master.AnimatedSprite.Animation = AnimatorNames.Run;
-                Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() * Master.MoveSpeed;
+                Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                                  Master.MoveSpeed;
                 Master.CalcMove(delta);
 
-                if (Master.NavigationAgent2D.IsNavigationFinished())
+                if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
                 {
+                    _pauseTimer = 1;
                     _isMoveOver = true;
                 }
             }
+
             Master.TestViewRayCastOver();
         }
+    }
+
+    //移动结束
+    private void RunOver()
+    {
+        float angle;
+        if (_againstWall)
+        {
+            angle = Utils.RandRange(_againstWallNormalAngle - Mathf.Pi * 0.5f,
+                _againstWallNormalAngle + Mathf.Pi * 0.5f);
+        }
+        else
+        {
+            angle = Utils.RandRange(0, Mathf.Pi * 2f);
+        }
+
+        var len = Utils.RandRangeInt(30, 200);
+        _nextPos = new Vector2(len, 0).Rotated(angle) + Master.GlobalPosition;
+        //获取射线碰到的坐标
+        if (Master.TestViewRayCast(_nextPos)) //碰到墙壁
+        {
+            _nextPos = Master.ViewRay.GetCollisionPoint();
+            _againstWall = true;
+            _againstWallNormalAngle = Master.ViewRay.GetCollisionNormal().Angle();
+        }
+        else
+        {
+            _againstWall = false;
+        }
+
+        Master.NavigationAgent2D.SetTargetLocation(_nextPos);
+        Master.LookTargetPosition(_nextPos);
     }
 
     public override void DebugDraw()
