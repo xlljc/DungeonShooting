@@ -11,6 +11,7 @@
 #endregion
 
 
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -23,7 +24,9 @@ public class Enemy : Role
     /// 公共属性, 是否找到玩家, 如果找到玩家, 则所有敌人都会知道玩家的位置
     /// </summary>
     public static bool IsFindPlayer { get; set; }
-    
+
+    private static readonly List<Enemy> _enemies = new List<Enemy>();
+
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
@@ -85,6 +88,7 @@ public class Enemy : Role
         StateController.Register(new AiNormalState());
         StateController.Register(new AiProbeState());
         StateController.Register(new AiTailAfterState());
+        StateController.Register(new AIAttackState());
     }
 
     public override void _Ready()
@@ -96,11 +100,37 @@ public class Enemy : Role
         NavigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
     }
 
+    public override void _EnterTree()
+    {
+        if (!_enemies.Contains(this))
+        {
+            _enemies.Add(this);
+        }
+    }
+
+    public override void _ExitTree()
+    {
+        _enemies.Remove(this);
+    }
+
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
 
         _enemyAttackTimer -= delta;
+    }
+
+    /// <summary>
+    /// 更新敌人视野
+    /// </summary>
+    public static void UpdateEnemiesView()
+    {
+        for (var i = 0; i < _enemies.Count; i++)
+        {
+            var enemy = _enemies[i];
+            
+            //enemy.StateController.GetState()
+        }
     }
 
     /// <summary>

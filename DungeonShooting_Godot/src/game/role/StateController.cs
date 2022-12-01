@@ -61,6 +61,19 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
     }
 
     /// <summary>
+    /// 获取指定状态对应的实例对象
+    /// </summary>
+    public StateBase<T, S> GetState(S state)
+    {
+        if (_states.ContainsKey(state))
+        {
+            return _states[state];
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// 立即切换到下一个指定状态, 并且这一帧会被调用 PhysicsProcess
     /// </summary>
     public void ChangeState(S next, params object[] arg)

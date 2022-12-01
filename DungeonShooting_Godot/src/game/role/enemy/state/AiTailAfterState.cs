@@ -6,16 +6,20 @@ using Godot;
 /// </summary>
 public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
 {
+    /// <summary>
+    /// 目标是否在视野半径内
+    /// </summary>
+    public bool IsInViewRange;
+    
+    /// <summary>
+    /// 是否在视野内
+    /// </summary>
+    public bool IsInView;
+    
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
 
-    //目标是否在视野半径内
-    private bool _isInViewRange;
-    
-    //是否在视野内
-    private bool _isInView;
-    
     //目标从视野消失时已经过去的时间
     private float _viewTimer;
     
@@ -25,8 +29,8 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
 
     public override void Enter(AIStateEnum prev, params object[] args)
     {
-        _isInViewRange = true;
-        _isInView = true;
+        IsInViewRange = true;
+        IsInView = true;
         _navigationUpdateTimer = 0;
         _viewTimer = 0;
     }
@@ -62,27 +66,27 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
         
         if (masterPos.DistanceSquaredTo(playerPos) <= Master.TailAfterViewRange * Master.TailAfterViewRange)
         {
-            _isInView = !Master.TestViewRayCast(playerPos);
-            if (_isInView)
+            IsInView = !Master.TestViewRayCast(playerPos);
+            if (IsInView)
             {
-                _isInViewRange = true;
+                IsInViewRange = true;
             }
             else
             {
-                _isInViewRange = masterPos.DistanceSquaredTo(playerPos) <= Master.ViewRange * Master.ViewRange;
+                IsInViewRange = masterPos.DistanceSquaredTo(playerPos) <= Master.ViewRange * Master.ViewRange;
             }
         }
         else
         {
-            _isInViewRange = masterPos.DistanceSquaredTo(playerPos) <= Master.ViewRange * Master.ViewRange;
-            _isInView = false;
+            IsInViewRange = masterPos.DistanceSquaredTo(playerPos) <= Master.ViewRange * Master.ViewRange;
+            IsInView = false;
         }
 
-        if (_isInViewRange)
+        if (IsInViewRange)
         {
             _viewTimer = 0;
 
-            if (_isInView)
+            if (IsInView)
             {
                 //攻击
                 Master.EnemyAttack();
@@ -104,11 +108,11 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
     public override void DebugDraw()
     {
         var playerPos = GameApplication.Instance.Room.Player.GlobalPosition;
-        if (_isInView)
+        if (IsInView)
         {
             Master.DrawLine(Vector2.Zero, Master.ToLocal(playerPos), Colors.Red);
         }
-        else if (_isInViewRange)
+        else if (IsInViewRange)
         {
             Master.DrawLine(Vector2.Zero, Master.ToLocal(playerPos), Colors.Orange);
         }

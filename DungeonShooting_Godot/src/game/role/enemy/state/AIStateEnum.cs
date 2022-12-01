@@ -13,4 +13,8 @@ public enum AIStateEnum
     /// 发现目标, 并且知道位置
     /// </summary>
     AITailAfter,
+    /// <summary>
+    /// 目标在视野内, 发起攻击
+    /// </summary>
+    AIAttack,
 }

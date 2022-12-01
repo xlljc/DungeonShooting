@@ -36,7 +36,7 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
         _againstWallNormalAngle = 0;
         _pauseTimer = 0;
     }
-
+    
     public override void PhysicsProcess(float delta)
     {
 
@@ -77,7 +77,7 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
 
                 if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
                 {
-                    _pauseTimer = 1;
+                    _pauseTimer = Utils.RandRange(0.3f, 2f);
                     _isMoveOver = true;
                 }
             }
