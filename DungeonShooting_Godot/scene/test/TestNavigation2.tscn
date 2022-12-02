@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/test/TestNavigation2.cs" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+
+[sub_resource type="NavigationPolygon" id=1]
+vertices = PoolVector2Array( 1650, 237, 1789, 81, 1795, 986, 1635, 828, 1627, 721, 1215, 660, 1070, 733, 62, 978, 975, 834, 888, 830, 806, 831, 1123, 576, 1033, 218, 1563, 162, 950, 211, 883, 208, 288, 833, 286, 610, 807, 609, 208, 836, 79, 73, 212, 202, 796, 205, 795, 525, 300, 527, 292, 192 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4 ), PoolIntArray( 5, 0, 4 ), PoolIntArray( 5, 4, 6 ), PoolIntArray( 3, 2, 7, 8 ), PoolIntArray( 9, 8, 7, 10 ), PoolIntArray( 11, 5, 6 ), PoolIntArray( 11, 6, 12 ), PoolIntArray( 13, 11, 12 ), PoolIntArray( 14, 8, 9, 15 ), PoolIntArray( 16, 17, 18, 10 ), PoolIntArray( 16, 10, 7, 19 ), PoolIntArray( 19, 7, 20, 21 ), PoolIntArray( 22, 23, 24, 25 ), PoolIntArray( 1, 0, 13 ), PoolIntArray( 20, 1, 13, 12, 14 ), PoolIntArray( 20, 14, 15 ), PoolIntArray( 20, 15, 22 ), PoolIntArray( 20, 22, 25 ), PoolIntArray( 20, 25, 21 ) ]
+outlines = [ PoolVector2Array( 79, 73, 62, 978, 1795, 986, 1789, 81 ), PoolVector2Array( 212, 202, 208, 836, 288, 833, 286, 610, 807, 609, 806, 831, 888, 830, 883, 208, 796, 205, 795, 525, 300, 527, 292, 192 ), PoolVector2Array( 950, 211, 975, 834, 1635, 828, 1627, 721, 1070, 733, 1033, 218 ), PoolVector2Array( 1123, 576, 1215, 660, 1650, 237, 1563, 162 ) ]
+
+[node name="TestNavigation2" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Navigation2D" type="Navigation2D" parent="."]
+
+[node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="Navigation2D"]
+navpoly = SubResource( 1 )
+
+[node name="Enemy" type="Sprite" parent="Navigation2D"]
+position = Vector2( 129, 118 )
+texture = ExtResource( 2 )
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="Navigation2D/Enemy"]
+
+[node name="Timer" type="Timer" parent="Navigation2D/Enemy"]
+process_mode = 0
+autostart = true
+
+[connection signal="timeout" from="Navigation2D/Enemy/Timer" to="." method="_on_Timer_timeout"]

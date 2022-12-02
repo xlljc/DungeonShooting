@@ -61,6 +61,9 @@ public class GameApplication : Node2D
 
     public override void _EnterTree()
     {
+        GD.Randomize();
+        ActivityObject.IsDebug = Debug;
+        
         GlobalNodeRoot = GetNode<Node2D>(GlobalNodeRootPath);
         // 初始化鼠标
         Cursor = CursorPack.Instance<Cursor>();

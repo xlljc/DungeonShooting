@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/reloading.mp3-a718918dc3dc57c0c17a3c31a9e33c3f.mp3str"
+
+[deps]
+
+source_file="res://resource/sound/sfx/reloading.mp3"
+dest_files=[ "res://.import/reloading.mp3-a718918dc3dc57c0c17a3c31a9e33c3f.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0.0

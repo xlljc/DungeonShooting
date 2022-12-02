@@ -8,27 +8,26 @@ using System.Collections.Generic;
 public class StateController<T, S> : Component where T : ActivityObject where S : Enum
 {
     /// <summary>
-    /// 当前活跃的状态
+    /// 当前活跃的状态对象实例
     /// </summary>
-    public IState<T, S> CurrState => _currState;
-    private IState<T, S> _currState;
-    
+    public StateBase<T, S> CurrStateBase { get; private set; }
+
     /// <summary>
     /// 负责存放状态实例对象
     /// </summary>
-    private readonly Dictionary<S, IState<T, S>> _states = new Dictionary<S, IState<T, S>>();
+    private readonly Dictionary<S, StateBase<T, S>> _states = new Dictionary<S, StateBase<T, S>>();
 
     /// <summary>
     /// 记录下当前帧是否有改变的状态
     /// </summary>
     private bool _isChangeState;
-    
+
     public override void PhysicsProcess(float delta)
     {
         _isChangeState = false;
-        if (CurrState != null)
+        if (CurrStateBase != null)
         {
-            CurrState.PhysicsProcess(delta);
+            CurrStateBase.PhysicsProcess(delta);
             //判断当前帧是否有改变的状态, 如果有, 则重新调用 PhysicsProcess() 方法
             if (_isChangeState)
             {
@@ -37,19 +36,28 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
         }
     }
 
-    /// <summary>
-    /// 往状态机力注册一个新的状态
-    /// </summary>
-    public void Register(IState<T, S> state)
+    public override void DebugDraw()
     {
-        if (GetStateInstance(state.StateType) != null)
+        if (CurrStateBase != null)
         {
-            GD.PrintErr("当前状态已经在状态机中注册:", state);
+            CurrStateBase.DebugDraw();
+        }
+    }
+
+    /// <summary>
+    /// 往状态机里注册一个新的状态实例
+    /// </summary>
+    public void Register(StateBase<T, S> stateBase)
+    {
+        if (GetStateInstance(stateBase.State) != null)
+        {
+            GD.PrintErr("当前状态已经在状态机中注册:", stateBase);
             return;
         }
-        state.Master = ActivityObject as T;
-        state.StateController = this;
-        _states.Add(state.StateType, state);
+
+        stateBase.Master = ActivityObject as T;
+        stateBase.StateController = this;
+        _states.Add(stateBase.State, stateBase);
     }
 
     /// <summary>
@@ -71,7 +79,7 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
     /// <summary>
     /// 根据状态类型获取相应的状态对象
     /// </summary>
-    private IState<T, S> GetStateInstance(S stateType)
+    private StateBase<T, S> GetStateInstance(S stateType)
     {
         _states.TryGetValue(stateType, out var v);
         return v;
@@ -82,29 +90,31 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
     /// </summary>
     private void _changeState(bool late, S next, params object[] arg)
     {
-        if (_currState != null && _currState.StateType.Equals(next))
+        if (CurrStateBase != null && CurrStateBase.State.Equals(next))
         {
             return;
         }
+
         var newState = GetStateInstance(next);
         if (newState == null)
         {
             GD.PrintErr("当前状态机未找到相应状态:" + next);
             return;
         }
-        if (_currState == null)
+
+        if (CurrStateBase == null)
         {
-            _currState = newState;
+            CurrStateBase = newState;
             newState.Enter(default, arg);
         }
-        else if (_currState.CanChangeState(next))
+        else if (CurrStateBase.CanChangeState(next))
         {
             _isChangeState = !late;
-            var prev = _currState.StateType;
-            _currState.Exit(next);
+            var prev = CurrStateBase.State;
+            CurrStateBase.Exit(next);
             GD.Print("nextState => " + next);
-            _currState = newState;
-            _currState.Enter(prev, arg);
+            CurrStateBase = newState;
+            CurrStateBase.Enter(prev, arg);
         }
     }
 }

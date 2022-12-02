@@ -10,6 +10,11 @@ using Plugin;
 public abstract class ActivityObject : KinematicBody2D
 {
     /// <summary>
+    /// 是否是调试模式
+    /// </summary>
+    public static bool IsDebug { get; set; }
+    
+    /// <summary>
     /// 当前物体类型id, 用于区分是否是同一种物体, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemId 为 null
     /// </summary>
     public string ItemId { get; internal set; }
@@ -231,6 +236,13 @@ public abstract class ActivityObject : KinematicBody2D
     }
 
     /// <summary>
+    /// 如果开启 debug, 则每帧调用该函数, 可用于绘制文字线段等
+    /// </summary>
+    protected virtual void DebugDraw()
+    {
+    }
+
+    /// <summary>
     /// 拾起一个 node 节点
     /// </summary>
     public void Pickup()
@@ -408,9 +420,10 @@ public abstract class ActivityObject : KinematicBody2D
                 var temp = arr[i].Value;
                 if (temp != null && temp.ActivityObject == this && temp.Enable)
                 {
-                    if (!temp.IsStart)
+                    if (!temp.IsReady)
                     {
                         temp.Ready();
+                        temp.IsReady = true;
                     }
 
                     temp.Process(delta);
@@ -500,7 +513,54 @@ public abstract class ActivityObject : KinematicBody2D
             //计算阴影
             CalcShadow();
         }
+        
+        //调试绘制
+        if (IsDebug)
+        {
+            Update();
+        }
+    }
+    
+    public override void _PhysicsProcess(float delta)
+    {
+        //更新组件
+        if (_components.Count > 0)
+        {
+            var arr = _components.ToArray();
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (IsDestroyed) return;
+                var temp = arr[i].Value;
+                if (temp != null && temp.ActivityObject == this && temp.Enable)
+                {
+                    if (!temp.IsReady)
+                    {
+                        temp.Ready();
+                        temp.IsReady = true;
+                    }
 
+                    temp.PhysicsProcess(delta);
+                }
+            }
+        }
+    }
+
+    public override void _Draw()
+    {
+        if (IsDebug)
+        {
+            DebugDraw();
+            var arr = _components.ToArray();
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (IsDestroyed) return;
+                var temp = arr[i].Value;
+                if (temp != null && temp.ActivityObject == this && temp.Enable)
+                {
+                    temp.DebugDraw();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -524,29 +584,7 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
 
-    public override void _PhysicsProcess(float delta)
-    {
-        //更新组件
-        if (_components.Count > 0)
-        {
-            var arr = _components.ToArray();
-            for (int i = 0; i < arr.Length; i++)
-            {
-                if (IsDestroyed) return;
-                var temp = arr[i].Value;
-                if (temp != null && temp.ActivityObject == this && temp.Enable)
-                {
-                    if (!temp.IsStart)
-                    {
-                        temp.Ready();
-                    }
-
-                    temp.PhysicsProcess(delta);
-                }
-            }
-        }
-    }
-
+    
     /// <summary>
     /// 销毁物体
     /// </summary>

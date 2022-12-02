@@ -18,63 +18,73 @@ using Godot;
 /// </summary>
 public class Enemy : Role
 {
-
+    
+    /// <summary>
+    /// 公共属性, 是否找到玩家, 如果找到玩家, 则所有敌人都会知道玩家的位置
+    /// </summary>
+    public static bool IsFindPlayer { get; set; }
+    
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
     public StateController<Enemy, AIStateEnum> StateController { get; }
-    
+
     /// <summary>
-    /// 视野半径, 单位像素
+    /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
     /// </summary>
-    public float ViewRange { get; set; } = 200;
+    public float ViewRange { get; set; } = 250;
+
+    /// <summary>
+    /// 发现玩家后的视野半径
+    /// </summary>
+    public float TailAfterViewRange { get; set; } = 400;
 
     /// <summary>
     /// 背后的视野半径, 单位像素
     /// </summary>
     public float BackViewRange { get; set; } = 50;
-    
+
     /// <summary>
     /// 视野检测射线, 朝玩家打射线, 检测是否碰到墙
     /// </summary>
     public RayCast2D ViewRay { get; }
     
-    //------------------- 寻路相关 ---------------------------
+    /// <summary>
+    /// 导航代理
+    /// </summary>
+    public NavigationAgent2D NavigationAgent2D { get; }
 
     /// <summary>
-    /// 移动目标标记
+    /// 导航代理中点
     /// </summary>
-    public PathSign PathSign { get; }
+    public Position2D NavigationPoint { get; }
 
-    /// <summary>
-    /// 寻路标记线段总长度
-    /// </summary>
-    public float PathSignLength { get; set; } = 500;
-
-    //-------------------------------------------------------
-
-    private Area2D _marginArea;
+    private float _enemyAttackTimer = 0;
     
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
         StateController = new StateController<Enemy, AIStateEnum>();
         AddComponent(StateController);
-        
+
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
-        MoveSpeed = 20;
-        
+        MoveSpeed = 30;
+
+        Holster.SlotList[2].Enable = true;
+        Holster.SlotList[3].Enable = true;
+
         //视野射线
         ViewRay = GetNode<RayCast2D>("ViewRay");
-        _marginArea = GetNode<Area2D>("MarginArea");
-        
-        PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
-        
+        NavigationPoint = GetNode<Position2D>("NavigationPoint");
+        NavigationAgent2D = NavigationPoint.GetNode<NavigationAgent2D>("NavigationAgent2D");
+
+        //PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
+
         //注册Ai状态机
-        StateController.Register(new AINormalState());
-        StateController.Register(new AIProbeState());
-        StateController.Register(new AITailAfterState());
+        StateController.Register(new AiNormalState());
+        StateController.Register(new AiProbeState());
+        StateController.Register(new AiTailAfterState());
     }
 
     public override void _Ready()
@@ -82,80 +92,73 @@ public class Enemy : Role
         base._Ready();
         //默认状态
         StateController.ChangeState(AIStateEnum.AINormal);
-        
-        _marginArea.Connect("body_shape_entered", this, nameof(OnObjectEnter));
-    }
 
-    public void OnObjectEnter(RID id, Node node, int shapeIndex, int localShapeIndex)
-    {
-        if (node is TileMap tileMap)
-        {
-            // var tileGetShape = tileMap.TileSet.TileGetShapeTransform(shapeIndex, localShapeIndex).;
-            // GD.Print("enter: ", tileGetShape.GetType().FullName);
-        }
-    }
-    
-    public override void _Process(float delta)
-    {
-        base._Process(delta);
-        if (GameApplication.Instance.Debug)
-        {
-            PathSign.Scale = new Vector2((int)Face, 1);
-            Update();
-        }
+        NavigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
     }
 
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
-        
-        // var player = GameApplication.Instance.Room.Player;
-        // //玩家中心点坐标
-        // var playerPos = player.MountPoint.GlobalPosition;
-        //
-        // //玩家是否在前方
-        // var isForward = IsPositionInForward(playerPos);
-        //
-        // if (isForward) //脸朝向玩家
-        // {
-        //     // if (GlobalPosition.DistanceSquaredTo(playerPos) <= ViewRange * ViewRange) //没有超出视野半径
-        //     // {
-        //     //     //射线检测墙体
-        //     //     ViewRay.Enabled = true;
-        //     //     var localPos = ViewRay.ToLocal(playerPos);
-        //     //     ViewRay.CastTo = localPos;
-        //     //     ViewRay.ForceRaycastUpdate();
-        //     //
-        //     //     if (ViewRay.IsColliding()) //在视野范围内, 但是碰到墙壁
-        //     //     {
-        //     //         LookTarget = null;
-        //     //         StateController.ChangeState(StateEnum.Idle);
-        //     //     }
-        //     //     else //视野无阻
-        //     //     {
-        //     //         LookTarget = player;
-        //     //         StateController.ChangeState(StateEnum.Run);
-        //     //     }
-        //     //     
-        //     //     ViewRay.Enabled = false;
-        //     // }
-        //     // else //超出视野半径
-        //     // {
-        //     //     LookTarget = null;
-        //     //     StateController.ChangeState(StateEnum.Idle);
-        //     // }
-        //     // //_prevPlayerPos = playerPos;
-        // }
+
+        _enemyAttackTimer -= delta;
     }
 
-    public override void _Draw()
+    /// <summary>
+    /// Ai触发的攻击
+    /// </summary>
+    public void EnemyAttack()
     {
-        if (GameApplication.Instance.Debug)
+        var weapon = Holster.ActiveWeapon;
+        if (weapon != null)
         {
-            if (PathSign != null)
+            if (weapon.Attribute.ContinuousShoot) //连发
             {
-                DrawLine(Vector2.Zero,ToLocal(PathSign.GlobalPosition), Colors.Red);
+                Attack();
+            }
+            else //单发
+            {
+                if (_enemyAttackTimer <= 0)
+                {
+                    _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed;
+                    Attack();
+                }
             }
         }
+    }
+
+    /// <summary>
+    /// 返回目标点是否在视野范围内
+    /// </summary>
+    public bool IsInViewRange(Vector2 target)
+    {
+        var isForward = IsPositionInForward(target);
+        if (isForward)
+        {
+            if (GlobalPosition.DistanceSquaredTo(target) <= ViewRange * ViewRange) //没有超出视野半径
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 调用视野检测, 如果被墙壁和其它物体遮挡, 则返回被挡住视野的物体对象, 视野无阻则返回 null
+    /// </summary>
+    public bool TestViewRayCast(Vector2 target)
+    {
+        ViewRay.Enabled = true;
+        ViewRay.CastTo = ViewRay.ToLocal(target);
+        ViewRay.ForceRaycastUpdate();
+        return ViewRay.IsColliding();
+    }
+
+    /// <summary>
+    /// 调用视野检测完毕后, 需要调用 TestViewRayCastOver() 来关闭视野检测射线
+    /// </summary>
+    public void TestViewRayCastOver()
+    {
+        ViewRay.Enabled = false;
     }
 }

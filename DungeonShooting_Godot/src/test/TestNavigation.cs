@@ -1,6 +1,8 @@
 using Godot;
 
-//测试导航
+/// <summary>
+/// 该demo是以3.4为基础做的导航demo, 后面3.5出了新的导航系统, 游戏中已采用新的导航方案
+/// </summary>
 public class TestNavigation : Node2D
 {
 

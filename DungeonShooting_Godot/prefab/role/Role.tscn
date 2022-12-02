@@ -99,7 +99,6 @@ material = SubResource( 33 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
-frame = 1
 playing = true
 
 [node name="Collision" type="CollisionShape2D" parent="."]
