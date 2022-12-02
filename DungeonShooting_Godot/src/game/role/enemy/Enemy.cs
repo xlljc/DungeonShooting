@@ -30,7 +30,7 @@ public class Enemy : Role
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
-    public StateController<Enemy, AIStateEnum> StateController { get; }
+    public StateController<Enemy, AiStateEnum> StateController { get; }
 
     /// <summary>
     /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
@@ -63,10 +63,11 @@ public class Enemy : Role
     public Position2D NavigationPoint { get; }
 
     private float _enemyAttackTimer = 0;
+    private EventBinder _eventBinder;
     
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
-        StateController = new StateController<Enemy, AIStateEnum>();
+        StateController = new StateController<Enemy, AiStateEnum>();
         AddComponent(StateController);
 
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
@@ -88,14 +89,15 @@ public class Enemy : Role
         StateController.Register(new AiNormalState());
         StateController.Register(new AiProbeState());
         StateController.Register(new AiTailAfterState());
-        StateController.Register(new AIAttackState());
+        StateController.Register(new AiTargetInViewState());
+        StateController.Register(new AiLeaveForState());
     }
 
     public override void _Ready()
     {
         base._Ready();
         //默认状态
-        StateController.ChangeState(AIStateEnum.AINormal);
+        StateController.ChangeState(AiStateEnum.AiNormal);
 
         NavigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
     }
@@ -106,11 +108,14 @@ public class Enemy : Role
         {
             _enemies.Add(this);
         }
+        _eventBinder = EventManager.AddEventListener(EventEnum.OnEnemyFindPlayer, OnEnemyFindPlayer);
     }
 
     public override void _ExitTree()
     {
         _enemies.Remove(this);
+        _eventBinder.RemoveEventListener();
+        _eventBinder = null;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -174,6 +179,23 @@ public class Enemy : Role
     }
 
     /// <summary>
+    /// 返回目标点是否在跟随状态下的视野半径内
+    /// </summary>
+    public bool IsInTailAfterViewRange(Vector2 target)
+    {
+        var isForward = IsPositionInForward(target);
+        if (isForward)
+        {
+            if (GlobalPosition.DistanceSquaredTo(target) <= TailAfterViewRange * TailAfterViewRange) //没有超出视野半径
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// 调用视野检测, 如果被墙壁和其它物体遮挡, 则返回被挡住视野的物体对象, 视野无阻则返回 null
     /// </summary>
     public bool TestViewRayCast(Vector2 target)
@@ -190,5 +212,16 @@ public class Enemy : Role
     public void TestViewRayCastOver()
     {
         ViewRay.Enabled = false;
+    }
+    
+    //其他敌人发现玩家
+    private void OnEnemyFindPlayer(object obj)
+    {
+        var state = StateController.CurrState;
+        if (state != AiStateEnum.AiLeaveFor && state != AiStateEnum.AiTailAfter && state != AiStateEnum.AiTargetInView)
+        {
+            //前往指定地点
+            StateController.ChangeStateLate(AiStateEnum.AiLeaveFor, GameApplication.Instance.Room.Player.GetCenterPosition());
+        }
     }
 }

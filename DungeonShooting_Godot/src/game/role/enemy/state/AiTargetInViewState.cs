@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 目标在视野范围内, 发起攻击
 /// </summary>
-public class AIAttackState : StateBase<Enemy, AIStateEnum>
+public class AiTargetInViewState : StateBase<Enemy, AiStateEnum>
 {
         
     /// <summary>
@@ -16,11 +16,11 @@ public class AIAttackState : StateBase<Enemy, AIStateEnum>
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
     
-    public AIAttackState() : base(AIStateEnum.AIAttack)
+    public AiTargetInViewState() : base(AiStateEnum.AiTargetInView)
     {
     }
 
-    public override void Enter(AIStateEnum prev, params object[] args)
+    public override void Enter(AiStateEnum prev, params object[] args)
     {
         _navigationUpdateTimer = 0;
         IsInView = true;
@@ -28,8 +28,7 @@ public class AIAttackState : StateBase<Enemy, AIStateEnum>
 
     public override void PhysicsProcess(float delta)
     {
-        var masterPos = Master.GlobalPosition;
-        var playerPos = GameApplication.Instance.Room.Player.GlobalPosition;
+        var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
         
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
@@ -54,9 +53,10 @@ public class AIAttackState : StateBase<Enemy, AIStateEnum>
         Master.CalcMove(delta);
         
         //检测玩家是否在视野内
-        if (masterPos.DistanceSquaredTo(playerPos) <= Master.TailAfterViewRange * Master.TailAfterViewRange)
+        if (Master.IsInTailAfterViewRange(playerPos))
         {
             IsInView = !Master.TestViewRayCast(playerPos);
+            //关闭射线检测
             Master.TestViewRayCastOver();
         }
         else
@@ -70,13 +70,13 @@ public class AIAttackState : StateBase<Enemy, AIStateEnum>
         }
         else
         {
-            ChangeStateLate(AIStateEnum.AITailAfter);
+            ChangeStateLate(AiStateEnum.AiTailAfter);
         }
     }
 
     public override void DebugDraw()
     {
-        var playerPos = GameApplication.Instance.Room.Player.GlobalPosition;
+        var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
         Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Red);
     }
 }

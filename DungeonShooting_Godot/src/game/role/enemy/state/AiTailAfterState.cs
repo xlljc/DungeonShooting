@@ -2,14 +2,14 @@
 using Godot;
 
 /// <summary>
-/// AI 发现玩家
+/// AI 发现玩家, 跟随玩家
 /// </summary>
-public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
+public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
 {
     /// <summary>
     /// 目标是否在视野半径内
     /// </summary>
-    public bool IsInViewRange;
+    private bool _isInViewRange;
 
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
@@ -17,22 +17,21 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
 
     //目标从视野消失时已经过去的时间
     private float _viewTimer;
-    
-    public AiTailAfterState() : base(AIStateEnum.AITailAfter)
+
+    public AiTailAfterState() : base(AiStateEnum.AiTailAfter)
     {
     }
 
-    public override void Enter(AIStateEnum prev, params object[] args)
+    public override void Enter(AiStateEnum prev, params object[] args)
     {
-        IsInViewRange = true;
+        _isInViewRange = true;
         _navigationUpdateTimer = 0;
         _viewTimer = 0;
     }
-
+    
     public override void PhysicsProcess(float delta)
     {
-        var masterPos = Master.GlobalPosition;
-        var playerPos = GameApplication.Instance.Room.Player.GlobalPosition;
+        var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
         
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
@@ -56,26 +55,29 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
         Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() * Master.MoveSpeed;
         Master.CalcMove(delta);
 
-        //是否看到玩家'
-        //检测玩家是否在视野内
-        if (masterPos.DistanceSquaredTo(playerPos) <= Master.TailAfterViewRange * Master.TailAfterViewRange)
+        //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
+        if (Master.IsInTailAfterViewRange(playerPos))
         {
-            if (!Master.TestViewRayCast(playerPos))
+            if (!Master.TestViewRayCast(playerPos)) //看到玩家
             {
+                //关闭射线检测
                 Master.TestViewRayCastOver();
-                //切换成攻击状态
-                ChangeStateLate(AIStateEnum.AIAttack);
+                //切换成发现目标状态
+                ChangeStateLate(AiStateEnum.AiTargetInView);
+                //派发发现玩家事件
+                EventManager.EmitEvent(EventEnum.OnEnemyFindPlayer);
                 return;
             }
             else
             {
+                //关闭射线检测
                 Master.TestViewRayCastOver();
             }
         }
         
-        //检测玩家是否在视野内, 此时视野可穿墙, 直接检测距离即可
-        IsInViewRange = masterPos.DistanceSquaredTo(playerPos) <= Master.ViewRange * Master.ViewRange;
-        if (IsInViewRange)
+        //检测玩家是否在穿墙视野范围内, 直接检测距离即可
+        _isInViewRange = Master.IsInViewRange(playerPos);
+        if (_isInViewRange)
         {
             _viewTimer = 0;
         }
@@ -83,7 +85,7 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
         {
             if (_viewTimer > 10) //10秒
             {
-                ChangeStateLate(AIStateEnum.AINormal);
+                ChangeStateLate(AiStateEnum.AiNormal);
             }
             else
             {
@@ -94,8 +96,8 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
 
     public override void DebugDraw()
     {
-        var playerPos = GameApplication.Instance.Room.Player.GlobalPosition;
-        if (IsInViewRange)
+        var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
+        if (_isInViewRange)
         {
             Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Orange);
         }

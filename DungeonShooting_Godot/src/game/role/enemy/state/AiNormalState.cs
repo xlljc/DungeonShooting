@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// AI 正常状态
 /// </summary>
-public class AiNormalState : StateBase<Enemy, AIStateEnum>
+public class AiNormalState : StateBase<Enemy, AiStateEnum>
 {
     //是否发现玩家
     private bool _isFindPlayer;
@@ -24,11 +24,11 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
     //移动停顿计时器
     private float _pauseTimer;
 
-    public AiNormalState() : base(AIStateEnum.AINormal)
+    public AiNormalState() : base(AiStateEnum.AiNormal)
     {
     }
 
-    public override void Enter(AIStateEnum prev, params object[] args)
+    public override void Enter(AiStateEnum prev, params object[] args)
     {
         _isFindPlayer = false;
         _isMoveOver = true;
@@ -43,14 +43,14 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
         if (_isFindPlayer) //已经找到玩家了
         {
             //现临时处理, 直接切换状态
-            ChangeStateLate(AIStateEnum.AITailAfter);
+            ChangeStateLate(AiStateEnum.AiTailAfter);
         }
         else //没有找到玩家
         {
             //检测玩家
             var player = GameApplication.Instance.Room.Player;
             //玩家中心点坐标
-            var playerPos = player.MountPoint.GlobalPosition;
+            var playerPos = player.GetCenterPosition();
 
             if (Master.IsInViewRange(playerPos) && !Master.TestViewRayCast(playerPos)) //发现玩家
             {
@@ -81,7 +81,7 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
                     _isMoveOver = true;
                 }
             }
-
+            //关闭射线检测
             Master.TestViewRayCastOver();
         }
     }

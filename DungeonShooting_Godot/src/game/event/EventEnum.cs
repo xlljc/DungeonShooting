@@ -4,5 +4,8 @@
 /// </summary>
 public enum EventEnum
 {
-    Test,
+    /// <summary>
+    /// 敌人发现玩家
+    /// </summary>
+    OnEnemyFindPlayer,
 }

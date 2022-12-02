@@ -112,7 +112,6 @@ public class RoomManager : Navigation2D
 
     public override void _Process(float delta)
     {
-        Enemy.UpdateEnemiesView();
         if (GameApplication.Instance.Debug)
         {
             Update();

@@ -302,6 +302,14 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
+    /// 获取当前角色的中心点坐标
+    /// </summary>
+    public Vector2 GetCenterPosition()
+    {
+        return MountPoint.GlobalPosition;
+    }
+
+    /// <summary>
     /// 使角色看向指定的坐标,
     /// 注意, 调用该函数会清空 LookTarget, 因为拥有 LookTarget 时也会每帧更新玩家视野位置
     /// </summary>

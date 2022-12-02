@@ -2,9 +2,9 @@
 /// <summary>
 /// Ai 不确定玩家位置
 /// </summary>
-public class AiProbeState : StateBase<Enemy, AIStateEnum>
+public class AiProbeState : StateBase<Enemy, AiStateEnum>
 {
-    public AiProbeState() : base(AIStateEnum.AIProbe)
+    public AiProbeState() : base(AiStateEnum.AiProbe)
     {
     }
 }
