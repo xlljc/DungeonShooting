@@ -10,12 +10,7 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
     /// 目标是否在视野半径内
     /// </summary>
     public bool IsInViewRange;
-    
-    /// <summary>
-    /// 是否在视野内
-    /// </summary>
-    public bool IsInView;
-    
+
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
@@ -30,7 +25,6 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
     public override void Enter(AIStateEnum prev, params object[] args)
     {
         IsInViewRange = true;
-        IsInView = true;
         _navigationUpdateTimer = 0;
         _viewTimer = 0;
     }
@@ -62,35 +56,28 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
         Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() * Master.MoveSpeed;
         Master.CalcMove(delta);
 
-        //检测玩家是否在视野内, 此时视野可穿墙, 直接检测距离即可
-        
+        //是否看到玩家'
+        //检测玩家是否在视野内
         if (masterPos.DistanceSquaredTo(playerPos) <= Master.TailAfterViewRange * Master.TailAfterViewRange)
         {
-            IsInView = !Master.TestViewRayCast(playerPos);
-            if (IsInView)
+            if (!Master.TestViewRayCast(playerPos))
             {
-                IsInViewRange = true;
+                Master.TestViewRayCastOver();
+                //切换成攻击状态
+                ChangeStateLate(AIStateEnum.AIAttack);
+                return;
             }
             else
             {
-                IsInViewRange = masterPos.DistanceSquaredTo(playerPos) <= Master.ViewRange * Master.ViewRange;
+                Master.TestViewRayCastOver();
             }
         }
-        else
-        {
-            IsInViewRange = masterPos.DistanceSquaredTo(playerPos) <= Master.ViewRange * Master.ViewRange;
-            IsInView = false;
-        }
-
+        
+        //检测玩家是否在视野内, 此时视野可穿墙, 直接检测距离即可
+        IsInViewRange = masterPos.DistanceSquaredTo(playerPos) <= Master.ViewRange * Master.ViewRange;
         if (IsInViewRange)
         {
             _viewTimer = 0;
-
-            if (IsInView)
-            {
-                //攻击
-                Master.EnemyAttack();
-            }
         }
         else //超出视野
         {
@@ -108,17 +95,13 @@ public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
     public override void DebugDraw()
     {
         var playerPos = GameApplication.Instance.Room.Player.GlobalPosition;
-        if (IsInView)
+        if (IsInViewRange)
         {
-            Master.DrawLine(Vector2.Zero, Master.ToLocal(playerPos), Colors.Red);
-        }
-        else if (IsInViewRange)
-        {
-            Master.DrawLine(Vector2.Zero, Master.ToLocal(playerPos), Colors.Orange);
+            Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Orange);
         }
         else
         {
-            Master.DrawLine(Vector2.Zero, Master.ToLocal(playerPos), Colors.Blue);
+            Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Blue);
         }
     }
 }

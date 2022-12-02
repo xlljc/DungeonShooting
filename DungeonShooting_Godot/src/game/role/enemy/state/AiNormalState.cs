@@ -120,6 +120,6 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
 
     public override void DebugDraw()
     {
-        Master.DrawLine(Vector2.Zero, Master.ToLocal(_nextPos), Colors.Green);
+        Master.DrawLine(new Vector2(0, -8), Master.ToLocal(_nextPos), Colors.Green);
     }
 }
