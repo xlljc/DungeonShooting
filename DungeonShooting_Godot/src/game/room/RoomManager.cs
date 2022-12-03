@@ -11,7 +11,7 @@ public class RoomManager : Navigation2D
     /// <summary>
     /// 玩家对象
     /// </summary>
-    public Role Player { get; private set; }
+    public Player Player { get; private set; }
 
     /// <summary>
     /// 导航区域形状
@@ -112,6 +112,7 @@ public class RoomManager : Navigation2D
 
     public override void _Process(float delta)
     {
+        Enemy.UpdateEnemiesView();
         if (GameApplication.Instance.Debug)
         {
             Update();

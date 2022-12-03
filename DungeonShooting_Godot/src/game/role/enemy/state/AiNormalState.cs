@@ -39,7 +39,13 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
     
     public override void PhysicsProcess(float delta)
     {
-
+        //其他敌人发现玩家
+        if (Enemy.IsFindTarget)
+        {
+            ChangeStateLate(AiStateEnum.AiLeaveFor);
+            return;
+        }
+        
         if (_isFindPlayer) //已经找到玩家了
         {
             //现临时处理, 直接切换状态

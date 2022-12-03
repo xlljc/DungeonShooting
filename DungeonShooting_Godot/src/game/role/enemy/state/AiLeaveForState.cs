@@ -6,29 +6,46 @@ using Godot;
 /// </summary>
 public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
 {
-    private Vector2 _targetPosition;
-
+    //导航目标点刷新计时器
+    private float _navigationUpdateTimer = 0;
+    private float _navigationInterval = 0.3f;
+    
     public AiLeaveForState() : base(AiStateEnum.AiLeaveFor)
     {
     }
 
     public override void Enter(AiStateEnum prev, params object[] args)
     {
-        if (args.Length > 0 && args[0] is Vector2 pos)
+        if (Enemy.IsFindTarget)
         {
-            UpdateTargetPosition(pos);
+            Master.NavigationAgent2D.SetTargetLocation(Enemy.FindTargetPosition);
         }
         else
         {
-            ChangeState(AiStateEnum.AiNormal);
+            ChangeStateLate(prev);
         }
     }
 
     public override void PhysicsProcess(float delta)
     {
+        //更新玩家位置
+        if (_navigationUpdateTimer <= 0)
+        {
+            //每隔一段时间秒更改目标位置
+            _navigationUpdateTimer = _navigationInterval;
+            if (Master.NavigationAgent2D.GetTargetLocation() != Enemy.FindTargetPosition)
+            {
+                Master.NavigationAgent2D.SetTargetLocation(Enemy.FindTargetPosition);
+            }
+        }
+        else
+        {
+            _navigationUpdateTimer -= delta;
+        }
+        
         //计算移动
         var nextPos = Master.NavigationAgent2D.GetNextLocation();
-        Master.LookTargetPosition(_targetPosition);
+        Master.LookTargetPosition(Enemy.FindTargetPosition);
         Master.AnimatedSprite.Animation = AnimatorNames.Run;
         Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                           Master.MoveSpeed;
@@ -44,8 +61,6 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
                 ChangeStateLate(AiStateEnum.AiTargetInView);
-                //派发发现玩家事件
-                EventManager.EmitEvent(EventEnum.OnEnemyFindPlayer);
                 return;
             }
             else
@@ -62,9 +77,8 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         }
     }
 
-    public void UpdateTargetPosition(Vector2 pos)
+    public override void DebugDraw()
     {
-        _targetPosition = pos;
-        Master.NavigationAgent2D.SetTargetLocation(pos);
+        Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.NavigationAgent2D.GetTargetLocation()), Colors.Yellow);
     }
 }

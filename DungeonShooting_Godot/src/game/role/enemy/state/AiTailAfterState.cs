@@ -64,8 +64,6 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
                 ChangeStateLate(AiStateEnum.AiTargetInView);
-                //派发发现玩家事件
-                EventManager.EmitEvent(EventEnum.OnEnemyFindPlayer);
                 return;
             }
             else

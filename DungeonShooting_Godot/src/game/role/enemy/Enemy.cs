@@ -21,9 +21,14 @@ public class Enemy : Role
 {
     
     /// <summary>
-    /// 公共属性, 是否找到玩家, 如果找到玩家, 则所有敌人都会知道玩家的位置
+    /// 公共属性, 是否找到目标, 如果找到目标, 则所有敌人都会知道玩家的位置
     /// </summary>
-    public static bool IsFindPlayer { get; set; }
+    public static bool IsFindTarget { get; private set; }
+    
+    /// <summary>
+    /// 找到的目标的位置, 如果目标在视野内, 则一直更新
+    /// </summary>
+    public static Vector2 FindTargetPosition { get; private set; }
 
     private static readonly List<Enemy> _enemies = new List<Enemy>();
 
@@ -63,7 +68,6 @@ public class Enemy : Role
     public Position2D NavigationPoint { get; }
 
     private float _enemyAttackTimer = 0;
-    private EventBinder _eventBinder;
     
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
@@ -96,6 +100,9 @@ public class Enemy : Role
     public override void _Ready()
     {
         base._Ready();
+        //防撞速度计算
+        NavigationAgent2D.Connect("velocity_computed", this, nameof(OnVelocityComputed));
+        
         //默认状态
         StateController.ChangeState(AiStateEnum.AiNormal);
 
@@ -108,14 +115,11 @@ public class Enemy : Role
         {
             _enemies.Add(this);
         }
-        _eventBinder = EventManager.AddEventListener(EventEnum.OnEnemyFindPlayer, OnEnemyFindPlayer);
     }
 
     public override void _ExitTree()
     {
         _enemies.Remove(this);
-        _eventBinder.RemoveEventListener();
-        _eventBinder = null;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -130,11 +134,15 @@ public class Enemy : Role
     /// </summary>
     public static void UpdateEnemiesView()
     {
+        IsFindTarget = false;
         for (var i = 0; i < _enemies.Count; i++)
         {
             var enemy = _enemies[i];
-            
-            //enemy.StateController.GetState()
+            if (enemy.StateController.CurrState == AiStateEnum.AiTargetInView) //目标在视野内
+            {
+                IsFindTarget = true;
+                FindTargetPosition = Player.Current.GetCenterPosition();
+            }
         }
     }
 
@@ -213,15 +221,9 @@ public class Enemy : Role
     {
         ViewRay.Enabled = false;
     }
-    
-    //其他敌人发现玩家
-    private void OnEnemyFindPlayer(object obj)
+
+    private void OnVelocityComputed(Vector2 velocity)
     {
-        var state = StateController.CurrState;
-        if (state != AiStateEnum.AiLeaveFor && state != AiStateEnum.AiTailAfter && state != AiStateEnum.AiTargetInView)
-        {
-            //前往指定地点
-            StateController.ChangeStateLate(AiStateEnum.AiLeaveFor, GameApplication.Instance.Room.Player.GetCenterPosition());
-        }
+        GD.Print("velocity: " + velocity);
     }
 }
