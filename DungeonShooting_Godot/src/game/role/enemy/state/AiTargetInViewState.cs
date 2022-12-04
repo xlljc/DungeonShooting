@@ -45,14 +45,26 @@ public class AiTargetInViewState : StateBase<Enemy, AiStateEnum>
             _navigationUpdateTimer -= delta;
         }
 
-        if (!Master.NavigationAgent2D.IsNavigationFinished())
+        var masterPosition = Master.GlobalPosition;
+        var canMove = false;
+
+        var weapon = Master.Holster.ActiveWeapon;
+        if (weapon != null)
         {
-            //计算移动
-            var nextPos = Master.NavigationAgent2D.GetNextLocation();
-            Master.LookTargetPosition(playerPos);
-            Master.AnimatedSprite.Animation = AnimatorNames.Run;
-            Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() * Master.MoveSpeed;
-            Master.CalcMove(delta);
+            canMove = masterPosition.DistanceSquaredTo(playerPos) >= 50 * 50;
+        }
+        
+        if (canMove)
+        {
+            if (!Master.NavigationAgent2D.IsNavigationFinished())
+            {
+                //计算移动
+                var nextPos = Master.NavigationAgent2D.GetNextLocation();
+                Master.LookTargetPosition(playerPos);
+                Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                Master.Velocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() * Master.MoveSpeed;
+                Master.CalcMove(delta);
+            }
         }
 
         //检测玩家是否在视野内

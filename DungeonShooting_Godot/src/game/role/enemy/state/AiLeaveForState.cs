@@ -9,7 +9,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
-    
+
     public AiLeaveForState() : base(AiStateEnum.AiLeaveFor)
     {
     }

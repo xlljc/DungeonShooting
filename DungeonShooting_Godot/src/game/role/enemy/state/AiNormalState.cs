@@ -36,7 +36,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
         _againstWallNormalAngle = 0;
         _pauseTimer = 0;
     }
-    
+
     public override void PhysicsProcess(float delta)
     {
         //其他敌人发现玩家
@@ -45,7 +45,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
             ChangeStateLate(AiStateEnum.AiLeaveFor);
             return;
         }
-        
+
         if (_isFindPlayer) //已经找到玩家了
         {
             //现临时处理, 直接切换状态
@@ -86,7 +86,17 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
                     _pauseTimer = Utils.RandRange(0.3f, 2f);
                     _isMoveOver = true;
                 }
+                else
+                {
+                    var lastSlideCollision = Master.GetLastSlideCollision();
+                    if (lastSlideCollision != null && lastSlideCollision.Collider is Role) //碰到其他角色
+                    {
+                        _pauseTimer = Utils.RandRange(0.1f, 0.5f);
+                        _isMoveOver = true;
+                    }
+                }
             }
+
             //关闭射线检测
             Master.TestViewRayCastOver();
         }
