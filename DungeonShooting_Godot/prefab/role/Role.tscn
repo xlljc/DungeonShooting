@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://resource/materlal/Blend.tres" type="Material" id=1]
 [ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=2]
@@ -80,6 +80,9 @@ animations = [ {
 "speed": 10.0
 } ]
 
+[sub_resource type="CircleShape2D" id=34]
+radius = 7.00446
+
 [sub_resource type="RectangleShape2D" id=16]
 extents = Vector2( 5, 8.25 )
 
@@ -99,11 +102,12 @@ material = SubResource( 33 )
 position = Vector2( 0, -12 )
 frames = SubResource( 6 )
 animation = "idle"
+frame = 3
 playing = true
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -7.75 )
-shape = SubResource( 16 )
+shape = SubResource( 34 )
 
 [node name="InteractiveArea" type="Area2D" parent="."]
 visible = false

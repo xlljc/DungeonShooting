@@ -24,7 +24,7 @@ material = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource( 2 )
-frame = 1
+frame = 0
 
 [node name="Collision" parent="." index="3"]
 position = Vector2( 0, -8 )
@@ -36,5 +36,4 @@ position = Vector2( 0, -8 )
 position = Vector2( 0, -5 )
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="NavigationPoint" index="0"]
-avoidance_enabled = true
 radius = 20.0

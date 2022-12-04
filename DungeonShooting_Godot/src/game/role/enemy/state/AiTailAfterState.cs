@@ -48,13 +48,16 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
             _navigationUpdateTimer -= delta;
         }
         
-        //计算移动
-        var nextPos = Master.NavigationAgent2D.GetNextLocation();
-        Master.LookTargetPosition(playerPos);
-        Master.AnimatedSprite.Animation = AnimatorNames.Run;
-        Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() * Master.MoveSpeed;
-        Master.CalcMove(delta);
-
+        if (!Master.NavigationAgent2D.IsNavigationFinished())
+        {
+            //计算移动
+            var nextPos = Master.NavigationAgent2D.GetNextLocation();
+            Master.LookTargetPosition(playerPos);
+            Master.AnimatedSprite.Animation = AnimatorNames.Run;
+            Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                              Master.MoveSpeed;
+            Master.CalcMove(delta);
+        }
         //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
         if (Master.IsInTailAfterViewRange(playerPos))
         {

@@ -42,14 +42,17 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         {
             _navigationUpdateTimer -= delta;
         }
-        
-        //计算移动
-        var nextPos = Master.NavigationAgent2D.GetNextLocation();
-        Master.LookTargetPosition(Enemy.FindTargetPosition);
-        Master.AnimatedSprite.Animation = AnimatorNames.Run;
-        Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                          Master.MoveSpeed;
-        Master.CalcMove(delta);
+
+        if (!Master.NavigationAgent2D.IsNavigationFinished())
+        {
+            //计算移动
+            var nextPos = Master.NavigationAgent2D.GetNextLocation();
+            Master.LookTargetPosition(Enemy.FindTargetPosition);
+            Master.AnimatedSprite.Animation = AnimatorNames.Run;
+            Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                              Master.MoveSpeed;
+            Master.CalcMove(delta);
+        }
 
         var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
         //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
