@@ -8,8 +8,6 @@ using Godot;
 public static class SpecialEffectManager
 {
 
-    private static Stack<SpecialEffect> _specialEffectStack = new Stack<SpecialEffect>();
-
     /// <summary>
     /// 基础特效播放类, 用于播放序列帧动画特效, 播完就回收
     /// </summary>
@@ -37,7 +35,7 @@ public static class SpecialEffectManager
         private void Over()
         {
             currLoopCount = 0;
-            RecycleSpecialEffect(this);
+            QueueFree();
         }
     }
 
@@ -56,8 +54,7 @@ public static class SpecialEffectManager
     public static void Play(string path, string animName, Vector2 pos, float rotation, Vector2 scale, Vector2 offset, int zIndex = 0, float speed = 1, int loopCount = 1)
     {
         var spriteFrames = ResourceManager.Load<SpriteFrames>(path);
-        
-        var specialEffect = GetSpecialEffect();
+        var specialEffect = new SpecialEffect();
         specialEffect.GlobalPosition = pos;
         specialEffect.Rotation = rotation;
         specialEffect.Scale = scale;
@@ -68,31 +65,5 @@ public static class SpecialEffectManager
         specialEffect.Frames = spriteFrames;
         specialEffect.Play(animName);
         GameApplication.Instance.Room.GetRoot(true).AddChild(specialEffect);
-    }
-
-    private static SpecialEffect GetSpecialEffect()
-    {
-        if (_specialEffectStack.Count > 0)
-        {
-            return _specialEffectStack.Pop();
-        }
-
-        return new SpecialEffect();
-    }
-    
-    /// <summary>
-    /// 回收2D音频播放节点
-    /// </summary>
-    private static void RecycleSpecialEffect(SpecialEffect inst)
-    {
-        var parent = inst.GetParent();
-        if (parent != null)
-        {
-            parent.RemoveChild(inst);
-        }
-
-        inst.Playing = false;
-        inst.Frames = null;
-        _specialEffectStack.Push(inst);
     }
 }
