@@ -67,7 +67,7 @@ public class Bullet : ActivityObject
             // hit.RotationDegrees = Utils.RandRangeInt(0, 360);
             // hit.GlobalPosition = GlobalPosition;
             // GameApplication.Instance.Room.GetRoot(true).AddChild(hit);
-            
+
             DoDestroy();
         }
     }
@@ -82,9 +82,16 @@ public class Bullet : ActivityObject
 
     private void DoDestroy()
     {
-        SpecialEffectManager.Play(ResourcePath.resource_effects_Hit_tres, "default", GlobalPosition,
-            Mathf.Deg2Rad(Utils.RandRangeInt(0, 360)), Vector2.One, new Vector2(1, 11), 0);
+        // SpecialEffectManager.Play(ResourcePath.resource_effects_Hit_tres, "default", GlobalPosition,
+        //     Mathf.Deg2Rad(Utils.RandRangeInt(0, 360)), Vector2.One, new Vector2(1, 11), 0);
 
+        //创建粒子特效
+        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletSmoke_tscn);
+        var smoke = packedScene.Instance<Particles2D>();
+        smoke.Position = Position;
+        smoke.Rotation = Rotation - Mathf.Pi;
+        GameApplication.Instance.Room.GetRoot(true).AddChild(smoke);
+        
         Destroy();
     }
 }
