@@ -19,4 +19,5 @@ public static class GameConfig
     /// 游戏视图大小
     /// </summary>
     public static readonly Vector2 ViewportSize = new Vector2(480, 270);
+    //public static Vector2 ViewportSize => OS.WindowSize / WindowScale;
 }

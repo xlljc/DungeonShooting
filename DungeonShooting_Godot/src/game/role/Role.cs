@@ -13,10 +13,10 @@ public abstract class Role : ActivityObject
     public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Wall | PhysicsLayer.Props;
     
     /// <summary>
-    /// 动画播放器
+    /// 伤害区域
     /// </summary>
-    public AnimationPlayer AnimationPlayer { get; private set; }
-    
+    public Area2D HurtArea { get; private set; }
+
     /// <summary>
     /// 重写的纹理, 即将删除, 请直接更改 AnimatedSprite.Frames
     /// </summary>
@@ -218,11 +218,15 @@ public abstract class Role : ActivityObject
     public override void _Ready()
     {
         base._Ready();
-        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         _startScale = Scale;
         MountPoint = GetNode<MountRotation>("MountPoint");
         MountPoint.Master = this;
         BackMountPoint = GetNode<Position2D>("BackMountPoint");
+
+        HurtArea = GetNode<Area2D>("HurtArea");
+        HurtArea.CollisionLayer = CollisionLayer;
+        HurtArea.CollisionMask = 0;
+        
         //即将删除
         if (OverrideTexture != null)
         {

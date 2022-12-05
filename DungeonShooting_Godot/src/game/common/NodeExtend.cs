@@ -21,4 +21,21 @@ public static class NodeExtend
         }
         return null;
     }
+    
+    /// <summary>
+    /// 尝试将一个 Node2d 节点转换成一个 ActivityObject 对象, 如果转换失败, 则返回 null
+    /// </summary>
+    public static T AsActivityObject<T>(this Node2D node2d) where T : ActivityObject
+    {
+        if (node2d is T p)
+        {
+            return p;
+        }
+        var parent = node2d.GetParent();
+        if (parent != null && parent is T p2)
+        {
+            return p2;
+        }
+        return null;
+    }
 }
