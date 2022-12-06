@@ -49,8 +49,8 @@ public class Bullet : ActivityObject
             //创建粒子特效
             var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletSmoke_tscn);
             var smoke = packedScene.Instance<Particles2D>();
-            smoke.Position = Position;
-            smoke.Rotation = kinematicCollision.Normal.Angle();
+            smoke.GlobalPosition = kinematicCollision.Position;
+            smoke.GlobalRotation = kinematicCollision.Normal.Angle();
             GameApplication.Instance.Room.GetRoot(true).AddChild(smoke);
 
             Destroy();

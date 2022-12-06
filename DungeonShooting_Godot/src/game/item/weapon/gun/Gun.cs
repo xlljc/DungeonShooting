@@ -105,8 +105,15 @@ public class Gun : Weapon
         if (Master == GameApplication.Instance.Room.Player)
         {
             //创建抖动
-            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
+            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2.5f);
         }
+
+        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_ShotFire_tscn);
+        var sprite = packedScene.Instance<Sprite>();
+        sprite.GlobalPosition = FirePoint.GlobalPosition;
+        sprite.GlobalRotation = FirePoint.GlobalRotation;
+        GameApplication.Instance.Room.GetRoot(true).AddChild(sprite);
+
         //播放射击音效
         SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet2_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -8);
     }

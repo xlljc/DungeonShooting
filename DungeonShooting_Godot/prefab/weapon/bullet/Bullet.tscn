@@ -21,7 +21,7 @@ animations = [ {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "default",
-"speed": 5.0
+"speed": 30.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -77,7 +77,6 @@ position = Vector2( 2, 0 )
 shape = SubResource( 2 )
 
 [node name="CollisionArea" type="Area2D" parent="."]
-visible = false
 collision_layer = 0
 collision_mask = 0
 
