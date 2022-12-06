@@ -77,6 +77,7 @@ tracks/1/keys = {
 
 [node name="BulletSmoke" type="Particles2D"]
 material = SubResource( 1 )
+scale = Vector2( 0.8, 0.8 )
 emitting = false
 lifetime = 0.4
 one_shot = true

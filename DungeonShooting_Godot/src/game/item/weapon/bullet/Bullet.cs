@@ -25,9 +25,6 @@ public class Bullet : ActivityObject
         CollisionArea = GetNode<Area2D>("CollisionArea");
         CollisionArea.CollisionMask = targetLayer;
         CollisionArea.Connect("area_entered", this, nameof(OnArea2dEntered));
-        CollisionArea.Connect("body_entered", this, nameof(OnBodyEntered));
-
-        Collision.Disabled = true;
 
         MaxDistance = maxDistance;
         Position = position;
@@ -46,7 +43,19 @@ public class Bullet : ActivityObject
     {
         base._PhysicsProcess(delta);
         //移动
-        Position += new Vector2(FlySpeed * delta, 0).Rotated(Rotation);
+        var kinematicCollision = MoveAndCollide(new Vector2(FlySpeed * delta, 0).Rotated(Rotation));
+        if (kinematicCollision != null)
+        {
+            //创建粒子特效
+            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletSmoke_tscn);
+            var smoke = packedScene.Instance<Particles2D>();
+            smoke.Position = Position;
+            smoke.Rotation = kinematicCollision.Normal.Angle();
+            GameApplication.Instance.Room.GetRoot(true).AddChild(smoke);
+
+            Destroy();
+            return;
+        }
         //距离太大, 自动销毁
         CurrFlyDistance += FlySpeed * delta;
         if (CurrFlyDistance >= MaxDistance)
@@ -61,37 +70,7 @@ public class Bullet : ActivityObject
         if (role != null)
         {
             role.Hurt(1);
-         
-            //播放受击动画
-            // Node2D hit = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Hit_tscn).Instance<Node2D>();
-            // hit.RotationDegrees = Utils.RandRangeInt(0, 360);
-            // hit.GlobalPosition = GlobalPosition;
-            // GameApplication.Instance.Room.GetRoot(true).AddChild(hit);
-
-            DoDestroy();
+            Destroy();
         }
-    }
-
-    private void OnBodyEntered(Node2D other)
-    {
-        if (!(other is Role))
-        {
-            DoDestroy();
-        }
-    }
-
-    private void DoDestroy()
-    {
-        // SpecialEffectManager.Play(ResourcePath.resource_effects_Hit_tres, "default", GlobalPosition,
-        //     Mathf.Deg2Rad(Utils.RandRangeInt(0, 360)), Vector2.One, new Vector2(1, 11), 0);
-
-        //创建粒子特效
-        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletSmoke_tscn);
-        var smoke = packedScene.Instance<Particles2D>();
-        smoke.Position = Position;
-        smoke.Rotation = Rotation - Mathf.Pi;
-        GameApplication.Instance.Room.GetRoot(true).AddChild(smoke);
-        
-        Destroy();
     }
 }
