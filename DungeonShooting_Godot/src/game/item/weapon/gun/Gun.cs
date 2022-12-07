@@ -41,8 +41,8 @@ public class Gun : Weapon
             MaxFireBulletCount = 1;
             //抬起角度
             UpliftAngle = 10;
-            //枪身长度
-            FirePosition = new Vector2(16, 1.5f);
+            //开火位置
+            FirePosition = new Vector2(16, 2);
         }
     }
 
@@ -81,8 +81,8 @@ public class Gun : Weapon
             MaxFireBulletCount = 1;
             //抬起角度
             UpliftAngle = 30;
-            //枪身长度
-            FirePosition = new Vector2(10, 1.5f);
+            //开火位置
+            FirePosition = new Vector2(10, 2);
         }
     }
 
@@ -105,9 +105,10 @@ public class Gun : Weapon
         if (Master == GameApplication.Instance.Room.Player)
         {
             //创建抖动
-            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2.5f);
+            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
         }
 
+        //创建开火特效
         var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_ShotFire_tscn);
         var sprite = packedScene.Instance<Sprite>();
         sprite.GlobalPosition = FirePoint.GlobalPosition;
@@ -124,6 +125,7 @@ public class Gun : Weapon
         //CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation);
         var bullet = new Bullet(
             ResourcePath.prefab_weapon_bullet_Bullet_tscn,
+            350,
             Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,
             fireRotation,

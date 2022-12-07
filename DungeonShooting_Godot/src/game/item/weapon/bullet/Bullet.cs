@@ -14,18 +14,19 @@ public class Bullet : ActivityObject
     private float MaxDistance;
 
     // 子弹飞行速度
-    private float FlySpeed = 350;
+    private float FlySpeed;
 
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
 
-    public Bullet(string scenePath, float maxDistance, Vector2 position, float rotation, uint targetLayer) :
+    public Bullet(string scenePath, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer) :
         base(scenePath)
     {
         CollisionArea = GetNode<Area2D>("CollisionArea");
         CollisionArea.CollisionMask = targetLayer;
         CollisionArea.Connect("area_entered", this, nameof(OnArea2dEntered));
 
+        FlySpeed = speed;
         MaxDistance = maxDistance;
         Position = position;
         Rotation = rotation;
