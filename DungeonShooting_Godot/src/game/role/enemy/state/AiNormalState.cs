@@ -65,6 +65,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
             }
             else if (_pauseTimer >= 0)
             {
+                Master.AnimatedSprite.Animation = AnimatorNames.Idle;
                 _pauseTimer -= delta;
             }
             else if (_isMoveOver) //没发现玩家, 且已经移动完成

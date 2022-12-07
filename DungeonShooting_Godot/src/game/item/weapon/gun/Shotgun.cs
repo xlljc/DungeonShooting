@@ -31,8 +31,8 @@ public class Shotgun : Weapon
             //开火前延时
             DelayedTime = 0f;
             //攻击距离
-            MinDistance = 500;
-            MaxDistance = 600;
+            MinDistance = 200;
+            MaxDistance = 250;
             //发射子弹数量
             MinFireBulletCount = 1;
             MaxFireBulletCount = 1;
@@ -81,7 +81,7 @@ public class Shotgun : Weapon
         GameApplication.Instance.Room.GetRoot(true).AddChild(sprite);
         
         //播放射击音效
-        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet_ogg, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), 6f);
+        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet3_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -15);
     }
 
     protected override void OnShoot(float fireRotation)

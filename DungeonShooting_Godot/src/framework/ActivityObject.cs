@@ -17,7 +17,7 @@ public abstract class ActivityObject : KinematicBody2D
     /// <summary>
     /// 当前物体类型id, 用于区分是否是同一种物体, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemId 为 null
     /// </summary>
-    public string ItemId { get; internal set; }
+    public string ItemId { get; private set; }
     
     /// <summary>
     /// 是否放入 ySort 节点下

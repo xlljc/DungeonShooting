@@ -63,7 +63,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
                 //关闭射线检测
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
-                ChangeStateLate(AiStateEnum.AiTargetInView);
+                ChangeStateLate(AiStateEnum.AiFollowUp);
                 return;
             }
             else

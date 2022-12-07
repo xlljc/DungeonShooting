@@ -103,6 +103,7 @@ public abstract class Role : ActivityObject
         {
             int temp = _maxHp;
             _maxHp = value;
+            //护盾值改变
             if (temp != _maxHp) OnChangeMaxHp(_maxHp);
         }
     }
@@ -118,6 +119,9 @@ public abstract class Role : ActivityObject
         {
             int temp = _shield;
             _shield = value;
+            //护盾被破坏
+            if (temp > 0 && _shield <= 0) OnShieldDamage();
+            //护盾值改变
             if (temp != _shield) OnChangeShield(_shield);
         }
     }
@@ -180,6 +184,13 @@ public abstract class Role : ActivityObject
     /// 最大护盾值改变时调用
     /// </summary>
     protected virtual void OnChangeMaxShield(int maxShield)
+    {
+    }
+
+    /// <summary>
+    /// 当护盾被破坏时调用
+    /// </summary>
+    protected virtual void OnShieldDamage()
     {
     }
 
@@ -451,10 +462,18 @@ public abstract class Role : ActivityObject
     /// <param name="damage">伤害的量</param>
     public virtual void Hurt(int damage)
     {
-        Hp -= damage;
+        OnHit(damage);
+        if (Shield > 0)
+        {
+            Shield -= damage;
+        }
+        else
+        {
+            Hp -= damage;
+        }
+        
         AnimationPlayer.Stop();
         AnimationPlayer.Play("hit");
-        OnHit(damage);
     }
 
     /// <summary>

@@ -93,8 +93,9 @@ public class Enemy : Role
         StateController.Register(new AiNormalState());
         StateController.Register(new AiProbeState());
         StateController.Register(new AiTailAfterState());
-        StateController.Register(new AiTargetInViewState());
+        StateController.Register(new AiFollowUpState());
         StateController.Register(new AiLeaveForState());
+        StateController.Register(new AiSurroundState());
     }
 
     public override void _Ready()
@@ -138,7 +139,7 @@ public class Enemy : Role
         for (var i = 0; i < _enemies.Count; i++)
         {
             var enemy = _enemies[i];
-            if (enemy.StateController.CurrState == AiStateEnum.AiTargetInView) //目标在视野内
+            if (enemy.StateController.CurrState == AiStateEnum.AiFollowUp) //目标在视野内
             {
                 IsFindTarget = true;
                 FindTargetPosition = Player.Current.GetCenterPosition();
@@ -167,6 +168,21 @@ public class Enemy : Role
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// 获取武器攻击范围 (最大距离值与最小距离的中间值)
+    /// </summary>
+    /// <param name="weight">从最小到最大距离的过渡量, 0 - 1, 默认 0.5</param>
+    public float GetWeaponRange(float weight = 0.5f)
+    {
+        if (Holster.ActiveWeapon != null)
+        {
+            var attribute = Holster.ActiveWeapon.Attribute;
+            return Mathf.Lerp(attribute.MinDistance, attribute.MaxDistance, weight);
+        }
+
+        return 0;
     }
 
     /// <summary>
