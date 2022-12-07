@@ -34,8 +34,8 @@ public class Gun : Weapon
             //开火前延时
             DelayedTime = 0f;
             //攻击距离
-            MinDistance = 500;
-            MaxDistance = 600;
+            MinDistance = 300;
+            MaxDistance = 400;
             //发射子弹数量
             MinFireBulletCount = 1;
             MaxFireBulletCount = 1;
@@ -74,8 +74,8 @@ public class Gun : Weapon
             //开火前延时
             DelayedTime = 0f;
             //攻击距离
-            MinDistance = 500;
-            MaxDistance = 600;
+            MinDistance = 250;
+            MaxDistance = 300;
             //发射子弹数量
             MinFireBulletCount = 1;
             MaxFireBulletCount = 1;

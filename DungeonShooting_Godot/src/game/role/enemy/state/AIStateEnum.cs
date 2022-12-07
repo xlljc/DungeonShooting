@@ -18,7 +18,11 @@ public enum AiStateEnum
     /// </summary>
     AiTailAfter,
     /// <summary>
-    /// 目标在视野内
+    /// 目标在视野内, 跟进目标
     /// </summary>
-    AiTargetInView,
+    AiFollowUp,
+    /// <summary>
+    /// 距离足够进, 在目标附近随机移动
+    /// </summary>
+    AiSurround,
 }
