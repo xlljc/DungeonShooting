@@ -35,6 +35,7 @@ namespace Plugin
 
         public override void _Ready()
         {
+#if TOOLS
             // 在工具模式下创建的 template 节点自动创建对应的必要子节点
             if (Engine.EditorHint)
             {
@@ -127,6 +128,7 @@ namespace Plugin
                     }
                 }
             }
+#endif
         }
     }
 }

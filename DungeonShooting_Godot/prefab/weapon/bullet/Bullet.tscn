@@ -21,7 +21,7 @@ animations = [ {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "default",
-"speed": 5.0
+"speed": 30.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -61,6 +61,7 @@ tracks/0/keys = {
 
 [node name="Bullet" type="Node"]
 script = ExtResource( 1 )
+CollisionMask = 1
 
 [node name="ShadowSprite" type="Sprite" parent="."]
 material = SubResource( 3 )
@@ -72,7 +73,8 @@ position = Vector2( 2.38419e-07, 0 )
 frames = SubResource( 1 )
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2( 1.5, 0 )
+position = Vector2( 2, 0 )
+shape = SubResource( 2 )
 
 [node name="CollisionArea" type="Area2D" parent="."]
 collision_layer = 0

@@ -47,6 +47,9 @@ public class SoundManager
 
         public void OnPlayFinish()
         {
+            GetParent().RemoveChild(this);
+            Stream = null;
+            Playing = false;
             RecycleAudioPlayer(this);
         }
     }
@@ -161,13 +164,6 @@ public class SoundManager
     /// </summary>
     private static void RecycleAudioPlayer(AudioPlayer inst)
     {
-        var parent = inst.GetParent();
-        if (parent != null)
-        {
-            parent.RemoveChild(inst);
-        }
-
-        inst.Stream = null;
         _streamPlayerStack.Push(inst);
     }
 }

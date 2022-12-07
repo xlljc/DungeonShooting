@@ -1,8 +1,16 @@
 using System.Collections.Generic;
 using Godot;
 
+
+/// <summary>
+/// 玩家角色基类, 所有角色都必须继承该类
+/// </summary>
 public class Player : Role
 {
+    /// <summary>
+    /// 获取当前操作的角色
+    /// </summary>
+    public static Player Current => GameApplication.Instance.Room.Player;
     
     /// <summary>
     /// 移动加速度

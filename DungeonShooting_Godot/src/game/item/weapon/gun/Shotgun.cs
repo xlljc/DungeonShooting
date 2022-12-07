@@ -40,8 +40,8 @@ public class Shotgun : Weapon
             UpliftAngle = 15;
             MaxBacklash = 6;
             MinBacklash = 5;
-            //枪身长度
-            FirePosition = new Vector2(16, 1.5f);
+            //开火位置
+            FirePosition = new Vector2(18, 4);
         }
     }
     
@@ -70,8 +70,16 @@ public class Shotgun : Weapon
         if (Master == GameApplication.Instance.Room.Player)
         {
             //创建抖动
-            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
+            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
         }
+        
+        //创建开火特效
+        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_ShotFire_tscn);
+        var sprite = packedScene.Instance<Sprite>();
+        sprite.GlobalPosition = FirePoint.GlobalPosition;
+        sprite.GlobalRotation = FirePoint.GlobalRotation;
+        GameApplication.Instance.Room.GetRoot(true).AddChild(sprite);
+        
         //播放射击音效
         SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet_ogg, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), 6f);
     }
@@ -82,9 +90,10 @@ public class Shotgun : Weapon
         {
             //创建子弹
             //CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation + MathUtils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi));
-            
+
             var bullet = new Bullet(
                 ResourcePath.prefab_weapon_bullet_Bullet_tscn,
+                Utils.RandRangeInt(280, 380),
                 Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
                 FirePoint.GlobalPosition,
                 fireRotation + Utils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),

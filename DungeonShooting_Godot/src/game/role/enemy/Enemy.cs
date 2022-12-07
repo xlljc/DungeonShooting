@@ -11,6 +11,7 @@
 #endregion
 
 
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -20,14 +21,21 @@ public class Enemy : Role
 {
     
     /// <summary>
-    /// 公共属性, 是否找到玩家, 如果找到玩家, 则所有敌人都会知道玩家的位置
+    /// 公共属性, 是否找到目标, 如果找到目标, 则所有敌人都会知道玩家的位置
     /// </summary>
-    public static bool IsFindPlayer { get; set; }
+    public static bool IsFindTarget { get; private set; }
     
+    /// <summary>
+    /// 找到的目标的位置, 如果目标在视野内, 则一直更新
+    /// </summary>
+    public static Vector2 FindTargetPosition { get; private set; }
+
+    private static readonly List<Enemy> _enemies = new List<Enemy>();
+
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
-    public StateController<Enemy, AIStateEnum> StateController { get; }
+    public StateController<Enemy, AiStateEnum> StateController { get; }
 
     /// <summary>
     /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
@@ -63,7 +71,7 @@ public class Enemy : Role
     
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
-        StateController = new StateController<Enemy, AIStateEnum>();
+        StateController = new StateController<Enemy, AiStateEnum>();
         AddComponent(StateController);
 
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
@@ -85,15 +93,33 @@ public class Enemy : Role
         StateController.Register(new AiNormalState());
         StateController.Register(new AiProbeState());
         StateController.Register(new AiTailAfterState());
+        StateController.Register(new AiTargetInViewState());
+        StateController.Register(new AiLeaveForState());
     }
 
     public override void _Ready()
     {
         base._Ready();
+        //防撞速度计算
+        NavigationAgent2D.Connect("velocity_computed", this, nameof(OnVelocityComputed));
+        
         //默认状态
-        StateController.ChangeState(AIStateEnum.AINormal);
+        StateController.ChangeState(AiStateEnum.AiNormal);
 
         NavigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
+    }
+
+    public override void _EnterTree()
+    {
+        if (!_enemies.Contains(this))
+        {
+            _enemies.Add(this);
+        }
+    }
+
+    public override void _ExitTree()
+    {
+        _enemies.Remove(this);
     }
 
     public override void _PhysicsProcess(float delta)
@@ -101,6 +127,23 @@ public class Enemy : Role
         base._PhysicsProcess(delta);
 
         _enemyAttackTimer -= delta;
+    }
+
+    /// <summary>
+    /// 更新敌人视野
+    /// </summary>
+    public static void UpdateEnemiesView()
+    {
+        IsFindTarget = false;
+        for (var i = 0; i < _enemies.Count; i++)
+        {
+            var enemy = _enemies[i];
+            if (enemy.StateController.CurrState == AiStateEnum.AiTargetInView) //目标在视野内
+            {
+                IsFindTarget = true;
+                FindTargetPosition = Player.Current.GetCenterPosition();
+            }
+        }
     }
 
     /// <summary>
@@ -144,6 +187,23 @@ public class Enemy : Role
     }
 
     /// <summary>
+    /// 返回目标点是否在跟随状态下的视野半径内
+    /// </summary>
+    public bool IsInTailAfterViewRange(Vector2 target)
+    {
+        var isForward = IsPositionInForward(target);
+        if (isForward)
+        {
+            if (GlobalPosition.DistanceSquaredTo(target) <= TailAfterViewRange * TailAfterViewRange) //没有超出视野半径
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// 调用视野检测, 如果被墙壁和其它物体遮挡, 则返回被挡住视野的物体对象, 视野无阻则返回 null
     /// </summary>
     public bool TestViewRayCast(Vector2 target)
@@ -160,5 +220,10 @@ public class Enemy : Role
     public void TestViewRayCastOver()
     {
         ViewRay.Enabled = false;
+    }
+
+    private void OnVelocityComputed(Vector2 velocity)
+    {
+        GD.Print("velocity: " + velocity);
     }
 }

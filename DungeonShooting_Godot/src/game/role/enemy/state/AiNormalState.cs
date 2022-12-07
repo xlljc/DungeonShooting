@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// AI 正常状态
 /// </summary>
-public class AiNormalState : StateBase<Enemy, AIStateEnum>
+public class AiNormalState : StateBase<Enemy, AiStateEnum>
 {
     //是否发现玩家
     private bool _isFindPlayer;
@@ -24,11 +24,11 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
     //移动停顿计时器
     private float _pauseTimer;
 
-    public AiNormalState() : base(AIStateEnum.AINormal)
+    public AiNormalState() : base(AiStateEnum.AiNormal)
     {
     }
 
-    public override void Enter(AIStateEnum prev, params object[] args)
+    public override void Enter(AiStateEnum prev, params object[] args)
     {
         _isFindPlayer = false;
         _isMoveOver = true;
@@ -39,18 +39,24 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
 
     public override void PhysicsProcess(float delta)
     {
+        //其他敌人发现玩家
+        if (Enemy.IsFindTarget)
+        {
+            ChangeStateLate(AiStateEnum.AiLeaveFor);
+            return;
+        }
 
         if (_isFindPlayer) //已经找到玩家了
         {
             //现临时处理, 直接切换状态
-            ChangeStateLate(AIStateEnum.AITailAfter);
+            ChangeStateLate(AiStateEnum.AiTailAfter);
         }
         else //没有找到玩家
         {
             //检测玩家
             var player = GameApplication.Instance.Room.Player;
             //玩家中心点坐标
-            var playerPos = player.MountPoint.GlobalPosition;
+            var playerPos = player.GetCenterPosition();
 
             if (Master.IsInViewRange(playerPos) && !Master.TestViewRayCast(playerPos)) //发现玩家
             {
@@ -77,11 +83,21 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
 
                 if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
                 {
-                    _pauseTimer = 1;
+                    _pauseTimer = Utils.RandRange(0.3f, 2f);
                     _isMoveOver = true;
+                }
+                else
+                {
+                    var lastSlideCollision = Master.GetLastSlideCollision();
+                    if (lastSlideCollision != null && lastSlideCollision.Collider is Role) //碰到其他角色
+                    {
+                        _pauseTimer = Utils.RandRange(0.1f, 0.5f);
+                        _isMoveOver = true;
+                    }
                 }
             }
 
+            //关闭射线检测
             Master.TestViewRayCastOver();
         }
     }
@@ -120,6 +136,6 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
 
     public override void DebugDraw()
     {
-        Master.DrawLine(Vector2.Zero, Master.ToLocal(_nextPos), Colors.Green);
+        Master.DrawLine(new Vector2(0, -8), Master.ToLocal(_nextPos), Colors.Green);
     }
 }

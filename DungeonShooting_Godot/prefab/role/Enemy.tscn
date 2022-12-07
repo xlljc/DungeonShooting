@@ -24,10 +24,6 @@ material = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource( 2 )
-frame = 1
-
-[node name="Collision" parent="." index="3"]
-position = Vector2( 0, -8 )
 
 [node name="ViewRay" type="RayCast2D" parent="." index="6"]
 position = Vector2( 0, -8 )
@@ -36,3 +32,4 @@ position = Vector2( 0, -8 )
 position = Vector2( 0, -5 )
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="NavigationPoint" index="0"]
+radius = 20.0

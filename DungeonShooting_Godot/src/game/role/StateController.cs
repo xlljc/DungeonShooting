@@ -8,6 +8,11 @@ using System.Collections.Generic;
 public class StateController<T, S> : Component where T : ActivityObject where S : Enum
 {
     /// <summary>
+    /// 获取当前状态
+    /// </summary>
+    public S CurrState => CurrStateBase != null ? CurrStateBase.State : default;
+    
+    /// <summary>
     /// 当前活跃的状态对象实例
     /// </summary>
     public StateBase<T, S> CurrStateBase { get; private set; }
@@ -58,6 +63,19 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
         stateBase.Master = ActivityObject as T;
         stateBase.StateController = this;
         _states.Add(stateBase.State, stateBase);
+    }
+
+    /// <summary>
+    /// 获取指定状态对应的实例对象
+    /// </summary>
+    public StateBase<T, S> GetState(S state)
+    {
+        if (_states.ContainsKey(state))
+        {
+            return _states[state];
+        }
+
+        return null;
     }
 
     /// <summary>
