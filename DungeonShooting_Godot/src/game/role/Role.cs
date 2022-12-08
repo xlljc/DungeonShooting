@@ -157,7 +157,7 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 可以互动的道具
     /// </summary>
-    protected ActivityObject InteractiveItem { get; private set; }
+    public ActivityObject InteractiveItem { get; private set; }
 
     /// <summary>
     /// 当血量改变时调用
@@ -368,12 +368,13 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
-    /// 拾起一个武器, 并且切换到这个武器, 返回是否成功拾取
+    /// 拾起一个武器, 返回是否成功拾取, 如果不想立刻切换到该武器, exchange 请传 false
     /// </summary>
     /// <param name="weapon">武器对象</param>
-    public virtual bool PickUpWeapon(Weapon weapon)
+    /// <param name="exchange">是否立即切换到该武器, 默认 true </param>
+    public virtual bool PickUpWeapon(Weapon weapon, bool exchange = true)
     {
-        if (Holster.PickupWeapon(weapon) != -1)
+        if (Holster.PickupWeapon(weapon, exchange) != -1)
         {
             //从可互动队列中移除
             _interactiveItemList.Remove(weapon);
@@ -404,7 +405,16 @@ public abstract class Role : ActivityObject
     /// </summary>
     public virtual void ThrowWeapon()
     {
-        var weapon = Holster.RemoveWeapon(Holster.ActiveIndex);
+        ThrowWeapon(Holster.ActiveIndex);
+    }
+
+    /// <summary>
+    /// 扔掉指定位置的武器
+    /// </summary>
+    /// <param name="index">武器在武器袋中的位置</param>
+    public virtual void ThrowWeapon(int index)
+    {
+        var weapon = Holster.RemoveWeapon(index);
         //播放抛出效果
         if (weapon != null)
         {
@@ -431,6 +441,7 @@ public abstract class Role : ActivityObject
             item.Interactive(this);
             return item;
         }
+
         return null;
     }
 

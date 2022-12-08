@@ -2,7 +2,7 @@
 public enum AiStateEnum
 {
     /// <summary>
-    /// ai状态, 正常, 未发现目标
+    /// Ai 状态, 正常, 未发现目标
     /// </summary>
     AiNormal,
     /// <summary>
@@ -25,4 +25,8 @@ public enum AiStateEnum
     /// 距离足够进, 在目标附近随机移动
     /// </summary>
     AiSurround,
+    /// <summary>
+    /// Ai 寻找弹药
+    /// </summary>
+    AiFindAmmo,
 }

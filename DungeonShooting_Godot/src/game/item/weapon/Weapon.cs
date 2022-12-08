@@ -7,9 +7,9 @@ using System;
 public abstract class Weapon : ActivityObject
 {
     /// <summary>
-    /// 武器的唯一id
+    /// 武器的类型 id
     /// </summary>
-    public string Id { get; }
+    public string TypeId { get; }
 
     /// <summary>
     /// 开火回调事件
@@ -158,15 +158,15 @@ public abstract class Weapon : ActivityObject
 
     //当前后坐力导致的偏移长度
     private float _currBacklashLength = 0;
-    
+
     /// <summary>
     /// 根据属性创建一把武器
     /// </summary>
-    /// <param name="id">武器唯一id</param>
+    /// <param name="typeId">武器的类型id</param>
     /// <param name="attribute">属性</param>
-    public Weapon(string id, WeaponAttribute attribute) : base(attribute.WeaponPrefab)
+    public Weapon(string typeId, WeaponAttribute attribute) : base(attribute.WeaponPrefab)
     {
-        Id = id;
+        TypeId = typeId;
         Attribute = attribute;
 
         FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
@@ -186,7 +186,7 @@ public abstract class Weapon : ActivityObject
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
             Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
-            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + id);
+            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + typeId);
         }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
@@ -763,7 +763,7 @@ public abstract class Weapon : ActivityObject
             {
                 var masterWeapon = roleMaster.Holster.ActiveWeapon;
                 //查找是否有同类型武器
-                var index = roleMaster.Holster.FindWeapon(Id);
+                var index = roleMaster.Holster.FindWeapon(TypeId);
                 if (index != -1) //如果有这个武器
                 {
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
@@ -774,7 +774,7 @@ public abstract class Weapon : ActivityObject
                             //可以互动拾起弹药
                             result.CanInteractive = true;
                             result.Message = Attribute.Name;
-                            result.ShowIcon = "res://resource/sprite/ui/icon/icon_bullet.png";
+                            result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_bullet_png;
                             return result;
                         }
                     }
@@ -786,7 +786,7 @@ public abstract class Weapon : ActivityObject
                         //可以互动, 拾起武器
                         result.CanInteractive = true;
                         result.Message = Attribute.Name;
-                        result.ShowIcon = "res://resource/sprite/ui/icon/icon_pickup.png";
+                        result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_pickup_png;
                         return result;
                     }
                     else if (masterWeapon != null && masterWeapon.Attribute.WeightType == Attribute.WeightType) //替换武器
@@ -794,7 +794,7 @@ public abstract class Weapon : ActivityObject
                         //可以互动, 切换武器
                         result.CanInteractive = true;
                         result.Message = Attribute.Name;
-                        result.ShowIcon = "res://resource/sprite/ui/icon/icon_replace.png";
+                        result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_replace_png;
                         return result;
                     }
                 }
@@ -810,7 +810,7 @@ public abstract class Weapon : ActivityObject
         {
             var holster = roleMaster.Holster;
             //查找是否有同类型武器
-            var index = holster.FindWeapon(Id);
+            var index = holster.FindWeapon(TypeId);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了

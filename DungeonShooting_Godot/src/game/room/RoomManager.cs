@@ -95,23 +95,23 @@ public class RoomManager : Navigation2D
         //     enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
         // }
         
-        var enemy2 = new Enemy();
-        enemy2.Name = "Enemy2";
-        enemy2.PutDown(new Vector2(540, 100));
-        enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
-        enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
-        enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
-        //
-        var enemy3 = new Enemy();
-        enemy3.Name = "Enemy3";
-        enemy3.PutDown(new Vector2(540, 300));
-        enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
-        enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
+        // var enemy2 = new Enemy();
+        // enemy2.Name = "Enemy2";
+        // enemy2.PutDown(new Vector2(540, 100));
+        // enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
+        // enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
+        // enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
+        // //
+        // var enemy3 = new Enemy();
+        // enemy3.Name = "Enemy3";
+        // enemy3.PutDown(new Vector2(540, 300));
+        // enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
+        // enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
 
-        WeaponManager.GetGun("1001").PutDown(new Vector2(80, 100));
-        WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
-        WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120));
-        WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80));
+        // WeaponManager.GetGun("1001").PutDown(new Vector2(80, 100));
+        // WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
+        // WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120));
+        // WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80));
 
         WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80));
         WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));

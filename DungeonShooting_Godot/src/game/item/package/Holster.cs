@@ -29,7 +29,9 @@ public class Holster
     /// 归属者
     /// </summary>
     public Role Master { get; }
-
+    
+    //public Weapon HandheldWeapon { get; private set; }
+    
     /// <summary>
     /// 当前使用的武器对象
     /// </summary>
@@ -68,6 +70,23 @@ public class Holster
     }
 
     /// <summary>
+    /// 返回当前武器袋是否还有空位
+    /// </summary>
+    public bool HasVacancy()
+    {
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            var item = SlotList[i];
+            if (item.Enable && item.Weapon == null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// 根据索引获取武器
     /// </summary>
     public Weapon GetWeapon(int index) {
@@ -87,7 +106,7 @@ public class Holster
         for (int i = 0; i < SlotList.Length; i++)
         {
             var item = SlotList[i];
-            if (item.Weapon != null && item.Weapon.Id == id)
+            if (item.Weapon != null && item.Weapon.TypeId == id)
             {
                 return i;
             }
@@ -134,7 +153,8 @@ public class Holster
     /// 拾起武器, 存入武器袋中, 返回存放在武器袋的位置, 如果容不下这把武器, 则会返回 -1
     /// </summary>
     /// <param name="weapon">武器对象</param>
-    public int PickupWeapon(Weapon weapon)
+    /// <param name="exchange">是否立即切换到该武器, 默认 true </param>
+    public int PickupWeapon(Weapon weapon, bool exchange = true)
     {
         //已经被拾起了
         if (weapon.Master != null)
@@ -149,7 +169,11 @@ public class Holster
                 weapon.Pickup();
                 item.Weapon = weapon;
                 weapon.PickUpWeapon(Master);
-                ExchangeByIndex(i);
+                if (exchange)
+                {
+                    ExchangeByIndex(i);
+                }
+
                 return i;
             }
         }

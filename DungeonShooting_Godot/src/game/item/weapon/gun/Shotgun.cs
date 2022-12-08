@@ -34,8 +34,8 @@ public class Shotgun : Weapon
             MinDistance = 200;
             MaxDistance = 250;
             //发射子弹数量
-            MinFireBulletCount = 1;
-            MaxFireBulletCount = 1;
+            MinFireBulletCount = 5;
+            MaxFireBulletCount = 5;
             //抬起角度
             UpliftAngle = 15;
             MaxBacklash = 6;
@@ -50,7 +50,7 @@ public class Shotgun : Weapon
     /// </summary>
     public PackedScene ShellPack;
 
-    public Shotgun(string id, WeaponAttribute attribute) : base(id, attribute)
+    public Shotgun(string typeId, WeaponAttribute attribute) : base(typeId, attribute)
     {
         ShellPack = ResourceManager.Load<PackedScene>(ResourcePath.prefab_weapon_shell_ShellCase_tscn);
     }
@@ -86,20 +86,15 @@ public class Shotgun : Weapon
 
     protected override void OnShoot(float fireRotation)
     {
-        for (int i = 0; i < 5; i++)
-        {
-            //创建子弹
-            //CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation + MathUtils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi));
-
-            var bullet = new Bullet(
-                ResourcePath.prefab_weapon_bullet_Bullet_tscn,
-                Utils.RandRangeInt(280, 380),
-                Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
-                FirePoint.GlobalPosition,
-                fireRotation + Utils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
-                GetAttackLayer()
-            );
-            bullet.PutDown();
-        }
+        //创建子弹
+        var bullet = new Bullet(
+            ResourcePath.prefab_weapon_bullet_Bullet_tscn,
+            Utils.RandRangeInt(280, 380),
+            Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
+            FirePoint.GlobalPosition,
+            fireRotation + Utils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
+            GetAttackLayer()
+        );
+        bullet.PutDown();
     }
 }
