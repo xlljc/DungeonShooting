@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 /// <summary>
@@ -39,6 +40,9 @@ public class Holster
     /// </summary>
     public int ActiveIndex { get; private set; } = 0;
 
+    /// <summary>
+    /// 武器插槽
+    /// </summary>
     public WeaponSlot[] SlotList { get; } = new WeaponSlot[4];
 
     public Holster(Role master)
@@ -84,6 +88,24 @@ public class Holster
         {
             var item = SlotList[i];
             if (item.Weapon != null && item.Weapon.Id == id)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// 通过回调函数查询武器在武器袋中的位置, 如果没有, 则返回 -1
+    /// </summary>
+    /// <param name="handler"></param>
+    /// <returns></returns>
+    public int FindWeapon(Func<Weapon, bool> handler)
+    {
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            var item = SlotList[i];
+            if (item.Weapon != null && handler(item.Weapon))
             {
                 return i;
             }

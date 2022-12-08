@@ -155,16 +155,37 @@ public class Enemy : Role
         var weapon = Holster.ActiveWeapon;
         if (weapon != null)
         {
-            if (weapon.Attribute.ContinuousShoot) //连发
+            if (weapon.IsTotalAmmoEmpty()) //当前武器弹药打空
             {
-                Attack();
+                //扔掉当前武器
+                ThrowWeapon();
+                // var index = Holster.FindWeapon(we => !we.IsTotalAmmoEmpty());
+                // if (index != -1)
+                // {
+                //     
+                // }
             }
-            else //单发
+            else if (weapon.Reloading) //换弹中
             {
-                if (_enemyAttackTimer <= 0)
+                
+            }
+            else if (weapon.IsAmmoEmpty()) //弹夹已经打空
+            {
+                Reload();
+            }
+            else //正常射击
+            {
+                if (weapon.Attribute.ContinuousShoot) //连发
                 {
-                    _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed;
                     Attack();
+                }
+                else //单发
+                {
+                    if (_enemyAttackTimer <= 0)
+                    {
+                        _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed;
+                        Attack();
+                    }
                 }
             }
         }

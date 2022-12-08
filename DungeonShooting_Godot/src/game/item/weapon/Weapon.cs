@@ -285,17 +285,21 @@ public abstract class Weapon : ActivityObject
         //这把武器被扔在地上, 或者当前武器没有被使用
         if (Master == null || Master.Holster.ActiveWeapon != this)
         {
+            //_triggerTimer
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
+            //攻击冷却计时
             _attackTimer = _attackTimer > 0 ? _attackTimer - delta : 0;
+            //武器的当前散射半径
             CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
                 Attribute.StartScatteringRange);
             //松开扳机
             if (_triggerFlag || _downTimer > 0)
             {
                 UpTrigger();
-                _triggerFlag = false;
                 _downTimer = 0;
             }
+            
+            _triggerFlag = false;
 
             //重置数据
             if (_dirtyFlag)
@@ -406,6 +410,9 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public void Trigger()
     {
+        //这一帧已经按过了, 不需要再按下
+        if (_triggerFlag) return;
+        
         //是否第一帧按下
         var justDown = _downTimer == 0;
         //是否能发射
@@ -454,11 +461,14 @@ public abstract class Weapon : ActivityObject
                     fireFlag = false;
                 }
             }
-            else if (CurrAmmo <= 0)
+            else if (CurrAmmo <= 0) //子弹不够
             {
                 fireFlag = false;
-                //子弹不够
-                Reload();
+                if (justDown)
+                {
+                    //第一帧按下, 触发换弹
+                    Reload();
+                }
             }
 
             if (fireFlag)
@@ -631,15 +641,23 @@ public abstract class Weapon : ActivityObject
     /// <summary>
     /// 返回弹药是否到达上限
     /// </summary>
-    public bool IsFullAmmo()
+    public bool IsAmmoFull()
     {
         return CurrAmmo + ResidueAmmo >= Attribute.MaxAmmoCapacity;
     }
 
     /// <summary>
+    /// 返回弹夹是否打空
+    /// </summary>
+    public bool IsAmmoEmpty()
+    {
+        return CurrAmmo == 0;
+    }
+    
+    /// <summary>
     /// 返回是否弹药耗尽
     /// </summary>
-    public bool IsEmptyAmmo()
+    public bool IsTotalAmmoEmpty()
     {
         return CurrAmmo + ResidueAmmo == 0;
     }
@@ -751,7 +769,7 @@ public abstract class Weapon : ActivityObject
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
                     {
                         var targetWeapon = roleMaster.Holster.GetWeapon(index);
-                        if (!targetWeapon.IsFullAmmo()) //背包里面的武器子弹未满
+                        if (!targetWeapon.IsAmmoFull()) //背包里面的武器子弹未满
                         {
                             //可以互动拾起弹药
                             result.CanInteractive = true;
@@ -913,7 +931,7 @@ public abstract class Weapon : ActivityObject
     }
 
     /// <summary>
-    /// 触发移除
+    /// 触发移除, 这个函数由 Holster 对象调用
     /// </summary>a
     public void Remove()
     {

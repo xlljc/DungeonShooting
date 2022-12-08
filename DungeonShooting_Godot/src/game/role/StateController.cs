@@ -66,6 +66,14 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
     }
 
     /// <summary>
+    /// 返回该状态机控制器中是否存在指定的状态实例
+    /// </summary>
+    public bool HasState(S state)
+    {
+        return _states.ContainsKey(state);
+    }
+    
+    /// <summary>
     /// 获取指定状态对应的实例对象
     /// </summary>
     public StateBase<T, S> GetState(S state)
