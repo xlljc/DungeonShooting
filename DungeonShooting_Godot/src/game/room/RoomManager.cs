@@ -83,7 +83,7 @@ public class RoomManager : Navigation2D
         var enemy1 = new Enemy();
         enemy1.Name = "Enemy";
         enemy1.PutDown(new Vector2(150, 300));
-        enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
+        //enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
         enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
         // for (int i = 0; i < 10; i++)
@@ -109,15 +109,15 @@ public class RoomManager : Navigation2D
         // enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
 
         // WeaponManager.GetGun("1001").PutDown(new Vector2(80, 100));
-        // WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
+        WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
         // WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120));
         // WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80));
 
         WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80));
-        WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));
+        //WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));
         WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120));
 
-        WeaponManager.GetGun("1004").PutDown(new Vector2(220, 120));
+        //WeaponManager.GetGun("1004").PutDown(new Vector2(220, 120));
     }
 
     public override void _Process(float delta)

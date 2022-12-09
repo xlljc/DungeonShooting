@@ -138,7 +138,6 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
             _isChangeState = !late;
             var prev = CurrStateBase.State;
             CurrStateBase.Exit(next);
-            GD.Print("nextState => " + next);
             CurrStateBase = newState;
             CurrStateBase.Enter(prev, arg);
         }

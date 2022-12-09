@@ -1,11 +1,17 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// 武器的基类
 /// </summary>
 public abstract class Weapon : ActivityObject
 {
+    /// <summary>
+    /// 所有被扔在地上的武器
+    /// </summary>
+    public static readonly HashSet<Weapon> UnclaimedWeapons = new HashSet<Weapon>();
+
     /// <summary>
     /// 武器的类型 id
     /// </summary>
@@ -277,6 +283,24 @@ public abstract class Weapon : ActivityObject
     protected virtual int UseAmmoCount()
     {
         return 1;
+    }
+
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+
+        //收集落在地上的武器
+        if (Master == null && GetParent() == GameApplication.Instance.Room.GetRoot(false))
+        {
+            UnclaimedWeapons.Add(this);
+        }
+    }
+
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        
+        UnclaimedWeapons.Remove(this);
     }
 
     public override void _Process(float delta)
@@ -927,12 +951,14 @@ public abstract class Weapon : ActivityObject
         ZIndex = 0;
         //禁用碰撞
         CollisionShape2D.Disabled = true;
+        //清除 Ai 拾起标记
+        RemoveSign(AiFindAmmoState.AiFindWeaponSign);
         OnPickUp(master);
     }
 
     /// <summary>
     /// 触发移除, 这个函数由 Holster 对象调用
-    /// </summary>a
+    /// </summary>
     public void Remove()
     {
         Master = null;
@@ -960,5 +986,15 @@ public abstract class Weapon : ActivityObject
     {
         HideShadowSprite();
         OnConceal();
+    }
+    
+    //-------------------------------- Ai相关 -----------------------------
+
+    /// <summary>
+    /// 获取 Ai 对于该武器的评分, 评分越高, 代表 Ai 会越优先选择该武器, 如果为 -1, 则表示 Ai 不会使用该武器
+    /// </summary>
+    public float GetAiScore()
+    {
+        return 1;
     }
 }

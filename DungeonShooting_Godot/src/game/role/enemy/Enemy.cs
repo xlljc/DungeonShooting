@@ -166,7 +166,14 @@ public class Enemy : Role
                 }
                 else //所有子弹打光, 去寻找武器
                 {
-                    //StateController.ChangeStateLate(AiStateEnum.AiFindAmmo);
+                    //如果存在有子弹的武器
+                    foreach (var unclaimedWeapon in Weapon.UnclaimedWeapons)
+                    {
+                        if (!unclaimedWeapon.IsTotalAmmoEmpty())
+                        {
+                            StateController.ChangeStateLate(AiStateEnum.AiFindAmmo);
+                        }
+                    }
                 }
             }
             else if (weapon.Reloading) //换弹中
@@ -268,6 +275,13 @@ public class Enemy : Role
     /// </summary>
     private void EnemyPickUpWeapon()
     {
+        //这几个状态不需要主动拾起武器操作
+        var state = StateController.CurrState;
+        if (state == AiStateEnum.AiNormal)
+        {
+            return;
+        }
+        
         //拾起地上的武器
         if (InteractiveItem is Weapon weapon)
         {
@@ -296,7 +310,7 @@ public class Enemy : Role
 
             var index2 = Holster.FindWeapon(we =>
                 we.Attribute.WeightType == weapon.Attribute.WeightType && we.IsTotalAmmoEmpty());
-            if (index2 != -1) //则扔掉没子弹的武器
+            if (index2 != -1) //扔掉没子弹的武器
             {
                 ThrowWeapon(index2);
                 TriggerInteractive();
