@@ -18,12 +18,6 @@ public abstract class Role : ActivityObject
     public Area2D HurtArea { get; private set; }
 
     /// <summary>
-    /// 重写的纹理, 即将删除, 请直接更改 AnimatedSprite.Frames
-    /// </summary>
-    [Obsolete]
-    public Texture OverrideTexture { get; protected set; }
-
-    /// <summary>
     /// 移动速度
     /// </summary>
     public float MoveSpeed = 120f;
@@ -243,14 +237,6 @@ public abstract class Role : ActivityObject
         HurtArea.CollisionLayer = CollisionLayer;
         HurtArea.CollisionMask = 0;
         
-        //即将删除
-        if (OverrideTexture != null)
-        {
-            // 更改纹理
-            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite);
-            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite);
-            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite);
-        }
         Face = FaceDirection.Right;
 
         //连接互动物体信号
@@ -504,8 +490,7 @@ public abstract class Role : ActivityObject
             Hp -= damage;
         }
         
-        AnimationPlayer.Stop();
-        AnimationPlayer.Play("hit");
+        PlayHitAnimation();
         
         //死亡判定
         if (Hp <= 0)
@@ -539,25 +524,7 @@ public abstract class Role : ActivityObject
             }
         }
     }
-
-    /// <summary>
-    /// 更改指定动画的纹理, 即将删除
-    /// </summary>
-    [Obsolete]
-    private void ChangeFrameTexture(string anim, AnimatedSprite animatedSprite)
-    {
-        SpriteFrames spriteFrames = animatedSprite.Frames;
-        if (spriteFrames != null)
-        {
-            int count = spriteFrames.GetFrameCount(anim);
-            for (int i = 0; i < count; i++)
-            {
-                AtlasTexture temp = spriteFrames.GetFrame(anim, i) as AtlasTexture;
-                temp.Atlas = OverrideTexture;
-            }
-        }
-    }
-
+    
     /// <summary>
     /// 连接信号: InteractiveArea.area_entered
     /// 与物体碰撞
