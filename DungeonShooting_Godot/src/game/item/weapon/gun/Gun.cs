@@ -24,8 +24,8 @@ public class Gun : Weapon
             //连发
             ContinuousShoot = true;
             AmmoCapacity = 30;
-            StandbyAmmoCapacity = 30 * 70;
-            MaxAmmoCapacity = 30 * 70;
+            StandbyAmmoCapacity = 30 * 3;
+            MaxAmmoCapacity = 30 * 3;
             //扳机检测间隔
             TriggerInterval = 0f;
             //连发数量
@@ -86,7 +86,7 @@ public class Gun : Weapon
         }
     }
 
-    public Gun(string id, WeaponAttribute attribute): base(id, attribute)
+    public Gun(string typeId, WeaponAttribute attribute): base(typeId, attribute)
     {
     }
 

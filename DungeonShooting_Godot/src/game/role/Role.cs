@@ -79,6 +79,11 @@ public abstract class Role : ActivityObject
     public Vector2 Velocity { get; set; } = Vector2.Zero;
     
     /// <summary>
+    /// 是否死亡
+    /// </summary>
+    public bool IsDie { get; private set; }
+    
+    /// <summary>
     /// 血量
     /// </summary>
     public int Hp
@@ -91,7 +96,7 @@ public abstract class Role : ActivityObject
             if (temp != _hp) OnChangeHp(_hp);
         }
     }
-    private int _hp = 0;
+    private int _hp = 20;
 
     /// <summary>
     /// 最大血量
@@ -107,7 +112,7 @@ public abstract class Role : ActivityObject
             if (temp != _maxHp) OnChangeMaxHp(_maxHp);
         }
     }
-    private int _maxHp = 0;
+    private int _maxHp = 20;
     
     /// <summary>
     /// 当前护盾值
@@ -157,7 +162,7 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 可以互动的道具
     /// </summary>
-    protected ActivityObject InteractiveItem { get; private set; }
+    public ActivityObject InteractiveItem { get; private set; }
 
     /// <summary>
     /// 当血量改变时调用
@@ -257,7 +262,7 @@ public abstract class Role : ActivityObject
     public override void _Process(float delta)
     {
         base._Process(delta);
-        
+
         //看向目标
         if (LookTarget != null)
         {
@@ -368,12 +373,29 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
-    /// 拾起一个武器, 并且切换到这个武器, 返回是否成功拾取
+    /// 返回所有武器是否弹药都打光了
+    /// </summary>
+    public bool IsAllWeaponTotalAmmoEmpty()
+    {
+        foreach (var weaponSlot in Holster.SlotList)
+        {
+            if (weaponSlot.Weapon != null && !weaponSlot.Weapon.IsTotalAmmoEmpty())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    /// <summary>
+    /// 拾起一个武器, 返回是否成功拾取, 如果不想立刻切换到该武器, exchange 请传 false
     /// </summary>
     /// <param name="weapon">武器对象</param>
-    public virtual bool PickUpWeapon(Weapon weapon)
+    /// <param name="exchange">是否立即切换到该武器, 默认 true </param>
+    public virtual bool PickUpWeapon(Weapon weapon, bool exchange = true)
     {
-        if (Holster.PickupWeapon(weapon) != -1)
+        if (Holster.PickupWeapon(weapon, exchange) != -1)
         {
             //从可互动队列中移除
             _interactiveItemList.Remove(weapon);
@@ -404,7 +426,16 @@ public abstract class Role : ActivityObject
     /// </summary>
     public virtual void ThrowWeapon()
     {
-        var weapon = Holster.RemoveWeapon(Holster.ActiveIndex);
+        ThrowWeapon(Holster.ActiveIndex);
+    }
+
+    /// <summary>
+    /// 扔掉指定位置的武器
+    /// </summary>
+    /// <param name="index">武器在武器袋中的位置</param>
+    public virtual void ThrowWeapon(int index)
+    {
+        var weapon = Holster.RemoveWeapon(index);
         //播放抛出效果
         if (weapon != null)
         {
@@ -431,6 +462,7 @@ public abstract class Role : ActivityObject
             item.Interactive(this);
             return item;
         }
+
         return null;
     }
 
@@ -457,7 +489,7 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
-    /// 受到伤害
+    /// 受到伤害, 如果是在碰撞信号处理函数中调用该函数, 请使用 CallDeferred 来延时调用, 否则很有可能导致报错
     /// </summary>
     /// <param name="damage">伤害的量</param>
     public virtual void Hurt(int damage)
@@ -474,6 +506,17 @@ public abstract class Role : ActivityObject
         
         AnimationPlayer.Stop();
         AnimationPlayer.Play("hit");
+        
+        //死亡判定
+        if (Hp <= 0)
+        {
+            //死亡
+            if (!IsDie)
+            {
+                IsDie = true;
+                OnDie();
+            }
+        }
     }
 
     /// <summary>

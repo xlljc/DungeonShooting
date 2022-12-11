@@ -165,4 +165,9 @@ public class WeaponAttribute
     /// 开火后武器口角度恢复速度倍数
     /// </summary>
     public float UpliftAngleRestore = 1f;
+    
+    //------------------------------ Ai相关 -----------------------------
+    
+    //public bool Ai
+    
 }

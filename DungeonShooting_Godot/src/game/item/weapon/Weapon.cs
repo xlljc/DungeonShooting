@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// 武器的基类
@@ -7,9 +8,14 @@ using System;
 public abstract class Weapon : ActivityObject
 {
     /// <summary>
-    /// 武器的唯一id
+    /// 所有被扔在地上的武器
     /// </summary>
-    public string Id { get; }
+    public static readonly HashSet<Weapon> UnclaimedWeapons = new HashSet<Weapon>();
+
+    /// <summary>
+    /// 武器的类型 id
+    /// </summary>
+    public string TypeId { get; }
 
     /// <summary>
     /// 开火回调事件
@@ -158,15 +164,15 @@ public abstract class Weapon : ActivityObject
 
     //当前后坐力导致的偏移长度
     private float _currBacklashLength = 0;
-    
+
     /// <summary>
     /// 根据属性创建一把武器
     /// </summary>
-    /// <param name="id">武器唯一id</param>
+    /// <param name="typeId">武器的类型id</param>
     /// <param name="attribute">属性</param>
-    public Weapon(string id, WeaponAttribute attribute) : base(attribute.WeaponPrefab)
+    public Weapon(string typeId, WeaponAttribute attribute) : base(attribute.WeaponPrefab)
     {
-        Id = id;
+        TypeId = typeId;
         Attribute = attribute;
 
         FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
@@ -186,7 +192,7 @@ public abstract class Weapon : ActivityObject
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
             Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
-            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + id);
+            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + typeId);
         }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
@@ -279,23 +285,45 @@ public abstract class Weapon : ActivityObject
         return 1;
     }
 
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+
+        //收集落在地上的武器
+        if (Master == null && GetParent() == GameApplication.Instance.Room.GetRoot(false))
+        {
+            UnclaimedWeapons.Add(this);
+        }
+    }
+
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        
+        UnclaimedWeapons.Remove(this);
+    }
+
     public override void _Process(float delta)
     {
         base._Process(delta);
         //这把武器被扔在地上, 或者当前武器没有被使用
         if (Master == null || Master.Holster.ActiveWeapon != this)
         {
+            //_triggerTimer
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
+            //攻击冷却计时
             _attackTimer = _attackTimer > 0 ? _attackTimer - delta : 0;
+            //武器的当前散射半径
             CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
                 Attribute.StartScatteringRange);
             //松开扳机
             if (_triggerFlag || _downTimer > 0)
             {
                 UpTrigger();
-                _triggerFlag = false;
                 _downTimer = 0;
             }
+            
+            _triggerFlag = false;
 
             //重置数据
             if (_dirtyFlag)
@@ -406,6 +434,9 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public void Trigger()
     {
+        //这一帧已经按过了, 不需要再按下
+        if (_triggerFlag) return;
+        
         //是否第一帧按下
         var justDown = _downTimer == 0;
         //是否能发射
@@ -454,11 +485,14 @@ public abstract class Weapon : ActivityObject
                     fireFlag = false;
                 }
             }
-            else if (CurrAmmo <= 0)
+            else if (CurrAmmo <= 0) //子弹不够
             {
                 fireFlag = false;
-                //子弹不够
-                Reload();
+                if (justDown)
+                {
+                    //第一帧按下, 触发换弹
+                    Reload();
+                }
             }
 
             if (fireFlag)
@@ -631,15 +665,23 @@ public abstract class Weapon : ActivityObject
     /// <summary>
     /// 返回弹药是否到达上限
     /// </summary>
-    public bool IsFullAmmo()
+    public bool IsAmmoFull()
     {
         return CurrAmmo + ResidueAmmo >= Attribute.MaxAmmoCapacity;
     }
 
     /// <summary>
+    /// 返回弹夹是否打空
+    /// </summary>
+    public bool IsAmmoEmpty()
+    {
+        return CurrAmmo == 0;
+    }
+    
+    /// <summary>
     /// 返回是否弹药耗尽
     /// </summary>
-    public bool IsEmptyAmmo()
+    public bool IsTotalAmmoEmpty()
     {
         return CurrAmmo + ResidueAmmo == 0;
     }
@@ -745,18 +787,18 @@ public abstract class Weapon : ActivityObject
             {
                 var masterWeapon = roleMaster.Holster.ActiveWeapon;
                 //查找是否有同类型武器
-                var index = roleMaster.Holster.FindWeapon(Id);
+                var index = roleMaster.Holster.FindWeapon(TypeId);
                 if (index != -1) //如果有这个武器
                 {
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
                     {
                         var targetWeapon = roleMaster.Holster.GetWeapon(index);
-                        if (!targetWeapon.IsFullAmmo()) //背包里面的武器子弹未满
+                        if (!targetWeapon.IsAmmoFull()) //背包里面的武器子弹未满
                         {
                             //可以互动拾起弹药
                             result.CanInteractive = true;
                             result.Message = Attribute.Name;
-                            result.ShowIcon = "res://resource/sprite/ui/icon/icon_bullet.png";
+                            result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_bullet_png;
                             return result;
                         }
                     }
@@ -768,7 +810,7 @@ public abstract class Weapon : ActivityObject
                         //可以互动, 拾起武器
                         result.CanInteractive = true;
                         result.Message = Attribute.Name;
-                        result.ShowIcon = "res://resource/sprite/ui/icon/icon_pickup.png";
+                        result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_pickup_png;
                         return result;
                     }
                     else if (masterWeapon != null && masterWeapon.Attribute.WeightType == Attribute.WeightType) //替换武器
@@ -776,7 +818,7 @@ public abstract class Weapon : ActivityObject
                         //可以互动, 切换武器
                         result.CanInteractive = true;
                         result.Message = Attribute.Name;
-                        result.ShowIcon = "res://resource/sprite/ui/icon/icon_replace.png";
+                        result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_replace_png;
                         return result;
                     }
                 }
@@ -792,7 +834,7 @@ public abstract class Weapon : ActivityObject
         {
             var holster = roleMaster.Holster;
             //查找是否有同类型武器
-            var index = holster.FindWeapon(Id);
+            var index = holster.FindWeapon(TypeId);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
@@ -909,12 +951,14 @@ public abstract class Weapon : ActivityObject
         ZIndex = 0;
         //禁用碰撞
         CollisionShape2D.Disabled = true;
+        //清除 Ai 拾起标记
+        RemoveSign(SignNames.AiFindWeaponSign);
         OnPickUp(master);
     }
 
     /// <summary>
-    /// 触发移除
-    /// </summary>a
+    /// 触发移除, 这个函数由 Holster 对象调用
+    /// </summary>
     public void Remove()
     {
         Master = null;
@@ -942,5 +986,15 @@ public abstract class Weapon : ActivityObject
     {
         HideShadowSprite();
         OnConceal();
+    }
+    
+    //-------------------------------- Ai相关 -----------------------------
+
+    /// <summary>
+    /// 获取 Ai 对于该武器的评分, 评分越高, 代表 Ai 会越优先选择该武器, 如果为 -1, 则表示 Ai 不会使用该武器
+    /// </summary>
+    public float GetAiScore()
+    {
+        return 1;
     }
 }

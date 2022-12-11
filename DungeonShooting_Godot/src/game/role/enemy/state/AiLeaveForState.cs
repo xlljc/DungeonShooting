@@ -2,7 +2,7 @@
 using Godot;
 
 /// <summary>
-/// 前往目标位置
+/// 收到其他敌人通知, 前往发现目标的位置
 /// </summary>
 public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
 {
@@ -20,14 +20,32 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         {
             Master.NavigationAgent2D.SetTargetLocation(Enemy.FindTargetPosition);
         }
+        // else if (args.Length > 0 && args[0] is Vector2 targetPos)
+        // {
+        //     Master.NavigationAgent2D.SetTargetLocation(targetPos);
+        // }
         else
         {
             ChangeStateLate(prev);
+            return;
+        }
+        
+        //先检查弹药是否打光
+        if (Master.IsAllWeaponTotalAmmoEmpty())
+        {
+            //再寻找是否有可用的武器
+            if (Master.CheckUsableWeaponInUnclaimed())
+            {
+                //切换到寻找武器状态
+                ChangeStateLate(AiStateEnum.AiFindAmmo);
+            }
         }
     }
 
     public override void PhysicsProcess(float delta)
     {
+        //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
+        
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
         {

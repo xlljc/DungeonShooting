@@ -2,7 +2,7 @@
 using Godot;
 
 /// <summary>
-/// 目标在视野范围内, 跟进目标
+/// 目标在视野内, 跟进目标, 如果距离在子弹有效射程内, 则开火
 /// </summary>
 public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
 {
@@ -16,10 +16,6 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
 
-    //是否存在下一个移动点
-    //private bool _hasNextPosition;
-    //private Vector2 _nextPosition;
-
     public AiFollowUpState() : base(AiStateEnum.AiFollowUp)
     {
     }
@@ -32,6 +28,18 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
 
     public override void PhysicsProcess(float delta)
     {
+        //先检查弹药是否打光
+        if (Master.IsAllWeaponTotalAmmoEmpty())
+        {
+            //再寻找是否有可用的武器
+            if (Master.CheckUsableWeaponInUnclaimed())
+            {
+                //切换到寻找武器状态
+                ChangeStateLate(AiStateEnum.AiFindAmmo);
+                return;
+            }
+        }
+        
         var playerPos = Player.Current.GetCenterPosition();
 
         //更新玩家位置

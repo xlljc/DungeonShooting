@@ -13,17 +13,17 @@ public abstract class ActivityObject : KinematicBody2D
     /// 是否是调试模式
     /// </summary>
     public static bool IsDebug { get; set; }
-    
+
     /// <summary>
     /// 当前物体类型id, 用于区分是否是同一种物体, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemId 为 null
     /// </summary>
     public string ItemId { get; private set; }
-    
+
     /// <summary>
     /// 是否放入 ySort 节点下
     /// </summary>
     public bool UseYSort { get; }
-    
+
     /// <summary>
     /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite", 类型为 AnimatedSprite
     /// </summary>
@@ -44,7 +44,7 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     /// <value></value>
     public AnimationPlayer AnimationPlayer { get; }
-    
+
     /// <summary>
     /// 是否调用过 Destroy() 函数
     /// </summary>
@@ -68,6 +68,9 @@ public abstract class ActivityObject : KinematicBody2D
 
     //存储投抛该物体时所产生的数据
     private ObjectThrowData _throwData;
+
+    //标记字典
+    private Dictionary<string, object> _signMap;
 
     public ActivityObject(string scenePath)
     {
@@ -130,9 +133,10 @@ public abstract class ActivityObject : KinematicBody2D
             //切换阴影动画
             ShadowSprite.Texture = AnimatedSprite.Frames.GetFrame(anim, frame);
         }
+
         _prevAnimation = anim;
         _prevAnimationFrame = frame;
-        
+
         CalcShadow();
         ShadowSprite.Visible = true;
     }
@@ -507,20 +511,21 @@ public abstract class ActivityObject : KinematicBody2D
                 //切换阴影动画
                 ShadowSprite.Texture = AnimatedSprite.Frames.GetFrame(anim, AnimatedSprite.Frame);
             }
+
             _prevAnimation = anim;
             _prevAnimationFrame = frame;
-            
+
             //计算阴影
             CalcShadow();
         }
-        
+
         //调试绘制
         if (IsDebug)
         {
             Update();
         }
     }
-    
+
     public override void _PhysicsProcess(float delta)
     {
         //更新组件
@@ -584,7 +589,7 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
 
-    
+
     /// <summary>
     /// 销毁物体
     /// </summary>
@@ -596,7 +601,7 @@ public abstract class ActivityObject : KinematicBody2D
         }
 
         IsDestroyed = true;
-        
+
         OnDestroy();
         QueueFree();
         var arr = _components.ToArray();
@@ -726,6 +731,72 @@ public abstract class ActivityObject : KinematicBody2D
         RestoreCollision();
 
         OnThrowOver();
+    }
+
+    /// <summary>
+    /// 设置标记, 用于在物体上记录自定义数据
+    /// </summary>
+    /// <param name="name">标记名称</param>
+    /// <param name="v">存入值</param>
+    public void SetSign(string name, object v)
+    {
+        if (_signMap == null)
+        {
+            _signMap = new Dictionary<string, object>();
+        }
+
+        _signMap[name] = v;
+    }
+
+    /// <summary>
+    /// 返回是否存在指定名称的标记数据
+    /// </summary>
+    public bool HasSign(string name)
+    {
+        return _signMap == null ? false : _signMap.ContainsKey(name);
+    }
+
+    /// <summary>
+    /// 根据名称获取标记值
+    /// </summary>
+    public object GetSign(string name)
+    {
+        if (_signMap == null)
+        {
+            return null;
+        }
+
+        _signMap.TryGetValue(name, out var value);
+        return value;
+    }
+
+    /// <summary>
+    /// 根据名称获取标记值
+    /// </summary>
+    public T GetSign<T>(string name)
+    {
+        if (_signMap == null)
+        {
+            return default;
+        }
+
+        _signMap.TryGetValue(name, out var value);
+        if (value is T v)
+        {
+            return v;
+        }
+        return default;
+    }
+
+    /// <summary>
+    /// 根据名称删除标记
+    /// </summary>
+    public void RemoveSign(string name)
+    {
+        if (_signMap != null)
+        {
+            _signMap.Remove(name);
+        }
     }
 
     /// <summary>

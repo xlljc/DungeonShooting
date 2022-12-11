@@ -22,6 +22,7 @@ public class Knife : Weapon
             MaxAmmoCapacity = AmmoCapacity;
             //握把位置
             HoldPosition = new Vector2(10, 0);
+            MaxDistance = MinDistance = 35;
             //后坐力改为向前, 模拟手伸长的效果
             MaxBacklash = -8;
             MinBacklash = -8;
@@ -34,7 +35,7 @@ public class Knife : Weapon
 
     private int _attackIndex = 0;
     
-    public Knife(string id, WeaponAttribute attribute) : base(id, attribute)
+    public Knife(string typeId, WeaponAttribute attribute) : base(typeId, attribute)
     {
         _hitArea = GetNode<Area2D>("HitArea");
         _hitArea.Monitoring = false;
@@ -117,7 +118,7 @@ public class Knife : Weapon
         {
             if (activityObject is Role role)
             {
-                role.Hurt(1);
+                role.CallDeferred(nameof(Role.Hurt), 10);
             }
         }
     }

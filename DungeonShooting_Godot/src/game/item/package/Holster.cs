@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -28,7 +30,9 @@ public class Holster
     /// 归属者
     /// </summary>
     public Role Master { get; }
-
+    
+    //public Weapon HandheldWeapon { get; private set; }
+    
     /// <summary>
     /// 当前使用的武器对象
     /// </summary>
@@ -39,6 +43,9 @@ public class Holster
     /// </summary>
     public int ActiveIndex { get; private set; } = 0;
 
+    /// <summary>
+    /// 武器插槽
+    /// </summary>
     public WeaponSlot[] SlotList { get; } = new WeaponSlot[4];
 
     public Holster(Role master)
@@ -64,6 +71,23 @@ public class Holster
     }
 
     /// <summary>
+    /// 返回当前武器袋是否还有空位
+    /// </summary>
+    public bool HasVacancy()
+    {
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            var item = SlotList[i];
+            if (item.Enable && item.Weapon == null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// 根据索引获取武器
     /// </summary>
     public Weapon GetWeapon(int index) {
@@ -83,12 +107,65 @@ public class Holster
         for (int i = 0; i < SlotList.Length; i++)
         {
             var item = SlotList[i];
-            if (item.Weapon != null && item.Weapon.Id == id)
+            if (item.Weapon != null && item.Weapon.TypeId == id)
             {
                 return i;
             }
         }
         return -1;
+    }
+
+    /// <summary>
+    /// 通过回调函数查询武器在武器袋中的位置, 如果没有, 则返回 -1
+    /// </summary>
+    public int FindWeapon(Func<Weapon, int, bool> handler)
+    {
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            var item = SlotList[i];
+            if (item.Weapon != null && handler(item.Weapon, i))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// 遍历所有武器
+    /// </summary>
+    public void ForEach(Action<Weapon, int> handler)
+    {
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            var item = SlotList[i];
+            if (item.Weapon != null)
+            {
+                handler(item.Weapon, i);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 从武器袋中移除所有武器, 并返回
+    /// </summary>
+    public Weapon[] GetAndClearWeapon()
+    {
+        List<Weapon> weapons = new List<Weapon>();
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            var slot = SlotList[i];
+            var weapon = slot.Weapon;
+            if (weapon != null)
+            {
+                weapon.GetParent().RemoveChild(weapon);
+                weapon.Remove();
+                weapons.Add(weapon);
+                slot.Weapon = null;
+            }
+        }
+
+        return weapons.ToArray();
     }
 
     /// <summary>
@@ -112,7 +189,8 @@ public class Holster
     /// 拾起武器, 存入武器袋中, 返回存放在武器袋的位置, 如果容不下这把武器, 则会返回 -1
     /// </summary>
     /// <param name="weapon">武器对象</param>
-    public int PickupWeapon(Weapon weapon)
+    /// <param name="exchange">是否立即切换到该武器, 默认 true </param>
+    public int PickupWeapon(Weapon weapon, bool exchange = true)
     {
         //已经被拾起了
         if (weapon.Master != null)
@@ -127,7 +205,11 @@ public class Holster
                 weapon.Pickup();
                 item.Weapon = weapon;
                 weapon.PickUpWeapon(Master);
-                ExchangeByIndex(i);
+                if (exchange)
+                {
+                    ExchangeByIndex(i);
+                }
+
                 return i;
             }
         }
