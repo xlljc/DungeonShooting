@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -117,19 +118,54 @@ public class Holster
     /// <summary>
     /// 通过回调函数查询武器在武器袋中的位置, 如果没有, 则返回 -1
     /// </summary>
-    /// <param name="handler"></param>
-    /// <returns></returns>
-    public int FindWeapon(Func<Weapon, bool> handler)
+    public int FindWeapon(Func<Weapon, int, bool> handler)
     {
         for (int i = 0; i < SlotList.Length; i++)
         {
             var item = SlotList[i];
-            if (item.Weapon != null && handler(item.Weapon))
+            if (item.Weapon != null && handler(item.Weapon, i))
             {
                 return i;
             }
         }
         return -1;
+    }
+
+    /// <summary>
+    /// 遍历所有武器
+    /// </summary>
+    public void ForEach(Action<Weapon, int> handler)
+    {
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            var item = SlotList[i];
+            if (item.Weapon != null)
+            {
+                handler(item.Weapon, i);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 从武器袋中移除所有武器, 并返回
+    /// </summary>
+    public Weapon[] GetAndClearWeapon()
+    {
+        List<Weapon> weapons = new List<Weapon>();
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            var slot = SlotList[i];
+            var weapon = slot.Weapon;
+            if (weapon != null)
+            {
+                weapon.GetParent().RemoveChild(weapon);
+                weapon.Remove();
+                weapons.Add(weapon);
+                slot.Weapon = null;
+            }
+        }
+
+        return weapons.ToArray();
     }
 
     /// <summary>

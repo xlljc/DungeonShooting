@@ -27,10 +27,23 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
         _isInViewRange = true;
         _navigationUpdateTimer = 0;
         _viewTimer = 0;
+        
+        //先检查弹药是否打光
+        if (Master.IsAllWeaponTotalAmmoEmpty())
+        {
+            //再寻找是否有可用的武器
+            if (Master.CheckUsableWeaponInUnclaimed())
+            {
+                //切换到寻找武器状态
+                ChangeStateLate(AiStateEnum.AiFindAmmo);
+            }
+        }
     }
     
     public override void PhysicsProcess(float delta)
     {
+        //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
+        
         var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
         
         //更新玩家位置
@@ -48,11 +61,12 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
             _navigationUpdateTimer -= delta;
         }
         
+        //枪口指向玩家
+        Master.LookTargetPosition(playerPos);
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
             //计算移动
             var nextPos = Master.NavigationAgent2D.GetNextLocation();
-            Master.LookTargetPosition(playerPos);
             Master.AnimatedSprite.Animation = AnimatorNames.Run;
             Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;

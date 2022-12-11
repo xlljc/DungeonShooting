@@ -81,6 +81,9 @@ public class Enemy : Role
 
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;
+        
+        MaxHp = 20;
+        Hp = 20;
 
         //视野射线
         ViewRay = GetNode<RayCast2D>("ViewRay");
@@ -122,6 +125,17 @@ public class Enemy : Role
         _enemies.Remove(this);
     }
 
+    protected override void OnDie()
+    {
+        //扔掉所有武器
+        var weapons = Holster.GetAndClearWeapon();
+        for (var i = 0; i < weapons.Length; i++)
+        {
+            weapons[i].ThrowWeapon(this);
+        }
+        Destroy();
+    }
+
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
@@ -129,6 +143,33 @@ public class Enemy : Role
         _enemyAttackTimer -= delta;
 
         EnemyPickUpWeapon();
+    }
+
+    protected override void OnHit(int damage)
+    {
+        //受到伤害
+        var state = StateController.CurrState;
+        if (state == AiStateEnum.AiNormal || state == AiStateEnum.AiProbe || state == AiStateEnum.AiLeaveFor)
+        {
+            StateController.ChangeStateLate(AiStateEnum.AiTailAfter);
+        }
+    }
+
+    /// <summary>
+    /// 返回地上的武器是否有可以拾取的, 也包含没有被其他敌人标记的武器
+    /// </summary>
+    public bool CheckUsableWeaponInUnclaimed()
+    {
+        //如果存在有子弹的武器
+        foreach (var unclaimedWeapon in Weapon.UnclaimedWeapons)
+        {
+            if (!unclaimedWeapon.IsTotalAmmoEmpty() && !unclaimedWeapon.HasSign(SignNames.AiFindWeaponSign))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -140,7 +181,8 @@ public class Enemy : Role
         for (var i = 0; i < _enemies.Count; i++)
         {
             var enemy = _enemies[i];
-            if (enemy.StateController.CurrState == AiStateEnum.AiFollowUp) //目标在视野内
+            var state = enemy.StateController.CurrState;
+            if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
             {
                 IsFindTarget = true;
                 FindTargetPosition = Player.Current.GetCenterPosition();
@@ -159,21 +201,14 @@ public class Enemy : Role
             if (weapon.IsTotalAmmoEmpty()) //当前武器弹药打空
             {
                 //切换到有子弹的武器
-                var index = Holster.FindWeapon(we => !we.IsTotalAmmoEmpty());
+                var index = Holster.FindWeapon((we, i) => !we.IsTotalAmmoEmpty());
                 if (index != -1)
                 {
                     Holster.ExchangeByIndex(index);
                 }
-                else //所有子弹打光, 去寻找武器
+                else //所有子弹打光
                 {
-                    //如果存在有子弹的武器
-                    foreach (var unclaimedWeapon in Weapon.UnclaimedWeapons)
-                    {
-                        if (!unclaimedWeapon.IsTotalAmmoEmpty())
-                        {
-                            StateController.ChangeStateLate(AiStateEnum.AiFindAmmo);
-                        }
-                    }
+                    
                 }
             }
             else if (weapon.Reloading) //换弹中
@@ -297,7 +332,7 @@ public class Enemy : Role
                 return;
             }
             
-            var index = Holster.FindWeapon(we => we.TypeId == weapon.TypeId);
+            var index = Holster.FindWeapon((we, i) => we.TypeId == weapon.TypeId);
             if (index != -1) //与武器袋中武器类型相同, 补充子弹
             {
                 if (!Holster.GetWeapon(index).IsAmmoFull())
@@ -308,7 +343,7 @@ public class Enemy : Role
                 return;
             }
 
-            var index2 = Holster.FindWeapon(we =>
+            var index2 = Holster.FindWeapon((we, i) =>
                 we.Attribute.WeightType == weapon.Attribute.WeightType && we.IsTotalAmmoEmpty());
             if (index2 != -1) //扔掉没子弹的武器
             {

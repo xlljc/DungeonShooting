@@ -117,7 +117,7 @@ public class RoomManager : Navigation2D
         //WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));
         WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120));
 
-        //WeaponManager.GetGun("1004").PutDown(new Vector2(220, 120));
+        WeaponManager.GetGun("1004").PutDown(new Vector2(220, 120));
     }
 
     public override void _Process(float delta)

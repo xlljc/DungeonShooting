@@ -79,6 +79,11 @@ public abstract class Role : ActivityObject
     public Vector2 Velocity { get; set; } = Vector2.Zero;
     
     /// <summary>
+    /// 是否死亡
+    /// </summary>
+    public bool IsDie { get; private set; }
+    
+    /// <summary>
     /// 血量
     /// </summary>
     public int Hp
@@ -91,7 +96,7 @@ public abstract class Role : ActivityObject
             if (temp != _hp) OnChangeHp(_hp);
         }
     }
-    private int _hp = 0;
+    private int _hp = 20;
 
     /// <summary>
     /// 最大血量
@@ -107,7 +112,7 @@ public abstract class Role : ActivityObject
             if (temp != _maxHp) OnChangeMaxHp(_maxHp);
         }
     }
-    private int _maxHp = 0;
+    private int _maxHp = 20;
     
     /// <summary>
     /// 当前护盾值
@@ -257,7 +262,7 @@ public abstract class Role : ActivityObject
     public override void _Process(float delta)
     {
         base._Process(delta);
-        
+
         //看向目标
         if (LookTarget != null)
         {
@@ -368,6 +373,22 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
+    /// 返回所有武器是否弹药都打光了
+    /// </summary>
+    public bool IsAllWeaponTotalAmmoEmpty()
+    {
+        foreach (var weaponSlot in Holster.SlotList)
+        {
+            if (weaponSlot.Weapon != null && !weaponSlot.Weapon.IsTotalAmmoEmpty())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    /// <summary>
     /// 拾起一个武器, 返回是否成功拾取, 如果不想立刻切换到该武器, exchange 请传 false
     /// </summary>
     /// <param name="weapon">武器对象</param>
@@ -468,7 +489,7 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
-    /// 受到伤害
+    /// 受到伤害, 如果是在碰撞信号处理函数中调用该函数, 请使用 CallDeferred 来延时调用, 否则很有可能导致报错
     /// </summary>
     /// <param name="damage">伤害的量</param>
     public virtual void Hurt(int damage)
@@ -485,6 +506,17 @@ public abstract class Role : ActivityObject
         
         AnimationPlayer.Stop();
         AnimationPlayer.Play("hit");
+        
+        //死亡判定
+        if (Hp <= 0)
+        {
+            //死亡
+            if (!IsDie)
+            {
+                IsDie = true;
+                OnDie();
+            }
+        }
     }
 
     /// <summary>

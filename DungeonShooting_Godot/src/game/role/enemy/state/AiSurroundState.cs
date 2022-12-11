@@ -2,7 +2,7 @@
 using Godot;
 
 /// <summary>
-/// 距离足够进, 在目标附近随机移动
+/// 距离目标足够近, 在目标附近随机移动, 并开火
 /// </summary>
 public class AiSurroundState : StateBase<Enemy, AiStateEnum>
 {
@@ -33,6 +33,18 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
 
     public override void PhysicsProcess(float delta)
     {
+        //先检查弹药是否打光
+        if (Master.IsAllWeaponTotalAmmoEmpty())
+        {
+            //再寻找是否有可用的武器
+            if (Master.CheckUsableWeaponInUnclaimed())
+            {
+                //切换到寻找武器状态
+                ChangeStateLate(AiStateEnum.AiFindAmmo);
+                return;
+            }
+        }
+        
         var playerPos = Player.Current.GetCenterPosition();
         var weapon = Master.Holster.ActiveWeapon;
 

@@ -952,7 +952,7 @@ public abstract class Weapon : ActivityObject
         //禁用碰撞
         CollisionShape2D.Disabled = true;
         //清除 Ai 拾起标记
-        RemoveSign(AiFindAmmoState.AiFindWeaponSign);
+        RemoveSign(SignNames.AiFindWeaponSign);
         OnPickUp(master);
     }
 

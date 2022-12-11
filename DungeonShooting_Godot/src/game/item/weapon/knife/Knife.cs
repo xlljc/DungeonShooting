@@ -118,7 +118,7 @@ public class Knife : Weapon
         {
             if (activityObject is Role role)
             {
-                role.Hurt(1);
+                role.CallDeferred(nameof(Role.Hurt), 10);
             }
         }
     }
