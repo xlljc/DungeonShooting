@@ -39,8 +39,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
 
     public override void PhysicsProcess(float delta)
     {
-        var activeWeapon = Master.Holster.ActiveWeapon;
-        if (activeWeapon != null && !activeWeapon.IsTotalAmmoEmpty()) //已经有弹药了
+        if (!Master.IsAllWeaponTotalAmmoEmpty()) //已经有弹药了
         {
             ChangeStateLate(GetNextState());
             return;
