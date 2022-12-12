@@ -83,7 +83,7 @@ public class ObjectThrowData
     public float OriginRotation;
     public Vector2 OriginScale;
     public int OriginZIndex;
-    public int OriginSpriteZIndex;
+    public Vector2 OriginSpritePosition;
     public bool OriginCollisionEnable;
     public Vector2 OriginCollisionPosition;
     public float OriginCollisionRotation;

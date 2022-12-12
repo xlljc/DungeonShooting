@@ -455,19 +455,20 @@ public abstract class ActivityObject : KinematicBody2D
         if (_throwData != null && !_throwData.IsOver)
         {
             _throwData.LinearVelocity = MoveAndSlide(_throwData.LinearVelocity);
-            Position = new Vector2(Position.x, Position.y - _throwData.YSpeed * delta);
-            var rotate = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
-            GlobalRotationDegrees = rotate;
-
-            var pos = AnimatedSprite.GlobalPosition;
-            ShadowSprite.GlobalRotationDegrees = rotate;
+            GlobalRotationDegrees = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
+            if (Scale.y < 0)
+            {
+                AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) - _throwData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
+            }
+            else
+            {
+                AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) + _throwData.OriginSpritePosition.Rotated(Rotation);
+            }
 
             var ysp = _throwData.YSpeed;
 
             _throwData.Y += _throwData.YSpeed * delta;
             _throwData.YSpeed -= GameConfig.G * delta;
-
-            AnimatedSprite.ZIndex = Mathf.Max(0, (int)_throwData.Y);
             
             //达到最高点
             if (ysp * _throwData.YSpeed < 0)
@@ -479,7 +480,6 @@ public abstract class ActivityObject : KinematicBody2D
             //落地判断
             if (_throwData.Y <= 0)
             {
-                Collision.GlobalPosition = pos;
 
                 _throwData.IsOver = true;
 
@@ -509,11 +509,6 @@ public abstract class ActivityObject : KinematicBody2D
                     OnFallToGround();
                     ThrowOver();
                 }
-            }
-            else
-            {
-                //碰撞器位置
-                Collision.GlobalPosition = pos + new Vector2(0, _throwData.Y);
             }
         }
 
@@ -616,7 +611,7 @@ public abstract class ActivityObject : KinematicBody2D
         //缩放
         ShadowSprite.Scale = AnimatedSprite.Scale;
         //阴影角度
-        ShadowSprite.GlobalRotationDegrees = GlobalRotationDegrees;
+        ShadowSprite.Rotation = 0;
         //阴影位置计算
         var pos = AnimatedSprite.GlobalPosition;
         if (_throwData != null && !_throwData.IsOver)
@@ -710,7 +705,7 @@ public abstract class ActivityObject : KinematicBody2D
             _throwData.OriginRotation = Collision.Rotation;
             _throwData.OriginScale = Collision.Scale;
             _throwData.OriginZIndex = ZIndex;
-            _throwData.OriginSpriteZIndex = AnimatedSprite.ZIndex;
+            _throwData.OriginSpritePosition = AnimatedSprite.Position;
             _throwData.OriginCollisionEnable = Collision.Disabled;
             _throwData.OriginCollisionPosition = Collision.Position;
             _throwData.OriginCollisionRotation = Collision.Rotation;
@@ -724,12 +719,10 @@ public abstract class ActivityObject : KinematicBody2D
             }
 
             Collision.Shape = _throwData.RectangleShape;
-            //Collision.Position = Vector2.Zero;
+            Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
             ZIndex = 0;
-            AnimatedSprite.ZIndex = 0;
-            //ZIndex = 2;
             Collision.Disabled = false;
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
@@ -752,7 +745,7 @@ public abstract class ActivityObject : KinematicBody2D
             Collision.Rotation = _throwData.OriginRotation;
             Collision.Scale = _throwData.OriginScale;
             ZIndex = _throwData.OriginZIndex;
-            AnimatedSprite.ZIndex = _throwData.OriginSpriteZIndex;
+            AnimatedSprite.Position = _throwData.OriginSpritePosition;
             Collision.Disabled = _throwData.OriginCollisionEnable;
             Collision.Position = _throwData.OriginCollisionPosition;
             Collision.Rotation = _throwData.OriginCollisionRotation;

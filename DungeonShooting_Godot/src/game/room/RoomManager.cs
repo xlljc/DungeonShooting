@@ -39,6 +39,7 @@ public class RoomManager : Navigation2D
 
     public override void _EnterTree()
     {
+        //Engine.TimeScale = 0.2f;
         Input.MouseMode = Input.MouseModeEnum.Hidden;
 
         _sortRoot = GetNode<YSort>("SortRoot");
