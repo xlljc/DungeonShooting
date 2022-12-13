@@ -11,6 +11,7 @@ public class ResourcePath
     public const string editor_prefabs_CodePanel_tscn = "res://editor/prefabs/CodePanel.tscn";
     public const string editor_prefabs_Editor_tscn = "res://editor/prefabs/Editor.tscn";
     public const string prefab_FanCollisionShape_tscn = "res://prefab/FanCollisionShape.tscn";
+    public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
     public const string prefab_effect_BulletSmoke_tscn = "res://prefab/effect/BulletSmoke.tscn";
     public const string prefab_effect_FirePart_tscn = "res://prefab/effect/FirePart.tscn";
     public const string prefab_effect_ShotFire_tscn = "res://prefab/effect/ShotFire.tscn";
@@ -27,6 +28,7 @@ public class ResourcePath
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";
     public const string prefab_weapon_bullet_Bullet_tscn = "res://prefab/weapon/bullet/Bullet.tscn";
     public const string prefab_weapon_shell_ShellCase_tscn = "res://prefab/weapon/shell/ShellCase.tscn";
+    public const string resource_effects_Circle_png = "res://resource/effects/Circle.png";
     public const string resource_effects_Collision_png = "res://resource/effects/Collision.png";
     public const string resource_effects_debug_arrows_png = "res://resource/effects/debug_arrows.png";
     public const string resource_effects_Hit_tres = "res://resource/effects/Hit.tres";

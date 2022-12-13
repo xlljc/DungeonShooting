@@ -488,6 +488,10 @@ public abstract class Role : ActivityObject
         else
         {
             Hp -= damage;
+            // var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);
+            // var particles2D = packedScene.Instance<Blood>();
+            // particles2D.GlobalPosition = GlobalPosition;
+            // GameApplication.Instance.Room.GetRoot().AddChild(particles2D);
         }
         
         PlayHitAnimation();
