@@ -70,7 +70,7 @@ public class Bullet : ActivityObject
         var role = other.AsActivityObject<Role>();
         if (role != null)
         {
-            role.CallDeferred(nameof(Role.Hurt), 4);
+            role.CallDeferred(nameof(Role.Hurt), 4, Rotation);
             Destroy();
         }
     }

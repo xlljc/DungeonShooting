@@ -1,24 +1,17 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://resource/effects/Circle.png" type="Texture" id=1]
 [ext_resource path="res://src/game/effects/Blood.cs" type="Script" id=2]
 
-[sub_resource type="ParticlesMaterial" id=1]
-flag_disable_z = true
-gravity = Vector3( 0, 0, 0 )
-initial_velocity = 70.0
-initial_velocity_random = 1.0
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-scale = 0.1
-scale_random = 0.3
-color = Color( 0.792157, 0, 0, 1 )
-
-[node name="Blood" type="Particles2D"]
-emitting = false
-lifetime = 0.5
-one_shot = true
+[node name="Blood" type="CPUParticles2D"]
+z_index = -5
+lifetime = 0.2
 explosiveness = 0.9
-process_material = SubResource( 1 )
 texture = ExtResource( 1 )
+gravity = Vector2( 0, 0 )
+initial_velocity = 150.0
+initial_velocity_random = 1.0
+scale_amount = 0.15
+scale_amount_random = 0.4
+color = Color( 0.627451, 0.0705882, 0.0705882, 0.705882 )
 script = ExtResource( 2 )

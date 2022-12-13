@@ -687,7 +687,7 @@ public abstract class ActivityObject : KinematicBody2D
             sortRoot.AddChild(this);
         }
 
-        GlobalPosition = _throwData.StartPosition + new Vector2(0, -_throwData.Y);
+        GlobalPosition = _throwData.StartPosition;
 
         //显示阴影
         ShowShadowSprite();

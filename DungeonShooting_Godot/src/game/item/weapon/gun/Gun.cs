@@ -93,14 +93,13 @@ public class Gun : Weapon
     protected override void OnFire()
     {
         //创建一个弹壳
-        var startPos = GlobalPosition + new Vector2(0, 5);
         var startHeight = 6;
         var direction = GlobalRotationDegrees + Utils.RandRangeInt(-30, 30) + 180;
         var xf = Utils.RandRangeInt(20, 60);
         var yf = Utils.RandRangeInt(60, 120);
         var rotate = Utils.RandRangeInt(-720, 720);
         var shell = new ShellCase();
-        shell.Throw(new Vector2(10, 5), startPos, startHeight, direction, xf, yf, rotate, true);
+        shell.Throw(new Vector2(10, 5), Master.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
         
         if (Master == GameApplication.Instance.Room.Player)
         {

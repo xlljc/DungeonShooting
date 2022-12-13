@@ -118,7 +118,7 @@ public class Knife : Weapon
         {
             if (activityObject is Role role)
             {
-                role.CallDeferred(nameof(Role.Hurt), 10);
+                role.CallDeferred(nameof(Role.Hurt), 10, (role.GetCenterPosition() - GlobalPosition).Angle());
             }
         }
     }

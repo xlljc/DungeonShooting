@@ -478,7 +478,8 @@ public abstract class Role : ActivityObject
     /// 受到伤害, 如果是在碰撞信号处理函数中调用该函数, 请使用 CallDeferred 来延时调用, 否则很有可能导致报错
     /// </summary>
     /// <param name="damage">伤害的量</param>
-    public virtual void Hurt(int damage)
+    /// <param name="angle">角度</param>
+    public virtual void Hurt(int damage, float angle)
     {
         OnHit(damage);
         if (Shield > 0)
@@ -488,10 +489,11 @@ public abstract class Role : ActivityObject
         else
         {
             Hp -= damage;
-            // var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);
-            // var particles2D = packedScene.Instance<Blood>();
-            // particles2D.GlobalPosition = GlobalPosition;
-            // GameApplication.Instance.Room.GetRoot().AddChild(particles2D);
+            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);
+            var blood = packedScene.Instance<Blood>();
+            blood.GlobalPosition = GlobalPosition;
+            blood.Rotation = angle;
+            GameApplication.Instance.Room.GetRoot().AddChild(blood);
         }
         
         PlayHitAnimation();

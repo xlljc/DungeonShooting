@@ -51,7 +51,7 @@ public class RoomManager : Navigation2D
         //初始化地图
         _mapRoot = GetNode<Node2D>("MapRoot");
         var child = _mapRoot.GetChild(0);
-        _tileMap = child.GetNode<TileMap>("Wall");
+        _tileMap = child.GetNode<TileMap>("Ground");
         var node = child.GetNode("Config");
         Color color = (Color)node.GetMeta("ClearColor");
         VisualServer.SetDefaultClearColor(color);

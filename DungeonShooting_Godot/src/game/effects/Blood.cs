@@ -1,20 +1,41 @@
 using Godot;
 
-public class Blood : Particles2D
+/// <summary>
+/// 血液溅射效果
+/// </summary>
+public class Blood : CPUParticles2D
 {
+	private float _timer;
+	
 	public override void _Ready()
 	{
 		Emitting = true;
-		Life();
+		ReadyStop();
 	}
 
-	private async void Life()
+	public override void _Process(float delta)
 	{
-		var timer = GetTree().CreateTimer(0.4f);
+		_timer += delta;
+		if (_timer > 15f)
+		{
+			if (_timer > 60f)
+			{
+				QueueFree();
+			}
+			else
+			{
+				var color = Modulate;
+				color.a = Mathf.Lerp(1, 0, (_timer - 15f) / 45f);
+				Modulate = color;
+			}
+		}
+	}
+
+	private async void ReadyStop()
+	{
+		var timer = GetTree().CreateTimer(Lifetime - 0.05f);
 		await ToSignal(timer, "timeout");
 		Emitting = false;
-		GD.Print("冻结");
-		SetProcess(false);
 		SetPhysicsProcess(false);
 		SetProcessInput(false);
 		SetProcessInternal(false);
