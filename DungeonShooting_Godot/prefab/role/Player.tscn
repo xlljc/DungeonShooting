@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://prefab/role/Role.tscn" type="PackedScene" id=1]
 [ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=2]
@@ -82,6 +82,9 @@ animations = [ {
 "speed": 10.0
 } ]
 
+[sub_resource type="CircleShape2D" id=32]
+radius = 4.0
+
 [node name="Player" instance=ExtResource( 1 )]
 CollisionLayer = 8
 CollisionMask = 25
@@ -93,3 +96,7 @@ material = SubResource( 1 )
 material = SubResource( 2 )
 frames = SubResource( 19 )
 playing = true
+
+[node name="Collision" parent="." index="3"]
+position = Vector2( 0, -3 )
+shape = SubResource( 32 )

@@ -11,7 +11,7 @@ shader = ExtResource( 5 )
 shader_param/blend = Color( 1, 1, 1, 1 )
 shader_param/schedule = 0.0
 
-[sub_resource type="CircleShape2D" id=34]
+[sub_resource type="CircleShape2D" id=36]
 radius = 4.0
 
 [sub_resource type="RectangleShape2D" id=35]
@@ -36,9 +36,8 @@ material = SubResource( 33 )
 position = Vector2( 0, -12 )
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2( 0, -4 )
-shape = SubResource( 34 )
+shape = SubResource( 36 )
 
 [node name="HurtArea" type="Area2D" parent="."]
 collision_layer = 0

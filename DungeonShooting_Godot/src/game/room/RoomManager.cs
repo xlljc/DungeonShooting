@@ -8,6 +8,10 @@ using Godot;
 /// </summary>
 public class RoomManager : Navigation2D
 {
+    [Export] public NodePath ObjectRootPath;
+    [Export] public NodePath SortRootPath;
+    [Export] public NodePath MapRootPath;
+    
     /// <summary>
     /// 玩家对象
     /// </summary>
@@ -42,16 +46,16 @@ public class RoomManager : Navigation2D
         //Engine.TimeScale = 0.2f;
         Input.MouseMode = Input.MouseModeEnum.Hidden;
 
-        _sortRoot = GetNode<YSort>("SortRoot");
-        _objectRoot = GetNode<Node2D>("ObjectRoot");
+        _sortRoot = GetNode<YSort>(SortRootPath);
+        _objectRoot = GetNode<Node2D>(ObjectRootPath);
         
         NavigationPolygon = new NavigationPolygonInstance();
         AddChild(NavigationPolygon);
 
         //初始化地图
-        _mapRoot = GetNode<Node2D>("MapRoot");
+        _mapRoot = GetNode<Node2D>(MapRootPath);
         var child = _mapRoot.GetChild(0);
-        _tileMap = child.GetNode<TileMap>("Ground");
+        _tileMap = child.GetNode<TileMap>("Wall");
         var node = child.GetNode("Config");
         Color color = (Color)node.GetMeta("ClearColor");
         VisualServer.SetDefaultClearColor(color);

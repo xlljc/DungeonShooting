@@ -10,6 +10,9 @@ glow_enabled = true
 
 [node name="Room" type="Navigation2D"]
 script = ExtResource( 3 )
+ObjectRootPath = NodePath("ObjectRoot")
+SortRootPath = NodePath("SortRoot")
+MapRootPath = NodePath("MapRoot")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
