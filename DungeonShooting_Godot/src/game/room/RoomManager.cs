@@ -9,7 +9,7 @@ using Godot;
 public class RoomManager : Navigation2D
 {
     [Export] public NodePath ObjectRootPath;
-    [Export] public NodePath SortRootPath;
+    [Export] public NodePath YSortRootPath;
     [Export] public NodePath MapRootPath;
     
     /// <summary>
@@ -27,7 +27,7 @@ public class RoomManager : Navigation2D
 
     //对象根节点, 带y轴排序功能
     private YSort _sortRoot;
-
+    
     private Node2D _mapRoot;
 
     //可行走区域的tileId
@@ -46,7 +46,7 @@ public class RoomManager : Navigation2D
         //Engine.TimeScale = 0.2f;
         Input.MouseMode = Input.MouseModeEnum.Hidden;
 
-        _sortRoot = GetNode<YSort>(SortRootPath);
+        _sortRoot = GetNode<YSort>(YSortRootPath);
         _objectRoot = GetNode<Node2D>(ObjectRootPath);
         
         NavigationPolygon = new NavigationPolygonInstance();

@@ -140,7 +140,7 @@ public class PathSign : Node2D, IDestroy
                 if (_isInRange && !_isCollision && Next == null) //如果上一帧就在视野内, 才能创建新的折点
                 {
                     var distance = Mathf.Sqrt(distanceSquared);
-                    Next = new PathSign(GameApplication.Instance.Room.GetRoot(false), _targetPos, ViewRadius - distance, Target, Index + 1);
+                    Next = new PathSign(GameApplication.Instance.Room.GetRoot(), _targetPos, ViewRadius - distance, Target, Index + 1);
                     Next._targetPos = nowTargetPos;
                     Next.Enable = true;
                 }

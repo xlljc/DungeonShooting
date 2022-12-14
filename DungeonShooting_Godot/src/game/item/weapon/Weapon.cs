@@ -289,7 +289,7 @@ public abstract class Weapon : ActivityObject
         base._EnterTree();
 
         //收集落在地上的武器
-        if (Master == null && GetParent() == GameApplication.Instance.Room.GetRoot(false))
+        if (Master == null && GetParent() == GameApplication.Instance.Room.GetRoot())
         {
             UnclaimedWeapons.Add(this);
         }

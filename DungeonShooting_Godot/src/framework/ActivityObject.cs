@@ -115,7 +115,7 @@ public abstract class ActivityObject : KinematicBody2D
                 case "ShadowSprite":
                     ShadowSprite = (Sprite)body;
                     ShadowSprite.Visible = false;
-                    ShadowSprite.ZIndex = -5;
+                    //ShadowSprite.ZIndex = -5;
                     break;
                 case "Collision":
                     Collision = (CollisionShape2D)body;
@@ -456,24 +456,26 @@ public abstract class ActivityObject : KinematicBody2D
         {
             _throwData.LinearVelocity = MoveAndSlide(_throwData.LinearVelocity);
             GlobalRotationDegrees = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
-            if (Scale.y < 0)
-            {
-                AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) - _throwData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
-            }
-            else
-            {
-                AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) + _throwData.OriginSpritePosition.Rotated(Rotation);
-            }
+            CalcThrowAnimatedPosition();
 
             var ysp = _throwData.YSpeed;
 
             _throwData.Y += _throwData.YSpeed * delta;
             _throwData.YSpeed -= GameConfig.G * delta;
+
+            //当高度大于16时, 显示在所有物体上
+            if (_throwData.Y >= 16)
+            {
+                AnimatedSprite.ZIndex = 20;
+            }
+            else
+            {
+                AnimatedSprite.ZIndex = 0;
+            }
             
             //达到最高点
             if (ysp * _throwData.YSpeed < 0)
             {
-                //ZIndex = 0;
                 OnThrowMaxHeight(_throwData.Y);
             }
 
@@ -623,6 +625,18 @@ public abstract class ActivityObject : KinematicBody2D
             ShadowSprite.GlobalPosition = pos + ShadowOffset;
         }
     }
+    
+    private void CalcThrowAnimatedPosition()
+    {
+        if (Scale.y < 0)
+        {
+            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) - _throwData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
+        }
+        else
+        {
+            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) + _throwData.OriginSpritePosition.Rotated(Rotation);
+        }
+    }
 
 
     /// <summary>
@@ -675,20 +689,21 @@ public abstract class ActivityObject : KinematicBody2D
     {
         var parent = GetParent();
         //投抛时必须要加入 sortRoot 节点下
-        var root = GameApplication.Instance.Room.GetRoot(false);
-        var sortRoot = GameApplication.Instance.Room.GetRoot(true);
+        var root = GameApplication.Instance.Room.GetRoot();
+        var throwRoot = GameApplication.Instance.Room.GetRoot(true);
         if (parent == null)
         {
-            sortRoot.AddChild(this);
+            throwRoot.AddChild(this);
         }
         else if (parent == root)
         {
             parent.RemoveChild(this);
-            sortRoot.AddChild(this);
+            throwRoot.AddChild(this);
         }
 
         GlobalPosition = _throwData.StartPosition;
 
+        CalcThrowAnimatedPosition();
         //显示阴影
         ShowShadowSprite();
     }
