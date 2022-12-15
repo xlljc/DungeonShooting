@@ -98,5 +98,4 @@ frames = SubResource( 19 )
 playing = true
 
 [node name="Collision" parent="." index="3"]
-position = Vector2( 0, -3 )
 shape = SubResource( 32 )

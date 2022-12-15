@@ -39,6 +39,7 @@ public class RoomManager : Navigation2D
     //导航区域数据
     private List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
 
+    private TileMap _groundTiled;
     private TileMap _tileMap;
 
     public override void _EnterTree()
@@ -70,7 +71,17 @@ public class RoomManager : Navigation2D
 
     public override void _Ready()
     {
+        _tileMap.CellYSort = false;
+        _tileMap.BakeNavigation = false;
+        //拆分 ground 和 面向下方的 wall
+        _groundTiled = new TileMap();
+        _groundTiled.CellSize = GameConfig.MapCellSize;
+        _groundTiled.TileSet = _tileMap.TileSet;
+        //_groundTiled.SetCell(0, 0, 1);
+        _mapRoot.AddChild(_groundTiled);
+        
         var nowTicks = DateTime.Now.Ticks;
+        //生成寻路网格
         GenerateNavigationPolygon();
         GD.Print("计算NavigationPolygon用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
         

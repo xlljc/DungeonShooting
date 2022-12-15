@@ -920,7 +920,7 @@ public abstract class Weapon : ActivityObject
         var xf = 30;
         var yf = Utils.RandRangeInt(60, 120);
         var rotate = Utils.RandRangeInt(-180, 180);
-        Throw(new Vector2(30, 15), master.MountPoint.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
+        Throw(new Vector2(30, 15), master.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
     }
 
     protected override void OnThrowOver()
