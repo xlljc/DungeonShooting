@@ -66,7 +66,10 @@ public class RoomManager : Navigation2D
         Player.Position = new Vector2(100, 100);
         Player.Name = "Player";
         Player.PutDown();
-        
+
+        // var testActivity = new TestActivity();
+        // testActivity.Position = new Vector2(10, 10);
+        // testActivity.PutDown();
     }
 
     public override void _Ready()

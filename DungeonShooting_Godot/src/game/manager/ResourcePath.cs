@@ -20,6 +20,7 @@ public class ResourcePath
     public const string prefab_role_Player_tscn = "res://prefab/role/Player.tscn";
     public const string prefab_role_Role_tscn = "res://prefab/role/Role.tscn";
     public const string prefab_test_MoveComponent_tscn = "res://prefab/test/MoveComponent.tscn";
+    public const string prefab_test_TestActivity_tscn = "res://prefab/test/TestActivity.tscn";
     public const string prefab_ui_Cursor_tscn = "res://prefab/ui/Cursor.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_ui_bar_InteractiveTipBar_tscn = "res://prefab/ui/bar/InteractiveTipBar.tscn";
@@ -38,6 +39,7 @@ public class ResourcePath
     public const string resource_font_cn_font_12_tres = "res://resource/font/cn_font_12.tres";
     public const string resource_font_cn_font_18_tres = "res://resource/font/cn_font_18.tres";
     public const string resource_font_cn_font_36_tres = "res://resource/font/cn_font_36.tres";
+    public const string resource_map_dungeon_1_tmx = "res://resource/map/dungeon_1.tmx";
     public const string resource_map_dungeon_test_tmx = "res://resource/map/dungeon_test.tmx";
     public const string resource_map_itchioDungeonTileset4_tsx = "res://resource/map/itch-io-DungeonTileset4.tsx";
     public const string resource_materlal_Blend_gdshader = "res://resource/materlal/Blend.gdshader";

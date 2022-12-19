@@ -59,6 +59,11 @@ public abstract class ActivityObject : KinematicBody2D
     /// 阴影偏移
     /// </summary>
     public Vector2 ShadowOffset { get; protected set; } = new Vector2(0, 2);
+    
+    /// <summary>
+    /// 移动控制器
+    /// </summary>
+    public MoveController MoveController { get; }
 
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
@@ -125,6 +130,9 @@ public abstract class ActivityObject : KinematicBody2D
                     break;
             }
         }
+
+        MoveController = new MoveController();
+        AddComponent(MoveController);
     }
 
     /// <summary>
@@ -427,7 +435,7 @@ public abstract class ActivityObject : KinematicBody2D
         if (component == null) return null;
         return (TC)component;
     }
-
+    
     public override void _Process(float delta)
     {
         //更新组件
