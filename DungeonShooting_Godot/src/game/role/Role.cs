@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -62,16 +61,6 @@ public abstract class Role : ActivityObject
     public FaceDirection Face { get => _face; set => SetFace(value); }
     private FaceDirection _face;
 
-    /// <summary>
-    /// 是否启用角色移动, 如果禁用, 那么调用 CalcMove() 将不再有任何效果
-    /// </summary>
-    public bool EnableMove { get; set; } = true;
-    
-    /// <summary>
-    /// 移动速度, 通过调用 CalcMove() 函数来移动
-    /// </summary>
-    public Vector2 Velocity { get; set; } = Vector2.Zero;
-    
     /// <summary>
     /// 是否死亡
     /// </summary>
@@ -245,10 +234,8 @@ public abstract class Role : ActivityObject
         InteractiveArea.Connect("area_exited", this, nameof(_OnPropsExit));
     }
 
-    public override void _Process(float delta)
+    protected override void Process(float delta)
     {
-        base._Process(delta);
-
         //看向目标
         if (LookTarget != null)
         {
@@ -345,17 +332,6 @@ public abstract class Role : ActivityObject
         var gps = GlobalPosition;
         return (Face == FaceDirection.Left && pos.x <= gps.x) ||
                (Face == FaceDirection.Right && pos.x >= gps.x);
-    }
-
-    /// <summary>
-    /// 计算角色移动
-    /// </summary>
-    public virtual void CalcMove(float delta)
-    {
-        if (EnableMove && Velocity != Vector2.Zero)
-        {
-            Velocity = MoveAndSlide(Velocity);
-        }
     }
 
     /// <summary>

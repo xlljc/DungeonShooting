@@ -49,10 +49,9 @@ public class Player : Role
         Shield = 30;
     }
 
-    public override void _Process(float delta)
+    protected override void Process(float delta)
     {
-        base._Process(delta);
-
+        base.Process(delta);
         //脸的朝向
         var gPos = GlobalPosition;
         if (LookTarget == null)
@@ -110,9 +109,9 @@ public class Player : Role
         }
     }
 
-    public override void _PhysicsProcess(float delta)
+    protected override void PhysicsProcess(float delta)
     {
-        base._PhysicsProcess(delta);
+        base.PhysicsProcess(delta);
         HandleMoveInput(delta);
         //播放动画
         PlayAnim();
@@ -193,35 +192,35 @@ public class Player : Role
         // 如果 有输入 就以当前速度，用acceleration 插值到 对应方向 * 最大速度
         if (Mathf.IsZeroApprox(dir.x))
         {
-            Velocity = new Vector2(Mathf.MoveToward(Velocity.x, 0, Friction * delta), Velocity.y);
+            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.x, 0, Friction * delta), BasisVelocity.y);
         }
         else
         {
-            Velocity = new Vector2(Mathf.MoveToward(Velocity.x, dir.x * MoveSpeed, Acceleration * delta), Velocity.y);
+            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.x, dir.x * MoveSpeed, Acceleration * delta),
+                BasisVelocity.y);
         }
 
         if (Mathf.IsZeroApprox(dir.y))
         {
-            Velocity = new Vector2(Velocity.x, Mathf.MoveToward(Velocity.y, 0, Friction * delta));
+            BasisVelocity = new Vector2(BasisVelocity.x, Mathf.MoveToward(BasisVelocity.y, 0, Friction * delta));
         }
         else
         {
-            Velocity = new Vector2(Velocity.x, Mathf.MoveToward(Velocity.y, dir.y * MoveSpeed, Acceleration * delta));
+            BasisVelocity = new Vector2(BasisVelocity.x,
+                Mathf.MoveToward(BasisVelocity.y, dir.y * MoveSpeed, Acceleration * delta));
         }
-
-        CalcMove(delta);
     }
-    
+
     // 播放动画
     private void PlayAnim()
     {
-        if (Velocity != Vector2.Zero)
+        if (BasisVelocity != Vector2.Zero)
         {
-            if ((Face == FaceDirection.Right && Velocity.x >= 0) || Face == FaceDirection.Left && Velocity.x <= 0) //向前走
+            if ((Face == FaceDirection.Right && BasisVelocity.x >= 0) || Face == FaceDirection.Left && BasisVelocity.x <= 0) //向前走
             {
                 AnimatedSprite.Animation = AnimatorNames.Run;
             }
-            else if ((Face == FaceDirection.Right && Velocity.x < 0) || Face == FaceDirection.Left && Velocity.x > 0) //向后走
+            else if ((Face == FaceDirection.Right && BasisVelocity.x < 0) || Face == FaceDirection.Left && BasisVelocity.x > 0) //向后走
             {
                 AnimatedSprite.Animation = AnimatorNames.ReverseRun;
             }

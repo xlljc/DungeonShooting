@@ -65,6 +65,21 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     public MoveController MoveController { get; }
 
+    /// <summary>
+    /// 物体移动基础速率
+    /// </summary>
+    public Vector2 BasisVelocity
+    {
+        get => MoveController.BasisVelocity;
+        set => MoveController.BasisVelocity = value;
+    }
+    
+    /// <summary>
+    /// 这个速度就是玩家当前物理帧移动的真实速率, 该速度由物理帧循环更新, 并不会马上更新
+    /// 该速度就是 BasisVelocity + 外力总和
+    /// </summary>
+    public Vector2 Velocity => MoveController.Velocity;
+
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     //是否初始化阴影
@@ -120,7 +135,6 @@ public abstract class ActivityObject : KinematicBody2D
                 case "ShadowSprite":
                     ShadowSprite = (Sprite)body;
                     ShadowSprite.Visible = false;
-                    //ShadowSprite.ZIndex = -5;
                     break;
                 case "Collision":
                     Collision = (CollisionShape2D)body;
@@ -264,6 +278,20 @@ public abstract class ActivityObject : KinematicBody2D
     }
 
     /// <summary>
+    /// 每帧调用一次, 物体的 Process() 会在组件的 Process() 之前调用
+    /// </summary>
+    protected virtual void Process(float delta)
+    {
+    }
+    
+    /// <summary>
+    /// 每物理帧调用一次, 物体的 PhysicsProcess() 会在组件的 PhysicsProcess() 之前调用
+    /// </summary>
+    protected virtual void PhysicsProcess(float delta)
+    {
+    }
+    
+    /// <summary>
     /// 如果开启 debug, 则每帧调用该函数, 可用于绘制文字线段等
     /// </summary>
     protected virtual void DebugDraw()
@@ -357,7 +385,9 @@ public abstract class ActivityObject : KinematicBody2D
         _throwData.StartXSpeed = xSpeed;
         _throwData.StartYSpeed = ySpeed;
         _throwData.RotateSpeed = rotate;
-        _throwData.LinearVelocity = new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
+        _throwData.ThrowForce = MoveController.AddForce("ThrowForce");
+        _throwData.ThrowForce.Velocity =
+            new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
         _throwData.Y = startHeight;
         _throwData.Bounce = bounce;
         _throwData.BounceStrength = bounceStrength;
@@ -436,8 +466,13 @@ public abstract class ActivityObject : KinematicBody2D
         return (TC)component;
     }
     
-    public override void _Process(float delta)
+    /// <summary>
+    /// 每帧调用一次, 为了防止子类覆盖 _Process(), 给 _Process() 加上了 sealed, 子类需要帧循环函数请重写 Process() 函数
+    /// </summary>
+    public sealed override void _Process(float delta)
     {
+        Process(delta);
+        
         //更新组件
         if (_components.Count > 0)
         {
@@ -462,7 +497,6 @@ public abstract class ActivityObject : KinematicBody2D
         //投抛计算
         if (_throwData != null && !_throwData.IsOver)
         {
-            _throwData.LinearVelocity = MoveAndSlide(_throwData.LinearVelocity);
             GlobalRotationDegrees = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
             CalcThrowAnimatedPosition();
 
@@ -508,7 +542,7 @@ public abstract class ActivityObject : KinematicBody2D
                     _throwData.XSpeed = _throwData.StartXSpeed = _throwData.StartXSpeed * _throwData.BounceSpeed;
                     _throwData.YSpeed = _throwData.StartYSpeed = _throwData.StartYSpeed * _throwData.BounceStrength;
                     _throwData.RotateSpeed = _throwData.RotateSpeed * _throwData.BounceStrength;
-                    _throwData.LinearVelocity *= _throwData.BounceSpeed;
+                    _throwData.ThrowForce.Velocity *= _throwData.BounceSpeed;
                     _throwData.FirstOver = false;
                     _throwData.IsOver = false;
 
@@ -571,8 +605,13 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
 
-    public override void _PhysicsProcess(float delta)
+    /// <summary>
+    /// 每物理帧调用一次, 为了防止子类覆盖 _PhysicsProcess(), 给 _PhysicsProcess() 加上了 sealed, 子类需要帧循环函数请重写 PhysicsProcess() 函数
+    /// </summary>
+    public sealed override void _PhysicsProcess(float delta)
     {
+        PhysicsProcess(delta);
+        
         //更新组件
         if (_components.Count > 0)
         {
@@ -595,7 +634,10 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
 
-    public override void _Draw()
+    /// <summary>
+    /// 绘制函数, 子类不允许重写, 需要绘制函数请重写 DebugDraw()
+    /// </summary>
+    public sealed override void _Draw()
     {
         if (IsDebug)
         {
@@ -785,6 +827,9 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     private void ThrowOver()
     {
+        //移除投抛的力
+        MoveController.RemoveForce(_throwData.ThrowForce);
+        
         GetParent().RemoveChild(this);
         GameApplication.Instance.Room.GetRoot(UseYSort).AddChild(this);
         RestoreCollision();

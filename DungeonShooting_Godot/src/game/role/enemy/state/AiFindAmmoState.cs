@@ -108,10 +108,9 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
                 //计算移动
                 var nextPos = Master.NavigationAgent2D.GetNextLocation();
                 Master.AnimatedSprite.Animation = AnimatorNames.Run;
-                Master.Velocity =
+                Master.BasisVelocity =
                     (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                     Master.MoveSpeed;
-                Master.CalcMove(delta);
             }
         }
     }

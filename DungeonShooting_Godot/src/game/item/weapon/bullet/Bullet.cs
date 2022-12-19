@@ -40,9 +40,8 @@ public class Bullet : ActivityObject
         ShowShadowSprite();
     }
 
-    public override void _PhysicsProcess(float delta)
+    protected override void PhysicsProcess(float delta)
     {
-        base._PhysicsProcess(delta);
         //移动
         var kinematicCollision = MoveAndCollide(new Vector2(FlySpeed * delta, 0).Rotated(Rotation));
         if (kinematicCollision != null)

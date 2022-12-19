@@ -68,9 +68,8 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
             //计算移动
             var nextPos = Master.NavigationAgent2D.GetNextLocation();
             Master.AnimatedSprite.Animation = AnimatorNames.Run;
-            Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+            Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
-            Master.CalcMove(delta);
         }
         //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
         if (Master.IsInTailAfterViewRange(playerPos))

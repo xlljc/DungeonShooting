@@ -13,10 +13,32 @@ public class MoveController : Component
     private readonly List<ExternalForce> _forceList = new List<ExternalForce>();
 
     /// <summary>
-    /// 这个速度就是玩家当前物理帧移动的真实速率
+    /// 这个速度就是玩家当前物理帧移动的真实速率, 该速度由物理帧循环更新, 并不会马上更新
+    /// 该速度就是 BasisVelocity + 外力总和
     /// </summary>
     public Vector2 Velocity => _velocity;
+
     private Vector2 _velocity = Vector2.Zero;
+
+
+    /// <summary>
+    /// 玩家的基础移动速率
+    /// </summary>
+    public Vector2 BasisVelocity
+    {
+        get => _basisVelocity;
+        set => _basisVelocity = value;
+    }
+
+    private Vector2 _basisVelocity = Vector2.Zero;
+
+    /// <summary>
+    /// 获取所有外力对象
+    /// </summary>
+    public ExternalForce[] GetAllForce()
+    {
+        return _forceList.ToArray();
+    }
 
     /// <summary>
     /// 根据名称添加一个外力, 并返回创建的外力的对象, 如果存在这个名称的外力, 移除之前的外力
@@ -103,17 +125,13 @@ public class MoveController : Component
         _forceList.Clear();
     }
 
-    /// <summary>
-    /// 移除所有外力和基础力, 使物体静止
-    /// </summary>
-    public void Halt()
-    {
-        ClearForce();
-        _velocity = Vector2.Zero;
-    }
-
     public override void PhysicsProcess(float delta)
     {
+        if (_basisVelocity == Vector2.Zero && _forceList.Count == 0)
+        {
+            return;
+        }
+
         //先调用更新
         var externalForces = _forceList.ToArray();
         foreach (var fore in externalForces)
@@ -123,7 +141,7 @@ public class MoveController : Component
         }
 
         //外力总和
-        var finallyEf = Vector2.Zero;
+        var finallyEf = new Vector2();
         foreach (var fore in externalForces)
         {
             if (fore.Enable)
@@ -131,29 +149,33 @@ public class MoveController : Component
         }
 
         //最终速率
-        var finallyVelocity = _velocity + finallyEf;
+        var finallyVelocity = _basisVelocity + finallyEf;
 
-        //计算移动
-        _velocity = ActivityObject.MoveAndSlide(finallyVelocity);
-
-        //调整外力速率
-        if (externalForces.Length > 0)
+        if (finallyVelocity != Vector2.Zero)
         {
-            var scale = new Vector2();
-            //x轴外力
-            var efx = _velocity.x - _velocity.x;
-            scale.x = finallyEf.x == 0f ? 0 : Mathf.Abs(efx / finallyEf.x);
-            //y轴外力
-            var efy = _velocity.y - _velocity.y;
-            scale.y = finallyEf.y == 0f ? 0 : Mathf.Abs(efy / finallyEf.y);
-            foreach (var force in externalForces)
+            //计算移动
+            _velocity = ActivityObject.MoveAndSlide(finallyVelocity);
+
+            //调整外力速率
+            if (externalForces.Length > 0)
             {
-                if (force.Enable)
+                //x轴外力
+                var scaleX = finallyEf.x == 0f ? 0 : Mathf.Abs((_velocity.x - _basisVelocity.x) / finallyEf.x);
+                //y轴外力
+                var scaleY = finallyEf.y == 0f ? 0 : Mathf.Abs((_velocity.y - _basisVelocity.y) / finallyEf.y);
+                foreach (var force in _forceList)
                 {
-                    var velocity = force.Velocity;
-                    force.Velocity = new Vector2(velocity.x * scale.x, velocity.y * scale.y);
+                    if (force.Enable)
+                    {
+                        var velocity = force.Velocity;
+                        force.Velocity = new Vector2(velocity.x * scaleX, velocity.y * scaleY);
+                    }
                 }
             }
+        }
+        else
+        {
+            _velocity = finallyEf;
         }
     }
 }

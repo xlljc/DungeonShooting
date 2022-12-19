@@ -67,9 +67,8 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
             var nextPos = Master.NavigationAgent2D.GetNextLocation();
             Master.LookTargetPosition(Enemy.FindTargetPosition);
             Master.AnimatedSprite.Animation = AnimatorNames.Run;
-            Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+            Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
-            Master.CalcMove(delta);
         }
 
         var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();

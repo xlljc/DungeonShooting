@@ -302,9 +302,8 @@ public abstract class Weapon : ActivityObject
         UnclaimedWeapons.Remove(this);
     }
 
-    public override void _Process(float delta)
+    protected override void Process(float delta)
     {
-        base._Process(delta);
         //这把武器被扔在地上, 或者当前武器没有被使用
         if (Master == null || Master.Holster.ActiveWeapon != this)
         {

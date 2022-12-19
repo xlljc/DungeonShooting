@@ -74,8 +74,8 @@ public class ObjectThrowData
 
     public Vector2 CurrPosition;
     public float Y;
-    public Vector2 LinearVelocity;
-    
+    public ExternalForce ThrowForce;
+
     //----------- 用于记录原始信息 --------------
     public bool UseOrigin = true;
     public Shape2D OriginShape;

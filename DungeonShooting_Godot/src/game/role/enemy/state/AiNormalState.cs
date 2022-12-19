@@ -78,9 +78,8 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
                 //计算移动
                 var nextPos = Master.NavigationAgent2D.GetNextLocation();
                 Master.AnimatedSprite.Animation = AnimatorNames.Run;
-                Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                                   Master.MoveSpeed;
-                Master.CalcMove(delta);
 
                 if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
                 {

@@ -75,9 +75,8 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             //计算移动
             var nextPos = Master.NavigationAgent2D.GetNextLocation();
             Master.AnimatedSprite.Animation = AnimatorNames.Run;
-            Master.Velocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
+            Master.BasisVelocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
-            Master.CalcMove(delta);
         }
 
         //检测玩家是否在视野内
