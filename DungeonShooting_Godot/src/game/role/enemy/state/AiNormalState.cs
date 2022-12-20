@@ -75,16 +75,11 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
             }
             else //移动中
             {
-                //计算移动
-                var nextPos = Master.NavigationAgent2D.GetNextLocation();
-                Master.AnimatedSprite.Animation = AnimatorNames.Run;
-                Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                                  Master.MoveSpeed;
-
                 if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
                 {
                     _pauseTimer = Utils.RandRange(0.3f, 2f);
                     _isMoveOver = true;
+                    Master.BasisVelocity = Vector2.Zero;
                 }
                 else
                 {
@@ -93,6 +88,15 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
                     {
                         _pauseTimer = Utils.RandRange(0.1f, 0.5f);
                         _isMoveOver = true;
+                        Master.BasisVelocity = Vector2.Zero;
+                    }
+                    else
+                    {
+                        //计算移动
+                        var nextPos = Master.NavigationAgent2D.GetNextLocation();
+                        Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                        Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                                               Master.MoveSpeed;
                     }
                 }
             }

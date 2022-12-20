@@ -77,16 +77,11 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
             }
             else
             {
-                //计算移动
-                var nextPos = Master.NavigationAgent2D.GetNextLocation();
-                Master.AnimatedSprite.Animation = AnimatorNames.Run;
-                Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                                  Master.MoveSpeed;
-
                 if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
                 {
                     _pauseTimer = Utils.RandRange(0f, 0.5f);
                     _isMoveOver = true;
+                    Master.BasisVelocity = Vector2.Zero;
                 }
                 else
                 {
@@ -95,6 +90,15 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     {
                         _pauseTimer = Utils.RandRange(0f, 0.3f);
                         _isMoveOver = true;
+                        Master.BasisVelocity = Vector2.Zero;
+                    }
+                    else
+                    {
+                        //计算移动
+                        var nextPos = Master.NavigationAgent2D.GetNextLocation();
+                        Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                        Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                                               Master.MoveSpeed;
                     }
                 }
 

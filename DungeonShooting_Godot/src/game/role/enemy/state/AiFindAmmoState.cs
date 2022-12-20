@@ -112,6 +112,10 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
                     (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                     Master.MoveSpeed;
             }
+            else
+            {
+                Master.BasisVelocity = Vector2.Zero;
+            }
         }
     }
 

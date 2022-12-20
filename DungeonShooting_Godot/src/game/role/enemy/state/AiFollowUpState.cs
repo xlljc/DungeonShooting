@@ -70,6 +70,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
 
         //枪口指向玩家
         Master.LookTargetPosition(playerPos);
+        
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
             //计算移动
@@ -77,6 +78,10 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             Master.AnimatedSprite.Animation = AnimatorNames.Run;
             Master.BasisVelocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
+        }
+        else
+        {
+            Master.BasisVelocity = Vector2.Zero;
         }
 
         //检测玩家是否在视野内
