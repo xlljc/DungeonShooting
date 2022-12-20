@@ -17,6 +17,16 @@ public class ExternalForce
     public bool Enable { get; set; } = true;
 
     /// <summary>
+    /// 阻力大小, 也就是速度每秒衰减的量
+    /// </summary>
+    public float Resistance { get; set; } = 5;
+
+    /// <summary>
+    /// 当速度到达 0 后是否自动销毁
+    /// </summary>
+    public bool AutoDestroy { get; set; } = true;
+    
+    /// <summary>
     /// 当前力的速率
     /// </summary>
     public Vector2 Velocity { get; set; } = Vector2.Zero;

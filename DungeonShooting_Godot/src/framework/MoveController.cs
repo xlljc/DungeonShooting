@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -7,6 +8,8 @@ using Godot;
 /// </summary>
 public class MoveController : Component
 {
+    private static long _index = 0;
+
     /// <summary>
     /// 玩家受到的外力的集合
     /// </summary>
@@ -38,6 +41,19 @@ public class MoveController : Component
     public ExternalForce[] GetAllForce()
     {
         return _forceList.ToArray();
+    }
+
+    /// <summary>
+    /// 快速窗口一个外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
+    /// </summary>
+    /// <param name="velocity">外力速率</param>
+    /// <param name="resistance">阻力大小</param>
+    public ExternalForce AddForce(Vector2 velocity, float resistance)
+    {
+        var force = AddForce("_anonymity_" + _index++);
+        force.Velocity = velocity;
+        force.Resistance = resistance;
+        return force;
     }
 
     /// <summary>
@@ -163,12 +179,23 @@ public class MoveController : Component
                 var scaleX = finallyEf.x == 0f ? 0 : Mathf.Abs((_velocity.x - _basisVelocity.x) / finallyEf.x);
                 //y轴外力
                 var scaleY = finallyEf.y == 0f ? 0 : Mathf.Abs((_velocity.y - _basisVelocity.y) / finallyEf.y);
-                foreach (var force in _forceList)
+                for (var i = 0; i < _forceList.Count; i++)
                 {
+                    var force = _forceList[i];
                     if (force.Enable)
                     {
                         var velocity = force.Velocity;
                         force.Velocity = new Vector2(velocity.x * scaleX, velocity.y * scaleY);
+                        if (force.Resistance != 0)
+                        {
+                            force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.Resistance * delta);
+                        }
+
+                        if (force.AutoDestroy && force.Velocity == Vector2.Zero)
+                        {
+                            _forceList.RemoveAt(i--);
+                            GD.Print("移除外力: " + force.Name);
+                        }
                     }
                 }
             }
@@ -176,6 +203,16 @@ public class MoveController : Component
         else
         {
             _velocity = finallyEf;
+        }
+    }
+
+    public override void DebugDraw()
+    {
+        var globalRotation = GlobalRotation;
+        ActivityObject.DrawLine(Vector2.Zero, BasisVelocity.Rotated(-globalRotation), Colors.Yellow);
+        foreach (var force in _forceList)
+        {
+            ActivityObject.DrawLine(Vector2.Zero, force.Velocity.Rotated(-globalRotation), Colors.YellowGreen);
         }
     }
 }

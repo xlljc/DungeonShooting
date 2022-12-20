@@ -67,6 +67,8 @@ public class RoomManager : Navigation2D
         Player.Name = "Player";
         Player.PutDown();
 
+        Player.GetComponent<MoveController>().AddForce(new Vector2(10, 10), 5);
+
         // var testActivity = new TestActivity();
         // testActivity.Position = new Vector2(10, 10);
         // testActivity.PutDown();
@@ -105,14 +107,14 @@ public class RoomManager : Navigation2D
         //enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
         enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
-        for (int i = 0; i < 10; i++)
-        {
-            var enemyTemp = new Enemy();
-            enemyTemp.Name = "EnemyTemp" + i;
-            enemyTemp.PutDown(new Vector2(150 + (i + 1) * 20, 300));
-            enemyTemp.PickUpWeapon(WeaponManager.GetGun("1003"));
-            enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
-        }
+        // for (int i = 0; i < 10; i++)
+        // {
+        //     var enemyTemp = new Enemy();
+        //     enemyTemp.Name = "EnemyTemp" + i;
+        //     enemyTemp.PutDown(new Vector2(150 + (i + 1) * 20, 300));
+        //     enemyTemp.PickUpWeapon(WeaponManager.GetGun("1003"));
+        //     enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
+        // }
         
         var enemy2 = new Enemy();
         enemy2.Name = "Enemy2";
