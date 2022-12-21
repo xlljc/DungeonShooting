@@ -1,0 +1,79 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://resource/sprite/environment/itch-io-DungeonTileset4/16x16 dungeon ii wall reconfig v04 spritesheet.png" type="Texture" id=1]
+[ext_resource path="res://resource/sprite/role/role1.png" type="Texture" id=2]
+[ext_resource path="res://resource/sprite/gun/gun1.png" type="Texture" id=3]
+[ext_resource path="res://resource/sprite/shell/shellCase.png" type="Texture" id=4]
+
+[sub_resource type="TileSet" id=1]
+0/name = "16x16 dungeon ii wall reconfig v04 spritesheet.png 0"
+0/texture = ExtResource( 1 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 64, 144 )
+0/tile_mode = 2
+0/autotile/icon_coordinate = Vector2( 0, 0 )
+0/autotile/tile_size = Vector2( 16, 16 )
+0/autotile/spacing = 0
+0/autotile/occluder_map = [  ]
+0/autotile/navpoly_map = [  ]
+0/autotile/priority_map = [  ]
+0/autotile/z_index_map = [  ]
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+
+[node name="TestTileLayer" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+z_index = 10
+tile_set = SubResource( 1 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 0, 0, 262146, 1, 0, 262146, 2, 0, 262146, 3, 0, 262146, 4, 0, 262146, 5, 0, 262146, 6, 0, 262146, 7, 0, 262146, 8, 0, 262146, 9, 0, 262146, 10, 0, 262146, 11, 0, 262146, 12, 0, 262146, 13, 0, 262146, 14, 0, 262146, 15, 0, 262147, 65536, 0, 262146, 65537, 0, 262146, 65538, 0, 262146, 65539, 0, 262146, 65540, 0, 262146, 65541, 0, 262146, 65542, 0, 262146, 65543, 0, 262146, 65544, 0, 262146, 65545, 0, 262146, 65546, 0, 262146, 65547, 0, 262146, 65548, 0, 262146, 65549, 0, 262146, 65550, 0, 262146, 65551, 0, 262147, 131072, 0, 262146, 131073, 0, 262146, 131074, 0, 262146, 131075, 0, 262146, 131076, 0, 262146, 131077, 0, 262146, 131078, 0, 262146, 131079, 0, 262146, 131080, 0, 262146, 131081, 0, 262146, 131082, 0, 262146, 131083, 0, 262146, 131084, 0, 262146, 131085, 0, 262146, 131086, 0, 262146, 131087, 0, 262147, 196608, 0, 262146, 196609, 0, 262146, 196610, 0, 262146, 196611, 0, 262146, 196612, 0, 262146, 196613, 0, 262146, 196614, 0, 262146, 196615, 0, 262146, 196616, 0, 262146, 196617, 0, 262146, 196618, 0, 262146, 196619, 0, 262146, 196620, 0, 262146, 196621, 0, 262146, 196622, 0, 262146, 196623, 0, 262147, 262144, 0, 262146, 262145, 0, 262146, 262146, 0, 262146, 262147, 0, 262146, 262148, 0, 262146, 262149, 0, 262146, 262150, 0, 262146, 262151, 0, 262146, 262152, 0, 262146, 262153, 0, 262146, 262154, 0, 262146, 262155, 0, 262146, 262156, 0, 262146, 262157, 0, 262146, 262158, 0, 262146, 262159, 0, 262147 )
+
+[node name="Ground" type="TileMap" parent="."]
+z_index = -10
+tile_set = SubResource( 1 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 16, 0, 524288, 17, 0, 524288, 18, 0, 524288, 19, 0, 524288, 65552, 0, 524288, 65553, 0, 524288, 65554, 0, 524288, 65555, 0, 524288, 131088, 0, 524288, 131089, 0, 524288, 131090, 0, 524288, 131091, 0, 524288, 196624, 0, 524288, 196625, 0, 524288, 196626, 0, 524288, 196627, 0, 524288, 262160, 0, 524288, 262161, 0, 524288, 262162, 0, 524288, 262163, 0, 524288, 327696, 0, 524288, 327697, 0, 524288, 327698, 0, 524288, 327699, 0, 524288, 393216, 0, 524288, 393217, 0, 524288, 393218, 0, 524288, 393219, 0, 524288, 393220, 0, 524288, 393221, 0, 524288, 393222, 0, 524288, 393223, 0, 524288, 393224, 0, 524288, 393225, 0, 524288, 393226, 0, 524288, 393227, 0, 524288, 393228, 0, 524288, 393229, 0, 524288, 393230, 0, 524288, 393231, 0, 524288, 393232, 0, 524288, 393233, 0, 524288, 393234, 0, 524288, 393235, 0, 524288, 458752, 0, 524288, 458753, 0, 524288, 458754, 0, 524288, 458755, 0, 524288, 458756, 0, 524288, 458757, 0, 524288, 458758, 0, 524288, 458759, 0, 524288, 458760, 0, 524288, 458761, 0, 524288, 458762, 0, 524288, 458763, 0, 524288, 458764, 0, 524288, 458765, 0, 524288, 458766, 0, 524288, 458767, 0, 524288, 458768, 0, 524288, 458769, 0, 524288, 458770, 0, 524288, 458771, 0, 524288, 524288, 0, 524288, 524289, 0, 524288, 524290, 0, 524288, 524291, 0, 524288, 524292, 0, 524288, 524293, 0, 524288, 524294, 0, 524288, 524295, 0, 524288, 524296, 0, 524288, 524297, 0, 524288, 524298, 0, 524288, 524299, 0, 524288, 524300, 0, 524288, 524301, 0, 524288, 524302, 0, 524288, 524303, 0, 524288, 524304, 0, 524288, 524305, 0, 524288, 524306, 0, 524288, 524307, 0, 524288 )
+
+[node name="YSort" type="YSort" parent="."]
+
+[node name="DownWall" type="TileMap" parent="YSort"]
+tile_set = SubResource( 1 )
+cell_size = Vector2( 16, 16 )
+cell_tile_origin = 1
+cell_y_sort = true
+format = 1
+tile_data = PoolIntArray( 327680, 0, 65538, 327681, 0, 65538, 327682, 0, 65538, 327683, 0, 65538, 327684, 0, 65538, 327685, 0, 65538, 327686, 0, 65538, 327687, 0, 65538, 327688, 0, 65538, 327689, 0, 65538, 327690, 0, 65538, 327691, 0, 65538, 327692, 0, 65538, 327693, 0, 65538, 327694, 0, 65538, 327695, 0, 65539 )
+
+[node name="KinematicBody2D" type="KinematicBody2D" parent="YSort"]
+position = Vector2( 261, 87 )
+
+[node name="Sprite" type="Sprite" parent="YSort/KinematicBody2D"]
+position = Vector2( 0, -12 )
+rotation = -3.14159
+scale = Vector2( 1, -1 )
+texture = ExtResource( 2 )
+hframes = 4
+vframes = 3
+
+[node name="Weapon" type="Sprite" parent="YSort/KinematicBody2D"]
+position = Vector2( -8, -2 )
+rotation = 2.58842
+scale = Vector2( 1, -1 )
+texture = ExtResource( 3 )
+
+[node name="KinematicBody2D2" type="KinematicBody2D" parent="YSort"]
+position = Vector2( 230, 97 )
+
+[node name="BulletShell" type="Sprite" parent="YSort/KinematicBody2D2"]
+position = Vector2( 5, -16 )
+texture = ExtResource( 4 )
