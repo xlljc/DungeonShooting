@@ -171,21 +171,30 @@ public class MoveController : Component
         {
             //计算移动
             _velocity = ActivityObject.MoveAndSlide(finallyVelocity);
+            if (_velocity.x == 0f && _basisVelocity.x * finallyVelocity.x > 0)
+            {
+                _basisVelocity.x = 0;
+            }
+
+            if (_velocity.y == 0f && _basisVelocity.y * finallyVelocity.y > 0)
+            {
+                _basisVelocity.y = 0;
+            }
 
             //调整外力速率
             if (externalForces.Length > 0)
             {
-                //x轴外力
-                var scaleX = finallyEf.x == 0f ? 0 : Mathf.Abs((_velocity.x - _basisVelocity.x) / finallyEf.x);
-                //y轴外力
-                var scaleY = finallyEf.y == 0f ? 0 : Mathf.Abs((_velocity.y - _basisVelocity.y) / finallyEf.y);
                 for (var i = 0; i < _forceList.Count; i++)
                 {
                     var force = _forceList[i];
                     if (force.Enable)
                     {
                         var velocity = force.Velocity;
-                        force.Velocity = new Vector2(velocity.x * scaleX, velocity.y * scaleY);
+                        force.Velocity = new Vector2(
+                            _velocity.x == 0f && velocity.x * finallyVelocity.x > 0 ? 0 : velocity.x,
+                            _velocity.y == 0f && velocity.y * finallyVelocity.y > 0 ? 0 : velocity.y
+                        );
+
                         if (force.Resistance != 0)
                         {
                             force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.Resistance * delta);
@@ -194,7 +203,6 @@ public class MoveController : Component
                         if (force.AutoDestroy && force.Velocity == Vector2.Zero)
                         {
                             _forceList.RemoveAt(i--);
-                            GD.Print("移除外力: " + force.Name);
                         }
                     }
                 }

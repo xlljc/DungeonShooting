@@ -67,7 +67,7 @@ public class RoomManager : Navigation2D
         Player.Name = "Player";
         Player.PutDown();
 
-        Player.GetComponent<MoveController>().AddForce(new Vector2(10, 10), 5);
+        //Player.GetComponent<MoveController>().AddForce(new Vector2(-15, -15), 1);
 
         // var testActivity = new TestActivity();
         // testActivity.Position = new Vector2(10, 10);
