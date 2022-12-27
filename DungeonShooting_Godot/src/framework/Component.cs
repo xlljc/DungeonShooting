@@ -178,7 +178,7 @@ public abstract class Component : IProcess, IDestroy
     }
 
     /// <summary>
-    /// 当该组件挂载到GameObject上时调用
+    /// 当该组件挂载到 ActivityObject 上时调用
     /// </summary>
     public virtual void OnMount()
     {

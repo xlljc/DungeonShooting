@@ -5,6 +5,15 @@ using Godot;
 /// </summary>
 public static class Utils
 {
+    
+    /// <summary>
+    /// 返回随机 boolean 值
+    /// </summary>
+    public static bool RandBoolean()
+    {
+        return GD.Randf() >= 0.5f;
+    }
+    
     /// <summary>
     /// 返回一个区间内的随机小数
     /// </summary>

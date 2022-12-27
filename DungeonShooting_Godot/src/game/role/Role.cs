@@ -472,7 +472,7 @@ public abstract class Role : ActivityObject
             GameApplication.Instance.Room.GetRoot().AddChild(blood);
         }
         
-        PlayHitAnimation();
+        //PlayHitAnimation();
         
         //死亡判定
         if (Hp <= 0)
