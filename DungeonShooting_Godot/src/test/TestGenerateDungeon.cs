@@ -14,12 +14,14 @@ public class TestGenerateDungeon : Node2D
 
 	public override void _Ready()
 	{
-		GD.Randomize();
+		//GD.Randomize();
 		_tileMap = GetNode<TileMap>(TileMapPath);
 		_camera = GetNode<Camera2D>(Camera);
 
 		var temp = new GenerateDungeon(_tileMap);
+		var nowTicks = DateTime.Now.Ticks;
 		temp.Generate();
+		GD.Print("useTime: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 	}
 
 	public override void _Process(float delta)

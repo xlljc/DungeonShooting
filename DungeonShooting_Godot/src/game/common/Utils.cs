@@ -35,4 +35,14 @@ public static class Utils
             return Mathf.FloorToInt(GD.Randf() * (min - max + 1) + max);
         return Mathf.FloorToInt(GD.Randf() * (max - min + 1) + min);
     }
+
+    public static T RandChoose<T>(params T[] list)
+    {
+        if (list.Length == 0)
+        {
+            return default;
+        }
+
+        return list[list.Length - 1];
+    }
 }
