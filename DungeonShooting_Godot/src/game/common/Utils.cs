@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -43,6 +44,16 @@ public static class Utils
             return default;
         }
 
-        return list[list.Length - 1];
+        return list[RandRangeInt(0, list.Length - 1)];
+    }
+
+    public static T RandChoose<T>(List<T> list)
+    {
+        if (list.Count == 0)
+        {
+            return default;
+        }
+
+        return list[RandRangeInt(0, list.Count - 1)];
     }
 }

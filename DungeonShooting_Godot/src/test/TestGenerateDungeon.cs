@@ -14,7 +14,7 @@ public class TestGenerateDungeon : Node2D
 
 	public override void _Ready()
 	{
-		//GD.Randomize();
+		GD.Randomize();
 		_tileMap = GetNode<TileMap>(TileMapPath);
 		_camera = GetNode<Camera2D>(Camera);
 

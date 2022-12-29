@@ -12,7 +12,7 @@ public class GenerateDungeon
     private Grid<bool> _roomGrid = new Grid<bool>();
     private List<RoomInfo> _roomInfos = new List<RoomInfo>();
     private int _count = 0;
-    private int _maxCount = 3;
+    private int _maxCount = 30;
 
     public GenerateDungeon(TileMap tileMap)
     {
@@ -21,7 +21,7 @@ public class GenerateDungeon
 
     public void Generate()
     {
-        GenerateRoom(null);
+        GenerateRoom(null, 0);
 
         foreach (var info in _roomInfos)
         {
@@ -37,22 +37,25 @@ public class GenerateDungeon
         }
     }
 
-    public void GenerateRoom(RoomInfo prevRoomInfo)
+    private RoomInfo GenerateRoom(RoomInfo prevRoomInfo, int direction)
     {
-        if (_count >= _maxCount)
+        if (_count > _maxCount)
         {
-            return;
+            return null;
         }
-        
-        var pos = Vector2.Zero;
-        var size = new Vector2(Utils.RandRangeInt(5, 10), Utils.RandRangeInt(5, 10));
+        _count++;
+        var info = new RoomInfo();
+        info.Size = new Vector2(Utils.RandRangeInt(10, 30), Utils.RandRangeInt(10, 30));
+        info.Position = Vector2.Zero;
+        info.Direction = direction;
 
         if (prevRoomInfo != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
         {
-            var dir = Utils.RandRangeInt(0, 3); //0上, 1右, 2下, 3左
-            var space = Utils.RandRangeInt(3, 10);
+            //房间间隔
+            var space = Utils.RandRangeInt(3, 4);
+            //中心偏移
             int offset;
-            if (dir == 0 || dir == 2)
+            if (direction == 0 || direction == 2)
             {
                 offset = Utils.RandRangeInt(-(int)prevRoomInfo.Size.y, (int)prevRoomInfo.Size.y);
             }
@@ -60,39 +63,70 @@ public class GenerateDungeon
             {
                 offset = Utils.RandRangeInt(-(int)prevRoomInfo.Size.x, (int)prevRoomInfo.Size.x);
             }
-
-            if (dir == 0)
+            //计算房间位置
+            if (direction == 0) //上
             {
-                pos = new Vector2(prevRoomInfo.Position.x + offset,
-                    prevRoomInfo.Position.y - prevRoomInfo.Size.y - space);
+                info.Position = new Vector2(prevRoomInfo.Position.x + offset,
+                    prevRoomInfo.Position.y - info.Size.y - space);
             }
-            else if (dir == 1)
+            else if (direction == 1) //右
             {
-                pos = new Vector2(prevRoomInfo.Position.x + prevRoomInfo.Size.y + space, prevRoomInfo.Position.y + offset - space);
+                info.Position = new Vector2(prevRoomInfo.Position.x + prevRoomInfo.Size.y + space, prevRoomInfo.Position.y + offset);
             }
-            else if (dir == 2)
+            else if (direction == 2) //下
             {
-                pos = new Vector2(prevRoomInfo.Position.x + offset, prevRoomInfo.Position.y + space);
+                info.Position = new Vector2(prevRoomInfo.Position.x + offset, prevRoomInfo.Position.y + prevRoomInfo.Size.y + space);
             }
-            else if (dir == 3)
+            else if (direction == 3) //左
             {
-                pos = new Vector2(prevRoomInfo.Position.x - prevRoomInfo.Size.x - space,
-                    prevRoomInfo.Position.y + prevRoomInfo.Size.y + offset);
+                info.Position = new Vector2(prevRoomInfo.Position.x - info.Size.x - space,
+                    prevRoomInfo.Position.y + offset);
             }
-
-            if (_roomGrid.RectCollision(pos, size))
+            
+            //是否碰到其他房间
+            if (_roomGrid.RectCollision(info.Position - new Vector2(1, 1), info.Size + new Vector2(2, 2)))
             {
-                return;
+                return null;
             }
         }
-
-
-        _count++;
-        var info = new RoomInfo();
-        info.Size = size;
-        info.Position = pos;
+        
         _roomInfos.Add(info);
         _roomGrid.AddRect(info.Position, info.Size, true);
-        GenerateRoom(info);
+        
+        //下一个房间
+        //0上, 1右, 2下, 3左
+        var dirList = new List<int>(new []{ 0, 1, 2, 3 });
+        if (prevRoomInfo != null)
+        {
+            dirList.Remove(GetReverseDirection(direction));
+        }
+
+        while (dirList.Count > 0)
+        {
+            var randDir = Utils.RandChoose(dirList);
+            var generateRoom = GenerateRoom(info, randDir);
+            if (generateRoom == null)
+            {
+                break;
+            }
+
+            dirList.Remove(randDir);
+        }
+        
+        
+        return info;
+    }
+
+    private int GetReverseDirection(int direction)
+    {
+        switch (direction)
+        {
+            case 0: return 2;
+            case 1: return 3;
+            case 2: return 0;
+            case 3: return 1;
+        }
+
+        return 2;
     }
 }
