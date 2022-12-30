@@ -22,6 +22,7 @@ public class Knife : Weapon
             MaxAmmoCapacity = AmmoCapacity;
             //握把位置
             HoldPosition = new Vector2(10, 0);
+            MaxDistance = MinDistance = 35;
             //后坐力改为向前, 模拟手伸长的效果
             MaxBacklash = -8;
             MinBacklash = -8;
@@ -34,7 +35,7 @@ public class Knife : Weapon
 
     private int _attackIndex = 0;
     
-    public Knife(string id, WeaponAttribute attribute) : base(id, attribute)
+    public Knife(string typeId, WeaponAttribute attribute) : base(typeId, attribute)
     {
         _hitArea = GetNode<Area2D>("HitArea");
         _hitArea.Monitoring = false;
@@ -43,10 +44,9 @@ public class Knife : Weapon
         _hitArea.Connect("body_entered", this, nameof(OnBodyEntered));
     }
 
-    public override void _Process(float delta)
+    protected override void Process(float delta)
     {
-        base._Process(delta);
-        
+        base.Process(delta);
         if (IsActive)
         {
             //让碰撞节点与武器挂载节点位置保持一致, 而不跟着武器走
@@ -54,10 +54,9 @@ public class Knife : Weapon
         }
     }
 
-    public override void _PhysicsProcess(float delta)
+    protected override void PhysicsProcess(float delta)
     {
-        base._PhysicsProcess(delta);
-
+        base.PhysicsProcess(delta);
         //过去两个物理帧后就能关闭碰撞了
         if (++_attackIndex >= 2)
         {
@@ -117,7 +116,7 @@ public class Knife : Weapon
         {
             if (activityObject is Role role)
             {
-                role.Hurt(1);
+                role.CallDeferred(nameof(Role.Hurt), 10, (role.GetCenterPosition() - GlobalPosition).Angle());
             }
         }
     }

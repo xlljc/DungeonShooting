@@ -8,10 +8,14 @@ using Godot;
 /// </summary>
 public class RoomManager : Navigation2D
 {
+    [Export] public NodePath ObjectRootPath;
+    [Export] public NodePath YSortRootPath;
+    [Export] public NodePath MapRootPath;
+    
     /// <summary>
     /// 玩家对象
     /// </summary>
-    public Role Player { get; private set; }
+    public Player Player { get; private set; }
 
     /// <summary>
     /// 导航区域形状
@@ -23,7 +27,7 @@ public class RoomManager : Navigation2D
 
     //对象根节点, 带y轴排序功能
     private YSort _sortRoot;
-
+    
     private Node2D _mapRoot;
 
     //可行走区域的tileId
@@ -35,20 +39,22 @@ public class RoomManager : Navigation2D
     //导航区域数据
     private List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
 
+    private TileMap _groundTiled;
     private TileMap _tileMap;
 
     public override void _EnterTree()
     {
+        //Engine.TimeScale = 0.2f;
         Input.MouseMode = Input.MouseModeEnum.Hidden;
 
-        _sortRoot = GetNode<YSort>("SortRoot");
-        _objectRoot = GetNode<Node2D>("ObjectRoot");
+        _sortRoot = GetNode<YSort>(YSortRootPath);
+        _objectRoot = GetNode<Node2D>(ObjectRootPath);
         
         NavigationPolygon = new NavigationPolygonInstance();
         AddChild(NavigationPolygon);
 
         //初始化地图
-        _mapRoot = GetNode<Node2D>("MapRoot");
+        _mapRoot = GetNode<Node2D>(MapRootPath);
         var child = _mapRoot.GetChild(0);
         _tileMap = child.GetNode<TileMap>("Wall");
         var node = child.GetNode("Config");
@@ -60,12 +66,27 @@ public class RoomManager : Navigation2D
         Player.Position = new Vector2(100, 100);
         Player.Name = "Player";
         Player.PutDown();
-        
+
+        //Player.GetComponent<MoveController>().AddForce(new Vector2(-15, -15), 1);
+
+        // var testActivity = new TestActivity();
+        // testActivity.Position = new Vector2(10, 10);
+        // testActivity.PutDown();
     }
 
     public override void _Ready()
     {
+        _tileMap.CellYSort = false;
+        _tileMap.BakeNavigation = false;
+        //拆分 ground 和 面向下方的 wall
+        _groundTiled = new TileMap();
+        _groundTiled.CellSize = GameConfig.MapCellSize;
+        _groundTiled.TileSet = _tileMap.TileSet;
+        //_groundTiled.SetCell(0, 0, 1);
+        _mapRoot.AddChild(_groundTiled);
+        
         var nowTicks = DateTime.Now.Ticks;
+        //生成寻路网格
         GenerateNavigationPolygon();
         GD.Print("计算NavigationPolygon用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
         
@@ -79,26 +100,37 @@ public class RoomManager : Navigation2D
 
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
+        
         var enemy1 = new Enemy();
         enemy1.Name = "Enemy";
         enemy1.PutDown(new Vector2(150, 300));
-        enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
+        //enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
         enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        
+        // for (int i = 0; i < 10; i++)
+        // {
+        //     var enemyTemp = new Enemy();
+        //     enemyTemp.Name = "EnemyTemp" + i;
+        //     enemyTemp.PutDown(new Vector2(150 + (i + 1) * 20, 300));
+        //     enemyTemp.PickUpWeapon(WeaponManager.GetGun("1003"));
+        //     enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
+        // }
         
         var enemy2 = new Enemy();
         enemy2.Name = "Enemy2";
         enemy2.PutDown(new Vector2(540, 100));
         enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
-        enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
-        enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
-        
+        //enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
+        //enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
+
         var enemy3 = new Enemy();
         enemy3.Name = "Enemy3";
         enemy3.PutDown(new Vector2(540, 300));
         enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
         enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
 
-        WeaponManager.GetGun("1001").PutDown(new Vector2(80, 100));
+        WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100));
+        WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120));
         WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
         WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120));
         WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80));
@@ -107,11 +139,11 @@ public class RoomManager : Navigation2D
         WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));
         WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120));
 
-        WeaponManager.GetGun("1004").PutDown(new Vector2(220, 120));
     }
 
     public override void _Process(float delta)
     {
+        Enemy.UpdateEnemiesView();
         if (GameApplication.Instance.Debug)
         {
             Update();

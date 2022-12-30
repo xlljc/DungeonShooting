@@ -13,17 +13,17 @@ public abstract class ActivityObject : KinematicBody2D
     /// 是否是调试模式
     /// </summary>
     public static bool IsDebug { get; set; }
-    
+
     /// <summary>
     /// 当前物体类型id, 用于区分是否是同一种物体, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemId 为 null
     /// </summary>
-    public string ItemId { get; internal set; }
-    
+    public string ItemId { get; private set; }
+
     /// <summary>
     /// 是否放入 ySort 节点下
     /// </summary>
     public bool UseYSort { get; }
-    
+
     /// <summary>
     /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite", 类型为 AnimatedSprite
     /// </summary>
@@ -44,7 +44,7 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     /// <value></value>
     public AnimationPlayer AnimationPlayer { get; }
-    
+
     /// <summary>
     /// 是否调用过 Destroy() 函数
     /// </summary>
@@ -59,15 +59,49 @@ public abstract class ActivityObject : KinematicBody2D
     /// 阴影偏移
     /// </summary>
     public Vector2 ShadowOffset { get; protected set; } = new Vector2(0, 2);
+    
+    /// <summary>
+    /// 移动控制器
+    /// </summary>
+    public MoveController MoveController { get; }
+
+    /// <summary>
+    /// 物体移动基础速率
+    /// </summary>
+    public Vector2 BasisVelocity
+    {
+        get => MoveController.BasisVelocity;
+        set => MoveController.BasisVelocity = value;
+    }
+    
+    /// <summary>
+    /// 这个速度就是玩家当前物理帧移动的真实速率, 该速度由物理帧循环更新, 并不会马上更新
+    /// 该速度就是 BasisVelocity + 外力总和
+    /// </summary>
+    public Vector2 Velocity => MoveController.Velocity;
 
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
-    private bool initShadow;
+    //是否初始化阴影
+    private bool _initShadow;
+    //上一帧动画名称
     private string _prevAnimation;
+    //上一帧动画
     private int _prevAnimationFrame;
+
+    //播放 Hit 动画
+    private bool _playHit;
+    private float _playHitSchedule;
+
+    //混色shader材质
+    private ShaderMaterial _blendShaderMaterial;
+    
 
     //存储投抛该物体时所产生的数据
     private ObjectThrowData _throwData;
+
+    //标记字典
+    private Dictionary<string, object> _signMap;
 
     public ActivityObject(string scenePath)
     {
@@ -96,11 +130,11 @@ public abstract class ActivityObject : KinematicBody2D
             {
                 case "AnimatedSprite":
                     AnimatedSprite = (AnimatedSprite)body;
+                    _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
                     break;
                 case "ShadowSprite":
                     ShadowSprite = (Sprite)body;
                     ShadowSprite.Visible = false;
-                    ShadowSprite.ZIndex = -5;
                     break;
                 case "Collision":
                     Collision = (CollisionShape2D)body;
@@ -110,6 +144,9 @@ public abstract class ActivityObject : KinematicBody2D
                     break;
             }
         }
+
+        MoveController = new MoveController();
+        AddComponent(MoveController);
     }
 
     /// <summary>
@@ -117,22 +154,28 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     public void ShowShadowSprite()
     {
-        if (!initShadow)
+        if (!_initShadow)
         {
-            initShadow = true;
+            _initShadow = true;
             ShadowSprite.Material = ResourceManager.BlendMaterial;
         }
 
         var anim = AnimatedSprite.Animation;
+        
         var frame = AnimatedSprite.Frame;
         if (_prevAnimation != anim || _prevAnimationFrame != frame)
         {
-            //切换阴影动画
-            ShadowSprite.Texture = AnimatedSprite.Frames.GetFrame(anim, frame);
+            var frames = AnimatedSprite.Frames;
+            if (frames.HasAnimation(anim))
+            {
+                //切换阴影动画
+                ShadowSprite.Texture = frames.GetFrame(anim, frame);
+            }
         }
+
         _prevAnimation = anim;
         _prevAnimationFrame = frame;
-        
+
         CalcShadow();
         ShadowSprite.Visible = true;
     }
@@ -146,9 +189,8 @@ public abstract class ActivityObject : KinematicBody2D
     }
 
     /// <summary>
-    /// 设置默认序列帧动画的第一帧, 即将删除, 请直接设置 AnimatedSprite.Frames
+    /// 设置默认序列帧动画的第一帧
     /// </summary>
-    [Obsolete]
     public void SetDefaultTexture(Texture texture)
     {
         if (AnimatedSprite.Frames == null)
@@ -162,17 +204,9 @@ public abstract class ActivityObject : KinematicBody2D
             SpriteFrames spriteFrames = AnimatedSprite.Frames;
             spriteFrames.SetFrame("default", 0, texture);
         }
-
+    
         AnimatedSprite.Animation = "default";
         AnimatedSprite.Playing = true;
-    }
-
-    /// <summary>
-    /// 获取当前序列帧动画的 Texture
-    /// </summary>
-    public Texture GetCurrentTexture()
-    {
-        return AnimatedSprite.Frames.GetFrame(AnimatedSprite.Name, AnimatedSprite.Frame);
     }
 
     /// <summary>
@@ -181,6 +215,14 @@ public abstract class ActivityObject : KinematicBody2D
     public Texture GetDefaultTexture()
     {
         return AnimatedSprite.Frames.GetFrame("default", 0);
+    }
+    
+    /// <summary>
+    /// 获取当前序列帧动画的 Texture
+    /// </summary>
+    public Texture GetCurrentTexture()
+    {
+        return AnimatedSprite.Frames.GetFrame(AnimatedSprite.Name, AnimatedSprite.Frame);
     }
 
     /// <summary>
@@ -235,6 +277,20 @@ public abstract class ActivityObject : KinematicBody2D
     {
     }
 
+    /// <summary>
+    /// 每帧调用一次, 物体的 Process() 会在组件的 Process() 之前调用
+    /// </summary>
+    protected virtual void Process(float delta)
+    {
+    }
+    
+    /// <summary>
+    /// 每物理帧调用一次, 物体的 PhysicsProcess() 会在组件的 PhysicsProcess() 之前调用
+    /// </summary>
+    protected virtual void PhysicsProcess(float delta)
+    {
+    }
+    
     /// <summary>
     /// 如果开启 debug, 则每帧调用该函数, 可用于绘制文字线段等
     /// </summary>
@@ -329,7 +385,9 @@ public abstract class ActivityObject : KinematicBody2D
         _throwData.StartXSpeed = xSpeed;
         _throwData.StartYSpeed = ySpeed;
         _throwData.RotateSpeed = rotate;
-        _throwData.LinearVelocity = new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
+        _throwData.ThrowForce = MoveController.AddForce("ThrowForce");
+        _throwData.ThrowForce.Velocity =
+            new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
         _throwData.Y = startHeight;
         _throwData.Bounce = bounce;
         _throwData.BounceStrength = bounceStrength;
@@ -407,9 +465,14 @@ public abstract class ActivityObject : KinematicBody2D
         if (component == null) return null;
         return (TC)component;
     }
-
-    public override void _Process(float delta)
+    
+    /// <summary>
+    /// 每帧调用一次, 为了防止子类覆盖 _Process(), 给 _Process() 加上了 sealed, 子类需要帧循环函数请重写 Process() 函数
+    /// </summary>
+    public sealed override void _Process(float delta)
     {
+        Process(delta);
+        
         //更新组件
         if (_components.Count > 0)
         {
@@ -434,30 +497,33 @@ public abstract class ActivityObject : KinematicBody2D
         //投抛计算
         if (_throwData != null && !_throwData.IsOver)
         {
-            _throwData.LinearVelocity = MoveAndSlide(_throwData.LinearVelocity);
-            Position = new Vector2(Position.x, Position.y - _throwData.YSpeed * delta);
-            var rotate = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
-            GlobalRotationDegrees = rotate;
-
-            var pos = AnimatedSprite.GlobalPosition;
-            ShadowSprite.GlobalRotationDegrees = rotate;
+            GlobalRotationDegrees = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
+            CalcThrowAnimatedPosition();
 
             var ysp = _throwData.YSpeed;
 
             _throwData.Y += _throwData.YSpeed * delta;
             _throwData.YSpeed -= GameConfig.G * delta;
 
+            //当高度大于16时, 显示在所有物体上
+            if (_throwData.Y >= 16)
+            {
+                AnimatedSprite.ZIndex = 20;
+            }
+            else
+            {
+                AnimatedSprite.ZIndex = 0;
+            }
+            
             //达到最高点
             if (ysp * _throwData.YSpeed < 0)
             {
-                ZIndex = 0;
                 OnThrowMaxHeight(_throwData.Y);
             }
 
             //落地判断
             if (_throwData.Y <= 0)
             {
-                Collision.GlobalPosition = pos;
 
                 _throwData.IsOver = true;
 
@@ -476,9 +542,7 @@ public abstract class ActivityObject : KinematicBody2D
                     _throwData.XSpeed = _throwData.StartXSpeed = _throwData.StartXSpeed * _throwData.BounceSpeed;
                     _throwData.YSpeed = _throwData.StartYSpeed = _throwData.StartYSpeed * _throwData.BounceStrength;
                     _throwData.RotateSpeed = _throwData.RotateSpeed * _throwData.BounceStrength;
-                    _throwData.LinearVelocity *= _throwData.BounceSpeed;
-                    // _throwData.LinearVelocity =
-                    //     new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
+                    _throwData.ThrowForce.Velocity *= _throwData.BounceSpeed;
                     _throwData.FirstOver = false;
                     _throwData.IsOver = false;
 
@@ -490,13 +554,9 @@ public abstract class ActivityObject : KinematicBody2D
                     ThrowOver();
                 }
             }
-            else
-            {
-                //碰撞器位置
-                Collision.GlobalPosition = pos + new Vector2(0, _throwData.Y);
-            }
         }
 
+        //阴影
         if (ShadowSprite.Visible)
         {
             //更新阴影贴图, 使其和动画一致
@@ -507,11 +567,35 @@ public abstract class ActivityObject : KinematicBody2D
                 //切换阴影动画
                 ShadowSprite.Texture = AnimatedSprite.Frames.GetFrame(anim, AnimatedSprite.Frame);
             }
+
             _prevAnimation = anim;
             _prevAnimationFrame = frame;
-            
+
             //计算阴影
             CalcShadow();
+        }
+
+        // Hit 动画
+        if (_playHit && _blendShaderMaterial != null)
+        {
+            if (_playHitSchedule < 0.05f)
+            {
+                _blendShaderMaterial.SetShaderParam("schedule", 1);
+            }
+            else if (_playHitSchedule < 0.15f)
+            {
+                _blendShaderMaterial.SetShaderParam("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
+            }
+            if (_playHitSchedule >= 0.15f)
+            {
+                _blendShaderMaterial.SetShaderParam("schedule", 0);
+                _playHitSchedule = 0;
+                _playHit = false;
+            }
+            else
+            {
+                _playHitSchedule += delta;
+            }
         }
         
         //调试绘制
@@ -520,9 +604,14 @@ public abstract class ActivityObject : KinematicBody2D
             Update();
         }
     }
-    
-    public override void _PhysicsProcess(float delta)
+
+    /// <summary>
+    /// 每物理帧调用一次, 为了防止子类覆盖 _PhysicsProcess(), 给 _PhysicsProcess() 加上了 sealed, 子类需要帧循环函数请重写 PhysicsProcess() 函数
+    /// </summary>
+    public sealed override void _PhysicsProcess(float delta)
     {
+        PhysicsProcess(delta);
+        
         //更新组件
         if (_components.Count > 0)
         {
@@ -545,7 +634,10 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
 
-    public override void _Draw()
+    /// <summary>
+    /// 绘制函数, 子类不允许重写, 需要绘制函数请重写 DebugDraw()
+    /// </summary>
+    public sealed override void _Draw()
     {
         if (IsDebug)
         {
@@ -571,7 +663,7 @@ public abstract class ActivityObject : KinematicBody2D
         //缩放
         ShadowSprite.Scale = AnimatedSprite.Scale;
         //阴影角度
-        ShadowSprite.GlobalRotationDegrees = GlobalRotationDegrees;
+        ShadowSprite.Rotation = 0;
         //阴影位置计算
         var pos = AnimatedSprite.GlobalPosition;
         if (_throwData != null && !_throwData.IsOver)
@@ -583,8 +675,20 @@ public abstract class ActivityObject : KinematicBody2D
             ShadowSprite.GlobalPosition = pos + ShadowOffset;
         }
     }
-
     
+    private void CalcThrowAnimatedPosition()
+    {
+        if (Scale.y < 0)
+        {
+            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) - _throwData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
+        }
+        else
+        {
+            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) + _throwData.OriginSpritePosition.Rotated(Rotation);
+        }
+    }
+
+
     /// <summary>
     /// 销毁物体
     /// </summary>
@@ -596,7 +700,7 @@ public abstract class ActivityObject : KinematicBody2D
         }
 
         IsDestroyed = true;
-        
+
         OnDestroy();
         QueueFree();
         var arr = _components.ToArray();
@@ -635,20 +739,21 @@ public abstract class ActivityObject : KinematicBody2D
     {
         var parent = GetParent();
         //投抛时必须要加入 sortRoot 节点下
-        var root = GameApplication.Instance.Room.GetRoot(false);
-        var sortRoot = GameApplication.Instance.Room.GetRoot(true);
+        var root = GameApplication.Instance.Room.GetRoot();
+        var throwRoot = GameApplication.Instance.Room.GetRoot(true);
         if (parent == null)
         {
-            sortRoot.AddChild(this);
+            throwRoot.AddChild(this);
         }
         else if (parent == root)
         {
             parent.RemoveChild(this);
-            sortRoot.AddChild(this);
+            throwRoot.AddChild(this);
         }
 
-        GlobalPosition = _throwData.StartPosition + new Vector2(0, -_throwData.Y);
+        GlobalPosition = _throwData.StartPosition;
 
+        CalcThrowAnimatedPosition();
         //显示阴影
         ShowShadowSprite();
     }
@@ -665,6 +770,7 @@ public abstract class ActivityObject : KinematicBody2D
             _throwData.OriginRotation = Collision.Rotation;
             _throwData.OriginScale = Collision.Scale;
             _throwData.OriginZIndex = ZIndex;
+            _throwData.OriginSpritePosition = AnimatedSprite.Position;
             _throwData.OriginCollisionEnable = Collision.Disabled;
             _throwData.OriginCollisionPosition = Collision.Position;
             _throwData.OriginCollisionRotation = Collision.Rotation;
@@ -678,11 +784,10 @@ public abstract class ActivityObject : KinematicBody2D
             }
 
             Collision.Shape = _throwData.RectangleShape;
-            //Collision.Position = Vector2.Zero;
+            Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
             ZIndex = 0;
-            //ZIndex = 2;
             Collision.Disabled = false;
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
@@ -705,6 +810,7 @@ public abstract class ActivityObject : KinematicBody2D
             Collision.Rotation = _throwData.OriginRotation;
             Collision.Scale = _throwData.OriginScale;
             ZIndex = _throwData.OriginZIndex;
+            AnimatedSprite.Position = _throwData.OriginSpritePosition;
             Collision.Disabled = _throwData.OriginCollisionEnable;
             Collision.Position = _throwData.OriginCollisionPosition;
             Collision.Rotation = _throwData.OriginCollisionRotation;
@@ -721,11 +827,89 @@ public abstract class ActivityObject : KinematicBody2D
     /// </summary>
     private void ThrowOver()
     {
+        //移除投抛的力
+        MoveController.RemoveForce(_throwData.ThrowForce);
+        
         GetParent().RemoveChild(this);
         GameApplication.Instance.Room.GetRoot(UseYSort).AddChild(this);
         RestoreCollision();
 
         OnThrowOver();
+    }
+
+    /// <summary>
+    /// 设置标记, 用于在物体上记录自定义数据
+    /// </summary>
+    /// <param name="name">标记名称</param>
+    /// <param name="v">存入值</param>
+    public void SetSign(string name, object v)
+    {
+        if (_signMap == null)
+        {
+            _signMap = new Dictionary<string, object>();
+        }
+
+        _signMap[name] = v;
+    }
+
+    /// <summary>
+    /// 返回是否存在指定名称的标记数据
+    /// </summary>
+    public bool HasSign(string name)
+    {
+        return _signMap == null ? false : _signMap.ContainsKey(name);
+    }
+
+    /// <summary>
+    /// 根据名称获取标记值
+    /// </summary>
+    public object GetSign(string name)
+    {
+        if (_signMap == null)
+        {
+            return null;
+        }
+
+        _signMap.TryGetValue(name, out var value);
+        return value;
+    }
+
+    /// <summary>
+    /// 根据名称获取标记值
+    /// </summary>
+    public T GetSign<T>(string name)
+    {
+        if (_signMap == null)
+        {
+            return default;
+        }
+
+        _signMap.TryGetValue(name, out var value);
+        if (value is T v)
+        {
+            return v;
+        }
+        return default;
+    }
+
+    /// <summary>
+    /// 根据名称删除标记
+    /// </summary>
+    public void RemoveSign(string name)
+    {
+        if (_signMap != null)
+        {
+            _signMap.Remove(name);
+        }
+    }
+
+    /// <summary>
+    /// 播放受伤动画, 该动画不与 Animation 节点的动画冲突
+    /// </summary>
+    public void PlayHitAnimation()
+    {
+        _playHit = true;
+        _playHitSchedule = 0;
     }
 
     /// <summary>

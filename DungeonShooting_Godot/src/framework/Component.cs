@@ -178,7 +178,7 @@ public abstract class Component : IProcess, IDestroy
     }
 
     /// <summary>
-    /// 当该组件挂载到GameObject上时调用
+    /// 当该组件挂载到 ActivityObject 上时调用
     /// </summary>
     public virtual void OnMount()
     {
@@ -206,7 +206,7 @@ public abstract class Component : IProcess, IDestroy
     }
 
     /// <summary>
-    /// 如果开启 debug, 则每帧调用该函数, 可用于绘制文字线段等
+    /// 如果开启 debug, 则每帧调用该函数, 可用于绘制文字线段等, 需要调用 ActivityObject 身上的绘制函数
     /// </summary>
     public virtual void DebugDraw()
     {

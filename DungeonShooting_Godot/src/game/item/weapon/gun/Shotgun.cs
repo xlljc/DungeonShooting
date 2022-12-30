@@ -31,17 +31,17 @@ public class Shotgun : Weapon
             //开火前延时
             DelayedTime = 0f;
             //攻击距离
-            MinDistance = 500;
-            MaxDistance = 600;
+            MinDistance = 200;
+            MaxDistance = 250;
             //发射子弹数量
-            MinFireBulletCount = 1;
-            MaxFireBulletCount = 1;
+            MinFireBulletCount = 5;
+            MaxFireBulletCount = 5;
             //抬起角度
             UpliftAngle = 15;
             MaxBacklash = 6;
             MinBacklash = 5;
-            //枪身长度
-            FirePosition = new Vector2(16, 1.5f);
+            //开火位置
+            FirePosition = new Vector2(18, 4);
         }
     }
     
@@ -50,7 +50,7 @@ public class Shotgun : Weapon
     /// </summary>
     public PackedScene ShellPack;
 
-    public Shotgun(string id, WeaponAttribute attribute) : base(id, attribute)
+    public Shotgun(string typeId, WeaponAttribute attribute) : base(typeId, attribute)
     {
         ShellPack = ResourceManager.Load<PackedScene>(ResourcePath.prefab_weapon_shell_ShellCase_tscn);
     }
@@ -70,27 +70,31 @@ public class Shotgun : Weapon
         if (Master == GameApplication.Instance.Room.Player)
         {
             //创建抖动
-            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 1.5f);
+            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
         }
+        
+        //创建开火特效
+        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_ShotFire_tscn);
+        var sprite = packedScene.Instance<Sprite>();
+        sprite.GlobalPosition = FirePoint.GlobalPosition;
+        sprite.GlobalRotation = FirePoint.GlobalRotation;
+        GameApplication.Instance.Room.GetRoot(true).AddChild(sprite);
+        
         //播放射击音效
-        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet_ogg, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), 6f);
+        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet3_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -15);
     }
 
     protected override void OnShoot(float fireRotation)
     {
-        for (int i = 0; i < 5; i++)
-        {
-            //创建子弹
-            //CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation + MathUtils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi));
-            
-            var bullet = new Bullet(
-                ResourcePath.prefab_weapon_bullet_Bullet_tscn,
-                Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
-                FirePoint.GlobalPosition,
-                fireRotation + Utils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
-                GetAttackLayer()
-            );
-            bullet.PutDown();
-        }
+        //创建子弹
+        var bullet = new Bullet(
+            ResourcePath.prefab_weapon_bullet_Bullet_tscn,
+            Utils.RandRangeInt(280, 380),
+            Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
+            FirePoint.GlobalPosition,
+            fireRotation + Utils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
+            GetAttackLayer()
+        );
+        bullet.PutDown();
     }
 }
