@@ -9,10 +9,12 @@ public class GenerateDungeon
 {
     public readonly TileMap TileMap;
 
+    public RoomInfo StartRoom;
+
     private Grid<bool> _roomGrid = new Grid<bool>();
     private List<RoomInfo> _roomInfos = new List<RoomInfo>();
     private int _count = 0;
-    private int _maxCount = 30;
+    private int _maxCount = 15;
 
     public GenerateDungeon(TileMap tileMap)
     {
@@ -21,7 +23,17 @@ public class GenerateDungeon
 
     public void Generate()
     {
-        GenerateRoom(null, 0);
+        StartRoom = GenerateRoom(null, 0);
+
+        while (_count < _maxCount)
+        {
+            var info = Utils.RandChoose(_roomInfos);
+            var nextInfo = GenerateRoom(info, Utils.RandRangeInt(0, 3));
+            if (nextInfo != null)
+            {
+                info.Next.Add(nextInfo);
+            }
+        }
 
         foreach (var info in _roomInfos)
         {
@@ -39,12 +51,11 @@ public class GenerateDungeon
 
     private RoomInfo GenerateRoom(RoomInfo prevRoomInfo, int direction)
     {
-        if (_count > _maxCount)
+        if (_count >= _maxCount)
         {
             return null;
         }
-        _count++;
-        var info = new RoomInfo();
+        var info = new RoomInfo(_count);
         info.Size = new Vector2(Utils.RandRangeInt(10, 30), Utils.RandRangeInt(10, 30));
         info.Position = Vector2.Zero;
         info.Direction = direction;
@@ -89,7 +100,8 @@ public class GenerateDungeon
                 return null;
             }
         }
-        
+
+        _count++;
         _roomInfos.Add(info);
         _roomGrid.AddRect(info.Position, info.Size, true);
         
@@ -101,19 +113,24 @@ public class GenerateDungeon
             dirList.Remove(GetReverseDirection(direction));
         }
 
-        while (dirList.Count > 0)
+        if (Utils.RandRangeInt(0, 2) != 0)
         {
-            var randDir = Utils.RandChoose(dirList);
-            var generateRoom = GenerateRoom(info, randDir);
-            if (generateRoom == null)
+            while (dirList.Count > 0)
             {
-                break;
-            }
+                var randDir = Utils.RandChoose(dirList);
+                var generateRoom = GenerateRoom(info, randDir);
+                if (generateRoom == null)
+                {
+                    break;
+                }
 
-            dirList.Remove(randDir);
+                generateRoom.Prev = info;
+                info.Next.Add(generateRoom);
+
+                dirList.Remove(randDir);
+            }
         }
-        
-        
+
         return info;
     }
 

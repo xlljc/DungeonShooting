@@ -28,6 +28,7 @@ Camera = NodePath("Camera2D")
 current = true
 
 [node name="TileMap" type="TileMap" parent="."]
+z_index = -1
 tile_set = SubResource( 1 )
 cell_size = Vector2( 16, 16 )
 format = 1

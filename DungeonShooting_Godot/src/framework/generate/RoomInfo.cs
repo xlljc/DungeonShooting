@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -6,6 +7,13 @@ using Godot;
 /// </summary>
 public class RoomInfo
 {
+    public RoomInfo(int id)
+    {
+        Id = id;
+    }
+
+    public int Id;
+    
     /// <summary>
     /// 房间大小
     /// </summary>
@@ -22,7 +30,8 @@ public class RoomInfo
     /// 房间生成时所处方向: 0上, 1右, 2下, 3左
     /// </summary>
     public int Direction;
-
-    //public RoomInfo Next;
-    //public RoomInfo Prev;
+    
+    public List<RoomInfo> Next = new List<RoomInfo>();
+    
+    public RoomInfo Prev;
 }
