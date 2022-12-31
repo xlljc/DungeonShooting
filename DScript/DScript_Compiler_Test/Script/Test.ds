@@ -1,4 +1,7 @@
-﻿import Behavior =example.framework.Behavior
+﻿var a = 1.12;
+
+/*
+import Behavior =example.framework.Behavior
 import myName=example
 
 namespace test.aaa
@@ -15,3 +18,4 @@ func say(message) {
 func vec2Zero(): class {
     return Vector2(0, 0)
 }
+*/

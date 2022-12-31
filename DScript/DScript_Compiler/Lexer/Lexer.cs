@@ -340,21 +340,20 @@ namespace DScript.Compiler
                     }
 
                     var word = sb.ToString();
-                    if (Keyword.IsKeyword(word))
+                    if (Keyword.IsKeyword(word)) //关键字
                     {
                         list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Keyword));
                     }
-                    else if (Regex.IsMatch(word, "^[0-9]+$"))
+                    else if (Regex.IsMatch(word, "^[0-9]+$")) //数字 //正则 (^[0-9]+$)|(^[0-9]+\.[0-9]+$)|(^0b|B[0-9_]+$)|(^0x|X[0-9a-fA-F]+$)
                     {
                         list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Number));
                     }
-                    else
+                    else //普通单词
                     {
                         list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Word));
                     }
                 }
             }
-
             _lexerStrings = list.ToArray();
         }
 

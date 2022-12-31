@@ -102,7 +102,7 @@ namespace DScript.Compiler
             }
 
             marchResult.Success = true;
-            marchResult.End = syntaxTree.GetTokenIndex() + 1;
+            marchResult.End = (int)MathF.Min(syntaxTree.GetTokenIndex() + 1, syntaxTree.GetTokenLength());
             callback(marchResult);
         }
 

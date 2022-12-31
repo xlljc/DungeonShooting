@@ -245,6 +245,19 @@ namespace DScript.Compiler
         {
             return _currIndex;
         }
+        
+        /// <summary>
+        /// 返回token长度
+        /// </summary>
+        internal int GetTokenLength()
+        {
+            if (_currFileToken == null)
+            {
+                return 0;
+            }
+
+            return _currFileToken.Tokens.Length;
+        }
 
         internal Token[] CopyTokens(int start, int end, bool ignoreLineFeed = true)
         {
