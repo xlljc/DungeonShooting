@@ -27,11 +27,25 @@ public class GenerateDungeon
 
         while (_count < _maxCount)
         {
-            var info = Utils.RandChoose(_roomInfos);
-            var nextInfo = GenerateRoom(info, Utils.RandRangeInt(0, 3));
-            if (nextInfo != null)
+            var room = Utils.RandChoose(_roomInfos);
+            var nextRoom = GenerateRoom(room, Utils.RandRangeInt(0, 3));
+            if (nextRoom != null)
             {
-                info.Next.Add(nextInfo);
+                room.Next.Add(nextRoom);
+                
+                //找门
+                if (Mathf.Max(room.Position.x, nextRoom.Position.x) <= Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x)) //x轴
+                {
+                    GD.Print("----1: " + room.Id + ", " + nextRoom.Id + ", = " + (Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x) - Mathf.Max(room.Position.x, nextRoom.Position.x)));
+                }
+                else if (Mathf.Max(room.Position.y, nextRoom.Position.y) <= Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y)) //y轴
+                {
+                    GD.Print("----2: " + room.Id + ", " + nextRoom.Id + ", = " + (Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y) - Mathf.Max(room.Position.y, nextRoom.Position.y)));
+                }
+                else
+                {
+                    GD.Print("----3: " + room.Id + ", " + nextRoom.Id);
+                }
             }
         }
 
@@ -55,55 +69,55 @@ public class GenerateDungeon
         {
             return null;
         }
-        var info = new RoomInfo(_count);
-        info.Size = new Vector2(Utils.RandRangeInt(10, 30), Utils.RandRangeInt(10, 30));
-        info.Position = Vector2.Zero;
-        info.Direction = direction;
+        var room = new RoomInfo(_count);
+        room.Size = new Vector2(Utils.RandRangeInt(25, 60), Utils.RandRangeInt(25, 45));
+        room.Position = Vector2.Zero;
+        room.Direction = direction;
 
         if (prevRoomInfo != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
         {
             //房间间隔
-            var space = Utils.RandRangeInt(3, 4);
+            var space = Utils.RandRangeInt(6, 12);
             //中心偏移
             int offset;
             if (direction == 0 || direction == 2)
             {
-                offset = Utils.RandRangeInt(-(int)prevRoomInfo.Size.y, (int)prevRoomInfo.Size.y);
+                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.y * 0.7f), (int)(prevRoomInfo.Size.y * 0.7f));
             }
             else
             {
-                offset = Utils.RandRangeInt(-(int)prevRoomInfo.Size.x, (int)prevRoomInfo.Size.x);
+                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.x * 0.7f), (int)(prevRoomInfo.Size.x * 0.7f));
             }
             //计算房间位置
             if (direction == 0) //上
             {
-                info.Position = new Vector2(prevRoomInfo.Position.x + offset,
-                    prevRoomInfo.Position.y - info.Size.y - space);
+                room.Position = new Vector2(prevRoomInfo.Position.x + offset,
+                    prevRoomInfo.Position.y - room.Size.y - space);
             }
             else if (direction == 1) //右
             {
-                info.Position = new Vector2(prevRoomInfo.Position.x + prevRoomInfo.Size.y + space, prevRoomInfo.Position.y + offset);
+                room.Position = new Vector2(prevRoomInfo.Position.x + prevRoomInfo.Size.y + space, prevRoomInfo.Position.y + offset);
             }
             else if (direction == 2) //下
             {
-                info.Position = new Vector2(prevRoomInfo.Position.x + offset, prevRoomInfo.Position.y + prevRoomInfo.Size.y + space);
+                room.Position = new Vector2(prevRoomInfo.Position.x + offset, prevRoomInfo.Position.y + prevRoomInfo.Size.y + space);
             }
             else if (direction == 3) //左
             {
-                info.Position = new Vector2(prevRoomInfo.Position.x - info.Size.x - space,
+                room.Position = new Vector2(prevRoomInfo.Position.x - room.Size.x - space,
                     prevRoomInfo.Position.y + offset);
             }
             
             //是否碰到其他房间
-            if (_roomGrid.RectCollision(info.Position - new Vector2(1, 1), info.Size + new Vector2(2, 2)))
+            if (_roomGrid.RectCollision(room.Position - new Vector2(2, 2), room.Size + new Vector2(4, 4)))
             {
                 return null;
             }
         }
 
         _count++;
-        _roomInfos.Add(info);
-        _roomGrid.AddRect(info.Position, info.Size, true);
+        _roomInfos.Add(room);
+        _roomGrid.AddRect(room.Position, room.Size, true);
         
         //下一个房间
         //0上, 1右, 2下, 3左
@@ -118,20 +132,34 @@ public class GenerateDungeon
             while (dirList.Count > 0)
             {
                 var randDir = Utils.RandChoose(dirList);
-                var generateRoom = GenerateRoom(info, randDir);
-                if (generateRoom == null)
+                var nextRoom = GenerateRoom(room, randDir);
+                if (nextRoom == null)
                 {
                     break;
                 }
 
-                generateRoom.Prev = info;
-                info.Next.Add(generateRoom);
+                nextRoom.Prev = room;
+                room.Next.Add(nextRoom);
 
                 dirList.Remove(randDir);
+                
+                //找门
+                if (Mathf.Max(room.Position.x, nextRoom.Position.x) <= Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x)) //x轴
+                {
+                    GD.Print("----1: " + room.Id + ", " + nextRoom.Id + ", = " + (Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x) - Mathf.Max(room.Position.x, nextRoom.Position.x)));
+                }
+                else if (Mathf.Max(room.Position.y, nextRoom.Position.y) <= Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y)) //y轴
+                {
+                    GD.Print("----2: " + room.Id + ", " + nextRoom.Id + ", = " + (Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y) - Mathf.Max(room.Position.y, nextRoom.Position.y)));
+                }
+                else
+                {
+                    GD.Print("----3: " + room.Id + ", " + nextRoom.Id);
+                }
             }
         }
 
-        return info;
+        return room;
     }
 
     private int GetReverseDirection(int direction)
