@@ -344,14 +344,52 @@ namespace DScript.Compiler
                     {
                         list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Keyword));
                     }
-                    else if (Regex.IsMatch(word, "^[0-9]+$")) //数字 //正则 (^[0-9]+$)|(^[0-9]+\.[0-9]+$)|(^0b|B[0-9_]+$)|(^0x|X[0-9a-fA-F]+$)
+                    else  if (Regex.IsMatch(word, "^[0-9]")) //数字开头
                     {
-                        list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Number));
+                        if (i <= length - 2)
+                        {
+                            var cNext = code[i + 1];
+                            var cNext2 = code[i + 2];
+                            if (cNext == '.' && (cNext2 >= '0' && cNext2 <= '9')) //.后面是以数字开头
+                            {
+                                sb.Append(cNext);
+                                sb.Append(cNext2);
+                                moveNext();
+                                moveNext();
+                                for (; i < length - 1; moveNext())
+                                {
+                                    var cNext3 = code[i + 1];
+                                    if (IsEmpty(cNext3) || IsSymbol(cNext3))
+                                    {
+                                        break;
+                                    }
+                                    sb.Append(cNext3);
+                                }
+
+                                list.Add(new Token(sb.ToString(), i, sb.Length, row, column, TokenType.Number));
+                            }
+                            else
+                            {
+                                list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Number));
+                            }
+                        }
+                        else
+                        {
+                            list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Number));
+                        }
                     }
                     else //普通单词
                     {
                         list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Word));
                     }
+                    // else if (Regex.IsMatch(word, "^[0-9]+$")) //数字 //正则 (^[0-9]+((e|E)[0-9]+)?$)|(^[0-9]+\.[0-9]+((e|E)[0-9]+)?$)|(^0(b|B)[0-1]+(_[0-1]+)*$)|(^0x|X[0-9a-fA-F]+$)
+                    // {
+                    //     list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Number));
+                    // }
+                    // else //普通单词
+                    // {
+                    //     list.Add(new Token(word, index, sb.Length, startRow, startColumn, TokenType.Word));
+                    // }
                 }
             }
             _lexerStrings = list.ToArray();

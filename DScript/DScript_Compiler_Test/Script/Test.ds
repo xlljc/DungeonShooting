@@ -1,5 +1,8 @@
 ﻿var a = 1.12;
-
+var b = 1;
+var c = 0x12;
+var b = 1.4e3;
+var d = 0d1_1;
 /*
 import Behavior =example.framework.Behavior
 import myName=example
