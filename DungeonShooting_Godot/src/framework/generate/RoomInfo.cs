@@ -27,13 +27,8 @@ public class RoomInfo
     /// <summary>
     /// 门
     /// </summary>
-    public List<RoomDoor> Doors;
+    public List<RoomDoor> Doors = new List<RoomDoor>();
 
-    /// <summary>
-    /// 房间生成时所处方向: 0上, 1右, 2下, 3左
-    /// </summary>
-    public int Direction;
-    
     public List<RoomInfo> Next = new List<RoomInfo>();
     
     public RoomInfo Prev;

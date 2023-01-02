@@ -33,8 +33,8 @@ public class TestGenerateDungeon : Node2D
 	public override void _Process(float delta)
 	{
 		//移动相机位置
-		var dir = Input.GetVector("move_left", "move_right", "move_up", "move_down");
-		_camera.Position += dir * 500 * delta;
+		var dir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
+		_camera.Position += dir * 1000 * delta;
 		
 		Update();
 	}
@@ -46,15 +46,40 @@ public class TestGenerateDungeon : Node2D
 
 	}
 
-	private void DrawRoomInfo(RoomInfo roomInfo)
+	private void DrawRoomInfo(RoomInfo room)
 	{
-		var pos1 = (roomInfo.Position + roomInfo.Size / 2) * _tileMap.CellSize;
-		foreach (var info in roomInfo.Next)
+		var cellSize = _tileMap.CellSize;
+		var pos1 = (room.Position + room.Size / 2) * cellSize;
+		foreach (var nextRoom in room.Next)
 		{
-			var pos2 = (info.Position + info.Size / 2) * _tileMap.CellSize;
+			var pos2 = (nextRoom.Position + nextRoom.Size / 2) * cellSize;
 			DrawLine(pos1, pos2, Colors.Red);
-			DrawRoomInfo(info);
+			DrawRoomInfo(nextRoom);
 		}
-		DrawString(_font, pos1, roomInfo.Id.ToString(), Colors.Yellow);
+		DrawString(_font, pos1, room.Id.ToString(), Colors.Yellow);
+		
+		foreach (var roomDoor in room.Doors)
+		{
+			var originPos = roomDoor.OriginPosition * cellSize;
+			switch (roomDoor.Direction)
+			{
+				case DoorDirection.E:
+					DrawLine(originPos, originPos + new Vector2(3, 0) * cellSize, Colors.Yellow);
+					DrawLine(originPos + new Vector2(0, 4) * cellSize, originPos + new Vector2(3, 4) * cellSize, Colors.Yellow);
+					break;
+				case DoorDirection.W:
+					DrawLine(originPos, originPos - new Vector2(3, 0) * cellSize, Colors.Yellow);
+					DrawLine(originPos + new Vector2(0, 4) * cellSize, originPos - new Vector2(3, -4) * cellSize, Colors.Yellow);
+					break;
+				case DoorDirection.S:
+					DrawLine(originPos, originPos + new Vector2(0, 3) * cellSize, Colors.Yellow);
+					DrawLine(originPos + new Vector2(4, 0) * cellSize, originPos + new Vector2(4, 3) * cellSize, Colors.Yellow);
+					break;
+				case DoorDirection.N:
+					DrawLine(originPos, originPos - new Vector2(0, 3) * cellSize, Colors.Yellow);
+					DrawLine(originPos + new Vector2(4, 0) * cellSize, originPos - new Vector2(-4, 3) * cellSize, Colors.Yellow);
+					break;
+			}
+		}
 	}
 }

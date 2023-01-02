@@ -34,18 +34,7 @@ public class GenerateDungeon
                 room.Next.Add(nextRoom);
                 
                 //找门
-                if (Mathf.Max(room.Position.x, nextRoom.Position.x) <= Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x)) //x轴
-                {
-                    GD.Print("----1: " + room.Id + ", " + nextRoom.Id + ", = " + (Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x) - Mathf.Max(room.Position.x, nextRoom.Position.x)));
-                }
-                else if (Mathf.Max(room.Position.y, nextRoom.Position.y) <= Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y)) //y轴
-                {
-                    GD.Print("----2: " + room.Id + ", " + nextRoom.Id + ", = " + (Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y) - Mathf.Max(room.Position.y, nextRoom.Position.y)));
-                }
-                else
-                {
-                    GD.Print("----3: " + room.Id + ", " + nextRoom.Id);
-                }
+                FindDoor(room, nextRoom);
             }
         }
 
@@ -72,7 +61,6 @@ public class GenerateDungeon
         var room = new RoomInfo(_count);
         room.Size = new Vector2(Utils.RandRangeInt(25, 60), Utils.RandRangeInt(25, 45));
         room.Position = Vector2.Zero;
-        room.Direction = direction;
 
         if (prevRoomInfo != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
         {
@@ -144,24 +132,97 @@ public class GenerateDungeon
                 dirList.Remove(randDir);
                 
                 //找门
-                if (Mathf.Max(room.Position.x, nextRoom.Position.x) <= Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x)) //x轴
-                {
-                    GD.Print("----1: " + room.Id + ", " + nextRoom.Id + ", = " + (Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x) - Mathf.Max(room.Position.x, nextRoom.Position.x)));
-                }
-                else if (Mathf.Max(room.Position.y, nextRoom.Position.y) <= Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y)) //y轴
-                {
-                    GD.Print("----2: " + room.Id + ", " + nextRoom.Id + ", = " + (Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y) - Mathf.Max(room.Position.y, nextRoom.Position.y)));
-                }
-                else
-                {
-                    GD.Print("----3: " + room.Id + ", " + nextRoom.Id);
-                }
+                FindDoor(room, nextRoom);
             }
         }
 
         return room;
     }
 
+    /// <summary>
+    /// 找两个房间的门
+    /// </summary>
+    private void FindDoor(RoomInfo room, RoomInfo nextRoom)
+    {
+        if (Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x) -
+            Mathf.Max(room.Position.x, nextRoom.Position.x) >= 6) //x轴
+        {
+            GD.Print("----1: " + room.Id + ", " + nextRoom.Id);
+            
+            //找到重叠区域
+            var range = CalcRange(room.Position.x, room.Position.x + room.Size.x,
+                nextRoom.Position.x, nextRoom.Position.x + nextRoom.Size.x);
+            var x = Utils.RandRangeInt((int)range.x, (int)range.y - 4);
+
+            //门描述
+            var roomDoor = new RoomDoor();
+            var nextRoomDoor = new RoomDoor();
+            roomDoor.ConnectRoom = nextRoom;
+            nextRoomDoor.ConnectRoom = room;
+
+            if (room.Position.y < nextRoom.Position.y) //room在上, nextRoom在下
+            {
+                roomDoor.Direction = DoorDirection.S;
+                nextRoomDoor.Direction = DoorDirection.N;
+                roomDoor.OriginPosition = new Vector2(x, room.Position.y + room.Size.y);
+                nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.y);
+            }
+            else //room在下, nextRoom在上
+            {
+                roomDoor.Direction = DoorDirection.N;
+                nextRoomDoor.Direction = DoorDirection.S;
+                roomDoor.OriginPosition = new Vector2(x, room.Position.y);
+                nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.y + nextRoom.Size.y);
+            }
+            
+            room.Doors.Add(roomDoor);
+            nextRoom.Doors.Add(nextRoomDoor);
+        }
+        else if (Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y) -
+                 Mathf.Max(room.Position.y, nextRoom.Position.y) >= 6) //y轴
+        {
+            GD.Print("----2: " + room.Id + ", " + nextRoom.Id);
+            
+            //找到重叠区域
+            var range = CalcRange(room.Position.y, room.Position.y + room.Size.y,
+                nextRoom.Position.y, nextRoom.Position.y + nextRoom.Size.y);
+            var y = Utils.RandRangeInt((int)range.x, (int)range.y - 4);
+
+            //门描述
+            var roomDoor = new RoomDoor();
+            var nextRoomDoor = new RoomDoor();
+            roomDoor.ConnectRoom = nextRoom;
+            nextRoomDoor.ConnectRoom = room;
+
+            if (room.Position.x < nextRoom.Position.x) //room在左, nextRoom在右
+            {
+                roomDoor.Direction = DoorDirection.E;
+                nextRoomDoor.Direction = DoorDirection.W;
+                roomDoor.OriginPosition = new Vector2(room.Position.x + room.Size.x, y);
+                nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x, y);
+            }
+            else //room在右, nextRoom在左
+            {
+                roomDoor.Direction = DoorDirection.W;
+                nextRoomDoor.Direction = DoorDirection.E;
+                roomDoor.OriginPosition = new Vector2(room.Position.x, y);
+                nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x, y);
+            }
+            
+            room.Doors.Add(roomDoor);
+            nextRoom.Doors.Add(nextRoomDoor);
+        }
+        else
+        {
+            GD.Print("----3: " + room.Id + ", " + nextRoom.Id);
+        }
+    }
+
+    private Vector2 CalcRange(float start1, float end1, float start2, float end2)
+    {
+        return new Vector2(Mathf.Max(start1, start2), Mathf.Min(end1, end2));
+    }
+    
     private int GetReverseDirection(int direction)
     {
         switch (direction)
