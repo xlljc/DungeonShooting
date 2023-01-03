@@ -215,6 +215,74 @@ public class GenerateDungeon
         else
         {
             GD.Print("----3: " + room.Id + ", " + nextRoom.Id);
+
+            //门描述
+            var roomDoor = new RoomDoor();
+            var nextRoomDoor = new RoomDoor();
+            roomDoor.ConnectRoom = nextRoom;
+            nextRoomDoor.ConnectRoom = room;
+
+            if (room.Position.x > nextRoom.Position.x)
+            {
+                if (room.Position.y > nextRoom.Position.y)
+                {
+                    if (Utils.RandBoolean())
+                    {
+                        roomDoor.Direction = DoorDirection.N;
+                        nextRoomDoor.Direction = DoorDirection.E;
+                    }
+                    else
+                    {
+                        roomDoor.Direction = DoorDirection.W;
+                        nextRoomDoor.Direction = DoorDirection.S;
+                    }
+                }
+                else
+                {
+                    if (Utils.RandBoolean())
+                    {
+                        roomDoor.Direction = DoorDirection.S;
+                        nextRoomDoor.Direction = DoorDirection.E;
+                    }
+                    else
+                    {
+                        roomDoor.Direction = DoorDirection.W;
+                        nextRoomDoor.Direction = DoorDirection.N;
+                    }
+                }
+            }
+            else
+            {
+                if (room.Position.y > nextRoom.Position.y)
+                {
+                    if (Utils.RandBoolean())
+                    {
+                        roomDoor.Direction = DoorDirection.E;
+                        nextRoomDoor.Direction = DoorDirection.S;
+                    }
+                    else
+                    {
+                        roomDoor.Direction = DoorDirection.N;
+                        nextRoomDoor.Direction = DoorDirection.W;
+                    }
+                }
+                else
+                {
+                    if (Utils.RandBoolean())
+                    {
+                        roomDoor.Direction = DoorDirection.E;
+                        nextRoomDoor.Direction = DoorDirection.N;
+                    }
+                    else
+                    {
+                        roomDoor.Direction = DoorDirection.S;
+                        nextRoomDoor.Direction = DoorDirection.W;
+                    }
+                }
+            }
+            
+            //var temp = room.Position - nextRoom.Position;
+            
         }
     }
 
