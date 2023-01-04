@@ -20,4 +20,8 @@ public class RoomDoor
     /// 原点坐标
     /// </summary>
     public Vector2 OriginPosition;
+
+    public bool HasFocus;
+
+    public Vector2 Focus;
 }

@@ -70,11 +70,11 @@ public class GenerateDungeon
             int offset;
             if (direction == 0 || direction == 2)
             {
-                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.y * 0.7f), (int)(prevRoomInfo.Size.y * 0.7f));
+                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.y * 0.7f), (int)(prevRoomInfo.Size.y * 1.5f));
             }
             else
             {
-                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.x * 0.7f), (int)(prevRoomInfo.Size.x * 0.7f));
+                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.x * 0.7f), (int)(prevRoomInfo.Size.x * 1.5f));
             }
             //计算房间位置
             if (direction == 0) //上
@@ -97,7 +97,7 @@ public class GenerateDungeon
             }
             
             //是否碰到其他房间
-            if (_roomGrid.RectCollision(room.Position - new Vector2(2, 2), room.Size + new Vector2(4, 4)))
+            if (_roomGrid.RectCollision(room.Position - new Vector2(3, 3), room.Size + new Vector2(6, 6)))
             {
                 return null;
             }
@@ -144,21 +144,22 @@ public class GenerateDungeon
     /// </summary>
     private void FindDoor(RoomInfo room, RoomInfo nextRoom)
     {
-        if (Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x) -
-            Mathf.Max(room.Position.x, nextRoom.Position.x) >= 6) //x轴
+        //门描述
+        var roomDoor = new RoomDoor();
+        var nextRoomDoor = new RoomDoor();
+        roomDoor.ConnectRoom = nextRoom;
+        nextRoomDoor.ConnectRoom = room;
+        
+        var tempX = Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x) -
+                    Mathf.Max(room.Position.x, nextRoom.Position.x);
+        if (tempX >= 6) //x轴
         {
             GD.Print("----1: " + room.Id + ", " + nextRoom.Id);
-            
+
             //找到重叠区域
             var range = CalcRange(room.Position.x, room.Position.x + room.Size.x,
                 nextRoom.Position.x, nextRoom.Position.x + nextRoom.Size.x);
             var x = Utils.RandRangeInt((int)range.x, (int)range.y - 4);
-
-            //门描述
-            var roomDoor = new RoomDoor();
-            var nextRoomDoor = new RoomDoor();
-            roomDoor.ConnectRoom = nextRoom;
-            nextRoomDoor.ConnectRoom = room;
 
             if (room.Position.y < nextRoom.Position.y) //room在上, nextRoom在下
             {
@@ -174,25 +175,23 @@ public class GenerateDungeon
                 roomDoor.OriginPosition = new Vector2(x, room.Position.y);
                 nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.y + nextRoom.Size.y);
             }
-            
+
             room.Doors.Add(roomDoor);
             nextRoom.Doors.Add(nextRoomDoor);
+
+            return;
         }
-        else if (Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y) -
-                 Mathf.Max(room.Position.y, nextRoom.Position.y) >= 6) //y轴
+
+        var tempY = Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y) -
+                    Mathf.Max(room.Position.y, nextRoom.Position.y);
+        if (tempY >= 6) //y轴
         {
             GD.Print("----2: " + room.Id + ", " + nextRoom.Id);
-            
+
             //找到重叠区域
             var range = CalcRange(room.Position.y, room.Position.y + room.Size.y,
                 nextRoom.Position.y, nextRoom.Position.y + nextRoom.Size.y);
             var y = Utils.RandRangeInt((int)range.x, (int)range.y - 4);
-
-            //门描述
-            var roomDoor = new RoomDoor();
-            var nextRoomDoor = new RoomDoor();
-            roomDoor.ConnectRoom = nextRoom;
-            nextRoomDoor.ConnectRoom = room;
 
             if (room.Position.x < nextRoom.Position.x) //room在左, nextRoom在右
             {
@@ -208,82 +207,126 @@ public class GenerateDungeon
                 roomDoor.OriginPosition = new Vector2(room.Position.x, y);
                 nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x, y);
             }
-            
+
             room.Doors.Add(roomDoor);
             nextRoom.Doors.Add(nextRoomDoor);
+
+            return;
         }
-        else
+
+        GD.Print("----3: " + room.Id + ", " + nextRoom.Id + " --- " + tempX + ", " + tempY);
+
+        var offset2 = tempX > 0 ? (int)tempX + 2 : 2;
+        var offset1 = tempY > 0 ? (int)tempY + 2 : 2;
+        
+        //焦点
+        Vector2 focus;
+
+        if (room.Position.x > nextRoom.Position.x)
         {
-            GD.Print("----3: " + room.Id + ", " + nextRoom.Id);
-
-            //门描述
-            var roomDoor = new RoomDoor();
-            var nextRoomDoor = new RoomDoor();
-            roomDoor.ConnectRoom = nextRoom;
-            nextRoomDoor.ConnectRoom = room;
-
-            if (room.Position.x > nextRoom.Position.x)
+            if (room.Position.y > nextRoom.Position.y)
             {
-                if (room.Position.y > nextRoom.Position.y)
+                if (Utils.RandBoolean())
                 {
-                    if (Utils.RandBoolean())
-                    {
-                        roomDoor.Direction = DoorDirection.N;
-                        nextRoomDoor.Direction = DoorDirection.E;
-                    }
-                    else
-                    {
-                        roomDoor.Direction = DoorDirection.W;
-                        nextRoomDoor.Direction = DoorDirection.S;
-                    }
+                    roomDoor.Direction = DoorDirection.N; //↑
+                    nextRoomDoor.Direction = DoorDirection.E; //→
+
+                    roomDoor.OriginPosition = new Vector2(room.Position.x + offset1, room.Position.y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x,
+                        nextRoom.Position.y + nextRoom.Size.y - offset2 - 4);
+                    focus = new Vector2(roomDoor.OriginPosition.x, nextRoomDoor.OriginPosition.y);
                 }
                 else
                 {
-                    if (Utils.RandBoolean())
-                    {
-                        roomDoor.Direction = DoorDirection.S;
-                        nextRoomDoor.Direction = DoorDirection.E;
-                    }
-                    else
-                    {
-                        roomDoor.Direction = DoorDirection.W;
-                        nextRoomDoor.Direction = DoorDirection.N;
-                    }
+                    roomDoor.Direction = DoorDirection.W; //←
+                    nextRoomDoor.Direction = DoorDirection.S; //↓
+
+                    roomDoor.OriginPosition = new Vector2(room.Position.x, room.Position.y + offset1);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x - offset2 - 4,
+                        nextRoom.Position.y + nextRoom.Size.y);
+                    focus = new Vector2(nextRoomDoor.OriginPosition.x, roomDoor.OriginPosition.y);
                 }
             }
             else
             {
-                if (room.Position.y > nextRoom.Position.y)
+                if (Utils.RandBoolean())
                 {
-                    if (Utils.RandBoolean())
-                    {
-                        roomDoor.Direction = DoorDirection.E;
-                        nextRoomDoor.Direction = DoorDirection.S;
-                    }
-                    else
-                    {
-                        roomDoor.Direction = DoorDirection.N;
-                        nextRoomDoor.Direction = DoorDirection.W;
-                    }
+                    roomDoor.Direction = DoorDirection.S; //↓
+                    nextRoomDoor.Direction = DoorDirection.E; //→
+
+                    roomDoor.OriginPosition = new Vector2(room.Position.x + offset1, room.Position.y + room.Size.y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x,
+                        nextRoom.Position.y + offset2);
+                    focus = new Vector2(roomDoor.OriginPosition.x, nextRoomDoor.OriginPosition.y);
                 }
                 else
                 {
-                    if (Utils.RandBoolean())
-                    {
-                        roomDoor.Direction = DoorDirection.E;
-                        nextRoomDoor.Direction = DoorDirection.N;
-                    }
-                    else
-                    {
-                        roomDoor.Direction = DoorDirection.S;
-                        nextRoomDoor.Direction = DoorDirection.W;
-                    }
+                    roomDoor.Direction = DoorDirection.W; //←
+                    nextRoomDoor.Direction = DoorDirection.N; //↑
+
+                    roomDoor.OriginPosition = new Vector2(room.Position.x, room.Position.y + room.Size.y - offset1 - 4);//
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x - offset2 - 4,
+                        nextRoom.Position.y);
+                    focus = new Vector2(nextRoomDoor.OriginPosition.x, roomDoor.OriginPosition.y);
                 }
             }
-            
-            //var temp = room.Position - nextRoom.Position;
-            
         }
+        else
+        {
+            if (room.Position.y > nextRoom.Position.y)
+            {
+                if (Utils.RandBoolean())
+                {
+                    roomDoor.Direction = DoorDirection.E; //→
+                    nextRoomDoor.Direction = DoorDirection.S; //↓
+
+                    roomDoor.OriginPosition = new Vector2(room.Position.x + room.Size.x, room.Position.y + offset1);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + offset2,
+                        nextRoom.Position.y + nextRoom.Size.y);
+                    focus = new Vector2(nextRoomDoor.OriginPosition.x, roomDoor.OriginPosition.y);
+                }
+                else
+                {
+                    roomDoor.Direction = DoorDirection.N; //↑
+                    nextRoomDoor.Direction = DoorDirection.W; //←
+
+                    roomDoor.OriginPosition = new Vector2(room.Position.x + room.Size.x - offset1 - 4, room.Position.y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x,
+                        nextRoom.Position.y + nextRoom.Size.y - offset2 - 4);
+                    focus = new Vector2(roomDoor.OriginPosition.x, nextRoomDoor.OriginPosition.y);
+                }
+            }
+            else
+            {
+                if (Utils.RandBoolean())
+                {
+                    roomDoor.Direction = DoorDirection.E; //→
+                    nextRoomDoor.Direction = DoorDirection.N; //↑
+
+                    roomDoor.OriginPosition = new Vector2(room.Position.x + room.Size.x,
+                        room.Position.y + room.Size.y - offset1 - 4);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + offset2, nextRoom.Position.y);
+                    focus = new Vector2(nextRoomDoor.OriginPosition.x, roomDoor.OriginPosition.y);
+                }
+                else
+                {
+                    roomDoor.Direction = DoorDirection.S; //↓
+                    nextRoomDoor.Direction = DoorDirection.W; //←
+
+                    roomDoor.OriginPosition = new Vector2(room.Position.x + room.Size.x - offset1 - 4,
+                        room.Position.y + room.Size.y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x, nextRoom.Position.y + offset2);
+                    focus = new Vector2(roomDoor.OriginPosition.x, nextRoomDoor.OriginPosition.y);
+                }
+            }
+        }
+
+        roomDoor.HasFocus = true;
+        roomDoor.Focus = focus;
+
+        //var temp = room.Position - nextRoom.Position;
+        room.Doors.Add(roomDoor);
+        nextRoom.Doors.Add(nextRoomDoor);
     }
 
     private Vector2 CalcRange(float start1, float end1, float start2, float end2)

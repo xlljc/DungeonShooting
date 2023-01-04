@@ -80,6 +80,11 @@ public class TestGenerateDungeon : Node2D
 					DrawLine(originPos + new Vector2(4, 0) * cellSize, originPos - new Vector2(-4, 3) * cellSize, Colors.Yellow);
 					break;
 			}
+
+			if (roomDoor.HasFocus)
+			{
+				DrawRect(new Rect2(roomDoor.Focus * cellSize, cellSize * 4), Colors.Yellow);
+			}
 		}
 	}
 }
