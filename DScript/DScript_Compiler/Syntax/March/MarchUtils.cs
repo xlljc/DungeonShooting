@@ -78,8 +78,18 @@ namespace DScript.Compiler
                             return;
                         }
                     }
+                    else if (item.MarchType == MarchType.Expression) //表达式
+                    {
+                        if (!MarchExpression(syntaxTree))
+                        {
+                            marchResult.Success = false;
+                            marchResult.End = syntaxTree.GetTokenIndex();
+                            callback(marchResult);
+                            return;
+                        }
+                    }
                 }
-                else //非必要数据
+                else //尝试匹配
                 {
                     var index = syntaxTree.GetTokenIndex();
                     MarchResult tempResult = null;
@@ -177,7 +187,7 @@ namespace DScript.Compiler
                 }
                 else
                 {
-                    if (Check(tempToken, isFullKeyword))
+                    if (CheckType(tempToken, isFullKeyword))
                     {
                         canEnd = true;
                     }
@@ -219,7 +229,13 @@ namespace DScript.Compiler
             return false;
         }
 
-        private static bool Check(Token token, bool isFullKeyword)
+        //匹配表达式
+        private static bool MarchExpression(SyntaxTree syntaxTree)
+        {
+            return true;
+        }
+        
+        private static bool CheckType(Token token, bool isFullKeyword)
         {
             if (isFullKeyword)
             {

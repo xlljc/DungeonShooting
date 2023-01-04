@@ -28,12 +28,18 @@ public class CompilerTest1 : UnitTest
     [Fact(DisplayName = "Test2, 测试解析语法树")]
     public void Test2()
     {
-        var fileName = "Script/Test.ds";
+        var fileName = "Script/Test2.ds";
         var text = File.ReadAllText(fileName);
         var tree = new Lexer();
         tree.FromSource(text);
         var syntaxTree = new SyntaxTree();
         syntaxTree.ParseToken(fileName, tree.GetLexerStrings());
+    }
+
+    [Fact(DisplayName = "Test3, 测试解析表达式")]
+    public void Test3()
+    {
+        
     }
 
 }

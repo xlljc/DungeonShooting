@@ -216,7 +216,19 @@ namespace DScript.Compiler
              匹配:
                  var a = 表达式
              */
-            
+            MarchUtils.March(_syntaxTree, VarMarchData,
+                (result) =>
+                {
+                    if (result.Success)
+                    {
+                        
+                    }
+                    else
+                    {
+                        //var语法错误
+                        throw new Exception("xxx");
+                    }
+                });
         }
     }
 }

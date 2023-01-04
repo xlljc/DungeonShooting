@@ -10,7 +10,7 @@
         {
             Code,
             MarchType,
-            NotEssential,
+            TryMarch,
         }
         
         public MarchDataType DataType;
@@ -18,12 +18,18 @@
         public MarchType MarchType;
         public MarchData[] MarchDatas;
 
+        /// <summary>
+        /// 匹配字符
+        /// </summary>
         public MarchData(string code)
         {
             Code = code;
             DataType = MarchDataType.Code;
         }
 
+        /// <summary>
+        /// 根据枚举类型匹配
+        /// </summary>
         public MarchData(MarchType type)
         {
             MarchType = type;
@@ -36,7 +42,7 @@
         public MarchData(params MarchData[] marchDatas)
         {
             MarchDatas = marchDatas;
-            DataType = MarchDataType.NotEssential;
+            DataType = MarchDataType.TryMarch;
         }
     }
 }
