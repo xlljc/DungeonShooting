@@ -3,12 +3,10 @@ using Godot;
 
 public class TestGenerateDungeon : Node2D
 {
-	[Export]
-	public NodePath TileMapPath;
+	[Export] public NodePath TileMapPath;
 
-	[Export]
-	public NodePath Camera;
-	
+	[Export] public NodePath Camera;
+
 	private TileMap _tileMap;
 	private Camera2D _camera;
 
@@ -22,12 +20,12 @@ public class TestGenerateDungeon : Node2D
 		_camera = GetNode<Camera2D>(Camera);
 
 		_font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
-		
+
 		_generateDungeon = new GenerateDungeon(_tileMap);
 		var nowTicks = DateTime.Now.Ticks;
 		_generateDungeon.Generate();
 		GD.Print("useTime: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
-		
+
 	}
 
 	public override void _Process(float delta)
@@ -35,13 +33,12 @@ public class TestGenerateDungeon : Node2D
 		//移动相机位置
 		var dir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 		_camera.Position += dir * 1000 * delta;
-		
+
 		Update();
 	}
 
 	public override void _Draw()
 	{
-
 		DrawRoomInfo(_generateDungeon.StartRoom);
 
 	}
@@ -56,8 +53,9 @@ public class TestGenerateDungeon : Node2D
 			DrawLine(pos1, pos2, Colors.Red);
 			DrawRoomInfo(nextRoom);
 		}
+
 		DrawString(_font, pos1, room.Id.ToString(), Colors.Yellow);
-		
+
 		foreach (var roomDoor in room.Doors)
 		{
 			var originPos = roomDoor.OriginPosition * cellSize;
@@ -65,19 +63,23 @@ public class TestGenerateDungeon : Node2D
 			{
 				case DoorDirection.E:
 					DrawLine(originPos, originPos + new Vector2(3, 0) * cellSize, Colors.Yellow);
-					DrawLine(originPos + new Vector2(0, 4) * cellSize, originPos + new Vector2(3, 4) * cellSize, Colors.Yellow);
+					DrawLine(originPos + new Vector2(0, 4) * cellSize, originPos + new Vector2(3, 4) * cellSize,
+						Colors.Yellow);
 					break;
 				case DoorDirection.W:
 					DrawLine(originPos, originPos - new Vector2(3, 0) * cellSize, Colors.Yellow);
-					DrawLine(originPos + new Vector2(0, 4) * cellSize, originPos - new Vector2(3, -4) * cellSize, Colors.Yellow);
+					DrawLine(originPos + new Vector2(0, 4) * cellSize, originPos - new Vector2(3, -4) * cellSize,
+						Colors.Yellow);
 					break;
 				case DoorDirection.S:
 					DrawLine(originPos, originPos + new Vector2(0, 3) * cellSize, Colors.Yellow);
-					DrawLine(originPos + new Vector2(4, 0) * cellSize, originPos + new Vector2(4, 3) * cellSize, Colors.Yellow);
+					DrawLine(originPos + new Vector2(4, 0) * cellSize, originPos + new Vector2(4, 3) * cellSize,
+						Colors.Yellow);
 					break;
 				case DoorDirection.N:
 					DrawLine(originPos, originPos - new Vector2(0, 3) * cellSize, Colors.Yellow);
-					DrawLine(originPos + new Vector2(4, 0) * cellSize, originPos - new Vector2(-4, 3) * cellSize, Colors.Yellow);
+					DrawLine(originPos + new Vector2(4, 0) * cellSize, originPos - new Vector2(-4, 3) * cellSize,
+						Colors.Yellow);
 					break;
 			}
 
@@ -86,5 +88,11 @@ public class TestGenerateDungeon : Node2D
 				DrawRect(new Rect2(roomDoor.Focus * cellSize, cellSize * 4), Colors.Yellow);
 			}
 		}
+
+		//绘制地图上被占用的网格
+		// _generateDungeon.RoomGrid.ForEach((x, y, value) =>
+		// {
+		// 	DrawRect(new Rect2(new Vector2(x, y) * cellSize + new Vector2(6, 6), new Vector2(4, 4)), Colors.White);
+		// });
 	}
 }

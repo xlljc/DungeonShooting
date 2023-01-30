@@ -37,6 +37,9 @@ public static class Utils
         return Mathf.FloorToInt(GD.Randf() * (max - min + 1) + min);
     }
 
+    /// <summary>
+    /// 随机返回其中一个参数
+    /// </summary>
     public static T RandChoose<T>(params T[] list)
     {
         if (list.Length == 0)
@@ -47,6 +50,9 @@ public static class Utils
         return list[RandRangeInt(0, list.Length - 1)];
     }
 
+    /// <summary>
+    /// 随机返回集合中的一个元素
+    /// </summary>
     public static T RandChoose<T>(List<T> list)
     {
         if (list.Count == 0)

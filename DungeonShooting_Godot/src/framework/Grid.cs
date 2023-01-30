@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -8,7 +9,7 @@ using Godot;
 /// </summary>
 public class Grid<T>
 {
-    private Dictionary<int, Dictionary<int, T>> _map = new Dictionary<int, Dictionary<int, T>>();
+    private readonly Dictionary<int, Dictionary<int, T>> _map = new Dictionary<int, Dictionary<int, T>>();
 
     public bool Contains(int x, int y)
     {
@@ -88,5 +89,16 @@ public class Grid<T>
             }
         }
         return false;
+    }
+
+    public void ForEach(Action<int, int, T> cb)
+    {
+        foreach (var pair1 in _map)
+        {
+            foreach (var pair2 in pair1.Value)
+            {
+                cb(pair1.Key, pair2.Key, pair2.Value);
+            }
+        }
     }
 }
