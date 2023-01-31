@@ -346,7 +346,7 @@ namespace DScript.Compiler
                     }
                     else  if (Regex.IsMatch(word, "^[0-9]")) //数字开头
                     {
-                        if (i <= length - 2)
+                        if (i <= length - 3)
                         {
                             var cNext = code[i + 1];
                             var cNext2 = code[i + 2];

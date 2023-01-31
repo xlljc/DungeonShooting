@@ -39,7 +39,12 @@ public class CompilerTest1 : UnitTest
     [Fact(DisplayName = "Test3, 测试解析表达式")]
     public void Test3()
     {
-        
+        var fileName = "Script/Test3.ds";
+        var text = File.ReadAllText(fileName);
+        var tree = new Lexer();
+        tree.FromSource(text);
+        var syntaxTree = new SyntaxTree();
+        syntaxTree.ParseToken(fileName, tree.GetLexerStrings());
     }
 
 }
