@@ -83,16 +83,16 @@ public class TestGenerateDungeon : Node2D
 					break;
 			}
 
-			if (roomDoor.HasFocus)
+			if (roomDoor.HasCross)
 			{
-				DrawRect(new Rect2(roomDoor.Focus * cellSize, cellSize * 4), Colors.Yellow);
+				DrawRect(new Rect2(roomDoor.Cross * cellSize, cellSize * 4), Colors.Yellow);
 			}
 		}
 
 		//绘制地图上被占用的网格
 		// _generateDungeon.RoomGrid.ForEach((x, y, value) =>
 		// {
-		// 	DrawRect(new Rect2(new Vector2(x, y) * cellSize + new Vector2(6, 6), new Vector2(4, 4)), Colors.White);
+		// 	DrawRect(new Rect2(new Vector2(x, y) * cellSize + new Vector2(6, 6), new Vector2(4, 4)), Colors.Green);
 		// });
 	}
 }

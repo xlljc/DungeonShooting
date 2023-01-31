@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 
 /// <summary>
@@ -41,6 +40,7 @@ public class Grid<T>
         {
             return value[y];
         }
+
         return default;
     }
 
@@ -66,6 +66,26 @@ public class Grid<T>
         }
     }
 
+    public void RemoveRect(Vector2 pos, Vector2 size)
+    {
+        var x = (int)pos.x;
+        var y = (int)pos.y;
+        for (var i = 0; i < size.x; i++)
+        {
+            for (var j = 0; j < size.y; j++)
+            {
+                if (_map.TryGetValue(x + i, out var value))
+                {
+                    value.Remove(y + j);
+                    if (value.Count == 0)
+                    {
+                        _map.Remove(x + i);
+                    }
+                }
+            }
+        }
+    }
+
     public bool RectCollision(Vector2 pos, Vector2 size)
     {
         var x = (int)pos.x;
@@ -73,10 +93,11 @@ public class Grid<T>
         var w = (int)size.x;
         var h = (int)size.y;
         //先判断四个角
-        if (Contains(x, y) || Contains(x + w, y) || Contains(x, y + h) || Contains(x + w, y + h))
+        if (Contains(x, y) || Contains(x + w - 1, y) || Contains(x, y + h - 1) || Contains(x + w - 1, y + h - 1))
         {
             return true;
         }
+
         //逐个点判断
         for (int i = 1; i < w; i++)
         {
@@ -88,6 +109,7 @@ public class Grid<T>
                 }
             }
         }
+
         return false;
     }
 

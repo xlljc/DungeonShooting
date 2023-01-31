@@ -21,7 +21,13 @@ public class RoomDoor
     /// </summary>
     public Vector2 OriginPosition;
 
-    public bool HasFocus;
-
-    public Vector2 Focus;
+    /// <summary>
+    /// 与下一道门是否有交叉点
+    /// </summary>
+    public bool HasCross;
+    
+    /// <summary>
+    /// 与下一道门的交叉点
+    /// </summary>
+    public Vector2 Cross;
 }
