@@ -16,7 +16,8 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
 
     //移动停顿计时器
     private float _pauseTimer;
-
+    private bool _moveFlag;
+    
     //下一个移动点
     private Vector2 _nextPosition;
 
@@ -29,6 +30,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         IsInView = true;
         _isMoveOver = true;
         _pauseTimer = 0;
+        _moveFlag = false;
     }
 
     public override void PhysicsProcess(float delta)
@@ -77,17 +79,21 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
             }
             else
             {
-                //计算移动
-                var nextPos = Master.NavigationAgent2D.GetNextLocation();
-                Master.AnimatedSprite.Animation = AnimatorNames.Run;
-                Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                                  Master.MoveSpeed;
-                Master.CalcMove(delta);
-
                 if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
                 {
                     _pauseTimer = Utils.RandRange(0f, 0.5f);
                     _isMoveOver = true;
+                    _moveFlag = false;
+                    Master.BasisVelocity = Vector2.Zero;
+                }
+                else if (!_moveFlag)
+                {
+                    _moveFlag = true;
+                    //计算移动
+                    var nextPos = Master.NavigationAgent2D.GetNextLocation();
+                    Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                    Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                                           Master.MoveSpeed;
                 }
                 else
                 {
@@ -96,6 +102,16 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     {
                         _pauseTimer = Utils.RandRange(0f, 0.3f);
                         _isMoveOver = true;
+                        _moveFlag = false;
+                        Master.BasisVelocity = Vector2.Zero;
+                    }
+                    else
+                    {
+                        //计算移动
+                        var nextPos = Master.NavigationAgent2D.GetNextLocation();
+                        Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                        Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                                               Master.MoveSpeed;
                     }
                 }
 

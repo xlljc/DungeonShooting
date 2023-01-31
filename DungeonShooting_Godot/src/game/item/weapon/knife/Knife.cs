@@ -44,10 +44,9 @@ public class Knife : Weapon
         _hitArea.Connect("body_entered", this, nameof(OnBodyEntered));
     }
 
-    public override void _Process(float delta)
+    protected override void Process(float delta)
     {
-        base._Process(delta);
-        
+        base.Process(delta);
         if (IsActive)
         {
             //让碰撞节点与武器挂载节点位置保持一致, 而不跟着武器走
@@ -55,10 +54,9 @@ public class Knife : Weapon
         }
     }
 
-    public override void _PhysicsProcess(float delta)
+    protected override void PhysicsProcess(float delta)
     {
-        base._PhysicsProcess(delta);
-
+        base.PhysicsProcess(delta);
         //过去两个物理帧后就能关闭碰撞了
         if (++_attackIndex >= 2)
         {
@@ -118,7 +116,7 @@ public class Knife : Weapon
         {
             if (activityObject is Role role)
             {
-                role.CallDeferred(nameof(Role.Hurt), 10);
+                role.CallDeferred(nameof(Role.Hurt), 10, (role.GetCenterPosition() - GlobalPosition).Angle());
             }
         }
     }

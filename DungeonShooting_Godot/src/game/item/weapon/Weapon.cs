@@ -180,9 +180,8 @@ public abstract class Weapon : ActivityObject
         ShellPoint = GetNode<Position2D>("WeaponBody/ShellPoint");
         CollisionShape2D = GetNode<CollisionShape2D>("WeaponBody/Collision");
 
-        //更新图片
-        var texture = ResourceLoader.Load<Texture>(Attribute.Sprite);
-        SetDefaultTexture(texture);
+        //图标
+        SetDefaultTexture(ResourceLoader.Load<Texture>(Attribute.Sprite));
         AnimatedSprite.Position = Attribute.CenterPosition;
 
         //开火位置
@@ -290,7 +289,7 @@ public abstract class Weapon : ActivityObject
         base._EnterTree();
 
         //收集落在地上的武器
-        if (Master == null && GetParent() == GameApplication.Instance.Room.GetRoot(false))
+        if (Master == null && GetParent() == GameApplication.Instance.Room.GetRoot())
         {
             UnclaimedWeapons.Add(this);
         }
@@ -303,9 +302,8 @@ public abstract class Weapon : ActivityObject
         UnclaimedWeapons.Remove(this);
     }
 
-    public override void _Process(float delta)
+    protected override void Process(float delta)
     {
-        base._Process(delta);
         //这把武器被扔在地上, 或者当前武器没有被使用
         if (Master == null || Master.Holster.ActiveWeapon != this)
         {
@@ -911,15 +909,17 @@ public abstract class Weapon : ActivityObject
         if (master.Face == FaceDirection.Left)
         {
             Scale *= new Vector2(1, -1);
-            RotationDegrees = 180;
         }
 
+        var angle = master.MountPoint.GlobalRotationDegrees;
+        GlobalRotationDegrees = angle;
+
         var startHeight = 6;
-        var direction = master.GlobalRotationDegrees + Utils.RandRangeInt(-20, 20);
-        var xf = 30;
-        var yf = Utils.RandRangeInt(60, 120);
-        var rotate = Utils.RandRangeInt(-180, 180);
-        Throw(new Vector2(30, 15), master.MountPoint.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
+        var direction = angle + Utils.RandRangeInt(-20, 20);
+        var xf = 20;
+        var yf = Utils.RandRangeInt(50, 70);
+        var rotate = Utils.RandRangeInt(-90, 90);
+        Throw(new Vector2(30, 15), master.GetCenterPosition(), startHeight, direction, xf, yf, rotate, true);
     }
 
     protected override void OnThrowOver()

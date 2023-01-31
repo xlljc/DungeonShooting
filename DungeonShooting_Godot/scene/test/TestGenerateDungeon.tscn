@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/test/TestGenerateDungeon.cs" type="Script" id=1]
+[ext_resource path="res://resource/sprite/environment/itch-io-DungeonTileset4/16x16 dungeon ii wall reconfig v04 spritesheet.png" type="Texture" id=2]
+
+[sub_resource type="TileSet" id=1]
+0/name = "16x16 dungeon ii wall reconfig v04 spritesheet.png 0"
+0/texture = ExtResource( 2 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 128, 16, 16 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+
+[node name="TestGenerateDungeon" type="Node2D"]
+script = ExtResource( 1 )
+TileMapPath = NodePath("TileMap")
+Camera = NodePath("Camera2D")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+
+[node name="TileMap" type="TileMap" parent="."]
+z_index = -1
+tile_set = SubResource( 1 )
+cell_size = Vector2( 16, 16 )
+format = 1

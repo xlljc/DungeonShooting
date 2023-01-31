@@ -39,8 +39,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
 
     public override void PhysicsProcess(float delta)
     {
-        var activeWeapon = Master.Holster.ActiveWeapon;
-        if (activeWeapon != null && !activeWeapon.IsTotalAmmoEmpty()) //已经有弹药了
+        if (!Master.IsAllWeaponTotalAmmoEmpty()) //已经有弹药了
         {
             ChangeStateLate(GetNextState());
             return;
@@ -109,10 +108,13 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
                 //计算移动
                 var nextPos = Master.NavigationAgent2D.GetNextLocation();
                 Master.AnimatedSprite.Animation = AnimatorNames.Run;
-                Master.Velocity =
+                Master.BasisVelocity =
                     (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                     Master.MoveSpeed;
-                Master.CalcMove(delta);
+            }
+            else
+            {
+                Master.BasisVelocity = Vector2.Zero;
             }
         }
     }

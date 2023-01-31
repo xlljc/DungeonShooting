@@ -20,10 +20,6 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         {
             Master.NavigationAgent2D.SetTargetLocation(Enemy.FindTargetPosition);
         }
-        // else if (args.Length > 0 && args[0] is Vector2 targetPos)
-        // {
-        //     Master.NavigationAgent2D.SetTargetLocation(targetPos);
-        // }
         else
         {
             ChangeStateLate(prev);
@@ -67,9 +63,12 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
             var nextPos = Master.NavigationAgent2D.GetNextLocation();
             Master.LookTargetPosition(Enemy.FindTargetPosition);
             Master.AnimatedSprite.Animation = AnimatorNames.Run;
-            Master.Velocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+            Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
-            Master.CalcMove(delta);
+        }
+        else
+        {
+            Master.BasisVelocity = Vector2.Zero;
         }
 
         var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();

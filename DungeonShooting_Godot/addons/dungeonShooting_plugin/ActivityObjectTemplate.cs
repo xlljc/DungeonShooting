@@ -63,6 +63,7 @@ namespace Plugin
                     {
                         sprite = new Sprite();
                         sprite.Name = "ShadowSprite";
+                        sprite.ZIndex = -5;
                         var material =
                             ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
                         material.SetShaderParam("blend", new Color(0, 0, 0, 0.47058824F));
@@ -117,12 +118,6 @@ namespace Plugin
                     {
                         var ap = new AnimationPlayer();
                         ap.Name = "AnimationPlayer";
-                        ap.AddAnimation("RESET",
-                            ResourceManager.Load<Animation>(
-                                "res://addons/dungeonShooting_plugin/ActivityObjectReset.tres", false));
-                        ap.AddAnimation("hit",
-                            ResourceManager.Load<Animation>(
-                                "res://addons/dungeonShooting_plugin/ActivityObjectHit.tres", false));
                         AddChild(ap);
                         ap.Owner = owner;
                     }

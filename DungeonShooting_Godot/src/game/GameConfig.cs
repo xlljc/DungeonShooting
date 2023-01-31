@@ -20,4 +20,8 @@ public static class GameConfig
     /// </summary>
     public static readonly Vector2 ViewportSize = new Vector2(480, 270);
     //public static Vector2 ViewportSize => OS.WindowSize / WindowScale;
+    /// <summary>
+    /// 游戏地图网格大小
+    /// </summary>
+    public static readonly Vector2 MapCellSize = new Vector2(16, 16);
 }

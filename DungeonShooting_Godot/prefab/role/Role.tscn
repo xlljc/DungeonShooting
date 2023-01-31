@@ -1,12 +1,9 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://resource/materlal/Blend.tres" type="Material" id=1]
 [ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=2]
-[ext_resource path="res://resource/sprite/role/role1.png" type="Texture" id=3]
 [ext_resource path="res://src/game/role/MountRotation.cs" type="Script" id=4]
 [ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=5]
-[ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectReset.tres" type="Animation" id=6]
-[ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectHit.tres" type="Animation" id=7]
 
 [sub_resource type="ShaderMaterial" id=33]
 resource_local_to_scene = true
@@ -14,73 +11,7 @@ shader = ExtResource( 5 )
 shader_param/blend = Color( 1, 1, 1, 1 )
 shader_param/schedule = 0.0
 
-[sub_resource type="AtlasTexture" id=17]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 24, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=18]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 24, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=19]
-atlas = ExtResource( 3 )
-region = Rect2( 32, 24, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 3 )
-region = Rect2( 48, 24, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 3 )
-region = Rect2( 48, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 3 )
-region = Rect2( 32, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=27]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=28]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=22]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 3 )
-region = Rect2( 32, 48, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 3 )
-region = Rect2( 48, 48, 16, 24 )
-
-[sub_resource type="SpriteFrames" id=6]
-animations = [ {
-"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ) ],
-"loop": true,
-"name": "idle",
-"speed": 7.0
-}, {
-"frames": [ SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ) ],
-"loop": true,
-"name": "reverseRun",
-"speed": 10.0
-}, {
-"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
-"loop": true,
-"name": "run",
-"speed": 10.0
-} ]
-
-[sub_resource type="CircleShape2D" id=34]
+[sub_resource type="CircleShape2D" id=36]
 radius = 4.0
 
 [sub_resource type="RectangleShape2D" id=35]
@@ -103,15 +34,10 @@ position = Vector2( 0, -10 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 material = SubResource( 33 )
 position = Vector2( 0, -12 )
-frames = SubResource( 6 )
-animation = "idle"
-frame = 3
-playing = true
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2( 0, -4 )
-shape = SubResource( 34 )
+shape = SubResource( 36 )
 
 [node name="HurtArea" type="Area2D" parent="."]
 collision_layer = 0
@@ -137,5 +63,3 @@ position = Vector2( 2, -4 )
 script = ExtResource( 4 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/RESET = ExtResource( 6 )
-anims/hit = ExtResource( 7 )

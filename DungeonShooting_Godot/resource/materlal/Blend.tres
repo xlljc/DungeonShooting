@@ -4,6 +4,7 @@
 
 [resource]
 resource_local_to_scene = true
+render_priority = 4
 shader = ExtResource( 1 )
 shader_param/blend = Color( 0, 0, 0, 0.470588 )
 shader_param/schedule = 1

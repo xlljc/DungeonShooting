@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -16,12 +15,6 @@ public abstract class Role : ActivityObject
     /// 伤害区域
     /// </summary>
     public Area2D HurtArea { get; private set; }
-
-    /// <summary>
-    /// 重写的纹理, 即将删除, 请直接更改 AnimatedSprite.Frames
-    /// </summary>
-    [Obsolete]
-    public Texture OverrideTexture { get; protected set; }
 
     /// <summary>
     /// 移动速度
@@ -68,16 +61,6 @@ public abstract class Role : ActivityObject
     public FaceDirection Face { get => _face; set => SetFace(value); }
     private FaceDirection _face;
 
-    /// <summary>
-    /// 是否启用角色移动, 如果禁用, 那么调用 CalcMove() 将不再有任何效果
-    /// </summary>
-    public bool EnableMove { get; set; } = true;
-    
-    /// <summary>
-    /// 移动速度, 通过调用 CalcMove() 函数来移动
-    /// </summary>
-    public Vector2 Velocity { get; set; } = Vector2.Zero;
-    
     /// <summary>
     /// 是否死亡
     /// </summary>
@@ -243,14 +226,6 @@ public abstract class Role : ActivityObject
         HurtArea.CollisionLayer = CollisionLayer;
         HurtArea.CollisionMask = 0;
         
-        //即将删除
-        if (OverrideTexture != null)
-        {
-            // 更改纹理
-            ChangeFrameTexture(AnimatorNames.Idle, AnimatedSprite);
-            ChangeFrameTexture(AnimatorNames.Run, AnimatedSprite);
-            ChangeFrameTexture(AnimatorNames.ReverseRun, AnimatedSprite);
-        }
         Face = FaceDirection.Right;
 
         //连接互动物体信号
@@ -259,10 +234,8 @@ public abstract class Role : ActivityObject
         InteractiveArea.Connect("area_exited", this, nameof(_OnPropsExit));
     }
 
-    public override void _Process(float delta)
+    protected override void Process(float delta)
     {
-        base._Process(delta);
-
         //看向目标
         if (LookTarget != null)
         {
@@ -359,17 +332,6 @@ public abstract class Role : ActivityObject
         var gps = GlobalPosition;
         return (Face == FaceDirection.Left && pos.x <= gps.x) ||
                (Face == FaceDirection.Right && pos.x >= gps.x);
-    }
-
-    /// <summary>
-    /// 计算角色移动
-    /// </summary>
-    public virtual void CalcMove(float delta)
-    {
-        if (EnableMove && Velocity != Vector2.Zero)
-        {
-            Velocity = MoveAndSlide(Velocity);
-        }
     }
 
     /// <summary>
@@ -492,7 +454,8 @@ public abstract class Role : ActivityObject
     /// 受到伤害, 如果是在碰撞信号处理函数中调用该函数, 请使用 CallDeferred 来延时调用, 否则很有可能导致报错
     /// </summary>
     /// <param name="damage">伤害的量</param>
-    public virtual void Hurt(int damage)
+    /// <param name="angle">角度</param>
+    public virtual void Hurt(int damage, float angle)
     {
         OnHit(damage);
         if (Shield > 0)
@@ -502,10 +465,16 @@ public abstract class Role : ActivityObject
         else
         {
             Hp -= damage;
+            //播放血液效果
+            // var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);
+            // var blood = packedScene.Instance<Blood>();
+            // blood.GlobalPosition = GlobalPosition;
+            // blood.Rotation = angle;
+            // GameApplication.Instance.Room.GetRoot().AddChild(blood);
         }
         
-        AnimationPlayer.Stop();
-        AnimationPlayer.Play("hit");
+        //受伤特效
+        PlayHitAnimation();
         
         //死亡判定
         if (Hp <= 0)
@@ -539,25 +508,7 @@ public abstract class Role : ActivityObject
             }
         }
     }
-
-    /// <summary>
-    /// 更改指定动画的纹理, 即将删除
-    /// </summary>
-    [Obsolete]
-    private void ChangeFrameTexture(string anim, AnimatedSprite animatedSprite)
-    {
-        SpriteFrames spriteFrames = animatedSprite.Frames;
-        if (spriteFrames != null)
-        {
-            int count = spriteFrames.GetFrameCount(anim);
-            for (int i = 0; i < count; i++)
-            {
-                AtlasTexture temp = spriteFrames.GetFrame(anim, i) as AtlasTexture;
-                temp.Atlas = OverrideTexture;
-            }
-        }
-    }
-
+    
     /// <summary>
     /// 连接信号: InteractiveArea.area_entered
     /// 与物体碰撞
