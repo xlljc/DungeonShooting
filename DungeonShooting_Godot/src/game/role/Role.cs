@@ -465,14 +465,16 @@ public abstract class Role : ActivityObject
         else
         {
             Hp -= damage;
-            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);
-            var blood = packedScene.Instance<Blood>();
-            blood.GlobalPosition = GlobalPosition;
-            blood.Rotation = angle;
-            GameApplication.Instance.Room.GetRoot().AddChild(blood);
+            //播放血液效果
+            // var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);
+            // var blood = packedScene.Instance<Blood>();
+            // blood.GlobalPosition = GlobalPosition;
+            // blood.Rotation = angle;
+            // GameApplication.Instance.Room.GetRoot().AddChild(blood);
         }
         
-        //PlayHitAnimation();
+        //受伤特效
+        PlayHitAnimation();
         
         //死亡判定
         if (Hp <= 0)

@@ -916,10 +916,10 @@ public abstract class Weapon : ActivityObject
 
         var startHeight = 6;
         var direction = angle + Utils.RandRangeInt(-20, 20);
-        var xf = 30;
-        var yf = Utils.RandRangeInt(60, 120);
-        var rotate = Utils.RandRangeInt(-180, 180);
-        Throw(new Vector2(30, 15), master.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
+        var xf = 20;
+        var yf = Utils.RandRangeInt(50, 70);
+        var rotate = Utils.RandRangeInt(-90, 90);
+        Throw(new Vector2(30, 15), master.GetCenterPosition(), startHeight, direction, xf, yf, rotate, true);
     }
 
     protected override void OnThrowOver()
