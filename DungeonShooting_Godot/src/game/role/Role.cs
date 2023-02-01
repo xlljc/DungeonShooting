@@ -397,12 +397,17 @@ public abstract class Role : ActivityObject
     /// <param name="index">武器在武器袋中的位置</param>
     public virtual void ThrowWeapon(int index)
     {
-        var weapon = Holster.RemoveWeapon(index);
-        //播放抛出效果
-        if (weapon != null)
+        var weapon = Holster.GetWeapon(index);
+        if (weapon == null)
         {
-            weapon.ThrowWeapon(this);
+            return;
         }
+
+        var temp = new Vector2(weapon.Attribute.HoldPosition.x, 0);
+        var pos = weapon.GlobalPosition + temp.Rotated(weapon.GlobalRotation);
+        Holster.RemoveWeapon(index);
+        //播放抛出效果
+        weapon.ThrowWeapon(this, pos);
     }
 
     /// <summary>

@@ -877,11 +877,11 @@ public abstract class Weapon : ActivityObject
             {
                 if (holster.PickupWeapon(this) == -1)
                 {
+                    //替换武器
                     var slot = holster.SlotList[holster.ActiveIndex];
                     if (slot.Type == Attribute.WeightType)
                     {
-                        var weapon = holster.RemoveWeapon(holster.ActiveIndex);
-                        weapon.ThrowWeapon(roleMaster);
+                        roleMaster.ThrowWeapon();
                         roleMaster.PickUpWeapon(this);
                     }
                 }
