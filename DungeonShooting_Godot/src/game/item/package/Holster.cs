@@ -90,8 +90,9 @@ public class Holster
     /// <summary>
     /// 根据索引获取武器
     /// </summary>
-    public Weapon GetWeapon(int index) {
-        if (index >= SlotList.Length)
+    public Weapon GetWeapon(int index)
+    {
+        if (index < 0 || index >= SlotList.Length)
         {
             return null;
         }

@@ -243,6 +243,13 @@ public abstract class ActivityObject : KinematicBody2D
     }
 
     /// <summary>
+    /// 开始投抛该物体时调用
+    /// </summary>
+    protected virtual void OnThrowStart()
+    {
+    }
+    
+    /// <summary>
     /// 投抛该物体达到最高点时调用
     /// </summary>
     protected virtual void OnThrowMaxHeight(float height)
@@ -676,6 +683,7 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
     
+    //计算位置
     private void CalcThrowAnimatedPosition()
     {
         if (Scale.y < 0)
@@ -756,6 +764,7 @@ public abstract class ActivityObject : KinematicBody2D
         CalcThrowAnimatedPosition();
         //显示阴影
         ShowShadowSprite();
+        OnThrowStart();
     }
 
     /// <summary>

@@ -901,7 +901,17 @@ public abstract class Weapon : ActivityObject
     /// 触发扔掉武器抛出的效果, 并不会管武器是否在武器袋中
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
-    public virtual void ThrowWeapon(Role master)
+    public void ThrowWeapon(Role master)
+    {
+        ThrowWeapon(master, master.GlobalPosition);
+    }
+
+    /// <summary>
+    /// 触发扔掉武器抛出的效果, 并不会管武器是否在武器袋中
+    /// </summary>
+    /// <param name="master">触发扔掉该武器的的角色</param>
+    /// <param name="startPosition">投抛起始位置</param>
+    public void ThrowWeapon(Role master, Vector2 startPosition)
     {
         //阴影偏移
         ShadowOffset = new Vector2(0, 2);
@@ -919,7 +929,7 @@ public abstract class Weapon : ActivityObject
         var xf = 20;
         var yf = Utils.RandRangeInt(50, 70);
         var rotate = Utils.RandRangeInt(-90, 90);
-        Throw(new Vector2(30, 15), master.GetCenterPosition(), startHeight, direction, xf, yf, rotate, true);
+        Throw(new Vector2(30, 15), startPosition, startHeight, direction, xf, yf, rotate, true);
     }
 
     protected override void OnThrowOver()
