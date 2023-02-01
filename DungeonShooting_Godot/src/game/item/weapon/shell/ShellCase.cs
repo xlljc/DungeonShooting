@@ -13,13 +13,14 @@ public class ShellCase : ActivityObject
 
     protected override void OnThrowOver()
     {
-        AwaitDestroy();
+        //AwaitDestroy();
+        AnimationPlayer.Play("Flicker");
     }
 
     private async void AwaitDestroy()
     {
-        //30秒后销毁
-        await ToSignal(GetTree().CreateTimer(30), "timeout");
+        //2秒后销毁
+        await ToSignal(GetTree().CreateTimer(2), "timeout");
         Destroy();
     }
 }

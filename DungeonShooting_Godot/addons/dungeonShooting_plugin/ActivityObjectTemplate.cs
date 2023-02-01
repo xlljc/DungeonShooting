@@ -16,22 +16,27 @@ namespace Plugin
         /// <summary>
         /// 物体初始缩放
         /// </summary>
-        [Export] public Vector2 Scale = Vector2.One;
+        [Export] public Vector2 scale = Vector2.One;
         
         /// <summary>
         /// 当前物体所属物理层
         /// </summary>
-        [Export(PropertyHint.Layers2dPhysics)] public uint CollisionLayer;
+        [Export(PropertyHint.Layers2dPhysics)] public uint collision_layer;
 
         /// <summary>
         /// 当前物体扫描的物理层
         /// </summary>
-        [Export(PropertyHint.Layers2dPhysics)] public uint CollisionMask;
+        [Export(PropertyHint.Layers2dPhysics)] public uint collision_mask;
 
+        /// <summary>
+        /// 显示状态
+        /// </summary>
+        [Export] public bool visible = true;
+        
         /// <summary>
         /// 当前物体渲染层级
         /// </summary>
-        [Export] public int ZIndex;
+        [Export] public int z_index;
 
         public override void _Ready()
         {

@@ -1,10 +1,12 @@
-using System;
+
 using Godot;
 
+/// <summary>
+/// 测试地牢生成
+/// </summary>
 public class TestGenerateDungeon : Node2D
 {
 	[Export] public NodePath TileMapPath;
-
 	[Export] public NodePath Camera;
 
 	private TileMap _tileMap;
@@ -15,17 +17,26 @@ public class TestGenerateDungeon : Node2D
 
 	public override void _Ready()
 	{
-		GD.Randomize();
 		_tileMap = GetNode<TileMap>(TileMapPath);
 		_camera = GetNode<Camera2D>(Camera);
 
 		_font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
 
-		_generateDungeon = new GenerateDungeon(_tileMap);
-		var nowTicks = DateTime.Now.Ticks;
+		_generateDungeon = new GenerateDungeon();
 		_generateDungeon.Generate();
-		GD.Print("useTime: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
+		foreach (var info in _generateDungeon.RoomInfos)
+		{
+			//临时铺上地砖
+			var id = (int)_tileMap.TileSet.GetTilesIds()[0];
+			for (int i = 0; i < info.Size.x; i++)
+			{
+				for (int j = 0; j < info.Size.y; j++)
+				{
+					_tileMap.SetCell(i + (int)info.Position.x, j + (int)info.Position.y, id);
+				}
+			}
+		}
 	}
 
 	public override void _Process(float delta)

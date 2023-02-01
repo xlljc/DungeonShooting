@@ -113,11 +113,12 @@ public abstract class ActivityObject : KinematicBody2D
         }
 
         var tempNode = tempPrefab.Instance<ActivityObjectTemplate>();
-        ZIndex = tempNode.ZIndex;
-        CollisionLayer = tempNode.CollisionLayer;
-        CollisionMask = tempNode.CollisionMask;
+        ZIndex = tempNode.z_index;
+        CollisionLayer = tempNode.collision_layer;
+        CollisionMask = tempNode.collision_mask;
         UseYSort = tempNode.UseYSort;
-        Scale = tempNode.Scale;
+        Scale = tempNode.scale;
+        Visible = tempNode.visible;
 
         //移动子节点
         var count = tempNode.GetChildCount();

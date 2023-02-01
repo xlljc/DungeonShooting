@@ -7,13 +7,20 @@ using Godot;
 /// </summary>
 public class GenerateDungeon
 {
-    public readonly TileMap TileMap;
+    /// <summary>
+    /// 用于标记地图上的坐标是否被占用
+    /// </summary>
+    public Grid<bool> RoomGrid { get; } = new Grid<bool>();
 
-    public RoomInfo StartRoom;
-
-    public readonly Grid<bool> RoomGrid = new Grid<bool>();
-
-    private List<RoomInfo> _roomInfos = new List<RoomInfo>();
+    /// <summary>
+    /// 所有生成的房间, 调用过 Generate() 函数才能获取到值
+    /// </summary>
+    public List<RoomInfo> RoomInfos { get; } = new List<RoomInfo>();
+    
+    /// <summary>
+    /// 起始房间
+    /// </summary>
+    public RoomInfo StartRoom { get; private set; }
 
     private int _count = 0;
 
@@ -28,11 +35,10 @@ public class GenerateDungeon
     private int _corridorWidth = 4;
 
     //宽高
-    private int _roomMinWidth = 20;
-    private int _roomMaxWidth = 45;
-    private int _roomMinHeight = 20;
-
-    private int _roomMaxHeight = 35;
+    private int _roomMinWidth = 15;
+    private int _roomMaxWidth = 35;
+    private int _roomMinHeight = 10;
+    private int _roomMaxHeight = 25;
 
     //间隔
     private int _roomMinInterval = 6;
@@ -47,37 +53,21 @@ public class GenerateDungeon
     private float _roomVerticalMinDispersion = 0.7f;
     private float _roomVerticalMaxDispersion = 1.1f;
 
-    public GenerateDungeon(TileMap tileMap)
-    {
-        TileMap = tileMap;
-    }
-
     public void Generate()
     {
+        if (StartRoom != null) return;
+        
         //第一个房间
         StartRoom = GenerateRoom(null, 0);
 
         //如果房间数量不够, 就一直生成
         while (_count < _maxCount)
         {
-            var room = Utils.RandChoose(_roomInfos);
+            var room = Utils.RandChoose(RoomInfos);
             var nextRoom = GenerateRoom(room, Utils.RandRangeInt(0, 3));
             if (nextRoom != null)
             {
                 room.Next.Add(nextRoom);
-            }
-        }
-
-        foreach (var info in _roomInfos)
-        {
-            //临时铺上地砖
-            var id = (int)TileMap.TileSet.GetTilesIds()[0];
-            for (int i = 0; i < info.Size.x; i++)
-            {
-                for (int j = 0; j < info.Size.y; j++)
-                {
-                    TileMap.SetCell(i + (int)info.Position.x, j + (int)info.Position.y, id);
-                }
             }
         }
     }
@@ -151,7 +141,7 @@ public class GenerateDungeon
         }
 
         _count++;
-        _roomInfos.Add(room);
+        RoomInfos.Add(room);
         if (prevRoomInfo == null)
         {
             RoomGrid.AddRect(room.Position, room.Size, true);

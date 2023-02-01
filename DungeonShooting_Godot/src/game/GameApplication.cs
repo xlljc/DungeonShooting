@@ -61,7 +61,9 @@ public class GameApplication : Node2D
 
     public override void _EnterTree()
     {
+        //随机化种子
         GD.Randomize();
+        //调试绘制开关
         ActivityObject.IsDebug = Debug;
 
         GlobalNodeRoot = GetNode<Node2D>(GlobalNodeRootPath);

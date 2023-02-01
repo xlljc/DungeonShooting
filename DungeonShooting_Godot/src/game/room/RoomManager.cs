@@ -10,7 +10,9 @@ public class RoomManager : Navigation2D
 {
     [Export] public NodePath ObjectRootPath;
     [Export] public NodePath YSortRootPath;
-    [Export] public NodePath MapRootPath;
+    [Export] public NodePath TopTilePath;
+    [Export] public NodePath MiddleTilePath;
+    [Export] public NodePath FloorTilePath;
     
     /// <summary>
     /// 玩家对象
@@ -27,20 +29,17 @@ public class RoomManager : Navigation2D
 
     //对象根节点, 带y轴排序功能
     private YSort _sortRoot;
-    
-    private Node2D _mapRoot;
-
-    //可行走区域的tileId
-    private List<int> _wayIds = new List<int>(new[] { 129 });
 
     //已经标记过的点
     private HashSet<Vector2> _usePoints = new HashSet<Vector2>();
 
     //导航区域数据
     private List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
-
-    private TileMap _groundTiled;
+    
     private TileMap _tileMap;
+    
+    private Font _font;
+    private GenerateDungeon _generateDungeon;
 
     public override void _EnterTree()
     {
@@ -52,38 +51,31 @@ public class RoomManager : Navigation2D
         
         NavigationPolygon = new NavigationPolygonInstance();
         AddChild(NavigationPolygon);
-
-        //初始化地图
-        _mapRoot = GetNode<Node2D>(MapRootPath);
-        var child = _mapRoot.GetChild(0);
-        _tileMap = child.GetNode<TileMap>("Wall");
-        var node = child.GetNode("Config");
-        Color color = (Color)node.GetMeta("ClearColor");
-        VisualServer.SetDefaultClearColor(color);
+        
+        _tileMap = GetNode<TileMap>(FloorTilePath);
+        // var node = child.GetNode("Config");
+        // Color color = (Color)node.GetMeta("ClearColor");
+        // VisualServer.SetDefaultClearColor(color);
 
         //创建玩家
         Player = new Player();
         Player.Position = new Vector2(100, 100);
         Player.Name = "Player";
         Player.PutDown();
-
-        //Player.GetComponent<MoveController>().AddForce(new Vector2(-15, -15), 1);
-
-        // var testActivity = new TestActivity();
-        // testActivity.Position = new Vector2(10, 10);
-        // testActivity.PutDown();
     }
 
     public override void _Ready()
     {
         _tileMap.CellYSort = false;
         _tileMap.BakeNavigation = false;
-        //拆分 ground 和 面向下方的 wall
-        _groundTiled = new TileMap();
-        _groundTiled.CellSize = GameConfig.MapCellSize;
-        _groundTiled.TileSet = _tileMap.TileSet;
-        //_groundTiled.SetCell(0, 0, 1);
-        _mapRoot.AddChild(_groundTiled);
+        
+        _font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
+
+        //生成地牢房间
+        _generateDungeon = new GenerateDungeon();
+        _generateDungeon.Generate();
+        
+        //根据房间数据创建填充 tiled
         
         var nowTicks = DateTime.Now.Ticks;
         //生成寻路网格
@@ -101,11 +93,11 @@ public class RoomManager : Navigation2D
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
         
-        var enemy1 = new Enemy();
-        enemy1.Name = "Enemy";
-        enemy1.PutDown(new Vector2(150, 300));
-        //enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
-        enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        // var enemy1 = new Enemy();
+        // enemy1.Name = "Enemy";
+        // enemy1.PutDown(new Vector2(150, 300));
+        // //enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
+        // enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
         // for (int i = 0; i < 10; i++)
         // {
@@ -116,18 +108,18 @@ public class RoomManager : Navigation2D
         //     enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
         // }
         
-        var enemy2 = new Enemy();
-        enemy2.Name = "Enemy2";
-        enemy2.PutDown(new Vector2(540, 100));
-        enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
-        //enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
-        //enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
-
-        var enemy3 = new Enemy();
-        enemy3.Name = "Enemy3";
-        enemy3.PutDown(new Vector2(540, 300));
-        enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
-        enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
+        // var enemy2 = new Enemy();
+        // enemy2.Name = "Enemy2";
+        // enemy2.PutDown(new Vector2(540, 100));
+        // enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
+        // //enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
+        // //enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
+        //
+        // var enemy3 = new Enemy();
+        // enemy3.Name = "Enemy3";
+        // enemy3.PutDown(new Vector2(540, 300));
+        // enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
+        // enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
 
         WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100));
         WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120));
@@ -154,6 +146,7 @@ public class RoomManager : Navigation2D
     {
         if (GameApplication.Instance.Debug)
         {
+            //绘制ai寻路区域
             for (var i = 0; i < _polygonDataList.Count; i++)
             {
                 var item = _polygonDataList[i];
@@ -163,6 +156,8 @@ public class RoomManager : Navigation2D
                 }
             }
         }
+        //绘制房间区域
+        DrawRoomInfo(_generateDungeon.StartRoom);
     }
 
     /// <summary>
@@ -180,8 +175,7 @@ public class RoomManager : Navigation2D
     /// </summary>
     public bool IsWayTile(int x, int y)
     {
-        var cellId = _tileMap.GetCell(x, y);
-        return cellId != -1 && _wayIds.Contains(cellId);
+        return _tileMap.GetCell(x, y) != TileMap.InvalidCell;
     }
 
     /// <summary>
@@ -235,7 +229,7 @@ public class RoomManager : Navigation2D
             }
         }
     }
-
+    
     private NavigationPolygonData CalcOutline(int i, int j, TileMap tileMap, Vector2 size)
     {
         var polygonData = new NavigationPolygonData();
@@ -720,5 +714,59 @@ public class RoomManager : Navigation2D
         }
 
         _usePoints.Add(pos);
+    }
+    
+    //绘制房间区域, debug 用
+    private void DrawRoomInfo(RoomInfo room)
+    {
+        var cellSize = _tileMap.CellSize;
+        var pos1 = (room.Position + room.Size / 2) * cellSize;
+        
+        //绘制下一个房间
+        foreach (var nextRoom in room.Next)
+        {
+            var pos2 = (nextRoom.Position + nextRoom.Size / 2) * cellSize;
+            DrawLine(pos1, pos2, Colors.Red);
+            DrawRoomInfo(nextRoom);
+        }
+
+        DrawString(_font, pos1, room.Id.ToString(), Colors.Yellow);
+
+        //绘制门
+        foreach (var roomDoor in room.Doors)
+        {
+            var originPos = roomDoor.OriginPosition * cellSize;
+            switch (roomDoor.Direction)
+            {
+                case DoorDirection.E:
+                    DrawLine(originPos, originPos + new Vector2(3, 0) * cellSize, Colors.Yellow);
+                    DrawLine(originPos + new Vector2(0, 4) * cellSize, originPos + new Vector2(3, 4) * cellSize,
+                        Colors.Yellow);
+                    break;
+                case DoorDirection.W:
+                    DrawLine(originPos, originPos - new Vector2(3, 0) * cellSize, Colors.Yellow);
+                    DrawLine(originPos + new Vector2(0, 4) * cellSize, originPos - new Vector2(3, -4) * cellSize,
+                        Colors.Yellow);
+                    break;
+                case DoorDirection.S:
+                    DrawLine(originPos, originPos + new Vector2(0, 3) * cellSize, Colors.Yellow);
+                    DrawLine(originPos + new Vector2(4, 0) * cellSize, originPos + new Vector2(4, 3) * cellSize,
+                        Colors.Yellow);
+                    break;
+                case DoorDirection.N:
+                    DrawLine(originPos, originPos - new Vector2(0, 3) * cellSize, Colors.Yellow);
+                    DrawLine(originPos + new Vector2(4, 0) * cellSize, originPos - new Vector2(-4, 3) * cellSize,
+                        Colors.Yellow);
+                    break;
+            }
+            
+            //绘制房间区域
+            DrawRect(new Rect2(room.Position * cellSize, room.Size * cellSize), Colors.Blue, false);
+
+            if (roomDoor.HasCross)
+            {
+                DrawRect(new Rect2(roomDoor.Cross * cellSize, cellSize * 4), Colors.Yellow, false);
+            }
+        }
     }
 }
