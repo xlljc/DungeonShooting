@@ -16,7 +16,7 @@ public class GenerateDungeon
     /// 所有生成的房间, 调用过 Generate() 函数才能获取到值
     /// </summary>
     public List<RoomInfo> RoomInfos { get; } = new List<RoomInfo>();
-    
+
     /// <summary>
     /// 起始房间
     /// </summary>
@@ -56,7 +56,7 @@ public class GenerateDungeon
     public void Generate()
     {
         if (StartRoom != null) return;
-        
+
         //第一个房间
         StartRoom = GenerateRoom(null, 0);
 
@@ -214,7 +214,7 @@ public class GenerateDungeon
             }
 
             //判断门之间的通道是否有物体碰到
-            if (!AddCorridorToGridRange(roomDoor.OriginPosition, nextRoomDoor.OriginPosition))
+            if (!AddCorridorToGridRange(roomDoor, nextRoomDoor))
             {
                 //此门不能连通
                 return false;
@@ -252,7 +252,7 @@ public class GenerateDungeon
             }
 
             //判断门之间的通道是否有物体碰到
-            if (!AddCorridorToGridRange(roomDoor.OriginPosition, nextRoomDoor.OriginPosition))
+            if (!AddCorridorToGridRange(roomDoor, nextRoomDoor))
             {
                 //此门不能连通
                 return false;
@@ -373,7 +373,7 @@ public class GenerateDungeon
         }
 
         //判断门之间的通道是否有物体碰到
-        if (!AddCorridorToGridRange(roomDoor.OriginPosition, nextRoomDoor.OriginPosition, cross))
+        if (!AddCorridorToGridRange(roomDoor, nextRoomDoor, cross))
         {
             //此门不能连通
             return false;
@@ -387,11 +387,13 @@ public class GenerateDungeon
         return true;
     }
 
+    //返回的x为宽, y为高
     private Vector2 CalcRange(float start1, float end1, float start2, float end2)
     {
         return new Vector2(Mathf.Max(start1, start2), Mathf.Min(end1, end2));
     }
 
+    //返回参数方向的反方向
     private int GetReverseDirection(int direction)
     {
         switch (direction)
@@ -405,14 +407,31 @@ public class GenerateDungeon
         return 2;
     }
 
-    private bool AddCorridorToGridRange(Vector2 point1, Vector2 point2)
+    //将两个门间的过道占用数据存入RoomGrid
+    private bool AddCorridorToGridRange(RoomDoor door1, RoomDoor door2)
     {
+        var point1 = door1.OriginPosition;
+        var point2 = door2.OriginPosition;
         var pos = new Vector2(Mathf.Min(point1.x, point2.x), Mathf.Min(point1.y, point2.y));
         var size = new Vector2(
             point1.x == point2.x ? _corridorWidth : Mathf.Abs(point1.x - point2.x),
             point1.y == point2.y ? _corridorWidth : Mathf.Abs(point1.y - point2.y)
         );
-        if (RoomGrid.RectCollision(pos, size))
+
+        Vector2 collPos;
+        Vector2 collSize;
+        if (point1.x == point2.x) //纵向加宽, 防止贴到其它墙
+        {
+            collPos = new Vector2(pos.x - 3, pos.y);
+            collSize = new Vector2(size.x + 6, size.y);
+        }
+        else //横向加宽, 防止贴到其它墙
+        {
+            collPos = new Vector2(pos.x, pos.y - 3);
+            collSize = new Vector2(size.x, size.y + 6);
+        }
+
+        if (RoomGrid.RectCollision(collPos, collSize))
         {
             return false;
         }
@@ -421,8 +440,11 @@ public class GenerateDungeon
         return true;
     }
 
-    private bool AddCorridorToGridRange(Vector2 point1, Vector2 point2, Vector2 cross)
+    //将两个门间的过道占用数据存入RoomGrid, 该重载
+    private bool AddCorridorToGridRange(RoomDoor door1, RoomDoor door2, Vector2 cross)
     {
+        var point1 = door1.OriginPosition;
+        var point2 = door2.OriginPosition;
         var pos1 = new Vector2(Mathf.Min(point1.x, cross.x), Mathf.Min(point1.y, cross.y));
         var size1 = new Vector2(
             point1.x == cross.x ? _corridorWidth : Mathf.Abs(point1.x - cross.x),
@@ -433,7 +455,39 @@ public class GenerateDungeon
             point2.x == cross.x ? _corridorWidth : Mathf.Abs(point2.x - cross.x),
             point2.y == cross.y ? _corridorWidth : Mathf.Abs(point2.y - cross.y)
         );
-        if (RoomGrid.RectCollision(pos1, size1) || RoomGrid.RectCollision(pos2, size2))
+
+        Vector2 collPos1;
+        Vector2 collSize1;
+        if (point1.x == cross.x) //纵向加宽, 防止贴到其它墙
+        {
+            collPos1 = new Vector2(pos1.x - 3, pos1.y);
+            collSize1 = new Vector2(size1.x + 6, size1.y);
+        }
+        else //横向加宽, 防止贴到其它墙
+        {
+            collPos1 = new Vector2(pos1.x, pos1.y - 3);
+            collSize1 = new Vector2(size1.x, size1.y + 6);
+        }
+
+        if (RoomGrid.RectCollision(collPos1, collSize1))
+        {
+            return false;
+        }
+
+        Vector2 collPos2;
+        Vector2 collSize2;
+        if (point2.x == cross.x) //纵向加宽, 防止贴到其它墙
+        {
+            collPos2 = new Vector2(pos2.x - 3, pos2.y);
+            collSize2 = new Vector2(size2.x + 6, size2.y);
+        }
+        else //横向加宽, 防止贴到其它墙
+        {
+            collPos2 = new Vector2(pos2.x, pos2.y - 3);
+            collSize2 = new Vector2(size2.x, size2.y + 6);
+        }
+
+        if (RoomGrid.RectCollision(collPos2, collSize2))
         {
             return false;
         }
