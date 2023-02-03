@@ -112,6 +112,14 @@ public class Grid<T>
     }
 
     /// <summary>
+    /// 清除所有数据
+    /// </summary>
+    public void Clear()
+    {
+        _map.Clear();
+    }
+    
+    /// <summary>
     /// 检测矩形区域内是否与其他数据有碰撞
     /// </summary>
     /// <param name="pos">起点位置</param>

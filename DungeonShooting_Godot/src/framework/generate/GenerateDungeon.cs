@@ -8,11 +8,6 @@ using Godot;
 public class GenerateDungeon
 {
     /// <summary>
-    /// 用于标记地图上的坐标是否被占用
-    /// </summary>
-    public Grid<bool> RoomGrid { get; } = new Grid<bool>();
-
-    /// <summary>
     /// 所有生成的房间, 调用过 Generate() 函数才能获取到值
     /// </summary>
     public List<RoomInfo> RoomInfos { get; } = new List<RoomInfo>();
@@ -21,9 +16,7 @@ public class GenerateDungeon
     /// 起始房间
     /// </summary>
     public RoomInfo StartRoom { get; private set; }
-
-    private int _count = 0;
-
+    
     /// <summary>
     /// 生成的房间数量
     /// </summary>
@@ -33,7 +26,13 @@ public class GenerateDungeon
     /// 过道宽度
     /// </summary>
     private int _corridorWidth = 4;
-
+    
+    //用于标记地图上的坐标是否被占用
+    private Grid<bool> _roomGrid { get; } = new Grid<bool>();
+    
+    //当前房间数量
+    private int _count = 0;
+    
     //宽高
     private int _roomMinWidth = 15;
     private int _roomMaxWidth = 35;
@@ -46,13 +45,15 @@ public class GenerateDungeon
 
     //房间横轴分散程度
     private float _roomHorizontalMinDispersion = 0.7f;
-
     private float _roomHorizontalMaxDispersion = 1.1f;
 
     //房间纵轴分散程度
     private float _roomVerticalMinDispersion = 0.7f;
     private float _roomVerticalMaxDispersion = 1.1f;
 
+    /// <summary>
+    /// 生成房间
+    /// </summary>
     public void Generate()
     {
         if (StartRoom != null) return;
@@ -70,6 +71,8 @@ public class GenerateDungeon
                 room.Next.Add(nextRoom);
             }
         }
+        
+        _roomGrid.Clear();
     }
 
     //生成房间
@@ -125,17 +128,17 @@ public class GenerateDungeon
             }
 
             //是否碰到其他房间或者过道
-            if (RoomGrid.RectCollision(room.Position - new Vector2(3, 3), room.Size + new Vector2(6, 6)))
+            if (_roomGrid.RectCollision(room.Position - new Vector2(3, 3), room.Size + new Vector2(6, 6)))
             {
                 return null;
             }
 
-            RoomGrid.AddRect(room.Position, room.Size, true);
+            _roomGrid.AddRect(room.Position, room.Size, true);
 
             //找门, 与上一个房间是否能连通
             if (!ConnectDoor(prevRoomInfo, room))
             {
-                RoomGrid.RemoveRect(room.Position, room.Size);
+                _roomGrid.RemoveRect(room.Position, room.Size);
                 return null;
             }
         }
@@ -144,7 +147,7 @@ public class GenerateDungeon
         RoomInfos.Add(room);
         if (prevRoomInfo == null)
         {
-            RoomGrid.AddRect(room.Position, room.Size, true);
+            _roomGrid.AddRect(room.Position, room.Size, true);
         }
 
         //下一个房间
@@ -431,12 +434,12 @@ public class GenerateDungeon
             collSize = new Vector2(size.x, size.y + 6);
         }
 
-        if (RoomGrid.RectCollision(collPos, collSize))
+        if (_roomGrid.RectCollision(collPos, collSize))
         {
             return false;
         }
 
-        RoomGrid.AddRect(pos, size, true);
+        _roomGrid.AddRect(pos, size, true);
         return true;
     }
 
@@ -469,7 +472,7 @@ public class GenerateDungeon
             collSize1 = new Vector2(size1.x, size1.y + 6);
         }
 
-        if (RoomGrid.RectCollision(collPos1, collSize1))
+        if (_roomGrid.RectCollision(collPos1, collSize1))
         {
             return false;
         }
@@ -487,13 +490,13 @@ public class GenerateDungeon
             collSize2 = new Vector2(size2.x, size2.y + 6);
         }
 
-        if (RoomGrid.RectCollision(collPos2, collSize2))
+        if (_roomGrid.RectCollision(collPos2, collSize2))
         {
             return false;
         }
 
-        RoomGrid.AddRect(pos1, size1, true);
-        RoomGrid.AddRect(pos2, size2, true);
+        _roomGrid.AddRect(pos1, size1, true);
+        _roomGrid.AddRect(pos2, size2, true);
         return true;
     }
 }
