@@ -86,8 +86,6 @@ animations = [ {
 radius = 4.0
 
 [node name="Player" instance=ExtResource( 1 )]
-CollisionLayer = 8
-CollisionMask = 25
 
 [node name="ShadowSprite" parent="." index="0"]
 material = SubResource( 1 )

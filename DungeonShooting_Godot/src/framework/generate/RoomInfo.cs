@@ -27,9 +27,15 @@ public class RoomInfo
     /// <summary>
     /// 门
     /// </summary>
-    public List<RoomDoor> Doors = new List<RoomDoor>();
+    public List<RoomDoorInfo> Doors = new List<RoomDoorInfo>();
 
+    /// <summary>
+    /// 下一个房间
+    /// </summary>
     public List<RoomInfo> Next = new List<RoomInfo>();
     
+    /// <summary>
+    /// 上一个房间
+    /// </summary>
     public RoomInfo Prev;
 }

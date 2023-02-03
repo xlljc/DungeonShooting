@@ -186,10 +186,14 @@ public class GenerateDungeon
     private bool ConnectDoor(RoomInfo room, RoomInfo nextRoom)
     {
         //门描述
-        var roomDoor = new RoomDoor();
-        var nextRoomDoor = new RoomDoor();
+        var roomDoor = new RoomDoorInfo();
+        var nextRoomDoor = new RoomDoorInfo();
+        roomDoor.RoomInfo = room;
+        nextRoomDoor.RoomInfo = nextRoom;
         roomDoor.ConnectRoom = nextRoom;
+        roomDoor.ConnectDoor = nextRoomDoor;
         nextRoomDoor.ConnectRoom = room;
+        nextRoomDoor.ConnectDoor = roomDoor;
 
         var overlapX = Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x) -
                        Mathf.Max(room.Position.x, nextRoom.Position.x);
@@ -197,7 +201,7 @@ public class GenerateDungeon
         if (overlapX >= 6)
         {
             //找到重叠区域
-            var range = CalcRange(room.Position.x, room.Position.x + room.Size.x,
+            var range = CalcOverlapRange(room.Position.x, room.Position.x + room.Size.x,
                 nextRoom.Position.x, nextRoom.Position.x + nextRoom.Size.x);
             var x = Utils.RandRangeInt((int)range.x + 1, (int)range.y - _corridorWidth - 1);
 
@@ -235,7 +239,7 @@ public class GenerateDungeon
         if (overlapY >= 6)
         {
             //找到重叠区域
-            var range = CalcRange(room.Position.y, room.Position.y + room.Size.y,
+            var range = CalcOverlapRange(room.Position.y, room.Position.y + room.Size.y,
                 nextRoom.Position.y, nextRoom.Position.y + nextRoom.Size.y);
             var y = Utils.RandRangeInt((int)range.x + 1, (int)range.y - _corridorWidth - 1);
 
@@ -390,8 +394,8 @@ public class GenerateDungeon
         return true;
     }
 
-    //返回的x为宽, y为高
-    private Vector2 CalcRange(float start1, float end1, float start2, float end2)
+    //用于计算重叠区域坐标, 可以理解为一维轴上4个点的中间两个点
+    private Vector2 CalcOverlapRange(float start1, float end1, float start2, float end2)
     {
         return new Vector2(Mathf.Max(start1, start2), Mathf.Min(end1, end2));
     }
@@ -411,7 +415,7 @@ public class GenerateDungeon
     }
 
     //将两个门间的过道占用数据存入RoomGrid
-    private bool AddCorridorToGridRange(RoomDoor door1, RoomDoor door2)
+    private bool AddCorridorToGridRange(RoomDoorInfo door1, RoomDoorInfo door2)
     {
         var point1 = door1.OriginPosition;
         var point2 = door2.OriginPosition;
@@ -444,7 +448,7 @@ public class GenerateDungeon
     }
 
     //将两个门间的过道占用数据存入RoomGrid, 该重载
-    private bool AddCorridorToGridRange(RoomDoor door1, RoomDoor door2, Vector2 cross)
+    private bool AddCorridorToGridRange(RoomDoorInfo door1, RoomDoorInfo door2, Vector2 cross)
     {
         var point1 = door1.OriginPosition;
         var point2 = door2.OriginPosition;

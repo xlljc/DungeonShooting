@@ -100,7 +100,6 @@
 [node name="TestTileLayer" type="Node2D"]
 
 [node name="YSort" type="YSort" parent="."]
-visible = false
 
 [node name="MiddleTileMap" type="TileMap" parent="YSort"]
 tile_set = SubResource( 2 )

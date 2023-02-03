@@ -36,7 +36,9 @@ public class RoomManager : Navigation2D
     //导航区域数据
     private List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
     
-    private TileMap _tileMap;
+    public TileMap FloorTileMap { get; private set; }
+    public TileMap MiddleTileMap { get; private set; }
+    public TileMap TopTileMap { get; private set; }
     
     private Font _font;
     private GenerateDungeon _generateDungeon;
@@ -52,7 +54,10 @@ public class RoomManager : Navigation2D
         NavigationPolygon = new NavigationPolygonInstance();
         AddChild(NavigationPolygon);
         
-        _tileMap = GetNode<TileMap>(FloorTilePath);
+        FloorTileMap = GetNode<TileMap>(FloorTilePath);
+        MiddleTileMap = GetNode<TileMap>(MiddleTilePath);
+        TopTileMap = GetNode<TileMap>(TopTilePath);
+        
         // var node = child.GetNode("Config");
         // Color color = (Color)node.GetMeta("ClearColor");
         // VisualServer.SetDefaultClearColor(color);
@@ -66,14 +71,19 @@ public class RoomManager : Navigation2D
 
     public override void _Ready()
     {
-        _tileMap.CellYSort = false;
-        _tileMap.BakeNavigation = false;
+        FloorTileMap.CellYSort = false;
+        FloorTileMap.BakeNavigation = false;
         
         _font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
 
         //生成地牢房间
         _generateDungeon = new GenerateDungeon();
         _generateDungeon.Generate();
+        //填充地牢
+        DungeonTileManager.AutoFillRoomTile(FloorTileMap, MiddleTileMap, TopTileMap, _generateDungeon.StartRoom);
+        FloorTileMap.UpdateDirtyQuadrants();
+        MiddleTileMap.UpdateDirtyQuadrants();
+        TopTileMap.UpdateDirtyQuadrants();
         
         //根据房间数据创建填充 tiled
         
@@ -175,7 +185,7 @@ public class RoomManager : Navigation2D
     /// </summary>
     public bool IsWayTile(int x, int y)
     {
-        return _tileMap.GetCell(x, y) != TileMap.InvalidCell;
+        return FloorTileMap.GetCell(x, y) != TileMap.InvalidCell;
     }
 
     /// <summary>
@@ -183,7 +193,7 @@ public class RoomManager : Navigation2D
     /// </summary>
     public bool IsWayPosition(float x, float y)
     {
-        var tileMapCellSize = _tileMap.CellSize;
+        var tileMapCellSize = FloorTileMap.CellSize;
         return IsWayTile((int)(x / tileMapCellSize.x), (int)(y / tileMapCellSize.y));
     }
 
@@ -192,9 +202,9 @@ public class RoomManager : Navigation2D
     /// </summary>
     private void GenerateNavigationPolygon()
     {
-        var size = _tileMap.CellSize;
+        var size = FloorTileMap.CellSize;
 
-        var rect = _tileMap.GetUsedRect();
+        var rect = FloorTileMap.GetUsedRect();
 
         var x = (int)rect.Position.x;
         var y = (int)rect.Position.y;
@@ -213,11 +223,11 @@ public class RoomManager : Navigation2D
 
                         if (!IsWayTile(i, j - 1))
                         {
-                            polygonData = CalcOutline(i, j, _tileMap, size);
+                            polygonData = CalcOutline(i, j, FloorTileMap, size);
                         }
                         else if (!IsWayTile(i, j + 1))
                         {
-                            polygonData = CalcInline(i, j, _tileMap, size);
+                            polygonData = CalcInline(i, j, FloorTileMap, size);
                         }
 
                         if (polygonData != null)
@@ -230,6 +240,7 @@ public class RoomManager : Navigation2D
         }
     }
     
+    //计算导航网格外轮廓
     private NavigationPolygonData CalcOutline(int i, int j, TileMap tileMap, Vector2 size)
     {
         var polygonData = new NavigationPolygonData();
@@ -468,6 +479,7 @@ public class RoomManager : Navigation2D
         }
     }
 
+    //计算导航网格内轮廓
     private NavigationPolygonData CalcInline(int i, int j, TileMap tileMap, Vector2 size)
     {
         var polygonData = new NavigationPolygonData();
@@ -706,6 +718,7 @@ public class RoomManager : Navigation2D
         }
     }
 
+    //记录导航网格中已经使用过的坐标
     private void PutUsePoint(Vector2 pos)
     {
         if (_usePoints.Contains(pos))
@@ -719,7 +732,7 @@ public class RoomManager : Navigation2D
     //绘制房间区域, debug 用
     private void DrawRoomInfo(RoomInfo room)
     {
-        var cellSize = _tileMap.CellSize;
+        var cellSize = FloorTileMap.CellSize;
         var pos1 = (room.Position + room.Size / 2) * cellSize;
         
         //绘制下一个房间
