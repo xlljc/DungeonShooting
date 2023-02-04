@@ -388,6 +388,8 @@ public class GenerateDungeon
 
         roomDoor.HasCross = true;
         roomDoor.Cross = cross;
+        nextRoomDoor.HasCross = true;
+        nextRoomDoor.Cross = cross;
 
         room.Doors.Add(roomDoor);
         nextRoom.Doors.Add(nextRoomDoor);

@@ -776,7 +776,7 @@ public class RoomManager : Navigation2D
             //绘制房间区域
             DrawRect(new Rect2(room.Position * cellSize, room.Size * cellSize), Colors.Blue, false);
 
-            if (roomDoor.HasCross)
+            if (roomDoor.HasCross && roomDoor.RoomInfo.Id < roomDoor.ConnectRoom.Id)
             {
                 DrawRect(new Rect2(roomDoor.Cross * cellSize, cellSize * 4), Colors.Yellow, false);
             }

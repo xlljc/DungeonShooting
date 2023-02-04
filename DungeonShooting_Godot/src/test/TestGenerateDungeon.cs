@@ -94,7 +94,7 @@ public class TestGenerateDungeon : Node2D
 					break;
 			}
 
-			if (roomDoor.HasCross)
+			if (roomDoor.HasCross && roomDoor.RoomInfo.Id < roomDoor.ConnectRoom.Id)
 			{
 				DrawRect(new Rect2(roomDoor.Cross * cellSize, cellSize * 4), Colors.Yellow);
 			}
