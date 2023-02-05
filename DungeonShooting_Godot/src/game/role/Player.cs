@@ -48,7 +48,7 @@ public class Player : Role
         MaxShield = 30;
         Shield = 30;
 
-        MoveSpeed = 300;
+        //MoveSpeed = 800;
     }
 
     protected override void Process(float delta)

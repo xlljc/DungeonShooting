@@ -8,6 +8,11 @@ using Godot;
 public class GenerateDungeon
 {
     /// <summary>
+    /// 过道宽度
+    /// </summary>
+    public const int CorridorWidth = 4;
+    
+    /// <summary>
     /// 所有生成的房间, 调用过 Generate() 函数才能获取到值
     /// </summary>
     public List<RoomInfo> RoomInfos { get; } = new List<RoomInfo>();
@@ -22,11 +27,6 @@ public class GenerateDungeon
     /// </summary>
     private int _maxCount = 15;
 
-    /// <summary>
-    /// 过道宽度
-    /// </summary>
-    private int _corridorWidth = 4;
-    
     //用于标记地图上的坐标是否被占用
     private Grid<bool> _roomGrid { get; } = new Grid<bool>();
     
@@ -36,8 +36,8 @@ public class GenerateDungeon
     //宽高
     private int _roomMinWidth = 15;
     private int _roomMaxWidth = 35;
-    private int _roomMinHeight = 10;
-    private int _roomMaxHeight = 25;
+    private int _roomMinHeight = 15;
+    private int _roomMaxHeight = 30;
 
     //间隔
     private int _roomMinInterval = 6;
@@ -51,6 +51,28 @@ public class GenerateDungeon
     private float _roomVerticalMinDispersion = 0.7f;
     private float _roomVerticalMaxDispersion = 1.1f;
 
+    //区域限制
+    private bool _enableLimitRange = true;
+    private int _rangeX = 110;
+    private int _rangeY = 110;
+    
+    //找房间失败次数, 过大则会关闭区域限制
+    private int _maxFailCount = 10;
+    private int _failCount = 0;
+
+    private enum GenerateRoomErrorCode
+    {
+        NoError,
+        //房间已满
+        RoomFull,
+        //超出区域
+        OutArea,
+        //碰到其他房间或过道
+        HasCollision,
+        //没有合适的门
+        NoProperDoor,
+    }
+    
     /// <summary>
     /// 生成房间
     /// </summary>
@@ -59,16 +81,32 @@ public class GenerateDungeon
         if (StartRoom != null) return;
 
         //第一个房间
-        StartRoom = GenerateRoom(null, 0);
-
+        GenerateRoom(null, 0, out var startRoom);
+        StartRoom = startRoom;
+        
         //如果房间数量不够, 就一直生成
         while (_count < _maxCount)
         {
             var room = Utils.RandChoose(RoomInfos);
-            var nextRoom = GenerateRoom(room, Utils.RandRangeInt(0, 3));
-            if (nextRoom != null)
+            var errorCode = GenerateRoom(room, Utils.RandRangeInt(0, 3), out var nextRoom);
+            if (errorCode == GenerateRoomErrorCode.NoError)
             {
+                _failCount = 0;
                 room.Next.Add(nextRoom);
+            }
+            else
+            {
+                GD.Print("生成第" + (_count + 1) + "个房间失败! 失败原因: " + errorCode);
+                if (errorCode == GenerateRoomErrorCode.OutArea)
+                {
+                    _failCount++;
+                    GD.Print("超出区域失败次数: " + _failCount);
+                    if (_failCount >= _maxFailCount)
+                    {
+                        _enableLimitRange = false;
+                        GD.Print("生成房间失败次数过多, 关闭区域限制!");
+                    }
+                }
             }
         }
         
@@ -76,11 +114,12 @@ public class GenerateDungeon
     }
 
     //生成房间
-    private RoomInfo GenerateRoom(RoomInfo prevRoomInfo, int direction)
+    private GenerateRoomErrorCode GenerateRoom(RoomInfo prevRoomInfo, int direction, out RoomInfo resultRoom)
     {
         if (_count >= _maxCount)
         {
-            return null;
+            resultRoom = null;
+            return GenerateRoomErrorCode.RoomFull;
         }
 
         var room = new RoomInfo(_count);
@@ -126,11 +165,22 @@ public class GenerateDungeon
                 room.Position = new Vector2(prevRoomInfo.Position.x - room.Size.x - space,
                     prevRoomInfo.Position.y + offset);
             }
+            
+            //是否在限制区域内
+            if (_enableLimitRange)
+            {
+                if (room.Position.x < -_rangeX || room.Position.x + room.Size.x > _rangeX || room.Position.y < -_rangeY || room.Position.y + room.Size.y > _rangeY)
+                {
+                    resultRoom = null;
+                    return GenerateRoomErrorCode.OutArea;
+                }
+            }
 
             //是否碰到其他房间或者过道
             if (_roomGrid.RectCollision(room.Position - new Vector2(3, 3), room.Size + new Vector2(6, 6)))
             {
-                return null;
+                resultRoom = null;
+                return GenerateRoomErrorCode.HasCollision;
             }
 
             _roomGrid.AddRect(room.Position, room.Size, true);
@@ -139,7 +189,8 @@ public class GenerateDungeon
             if (!ConnectDoor(prevRoomInfo, room))
             {
                 _roomGrid.RemoveRect(room.Position, room.Size);
-                return null;
+                resultRoom = null;
+                return GenerateRoomErrorCode.NoProperDoor;
             }
         }
 
@@ -164,7 +215,7 @@ public class GenerateDungeon
             while (dirList.Count > 0)
             {
                 var randDir = Utils.RandChoose(dirList);
-                var nextRoom = GenerateRoom(room, randDir);
+                GenerateRoom(room, randDir, out var nextRoom);
                 if (nextRoom == null)
                 {
                     break;
@@ -177,7 +228,8 @@ public class GenerateDungeon
             }
         }
 
-        return room;
+        resultRoom = room;
+        return GenerateRoomErrorCode.NoError;
     }
 
     /// <summary>
@@ -203,7 +255,7 @@ public class GenerateDungeon
             //找到重叠区域
             var range = CalcOverlapRange(room.Position.x, room.Position.x + room.Size.x,
                 nextRoom.Position.x, nextRoom.Position.x + nextRoom.Size.x);
-            var x = Utils.RandRangeInt((int)range.x + 1, (int)range.y - _corridorWidth - 1);
+            var x = Utils.RandRangeInt((int)range.x + 1, (int)range.y - CorridorWidth - 1);
 
             if (room.Position.y < nextRoom.Position.y) //room在上, nextRoom在下
             {
@@ -241,7 +293,7 @@ public class GenerateDungeon
             //找到重叠区域
             var range = CalcOverlapRange(room.Position.y, room.Position.y + room.Size.y,
                 nextRoom.Position.y, nextRoom.Position.y + nextRoom.Size.y);
-            var y = Utils.RandRangeInt((int)range.x + 1, (int)range.y - _corridorWidth - 1);
+            var y = Utils.RandRangeInt((int)range.x + 1, (int)range.y - CorridorWidth - 1);
 
             if (room.Position.x < nextRoom.Position.x) //room在左, nextRoom在右
             {
@@ -271,9 +323,9 @@ public class GenerateDungeon
             return true;
         }
 
-
-        var offset1 = Mathf.Max((int)overlapX + 2, 2);
-        var offset2 = Mathf.Max((int)overlapY + 2, 2);
+        
+        var offset1 = Mathf.Clamp((int)overlapX + 2, 2, 6);
+        var offset2 = Mathf.Clamp((int)overlapY + 2, 2, 6);
 
         //焦点
         Vector2 cross;
@@ -297,7 +349,7 @@ public class GenerateDungeon
                 {
                     roomDoor.Direction = DoorDirection.W; //←
                     nextRoomDoor.Direction = DoorDirection.S; //↓
-
+                
                     roomDoor.OriginPosition = new Vector2(room.Position.x, room.Position.y + offset2);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x - offset1 - 6,
                         nextRoom.Position.y + nextRoom.Size.y);
@@ -423,8 +475,8 @@ public class GenerateDungeon
         var point2 = door2.OriginPosition;
         var pos = new Vector2(Mathf.Min(point1.x, point2.x), Mathf.Min(point1.y, point2.y));
         var size = new Vector2(
-            point1.x == point2.x ? _corridorWidth : Mathf.Abs(point1.x - point2.x),
-            point1.y == point2.y ? _corridorWidth : Mathf.Abs(point1.y - point2.y)
+            point1.x == point2.x ? CorridorWidth : Mathf.Abs(point1.x - point2.x),
+            point1.y == point2.y ? CorridorWidth : Mathf.Abs(point1.y - point2.y)
         );
 
         Vector2 collPos;
@@ -456,13 +508,13 @@ public class GenerateDungeon
         var point2 = door2.OriginPosition;
         var pos1 = new Vector2(Mathf.Min(point1.x, cross.x), Mathf.Min(point1.y, cross.y));
         var size1 = new Vector2(
-            point1.x == cross.x ? _corridorWidth : Mathf.Abs(point1.x - cross.x),
-            point1.y == cross.y ? _corridorWidth : Mathf.Abs(point1.y - cross.y)
+            point1.x == cross.x ? CorridorWidth : Mathf.Abs(point1.x - cross.x),
+            point1.y == cross.y ? CorridorWidth : Mathf.Abs(point1.y - cross.y)
         );
         var pos2 = new Vector2(Mathf.Min(point2.x, cross.x), Mathf.Min(point2.y, cross.y));
         var size2 = new Vector2(
-            point2.x == cross.x ? _corridorWidth : Mathf.Abs(point2.x - cross.x),
-            point2.y == cross.y ? _corridorWidth : Mathf.Abs(point2.y - cross.y)
+            point2.x == cross.x ? CorridorWidth : Mathf.Abs(point2.x - cross.x),
+            point2.y == cross.y ? CorridorWidth : Mathf.Abs(point2.y - cross.y)
         );
 
         Vector2 collPos1;
