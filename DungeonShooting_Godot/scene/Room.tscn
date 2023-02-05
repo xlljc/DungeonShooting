@@ -121,8 +121,6 @@ format = 1
 [node name="MiddleTileMap" type="TileMap" parent="SortRoot/MapRoot"]
 tile_set = SubResource( 2 )
 cell_size = Vector2( 16, 16 )
-cell_tile_origin = 2
-cell_y_sort = true
 collision_mask = 0
 bake_navigation = true
 format = 1
