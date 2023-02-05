@@ -29,7 +29,7 @@ extents = Vector2( 6, 2 )
 
 [node name="Bullet" type="Node"]
 script = ExtResource( 1 )
-CollisionMask = 1
+collision_mask = 1
 
 [node name="ShadowSprite" type="Sprite" parent="."]
 material = SubResource( 3 )

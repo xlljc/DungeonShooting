@@ -1,22 +1,35 @@
 ﻿
-using System;
 using Godot;
 
 public static class DungeonTileManager
 {
-    public static void AutoFillRoomTile(TileMap floor, TileMap middle, TileMap top, RoomInfo roomInfo)
+    public static void AutoFillRoomTile(TileMap floor, TileMap middle, TileMap top, AutoTileConfig config,
+        RoomInfo roomInfo)
     {
         foreach (var info in roomInfo.Next)
         {
-            AutoFillRoomTile(floor, middle, top, info);
+            AutoFillRoomTile(floor, middle, top, config, info);
         }
 
         //铺房间
-        FillRect(floor, 0, roomInfo.Position, roomInfo.Size);
+        FillRect(floor, config.In, roomInfo.Position + Vector2.One, roomInfo.Size - new Vector2(2, 2));
+
+        FillRect(top, config.LT, roomInfo.Position, Vector2.One);
+        FillRect(top, config.L, roomInfo.Position + new Vector2(0, 1), new Vector2(1, roomInfo.Size.y - 2));
+        FillRect(top, config.LB, roomInfo.Position + new Vector2(0, roomInfo.Size.y - 1), new Vector2(1, 1));
+        FillRect(top, config.B, roomInfo.Position + new Vector2(1, roomInfo.Size.y - 1),
+            new Vector2(roomInfo.Size.x - 2, 1));
+        FillRect(top, config.RB, roomInfo.Position + new Vector2(roomInfo.Size.x - 1, roomInfo.Size.y - 1),
+            Vector2.One);
+        FillRect(top, config.R, roomInfo.Position + new Vector2(roomInfo.Size.x - 1, 1),
+            new Vector2(1, roomInfo.Size.y - 2));
+        FillRect(top, config.RT, roomInfo.Position + new Vector2(roomInfo.Size.x - 1, 0), Vector2.One);
+        FillRect(middle, config.T, roomInfo.Position + Vector2.Right, new Vector2(roomInfo.Size.x - 2, 1));
+
         //铺过道
         foreach (var doorInfo in roomInfo.Doors)
         {
-            if (doorInfo.ConnectRoom.Id < roomInfo.Id)
+            if (doorInfo.ConnectRoom.Id > roomInfo.Id)
             {
                 //普通的直线连接
                 if (!doorInfo.HasCross)
@@ -39,7 +52,35 @@ public static class DungeonTileManager
                         rect.Size = new Vector2(rect.Size.x, GenerateDungeon.CorridorWidth);
                     }
 
-                    FillRect(floor, 0, rect.Position, rect.Size);
+
+                    if (dir == 0) //横向
+                    {
+                        FillRect(floor, config.In, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
+                        FillRect(middle, config.T, rect.Position, new Vector2(rect.Size.x, 1));
+                        FillRect(top, config.B, rect.Position + new Vector2(0, rect.Size.y - 1), new Vector2(rect.Size.x, 1));
+
+                        //左
+                        ClearRect(top, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.y - 2));
+                        FillRect(floor, config.In, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.y - 2));
+                        
+                        //又
+                        ClearRect(top, rect.Position + new Vector2(rect.Size.x, 1), new Vector2(1, rect.Size.y - 2));
+                        FillRect(floor, config.In, rect.Position + new Vector2(rect.Size.x, 1), new Vector2(1, rect.Size.y - 2));
+                    }
+                    else //纵向
+                    {
+                        FillRect(floor, config.In, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
+                        FillRect(top, config.L, rect.Position, new Vector2(1, rect.Size.y));
+                        FillRect(top, config.R, rect.Position + new Vector2(rect.Size.x - 1, 0), new Vector2(1, rect.Size.y));
+
+                        //上
+                        ClearRect(top, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.x - 2, 1));
+                        FillRect(floor, config.In, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.x - 2, 1));
+                        
+                        //下
+                        ClearRect(middle, rect.Position + new Vector2(1, rect.Size.y), new Vector2(rect.Size.x - 2, 1));
+                        FillRect(floor, config.In, rect.Position + new Vector2(1, rect.Size.y), new Vector2(rect.Size.x - 2, 1));
+                    }
                 }
                 else //带交叉点
                 {
@@ -134,22 +175,36 @@ public static class DungeonTileManager
                             break;
                     }
 
-                    FillRect(floor, 0, rect.Position, rect.Size);
-                    FillRect(floor, 0, rect2.Position, rect2.Size);
-                    FillRect(floor, 0, doorInfo.Cross, new Vector2(GenerateDungeon.CorridorWidth, GenerateDungeon.CorridorWidth));
+                    FillRect(floor, config.In, rect.Position, rect.Size);
+                    FillRect(floor, config.In, rect2.Position, rect2.Size);
+                    FillRect(floor, config.In, doorInfo.Cross, new Vector2(GenerateDungeon.CorridorWidth, GenerateDungeon.CorridorWidth));
+                    
+                    
                 }
             }
         }
     }
 
-    private static void FillRect(TileMap tileMap, int index, Vector2 pos, Vector2 size)
+    private static void FillRect(TileMap tileMap, TileCellInfo info, Vector2 pos, Vector2 size)
     {
         for (int i = 0; i < size.x; i++)
         {
             for (int j = 0; j < size.y; j++)
             {
-                tileMap.SetCell((int)pos.x + i, (int)pos.y + j, index, false, false, false, new Vector2(0, 8));
+                tileMap.SetCell((int)pos.x + i, (int)pos.y + j, info.Id, false, false, false, info.AutotileCoord);
             }
         }
     }
+
+    private static void ClearRect(TileMap tileMap, Vector2 pos, Vector2 size)
+    {
+        for (int i = 0; i < size.x; i++)
+        {
+            for (int j = 0; j < size.y; j++)
+            {
+                tileMap.SetCell((int)pos.x + i, (int)pos.y + j, -1);
+            }
+        }
+    }
+
 }

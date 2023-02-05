@@ -35,6 +35,8 @@ public class RoomManager : Navigation2D
 
     //导航区域数据
     private List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
+
+    private AutoTileConfig _autoTileConfig;
     
     public TileMap FloorTileMap { get; private set; }
     public TileMap MiddleTileMap { get; private set; }
@@ -79,8 +81,10 @@ public class RoomManager : Navigation2D
         //生成地牢房间
         _generateDungeon = new GenerateDungeon();
         _generateDungeon.Generate();
+        
         //填充地牢
-        DungeonTileManager.AutoFillRoomTile(FloorTileMap, MiddleTileMap, TopTileMap, _generateDungeon.StartRoom);
+        _autoTileConfig = new AutoTileConfig();
+        DungeonTileManager.AutoFillRoomTile(FloorTileMap, MiddleTileMap, TopTileMap, _autoTileConfig, _generateDungeon.StartRoom);
         FloorTileMap.UpdateDirtyQuadrants();
         MiddleTileMap.UpdateDirtyQuadrants();
         TopTileMap.UpdateDirtyQuadrants();
@@ -89,7 +93,7 @@ public class RoomManager : Navigation2D
         
         var nowTicks = DateTime.Now.Ticks;
         //生成寻路网格
-        GenerateNavigationPolygon();
+        //GenerateNavigationPolygon();
         GD.Print("计算NavigationPolygon用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
         
         var polygon = new NavigationPolygon();
