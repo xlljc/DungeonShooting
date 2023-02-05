@@ -72,4 +72,3 @@ tile_set = SubResource( 2 )
 cell_size = Vector2( 16, 16 )
 bake_navigation = true
 format = 1
-tile_data = PoolIntArray( -131072, 0, 524288, -131071, 0, 524288, -65536, 0, 524288, -65535, 0, 524288 )

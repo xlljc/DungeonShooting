@@ -216,10 +216,28 @@ public class MoveController : Component
     public override void DebugDraw()
     {
         var globalRotation = GlobalRotation;
-        ActivityObject.DrawLine(Vector2.Zero, BasisVelocity.Rotated(-globalRotation), Colors.Yellow);
+        var flag = ActivityObject.Scale.y < 0;
+        if (flag)
+        {
+            ActivityObject.DrawLine(Vector2.Zero, (BasisVelocity * new Vector2(1, -1)).Rotated(-globalRotation),
+                Colors.Yellow);
+        }
+        else
+        {
+            ActivityObject.DrawLine(Vector2.Zero, BasisVelocity.Rotated(-globalRotation), Colors.Yellow);
+        }
+
         foreach (var force in _forceList)
         {
-            ActivityObject.DrawLine(Vector2.Zero, force.Velocity.Rotated(-globalRotation), Colors.YellowGreen);
+            if (flag)
+            {
+                ActivityObject.DrawLine(Vector2.Zero, (force.Velocity * new Vector2(1, -1)).Rotated(globalRotation),
+                    Colors.YellowGreen);
+            }
+            else
+            {
+                ActivityObject.DrawLine(Vector2.Zero, force.Velocity.Rotated(-globalRotation), Colors.YellowGreen);
+            }
         }
     }
 }
