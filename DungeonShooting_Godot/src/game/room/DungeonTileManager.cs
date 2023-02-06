@@ -12,18 +12,18 @@ public static class DungeonTileManager
         }
 
         //铺房间
-        FillRect(floor, config.In, roomInfo.Position + Vector2.One, roomInfo.Size - new Vector2(2, 2));
+        FillRect(floor, config.Ground, roomInfo.Position + Vector2.One, roomInfo.Size - new Vector2(2, 2));
 
-         FillRect(top, config.LT, roomInfo.Position, Vector2.One);
+         FillRect(top, config.IN_LT, roomInfo.Position, Vector2.One);
          FillRect(top, config.L, roomInfo.Position + new Vector2(0, 1), new Vector2(1, roomInfo.Size.y - 2));
-         FillRect(top, config.LB, roomInfo.Position + new Vector2(0, roomInfo.Size.y - 1), new Vector2(1, 1));
+         FillRect(top, config.IN_LB, roomInfo.Position + new Vector2(0, roomInfo.Size.y - 1), new Vector2(1, 1));
          FillRect(top, config.B, roomInfo.Position + new Vector2(1, roomInfo.Size.y - 1),
              new Vector2(roomInfo.Size.x - 2, 1));
-         FillRect(top, config.RB, roomInfo.Position + new Vector2(roomInfo.Size.x - 1, roomInfo.Size.y - 1),
+         FillRect(top, config.IN_RB, roomInfo.Position + new Vector2(roomInfo.Size.x - 1, roomInfo.Size.y - 1),
              Vector2.One);
          FillRect(top, config.R, roomInfo.Position + new Vector2(roomInfo.Size.x - 1, 1),
              new Vector2(1, roomInfo.Size.y - 2));
-         FillRect(top, config.RT, roomInfo.Position + new Vector2(roomInfo.Size.x - 1, 0), Vector2.One);
+         FillRect(top, config.IN_RT, roomInfo.Position + new Vector2(roomInfo.Size.x - 1, 0), Vector2.One);
          FillRect(middle, config.T, roomInfo.Position + Vector2.Right, new Vector2(roomInfo.Size.x - 2, 1));
 
         //铺过道
@@ -32,6 +32,8 @@ public static class DungeonTileManager
             if (doorInfo.ConnectRoom.Id > roomInfo.Id)
             {
                 //普通的直线连接
+                var doorDir1 = doorInfo.Direction;
+                var doorDir2 = doorInfo.ConnectDoor.Direction;
                 if (!doorInfo.HasCross)
                 {
                     //方向, 0横向, 1纵向
@@ -42,7 +44,7 @@ public static class DungeonTileManager
                         doorInfo.ConnectDoor.OriginPosition.x,
                         doorInfo.ConnectDoor.OriginPosition.y
                     );
-                    if (doorInfo.Direction == DoorDirection.N || doorInfo.Direction == DoorDirection.S)
+                    if (doorDir1 == DoorDirection.N || doorDir1 == DoorDirection.S)
                     {
                         rect.Size = new Vector2(GenerateDungeon.CorridorWidth, rect.Size.y);
                         dir = 1;
@@ -71,7 +73,7 @@ public static class DungeonTileManager
                     Rect2 rect2;
 
                     //计算范围
-                    switch (doorInfo.Direction)
+                    switch (doorDir1)
                     {
                         case DoorDirection.E: //→
                             rect = new Rect2(
@@ -111,7 +113,8 @@ public static class DungeonTileManager
                             rect = new Rect2();
                             break;
                     }
-                    switch (doorInfo.ConnectDoor.Direction)
+                    
+                    switch (doorDir2)
                     {
                         case DoorDirection.E: //→
                             rect2 = new Rect2(
@@ -152,10 +155,10 @@ public static class DungeonTileManager
                             break;
                     }
 
-                    FillRect(floor, config.In, rect.Position, rect.Size);
-                    FillRect(floor, config.In, rect2.Position, rect2.Size);
-                    FillRect(floor, config.In, doorInfo.Cross, new Vector2(GenerateDungeon.CorridorWidth, GenerateDungeon.CorridorWidth));
+                    FillRect(floor, config.Ground, doorInfo.Cross + Vector2.One, 
+                        new Vector2(GenerateDungeon.CorridorWidth - 2, GenerateDungeon.CorridorWidth - 2));
 
+                    //墙壁
                     if (dir1 == 0)
                     {
                         FullHorizontalGalleryWall(floor, middle, top, config, rect);
@@ -172,44 +175,90 @@ public static class DungeonTileManager
                     {
                         FullVerticalGalleryWall(floor, middle, top, config, rect2);
                     }
+
+                    if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
+                        (doorDir2 == DoorDirection.N && doorDir1 == DoorDirection.E))
+                    {
+                        FillRect(top, config.OUT_RT, 
+                            doorInfo.Cross + new Vector2(0, GenerateDungeon.CorridorWidth - 1),
+                            Vector2.One);
+                        FillRect(top, config.IN_RT, doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1, 0), Vector2.One);
+                        FillRect(middle, config.T, doorInfo.Cross, new Vector2(GenerateDungeon.CorridorWidth - 1, 1));
+                        FillRect(top, config.R, doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1, 1),
+                            new Vector2(1, GenerateDungeon.CorridorWidth - 1));
+                    }
+                    else if ((doorDir1 == DoorDirection.E && doorDir2 == DoorDirection.S) || //→↓
+                             (doorDir2 == DoorDirection.E && doorDir1 == DoorDirection.S))
+                    {
+                        FillRect(middle, config.OUT_RB, doorInfo.Cross, Vector2.One);
+                        FillRect(top, config.IN_RB, doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1, GenerateDungeon.CorridorWidth - 1),
+                            Vector2.One);
+                        FillRect(top, config.R, doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1, 0),
+                            new Vector2(1, GenerateDungeon.CorridorWidth - 1));
+                        FillRect(top, config.B, doorInfo.Cross + new Vector2(0, GenerateDungeon.CorridorWidth - 1),
+                            new Vector2(GenerateDungeon.CorridorWidth - 1, 1));
+                    }
+                    else if ((doorDir1 == DoorDirection.S && doorDir2 == DoorDirection.W) || //↓←
+                             (doorDir2 == DoorDirection.S && doorDir1 == DoorDirection.W))
+                    {
+                        FillRect(middle, config.OUT_LB,
+                            doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1, 0), Vector2.One);
+                        FillRect(top, config.IN_LB, doorInfo.Cross + new Vector2(0, GenerateDungeon.CorridorWidth - 1),
+                            Vector2.One);
+                        FillRect(top, config.L, doorInfo.Cross, new Vector2(1, GenerateDungeon.CorridorWidth - 1));
+                        FillRect(top, config.B, doorInfo.Cross + new Vector2(1, GenerateDungeon.CorridorWidth - 1),
+                            new Vector2(GenerateDungeon.CorridorWidth - 1, 1));
+                    }
+                    else if ((doorDir1 == DoorDirection.W && doorDir2 == DoorDirection.N) || //←↑
+                             (doorDir2 == DoorDirection.W && doorDir1 == DoorDirection.N))
+                    {
+                        FillRect(top, config.OUT_LT, 
+                            doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1, GenerateDungeon.CorridorWidth - 1),
+                            Vector2.One);
+                        FillRect(top, config.IN_LT, doorInfo.Cross, Vector2.One);
+                        FillRect(middle, config.T, doorInfo.Cross + new Vector2(1, 0),
+                            new Vector2(GenerateDungeon.CorridorWidth - 1, 1));
+                        FillRect(top, config.L, doorInfo.Cross + new Vector2(0, 1),
+                            new Vector2(1, GenerateDungeon.CorridorWidth - 1));
+                    }
                     
                     //在房间墙上开洞
-                    switch (doorInfo.Direction)
+                    switch (doorDir1)
                     {
                         case DoorDirection.E: //→
                             ClearRect(top, doorInfo.OriginPosition + new Vector2(-1, 1), new Vector2(1, rect.Size.y - 2));
-                            FillRect(floor, config.In, doorInfo.OriginPosition + new Vector2(-1, 1), new Vector2(1, rect.Size.y - 2));
+                            FillRect(floor, config.Ground, doorInfo.OriginPosition + new Vector2(-1, 1), new Vector2(1, rect.Size.y - 2));
                             break;
                         case DoorDirection.W: //←
                             ClearRect(top, doorInfo.OriginPosition + new Vector2(0, 1), new Vector2(1, rect.Size.y - 2));
-                            FillRect(floor, config.In, doorInfo.OriginPosition + new Vector2(0, 1), new Vector2(1, rect.Size.y - 2));
+                            FillRect(floor, config.Ground, doorInfo.OriginPosition + new Vector2(0, 1), new Vector2(1, rect.Size.y - 2));
                             break;
                         case DoorDirection.S: //↓
                             ClearRect(top, doorInfo.OriginPosition + new Vector2(1, -1), new Vector2(rect.Size.x - 2, 1));
-                            FillRect(floor, config.In, doorInfo.OriginPosition + new Vector2(1, -1), new Vector2(rect.Size.x - 2, 1));
+                            FillRect(floor, config.Ground, doorInfo.OriginPosition + new Vector2(1, -1), new Vector2(rect.Size.x - 2, 1));
                             break;
                         case DoorDirection.N: //↑
                             ClearRect(middle, doorInfo.OriginPosition + new Vector2(1, 2), new Vector2(rect.Size.x - 2, 1));
-                            FillRect(floor, config.In, doorInfo.OriginPosition + new Vector2(1, 0), new Vector2(rect.Size.x - 2, 1));
+                            FillRect(floor, config.Ground, doorInfo.OriginPosition + new Vector2(1, 0), new Vector2(rect.Size.x - 2, 1));
                             break;
                     }
-                    switch (doorInfo.ConnectDoor.Direction)
+                    switch (doorDir2)
                     {
                         case DoorDirection.E: //→
                             ClearRect(top, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1), new Vector2(1, rect2.Size.y - 2));
-                            FillRect(floor, config.In, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1), new Vector2(1, rect2.Size.y - 2));
+                            FillRect(floor, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1), new Vector2(1, rect2.Size.y - 2));
                             break;
                         case DoorDirection.W: //←
                             ClearRect(top, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1), new Vector2(1, rect2.Size.y - 2));
-                            FillRect(floor, config.In, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1), new Vector2(1, rect2.Size.y - 2));
+                            FillRect(floor, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1), new Vector2(1, rect2.Size.y - 2));
                             break;
                         case DoorDirection.S: //↓
                             ClearRect(top, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1), new Vector2(rect2.Size.x - 2, 1));
-                            FillRect(floor, config.In, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1), new Vector2(rect2.Size.x - 2, 1));
+                            FillRect(floor, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1), new Vector2(rect2.Size.x - 2, 1));
                             break;
                         case DoorDirection.N: //↑
                             ClearRect(middle, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0), new Vector2(rect2.Size.x - 2, 1));
-                            FillRect(floor, config.In, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0), new Vector2(rect2.Size.x - 2, 1));
+                            FillRect(floor, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0), new Vector2(rect2.Size.x - 2, 1));
                             break;
                     }
                 }
@@ -241,28 +290,28 @@ public static class DungeonTileManager
 
     private static void FullHorizontalGalleryWall(TileMap floor, TileMap middle, TileMap top, AutoTileConfig config, Rect2 rect)
     {
-        FillRect(floor, config.In, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
+        FillRect(floor, config.Ground, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
         FillRect(middle, config.T, rect.Position, new Vector2(rect.Size.x, 1));
         FillRect(top, config.B, rect.Position + new Vector2(0, rect.Size.y - 1), new Vector2(rect.Size.x, 1));
         //左
         ClearRect(top, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.y - 2));
-        FillRect(floor, config.In, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.y - 2));
+        FillRect(floor, config.Ground, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.y - 2));
         //右
         ClearRect(top, rect.Position + new Vector2(rect.Size.x, 1), new Vector2(1, rect.Size.y - 2));
-        FillRect(floor, config.In, rect.Position + new Vector2(rect.Size.x, 1), new Vector2(1, rect.Size.y - 2));
+        FillRect(floor, config.Ground, rect.Position + new Vector2(rect.Size.x, 1), new Vector2(1, rect.Size.y - 2));
     }
 
     private static void FullVerticalGalleryWall(TileMap floor, TileMap middle, TileMap top, AutoTileConfig config, Rect2 rect)
     {
-        FillRect(floor, config.In, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
+        FillRect(floor, config.Ground, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
         FillRect(top, config.L, rect.Position, new Vector2(1, rect.Size.y));
         FillRect(top, config.R, rect.Position + new Vector2(rect.Size.x - 1, 0), new Vector2(1, rect.Size.y));
         //上
         ClearRect(top, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.x - 2, 1));
-        FillRect(floor, config.In, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.x - 2, 1));
+        FillRect(floor, config.Ground, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.x - 2, 1));
         //下
         ClearRect(middle, rect.Position + new Vector2(1, rect.Size.y), new Vector2(rect.Size.x - 2, 1));
-        FillRect(floor, config.In, rect.Position + new Vector2(1, rect.Size.y), new Vector2(rect.Size.x - 2, 1));
+        FillRect(floor, config.Ground, rect.Position + new Vector2(1, rect.Size.y), new Vector2(rect.Size.x - 2, 1));
     }
 
 }
