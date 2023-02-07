@@ -1,4 +1,4 @@
-﻿
+
 using Godot;
 
 /// <summary>
@@ -18,7 +18,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
     {
         if (Enemy.IsFindTarget)
         {
-            Master.NavigationAgent2D.SetTargetLocation(Enemy.FindTargetPosition);
+            Master.NavigationAgent2D.TargetPosition = Enemy.FindTargetPosition;
         }
         else
         {
@@ -47,10 +47,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            if (Master.NavigationAgent2D.GetTargetLocation() != Enemy.FindTargetPosition)
-            {
-                Master.NavigationAgent2D.SetTargetLocation(Enemy.FindTargetPosition);
-            }
+            Master.NavigationAgent2D.TargetPosition = Enemy.FindTargetPosition;
         }
         else
         {
@@ -60,9 +57,9 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
             //计算移动
-            var nextPos = Master.NavigationAgent2D.GetNextLocation();
+            var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
             Master.LookTargetPosition(Enemy.FindTargetPosition);
-            Master.AnimatedSprite.Animation = AnimatorNames.Run;
+            Master.AnimatedSprite2D.Animation = AnimatorNames.Run;
             Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
         }
@@ -71,7 +68,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
             Master.BasisVelocity = Vector2.Zero;
         }
 
-        var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
+        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
         //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
         if (Master.IsInTailAfterViewRange(playerPos))
         {
@@ -99,6 +96,6 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
 
     public override void DebugDraw()
     {
-        Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.NavigationAgent2D.GetTargetLocation()), Colors.Yellow);
+        Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.NavigationAgent2D.TargetPosition), Colors.Yellow);
     }
 }

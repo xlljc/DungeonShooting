@@ -1,4 +1,4 @@
-﻿#region 基础敌人设计思路
+#region 基础敌人设计思路
 /*
 敌人有三种状态: 
 状态1: 未发现玩家, 视野不可穿墙, 该状态下敌人移动比较规律, 移动速度较慢, 一旦玩家进入视野或者听到玩家枪声, 立刻切换至状态3, 该房间的敌人不能再回到状态1
@@ -17,7 +17,7 @@ using Godot;
 /// <summary>
 /// 基础敌人
 /// </summary>
-public class Enemy : Role
+public partial class Enemy : Role
 {
 
     /// <summary>
@@ -65,7 +65,7 @@ public class Enemy : Role
     /// <summary>
     /// 导航代理中点
     /// </summary>
-    public Position2D NavigationPoint { get; }
+    public Marker2D NavigationPoint { get; }
 
     private float _enemyAttackTimer = 0;
 
@@ -87,10 +87,10 @@ public class Enemy : Role
 
         //视野射线
         ViewRay = GetNode<RayCast2D>("ViewRay");
-        NavigationPoint = GetNode<Position2D>("NavigationPoint");
+        NavigationPoint = GetNode<Marker2D>("NavigationPoint");
         NavigationAgent2D = NavigationPoint.GetNode<NavigationAgent2D>("NavigationAgent2D");
 
-        //PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
+        //PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Node3D.Player);
 
         //注册Ai状态机
         StateController.Register(new AiNormalState());
@@ -108,7 +108,7 @@ public class Enemy : Role
         //默认状态
         StateController.ChangeState(AiStateEnum.AiNormal);
 
-        NavigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
+        NavigationAgent2D.TargetPosition = GameApplication.Instance.RoomManager.Player.GlobalPosition;
     }
 
     public override void _EnterTree()
@@ -228,7 +228,7 @@ public class Enemy : Role
                 {
                     if (_enemyAttackTimer <= 0)
                     {
-                        _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed + Utils.RandRange(0, 0.06f);
+                        _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed + Utils.RandfRange(0, 0.06f);
                         Attack();
                     }
                 }
@@ -291,7 +291,7 @@ public class Enemy : Role
     public bool TestViewRayCast(Vector2 target)
     {
         ViewRay.Enabled = true;
-        ViewRay.CastTo = ViewRay.ToLocal(target);
+        ViewRay.TargetPosition = ViewRay.ToLocal(target);
         ViewRay.ForceRaycastUpdate();
         return ViewRay.IsColliding();
     }

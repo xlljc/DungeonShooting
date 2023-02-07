@@ -1,10 +1,10 @@
-﻿
+
 using Godot;
 
 /// <summary>
-/// 用于限定 Position2D 节点的旋转角度
+/// 用于限定 Marker2D 节点的旋转角度
 /// </summary>
-public class MountRotation : Position2D
+public partial class MountRotation : Marker2D
 {
     /// <summary>
     /// 吸附角度
@@ -27,7 +27,7 @@ public class MountRotation : Position2D
     public void SetLookAt(Vector2 target)
     {
         var myPos = GlobalPosition;
-        var angle = Mathf.Rad2Deg((target - myPos).Angle());
+        var angle = Mathf.RadToDeg((target - myPos).Angle());
 
         if (Master.Face == FaceDirection.Left)
         {
@@ -47,7 +47,7 @@ public class MountRotation : Position2D
 
         RealAngle = angle;
 
-        if (Master.GlobalPosition.x >= target.x)
+        if (Master.GlobalPosition.X >= target.X)
         {
             angle = -angle;
         }

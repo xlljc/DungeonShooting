@@ -20,7 +20,7 @@ public class WeaponAttribute
     /// <summary>
     /// 武器的图片
     /// </summary>
-    public string Sprite = ResourcePath.resource_sprite_gun_gun1_png;
+    public string Sprite2D = ResourcePath.resource_sprite_gun_gun1_png;
     /// <summary>
     /// 是否连续发射, 如果为false, 则每次发射都需要扣动扳机
     /// </summary>

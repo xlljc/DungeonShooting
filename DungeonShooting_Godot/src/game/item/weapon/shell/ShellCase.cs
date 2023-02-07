@@ -1,10 +1,10 @@
-﻿
+
 using Godot;
 
 /// <summary>
 /// 弹壳类
 /// </summary>
-public class ShellCase : ActivityObject
+public partial class ShellCase : ActivityObject
 {
     public ShellCase() : base(ResourcePath.prefab_weapon_shell_ShellCase_tscn)
     {

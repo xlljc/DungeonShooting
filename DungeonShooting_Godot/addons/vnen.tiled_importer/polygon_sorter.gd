@@ -21,13 +21,13 @@
 # SOFTWARE.
 
 # Sorter for polygon vertices
-tool
-extends Reference
+@tool
+extends RefCounted
 
 var center
 
 # Sort the vertices of a convex polygon to clockwise order
-# Receives a PoolVector2Array and returns a new one
+# Receives a PackedVector2Array and returns a new one
 func sort_polygon(vertices):
 	vertices = Array(vertices)
 
@@ -40,9 +40,9 @@ func sort_polygon(vertices):
 	centroid /= size
 
 	center = centroid
-	vertices.sort_custom(self, "is_less")
+	vertices.sort_custom(Callable(self,"is_less"))
 
-	return PoolVector2Array(vertices)
+	return PackedVector2Array(vertices)
 
 # Sorter function, determines which of the poins should come first
 func is_less(a, b):

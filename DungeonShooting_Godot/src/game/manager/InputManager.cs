@@ -1,4 +1,4 @@
-﻿
+
 using Godot;
 
 /// <summary>
@@ -7,7 +7,7 @@ using Godot;
 public static class InputManager
 {
     /// <summary>
-    /// 获取鼠标在Viewport节点下的坐标
+    /// 获取鼠标在SubViewport节点下的坐标
     /// </summary>
     public static Vector2 GetViewportMousePosition()
     {

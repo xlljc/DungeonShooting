@@ -3,7 +3,7 @@ using Godot;
 /// <summary>
 /// 子弹类
 /// </summary>
-public class Bullet : ActivityObject
+public partial class Bullet : ActivityObject
 {
     /// <summary>
     /// 碰撞区域
@@ -24,7 +24,7 @@ public class Bullet : ActivityObject
     {
         CollisionArea = GetNode<Area2D>("CollisionArea");
         CollisionArea.CollisionMask = targetLayer;
-        CollisionArea.Connect("area_entered", this, nameof(OnArea2dEntered));
+        CollisionArea.Connect("area_entered",new Callable(this,nameof(OnArea2dEntered)));
 
         FlySpeed = speed;
         MaxDistance = maxDistance;
@@ -48,10 +48,10 @@ public class Bullet : ActivityObject
         {
             //创建粒子特效
             var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletSmoke_tscn);
-            var smoke = packedScene.Instance<Particles2D>();
-            smoke.GlobalPosition = kinematicCollision.Position;
-            smoke.GlobalRotation = kinematicCollision.Normal.Angle();
-            GameApplication.Instance.Room.GetRoot(true).AddChild(smoke);
+            var smoke = packedScene.Instantiate<GpuParticles2D>();
+            smoke.GlobalPosition = kinematicCollision.GetPosition();
+            smoke.GlobalRotation = kinematicCollision.GetNormal().Angle();
+            GameApplication.Instance.RoomManager.GetRoot(true).AddChild(smoke);
 
             Destroy();
             return;

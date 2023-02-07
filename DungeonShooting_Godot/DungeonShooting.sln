@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DungeonShooting", "DungeonShooting.csproj", "{1C7B20F3-5430-47C7-988D-0A360C4E9CDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DungeonShooting", "DungeonShooting.csproj", "{5FEA73C5-32E3-43C4-839F-A1485EAC91BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,11 +9,11 @@ Global
 	ExportRelease|Any CPU = ExportRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1C7B20F3-5430-47C7-988D-0A360C4E9CDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C7B20F3-5430-47C7-988D-0A360C4E9CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C7B20F3-5430-47C7-988D-0A360C4E9CDB}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
-		{1C7B20F3-5430-47C7-988D-0A360C4E9CDB}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
-		{1C7B20F3-5430-47C7-988D-0A360C4E9CDB}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
-		{1C7B20F3-5430-47C7-988D-0A360C4E9CDB}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{5FEA73C5-32E3-43C4-839F-A1485EAC91BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FEA73C5-32E3-43C4-839F-A1485EAC91BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FEA73C5-32E3-43C4-839F-A1485EAC91BC}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{5FEA73C5-32E3-43C4-839F-A1485EAC91BC}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{5FEA73C5-32E3-43C4-839F-A1485EAC91BC}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{5FEA73C5-32E3-43C4-839F-A1485EAC91BC}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
 	EndGlobalSection
 EndGlobal

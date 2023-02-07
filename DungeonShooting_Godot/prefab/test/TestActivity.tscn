@@ -2,7 +2,7 @@
 
 [ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=1]
 [ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://icon.png" type="Texture2D" id=3]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -20,7 +20,7 @@ shader_param/schedule = 0
 
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
-"frames": [ ExtResource( 3 ) ],
+"sprite_frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -29,13 +29,13 @@ animations = [ {
 [node name="TestActivity" type="Node"]
 script = ExtResource( 2 )
 
-[node name="ShadowSprite" type="Sprite" parent="."]
+[node name="ShadowSprite" type="Sprite2D" parent="."]
 material = SubResource( 1 )
 z_index = -5
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource( 2 )
-frames = SubResource( 3 )
+sprite_frames = SubResource( 3 )
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 

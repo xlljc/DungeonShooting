@@ -261,9 +261,11 @@ public class ResourcePath
     public const string scene_Main_tscn = "res://scene/Main.tscn";
     public const string scene_Room_tscn = "res://scene/Room.tscn";
     public const string scene_test_TestCommpont_tscn = "res://scene/test/TestCommpont.tscn";
+    public const string scene_test_TestGenerateDungeon_tscn = "res://scene/test/TestGenerateDungeon.tscn";
     public const string scene_test_TestNavigation_tscn = "res://scene/test/TestNavigation.tscn";
     public const string scene_test_TestNavigation2_tscn = "res://scene/test/TestNavigation2.tscn";
     public const string scene_test_TestNavigationPolygon_tscn = "res://scene/test/TestNavigationPolygon.tscn";
+    public const string scene_test_TestTileLayer_tscn = "res://scene/test/TestTileLayer.tscn";
     public const string default_bus_layout_tres = "res://default_bus_layout.tres";
     public const string default_env_tres = "res://default_env.tres";
     public const string icon_png = "res://icon.png";

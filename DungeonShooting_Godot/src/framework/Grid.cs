@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using Godot;
@@ -66,11 +66,11 @@ public class Grid<T>
     /// <param name="data">数据</param>
     public void AddRect(Vector2 pos, Vector2 size, T data)
     {
-        var x = (int)pos.x;
-        var y = (int)pos.y;
-        for (var i = 0; i < size.x; i++)
+        var x = (int)pos.X;
+        var y = (int)pos.Y;
+        for (var i = 0; i < size.X; i++)
         {
-            for (var j = 0; j < size.y; j++)
+            for (var j = 0; j < size.Y; j++)
             {
                 if (_map.TryGetValue(x + i, out var value))
                 {
@@ -93,11 +93,11 @@ public class Grid<T>
     /// <param name="size">区域大小</param>
     public void RemoveRect(Vector2 pos, Vector2 size)
     {
-        var x = (int)pos.x;
-        var y = (int)pos.y;
-        for (var i = 0; i < size.x; i++)
+        var x = (int)pos.X;
+        var y = (int)pos.Y;
+        for (var i = 0; i < size.X; i++)
         {
-            for (var j = 0; j < size.y; j++)
+            for (var j = 0; j < size.Y; j++)
             {
                 if (_map.TryGetValue(x + i, out var value))
                 {
@@ -126,10 +126,10 @@ public class Grid<T>
     /// <param name="size">区域大小</param>
     public bool RectCollision(Vector2 pos, Vector2 size)
     {
-        var x = (int)pos.x;
-        var y = (int)pos.y;
-        var w = (int)size.x;
-        var h = (int)size.y;
+        var x = (int)pos.X;
+        var y = (int)pos.Y;
+        var w = (int)size.X;
+        var h = (int)size.Y;
         //先判断四个角
         if (Contains(x, y) || Contains(x + w - 1, y) || Contains(x, y + h - 1) || Contains(x + w - 1, y + h - 1))
         {

@@ -4,5 +4,5 @@
 
 [node name="CPlusPlus" instance=ExtResource( 1 )]
 
-[node name="AnimatedSprite" parent="." index="2"]
+[node name="AnimatedSprite2D" parent="." index="2"]
 frame = 3

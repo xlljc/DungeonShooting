@@ -1,4 +1,4 @@
-﻿/// <summary>
+/// <summary>
 /// 物理碰撞层
 /// </summary>
 public class PhysicsLayer

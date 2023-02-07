@@ -25,13 +25,13 @@ script = ExtResource( 2 )
 UseYSort = true
 CollisionMask = 1
 
-[node name="ShadowSprite" type="Sprite" parent="."]
+[node name="ShadowSprite" type="Sprite2D" parent="."]
 material = ExtResource( 1 )
 
-[node name="BackMountPoint" type="Position2D" parent="."]
+[node name="BackMountPoint" type="Marker2D" parent="."]
 position = Vector2( 0, -10 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource( 33 )
 position = Vector2( 0, -12 )
 
@@ -58,7 +58,7 @@ monitorable = false
 position = Vector2( 0, -5 )
 shape = SubResource( 16 )
 
-[node name="MountPoint" type="Position2D" parent="."]
+[node name="MountPoint" type="Marker2D" parent="."]
 position = Vector2( 2, -4 )
 script = ExtResource( 4 )
 

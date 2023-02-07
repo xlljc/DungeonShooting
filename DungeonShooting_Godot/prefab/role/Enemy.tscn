@@ -2,7 +2,7 @@
 
 [ext_resource path="res://prefab/role/Role.tscn" type="PackedScene" id=1]
 [ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=2]
-[ext_resource path="res://resource/sprite/role/role8.png" type="Texture" id=3]
+[ext_resource path="res://resource/sprite/role/role8.png" type="Texture2D" id=3]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -66,17 +66,17 @@ region = Rect2( 48, 48, 16, 24 )
 
 [sub_resource type="SpriteFrames" id=19]
 animations = [ {
-"frames": [ SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
+"sprite_frames": [ SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
 "loop": true,
 "name": "idle",
 "speed": 7.0
 }, {
-"frames": [ SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
+"sprite_frames": [ SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
 "loop": true,
 "name": "reverseRun",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
+"sprite_frames": [ SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
 "loop": true,
 "name": "run",
 "speed": 10.0
@@ -92,9 +92,9 @@ collision_mask = 1
 [node name="ShadowSprite" parent="." index="0"]
 material = SubResource( 1 )
 
-[node name="AnimatedSprite" parent="." index="2"]
+[node name="AnimatedSprite2D" parent="." index="2"]
 material = SubResource( 2 )
-frames = SubResource( 19 )
+sprite_frames = SubResource( 19 )
 playing = true
 
 [node name="Collision" parent="." index="3"]
@@ -103,7 +103,7 @@ shape = SubResource( 20 )
 [node name="ViewRay" type="RayCast2D" parent="." index="6"]
 position = Vector2( 0, -8 )
 
-[node name="NavigationPoint" type="Position2D" parent="." index="8"]
+[node name="NavigationPoint" type="Marker2D" parent="." index="8"]
 position = Vector2( 0, -5 )
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="NavigationPoint" index="0"]

@@ -1,7 +1,7 @@
-﻿
+
 using Godot;
 
-public class GameApplication : Node2D
+public partial class GameApplication : Node2D
 {
     public static GameApplication Instance { get; private set; }
 
@@ -32,17 +32,17 @@ public class GameApplication : Node2D
     /// <summary>
     /// 游戏房间
     /// </summary>
-    public RoomManager Room { get; private set; }
+    public RoomManager RoomManager { get; private set; }
 
     /// <summary>
     /// 游戏渲染视口
     /// </summary>
-    public Viewport Viewport { get; private set; }
+    public SubViewport SubViewport { get; private set; }
 
     /// <summary>
-    /// ViewportContainer 组件
+    /// SubViewportContainer 组件
     /// </summary>
-    public ViewportContainer ViewportContainer { get; private set; }
+    public SubViewportContainer SubViewportContainer { get; private set; }
 
     /// <summary>
     /// 游戏ui对象
@@ -68,11 +68,11 @@ public class GameApplication : Node2D
 
         GlobalNodeRoot = GetNode<Node2D>(GlobalNodeRootPath);
         // 初始化鼠标
-        Cursor = CursorPack.Instance<Cursor>();
+        Cursor = CursorPack.Instantiate<Cursor>();
 
-        Room = GetNode<RoomManager>(RoomPath);
-        Viewport = GetNode<Viewport>(ViewportPath);
-        ViewportContainer = GetNode<ViewportContainer>(ViewportContainerPath);
+        RoomManager = GetNode<RoomManager>(RoomPath);
+        SubViewport = GetNode<SubViewport>(ViewportPath);
+        SubViewportContainer = GetNode<SubViewportContainer>(ViewportContainerPath);
         Ui = GetNode<RoomUI>(UiPath);
 
         Ui.AddChild(Cursor);

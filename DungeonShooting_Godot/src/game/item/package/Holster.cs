@@ -160,7 +160,7 @@ public class Holster
             if (weapon != null)
             {
                 weapon.GetParent().RemoveChild(weapon);
-                weapon.Remove();
+                weapon.RemoveAt();
                 weapons.Add(weapon);
                 slot.Weapon = null;
             }
@@ -246,7 +246,7 @@ public class Holster
                 ActiveWeapon = null;
             }
         }
-        weapon.Remove();
+        weapon.RemoveAt();
         return weapon;
     }
 

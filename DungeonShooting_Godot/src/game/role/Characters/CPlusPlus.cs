@@ -14,7 +14,7 @@
 // 每个角色都应该有对应的被动  属性 专属武器 
 #endregion
 
-public class CPlusPlus : Player
+public partial class CPlusPlus : Player
 {
 
 

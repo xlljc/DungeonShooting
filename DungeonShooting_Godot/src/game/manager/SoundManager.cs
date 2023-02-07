@@ -14,7 +14,7 @@ public enum BUS
 /// <summary>
 /// 声音管理 背景音乐管理 音效
 /// </summary>
-public class SoundManager
+public partial class SoundManager
 {
     private static Stack<AudioPlayer2D> _streamPlayer2DStack = new Stack<AudioPlayer2D>();
     private static Stack<AudioPlayer> _streamPlayerStack = new Stack<AudioPlayer>();
@@ -22,11 +22,11 @@ public class SoundManager
     /// <summary>
     /// 2D音频播放节点
     /// </summary>
-    private class AudioPlayer2D : AudioStreamPlayer2D
+    private partial class AudioPlayer2D : AudioStreamPlayer2D
     {
         public override void _Ready()
         {
-            Connect("finished", this, nameof(OnPlayFinish));
+            Connect("finished",new Callable(this,nameof(OnPlayFinish)));
         }
 
         public void OnPlayFinish()
@@ -38,11 +38,11 @@ public class SoundManager
     /// <summary>
     /// 音频播放节点
     /// </summary>
-    private class AudioPlayer : AudioStreamPlayer
+    private partial class AudioPlayer : AudioStreamPlayer
     {
         public override void _Ready()
         {
-            Connect("finished", this, nameof(OnPlayFinish));
+            Connect("finished",new Callable(this,nameof(OnPlayFinish)));
         }
 
         public void OnPlayFinish()

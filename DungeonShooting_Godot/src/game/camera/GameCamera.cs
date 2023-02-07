@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
 /// 游戏相机
 /// </summary>
-public class GameCamera : Camera2D
+public partial class GameCamera : Camera2D
 {
     /// <summary>
     /// 当前场景的相机对象
@@ -39,18 +39,19 @@ public class GameCamera : Camera2D
 
     //public override void _PhysicsProcess(float delta);
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
-        _Shake(delta);
+        var newDelta = (float)delta;
+        _Shake(newDelta);
         
-        var player = GameApplication.Instance.Room.Player;
-        var viewportContainer = GameApplication.Instance.ViewportContainer;
+        var player = GameApplication.Instance.RoomManager.Player;
+        var viewportContainer = GameApplication.Instance.SubViewportContainer;
         var camPos = player.GlobalPosition;
-        //var camPos = player.GlobalPosition.LinearInterpolate(mousePos, 0);
+        //var camPos = player.GlobalPosition.Lerp(mousePos, 0);
         //_camPos = camPos + _shakeOffset;
-        _camPos = _camPos.LinearInterpolate(camPos, Mathf.Min(5 * delta, 1)) + _shakeOffset;
+        _camPos = _camPos.Lerp(camPos, Mathf.Min(5 * newDelta, 1)) + _shakeOffset;
         SubPixelPosition = _camPos.Round() - _camPos;
-        (viewportContainer.Material as ShaderMaterial)?.SetShaderParam("offset", SubPixelPosition);
+        (viewportContainer.Material as ShaderMaterial)?.SetShaderParameter("offset", SubPixelPosition);
         GlobalPosition = _camPos.Round();
     }
     
@@ -95,15 +96,15 @@ public class GameCamera : Camera2D
         {
             var distance = _CalculateDistance();
             _shakeOffset += _processDirection + new Vector2(
-                (float)GD.RandRange(-distance.x, distance.x) - _shakeOffset.x,
-                (float)GD.RandRange(-distance.y, distance.y) - _shakeOffset.y
+                Utils.RandfRange(-distance.X, distance.X) - _shakeOffset.X,
+                Utils.RandfRange(-distance.Y, distance.Y) - _shakeOffset.Y
             );
             _processDistance = Vector2.Zero;
             _processDirection = Vector2.Zero;
         }
         else
         {
-            _shakeOffset = _shakeOffset.LinearInterpolate(Vector2.Zero, RecoveryCoefficient * delta);
+            _shakeOffset = _shakeOffset.Lerp(Vector2.Zero, RecoveryCoefficient * delta);
         }
     }
 

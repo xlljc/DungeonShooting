@@ -6,7 +6,7 @@ using Godot;
 /// <summary>
 /// 房间管理器
 /// </summary>
-public class RoomManager : Navigation2D
+public partial class RoomManager : Node2D
 {
     [Export] public NodePath ObjectRootPath;
     [Export] public NodePath YSortRootPath;
@@ -22,13 +22,13 @@ public class RoomManager : Navigation2D
     /// <summary>
     /// 导航区域形状
     /// </summary>
-    public NavigationPolygonInstance NavigationPolygon { get; private set; }
+    public NavigationRegion2D NavigationPolygon { get; private set; }
     
     //对象根节点
     private Node2D _objectRoot;
 
     //对象根节点, 带y轴排序功能
-    private YSort _sortRoot;
+    private Node2D _sortRoot;
 
     //已经标记过的点
     private HashSet<Vector2> _usePoints = new HashSet<Vector2>();
@@ -50,10 +50,10 @@ public class RoomManager : Navigation2D
         //Engine.TimeScale = 0.2f;
         Input.MouseMode = Input.MouseModeEnum.Hidden;
 
-        _sortRoot = GetNode<YSort>(YSortRootPath);
+        _sortRoot = GetNode<Node2D>(YSortRootPath);
         _objectRoot = GetNode<Node2D>(ObjectRootPath);
         
-        NavigationPolygon = new NavigationPolygonInstance();
+        NavigationPolygon = new NavigationRegion2D();
         AddChild(NavigationPolygon);
         
         FloorTileMap = GetNode<TileMap>(FloorTilePath);
@@ -62,7 +62,7 @@ public class RoomManager : Navigation2D
         
         // var node = child.GetNode("Config");
         // Color color = (Color)node.GetMeta("ClearColor");
-        // VisualServer.SetDefaultClearColor(color);
+        // GetTabAlignment.SetDefaultClearColor(color);
 
         //创建玩家
         Player = new Player();
@@ -73,8 +73,8 @@ public class RoomManager : Navigation2D
 
     public override void _Ready()
     {
-        FloorTileMap.CellYSort = false;
-        FloorTileMap.BakeNavigation = false;
+        FloorTileMap.YSortEnabled = false;
+        //FloorTileMap.NavigationVisibilityMode = TileMap.VisibilityMode.ForceShow;
         
         _font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
 
@@ -84,11 +84,11 @@ public class RoomManager : Navigation2D
         
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
-        DungeonTileManager.AutoFillRoomTile(FloorTileMap, MiddleTileMap, TopTileMap, _autoTileConfig, _generateDungeon.StartRoom);
-        FloorTileMap.UpdateDirtyQuadrants();
-        MiddleTileMap.UpdateDirtyQuadrants();
-        TopTileMap.UpdateDirtyQuadrants();
-        
+        //DungeonTileManager.AutoFillRoomTile(FloorTileMap, MiddleTileMap, TopTileMap, _autoTileConfig, _generateDungeon.StartRoom);
+        // FloorTileMap.UpdateDirtyQuadrants();
+        // MiddleTileMap.UpdateDirtyQuadrants();
+        // TopTileMap.UpdateDirtyQuadrants();
+
         //根据房间数据创建填充 tiled
         
         var nowTicks = DateTime.Now.Ticks;
@@ -102,10 +102,10 @@ public class RoomManager : Navigation2D
             polygon.AddOutline(polygonData.Points.ToArray());
         }
         polygon.MakePolygonsFromOutlines();
-        NavigationPolygon.Navpoly = polygon;
+        NavigationPolygon.NavigationPolygon = polygon;
 
         //播放bgm
-        SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
+        //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
         
         // var enemy1 = new Enemy();
         // enemy1.Name = "Enemy";
@@ -135,24 +135,24 @@ public class RoomManager : Navigation2D
         // enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
         // enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
 
-        WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100));
-        WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120));
-        WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
-        WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120));
-        WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80));
-
-        WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80));
-        WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));
-        WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120));
+        // WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100));
+        // WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120));
+        // WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
+        // WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120));
+        // WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80));
+        //
+        // WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80));
+        // WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));
+        // WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120));
 
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         Enemy.UpdateEnemiesView();
         if (GameApplication.Instance.Debug)
         {
-            Update();
+            QueueRedraw();
         }
     }
 
@@ -177,7 +177,7 @@ public class RoomManager : Navigation2D
     /// <summary>
     /// 获取房间根节点
     /// </summary>
-    /// <param name="useYSort">是否获取 YSort 节点</param>
+    /// <param name="useYSort">是否获取 Node2D 节点</param>
     /// <returns></returns>
     public Node2D GetRoot(bool useYSort = false)
     {
@@ -189,7 +189,8 @@ public class RoomManager : Navigation2D
     /// </summary>
     public bool IsWayTile(int x, int y)
     {
-        return FloorTileMap.GetCell(x, y) != TileMap.InvalidCell;
+        return false;
+        //return FloorTileMap.GetCell(x, y) != TileMap.InvalidCell;
     }
 
     /// <summary>
@@ -197,8 +198,8 @@ public class RoomManager : Navigation2D
     /// </summary>
     public bool IsWayPosition(float x, float y)
     {
-        var tileMapCellSize = FloorTileMap.CellSize;
-        return IsWayTile((int)(x / tileMapCellSize.x), (int)(y / tileMapCellSize.y));
+        var tileMapCellSize = FloorTileMap.CellQuadrantSize;
+        return IsWayTile((int)(x / tileMapCellSize), (int)(y / tileMapCellSize));
     }
 
     /// <summary>
@@ -206,14 +207,14 @@ public class RoomManager : Navigation2D
     /// </summary>
     private void GenerateNavigationPolygon()
     {
-        var size = FloorTileMap.CellSize;
+        var size = new Vector2(FloorTileMap.CellQuadrantSize, FloorTileMap.CellQuadrantSize);
 
         var rect = FloorTileMap.GetUsedRect();
 
-        var x = (int)rect.Position.x;
-        var y = (int)rect.Position.y;
-        var w = (int)rect.Size.x;
-        var h = (int)rect.Size.y;
+        var x = (int)rect.Position.X;
+        var y = (int)rect.Position.Y;
+        var w = (int)rect.Size.X;
+        var h = (int)rect.Size.Y;
 
         for (int j = y; j < h; j++)
         {
@@ -252,7 +253,7 @@ public class RoomManager : Navigation2D
         var points = polygonData.Points;
         // 0:右, 1:下, 2:左, 3:上
         var dir = 0;
-        var offset = new Vector2(size.x * 0.5f, size.y * 0.5f);
+        var offset = new Vector2(size.X * 0.5f, size.Y * 0.5f);
         //找到路, 向右开始找边界
         var startPos = new Vector2(i, j);
 
@@ -275,7 +276,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -285,7 +286,7 @@ public class RoomManager : Navigation2D
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -308,7 +309,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -329,7 +330,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempI++;
@@ -339,7 +340,7 @@ public class RoomManager : Navigation2D
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -362,7 +363,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempI--;
@@ -383,7 +384,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -393,7 +394,7 @@ public class RoomManager : Navigation2D
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -416,7 +417,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -437,7 +438,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempI--;
@@ -447,7 +448,7 @@ public class RoomManager : Navigation2D
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -470,7 +471,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempI++;
@@ -491,7 +492,7 @@ public class RoomManager : Navigation2D
         var points = polygonData.Points;
         // 0:右, 1:下, 2:左, 3:上
         var dir = 0;
-        var offset = new Vector2(size.x * 0.5f, size.y * 0.5f);
+        var offset = new Vector2(size.X * 0.5f, size.Y * 0.5f);
         //找到路, 向右开始找边界
         var startPos = new Vector2(i - 1, j);
 
@@ -514,7 +515,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -524,7 +525,7 @@ public class RoomManager : Navigation2D
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.x, tempJ * size.y) + offset);
+                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -547,7 +548,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -568,7 +569,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempI--;
@@ -578,7 +579,7 @@ public class RoomManager : Navigation2D
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.x, tempJ * size.y) + offset);
+                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -601,7 +602,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempI++;
@@ -622,7 +623,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -632,7 +633,7 @@ public class RoomManager : Navigation2D
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.x, tempJ * size.y) + offset);
+                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -655,7 +656,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -676,7 +677,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempI++;
@@ -686,7 +687,7 @@ public class RoomManager : Navigation2D
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.x, tempJ * size.y) + offset);
+                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -709,7 +710,7 @@ public class RoomManager : Navigation2D
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.x, tempJ * size.y) + offset);
+                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
                         PutUsePoint(pos);
 
                         tempI--;
@@ -736,7 +737,7 @@ public class RoomManager : Navigation2D
     //绘制房间区域, debug 用
     private void DrawRoomInfo(RoomInfo room)
     {
-        var cellSize = FloorTileMap.CellSize;
+        var cellSize = FloorTileMap.CellQuadrantSize;
         var pos1 = (room.Position + room.Size / 2) * cellSize;
         
         //绘制下一个房间
@@ -747,7 +748,7 @@ public class RoomManager : Navigation2D
             DrawRoomInfo(nextRoom);
         }
 
-        DrawString(_font, pos1, room.Id.ToString(), Colors.Yellow);
+        DrawString(_font, pos1, room.Id.ToString());
 
         //绘制门
         foreach (var roomDoor in room.Doors)
@@ -782,7 +783,7 @@ public class RoomManager : Navigation2D
 
             if (roomDoor.HasCross && roomDoor.RoomInfo.Id < roomDoor.ConnectRoom.Id)
             {
-                DrawRect(new Rect2(roomDoor.Cross * cellSize, cellSize * 4), Colors.Yellow, false);
+                DrawRect(new Rect2(roomDoor.Cross * cellSize, new Vector2(cellSize * 4, cellSize * 4)), Colors.Yellow, false);
             }
         }
     }

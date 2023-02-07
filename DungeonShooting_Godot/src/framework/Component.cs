@@ -1,4 +1,4 @@
-﻿
+
 using Godot;
 
 /// <summary>
@@ -104,11 +104,11 @@ public abstract class Component : IProcess, IDestroy
     /// <summary>
     /// 挂载物体的动画节点
     /// </summary>
-    public AnimatedSprite AnimatedSprite => ActivityObject.AnimatedSprite;
+    public AnimatedSprite2D AnimatedSprite2D => ActivityObject.AnimatedSprite2D;
     /// <summary>
     /// 挂载物体的阴影节点
     /// </summary>
-    public Sprite ShadowSprite => ActivityObject.ShadowSprite;
+    public Sprite2D ShadowSprite => ActivityObject.ShadowSprite;
     /// <summary>
     /// 挂载物体的碰撞器节点
     /// </summary>

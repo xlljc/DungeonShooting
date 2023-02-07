@@ -1,17 +1,17 @@
-﻿
+
 using System.Collections.Generic;
 using Godot;
 
 /// <summary>
 /// 特效管理器
 /// </summary>
-public static class SpecialEffectManager
+public static partial class SpecialEffectManager
 {
 
     /// <summary>
     /// 基础特效播放类, 用于播放序列帧动画特效, 播完就回收
     /// </summary>
-    private class SpecialEffect : AnimatedSprite
+    private partial class SpecialEffect : AnimatedSprite2D
     {
         //记录循环次数
         public int LoopCount;
@@ -19,7 +19,7 @@ public static class SpecialEffectManager
         private int currLoopCount = 0;
         public override void _Ready()
         {
-            Connect("animation_finished", this, nameof(OnAnimationFinished));
+            Connect("animation_finished",new Callable(this,nameof(OnAnimationFinished)));
         }
 
         //动画结束
@@ -62,8 +62,8 @@ public static class SpecialEffectManager
         specialEffect.Offset = offset;
         specialEffect.SpeedScale = speed;
         specialEffect.LoopCount = loopCount;
-        specialEffect.Frames = spriteFrames;
+        specialEffect.SpriteFrames = spriteFrames;
         specialEffect.Play(animName);
-        GameApplication.Instance.Room.GetRoot(true).AddChild(specialEffect);
+        GameApplication.Instance.RoomManager.GetRoot(true).AddChild(specialEffect);
     }
 }

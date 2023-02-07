@@ -3,18 +3,18 @@ using Godot;
 /// <summary>
 /// 换弹进度组件
 /// </summary>
-public class ReloadBar : Node2D
+public partial class ReloadBar : Node2D
 {
-    private Sprite slot;
-    private Sprite block;
+    private Sprite2D slot;
+    private Sprite2D block;
 
     private int width;
     private float startX;
 
     public override void _Ready()
     {
-        slot = GetNode<Sprite>("Slot");
-        block = GetNode<Sprite>("Slot/Block");
+        slot = GetNode<Sprite2D>("Slot");
+        block = GetNode<Sprite2D>("Slot/Block");
         width = slot.Texture.GetWidth();
         startX = -(width - 3) / 2f;
     }

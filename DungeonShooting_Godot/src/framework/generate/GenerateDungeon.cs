@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 using Godot;
 
@@ -135,41 +135,41 @@ public class GenerateDungeon
             int offset;
             if (direction == 0 || direction == 2)
             {
-                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.x * _roomVerticalMinDispersion),
-                    (int)(prevRoomInfo.Size.x * _roomVerticalMaxDispersion));
+                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
+                    (int)(prevRoomInfo.Size.X * _roomVerticalMaxDispersion));
             }
             else
             {
-                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.y * _roomHorizontalMinDispersion),
-                    (int)(prevRoomInfo.Size.y * _roomHorizontalMaxDispersion));
+                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
+                    (int)(prevRoomInfo.Size.Y * _roomHorizontalMaxDispersion));
             }
 
             //计算房间位置
             if (direction == 0) //上
             {
-                room.Position = new Vector2(prevRoomInfo.Position.x + offset,
-                    prevRoomInfo.Position.y - room.Size.y - space);
+                room.Position = new Vector2(prevRoomInfo.Position.X + offset,
+                    prevRoomInfo.Position.Y - room.Size.Y - space);
             }
             else if (direction == 1) //右
             {
-                room.Position = new Vector2(prevRoomInfo.Position.x + prevRoomInfo.Size.y + space,
-                    prevRoomInfo.Position.y + offset);
+                room.Position = new Vector2(prevRoomInfo.Position.X + prevRoomInfo.Size.Y + space,
+                    prevRoomInfo.Position.Y + offset);
             }
             else if (direction == 2) //下
             {
-                room.Position = new Vector2(prevRoomInfo.Position.x + offset,
-                    prevRoomInfo.Position.y + prevRoomInfo.Size.y + space);
+                room.Position = new Vector2(prevRoomInfo.Position.X + offset,
+                    prevRoomInfo.Position.Y + prevRoomInfo.Size.Y + space);
             }
             else if (direction == 3) //左
             {
-                room.Position = new Vector2(prevRoomInfo.Position.x - room.Size.x - space,
-                    prevRoomInfo.Position.y + offset);
+                room.Position = new Vector2(prevRoomInfo.Position.X - room.Size.X - space,
+                    prevRoomInfo.Position.Y + offset);
             }
             
             //是否在限制区域内
             if (_enableLimitRange)
             {
-                if (room.Position.x < -_rangeX || room.Position.x + room.Size.x > _rangeX || room.Position.y < -_rangeY || room.Position.y + room.Size.y > _rangeY)
+                if (room.Position.X < -_rangeX || room.Position.X + room.Size.X > _rangeX || room.Position.Y < -_rangeY || room.Position.Y + room.Size.Y > _rangeY)
                 {
                     resultRoom = null;
                     return GenerateRoomErrorCode.OutArea;
@@ -247,29 +247,29 @@ public class GenerateDungeon
         nextRoomDoor.ConnectRoom = room;
         nextRoomDoor.ConnectDoor = roomDoor;
 
-        var overlapX = Mathf.Min(room.Position.x + room.Size.x, nextRoom.Position.x + nextRoom.Size.x) -
-                       Mathf.Max(room.Position.x, nextRoom.Position.x);
+        var overlapX = Mathf.Min(room.Position.X + room.Size.X, nextRoom.Position.X + nextRoom.Size.X) -
+                       Mathf.Max(room.Position.X, nextRoom.Position.X);
         //这种情况下x轴有重叠
         if (overlapX >= 6)
         {
             //找到重叠区域
-            var range = CalcOverlapRange(room.Position.x, room.Position.x + room.Size.x,
-                nextRoom.Position.x, nextRoom.Position.x + nextRoom.Size.x);
-            var x = Utils.RandRangeInt((int)range.x + 1, (int)range.y - CorridorWidth - 1);
+            var range = CalcOverlapRange(room.Position.X, room.Position.X + room.Size.X,
+                nextRoom.Position.X, nextRoom.Position.X + nextRoom.Size.X);
+            var x = Utils.RandRangeInt((int)range.X + 1, (int)range.Y - CorridorWidth - 1);
 
-            if (room.Position.y < nextRoom.Position.y) //room在上, nextRoom在下
+            if (room.Position.Y < nextRoom.Position.Y) //room在上, nextRoom在下
             {
                 roomDoor.Direction = DoorDirection.S;
                 nextRoomDoor.Direction = DoorDirection.N;
-                roomDoor.OriginPosition = new Vector2(x, room.Position.y + room.Size.y);
-                nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.y);
+                roomDoor.OriginPosition = new Vector2(x, room.Position.Y + room.Size.Y);
+                nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.Y);
             }
             else //room在下, nextRoom在上
             {
                 roomDoor.Direction = DoorDirection.N;
                 nextRoomDoor.Direction = DoorDirection.S;
-                roomDoor.OriginPosition = new Vector2(x, room.Position.y);
-                nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.y + nextRoom.Size.y);
+                roomDoor.OriginPosition = new Vector2(x, room.Position.Y);
+                nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.Y + nextRoom.Size.Y);
             }
 
             //判断门之间的通道是否有物体碰到
@@ -285,29 +285,29 @@ public class GenerateDungeon
             return true;
         }
 
-        var overlapY = Mathf.Min(room.Position.y + room.Size.y, nextRoom.Position.y + nextRoom.Size.y) -
-                       Mathf.Max(room.Position.y, nextRoom.Position.y);
+        var overlapY = Mathf.Min(room.Position.Y + room.Size.Y, nextRoom.Position.Y + nextRoom.Size.Y) -
+                       Mathf.Max(room.Position.Y, nextRoom.Position.Y);
         //这种情况下y轴有重叠
         if (overlapY >= 6)
         {
             //找到重叠区域
-            var range = CalcOverlapRange(room.Position.y, room.Position.y + room.Size.y,
-                nextRoom.Position.y, nextRoom.Position.y + nextRoom.Size.y);
-            var y = Utils.RandRangeInt((int)range.x + 1, (int)range.y - CorridorWidth - 1);
+            var range = CalcOverlapRange(room.Position.Y, room.Position.Y + room.Size.Y,
+                nextRoom.Position.Y, nextRoom.Position.Y + nextRoom.Size.Y);
+            var y = Utils.RandRangeInt((int)range.X + 1, (int)range.Y - CorridorWidth - 1);
 
-            if (room.Position.x < nextRoom.Position.x) //room在左, nextRoom在右
+            if (room.Position.X < nextRoom.Position.X) //room在左, nextRoom在右
             {
                 roomDoor.Direction = DoorDirection.E;
                 nextRoomDoor.Direction = DoorDirection.W;
-                roomDoor.OriginPosition = new Vector2(room.Position.x + room.Size.x, y);
-                nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x, y);
+                roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X, y);
+                nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X, y);
             }
             else //room在右, nextRoom在左
             {
                 roomDoor.Direction = DoorDirection.W;
                 nextRoomDoor.Direction = DoorDirection.E;
-                roomDoor.OriginPosition = new Vector2(room.Position.x, y);
-                nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x, y);
+                roomDoor.OriginPosition = new Vector2(room.Position.X, y);
+                nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X, y);
             }
 
             //判断门之间的通道是否有物体碰到
@@ -331,29 +331,29 @@ public class GenerateDungeon
         Vector2 cross;
 
         //这种情况下x和y轴都没有重叠, 那么就只能生成拐角通道了
-        if (room.Position.x > nextRoom.Position.x)
+        if (room.Position.X > nextRoom.Position.X)
         {
-            if (room.Position.y > nextRoom.Position.y)
+            if (room.Position.Y > nextRoom.Position.Y)
             {
                 if (Utils.RandBoolean())
                 {
                     roomDoor.Direction = DoorDirection.N; //↑
                     nextRoomDoor.Direction = DoorDirection.E; //→
 
-                    roomDoor.OriginPosition = new Vector2(room.Position.x + offset1, room.Position.y);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x,
-                        nextRoom.Position.y + nextRoom.Size.y - offset2 - 6);
-                    cross = new Vector2(roomDoor.OriginPosition.x, nextRoomDoor.OriginPosition.y);
+                    roomDoor.OriginPosition = new Vector2(room.Position.X + offset1, room.Position.Y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X,
+                        nextRoom.Position.Y + nextRoom.Size.Y - offset2 - 6);
+                    cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
                 }
                 else
                 {
                     roomDoor.Direction = DoorDirection.W; //←
                     nextRoomDoor.Direction = DoorDirection.S; //↓
                 
-                    roomDoor.OriginPosition = new Vector2(room.Position.x, room.Position.y + offset2);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x - offset1 - 6,
-                        nextRoom.Position.y + nextRoom.Size.y);
-                    cross = new Vector2(nextRoomDoor.OriginPosition.x, roomDoor.OriginPosition.y);
+                    roomDoor.OriginPosition = new Vector2(room.Position.X, room.Position.Y + offset2);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X - offset1 - 6,
+                        nextRoom.Position.Y + nextRoom.Size.Y);
+                    cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
             }
             else
@@ -363,10 +363,10 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.S; //↓
                     nextRoomDoor.Direction = DoorDirection.E; //→
 
-                    roomDoor.OriginPosition = new Vector2(room.Position.x + offset1, room.Position.y + room.Size.y);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x,
-                        nextRoom.Position.y + offset2);
-                    cross = new Vector2(roomDoor.OriginPosition.x, nextRoomDoor.OriginPosition.y);
+                    roomDoor.OriginPosition = new Vector2(room.Position.X + offset1, room.Position.Y + room.Size.Y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X,
+                        nextRoom.Position.Y + offset2);
+                    cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
                 }
                 else
                 {
@@ -374,36 +374,36 @@ public class GenerateDungeon
                     nextRoomDoor.Direction = DoorDirection.N; //↑
 
                     roomDoor.OriginPosition =
-                        new Vector2(room.Position.x, room.Position.y + room.Size.y - offset2 - 6); //
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + nextRoom.Size.x - offset2 - 6,
-                        nextRoom.Position.y);
-                    cross = new Vector2(nextRoomDoor.OriginPosition.x, roomDoor.OriginPosition.y);
+                        new Vector2(room.Position.X, room.Position.Y + room.Size.Y - offset2 - 6); //
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X - offset2 - 6,
+                        nextRoom.Position.Y);
+                    cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
             }
         }
         else
         {
-            if (room.Position.y > nextRoom.Position.y)
+            if (room.Position.Y > nextRoom.Position.Y)
             {
                 if (Utils.RandBoolean())
                 {
                     roomDoor.Direction = DoorDirection.E; //→
                     nextRoomDoor.Direction = DoorDirection.S; //↓
 
-                    roomDoor.OriginPosition = new Vector2(room.Position.x + room.Size.x, room.Position.y + offset2);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + offset1,
-                        nextRoom.Position.y + nextRoom.Size.y);
-                    cross = new Vector2(nextRoomDoor.OriginPosition.x, roomDoor.OriginPosition.y);
+                    roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X, room.Position.Y + offset2);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + offset1,
+                        nextRoom.Position.Y + nextRoom.Size.Y);
+                    cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
                 else
                 {
                     roomDoor.Direction = DoorDirection.N; //↑
                     nextRoomDoor.Direction = DoorDirection.W; //←
 
-                    roomDoor.OriginPosition = new Vector2(room.Position.x + room.Size.x - offset1 - 6, room.Position.y);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x,
-                        nextRoom.Position.y + nextRoom.Size.y - offset2 - 6);
-                    cross = new Vector2(roomDoor.OriginPosition.x, nextRoomDoor.OriginPosition.y);
+                    roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X - offset1 - 6, room.Position.Y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X,
+                        nextRoom.Position.Y + nextRoom.Size.Y - offset2 - 6);
+                    cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
                 }
             }
             else
@@ -413,20 +413,20 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.E; //→
                     nextRoomDoor.Direction = DoorDirection.N; //↑
 
-                    roomDoor.OriginPosition = new Vector2(room.Position.x + room.Size.x,
-                        room.Position.y + room.Size.y - offset2 - 6);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x + offset1, nextRoom.Position.y);
-                    cross = new Vector2(nextRoomDoor.OriginPosition.x, roomDoor.OriginPosition.y);
+                    roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X,
+                        room.Position.Y + room.Size.Y - offset2 - 6);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + offset1, nextRoom.Position.Y);
+                    cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
                 else
                 {
                     roomDoor.Direction = DoorDirection.S; //↓
                     nextRoomDoor.Direction = DoorDirection.W; //←
 
-                    roomDoor.OriginPosition = new Vector2(room.Position.x + room.Size.x - offset1 - 6,
-                        room.Position.y + room.Size.y);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.x, nextRoom.Position.y + offset2);
-                    cross = new Vector2(roomDoor.OriginPosition.x, nextRoomDoor.OriginPosition.y);
+                    roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X - offset1 - 6,
+                        room.Position.Y + room.Size.Y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X, nextRoom.Position.Y + offset2);
+                    cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
                 }
             }
         }
@@ -473,23 +473,23 @@ public class GenerateDungeon
     {
         var point1 = door1.OriginPosition;
         var point2 = door2.OriginPosition;
-        var pos = new Vector2(Mathf.Min(point1.x, point2.x), Mathf.Min(point1.y, point2.y));
+        var pos = new Vector2(Mathf.Min(point1.X, point2.X), Mathf.Min(point1.Y, point2.Y));
         var size = new Vector2(
-            point1.x == point2.x ? CorridorWidth : Mathf.Abs(point1.x - point2.x),
-            point1.y == point2.y ? CorridorWidth : Mathf.Abs(point1.y - point2.y)
+            point1.X == point2.X ? CorridorWidth : Mathf.Abs(point1.X - point2.X),
+            point1.Y == point2.Y ? CorridorWidth : Mathf.Abs(point1.Y - point2.Y)
         );
 
         Vector2 collPos;
         Vector2 collSize;
-        if (point1.x == point2.x) //纵向加宽, 防止贴到其它墙
+        if (point1.X == point2.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos = new Vector2(pos.x - 3, pos.y);
-            collSize = new Vector2(size.x + 6, size.y);
+            collPos = new Vector2(pos.X - 3, pos.Y);
+            collSize = new Vector2(size.X + 6, size.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos = new Vector2(pos.x, pos.y - 3);
-            collSize = new Vector2(size.x, size.y + 6);
+            collPos = new Vector2(pos.X, pos.Y - 3);
+            collSize = new Vector2(size.X, size.Y + 6);
         }
 
         if (_roomGrid.RectCollision(collPos, collSize))
@@ -506,28 +506,28 @@ public class GenerateDungeon
     {
         var point1 = door1.OriginPosition;
         var point2 = door2.OriginPosition;
-        var pos1 = new Vector2(Mathf.Min(point1.x, cross.x), Mathf.Min(point1.y, cross.y));
+        var pos1 = new Vector2(Mathf.Min(point1.X, cross.X), Mathf.Min(point1.Y, cross.Y));
         var size1 = new Vector2(
-            point1.x == cross.x ? CorridorWidth : Mathf.Abs(point1.x - cross.x),
-            point1.y == cross.y ? CorridorWidth : Mathf.Abs(point1.y - cross.y)
+            point1.X == cross.X ? CorridorWidth : Mathf.Abs(point1.X - cross.X),
+            point1.Y == cross.Y ? CorridorWidth : Mathf.Abs(point1.Y - cross.Y)
         );
-        var pos2 = new Vector2(Mathf.Min(point2.x, cross.x), Mathf.Min(point2.y, cross.y));
+        var pos2 = new Vector2(Mathf.Min(point2.X, cross.X), Mathf.Min(point2.Y, cross.Y));
         var size2 = new Vector2(
-            point2.x == cross.x ? CorridorWidth : Mathf.Abs(point2.x - cross.x),
-            point2.y == cross.y ? CorridorWidth : Mathf.Abs(point2.y - cross.y)
+            point2.X == cross.X ? CorridorWidth : Mathf.Abs(point2.X - cross.X),
+            point2.Y == cross.Y ? CorridorWidth : Mathf.Abs(point2.Y - cross.Y)
         );
 
         Vector2 collPos1;
         Vector2 collSize1;
-        if (point1.x == cross.x) //纵向加宽, 防止贴到其它墙
+        if (point1.X == cross.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos1 = new Vector2(pos1.x - 3, pos1.y);
-            collSize1 = new Vector2(size1.x + 6, size1.y);
+            collPos1 = new Vector2(pos1.X - 3, pos1.Y);
+            collSize1 = new Vector2(size1.X + 6, size1.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos1 = new Vector2(pos1.x, pos1.y - 3);
-            collSize1 = new Vector2(size1.x, size1.y + 6);
+            collPos1 = new Vector2(pos1.X, pos1.Y - 3);
+            collSize1 = new Vector2(size1.X, size1.Y + 6);
         }
 
         if (_roomGrid.RectCollision(collPos1, collSize1))
@@ -537,15 +537,15 @@ public class GenerateDungeon
 
         Vector2 collPos2;
         Vector2 collSize2;
-        if (point2.x == cross.x) //纵向加宽, 防止贴到其它墙
+        if (point2.X == cross.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos2 = new Vector2(pos2.x - 3, pos2.y);
-            collSize2 = new Vector2(size2.x + 6, size2.y);
+            collPos2 = new Vector2(pos2.X - 3, pos2.Y);
+            collSize2 = new Vector2(size2.X + 6, size2.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos2 = new Vector2(pos2.x, pos2.y - 3);
-            collSize2 = new Vector2(size2.x, size2.y + 6);
+            collPos2 = new Vector2(pos2.X, pos2.Y - 3);
+            collSize2 = new Vector2(size2.X, size2.Y + 6);
         }
 
         if (_roomGrid.RectCollision(collPos2, collSize2))

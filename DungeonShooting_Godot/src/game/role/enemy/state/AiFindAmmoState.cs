@@ -1,4 +1,4 @@
-﻿
+
 using Godot;
 
 /// <summary>
@@ -51,10 +51,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
             var position = _target.GlobalPosition;
-            if (Master.NavigationAgent2D.GetTargetLocation() != position)
-            {
-                Master.NavigationAgent2D.SetTargetLocation(position);
-            }
+            Master.NavigationAgent2D.TargetPosition = position;
         }
         else
         {
@@ -106,8 +103,8 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
             if (!Master.NavigationAgent2D.IsNavigationFinished())
             {
                 //计算移动
-                var nextPos = Master.NavigationAgent2D.GetNextLocation();
-                Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
+                Master.AnimatedSprite2D.Animation = AnimatorNames.Run;
                 Master.BasisVelocity =
                     (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                     Master.MoveSpeed;
@@ -183,7 +180,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
         //设置目标点
         if (_target != null)
         {
-            Master.NavigationAgent2D.SetTargetLocation(_target.GlobalPosition);
+            Master.NavigationAgent2D.TargetPosition = _target.GlobalPosition;
         }
     }
 }

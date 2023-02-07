@@ -1,6 +1,6 @@
 shader_type canvas_item;
 
-uniform vec4 blend : hint_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform vec4 blend : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform float schedule = 1.0;
 //将贴图渲染为阴影
 

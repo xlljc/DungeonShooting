@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-tool
-extends Reference
+@tool
+extends RefCounted
 
 # Reads a TMX file from a path and return a Dictionary with the same structure
 # as the JSON map format
@@ -559,7 +559,7 @@ static func attributes_to_dict(parser):
 	for i in range(parser.get_attribute_count()):
 		var attr = parser.get_attribute_name(i)
 		var val = parser.get_attribute_value(i)
-		if val.is_valid_integer():
+		if val.is_valid_int():
 			val = int(val)
 		elif val.is_valid_float():
 			val = float(val)

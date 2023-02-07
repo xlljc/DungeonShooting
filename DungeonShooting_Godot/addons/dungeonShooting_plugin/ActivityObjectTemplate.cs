@@ -1,4 +1,4 @@
-﻿using Godot;
+using Godot;
 
 namespace Plugin
 {
@@ -6,7 +6,7 @@ namespace Plugin
     /// ActivityObject 节点模板对象
     /// </summary>
     [Tool]
-    public class ActivityObjectTemplate : Node
+    public partial class ActivityObjectTemplate : Node
     {
         /// <summary>
         /// 是否放入 ySort 节点下
@@ -21,12 +21,12 @@ namespace Plugin
         /// <summary>
         /// 当前物体所属物理层
         /// </summary>
-        [Export(PropertyHint.Layers2dPhysics)] public uint collision_layer;
+        [Export(PropertyHint.Layers2DPhysics)] public uint collision_layer;
 
         /// <summary>
         /// 当前物体扫描的物理层
         /// </summary>
-        [Export(PropertyHint.Layers2dPhysics)] public uint collision_mask;
+        [Export(PropertyHint.Layers2DPhysics)] public uint collision_mask;
 
         /// <summary>
         /// 显示状态
@@ -42,7 +42,7 @@ namespace Plugin
         {
 #if TOOLS
             // 在工具模式下创建的 template 节点自动创建对应的必要子节点
-            if (Engine.EditorHint)
+            if (Engine.IsEditorHint())
             {
                 var parent = GetParent();
                 if (parent != null)
@@ -62,17 +62,17 @@ namespace Plugin
                         owner = parent;
                     }
 
-                    var sprite = GetNodeOrNull<Sprite>("ShadowSprite");
+                    var sprite = GetNodeOrNull<Sprite2D>("ShadowSprite");
                     //创建Shadow
                     if (sprite == null)
                     {
-                        sprite = new Sprite();
+                        sprite = new Sprite2D();
                         sprite.Name = "ShadowSprite";
                         sprite.ZIndex = -5;
                         var material =
                             ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
-                        material.SetShaderParam("blend", new Color(0, 0, 0, 0.47058824F));
-                        material.SetShaderParam("schedule", 1);
+                        material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
+                        material.SetShaderParameter("schedule", 1);
                         sprite.Material = material;
                         AddChild(sprite);
                         sprite.Owner = owner;
@@ -81,21 +81,21 @@ namespace Plugin
                     {
                         var material =
                             ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
-                        material.SetShaderParam("blend", new Color(0, 0, 0, 0.47058824F));
-                        material.SetShaderParam("schedule", 1);
+                        material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
+                        material.SetShaderParameter("schedule", 1);
                         sprite.Material = material;
                     }
 
-                    var animatedSprite = GetNodeOrNull<AnimatedSprite>("AnimatedSprite");
-                    //创建 Sprite
+                    var animatedSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
+                    //创建 Sprite2D
                     if (animatedSprite == null)
                     {
-                        animatedSprite = new AnimatedSprite();
-                        animatedSprite.Name = "AnimatedSprite";
+                        animatedSprite = new AnimatedSprite2D();
+                        animatedSprite.Name = "AnimatedSprite2D";
                         var material =
                             ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
-                        material.SetShaderParam("blend", new Color(1, 1, 1, 1));
-                        material.SetShaderParam("schedule", 0);
+                        material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
+                        material.SetShaderParameter("schedule", 0);
                         animatedSprite.Material = material;
                         AddChild(animatedSprite);
                         animatedSprite.Owner = owner;
@@ -104,8 +104,8 @@ namespace Plugin
                     {
                         var material =
                             ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
-                        material.SetShaderParam("blend", new Color(1, 1, 1, 1));
-                        material.SetShaderParam("schedule", 0);
+                        material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
+                        material.SetShaderParameter("schedule", 0);
                         animatedSprite.Material = material;
                     }
 

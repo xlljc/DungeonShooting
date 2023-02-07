@@ -21,26 +21,26 @@ extents = Vector2( 7.8, 3.5 )
 [sub_resource type="Animation" id=9]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_param/schedule")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array( 0 ),
+"transitions": PackedFloat32Array( 1 ),
 "update": 0,
 "values": [ 0.0 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("AnimatedSprite:material:shader_param/blend")
+tracks/1/path = NodePath("AnimatedSprite2D:material:shader_param/blend")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array( 0 ),
+"transitions": PackedFloat32Array( 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
@@ -50,14 +50,14 @@ resource_name = "floodlight"
 length = 3.0
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_param/schedule")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 2.3, 2.6, 2.7, 3 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"times": PackedFloat32Array( 0, 2.3, 2.6, 2.7, 3 ),
+"transitions": PackedFloat32Array( 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ 0.0, 0.0, 0.5, 0.5, 0.0 ]
 }
@@ -65,10 +65,10 @@ tracks/0/keys = {
 [node name="Weapon" type="Node"]
 script = ExtResource( 3 )
 
-[node name="ShadowSprite" type="Sprite" parent="."]
+[node name="ShadowSprite" type="Sprite2D" parent="."]
 material = SubResource( 7 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource( 8 )
 position = Vector2( 0.4, -2.6 )
 scale = Vector2( 0.8, 0.8 )
@@ -77,13 +77,13 @@ scale = Vector2( 0.8, 0.8 )
 collision_layer = 4
 collision_mask = 0
 
-[node name="OriginPoint" type="Position2D" parent="WeaponBody"]
+[node name="OriginPoint" type="Marker2D" parent="WeaponBody"]
 position = Vector2( -3.60001, -1.1 )
 
-[node name="ShellPoint" type="Position2D" parent="WeaponBody"]
+[node name="ShellPoint" type="Marker2D" parent="WeaponBody"]
 position = Vector2( -2.60001, -2.60001 )
 
-[node name="FirePoint" type="Position2D" parent="WeaponBody"]
+[node name="FirePoint" type="Marker2D" parent="WeaponBody"]
 position = Vector2( 7.39999, -1.1 )
 
 [node name="Collision" type="CollisionShape2D" parent="WeaponBody"]
