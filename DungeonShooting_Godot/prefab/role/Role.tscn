@@ -1,43 +1,43 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://4v6441urmwrf"]
 
-[ext_resource path="res://resource/materlal/Blend.tres" type="Material" id=1]
-[ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=2]
-[ext_resource path="res://src/game/role/MountRotation.cs" type="Script" id=4]
-[ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=5]
+[ext_resource type="Script" path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" id="2"]
+[ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_q6jwp"]
+[ext_resource type="Script" path="res://src/game/role/MountRotation.cs" id="4"]
 
-[sub_resource type="ShaderMaterial" id=33]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v2kfw"]
 resource_local_to_scene = true
-shader = ExtResource( 5 )
-shader_param/blend = Color( 1, 1, 1, 1 )
-shader_param/schedule = 0.0
+shader = ExtResource("2_q6jwp")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
 
-[sub_resource type="CircleShape2D" id=36]
-radius = 4.0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yif6x"]
+resource_local_to_scene = true
+shader = ExtResource("2_q6jwp")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
 
-[sub_resource type="RectangleShape2D" id=35]
-extents = Vector2( 5, 7.5 )
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1eja2"]
+size = Vector2(10, 15)
 
-[sub_resource type="RectangleShape2D" id=16]
-extents = Vector2( 5, 8.25 )
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n68nu"]
+size = Vector2(10, 16.5)
 
 [node name="Role" type="Node"]
-script = ExtResource( 2 )
+script = ExtResource("2")
 UseYSort = true
-CollisionMask = 1
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
-material = ExtResource( 1 )
+z_index = -5
+material = SubResource("ShaderMaterial_v2kfw")
 
 [node name="BackMountPoint" type="Marker2D" parent="."]
-position = Vector2( 0, -10 )
+position = Vector2(0, -10)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-material = SubResource( 33 )
-position = Vector2( 0, -12 )
+material = SubResource("ShaderMaterial_yif6x")
+position = Vector2(0, -12)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -4 )
-shape = SubResource( 36 )
 
 [node name="HurtArea" type="Area2D" parent="."]
 collision_layer = 0
@@ -45,8 +45,8 @@ collision_mask = 0
 monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtArea"]
-position = Vector2( 0, -7.5 )
-shape = SubResource( 35 )
+position = Vector2(0, -7.5)
+shape = SubResource("RectangleShape2D_1eja2")
 
 [node name="InteractiveArea" type="Area2D" parent="."]
 visible = false
@@ -55,11 +55,11 @@ collision_mask = 4
 monitorable = false
 
 [node name="Collision" type="CollisionShape2D" parent="InteractiveArea"]
-position = Vector2( 0, -5 )
-shape = SubResource( 16 )
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_n68nu")
 
 [node name="MountPoint" type="Marker2D" parent="."]
-position = Vector2( 2, -4 )
-script = ExtResource( 4 )
+position = Vector2(2, -4)
+script = ExtResource("4")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

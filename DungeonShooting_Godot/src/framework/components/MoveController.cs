@@ -163,9 +163,12 @@ public class MoveController : Component
         //最终速率
         var finallyVelocity = _basisVelocity + finallyEf;
 
+        GD.Print("finallyVelocity: " + finallyVelocity);
+        
         if (finallyVelocity != Vector2.Zero)
         {
             //计算移动
+            ActivityObject.Velocity = finallyVelocity;
             ActivityObject.MoveAndSlide();
             var newVelocity = ActivityObject.Velocity;
             if (newVelocity.X == 0f && _basisVelocity.X * finallyVelocity.X > 0)
@@ -207,7 +210,7 @@ public class MoveController : Component
         }
         else
         {
-            ActivityObject.Velocity = finallyEf;
+            ActivityObject.Velocity = Vector2.Zero;
         }
     }
 
