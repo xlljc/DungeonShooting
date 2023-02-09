@@ -33,7 +33,7 @@ material = SubResource("ShaderMaterial_v2kfw")
 [node name="BackMountPoint" type="Marker2D" parent="."]
 position = Vector2(0, -10)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_yif6x")
 position = Vector2(0, -12)
 

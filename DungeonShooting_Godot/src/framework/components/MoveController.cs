@@ -163,8 +163,6 @@ public class MoveController : Component
         //最终速率
         var finallyVelocity = _basisVelocity + finallyEf;
 
-        GD.Print("finallyVelocity: " + finallyVelocity);
-        
         if (finallyVelocity != Vector2.Zero)
         {
             //计算移动

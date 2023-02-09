@@ -86,12 +86,12 @@ namespace Plugin
                         sprite.Material = material;
                     }
 
-                    var animatedSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
+                    var animatedSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite");
                     //创建 Sprite2D
                     if (animatedSprite == null)
                     {
                         animatedSprite = new AnimatedSprite2D();
-                        animatedSprite.Name = "AnimatedSprite2D";
+                        animatedSprite.Name = "AnimatedSprite";
                         var material =
                             ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
                         material.SetShaderParameter("blend", new Color(1, 1, 1, 1));

@@ -104,7 +104,7 @@ public abstract class Component : IProcess, IDestroy
     /// <summary>
     /// 挂载物体的动画节点
     /// </summary>
-    public AnimatedSprite2D AnimatedSprite2D => ActivityObject.AnimatedSprite2D;
+    public AnimatedSprite2D AnimatedSprite2D => ActivityObject.AnimatedSprite;
     /// <summary>
     /// 挂载物体的阴影节点
     /// </summary>

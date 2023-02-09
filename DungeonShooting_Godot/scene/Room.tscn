@@ -5436,6 +5436,7 @@ environment = SubResource("1")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(253, 219)
+process_callback = 0
 limit_smoothed = true
 editor_draw_drag_margin = true
 script = ExtResource("5")

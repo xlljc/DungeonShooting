@@ -27,7 +27,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite2D", 类型为 AnimatedSprite2D
     /// </summary>
-    public AnimatedSprite2D AnimatedSprite2D { get; }
+    public AnimatedSprite2D AnimatedSprite { get; }
 
     /// <summary>
     /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite2D
@@ -129,9 +129,9 @@ public abstract partial class ActivityObject : CharacterBody2D
             AddChild(body);
             switch (body.Name)
             {
-                case "AnimatedSprite2D":
-                    AnimatedSprite2D = (AnimatedSprite2D)body;
-                    _blendShaderMaterial = AnimatedSprite2D.Material as ShaderMaterial;
+                case "AnimatedSprite":
+                    AnimatedSprite = (AnimatedSprite2D)body;
+                    _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
                     break;
                 case "ShadowSprite":
                     ShadowSprite = (Sprite2D)body;
@@ -161,12 +161,12 @@ public abstract partial class ActivityObject : CharacterBody2D
             ShadowSprite.Material = ResourceManager.BlendMaterial;
         }
 
-        var anim = AnimatedSprite2D.Animation;
+        var anim = AnimatedSprite.Animation;
         
-        var frame = AnimatedSprite2D.Frame;
+        var frame = AnimatedSprite.Frame;
         if (_prevAnimation != anim || _prevAnimationFrame != frame)
         {
-            var frames = AnimatedSprite2D.SpriteFrames;
+            var frames = AnimatedSprite.SpriteFrames;
             if (frames.HasAnimation(anim))
             {
                 //切换阴影动画
@@ -194,19 +194,19 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     public void SetDefaultTexture(Texture2D texture)
     {
-        if (AnimatedSprite2D.SpriteFrames == null)
+        if (AnimatedSprite.SpriteFrames == null)
         {
             SpriteFrames spriteFrames = new SpriteFrames();
-            AnimatedSprite2D.SpriteFrames = spriteFrames;
+            AnimatedSprite.SpriteFrames = spriteFrames;
             spriteFrames.AddFrame("default", texture);
         }
         else
         {
-            SpriteFrames spriteFrames = AnimatedSprite2D.SpriteFrames;
+            SpriteFrames spriteFrames = AnimatedSprite.SpriteFrames;
             spriteFrames.SetFrame("default", 0, texture);
         }
     
-        AnimatedSprite2D.Play("default");
+        AnimatedSprite.Play("default");
     }
 
     /// <summary>
@@ -214,7 +214,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     public Texture2D GetDefaultTexture()
     {
-        return AnimatedSprite2D.SpriteFrames.GetFrameTexture("default", 0);
+        return AnimatedSprite.SpriteFrames.GetFrameTexture("default", 0);
     }
     
     /// <summary>
@@ -222,7 +222,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     public Texture2D GetCurrentTexture()
     {
-        return AnimatedSprite2D.SpriteFrames.GetFrameTexture(AnimatedSprite2D.Name, AnimatedSprite2D.Frame);
+        return AnimatedSprite.SpriteFrames.GetFrameTexture(AnimatedSprite.Name, AnimatedSprite.Frame);
     }
 
     /// <summary>
@@ -516,11 +516,11 @@ public abstract partial class ActivityObject : CharacterBody2D
             //当高度大于16时, 显示在所有物体上
             if (_throwData.Y >= 16)
             {
-                AnimatedSprite2D.ZIndex = 20;
+                AnimatedSprite.ZIndex = 20;
             }
             else
             {
-                AnimatedSprite2D.ZIndex = 0;
+                AnimatedSprite.ZIndex = 0;
             }
             
             //达到最高点
@@ -568,12 +568,12 @@ public abstract partial class ActivityObject : CharacterBody2D
         if (ShadowSprite.Visible)
         {
             //更新阴影贴图, 使其和动画一致
-            var anim = AnimatedSprite2D.Animation;
-            var frame = AnimatedSprite2D.Frame;
+            var anim = AnimatedSprite.Animation;
+            var frame = AnimatedSprite.Frame;
             if (_prevAnimation != anim || _prevAnimationFrame != frame)
             {
                 //切换阴影动画
-                ShadowSprite.Texture = AnimatedSprite2D.SpriteFrames.GetFrameTexture(anim, AnimatedSprite2D.Frame);
+                ShadowSprite.Texture = AnimatedSprite.SpriteFrames.GetFrameTexture(anim, AnimatedSprite.Frame);
             }
 
             _prevAnimation = anim;
@@ -670,11 +670,11 @@ public abstract partial class ActivityObject : CharacterBody2D
     public void CalcShadow()
     {
         //缩放
-        ShadowSprite.Scale = AnimatedSprite2D.Scale;
+        ShadowSprite.Scale = AnimatedSprite.Scale;
         //阴影角度
         ShadowSprite.Rotation = 0;
         //阴影位置计算
-        var pos = AnimatedSprite2D.GlobalPosition;
+        var pos = AnimatedSprite.GlobalPosition;
         if (_throwData != null && !_throwData.IsOver)
         {
             ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + _throwData.Y);
@@ -690,11 +690,11 @@ public abstract partial class ActivityObject : CharacterBody2D
     {
         if (Scale.Y < 0)
         {
-            AnimatedSprite2D.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) - _throwData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
+            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) - _throwData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
         }
         else
         {
-            AnimatedSprite2D.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) + _throwData.OriginSpritePosition.Rotated(Rotation);
+            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) + _throwData.OriginSpritePosition.Rotated(Rotation);
         }
     }
 
@@ -781,7 +781,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             _throwData.OriginRotation = Collision.Rotation;
             _throwData.OriginScale = Collision.Scale;
             _throwData.OriginZIndex = ZIndex;
-            _throwData.OriginSpritePosition = AnimatedSprite2D.Position;
+            _throwData.OriginSpritePosition = AnimatedSprite.Position;
             _throwData.OriginCollisionEnable = Collision.Disabled;
             _throwData.OriginCollisionPosition = Collision.Position;
             _throwData.OriginCollisionRotation = Collision.Rotation;
@@ -821,7 +821,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             Collision.Rotation = _throwData.OriginRotation;
             Collision.Scale = _throwData.OriginScale;
             ZIndex = _throwData.OriginZIndex;
-            AnimatedSprite2D.Position = _throwData.OriginSpritePosition;
+            AnimatedSprite.Position = _throwData.OriginSpritePosition;
             Collision.Disabled = _throwData.OriginCollisionEnable;
             Collision.Position = _throwData.OriginCollisionPosition;
             Collision.Rotation = _throwData.OriginCollisionRotation;

@@ -67,7 +67,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
             }
             else if (_pauseTimer >= 0)
             {
-                Master.AnimatedSprite2D.Animation = AnimatorNames.Idle;
+                Master.AnimatedSprite.Animation = AnimatorNames.Idle;
                 _pauseTimer -= delta;
             }
             else if (_isMoveOver) //没发现玩家, 且已经移动完成
@@ -89,7 +89,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
                     _moveFlag = true;
                     //计算移动
                     var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                    Master.AnimatedSprite2D.Animation = AnimatorNames.Run;
+                    Master.AnimatedSprite.Animation = AnimatorNames.Run;
                     Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                                            Master.MoveSpeed;
                 }
@@ -107,7 +107,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
                     {
                         //计算移动
                         var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                        Master.AnimatedSprite2D.Animation = AnimatorNames.Run;
+                        Master.AnimatedSprite.Animation = AnimatorNames.Run;
                         Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                                                Master.MoveSpeed;
                     }

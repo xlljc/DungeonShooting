@@ -10,7 +10,7 @@ shader = ExtResource("2_nvo1u")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e5y30"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0gb8j"]
 resource_local_to_scene = true
 shader = ExtResource("2_nvo1u")
 shader_parameter/blend = Color(1, 1, 1, 1)
@@ -64,7 +64,7 @@ region = Rect2(32, 48, 16, 24)
 atlas = ExtResource("3_55mk2")
 region = Rect2(48, 48, 16, 24)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_snvk2"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_3poqo"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -128,9 +128,9 @@ collision_mask = 1
 [node name="ShadowSprite" parent="." index="0"]
 material = SubResource("ShaderMaterial_vejn8")
 
-[node name="AnimatedSprite2D" parent="." index="2"]
-material = SubResource("ShaderMaterial_e5y30")
-sprite_frames = SubResource("SpriteFrames_snvk2")
+[node name="AnimatedSprite" parent="." index="2"]
+material = SubResource("ShaderMaterial_0gb8j")
+sprite_frames = SubResource("SpriteFrames_3poqo")
 animation = &"idle"
 
 [node name="Collision" parent="." index="3"]

@@ -222,16 +222,16 @@ public partial class Player : Role
         {
             if ((Face == FaceDirection.Right && BasisVelocity.X >= 0) || Face == FaceDirection.Left && BasisVelocity.X <= 0) //向前走
             {
-                AnimatedSprite2D.Animation = AnimatorNames.Run;
+                AnimatedSprite.Animation = AnimatorNames.Run;
             }
             else if ((Face == FaceDirection.Right && BasisVelocity.X < 0) || Face == FaceDirection.Left && BasisVelocity.X > 0) //向后走
             {
-                AnimatedSprite2D.Animation = AnimatorNames.ReverseRun;
+                AnimatedSprite.Animation = AnimatorNames.ReverseRun;
             }
         }
         else
         {
-            AnimatedSprite2D.Animation = AnimatorNames.Idle;
+            AnimatedSprite.Animation = AnimatorNames.Idle;
         }
     }
 }

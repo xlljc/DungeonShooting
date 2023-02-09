@@ -69,7 +69,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         {
             if (_pauseTimer >= 0)
             {
-                Master.AnimatedSprite2D.Animation = AnimatorNames.Idle;
+                Master.AnimatedSprite.Animation = AnimatorNames.Idle;
                 _pauseTimer -= delta;
             }
             else if (_isMoveOver) //移动已经完成
@@ -91,7 +91,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     _moveFlag = true;
                     //计算移动
                     var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                    Master.AnimatedSprite2D.Animation = AnimatorNames.Run;
+                    Master.AnimatedSprite.Animation = AnimatorNames.Run;
                     Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                                            Master.MoveSpeed;
                 }
@@ -109,7 +109,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     {
                         //计算移动
                         var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                        Master.AnimatedSprite2D.Animation = AnimatorNames.Run;
+                        Master.AnimatedSprite.Animation = AnimatorNames.Run;
                         Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                                                Master.MoveSpeed;
                     }

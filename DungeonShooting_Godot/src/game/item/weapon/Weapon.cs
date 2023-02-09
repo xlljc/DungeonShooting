@@ -182,7 +182,7 @@ public abstract partial class Weapon : ActivityObject
 
         //图标
         SetDefaultTexture(ResourceLoader.Load<Texture2D>(Attribute.Sprite2D));
-        AnimatedSprite2D.Position = Attribute.CenterPosition;
+        AnimatedSprite.Position = Attribute.CenterPosition;
 
         //开火位置
         FirePoint.Position = new Vector2(Attribute.FirePosition.X, -Attribute.FirePosition.Y);
@@ -952,11 +952,11 @@ public abstract partial class Weapon : ActivityObject
     {
         Master = master;
         //握把位置
-        AnimatedSprite2D.Position = Attribute.HoldPosition;
+        AnimatedSprite.Position = Attribute.HoldPosition;
         //停止动画
         AnimationPlayer.Stop();
         //清除泛白效果
-        ShaderMaterial sm = (ShaderMaterial)AnimatedSprite2D.Material;
+        ShaderMaterial sm = (ShaderMaterial)AnimatedSprite.Material;
         sm.SetShaderParameter("schedule", 0);
         ZIndex = 0;
         //禁用碰撞
@@ -972,7 +972,7 @@ public abstract partial class Weapon : ActivityObject
     public void RemoveAt()
     {
         Master = null;
-        AnimatedSprite2D.Position = Attribute.CenterPosition;
+        AnimatedSprite.Position = Attribute.CenterPosition;
         OnRemove();
     }
 

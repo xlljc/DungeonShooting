@@ -72,7 +72,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         {
             //计算移动
             var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-            Master.AnimatedSprite2D.Animation = AnimatorNames.Run;
+            Master.AnimatedSprite.Animation = AnimatorNames.Run;
             Master.BasisVelocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
         }

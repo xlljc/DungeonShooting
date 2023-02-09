@@ -1,55 +1,54 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://dlj2qtrqxph0a"]
 
-[ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=1]
-[ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=2]
-[ext_resource path="res://resource/sprite/bullet/bullet.png" type="Texture2D" id=3]
+[ext_resource type="Script" path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" id="1"]
+[ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2"]
+[ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/bullet.png" id="3"]
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5a4f2"]
 resource_local_to_scene = true
-shader = ExtResource( 2 )
-shader_param/blend = Color( 0, 0, 0, 0.470588 )
-shader_param/schedule = 1
+shader = ExtResource("2")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o0655"]
 resource_local_to_scene = true
-shader = ExtResource( 2 )
-shader_param/blend = Color( 1, 1, 1, 1 )
-shader_param/schedule = 0.0
+shader = ExtResource("2")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
 
-[sub_resource type="SpriteFrames" id=1]
-animations = [ {
-"sprite_frames": [ ExtResource( 3 ) ],
+[sub_resource type="SpriteFrames" id="SpriteFrames_5wvmf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}],
 "loop": true,
-"name": "default",
-"speed": 30.0
-} ]
+"name": &"default",
+"speed": 5.0
+}]
 
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 6, 2 )
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c0onq"]
+size = Vector2(44.72, 12)
 
 [node name="Bullet" type="Node"]
-script = ExtResource( 1 )
+script = ExtResource("1")
 collision_mask = 1
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
-material = SubResource( 3 )
+z_index = -5
+material = SubResource("ShaderMaterial_5a4f2")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-modulate = Color( 1.8, 1.8, 1.8, 1 )
-material = SubResource( 4 )
-position = Vector2( 2.38419e-07, 0 )
-sprite_frames = SubResource( 1 )
-
-[node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2( 2, 0 )
-shape = SubResource( 2 )
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_o0655")
+sprite_frames = SubResource("SpriteFrames_5wvmf")
 
 [node name="CollisionArea" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
-position = Vector2( 2, 0 )
-shape = SubResource( 2 )
+position = Vector2(2.93353, 0)
+scale = Vector2(0.226586, 0.333333)
+shape = SubResource("RectangleShape2D_c0onq")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
