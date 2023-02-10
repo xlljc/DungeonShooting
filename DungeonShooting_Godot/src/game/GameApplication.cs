@@ -57,8 +57,11 @@ public partial class GameApplication : Node2D
     public GameApplication()
     {
         Instance = this;
+        
+        //扫描并注册当前程序集下的武器
+        WeaponManager.RegisterWeaponFromAssembly(GetType().Assembly);
     }
-
+    
     public override void _EnterTree()
     {
         //随机化种子
@@ -68,6 +71,7 @@ public partial class GameApplication : Node2D
 
         GlobalNodeRoot = GetNode<Node2D>(GlobalNodeRootPath);
         // 初始化鼠标
+        Input.MouseMode = Input.MouseModeEnum.Hidden;
         Cursor = CursorPack.Instantiate<Cursor>();
 
         RoomManager = GetNode<RoomManager>(RoomPath);
@@ -78,11 +82,17 @@ public partial class GameApplication : Node2D
         Ui.AddChild(Cursor);
     }
 
+    public override void _Process(double delta)
+    {
+        InputManager.Update((float)delta);
+    }
+
     /// <summary>
     /// 将 viewport 以外的全局坐标 转换成 viewport 内的全局坐标
     /// </summary>
     public Vector2 GlobalToViewPosition(Vector2 globalPos)
     {
+        //return globalPos;
         return globalPos / GameConfig.WindowScale - (GameConfig.ViewportSize / 2) + GameCamera.Main.GlobalPosition;
     }
 
@@ -91,6 +101,7 @@ public partial class GameApplication : Node2D
     /// </summary>
     public Vector2 ViewToGlobalPosition(Vector2 viewPos)
     {
+        //return viewPos;
         return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
     }
 }

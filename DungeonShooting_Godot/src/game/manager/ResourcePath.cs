@@ -3,19 +3,11 @@
 /// </summary>
 public class ResourcePath
 {
-    public const string editor_ActivityObject_svg = "res://editor/ActivityObject.svg";
-    public const string editor_ide_cn_font_12_tres = "res://editor/ide_cn_font_12.tres";
-    public const string editor_ide_cn_font_12_hint_tres = "res://editor/ide_cn_font_12_hint.tres";
-    public const string editor_prefabs_CodeHintItem_tscn = "res://editor/prefabs/CodeHintItem.tscn";
-    public const string editor_prefabs_CodeHintPanel_tscn = "res://editor/prefabs/CodeHintPanel.tscn";
-    public const string editor_prefabs_CodePanel_tscn = "res://editor/prefabs/CodePanel.tscn";
-    public const string editor_prefabs_Editor_tscn = "res://editor/prefabs/Editor.tscn";
     public const string prefab_FanCollisionShape_tscn = "res://prefab/FanCollisionShape.tscn";
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
     public const string prefab_effect_BulletSmoke_tscn = "res://prefab/effect/BulletSmoke.tscn";
     public const string prefab_effect_FirePart_tscn = "res://prefab/effect/FirePart.tscn";
     public const string prefab_effect_ShotFire_tscn = "res://prefab/effect/ShotFire.tscn";
-    public const string prefab_role_CPlusPlus_tscn = "res://prefab/role/CPlusPlus.tscn";
     public const string prefab_role_Enemy_tscn = "res://prefab/role/Enemy.tscn";
     public const string prefab_role_Player_tscn = "res://prefab/role/Player.tscn";
     public const string prefab_role_Role_tscn = "res://prefab/role/Role.tscn";

@@ -24,7 +24,7 @@ public partial class Bullet : ActivityObject
     {
         CollisionArea = GetNode<Area2D>("CollisionArea");
         CollisionArea.CollisionMask = targetLayer;
-        CollisionArea.Connect("area_entered",new Callable(this,nameof(OnArea2dEntered)));
+        CollisionArea.AreaEntered += OnArea2dEntered;
 
         FlySpeed = speed;
         MaxDistance = maxDistance;

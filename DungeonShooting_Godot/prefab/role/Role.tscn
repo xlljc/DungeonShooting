@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://4v6441urmwrf"]
+[gd_scene load_steps=10 format=3 uid="uid://4v6441urmwrf"]
 
 [ext_resource type="Script" path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" id="2"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_q6jwp"]
@@ -15,6 +15,9 @@ resource_local_to_scene = true
 shader = ExtResource("2_q6jwp")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5pj80"]
+radius = 4.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1eja2"]
 size = Vector2(10, 15)
@@ -40,6 +43,8 @@ material = SubResource("ShaderMaterial_yif6x")
 position = Vector2(0, -12)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_5pj80")
 
 [node name="HurtArea" type="Area2D" parent="."]
 collision_layer = 0

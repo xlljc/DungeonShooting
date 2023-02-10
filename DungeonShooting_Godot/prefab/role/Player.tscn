@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cdohv4xeirtuc"]
+[gd_scene load_steps=19 format=3 uid="uid://cdohv4xeirtuc"]
 
 [ext_resource type="PackedScene" uid="uid://4v6441urmwrf" path="res://prefab/role/Role.tscn" id="1"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_nvo1u"]
@@ -118,9 +118,6 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_eoc37"]
-radius = 4.0
-
 [node name="Player" instance=ExtResource("1")]
 collision_layer = 8
 collision_mask = 1
@@ -132,7 +129,3 @@ material = SubResource("ShaderMaterial_vejn8")
 material = SubResource("ShaderMaterial_0gb8j")
 sprite_frames = SubResource("SpriteFrames_3poqo")
 animation = &"idle"
-
-[node name="Collision" parent="." index="3"]
-position = Vector2(0, -4)
-shape = SubResource("CircleShape2D_eoc37")

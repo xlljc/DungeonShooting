@@ -230,8 +230,8 @@ public abstract partial class Role : ActivityObject
 
         //连接互动物体信号
         InteractiveArea = GetNode<Area2D>("InteractiveArea");
-        InteractiveArea.Connect("area_entered",new Callable(this,nameof(_OnPropsEnter)));
-        InteractiveArea.Connect("area_exited",new Callable(this,nameof(_OnPropsExit)));
+        InteractiveArea.AreaEntered += _OnPropsEnter;
+        InteractiveArea.AreaExited += _OnPropsExit;
     }
 
     protected override void Process(float delta)

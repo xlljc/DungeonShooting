@@ -12,7 +12,7 @@ public static class InputManager
     public static Vector2 GetViewportMousePosition()
     {
         var application = GameApplication.Instance;
-        return application.GlobalToViewPosition(application.GetGlobalMousePosition());
+        return application.GlobalToViewPosition(application.GetGlobalMousePosition() - new Vector2(25, 25));
     }
 
     /// <summary>

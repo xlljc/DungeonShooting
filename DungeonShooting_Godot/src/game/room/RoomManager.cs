@@ -48,7 +48,6 @@ public partial class RoomManager : Node2D
     public override void _EnterTree()
     {
         //Engine.TimeScale = 0.2f;
-        Input.MouseMode = Input.MouseModeEnum.Hidden;
 
         _sortRoot = GetNode<Node2D>(YSortRootPath);
         _objectRoot = GetNode<Node2D>(ObjectRootPath);
@@ -105,12 +104,12 @@ public partial class RoomManager : Node2D
         NavigationPolygon.NavigationPolygon = polygon;
 
         //播放bgm
-        //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
+        SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
         
         // var enemy1 = new Enemy();
         // enemy1.Name = "Enemy";
         // enemy1.PutDown(new Vector2(150, 300));
-        // //enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
+        // enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
         // enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
         // for (int i = 0; i < 10; i++)

@@ -26,7 +26,7 @@ public partial class SoundManager
     {
         public override void _Ready()
         {
-            Connect("finished",new Callable(this,nameof(OnPlayFinish)));
+            Finished += OnPlayFinish;
         }
 
         public void OnPlayFinish()
@@ -42,7 +42,7 @@ public partial class SoundManager
     {
         public override void _Ready()
         {
-            Connect("finished",new Callable(this,nameof(OnPlayFinish)));
+            Finished += OnPlayFinish;
         }
 
         public void OnPlayFinish()

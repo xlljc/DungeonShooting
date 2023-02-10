@@ -15,10 +15,6 @@ run/main_scene="res://scene/Main.tscn"
 config/features=PackedStringArray("4.0", "C#")
 config/icon="res://icon.png"
 
-[autoload]
-
-GameManager="*res://src/game/manager/GameManager.cs"
-
 [debug]
 
 settings/fps/force_fps=60
@@ -38,7 +34,7 @@ project/assembly_name="DungeonShooting"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/dungeonShooting_plugin/plugin.cfg", "res://addons/vnen.tiled_importer/plugin.cfg")
+enabled=PackedStringArray("res://addons/dungeonShooting_plugin/plugin.cfg")
 
 [gui]
 

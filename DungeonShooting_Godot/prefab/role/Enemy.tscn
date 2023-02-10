@@ -1,0 +1,141 @@
+[gd_scene load_steps=19 format=3 uid="uid://dbrig6dq441wo"]
+
+[ext_resource type="PackedScene" uid="uid://4v6441urmwrf" path="res://prefab/role/Role.tscn" id="1_qkqsa"]
+[ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_in1s7"]
+[ext_resource type="Texture2D" uid="uid://un6gylhe011n" path="res://resource/sprite/role/role8.png" id="3_tk1tp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8vxx6"]
+resource_local_to_scene = true
+shader = ExtResource("2_in1s7")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k8mt5"]
+resource_local_to_scene = true
+shader = ExtResource("2_in1s7")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ps4o2"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(0, 24, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_00s75"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(16, 24, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ov7r3"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(32, 24, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7o5sg"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(48, 24, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3cf41"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(48, 48, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ore1n"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(32, 48, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0yx8e"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(16, 48, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v2had"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(0, 48, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_myxvk"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(0, 48, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t5tkd"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(16, 48, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ia68q"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(32, 48, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ueb6d"]
+atlas = ExtResource("3_tk1tp")
+region = Rect2(48, 48, 16, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m7t3e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ps4o2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_00s75")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ov7r3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7o5sg")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3cf41")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ore1n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0yx8e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v2had")
+}],
+"loop": true,
+"name": &"reverseRun",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_myxvk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t5tkd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ia68q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ueb6d")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]
+
+[node name="Enemy" instance=ExtResource("1_qkqsa")]
+collision_layer = 16
+collision_mask = 1
+
+[node name="ShadowSprite" parent="." index="0"]
+material = SubResource("ShaderMaterial_8vxx6")
+
+[node name="AnimatedSprite" parent="." index="2"]
+material = SubResource("ShaderMaterial_k8mt5")
+sprite_frames = SubResource("SpriteFrames_m7t3e")
+animation = &"idle"
+
+[node name="ViewRay" type="RayCast2D" parent="." index="6"]
+position = Vector2(0, -8)
+enabled = false
+
+[node name="NavigationPoint" type="Marker2D" parent="." index="8"]
+position = Vector2(0, -5)
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="NavigationPoint" index="0"]
+radius = 20.0

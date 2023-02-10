@@ -47,10 +47,10 @@ public partial class MountRotation : Marker2D
 
         RealAngle = angle;
 
-        if (Master.GlobalPosition.X >= target.X)
-        {
-            angle = -angle;
-        }
+        // if (Master.GlobalPosition.X >= target.X)
+        // {
+        //     angle = -angle;
+        // }
         GlobalRotationDegrees = AdsorptionAngle(angle);
     }
 
