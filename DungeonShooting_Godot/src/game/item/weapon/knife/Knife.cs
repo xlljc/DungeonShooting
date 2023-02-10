@@ -41,7 +41,7 @@ public partial class Knife : Weapon
         _hitArea.Monitoring = false;
         _hitArea.Monitorable = false;
 
-        _hitArea.Connect("body_entered",new Callable(this,nameof(OnBodyEntered)));
+        _hitArea.BodyEntered += OnBodyEntered;
     }
 
     protected override void Process(float delta)

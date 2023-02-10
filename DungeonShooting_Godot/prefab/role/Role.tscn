@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://4v6441urmwrf"]
+[gd_scene load_steps=9 format=3 uid="uid://4v6441urmwrf"]
 
 [ext_resource type="Script" path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" id="2"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_q6jwp"]
@@ -21,6 +21,8 @@ size = Vector2(10, 15)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n68nu"]
 size = Vector2(10, 16.5)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7yld5"]
 
 [node name="Role" type="Node"]
 script = ExtResource("2")
@@ -63,3 +65,6 @@ position = Vector2(2, -4)
 script = ExtResource("4")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_7yld5")
+}

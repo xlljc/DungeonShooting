@@ -28,11 +28,11 @@ animations = [{
 }]
 
 [sub_resource type="Animation" id="Animation_kjsto"]
-resource_name = "Flicker"
+resource_name = "flicker"
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cpq4j"]
 _data = {
-"Flicker": SubResource("Animation_kjsto")
+"flicker": SubResource("Animation_kjsto")
 }
 
 [node name="ShellCase" type="Node"]

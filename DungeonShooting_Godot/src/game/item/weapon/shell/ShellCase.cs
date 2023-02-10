@@ -14,7 +14,7 @@ public partial class ShellCase : ActivityObject
     protected override void OnThrowOver()
     {
         //AwaitDestroy();
-        AnimationPlayer.Play("Flicker");
+        AnimationPlayer.Play("flicker");
     }
 
     private async void AwaitDestroy()

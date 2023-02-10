@@ -19,11 +19,11 @@ public static partial class SpecialEffectManager
         private int currLoopCount = 0;
         public override void _Ready()
         {
-            Connect("animation_finished",new Callable(this,nameof(OnAnimationFinished)));
+            AnimationLooped += OnAnimationLooped;
         }
 
         //动画结束
-        private void OnAnimationFinished()
+        private void OnAnimationLooped()
         {
             currLoopCount++;
             if (currLoopCount >= LoopCount)
