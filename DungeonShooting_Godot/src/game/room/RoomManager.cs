@@ -8,12 +8,21 @@ using Godot;
 /// </summary>
 public partial class RoomManager : Node2D
 {
-    [Export] public NodePath ObjectRootPath;
-    [Export] public NodePath YSortRootPath;
-    [Export] public NodePath TopTilePath;
-    [Export] public NodePath MiddleTilePath;
-    [Export] public NodePath FloorTilePath;
+    /// <summary>
+    /// //对象根节点
+    /// </summary>
+    [Export] public Node2D ObjectRoot;
     
+    /// <summary>
+    /// 对象根节点, 带y轴排序功能
+    /// </summary>
+    [Export] public Node2D YSortRoot;
+    
+    /// <summary>
+    /// 地图根节点
+    /// </summary>
+    [Export] public TileMap TileRoot;
+
     /// <summary>
     /// 玩家对象
     /// </summary>
@@ -23,12 +32,6 @@ public partial class RoomManager : Node2D
     /// 导航区域形状
     /// </summary>
     public NavigationRegion2D NavigationPolygon { get; private set; }
-    
-    //对象根节点
-    private Node2D _objectRoot;
-
-    //对象根节点, 带y轴排序功能
-    private Node2D _sortRoot;
 
     //已经标记过的点
     private HashSet<Vector2> _usePoints = new HashSet<Vector2>();
@@ -38,10 +41,6 @@ public partial class RoomManager : Node2D
 
     private AutoTileConfig _autoTileConfig;
     
-    public TileMap FloorTileMap { get; private set; }
-    public TileMap MiddleTileMap { get; private set; }
-    public TileMap TopTileMap { get; private set; }
-    
     private Font _font;
     private GenerateDungeon _generateDungeon;
 
@@ -49,15 +48,10 @@ public partial class RoomManager : Node2D
     {
         //Engine.TimeScale = 0.2f;
 
-        _sortRoot = GetNode<Node2D>(YSortRootPath);
-        _objectRoot = GetNode<Node2D>(ObjectRootPath);
-        
         NavigationPolygon = new NavigationRegion2D();
         AddChild(NavigationPolygon);
-        
-        FloorTileMap = GetNode<TileMap>(FloorTilePath);
-        MiddleTileMap = GetNode<TileMap>(MiddleTilePath);
-        TopTileMap = GetNode<TileMap>(TopTilePath);
+
+        //_tileMap = GetNode<Godot.TileMap>(TileMap);
         
         // var node = child.GetNode("Config");
         // Color color = (Color)node.GetMeta("ClearColor");
@@ -72,7 +66,7 @@ public partial class RoomManager : Node2D
 
     public override void _Ready()
     {
-        FloorTileMap.YSortEnabled = false;
+        TileRoot.YSortEnabled = false;
         //FloorTileMap.NavigationVisibilityMode = TileMap.VisibilityMode.ForceShow;
         
         _font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
@@ -105,11 +99,11 @@ public partial class RoomManager : Node2D
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
         
-        // var enemy1 = new Enemy();
-        // enemy1.Name = "Enemy";
-        // enemy1.PutDown(new Vector2(150, 300));
-        // enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
-        // enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        var enemy1 = new Enemy();
+        enemy1.Name = "Enemy";
+        enemy1.PutDown(new Vector2(150, 300));
+        enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
+        enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
         // for (int i = 0; i < 10; i++)
         // {
@@ -179,7 +173,7 @@ public partial class RoomManager : Node2D
     /// <returns></returns>
     public Node2D GetRoot(bool useYSort = false)
     {
-        return useYSort ? _sortRoot : _objectRoot;
+        return useYSort ? YSortRoot : ObjectRoot;
     }
 
     /// <summary>
@@ -196,7 +190,7 @@ public partial class RoomManager : Node2D
     /// </summary>
     public bool IsWayPosition(float x, float y)
     {
-        var tileMapCellSize = FloorTileMap.CellQuadrantSize;
+        var tileMapCellSize = TileRoot.CellQuadrantSize;
         return IsWayTile((int)(x / tileMapCellSize), (int)(y / tileMapCellSize));
     }
 
@@ -205,9 +199,9 @@ public partial class RoomManager : Node2D
     /// </summary>
     private void GenerateNavigationPolygon()
     {
-        var size = new Vector2(FloorTileMap.CellQuadrantSize, FloorTileMap.CellQuadrantSize);
+        var size = new Vector2(TileRoot.CellQuadrantSize, TileRoot.CellQuadrantSize);
 
-        var rect = FloorTileMap.GetUsedRect();
+        var rect = TileRoot.GetUsedRect();
 
         var x = rect.Position.X;
         var y = rect.Position.Y;
@@ -226,11 +220,11 @@ public partial class RoomManager : Node2D
 
                         if (!IsWayTile(i, j - 1))
                         {
-                            polygonData = CalcOutline(i, j, FloorTileMap, size);
+                            polygonData = CalcOutline(i, j, TileRoot, size);
                         }
                         else if (!IsWayTile(i, j + 1))
                         {
-                            polygonData = CalcInline(i, j, FloorTileMap, size);
+                            polygonData = CalcInline(i, j, TileRoot, size);
                         }
 
                         if (polygonData != null)
@@ -735,7 +729,7 @@ public partial class RoomManager : Node2D
     //绘制房间区域, debug 用
     private void DrawRoomInfo(RoomInfo room)
     {
-        var cellSize = FloorTileMap.CellQuadrantSize;
+        var cellSize = TileRoot.CellQuadrantSize;
         var pos1 = (room.Position + room.Size / 2) * cellSize;
         
         //绘制下一个房间

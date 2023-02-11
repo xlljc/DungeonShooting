@@ -9,15 +9,15 @@ public abstract class Component : IProcess, IDestroy
     /// <summary>
     /// 当前组件所挂载的游戏对象
     /// </summary>
-    public ActivityObject ActivityObject { get; private set; }
+    public ActivityObject ActivityInstance { get; internal set; }
 
     /// <summary>
     /// 当前组件所挂载的物体的坐标
     /// </summary>
     public Vector2 Position
     {
-        get => ActivityObject.Position;
-        set => ActivityObject.Position = value;
+        get => ActivityInstance.Position;
+        set => ActivityInstance.Position = value;
     }
 
     /// <summary>
@@ -25,8 +25,8 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     public Vector2 GlobalPosition
     {
-        get => ActivityObject.GlobalPosition;
-        set => ActivityObject.GlobalPosition = value;
+        get => ActivityInstance.GlobalPosition;
+        set => ActivityInstance.GlobalPosition = value;
     }
 
     /// <summary>
@@ -34,8 +34,8 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     public Vector2 Scale
     {
-        get => ActivityObject.Scale;
-        set => ActivityObject.Scale = value;
+        get => ActivityInstance.Scale;
+        set => ActivityInstance.Scale = value;
     }
     
     /// <summary>
@@ -43,8 +43,8 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     public Vector2 GlobalScale
     {
-        get => ActivityObject.GlobalScale;
-        set => ActivityObject.GlobalScale = value;
+        get => ActivityInstance.GlobalScale;
+        set => ActivityInstance.GlobalScale = value;
     }
 
     /// <summary>
@@ -52,8 +52,8 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     public float Rotation
     {
-        get => ActivityObject.Rotation;
-        set => ActivityObject.Rotation = value;
+        get => ActivityInstance.Rotation;
+        set => ActivityInstance.Rotation = value;
     }
     
     /// <summary>
@@ -61,8 +61,8 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     public float GlobalRotation
     {
-        get => ActivityObject.GlobalRotation;
-        set => ActivityObject.GlobalRotation = value;
+        get => ActivityInstance.GlobalRotation;
+        set => ActivityInstance.GlobalRotation = value;
     }
 
     /// <summary>
@@ -70,8 +70,8 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     public float RotationDegrees
     {
-        get => ActivityObject.RotationDegrees;
-        set => ActivityObject.RotationDegrees = value;
+        get => ActivityInstance.RotationDegrees;
+        set => ActivityInstance.RotationDegrees = value;
     }
     
     /// <summary>
@@ -79,8 +79,8 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     public float GlobalRotationDegrees
     {
-        get => ActivityObject.GlobalRotationDegrees;
-        set => ActivityObject.GlobalRotationDegrees = value;
+        get => ActivityInstance.GlobalRotationDegrees;
+        set => ActivityInstance.GlobalRotationDegrees = value;
     }
     
     /// <summary>
@@ -88,8 +88,8 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     public int ZIndex
     {
-        get => ActivityObject.ZIndex;
-        set => ActivityObject.ZIndex = value;
+        get => ActivityInstance.ZIndex;
+        set => ActivityInstance.ZIndex = value;
     }
     
     /// <summary>
@@ -97,22 +97,22 @@ public abstract class Component : IProcess, IDestroy
     /// </summary>
     public bool Visible
     {
-        get => ActivityObject.Visible;
-        set => ActivityObject.Visible = value;
+        get => ActivityInstance.Visible;
+        set => ActivityInstance.Visible = value;
     }
 
     /// <summary>
     /// 挂载物体的动画节点
     /// </summary>
-    public AnimatedSprite2D AnimatedSprite2D => ActivityObject.AnimatedSprite;
+    public AnimatedSprite2D AnimatedSprite2D => ActivityInstance.AnimatedSprite;
     /// <summary>
     /// 挂载物体的阴影节点
     /// </summary>
-    public Sprite2D ShadowSprite => ActivityObject.ShadowSprite;
+    public Sprite2D ShadowSprite => ActivityInstance.ShadowSprite;
     /// <summary>
     /// 挂载物体的碰撞器节点
     /// </summary>
-    public CollisionShape2D Collision => ActivityObject.Collision;
+    public CollisionShape2D Collision => ActivityInstance.Collision;
 
     /// <summary>
     /// 是否启用当前组件, 如果禁用, 则不会调用 Process 和 PhysicsProcess
@@ -178,20 +178,6 @@ public abstract class Component : IProcess, IDestroy
     }
 
     /// <summary>
-    /// 当该组件挂载到 ActivityObject 上时调用
-    /// </summary>
-    public virtual void OnMount()
-    {
-    }
-
-    /// <summary>
-    /// 当该组件被取消挂载时调用
-    /// </summary>
-    public virtual void OnUnMount()
-    {
-    }
-
-    /// <summary>
     /// 当组件启用时调用
     /// </summary>
     public virtual void OnEnable()
@@ -211,7 +197,7 @@ public abstract class Component : IProcess, IDestroy
     public virtual void DebugDraw()
     {
     }
-    
+
     /// <summary>
     /// 当组件销毁
     /// </summary>
@@ -223,16 +209,7 @@ public abstract class Component : IProcess, IDestroy
         }
 
         IsDestroyed = true;
-        if (ActivityObject != null)
-        {
-            ActivityObject.RemoveComponent(this);
-        }
-
+        ActivityInstance.RemoveComponent(this);
         OnDestroy();
-    }
-    
-    internal void _SetActivityObject(ActivityObject activityObject)
-    {
-        ActivityObject = activityObject;
     }
 }

@@ -145,9 +145,8 @@ public abstract partial class ActivityObject : CharacterBody2D
                     break;
             }
         }
-
-        MoveController = new MoveController();
-        AddComponent(MoveController);
+        
+        MoveController = AddComponent<MoveController>();
     }
 
     /// <summary>
@@ -292,9 +291,23 @@ public abstract partial class ActivityObject : CharacterBody2D
     }
     
     /// <summary>
+    /// 每帧调用一次, ProcessOver() 会在组件的 Process() 之后调用
+    /// </summary>
+    protected virtual void ProcessOver(float delta)
+    {
+    }
+    
+    /// <summary>
     /// 每物理帧调用一次, 物体的 PhysicsProcess() 会在组件的 PhysicsProcess() 之前调用
     /// </summary>
     protected virtual void PhysicsProcess(float delta)
+    {
+    }
+    
+    /// <summary>
+    /// 每物理帧调用一次, PhysicsProcessOver() 会在组件的 PhysicsProcess() 之后调用
+    /// </summary>
+    protected virtual void PhysicsProcessOver(float delta)
     {
     }
     
@@ -304,9 +317,9 @@ public abstract partial class ActivityObject : CharacterBody2D
     protected virtual void DebugDraw()
     {
     }
-
+    
     /// <summary>
-    /// 拾起一个 node 节点
+    /// 拾起一个 node 节点, 也就是将其从场景树中移除
     /// </summary>
     public void Pickup()
     {
@@ -417,19 +430,16 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 往当前物体上挂载一个组件
     /// </summary>
-    /// <param name="component">组件对象</param>
-    public void AddComponent(Component component)
+    public T AddComponent<T>() where T : Component, new()
     {
-        if (!ContainsComponent(component))
-        {
-            _components.Add(new KeyValuePair<Type, Component>(component.GetType(), component));
-            component._SetActivityObject(this);
-            component.OnMount();
-        }
+        var component = new T();
+        _components.Add(new KeyValuePair<Type, Component>(typeof(T), component));
+        component.ActivityInstance = this;
+        return component;
     }
 
     /// <summary>
-    /// 移除一个组件
+    /// 移除一个组件, 并且销毁
     /// </summary>
     /// <param name="component">组件对象</param>
     public void RemoveComponent(Component component)
@@ -439,8 +449,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             if (_components[i].Value == component)
             {
                 _components.RemoveAt(i);
-                component.OnUnMount();
-                component._SetActivityObject(null);
+                component.Destroy();
                 return;
             }
         }
@@ -466,11 +475,11 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 根据类型获取一个组件
     /// </summary>
-    public TC GetComponent<TC>() where TC : Component
+    public T GetComponent<T>() where T : Component
     {
-        var component = GetComponent(typeof(TC));
+        var component = GetComponent(typeof(T));
         if (component == null) return null;
-        return (TC)component;
+        return (T)component;
     }
     
     /// <summary>
@@ -489,7 +498,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             {
                 if (IsDestroyed) return;
                 var temp = arr[i].Value;
-                if (temp != null && temp.ActivityObject == this && temp.Enable)
+                if (temp != null && temp.ActivityInstance == this && temp.Enable)
                 {
                     if (!temp.IsReady)
                     {
@@ -606,6 +615,8 @@ public abstract partial class ActivityObject : CharacterBody2D
             }
         }
         
+        ProcessOver(newDelta);
+        
         //调试绘制
         if (IsDebug)
         {
@@ -629,7 +640,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             {
                 if (IsDestroyed) return;
                 var temp = arr[i].Value;
-                if (temp != null && temp.ActivityObject == this && temp.Enable)
+                if (temp != null && temp.ActivityInstance == this && temp.Enable)
                 {
                     if (!temp.IsReady)
                     {
@@ -641,6 +652,8 @@ public abstract partial class ActivityObject : CharacterBody2D
                 }
             }
         }
+
+        PhysicsProcessOver(newDelta);
     }
 
     /// <summary>
@@ -656,7 +669,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             {
                 if (IsDestroyed) return;
                 var temp = arr[i].Value;
-                if (temp != null && temp.ActivityObject == this && temp.Enable)
+                if (temp != null && temp.ActivityInstance == this && temp.Enable)
                 {
                     temp.DebugDraw();
                 }

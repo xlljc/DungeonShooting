@@ -71,8 +71,7 @@ public partial class Enemy : Role
 
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
-        StateController = new StateController<Enemy, AiStateEnum>();
-        AddComponent(StateController);
+        StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
 
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
         Camp = CampEnum.Camp2;

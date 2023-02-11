@@ -31,6 +31,8 @@ public partial class Bullet : ActivityObject
         Position = position;
         Rotation = rotation;
         ShadowOffset = new Vector2(0, 5);
+
+        BasisVelocity = new Vector2(FlySpeed, 0).Rotated(Rotation);
     }
 
     public override void _Ready()
@@ -40,17 +42,17 @@ public partial class Bullet : ActivityObject
         ShowShadowSprite();
     }
 
-    protected override void PhysicsProcess(float delta)
+    protected override void PhysicsProcessOver(float delta)
     {
         //移动
-        var kinematicCollision = MoveAndCollide(new Vector2(FlySpeed * delta, 0).Rotated(Rotation));
-        if (kinematicCollision != null)
+        var lastSlideCollision = GetLastSlideCollision();
+        if (lastSlideCollision != null)
         {
             //创建粒子特效
             var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletSmoke_tscn);
             var smoke = packedScene.Instantiate<GpuParticles2D>();
-            smoke.GlobalPosition = kinematicCollision.GetPosition();
-            smoke.GlobalRotation = kinematicCollision.GetNormal().Angle();
+            smoke.GlobalPosition = lastSlideCollision.GetPosition();
+            smoke.GlobalRotation = lastSlideCollision.GetNormal().Angle();
             GameApplication.Instance.RoomManager.GetRoot(true).AddChild(smoke);
 
             Destroy();
