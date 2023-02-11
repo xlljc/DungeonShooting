@@ -93,8 +93,6 @@ public partial class RoomManager : Node2D
         var nowTicks = DateTime.Now.Ticks;
         //生成寻路网格
         //GenerateNavigationPolygon();
-        GD.Print("计算NavigationPolygon用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
-        
         var polygon = new NavigationPolygon();
         foreach (var polygonData in _polygonDataList)
         {
@@ -102,6 +100,7 @@ public partial class RoomManager : Node2D
         }
         polygon.MakePolygonsFromOutlines();
         NavigationPolygon.NavigationPolygon = polygon;
+        GD.Print("计算NavigationPolygon用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
@@ -210,10 +209,10 @@ public partial class RoomManager : Node2D
 
         var rect = FloorTileMap.GetUsedRect();
 
-        var x = (int)rect.Position.X;
-        var y = (int)rect.Position.Y;
-        var w = (int)rect.Size.X;
-        var h = (int)rect.Size.Y;
+        var x = rect.Position.X;
+        var y = rect.Position.Y;
+        var w = rect.Size.X;
+        var h = rect.Size.Y;
 
         for (int j = y; j < h; j++)
         {
