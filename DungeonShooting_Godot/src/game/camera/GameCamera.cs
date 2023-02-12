@@ -49,10 +49,11 @@ public partial class GameCamera : Camera2D
         var camPos = player.GlobalPosition;
         //var camPos = player.GlobalPosition.Lerp(mousePos, 0);
         //_camPos = camPos + _shakeOffset;
-        _camPos = _camPos.Lerp(camPos, Mathf.Min(5 * newDelta, 1)) + _shakeOffset;
+        _camPos = _camPos.Lerp(camPos, Mathf.Min(6 * newDelta, 1)) + _shakeOffset;
         SubPixelPosition = _camPos.Round() - _camPos;
-        (viewportContainer.Material as ShaderMaterial)?.SetShaderParameter("offset", SubPixelPosition);
+        //(viewportContainer.Material as ShaderMaterial)?.SetShaderParameter("offset", SubPixelPosition);
         GlobalPosition = _camPos.Round();
+        //GlobalPosition = _camPos;
     }
     
     /// <summary>
