@@ -66,8 +66,11 @@ public partial class GameApplication : Node2D
     {
         //随机化种子
         GD.Randomize();
+        //固定帧率
+        Engine.MaxFps = 60;
         //调试绘制开关
         ActivityObject.IsDebug = Debug;
+        //Engine.TimeScale = 0.3f;
 
         GlobalNodeRoot = GetNode<Node2D>(GlobalNodeRootPath);
         // 初始化鼠标

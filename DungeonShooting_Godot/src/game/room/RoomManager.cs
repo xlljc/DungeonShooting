@@ -8,6 +8,10 @@ using Godot;
 /// </summary>
 public partial class RoomManager : Node2D
 {
+    public const int FloorMapLayer = 0;
+    public const int MiddleMapLayer = 1;
+    public const int TopMapLayer = 2;
+    
     /// <summary>
     /// //对象根节点
     /// </summary>
@@ -61,7 +65,7 @@ public partial class RoomManager : Node2D
         Player = new Player();
         Player.Position = new Vector2(100, 100);
         Player.Name = "Player";
-        Player.PutDown();
+        Player.PutDown(true);
     }
 
     public override void _Ready()
@@ -77,16 +81,13 @@ public partial class RoomManager : Node2D
         
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
-        //DungeonTileManager.AutoFillRoomTile(FloorTileMap, MiddleTileMap, TopTileMap, _autoTileConfig, _generateDungeon.StartRoom);
-        // FloorTileMap.UpdateDirtyQuadrants();
-        // MiddleTileMap.UpdateDirtyQuadrants();
-        // TopTileMap.UpdateDirtyQuadrants();
+        DungeonTileManager.AutoFillRoomTile(TileRoot, FloorMapLayer, MiddleMapLayer, TopMapLayer, _autoTileConfig, _generateDungeon.StartRoom);
 
         //根据房间数据创建填充 tiled
         
         var nowTicks = DateTime.Now.Ticks;
         //生成寻路网格
-        //GenerateNavigationPolygon();
+        GenerateNavigationPolygon();
         var polygon = new NavigationPolygon();
         foreach (var polygonData in _polygonDataList)
         {
@@ -98,10 +99,10 @@ public partial class RoomManager : Node2D
 
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
-        
+
         var enemy1 = new Enemy();
         enemy1.Name = "Enemy";
-        enemy1.PutDown(new Vector2(150, 300));
+        enemy1.PutDown(new Vector2(100, 100));
         enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
         enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
@@ -114,18 +115,18 @@ public partial class RoomManager : Node2D
         //     enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
         // }
         
-        // var enemy2 = new Enemy();
-        // enemy2.Name = "Enemy2";
-        // enemy2.PutDown(new Vector2(540, 100));
-        // enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
-        // //enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
-        // //enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
-        //
-        // var enemy3 = new Enemy();
-        // enemy3.Name = "Enemy3";
-        // enemy3.PutDown(new Vector2(540, 300));
-        // enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
-        // enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
+        var enemy2 = new Enemy();
+        enemy2.Name = "Enemy2";
+        enemy2.PutDown(new Vector2(120, 100));
+        enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
+        //enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
+        //enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
+        
+        var enemy3 = new Enemy();
+        enemy3.Name = "Enemy3";
+        enemy3.PutDown(new Vector2(100, 120));
+        enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
+        enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
 
         WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100));
         WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120));
@@ -167,22 +168,11 @@ public partial class RoomManager : Node2D
     }
 
     /// <summary>
-    /// 获取房间根节点
-    /// </summary>
-    /// <param name="useYSort">是否获取 Node2D 节点</param>
-    /// <returns></returns>
-    public Node2D GetRoot(bool useYSort = false)
-    {
-        return useYSort ? YSortRoot : ObjectRoot;
-    }
-
-    /// <summary>
     /// 返回指定位置的Tile是否为可以行走
     /// </summary>
     public bool IsWayTile(int x, int y)
     {
-        return false;
-        //return FloorTileMap.GetCell(x, y) != TileMap.InvalidCell;
+        return TileRoot.GetCellTileData(FloorMapLayer, new Vector2I(x, y)) != null;
     }
 
     /// <summary>

@@ -78,7 +78,7 @@ public partial class Shotgun : Weapon
         var sprite = packedScene.Instantiate<Sprite2D>();
         sprite.GlobalPosition = FirePoint.GlobalPosition;
         sprite.GlobalRotation = FirePoint.GlobalRotation;
-        GameApplication.Instance.RoomManager.GetRoot(true).AddChild(sprite);
+        sprite.AddToActivityRoot(true);
         
         //播放射击音效
         SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet3_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -15);
@@ -95,6 +95,6 @@ public partial class Shotgun : Weapon
             fireRotation + Utils.RandfRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
             GetAttackLayer()
         );
-        bullet.PutDown();
+        bullet.PutDown(true);
     }
 }

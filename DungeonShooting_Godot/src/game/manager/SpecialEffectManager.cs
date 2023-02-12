@@ -64,6 +64,6 @@ public static partial class SpecialEffectManager
         specialEffect.LoopCount = loopCount;
         specialEffect.SpriteFrames = spriteFrames;
         specialEffect.Play(animName);
-        GameApplication.Instance.RoomManager.GetRoot(true).AddChild(specialEffect);
+        specialEffect.AddToActivityRoot(true);
     }
 }

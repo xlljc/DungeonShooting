@@ -24,7 +24,6 @@ settings/fps/force_fps=60
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/resizable=false
-window/stretch/mode="2d"
 window/stretch/aspect="keep_width"
 window/vsync/use_vsync=false
 
@@ -181,6 +180,7 @@ project/assembly_name="DungeonShooting"
 
 [rendering]
 
+environment/defaults/default_clear_color=Color(0.109804, 0.0666667, 0.0901961, 1)
 textures/canvas_textures/default_texture_filter=0
 2d/snapping/use_gpu_pixel_snap=true
 environment/default_environment="res://default_env.tres"

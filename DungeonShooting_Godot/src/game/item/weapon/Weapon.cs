@@ -289,7 +289,7 @@ public abstract partial class Weapon : ActivityObject
         base._EnterTree();
 
         //收集落在地上的武器
-        if (Master == null && GetParent() == GameApplication.Instance.RoomManager.GetRoot())
+        if (IsInGround())
         {
             UnclaimedWeapons.Add(this);
         }
@@ -427,6 +427,15 @@ public abstract partial class Weapon : ActivityObject
         }
     }
 
+    /// <summary>
+    /// 返回武器是否在地上
+    /// </summary>
+    /// <returns></returns>
+    public bool IsInGround()
+    {
+        return Master == null && GetParent() == GameApplication.Instance.RoomManager.ObjectRoot;
+    }
+    
     /// <summary>
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
@@ -939,9 +948,9 @@ public abstract partial class Weapon : ActivityObject
         AnimationPlayer.Play("floodlight");
     }
 
-    public override void PutDown()
+    public override void PutDown(bool useYSort = false)
     {
-        base.PutDown();
+        base.PutDown(useYSort);
         AnimationPlayer.Play("floodlight");
     }
 

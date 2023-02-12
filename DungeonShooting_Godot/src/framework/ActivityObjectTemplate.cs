@@ -68,7 +68,7 @@ namespace Plugin
                     {
                         sprite = new Sprite2D();
                         sprite.Name = "ShadowSprite";
-                        sprite.ZIndex = -5;
+                        sprite.ZIndex = -1;
                         var material =
                             ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
                         material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));

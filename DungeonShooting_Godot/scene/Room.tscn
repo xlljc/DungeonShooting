@@ -7,6 +7,7 @@
 [sub_resource type="Environment" id="1"]
 background_mode = 4
 glow_enabled = true
+glow_intensity = 3.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rkmbu"]
 texture = ExtResource("1")
@@ -567,6 +568,7 @@ script = ExtResource("1_3w1c7")
 ObjectRoot = NodePath("ObjectRoot")
 YSortRoot = NodePath("SortRoot")
 TileRoot = NodePath("SortRoot/TileRoot")
+metadata/_edit_vertical_guides_ = []
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("1")
@@ -579,15 +581,17 @@ editor_draw_drag_margin = true
 script = ExtResource("5")
 
 [node name="ObjectRoot" type="Node2D" parent="."]
+z_index = -1
 
 [node name="SortRoot" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="TileRoot" type="TileMap" parent="SortRoot"]
 y_sort_enabled = true
 tile_set = SubResource("TileSet_bspf4")
 format = 2
-layer_0/name = "Top"
-layer_0/tile_data = PackedInt32Array(458756, 65537, 2, 524292, 65537, 3, 589828, 65537, 4, 655364, 65537, 5, 720900, 65537, 6, 786436, 65537, 7, 458757, 131073, 2, 524293, 131073, 3, 589829, 131073, 4, 655365, 131073, 5, 720901, 131073, 6, 786437, 131073, 7, 458758, 196609, 2, 524294, 196609, 3, 589830, 196609, 4, 655366, 196609, 5, 720902, 196609, 6, 786438, 196609, 7)
+layer_0/name = "Floor"
+layer_0/z_index = -10
 layer_1/name = "Middle"
 layer_1/enabled = true
 layer_1/modulate = Color(1, 1, 1, 1)
@@ -595,10 +599,10 @@ layer_1/y_sort_enabled = false
 layer_1/y_sort_origin = 0
 layer_1/z_index = 0
 layer_1/tile_data = PackedInt32Array()
-layer_2/name = "Floor"
+layer_2/name = "Top"
 layer_2/enabled = true
 layer_2/modulate = Color(1, 1, 1, 1)
 layer_2/y_sort_enabled = false
 layer_2/y_sort_origin = 0
-layer_2/z_index = 0
+layer_2/z_index = 10
 layer_2/tile_data = PackedInt32Array()

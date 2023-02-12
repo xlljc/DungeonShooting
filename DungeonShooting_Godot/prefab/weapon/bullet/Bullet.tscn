@@ -1,6 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://dlj2qtrqxph0a"]
+[gd_scene load_steps=9 format=3 uid="uid://b11ncboik0a7f"]
 
-[ext_resource type="Script" path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" id="1"]
+[ext_resource type="Script" path="res://src/framework/ActivityObjectTemplate.cs" id="1_nwypj"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2"]
 [ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/bullet.png" id="3"]
 
@@ -34,14 +34,15 @@ size = Vector2(44.72, 12)
 size = Vector2(11, 4)
 
 [node name="Bullet" type="Node"]
-script = ExtResource("1")
+script = ExtResource("1_nwypj")
 collision_mask = 1
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
-z_index = -5
+z_index = -1
 material = SubResource("ShaderMaterial_5a4f2")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+modulate = Color(1.8, 1.8, 1.8, 1)
 material = SubResource("ShaderMaterial_o0655")
 sprite_frames = SubResource("SpriteFrames_5wvmf")
 

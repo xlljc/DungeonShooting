@@ -38,4 +38,23 @@ public static class NodeExtend
         }
         return null;
     }
+
+    /// <summary>
+    /// 将节点插入的房间物体根节点
+    /// </summary>
+    /// <param name="node">实例</param>
+    /// <param name="useYSort">是否启用 YSort 排序</param>
+    public static void AddToActivityRoot(this Node2D node, bool useYSort = false)
+    {
+        if (useYSort)
+        {
+            //node.YSortEnabled = true;
+            GameApplication.Instance.RoomManager.YSortRoot.AddChild(node);
+        }
+        else
+        {
+            //node.YSortEnabled = false;
+            GameApplication.Instance.RoomManager.ObjectRoot.AddChild(node);
+        }
+    }
 }

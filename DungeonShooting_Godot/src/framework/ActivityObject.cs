@@ -103,8 +103,11 @@ public abstract partial class ActivityObject : CharacterBody2D
     //标记字典
     private Dictionary<string, object> _signMap;
 
+    private static long _index = 0;
+    
     public ActivityObject(string scenePath)
     {
+        Name = GetType().Name + (_index++);
         //加载预制体
         var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
         if (tempPrefab == null)
@@ -337,19 +340,19 @@ public abstract partial class ActivityObject : CharacterBody2D
 
     /// <summary>
     /// 将一个节点扔到地上, 并设置显示的阴影
+    /// <param name="useYSort">是否放到 ySort 下</param>
     /// </summary>
-    public virtual void PutDown()
+    public virtual void PutDown(bool useYSort = false)
     {
         var parent = GetParent();
-        var root = GameApplication.Instance.RoomManager.GetRoot(UseYSort);
-        if (parent != root)
+        if (parent != (useYSort ? GameApplication.Instance.RoomManager.YSortRoot : GameApplication.Instance.RoomManager.ObjectRoot))
         {
             if (parent != null)
             {
                 parent.RemoveChild(this);
             }
 
-            root.AddChild(this);
+            this.AddToActivityRoot(useYSort);
         }
 
         if (IsInsideTree())
@@ -367,9 +370,10 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// 将一个节点扔到地上, 并设置显示的阴影
     /// </summary>
     /// <param name="position">放置的位置</param>
-    public void PutDown(Vector2 position)
+    /// <param name="useYSort">是否放到 ySort 下</param>
+    public void PutDown(Vector2 position, bool useYSort = false)
     {
-        PutDown();
+        PutDown(useYSort);
         Position = position;
     }
 
@@ -762,16 +766,14 @@ public abstract partial class ActivityObject : CharacterBody2D
     {
         var parent = GetParent();
         //投抛时必须要加入 sortRoot 节点下
-        var root = GameApplication.Instance.RoomManager.GetRoot();
-        var throwRoot = GameApplication.Instance.RoomManager.GetRoot(true);
         if (parent == null)
         {
-            throwRoot.AddChild(this);
+            this.AddToActivityRoot(true);
         }
-        else if (parent == root)
+        else if (parent == GameApplication.Instance.RoomManager.ObjectRoot)
         {
             parent.RemoveChild(this);
-            throwRoot.AddChild(this);
+            this.AddToActivityRoot(true);
         }
 
         GlobalPosition = _throwData.StartPosition;
@@ -855,7 +857,7 @@ public abstract partial class ActivityObject : CharacterBody2D
         MoveController.RemoveForce(_throwData.ThrowForce);
         
         GetParent().RemoveChild(this);
-        GameApplication.Instance.RoomManager.GetRoot(UseYSort).AddChild(this);
+        this.AddToActivityRoot(UseYSort);
         RestoreCollision();
 
         OnThrowOver();

@@ -1,8 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://dp6n6l6wq1hvs"]
+[gd_scene load_steps=10 format=3 uid="uid://eaqea7rdp3tm"]
 
 [ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/shellCase.png" id="1"]
+[ext_resource type="Script" path="res://src/framework/ActivityObjectTemplate.cs" id="1_nmhqm"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2"]
-[ext_resource type="Script" path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" id="3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_px12l"]
 resource_local_to_scene = true
@@ -27,19 +27,61 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Animation" id="Animation_pfprw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="Animation" id="Animation_kjsto"]
 resource_name = "flicker"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.7, 0.8, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [true, true, false, true, false, true, false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cpq4j"]
 _data = {
+"RESET": SubResource("Animation_pfprw"),
 "flicker": SubResource("Animation_kjsto")
 }
 
 [node name="ShellCase" type="Node"]
-script = ExtResource("3")
+script = ExtResource("1_nmhqm")
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
-z_index = -5
+z_index = -1
 material = SubResource("ShaderMaterial_px12l")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]

@@ -26,7 +26,7 @@ shader_parameter/offset = Vector2(0, 0)
 script = ExtResource("3")
 Debug = true
 CursorPack = ExtResource("4")
-RoomPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport/Node3D")
+RoomPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport/Room")
 ViewportPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport")
 ViewportContainerPath = NodePath("ViewCanvas/SubViewportContainer")
 UiPath = NodePath("UiCanvas/RoomUI")
@@ -54,7 +54,7 @@ sdf_oversize = 0
 size = Vector2i(482, 272)
 render_target_update_mode = 4
 
-[node name="Node3D" parent="ViewCanvas/SubViewportContainer/SubViewport" instance=ExtResource("1")]
+[node name="Room" parent="ViewCanvas/SubViewportContainer/SubViewport" instance=ExtResource("1")]
 
 [node name="GlobalNodeRoot" type="Node2D" parent="."]
 

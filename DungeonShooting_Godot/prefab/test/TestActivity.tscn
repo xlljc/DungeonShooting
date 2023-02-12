@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bx0krba7eguqp"]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="1"]
-[ext_resource type="Script" path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" id="2"]
+[ext_resource type="Script" path="res://src/framework/ActivityObjectTemplate.cs" id="2"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rxkv3"]
