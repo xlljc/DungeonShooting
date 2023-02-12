@@ -112,7 +112,7 @@ public partial class Gun : Weapon
         var sprite = packedScene.Instantiate<Sprite2D>();
         sprite.GlobalPosition = FirePoint.GlobalPosition;
         sprite.GlobalRotation = FirePoint.GlobalRotation;
-        sprite.AddToActivityRoot(true);
+        sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
 
         //播放射击音效
         SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet2_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -8);
@@ -130,6 +130,6 @@ public partial class Gun : Weapon
             fireRotation,
             GetAttackLayer()
         );
-        bullet.PutDown(true);
+        bullet.PutDown(RoomLayerEnum.YSortLayer);
     }
 }

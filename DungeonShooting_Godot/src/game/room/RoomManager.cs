@@ -15,12 +15,12 @@ public partial class RoomManager : Node2D
     /// <summary>
     /// //对象根节点
     /// </summary>
-    [Export] public Node2D ObjectRoot;
+    [Export] public Node2D NormalLayer;
     
     /// <summary>
     /// 对象根节点, 带y轴排序功能
     /// </summary>
-    [Export] public Node2D YSortRoot;
+    [Export] public Node2D YSortLayer;
     
     /// <summary>
     /// 地图根节点
@@ -65,7 +65,7 @@ public partial class RoomManager : Node2D
         Player = new Player();
         Player.Position = new Vector2(100, 100);
         Player.Name = "Player";
-        Player.PutDown(true);
+        Player.PutDown(RoomLayerEnum.YSortLayer);
     }
 
     public override void _Ready()
@@ -100,11 +100,11 @@ public partial class RoomManager : Node2D
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
-        var enemy1 = new Enemy();
-        enemy1.Name = "Enemy";
-        enemy1.PutDown(new Vector2(100, 100));
-        enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
-        enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        // var enemy1 = new Enemy();
+        // enemy1.Name = "Enemy";
+        // enemy1.PutDown(new Vector2(100, 100));
+        // enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
+        // enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
         // for (int i = 0; i < 10; i++)
         // {
@@ -115,29 +115,47 @@ public partial class RoomManager : Node2D
         //     enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
         // }
         
-        var enemy2 = new Enemy();
-        enemy2.Name = "Enemy2";
-        enemy2.PutDown(new Vector2(120, 100));
-        enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
-        //enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
-        //enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
-        
-        var enemy3 = new Enemy();
-        enemy3.Name = "Enemy3";
-        enemy3.PutDown(new Vector2(100, 120));
-        enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
-        enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
+        // var enemy2 = new Enemy();
+        // enemy2.Name = "Enemy2";
+        // enemy2.PutDown(new Vector2(120, 100));
+        // enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
+        // //enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
+        // //enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
+        //
+        // var enemy3 = new Enemy();
+        // enemy3.Name = "Enemy3";
+        // enemy3.PutDown(new Vector2(100, 120));
+        // enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
+        // enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
 
-        WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100));
-        WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120));
-        WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80));
-        WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120));
-        WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80));
+        WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80), RoomLayerEnum.NormalLayer);
         
-        WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80));
-        WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180));
-        WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120));
+        WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120), RoomLayerEnum.NormalLayer);
 
+    }
+
+    /// <summary>
+    /// 获取指定层级根节点
+    /// </summary>
+    /// <param name="layerEnum"></param>
+    /// <returns></returns>
+    public Node2D GetRoomLayer(RoomLayerEnum layerEnum)
+    {
+        switch (layerEnum)
+        {
+            case RoomLayerEnum.NormalLayer:
+                return NormalLayer;
+            case RoomLayerEnum.YSortLayer:
+                return YSortLayer;
+        }
+
+        return null;
     }
 
     public override void _Process(double delta)

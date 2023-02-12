@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 /// <summary>
@@ -43,18 +44,9 @@ public static class NodeExtend
     /// 将节点插入的房间物体根节点
     /// </summary>
     /// <param name="node">实例</param>
-    /// <param name="useYSort">是否启用 YSort 排序</param>
-    public static void AddToActivityRoot(this Node2D node, bool useYSort = false)
+    /// <param name="layer">放入的层</param>
+    public static void AddToActivityRoot(this Node2D node, RoomLayerEnum layer)
     {
-        if (useYSort)
-        {
-            //node.YSortEnabled = true;
-            GameApplication.Instance.RoomManager.YSortRoot.AddChild(node);
-        }
-        else
-        {
-            //node.YSortEnabled = false;
-            GameApplication.Instance.RoomManager.ObjectRoot.AddChild(node);
-        }
+        GameApplication.Instance.RoomManager.GetRoomLayer(layer).AddChild(node);
     }
 }

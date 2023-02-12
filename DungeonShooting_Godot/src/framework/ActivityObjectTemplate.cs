@@ -8,10 +8,10 @@ namespace Plugin
     [Tool]
     public partial class ActivityObjectTemplate : Node
     {
-        /// <summary>
-        /// 是否放入 ySort 节点下
-        /// </summary>
-        [Export] public bool UseYSort;
+        // /// <summary>
+        // /// 默认放入的层级
+        // /// </summary>
+        // [Export] public RoomLayerEnum DefaultLayer = RoomLayerEnum.NormalLayer;
 
         /// <summary>
         /// 物体初始缩放

@@ -20,11 +20,6 @@ public abstract partial class ActivityObject : CharacterBody2D
     public string ItemId { get; private set; }
 
     /// <summary>
-    /// 是否放入 ySort 节点下
-    /// </summary>
-    public bool UseYSort { get; }
-
-    /// <summary>
     /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite2D", 类型为 AnimatedSprite2D
     /// </summary>
     public AnimatedSprite2D AnimatedSprite { get; }
@@ -73,12 +68,6 @@ public abstract partial class ActivityObject : CharacterBody2D
         get => MoveController.BasisVelocity;
         set => MoveController.BasisVelocity = value;
     }
-    
-    // /// <summary>
-    // /// 这个速度就是玩家当前物理帧移动的真实速率, 该速度由物理帧循环更新, 并不会马上更新
-    // /// 该速度就是 BasisVelocity + 外力总和
-    // /// </summary>
-    // public Vector2 Velocity => MoveController.Velocity;
 
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
@@ -96,10 +85,12 @@ public abstract partial class ActivityObject : CharacterBody2D
     //混色shader材质
     private ShaderMaterial _blendShaderMaterial;
     
-
     //存储投抛该物体时所产生的数据
     private ObjectThrowData _throwData;
-
+    
+    //所在层级
+    private RoomLayerEnum _currLayer;
+    
     //标记字典
     private Dictionary<string, object> _signMap;
 
@@ -119,7 +110,6 @@ public abstract partial class ActivityObject : CharacterBody2D
         ZIndex = tempNode.z_index;
         CollisionLayer = tempNode.collision_layer;
         CollisionMask = tempNode.collision_mask;
-        UseYSort = tempNode.UseYSort;
         Scale = tempNode.scale;
         Visible = tempNode.visible;
 
@@ -340,19 +330,21 @@ public abstract partial class ActivityObject : CharacterBody2D
 
     /// <summary>
     /// 将一个节点扔到地上, 并设置显示的阴影
-    /// <param name="useYSort">是否放到 ySort 下</param>
+    /// <param name="layer">放入的层</param>
     /// </summary>
-    public virtual void PutDown(bool useYSort = false)
+    public virtual void PutDown(RoomLayerEnum layer)
     {
+        _currLayer = layer;
         var parent = GetParent();
-        if (parent != (useYSort ? GameApplication.Instance.RoomManager.YSortRoot : GameApplication.Instance.RoomManager.ObjectRoot))
+        var root = GameApplication.Instance.RoomManager.GetRoomLayer(layer);
+        if (parent != root)
         {
             if (parent != null)
             {
                 parent.RemoveChild(this);
             }
 
-            this.AddToActivityRoot(useYSort);
+            this.AddToActivityRoot(layer);
         }
 
         if (IsInsideTree())
@@ -370,10 +362,10 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// 将一个节点扔到地上, 并设置显示的阴影
     /// </summary>
     /// <param name="position">放置的位置</param>
-    /// <param name="useYSort">是否放到 ySort 下</param>
-    public void PutDown(Vector2 position, bool useYSort = false)
+    /// <param name="layer">放入的层</param>
+    public void PutDown(Vector2 position, RoomLayerEnum layer)
     {
-        PutDown(useYSort);
+        PutDown(layer);
         Position = position;
     }
 
@@ -765,15 +757,15 @@ public abstract partial class ActivityObject : CharacterBody2D
     private void Throw()
     {
         var parent = GetParent();
-        //投抛时必须要加入 sortRoot 节点下
+        //投抛时必须要加入 YSortLayer 节点下
         if (parent == null)
         {
-            this.AddToActivityRoot(true);
+            this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
-        else if (parent == GameApplication.Instance.RoomManager.ObjectRoot)
+        else if (parent == GameApplication.Instance.RoomManager.NormalLayer)
         {
             parent.RemoveChild(this);
-            this.AddToActivityRoot(true);
+            this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
 
         GlobalPosition = _throwData.StartPosition;
@@ -857,7 +849,7 @@ public abstract partial class ActivityObject : CharacterBody2D
         MoveController.RemoveForce(_throwData.ThrowForce);
         
         GetParent().RemoveChild(this);
-        this.AddToActivityRoot(UseYSort);
+        this.AddToActivityRoot(_currLayer);
         RestoreCollision();
 
         OnThrowOver();

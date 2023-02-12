@@ -433,7 +433,7 @@ public abstract partial class Weapon : ActivityObject
     /// <returns></returns>
     public bool IsInGround()
     {
-        return Master == null && GetParent() == GameApplication.Instance.RoomManager.ObjectRoot;
+        return Master == null && GetParent() == GameApplication.Instance.RoomManager.NormalLayer;
     }
     
     /// <summary>
@@ -948,9 +948,9 @@ public abstract partial class Weapon : ActivityObject
         AnimationPlayer.Play("floodlight");
     }
 
-    public override void PutDown(bool useYSort = false)
+    public override void PutDown(RoomLayerEnum layer)
     {
-        base.PutDown(useYSort);
+        base.PutDown(layer);
         AnimationPlayer.Play("floodlight");
     }
 

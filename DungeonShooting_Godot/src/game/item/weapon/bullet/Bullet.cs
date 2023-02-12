@@ -53,7 +53,7 @@ public partial class Bullet : ActivityObject
             var smoke = packedScene.Instantiate<GpuParticles2D>();
             smoke.GlobalPosition = lastSlideCollision.GetPosition();
             smoke.GlobalRotation = lastSlideCollision.GetNormal().Angle();
-            smoke.AddToActivityRoot(true);
+            smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
 
             Destroy();
             return;

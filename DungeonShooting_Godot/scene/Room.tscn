@@ -4,10 +4,10 @@
 [ext_resource type="Script" path="res://src/game/room/RoomManager.cs" id="1_3w1c7"]
 [ext_resource type="Script" path="res://src/game/camera/GameCamera.cs" id="5"]
 
-[sub_resource type="Environment" id="1"]
-background_mode = 4
+[sub_resource type="Environment" id="Environment_ji6mi"]
+background_mode = 3
 glow_enabled = true
-glow_intensity = 3.0
+glow_intensity = 4.74
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rkmbu"]
 texture = ExtResource("1")
@@ -563,15 +563,15 @@ physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_rkmbu")
 
-[node name="Room" type="Node2D" node_paths=PackedStringArray("ObjectRoot", "YSortRoot", "TileRoot")]
+[node name="Room" type="Node2D" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot")]
 script = ExtResource("1_3w1c7")
-ObjectRoot = NodePath("ObjectRoot")
-YSortRoot = NodePath("SortRoot")
-TileRoot = NodePath("SortRoot/TileRoot")
+NormalLayer = NodePath("NormalLayer")
+YSortLayer = NodePath("YSortLayer")
+TileRoot = NodePath("YSortLayer/TileRoot")
 metadata/_edit_vertical_guides_ = []
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("1")
+environment = SubResource("Environment_ji6mi")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(253, 219)
@@ -580,13 +580,13 @@ limit_smoothed = true
 editor_draw_drag_margin = true
 script = ExtResource("5")
 
-[node name="ObjectRoot" type="Node2D" parent="."]
+[node name="NormalLayer" type="Node2D" parent="."]
 z_index = -1
 
-[node name="SortRoot" type="Node2D" parent="."]
+[node name="YSortLayer" type="Node2D" parent="."]
 y_sort_enabled = true
 
-[node name="TileRoot" type="TileMap" parent="SortRoot"]
+[node name="TileRoot" type="TileMap" parent="YSortLayer"]
 y_sort_enabled = true
 tile_set = SubResource("TileSet_bspf4")
 format = 2

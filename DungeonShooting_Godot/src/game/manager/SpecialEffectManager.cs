@@ -1,5 +1,4 @@
 
-using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -64,6 +63,6 @@ public static partial class SpecialEffectManager
         specialEffect.LoopCount = loopCount;
         specialEffect.SpriteFrames = spriteFrames;
         specialEffect.Play(animName);
-        specialEffect.AddToActivityRoot(true);
+        specialEffect.AddToActivityRoot(RoomLayerEnum.YSortLayer);
     }
 }
