@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Godot;
 using Plugin;
@@ -93,7 +94,10 @@ public abstract partial class ActivityObject : CharacterBody2D
     
     //标记字典
     private Dictionary<string, object> _signMap;
-
+    
+    private List<KeyValuePair<long, IEnumerator>> _coroutineList;
+    
+    private static long _coroutineId = 0;
     private static long _index = 0;
     
     public ActivityObject(string scenePath)
@@ -140,6 +144,7 @@ public abstract partial class ActivityObject : CharacterBody2D
         }
         
         MoveController = AddComponent<MoveController>();
+        tempNode.QueueFree();
     }
 
     /// <summary>
@@ -611,6 +616,20 @@ public abstract partial class ActivityObject : CharacterBody2D
             }
         }
         
+        //协程更新
+        if (_coroutineList != null)
+        {
+            var pairs = _coroutineList.ToArray();
+            for (var i = 0; i < pairs.Length; i++)
+            {
+                var item = pairs[i];
+                if (!item.Value.MoveNext())
+                {
+                    StopCoroutine(item.Key);
+                }
+            }
+        }
+        
         ProcessOver(newDelta);
         
         //调试绘制
@@ -930,6 +949,41 @@ public abstract partial class ActivityObject : CharacterBody2D
         _playHitSchedule = 0;
     }
 
+    public long StartCoroutine(IEnumerable able)
+    {
+        var id = _coroutineId++;
+        if (_coroutineList == null)
+        {
+            _coroutineList = new List<KeyValuePair<long, IEnumerator>>();
+        }
+        _coroutineList.Add(new KeyValuePair<long, IEnumerator>(id, able.GetEnumerator()));
+        return id;
+    }
+
+    public void StopCoroutine(long coroutineId)
+    {
+        if (_coroutineList != null)
+        {
+            for (var i = 0; i < _coroutineList.Count; i++)
+            {
+                var item = _coroutineList[i];
+                if (item.Key == coroutineId)
+                {
+                    _coroutineList.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+    }
+    
+    public void StopAllCoroutine()
+    {
+        if (_coroutineList != null)
+        {
+            _coroutineList.Clear();
+        }
+    }
+    
     /// <summary>
     /// 通过 ItemId 实例化 ActivityObject 对象
     /// </summary>
