@@ -86,7 +86,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     private ShaderMaterial _blendShaderMaterial;
     
     //存储投抛该物体时所产生的数据
-    private ObjectThrowData _throwData;
+    private ActivityThrowData _throwData;
     
     //所在层级
     private RoomLayerEnum _currLayer;
@@ -387,7 +387,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     {
         if (_throwData == null)
         {
-            _throwData = new ObjectThrowData();
+            _throwData = new ActivityThrowData();
         }
 
         SetThrowCollision();

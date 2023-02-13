@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cguea7a1vauvm"]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="1"]
-[ext_resource type="Script" path="res://src/framework/ActivityObjectTemplate.cs" id="1_dtam7"]
+[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_dtam7"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
 resource_local_to_scene = true

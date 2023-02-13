@@ -1,6 +1,6 @@
 using Godot;
 
-public class ObjectThrowData
+public class ActivityThrowData
 {
     /// <summary>
     /// 是否是第一次结束

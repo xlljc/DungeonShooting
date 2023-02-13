@@ -19,7 +19,7 @@ namespace Plugin
         public override void _EnterTree()
         {
             _instance = this;
-            var script = GD.Load<Script>("res://src/framework/ActivityObjectTemplate.cs");
+            var script = GD.Load<Script>("res://src/framework/activity/ActivityObjectTemplate.cs");
             var texture = GD.Load<Texture2D>("res://addons/dungeonShooting_plugin/ActivityObject.svg");
             AddCustomType("ActivityObjectTemplate", "Node", script, texture);
             

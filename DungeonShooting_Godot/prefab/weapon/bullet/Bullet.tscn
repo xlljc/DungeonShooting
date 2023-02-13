@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://b11ncboik0a7f"]
+[gd_scene load_steps=9 format=3]
 
-[ext_resource type="Script" path="res://src/framework/ActivityObjectTemplate.cs" id="1_nwypj"]
+[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_nwypj"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2"]
 [ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/bullet.png" id="3"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5a4f2"]
 resource_local_to_scene = true
