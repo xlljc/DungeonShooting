@@ -1,97 +1,95 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=3]
 
-[ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=1]
-[ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=3]
+[ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="1"]
+[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_dtam7"]
 
-[sub_resource type="ShaderMaterial" id=7]
+
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
 resource_local_to_scene = true
-shader = ExtResource( 1 )
-shader_param/blend = Color( 0, 0, 0, 0.470588 )
-shader_param/schedule = 1
+shader = ExtResource("1")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
 
-[sub_resource type="ShaderMaterial" id=8]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
 resource_local_to_scene = true
-shader = ExtResource( 1 )
-shader_param/blend = Color( 1, 1, 1, 1 )
-shader_param/schedule = 0.0
+shader = ExtResource("1")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 7.8, 3.5 )
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3p5jk"]
+size = Vector2(15.6, 7)
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id="Animation_x136i"]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ 0.0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("AnimatedSprite:material:shader_param/blend")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
+"values": [0]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id="Animation_3piau"]
 resource_name = "floodlight"
 length = 3.0
-loop = true
+loop_mode = 1
 tracks/0/type = "value"
-tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 2.3, 2.6, 2.7, 3 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"times": PackedFloat32Array(0, 2.3, 2.6, 2.7, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [ 0.0, 0.0, 0.5, 0.5, 0.0 ]
+"values": [0, 0, 0.5, 0.5, 0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_trkjd"]
+_data = {
+"RESET": SubResource("Animation_x136i"),
+"floodlight": SubResource("Animation_3piau")
 }
 
 [node name="Weapon" type="Node"]
-script = ExtResource( 3 )
+script = ExtResource("1_dtam7")
 
-[node name="ShadowSprite" type="Sprite" parent="."]
-material = SubResource( 7 )
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+z_index = -1
+material = SubResource("ShaderMaterial_cbiyh")
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-material = SubResource( 8 )
-position = Vector2( 0.4, -2.6 )
-scale = Vector2( 0.8, 0.8 )
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_o36tv")
+position = Vector2(0.4, -2.6)
+scale = Vector2(0.8, 0.8)
 
 [node name="WeaponBody" type="Area2D" parent="."]
 collision_layer = 4
 collision_mask = 0
 
-[node name="OriginPoint" type="Position2D" parent="WeaponBody"]
-position = Vector2( -3.60001, -1.1 )
+[node name="OriginPoint" type="Marker2D" parent="WeaponBody"]
+position = Vector2(-3.6, -1.1)
 
-[node name="ShellPoint" type="Position2D" parent="WeaponBody"]
-position = Vector2( -2.60001, -2.60001 )
+[node name="ShellPoint" type="Marker2D" parent="WeaponBody"]
+position = Vector2(-2.6, -2.6)
 
-[node name="FirePoint" type="Position2D" parent="WeaponBody"]
-position = Vector2( 7.39999, -1.1 )
+[node name="FirePoint" type="Marker2D" parent="WeaponBody"]
+position = Vector2(7.4, -1.1)
 
 [node name="Collision" type="CollisionShape2D" parent="WeaponBody"]
-position = Vector2( 0.59999, 0.199997 )
-shape = SubResource( 1 )
+position = Vector2(0.6, 0.2)
+shape = SubResource("RectangleShape2D_3p5jk")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/RESET = SubResource( 9 )
-anims/floodlight = SubResource( 11 )
+libraries = {
+"": SubResource("AnimationLibrary_trkjd")
+}

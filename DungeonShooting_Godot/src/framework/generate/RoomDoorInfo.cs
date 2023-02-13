@@ -1,15 +1,25 @@
-﻿
+
 using Godot;
 
 /// <summary>
 /// 房间的门
 /// </summary>
-public class RoomDoor
+public class RoomDoorInfo
 {
     /// <summary>
     /// 所在墙面方向
     /// </summary>
     public DoorDirection Direction;
+
+    /// <summary>
+    /// 所在的房间
+    /// </summary>
+    public RoomInfo RoomInfo;
+    
+    /// <summary>
+    /// 连接的门
+    /// </summary>
+    public RoomDoorInfo ConnectDoor;
     
     /// <summary>
     /// 连接的房间

@@ -4,12 +4,12 @@ using Godot;
 /// <summary>
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
-public class Player : Role
+public partial class Player : Role
 {
     /// <summary>
     /// 获取当前操作的角色
     /// </summary>
-    public static Player Current => GameApplication.Instance.Room.Player;
+    public static Player Current => GameApplication.Instance.RoomManager.Player;
     
     /// <summary>
     /// 移动加速度
@@ -47,6 +47,10 @@ public class Player : Role
         Hp = 50;
         MaxShield = 30;
         Shield = 30;
+
+        // Acceleration = 3000;
+        // Friction = 3000;
+        // MoveSpeed = 800;
     }
 
     protected override void Process(float delta)
@@ -57,11 +61,11 @@ public class Player : Role
         if (LookTarget == null)
         {
             Vector2 mousePos = InputManager.GetViewportMousePosition();
-            if (mousePos.x > gPos.x && Face == FaceDirection.Left)
+            if (mousePos.X > gPos.X && Face == FaceDirection.Left)
             {
                 Face = FaceDirection.Right;
             }
-            else if (mousePos.x < gPos.x && Face == FaceDirection.Right)
+            else if (mousePos.X < gPos.X && Face == FaceDirection.Right)
             {
                 Face = FaceDirection.Left;
             }
@@ -190,24 +194,24 @@ public class Player : Role
         Vector2 dir = Input.GetVector("move_left", "move_right", "move_up", "move_down");
         // 移动. 如果移动的数值接近0(是用 摇杆可能出现 方向 可能会出现浮点)，就friction的值 插值 到 0
         // 如果 有输入 就以当前速度，用acceleration 插值到 对应方向 * 最大速度
-        if (Mathf.IsZeroApprox(dir.x))
+        if (Mathf.IsZeroApprox(dir.X))
         {
-            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.x, 0, Friction * delta), BasisVelocity.y);
+            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.X, 0, Friction * delta), BasisVelocity.Y);
         }
         else
         {
-            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.x, dir.x * MoveSpeed, Acceleration * delta),
-                BasisVelocity.y);
+            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.X, dir.X * MoveSpeed, Acceleration * delta),
+                BasisVelocity.Y);
         }
 
-        if (Mathf.IsZeroApprox(dir.y))
+        if (Mathf.IsZeroApprox(dir.Y))
         {
-            BasisVelocity = new Vector2(BasisVelocity.x, Mathf.MoveToward(BasisVelocity.y, 0, Friction * delta));
+            BasisVelocity = new Vector2(BasisVelocity.X, Mathf.MoveToward(BasisVelocity.Y, 0, Friction * delta));
         }
         else
         {
-            BasisVelocity = new Vector2(BasisVelocity.x,
-                Mathf.MoveToward(BasisVelocity.y, dir.y * MoveSpeed, Acceleration * delta));
+            BasisVelocity = new Vector2(BasisVelocity.X,
+                Mathf.MoveToward(BasisVelocity.Y, dir.Y * MoveSpeed, Acceleration * delta));
         }
     }
 
@@ -216,18 +220,18 @@ public class Player : Role
     {
         if (BasisVelocity != Vector2.Zero)
         {
-            if ((Face == FaceDirection.Right && BasisVelocity.x >= 0) || Face == FaceDirection.Left && BasisVelocity.x <= 0) //向前走
+            if ((Face == FaceDirection.Right && BasisVelocity.X >= 0) || Face == FaceDirection.Left && BasisVelocity.X <= 0) //向前走
             {
-                AnimatedSprite.Animation = AnimatorNames.Run;
+                AnimatedSprite.Play(AnimatorNames.Run);
             }
-            else if ((Face == FaceDirection.Right && BasisVelocity.x < 0) || Face == FaceDirection.Left && BasisVelocity.x > 0) //向后走
+            else if ((Face == FaceDirection.Right && BasisVelocity.X < 0) || Face == FaceDirection.Left && BasisVelocity.X > 0) //向后走
             {
-                AnimatedSprite.Animation = AnimatorNames.ReverseRun;
+                AnimatedSprite.Play(AnimatorNames.ReverseRun);
             }
         }
         else
         {
-            AnimatedSprite.Animation = AnimatorNames.Idle;
+            AnimatedSprite.Play(AnimatorNames.Idle);
         }
     }
 }

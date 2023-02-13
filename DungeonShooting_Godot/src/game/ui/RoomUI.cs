@@ -3,7 +3,7 @@ using Godot;
 /// <summary>
 /// 房间中的ui
 /// </summary>
-public class RoomUI : Control
+public partial class RoomUI : Control
 {
     //public static RoomUI Current { get; private set; }
 
@@ -70,9 +70,9 @@ public class RoomUI : Control
         }
         globalNode.CallDeferred("queue_free");
         
-        //将 ViewNode 节点放到 Viewport 下
+        //将 ViewNode 节点放到 SubViewport 下
         var viewNode = GetNode("ViewNode");
-        var viewport = GameApplication.Instance.Viewport;
+        var viewport = GameApplication.Instance.SubViewport;
         count = viewNode.GetChildCount();
         for (int i = count - 1; i >= 0; i--)
         {
@@ -83,17 +83,17 @@ public class RoomUI : Control
         viewNode.CallDeferred("queue_free");
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         
     }
 
-    public override void _PhysicsProcess(float delta)
+    public override void _PhysicsProcess(double delta)
     {
         // var colorRect = GetNode<ColorRect>("ColorRect");
-        // var pos = GameApplication.Instance.ViewToGlobalPosition(GameApplication.Instance.Room.Player.GlobalPosition);
+        // var pos = GameApplication.Instance.ViewToGlobalPosition(GameApplication.Instance.Node3D.Player.GlobalPosition);
         // colorRect.SetGlobalPosition(pos);
-        //GD.Print("pos: " + pos + ", " + colorRect.RectGlobalPosition);
+        //GD.Print("pos: " + pos + ", " + colorRect.GlobalPosition);
     }
 
     /// <summary>
@@ -102,7 +102,7 @@ public class RoomUI : Control
     public void SetMaxHp(int maxHp)
     {
         MaxHp = Mathf.Max(maxHp, 0);
-        hpSlot.RectSize = new Vector2(maxHp + 3, hpSlot.RectSize.y);
+        hpSlot.Size = new Vector2(maxHp + 3, hpSlot.Size.Y);
         if (Hp > maxHp)
         {
             SetHp(maxHp);
@@ -115,7 +115,7 @@ public class RoomUI : Control
     public void SetMaxShield(int maxShield)
     {
         MaxShield = Mathf.Max(maxShield, 0); ;
-        shieldSlot.RectSize = new Vector2(maxShield + 2, shieldSlot.RectSize.y);
+        shieldSlot.Size = new Vector2(maxShield + 2, shieldSlot.Size.Y);
         if (Shield > MaxShield)
         {
             SetShield(maxShield);
@@ -128,7 +128,7 @@ public class RoomUI : Control
     public void SetHp(int hp)
     {
         Hp = Mathf.Clamp(hp, 0, MaxHp);
-        hpBar.RectSize = new Vector2(hp, hpBar.RectSize.y);
+        hpBar.Size = new Vector2(hp, hpBar.Size.Y);
     }
 
     /// <summary>
@@ -137,7 +137,7 @@ public class RoomUI : Control
     public void SetShield(int shield)
     {
         Shield = Mathf.Clamp(shield, 0, MaxShield);
-        shieldBar.RectSize = new Vector2(shield, shieldBar.RectSize.y);
+        shieldBar.Size = new Vector2(shield, shieldBar.Size.Y);
     }
 
     /// <summary>
@@ -152,7 +152,7 @@ public class RoomUI : Control
     /// 设置显示在 ui 上的枪的纹理
     /// </summary>
     /// <param name="gun">纹理</param>
-    public void SetGunTexture(Texture gun)
+    public void SetGunTexture(Texture2D gun)
     {
         if (gun != null)
         {

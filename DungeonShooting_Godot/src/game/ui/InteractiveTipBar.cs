@@ -3,18 +3,18 @@ using Godot;
 /// <summary>
 /// 互动提示文本
 /// </summary>
-public class InteractiveTipBar : Node2D
+public partial class InteractiveTipBar : Node2D
 {
 
     private ActivityObject Target;
     
-    private Sprite Icon;
+    private Sprite2D Icon;
 
     private string currImage;
 
     public override void _Ready()
     {
-        Icon = GetNode<Sprite>("Icon");
+        Icon = GetNode<Sprite2D>("Icon");
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class InteractiveTipBar : Node2D
         if (currImage != icon)
         {
             currImage = icon;
-            Icon.Texture = ResourceManager.Load<Texture>(icon);
+            Icon.Texture = ResourceManager.Load<Texture2D>(icon);
         }
         Visible = true;
     }

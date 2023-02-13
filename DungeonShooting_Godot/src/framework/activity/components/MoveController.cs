@@ -10,21 +10,18 @@ public class MoveController : Component
     private static long _index = 0;
 
     /// <summary>
-    /// 玩家受到的外力的集合
+    /// 物体受到的外力的集合
     /// </summary>
     private readonly List<ExternalForce> _forceList = new List<ExternalForce>();
 
     /// <summary>
-    /// 这个速度就是玩家当前物理帧移动的真实速率, 该速度由物理帧循环更新, 并不会马上更新
+    /// 这个速度就是物体当前物理帧移动的真实速率, 该速度由物理帧循环计算, 并不会马上更新
     /// 该速度就是 BasisVelocity + 外力总和
     /// </summary>
-    public Vector2 Velocity => _velocity;
-
-    private Vector2 _velocity = Vector2.Zero;
-
+    public Vector2 Velocity => ActivityInstance.Velocity;
 
     /// <summary>
-    /// 玩家的基础移动速率
+    /// 物体的基础移动速率
     /// </summary>
     public Vector2 BasisVelocity
     {
@@ -43,13 +40,13 @@ public class MoveController : Component
     }
 
     /// <summary>
-    /// 快速窗口一个外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
+    /// 快速创建一个外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
     /// </summary>
     /// <param name="velocity">外力速率</param>
     /// <param name="resistance">阻力大小</param>
-    public ExternalForce AddForce(Vector2 velocity, float resistance)
+    public ExternalForce AddConstantForce(Vector2 velocity, float resistance)
     {
-        var force = AddForce("_anonymity_" + _index++);
+        var force = AddConstantForce("_anonymity_" + _index++);
         force.Velocity = velocity;
         force.Resistance = resistance;
         return force;
@@ -58,17 +55,17 @@ public class MoveController : Component
     /// <summary>
     /// 根据名称添加一个外力, 并返回创建的外力的对象, 如果存在这个名称的外力, 移除之前的外力
     /// </summary>
-    public ExternalForce AddForce(string name)
+    public ExternalForce AddConstantForce(string name)
     {
         var f = new ExternalForce(name);
-        AddForce(f);
+        AddConstantForce(f);
         return f;
     }
 
     /// <summary>
     /// 根据对象添加一个外力力, 如果存在这个名称的外力, 移除之前的外力
     /// </summary>
-    public T AddForce<T>(T force) where T : ExternalForce
+    public T AddConstantForce<T>(T force) where T : ExternalForce
     {
         RemoveForce(force.Name);
         _forceList.Add(force);
@@ -169,15 +166,17 @@ public class MoveController : Component
         if (finallyVelocity != Vector2.Zero)
         {
             //计算移动
-            _velocity = ActivityObject.MoveAndSlide(finallyVelocity);
-            if (_velocity.x == 0f && _basisVelocity.x * finallyVelocity.x > 0)
+            ActivityInstance.Velocity = finallyVelocity;
+            ActivityInstance.MoveAndSlide();
+            var newVelocity = ActivityInstance.Velocity;
+            if (newVelocity.X == 0f && _basisVelocity.X * finallyVelocity.X > 0)
             {
-                _basisVelocity.x = 0;
+                _basisVelocity.X = 0;
             }
 
-            if (_velocity.y == 0f && _basisVelocity.y * finallyVelocity.y > 0)
+            if (newVelocity.Y == 0f && _basisVelocity.Y * finallyVelocity.Y > 0)
             {
-                _basisVelocity.y = 0;
+                _basisVelocity.Y = 0;
             }
 
             //调整外力速率
@@ -190,8 +189,8 @@ public class MoveController : Component
                     {
                         var velocity = force.Velocity;
                         force.Velocity = new Vector2(
-                            _velocity.x == 0f && velocity.x * finallyVelocity.x > 0 ? 0 : velocity.x,
-                            _velocity.y == 0f && velocity.y * finallyVelocity.y > 0 ? 0 : velocity.y
+                            newVelocity.X == 0f && velocity.X * finallyVelocity.X > 0 ? 0 : velocity.X,
+                            newVelocity.Y == 0f && velocity.Y * finallyVelocity.Y > 0 ? 0 : velocity.Y
                         );
 
                         if (force.Resistance != 0)
@@ -209,17 +208,42 @@ public class MoveController : Component
         }
         else
         {
-            _velocity = finallyEf;
+            ActivityInstance.Velocity = Vector2.Zero;
         }
     }
 
     public override void DebugDraw()
     {
+        //绘制力大小和方向
+        
+        if (ActivityInstance is Bullet) //不绘制子弹的力
+        {
+            return;
+        }
+        
         var globalRotation = GlobalRotation;
-        ActivityObject.DrawLine(Vector2.Zero, BasisVelocity.Rotated(-globalRotation), Colors.Yellow);
+        var flag = ActivityInstance.Scale.Y < 0;
+        if (flag)
+        {
+            ActivityInstance.DrawLine(Vector2.Zero, (BasisVelocity * new Vector2(1, -1)).Rotated(-globalRotation),
+                Colors.Yellow);
+        }
+        else
+        {
+            ActivityInstance.DrawLine(Vector2.Zero, BasisVelocity.Rotated(-globalRotation), Colors.Yellow);
+        }
+
         foreach (var force in _forceList)
         {
-            ActivityObject.DrawLine(Vector2.Zero, force.Velocity.Rotated(-globalRotation), Colors.YellowGreen);
+            if (flag)
+            {
+                ActivityInstance.DrawLine(Vector2.Zero, (force.Velocity * new Vector2(1, -1)).Rotated(globalRotation),
+                    Colors.YellowGreen);
+            }
+            else
+            {
+                ActivityInstance.DrawLine(Vector2.Zero, force.Velocity.Rotated(-globalRotation), Colors.YellowGreen);
+            }
         }
     }
 }

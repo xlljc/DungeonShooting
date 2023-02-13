@@ -3,13 +3,13 @@ using Godot;
 /// <summary>
 /// 测试动态创建 NavigationPolygon
 /// </summary>
-public class TestNavigationPolygon : Navigation2D
+public partial class TestNavigationPolygon : Node2D
 {
 	public override void _Ready()
 	{
-		var nv = GetNode<NavigationPolygonInstance>("NavigationPolygonInstance");
+		var nv = GetNode<NavigationRegion2D>("NavigationRegion2D");
 
-		var navpoy = nv.Navpoly;
+		var navpoy = nv.NavigationPolygon;
 		var outlines = navpoy.Outlines;
 		var polygons = navpoy.Polygons;
 		var vertices = navpoy.Vertices;
@@ -27,6 +27,6 @@ public class TestNavigationPolygon : Navigation2D
 		polygon.AddOutline(new [] { new Vector2(50,50), new Vector2(150, 50), new Vector2(150,150), new Vector2(50, 150) });
 		polygon.MakePolygonsFromOutlines();
 		
-		nv.Navpoly = polygon;
+		nv.NavigationPolygon = polygon;
 	}
 }

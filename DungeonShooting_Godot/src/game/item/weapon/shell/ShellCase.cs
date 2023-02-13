@@ -1,10 +1,10 @@
-﻿
+
 using Godot;
 
 /// <summary>
 /// 弹壳类
 /// </summary>
-public class ShellCase : ActivityObject
+public partial class ShellCase : ActivityObject
 {
     public ShellCase() : base(ResourcePath.prefab_weapon_shell_ShellCase_tscn)
     {
@@ -13,13 +13,14 @@ public class ShellCase : ActivityObject
 
     protected override void OnThrowOver()
     {
-        AwaitDestroy();
+        //AwaitDestroy();
+        AnimationPlayer.Play("flicker");
     }
 
     private async void AwaitDestroy()
     {
-        //30秒后销毁
-        await ToSignal(GetTree().CreateTimer(30), "timeout");
+        //2秒后销毁
+        await ToSignal(GetTree().CreateTimer(2), "timeout");
         Destroy();
     }
 }

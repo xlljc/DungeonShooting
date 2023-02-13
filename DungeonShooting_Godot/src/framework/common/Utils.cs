@@ -6,7 +6,7 @@ using Godot;
 /// </summary>
 public static class Utils
 {
-    
+
     /// <summary>
     /// 返回随机 boolean 值
     /// </summary>
@@ -14,13 +14,13 @@ public static class Utils
     {
         return GD.Randf() >= 0.5f;
     }
-    
+
     /// <summary>
     /// 返回一个区间内的随机小数
     /// </summary>
-    public static float RandRange(float min, float max)
+    public static float RandfRange(float min, float max)
     {
-        if (min == max) return min; 
+        if (min == max) return min;
         if (min > max)
             return GD.Randf() * (min - max) + max;
         return GD.Randf() * (max - min) + min;
@@ -31,7 +31,7 @@ public static class Utils
     /// </summary>
     public static int RandRangeInt(int min, int max)
     {
-        if (min == max) return min; 
+        if (min == max) return min;
         if (min > max)
             return Mathf.FloorToInt(GD.Randf() * (min - max + 1) + max);
         return Mathf.FloorToInt(GD.Randf() * (max - min + 1) + min);
@@ -61,5 +61,13 @@ public static class Utils
         }
 
         return list[RandRangeInt(0, list.Count - 1)];
+    }
+
+    public static Rect2 CalcRect(float start1, float end1, float start2, float end2)
+    {
+        return new Rect2(
+            Mathf.Min(start1, start2), Mathf.Min(end1, end2),
+            Mathf.Abs(start1 - start2), Mathf.Abs(end1 - end2)
+        );
     }
 }

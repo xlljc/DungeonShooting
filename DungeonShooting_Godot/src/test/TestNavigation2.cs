@@ -1,43 +1,43 @@
 using Godot;
 
-public class TestNavigation2 : Node2D
+public partial class TestNavigation2 : Node2D
 {
-	private Navigation2D _navigation2D;
+	private Node2D _navigation2D;
 
 
-	private Sprite _enemy;
+	private Sprite2D _enemy;
 	private NavigationAgent2D _navigationAgent2D;
 
 	public override void _Ready()
 	{
-		_navigation2D = GetNode<Navigation2D>("Navigation2D");
-		_enemy = _navigation2D.GetNode<Sprite>("Enemy");
+		_navigation2D = GetNode<Node2D>("Node2D");
+		_enemy = _navigation2D.GetNode<Sprite2D>("Enemy");
 		_navigationAgent2D = _enemy.GetNode<NavigationAgent2D>("NavigationAgent2D");
 
-		_navigationAgent2D.SetTargetLocation(GetGlobalMousePosition());
+		_navigationAgent2D.TargetPosition = GetGlobalMousePosition();
 
 	}
 
-	public override void _PhysicsProcess(float delta)
+	public override void _PhysicsProcess(double delta)
 	{
 		if (_navigationAgent2D.IsNavigationFinished())
 		{
 			return;
 		}
 		
-		var pos = _navigationAgent2D.GetNextLocation();
-		_enemy.GlobalPosition = _enemy.GlobalPosition.MoveToward(pos, 100 * delta);
+		var pos = _navigationAgent2D.GetNextPathPosition();
+		_enemy.GlobalPosition = _enemy.GlobalPosition.MoveToward(pos, 100 * (float)delta);
 
 	}
 
-	public override void _Process(float delta)
+	public override void _Process(double delta)
 	{
-		Update();
+		QueueRedraw();
 	}
 
 	public override void _Draw()
 	{
-		var points = _navigationAgent2D.GetNavPath();
+		var points = _navigationAgent2D.GetCurrentNavigationPath();
 		if (points != null && points.Length >= 2)
 		{
 			DrawPolyline(points, Colors.Red);
@@ -48,10 +48,6 @@ public class TestNavigation2 : Node2D
 	private void _on_Timer_timeout()
 	{
 		var target = GetGlobalMousePosition();
-		if (_navigationAgent2D.GetTargetLocation() != target)
-		{
-			GD.Print("更新目标位置...");
-			_navigationAgent2D.SetTargetLocation(target);
-		}
+		_navigationAgent2D.TargetPosition = target;
 	}
 }

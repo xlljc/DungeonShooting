@@ -90,8 +90,9 @@ public class Holster
     /// <summary>
     /// 根据索引获取武器
     /// </summary>
-    public Weapon GetWeapon(int index) {
-        if (index >= SlotList.Length)
+    public Weapon GetWeapon(int index)
+    {
+        if (index < 0 || index >= SlotList.Length)
         {
             return null;
         }
@@ -159,7 +160,7 @@ public class Holster
             if (weapon != null)
             {
                 weapon.GetParent().RemoveChild(weapon);
-                weapon.Remove();
+                weapon.RemoveAt();
                 weapons.Add(weapon);
                 slot.Weapon = null;
             }
@@ -245,7 +246,7 @@ public class Holster
                 ActiveWeapon = null;
             }
         }
-        weapon.Remove();
+        weapon.RemoveAt();
         return weapon;
     }
 

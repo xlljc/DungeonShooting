@@ -1,4 +1,4 @@
-﻿
+
 using Godot;
 
 /// <summary>
@@ -56,7 +56,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
         else //没有找到玩家
         {
             //检测玩家
-            var player = GameApplication.Instance.Room.Player;
+            var player = GameApplication.Instance.RoomManager.Player;
             //玩家中心点坐标
             var playerPos = player.GetCenterPosition();
 
@@ -67,7 +67,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
             }
             else if (_pauseTimer >= 0)
             {
-                Master.AnimatedSprite.Animation = AnimatorNames.Idle;
+                Master.AnimatedSprite.Play(AnimatorNames.Idle);
                 _pauseTimer -= delta;
             }
             else if (_isMoveOver) //没发现玩家, 且已经移动完成
@@ -79,7 +79,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
             {
                 if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
                 {
-                    _pauseTimer = Utils.RandRange(0.3f, 2f);
+                    _pauseTimer = Utils.RandfRange(0.3f, 2f);
                     _isMoveOver = true;
                     _moveFlag = false;
                     Master.BasisVelocity = Vector2.Zero;
@@ -88,17 +88,17 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
                 {
                     _moveFlag = true;
                     //计算移动
-                    var nextPos = Master.NavigationAgent2D.GetNextLocation();
-                    Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                    var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
+                    Master.AnimatedSprite.Play(AnimatorNames.Run);
                     Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                                            Master.MoveSpeed;
                 }
                 else
                 {
                     var lastSlideCollision = Master.GetLastSlideCollision();
-                    if (lastSlideCollision != null && lastSlideCollision.Collider is Role) //碰到其他角色
+                    if (lastSlideCollision != null && lastSlideCollision.GetCollider() is Role) //碰到其他角色
                     {
-                        _pauseTimer = Utils.RandRange(0.1f, 0.5f);
+                        _pauseTimer = Utils.RandfRange(0.1f, 0.5f);
                         _isMoveOver = true;
                         _moveFlag = false;
                         Master.BasisVelocity = Vector2.Zero;
@@ -106,8 +106,8 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
                     else
                     {
                         //计算移动
-                        var nextPos = Master.NavigationAgent2D.GetNextLocation();
-                        Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                        var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
+                        Master.AnimatedSprite.Play(AnimatorNames.Run);
                         Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                                                Master.MoveSpeed;
                     }
@@ -125,12 +125,12 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
         float angle;
         if (_againstWall)
         {
-            angle = Utils.RandRange(_againstWallNormalAngle - Mathf.Pi * 0.5f,
+            angle = Utils.RandfRange(_againstWallNormalAngle - Mathf.Pi * 0.5f,
                 _againstWallNormalAngle + Mathf.Pi * 0.5f);
         }
         else
         {
-            angle = Utils.RandRange(0, Mathf.Pi * 2f);
+            angle = Utils.RandfRange(0, Mathf.Pi * 2f);
         }
 
         var len = Utils.RandRangeInt(30, 200);
@@ -147,7 +147,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
             _againstWall = false;
         }
 
-        Master.NavigationAgent2D.SetTargetLocation(_nextPos);
+        Master.NavigationAgent2D.TargetPosition = _nextPos;
         Master.LookTargetPosition(_nextPos);
     }
 

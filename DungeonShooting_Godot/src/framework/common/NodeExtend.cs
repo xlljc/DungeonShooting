@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 /// <summary>
@@ -37,5 +38,15 @@ public static class NodeExtend
             return p2;
         }
         return null;
+    }
+
+    /// <summary>
+    /// 将节点插入的房间物体根节点
+    /// </summary>
+    /// <param name="node">实例</param>
+    /// <param name="layer">放入的层</param>
+    public static void AddToActivityRoot(this Node2D node, RoomLayerEnum layer)
+    {
+        GameApplication.Instance.RoomManager.GetRoomLayer(layer).AddChild(node);
     }
 }

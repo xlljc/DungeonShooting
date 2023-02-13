@@ -1,5 +1,6 @@
-﻿
+
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Godot;
 using Plugin;
@@ -7,7 +8,7 @@ using Plugin;
 /// <summary>
 /// 房间内活动物体基类
 /// </summary>
-public abstract class ActivityObject : KinematicBody2D
+public abstract partial class ActivityObject : CharacterBody2D
 {
     /// <summary>
     /// 是否是调试模式
@@ -20,19 +21,14 @@ public abstract class ActivityObject : KinematicBody2D
     public string ItemId { get; private set; }
 
     /// <summary>
-    /// 是否放入 ySort 节点下
+    /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite2D", 类型为 AnimatedSprite2D
     /// </summary>
-    public bool UseYSort { get; }
+    public AnimatedSprite2D AnimatedSprite { get; }
 
     /// <summary>
-    /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite", 类型为 AnimatedSprite
+    /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite2D
     /// </summary>
-    public AnimatedSprite AnimatedSprite { get; }
-
-    /// <summary>
-    /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite
-    /// </summary>
-    public Sprite ShadowSprite { get; }
+    public Sprite2D ShadowSprite { get; }
 
     /// <summary>
     /// 当前物体碰撞器节点, 节点名称必须叫 "Collision", 类型为 CollisionShape2D
@@ -73,12 +69,6 @@ public abstract class ActivityObject : KinematicBody2D
         get => MoveController.BasisVelocity;
         set => MoveController.BasisVelocity = value;
     }
-    
-    /// <summary>
-    /// 这个速度就是玩家当前物理帧移动的真实速率, 该速度由物理帧循环更新, 并不会马上更新
-    /// 该速度就是 BasisVelocity + 外力总和
-    /// </summary>
-    public Vector2 Velocity => MoveController.Velocity;
 
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
@@ -96,15 +86,24 @@ public abstract class ActivityObject : KinematicBody2D
     //混色shader材质
     private ShaderMaterial _blendShaderMaterial;
     
-
     //存储投抛该物体时所产生的数据
-    private ObjectThrowData _throwData;
-
+    private ActivityThrowData _throwData;
+    
+    //所在层级
+    private RoomLayerEnum _currLayer;
+    
     //标记字典
     private Dictionary<string, object> _signMap;
-
+    
+    private List<KeyValuePair<long, IEnumerator>> _coroutineList;
+    private ActivityObjectTemplate _templateInstance;
+    
+    private static long _coroutineId = 0;
+    private static long _index = 0;
+    
     public ActivityObject(string scenePath)
     {
+        Name = GetType().Name + (_index++);
         //加载预制体
         var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
         if (tempPrefab == null)
@@ -112,28 +111,28 @@ public abstract class ActivityObject : KinematicBody2D
             throw new Exception("创建 ActivityObject 没有找到指定挂载的预制体: " + scenePath);
         }
 
-        var tempNode = tempPrefab.Instance<ActivityObjectTemplate>();
-        ZIndex = tempNode.ZIndex;
-        CollisionLayer = tempNode.CollisionLayer;
-        CollisionMask = tempNode.CollisionMask;
-        UseYSort = tempNode.UseYSort;
-        Scale = tempNode.Scale;
+        _templateInstance = tempPrefab.Instantiate<ActivityObjectTemplate>();
+        ZIndex = _templateInstance.z_index;
+        CollisionLayer = _templateInstance.collision_layer;
+        CollisionMask = _templateInstance.collision_mask;
+        Scale = _templateInstance.scale;
+        Visible = _templateInstance.visible;
 
         //移动子节点
-        var count = tempNode.GetChildCount();
+        var count = _templateInstance.GetChildCount();
         for (int i = 0; i < count; i++)
         {
-            var body = tempNode.GetChild(0);
-            tempNode.RemoveChild(body);
+            var body = _templateInstance.GetChild(0);
+            _templateInstance.RemoveChild(body);
             AddChild(body);
             switch (body.Name)
             {
                 case "AnimatedSprite":
-                    AnimatedSprite = (AnimatedSprite)body;
+                    AnimatedSprite = (AnimatedSprite2D)body;
                     _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
                     break;
                 case "ShadowSprite":
-                    ShadowSprite = (Sprite)body;
+                    ShadowSprite = (Sprite2D)body;
                     ShadowSprite.Visible = false;
                     break;
                 case "Collision":
@@ -144,9 +143,9 @@ public abstract class ActivityObject : KinematicBody2D
                     break;
             }
         }
-
-        MoveController = new MoveController();
-        AddComponent(MoveController);
+        
+        MoveController = AddComponent<MoveController>();
+        //tempNode.CallDeferred(Node.MethodName.QueueFree);
     }
 
     /// <summary>
@@ -165,11 +164,11 @@ public abstract class ActivityObject : KinematicBody2D
         var frame = AnimatedSprite.Frame;
         if (_prevAnimation != anim || _prevAnimationFrame != frame)
         {
-            var frames = AnimatedSprite.Frames;
+            var frames = AnimatedSprite.SpriteFrames;
             if (frames.HasAnimation(anim))
             {
                 //切换阴影动画
-                ShadowSprite.Texture = frames.GetFrame(anim, frame);
+                ShadowSprite.Texture = frames.GetFrameTexture(anim, frame);
             }
         }
 
@@ -191,38 +190,37 @@ public abstract class ActivityObject : KinematicBody2D
     /// <summary>
     /// 设置默认序列帧动画的第一帧
     /// </summary>
-    public void SetDefaultTexture(Texture texture)
+    public void SetDefaultTexture(Texture2D texture)
     {
-        if (AnimatedSprite.Frames == null)
+        if (AnimatedSprite.SpriteFrames == null)
         {
             SpriteFrames spriteFrames = new SpriteFrames();
-            AnimatedSprite.Frames = spriteFrames;
+            AnimatedSprite.SpriteFrames = spriteFrames;
             spriteFrames.AddFrame("default", texture);
         }
         else
         {
-            SpriteFrames spriteFrames = AnimatedSprite.Frames;
+            SpriteFrames spriteFrames = AnimatedSprite.SpriteFrames;
             spriteFrames.SetFrame("default", 0, texture);
         }
     
-        AnimatedSprite.Animation = "default";
-        AnimatedSprite.Playing = true;
+        AnimatedSprite.Play("default");
     }
 
     /// <summary>
     /// 获取默认序列帧动画的第一帧
     /// </summary>
-    public Texture GetDefaultTexture()
+    public Texture2D GetDefaultTexture()
     {
-        return AnimatedSprite.Frames.GetFrame("default", 0);
+        return AnimatedSprite.SpriteFrames.GetFrameTexture("default", 0);
     }
     
     /// <summary>
-    /// 获取当前序列帧动画的 Texture
+    /// 获取当前序列帧动画的 Texture2D
     /// </summary>
-    public Texture GetCurrentTexture()
+    public Texture2D GetCurrentTexture()
     {
-        return AnimatedSprite.Frames.GetFrame(AnimatedSprite.Name, AnimatedSprite.Frame);
+        return AnimatedSprite.SpriteFrames.GetFrameTexture(AnimatedSprite.Name, AnimatedSprite.Frame);
     }
 
     /// <summary>
@@ -242,6 +240,13 @@ public abstract class ActivityObject : KinematicBody2D
     {
     }
 
+    /// <summary>
+    /// 开始投抛该物体时调用
+    /// </summary>
+    protected virtual void OnThrowStart()
+    {
+    }
+    
     /// <summary>
     /// 投抛该物体达到最高点时调用
     /// </summary>
@@ -285,9 +290,23 @@ public abstract class ActivityObject : KinematicBody2D
     }
     
     /// <summary>
+    /// 每帧调用一次, ProcessOver() 会在组件的 Process() 之后调用
+    /// </summary>
+    protected virtual void ProcessOver(float delta)
+    {
+    }
+    
+    /// <summary>
     /// 每物理帧调用一次, 物体的 PhysicsProcess() 会在组件的 PhysicsProcess() 之前调用
     /// </summary>
     protected virtual void PhysicsProcess(float delta)
+    {
+    }
+    
+    /// <summary>
+    /// 每物理帧调用一次, PhysicsProcessOver() 会在组件的 PhysicsProcess() 之后调用
+    /// </summary>
+    protected virtual void PhysicsProcessOver(float delta)
     {
     }
     
@@ -297,9 +316,9 @@ public abstract class ActivityObject : KinematicBody2D
     protected virtual void DebugDraw()
     {
     }
-
+    
     /// <summary>
-    /// 拾起一个 node 节点
+    /// 拾起一个 node 节点, 也就是将其从场景树中移除
     /// </summary>
     public void Pickup()
     {
@@ -317,11 +336,13 @@ public abstract class ActivityObject : KinematicBody2D
 
     /// <summary>
     /// 将一个节点扔到地上, 并设置显示的阴影
+    /// <param name="layer">放入的层</param>
     /// </summary>
-    public virtual void PutDown()
+    public virtual void PutDown(RoomLayerEnum layer)
     {
+        _currLayer = layer;
         var parent = GetParent();
-        var root = GameApplication.Instance.Room.GetRoot(UseYSort);
+        var root = GameApplication.Instance.RoomManager.GetRoomLayer(layer);
         if (parent != root)
         {
             if (parent != null)
@@ -329,7 +350,7 @@ public abstract class ActivityObject : KinematicBody2D
                 parent.RemoveChild(this);
             }
 
-            root.AddChild(this);
+            this.AddToActivityRoot(layer);
         }
 
         if (IsInsideTree())
@@ -347,9 +368,10 @@ public abstract class ActivityObject : KinematicBody2D
     /// 将一个节点扔到地上, 并设置显示的阴影
     /// </summary>
     /// <param name="position">放置的位置</param>
-    public void PutDown(Vector2 position)
+    /// <param name="layer">放入的层</param>
+    public void PutDown(Vector2 position, RoomLayerEnum layer)
     {
-        PutDown();
+        PutDown(layer);
         Position = position;
     }
 
@@ -371,7 +393,7 @@ public abstract class ActivityObject : KinematicBody2D
     {
         if (_throwData == null)
         {
-            _throwData = new ObjectThrowData();
+            _throwData = new ActivityThrowData();
         }
 
         SetThrowCollision();
@@ -385,7 +407,7 @@ public abstract class ActivityObject : KinematicBody2D
         _throwData.StartXSpeed = xSpeed;
         _throwData.StartYSpeed = ySpeed;
         _throwData.RotateSpeed = rotate;
-        _throwData.ThrowForce = MoveController.AddForce("ThrowForce");
+        _throwData.ThrowForce = MoveController.AddConstantForce("ThrowForce");
         _throwData.ThrowForce.Velocity =
             new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
         _throwData.Y = startHeight;
@@ -393,7 +415,7 @@ public abstract class ActivityObject : KinematicBody2D
         _throwData.BounceStrength = bounceStrength;
         _throwData.BounceSpeed = bounceSpeed;
 
-        _throwData.RectangleShape.Extents = _throwData.Size * 0.5f;
+        _throwData.RectangleShape.Size = _throwData.Size * 0.5f;
 
         Throw();
     }
@@ -410,19 +432,16 @@ public abstract class ActivityObject : KinematicBody2D
     /// <summary>
     /// 往当前物体上挂载一个组件
     /// </summary>
-    /// <param name="component">组件对象</param>
-    public void AddComponent(Component component)
+    public T AddComponent<T>() where T : Component, new()
     {
-        if (!ContainsComponent(component))
-        {
-            _components.Add(new KeyValuePair<Type, Component>(component.GetType(), component));
-            component._SetActivityObject(this);
-            component.OnMount();
-        }
+        var component = new T();
+        _components.Add(new KeyValuePair<Type, Component>(typeof(T), component));
+        component.ActivityInstance = this;
+        return component;
     }
 
     /// <summary>
-    /// 移除一个组件
+    /// 移除一个组件, 并且销毁
     /// </summary>
     /// <param name="component">组件对象</param>
     public void RemoveComponent(Component component)
@@ -432,8 +451,7 @@ public abstract class ActivityObject : KinematicBody2D
             if (_components[i].Value == component)
             {
                 _components.RemoveAt(i);
-                component.OnUnMount();
-                component._SetActivityObject(null);
+                component.Destroy();
                 return;
             }
         }
@@ -459,19 +477,20 @@ public abstract class ActivityObject : KinematicBody2D
     /// <summary>
     /// 根据类型获取一个组件
     /// </summary>
-    public TC GetComponent<TC>() where TC : Component
+    public T GetComponent<T>() where T : Component
     {
-        var component = GetComponent(typeof(TC));
+        var component = GetComponent(typeof(T));
         if (component == null) return null;
-        return (TC)component;
+        return (T)component;
     }
     
     /// <summary>
     /// 每帧调用一次, 为了防止子类覆盖 _Process(), 给 _Process() 加上了 sealed, 子类需要帧循环函数请重写 Process() 函数
     /// </summary>
-    public sealed override void _Process(float delta)
+    public sealed override void _Process(double delta)
     {
-        Process(delta);
+        var newDelta = (float)delta;
+        Process(newDelta);
         
         //更新组件
         if (_components.Count > 0)
@@ -481,7 +500,7 @@ public abstract class ActivityObject : KinematicBody2D
             {
                 if (IsDestroyed) return;
                 var temp = arr[i].Value;
-                if (temp != null && temp.ActivityObject == this && temp.Enable)
+                if (temp != null && temp.ActivityInstance == this && temp.Enable)
                 {
                     if (!temp.IsReady)
                     {
@@ -489,7 +508,7 @@ public abstract class ActivityObject : KinematicBody2D
                         temp.IsReady = true;
                     }
 
-                    temp.Process(delta);
+                    temp.Process(newDelta);
                 }
             }
         }
@@ -497,13 +516,13 @@ public abstract class ActivityObject : KinematicBody2D
         //投抛计算
         if (_throwData != null && !_throwData.IsOver)
         {
-            GlobalRotationDegrees = GlobalRotationDegrees + _throwData.RotateSpeed * delta;
+            GlobalRotationDegrees = GlobalRotationDegrees + _throwData.RotateSpeed * newDelta;
             CalcThrowAnimatedPosition();
 
             var ysp = _throwData.YSpeed;
 
-            _throwData.Y += _throwData.YSpeed * delta;
-            _throwData.YSpeed -= GameConfig.G * delta;
+            _throwData.Y += _throwData.YSpeed * newDelta;
+            _throwData.YSpeed -= GameConfig.G * newDelta;
 
             //当高度大于16时, 显示在所有物体上
             if (_throwData.Y >= 16)
@@ -565,7 +584,7 @@ public abstract class ActivityObject : KinematicBody2D
             if (_prevAnimation != anim || _prevAnimationFrame != frame)
             {
                 //切换阴影动画
-                ShadowSprite.Texture = AnimatedSprite.Frames.GetFrame(anim, AnimatedSprite.Frame);
+                ShadowSprite.Texture = AnimatedSprite.SpriteFrames.GetFrameTexture(anim, AnimatedSprite.Frame);
             }
 
             _prevAnimation = anim;
@@ -580,37 +599,54 @@ public abstract class ActivityObject : KinematicBody2D
         {
             if (_playHitSchedule < 0.05f)
             {
-                _blendShaderMaterial.SetShaderParam("schedule", 1);
+                _blendShaderMaterial.SetShaderParameter("schedule", 1);
             }
             else if (_playHitSchedule < 0.15f)
             {
-                _blendShaderMaterial.SetShaderParam("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
+                _blendShaderMaterial.SetShaderParameter("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
             }
             if (_playHitSchedule >= 0.15f)
             {
-                _blendShaderMaterial.SetShaderParam("schedule", 0);
+                _blendShaderMaterial.SetShaderParameter("schedule", 0);
                 _playHitSchedule = 0;
                 _playHit = false;
             }
             else
             {
-                _playHitSchedule += delta;
+                _playHitSchedule += newDelta;
             }
         }
+        
+        //协程更新
+        if (_coroutineList != null)
+        {
+            var pairs = _coroutineList.ToArray();
+            for (var i = 0; i < pairs.Length; i++)
+            {
+                var item = pairs[i];
+                if (!item.Value.MoveNext())
+                {
+                    StopCoroutine(item.Key);
+                }
+            }
+        }
+        
+        ProcessOver(newDelta);
         
         //调试绘制
         if (IsDebug)
         {
-            Update();
+            QueueRedraw();
         }
     }
 
     /// <summary>
     /// 每物理帧调用一次, 为了防止子类覆盖 _PhysicsProcess(), 给 _PhysicsProcess() 加上了 sealed, 子类需要帧循环函数请重写 PhysicsProcess() 函数
     /// </summary>
-    public sealed override void _PhysicsProcess(float delta)
+    public sealed override void _PhysicsProcess(double delta)
     {
-        PhysicsProcess(delta);
+        var newDelta = (float)delta;
+        PhysicsProcess(newDelta);
         
         //更新组件
         if (_components.Count > 0)
@@ -620,7 +656,7 @@ public abstract class ActivityObject : KinematicBody2D
             {
                 if (IsDestroyed) return;
                 var temp = arr[i].Value;
-                if (temp != null && temp.ActivityObject == this && temp.Enable)
+                if (temp != null && temp.ActivityInstance == this && temp.Enable)
                 {
                     if (!temp.IsReady)
                     {
@@ -628,10 +664,12 @@ public abstract class ActivityObject : KinematicBody2D
                         temp.IsReady = true;
                     }
 
-                    temp.PhysicsProcess(delta);
+                    temp.PhysicsProcess(newDelta);
                 }
             }
         }
+
+        PhysicsProcessOver(newDelta);
     }
 
     /// <summary>
@@ -647,7 +685,7 @@ public abstract class ActivityObject : KinematicBody2D
             {
                 if (IsDestroyed) return;
                 var temp = arr[i].Value;
-                if (temp != null && temp.ActivityObject == this && temp.Enable)
+                if (temp != null && temp.ActivityInstance == this && temp.Enable)
                 {
                     temp.DebugDraw();
                 }
@@ -668,7 +706,7 @@ public abstract class ActivityObject : KinematicBody2D
         var pos = AnimatedSprite.GlobalPosition;
         if (_throwData != null && !_throwData.IsOver)
         {
-            ShadowSprite.GlobalPosition = new Vector2(pos.x + ShadowOffset.x, pos.y + ShadowOffset.y + _throwData.Y);
+            ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + _throwData.Y);
         }
         else
         {
@@ -676,9 +714,10 @@ public abstract class ActivityObject : KinematicBody2D
         }
     }
     
+    //计算位置
     private void CalcThrowAnimatedPosition()
     {
-        if (Scale.y < 0)
+        if (Scale.Y < 0)
         {
             AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) - _throwData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
         }
@@ -708,6 +747,8 @@ public abstract class ActivityObject : KinematicBody2D
         {
             arr[i].Value?.Destroy();
         }
+        //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
+        _templateInstance.QueueFree();
     }
 
     /// <summary>
@@ -738,17 +779,15 @@ public abstract class ActivityObject : KinematicBody2D
     private void Throw()
     {
         var parent = GetParent();
-        //投抛时必须要加入 sortRoot 节点下
-        var root = GameApplication.Instance.Room.GetRoot();
-        var throwRoot = GameApplication.Instance.Room.GetRoot(true);
+        //投抛时必须要加入 YSortLayer 节点下
         if (parent == null)
         {
-            throwRoot.AddChild(this);
+            this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
-        else if (parent == root)
+        else if (parent == GameApplication.Instance.RoomManager.NormalLayer)
         {
             parent.RemoveChild(this);
-            throwRoot.AddChild(this);
+            this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
 
         GlobalPosition = _throwData.StartPosition;
@@ -756,6 +795,7 @@ public abstract class ActivityObject : KinematicBody2D
         CalcThrowAnimatedPosition();
         //显示阴影
         ShowShadowSprite();
+        OnThrowStart();
     }
 
     /// <summary>
@@ -831,7 +871,7 @@ public abstract class ActivityObject : KinematicBody2D
         MoveController.RemoveForce(_throwData.ThrowForce);
         
         GetParent().RemoveChild(this);
-        GameApplication.Instance.Room.GetRoot(UseYSort).AddChild(this);
+        this.AddToActivityRoot(_currLayer);
         RestoreCollision();
 
         OnThrowOver();
@@ -912,6 +952,50 @@ public abstract class ActivityObject : KinematicBody2D
         _playHitSchedule = 0;
     }
 
+    /// <summary>
+    /// 开启一个协程, 返回协程 id
+    /// </summary>
+    public long StartCoroutine(IEnumerable able)
+    {
+        var id = _coroutineId++;
+        if (_coroutineList == null)
+        {
+            _coroutineList = new List<KeyValuePair<long, IEnumerator>>();
+        }
+        _coroutineList.Add(new KeyValuePair<long, IEnumerator>(id, able.GetEnumerator()));
+        return id;
+    }
+
+    /// <summary>
+    /// 根据协程 id 停止协程
+    /// </summary>
+    public void StopCoroutine(long coroutineId)
+    {
+        if (_coroutineList != null)
+        {
+            for (var i = 0; i < _coroutineList.Count; i++)
+            {
+                var item = _coroutineList[i];
+                if (item.Key == coroutineId)
+                {
+                    _coroutineList.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 停止所有协程
+    /// </summary>
+    public void StopAllCoroutine()
+    {
+        if (_coroutineList != null)
+        {
+            _coroutineList.Clear();
+        }
+    }
+    
     /// <summary>
     /// 通过 ItemId 实例化 ActivityObject 对象
     /// </summary>

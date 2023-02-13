@@ -1,83 +1,47 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://cji4nrwabt4ky"]
 
-[ext_resource path="res://prefab/weapon/Weapon.tscn" type="PackedScene" id=1]
-[ext_resource path="res://resource/sprite/gun/knife1.png" type="Texture" id=2]
-[ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=3]
-[ext_resource path="res://prefab/FanCollisionShape.tscn" type="PackedScene" id=4]
+[ext_resource type="PackedScene" uid="uid://cguea7a1vauvm" path="res://prefab/weapon/Weapon.tscn" id="1_xk7sg"]
+[ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_vwwhv"]
+[ext_resource type="Texture2D" uid="uid://bxhbsq0wb2yo1" path="res://resource/sprite/gun/knife1.png" id="3_s52oh"]
+[ext_resource type="PackedScene" path="res://prefab/FanCollisionShape.tscn" id="3_wdje6"]
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o5ytq"]
 resource_local_to_scene = true
-shader = ExtResource( 3 )
-shader_param/blend = Color( 1, 1, 1, 1 )
-shader_param/schedule = 1.0
+shader = ExtResource("2_vwwhv")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rtliw"]
 resource_local_to_scene = true
-shader = ExtResource( 3 )
-shader_param/blend = Color( 1, 1, 1, 1 )
-shader_param/schedule = 0.0
+shader = ExtResource("2_vwwhv")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
 
-[sub_resource type="SpriteFrames" id=4]
-animations = [ {
-"frames": [ ExtResource( 2 ) ],
+[sub_resource type="SpriteFrames" id="SpriteFrames_fbixs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_s52oh")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
-} ]
+}]
 
-[sub_resource type="Animation" id=5]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0.0 ]
-}
-
-[sub_resource type="Animation" id=6]
-resource_name = "hit"
-length = 0.15
-step = 0.05
-tracks/0/type = "value"
-tracks/0/path = NodePath("AnimatedSprite:material:shader_param/schedule")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.05, 0.15 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ 1.0, 1.0, 0.0 ]
-}
-
-[node name="Knife" instance=ExtResource( 1 )]
+[node name="Knife" instance=ExtResource("1_xk7sg")]
 
 [node name="ShadowSprite" parent="." index="0"]
-material = SubResource( 2 )
+material = SubResource("ShaderMaterial_o5ytq")
 
 [node name="AnimatedSprite" parent="." index="1"]
-material = SubResource( 3 )
-position = Vector2( 0, 0 )
-frames = SubResource( 4 )
+material = SubResource("ShaderMaterial_rtliw")
+position = Vector2(0, 0)
+sprite_frames = SubResource("SpriteFrames_fbixs")
 
 [node name="HitArea" type="Area2D" parent="." index="4"]
-collision_layer = 0
-collision_mask = 0
 monitoring = false
 monitorable = false
 
-[node name="FanCollisionShape" parent="HitArea" index="0" instance=ExtResource( 4 )]
+[node name="FanCollisionShape" parent="HitArea" index="0" instance=ExtResource("3_wdje6")]
 rotation = -1.5708
-scale = Vector2( 3, 3 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="HitArea" index="1"]
-root_node = NodePath("../..")
-anims/RESET = SubResource( 5 )
-anims/hit = SubResource( 6 )
+scale = Vector2(3, 3)

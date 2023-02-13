@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// 武器的基类
 /// </summary>
-public abstract class Weapon : ActivityObject
+public abstract partial class Weapon : ActivityObject
 {
     /// <summary>
     /// 所有被扔在地上的武器
@@ -50,17 +50,17 @@ public abstract class Weapon : ActivityObject
     /// <summary>
     /// 武器管的开火点
     /// </summary>
-    public Position2D FirePoint { get; private set; }
+    public Marker2D FirePoint { get; private set; }
 
     /// <summary>
     /// 武器管的原点
     /// </summary>
-    public Position2D OriginPoint { get; private set; }
+    public Marker2D OriginPoint { get; private set; }
 
     /// <summary>
     /// 弹壳抛出的点
     /// </summary>
-    public Position2D ShellPoint { get; private set; }
+    public Marker2D ShellPoint { get; private set; }
 
     /// <summary>
     /// 碰撞器节点
@@ -175,18 +175,18 @@ public abstract class Weapon : ActivityObject
         TypeId = typeId;
         Attribute = attribute;
 
-        FirePoint = GetNode<Position2D>("WeaponBody/FirePoint");
-        OriginPoint = GetNode<Position2D>("WeaponBody/OriginPoint");
-        ShellPoint = GetNode<Position2D>("WeaponBody/ShellPoint");
+        FirePoint = GetNode<Marker2D>("WeaponBody/FirePoint");
+        OriginPoint = GetNode<Marker2D>("WeaponBody/OriginPoint");
+        ShellPoint = GetNode<Marker2D>("WeaponBody/ShellPoint");
         CollisionShape2D = GetNode<CollisionShape2D>("WeaponBody/Collision");
 
         //图标
-        SetDefaultTexture(ResourceLoader.Load<Texture>(Attribute.Sprite));
+        SetDefaultTexture(ResourceLoader.Load<Texture2D>(Attribute.Sprite2D));
         AnimatedSprite.Position = Attribute.CenterPosition;
 
         //开火位置
-        FirePoint.Position = new Vector2(Attribute.FirePosition.x, -Attribute.FirePosition.y);
-        OriginPoint.Position = new Vector2(0, -Attribute.FirePosition.y);
+        FirePoint.Position = new Vector2(Attribute.FirePosition.X, -Attribute.FirePosition.Y);
+        OriginPoint.Position = new Vector2(0, -Attribute.FirePosition.Y);
 
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
@@ -289,7 +289,7 @@ public abstract class Weapon : ActivityObject
         base._EnterTree();
 
         //收集落在地上的武器
-        if (Master == null && GetParent() == GameApplication.Instance.Room.GetRoot())
+        if (IsInGround())
         {
             UnclaimedWeapons.Add(this);
         }
@@ -427,6 +427,15 @@ public abstract class Weapon : ActivityObject
         }
     }
 
+    /// <summary>
+    /// 返回武器是否在地上
+    /// </summary>
+    /// <returns></returns>
+    public bool IsInGround()
+    {
+        return Master == null && GetParent() == GameApplication.Instance.RoomManager.NormalLayer;
+    }
+    
     /// <summary>
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
@@ -617,11 +626,11 @@ public abstract class Weapon : ActivityObject
         var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
 
         //先算武器口方向
-        var tempRotation = (float)GD.RandRange(-angle, angle);
-        var tempAngle = Mathf.Rad2Deg(tempRotation);
+        var tempRotation = Utils.RandfRange(-angle, angle);
+        var tempAngle = Mathf.RadToDeg(tempRotation);
 
         //开火时枪口角度
-        var fireRotation = Mathf.Deg2Rad(Master.MountPoint.RealAngle) + tempRotation;
+        var fireRotation = Mathf.DegToRad(Master.MountPoint.RealAngle) + tempRotation;
         //创建子弹
         for (int i = 0; i < bulletCount; i++)
         {
@@ -640,7 +649,7 @@ public abstract class Weapon : ActivityObject
         //武器身位置
         var max = Mathf.Abs(Mathf.Max(Attribute.MaxBacklash, Attribute.MinBacklash));
         _currBacklashLength = Mathf.Clamp(
-            _currBacklashLength - Utils.RandRange(Attribute.MinBacklash, Attribute.MaxBacklash),
+            _currBacklashLength - Utils.RandfRange(Attribute.MinBacklash, Attribute.MaxBacklash),
             -max, max
         );
         Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
@@ -877,11 +886,11 @@ public abstract class Weapon : ActivityObject
             {
                 if (holster.PickupWeapon(this) == -1)
                 {
+                    //替换武器
                     var slot = holster.SlotList[holster.ActiveIndex];
                     if (slot.Type == Attribute.WeightType)
                     {
-                        var weapon = holster.RemoveWeapon(holster.ActiveIndex);
-                        weapon.ThrowWeapon(roleMaster);
+                        roleMaster.ThrowWeapon();
                         roleMaster.PickUpWeapon(this);
                     }
                 }
@@ -894,14 +903,24 @@ public abstract class Weapon : ActivityObject
     /// </summary>
     public float GetRealGlobalRotation()
     {
-        return Mathf.Deg2Rad(Master.MountPoint.RealAngle) + Rotation;
+        return Mathf.DegToRad(Master.MountPoint.RealAngle) + Rotation;
     }
 
     /// <summary>
     /// 触发扔掉武器抛出的效果, 并不会管武器是否在武器袋中
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
-    public virtual void ThrowWeapon(Role master)
+    public void ThrowWeapon(Role master)
+    {
+        ThrowWeapon(master, master.GlobalPosition);
+    }
+
+    /// <summary>
+    /// 触发扔掉武器抛出的效果, 并不会管武器是否在武器袋中
+    /// </summary>
+    /// <param name="master">触发扔掉该武器的的角色</param>
+    /// <param name="startPosition">投抛起始位置</param>
+    public void ThrowWeapon(Role master, Vector2 startPosition)
     {
         //阴影偏移
         ShadowOffset = new Vector2(0, 2);
@@ -919,7 +938,7 @@ public abstract class Weapon : ActivityObject
         var xf = 20;
         var yf = Utils.RandRangeInt(50, 70);
         var rotate = Utils.RandRangeInt(-90, 90);
-        Throw(new Vector2(30, 15), master.GetCenterPosition(), startHeight, direction, xf, yf, rotate, true);
+        Throw(new Vector2(30, 15), startPosition, startHeight, direction, xf, yf, rotate, true);
     }
 
     protected override void OnThrowOver()
@@ -929,9 +948,9 @@ public abstract class Weapon : ActivityObject
         AnimationPlayer.Play("floodlight");
     }
 
-    public override void PutDown()
+    public override void PutDown(RoomLayerEnum layer)
     {
-        base.PutDown();
+        base.PutDown(layer);
         AnimationPlayer.Play("floodlight");
     }
 
@@ -947,7 +966,7 @@ public abstract class Weapon : ActivityObject
         AnimationPlayer.Stop();
         //清除泛白效果
         ShaderMaterial sm = (ShaderMaterial)AnimatedSprite.Material;
-        sm.SetShaderParam("schedule", 0);
+        sm.SetShaderParameter("schedule", 0);
         ZIndex = 0;
         //禁用碰撞
         CollisionShape2D.Disabled = true;
@@ -959,7 +978,7 @@ public abstract class Weapon : ActivityObject
     /// <summary>
     /// 触发移除, 这个函数由 Holster 对象调用
     /// </summary>
-    public void Remove()
+    public void RemoveAt()
     {
         Master = null;
         AnimatedSprite.Position = Attribute.CenterPosition;
@@ -972,7 +991,7 @@ public abstract class Weapon : ActivityObject
     public void Active()
     {
         //调整阴影
-        ShadowOffset = new Vector2(0, Master.GlobalPosition.y - GlobalPosition.y);
+        ShadowOffset = new Vector2(0, Master.GlobalPosition.Y - GlobalPosition.Y);
         //枪口默认抬起角度
         RotationDegrees = -Attribute.DefaultAngle;
         ShowShadowSprite();

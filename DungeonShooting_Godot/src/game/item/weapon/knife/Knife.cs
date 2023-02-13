@@ -1,14 +1,14 @@
-﻿
+
 using Godot;
 
 [RegisterWeapon("1004", typeof(KnifeAttribute))]
-public class Knife : Weapon
+public partial class Knife : Weapon
 {
     private class KnifeAttribute : WeaponAttribute
     {
         public KnifeAttribute()
         {
-            Sprite = ResourcePath.resource_sprite_gun_knife1_png;
+            Sprite2D = ResourcePath.resource_sprite_gun_knife1_png;
             WeaponPrefab = ResourcePath.prefab_weapon_Knife_tscn;
             //攻速设置
             StartFiringSpeed = 180;
@@ -41,7 +41,7 @@ public class Knife : Weapon
         _hitArea.Monitoring = false;
         _hitArea.Monitorable = false;
 
-        _hitArea.Connect("body_entered", this, nameof(OnBodyEntered));
+        _hitArea.BodyEntered += OnBodyEntered;
     }
 
     protected override void Process(float delta)
@@ -90,7 +90,7 @@ public class Knife : Weapon
         }
 
 
-        if (Master == GameApplication.Instance.Room.Player)
+        if (Master == GameApplication.Instance.RoomManager.Player)
         {
             //创建抖动
             //GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation - Mathf.Pi * 0.5f) * 1.5f);

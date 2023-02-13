@@ -1,101 +1,131 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=19 format=3 uid="uid://cdohv4xeirtuc"]
 
-[ext_resource path="res://prefab/role/Role.tscn" type="PackedScene" id=1]
-[ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=2]
-[ext_resource path="res://resource/sprite/role/role2.png" type="Texture" id=3]
+[ext_resource type="PackedScene" path="res://prefab/role/Role.tscn" id="1"]
+[ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_nvo1u"]
+[ext_resource type="Texture2D" uid="uid://bhwhhg2dfsr26" path="res://resource/sprite/role/role2.png" id="3_55mk2"]
 
-[sub_resource type="ShaderMaterial" id=1]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vejn8"]
 resource_local_to_scene = true
-shader = ExtResource( 2 )
-shader_param/blend = Color( 1, 1, 1, 1 )
-shader_param/schedule = 1.0
+shader = ExtResource("2_nvo1u")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0gb8j"]
 resource_local_to_scene = true
-shader = ExtResource( 2 )
-shader_param/blend = Color( 1, 1, 1, 1 )
-shader_param/schedule = 0.0
+shader = ExtResource("2_nvo1u")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
 
-[sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 24, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_dvg4a"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(0, 24, 16, 24)
 
-[sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 24, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvuct"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(16, 24, 16, 24)
 
-[sub_resource type="AtlasTexture" id=22]
-atlas = ExtResource( 3 )
-region = Rect2( 32, 24, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_5op76"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(32, 24, 16, 24)
 
-[sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 3 )
-region = Rect2( 48, 24, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_helyc"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(48, 24, 16, 24)
 
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 48, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_67mn8"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(48, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 48, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_jeywq"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(32, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 3 )
-region = Rect2( 32, 48, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_oycx8"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(16, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id=27]
-atlas = ExtResource( 3 )
-region = Rect2( 48, 48, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_tjg1t"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(0, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id=28]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 48, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ltxw"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(0, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id=29]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 48, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_x1va1"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(16, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id=30]
-atlas = ExtResource( 3 )
-region = Rect2( 32, 48, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_ic2p5"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(32, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id=31]
-atlas = ExtResource( 3 )
-region = Rect2( 48, 48, 16, 24 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_j3hdu"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(48, 48, 16, 24)
 
-[sub_resource type="SpriteFrames" id=19]
-animations = [ {
-"frames": [ SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ) ],
+[sub_resource type="SpriteFrames" id="SpriteFrames_3poqo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dvg4a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvuct")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5op76")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_helyc")
+}],
 "loop": true,
-"name": "idle",
+"name": &"idle",
 "speed": 7.0
 }, {
-"frames": [ SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_67mn8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jeywq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oycx8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tjg1t")
+}],
 "loop": true,
-"name": "reverseRun",
+"name": &"reverseRun",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ltxw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x1va1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ic2p5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j3hdu")
+}],
 "loop": true,
-"name": "run",
+"name": &"run",
 "speed": 10.0
-} ]
+}]
 
-[sub_resource type="CircleShape2D" id=32]
-radius = 4.0
-
-[node name="Player" instance=ExtResource( 1 )]
-CollisionLayer = 8
-CollisionMask = 25
+[node name="Player" instance=ExtResource("1")]
+collision_layer = 8
+collision_mask = 1
 
 [node name="ShadowSprite" parent="." index="0"]
-material = SubResource( 1 )
+material = SubResource("ShaderMaterial_vejn8")
 
 [node name="AnimatedSprite" parent="." index="2"]
-material = SubResource( 2 )
-frames = SubResource( 19 )
-playing = true
-
-[node name="Collision" parent="." index="3"]
-shape = SubResource( 32 )
+material = SubResource("ShaderMaterial_0gb8j")
+sprite_frames = SubResource("SpriteFrames_3poqo")
+animation = &"idle"

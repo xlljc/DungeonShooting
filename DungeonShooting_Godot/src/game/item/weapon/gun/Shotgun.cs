@@ -1,7 +1,7 @@
 using Godot;
 
 [RegisterWeapon("1002", typeof(Shotgun.ShotgunAttribute))]
-public class Shotgun : Weapon
+public partial class Shotgun : Weapon
 {
 
     private class ShotgunAttribute : WeaponAttribute
@@ -9,7 +9,7 @@ public class Shotgun : Weapon
         public ShotgunAttribute()
         {
             Name = "霰弹枪";
-            Sprite = ResourcePath.resource_sprite_gun_gun2_png;
+            Sprite2D = ResourcePath.resource_sprite_gun_gun2_png;
             Weight = 40;
             CenterPosition = new Vector2(0.4f, -2.6f);
             StartFiringSpeed = 120;
@@ -67,7 +67,7 @@ public class Shotgun : Weapon
         var shell = new ShellCase();
         shell.Throw(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, true);
         
-        if (Master == GameApplication.Instance.Room.Player)
+        if (Master == GameApplication.Instance.RoomManager.Player)
         {
             //创建抖动
             GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
@@ -75,10 +75,10 @@ public class Shotgun : Weapon
         
         //创建开火特效
         var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_ShotFire_tscn);
-        var sprite = packedScene.Instance<Sprite>();
+        var sprite = packedScene.Instantiate<Sprite2D>();
         sprite.GlobalPosition = FirePoint.GlobalPosition;
         sprite.GlobalRotation = FirePoint.GlobalRotation;
-        GameApplication.Instance.Room.GetRoot(true).AddChild(sprite);
+        sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         
         //播放射击音效
         SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet3_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -15);
@@ -90,11 +90,11 @@ public class Shotgun : Weapon
         var bullet = new Bullet(
             ResourcePath.prefab_weapon_bullet_Bullet_tscn,
             Utils.RandRangeInt(280, 380),
-            Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
+            Utils.RandfRange(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,
-            fireRotation + Utils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
+            fireRotation + Utils.RandfRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
             GetAttackLayer()
         );
-        bullet.PutDown();
+        bullet.PutDown(RoomLayerEnum.YSortLayer);
     }
 }

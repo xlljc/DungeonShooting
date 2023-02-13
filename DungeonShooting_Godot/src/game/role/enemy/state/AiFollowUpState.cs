@@ -1,4 +1,4 @@
-﻿
+
 using Godot;
 
 /// <summary>
@@ -38,6 +38,11 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
                 ChangeStateLate(AiStateEnum.AiFindAmmo);
                 return;
             }
+            else
+            {
+                //切换到随机移动状态
+                ChangeStateLate(AiStateEnum.AiSurround);
+            }
         }
         
         var playerPos = Player.Current.GetCenterPosition();
@@ -47,10 +52,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            if (Master.NavigationAgent2D.GetTargetLocation() != playerPos)
-            {
-                Master.NavigationAgent2D.SetTargetLocation(playerPos);
-            }
+            Master.NavigationAgent2D.TargetPosition = playerPos;
         }
         else
         {
@@ -74,8 +76,8 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
             //计算移动
-            var nextPos = Master.NavigationAgent2D.GetNextLocation();
-            Master.AnimatedSprite.Animation = AnimatorNames.Run;
+            var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
+            Master.AnimatedSprite.Play(AnimatorNames.Run);
             Master.BasisVelocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
         }
@@ -118,7 +120,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
 
     public override void DebugDraw()
     {
-        var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
+        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
         Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Red);
     }
 }

@@ -3,7 +3,7 @@ using Godot;
 /// <summary>
 /// 子弹类
 /// </summary>
-public class Bullet : ActivityObject
+public partial class Bullet : ActivityObject
 {
     /// <summary>
     /// 碰撞区域
@@ -24,13 +24,15 @@ public class Bullet : ActivityObject
     {
         CollisionArea = GetNode<Area2D>("CollisionArea");
         CollisionArea.CollisionMask = targetLayer;
-        CollisionArea.Connect("area_entered", this, nameof(OnArea2dEntered));
+        CollisionArea.AreaEntered += OnArea2dEntered;
 
         FlySpeed = speed;
         MaxDistance = maxDistance;
         Position = position;
         Rotation = rotation;
         ShadowOffset = new Vector2(0, 5);
+
+        BasisVelocity = new Vector2(FlySpeed, 0).Rotated(Rotation);
     }
 
     public override void _Ready()
@@ -40,18 +42,18 @@ public class Bullet : ActivityObject
         ShowShadowSprite();
     }
 
-    protected override void PhysicsProcess(float delta)
+    protected override void PhysicsProcessOver(float delta)
     {
         //移动
-        var kinematicCollision = MoveAndCollide(new Vector2(FlySpeed * delta, 0).Rotated(Rotation));
-        if (kinematicCollision != null)
+        var lastSlideCollision = GetLastSlideCollision();
+        if (lastSlideCollision != null)
         {
             //创建粒子特效
             var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletSmoke_tscn);
-            var smoke = packedScene.Instance<Particles2D>();
-            smoke.GlobalPosition = kinematicCollision.Position;
-            smoke.GlobalRotation = kinematicCollision.Normal.Angle();
-            GameApplication.Instance.Room.GetRoot(true).AddChild(smoke);
+            var smoke = packedScene.Instantiate<GpuParticles2D>();
+            smoke.GlobalPosition = lastSlideCollision.GetPosition();
+            smoke.GlobalRotation = lastSlideCollision.GetNormal().Angle();
+            smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
 
             Destroy();
             return;

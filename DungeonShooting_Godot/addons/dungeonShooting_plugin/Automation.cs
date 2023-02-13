@@ -6,7 +6,7 @@ using Godot;
 using File = System.IO.File;
 
 [Tool]
-public class Automation : Control
+public partial class Automation : Control
 {
 	//支持后缀
 	private string[] suffix =
@@ -16,7 +16,7 @@ public class Automation : Control
 	//排除第一层的文件夹
 	private string[] exclude =
 	{
-		".vscode", ".idea", ".git", ".import", ".mono", "android", "addons"
+		".vscode", ".idea", ".git", ".import", ".mono", "android", "addons", ".godot"
 	};
 	private string currDir = System.Environment.CurrentDirectory;
 
@@ -30,8 +30,7 @@ public class Automation : Control
 		            "/// </summary>\n" +
 		            "public class ResourcePath\n" +
 		            "{\n";
-		//输出路径
-		var path = "src/game/manager/ResourcePath1.cs";
+
 		GD.Print("更新 ResourcePath...");
 
 		var directoryInfo = new DirectoryInfo(currDir);

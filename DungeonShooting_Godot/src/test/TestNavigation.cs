@@ -3,41 +3,41 @@ using Godot;
 /// <summary>
 /// 该demo是以3.4为基础做的导航demo, 后面3.5出了新的导航系统, 游戏中已采用新的导航方案
 /// </summary>
-public class TestNavigation : Node2D
+public partial class TestNavigation : Node2D
 {
 
-    private Navigation2D Navigation2D;
-    private Vector2[] points = new Vector2[0];
-
-    public override void _Ready()
-    {
-        Navigation2D = GetNode<Navigation2D>("Position2D/Navigation2D");
-    }
-
-    public override void _Input(InputEvent @event)
-    {
-        if (@event is InputEventMouseButton ieb) {
-            if (ieb.ButtonIndex == (int)ButtonList.Left && ieb.Pressed)
-            {
-                points = Navigation2D.GetSimplePath(Vector2.Zero, Navigation2D.ToLocal(ieb.Position));
-                Update();
-                string str = "";
-                foreach (var item in points)
-                {
-                    str += item;
-                }
-                GD.Print("路径: " + points.Length + ", " + str);
-            }
-        }
-    }
-
-    public override void _Draw()
-    {
-        if (points.Length >= 2)
-        {
-            GD.Print("绘制线段...");
-            DrawPolyline(points, Colors.Red);
-            // DrawMultiline(points, Colors.Red);
-        }
-    }
+    // private Node2D Node2D;
+    // private Vector2[] points = new Vector2[0];
+    //
+    // public override void _Ready()
+    // {
+    //     Node2D = GetNode<Node2D>("Marker2D/Node2D");
+    // }
+    //
+    // public override void _Input(InputEvent @event)
+    // {
+    //     if (@event is InputEventMouseButton ieb) {
+    //         if (ieb.ButtonIndex == (int)ButtonList.Left && ieb.Pressed)
+    //         {
+    //             points = Node2D.GetSimplePath(Vector2.Zero, Node2D.ToLocal(ieb.Position));
+    //             Update();
+    //             string str = "";
+    //             foreach (var item in points)
+    //             {
+    //                 str += item;
+    //             }
+    //             GD.Print("路径: " + points.Length + ", " + str);
+    //         }
+    //     }
+    // }
+    //
+    // public override void _Draw()
+    // {
+    //     if (points.Length >= 2)
+    //     {
+    //         GD.Print("绘制线段...");
+    //         DrawPolyline(points, Colors.Red);
+    //         // DrawMultiline(points, Colors.Red);
+    //     }
+    // }
 }

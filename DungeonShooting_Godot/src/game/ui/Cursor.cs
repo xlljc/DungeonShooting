@@ -3,24 +3,24 @@ using Godot;
 /// <summary>
 /// 鼠标指针
 /// </summary>
-public class Cursor : Node2D
+public partial class Cursor : Node2D
 {
-    private Sprite lt;
-    private Sprite lb;
-    private Sprite rt;
-    private Sprite rb;
+    private Sprite2D lt;
+    private Sprite2D lb;
+    private Sprite2D rt;
+    private Sprite2D rb;
 
     public override void _Ready()
     {
-        lt = GetNode<Sprite>("LT");
-        lb = GetNode<Sprite>("LB");
-        rt = GetNode<Sprite>("RT");
-        rb = GetNode<Sprite>("RB");
+        lt = GetNode<Sprite2D>("LT");
+        lb = GetNode<Sprite2D>("LB");
+        rt = GetNode<Sprite2D>("RT");
+        rb = GetNode<Sprite2D>("RB");
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
-        var targetGun = GameApplication.Instance.Room.Player?.Holster.ActiveWeapon;
+        var targetGun = GameApplication.Instance.RoomManager.Player?.Holster.ActiveWeapon;
         if (targetGun != null)
         {
             SetScope(targetGun.CurrScatteringRange, targetGun);
@@ -48,7 +48,7 @@ public class Cursor : Node2D
             var len = GlobalPosition.DistanceTo(tunPos);
             if (targetGun.Attribute != null)
             {
-                len = Mathf.Max(0, len - targetGun.Attribute.FirePosition.x);
+                len = Mathf.Max(0, len - targetGun.Attribute.FirePosition.X);
             }
             scope = len / GameConfig.ScatteringDistance * scope;
         }

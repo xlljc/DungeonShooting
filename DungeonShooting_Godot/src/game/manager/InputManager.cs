@@ -1,4 +1,4 @@
-﻿
+
 using Godot;
 
 /// <summary>
@@ -7,12 +7,12 @@ using Godot;
 public static class InputManager
 {
     /// <summary>
-    /// 获取鼠标在Viewport节点下的坐标
+    /// 获取鼠标在SubViewport节点下的坐标
     /// </summary>
     public static Vector2 GetViewportMousePosition()
     {
         var application = GameApplication.Instance;
-        return application.GlobalToViewPosition(application.GetGlobalMousePosition());
+        return application.GlobalToViewPosition(application.GetGlobalMousePosition() - new Vector2(25, 25));
     }
 
     /// <summary>
