@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="3"]
 
 
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rxkv3"]
 resource_local_to_scene = true
 shader = ExtResource("1")

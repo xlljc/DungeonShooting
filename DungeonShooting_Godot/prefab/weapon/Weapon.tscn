@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_dtam7"]
 
 
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
 resource_local_to_scene = true
 shader = ExtResource("1")

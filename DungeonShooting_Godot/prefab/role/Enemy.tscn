@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=3 uid="uid://dbrig6dq441wo"]
 
-[ext_resource type="PackedScene" uid="uid://4v6441urmwrf" path="res://prefab/role/Role.tscn" id="1_qkqsa"]
+[ext_resource type="PackedScene" path="res://prefab/role/Role.tscn" id="1_qkqsa"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_in1s7"]
 [ext_resource type="Texture2D" uid="uid://un6gylhe011n" path="res://resource/sprite/role/role8.png" id="3_tk1tp"]
 
@@ -81,7 +81,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 5.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -98,7 +98,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"reverseRun",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -115,12 +115,12 @@ animations = [{
 }],
 "loop": true,
 "name": &"run",
-"speed": 5.0
+"speed": 10.0
 }]
 
 [node name="Enemy" instance=ExtResource("1_qkqsa")]
 collision_layer = 16
-collision_mask = 1
+collision_mask = 25
 
 [node name="ShadowSprite" parent="." index="0"]
 material = SubResource("ShaderMaterial_8vxx6")
@@ -130,6 +130,9 @@ material = SubResource("ShaderMaterial_k8mt5")
 sprite_frames = SubResource("SpriteFrames_m7t3e")
 animation = &"idle"
 
+[node name="HurtArea" parent="." index="4"]
+visible = false
+
 [node name="ViewRay" type="RayCast2D" parent="." index="6"]
 position = Vector2(0, -8)
 enabled = false
@@ -138,4 +141,6 @@ enabled = false
 position = Vector2(0, -5)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="NavigationPoint" index="0"]
+path_desired_distance = 3.0
+target_desired_distance = 3.0
 radius = 20.0

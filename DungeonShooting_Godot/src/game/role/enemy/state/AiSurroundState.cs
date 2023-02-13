@@ -69,7 +69,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         {
             if (_pauseTimer >= 0)
             {
-                Master.AnimatedSprite.Animation = AnimatorNames.Idle;
+                Master.AnimatedSprite.Play(AnimatorNames.Idle);
                 _pauseTimer -= delta;
             }
             else if (_isMoveOver) //移动已经完成
@@ -91,7 +91,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     _moveFlag = true;
                     //计算移动
                     var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                    Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                    Master.AnimatedSprite.Play(AnimatorNames.Run);
                     Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                                            Master.MoveSpeed;
                 }
@@ -109,7 +109,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     {
                         //计算移动
                         var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                        Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                        Master.AnimatedSprite.Play(AnimatorNames.Run);
                         Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                                                Master.MoveSpeed;
                     }
@@ -138,7 +138,8 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
 
     private void RunOver(Vector2 targetPos)
     {
-        var distance = (int)(Master.Holster.ActiveWeapon.Attribute.MinDistance * 0.7f);
+        var weapon = Master.Holster.ActiveWeapon;
+        var distance = (int)(weapon == null ? 150 : (weapon.Attribute.MinDistance * 0.7f));
         _nextPosition = new Vector2(
             targetPos.X + Utils.RandRangeInt(-distance, distance),
             targetPos.Y + Utils.RandRangeInt(-distance, distance)

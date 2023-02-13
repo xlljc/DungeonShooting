@@ -65,7 +65,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
         {
             //计算移动
             var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-            Master.AnimatedSprite.Animation = AnimatorNames.Run;
+            Master.AnimatedSprite.Play(AnimatorNames.Run);
             Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
         }

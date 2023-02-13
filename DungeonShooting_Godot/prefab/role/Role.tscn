@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://src/game/role/MountRotation.cs" id="4"]
 
 
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v2kfw"]
 resource_local_to_scene = true
 shader = ExtResource("2_q6jwp")

@@ -37,23 +37,35 @@ public partial class GameCamera : Camera2D
         _camPos = GlobalPosition;
     }
 
-    //public override void _PhysicsProcess(float delta);
-
     public override void _Process(double delta)
     {
         var newDelta = (float)delta;
         _Shake(newDelta);
         
+        // 3.5 写法
+        // var player = GameApplication.Instance.RoomManager.Player;
+        // var viewportContainer = GameApplication.Instance.SubViewportContainer;
+        // var camPos = player.GlobalPosition;
+        // _camPos = _camPos.Lerp(camPos, Mathf.Min(6 * newDelta, 1)) + _shakeOffset;
+        // SubPixelPosition = _camPos.Round() - _camPos;
+        // (viewportContainer.Material as ShaderMaterial)?.SetShaderParameter("offset", SubPixelPosition);
+        // GlobalPosition = _camPos.Round();
+        
         var player = GameApplication.Instance.RoomManager.Player;
-        var viewportContainer = GameApplication.Instance.SubViewportContainer;
-        var camPos = player.GlobalPosition;
-        //var camPos = player.GlobalPosition.Lerp(mousePos, 0);
-        //_camPos = camPos + _shakeOffset;
-        _camPos = _camPos.Lerp(camPos, Mathf.Min(6 * newDelta, 1)) + _shakeOffset;
+        var mousePosition = InputManager.GetViewportMousePosition();
+        var playerPosition = player.GlobalPosition;
+        Vector2 targetPos;
+        if (playerPosition.DistanceSquaredTo(mousePosition) >= (60 / 0.3f) * (60 / 0.3f))
+        {
+            targetPos = playerPosition.MoveToward(mousePosition, 60);
+        }
+        else
+        {
+            targetPos = playerPosition.Lerp(mousePosition, 0.3f);
+        }
+        _camPos = _camPos.Lerp(targetPos, Mathf.Min(6 * newDelta, 1)) + _shakeOffset;
         SubPixelPosition = _camPos.Round() - _camPos;
-        //(viewportContainer.Material as ShaderMaterial)?.SetShaderParameter("offset", SubPixelPosition);
         GlobalPosition = _camPos.Round();
-        //GlobalPosition = _camPos;
     }
     
     /// <summary>

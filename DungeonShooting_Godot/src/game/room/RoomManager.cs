@@ -63,7 +63,7 @@ public partial class RoomManager : Node2D
 
         //创建玩家
         Player = new Player();
-        Player.Position = new Vector2(100, 100);
+        Player.Position = new Vector2(80, 80);
         Player.Name = "Player";
         Player.PutDown(RoomLayerEnum.YSortLayer);
     }
@@ -100,19 +100,19 @@ public partial class RoomManager : Node2D
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
-        // var enemy1 = new Enemy();
-        // enemy1.Name = "Enemy";
-        // enemy1.PutDown(new Vector2(100, 100));
-        // enemy1.PickUpWeapon(WeaponManager.GetGun("1003"));
-        // enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        Player.PickUpWeapon(WeaponManager.GetGun("1003"));
+        Player.PickUpWeapon(WeaponManager.GetGun("1004"));
         
-        // for (int i = 0; i < 10; i++)
+        var enemy1 = new Enemy();
+        enemy1.PutDown(new Vector2(100, 100), RoomLayerEnum.YSortLayer);
+        //enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        
+        // for (int i = 0; i < 3; i++)
         // {
         //     var enemyTemp = new Enemy();
-        //     enemyTemp.Name = "EnemyTemp" + i;
-        //     enemyTemp.PutDown(new Vector2(150 + (i + 1) * 20, 300));
-        //     enemyTemp.PickUpWeapon(WeaponManager.GetGun("1003"));
-        //     enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
+        //     enemyTemp.PutDown(new Vector2(30 + (i + 1) * 20, 30), RoomLayerEnum.YSortLayer);
+        //     // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1003"));
+        //     // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
         // }
         
         // var enemy2 = new Enemy();

@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://lbe753cb8heb"]
 
 [ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Room.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://prefab/ui/RoomUI.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://bvpmtfupny8iu" path="res://prefab/ui/RoomUI.tscn" id="2"]
 [ext_resource type="Script" path="res://src/game/GameApplication.cs" id="3"]
 [ext_resource type="PackedScene" path="res://prefab/ui/Cursor.tscn" id="4"]
 
@@ -24,6 +24,7 @@ shader_parameter/offset = Vector2(0, 0)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("3")
+Debug = true
 CursorPack = ExtResource("4")
 RoomPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport/Room")
 ViewportPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport")

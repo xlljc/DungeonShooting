@@ -341,8 +341,9 @@ public partial class Enemy : Role
                 return;
             }
 
-            var index2 = Holster.FindWeapon((we, i) =>
-                we.Attribute.WeightType == weapon.Attribute.WeightType && we.IsTotalAmmoEmpty());
+            // var index2 = Holster.FindWeapon((we, i) =>
+            //     we.Attribute.WeightType == weapon.Attribute.WeightType && we.IsTotalAmmoEmpty());
+            var index2 = Holster.FindWeapon((we, i) => we.IsTotalAmmoEmpty());
             if (index2 != -1) //扔掉没子弹的武器
             {
                 ThrowWeapon(index2);
@@ -350,11 +351,11 @@ public partial class Enemy : Role
                 return;
             }
             
-            if (Holster.HasVacancy()) //有空位, 拾起武器
-            {
-                TriggerInteractive();
-                return;
-            }
+            // if (Holster.HasVacancy()) //有空位, 拾起武器
+            // {
+            //     TriggerInteractive();
+            //     return;
+            // }
         }
     }
 

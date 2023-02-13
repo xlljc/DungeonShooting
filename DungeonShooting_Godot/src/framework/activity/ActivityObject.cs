@@ -96,6 +96,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     private Dictionary<string, object> _signMap;
     
     private List<KeyValuePair<long, IEnumerator>> _coroutineList;
+    private ActivityObjectTemplate _templateInstance;
     
     private static long _coroutineId = 0;
     private static long _index = 0;
@@ -110,19 +111,19 @@ public abstract partial class ActivityObject : CharacterBody2D
             throw new Exception("创建 ActivityObject 没有找到指定挂载的预制体: " + scenePath);
         }
 
-        var tempNode = tempPrefab.Instantiate<ActivityObjectTemplate>();
-        ZIndex = tempNode.z_index;
-        CollisionLayer = tempNode.collision_layer;
-        CollisionMask = tempNode.collision_mask;
-        Scale = tempNode.scale;
-        Visible = tempNode.visible;
+        _templateInstance = tempPrefab.Instantiate<ActivityObjectTemplate>();
+        ZIndex = _templateInstance.z_index;
+        CollisionLayer = _templateInstance.collision_layer;
+        CollisionMask = _templateInstance.collision_mask;
+        Scale = _templateInstance.scale;
+        Visible = _templateInstance.visible;
 
         //移动子节点
-        var count = tempNode.GetChildCount();
+        var count = _templateInstance.GetChildCount();
         for (int i = 0; i < count; i++)
         {
-            var body = tempNode.GetChild(0);
-            tempNode.RemoveChild(body);
+            var body = _templateInstance.GetChild(0);
+            _templateInstance.RemoveChild(body);
             AddChild(body);
             switch (body.Name)
             {
@@ -144,7 +145,7 @@ public abstract partial class ActivityObject : CharacterBody2D
         }
         
         MoveController = AddComponent<MoveController>();
-        tempNode.QueueFree();
+        //tempNode.CallDeferred(Node.MethodName.QueueFree);
     }
 
     /// <summary>
@@ -746,6 +747,8 @@ public abstract partial class ActivityObject : CharacterBody2D
         {
             arr[i].Value?.Destroy();
         }
+        //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
+        _templateInstance.QueueFree();
     }
 
     /// <summary>
@@ -949,6 +952,9 @@ public abstract partial class ActivityObject : CharacterBody2D
         _playHitSchedule = 0;
     }
 
+    /// <summary>
+    /// 开启一个协程, 返回协程 id
+    /// </summary>
     public long StartCoroutine(IEnumerable able)
     {
         var id = _coroutineId++;
@@ -960,6 +966,9 @@ public abstract partial class ActivityObject : CharacterBody2D
         return id;
     }
 
+    /// <summary>
+    /// 根据协程 id 停止协程
+    /// </summary>
     public void StopCoroutine(long coroutineId)
     {
         if (_coroutineList != null)
@@ -976,6 +985,9 @@ public abstract partial class ActivityObject : CharacterBody2D
         }
     }
     
+    /// <summary>
+    /// 停止所有协程
+    /// </summary>
     public void StopAllCoroutine()
     {
         if (_coroutineList != null)
