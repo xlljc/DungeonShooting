@@ -28,9 +28,7 @@ public partial class Gun : Weapon
             MaxAmmoCapacity = 30 * 3;
             //扳机检测间隔
             TriggerInterval = 0f;
-            //连发数量
-            MinContinuousCount = 3;
-            MaxContinuousCount = 3;
+
             //开火前延时
             DelayedTime = 0f;
             //攻击距离
@@ -43,6 +41,15 @@ public partial class Gun : Weapon
             UpliftAngle = 10;
             //开火位置
             FirePosition = new Vector2(16, 2);
+            
+            AiUseAttribute = Clone();
+            AiUseAttribute.DelayedTime = 1f;
+            AiUseAttribute.TriggerInterval = 4f;
+            AiUseAttribute.ContinuousShoot = true;
+            //连发数量
+            AiUseAttribute.MinContinuousCount = 3;
+            AiUseAttribute.MaxContinuousCount = 3;
+                
         }
     }
 
@@ -57,6 +64,7 @@ public partial class Gun : Weapon
             CenterPosition = new Vector2(0.4f, -2.6f);
             WeightType = WeaponWeightType.DeputyWeapon;
             StartFiringSpeed = 300;
+            FinalFiringSpeed = 300;
             StartScatteringRange = 5;
             FinalScatteringRange = 60;
             ScatteringRangeAddValue = 8f;
@@ -83,6 +91,9 @@ public partial class Gun : Weapon
             UpliftAngle = 30;
             //开火位置
             FirePosition = new Vector2(10, 2);
+
+            AiUseAttribute = Clone();
+            AiUseAttribute.TriggerInterval = 2f;
         }
     }
 

@@ -42,6 +42,9 @@ public partial class Shotgun : Weapon
             MinBacklash = 5;
             //开火位置
             FirePosition = new Vector2(18, 4);
+
+            AiUseAttribute = Clone();
+            AiUseAttribute.TriggerInterval = 3.5f;
         }
     }
     

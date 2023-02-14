@@ -192,7 +192,7 @@ public partial class Enemy : Role
     /// <summary>
     /// Ai触发的攻击
     /// </summary>
-    public void EnemyAttack()
+    public void EnemyAttack(float delta)
     {
         var weapon = Holster.ActiveWeapon;
         if (weapon != null)
@@ -220,16 +220,23 @@ public partial class Enemy : Role
             }
             else //正常射击
             {
-                if (weapon.Attribute.ContinuousShoot) //连发
+                if (weapon.GetDelayedAttackTime() > 0)
                 {
                     Attack();
                 }
-                else //单发
+                else
                 {
-                    if (_enemyAttackTimer <= 0)
+                    if (weapon.Attribute.ContinuousShoot) //连发
                     {
-                        _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed + Utils.RandfRange(0, 0.06f);
                         Attack();
+                    }
+                    else //单发
+                    {
+                        if (_enemyAttackTimer <= 0)
+                        {
+                            _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed;
+                            Attack();
+                        }
                     }
                 }
             }

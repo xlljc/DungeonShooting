@@ -60,7 +60,5 @@ render_target_update_mode = 4
 [node name="UiCanvas" type="CanvasLayer" parent="."]
 
 [node name="RoomUI" parent="UiCanvas" instance=ExtResource("2")]
-layout_mode = 3
-anchors_preset = 15
 grow_horizontal = 2
 grow_vertical = 2

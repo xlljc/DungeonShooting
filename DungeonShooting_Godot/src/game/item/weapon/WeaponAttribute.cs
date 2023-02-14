@@ -218,7 +218,7 @@ public class WeaponAttribute
     }
 
     //------------------------------ Ai相关 -----------------------------
-
+    
     public WeaponAttribute AiUseAttribute;
     
     public AiFireCallback OnAiFireCallback;

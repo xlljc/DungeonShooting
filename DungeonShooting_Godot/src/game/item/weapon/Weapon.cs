@@ -564,10 +564,17 @@ public abstract partial class Weapon : ActivityObject
     /// 获取扳机蓄力时长, 计算按下扳机后从可以开火到当前一共经过了多长时间, 可用于计算蓄力攻击
     /// 注意, 该函数仅在 Attribute.LooseShoot == false 时有正确的返回值, 否则返回 0
     /// </summary>
-    /// <returns></returns>
     public float GetTriggerChargeTime()
     {
         return _chargeTime;
+    }
+    
+    /// <summary>
+    /// 获取延时射击倒计时, 单位: 秒
+    /// </summary>
+    public float GetDelayedAttackTime()
+    {
+        return _delayedTime;
     }
     
     /// <summary>

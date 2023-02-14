@@ -125,7 +125,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     else
                     {
                         //发起攻击
-                        Master.EnemyAttack();
+                        Master.EnemyAttack(delta);
                     }
                 }
             }
