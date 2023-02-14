@@ -109,14 +109,14 @@ public partial class RoomManager : Node2D
         // enemy1.PutDown(new Vector2(100, 100), RoomLayerEnum.YSortLayer);
         // enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
-        // for (int i = 0; i < 10; i++)
-        // {
-        //     var enemyTemp = new Enemy();
-        //     enemyTemp.PutDown(new Vector2(30 + (i + 1) * 20, 30), RoomLayerEnum.YSortLayer);
-        //     // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1003"));
-        //     // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
-        // }
-        //
+        for (int i = 0; i < 10; i++)
+        {
+            var enemyTemp = new Enemy();
+            enemyTemp.PutDown(new Vector2(30 + (i + 1) * 20, 30), RoomLayerEnum.YSortLayer);
+            // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1003"));
+            // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
+        }
+
         // var enemy2 = new Enemy();
         // enemy2.Name = "Enemy2";
         // enemy2.PutDown(new Vector2(120, 100));

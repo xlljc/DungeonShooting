@@ -567,7 +567,7 @@ sources/1 = SubResource("TileSetAtlasSource_rkmbu")
 script = ExtResource("1_3w1c7")
 NormalLayer = NodePath("NormalLayer")
 YSortLayer = NodePath("YSortLayer")
-TileRoot = NodePath("YSortLayer/TileRoot")
+TileRoot = NodePath("TileRoot")
 metadata/_edit_vertical_guides_ = []
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -580,13 +580,7 @@ limit_smoothed = true
 editor_draw_drag_margin = true
 script = ExtResource("5")
 
-[node name="NormalLayer" type="Node2D" parent="."]
-z_index = -1
-
-[node name="YSortLayer" type="Node2D" parent="."]
-y_sort_enabled = true
-
-[node name="TileRoot" type="TileMap" parent="YSortLayer"]
+[node name="TileRoot" type="TileMap" parent="."]
 y_sort_enabled = true
 tile_set = SubResource("TileSet_bspf4")
 format = 2
@@ -606,3 +600,9 @@ layer_2/y_sort_enabled = false
 layer_2/y_sort_origin = 0
 layer_2/z_index = 10
 layer_2/tile_data = PackedInt32Array()
+
+[node name="NormalLayer" type="Node2D" parent="."]
+z_index = -1
+
+[node name="YSortLayer" type="Node2D" parent="."]
+y_sort_enabled = true
