@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 /// <summary>
@@ -167,7 +168,10 @@ public class WeaponAttribute
     public float UpliftAngleRestore = 1f;
     
     //------------------------------ Ai相关 -----------------------------
+
+    public WeaponAttribute AiUseAttribute;
     
-    //public bool Ai
-    
+    public AiFireCallback OnAiFireCallback;
+
+    public delegate void AiFireCallback(Enemy enemy, Weapon weapon);
 }

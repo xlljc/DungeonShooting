@@ -7,6 +7,11 @@ using Godot;
 public abstract partial class Role : ActivityObject
 {
     /// <summary>
+    /// 是否是 Ai
+    /// </summary>
+    public bool IsAi { get; protected set; } = false;
+    
+    /// <summary>
     /// 默认攻击对象层级
     /// </summary>
     public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Wall | PhysicsLayer.Props;

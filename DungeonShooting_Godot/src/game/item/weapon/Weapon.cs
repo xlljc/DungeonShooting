@@ -25,7 +25,10 @@ public abstract partial class Weapon : ActivityObject
     /// <summary>
     /// 武器属性数据
     /// </summary>
-    public WeaponAttribute Attribute { get; private set; }
+    public WeaponAttribute Attribute => _weaponAttribute;
+
+    private WeaponAttribute _weaponAttribute;
+    private WeaponAttribute _originWeaponAttribute;
 
     /// <summary>
     /// 武器攻击的目标阵营
@@ -173,7 +176,8 @@ public abstract partial class Weapon : ActivityObject
     public Weapon(string typeId, WeaponAttribute attribute) : base(attribute.WeaponPrefab)
     {
         TypeId = typeId;
-        Attribute = attribute;
+        _originWeaponAttribute = attribute;
+        _weaponAttribute = attribute;
 
         FirePoint = GetNode<Marker2D>("WeaponBody/FirePoint");
         OriginPoint = GetNode<Marker2D>("WeaponBody/OriginPoint");
@@ -960,6 +964,14 @@ public abstract partial class Weapon : ActivityObject
     public void PickUpWeapon(Role master)
     {
         Master = master;
+        if (master.IsAi && _originWeaponAttribute.AiUseAttribute != null)
+        {
+            _weaponAttribute = _originWeaponAttribute.AiUseAttribute;
+        }
+        else
+        {
+            _weaponAttribute = _originWeaponAttribute;
+        }
         //握把位置
         AnimatedSprite.Position = Attribute.HoldPosition;
         //停止动画
@@ -981,6 +993,7 @@ public abstract partial class Weapon : ActivityObject
     public void RemoveAt()
     {
         Master = null;
+        _weaponAttribute = _originWeaponAttribute;
         AnimatedSprite.Position = Attribute.CenterPosition;
         OnRemove();
     }

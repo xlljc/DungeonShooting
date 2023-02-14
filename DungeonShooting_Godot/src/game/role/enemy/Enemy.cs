@@ -71,6 +71,7 @@ public partial class Enemy : Role
 
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
+        IsAi = true;
         StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
 
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
