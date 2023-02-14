@@ -101,22 +101,22 @@ public partial class RoomManager : Node2D
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
         Player.PickUpWeapon(WeaponManager.GetGun("1001"));
-        Player.PickUpWeapon(WeaponManager.GetGun("1002"));
+        // Player.PickUpWeapon(WeaponManager.GetGun("1002"));
         Player.PickUpWeapon(WeaponManager.GetGun("1003"));
         Player.PickUpWeapon(WeaponManager.GetGun("1004"));
         
-        var enemy1 = new Enemy();
-        enemy1.PutDown(new Vector2(100, 100), RoomLayerEnum.YSortLayer);
-        enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        // var enemy1 = new Enemy();
+        // enemy1.PutDown(new Vector2(100, 100), RoomLayerEnum.YSortLayer);
+        // enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
-        // for (int i = 0; i < 3; i++)
+        // for (int i = 0; i < 10; i++)
         // {
         //     var enemyTemp = new Enemy();
         //     enemyTemp.PutDown(new Vector2(30 + (i + 1) * 20, 30), RoomLayerEnum.YSortLayer);
         //     // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1003"));
         //     // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
         // }
-        
+        //
         // var enemy2 = new Enemy();
         // enemy2.Name = "Enemy2";
         // enemy2.PutDown(new Vector2(120, 100));
@@ -130,15 +130,19 @@ public partial class RoomManager : Node2D
         // enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
         // enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
 
-        // WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80), RoomLayerEnum.NormalLayer);
-        //
+        WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1001").PutDown(new Vector2(230, 120), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1003").PutDown(new Vector2(130, 80), RoomLayerEnum.NormalLayer);
+        WeaponManager.GetGun("1003").PutDown(new Vector2(140, 80), RoomLayerEnum.NormalLayer);
+        
         // WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80), RoomLayerEnum.NormalLayer);
         // WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180), RoomLayerEnum.NormalLayer);
         // WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120), RoomLayerEnum.NormalLayer);
+        // WeaponManager.GetGun("1002").PutDown(new Vector2(180, 130), RoomLayerEnum.NormalLayer);
 
     }
 

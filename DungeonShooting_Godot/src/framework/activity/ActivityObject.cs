@@ -3,10 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Godot;
-using Plugin;
 
 /// <summary>
-/// 房间内活动物体基类
+/// 房间内活动物体基类, 所有物体都必须继承该类
 /// </summary>
 public abstract partial class ActivityObject : CharacterBody2D
 {
@@ -38,7 +37,6 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 动画播放器
     /// </summary>
-    /// <value></value>
     public AnimationPlayer AnimationPlayer { get; }
 
     /// <summary>
@@ -631,12 +629,22 @@ public abstract partial class ActivityObject : CharacterBody2D
                     {
                         canNext = false;
                     }
+                    else
+                    {
+                        item.WaitType = CoroutineData.WaitTypeEnum.None;
+                        item.WaitForSeconds = null;
+                    }
                 }
                 else if (item.WaitType == CoroutineData.WaitTypeEnum.WaitForFixedProcess) //等待帧数
                 {
                     if (!item.WaitForFixedProcess.NextStep())
                     {
                         canNext = false;
+                    }
+                    else
+                    {
+                        item.WaitType = CoroutineData.WaitTypeEnum.None;
+                        item.WaitForFixedProcess = null;
                     }
                 }
 
@@ -645,7 +653,7 @@ public abstract partial class ActivityObject : CharacterBody2D
                     if (item.Enumerator.MoveNext()) //嵌套协程
                     {
                         var next = item.Enumerator.Current;
-                        if (next is IEnumerator enumerator)
+                        if (next is IEnumerable enumerable)
                         {
                             if (item.EnumeratorStack == null)
                             {
@@ -653,7 +661,7 @@ public abstract partial class ActivityObject : CharacterBody2D
                             }
 
                             item.EnumeratorStack.Push(item.Enumerator);
-                            item.Enumerator = enumerator;
+                            item.Enumerator = enumerable.GetEnumerator();
                         }
                         else if (next is WaitForSeconds seconds) //等待秒数
                         {

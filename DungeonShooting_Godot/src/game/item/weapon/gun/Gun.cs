@@ -43,13 +43,11 @@ public partial class Gun : Weapon
             FirePosition = new Vector2(16, 2);
             
             AiUseAttribute = Clone();
-            AiUseAttribute.DelayedTime = 1f;
-            AiUseAttribute.TriggerInterval = 4f;
-            AiUseAttribute.ContinuousShoot = true;
-            //连发数量
+            AiUseAttribute.AiTargetLockingTime = 0.5f;
+            AiUseAttribute.TriggerInterval = 3f;
+            AiUseAttribute.ContinuousShoot = false;
             AiUseAttribute.MinContinuousCount = 3;
             AiUseAttribute.MaxContinuousCount = 3;
-                
         }
     }
 
@@ -93,6 +91,7 @@ public partial class Gun : Weapon
             FirePosition = new Vector2(10, 2);
 
             AiUseAttribute = Clone();
+            AiUseAttribute.AiTargetLockingTime = 1f;
             AiUseAttribute.TriggerInterval = 2f;
         }
     }

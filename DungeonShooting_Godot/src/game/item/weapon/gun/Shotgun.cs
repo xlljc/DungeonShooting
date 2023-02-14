@@ -44,6 +44,7 @@ public partial class Shotgun : Weapon
             FirePosition = new Vector2(18, 4);
 
             AiUseAttribute = Clone();
+            AiUseAttribute.AiTargetLockingTime = 0.2f;
             AiUseAttribute.TriggerInterval = 3.5f;
         }
     }

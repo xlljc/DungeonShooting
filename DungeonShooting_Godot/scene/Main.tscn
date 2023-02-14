@@ -24,7 +24,6 @@ shader_parameter/offset = Vector2(0, 0)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("3")
-Debug = true
 CursorPack = ExtResource("4")
 RoomPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport/Room")
 ViewportPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport")
@@ -60,5 +59,3 @@ render_target_update_mode = 4
 [node name="UiCanvas" type="CanvasLayer" parent="."]
 
 [node name="RoomUI" parent="UiCanvas" instance=ExtResource("2")]
-grow_horizontal = 2
-grow_vertical = 2
