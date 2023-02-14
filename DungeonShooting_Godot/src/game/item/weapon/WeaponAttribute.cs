@@ -166,7 +166,57 @@ public class WeaponAttribute
     /// 开火后武器口角度恢复速度倍数
     /// </summary>
     public float UpliftAngleRestore = 1f;
-    
+
+    /// <summary>
+    /// 克隆一份新的属性配置
+    /// </summary>
+    /// <returns></returns>
+    public WeaponAttribute Clone()
+    {
+        var attr = new WeaponAttribute();
+        attr.Name = Name;
+        attr.WeaponPrefab = WeaponPrefab;
+        attr.WeightType = WeightType;
+        attr.Sprite2D = Sprite2D;
+        attr.ContinuousShoot = ContinuousShoot;
+        attr.AmmoCapacity = AmmoCapacity;
+        attr.MaxAmmoCapacity = MaxAmmoCapacity;
+        attr.StandbyAmmoCapacity = StandbyAmmoCapacity;
+        attr.ReloadTime = ReloadTime;
+        attr.AloneReload = AloneReload;
+        attr.AloneReloadCount = AloneReloadCount;
+        attr.AloneReloadCanShoot = AloneReloadCanShoot;
+        attr.LooseShoot = LooseShoot;
+        attr.MinChargeTime = MinChargeTime;
+        attr.MinContinuousCount = MinContinuousCount;
+        attr.MaxContinuousCount = MaxContinuousCount;
+        attr.TriggerInterval = TriggerInterval;
+        attr.StartFiringSpeed = StartFiringSpeed;
+        attr.FinalFiringSpeed = FinalFiringSpeed;
+        attr.FiringSpeedAddSpeed = FiringSpeedAddSpeed;
+        attr.FiringSpeedBackSpeed = FiringSpeedBackSpeed;
+        attr.MinFireBulletCount = MinFireBulletCount;
+        attr.MaxFireBulletCount = MaxFireBulletCount;
+        attr.DelayedTime = DelayedTime;
+        attr.StartScatteringRange = StartScatteringRange;
+        attr.FinalScatteringRange = FinalScatteringRange;
+        attr.ScatteringRangeAddValue = ScatteringRangeAddValue;
+        attr.ScatteringRangeBackSpeed = ScatteringRangeBackSpeed;
+        attr.MaxDistance = MaxDistance;
+        attr.MinDistance = MinDistance;
+        attr.CenterPosition = CenterPosition;
+        attr.FirePosition = FirePosition;
+        attr.HoldPosition = HoldPosition;
+        attr.Weight = Weight;
+        attr.MaxBacklash = MaxBacklash;
+        attr.MinBacklash = MinBacklash;
+        attr.BacklashRegressionSpeed = BacklashRegressionSpeed;
+        attr.UpliftAngle = UpliftAngle;
+        attr.DefaultAngle = DefaultAngle;
+        attr.UpliftAngleRestore = UpliftAngleRestore;
+        return attr;
+    }
+
     //------------------------------ Ai相关 -----------------------------
 
     public WeaponAttribute AiUseAttribute;
