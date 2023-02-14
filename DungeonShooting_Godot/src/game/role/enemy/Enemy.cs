@@ -26,7 +26,7 @@ public partial class Enemy : Role
     public static bool IsFindTarget { get; private set; }
 
     /// <summary>
-    /// 找到的目标的位置, 如果目标在视野内, 则一直更新
+    /// 公共属性, 找到的目标的位置, 如果目标在视野内, 则一直更新
     /// </summary>
     public static Vector2 FindTargetPosition { get; private set; }
 
@@ -67,7 +67,10 @@ public partial class Enemy : Role
     /// </summary>
     public Marker2D NavigationPoint { get; }
 
+    //开火间隙时间
     private float _enemyAttackTimer = 0;
+    //目标在视野内的时间
+    private float _targetInViewTime = 0;
 
     public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
     {
@@ -136,10 +139,21 @@ public partial class Enemy : Role
         Destroy();
     }
 
-    protected override void PhysicsProcess(float delta)
+    protected override void Process(float delta)
     {
-        base.PhysicsProcess(delta);
+        base.Process(delta);
         _enemyAttackTimer -= delta;
+
+        //目标在视野内的时间
+        var currState = StateController.CurrState;
+        if (currState == AiStateEnum.AiSurround || currState == AiStateEnum.AiFollowUp)
+        {
+            _targetInViewTime += delta;
+        }
+        else
+        {
+            _targetInViewTime = 0;
+        }
 
         EnemyPickUpWeapon();
     }
@@ -192,7 +206,7 @@ public partial class Enemy : Role
     /// <summary>
     /// Ai触发的攻击
     /// </summary>
-    public void EnemyAttack()
+    public void EnemyAttack(float delta)
     {
         var weapon = Holster.ActiveWeapon;
         if (weapon != null)
@@ -218,18 +232,25 @@ public partial class Enemy : Role
             {
                 Reload();
             }
-            else //正常射击
+            else if (_targetInViewTime >= weapon.Attribute.AiTargetLockingTime) //正常射击
             {
-                if (weapon.Attribute.ContinuousShoot) //连发
+                if (weapon.GetDelayedAttackTime() > 0)
                 {
                     Attack();
                 }
-                else //单发
+                else
                 {
-                    if (_enemyAttackTimer <= 0)
+                    if (weapon.Attribute.ContinuousShoot) //连发
                     {
-                        _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed + Utils.RandfRange(0, 0.06f);
                         Attack();
+                    }
+                    else //单发
+                    {
+                        if (_enemyAttackTimer <= 0)
+                        {
+                            _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed;
+                            Attack();
+                        }
                     }
                 }
             }

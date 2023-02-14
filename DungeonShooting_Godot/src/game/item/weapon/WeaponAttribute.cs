@@ -214,11 +214,17 @@ public class WeaponAttribute
         attr.UpliftAngle = UpliftAngle;
         attr.DefaultAngle = DefaultAngle;
         attr.UpliftAngleRestore = UpliftAngleRestore;
+        attr.AiTargetLockingTime = AiTargetLockingTime;
         return attr;
     }
 
     //------------------------------ Ai相关 -----------------------------
 
+    /// <summary>
+    /// 用于Ai, 目标锁定时间, 也就是瞄准目标多久才会开火
+    /// </summary>
+    public float AiTargetLockingTime = 0;
+    
     public WeaponAttribute AiUseAttribute;
     
     public AiFireCallback OnAiFireCallback;

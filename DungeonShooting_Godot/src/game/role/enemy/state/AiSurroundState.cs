@@ -33,7 +33,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         _moveFlag = false;
     }
 
-    public override void PhysicsProcess(float delta)
+    public override void Process(float delta)
     {
         //先检查弹药是否打光
         if (Master.IsAllWeaponTotalAmmoEmpty())
@@ -125,7 +125,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     else
                     {
                         //发起攻击
-                        Master.EnemyAttack();
+                        Master.EnemyAttack(delta);
                     }
                 }
             }

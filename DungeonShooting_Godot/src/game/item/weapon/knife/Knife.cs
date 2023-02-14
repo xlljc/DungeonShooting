@@ -28,6 +28,9 @@ public partial class Knife : Weapon
             MinBacklash = -8;
             BacklashRegressionSpeed = 24;
             UpliftAngle = -95;
+
+            //AiUseAttribute = Clone();
+            //AiUseAttribute.TriggerInterval = 3f;
         }
     }
 

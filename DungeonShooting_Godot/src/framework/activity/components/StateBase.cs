@@ -41,9 +41,9 @@ public abstract class StateBase<T, S> where T : ActivityObject where S : Enum
     }
 
     /// <summary>
-    /// 如果当前状态已被激活, 物理帧每帧更新
+    /// 如果当前状态已被激活, 帧每帧更新
     /// </summary>
-    public virtual void PhysicsProcess(float delta)
+    public virtual void Process(float delta)
     {
         
     }

@@ -26,7 +26,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         IsInView = true;
     }
 
-    public override void PhysicsProcess(float delta)
+    public override void Process(float delta)
     {
         //先检查弹药是否打光
         if (Master.IsAllWeaponTotalAmmoEmpty())
@@ -103,7 +103,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             if (inAttackRange) //在攻击范围内
             {
                 //发起攻击
-                Master.EnemyAttack();
+                Master.EnemyAttack(delta);
                 
                 //距离够近, 可以切换到环绕模式
                 if (Master.GlobalPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(weapon.Attribute.MinDistance, 2) * 0.7f)

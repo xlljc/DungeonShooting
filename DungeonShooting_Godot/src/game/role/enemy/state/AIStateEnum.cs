@@ -14,7 +14,7 @@ public enum AiStateEnum
     /// </summary>
     AiLeaveFor,
     /// <summary>
-    /// 发现目标, 并且知道位置
+    /// 发现目标, 目标不在视野内, 但是知道位置
     /// </summary>
     AiTailAfter,
     /// <summary>
