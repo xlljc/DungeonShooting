@@ -77,20 +77,14 @@ public partial class Player : Role
         if (Input.IsActionJustPressed("exchange")) //切换武器
         {
             ExchangeNext();
-            RefreshGunTexture();
         }
         else if (Input.IsActionJustPressed("throw")) //扔掉武器
         {
             ThrowWeapon();
-            RefreshGunTexture();
         }
         else if (Input.IsActionJustPressed("interactive")) //互动物体
         {
-            var item = TriggerInteractive();
-            if (item is Weapon)
-            {
-                RefreshGunTexture();
-            }
+            TriggerInteractive();
         }
         else if (Input.IsActionJustPressed("reload")) //换弹
         {
@@ -120,6 +114,40 @@ public partial class Player : Role
         HandleMoveInput(delta);
         //播放动画
         PlayAnim();
+    }
+
+    public override void ExchangeNext()
+    {
+        base.ExchangeNext();
+        RefreshGunTexture();
+    }
+
+    public override void ExchangePrev()
+    {
+        base.ExchangePrev();
+        RefreshGunTexture();
+    }
+
+    public override void ThrowWeapon(int index)
+    {
+        base.ThrowWeapon(index);
+        RefreshGunTexture();
+    }
+
+    public override void ThrowWeapon()
+    {
+        base.ThrowWeapon();
+        RefreshGunTexture();
+    }
+
+    public override bool PickUpWeapon(Weapon weapon, bool exchange = true)
+    {
+        var v = base.PickUpWeapon(weapon, exchange);
+        if (v)
+        {
+            RefreshGunTexture();
+        }
+        return v;
     }
 
     protected override void OnChangeHp(int hp)

@@ -102,8 +102,8 @@ public partial class RoomManager : Node2D
 
         Player.PickUpWeapon(WeaponManager.GetGun("1001"));
         // Player.PickUpWeapon(WeaponManager.GetGun("1002"));
-        Player.PickUpWeapon(WeaponManager.GetGun("1003"));
         Player.PickUpWeapon(WeaponManager.GetGun("1004"));
+        Player.PickUpWeapon(WeaponManager.GetGun("1003"));
         
         // var enemy1 = new Enemy();
         // enemy1.PutDown(new Vector2(100, 100), RoomLayerEnum.YSortLayer);
