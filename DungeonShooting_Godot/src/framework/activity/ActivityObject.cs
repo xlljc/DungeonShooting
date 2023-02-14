@@ -95,15 +95,14 @@ public abstract partial class ActivityObject : CharacterBody2D
     //标记字典
     private Dictionary<string, object> _signMap;
     
-    private List<KeyValuePair<long, IEnumerator>> _coroutineList;
+    private List<CoroutineData> _coroutineList;
     private ActivityObjectTemplate _templateInstance;
     
-    private static long _coroutineId = 0;
-    private static long _index = 0;
+    private static long _instanceIndex = 0;
     
     public ActivityObject(string scenePath)
     {
-        Name = GetType().Name + (_index++);
+        Name = GetType().Name + (_instanceIndex++);
         //加载预制体
         var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
         if (tempPrefab == null)
@@ -624,13 +623,62 @@ public abstract partial class ActivityObject : CharacterBody2D
             for (var i = 0; i < pairs.Length; i++)
             {
                 var item = pairs[i];
-                if (!item.Value.MoveNext())
+                var canNext = true;
+
+                if (item.WaitType == CoroutineData.WaitTypeEnum.WaitForSeconds) //等待秒数
                 {
-                    StopCoroutine(item.Key);
+                    if (!item.WaitForSeconds.NextStep(newDelta))
+                    {
+                        canNext = false;
+                    }
+                }
+                else if (item.WaitType == CoroutineData.WaitTypeEnum.WaitForFixedProcess) //等待帧数
+                {
+                    if (!item.WaitForFixedProcess.NextStep())
+                    {
+                        canNext = false;
+                    }
+                }
+
+                if (canNext)
+                {
+                    if (item.Enumerator.MoveNext()) //嵌套协程
+                    {
+                        var next = item.Enumerator.Current;
+                        if (next is IEnumerator enumerator)
+                        {
+                            if (item.EnumeratorStack == null)
+                            {
+                                item.EnumeratorStack = new Stack<IEnumerator>();
+                            }
+
+                            item.EnumeratorStack.Push(item.Enumerator);
+                            item.Enumerator = enumerator;
+                        }
+                        else if (next is WaitForSeconds seconds) //等待秒数
+                        {
+                            item.WaitFor(seconds);
+                        }
+                        else if (next is WaitForFixedProcess process) //等待帧数
+                        {
+                            item.WaitFor(process);
+                        }
+                    }
+                    else
+                    {
+                        if (item.EnumeratorStack == null || item.EnumeratorStack.Count == 0)
+                        {
+                            StopCoroutine(item.Id);
+                        }
+                        else
+                        {
+                            item.Enumerator = item.EnumeratorStack.Pop();
+                        }
+                    }
                 }
             }
         }
-        
+
         ProcessOver(newDelta);
         
         //调试绘制
@@ -757,20 +805,6 @@ public abstract partial class ActivityObject : CharacterBody2D
     public void DelayDestroy()
     {
         CallDeferred(nameof(Destroy));
-    }
-
-    //返回该组件是否被挂载到当前物体上
-    private bool ContainsComponent(Component component)
-    {
-        for (int i = 0; i < _components.Count; i++)
-        {
-            if (_components[i].Value == component)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /// <summary>
@@ -953,17 +987,18 @@ public abstract partial class ActivityObject : CharacterBody2D
     }
 
     /// <summary>
-    /// 开启一个协程, 返回协程 id
+    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess
     /// </summary>
     public long StartCoroutine(IEnumerable able)
     {
-        var id = _coroutineId++;
         if (_coroutineList == null)
         {
-            _coroutineList = new List<KeyValuePair<long, IEnumerator>>();
+            _coroutineList = new List<CoroutineData>();
         }
-        _coroutineList.Add(new KeyValuePair<long, IEnumerator>(id, able.GetEnumerator()));
-        return id;
+
+        var data = new CoroutineData(able.GetEnumerator());
+        _coroutineList.Add(data);
+        return data.Id;
     }
 
     /// <summary>
@@ -976,7 +1011,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             for (var i = 0; i < _coroutineList.Count; i++)
             {
                 var item = _coroutineList[i];
-                if (item.Key == coroutineId)
+                if (item.Id == coroutineId)
                 {
                     _coroutineList.RemoveAt(i);
                     return;
