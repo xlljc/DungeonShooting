@@ -40,7 +40,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
         }
     }
     
-    public override void PhysicsProcess(float delta)
+    public override void Process(float delta)
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
         

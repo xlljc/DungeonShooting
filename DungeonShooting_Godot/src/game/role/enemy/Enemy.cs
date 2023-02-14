@@ -136,9 +136,9 @@ public partial class Enemy : Role
         Destroy();
     }
 
-    protected override void PhysicsProcess(float delta)
+    protected override void Process(float delta)
     {
-        base.PhysicsProcess(delta);
+        base.Process(delta);
         _enemyAttackTimer -= delta;
 
         EnemyPickUpWeapon();

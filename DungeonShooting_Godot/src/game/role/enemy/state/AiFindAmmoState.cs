@@ -37,7 +37,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
         _target.SetSign(SignNames.AiFindWeaponSign, Master);
     }
 
-    public override void PhysicsProcess(float delta)
+    public override void Process(float delta)
     {
         if (!Master.IsAllWeaponTotalAmmoEmpty()) //已经有弹药了
         {

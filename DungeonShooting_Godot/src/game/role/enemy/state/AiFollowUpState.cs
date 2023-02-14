@@ -26,7 +26,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         IsInView = true;
     }
 
-    public override void PhysicsProcess(float delta)
+    public override void Process(float delta)
     {
         //先检查弹药是否打光
         if (Master.IsAllWeaponTotalAmmoEmpty())

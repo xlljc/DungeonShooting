@@ -39,7 +39,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
         _moveFlag = false;
     }
 
-    public override void PhysicsProcess(float delta)
+    public override void Process(float delta)
     {
         //其他敌人发现玩家
         if (Enemy.IsFindTarget)

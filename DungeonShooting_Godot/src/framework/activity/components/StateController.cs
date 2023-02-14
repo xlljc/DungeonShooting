@@ -27,16 +27,16 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
     /// </summary>
     private bool _isChangeState;
 
-    public override void PhysicsProcess(float delta)
+    public override void Process(float delta)
     {
         _isChangeState = false;
         if (CurrStateBase != null)
         {
-            CurrStateBase.PhysicsProcess(delta);
-            //判断当前帧是否有改变的状态, 如果有, 则重新调用 PhysicsProcess() 方法
+            CurrStateBase.Process(delta);
+            //判断当前帧是否有改变的状态, 如果有, 则重新调用 Process() 方法
             if (_isChangeState)
             {
-                PhysicsProcess(delta);
+                Process(delta);
             }
         }
     }
