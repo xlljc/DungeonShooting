@@ -84,7 +84,11 @@ public partial class Player : Role
         }
         else if (Input.IsActionJustPressed("interactive")) //互动物体
         {
-            TriggerInteractive();
+            var item = TriggerInteractive();
+            if (item != null)
+            {
+                RefreshGunTexture();
+            }
         }
         else if (Input.IsActionJustPressed("reload")) //换弹
         {

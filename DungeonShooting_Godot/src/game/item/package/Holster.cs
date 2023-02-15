@@ -71,6 +71,22 @@ public class Holster
     }
 
     /// <summary>
+    /// 返回当前武器袋是否是空的
+    /// </summary>
+    public bool IsEmpty()
+    {
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            if (SlotList[i].Weapon != null)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    /// <summary>
     /// 返回当前武器袋是否还有空位
     /// </summary>
     public bool HasVacancy()
