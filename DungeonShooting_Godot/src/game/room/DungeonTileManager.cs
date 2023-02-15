@@ -11,22 +11,44 @@ public static class DungeonTileManager
         {
             AutoFillRoomTile(tileMap, floorLayer, middleLayer, topLayer, config, info);
         }
-
+        
         //铺房间
-        FillRect(tileMap, floorLayer, config.Ground, roomInfo.Position + Vector2.One,
-            roomInfo.Size - new Vector2(2, 2));
+        if (roomInfo.Template == null)
+        {
+            FillRect(tileMap, floorLayer, config.Ground, roomInfo.Position + Vector2.One,
+                roomInfo.Size - new Vector2(2, 2));
 
-        FillRect(tileMap, topLayer, config.IN_LT, roomInfo.Position, Vector2.One);
-        FillRect(tileMap, topLayer, config.L, roomInfo.Position + new Vector2(0, 1), new Vector2(1, roomInfo.Size.Y - 2));
-        FillRect(tileMap, topLayer, config.IN_LB, roomInfo.Position + new Vector2(0, roomInfo.Size.Y - 1), new Vector2(1, 1));
-        FillRect(tileMap, topLayer, config.B, roomInfo.Position + new Vector2(1, roomInfo.Size.Y - 1),
-            new Vector2(roomInfo.Size.X - 2, 1));
-        FillRect(tileMap, topLayer, config.IN_RB, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, roomInfo.Size.Y - 1),
-            Vector2.One);
-        FillRect(tileMap, topLayer, config.R, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 1),
-            new Vector2(1, roomInfo.Size.Y - 2));
-        FillRect(tileMap, topLayer, config.IN_RT, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 0), Vector2.One);
-        FillRect(tileMap, middleLayer, config.T, roomInfo.Position + Vector2.Right, new Vector2(roomInfo.Size.X - 2, 1));
+            FillRect(tileMap, topLayer, config.IN_LT, roomInfo.Position, Vector2.One);
+            FillRect(tileMap, topLayer, config.L, roomInfo.Position + new Vector2(0, 1),
+                new Vector2(1, roomInfo.Size.Y - 2));
+            FillRect(tileMap, topLayer, config.IN_LB, roomInfo.Position + new Vector2(0, roomInfo.Size.Y - 1),
+                new Vector2(1, 1));
+            FillRect(tileMap, topLayer, config.B, roomInfo.Position + new Vector2(1, roomInfo.Size.Y - 1),
+                new Vector2(roomInfo.Size.X - 2, 1));
+            FillRect(tileMap, topLayer, config.IN_RB,
+                roomInfo.Position + new Vector2(roomInfo.Size.X - 1, roomInfo.Size.Y - 1),
+                Vector2.One);
+            FillRect(tileMap, topLayer, config.R, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 1),
+                new Vector2(1, roomInfo.Size.Y - 2));
+            FillRect(tileMap, topLayer, config.IN_RT, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 0),
+                Vector2.One);
+            FillRect(tileMap, middleLayer, config.T, roomInfo.Position + Vector2.Right,
+                new Vector2(roomInfo.Size.X - 2, 1));
+        }
+        else
+        {
+            var usedRect = roomInfo.Template.GetUsedRect();
+            var rectSize = usedRect.Size;
+            var rectPos = usedRect.Position;
+            for (int i = 0; i < rectSize.X; i++)
+            {
+                for (int j = 0; j < rectSize.Y; j++)
+                {
+                    var atlasCoords = roomInfo.Template.GetCellAtlasCoords(0, new Vector2I(rectPos.X + i, rectPos.Y + j));
+                    tileMap.SetCell(floorLayer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j), 1, atlasCoords);
+                }
+            }
+        }
 
         //铺过道
         foreach (var doorInfo in roomInfo.Doors)

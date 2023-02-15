@@ -7,22 +7,31 @@ using Godot;
 /// </summary>
 public class RoomInfo
 {
-    public RoomInfo(int id)
+    public RoomInfo(int id, TileMap tileMap)
     {
         Id = id;
+        Template = tileMap;
     }
 
+    /// <summary>
+    /// 房间 id
+    /// </summary>
     public int Id;
+
+    /// <summary>
+    /// 生成该房间使用的模板
+    /// </summary>
+    public TileMap Template;
     
     /// <summary>
     /// 房间大小
     /// </summary>
-    public Vector2 Size;
+    public Vector2I Size;
 
     /// <summary>
     /// 房间位置
     /// </summary>
-    public Vector2 Position;
+    public Vector2I Position;
     
     /// <summary>
     /// 门

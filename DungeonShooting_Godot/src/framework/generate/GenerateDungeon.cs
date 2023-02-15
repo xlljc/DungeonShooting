@@ -122,10 +122,22 @@ public class GenerateDungeon
             return GenerateRoomErrorCode.RoomFull;
         }
 
-        var room = new RoomInfo(_count);
+        var packedScene = ResourceManager.Load<PackedScene>(
+            Utils.RandChoose(
+                ResourcePath.resource_map_Room1_tscn,
+                ResourcePath.resource_map_Room2_tscn
+                )
+            );
+        var template = packedScene.Instantiate<TileMap>();
+        var room = new RoomInfo(_count, template);
+        
         //房间大小
-        room.Size = new Vector2(Utils.RandRangeInt(_roomMinWidth, _roomMaxWidth),
-            Utils.RandRangeInt(_roomMinHeight, _roomMaxHeight));
+        var usedRect = template.GetUsedRect();
+        room.Size = usedRect.Size;
+
+        //随机生成房间 (老流程)
+        // room.Size = new Vector2(Utils.RandRangeInt(_roomMinWidth, _roomMaxWidth),
+        //     Utils.RandRangeInt(_roomMinHeight, _roomMaxHeight));
 
         if (prevRoomInfo != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
         {
@@ -147,22 +159,22 @@ public class GenerateDungeon
             //计算房间位置
             if (direction == 0) //上
             {
-                room.Position = new Vector2(prevRoomInfo.Position.X + offset,
+                room.Position = new Vector2I(prevRoomInfo.Position.X + offset,
                     prevRoomInfo.Position.Y - room.Size.Y - space);
             }
             else if (direction == 1) //右
             {
-                room.Position = new Vector2(prevRoomInfo.Position.X + prevRoomInfo.Size.Y + space,
+                room.Position = new Vector2I(prevRoomInfo.Position.X + prevRoomInfo.Size.Y + space,
                     prevRoomInfo.Position.Y + offset);
             }
             else if (direction == 2) //下
             {
-                room.Position = new Vector2(prevRoomInfo.Position.X + offset,
+                room.Position = new Vector2I(prevRoomInfo.Position.X + offset,
                     prevRoomInfo.Position.Y + prevRoomInfo.Size.Y + space);
             }
             else if (direction == 3) //左
             {
-                room.Position = new Vector2(prevRoomInfo.Position.X - room.Size.X - space,
+                room.Position = new Vector2I(prevRoomInfo.Position.X - room.Size.X - space,
                     prevRoomInfo.Position.Y + offset);
             }
             
@@ -323,7 +335,6 @@ public class GenerateDungeon
             return true;
         }
 
-        
         var offset1 = Mathf.Clamp((int)overlapX + 2, 2, 6);
         var offset2 = Mathf.Clamp((int)overlapY + 2, 2, 6);
 

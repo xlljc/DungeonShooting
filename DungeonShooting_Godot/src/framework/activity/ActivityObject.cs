@@ -115,6 +115,8 @@ public abstract partial class ActivityObject : CharacterBody2D
         Scale = _templateInstance.scale;
         Visible = _templateInstance.visible;
 
+        MotionMode = MotionModeEnum.Floating;
+        
         //移动子节点
         var count = _templateInstance.GetChildCount();
         for (int i = 0; i < count; i++)

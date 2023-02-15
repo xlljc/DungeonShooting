@@ -34,6 +34,9 @@ public class ResourcePath
     public const string resource_map_dungeon_1_tmx = "res://resource/map/dungeon_1.tmx";
     public const string resource_map_dungeon_test_tmx = "res://resource/map/dungeon_test.tmx";
     public const string resource_map_itchioDungeonTileset4_tsx = "res://resource/map/itch-io-DungeonTileset4.tsx";
+    public const string resource_map_Room1_tscn = "res://resource/map/Room1.tscn";
+    public const string resource_map_Room2_tscn = "res://resource/map/Room2.tscn";
+    public const string resource_map_tileset_TileSet1_tres = "res://resource/map/tileset/TileSet1.tres";
     public const string resource_materlal_Blend_gdshader = "res://resource/materlal/Blend.gdshader";
     public const string resource_materlal_Blend_tres = "res://resource/materlal/Blend.tres";
     public const string resource_sound_bgm_Intro_ogg = "res://resource/sound/bgm/Intro.ogg";
@@ -257,6 +260,7 @@ public class ResourcePath
     public const string scene_test_TestNavigation_tscn = "res://scene/test/TestNavigation.tscn";
     public const string scene_test_TestNavigation2_tscn = "res://scene/test/TestNavigation2.tscn";
     public const string scene_test_TestNavigationPolygon_tscn = "res://scene/test/TestNavigationPolygon.tscn";
+    public const string scene_test_TestNewTileMap_tscn = "res://scene/test/TestNewTileMap.tscn";
     public const string scene_test_TestTileLayer_tscn = "res://scene/test/TestTileLayer.tscn";
     public const string default_bus_layout_tres = "res://default_bus_layout.tres";
     public const string default_env_tres = "res://default_env.tres";
