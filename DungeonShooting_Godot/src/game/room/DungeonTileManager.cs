@@ -48,6 +48,8 @@ public static class DungeonTileManager
                     tileMap.SetCell(floorLayer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j), 1, atlasCoords);
                 }
             }
+            roomInfo.Template.QueueFree();
+            roomInfo.Template = null;
         }
 
         //铺过道
