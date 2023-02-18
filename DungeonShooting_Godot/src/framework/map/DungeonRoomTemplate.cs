@@ -20,6 +20,10 @@ public partial class DungeonRoomTemplate : TileMap
     //选中左/右点
     private byte _activePointType = 0;
     private DoorAreaInfo _activeArea = null;
+    
+    //拖拽
+    private bool _isDrag = false;
+    private Vector2 _startPosition;
 
     private bool _mouseDown = false;
 
@@ -67,8 +71,11 @@ public partial class DungeonRoomTemplate : TileMap
                 else
                 {
                     _canPut = true;
-                    _hasActivePoint = false;
-                    _activeArea = null;
+                    if (!_isDrag)
+                    {
+                        _hasActivePoint = false;
+                        _activeArea = null;
+                    }
                 }
             }
             else if (Mathf.Abs(mousePosition.X - mapRect.Position.X) <= 8 && mousePosition.Y >= mapRect.Position.Y &&
@@ -89,6 +96,11 @@ public partial class DungeonRoomTemplate : TileMap
                 else
                 {
                     _canPut = true;
+                    if (!_isDrag)
+                    {
+                        _hasActivePoint = false;
+                        _activeArea = null;
+                    }
                 }
             }
             else if (Mathf.Abs(mousePosition.Y - (mapRect.Position.Y + mapRect.Size.Y)) <= 8 &&
@@ -111,6 +123,11 @@ public partial class DungeonRoomTemplate : TileMap
                 else
                 {
                     _canPut = true;
+                    if (!_isDrag)
+                    {
+                        _hasActivePoint = false;
+                        _activeArea = null;
+                    }
                 }
             }
             else if (Mathf.Abs(mousePosition.X - (mapRect.Position.X + mapRect.Size.X)) <= 8 &&
@@ -133,20 +150,37 @@ public partial class DungeonRoomTemplate : TileMap
                 else
                 {
                     _canPut = true;
+                    if (!_isDrag)
+                    {
+                        _hasActivePoint = false;
+                        _activeArea = null;
+                    }
                 }
             }
             else
             {
                 _hover = false;
                 _canPut = false;
-                _hasActivePoint = false;
-                _activeArea = null;
-            }
 
-            //判断是否可以创建新的点
-            if (isClick && _canPut)
+                if (!_isDrag)
+                {
+                    _hasActivePoint = false;
+                    _activeArea = null;
+                }
+            }
+            
+            if (isClick && _canPut) //判断是否可以创建新的点
             {
                 CreateDoorArea(mapRect);
+            }
+            else if (_mouseDown && !_isDrag) //拖拽节点
+            {
+                _isDrag = true;
+                _startPosition = mousePosition;
+            }
+            else if (!_mouseDown && _isDrag) //松开拖拽的点
+            {
+                _isDrag = false;
             }
             
             QueueRedraw();
@@ -171,7 +205,7 @@ public partial class DungeonRoomTemplate : TileMap
             DrawRect(mapRange, _hover ? Colors.Green : new Color(0.03137255F, 0.59607846F, 0.03137255F), false, 2);
 
             //绘制悬停
-            if (_hover)
+            if (_hover && !_isDrag)
             {
                 if (!_hasActivePoint) //这里判断是否悬停在拖动点上
                 {
@@ -215,8 +249,8 @@ public partial class DungeonRoomTemplate : TileMap
             foreach (var doorAreaInfo in _doorConfigs)
             {
                 var flag = _hasActivePoint && _activeArea == doorAreaInfo;
-                var color3 = (flag && _activePointType == 0) ? new Color(1, 1, 1, 0.8f) : color2;
-                var color4 = (flag && _activePointType == 1) ? new Color(1, 1, 1, 0.8f) : color2;
+                var color3 = (flag && _activePointType == 0) ? (_isDrag ? new Color(0.2F,0.4117647F,0.8392157F, 0.8f) : new Color(1, 1, 1, 0.8f)) : color2;
+                var color4 = (flag && _activePointType == 1) ? (_isDrag ? new Color(0.2F,0.4117647F,0.8392157F, 0.8f) : new Color(1, 1, 1, 0.8f)) : color2;
                 switch (doorAreaInfo.Direction)
                 {
                     case DoorDirection.E:
@@ -334,6 +368,11 @@ public partial class DungeonRoomTemplate : TileMap
 
     private void FindHoverPoint(float mouseOffset)
     {
+        if (_isDrag)
+        {
+            return;
+        }
+        
         //检测是否有碰撞的点
         var flag = false;
         foreach (var doorAreaInfo in _doorConfigs)
