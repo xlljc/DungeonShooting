@@ -73,7 +73,7 @@ public partial class DungeonRoomTemplate : TileMap
                 _hoverPoint1 = new Vector2(mapRect.Position.X, Approach(mousePosition.Y, tileSize.Y) - tileSize.Y * 2);
                 _hoverPoint2 = new Vector2(_hoverPoint1.X, _hoverPoint1.Y + tileSize.X * 4);
 
-                if (_hoverPoint1.Y <= mapRect.Position.Y || _hoverPoint2.Y >= mapRect.Position.Y + mapRect.Size.Y)
+                if (_hoverPoint1.Y <= mapRect.Position.Y || _hoverPoint2.Y >= mapRect.Position.Y + mapRect.Size.Y || CheckDoorCollision(mapRect))
                 {
                     _canPut = false;
                 }
@@ -92,7 +92,7 @@ public partial class DungeonRoomTemplate : TileMap
                     mapRect.Position.Y + mapRect.Size.Y);
                 _hoverPoint2 = new Vector2(_hoverPoint1.X + tileSize.X * 4, _hoverPoint1.Y);
 
-                if (_hoverPoint1.X <= mapRect.Position.X || _hoverPoint2.X >= mapRect.Position.X + mapRect.Size.X)
+                if (_hoverPoint1.X <= mapRect.Position.X || _hoverPoint2.X >= mapRect.Position.X + mapRect.Size.X || CheckDoorCollision(mapRect))
                 {
                     _canPut = false;
                 }
@@ -111,7 +111,7 @@ public partial class DungeonRoomTemplate : TileMap
                     Approach(mousePosition.Y, tileSize.Y) - tileSize.Y * 2);
                 _hoverPoint2 = new Vector2(_hoverPoint1.X, _hoverPoint1.Y + tileSize.X * 4);
 
-                if (_hoverPoint1.Y <= mapRect.Position.Y || _hoverPoint2.Y >= mapRect.Position.Y + mapRect.Size.Y)
+                if (_hoverPoint1.Y <= mapRect.Position.Y || _hoverPoint2.Y >= mapRect.Position.Y + mapRect.Size.Y || CheckDoorCollision(mapRect))
                 {
                     _canPut = false;
                 }
@@ -302,7 +302,7 @@ public partial class DungeonRoomTemplate : TileMap
     private bool CheckValueCollision(float o1, float o2, float h1, float h2)
     {
         var size = TileSet.TileSize.X;
-        return !(o1 - 3 * size > h2 || o2 + 3 * size < h1);
+        return !(h2 < o1 - 3 * size || o2 + 3 * size < h1);
     }
     
     private Rect2 CalcTileRange()
