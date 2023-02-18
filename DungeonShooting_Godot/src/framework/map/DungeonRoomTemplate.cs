@@ -53,122 +53,151 @@ public partial class DungeonRoomTemplate : TileMap
             var mousePosition = GetLocalMousePosition();
 
             var tileSize = TileSet.TileSize;
-            if (Mathf.Abs(mousePosition.Y - mapRect.Position.Y) <= 8 && mousePosition.X >= mapRect.Position.X &&
-                mousePosition.X <= mapRect.Position.X + mapRect.Size.X) //上
+            if (_isDrag) //拖拽中
             {
-                _hover = true;
-                _hoverDirection = DoorDirection.N;
-                var mouseOffset = Approach(mousePosition.X, tileSize.X);
-                _hoverPoint1 = new Vector2(mouseOffset - tileSize.X * 2, mapRect.Position.Y);
-                _hoverPoint2 = new Vector2(_hoverPoint1.X + tileSize.X * 4, _hoverPoint1.Y);
-
-                //判断是否能放下新的门
-                if (_hoverPoint1.X <= mapRect.Position.X || _hoverPoint2.X >= mapRect.Position.X + mapRect.Size.X || CheckDoorCollision(mapRect))
+                if (_activeArea != null)
                 {
-                    _canPut = false;
-                    FindHoverPoint(mouseOffset);
-                }
-                else
-                {
-                    _canPut = true;
-                    if (!_isDrag)
+                    if (_activeArea.Direction == DoorDirection.N || _activeArea.Direction == DoorDirection.S)
                     {
+                        if (_activePointType == 0)
+                        {
+                            var mouseOffset = Approach(mousePosition.X, tileSize.X);
+                            _activeArea.StartPosition = new Vector2(mouseOffset, _activeArea.StartPosition.Y);
+                            _activeArea.Start = mouseOffset - mapRect.Position.X;
+                        }
+                        else
+                        {
+                            var mouseOffset = Approach(mousePosition.X, tileSize.X);
+                            _activeArea.EndPosition = new Vector2(mouseOffset, _activeArea.EndPosition.Y);
+                            _activeArea.End = mouseOffset - mapRect.Position.X;
+                        }
+                    }
+                    else
+                    {
+                        if (_activePointType == 0)
+                        {
+                            var mouseOffset = Approach(mousePosition.Y, tileSize.Y);
+                            _activeArea.StartPosition = new Vector2(_activeArea.StartPosition.X, mouseOffset);
+                            _activeArea.Start = mouseOffset - mapRect.Position.Y;
+                        }
+                        else
+                        {
+                            var mouseOffset = Approach(mousePosition.Y, tileSize.Y);
+                            _activeArea.EndPosition = new Vector2(_activeArea.EndPosition.X, mouseOffset);
+                            _activeArea.End = mouseOffset - mapRect.Position.Y;
+                        }
+                    }
+                }
+            }
+            else 
+            {
+                if (Mathf.Abs(mousePosition.Y - mapRect.Position.Y) <= 8 && mousePosition.X >= mapRect.Position.X &&
+                    mousePosition.X <= mapRect.Position.X + mapRect.Size.X) //上
+                {
+                    _hover = true;
+                    _hoverDirection = DoorDirection.N;
+                    var mouseOffset = Approach(mousePosition.X, tileSize.X);
+                    _hoverPoint1 = new Vector2(mouseOffset - tileSize.X * 2, mapRect.Position.Y);
+                    _hoverPoint2 = new Vector2(_hoverPoint1.X + tileSize.X * 4, _hoverPoint1.Y);
+
+                    //判断是否能放下新的门
+                    if (_hoverPoint1.X <= mapRect.Position.X || _hoverPoint2.X >= mapRect.Position.X + mapRect.Size.X ||
+                        CheckDoorCollision(mapRect))
+                    {
+                        _canPut = false;
+                        FindHoverPoint(mouseOffset);
+                    }
+                    else
+                    {
+                        _canPut = true;
                         _hasActivePoint = false;
                         _activeArea = null;
                     }
                 }
-            }
-            else if (Mathf.Abs(mousePosition.X - mapRect.Position.X) <= 8 && mousePosition.Y >= mapRect.Position.Y &&
-                     mousePosition.Y <= mapRect.Position.Y + mapRect.Size.Y) //左
-            {
-                _hover = true;
-                _hoverDirection = DoorDirection.W;
-                var mouseOffset = Approach(mousePosition.Y, tileSize.Y);
-                _hoverPoint1 = new Vector2(mapRect.Position.X, mouseOffset - tileSize.Y * 2);
-                _hoverPoint2 = new Vector2(_hoverPoint1.X, _hoverPoint1.Y + tileSize.X * 4);
+                else if (Mathf.Abs(mousePosition.X - mapRect.Position.X) <= 8 &&
+                         mousePosition.Y >= mapRect.Position.Y &&
+                         mousePosition.Y <= mapRect.Position.Y + mapRect.Size.Y) //左
+                {
+                    _hover = true;
+                    _hoverDirection = DoorDirection.W;
+                    var mouseOffset = Approach(mousePosition.Y, tileSize.Y);
+                    _hoverPoint1 = new Vector2(mapRect.Position.X, mouseOffset - tileSize.Y * 2);
+                    _hoverPoint2 = new Vector2(_hoverPoint1.X, _hoverPoint1.Y + tileSize.X * 4);
 
-                //判断是否能放下新的门
-                if (_hoverPoint1.Y <= mapRect.Position.Y || _hoverPoint2.Y >= mapRect.Position.Y + mapRect.Size.Y || CheckDoorCollision(mapRect))
-                {
-                    _canPut = false;
-                    FindHoverPoint(mouseOffset);
-                }
-                else
-                {
-                    _canPut = true;
-                    if (!_isDrag)
+                    //判断是否能放下新的门
+                    if (_hoverPoint1.Y <= mapRect.Position.Y || _hoverPoint2.Y >= mapRect.Position.Y + mapRect.Size.Y ||
+                        CheckDoorCollision(mapRect))
                     {
+                        _canPut = false;
+                        FindHoverPoint(mouseOffset);
+                    }
+                    else
+                    {
+                        _canPut = true;
                         _hasActivePoint = false;
                         _activeArea = null;
                     }
                 }
-            }
-            else if (Mathf.Abs(mousePosition.Y - (mapRect.Position.Y + mapRect.Size.Y)) <= 8 &&
-                     mousePosition.X >= mapRect.Position.X &&
-                     mousePosition.X <= mapRect.Position.X + mapRect.Size.X) //下
-            {
-                _hover = true;
-                _hoverDirection = DoorDirection.S;
-                var mouseOffset = Approach(mousePosition.X, tileSize.X);
-                _hoverPoint1 = new Vector2(mouseOffset - tileSize.X * 2,
-                    mapRect.Position.Y + mapRect.Size.Y);
-                _hoverPoint2 = new Vector2(_hoverPoint1.X + tileSize.X * 4, _hoverPoint1.Y);
+                else if (Mathf.Abs(mousePosition.Y - (mapRect.Position.Y + mapRect.Size.Y)) <= 8 &&
+                         mousePosition.X >= mapRect.Position.X &&
+                         mousePosition.X <= mapRect.Position.X + mapRect.Size.X) //下
+                {
+                    _hover = true;
+                    _hoverDirection = DoorDirection.S;
+                    var mouseOffset = Approach(mousePosition.X, tileSize.X);
+                    _hoverPoint1 = new Vector2(mouseOffset - tileSize.X * 2,
+                        mapRect.Position.Y + mapRect.Size.Y);
+                    _hoverPoint2 = new Vector2(_hoverPoint1.X + tileSize.X * 4, _hoverPoint1.Y);
 
-                //判断是否能放下新的门
-                if (_hoverPoint1.X <= mapRect.Position.X || _hoverPoint2.X >= mapRect.Position.X + mapRect.Size.X || CheckDoorCollision(mapRect))
-                {
-                    _canPut = false;
-                    FindHoverPoint(mouseOffset);
-                }
-                else
-                {
-                    _canPut = true;
-                    if (!_isDrag)
+                    //判断是否能放下新的门
+                    if (_hoverPoint1.X <= mapRect.Position.X || _hoverPoint2.X >= mapRect.Position.X + mapRect.Size.X ||
+                        CheckDoorCollision(mapRect))
                     {
+                        _canPut = false;
+                        FindHoverPoint(mouseOffset);
+                    }
+                    else
+                    {
+                        _canPut = true;
                         _hasActivePoint = false;
                         _activeArea = null;
                     }
                 }
-            }
-            else if (Mathf.Abs(mousePosition.X - (mapRect.Position.X + mapRect.Size.X)) <= 8 &&
-                     mousePosition.Y >= mapRect.Position.Y &&
-                     mousePosition.Y <= mapRect.Position.Y + mapRect.Size.Y) //右
-            {
-                _hover = true;
-                _hoverDirection = DoorDirection.E;
-                var mouseOffset = Approach(mousePosition.Y, tileSize.Y);
-                _hoverPoint1 = new Vector2(mapRect.Position.X + mapRect.Size.X,
-                    mouseOffset - tileSize.Y * 2);
-                _hoverPoint2 = new Vector2(_hoverPoint1.X, _hoverPoint1.Y + tileSize.X * 4);
+                else if (Mathf.Abs(mousePosition.X - (mapRect.Position.X + mapRect.Size.X)) <= 8 &&
+                         mousePosition.Y >= mapRect.Position.Y &&
+                         mousePosition.Y <= mapRect.Position.Y + mapRect.Size.Y) //右
+                {
+                    _hover = true;
+                    _hoverDirection = DoorDirection.E;
+                    var mouseOffset = Approach(mousePosition.Y, tileSize.Y);
+                    _hoverPoint1 = new Vector2(mapRect.Position.X + mapRect.Size.X,
+                        mouseOffset - tileSize.Y * 2);
+                    _hoverPoint2 = new Vector2(_hoverPoint1.X, _hoverPoint1.Y + tileSize.X * 4);
 
-                //判断是否能放下新的门
-                if (_hoverPoint1.Y <= mapRect.Position.Y || _hoverPoint2.Y >= mapRect.Position.Y + mapRect.Size.Y || CheckDoorCollision(mapRect))
-                {
-                    _canPut = false;
-                    FindHoverPoint(mouseOffset);
-                }
-                else
-                {
-                    _canPut = true;
-                    if (!_isDrag)
+                    //判断是否能放下新的门
+                    if (_hoverPoint1.Y <= mapRect.Position.Y || _hoverPoint2.Y >= mapRect.Position.Y + mapRect.Size.Y ||
+                        CheckDoorCollision(mapRect))
                     {
+                        _canPut = false;
+                        FindHoverPoint(mouseOffset);
+                    }
+                    else
+                    {
+                        _canPut = true;
                         _hasActivePoint = false;
                         _activeArea = null;
                     }
                 }
-            }
-            else
-            {
-                _hover = false;
-                _canPut = false;
-
-                if (!_isDrag)
+                else
                 {
+                    _hover = false;
+                    _canPut = false;
                     _hasActivePoint = false;
                     _activeArea = null;
                 }
             }
-            
+
+
             if (isClick && _canPut) //判断是否可以创建新的点
             {
                 CreateDoorArea(mapRect);
