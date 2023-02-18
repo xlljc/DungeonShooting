@@ -21,9 +21,12 @@ public partial class DungeonRoomTemplate : TileMap
     private byte _activePointType = 0;
     private DoorAreaInfo _activeArea = null;
     
+    
     //拖拽
     private bool _isDrag = false;
-    private Vector2 _startPosition;
+    private float _startDragValue;
+    private Vector2 _startDragPositionValue;
+    private bool _dragHasCollision = false;
 
     private bool _mouseDown = false;
 
@@ -64,6 +67,7 @@ public partial class DungeonRoomTemplate : TileMap
                             var mouseOffset = Approach(mousePosition.X, tileSize.X);
                             _activeArea.StartPosition = new Vector2(mouseOffset, _activeArea.StartPosition.Y);
                             _activeArea.Start = mouseOffset - mapRect.Position.X;
+                            _dragHasCollision = _activeArea.StartPosition.X <= mapRect.Position.X || _activeArea.StartPosition.X + 3 * tileSize.X >= _activeArea.EndPosition.X;
                         }
                         else
                         {
@@ -205,11 +209,39 @@ public partial class DungeonRoomTemplate : TileMap
             else if (_mouseDown && !_isDrag) //拖拽节点
             {
                 _isDrag = true;
-                _startPosition = mousePosition;
+                _dragHasCollision = false;
+                if (_activeArea != null)
+                {
+                    if (_activePointType == 0)
+                    {
+                        _startDragValue = _activeArea.Start;
+                        _startDragPositionValue = _activeArea.StartPosition;
+                    }
+                    else
+                    {
+                        _startDragValue = _activeArea.End;
+                        _startDragPositionValue = _activeArea.EndPosition;
+                    }
+                }
             }
             else if (!_mouseDown && _isDrag) //松开拖拽的点
             {
                 _isDrag = false;
+                if (_activeArea != null && _dragHasCollision)
+                {
+                    if (_activePointType == 0)
+                    {
+                        _activeArea.Start = _startDragValue;
+                        _activeArea.StartPosition = _startDragPositionValue;
+                    }
+                    else
+                    {
+                        _activeArea.End = _startDragValue;
+                        _activeArea.EndPosition = _startDragPositionValue;
+                    }
+                }
+
+                _dragHasCollision = false;
             }
             
             QueueRedraw();
@@ -278,8 +310,16 @@ public partial class DungeonRoomTemplate : TileMap
             foreach (var doorAreaInfo in _doorConfigs)
             {
                 var flag = _hasActivePoint && _activeArea == doorAreaInfo;
-                var color3 = (flag && _activePointType == 0) ? (_isDrag ? new Color(0.2F,0.4117647F,0.8392157F, 0.8f) : new Color(1, 1, 1, 0.8f)) : color2;
-                var color4 = (flag && _activePointType == 1) ? (_isDrag ? new Color(0.2F,0.4117647F,0.8392157F, 0.8f) : new Color(1, 1, 1, 0.8f)) : color2;
+                var color3 = (flag && _activePointType == 0)
+                    ? (_isDrag
+                        ? (_dragHasCollision ? new Color(1, 0, 0, 0.8f) : new Color(0.2F, 0.4117647F, 0.8392157F, 0.8f))
+                        : new Color(1, 1, 1, 0.8f))
+                    : color2;
+                var color4 = (flag && _activePointType == 1)
+                    ? (_isDrag
+                        ? (_dragHasCollision ? new Color(1, 0, 0, 0.8f) : new Color(0.2F, 0.4117647F, 0.8392157F, 0.8f))
+                        : new Color(1, 1, 1, 0.8f))
+                    : color2;
                 switch (doorAreaInfo.Direction)
                 {
                     case DoorDirection.E:
