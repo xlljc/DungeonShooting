@@ -132,7 +132,7 @@ public partial class Automation : Control
 		{
 			var configPath = tileDataDir + item + ".json";
 			var configText = File.ReadAllText(configPath);
-			var roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(configText);
+			var roomInfo = DungeonRoomTemplate.DeserializeDungeonRoomInfo(configText);
 			var split = new DungeonRoomSplit();
 			split.ScenePath = ToResPath(tileDir + item + ".tscn");
 			split.ConfigPath = ToResPath(configPath);
