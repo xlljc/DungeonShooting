@@ -1,6 +1,9 @@
 #if TOOLS
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using Godot;
 using File = System.IO.File;
@@ -22,7 +25,9 @@ public partial class Automation : Control
 
 	private string resultStr = "";
 	
-	//更新 ResourcePath
+	/// <summary>
+	/// 更新 ResourcePath
+	/// </summary>
 	private void _on_Button_pressed()
 	{
 		resultStr = "/// <summary>\n" +
@@ -56,6 +61,87 @@ public partial class Automation : Control
 		GD.Print("ResourcePath.cs 写出完成!");
 	}
 
+	/// <summary>
+	/// 重新打包房间配置
+	/// </summary>
+	private void _on_Button2_pressed()
+	{
+		//地图路径
+		var tileDir = DungeonRoomTemplate.RoomTileDir;
+		//地图描述数据路径
+		var tileDataDir = DungeonRoomTemplate.RoomTileDataDir;
+		
+		var tileDirInfo = new DirectoryInfo(tileDir);
+		var tileDataDirInfo = new DirectoryInfo(tileDataDir);
+
+		//所有地图列表
+		var mapList = new HashSet<string>();
+		
+		//收集所有名称
+		var fileDataInfos = tileDataDirInfo.GetFiles();
+		foreach (var fileInfo in fileDataInfos)
+		{
+			mapList.Add(RemoveExtension(fileInfo.Name));
+		}
+		//收集所有名称
+		var fileInfos = tileDirInfo.GetFiles();
+		foreach (var fileInfo in fileInfos)
+		{
+			if (fileInfo.Extension == ".tscn")
+			{
+				mapList.Add(RemoveExtension(fileInfo.Name));
+			}
+		}
+		
+		//剔除多余的 tile.json
+		var arrays = mapList.ToArray();
+		foreach (var item in arrays)
+		{
+			if (!File.Exists(tileDir + item + ".tscn"))
+			{
+				mapList.Remove(item);
+			}
+		}
+
+		//手动生成缺失的 tile.json
+		foreach (var item in mapList)
+		{
+			if (!File.Exists(tileDataDir + item + ".json"))
+			{
+				var tscnName = tileDir + item + ".tscn";
+				var packedScene = ResourceManager.Load<PackedScene>(tscnName);
+				if (packedScene != null)
+				{
+					var dungeonRoomTemplate = packedScene.Instantiate<DungeonRoomTemplate>();
+					DungeonRoomTemplate.SaveConfig(new List<DoorAreaInfo>(), DungeonRoomTemplate.CalcTileRange(dungeonRoomTemplate), item);
+					dungeonRoomTemplate.QueueFree();
+				}
+			}
+		}
+
+		var list = new List<DungeonRoomSplit>();
+		//整合操作
+		foreach (var item in mapList)
+		{
+			var configPath = tileDataDir + item + ".json";
+			var configText = File.ReadAllText(configPath);
+			var roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(configText);
+			var split = new DungeonRoomSplit();
+			split.ResourcePath = ToResPath(tileDir + item + ".tscn");
+			split.ConfigPath = ToResPath(configPath);
+			split.RoomInfo = roomInfo;
+			list.Add(split);
+		}
+
+		//写出配置
+		var config = new JsonSerializerOptions();
+		config.WriteIndented = true;
+		var text = JsonSerializer.Serialize(list, config);
+		File.WriteAllText(DungeonRoomTemplate.RoomTileConfigFile, text);
+
+		GD.Print("地牢房间配置, 重新打包完成!");
+	}
+	
 	private void EachDir(DirectoryInfo directoryInfos)
 	{
 		var fileInfos = directoryInfos.GetFiles();
@@ -83,6 +169,24 @@ public partial class Automation : Control
 			field = Regex.Replace(field, "[^\\w_]", "");
 			resultStr += $"    public const string {field} = \"{resPath}\";\n";
 		}
+	}
+
+	private string ToResPath(string path)
+	{
+		var field = path.Substring(currDir.Length + 1);
+		field = field.Replace("\\", "/");
+		return "res://" + field;
+	}
+
+	private string RemoveExtension(string name)
+	{
+		var index = name.LastIndexOf(".", StringComparison.Ordinal);
+		if (index >= 0)
+		{
+			return name.Substring(0, index);
+		}
+
+		return name;
 	}
 }
 #endif

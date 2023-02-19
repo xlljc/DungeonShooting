@@ -1,22 +1,11 @@
-[
-  {
-    "Direction": 3,
-    "Start": 16,
-    "End": 320
+{
+  "Position": {
+    "X": -16,
+    "Y": -16
   },
-  {
-    "Direction": 2,
-    "Start": 16,
-    "End": 320
+  "Size": {
+    "X": 336,
+    "Y": 336
   },
-  {
-    "Direction": 0,
-    "Start": 16,
-    "End": 320
-  },
-  {
-    "Direction": 1,
-    "Start": 16,
-    "End": 320
-  }
-]
+  "DoorAreaInfos": []
+}

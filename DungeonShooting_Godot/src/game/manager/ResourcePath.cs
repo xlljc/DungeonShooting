@@ -36,6 +36,8 @@ public class ResourcePath
     public const string resource_map_itchioDungeonTileset4_tsx = "res://resource/map/itch-io-DungeonTileset4.tsx";
     public const string resource_map_Room1_tscn = "res://resource/map/Room1.tscn";
     public const string resource_map_Room2_tscn = "res://resource/map/Room2.tscn";
+    public const string resource_map_Room3_tscn = "res://resource/map/Room3.tscn";
+    public const string resource_map_tiledata_Room1_json = "res://resource/map/tiledata/Room1.json";
     public const string resource_map_tileset_TileSet1_tres = "res://resource/map/tileset/TileSet1.tres";
     public const string resource_materlal_Blend_gdshader = "res://resource/materlal/Blend.gdshader";
     public const string resource_materlal_Blend_tres = "res://resource/materlal/Blend.tres";

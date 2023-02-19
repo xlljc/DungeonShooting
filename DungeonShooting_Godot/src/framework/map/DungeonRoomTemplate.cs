@@ -9,6 +9,21 @@ using Godot;
 public partial class DungeonRoomTemplate : TileMap
 {
     
+    /// <summary>
+    /// 地图路径
+    /// </summary>
+    public static readonly string RoomTileDir = System.Environment.CurrentDirectory + "\\resource\\map\\tileMaps\\";
+    
+    /// <summary>
+    /// 地图描述数据路径
+    /// </summary>
+    public static readonly string RoomTileDataDir = System.Environment.CurrentDirectory + "\\resource\\map\\tiledata\\";
+    
+    /// <summary>
+    /// 房间配置汇总
+    /// </summary>
+    public static readonly string RoomTileConfigFile = System.Environment.CurrentDirectory + "\\resource\\map\\RoomConfig.json";
+    
 #if TOOLS
     //是否悬停在线上
     private bool _hover = false;
@@ -33,8 +48,6 @@ public partial class DungeonRoomTemplate : TileMap
     private bool _dragHasCollision = false;
 
     private bool _mouseDown = false;
-    
-    private static string _currDir = System.Environment.CurrentDirectory + "\\resource\\map\\tiledata\\";
 
     //
     private List<DoorAreaInfo> _doorConfigs;
@@ -51,7 +64,7 @@ public partial class DungeonRoomTemplate : TileMap
         if (_doorConfigs == null)
         {
             initConfigs = true;
-            ReadConfig();
+            _doorConfigs = ReadConfig(CalcTileRange(this), Name);
         }
         
         var isClick = false;
@@ -80,7 +93,7 @@ public partial class DungeonRoomTemplate : TileMap
         }
         else if (TileSet != null)
         {
-            var mapRect = CalcTileRange();
+            var mapRect = CalcTileRange(this);
             var mousePosition = GetLocalMousePosition();
             
             if (mapRect != _prevRect)
@@ -317,7 +330,7 @@ public partial class DungeonRoomTemplate : TileMap
         if (TileSet != null)
         {
             //绘制地图轮廓
-            var mapRange = CalcTileRange();
+            var mapRange = CalcTileRange(this);
             mapRange.Position -= new Vector2(2, 2);
             mapRange.Size += new Vector2(4, 4);
             DrawRect(mapRange, _hover ? Colors.Green : new Color(0.03137255F, 0.59607846F, 0.03137255F), false, 2);
@@ -585,14 +598,6 @@ public partial class DungeonRoomTemplate : TileMap
             _activeArea = null;
         }
     }
-    
-    private Rect2 CalcTileRange()
-    {
-        var usedRect = GetUsedRect();
-        var pos = usedRect.Position * TileSet.TileSize;
-        var size = usedRect.Size * TileSet.TileSize;
-        return new Rect2(ToLocal(pos), size);
-    }
 
     private float Approach(float value, float period)
     {
@@ -618,32 +623,52 @@ public partial class DungeonRoomTemplate : TileMap
     //区域数据修改
     private void OnDoorAreaChange()
     {
-        SaveConfig();
+        SaveConfig(_doorConfigs, CalcTileRange(this), Name);
     }
-
-    //保存配置
-    private void SaveConfig()
+    
+    /// <summary>
+    /// 计算tile所占区域
+    /// </summary>
+    /// <returns></returns>
+    public static Rect2 CalcTileRange(TileMap tileMap)
+    {
+        var usedRect = tileMap.GetUsedRect();
+        var pos = usedRect.Position * tileMap.TileSet.TileSize;
+        var size = usedRect.Size * tileMap.TileSet.TileSize;
+        return new Rect2(tileMap.ToLocal(pos), size);
+    }
+    
+    /// <summary>
+    /// 保存房间配置
+    /// </summary>
+    public static void SaveConfig(List<DoorAreaInfo> doorConfigs, Rect2 mapRect, string name)
     {
         //存入本地
-        var path = _currDir + Name + ".json";
+        var path = RoomTileDataDir + name + ".json";
+        var roomInfo = new DungeonRoomInfo();
+        roomInfo.Position = new SerializeVector2(mapRect.Position.X, mapRect.Position.Y);
+        roomInfo.Size = new SerializeVector2(mapRect.Size.X, mapRect.Size.Y);
+        roomInfo.DoorAreaInfos = doorConfigs;
+        
         var config = new JsonSerializerOptions();
         config.WriteIndented = true;
-        var jsonStr = JsonSerializer.Serialize(_doorConfigs, config);
+        var jsonStr = JsonSerializer.Serialize(roomInfo, config);
         File.WriteAllText(path, jsonStr);
     }
 
-    //读取配置
-    private void ReadConfig()
+    /// <summary>
+    /// 读取房间配置
+    /// </summary>
+    public static List<DoorAreaInfo> ReadConfig(Rect2 mapRect, string name)
     {
-        var path = _currDir + Name + ".json";
+        var path = RoomTileDataDir + name + ".json";
         if (File.Exists(path))
         {
-            var mapRect = CalcTileRange();
             var text = File.ReadAllText(path);
             try
             {
-                _doorConfigs = JsonSerializer.Deserialize<List<DoorAreaInfo>>(text);
-                foreach (var doorAreaInfo in _doorConfigs)
+                var roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(text);
+                foreach (var doorAreaInfo in roomInfo.DoorAreaInfos)
                 {
                     switch (doorAreaInfo.Direction)
                     {
@@ -665,18 +690,19 @@ public partial class DungeonRoomTemplate : TileMap
                             break;
                     }
                 }
+
+                return roomInfo.DoorAreaInfos;
             }
             catch (Exception e)
             {
                 GD.PrintErr($"加载房间数据'{path}'发生异常: " + e);
-                _doorConfigs = new List<DoorAreaInfo>();
+                return new List<DoorAreaInfo>();
             }
         }
         else
         {
-            _doorConfigs = new List<DoorAreaInfo>();
+            return new List<DoorAreaInfo>();
         }
     }
-    
 #endif
 }
