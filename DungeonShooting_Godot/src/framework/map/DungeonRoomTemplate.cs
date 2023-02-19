@@ -50,7 +50,16 @@ public partial class DungeonRoomTemplate : TileMap
             isClick = false;
         }
 
-        if (TileSet != null)
+        if (Input.IsMouseButtonPressed(MouseButton.Middle)) //中键移除门
+        {
+            if (_activeArea != null)
+            {
+                RemoveDoorArea(_activeArea);
+                _hasActivePoint = false;
+                _activeArea = null;
+            }
+        }
+        else if (TileSet != null)
         {
             var mapRect = CalcTileRange();
             var mousePosition = GetLocalMousePosition();
@@ -60,6 +69,7 @@ public partial class DungeonRoomTemplate : TileMap
             {
                 if (_activeArea != null)
                 {
+                    //拖拽节点操作
                     if (_activeArea.Direction == DoorDirection.N || _activeArea.Direction == DoorDirection.S)
                     {
                         if (_activePointType == 0)
@@ -67,13 +77,18 @@ public partial class DungeonRoomTemplate : TileMap
                             var mouseOffset = Approach(mousePosition.X, tileSize.X);
                             _activeArea.StartPosition = new Vector2(mouseOffset, _activeArea.StartPosition.Y);
                             _activeArea.Start = mouseOffset - mapRect.Position.X;
-                            _dragHasCollision = _activeArea.StartPosition.X <= mapRect.Position.X || _activeArea.StartPosition.X + 3 * tileSize.X >= _activeArea.EndPosition.X;
+                            _dragHasCollision = _activeArea.StartPosition.X <= mapRect.Position.X ||
+                                                _activeArea.StartPosition.X + 3 * tileSize.X >= _activeArea.EndPosition.X ||
+                                                CheckDoorCollision(_activeArea.Direction, _activeArea);
                         }
                         else
                         {
                             var mouseOffset = Approach(mousePosition.X, tileSize.X);
                             _activeArea.EndPosition = new Vector2(mouseOffset, _activeArea.EndPosition.Y);
                             _activeArea.End = mouseOffset - mapRect.Position.X;
+                            _dragHasCollision = _activeArea.EndPosition.X >= mapRect.Position.X + mapRect.Size.X ||
+                                                _activeArea.EndPosition.X - 3 * tileSize.X <= _activeArea.StartPosition.X ||
+                                                CheckDoorCollision(_activeArea.Direction, _activeArea);
                         }
                     }
                     else
@@ -83,12 +98,18 @@ public partial class DungeonRoomTemplate : TileMap
                             var mouseOffset = Approach(mousePosition.Y, tileSize.Y);
                             _activeArea.StartPosition = new Vector2(_activeArea.StartPosition.X, mouseOffset);
                             _activeArea.Start = mouseOffset - mapRect.Position.Y;
+                            _dragHasCollision = _activeArea.StartPosition.Y <= mapRect.Position.Y ||
+                                                _activeArea.StartPosition.Y + 3 * tileSize.Y >= _activeArea.EndPosition.Y ||
+                                                CheckDoorCollision(_activeArea.Direction, _activeArea);
                         }
                         else
                         {
                             var mouseOffset = Approach(mousePosition.Y, tileSize.Y);
                             _activeArea.EndPosition = new Vector2(_activeArea.EndPosition.X, mouseOffset);
                             _activeArea.End = mouseOffset - mapRect.Position.Y;
+                            _dragHasCollision = _activeArea.EndPosition.Y >= mapRect.Position.Y + mapRect.Size.Y ||
+                                                _activeArea.EndPosition.Y - 3 * tileSize.Y <= _activeArea.StartPosition.Y ||
+                                                CheckDoorCollision(_activeArea.Direction, _activeArea);
                         }
                     }
                 }
@@ -106,7 +127,7 @@ public partial class DungeonRoomTemplate : TileMap
 
                     //判断是否能放下新的门
                     if (_hoverPoint1.X <= mapRect.Position.X || _hoverPoint2.X >= mapRect.Position.X + mapRect.Size.X ||
-                        CheckDoorCollision(mapRect))
+                        CheckDoorCollision())
                     {
                         _canPut = false;
                         FindHoverPoint(mouseOffset);
@@ -130,7 +151,7 @@ public partial class DungeonRoomTemplate : TileMap
 
                     //判断是否能放下新的门
                     if (_hoverPoint1.Y <= mapRect.Position.Y || _hoverPoint2.Y >= mapRect.Position.Y + mapRect.Size.Y ||
-                        CheckDoorCollision(mapRect))
+                        CheckDoorCollision())
                     {
                         _canPut = false;
                         FindHoverPoint(mouseOffset);
@@ -155,7 +176,7 @@ public partial class DungeonRoomTemplate : TileMap
 
                     //判断是否能放下新的门
                     if (_hoverPoint1.X <= mapRect.Position.X || _hoverPoint2.X >= mapRect.Position.X + mapRect.Size.X ||
-                        CheckDoorCollision(mapRect))
+                        CheckDoorCollision())
                     {
                         _canPut = false;
                         FindHoverPoint(mouseOffset);
@@ -180,7 +201,7 @@ public partial class DungeonRoomTemplate : TileMap
 
                     //判断是否能放下新的门
                     if (_hoverPoint1.Y <= mapRect.Position.Y || _hoverPoint2.Y >= mapRect.Position.Y + mapRect.Size.Y ||
-                        CheckDoorCollision(mapRect))
+                        CheckDoorCollision())
                     {
                         _canPut = false;
                         FindHoverPoint(mouseOffset);
@@ -399,8 +420,14 @@ public partial class DungeonRoomTemplate : TileMap
         _doorConfigs.Add(doorAreaInfo);
     }
 
-    //检查是否能放下门
-    private bool CheckDoorCollision(Rect2 mapRect)
+    //移除门
+    private void RemoveDoorArea(DoorAreaInfo doorAreaInfo)
+    {
+        _doorConfigs.Remove(doorAreaInfo);
+    }
+
+    //检查门是否有碰撞
+    private bool CheckDoorCollision()
     {
         foreach (var doorAreaInfo in _doorConfigs)
         {
@@ -429,6 +456,21 @@ public partial class DungeonRoomTemplate : TileMap
         return false;
     }
 
+    //检查门是否有碰撞
+    private bool CheckDoorCollision(DoorDirection direction, DoorAreaInfo info)
+    {
+        foreach (var doorAreaInfo in _doorConfigs)
+        {
+            if (doorAreaInfo.Direction == direction && info != doorAreaInfo &&
+                CheckValueCollision(doorAreaInfo.Start, doorAreaInfo.End, info.Start, info.End))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     private bool CheckValueCollision(float o1, float o2, float h1, float h2)
     {
         var size = TileSet.TileSize.X;
