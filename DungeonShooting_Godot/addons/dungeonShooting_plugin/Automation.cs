@@ -100,6 +100,12 @@ public partial class Automation : Control
 			if (!File.Exists(tileDir + item + ".tscn"))
 			{
 				mapList.Remove(item);
+				var filePath = tileDataDir + item + ".json";
+				if (File.Exists(filePath))
+				{
+					GD.Print($"未找到'{tileDir + item}.tscn', 删除配置文件: {filePath}");
+					File.Delete(filePath);
+				}
 			}
 		}
 
