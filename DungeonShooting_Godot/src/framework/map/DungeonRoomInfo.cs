@@ -1,12 +1,10 @@
 ﻿
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 /// <summary>
 /// 房间配置数据
 /// </summary>
-[Serializable]
 public class DungeonRoomInfo
 {
     /// <summary>

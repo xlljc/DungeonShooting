@@ -1,12 +1,10 @@
 ﻿
-using System;
 using System.Text.Json.Serialization;
 using Godot;
 
 /// <summary>
 /// 可序列化的 Vector2 对象
 /// </summary>
-[Serializable]
 public class SerializeVector2
 {
     public SerializeVector2(float x, float y)
