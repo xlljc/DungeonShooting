@@ -623,7 +623,8 @@ public partial class DungeonRoomTemplate : TileMap
     //区域数据修改
     private void OnDoorAreaChange()
     {
-        SaveConfig(_doorConfigs, CalcTileRange(this), Name);
+        var rect = GetUsedRect();
+        SaveConfig(_doorConfigs, rect.Position, rect.Size, Name);
     }
     
     /// <summary>
@@ -641,13 +642,13 @@ public partial class DungeonRoomTemplate : TileMap
     /// <summary>
     /// 保存房间配置
     /// </summary>
-    public static void SaveConfig(List<DoorAreaInfo> doorConfigs, Rect2 mapRect, string name)
+    public static void SaveConfig(List<DoorAreaInfo> doorConfigs, Vector2I position, Vector2I size, string name)
     {
         //存入本地
         var path = RoomTileDataDir + name + ".json";
         var roomInfo = new DungeonRoomInfo();
-        roomInfo.Position = new SerializeVector2(mapRect.Position.X, mapRect.Position.Y);
-        roomInfo.Size = new SerializeVector2(mapRect.Size.X, mapRect.Size.Y);
+        roomInfo.Position = new SerializeVector2(position);
+        roomInfo.Size = new SerializeVector2(size);
         roomInfo.DoorAreaInfos = doorConfigs;
         
         var config = new JsonSerializerOptions();

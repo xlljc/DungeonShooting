@@ -13,7 +13,7 @@ public static class DungeonTileManager
         }
         
         //铺房间
-        if (roomInfo.Template == null)
+        if (roomInfo.RoomSplit == null)
         {
             FillRect(tileMap, floorLayer, config.Ground, roomInfo.Position + Vector2.One,
                 roomInfo.Size - new Vector2(2, 2));
@@ -37,19 +37,22 @@ public static class DungeonTileManager
         }
         else
         {
-            var usedRect = roomInfo.Template.GetUsedRect();
-            var rectSize = usedRect.Size;
-            var rectPos = usedRect.Position;
+            var rectSize = roomInfo.RoomSplit.RoomInfo.Size;
+            var rectPos = roomInfo.RoomSplit.RoomInfo.Position;
+            var template = ResourceManager.Load<PackedScene>(roomInfo.RoomSplit.ScenePath);
+            var tileInstance = template.Instantiate<DungeonRoomTemplate>();
             for (int i = 0; i < rectSize.X; i++)
             {
                 for (int j = 0; j < rectSize.Y; j++)
                 {
-                    var atlasCoords = roomInfo.Template.GetCellAtlasCoords(0, new Vector2I(rectPos.X + i, rectPos.Y + j));
-                    tileMap.SetCell(floorLayer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j), 1, atlasCoords);
+                    var atlasCoords =
+                        tileInstance.GetCellAtlasCoords(0, new Vector2I((int)(rectPos.X + i), (int)(rectPos.Y + j)));
+                    tileMap.SetCell(floorLayer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j), 1,
+                        atlasCoords);
                 }
             }
-            roomInfo.Template.QueueFree();
-            roomInfo.Template = null;
+
+            tileInstance.QueueFree();
         }
 
         //铺过道
@@ -322,9 +325,7 @@ public static class DungeonTileManager
         {
             for (int j = 0; j < size.Y; j++)
             {
-                //tileMap.SetCell((int)pos.X + i, (int)pos.Y + j, info.Id, false, false, false, info.AutotileCoord);
                 tileMap.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), 1, info.AutotileCoord);
-                //tileMap.SetCell(layer, new Vector2I(0, 0), 1, new Vector2I(0, 8), 0);
             }
         }
     }

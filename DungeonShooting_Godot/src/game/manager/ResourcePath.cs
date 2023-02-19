@@ -34,10 +34,13 @@ public class ResourcePath
     public const string resource_map_dungeon_1_tmx = "res://resource/map/dungeon_1.tmx";
     public const string resource_map_dungeon_test_tmx = "res://resource/map/dungeon_test.tmx";
     public const string resource_map_itchioDungeonTileset4_tsx = "res://resource/map/itch-io-DungeonTileset4.tsx";
-    public const string resource_map_Room1_tscn = "res://resource/map/Room1.tscn";
-    public const string resource_map_Room2_tscn = "res://resource/map/Room2.tscn";
-    public const string resource_map_Room3_tscn = "res://resource/map/Room3.tscn";
+    public const string resource_map_RoomConfig_json = "res://resource/map/RoomConfig.json";
     public const string resource_map_tiledata_Room1_json = "res://resource/map/tiledata/Room1.json";
+    public const string resource_map_tiledata_Room2_json = "res://resource/map/tiledata/Room2.json";
+    public const string resource_map_tiledata_Room3_json = "res://resource/map/tiledata/Room3.json";
+    public const string resource_map_tileMaps_Room1_tscn = "res://resource/map/tileMaps/Room1.tscn";
+    public const string resource_map_tileMaps_Room2_tscn = "res://resource/map/tileMaps/Room2.tscn";
+    public const string resource_map_tileMaps_Room3_tscn = "res://resource/map/tileMaps/Room3.tscn";
     public const string resource_map_tileset_TileSet1_tres = "res://resource/map/tileset/TileSet1.tres";
     public const string resource_materlal_Blend_gdshader = "res://resource/materlal/Blend.gdshader";
     public const string resource_materlal_Blend_tres = "res://resource/materlal/Blend.tres";

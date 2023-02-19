@@ -1,61 +1,45 @@
 [
   {
-    "ResourcePath": "res://resource/map/tileMaps/Room1.tscn",
+    "ScenePath": "res://resource/map/tileMaps/Room1.tscn",
     "ConfigPath": "res://resource/map/tiledata/Room1.json",
     "RoomInfo": {
       "Position": {
         "X": 0,
-        "Y": -16
+        "Y": -1
       },
       "Size": {
-        "X": 496,
-        "Y": 304
-      },
-      "DoorAreaInfos": [
-        {
-          "Direction": 3,
-          "Start": 64,
-          "End": 192
-        },
-        {
-          "Direction": 2,
-          "Start": 320,
-          "End": 464
-        },
-        {
-          "Direction": 2,
-          "Start": 80,
-          "End": 224
-        }
-      ]
-    }
-  },
-  {
-    "ResourcePath": "res://resource/map/tileMaps/Room2.tscn",
-    "ConfigPath": "res://resource/map/tiledata/Room2.json",
-    "RoomInfo": {
-      "Position": {
-        "X": -64,
-        "Y": -48
-      },
-      "Size": {
-        "X": 288,
-        "Y": 224
+        "X": 31,
+        "Y": 19
       },
       "DoorAreaInfos": []
     }
   },
   {
-    "ResourcePath": "res://resource/map/tileMaps/Room3.tscn",
+    "ScenePath": "res://resource/map/tileMaps/Room2.tscn",
+    "ConfigPath": "res://resource/map/tiledata/Room2.json",
+    "RoomInfo": {
+      "Position": {
+        "X": -4,
+        "Y": -3
+      },
+      "Size": {
+        "X": 18,
+        "Y": 14
+      },
+      "DoorAreaInfos": []
+    }
+  },
+  {
+    "ScenePath": "res://resource/map/tileMaps/Room3.tscn",
     "ConfigPath": "res://resource/map/tiledata/Room3.json",
     "RoomInfo": {
       "Position": {
-        "X": -16,
-        "Y": -16
+        "X": -1,
+        "Y": -1
       },
       "Size": {
-        "X": 336,
-        "Y": 336
+        "X": 21,
+        "Y": 21
       },
       "DoorAreaInfos": []
     }

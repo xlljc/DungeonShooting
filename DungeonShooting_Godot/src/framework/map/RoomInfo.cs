@@ -7,10 +7,10 @@ using Godot;
 /// </summary>
 public class RoomInfo
 {
-    public RoomInfo(int id, TileMap tileMap)
+    public RoomInfo(int id, DungeonRoomSplit roomSplit)
     {
         Id = id;
-        Template = tileMap;
+        RoomSplit = roomSplit;
     }
 
     /// <summary>
@@ -21,7 +21,7 @@ public class RoomInfo
     /// <summary>
     /// 生成该房间使用的模板
     /// </summary>
-    public TileMap Template;
+    public DungeonRoomSplit RoomSplit;
     
     /// <summary>
     /// 房间大小

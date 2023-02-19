@@ -1,27 +1,11 @@
 {
   "Position": {
     "X": 0,
-    "Y": -16
+    "Y": -1
   },
   "Size": {
-    "X": 496,
-    "Y": 304
+    "X": 31,
+    "Y": 19
   },
-  "DoorAreaInfos": [
-    {
-      "Direction": 3,
-      "Start": 64,
-      "End": 192
-    },
-    {
-      "Direction": 2,
-      "Start": 320,
-      "End": 464
-    },
-    {
-      "Direction": 2,
-      "Start": 80,
-      "End": 224
-    }
-  ]
+  "DoorAreaInfos": []
 }

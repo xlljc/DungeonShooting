@@ -122,18 +122,11 @@ public class GenerateDungeon
             return GenerateRoomErrorCode.RoomFull;
         }
 
-        var packedScene = ResourceManager.Load<PackedScene>(
-            Utils.RandChoose(
-                ResourcePath.resource_map_Room1_tscn,
-                ResourcePath.resource_map_Room2_tscn
-                )
-            );
-        var template = packedScene.Instantiate<TileMap>();
-        var room = new RoomInfo(_count, template);
+        var randChoose = Utils.RandChoose(GameApplication.Instance.RoomConfig);
+        var room = new RoomInfo(_count, randChoose);
         
         //房间大小
-        var usedRect = template.GetUsedRect();
-        room.Size = usedRect.Size;
+        room.Size = new Vector2I((int)randChoose.RoomInfo.Size.X, (int)randChoose.RoomInfo.Size.Y);
 
         //随机生成房间 (老流程)
         // room.Size = new Vector2(Utils.RandRangeInt(_roomMinWidth, _roomMaxWidth),

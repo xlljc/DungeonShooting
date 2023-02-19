@@ -109,11 +109,12 @@ public partial class Automation : Control
 			if (!File.Exists(tileDataDir + item + ".json"))
 			{
 				var tscnName = tileDir + item + ".tscn";
-				var packedScene = ResourceManager.Load<PackedScene>(tscnName);
+				var packedScene = ResourceManager.Load<PackedScene>(tscnName, false);
 				if (packedScene != null)
 				{
 					var dungeonRoomTemplate = packedScene.Instantiate<DungeonRoomTemplate>();
-					DungeonRoomTemplate.SaveConfig(new List<DoorAreaInfo>(), DungeonRoomTemplate.CalcTileRange(dungeonRoomTemplate), item);
+					var usedRect = dungeonRoomTemplate.GetUsedRect();
+					DungeonRoomTemplate.SaveConfig(new List<DoorAreaInfo>(), usedRect.Position, usedRect.Size, item);
 					dungeonRoomTemplate.QueueFree();
 				}
 			}
@@ -127,7 +128,7 @@ public partial class Automation : Control
 			var configText = File.ReadAllText(configPath);
 			var roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(configText);
 			var split = new DungeonRoomSplit();
-			split.ResourcePath = ToResPath(tileDir + item + ".tscn");
+			split.ScenePath = ToResPath(tileDir + item + ".tscn");
 			split.ConfigPath = ToResPath(configPath);
 			split.RoomInfo = roomInfo;
 			list.Add(split);
