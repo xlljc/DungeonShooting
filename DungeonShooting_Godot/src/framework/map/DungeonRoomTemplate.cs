@@ -1,11 +1,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 using Godot;
 
 [Tool]
 public partial class DungeonRoomTemplate : TileMap
 {
+    
+#if TOOLS
     //是否悬停在线上
     private bool _hover = false;
 
@@ -29,12 +33,27 @@ public partial class DungeonRoomTemplate : TileMap
     private bool _dragHasCollision = false;
 
     private bool _mouseDown = false;
+    
+    private static string _currDir = System.Environment.CurrentDirectory + "\\resource\\map\\tiledata\\";
 
     //
-    private List<DoorAreaInfo> _doorConfigs = new List<DoorAreaInfo>();
-
+    private List<DoorAreaInfo> _doorConfigs;
+    private Rect2 _prevRect;
+    
     public override void _Process(double delta)
     {
+        if (!Engine.IsEditorHint())
+        {
+            return;
+        }
+
+        var initConfigs = false;
+        if (_doorConfigs == null)
+        {
+            initConfigs = true;
+            ReadConfig();
+        }
+        
         var isClick = false;
         if (Input.IsMouseButtonPressed(MouseButton.Left))
         {
@@ -63,7 +82,16 @@ public partial class DungeonRoomTemplate : TileMap
         {
             var mapRect = CalcTileRange();
             var mousePosition = GetLocalMousePosition();
-
+            
+            if (mapRect != _prevRect)
+            {
+                if (!initConfigs)
+                {
+                    OnMapRectChange(mapRect);
+                }
+            }
+            _prevRect = mapRect;
+            
             var tileSize = TileSet.TileSize;
             if (_isDrag) //拖拽中
             {
@@ -248,18 +276,22 @@ public partial class DungeonRoomTemplate : TileMap
             else if (!_mouseDown && _isDrag) //松开拖拽的点
             {
                 _isDrag = false;
-                if (_activeArea != null && _dragHasCollision)
+                if (_activeArea != null) //提交拖拽结果
                 {
-                    if (_activePointType == 0)
+                    if (_dragHasCollision)
                     {
-                        _activeArea.Start = _startDragValue;
-                        _activeArea.StartPosition = _startDragPositionValue;
+                        if (_activePointType == 0)
+                        {
+                            _activeArea.Start = _startDragValue;
+                            _activeArea.StartPosition = _startDragPositionValue;
+                        }
+                        else
+                        {
+                            _activeArea.End = _startDragValue;
+                            _activeArea.EndPosition = _startDragPositionValue;
+                        }
                     }
-                    else
-                    {
-                        _activeArea.End = _startDragValue;
-                        _activeArea.EndPosition = _startDragPositionValue;
-                    }
+                    OnDoorAreaChange();
                 }
 
                 _dragHasCollision = false;
@@ -278,6 +310,10 @@ public partial class DungeonRoomTemplate : TileMap
 
     public override void _Draw()
     {
+        if (!Engine.IsEditorHint())
+        {
+            return;
+        }
         if (TileSet != null)
         {
             //绘制地图轮廓
@@ -326,71 +362,81 @@ public partial class DungeonRoomTemplate : TileMap
                 }
             }
 
-            var color2 = new Color(0, 1, 0, 0.8f);
-            //绘制已经存在的
-            foreach (var doorAreaInfo in _doorConfigs)
+            if (_doorConfigs != null)
             {
-                var flag = _hasActivePoint && _activeArea == doorAreaInfo;
-                var color3 = (flag && _activePointType == 0)
-                    ? (_isDrag
-                        ? (_dragHasCollision ? new Color(1, 0, 0, 0.8f) : new Color(0.2F, 0.4117647F, 0.8392157F, 0.8f))
-                        : new Color(1, 1, 1, 0.8f))
-                    : color2;
-                var color4 = (flag && _activePointType == 1)
-                    ? (_isDrag
-                        ? (_dragHasCollision ? new Color(1, 0, 0, 0.8f) : new Color(0.2F, 0.4117647F, 0.8392157F, 0.8f))
-                        : new Color(1, 1, 1, 0.8f))
-                    : color2;
-                switch (doorAreaInfo.Direction)
+                var color2 = new Color(0, 1, 0, 0.8f);
+                //绘制已经存在的
+                foreach (var doorAreaInfo in _doorConfigs)
                 {
-                    case DoorDirection.E:
-                        DrawRect(
-                            new Rect2(
+                    var flag = _hasActivePoint && _activeArea == doorAreaInfo;
+                    var color3 = (flag && _activePointType == 0)
+                        ? (_isDrag
+                            ? (_dragHasCollision
+                                ? new Color(1, 0, 0, 0.8f)
+                                : new Color(0.2F, 0.4117647F, 0.8392157F, 0.8f))
+                            : new Color(1, 1, 1, 0.8f))
+                        : color2;
+                    var color4 = (flag && _activePointType == 1)
+                        ? (_isDrag
+                            ? (_dragHasCollision
+                                ? new Color(1, 0, 0, 0.8f)
+                                : new Color(0.2F, 0.4117647F, 0.8392157F, 0.8f))
+                            : new Color(1, 1, 1, 0.8f))
+                        : color2;
+                    switch (doorAreaInfo.Direction)
+                    {
+                        case DoorDirection.E:
+                            DrawRect(
+                                new Rect2(
+                                    new Vector2(mapRange.Position.X + mapRange.Size.X,
+                                        mapRange.Position.Y + doorAreaInfo.Start + 2), 30,
+                                    doorAreaInfo.End - doorAreaInfo.Start), color2);
+                            DrawCircle(
                                 new Vector2(mapRange.Position.X + mapRange.Size.X,
-                                    mapRange.Position.Y + doorAreaInfo.Start + 2), 30,
-                                doorAreaInfo.End - doorAreaInfo.Start), color2);
-                        DrawCircle(
-                            new Vector2(mapRange.Position.X + mapRange.Size.X,
-                                mapRange.Position.Y + doorAreaInfo.Start + 2), 5, color3);
-                        DrawCircle(
-                            new Vector2(mapRange.Position.X + mapRange.Size.X,
-                                mapRange.Position.Y + doorAreaInfo.End + 2),
-                            5, color4);
-                        break;
-                    case DoorDirection.W:
-                        DrawRect(
-                            new Rect2(
-                                new Vector2(mapRange.Position.X - 30, mapRange.Position.Y + doorAreaInfo.Start + 2),
-                                30, doorAreaInfo.End - doorAreaInfo.Start), color2);
-                        DrawCircle(new Vector2(mapRange.Position.X, mapRange.Position.Y + doorAreaInfo.Start + 2), 5,
-                            color3);
-                        DrawCircle(new Vector2(mapRange.Position.X, mapRange.Position.Y + doorAreaInfo.End + 2), 5,
-                            color4);
-                        break;
-                    case DoorDirection.S:
-                        DrawRect(
-                            new Rect2(
+                                    mapRange.Position.Y + doorAreaInfo.Start + 2), 5, color3);
+                            DrawCircle(
+                                new Vector2(mapRange.Position.X + mapRange.Size.X,
+                                    mapRange.Position.Y + doorAreaInfo.End + 2),
+                                5, color4);
+                            break;
+                        case DoorDirection.W:
+                            DrawRect(
+                                new Rect2(
+                                    new Vector2(mapRange.Position.X - 30, mapRange.Position.Y + doorAreaInfo.Start + 2),
+                                    30, doorAreaInfo.End - doorAreaInfo.Start), color2);
+                            DrawCircle(new Vector2(mapRange.Position.X, mapRange.Position.Y + doorAreaInfo.Start + 2),
+                                5,
+                                color3);
+                            DrawCircle(new Vector2(mapRange.Position.X, mapRange.Position.Y + doorAreaInfo.End + 2), 5,
+                                color4);
+                            break;
+                        case DoorDirection.S:
+                            DrawRect(
+                                new Rect2(
+                                    new Vector2(mapRange.Position.X + doorAreaInfo.Start + 2,
+                                        mapRange.Position.Y + mapRange.Size.Y), doorAreaInfo.End - doorAreaInfo.Start,
+                                    30),
+                                color2);
+                            DrawCircle(
                                 new Vector2(mapRange.Position.X + doorAreaInfo.Start + 2,
-                                    mapRange.Position.Y + mapRange.Size.Y), doorAreaInfo.End - doorAreaInfo.Start, 30),
-                            color2);
-                        DrawCircle(
-                            new Vector2(mapRange.Position.X + doorAreaInfo.Start + 2,
-                                mapRange.Position.Y + mapRange.Size.Y), 5, color3);
-                        DrawCircle(
-                            new Vector2(mapRange.Position.X + doorAreaInfo.End + 2,
-                                mapRange.Position.Y + mapRange.Size.Y),
-                            5, color4);
-                        break;
-                    case DoorDirection.N:
-                        DrawRect(
-                            new Rect2(
-                                new Vector2(mapRange.Position.X + doorAreaInfo.Start + 2, mapRange.Position.Y - 30),
-                                doorAreaInfo.End - doorAreaInfo.Start, 30), color2);
-                        DrawCircle(new Vector2(mapRange.Position.X + doorAreaInfo.Start + 2, mapRange.Position.Y), 5,
-                            color3);
-                        DrawCircle(new Vector2(mapRange.Position.X + doorAreaInfo.End + 2, mapRange.Position.Y), 5,
-                            color4);
-                        break;
+                                    mapRange.Position.Y + mapRange.Size.Y), 5, color3);
+                            DrawCircle(
+                                new Vector2(mapRange.Position.X + doorAreaInfo.End + 2,
+                                    mapRange.Position.Y + mapRange.Size.Y),
+                                5, color4);
+                            break;
+                        case DoorDirection.N:
+                            DrawRect(
+                                new Rect2(
+                                    new Vector2(mapRange.Position.X + doorAreaInfo.Start + 2, mapRange.Position.Y - 30),
+                                    doorAreaInfo.End - doorAreaInfo.Start, 30), color2);
+                            DrawCircle(new Vector2(mapRange.Position.X + doorAreaInfo.Start + 2, mapRange.Position.Y),
+                                5,
+                                color3);
+                            DrawCircle(new Vector2(mapRange.Position.X + doorAreaInfo.End + 2, mapRange.Position.Y), 5,
+                                color4);
+                            break;
+                    }
                 }
             }
         }
@@ -418,12 +464,14 @@ public partial class DungeonRoomTemplate : TileMap
         }
 
         _doorConfigs.Add(doorAreaInfo);
+        OnDoorAreaChange();
     }
 
     //移除门
     private void RemoveDoorArea(DoorAreaInfo doorAreaInfo)
     {
         _doorConfigs.Remove(doorAreaInfo);
+        OnDoorAreaChange();
     }
 
     //检查门是否有碰撞
@@ -556,4 +604,79 @@ public partial class DungeonRoomTemplate : TileMap
 
         return (int)(value / period) * period;
     }
+
+    //地图大小改变
+    private void OnMapRectChange(Rect2 mapRect)
+    {
+        _doorConfigs.Clear();
+        _canPut = false;
+        _hasActivePoint = false;
+        _activeArea = null;
+        OnDoorAreaChange();
+    }
+
+    //区域数据修改
+    private void OnDoorAreaChange()
+    {
+        SaveConfig();
+    }
+
+    //保存配置
+    private void SaveConfig()
+    {
+        //存入本地
+        var path = _currDir + Name + ".json";
+        var config = new JsonSerializerOptions();
+        config.WriteIndented = true;
+        var jsonStr = JsonSerializer.Serialize(_doorConfigs, config);
+        File.WriteAllText(path, jsonStr);
+    }
+
+    //读取配置
+    private void ReadConfig()
+    {
+        var path = _currDir + Name + ".json";
+        if (File.Exists(path))
+        {
+            var mapRect = CalcTileRange();
+            var text = File.ReadAllText(path);
+            try
+            {
+                _doorConfigs = JsonSerializer.Deserialize<List<DoorAreaInfo>>(text);
+                foreach (var doorAreaInfo in _doorConfigs)
+                {
+                    switch (doorAreaInfo.Direction)
+                    {
+                        case DoorDirection.E:
+                            doorAreaInfo.StartPosition = new Vector2(mapRect.Position.X, mapRect.Position.Y + doorAreaInfo.Start);
+                            doorAreaInfo.EndPosition = new Vector2(mapRect.Position.X, mapRect.Position.Y + doorAreaInfo.End);
+                            break;
+                        case DoorDirection.W:
+                            doorAreaInfo.StartPosition = new Vector2(mapRect.Position.X + mapRect.Size.X, mapRect.Position.Y + doorAreaInfo.Start);
+                            doorAreaInfo.EndPosition = new Vector2(mapRect.Position.X + mapRect.Size.X, mapRect.Position.Y + doorAreaInfo.End);
+                            break;
+                        case DoorDirection.S:
+                            doorAreaInfo.StartPosition = new Vector2(mapRect.Position.X + doorAreaInfo.Start, mapRect.Position.Y + mapRect.Size.Y);
+                            doorAreaInfo.EndPosition = new Vector2(mapRect.Position.X + doorAreaInfo.End, mapRect.Position.Y + mapRect.Size.Y);
+                            break;
+                        case DoorDirection.N:
+                            doorAreaInfo.StartPosition = new Vector2(mapRect.Position.X + doorAreaInfo.Start, mapRect.Position.Y);
+                            doorAreaInfo.EndPosition = new Vector2(mapRect.Position.X + doorAreaInfo.End, mapRect.Position.Y);
+                            break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr($"加载房间数据'{path}'发生异常: " + e);
+                _doorConfigs = new List<DoorAreaInfo>();
+            }
+        }
+        else
+        {
+            _doorConfigs = new List<DoorAreaInfo>();
+        }
+    }
+    
+#endif
 }

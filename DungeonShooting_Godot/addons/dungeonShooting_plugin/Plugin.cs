@@ -22,6 +22,10 @@ namespace Plugin
             var script = GD.Load<Script>("res://src/framework/activity/ActivityObjectTemplate.cs");
             var texture = GD.Load<Texture2D>("res://addons/dungeonShooting_plugin/ActivityObject.svg");
             AddCustomType("ActivityObjectTemplate", "Node", script, texture);
+
+            var script2 = GD.Load<Script>("res://src/framework/map/DungeonRoomTemplate.cs");
+            var texture2 = GD.Load<Texture2D>("res://addons/dungeonShooting_plugin/Map.svg");
+            AddCustomType("DungeonRoomTemplate", "TileMap", script2, texture2);
             
             dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/Automation.tscn").Instantiate<Control>();
             AddControlToDock(DockSlot.LeftUr, dock);
@@ -30,6 +34,7 @@ namespace Plugin
         public override void _ExitTree()
         {
             RemoveCustomType("ActivityObjectTemplate");
+            RemoveCustomType("DungeonRoomTemplate");
             RemoveControlFromDocks(dock);
             dock.Free();
         }
