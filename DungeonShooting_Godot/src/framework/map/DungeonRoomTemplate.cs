@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Godot;
+using FileAccess = Godot.FileAccess;
 
 [Tool]
 public partial class DungeonRoomTemplate : TileMap
@@ -263,7 +264,6 @@ public partial class DungeonRoomTemplate : TileMap
                 }
             }
 
-
             if (isClick && _canPut) //判断是否可以创建新的点
             {
                 CreateDoorArea(mapRect);
@@ -319,6 +319,7 @@ public partial class DungeonRoomTemplate : TileMap
             _hasActivePoint = false;
             _activeArea = null;
         }
+        
     }
 
     public override void _Draw()
@@ -653,6 +654,7 @@ public partial class DungeonRoomTemplate : TileMap
         
         var config = new JsonSerializerOptions();
         config.WriteIndented = true;
+        
         var jsonStr = JsonSerializer.Serialize(roomInfo, config);
         File.WriteAllText(path, jsonStr);
     }
@@ -668,7 +670,29 @@ public partial class DungeonRoomTemplate : TileMap
             var text = File.ReadAllText(path);
             try
             {
-                var roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(text);
+                // 下面这句代码在 Godot4.0_rc2的编辑器模式下, 重载脚本会导致编辑器一直报错!, 所以暂时先用下面的方法
+                //var roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(text);
+                
+                //临时解决
+                var obj = Json.ParseString(text).AsGodotDictionary();
+                var roomInfo = new DungeonRoomInfo();
+                var position = obj["Position"].AsGodotDictionary();
+                roomInfo.Position = new SerializeVector2(position["X"].AsInt32(), position["Y"].AsInt32());
+                var size = obj["Size"].AsGodotDictionary();
+                roomInfo.Size = new SerializeVector2(size["X"].AsInt32(), size["Y"].AsInt32());
+                var doorAreaInfos = obj["DoorAreaInfos"].AsGodotArray<Variant>();
+                roomInfo.DoorAreaInfos = new List<DoorAreaInfo>();
+                foreach (var item in doorAreaInfos)
+                {
+                    var temp = item.AsGodotDictionary();
+                    var doorInfo = new DoorAreaInfo();
+                    doorInfo.Direction = (DoorDirection)temp["Direction"].AsInt32();
+                    doorInfo.Start = temp["Start"].AsInt32();
+                    doorInfo.End = temp["End"].AsInt32();
+                    roomInfo.DoorAreaInfos.Add(doorInfo);
+                }
+                
+                //填充 StartPosition 和 EndPosition 数据
                 foreach (var doorAreaInfo in roomInfo.DoorAreaInfos)
                 {
                     switch (doorAreaInfo.Direction)
@@ -691,7 +715,6 @@ public partial class DungeonRoomTemplate : TileMap
                             break;
                     }
                 }
-
                 return roomInfo.DoorAreaInfos;
             }
             catch (Exception e)

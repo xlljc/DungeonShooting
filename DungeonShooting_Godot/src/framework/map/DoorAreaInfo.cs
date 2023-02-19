@@ -1,10 +1,12 @@
 
+using System;
 using System.Text.Json.Serialization;
 using Godot;
 
 /// <summary>
 /// 用于描述门生成区域
 /// </summary>
+[Serializable]
 public class DoorAreaInfo
 {
     /// <summary>

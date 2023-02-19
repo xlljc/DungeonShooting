@@ -1,9 +1,11 @@
 ﻿
+using System;
 using System.Text.Json.Serialization;
 
 /// <summary>
 /// 房间配置文件相关信息, 将会在 RoomConfig.json 中汇总
 /// </summary>
+[Serializable]
 public class DungeonRoomSplit
 {
     /// <summary>

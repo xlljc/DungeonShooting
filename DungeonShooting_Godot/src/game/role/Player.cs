@@ -49,9 +49,11 @@ public partial class Player : Role
         MaxShield = 30;
         Shield = 30;
 
-        // Acceleration = 3000;
-        // Friction = 3000;
-        // MoveSpeed = 800;
+        Acceleration = 3000;
+        Friction = 3000;
+        MoveSpeed = 500;
+        CollisionLayer = 0;
+        CollisionMask = 0;
     }
 
     protected override void Process(float delta)

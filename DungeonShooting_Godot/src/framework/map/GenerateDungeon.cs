@@ -25,7 +25,7 @@ public class GenerateDungeon
     /// <summary>
     /// 生成的房间数量
     /// </summary>
-    private int _maxCount = 15;
+    private int _maxCount = 7;
 
     //用于标记地图上的坐标是否被占用
     private Grid<bool> _roomGrid { get; } = new Grid<bool>();
@@ -44,12 +44,12 @@ public class GenerateDungeon
     private int _roomMaxInterval = 10;
 
     //房间横轴分散程度
-    private float _roomHorizontalMinDispersion = 0.7f;
-    private float _roomHorizontalMaxDispersion = 1.1f;
+    private float _roomHorizontalMinDispersion = 0f;
+    private float _roomHorizontalMaxDispersion = 0f;
 
     //房间纵轴分散程度
-    private float _roomVerticalMinDispersion = 0.7f;
-    private float _roomVerticalMaxDispersion = 1.1f;
+    private float _roomVerticalMinDispersion = 0f;
+    private float _roomVerticalMaxDispersion = 0f;
 
     //区域限制
     private bool _enableLimitRange = true;
@@ -122,11 +122,12 @@ public class GenerateDungeon
             return GenerateRoomErrorCode.RoomFull;
         }
 
-        var randChoose = Utils.RandChoose(GameApplication.Instance.RoomConfig);
-        var room = new RoomInfo(_count, randChoose);
+        //随机选择一个房间
+        var roomSplit = Utils.RandChoose(GameApplication.Instance.RoomConfig);
+        var room = new RoomInfo(_count, roomSplit);
         
         //房间大小
-        room.Size = new Vector2I((int)randChoose.RoomInfo.Size.X, (int)randChoose.RoomInfo.Size.Y);
+        room.Size = new Vector2I((int)roomSplit.RoomInfo.Size.X, (int)roomSplit.RoomInfo.Size.Y);
 
         //随机生成房间 (老流程)
         // room.Size = new Vector2(Utils.RandRangeInt(_roomMinWidth, _roomMaxWidth),
@@ -257,6 +258,7 @@ public class GenerateDungeon
         //这种情况下x轴有重叠
         if (overlapX >= 6)
         {
+            
             //找到重叠区域
             var range = CalcOverlapRange(room.Position.X, room.Position.X + room.Size.X,
                 nextRoom.Position.X, nextRoom.Position.X + nextRoom.Size.X);

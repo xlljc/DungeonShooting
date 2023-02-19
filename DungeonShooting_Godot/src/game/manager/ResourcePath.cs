@@ -31,9 +31,6 @@ public class ResourcePath
     public const string resource_font_cn_font_12_tres = "res://resource/font/cn_font_12.tres";
     public const string resource_font_cn_font_18_tres = "res://resource/font/cn_font_18.tres";
     public const string resource_font_cn_font_36_tres = "res://resource/font/cn_font_36.tres";
-    public const string resource_map_dungeon_1_tmx = "res://resource/map/dungeon_1.tmx";
-    public const string resource_map_dungeon_test_tmx = "res://resource/map/dungeon_test.tmx";
-    public const string resource_map_itchioDungeonTileset4_tsx = "res://resource/map/itch-io-DungeonTileset4.tsx";
     public const string resource_map_RoomConfig_json = "res://resource/map/RoomConfig.json";
     public const string resource_map_tiledata_Room1_json = "res://resource/map/tiledata/Room1.json";
     public const string resource_map_tiledata_Room2_json = "res://resource/map/tiledata/Room2.json";

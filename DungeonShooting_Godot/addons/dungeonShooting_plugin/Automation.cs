@@ -14,7 +14,7 @@ public partial class Automation : Control
 	//支持后缀
 	private string[] suffix =
 	{
-		".png", ".jpg", ".txt", ".json", ".ini", ".tscn", ".tres", ".otf", ".gdshader", ".tmx", ".tsx", ".ogg", ".mp3", ".wav", ".svg"
+		".png", ".jpg", ".txt", ".json", ".ini", ".tscn", ".tres", ".otf", ".gdshader", ".ogg", ".mp3", ".wav", ".svg"
 	};
 	//排除第一层的文件夹
 	private string[] exclude =
