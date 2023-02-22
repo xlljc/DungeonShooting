@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -454,6 +455,43 @@ public class GenerateDungeon
         return true;
     }
 
+    /// <summary>
+    /// 查找房间的连接通道, 函数返回是否找到对应的门, 通过 result 返回 x/y 轴坐标
+    /// </summary>
+    /// <param name="room">第一个房间</param>
+    /// <param name="nextRoom">第二个房间</param>
+    /// <param name="direction">第一个房间连接方向</param>
+    /// <param name="result">返回连接的 x/y 轴坐标</param>
+    private bool FindPassage(RoomInfo room, RoomInfo nextRoom, DoorDirection direction, out int result)
+    {
+        var room1 = room.RoomSplit.RoomInfo;
+        var room2 = nextRoom.RoomSplit.RoomInfo;
+        
+        foreach (var doorAreaInfo1 in room1.DoorAreaInfos)
+        {
+            if (doorAreaInfo1.Direction == direction)
+            {
+
+                switch (direction)
+                {
+                    case DoorDirection.E: 
+                        break;
+                    case DoorDirection.W:
+                        break;
+                    case DoorDirection.S: //第二个门向↑
+                        
+                        break;
+                    case DoorDirection.N: //第二个门向↓
+                        
+                        break;
+                }
+            }
+        }
+
+        result = 0;
+        return false;
+    }
+    
     //用于计算重叠区域坐标, 可以理解为一维轴上4个点的中间两个点
     private Vector2 CalcOverlapRange(float start1, float end1, float start2, float end2)
     {
