@@ -100,7 +100,7 @@ public partial class DungeonRoomTemplate : TileMap
             {
                 if (!initConfigs)
                 {
-                    OnMapRectChange(mapRect);
+                    OnMapRectChange();
                 }
             }
             _prevRect = mapRect;
@@ -611,7 +611,7 @@ public partial class DungeonRoomTemplate : TileMap
     }
 
     //地图大小改变
-    private void OnMapRectChange(Rect2 mapRect)
+    private void OnMapRectChange()
     {
         _doorConfigs.Clear();
         _canPut = false;
@@ -708,7 +708,9 @@ public partial class DungeonRoomTemplate : TileMap
         }
     }
 
-    //反序列化 DungeonRoomInfo
+    /// <summary>
+    /// 反序列化 DungeonRoomInfo
+    /// </summary>
     public static DungeonRoomInfo DeserializeDungeonRoomInfo(string text)
     {
         // 下面这句代码在 Godot4.0_rc2的编辑器模式下, 重载脚本会导致编辑器一直报错!, 所以暂时先用下面的方法
