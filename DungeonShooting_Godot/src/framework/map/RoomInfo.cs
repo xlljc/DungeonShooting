@@ -19,17 +19,17 @@ public class RoomInfo
     public int Id;
 
     /// <summary>
-    /// 生成该房间使用的模板
+    /// 生成该房间使用的配置数据
     /// </summary>
     public DungeonRoomSplit RoomSplit;
     
     /// <summary>
-    /// 房间大小
+    /// 房间大小, 单位: 格
     /// </summary>
     public Vector2I Size;
 
     /// <summary>
-    /// 房间位置
+    /// 房间位置, 单位: 格
     /// </summary>
     public Vector2I Position;
     

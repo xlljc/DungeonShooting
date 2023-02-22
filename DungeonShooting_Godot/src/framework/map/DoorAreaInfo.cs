@@ -13,22 +13,22 @@ public class DoorAreaInfo
     [JsonInclude]
     public DoorDirection Direction;
     /// <summary>
-    /// 起始位置, 相对 tilemap 的横/纵轴原点, 单位像素
+    /// 起始位置, 相对 tilemap 的横/纵轴原点, 单位: 像素
     /// </summary>
     [JsonInclude]
     public float Start = 0;
     /// <summary>
-    /// 结束位置, 相对 tilemap 的横/纵轴原点, 单位像素
+    /// 结束位置, 相对 tilemap 的横/纵轴原点, 单位: 像素
     /// </summary>
     [JsonInclude]
     public float End = 1;
     
     /// <summary>
-    /// 起始点坐标, 该坐标位世界坐标, 单位像素, 不参与序列化与反序列化
+    /// 起始点坐标, 该坐标位世界坐标, 单位: 像素, 不参与序列化与反序列化
     /// </summary>
     public Vector2 StartPosition;
     /// <summary>
-    /// 结束点坐标, 该坐标位世界坐标, 单位像素, 不参与序列化与反序列化
+    /// 结束点坐标, 该坐标位世界坐标, 单位: 像素, 不参与序列化与反序列化
     /// </summary>
     public Vector2 EndPosition;
 
