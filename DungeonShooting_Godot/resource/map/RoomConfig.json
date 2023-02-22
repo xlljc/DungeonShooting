@@ -11,7 +11,28 @@
         "X": 21,
         "Y": 21
       },
-      "DoorAreaInfos": []
+      "DoorAreaInfos": [
+        {
+          "Direction": 3,
+          "Start": 16,
+          "End": 80
+        },
+        {
+          "Direction": 2,
+          "Start": 64,
+          "End": 272
+        },
+        {
+          "Direction": 1,
+          "Start": 16,
+          "End": 320
+        },
+        {
+          "Direction": 3,
+          "Start": 208,
+          "End": 320
+        }
+      ]
     }
   }
 ]

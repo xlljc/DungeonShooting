@@ -259,7 +259,6 @@ public class GenerateDungeon
         //这种情况下x轴有重叠
         if (overlapX >= 6)
         {
-            
             //找到重叠区域
             var range = CalcOverlapRange(room.Position.X, room.Position.X + room.Size.X,
                 nextRoom.Position.X, nextRoom.Position.X + nextRoom.Size.X);
@@ -267,6 +266,8 @@ public class GenerateDungeon
 
             if (room.Position.Y < nextRoom.Position.Y) //room在上, nextRoom在下
             {
+                FindPassage(room, nextRoom, DoorDirection.S, out var result);
+                
                 roomDoor.Direction = DoorDirection.S;
                 nextRoomDoor.Direction = DoorDirection.N;
                 roomDoor.OriginPosition = new Vector2(x, room.Position.Y + room.Size.Y);
@@ -274,6 +275,8 @@ public class GenerateDungeon
             }
             else //room在下, nextRoom在上
             {
+                FindPassage(room, nextRoom, DoorDirection.N, out var result);
+                
                 roomDoor.Direction = DoorDirection.N;
                 nextRoomDoor.Direction = DoorDirection.S;
                 roomDoor.OriginPosition = new Vector2(x, room.Position.Y);
@@ -480,6 +483,21 @@ public class GenerateDungeon
                         break;
                     case DoorDirection.S: //第二个门向↑
                         
+                        foreach (var doorAreaInfo2 in room2.DoorAreaInfos)
+                        {
+                            if (doorAreaInfo2.Direction == DoorDirection.N)
+                            {
+                                var range = CalcOverlapRange(
+                                    room.Position.X + doorAreaInfo1.Start, room.Position.X + doorAreaInfo1.End,
+                                    nextRoom.Position.X + doorAreaInfo2.Start, nextRoom.Position.X + doorAreaInfo2.End
+                                    );
+                                if (range.Y - range.X >= 16 * 4)
+                                {
+                                    GD.Print("找打了!!!");
+                                }
+                            }
+                        }
+
                         break;
                     case DoorDirection.N: //第二个门向↓
                         
@@ -492,7 +510,9 @@ public class GenerateDungeon
         return false;
     }
     
-    //用于计算重叠区域坐标, 可以理解为一维轴上4个点的中间两个点
+    /// <summary>
+    /// 用于计算重叠区域坐标, 可以理解为一维轴上4个点的中间两个点, 返回的x为起始点, y为结束点
+    /// </summary>
     private Vector2 CalcOverlapRange(float start1, float end1, float start2, float end2)
     {
         return new Vector2(Mathf.Max(start1, start2), Mathf.Min(end1, end2));
@@ -545,7 +565,7 @@ public class GenerateDungeon
         return true;
     }
 
-    //将两个门间的过道占用数据存入RoomGrid, 该重载
+    //将两个门间的过道占用数据存入RoomGrid, 该重载加入拐角点
     private bool AddCorridorToGridRange(RoomDoorInfo door1, RoomDoorInfo door2, Vector2 cross)
     {
         var point1 = door1.OriginPosition;

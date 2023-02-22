@@ -674,25 +674,7 @@ public partial class DungeonRoomTemplate : TileMap
                 //填充 StartPosition 和 EndPosition 数据
                 foreach (var doorAreaInfo in roomInfo.DoorAreaInfos)
                 {
-                    switch (doorAreaInfo.Direction)
-                    {
-                        case DoorDirection.E:
-                            doorAreaInfo.StartPosition = new Vector2(mapRect.Position.X, mapRect.Position.Y + doorAreaInfo.Start);
-                            doorAreaInfo.EndPosition = new Vector2(mapRect.Position.X, mapRect.Position.Y + doorAreaInfo.End);
-                            break;
-                        case DoorDirection.W:
-                            doorAreaInfo.StartPosition = new Vector2(mapRect.Position.X + mapRect.Size.X, mapRect.Position.Y + doorAreaInfo.Start);
-                            doorAreaInfo.EndPosition = new Vector2(mapRect.Position.X + mapRect.Size.X, mapRect.Position.Y + doorAreaInfo.End);
-                            break;
-                        case DoorDirection.S:
-                            doorAreaInfo.StartPosition = new Vector2(mapRect.Position.X + doorAreaInfo.Start, mapRect.Position.Y + mapRect.Size.Y);
-                            doorAreaInfo.EndPosition = new Vector2(mapRect.Position.X + doorAreaInfo.End, mapRect.Position.Y + mapRect.Size.Y);
-                            break;
-                        case DoorDirection.N:
-                            doorAreaInfo.StartPosition = new Vector2(mapRect.Position.X + doorAreaInfo.Start, mapRect.Position.Y);
-                            doorAreaInfo.EndPosition = new Vector2(mapRect.Position.X + doorAreaInfo.End, mapRect.Position.Y);
-                            break;
-                    }
+                    doorAreaInfo.CalcPosition(mapRect.Position, mapRect.Size);
                 }
                 return roomInfo.DoorAreaInfos;
             }
