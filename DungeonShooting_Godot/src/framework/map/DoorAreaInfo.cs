@@ -21,7 +21,7 @@ public class DoorAreaInfo
     /// 结束位置, 相对 tilemap 的横/纵轴原点, 单位: 像素
     /// </summary>
     [JsonInclude]
-    public float End = 1;
+    public float End = 16;
     
     /// <summary>
     /// 起始点坐标, 该坐标位世界坐标, 单位: 像素, 不参与序列化与反序列化

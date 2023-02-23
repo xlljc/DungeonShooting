@@ -12,6 +12,11 @@ public class GenerateDungeon
     /// 过道宽度
     /// </summary>
     public const int CorridorWidth = 4;
+
+    /// <summary>
+    /// tilemap 网格大小
+    /// </summary>
+    public const int TileCellSize = 16;
     
     /// <summary>
     /// 所有生成的房间, 调用过 Generate() 函数才能获取到值
@@ -470,42 +475,59 @@ public class GenerateDungeon
         var room1 = room.RoomSplit.RoomInfo;
         var room2 = nextRoom.RoomSplit.RoomInfo;
         
+        //用于存储符合生成条件的区域
+        List<Vector2> rangeList = null;
+        
         foreach (var doorAreaInfo1 in room1.DoorAreaInfos)
         {
             if (doorAreaInfo1.Direction == direction)
             {
-
-                switch (direction)
+                //第二个门的方向
+                var direction2 = GetReverseDirection(direction);
+                
+                foreach (var doorAreaInfo2 in room2.DoorAreaInfos)
                 {
-                    case DoorDirection.E: 
-                        break;
-                    case DoorDirection.W:
-                        break;
-                    case DoorDirection.S: //第二个门向↑
-                        
-                        foreach (var doorAreaInfo2 in room2.DoorAreaInfos)
+                    if (doorAreaInfo2.Direction == direction2)
+                    {
+                        Vector2 range;
+                        if (direction == DoorDirection.E || direction == DoorDirection.W) //第二个门向← 或者 第二个门向→
                         {
-                            if (doorAreaInfo2.Direction == DoorDirection.N)
-                            {
-                                var range = CalcOverlapRange(
-                                    room.Position.X + doorAreaInfo1.Start, room.Position.X + doorAreaInfo1.End,
-                                    nextRoom.Position.X + doorAreaInfo2.Start, nextRoom.Position.X + doorAreaInfo2.End
-                                    );
-                                if (range.Y - range.X >= 16 * 4)
-                                {
-                                    GD.Print("找打了!!!");
-                                }
-                            }
+                            range = CalcOverlapRange(
+                                room.Position.Y * TileCellSize + doorAreaInfo1.Start, room.Position.Y * TileCellSize + doorAreaInfo1.End,
+                                nextRoom.Position.Y * TileCellSize + doorAreaInfo2.Start, nextRoom.Position.Y * TileCellSize + doorAreaInfo2.End
+                            );
                         }
+                        else //第二个门向↑ 或者 第二个门向↓
+                        {
+                            range = CalcOverlapRange(
+                                room.Position.X * TileCellSize + doorAreaInfo1.Start, room.Position.X * TileCellSize + doorAreaInfo1.End,
+                                nextRoom.Position.X * TileCellSize + doorAreaInfo2.Start, nextRoom.Position.X * TileCellSize + doorAreaInfo2.End
+                            );
+                        }
+                        //交集范围够生成门
+                        if (range.Y - range.X >= CorridorWidth * TileCellSize)
+                        {
+                            if (rangeList == null)
+                            {
+                                rangeList = new List<Vector2>();
+                            }
 
-                        break;
-                    case DoorDirection.N: //第二个门向↓
-                        
-                        break;
+                            range.Y -= CorridorWidth * TileCellSize;
+                            rangeList.Add(range);
+                        }
+                    }
                 }
             }
         }
 
+        if (rangeList != null)
+        {
+            //随机选择一个
+            var data = Utils.RandChoose(rangeList);
+            result = Utils.RandRangeInt((int)data.X, (int)data.Y);
+            return true;
+        }
+        
         result = 0;
         return false;
     }
@@ -518,7 +540,8 @@ public class GenerateDungeon
         return new Vector2(Mathf.Max(start1, start2), Mathf.Min(end1, end2));
     }
 
-    //返回参数方向的反方向
+    //返回指定方向的反方向
+    //0上, 1右, 2下, 3左
     private int GetReverseDirection(int direction)
     {
         switch (direction)
@@ -530,6 +553,24 @@ public class GenerateDungeon
         }
 
         return 2;
+    }
+    
+    //返回参数方向的反方向
+    private DoorDirection GetReverseDirection(DoorDirection direction)
+    {
+        switch (direction)
+        {
+            case DoorDirection.E:
+                return DoorDirection.W;
+            case DoorDirection.W:
+                return DoorDirection.E;
+            case DoorDirection.S:
+                return DoorDirection.N;
+            case DoorDirection.N:
+                return DoorDirection.S;
+        }
+
+        return DoorDirection.S;
     }
 
     //将两个门间的过道占用数据存入RoomGrid
