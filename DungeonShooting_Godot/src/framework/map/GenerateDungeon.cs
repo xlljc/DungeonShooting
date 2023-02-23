@@ -31,7 +31,7 @@ public class GenerateDungeon
     /// <summary>
     /// 生成的房间数量
     /// </summary>
-    private int _maxCount = 7;
+    private int _maxCount = 15;
 
     //用于标记地图上的坐标是否被占用
     private Grid<bool> _roomGrid { get; } = new Grid<bool>();
@@ -50,12 +50,12 @@ public class GenerateDungeon
     private int _roomMaxInterval = 10;
 
     //房间横轴分散程度
-    private float _roomHorizontalMinDispersion = 0f;
-    private float _roomHorizontalMaxDispersion = 0f;
+    private float _roomHorizontalMinDispersion = 0.7f;
+    private float _roomHorizontalMaxDispersion = 1.1f;
 
     //房间纵轴分散程度
-    private float _roomVerticalMinDispersion = 0f;
-    private float _roomVerticalMaxDispersion = 0f;
+    private float _roomVerticalMinDispersion = 0.7f;
+    private float _roomVerticalMaxDispersion = 1.1f;
 
     //区域限制
     private bool _enableLimitRange = true;
@@ -134,10 +134,6 @@ public class GenerateDungeon
         
         //房间大小
         room.Size = new Vector2I((int)roomSplit.RoomInfo.Size.X, (int)roomSplit.RoomInfo.Size.Y);
-
-        //随机生成房间 (老流程)
-        // room.Size = new Vector2(Utils.RandRangeInt(_roomMinWidth, _roomMaxWidth),
-        //     Utils.RandRangeInt(_roomMinHeight, _roomMaxHeight));
 
         if (prevRoomInfo != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
         {
@@ -279,6 +275,8 @@ public class GenerateDungeon
             }
         }
         
+        //这种情况下x和y轴都没有重叠, 那么就只能生成拐角通道了
+        
         var overlapX = Mathf.Min(room.Position.X + room.Size.X, nextRoom.Position.X + nextRoom.Size.X) -
                        Mathf.Max(room.Position.X, nextRoom.Position.X);
         var overlapY = Mathf.Min(room.Position.Y + room.Size.Y, nextRoom.Position.Y + nextRoom.Size.Y) -
@@ -289,8 +287,7 @@ public class GenerateDungeon
 
         //焦点
         Vector2 cross;
-
-        //这种情况下x和y轴都没有重叠, 那么就只能生成拐角通道了
+        
         if (room.Position.X > nextRoom.Position.X)
         {
             if (room.Position.Y > nextRoom.Position.Y)
