@@ -93,8 +93,8 @@ public class GenerateDungeon
         //如果房间数量不够, 就一直生成
         while (_count < _maxCount)
         {
-            var room = Utils.RandChoose(RoomInfos);
-            var errorCode = GenerateRoom(room, Utils.RandRangeInt(0, 3), out var nextRoom);
+            var room = Utils.RandomChoose(RoomInfos);
+            var errorCode = GenerateRoom(room, Utils.RandomRangeInt(0, 3), out var nextRoom);
             if (errorCode == GenerateRoomErrorCode.NoError)
             {
                 _failCount = 0;
@@ -129,7 +129,7 @@ public class GenerateDungeon
         }
 
         //随机选择一个房间
-        var roomSplit = Utils.RandChoose(GameApplication.Instance.RoomConfig);
+        var roomSplit = Utils.RandomChoose(GameApplication.Instance.RoomConfig);
         var room = new RoomInfo(_count, roomSplit);
         
         //房间大小
@@ -142,17 +142,17 @@ public class GenerateDungeon
         if (prevRoomInfo != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
         {
             //房间间隔
-            var space = Utils.RandRangeInt(_roomMinInterval, _roomMaxInterval);
+            var space = Utils.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
             //中心偏移
             int offset;
             if (direction == 0 || direction == 2)
             {
-                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
+                offset = Utils.RandomRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
                     (int)(prevRoomInfo.Size.X * _roomVerticalMaxDispersion));
             }
             else
             {
-                offset = Utils.RandRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
+                offset = Utils.RandomRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
                     (int)(prevRoomInfo.Size.Y * _roomHorizontalMaxDispersion));
             }
 
@@ -222,11 +222,11 @@ public class GenerateDungeon
         }
 
         //这条线有一定概率不生成下一个房间
-        if (Utils.RandRangeInt(0, 2) != 0)
+        if (Utils.RandomRangeInt(0, 2) != 0)
         {
             while (dirList.Count > 0)
             {
-                var randDir = Utils.RandChoose(dirList);
+                var randDir = Utils.RandomChoose(dirList);
                 GenerateRoom(room, randDir, out var nextRoom);
                 if (nextRoom == null)
                 {
@@ -259,8 +259,8 @@ public class GenerateDungeon
         nextRoomDoor.ConnectRoom = room;
         nextRoomDoor.ConnectDoor = roomDoor;
 
-        
-        if (Utils.RandBoolean())
+        //先寻找直通门
+        if (Utils.RandomBoolean())
         {
             //直行通道, 优先横轴
             if (TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor)
@@ -295,7 +295,7 @@ public class GenerateDungeon
         {
             if (room.Position.Y > nextRoom.Position.Y)
             {
-                if (Utils.RandBoolean())
+                if (Utils.RandomBoolean())
                 {
                     roomDoor.Direction = DoorDirection.N; //↑
                     nextRoomDoor.Direction = DoorDirection.E; //→
@@ -318,7 +318,7 @@ public class GenerateDungeon
             }
             else
             {
-                if (Utils.RandBoolean())
+                if (Utils.RandomBoolean())
                 {
                     roomDoor.Direction = DoorDirection.S; //↓
                     nextRoomDoor.Direction = DoorDirection.E; //→
@@ -345,7 +345,7 @@ public class GenerateDungeon
         {
             if (room.Position.Y > nextRoom.Position.Y)
             {
-                if (Utils.RandBoolean())
+                if (Utils.RandomBoolean())
                 {
                     roomDoor.Direction = DoorDirection.E; //→
                     nextRoomDoor.Direction = DoorDirection.S; //↓
@@ -368,7 +368,7 @@ public class GenerateDungeon
             }
             else
             {
-                if (Utils.RandBoolean())
+                if (Utils.RandomBoolean())
                 {
                     roomDoor.Direction = DoorDirection.E; //→
                     nextRoomDoor.Direction = DoorDirection.N; //↑
@@ -408,6 +408,9 @@ public class GenerateDungeon
         return true;
     }
 
+    /// <summary>
+    /// 尝试寻找横轴方向上两个房间的连通的门, 只查找直线通道, 返回是否找到
+    /// </summary>
     private bool TryConnectHorizontalDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
     {
         var overlapX = Mathf.Min(room.Position.X + room.Size.X, nextRoom.Position.X + nextRoom.Size.X) -
@@ -416,45 +419,50 @@ public class GenerateDungeon
         if (overlapX >= 6)
         {
             //找到重叠区域
-            var range = CalcOverlapRange(room.Position.X, room.Position.X + room.Size.X,
-                nextRoom.Position.X, nextRoom.Position.X + nextRoom.Size.X);
-            var x = Utils.RandRangeInt((int)range.X + 1, (int)range.Y - CorridorWidth - 1);
-
-            if (room.Position.Y < nextRoom.Position.Y) //room在上, nextRoom在下
+            var rangeList = FindPassage(room, nextRoom, 
+                room.Position.Y < nextRoom.Position.Y ? DoorDirection.S : DoorDirection.N);
+            
+            while (rangeList.Count > 0)
             {
-                FindPassage(room, nextRoom, DoorDirection.S);
+                //找到重叠区域
+                var range = Utils.RandomChooseAndRemove(rangeList);
+                var x = Utils.RandomRangeInt(range.X, range.Y);
                 
-                roomDoor.Direction = DoorDirection.S;
-                nextRoomDoor.Direction = DoorDirection.N;
-                roomDoor.OriginPosition = new Vector2(x, room.Position.Y + room.Size.Y);
-                nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.Y);
-            }
-            else //room在下, nextRoom在上
-            {
-                FindPassage(room, nextRoom, DoorDirection.N);
-                
-                roomDoor.Direction = DoorDirection.N;
-                nextRoomDoor.Direction = DoorDirection.S;
-                roomDoor.OriginPosition = new Vector2(x, room.Position.Y);
-                nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.Y + nextRoom.Size.Y);
-            }
+                if (room.Position.Y < nextRoom.Position.Y) //room在上, nextRoom在下
+                {
+                    roomDoor.Direction = DoorDirection.S;
+                    nextRoomDoor.Direction = DoorDirection.N;
+                    roomDoor.OriginPosition = new Vector2(x, room.Position.Y + room.Size.Y);
+                    nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.Y);
+                }
+                else //room在下, nextRoom在上
+                {
+                    roomDoor.Direction = DoorDirection.N;
+                    nextRoomDoor.Direction = DoorDirection.S;
+                    roomDoor.OriginPosition = new Vector2(x, room.Position.Y);
+                    nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.Y + nextRoom.Size.Y);
+                }
 
-            //判断门之间的通道是否有物体碰到
-            if (!AddCorridorToGridRange(roomDoor, nextRoomDoor))
-            {
-                //此门不能连通
-                return false;
-            }
+                //判断门之间的通道是否有物体碰到
+                if (!AddCorridorToGridRange(roomDoor, nextRoomDoor))
+                {
+                    //此门不能连通
+                    continue;
+                }
 
-            //没有撞到物体
-            room.Doors.Add(roomDoor);
-            nextRoom.Doors.Add(nextRoomDoor);
-            return true;
+                //没有撞到物体
+                room.Doors.Add(roomDoor);
+                nextRoom.Doors.Add(nextRoomDoor);
+                return true;
+            }
         }
         
         return false;
     }
 
+    /// <summary>
+    /// 尝试寻找纵轴方向上两个房间的连通的门, 只查找直线通道, 返回是否找到
+    /// </summary>
     private bool TryConnectVerticalDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
     {
         var overlapY = Mathf.Min(room.Position.Y + room.Size.Y, nextRoom.Position.Y + nextRoom.Size.Y) -
@@ -463,36 +471,42 @@ public class GenerateDungeon
         if (overlapY >= 6)
         {
             //找到重叠区域
-            var range = CalcOverlapRange(room.Position.Y, room.Position.Y + room.Size.Y,
-                nextRoom.Position.Y, nextRoom.Position.Y + nextRoom.Size.Y);
-            var y = Utils.RandRangeInt((int)range.X + 1, (int)range.Y - CorridorWidth - 1);
+            var rangeList = FindPassage(room, nextRoom, 
+                room.Position.X < nextRoom.Position.X ? DoorDirection.E : DoorDirection.W);
 
-            if (room.Position.X < nextRoom.Position.X) //room在左, nextRoom在右
+            while (rangeList.Count > 0)
             {
-                roomDoor.Direction = DoorDirection.E;
-                nextRoomDoor.Direction = DoorDirection.W;
-                roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X, y);
-                nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X, y);
-            }
-            else //room在右, nextRoom在左
-            {
-                roomDoor.Direction = DoorDirection.W;
-                nextRoomDoor.Direction = DoorDirection.E;
-                roomDoor.OriginPosition = new Vector2(room.Position.X, y);
-                nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X, y);
-            }
+                //找到重叠区域
+                var range = Utils.RandomChooseAndRemove(rangeList);
+                var y = Utils.RandomRangeInt(range.X, range.Y);
+                
+                if (room.Position.X < nextRoom.Position.X) //room在左, nextRoom在右
+                {
+                    roomDoor.Direction = DoorDirection.E;
+                    nextRoomDoor.Direction = DoorDirection.W;
+                    roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X, y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X, y);
+                }
+                else //room在右, nextRoom在左
+                {
+                    roomDoor.Direction = DoorDirection.W;
+                    nextRoomDoor.Direction = DoorDirection.E;
+                    roomDoor.OriginPosition = new Vector2(room.Position.X, y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X, y);
+                }
 
-            //判断门之间的通道是否有物体碰到
-            if (!AddCorridorToGridRange(roomDoor, nextRoomDoor))
-            {
-                //此门不能连通
-                return false;
-            }
+                //判断门之间的通道是否有物体碰到
+                if (!AddCorridorToGridRange(roomDoor, nextRoomDoor))
+                {
+                    //此门不能连通
+                    continue;
+                }
 
-            //没有撞到物体
-            room.Doors.Add(roomDoor);
-            nextRoom.Doors.Add(nextRoomDoor);
-            return true;
+                //没有撞到物体
+                room.Doors.Add(roomDoor);
+                nextRoom.Doors.Add(nextRoomDoor);
+                return true;
+            }
         }
 
         return false;
@@ -505,13 +519,13 @@ public class GenerateDungeon
     /// <param name="nextRoom">第二个房间</param>
     /// <param name="direction">第一个房间连接方向</param>
     /// <param name="result">返回连接的 x/y 轴坐标</param>
-    private List<Vector2> FindPassage(RoomInfo room, RoomInfo nextRoom, DoorDirection direction)
+    private List<Vector2I> FindPassage(RoomInfo room, RoomInfo nextRoom, DoorDirection direction)
     {
         var room1 = room.RoomSplit.RoomInfo;
         var room2 = nextRoom.RoomSplit.RoomInfo;
         
         //用于存储符合生成条件的区域
-        var rangeList = new List<Vector2>();
+        var rangeList = new List<Vector2I>();
         
         foreach (var doorAreaInfo1 in room1.DoorAreaInfos)
         {
@@ -542,8 +556,7 @@ public class GenerateDungeon
                         //交集范围够生成门
                         if (range.Y - range.X >= CorridorWidth * TileCellSize)
                         {
-                            range.Y -= CorridorWidth * TileCellSize;
-                            rangeList.Add(range);
+                            rangeList.Add(new Vector2I((int)(range.X / 16), (int)(range.Y / 16) - CorridorWidth));
                         }
                     }
                 }

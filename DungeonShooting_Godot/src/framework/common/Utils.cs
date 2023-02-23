@@ -10,7 +10,7 @@ public static class Utils
     /// <summary>
     /// 返回随机 boolean 值
     /// </summary>
-    public static bool RandBoolean()
+    public static bool RandomBoolean()
     {
         return GD.Randf() >= 0.5f;
     }
@@ -18,7 +18,7 @@ public static class Utils
     /// <summary>
     /// 返回一个区间内的随机小数
     /// </summary>
-    public static float RandfRange(float min, float max)
+    public static float RandomRangeFloat(float min, float max)
     {
         if (min == max) return min;
         if (min > max)
@@ -29,7 +29,7 @@ public static class Utils
     /// <summary>
     /// 返回一个区间内的随机整数
     /// </summary>
-    public static int RandRangeInt(int min, int max)
+    public static int RandomRangeInt(int min, int max)
     {
         if (min == max) return min;
         if (min > max)
@@ -40,29 +40,48 @@ public static class Utils
     /// <summary>
     /// 随机返回其中一个参数
     /// </summary>
-    public static T RandChoose<T>(params T[] list)
+    public static T RandomChoose<T>(params T[] list)
     {
         if (list.Length == 0)
         {
             return default;
         }
 
-        return list[RandRangeInt(0, list.Length - 1)];
+        return list[RandomRangeInt(0, list.Length - 1)];
     }
 
     /// <summary>
     /// 随机返回集合中的一个元素
     /// </summary>
-    public static T RandChoose<T>(List<T> list)
+    public static T RandomChoose<T>(List<T> list)
     {
         if (list.Count == 0)
         {
             return default;
         }
 
-        return list[RandRangeInt(0, list.Count - 1)];
+        return list[RandomRangeInt(0, list.Count - 1)];
     }
 
+    /// <summary>
+    /// 随机返回集合中的一个元素, 并将其从集合中移除
+    /// </summary>
+    public static T RandomChooseAndRemove<T>(List<T> list)
+    {
+        if (list.Count == 0)
+        {
+            return default;
+        }
+
+        var index = RandomRangeInt(0, list.Count - 1);
+        var result = list[index];
+        list.RemoveAt(index);
+        return result;
+    }
+    
+    /// <summary>
+    /// 根据四个点计算出矩形
+    /// </summary>
     public static Rect2 CalcRect(float start1, float end1, float start2, float end2)
     {
         return new Rect2(
