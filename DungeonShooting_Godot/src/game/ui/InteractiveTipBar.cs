@@ -30,7 +30,6 @@ public partial class InteractiveTipBar : Node2D
     /// </summary>
     /// <param name="target">所在坐标</param>
     /// <param name="icon">显示图标</param>
-    /// <param name="message">显示文本</param>
 	public void ShowBar(ActivityObject target, string icon)
     {
         Target = target;

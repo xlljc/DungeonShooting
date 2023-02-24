@@ -275,6 +275,116 @@ public class GenerateDungeon
             }
         }
         
+        //包含拐角的通道
+        return TryConnectCrossDoor(room, roomDoor, nextRoom, nextRoomDoor);
+    }
+
+    /// <summary>
+    /// 尝试寻找横轴方向上两个房间的连通的门, 只查找直线通道, 返回是否找到
+    /// </summary>
+    private bool TryConnectHorizontalDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
+    {
+        var overlapX = Mathf.Min(room.Position.X + room.Size.X, nextRoom.Position.X + nextRoom.Size.X) -
+                       Mathf.Max(room.Position.X, nextRoom.Position.X);
+        //这种情况下x轴有重叠
+        if (overlapX >= 6)
+        {
+            //找到重叠区域
+            var rangeList = FindPassage(room, nextRoom, 
+                room.Position.Y < nextRoom.Position.Y ? DoorDirection.S : DoorDirection.N);
+            
+            while (rangeList.Count > 0)
+            {
+                //找到重叠区域
+                var range = Utils.RandomChooseAndRemove(rangeList);
+                var x = Utils.RandomRangeInt(range.X, range.Y);
+                
+                if (room.Position.Y < nextRoom.Position.Y) //room在上, nextRoom在下
+                {
+                    roomDoor.Direction = DoorDirection.S;
+                    nextRoomDoor.Direction = DoorDirection.N;
+                    roomDoor.OriginPosition = new Vector2(x, room.Position.Y + room.Size.Y);
+                    nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.Y);
+                }
+                else //room在下, nextRoom在上
+                {
+                    roomDoor.Direction = DoorDirection.N;
+                    nextRoomDoor.Direction = DoorDirection.S;
+                    roomDoor.OriginPosition = new Vector2(x, room.Position.Y);
+                    nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.Y + nextRoom.Size.Y);
+                }
+
+                //判断门之间的通道是否有物体碰到
+                if (!AddCorridorToGridRange(roomDoor, nextRoomDoor))
+                {
+                    //此门不能连通
+                    continue;
+                }
+
+                //没有撞到物体
+                room.Doors.Add(roomDoor);
+                nextRoom.Doors.Add(nextRoomDoor);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    /// <summary>
+    /// 尝试寻找纵轴方向上两个房间的连通的门, 只查找直线通道, 返回是否找到
+    /// </summary>
+    private bool TryConnectVerticalDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
+    {
+        var overlapY = Mathf.Min(room.Position.Y + room.Size.Y, nextRoom.Position.Y + nextRoom.Size.Y) -
+                       Mathf.Max(room.Position.Y, nextRoom.Position.Y);
+        //这种情况下y轴有重叠
+        if (overlapY >= 6)
+        {
+            //找到重叠区域
+            var rangeList = FindPassage(room, nextRoom, 
+                room.Position.X < nextRoom.Position.X ? DoorDirection.E : DoorDirection.W);
+
+            while (rangeList.Count > 0)
+            {
+                //找到重叠区域
+                var range = Utils.RandomChooseAndRemove(rangeList);
+                var y = Utils.RandomRangeInt(range.X, range.Y);
+                
+                if (room.Position.X < nextRoom.Position.X) //room在左, nextRoom在右
+                {
+                    roomDoor.Direction = DoorDirection.E;
+                    nextRoomDoor.Direction = DoorDirection.W;
+                    roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X, y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X, y);
+                }
+                else //room在右, nextRoom在左
+                {
+                    roomDoor.Direction = DoorDirection.W;
+                    nextRoomDoor.Direction = DoorDirection.E;
+                    roomDoor.OriginPosition = new Vector2(room.Position.X, y);
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X, y);
+                }
+
+                //判断门之间的通道是否有物体碰到
+                if (!AddCorridorToGridRange(roomDoor, nextRoomDoor))
+                {
+                    //此门不能连通
+                    continue;
+                }
+
+                //没有撞到物体
+                room.Doors.Add(roomDoor);
+                nextRoom.Doors.Add(nextRoomDoor);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool TryConnectCrossDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
+    {
         //这种情况下x和y轴都没有重叠, 那么就只能生成拐角通道了
         
         var overlapX = Mathf.Min(room.Position.X + room.Size.X, nextRoom.Position.X + nextRoom.Size.X) -
@@ -282,8 +392,8 @@ public class GenerateDungeon
         var overlapY = Mathf.Min(room.Position.Y + room.Size.Y, nextRoom.Position.Y + nextRoom.Size.Y) -
                        Mathf.Max(room.Position.Y, nextRoom.Position.Y);
 
-        var offset1 = Mathf.Clamp((int)overlapX + 2, 2, 6);
-        var offset2 = Mathf.Clamp((int)overlapY + 2, 2, 6);
+        var offset1 = Mathf.Clamp(overlapX + 2, 2, 6);
+        var offset2 = Mathf.Clamp(overlapY + 2, 2, 6);
 
         //焦点
         Vector2 cross;
@@ -403,110 +513,6 @@ public class GenerateDungeon
         room.Doors.Add(roomDoor);
         nextRoom.Doors.Add(nextRoomDoor);
         return true;
-    }
-
-    /// <summary>
-    /// 尝试寻找横轴方向上两个房间的连通的门, 只查找直线通道, 返回是否找到
-    /// </summary>
-    private bool TryConnectHorizontalDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
-    {
-        var overlapX = Mathf.Min(room.Position.X + room.Size.X, nextRoom.Position.X + nextRoom.Size.X) -
-                       Mathf.Max(room.Position.X, nextRoom.Position.X);
-        //这种情况下x轴有重叠
-        if (overlapX >= 6)
-        {
-            //找到重叠区域
-            var rangeList = FindPassage(room, nextRoom, 
-                room.Position.Y < nextRoom.Position.Y ? DoorDirection.S : DoorDirection.N);
-            
-            while (rangeList.Count > 0)
-            {
-                //找到重叠区域
-                var range = Utils.RandomChooseAndRemove(rangeList);
-                var x = Utils.RandomRangeInt(range.X, range.Y);
-                
-                if (room.Position.Y < nextRoom.Position.Y) //room在上, nextRoom在下
-                {
-                    roomDoor.Direction = DoorDirection.S;
-                    nextRoomDoor.Direction = DoorDirection.N;
-                    roomDoor.OriginPosition = new Vector2(x, room.Position.Y + room.Size.Y);
-                    nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.Y);
-                }
-                else //room在下, nextRoom在上
-                {
-                    roomDoor.Direction = DoorDirection.N;
-                    nextRoomDoor.Direction = DoorDirection.S;
-                    roomDoor.OriginPosition = new Vector2(x, room.Position.Y);
-                    nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.Position.Y + nextRoom.Size.Y);
-                }
-
-                //判断门之间的通道是否有物体碰到
-                if (!AddCorridorToGridRange(roomDoor, nextRoomDoor))
-                {
-                    //此门不能连通
-                    continue;
-                }
-
-                //没有撞到物体
-                room.Doors.Add(roomDoor);
-                nextRoom.Doors.Add(nextRoomDoor);
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    /// <summary>
-    /// 尝试寻找纵轴方向上两个房间的连通的门, 只查找直线通道, 返回是否找到
-    /// </summary>
-    private bool TryConnectVerticalDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
-    {
-        var overlapY = Mathf.Min(room.Position.Y + room.Size.Y, nextRoom.Position.Y + nextRoom.Size.Y) -
-                       Mathf.Max(room.Position.Y, nextRoom.Position.Y);
-        //这种情况下y轴有重叠
-        if (overlapY >= 6)
-        {
-            //找到重叠区域
-            var rangeList = FindPassage(room, nextRoom, 
-                room.Position.X < nextRoom.Position.X ? DoorDirection.E : DoorDirection.W);
-
-            while (rangeList.Count > 0)
-            {
-                //找到重叠区域
-                var range = Utils.RandomChooseAndRemove(rangeList);
-                var y = Utils.RandomRangeInt(range.X, range.Y);
-                
-                if (room.Position.X < nextRoom.Position.X) //room在左, nextRoom在右
-                {
-                    roomDoor.Direction = DoorDirection.E;
-                    nextRoomDoor.Direction = DoorDirection.W;
-                    roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X, y);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X, y);
-                }
-                else //room在右, nextRoom在左
-                {
-                    roomDoor.Direction = DoorDirection.W;
-                    nextRoomDoor.Direction = DoorDirection.E;
-                    roomDoor.OriginPosition = new Vector2(room.Position.X, y);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X, y);
-                }
-
-                //判断门之间的通道是否有物体碰到
-                if (!AddCorridorToGridRange(roomDoor, nextRoomDoor))
-                {
-                    //此门不能连通
-                    continue;
-                }
-
-                //没有撞到物体
-                room.Doors.Add(roomDoor);
-                nextRoom.Doors.Add(nextRoomDoor);
-                return true;
-            }
-        }
-
-        return false;
     }
     
     /// <summary>
