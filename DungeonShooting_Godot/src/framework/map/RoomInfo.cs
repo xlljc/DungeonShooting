@@ -47,4 +47,24 @@ public class RoomInfo
     /// 上一个房间
     /// </summary>
     public RoomInfo Prev;
+
+    public int GetHorizontalEnd()
+    {
+        return Position.X + Size.X;
+    }
+
+    public int GetVerticalEnd()
+    {
+        return Position.Y + Size.Y;
+    }
+    
+    public int GetHorizontalStart()
+    {
+        return Position.X;
+    }
+
+    public int GetVerticalStart()
+    {
+        return Position.Y;
+    }
 }

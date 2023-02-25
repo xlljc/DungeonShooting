@@ -392,12 +392,15 @@ public class GenerateDungeon
         var overlapY = Mathf.Min(room.Position.Y + room.Size.Y, nextRoom.Position.Y + nextRoom.Size.Y) -
                        Mathf.Max(room.Position.Y, nextRoom.Position.Y);
 
-        var offset1 = Mathf.Clamp(overlapX + 2, 2, 6);
-        var offset2 = Mathf.Clamp(overlapY + 2, 2, 6);
+        //var offset1 = Mathf.Clamp(overlapX + 2, 2, 6);
+        //var offset2 = Mathf.Clamp(overlapY + 2, 2, 6);
+        
+        var offset1 = 0;
+        var offset2 = 0;
 
         //焦点
         Vector2 cross;
-        
+
         if (room.Position.X > nextRoom.Position.X)
         {
             if (room.Position.Y > nextRoom.Position.Y)
@@ -515,13 +518,73 @@ public class GenerateDungeon
         return true;
     }
     
+    private void Test(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor)
+    {
+        var room1 = room.RoomSplit.RoomInfo;
+        var room2 = nextRoom.RoomSplit.RoomInfo;
+
+        DoorAreaInfo tempArea1 = null;
+        DoorAreaInfo tempArea2 = null;
+        
+        var tempX = room.GetHorizontalStart() * TileCellSize;
+        var tempY = room.GetVerticalStart() * TileCellSize;
+
+        foreach (var areaInfo1 in room1.DoorAreaInfos)
+        {
+            if (areaInfo1.Direction == roomDoor.Direction)
+            {
+                if (areaInfo1.Direction == DoorDirection.N || areaInfo1.Direction == DoorDirection.S) //横向
+                {
+                    var p1 = tempX + areaInfo1.Start;
+                    var p2 = tempX + areaInfo1.End;
+                    if (room.Position.X > nextRoom.Position.X)
+                    {
+                        if (IsInRange(nextRoom.GetHorizontalEnd() * TileCellSize,
+                                room.GetHorizontalEnd() * TileCellSize, p1, p2))
+                        {
+                            if (tempArea1 == null || areaInfo1.Start < tempArea1.Start)
+                            {
+                                tempArea1 = areaInfo1;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (IsInRange(room.GetHorizontalStart() * TileCellSize,
+                                nextRoom.GetHorizontalStart() * TileCellSize, p1, p2))
+                        {
+                            if (tempArea1 == null || areaInfo1.End > tempArea1.End)
+                            {
+                                tempArea1 = areaInfo1;
+                            }
+                        }
+                    }
+                }
+                else //纵向
+                {
+                    var p1 = tempY + areaInfo1.Start;
+                    var p2 = tempY + areaInfo1.End;
+                    
+                }
+            }
+        }
+
+        foreach (var areaInfo2 in room2.DoorAreaInfos)
+        {
+            if (areaInfo2.Direction == nextRoomDoor.Direction)
+            {
+                //if (IsInRange(room.Position.Y * TileCellSize, nextRoom.Position.Y * TileCellSize,
+                //      room.Position.Y * TileCellSize + areaInfo1.Start, room.Position.Y * TileCellSize + areaInfo1.End))
+            }
+        }
+    }
+
     /// <summary>
     /// 查找房间的连接通道, 函数返回是否找到对应的门, 通过 result 返回 x/y 轴坐标
     /// </summary>
     /// <param name="room">第一个房间</param>
     /// <param name="nextRoom">第二个房间</param>
     /// <param name="direction">第一个房间连接方向</param>
-    /// <param name="result">返回连接的 x/y 轴坐标</param>
     private List<Vector2I> FindPassage(RoomInfo room, RoomInfo nextRoom, DoorDirection direction)
     {
         var room1 = room.RoomSplit.RoomInfo;
@@ -577,6 +640,14 @@ public class GenerateDungeon
         return new Vector2(Mathf.Max(start1, start2), Mathf.Min(end1, end2));
     }
 
+    /// <summary>
+    /// 返回 p1 - p2 是否在 start - end 范围内
+    /// </summary>
+    private bool IsInRange(float start, float end, float p1, float p2)
+    {
+        return p1 >= start && p2 <= end;
+    }
+    
     //返回指定方向的反方向
     //0上, 1右, 2下, 3左
     private int GetReverseDirection(int direction)

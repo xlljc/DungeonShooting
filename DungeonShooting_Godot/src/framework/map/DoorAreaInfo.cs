@@ -24,11 +24,11 @@ public class DoorAreaInfo
     public float End = 16;
     
     /// <summary>
-    /// 起始点坐标, 该坐标位世界坐标, 单位: 像素, 不参与序列化与反序列化
+    /// 起始点坐标, 该坐标为模板场景的世界坐标, 单位: 像素, 不参与序列化与反序列化
     /// </summary>
     public Vector2 StartPosition;
     /// <summary>
-    /// 结束点坐标, 该坐标位世界坐标, 单位: 像素, 不参与序列化与反序列化
+    /// 结束点坐标, 该坐标为模板场景的世界坐标, 单位: 像素, 不参与序列化与反序列化
     /// </summary>
     public Vector2 EndPosition;
 
