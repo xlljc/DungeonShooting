@@ -410,6 +410,8 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.N; //↑
                     nextRoomDoor.Direction = DoorDirection.E; //→
 
+                    FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor);
+                    
                     roomDoor.OriginPosition = new Vector2(room.Position.X + offset1, room.Position.Y);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X,
                         nextRoom.Position.Y + nextRoom.Size.Y - offset2 - 6);
@@ -420,6 +422,8 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.W; //←
                     nextRoomDoor.Direction = DoorDirection.S; //↓
                 
+                    FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor);
+                    
                     roomDoor.OriginPosition = new Vector2(room.Position.X, room.Position.Y + offset2);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X - offset1 - 6,
                         nextRoom.Position.Y + nextRoom.Size.Y);
@@ -432,6 +436,8 @@ public class GenerateDungeon
                 {
                     roomDoor.Direction = DoorDirection.S; //↓
                     nextRoomDoor.Direction = DoorDirection.E; //→
+                    
+                    FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor);
 
                     roomDoor.OriginPosition = new Vector2(room.Position.X + offset1, room.Position.Y + room.Size.Y);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X,
@@ -442,6 +448,8 @@ public class GenerateDungeon
                 {
                     roomDoor.Direction = DoorDirection.W; //←
                     nextRoomDoor.Direction = DoorDirection.N; //↑
+                    
+                    FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor);
 
                     roomDoor.OriginPosition =
                         new Vector2(room.Position.X, room.Position.Y + room.Size.Y - offset2 - 6); //
@@ -518,7 +526,7 @@ public class GenerateDungeon
         return true;
     }
     
-    private void Test(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor)
+    private void FindCrossPassage(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor)
     {
         var room1 = room.RoomSplit.RoomInfo;
         var room2 = nextRoom.RoomSplit.RoomInfo;
@@ -533,7 +541,7 @@ public class GenerateDungeon
         {
             if (areaInfo1.Direction == roomDoor.Direction)
             {
-                if (areaInfo1.Direction == DoorDirection.N || areaInfo1.Direction == DoorDirection.S) //横向
+                if (areaInfo1.Direction == DoorDirection.N || areaInfo1.Direction == DoorDirection.S) //纵向门
                 {
                     var p1 = tempX + areaInfo1.Start;
                     var p2 = tempX + areaInfo1.End;
@@ -560,11 +568,33 @@ public class GenerateDungeon
                         }
                     }
                 }
-                else //纵向
+                else //横向门
                 {
                     var p1 = tempY + areaInfo1.Start;
                     var p2 = tempY + areaInfo1.End;
-                    
+
+                    if (room.Position.Y > nextRoom.Position.Y)
+                    {
+                        if (IsInRange(nextRoom.GetVerticalEnd() * TileCellSize,
+                                room.GetVerticalEnd() * TileCellSize, p1, p2))
+                        {
+                            if (tempArea1 == null || areaInfo1.Start < tempArea1.Start)
+                            {
+                                tempArea1 = areaInfo1;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (IsInRange(room.GetVerticalStart() * TileCellSize,
+                                nextRoom.GetVerticalStart() * TileCellSize, p1, p2))
+                        {
+                            if (tempArea1 == null || areaInfo1.End > tempArea1.End)
+                            {
+                                tempArea1 = areaInfo1;
+                            }
+                        }
+                    }
                 }
             }
         }
