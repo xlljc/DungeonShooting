@@ -277,6 +277,7 @@ public class GenerateDungeon
         
         //包含拐角的通道
         return TryConnectCrossDoor(room, roomDoor, nextRoom, nextRoomDoor);
+        //return false;
     }
 
     /// <summary>
@@ -525,77 +526,20 @@ public class GenerateDungeon
         nextRoom.Doors.Add(nextRoomDoor);
         return true;
     }
-    
+
     private void FindCrossPassage(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor)
     {
         var room1 = room.RoomSplit.RoomInfo;
         var room2 = nextRoom.RoomSplit.RoomInfo;
-
-        DoorAreaInfo tempArea1 = null;
-        DoorAreaInfo tempArea2 = null;
         
-        var tempX = room.GetHorizontalStart() * TileCellSize;
-        var tempY = room.GetVerticalStart() * TileCellSize;
+        Vector2I? temp1 = null;
+        Vector2I? temp2 = null;
 
         foreach (var areaInfo1 in room1.DoorAreaInfos)
         {
             if (areaInfo1.Direction == roomDoor.Direction)
             {
-                if (areaInfo1.Direction == DoorDirection.N || areaInfo1.Direction == DoorDirection.S) //纵向门
-                {
-                    var p1 = tempX + areaInfo1.Start;
-                    var p2 = tempX + areaInfo1.End;
-                    if (room.Position.X > nextRoom.Position.X)
-                    {
-                        if (IsInRange(nextRoom.GetHorizontalEnd() * TileCellSize,
-                                room.GetHorizontalEnd() * TileCellSize, p1, p2))
-                        {
-                            if (tempArea1 == null || areaInfo1.Start < tempArea1.Start)
-                            {
-                                tempArea1 = areaInfo1;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (IsInRange(room.GetHorizontalStart() * TileCellSize,
-                                nextRoom.GetHorizontalStart() * TileCellSize, p1, p2))
-                        {
-                            if (tempArea1 == null || areaInfo1.End > tempArea1.End)
-                            {
-                                tempArea1 = areaInfo1;
-                            }
-                        }
-                    }
-                }
-                else //横向门
-                {
-                    var p1 = tempY + areaInfo1.Start;
-                    var p2 = tempY + areaInfo1.End;
-
-                    if (room.Position.Y > nextRoom.Position.Y)
-                    {
-                        if (IsInRange(nextRoom.GetVerticalEnd() * TileCellSize,
-                                room.GetVerticalEnd() * TileCellSize, p1, p2))
-                        {
-                            if (tempArea1 == null || areaInfo1.Start < tempArea1.Start)
-                            {
-                                tempArea1 = areaInfo1;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (IsInRange(room.GetVerticalStart() * TileCellSize,
-                                nextRoom.GetVerticalStart() * TileCellSize, p1, p2))
-                        {
-                            if (tempArea1 == null || areaInfo1.End > tempArea1.End)
-                            {
-                                tempArea1 = areaInfo1;
-                            }
-                        }
-                    }
-                }
+                FindCrossPassage_Area(areaInfo1, room, nextRoom, ref temp1);
             }
         }
 
@@ -603,8 +547,86 @@ public class GenerateDungeon
         {
             if (areaInfo2.Direction == nextRoomDoor.Direction)
             {
-                //if (IsInRange(room.Position.Y * TileCellSize, nextRoom.Position.Y * TileCellSize,
-                //      room.Position.Y * TileCellSize + areaInfo1.Start, room.Position.Y * TileCellSize + areaInfo1.End))
+                FindCrossPassage_Area(areaInfo2, nextRoom, room, ref temp2);
+            }
+        }
+
+        if (temp1 != null && temp2 != null)
+        {
+            
+        }
+        else
+        {
+            
+        }
+    }
+
+    private void FindCrossPassage_Area(DoorAreaInfo areaInfo, RoomInfo room1, RoomInfo room2, ref Vector2I? areaRange)
+    {
+        if (areaInfo.Direction == DoorDirection.N || areaInfo.Direction == DoorDirection.S) //纵向门
+        {
+            var num = room1.GetHorizontalStart() * TileCellSize;
+            var p1 = num + areaInfo.Start;
+            var p2 = num + areaInfo.End;
+
+            if (room1.Position.X > room2.Position.X)
+            {
+                var range = CalcOverlapRange(room2.GetHorizontalEnd() * TileCellSize,
+                    room1.GetHorizontalEnd() * TileCellSize, p1, p2);
+                //交集范围够生成门
+                if (range.Y - range.X >= CorridorWidth * TileCellSize)
+                {
+                    if (areaRange == null || range.X < areaRange.Value.X)
+                    {
+                        areaRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)(range.X / 16)), Mathf.Abs(room1.Position.X - (int)(range.Y / 16) - CorridorWidth));
+                    }
+                }
+            }
+            else
+            {
+                var range = CalcOverlapRange(room1.GetHorizontalStart() * TileCellSize,
+                    room2.GetHorizontalStart() * TileCellSize, p1, p2);
+                //交集范围够生成门
+                if (range.Y - range.X >= CorridorWidth * TileCellSize)
+                {
+                    if (areaRange == null || range.Y > areaRange.Value.Y)
+                    {
+                        areaRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)(range.X / 16)), Mathf.Abs(room1.Position.X - (int)(range.Y / 16) - CorridorWidth));
+                    }
+                }
+            }
+        }
+        else //横向门
+        {
+            var num = room1.GetVerticalStart() * TileCellSize;
+            var p1 = num + areaInfo.Start;
+            var p2 = num + areaInfo.End;
+
+            if (room1.Position.Y > room2.Position.Y)
+            {
+                var range = CalcOverlapRange(room2.GetVerticalEnd() * TileCellSize,
+                    room1.GetVerticalEnd() * TileCellSize, p1, p2);
+                //交集范围够生成门
+                if (range.Y - range.X >= CorridorWidth * TileCellSize)
+                {
+                    if (areaRange == null || range.X < areaRange.Value.X)
+                    {
+                        areaRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)(range.X / 16)), Mathf.Abs(room1.Position.Y - (int)(range.Y / 16) - CorridorWidth));
+                    }
+                }
+            }
+            else
+            {
+                var range = CalcOverlapRange(room1.GetVerticalStart() * TileCellSize,
+                    room2.GetVerticalStart() * TileCellSize, p1, p2);
+                //交集范围够生成门
+                if (range.Y - range.X >= CorridorWidth * TileCellSize)
+                {
+                    if (areaRange == null || range.Y > areaRange.Value.Y)
+                    {
+                        areaRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)(range.X / 16)), Mathf.Abs(room1.Position.Y - (int)(range.Y / 16) - CorridorWidth));
+                    }
+                }
             }
         }
     }
@@ -652,6 +674,7 @@ public class GenerateDungeon
                         //交集范围够生成门
                         if (range.Y - range.X >= CorridorWidth * TileCellSize)
                         {
+                            GD.Print(new Vector2I((int)(range.X / 16), (int)(range.Y / 16) - CorridorWidth));
                             rangeList.Add(new Vector2I((int)(range.X / 16), (int)(range.Y / 16) - CorridorWidth));
                         }
                     }
