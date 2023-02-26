@@ -10,28 +10,23 @@
   "DoorAreaInfos": [
     {
       "Direction": 1,
-      "Start": 16,
-      "End": 144
+      "Start": 128,
+      "End": 208
     },
     {
       "Direction": 3,
-      "Start": 208,
-      "End": 272
+      "Start": 128,
+      "End": 208
     },
     {
       "Direction": 2,
-      "Start": 208,
-      "End": 272
+      "Start": 128,
+      "End": 208
     },
     {
       "Direction": 0,
-      "Start": 16,
-      "End": 144
-    },
-    {
-      "Direction": 2,
-      "Start": 64,
-      "End": 144
+      "Start": 128,
+      "End": 208
     }
   ]
 }

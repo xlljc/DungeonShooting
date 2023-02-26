@@ -388,10 +388,10 @@ public class GenerateDungeon
     {
         //这种情况下x和y轴都没有重叠, 那么就只能生成拐角通道了
         
-        var overlapX = Mathf.Min(room.Position.X + room.Size.X, nextRoom.Position.X + nextRoom.Size.X) -
-                       Mathf.Max(room.Position.X, nextRoom.Position.X);
-        var overlapY = Mathf.Min(room.Position.Y + room.Size.Y, nextRoom.Position.Y + nextRoom.Size.Y) -
-                       Mathf.Max(room.Position.Y, nextRoom.Position.Y);
+        // var overlapX = Mathf.Min(room.Position.X + room.Size.X, nextRoom.Position.X + nextRoom.Size.X) -
+        //                Mathf.Max(room.Position.X, nextRoom.Position.X);
+        // var overlapY = Mathf.Min(room.Position.Y + room.Size.Y, nextRoom.Position.Y + nextRoom.Size.Y) -
+        //                Mathf.Max(room.Position.Y, nextRoom.Position.Y);
 
         //var offset1 = Mathf.Clamp(overlapX + 2, 2, 6);
         //var offset2 = Mathf.Clamp(overlapY + 2, 2, 6);
@@ -411,7 +411,10 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.N; //↑
                     nextRoomDoor.Direction = DoorDirection.E; //→
 
-                    FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor);
+                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    {
+                        return false;
+                    }
                     
                     roomDoor.OriginPosition = new Vector2(room.Position.X + offset1, room.Position.Y);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X,
@@ -423,7 +426,10 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.W; //←
                     nextRoomDoor.Direction = DoorDirection.S; //↓
                 
-                    FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor);
+                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    {
+                        return false;
+                    }
                     
                     roomDoor.OriginPosition = new Vector2(room.Position.X, room.Position.Y + offset2);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X - offset1 - 6,
@@ -438,7 +444,10 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.S; //↓
                     nextRoomDoor.Direction = DoorDirection.E; //→
                     
-                    FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor);
+                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    {
+                        return false;
+                    }
 
                     roomDoor.OriginPosition = new Vector2(room.Position.X + offset1, room.Position.Y + room.Size.Y);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + nextRoom.Size.X,
@@ -450,7 +459,10 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.W; //←
                     nextRoomDoor.Direction = DoorDirection.N; //↑
                     
-                    FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor);
+                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    {
+                        return false;
+                    }
 
                     roomDoor.OriginPosition =
                         new Vector2(room.Position.X, room.Position.Y + room.Size.Y - offset2 - 6); //
@@ -469,6 +481,11 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.E; //→
                     nextRoomDoor.Direction = DoorDirection.S; //↓
 
+                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    {
+                        return false;
+                    }
+                    
                     roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X, room.Position.Y + offset2);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + offset1,
                         nextRoom.Position.Y + nextRoom.Size.Y);
@@ -479,6 +496,11 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.N; //↑
                     nextRoomDoor.Direction = DoorDirection.W; //←
 
+                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    {
+                        return false;
+                    }
+                    
                     roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X - offset1 - 6, room.Position.Y);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X,
                         nextRoom.Position.Y + nextRoom.Size.Y - offset2 - 6);
@@ -492,6 +514,11 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.E; //→
                     nextRoomDoor.Direction = DoorDirection.N; //↑
 
+                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    {
+                        return false;
+                    }
+                    
                     roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X,
                         room.Position.Y + room.Size.Y - offset2 - 6);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X + offset1, nextRoom.Position.Y);
@@ -502,6 +529,11 @@ public class GenerateDungeon
                     roomDoor.Direction = DoorDirection.S; //↓
                     nextRoomDoor.Direction = DoorDirection.W; //←
 
+                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    {
+                        return false;
+                    }
+                    
                     roomDoor.OriginPosition = new Vector2(room.Position.X + room.Size.X - offset1 - 6,
                         room.Position.Y + room.Size.Y);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.Position.X, nextRoom.Position.Y + offset2);
@@ -527,7 +559,7 @@ public class GenerateDungeon
         return true;
     }
 
-    private void FindCrossPassage(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor)
+    private bool FindCrossPassage(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor,ref int offset1, ref int offset2)
     {
         var room1 = room.RoomSplit.RoomInfo;
         var room2 = nextRoom.RoomSplit.RoomInfo;
@@ -553,12 +585,12 @@ public class GenerateDungeon
 
         if (temp1 != null && temp2 != null)
         {
-            
+            offset1 = Utils.RandomRangeInt(temp1.Value.X, temp1.Value.Y);
+            offset2 = Utils.RandomRangeInt(temp2.Value.X, temp2.Value.Y);
+            return true;
         }
-        else
-        {
-            
-        }
+
+        return false;
     }
 
     private void FindCrossPassage_Area(DoorAreaInfo areaInfo, RoomInfo room1, RoomInfo room2, ref Vector2I? areaRange)
@@ -578,7 +610,7 @@ public class GenerateDungeon
                 {
                     if (areaRange == null || range.X < areaRange.Value.X)
                     {
-                        areaRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)(range.X / 16)), Mathf.Abs(room1.Position.X - (int)(range.Y / 16) - CorridorWidth));
+                        areaRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)(range.X / 16)), Mathf.Abs(room1.Position.X - (int)(range.Y / 16)) - CorridorWidth);
                     }
                 }
             }
@@ -591,7 +623,7 @@ public class GenerateDungeon
                 {
                     if (areaRange == null || range.Y > areaRange.Value.Y)
                     {
-                        areaRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)(range.X / 16)), Mathf.Abs(room1.Position.X - (int)(range.Y / 16) - CorridorWidth));
+                        areaRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)(range.X / 16)), Mathf.Abs(room1.Position.X - (int)(range.Y / 16)) - CorridorWidth);
                     }
                 }
             }
@@ -611,7 +643,7 @@ public class GenerateDungeon
                 {
                     if (areaRange == null || range.X < areaRange.Value.X)
                     {
-                        areaRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)(range.X / 16)), Mathf.Abs(room1.Position.Y - (int)(range.Y / 16) - CorridorWidth));
+                        areaRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)(range.X / 16)), Mathf.Abs(room1.Position.Y - (int)(range.Y / 16)) - CorridorWidth);
                     }
                 }
             }
@@ -624,7 +656,7 @@ public class GenerateDungeon
                 {
                     if (areaRange == null || range.Y > areaRange.Value.Y)
                     {
-                        areaRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)(range.X / 16)), Mathf.Abs(room1.Position.Y - (int)(range.Y / 16) - CorridorWidth));
+                        areaRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)(range.X / 16)), Mathf.Abs(room1.Position.Y - (int)(range.Y / 16)) - CorridorWidth);
                     }
                 }
             }
@@ -674,7 +706,6 @@ public class GenerateDungeon
                         //交集范围够生成门
                         if (range.Y - range.X >= CorridorWidth * TileCellSize)
                         {
-                            GD.Print(new Vector2I((int)(range.X / 16), (int)(range.Y / 16) - CorridorWidth));
                             rangeList.Add(new Vector2I((int)(range.X / 16), (int)(range.Y / 16) - CorridorWidth));
                         }
                     }
