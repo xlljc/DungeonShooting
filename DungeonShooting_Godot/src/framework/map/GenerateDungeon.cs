@@ -386,19 +386,8 @@ public class GenerateDungeon
 
     private bool TryConnectCrossDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
     {
-        //这种情况下x和y轴都没有重叠, 那么就只能生成拐角通道了
-        
-        // var overlapX = Mathf.Min(room.GetHorizontalEnd(), nextRoom.GetHorizontalEnd()) -
-        //                Mathf.Max(room.GetHorizontalStart(), nextRoom.GetHorizontalStart());
-        // var overlapY = Mathf.Min(room.GetVerticalEnd(), nextRoom.GetVerticalEnd()) -
-        //                Mathf.Max(room.GetVerticalStart(), nextRoom.GetVerticalStart());
-
-        //var offset1 = Mathf.Clamp(overlapX + 2, 2, 6);
-        //var offset2 = Mathf.Clamp(overlapY + 2, 2, 6);
-        
         var offset1 = 0;
         var offset2 = 0;
-
         //焦点
         Vector2 cross;
 
@@ -418,7 +407,7 @@ public class GenerateDungeon
                     
                     roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalEnd(),
-                        nextRoom.GetVerticalEnd() - offset2 - 6);
+                        nextRoom.GetVerticalStart() + offset2);
                     cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
                 }
                 else
@@ -432,7 +421,7 @@ public class GenerateDungeon
                     }
                     
                     roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset2);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalEnd() - offset1 - 6,
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1,
                         nextRoom.GetVerticalEnd());
                     cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
@@ -465,8 +454,8 @@ public class GenerateDungeon
                     }
 
                     roomDoor.OriginPosition =
-                        new Vector2(room.GetHorizontalStart(), room.GetVerticalEnd() - offset2 - 6); //
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalEnd() - offset2 - 6,
+                        new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset2); //
+                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2,
                         nextRoom.GetVerticalStart());
                     cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
@@ -501,9 +490,9 @@ public class GenerateDungeon
                         return false;
                     }
                     
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd() - offset1 - 6, room.GetVerticalStart());
+                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart(),
-                        nextRoom.GetVerticalEnd() - offset2 - 6);
+                        nextRoom.GetVerticalStart() + offset2);
                     cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
                 }
             }
@@ -520,7 +509,7 @@ public class GenerateDungeon
                     }
                     
                     roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(),
-                        room.GetVerticalEnd() - offset2 - 6);
+                        room.GetVerticalStart() + offset2);
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1, nextRoom.GetVerticalStart());
                     cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
@@ -534,7 +523,7 @@ public class GenerateDungeon
                         return false;
                     }
                     
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd() - offset1 - 6,
+                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1,
                         room.GetVerticalEnd());
                     nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart(), nextRoom.GetVerticalStart() + offset2);
                     cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
