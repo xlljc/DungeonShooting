@@ -529,66 +529,74 @@ public class GenerateDungeon
     {
         if (areaInfo.Direction == DoorDirection.N || areaInfo.Direction == DoorDirection.S) //纵向门
         {
-            var num = room1.GetHorizontalStart() * TileCellSize;
-            var p1 = num + areaInfo.Start;
-            var p2 = num + areaInfo.End;
+            var num = room1.GetHorizontalStart();
+            var p1 = num + areaInfo.Start / TileCellSize;
+            var p2 = num + areaInfo.End / TileCellSize;
 
             if (room1.Position.X > room2.Position.X)
             {
-                var range = CalcOverlapRange(room2.GetHorizontalEnd() * TileCellSize,
-                    room1.GetHorizontalEnd() * TileCellSize, p1, p2);
+                var range = CalcOverlapRange(room2.GetHorizontalEnd(),
+                    room1.GetHorizontalEnd(), p1, p2);
                 //交集范围够生成门
-                if (range.Y - range.X >= CorridorWidth * TileCellSize)
+                if (range.Y - range.X >= CorridorWidth)
                 {
-                    if (areaRange == null || range.X < areaRange.Value.X)
+                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
+                        Mathf.Abs(room1.Position.X - (int)range.Y) - CorridorWidth);
+                    if (areaRange == null || tempRange.X < areaRange.Value.X)
                     {
-                        areaRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)(range.X / 16)), Mathf.Abs(room1.Position.X - (int)(range.Y / 16)) - CorridorWidth);
+                        areaRange = tempRange;
                     }
                 }
             }
             else
             {
-                var range = CalcOverlapRange(room1.GetHorizontalStart() * TileCellSize,
-                    room2.GetHorizontalStart() * TileCellSize, p1, p2);
+                var range = CalcOverlapRange(room1.GetHorizontalStart(),
+                    room2.GetHorizontalStart(), p1, p2);
                 //交集范围够生成门
-                if (range.Y - range.X >= CorridorWidth * TileCellSize)
+                if (range.Y - range.X >= CorridorWidth)
                 {
-                    if (areaRange == null || range.Y > areaRange.Value.Y)
+                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
+                        Mathf.Abs(room1.Position.X - (int)range.Y) - CorridorWidth);
+                    if (areaRange == null || tempRange.Y > areaRange.Value.Y)
                     {
-                        areaRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)(range.X / 16)), Mathf.Abs(room1.Position.X - (int)(range.Y / 16)) - CorridorWidth);
+                        areaRange = tempRange;
                     }
                 }
             }
         }
         else //横向门
         {
-            var num = room1.GetVerticalStart() * TileCellSize;
-            var p1 = num + areaInfo.Start;
-            var p2 = num + areaInfo.End;
+            var num = room1.GetVerticalStart();
+            var p1 = num + areaInfo.Start / TileCellSize;
+            var p2 = num + areaInfo.End / TileCellSize;
 
             if (room1.Position.Y > room2.Position.Y)
             {
-                var range = CalcOverlapRange(room2.GetVerticalEnd() * TileCellSize,
-                    room1.GetVerticalEnd() * TileCellSize, p1, p2);
+                var range = CalcOverlapRange(room2.GetVerticalEnd(),
+                    room1.GetVerticalEnd(), p1, p2);
                 //交集范围够生成门
-                if (range.Y - range.X >= CorridorWidth * TileCellSize)
+                if (range.Y - range.X >= CorridorWidth)
                 {
-                    if (areaRange == null || range.X < areaRange.Value.X)
+                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
+                        Mathf.Abs(room1.Position.Y - (int)range.Y) - CorridorWidth);
+                    if (areaRange == null || tempRange.X < areaRange.Value.X)
                     {
-                        areaRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)(range.X / 16)), Mathf.Abs(room1.Position.Y - (int)(range.Y / 16)) - CorridorWidth);
+                        areaRange = tempRange;
                     }
                 }
             }
             else
             {
-                var range = CalcOverlapRange(room1.GetVerticalStart() * TileCellSize,
-                    room2.GetVerticalStart() * TileCellSize, p1, p2);
+                var range = CalcOverlapRange(room1.GetVerticalStart(),
+                    room2.GetVerticalStart(), p1, p2);
                 //交集范围够生成门
-                if (range.Y - range.X >= CorridorWidth * TileCellSize)
+                if (range.Y - range.X >= CorridorWidth)
                 {
-                    if (areaRange == null || range.Y > areaRange.Value.Y)
+                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
+                        Mathf.Abs(room1.Position.Y - (int)range.Y) - CorridorWidth);
+                    if (areaRange == null || tempRange.Y > areaRange.Value.Y)
                     {
-                        areaRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)(range.X / 16)), Mathf.Abs(room1.Position.Y - (int)(range.Y / 16)) - CorridorWidth);
+                        areaRange = tempRange;
                     }
                 }
             }
@@ -616,6 +624,7 @@ public class GenerateDungeon
 
     private bool TryConnect_WS_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
     {
+        //ok
         var offset1 = 0;
         var offset2 = 0;
         roomDoor.Direction = DoorDirection.W; //←
@@ -626,9 +635,8 @@ public class GenerateDungeon
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset2);
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1,
-            nextRoom.GetVerticalEnd());
+        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset1);
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2, nextRoom.GetVerticalEnd());
         cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
     }
@@ -665,7 +673,7 @@ public class GenerateDungeon
         }
 
         roomDoor.OriginPosition =
-            new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset2); //
+            new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset1); //
         nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2,
             nextRoom.GetVerticalStart());
         cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
@@ -684,8 +692,8 @@ public class GenerateDungeon
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(), room.GetVerticalStart() + offset2);
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1,
+        roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(), room.GetVerticalStart() + offset1);
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2,
             nextRoom.GetVerticalEnd());
         cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
@@ -723,8 +731,8 @@ public class GenerateDungeon
         }
                     
         roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(),
-            room.GetVerticalStart() + offset2);
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1, nextRoom.GetVerticalStart());
+            room.GetVerticalStart() + offset1);
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2, nextRoom.GetVerticalStart());
         cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
     }

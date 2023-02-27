@@ -78,7 +78,7 @@ public partial class GameApplication : Node2D
 	public override void _EnterTree()
 	{
 		//随机化种子
-		GD.Randomize();
+		//GD.Randomize();
 		//固定帧率
 		Engine.MaxFps = 60;
 		//调试绘制开关

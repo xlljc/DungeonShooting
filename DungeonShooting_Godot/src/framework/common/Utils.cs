@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -7,12 +8,19 @@ using Godot;
 public static class Utils
 {
 
+    private static readonly Random _random;
+    
+    static Utils()
+    {
+        _random = new Random();
+    }
+    
     /// <summary>
     /// 返回随机 boolean 值
     /// </summary>
     public static bool RandomBoolean()
     {
-        return GD.Randf() >= 0.5f;
+        return _random.NextSingle() >= 0.5f;
     }
 
     /// <summary>
@@ -22,8 +30,8 @@ public static class Utils
     {
         if (min == max) return min;
         if (min > max)
-            return GD.Randf() * (min - max) + max;
-        return GD.Randf() * (max - min) + min;
+            return _random.NextSingle() * (min - max) + max;
+        return _random.NextSingle() * (max - min) + min;
     }
 
     /// <summary>
@@ -33,8 +41,8 @@ public static class Utils
     {
         if (min == max) return min;
         if (min > max)
-            return Mathf.FloorToInt(GD.Randf() * (min - max + 1) + max);
-        return Mathf.FloorToInt(GD.Randf() * (max - min + 1) + min);
+            return Mathf.FloorToInt(_random.NextSingle() * (min - max + 1) + max);
+        return Mathf.FloorToInt(_random.NextSingle() * (max - min + 1) + min);
     }
 
     /// <summary>

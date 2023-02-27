@@ -24,14 +24,14 @@
       "End": 128
     },
     {
-      "Direction": 0,
+      "Direction": 1,
       "Start": 16,
       "End": 128
     },
     {
-      "Direction": 1,
-      "Start": 16,
-      "End": 128
+      "Direction": 2,
+      "Start": 208,
+      "End": 320
     },
     {
       "Direction": 3,
@@ -40,11 +40,11 @@
     },
     {
       "Direction": 0,
-      "Start": 208,
-      "End": 320
+      "Start": 16,
+      "End": 128
     },
     {
-      "Direction": 2,
+      "Direction": 0,
       "Start": 208,
       "End": 320
     }
