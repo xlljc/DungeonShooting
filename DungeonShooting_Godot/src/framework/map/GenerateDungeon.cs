@@ -277,7 +277,6 @@ public class GenerateDungeon
         
         //包含拐角的通道
         return TryConnectCrossDoor(room, roomDoor, nextRoom, nextRoomDoor);
-        //return false;
     }
 
     /// <summary>
@@ -384,149 +383,93 @@ public class GenerateDungeon
         return false;
     }
 
+    /// <summary>
+    /// 尝试寻找包含拐角的两个房间的连通的门, 返回是否找到
+    /// </summary>
     private bool TryConnectCrossDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
     {
-        var offset1 = 0;
-        var offset2 = 0;
         //焦点
-        Vector2 cross;
+        Vector2 cross = default;
 
         if (room.GetHorizontalStart() > nextRoom.GetHorizontalStart())
         {
             if (room.GetVerticalStart() > nextRoom.GetVerticalStart())
             {
-                if (Utils.RandomBoolean())
+                if (Utils.RandomBoolean()) //↑ //→
                 {
-                    roomDoor.Direction = DoorDirection.N; //↑
-                    nextRoomDoor.Direction = DoorDirection.E; //→
-
-                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    if (!TryConnect_NE_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_WS_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
-                    
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalEnd(),
-                        nextRoom.GetVerticalStart() + offset2);
-                    cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
                 }
-                else
+                else //← //↓
                 {
-                    roomDoor.Direction = DoorDirection.W; //←
-                    nextRoomDoor.Direction = DoorDirection.S; //↓
-                
-                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    if (!TryConnect_WS_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_NE_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
-                    
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset2);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1,
-                        nextRoom.GetVerticalEnd());
-                    cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
             }
             else
             {
-                if (Utils.RandomBoolean())
+                if (Utils.RandomBoolean()) //↓ //→
                 {
-                    roomDoor.Direction = DoorDirection.S; //↓
-                    nextRoomDoor.Direction = DoorDirection.E; //→
-                    
-                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    if (!TryConnect_SE_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_WN_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
-
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalEnd());
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalEnd(),
-                        nextRoom.GetVerticalStart() + offset2);
-                    cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
                 }
-                else
+                else //← //↑
                 {
-                    roomDoor.Direction = DoorDirection.W; //←
-                    nextRoomDoor.Direction = DoorDirection.N; //↑
-                    
-                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    if (!TryConnect_WN_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_SE_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
-
-                    roomDoor.OriginPosition =
-                        new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset2); //
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2,
-                        nextRoom.GetVerticalStart());
-                    cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
             }
         }
         else
         {
-            if (room.GetVerticalStart() > nextRoom.GetVerticalStart())
+            if (room.GetVerticalStart() > nextRoom.GetVerticalStart()) //→ //↓
             {
                 if (Utils.RandomBoolean())
                 {
-                    roomDoor.Direction = DoorDirection.E; //→
-                    nextRoomDoor.Direction = DoorDirection.S; //↓
-
-                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    if (!TryConnect_ES_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_NW_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
-                    
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(), room.GetVerticalStart() + offset2);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1,
-                        nextRoom.GetVerticalEnd());
-                    cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
-                else
+                else //↑ //←
                 {
-                    roomDoor.Direction = DoorDirection.N; //↑
-                    nextRoomDoor.Direction = DoorDirection.W; //←
-
-                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    if (!TryConnect_NW_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_ES_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
-                    
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart(),
-                        nextRoom.GetVerticalStart() + offset2);
-                    cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
                 }
             }
             else
             {
-                if (Utils.RandomBoolean())
+                if (Utils.RandomBoolean()) //→ //↑
                 {
-                    roomDoor.Direction = DoorDirection.E; //→
-                    nextRoomDoor.Direction = DoorDirection.N; //↑
-
-                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    if (!TryConnect_EN_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_SW_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
-                    
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(),
-                        room.GetVerticalStart() + offset2);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1, nextRoom.GetVerticalStart());
-                    cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
                 }
-                else
+                else //↓ //←
                 {
-                    roomDoor.Direction = DoorDirection.S; //↓
-                    nextRoomDoor.Direction = DoorDirection.W; //←
-
-                    if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+                    if (!TryConnect_SW_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_EN_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
-                    
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1,
-                        room.GetVerticalEnd());
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart(), nextRoom.GetVerticalStart() + offset2);
-                    cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
                 }
             }
         }
@@ -650,6 +593,159 @@ public class GenerateDungeon
                 }
             }
         }
+    }
+
+    private bool TryConnect_NE_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    {
+        var offset1 = 0;
+        var offset2 = 0;
+        roomDoor.Direction = DoorDirection.N; //↑
+        nextRoomDoor.Direction = DoorDirection.E; //→
+
+        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        {
+            return false;
+        }
+                    
+        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalEnd(),
+            nextRoom.GetVerticalStart() + offset2);
+        cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
+        return true;
+    }
+
+    private bool TryConnect_WS_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    {
+        var offset1 = 0;
+        var offset2 = 0;
+        roomDoor.Direction = DoorDirection.W; //←
+        nextRoomDoor.Direction = DoorDirection.S; //↓
+                
+        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        {
+            return false;
+        }
+                    
+        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset2);
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1,
+            nextRoom.GetVerticalEnd());
+        cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
+        return true;
+    }
+
+    private bool TryConnect_SE_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    {
+        var offset1 = 0;
+        var offset2 = 0;
+        roomDoor.Direction = DoorDirection.S; //↓
+        nextRoomDoor.Direction = DoorDirection.E; //→
+                    
+        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        {
+            return false;
+        }
+
+        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalEnd());
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalEnd(),
+            nextRoom.GetVerticalStart() + offset2);
+        cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
+        return true;
+    }
+
+    private bool TryConnect_WN_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    {
+        var offset1 = 0;
+        var offset2 = 0;
+        roomDoor.Direction = DoorDirection.W; //←
+        nextRoomDoor.Direction = DoorDirection.N; //↑
+                    
+        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        {
+            return false;
+        }
+
+        roomDoor.OriginPosition =
+            new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset2); //
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2,
+            nextRoom.GetVerticalStart());
+        cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
+        return true;
+    }
+    
+    private bool TryConnect_ES_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    {
+        var offset1 = 0;
+        var offset2 = 0;
+        roomDoor.Direction = DoorDirection.E; //→
+        nextRoomDoor.Direction = DoorDirection.S; //↓
+
+        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        {
+            return false;
+        }
+                    
+        roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(), room.GetVerticalStart() + offset2);
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1,
+            nextRoom.GetVerticalEnd());
+        cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
+        return true;
+    }
+    
+    private bool TryConnect_NW_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    {
+        var offset1 = 0;
+        var offset2 = 0;
+        roomDoor.Direction = DoorDirection.N; //↑
+        nextRoomDoor.Direction = DoorDirection.W; //←
+
+        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        {
+            return false;
+        }
+                    
+        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart(),
+            nextRoom.GetVerticalStart() + offset2);
+        cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
+        return true;
+    }
+    
+    private bool TryConnect_EN_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    {
+        var offset1 = 0;
+        var offset2 = 0;
+        roomDoor.Direction = DoorDirection.E; //→
+        nextRoomDoor.Direction = DoorDirection.N; //↑
+
+        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        {
+            return false;
+        }
+                    
+        roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(),
+            room.GetVerticalStart() + offset2);
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset1, nextRoom.GetVerticalStart());
+        cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
+        return true;
+    }
+
+    private bool TryConnect_SW_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    {
+        var offset1 = 0;
+        var offset2 = 0;
+        roomDoor.Direction = DoorDirection.S; //↓
+        nextRoomDoor.Direction = DoorDirection.W; //←
+
+        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        {
+            return false;
+        }
+                    
+        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1,
+            room.GetVerticalEnd());
+        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart(), nextRoom.GetVerticalStart() + offset2);
+        cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
+        return true;
     }
 
     /// <summary>
