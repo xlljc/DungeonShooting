@@ -1,8 +1,22 @@
 
+using System.Collections.Generic;
 using Godot;
 
 public static class DungeonTileManager
 {
+
+    private static readonly List<Vector2I> FloorAtlasCoords = new List<Vector2I>(new[]
+    {
+        new Vector2I(0, 8),
+    });
+
+    private static readonly List<Vector2I> MiddleAtlasCoords = new List<Vector2I>(new[]
+    {
+        new Vector2I(1, 7),
+        new Vector2I(2, 7),
+        new Vector2I(3, 7),
+    });
+    
     public static void AutoFillRoomTile(TileMap tileMap, int floorLayer, int middleLayer, int topLayer,
         AutoTileConfig config,
         RoomInfo roomInfo)
@@ -47,8 +61,23 @@ public static class DungeonTileManager
                 {
                     var atlasCoords =
                         tileInstance.GetCellAtlasCoords(0, new Vector2I((int)(rectPos.X + i), (int)(rectPos.Y + j)));
-                    tileMap.SetCell(floorLayer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j), 1,
-                        atlasCoords);
+
+                    //判断层级
+                    if (FloorAtlasCoords.Contains(atlasCoords))
+                    {
+                        tileMap.SetCell(floorLayer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j), 1,
+                            atlasCoords);
+                    }
+                    else if (MiddleAtlasCoords.Contains(atlasCoords))
+                    {
+                        tileMap.SetCell(middleLayer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j), 1,
+                            atlasCoords);
+                    }
+                    else
+                    {
+                        tileMap.SetCell(topLayer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j), 1,
+                            atlasCoords);
+                    }
                 }
             }
 

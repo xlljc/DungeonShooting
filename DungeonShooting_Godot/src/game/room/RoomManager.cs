@@ -50,17 +50,9 @@ public partial class RoomManager : Node2D
 
     public override void _EnterTree()
     {
-        //Engine.TimeScale = 0.2f;
-
         NavigationPolygon = new NavigationRegion2D();
         AddChild(NavigationPolygon);
-
-        //_tileMap = GetNode<Godot.TileMap>(TileMap);
         
-        // var node = child.GetNode("Config");
-        // Color color = (Color)node.GetMeta("ClearColor");
-        // GetTabAlignment.SetDefaultClearColor(color);
-
         //创建玩家
         Player = new Player();
         Player.Position = new Vector2(30, 30);
@@ -87,7 +79,7 @@ public partial class RoomManager : Node2D
         
         var nowTicks = DateTime.Now.Ticks;
         //生成寻路网格
-        //GenerateNavigationPolygon();
+        GenerateNavigationPolygon();
         var polygon = new NavigationPolygon();
         foreach (var polygonData in _polygonDataList)
         {
