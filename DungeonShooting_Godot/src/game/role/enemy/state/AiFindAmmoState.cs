@@ -159,6 +159,10 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
                     {
                         weapon.RemoveSign(SignNames.AiFindWeaponSign);
                     }
+                    else if (!enemy.IsAllWeaponTotalAmmoEmpty()) //标记当前武器的敌人已经有新的武器了
+                    {
+                        weapon.RemoveSign(SignNames.AiFindWeaponSign);
+                    }
                     else //放弃这把武器
                     {
                         continue;

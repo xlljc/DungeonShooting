@@ -1,34 +1,46 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://bygnukrvvm1vi"]
 
-[ext_resource path="res://addons/dungeonShooting_plugin/Automation.cs" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/dungeonShooting_plugin/Automation.cs" id="1"]
 
 [node name="Automation" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
-offset_right = 1920.0
-offset_bottom = 35.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
-offset_right = 1920.0
-offset_bottom = 35.0
+layout_mode = 2
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
-offset_right = 158.0
-offset_bottom = 35.0
+layout_mode = 2
 text = "ResourcePath.cs"
 
 [node name="Button" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
-offset_left = 162.0
-offset_right = 246.0
-offset_bottom = 35.0
+layout_mode = 2
 text = "重新生成"
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "地牢房间配置"
+
+[node name="Button" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "重新打包"
+
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/HBoxContainer/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/HBoxContainer2/Button" to="." method="_on_Button2_pressed"]

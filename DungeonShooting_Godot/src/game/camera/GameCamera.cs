@@ -109,8 +109,8 @@ public partial class GameCamera : Camera2D
         {
             var distance = _CalculateDistance();
             _shakeOffset += _processDirection + new Vector2(
-                Utils.RandfRange(-distance.X, distance.X) - _shakeOffset.X,
-                Utils.RandfRange(-distance.Y, distance.Y) - _shakeOffset.Y
+                Utils.RandomRangeFloat(-distance.X, distance.X) - _shakeOffset.X,
+                Utils.RandomRangeFloat(-distance.Y, distance.Y) - _shakeOffset.Y
             );
             _processDistance = Vector2.Zero;
             _processDirection = Vector2.Zero;

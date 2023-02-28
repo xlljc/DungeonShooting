@@ -518,7 +518,7 @@ public abstract partial class Weapon : ActivityObject
                     if (!Attribute.ContinuousShoot)
                     {
                         _continuousCount =
-                            Utils.RandRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
+                            Utils.RandomRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
                     }
                 }
 
@@ -632,12 +632,12 @@ public abstract partial class Weapon : ActivityObject
         OnFire();
 
         //开火发射的子弹数量
-        var bulletCount = Utils.RandRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
+        var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
         //武器口角度
         var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
 
         //先算武器口方向
-        var tempRotation = Utils.RandfRange(-angle, angle);
+        var tempRotation = Utils.RandomRangeFloat(-angle, angle);
         var tempAngle = Mathf.RadToDeg(tempRotation);
 
         //开火时枪口角度
@@ -660,7 +660,7 @@ public abstract partial class Weapon : ActivityObject
         //武器身位置
         var max = Mathf.Abs(Mathf.Max(Attribute.MaxBacklash, Attribute.MinBacklash));
         _currBacklashLength = Mathf.Clamp(
-            _currBacklashLength - Utils.RandfRange(Attribute.MinBacklash, Attribute.MaxBacklash),
+            _currBacklashLength - Utils.RandomRangeFloat(Attribute.MinBacklash, Attribute.MaxBacklash),
             -max, max
         );
         Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
@@ -889,8 +889,8 @@ public abstract partial class Weapon : ActivityObject
                 if (flag)
                 {
                     Throw(new Vector2(30, 15), GlobalPosition, 0, 0,
-                        Utils.RandRangeInt(-20, 20), Utils.RandRangeInt(20, 50),
-                        Utils.RandRangeInt(-180, 180));
+                        Utils.RandomRangeInt(-20, 20), Utils.RandomRangeInt(20, 50),
+                        Utils.RandomRangeInt(-180, 180));
                 }
             }
             else //没有武器
@@ -945,10 +945,10 @@ public abstract partial class Weapon : ActivityObject
         GlobalRotationDegrees = angle;
 
         var startHeight = 6;
-        var direction = angle + Utils.RandRangeInt(-20, 20);
+        var direction = angle + Utils.RandomRangeInt(-20, 20);
         var xf = 20;
-        var yf = Utils.RandRangeInt(50, 70);
-        var rotate = Utils.RandRangeInt(-90, 90);
+        var yf = Utils.RandomRangeInt(50, 70);
+        var rotate = Utils.RandomRangeInt(-90, 90);
         Throw(new Vector2(30, 15), startPosition, startHeight, direction, xf, yf, rotate, true);
     }
 

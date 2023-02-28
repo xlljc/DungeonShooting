@@ -115,6 +115,8 @@ public abstract partial class ActivityObject : CharacterBody2D
         Scale = _templateInstance.scale;
         Visible = _templateInstance.visible;
 
+        MotionMode = MotionModeEnum.Floating;
+        
         //移动子节点
         var count = _templateInstance.GetChildCount();
         for (int i = 0; i < count; i++)
@@ -663,6 +665,16 @@ public abstract partial class ActivityObject : CharacterBody2D
                             item.EnumeratorStack.Push(item.Enumerator);
                             item.Enumerator = enumerable.GetEnumerator();
                         }
+                        else if (next is IEnumerator enumerator)
+                        {
+                            if (item.EnumeratorStack == null)
+                            {
+                                item.EnumeratorStack = new Stack<IEnumerator>();
+                            }
+
+                            item.EnumeratorStack.Push(item.Enumerator);
+                            item.Enumerator = enumerator;
+                        }
                         else if (next is WaitForSeconds seconds) //等待秒数
                         {
                             item.WaitFor(seconds);
@@ -997,16 +1009,24 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess
     /// </summary>
-    public long StartCoroutine(IEnumerable able)
+    public long StartCoroutine(IEnumerator able)
     {
         if (_coroutineList == null)
         {
             _coroutineList = new List<CoroutineData>();
         }
 
-        var data = new CoroutineData(able.GetEnumerator());
+        var data = new CoroutineData(able);
         _coroutineList.Add(data);
         return data.Id;
+    }
+    
+    /// <summary>
+    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess
+    /// </summary>
+    public long StartCoroutine(IEnumerable able)
+    {
+        return StartCoroutine(able.GetEnumerator());
     }
 
     /// <summary>

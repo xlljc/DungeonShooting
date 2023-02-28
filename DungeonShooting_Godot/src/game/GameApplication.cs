@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+using System.Text.Json;
 using Godot;
 
 public partial class GameApplication : Node2D
@@ -53,11 +55,22 @@ public partial class GameApplication : Node2D
 	/// 全局根节点
 	/// </summary>
 	public Node2D GlobalNodeRoot { get; private set; }
+	
+	/// <summary>
+	/// 房间配置
+	/// </summary>
+	public readonly List<DungeonRoomSplit> RoomConfig;
 
 	public GameApplication()
 	{
 		Instance = this;
-		
+
+		//加载房间配置信息
+		var file = FileAccess.Open(ResourcePath.resource_map_RoomConfig_json, FileAccess.ModeFlags.Read);
+		var asText = file.GetAsText();
+		RoomConfig = JsonSerializer.Deserialize<List<DungeonRoomSplit>>(asText);
+		file.Dispose();
+
 		//扫描并注册当前程序集下的武器
 		WeaponManager.RegisterWeaponFromAssembly(GetType().Assembly);
 	}
@@ -65,7 +78,7 @@ public partial class GameApplication : Node2D
 	public override void _EnterTree()
 	{
 		//随机化种子
-		GD.Randomize();
+		//GD.Randomize();
 		//固定帧率
 		Engine.MaxFps = 60;
 		//调试绘制开关

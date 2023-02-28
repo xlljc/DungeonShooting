@@ -49,9 +49,12 @@ public partial class Player : Role
         MaxShield = 30;
         Shield = 30;
 
+        // debug用
         // Acceleration = 3000;
         // Friction = 3000;
-        // MoveSpeed = 800;
+        // MoveSpeed = 500;
+        // CollisionLayer = 0;
+        // CollisionMask = 0;
     }
 
     protected override void Process(float delta)
@@ -84,7 +87,11 @@ public partial class Player : Role
         }
         else if (Input.IsActionJustPressed("interactive")) //互动物体
         {
-            TriggerInteractive();
+            var item = TriggerInteractive();
+            if (item != null)
+            {
+                RefreshGunTexture();
+            }
         }
         else if (Input.IsActionJustPressed("reload")) //换弹
         {
