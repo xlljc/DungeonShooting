@@ -26,13 +26,7 @@ public partial class RoomManager : Node2D
     /// 玩家对象
     /// </summary>
     public Player Player { get; private set; }
-
-    /// <summary>
-    /// 导航区域形状
-    /// </summary>
-    public NavigationRegion2D NavigationPolygon { get; private set; }
-
-
+    
     private DungeonTile _dungeonTile;
     private AutoTileConfig _autoTileConfig;
     
@@ -41,9 +35,6 @@ public partial class RoomManager : Node2D
 
     public override void _EnterTree()
     {
-        NavigationPolygon = new NavigationRegion2D();
-        AddChild(NavigationPolygon);
-        
         //创建玩家
         Player = new Player();
         Player.Position = new Vector2(30, 30);
@@ -58,6 +49,7 @@ public partial class RoomManager : Node2D
         
         _font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
 
+        var nowTicks = DateTime.Now.Ticks;
         //生成地牢房间
         _generateDungeon = new GenerateDungeon();
         _generateDungeon.Generate();
@@ -66,13 +58,10 @@ public partial class RoomManager : Node2D
         _autoTileConfig = new AutoTileConfig();
         _dungeonTile = new DungeonTile(TileRoot);
         _dungeonTile.AutoFillRoomTile(_autoTileConfig, _generateDungeon.StartRoom);
-
-        //根据房间数据创建填充 tiled
         
-        var nowTicks = DateTime.Now.Ticks;
         //生成寻路网格
-        _dungeonTile.GenerateNavigationPolygon(NavigationPolygon);
-        GD.Print("计算NavigationPolygon用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
+        _dungeonTile.GenerateNavigationPolygon(this);
+        GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
@@ -157,7 +146,8 @@ public partial class RoomManager : Node2D
             if (_dungeonTile != null)
             {
                 //绘制ai寻路区域
-                foreach (var item in _dungeonTile.GetPolygonData())
+                var polygonData = _dungeonTile.GetPolygonData();
+                foreach (var item in polygonData)
                 {
                     if (item.Points.Count >= 2)
                     {
@@ -166,7 +156,7 @@ public partial class RoomManager : Node2D
                 }
             }
             //绘制房间区域
-            DrawRoomInfo(_generateDungeon.StartRoom);
+            //DrawRoomInfo(_generateDungeon.StartRoom);
         }
     }
 

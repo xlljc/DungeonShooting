@@ -403,18 +403,24 @@ public class DungeonTile
     }
     
     /// <summary>
-    /// 计算网格区域, 并且赋值给 navigationPolygon
+    /// 计算网格区域, 并将导航区域挂载到 navigationRoot 上
     /// </summary>
-    public void GenerateNavigationPolygon(NavigationRegion2D navigationPolygon)
+    public void GenerateNavigationPolygon(Node2D navigationRoot)
     {
         GenerateNavigationPolygon();
-        var polygon = new NavigationPolygon();
-        foreach (var polygonData in _polygonDataList)
+        // 在 Godot4.0_rc6 中 如果将所有点都放在 NavigationPolygon 里面, 即使点是对的, 但调用 MakePolygonsFromOutlines 还是可能会报错, 这应该是个bug
+        for (var i = 0; i < _polygonDataList.Count; i++)
         {
-            polygon.AddOutline(polygonData.Points.ToArray());
+            var polygonData = _polygonDataList[i];
+            var polygon = new NavigationPolygon();
+            var array = polygonData.Points.ToArray();
+            polygon.AddOutline(array);
+            polygon.MakePolygonsFromOutlines();
+            var navigationPolygon = new NavigationRegion2D();
+            navigationPolygon.Name = "NavigationRegion" + i;
+            navigationPolygon.NavigationPolygon = polygon;
+            navigationRoot.AddChild(navigationPolygon);
         }
-        polygon.MakePolygonsFromOutlines();
-        navigationPolygon.NavigationPolygon = polygon;
     }
 
     /// <summary>
