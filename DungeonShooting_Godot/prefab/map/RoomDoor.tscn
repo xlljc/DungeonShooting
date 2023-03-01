@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://b72vjthv7exo1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vke61"]
+size = Vector2(60, 66)
+
+[node name="RoomDoor" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_vke61")

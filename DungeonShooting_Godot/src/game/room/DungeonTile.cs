@@ -312,25 +312,17 @@ public class DungeonTile
                         case DoorDirection.E: //→
                             ClearRect(TopMapLayer, doorInfo.OriginPosition + new Vector2(-1, 1),
                                 new Vector2(1, rect.Size.Y - 2));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.OriginPosition + new Vector2(-1, 1),
-                                new Vector2(1, rect.Size.Y - 2));
                             break;
                         case DoorDirection.W: //←
                             ClearRect(TopMapLayer, doorInfo.OriginPosition + new Vector2(0, 1),
-                                new Vector2(1, rect.Size.Y - 2));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.OriginPosition + new Vector2(0, 1),
                                 new Vector2(1, rect.Size.Y - 2));
                             break;
                         case DoorDirection.S: //↓
                             ClearRect(TopMapLayer, doorInfo.OriginPosition + new Vector2(1, -1),
                                 new Vector2(rect.Size.X - 2, 1));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.OriginPosition + new Vector2(1, -1),
-                                new Vector2(rect.Size.X - 2, 1));
                             break;
                         case DoorDirection.N: //↑
                             ClearRect(MiddleMapLayer, doorInfo.OriginPosition + new Vector2(1, 2),
-                                new Vector2(rect.Size.X - 2, 1));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.OriginPosition + new Vector2(1, 0),
                                 new Vector2(rect.Size.X - 2, 1));
                             break;
                     }
@@ -340,25 +332,17 @@ public class DungeonTile
                         case DoorDirection.E: //→
                             ClearRect(TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1),
                                 new Vector2(1, rect2.Size.Y - 2));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1),
-                                new Vector2(1, rect2.Size.Y - 2));
                             break;
                         case DoorDirection.W: //←
                             ClearRect(TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1),
-                                new Vector2(1, rect2.Size.Y - 2));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1),
                                 new Vector2(1, rect2.Size.Y - 2));
                             break;
                         case DoorDirection.S: //↓
                             ClearRect(TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1),
                                 new Vector2(rect2.Size.X - 2, 1));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1),
-                                new Vector2(rect2.Size.X - 2, 1));
                             break;
                         case DoorDirection.N: //↑
                             ClearRect(MiddleMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0),
-                                new Vector2(rect2.Size.X - 2, 1));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0),
                                 new Vector2(rect2.Size.X - 2, 1));
                             break;
                     }

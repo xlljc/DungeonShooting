@@ -24,6 +24,7 @@ shader_parameter/offset = Vector2(0, 0)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("3")
+Debug = true
 CursorPack = ExtResource("4")
 RoomPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport/Room")
 ViewportPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport")
