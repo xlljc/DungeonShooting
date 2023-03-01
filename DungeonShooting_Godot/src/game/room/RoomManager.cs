@@ -57,7 +57,7 @@ public partial class RoomManager : Node2D
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
         _dungeonTile = new DungeonTile(TileRoot);
-        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _generateDungeon.StartRoom);
+        //_dungeonTile.AutoFillRoomTile(_autoTileConfig, _generateDungeon.StartRoom);
         
         //生成寻路网格
         _dungeonTile.GenerateNavigationPolygon(this);
@@ -71,9 +71,9 @@ public partial class RoomManager : Node2D
         Player.PickUpWeapon(WeaponManager.GetGun("1004"));
         Player.PickUpWeapon(WeaponManager.GetGun("1003"));
         
-        var enemy1 = new Enemy();
-        enemy1.PutDown(new Vector2(150, 150), RoomLayerEnum.YSortLayer);
-        enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        // var enemy1 = new Enemy();
+        // enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
+        // enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
         // for (int i = 0; i < 10; i++)
         // {
@@ -145,13 +145,24 @@ public partial class RoomManager : Node2D
         {
             if (_dungeonTile != null)
             {
+                // DrawLine(new Vector2(0, -5000), new Vector2(0, 5000), Colors.Green);
+                // DrawLine(new Vector2(-5000, 0), new Vector2(5000, 0), Colors.Green);
+                
                 //绘制ai寻路区域
                 var polygonData = _dungeonTile.GetPolygonData();
-                foreach (var item in polygonData)
+                for (var i = 0; i < polygonData.Length; i++)
                 {
+                    var item = polygonData[i];
                     if (item.Points.Count >= 2)
                     {
-                        DrawPolyline(item.Points.Concat(new []{ item.Points[0] }).ToArray(), Colors.Red);
+                        if (i == polygonData.Length - 1)
+                        {
+                            DrawPolyline(item.Points.Concat(new[] { item.Points[0] }).ToArray(), Colors.Yellow);
+                        }
+                        else
+                        {
+                            DrawPolyline(item.Points.Concat(new[] { item.Points[0] }).ToArray(), Colors.Red);
+                        }
                     }
                 }
             }
