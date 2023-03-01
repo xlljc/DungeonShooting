@@ -57,7 +57,7 @@ public partial class RoomManager : Node2D
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
         _dungeonTile = new DungeonTile(TileRoot);
-        //_dungeonTile.AutoFillRoomTile(_autoTileConfig, _generateDungeon.StartRoom);
+        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _generateDungeon.StartRoom);
         
         //生成寻路网格
         _dungeonTile.GenerateNavigationPolygon(this);
@@ -155,7 +155,7 @@ public partial class RoomManager : Node2D
                     var item = polygonData[i];
                     if (item.Points.Count >= 2)
                     {
-                        if (i == polygonData.Length - 1)
+                        if (item.Type == NavigationPolygonType.In)
                         {
                             DrawPolyline(item.Points.Concat(new[] { item.Points[0] }).ToArray(), Colors.Yellow);
                         }

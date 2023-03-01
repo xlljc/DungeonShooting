@@ -133,11 +133,11 @@ public class DungeonTile
 
                     if (dir == 0) //横向
                     {
-                        FullHorizontalGalleryWall(config, rect);
+                        FullHorizontalGalleryWall(config, rect, 0);
                     }
                     else //纵向
                     {
-                        FullVerticalGalleryWall(config, rect);
+                        FullVerticalGalleryWall(config, rect, 0);
                     }
                 }
                 else //带交叉点
@@ -237,23 +237,23 @@ public class DungeonTile
                     FillRect(FloorMapLayer, config.Ground, doorInfo.Cross + Vector2.One,
                         new Vector2(GenerateDungeon.CorridorWidth - 2, GenerateDungeon.CorridorWidth - 2));
 
-                    //墙壁
+                    //墙壁, 0横向, 1纵向
                     if (dir1 == 0)
                     {
-                        FullHorizontalGalleryWall(config, rect);
+                        FullHorizontalGalleryWall(config, rect, doorDir1 == DoorDirection.W ? 1: 2);
                     }
                     else
                     {
-                        FullVerticalGalleryWall(config, rect);
+                        FullVerticalGalleryWall(config, rect, doorDir1 == DoorDirection.N ? 1: 2);
                     }
 
                     if (dir2 == 0)
                     {
-                        FullHorizontalGalleryWall(config, rect2);
+                        FullHorizontalGalleryWall(config, rect2, doorDir2 == DoorDirection.W ? 1: 2);
                     }
                     else
                     {
-                        FullVerticalGalleryWall(config, rect2);
+                        FullVerticalGalleryWall(config, rect2, doorDir2 == DoorDirection.N ? 1: 2);
                     }
 
                     if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
@@ -376,128 +376,62 @@ public class DungeonTile
         }
     }
 
-    private void FullHorizontalGalleryWall(AutoTileConfig config, Rect2 rect)
+    private void FullHorizontalGalleryWall(AutoTileConfig config, Rect2 rect, int type)
     {
         FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
         FillRect(MiddleMapLayer, config.T, rect.Position, new Vector2(rect.Size.X, 1));
         FillRect(TopMapLayer, config.B, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
         //左
         ClearRect(TopMapLayer, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
-        //FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+        if (type == 1)
+        {
+            FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+        }
         //右
         ClearRect(TopMapLayer, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
-        //FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+        if (type == 2)
+        {
+            FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+        }
     }
 
-    private void FullVerticalGalleryWall(AutoTileConfig config, Rect2 rect)
+    private void FullVerticalGalleryWall(AutoTileConfig config, Rect2 rect, int type)
     {
         FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
         FillRect(TopMapLayer, config.L, rect.Position, new Vector2(1, rect.Size.Y));
         FillRect(TopMapLayer, config.R, rect.Position + new Vector2(rect.Size.X - 1, 0), new Vector2(1, rect.Size.Y));
         //上
         ClearRect(TopMapLayer, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
-        //FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+        if (type == 1)
+        {
+            FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+        }
         //下
         ClearRect(MiddleMapLayer, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
-        //FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+        if (type == 2)
+        {
+            FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+        }
     }
     
-    private void FullTestData()
+    //报错数据
+    private void TestData()
     {
         _polygonDataList.Clear();
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(328, -296), new Vector2(360, -296), new Vector2(360, -184), new Vector2(440, -184), new Vector2(440, -296), new Vector2(584, -296), new Vector2(584, -152), new Vector2(552, -152), new Vector2(552, -280), new Vector2(472, -280), new Vector2(472, -152), new Vector2(328, -152) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(168, -216), new Vector2(184, -216), new Vector2(184, -200), new Vector2(168, -200) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(216, -216), new Vector2(296, -216), new Vector2(296, -200), new Vector2(216, -200) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(168, -168), new Vector2(184, -168), new Vector2(184, -8), new Vector2(168, -8) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(680, -152), new Vector2(712, -152), new Vector2(712, -40), new Vector2(792, -40), new Vector2(792, -152), new Vector2(936, -152), new Vector2(936, -8), new Vector2(904, -8), new Vector2(904, -136), new Vector2(824, -136), new Vector2(824, -8), new Vector2(680, -8) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(968, -136), new Vector2(1080, -136), new Vector2(1080, -120), new Vector2(968, -120) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(1112, -136), new Vector2(1128, -136), new Vector2(1128, -120), new Vector2(1112, -120) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(424, -120), new Vector2(440, -120), new Vector2(440, -88), new Vector2(424, -88) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(1112, -88), new Vector2(1128, -88), new Vector2(1128, -56), new Vector2(1112, -56) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(424, -56), new Vector2(440, -56), new Vector2(440, -40), new Vector2(424, -40) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(472, -56), new Vector2(648, -56), new Vector2(648, -40), new Vector2(472, -40) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(1032, -24), new Vector2(1304, -24), new Vector2(1304, 136), new Vector2(1032, 136) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(1064, 8), new Vector2(1272, 8), new Vector2(1272, 104), new Vector2(1064, 104) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(24, 24), new Vector2(56, 24), new Vector2(56, 136), new Vector2(136, 136), new Vector2(136, 24), new Vector2(280, 24), new Vector2(280, 168), new Vector2(248, 168), new Vector2(248, 40), new Vector2(168, 40), new Vector2(168, 168), new Vector2(24, 168) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(312, 88), new Vector2(440, 88), new Vector2(440, 104), new Vector2(312, 104) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(472, 88), new Vector2(488, 88), new Vector2(488, 104), new Vector2(472, 104) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-136, 104), new Vector2(-120, 104), new Vector2(-120, 120), new Vector2(-136, 120) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-88, 104), new Vector2(-8, 104), new Vector2(-8, 120), new Vector2(-88, 120) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(472, 136), new Vector2(488, 136), new Vector2(488, 280), new Vector2(472, 280) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-136, 152), new Vector2(-120, 152), new Vector2(-120, 328), new Vector2(-136, 328) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(264, 312), new Vector2(536, 312), new Vector2(536, 472), new Vector2(264, 472) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(296, 344), new Vector2(504, 344), new Vector2(504, 440), new Vector2(296, 440) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-168, 360), new Vector2(120, 360), new Vector2(120, 648), new Vector2(-168, 648) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(-136, 392), new Vector2(-40, 392), new Vector2(-40, 488), new Vector2(-136, 488) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(-8, 392), new Vector2(88, 392), new Vector2(88, 488), new Vector2(-8, 488) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-520, 408), new Vector2(-504, 408), new Vector2(-504, 424), new Vector2(-520, 424) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-472, 408), new Vector2(-200, 408), new Vector2(-200, 424), new Vector2(-472, 424) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-520, 456), new Vector2(-504, 456), new Vector2(-504, 488), new Vector2(-520, 488) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(632, 472), new Vector2(904, 472), new Vector2(904, 632), new Vector2(632, 632) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(360, 504), new Vector2(376, 504), new Vector2(376, 536), new Vector2(360, 536) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(664, 504), new Vector2(872, 504), new Vector2(872, 600), new Vector2(664, 600) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-600, 520), new Vector2(-328, 520), new Vector2(-328, 680), new Vector2(-600, 680) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(-136, 520), new Vector2(-40, 520), new Vector2(-40, 616), new Vector2(-136, 616) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(-8, 520), new Vector2(88, 520), new Vector2(88, 616), new Vector2(-8, 616) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(-568, 552), new Vector2(-360, 552), new Vector2(-360, 648), new Vector2(-568, 648) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(360, 568), new Vector2(376, 568), new Vector2(376, 584), new Vector2(360, 584) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(408, 568), new Vector2(600, 568), new Vector2(600, 584), new Vector2(408, 584) })});
-        
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(824, 664), new Vector2(840, 664), new Vector2(840, 904), new Vector2(824, 904) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(72, 680), new Vector2(88, 680), new Vector2(88, 744), new Vector2(72, 744) })});
-        //_polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-1080, 712), new Vector2(-808, 712), new Vector2(-808, 872), new Vector2(-1080, 872) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-456, 712), new Vector2(-440, 712), new Vector2(-440, 792), new Vector2(-456, 792) })});
-        //_polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(312, 728), new Vector2(584, 728), new Vector2(584, 888), new Vector2(312, 888) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(-1048, 744), new Vector2(-840, 744), new Vector2(-840, 840), new Vector2(-1048, 840) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(344, 760), new Vector2(552, 760), new Vector2(552, 856), new Vector2(344, 856) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(72, 776), new Vector2(88, 776), new Vector2(88, 792), new Vector2(72, 792) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(120, 776), new Vector2(280, 776), new Vector2(280, 792), new Vector2(120, 792) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-776, 824), new Vector2(-488, 824), new Vector2(-488, 840), new Vector2(-776, 840) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-456, 824), new Vector2(-440, 824), new Vector2(-440, 840), new Vector2(-456, 840) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(968, 840), new Vector2(1000, 840), new Vector2(1000, 952), new Vector2(1080, 952), new Vector2(1080, 840), new Vector2(1224, 840), new Vector2(1224, 984), new Vector2(1192, 984), new Vector2(1192, 856), new Vector2(1112, 856), new Vector2(1112, 984), new Vector2(968, 984) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(488, 920), new Vector2(504, 920), new Vector2(504, 1128), new Vector2(488, 1128) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(824, 936), new Vector2(840, 936), new Vector2(840, 952), new Vector2(824, 952) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(872, 936), new Vector2(936, 936), new Vector2(936, 952), new Vector2(872, 952) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(1320, 984), new Vector2(1352, 984), new Vector2(1352, 1096), new Vector2(1432, 1096), new Vector2(1432, 984), new Vector2(1576, 984), new Vector2(1576, 1128), new Vector2(1544, 1128), new Vector2(1544, 1000), new Vector2(1464, 1000), new Vector2(1464, 1128), new Vector2(1320, 1128) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(1032, 1016), new Vector2(1048, 1016), new Vector2(1048, 1048), new Vector2(1032, 1048) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(1032, 1080), new Vector2(1048, 1080), new Vector2(1048, 1096), new Vector2(1032, 1096) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(1080, 1080), new Vector2(1288, 1080), new Vector2(1288, 1096), new Vector2(1080, 1096) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(600, 1096), new Vector2(632, 1096), new Vector2(632, 1208), new Vector2(712, 1208), new Vector2(712, 1096), new Vector2(856, 1096), new Vector2(856, 1240), new Vector2(824, 1240), new Vector2(824, 1112), new Vector2(744, 1112), new Vector2(744, 1240), new Vector2(600, 1240) })});
-        
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(488, 1160), new Vector2(504, 1160), new Vector2(504, 1176), new Vector2(488, 1176) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(536, 1160), new Vector2(568, 1160), new Vector2(568, 1176), new Vector2(536, 1176) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(888, 1208), new Vector2(920, 1208), new Vector2(920, 1224), new Vector2(888, 1224) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(952, 1208), new Vector2(968, 1208), new Vector2(968, 1224), new Vector2(952, 1224) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(952, 1256), new Vector2(968, 1256), new Vector2(968, 1400), new Vector2(952, 1400) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(632, 1272), new Vector2(648, 1272), new Vector2(648, 1336), new Vector2(632, 1336) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(168, 1304), new Vector2(440, 1304), new Vector2(440, 1464), new Vector2(168, 1464) })});
-        //
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(200, 1336), new Vector2(408, 1336), new Vector2(408, 1432), new Vector2(200, 1432) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(472, 1368), new Vector2(600, 1368), new Vector2(600, 1384), new Vector2(472, 1384) })});
-        
-        //
-        //_polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(632, 1368), new Vector2(648, 1368), new Vector2(648, 1384), new Vector2(632, 1384) })});
-        // _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(712, 1432), new Vector2(984, 1432), new Vector2(984, 1592), new Vector2(712, 1592) })});
-        
-        
-        //_polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(744, 1464), new Vector2(952, 1464), new Vector2(952, 1560), new Vector2(744, 1560) })});
-        
         _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-456, 712), new Vector2(-440, 712), new Vector2(-440, 792), new Vector2(-456, 792) })});
         _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(-1048, 744), new Vector2(-840, 744), new Vector2(-840, 840), new Vector2(-1048, 840) })});
         _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(488, 920), new Vector2(504, 920), new Vector2(504, 1128), new Vector2(488, 1128) })});
         _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(1320, 984), new Vector2(1352, 984), new Vector2(1352, 1096), new Vector2(1432, 1096), new Vector2(1432, 984), new Vector2(1576, 984), new Vector2(1576, 1128), new Vector2(1544, 1128), new Vector2(1544, 1000), new Vector2(1464, 1000), new Vector2(1464, 1128), new Vector2(1320, 1128) })});
         _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(712, 1432), new Vector2(984, 1432), new Vector2(984, 1592), new Vector2(712, 1592) })});
-
     }
 
-    
     /// <summary>
     /// 计算网格区域, 并将导航区域挂载到 navigationRoot 上
     /// </summary>
     public void GenerateNavigationPolygon(Node2D navigationRoot)
     {
         GenerateNavigationPolygon();
-        FullTestData();
+        //TestData();
         // 在 Godot4.0_rc6 中 如果将所有点都放在 NavigationPolygon 里面, 即使点是对的, 但调用 MakePolygonsFromOutlines 还是可能会报错, 这应该是个bug
         // for (var i = 0; i < _polygonDataList.Count; i++)
         // {
@@ -512,42 +446,12 @@ public class DungeonTile
         //     navigationRoot.AddChild(navigationPolygon);
         // }
         var polygon = new NavigationPolygon();
-
-        for (var i = 0; i < _polygonDataList.Count; i++)
-        {
-            var polygonData = _polygonDataList[i];
-            if (polygonData.Type == NavigationPolygonType.Out)
-            {
-                var list = new List<Vector2>(polygonData.Points);
-                //list.Add(list[0]);
-                var array = list.ToArray();
-                polygon.AddOutline(array);
-            }
-        }
         
         for (var i = 0; i < _polygonDataList.Count; i++)
         {
             var polygonData = _polygonDataList[i];
-            if (polygonData.Type == NavigationPolygonType.In)
-            {
-                var list = new List<Vector2>(polygonData.Points);
-                //list.Add(list[0]);
-                var array = list.ToArray();
-                polygon.AddOutline(array);
-            }
+            polygon.AddOutline(polygonData.Points.ToArray());
         }
-
-        // for (var i = 0; i < _polygonDataList.Count; i++)
-        // {
-        //     var polygonData = _polygonDataList[i];
-        //     var array = new Vector2[polygonData.Points.Count];
-        //     for (var j = 0; j < polygonData.Points.Count; j++)
-        //     {
-        //         var p = polygonData.Points[j];
-        //         array[j] = new Vector2(p.X + 2000, p.Y + 2000);
-        //     }
-        //     polygon.AddOutline(array);
-        // }
         
         polygon.MakePolygonsFromOutlines();
         var navigationPolygon = new NavigationRegion2D();
