@@ -60,7 +60,9 @@ public partial class RoomManager : Node2D
         _dungeonTile.AutoFillRoomTile(_autoTileConfig, _generateDungeon.StartRoom);
         
         //生成寻路网格
-        _dungeonTile.GenerateNavigationPolygon(this);
+        _dungeonTile.GenerateNavigationPolygon(DungeonTile.FloorMapLayer);
+        //挂载导航区域
+        _dungeonTile.MountNavigationPolygon(this);
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
         //播放bgm
