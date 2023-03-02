@@ -8,7 +8,6 @@ using Godot;
 [Tool]
 public partial class DungeonRoomTemplate : TileMap
 {
-    
     /// <summary>
     /// 地图路径
     /// </summary>
@@ -62,7 +61,7 @@ public partial class DungeonRoomTemplate : TileMap
     //是否能保存
     private bool _canSave = false;
     private bool _clickSave = false;
-    
+
     public override void _Process(double delta)
     {
         if (!Engine.IsEditorHint())
@@ -76,9 +75,8 @@ public partial class DungeonRoomTemplate : TileMap
         {
             initConfigs = true;
             _doorConfigs = ReadConfig(CalcTileRange(this), Name);
-            QueueRedraw();
         }
-        
+
         //按键检测
         var isClick = false;
         if (Input.IsMouseButtonPressed(MouseButton.Left))
@@ -95,32 +93,32 @@ public partial class DungeonRoomTemplate : TileMap
             isClick = false;
         }
 
-        if (EnableEdit) //启用了编辑功能
+        if (Input.IsMouseButtonPressed(MouseButton.Middle)) //中键移除门
         {
-            if (Input.IsMouseButtonPressed(MouseButton.Middle)) //中键移除门
+            if (EnableEdit && _activeArea != null)
             {
-                if (_activeArea != null)
+                RemoveDoorArea(_activeArea);
+                _hasActivePoint = false;
+                _activeArea = null;
+            }
+        }
+        else if (TileSet != null) //编辑操作
+        {
+            var mapRect = CalcTileRange(this);
+            var mousePosition = GetLocalMousePosition();
+
+            if (mapRect != _prevRect)
+            {
+                if (!initConfigs)
                 {
-                    RemoveDoorArea(_activeArea);
-                    _hasActivePoint = false;
-                    _activeArea = null;
+                    OnMapRectChange();
                 }
             }
-            else if (TileSet != null) //编辑操作
+
+            _prevRect = mapRect;
+            
+            if (EnableEdit)
             {
-                var mapRect = CalcTileRange(this);
-                var mousePosition = GetLocalMousePosition();
-
-                if (mapRect != _prevRect)
-                {
-                    if (!initConfigs)
-                    {
-                        OnMapRectChange();
-                    }
-                }
-
-                _prevRect = mapRect;
-
                 var tileSize = TileSet.TileSize;
                 if (_isDrag) //拖拽中
                 {
@@ -280,10 +278,7 @@ public partial class DungeonRoomTemplate : TileMap
                     }
                     else
                     {
-                        _hover = false;
-                        _canPut = false;
-                        _hasActivePoint = false;
-                        _activeArea = null;
+                        ClearState();
                     }
                 }
 
@@ -333,13 +328,13 @@ public partial class DungeonRoomTemplate : TileMap
 
                     _dragHasCollision = false;
                 }
-
-                QueueRedraw();
             }
             else
             {
                 ClearState();
             }
+
+            QueueRedraw();
         }
         else
         {
@@ -712,6 +707,7 @@ public partial class DungeonRoomTemplate : TileMap
         
         var jsonStr = JsonSerializer.Serialize(roomInfo, config);
         File.WriteAllText(path, jsonStr);
+        GD.Print("保存房间配置成功！路径为：" + path);
     }
     
     /// <summary>
