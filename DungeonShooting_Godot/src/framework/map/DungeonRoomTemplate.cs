@@ -674,6 +674,7 @@ public partial class DungeonRoomTemplate : TileMap
         roomInfo.Position = new SerializeVector2(position);
         roomInfo.Size = new SerializeVector2(size);
         roomInfo.DoorAreaInfos = doorConfigs;
+        roomInfo.NavigationList = new List<NavigationPolygonData>();
         
         var config = new JsonSerializerOptions();
         config.WriteIndented = true;
@@ -721,13 +722,15 @@ public partial class DungeonRoomTemplate : TileMap
     {
         // 下面这句代码在 Godot4.0_rc2的编辑器模式下, 重载脚本会导致编辑器一直报错!, 所以暂时先用下面的方法
         //var roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(text);
-        
+
         var obj = Json.ParseString(text).AsGodotDictionary();
         var roomInfo = new DungeonRoomInfo();
         var position = obj["Position"].AsGodotDictionary();
         roomInfo.Position = new SerializeVector2(position["X"].AsInt32(), position["Y"].AsInt32());
+
         var size = obj["Size"].AsGodotDictionary();
         roomInfo.Size = new SerializeVector2(size["X"].AsInt32(), size["Y"].AsInt32());
+
         var doorAreaInfos = obj["DoorAreaInfos"].AsGodotArray<Variant>();
         roomInfo.DoorAreaInfos = new List<DoorAreaInfo>();
         foreach (var item in doorAreaInfos)
@@ -738,6 +741,25 @@ public partial class DungeonRoomTemplate : TileMap
             doorInfo.Start = temp["Start"].AsInt32();
             doorInfo.End = temp["End"].AsInt32();
             roomInfo.DoorAreaInfos.Add(doorInfo);
+        }
+
+        var navigationArray = obj["NavigationList"].AsGodotArray<Variant>();
+        roomInfo.NavigationList = new List<NavigationPolygonData>();
+        for (var i = 0; i < navigationArray.Count; i++)
+        {
+            var navigation = navigationArray[i].AsGodotDictionary();
+            var polygonData = new NavigationPolygonData();
+
+            polygonData.Type = (NavigationPolygonType)navigation["Type"].AsInt32();
+            polygonData.Points = new List<SerializeVector2>();
+            var pointArray = navigation["Points"].AsGodotArray<Variant>();
+            for (var j = 0; j < pointArray.Count; j++)
+            {
+                var point = pointArray[j].AsGodotDictionary();
+                polygonData.Points.Add(new SerializeVector2(point["X"].AsInt32(), point["Y"].AsInt32()));
+            }
+
+            roomInfo.NavigationList.Add(polygonData);
         }
 
         return roomInfo;

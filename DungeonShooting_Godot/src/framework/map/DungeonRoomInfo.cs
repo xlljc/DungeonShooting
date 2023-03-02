@@ -29,5 +29,5 @@ public class DungeonRoomInfo
     /// 导航数据
     /// </summary>
     [JsonInclude]
-    public NavigationPolygonData Navigation;
+    public List<NavigationPolygonData> NavigationList;
 }
