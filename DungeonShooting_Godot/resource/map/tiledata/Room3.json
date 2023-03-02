@@ -7,5 +7,6 @@
     "X": 21,
     "Y": 21
   },
-  "DoorAreaInfos": []
+  "DoorAreaInfos": [],
+  "NavigationList": []
 }

@@ -600,6 +600,13 @@ layer_2/y_sort_enabled = false
 layer_2/y_sort_origin = 0
 layer_2/z_index = 10
 layer_2/tile_data = PackedInt32Array()
+layer_3/name = "AisleFloor"
+layer_3/enabled = true
+layer_3/modulate = Color(1, 1, 1, 1)
+layer_3/y_sort_enabled = true
+layer_3/y_sort_origin = 0
+layer_3/z_index = -10
+layer_3/tile_data = PackedInt32Array()
 
 [node name="NormalLayer" type="Node2D" parent="."]
 z_index = -1

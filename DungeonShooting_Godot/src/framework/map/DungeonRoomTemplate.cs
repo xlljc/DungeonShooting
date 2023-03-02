@@ -62,6 +62,11 @@ public partial class DungeonRoomTemplate : TileMap
     private bool _canSave = false;
     private bool _clickSave = false;
 
+    public override void _Ready()
+    {
+        EnableEdit = false;
+    }
+
     public override void _Process(double delta)
     {
         if (!Engine.IsEditorHint())
