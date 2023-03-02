@@ -11,17 +11,17 @@ public partial class DungeonRoomTemplate : TileMap
     /// <summary>
     /// 地图路径
     /// </summary>
-    public static readonly string RoomTileDir = System.Environment.CurrentDirectory + "\\resource\\map\\tileMaps\\";
+    public static readonly string RoomTileDir = System.Environment.CurrentDirectory + "/resource/map/tileMaps/";
     
     /// <summary>
     /// 地图描述数据路径
     /// </summary>
-    public static readonly string RoomTileDataDir = System.Environment.CurrentDirectory + "\\resource\\map\\tiledata\\";
+    public static readonly string RoomTileDataDir = System.Environment.CurrentDirectory + "/resource/map/tiledata/";
     
     /// <summary>
     /// 房间配置汇总
     /// </summary>
-    public static readonly string RoomTileConfigFile = System.Environment.CurrentDirectory + "\\resource\\map\\RoomConfig.json";
+    public static readonly string RoomTileConfigFile = System.Environment.CurrentDirectory + "/resource/map/RoomConfig.json";
     
     /// <summary>
     /// 是否启用编辑模式

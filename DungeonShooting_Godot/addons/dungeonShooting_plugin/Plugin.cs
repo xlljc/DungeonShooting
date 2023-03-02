@@ -35,8 +35,11 @@ namespace Plugin
         {
             RemoveCustomType("ActivityObjectTemplate");
             RemoveCustomType("DungeonRoomTemplate");
-            RemoveControlFromDocks(dock);
-            dock.Free();
+            if (dock != null)
+            {
+                RemoveControlFromDocks(dock);
+                dock.Free();
+            }
         }
 
         /*public override bool Handles(Object @object)
