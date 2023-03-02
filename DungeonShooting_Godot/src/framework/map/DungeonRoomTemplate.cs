@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Godot;
 
@@ -54,7 +55,7 @@ public partial class DungeonRoomTemplate : TileMap
 
     private bool _mouseDown = false;
 
-    //
+    //门区域数据
     private List<DoorAreaInfo> _doorConfigs;
     private Rect2 _prevRect;
 
@@ -62,8 +63,17 @@ public partial class DungeonRoomTemplate : TileMap
     private bool _canSave = false;
     private bool _clickSave = false;
 
+    private DungeonTile _dungeonTile;
+
+    //计算导航的计时器
+    private float _calcTileNavTimer = 0;
+
     public override void _Ready()
     {
+        if (!Engine.IsEditorHint())
+        {
+            return;
+        }
         EnableEdit = false;
     }
 
@@ -72,6 +82,29 @@ public partial class DungeonRoomTemplate : TileMap
         if (!Engine.IsEditorHint())
         {
             return;
+        }
+
+        if (_dungeonTile == null)
+        {
+            _dungeonTile = new DungeonTile(this);
+            _dungeonTile.SetFloorAtlasCoords(new List<Vector2I>() { new Vector2I(0, 8) });
+            OnTileChanged();
+            var callable = new Callable(this, nameof(OnTileChanged));
+            if (!IsConnected("changed", callable))
+            {
+                Connect("changed", callable);
+            }
+        }
+        
+        //导航计算
+        if (_calcTileNavTimer > 0)
+        {
+            _calcTileNavTimer -= (float)delta;
+            //重新计算导航
+            if (_calcTileNavTimer <= 0)
+            {
+                _dungeonTile.GenerateNavigationPolygon(0);
+            }
         }
 
         //加载配置
@@ -416,6 +449,7 @@ public partial class DungeonRoomTemplate : TileMap
                 }
             }
 
+            //绘制区域
             if (_doorConfigs != null)
             {
                 var color2 = new Color(0, 1, 0, 0.8f);
@@ -493,6 +527,24 @@ public partial class DungeonRoomTemplate : TileMap
                     }
                 }
             }
+            
+            //绘制导航, 现在有点问题, 绘制的内容会被自身的 tile 所挡住
+            if (_dungeonTile != null)
+            {
+                var result = _dungeonTile.GetGenerateNavigationResult();
+                if (result != null)
+                {
+                    if (result.Success)
+                    {
+                        var polygonData = _dungeonTile.GetPolygonData();
+                        Utils.DrawNavigationPolygon(this, polygonData);
+                    }
+                    else
+                    {
+                        DrawCircle(result.Exception.Point * GenerateDungeon.TileCellSize, 10, Colors.Red);
+                    }
+                }
+            }
         }
     }
 
@@ -502,6 +554,11 @@ public partial class DungeonRoomTemplate : TileMap
         _canPut = false;
         _hasActivePoint = false;
         _activeArea = null;
+    }
+
+    private void OnTileChanged()
+    {
+        _calcTileNavTimer = 1f;
     }
     
     //创建门
@@ -678,8 +735,11 @@ public partial class DungeonRoomTemplate : TileMap
     //触发保存操作
     private void TriggerSave()
     {
+        //计算导航网格
+        _dungeonTile.GenerateNavigationPolygon(0);
+        var polygonData = _dungeonTile.GetPolygonData();
         var rect = GetUsedRect();
-        SaveConfig(_doorConfigs, rect.Position, rect.Size, Name);
+        SaveConfig(_doorConfigs, rect.Position, rect.Size, polygonData.ToList(), Name);
     }
     
     /// <summary>
@@ -697,7 +757,7 @@ public partial class DungeonRoomTemplate : TileMap
     /// <summary>
     /// 保存房间配置
     /// </summary>
-    public static void SaveConfig(List<DoorAreaInfo> doorConfigs, Vector2I position, Vector2I size, string name)
+    public static void SaveConfig(List<DoorAreaInfo> doorConfigs, Vector2I position, Vector2I size, List<NavigationPolygonData> polygonData, string name)
     {
         //存入本地
         var path = RoomTileDataDir + name + ".json";
@@ -705,7 +765,7 @@ public partial class DungeonRoomTemplate : TileMap
         roomInfo.Position = new SerializeVector2(position);
         roomInfo.Size = new SerializeVector2(size);
         roomInfo.DoorAreaInfos = doorConfigs;
-        roomInfo.NavigationList = new List<NavigationPolygonData>();
+        roomInfo.NavigationList = polygonData;
         
         var config = new JsonSerializerOptions();
         config.WriteIndented = true;

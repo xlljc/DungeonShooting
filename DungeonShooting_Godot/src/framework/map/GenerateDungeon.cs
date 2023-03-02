@@ -83,6 +83,28 @@ public class GenerateDungeon
         // //没有合适的门
         // NoProperDoor,
     }
+
+    /// <summary>
+    /// 遍历所有房间
+    /// </summary>
+    public void EachRoom(Action<RoomInfo> cb)
+    {
+        EachRoom(StartRoom, cb);
+    }
+
+    private void EachRoom(RoomInfo roomInfo, Action<RoomInfo> cb)
+    {
+        if (roomInfo == null)
+        {
+            return;
+        }
+
+        cb(roomInfo);
+        foreach (var next in roomInfo.Next)
+        {
+            EachRoom(next, cb);
+        }
+    }
     
     /// <summary>
     /// 生成房间

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -33,6 +34,9 @@ public partial class RoomManager : Node2D
     private Font _font;
     private GenerateDungeon _generateDungeon;
 
+    //房间内所有导航网格数据
+    private List<NavigationPolygonData> _roomNavDataList = new List<NavigationPolygonData>();
+
     public override void _EnterTree()
     {
         //创建玩家
@@ -63,6 +67,10 @@ public partial class RoomManager : Node2D
         _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorLayer);
         //挂载导航区域
         _dungeonTile.MountNavigationPolygon(this);
+        _roomNavDataList.AddRange(_dungeonTile.GetPolygonData());
+        //挂载所有导航区域
+        _generateDungeon.EachRoom(MountNavFromRoomInfo);
+        
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
         //播放bgm
@@ -151,30 +159,42 @@ public partial class RoomManager : Node2D
                 // DrawLine(new Vector2(-5000, 0), new Vector2(5000, 0), Colors.Green);
                 
                 //绘制ai寻路区域
-                var polygonData = _dungeonTile.GetPolygonData();
-                for (var i = 0; i < polygonData.Length; i++)
-                {
-                    var item = polygonData[i];
-                    if (item.Points.Count >= 2)
-                    {
-                        var array = item.ConvertPointsToVector2Array().ToList();
-                        array.Add(array[0]);
-                        if (item.Type == NavigationPolygonType.In)
-                        {
-                            DrawPolyline(array.ToArray(), Colors.Yellow);
-                        }
-                        else
-                        {
-                            DrawPolyline(array.ToArray(), Colors.Red);
-                        }
-                    }
-                }
+                Utils.DrawNavigationPolygon(this, _roomNavDataList.ToArray());
             }
             //绘制房间区域
             //DrawRoomInfo(_generateDungeon.StartRoom);
         }
     }
 
+    private void MountNavFromRoomInfo(RoomInfo roomInfo)
+    {
+        var polygonArray = roomInfo.RoomSplit.RoomInfo.NavigationList.ToArray();
+        var polygon = new NavigationPolygon();
+        for (var i = 0; i < polygonArray.Length; i++)
+        {
+            var navigationPolygonData = polygonArray[i];
+            var polygonPointArray = navigationPolygonData.ConvertPointsToVector2Array();
+            //这里的位置需要加上房间位置
+            for (var j = 0; j < polygonPointArray.Length; j++)
+            {
+                polygonPointArray[j] = polygonPointArray[j] + (roomInfo.Position + Vector2I.One) * GenerateDungeon.TileCellSize;
+            }
+            polygon.AddOutline(polygonPointArray);
+                
+            //存入汇总列表
+            _roomNavDataList.Add(new NavigationPolygonData()
+            {
+                Type = navigationPolygonData.Type,
+                Points = polygonPointArray.Select(point => new SerializeVector2(point)).ToList(),
+            });
+        }
+        polygon.MakePolygonsFromOutlines();
+        var navigationPolygon = new NavigationRegion2D();
+        navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
+        navigationPolygon.NavigationPolygon = polygon;
+        AddChild(navigationPolygon);
+    }
+    
     //绘制房间区域, debug 用
     private void DrawRoomInfo(RoomInfo room)
     {

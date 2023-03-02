@@ -43,6 +43,8 @@ public class DungeonTile
     private TileMap _tileRoot;
     //地面地砖在 Atlas 的位置
     private List<Vector2I> _floorAtlasCoords;
+    //生成导航的结果
+    private GenerateNavigationResult _generateNavigationResult;
 
     public DungeonTile(TileMap tileRoot)
     {
@@ -438,45 +440,66 @@ public class DungeonTile
     {
         _usePoints.Clear();
         _polygonDataList.Clear();
-        
-        var size = new Vector2(_tileRoot.CellQuadrantSize, _tileRoot.CellQuadrantSize);
 
-        var rect = _tileRoot.GetUsedRect();
-
-        var x = rect.Position.X;
-        var y = rect.Position.Y;
-        var w = rect.Size.X;
-        var h = rect.Size.Y;
-
-        for (int j = y; j < h; j++)
+        try
         {
-            for (int i = x; i < w; i++)
+            var size = new Vector2(_tileRoot.CellQuadrantSize, _tileRoot.CellQuadrantSize);
+
+            var rect = _tileRoot.GetUsedRect();
+
+            var x = rect.Position.X;
+            var y = rect.Position.Y;
+            var w = rect.Size.X;
+            var h = rect.Size.Y;
+
+            for (int j = y; j < h; j++)
             {
-                if (IsWayTile(layer, i, j))
+                for (int i = x; i < w; i++)
                 {
-                    if (!_usePoints.Contains(new Vector2(i, j)))
+                    if (IsWayTile(layer, i, j))
                     {
-                        NavigationPolygonData polygonData = null;
+                        if (!_usePoints.Contains(new Vector2(i, j)))
+                        {
+                            NavigationPolygonData polygonData = null;
 
-                        if (!IsWayTile(layer, i, j - 1))
-                        {
-                            polygonData = CalcOutline(layer, i, j, size);
-                        }
-                        else if (!IsWayTile(layer, i, j + 1))
-                        {
-                            polygonData = CalcInline(layer, i, j, size);
-                        }
+                            if (!IsWayTile(layer, i, j - 1))
+                            {
+                                polygonData = CalcOutline(layer, i, j, size);
+                            }
+                            else if (!IsWayTile(layer, i, j + 1))
+                            {
+                                polygonData = CalcInline(layer, i, j, size);
+                            }
 
-                        if (polygonData != null)
-                        {
-                            _polygonDataList.Add(polygonData);
+                            if (polygonData != null)
+                            {
+                                _polygonDataList.Add(polygonData);
+                            }
                         }
                     }
                 }
             }
+
+            _generateNavigationResult = new GenerateNavigationResult(true);
+        }
+        catch (NavigationPointInterleavingException e)
+        {
+            _usePoints.Clear();
+            _polygonDataList.Clear();
+            GD.Print(e.Message);
+            _generateNavigationResult = new GenerateNavigationResult(false, e);
         }
     }
 
+    /// <summary>
+    /// 获取生成导航区域操作的结果, 如果没有调用过 GenerateNavigationPolygon() 函数, 则返回 null
+    /// </summary>
+    /// <returns></returns>
+    public GenerateNavigationResult GetGenerateNavigationResult()
+    {
+        return _generateNavigationResult;
+    }
+    
     /// <summary>
     /// 将导航区域挂载到 navigationRoot 上
     /// </summary>
@@ -484,31 +507,17 @@ public class DungeonTile
     {
         //TestData();
         // 在 Godot4.0_rc6 中 如果将所有点都放在 NavigationPolygon 里面, 即使点是对的, 但调用 MakePolygonsFromOutlines 还是可能会报错, 这应该是个bug
-        // for (var i = 0; i < _polygonDataList.Count; i++)
-        // {
-        //     var polygonData = _polygonDataList[i];
-        //     var polygon = new NavigationPolygon();
-        //     var array = polygonData.Points.ToArray();
-        //     polygon.AddOutline(array);
-        //     polygon.MakePolygonsFromOutlines();
-        //     var navigationPolygon = new NavigationRegion2D();
-        //     navigationPolygon.Name = "NavigationRegion" + i;
-        //     navigationPolygon.NavigationPolygon = polygon;
-        //     navigationRoot.AddChild(navigationPolygon);
-        // }
-        var polygon = new NavigationPolygon();
-        
         for (var i = 0; i < _polygonDataList.Count; i++)
         {
             var polygonData = _polygonDataList[i];
+            var polygon = new NavigationPolygon();
             polygon.AddOutline(polygonData.ConvertPointsToVector2Array());
+            polygon.MakePolygonsFromOutlines();
+            var navigationPolygon = new NavigationRegion2D();
+            navigationPolygon.Name = "NavigationRegion" + (navigationRoot.GetChildCount() + 1);
+            navigationPolygon.NavigationPolygon = polygon;
+            navigationRoot.AddChild(navigationPolygon);
         }
-        
-        polygon.MakePolygonsFromOutlines();
-        var navigationPolygon = new NavigationRegion2D();
-        navigationPolygon.Name = "NavigationRegion";
-        navigationPolygon.NavigationPolygon = polygon;
-        navigationRoot.AddChild(navigationPolygon);
     }
 
     /// <summary>
@@ -1024,7 +1033,7 @@ public class DungeonTile
     {
         if (_usePoints.Contains(pos))
         {
-            throw new Exception("生成导航多边形发生错误! 点: " + pos + "发生交错!");
+            throw new NavigationPointInterleavingException(pos, "生成导航多边形发生错误! 点: " + pos + "发生交错!");
         }
 
         _usePoints.Add(pos);
