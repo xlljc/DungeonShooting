@@ -32,6 +32,17 @@ public class DoorAreaInfo
     /// </summary>
     public Vector2 EndPosition;
 
+    public DoorAreaInfo()
+    {
+    }
+
+    public DoorAreaInfo(DoorDirection direction, float start, float end)
+    {
+        Direction = direction;
+        Start = start;
+        End = end;
+    }
+    
     /// <summary>
     /// 自动计算 startPosition 和 endPosition
     /// </summary>
