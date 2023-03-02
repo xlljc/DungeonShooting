@@ -24,4 +24,10 @@ public class DungeonRoomInfo
     /// </summary>
     [JsonInclude]
     public List<DoorAreaInfo> DoorAreaInfos;
+
+    /// <summary>
+    /// 导航数据
+    /// </summary>
+    [JsonInclude]
+    public NavigationPolygonData Navigation;
 }

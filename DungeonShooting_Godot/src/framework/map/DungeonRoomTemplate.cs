@@ -52,6 +52,10 @@ public partial class DungeonRoomTemplate : TileMap
     //
     private List<DoorAreaInfo> _doorConfigs;
     private Rect2 _prevRect;
+
+    //是否能保存
+    private bool _canSave = false;
+    private bool _clickSave = false;
     
     public override void _Process(double delta)
     {
@@ -318,7 +322,21 @@ public partial class DungeonRoomTemplate : TileMap
             _hasActivePoint = false;
             _activeArea = null;
         }
-        
+
+        //按下 ctrl + s 保存
+        if (Input.IsKeyPressed(Key.Ctrl) && Input.IsKeyPressed(Key.S))
+        {
+            _clickSave = true;
+            if (_canSave)
+            {
+                _canSave = false;
+                TriggerSave();
+            }
+        }
+        else
+        {
+            _clickSave = false;
+        }
     }
 
     public override void _Draw()
@@ -623,6 +641,12 @@ public partial class DungeonRoomTemplate : TileMap
     //区域数据修改
     private void OnDoorAreaChange()
     {
+        _canSave = true;
+    }
+
+    //触发保存操作
+    private void TriggerSave()
+    {
         var rect = GetUsedRect();
         SaveConfig(_doorConfigs, rect.Position, rect.Size, Name);
     }
@@ -657,7 +681,7 @@ public partial class DungeonRoomTemplate : TileMap
         var jsonStr = JsonSerializer.Serialize(roomInfo, config);
         File.WriteAllText(path, jsonStr);
     }
-
+    
     /// <summary>
     /// 读取房间配置
     /// </summary>

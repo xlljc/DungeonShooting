@@ -30,6 +30,9 @@ public class NavigationPolygonData
     /// </summary>
     [JsonInclude] public List<SerializeVector2> Points = new List<SerializeVector2>();
 
+    /// <summary>
+    /// 将 Points 字段转为 Vector2[] 类型数据并返回
+    /// </summary>
     public Vector2[] ConvertPointsToVector2Array()
     {
         if (Points == null)
@@ -46,6 +49,9 @@ public class NavigationPolygonData
         return array;
     }
 
+    /// <summary>
+    /// 将 Points 字段转为 Vector2I[] 类型数据并返回
+    /// </summary>
     public Vector2I[] ConvertPointsToVector2IArray()
     {
         if (Points == null)

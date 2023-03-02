@@ -31,9 +31,9 @@ public class SerializeVector2
     }
 
     [JsonInclude]
-    public float X;
+    public float X { get; private set; }
     [JsonInclude]
-    public float Y;
+    public float Y  { get; private set; }
 
     /// <summary>
     /// 转为 Vector2
