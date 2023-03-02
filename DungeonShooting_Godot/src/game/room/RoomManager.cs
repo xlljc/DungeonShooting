@@ -155,13 +155,15 @@ public partial class RoomManager : Node2D
                     var item = polygonData[i];
                     if (item.Points.Count >= 2)
                     {
+                        var array = item.ConvertPointsToVector2Array().ToList();
+                        array.Add(array[0]);
                         if (item.Type == NavigationPolygonType.In)
                         {
-                            DrawPolyline(item.Points.Concat(new[] { item.Points[0] }).ToArray(), Colors.Yellow);
+                            DrawPolyline(array.ToArray(), Colors.Yellow);
                         }
                         else
                         {
-                            DrawPolyline(item.Points.Concat(new[] { item.Points[0] }).ToArray(), Colors.Red);
+                            DrawPolyline(array.ToArray(), Colors.Red);
                         }
                     }
                 }

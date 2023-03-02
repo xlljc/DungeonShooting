@@ -418,11 +418,11 @@ public class DungeonTile
     private void TestData()
     {
         _polygonDataList.Clear();
-        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-456, 712), new Vector2(-440, 712), new Vector2(-440, 792), new Vector2(-456, 792) })});
-        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(-1048, 744), new Vector2(-840, 744), new Vector2(-840, 840), new Vector2(-1048, 840) })});
-        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(488, 920), new Vector2(504, 920), new Vector2(504, 1128), new Vector2(488, 1128) })});
-        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(1320, 984), new Vector2(1352, 984), new Vector2(1352, 1096), new Vector2(1432, 1096), new Vector2(1432, 984), new Vector2(1576, 984), new Vector2(1576, 1128), new Vector2(1544, 1128), new Vector2(1544, 1000), new Vector2(1464, 1000), new Vector2(1464, 1128), new Vector2(1320, 1128) })});
-        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(712, 1432), new Vector2(984, 1432), new Vector2(984, 1592), new Vector2(712, 1592) })});
+        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<SerializeVector2>(new []{ new SerializeVector2(-456, 712), new SerializeVector2(-440, 712), new SerializeVector2(-440, 792), new SerializeVector2(-456, 792) })});
+        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<SerializeVector2>(new []{ new SerializeVector2(-1048, 744), new SerializeVector2(-840, 744), new SerializeVector2(-840, 840), new SerializeVector2(-1048, 840) })});
+        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<SerializeVector2>(new []{ new SerializeVector2(488, 920), new SerializeVector2(504, 920), new SerializeVector2(504, 1128), new SerializeVector2(488, 1128) })});
+        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<SerializeVector2>(new []{ new SerializeVector2(1320, 984), new SerializeVector2(1352, 984), new SerializeVector2(1352, 1096), new SerializeVector2(1432, 1096), new SerializeVector2(1432, 984), new SerializeVector2(1576, 984), new SerializeVector2(1576, 1128), new SerializeVector2(1544, 1128), new SerializeVector2(1544, 1000), new SerializeVector2(1464, 1000), new SerializeVector2(1464, 1128), new SerializeVector2(1320, 1128) })});
+        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<SerializeVector2>(new []{ new SerializeVector2(712, 1432), new SerializeVector2(984, 1432), new SerializeVector2(984, 1592), new SerializeVector2(712, 1592) })});
     }
 
     /// <summary>
@@ -450,7 +450,7 @@ public class DungeonTile
         for (var i = 0; i < _polygonDataList.Count; i++)
         {
             var polygonData = _polygonDataList[i];
-            polygon.AddOutline(polygonData.Points.ToArray());
+            polygon.AddOutline(polygonData.ConvertPointsToVector2Array());
         }
         
         polygon.MakePolygonsFromOutlines();
@@ -559,7 +559,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -569,7 +569,7 @@ public class DungeonTile
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -592,7 +592,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y +  + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -613,7 +613,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI++;
@@ -623,7 +623,7 @@ public class DungeonTile
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -646,7 +646,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI--;
@@ -667,7 +667,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -677,7 +677,7 @@ public class DungeonTile
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -700,7 +700,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -721,7 +721,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI--;
@@ -731,7 +731,7 @@ public class DungeonTile
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -754,7 +754,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI++;
@@ -798,7 +798,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -808,7 +808,7 @@ public class DungeonTile
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -831,7 +831,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -852,7 +852,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI--;
@@ -862,7 +862,7 @@ public class DungeonTile
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -885,7 +885,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI++;
@@ -906,7 +906,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -916,7 +916,7 @@ public class DungeonTile
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -939,7 +939,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -960,7 +960,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI++;
@@ -970,7 +970,7 @@ public class DungeonTile
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -993,7 +993,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI--;
