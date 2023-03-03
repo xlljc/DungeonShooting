@@ -30,9 +30,24 @@ public class SerializeVector2
         
     }
 
-    
     [JsonInclude]
-    public float X;
+    public float X { get; private set; }
     [JsonInclude]
-    public float Y;
+    public float Y  { get; private set; }
+
+    /// <summary>
+    /// 转为 Vector2
+    /// </summary>
+    public Vector2 AsVector2()
+    {
+        return new Vector2(X, Y);
+    }
+
+    /// <summary>
+    /// 转为 Vector2I
+    /// </summary>
+    public Vector2I AsVector2I()
+    {
+        return new Vector2I((int)X, (int)Y);
+    }
 }

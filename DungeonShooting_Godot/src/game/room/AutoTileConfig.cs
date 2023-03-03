@@ -14,7 +14,7 @@ public class AutoTileConfig
     public TileCellInfo L = new TileCellInfo(0, new Vector2I(3, 3));
     public TileCellInfo T = new TileCellInfo(0, new Vector2I(2, 7));
     public TileCellInfo B = new TileCellInfo(0, new Vector2I(2, 2));
-    public TileCellInfo Ground = new TileCellInfo(0, new Vector2I(0, 8));
+    public TileCellInfo Floor = new TileCellInfo(0, new Vector2I(0, 8));
     
     public TileCellInfo OUT_LT = new TileCellInfo(0, new Vector2I(1, 2));
     public TileCellInfo OUT_LB = new TileCellInfo(0, new Vector2I(1, 7));

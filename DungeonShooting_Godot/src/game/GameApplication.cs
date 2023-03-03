@@ -59,17 +59,13 @@ public partial class GameApplication : Node2D
 	/// <summary>
 	/// 房间配置
 	/// </summary>
-	public readonly List<DungeonRoomSplit> RoomConfig;
+	public List<DungeonRoomSplit> RoomConfig { get; private set; }
 
 	public GameApplication()
 	{
 		Instance = this;
-
-		//加载房间配置信息
-		var file = FileAccess.Open(ResourcePath.resource_map_RoomConfig_json, FileAccess.ModeFlags.Read);
-		var asText = file.GetAsText();
-		RoomConfig = JsonSerializer.Deserialize<List<DungeonRoomSplit>>(asText);
-		file.Dispose();
+		
+		InitRoomConfig();
 
 		//扫描并注册当前程序集下的武器
 		WeaponManager.RegisterWeaponFromAssembly(GetType().Assembly);
@@ -119,5 +115,28 @@ public partial class GameApplication : Node2D
 	{
 		//return viewPos;
 		return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
+	}
+
+	//初始化房间配置
+	private void InitRoomConfig()
+	{
+		//加载房间配置信息
+		var file = FileAccess.Open(ResourcePath.resource_map_RoomConfig_json, FileAccess.ModeFlags.Read);
+		var asText = file.GetAsText();
+		RoomConfig = JsonSerializer.Deserialize<List<DungeonRoomSplit>>(asText);
+		file.Dispose();
+		
+		//需要处理 DoorAreaInfos 长度为 0 的房间, 并为其配置默认值
+		foreach (var roomSplit in RoomConfig)
+		{
+			var areaInfos = roomSplit.RoomInfo.DoorAreaInfos;
+			if (areaInfos.Count == 0)
+			{
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.X - 2) * GenerateDungeon.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.X - 2) * GenerateDungeon.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.Y - 2) * GenerateDungeon.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.Y - 2) * GenerateDungeon.TileCellSize));
+			}
+		}
 	}
 }

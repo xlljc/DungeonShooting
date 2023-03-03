@@ -66,6 +66,9 @@ public class GenerateDungeon
     private int _maxFailCount = 10;
     private int _failCount = 0;
 
+    //最大尝试次数
+    private int _maxTryCount = 10;
+    
     private enum GenerateRoomErrorCode
     {
         NoError,
@@ -73,10 +76,34 @@ public class GenerateDungeon
         RoomFull,
         //超出区域
         OutArea,
-        //碰到其他房间或过道
-        HasCollision,
-        //没有合适的门
-        NoProperDoor,
+        //没有合适的位置
+        NoSuitableLocation
+        // //碰到其他房间或过道
+        // HasCollision,
+        // //没有合适的门
+        // NoProperDoor,
+    }
+
+    /// <summary>
+    /// 遍历所有房间
+    /// </summary>
+    public void EachRoom(Action<RoomInfo> cb)
+    {
+        EachRoom(StartRoom, cb);
+    }
+
+    private void EachRoom(RoomInfo roomInfo, Action<RoomInfo> cb)
+    {
+        if (roomInfo == null)
+        {
+            return;
+        }
+
+        cb(roomInfo);
+        foreach (var next in roomInfo.Next)
+        {
+            EachRoom(next, cb);
+        }
     }
     
     /// <summary>
@@ -137,68 +164,85 @@ public class GenerateDungeon
 
         if (prevRoomInfo != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
         {
-            //房间间隔
-            var space = Utils.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
-            //中心偏移
-            int offset;
-            if (direction == 0 || direction == 2)
+            //生成的位置可能会和上一个房间对不上, 需要多次尝试
+            var tryCount = 0; //当前尝试次数
+            for (; tryCount < _maxTryCount; tryCount++)
             {
-                offset = Utils.RandomRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
-                    (int)(prevRoomInfo.Size.X * _roomVerticalMaxDispersion));
-            }
-            else
-            {
-                offset = Utils.RandomRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
-                    (int)(prevRoomInfo.Size.Y * _roomHorizontalMaxDispersion));
-            }
-
-            //计算房间位置
-            if (direction == 0) //上
-            {
-                room.Position = new Vector2I(prevRoomInfo.Position.X + offset,
-                    prevRoomInfo.Position.Y - room.Size.Y - space);
-            }
-            else if (direction == 1) //右
-            {
-                room.Position = new Vector2I(prevRoomInfo.Position.X + prevRoomInfo.Size.Y + space,
-                    prevRoomInfo.Position.Y + offset);
-            }
-            else if (direction == 2) //下
-            {
-                room.Position = new Vector2I(prevRoomInfo.Position.X + offset,
-                    prevRoomInfo.Position.Y + prevRoomInfo.Size.Y + space);
-            }
-            else if (direction == 3) //左
-            {
-                room.Position = new Vector2I(prevRoomInfo.Position.X - room.Size.X - space,
-                    prevRoomInfo.Position.Y + offset);
-            }
-            
-            //是否在限制区域内
-            if (_enableLimitRange)
-            {
-                if (room.GetHorizontalStart() < -_rangeX || room.GetHorizontalEnd() > _rangeX || room.GetVerticalStart() < -_rangeY || room.GetVerticalEnd() > _rangeY)
+                //房间间隔
+                var space = Utils.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
+                //中心偏移
+                int offset;
+                if (direction == 0 || direction == 2)
                 {
-                    resultRoom = null;
-                    return GenerateRoomErrorCode.OutArea;
+                    offset = Utils.RandomRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
+                        (int)(prevRoomInfo.Size.X * _roomVerticalMaxDispersion));
                 }
+                else
+                {
+                    offset = Utils.RandomRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
+                        (int)(prevRoomInfo.Size.Y * _roomHorizontalMaxDispersion));
+                }
+
+                //计算房间位置
+                if (direction == 0) //上
+                {
+                    room.Position = new Vector2I(prevRoomInfo.Position.X + offset,
+                        prevRoomInfo.Position.Y - room.Size.Y - space);
+                }
+                else if (direction == 1) //右
+                {
+                    room.Position = new Vector2I(prevRoomInfo.Position.X + prevRoomInfo.Size.Y + space,
+                        prevRoomInfo.Position.Y + offset);
+                }
+                else if (direction == 2) //下
+                {
+                    room.Position = new Vector2I(prevRoomInfo.Position.X + offset,
+                        prevRoomInfo.Position.Y + prevRoomInfo.Size.Y + space);
+                }
+                else if (direction == 3) //左
+                {
+                    room.Position = new Vector2I(prevRoomInfo.Position.X - room.Size.X - space,
+                        prevRoomInfo.Position.Y + offset);
+                }
+
+                //是否在限制区域内
+                if (_enableLimitRange)
+                {
+                    if (room.GetHorizontalStart() < -_rangeX || room.GetHorizontalEnd() > _rangeX ||
+                        room.GetVerticalStart() < -_rangeY || room.GetVerticalEnd() > _rangeY)
+                    {
+                        //超出区域, 直接跳出尝试的循环, 返回 null
+                        resultRoom = null;
+                        return GenerateRoomErrorCode.OutArea;
+                    }
+                }
+
+                //是否碰到其他房间或者过道
+                if (_roomGrid.RectCollision(room.Position - new Vector2(3, 3), room.Size + new Vector2(6, 6)))
+                {
+                    //碰到其他墙壁, 再一次尝试
+                    continue;
+                    //return GenerateRoomErrorCode.HasCollision;
+                }
+
+                _roomGrid.AddRect(room.Position, room.Size, true);
+
+                //找门, 与上一个房间是否能连通
+                if (!ConnectDoor(prevRoomInfo, room))
+                {
+                    _roomGrid.RemoveRect(room.Position, room.Size);
+                    //房间过道没有连接上, 再一次尝试
+                    continue;
+                    //return GenerateRoomErrorCode.NoProperDoor;
+                }
+                break;
             }
 
-            //是否碰到其他房间或者过道
-            if (_roomGrid.RectCollision(room.Position - new Vector2(3, 3), room.Size + new Vector2(6, 6)))
+            //尝试次数用光了, 还没有找到合适的位置
+            if (tryCount >= _maxTryCount)
             {
                 resultRoom = null;
-                return GenerateRoomErrorCode.HasCollision;
-            }
-
-            _roomGrid.AddRect(room.Position, room.Size, true);
-
-            //找门, 与上一个房间是否能连通
-            if (!ConnectDoor(prevRoomInfo, room))
-            {
-                _roomGrid.RemoveRect(room.Position, room.Size);
-                resultRoom = null;
-                return GenerateRoomErrorCode.NoProperDoor;
+                return GenerateRoomErrorCode.NoSuitableLocation;
             }
         }
 

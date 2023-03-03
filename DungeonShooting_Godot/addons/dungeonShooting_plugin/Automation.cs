@@ -120,7 +120,12 @@ public partial class Automation : Control
 				{
 					var dungeonRoomTemplate = packedScene.Instantiate<DungeonRoomTemplate>();
 					var usedRect = dungeonRoomTemplate.GetUsedRect();
-					DungeonRoomTemplate.SaveConfig(new List<DoorAreaInfo>(), usedRect.Position, usedRect.Size, item);
+					var dungeonTile = new DungeonTile(dungeonRoomTemplate);
+					dungeonTile.SetFloorAtlasCoords(new List<Vector2I>() { new Vector2I(0, 8) });
+					//计算导航网格
+					dungeonTile.GenerateNavigationPolygon(0);
+					var polygonData = dungeonTile.GetPolygonData();
+					DungeonRoomTemplate.SaveConfig(new List<DoorAreaInfo>(), usedRect.Position, usedRect.Size, polygonData.ToList(), item);
 					dungeonRoomTemplate.QueueFree();
 				}
 			}

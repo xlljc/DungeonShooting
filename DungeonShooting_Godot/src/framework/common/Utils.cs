@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -96,5 +97,29 @@ public static class Utils
             Mathf.Min(start1, start2), Mathf.Min(end1, end2),
             Mathf.Abs(start1 - start2), Mathf.Abs(end1 - end2)
         );
+    }
+
+    /// <summary>
+    /// 使用定的 canvasItem 绘制导航区域, 注意, 该函数只能在 draw 函数中调用
+    /// </summary>
+    public static void DrawNavigationPolygon(CanvasItem canvasItem, NavigationPolygonData[] polygonData)
+    {
+        for (var i = 0; i < polygonData.Length; i++)
+        {
+            var item = polygonData[i];
+            if (item.Points.Count >= 2)
+            {
+                var array = item.ConvertPointsToVector2Array().ToList();
+                array.Add(array[0]);
+                if (item.Type == NavigationPolygonType.In)
+                {
+                    canvasItem.DrawPolyline(array.ToArray(), Colors.Yellow);
+                }
+                else
+                {
+                    canvasItem.DrawPolyline(array.ToArray(), Colors.Red);
+                }
+            }
+        }
     }
 }

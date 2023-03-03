@@ -178,6 +178,15 @@ reload={
 
 project/assembly_name="DungeonShooting"
 
+[navigation]
+
+2d/default_edge_connection_margin=4
+
+[physics]
+
+2d/default_gravity=0.0
+2d/default_gravity_vector=Vector2(0, 0)
+
 [rendering]
 
 environment/defaults/default_clear_color=Color(0.109804, 0.0666667, 0.0901961, 1)

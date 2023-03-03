@@ -26,7 +26,7 @@ public partial class TestNavigation2 : Node2D
 		}
 		
 		var pos = _navigationAgent2D.GetNextPathPosition();
-		_enemy.GlobalPosition = _enemy.GlobalPosition.MoveToward(pos, 100 * (float)delta);
+		_enemy.GlobalPosition = _enemy.GlobalPosition.MoveToward(pos, 400 * (float)delta);
 
 	}
 

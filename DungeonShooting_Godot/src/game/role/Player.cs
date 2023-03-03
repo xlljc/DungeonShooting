@@ -55,6 +55,7 @@ public partial class Player : Role
         // MoveSpeed = 500;
         // CollisionLayer = 0;
         // CollisionMask = 0;
+        // GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
     }
 
     protected override void Process(float delta)

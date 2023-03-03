@@ -20,6 +20,10 @@ public class DungeonTile
     /// TileMap 上层的层级
     /// </summary>
     public const int TopMapLayer = 2;
+    /// <summary>
+    /// 连接房间的过道的地板层级
+    /// </summary>
+    public const int AisleFloorMapLayer = 3;
 
     /// <summary>
     /// 配置层级的自定义数据名称
@@ -33,30 +37,43 @@ public class DungeonTile
 
     //导航区域数据
     private readonly List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
+
+    //连接门的导航区域
+    private readonly List<NavigationPolygonData> _connectDoorPolygonDataList = new List<NavigationPolygonData>();
     
     //----------------------------------------------------
-
-    private TileMap _tileRoot;
     
+    private TileMap _tileRoot;
+    //地面地砖在 Atlas 的位置
+    private List<Vector2I> _floorAtlasCoords;
+    //生成导航的结果
+    private GenerateNavigationResult _generateNavigationResult;
+
     public DungeonTile(TileMap tileRoot)
     {
         _tileRoot = tileRoot;
     }
-    
+
     /// <summary>
     /// 根据 roomInfo 和 config 数据自动填充 tileMap 参数中的地图数据
     /// </summary>
     public void AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo)
     {
+        _connectDoorPolygonDataList.Clear();
+        _AutoFillRoomTile(config, roomInfo);
+    }
+    
+    private void _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo)
+    {
         foreach (var info in roomInfo.Next)
         {
-            AutoFillRoomTile(config, info);
+            _AutoFillRoomTile(config, info);
         }
         
         //铺房间
         if (roomInfo.RoomSplit == null)
         {
-            FillRect(FloorMapLayer, config.Ground, roomInfo.Position + Vector2.One,
+            FillRect(FloorMapLayer, config.Floor, roomInfo.Position + Vector2.One,
                 roomInfo.Size - new Vector2(2, 2));
 
             FillRect(TopMapLayer, config.IN_LT, roomInfo.Position, Vector2.One);
@@ -133,11 +150,11 @@ public class DungeonTile
 
                     if (dir == 0) //横向
                     {
-                        FullHorizontalGalleryWall(config, rect);
+                        FullHorizontalAisleWall(config, rect, 0);
                     }
                     else //纵向
                     {
-                        FullVerticalGalleryWall(config, rect);
+                        FullVerticalAisleWall(config, rect, 0);
                     }
                 }
                 else //带交叉点
@@ -234,26 +251,26 @@ public class DungeonTile
                             break;
                     }
 
-                    FillRect(FloorMapLayer, config.Ground, doorInfo.Cross + Vector2.One,
+                    FillRect(AisleFloorMapLayer, config.Floor, doorInfo.Cross + Vector2.One,
                         new Vector2(GenerateDungeon.CorridorWidth - 2, GenerateDungeon.CorridorWidth - 2));
 
-                    //墙壁
+                    //墙壁, 0横向, 1纵向
                     if (dir1 == 0)
                     {
-                        FullHorizontalGalleryWall(config, rect);
+                        FullHorizontalAisleWall(config, rect, doorDir1 == DoorDirection.W ? 1: 2);
                     }
                     else
                     {
-                        FullVerticalGalleryWall(config, rect);
+                        FullVerticalAisleWall(config, rect, doorDir1 == DoorDirection.N ? 1 : 2);
                     }
 
                     if (dir2 == 0)
                     {
-                        FullHorizontalGalleryWall(config, rect2);
+                        FullHorizontalAisleWall(config, rect2, doorDir2 == DoorDirection.W ? 1 : 2);
                     }
                     else
                     {
-                        FullVerticalGalleryWall(config, rect2);
+                        FullVerticalAisleWall(config, rect2, doorDir2 == DoorDirection.N ? 1 : 2);
                     }
 
                     if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
@@ -312,25 +329,17 @@ public class DungeonTile
                         case DoorDirection.E: //→
                             ClearRect(TopMapLayer, doorInfo.OriginPosition + new Vector2(-1, 1),
                                 new Vector2(1, rect.Size.Y - 2));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.OriginPosition + new Vector2(-1, 1),
-                                new Vector2(1, rect.Size.Y - 2));
                             break;
                         case DoorDirection.W: //←
                             ClearRect(TopMapLayer, doorInfo.OriginPosition + new Vector2(0, 1),
-                                new Vector2(1, rect.Size.Y - 2));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.OriginPosition + new Vector2(0, 1),
                                 new Vector2(1, rect.Size.Y - 2));
                             break;
                         case DoorDirection.S: //↓
                             ClearRect(TopMapLayer, doorInfo.OriginPosition + new Vector2(1, -1),
                                 new Vector2(rect.Size.X - 2, 1));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.OriginPosition + new Vector2(1, -1),
-                                new Vector2(rect.Size.X - 2, 1));
                             break;
                         case DoorDirection.N: //↑
                             ClearRect(MiddleMapLayer, doorInfo.OriginPosition + new Vector2(1, 2),
-                                new Vector2(rect.Size.X - 2, 1));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.OriginPosition + new Vector2(1, 0),
                                 new Vector2(rect.Size.X - 2, 1));
                             break;
                     }
@@ -340,25 +349,17 @@ public class DungeonTile
                         case DoorDirection.E: //→
                             ClearRect(TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1),
                                 new Vector2(1, rect2.Size.Y - 2));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1),
-                                new Vector2(1, rect2.Size.Y - 2));
                             break;
                         case DoorDirection.W: //←
                             ClearRect(TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1),
-                                new Vector2(1, rect2.Size.Y - 2));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1),
                                 new Vector2(1, rect2.Size.Y - 2));
                             break;
                         case DoorDirection.S: //↓
                             ClearRect(TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1),
                                 new Vector2(rect2.Size.X - 2, 1));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1),
-                                new Vector2(rect2.Size.X - 2, 1));
                             break;
                         case DoorDirection.N: //↑
                             ClearRect(MiddleMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0),
-                                new Vector2(rect2.Size.X - 2, 1));
-                            FillRect(FloorMapLayer, config.Ground, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0),
                                 new Vector2(rect2.Size.X - 2, 1));
                             break;
                     }
@@ -386,123 +387,262 @@ public class DungeonTile
         {
             for (int j = 0; j < size.Y; j++)
             {
-                //tileMap.SetCell((int)pos.X + i, (int)pos.Y + j, -1);
                 _tileRoot.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), -1);
             }
         }
     }
-
-    private void FullHorizontalGalleryWall(AutoTileConfig config, Rect2 rect)
+    
+    private void FullHorizontalAisleWall(AutoTileConfig config, Rect2 rect, int type)
     {
-        FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
+        FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
         FillRect(MiddleMapLayer, config.T, rect.Position, new Vector2(rect.Size.X, 1));
         FillRect(TopMapLayer, config.B, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
         //左
         ClearRect(TopMapLayer, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
-        FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+        if (type == 1)
+        {
+            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+        }
+        else
+        {
+            FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+            //生成门的导航区域
+            var x = rect.Position.X * GenerateDungeon.TileCellSize;
+            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            AddDoorNavigation(
+                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 2.5f),
+                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 2.5f)
+            );
+        }
+
         //右
         ClearRect(TopMapLayer, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
-        FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+        if (type == 2)
+        {
+            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+        }
+        else
+        {
+            FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+            //生成门的导航区域
+            var x = rect.Position.X * GenerateDungeon.TileCellSize;
+            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            AddDoorNavigation(
+                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f),
+                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f)
+            );
+        }
     }
 
-    private void FullVerticalGalleryWall(AutoTileConfig config, Rect2 rect)
+    private void FullVerticalAisleWall(AutoTileConfig config, Rect2 rect, int type)
     {
-        FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
+        FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
         FillRect(TopMapLayer, config.L, rect.Position, new Vector2(1, rect.Size.Y));
         FillRect(TopMapLayer, config.R, rect.Position + new Vector2(rect.Size.X - 1, 0), new Vector2(1, rect.Size.Y));
         //上
         ClearRect(TopMapLayer, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
-        FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+        if (type == 1)
+        {
+            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+        }
+        else
+        {
+            FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+            //生成门的导航区域
+            var x = rect.Position.X * GenerateDungeon.TileCellSize;
+            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            AddDoorNavigation(
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f)
+            );
+        }
         //下
         ClearRect(MiddleMapLayer, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
-        FillRect(FloorMapLayer, config.Ground, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+        if (type == 2)
+        {
+            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+        }
+        else
+        {
+            FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+            //生成门的导航区域
+            var x = rect.Position.X * GenerateDungeon.TileCellSize;
+            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            AddDoorNavigation(
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize)
+            );
+        }
+    }
+
+    private void AddDoorNavigation(SerializeVector2 p1, SerializeVector2 p2, SerializeVector2 p3, SerializeVector2 p4)
+    {
+        var polygonData = new NavigationPolygonData();
+        polygonData.Type = NavigationPolygonType.Out;
+        polygonData.Points.Add(p1);
+        polygonData.Points.Add(p2);
+        polygonData.Points.Add(p3);
+        polygonData.Points.Add(p4);
+        _connectDoorPolygonDataList.Add(polygonData);
     }
     
-    /// <summary>
-    /// 计算网格区域, 并且赋值给 navigationPolygon
-    /// </summary>
-    public void GenerateNavigationPolygon(NavigationRegion2D navigationPolygon)
+    //报错数据
+    private void TestData()
     {
-        GenerateNavigationPolygon();
-        var polygon = new NavigationPolygon();
-        foreach (var polygonData in _polygonDataList)
-        {
-            polygon.AddOutline(polygonData.Points.ToArray());
-        }
-        polygon.MakePolygonsFromOutlines();
-        navigationPolygon.NavigationPolygon = polygon;
+        _polygonDataList.Clear();
+        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<SerializeVector2>(new []{ new SerializeVector2(-456, 712), new SerializeVector2(-440, 712), new SerializeVector2(-440, 792), new SerializeVector2(-456, 792) })});
+        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<SerializeVector2>(new []{ new SerializeVector2(-1048, 744), new SerializeVector2(-840, 744), new SerializeVector2(-840, 840), new SerializeVector2(-1048, 840) })});
+        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<SerializeVector2>(new []{ new SerializeVector2(488, 920), new SerializeVector2(504, 920), new SerializeVector2(504, 1128), new SerializeVector2(488, 1128) })});
+        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<SerializeVector2>(new []{ new SerializeVector2(1320, 984), new SerializeVector2(1352, 984), new SerializeVector2(1352, 1096), new SerializeVector2(1432, 1096), new SerializeVector2(1432, 984), new SerializeVector2(1576, 984), new SerializeVector2(1576, 1128), new SerializeVector2(1544, 1128), new SerializeVector2(1544, 1000), new SerializeVector2(1464, 1000), new SerializeVector2(1464, 1128), new SerializeVector2(1320, 1128) })});
+        _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<SerializeVector2>(new []{ new SerializeVector2(712, 1432), new SerializeVector2(984, 1432), new SerializeVector2(984, 1592), new SerializeVector2(712, 1592) })});
     }
 
     /// <summary>
-    /// 获取导航点数据
+    /// 计算并动生成导航区域, layer 为需要计算的层级，如果没有设置 floorAtlasCoords，则该 layer 下不为空的地砖都将视为可行走区域
+    /// </summary>
+    public void GenerateNavigationPolygon(int layer)
+    {
+        _usePoints.Clear();
+        _polygonDataList.Clear();
+
+        try
+        {
+            var size = new Vector2(_tileRoot.CellQuadrantSize, _tileRoot.CellQuadrantSize);
+
+            var rect = _tileRoot.GetUsedRect();
+
+            var x = rect.Position.X;
+            var y = rect.Position.Y;
+            var w = rect.Size.X;
+            var h = rect.Size.Y;
+
+            for (int j = y; j < h; j++)
+            {
+                for (int i = x; i < w; i++)
+                {
+                    if (IsWayTile(layer, i, j))
+                    {
+                        if (!_usePoints.Contains(new Vector2(i, j)))
+                        {
+                            NavigationPolygonData polygonData = null;
+
+                            if (!IsWayTile(layer, i, j - 1))
+                            {
+                                polygonData = CalcOutline(layer, i, j, size);
+                            }
+                            else if (!IsWayTile(layer, i, j + 1))
+                            {
+                                polygonData = CalcInline(layer, i, j, size);
+                            }
+
+                            if (polygonData != null)
+                            {
+                                _polygonDataList.Add(polygonData);
+                            }
+                        }
+                    }
+                }
+            }
+
+            _generateNavigationResult = new GenerateNavigationResult(true);
+        }
+        catch (NavigationPointInterleavingException e)
+        {
+            _usePoints.Clear();
+            _polygonDataList.Clear();
+            GD.Print(e.Message);
+            _generateNavigationResult = new GenerateNavigationResult(false, e);
+        }
+    }
+
+    /// <summary>
+    /// 获取生成导航区域操作的结果, 如果没有调用过 GenerateNavigationPolygon() 函数, 则返回 null
+    /// </summary>
+    /// <returns></returns>
+    public GenerateNavigationResult GetGenerateNavigationResult()
+    {
+        return _generateNavigationResult;
+    }
+    
+    /// <summary>
+    /// 将导航区域挂载到 navigationRoot 上
+    /// </summary>
+    public void MountNavigationPolygon(Node2D navigationRoot)
+    {
+        //TestData();
+        // 在 Godot4.0_rc6 中 如果将所有点都放在 NavigationPolygon 里面, 即使点是对的, 但调用 MakePolygonsFromOutlines 还是可能会报错, 这应该是个bug
+        for (var i = 0; i < _polygonDataList.Count; i++)
+        {
+            var polygonData = _polygonDataList[i];
+            CreateNavigationRegion(navigationRoot, polygonData);
+        }
+
+        for (var i = 0; i < _connectDoorPolygonDataList.Count; i++)
+        {
+            var polygonData = _connectDoorPolygonDataList[i];
+            CreateNavigationRegion(navigationRoot, polygonData);
+        }
+    }
+
+    private void CreateNavigationRegion(Node2D navigationRoot, NavigationPolygonData polygonData)
+    {
+        var polygon = new NavigationPolygon();
+        polygon.AddOutline(polygonData.ConvertPointsToVector2Array());
+        polygon.MakePolygonsFromOutlines();
+        var navigationPolygon = new NavigationRegion2D();
+        navigationPolygon.Name = "NavigationRegion" + (navigationRoot.GetChildCount() + 1);
+        navigationPolygon.NavigationPolygon = polygon;
+        navigationRoot.AddChild(navigationPolygon);
+    }
+
+    /// <summary>
+    /// 获取房间内的导航点数据
     /// </summary>
     public NavigationPolygonData[] GetPolygonData()
     {
         return _polygonDataList.ToArray();
     }
+    
+    /// <summary>
+    /// 获取连接门导航数据, 必须要调用 AutoFillRoomTile() 函数才有数据
+    /// </summary>
+    public NavigationPolygonData[] GetConnectDoorPolygonData()
+    {
+        return _connectDoorPolygonDataList.ToArray();
+    }
 
+    /// <summary>
+    /// 设置地面的地砖，将影响导航网格计算
+    /// </summary>
+    public void SetFloorAtlasCoords(List<Vector2I> floorAtlasCoords)
+    {
+        _floorAtlasCoords = floorAtlasCoords;
+    }
+    
     /// <summary>
     /// 返回指定位置的Tile是否为可以行走
     /// </summary>
-    public bool IsWayTile(int x, int y)
+    private bool IsWayTile(int layer, int x, int y)
     {
-        return _tileRoot.GetCellTileData(DungeonTile.FloorMapLayer, new Vector2I(x, y)) != null;
-    }
-
-    /// <summary>
-    /// 返回指定坐标下对应的Tile是否为可以行走
-    /// </summary>
-    public bool IsWayPosition(float x, float y)
-    {
-        var tileMapCellSize = _tileRoot.CellQuadrantSize;
-        return IsWayTile((int)(x / tileMapCellSize), (int)(y / tileMapCellSize));
-    }
-
-    /// <summary>
-    /// 自动生成导航区域
-    /// </summary>
-    private void GenerateNavigationPolygon()
-    {
-        var size = new Vector2(_tileRoot.CellQuadrantSize, _tileRoot.CellQuadrantSize);
-
-        var rect = _tileRoot.GetUsedRect();
-
-        var x = rect.Position.X;
-        var y = rect.Position.Y;
-        var w = rect.Size.X;
-        var h = rect.Size.Y;
-
-        for (int j = y; j < h; j++)
+        if (_floorAtlasCoords == null || _floorAtlasCoords.Count == 0)
         {
-            for (int i = x; i < w; i++)
-            {
-                if (IsWayTile(i, j))
-                {
-                    if (!_usePoints.Contains(new Vector2(i, j)))
-                    {
-                        NavigationPolygonData polygonData = null;
-
-                        if (!IsWayTile(i, j - 1))
-                        {
-                            polygonData = CalcOutline(i, j, _tileRoot, size);
-                        }
-                        else if (!IsWayTile(i, j + 1))
-                        {
-                            polygonData = CalcInline(i, j, _tileRoot, size);
-                        }
-
-                        if (polygonData != null)
-                        {
-                            _polygonDataList.Add(polygonData);
-                        }
-                    }
-                }
-            }
+            return _tileRoot.GetCellTileData(layer, new Vector2I(x, y)) != null;
         }
+
+        var result = _tileRoot.GetCellAtlasCoords(layer, new Vector2I(x, y));
+        return _floorAtlasCoords.Contains(result);
     }
-    
+
     //计算导航网格外轮廓
-    private NavigationPolygonData CalcOutline(int i, int j, TileMap tileMap, Vector2 size)
+    private NavigationPolygonData CalcOutline(int layer, int i, int j, Vector2 size)
     {
         var polygonData = new NavigationPolygonData();
         polygonData.Type = NavigationPolygonType.Out;
@@ -522,7 +662,7 @@ public class DungeonTile
             {
                 case 0: //右
                 {
-                    if (IsWayTile(tempI, tempJ - 1)) //先向上找
+                    if (IsWayTile(layer, tempI, tempJ - 1)) //先向上找
                     {
                         dir = 3;
 
@@ -532,17 +672,17 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ--;
                         break;
                     }
-                    else if (IsWayTile(tempI + 1, tempJ)) //再向右找
+                    else if (IsWayTile(layer, tempI + 1, tempJ)) //再向右找
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -555,7 +695,7 @@ public class DungeonTile
                         tempI++;
                         break;
                     }
-                    else if (IsWayTile(tempI, tempJ + 1)) //向下找
+                    else if (IsWayTile(layer, tempI, tempJ + 1)) //向下找
                     {
                         dir = 1;
 
@@ -565,7 +705,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y +  + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -576,7 +716,7 @@ public class DungeonTile
                 }
                 case 1: //下
                 {
-                    if (IsWayTile(tempI + 1, tempJ)) //先向右找
+                    if (IsWayTile(layer, tempI + 1, tempJ)) //先向右找
                     {
                         dir = 0;
 
@@ -586,17 +726,17 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI++;
                         break;
                     }
-                    else if (IsWayTile(tempI, tempJ + 1)) //再向下找
+                    else if (IsWayTile(layer, tempI, tempJ + 1)) //再向下找
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -609,7 +749,7 @@ public class DungeonTile
                         tempJ++;
                         break;
                     }
-                    else if (IsWayTile(tempI - 1, tempJ)) //向左找
+                    else if (IsWayTile(layer, tempI - 1, tempJ)) //向左找
                     {
                         dir = 2;
 
@@ -619,7 +759,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI--;
@@ -630,7 +770,7 @@ public class DungeonTile
                 }
                 case 2: //左
                 {
-                    if (IsWayTile(tempI, tempJ + 1)) //先向下找
+                    if (IsWayTile(layer, tempI, tempJ + 1)) //先向下找
                     {
                         dir = 1;
 
@@ -640,17 +780,17 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ++;
                         break;
                     }
-                    else if (IsWayTile(tempI - 1, tempJ)) //再向左找
+                    else if (IsWayTile(layer, tempI - 1, tempJ)) //再向左找
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -663,7 +803,7 @@ public class DungeonTile
                         tempI--;
                         break;
                     }
-                    else if (IsWayTile(tempI, tempJ - 1)) //向上找
+                    else if (IsWayTile(layer, tempI, tempJ - 1)) //向上找
                     {
                         dir = 3;
 
@@ -673,7 +813,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -684,7 +824,7 @@ public class DungeonTile
                 }
                 case 3: //上
                 {
-                    if (IsWayTile(tempI - 1, tempJ)) //先向左找
+                    if (IsWayTile(layer, tempI - 1, tempJ)) //先向左找
                     {
                         dir = 2;
 
@@ -694,17 +834,17 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI--;
                         break;
                     }
-                    else if (IsWayTile(tempI, tempJ - 1)) //再向上找
+                    else if (IsWayTile(layer, tempI, tempJ - 1)) //再向上找
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -717,7 +857,7 @@ public class DungeonTile
                         tempJ--;
                         break;
                     }
-                    else if (IsWayTile(tempI + 1, tempJ)) //向右找
+                    else if (IsWayTile(layer, tempI + 1, tempJ)) //向右找
                     {
                         dir = 0;
 
@@ -727,7 +867,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI++;
@@ -741,7 +881,7 @@ public class DungeonTile
     }
 
     //计算导航网格内轮廓
-    private NavigationPolygonData CalcInline(int i, int j, TileMap tileMap, Vector2 size)
+    private NavigationPolygonData CalcInline(int layer, int i, int j, Vector2 size)
     {
         var polygonData = new NavigationPolygonData();
         polygonData.Type = NavigationPolygonType.In;
@@ -761,7 +901,7 @@ public class DungeonTile
             {
                 case 0: //右
                 {
-                    if (IsWayTile(tempI, tempJ + 1)) //向下找
+                    if (IsWayTile(layer, tempI, tempJ + 1)) //向下找
                     {
                         dir = 1;
 
@@ -771,17 +911,17 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ++;
                         break;
                     }
-                    else if (IsWayTile(tempI + 1, tempJ)) //再向右找
+                    else if (IsWayTile(layer, tempI + 1, tempJ)) //再向右找
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -794,7 +934,7 @@ public class DungeonTile
                         tempI++;
                         break;
                     }
-                    else if (IsWayTile(tempI, tempJ - 1)) //先向上找
+                    else if (IsWayTile(layer, tempI, tempJ - 1)) //先向上找
                     {
                         dir = 3;
 
@@ -804,7 +944,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -815,7 +955,7 @@ public class DungeonTile
                 }
                 case 1: //下
                 {
-                    if (IsWayTile(tempI - 1, tempJ)) //向左找
+                    if (IsWayTile(layer, tempI - 1, tempJ)) //向左找
                     {
                         dir = 2;
 
@@ -825,17 +965,17 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI--;
                         break;
                     }
-                    else if (IsWayTile(tempI, tempJ + 1)) //再向下找
+                    else if (IsWayTile(layer, tempI, tempJ + 1)) //再向下找
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -848,7 +988,7 @@ public class DungeonTile
                         tempJ++;
                         break;
                     }
-                    else if (IsWayTile(tempI + 1, tempJ)) //先向右找
+                    else if (IsWayTile(layer, tempI + 1, tempJ)) //先向右找
                     {
                         dir = 0;
 
@@ -858,7 +998,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI++;
@@ -869,7 +1009,7 @@ public class DungeonTile
                 }
                 case 2: //左
                 {
-                    if (IsWayTile(tempI, tempJ - 1)) //向上找
+                    if (IsWayTile(layer, tempI, tempJ - 1)) //向上找
                     {
                         dir = 3;
 
@@ -879,17 +1019,17 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ--;
                         break;
                     }
-                    else if (IsWayTile(tempI - 1, tempJ)) //再向左找
+                    else if (IsWayTile(layer, tempI - 1, tempJ)) //再向左找
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -902,7 +1042,7 @@ public class DungeonTile
                         tempI--;
                         break;
                     }
-                    else if (IsWayTile(tempI, tempJ + 1)) //先向下找
+                    else if (IsWayTile(layer, tempI, tempJ + 1)) //先向下找
                     {
                         dir = 1;
 
@@ -912,7 +1052,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -923,7 +1063,7 @@ public class DungeonTile
                 }
                 case 3: //上
                 {
-                    if (IsWayTile(tempI + 1, tempJ)) //向右找
+                    if (IsWayTile(layer, tempI + 1, tempJ)) //向右找
                     {
                         dir = 0;
 
@@ -933,17 +1073,17 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI++;
                         break;
                     }
-                    else if (IsWayTile(tempI, tempJ - 1)) //再向上找
+                    else if (IsWayTile(layer, tempI, tempJ - 1)) //再向上找
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new Vector2((tempI - 1) * size.X, tempJ * size.Y) + offset);
+                            points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -956,7 +1096,7 @@ public class DungeonTile
                         tempJ--;
                         break;
                     }
-                    else if (IsWayTile(tempI - 1, tempJ)) //先向左找
+                    else if (IsWayTile(layer, tempI - 1, tempJ)) //先向左找
                     {
                         dir = 2;
 
@@ -966,7 +1106,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new Vector2(tempI * size.X, tempJ * size.Y) + offset);
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempI--;
@@ -984,7 +1124,7 @@ public class DungeonTile
     {
         if (_usePoints.Contains(pos))
         {
-            throw new Exception("生成导航多边形发生错误! 点: " + pos + "发生交错!");
+            throw new NavigationPointInterleavingException(pos, "生成导航多边形发生错误! 点: " + pos + "发生交错!");
         }
 
         _usePoints.Add(pos);
