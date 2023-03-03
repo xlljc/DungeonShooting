@@ -34,8 +34,8 @@ public partial class RoomManager : Node2D
     private Font _font;
     private GenerateDungeon _generateDungeon;
 
-    //房间内所有导航网格数据
-    private List<NavigationPolygonData> _roomNavDataList = new List<NavigationPolygonData>();
+    //房间内所有静态导航网格数据
+    private static List<NavigationPolygonData> _roomStaticNavigationList = new List<NavigationPolygonData>();
 
     public override void _EnterTree()
     {
@@ -64,10 +64,10 @@ public partial class RoomManager : Node2D
         _dungeonTile.AutoFillRoomTile(_autoTileConfig, _generateDungeon.StartRoom);
         
         //生成寻路网格
-        _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorLayer);
+        _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorMapLayer);
         //挂载导航区域
         _dungeonTile.MountNavigationPolygon(this);
-        _roomNavDataList.AddRange(_dungeonTile.GetPolygonData());
+        _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
         //挂载所有导航区域
         _generateDungeon.EachRoom(MountNavFromRoomInfo);
         
@@ -159,7 +159,7 @@ public partial class RoomManager : Node2D
                 // DrawLine(new Vector2(-5000, 0), new Vector2(5000, 0), Colors.Green);
                 
                 //绘制ai寻路区域
-                Utils.DrawNavigationPolygon(this, _roomNavDataList.ToArray());
+                Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());
             }
             //绘制房间区域
             //DrawRoomInfo(_generateDungeon.StartRoom);
@@ -182,7 +182,7 @@ public partial class RoomManager : Node2D
             polygon.AddOutline(polygonPointArray);
                 
             //存入汇总列表
-            _roomNavDataList.Add(new NavigationPolygonData()
+            _roomStaticNavigationList.Add(new NavigationPolygonData()
             {
                 Type = navigationPolygonData.Type,
                 Points = polygonPointArray.Select(point => new SerializeVector2(point)).ToList(),

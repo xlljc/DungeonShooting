@@ -23,7 +23,7 @@ public class DungeonTile
     /// <summary>
     /// 连接房间的过道的地板层级
     /// </summary>
-    public const int AisleFloorLayer = 3;
+    public const int AisleFloorMapLayer = 3;
 
     /// <summary>
     /// 配置层级的自定义数据名称
@@ -242,7 +242,7 @@ public class DungeonTile
                             break;
                     }
 
-                    FillRect(AisleFloorLayer, config.Floor, doorInfo.Cross + Vector2.One,
+                    FillRect(AisleFloorMapLayer, config.Floor, doorInfo.Cross + Vector2.One,
                         new Vector2(GenerateDungeon.CorridorWidth - 2, GenerateDungeon.CorridorWidth - 2));
 
                     //墙壁, 0横向, 1纵向
@@ -378,7 +378,6 @@ public class DungeonTile
         {
             for (int j = 0; j < size.Y; j++)
             {
-                //tileMap.SetCell((int)pos.X + i, (int)pos.Y + j, -1);
                 _tileRoot.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), -1);
             }
         }
@@ -386,39 +385,59 @@ public class DungeonTile
     
     private void FullHorizontalAisleWall(AutoTileConfig config, Rect2 rect, int type)
     {
-        FillRect(AisleFloorLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
+        FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
         FillRect(MiddleMapLayer, config.T, rect.Position, new Vector2(rect.Size.X, 1));
         FillRect(TopMapLayer, config.B, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
         //左
         ClearRect(TopMapLayer, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
         if (type == 1)
         {
-            FillRect(AisleFloorLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+        }
+        else
+        {
+            FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+            //生成门的导航区域
         }
         //右
         ClearRect(TopMapLayer, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
         if (type == 2)
         {
-            FillRect(AisleFloorLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+        }
+        else
+        {
+            FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+            //生成门的导航区域
         }
     }
 
     private void FullVerticalAisleWall(AutoTileConfig config, Rect2 rect, int type)
     {
-        FillRect(AisleFloorLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
+        FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
         FillRect(TopMapLayer, config.L, rect.Position, new Vector2(1, rect.Size.Y));
         FillRect(TopMapLayer, config.R, rect.Position + new Vector2(rect.Size.X - 1, 0), new Vector2(1, rect.Size.Y));
         //上
         ClearRect(TopMapLayer, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
         if (type == 1)
         {
-            FillRect(AisleFloorLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+        }
+        else
+        {
+            FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+            //生成门的导航区域
         }
         //下
         ClearRect(MiddleMapLayer, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
         if (type == 2)
         {
-            FillRect(AisleFloorLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+        }
+        else
+        {
+            FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+            //生成门的导航区域
         }
     }
     
