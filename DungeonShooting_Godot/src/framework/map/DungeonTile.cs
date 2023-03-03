@@ -37,6 +37,9 @@ public class DungeonTile
 
     //导航区域数据
     private readonly List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
+
+    //连接门的导航区域
+    private readonly List<NavigationPolygonData> _connectDoorPolygonDataList = new List<NavigationPolygonData>();
     
     //----------------------------------------------------
     
@@ -50,15 +53,21 @@ public class DungeonTile
     {
         _tileRoot = tileRoot;
     }
-    
+
     /// <summary>
     /// 根据 roomInfo 和 config 数据自动填充 tileMap 参数中的地图数据
     /// </summary>
     public void AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo)
     {
+        _connectDoorPolygonDataList.Clear();
+        _AutoFillRoomTile(config, roomInfo);
+    }
+    
+    private void _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo)
+    {
         foreach (var info in roomInfo.Next)
         {
-            AutoFillRoomTile(config, info);
+            _AutoFillRoomTile(config, info);
         }
         
         //铺房间
@@ -398,7 +407,16 @@ public class DungeonTile
         {
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
             //生成门的导航区域
+            var x = rect.Position.X * GenerateDungeon.TileCellSize;
+            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            AddDoorNavigation(
+                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 2.5f),
+                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 2.5f)
+            );
         }
+
         //右
         ClearRect(TopMapLayer, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
         if (type == 2)
@@ -409,6 +427,14 @@ public class DungeonTile
         {
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
             //生成门的导航区域
+            var x = rect.Position.X * GenerateDungeon.TileCellSize;
+            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            AddDoorNavigation(
+                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f),
+                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f)
+            );
         }
     }
 
@@ -427,6 +453,14 @@ public class DungeonTile
         {
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域
+            var x = rect.Position.X * GenerateDungeon.TileCellSize;
+            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            AddDoorNavigation(
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f)
+            );
         }
         //下
         ClearRect(MiddleMapLayer, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
@@ -438,7 +472,26 @@ public class DungeonTile
         {
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域
+            var x = rect.Position.X * GenerateDungeon.TileCellSize;
+            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            AddDoorNavigation(
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
+                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize)
+            );
         }
+    }
+
+    private void AddDoorNavigation(SerializeVector2 p1, SerializeVector2 p2, SerializeVector2 p3, SerializeVector2 p4)
+    {
+        var polygonData = new NavigationPolygonData();
+        polygonData.Type = NavigationPolygonType.Out;
+        polygonData.Points.Add(p1);
+        polygonData.Points.Add(p2);
+        polygonData.Points.Add(p3);
+        polygonData.Points.Add(p4);
+        _connectDoorPolygonDataList.Add(polygonData);
     }
     
     //报错数据
@@ -529,22 +582,41 @@ public class DungeonTile
         for (var i = 0; i < _polygonDataList.Count; i++)
         {
             var polygonData = _polygonDataList[i];
-            var polygon = new NavigationPolygon();
-            polygon.AddOutline(polygonData.ConvertPointsToVector2Array());
-            polygon.MakePolygonsFromOutlines();
-            var navigationPolygon = new NavigationRegion2D();
-            navigationPolygon.Name = "NavigationRegion" + (navigationRoot.GetChildCount() + 1);
-            navigationPolygon.NavigationPolygon = polygon;
-            navigationRoot.AddChild(navigationPolygon);
+            CreateNavigationRegion(navigationRoot, polygonData);
+        }
+
+        for (var i = 0; i < _connectDoorPolygonDataList.Count; i++)
+        {
+            var polygonData = _connectDoorPolygonDataList[i];
+            CreateNavigationRegion(navigationRoot, polygonData);
         }
     }
 
+    private void CreateNavigationRegion(Node2D navigationRoot, NavigationPolygonData polygonData)
+    {
+        var polygon = new NavigationPolygon();
+        polygon.AddOutline(polygonData.ConvertPointsToVector2Array());
+        polygon.MakePolygonsFromOutlines();
+        var navigationPolygon = new NavigationRegion2D();
+        navigationPolygon.Name = "NavigationRegion" + (navigationRoot.GetChildCount() + 1);
+        navigationPolygon.NavigationPolygon = polygon;
+        navigationRoot.AddChild(navigationPolygon);
+    }
+
     /// <summary>
-    /// 获取导航点数据
+    /// 获取房间内的导航点数据
     /// </summary>
     public NavigationPolygonData[] GetPolygonData()
     {
         return _polygonDataList.ToArray();
+    }
+    
+    /// <summary>
+    /// 获取连接门导航数据, 必须要调用 AutoFillRoomTile() 函数才有数据
+    /// </summary>
+    public NavigationPolygonData[] GetConnectDoorPolygonData()
+    {
+        return _connectDoorPolygonDataList.ToArray();
     }
 
     /// <summary>

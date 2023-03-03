@@ -68,6 +68,7 @@ public partial class RoomManager : Node2D
         //挂载导航区域
         _dungeonTile.MountNavigationPolygon(this);
         _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
+        _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
         //挂载所有导航区域
         _generateDungeon.EachRoom(MountNavFromRoomInfo);
         
@@ -81,9 +82,9 @@ public partial class RoomManager : Node2D
         Player.PickUpWeapon(WeaponManager.GetGun("1004"));
         Player.PickUpWeapon(WeaponManager.GetGun("1003"));
         
-        // var enemy1 = new Enemy();
-        // enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
-        // enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        var enemy1 = new Enemy();
+        enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
+        enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
         
         // for (int i = 0; i < 10; i++)
         // {
