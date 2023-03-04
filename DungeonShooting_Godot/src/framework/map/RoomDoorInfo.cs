@@ -27,7 +27,7 @@ public class RoomDoorInfo
     public RoomInfo ConnectRoom;
 
     /// <summary>
-    /// 原点坐标
+    /// 原点坐标, 单位: 格
     /// </summary>
     public Vector2 OriginPosition;
 
@@ -37,7 +37,7 @@ public class RoomDoorInfo
     public bool HasCross;
 
     /// <summary>
-    /// 与下一道门的交叉点
+    /// 与下一道门的交叉点, 单位: 格
     /// </summary>
     public Vector2 Cross;
 

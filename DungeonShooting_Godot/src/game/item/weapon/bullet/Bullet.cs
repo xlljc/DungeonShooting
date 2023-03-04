@@ -35,13 +35,6 @@ public partial class Bullet : ActivityObject
         BasisVelocity = new Vector2(FlySpeed, 0).Rotated(Rotation);
     }
 
-    public override void _Ready()
-    {
-        base._Ready();
-        //绘制阴影
-        ShowShadowSprite();
-    }
-
     protected override void PhysicsProcessOver(float delta)
     {
         //移动

@@ -26,4 +26,9 @@ public static class ActivityIdPrefix
     /// 弹壳
     /// </summary>
     public const string Shell = "shell";
+    
+    /// <summary>
+    /// 其他类型
+    /// </summary>
+    public const string Other = "other";
 }

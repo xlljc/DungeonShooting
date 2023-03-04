@@ -70,6 +70,8 @@ public partial class RoomManager : Node2D
         _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
         //挂载所有房间的导航区域
         _generateDungeon.EachRoom(MountNavFromRoomInfo);
+        //创建门实例
+        _generateDungeon.EachRoom(CreateDoor);
         
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
@@ -166,6 +168,7 @@ public partial class RoomManager : Node2D
         }
     }
 
+    //挂载房间导航区域
     private void MountNavFromRoomInfo(RoomInfo roomInfo)
     {
         var polygonArray = roomInfo.RoomSplit.RoomInfo.NavigationList.ToArray();
@@ -195,6 +198,23 @@ public partial class RoomManager : Node2D
         navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
         navigationPolygon.NavigationPolygon = polygon;
         AddChild(navigationPolygon);
+    }
+
+    private void CreateDoor(RoomInfo roomInfo)
+    {
+        foreach (var roomInfoDoor in roomInfo.Doors)
+        {
+            var door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "0001");
+            if (roomInfoDoor.Direction == DoorDirection.E || roomInfoDoor.Direction == DoorDirection.W)
+            {
+                door.Position = (roomInfoDoor.OriginPosition + new Vector2(0, 2)) * GenerateDungeon.TileCellSize;
+            }
+            else
+            {
+                door.Position = (roomInfoDoor.OriginPosition + new Vector2(2, 0)) * GenerateDungeon.TileCellSize;
+            }
+            door.PutDown(RoomLayerEnum.NormalLayer);
+        }
     }
     
     //绘制房间区域, debug 用

@@ -8,6 +8,7 @@ public class ResourcePath
     public const string prefab_effect_BulletSmoke_tscn = "res://prefab/effect/BulletSmoke.tscn";
     public const string prefab_effect_FirePart_tscn = "res://prefab/effect/FirePart.tscn";
     public const string prefab_effect_ShotFire_tscn = "res://prefab/effect/ShotFire.tscn";
+    public const string prefab_map_RoomDoor_tscn = "res://prefab/map/RoomDoor.tscn";
     public const string prefab_role_Enemy_tscn = "res://prefab/role/Enemy.tscn";
     public const string prefab_role_Player_tscn = "res://prefab/role/Player.tscn";
     public const string prefab_role_Role_tscn = "res://prefab/role/Role.tscn";

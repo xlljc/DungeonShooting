@@ -96,6 +96,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     
     private static long _instanceIndex = 0;
 
+    //初始化节点
     private void _InitNode(string itemId, string scenePath)
     {
         ItemId = itemId;
