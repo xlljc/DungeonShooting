@@ -20,14 +20,14 @@ public static class WeaponManager
         foreach (var type in types)
         {
             //注册类
-            Attribute[] attribute = Attribute.GetCustomAttributes(type, typeof(RegisterWeapon), false);
+            Attribute[] attribute = Attribute.GetCustomAttributes(type, typeof(RegisterWeaponOld), false);
             if (attribute != null && attribute.Length > 0)
             {
                 if (!typeof(Weapon).IsAssignableFrom(type))
                 {
                     throw new Exception($"注册武器类'{type.FullName}'没有继承类'Weapon'!");
                 }
-                var atts = (RegisterWeapon[])attribute;
+                var atts = (RegisterWeaponOld[])attribute;
                 foreach (var att in atts)
                 {
                     //注册类

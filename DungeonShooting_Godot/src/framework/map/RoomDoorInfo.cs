@@ -42,7 +42,7 @@ public class RoomDoorInfo
     public Vector2 Cross;
 
     /// <summary>
-    /// 导航网格
+    /// 占位导航网格
     /// </summary>
     public DoorNavigationInfo Navigation;
 }

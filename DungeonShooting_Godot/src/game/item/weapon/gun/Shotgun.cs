@@ -1,6 +1,6 @@
 using Godot;
 
-[RegisterWeapon("1002", typeof(Shotgun.ShotgunAttribute))]
+[RegisterWeaponOld("1002", typeof(Shotgun.ShotgunAttribute))]
 public partial class Shotgun : Weapon
 {
 

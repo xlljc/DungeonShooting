@@ -17,9 +17,9 @@ using Godot;
 /// <summary>
 /// 基础敌人
 /// </summary>
+[RegisterActivity("1001", ResourcePath.prefab_role_Enemy_tscn)]
 public partial class Enemy : Role
 {
-
     /// <summary>
     /// 公共属性, 是否找到目标, 如果找到目标, 则所有敌人都会知道玩家的位置
     /// </summary>

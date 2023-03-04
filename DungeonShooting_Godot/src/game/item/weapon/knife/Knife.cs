@@ -1,7 +1,7 @@
 
 using Godot;
 
-[RegisterWeapon("1004", typeof(KnifeAttribute))]
+[RegisterWeaponOld("1004", typeof(KnifeAttribute))]
 public partial class Knife : Weapon
 {
     private class KnifeAttribute : WeaponAttribute

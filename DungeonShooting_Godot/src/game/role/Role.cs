@@ -44,7 +44,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 角色携带的枪套
     /// </summary>
-    public Holster Holster { get; }
+    public Holster Holster { get; private set; }
 
     /// <summary>
     /// 武器挂载点
@@ -213,15 +213,11 @@ public abstract partial class Role : ActivityObject
     public Role() : this(ResourcePath.prefab_role_Role_tscn)
     {
     }
-    
-    public Role(string scenePath) : base(scenePath)
-    {
-        Holster = new Holster(this);
-    }
-    
+
     public override void _Ready()
     {
         base._Ready();
+        Holster = new Holster(this);
         _startScale = Scale;
         MountPoint = GetNode<MountRotation>("MountPoint");
         MountPoint.Master = this;

@@ -22,22 +22,22 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite2D", 类型为 AnimatedSprite2D
     /// </summary>
-    public AnimatedSprite2D AnimatedSprite { get; }
+    public AnimatedSprite2D AnimatedSprite { get; private set; }
 
     /// <summary>
     /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite2D
     /// </summary>
-    public Sprite2D ShadowSprite { get; }
+    public Sprite2D ShadowSprite { get; private set; }
 
     /// <summary>
     /// 当前物体碰撞器节点, 节点名称必须叫 "Collision", 类型为 CollisionShape2D
     /// </summary>
-    public CollisionShape2D Collision { get; }
+    public CollisionShape2D Collision { get; private set; }
 
     /// <summary>
     /// 动画播放器
     /// </summary>
-    public AnimationPlayer AnimationPlayer { get; }
+    public AnimationPlayer AnimationPlayer { get; private set; }
 
     /// <summary>
     /// 是否调用过 Destroy() 函数
@@ -57,7 +57,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 移动控制器
     /// </summary>
-    public MoveController MoveController { get; }
+    public MoveController MoveController { get; private set; }
 
     /// <summary>
     /// 物体移动基础速率
@@ -97,8 +97,8 @@ public abstract partial class ActivityObject : CharacterBody2D
     private ActivityObjectTemplate _templateInstance;
     
     private static long _instanceIndex = 0;
-    
-    public ActivityObject(string scenePath)
+
+    private void _InitNode(string scenePath)
     {
         Name = GetType().Name + (_instanceIndex++);
         //加载预制体
@@ -1057,13 +1057,5 @@ public abstract partial class ActivityObject : CharacterBody2D
         {
             _coroutineList.Clear();
         }
-    }
-    
-    /// <summary>
-    /// 通过 ItemId 实例化 ActivityObject 对象
-    /// </summary>
-    public static T Create<T>(string itemId) where T : ActivityObject
-    {
-        return null;
     }
 }
