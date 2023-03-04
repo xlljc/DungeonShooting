@@ -67,8 +67,8 @@ public partial class GameApplication : Node2D
 		
 		InitRoomConfig();
 
-		//扫描并注册当前程序集下的武器
-		WeaponManager.RegisterWeaponFromAssembly(GetType().Assembly);
+		//初始化 ActivityObject
+		ActivityObject.Init();
 	}
 	
 	public override void _EnterTree()

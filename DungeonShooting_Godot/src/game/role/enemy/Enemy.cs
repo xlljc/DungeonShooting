@@ -17,7 +17,7 @@ using Godot;
 /// <summary>
 /// 基础敌人
 /// </summary>
-[RegisterActivity("1001", ResourcePath.prefab_role_Enemy_tscn)]
+[RegisterActivity(ActivityIdPrefix.Enemy + "0001", ResourcePath.prefab_role_Enemy_tscn)]
 public partial class Enemy : Role
 {
     /// <summary>
@@ -35,7 +35,7 @@ public partial class Enemy : Role
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
-    public StateController<Enemy, AiStateEnum> StateController { get; }
+    public StateController<Enemy, AiStateEnum> StateController { get; private set; }
 
     /// <summary>
     /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
@@ -55,25 +55,26 @@ public partial class Enemy : Role
     /// <summary>
     /// 视野检测射线, 朝玩家打射线, 检测是否碰到墙
     /// </summary>
-    public RayCast2D ViewRay { get; }
+    public RayCast2D ViewRay { get; private set; }
 
     /// <summary>
     /// 导航代理
     /// </summary>
-    public NavigationAgent2D NavigationAgent2D { get; }
+    public NavigationAgent2D NavigationAgent2D { get; private set; }
 
     /// <summary>
     /// 导航代理中点
     /// </summary>
-    public Marker2D NavigationPoint { get; }
+    public Marker2D NavigationPoint { get; private set; }
 
     //开火间隙时间
     private float _enemyAttackTimer = 0;
     //目标在视野内的时间
     private float _targetInViewTime = 0;
 
-    public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
+    public override void _Ready()
     {
+        base._Ready();
         IsAi = true;
         StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
 
@@ -103,11 +104,7 @@ public partial class Enemy : Role
         StateController.Register(new AiLeaveForState());
         StateController.Register(new AiSurroundState());
         StateController.Register(new AiFindAmmoState());
-    }
-
-    public override void _Ready()
-    {
-        base._Ready();
+        
         //默认状态
         StateController.ChangeState(AiStateEnum.AiNormal);
 
@@ -352,7 +349,7 @@ public partial class Enemy : Role
                 return;
             }
             
-            var index = Holster.FindWeapon((we, i) => we.TypeId == weapon.TypeId);
+            var index = Holster.FindWeapon((we, i) => we.ItemId == weapon.ItemId);
             if (index != -1) //与武器袋中武器类型相同, 补充子弹
             {
                 if (!Holster.GetWeapon(index).IsAmmoFull())

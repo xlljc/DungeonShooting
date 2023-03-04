@@ -4,9 +4,10 @@ using Godot;
 /// <summary>
 /// 弹壳类
 /// </summary>
+[RegisterActivity(ActivityIdPrefix.Shell + "0001", ResourcePath.prefab_weapon_shell_ShellCase_tscn)]
 public partial class ShellCase : ActivityObject
 {
-    public ShellCase() : base(ResourcePath.prefab_weapon_shell_ShellCase_tscn)
+    public override void _Ready()
     {
         ShadowOffset = new Vector2(0, 1);
     }

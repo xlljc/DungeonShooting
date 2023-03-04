@@ -3,12 +3,13 @@ using Godot;
 /// <summary>
 /// 子弹类
 /// </summary>
+[RegisterActivity(ActivityIdPrefix.Bullet + "0001", ResourcePath.prefab_weapon_bullet_Bullet_tscn)]
 public partial class Bullet : ActivityObject
 {
     /// <summary>
     /// 碰撞区域
     /// </summary>
-    public Area2D CollisionArea { get; }
+    public Area2D CollisionArea { get; private set; }
 
     // 最大飞行距离
     private float MaxDistance;
@@ -19,8 +20,7 @@ public partial class Bullet : ActivityObject
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
 
-    public Bullet(string scenePath, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer) :
-        base(scenePath)
+    public void Init(float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
         CollisionArea = GetNode<Area2D>("CollisionArea");
         CollisionArea.CollisionMask = targetLayer;

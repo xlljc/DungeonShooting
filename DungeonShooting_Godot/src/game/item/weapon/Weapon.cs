@@ -13,11 +13,6 @@ public abstract partial class Weapon : ActivityObject
     public static readonly HashSet<Weapon> UnclaimedWeapons = new HashSet<Weapon>();
 
     /// <summary>
-    /// 武器的类型 id
-    /// </summary>
-    public string TypeId { get; }
-
-    /// <summary>
     /// 开火回调事件
     /// </summary>
     public event Action<Weapon> FireEvent;
@@ -169,13 +164,10 @@ public abstract partial class Weapon : ActivityObject
     private float _currBacklashLength = 0;
 
     /// <summary>
-    /// 根据属性创建一把武器
+    /// 初始化武器属性
     /// </summary>
-    /// <param name="typeId">武器的类型id</param>
-    /// <param name="attribute">属性</param>
-    public Weapon(string typeId, WeaponAttribute attribute) : base(attribute.WeaponPrefab)
+    public void InitWeapon(WeaponAttribute attribute)
     {
-        TypeId = typeId;
         _originWeaponAttribute = attribute;
         _weaponAttribute = attribute;
 
@@ -195,14 +187,14 @@ public abstract partial class Weapon : ActivityObject
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
             Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
-            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + typeId);
+            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + ItemId);
         }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
         //剩余弹药量
         ResidueAmmo = Mathf.Min(Attribute.StandbyAmmoCapacity + CurrAmmo, Attribute.MaxAmmoCapacity) - CurrAmmo;
     }
-    
+
     /// <summary>
     /// 单次开火时调用的函数
     /// </summary>
@@ -805,7 +797,7 @@ public abstract partial class Weapon : ActivityObject
             {
                 var masterWeapon = roleMaster.Holster.ActiveWeapon;
                 //查找是否有同类型武器
-                var index = roleMaster.Holster.FindWeapon(TypeId);
+                var index = roleMaster.Holster.FindWeapon(ItemId);
                 if (index != -1) //如果有这个武器
                 {
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
@@ -852,7 +844,7 @@ public abstract partial class Weapon : ActivityObject
         {
             var holster = roleMaster.Holster;
             //查找是否有同类型武器
-            var index = holster.FindWeapon(TypeId);
+            var index = holster.FindWeapon(ItemId);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了

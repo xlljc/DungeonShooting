@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 
 /// <summary>
@@ -40,7 +39,7 @@ public partial class RoomManager : Node2D
     public override void _EnterTree()
     {
         //创建玩家
-        Player = new Player();
+        Player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
         Player.Position = new Vector2(30, 30);
         Player.Name = "Player";
         Player.PutDown(RoomLayerEnum.YSortLayer);
@@ -77,49 +76,49 @@ public partial class RoomManager : Node2D
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
-        Player.PickUpWeapon(WeaponManager.GetGun("1001"));
-        // Player.PickUpWeapon(WeaponManager.GetGun("1002"));
-        Player.PickUpWeapon(WeaponManager.GetGun("1004"));
-        Player.PickUpWeapon(WeaponManager.GetGun("1003"));
+        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
+        // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
+        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
+        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
         
-        var enemy1 = new Enemy();
-        enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
-        enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
+        // var enemy1 = new Enemy();
+        // enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
+        // enemy1.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
         
         // for (int i = 0; i < 10; i++)
         // {
         //     var enemyTemp = new Enemy();
         //     enemyTemp.PutDown(new Vector2(30 + (i + 1) * 20, 30), RoomLayerEnum.YSortLayer);
-        //     // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1003"));
-        //     // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
+        //     // enemyTemp.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
+        //     // enemyTemp.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
         // }
 
         // var enemy2 = new Enemy();
         // enemy2.Name = "Enemy2";
         // enemy2.PutDown(new Vector2(120, 100));
-        // enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
-        // //enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
-        // //enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
+        // enemy2.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
+        // //enemy2.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
+        // //enemy2.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
         //
         // var enemy3 = new Enemy();
         // enemy3.Name = "Enemy3";
         // enemy3.PutDown(new Vector2(100, 120));
-        // enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
-        // enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
+        // enemy3.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
+        // enemy3.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
 
-        // WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1001").PutDown(new Vector2(230, 120), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(130, 80), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(140, 80), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004").PutDown(new Vector2(80, 100), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001").PutDown(new Vector2(220, 120), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001").PutDown(new Vector2(230, 120), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001").PutDown(new Vector2(80, 80), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002").PutDown(new Vector2(80, 120), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(120, 80), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(130, 80), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(140, 80), RoomLayerEnum.NormalLayer);
         
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1002").PutDown(new Vector2(180, 130), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(180, 80), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(180, 180), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002").PutDown(new Vector2(180, 120), RoomLayerEnum.NormalLayer);
+        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002").PutDown(new Vector2(180, 130), RoomLayerEnum.NormalLayer);
 
     }
 

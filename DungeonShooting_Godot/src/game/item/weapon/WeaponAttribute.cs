@@ -225,9 +225,8 @@ public class WeaponAttribute
     /// </summary>
     public float AiTargetLockingTime = 0;
     
+    /// <summary>
+    /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性
+    /// </summary>
     public WeaponAttribute AiUseAttribute;
-    
-    public AiFireCallback OnAiFireCallback;
-
-    public delegate void AiFireCallback(Enemy enemy, Weapon weapon);
 }

@@ -209,14 +209,9 @@ public abstract partial class Role : ActivityObject
     protected virtual void OnDie()
     {
     }
-    
-    public Role() : this(ResourcePath.prefab_role_Role_tscn)
-    {
-    }
 
     public override void _Ready()
     {
-        base._Ready();
         Holster = new Holster(this);
         _startScale = Scale;
         MountPoint = GetNode<MountRotation>("MountPoint");

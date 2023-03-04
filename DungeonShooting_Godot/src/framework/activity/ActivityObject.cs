@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using Godot;
 
 /// <summary>
-/// 房间内活动物体基类, 所有物体都必须继承该类
+/// 房间内活动物体基类, 所有物体都必须继承该类,
+/// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, 
+/// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [RegisterActivity(id, prefabPath)],
+/// ActivityObject 类会自动扫描并注册物体, 然后使用而是使用 ActivityObject.Create(id) 来创建实例
 /// </summary>
 public abstract partial class ActivityObject : CharacterBody2D
 {
@@ -98,8 +101,9 @@ public abstract partial class ActivityObject : CharacterBody2D
     
     private static long _instanceIndex = 0;
 
-    private void _InitNode(string scenePath)
+    private void _InitNode(string itemId, string scenePath)
     {
+        ItemId = itemId;
         Name = GetType().Name + (_instanceIndex++);
         //加载预制体
         var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);

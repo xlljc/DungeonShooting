@@ -1,10 +1,10 @@
-using System.Collections;
 using Godot;
 
 
 /// <summary>
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
+[RegisterActivity(ActivityIdPrefix.Role + "0001", ResourcePath.prefab_role_Player_tscn)]
 public partial class Player : Role
 {
     /// <summary>
@@ -21,20 +21,16 @@ public partial class Player : Role
     /// 移动摩擦力
     /// </summary>
     public float Friction { get; set; } = 800f;
-
-    public Player(): base(ResourcePath.prefab_role_Player_tscn)
+    
+    public override void _Ready()
     {
+        base._Ready();
+        
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
         
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;
-    }
-
-    public override void _Ready()
-    {
-        base._Ready();
-
         //让相机跟随玩家
         // var remoteTransform = new RemoteTransform2D();
         // AddChild(remoteTransform);
