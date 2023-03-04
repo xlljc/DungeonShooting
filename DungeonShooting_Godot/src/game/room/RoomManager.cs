@@ -63,13 +63,13 @@ public partial class RoomManager : Node2D
         _dungeonTile = new DungeonTile(TileRoot);
         _dungeonTile.AutoFillRoomTile(_autoTileConfig, _generateDungeon.StartRoom);
         
-        //生成寻路网格
+        //生成寻路网格， 这一步操作只生成过道的导航
         _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorMapLayer);
-        //挂载导航区域
+        //挂载过道导航区域
         _dungeonTile.MountNavigationPolygon(this);
         _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
         _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
-        //挂载所有导航区域
+        //挂载所有房间的导航区域
         _generateDungeon.EachRoom(MountNavFromRoomInfo);
         
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
@@ -181,13 +181,15 @@ public partial class RoomManager : Node2D
                 polygonPointArray[j] = polygonPointArray[j] + (roomInfo.Position + Vector2I.One) * GenerateDungeon.TileCellSize;
             }
             polygon.AddOutline(polygonPointArray);
-                
-            //存入汇总列表
-            _roomStaticNavigationList.Add(new NavigationPolygonData()
+            
+            var points = new List<SerializeVector2>();
+            for (var j = 0; j < polygonPointArray.Length; j++)
             {
-                Type = navigationPolygonData.Type,
-                Points = polygonPointArray.Select(point => new SerializeVector2(point)).ToList(),
-            });
+                points.Add(new SerializeVector2(polygonPointArray[j]));
+            }
+            
+            //存入汇总列表
+            _roomStaticNavigationList.Add(new NavigationPolygonData(navigationPolygonData.Type, points));
         }
         polygon.MakePolygonsFromOutlines();
         var navigationPolygon = new NavigationRegion2D();

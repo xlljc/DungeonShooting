@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -39,7 +40,19 @@ public class DungeonTile
     private readonly List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
 
     //连接门的导航区域
-    private readonly List<NavigationPolygonData> _connectDoorPolygonDataList = new List<NavigationPolygonData>();
+    private readonly List<DoorNavigationItem> _connectNavigationItemList = new List<DoorNavigationItem>();
+
+    private class DoorNavigationItem
+    {
+        public NavigationPolygonData NavigationPolygonData;
+        public RoomDoorInfo DoorInfo;
+
+        public DoorNavigationItem(NavigationPolygonData navigationPolygonData, RoomDoorInfo doorInfo)
+        {
+            NavigationPolygonData = navigationPolygonData;
+            DoorInfo = doorInfo;
+        }
+    }
     
     //----------------------------------------------------
     
@@ -55,12 +68,12 @@ public class DungeonTile
     }
 
     /// <summary>
-    /// 根据 roomInfo 和 config 数据自动填充 tileMap 参数中的地图数据
+    /// 根据 startRoom 和 config 数据自动填充 tileMap 参数中的地图数据
     /// </summary>
-    public void AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo)
+    public void AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoom)
     {
-        _connectDoorPolygonDataList.Clear();
-        _AutoFillRoomTile(config, roomInfo);
+        _connectNavigationItemList.Clear();
+        _AutoFillRoomTile(config, startRoom);
     }
     
     private void _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo)
@@ -150,11 +163,11 @@ public class DungeonTile
 
                     if (dir == 0) //横向
                     {
-                        FullHorizontalAisleWall(config, rect, 0);
+                        FullHorizontalAisleWall(doorInfo, config, rect, 0);
                     }
                     else //纵向
                     {
-                        FullVerticalAisleWall(config, rect, 0);
+                        FullVerticalAisleWall(doorInfo, config, rect, 0);
                     }
                 }
                 else //带交叉点
@@ -257,20 +270,20 @@ public class DungeonTile
                     //墙壁, 0横向, 1纵向
                     if (dir1 == 0)
                     {
-                        FullHorizontalAisleWall(config, rect, doorDir1 == DoorDirection.W ? 1: 2);
+                        FullHorizontalAisleWall(doorInfo, config, rect, doorDir1 == DoorDirection.W ? 1: 2);
                     }
                     else
                     {
-                        FullVerticalAisleWall(config, rect, doorDir1 == DoorDirection.N ? 1 : 2);
+                        FullVerticalAisleWall(doorInfo, config, rect, doorDir1 == DoorDirection.N ? 1 : 2);
                     }
 
                     if (dir2 == 0)
                     {
-                        FullHorizontalAisleWall(config, rect2, doorDir2 == DoorDirection.W ? 1 : 2);
+                        FullHorizontalAisleWall(doorInfo, config, rect2, doorDir2 == DoorDirection.W ? 1 : 2);
                     }
                     else
                     {
-                        FullVerticalAisleWall(config, rect2, doorDir2 == DoorDirection.N ? 1 : 2);
+                        FullVerticalAisleWall(doorInfo, config, rect2, doorDir2 == DoorDirection.N ? 1 : 2);
                     }
 
                     if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
@@ -392,7 +405,7 @@ public class DungeonTile
         }
     }
     
-    private void FullHorizontalAisleWall(AutoTileConfig config, Rect2 rect, int type)
+    private void FullHorizontalAisleWall(RoomDoorInfo doorInfo, AutoTileConfig config, Rect2 rect, int type)
     {
         FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
         FillRect(MiddleMapLayer, config.T, rect.Position, new Vector2(rect.Size.X, 1));
@@ -410,6 +423,7 @@ public class DungeonTile
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
             var y = rect.Position.Y * GenerateDungeon.TileCellSize;
             AddDoorNavigation(
+                doorInfo,
                 new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 1.5f),
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 1.5f),
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 2.5f),
@@ -430,6 +444,7 @@ public class DungeonTile
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
             var y = rect.Position.Y * GenerateDungeon.TileCellSize;
             AddDoorNavigation(
+                doorInfo,
                 new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f),
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f),
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f),
@@ -438,7 +453,7 @@ public class DungeonTile
         }
     }
 
-    private void FullVerticalAisleWall(AutoTileConfig config, Rect2 rect, int type)
+    private void FullVerticalAisleWall(RoomDoorInfo doorInfo, AutoTileConfig config, Rect2 rect, int type)
     {
         FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
         FillRect(TopMapLayer, config.L, rect.Position, new Vector2(1, rect.Size.Y));
@@ -456,6 +471,7 @@ public class DungeonTile
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
             var y = rect.Position.Y * GenerateDungeon.TileCellSize;
             AddDoorNavigation(
+                doorInfo,
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f),
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f),
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f),
@@ -475,6 +491,7 @@ public class DungeonTile
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
             var y = rect.Position.Y * GenerateDungeon.TileCellSize;
             AddDoorNavigation(
+                doorInfo,
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
@@ -483,7 +500,7 @@ public class DungeonTile
         }
     }
 
-    private void AddDoorNavigation(SerializeVector2 p1, SerializeVector2 p2, SerializeVector2 p3, SerializeVector2 p4)
+    private void AddDoorNavigation(RoomDoorInfo doorInfo, SerializeVector2 p1, SerializeVector2 p2, SerializeVector2 p3, SerializeVector2 p4)
     {
         var polygonData = new NavigationPolygonData();
         polygonData.Type = NavigationPolygonType.Out;
@@ -491,7 +508,7 @@ public class DungeonTile
         polygonData.Points.Add(p2);
         polygonData.Points.Add(p3);
         polygonData.Points.Add(p4);
-        _connectDoorPolygonDataList.Add(polygonData);
+        _connectNavigationItemList.Add(new DoorNavigationItem(polygonData, doorInfo));
     }
     
     //报错数据
@@ -585,14 +602,15 @@ public class DungeonTile
             CreateNavigationRegion(navigationRoot, polygonData);
         }
 
-        for (var i = 0; i < _connectDoorPolygonDataList.Count; i++)
+        for (var i = 0; i < _connectNavigationItemList.Count; i++)
         {
-            var polygonData = _connectDoorPolygonDataList[i];
-            CreateNavigationRegion(navigationRoot, polygonData);
+            var item = _connectNavigationItemList[i];
+            var node = CreateNavigationRegion(navigationRoot, item.NavigationPolygonData);
+            item.DoorInfo.Navigation = new DoorNavigationInfo(node, item.NavigationPolygonData);
         }
     }
 
-    private void CreateNavigationRegion(Node2D navigationRoot, NavigationPolygonData polygonData)
+    private NavigationRegion2D CreateNavigationRegion(Node2D navigationRoot, NavigationPolygonData polygonData)
     {
         var polygon = new NavigationPolygon();
         polygon.AddOutline(polygonData.ConvertPointsToVector2Array());
@@ -601,6 +619,7 @@ public class DungeonTile
         navigationPolygon.Name = "NavigationRegion" + (navigationRoot.GetChildCount() + 1);
         navigationPolygon.NavigationPolygon = polygon;
         navigationRoot.AddChild(navigationPolygon);
+        return navigationPolygon;
     }
 
     /// <summary>
@@ -616,7 +635,12 @@ public class DungeonTile
     /// </summary>
     public NavigationPolygonData[] GetConnectDoorPolygonData()
     {
-        return _connectDoorPolygonDataList.ToArray();
+        var array = new NavigationPolygonData[_connectNavigationItemList.Count];
+        for (var i = 0; i < _connectNavigationItemList.Count; i++)
+        {
+            array[i] = _connectNavigationItemList[i].NavigationPolygonData;
+        }
+        return array;
     }
 
     /// <summary>

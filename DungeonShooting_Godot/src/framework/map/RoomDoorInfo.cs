@@ -15,12 +15,12 @@ public class RoomDoorInfo
     /// 所在的房间
     /// </summary>
     public RoomInfo RoomInfo;
-    
+
     /// <summary>
     /// 连接的门
     /// </summary>
     public RoomDoorInfo ConnectDoor;
-    
+
     /// <summary>
     /// 连接的房间
     /// </summary>
@@ -35,9 +35,14 @@ public class RoomDoorInfo
     /// 与下一道门是否有交叉点
     /// </summary>
     public bool HasCross;
-    
+
     /// <summary>
     /// 与下一道门的交叉点
     /// </summary>
     public Vector2 Cross;
+
+    /// <summary>
+    /// 导航网格
+    /// </summary>
+    public DoorNavigationInfo Navigation;
 }
