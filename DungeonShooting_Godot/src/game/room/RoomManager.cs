@@ -81,26 +81,26 @@ public partial class RoomManager : Node2D
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
         
-        // var enemy1 = new Enemy();
-        // enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
-        // enemy1.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
+        var enemy1 = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
+        enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
+        enemy1.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
         
         // for (int i = 0; i < 10; i++)
         // {
-        //     var enemyTemp = new Enemy();
+        //     var enemyTemp = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
         //     enemyTemp.PutDown(new Vector2(30 + (i + 1) * 20, 30), RoomLayerEnum.YSortLayer);
         //     // enemyTemp.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
         //     // enemyTemp.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
         // }
 
-        // var enemy2 = new Enemy();
+        // var enemy2 = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
         // enemy2.Name = "Enemy2";
         // enemy2.PutDown(new Vector2(120, 100));
         // enemy2.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
         // //enemy2.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
         // //enemy2.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
         //
-        // var enemy3 = new Enemy();
+        // var enemy3 = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
         // enemy3.Name = "Enemy3";
         // enemy3.PutDown(new Vector2(100, 120));
         // enemy3.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));

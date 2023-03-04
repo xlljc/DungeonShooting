@@ -173,6 +173,16 @@ public class WeaponAttribute
     /// <returns></returns>
     public WeaponAttribute Clone()
     {
+        var attr = _Clone();
+        if (AiUseAttribute != null)
+        {
+            attr.AiUseAttribute = AiUseAttribute._Clone();
+        }
+        return attr;
+    }
+
+    private WeaponAttribute _Clone()
+    {
         var attr = new WeaponAttribute();
         attr.Name = Name;
         attr.WeaponPrefab = WeaponPrefab;
