@@ -1,10 +1,8 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://b515ti0qinck8"]
 
 [ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_hm41b"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_q6jwp"]
 [ext_resource type="Script" path="res://src/game/role/MountRotation.cs" id="4"]
-
-
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v2kfw"]
 resource_local_to_scene = true
@@ -26,8 +24,6 @@ size = Vector2(10, 15)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n68nu"]
 size = Vector2(10, 16.5)
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_7yld5"]
 
 [node name="Role" type="Node"]
 script = ExtResource("1_hm41b")
@@ -69,8 +65,3 @@ shape = SubResource("RectangleShape2D_n68nu")
 [node name="MountPoint" type="Marker2D" parent="."]
 position = Vector2(2, -4)
 script = ExtResource("4")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_7yld5")
-}

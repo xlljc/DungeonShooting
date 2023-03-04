@@ -114,6 +114,11 @@ public abstract partial class Weapon : ActivityObject
     /// 返回是否真正使用该武器
     /// </summary>
     public bool IsActive => Master != null && Master.Holster.ActiveWeapon == this;
+    
+    /// <summary>
+    /// 动画播放器
+    /// </summary>
+    public AnimationPlayer AnimationPlayer { get; private set; }
 
 
     //--------------------------------------------------------------------------------------------
@@ -171,6 +176,7 @@ public abstract partial class Weapon : ActivityObject
         _originWeaponAttribute = attribute;
         _weaponAttribute = attribute;
 
+        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         FirePoint = GetNode<Marker2D>("WeaponBody/FirePoint");
         OriginPoint = GetNode<Marker2D>("WeaponBody/OriginPoint");
         ShellPoint = GetNode<Marker2D>("WeaponBody/ShellPoint");

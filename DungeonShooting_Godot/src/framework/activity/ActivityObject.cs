@@ -38,11 +38,6 @@ public abstract partial class ActivityObject : CharacterBody2D
     public CollisionShape2D Collision { get; private set; }
 
     /// <summary>
-    /// 动画播放器
-    /// </summary>
-    public AnimationPlayer AnimationPlayer { get; private set; }
-
-    /// <summary>
     /// 是否调用过 Destroy() 函数
     /// </summary>
     public bool IsDestroyed { get; private set; }
@@ -140,9 +135,6 @@ public abstract partial class ActivityObject : CharacterBody2D
                     break;
                 case "Collision":
                     Collision = (CollisionShape2D)body;
-                    break;
-                case "AnimationPlayer":
-                    AnimationPlayer = (AnimationPlayer)body;
                     break;
             }
         }
