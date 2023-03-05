@@ -112,6 +112,18 @@ public class DungeonTile
             var rectPos = roomInfo.RoomSplit.RoomInfo.Position;
             var template = ResourceManager.Load<PackedScene>(roomInfo.RoomSplit.ScenePath);
             var tileInstance = template.Instantiate<DungeonRoomTemplate>();
+            //物体标记
+            var activityMarks = tileInstance.GetMarks();
+            foreach (var activityMark in activityMarks)
+            {
+                activityMark.GetParent().RemoveChild(activityMark);
+                var pos = activityMark.GlobalPosition;
+                _tileRoot.AddChild(activityMark);
+                activityMark.GlobalPosition = (roomInfo.Position + Vector2I.One) * GenerateDungeon.TileCellSize + pos;
+            }
+            roomInfo.ActivityMarks.AddRange(activityMarks);
+            
+            //填充tile操作
             for (int i = 0; i < rectSize.X; i++)
             {
                 for (int j = 0; j < rectSize.Y; j++)

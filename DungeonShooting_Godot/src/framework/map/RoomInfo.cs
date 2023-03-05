@@ -49,6 +49,11 @@ public class RoomInfo
     public RoomInfo Prev;
 
     /// <summary>
+    /// 物体生成标记
+    /// </summary>
+    public List<ActivityMark> ActivityMarks = new List<ActivityMark>();
+
+    /// <summary>
     /// 获取房间横轴结束位置, 单位: 格
     /// </summary>
     public int GetHorizontalEnd()

@@ -369,11 +369,12 @@ public abstract partial class ActivityObject : CharacterBody2D
     }
 
     /// <summary>
-    /// 将一个节点扔到地上, 并设置显示的阴影
+    /// 将一个节点扔到地上
     /// </summary>
     /// <param name="position">放置的位置</param>
     /// <param name="layer">放入的层</param>
-    public void PutDown(Vector2 position, RoomLayerEnum layer)
+    /// <param name="showShadow">是否显示阴影</param>
+    public void PutDown(Vector2 position, RoomLayerEnum layer, bool showShadow = true)
     {
         PutDown(layer);
         Position = position;

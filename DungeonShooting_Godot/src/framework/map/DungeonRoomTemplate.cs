@@ -735,6 +735,10 @@ public partial class DungeonRoomTemplate : TileMap
     //触发保存操作
     private void TriggerSave()
     {
+        if (!File.Exists(RoomTileDir + Name + ".tscn"))
+        {
+            return;
+        }
         //计算导航网格
         _dungeonTile.GenerateNavigationPolygon(0);
         var polygonData = _dungeonTile.GetPolygonData();
@@ -857,4 +861,30 @@ public partial class DungeonRoomTemplate : TileMap
         return roomInfo;
     }
 #endif
+
+    /// <summary>
+    /// 获取所有标记数据
+    /// </summary>
+    public ActivityMark[] GetMarks()
+    {
+        var list = new List<ActivityMark>();
+        foreach (var child in GetChildren())
+        {
+            EachAndGetMarks(child, list);
+        }
+
+        return list.ToArray();
+    }
+
+    private void EachAndGetMarks(Node node, List<ActivityMark> list)
+    {
+        if (node is ActivityMark mark)
+        {
+            list.Add(mark);
+        }
+        foreach (var child in node.GetChildren())
+        {
+            EachAndGetMarks(child, list);
+        }
+    }
 }

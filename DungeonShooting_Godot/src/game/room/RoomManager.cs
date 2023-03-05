@@ -175,6 +175,12 @@ public partial class RoomManager : Node2D
         CreateDoor(roomInfo);
         
         //创建房间区域
+        
+        //创建敌人
+        foreach (var roomInfoActivityMark in roomInfo.ActivityMarks)
+        {
+            roomInfoActivityMark.BeReady(roomInfo);
+        }
     }
     
     //挂载房间导航区域

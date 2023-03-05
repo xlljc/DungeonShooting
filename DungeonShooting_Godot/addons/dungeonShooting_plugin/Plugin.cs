@@ -27,6 +27,10 @@ namespace Plugin
             var texture2 = GD.Load<Texture2D>("res://addons/dungeonShooting_plugin/Map.svg");
             AddCustomType("DungeonRoomTemplate", "TileMap", script2, texture2);
             
+            var script3 = GD.Load<Script>("res://src/framework/map/mark/ActivityMark.cs");
+            var texture3 = GD.Load<Texture2D>("res://addons/dungeonShooting_plugin/Mark.svg");
+            AddCustomType("ActivityMark", "Node2D", script3, texture3);
+            
             dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/Automation.tscn").Instantiate<Control>();
             AddControlToDock(DockSlot.LeftUr, dock);
         }
