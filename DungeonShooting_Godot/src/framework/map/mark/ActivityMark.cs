@@ -7,54 +7,11 @@ using Godot;
 [Tool]
 public partial class ActivityMark : Node2D
 {
-    public enum MarkActivityType
-    {
-        /// <summary>
-        /// 没有前缀
-        /// </summary>
-        NonePrefix,
-
-        /// <summary>
-        /// 测试单位
-        /// </summary>
-        Test,
-
-        /// <summary>
-        /// 角色
-        /// </summary>
-        Role,
-
-        /// <summary>
-        /// 敌人
-        /// </summary>
-        Enemy,
-
-        /// <summary>
-        /// 武器
-        /// </summary>
-        Weapon,
-
-        /// <summary>
-        /// 子弹
-        /// </summary>
-        Bullet,
-
-        /// <summary>
-        /// 弹壳
-        /// </summary>
-        Shell,
-
-        /// <summary>
-        /// 其他类型
-        /// </summary>
-        Other,
-    }
-
     /// <summary>
     /// 物体类型
     /// </summary>
     [Export]
-    public MarkActivityType Type = MarkActivityType.NonePrefix;
+    public ActivityIdPrefix.ActivityPrefixType Type = ActivityIdPrefix.ActivityPrefixType.NonePrefix;
 
     /// <summary>
     /// 物体id
@@ -74,27 +31,7 @@ public partial class ActivityMark : Node2D
     /// <returns></returns>
     public string GetItemId()
     {
-        switch (Type)
-        {
-            case MarkActivityType.NonePrefix:
-                return ItemId;
-            case MarkActivityType.Test:
-                return ActivityIdPrefix.Test + ItemId;
-            case MarkActivityType.Role:
-                return ActivityIdPrefix.Role + ItemId;
-            case MarkActivityType.Enemy:
-                return ActivityIdPrefix.Enemy + ItemId;
-            case MarkActivityType.Weapon:
-                return ActivityIdPrefix.Weapon + ItemId;
-            case MarkActivityType.Bullet:
-                return ActivityIdPrefix.Bullet + ItemId;
-            case MarkActivityType.Shell:
-                return ActivityIdPrefix.Shell + ItemId;
-            case MarkActivityType.Other:
-                return ActivityIdPrefix.Other + ItemId;
-        }
-
-        return ItemId;
+        return ActivityIdPrefix.GetNameByPrefixType(Type) + ItemId;
     }
 
     /// <summary>
