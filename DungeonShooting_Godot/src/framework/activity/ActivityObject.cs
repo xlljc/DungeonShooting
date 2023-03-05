@@ -66,6 +66,11 @@ public abstract partial class ActivityObject : CharacterBody2D
         set => MoveController.BasisVelocity = value;
     }
 
+    /// <summary>
+    /// 当前物体归属的区域
+    /// </summary>
+    public AffiliationArea Affiliation { get; }
+    
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     //是否初始化阴影

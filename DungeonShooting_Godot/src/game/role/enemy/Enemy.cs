@@ -21,10 +21,15 @@ using Godot;
 public partial class Enemy : Role
 {
     /// <summary>
-    /// 公共属性, 是否找到目标, 如果找到目标, 则所有敌人都会知道玩家的位置
+    /// 公共属性, 是否找到目标, 如果找到目标, 则与目标同房间的所有敌人都会知道目标的位置
     /// </summary>
     public static bool IsFindTarget { get; private set; }
 
+    /// <summary>
+    /// 公共属性, 在哪个区域找到的目标, 所有该区域下的敌人都会知道目标的位置
+    /// </summary>
+    public static AffiliationArea FindTargetAffiliation { get; private set; }
+    
     /// <summary>
     /// 公共属性, 找到的目标的位置, 如果目标在视野内, 则一直更新
     /// </summary>
@@ -183,6 +188,27 @@ public partial class Enemy : Role
     }
 
     /// <summary>
+    /// 检查是否能切换到 AiStateEnum.AiLeaveFor 状态
+    /// </summary>
+    /// <returns></returns>
+    public bool CanChangeLeaveFor()
+    {
+        if (!IsFindTarget)
+        {
+            return false;
+        }
+
+        var currState = StateController.CurrState;
+        if (currState == AiStateEnum.AiNormal || currState == AiStateEnum.AiProbe)
+        {
+            //判断是否在同一个房间内
+            return Affiliation == FindTargetAffiliation;
+        }
+        
+        return false;
+    }
+    
+    /// <summary>
     /// 更新敌人视野
     /// </summary>
     public static void UpdateEnemiesView()
@@ -196,6 +222,8 @@ public partial class Enemy : Role
             {
                 IsFindTarget = true;
                 FindTargetPosition = Player.Current.GetCenterPosition();
+                FindTargetAffiliation = enemy.Affiliation;
+                break;
             }
         }
     }

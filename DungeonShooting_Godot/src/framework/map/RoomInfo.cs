@@ -54,6 +54,31 @@ public class RoomInfo
     public List<ActivityMark> ActivityMarks = new List<ActivityMark>();
 
     /// <summary>
+    /// 当前房间归属区域
+    /// </summary>
+    public AffiliationArea Affiliation;
+    
+    /// <summary>
+    /// 获取房间的全局坐标, 单位: 像素
+    /// </summary>
+    public Vector2 GetWorldPosition()
+    {
+        return new Vector2(
+            Position.X * GenerateDungeon.TileCellSize,
+            Position.Y * GenerateDungeon.TileCellSize
+        );
+    }
+
+    /// <summary>
+    /// 获取房间左上角的 Tile 距离全局坐标原点的偏移, 单位: 像素
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetOffsetPosition()
+    {
+        return RoomSplit.RoomInfo.Position.AsVector2() * GenerateDungeon.TileCellSize;
+    }
+    
+    /// <summary>
     /// 获取房间横轴结束位置, 单位: 格
     /// </summary>
     public int GetHorizontalEnd()

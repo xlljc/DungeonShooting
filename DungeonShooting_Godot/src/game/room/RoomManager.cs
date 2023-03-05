@@ -33,6 +33,8 @@ public partial class RoomManager : Node2D
     private Font _font;
     private GenerateDungeon _generateDungeon;
 
+    private int _affiliationIndex = 0;
+
     //房间内所有静态导航网格数据
     private static List<NavigationPolygonData> _roomStaticNavigationList = new List<NavigationPolygonData>();
 
@@ -66,8 +68,13 @@ public partial class RoomManager : Node2D
         _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorMapLayer);
         //挂载过道导航区域
         _dungeonTile.MountNavigationPolygon(this);
-        _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
+        //过道导航区域数据
+        var aisleData = _dungeonTile.GetPolygonData();
+        _roomStaticNavigationList.AddRange(aisleData);
+        //门导航区域数据
         _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
+        //创建过道的归属区域
+        CreateAisleAffiliation(aisleData);
         //初始化所有房间
         _generateDungeon.EachRoom(InitRoom);
 
@@ -84,42 +91,6 @@ public partial class RoomManager : Node2D
         // var enemy1 = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
         // enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
         // enemy1.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
-        
-        // for (int i = 0; i < 10; i++)
-        // {
-        //     var enemyTemp = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
-        //     enemyTemp.PutDown(new Vector2(30 + (i + 1) * 20, 30), RoomLayerEnum.YSortLayer);
-        //     // enemyTemp.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
-        //     // enemyTemp.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
-        // }
-
-        // var enemy2 = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
-        // enemy2.Name = "Enemy2";
-        // enemy2.PutDown(new Vector2(120, 100));
-        // enemy2.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
-        // //enemy2.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
-        // //enemy2.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
-        //
-        // var enemy3 = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
-        // enemy3.Name = "Enemy3";
-        // enemy3.PutDown(new Vector2(100, 120));
-        // enemy3.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
-        // enemy3.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
-
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004").PutDown(new Vector2(80, 100), RoomLayerEnum.NormalLayer);
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001").PutDown(new Vector2(220, 120), RoomLayerEnum.NormalLayer);
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001").PutDown(new Vector2(230, 120), RoomLayerEnum.NormalLayer);
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001").PutDown(new Vector2(80, 80), RoomLayerEnum.NormalLayer);
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002").PutDown(new Vector2(80, 120), RoomLayerEnum.NormalLayer);
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(120, 80), RoomLayerEnum.NormalLayer);
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(130, 80), RoomLayerEnum.NormalLayer);
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(140, 80), RoomLayerEnum.NormalLayer);
-        
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(180, 80), RoomLayerEnum.NormalLayer);
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(180, 180), RoomLayerEnum.NormalLayer);
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002").PutDown(new Vector2(180, 120), RoomLayerEnum.NormalLayer);
-        // ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002").PutDown(new Vector2(180, 130), RoomLayerEnum.NormalLayer);
-
     }
 
     /// <summary>
@@ -174,12 +145,13 @@ public partial class RoomManager : Node2D
         //创建门
         CreateDoor(roomInfo);
         
-        //创建房间区域
+        //创建房间归属区域
+        CreateRoomAisleAffiliation(roomInfo);
         
         //创建敌人
         foreach (var roomInfoActivityMark in roomInfo.ActivityMarks)
         {
-            roomInfoActivityMark.BeReady(roomInfo);
+            //roomInfoActivityMark.BeReady(roomInfo);
         }
     }
     
@@ -188,6 +160,7 @@ public partial class RoomManager : Node2D
     {
         var polygonArray = roomInfo.RoomSplit.RoomInfo.NavigationList.ToArray();
         var polygon = new NavigationPolygon();
+        var offset = roomInfo.GetOffsetPosition();
         for (var i = 0; i < polygonArray.Length; i++)
         {
             var navigationPolygonData = polygonArray[i];
@@ -195,7 +168,7 @@ public partial class RoomManager : Node2D
             //这里的位置需要加上房间位置
             for (var j = 0; j < polygonPointArray.Length; j++)
             {
-                polygonPointArray[j] = polygonPointArray[j] + (roomInfo.Position + Vector2I.One) * GenerateDungeon.TileCellSize;
+                polygonPointArray[j] = polygonPointArray[j] + roomInfo.GetWorldPosition() - offset;
             }
             polygon.AddOutline(polygonPointArray);
             
@@ -244,6 +217,30 @@ public partial class RoomManager : Node2D
             door.Init(doorInfo);
             door.OpenDoor();
             door.PutDown(RoomLayerEnum.NormalLayer, false);
+        }
+    }
+
+    //创建房间归属区域
+    private void CreateRoomAisleAffiliation(RoomInfo roomInfo)
+    {
+        var affiliation = new AffiliationArea();
+        affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
+        affiliation.Init(new Rect2(roomInfo.GetWorldPosition(), roomInfo.Size * GenerateDungeon.TileCellSize));
+        
+        roomInfo.Affiliation = affiliation;
+        TileRoot.AddChild(affiliation);
+    }
+    
+    //创建过道归属区域
+    private void CreateAisleAffiliation(NavigationPolygonData[] aisleData)
+    {
+        foreach (var aisle in aisleData)
+        {
+            var affiliation = new AffiliationArea();
+            affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
+            affiliation.Init(aisle.ConvertPointsToVector2Array());
+            
+            TileRoot.AddChild(affiliation);
         }
     }
     
