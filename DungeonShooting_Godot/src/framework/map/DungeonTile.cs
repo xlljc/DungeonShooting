@@ -143,50 +143,47 @@ public class DungeonTile
                 var doorDir2 = doorInfo.ConnectDoor.Direction;
                 if (!doorInfo.HasCross)
                 {
-                    //方向, 0横向, 1纵向
-                    int dir = 0;
                     var rect = Utils.CalcRect(
                         doorInfo.OriginPosition.X,
                         doorInfo.OriginPosition.Y,
                         doorInfo.ConnectDoor.OriginPosition.X,
                         doorInfo.ConnectDoor.OriginPosition.Y
                     );
-                    if (doorDir1 == DoorDirection.N || doorDir1 == DoorDirection.S)
-                    {
-                        rect.Size = new Vector2(GenerateDungeon.CorridorWidth, rect.Size.Y);
-                        dir = 1;
-                    }
-                    else
-                    {
-                        rect.Size = new Vector2(rect.Size.X, GenerateDungeon.CorridorWidth);
-                    }
 
-                    if (dir == 0) //横向
+                    switch (doorDir1)
                     {
-                        FullHorizontalAisle(config, rect);
+                        case DoorDirection.E:
+                            rect.Size = new Vector2(rect.Size.X, GenerateDungeon.CorridorWidth);
+                            FullHorizontalAisle(config, rect);
+                            FullHorizontalAisleLeft(config, rect, doorInfo);
+                            FullHorizontalAisleRight(config, rect, doorInfo.ConnectDoor);
+                            break;
+                        case DoorDirection.W:
+                            rect.Size = new Vector2(rect.Size.X, GenerateDungeon.CorridorWidth);
+                            FullHorizontalAisle(config, rect);
+                            FullHorizontalAisleLeft(config, rect, doorInfo.ConnectDoor);
+                            FullHorizontalAisleRight(config, rect, doorInfo);
+                            break;
                         
-                        FullHorizontalAisleLeft(config, rect, doorDir1 == DoorDirection.E ? doorInfo : null);
-                        FullHorizontalAisleRight(config, rect, doorDir1 == DoorDirection.W ? doorInfo : null);
-                        
-                        FullHorizontalAisleLeft(config, rect, doorDir2 == DoorDirection.E ? doorInfo.ConnectDoor : null);
-                        FullHorizontalAisleRight(config, rect, doorDir2 == DoorDirection.W ? doorInfo.ConnectDoor : null);
-                    }
-                    else //纵向
-                    {
-                        FullVerticalAisle(config, rect);
-                        
-                        FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
-                        FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
-                        
-                        FullVerticalAisleUp(config, rect, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
-                        FullVerticalAisleDown(config, rect, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
+                        case DoorDirection.S:
+                            rect.Size = new Vector2(GenerateDungeon.CorridorWidth, rect.Size.Y);
+                            FullVerticalAisle(config, rect);
+                            FullVerticalAisleUp(config, rect, doorInfo);
+                            FullVerticalAisleDown(config, rect, doorInfo.ConnectDoor);
+                            break;
+                        case DoorDirection.N:
+                            rect.Size = new Vector2(GenerateDungeon.CorridorWidth, rect.Size.Y);
+                            FullVerticalAisle(config, rect);
+                            FullVerticalAisleUp(config, rect, doorInfo.ConnectDoor);
+                            FullVerticalAisleDown(config, rect, doorInfo);
+                            break;
                     }
                 }
                 else //带交叉点
                 {
                     //方向, 0横向, 1纵向
-                    int dir1 = 0;
-                    int dir2 = 0;
+                    var dir1 = 0;
+                    var dir2 = 0;
 
                     Rect2 rect;
                     Rect2 rect2;

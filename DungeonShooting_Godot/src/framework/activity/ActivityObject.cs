@@ -331,10 +331,11 @@ public abstract partial class ActivityObject : CharacterBody2D
     }
 
     /// <summary>
-    /// 将一个节点扔到地上, 并设置显示的阴影
+    /// 将一个节点扔到地上
     /// <param name="layer">放入的层</param>
+    /// <param name="showShadow">是否显示阴影</param>
     /// </summary>
-    public virtual void PutDown(RoomLayerEnum layer)
+    public virtual void PutDown(RoomLayerEnum layer, bool showShadow = true)
     {
         _currLayer = layer;
         var parent = GetParent();
@@ -349,14 +350,21 @@ public abstract partial class ActivityObject : CharacterBody2D
             this.AddToActivityRoot(layer);
         }
 
-        if (IsInsideTree())
+        if (showShadow)
         {
-            ShowShadowSprite();
+            if (IsInsideTree())
+            {
+                ShowShadowSprite();
+            }
+            else
+            {
+                //注意需要延时调用
+                CallDeferred(nameof(ShowShadowSprite));
+            }
         }
         else
         {
-            //注意需要延时调用
-            CallDeferred(nameof(ShowShadowSprite));
+            ShadowSprite.Visible = false;
         }
     }
 

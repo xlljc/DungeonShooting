@@ -957,9 +957,9 @@ public abstract partial class Weapon : ActivityObject
         AnimationPlayer.Play("floodlight");
     }
 
-    public override void PutDown(RoomLayerEnum layer)
+    public override void PutDown(RoomLayerEnum layer, bool showShadow = true)
     {
-        base.PutDown(layer);
+        base.PutDown(layer, showShadow);
         AnimationPlayer.Play("floodlight");
     }
 

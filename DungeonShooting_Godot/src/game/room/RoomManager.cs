@@ -226,7 +226,7 @@ public partial class RoomManager : Node2D
             }
             door.Position = (doorInfo.OriginPosition + offset) * GenerateDungeon.TileCellSize;
             door.Init(doorInfo);
-            door.PutDown(RoomLayerEnum.NormalLayer);
+            door.PutDown(RoomLayerEnum.NormalLayer, false);
         }
     }
     
