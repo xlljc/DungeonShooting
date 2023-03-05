@@ -55,6 +55,11 @@ public partial class Bullet : ActivityObject
         CurrFlyDistance += FlySpeed * delta;
         if (CurrFlyDistance >= MaxDistance)
         {
+            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletDisappear_tscn);
+            var node = packedScene.Instantiate<Node2D>();
+            node.GlobalPosition = GlobalPosition;
+            node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+            
             Destroy();
         }
     }

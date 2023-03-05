@@ -27,6 +27,7 @@ orbit_velocity_max = 0.0
 angle_max = 360.0
 scale_curve = SubResource("CurveTexture_yr1bt")
 color = Color(0.75, 0.75, 0.75, 0.470588)
+anim_offset_max = 1.0
 
 [sub_resource type="Animation" id="5"]
 length = 0.001

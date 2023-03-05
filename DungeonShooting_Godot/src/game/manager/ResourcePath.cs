@@ -5,6 +5,7 @@ public class ResourcePath
 {
     public const string prefab_FanCollisionShape_tscn = "res://prefab/FanCollisionShape.tscn";
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
+    public const string prefab_effect_BulletDisappear_tscn = "res://prefab/effect/BulletDisappear.tscn";
     public const string prefab_effect_BulletSmoke_tscn = "res://prefab/effect/BulletSmoke.tscn";
     public const string prefab_effect_FirePart_tscn = "res://prefab/effect/FirePart.tscn";
     public const string prefab_effect_ShotFire_tscn = "res://prefab/effect/ShotFire.tscn";
