@@ -31,7 +31,6 @@ animations = [{
 
 [node name="RoomDoor" type="Node"]
 script = ExtResource("1_8es7a")
-collision_layer = 1
 z_index = 15
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]

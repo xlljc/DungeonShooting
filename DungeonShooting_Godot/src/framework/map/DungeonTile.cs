@@ -163,11 +163,23 @@ public class DungeonTile
 
                     if (dir == 0) //横向
                     {
-                        FullHorizontalAisleWall(doorInfo, config, rect, 0);
+                        FullHorizontalAisle(config, rect);
+                        
+                        FullHorizontalAisleLeft(config, rect, doorDir1 == DoorDirection.E ? doorInfo : null);
+                        FullHorizontalAisleRight(config, rect, doorDir1 == DoorDirection.W ? doorInfo : null);
+                        
+                        FullHorizontalAisleLeft(config, rect, doorDir2 == DoorDirection.E ? doorInfo.ConnectDoor : null);
+                        FullHorizontalAisleRight(config, rect, doorDir2 == DoorDirection.W ? doorInfo.ConnectDoor : null);
                     }
                     else //纵向
                     {
-                        FullVerticalAisleWall(doorInfo, config, rect, 0);
+                        FullVerticalAisle(config, rect);
+                        
+                        FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
+                        FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
+                        
+                        FullVerticalAisleUp(config, rect, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
+                        FullVerticalAisleDown(config, rect, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
                     }
                 }
                 else //带交叉点
@@ -270,20 +282,28 @@ public class DungeonTile
                     //墙壁, 0横向, 1纵向
                     if (dir1 == 0)
                     {
-                        FullHorizontalAisleWall(doorInfo, config, rect, doorDir1 == DoorDirection.W ? 1: 2);
+                        FullHorizontalAisle(config, rect);
+                        FullHorizontalAisleLeft(config, rect, doorDir1 == DoorDirection.E ? doorInfo : null);
+                        FullHorizontalAisleRight(config, rect, doorDir1 == DoorDirection.W ? doorInfo : null);
                     }
                     else
                     {
-                        FullVerticalAisleWall(doorInfo, config, rect, doorDir1 == DoorDirection.N ? 1 : 2);
+                        FullVerticalAisle(config, rect);
+                        FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
+                        FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
                     }
 
                     if (dir2 == 0)
                     {
-                        FullHorizontalAisleWall(doorInfo, config, rect2, doorDir2 == DoorDirection.W ? 1 : 2);
+                        FullHorizontalAisle(config, rect2);
+                        FullHorizontalAisleLeft(config, rect2, doorDir2 == DoorDirection.E ? doorInfo.ConnectDoor : null);
+                        FullHorizontalAisleRight(config, rect2, doorDir2 == DoorDirection.W ? doorInfo.ConnectDoor : null);
                     }
                     else
                     {
-                        FullVerticalAisleWall(doorInfo, config, rect2, doorDir2 == DoorDirection.N ? 1 : 2);
+                        FullVerticalAisle(config, rect2);
+                        FullVerticalAisleUp(config, rect2, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
+                        FullVerticalAisleDown(config, rect2, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
                     }
 
                     if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
@@ -404,17 +424,29 @@ public class DungeonTile
             }
         }
     }
-    
-    private void FullHorizontalAisleWall(RoomDoorInfo doorInfo, AutoTileConfig config, Rect2 rect, int type)
+
+    private void FullHorizontalAisle(AutoTileConfig config, Rect2 rect)
     {
         FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
         FillRect(MiddleMapLayer, config.T, rect.Position, new Vector2(rect.Size.X, 1));
         FillRect(TopMapLayer, config.B, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
+    }
+
+    private void FullVerticalAisle(AutoTileConfig config, Rect2 rect)
+    {
+        FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
+        FillRect(TopMapLayer, config.L, rect.Position, new Vector2(1, rect.Size.Y));
+        FillRect(TopMapLayer, config.R, rect.Position + new Vector2(rect.Size.X - 1, 0), new Vector2(1, rect.Size.Y));
+    }
+
+    private void FullHorizontalAisleLeft(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
+    {
         //左
         ClearRect(TopMapLayer, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
-        if (type == 1)
+        if (doorInfo == null)
         {
-            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1),
+                new Vector2(1, rect.Size.Y - 2));
         }
         else
         {
@@ -430,10 +462,12 @@ public class DungeonTile
                 new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 2.5f)
             );
         }
-
+    }
+    private void FullHorizontalAisleRight(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
+    {
         //右
         ClearRect(TopMapLayer, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
-        if (type == 2)
+        if (doorInfo == null)
         {
             FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
         }
@@ -453,16 +487,14 @@ public class DungeonTile
         }
     }
 
-    private void FullVerticalAisleWall(RoomDoorInfo doorInfo, AutoTileConfig config, Rect2 rect, int type)
+    private void FullVerticalAisleUp(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
     {
-        FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
-        FillRect(TopMapLayer, config.L, rect.Position, new Vector2(1, rect.Size.Y));
-        FillRect(TopMapLayer, config.R, rect.Position + new Vector2(rect.Size.X - 1, 0), new Vector2(1, rect.Size.Y));
         //上
         ClearRect(TopMapLayer, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
-        if (type == 1)
+        if (doorInfo == null)
         {
-            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+            FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1),
+                new Vector2(rect.Size.X - 2, 1));
         }
         else
         {
@@ -478,9 +510,12 @@ public class DungeonTile
                 new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f)
             );
         }
+    }
+    private void FullVerticalAisleDown(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
+    {
         //下
         ClearRect(MiddleMapLayer, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
-        if (type == 2)
+        if (doorInfo == null)
         {
             FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
         }

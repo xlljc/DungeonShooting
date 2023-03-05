@@ -68,7 +68,7 @@ public partial class GameApplication : Node2D
 		InitRoomConfig();
 
 		//初始化 ActivityObject
-		ActivityObject.Init();
+		ActivityObject.InitActivity();
 	}
 	
 	public override void _EnterTree()

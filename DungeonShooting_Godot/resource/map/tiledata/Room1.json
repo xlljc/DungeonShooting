@@ -1,11 +1,11 @@
 {
   "Position": {
     "X": -1,
-    "Y": -1
+    "Y": -3
   },
   "Size": {
     "X": 20,
-    "Y": 13
+    "Y": 15
   },
   "DoorAreaInfos": [],
   "NavigationList": [

@@ -72,15 +72,15 @@ public partial class RoomManager : Node2D
         _generateDungeon.EachRoom(MountNavFromRoomInfo);
         //创建门实例
         _generateDungeon.EachRoom(CreateDoor);
-        
+
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
-        // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
-        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
+        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
+        // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
         
         var enemy1 = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
@@ -202,17 +202,30 @@ public partial class RoomManager : Node2D
 
     private void CreateDoor(RoomInfo roomInfo)
     {
-        foreach (var roomInfoDoor in roomInfo.Doors)
+        foreach (var doorInfo in roomInfo.Doors)
         {
             var door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "0001");
-            if (roomInfoDoor.Direction == DoorDirection.E || roomInfoDoor.Direction == DoorDirection.W)
+            doorInfo.Door = door;
+            Vector2 offset;
+            switch (doorInfo.Direction)
             {
-                door.Position = (roomInfoDoor.OriginPosition + new Vector2(0, 2)) * GenerateDungeon.TileCellSize;
+                case DoorDirection.E:
+                    offset = new Vector2(-0.5f, 2);
+                    break;
+                case DoorDirection.W:
+                    offset = new Vector2(0.5f, 2);
+                    break;
+                case DoorDirection.S:
+                    offset = new Vector2(2f, -0.5f);
+                    break;
+                case DoorDirection.N:
+                    offset = new Vector2(2f, 0.5f);
+                    break;
+                default: offset = new Vector2();
+                    break;
             }
-            else
-            {
-                door.Position = (roomInfoDoor.OriginPosition + new Vector2(2, 0)) * GenerateDungeon.TileCellSize;
-            }
+            door.Position = (doorInfo.OriginPosition + offset) * GenerateDungeon.TileCellSize;
+            door.Init(doorInfo);
             door.PutDown(RoomLayerEnum.NormalLayer);
         }
     }

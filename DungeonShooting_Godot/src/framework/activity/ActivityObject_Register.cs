@@ -26,7 +26,7 @@ public partial class ActivityObject
     /// <summary>
     /// 初始化调用, 开始扫描当前程序集, 并自动注册 ActivityObject 物体
     /// </summary>
-    public static void Init()
+    public static void InitActivity()
     {
         if (_initState)
         {

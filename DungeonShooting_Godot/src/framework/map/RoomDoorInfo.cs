@@ -45,4 +45,9 @@ public class RoomDoorInfo
     /// 占位导航网格
     /// </summary>
     public DoorNavigationInfo Navigation;
+
+    /// <summary>
+    /// 门实例
+    /// </summary>
+    public RoomDoor Door;
 }
