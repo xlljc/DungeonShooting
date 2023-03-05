@@ -68,10 +68,8 @@ public partial class RoomManager : Node2D
         _dungeonTile.MountNavigationPolygon(this);
         _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
         _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
-        //挂载所有房间的导航区域
-        _generateDungeon.EachRoom(MountNavFromRoomInfo);
-        //创建门实例
-        _generateDungeon.EachRoom(CreateDoor);
+        //初始化所有房间
+        _generateDungeon.EachRoom(InitRoom);
 
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
@@ -83,9 +81,9 @@ public partial class RoomManager : Node2D
         // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
         
-        var enemy1 = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
-        enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
-        enemy1.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
+        // var enemy1 = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
+        // enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
+        // enemy1.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
         
         // for (int i = 0; i < 10; i++)
         // {
@@ -168,6 +166,17 @@ public partial class RoomManager : Node2D
         }
     }
 
+    // 初始化房间
+    private void InitRoom(RoomInfo roomInfo)
+    {
+        //挂载房间导航区域
+        MountNavFromRoomInfo(roomInfo);
+        //创建门
+        CreateDoor(roomInfo);
+        
+        //创建房间区域
+    }
+    
     //挂载房间导航区域
     private void MountNavFromRoomInfo(RoomInfo roomInfo)
     {
@@ -200,6 +209,7 @@ public partial class RoomManager : Node2D
         AddChild(navigationPolygon);
     }
 
+    //创建门
     private void CreateDoor(RoomInfo roomInfo)
     {
         foreach (var doorInfo in roomInfo.Doors)
@@ -226,6 +236,7 @@ public partial class RoomManager : Node2D
             }
             door.Position = (doorInfo.OriginPosition + offset) * GenerateDungeon.TileCellSize;
             door.Init(doorInfo);
+            door.OpenDoor();
             door.PutDown(RoomLayerEnum.NormalLayer, false);
         }
     }

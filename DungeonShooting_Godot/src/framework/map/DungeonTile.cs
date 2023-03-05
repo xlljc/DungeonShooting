@@ -436,6 +436,7 @@ public class DungeonTile
         FillRect(TopMapLayer, config.R, rect.Position + new Vector2(rect.Size.X - 1, 0), new Vector2(1, rect.Size.Y));
     }
 
+    //横向过道, 门朝右, 连接方向向左
     private void FullHorizontalAisleLeft(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
     {
         //左
@@ -447,6 +448,9 @@ public class DungeonTile
         }
         else
         {
+            FillRect(TopMapLayer, config.OUT_LB, rect.Position + new Vector2(-1, 0), Vector2.One);
+            FillRect(TopMapLayer, config.OUT_LT, rect.Position + new Vector2(-1, 3), Vector2.One);
+            
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
             //生成门的导航区域
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
@@ -460,6 +464,8 @@ public class DungeonTile
             );
         }
     }
+    
+    //横向过道, 门朝左, 连接方向向右
     private void FullHorizontalAisleRight(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
     {
         //右
@@ -470,6 +476,9 @@ public class DungeonTile
         }
         else
         {
+            FillRect(TopMapLayer, config.OUT_RB, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
+            FillRect(TopMapLayer, config.OUT_RT, rect.Position + new Vector2(rect.Size.X, 3), Vector2.One);
+            
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
             //生成门的导航区域
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
@@ -484,6 +493,7 @@ public class DungeonTile
         }
     }
 
+    //纵向过道, 门朝下, 连接方向向上
     private void FullVerticalAisleUp(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
     {
         //上
@@ -495,6 +505,9 @@ public class DungeonTile
         }
         else
         {
+            FillRect(TopMapLayer, config.OUT_RT, rect.Position + new Vector2(0, -1), Vector2.One);
+            FillRect(TopMapLayer, config.OUT_LT, rect.Position + new Vector2(3, -1), Vector2.One);
+            
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
@@ -508,6 +521,8 @@ public class DungeonTile
             );
         }
     }
+    
+    //纵向过道, 门朝上, 连接方向向下
     private void FullVerticalAisleDown(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
     {
         //下
@@ -518,6 +533,9 @@ public class DungeonTile
         }
         else
         {
+            FillRect(MiddleMapLayer, config.OUT_RB, rect.Position + new Vector2(0, rect.Size.Y), Vector2.One);
+            FillRect(MiddleMapLayer, config.OUT_LB, rect.Position + new Vector2(3, rect.Size.Y), Vector2.One);
+            
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域
             var x = rect.Position.X * GenerateDungeon.TileCellSize;

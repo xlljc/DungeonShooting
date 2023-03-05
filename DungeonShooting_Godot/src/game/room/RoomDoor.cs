@@ -12,11 +12,15 @@ public partial class RoomDoor : ActivityObject
 
     public void OpenDoor()
     {
+        Visible = false;
+        Collision.Disabled = true;
         _door.Navigation.NavigationNode.Enabled = true;
     }
 
     public void CloseDoor()
     {
+        Visible = true;
+        Collision.Disabled = false;
         _door.Navigation.NavigationNode.Enabled = false;
     }
 }
