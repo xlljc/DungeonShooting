@@ -16,16 +16,24 @@ public partial class GameCamera : Camera2D
     /// </summary>
     [Export]
     public float RecoveryCoefficient = 100f;
+    
     /// <summary>
     /// 抖动开关
     /// </summary>
-    public bool Enable { get; set; } = true;
+    public bool EnableShake { get; set; } = true;
+
+    /// <summary>
+    /// 相机跟随目标
+    /// </summary>
+    private Role _followTarget;
     
-    public Vector2 SubPixelPosition { get; private set; }
+    // 3.5
+    //public Vector2 SubPixelPosition { get; private set; }
 
     private long _index = 0;
     private Vector2 _processDistance = Vector2.Zero;
     private Vector2 _processDirection = Vector2.Zero;
+    //抖动数据
     private readonly Dictionary<long, Vector2> _shakeMap = new Dictionary<long, Vector2>();
     
     private Vector2 _camPos;
@@ -50,22 +58,40 @@ public partial class GameCamera : Camera2D
         // SubPixelPosition = _camPos.Round() - _camPos;
         // (viewportContainer.Material as ShaderMaterial)?.SetShaderParameter("offset", SubPixelPosition);
         // GlobalPosition = _camPos.Round();
-        
-        var player = GameApplication.Instance.RoomManager.Player;
-        var mousePosition = InputManager.GetViewportMousePosition();
-        var playerPosition = player.GlobalPosition;
-        Vector2 targetPos;
-        if (playerPosition.DistanceSquaredTo(mousePosition) >= (60 / 0.3f) * (60 / 0.3f))
+
+        if (_followTarget != null)
         {
-            targetPos = playerPosition.MoveToward(mousePosition, 60);
+            var mousePosition = InputManager.GetViewportMousePosition();
+            var targetPosition = _followTarget.GlobalPosition;
+            Vector2 targetPos;
+            if (targetPosition.DistanceSquaredTo(mousePosition) >= (60 / 0.3f) * (60 / 0.3f))
+            {
+                targetPos = targetPosition.MoveToward(mousePosition, 60);
+            }
+            else
+            {
+                targetPos = targetPosition.Lerp(mousePosition, 0.3f);
+            }
+            _camPos = _camPos.Lerp(targetPos, Mathf.Min(6 * newDelta, 1)) + _shakeOffset;
+            GlobalPosition = _camPos.Round();
         }
-        else
-        {
-            targetPos = playerPosition.Lerp(mousePosition, 0.3f);
-        }
-        _camPos = _camPos.Lerp(targetPos, Mathf.Min(6 * newDelta, 1)) + _shakeOffset;
-        SubPixelPosition = _camPos.Round() - _camPos;
-        GlobalPosition = _camPos.Round();
+    }
+
+    /// <summary>
+    /// 设置相机跟随目标
+    /// </summary>
+    public void SetFollowTarget(Role target)
+    {
+        _followTarget = target;
+        GlobalPosition = target.GlobalPosition;
+    }
+
+    /// <summary>
+    /// 获取相机跟随目标
+    /// </summary>
+    public Role GetFollowTarget()
+    {
+        return _followTarget;
     }
     
     /// <summary>
@@ -105,7 +131,7 @@ public partial class GameCamera : Camera2D
     //抖动调用
     private void _Shake(float delta)
     {
-        if (Enable)
+        if (EnableShake)
         {
             var distance = _CalculateDistance();
             _shakeOffset += _processDirection + new Vector2(

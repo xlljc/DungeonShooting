@@ -10,7 +10,7 @@ public class RegisterActivity : Attribute
     /// <summary>
     /// 注册物体唯一ID， 该ID不能有重复
     /// </summary>
-    public string Id { get; }
+    public string Id { get; protected set; }
 
     /// <summary>
     /// 模板 Prefab 的路径

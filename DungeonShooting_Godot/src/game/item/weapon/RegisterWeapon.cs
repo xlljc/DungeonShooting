@@ -6,19 +6,22 @@ using System;
 /// </summary>
 public class RegisterWeapon : RegisterActivity
 {
-    public WeaponAttribute WeaponAttribute { get; }
+    /// <summary>
+    /// 武器属性
+    /// </summary>
+    private readonly WeaponAttribute _weaponAttribute;
     
     public RegisterWeapon(string id, Type attribute) : base(id, null)
     {
-        WeaponAttribute = (WeaponAttribute)Activator.CreateInstance(attribute);
-        if (WeaponAttribute != null) PrefabPath = WeaponAttribute.WeaponPrefab;
+        _weaponAttribute = (WeaponAttribute)Activator.CreateInstance(attribute);
+        if (_weaponAttribute != null) PrefabPath = _weaponAttribute.WeaponPrefab;
     }
 
     public override void CustomHandler(ActivityObject instance)
     {
         if (instance is Weapon weapon)
         {
-            weapon.InitWeapon(WeaponAttribute.Clone());
+            weapon.InitWeapon(_weaponAttribute.Clone());
         }
     }
 }

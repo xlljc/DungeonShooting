@@ -113,8 +113,9 @@ public partial class GameApplication : Node2D
 	/// </summary>
 	public Vector2 ViewToGlobalPosition(Vector2 viewPos)
 	{
-		//return viewPos;
-		return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
+		// 3.5写法
+		//return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
+		return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale;
 	}
 
 	//初始化房间配置

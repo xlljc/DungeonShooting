@@ -41,8 +41,6 @@ public partial class ActivityObject
     /// <summary>
     /// 扫描指定程序集, 自动注册带有 RegisterActivity 特性的类
     /// </summary>
-    /// <param name="assembly"></param>
-    /// <exception cref="Exception"></exception>
     public static void ScannerFromAssembly(Assembly assembly)
     {
         var types = assembly.GetTypes();

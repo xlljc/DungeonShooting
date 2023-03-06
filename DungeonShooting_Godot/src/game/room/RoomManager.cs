@@ -37,16 +37,7 @@ public partial class RoomManager : Node2D
 
     //房间内所有静态导航网格数据
     private static List<NavigationPolygonData> _roomStaticNavigationList = new List<NavigationPolygonData>();
-
-    public override void _EnterTree()
-    {
-        //创建玩家
-        Player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
-        Player.Position = new Vector2(30, 30);
-        Player.Name = "Player";
-        Player.PutDown(RoomLayerEnum.YSortLayer);
-    }
-
+    
     public override void _Ready()
     {
         TileRoot.YSortEnabled = false;
@@ -83,14 +74,24 @@ public partial class RoomManager : Node2D
         //播放bgm
         SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
+        //创建玩家
+        Player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
+        Player.Position = new Vector2(30, 30);
+        Player.Name = "Player";
+        Player.PutDown(RoomLayerEnum.YSortLayer);
+        
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
         // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
+
+        //相机跟随玩家
+        GameCamera.Main.SetFollowTarget(Player);
         
-        // var enemy1 = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
-        // enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
-        // enemy1.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
+        //修改鼠标指针
+        var cursor = GameApplication.Instance.Cursor;
+        cursor.SetGuiMode(false);
+        cursor.SetMountRole(Player);
     }
 
     /// <summary>
