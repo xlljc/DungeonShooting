@@ -139,6 +139,8 @@ public partial class Enemy : Role
         {
             weapons[i].ThrowWeapon(this);
         }
+        //派发敌人死亡信号
+        EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
         Destroy();
     }
 

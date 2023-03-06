@@ -94,6 +94,22 @@ public partial class RoomManager : Node2D
         var cursor = GameApplication.Instance.Cursor;
         cursor.SetGuiMode(false);
         cursor.SetMountRole(Player);
+
+        EventManager.AddEventListener(EventEnum.OnEnemyDie, o =>
+        {
+            var inst = (ActivityObject)o;
+            var count = Player.Affiliation.FindIncludeItemsCount(
+                activityObject => activityObject.CollisionLayer == PhysicsLayer.Enemy && activityObject != inst
+            );
+            GD.Print("有敌人死亡! 当前房间还剩: " + count + "个敌人");
+            if (count == 0)
+            {
+                foreach (var doorInfo in Player.Affiliation.RoomInfo.Doors)
+                {
+                    doorInfo.Door.OpenDoor();
+                }
+            }
+        });
     }
 
     /// <summary>
@@ -218,7 +234,7 @@ public partial class RoomManager : Node2D
             }
             door.Position = (doorInfo.OriginPosition + offset) * GenerateDungeon.TileCellSize;
             door.Init(doorInfo);
-            door.OpenDoor();
+            //door.OpenDoor();
             door.PutDown(RoomLayerEnum.NormalLayer, false);
         }
     }
@@ -228,24 +244,24 @@ public partial class RoomManager : Node2D
     {
         var affiliation = new AffiliationArea();
         affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
-        affiliation.Init(new Rect2(roomInfo.GetWorldPosition(), roomInfo.Size * GenerateDungeon.TileCellSize));
+        affiliation.Init(roomInfo, new Rect2(roomInfo.GetWorldPosition(), roomInfo.Size * GenerateDungeon.TileCellSize));
         
         roomInfo.Affiliation = affiliation;
         TileRoot.AddChild(affiliation);
     }
     
-    //创建过道归属区域
-    private void CreateAisleAffiliation(NavigationPolygonData[] aisleData)
-    {
-        foreach (var aisle in aisleData)
-        {
-            var affiliation = new AffiliationArea();
-            affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
-            affiliation.Init(aisle.ConvertPointsToVector2Array());
-            
-            TileRoot.AddChild(affiliation);
-        }
-    }
+    // //创建过道归属区域
+    // private void CreateAisleAffiliation(NavigationPolygonData[] aisleData)
+    // {
+    //     foreach (var aisle in aisleData)
+    //     {
+    //         var affiliation = new AffiliationArea();
+    //         affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
+    //         affiliation.Init(aisle.ConvertPointsToVector2Array());
+    //         
+    //         TileRoot.AddChild(affiliation);
+    //     }
+    // }
     
     //绘制房间区域, debug 用
     private void DrawRoomInfo(RoomInfo room)

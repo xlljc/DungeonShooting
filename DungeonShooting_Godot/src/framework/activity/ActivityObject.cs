@@ -147,7 +147,9 @@ public abstract partial class ActivityObject : CharacterBody2D
         MotionMode = MotionModeEnum.Floating;
 
         MoveController = AddComponent<MoveController>();
-        //tempNode.CallDeferred(Node.MethodName.QueueFree);
+        
+        //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
+        //_templateInstance.CallDeferred(Node.MethodName.QueueFree);
     }
 
     /// <summary>
@@ -819,16 +821,22 @@ public abstract partial class ActivityObject : CharacterBody2D
         }
 
         IsDestroyed = true;
-
-        OnDestroy();
         QueueFree();
+        OnDestroy();
+
         var arr = _components.ToArray();
         for (int i = 0; i < arr.Length; i++)
         {
             arr[i].Value?.Destroy();
         }
+        
+        if (Affiliation != null)
+        {
+            Affiliation.RemoveItem(this);
+        }
+        
         //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
-        _templateInstance.QueueFree();
+        //_templateInstance.QueueFree();
     }
 
     /// <summary>
