@@ -44,11 +44,17 @@ public partial class AffiliationArea : Area2D
         Monitoring = true;
         Monitorable = false;
         CollisionLayer = PhysicsLayer.None;
-        CollisionMask = PhysicsLayer.Props | PhysicsLayer.Player | PhysicsLayer.Enemy;
+        CollisionMask = PhysicsLayer.Props | PhysicsLayer.Player | PhysicsLayer.Bullet;
 
-        BodyEntered += body =>
+        BodyEntered += OnBodyEntered;
+    }
+
+    private void OnBodyEntered(Node2D body)
+    {
+        GD.Print("有物体进入: " + body.Name);
+        if (body is CharacterBody2D characterBody)
         {
-            GD.Print("有物体进入: " + body.Name);
-        };
+            GD.Print("layer: " + characterBody.CollisionLayer);
+        }
     }
 }

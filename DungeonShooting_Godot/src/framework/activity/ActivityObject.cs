@@ -104,24 +104,17 @@ public abstract partial class ActivityObject : CharacterBody2D
     //初始化节点
     private void _InitNode(string itemId, string scenePath)
     {
-        ItemId = itemId;
-        Name = GetType().Name + (_instanceIndex++);
         //加载预制体
         var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
         if (tempPrefab == null)
         {
             throw new Exception("创建 ActivityObject 没有找到指定挂载的预制体: " + scenePath);
         }
-
-        _templateInstance = tempPrefab.Instantiate<ActivityObjectTemplate>();
-        ZIndex = _templateInstance.z_index;
-        CollisionLayer = _templateInstance.collision_layer;
-        CollisionMask = _templateInstance.collision_mask;
-        Scale = _templateInstance.scale;
-        Visible = _templateInstance.visible;
-
-        MotionMode = MotionModeEnum.Floating;
         
+        ItemId = itemId;
+        Name = GetType().Name + (_instanceIndex++);
+        
+        _templateInstance = tempPrefab.Instantiate<ActivityObjectTemplate>();
         //移动子节点
         var count = _templateInstance.GetChildCount();
         for (int i = 0; i < count; i++)
@@ -145,6 +138,14 @@ public abstract partial class ActivityObject : CharacterBody2D
             }
         }
         
+        ZIndex = _templateInstance.z_index;
+        CollisionLayer = _templateInstance.collision_layer;
+        CollisionMask = _templateInstance.collision_mask;
+        Scale = _templateInstance.scale;
+        Visible = _templateInstance.visible;
+
+        MotionMode = MotionModeEnum.Floating;
+
         MoveController = AddComponent<MoveController>();
         //tempNode.CallDeferred(Node.MethodName.QueueFree);
     }

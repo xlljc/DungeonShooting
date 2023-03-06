@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bqf2vks5ggnsp"]
+[gd_scene load_steps=9 format=3 uid="uid://bqf2vks5ggnsp"]
 
 [ext_resource type="Texture2D" uid="uid://dj8nrd5od4fcl" path="res://resource/sprite/environment/itch-io-DungeonTileset4/16x16 dungeon ii wall reconfig v04 spritesheet.png" id="1"]
 [ext_resource type="Script" path="res://src/game/room/RoomManager.cs" id="1_3w1c7"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="4_lomny"]
 [ext_resource type="Script" path="res://src/game/camera/GameCamera.cs" id="5"]
 
 [sub_resource type="Environment" id="Environment_ji6mi"]
@@ -565,6 +566,9 @@ physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_rkmbu")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h2s2y"]
+size = Vector2(64, 64)
+
 [node name="Room" type="Node2D" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot")]
 script = ExtResource("1_3w1c7")
 NormalLayer = NodePath("NormalLayer")
@@ -612,6 +616,30 @@ layer_3/tile_data = PackedInt32Array()
 
 [node name="NormalLayer" type="Node2D" parent="."]
 z_index = -1
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="NormalLayer"]
+position = Vector2(178, 165)
+collision_layer = 4
+collision_mask = 0
+motion_mode = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="NormalLayer/CharacterBody2D"]
+texture = ExtResource("4_lomny")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NormalLayer/CharacterBody2D"]
+shape = SubResource("RectangleShape2D_h2s2y")
+
+[node name="CharacterBody2D2" type="CharacterBody2D" parent="NormalLayer"]
+position = Vector2(178, 165)
+collision_layer = 4
+collision_mask = 0
+motion_mode = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="NormalLayer/CharacterBody2D2"]
+texture = ExtResource("4_lomny")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NormalLayer/CharacterBody2D2"]
+shape = SubResource("RectangleShape2D_h2s2y")
 
 [node name="YSortLayer" type="Node2D" parent="."]
 y_sort_enabled = true
