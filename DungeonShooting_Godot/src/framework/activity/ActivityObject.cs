@@ -67,9 +67,9 @@ public abstract partial class ActivityObject : CharacterBody2D
     }
 
     /// <summary>
-    /// 当前物体归属的区域
+    /// 当前物体归属的区域, 如果为 null 代表不属于任何一个区域
     /// </summary>
-    public AffiliationArea Affiliation { get; }
+    public AffiliationArea Affiliation { get; set; }
     
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();

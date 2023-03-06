@@ -65,7 +65,7 @@ public partial class RoomManager : Node2D
         //门导航区域数据
         _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
         //创建过道的归属区域
-        CreateAisleAffiliation(aisleData);
+        //CreateAisleAffiliation(aisleData);
         //初始化所有房间
         _generateDungeon.EachRoom(InitRoom);
 
@@ -85,7 +85,7 @@ public partial class RoomManager : Node2D
         // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
 
-        ActivityObject.Create<Gun>(ActivityIdPrefix.Weapon + "0001").PutDown(new Vector2(35, 35), RoomLayerEnum.YSortLayer);
+        ActivityObject.Create<Gun>(ActivityIdPrefix.Weapon + "0001").PutDown(new Vector2(35, 35), RoomLayerEnum.NormalLayer);
         
         //相机跟随玩家
         GameCamera.Main.SetFollowTarget(Player);
@@ -154,7 +154,7 @@ public partial class RoomManager : Node2D
         //创建敌人
         foreach (var roomInfoActivityMark in roomInfo.ActivityMarks)
         {
-            //roomInfoActivityMark.BeReady(roomInfo);
+            roomInfoActivityMark.BeReady(roomInfo);
         }
     }
     

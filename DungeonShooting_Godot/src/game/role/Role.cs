@@ -226,8 +226,8 @@ public abstract partial class Role : ActivityObject
 
         //连接互动物体信号
         InteractiveArea = GetNode<Area2D>("InteractiveArea");
-        InteractiveArea.AreaEntered += _OnPropsEnter;
-        InteractiveArea.AreaExited += _OnPropsExit;
+        InteractiveArea.BodyEntered += _OnPropsEnter;
+        InteractiveArea.BodyExited += _OnPropsExit;
     }
 
     protected override void Process(float delta)
@@ -514,7 +514,7 @@ public abstract partial class Role : ActivityObject
     /// 连接信号: InteractiveArea.area_entered
     /// 与物体碰撞
     /// </summary>
-    private void _OnPropsEnter(Area2D other)
+    private void _OnPropsEnter(Node2D other)
     {
         ActivityObject propObject = other.AsActivityObject();
         if (propObject != null)
@@ -530,7 +530,7 @@ public abstract partial class Role : ActivityObject
     /// 连接信号: InteractiveArea.area_exited
     /// 物体离开碰撞区域
     /// </summary>
-    private void _OnPropsExit(Area2D other)
+    private void _OnPropsExit(Node2D other)
     {
         ActivityObject propObject = other.AsActivityObject();
         if (propObject != null)

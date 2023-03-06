@@ -28,7 +28,7 @@ public partial class Enemy : Role
     /// <summary>
     /// 公共属性, 在哪个区域找到的目标, 所有该区域下的敌人都会知道目标的位置
     /// </summary>
-    public static AffiliationArea FindTargetAffiliation { get; private set; }
+    public static HashSet<AffiliationArea> FindTargetAffiliationSet { get; } = new HashSet<AffiliationArea>();
     
     /// <summary>
     /// 公共属性, 找到的目标的位置, 如果目标在视野内, 则一直更新
@@ -115,8 +115,6 @@ public partial class Enemy : Role
         
         //默认状态
         StateController.ChangeState(AiStateEnum.AiNormal);
-
-        NavigationAgent2D.TargetPosition = GameApplication.Instance.RoomManager.Player.GlobalPosition;
     }
 
     public override void _EnterTree()
@@ -205,7 +203,7 @@ public partial class Enemy : Role
         if (currState == AiStateEnum.AiNormal || currState == AiStateEnum.AiProbe)
         {
             //判断是否在同一个房间内
-            return Affiliation == FindTargetAffiliation;
+            return FindTargetAffiliationSet.Contains(Affiliation);
         }
         
         return false;
@@ -217,16 +215,20 @@ public partial class Enemy : Role
     public static void UpdateEnemiesView()
     {
         IsFindTarget = false;
+        FindTargetAffiliationSet.Clear();
         for (var i = 0; i < _enemieList.Count; i++)
         {
             var enemy = _enemieList[i];
             var state = enemy.StateController.CurrState;
             if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
             {
-                IsFindTarget = true;
-                FindTargetPosition = Player.Current.GetCenterPosition();
-                FindTargetAffiliation = enemy.Affiliation;
-                break;
+                if (!IsFindTarget)
+                {
+                    IsFindTarget = true;
+                    FindTargetPosition = Player.Current.GetCenterPosition();
+                    FindTargetAffiliationSet.Add(Player.Current.Affiliation);
+                }
+                FindTargetAffiliationSet.Add(enemy.Affiliation);
             }
         }
     }

@@ -8,6 +8,9 @@ public partial class AffiliationArea : Area2D
 {
     private bool _init = false;
     
+    /// <summary>
+    /// 根据矩形区域初始化归属区域
+    /// </summary>
     public void Init(Rect2 rect2)
     {
         if (_init)
@@ -25,6 +28,9 @@ public partial class AffiliationArea : Area2D
         _Init();
     }
 
+    /// <summary>
+    /// 更具多边形初始化归属区域
+    /// </summary>
     public void Init(Vector2[] polygon)
     {
         if (_init)
@@ -44,17 +50,17 @@ public partial class AffiliationArea : Area2D
         Monitoring = true;
         Monitorable = false;
         CollisionLayer = PhysicsLayer.None;
-        CollisionMask = PhysicsLayer.Props | PhysicsLayer.Player | PhysicsLayer.Bullet;
+        CollisionMask = PhysicsLayer.Props | PhysicsLayer.Player | PhysicsLayer.Enemy;
 
         BodyEntered += OnBodyEntered;
     }
 
     private void OnBodyEntered(Node2D body)
     {
-        GD.Print("有物体进入: " + body.Name);
-        if (body is CharacterBody2D characterBody)
+        if (body is ActivityObject activityObject)
         {
-            GD.Print("layer: " + characterBody.CollisionLayer);
+            activityObject.Affiliation = this;
+            GD.Print("有物体进入: " + body.Name + ", " + Name);
         }
     }
 }

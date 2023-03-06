@@ -61,12 +61,6 @@ public abstract partial class Weapon : ActivityObject
     public Marker2D ShellPoint { get; private set; }
 
     /// <summary>
-    /// 碰撞器节点
-    /// </summary>
-    /// <value></value>
-    public CollisionShape2D CollisionShape2D { get; private set; }
-
-    /// <summary>
     /// 武器的当前散射半径
     /// </summary>
     public float CurrScatteringRange { get; private set; } = 0;
@@ -177,10 +171,9 @@ public abstract partial class Weapon : ActivityObject
         _weaponAttribute = attribute;
 
         AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-        FirePoint = GetNode<Marker2D>("WeaponBody/FirePoint");
-        OriginPoint = GetNode<Marker2D>("WeaponBody/OriginPoint");
-        ShellPoint = GetNode<Marker2D>("WeaponBody/ShellPoint");
-        CollisionShape2D = GetNode<CollisionShape2D>("WeaponBody/Collision");
+        FirePoint = GetNode<Marker2D>("FirePoint");
+        OriginPoint = GetNode<Marker2D>("OriginPoint");
+        ShellPoint = GetNode<Marker2D>("ShellPoint");
 
         //图标
         SetDefaultTexture(ResourceLoader.Load<Texture2D>(Attribute.Sprite2D));
@@ -953,7 +946,7 @@ public abstract partial class Weapon : ActivityObject
     protected override void OnThrowOver()
     {
         //启用碰撞
-        CollisionShape2D.Disabled = false;
+        Collision.Disabled = false;
         AnimationPlayer.Play("floodlight");
     }
 
@@ -986,7 +979,7 @@ public abstract partial class Weapon : ActivityObject
         sm.SetShaderParameter("schedule", 0);
         ZIndex = 0;
         //禁用碰撞
-        CollisionShape2D.Disabled = true;
+        Collision.Disabled = true;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         OnPickUp(master);
