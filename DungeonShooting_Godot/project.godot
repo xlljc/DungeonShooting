@@ -172,7 +172,7 @@ reload={
 2d_physics/layer_3="props"
 2d_physics/layer_4="player"
 2d_physics/layer_5="enemy"
-2d_physics/layer_6="view"
+2d_physics/layer_6="affiliation"
 
 [mono]
 

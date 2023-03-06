@@ -35,7 +35,10 @@ public partial class Enemy : Role
     /// </summary>
     public static Vector2 FindTargetPosition { get; private set; }
 
-    private static readonly List<Enemy> _enemies = new List<Enemy>();
+    /// <summary>
+    /// 记录所有存活的敌人
+    /// </summary>
+    private static readonly List<Enemy> _enemieList = new List<Enemy>();
 
     /// <summary>
     /// 敌人身上的状态机控制器
@@ -118,16 +121,16 @@ public partial class Enemy : Role
 
     public override void _EnterTree()
     {
-        if (!_enemies.Contains(this))
+        if (!_enemieList.Contains(this))
         {
-            _enemies.Add(this);
+            _enemieList.Add(this);
         }
     }
 
     public override void _ExitTree()
     {
         base._ExitTree();
-        _enemies.Remove(this);
+        _enemieList.Remove(this);
     }
 
     protected override void OnDie()
@@ -214,9 +217,9 @@ public partial class Enemy : Role
     public static void UpdateEnemiesView()
     {
         IsFindTarget = false;
-        for (var i = 0; i < _enemies.Count; i++)
+        for (var i = 0; i < _enemieList.Count; i++)
         {
-            var enemy = _enemies[i];
+            var enemy = _enemieList[i];
             var state = enemy.StateController.CurrState;
             if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
             {

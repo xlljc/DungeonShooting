@@ -22,6 +22,7 @@ public partial class AffiliationArea : Area2D
         shape.Size = rect2.Size;
         collisionShape.Shape = shape;
         AddChild(collisionShape);
+        _Init();
     }
 
     public void Init(Vector2[] polygon)
@@ -35,5 +36,19 @@ public partial class AffiliationArea : Area2D
         var collisionPolygon = new CollisionPolygon2D();
         collisionPolygon.Polygon = polygon;
         AddChild(collisionPolygon);
+        _Init();
+    }
+
+    private void _Init()
+    {
+        Monitoring = true;
+        Monitorable = false;
+        CollisionLayer = PhysicsLayer.None;
+        CollisionMask = PhysicsLayer.Props | PhysicsLayer.Player | PhysicsLayer.Enemy;
+
+        BodyEntered += body =>
+        {
+            GD.Print("有物体进入: " + body.Name);
+        };
     }
 }
