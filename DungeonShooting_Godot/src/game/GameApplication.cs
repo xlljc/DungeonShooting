@@ -81,6 +81,9 @@ public partial class GameApplication : Node2D
 		ActivityObject.IsDebug = Debug;
 		//Engine.TimeScale = 0.3f;
 
+		//初始化ui
+		UiManager.Init();
+		
 		GlobalNodeRoot = GetNode<Node2D>(GlobalNodeRootPath);
 		// 初始化鼠标
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
