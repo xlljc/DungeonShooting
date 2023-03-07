@@ -44,14 +44,14 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         if (Master.IsAllWeaponTotalAmmoEmpty())
         {
             //再寻找是否有可用的武器
-            if (Master.CheckUsableWeaponInUnclaimed())
+            var targetWeapon = Master.FindTargetWeapon();
+            if (targetWeapon != null)
             {
-                //切换到寻找武器状态
-                ChangeStateLate(AiStateEnum.AiFindAmmo);
+                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
         }
-        
+
         var playerPos = Player.Current.GetCenterPosition();
         var weapon = Master.Holster.ActiveWeapon;
 

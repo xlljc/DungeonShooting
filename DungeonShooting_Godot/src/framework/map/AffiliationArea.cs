@@ -17,10 +17,13 @@ public partial class AffiliationArea : Area2D
     /// 当前归属区域包含的所有物体对象
     /// </summary>
     private readonly HashSet<ActivityObject> _includeItems = new HashSet<ActivityObject>();
-
+    
+    /// <summary>
+    /// 玩家是否是第一次进入
+    /// </summary>
+    public bool IsFirstEnterFlag { get; private set; } = true;
+    
     private bool _init = false;
-    //玩家是否是第一次进入
-    private bool _isFirstEnterFlag = true;
     
     /// <summary>
     /// 根据矩形区域初始化归属区域
@@ -124,10 +127,10 @@ public partial class AffiliationArea : Area2D
     //玩家进入房间
     private void OnPlayerEnterRoom()
     {
-        if (_isFirstEnterFlag)
+        if (IsFirstEnterFlag)
         {
             EventManager.EmitEvent(EventEnum.OnPlayerFirstEnterRoom, RoomInfo);
-            _isFirstEnterFlag = false;
+            IsFirstEnterFlag = false;
         }
         EventManager.EmitEvent(EventEnum.OnPlayerEnterRoom, RoomInfo);
     }

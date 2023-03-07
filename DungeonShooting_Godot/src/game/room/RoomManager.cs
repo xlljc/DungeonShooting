@@ -26,6 +26,16 @@ public partial class RoomManager : Node2D
     /// 玩家对象
     /// </summary>
     public Player Player { get; private set; }
+
+    /// <summary>
+    /// 当前玩家所在的房间
+    /// </summary>
+    public RoomInfo ActiveRoom => Player?.Affiliation.RoomInfo;
+    
+    /// <summary>
+    /// 当前玩家所在的区域
+    /// </summary>
+    public AffiliationArea ActiveAffiliation => Player?.Affiliation;
     
     private DungeonTile _dungeonTile;
     private AutoTileConfig _autoTileConfig;
@@ -148,12 +158,6 @@ public partial class RoomManager : Node2D
         
         //创建房间归属区域
         CreateRoomAisleAffiliation(roomInfo);
-        
-        //创建敌人
-        // foreach (var roomInfoActivityMark in roomInfo.ActivityMarks)
-        // {
-        //     roomInfoActivityMark.BeReady(roomInfo);
-        // }
     }
     
     //挂载房间导航区域
@@ -226,8 +230,8 @@ public partial class RoomManager : Node2D
         var affiliation = new AffiliationArea();
         affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
         affiliation.Init(roomInfo, new Rect2(
-            roomInfo.GetWorldPosition() + new Vector2(GenerateDungeon.TileCellSize * 1.5f, GenerateDungeon.TileCellSize * 1.5f),
-            (roomInfo.Size - new Vector2I(3, 3)) * GenerateDungeon.TileCellSize));
+            roomInfo.GetWorldPosition() + new Vector2(GenerateDungeon.TileCellSize, GenerateDungeon.TileCellSize),
+            (roomInfo.Size - new Vector2I(2, 2)) * GenerateDungeon.TileCellSize));
         
         roomInfo.Affiliation = affiliation;
         TileRoot.AddChild(affiliation);
@@ -239,16 +243,7 @@ public partial class RoomManager : Node2D
     private void OnPlayerFirstEnterRoom(object o)
     {
         var room = (RoomInfo)o;
-        //关门
-        foreach (var doorInfo in room.Doors)
-        {
-            doorInfo.Door.CloseDoor();
-        }
-        //根据标记生成对象
-        foreach (var mark in room.ActivityMarks)
-        {
-            mark.BeReady(room);
-        }
+        room.BeReady();
     }
 
     /// <summary>
@@ -264,15 +259,12 @@ public partial class RoomManager : Node2D
     private void OnEnemyDie(object o)
     {
         var inst = (ActivityObject)o;
-        var count = Player.Affiliation.FindIncludeItemsCount(
+        var count = ActiveAffiliation.FindIncludeItemsCount(
             activityObject => activityObject != inst && activityObject.CollisionWithLayer(PhysicsLayer.Enemy)
         );
         if (count == 0)
         {
-            foreach (var doorInfo in Player.Affiliation.RoomInfo.Doors)
-            {
-                doorInfo.Door.OpenDoor();
-            }
+            ActiveRoom.OnClearRoom();
         }
     }
 

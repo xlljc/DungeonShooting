@@ -57,6 +57,11 @@ public class RoomInfo
     /// 当前房间归属区域
     /// </summary>
     public AffiliationArea Affiliation;
+
+    /// <summary>
+    /// 是否处于闭关状态, 也就是房间门没有打开
+    /// </summary>
+    public bool IsSeclusion { get; private set; } = false;
     
     /// <summary>
     /// 获取房间的全局坐标, 单位: 像素
@@ -108,5 +113,36 @@ public class RoomInfo
     public int GetVerticalStart()
     {
         return Position.Y;
+    }
+
+    /// <summary>
+    /// 房间准备好了, 准备刷敌人, 并且关闭所有门
+    /// </summary>
+    public void BeReady()
+    {
+        IsSeclusion = true;
+        //关门
+        foreach (var doorInfo in Doors)
+        {
+            doorInfo.Door.CloseDoor();
+        }
+        //根据标记生成对象
+        foreach (var mark in ActivityMarks)
+        {
+            mark.BeReady(this);
+        }
+    }
+
+    /// <summary>
+    /// 当前房间所有敌人都被清除了
+    /// </summary>
+    public void OnClearRoom()
+    {
+        IsSeclusion = false;
+        //开门
+        foreach (var doorInfo in Doors)
+        {
+            doorInfo.Door.OpenDoor();
+        }
     }
 }

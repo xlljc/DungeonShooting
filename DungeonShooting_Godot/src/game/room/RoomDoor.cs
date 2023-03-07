@@ -10,6 +10,11 @@ public partial class RoomDoor : ActivityObject
     /// </summary>
     public DoorDirection Direction => _door.Direction;
     
+    /// <summary>
+    /// 门是否关闭
+    /// </summary>
+    public bool IsClose { get; private set; }
+    
     private RoomDoorInfo _door;
 
     /// <summary>
@@ -42,6 +47,7 @@ public partial class RoomDoor : ActivityObject
     /// </summary>
     public void OpenDoor()
     {
+        IsClose = false;
         Visible = false;
         Collision.Disabled = true;
         _door.Navigation.NavigationNode.Enabled = true;
@@ -52,6 +58,7 @@ public partial class RoomDoor : ActivityObject
     /// </summary>
     public void CloseDoor()
     {
+        IsClose = true;
         Visible = true;
         Collision.Disabled = false;
         _door.Navigation.NavigationNode.Enabled = false;

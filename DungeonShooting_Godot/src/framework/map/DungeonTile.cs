@@ -435,6 +435,7 @@ public class DungeonTile
         }
     }
 
+    //横向过道
     private void FullHorizontalAisle(AutoTileConfig config, Rect2 rect)
     {
         FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
@@ -442,6 +443,7 @@ public class DungeonTile
         FillRect(TopMapLayer, config.B, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
     }
 
+    //纵向过道
     private void FullVerticalAisle(AutoTileConfig config, Rect2 rect)
     {
         FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));

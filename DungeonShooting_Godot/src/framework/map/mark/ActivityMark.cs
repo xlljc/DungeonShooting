@@ -42,7 +42,7 @@ public partial class ActivityMark : Node2D
         var id = GetItemId();
         var instance = ActivityObject.Create(id);
         instance.PutDown(GlobalPosition, Layer);
-        QueueFree();
+        Visible = false;
     }
 
     public override void _Draw()

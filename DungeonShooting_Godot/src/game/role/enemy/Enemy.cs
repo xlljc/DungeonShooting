@@ -178,16 +178,90 @@ public partial class Enemy : Role
     /// </summary>
     public bool CheckUsableWeaponInUnclaimed()
     {
-        //如果存在有子弹的武器
         foreach (var unclaimedWeapon in Weapon.UnclaimedWeapons)
         {
-            if (!unclaimedWeapon.IsTotalAmmoEmpty() && !unclaimedWeapon.HasSign(SignNames.AiFindWeaponSign))
+            //判断是否能拾起武器, 条件: 相同的房间
+            if (unclaimedWeapon.Affiliation == Affiliation)
             {
-                return true;
+                if (!unclaimedWeapon.IsTotalAmmoEmpty())
+                {
+                    if (!unclaimedWeapon.HasSign(SignNames.AiFindWeaponSign))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        //判断是否可以移除该标记
+                        var enemy = unclaimedWeapon.GetSign<Enemy>(SignNames.AiFindWeaponSign);
+                        if (enemy == null || enemy.IsDestroyed) //标记当前武器的敌人已经被销毁
+                        {
+                            unclaimedWeapon.RemoveSign(SignNames.AiFindWeaponSign);
+                            return true;
+                        }
+                        else if (!enemy.IsAllWeaponTotalAmmoEmpty()) //标记当前武器的敌人已经有新的武器了
+                        {
+                            unclaimedWeapon.RemoveSign(SignNames.AiFindWeaponSign);
+                            return true;
+                        }
+                    }
+                }
             }
         }
 
         return false;
+    }
+    
+    /// <summary>
+    /// 寻找可用的武器
+    /// </summary>
+    public Weapon FindTargetWeapon()
+    {
+        Weapon target = null;
+        var position = Position;
+        foreach (var weapon in Weapon.UnclaimedWeapons)
+        {
+            //判断是否能拾起武器, 条件: 相同的房间, 或者当前房间目前没有战斗, 或者不在战斗房间
+            if (weapon.Affiliation == Affiliation)
+            {
+                //还有弹药
+                if (!weapon.IsTotalAmmoEmpty())
+                {
+                    //查询是否有其他敌人标记要拾起该武器
+                    if (weapon.HasSign(SignNames.AiFindWeaponSign))
+                    {
+                        var enemy = weapon.GetSign<Enemy>(SignNames.AiFindWeaponSign);
+                        if (enemy == this) //就是自己标记的
+                        {
+
+                        }
+                        else if (enemy == null || enemy.IsDestroyed) //标记当前武器的敌人已经被销毁
+                        {
+                            weapon.RemoveSign(SignNames.AiFindWeaponSign);
+                        }
+                        else if (!enemy.IsAllWeaponTotalAmmoEmpty()) //标记当前武器的敌人已经有新的武器了
+                        {
+                            weapon.RemoveSign(SignNames.AiFindWeaponSign);
+                        }
+                        else //放弃这把武器
+                        {
+                            continue;
+                        }
+                    }
+
+                    if (target == null) //第一把武器
+                    {
+                        target = weapon;
+                    }
+                    else if (target.Position.DistanceSquaredTo(position) >
+                             weapon.Position.DistanceSquaredTo(position)) //距离更近
+                    {
+                        target = weapon;
+                    }
+                }
+            }
+        }
+
+        return target;
     }
 
     /// <summary>
