@@ -290,6 +290,15 @@ public abstract partial class Role : ActivityObject
         }
     }
 
+    protected override void OnAffiliationChange()
+    {
+        //身上的武器的所属区域也得跟着变
+        Holster.ForEach((weapon, i) =>
+        {
+            weapon.Affiliation = Affiliation;
+        });
+    }
+
     /// <summary>
     /// 获取当前角色的中心点坐标
     /// </summary>

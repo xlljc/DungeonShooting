@@ -69,8 +69,19 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 当前物体归属的区域, 如果为 null 代表不属于任何一个区域
     /// </summary>
-    public AffiliationArea Affiliation { get; set; }
-    
+    public AffiliationArea Affiliation
+    {
+        get => _affiliationArea;
+        set
+        {
+            if (value != _affiliationArea)
+            {
+                _affiliationArea = value;
+                OnAffiliationChange();
+            }
+        }
+    }
+
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     //是否初始化阴影
@@ -96,8 +107,12 @@ public abstract partial class ActivityObject : CharacterBody2D
     //标记字典
     private Dictionary<string, object> _signMap;
     
+    //开启的协程
     private List<CoroutineData> _coroutineList;
+    //模板实例
     private ActivityObjectTemplate _templateInstance;
+    
+    private AffiliationArea _affiliationArea;
     
     private static long _instanceIndex = 0;
 
@@ -318,6 +333,13 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// 如果开启 debug, 则每帧调用该函数, 可用于绘制文字线段等
     /// </summary>
     protected virtual void DebugDraw()
+    {
+    }
+
+    /// <summary>
+    /// 归属区域发生改变
+    /// </summary>
+    protected virtual void OnAffiliationChange()
     {
     }
 
