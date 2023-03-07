@@ -107,6 +107,7 @@ public partial class RoomManager : Node2D
                 foreach (var doorInfo in Player.Affiliation.RoomInfo.Doors)
                 {
                     doorInfo.Door.OpenDoor();
+                    doorInfo.ConnectDoor.Door.OpenDoor();
                 }
             }
         });
