@@ -320,6 +320,14 @@ public abstract partial class ActivityObject : CharacterBody2D
     protected virtual void DebugDraw()
     {
     }
+
+    /// <summary>
+    /// 返回当物体 CollisionLayer 是否能与 layer 层碰撞
+    /// </summary>
+    public bool CollisionWithLayer(uint layer)
+    {
+        return (CollisionLayer & layer) != 0;
+    }
     
     /// <summary>
     /// 拾起一个 node 节点, 也就是将其从场景树中移除

@@ -99,7 +99,7 @@ public partial class RoomManager : Node2D
         {
             var inst = (ActivityObject)o;
             var count = Player.Affiliation.FindIncludeItemsCount(
-                activityObject => activityObject.CollisionLayer == PhysicsLayer.Enemy && activityObject != inst
+                activityObject => activityObject != inst && activityObject.CollisionWithLayer(PhysicsLayer.Enemy)
             );
             GD.Print("有敌人死亡! 当前房间还剩: " + count + "个敌人");
             if (count == 0)
