@@ -225,7 +225,9 @@ public partial class RoomManager : Node2D
     {
         var affiliation = new AffiliationArea();
         affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
-        affiliation.Init(roomInfo, new Rect2(roomInfo.GetWorldPosition(), roomInfo.Size * GenerateDungeon.TileCellSize));
+        affiliation.Init(roomInfo, new Rect2(
+            roomInfo.GetWorldPosition() + new Vector2(GenerateDungeon.TileCellSize * 1.5f, GenerateDungeon.TileCellSize * 1.5f),
+            (roomInfo.Size - new Vector2I(3, 3)) * GenerateDungeon.TileCellSize));
         
         roomInfo.Affiliation = affiliation;
         TileRoot.AddChild(affiliation);

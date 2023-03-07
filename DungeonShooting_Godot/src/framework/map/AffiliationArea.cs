@@ -116,7 +116,8 @@ public partial class AffiliationArea : Area2D
     {
         if (body is ActivityObject activityObject)
         {
-            InsertItem(activityObject);
+            //注意需要延时调用
+            CallDeferred(nameof(InsertItem), activityObject);
         }
     }
 

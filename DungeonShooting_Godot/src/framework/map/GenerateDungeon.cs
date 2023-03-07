@@ -17,6 +17,11 @@ public class GenerateDungeon
     /// tilemap 网格大小
     /// </summary>
     public const int TileCellSize = 16;
+
+    /// <summary>
+    /// 房间最小间距
+    /// </summary>
+    public const int RoomSpace = 4;
     
     /// <summary>
     /// 所有生成的房间, 调用过 Generate() 函数才能获取到值
@@ -218,7 +223,7 @@ public class GenerateDungeon
                 }
 
                 //是否碰到其他房间或者过道
-                if (_roomGrid.RectCollision(room.Position - new Vector2(3, 3), room.Size + new Vector2(6, 6)))
+                if (_roomGrid.RectCollision(room.Position - new Vector2(RoomSpace, RoomSpace), room.Size + new Vector2(RoomSpace * 2, RoomSpace * 2)))
                 {
                     //碰到其他墙壁, 再一次尝试
                     continue;
@@ -917,13 +922,13 @@ public class GenerateDungeon
         Vector2 collSize;
         if (point1.X == point2.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos = new Vector2(pos.X - 3, pos.Y);
-            collSize = new Vector2(size.X + 6, size.Y);
+            collPos = new Vector2(pos.X - RoomSpace, pos.Y);
+            collSize = new Vector2(size.X + RoomSpace * 2, size.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos = new Vector2(pos.X, pos.Y - 3);
-            collSize = new Vector2(size.X, size.Y + 6);
+            collPos = new Vector2(pos.X, pos.Y - RoomSpace);
+            collSize = new Vector2(size.X, size.Y + RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos, collSize))
@@ -955,13 +960,13 @@ public class GenerateDungeon
         Vector2 collSize1;
         if (point1.X == cross.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos1 = new Vector2(pos1.X - 3, pos1.Y);
-            collSize1 = new Vector2(size1.X + 6, size1.Y);
+            collPos1 = new Vector2(pos1.X - RoomSpace, pos1.Y);
+            collSize1 = new Vector2(size1.X + RoomSpace * 2, size1.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos1 = new Vector2(pos1.X, pos1.Y - 3);
-            collSize1 = new Vector2(size1.X, size1.Y + 6);
+            collPos1 = new Vector2(pos1.X, pos1.Y - RoomSpace);
+            collSize1 = new Vector2(size1.X, size1.Y + RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos1, collSize1))
@@ -973,13 +978,13 @@ public class GenerateDungeon
         Vector2 collSize2;
         if (point2.X == cross.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos2 = new Vector2(pos2.X - 3, pos2.Y);
-            collSize2 = new Vector2(size2.X + 6, size2.Y);
+            collPos2 = new Vector2(pos2.X - RoomSpace, pos2.Y);
+            collSize2 = new Vector2(size2.X + RoomSpace * 2, size2.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos2 = new Vector2(pos2.X, pos2.Y - 3);
-            collSize2 = new Vector2(size2.X, size2.Y + 6);
+            collPos2 = new Vector2(pos2.X, pos2.Y - RoomSpace);
+            collSize2 = new Vector2(size2.X, size2.Y + RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos2, collSize2))
