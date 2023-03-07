@@ -19,6 +19,8 @@ public partial class AffiliationArea : Area2D
     private readonly HashSet<ActivityObject> _includeItems = new HashSet<ActivityObject>();
 
     private bool _init = false;
+    //玩家是否是第一次进入
+    private bool _isFirstEnterFlag = true;
     
     /// <summary>
     /// 根据矩形区域初始化归属区域
@@ -41,23 +43,6 @@ public partial class AffiliationArea : Area2D
         AddChild(collisionShape);
         _Init();
     }
-
-    // /// <summary>
-    // /// 更具多边形初始化归属区域
-    // /// </summary>
-    // public void Init(Vector2[] polygon)
-    // {
-    //     if (_init)
-    //     {
-    //         return;
-    //     }
-    //
-    //     _init = true;
-    //     var collisionPolygon = new CollisionPolygon2D();
-    //     collisionPolygon.Polygon = polygon;
-    //     AddChild(collisionPolygon);
-    //     _Init();
-    // }
 
     private void _Init()
     {
@@ -85,6 +70,12 @@ public partial class AffiliationArea : Area2D
         }
         activityObject.Affiliation = this;
         _includeItems.Add(activityObject);
+
+        //如果是玩家
+        if (activityObject == Player.Current)
+        {
+            OnPlayerEnterRoom();
+        }
     }
 
     /// <summary>
@@ -127,5 +118,16 @@ public partial class AffiliationArea : Area2D
         {
             InsertItem(activityObject);
         }
+    }
+
+    //玩家进入房间
+    private void OnPlayerEnterRoom()
+    {
+        if (_isFirstEnterFlag)
+        {
+            EventManager.EmitEvent(EventEnum.OnPlayerFirstEnterRoom, RoomInfo);
+            _isFirstEnterFlag = false;
+        }
+        EventManager.EmitEvent(EventEnum.OnPlayerEnterRoom, RoomInfo);
     }
 }

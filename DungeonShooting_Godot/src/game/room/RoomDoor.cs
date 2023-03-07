@@ -7,7 +7,6 @@ public partial class RoomDoor : ActivityObject
     public void Init(RoomDoorInfo doorInfo)
     {
         _door = doorInfo;
-        CloseDoor();
     }
 
     public void OpenDoor()
