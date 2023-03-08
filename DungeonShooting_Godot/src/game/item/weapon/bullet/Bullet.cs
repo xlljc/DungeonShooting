@@ -39,6 +39,7 @@ public partial class Bullet : ActivityObject
     {
         //移动
         var lastSlideCollision = GetLastSlideCollision();
+        //撞到墙
         if (lastSlideCollision != null)
         {
             //创建粒子特效

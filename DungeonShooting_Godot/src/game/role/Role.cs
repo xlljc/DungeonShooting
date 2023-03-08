@@ -255,7 +255,7 @@ public abstract partial class Role : ActivityObject
         for (int i = 0; i < _interactiveItemList.Count; i++)
         {
             var item = _interactiveItemList[i];
-            if (item == null)
+            if (item == null || item.IsDestroyed)
             {
                 _interactiveItemList.RemoveAt(i--);
             }
@@ -520,13 +520,12 @@ public abstract partial class Role : ActivityObject
     }
     
     /// <summary>
-    /// 连接信号: InteractiveArea.area_entered
+    /// 连接信号: InteractiveArea.BodyEntered
     /// 与物体碰撞
     /// </summary>
     private void _OnPropsEnter(Node2D other)
     {
-        ActivityObject propObject = other.AsActivityObject();
-        if (propObject != null)
+        if (other is ActivityObject propObject)
         {
             if (!_interactiveItemList.Contains(propObject))
             {
@@ -536,13 +535,12 @@ public abstract partial class Role : ActivityObject
     }
 
     /// <summary>
-    /// 连接信号: InteractiveArea.area_exited
+    /// 连接信号: InteractiveArea.BodyExited
     /// 物体离开碰撞区域
     /// </summary>
     private void _OnPropsExit(Node2D other)
     {
-        ActivityObject propObject = other.AsActivityObject();
-        if (propObject != null)
+        if (other is ActivityObject propObject)
         {
             if (_interactiveItemList.Contains(propObject))
             {
