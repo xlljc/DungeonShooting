@@ -83,7 +83,7 @@ public partial class RoomManager : Node2D
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
         //播放bgm
-        SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
+        //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
         //创建玩家
         Player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");

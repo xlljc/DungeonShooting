@@ -13,7 +13,6 @@ script = ExtResource("1_hg3w8")
 [node name="EnemyMark" type="Node2D" parent="."]
 position = Vector2(136, 72)
 script = ExtResource("3_tgvyr")
-WeaponIds = PackedStringArray("0001", "0002")
 Type = 3
 ItemId = "0001"
 Layer = 1

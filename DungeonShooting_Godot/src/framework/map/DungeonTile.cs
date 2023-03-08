@@ -449,7 +449,8 @@ public class DungeonTile
         }
         else
         {
-            FillRect(TopMapLayer, config.OUT_LB, rect.Position + new Vector2(-1, 0), Vector2.One);
+            ClearRect(TopMapLayer, rect.Position + new Vector2(-1, 0), Vector2.One);
+            FillRect(MiddleMapLayer, config.OUT_LB, rect.Position + new Vector2(-1, 0), Vector2.One);
             FillRect(TopMapLayer, config.OUT_LT, rect.Position + new Vector2(-1, 3), Vector2.One);
             
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
@@ -482,7 +483,8 @@ public class DungeonTile
         }
         else
         {
-            FillRect(TopMapLayer, config.OUT_RB, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
+            ClearRect(TopMapLayer, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
+            FillRect(MiddleMapLayer, config.OUT_RB, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
             FillRect(TopMapLayer, config.OUT_RT, rect.Position + new Vector2(rect.Size.X, 3), Vector2.One);
             
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
@@ -729,7 +731,7 @@ public class DungeonTile
         var array = new NavigationPolygonData[_connectNavigationItemList.Count];
         for (var i = 0; i < _connectNavigationItemList.Count; i++)
         {
-            array[i] = _connectNavigationItemList[i].CloseNavigationData;
+            array[i] = _connectNavigationItemList[i].OpenNavigationData;
         }
         return array;
     }

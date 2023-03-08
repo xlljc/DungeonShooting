@@ -41,7 +41,7 @@ public abstract partial class Weapon : ActivityObject
     public int CurrAmmo { get; private set; }
 
     /// <summary>
-    /// 剩余弹药量
+    /// 剩余弹药量(备用弹药)
     /// </summary>
     public int ResidueAmmo { get; private set; }
 
@@ -696,6 +696,35 @@ public abstract partial class Weapon : ActivityObject
     }
 
     /// <summary>
+    /// 强制修改弹药量, 优先改动备用弹药
+    /// </summary>
+    public void SetTotalAmmo(int total)
+    {
+        var totalAmmo = CurrAmmo + ResidueAmmo;
+        if (totalAmmo == total)
+        {
+            return;
+        }
+        
+        if (total > totalAmmo) //弹药增加
+        {
+            ResidueAmmo = Mathf.Min(total - CurrAmmo, Attribute.MaxAmmoCapacity - CurrAmmo);
+        }
+        else //弹药减少
+        {
+            if (CurrAmmo < total)
+            {
+                ResidueAmmo = total - CurrAmmo;
+            }
+            else
+            {
+                CurrAmmo = total;
+                ResidueAmmo = 0;
+            }
+        }
+    }
+
+    /// <summary>
     /// 拾起的弹药数量, 如果到达容量上限, 则返回拾取完毕后剩余的弹药数量
     /// </summary>
     /// <param name="count">弹药数量</param>
@@ -769,14 +798,14 @@ public abstract partial class Weapon : ActivityObject
         }
         else //换弹结束
         {
-            if (ResidueAmmo >= Attribute.AmmoCapacity)
+            if (CurrAmmo + ResidueAmmo >= Attribute.AmmoCapacity)
             {
                 ResidueAmmo -= Attribute.AmmoCapacity - CurrAmmo;
                 CurrAmmo = Attribute.AmmoCapacity;
             }
             else
             {
-                CurrAmmo = ResidueAmmo;
+                CurrAmmo += ResidueAmmo;
                 ResidueAmmo = 0;
             }
 
