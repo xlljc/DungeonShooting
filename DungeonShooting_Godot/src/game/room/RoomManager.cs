@@ -237,6 +237,12 @@ public partial class RoomManager : Node2D
     private void OnPlayerFirstEnterRoom(object o)
     {
         var room = (RoomInfo)o;
+        //关门
+        foreach (var doorInfo in room.Doors)
+        {
+            doorInfo.Door.CloseDoor();
+        }
+        //根据标记生成对象
         foreach (var mark in room.ActivityMarks)
         {
             mark.BeReady(room);
@@ -248,11 +254,6 @@ public partial class RoomManager : Node2D
     /// </summary>
     private void OnPlayerEnterRoom(object o)
     {
-        var room = (RoomInfo)o;
-        foreach (var doorInfo in room.Doors)
-        {
-            doorInfo.Door.CloseDoor();
-        }
     }
     
     /// <summary>
