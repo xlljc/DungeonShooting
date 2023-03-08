@@ -6,19 +6,30 @@ using Godot;
 /// </summary>
 public class DoorNavigationInfo
 {
-    public DoorNavigationInfo(NavigationRegion2D navigationNode, NavigationPolygonData navigationData)
+    public DoorNavigationInfo(RoomDoorInfo doorInfo, NavigationPolygonData doorOpenNavigationData, NavigationPolygonData doorCloseNavigationData)
     {
-        NavigationNode = navigationNode;
-        NavigationData = navigationData;
+        DoorInfo = doorInfo;
+        DoorOpenNavigationData = doorOpenNavigationData;
+        DoorCloseNavigationData = doorCloseNavigationData;
     }
 
+    /// <summary>
+    /// 绑定的门对象
+    /// </summary>
+    public RoomDoorInfo DoorInfo;
+    
     /// <summary>
     /// 导航区域节点
     /// </summary>
     public NavigationRegion2D NavigationNode;
 
     /// <summary>
-    /// 导航形状数据
+    /// 门开启时导航形状数据
     /// </summary>
-    public NavigationPolygonData NavigationData;
+    public NavigationPolygonData DoorOpenNavigationData;
+    
+    /// <summary>
+    /// 门关闭时导航形状数据
+    /// </summary>
+    public NavigationPolygonData DoorCloseNavigationData;
 }

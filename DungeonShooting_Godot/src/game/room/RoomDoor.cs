@@ -50,7 +50,7 @@ public partial class RoomDoor : ActivityObject
         IsClose = false;
         Visible = false;
         Collision.Disabled = true;
-        _door.Navigation.NavigationNode.Enabled = true;
+        //_door.Navigation.NavigationNode.Enabled = true;
     }
 
     /// <summary>
@@ -61,6 +61,6 @@ public partial class RoomDoor : ActivityObject
         IsClose = true;
         Visible = true;
         Collision.Disabled = false;
-        _door.Navigation.NavigationNode.Enabled = false;
+        //_door.Navigation.NavigationNode.Enabled = false;
     }
 }

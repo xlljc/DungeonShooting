@@ -1,7 +1,5 @@
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 
 /// <summary>
@@ -40,19 +38,7 @@ public class DungeonTile
     private readonly List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
 
     //连接门的导航区域
-    private readonly List<DoorNavigationItem> _connectNavigationItemList = new List<DoorNavigationItem>();
-
-    private class DoorNavigationItem
-    {
-        public NavigationPolygonData NavigationPolygonData;
-        public RoomDoorInfo DoorInfo;
-
-        public DoorNavigationItem(NavigationPolygonData navigationPolygonData, RoomDoorInfo doorInfo)
-        {
-            NavigationPolygonData = navigationPolygonData;
-            DoorInfo = doorInfo;
-        }
-    }
+    private readonly List<DoorNavigationInfo> _connectNavigationItemList = new List<DoorNavigationInfo>();
     
     //----------------------------------------------------
     
@@ -573,7 +559,8 @@ public class DungeonTile
         polygonData.Points.Add(p2);
         polygonData.Points.Add(p3);
         polygonData.Points.Add(p4);
-        _connectNavigationItemList.Add(new DoorNavigationItem(polygonData, doorInfo));
+        //这里 NavigationPolygonData 需要计算, 后续补上
+        _connectNavigationItemList.Add(new DoorNavigationInfo(doorInfo, null, polygonData));
     }
     
     //报错数据
@@ -670,8 +657,8 @@ public class DungeonTile
         for (var i = 0; i < _connectNavigationItemList.Count; i++)
         {
             var item = _connectNavigationItemList[i];
-            var node = CreateNavigationRegion(navigationRoot, item.NavigationPolygonData);
-            item.DoorInfo.Navigation = new DoorNavigationInfo(node, item.NavigationPolygonData);
+            item.NavigationNode = CreateNavigationRegion(navigationRoot, item.DoorCloseNavigationData);
+            item.DoorInfo.Navigation = item;
         }
     }
 
@@ -703,7 +690,7 @@ public class DungeonTile
         var array = new NavigationPolygonData[_connectNavigationItemList.Count];
         for (var i = 0; i < _connectNavigationItemList.Count; i++)
         {
-            array[i] = _connectNavigationItemList[i].NavigationPolygonData;
+            array[i] = _connectNavigationItemList[i].DoorCloseNavigationData;
         }
         return array;
     }
