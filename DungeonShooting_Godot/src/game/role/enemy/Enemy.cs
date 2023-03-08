@@ -89,7 +89,7 @@ public partial class Enemy : Role
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
-        MoveSpeed = 30;
+        MoveSpeed = 20;
 
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;

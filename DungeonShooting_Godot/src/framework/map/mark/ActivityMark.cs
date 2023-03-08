@@ -26,6 +26,11 @@ public partial class ActivityMark : Node2D
     public RoomLayerEnum Layer = RoomLayerEnum.NormalLayer;
 
     /// <summary>
+    /// 绘制的颜色
+    /// </summary>
+    protected Color DrawColor = new Color(0.4F, 0.56078434F, 0.8784314F);
+
+    /// <summary>
     /// 获取物体Id
     /// </summary>
     /// <returns></returns>
@@ -39,8 +44,7 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public virtual void BeReady(RoomInfo roomInfo)
     {
-        var id = GetItemId();
-        var instance = ActivityObject.Create(id);
+        var instance = ActivityObject.Create(GetItemId());
         instance.PutDown(GlobalPosition, Layer);
         Visible = false;
     }
@@ -49,8 +53,8 @@ public partial class ActivityMark : Node2D
     {
         if (Engine.IsEditorHint() || GameApplication.Instance.Debug)
         {
-            DrawLine(new Vector2(-5, -5), new Vector2(5, 5), new Color(0.4F,0.56078434F,0.8784314F), 2f);
-            DrawLine(new Vector2(-5, 5), new Vector2(5, -5), new Color(0.4F,0.56078434F,0.8784314F), 2f);
+            DrawLine(new Vector2(-5, -5), new Vector2(5, 5), DrawColor, 2f);
+            DrawLine(new Vector2(-5, 5), new Vector2(5, -5), DrawColor, 2f);
         }
     }
 

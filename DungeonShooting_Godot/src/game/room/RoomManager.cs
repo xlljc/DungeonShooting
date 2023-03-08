@@ -92,9 +92,9 @@ public partial class RoomManager : Node2D
         Player.PutDown(RoomLayerEnum.YSortLayer);
         
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
-        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
+        // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
         // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
-        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
+        // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
 
         //相机跟随玩家
         GameCamera.Main.SetFollowTarget(Player);

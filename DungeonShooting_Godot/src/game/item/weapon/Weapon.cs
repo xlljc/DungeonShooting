@@ -696,10 +696,30 @@ public abstract partial class Weapon : ActivityObject
     }
 
     /// <summary>
+    /// 强制修改当前弹夹弹药量
+    /// </summary>
+    public void SetCurrAmmo(int count)
+    {
+        CurrAmmo = Mathf.Clamp(count, 0, Attribute.AmmoCapacity);
+    }
+
+    /// <summary>
+    /// 强制修改备用弹药量
+    /// </summary>
+    public void SetResidueAmmo(int count)
+    {
+        ResidueAmmo = Mathf.Clamp(count, 0, Attribute.MaxAmmoCapacity - CurrAmmo);
+    }
+    
+    /// <summary>
     /// 强制修改弹药量, 优先改动备用弹药
     /// </summary>
     public void SetTotalAmmo(int total)
     {
+        if (total < 0)
+        {
+            return;
+        }
         var totalAmmo = CurrAmmo + ResidueAmmo;
         if (totalAmmo == total)
         {

@@ -2,7 +2,7 @@
 using Godot;
 
 /// <summary>
-/// 敌人标记
+/// 针对敌人生成位置的标记
 /// </summary>
 [Tool]
 public partial class EnemyMark : ActivityMark
@@ -10,7 +10,7 @@ public partial class EnemyMark : ActivityMark
     /// <summary>
     /// 武器1 id, id会自动加上武器前缀
     /// </summary>
-    [Export(default, "副武器1 id, id会自动加上武器前缀")]
+    [Export]
     public string Weapon1Id;
     /// <summary>
     /// 武器1弹药量, 如果值小于0, 则使用默认弹药量
@@ -50,6 +50,7 @@ public partial class EnemyMark : ActivityMark
 
     public override void _Ready()
     {
+        DrawColor = Colors.Red;
         Type = ActivityIdPrefix.ActivityPrefixType.Enemy;
         Layer = RoomLayerEnum.YSortLayer;
     }
@@ -58,9 +59,7 @@ public partial class EnemyMark : ActivityMark
     {
         var pos = GlobalPosition;
         //创建敌人
-        Type = ActivityIdPrefix.ActivityPrefixType.Enemy;
-        var id = GetItemId();
-        var instance = ActivityObject.Create<Enemy>(id);
+        var instance = ActivityObject.Create<Enemy>(GetItemId());
         instance.PutDown(pos, Layer);
         Visible = false;
 

@@ -40,12 +40,13 @@ public class GenerateDungeon
     private int _roomMaxInterval = 10;
 
     //房间横轴分散程度
-    private float _roomHorizontalMinDispersion = 0.7f;
-    private float _roomHorizontalMaxDispersion = 1.1f;
+    
+    private float _roomHorizontalMinDispersion = 0.3f;
+    private float _roomHorizontalMaxDispersion = 1.2f;
 
     //房间纵轴分散程度
-    private float _roomVerticalMinDispersion = 0.7f;
-    private float _roomVerticalMaxDispersion = 1.1f;
+    private float _roomVerticalMinDispersion = 0.3f;
+    private float _roomVerticalMaxDispersion = 1.2f;
 
     //区域限制
     private bool _enableLimitRange = true;
