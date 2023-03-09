@@ -69,7 +69,7 @@ public partial class AffiliationArea : Area2D
 
         if (activityObject.Affiliation != null)
         {
-            activityObject.Affiliation.RemoveItem(activityObject);
+            _includeItems.Remove(activityObject);
         }
         activityObject.Affiliation = this;
         _includeItems.Add(activityObject);
@@ -86,6 +86,10 @@ public partial class AffiliationArea : Area2D
     /// </summary>
     public void RemoveItem(ActivityObject activityObject)
     {
+        if (activityObject.Affiliation == null)
+        {
+            return;
+        }
         activityObject.Affiliation = null;
         _includeItems.Remove(activityObject);
     }

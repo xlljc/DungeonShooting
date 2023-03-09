@@ -295,7 +295,14 @@ public abstract partial class Role : ActivityObject
         //身上的武器的所属区域也得跟着变
         Holster.ForEach((weapon, i) =>
         {
-            weapon.Affiliation = Affiliation;
+            if (Affiliation != null)
+            {
+                Affiliation.InsertItem(weapon);
+            }
+            else if (weapon.Affiliation != null)
+            {
+                weapon.Affiliation.RemoveItem(weapon);
+            }
         });
     }
 

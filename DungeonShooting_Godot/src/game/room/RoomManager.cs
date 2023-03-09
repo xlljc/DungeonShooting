@@ -45,6 +45,8 @@ public partial class RoomManager : Node2D
 
     private int _affiliationIndex = 0;
 
+    private float _checkEnemyTimer = 0;
+
     //房间内所有静态导航网格数据
     private static List<NavigationPolygonData> _roomStaticNavigationList = new List<NavigationPolygonData>();
     
@@ -55,7 +57,7 @@ public partial class RoomManager : Node2D
         _font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
 
         //绑定事件
-        EventManager.AddEventListener(EventEnum.OnEnemyDie, OnEnemyDie);
+        //EventManager.AddEventListener(EventEnum.OnEnemyDie, OnEnemyDie);
         EventManager.AddEventListener(EventEnum.OnPlayerFirstEnterRoom, OnPlayerFirstEnterRoom);
         EventManager.AddEventListener(EventEnum.OnPlayerEnterRoom, OnPlayerEnterRoom);
         
@@ -103,6 +105,17 @@ public partial class RoomManager : Node2D
         var cursor = GameApplication.Instance.Cursor;
         cursor.SetGuiMode(false);
         cursor.SetMountRole(Player);
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        _checkEnemyTimer += (float)delta;
+        if (_checkEnemyTimer >= 1)
+        {
+            _checkEnemyTimer %= 1;
+            //检查房间内的敌人存活状况
+            OnCheckEnemy();
+        }
     }
 
     /// <summary>
@@ -250,17 +263,25 @@ public partial class RoomManager : Node2D
     }
     
     /// <summary>
-    /// 敌人死亡回调
+    /// 检测当前房间敌人是否已经消灭干净, 应当每秒执行一次
     /// </summary>
-    private void OnEnemyDie(object o)
+    private void OnCheckEnemy()
     {
-        var inst = (ActivityObject)o;
-        var count = ActiveAffiliation.FindIncludeItemsCount(
-            activityObject => activityObject != inst && activityObject.CollisionWithMask(PhysicsLayer.Enemy)
-        );
-        if (count == 0)
+        var activeRoom = ActiveRoom;
+        if (activeRoom.IsSeclusion)
         {
-            ActiveRoom.OnClearRoom();
+            if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
+            {
+                //存活敌人数量
+                var count = ActiveAffiliation.FindIncludeItemsCount(
+                    activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
+                );
+                GD.Print("当前房间存活数量: " + count);
+                if (count == 0)
+                {
+                    activeRoom.OnClearRoom();
+                }
+            }
         }
     }
 

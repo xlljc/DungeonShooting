@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Godot;
 
 public partial class ActivityObject
 {
@@ -102,7 +103,7 @@ public partial class ActivityObject
         {
             return (T)instance;
         }
-
+        GD.PrintErr("创建实例失败, 未找到id为'" + itemId + "'的物体!");
         return null;
     }
 }

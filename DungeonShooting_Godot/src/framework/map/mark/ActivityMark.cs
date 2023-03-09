@@ -43,8 +43,9 @@ public partial class ActivityMark : Node2D
     /// </summary>
     protected Color DrawColor = new Color(0.4F, 0.56078434F, 0.8784314F);
 
-    //是否已经开始
-    private bool _isStart = false;
+    //是否已经结束
+    private bool _isOver = true;
+    private float _overTimer = 0;
     private float _timer = 0;
     private RoomInfo _tempRoom;
 
@@ -58,14 +59,21 @@ public partial class ActivityMark : Node2D
 
     public override void _Process(double delta)
     {
-        if (_isStart && DelayTime > 0)
+        if (_isOver)
         {
-            _timer += (float)delta;
-            if (_timer >= DelayTime)
+            _overTimer += (float)delta;
+        }
+        else
+        {
+            if (DelayTime > 0)
             {
-                Doing(_tempRoom);
-                _tempRoom = null;
-                _isStart = false;
+                _timer += (float)delta;
+                if (_timer >= DelayTime)
+                {
+                    Doing(_tempRoom);
+                    _tempRoom = null;
+                    _isOver = true;
+                }
             }
         }
     }
@@ -75,11 +83,12 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public void BeReady(RoomInfo roomInfo)
     {
-        _isStart = true;
+        _isOver = false;
+        _overTimer = 0;
         if (DelayTime <= 0)
         {
             Doing(roomInfo);
-            _isStart = false;
+            _isOver = true;
         }
         else
         {
@@ -93,32 +102,19 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public bool IsOver()
     {
-        return !_isStart;
+        return _isOver && _overTimer >= 1;
     }
 
     /// <summary>
-    /// 调用该函数表示该标记可以生成物体了, 使用标记创建实例必须调用 CreateInstance(id)
+    /// 调用该函数表示该标记可以生成物体了
     /// </summary>
     public virtual void Doing(RoomInfo roomInfo)
     {
-        CreateInstance<ActivityObject>(GetItemId());
+        var instance = ActivityObject.Create(GetItemId());
+        instance.PutDown(GlobalPosition, Layer);
         Visible = false;
     }
-    
-    /// <summary>
-    /// 创建实例，并放入场景中，使用标记创建实例必须调用 CreateInstance(id)
-    /// </summary>
-    protected T CreateInstance<T>(string id) where T : ActivityObject
-    {
-        var instance = ActivityObject.Create<T>(id);
-        instance.PutDown(GlobalPosition, Layer);
-        if (instance is Enemy)
-        {
-            
-        }
-        return instance;
-    }
-    
+
     public override void _Draw()
     {
         if (Engine.IsEditorHint() || GameApplication.Instance.Debug)

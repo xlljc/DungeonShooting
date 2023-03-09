@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://c83qc7utiy3pd"]
+[gd_scene load_steps=5 format=3 uid="uid://c83qc7utiy3pd"]
 
 [ext_resource type="Script" path="res://src/framework/map/DungeonRoomTemplate.cs" id="1_n5qca"]
 [ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="1_ngr66"]
 [ext_resource type="Script" path="res://src/framework/map/mark/EnemyMark.cs" id="3_jwvnp"]
+[ext_resource type="Script" path="res://src/framework/map/mark/WeaponMark.cs" id="4_6je2e"]
 
 [node name="Room3" type="TileMap"]
 tile_set = ExtResource("1_ngr66")
@@ -11,10 +12,39 @@ layer_0/tile_data = PackedInt32Array(196613, 196608, 4, 262149, 196608, 3, 52429
 script = ExtResource("1_n5qca")
 
 [node name="EnemyMark" type="Node2D" parent="."]
-position = Vector2(251, 212)
+position = Vector2(230, 215)
 script = ExtResource("3_jwvnp")
-Weapon1Id = "0003"
-Weapon1Ammo = 20
 Type = 3
 ItemId = "0001"
 Layer = 1
+
+[node name="EnemyMark2" type="Node2D" parent="."]
+position = Vector2(261, 217)
+script = ExtResource("3_jwvnp")
+Type = 3
+ItemId = "0001"
+Layer = 1
+
+[node name="WeaponMark" type="Node2D" parent="."]
+position = Vector2(248, 160)
+script = ExtResource("4_6je2e")
+ResidueAmmo = 12
+Type = 4
+ItemId = "0002"
+
+[node name="WeaponMark2" type="Node2D" parent="."]
+position = Vector2(249, 268)
+script = ExtResource("4_6je2e")
+ResidueAmmo = 7
+Type = 4
+ItemId = "0003"
+
+[node name="EnemyMark3" type="Node2D" parent="."]
+position = Vector2(246, 215)
+script = ExtResource("3_jwvnp")
+Weapon1Id = "0001"
+Weapon1Ammo = 30
+Type = 3
+ItemId = "0001"
+Layer = 1
+WaveNumber = 2

@@ -106,6 +106,7 @@ public class DungeonTile
                 activityMark.GetParent().RemoveChild(activityMark);
                 var pos = activityMark.GlobalPosition - offset;
                 _tileRoot.AddChild(activityMark);
+                activityMark.Visible = false;
                 activityMark.GlobalPosition = roomInfo.GetWorldPosition() + pos;
             }
             roomInfo.ActivityMarks.AddRange(activityMarks);

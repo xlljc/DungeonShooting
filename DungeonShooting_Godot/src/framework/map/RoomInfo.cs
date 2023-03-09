@@ -63,9 +63,11 @@ public class RoomInfo
     /// </summary>
     public bool IsSeclusion { get; private set; } = false;
 
+    private bool _beReady = false;
     private bool _waveStart = false;
     private int _currWaveIndex = 0;
     private int _currWaveNumber = 0;
+    private List<ActivityMark> _currActivityMarks = new List<ActivityMark>();
 
     /// <summary>
     /// 获取房间的全局坐标, 单位: 像素
@@ -128,23 +130,68 @@ public class RoomInfo
         //没有标记, 啥都不要做
         if (ActivityMarks.Count == 0)
         {
+            _beReady = true;
+            IsSeclusion = false;
             return;
         }
         IsSeclusion = true;
-        
-        //按照 WaveNumber 排序
-        ActivityMarks.Sort((x, y) =>
+        _waveStart = false;
+
+        if (!_beReady)
         {
-            return x.WaveNumber - y.WaveNumber;
-        });
-        
+            _beReady = true;
+            //按照 WaveNumber 排序
+            ActivityMarks.Sort((x, y) =>
+            {
+                return x.WaveNumber - y.WaveNumber;
+            });
+        }
+
         //关门
         foreach (var doorInfo in Doors)
         {
             doorInfo.Door.CloseDoor();
         }
-
+        
+        //执行第一波生成
         NextWave();
+    }
+
+    /// <summary>
+    /// 当前房间所有敌人都被清除了
+    /// </summary>
+    public void OnClearRoom()
+    {
+        if (_currWaveIndex >= ActivityMarks.Count) //所有 mark 全部走完了
+        {
+            IsSeclusion = false;
+            _currActivityMarks.Clear();
+            //开门
+            foreach (var doorInfo in Doors)
+            {
+                doorInfo.Door.OpenDoor();
+            }
+        }
+        else //执行下一波
+        {
+            NextWave();
+        }
+    }
+
+    /// <summary>
+    /// 返回当前这一波所有的标记的 Doing 函数是否执行完成
+    /// </summary>
+    public bool IsCurrWaveOver()
+    {
+        for (var i = 0; i < _currActivityMarks.Count; i++)
+        {
+            if (!_currActivityMarks[i].IsOver())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -158,24 +205,23 @@ public class RoomInfo
             _currWaveIndex = 0;
             _currWaveNumber = ActivityMarks[0].WaveNumber;
         }
-
+        GD.Print("执行下一波, 当前: " + _currWaveNumber);
+        
+        _currActivityMarks.Clear();
         //根据标记生成对象
-        foreach (var mark in ActivityMarks)
+        for (; _currWaveIndex < ActivityMarks.Count; _currWaveIndex++)
         {
-            mark.BeReady(this);
-        }
-    }
-    
-    /// <summary>
-    /// 当前房间所有敌人都被清除了
-    /// </summary>
-    public void OnClearRoom()
-    {
-        IsSeclusion = false;
-        //开门
-        foreach (var doorInfo in Doors)
-        {
-            doorInfo.Door.OpenDoor();
+            var mark = ActivityMarks[_currWaveIndex];
+            if (mark.WaveNumber != _currWaveNumber) //当前这波已经执行完成了
+            {
+                _currWaveNumber = mark.WaveNumber;
+                break;
+            }
+            else //生成操作
+            {
+                mark.BeReady(this);
+                _currActivityMarks.Add(mark);
+            }
         }
     }
 }

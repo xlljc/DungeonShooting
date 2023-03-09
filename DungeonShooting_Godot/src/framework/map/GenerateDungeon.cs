@@ -148,6 +148,7 @@ public class GenerateDungeon
 
         //随机选择一个房间
         var roomSplit = Utils.RandomChoose(GameApplication.Instance.RoomConfig);
+        //var roomSplit = GameApplication.Instance.RoomConfig[0];
         var room = new RoomInfo(_count, roomSplit);
         
         //房间大小
