@@ -3,6 +3,8 @@ using Godot;
 
 public static class GameConfig
 {
+    // --------------------- 可配置项 ---------------------
+    
     /// <summary>
     /// 散射计算的默认距离
     /// </summary>
@@ -11,10 +13,14 @@ public static class GameConfig
     /// 重力加速度
     /// </summary>
     public static float G = 250f;
+
+    
+    // ----------------------- 常量 -----------------------
+    
     /// <summary>
     /// 像素缩放
     /// </summary>
-    public static readonly int WindowScale = 4;
+    public const int WindowScale = 4;
     /// <summary>
     /// 游戏视图大小
     /// </summary>
