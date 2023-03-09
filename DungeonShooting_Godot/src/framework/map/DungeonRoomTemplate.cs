@@ -541,7 +541,7 @@ public partial class DungeonRoomTemplate : TileMap
                     }
                     else
                     {
-                        DrawCircle(result.Exception.Point * GenerateDungeon.TileCellSize, 10, Colors.Red);
+                        DrawCircle(result.Exception.Point * GameConfig.TileCellSize, 10, Colors.Red);
                     }
                 }
             }

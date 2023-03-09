@@ -108,8 +108,6 @@ public partial class RoomManager : Node2D
     /// <summary>
     /// 获取指定层级根节点
     /// </summary>
-    /// <param name="layerEnum"></param>
-    /// <returns></returns>
     public Node2D GetRoomLayer(RoomLayerEnum layerEnum)
     {
         switch (layerEnum)
@@ -216,7 +214,7 @@ public partial class RoomManager : Node2D
                 default: offset = new Vector2();
                     break;
             }
-            door.Position = (doorInfo.OriginPosition + offset) * GenerateDungeon.TileCellSize;
+            door.Position = (doorInfo.OriginPosition + offset) * GameConfig.TileCellSize;
             door.Init(doorInfo);
             door.PutDown(RoomLayerEnum.NormalLayer, false);
         }
@@ -228,8 +226,8 @@ public partial class RoomManager : Node2D
         var affiliation = new AffiliationArea();
         affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
         affiliation.Init(roomInfo, new Rect2(
-            roomInfo.GetWorldPosition() + new Vector2(GenerateDungeon.TileCellSize, GenerateDungeon.TileCellSize),
-            (roomInfo.Size - new Vector2I(2, 2)) * GenerateDungeon.TileCellSize));
+            roomInfo.GetWorldPosition() + new Vector2(GameConfig.TileCellSize, GameConfig.TileCellSize),
+            (roomInfo.Size - new Vector2I(2, 2)) * GameConfig.TileCellSize));
         
         roomInfo.Affiliation = affiliation;
         TileRoot.AddChild(affiliation);

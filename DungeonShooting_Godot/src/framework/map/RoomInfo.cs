@@ -69,8 +69,8 @@ public class RoomInfo
     public Vector2 GetWorldPosition()
     {
         return new Vector2(
-            Position.X * GenerateDungeon.TileCellSize,
-            Position.Y * GenerateDungeon.TileCellSize
+            Position.X * GameConfig.TileCellSize,
+            Position.Y * GameConfig.TileCellSize
         );
     }
 
@@ -80,7 +80,7 @@ public class RoomInfo
     /// <returns></returns>
     public Vector2 GetOffsetPosition()
     {
-        return RoomSplit.RoomInfo.Position.AsVector2() * GenerateDungeon.TileCellSize;
+        return RoomSplit.RoomInfo.Position.AsVector2() * GameConfig.TileCellSize;
     }
     
     /// <summary>
