@@ -30,7 +30,7 @@ public partial class RoomManager : Node2D
     /// <summary>
     /// 当前玩家所在的房间
     /// </summary>
-    public RoomInfo ActiveRoom => Player?.Affiliation.RoomInfo;
+    public RoomInfo ActiveRoom => Player?.Affiliation?.RoomInfo;
     
     /// <summary>
     /// 当前玩家所在的区域
@@ -268,7 +268,7 @@ public partial class RoomManager : Node2D
     private void OnCheckEnemy()
     {
         var activeRoom = ActiveRoom;
-        if (activeRoom.IsSeclusion)
+        if (activeRoom != null && activeRoom.IsSeclusion)
         {
             if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
             {
