@@ -256,7 +256,7 @@ public partial class RoomManager : Node2D
     {
         var inst = (ActivityObject)o;
         var count = ActiveAffiliation.FindIncludeItemsCount(
-            activityObject => activityObject != inst && activityObject.CollisionWithLayer(PhysicsLayer.Enemy)
+            activityObject => activityObject != inst && activityObject.CollisionWithMask(PhysicsLayer.Enemy)
         );
         if (count == 0)
         {

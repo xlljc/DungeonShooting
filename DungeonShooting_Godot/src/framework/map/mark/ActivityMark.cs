@@ -46,7 +46,7 @@ public partial class ActivityMark : Node2D
     }
 
     /// <summary>
-    /// 调用该函数表示该标记可以生成物体了
+    /// 调用该函数表示该标记可以生成物体了, 使用标记创建实例必须调用 CreateInstance(id)
     /// </summary>
     public virtual void BeReady(RoomInfo roomInfo)
     {
@@ -54,7 +54,12 @@ public partial class ActivityMark : Node2D
         instance.PutDown(GlobalPosition, Layer);
         Visible = false;
     }
-
+    
+    protected T CreateInstance<T>(string id) where T : ActivityObject
+    {
+        return default;
+    }
+    
     public override void _Draw()
     {
         if (Engine.IsEditorHint() || GameApplication.Instance.Debug)

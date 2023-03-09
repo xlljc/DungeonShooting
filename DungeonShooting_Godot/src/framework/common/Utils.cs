@@ -98,6 +98,14 @@ public static class Utils
             Mathf.Abs(start1 - start2), Mathf.Abs(end1 - end2)
         );
     }
+    
+    /// <summary>
+    /// 返回碰撞层 mask 是否会检测 layer 
+    /// </summary>
+    public static bool CollisionMaskWithLayer(uint mask, uint layer)
+    {
+        return (mask & layer) != 0;
+    }
 
     /// <summary>
     /// 使用定的 canvasItem 绘制导航区域, 注意, 该函数只能在 draw 函数中调用

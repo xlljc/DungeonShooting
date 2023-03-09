@@ -23,9 +23,20 @@ Layer = 1
 [node name="EnemyMark2" type="Node2D" parent="."]
 position = Vector2(118, 74)
 script = ExtResource("3_2xk8s")
+Weapon1Id = "0002"
 Type = 3
 ItemId = "0001"
 Layer = 1
+WaveNumber = 2
+
+[node name="EnemyMark3" type="Node2D" parent="."]
+position = Vector2(117, 4)
+script = ExtResource("3_2xk8s")
+Weapon1Id = "0003"
+Type = 3
+ItemId = "0001"
+Layer = 1
+WaveNumber = 3
 
 [node name="WeaponMark" type="Node2D" parent="."]
 position = Vector2(-120, 72)

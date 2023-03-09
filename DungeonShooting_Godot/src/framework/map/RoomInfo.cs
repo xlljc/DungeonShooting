@@ -63,6 +63,9 @@ public class RoomInfo
     /// </summary>
     public bool IsSeclusion { get; private set; } = false;
 
+    private bool _waveStart = false;
+    private int _currWaveNumber = 0;
+
     /// <summary>
     /// 获取房间的全局坐标, 单位: 像素
     /// </summary>
@@ -121,6 +124,11 @@ public class RoomInfo
     /// </summary>
     public void BeReady()
     {
+        //没有标记, 不需要关门
+        if (ActivityMarks.Count == 0)
+        {
+            return;
+        }
         IsSeclusion = true;
         
         //按照 WaveNumber 排序
@@ -135,16 +143,24 @@ public class RoomInfo
             doorInfo.Door.CloseDoor();
         }
 
+        NextWave();
+    }
+
+    /// <summary>
+    /// 执行下一轮标记
+    /// </summary>
+    public void NextWave()
+    {
+        if (!_waveStart)
+        {
+            
+        }
+        
         //根据标记生成对象
         foreach (var mark in ActivityMarks)
         {
             mark.BeReady(this);
         }
-    }
-
-    public void NextWave()
-    {
-        
     }
     
     /// <summary>

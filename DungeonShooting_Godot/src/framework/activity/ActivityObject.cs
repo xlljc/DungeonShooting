@@ -344,11 +344,11 @@ public abstract partial class ActivityObject : CharacterBody2D
     }
 
     /// <summary>
-    /// 返回当物体 CollisionLayer 是否能与 layer 层碰撞
+    /// 返回当物体 CollisionLayer 是否能与 mask 层碰撞
     /// </summary>
-    public bool CollisionWithLayer(uint layer)
+    public bool CollisionWithMask(uint mask)
     {
-        return (CollisionLayer & layer) != 0;
+        return (CollisionLayer & mask) != 0;
     }
     
     /// <summary>
