@@ -456,12 +456,17 @@ public class DungeonTile
             //生成门的导航区域
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
             var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            
+            var op1 = new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 1.5f);
+            var op2 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 1.5f);
+            var op3 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 2.5f);
+            var op4 = new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 2.5f);
             AddDoorNavigation(
-                doorInfo,
-                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 2.5f),
-                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 2.5f)
+                doorInfo, op1, op2, op3, op4,
+                new SerializeVector2(op1),
+                new SerializeVector2(op1.X + GenerateDungeon.TileCellSize, op2.Y),
+                new SerializeVector2(op1.X + GenerateDungeon.TileCellSize, op3.Y),
+                new SerializeVector2(op4)
             );
         }
     }
@@ -484,12 +489,17 @@ public class DungeonTile
             //生成门的导航区域
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
             var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            
+            var op1 = new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f);
+            var op2 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f);
+            var op3 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f);
+            var op4 = new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f);
             AddDoorNavigation(
-                doorInfo,
-                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f),
-                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f)
+                doorInfo, op1, op2, op3, op4,
+                new SerializeVector2(op2.X - GenerateDungeon.TileCellSize, op1.Y),
+                new SerializeVector2(op2),
+                new SerializeVector2(op3),
+                new SerializeVector2(op2.X - GenerateDungeon.TileCellSize, op4.Y)
             );
         }
     }
@@ -513,12 +523,17 @@ public class DungeonTile
             //生成门的导航区域
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
             var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            
+            var op1 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f);
+            var op2 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f);
+            var op3 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f);
+            var op4 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f);
             AddDoorNavigation(
-                doorInfo,
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f)
+                doorInfo, op1, op2, op3, op4,
+                new SerializeVector2(op1),
+                new SerializeVector2(op2),
+                new SerializeVector2(op3.X, op1.Y + GenerateDungeon.TileCellSize),
+                new SerializeVector2(op4.X, op1.Y + GenerateDungeon.TileCellSize)
             );
         }
     }
@@ -541,26 +556,44 @@ public class DungeonTile
             //生成门的导航区域
             var x = rect.Position.X * GenerateDungeon.TileCellSize;
             var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            
+            var op1 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize);
+            var op2 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize);
+            var op3 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize);
+            var op4 = new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize);
             AddDoorNavigation(
-                doorInfo,
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize)
+                doorInfo, op1, op2, op3, op4,
+                new SerializeVector2(op1.X, op3.Y - GenerateDungeon.TileCellSize),
+                new SerializeVector2(op2.X, op3.Y - GenerateDungeon.TileCellSize),
+                new SerializeVector2(op3),
+                new SerializeVector2(op4)
             );
         }
     }
 
-    private void AddDoorNavigation(RoomDoorInfo doorInfo, SerializeVector2 p1, SerializeVector2 p2, SerializeVector2 p3, SerializeVector2 p4)
+    /// <summary>
+    /// 添加房间
+    /// </summary>
+    private void AddDoorNavigation(RoomDoorInfo doorInfo,
+        SerializeVector2 op1, SerializeVector2 op2, SerializeVector2 op3, SerializeVector2 op4,
+        SerializeVector2 cp1, SerializeVector2 cp2, SerializeVector2 cp3, SerializeVector2 cp4)
     {
-        var polygonData = new NavigationPolygonData();
-        polygonData.Type = NavigationPolygonType.Out;
-        polygonData.Points.Add(p1);
-        polygonData.Points.Add(p2);
-        polygonData.Points.Add(p3);
-        polygonData.Points.Add(p4);
+        var openPolygonData = new NavigationPolygonData();
+        openPolygonData.Type = NavigationPolygonType.Out;
+        openPolygonData.Points.Add(op1);
+        openPolygonData.Points.Add(op2);
+        openPolygonData.Points.Add(op3);
+        openPolygonData.Points.Add(op4);
+        
+        var closePolygonData = new NavigationPolygonData();
+        closePolygonData.Type = NavigationPolygonType.Out;
+        closePolygonData.Points.Add(cp1);
+        closePolygonData.Points.Add(cp2);
+        closePolygonData.Points.Add(cp3);
+        closePolygonData.Points.Add(cp4);
+        
         //这里 NavigationPolygonData 需要计算, 后续补上
-        _connectNavigationItemList.Add(new DoorNavigationInfo(doorInfo, null, polygonData));
+        _connectNavigationItemList.Add(new DoorNavigationInfo(doorInfo, openPolygonData, closePolygonData));
     }
     
     //报错数据
@@ -648,16 +681,22 @@ public class DungeonTile
     {
         //TestData();
         // 在 Godot4.0_rc6 中 如果将所有点都放在 NavigationPolygon 里面, 即使点是对的, 但调用 MakePolygonsFromOutlines 还是可能会报错, 这应该是个bug
+        
+        //通过 GenerateNavigationPolygon() 计算出来的导航区域
         for (var i = 0; i < _polygonDataList.Count; i++)
         {
             var polygonData = _polygonDataList[i];
-            var node = CreateNavigationRegion(navigationRoot, polygonData);
+            CreateNavigationRegion(navigationRoot, polygonData);
         }
 
+        //门占用区域的导航区域
         for (var i = 0; i < _connectNavigationItemList.Count; i++)
         {
             var item = _connectNavigationItemList[i];
-            item.NavigationNode = CreateNavigationRegion(navigationRoot, item.DoorCloseNavigationData);
+            item.CloseNavigationNode = CreateNavigationRegion(navigationRoot, item.CloseNavigationData);
+            item.OpenNavigationNode = CreateNavigationRegion(navigationRoot, item.OpenNavigationData);
+            item.CloseNavigationNode.Enabled = false;
+            item.OpenNavigationNode.Enabled = false;
             item.DoorInfo.Navigation = item;
         }
     }
@@ -690,7 +729,7 @@ public class DungeonTile
         var array = new NavigationPolygonData[_connectNavigationItemList.Count];
         for (var i = 0; i < _connectNavigationItemList.Count; i++)
         {
-            array[i] = _connectNavigationItemList[i].DoorCloseNavigationData;
+            array[i] = _connectNavigationItemList[i].CloseNavigationData;
         }
         return array;
     }

@@ -6,11 +6,11 @@ using Godot;
 /// </summary>
 public class DoorNavigationInfo
 {
-    public DoorNavigationInfo(RoomDoorInfo doorInfo, NavigationPolygonData doorOpenNavigationData, NavigationPolygonData doorCloseNavigationData)
+    public DoorNavigationInfo(RoomDoorInfo doorInfo, NavigationPolygonData openNavigationData, NavigationPolygonData closeNavigationData)
     {
         DoorInfo = doorInfo;
-        DoorOpenNavigationData = doorOpenNavigationData;
-        DoorCloseNavigationData = doorCloseNavigationData;
+        OpenNavigationData = openNavigationData;
+        CloseNavigationData = closeNavigationData;
     }
 
     /// <summary>
@@ -19,17 +19,22 @@ public class DoorNavigationInfo
     public RoomDoorInfo DoorInfo;
     
     /// <summary>
-    /// 导航区域节点
+    /// 门开启时导航区域节点
     /// </summary>
-    public NavigationRegion2D NavigationNode;
+    public NavigationRegion2D OpenNavigationNode;
+    
+    /// <summary>
+    /// 门关闭时导航区域节点
+    /// </summary>
+    public NavigationRegion2D CloseNavigationNode;
 
     /// <summary>
     /// 门开启时导航形状数据
     /// </summary>
-    public NavigationPolygonData DoorOpenNavigationData;
+    public NavigationPolygonData OpenNavigationData;
     
     /// <summary>
     /// 门关闭时导航形状数据
     /// </summary>
-    public NavigationPolygonData DoorCloseNavigationData;
+    public NavigationPolygonData CloseNavigationData;
 }
