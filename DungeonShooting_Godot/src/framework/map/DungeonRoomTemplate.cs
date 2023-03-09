@@ -735,6 +735,7 @@ public partial class DungeonRoomTemplate : TileMap
     //触发保存操作
     private void TriggerSave()
     {
+        //如果没有找到对应的场景文件，则不保存
         if (!File.Exists(RoomTileDir + Name + ".tscn"))
         {
             return;

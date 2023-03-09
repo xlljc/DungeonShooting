@@ -31,6 +31,9 @@ namespace Plugin
             var texture3 = GD.Load<Texture2D>("res://addons/dungeonShooting_plugin/Mark.svg");
             AddCustomType("ActivityMark", "Node2D", script3, texture3);
             
+            var script4 = GD.Load<Script>("res://src/framework/map/mark/EnemyMark.cs");
+            AddCustomType("EnemyMark", "Node2D", script4, texture3);
+            
             dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/Automation.tscn").Instantiate<Control>();
             AddControlToDock(DockSlot.LeftUr, dock);
         }
