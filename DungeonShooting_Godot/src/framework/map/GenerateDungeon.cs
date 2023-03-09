@@ -21,7 +21,7 @@ public class GenerateDungeon
     /// <summary>
     /// 生成的房间数量
     /// </summary>
-    private int _maxCount = 15;
+    private int _maxCount = 3;
 
     //用于标记地图上的坐标是否被占用
     private Grid<bool> _roomGrid { get; } = new Grid<bool>();
@@ -291,25 +291,25 @@ public class GenerateDungeon
         nextRoomDoor.ConnectRoom = room;
         nextRoomDoor.ConnectDoor = roomDoor;
 
-        //先寻找直通门
-        if (Utils.RandomBoolean())
-        {
-            //直行通道, 优先横轴
-            if (TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor)
-                || TryConnectVerticalDoor(room, roomDoor, nextRoom, nextRoomDoor))
-            {
-                return true;
-            }
-        }
-        else
-        {
-            //直行通道, 优先纵轴
-            if (TryConnectVerticalDoor(room, roomDoor, nextRoom, nextRoomDoor)
-                || TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor))
-            {
-                return true;
-            }
-        }
+        // //先寻找直通门
+        // if (Utils.RandomBoolean())
+        // {
+        //     //直行通道, 优先横轴
+        //     if (TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor)
+        //         || TryConnectVerticalDoor(room, roomDoor, nextRoom, nextRoomDoor))
+        //     {
+        //         return true;
+        //     }
+        // }
+        // else
+        // {
+        //     //直行通道, 优先纵轴
+        //     if (TryConnectVerticalDoor(room, roomDoor, nextRoom, nextRoomDoor)
+        //         || TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor))
+        //     {
+        //         return true;
+        //     }
+        // }
         
         //包含拐角的通道
         return TryConnectCrossDoor(room, roomDoor, nextRoom, nextRoomDoor);
@@ -576,11 +576,13 @@ public class GenerateDungeon
                 //交集范围够生成门
                 if (range.Y - range.X >= GameConfig.CorridorWidth)
                 {
-                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
-                        Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth);
-                    if (areaRange == null || tempRange.X < areaRange.Value.X)
+                    // var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
+                    //     Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth);
+                    
+                    var rangeValue = Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth;
+                    if (areaRange == null || rangeValue < areaRange.Value.X)
                     {
-                        areaRange = tempRange;
+                        areaRange = new Vector2I(rangeValue, rangeValue);
                     }
                 }
             }
@@ -591,11 +593,13 @@ public class GenerateDungeon
                 //交集范围够生成门
                 if (range.Y - range.X >= GameConfig.CorridorWidth)
                 {
-                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
-                        Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth);
-                    if (areaRange == null || tempRange.Y > areaRange.Value.Y)
+                    // var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
+                    //     Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth);
+
+                    var rangeValue = Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth;
+                    if (areaRange == null || rangeValue > areaRange.Value.Y)
                     {
-                        areaRange = tempRange;
+                        areaRange = new Vector2I(rangeValue, rangeValue);
                     }
                 }
             }
@@ -613,11 +617,13 @@ public class GenerateDungeon
                 //交集范围够生成门
                 if (range.Y - range.X >= GameConfig.CorridorWidth)
                 {
-                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
-                        Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth);
-                    if (areaRange == null || tempRange.X < areaRange.Value.X)
+                    // var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
+                    //     Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth);
+
+                    var rangeValue = Mathf.Abs(room1.Position.Y - (int)range.X);
+                    if (areaRange == null || rangeValue < areaRange.Value.X)
                     {
-                        areaRange = tempRange;
+                        areaRange = new Vector2I(rangeValue, rangeValue);
                     }
                 }
             }
@@ -628,11 +634,13 @@ public class GenerateDungeon
                 //交集范围够生成门
                 if (range.Y - range.X >= GameConfig.CorridorWidth)
                 {
-                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
-                        Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth);
-                    if (areaRange == null || tempRange.Y > areaRange.Value.Y)
+                    // var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
+                    //     Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth);
+
+                    var rangeValue = Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth;
+                    if (areaRange == null || rangeValue > areaRange.Value.Y)
                     {
-                        areaRange = tempRange;
+                        areaRange = new Vector2I(rangeValue, rangeValue);
                     }
                 }
             }
