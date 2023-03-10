@@ -148,7 +148,7 @@ public class GenerateDungeon
 
         //随机选择一个房间
         var roomSplit = Utils.RandomChoose(GameApplication.Instance.RoomConfig);
-        //var roomSplit = GameApplication.Instance.RoomConfig[0];
+        //var roomSplit = GameApplication.Instance.RoomConfig[1];
         var room = new RoomInfo(_count, roomSplit);
         
         //房间大小
@@ -532,8 +532,8 @@ public class GenerateDungeon
         var room1 = room.RoomSplit.RoomInfo;
         var room2 = nextRoom.RoomSplit.RoomInfo;
         
-        Vector2I? temp1 = null;
-        Vector2I? temp2 = null;
+        int? temp1 = null;
+        int? temp2 = null;
 
         foreach (var areaInfo1 in room1.DoorAreaInfos)
         {
@@ -541,6 +541,11 @@ public class GenerateDungeon
             {
                 FindCrossPassage_Area(areaInfo1, room, nextRoom, ref temp1);
             }
+        }
+        
+        if (temp1 == null)
+        {
+            return false;
         }
 
         foreach (var areaInfo2 in room2.DoorAreaInfos)
@@ -551,17 +556,17 @@ public class GenerateDungeon
             }
         }
 
-        if (temp1 != null && temp2 != null)
+        if (temp2 == null)
         {
-            offset1 = Utils.RandomRangeInt(temp1.Value.X, temp1.Value.Y);
-            offset2 = Utils.RandomRangeInt(temp2.Value.X, temp2.Value.Y);
-            return true;
+            return false;
         }
-
-        return false;
+        
+        offset1 = temp1.Value;
+        offset2 = temp2.Value;
+        return true;
     }
 
-    private void FindCrossPassage_Area(DoorAreaInfo areaInfo, RoomInfo room1, RoomInfo room2, ref Vector2I? areaRange)
+    private void FindCrossPassage_Area(DoorAreaInfo areaInfo, RoomInfo room1, RoomInfo room2, ref int? areaRange)
     {
         if (areaInfo.Direction == DoorDirection.N || areaInfo.Direction == DoorDirection.S) //纵向门
         {
@@ -571,7 +576,7 @@ public class GenerateDungeon
 
             if (room1.Position.X > room2.Position.X)
             {
-                var range = CalcOverlapRange(room2.GetHorizontalEnd(),
+                var range = CalcOverlapRange(room2.GetHorizontalEnd() + GameConfig.RoomSpace,
                     room1.GetHorizontalEnd(), p1, p2);
                 //交集范围够生成门
                 if (range.Y - range.X >= GameConfig.CorridorWidth)
@@ -579,17 +584,18 @@ public class GenerateDungeon
                     // var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
                     //     Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth);
                     
-                    var rangeValue = Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth;
-                    if (areaRange == null || rangeValue < areaRange.Value.X)
+                    var rangeValue = Mathf.Abs(room1.Position.X - (int)range.X);
+
+                    if (areaRange == null || rangeValue < areaRange)
                     {
-                        areaRange = new Vector2I(rangeValue, rangeValue);
+                        areaRange = rangeValue;
                     }
                 }
             }
             else
             {
                 var range = CalcOverlapRange(room1.GetHorizontalStart(),
-                    room2.GetHorizontalStart(), p1, p2);
+                    room2.GetHorizontalStart() -  + GameConfig.RoomSpace, p1, p2);
                 //交集范围够生成门
                 if (range.Y - range.X >= GameConfig.CorridorWidth)
                 {
@@ -597,9 +603,10 @@ public class GenerateDungeon
                     //     Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth);
 
                     var rangeValue = Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth;
-                    if (areaRange == null || rangeValue > areaRange.Value.Y)
+
+                    if (areaRange == null || rangeValue > areaRange)
                     {
-                        areaRange = new Vector2I(rangeValue, rangeValue);
+                        areaRange = rangeValue;
                     }
                 }
             }
@@ -612,7 +619,7 @@ public class GenerateDungeon
 
             if (room1.Position.Y > room2.Position.Y)
             {
-                var range = CalcOverlapRange(room2.GetVerticalEnd(),
+                var range = CalcOverlapRange(room2.GetVerticalEnd() + GameConfig.RoomSpace,
                     room1.GetVerticalEnd(), p1, p2);
                 //交集范围够生成门
                 if (range.Y - range.X >= GameConfig.CorridorWidth)
@@ -621,26 +628,28 @@ public class GenerateDungeon
                     //     Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth);
 
                     var rangeValue = Mathf.Abs(room1.Position.Y - (int)range.X);
-                    if (areaRange == null || rangeValue < areaRange.Value.X)
+
+                    if (areaRange == null || rangeValue < areaRange)
                     {
-                        areaRange = new Vector2I(rangeValue, rangeValue);
+                        areaRange = rangeValue;
                     }
                 }
             }
             else
             {
                 var range = CalcOverlapRange(room1.GetVerticalStart(),
-                    room2.GetVerticalStart(), p1, p2);
+                    room2.GetVerticalStart() - GameConfig.RoomSpace, p1, p2);
                 //交集范围够生成门
                 if (range.Y - range.X >= GameConfig.CorridorWidth)
                 {
                     // var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
                     //     Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth);
-
+                    
                     var rangeValue = Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth;
-                    if (areaRange == null || rangeValue > areaRange.Value.Y)
+
+                    if (areaRange == null || rangeValue > areaRange)
                     {
-                        areaRange = new Vector2I(rangeValue, rangeValue);
+                        areaRange = rangeValue;
                     }
                 }
             }

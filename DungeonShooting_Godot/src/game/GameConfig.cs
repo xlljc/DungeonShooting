@@ -38,4 +38,17 @@ public static class GameConfig
     /// 房间最小间距
     /// </summary>
     public const int RoomSpace = 4;
+    
+    /// <summary>
+    /// 地图数据路径
+    /// </summary>
+    public static readonly string RoomTileDir = System.Environment.CurrentDirectory + "/resource/map/tileMaps/";
+    /// <summary>
+    /// 地图描述数据路径
+    /// </summary>
+    public static readonly string RoomTileDataDir = System.Environment.CurrentDirectory + "/resource/map/tiledata/";
+    /// <summary>
+    /// 房间配置汇总数据路径
+    /// </summary>
+    public static readonly string RoomTileConfigFile = System.Environment.CurrentDirectory + "/resource/map/RoomConfig.json";
 }

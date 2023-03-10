@@ -67,9 +67,9 @@ public partial class Automation : Control
 	private void _on_Button2_pressed()
 	{
 		//地图路径
-		var tileDir = DungeonRoomTemplate.RoomTileDir;
+		var tileDir = GameConfig.RoomTileDir;
 		//地图描述数据路径
-		var tileDataDir = DungeonRoomTemplate.RoomTileDataDir;
+		var tileDataDir = GameConfig.RoomTileDataDir;
 		
 		var tileDirInfo = new DirectoryInfo(tileDir);
 		var tileDataDirInfo = new DirectoryInfo(tileDataDir);
@@ -149,7 +149,7 @@ public partial class Automation : Control
 		var config = new JsonSerializerOptions();
 		config.WriteIndented = true;
 		var text = JsonSerializer.Serialize(list, config);
-		File.WriteAllText(DungeonRoomTemplate.RoomTileConfigFile, text);
+		File.WriteAllText(GameConfig.RoomTileConfigFile, text);
 
 		GD.Print("地牢房间配置, 重新打包完成!");
 	}
