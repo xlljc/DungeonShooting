@@ -80,9 +80,9 @@ public partial class Enemy : Role
     //目标在视野内的时间
     private float _targetInViewTime = 0;
 
-    public override void _Ready()
+    public override void OnInit()
     {
-        base._Ready();
+        base.OnInit();
         IsAi = true;
         StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
 

@@ -125,7 +125,7 @@ public abstract partial class ActivityObject : CharacterBody2D
         {
             throw new Exception("创建 ActivityObject 没有找到指定挂载的预制体: " + scenePath);
         }
-        
+
         ItemId = itemId;
         Name = GetType().Name + (_instanceIndex++);
         
@@ -137,6 +137,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             var body = _templateInstance.GetChild(0);
             _templateInstance.RemoveChild(body);
             AddChild(body);
+            body.Owner = this;
             switch (body.Name)
             {
                 case "AnimatedSprite":
@@ -165,6 +166,8 @@ public abstract partial class ActivityObject : CharacterBody2D
         
         //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
         //_templateInstance.CallDeferred(Node.MethodName.QueueFree);
+
+        OnInit();
     }
 
     /// <summary>
@@ -242,6 +245,13 @@ public abstract partial class ActivityObject : CharacterBody2D
         return AnimatedSprite.SpriteFrames.GetFrameTexture(AnimatedSprite.Name, AnimatedSprite.Frame);
     }
 
+    /// <summary>
+    /// 物体初始化时调用
+    /// </summary>
+    public virtual void OnInit()
+    {
+    }
+    
     /// <summary>
     /// 返回是否能与其他ActivityObject互动
     /// </summary>
@@ -866,7 +876,7 @@ public abstract partial class ActivityObject : CharacterBody2D
         }
         
         //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
-        //_templateInstance.QueueFree();
+        _templateInstance.QueueFree();
     }
 
     /// <summary>

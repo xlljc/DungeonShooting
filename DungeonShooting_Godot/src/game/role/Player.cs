@@ -22,9 +22,9 @@ public partial class Player : Role
     /// </summary>
     public float Friction { get; set; } = 800f;
     
-    public override void _Ready()
+    public override void OnInit()
     {
-        base._Ready();
+        base.OnInit();
         
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;

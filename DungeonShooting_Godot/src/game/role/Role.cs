@@ -210,7 +210,7 @@ public abstract partial class Role : ActivityObject
     {
     }
 
-    public override void _Ready()
+    public override void OnInit()
     {
         Holster = new Holster(this);
         _startScale = Scale;

@@ -597,7 +597,6 @@ public class DungeonTile
         closePolygonData.Points.Add(cp3);
         closePolygonData.Points.Add(cp4);
         
-        //这里 NavigationPolygonData 需要计算, 后续补上
         _connectNavigationItemList.Add(new DoorNavigationInfo(doorInfo, openPolygonData, closePolygonData));
     }
     
