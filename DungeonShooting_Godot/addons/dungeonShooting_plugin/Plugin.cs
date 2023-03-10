@@ -45,27 +45,16 @@ namespace Plugin
         {
             RemoveCustomType("ActivityObjectTemplate");
             RemoveCustomType("DungeonRoomTemplate");
+            RemoveCustomType("ActivityMark");
+            RemoveCustomType("EnemyMark");
+            RemoveCustomType("WeaponMark");
+
             if (dock != null)
             {
                 RemoveControlFromDocks(dock);
                 dock.Free();
             }
         }
-
-        /*public override bool Handles(Object @object)
-        {
-            if (@object is Node node)
-            {
-                node.
-                GD.Print("node: " + (node.GetScript() == activityObjectTemplateScript));
-                /*GD.Print("---------------------- 1: " + objectTemplate.Name);
-                var sp = new Sprite2D();
-                sp.Name = "Sprite2D";
-                objectTemplate.AddChild(sp);
-                sp.Owner = objectTemplate.Owner;#1#
-            }
-            return base.Handles(@object);
-        }*/
     }
 
 }

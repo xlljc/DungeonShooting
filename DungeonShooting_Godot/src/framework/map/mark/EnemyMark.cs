@@ -55,7 +55,7 @@ public partial class EnemyMark : ActivityMark
         Layer = RoomLayerEnum.YSortLayer;
     }
 
-    public override void BeReady(RoomInfo roomInfo)
+    public override void OnBeReady(RoomInfo roomInfo)
     {
         var pos = GlobalPosition;
         //创建敌人

@@ -26,7 +26,7 @@ public partial class WeaponMark : ActivityMark
         Layer = RoomLayerEnum.NormalLayer;
     }
 
-    public override void BeReady(RoomInfo roomInfo)
+    public override void OnBeReady(RoomInfo roomInfo)
     {
         //创建武器
         var instance = ActivityObject.Create<Weapon>(GetItemId());

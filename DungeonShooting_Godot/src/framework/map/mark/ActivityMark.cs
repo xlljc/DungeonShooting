@@ -31,6 +31,12 @@ public partial class ActivityMark : Node2D
     /// </summary>
     [Export]
     public int WaveNumber = 1;
+
+    /// <summary>
+    /// 延时执行时间，单位：秒
+    /// </summary>
+    [Export]
+    public float DelayTime = 0;
     
     /// <summary>
     /// 绘制的颜色
@@ -46,18 +52,34 @@ public partial class ActivityMark : Node2D
     }
 
     /// <summary>
+    /// 标记准备好了
+    /// </summary>
+    public void BeReady(RoomInfo roomInfo)
+    {
+        OnBeReady(roomInfo);
+    }
+
+    /// <summary>
     /// 调用该函数表示该标记可以生成物体了, 使用标记创建实例必须调用 CreateInstance(id)
     /// </summary>
-    public virtual void BeReady(RoomInfo roomInfo)
+    public virtual void OnBeReady(RoomInfo roomInfo)
     {
-        var instance = ActivityObject.Create(GetItemId());
-        instance.PutDown(GlobalPosition, Layer);
+        CreateInstance<ActivityObject>(GetItemId());
         Visible = false;
     }
     
+    /// <summary>
+    /// 创建实例，并放入场景中，使用标记创建实例必须调用 CreateInstance(id)
+    /// </summary>
     protected T CreateInstance<T>(string id) where T : ActivityObject
     {
-        return default;
+        var instance = ActivityObject.Create<T>(id);
+        instance.PutDown(GlobalPosition, Layer);
+        if (instance is Enemy)
+        {
+            
+        }
+        return instance;
     }
     
     public override void _Draw()
