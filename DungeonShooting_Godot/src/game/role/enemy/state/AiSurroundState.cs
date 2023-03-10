@@ -20,6 +20,11 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
     
     //下一个移动点
     private Vector2 _nextPosition;
+    
+    //上一帧位置
+    private Vector2 _prevPos;
+    //卡在一个位置的时间
+    private float _lockTimer;
 
     public AiSurroundState() : base(AiStateEnum.AiSurround)
     {
@@ -39,14 +44,14 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         if (Master.IsAllWeaponTotalAmmoEmpty())
         {
             //再寻找是否有可用的武器
-            if (Master.CheckUsableWeaponInUnclaimed())
+            var targetWeapon = Master.FindTargetWeapon();
+            if (targetWeapon != null)
             {
-                //切换到寻找武器状态
-                ChangeStateLate(AiStateEnum.AiFindAmmo);
+                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
         }
-        
+
         var playerPos = Player.Current.GetCenterPosition();
         var weapon = Master.Holster.ActiveWeapon;
 
@@ -79,7 +84,13 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
             }
             else
             {
-                if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
+                if (_lockTimer >= 1) //卡在一个点超过一秒
+                {
+                    RunOver(playerPos);
+                    _isMoveOver = false;
+                    _lockTimer = 0;
+                }
+                else if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
                 {
                     _pauseTimer = Utils.RandomRangeFloat(0f, 0.5f);
                     _isMoveOver = true;
@@ -90,6 +101,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                 {
                     _moveFlag = true;
                     //计算移动
+                    var pos = Master.GlobalPosition;
                     var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
                     Master.AnimatedSprite.Play(AnimatorNames.Run);
                     Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
@@ -97,6 +109,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                 }
                 else
                 {
+                    var pos = Master.GlobalPosition;
                     var lastSlideCollision = Master.GetLastSlideCollision();
                     if (lastSlideCollision != null && lastSlideCollision.GetCollider() is Role) //碰到其他角色
                     {
@@ -110,8 +123,17 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                         //计算移动
                         var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
                         Master.AnimatedSprite.Play(AnimatorNames.Run);
-                        Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                        Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
                                                Master.MoveSpeed;
+                    }
+                    
+                    if (_prevPos.DistanceSquaredTo(pos) <= 0.01f)
+                    {
+                        _lockTimer += delta;
+                    }
+                    else
+                    {
+                        _prevPos = pos;
                     }
                 }
 

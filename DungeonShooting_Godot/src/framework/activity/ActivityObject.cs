@@ -67,10 +67,21 @@ public abstract partial class ActivityObject : CharacterBody2D
     }
 
     /// <summary>
-    /// 当前物体归属的区域
+    /// 当前物体归属的区域, 如果为 null 代表不属于任何一个区域
     /// </summary>
-    public AffiliationArea Affiliation { get; }
-    
+    public AffiliationArea Affiliation
+    {
+        get => _affiliationArea;
+        set
+        {
+            if (value != _affiliationArea)
+            {
+                _affiliationArea = value;
+                OnAffiliationChange();
+            }
+        }
+    }
+
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     //是否初始化阴影
@@ -96,32 +107,29 @@ public abstract partial class ActivityObject : CharacterBody2D
     //标记字典
     private Dictionary<string, object> _signMap;
     
+    //开启的协程
     private List<CoroutineData> _coroutineList;
+    //模板实例
     private ActivityObjectTemplate _templateInstance;
+    
+    private AffiliationArea _affiliationArea;
     
     private static long _instanceIndex = 0;
 
     //初始化节点
     private void _InitNode(string itemId, string scenePath)
     {
-        ItemId = itemId;
-        Name = GetType().Name + (_instanceIndex++);
         //加载预制体
         var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
         if (tempPrefab == null)
         {
             throw new Exception("创建 ActivityObject 没有找到指定挂载的预制体: " + scenePath);
         }
-
-        _templateInstance = tempPrefab.Instantiate<ActivityObjectTemplate>();
-        ZIndex = _templateInstance.z_index;
-        CollisionLayer = _templateInstance.collision_layer;
-        CollisionMask = _templateInstance.collision_mask;
-        Scale = _templateInstance.scale;
-        Visible = _templateInstance.visible;
-
-        MotionMode = MotionModeEnum.Floating;
         
+        ItemId = itemId;
+        Name = GetType().Name + (_instanceIndex++);
+        
+        _templateInstance = tempPrefab.Instantiate<ActivityObjectTemplate>();
         //移动子节点
         var count = _templateInstance.GetChildCount();
         for (int i = 0; i < count; i++)
@@ -145,8 +153,18 @@ public abstract partial class ActivityObject : CharacterBody2D
             }
         }
         
+        ZIndex = _templateInstance.z_index;
+        CollisionLayer = _templateInstance.collision_layer;
+        CollisionMask = _templateInstance.collision_mask;
+        Scale = _templateInstance.scale;
+        Visible = _templateInstance.visible;
+
+        MotionMode = MotionModeEnum.Floating;
+
         MoveController = AddComponent<MoveController>();
-        //tempNode.CallDeferred(Node.MethodName.QueueFree);
+        
+        //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
+        //_templateInstance.CallDeferred(Node.MethodName.QueueFree);
     }
 
     /// <summary>
@@ -316,6 +334,21 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     protected virtual void DebugDraw()
     {
+    }
+
+    /// <summary>
+    /// 归属区域发生改变
+    /// </summary>
+    protected virtual void OnAffiliationChange()
+    {
+    }
+
+    /// <summary>
+    /// 返回当物体 CollisionLayer 是否能与 mask 层碰撞
+    /// </summary>
+    public bool CollisionWithMask(uint mask)
+    {
+        return (CollisionLayer & mask) != 0;
     }
     
     /// <summary>
@@ -818,16 +851,22 @@ public abstract partial class ActivityObject : CharacterBody2D
         }
 
         IsDestroyed = true;
-
-        OnDestroy();
         QueueFree();
+        OnDestroy();
+
         var arr = _components.ToArray();
         for (int i = 0; i < arr.Length; i++)
         {
             arr[i].Value?.Destroy();
         }
+        
+        if (Affiliation != null)
+        {
+            Affiliation.RemoveItem(this);
+        }
+        
         //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
-        _templateInstance.QueueFree();
+        //_templateInstance.QueueFree();
     }
 
     /// <summary>

@@ -1,4 +1,6 @@
 ﻿
+using System;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -6,9 +8,27 @@ using Godot;
 /// </summary>
 public partial class AffiliationArea : Area2D
 {
+    /// <summary>
+    /// 当前实例所属房间
+    /// </summary>
+    public RoomInfo RoomInfo;
+    
+    /// <summary>
+    /// 当前归属区域包含的所有物体对象
+    /// </summary>
+    private readonly HashSet<ActivityObject> _includeItems = new HashSet<ActivityObject>();
+    
+    /// <summary>
+    /// 玩家是否是第一次进入
+    /// </summary>
+    public bool IsFirstEnterFlag { get; private set; } = true;
+    
     private bool _init = false;
     
-    public void Init(Rect2 rect2)
+    /// <summary>
+    /// 根据矩形区域初始化归属区域
+    /// </summary>
+    public void Init(RoomInfo roomInfo, Rect2 rect2)
     {
         if (_init)
         {
@@ -16,26 +36,14 @@ public partial class AffiliationArea : Area2D
         }
 
         _init = true;
+
+        RoomInfo = roomInfo;
         var collisionShape = new CollisionShape2D();
         collisionShape.GlobalPosition = rect2.Position + rect2.Size / 2;
         var shape = new RectangleShape2D();
         shape.Size = rect2.Size;
         collisionShape.Shape = shape;
         AddChild(collisionShape);
-        _Init();
-    }
-
-    public void Init(Vector2[] polygon)
-    {
-        if (_init)
-        {
-            return;
-        }
-
-        _init = true;
-        var collisionPolygon = new CollisionPolygon2D();
-        collisionPolygon.Polygon = polygon;
-        AddChild(collisionPolygon);
         _Init();
     }
 
@@ -46,9 +54,88 @@ public partial class AffiliationArea : Area2D
         CollisionLayer = PhysicsLayer.None;
         CollisionMask = PhysicsLayer.Props | PhysicsLayer.Player | PhysicsLayer.Enemy;
 
-        BodyEntered += body =>
+        BodyEntered += OnBodyEntered;
+    }
+
+    /// <summary>
+    /// 将物体添加到当前所属区域中
+    /// </summary>
+    public void InsertItem(ActivityObject activityObject)
+    {
+        if (activityObject.Affiliation == this)
         {
-            GD.Print("有物体进入: " + body.Name);
-        };
+            return;
+        }
+
+        if (activityObject.Affiliation != null)
+        {
+            _includeItems.Remove(activityObject);
+        }
+        activityObject.Affiliation = this;
+        _includeItems.Add(activityObject);
+
+        //如果是玩家
+        if (activityObject == Player.Current)
+        {
+            OnPlayerEnterRoom();
+        }
+    }
+
+    /// <summary>
+    /// 将物体从当前所属区域移除
+    /// </summary>
+    public void RemoveItem(ActivityObject activityObject)
+    {
+        if (activityObject.Affiliation == null)
+        {
+            return;
+        }
+        activityObject.Affiliation = null;
+        _includeItems.Remove(activityObject);
+    }
+
+    /// <summary>
+    /// 获取该区域中物体的总数
+    /// </summary>
+    public int GetIncludeItemsCount()
+    {
+        return _includeItems.Count;
+    }
+
+    /// <summary>
+    /// 统计符合条件的数量
+    /// </summary>
+    /// <param name="handler">操作函数, 返回是否满足要求</param>
+    public int FindIncludeItemsCount(Func<ActivityObject, bool> handler)
+    {
+        var count = 0;
+        foreach (var activityObject in _includeItems)
+        {
+            if (handler(activityObject))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    private void OnBodyEntered(Node2D body)
+    {
+        if (body is ActivityObject activityObject)
+        {
+            //注意需要延时调用
+            CallDeferred(nameof(InsertItem), activityObject);
+        }
+    }
+
+    //玩家进入房间
+    private void OnPlayerEnterRoom()
+    {
+        if (IsFirstEnterFlag)
+        {
+            EventManager.EmitEvent(EventEnum.OnPlayerFirstEnterRoom, RoomInfo);
+            IsFirstEnterFlag = false;
+        }
+        EventManager.EmitEvent(EventEnum.OnPlayerEnterRoom, RoomInfo);
     }
 }

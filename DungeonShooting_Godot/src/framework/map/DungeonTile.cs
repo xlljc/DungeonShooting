@@ -1,7 +1,5 @@
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 
 /// <summary>
@@ -40,19 +38,7 @@ public class DungeonTile
     private readonly List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
 
     //连接门的导航区域
-    private readonly List<DoorNavigationItem> _connectNavigationItemList = new List<DoorNavigationItem>();
-
-    private class DoorNavigationItem
-    {
-        public NavigationPolygonData NavigationPolygonData;
-        public RoomDoorInfo DoorInfo;
-
-        public DoorNavigationItem(NavigationPolygonData navigationPolygonData, RoomDoorInfo doorInfo)
-        {
-            NavigationPolygonData = navigationPolygonData;
-            DoorInfo = doorInfo;
-        }
-    }
+    private readonly List<DoorNavigationInfo> _connectNavigationItemList = new List<DoorNavigationInfo>();
     
     //----------------------------------------------------
     
@@ -120,7 +106,10 @@ public class DungeonTile
                 activityMark.GetParent().RemoveChild(activityMark);
                 var pos = activityMark.GlobalPosition - offset;
                 _tileRoot.AddChild(activityMark);
+                activityMark.Visible = false;
                 activityMark.GlobalPosition = roomInfo.GetWorldPosition() + pos;
+                activityMark.Visible = false;
+                activityMark.SetActive(false);
             }
             roomInfo.ActivityMarks.AddRange(activityMarks);
             
@@ -166,26 +155,26 @@ public class DungeonTile
                     switch (doorDir1)
                     {
                         case DoorDirection.E:
-                            rect.Size = new Vector2(rect.Size.X, GenerateDungeon.CorridorWidth);
+                            rect.Size = new Vector2(rect.Size.X, GameConfig.CorridorWidth);
                             FullHorizontalAisle(config, rect);
                             FullHorizontalAisleLeft(config, rect, doorInfo);
                             FullHorizontalAisleRight(config, rect, doorInfo.ConnectDoor);
                             break;
                         case DoorDirection.W:
-                            rect.Size = new Vector2(rect.Size.X, GenerateDungeon.CorridorWidth);
+                            rect.Size = new Vector2(rect.Size.X, GameConfig.CorridorWidth);
                             FullHorizontalAisle(config, rect);
                             FullHorizontalAisleLeft(config, rect, doorInfo.ConnectDoor);
                             FullHorizontalAisleRight(config, rect, doorInfo);
                             break;
                         
                         case DoorDirection.S:
-                            rect.Size = new Vector2(GenerateDungeon.CorridorWidth, rect.Size.Y);
+                            rect.Size = new Vector2(GameConfig.CorridorWidth, rect.Size.Y);
                             FullVerticalAisle(config, rect);
                             FullVerticalAisleUp(config, rect, doorInfo);
                             FullVerticalAisleDown(config, rect, doorInfo.ConnectDoor);
                             break;
                         case DoorDirection.N:
-                            rect.Size = new Vector2(GenerateDungeon.CorridorWidth, rect.Size.Y);
+                            rect.Size = new Vector2(GameConfig.CorridorWidth, rect.Size.Y);
                             FullVerticalAisle(config, rect);
                             FullVerticalAisleUp(config, rect, doorInfo.ConnectDoor);
                             FullVerticalAisleDown(config, rect, doorInfo);
@@ -209,15 +198,15 @@ public class DungeonTile
                                 doorInfo.OriginPosition.X,
                                 doorInfo.OriginPosition.Y,
                                 doorInfo.Cross.X - doorInfo.OriginPosition.X,
-                                GenerateDungeon.CorridorWidth
+                                GameConfig.CorridorWidth
                             );
                             break;
                         case DoorDirection.W: //←
                             rect = new Rect2(
-                                doorInfo.Cross.X + GenerateDungeon.CorridorWidth,
+                                doorInfo.Cross.X + GameConfig.CorridorWidth,
                                 doorInfo.Cross.Y,
-                                doorInfo.OriginPosition.X - (doorInfo.Cross.X + GenerateDungeon.CorridorWidth),
-                                GenerateDungeon.CorridorWidth
+                                doorInfo.OriginPosition.X - (doorInfo.Cross.X + GameConfig.CorridorWidth),
+                                GameConfig.CorridorWidth
                             );
                             break;
                         case DoorDirection.S: //↓
@@ -225,7 +214,7 @@ public class DungeonTile
                             rect = new Rect2(
                                 doorInfo.OriginPosition.X,
                                 doorInfo.OriginPosition.Y,
-                                GenerateDungeon.CorridorWidth,
+                                GameConfig.CorridorWidth,
                                 doorInfo.Cross.Y - doorInfo.OriginPosition.Y
                             );
                             break;
@@ -233,9 +222,9 @@ public class DungeonTile
                             dir1 = 1;
                             rect = new Rect2(
                                 doorInfo.Cross.X,
-                                doorInfo.Cross.Y + GenerateDungeon.CorridorWidth,
-                                GenerateDungeon.CorridorWidth,
-                                doorInfo.OriginPosition.Y - (doorInfo.Cross.Y + GenerateDungeon.CorridorWidth)
+                                doorInfo.Cross.Y + GameConfig.CorridorWidth,
+                                GameConfig.CorridorWidth,
+                                doorInfo.OriginPosition.Y - (doorInfo.Cross.Y + GameConfig.CorridorWidth)
                             );
                             break;
                         default:
@@ -250,16 +239,16 @@ public class DungeonTile
                                 doorInfo.ConnectDoor.OriginPosition.X,
                                 doorInfo.ConnectDoor.OriginPosition.Y,
                                 doorInfo.Cross.X - doorInfo.ConnectDoor.OriginPosition.X,
-                                GenerateDungeon.CorridorWidth
+                                GameConfig.CorridorWidth
                             );
                             break;
                         case DoorDirection.W: //←
                             rect2 = new Rect2(
-                                doorInfo.Cross.X + GenerateDungeon.CorridorWidth,
+                                doorInfo.Cross.X + GameConfig.CorridorWidth,
                                 doorInfo.Cross.Y,
                                 doorInfo.ConnectDoor.OriginPosition.X -
-                                (doorInfo.Cross.X + GenerateDungeon.CorridorWidth),
-                                GenerateDungeon.CorridorWidth
+                                (doorInfo.Cross.X + GameConfig.CorridorWidth),
+                                GameConfig.CorridorWidth
                             );
                             break;
                         case DoorDirection.S: //↓
@@ -267,7 +256,7 @@ public class DungeonTile
                             rect2 = new Rect2(
                                 doorInfo.ConnectDoor.OriginPosition.X,
                                 doorInfo.ConnectDoor.OriginPosition.Y,
-                                GenerateDungeon.CorridorWidth,
+                                GameConfig.CorridorWidth,
                                 doorInfo.Cross.Y - doorInfo.ConnectDoor.OriginPosition.Y
                             );
                             break;
@@ -275,10 +264,10 @@ public class DungeonTile
                             dir2 = 1;
                             rect2 = new Rect2(
                                 doorInfo.Cross.X,
-                                doorInfo.Cross.Y + GenerateDungeon.CorridorWidth,
-                                GenerateDungeon.CorridorWidth,
+                                doorInfo.Cross.Y + GameConfig.CorridorWidth,
+                                GameConfig.CorridorWidth,
                                 doorInfo.ConnectDoor.OriginPosition.Y -
-                                (doorInfo.Cross.Y + GenerateDungeon.CorridorWidth)
+                                (doorInfo.Cross.Y + GameConfig.CorridorWidth)
                             );
                             break;
                         default:
@@ -287,7 +276,7 @@ public class DungeonTile
                     }
 
                     FillRect(AisleFloorMapLayer, config.Floor, doorInfo.Cross + Vector2.One,
-                        new Vector2(GenerateDungeon.CorridorWidth - 2, GenerateDungeon.CorridorWidth - 2));
+                        new Vector2(GameConfig.CorridorWidth - 2, GameConfig.CorridorWidth - 2));
 
                     //墙壁, 0横向, 1纵向
                     if (dir1 == 0)
@@ -320,50 +309,50 @@ public class DungeonTile
                         (doorDir2 == DoorDirection.N && doorDir1 == DoorDirection.E))
                     {
                         FillRect(TopMapLayer, config.OUT_RT,
-                            doorInfo.Cross + new Vector2(0, GenerateDungeon.CorridorWidth - 1),
+                            doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
                             Vector2.One);
-                        FillRect(TopMapLayer, config.IN_RT, doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1, 0),
+                        FillRect(TopMapLayer, config.IN_RT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0),
                             Vector2.One);
-                        FillRect(MiddleMapLayer, config.T, doorInfo.Cross, new Vector2(GenerateDungeon.CorridorWidth - 1, 1));
-                        FillRect(TopMapLayer, config.R, doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1, 1),
-                            new Vector2(1, GenerateDungeon.CorridorWidth - 1));
+                        FillRect(MiddleMapLayer, config.T, doorInfo.Cross, new Vector2(GameConfig.CorridorWidth - 1, 1));
+                        FillRect(TopMapLayer, config.R, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 1),
+                            new Vector2(1, GameConfig.CorridorWidth - 1));
                     }
                     else if ((doorDir1 == DoorDirection.E && doorDir2 == DoorDirection.S) || //→↓
                              (doorDir2 == DoorDirection.E && doorDir1 == DoorDirection.S))
                     {
                         FillRect(MiddleMapLayer, config.OUT_RB, doorInfo.Cross, Vector2.One);
                         FillRect(TopMapLayer, config.IN_RB,
-                            doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1,
-                                GenerateDungeon.CorridorWidth - 1),
+                            doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1,
+                                GameConfig.CorridorWidth - 1),
                             Vector2.One);
-                        FillRect(TopMapLayer, config.R, doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1, 0),
-                            new Vector2(1, GenerateDungeon.CorridorWidth - 1));
-                        FillRect(TopMapLayer, config.B, doorInfo.Cross + new Vector2(0, GenerateDungeon.CorridorWidth - 1),
-                            new Vector2(GenerateDungeon.CorridorWidth - 1, 1));
+                        FillRect(TopMapLayer, config.R, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0),
+                            new Vector2(1, GameConfig.CorridorWidth - 1));
+                        FillRect(TopMapLayer, config.B, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
+                            new Vector2(GameConfig.CorridorWidth - 1, 1));
                     }
                     else if ((doorDir1 == DoorDirection.S && doorDir2 == DoorDirection.W) || //↓←
                              (doorDir2 == DoorDirection.S && doorDir1 == DoorDirection.W))
                     {
                         FillRect(MiddleMapLayer, config.OUT_LB,
-                            doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1, 0), Vector2.One);
-                        FillRect(TopMapLayer, config.IN_LB, doorInfo.Cross + new Vector2(0, GenerateDungeon.CorridorWidth - 1),
+                            doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), Vector2.One);
+                        FillRect(TopMapLayer, config.IN_LB, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
                             Vector2.One);
-                        FillRect(TopMapLayer, config.L, doorInfo.Cross, new Vector2(1, GenerateDungeon.CorridorWidth - 1));
-                        FillRect(TopMapLayer, config.B, doorInfo.Cross + new Vector2(1, GenerateDungeon.CorridorWidth - 1),
-                            new Vector2(GenerateDungeon.CorridorWidth - 1, 1));
+                        FillRect(TopMapLayer, config.L, doorInfo.Cross, new Vector2(1, GameConfig.CorridorWidth - 1));
+                        FillRect(TopMapLayer, config.B, doorInfo.Cross + new Vector2(1, GameConfig.CorridorWidth - 1),
+                            new Vector2(GameConfig.CorridorWidth - 1, 1));
                     }
                     else if ((doorDir1 == DoorDirection.W && doorDir2 == DoorDirection.N) || //←↑
                              (doorDir2 == DoorDirection.W && doorDir1 == DoorDirection.N))
                     {
                         FillRect(TopMapLayer, config.OUT_LT,
-                            doorInfo.Cross + new Vector2(GenerateDungeon.CorridorWidth - 1,
-                                GenerateDungeon.CorridorWidth - 1),
+                            doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1,
+                                GameConfig.CorridorWidth - 1),
                             Vector2.One);
                         FillRect(TopMapLayer, config.IN_LT, doorInfo.Cross, Vector2.One);
                         FillRect(MiddleMapLayer, config.T, doorInfo.Cross + new Vector2(1, 0),
-                            new Vector2(GenerateDungeon.CorridorWidth - 1, 1));
+                            new Vector2(GameConfig.CorridorWidth - 1, 1));
                         FillRect(TopMapLayer, config.L, doorInfo.Cross + new Vector2(0, 1),
-                            new Vector2(1, GenerateDungeon.CorridorWidth - 1));
+                            new Vector2(1, GameConfig.CorridorWidth - 1));
                     }
 
                     //在房间墙上开洞
@@ -435,6 +424,7 @@ public class DungeonTile
         }
     }
 
+    //横向过道
     private void FullHorizontalAisle(AutoTileConfig config, Rect2 rect)
     {
         FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
@@ -442,6 +432,7 @@ public class DungeonTile
         FillRect(TopMapLayer, config.B, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
     }
 
+    //纵向过道
     private void FullVerticalAisle(AutoTileConfig config, Rect2 rect)
     {
         FillRect(AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
@@ -461,19 +452,25 @@ public class DungeonTile
         }
         else
         {
-            FillRect(TopMapLayer, config.OUT_LB, rect.Position + new Vector2(-1, 0), Vector2.One);
+            ClearRect(TopMapLayer, rect.Position + new Vector2(-1, 0), Vector2.One);
+            FillRect(MiddleMapLayer, config.OUT_LB, rect.Position + new Vector2(-1, 0), Vector2.One);
             FillRect(TopMapLayer, config.OUT_LT, rect.Position + new Vector2(-1, 3), Vector2.One);
             
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
             //生成门的导航区域
-            var x = rect.Position.X * GenerateDungeon.TileCellSize;
-            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            var x = rect.Position.X * GameConfig.TileCellSize;
+            var y = rect.Position.Y * GameConfig.TileCellSize;
+            
+            var op1 = new SerializeVector2(x - GameConfig.TileCellSize * 1.5f, y + GameConfig.TileCellSize * 1.5f);
+            var op2 = new SerializeVector2(x + GameConfig.TileCellSize * 0.5f, y + GameConfig.TileCellSize * 1.5f);
+            var op3 = new SerializeVector2(x + GameConfig.TileCellSize * 0.5f, y + GameConfig.TileCellSize * 2.5f);
+            var op4 = new SerializeVector2(x - GameConfig.TileCellSize * 1.5f, y + GameConfig.TileCellSize * 2.5f);
             AddDoorNavigation(
-                doorInfo,
-                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f, y + GenerateDungeon.TileCellSize * 2.5f),
-                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 2.5f)
+                doorInfo, op1, op2, op3, op4,
+                new SerializeVector2(op1),
+                new SerializeVector2(op1.X + GameConfig.TileCellSize, op2.Y),
+                new SerializeVector2(op1.X + GameConfig.TileCellSize, op3.Y),
+                new SerializeVector2(op4)
             );
         }
     }
@@ -489,19 +486,25 @@ public class DungeonTile
         }
         else
         {
-            FillRect(TopMapLayer, config.OUT_RB, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
+            ClearRect(TopMapLayer, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
+            FillRect(MiddleMapLayer, config.OUT_RB, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
             FillRect(TopMapLayer, config.OUT_RT, rect.Position + new Vector2(rect.Size.X, 3), Vector2.One);
             
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
             //生成门的导航区域
-            var x = rect.Position.X * GenerateDungeon.TileCellSize;
-            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            var x = rect.Position.X * GameConfig.TileCellSize;
+            var y = rect.Position.Y * GameConfig.TileCellSize;
+            
+            var op1 = new SerializeVector2(x - GameConfig.TileCellSize * 1.5f + (rect.Size.X + 1) * GameConfig.TileCellSize, y + GameConfig.TileCellSize * 1.5f);
+            var op2 = new SerializeVector2(x + GameConfig.TileCellSize * 0.5f + (rect.Size.X + 1) * GameConfig.TileCellSize, y + GameConfig.TileCellSize * 1.5f);
+            var op3 = new SerializeVector2(x + GameConfig.TileCellSize * 0.5f + (rect.Size.X + 1) * GameConfig.TileCellSize, y + GameConfig.TileCellSize * 2.5f);
+            var op4 = new SerializeVector2(x - GameConfig.TileCellSize * 1.5f + (rect.Size.X + 1) * GameConfig.TileCellSize, y + GameConfig.TileCellSize * 2.5f);
             AddDoorNavigation(
-                doorInfo,
-                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f),
-                new SerializeVector2(x - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.X + 1) * GenerateDungeon.TileCellSize, y + GenerateDungeon.TileCellSize * 2.5f)
+                doorInfo, op1, op2, op3, op4,
+                new SerializeVector2(op2.X - GameConfig.TileCellSize, op1.Y),
+                new SerializeVector2(op2),
+                new SerializeVector2(op3),
+                new SerializeVector2(op2.X - GameConfig.TileCellSize, op4.Y)
             );
         }
     }
@@ -523,14 +526,19 @@ public class DungeonTile
             
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域
-            var x = rect.Position.X * GenerateDungeon.TileCellSize;
-            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            var x = rect.Position.X * GameConfig.TileCellSize;
+            var y = rect.Position.Y * GameConfig.TileCellSize;
+            
+            var op1 = new SerializeVector2(x + GameConfig.TileCellSize * 1.5f, y - GameConfig.TileCellSize * 1.5f);
+            var op2 = new SerializeVector2(x + GameConfig.TileCellSize * 2.5f, y - GameConfig.TileCellSize * 1.5f);
+            var op3 = new SerializeVector2(x + GameConfig.TileCellSize * 2.5f, y + GameConfig.TileCellSize * 0.5f);
+            var op4 = new SerializeVector2(x + GameConfig.TileCellSize * 1.5f, y + GameConfig.TileCellSize * 0.5f);
             AddDoorNavigation(
-                doorInfo,
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f)
+                doorInfo, op1, op2, op3, op4,
+                new SerializeVector2(op1),
+                new SerializeVector2(op2),
+                new SerializeVector2(op3.X, op1.Y + GameConfig.TileCellSize),
+                new SerializeVector2(op4.X, op1.Y + GameConfig.TileCellSize)
             );
         }
     }
@@ -551,27 +559,46 @@ public class DungeonTile
             
             FillRect(FloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域
-            var x = rect.Position.X * GenerateDungeon.TileCellSize;
-            var y = rect.Position.Y * GenerateDungeon.TileCellSize;
+            var x = rect.Position.X * GameConfig.TileCellSize;
+            var y = rect.Position.Y * GameConfig.TileCellSize;
+            
+            var op1 = new SerializeVector2(x + GameConfig.TileCellSize * 1.5f, y - GameConfig.TileCellSize * 1.5f + (rect.Size.Y + 1) * GameConfig.TileCellSize);
+            var op2 = new SerializeVector2(x + GameConfig.TileCellSize * 2.5f, y - GameConfig.TileCellSize * 1.5f + (rect.Size.Y + 1) * GameConfig.TileCellSize);
+            var op3 = new SerializeVector2(x + GameConfig.TileCellSize * 2.5f, y + GameConfig.TileCellSize * 0.5f + (rect.Size.Y + 1) * GameConfig.TileCellSize);
+            var op4 = new SerializeVector2(x + GameConfig.TileCellSize * 1.5f, y + GameConfig.TileCellSize * 0.5f + (rect.Size.Y + 1) * GameConfig.TileCellSize);
             AddDoorNavigation(
-                doorInfo,
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y - GenerateDungeon.TileCellSize * 1.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 2.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize),
-                new SerializeVector2(x + GenerateDungeon.TileCellSize * 1.5f, y + GenerateDungeon.TileCellSize * 0.5f + (rect.Size.Y + 1) * GenerateDungeon.TileCellSize)
+                doorInfo, op1, op2, op3, op4,
+                new SerializeVector2(op1.X, op3.Y - GameConfig.TileCellSize),
+                new SerializeVector2(op2.X, op3.Y - GameConfig.TileCellSize),
+                new SerializeVector2(op3),
+                new SerializeVector2(op4)
             );
         }
     }
 
-    private void AddDoorNavigation(RoomDoorInfo doorInfo, SerializeVector2 p1, SerializeVector2 p2, SerializeVector2 p3, SerializeVector2 p4)
+    /// <summary>
+    /// 添加房间
+    /// </summary>
+    private void AddDoorNavigation(RoomDoorInfo doorInfo,
+        SerializeVector2 op1, SerializeVector2 op2, SerializeVector2 op3, SerializeVector2 op4,
+        SerializeVector2 cp1, SerializeVector2 cp2, SerializeVector2 cp3, SerializeVector2 cp4)
     {
-        var polygonData = new NavigationPolygonData();
-        polygonData.Type = NavigationPolygonType.Out;
-        polygonData.Points.Add(p1);
-        polygonData.Points.Add(p2);
-        polygonData.Points.Add(p3);
-        polygonData.Points.Add(p4);
-        _connectNavigationItemList.Add(new DoorNavigationItem(polygonData, doorInfo));
+        var openPolygonData = new NavigationPolygonData();
+        openPolygonData.Type = NavigationPolygonType.Out;
+        openPolygonData.Points.Add(op1);
+        openPolygonData.Points.Add(op2);
+        openPolygonData.Points.Add(op3);
+        openPolygonData.Points.Add(op4);
+        
+        var closePolygonData = new NavigationPolygonData();
+        closePolygonData.Type = NavigationPolygonType.Out;
+        closePolygonData.Points.Add(cp1);
+        closePolygonData.Points.Add(cp2);
+        closePolygonData.Points.Add(cp3);
+        closePolygonData.Points.Add(cp4);
+        
+        //这里 NavigationPolygonData 需要计算, 后续补上
+        _connectNavigationItemList.Add(new DoorNavigationInfo(doorInfo, openPolygonData, closePolygonData));
     }
     
     //报错数据
@@ -659,17 +686,23 @@ public class DungeonTile
     {
         //TestData();
         // 在 Godot4.0_rc6 中 如果将所有点都放在 NavigationPolygon 里面, 即使点是对的, 但调用 MakePolygonsFromOutlines 还是可能会报错, 这应该是个bug
+        
+        //通过 GenerateNavigationPolygon() 计算出来的导航区域
         for (var i = 0; i < _polygonDataList.Count; i++)
         {
             var polygonData = _polygonDataList[i];
-            var node = CreateNavigationRegion(navigationRoot, polygonData);
+            CreateNavigationRegion(navigationRoot, polygonData);
         }
 
+        //门占用区域的导航区域
         for (var i = 0; i < _connectNavigationItemList.Count; i++)
         {
             var item = _connectNavigationItemList[i];
-            var node = CreateNavigationRegion(navigationRoot, item.NavigationPolygonData);
-            item.DoorInfo.Navigation = new DoorNavigationInfo(node, item.NavigationPolygonData);
+            item.CloseNavigationNode = CreateNavigationRegion(navigationRoot, item.CloseNavigationData);
+            item.OpenNavigationNode = CreateNavigationRegion(navigationRoot, item.OpenNavigationData);
+            item.CloseNavigationNode.Enabled = false;
+            item.OpenNavigationNode.Enabled = false;
+            item.DoorInfo.Navigation = item;
         }
     }
 
@@ -701,7 +734,7 @@ public class DungeonTile
         var array = new NavigationPolygonData[_connectNavigationItemList.Count];
         for (var i = 0; i < _connectNavigationItemList.Count; i++)
         {
-            array[i] = _connectNavigationItemList[i].NavigationPolygonData;
+            array[i] = _connectNavigationItemList[i].OpenNavigationData;
         }
         return array;
     }

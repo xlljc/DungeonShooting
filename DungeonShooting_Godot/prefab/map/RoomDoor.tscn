@@ -28,7 +28,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xgcls"]
-size = Vector2(26, 26)
+size = Vector2(32, 16)
 
 [node name="RoomDoor" type="Node"]
 script = ExtResource("1_8es7a")
@@ -41,8 +41,10 @@ material = SubResource("ShaderMaterial_x5aop")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_f8vun")
-scale = Vector2(0.40625, 0.40625)
+position = Vector2(0, -16)
+scale = Vector2(0.5, 0.25)
 sprite_frames = SubResource("SpriteFrames_ugstb")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_xgcls")

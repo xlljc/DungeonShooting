@@ -35,7 +35,7 @@ public class WeaponAttribute
     /// </summary>
     public int MaxAmmoCapacity = 120;
     /// <summary>
-    /// 备用弹药数量
+    /// 起始备用弹药数量
     /// </summary>
     public int StandbyAmmoCapacity = 90;
     /// <summary>

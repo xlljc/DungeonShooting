@@ -226,8 +226,8 @@ public abstract partial class Role : ActivityObject
 
         //连接互动物体信号
         InteractiveArea = GetNode<Area2D>("InteractiveArea");
-        InteractiveArea.AreaEntered += _OnPropsEnter;
-        InteractiveArea.AreaExited += _OnPropsExit;
+        InteractiveArea.BodyEntered += _OnPropsEnter;
+        InteractiveArea.BodyExited += _OnPropsExit;
     }
 
     protected override void Process(float delta)
@@ -255,7 +255,7 @@ public abstract partial class Role : ActivityObject
         for (int i = 0; i < _interactiveItemList.Count; i++)
         {
             var item = _interactiveItemList[i];
-            if (item == null)
+            if (item == null || item.IsDestroyed)
             {
                 _interactiveItemList.RemoveAt(i--);
             }
@@ -288,6 +288,22 @@ public abstract partial class Role : ActivityObject
             InteractiveItem = null;
             ChangeInteractiveItem(null);
         }
+    }
+
+    protected override void OnAffiliationChange()
+    {
+        //身上的武器的所属区域也得跟着变
+        Holster.ForEach((weapon, i) =>
+        {
+            if (Affiliation != null)
+            {
+                Affiliation.InsertItem(weapon);
+            }
+            else if (weapon.Affiliation != null)
+            {
+                weapon.Affiliation.RemoveItem(weapon);
+            }
+        });
     }
 
     /// <summary>
@@ -511,13 +527,12 @@ public abstract partial class Role : ActivityObject
     }
     
     /// <summary>
-    /// 连接信号: InteractiveArea.area_entered
+    /// 连接信号: InteractiveArea.BodyEntered
     /// 与物体碰撞
     /// </summary>
-    private void _OnPropsEnter(Area2D other)
+    private void _OnPropsEnter(Node2D other)
     {
-        ActivityObject propObject = other.AsActivityObject();
-        if (propObject != null)
+        if (other is ActivityObject propObject)
         {
             if (!_interactiveItemList.Contains(propObject))
             {
@@ -527,13 +542,12 @@ public abstract partial class Role : ActivityObject
     }
 
     /// <summary>
-    /// 连接信号: InteractiveArea.area_exited
+    /// 连接信号: InteractiveArea.BodyExited
     /// 物体离开碰撞区域
     /// </summary>
-    private void _OnPropsExit(Area2D other)
+    private void _OnPropsExit(Node2D other)
     {
-        ActivityObject propObject = other.AsActivityObject();
-        if (propObject != null)
+        if (other is ActivityObject propObject)
         {
             if (_interactiveItemList.Contains(propObject))
             {

@@ -58,6 +58,7 @@ _data = {
 
 [node name="Weapon" type="Node"]
 script = ExtResource("1_dtam7")
+collision_layer = 4
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1
@@ -68,24 +69,18 @@ material = SubResource("ShaderMaterial_o36tv")
 position = Vector2(0.4, -2.6)
 scale = Vector2(0.8, 0.8)
 
-[node name="WeaponBody" type="Area2D" parent="."]
-collision_layer = 4
-collision_mask = 0
-
-[node name="OriginPoint" type="Marker2D" parent="WeaponBody"]
+[node name="OriginPoint" type="Marker2D" parent="."]
 position = Vector2(-3.6, -1.1)
 
-[node name="ShellPoint" type="Marker2D" parent="WeaponBody"]
+[node name="ShellPoint" type="Marker2D" parent="."]
 position = Vector2(-2.6, -2.6)
 
-[node name="FirePoint" type="Marker2D" parent="WeaponBody"]
+[node name="FirePoint" type="Marker2D" parent="."]
 position = Vector2(7.4, -1.1)
 
-[node name="Collision" type="CollisionShape2D" parent="WeaponBody"]
+[node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0.6, 0.2)
 shape = SubResource("RectangleShape2D_3p5jk")
-
-[node name="Collision" type="CollisionShape2D" parent="."]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

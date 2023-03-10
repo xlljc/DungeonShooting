@@ -13,7 +13,7 @@ public static class Utils
     
     static Utils()
     {
-        _random = new Random();
+        _random = new Random(123);
     }
     
     /// <summary>
@@ -97,6 +97,14 @@ public static class Utils
             Mathf.Min(start1, start2), Mathf.Min(end1, end2),
             Mathf.Abs(start1 - start2), Mathf.Abs(end1 - end2)
         );
+    }
+    
+    /// <summary>
+    /// 返回碰撞层 mask 是否会检测 layer 
+    /// </summary>
+    public static bool CollisionMaskWithLayer(uint mask, uint layer)
+    {
+        return (mask & layer) != 0;
     }
 
     /// <summary>

@@ -24,6 +24,12 @@ public class SerializeVector2
         X = v.X;
         Y = v.Y;
     }
+    
+    public SerializeVector2(SerializeVector2 v)
+    {
+        X = v.X;
+        Y = v.Y;
+    }
 
     public SerializeVector2()
     {

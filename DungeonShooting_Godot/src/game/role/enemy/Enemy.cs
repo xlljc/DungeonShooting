@@ -28,7 +28,7 @@ public partial class Enemy : Role
     /// <summary>
     /// 公共属性, 在哪个区域找到的目标, 所有该区域下的敌人都会知道目标的位置
     /// </summary>
-    public static AffiliationArea FindTargetAffiliation { get; private set; }
+    public static HashSet<AffiliationArea> FindTargetAffiliationSet { get; } = new HashSet<AffiliationArea>();
     
     /// <summary>
     /// 公共属性, 找到的目标的位置, 如果目标在视野内, 则一直更新
@@ -89,7 +89,7 @@ public partial class Enemy : Role
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
-        MoveSpeed = 30;
+        MoveSpeed = 20;
 
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;
@@ -115,8 +115,6 @@ public partial class Enemy : Role
         
         //默认状态
         StateController.ChangeState(AiStateEnum.AiNormal);
-
-        NavigationAgent2D.TargetPosition = GameApplication.Instance.RoomManager.Player.GlobalPosition;
     }
 
     public override void _EnterTree()
@@ -141,6 +139,8 @@ public partial class Enemy : Role
         {
             weapons[i].ThrowWeapon(this);
         }
+        //派发敌人死亡信号
+        EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
         Destroy();
     }
 
@@ -178,16 +178,90 @@ public partial class Enemy : Role
     /// </summary>
     public bool CheckUsableWeaponInUnclaimed()
     {
-        //如果存在有子弹的武器
         foreach (var unclaimedWeapon in Weapon.UnclaimedWeapons)
         {
-            if (!unclaimedWeapon.IsTotalAmmoEmpty() && !unclaimedWeapon.HasSign(SignNames.AiFindWeaponSign))
+            //判断是否能拾起武器, 条件: 相同的房间
+            if (unclaimedWeapon.Affiliation == Affiliation)
             {
-                return true;
+                if (!unclaimedWeapon.IsTotalAmmoEmpty())
+                {
+                    if (!unclaimedWeapon.HasSign(SignNames.AiFindWeaponSign))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        //判断是否可以移除该标记
+                        var enemy = unclaimedWeapon.GetSign<Enemy>(SignNames.AiFindWeaponSign);
+                        if (enemy == null || enemy.IsDestroyed) //标记当前武器的敌人已经被销毁
+                        {
+                            unclaimedWeapon.RemoveSign(SignNames.AiFindWeaponSign);
+                            return true;
+                        }
+                        else if (!enemy.IsAllWeaponTotalAmmoEmpty()) //标记当前武器的敌人已经有新的武器了
+                        {
+                            unclaimedWeapon.RemoveSign(SignNames.AiFindWeaponSign);
+                            return true;
+                        }
+                    }
+                }
             }
         }
 
         return false;
+    }
+    
+    /// <summary>
+    /// 寻找可用的武器
+    /// </summary>
+    public Weapon FindTargetWeapon()
+    {
+        Weapon target = null;
+        var position = Position;
+        foreach (var weapon in Weapon.UnclaimedWeapons)
+        {
+            //判断是否能拾起武器, 条件: 相同的房间, 或者当前房间目前没有战斗, 或者不在战斗房间
+            if (weapon.Affiliation == Affiliation)
+            {
+                //还有弹药
+                if (!weapon.IsTotalAmmoEmpty())
+                {
+                    //查询是否有其他敌人标记要拾起该武器
+                    if (weapon.HasSign(SignNames.AiFindWeaponSign))
+                    {
+                        var enemy = weapon.GetSign<Enemy>(SignNames.AiFindWeaponSign);
+                        if (enemy == this) //就是自己标记的
+                        {
+
+                        }
+                        else if (enemy == null || enemy.IsDestroyed) //标记当前武器的敌人已经被销毁
+                        {
+                            weapon.RemoveSign(SignNames.AiFindWeaponSign);
+                        }
+                        else if (!enemy.IsAllWeaponTotalAmmoEmpty()) //标记当前武器的敌人已经有新的武器了
+                        {
+                            weapon.RemoveSign(SignNames.AiFindWeaponSign);
+                        }
+                        else //放弃这把武器
+                        {
+                            continue;
+                        }
+                    }
+
+                    if (target == null) //第一把武器
+                    {
+                        target = weapon;
+                    }
+                    else if (target.Position.DistanceSquaredTo(position) >
+                             weapon.Position.DistanceSquaredTo(position)) //距离更近
+                    {
+                        target = weapon;
+                    }
+                }
+            }
+        }
+
+        return target;
     }
 
     /// <summary>
@@ -205,7 +279,7 @@ public partial class Enemy : Role
         if (currState == AiStateEnum.AiNormal || currState == AiStateEnum.AiProbe)
         {
             //判断是否在同一个房间内
-            return Affiliation == FindTargetAffiliation;
+            return FindTargetAffiliationSet.Contains(Affiliation);
         }
         
         return false;
@@ -217,16 +291,20 @@ public partial class Enemy : Role
     public static void UpdateEnemiesView()
     {
         IsFindTarget = false;
+        FindTargetAffiliationSet.Clear();
         for (var i = 0; i < _enemieList.Count; i++)
         {
             var enemy = _enemieList[i];
             var state = enemy.StateController.CurrState;
             if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
             {
-                IsFindTarget = true;
-                FindTargetPosition = Player.Current.GetCenterPosition();
-                FindTargetAffiliation = enemy.Affiliation;
-                break;
+                if (!IsFindTarget)
+                {
+                    IsFindTarget = true;
+                    FindTargetPosition = Player.Current.GetCenterPosition();
+                    FindTargetAffiliationSet.Add(Player.Current.Affiliation);
+                }
+                FindTargetAffiliationSet.Add(enemy.Affiliation);
             }
         }
     }

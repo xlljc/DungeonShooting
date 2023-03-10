@@ -12,7 +12,7 @@ public partial class Shotgun : Weapon
             Sprite2D = ResourcePath.resource_sprite_gun_gun2_png;
             Weight = 40;
             CenterPosition = new Vector2(0.4f, -2.6f);
-            StartFiringSpeed = 300;
+            StartFiringSpeed = 400;
             StartScatteringRange = 30;
             FinalScatteringRange = 90;
             ScatteringRangeAddValue = 50f;

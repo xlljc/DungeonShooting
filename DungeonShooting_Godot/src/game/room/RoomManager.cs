@@ -26,6 +26,16 @@ public partial class RoomManager : Node2D
     /// 玩家对象
     /// </summary>
     public Player Player { get; private set; }
+
+    /// <summary>
+    /// 当前玩家所在的房间
+    /// </summary>
+    public RoomInfo ActiveRoom => Player?.Affiliation?.RoomInfo;
+    
+    /// <summary>
+    /// 当前玩家所在的区域
+    /// </summary>
+    public AffiliationArea ActiveAffiliation => Player?.Affiliation;
     
     private DungeonTile _dungeonTile;
     private AutoTileConfig _autoTileConfig;
@@ -35,16 +45,22 @@ public partial class RoomManager : Node2D
 
     private int _affiliationIndex = 0;
 
+    private float _checkEnemyTimer = 0;
+
     //房间内所有静态导航网格数据
     private static List<NavigationPolygonData> _roomStaticNavigationList = new List<NavigationPolygonData>();
     
     public override void _Ready()
     {
         TileRoot.YSortEnabled = false;
-        //FloorTileMap.NavigationVisibilityMode = TileMap.VisibilityMode.ForceShow;
         
         _font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
 
+        //绑定事件
+        //EventManager.AddEventListener(EventEnum.OnEnemyDie, OnEnemyDie);
+        EventManager.AddEventListener(EventEnum.OnPlayerFirstEnterRoom, OnPlayerFirstEnterRoom);
+        EventManager.AddEventListener(EventEnum.OnPlayerEnterRoom, OnPlayerEnterRoom);
+        
         var nowTicks = DateTime.Now.Ticks;
         //生成地牢房间
         _generateDungeon = new GenerateDungeon();
@@ -60,19 +76,16 @@ public partial class RoomManager : Node2D
         //挂载过道导航区域
         _dungeonTile.MountNavigationPolygon(this);
         //过道导航区域数据
-        var aisleData = _dungeonTile.GetPolygonData();
-        _roomStaticNavigationList.AddRange(aisleData);
+        _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
         //门导航区域数据
         _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
-        //创建过道的归属区域
-        CreateAisleAffiliation(aisleData);
         //初始化所有房间
         _generateDungeon.EachRoom(InitRoom);
 
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
         //播放bgm
-        SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
+        //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
         //创建玩家
         Player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
@@ -81,9 +94,9 @@ public partial class RoomManager : Node2D
         Player.PutDown(RoomLayerEnum.YSortLayer);
         
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
-        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
+        // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
         // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
-        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
+        // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
 
         //相机跟随玩家
         GameCamera.Main.SetFollowTarget(Player);
@@ -94,11 +107,20 @@ public partial class RoomManager : Node2D
         cursor.SetMountRole(Player);
     }
 
+    public override void _PhysicsProcess(double delta)
+    {
+        _checkEnemyTimer += (float)delta;
+        if (_checkEnemyTimer >= 1)
+        {
+            _checkEnemyTimer %= 1;
+            //检查房间内的敌人存活状况
+            OnCheckEnemy();
+        }
+    }
+
     /// <summary>
     /// 获取指定层级根节点
     /// </summary>
-    /// <param name="layerEnum"></param>
-    /// <returns></returns>
     public Node2D GetRoomLayer(RoomLayerEnum layerEnum)
     {
         switch (layerEnum)
@@ -127,9 +149,6 @@ public partial class RoomManager : Node2D
         {
             if (_dungeonTile != null)
             {
-                // DrawLine(new Vector2(0, -5000), new Vector2(0, 5000), Colors.Green);
-                // DrawLine(new Vector2(-5000, 0), new Vector2(5000, 0), Colors.Green);
-                
                 //绘制ai寻路区域
                 Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());
             }
@@ -148,12 +167,6 @@ public partial class RoomManager : Node2D
         
         //创建房间归属区域
         CreateRoomAisleAffiliation(roomInfo);
-        
-        //创建敌人
-        foreach (var roomInfoActivityMark in roomInfo.ActivityMarks)
-        {
-            //roomInfoActivityMark.BeReady(roomInfo);
-        }
     }
     
     //挂载房间导航区域
@@ -214,9 +227,8 @@ public partial class RoomManager : Node2D
                 default: offset = new Vector2();
                     break;
             }
-            door.Position = (doorInfo.OriginPosition + offset) * GenerateDungeon.TileCellSize;
+            door.Position = (doorInfo.OriginPosition + offset) * GameConfig.TileCellSize;
             door.Init(doorInfo);
-            door.OpenDoor();
             door.PutDown(RoomLayerEnum.NormalLayer, false);
         }
     }
@@ -226,25 +238,53 @@ public partial class RoomManager : Node2D
     {
         var affiliation = new AffiliationArea();
         affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
-        affiliation.Init(new Rect2(roomInfo.GetWorldPosition(), roomInfo.Size * GenerateDungeon.TileCellSize));
+        affiliation.Init(roomInfo, new Rect2(
+            roomInfo.GetWorldPosition() + new Vector2(GameConfig.TileCellSize, GameConfig.TileCellSize),
+            (roomInfo.Size - new Vector2I(2, 2)) * GameConfig.TileCellSize));
         
         roomInfo.Affiliation = affiliation;
         TileRoot.AddChild(affiliation);
     }
-    
-    //创建过道归属区域
-    private void CreateAisleAffiliation(NavigationPolygonData[] aisleData)
+
+    /// <summary>
+    /// 玩家第一次进入某个房间回调
+    /// </summary>
+    private void OnPlayerFirstEnterRoom(object o)
     {
-        foreach (var aisle in aisleData)
-        {
-            var affiliation = new AffiliationArea();
-            affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
-            affiliation.Init(aisle.ConvertPointsToVector2Array());
-            
-            TileRoot.AddChild(affiliation);
-        }
+        var room = (RoomInfo)o;
+        room.BeReady();
+    }
+
+    /// <summary>
+    /// 玩家进入某个房间回调
+    /// </summary>
+    private void OnPlayerEnterRoom(object o)
+    {
     }
     
+    /// <summary>
+    /// 检测当前房间敌人是否已经消灭干净, 应当每秒执行一次
+    /// </summary>
+    private void OnCheckEnemy()
+    {
+        var activeRoom = ActiveRoom;
+        if (activeRoom != null && activeRoom.IsSeclusion)
+        {
+            if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
+            {
+                //存活敌人数量
+                var count = ActiveAffiliation.FindIncludeItemsCount(
+                    activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
+                );
+                GD.Print("当前房间存活数量: " + count);
+                if (count == 0)
+                {
+                    activeRoom.OnClearRoom();
+                }
+            }
+        }
+    }
+
     //绘制房间区域, debug 用
     private void DrawRoomInfo(RoomInfo room)
     {

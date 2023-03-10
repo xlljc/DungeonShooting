@@ -27,7 +27,7 @@ public partial class DungeonRoomTemplate : TileMap
     /// <summary>
     /// 是否启用编辑模式
     /// </summary>
-    [Export(PropertyHint.None, "是否启用编辑模式")]
+    [Export]
     public bool EnableEdit = false;
     
 #if TOOLS
@@ -541,7 +541,7 @@ public partial class DungeonRoomTemplate : TileMap
                     }
                     else
                     {
-                        DrawCircle(result.Exception.Point * GenerateDungeon.TileCellSize, 10, Colors.Red);
+                        DrawCircle(result.Exception.Point * GameConfig.TileCellSize, 10, Colors.Red);
                     }
                 }
             }
@@ -735,6 +735,7 @@ public partial class DungeonRoomTemplate : TileMap
     //触发保存操作
     private void TriggerSave()
     {
+        //如果没有找到对应的场景文件，则不保存
         if (!File.Exists(RoomTileDir + Name + ".tscn"))
         {
             return;

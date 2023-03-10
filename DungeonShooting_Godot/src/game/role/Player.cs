@@ -45,7 +45,7 @@ public partial class Player : Role
         MaxShield = 30;
         Shield = 30;
 
-        // debug用
+        // // debug用
         // Acceleration = 3000;
         // Friction = 3000;
         // MoveSpeed = 500;

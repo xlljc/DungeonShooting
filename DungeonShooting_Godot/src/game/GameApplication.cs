@@ -136,10 +136,10 @@ public partial class GameApplication : Node2D
 			var areaInfos = roomSplit.RoomInfo.DoorAreaInfos;
 			if (areaInfos.Count == 0)
 			{
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.X - 2) * GenerateDungeon.TileCellSize));
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.X - 2) * GenerateDungeon.TileCellSize));
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.Y - 2) * GenerateDungeon.TileCellSize));
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.Y - 2) * GenerateDungeon.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.X - 1) * GameConfig.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.X - 1) * GameConfig.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.Y - 1) * GameConfig.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.Y - 1) * GameConfig.TileCellSize));
 			}
 		}
 	}

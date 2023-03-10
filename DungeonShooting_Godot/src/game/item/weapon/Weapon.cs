@@ -41,7 +41,7 @@ public abstract partial class Weapon : ActivityObject
     public int CurrAmmo { get; private set; }
 
     /// <summary>
-    /// 剩余弹药量
+    /// 剩余弹药量(备用弹药)
     /// </summary>
     public int ResidueAmmo { get; private set; }
 
@@ -59,12 +59,6 @@ public abstract partial class Weapon : ActivityObject
     /// 弹壳抛出的点
     /// </summary>
     public Marker2D ShellPoint { get; private set; }
-
-    /// <summary>
-    /// 碰撞器节点
-    /// </summary>
-    /// <value></value>
-    public CollisionShape2D CollisionShape2D { get; private set; }
 
     /// <summary>
     /// 武器的当前散射半径
@@ -177,10 +171,9 @@ public abstract partial class Weapon : ActivityObject
         _weaponAttribute = attribute;
 
         AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-        FirePoint = GetNode<Marker2D>("WeaponBody/FirePoint");
-        OriginPoint = GetNode<Marker2D>("WeaponBody/OriginPoint");
-        ShellPoint = GetNode<Marker2D>("WeaponBody/ShellPoint");
-        CollisionShape2D = GetNode<CollisionShape2D>("WeaponBody/Collision");
+        FirePoint = GetNode<Marker2D>("FirePoint");
+        OriginPoint = GetNode<Marker2D>("OriginPoint");
+        ShellPoint = GetNode<Marker2D>("ShellPoint");
 
         //图标
         SetDefaultTexture(ResourceLoader.Load<Texture2D>(Attribute.Sprite2D));
@@ -703,6 +696,55 @@ public abstract partial class Weapon : ActivityObject
     }
 
     /// <summary>
+    /// 强制修改当前弹夹弹药量
+    /// </summary>
+    public void SetCurrAmmo(int count)
+    {
+        CurrAmmo = Mathf.Clamp(count, 0, Attribute.AmmoCapacity);
+    }
+
+    /// <summary>
+    /// 强制修改备用弹药量
+    /// </summary>
+    public void SetResidueAmmo(int count)
+    {
+        ResidueAmmo = Mathf.Clamp(count, 0, Attribute.MaxAmmoCapacity - CurrAmmo);
+    }
+    
+    /// <summary>
+    /// 强制修改弹药量, 优先改动备用弹药
+    /// </summary>
+    public void SetTotalAmmo(int total)
+    {
+        if (total < 0)
+        {
+            return;
+        }
+        var totalAmmo = CurrAmmo + ResidueAmmo;
+        if (totalAmmo == total)
+        {
+            return;
+        }
+        
+        if (total > totalAmmo) //弹药增加
+        {
+            ResidueAmmo = Mathf.Min(total - CurrAmmo, Attribute.MaxAmmoCapacity - CurrAmmo);
+        }
+        else //弹药减少
+        {
+            if (CurrAmmo < total)
+            {
+                ResidueAmmo = total - CurrAmmo;
+            }
+            else
+            {
+                CurrAmmo = total;
+                ResidueAmmo = 0;
+            }
+        }
+    }
+
+    /// <summary>
     /// 拾起的弹药数量, 如果到达容量上限, 则返回拾取完毕后剩余的弹药数量
     /// </summary>
     /// <param name="count">弹药数量</param>
@@ -776,14 +818,14 @@ public abstract partial class Weapon : ActivityObject
         }
         else //换弹结束
         {
-            if (ResidueAmmo >= Attribute.AmmoCapacity)
+            if (CurrAmmo + ResidueAmmo >= Attribute.AmmoCapacity)
             {
                 ResidueAmmo -= Attribute.AmmoCapacity - CurrAmmo;
                 CurrAmmo = Attribute.AmmoCapacity;
             }
             else
             {
-                CurrAmmo = ResidueAmmo;
+                CurrAmmo += ResidueAmmo;
                 ResidueAmmo = 0;
             }
 
@@ -953,7 +995,7 @@ public abstract partial class Weapon : ActivityObject
     protected override void OnThrowOver()
     {
         //启用碰撞
-        CollisionShape2D.Disabled = false;
+        Collision.Disabled = false;
         AnimationPlayer.Play("floodlight");
     }
 
@@ -986,7 +1028,7 @@ public abstract partial class Weapon : ActivityObject
         sm.SetShaderParameter("schedule", 0);
         ZIndex = 0;
         //禁用碰撞
-        CollisionShape2D.Disabled = true;
+        Collision.Disabled = true;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         OnPickUp(master);
