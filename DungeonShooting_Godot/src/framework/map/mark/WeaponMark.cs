@@ -40,7 +40,5 @@ public partial class WeaponMark : ActivityMark
             instance.SetResidueAmmo(ResidueAmmo);   
         }
         instance.PutDown(GlobalPosition, Layer);
-        
-        Visible = false;
     }
 }

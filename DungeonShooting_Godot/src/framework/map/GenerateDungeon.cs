@@ -21,7 +21,7 @@ public class GenerateDungeon
     /// <summary>
     /// 生成的房间数量
     /// </summary>
-    private int _maxCount = 3;
+    private int _maxCount = 15;
 
     //用于标记地图上的坐标是否被占用
     private Grid<bool> _roomGrid { get; } = new Grid<bool>();
@@ -291,25 +291,25 @@ public class GenerateDungeon
         nextRoomDoor.ConnectRoom = room;
         nextRoomDoor.ConnectDoor = roomDoor;
 
-        // //先寻找直通门
-        // if (Utils.RandomBoolean())
-        // {
-        //     //直行通道, 优先横轴
-        //     if (TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor)
-        //         || TryConnectVerticalDoor(room, roomDoor, nextRoom, nextRoomDoor))
-        //     {
-        //         return true;
-        //     }
-        // }
-        // else
-        // {
-        //     //直行通道, 优先纵轴
-        //     if (TryConnectVerticalDoor(room, roomDoor, nextRoom, nextRoomDoor)
-        //         || TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor))
-        //     {
-        //         return true;
-        //     }
-        // }
+        //先寻找直通门
+        if (Utils.RandomBoolean())
+        {
+            //直行通道, 优先横轴
+            if (TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor)
+                || TryConnectVerticalDoor(room, roomDoor, nextRoom, nextRoomDoor))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            //直行通道, 优先纵轴
+            if (TryConnectVerticalDoor(room, roomDoor, nextRoom, nextRoomDoor)
+                || TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor))
+            {
+                return true;
+            }
+        }
         
         //包含拐角的通道
         return TryConnectCrossDoor(room, roomDoor, nextRoom, nextRoomDoor);

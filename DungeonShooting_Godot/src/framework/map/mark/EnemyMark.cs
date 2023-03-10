@@ -61,7 +61,6 @@ public partial class EnemyMark : ActivityMark
         //创建敌人
         var instance = ActivityObject.Create<Enemy>(GetItemId());
         instance.PutDown(pos, Layer);
-        Visible = false;
 
         if (!string.IsNullOrWhiteSpace(Weapon1Id))
             CreateWeapon(instance, pos, Weapon1Id, Weapon1Ammo);

@@ -62,6 +62,10 @@ public partial class ActivityMark : Node2D
         if (_isOver)
         {
             _overTimer += (float)delta;
+            if (_overTimer >= 1)
+            {
+                SetActive(false);
+            }
         }
         else
         {
@@ -85,6 +89,7 @@ public partial class ActivityMark : Node2D
     {
         _isOver = false;
         _overTimer = 0;
+        SetActive(true);
         if (DelayTime <= 0)
         {
             Doing(roomInfo);
@@ -112,7 +117,6 @@ public partial class ActivityMark : Node2D
     {
         var instance = ActivityObject.Create(GetItemId());
         instance.PutDown(GlobalPosition, Layer);
-        Visible = false;
     }
 
     public override void _Draw()
@@ -124,4 +128,14 @@ public partial class ActivityMark : Node2D
         }
     }
 
+    /// <summary>
+    /// 设置当前节点是否是活动状态
+    /// </summary>
+    public void SetActive(bool flag)
+    {
+        SetProcess(flag);
+        SetProcessInternal(flag);
+        SetPhysicsProcess(flag);
+        SetPhysicsProcessInternal(flag);
+    }
 }
