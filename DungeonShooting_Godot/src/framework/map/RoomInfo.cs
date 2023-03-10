@@ -64,6 +64,7 @@ public class RoomInfo
     public bool IsSeclusion { get; private set; } = false;
 
     private bool _waveStart = false;
+    private int _currWaveIndex = 0;
     private int _currWaveNumber = 0;
 
     /// <summary>
@@ -124,7 +125,7 @@ public class RoomInfo
     /// </summary>
     public void BeReady()
     {
-        //没有标记, 不需要关门
+        //没有标记, 啥都不要做
         if (ActivityMarks.Count == 0)
         {
             return;
@@ -149,13 +150,15 @@ public class RoomInfo
     /// <summary>
     /// 执行下一轮标记
     /// </summary>
-    public void NextWave()
+    private void NextWave()
     {
         if (!_waveStart)
         {
-            
+            _waveStart = true;
+            _currWaveIndex = 0;
+            _currWaveNumber = ActivityMarks[0].WaveNumber;
         }
-        
+
         //根据标记生成对象
         foreach (var mark in ActivityMarks)
         {

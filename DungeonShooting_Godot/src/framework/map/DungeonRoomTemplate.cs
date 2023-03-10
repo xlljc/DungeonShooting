@@ -27,7 +27,7 @@ public partial class DungeonRoomTemplate : TileMap
     /// <summary>
     /// 是否启用编辑模式
     /// </summary>
-    [Export(PropertyHint.None, "是否启用编辑模式")]
+    [Export]
     public bool EnableEdit = false;
     
 #if TOOLS

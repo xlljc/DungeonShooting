@@ -43,6 +43,11 @@ public partial class ActivityMark : Node2D
     /// </summary>
     protected Color DrawColor = new Color(0.4F, 0.56078434F, 0.8784314F);
 
+    //是否已经开始
+    private bool _isStart = false;
+    private float _timer = 0;
+    private RoomInfo _tempRoom;
+
     /// <summary>
     /// 获取物体Id
     /// </summary>
@@ -51,18 +56,50 @@ public partial class ActivityMark : Node2D
         return ActivityIdPrefix.GetNameByPrefixType(Type) + ItemId;
     }
 
+    public override void _Process(double delta)
+    {
+        if (_isStart && DelayTime > 0)
+        {
+            _timer += (float)delta;
+            if (_timer >= DelayTime)
+            {
+                Doing(_tempRoom);
+                _tempRoom = null;
+                _isStart = false;
+            }
+        }
+    }
+
     /// <summary>
     /// 标记准备好了
     /// </summary>
     public void BeReady(RoomInfo roomInfo)
     {
-        OnBeReady(roomInfo);
+        _isStart = true;
+        if (DelayTime <= 0)
+        {
+            Doing(roomInfo);
+            _isStart = false;
+        }
+        else
+        {
+            _timer = 0;
+            _tempRoom = roomInfo;
+        }
+    }
+
+    /// <summary>
+    /// 是否已经结束
+    /// </summary>
+    public bool IsOver()
+    {
+        return !_isStart;
     }
 
     /// <summary>
     /// 调用该函数表示该标记可以生成物体了, 使用标记创建实例必须调用 CreateInstance(id)
     /// </summary>
-    public virtual void OnBeReady(RoomInfo roomInfo)
+    public virtual void Doing(RoomInfo roomInfo)
     {
         CreateInstance<ActivityObject>(GetItemId());
         Visible = false;
