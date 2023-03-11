@@ -875,7 +875,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             Affiliation.RemoveItem(this);
         }
         
-        //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
+        //临时处理, 4.0 有bug, 不能提前销毁模板实例, 不然关闭游戏会报错!!!
         _templateInstance.QueueFree();
     }
 

@@ -122,10 +122,22 @@ public class DungeonTile
                     var atlasCoords = tileInstance.GetCellAtlasCoords(0, coords);
                     if (atlasCoords.X != -1 && atlasCoords.Y != -1)
                     {
+                        // 在 Godot 4.0 中使用以下这段代码区分层级, 会导致游戏关闭时有概率报错卡死, 目前尚不清楚原因
                         //获取自定义层级
-                        var layer = tileInstance.GetCellTileData(0, coords).GetCustomData(CustomTileLayerName)
-                            .AsInt32();
-                        layer = Mathf.Clamp(layer, FloorMapLayer, TopMapLayer);
+                        // var customData = tileInstance.GetCellTileData(0, coords).GetCustomData(CustomTileLayerName);
+                        // var layer = customData.AsInt32();
+                        // layer = Mathf.Clamp(layer, FloorMapLayer, TopMapLayer);
+                        
+                        var layer = FloorMapLayer;
+                        if (config.MiddleLayerAtlasCoords.Contains(atlasCoords))
+                        {
+                            layer = MiddleMapLayer;
+                        }
+                        else if (config.TopLayerAtlasCoords.Contains(atlasCoords))
+                        {
+                            layer = TopMapLayer;
+                        }
+                        
                         _tileRoot.SetCell(layer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j),
                             1, atlasCoords);
                     }
@@ -151,7 +163,7 @@ public class DungeonTile
                         doorInfo.ConnectDoor.OriginPosition.X,
                         doorInfo.ConnectDoor.OriginPosition.Y
                     );
-
+        
                     switch (doorDir1)
                     {
                         case DoorDirection.E:
@@ -186,10 +198,10 @@ public class DungeonTile
                     //方向, 0横向, 1纵向
                     var dir1 = 0;
                     var dir2 = 0;
-
+        
                     Rect2 rect;
                     Rect2 rect2;
-
+        
                     //计算范围
                     switch (doorDir1)
                     {
@@ -231,7 +243,7 @@ public class DungeonTile
                             rect = new Rect2();
                             break;
                     }
-
+        
                     switch (doorDir2)
                     {
                         case DoorDirection.E: //→
@@ -274,10 +286,10 @@ public class DungeonTile
                             rect2 = new Rect2();
                             break;
                     }
-
+        
                     FillRect(AisleFloorMapLayer, config.Floor, doorInfo.Cross + Vector2.One,
                         new Vector2(GameConfig.CorridorWidth - 2, GameConfig.CorridorWidth - 2));
-
+        
                     //墙壁, 0横向, 1纵向
                     if (dir1 == 0)
                     {
@@ -291,7 +303,7 @@ public class DungeonTile
                         FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
                         FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
                     }
-
+        
                     if (dir2 == 0)
                     {
                         FullHorizontalAisle(config, rect2);
@@ -304,7 +316,7 @@ public class DungeonTile
                         FullVerticalAisleUp(config, rect2, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
                         FullVerticalAisleDown(config, rect2, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
                     }
-
+        
                     if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
                         (doorDir2 == DoorDirection.N && doorDir1 == DoorDirection.E))
                     {
@@ -354,7 +366,7 @@ public class DungeonTile
                         FillRect(TopMapLayer, config.L, doorInfo.Cross + new Vector2(0, 1),
                             new Vector2(1, GameConfig.CorridorWidth - 1));
                     }
-
+        
                     //在房间墙上开洞
                     switch (doorDir1)
                     {
@@ -375,7 +387,7 @@ public class DungeonTile
                                 new Vector2(rect.Size.X - 2, 1));
                             break;
                     }
-
+        
                     switch (doorDir2)
                     {
                         case DoorDirection.E: //→
