@@ -2,7 +2,6 @@ using Godot;
 
 namespace UI;
 
-
 /*
  Test
     c1
