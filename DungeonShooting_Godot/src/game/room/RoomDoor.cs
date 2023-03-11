@@ -50,10 +50,13 @@ public partial class RoomDoor : ActivityObject
         IsClose = false;
         Visible = false;
         Collision.Disabled = true;
-        _door.Navigation.OpenNavigationNode.Enabled = true;
-        _door.Navigation.OpenNavigationNode.Visible = true;
-        _door.Navigation.CloseNavigationNode.Enabled = false;
-        _door.Navigation.CloseNavigationNode.Visible = false;
+        if (_door.Navigation != null)
+        {
+            _door.Navigation.OpenNavigationNode.Enabled = true;
+            _door.Navigation.OpenNavigationNode.Visible = true;
+            _door.Navigation.CloseNavigationNode.Enabled = false;
+            _door.Navigation.CloseNavigationNode.Visible = false;
+        }
     }
 
     /// <summary>
@@ -64,9 +67,12 @@ public partial class RoomDoor : ActivityObject
         IsClose = true;
         Visible = true;
         Collision.Disabled = false;
-        _door.Navigation.OpenNavigationNode.Enabled = false;
-        _door.Navigation.OpenNavigationNode.Visible = false;
-        _door.Navigation.CloseNavigationNode.Enabled = true;
-        _door.Navigation.CloseNavigationNode.Visible = true;
+        if (_door.Navigation != null)
+        {
+            _door.Navigation.OpenNavigationNode.Enabled = false;
+            _door.Navigation.OpenNavigationNode.Visible = false;
+            _door.Navigation.CloseNavigationNode.Enabled = true;
+            _door.Navigation.CloseNavigationNode.Visible = true;
+        }
     }
 }

@@ -13,7 +13,7 @@ public static class Utils
     
     static Utils()
     {
-        _random = new Random(123);
+        _random = new Random(999);
     }
     
     /// <summary>

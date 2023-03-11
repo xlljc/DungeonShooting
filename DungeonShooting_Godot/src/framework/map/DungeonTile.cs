@@ -98,19 +98,19 @@ public class DungeonTile
             var rectPos = roomInfo.RoomSplit.RoomInfo.Position;
             var template = ResourceManager.Load<PackedScene>(roomInfo.RoomSplit.ScenePath);
             var tileInstance = template.Instantiate<DungeonRoomTemplate>();
-            //物体标记
-            var activityMarks = tileInstance.GetMarks();
-            var offset = roomInfo.GetOffsetPosition();
-            foreach (var activityMark in activityMarks)
-            {
-                activityMark.GetParent().RemoveChild(activityMark);
-                var pos = activityMark.GlobalPosition - offset;
-                _tileRoot.AddChild(activityMark);
-                activityMark.Visible = false;
-                activityMark.GlobalPosition = roomInfo.GetWorldPosition() + pos;
-                activityMark.Visible = false;
-                activityMark.SetActive(false);
-            }
+             //物体标记
+             var activityMarks = tileInstance.GetMarks();
+             var offset = roomInfo.GetOffsetPosition();
+             foreach (var activityMark in activityMarks)
+             {
+                 activityMark.GetParent().RemoveChild(activityMark);
+                 var pos = activityMark.GlobalPosition - offset;
+                 _tileRoot.AddChild(activityMark);
+                 activityMark.Owner = _tileRoot;
+                 activityMark.GlobalPosition = roomInfo.GetWorldPosition() + pos;
+                 activityMark.Visible = false;
+                 activityMark.SetActive(false);
+             }
             roomInfo.ActivityMarks.AddRange(activityMarks);
             
             //填充tile操作
@@ -132,7 +132,7 @@ public class DungeonTile
                 }
             }
 
-            tileInstance.QueueFree();
+            tileInstance.CallDeferred(Node.MethodName.QueueFree);
         }
 
         //铺过道

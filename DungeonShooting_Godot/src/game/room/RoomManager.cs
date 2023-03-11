@@ -57,14 +57,14 @@ public partial class RoomManager : Node2D
         _font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
 
         //绑定事件
-        //EventManager.AddEventListener(EventEnum.OnEnemyDie, OnEnemyDie);
         EventManager.AddEventListener(EventEnum.OnPlayerFirstEnterRoom, OnPlayerFirstEnterRoom);
         EventManager.AddEventListener(EventEnum.OnPlayerEnterRoom, OnPlayerEnterRoom);
-        
+
         var nowTicks = DateTime.Now.Ticks;
         //生成地牢房间
         _generateDungeon = new GenerateDungeon();
         _generateDungeon.Generate();
+        
         
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
@@ -81,7 +81,7 @@ public partial class RoomManager : Node2D
         _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
         //初始化所有房间
         _generateDungeon.EachRoom(InitRoom);
-
+        
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
         //播放bgm
@@ -94,9 +94,15 @@ public partial class RoomManager : Node2D
         Player.PutDown(RoomLayerEnum.YSortLayer);
         
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
-        // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
-        // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0004"));
-        // Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003"));
+        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
+        ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(10, 10), RoomLayerEnum.NormalLayer);
+
+        // for (int i = 0; i < 10; i++)
+        // {
+        //     var enemy = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
+        //     enemy.PutDown(new Vector2(100 + i * 20, 100), RoomLayerEnum.YSortLayer);
+        //     enemy.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + Utils.RandomChoose("0001", "0002", "0003")));
+        // }
 
         //相机跟随玩家
         GameCamera.Main.SetFollowTarget(Player);
