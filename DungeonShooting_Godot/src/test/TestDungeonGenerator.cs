@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 测试地牢生成
 /// </summary>
-public partial class TestGenerateDungeon : Node2D
+public partial class TestDungeonGenerator : Node2D
 {
 	[Export] public NodePath TileMapPath;
 	[Export] public NodePath Camera3D;
@@ -12,7 +12,7 @@ public partial class TestGenerateDungeon : Node2D
 	private TileMap _tileMap;
 	private Camera2D _camera;
 
-	private GenerateDungeon _generateDungeon;
+	private DungeonGenerator _dungeonGenerator;
 	private Font _font;
 
 	// public override void _Ready()
