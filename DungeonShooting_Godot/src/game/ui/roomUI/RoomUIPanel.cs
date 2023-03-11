@@ -1,12 +1,12 @@
 using Godot;
 
+namespace UI;
+
 /// <summary>
 /// 房间中的ui
 /// </summary>
-public partial class RoomUI : Control
+public partial class RoomUIPanel : RoomUI
 {
-    //public static RoomUI Current { get; private set; }
-
     /// <summary>
     /// 当前血量
     /// </summary>
@@ -23,6 +23,7 @@ public partial class RoomUI : Control
     /// 最大护盾值
     /// </summary>
     public int MaxShield { get; private set; }
+    
     /// <summary>
     /// 互动提示组件
     /// </summary>
@@ -31,24 +32,19 @@ public partial class RoomUI : Control
     /// 换弹进度组件
     /// </summary>
     public ReloadBar ReloadBar { get; private set; }
+    
+    public override void OnOpen(params object[] args)
+    {
+        
+    }
 
-    private NinePatchRect hpSlot;
-    private NinePatchRect shieldSlot;
-    private TextureRect hpBar;
-    private TextureRect shieldBar;
-    private Label bulletText;
-    private TextureRect gunSprite;
-
+    public override void OnClose()
+    {
+        
+    }
+    
     public override void _EnterTree()
     {
-        hpSlot = GetNode<NinePatchRect>("Control/HealthBar/HpSlot");
-        shieldSlot = GetNode<NinePatchRect>("Control/HealthBar/ShieldSlot");
-        hpBar = GetNode<TextureRect>("Control/HealthBar/HpSlot/HpBar");
-        shieldBar = GetNode<TextureRect>("Control/HealthBar/ShieldSlot/ShieldBar");
-
-        bulletText = GetNode<Label>("Control/GunBar/BulletText");
-        gunSprite = GetNode<TextureRect>("Control/GunBar/GunSprite");
-
         InteractiveTipBar = GetNode<InteractiveTipBar>("ViewNode/InteractiveTipBar");
         InteractiveTipBar.Visible = false;
 
@@ -82,27 +78,14 @@ public partial class RoomUI : Control
         }
         viewNode.CallDeferred("queue_free");
     }
-
-    public override void _Process(double delta)
-    {
-        
-    }
-
-    public override void _PhysicsProcess(double delta)
-    {
-        // var colorRect = GetNode<ColorRect>("ColorRect");
-        // var pos = GameApplication.Instance.ViewToGlobalPosition(GameApplication.Instance.Node3D.Player.GlobalPosition);
-        // colorRect.SetGlobalPosition(pos);
-        //GD.Print("pos: " + pos + ", " + colorRect.GlobalPosition);
-    }
-
+    
     /// <summary>
     /// 设置最大血量
     /// </summary>
     public void SetMaxHp(int maxHp)
     {
         MaxHp = Mathf.Max(maxHp, 0);
-        hpSlot.Size = new Vector2(maxHp + 3, hpSlot.Size.Y);
+        Control.HealthBar.HpSlot.Instance.Size = new Vector2(maxHp + 3, Control.HealthBar.HpSlot.Instance.Size.Y);
         if (Hp > maxHp)
         {
             SetHp(maxHp);
@@ -115,7 +98,7 @@ public partial class RoomUI : Control
     public void SetMaxShield(int maxShield)
     {
         MaxShield = Mathf.Max(maxShield, 0); ;
-        shieldSlot.Size = new Vector2(maxShield + 2, shieldSlot.Size.Y);
+        Control.HealthBar.ShieldSlot.Instance.Size = new Vector2(maxShield + 2, Control.HealthBar.ShieldSlot.Instance.Size.Y);
         if (Shield > MaxShield)
         {
             SetShield(maxShield);
@@ -128,7 +111,7 @@ public partial class RoomUI : Control
     public void SetHp(int hp)
     {
         Hp = Mathf.Clamp(hp, 0, MaxHp);
-        hpBar.Size = new Vector2(hp, hpBar.Size.Y);
+        Control.HealthBar.HpSlot.Instance.Size = new Vector2(hp, Control.HealthBar.HpSlot.Instance.Size.Y);
     }
 
     /// <summary>
@@ -137,7 +120,7 @@ public partial class RoomUI : Control
     public void SetShield(int shield)
     {
         Shield = Mathf.Clamp(shield, 0, MaxShield);
-        shieldBar.Size = new Vector2(shield, shieldBar.Size.Y);
+        Control.HealthBar.ShieldSlot.Instance.Size = new Vector2(shield, Control.HealthBar.ShieldSlot.Instance.Size.Y);
     }
 
     /// <summary>
@@ -156,14 +139,14 @@ public partial class RoomUI : Control
     {
         if (gun != null)
         {
-            gunSprite.Texture = gun;
-            gunSprite.Visible = true;
-            bulletText.Visible = true;
+            Control.GunBar.GunSprite.Instance.Texture = gun;
+            Control.GunBar.GunSprite.Instance.Visible = true;
+            Control.GunBar.BulletText.Instance.Visible = true;
         }
         else
         {
-            gunSprite.Visible = false;
-            bulletText.Visible = false;
+            Control.GunBar.GunSprite.Instance.Visible = false;
+            Control.GunBar.BulletText.Instance.Visible = false;
         }
     }
 
@@ -174,6 +157,7 @@ public partial class RoomUI : Control
     /// <param name="total">剩余弹药总数</param>
     public void SetAmmunition(int curr, int total)
     {
-        bulletText.Text = curr + " / " + total;
+        Control.GunBar.BulletText.Instance.Text = curr + " / " + total;
     }
+    
 }
