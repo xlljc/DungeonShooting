@@ -1,6 +1,6 @@
 namespace UI;
 
-public partial class TestPanel : Test
+public partial class RoomUIPanel : RoomUI
 {
     public override void OnOpen(params object[] args)
     {

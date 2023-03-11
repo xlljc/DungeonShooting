@@ -54,6 +54,8 @@ public partial class RoomUI : Control
 
         ReloadBar = GetNode<ReloadBar>("ViewNode/ReloadBar");
         ReloadBar.Visible = false;
+        
+        Generator.UiGenerator.GenerateUi(this);
     }
 
     public override void _Ready()
