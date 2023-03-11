@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://bvpmtfupny8iu"]
 
-[ext_resource type="Script" path="res://src/game/ui/RoomUI.cs" id="1"]
+[ext_resource type="Script" path="res://src/game/ui/roomUI/RoomUIPanel.cs" id="1_u48k1"]
 [ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/mapBar.png" id="2"]
 [ext_resource type="PackedScene" path="res://prefab/ui/bar/ReloadBar.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://u5ul7fu8wv1a" path="res://resource/sprite/ui/healthBar.png" id="4"]
@@ -18,7 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1")
+script = ExtResource("1_u48k1")
 
 [node name="Control" type="Control" parent="."]
 anchors_preset = 0

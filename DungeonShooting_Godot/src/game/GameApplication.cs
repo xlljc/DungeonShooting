@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using Godot;
+using UI;
 
 public partial class GameApplication : Node2D
 {
@@ -49,7 +50,7 @@ public partial class GameApplication : Node2D
 	/// <summary>
 	/// 游戏ui对象
 	/// </summary>
-	public RoomUI Ui { get; private set; }
+	public RoomUIPanel Ui { get; private set; }
 
 	/// <summary>
 	/// 全局根节点
@@ -92,7 +93,7 @@ public partial class GameApplication : Node2D
 		RoomManager = GetNode<RoomManager>(RoomPath);
 		SubViewport = GetNode<SubViewport>(ViewportPath);
 		SubViewportContainer = GetNode<SubViewportContainer>(ViewportContainerPath);
-		Ui = GetNode<RoomUI>(UiPath);
+		Ui = GetNode<RoomUIPanel>(UiPath);
 
 		Ui.AddChild(Cursor);
 	}
