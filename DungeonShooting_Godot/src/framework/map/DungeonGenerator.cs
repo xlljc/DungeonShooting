@@ -6,7 +6,7 @@ using Godot;
 /// <summary>
 /// 地牢生成器
 /// </summary>
-public class GenerateDungeon
+public class DungeonGenerator
 {
     /// <summary>
     /// 所有生成的房间, 调用过 Generate() 函数才能获取到值

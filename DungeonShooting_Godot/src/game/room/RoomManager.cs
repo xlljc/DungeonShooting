@@ -41,7 +41,7 @@ public partial class RoomManager : Node2D
     private AutoTileConfig _autoTileConfig;
     
     private Font _font;
-    private GenerateDungeon _generateDungeon;
+    private DungeonGenerator _dungeonGenerator;
 
     private int _affiliationIndex = 0;
 
@@ -63,13 +63,13 @@ public partial class RoomManager : Node2D
         
         var nowTicks = DateTime.Now.Ticks;
         //生成地牢房间
-        _generateDungeon = new GenerateDungeon();
-        _generateDungeon.Generate();
+        _dungeonGenerator = new DungeonGenerator();
+        _dungeonGenerator.Generate();
         
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
         _dungeonTile = new DungeonTile(TileRoot);
-        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _generateDungeon.StartRoom);
+        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom);
         
         //生成寻路网格， 这一步操作只生成过道的导航
         _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorMapLayer);
@@ -80,7 +80,7 @@ public partial class RoomManager : Node2D
         //门导航区域数据
         _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
         //初始化所有房间
-        _generateDungeon.EachRoom(InitRoom);
+        _dungeonGenerator.EachRoom(InitRoom);
 
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
