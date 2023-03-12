@@ -94,8 +94,6 @@ public partial class RoomManager : Node2D
         Player.PutDown(RoomLayerEnum.YSortLayer);
         
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
-        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
-        ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(10, 10), RoomLayerEnum.NormalLayer);
 
         // for (int i = 0; i < 10; i++)
         // {
