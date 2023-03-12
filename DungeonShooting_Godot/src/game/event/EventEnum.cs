@@ -16,4 +16,8 @@ public enum EventEnum
     /// 玩家第一次进入某个房间，参数为房间对象
     /// </summary>
     OnPlayerFirstEnterRoom,
+    /// <summary>
+    /// 玩家可互动对象改变, 参数为 CheckInteractiveResult
+    /// </summary>
+    OnPlayerChangeInteractiveItem,
 }

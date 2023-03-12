@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using Godot;
-using UI;
+using UI.RoomUI;
 
 public partial class GameApplication : Node2D
 {
@@ -79,7 +79,7 @@ public partial class GameApplication : Node2D
 		// 初始化鼠标
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
 		Cursor = ResourceManager.Load<PackedScene>(ResourcePath.prefab_ui_Cursor_tscn).Instantiate<Cursor>();
-
+		
 		Ui.AddChild(Cursor);
 
 		RoomManager = ResourceManager.Load<PackedScene>(ResourcePath.scene_Room_tscn).Instantiate<RoomManager>();

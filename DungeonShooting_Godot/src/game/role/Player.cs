@@ -25,9 +25,7 @@ public partial class Player : Role
     public override void OnInit()
     {
         base.OnInit();
-
-        GameCamera.Main.OnPositionUpdateEvent += OnCameraPositionUpdate;
-
+        
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
         
@@ -112,21 +110,6 @@ public partial class Player : Role
         PlayAnim();
     }
 
-    private void OnCameraPositionUpdate(float delta)
-    {
-        var reloadBar = GameApplication.Instance.Ui.ReloadBar;
-        if (Holster.ActiveWeapon != null && Holster.ActiveWeapon.Reloading)
-        {
-            reloadBar.ShowBar(GlobalPosition, 1 - Holster.ActiveWeapon.ReloadProgress);
-        }
-        else
-        {
-            reloadBar.HideBar();
-        }
-        // GameApplication.Instance.Ui.Control.MapBar.Instance.GlobalPosition =
-        //     GameApplication.Instance.ViewToGlobalPosition(Player.Current.GlobalPosition);
-    }
-    
     public override void ExchangeNext()
     {
         base.ExchangeNext();
@@ -173,19 +156,8 @@ public partial class Player : Role
 
     protected override void ChangeInteractiveItem(CheckInteractiveResult result)
     {
-        if (result == null)
-        {
-            //隐藏互动提示
-            GameApplication.Instance.Ui.InteractiveTipBar.HideBar();
-        }
-        else
-        {
-            if (InteractiveItem is Weapon gun)
-            {
-                //显示互动提示
-                GameApplication.Instance.Ui.InteractiveTipBar.ShowBar(result.Target, result.ShowIcon);
-            }
-        }
+        //派发互动对象改变事件
+        EventManager.EmitEvent(EventEnum.OnPlayerChangeInteractiveItem, result);
     }
 
     protected override void OnChangeShield(int shield)

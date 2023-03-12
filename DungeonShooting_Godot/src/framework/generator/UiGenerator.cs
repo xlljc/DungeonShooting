@@ -26,7 +26,7 @@ public static class UiGenerator
 
     private static string GenerateClassCode(UiNode uiNode)
     {
-        return $"namespace UI;\n\n" +
+        return $"namespace UI.{uiNode.OriginName};\n\n" +
                $"/// <summary>\n" + 
                $"/// Ui代码, 该类是根据ui场景自动生成的, 请不要手动编辑该类, 以免造成代码丢失\n" + 
                $"/// </summary>\n" + 

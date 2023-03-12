@@ -1,6 +1,6 @@
 using Godot;
 
-namespace UI;
+namespace UI.RoomUI;
 
 /// <summary>
 /// 房间中的ui
@@ -23,62 +23,29 @@ public partial class RoomUIPanel : RoomUI
     /// 最大护盾值
     /// </summary>
     public int MaxShield { get; private set; }
-    
-    /// <summary>
-    /// 互动提示组件
-    /// </summary>
-    public InteractiveTipBar InteractiveTipBar { get; private set; }
-    /// <summary>
-    /// 换弹进度组件
-    /// </summary>
-    public ReloadBar ReloadBar { get; private set; }
-    
+
+    private ReloadBar _reloadBar;
+    private InteractiveTipBar _interactiveTipBar;
+
     public override void OnOpen(params object[] args)
     {
-        
+        _reloadBar.OnOpen();
+        _interactiveTipBar.OnOpen();
     }
 
     public override void OnClose()
     {
-        
-    }
-    
-    public override void _EnterTree()
-    {
-        InteractiveTipBar = GetNode<InteractiveTipBar>("ViewNode/InteractiveTipBar");
-        InteractiveTipBar.Visible = false;
-
-        ReloadBar = GetNode<ReloadBar>("ViewNode/ReloadBar");
-        ReloadBar.Visible = false;
+        _reloadBar.OnClose();
+        _interactiveTipBar.OnClose();
     }
 
     public override void _Ready()
     {
         //Generator.UiGenerator.GenerateUi(this, "src/game/ui/roomUI/RoomUI.cs");
-        
-        //将 GlobalNode 节点下的 ui 节点放入全局坐标中
-        var globalNode = GetNode("GlobalNode");
-        var root = GameApplication.Instance.GlobalNodeRoot;
-        var count = globalNode.GetChildCount();
-        for (int i = count - 1; i >= 0; i--)
-        {
-            var node = globalNode.GetChild(i);
-            globalNode.RemoveChild(node);
-            root.CallDeferred("add_child", node);
-        }
-        globalNode.CallDeferred("queue_free");
-        
-        //将 ViewNode 节点放到 SubViewport 下
-        var viewNode = GetNode("ViewNode");
-        var viewport = GameApplication.Instance.SubViewport;
-        count = viewNode.GetChildCount();
-        for (int i = count - 1; i >= 0; i--)
-        {
-            var node = viewNode.GetChild(i);
-            viewNode.RemoveChild(node);
-            viewport.CallDeferred("add_child", node);
-        }
-        viewNode.CallDeferred("queue_free");
+        _reloadBar = new ReloadBar(L_ReloadBar);
+        _interactiveTipBar = new InteractiveTipBar(L_InteractiveTipBar);
+
+        OnOpen();
     }
 
     /// <summary>
@@ -113,7 +80,8 @@ public partial class RoomUIPanel : RoomUI
     public void SetHp(int hp)
     {
         Hp = Mathf.Clamp(hp, 0, MaxHp);
-        L_Control.L_HealthBar.L_HpSlot.Instance.Size = new Vector2(hp, L_Control.L_HealthBar.L_HpSlot.Instance.Size.Y);
+        var textureRect = L_Control.L_HealthBar.L_HpSlot.L_HpBar.Instance;
+        textureRect.Size = new Vector2(hp, textureRect.Size.Y);
     }
 
     /// <summary>
@@ -122,7 +90,8 @@ public partial class RoomUIPanel : RoomUI
     public void SetShield(int shield)
     {
         Shield = Mathf.Clamp(shield, 0, MaxShield);
-        L_Control.L_HealthBar.L_ShieldSlot.Instance.Size = new Vector2(shield, L_Control.L_HealthBar.L_ShieldSlot.Instance.Size.Y);
+        var textureRect = L_Control.L_HealthBar.L_ShieldSlot.L_ShieldBar.Instance;
+        textureRect.Size = new Vector2(shield, textureRect.Size.Y);
     }
 
     /// <summary>
