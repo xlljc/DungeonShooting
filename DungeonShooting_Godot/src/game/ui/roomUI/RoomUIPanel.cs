@@ -54,6 +54,8 @@ public partial class RoomUIPanel : RoomUI
 
     public override void _Ready()
     {
+        //Generator.UiGenerator.GenerateUi(this, "src/game/ui/roomUI/RoomUI.cs");
+        
         //将 GlobalNode 节点下的 ui 节点放入全局坐标中
         var globalNode = GetNode("GlobalNode");
         var root = GameApplication.Instance.GlobalNodeRoot;
@@ -85,7 +87,7 @@ public partial class RoomUIPanel : RoomUI
     public void SetMaxHp(int maxHp)
     {
         MaxHp = Mathf.Max(maxHp, 0);
-        Control.HealthBar.HpSlot.Instance.Size = new Vector2(maxHp + 3, Control.HealthBar.HpSlot.Instance.Size.Y);
+        L_Control.L_HealthBar.L_HpSlot.Instance.Size = new Vector2(maxHp + 3, L_Control.L_HealthBar.L_HpSlot.Instance.Size.Y);
         if (Hp > maxHp)
         {
             SetHp(maxHp);
@@ -97,8 +99,8 @@ public partial class RoomUIPanel : RoomUI
     /// </summary>
     public void SetMaxShield(int maxShield)
     {
-        MaxShield = Mathf.Max(maxShield, 0); ;
-        Control.HealthBar.ShieldSlot.Instance.Size = new Vector2(maxShield + 2, Control.HealthBar.ShieldSlot.Instance.Size.Y);
+        MaxShield = Mathf.Max(maxShield, 0);
+        L_Control.L_HealthBar.L_ShieldSlot.Instance.Size = new Vector2(maxShield + 2, L_Control.L_HealthBar.L_ShieldSlot.Instance.Size.Y);
         if (Shield > MaxShield)
         {
             SetShield(maxShield);
@@ -111,7 +113,7 @@ public partial class RoomUIPanel : RoomUI
     public void SetHp(int hp)
     {
         Hp = Mathf.Clamp(hp, 0, MaxHp);
-        Control.HealthBar.HpSlot.Instance.Size = new Vector2(hp, Control.HealthBar.HpSlot.Instance.Size.Y);
+        L_Control.L_HealthBar.L_HpSlot.Instance.Size = new Vector2(hp, L_Control.L_HealthBar.L_HpSlot.Instance.Size.Y);
     }
 
     /// <summary>
@@ -120,7 +122,7 @@ public partial class RoomUIPanel : RoomUI
     public void SetShield(int shield)
     {
         Shield = Mathf.Clamp(shield, 0, MaxShield);
-        Control.HealthBar.ShieldSlot.Instance.Size = new Vector2(shield, Control.HealthBar.ShieldSlot.Instance.Size.Y);
+        L_Control.L_HealthBar.L_ShieldSlot.Instance.Size = new Vector2(shield, L_Control.L_HealthBar.L_ShieldSlot.Instance.Size.Y);
     }
 
     /// <summary>
@@ -139,14 +141,14 @@ public partial class RoomUIPanel : RoomUI
     {
         if (gun != null)
         {
-            Control.GunBar.GunSprite.Instance.Texture = gun;
-            Control.GunBar.GunSprite.Instance.Visible = true;
-            Control.GunBar.BulletText.Instance.Visible = true;
+            L_Control.L_GunBar.L_GunSprite.Instance.Texture = gun;
+            L_Control.L_GunBar.L_GunSprite.Instance.Visible = true;
+            L_Control.L_GunBar.L_BulletText.Instance.Visible = true;
         }
         else
         {
-            Control.GunBar.GunSprite.Instance.Visible = false;
-            Control.GunBar.BulletText.Instance.Visible = false;
+            L_Control.L_GunBar.L_GunSprite.Instance.Visible = false;
+            L_Control.L_GunBar.L_BulletText.Instance.Visible = false;
         }
     }
 
@@ -157,7 +159,7 @@ public partial class RoomUIPanel : RoomUI
     /// <param name="total">剩余弹药总数</param>
     public void SetAmmunition(int curr, int total)
     {
-        Control.GunBar.BulletText.Instance.Text = curr + " / " + total;
+        L_Control.L_GunBar.L_BulletText.Instance.Text = curr + " / " + total;
     }
     
 }
