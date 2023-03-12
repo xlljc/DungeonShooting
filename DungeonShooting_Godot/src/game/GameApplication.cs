@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using Godot;
-using UI.RoomUI;
 
 public partial class GameApplication : Node2D
 {
@@ -104,7 +103,7 @@ public partial class GameApplication : Node2D
 	{
 		// 3.5写法
 		//return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
-		return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale;
+		return (viewPos - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale;
 	}
 
 	//初始化房间配置

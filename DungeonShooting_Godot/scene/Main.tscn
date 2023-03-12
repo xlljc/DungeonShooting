@@ -20,14 +20,12 @@ void vertex() {
 shader = SubResource("1")
 shader_parameter/offset = Vector2(0, 0)
 
-[node name="Main" type="Node2D" node_paths=PackedStringArray("SubViewport", "SubViewportContainer", "SceneRoot", "Ui", "GlobalNodeRoot", "UiCanvas")]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("SubViewport", "SubViewportContainer", "SceneRoot", "GlobalNodeRoot")]
 script = ExtResource("3")
 SubViewport = NodePath("ViewCanvas/SubViewportContainer/SubViewport")
 SubViewportContainer = NodePath("ViewCanvas/SubViewportContainer")
 SceneRoot = NodePath("ViewCanvas/SubViewportContainer/SubViewport/SceneRoot")
-Ui = NodePath("")
 GlobalNodeRoot = NodePath("GlobalNodeRoot")
-UiCanvas = NodePath("")
 
 [node name="ViewCanvas" type="CanvasLayer" parent="."]
 layer = -1

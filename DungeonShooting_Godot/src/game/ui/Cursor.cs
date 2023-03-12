@@ -97,6 +97,7 @@ public partial class Cursor : Node2D
             }
             scope = len / GameConfig.ScatteringDistance * scope;
         }
+        scope = Mathf.Clamp(scope, 0, 200);
         lt.Position = new Vector2(-scope, -scope);
         lb.Position = new Vector2(-scope, scope);
         rt.Position = new Vector2(scope, -scope);
