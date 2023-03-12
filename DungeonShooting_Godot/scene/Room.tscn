@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bqf2vks5ggnsp"]
+[gd_scene load_steps=6 format=3 uid="uid://bqf2vks5ggnsp"]
 
 [ext_resource type="Texture2D" uid="uid://dj8nrd5od4fcl" path="res://resource/sprite/environment/itch-io-DungeonTileset4/16x16 dungeon ii wall reconfig v04 spritesheet.png" id="1"]
 [ext_resource type="Script" path="res://src/game/room/RoomManager.cs" id="1_3w1c7"]
-[ext_resource type="Script" path="res://src/game/camera/GameCamera.cs" id="5"]
 
 [sub_resource type="Environment" id="Environment_ji6mi"]
 background_mode = 3
@@ -574,13 +573,6 @@ metadata/_edit_vertical_guides_ = []
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ji6mi")
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(253, 219)
-process_callback = 0
-limit_smoothed = true
-editor_draw_drag_margin = true
-script = ExtResource("5")
 
 [node name="TileRoot" type="TileMap" parent="."]
 y_sort_enabled = true

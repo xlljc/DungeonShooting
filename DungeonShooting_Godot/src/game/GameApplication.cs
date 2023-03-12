@@ -13,49 +13,40 @@ public partial class GameApplication : Node2D
 	/// </summary>
 	[Export] public bool Debug = false;
 
-	[Export] public PackedScene CursorPack;
+	/// <summary>
+	/// 游戏渲染视口
+	/// </summary>
+	[Export] public SubViewport SubViewport;
 
-	[Export] public NodePath RoomPath;
+	/// <summary>
+	/// SubViewportContainer 组件
+	/// </summary>
+	[Export] public SubViewportContainer SubViewportContainer;
 
-	[Export] public NodePath ViewportPath;
+	/// <summary>
+	/// 场景根节点
+	/// </summary>
+	[Export] public Node2D SceneRoot;
 
-	[Export] public NodePath ViewportContainerPath;
+	/// <summary>
+	/// 游戏ui对象
+	/// </summary>
+	[Export] public RoomUIPanel Ui;
 
-	[Export] public NodePath UiPath;
-
-	[Export] public NodePath GlobalNodeRootPath;
-
-	[Export] public Font Font;
+	/// <summary>
+	/// 全局根节点
+	/// </summary>
+	[Export] public Node2D GlobalNodeRoot;
 	
 	/// <summary>
 	/// 鼠标指针
 	/// </summary>
 	public Cursor Cursor { get; private set; }
-
+	
 	/// <summary>
 	/// 游戏房间
 	/// </summary>
 	public RoomManager RoomManager { get; private set; }
-
-	/// <summary>
-	/// 游戏渲染视口
-	/// </summary>
-	public SubViewport SubViewport { get; private set; }
-
-	/// <summary>
-	/// SubViewportContainer 组件
-	/// </summary>
-	public SubViewportContainer SubViewportContainer { get; private set; }
-
-	/// <summary>
-	/// 游戏ui对象
-	/// </summary>
-	public RoomUIPanel Ui { get; private set; }
-
-	/// <summary>
-	/// 全局根节点
-	/// </summary>
-	public Node2D GlobalNodeRoot { get; private set; }
 	
 	/// <summary>
 	/// 房间配置
@@ -85,17 +76,14 @@ public partial class GameApplication : Node2D
 		//初始化ui
 		UiManager.Init();
 		
-		GlobalNodeRoot = GetNode<Node2D>(GlobalNodeRootPath);
 		// 初始化鼠标
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
-		Cursor = CursorPack.Instantiate<Cursor>();
-
-		RoomManager = GetNode<RoomManager>(RoomPath);
-		SubViewport = GetNode<SubViewport>(ViewportPath);
-		SubViewportContainer = GetNode<SubViewportContainer>(ViewportContainerPath);
-		Ui = GetNode<RoomUIPanel>(UiPath);
+		Cursor = ResourceManager.Load<PackedScene>(ResourcePath.prefab_ui_Cursor_tscn).Instantiate<Cursor>();
 
 		Ui.AddChild(Cursor);
+
+		RoomManager = ResourceManager.Load<PackedScene>(ResourcePath.scene_Room_tscn).Instantiate<RoomManager>();
+		SceneRoot.AddChild(RoomManager);
 	}
 
 	public override void _Process(double delta)
