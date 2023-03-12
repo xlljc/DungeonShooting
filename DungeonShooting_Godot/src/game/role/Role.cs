@@ -36,13 +36,13 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public uint AttackLayer { get; set; } = PhysicsLayer.Wall;
 
-    /// <summary>
-    /// 携带的道具包裹
-    /// </summary>
-    public List<object> PropsPack { get; } = new List<object>();
+    // /// <summary>
+    // /// 携带的道具包裹
+    // /// </summary>
+    // public List<object> PropsPack { get; } = new List<object>();
 
     /// <summary>
-    /// 角色携带的枪套
+    /// 角色携带的武器袋
     /// </summary>
     public Holster Holster { get; private set; }
 

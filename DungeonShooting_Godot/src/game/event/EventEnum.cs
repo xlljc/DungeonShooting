@@ -20,4 +20,24 @@ public enum EventEnum
     /// 玩家可互动对象改变, 参数为 CheckInteractiveResult
     /// </summary>
     OnPlayerChangeInteractiveItem,
+    /// <summary>
+    /// 玩家血量发生改变, 参数为玩家血量
+    /// </summary>
+    OnPlayerHpChange,
+    /// <summary>
+    /// 玩家最大血量发生改变, 参数为玩家最大血量
+    /// </summary>
+    OnPlayerMaxHpChange,
+    /// <summary>
+    /// 玩家护盾值发生改变, 参数为玩家护盾值
+    /// </summary>
+    OnPlayerShieldChange,
+    /// <summary>
+    /// 玩家最大护盾值发生改变, 参数为玩家最大护盾值
+    /// </summary>
+    OnPlayerMaxShieldChange,
+    /// <summary>
+    /// 刷新玩家手持武器纹理, 参数为 Texture2D
+    /// </summary>
+    OnPlayerRefreshWeaponTexture,
 }

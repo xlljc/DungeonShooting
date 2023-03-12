@@ -38,7 +38,7 @@ public partial class Player : Role
         // MainCamera.Main.ResetSmoothing();
         // remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
         
-        RefreshGunTexture();
+        RefreshWeaponTexture();
 
         MaxHp = 50;
         Hp = 50;
@@ -87,7 +87,7 @@ public partial class Player : Role
             var item = TriggerInteractive();
             if (item != null)
             {
-                RefreshGunTexture();
+                RefreshWeaponTexture();
             }
         }
         else if (Input.IsActionJustPressed("reload")) //换弹
@@ -98,8 +98,6 @@ public partial class Player : Role
         {
             Attack();
         }
-        //刷新显示的弹药剩余量
-        RefreshGunAmmunition();
     }
 
     protected override void PhysicsProcess(float delta)
@@ -113,25 +111,25 @@ public partial class Player : Role
     public override void ExchangeNext()
     {
         base.ExchangeNext();
-        RefreshGunTexture();
+        RefreshWeaponTexture();
     }
 
     public override void ExchangePrev()
     {
         base.ExchangePrev();
-        RefreshGunTexture();
+        RefreshWeaponTexture();
     }
 
     public override void ThrowWeapon(int index)
     {
         base.ThrowWeapon(index);
-        RefreshGunTexture();
+        RefreshWeaponTexture();
     }
 
     public override void ThrowWeapon()
     {
         base.ThrowWeapon();
-        RefreshGunTexture();
+        RefreshWeaponTexture();
     }
 
     public override bool PickUpWeapon(Weapon weapon, bool exchange = true)
@@ -139,19 +137,21 @@ public partial class Player : Role
         var v = base.PickUpWeapon(weapon, exchange);
         if (v)
         {
-            RefreshGunTexture();
+            RefreshWeaponTexture();
         }
         return v;
     }
 
     protected override void OnChangeHp(int hp)
     {
-        GameApplication.Instance.Ui.SetHp(hp);
+        //GameApplication.Instance.Ui.SetHp(hp);
+        EventManager.EmitEvent(EventEnum.OnPlayerHpChange, hp);
     }
 
     protected override void OnChangeMaxHp(int maxHp)
     {
-        GameApplication.Instance.Ui.SetMaxHp(maxHp);
+        //GameApplication.Instance.Ui.SetMaxHp(maxHp);
+        EventManager.EmitEvent(EventEnum.OnPlayerMaxHpChange, maxHp);
     }
 
     protected override void ChangeInteractiveItem(CheckInteractiveResult result)
@@ -162,40 +162,22 @@ public partial class Player : Role
 
     protected override void OnChangeShield(int shield)
     {
-        GameApplication.Instance.Ui.SetShield(shield);
+        //GameApplication.Instance.Ui.SetShield(shield);
+        EventManager.EmitEvent(EventEnum.OnPlayerShieldChange, shield);
     }
 
     protected override void OnChangeMaxShield(int maxShield)
     {
-        GameApplication.Instance.Ui.SetMaxShield(maxShield);
+        //GameApplication.Instance.Ui.SetMaxShield(maxShield);
+        EventManager.EmitEvent(EventEnum.OnPlayerMaxShieldChange, maxShield);
     }
 
     /// <summary>
     /// 刷新 ui 上手持的物体
     /// </summary>
-    private void RefreshGunTexture()
+    private void RefreshWeaponTexture()
     {
-        var gun = Holster.ActiveWeapon;
-        if (gun != null)
-        {
-            GameApplication.Instance.Ui.SetGunTexture(gun.GetDefaultTexture());
-        }
-        else
-        {
-            GameApplication.Instance.Ui.SetGunTexture(null);
-        }
-    }
-
-    /// <summary>
-    /// 刷新 ui 上显示的弹药量
-    /// </summary>
-    private void RefreshGunAmmunition()
-    {
-        var gun = Holster.ActiveWeapon;
-        if (gun != null)
-        {
-            GameApplication.Instance.Ui.SetAmmunition(gun.CurrAmmo, gun.ResidueAmmo);
-        }
+        EventManager.EmitEvent(EventEnum.OnPlayerRefreshWeaponTexture, Holster.ActiveWeapon?.GetDefaultTexture());
     }
 
     //处理角色移动的输入

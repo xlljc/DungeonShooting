@@ -18,9 +18,9 @@ public class EventFactory
     }
 
     /// <summary>
-    /// 清理所有监听事件
+    /// 移除所有监听事件
     /// </summary>
-    public void Clear()
+    public void RemoveAllEventListener()
     {
         foreach (var eventBinder in _binders)
         {

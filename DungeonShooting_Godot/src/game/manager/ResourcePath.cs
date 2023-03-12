@@ -17,8 +17,6 @@ public class ResourcePath
     public const string prefab_test_TestActivity_tscn = "res://prefab/test/TestActivity.tscn";
     public const string prefab_ui_Cursor_tscn = "res://prefab/ui/Cursor.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
-    public const string prefab_ui_bar_InteractiveTipBar_tscn = "res://prefab/ui/bar/InteractiveTipBar.tscn";
-    public const string prefab_ui_bar_ReloadBar_tscn = "res://prefab/ui/bar/ReloadBar.tscn";
     public const string prefab_weapon_Knife_tscn = "res://prefab/weapon/Knife.tscn";
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";
     public const string prefab_weapon_bullet_Bullet_tscn = "res://prefab/weapon/bullet/Bullet.tscn";
@@ -26,6 +24,7 @@ public class ResourcePath
     public const string resource_effects_Circle_png = "res://resource/effects/Circle.png";
     public const string resource_effects_Collision_png = "res://resource/effects/Collision.png";
     public const string resource_effects_debug_arrows_png = "res://resource/effects/debug_arrows.png";
+    public const string resource_effects_Explosion_png = "res://resource/effects/Explosion.png";
     public const string resource_effects_Hit_tres = "res://resource/effects/Hit.tres";
     public const string resource_effects_KnifeHit1_tres = "res://resource/effects/KnifeHit1.tres";
     public const string resource_effects_ShotFire_png = "res://resource/effects/ShotFire.png";

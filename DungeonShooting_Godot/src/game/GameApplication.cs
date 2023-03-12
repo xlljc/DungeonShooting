@@ -27,17 +27,12 @@ public partial class GameApplication : Node2D
 	/// 场景根节点
 	/// </summary>
 	[Export] public Node2D SceneRoot;
-
-	/// <summary>
-	/// 游戏ui对象
-	/// </summary>
-	[Export] public RoomUIPanel Ui;
-
+	
 	/// <summary>
 	/// 全局根节点
 	/// </summary>
 	[Export] public Node2D GlobalNodeRoot;
-	
+
 	/// <summary>
 	/// 鼠标指针
 	/// </summary>
@@ -79,9 +74,11 @@ public partial class GameApplication : Node2D
 		// 初始化鼠标
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
 		Cursor = ResourceManager.Load<PackedScene>(ResourcePath.prefab_ui_Cursor_tscn).Instantiate<Cursor>();
-		
-		Ui.AddChild(Cursor);
+		AddChild(Cursor);
 
+		//打开ui
+		UiManager.Open_RoomUI();
+		
 		RoomManager = ResourceManager.Load<PackedScene>(ResourcePath.scene_Room_tscn).Instantiate<RoomManager>();
 		SceneRoot.AddChild(RoomManager);
 	}
