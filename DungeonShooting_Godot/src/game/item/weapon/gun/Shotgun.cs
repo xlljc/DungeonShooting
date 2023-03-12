@@ -1,6 +1,6 @@
 using Godot;
 
-[RegisterWeapon("1002", typeof(Shotgun.ShotgunAttribute))]
+[RegisterWeapon(ActivityIdPrefix.Weapon + "0002", typeof(ShotgunAttribute))]
 public partial class Shotgun : Weapon
 {
 
@@ -12,7 +12,7 @@ public partial class Shotgun : Weapon
             Sprite2D = ResourcePath.resource_sprite_gun_gun2_png;
             Weight = 40;
             CenterPosition = new Vector2(0.4f, -2.6f);
-            StartFiringSpeed = 300;
+            StartFiringSpeed = 400;
             StartScatteringRange = 30;
             FinalScatteringRange = 90;
             ScatteringRangeAddValue = 50f;
@@ -54,8 +54,9 @@ public partial class Shotgun : Weapon
     /// </summary>
     public PackedScene ShellPack;
 
-    public Shotgun(string typeId, WeaponAttribute attribute) : base(typeId, attribute)
+    public override void _Ready()
     {
+        base._Ready();
         ShellPack = ResourceManager.Load<PackedScene>(ResourcePath.prefab_weapon_shell_ShellCase_tscn);
     }
 
@@ -68,13 +69,13 @@ public partial class Shotgun : Weapon
         var xf = Utils.RandomRangeInt(20, 60);
         var yf = Utils.RandomRangeInt(60, 120);
         var rotate = Utils.RandomRangeInt(-720, 720);
-        var shell = new ShellCase();
+        var shell = ActivityObject.Create<ShellCase>(ActivityIdPrefix.Shell + "0001");;
         shell.Throw(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, true);
         
         if (Master == GameApplication.Instance.RoomManager.Player)
         {
             //创建抖动
-            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
+            GameCamera.Main.DirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
         }
         
         //创建开火特效
@@ -91,8 +92,9 @@ public partial class Shotgun : Weapon
     protected override void OnShoot(float fireRotation)
     {
         //创建子弹
-        var bullet = new Bullet(
-            ResourcePath.prefab_weapon_bullet_Bullet_tscn,
+        const string bulletId = ActivityIdPrefix.Bullet + "0001";
+        var bullet = ActivityObject.Create<Bullet>(bulletId);
+        bullet.Init(
             Utils.RandomRangeInt(280, 380),
             Utils.RandomRangeFloat(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,

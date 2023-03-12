@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using Godot;
 
 /// <summary>
-/// 房间内活动物体基类, 所有物体都必须继承该类
+/// 房间内活动物体基类, 所有物体都必须继承该类,
+/// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, 
+/// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [RegisterActivity(id, prefabPath)],
+/// ActivityObject 类会自动扫描并注册物体, 然后使用而是使用 ActivityObject.Create(id) 来创建实例
 /// </summary>
 public abstract partial class ActivityObject : CharacterBody2D
 {
@@ -22,22 +25,17 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite2D", 类型为 AnimatedSprite2D
     /// </summary>
-    public AnimatedSprite2D AnimatedSprite { get; }
+    public AnimatedSprite2D AnimatedSprite { get; private set; }
 
     /// <summary>
     /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite2D
     /// </summary>
-    public Sprite2D ShadowSprite { get; }
+    public Sprite2D ShadowSprite { get; private set; }
 
     /// <summary>
     /// 当前物体碰撞器节点, 节点名称必须叫 "Collision", 类型为 CollisionShape2D
     /// </summary>
-    public CollisionShape2D Collision { get; }
-
-    /// <summary>
-    /// 动画播放器
-    /// </summary>
-    public AnimationPlayer AnimationPlayer { get; }
+    public CollisionShape2D Collision { get; private set; }
 
     /// <summary>
     /// 是否调用过 Destroy() 函数
@@ -57,7 +55,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 移动控制器
     /// </summary>
-    public MoveController MoveController { get; }
+    public MoveController MoveController { get; private set; }
 
     /// <summary>
     /// 物体移动基础速率
@@ -66,6 +64,22 @@ public abstract partial class ActivityObject : CharacterBody2D
     {
         get => MoveController.BasisVelocity;
         set => MoveController.BasisVelocity = value;
+    }
+
+    /// <summary>
+    /// 当前物体归属的区域, 如果为 null 代表不属于任何一个区域
+    /// </summary>
+    public AffiliationArea Affiliation
+    {
+        get => _affiliationArea;
+        set
+        {
+            if (value != _affiliationArea)
+            {
+                _affiliationArea = value;
+                OnAffiliationChange();
+            }
+        }
     }
 
     //组件集合
@@ -93,14 +107,18 @@ public abstract partial class ActivityObject : CharacterBody2D
     //标记字典
     private Dictionary<string, object> _signMap;
     
+    //开启的协程
     private List<CoroutineData> _coroutineList;
+    //模板实例
     private ActivityObjectTemplate _templateInstance;
     
-    private static long _instanceIndex = 0;
+    private AffiliationArea _affiliationArea;
     
-    public ActivityObject(string scenePath)
+    private static long _instanceIndex = 0;
+
+    //初始化节点
+    private void _InitNode(string itemId, string scenePath)
     {
-        Name = GetType().Name + (_instanceIndex++);
         //加载预制体
         var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
         if (tempPrefab == null)
@@ -108,15 +126,10 @@ public abstract partial class ActivityObject : CharacterBody2D
             throw new Exception("创建 ActivityObject 没有找到指定挂载的预制体: " + scenePath);
         }
 
-        _templateInstance = tempPrefab.Instantiate<ActivityObjectTemplate>();
-        ZIndex = _templateInstance.z_index;
-        CollisionLayer = _templateInstance.collision_layer;
-        CollisionMask = _templateInstance.collision_mask;
-        Scale = _templateInstance.scale;
-        Visible = _templateInstance.visible;
-
-        MotionMode = MotionModeEnum.Floating;
+        ItemId = itemId;
+        Name = GetType().Name + (_instanceIndex++);
         
+        _templateInstance = tempPrefab.Instantiate<ActivityObjectTemplate>();
         //移动子节点
         var count = _templateInstance.GetChildCount();
         for (int i = 0; i < count; i++)
@@ -124,6 +137,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             var body = _templateInstance.GetChild(0);
             _templateInstance.RemoveChild(body);
             AddChild(body);
+            body.Owner = this;
             switch (body.Name)
             {
                 case "AnimatedSprite":
@@ -137,14 +151,23 @@ public abstract partial class ActivityObject : CharacterBody2D
                 case "Collision":
                     Collision = (CollisionShape2D)body;
                     break;
-                case "AnimationPlayer":
-                    AnimationPlayer = (AnimationPlayer)body;
-                    break;
             }
         }
         
+        ZIndex = _templateInstance.z_index;
+        CollisionLayer = _templateInstance.collision_layer;
+        CollisionMask = _templateInstance.collision_mask;
+        Scale = _templateInstance.scale;
+        Visible = _templateInstance.visible;
+
+        MotionMode = MotionModeEnum.Floating;
+
         MoveController = AddComponent<MoveController>();
-        //tempNode.CallDeferred(Node.MethodName.QueueFree);
+        
+        //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
+        //_templateInstance.CallDeferred(Node.MethodName.QueueFree);
+
+        OnInit();
     }
 
     /// <summary>
@@ -222,6 +245,13 @@ public abstract partial class ActivityObject : CharacterBody2D
         return AnimatedSprite.SpriteFrames.GetFrameTexture(AnimatedSprite.Name, AnimatedSprite.Frame);
     }
 
+    /// <summary>
+    /// 物体初始化时调用
+    /// </summary>
+    public virtual void OnInit()
+    {
+    }
+    
     /// <summary>
     /// 返回是否能与其他ActivityObject互动
     /// </summary>
@@ -315,6 +345,21 @@ public abstract partial class ActivityObject : CharacterBody2D
     protected virtual void DebugDraw()
     {
     }
+
+    /// <summary>
+    /// 归属区域发生改变
+    /// </summary>
+    protected virtual void OnAffiliationChange()
+    {
+    }
+
+    /// <summary>
+    /// 返回当物体 CollisionLayer 是否能与 mask 层碰撞
+    /// </summary>
+    public bool CollisionWithMask(uint mask)
+    {
+        return (CollisionLayer & mask) != 0;
+    }
     
     /// <summary>
     /// 拾起一个 node 节点, 也就是将其从场景树中移除
@@ -334,10 +379,11 @@ public abstract partial class ActivityObject : CharacterBody2D
     }
 
     /// <summary>
-    /// 将一个节点扔到地上, 并设置显示的阴影
+    /// 将一个节点扔到地上
     /// <param name="layer">放入的层</param>
+    /// <param name="showShadow">是否显示阴影</param>
     /// </summary>
-    public virtual void PutDown(RoomLayerEnum layer)
+    public virtual void PutDown(RoomLayerEnum layer, bool showShadow = true)
     {
         _currLayer = layer;
         var parent = GetParent();
@@ -352,23 +398,31 @@ public abstract partial class ActivityObject : CharacterBody2D
             this.AddToActivityRoot(layer);
         }
 
-        if (IsInsideTree())
+        if (showShadow)
         {
-            ShowShadowSprite();
+            if (IsInsideTree())
+            {
+                ShowShadowSprite();
+            }
+            else
+            {
+                //注意需要延时调用
+                CallDeferred(nameof(ShowShadowSprite));
+            }
         }
         else
         {
-            //注意需要延时调用
-            CallDeferred(nameof(ShowShadowSprite));
+            ShadowSprite.Visible = false;
         }
     }
 
     /// <summary>
-    /// 将一个节点扔到地上, 并设置显示的阴影
+    /// 将一个节点扔到地上
     /// </summary>
     /// <param name="position">放置的位置</param>
     /// <param name="layer">放入的层</param>
-    public void PutDown(Vector2 position, RoomLayerEnum layer)
+    /// <param name="showShadow">是否显示阴影</param>
+    public void PutDown(Vector2 position, RoomLayerEnum layer, bool showShadow = true)
     {
         PutDown(layer);
         Position = position;
@@ -807,15 +861,21 @@ public abstract partial class ActivityObject : CharacterBody2D
         }
 
         IsDestroyed = true;
-
-        OnDestroy();
         QueueFree();
+        OnDestroy();
+
         var arr = _components.ToArray();
         for (int i = 0; i < arr.Length; i++)
         {
             arr[i].Value?.Destroy();
         }
-        //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
+        
+        if (Affiliation != null)
+        {
+            Affiliation.RemoveItem(this);
+        }
+        
+        //临时处理, 4.0 有bug, 不能提前销毁模板实例, 不然关闭游戏会报错!!!
         _templateInstance.QueueFree();
     }
 
@@ -1057,13 +1117,5 @@ public abstract partial class ActivityObject : CharacterBody2D
         {
             _coroutineList.Clear();
         }
-    }
-    
-    /// <summary>
-    /// 通过 ItemId 实例化 ActivityObject 对象
-    /// </summary>
-    public static T Create<T>(string itemId) where T : ActivityObject
-    {
-        return null;
     }
 }

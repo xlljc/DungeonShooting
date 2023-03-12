@@ -25,15 +25,15 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
             ChangeStateLate(prev);
             return;
         }
-        
+
         //先检查弹药是否打光
         if (Master.IsAllWeaponTotalAmmoEmpty())
         {
             //再寻找是否有可用的武器
-            if (Master.CheckUsableWeaponInUnclaimed())
+            var targetWeapon = Master.FindTargetWeapon();
+            if (targetWeapon != null)
             {
-                //切换到寻找武器状态
-                ChangeStateLate(AiStateEnum.AiFindAmmo);
+                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
             }
         }
     }

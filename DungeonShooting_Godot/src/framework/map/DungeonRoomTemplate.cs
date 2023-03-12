@@ -10,24 +10,9 @@ using Godot;
 public partial class DungeonRoomTemplate : TileMap
 {
     /// <summary>
-    /// 地图路径
-    /// </summary>
-    public static readonly string RoomTileDir = System.Environment.CurrentDirectory + "/resource/map/tileMaps/";
-    
-    /// <summary>
-    /// 地图描述数据路径
-    /// </summary>
-    public static readonly string RoomTileDataDir = System.Environment.CurrentDirectory + "/resource/map/tiledata/";
-    
-    /// <summary>
-    /// 房间配置汇总
-    /// </summary>
-    public static readonly string RoomTileConfigFile = System.Environment.CurrentDirectory + "/resource/map/RoomConfig.json";
-    
-    /// <summary>
     /// 是否启用编辑模式
     /// </summary>
-    [Export(PropertyHint.None, "是否启用编辑模式")]
+    [Export]
     public bool EnableEdit = false;
     
 #if TOOLS
@@ -541,7 +526,7 @@ public partial class DungeonRoomTemplate : TileMap
                     }
                     else
                     {
-                        DrawCircle(result.Exception.Point * GenerateDungeon.TileCellSize, 10, Colors.Red);
+                        DrawCircle(result.Exception.Point * GameConfig.TileCellSize, 10, Colors.Red);
                     }
                 }
             }
@@ -735,6 +720,11 @@ public partial class DungeonRoomTemplate : TileMap
     //触发保存操作
     private void TriggerSave()
     {
+        //如果没有找到对应的场景文件，则不保存
+        if (!File.Exists(GameConfig.RoomTileDir + Name + ".tscn"))
+        {
+            return;
+        }
         //计算导航网格
         _dungeonTile.GenerateNavigationPolygon(0);
         var polygonData = _dungeonTile.GetPolygonData();
@@ -760,7 +750,7 @@ public partial class DungeonRoomTemplate : TileMap
     public static void SaveConfig(List<DoorAreaInfo> doorConfigs, Vector2I position, Vector2I size, List<NavigationPolygonData> polygonData, string name)
     {
         //存入本地
-        var path = RoomTileDataDir + name + ".json";
+        var path = GameConfig.RoomTileDataDir + name + ".json";
         var roomInfo = new DungeonRoomInfo();
         roomInfo.Position = new SerializeVector2(position);
         roomInfo.Size = new SerializeVector2(size);
@@ -780,7 +770,7 @@ public partial class DungeonRoomTemplate : TileMap
     /// </summary>
     public static List<DoorAreaInfo> ReadConfig(Rect2 mapRect, string name)
     {
-        var path = RoomTileDataDir + name + ".json";
+        var path = GameConfig.RoomTileDataDir + name + ".json";
         if (File.Exists(path))
         {
             var text = File.ReadAllText(path);
@@ -857,4 +847,30 @@ public partial class DungeonRoomTemplate : TileMap
         return roomInfo;
     }
 #endif
+
+    /// <summary>
+    /// 获取所有标记数据
+    /// </summary>
+    public ActivityMark[] GetMarks()
+    {
+        var list = new List<ActivityMark>();
+        foreach (var child in GetChildren())
+        {
+            EachAndGetMarks(child, list);
+        }
+
+        return list.ToArray();
+    }
+
+    private void EachAndGetMarks(Node node, List<ActivityMark> list)
+    {
+        if (node is ActivityMark mark)
+        {
+            list.Add(mark);
+        }
+        foreach (var child in node.GetChildren())
+        {
+            EachAndGetMarks(child, list);
+        }
+    }
 }

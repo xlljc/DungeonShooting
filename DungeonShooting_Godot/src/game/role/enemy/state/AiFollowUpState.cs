@@ -32,10 +32,10 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         if (Master.IsAllWeaponTotalAmmoEmpty())
         {
             //再寻找是否有可用的武器
-            if (Master.CheckUsableWeaponInUnclaimed())
+            var targetWeapon = Master.FindTargetWeapon();
+            if (targetWeapon != null)
             {
-                //切换到寻找武器状态
-                ChangeStateLate(AiStateEnum.AiFindAmmo);
+                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
             else
@@ -44,7 +44,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
                 ChangeStateLate(AiStateEnum.AiSurround);
             }
         }
-        
+
         var playerPos = Player.Current.GetCenterPosition();
 
         //更新玩家位置

@@ -115,15 +115,6 @@ public partial class ActivityObjectTemplate : Node
                     AddChild(co);
                     co.Owner = owner;
                 }
-
-                //创建AnimationPlayer
-                if (GetNodeOrNull("AnimationPlayer") == null)
-                {
-                    var ap = new AnimationPlayer();
-                    ap.Name = "AnimationPlayer";
-                    AddChild(ap);
-                    ap.Owner = owner;
-                }
             }
         }
 #endif

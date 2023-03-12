@@ -26,10 +26,20 @@ public class NavigationPolygonData
     [JsonInclude] public NavigationPolygonType Type;
 
     /// <summary>
-    /// 多边形的顶点
+    /// 多边形的顶点, 单位: 像素
     /// </summary>
     [JsonInclude] public List<SerializeVector2> Points = new List<SerializeVector2>();
 
+    public NavigationPolygonData()
+    {
+    }
+
+    public NavigationPolygonData(NavigationPolygonType type, List<SerializeVector2> points)
+    {
+        Type = type;
+        Points = points;
+    }
+    
     /// <summary>
     /// 将 Points 字段转为 Vector2[] 类型数据并返回
     /// </summary>

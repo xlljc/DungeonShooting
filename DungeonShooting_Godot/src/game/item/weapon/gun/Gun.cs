@@ -3,8 +3,8 @@ using Godot;
 /// <summary>
 /// 普通的枪
 /// </summary>
-[RegisterWeapon("1001", typeof(Gun.RifleAttribute))]
-[RegisterWeapon("1003", typeof(Gun.PistolAttribute))]
+[RegisterWeapon(ActivityIdPrefix.Weapon + "0001", typeof(RifleAttribute))]
+[RegisterWeapon(ActivityIdPrefix.Weapon + "0003", typeof(PistolAttribute))]
 public partial class Gun : Weapon
 {
     //步枪属性数据
@@ -95,11 +95,7 @@ public partial class Gun : Weapon
             AiUseAttribute.TriggerInterval = 2f;
         }
     }
-
-    public Gun(string typeId, WeaponAttribute attribute): base(typeId, attribute)
-    {
-    }
-
+    
     protected override void OnFire()
     {
         //创建一个弹壳
@@ -108,13 +104,13 @@ public partial class Gun : Weapon
         var xf = Utils.RandomRangeInt(20, 60);
         var yf = Utils.RandomRangeInt(60, 120);
         var rotate = Utils.RandomRangeInt(-720, 720);
-        var shell = new ShellCase();
+        var shell = ActivityObject.Create<ShellCase>(ActivityIdPrefix.Shell + "0001");;
         shell.Throw(new Vector2(10, 5), Master.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
         
         if (Master == GameApplication.Instance.RoomManager.Player)
         {
             //创建抖动
-            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
+            GameCamera.Main.DirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
         }
 
         //创建开火特效
@@ -131,9 +127,9 @@ public partial class Gun : Weapon
     protected override void OnShoot(float fireRotation)
     {
         //创建子弹
-        //CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation);
-        var bullet = new Bullet(
-            ResourcePath.prefab_weapon_bullet_Bullet_tscn,
+        const string bulletId = ActivityIdPrefix.Bullet + "0001";
+        var bullet = ActivityObject.Create<Bullet>(bulletId);
+        bullet.Init(
             350,
             Utils.RandomRangeFloat(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,

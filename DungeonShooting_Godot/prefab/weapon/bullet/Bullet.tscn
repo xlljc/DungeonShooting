@@ -1,10 +1,8 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://gaa31i7420h"]
 
 [ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_nwypj"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2"]
 [ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/bullet.png" id="3"]
-
-
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5a4f2"]
 resource_local_to_scene = true
@@ -37,6 +35,7 @@ size = Vector2(11, 4)
 
 [node name="Bullet" type="Node"]
 script = ExtResource("1_nwypj")
+collision_layer = 2
 collision_mask = 1
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
@@ -62,5 +61,3 @@ shape = SubResource("RectangleShape2D_c0onq")
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(2.5, 0)
 shape = SubResource("RectangleShape2D_lcqb8")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

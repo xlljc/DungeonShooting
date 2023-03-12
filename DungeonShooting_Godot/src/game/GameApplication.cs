@@ -12,49 +12,35 @@ public partial class GameApplication : Node2D
 	/// </summary>
 	[Export] public bool Debug = false;
 
-	[Export] public PackedScene CursorPack;
-
-	[Export] public NodePath RoomPath;
-
-	[Export] public NodePath ViewportPath;
-
-	[Export] public NodePath ViewportContainerPath;
-
-	[Export] public NodePath UiPath;
-
-	[Export] public NodePath GlobalNodeRootPath;
-
-	[Export] public Font Font;
-	
-	/// <summary>
-	/// 鼠标指针
-	/// </summary>
-	public Cursor Cursor { get; private set; }
-
-	/// <summary>
-	/// 游戏房间
-	/// </summary>
-	public RoomManager RoomManager { get; private set; }
-
 	/// <summary>
 	/// 游戏渲染视口
 	/// </summary>
-	public SubViewport SubViewport { get; private set; }
+	[Export] public SubViewport SubViewport;
 
 	/// <summary>
 	/// SubViewportContainer 组件
 	/// </summary>
-	public SubViewportContainer SubViewportContainer { get; private set; }
+	[Export] public SubViewportContainer SubViewportContainer;
 
 	/// <summary>
-	/// 游戏ui对象
+	/// 场景根节点
 	/// </summary>
-	public RoomUI Ui { get; private set; }
-
+	[Export] public Node2D SceneRoot;
+	
 	/// <summary>
 	/// 全局根节点
 	/// </summary>
-	public Node2D GlobalNodeRoot { get; private set; }
+	[Export] public Node2D GlobalNodeRoot;
+
+	/// <summary>
+	/// 鼠标指针
+	/// </summary>
+	public Cursor Cursor { get; private set; }
+	
+	/// <summary>
+	/// 游戏房间
+	/// </summary>
+	public RoomManager RoomManager { get; private set; }
 	
 	/// <summary>
 	/// 房间配置
@@ -67,8 +53,8 @@ public partial class GameApplication : Node2D
 		
 		InitRoomConfig();
 
-		//扫描并注册当前程序集下的武器
-		WeaponManager.RegisterWeaponFromAssembly(GetType().Assembly);
+		//初始化 ActivityObject
+		ActivityObject.InitActivity();
 	}
 	
 	public override void _EnterTree()
@@ -81,17 +67,19 @@ public partial class GameApplication : Node2D
 		ActivityObject.IsDebug = Debug;
 		//Engine.TimeScale = 0.3f;
 
-		GlobalNodeRoot = GetNode<Node2D>(GlobalNodeRootPath);
+		//初始化ui
+		UiManager.Init();
+		
 		// 初始化鼠标
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
-		Cursor = CursorPack.Instantiate<Cursor>();
+		Cursor = ResourceManager.Load<PackedScene>(ResourcePath.prefab_ui_Cursor_tscn).Instantiate<Cursor>();
+		AddChild(Cursor);
 
-		RoomManager = GetNode<RoomManager>(RoomPath);
-		SubViewport = GetNode<SubViewport>(ViewportPath);
-		SubViewportContainer = GetNode<SubViewportContainer>(ViewportContainerPath);
-		Ui = GetNode<RoomUI>(UiPath);
-
-		Ui.AddChild(Cursor);
+		//打开ui
+		UiManager.Open_RoomUI();
+		
+		RoomManager = ResourceManager.Load<PackedScene>(ResourcePath.scene_Room_tscn).Instantiate<RoomManager>();
+		SceneRoot.AddChild(RoomManager);
 	}
 
 	public override void _Process(double delta)
@@ -113,8 +101,9 @@ public partial class GameApplication : Node2D
 	/// </summary>
 	public Vector2 ViewToGlobalPosition(Vector2 viewPos)
 	{
-		//return viewPos;
-		return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
+		// 3.5写法
+		//return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
+		return (viewPos - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale;
 	}
 
 	//初始化房间配置
@@ -132,10 +121,10 @@ public partial class GameApplication : Node2D
 			var areaInfos = roomSplit.RoomInfo.DoorAreaInfos;
 			if (areaInfos.Count == 0)
 			{
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.X - 2) * GenerateDungeon.TileCellSize));
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.X - 2) * GenerateDungeon.TileCellSize));
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.Y - 2) * GenerateDungeon.TileCellSize));
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GenerateDungeon.TileCellSize, (roomSplit.RoomInfo.Size.Y - 2) * GenerateDungeon.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.X - 1) * GameConfig.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.X - 1) * GameConfig.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.Y - 1) * GameConfig.TileCellSize));
+				areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.Y - 1) * GameConfig.TileCellSize));
 			}
 		}
 	}

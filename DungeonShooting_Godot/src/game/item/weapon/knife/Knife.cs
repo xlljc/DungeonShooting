@@ -1,7 +1,7 @@
 
 using Godot;
 
-[RegisterWeapon("1004", typeof(KnifeAttribute))]
+[RegisterWeapon(ActivityIdPrefix.Weapon + "0004", typeof(KnifeAttribute))]
 public partial class Knife : Weapon
 {
     private class KnifeAttribute : WeaponAttribute
@@ -35,11 +35,12 @@ public partial class Knife : Weapon
     }
 
     private Area2D _hitArea;
-
     private int _attackIndex = 0;
     
-    public Knife(string typeId, WeaponAttribute attribute) : base(typeId, attribute)
+    public override void _Ready()
     {
+        base._Ready();
+        
         _hitArea = GetNode<Area2D>("HitArea");
         _hitArea.Monitoring = false;
         _hitArea.Monitorable = false;

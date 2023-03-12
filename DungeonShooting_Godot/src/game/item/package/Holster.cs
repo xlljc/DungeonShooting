@@ -124,7 +124,7 @@ public class Holster
         for (int i = 0; i < SlotList.Length; i++)
         {
             var item = SlotList[i];
-            if (item.Weapon != null && item.Weapon.TypeId == id)
+            if (item.Weapon != null && item.Weapon.ItemId == id)
             {
                 return i;
             }

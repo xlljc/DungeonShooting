@@ -1,0 +1,144 @@
+[gd_scene load_steps=15 format=3 uid="uid://vbu1phb8mchw"]
+
+[ext_resource type="Texture2D" uid="uid://d8ot2wrdoe4j" path="res://resource/effects/Explosion.png" id="1_qqm6c"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/effects/Smoke.png" id="1_ybsvf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tscb3"]
+atlas = ExtResource("1_qqm6c")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l2nv6"]
+atlas = ExtResource("1_qqm6c")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5133m"]
+atlas = ExtResource("1_qqm6c")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_41eg5"]
+atlas = ExtResource("1_qqm6c")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ub3cw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tscb3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l2nv6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5133m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_41eg5")
+}],
+"loop": false,
+"name": &"default",
+"speed": 13.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4bd3q"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_86ye5"]
+_data = [Vector2(0, 0.736364), 0.0, 0.0, 0, 0, Vector2(0.396825, 1), 0.0, 0.0, 0, 0, Vector2(0.990476, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_j77i6"]
+curve = SubResource("Curve_86ye5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_r1yeu"]
+lifetime_randomness = 0.3
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 45.0
+initial_velocity_max = 65.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+angle_max = 360.0
+scale_min = 0.3
+scale_max = 0.6
+scale_curve = SubResource("CurveTexture_j77i6")
+color = Color(0.909804, 0.909804, 0.909804, 0.380392)
+anim_offset_max = 1.0
+
+[sub_resource type="Animation" id="Animation_jnfgg"]
+resource_name = "Start"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_yr61b"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1spnw"]
+_data = {
+"RESET": SubResource("Animation_yr61b"),
+"Start": SubResource("Animation_jnfgg")
+}
+
+[node name="BulletDisappear" type="AnimatedSprite2D"]
+modulate = Color(1, 1, 1, 0.784314)
+z_index = -4
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_ub3cw")
+autoplay = "default"
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_4bd3q")
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_r1yeu")
+texture = ExtResource("1_ybsvf")
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 20
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../GPUParticles2D")
+autoplay = "Start"
+libraries = {
+"": SubResource("AnimationLibrary_1spnw")
+}

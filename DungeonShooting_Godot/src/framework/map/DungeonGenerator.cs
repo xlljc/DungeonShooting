@@ -6,18 +6,8 @@ using Godot;
 /// <summary>
 /// 地牢生成器
 /// </summary>
-public class GenerateDungeon
+public class DungeonGenerator
 {
-    /// <summary>
-    /// 过道宽度
-    /// </summary>
-    public const int CorridorWidth = 4;
-
-    /// <summary>
-    /// tilemap 网格大小
-    /// </summary>
-    public const int TileCellSize = 16;
-    
     /// <summary>
     /// 所有生成的房间, 调用过 Generate() 函数才能获取到值
     /// </summary>
@@ -50,12 +40,13 @@ public class GenerateDungeon
     private int _roomMaxInterval = 10;
 
     //房间横轴分散程度
-    private float _roomHorizontalMinDispersion = 0.7f;
-    private float _roomHorizontalMaxDispersion = 1.1f;
+    
+    private float _roomHorizontalMinDispersion = 0.3f;
+    private float _roomHorizontalMaxDispersion = 1.2f;
 
     //房间纵轴分散程度
-    private float _roomVerticalMinDispersion = 0.7f;
-    private float _roomVerticalMaxDispersion = 1.1f;
+    private float _roomVerticalMinDispersion = 0.3f;
+    private float _roomVerticalMaxDispersion = 1.2f;
 
     //区域限制
     private bool _enableLimitRange = true;
@@ -157,6 +148,7 @@ public class GenerateDungeon
 
         //随机选择一个房间
         var roomSplit = Utils.RandomChoose(GameApplication.Instance.RoomConfig);
+        //var roomSplit = GameApplication.Instance.RoomConfig[1];
         var room = new RoomInfo(_count, roomSplit);
         
         //房间大小
@@ -218,7 +210,7 @@ public class GenerateDungeon
                 }
 
                 //是否碰到其他房间或者过道
-                if (_roomGrid.RectCollision(room.Position - new Vector2(3, 3), room.Size + new Vector2(6, 6)))
+                if (_roomGrid.RectCollision(room.Position - new Vector2(GameConfig.RoomSpace, GameConfig.RoomSpace), room.Size + new Vector2(GameConfig.RoomSpace * 2, GameConfig.RoomSpace * 2)))
                 {
                     //碰到其他墙壁, 再一次尝试
                     continue;
@@ -540,8 +532,8 @@ public class GenerateDungeon
         var room1 = room.RoomSplit.RoomInfo;
         var room2 = nextRoom.RoomSplit.RoomInfo;
         
-        Vector2I? temp1 = null;
-        Vector2I? temp2 = null;
+        int? temp1 = null;
+        int? temp2 = null;
 
         foreach (var areaInfo1 in room1.DoorAreaInfos)
         {
@@ -549,6 +541,11 @@ public class GenerateDungeon
             {
                 FindCrossPassage_Area(areaInfo1, room, nextRoom, ref temp1);
             }
+        }
+        
+        if (temp1 == null)
+        {
+            return false;
         }
 
         foreach (var areaInfo2 in room2.DoorAreaInfos)
@@ -559,51 +556,57 @@ public class GenerateDungeon
             }
         }
 
-        if (temp1 != null && temp2 != null)
+        if (temp2 == null)
         {
-            offset1 = Utils.RandomRangeInt(temp1.Value.X, temp1.Value.Y);
-            offset2 = Utils.RandomRangeInt(temp2.Value.X, temp2.Value.Y);
-            return true;
+            return false;
         }
-
-        return false;
+        
+        offset1 = temp1.Value;
+        offset2 = temp2.Value;
+        return true;
     }
 
-    private void FindCrossPassage_Area(DoorAreaInfo areaInfo, RoomInfo room1, RoomInfo room2, ref Vector2I? areaRange)
+    private void FindCrossPassage_Area(DoorAreaInfo areaInfo, RoomInfo room1, RoomInfo room2, ref int? areaRange)
     {
         if (areaInfo.Direction == DoorDirection.N || areaInfo.Direction == DoorDirection.S) //纵向门
         {
             var num = room1.GetHorizontalStart();
-            var p1 = num + areaInfo.Start / TileCellSize;
-            var p2 = num + areaInfo.End / TileCellSize;
+            var p1 = num + areaInfo.Start / GameConfig.TileCellSize;
+            var p2 = num + areaInfo.End / GameConfig.TileCellSize;
 
             if (room1.Position.X > room2.Position.X)
             {
-                var range = CalcOverlapRange(room2.GetHorizontalEnd(),
+                var range = CalcOverlapRange(room2.GetHorizontalEnd() + GameConfig.RoomSpace,
                     room1.GetHorizontalEnd(), p1, p2);
                 //交集范围够生成门
-                if (range.Y - range.X >= CorridorWidth)
+                if (range.Y - range.X >= GameConfig.CorridorWidth)
                 {
-                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
-                        Mathf.Abs(room1.Position.X - (int)range.Y) - CorridorWidth);
-                    if (areaRange == null || tempRange.X < areaRange.Value.X)
+                    // var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
+                    //     Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth);
+                    
+                    var rangeValue = Mathf.Abs(room1.Position.X - (int)range.X);
+
+                    if (areaRange == null || rangeValue < areaRange)
                     {
-                        areaRange = tempRange;
+                        areaRange = rangeValue;
                     }
                 }
             }
             else
             {
                 var range = CalcOverlapRange(room1.GetHorizontalStart(),
-                    room2.GetHorizontalStart(), p1, p2);
+                    room2.GetHorizontalStart() -  + GameConfig.RoomSpace, p1, p2);
                 //交集范围够生成门
-                if (range.Y - range.X >= CorridorWidth)
+                if (range.Y - range.X >= GameConfig.CorridorWidth)
                 {
-                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
-                        Mathf.Abs(room1.Position.X - (int)range.Y) - CorridorWidth);
-                    if (areaRange == null || tempRange.Y > areaRange.Value.Y)
+                    // var tempRange = new Vector2I(Mathf.Abs(room1.Position.X - (int)range.X),
+                    //     Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth);
+
+                    var rangeValue = Mathf.Abs(room1.Position.X - (int)range.Y) - GameConfig.CorridorWidth;
+
+                    if (areaRange == null || rangeValue > areaRange)
                     {
-                        areaRange = tempRange;
+                        areaRange = rangeValue;
                     }
                 }
             }
@@ -611,36 +614,42 @@ public class GenerateDungeon
         else //横向门
         {
             var num = room1.GetVerticalStart();
-            var p1 = num + areaInfo.Start / TileCellSize;
-            var p2 = num + areaInfo.End / TileCellSize;
+            var p1 = num + areaInfo.Start / GameConfig.TileCellSize;
+            var p2 = num + areaInfo.End / GameConfig.TileCellSize;
 
             if (room1.Position.Y > room2.Position.Y)
             {
-                var range = CalcOverlapRange(room2.GetVerticalEnd(),
+                var range = CalcOverlapRange(room2.GetVerticalEnd() + GameConfig.RoomSpace,
                     room1.GetVerticalEnd(), p1, p2);
                 //交集范围够生成门
-                if (range.Y - range.X >= CorridorWidth)
+                if (range.Y - range.X >= GameConfig.CorridorWidth)
                 {
-                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
-                        Mathf.Abs(room1.Position.Y - (int)range.Y) - CorridorWidth);
-                    if (areaRange == null || tempRange.X < areaRange.Value.X)
+                    // var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
+                    //     Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth);
+
+                    var rangeValue = Mathf.Abs(room1.Position.Y - (int)range.X);
+
+                    if (areaRange == null || rangeValue < areaRange)
                     {
-                        areaRange = tempRange;
+                        areaRange = rangeValue;
                     }
                 }
             }
             else
             {
                 var range = CalcOverlapRange(room1.GetVerticalStart(),
-                    room2.GetVerticalStart(), p1, p2);
+                    room2.GetVerticalStart() - GameConfig.RoomSpace, p1, p2);
                 //交集范围够生成门
-                if (range.Y - range.X >= CorridorWidth)
+                if (range.Y - range.X >= GameConfig.CorridorWidth)
                 {
-                    var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
-                        Mathf.Abs(room1.Position.Y - (int)range.Y) - CorridorWidth);
-                    if (areaRange == null || tempRange.Y > areaRange.Value.Y)
+                    // var tempRange = new Vector2I(Mathf.Abs(room1.Position.Y - (int)range.X),
+                    //     Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth);
+                    
+                    var rangeValue = Mathf.Abs(room1.Position.Y - (int)range.Y) - GameConfig.CorridorWidth;
+
+                    if (areaRange == null || rangeValue > areaRange)
                     {
-                        areaRange = tempRange;
+                        areaRange = rangeValue;
                     }
                 }
             }
@@ -829,21 +838,21 @@ public class GenerateDungeon
                         if (direction == DoorDirection.E || direction == DoorDirection.W) //第二个门向← 或者 第二个门向→
                         {
                             range = CalcOverlapRange(
-                                room.GetVerticalStart() * TileCellSize + doorAreaInfo1.Start, room.GetVerticalStart() * TileCellSize + doorAreaInfo1.End,
-                                nextRoom.GetVerticalStart() * TileCellSize + doorAreaInfo2.Start, nextRoom.GetVerticalStart() * TileCellSize + doorAreaInfo2.End
+                                room.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo1.Start, room.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo1.End,
+                                nextRoom.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo2.Start, nextRoom.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo2.End
                             );
                         }
                         else //第二个门向↑ 或者 第二个门向↓
                         {
                             range = CalcOverlapRange(
-                                room.GetHorizontalStart() * TileCellSize + doorAreaInfo1.Start, room.GetHorizontalStart() * TileCellSize + doorAreaInfo1.End,
-                                nextRoom.GetHorizontalStart() * TileCellSize + doorAreaInfo2.Start, nextRoom.GetHorizontalStart() * TileCellSize + doorAreaInfo2.End
+                                room.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo1.Start, room.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo1.End,
+                                nextRoom.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo2.Start, nextRoom.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo2.End
                             );
                         }
                         //交集范围够生成门
-                        if (range.Y - range.X >= CorridorWidth * TileCellSize)
+                        if (range.Y - range.X >= GameConfig.CorridorWidth * GameConfig.TileCellSize)
                         {
-                            rangeList.Add(new Vector2I((int)(range.X / 16), (int)(range.Y / 16) - CorridorWidth));
+                            rangeList.Add(new Vector2I((int)(range.X / 16), (int)(range.Y / 16) - GameConfig.CorridorWidth));
                         }
                     }
                 }
@@ -909,21 +918,21 @@ public class GenerateDungeon
         var point2 = door2.OriginPosition;
         var pos = new Vector2(Mathf.Min(point1.X, point2.X), Mathf.Min(point1.Y, point2.Y));
         var size = new Vector2(
-            point1.X == point2.X ? CorridorWidth : Mathf.Abs(point1.X - point2.X),
-            point1.Y == point2.Y ? CorridorWidth : Mathf.Abs(point1.Y - point2.Y)
+            point1.X == point2.X ? GameConfig.CorridorWidth : Mathf.Abs(point1.X - point2.X),
+            point1.Y == point2.Y ? GameConfig.CorridorWidth : Mathf.Abs(point1.Y - point2.Y)
         );
 
         Vector2 collPos;
         Vector2 collSize;
         if (point1.X == point2.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos = new Vector2(pos.X - 3, pos.Y);
-            collSize = new Vector2(size.X + 6, size.Y);
+            collPos = new Vector2(pos.X - GameConfig.RoomSpace, pos.Y);
+            collSize = new Vector2(size.X + GameConfig.RoomSpace * 2, size.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos = new Vector2(pos.X, pos.Y - 3);
-            collSize = new Vector2(size.X, size.Y + 6);
+            collPos = new Vector2(pos.X, pos.Y - GameConfig.RoomSpace);
+            collSize = new Vector2(size.X, size.Y + GameConfig.RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos, collSize))
@@ -942,26 +951,26 @@ public class GenerateDungeon
         var point2 = door2.OriginPosition;
         var pos1 = new Vector2(Mathf.Min(point1.X, cross.X), Mathf.Min(point1.Y, cross.Y));
         var size1 = new Vector2(
-            point1.X == cross.X ? CorridorWidth : Mathf.Abs(point1.X - cross.X),
-            point1.Y == cross.Y ? CorridorWidth : Mathf.Abs(point1.Y - cross.Y)
+            point1.X == cross.X ? GameConfig.CorridorWidth : Mathf.Abs(point1.X - cross.X),
+            point1.Y == cross.Y ? GameConfig.CorridorWidth : Mathf.Abs(point1.Y - cross.Y)
         );
         var pos2 = new Vector2(Mathf.Min(point2.X, cross.X), Mathf.Min(point2.Y, cross.Y));
         var size2 = new Vector2(
-            point2.X == cross.X ? CorridorWidth : Mathf.Abs(point2.X - cross.X),
-            point2.Y == cross.Y ? CorridorWidth : Mathf.Abs(point2.Y - cross.Y)
+            point2.X == cross.X ? GameConfig.CorridorWidth : Mathf.Abs(point2.X - cross.X),
+            point2.Y == cross.Y ? GameConfig.CorridorWidth : Mathf.Abs(point2.Y - cross.Y)
         );
 
         Vector2 collPos1;
         Vector2 collSize1;
         if (point1.X == cross.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos1 = new Vector2(pos1.X - 3, pos1.Y);
-            collSize1 = new Vector2(size1.X + 6, size1.Y);
+            collPos1 = new Vector2(pos1.X - GameConfig.RoomSpace, pos1.Y);
+            collSize1 = new Vector2(size1.X + GameConfig.RoomSpace * 2, size1.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos1 = new Vector2(pos1.X, pos1.Y - 3);
-            collSize1 = new Vector2(size1.X, size1.Y + 6);
+            collPos1 = new Vector2(pos1.X, pos1.Y - GameConfig.RoomSpace);
+            collSize1 = new Vector2(size1.X, size1.Y + GameConfig.RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos1, collSize1))
@@ -973,13 +982,13 @@ public class GenerateDungeon
         Vector2 collSize2;
         if (point2.X == cross.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos2 = new Vector2(pos2.X - 3, pos2.Y);
-            collSize2 = new Vector2(size2.X + 6, size2.Y);
+            collPos2 = new Vector2(pos2.X - GameConfig.RoomSpace, pos2.Y);
+            collSize2 = new Vector2(size2.X + GameConfig.RoomSpace * 2, size2.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos2 = new Vector2(pos2.X, pos2.Y - 3);
-            collSize2 = new Vector2(size2.X, size2.Y + 6);
+            collPos2 = new Vector2(pos2.X, pos2.Y - GameConfig.RoomSpace);
+            collSize2 = new Vector2(size2.X, size2.Y + GameConfig.RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos2, collSize2))

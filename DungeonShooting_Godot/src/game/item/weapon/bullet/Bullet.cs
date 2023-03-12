@@ -3,12 +3,13 @@ using Godot;
 /// <summary>
 /// 子弹类
 /// </summary>
+[RegisterActivity(ActivityIdPrefix.Bullet + "0001", ResourcePath.prefab_weapon_bullet_Bullet_tscn)]
 public partial class Bullet : ActivityObject
 {
     /// <summary>
     /// 碰撞区域
     /// </summary>
-    public Area2D CollisionArea { get; }
+    public Area2D CollisionArea { get; private set; }
 
     // 最大飞行距离
     private float MaxDistance;
@@ -19,8 +20,7 @@ public partial class Bullet : ActivityObject
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
 
-    public Bullet(string scenePath, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer) :
-        base(scenePath)
+    public void Init(float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
         CollisionArea = GetNode<Area2D>("CollisionArea");
         CollisionArea.CollisionMask = targetLayer;
@@ -35,17 +35,11 @@ public partial class Bullet : ActivityObject
         BasisVelocity = new Vector2(FlySpeed, 0).Rotated(Rotation);
     }
 
-    public override void _Ready()
-    {
-        base._Ready();
-        //绘制阴影
-        ShowShadowSprite();
-    }
-
     protected override void PhysicsProcessOver(float delta)
     {
         //移动
         var lastSlideCollision = GetLastSlideCollision();
+        //撞到墙
         if (lastSlideCollision != null)
         {
             //创建粒子特效
@@ -62,6 +56,11 @@ public partial class Bullet : ActivityObject
         CurrFlyDistance += FlySpeed * delta;
         if (CurrFlyDistance >= MaxDistance)
         {
+            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletDisappear_tscn);
+            var node = packedScene.Instantiate<Node2D>();
+            node.GlobalPosition = GlobalPosition;
+            node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+            
             Destroy();
         }
     }

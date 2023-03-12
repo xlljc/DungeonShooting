@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 
 /// <summary>
@@ -27,107 +26,107 @@ public partial class RoomManager : Node2D
     /// 玩家对象
     /// </summary>
     public Player Player { get; private set; }
+
+    /// <summary>
+    /// 当前玩家所在的房间
+    /// </summary>
+    public RoomInfo ActiveRoom => Player?.Affiliation?.RoomInfo;
+    
+    /// <summary>
+    /// 当前玩家所在的区域
+    /// </summary>
+    public AffiliationArea ActiveAffiliation => Player?.Affiliation;
     
     private DungeonTile _dungeonTile;
     private AutoTileConfig _autoTileConfig;
     
     private Font _font;
-    private GenerateDungeon _generateDungeon;
+    private DungeonGenerator _dungeonGenerator;
+
+    private int _affiliationIndex = 0;
+
+    private float _checkEnemyTimer = 0;
 
     //房间内所有静态导航网格数据
     private static List<NavigationPolygonData> _roomStaticNavigationList = new List<NavigationPolygonData>();
-
-    public override void _EnterTree()
-    {
-        //创建玩家
-        Player = new Player();
-        Player.Position = new Vector2(30, 30);
-        Player.Name = "Player";
-        Player.PutDown(RoomLayerEnum.YSortLayer);
-    }
-
+    
     public override void _Ready()
     {
         TileRoot.YSortEnabled = false;
-        //FloorTileMap.NavigationVisibilityMode = TileMap.VisibilityMode.ForceShow;
         
         _font = ResourceManager.Load<Font>(ResourcePath.resource_font_cn_font_36_tres);
 
+        //绑定事件
+        EventManager.AddEventListener(EventEnum.OnPlayerFirstEnterRoom, OnPlayerFirstEnterRoom);
+        EventManager.AddEventListener(EventEnum.OnPlayerEnterRoom, OnPlayerEnterRoom);
+
         var nowTicks = DateTime.Now.Ticks;
         //生成地牢房间
-        _generateDungeon = new GenerateDungeon();
-        _generateDungeon.Generate();
+        _dungeonGenerator = new DungeonGenerator();
+        _dungeonGenerator.Generate();
+        
         
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
         _dungeonTile = new DungeonTile(TileRoot);
-        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _generateDungeon.StartRoom);
+        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom);
         
-        //生成寻路网格
+        //生成寻路网格， 这一步操作只生成过道的导航
         _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorMapLayer);
-        //挂载导航区域
+        //挂载过道导航区域
         _dungeonTile.MountNavigationPolygon(this);
+        //过道导航区域数据
         _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
+        //门导航区域数据
         _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
-        //挂载所有导航区域
-        _generateDungeon.EachRoom(MountNavFromRoomInfo);
-        
+        //初始化所有房间
+        _dungeonGenerator.EachRoom(InitRoom);
+
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
         //播放bgm
-        SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
+        //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
-        Player.PickUpWeapon(WeaponManager.GetGun("1001"));
-        // Player.PickUpWeapon(WeaponManager.GetGun("1002"));
-        Player.PickUpWeapon(WeaponManager.GetGun("1004"));
-        Player.PickUpWeapon(WeaponManager.GetGun("1003"));
+        //创建玩家
+        Player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
+        Player.Position = new Vector2(30, 30);
+        Player.Name = "Player";
+        Player.PutDown(RoomLayerEnum.YSortLayer);
         
-        var enemy1 = new Enemy();
-        enemy1.PutDown(new Vector2(160, 160), RoomLayerEnum.YSortLayer);
-        enemy1.PickUpWeapon(WeaponManager.GetGun("1001"));
-        
+        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
+        Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
+        ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0003").PutDown(new Vector2(10, 10), RoomLayerEnum.NormalLayer);
+
         // for (int i = 0; i < 10; i++)
         // {
-        //     var enemyTemp = new Enemy();
-        //     enemyTemp.PutDown(new Vector2(30 + (i + 1) * 20, 30), RoomLayerEnum.YSortLayer);
-        //     // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1003"));
-        //     // enemyTemp.PickUpWeapon(WeaponManager.GetGun("1001"));
+        //     var enemy = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
+        //     enemy.PutDown(new Vector2(100 + i * 20, 100), RoomLayerEnum.YSortLayer);
+        //     enemy.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + Utils.RandomChoose("0001", "0002", "0003")));
         // }
 
-        // var enemy2 = new Enemy();
-        // enemy2.Name = "Enemy2";
-        // enemy2.PutDown(new Vector2(120, 100));
-        // enemy2.PickUpWeapon(WeaponManager.GetGun("1002"));
-        // //enemy2.PickUpWeapon(WeaponManager.GetGun("1004"));
-        // //enemy2.PickUpWeapon(WeaponManager.GetGun("1003"));
-        //
-        // var enemy3 = new Enemy();
-        // enemy3.Name = "Enemy3";
-        // enemy3.PutDown(new Vector2(100, 120));
-        // enemy3.PickUpWeapon(WeaponManager.GetGun("1003"));
-        // enemy3.PickUpWeapon(WeaponManager.GetGun("1002"));
-
-        // WeaponManager.GetGun("1004").PutDown(new Vector2(80, 100), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1001").PutDown(new Vector2(220, 120), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1001").PutDown(new Vector2(230, 120), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1001").PutDown(new Vector2(80, 80), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1002").PutDown(new Vector2(80, 120), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(120, 80), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(130, 80), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(140, 80), RoomLayerEnum.NormalLayer);
+        //相机跟随玩家
+        GameCamera.Main.SetFollowTarget(Player);
         
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(180, 80), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1003").PutDown(new Vector2(180, 180), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1002").PutDown(new Vector2(180, 120), RoomLayerEnum.NormalLayer);
-        // WeaponManager.GetGun("1002").PutDown(new Vector2(180, 130), RoomLayerEnum.NormalLayer);
+        //修改鼠标指针
+        var cursor = GameApplication.Instance.Cursor;
+        cursor.SetGuiMode(false);
+        cursor.SetMountRole(Player);
+    }
 
+    public override void _PhysicsProcess(double delta)
+    {
+        _checkEnemyTimer += (float)delta;
+        if (_checkEnemyTimer >= 1)
+        {
+            _checkEnemyTimer %= 1;
+            //检查房间内的敌人存活状况
+            OnCheckEnemy();
+        }
     }
 
     /// <summary>
     /// 获取指定层级根节点
     /// </summary>
-    /// <param name="layerEnum"></param>
-    /// <returns></returns>
     public Node2D GetRoomLayer(RoomLayerEnum layerEnum)
     {
         switch (layerEnum)
@@ -156,9 +155,6 @@ public partial class RoomManager : Node2D
         {
             if (_dungeonTile != null)
             {
-                // DrawLine(new Vector2(0, -5000), new Vector2(0, 5000), Colors.Green);
-                // DrawLine(new Vector2(-5000, 0), new Vector2(5000, 0), Colors.Green);
-                
                 //绘制ai寻路区域
                 Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());
             }
@@ -167,10 +163,24 @@ public partial class RoomManager : Node2D
         }
     }
 
+    // 初始化房间
+    private void InitRoom(RoomInfo roomInfo)
+    {
+        //挂载房间导航区域
+        MountNavFromRoomInfo(roomInfo);
+        //创建门
+        CreateDoor(roomInfo);
+        
+        //创建房间归属区域
+        CreateRoomAisleAffiliation(roomInfo);
+    }
+    
+    //挂载房间导航区域
     private void MountNavFromRoomInfo(RoomInfo roomInfo)
     {
         var polygonArray = roomInfo.RoomSplit.RoomInfo.NavigationList.ToArray();
         var polygon = new NavigationPolygon();
+        var offset = roomInfo.GetOffsetPosition();
         for (var i = 0; i < polygonArray.Length; i++)
         {
             var navigationPolygonData = polygonArray[i];
@@ -178,16 +188,18 @@ public partial class RoomManager : Node2D
             //这里的位置需要加上房间位置
             for (var j = 0; j < polygonPointArray.Length; j++)
             {
-                polygonPointArray[j] = polygonPointArray[j] + (roomInfo.Position + Vector2I.One) * GenerateDungeon.TileCellSize;
+                polygonPointArray[j] = polygonPointArray[j] + roomInfo.GetWorldPosition() - offset;
             }
             polygon.AddOutline(polygonPointArray);
-                
-            //存入汇总列表
-            _roomStaticNavigationList.Add(new NavigationPolygonData()
+            
+            var points = new List<SerializeVector2>();
+            for (var j = 0; j < polygonPointArray.Length; j++)
             {
-                Type = navigationPolygonData.Type,
-                Points = polygonPointArray.Select(point => new SerializeVector2(point)).ToList(),
-            });
+                points.Add(new SerializeVector2(polygonPointArray[j]));
+            }
+            
+            //存入汇总列表
+            _roomStaticNavigationList.Add(new NavigationPolygonData(navigationPolygonData.Type, points));
         }
         polygon.MakePolygonsFromOutlines();
         var navigationPolygon = new NavigationRegion2D();
@@ -195,7 +207,90 @@ public partial class RoomManager : Node2D
         navigationPolygon.NavigationPolygon = polygon;
         AddChild(navigationPolygon);
     }
+
+    //创建门
+    private void CreateDoor(RoomInfo roomInfo)
+    {
+        foreach (var doorInfo in roomInfo.Doors)
+        {
+            var door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "0001");
+            doorInfo.Door = door;
+            Vector2 offset;
+            switch (doorInfo.Direction)
+            {
+                case DoorDirection.E:
+                    offset = new Vector2(-0.5f, 2);
+                    break;
+                case DoorDirection.W:
+                    offset = new Vector2(0.5f, 2);
+                    break;
+                case DoorDirection.S:
+                    offset = new Vector2(2f, -0.5f);
+                    break;
+                case DoorDirection.N:
+                    offset = new Vector2(2f, 0.5f);
+                    break;
+                default: offset = new Vector2();
+                    break;
+            }
+            door.Position = (doorInfo.OriginPosition + offset) * GameConfig.TileCellSize;
+            door.Init(doorInfo);
+            door.PutDown(RoomLayerEnum.NormalLayer, false);
+        }
+    }
+
+    //创建房间归属区域
+    private void CreateRoomAisleAffiliation(RoomInfo roomInfo)
+    {
+        var affiliation = new AffiliationArea();
+        affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
+        affiliation.Init(roomInfo, new Rect2(
+            roomInfo.GetWorldPosition() + new Vector2(GameConfig.TileCellSize, GameConfig.TileCellSize),
+            (roomInfo.Size - new Vector2I(2, 2)) * GameConfig.TileCellSize));
+        
+        roomInfo.Affiliation = affiliation;
+        TileRoot.AddChild(affiliation);
+    }
+
+    /// <summary>
+    /// 玩家第一次进入某个房间回调
+    /// </summary>
+    private void OnPlayerFirstEnterRoom(object o)
+    {
+        var room = (RoomInfo)o;
+        room.BeReady();
+    }
+
+    /// <summary>
+    /// 玩家进入某个房间回调
+    /// </summary>
+    private void OnPlayerEnterRoom(object o)
+    {
+    }
     
+    /// <summary>
+    /// 检测当前房间敌人是否已经消灭干净, 应当每秒执行一次
+    /// </summary>
+    private void OnCheckEnemy()
+    {
+        var activeRoom = ActiveRoom;
+        if (activeRoom != null && activeRoom.IsSeclusion)
+        {
+            if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
+            {
+                //存活敌人数量
+                var count = ActiveAffiliation.FindIncludeItemsCount(
+                    activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
+                );
+                GD.Print("当前房间存活数量: " + count);
+                if (count == 0)
+                {
+                    activeRoom.OnClearRoom();
+                }
+            }
+        }
+    }
+
     //绘制房间区域, debug 用
     private void DrawRoomInfo(RoomInfo room)
     {

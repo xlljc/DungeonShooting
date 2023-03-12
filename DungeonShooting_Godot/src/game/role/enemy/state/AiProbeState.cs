@@ -11,7 +11,7 @@ public class AiProbeState : StateBase<Enemy, AiStateEnum>
     public override void Process(float delta)
     {
         //其他敌人发现玩家
-        if (Enemy.IsFindTarget)
+        if (Master.CanChangeLeaveFor())
         {
             ChangeStateLate(AiStateEnum.AiLeaveFor);
             return;

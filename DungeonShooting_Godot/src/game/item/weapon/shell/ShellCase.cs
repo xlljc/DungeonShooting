@@ -4,10 +4,17 @@ using Godot;
 /// <summary>
 /// 弹壳类
 /// </summary>
+[RegisterActivity(ActivityIdPrefix.Shell + "0001", ResourcePath.prefab_weapon_shell_ShellCase_tscn)]
 public partial class ShellCase : ActivityObject
 {
-    public ShellCase() : base(ResourcePath.prefab_weapon_shell_ShellCase_tscn)
+    /// <summary>
+    /// 动画播放器
+    /// </summary>
+    public AnimationPlayer AnimationPlayer { get; private set; }
+    
+    public override void _Ready()
     {
+        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         ShadowOffset = new Vector2(0, 1);
     }
 

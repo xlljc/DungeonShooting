@@ -1,15 +1,20 @@
-[gd_scene load_steps=11 format=3 uid="uid://bvpmtfupny8iu"]
+[gd_scene load_steps=14 format=3 uid="uid://bvpmtfupny8iu"]
 
-[ext_resource type="Script" path="res://src/game/ui/RoomUI.cs" id="1"]
+[ext_resource type="Script" path="res://src/game/ui/roomUI/RoomUIPanel.cs" id="1_u48k1"]
 [ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/mapBar.png" id="2"]
-[ext_resource type="PackedScene" path="res://prefab/ui/bar/ReloadBar.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://b67i86mtqrn32" path="res://resource/sprite/ui/icon/icon_bullet.png" id="2_004n3"]
+[ext_resource type="Texture2D" uid="uid://dxstii6f4l8m0" path="res://resource/sprite/ui/keyboard/e.png" id="3_ajp3c"]
 [ext_resource type="Texture2D" uid="uid://u5ul7fu8wv1a" path="res://resource/sprite/ui/healthBar.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://cukrx5yyqw86o" path="res://resource/sprite/ui/reloadBar.png" id="4_npp5n"]
 [ext_resource type="Texture2D" uid="uid://xafbhgrxmosy" path="res://resource/sprite/gun/gun4.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://cx3i1nkcc4307" path="res://resource/sprite/ui/reloadBarBlock.png" id="5_t7fdk"]
 [ext_resource type="Texture2D" uid="uid://bxd75tme0v3pb" path="res://resource/sprite/ui/hpBar.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://h25j6uka74tv" path="res://resource/sprite/ui/shieldBar.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://djcdjrs07ighv" path="res://resource/sprite/ui/hpSlot.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://dnpguajopuyd7" path="res://resource/sprite/ui/shieldSlot.png" id="9"]
-[ext_resource type="PackedScene" path="res://prefab/ui/bar/InteractiveTipBar.tscn" id="10"]
+
+[sub_resource type="Gradient" id="1"]
+colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
 
 [node name="RoomUI" type="Control"]
 layout_mode = 3
@@ -18,7 +23,38 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1")
+script = ExtResource("1_u48k1")
+
+[node name="InteractiveTipBar" type="Node2D" parent="."]
+z_index = 10
+position = Vector2(961, 553)
+scale = Vector2(4, 4)
+
+[node name="Icon" type="Sprite2D" parent="InteractiveTipBar"]
+position = Vector2(0, -25)
+texture = ExtResource("2_004n3")
+
+[node name="InteractiveIcon" type="Sprite2D" parent="InteractiveTipBar"]
+visible = false
+position = Vector2(0, -30)
+texture = ExtResource("3_ajp3c")
+
+[node name="Line2D" type="Line2D" parent="InteractiveTipBar"]
+points = PackedVector2Array(0, -17, 0, -15.0938, 0, 0)
+width = 2.0
+gradient = SubResource("1")
+
+[node name="ReloadBar" type="Node2D" parent="."]
+z_index = 15
+position = Vector2(961, 553)
+scale = Vector2(4, 4)
+
+[node name="Slot" type="Sprite2D" parent="ReloadBar"]
+position = Vector2(0, -24)
+texture = ExtResource("4_npp5n")
+
+[node name="Block" type="Sprite2D" parent="ReloadBar/Slot"]
+texture = ExtResource("5_t7fdk")
 
 [node name="Control" type="Control" parent="."]
 anchors_preset = 0
@@ -120,12 +156,3 @@ offset_bottom = 74.0
 text = "30/90"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="GlobalNode" type="Node" parent="."]
-
-[node name="ViewNode" type="Node" parent="."]
-
-[node name="InteractiveTipBar" parent="ViewNode" instance=ExtResource("10")]
-
-[node name="ReloadBar" parent="ViewNode" instance=ExtResource("3")]
-z_index = 15

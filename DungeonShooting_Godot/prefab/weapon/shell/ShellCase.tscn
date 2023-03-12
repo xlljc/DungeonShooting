@@ -1,10 +1,8 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=10 format=3 uid="uid://bj4yr6ru8nhwr"]
 
 [ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/shellCase.png" id="1"]
 [ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_nmhqm"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2"]
-
-
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_px12l"]
 resource_local_to_scene = true

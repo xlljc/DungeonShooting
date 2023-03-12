@@ -1,9 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://lbe753cb8heb"]
+[gd_scene load_steps=5 format=3 uid="uid://lbe753cb8heb"]
 
-[ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Room.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://bvpmtfupny8iu" path="res://prefab/ui/RoomUI.tscn" id="2"]
 [ext_resource type="Script" path="res://src/game/GameApplication.cs" id="3"]
-[ext_resource type="PackedScene" path="res://prefab/ui/Cursor.tscn" id="4"]
+[ext_resource type="Script" path="res://src/game/camera/GameCamera.cs" id="4_3gsi2"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
@@ -22,15 +20,12 @@ void vertex() {
 shader = SubResource("1")
 shader_parameter/offset = Vector2(0, 0)
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("SubViewport", "SubViewportContainer", "SceneRoot", "GlobalNodeRoot")]
 script = ExtResource("3")
-Debug = true
-CursorPack = ExtResource("4")
-RoomPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport/Room")
-ViewportPath = NodePath("ViewCanvas/SubViewportContainer/SubViewport")
-ViewportContainerPath = NodePath("ViewCanvas/SubViewportContainer")
-UiPath = NodePath("UiCanvas/RoomUI")
-GlobalNodeRootPath = NodePath("GlobalNodeRoot")
+SubViewport = NodePath("ViewCanvas/SubViewportContainer/SubViewport")
+SubViewportContainer = NodePath("ViewCanvas/SubViewportContainer")
+SceneRoot = NodePath("ViewCanvas/SubViewportContainer/SubViewport/SceneRoot")
+GlobalNodeRoot = NodePath("GlobalNodeRoot")
 
 [node name="ViewCanvas" type="CanvasLayer" parent="."]
 layer = -1
@@ -53,10 +48,13 @@ canvas_item_default_texture_filter = 0
 size = Vector2i(482, 272)
 render_target_update_mode = 4
 
-[node name="Room" parent="ViewCanvas/SubViewportContainer/SubViewport" instance=ExtResource("1")]
+[node name="SceneRoot" type="Node2D" parent="ViewCanvas/SubViewportContainer/SubViewport"]
+
+[node name="Camera2D" type="Camera2D" parent="ViewCanvas/SubViewportContainer/SubViewport"]
+position = Vector2(253, 219)
+process_callback = 0
+limit_smoothed = true
+editor_draw_drag_margin = true
+script = ExtResource("4_3gsi2")
 
 [node name="GlobalNodeRoot" type="Node2D" parent="."]
-
-[node name="UiCanvas" type="CanvasLayer" parent="."]
-
-[node name="RoomUI" parent="UiCanvas" instance=ExtResource("2")]

@@ -35,7 +35,7 @@ public class WeaponAttribute
     /// </summary>
     public int MaxAmmoCapacity = 120;
     /// <summary>
-    /// 备用弹药数量
+    /// 起始备用弹药数量
     /// </summary>
     public int StandbyAmmoCapacity = 90;
     /// <summary>
@@ -173,6 +173,16 @@ public class WeaponAttribute
     /// <returns></returns>
     public WeaponAttribute Clone()
     {
+        var attr = _Clone();
+        if (AiUseAttribute != null)
+        {
+            attr.AiUseAttribute = AiUseAttribute._Clone();
+        }
+        return attr;
+    }
+
+    private WeaponAttribute _Clone()
+    {
         var attr = new WeaponAttribute();
         attr.Name = Name;
         attr.WeaponPrefab = WeaponPrefab;
@@ -225,9 +235,8 @@ public class WeaponAttribute
     /// </summary>
     public float AiTargetLockingTime = 0;
     
+    /// <summary>
+    /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性
+    /// </summary>
     public WeaponAttribute AiUseAttribute;
-    
-    public AiFireCallback OnAiFireCallback;
-
-    public delegate void AiFireCallback(Enemy enemy, Weapon weapon);
 }

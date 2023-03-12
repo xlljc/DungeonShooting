@@ -1,36 +1,42 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://brx7nc4mdgjat"]
 
-[ext_resource path="res://resource/sprite/ui/Cursor.png" type="Texture2D" id=1]
-[ext_resource path="res://src/game/ui/Cursor.cs" type="Script" id=2]
+[ext_resource type="Texture2D" uid="uid://ct5v768lsf6nc" path="res://resource/sprite/ui/Cursor.png" id="1"]
+[ext_resource type="Script" path="res://src/game/ui/Cursor.cs" id="2"]
+[ext_resource type="Texture2D" uid="uid://cjiiu86a42mnj" path="res://resource/sprite/ui/CursorCenter.png" id="2_2j135"]
 
 [node name="Cursor" type="Node2D"]
 z_index = 10
-script = ExtResource( 2 )
+script = ExtResource("2")
+
+[node name="Center" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(4, 4)
+texture = ExtResource("2_2j135")
 
 [node name="LT" type="Sprite2D" parent="."]
-scale = Vector2( 4, 4 )
-texture = ExtResource( 1 )
-offset = Vector2( -2, -2 )
+scale = Vector2(4, 4)
+texture = ExtResource("1")
+offset = Vector2(-2, -2)
 region_enabled = true
-region_rect = Rect2( 0, 0, 4, 4 )
+region_rect = Rect2(0, 0, 4, 4)
 
 [node name="LB" type="Sprite2D" parent="."]
-scale = Vector2( 4, 4 )
-texture = ExtResource( 1 )
-offset = Vector2( -2, 2 )
+scale = Vector2(4, 4)
+texture = ExtResource("1")
+offset = Vector2(-2, 2)
 region_enabled = true
-region_rect = Rect2( 0, 4, 4, 4 )
+region_rect = Rect2(0, 4, 4, 4)
 
 [node name="RT" type="Sprite2D" parent="."]
-scale = Vector2( 4, 4 )
-texture = ExtResource( 1 )
-offset = Vector2( 2, -2 )
+scale = Vector2(4, 4)
+texture = ExtResource("1")
+offset = Vector2(2, -2)
 region_enabled = true
-region_rect = Rect2( 4, 0, 4, 4 )
+region_rect = Rect2(4, 0, 4, 4)
 
 [node name="RB" type="Sprite2D" parent="."]
-scale = Vector2( 4, 4 )
-texture = ExtResource( 1 )
-offset = Vector2( 2, 2 )
+scale = Vector2(4, 4)
+texture = ExtResource("1")
+offset = Vector2(2, 2)
 region_enabled = true
-region_rect = Rect2( 4, 4, 4, 4 )
+region_rect = Rect2(4, 4, 4, 4)

@@ -1,10 +1,10 @@
-using System.Collections;
 using Godot;
 
 
 /// <summary>
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
+[RegisterActivity(ActivityIdPrefix.Role + "0001", ResourcePath.prefab_role_Player_tscn)]
 public partial class Player : Role
 {
     /// <summary>
@@ -21,20 +21,16 @@ public partial class Player : Role
     /// 移动摩擦力
     /// </summary>
     public float Friction { get; set; } = 800f;
-
-    public Player(): base(ResourcePath.prefab_role_Player_tscn)
+    
+    public override void OnInit()
     {
+        base.OnInit();
+        
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
         
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;
-    }
-
-    public override void _Ready()
-    {
-        base._Ready();
-
         //让相机跟随玩家
         // var remoteTransform = new RemoteTransform2D();
         // AddChild(remoteTransform);
@@ -42,14 +38,14 @@ public partial class Player : Role
         // MainCamera.Main.ResetSmoothing();
         // remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
         
-        RefreshGunTexture();
+        RefreshWeaponTexture();
 
         MaxHp = 50;
         Hp = 50;
         MaxShield = 30;
         Shield = 30;
 
-        // debug用
+        // // debug用
         // Acceleration = 3000;
         // Friction = 3000;
         // MoveSpeed = 500;
@@ -62,9 +58,9 @@ public partial class Player : Role
     {
         base.Process(delta);
         //脸的朝向
-        var gPos = GlobalPosition;
         if (LookTarget == null)
         {
+            var gPos = GlobalPosition;
             Vector2 mousePos = InputManager.GetViewportMousePosition();
             if (mousePos.X > gPos.X && Face == FaceDirection.Left)
             {
@@ -91,7 +87,7 @@ public partial class Player : Role
             var item = TriggerInteractive();
             if (item != null)
             {
-                RefreshGunTexture();
+                RefreshWeaponTexture();
             }
         }
         else if (Input.IsActionJustPressed("reload")) //换弹
@@ -101,18 +97,6 @@ public partial class Player : Role
         if (Input.IsActionPressed("fire")) //开火
         {
             Attack();
-        }
-        //刷新显示的弹药剩余量
-        RefreshGunAmmunition();
-
-        var reloadBar = GameApplication.Instance.Ui.ReloadBar;
-        if (Holster.ActiveWeapon != null && Holster.ActiveWeapon.Reloading)
-        {
-            reloadBar.ShowBar(gPos, 1 - Holster.ActiveWeapon.ReloadProgress);
-        }
-        else
-        {
-            reloadBar.HideBar();
         }
     }
 
@@ -127,25 +111,25 @@ public partial class Player : Role
     public override void ExchangeNext()
     {
         base.ExchangeNext();
-        RefreshGunTexture();
+        RefreshWeaponTexture();
     }
 
     public override void ExchangePrev()
     {
         base.ExchangePrev();
-        RefreshGunTexture();
+        RefreshWeaponTexture();
     }
 
     public override void ThrowWeapon(int index)
     {
         base.ThrowWeapon(index);
-        RefreshGunTexture();
+        RefreshWeaponTexture();
     }
 
     public override void ThrowWeapon()
     {
         base.ThrowWeapon();
-        RefreshGunTexture();
+        RefreshWeaponTexture();
     }
 
     public override bool PickUpWeapon(Weapon weapon, bool exchange = true)
@@ -153,74 +137,47 @@ public partial class Player : Role
         var v = base.PickUpWeapon(weapon, exchange);
         if (v)
         {
-            RefreshGunTexture();
+            RefreshWeaponTexture();
         }
         return v;
     }
 
     protected override void OnChangeHp(int hp)
     {
-        GameApplication.Instance.Ui.SetHp(hp);
+        //GameApplication.Instance.Ui.SetHp(hp);
+        EventManager.EmitEvent(EventEnum.OnPlayerHpChange, hp);
     }
 
     protected override void OnChangeMaxHp(int maxHp)
     {
-        GameApplication.Instance.Ui.SetMaxHp(maxHp);
+        //GameApplication.Instance.Ui.SetMaxHp(maxHp);
+        EventManager.EmitEvent(EventEnum.OnPlayerMaxHpChange, maxHp);
     }
 
     protected override void ChangeInteractiveItem(CheckInteractiveResult result)
     {
-        if (result == null)
-        {
-            //隐藏互动提示
-            GameApplication.Instance.Ui.InteractiveTipBar.HideBar();
-        }
-        else
-        {
-            if (InteractiveItem is Weapon gun)
-            {
-                //显示互动提示
-                GameApplication.Instance.Ui.InteractiveTipBar.ShowBar(result.Target, result.ShowIcon);
-            }
-        }
+        //派发互动对象改变事件
+        EventManager.EmitEvent(EventEnum.OnPlayerChangeInteractiveItem, result);
     }
 
     protected override void OnChangeShield(int shield)
     {
-        GameApplication.Instance.Ui.SetShield(shield);
+        //GameApplication.Instance.Ui.SetShield(shield);
+        EventManager.EmitEvent(EventEnum.OnPlayerShieldChange, shield);
     }
 
     protected override void OnChangeMaxShield(int maxShield)
     {
-        GameApplication.Instance.Ui.SetMaxShield(maxShield);
+        //GameApplication.Instance.Ui.SetMaxShield(maxShield);
+        EventManager.EmitEvent(EventEnum.OnPlayerMaxShieldChange, maxShield);
     }
 
     /// <summary>
     /// 刷新 ui 上手持的物体
     /// </summary>
-    private void RefreshGunTexture()
+    private void RefreshWeaponTexture()
     {
-        var gun = Holster.ActiveWeapon;
-        if (gun != null)
-        {
-            GameApplication.Instance.Ui.SetGunTexture(gun.GetDefaultTexture());
-        }
-        else
-        {
-            GameApplication.Instance.Ui.SetGunTexture(null);
-        }
-    }
-
-    /// <summary>
-    /// 刷新 ui 上显示的弹药量
-    /// </summary>
-    private void RefreshGunAmmunition()
-    {
-        var gun = Holster.ActiveWeapon;
-        if (gun != null)
-        {
-            GameApplication.Instance.Ui.SetAmmunition(gun.CurrAmmo, gun.ResidueAmmo);
-        }
+        EventManager.EmitEvent(EventEnum.OnPlayerRefreshWeaponTexture, Holster.ActiveWeapon?.GetDefaultTexture());
     }
 
     //处理角色移动的输入
