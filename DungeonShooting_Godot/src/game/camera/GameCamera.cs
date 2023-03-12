@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -12,10 +13,15 @@ public partial class GameCamera : Camera2D
     public static GameCamera Main { get; private set; }
 
     /// <summary>
+    /// 相机坐标更新完成事件
+    /// </summary>
+    public event Action<float> OnPositionUpdateEvent;
+
+    /// <summary>
     /// 恢复系数
     /// </summary>
     [Export]
-    public float RecoveryCoefficient = 100f;
+    public float RecoveryCoefficient = 25f;
     
     /// <summary>
     /// 抖动开关
@@ -31,7 +37,8 @@ public partial class GameCamera : Camera2D
     //public Vector2 SubPixelPosition { get; private set; }
 
     private long _index = 0;
-    private Vector2 _processDistance = Vector2.Zero;
+    
+    private Vector2 _processDistanceSquared = Vector2.Zero;
     private Vector2 _processDirection = Vector2.Zero;
     //抖动数据
     private readonly Dictionary<long, Vector2> _shakeMap = new Dictionary<long, Vector2>();
@@ -39,9 +46,13 @@ public partial class GameCamera : Camera2D
     private Vector2 _camPos;
     private Vector2 _shakeOffset = Vector2.Zero;
 
-    public override void _Ready()
+    public GameCamera()
     {
         Main = this;
+    }
+    
+    public override void _Ready()
+    {
         _camPos = GlobalPosition;
     }
 
@@ -72,8 +83,18 @@ public partial class GameCamera : Camera2D
             {
                 targetPos = targetPosition.Lerp(mousePosition, 0.3f);
             }
-            _camPos = _camPos.Lerp(targetPos, Mathf.Min(6 * newDelta, 1)) + _shakeOffset;
-            GlobalPosition = _camPos.Round();
+            _camPos = (_camPos.Lerp(targetPos, Mathf.Min(6 * newDelta, 1))).Round();
+            GlobalPosition = _camPos;
+            
+            Offset = _shakeOffset.Round();
+        
+            //_temp = _camPos - targetPosition;
+
+            //调用相机更新事件
+            if (OnPositionUpdateEvent != null)
+            {
+                OnPositionUpdateEvent(newDelta);
+            }
         }
     }
 
@@ -98,32 +119,35 @@ public partial class GameCamera : Camera2D
     /// 设置帧抖动, 结束后自动清零, 需要每一帧调用
     /// </summary>
     /// <param name="value">抖动的力度</param>
-    public void ProcessShake(Vector2 value)
+    public void Shake(Vector2 value)
     {
-        if (value.Length() > _processDistance.Length())
+        if (value.LengthSquared() > _processDistanceSquared.LengthSquared())
         {
-            _processDistance = value;
+            _processDistanceSquared = value;
         }
     }
-
-    public void ProcessDirectionalShake(Vector2 value)
+    
+    /// <summary>
+    /// 添加一个单方向上的抖动, 该帧结束后自动清零
+    /// </summary>
+    public void DirectionalShake(Vector2 value)
     {
         _processDirection += value;
     }
-
+    
     /// <summary>
     /// 创建一个抖动, 并设置抖动时间
     /// </summary>
-    /// <param name="value">抖动力度</param>
-    /// <param name="time">抖动生效时间</param>
     public async void CreateShake(Vector2 value, float time)
     {
         if (time > 0)
         {
-            long tempIndex = _index++;
-            SceneTreeTimer sceneTreeTimer = GetTree().CreateTimer(time);
+            value.X = Mathf.Abs(value.X);
+            value.Y = Mathf.Abs(value.Y);
+            var tempIndex = _index++;
+            var sceneTreeTimer = GetTree().CreateTimer(time);
             _shakeMap[tempIndex] = value;
-            await ToSignal(sceneTreeTimer, "timeout");
+            await ToSignal(sceneTreeTimer, Timer.SignalName.Timeout);
             _shakeMap.Remove(tempIndex);
         }
     }
@@ -133,13 +157,14 @@ public partial class GameCamera : Camera2D
     {
         if (EnableShake)
         {
-            var distance = _CalculateDistance();
+            var distance = _CalculateDistanceSquared();
+            distance = new Vector2(Mathf.Sqrt(distance.X), Mathf.Sqrt(distance.Y));
             _shakeOffset += _processDirection + new Vector2(
-                Utils.RandomRangeFloat(-distance.X, distance.X) - _shakeOffset.X,
-                Utils.RandomRangeFloat(-distance.Y, distance.Y) - _shakeOffset.Y
+                (float)GD.RandRange(-distance.X, distance.X) - Offset.X,
+                (float)GD.RandRange(-distance.Y, distance.Y) - Offset.Y
             );
-            _processDistance = Vector2.Zero;
-            _processDirection = Vector2.Zero;
+            _processDistanceSquared = Vector2.Zero;
+            _processDirection = _processDirection.Lerp(Vector2.Zero, RecoveryCoefficient * delta);
         }
         else
         {
@@ -148,21 +173,21 @@ public partial class GameCamera : Camera2D
     }
 
     //计算相机需要抖动的值
-    private Vector2 _CalculateDistance()
+    private Vector2 _CalculateDistanceSquared()
     {
-        Vector2 temp = Vector2.Zero;
+        var temp = Vector2.Zero;
         float length = 0;
-        foreach (var item in _shakeMap)
+        
+        foreach (var keyValuePair in _shakeMap)
         {
-            var value = item.Value;
-            float tempLenght = value.Length();
+            var tempLenght = keyValuePair.Value.LengthSquared();
             if (tempLenght > length)
             {
                 length = tempLenght;
-                temp = value;
+                temp = keyValuePair.Value;
             }
         }
-        return _processDistance.Length() > length ? _processDistance : temp;
+        
+        return _processDistanceSquared.LengthSquared() > length ? _processDistanceSquared : temp;
     }
-
 }

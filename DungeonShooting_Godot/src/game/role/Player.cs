@@ -25,7 +25,9 @@ public partial class Player : Role
     public override void OnInit()
     {
         base.OnInit();
-        
+
+        GameCamera.Main.OnPositionUpdateEvent += OnCameraPositionUpdate;
+
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
         
@@ -58,9 +60,9 @@ public partial class Player : Role
     {
         base.Process(delta);
         //脸的朝向
-        var gPos = GlobalPosition;
         if (LookTarget == null)
         {
+            var gPos = GlobalPosition;
             Vector2 mousePos = InputManager.GetViewportMousePosition();
             if (mousePos.X > gPos.X && Face == FaceDirection.Left)
             {
@@ -100,16 +102,6 @@ public partial class Player : Role
         }
         //刷新显示的弹药剩余量
         RefreshGunAmmunition();
-
-        var reloadBar = GameApplication.Instance.Ui.ReloadBar;
-        if (Holster.ActiveWeapon != null && Holster.ActiveWeapon.Reloading)
-        {
-            reloadBar.ShowBar(gPos, 1 - Holster.ActiveWeapon.ReloadProgress);
-        }
-        else
-        {
-            reloadBar.HideBar();
-        }
     }
 
     protected override void PhysicsProcess(float delta)
@@ -120,6 +112,21 @@ public partial class Player : Role
         PlayAnim();
     }
 
+    private void OnCameraPositionUpdate(float delta)
+    {
+        var reloadBar = GameApplication.Instance.Ui.ReloadBar;
+        if (Holster.ActiveWeapon != null && Holster.ActiveWeapon.Reloading)
+        {
+            reloadBar.ShowBar(GlobalPosition, 1 - Holster.ActiveWeapon.ReloadProgress);
+        }
+        else
+        {
+            reloadBar.HideBar();
+        }
+        // GameApplication.Instance.Ui.Control.MapBar.Instance.GlobalPosition =
+        //     GameApplication.Instance.ViewToGlobalPosition(Player.Current.GlobalPosition);
+    }
+    
     public override void ExchangeNext()
     {
         base.ExchangeNext();
