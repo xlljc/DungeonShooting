@@ -63,14 +63,14 @@ public partial class Shotgun : Weapon
     protected override void OnFire()
     {
         //创建一个弹壳
-        var startPos = GlobalPosition + new Vector2(0, 5);
+        var startPos = Master.GlobalPosition;
         var startHeight = 6;
         var direction = GlobalRotationDegrees + Utils.RandomRangeInt(-30, 30) + 180;
-        var xf = Utils.RandomRangeInt(20, 60);
-        var yf = Utils.RandomRangeInt(60, 120);
+        var verticalSpeed = Utils.RandomRangeInt(60, 120);
+        var velocity = new Vector2(Utils.RandomRangeInt(20, 60), 0).Rotated(direction * Mathf.Pi / 180);
         var rotate = Utils.RandomRangeInt(-720, 720);
-        var shell = ActivityObject.Create<ShellCase>(ActivityIdPrefix.Shell + "0001");;
-        shell.Throw(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, true);
+        var shell = Create<ShellCase>(ActivityIdPrefix.Shell + "0001");
+        shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
         
         if (Master == GameApplication.Instance.RoomManager.Player)
         {

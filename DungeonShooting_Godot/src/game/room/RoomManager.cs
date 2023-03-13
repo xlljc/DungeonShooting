@@ -65,22 +65,21 @@ public partial class RoomManager : Node2D
         _dungeonGenerator = new DungeonGenerator();
         _dungeonGenerator.Generate();
         
+        //填充地牢
+        _autoTileConfig = new AutoTileConfig();
+        _dungeonTile = new DungeonTile(TileRoot);
+        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom);
         
-        // //填充地牢
-        // _autoTileConfig = new AutoTileConfig();
-        // _dungeonTile = new DungeonTile(TileRoot);
-        // _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom);
-        //
-        // //生成寻路网格， 这一步操作只生成过道的导航
-        // _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorMapLayer);
-        // //挂载过道导航区域
-        // _dungeonTile.MountNavigationPolygon(this);
-        // //过道导航区域数据
-        // _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
-        // //门导航区域数据
-        // _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
-        // //初始化所有房间
-        // _dungeonGenerator.EachRoom(InitRoom);
+        //生成寻路网格， 这一步操作只生成过道的导航
+        _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorMapLayer);
+        //挂载过道导航区域
+        _dungeonTile.MountNavigationPolygon(this);
+        //过道导航区域数据
+        _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
+        //门导航区域数据
+        _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
+        //初始化所有房间
+        _dungeonGenerator.EachRoom(InitRoom);
 
         GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
 
@@ -97,7 +96,7 @@ public partial class RoomManager : Node2D
 
         var weapon = ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001");
         weapon.PutDown(RoomLayerEnum.NormalLayer);
-        weapon.VerticalSpeed = 100;
+        weapon.Altitude = 32;
 
         // for (int i = 0; i < 10; i++)
         // {
