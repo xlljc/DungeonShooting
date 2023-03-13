@@ -104,7 +104,8 @@ public partial class Gun : Weapon
         var xf = Utils.RandomRangeInt(20, 60);
         var yf = Utils.RandomRangeInt(60, 120);
         var rotate = Utils.RandomRangeInt(-720, 720);
-        var shell = ActivityObject.Create<ShellCase>(ActivityIdPrefix.Shell + "0001");;
+        var shell = ActivityObject.Create<ShellCase>(ActivityIdPrefix.Shell + "0001");
+        shell.PutDown(RoomLayerEnum.YSortLayer);
         shell.Throw(new Vector2(10, 5), Master.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
         
         if (Master == GameApplication.Instance.RoomManager.Player)
