@@ -65,7 +65,7 @@ public partial class GameApplication : Node2D
 		Engine.MaxFps = 60;
 		//调试绘制开关
 		ActivityObject.IsDebug = Debug;
-		//Engine.TimeScale = 0.3f;
+		//Engine.TimeScale = 0.2f;
 
 		//初始化ui
 		UiManager.Init();

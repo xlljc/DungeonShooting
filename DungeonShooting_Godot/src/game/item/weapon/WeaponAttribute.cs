@@ -79,7 +79,7 @@ public class WeaponAttribute
     /// </summary>
     public float StartFiringSpeed = 300;
     /// <summary>
-    /// 最终射速, 最终每分钟能开火次数
+    /// 最终射速, 最终每分钟能开火次数, 仅当 ContinuousShoot 为 true 时生效
     /// </summary>
     public float FinalFiringSpeed = 300;
     /// <summary>

@@ -27,7 +27,7 @@ public class GunBar
 
     public void Process(float delta)
     {
-        var weapon = Player.Current.Holster.ActiveWeapon;
+        var weapon = Player.Current?.Holster.ActiveWeapon;
         if (weapon != null)
         {
             SetWeaponAmmunition(weapon.CurrAmmo, weapon.ResidueAmmo);

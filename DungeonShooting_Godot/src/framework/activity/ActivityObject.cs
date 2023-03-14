@@ -502,8 +502,13 @@ public abstract partial class ActivityObject : CharacterBody2D
     public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotate)
     {
         var parent = GetParent();
-        if (parent == null || parent != GameApplication.Instance.RoomManager.YSortLayer)
+        if (parent == null)
         {
+            GameApplication.Instance.RoomManager.YSortLayer.AddChild(this);
+        }
+        else if (parent != GameApplication.Instance.RoomManager.YSortLayer)
+        {
+            parent.RemoveChild(this);
             GameApplication.Instance.RoomManager.YSortLayer.AddChild(this);
         }
         
@@ -659,7 +664,6 @@ public abstract partial class ActivityObject : CharacterBody2D
             else
             {
                 GlobalRotationDegrees = GlobalRotationDegrees + ThrowRotationDegreesSpeed * newDelta;
-                CalcThrowAnimatedPosition();
 
                 var ysp = VerticalSpeed;
 
@@ -728,6 +732,8 @@ public abstract partial class ActivityObject : CharacterBody2D
                         ThrowOver();
                     }
                 }
+                //计算精灵位置
+                CalcThrowAnimatedPosition();
             }
         }
 
@@ -929,16 +935,9 @@ public abstract partial class ActivityObject : CharacterBody2D
         ShadowSprite.Rotation = 0;
         //阴影位置计算
         var pos = AnimatedSprite.GlobalPosition;
-        if (_fallData != null && !_isFallOver)
-        {
-            ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + Altitude);
-        }
-        else
-        {
-            ShadowSprite.GlobalPosition = pos + ShadowOffset;
-        }
+        ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + Altitude);
     }
-    
+
     //计算位置
     private void CalcThrowAnimatedPosition()
     {

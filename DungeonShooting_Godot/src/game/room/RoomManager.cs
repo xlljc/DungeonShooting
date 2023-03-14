@@ -94,10 +94,6 @@ public partial class RoomManager : Node2D
         
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
 
-        var weapon = ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001");
-        weapon.PutDown(RoomLayerEnum.NormalLayer);
-        weapon.Altitude = 32;
-
         // for (int i = 0; i < 10; i++)
         // {
         //     var enemy = ActivityObject.Create<Enemy>(ActivityIdPrefix.Enemy + "0001");
