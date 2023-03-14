@@ -54,9 +54,9 @@ public partial class Shotgun : Weapon
     /// </summary>
     public PackedScene ShellPack;
 
-    public override void _Ready()
+    public override void OnInit()
     {
-        base._Ready();
+        base.OnInit();
         ShellPack = ResourceManager.Load<PackedScene>(ResourcePath.prefab_weapon_shell_ShellCase_tscn);
     }
 

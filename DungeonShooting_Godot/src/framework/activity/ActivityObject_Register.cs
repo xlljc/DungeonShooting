@@ -65,11 +65,11 @@ public partial class ActivityObject
                 foreach (var att in attrs)
                 {
                     //注册操作
-                    if (_activityRegisterMap.ContainsKey(att.Id))
+                    if (_activityRegisterMap.ContainsKey(att.ItemId))
                     {
-                        throw new Exception($"Object ID: '{att.Id}' is already registered");
+                        throw new Exception($"Object ID: '{att.ItemId}' is already registered");
                     }
-                    _activityRegisterMap.Add(att.Id, new RegisterActivityData(att, () =>
+                    _activityRegisterMap.Add(att.ItemId, new RegisterActivityData(att, () =>
                     {
                         return (ActivityObject)Activator.CreateInstance(type);
                     }));
@@ -86,7 +86,7 @@ public partial class ActivityObject
         if (_activityRegisterMap.TryGetValue(itemId, out var item))
         {
             var instance = item.CallBack();
-            instance._InitNode(item.RegisterActivity.Id, item.RegisterActivity.PrefabPath);
+            instance._InitNode(item.RegisterActivity.ItemId, item.RegisterActivity.PrefabPath);
             item.RegisterActivity.CustomHandler(instance);
             return instance;
         }

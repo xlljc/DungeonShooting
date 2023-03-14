@@ -113,21 +113,11 @@ public abstract partial class ActivityObject : CharacterBody2D
     public float BounceSpeed { get; set; } = 0.75f;
     
     /// <summary>
-    /// 投抛状态下物体碰撞器大小, 如果为 (-1, -1), 则默认使用 AnimatedSprite 的默认动画第一帧的大小
+    /// 投抛状态下物体碰撞器大小, 如果 (x, y) 都小于 0, 则默认使用 AnimatedSprite 的默认动画第一帧的大小
     /// </summary>
     public Vector2 ThrowCollisionSize { get; set; } = new Vector2(-1, -1);
-    
-    //是否是第一次下坠
-    private bool _firstFall = true;
-    
-    //下坠是否已经结束
-    private bool _isFallOver = true;
 
-    //下坠状态碰撞器形状
-    private RectangleShape2D _throwRectangleShape;
-
-    //投抛移动速率
-    private ExternalForce _throwForce;
+    // --------------------------------------------------------------------------------
 
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
@@ -162,9 +152,23 @@ public abstract partial class ActivityObject : CharacterBody2D
     //物体所在区域
     private AffiliationArea _affiliationArea;
 
+    //是否是第一次下坠
+    private bool _firstFall = true;
+    
+    //下坠是否已经结束
+    private bool _isFallOver = true;
+
+    //下坠状态碰撞器形状
+    private RectangleShape2D _throwRectangleShape;
+
+    //投抛移动速率
+    private ExternalForce _throwForce;
+    
     //落到地上回弹的速度
     private float _resilienceVerticalSpeed = 0;
     private bool _hasResilienceVerticalSpeed = false;
+    
+    // --------------------------------------------------------------------------------
     
     //实例索引
     private static long _instanceIndex = 0;
@@ -221,6 +225,13 @@ public abstract partial class ActivityObject : CharacterBody2D
         //_templateInstance.CallDeferred(Node.MethodName.QueueFree);
 
         OnInit();
+    }
+
+    /// <summary>
+    /// 子类重写的 _Ready() 可能会比 _InitNode() 函数调用晚, 所以禁止子类重写, 如需要 _Ready() 类似的功能需重写 OnInit()
+    /// </summary>
+    public sealed override void _Ready()
+    {
     }
 
     /// <summary>
@@ -634,7 +645,7 @@ public abstract partial class ActivityObject : CharacterBody2D
                 _hasResilienceVerticalSpeed = false;
                 _resilienceVerticalSpeed = 0;
 
-                if (ThrowCollisionSize.X == -1f && ThrowCollisionSize.Y == -1)
+                if (ThrowCollisionSize.X < 0 && ThrowCollisionSize.Y < 0)
                 {
                     _throwRectangleShape.Size = GetDefaultTexture().GetSize();
                 }

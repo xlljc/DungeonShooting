@@ -37,9 +37,9 @@ public partial class Knife : Weapon
     private Area2D _hitArea;
     private int _attackIndex = 0;
     
-    public override void _Ready()
+    public override void OnInit()
     {
-        base._Ready();
+        base.OnInit();
         
         _hitArea = GetNode<Area2D>("HitArea");
         _hitArea.Monitoring = false;
