@@ -1,10 +1,8 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=7 format=3 uid="uid://bjf0e6nehg51j"]
 
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="1"]
 [ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="2"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="3"]
-
-
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rxkv3"]
 resource_local_to_scene = true
@@ -12,13 +10,13 @@ shader = ExtResource("1")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s2ghg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aaga8"]
 resource_local_to_scene = true
 shader = ExtResource("1")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_4au77"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkdcb"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -36,10 +34,8 @@ script = ExtResource("2")
 z_index = -5
 material = SubResource("ShaderMaterial_rxkv3")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-material = SubResource("ShaderMaterial_s2ghg")
-sprite_frames = SubResource("SpriteFrames_4au77")
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_aaga8")
+sprite_frames = SubResource("SpriteFrames_kkdcb")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

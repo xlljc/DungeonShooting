@@ -81,16 +81,36 @@ public abstract partial class ActivityObject : CharacterBody2D
             }
         }
     }
-    
+
     /// <summary>
     /// 当前物体的海拔高度, 如果大于0, 则会做自由落体运动, 也就是执行投抛代码
     /// </summary>
-    public float Altitude { get; set; }
+    public float Altitude
+    {
+        get => _altitude;
+        set
+        {
+            _altitude = value;
+            _hasResilienceVerticalSpeed = false;
+        }
+    }
+
+    private float _altitude = 0;
 
     /// <summary>
     /// 物体纵轴移动速度, 如果设置大于0, 就可以营造向上投抛物体的效果, 该值会随着重力加速度衰减
     /// </summary>
-    public float VerticalSpeed { get; set; }
+    public float VerticalSpeed
+    {
+        get => _verticalSpeed;
+        set
+        {
+            _verticalSpeed = value;
+            _hasResilienceVerticalSpeed = false;
+        }
+    }
+
+    private float _verticalSpeed;
     
     /// <summary>
     /// 物体投抛时旋转速度, 角度制
@@ -116,6 +136,11 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// 投抛状态下物体碰撞器大小, 如果 (x, y) 都小于 0, 则默认使用 AnimatedSprite 的默认动画第一帧的大小
     /// </summary>
     public Vector2 ThrowCollisionSize { get; set; } = new Vector2(-1, -1);
+
+    /// <summary>
+    /// 是否启用垂直方向上的运动模拟, 默认开启, 如果禁用, 那么下落和投抛效果, 同样 Throw() 函数也将失效
+    /// </summary>
+    public bool EnableVerticalMotion { get; set; } = true;
 
     // --------------------------------------------------------------------------------
 
@@ -649,7 +674,7 @@ public abstract partial class ActivityObject : CharacterBody2D
                 _firstFall = true;
                 _hasResilienceVerticalSpeed = false;
                 _resilienceVerticalSpeed = 0;
-
+                
                 if (ThrowCollisionSize.X < 0 && ThrowCollisionSize.Y < 0)
                 {
                     _throwRectangleShape.Size = GetDefaultTexture().GetSize();
@@ -663,75 +688,79 @@ public abstract partial class ActivityObject : CharacterBody2D
             }
             else
             {
-                GlobalRotationDegrees = GlobalRotationDegrees + ThrowRotationDegreesSpeed * newDelta;
-
-                var ysp = VerticalSpeed;
-
-                Altitude += VerticalSpeed * newDelta;
-                VerticalSpeed -= GameConfig.G * newDelta;
-
-                //当高度大于16时, 显示在所有物体上
-                if (Altitude >= 16)
+                if (EnableVerticalMotion) //如果启用了纵向运动, 则更新运动
                 {
-                    AnimatedSprite.ZIndex = 20;
-                }
-                else
-                {
-                    AnimatedSprite.ZIndex = 0;
-                }
-            
-                //达到最高点
-                if (ysp > 0 && ysp * VerticalSpeed < 0)
-                {
-                    OnThrowMaxHeight(Altitude);
-                }
+                    GlobalRotationDegrees = GlobalRotationDegrees + ThrowRotationDegreesSpeed * newDelta;
 
-                //落地判断
-                if (Altitude <= 0)
-                {
-                    _isFallOver = true;
-                    Altitude = 0;
+                    var ysp = VerticalSpeed;
 
-                    //第一次接触地面
-                    if (_firstFall)
+                    _altitude += VerticalSpeed * newDelta;
+                    _verticalSpeed -= GameConfig.G * newDelta;
+
+                    //当高度大于16时, 显示在所有物体上
+                    if (Altitude >= 16)
                     {
-                        _firstFall = false;
-                        OnFirstFallToGround();
+                        AnimatedSprite.ZIndex = 20;
+                    }
+                    else
+                    {
+                        AnimatedSprite.ZIndex = 0;
+                    }
+                
+                    //达到最高点
+                    if (ysp > 0 && ysp * VerticalSpeed < 0)
+                    {
+                        OnThrowMaxHeight(Altitude);
                     }
 
-                    MoveController.ScaleAllForce(BounceSpeed);
-                    //如果落地高度不够低, 再抛一次
-                    if (Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 1))
+                    //落地判断
+                    if (Altitude <= 0)
                     {
-                        if (!_hasResilienceVerticalSpeed)
-                        {
-                            _hasResilienceVerticalSpeed = true;
-                            _resilienceVerticalSpeed = -VerticalSpeed * BounceStrength;
-                        }
-                        else
-                        {
-                            _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength;
-                        }
-                        VerticalSpeed = _resilienceVerticalSpeed;
-                        ThrowRotationDegreesSpeed = ThrowRotationDegreesSpeed * BounceStrength;
-                        _isFallOver = false;
+                        _altitude = 0;
 
-                        OnFallToGround();
-                    }
-                    else //结束
-                    {
-                        VerticalSpeed = 0;
-
-                        if (_throwForce != null)
+                        //第一次接触地面
+                        if (_firstFall)
                         {
-                            MoveController.RemoveForce(_throwForce);
-                            _throwForce = null;
+                            _firstFall = false;
+                            OnFirstFallToGround();
                         }
-                        
-                        OnFallToGround();
-                        ThrowOver();
+
+                        MoveController.ScaleAllForce(BounceSpeed);
+                        //如果落地高度不够低, 再抛一次
+                        if (Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 1))
+                        {
+                            if (!_hasResilienceVerticalSpeed)
+                            {
+                                _hasResilienceVerticalSpeed = true;
+                                _resilienceVerticalSpeed = -VerticalSpeed * BounceStrength;
+                            }
+                            else
+                            {
+                                _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength;
+                            }
+                            _verticalSpeed = _resilienceVerticalSpeed;
+                            ThrowRotationDegreesSpeed = ThrowRotationDegreesSpeed * BounceStrength;
+                            _isFallOver = false;
+
+                            OnFallToGround();
+                        }
+                        else //结束
+                        {
+                            _verticalSpeed = 0;
+
+                            if (_throwForce != null)
+                            {
+                                MoveController.RemoveForce(_throwForce);
+                                _throwForce = null;
+                            }
+                            _isFallOver = true;
+                            
+                            OnFallToGround();
+                            ThrowOver();
+                        }
                     }
                 }
+
                 //计算精灵位置
                 CalcThrowAnimatedPosition();
             }
@@ -1009,7 +1038,11 @@ public abstract partial class ActivityObject : CharacterBody2D
         CalcThrowAnimatedPosition();
         //显示阴影
         ShowShadowSprite();
-        OnThrowStart();
+
+        if (EnableVerticalMotion)
+        {
+            OnThrowStart();
+        }
     }
 
     /// <summary>
