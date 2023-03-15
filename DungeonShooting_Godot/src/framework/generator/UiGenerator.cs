@@ -24,28 +24,28 @@ public static class UiGenerator
         File.WriteAllText(path, code);
     }
 
-    private static string GenerateClassCode(UiNode uiNode)
+    private static string GenerateClassCode(UiNodeInfo uiNodeInfo)
     {
-        return $"namespace UI.{uiNode.OriginName};\n\n" +
+        return $"namespace UI.{uiNodeInfo.OriginName};\n\n" +
                $"/// <summary>\n" + 
                $"/// Ui代码, 该类是根据ui场景自动生成的, 请不要手动编辑该类, 以免造成代码丢失\n" + 
                $"/// </summary>\n" + 
-               $"public abstract partial class {uiNode.OriginName} : UiBase\n" +
+               $"public abstract partial class {uiNodeInfo.OriginName} : UiBase\n" +
                $"{{\n" +
-               GeneratePropertyListClassCode("", uiNode.OriginName + ".", uiNode, "    ") +
+               GeneratePropertyListClassCode("", uiNodeInfo.OriginName + ".", uiNodeInfo, "    ") +
                $"\n\n" +
-               GenerateAllChildrenClassCode(uiNode.OriginName + ".", uiNode, "    ") +
+               GenerateAllChildrenClassCode(uiNodeInfo.OriginName + ".", uiNodeInfo, "    ") +
                $"}}\n";
     }
 
-    private static string GenerateAllChildrenClassCode(string parent, UiNode uiNode, string retraction)
+    private static string GenerateAllChildrenClassCode(string parent, UiNodeInfo uiNodeInfo, string retraction)
     {
         var str = "";
-        if (uiNode.Children != null)
+        if (uiNodeInfo.Children != null)
         {
-            for (var i = 0; i < uiNode.Children.Count; i++)
+            for (var i = 0; i < uiNodeInfo.Children.Count; i++)
             {
-                var item = uiNode.Children[i];
+                var item = uiNodeInfo.Children[i];
                 str += GenerateAllChildrenClassCode(parent + item.OriginName + ".", item, retraction);
                 str += GenerateChildrenClassCode(parent, item, retraction);
             }
@@ -54,31 +54,31 @@ public static class UiGenerator
         return str;
     }
     
-    private static string GenerateChildrenClassCode(string parent, UiNode uiNode, string retraction)
+    private static string GenerateChildrenClassCode(string parent, UiNodeInfo uiNodeInfo, string retraction)
     {
         return retraction + $"/// <summary>\n" + 
-               retraction + $"/// 类型: <see cref=\"{uiNode.TypeName}\"/>, 路径: {parent}{uiNode.OriginName}\n" + 
+               retraction + $"/// 类型: <see cref=\"{uiNodeInfo.TypeName}\"/>, 路径: {parent}{uiNodeInfo.OriginName}\n" + 
                retraction + $"/// </summary>\n" + 
-               retraction + $"public class {uiNode.ClassName}\n" +
+               retraction + $"public class {uiNodeInfo.ClassName} : IUiNode<{uiNodeInfo.TypeName}, {uiNodeInfo.ClassName}>\n" +
                retraction + $"{{\n" +
                retraction + $"    /// <summary>\n" +
-               retraction + $"    /// Ui节点实例, 节点类型: <see cref=\"{uiNode.TypeName}\"/>, 节点路径: {parent}{uiNode.OriginName}\n" +
+               retraction + $"    /// Ui节点实例, 节点类型: <see cref=\"{uiNodeInfo.TypeName}\"/>, 节点路径: {parent}{uiNodeInfo.OriginName}\n" +
                retraction + $"    /// </summary>\n" +
-               retraction + $"    public {uiNode.TypeName} Instance {{ get; }}\n\n" +
-               GeneratePropertyListClassCode("Instance.", parent, uiNode, retraction + "    ") + 
-               retraction + $"    public {uiNode.ClassName}({uiNode.TypeName} node) => Instance = node;\n" +
-               retraction + $"    public {uiNode.ClassName} Clone() => new (({uiNode.TypeName})Instance.Duplicate());\n" +
+               retraction + $"    public {uiNodeInfo.TypeName} Instance {{ get; }}\n\n" +
+               GeneratePropertyListClassCode("Instance.", parent, uiNodeInfo, retraction + "    ") + 
+               retraction + $"    public {uiNodeInfo.ClassName}({uiNodeInfo.TypeName} node) => Instance = node;\n" +
+               retraction + $"    public {uiNodeInfo.ClassName} Clone() => new (({uiNodeInfo.TypeName})Instance.Duplicate());\n" +
                retraction + $"}}\n\n";
     }
 
-    private static string GeneratePropertyListClassCode(string target, string parent, UiNode uiNode, string retraction)
+    private static string GeneratePropertyListClassCode(string target, string parent, UiNodeInfo uiNodeInfo, string retraction)
     {
         var str = "";
-        if (uiNode.Children != null)
+        if (uiNodeInfo.Children != null)
         {
-            for (var i = 0; i < uiNode.Children.Count; i++)
+            for (var i = 0; i < uiNodeInfo.Children.Count; i++)
             {
-                var item = uiNode.Children[i];
+                var item = uiNodeInfo.Children[i];
                 str += GeneratePropertyCode(target, parent, item, retraction);
             }
         }
@@ -86,26 +86,26 @@ public static class UiGenerator
         return str;
     }
     
-    private static string GeneratePropertyCode(string target, string parent, UiNode uiNode, string retraction)
+    private static string GeneratePropertyCode(string target, string parent, UiNodeInfo uiNodeInfo, string retraction)
     {
         return retraction + $"/// <summary>\n" + 
-               retraction + $"/// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref=\"{uiNode.TypeName}\"/>, 节点路径: {parent}{uiNode.OriginName}\n" + 
+               retraction + $"/// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref=\"{uiNodeInfo.TypeName}\"/>, 节点路径: {parent}{uiNodeInfo.OriginName}\n" + 
                retraction + $"/// </summary>\n" + 
-               retraction + $"public {uiNode.ClassName} {uiNode.Name}\n" +
+               retraction + $"public {uiNodeInfo.ClassName} {uiNodeInfo.Name}\n" +
                retraction + $"{{\n" + 
                retraction + $"    get\n" + 
                retraction + $"    {{\n" + 
-               retraction + $"        if (_{uiNode.Name} == null) _{uiNode.Name} = new {uiNode.ClassName}({target}GetNode<{uiNode.TypeName}>(\"{uiNode.OriginName}\"));\n" + 
-               retraction + $"        return _{uiNode.Name};\n" + 
+               retraction + $"        if (_{uiNodeInfo.Name} == null) _{uiNodeInfo.Name} = new {uiNodeInfo.ClassName}({target}GetNodeOrNull<{uiNodeInfo.TypeName}>(\"{uiNodeInfo.OriginName}\"));\n" + 
+               retraction + $"        return _{uiNodeInfo.Name};\n" + 
                retraction + $"    }}\n" + 
                retraction + $"}}\n" +
-               retraction + $"private {uiNode.ClassName} _{uiNode.Name};\n\n";
+               retraction + $"private {uiNodeInfo.ClassName} _{uiNodeInfo.Name};\n\n";
     }
     
-    private static UiNode EachNode(Node node)
+    private static UiNodeInfo EachNode(Node node)
     {
         var name = Regex.Replace(node.Name, "[^\\w_]", "");
-        var uiNode = new UiNode("L_" + name, name, "UiNode" + (_nodeIndex++) + "_" + name, node.GetType().FullName);
+        var uiNode = new UiNodeInfo("L_" + name, name, "UiNode" + (_nodeIndex++) + "_" + name, node.GetType().FullName);
 
         var childCount = node.GetChildCount();
         if (childCount > 0)
@@ -117,7 +117,7 @@ public static class UiGenerator
                 {
                     if (uiNode.Children == null)
                     {
-                        uiNode.Children = new List<UiNode>();
+                        uiNode.Children = new List<UiNodeInfo>();
                     }
 
                     uiNode.Children.Add(EachNode(children));
@@ -128,15 +128,15 @@ public static class UiGenerator
         return uiNode;
     }
 
-    private class UiNode
+    private class UiNodeInfo
     {
         public string Name;
         public string OriginName;
         public string ClassName;
         public string TypeName;
-        public List<UiNode> Children;
+        public List<UiNodeInfo> Children;
 
-        public UiNode(string name, string originName, string className, string typeName)
+        public UiNodeInfo(string name, string originName, string className, string typeName)
         {
             Name = name;
             OriginName = originName;

@@ -12,7 +12,7 @@ public abstract partial class RoomUI : UiBase
     {
         get
         {
-            if (_L_InteractiveTipBar == null) _L_InteractiveTipBar = new UiNode1_InteractiveTipBar(GetNode<Godot.Node2D>("InteractiveTipBar"));
+            if (_L_InteractiveTipBar == null) _L_InteractiveTipBar = new UiNode1_InteractiveTipBar(GetNodeOrNull<Godot.Node2D>("InteractiveTipBar"));
             return _L_InteractiveTipBar;
         }
     }
@@ -25,7 +25,7 @@ public abstract partial class RoomUI : UiBase
     {
         get
         {
-            if (_L_ReloadBar == null) _L_ReloadBar = new UiNode5_ReloadBar(GetNode<Godot.Node2D>("ReloadBar"));
+            if (_L_ReloadBar == null) _L_ReloadBar = new UiNode5_ReloadBar(GetNodeOrNull<Godot.Node2D>("ReloadBar"));
             return _L_ReloadBar;
         }
     }
@@ -38,31 +38,18 @@ public abstract partial class RoomUI : UiBase
     {
         get
         {
-            if (_L_Control == null) _L_Control = new UiNode8_Control(GetNode<Godot.Control>("Control"));
+            if (_L_Control == null) _L_Control = new UiNode8_Control(GetNodeOrNull<Godot.Control>("Control"));
             return _L_Control;
         }
     }
     private UiNode8_Control _L_Control;
-
-    /// <summary>
-    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Cursor"/>, 节点路径: RoomUI.Cursor
-    /// </summary>
-    public UiNode18_Cursor L_Cursor
-    {
-        get
-        {
-            if (_L_Cursor == null) _L_Cursor = new UiNode18_Cursor(GetNode<Cursor>("Cursor"));
-            return _L_Cursor;
-        }
-    }
-    private UiNode18_Cursor _L_Cursor;
 
 
 
     /// <summary>
     /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.InteractiveTipBar.Icon
     /// </summary>
-    public class UiNode2_Icon
+    public class UiNode2_Icon : IUiNode<Godot.Sprite2D, UiNode2_Icon>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.InteractiveTipBar.Icon
@@ -76,7 +63,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.InteractiveTipBar.InteractiveIcon
     /// </summary>
-    public class UiNode3_InteractiveIcon
+    public class UiNode3_InteractiveIcon : IUiNode<Godot.Sprite2D, UiNode3_InteractiveIcon>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.InteractiveTipBar.InteractiveIcon
@@ -90,7 +77,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.Line2D"/>, 路径: RoomUI.InteractiveTipBar.Line2D
     /// </summary>
-    public class UiNode4_Line2D
+    public class UiNode4_Line2D : IUiNode<Godot.Line2D, UiNode4_Line2D>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.Line2D"/>, 节点路径: RoomUI.InteractiveTipBar.Line2D
@@ -104,7 +91,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.Node2D"/>, 路径: RoomUI.InteractiveTipBar
     /// </summary>
-    public class UiNode1_InteractiveTipBar
+    public class UiNode1_InteractiveTipBar : IUiNode<Godot.Node2D, UiNode1_InteractiveTipBar>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: RoomUI.InteractiveTipBar
@@ -118,7 +105,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_Icon == null) _L_Icon = new UiNode2_Icon(Instance.GetNode<Godot.Sprite2D>("Icon"));
+                if (_L_Icon == null) _L_Icon = new UiNode2_Icon(Instance.GetNodeOrNull<Godot.Sprite2D>("Icon"));
                 return _L_Icon;
             }
         }
@@ -131,7 +118,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_InteractiveIcon == null) _L_InteractiveIcon = new UiNode3_InteractiveIcon(Instance.GetNode<Godot.Sprite2D>("InteractiveIcon"));
+                if (_L_InteractiveIcon == null) _L_InteractiveIcon = new UiNode3_InteractiveIcon(Instance.GetNodeOrNull<Godot.Sprite2D>("InteractiveIcon"));
                 return _L_InteractiveIcon;
             }
         }
@@ -144,7 +131,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_Line2D == null) _L_Line2D = new UiNode4_Line2D(Instance.GetNode<Godot.Line2D>("Line2D"));
+                if (_L_Line2D == null) _L_Line2D = new UiNode4_Line2D(Instance.GetNodeOrNull<Godot.Line2D>("Line2D"));
                 return _L_Line2D;
             }
         }
@@ -157,7 +144,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.ReloadBar.Slot.Block
     /// </summary>
-    public class UiNode7_Block
+    public class UiNode7_Block : IUiNode<Godot.Sprite2D, UiNode7_Block>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.ReloadBar.Slot.Block
@@ -171,7 +158,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.ReloadBar.Slot
     /// </summary>
-    public class UiNode6_Slot
+    public class UiNode6_Slot : IUiNode<Godot.Sprite2D, UiNode6_Slot>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.ReloadBar.Slot
@@ -185,7 +172,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_Block == null) _L_Block = new UiNode7_Block(Instance.GetNode<Godot.Sprite2D>("Block"));
+                if (_L_Block == null) _L_Block = new UiNode7_Block(Instance.GetNodeOrNull<Godot.Sprite2D>("Block"));
                 return _L_Block;
             }
         }
@@ -198,7 +185,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.Node2D"/>, 路径: RoomUI.ReloadBar
     /// </summary>
-    public class UiNode5_ReloadBar
+    public class UiNode5_ReloadBar : IUiNode<Godot.Node2D, UiNode5_ReloadBar>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: RoomUI.ReloadBar
@@ -212,7 +199,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_Slot == null) _L_Slot = new UiNode6_Slot(Instance.GetNode<Godot.Sprite2D>("Slot"));
+                if (_L_Slot == null) _L_Slot = new UiNode6_Slot(Instance.GetNodeOrNull<Godot.Sprite2D>("Slot"));
                 return _L_Slot;
             }
         }
@@ -225,7 +212,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.HealthBar.HpSlot.HpBar
     /// </summary>
-    public class UiNode11_HpBar
+    public class UiNode11_HpBar : IUiNode<Godot.TextureRect, UiNode11_HpBar>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.HealthBar.HpSlot.HpBar
@@ -239,7 +226,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.HealthBar.HpSlot
     /// </summary>
-    public class UiNode10_HpSlot
+    public class UiNode10_HpSlot : IUiNode<Godot.NinePatchRect, UiNode10_HpSlot>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.HealthBar.HpSlot
@@ -253,7 +240,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_HpBar == null) _L_HpBar = new UiNode11_HpBar(Instance.GetNode<Godot.TextureRect>("HpBar"));
+                if (_L_HpBar == null) _L_HpBar = new UiNode11_HpBar(Instance.GetNodeOrNull<Godot.TextureRect>("HpBar"));
                 return _L_HpBar;
             }
         }
@@ -266,7 +253,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.HealthBar.ShieldSlot.ShieldBar
     /// </summary>
-    public class UiNode13_ShieldBar
+    public class UiNode13_ShieldBar : IUiNode<Godot.TextureRect, UiNode13_ShieldBar>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.HealthBar.ShieldSlot.ShieldBar
@@ -280,7 +267,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.HealthBar.ShieldSlot
     /// </summary>
-    public class UiNode12_ShieldSlot
+    public class UiNode12_ShieldSlot : IUiNode<Godot.NinePatchRect, UiNode12_ShieldSlot>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.HealthBar.ShieldSlot
@@ -294,7 +281,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_ShieldBar == null) _L_ShieldBar = new UiNode13_ShieldBar(Instance.GetNode<Godot.TextureRect>("ShieldBar"));
+                if (_L_ShieldBar == null) _L_ShieldBar = new UiNode13_ShieldBar(Instance.GetNodeOrNull<Godot.TextureRect>("ShieldBar"));
                 return _L_ShieldBar;
             }
         }
@@ -307,7 +294,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.HealthBar
     /// </summary>
-    public class UiNode9_HealthBar
+    public class UiNode9_HealthBar : IUiNode<Godot.TextureRect, UiNode9_HealthBar>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.HealthBar
@@ -321,7 +308,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_HpSlot == null) _L_HpSlot = new UiNode10_HpSlot(Instance.GetNode<Godot.NinePatchRect>("HpSlot"));
+                if (_L_HpSlot == null) _L_HpSlot = new UiNode10_HpSlot(Instance.GetNodeOrNull<Godot.NinePatchRect>("HpSlot"));
                 return _L_HpSlot;
             }
         }
@@ -334,7 +321,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_ShieldSlot == null) _L_ShieldSlot = new UiNode12_ShieldSlot(Instance.GetNode<Godot.NinePatchRect>("ShieldSlot"));
+                if (_L_ShieldSlot == null) _L_ShieldSlot = new UiNode12_ShieldSlot(Instance.GetNodeOrNull<Godot.NinePatchRect>("ShieldSlot"));
                 return _L_ShieldSlot;
             }
         }
@@ -347,7 +334,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.MapBar
     /// </summary>
-    public class UiNode14_MapBar
+    public class UiNode14_MapBar : IUiNode<Godot.TextureRect, UiNode14_MapBar>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.MapBar
@@ -361,7 +348,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.GunBar.GunSprite
     /// </summary>
-    public class UiNode16_GunSprite
+    public class UiNode16_GunSprite : IUiNode<Godot.TextureRect, UiNode16_GunSprite>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.GunBar.GunSprite
@@ -375,7 +362,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.Label"/>, 路径: RoomUI.Control.GunBar.BulletText
     /// </summary>
-    public class UiNode17_BulletText
+    public class UiNode17_BulletText : IUiNode<Godot.Label, UiNode17_BulletText>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.Label"/>, 节点路径: RoomUI.Control.GunBar.BulletText
@@ -389,7 +376,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.GunBar
     /// </summary>
-    public class UiNode15_GunBar
+    public class UiNode15_GunBar : IUiNode<Godot.Control, UiNode15_GunBar>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.Control.GunBar
@@ -403,7 +390,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_GunSprite == null) _L_GunSprite = new UiNode16_GunSprite(Instance.GetNode<Godot.TextureRect>("GunSprite"));
+                if (_L_GunSprite == null) _L_GunSprite = new UiNode16_GunSprite(Instance.GetNodeOrNull<Godot.TextureRect>("GunSprite"));
                 return _L_GunSprite;
             }
         }
@@ -416,7 +403,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_BulletText == null) _L_BulletText = new UiNode17_BulletText(Instance.GetNode<Godot.Label>("BulletText"));
+                if (_L_BulletText == null) _L_BulletText = new UiNode17_BulletText(Instance.GetNodeOrNull<Godot.Label>("BulletText"));
                 return _L_BulletText;
             }
         }
@@ -429,7 +416,7 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control
     /// </summary>
-    public class UiNode8_Control
+    public class UiNode8_Control : IUiNode<Godot.Control, UiNode8_Control>
     {
         /// <summary>
         /// Ui节点实例, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.Control
@@ -443,7 +430,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_HealthBar == null) _L_HealthBar = new UiNode9_HealthBar(Instance.GetNode<Godot.TextureRect>("HealthBar"));
+                if (_L_HealthBar == null) _L_HealthBar = new UiNode9_HealthBar(Instance.GetNodeOrNull<Godot.TextureRect>("HealthBar"));
                 return _L_HealthBar;
             }
         }
@@ -456,7 +443,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_MapBar == null) _L_MapBar = new UiNode14_MapBar(Instance.GetNode<Godot.TextureRect>("MapBar"));
+                if (_L_MapBar == null) _L_MapBar = new UiNode14_MapBar(Instance.GetNodeOrNull<Godot.TextureRect>("MapBar"));
                 return _L_MapBar;
             }
         }
@@ -469,7 +456,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_GunBar == null) _L_GunBar = new UiNode15_GunBar(Instance.GetNode<Godot.Control>("GunBar"));
+                if (_L_GunBar == null) _L_GunBar = new UiNode15_GunBar(Instance.GetNodeOrNull<Godot.Control>("GunBar"));
                 return _L_GunBar;
             }
         }
@@ -477,128 +464,6 @@ public abstract partial class RoomUI : UiBase
 
         public UiNode8_Control(Godot.Control node) => Instance = node;
         public UiNode8_Control Clone() => new ((Godot.Control)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Cursor.LT
-    /// </summary>
-    public class UiNode19_LT
-    {
-        /// <summary>
-        /// Ui节点实例, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Cursor.LT
-        /// </summary>
-        public Godot.Sprite2D Instance { get; }
-
-        public UiNode19_LT(Godot.Sprite2D node) => Instance = node;
-        public UiNode19_LT Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Cursor.LB
-    /// </summary>
-    public class UiNode20_LB
-    {
-        /// <summary>
-        /// Ui节点实例, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Cursor.LB
-        /// </summary>
-        public Godot.Sprite2D Instance { get; }
-
-        public UiNode20_LB(Godot.Sprite2D node) => Instance = node;
-        public UiNode20_LB Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Cursor.RT
-    /// </summary>
-    public class UiNode21_RT
-    {
-        /// <summary>
-        /// Ui节点实例, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Cursor.RT
-        /// </summary>
-        public Godot.Sprite2D Instance { get; }
-
-        public UiNode21_RT(Godot.Sprite2D node) => Instance = node;
-        public UiNode21_RT Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Cursor.RB
-    /// </summary>
-    public class UiNode22_RB
-    {
-        /// <summary>
-        /// Ui节点实例, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Cursor.RB
-        /// </summary>
-        public Godot.Sprite2D Instance { get; }
-
-        public UiNode22_RB(Godot.Sprite2D node) => Instance = node;
-        public UiNode22_RB Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Cursor"/>, 路径: RoomUI.Cursor
-    /// </summary>
-    public class UiNode18_Cursor
-    {
-        /// <summary>
-        /// Ui节点实例, 节点类型: <see cref="Cursor"/>, 节点路径: RoomUI.Cursor
-        /// </summary>
-        public Cursor Instance { get; }
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.LT
-        /// </summary>
-        public UiNode19_LT L_LT
-        {
-            get
-            {
-                if (_L_LT == null) _L_LT = new UiNode19_LT(Instance.GetNode<Godot.Sprite2D>("LT"));
-                return _L_LT;
-            }
-        }
-        private UiNode19_LT _L_LT;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.LB
-        /// </summary>
-        public UiNode20_LB L_LB
-        {
-            get
-            {
-                if (_L_LB == null) _L_LB = new UiNode20_LB(Instance.GetNode<Godot.Sprite2D>("LB"));
-                return _L_LB;
-            }
-        }
-        private UiNode20_LB _L_LB;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.RT
-        /// </summary>
-        public UiNode21_RT L_RT
-        {
-            get
-            {
-                if (_L_RT == null) _L_RT = new UiNode21_RT(Instance.GetNode<Godot.Sprite2D>("RT"));
-                return _L_RT;
-            }
-        }
-        private UiNode21_RT _L_RT;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.RB
-        /// </summary>
-        public UiNode22_RB L_RB
-        {
-            get
-            {
-                if (_L_RB == null) _L_RB = new UiNode22_RB(Instance.GetNode<Godot.Sprite2D>("RB"));
-                return _L_RB;
-            }
-        }
-        private UiNode22_RB _L_RB;
-
-        public UiNode18_Cursor(Cursor node) => Instance = node;
-        public UiNode18_Cursor Clone() => new ((Cursor)Instance.Duplicate());
     }
 
 }

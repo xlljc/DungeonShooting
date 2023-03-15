@@ -14,7 +14,7 @@ public abstract partial class Test : UiBase
     {
         get
         {
-            if (_c1 == null) _c1 = new UiNode2_c1(GetNode<Control>("c1"));
+            if (_c1 == null) _c1 = new UiNode2_c1(GetNodeOrNull<Control>("c1"));
             return _c1;
         }
     }
@@ -22,7 +22,7 @@ public abstract partial class Test : UiBase
     {
         get
         {
-            if (_c2 == null) _c2 = new UiNode3_c2(GetNode<Control>("c2"));
+            if (_c2 == null) _c2 = new UiNode3_c2(GetNodeOrNull<Control>("c2"));
             return _c2;
         }
     }
@@ -30,7 +30,7 @@ public abstract partial class Test : UiBase
     private UiNode2_c1 _c1;
     private UiNode3_c2 _c2;
     
-    public class UiNode1_c11
+    public class UiNode1_c11 : IUiNode<Control, UiNode1_c11>
     {
         public Control Instance { get; }
 
@@ -45,7 +45,7 @@ public abstract partial class Test : UiBase
         }
     }
     
-    public class UiNode2_c1
+    public class UiNode2_c1 : IUiNode<Control, UiNode2_c1>
     {
         public Control Instance { get; }
 
@@ -53,7 +53,7 @@ public abstract partial class Test : UiBase
         {
             get
             {
-                if (_c11 == null) _c11 = new UiNode1_c11(Instance.GetNode<Control>("c11"));
+                if (_c11 == null) _c11 = new UiNode1_c11(Instance.GetNodeOrNull<Control>("c11"));
                 return _c11;
             }
         }
@@ -71,7 +71,7 @@ public abstract partial class Test : UiBase
         }
     }
     
-    public class UiNode3_c2
+    public class UiNode3_c2 : IUiNode<Control, UiNode3_c2>
     {
         public Control Instance { get; }
 
