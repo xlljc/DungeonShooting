@@ -61,13 +61,9 @@ public static class UiGenerator
                retraction + $"/// </summary>\n" + 
                retraction + $"public class {uiNodeInfo.ClassName} : IUiNode<{uiNodeInfo.TypeName}, {uiNodeInfo.ClassName}>\n" +
                retraction + $"{{\n" +
-               retraction + $"    /// <summary>\n" +
-               retraction + $"    /// Ui节点实例, 节点类型: <see cref=\"{uiNodeInfo.TypeName}\"/>, 节点路径: {parent}{uiNodeInfo.OriginName}\n" +
-               retraction + $"    /// </summary>\n" +
-               retraction + $"    public {uiNodeInfo.TypeName} Instance {{ get; }}\n\n" +
                GeneratePropertyListClassCode("Instance.", parent, uiNodeInfo, retraction + "    ") + 
-               retraction + $"    public {uiNodeInfo.ClassName}({uiNodeInfo.TypeName} node) => Instance = node;\n" +
-               retraction + $"    public {uiNodeInfo.ClassName} Clone() => new (({uiNodeInfo.TypeName})Instance.Duplicate());\n" +
+               retraction + $"    public {uiNodeInfo.ClassName}({uiNodeInfo.TypeName} node) : base(node) {{  }}\n" +
+               retraction + $"    public override {uiNodeInfo.ClassName} Clone() => new (({uiNodeInfo.TypeName})Instance.Duplicate());\n" +
                retraction + $"}}\n\n";
     }
 

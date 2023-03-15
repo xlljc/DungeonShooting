@@ -15,12 +15,12 @@ public class GunBar
         _gunBar = gunBar;
     }
 
-    public void OnOpen()
+    public void OnShow()
     {
         _binder = EventManager.AddEventListener(EventEnum.OnPlayerRefreshWeaponTexture, OnPlayerRefreshWeaponTexture);
     }
 
-    public void OnClose()
+    public void OnHide()
     {
         _binder.RemoveEventListener();
     }

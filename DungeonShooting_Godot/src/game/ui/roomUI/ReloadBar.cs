@@ -19,12 +19,12 @@ public class ReloadBar
         startX = -(width - 3) / 2f;
     }
     
-    public void OnOpen()
+    public void OnShow()
     {
         GameCamera.Main.OnPositionUpdateEvent += OnCameraPositionUpdate;
     }
 
-    public void OnClose()
+    public void OnHide()
     {
         GameCamera.Main.OnPositionUpdateEvent -= OnCameraPositionUpdate;
     }

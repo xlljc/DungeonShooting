@@ -12,29 +12,29 @@ public partial class RoomUIPanel : RoomUI
     private HealthBar _healthBar;
     private GunBar _gunBar;
 
-    public override void OnCreate()
+    public override void OnCreateUi()
     {
-        //Generator.UiGenerator.GenerateUi(this, "src/game/ui/roomUI/RoomUI.cs");
+        Generator.UiGenerator.GenerateUi(this, "src/game/ui/roomUI/RoomUI.cs");
         _reloadBar = new ReloadBar(L_ReloadBar);
         _interactiveTipBar = new InteractiveTipBar(L_InteractiveTipBar);
         _healthBar = new HealthBar(L_Control.L_HealthBar);
         _gunBar = new GunBar(L_Control.L_GunBar);
     }
 
-    public override void OnOpen(params object[] args)
+    public override void OnShowUi(params object[] args)
     {
-        _reloadBar.OnOpen();
-        _interactiveTipBar.OnOpen();
-        _healthBar.OnOpen();
-        _gunBar.OnOpen();
+        _reloadBar.OnShow();
+        _interactiveTipBar.OnShow();
+        _healthBar.OnShow();
+        _gunBar.OnShow();
     }
 
-    public override void OnClose()
+    public override void OnHideUi()
     {
-        _reloadBar.OnClose();
-        _interactiveTipBar.OnClose();
-        _healthBar.OnClose();
-        _gunBar.OnClose();
+        _reloadBar.OnHide();
+        _interactiveTipBar.OnHide();
+        _healthBar.OnHide();
+        _gunBar.OnHide();
     }
 
     public override void _Process(double delta)

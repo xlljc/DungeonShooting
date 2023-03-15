@@ -22,7 +22,7 @@ public class HealthBar
         _healthBar = healthBar;
     }
 
-    public void OnOpen()
+    public void OnShow()
     {
         _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnPlayerHpChange, OnPlayerHpChange);
@@ -31,7 +31,7 @@ public class HealthBar
         _eventFactory.AddEventListener(EventEnum.OnPlayerMaxShieldChange, OnPlayerMaxShieldChange);
     }
 
-    public void OnClose()
+    public void OnHide()
     {
         _eventFactory.RemoveAllEventListener();
     }

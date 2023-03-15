@@ -18,13 +18,13 @@ public class InteractiveTipBar
         _interactiveTipBar = interactiveTipBar;
     }
 
-    public void OnOpen()
+    public void OnShow()
     {
         GameCamera.Main.OnPositionUpdateEvent += OnCameraPositionUpdate;
         _binder = EventManager.AddEventListener(EventEnum.OnPlayerChangeInteractiveItem, OnPlayerChangeInteractiveItem);
     }
 
-    public void OnClose()
+    public void OnHide()
     {
         GameCamera.Main.OnPositionUpdateEvent -= OnCameraPositionUpdate;
         _binder.RemoveEventListener();

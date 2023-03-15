@@ -50,6 +50,9 @@ public static partial class UiManager
         GameApplication.Instance.AddChild(_popLayer);
     }
 
+    /// <summary>
+    /// 获取指定的Ui层根节点
+    /// </summary>
     public static CanvasLayer GetUiLayer(UiLayer uiLayer)
     {
         switch (uiLayer)
@@ -66,20 +69,40 @@ public static partial class UiManager
 
         return null;
     }
-    
-    public static UiBase OpenUi(string resourcePath)
+
+    private static UiBase InstantiateUi(string resourcePath)
     {
         var packedScene = ResourceManager.Load<PackedScene>(resourcePath);
         var uiBase = packedScene.Instantiate<UiBase>();
-        var canvasLayer = GetUiLayer(uiBase.Layer);
-        canvasLayer.AddChild(uiBase);
-        uiBase.OnCreate();
-        uiBase.OnOpen();
         return uiBase;
     }
 
-    public static T OpenUi<T>(string resourcePath) where T : UiBase
+    /// <summary>
+    /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
+    /// </summary>
+    public static UiBase OpenUi(string resourcePath, params object[] args)
     {
-        return (T)OpenUi(resourcePath);
+        var uiBase = InstantiateUi(resourcePath);
+        var canvasLayer = GetUiLayer(uiBase.Layer);
+        canvasLayer.AddChild(uiBase);
+        uiBase.OnCreateUi();
+        uiBase.ShowUi(args);
+        return uiBase;
+    }
+
+    /// <summary>
+    /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
+    /// </summary>
+    public static T OpenUi<T>(string resourcePath, params object[] args) where T : UiBase
+    {
+        return (T)OpenUi(resourcePath, args);
+    }
+
+    /// <summary>
+    /// 销毁指定Ui
+    /// </summary>
+    public static void DisposeUi(UiBase uiBase)
+    {
+        uiBase.DisposeUi();
     }
 }
