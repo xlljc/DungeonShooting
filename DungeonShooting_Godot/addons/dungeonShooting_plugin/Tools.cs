@@ -3,7 +3,7 @@ using Generator;
 using Godot;
 
 [Tool]
-public partial class Automation : Control
+public partial class Tools : Control
 {
 	/// <summary>
 	/// 更新 ResourcePath

@@ -37,8 +37,13 @@ namespace Plugin
             var script5 = GD.Load<Script>("res://src/framework/map/mark/WeaponMark.cs");
             AddCustomType("WeaponMark", "Node2D", script5, texture3);
             
-            dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/Automation.tscn").Instantiate<Control>();
-            AddControlToDock(DockSlot.LeftUr, dock);
+            dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/Tools.tscn").Instantiate<Control>();
+            //AddControlToDock(DockSlot.LeftUr, dock);
+            
+            //AddControlToContainer();
+            var editorMainScreen = GetEditorInterface().GetEditorMainScreen();
+            editorMainScreen.AddChild(dock);
+            _MakeVisible(false);
         }
 
         public override void _ExitTree()
@@ -51,11 +56,34 @@ namespace Plugin
 
             if (dock != null)
             {
-                RemoveControlFromDocks(dock);
+                //RemoveControlFromDocks(dock);
                 dock.Free();
+                dock = null;
+            }
+        }
+
+        public override bool _HasMainScreen()
+        {
+            return true;
+        }
+
+        public override Texture2D _GetPluginIcon()
+        {
+            return GD.Load<Texture2D>("res://addons/dungeonShooting_plugin/Tool.svg");
+        }
+
+        public override string _GetPluginName()
+        {
+            return "Tools";
+        }
+
+        public override void _MakeVisible(bool visible)
+        {
+            if (dock != null)
+            {
+                dock.Visible = visible;
             }
         }
     }
-
 }
 #endif
