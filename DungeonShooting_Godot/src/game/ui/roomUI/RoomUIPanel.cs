@@ -14,7 +14,6 @@ public partial class RoomUIPanel : RoomUI
 
     public override void OnCreateUi()
     {
-        Generator.UiGenerator.GenerateUi(this, "src/game/ui/roomUI/RoomUI.cs");
         _reloadBar = new ReloadBar(L_ReloadBar);
         _interactiveTipBar = new InteractiveTipBar(L_InteractiveTipBar);
         _healthBar = new HealthBar(L_Control.L_HealthBar);

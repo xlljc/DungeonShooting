@@ -16,12 +16,20 @@ public static class UiGenerator
     /// <summary>
     /// 根据指定ui节点生成相应的Ui类, 并保存到指定路径下
     /// </summary>
-    public static void GenerateUi(Control control, string path)
+    public static void GenerateUi(Node control, string path)
     {
         _nodeIndex = 0;
         var uiNode = EachNode(control);
         var code = GenerateClassCode(uiNode);
         File.WriteAllText(path, code);
+    }
+
+    /// <summary>
+    /// 从编辑器中生成ui代码
+    /// </summary>
+    public static void GenerateUiFromEditor(Node control, string path)
+    {
+        
     }
 
     private static string GenerateClassCode(UiNodeInfo uiNodeInfo)

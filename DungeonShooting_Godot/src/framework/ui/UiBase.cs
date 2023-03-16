@@ -1,9 +1,9 @@
-
 using Godot;
 
 /// <summary>
 /// Ui 基类
 /// </summary>
+[Tool]
 public abstract partial class UiBase : Control
 {
     /// <summary>

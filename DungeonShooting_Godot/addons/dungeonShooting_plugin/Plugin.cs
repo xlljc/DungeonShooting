@@ -1,4 +1,6 @@
 #if TOOLS
+using System;
+using Generator;
 using Godot;
 
 namespace Plugin
@@ -6,14 +8,23 @@ namespace Plugin
     [Tool]
     public partial class Plugin : EditorPlugin
     {
+        public const string UiResourcePath = "";
+        
         public static Plugin Instance => _instance;
         private static Plugin _instance;
 
         private Control dock;
 
+        //ui监听器
+        private NodeMonitor _uiMonitor;
+
         public override void _Process(double delta)
         {
             _instance = this;
+            if (_uiMonitor != null)
+            {
+                _uiMonitor.Process((float) delta);
+            }
         }
 
         public override void _EnterTree()
@@ -37,13 +48,18 @@ namespace Plugin
             var script5 = GD.Load<Script>("res://src/framework/map/mark/WeaponMark.cs");
             AddCustomType("WeaponMark", "Node2D", script5, texture3);
             
-            dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/Tools.tscn").Instantiate<Control>();
+            dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/EditorTools.tscn").Instantiate<Control>();
             //AddControlToDock(DockSlot.LeftUr, dock);
             
             //AddControlToContainer();
             var editorMainScreen = GetEditorInterface().GetEditorMainScreen();
             editorMainScreen.AddChild(dock);
             _MakeVisible(false);
+
+            SceneChanged += OnSceneChanged;
+
+            _uiMonitor = new NodeMonitor();
+            _uiMonitor.SceneNodeChangeEvent += OnUiSceneChange;
         }
 
         public override void _ExitTree()
@@ -54,14 +70,24 @@ namespace Plugin
             RemoveCustomType("EnemyMark");
             RemoveCustomType("WeaponMark");
 
-            if (dock != null)
+            try
             {
-                //RemoveControlFromDocks(dock);
-                dock.Free();
-                dock = null;
+                if (dock != null)
+                {
+                    //RemoveControlFromDocks(dock);
+                    dock.Free();
+                    dock = null;
+                }
+                SceneChanged -= OnSceneChanged;
+                _uiMonitor.SceneNodeChangeEvent -= OnUiSceneChange;
+                _uiMonitor = null;
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
             }
         }
-
+        
         public override bool _HasMainScreen()
         {
             return true;
@@ -83,6 +109,45 @@ namespace Plugin
             {
                 dock.Visible = visible;
             }
+        }
+
+        /// <summary>
+        /// 切换场景
+        /// </summary>
+        private void OnSceneChanged(Node node)
+        {
+            if (CheckIsUi(node))
+            {
+                _uiMonitor.ChangeCurrentNode(node);
+            }
+        }
+
+        private bool CheckIsUi(Node node)
+        {
+            var resourcePath = (node.GetScript().Obj as CSharpScript)?.ResourcePath;
+            if (resourcePath == null)
+            {
+                return false;
+            }
+
+            if (resourcePath.StartsWith("res://src/game/ui/") && resourcePath.EndsWith("Panel.cs"))
+            {
+                var index = resourcePath.LastIndexOf("/", StringComparison.Ordinal);
+                var uiName = resourcePath.Substring(index + 1, resourcePath.Length - index - 8 - 1);
+                var codePath = "res://src/game/ui/" + uiName.FirstToLower() + "/" + uiName + "Panel.cs";
+                if (ResourceLoader.Exists(codePath))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void OnUiSceneChange(Node node)
+        {
+            var name = node.Name.ToString();
+            UiGenerator.GenerateUiFromEditor(node,  GameConfig.UiCodeDir + name.FirstToLower() + "/" + name + ".cs");
         }
     }
 }
