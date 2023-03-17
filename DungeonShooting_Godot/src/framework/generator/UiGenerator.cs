@@ -12,14 +12,14 @@ namespace Generator;
 /// </summary>
 public static class UiGenerator
 {
-    private static int _nodeIndex = 0;
+    private static Dictionary<string, int> _nodeNameMap = new Dictionary<string, int>();
 
     /// <summary>
     /// 根据指定ui节点生成相应的Ui类, 并保存到指定路径下
     /// </summary>
     public static void GenerateUi(Node control, string path)
     {
-        _nodeIndex = 0;
+        _nodeNameMap.Clear();
         var uiNode = EachNode(control);
         var code = GenerateClassCode(uiNode);
         File.WriteAllText(path, code);
@@ -30,7 +30,7 @@ public static class UiGenerator
     /// </summary>
     public static void GenerateUiFromEditor(Node control, string path)
     {
-        _nodeIndex = 0;
+        _nodeNameMap.Clear();
         var uiNode = EachNodeFromEditor(control);
         var code = GenerateClassCode(uiNode);
         File.WriteAllText(path, code);
@@ -116,7 +116,21 @@ public static class UiGenerator
     private static UiNodeInfo EachNode(Node node)
     {
         var originName = Regex.Replace(node.Name, "[^\\w_]", "");
-        var uiNode = new UiNodeInfo("L_" + originName, originName, "UiNode" + (_nodeIndex++) + "_" + originName, node.GetType().FullName);
+        //类定义该图层的类名
+        string className;
+        if (_nodeNameMap.ContainsKey(originName)) //有同名图层, 为了防止类名冲突, 需要在 UiNode 后面加上索引
+        {
+            var count = _nodeNameMap[originName];
+            className = "UiNode" + (count) + "_" + originName;
+            _nodeNameMap[originName] = count + 1;
+        }
+        else
+        {
+            className = "UiNode" + "_" + originName;
+            _nodeNameMap.Add(originName, 1);
+        }
+        
+        var uiNode = new UiNodeInfo("L_" + originName, originName, className, node.GetType().FullName);
 
         var childCount = node.GetChildCount();
         if (childCount > 0)
@@ -150,7 +164,18 @@ public static class UiGenerator
         //字段名称
         var fieldName = "L_" + originName;
         //类定义该图层的类名
-        var className = "UiNode" + (_nodeIndex++) + "_" + originName;
+        string className;
+        if (_nodeNameMap.ContainsKey(originName)) //有同名图层, 为了防止类名冲突, 需要在 UiNode 后面加上索引
+        {
+            var count = _nodeNameMap[originName];
+            className = "UiNode" + (count) + "_" + originName;
+            _nodeNameMap[originName] = count + 1;
+        }
+        else
+        {
+            className = "UiNode" + "_" + originName;
+            _nodeNameMap.Add(originName, 1);
+        }
 
         var script = node.GetScript().As<CSharpScript>();
         if (script == null) //无脚本, 说明是内置节点

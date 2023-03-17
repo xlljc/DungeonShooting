@@ -4,13 +4,13 @@ namespace UI.RoomUI;
 
 public class GunBar
 {
-    private RoomUI.UiNode15_GunBar _gunBar;
+    private RoomUI.UiNode_GunBar _gunBar;
     private EventBinder _binder;
 
     private int _prevAmmo = -1;
     private int _prevResidue = -1;
     
-    public GunBar(RoomUI.UiNode15_GunBar gunBar)
+    public GunBar(RoomUI.UiNode_GunBar gunBar)
     {
         _gunBar = gunBar;
     }

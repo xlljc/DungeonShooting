@@ -8,8 +8,6 @@ namespace Plugin
     [Tool]
     public partial class Plugin : EditorPlugin
     {
-        public const string UiResourcePath = "";
-        
         public static Plugin Instance => _instance;
         private static Plugin _instance;
 

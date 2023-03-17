@@ -5,7 +5,7 @@ namespace UI.RoomUI;
 
 public class HealthBar
 {
-    private RoomUI.UiNode9_HealthBar _healthBar;
+    private RoomUI.UiNode_HealthBar _healthBar;
     // 当前血量
     private int _hp;
     // 最大血量
@@ -17,7 +17,7 @@ public class HealthBar
 
     private EventFactory _eventFactory;
     
-    public HealthBar(RoomUI.UiNode9_HealthBar healthBar)
+    public HealthBar(RoomUI.UiNode_HealthBar healthBar)
     {
         _healthBar = healthBar;
     }

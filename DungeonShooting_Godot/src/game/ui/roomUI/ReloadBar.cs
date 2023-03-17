@@ -7,11 +7,11 @@ namespace UI.RoomUI;
 /// </summary>
 public class ReloadBar
 {
-    private RoomUI.UiNode5_ReloadBar _reloadBar;
+    private RoomUI.UiNode_ReloadBar _reloadBar;
     private int width;
     private float startX;
 
-    public ReloadBar(RoomUI.UiNode5_ReloadBar reloadBar)
+    public ReloadBar(RoomUI.UiNode_ReloadBar reloadBar)
     {
         reloadBar.Instance.Visible = false;
         _reloadBar = reloadBar;
