@@ -16,6 +16,7 @@ public class ResourcePath
     public const string prefab_test_MoveComponent_tscn = "res://prefab/test/MoveComponent.tscn";
     public const string prefab_test_TestActivity_tscn = "res://prefab/test/TestActivity.tscn";
     public const string prefab_ui_Cursor_tscn = "res://prefab/ui/Cursor.tscn";
+    public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_weapon_Knife_tscn = "res://prefab/weapon/Knife.tscn";
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";

@@ -3,4 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="src\game\ui\editorTools" />
+  </ItemGroup>
 </Project>

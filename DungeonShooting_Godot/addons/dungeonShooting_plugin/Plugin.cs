@@ -2,6 +2,7 @@
 using System;
 using Generator;
 using Godot;
+using UI.EditorTools;
 
 namespace Plugin
 {
@@ -11,7 +12,7 @@ namespace Plugin
         public static Plugin Instance => _instance;
         private static Plugin _instance;
 
-        private Control _dock;
+        private EditorToolsPanel _dock;
 
         //ui监听器
         private NodeMonitor _uiMonitor;
@@ -46,14 +47,32 @@ namespace Plugin
             var script5 = GD.Load<Script>("res://src/framework/map/mark/WeaponMark.cs");
             AddCustomType("WeaponMark", "Node2D", script5, texture3);
             
-            _dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/EditorTools.tscn").Instantiate<Control>();
-            
-            //AddControlToDock(DockSlot.LeftUr, dock);
-            //GetEditorInterface().GetBaseControl()
+            _dock = GD.Load<PackedScene>(ResourcePath.prefab_ui_EditorTools_tscn).Instantiate<EditorToolsPanel>();
             var editorMainScreen = GetEditorInterface().GetEditorMainScreen();
             editorMainScreen.AddChild(_dock);
-            _MakeVisible(false);
 
+            try
+            {
+                _dock.OnCreateUi();
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
+            }
+
+            try
+            {
+                _dock.OnShowUi();
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
+            }
+            
+            
+            _MakeVisible(false);
+            
+            //场景切换事件
             SceneChanged += OnSceneChanged;
 
             _uiMonitor = new NodeMonitor();
@@ -68,24 +87,41 @@ namespace Plugin
             RemoveCustomType("EnemyMark");
             RemoveCustomType("WeaponMark");
 
-            try
+
+            if (_dock != null)
             {
-                if (_dock != null)
+                //RemoveControlFromDocks(dock);
+                try
                 {
-                    //RemoveControlFromDocks(dock);
-                    _dock.Free();
-                    _dock = null;
+                    _dock.OnHideUi();
                 }
-                SceneChanged -= OnSceneChanged;
+                catch (Exception e)
+                {
+                    GD.PrintErr(e.ToString());
+                }
+
+                try
+                {
+                    _dock.OnDisposeUi();
+                }
+                catch (Exception e)
+                {
+                    GD.PrintErr(e.ToString());
+                }
+
+                _dock.Free();
+                _dock = null;
+            }
+
+            SceneChanged -= OnSceneChanged;
+
+            if (_uiMonitor != null)
+            {
                 _uiMonitor.SceneNodeChangeEvent -= OnUiSceneChange;
                 _uiMonitor = null;
             }
-            catch (Exception e)
-            {
-                GD.PrintErr(e.ToString());
-            }
         }
-        
+
         public override bool _HasMainScreen()
         {
             return true;
@@ -117,6 +153,7 @@ namespace Plugin
             _uiMonitor.ChangeCurrentNode(null);
             if (CheckIsUi(node))
             {
+                OnUiSceneChange(node);
                 _uiMonitor.ChangeCurrentNode(node);
             }
         }
@@ -148,11 +185,18 @@ namespace Plugin
 
         private void OnUiSceneChange(Node node)
         {
-            var uiName = node.Name.ToString();
-            var path = GameConfig.UiCodeDir + uiName.FirstToLower() + "/" + uiName + ".cs";
-            GD.Print("检测到ui: '" + uiName + "'有变动, 重新生成ui代码: " + path);
-            //生成ui代码
-            UiGenerator.GenerateUiFromEditor(node, path);
+            try
+            {
+                var uiName = node.Name.ToString();
+                var path = GameConfig.UiCodeDir + uiName.FirstToLower() + "/" + uiName + ".cs";
+                GD.Print("检测到ui: '" + uiName + "'有变动, 重新生成ui代码: " + path);
+                //生成ui代码
+                UiGenerator.GenerateUiFromEditor(node, path);
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
+            }
         }
     }
 }

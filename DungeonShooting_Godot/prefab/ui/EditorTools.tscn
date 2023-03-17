@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://doyyiro45hwb6"]
+[gd_scene load_steps=2 format=3 uid="uid://kw3o772vpne"]
 
-[ext_resource type="Script" path="res://addons/dungeonShooting_plugin/Tools.cs" id="1_y0p44"]
+[ext_resource type="Script" path="res://src/game/ui/editorTools/EditorToolsPanel.cs" id="1_pav1q"]
 
 [node name="EditorTools" type="Control"]
 layout_mode = 3
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_y0p44")
+script = ExtResource("1_pav1q")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
@@ -30,20 +30,25 @@ theme_override_constants/margin_bottom = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 5
 
 [node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "ResourcePath.cs"
+vertical_alignment = 1
 
 [node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 0
 text = "重新生成"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 5
 
 [node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
@@ -53,5 +58,28 @@ text = "地牢房间配置"
 layout_mode = 2
 text = "重新打包"
 
-[connection signal="pressed" from="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/Button" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer2/Button" to="." method="_on_Button2_pressed"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "创建游戏Ui"
+
+[node name="LineEdit" type="LineEdit" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+placeholder_text = "请输入ui名称"
+
+[node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "创建
+"
+
+[node name="Confirm" type="ConfirmationDialog" parent="."]
+initial_position = 1
+size = Vector2i(200, 124)
+unresizable = true
+
+[node name="Tips" type="AcceptDialog" parent="."]
+initial_position = 1
