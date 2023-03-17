@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -29,7 +30,10 @@ public static class UiGenerator
     /// </summary>
     public static void GenerateUiFromEditor(Node control, string path)
     {
-        
+        _nodeIndex = 0;
+        var uiNode = EachNodeFromEditor(control);
+        var code = GenerateClassCode(uiNode);
+        File.WriteAllText(path, code);
     }
 
     private static string GenerateClassCode(UiNodeInfo uiNodeInfo)
@@ -106,10 +110,13 @@ public static class UiGenerator
                retraction + $"private {uiNodeInfo.ClassName} _{uiNodeInfo.Name};\n\n";
     }
     
+    /// <summary>
+    /// 递归解析节点, 并生成 UiNodeInfo 数据
+    /// </summary>
     private static UiNodeInfo EachNode(Node node)
     {
-        var name = Regex.Replace(node.Name, "[^\\w_]", "");
-        var uiNode = new UiNodeInfo("L_" + name, name, "UiNode" + (_nodeIndex++) + "_" + name, node.GetType().FullName);
+        var originName = Regex.Replace(node.Name, "[^\\w_]", "");
+        var uiNode = new UiNodeInfo("L_" + originName, originName, "UiNode" + (_nodeIndex++) + "_" + originName, node.GetType().FullName);
 
         var childCount = node.GetChildCount();
         if (childCount > 0)
@@ -129,6 +136,62 @@ public static class UiGenerator
             }
         }
 
+        return uiNode;
+    }
+
+    /// <summary>
+    /// 在编辑器下递归解析节点, 由于编辑器下绑定用户脚本的节点无法直接判断节点类型, 那么就只能获取节点的脚本然后解析名称和命名空间
+    /// </summary>
+    private static UiNodeInfo EachNodeFromEditor(Node node)
+    {
+        UiNodeInfo uiNode;
+        //原名称
+        var originName = Regex.Replace(node.Name, "[^\\w_]", "");
+        //字段名称
+        var fieldName = "L_" + originName;
+        //类定义该图层的类名
+        var className = "UiNode" + (_nodeIndex++) + "_" + originName;
+
+        var script = node.GetScript().As<CSharpScript>();
+        if (script == null) //无脚本, 说明是内置节点
+        {
+            uiNode = new UiNodeInfo(fieldName, originName, className, node.GetType().FullName);
+        }
+        else //存在脚本
+        {
+            var index = script.ResourcePath.LastIndexOf("/", StringComparison.Ordinal);
+            //文件名称
+            var fileName = script.ResourcePath.Substring(index + 1, script.ResourcePath.Length - index - 3 - 1);
+            //在源代码中寻找命名空间
+            var match = Regex.Match(script.SourceCode, "(?<=namespace\\s+)[\\w\\.]+");
+            if (match.Success) //存在命名空间
+            {
+                uiNode = new UiNodeInfo(fieldName, originName, className, match.Value + "." + fileName);
+            }
+            else //不存在命名空间
+            {
+                uiNode = new UiNodeInfo(fieldName, originName, className, fileName);
+            }
+        }
+        
+        var childCount = node.GetChildCount();
+        if (childCount > 0)
+        {
+            for (var i = 0; i < childCount; i++)
+            {
+                var children = node.GetChild(i);
+                if (children != null)
+                {
+                    if (uiNode.Children == null)
+                    {
+                        uiNode.Children = new List<UiNodeInfo>();
+                    }
+
+                    uiNode.Children.Add(EachNodeFromEditor(children));
+                }
+            }
+        }
+        
         return uiNode;
     }
 

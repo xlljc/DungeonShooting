@@ -13,7 +13,7 @@ namespace Plugin
         public static Plugin Instance => _instance;
         private static Plugin _instance;
 
-        private Control dock;
+        private Control _dock;
 
         //ui监听器
         private NodeMonitor _uiMonitor;
@@ -48,12 +48,12 @@ namespace Plugin
             var script5 = GD.Load<Script>("res://src/framework/map/mark/WeaponMark.cs");
             AddCustomType("WeaponMark", "Node2D", script5, texture3);
             
-            dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/EditorTools.tscn").Instantiate<Control>();
-            //AddControlToDock(DockSlot.LeftUr, dock);
+            _dock = GD.Load<PackedScene>("res://addons/dungeonShooting_plugin/EditorTools.tscn").Instantiate<Control>();
             
-            //AddControlToContainer();
+            //AddControlToDock(DockSlot.LeftUr, dock);
+            //GetEditorInterface().GetBaseControl()
             var editorMainScreen = GetEditorInterface().GetEditorMainScreen();
-            editorMainScreen.AddChild(dock);
+            editorMainScreen.AddChild(_dock);
             _MakeVisible(false);
 
             SceneChanged += OnSceneChanged;
@@ -72,11 +72,11 @@ namespace Plugin
 
             try
             {
-                if (dock != null)
+                if (_dock != null)
                 {
                     //RemoveControlFromDocks(dock);
-                    dock.Free();
-                    dock = null;
+                    _dock.Free();
+                    _dock = null;
                 }
                 SceneChanged -= OnSceneChanged;
                 _uiMonitor.SceneNodeChangeEvent -= OnUiSceneChange;
@@ -105,9 +105,9 @@ namespace Plugin
 
         public override void _MakeVisible(bool visible)
         {
-            if (dock != null)
+            if (_dock != null)
             {
-                dock.Visible = visible;
+                _dock.Visible = visible;
             }
         }
 
@@ -116,15 +116,19 @@ namespace Plugin
         /// </summary>
         private void OnSceneChanged(Node node)
         {
+            _uiMonitor.ChangeCurrentNode(null);
             if (CheckIsUi(node))
             {
                 _uiMonitor.ChangeCurrentNode(node);
             }
         }
 
+        /// <summary>
+        /// 检查节点是否为UI节点
+        /// </summary>
         private bool CheckIsUi(Node node)
         {
-            var resourcePath = (node.GetScript().Obj as CSharpScript)?.ResourcePath;
+            var resourcePath = node.GetScript().As<CSharpScript>()?.ResourcePath;
             if (resourcePath == null)
             {
                 return false;
@@ -146,8 +150,11 @@ namespace Plugin
 
         private void OnUiSceneChange(Node node)
         {
-            var name = node.Name.ToString();
-            UiGenerator.GenerateUiFromEditor(node,  GameConfig.UiCodeDir + name.FirstToLower() + "/" + name + ".cs");
+            var uiName = node.Name.ToString();
+            var path = GameConfig.UiCodeDir + uiName.FirstToLower() + "/" + uiName + ".cs";
+            GD.Print("检测到ui: '" + uiName + "'有变动, 重新生成ui代码: " + path);
+            //生成ui代码
+            UiGenerator.GenerateUiFromEditor(node, path);
         }
     }
 }
