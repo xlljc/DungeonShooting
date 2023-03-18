@@ -205,28 +205,28 @@ public partial class EditorToolsPanel : EditorTools
     /// </summary>
     private void OnCreateUI()
     {
-        var text = L_ScrollContainer.L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_LineEdit.Instance.Text;
-        ShowConfirm("提示", "是否创建UI：" + text, (result) =>
+        var uiName = L_ScrollContainer.L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_LineEdit.Instance.Text;
+        ShowConfirm("提示", "是否创建UI：" + uiName, (result) =>
         {
             if (result)
             {
                 //检查名称是否合规
-                if (!Regex.IsMatch(text, "^[A-Z][a-zA-Z0-9]*$"))
+                if (!Regex.IsMatch(uiName, "^[A-Z][a-zA-Z0-9]*$"))
                 {
-                    ShowTips("错误", "UI名称'" + text + "'不符合名称约束, UI名称只允许大写字母开头, 且名称中只允许出现大小字母和数字!");
+                    ShowTips("错误", "UI名称'" + uiName + "'不符合名称约束, UI名称只允许大写字母开头, 且名称中只允许出现大小字母和数字!");
                     return;
                 }
 
                 //检查是否有同名的Ui
-                var path = GameConfig.UiCodeDir + text.FirstToLower();
+                var path = GameConfig.UiCodeDir + uiName.FirstToLower();
                 if (Directory.Exists(path))
                 {
-                    ShowTips("错误", "已经存在相同名称'" + text + "'的UI了, 不能重复创建!");
+                    ShowTips("错误", "已经存在相同名称'" + uiName + "'的UI了, 不能重复创建!");
                     return;
                 }
                 
                 //执行创建操作
-                if (UiGenerator.CreateUi(text))
+                if (UiGenerator.CreateUi(uiName, true))
                 {
                     ShowTips("提示", "创建UI成功!");
                 }

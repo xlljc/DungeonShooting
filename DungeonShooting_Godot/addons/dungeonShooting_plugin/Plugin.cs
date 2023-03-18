@@ -250,10 +250,13 @@ namespace Plugin
         /// </summary>
         private void OnSceneChanged(Node node)
         {
-            _uiMonitor.ChangeCurrentNode(null);
-            if (CheckIsUi(node))
+            if (_uiMonitor != null)
             {
-                _uiMonitor.ChangeCurrentNode(node);
+                _uiMonitor.ChangeCurrentNode(null);
+                if (CheckIsUi(node))
+                {
+                    _uiMonitor.ChangeCurrentNode(node);
+                }
             }
         }
 

@@ -14,7 +14,10 @@ public static class UiGenerator
 {
     private static Dictionary<string, int> _nodeNameMap = new Dictionary<string, int>();
 
-    public static bool CreateUi(string uiName)
+    /// <summary>
+    /// 根据名称在编辑器中创建Ui, open 表示创建完成后是否在编辑器中打开这个ui
+    /// </summary>
+    public static bool CreateUi(string uiName, bool open = false)
     {
         try
         {
@@ -32,7 +35,7 @@ public static class UiGenerator
                              $"    {{\n" +
                              $"        \n" +
                              $"    }}\n" +
-                             $"" +
+                             $"\n" +
                              $"    public override void OnHideUi()\n" +
                              $"    {{\n" +
                              $"        \n" +
@@ -50,6 +53,7 @@ public static class UiGenerator
 
             //创建场景资源
             var prefabFile = GameConfig.UiPrefabDir + uiName + ".tscn";
+            var prefabResPath = "res://" + prefabFile;
             if (!Directory.Exists(GameConfig.UiPrefabDir))
             {
                 Directory.CreateDirectory(GameConfig.UiPrefabDir);
@@ -60,10 +64,17 @@ public static class UiGenerator
             uiNode.SetScript(scriptRes);
             var scene = new PackedScene();
             scene.Pack(uiNode);
-            ResourceSaver.Save(scene, "res://" + prefabFile);
+            ResourceSaver.Save(scene, prefabResPath);
             
             //生成Ui结构代码
             GenerateUiCode(uiNode, scriptPath + "/" + uiName + ".cs");
+
+#if TOOLS
+            if (open)
+            {
+                Plugin.Plugin.Instance.GetEditorInterface().OpenSceneFromPath(prefabResPath);
+            }   
+#endif
         }
         catch (Exception e)
         {
