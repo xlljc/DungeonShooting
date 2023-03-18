@@ -52,6 +52,10 @@ public static class GameConfig
     /// </summary>
     public const string RoomTileConfigFile = "resource/map/RoomConfig.json";
     /// <summary>
+    /// ui预制体路径
+    /// </summary>
+    public const string UiPrefabDir = "prefab/ui/";
+    /// <summary>
     /// ui代码根路径
     /// </summary>
     public const string UiCodeDir = "src/game/ui/";

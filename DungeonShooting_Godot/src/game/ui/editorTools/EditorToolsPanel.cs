@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Text.RegularExpressions;
 using Generator;
 using Godot;
 
@@ -35,6 +37,8 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer.L_Button.Instance.Pressed += GenerateResourcePath;
         //重新生成 RoomPack
         container.L_HBoxContainer2.L_Button.Instance.Pressed += GenerateRoomPack;
+        //重新生成ui代码
+        container.L_HBoxContainer4.L_Button.Instance.Pressed += OnGenerateCurrentUiCode;
         //创建ui
         container.L_HBoxContainer3.L_Button.Instance.Pressed += OnCreateUI;
     }
@@ -52,6 +56,7 @@ public partial class EditorToolsPanel : EditorTools
         var container = L_ScrollContainer.L_MarginContainer.L_VBoxContainer;
         container.L_HBoxContainer.L_Button.Instance.Pressed -= GenerateResourcePath;
         container.L_HBoxContainer2.L_Button.Instance.Pressed -= GenerateRoomPack;
+        container.L_HBoxContainer4.L_Button.Instance.Pressed -= OnGenerateCurrentUiCode;
         container.L_HBoxContainer3.L_Button.Instance.Pressed -= OnCreateUI;
     }
 
@@ -166,6 +171,34 @@ public partial class EditorToolsPanel : EditorTools
         L_Confirm.Instance.Hide();
         _onConfirmClose = null;
     }
+
+    /// <summary>
+    /// 重新生成当前ui的代码
+    /// </summary>
+    private void OnGenerateCurrentUiCode()
+    {
+#if TOOLS
+        if (Plugin.Plugin.Instance != null)
+        {
+            var root = Plugin.Plugin.Instance.GetEditorInterface().GetEditedSceneRoot();
+            if (Plugin.Plugin.Instance.CheckIsUi(root))
+            {
+                if (UiGenerator.GenerateUiCodeFromEditor(root))
+                {
+                    ShowTips("提示", "生成UI代码执行成功!");
+                }
+                else
+                {
+                    ShowTips("错误", "生成UI代码执行失败! 前往控制台查看错误日志!");
+                }
+            }
+            else
+            {
+                ShowTips("错误", "当前的场景不是受管束的UI场景!");
+            }
+        }
+#endif
+    }
     
     /// <summary>
     /// 创建Ui
@@ -177,7 +210,31 @@ public partial class EditorToolsPanel : EditorTools
         {
             if (result)
             {
-                ShowTips("提示", "创建Ui成功!");
+                //检查名称是否合规
+                if (!Regex.IsMatch(text, "^[A-Z][a-zA-Z0-9]*$"))
+                {
+                    ShowTips("错误", "UI名称'" + text + "'不符合名称约束, UI名称只允许大写字母开头, 且名称中只允许出现大小字母和数字!");
+                    return;
+                }
+
+                //检查是否有同名的Ui
+                var path = GameConfig.UiCodeDir + text.FirstToLower();
+                if (Directory.Exists(path))
+                {
+                    ShowTips("错误", "已经存在相同名称'" + text + "'的UI了, 不能重复创建!");
+                    return;
+                }
+                
+                //执行创建操作
+                if (UiGenerator.CreateUi(text))
+                {
+                    ShowTips("提示", "创建UI成功!");
+                }
+                else
+                {
+                    ShowTips("错误", "创建UI失败! 前往控制台查看错误日志!");
+                }
+                
             }
         });
     }
@@ -187,7 +244,14 @@ public partial class EditorToolsPanel : EditorTools
     /// </summary>
     private void GenerateResourcePath()
     {
-        ResourcePathGenerator.Generate();
+        if (ResourcePathGenerator.Generate())
+        {
+            ShowTips("提示", "ResourcePath.cs生成完成!");
+        }
+        else
+        {
+            ShowTips("错误", "ResourcePath.cs生成失败! 前往控制台查看错误日志!");
+        }
     }
 
     /// <summary>
@@ -195,6 +259,13 @@ public partial class EditorToolsPanel : EditorTools
     /// </summary>
     private void GenerateRoomPack()
     {
-        RoomPackGenerator.Generate();
+        if (RoomPackGenerator.Generate())
+        {
+            ShowTips("提示", "打包地牢房间配置执行完成!");
+        }
+        else
+        {
+            ShowTips("错误", "打包地牢房间配置执行失败! 前往控制台查看错误日志!");
+        }
     }
 }

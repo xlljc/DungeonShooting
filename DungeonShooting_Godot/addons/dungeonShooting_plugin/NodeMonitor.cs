@@ -70,10 +70,18 @@ public class NodeMonitor
         //更新前检查旧的节点是否发生改变
         if (node != _targetNode && _targetNode != null)
         {
-            var tempNode = ParseNodeTree(_targetNode);
-            if (!_sceneNode.Equals(tempNode))
+            try
             {
-                OnSceneNodeChange(_targetNode);
+                var tempNode = ParseNodeTree(_targetNode);
+                if (!_sceneNode.Equals(tempNode))
+                {
+                    OnSceneNodeChange(_targetNode);
+                }
+            }
+            catch (Exception e)
+            {
+                //检查节点存在报错, 直接跳过该节点的检查
+                GD.PrintErr(e.ToString());
             }
         }
 
@@ -93,17 +101,25 @@ public class NodeMonitor
     {
         if (_targetNode == null)
             return;
-
+        
         _checkTreeTimer += delta;
-        if (_checkTreeTimer >= 1)
+        if (_checkTreeTimer >= 5) //5秒检查一次
         {
-            var tempNode = ParseNodeTree(_targetNode);
-            if (!_sceneNode.Equals(tempNode))
+            try
             {
-                OnSceneNodeChange(_targetNode);
-                _sceneNode = tempNode;
+                var tempNode = ParseNodeTree(_targetNode);
+                if (!_sceneNode.Equals(tempNode))
+                {
+                    OnSceneNodeChange(_targetNode);
+                    _sceneNode = tempNode;
+                }
             }
-
+            catch (Exception e)
+            {
+                //检查节点存在报错, 直接跳过该节点的检查
+                GD.PrintErr(e.ToString());
+                _targetNode = null;
+            }
             _checkTreeTimer = 0;
         }
     }

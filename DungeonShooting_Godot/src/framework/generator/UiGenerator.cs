@@ -14,10 +14,70 @@ public static class UiGenerator
 {
     private static Dictionary<string, int> _nodeNameMap = new Dictionary<string, int>();
 
+    public static bool CreateUi(string uiName)
+    {
+        try
+        {
+            //创建脚本代码
+            var scriptPath = GameConfig.UiCodeDir + uiName.FirstToLower();
+            var scriptFile = scriptPath + "/" + uiName + "Panel.cs";
+            var scriptCode = $"using Godot;\n" +
+                             $"\n" +
+                             $"namespace UI.{uiName};\n" +
+                             $"\n" +
+                             $"public partial class {uiName}Panel : {uiName}\n" +
+                             $"{{\n" +
+                             $"\n" +
+                             $"    public override void OnShowUi(params object[] args)\n" +
+                             $"    {{\n" +
+                             $"        \n" +
+                             $"    }}\n" +
+                             $"" +
+                             $"    public override void OnHideUi()\n" +
+                             $"    {{\n" +
+                             $"        \n" +
+                             $"    }}\n" +
+                             $"\n" +
+                             $"}}\n";
+            if (!Directory.Exists(scriptPath))
+            {
+                Directory.CreateDirectory(scriptPath);
+            }
+            File.WriteAllText(scriptFile, scriptCode);
+
+            //加载脚本资源
+            var scriptRes = GD.Load<CSharpScript>("res://" + scriptFile);
+
+            //创建场景资源
+            var prefabFile = GameConfig.UiPrefabDir + uiName + ".tscn";
+            if (!Directory.Exists(GameConfig.UiPrefabDir))
+            {
+                Directory.CreateDirectory(GameConfig.UiPrefabDir);
+            }
+            var uiNode = new Control();
+            uiNode.Name = uiName;
+            uiNode.SetAnchorsPreset(Control.LayoutPreset.FullRect, true);
+            uiNode.SetScript(scriptRes);
+            var scene = new PackedScene();
+            scene.Pack(uiNode);
+            ResourceSaver.Save(scene, "res://" + prefabFile);
+            
+            //生成Ui结构代码
+            GenerateUiCode(uiNode, scriptPath + "/" + uiName + ".cs");
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            return false;
+        }
+
+        return true;
+    }
+
     /// <summary>
     /// 根据指定ui节点生成相应的Ui类, 并保存到指定路径下
     /// </summary>
-    public static void GenerateUi(Node control, string path)
+    public static void GenerateUiCode(Node control, string path)
     {
         _nodeNameMap.Clear();
         var uiNode = EachNode(control);
@@ -28,12 +88,27 @@ public static class UiGenerator
     /// <summary>
     /// 从编辑器中生成ui代码
     /// </summary>
-    public static void GenerateUiFromEditor(Node control, string path)
+    public static bool GenerateUiCodeFromEditor(Node control)
     {
-        _nodeNameMap.Clear();
-        var uiNode = EachNodeFromEditor(control);
-        var code = GenerateClassCode(uiNode);
-        File.WriteAllText(path, code);
+        try
+        {
+            _nodeNameMap.Clear();
+        
+            var uiName = control.Name.ToString();
+            var path = GameConfig.UiCodeDir + uiName.FirstToLower() + "/" + uiName + ".cs";
+            GD.Print("重新生成ui代码: " + path);
+
+            var uiNode = EachNodeFromEditor(control);
+            var code = GenerateClassCode(uiNode);
+            File.WriteAllText(path, code);
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            return false;
+        }
+
+        return true;
     }
 
     private static string GenerateClassCode(UiNodeInfo uiNodeInfo)

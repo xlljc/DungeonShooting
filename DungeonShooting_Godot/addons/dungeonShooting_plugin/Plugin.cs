@@ -73,8 +73,6 @@ namespace Plugin
                 "res://addons/dungeonShooting_plugin/Mark.svg"
             ),
         };
-
-        private bool _clickSave = false;
         
         public override void _Process(double delta)
         {
@@ -82,20 +80,6 @@ namespace Plugin
             if (_uiMonitor != null)
             {
                 _uiMonitor.Process((float) delta);
-            }
-            
-            //按下 ctrl + s 保存
-            if (Input.IsKeyPressed(Key.Ctrl) && Input.IsKeyPressed(Key.S))
-            {
-                if (!_clickSave)
-                {
-                    OnSaveClick();
-                }
-                _clickSave = true;
-            }
-            else
-            {
-                _clickSave = false;
             }
         }
 
@@ -150,7 +134,7 @@ namespace Plugin
             SceneChanged += OnSceneChanged;
 
             _uiMonitor = new NodeMonitor();
-            _uiMonitor.SceneNodeChangeEvent += OnUiSceneChange;
+            _uiMonitor.SceneNodeChangeEvent += GenerateUiCode;
         }
 
         public override void _ExitTree()
@@ -199,7 +183,7 @@ namespace Plugin
 
             if (_uiMonitor != null)
             {
-                _uiMonitor.SceneNodeChangeEvent -= OnUiSceneChange;
+                _uiMonitor.SceneNodeChangeEvent -= GenerateUiCode;
                 _uiMonitor = null;
             }
         }
@@ -226,36 +210,12 @@ namespace Plugin
                 _editorTools.Visible = visible;
             }
         }
-
-        //当ctrl+s按下
-        private void OnSaveClick()
-        {
-            var root = GetEditorInterface().GetEditedSceneRoot();
-            if (root != null)
-            {
-                if (CheckIsUi(root)) //生成ui代码
-                {
-                    OnUiSceneChange(root);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 切换场景
-        /// </summary>
-        private void OnSceneChanged(Node node)
-        {
-            _uiMonitor.ChangeCurrentNode(null);
-            if (CheckIsUi(node))
-            {
-                _uiMonitor.ChangeCurrentNode(node);
-            }
-        }
-
+        
+        
         /// <summary>
         /// 检查节点是否为UI节点
         /// </summary>
-        private bool CheckIsUi(Node node)
+        public bool CheckIsUi(Node node)
         {
             var resourcePath = node.GetScript().As<CSharpScript>()?.ResourcePath;
             if (resourcePath == null)
@@ -277,22 +237,26 @@ namespace Plugin
             return false;
         }
 
-        //ui场景存在修改
-        private void OnUiSceneChange(Node node)
+        /// <summary>
+        /// 执行生成ui代码操作
+        /// </summary>
+        public void GenerateUiCode(Node node)
         {
-            try
+            UiGenerator.GenerateUiCodeFromEditor(node);
+        }
+
+        /// <summary>
+        /// 切换场景
+        /// </summary>
+        private void OnSceneChanged(Node node)
+        {
+            _uiMonitor.ChangeCurrentNode(null);
+            if (CheckIsUi(node))
             {
-                var uiName = node.Name.ToString();
-                var path = GameConfig.UiCodeDir + uiName.FirstToLower() + "/" + uiName + ".cs";
-                GD.Print("重新生成ui代码: " + path);
-                //生成ui代码
-                UiGenerator.GenerateUiFromEditor(node, path);
-            }
-            catch (Exception e)
-            {
-                GD.PrintErr(e.ToString());
+                _uiMonitor.ChangeCurrentNode(node);
             }
         }
+
     }
 }
 #endif
