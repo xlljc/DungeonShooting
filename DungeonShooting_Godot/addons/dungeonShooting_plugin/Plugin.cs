@@ -77,10 +77,17 @@ namespace Plugin
         public override void _Process(double delta)
         {
             Instance = this;
+            
+            //GD.Print("_uiMonitor == null: " + (_uiMonitor == null));
             if (_uiMonitor != null)
             {
                 _uiMonitor.Process((float) delta);
             }
+            // else
+            // {
+            //     _uiMonitor = new NodeMonitor();
+            //     OnSceneChanged(GetEditorInterface().GetEditedSceneRoot());
+            // }
         }
 
         public override void _EnterTree()

@@ -69,7 +69,13 @@ public static class UiGenerator
             //生成Ui结构代码
             GenerateUiCode(uiNode, scriptPath + "/" + uiName + ".cs");
 
+            //生成 ResourcePath.cs 代码
+            ResourcePathGenerator.Generate();
+            
+            //生成 UiManager_Methods.cs 代码
+            UiManagerMethodsGenerator.Generate();
 #if TOOLS
+            //打开ui
             if (open)
             {
                 Plugin.Plugin.Instance.GetEditorInterface().OpenSceneFromPath(prefabResPath);

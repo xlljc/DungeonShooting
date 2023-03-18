@@ -41,6 +41,8 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer4.L_Button.Instance.Pressed += OnGenerateCurrentUiCode;
         //创建ui
         container.L_HBoxContainer3.L_Button.Instance.Pressed += OnCreateUI;
+        //重新生成UiManagerMethods.cs代码
+        container.L_HBoxContainer5.L_Button.Instance.Pressed += GenerateUiManagerMethods;
     }
 
     public override void OnHideUi()
@@ -58,6 +60,7 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer2.L_Button.Instance.Pressed -= GenerateRoomPack;
         container.L_HBoxContainer4.L_Button.Instance.Pressed -= OnGenerateCurrentUiCode;
         container.L_HBoxContainer3.L_Button.Instance.Pressed -= OnCreateUI;
+        container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
     }
 
     /// <summary>
@@ -218,8 +221,8 @@ public partial class EditorToolsPanel : EditorTools
                 }
 
                 //检查是否有同名的Ui
-                var path = GameConfig.UiCodeDir + uiName.FirstToLower();
-                if (Directory.Exists(path))
+                var path = GameConfig.UiPrefabDir + uiName + ".tscn";
+                if (File.Exists(path))
                 {
                     ShowTips("错误", "已经存在相同名称'" + uiName + "'的UI了, 不能重复创建!");
                     return;
@@ -266,6 +269,21 @@ public partial class EditorToolsPanel : EditorTools
         else
         {
             ShowTips("错误", "打包地牢房间配置执行失败! 前往控制台查看错误日志!");
+        }
+    }
+
+    /// <summary>
+    /// 重新生成UiManagerMethods.cs代码
+    /// </summary>
+    private void GenerateUiManagerMethods()
+    {
+        if (UiManagerMethodsGenerator.Generate())
+        {
+            ShowTips("提示", "生成UiManagerMethods.cs代码执行完成!");
+        }
+        else
+        {
+            ShowTips("错误", "生成UiManagerMethods.cs代码执行失败! 前往控制台查看错误日志!");
         }
     }
 }

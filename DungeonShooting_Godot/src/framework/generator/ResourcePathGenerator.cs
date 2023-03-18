@@ -22,12 +22,11 @@ public static class ResourcePathGenerator
     {
         ".vscode", ".idea", ".git", ".import", ".mono", "android", "addons", ".godot", ".vs"
     };
-    private static string currDir = System.Environment.CurrentDirectory;
 
     private static string resultStr = "";
 
     //保存路径
-    public static string savePath = "src/game/manager/ResourcePath.cs";
+    private static string savePath = "src/game/manager/ResourcePath.cs";
 
     /// <summary>
     /// 执行生成操作, 返回是否执行成功
@@ -44,7 +43,7 @@ public static class ResourcePathGenerator
 
             GD.Print("更新 ResourcePath...");
 
-            var directoryInfo = new DirectoryInfo(currDir);
+            var directoryInfo = new DirectoryInfo(System.Environment.CurrentDirectory);
 
             var directories = directoryInfo.GetDirectories();
             for (int i = 0; i < directories.Length; i++)
@@ -94,7 +93,7 @@ public static class ResourcePathGenerator
     {
         if (suffix.Contains(fileInfo.Extension))
         {
-            var field = fileInfo.FullName.Substring(currDir.Length + 1);
+            var field = fileInfo.FullName.Substring(System.Environment.CurrentDirectory.Length + 1);
             field = field.Replace("\\", "/");
             var resPath = "res://" + field;
             field = field.Replace(".", "_");
