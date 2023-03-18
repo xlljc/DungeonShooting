@@ -88,7 +88,7 @@ public static class ResourcePathGenerator
             var resPath = "res://" + field;
             field = field.Replace(".", "_");
             field = field.Replace("/", "_");
-            field = Regex.Replace(field, "[^\\w_]", "");
+            field = Regex.Replace(field, "[^\\w]", "");
             resultStr += $"    public const string {field} = \"{resPath}\";\n";
         }
     }

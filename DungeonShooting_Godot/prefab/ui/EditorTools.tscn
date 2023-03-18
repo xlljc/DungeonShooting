@@ -83,3 +83,5 @@ unresizable = true
 
 [node name="Tips" type="AcceptDialog" parent="."]
 initial_position = 1
+size = Vector2i(200, 124)
+unresizable = true

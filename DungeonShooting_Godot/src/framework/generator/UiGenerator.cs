@@ -115,7 +115,7 @@ public static class UiGenerator
     /// </summary>
     private static UiNodeInfo EachNode(Node node)
     {
-        var originName = Regex.Replace(node.Name, "[^\\w_]", "");
+        var originName = Regex.Replace(node.Name, "[^\\w]", "");
         //类定义该图层的类名
         string className;
         if (_nodeNameMap.ContainsKey(originName)) //有同名图层, 为了防止类名冲突, 需要在 UiNode 后面加上索引
@@ -160,7 +160,7 @@ public static class UiGenerator
     {
         UiNodeInfo uiNode;
         //原名称
-        var originName = Regex.Replace(node.Name, "[^\\w_]", "");
+        var originName = Regex.Replace(node.Name, "[^\\w]", "");
         //字段名称
         var fieldName = "L_" + originName;
         //类定义该图层的类名
