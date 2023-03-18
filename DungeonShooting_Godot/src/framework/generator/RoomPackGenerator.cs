@@ -13,7 +13,7 @@ namespace Generator;
 /// </summary>
 public static class RoomPackGenerator
 {
-	private static string currDir = System.Environment.CurrentDirectory;
+	private static string _currDir = System.Environment.CurrentDirectory;
 	
 	/// <summary>
 	/// 执行生成操作
@@ -110,8 +110,7 @@ public static class RoomPackGenerator
     
     private static string ToResPath(string path)
     {
-	    var field = path.Substring(currDir.Length + 1);
-	    field = field.Replace("\\", "/");
+	    var field = path.Replace("\\", "/");
 	    return "res://" + field;
     }
 

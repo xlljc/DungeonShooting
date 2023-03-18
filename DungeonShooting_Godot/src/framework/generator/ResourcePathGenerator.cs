@@ -19,7 +19,7 @@ public static class ResourcePathGenerator
     //排除第一层的文件夹
     private static string[] exclude =
     {
-        ".vscode", ".idea", ".git", ".import", ".mono", "android", "addons", ".godot"
+        ".vscode", ".idea", ".git", ".import", ".mono", "android", "addons", ".godot", ".vs"
     };
     private static string currDir = System.Environment.CurrentDirectory;
 
