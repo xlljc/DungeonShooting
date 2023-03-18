@@ -72,7 +72,7 @@ public partial class GameApplication : Node2D
 		
 		// 初始化鼠标
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
-		Cursor = ResourceManager.Load<PackedScene>(ResourcePath.prefab_ui_Cursor_tscn).Instantiate<Cursor>();
+		Cursor = ResourceManager.Load<PackedScene>(ResourcePath.prefab_Cursor_tscn).Instantiate<Cursor>();
 		AddChild(Cursor);
 
 		//打开ui
