@@ -28,6 +28,9 @@ namespace Plugin
             public string IconPath;
         }
         
+        /// <summary>
+        /// 当前插件实例
+        /// </summary>
         public static Plugin Instance { get; private set; }
 
         //工具面板
@@ -71,12 +74,28 @@ namespace Plugin
             ),
         };
 
+        private bool _clickSave = false;
+        
         public override void _Process(double delta)
         {
             Instance = this;
             if (_uiMonitor != null)
             {
                 _uiMonitor.Process((float) delta);
+            }
+            
+            //按下 ctrl + s 保存
+            if (Input.IsKeyPressed(Key.Ctrl) && Input.IsKeyPressed(Key.S))
+            {
+                if (!_clickSave)
+                {
+                    OnSaveClick();
+                }
+                _clickSave = true;
+            }
+            else
+            {
+                _clickSave = false;
             }
         }
 
@@ -154,7 +173,6 @@ namespace Plugin
 
             if (_editorTools != null)
             {
-                //RemoveControlFromDocks(dock);
                 try
                 {
                     _editorTools.OnHideUi();
@@ -209,6 +227,19 @@ namespace Plugin
             }
         }
 
+        //当ctrl+s按下
+        private void OnSaveClick()
+        {
+            var root = GetEditorInterface().GetEditedSceneRoot();
+            if (root != null)
+            {
+                if (CheckIsUi(root)) //生成ui代码
+                {
+                    OnUiSceneChange(root);
+                }
+            }
+        }
+
         /// <summary>
         /// 切换场景
         /// </summary>
@@ -217,7 +248,6 @@ namespace Plugin
             _uiMonitor.ChangeCurrentNode(null);
             if (CheckIsUi(node))
             {
-                OnUiSceneChange(node);
                 _uiMonitor.ChangeCurrentNode(node);
             }
         }
@@ -247,13 +277,14 @@ namespace Plugin
             return false;
         }
 
+        //ui场景存在修改
         private void OnUiSceneChange(Node node)
         {
             try
             {
                 var uiName = node.Name.ToString();
                 var path = GameConfig.UiCodeDir + uiName.FirstToLower() + "/" + uiName + ".cs";
-                GD.Print("检测到ui: '" + uiName + "'有变动, 重新生成ui代码: " + path);
+                GD.Print("重新生成ui代码: " + path);
                 //生成ui代码
                 UiGenerator.GenerateUiFromEditor(node, path);
             }
