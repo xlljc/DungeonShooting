@@ -6,7 +6,7 @@ using Godot;
 namespace Plugin;
 
 /// <summary>
-/// 场景监听器, 一旦当前节点内容发生改变, 则直接调用回调代码
+/// 场景监听器, 一旦当前节点内容发生改变, 则直接调用 SceneNodeChangeEvent 事件
 /// </summary>
 public class NodeMonitor
 {

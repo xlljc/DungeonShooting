@@ -9,17 +9,71 @@ namespace Plugin
     [Tool]
     public partial class Plugin : EditorPlugin
     {
-        public static Plugin Instance => _instance;
-        private static Plugin _instance;
+        /// <summary>
+        /// 自定义节点类型数据
+        /// </summary>
+        private class CustomTypeInfo
+        {
+            public CustomTypeInfo(string name, string parentName, string scriptPath, string iconPath)
+            {
+                Name = name;
+                ParentName = parentName;
+                ScriptPath = scriptPath;
+                IconPath = iconPath;
+            }
 
-        private EditorToolsPanel _dock;
+            public string Name;
+            public string ParentName;
+            public string ScriptPath;
+            public string IconPath;
+        }
+        
+        public static Plugin Instance { get; private set; }
+
+        //工具面板
+        private EditorToolsPanel _editorTools;
 
         //ui监听器
         private NodeMonitor _uiMonitor;
 
+        //自定义节点
+        private CustomTypeInfo[] _customTypeInfos = new CustomTypeInfo[]
+        {
+            new CustomTypeInfo(
+                "ActivityObjectTemplate",
+                "Node",
+                "res://src/framework/activity/ActivityObjectTemplate.cs",
+                "res://addons/dungeonShooting_plugin/ActivityObject.svg"
+            ),
+            new CustomTypeInfo(
+                "DungeonRoomTemplate",
+                "TileMap",
+                "res://src/framework/activity/ActivityObjectTemplate.cs",
+                "res://addons/dungeonShooting_plugin/Map.svg"
+            ),
+            new CustomTypeInfo(
+                "ActivityMark",
+                "Node2D",
+                "res://src/framework/map/mark/ActivityMark.cs",
+                "res://addons/dungeonShooting_plugin/Mark.svg"
+            ),
+            new CustomTypeInfo(
+                "EnemyMark",
+                "Node2D",
+                "res://src/framework/map/mark/EnemyMark.cs",
+                "res://addons/dungeonShooting_plugin/Mark.svg"
+            ),
+            new CustomTypeInfo(
+                "WeaponMark",
+                "Node2D",
+                "res://src/framework/map/mark/WeaponMark.cs",
+                "res://addons/dungeonShooting_plugin/Mark.svg"
+            ),
+        };
+
         public override void _Process(double delta)
         {
-            _instance = this;
+            Instance = this;
             if (_uiMonitor != null)
             {
                 _uiMonitor.Process((float) delta);
@@ -28,32 +82,33 @@ namespace Plugin
 
         public override void _EnterTree()
         {
-            _instance = this;
-            var script = GD.Load<Script>("res://src/framework/activity/ActivityObjectTemplate.cs");
-            var texture = GD.Load<Texture2D>("res://addons/dungeonShooting_plugin/ActivityObject.svg");
-            AddCustomType("ActivityObjectTemplate", "Node", script, texture);
+            Instance = this;
 
-            var script2 = GD.Load<Script>("res://src/framework/map/DungeonRoomTemplate.cs");
-            var texture2 = GD.Load<Texture2D>("res://addons/dungeonShooting_plugin/Map.svg");
-            AddCustomType("DungeonRoomTemplate", "TileMap", script2, texture2);
-            
-            var script3 = GD.Load<Script>("res://src/framework/map/mark/ActivityMark.cs");
-            var texture3 = GD.Load<Texture2D>("res://addons/dungeonShooting_plugin/Mark.svg");
-            AddCustomType("ActivityMark", "Node2D", script3, texture3);
-            
-            var script4 = GD.Load<Script>("res://src/framework/map/mark/EnemyMark.cs");
-            AddCustomType("EnemyMark", "Node2D", script4, texture3);
-            
-            var script5 = GD.Load<Script>("res://src/framework/map/mark/WeaponMark.cs");
-            AddCustomType("WeaponMark", "Node2D", script5, texture3);
-            
-            _dock = GD.Load<PackedScene>(ResourcePath.prefab_ui_EditorTools_tscn).Instantiate<EditorToolsPanel>();
+            if (_customTypeInfos != null)
+            {
+                //注册自定义节点
+                foreach (var customTypeInfo in _customTypeInfos)
+                {
+                    try
+                    {
+                        var script = GD.Load<Script>(customTypeInfo.ScriptPath);
+                        var icon = GD.Load<Texture2D>(customTypeInfo.IconPath);
+                        AddCustomType(customTypeInfo.Name, customTypeInfo.ParentName, script, icon);
+                    }
+                    catch (Exception e)
+                    {
+                        GD.PrintErr(e.ToString());
+                    }
+                }
+            }
+
+            _editorTools = GD.Load<PackedScene>(ResourcePath.prefab_ui_EditorTools_tscn).Instantiate<EditorToolsPanel>();
             var editorMainScreen = GetEditorInterface().GetEditorMainScreen();
-            editorMainScreen.AddChild(_dock);
+            editorMainScreen.AddChild(_editorTools);
 
             try
             {
-                _dock.OnCreateUi();
+                _editorTools.OnCreateUi();
             }
             catch (Exception e)
             {
@@ -62,7 +117,7 @@ namespace Plugin
 
             try
             {
-                _dock.OnShowUi();
+                _editorTools.OnShowUi();
             }
             catch (Exception e)
             {
@@ -81,19 +136,28 @@ namespace Plugin
 
         public override void _ExitTree()
         {
-            RemoveCustomType("ActivityObjectTemplate");
-            RemoveCustomType("DungeonRoomTemplate");
-            RemoveCustomType("ActivityMark");
-            RemoveCustomType("EnemyMark");
-            RemoveCustomType("WeaponMark");
+            //移除自定义节点
+            if (_customTypeInfos != null)
+            {
+                foreach (var customTypeInfo in _customTypeInfos)
+                {
+                    try
+                    {
+                        RemoveCustomType(customTypeInfo.Name);
+                    }
+                    catch (Exception e)
+                    {
+                        GD.PrintErr(e.ToString());
+                    }
+                }
+            }
 
-
-            if (_dock != null)
+            if (_editorTools != null)
             {
                 //RemoveControlFromDocks(dock);
                 try
                 {
-                    _dock.OnHideUi();
+                    _editorTools.OnHideUi();
                 }
                 catch (Exception e)
                 {
@@ -102,15 +166,15 @@ namespace Plugin
 
                 try
                 {
-                    _dock.OnDisposeUi();
+                    _editorTools.OnDisposeUi();
                 }
                 catch (Exception e)
                 {
                     GD.PrintErr(e.ToString());
                 }
 
-                _dock.Free();
-                _dock = null;
+                _editorTools.Free();
+                _editorTools = null;
             }
 
             SceneChanged -= OnSceneChanged;
@@ -139,9 +203,9 @@ namespace Plugin
 
         public override void _MakeVisible(bool visible)
         {
-            if (_dock != null)
+            if (_editorTools != null)
             {
-                _dock.Visible = visible;
+                _editorTools.Visible = visible;
             }
         }
 
