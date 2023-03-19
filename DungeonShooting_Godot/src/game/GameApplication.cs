@@ -81,7 +81,7 @@ public partial class GameApplication : Node2D
 
 		//打开ui
 		UiManager.Open_RoomUI();
-		
+
 		RoomManager = ResourceManager.Load<PackedScene>(ResourcePath.scene_Room_tscn).Instantiate<RoomManager>();
 		SceneRoot.AddChild(RoomManager);
 	}

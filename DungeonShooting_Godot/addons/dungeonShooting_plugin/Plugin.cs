@@ -78,16 +78,16 @@ namespace Plugin
         {
             Instance = this;
             
-            //GD.Print("_uiMonitor == null: " + (_uiMonitor == null));
             if (_uiMonitor != null)
             {
                 _uiMonitor.Process((float) delta);
             }
-            // else
-            // {
-            //     _uiMonitor = new NodeMonitor();
-            //     OnSceneChanged(GetEditorInterface().GetEditedSceneRoot());
-            // }
+            else
+            {
+                _uiMonitor = new NodeMonitor();
+                _uiMonitor.SceneNodeChangeEvent += GenerateUiCode;
+                OnSceneChanged(GetEditorInterface().GetEditedSceneRoot());
+            }
         }
 
         public override void _EnterTree()
@@ -142,6 +142,7 @@ namespace Plugin
 
             _uiMonitor = new NodeMonitor();
             _uiMonitor.SceneNodeChangeEvent += GenerateUiCode;
+            OnSceneChanged(GetEditorInterface().GetEditedSceneRoot());
         }
 
         public override void _ExitTree()
