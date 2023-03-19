@@ -811,84 +811,7 @@ public abstract partial class ActivityObject : CharacterBody2D
         //协程更新
         if (_coroutineList != null)
         {
-            var pairs = _coroutineList.ToArray();
-            for (var i = 0; i < pairs.Length; i++)
-            {
-                var item = pairs[i];
-                var canNext = true;
-
-                if (item.WaitType == CoroutineData.WaitTypeEnum.WaitForSeconds) //等待秒数
-                {
-                    if (!item.WaitForSeconds.NextStep(newDelta))
-                    {
-                        canNext = false;
-                    }
-                    else
-                    {
-                        item.WaitType = CoroutineData.WaitTypeEnum.None;
-                        item.WaitForSeconds = null;
-                    }
-                }
-                else if (item.WaitType == CoroutineData.WaitTypeEnum.WaitForFixedProcess) //等待帧数
-                {
-                    if (!item.WaitForFixedProcess.NextStep())
-                    {
-                        canNext = false;
-                    }
-                    else
-                    {
-                        item.WaitType = CoroutineData.WaitTypeEnum.None;
-                        item.WaitForFixedProcess = null;
-                    }
-                }
-
-                if (canNext)
-                {
-                    if (item.Enumerator.MoveNext()) //嵌套协程
-                    {
-                        var next = item.Enumerator.Current;
-                        if (next is IEnumerable enumerable)
-                        {
-                            if (item.EnumeratorStack == null)
-                            {
-                                item.EnumeratorStack = new Stack<IEnumerator>();
-                            }
-
-                            item.EnumeratorStack.Push(item.Enumerator);
-                            item.Enumerator = enumerable.GetEnumerator();
-                        }
-                        else if (next is IEnumerator enumerator)
-                        {
-                            if (item.EnumeratorStack == null)
-                            {
-                                item.EnumeratorStack = new Stack<IEnumerator>();
-                            }
-
-                            item.EnumeratorStack.Push(item.Enumerator);
-                            item.Enumerator = enumerator;
-                        }
-                        else if (next is WaitForSeconds seconds) //等待秒数
-                        {
-                            item.WaitFor(seconds);
-                        }
-                        else if (next is WaitForFixedProcess process) //等待帧数
-                        {
-                            item.WaitFor(process);
-                        }
-                    }
-                    else
-                    {
-                        if (item.EnumeratorStack == null || item.EnumeratorStack.Count == 0)
-                        {
-                            StopCoroutine(item.Id);
-                        }
-                        else
-                        {
-                            item.Enumerator = item.EnumeratorStack.Pop();
-                        }
-                    }
-                }
-            }
+            ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
         }
 
         ProcessOver(newDelta);
@@ -1206,22 +1129,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     public long StartCoroutine(IEnumerator able)
     {
-        if (_coroutineList == null)
-        {
-            _coroutineList = new List<CoroutineData>();
-        }
-
-        var data = new CoroutineData(able);
-        _coroutineList.Add(data);
-        return data.Id;
-    }
-    
-    /// <summary>
-    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess
-    /// </summary>
-    public long StartCoroutine(IEnumerable able)
-    {
-        return StartCoroutine(able.GetEnumerator());
+        return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
     }
 
     /// <summary>
@@ -1229,18 +1137,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     public void StopCoroutine(long coroutineId)
     {
-        if (_coroutineList != null)
-        {
-            for (var i = 0; i < _coroutineList.Count; i++)
-            {
-                var item = _coroutineList[i];
-                if (item.Id == coroutineId)
-                {
-                    _coroutineList.RemoveAt(i);
-                    return;
-                }
-            }
-        }
+        ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
     }
     
     /// <summary>
@@ -1248,9 +1145,6 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     public void StopAllCoroutine()
     {
-        if (_coroutineList != null)
-        {
-            _coroutineList.Clear();
-        }
+        ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
     }
 }

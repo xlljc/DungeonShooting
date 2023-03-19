@@ -3,6 +3,7 @@
 /// </summary>
 public class ResourcePath
 {
+    public const string prefab_Cursor_tscn = "res://prefab/Cursor.tscn";
     public const string prefab_FanCollisionShape_tscn = "res://prefab/FanCollisionShape.tscn";
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
     public const string prefab_effect_BulletDisappear_tscn = "res://prefab/effect/BulletDisappear.tscn";
@@ -15,7 +16,7 @@ public class ResourcePath
     public const string prefab_role_Role_tscn = "res://prefab/role/Role.tscn";
     public const string prefab_test_MoveComponent_tscn = "res://prefab/test/MoveComponent.tscn";
     public const string prefab_test_TestActivity_tscn = "res://prefab/test/TestActivity.tscn";
-    public const string prefab_ui_Cursor_tscn = "res://prefab/ui/Cursor.tscn";
+    public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_weapon_Knife_tscn = "res://prefab/weapon/Knife.tscn";
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";
@@ -239,6 +240,7 @@ public class ResourcePath
     public const string resource_sprite_role_role9_png = "res://resource/sprite/role/role9.png";
     public const string resource_sprite_shell_shellCase_png = "res://resource/sprite/shell/shellCase.png";
     public const string resource_sprite_ui_Cursor_png = "res://resource/sprite/ui/Cursor.png";
+    public const string resource_sprite_ui_CursorCenter_png = "res://resource/sprite/ui/CursorCenter.png";
     public const string resource_sprite_ui_font_bg_png = "res://resource/sprite/ui/font_bg.png";
     public const string resource_sprite_ui_healthBar_png = "res://resource/sprite/ui/healthBar.png";
     public const string resource_sprite_ui_hpBar_png = "res://resource/sprite/ui/hpBar.png";

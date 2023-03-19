@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// 协程数据
+/// </summary>
 public class CoroutineData
 {
     private static long _id;

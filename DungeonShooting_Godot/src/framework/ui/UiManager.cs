@@ -1,5 +1,4 @@
-
-using System;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -7,13 +6,21 @@ using Godot;
 /// </summary>
 public static partial class UiManager
 {
+    public enum RecordType
+    {
+        Open,
+        Close,
+    }
+    
     private static bool _init = false;
 
     private static CanvasLayer _bottomLayer;
     private static CanvasLayer _middleLayer;
     private static CanvasLayer _heightLayer;
     private static CanvasLayer _popLayer;
-    
+
+    private static Dictionary<string, List<UiBase>> _recordUiMap = new Dictionary<string, List<UiBase>>();
+
     public static void Init()
     {
         if (_init)
@@ -50,6 +57,9 @@ public static partial class UiManager
         GameApplication.Instance.AddChild(_popLayer);
     }
 
+    /// <summary>
+    /// 获取指定的Ui层根节点
+    /// </summary>
     public static CanvasLayer GetUiLayer(UiLayer uiLayer)
     {
         switch (uiLayer)
@@ -66,20 +76,83 @@ public static partial class UiManager
 
         return null;
     }
-    
-    public static UiBase OpenUi(string resourcePath)
+
+    /// <summary>
+    /// 记录ui的创建或者销毁
+    /// </summary>
+    public static void RecordUi(UiBase uiBase, RecordType type)
     {
-        var packedScene = ResourceManager.Load<PackedScene>(resourcePath);
+        if (type == RecordType.Open)
+        {
+            if (_recordUiMap.TryGetValue(uiBase.UiName, out var list))
+            {
+                list.Add(uiBase);
+            }
+            else
+            {
+                list = new List<UiBase>();
+                list.Add(uiBase);
+                _recordUiMap.Add(uiBase.UiName, list);
+            }
+        }
+        else
+        {
+            if (_recordUiMap.TryGetValue(uiBase.UiName, out var list))
+            {
+                list.Remove(uiBase);
+                if (list.Count == 0)
+                {
+                    _recordUiMap.Remove(uiBase.UiName);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
+    /// </summary>
+    public static UiBase OpenUi(string uiName, params object[] args)
+    {
+        var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
         var canvasLayer = GetUiLayer(uiBase.Layer);
         canvasLayer.AddChild(uiBase);
-        uiBase.OnCreate();
-        uiBase.OnOpen();
+        uiBase.OnCreateUi();
+        uiBase.ShowUi(args);
         return uiBase;
     }
 
-    public static T OpenUi<T>(string resourcePath) where T : UiBase
+    /// <summary>
+    /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
+    /// </summary>
+    public static T OpenUi<T>(string uiName, params object[] args) where T : UiBase
     {
-        return (T)OpenUi(resourcePath);
+        return (T)OpenUi(uiName, args);
+    }
+
+    /// <summary>
+    /// 销毁指定Ui
+    /// </summary>
+    public static void DisposeUi(UiBase uiBase)
+    {
+        uiBase.DisposeUi();
+    }
+
+    /// <summary>
+    /// 获取Ui实例
+    /// </summary>
+    public static T[] GetUiInstance<T>(string uiName) where T : UiBase
+    {
+        if (_recordUiMap.TryGetValue(uiName, out var list))
+        {
+            var result = new T[list.Count];
+            for (var i = 0; i < list.Count; i++)
+            {
+                result[i] = (T)list[i];
+            }
+            return result;
+        }
+
+        return new T[0];
     }
 }
