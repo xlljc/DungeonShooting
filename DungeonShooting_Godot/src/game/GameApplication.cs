@@ -65,15 +65,19 @@ public partial class GameApplication : Node2D
 		Engine.MaxFps = 60;
 		//调试绘制开关
 		ActivityObject.IsDebug = Debug;
-		//Engine.TimeScale = 0.3f;
+		//Engine.TimeScale = 0.2f;
 
 		//初始化ui
 		UiManager.Init();
 		
 		// 初始化鼠标
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
-		Cursor = ResourceManager.Load<PackedScene>(ResourcePath.prefab_ui_Cursor_tscn).Instantiate<Cursor>();
-		AddChild(Cursor);
+		Cursor = ResourceManager.Load<PackedScene>(ResourcePath.prefab_Cursor_tscn).Instantiate<Cursor>();
+		var cursorLayer = new CanvasLayer();
+		cursorLayer.Name = "CursorLayer";
+		cursorLayer.Layer = UiManager.GetUiLayer(UiLayer.Pop).Layer + 10;
+		AddChild(cursorLayer);
+		cursorLayer.AddChild(Cursor);
 
 		//打开ui
 		UiManager.Open_RoomUI();

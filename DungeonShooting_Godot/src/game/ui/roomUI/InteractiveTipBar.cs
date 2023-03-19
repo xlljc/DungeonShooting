@@ -7,24 +7,24 @@ namespace UI.RoomUI;
 /// </summary>
 public class InteractiveTipBar
 {
-    private RoomUI.UiNode1_InteractiveTipBar _interactiveTipBar;
+    private RoomUI.UiNode_InteractiveTipBar _interactiveTipBar;
     private string _currImage;
     private EventBinder _binder;
     private ActivityObject _interactiveTarget;
     
-    public InteractiveTipBar(RoomUI.UiNode1_InteractiveTipBar interactiveTipBar)
+    public InteractiveTipBar(RoomUI.UiNode_InteractiveTipBar interactiveTipBar)
     {
         interactiveTipBar.Instance.Visible = false;
         _interactiveTipBar = interactiveTipBar;
     }
 
-    public void OnOpen()
+    public void OnShow()
     {
         GameCamera.Main.OnPositionUpdateEvent += OnCameraPositionUpdate;
         _binder = EventManager.AddEventListener(EventEnum.OnPlayerChangeInteractiveItem, OnPlayerChangeInteractiveItem);
     }
 
-    public void OnClose()
+    public void OnHide()
     {
         GameCamera.Main.OnPositionUpdateEvent -= OnCameraPositionUpdate;
         _binder.RemoveEventListener();

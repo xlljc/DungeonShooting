@@ -130,4 +130,12 @@ public static class Utils
             }
         }
     }
+
+    /// <summary>
+    /// 字符串首字母小写
+    /// </summary>
+    public static string FirstToLower(this string str)
+    {
+        return str.Substring(0, 1).ToLower() + str.Substring(1);
+    }
 }

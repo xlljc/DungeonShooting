@@ -42,13 +42,21 @@ public static class GameConfig
     /// <summary>
     /// 地图数据路径
     /// </summary>
-    public static readonly string RoomTileDir = System.Environment.CurrentDirectory + "/resource/map/tileMaps/";
+    public const string RoomTileDir = "resource/map/tileMaps/";
     /// <summary>
     /// 地图描述数据路径
     /// </summary>
-    public static readonly string RoomTileDataDir = System.Environment.CurrentDirectory + "/resource/map/tiledata/";
+    public const string RoomTileDataDir = "resource/map/tiledata/";
     /// <summary>
     /// 房间配置汇总数据路径
     /// </summary>
-    public static readonly string RoomTileConfigFile = System.Environment.CurrentDirectory + "/resource/map/RoomConfig.json";
+    public const string RoomTileConfigFile = "resource/map/RoomConfig.json";
+    /// <summary>
+    /// ui预制体路径
+    /// </summary>
+    public const string UiPrefabDir = "prefab/ui/";
+    /// <summary>
+    /// ui代码根路径
+    /// </summary>
+    public const string UiCodeDir = "src/game/ui/";
 }

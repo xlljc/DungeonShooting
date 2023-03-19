@@ -22,7 +22,7 @@ public class ExternalForce
     public float Resistance { get; set; } = 5;
 
     /// <summary>
-    /// 当速度到达 0 后是否自动销毁
+    /// 当速度到达 0 后是否自动销毁, 默认 true
     /// </summary>
     public bool AutoDestroy { get; set; } = true;
     

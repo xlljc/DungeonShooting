@@ -1,5 +1,5 @@
 目前项目已经从Godot3x迁移至Godot4x<br>
-当前Godot版本: Godot_v4.0-stable, 请使用指定的Godot版打本开项目
+当前Godot版本: Godot_v4.0.1.rc1, 请使用指定的Godot版打本开项目
 
 游戏名称: 待定<br>
 美术风格: 2D像素<br>

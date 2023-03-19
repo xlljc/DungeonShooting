@@ -29,23 +29,23 @@ GlobalNodeRoot = NodePath("GlobalNodeRoot")
 
 [node name="ViewCanvas" type="CanvasLayer" parent="."]
 layer = -1
-offset = Vector2(-4, -4)
-transform = Transform2D(1, 0, 0, 1, -4, -4)
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="ViewCanvas"]
 material = SubResource("2")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1438.0
-offset_bottom = -808.0
+offset_right = -1440.0
+offset_bottom = -810.0
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(4, 4)
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="ViewCanvas/SubViewportContainer"]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(482, 272)
+size = Vector2i(480, 270)
 render_target_update_mode = 4
 
 [node name="SceneRoot" type="Node2D" parent="ViewCanvas/SubViewportContainer/SubViewport"]

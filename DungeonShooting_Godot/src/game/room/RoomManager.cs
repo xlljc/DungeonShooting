@@ -65,7 +65,6 @@ public partial class RoomManager : Node2D
         _dungeonGenerator = new DungeonGenerator();
         _dungeonGenerator.Generate();
         
-        
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
         _dungeonTile = new DungeonTile(TileRoot);
@@ -92,8 +91,11 @@ public partial class RoomManager : Node2D
         Player.Position = new Vector2(30, 30);
         Player.Name = "Player";
         Player.PutDown(RoomLayerEnum.YSortLayer);
-        
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
+
+        // var weapon = ActivityObject.Create(ActivityIdPrefix.Test + "0001");
+        // weapon.PutDown(new  Vector2(200, 200), RoomLayerEnum.NormalLayer);
+        // //weapon.Altitude = 50;
 
         // for (int i = 0; i < 10; i++)
         // {

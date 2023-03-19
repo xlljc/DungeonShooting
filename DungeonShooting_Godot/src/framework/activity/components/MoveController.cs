@@ -32,6 +32,32 @@ public class MoveController : Component
     private Vector2 _basisVelocity = Vector2.Zero;
 
     /// <summary>
+    /// 缩放所有力对象, 包括基础速率
+    /// </summary>
+    public void ScaleAllForce(float scale)
+    {
+        foreach (var externalForce in _forceList)
+        {
+            externalForce.Velocity *= scale;
+        }
+
+        BasisVelocity *= scale;
+    }
+    
+    /// <summary>
+    /// 设置所有力对象, 包括基础速率
+    /// </summary>
+    public void SetAllForce(Vector2 value)
+    {
+        foreach (var externalForce in _forceList)
+        {
+            externalForce.Velocity = value;
+        }
+
+        BasisVelocity = value;
+    }
+    
+    /// <summary>
     /// 获取所有外力对象
     /// </summary>
     public ExternalForce[] GetAllForce()
@@ -53,11 +79,12 @@ public class MoveController : Component
     }
 
     /// <summary>
-    /// 根据名称添加一个外力, 并返回创建的外力的对象, 如果存在这个名称的外力, 移除之前的外力
+    /// 根据名称添加一个外力, 并返回创建的外力的对象, 如果存在这个名称的外力, 移除之前的外力, 当速率变为 0 时不会自动销毁
     /// </summary>
     public ExternalForce AddConstantForce(string name)
     {
         var f = new ExternalForce(name);
+        f.AutoDestroy = false;
         AddConstantForce(f);
         return f;
     }
@@ -146,18 +173,27 @@ public class MoveController : Component
 
         //先调用更新
         var externalForces = _forceList.ToArray();
-        foreach (var fore in externalForces)
+        for (var i = 0; i < externalForces.Length; i++)
         {
-            if (fore.Enable)
-                fore.PhysicsProcess(delta);
+            var force = externalForces[i];
+            if (force.Enable)
+            {
+                force.PhysicsProcess(delta);
+                //自动销毁
+                if (force.AutoDestroy && force.Velocity == Vector2.Zero)
+                {
+                    _forceList.Remove(force);
+                    externalForces[i] = null;
+                }
+            }
         }
 
         //外力总和
         var finallyEf = new Vector2();
-        foreach (var fore in externalForces)
+        foreach (var force in externalForces)
         {
-            if (fore.Enable)
-                finallyEf += fore.Velocity;
+            if (force != null && force.Enable)
+                finallyEf += force.Velocity;
         }
 
         //最终速率
@@ -180,28 +216,27 @@ public class MoveController : Component
             }
 
             //调整外力速率
-            if (externalForces.Length > 0)
+            for (var i = 0; i < _forceList.Count; i++)
             {
-                for (var i = 0; i < _forceList.Count; i++)
+                var force = _forceList[i];
+                if (force.Enable)
                 {
-                    var force = _forceList[i];
-                    if (force.Enable)
+                    var velocity = force.Velocity;
+                    force.Velocity = new Vector2(
+                        newVelocity.X == 0f && velocity.X * finallyVelocity.X > 0 ? 0 : velocity.X,
+                        newVelocity.Y == 0f && velocity.Y * finallyVelocity.Y > 0 ? 0 : velocity.Y
+                    );
+
+                    //力速度衰减
+                    if (force.Resistance != 0)
                     {
-                        var velocity = force.Velocity;
-                        force.Velocity = new Vector2(
-                            newVelocity.X == 0f && velocity.X * finallyVelocity.X > 0 ? 0 : velocity.X,
-                            newVelocity.Y == 0f && velocity.Y * finallyVelocity.Y > 0 ? 0 : velocity.Y
-                        );
+                        force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.Resistance * delta);
+                    }
 
-                        if (force.Resistance != 0)
-                        {
-                            force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.Resistance * delta);
-                        }
-
-                        if (force.AutoDestroy && force.Velocity == Vector2.Zero)
-                        {
-                            _forceList.RemoveAt(i--);
-                        }
+                    //自动销毁
+                    if (force.AutoDestroy && force.Velocity == Vector2.Zero)
+                    {
+                        _forceList.RemoveAt(i--);
                     }
                 }
             }

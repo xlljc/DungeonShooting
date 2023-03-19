@@ -12,15 +12,18 @@ public partial class ShellCase : ActivityObject
     /// </summary>
     public AnimationPlayer AnimationPlayer { get; private set; }
     
-    public override void _Ready()
+    public override void OnInit()
     {
+        base.OnInit();
         AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         ShadowOffset = new Vector2(0, 1);
+        ThrowCollisionSize = new Vector2(5, 5);
     }
 
     protected override void OnThrowOver()
     {
         //AwaitDestroy();
+        MoveController.SetAllForce(Vector2.Zero);
         AnimationPlayer.Play("flicker");
     }
 

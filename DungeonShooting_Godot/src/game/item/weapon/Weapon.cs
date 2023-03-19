@@ -192,6 +192,8 @@ public abstract partial class Weapon : ActivityObject
         CurrAmmo = Attribute.AmmoCapacity;
         //剩余弹药量
         ResidueAmmo = Mathf.Min(Attribute.StandbyAmmoCapacity + CurrAmmo, Attribute.MaxAmmoCapacity) - CurrAmmo;
+        
+        ThrowCollisionSize = new Vector2(20, 15);
     }
 
     /// <summary>
@@ -928,9 +930,7 @@ public abstract partial class Weapon : ActivityObject
                 //播放互动效果
                 if (flag)
                 {
-                    Throw(new Vector2(30, 15), GlobalPosition, 0, 0,
-                        Utils.RandomRangeInt(-20, 20), Utils.RandomRangeInt(20, 50),
-                        Utils.RandomRangeInt(-180, 180));
+                    Throw(GlobalPosition, 0, Utils.RandomRangeInt(20, 50), Vector2.Zero, Utils.RandomRangeInt(-180, 180));
                 }
             }
             else //没有武器
@@ -986,10 +986,10 @@ public abstract partial class Weapon : ActivityObject
 
         var startHeight = 6;
         var direction = angle + Utils.RandomRangeInt(-20, 20);
-        var xf = 20;
+        var velocity = new Vector2(20, 0).Rotated(direction * Mathf.Pi / 180);
         var yf = Utils.RandomRangeInt(50, 70);
         var rotate = Utils.RandomRangeInt(-90, 90);
-        Throw(new Vector2(30, 15), startPosition, startHeight, direction, xf, yf, rotate, true);
+        Throw(startPosition, startHeight, yf, velocity, rotate);
     }
 
     protected override void OnThrowOver()

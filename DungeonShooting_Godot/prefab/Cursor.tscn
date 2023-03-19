@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://brx7nc4mdgjat"]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Texture2D" uid="uid://ct5v768lsf6nc" path="res://resource/sprite/ui/Cursor.png" id="1"]
-[ext_resource type="Script" path="res://src/game/ui/Cursor.cs" id="2"]
+[ext_resource type="Script" path="res://src/game/Cursor.cs" id="2"]
 [ext_resource type="Texture2D" uid="uid://cjiiu86a42mnj" path="res://resource/sprite/ui/CursorCenter.png" id="2_2j135"]
+
 
 [node name="Cursor" type="Node2D"]
 z_index = 10

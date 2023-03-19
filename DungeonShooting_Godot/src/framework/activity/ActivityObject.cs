@@ -45,7 +45,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 是否正在投抛过程中
     /// </summary>
-    public bool IsThrowing => _throwData != null && !_throwData.IsOver;
+    public bool IsThrowing => _fallData != null && !_isFallOver;
 
     /// <summary>
     /// 阴影偏移
@@ -82,6 +82,68 @@ public abstract partial class ActivityObject : CharacterBody2D
         }
     }
 
+    /// <summary>
+    /// 当前物体的海拔高度, 如果大于0, 则会做自由落体运动, 也就是执行投抛代码
+    /// </summary>
+    public float Altitude
+    {
+        get => _altitude;
+        set
+        {
+            _altitude = value;
+            _hasResilienceVerticalSpeed = false;
+        }
+    }
+
+    private float _altitude = 0;
+
+    /// <summary>
+    /// 物体纵轴移动速度, 如果设置大于0, 就可以营造向上投抛物体的效果, 该值会随着重力加速度衰减
+    /// </summary>
+    public float VerticalSpeed
+    {
+        get => _verticalSpeed;
+        set
+        {
+            _verticalSpeed = value;
+            _hasResilienceVerticalSpeed = false;
+        }
+    }
+
+    private float _verticalSpeed;
+    
+    /// <summary>
+    /// 物体投抛时旋转速度, 角度制
+    /// </summary>
+    public float ThrowRotationDegreesSpeed { get; set; }
+
+    /// <summary>
+    /// 落地之后是否回弹
+    /// </summary>
+    public bool Bounce { get; set; } = true;
+
+    /// <summary>
+    /// 物体下坠回弹的强度
+    /// </summary>
+    public float BounceStrength { get; set; } = 0.5f;
+
+    /// <summary>
+    /// 物体下坠回弹后的运动速度衰减量
+    /// </summary>
+    public float BounceSpeed { get; set; } = 0.75f;
+    
+    /// <summary>
+    /// 投抛状态下物体碰撞器大小, 如果 (x, y) 都小于 0, 则默认使用 AnimatedSprite 的默认动画第一帧的大小
+    /// </summary>
+    public Vector2 ThrowCollisionSize { get; set; } = new Vector2(-1, -1);
+
+    /// <summary>
+    /// 是否启用垂直方向上的运动模拟, 默认开启, 如果禁用, 那么下落和投抛效果, 同样 Throw() 函数也将失效
+    /// </summary>
+    public bool EnableVerticalMotion { get; set; } = true;
+
+    // --------------------------------------------------------------------------------
+
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     //是否初始化阴影
@@ -99,7 +161,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     private ShaderMaterial _blendShaderMaterial;
     
     //存储投抛该物体时所产生的数据
-    private ActivityThrowData _throwData;
+    private ActivityFallData _fallData;
     
     //所在层级
     private RoomLayerEnum _currLayer;
@@ -112,8 +174,28 @@ public abstract partial class ActivityObject : CharacterBody2D
     //模板实例
     private ActivityObjectTemplate _templateInstance;
     
+    //物体所在区域
     private AffiliationArea _affiliationArea;
+
+    //是否是第一次下坠
+    private bool _firstFall = true;
     
+    //下坠是否已经结束
+    private bool _isFallOver = true;
+
+    //下坠状态碰撞器形状
+    private RectangleShape2D _throwRectangleShape;
+
+    //投抛移动速率
+    private ExternalForce _throwForce;
+    
+    //落到地上回弹的速度
+    private float _resilienceVerticalSpeed = 0;
+    private bool _hasResilienceVerticalSpeed = false;
+    
+    // --------------------------------------------------------------------------------
+    
+    //实例索引
     private static long _instanceIndex = 0;
 
     //初始化节点
@@ -168,6 +250,13 @@ public abstract partial class ActivityObject : CharacterBody2D
         //_templateInstance.CallDeferred(Node.MethodName.QueueFree);
 
         OnInit();
+    }
+
+    /// <summary>
+    /// 子类重写的 _Ready() 可能会比 _InitNode() 函数调用晚, 所以禁止子类重写, 如需要 _Ready() 类似的功能需重写 OnInit()
+    /// </summary>
+    public sealed override void _Ready()
+    {
     }
 
     /// <summary>
@@ -431,54 +520,57 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// <summary>
     /// 将该节点投抛出去
     /// </summary>
-    /// <param name="size">碰撞器大小</param>
-    /// <param name="start">起始坐标 (全局)</param>
-    /// <param name="startHeight">起始高度</param>
-    /// <param name="direction">投抛角度 (0-360)</param>
-    /// <param name="xSpeed">移动速度</param>
-    /// <param name="ySpeed">下坠速度</param>
+    /// <param name="altitude">初始高度</param>
     /// <param name="rotate">旋转速度</param>
-    /// <param name="bounce">落地时是否回弹</param>
-    /// <param name="bounceStrength">落地回弹力度, 1为不消耗能量, 值越小回弹力度越小</param>
-    /// <param name="bounceSpeed">落地回弹后的速度, 1为不消速度, 值越小回弹速度消耗越大</param>
-    public void Throw(Vector2 size, Vector2 start, float startHeight, float direction, float xSpeed,
-        float ySpeed, float rotate, bool bounce = false, float bounceStrength = 0.5f, float bounceSpeed = 0.8f)
+    /// <param name="velocity">移动速率</param>
+    /// <param name="verticalSpeed">纵轴速度</param>
+    public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotate)
     {
-        if (_throwData == null)
+        var parent = GetParent();
+        if (parent == null)
         {
-            _throwData = new ActivityThrowData();
+            GameApplication.Instance.RoomManager.YSortLayer.AddChild(this);
+        }
+        else if (parent != GameApplication.Instance.RoomManager.YSortLayer)
+        {
+            parent.RemoveChild(this);
+            GameApplication.Instance.RoomManager.YSortLayer.AddChild(this);
+        }
+        
+        Altitude = altitude;
+        VerticalSpeed = verticalSpeed;
+        ThrowRotationDegreesSpeed = rotate;
+        if (_throwForce != null)
+        {
+            MoveController.RemoveForce(_throwForce);
         }
 
-        SetThrowCollision();
-
-        _throwData.IsOver = false;
-        _throwData.Size = size;
-        _throwData.StartPosition = _throwData.CurrPosition = start;
-        _throwData.Direction = direction;
-        _throwData.XSpeed = xSpeed;
-        _throwData.YSpeed = ySpeed;
-        _throwData.StartXSpeed = xSpeed;
-        _throwData.StartYSpeed = ySpeed;
-        _throwData.RotateSpeed = rotate;
-        _throwData.ThrowForce = MoveController.AddConstantForce("ThrowForce");
-        _throwData.ThrowForce.Velocity =
-            new Vector2(_throwData.XSpeed, 0).Rotated(_throwData.Direction * Mathf.Pi / 180);
-        _throwData.Y = startHeight;
-        _throwData.Bounce = bounce;
-        _throwData.BounceStrength = bounceStrength;
-        _throwData.BounceSpeed = bounceSpeed;
-
-        _throwData.RectangleShape.Size = _throwData.Size * 0.5f;
-
-        Throw();
+        _throwForce = new ExternalForce("throw");
+        _throwForce.Velocity = velocity;
+        MoveController.AddConstantForce(_throwForce);
     }
+
+    /// <summary>
+    /// 将该节点投抛出去
+    /// </summary>
+    /// <param name="position">初始位置</param>
+    /// <param name="altitude">初始高度</param>
+    /// <param name="rotate">旋转速度</param>
+    /// <param name="velocity">移动速率</param>
+    /// <param name="verticalSpeed">纵轴速度</param>
+    public void Throw(Vector2 position, float altitude, float verticalSpeed, Vector2 velocity, float rotate)
+    {
+        GlobalPosition = position;
+        Throw(altitude, verticalSpeed, velocity, rotate);
+    }
+
 
     /// <summary>
     /// 强制停止投抛运动
     /// </summary>
     public void StopThrow()
     {
-        _throwData.IsOver = true;
+        _isFallOver = true;
         RestoreCollision();
     }
 
@@ -566,65 +658,111 @@ public abstract partial class ActivityObject : CharacterBody2D
             }
         }
 
-        //投抛计算
-        if (_throwData != null && !_throwData.IsOver)
+        // 下坠判定
+        if (Altitude > 0 || VerticalSpeed != 0)
         {
-            GlobalRotationDegrees = GlobalRotationDegrees + _throwData.RotateSpeed * newDelta;
-            CalcThrowAnimatedPosition();
-
-            var ysp = _throwData.YSpeed;
-
-            _throwData.Y += _throwData.YSpeed * newDelta;
-            _throwData.YSpeed -= GameConfig.G * newDelta;
-
-            //当高度大于16时, 显示在所有物体上
-            if (_throwData.Y >= 16)
+            if (_fallData == null)
             {
-                AnimatedSprite.ZIndex = 20;
+                _fallData = new ActivityFallData();
+            }
+            
+            if (_isFallOver) // 没有处于下坠状态, 则进入下坠状态
+            {
+                SetFallCollision();
+
+                _isFallOver = false;
+                _firstFall = true;
+                _hasResilienceVerticalSpeed = false;
+                _resilienceVerticalSpeed = 0;
+                
+                if (ThrowCollisionSize.X < 0 && ThrowCollisionSize.Y < 0)
+                {
+                    _throwRectangleShape.Size = GetDefaultTexture().GetSize();
+                }
+                else
+                {
+                    _throwRectangleShape.Size = ThrowCollisionSize;
+                }
+
+                Throw();
             }
             else
             {
-                AnimatedSprite.ZIndex = 0;
-            }
-            
-            //达到最高点
-            if (ysp * _throwData.YSpeed < 0)
-            {
-                OnThrowMaxHeight(_throwData.Y);
-            }
-
-            //落地判断
-            if (_throwData.Y <= 0)
-            {
-
-                _throwData.IsOver = true;
-
-                //第一次接触地面
-                if (_throwData.FirstOver)
+                if (EnableVerticalMotion) //如果启用了纵向运动, 则更新运动
                 {
-                    _throwData.FirstOver = false;
-                    OnFirstFallToGround();
+                    GlobalRotationDegrees = GlobalRotationDegrees + ThrowRotationDegreesSpeed * newDelta;
+
+                    var ysp = VerticalSpeed;
+
+                    _altitude += VerticalSpeed * newDelta;
+                    _verticalSpeed -= GameConfig.G * newDelta;
+
+                    //当高度大于16时, 显示在所有物体上
+                    if (Altitude >= 16)
+                    {
+                        AnimatedSprite.ZIndex = 20;
+                    }
+                    else
+                    {
+                        AnimatedSprite.ZIndex = 0;
+                    }
+                
+                    //达到最高点
+                    if (ysp > 0 && ysp * VerticalSpeed < 0)
+                    {
+                        OnThrowMaxHeight(Altitude);
+                    }
+
+                    //落地判断
+                    if (Altitude <= 0)
+                    {
+                        _altitude = 0;
+
+                        //第一次接触地面
+                        if (_firstFall)
+                        {
+                            _firstFall = false;
+                            OnFirstFallToGround();
+                        }
+
+                        MoveController.ScaleAllForce(BounceSpeed);
+                        //如果落地高度不够低, 再抛一次
+                        if (Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 1))
+                        {
+                            if (!_hasResilienceVerticalSpeed)
+                            {
+                                _hasResilienceVerticalSpeed = true;
+                                _resilienceVerticalSpeed = -VerticalSpeed * BounceStrength;
+                            }
+                            else
+                            {
+                                _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength;
+                            }
+                            _verticalSpeed = _resilienceVerticalSpeed;
+                            ThrowRotationDegreesSpeed = ThrowRotationDegreesSpeed * BounceStrength;
+                            _isFallOver = false;
+
+                            OnFallToGround();
+                        }
+                        else //结束
+                        {
+                            _verticalSpeed = 0;
+
+                            if (_throwForce != null)
+                            {
+                                MoveController.RemoveForce(_throwForce);
+                                _throwForce = null;
+                            }
+                            _isFallOver = true;
+                            
+                            OnFallToGround();
+                            ThrowOver();
+                        }
+                    }
                 }
 
-                //如果落地高度不够低, 再抛一次
-                if (_throwData.StartYSpeed > 1 && _throwData.Bounce)
-                {
-                    _throwData.StartPosition = Position;
-                    _throwData.Y = 0;
-                    _throwData.XSpeed = _throwData.StartXSpeed = _throwData.StartXSpeed * _throwData.BounceSpeed;
-                    _throwData.YSpeed = _throwData.StartYSpeed = _throwData.StartYSpeed * _throwData.BounceStrength;
-                    _throwData.RotateSpeed = _throwData.RotateSpeed * _throwData.BounceStrength;
-                    _throwData.ThrowForce.Velocity *= _throwData.BounceSpeed;
-                    _throwData.FirstOver = false;
-                    _throwData.IsOver = false;
-
-                    OnFallToGround();
-                }
-                else //结束
-                {
-                    OnFallToGround();
-                    ThrowOver();
-                }
+                //计算精灵位置
+                CalcThrowAnimatedPosition();
             }
         }
 
@@ -673,84 +811,7 @@ public abstract partial class ActivityObject : CharacterBody2D
         //协程更新
         if (_coroutineList != null)
         {
-            var pairs = _coroutineList.ToArray();
-            for (var i = 0; i < pairs.Length; i++)
-            {
-                var item = pairs[i];
-                var canNext = true;
-
-                if (item.WaitType == CoroutineData.WaitTypeEnum.WaitForSeconds) //等待秒数
-                {
-                    if (!item.WaitForSeconds.NextStep(newDelta))
-                    {
-                        canNext = false;
-                    }
-                    else
-                    {
-                        item.WaitType = CoroutineData.WaitTypeEnum.None;
-                        item.WaitForSeconds = null;
-                    }
-                }
-                else if (item.WaitType == CoroutineData.WaitTypeEnum.WaitForFixedProcess) //等待帧数
-                {
-                    if (!item.WaitForFixedProcess.NextStep())
-                    {
-                        canNext = false;
-                    }
-                    else
-                    {
-                        item.WaitType = CoroutineData.WaitTypeEnum.None;
-                        item.WaitForFixedProcess = null;
-                    }
-                }
-
-                if (canNext)
-                {
-                    if (item.Enumerator.MoveNext()) //嵌套协程
-                    {
-                        var next = item.Enumerator.Current;
-                        if (next is IEnumerable enumerable)
-                        {
-                            if (item.EnumeratorStack == null)
-                            {
-                                item.EnumeratorStack = new Stack<IEnumerator>();
-                            }
-
-                            item.EnumeratorStack.Push(item.Enumerator);
-                            item.Enumerator = enumerable.GetEnumerator();
-                        }
-                        else if (next is IEnumerator enumerator)
-                        {
-                            if (item.EnumeratorStack == null)
-                            {
-                                item.EnumeratorStack = new Stack<IEnumerator>();
-                            }
-
-                            item.EnumeratorStack.Push(item.Enumerator);
-                            item.Enumerator = enumerator;
-                        }
-                        else if (next is WaitForSeconds seconds) //等待秒数
-                        {
-                            item.WaitFor(seconds);
-                        }
-                        else if (next is WaitForFixedProcess process) //等待帧数
-                        {
-                            item.WaitFor(process);
-                        }
-                    }
-                    else
-                    {
-                        if (item.EnumeratorStack == null || item.EnumeratorStack.Count == 0)
-                        {
-                            StopCoroutine(item.Id);
-                        }
-                        else
-                        {
-                            item.Enumerator = item.EnumeratorStack.Pop();
-                        }
-                    }
-                }
-            }
+            ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
         }
 
         ProcessOver(newDelta);
@@ -826,26 +887,19 @@ public abstract partial class ActivityObject : CharacterBody2D
         ShadowSprite.Rotation = 0;
         //阴影位置计算
         var pos = AnimatedSprite.GlobalPosition;
-        if (_throwData != null && !_throwData.IsOver)
-        {
-            ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + _throwData.Y);
-        }
-        else
-        {
-            ShadowSprite.GlobalPosition = pos + ShadowOffset;
-        }
+        ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + Altitude);
     }
-    
+
     //计算位置
     private void CalcThrowAnimatedPosition()
     {
         if (Scale.Y < 0)
         {
-            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) - _throwData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
+            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -Altitude) - _fallData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
         }
         else
         {
-            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -_throwData.Y) + _throwData.OriginSpritePosition.Rotated(Rotation);
+            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -Altitude) + _fallData.OriginSpritePosition.Rotated(Rotation);
         }
     }
 
@@ -904,40 +958,42 @@ public abstract partial class ActivityObject : CharacterBody2D
             this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
 
-        GlobalPosition = _throwData.StartPosition;
-
         CalcThrowAnimatedPosition();
         //显示阴影
         ShowShadowSprite();
-        OnThrowStart();
+
+        if (EnableVerticalMotion)
+        {
+            OnThrowStart();
+        }
     }
 
     /// <summary>
-    /// 设置投抛状态下的碰撞器
+    /// 设置下坠状态下的碰撞器
     /// </summary>
-    private void SetThrowCollision()
+    private void SetFallCollision()
     {
-        if (_throwData != null && _throwData.UseOrigin)
+        if (_fallData != null && _fallData.UseOrigin)
         {
-            _throwData.OriginShape = Collision.Shape;
-            _throwData.OriginPosition = Collision.Position;
-            _throwData.OriginRotation = Collision.Rotation;
-            _throwData.OriginScale = Collision.Scale;
-            _throwData.OriginZIndex = ZIndex;
-            _throwData.OriginSpritePosition = AnimatedSprite.Position;
-            _throwData.OriginCollisionEnable = Collision.Disabled;
-            _throwData.OriginCollisionPosition = Collision.Position;
-            _throwData.OriginCollisionRotation = Collision.Rotation;
-            _throwData.OriginCollisionScale = Collision.Scale;
-            _throwData.OriginCollisionMask = CollisionMask;
-            _throwData.OriginCollisionLayer = CollisionLayer;
+            _fallData.OriginShape = Collision.Shape;
+            _fallData.OriginPosition = Collision.Position;
+            _fallData.OriginRotation = Collision.Rotation;
+            _fallData.OriginScale = Collision.Scale;
+            _fallData.OriginZIndex = ZIndex;
+            _fallData.OriginSpritePosition = AnimatedSprite.Position;
+            _fallData.OriginCollisionEnable = Collision.Disabled;
+            _fallData.OriginCollisionPosition = Collision.Position;
+            _fallData.OriginCollisionRotation = Collision.Rotation;
+            _fallData.OriginCollisionScale = Collision.Scale;
+            _fallData.OriginCollisionMask = CollisionMask;
+            _fallData.OriginCollisionLayer = CollisionLayer;
 
-            if (_throwData.RectangleShape == null)
+            if (_throwRectangleShape == null)
             {
-                _throwData.RectangleShape = new RectangleShape2D();
+                _throwRectangleShape = new RectangleShape2D();
             }
 
-            Collision.Shape = _throwData.RectangleShape;
+            Collision.Shape = _throwRectangleShape;
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
@@ -948,7 +1004,7 @@ public abstract partial class ActivityObject : CharacterBody2D
             Collision.Scale = Vector2.One;
             CollisionMask = 1;
             CollisionLayer = 0;
-            _throwData.UseOrigin = false;
+            _fallData.UseOrigin = false;
         }
     }
 
@@ -957,22 +1013,22 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     private void RestoreCollision()
     {
-        if (_throwData != null && !_throwData.UseOrigin)
+        if (_fallData != null && !_fallData.UseOrigin)
         {
-            Collision.Shape = _throwData.OriginShape;
-            Collision.Position = _throwData.OriginPosition;
-            Collision.Rotation = _throwData.OriginRotation;
-            Collision.Scale = _throwData.OriginScale;
-            ZIndex = _throwData.OriginZIndex;
-            AnimatedSprite.Position = _throwData.OriginSpritePosition;
-            Collision.Disabled = _throwData.OriginCollisionEnable;
-            Collision.Position = _throwData.OriginCollisionPosition;
-            Collision.Rotation = _throwData.OriginCollisionRotation;
-            Collision.Scale = _throwData.OriginCollisionScale;
-            CollisionMask = _throwData.OriginCollisionMask;
-            CollisionLayer = _throwData.OriginCollisionLayer;
+            Collision.Shape = _fallData.OriginShape;
+            Collision.Position = _fallData.OriginPosition;
+            Collision.Rotation = _fallData.OriginRotation;
+            Collision.Scale = _fallData.OriginScale;
+            ZIndex = _fallData.OriginZIndex;
+            AnimatedSprite.Position = _fallData.OriginSpritePosition;
+            Collision.Disabled = _fallData.OriginCollisionEnable;
+            Collision.Position = _fallData.OriginCollisionPosition;
+            Collision.Rotation = _fallData.OriginCollisionRotation;
+            Collision.Scale = _fallData.OriginCollisionScale;
+            CollisionMask = _fallData.OriginCollisionMask;
+            CollisionLayer = _fallData.OriginCollisionLayer;
 
-            _throwData.UseOrigin = true;
+            _fallData.UseOrigin = true;
         }
     }
 
@@ -981,11 +1037,13 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     private void ThrowOver()
     {
-        //移除投抛的力
-        MoveController.RemoveForce(_throwData.ThrowForce);
-        
-        GetParent().RemoveChild(this);
-        this.AddToActivityRoot(_currLayer);
+        var parent = GetParent();
+        var roomLayer = GameApplication.Instance.RoomManager.GetRoomLayer(_currLayer);
+        if (parent != roomLayer)
+        {
+            parent.RemoveChild(this);
+            roomLayer.AddChild(this);
+        }
         RestoreCollision();
 
         OnThrowOver();
@@ -1071,22 +1129,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     public long StartCoroutine(IEnumerator able)
     {
-        if (_coroutineList == null)
-        {
-            _coroutineList = new List<CoroutineData>();
-        }
-
-        var data = new CoroutineData(able);
-        _coroutineList.Add(data);
-        return data.Id;
-    }
-    
-    /// <summary>
-    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess
-    /// </summary>
-    public long StartCoroutine(IEnumerable able)
-    {
-        return StartCoroutine(able.GetEnumerator());
+        return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
     }
 
     /// <summary>
@@ -1094,18 +1137,7 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     public void StopCoroutine(long coroutineId)
     {
-        if (_coroutineList != null)
-        {
-            for (var i = 0; i < _coroutineList.Count; i++)
-            {
-                var item = _coroutineList[i];
-                if (item.Id == coroutineId)
-                {
-                    _coroutineList.RemoveAt(i);
-                    return;
-                }
-            }
-        }
+        ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
     }
     
     /// <summary>
@@ -1113,9 +1145,6 @@ public abstract partial class ActivityObject : CharacterBody2D
     /// </summary>
     public void StopAllCoroutine()
     {
-        if (_coroutineList != null)
-        {
-            _coroutineList.Clear();
-        }
+        ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
     }
 }

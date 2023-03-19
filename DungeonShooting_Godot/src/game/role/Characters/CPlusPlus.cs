@@ -18,9 +18,9 @@ public partial class CPlusPlus : Player
 {
 
 
-    public override void _Ready()
+    public override void OnInit()
     {
-        base._Ready();
+        base.OnInit();
         #region 初始属性
 
         MaxHp = 55;

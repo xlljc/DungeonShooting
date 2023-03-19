@@ -11,7 +11,7 @@ public class RegisterWeapon : RegisterActivity
     /// </summary>
     private readonly WeaponAttribute _weaponAttribute;
     
-    public RegisterWeapon(string id, Type attribute) : base(id, null)
+    public RegisterWeapon(string itemId, Type attribute) : base(itemId, null)
     {
         _weaponAttribute = (WeaponAttribute)Activator.CreateInstance(attribute);
         if (_weaponAttribute != null) PrefabPath = _weaponAttribute.WeaponPrefab;
