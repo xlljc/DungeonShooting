@@ -46,30 +46,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "运行"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 5
-
-[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "重新打包地牢房间配置"
-
-[node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "运行"
-
-[node name="HBoxContainer4" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 5
-
-[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
-layout_mode = 2
-text = "重新生成当前UI的代码"
-
-[node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
-layout_mode = 2
-text = "运行"
-
 [node name="HBoxContainer3" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 5
@@ -88,6 +64,18 @@ layout_mode = 2
 text = "创建
 "
 
+[node name="HBoxContainer4" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "重新生成当前UI的代码"
+
+[node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "运行"
+
 [node name="HBoxContainer5" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 5
@@ -97,6 +85,36 @@ layout_mode = 2
 text = "重新生成UiManagerMethods.cs代码"
 
 [node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "运行"
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "创建地牢房间"
+
+[node name="LineEdit" type="LineEdit" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+placeholder_text = "请输入房间名称"
+
+[node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "创建
+"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "重新打包地牢房间配置"
+
+[node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 text = "运行"
 

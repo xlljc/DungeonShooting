@@ -35,14 +35,16 @@ public partial class EditorToolsPanel : EditorTools
         var container = L_ScrollContainer.L_MarginContainer.L_VBoxContainer;
         //重新生成 ResourcePath
         container.L_HBoxContainer.L_Button.Instance.Pressed += GenerateResourcePath;
-        //重新生成 RoomPack
-        container.L_HBoxContainer2.L_Button.Instance.Pressed += GenerateRoomPack;
+        //重新打包房间配置
+        container.L_HBoxContainer2.L_Button.Instance.Pressed += GenerateRoomConfig;
         //重新生成ui代码
         container.L_HBoxContainer4.L_Button.Instance.Pressed += OnGenerateCurrentUiCode;
         //创建ui
         container.L_HBoxContainer3.L_Button.Instance.Pressed += OnCreateUI;
         //重新生成UiManagerMethods.cs代码
         container.L_HBoxContainer5.L_Button.Instance.Pressed += GenerateUiManagerMethods;
+        //创建地牢房间
+        container.L_HBoxContainer6.L_Button.Instance.Pressed += GenerateDungeonRoom;
     }
 
     public override void OnHideUi()
@@ -57,10 +59,11 @@ public partial class EditorToolsPanel : EditorTools
         
         var container = L_ScrollContainer.L_MarginContainer.L_VBoxContainer;
         container.L_HBoxContainer.L_Button.Instance.Pressed -= GenerateResourcePath;
-        container.L_HBoxContainer2.L_Button.Instance.Pressed -= GenerateRoomPack;
+        container.L_HBoxContainer2.L_Button.Instance.Pressed -= GenerateRoomConfig;
         container.L_HBoxContainer4.L_Button.Instance.Pressed -= OnGenerateCurrentUiCode;
         container.L_HBoxContainer3.L_Button.Instance.Pressed -= OnCreateUI;
         container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
+        container.L_HBoxContainer6.L_Button.Instance.Pressed -= GenerateDungeonRoom;
     }
 
     /// <summary>
@@ -184,7 +187,7 @@ public partial class EditorToolsPanel : EditorTools
         if (Plugin.Plugin.Instance != null)
         {
             var root = Plugin.Plugin.Instance.GetEditorInterface().GetEditedSceneRoot();
-            if (Plugin.Plugin.Instance.CheckIsUi(root))
+            if (root != null && Plugin.Plugin.Instance.CheckIsUi(root))
             {
                 if (UiGenerator.GenerateUiCodeFromEditor(root))
                 {
@@ -260,9 +263,9 @@ public partial class EditorToolsPanel : EditorTools
     /// <summary>
     /// 重新打包房间配置
     /// </summary>
-    private void GenerateRoomPack()
+    private void GenerateRoomConfig()
     {
-        if (RoomPackGenerator.Generate())
+        if (DungeonRoomGenerator.GenerateRoomConfig())
         {
             ShowTips("提示", "打包地牢房间配置执行完成!");
         }
@@ -285,5 +288,44 @@ public partial class EditorToolsPanel : EditorTools
         {
             ShowTips("错误", "生成UiManagerMethods.cs代码执行失败! 前往控制台查看错误日志!");
         }
+    }
+
+    /// <summary>
+    /// 创建地牢房间
+    /// </summary>
+    private void GenerateDungeonRoom()
+    {
+        var roomName = L_ScrollContainer.L_MarginContainer.L_VBoxContainer.L_HBoxContainer6.L_LineEdit.Instance.Text;
+        ShowConfirm("提示", "是否创建房间：" + roomName, (result) =>
+        {
+            if (result)
+            {
+                //检查名称是否合规
+                if (!Regex.IsMatch(roomName, "^\\w*$"))
+                {
+                    ShowTips("错误", "房间名称'" + roomName + "'不符合名称约束, 房间名称只允许包含大写字母和数字!");
+                    return;
+                }
+
+                //检查是否有同名的Ui
+                var path = GameConfig.RoomTileDir + roomName + ".tscn";
+                if (File.Exists(path))
+                {
+                    ShowTips("错误", "已经存在相同名称'" + roomName + "'的房间了, 不能重复创建!");
+                    return;
+                }
+                
+                //执行创建操作
+                if (DungeonRoomGenerator.CreateDungeonRoom(roomName, true))
+                {
+                    ShowTips("提示", "创建房间成功!");
+                }
+                else
+                {
+                    ShowTips("错误", "创建房间失败! 前往控制台查看错误日志!");
+                }
+                
+            }
+        });
     }
 }
