@@ -118,18 +118,5 @@ public partial class GameApplication : Node2D
 		var asText = file.GetAsText();
 		RoomConfig = JsonSerializer.Deserialize<List<DungeonRoomSplit>>(asText);
 		file.Dispose();
-		
-		//需要处理 DoorAreaInfos 长度为 0 的房间, 并为其配置默认值
-		foreach (var roomSplit in RoomConfig)
-		{
-			var areaInfos = roomSplit.RoomInfo.DoorAreaInfos;
-			if (areaInfos.Count == 0)
-			{
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.X - 1) * GameConfig.TileCellSize));
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.X - 1) * GameConfig.TileCellSize));
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.Y - 1) * GameConfig.TileCellSize));
-				areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize, (roomSplit.RoomInfo.Size.Y - 1) * GameConfig.TileCellSize));
-			}
-		}
 	}
 }
