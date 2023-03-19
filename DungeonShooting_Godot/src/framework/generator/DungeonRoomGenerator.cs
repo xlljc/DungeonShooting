@@ -9,14 +9,56 @@ using Godot;
 namespace Generator;
 
 /// <summary>
-/// 预制房间数据生成器
+/// 地牢房间数据生成器
 /// </summary>
-public static class RoomPackGenerator
+public static class DungeonRoomGenerator
 {
 	/// <summary>
-	/// 执行生成操作, 返回是否执行成功
+	/// 根据名称在编辑器中创建地牢的预制房间, open 表示创建完成后是否在编辑器中打开这个房间
 	/// </summary>
-    public static bool Generate()
+	public static bool CreateDungeonRoom(string roomName, bool open = false)
+	{
+		try
+		{
+			//加载脚本资源
+			var scriptRes = GD.Load<CSharpScript>("res://src/framework/activity/ActivityObjectTemplate.cs");
+			//创建场景资源
+			var prefabFile = GameConfig.RoomTileDir + roomName + ".tscn";
+			var prefabResPath = "res://" + prefabFile;
+			if (!Directory.Exists(GameConfig.RoomTileDir))
+			{
+				Directory.CreateDirectory(GameConfig.RoomTileDir);
+			}
+			var tileMap = new TileMap();
+			tileMap.Name = roomName;
+			tileMap.SetScript(scriptRes);
+			var scene = new PackedScene();
+			scene.Pack(tileMap);
+			ResourceSaver.Save(scene, prefabResPath);
+		
+			//打包房间配置
+			GenerateRoomConfig();
+#if TOOLS
+			//打开房间
+			if (open)
+			{
+				Plugin.Plugin.Instance.GetEditorInterface().OpenSceneFromPath(prefabResPath);
+			}   
+#endif
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr(e.ToString());
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/// <summary>
+	/// 执行生成 RoomConfig.json 操作, 返回是否执行成功
+	/// </summary>
+    public static bool GenerateRoomConfig()
     {
 	    try
 	    {

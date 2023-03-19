@@ -49,12 +49,6 @@ namespace Plugin
                 "res://addons/dungeonShooting_plugin/ActivityObject.svg"
             ),
             new CustomTypeInfo(
-                "DungeonRoomTemplate",
-                "TileMap",
-                "res://src/framework/activity/ActivityObjectTemplate.cs",
-                "res://addons/dungeonShooting_plugin/Map.svg"
-            ),
-            new CustomTypeInfo(
                 "ActivityMark",
                 "Node2D",
                 "res://src/framework/map/mark/ActivityMark.cs",
@@ -261,9 +255,12 @@ namespace Plugin
             if (_uiMonitor != null)
             {
                 _uiMonitor.ChangeCurrentNode(null);
-                if (CheckIsUi(node))
+                if (node != null)
                 {
-                    _uiMonitor.ChangeCurrentNode(node);
+                    if (CheckIsUi(node))
+                    {
+                        _uiMonitor.ChangeCurrentNode(node);
+                    }
                 }
             }
         }

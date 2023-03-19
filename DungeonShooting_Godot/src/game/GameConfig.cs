@@ -40,7 +40,7 @@ public static class GameConfig
     public const int RoomSpace = 4;
     
     /// <summary>
-    /// 地图数据路径
+    /// 地图场景路径
     /// </summary>
     public const string RoomTileDir = "resource/map/tileMaps/";
     /// <summary>
