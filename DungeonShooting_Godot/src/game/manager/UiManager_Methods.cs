@@ -4,24 +4,42 @@
 public static partial class UiManager
 {
 
+    public static class UiName
+    {
+        public const string EditorTools = "EditorTools";
+        public const string RoomUI = "RoomUI";
+    }
+
+    /// <summary>
+    /// 打开 EditorTools, 并返回UI实例
+    /// </summary>
     public static UI.EditorTools.EditorToolsPanel Open_EditorTools()
     {
-        return OpenUi<UI.EditorTools.EditorToolsPanel>(ResourcePath.prefab_ui_EditorTools_tscn);
+        return OpenUi<UI.EditorTools.EditorToolsPanel>(UiName.EditorTools);
     }
 
-    public static UiBase[] Get_EditorTools_Instance()
+    /// <summary>
+    /// 获取所有 EditorTools 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorTools.EditorToolsPanel[] Get_EditorTools_Instance()
     {
-        return GetUiInstance(nameof(UI.EditorTools.EditorTools));
+        return GetUiInstance<UI.EditorTools.EditorToolsPanel>(nameof(UI.EditorTools.EditorTools));
     }
 
+    /// <summary>
+    /// 打开 RoomUI, 并返回UI实例
+    /// </summary>
     public static UI.RoomUI.RoomUIPanel Open_RoomUI()
     {
-        return OpenUi<UI.RoomUI.RoomUIPanel>(ResourcePath.prefab_ui_RoomUI_tscn);
+        return OpenUi<UI.RoomUI.RoomUIPanel>(UiName.RoomUI);
     }
 
-    public static UiBase[] Get_RoomUI_Instance()
+    /// <summary>
+    /// 获取所有 RoomUI 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.RoomUI.RoomUIPanel[] Get_RoomUI_Instance()
     {
-        return GetUiInstance(nameof(UI.RoomUI.RoomUI));
+        return GetUiInstance<UI.RoomUI.RoomUIPanel>(nameof(UI.RoomUI.RoomUI));
     }
 
 }

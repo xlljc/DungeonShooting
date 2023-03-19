@@ -111,9 +111,9 @@ public static partial class UiManager
     /// <summary>
     /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
     /// </summary>
-    public static UiBase OpenUi(string resourcePath, params object[] args)
+    public static UiBase OpenUi(string uiName, params object[] args)
     {
-        var packedScene = ResourceManager.Load<PackedScene>(resourcePath);
+        var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
         var canvasLayer = GetUiLayer(uiBase.Layer);
         canvasLayer.AddChild(uiBase);
@@ -125,9 +125,9 @@ public static partial class UiManager
     /// <summary>
     /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
     /// </summary>
-    public static T OpenUi<T>(string resourcePath, params object[] args) where T : UiBase
+    public static T OpenUi<T>(string uiName, params object[] args) where T : UiBase
     {
-        return (T)OpenUi(resourcePath, args);
+        return (T)OpenUi(uiName, args);
     }
 
     /// <summary>
@@ -141,13 +141,18 @@ public static partial class UiManager
     /// <summary>
     /// 获取Ui实例
     /// </summary>
-    public static UiBase[] GetUiInstance(string uiName)
+    public static T[] GetUiInstance<T>(string uiName) where T : UiBase
     {
         if (_recordUiMap.TryGetValue(uiName, out var list))
         {
-            return list.ToArray();
+            var result = new T[list.Count];
+            for (var i = 0; i < list.Count; i++)
+            {
+                result[i] = (T)list[i];
+            }
+            return result;
         }
 
-        return new UiBase[0];
+        return new T[0];
     }
 }

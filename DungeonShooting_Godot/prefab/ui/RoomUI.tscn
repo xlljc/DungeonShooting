@@ -115,12 +115,14 @@ texture = ExtResource("7")
 expand_mode = 1
 
 [node name="MapBar" type="TextureRect" parent="Control"]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -176.0
 offset_right = -132.0
 offset_bottom = 44.0
+grow_horizontal = 0
 scale = Vector2(4, 4)
 texture = ExtResource("2")
 
