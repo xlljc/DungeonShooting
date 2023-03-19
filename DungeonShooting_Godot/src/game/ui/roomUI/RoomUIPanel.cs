@@ -1,4 +1,7 @@
 
+using System.Collections;
+using Godot;
+
 namespace UI.RoomUI;
 
 /// <summary>
@@ -35,8 +38,8 @@ public partial class RoomUIPanel : RoomUI
         _gunBar.OnHide();
     }
 
-    public override void _Process(double delta)
+    public override void Process(float delta)
     {
-        _gunBar.Process((float) delta);
+        _gunBar.Process(delta);
     }
 }

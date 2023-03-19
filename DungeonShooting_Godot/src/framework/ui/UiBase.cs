@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -39,6 +41,9 @@ public abstract partial class UiBase : Control
     /// </summary>
     public bool IsDisposed { get; private set; } = false;
 
+    //开启的协程
+    private List<CoroutineData> _coroutineList;
+    
     public UiBase(string uiName)
     {
         UiName = uiName;
@@ -67,6 +72,13 @@ public abstract partial class UiBase : Control
     /// 销毁当前ui时调用
     /// </summary>
     public virtual void OnDisposeUi()
+    {
+    }
+
+    /// <summary>
+    /// 每帧调用一次
+    /// </summary>
+    public virtual void Process(float delta)
     {
     }
 
@@ -115,5 +127,41 @@ public abstract partial class UiBase : Control
         IsDisposed = true;
         OnDisposeUi();
         QueueFree();
+    }
+
+    public sealed override void _Process(double delta)
+    {
+        var newDelta = (float)delta;
+        Process(newDelta);
+        
+        //协程更新
+        if (_coroutineList != null)
+        {
+            ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
+        }
+    }
+
+    /// <summary>
+    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess
+    /// </summary>
+    public long StartCoroutine(IEnumerator able)
+    {
+        return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
+    }
+
+    /// <summary>
+    /// 根据协程 id 停止协程
+    /// </summary>
+    public void StopCoroutine(long coroutineId)
+    {
+        ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
+    }
+    
+    /// <summary>
+    /// 停止所有协程
+    /// </summary>
+    public void StopAllCoroutine()
+    {
+        ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
     }
 }
