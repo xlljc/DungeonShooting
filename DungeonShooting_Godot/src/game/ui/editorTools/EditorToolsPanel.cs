@@ -296,7 +296,7 @@ public partial class EditorToolsPanel : EditorTools
     private void GenerateDungeonRoom()
     {
         var roomName = L_ScrollContainer.L_MarginContainer.L_VBoxContainer.L_HBoxContainer6.L_LineEdit.Instance.Text;
-        ShowConfirm("提示", "是否创建UI：" + roomName, (result) =>
+        ShowConfirm("提示", "是否创建房间：" + roomName, (result) =>
         {
             if (result)
             {
@@ -308,7 +308,7 @@ public partial class EditorToolsPanel : EditorTools
                 }
 
                 //检查是否有同名的Ui
-                var path = GameConfig.RoomTileDataDir + roomName + ".tscn";
+                var path = GameConfig.RoomTileDir + roomName + ".tscn";
                 if (File.Exists(path))
                 {
                     ShowTips("错误", "已经存在相同名称'" + roomName + "'的房间了, 不能重复创建!");
@@ -318,11 +318,11 @@ public partial class EditorToolsPanel : EditorTools
                 //执行创建操作
                 if (DungeonRoomGenerator.CreateDungeonRoom(roomName, true))
                 {
-                    ShowTips("提示", "创建UI成功!");
+                    ShowTips("提示", "创建房间成功!");
                 }
                 else
                 {
-                    ShowTips("错误", "创建UI失败! 前往控制台查看错误日志!");
+                    ShowTips("错误", "创建房间失败! 前往控制台查看错误日志!");
                 }
                 
             }

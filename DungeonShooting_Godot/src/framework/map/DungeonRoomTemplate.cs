@@ -69,6 +69,11 @@ public partial class DungeonRoomTemplate : TileMap
             return;
         }
 
+        if (TileSet == null)
+        {
+            return;
+        }
+
         if (_dungeonTile == null)
         {
             _dungeonTile = new DungeonTile(this);
