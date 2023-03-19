@@ -25,6 +25,11 @@ public abstract partial class UiBase : Control
     public bool KeepOut = false;
 
     /// <summary>
+    /// ui名称
+    /// </summary>
+    public string UiName { get; } 
+    
+    /// <summary>
     /// 是否已经打开ui
     /// </summary>
     public bool IsOpen { get; private set; } = false;
@@ -34,6 +39,13 @@ public abstract partial class UiBase : Control
     /// </summary>
     public bool IsDisposed { get; private set; } = false;
 
+    public UiBase(string uiName)
+    {
+        UiName = uiName;
+        //记录ui打开
+        UiManager.RecordUi(this, UiManager.RecordType.Open);
+    }
+    
     /// <summary>
     /// 创建当前ui时调用
     /// </summary>
@@ -97,6 +109,8 @@ public abstract partial class UiBase : Control
         {
             return;
         }
+        //记录ui关闭
+        UiManager.RecordUi(this, UiManager.RecordType.Close);
         HideUi();
         IsDisposed = true;
         OnDisposeUi();

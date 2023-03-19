@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -5,13 +6,21 @@ using Godot;
 /// </summary>
 public static partial class UiManager
 {
+    public enum RecordType
+    {
+        Open,
+        Close,
+    }
+    
     private static bool _init = false;
 
     private static CanvasLayer _bottomLayer;
     private static CanvasLayer _middleLayer;
     private static CanvasLayer _heightLayer;
     private static CanvasLayer _popLayer;
-    
+
+    private static Dictionary<string, List<UiBase>> _recordUiMap = new Dictionary<string, List<UiBase>>();
+
     public static void Init()
     {
         if (_init)
@@ -68,11 +77,35 @@ public static partial class UiManager
         return null;
     }
 
-    private static UiBase InstantiateUi(string resourcePath)
+    /// <summary>
+    /// 记录ui的创建或者销毁
+    /// </summary>
+    public static void RecordUi(UiBase uiBase, RecordType type)
     {
-        var packedScene = ResourceManager.Load<PackedScene>(resourcePath);
-        var uiBase = packedScene.Instantiate<UiBase>();
-        return uiBase;
+        if (type == RecordType.Open)
+        {
+            if (_recordUiMap.TryGetValue(uiBase.UiName, out var list))
+            {
+                list.Add(uiBase);
+            }
+            else
+            {
+                list = new List<UiBase>();
+                list.Add(uiBase);
+                _recordUiMap.Add(uiBase.UiName, list);
+            }
+        }
+        else
+        {
+            if (_recordUiMap.TryGetValue(uiBase.UiName, out var list))
+            {
+                list.Remove(uiBase);
+                if (list.Count == 0)
+                {
+                    _recordUiMap.Remove(uiBase.UiName);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -80,7 +113,8 @@ public static partial class UiManager
     /// </summary>
     public static UiBase OpenUi(string resourcePath, params object[] args)
     {
-        var uiBase = InstantiateUi(resourcePath);
+        var packedScene = ResourceManager.Load<PackedScene>(resourcePath);
+        var uiBase = packedScene.Instantiate<UiBase>();
         var canvasLayer = GetUiLayer(uiBase.Layer);
         canvasLayer.AddChild(uiBase);
         uiBase.OnCreateUi();
@@ -102,5 +136,18 @@ public static partial class UiManager
     public static void DisposeUi(UiBase uiBase)
     {
         uiBase.DisposeUi();
+    }
+
+    /// <summary>
+    /// 获取Ui实例
+    /// </summary>
+    public static UiBase[] GetUiInstance(string uiName)
+    {
+        if (_recordUiMap.TryGetValue(uiName, out var list))
+        {
+            return list.ToArray();
+        }
+
+        return new UiBase[0];
     }
 }

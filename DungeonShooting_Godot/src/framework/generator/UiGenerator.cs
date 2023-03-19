@@ -137,7 +137,11 @@ public static class UiGenerator
                $"public abstract partial class {uiNodeInfo.OriginName} : UiBase\n" +
                $"{{\n" +
                GeneratePropertyListClassCode("", uiNodeInfo.OriginName + ".", uiNodeInfo, "    ") +
-               $"\n\n" +
+               $"\n" +
+               $"    public {uiNodeInfo.OriginName}() : base(nameof({uiNodeInfo.OriginName}))\n" +
+               $"    {{\n" +
+               $"    }}\n" +
+               $"\n" +
                GenerateAllChildrenClassCode(uiNodeInfo.OriginName + ".", uiNodeInfo, "    ") +
                $"}}\n";
     }

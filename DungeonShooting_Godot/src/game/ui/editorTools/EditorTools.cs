@@ -45,6 +45,9 @@ public abstract partial class EditorTools : UiBase
     private UiNode_Tips _L_Tips;
 
 
+    public EditorTools() : base(nameof(EditorTools))
+    {
+    }
 
     /// <summary>
     /// 类型: <see cref="Godot.Label"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.HBoxContainer.Label

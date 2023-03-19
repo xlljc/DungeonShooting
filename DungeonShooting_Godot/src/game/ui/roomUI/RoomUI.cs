@@ -45,6 +45,9 @@ public abstract partial class RoomUI : UiBase
     private UiNode_Control _L_Control;
 
 
+    public RoomUI() : base(nameof(RoomUI))
+    {
+    }
 
     /// <summary>
     /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.InteractiveTipBar.Icon

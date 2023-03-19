@@ -9,9 +9,19 @@ public static partial class UiManager
         return OpenUi<UI.EditorTools.EditorToolsPanel>(ResourcePath.prefab_ui_EditorTools_tscn);
     }
 
+    public static UiBase[] Get_EditorTools_Instance()
+    {
+        return GetUiInstance(nameof(UI.EditorTools.EditorTools));
+    }
+
     public static UI.RoomUI.RoomUIPanel Open_RoomUI()
     {
         return OpenUi<UI.RoomUI.RoomUIPanel>(ResourcePath.prefab_ui_RoomUI_tscn);
+    }
+
+    public static UiBase[] Get_RoomUI_Instance()
+    {
+        return GetUiInstance(nameof(UI.RoomUI.RoomUI));
     }
 
 }

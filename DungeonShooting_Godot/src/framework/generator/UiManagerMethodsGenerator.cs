@@ -50,6 +50,11 @@ public static class UiManagerMethodsGenerator
                             $"    {{\n" +
                             $"        return OpenUi<UI.{name}.{name}Panel>(ResourcePath.{field});\n" +
                             $"    }}\n" +
+                            $"\n" +
+                            $"    public static UiBase[] Get_{name}_Instance()\n" +
+                            $"    {{\n" +
+                            $"        return GetUiInstance(nameof(UI.{name}.{name}));\n" +
+                            $"    }}\n" +
                             $"\n";
                 }
             }
