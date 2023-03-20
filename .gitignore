@@ -1,8 +1,6 @@
 /DungeonShooting_Godot/android
-/DungeonShooting_Godot/.idea
 /DungeonShooting_Godot/.godot
 /Script_Vscode_Plugin/node_modules
-/DScript/.idea
 /DScript/DScript_Compiler/obj
 /DScript/DScript_Compiler/bin
 /DScript/DScript_Runtime/obj
@@ -15,3 +13,4 @@
 /DScript/DScript_Compiler_Test/obj
 /DScript/DScript_Runtime/Backups
 /DScript/DScript.sln.DotSettings.user
+**/.idea
