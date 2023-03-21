@@ -16,7 +16,7 @@
 ---
 
 ### 启动项目
-项目的目录结构如下
+git仓库的目录结构如下
 > ├ DungeonShooting_Art (美术资源存放目录)  
 > ├ DungeonShooting_Document (项目帮助文档, 更新日志相关的目录)  
 > └ DungeonShooting_Godot (Godot工程目录)
@@ -25,5 +25,6 @@
 
 --- 
 ### 其他
-开发日志: [开发日志.md](DungeonShooting_Document/开发日志.md)  
-项目看板: https://trello.com/b/a8UGxnTl/dungeonshooting
+**开发日志:** [开发日志.md](DungeonShooting_Document/开发日志.md)  
+**项目帮助文档:** [帮助文档.md](DungeonShooting_Document/项目帮助文档.md)  
+**项目看板:** https://trello.com/b/a8UGxnTl/dungeonshooting
