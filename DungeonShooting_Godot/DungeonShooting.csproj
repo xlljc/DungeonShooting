@@ -4,7 +4,6 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\game\ui\editorTools" />

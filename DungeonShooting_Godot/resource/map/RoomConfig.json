@@ -14,5 +14,9 @@
   {
     "ScenePath": "res://resource/map/tileMaps/Room4.tscn",
     "ConfigPath": "res://resource/map/tiledata/Room4.json"
+  },
+  {
+    "ScenePath": "res://resource/map/tileMaps/Room5.tscn",
+    "ConfigPath": "res://resource/map/tiledata/Room5.json"
   }
 ]
