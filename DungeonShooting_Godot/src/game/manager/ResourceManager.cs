@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using Godot;
 
+/// <summary>
+/// 资源管理器
+/// </summary>
 public static class ResourceManager
 {
     /// <summary>
