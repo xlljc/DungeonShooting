@@ -43,8 +43,7 @@ public partial class DungeonRoomTemplate : TileMap
     private List<DoorAreaInfo> _doorConfigs;
     private Rect2 _prevRect;
 
-    //是否能保存
-    private bool _canSave = false;
+    //是否能是否按下
     private bool _clickSave = false;
 
     private DungeonTile _dungeonTile;
@@ -532,7 +531,7 @@ public partial class DungeonRoomTemplate : TileMap
                             }
                         }
 
-                        OnDoorAreaChange();
+                        //OnDoorAreaChange();
                     }
 
                     _dragHasCollision = false;
@@ -553,12 +552,17 @@ public partial class DungeonRoomTemplate : TileMap
         //按下 ctrl + s 保存
         if (Input.IsKeyPressed(Key.Ctrl) && Input.IsKeyPressed(Key.S))
         {
-            _clickSave = true;
-            if (_canSave)
+            if (!_clickSave)
             {
-                _canSave = false;
                 TriggerSave();
             }
+            _clickSave = true;
+            
+            // if (_canSave)
+            // {
+            //     _canSave = false;
+            //     TriggerSave();
+            // }
         }
         else
         {
@@ -601,14 +605,14 @@ public partial class DungeonRoomTemplate : TileMap
         }
 
         _doorConfigs.Add(doorAreaInfo);
-        OnDoorAreaChange();
+        //OnDoorAreaChange();
     }
 
     //移除门
     private void RemoveDoorArea(DoorAreaInfo doorAreaInfo)
     {
         _doorConfigs.Remove(doorAreaInfo);
-        OnDoorAreaChange();
+        //OnDoorAreaChange();
     }
 
     //检查门是否有碰撞
@@ -741,14 +745,14 @@ public partial class DungeonRoomTemplate : TileMap
         _canPut = false;
         _hasActivePoint = false;
         _activeArea = null;
-        OnDoorAreaChange();
+        //OnDoorAreaChange();
     }
 
-    //区域数据修改
-    private void OnDoorAreaChange()
-    {
-        _canSave = true;
-    }
+    // //区域数据修改
+    // private void OnDoorAreaChange()
+    // {
+    //     _canSave = true;
+    // }
 
     //触发保存操作
     private void TriggerSave()
