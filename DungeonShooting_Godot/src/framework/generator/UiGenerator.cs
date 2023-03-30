@@ -31,7 +31,7 @@ public static class UiGenerator
                              $"public partial class {uiName}Panel : {uiName}\n" +
                              $"{{\n" +
                              $"\n" +
-                             $"    public override void OnShowUi(params object[] args)\n" +
+                             $"    public override void OnShowUi()\n" +
                              $"    {{\n" +
                              $"        \n" +
                              $"    }}\n" +
