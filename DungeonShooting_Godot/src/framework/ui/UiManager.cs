@@ -111,23 +111,23 @@ public static partial class UiManager
     /// <summary>
     /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
     /// </summary>
-    public static UiBase OpenUi(string uiName, params object[] args)
+    public static UiBase OpenUi(string uiName)
     {
         var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
         var canvasLayer = GetUiLayer(uiBase.Layer);
         canvasLayer.AddChild(uiBase);
         uiBase.OnCreateUi();
-        uiBase.ShowUi(args);
+        uiBase.ShowUi();
         return uiBase;
     }
 
     /// <summary>
     /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
     /// </summary>
-    public static T OpenUi<T>(string uiName, params object[] args) where T : UiBase
+    public static T OpenUi<T>(string uiName) where T : UiBase
     {
-        return (T)OpenUi(uiName, args);
+        return (T)OpenUi(uiName);
     }
 
     /// <summary>

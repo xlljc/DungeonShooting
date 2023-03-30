@@ -22,7 +22,7 @@ public partial class RoomUIPanel : RoomUI
         _gunBar = new GunBar(L_Control.L_GunBar);
     }
 
-    public override void OnShowUi(params object[] args)
+    public override void OnShowUi()
     {
         _reloadBar.OnShow();
         _interactiveTipBar.OnShow();

@@ -26,14 +26,14 @@ public abstract class IUiNode<TNodeType, TCloneType> where TNodeType : Node
     /// <summary>
     /// 嵌套打开子ui
     /// </summary>
-    public UiBase OpenNestedUi(string uiName, params object[] args)
+    public UiBase OpenNestedUi(string uiName)
     {
         var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
         Instance.AddChild(uiBase);
         
         uiBase.OnCreateUi();
-        uiBase.ShowUi(args);
+        uiBase.ShowUi();
         return uiBase;
     }
     
