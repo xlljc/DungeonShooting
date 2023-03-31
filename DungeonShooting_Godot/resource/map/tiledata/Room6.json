@@ -11,7 +11,22 @@
     {
       "Direction": 1,
       "Start": 16,
-      "End": 80
+      "End": 112
+    },
+    {
+      "Direction": 3,
+      "Start": 16,
+      "End": 144
+    },
+    {
+      "Direction": 0,
+      "Start": 80,
+      "End": 176
+    },
+    {
+      "Direction": 2,
+      "Start": 112,
+      "End": 208
     }
   ],
   "NavigationList": [

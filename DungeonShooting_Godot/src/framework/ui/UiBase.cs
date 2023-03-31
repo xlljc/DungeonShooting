@@ -98,7 +98,7 @@ public abstract partial class UiBase : Control
     }
     
     /// <summary>
-    /// 隐藏ui
+    /// 隐藏ui, 不会执行销毁
     /// </summary>
     public void HideUi()
     {
