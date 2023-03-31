@@ -15,7 +15,7 @@ public abstract partial class UiBase : Control
     public UiLayer Layer = UiLayer.Middle;
 
     /// <summary>
-    /// Ui 模式
+    /// Ui 模式, 单例/正常模式
     /// </summary>
     [Export]
     public UiMode Mode = UiMode.Normal;
@@ -59,9 +59,9 @@ public abstract partial class UiBase : Control
     }
     
     /// <summary>
-    /// 当前ui显示时调用，并接收参数
+    /// 当前ui显示时调用
     /// </summary>
-    public abstract void OnShowUi(params object[] args);
+    public abstract void OnShowUi();
 
     /// <summary>
     /// 当前ui隐藏时调用
@@ -83,9 +83,9 @@ public abstract partial class UiBase : Control
     }
 
     /// <summary>
-    /// 显示ui, 并传入参数
+    /// 显示ui
     /// </summary>
-    public void ShowUi(params object[] args)
+    public void ShowUi()
     {
         if (IsOpen)
         {
@@ -94,11 +94,11 @@ public abstract partial class UiBase : Control
 
         IsOpen = true;
         Visible = true;
-        OnShowUi(args);
+        OnShowUi();
     }
     
     /// <summary>
-    /// 隐藏ui
+    /// 隐藏ui, 不会执行销毁
     /// </summary>
     public void HideUi()
     {

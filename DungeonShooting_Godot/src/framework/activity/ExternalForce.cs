@@ -19,7 +19,7 @@ public class ExternalForce
     /// <summary>
     /// 阻力大小, 也就是速度每秒衰减的量
     /// </summary>
-    public float Resistance { get; set; } = 5;
+    public float Resistance { get; set; } = 0;
 
     /// <summary>
     /// 当速度到达 0 后是否自动销毁, 默认 true

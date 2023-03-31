@@ -119,6 +119,7 @@ public partial class ActivityMark : Node2D
         instance.PutDown(GlobalPosition, Layer);
     }
 
+#if TOOLS
     public override void _Draw()
     {
         if (Engine.IsEditorHint() || GameApplication.Instance.Debug)
@@ -127,6 +128,7 @@ public partial class ActivityMark : Node2D
             DrawLine(new Vector2(-5, 5), new Vector2(5, -5), DrawColor, 2f);
         }
     }
+#endif
 
     /// <summary>
     /// 设置当前节点是否是活动状态

@@ -15,7 +15,7 @@ public partial class EditorToolsPanel : EditorTools
     //询问窗口关闭
     private Action<bool> _onConfirmClose;
     
-    public override void OnShowUi(params object[] args)
+    public override void OnShowUi()
     {
         //tips
         _onTipsClose = null;

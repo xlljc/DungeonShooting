@@ -17,6 +17,7 @@ public class ResourcePath
     public const string prefab_test_MoveComponent_tscn = "res://prefab/test/MoveComponent.tscn";
     public const string prefab_test_TestActivity_tscn = "res://prefab/test/TestActivity.tscn";
     public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
+    public const string prefab_ui_MyUi_tscn = "res://prefab/ui/MyUi.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_weapon_Knife_tscn = "res://prefab/weapon/Knife.tscn";
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";
@@ -37,9 +38,15 @@ public class ResourcePath
     public const string resource_map_tiledata_Room1_json = "res://resource/map/tiledata/Room1.json";
     public const string resource_map_tiledata_Room2_json = "res://resource/map/tiledata/Room2.json";
     public const string resource_map_tiledata_Room3_json = "res://resource/map/tiledata/Room3.json";
+    public const string resource_map_tiledata_Room4_json = "res://resource/map/tiledata/Room4.json";
+    public const string resource_map_tiledata_Room5_json = "res://resource/map/tiledata/Room5.json";
+    public const string resource_map_tiledata_Room6_json = "res://resource/map/tiledata/Room6.json";
     public const string resource_map_tileMaps_Room1_tscn = "res://resource/map/tileMaps/Room1.tscn";
     public const string resource_map_tileMaps_Room2_tscn = "res://resource/map/tileMaps/Room2.tscn";
     public const string resource_map_tileMaps_Room3_tscn = "res://resource/map/tileMaps/Room3.tscn";
+    public const string resource_map_tileMaps_Room4_tscn = "res://resource/map/tileMaps/Room4.tscn";
+    public const string resource_map_tileMaps_Room5_tscn = "res://resource/map/tileMaps/Room5.tscn";
+    public const string resource_map_tileMaps_Room6_tscn = "res://resource/map/tileMaps/Room6.tscn";
     public const string resource_map_tileset_TileSet1_tres = "res://resource/map/tileset/TileSet1.tres";
     public const string resource_materlal_Blend_gdshader = "res://resource/materlal/Blend.gdshader";
     public const string resource_materlal_Blend_tres = "res://resource/materlal/Blend.tres";

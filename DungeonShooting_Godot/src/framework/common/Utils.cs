@@ -110,7 +110,7 @@ public static class Utils
     /// <summary>
     /// 使用定的 canvasItem 绘制导航区域, 注意, 该函数只能在 draw 函数中调用
     /// </summary>
-    public static void DrawNavigationPolygon(CanvasItem canvasItem, NavigationPolygonData[] polygonData)
+    public static void DrawNavigationPolygon(CanvasItem canvasItem, NavigationPolygonData[] polygonData, int width = 1)
     {
         for (var i = 0; i < polygonData.Length; i++)
         {
@@ -121,11 +121,11 @@ public static class Utils
                 array.Add(array[0]);
                 if (item.Type == NavigationPolygonType.In)
                 {
-                    canvasItem.DrawPolyline(array.ToArray(), Colors.Yellow);
+                    canvasItem.DrawPolyline(array.ToArray(), Colors.Yellow, width);
                 }
                 else
                 {
-                    canvasItem.DrawPolyline(array.ToArray(), Colors.Red);
+                    canvasItem.DrawPolyline(array.ToArray(), Colors.Red, width);
                 }
             }
         }

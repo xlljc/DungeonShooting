@@ -18,15 +18,6 @@ public static class GameConfig
     // ----------------------- 常量 -----------------------
     
     /// <summary>
-    /// 像素缩放
-    /// </summary>
-    public const int WindowScale = 4;
-    /// <summary>
-    /// 游戏视图大小
-    /// </summary>
-    public static readonly Vector2 ViewportSize = new Vector2(480, 270);
-    //public static Vector2 ViewportSize => OS.WindowSize / WindowScale;
-    /// <summary>
     /// 连接房间的过道宽度
     /// </summary>
     public const int CorridorWidth = 4;

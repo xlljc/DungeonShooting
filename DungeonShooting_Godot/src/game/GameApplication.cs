@@ -46,6 +46,16 @@ public partial class GameApplication : Node2D
 	/// 房间配置
 	/// </summary>
 	public List<DungeonRoomSplit> RoomConfig { get; private set; }
+	
+	/// <summary>
+	/// 游戏视图大小
+	/// </summary>
+	public Vector2 ViewportSize { get; private set; } = new Vector2(480, 270);
+	
+	/// <summary>
+	/// 像素缩放
+	/// </summary>
+	public int PixelScale { get; private set; } = 4;
 
 	public GameApplication()
 	{
@@ -66,6 +76,10 @@ public partial class GameApplication : Node2D
 		//调试绘制开关
 		ActivityObject.IsDebug = Debug;
 		//Engine.TimeScale = 0.2f;
+
+		//窗体大小改变
+		GetWindow().SizeChanged += OnWindowSizeChanged;
+		RefreshSubViewportSize();
 
 		//初始化ui
 		UiManager.Init();
@@ -97,7 +111,7 @@ public partial class GameApplication : Node2D
 	public Vector2 GlobalToViewPosition(Vector2 globalPos)
 	{
 		//return globalPos;
-		return globalPos / GameConfig.WindowScale - (GameConfig.ViewportSize / 2) + GameCamera.Main.GlobalPosition;
+		return globalPos / PixelScale - (ViewportSize / 2) + GameCamera.Main.GlobalPosition;
 	}
 
 	/// <summary>
@@ -107,7 +121,7 @@ public partial class GameApplication : Node2D
 	{
 		// 3.5写法
 		//return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
-		return (viewPos - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale;
+		return (viewPos - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (ViewportSize / 2)) * PixelScale;
 	}
 
 	//初始化房间配置
@@ -118,5 +132,24 @@ public partial class GameApplication : Node2D
 		var asText = file.GetAsText();
 		RoomConfig = JsonSerializer.Deserialize<List<DungeonRoomSplit>>(asText);
 		file.Dispose();
+	}
+
+	//窗体大小改变
+	private void OnWindowSizeChanged()
+	{
+		var size = GetWindow().Size;
+		ViewportSize = size / PixelScale;
+		RefreshSubViewportSize();
+	}
+	
+	//刷新视窗大小
+	private void RefreshSubViewportSize()
+	{
+		var s = new Vector2I((int)ViewportSize.X, (int)ViewportSize.Y);
+		s.X = s.X / 2 * 2;
+		s.Y = s.Y / 2 * 2;
+		SubViewport.Size = s;
+		SubViewportContainer.Scale = new Vector2(PixelScale, PixelScale);
+		SubViewportContainer.Size = s;
 	}
 }

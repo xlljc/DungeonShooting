@@ -843,7 +843,7 @@ public class DungeonTile
                         break;
                     }
 
-                    return null;
+                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
                 }
                 case 1: //下
                 {
@@ -897,7 +897,7 @@ public class DungeonTile
                         break;
                     }
 
-                    return null;
+                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
                 }
                 case 2: //左
                 {
@@ -951,7 +951,7 @@ public class DungeonTile
                         break;
                     }
 
-                    return null;
+                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
                 }
                 case 3: //上
                 {
@@ -1005,7 +1005,7 @@ public class DungeonTile
                         break;
                     }
 
-                    return null;
+                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
                 }
             }
         }
@@ -1082,7 +1082,7 @@ public class DungeonTile
                         break;
                     }
 
-                    return null;
+                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
                 }
                 case 1: //下
                 {
@@ -1136,7 +1136,7 @@ public class DungeonTile
                         break;
                     }
 
-                    return null;
+                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
                 }
                 case 2: //左
                 {
@@ -1190,7 +1190,7 @@ public class DungeonTile
                         break;
                     }
 
-                    return null;
+                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
                 }
                 case 3: //上
                 {
@@ -1244,7 +1244,7 @@ public class DungeonTile
                         break;
                     }
 
-                    return null;
+                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
                 }
             }
         }
