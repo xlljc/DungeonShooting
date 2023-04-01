@@ -30,4 +30,10 @@ public class DungeonRoomInfo
     /// </summary>
     [JsonInclude]
     public List<NavigationPolygonData> NavigationList;
+
+    /// <summary>
+    /// 房间类型
+    /// </summary>
+    [JsonInclude]
+    public DungeonRoomType RoomType = DungeonRoomType.Battle;
 }

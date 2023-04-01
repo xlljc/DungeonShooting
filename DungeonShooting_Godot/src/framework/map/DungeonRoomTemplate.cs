@@ -14,6 +14,26 @@ public partial class DungeonRoomTemplate : TileMap
     /// </summary>
     [Export]
     public bool EnableEdit = false;
+
+    /// <summary>
+    /// 房间类型
+    /// </summary>
+    [Export]
+    public DungeonRoomType RoomType
+    {
+        get => _roomType;
+        set
+        {
+            if (value != _roomType)
+            {
+                _changedRoomType = true;
+                _roomType = value;
+            }
+        }
+    }
+    
+    private DungeonRoomType _roomType = DungeonRoomType.Battle;
+    private bool _changedRoomType = false;
     
 #if TOOLS
     //是否悬停在线上
@@ -282,7 +302,7 @@ public partial class DungeonRoomTemplate : TileMap
         if (_doorConfigs == null)
         {
             initConfigs = true;
-            _doorConfigs = ReadConfig(CalcTileRange(this), Name);
+            ReadConfig(CalcTileRange(this), Name);
         }
 
         //按键检测
@@ -767,6 +787,12 @@ public partial class DungeonRoomTemplate : TileMap
         var polygonData = _dungeonTile.GetPolygonData();
         var rect = GetUsedRect();
         SaveConfig(_doorConfigs, rect.Position, rect.Size, polygonData.ToList(), Name);
+
+        if (_changedRoomType)
+        {
+            _changedRoomType = false;
+            Generator.DungeonRoomGenerator.GenerateRoomConfig();
+        }
     }
     
     /// <summary>
@@ -805,7 +831,7 @@ public partial class DungeonRoomTemplate : TileMap
     /// <summary>
     /// 读取房间配置
     /// </summary>
-    public static List<DoorAreaInfo> ReadConfig(Rect2 mapRect, string name)
+    private void ReadConfig(Rect2 mapRect, string name)
     {
         var path = GameConfig.RoomTileDataDir + name + ".json";
         if (File.Exists(path))
@@ -820,17 +846,19 @@ public partial class DungeonRoomTemplate : TileMap
                 {
                     doorAreaInfo.CalcPosition(mapRect.Position, mapRect.Size);
                 }
-                return roomInfo.DoorAreaInfos;
+
+                RoomType = roomInfo.RoomType;
+                _doorConfigs = roomInfo.DoorAreaInfos;
             }
             catch (Exception e)
             {
                 GD.PrintErr($"加载房间数据'{path}'发生异常: " + e);
-                return new List<DoorAreaInfo>();
+                _doorConfigs = new List<DoorAreaInfo>();
             }
         }
         else
         {
-            return new List<DoorAreaInfo>();
+            _doorConfigs = new List<DoorAreaInfo>();
         }
     }
 
@@ -844,41 +872,59 @@ public partial class DungeonRoomTemplate : TileMap
 
         var obj = Json.ParseString(text).AsGodotDictionary();
         var roomInfo = new DungeonRoomInfo();
-        var position = obj["Position"].AsGodotDictionary();
-        roomInfo.Position = new SerializeVector2(position["X"].AsInt32(), position["Y"].AsInt32());
-
-        var size = obj["Size"].AsGodotDictionary();
-        roomInfo.Size = new SerializeVector2(size["X"].AsInt32(), size["Y"].AsInt32());
-
-        var doorAreaInfos = obj["DoorAreaInfos"].AsGodotArray<Variant>();
-        roomInfo.DoorAreaInfos = new List<DoorAreaInfo>();
-        foreach (var item in doorAreaInfos)
+        if (obj.ContainsKey("Position"))
         {
-            var temp = item.AsGodotDictionary();
-            var doorInfo = new DoorAreaInfo();
-            doorInfo.Direction = (DoorDirection)temp["Direction"].AsInt32();
-            doorInfo.Start = temp["Start"].AsInt32();
-            doorInfo.End = temp["End"].AsInt32();
-            roomInfo.DoorAreaInfos.Add(doorInfo);
+            var position = obj["Position"].AsGodotDictionary();
+            roomInfo.Position = new SerializeVector2(position["X"].AsInt32(), position["Y"].AsInt32());
         }
 
-        var navigationArray = obj["NavigationList"].AsGodotArray<Variant>();
-        roomInfo.NavigationList = new List<NavigationPolygonData>();
-        for (var i = 0; i < navigationArray.Count; i++)
+        if (obj.ContainsKey("Size"))
         {
-            var navigation = navigationArray[i].AsGodotDictionary();
-            var polygonData = new NavigationPolygonData();
+            var size = obj["Size"].AsGodotDictionary();
+            roomInfo.Size = new SerializeVector2(size["X"].AsInt32(), size["Y"].AsInt32());
+        }
 
-            polygonData.Type = (NavigationPolygonType)navigation["Type"].AsInt32();
-            polygonData.Points = new List<SerializeVector2>();
-            var pointArray = navigation["Points"].AsGodotArray<Variant>();
-            for (var j = 0; j < pointArray.Count; j++)
+        if (obj.ContainsKey("RoomType"))
+        {
+            var roomType = obj["RoomType"].AsInt32();
+            roomInfo.RoomType = (DungeonRoomType)roomType;
+        }
+
+        if (obj.ContainsKey("DoorAreaInfos"))
+        {
+            var doorAreaInfos = obj["DoorAreaInfos"].AsGodotArray<Variant>();
+            roomInfo.DoorAreaInfos = new List<DoorAreaInfo>();
+            foreach (var item in doorAreaInfos)
             {
-                var point = pointArray[j].AsGodotDictionary();
-                polygonData.Points.Add(new SerializeVector2(point["X"].AsInt32(), point["Y"].AsInt32()));
+                var temp = item.AsGodotDictionary();
+                var doorInfo = new DoorAreaInfo();
+                doorInfo.Direction = (DoorDirection)temp["Direction"].AsInt32();
+                doorInfo.Start = temp["Start"].AsInt32();
+                doorInfo.End = temp["End"].AsInt32();
+                roomInfo.DoorAreaInfos.Add(doorInfo);
             }
+        }
 
-            roomInfo.NavigationList.Add(polygonData);
+        if (obj.ContainsKey("NavigationList"))
+        {
+            var navigationArray = obj["NavigationList"].AsGodotArray<Variant>();
+            roomInfo.NavigationList = new List<NavigationPolygonData>();
+            for (var i = 0; i < navigationArray.Count; i++)
+            {
+                var navigation = navigationArray[i].AsGodotDictionary();
+                var polygonData = new NavigationPolygonData();
+
+                polygonData.Type = (NavigationPolygonType)navigation["Type"].AsInt32();
+                polygonData.Points = new List<SerializeVector2>();
+                var pointArray = navigation["Points"].AsGodotArray<Variant>();
+                for (var j = 0; j < pointArray.Count; j++)
+                {
+                    var point = pointArray[j].AsGodotDictionary();
+                    polygonData.Points.Add(new SerializeVector2(point["X"].AsInt32(), point["Y"].AsInt32()));
+                }
+
+                roomInfo.NavigationList.Add(polygonData);
+            }
         }
 
         return roomInfo;
