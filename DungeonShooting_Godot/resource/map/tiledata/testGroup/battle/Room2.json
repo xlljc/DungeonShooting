@@ -7,28 +7,7 @@
     "X": 19,
     "Y": 12
   },
-  "DoorAreaInfos": [
-    {
-      "Direction": 1,
-      "Start": 16,
-      "End": 176
-    },
-    {
-      "Direction": 2,
-      "Start": 16,
-      "End": 176
-    },
-    {
-      "Direction": 3,
-      "Start": 128,
-      "End": 288
-    },
-    {
-      "Direction": 0,
-      "Start": 16,
-      "End": 176
-    }
-  ],
+  "DoorAreaInfos": [],
   "NavigationList": [
     {
       "Type": 0,
@@ -83,5 +62,8 @@
         }
       ]
     }
-  ]
+  ],
+  "GroupName": "testGroup",
+  "RoomType": 0,
+  "FileName": "Room2"
 }

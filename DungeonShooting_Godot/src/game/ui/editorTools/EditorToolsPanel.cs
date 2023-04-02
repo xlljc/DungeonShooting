@@ -316,7 +316,7 @@ public partial class EditorToolsPanel : EditorTools
                 }
                 
                 //执行创建操作
-                if (DungeonRoomGenerator.CreateDungeonRoom(roomName, true))
+                if (DungeonRoomGenerator.CreateDungeonRoom("testGroup", DungeonRoomType.Battle, roomName, true))
                 {
                     ShowTips("提示", "创建房间成功!");
                 }

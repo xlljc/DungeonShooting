@@ -16,12 +16,18 @@ public static class DungeonRoomGenerator
 	/// <summary>
 	/// 根据名称在编辑器中创建地牢的预制房间, open 表示创建完成后是否在编辑器中打开这个房间
 	/// </summary>
-	public static bool CreateDungeonRoom(string roomName, bool open = false)
+	public static bool CreateDungeonRoom(string groupName, DungeonRoomType type, string roomName, bool open = false)
 	{
 		try
 		{
+			var path = GameConfig.RoomTileDir + "/" + groupName + "/" +
+			           DungeonRoomTemplate.DungeonRoomTypeToString(type);
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
 			//创建场景资源
-			var prefabFile = GameConfig.RoomTileDir + roomName + ".tscn";
+			var prefabFile = path + "/" + roomName + ".tscn";
 			var prefabResPath = "res://" + prefabFile;
 			if (!Directory.Exists(GameConfig.RoomTileDir))
 			{
@@ -88,50 +94,86 @@ public static class DungeonRoomGenerator
 		    //地图描述数据路径
 		    var tileDataDir = GameConfig.RoomTileDataDir;
 		
-		    var tileDirInfo = new DirectoryInfo(tileDir);
-		    var tileDataDirInfo = new DirectoryInfo(tileDataDir);
+		    var tileGroup = new DirectoryInfo(tileDir).GetDirectories();
+		    var tileDataGroup = new DirectoryInfo(tileDataDir).GetDirectories();
 
 		    //所有地图列表
-		    var mapList = new HashSet<string>();
-		
-		    //收集所有名称
-		    var fileDataInfos = tileDataDirInfo.GetFiles();
-		    foreach (var fileInfo in fileDataInfos)
+		    var map = new Dictionary<string, FileInfo>();
+		    
+		    //地图场景
+		    foreach (var groupDir in tileGroup)
 		    {
-			    mapList.Add(RemoveExtension(fileInfo.Name));
-		    }
-		    //收集所有名称
-		    var fileInfos = tileDirInfo.GetFiles();
-		    foreach (var fileInfo in fileInfos)
-		    {
-			    if (fileInfo.Extension == ".tscn")
+			    var groupName = groupDir.Name;
+			    var typeDirArray = groupDir.GetDirectories();
+			    //遍历枚举, 获取指定路径文件
+			    foreach (DungeonRoomType roomType in Enum.GetValues(typeof(DungeonRoomType)))
 			    {
-				    mapList.Add(RemoveExtension(fileInfo.Name));
+				    var typeName = DungeonRoomTemplate.DungeonRoomTypeToString(roomType);
+
+				    //收集所有文件名称
+				    var tempFileDataInfos = typeDirArray.FirstOrDefault(dirInfo => dirInfo.Name == typeName);
+				    if (tempFileDataInfos != null)
+				    {
+					    foreach (var fileInfo in tempFileDataInfos.GetFiles())
+					    {
+						    if (fileInfo.Extension == ".tscn")
+						    {
+							    var pathInfo = new FileInfo(groupName, roomType, typeName, RemoveExtension(fileInfo.Name));
+							    map.TryAdd(pathInfo.GetPath(), pathInfo);
+						    }
+					    }
+				    }
 			    }
 		    }
-		
-		    //剔除多余的 tile.json
-		    var arrays = mapList.ToArray();
-		    foreach (var item in arrays)
+
+		    //地图配置数据
+		    foreach (var groupDir in tileDataGroup)
 		    {
-			    if (!File.Exists(tileDir + item + ".tscn"))
+			    var groupName = groupDir.Name;
+			    var typeDirArray = groupDir.GetDirectories();
+			    //遍历枚举, 获取指定路径文件
+			    foreach (DungeonRoomType roomType in Enum.GetValues(typeof(DungeonRoomType)))
 			    {
-				    mapList.Remove(item);
-				    var filePath = tileDataDir + item + ".json";
+				    var typeName = DungeonRoomTemplate.DungeonRoomTypeToString(roomType);
+
+				    //收集所有文件名称
+				    var tempFileDataInfos = typeDirArray.FirstOrDefault(dirInfo => dirInfo.Name == typeName);
+				    if (tempFileDataInfos != null)
+				    {
+					    foreach (var fileInfo in tempFileDataInfos.GetFiles())
+					    {
+						    if (fileInfo.Extension == ".json")
+						    {
+							    var pathInfo = new FileInfo(groupName, roomType, typeName, RemoveExtension(fileInfo.Name));
+							    map.TryAdd(pathInfo.GetPath(), pathInfo);
+						    }
+					    }
+				    }
+			    }
+		    }
+
+		    //剔除多余的 tile.json
+		    foreach (var item in map)
+		    {
+			    var path = item.Key;
+			    if (!File.Exists(tileDir + path + ".tscn"))
+			    {
+				    map.Remove(path);
+				    var filePath = tileDataDir + path + ".json";
 				    if (File.Exists(filePath))
 				    {
-					    GD.Print($"未找到'{tileDir + item}.tscn', 删除配置文件: {filePath}");
+					    GD.Print($"未找到'{tileDir + path}.tscn', 删除配置文件: {filePath}");
 					    File.Delete(filePath);
 				    }
 			    }
 		    }
 
 		    //手动生成缺失的 tile.json
-		    foreach (var item in mapList)
+		    foreach (var item in map)
 		    {
-			    if (!File.Exists(tileDataDir + item + ".json"))
+			    if (!File.Exists(tileDataDir + item.Key + ".json"))
 			    {
-				    var tscnName = tileDir + item + ".tscn";
+				    var tscnName = tileDir + item.Key + ".tscn";
 				    var packedScene = ResourceManager.Load<PackedScene>(tscnName, false);
 				    if (packedScene != null)
 				    {
@@ -142,7 +184,9 @@ public static class DungeonRoomGenerator
 					    //计算导航网格
 					    dungeonTile.GenerateNavigationPolygon(0);
 					    var polygonData = dungeonTile.GetPolygonData();
-					    DungeonRoomTemplate.SaveConfig(new List<DoorAreaInfo>(), usedRect.Position, usedRect.Size, polygonData.ToList(), item);
+					    
+					    DungeonRoomTemplate.SaveConfig(new List<DoorAreaInfo>(), usedRect.Position, usedRect.Size, polygonData.ToList(),
+						    item.Value.GroupName, item.Value.RoomType, item.Value.FileName);
 					    dungeonRoomTemplate.QueueFree();
 				    }
 			    }
@@ -150,11 +194,12 @@ public static class DungeonRoomGenerator
 
 		    var list = new List<DungeonRoomSplit>();
 		    //整合操作
-		    foreach (var item in mapList)
+		    foreach (var item in map)
 		    {
-			    var configPath = tileDataDir + item + ".json";
+			    var path = item.Key;
+			    var configPath = tileDataDir + path + ".json";
 			    var split = new DungeonRoomSplit();
-			    split.ScenePath = ToResPath(tileDir + item + ".tscn");
+			    split.ScenePath = ToResPath(tileDir + path + ".tscn");
 			    split.ConfigPath = ToResPath(configPath);
 			    list.Add(split);
 		    }
@@ -175,8 +220,29 @@ public static class DungeonRoomGenerator
 
 	    return true;
     }
-    
-    private static string ToResPath(string path)
+
+	private class FileInfo
+	{
+		public FileInfo(string groupName, DungeonRoomType roomType, string typeName, string fileName)
+		{
+			GroupName = groupName;
+			RoomType = roomType;
+			TypeName = typeName;
+			FileName = fileName;
+		}
+
+		public string GroupName;
+		public DungeonRoomType RoomType;
+		public string TypeName;
+		public string FileName;
+
+		public string GetPath()
+		{
+			return GroupName + "/" + TypeName + "/" + FileName;
+		}
+	}
+	
+	private static string ToResPath(string path)
     {
 	    var field = path.Replace("\\", "/");
 	    return "res://" + field;

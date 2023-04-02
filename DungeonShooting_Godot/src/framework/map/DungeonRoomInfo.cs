@@ -32,8 +32,20 @@ public class DungeonRoomInfo
     public List<NavigationPolygonData> NavigationList;
 
     /// <summary>
+    /// 当前房间所属分组的名称
+    /// </summary>
+    [JsonInclude]
+    public string GroupName = "unclaimed";
+    
+    /// <summary>
     /// 房间类型
     /// </summary>
     [JsonInclude]
     public DungeonRoomType RoomType = DungeonRoomType.Battle;
+
+    /// <summary>
+    /// 房间文件名称
+    /// </summary>
+    [JsonInclude]
+    public string FileName;
 }

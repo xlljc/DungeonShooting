@@ -7,7 +7,13 @@
     "X": 20,
     "Y": 13
   },
-  "DoorAreaInfos": [],
+  "DoorAreaInfos": [
+    {
+      "Direction": 3,
+      "Start": 32,
+      "End": 256
+    }
+  ],
   "NavigationList": [
     {
       "Type": 0,
@@ -51,5 +57,8 @@
         }
       ]
     }
-  ]
+  ],
+  "GroupName": "testGroup",
+  "RoomType": 0,
+  "FileName": "Room1"
 }
