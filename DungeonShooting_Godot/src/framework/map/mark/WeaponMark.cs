@@ -21,7 +21,7 @@ public partial class WeaponMark : ActivityMark
     
     public override void _Ready()
     {
-        DrawColor = Colors.Green;
+        DrawColor = Colors.Blue;
         Type = ActivityIdPrefix.ActivityPrefixType.Weapon;
         Layer = RoomLayerEnum.NormalLayer;
     }

@@ -944,6 +944,26 @@ public partial class DungeonRoomTemplate : TileMap
 
         return "battle";
     }
+    
+        
+    /// <summary>
+    /// 将房间类型枚举转为描述字符串
+    /// </summary>
+    public static string DungeonRoomTypeToDescribeString(DungeonRoomType roomType)
+    {
+        switch (roomType)
+        {
+            case DungeonRoomType.Battle: return "战斗房间";
+            case DungeonRoomType.Inlet: return "起始房间";
+            case DungeonRoomType.Outlet: return "结束房间";
+            case DungeonRoomType.Boss: return "boss战房间";
+            case DungeonRoomType.Reward: return "奖励房间";
+            case DungeonRoomType.Shop: return "商店房间";
+            case DungeonRoomType.Event: return "事件房间";
+        }
+
+        return "战斗房间";
+    }
 #endif
 
     /// <summary>

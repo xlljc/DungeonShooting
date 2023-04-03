@@ -16,12 +16,11 @@ public static class DungeonRoomGenerator
 	/// <summary>
 	/// 根据名称在编辑器中创建地牢的预制房间, open 表示创建完成后是否在编辑器中打开这个房间
 	/// </summary>
-	public static bool CreateDungeonRoom(string groupName, DungeonRoomType type, string roomName, bool open = false)
+	public static bool CreateDungeonRoom(string groupName, string roomType, string roomName, bool open = false)
 	{
 		try
 		{
-			var path = GameConfig.RoomTileDir + "/" + groupName + "/" +
-			           DungeonRoomTemplate.DungeonRoomTypeToString(type);
+			var path = GameConfig.RoomTileDir + groupName + "/" + roomType;
 			if (!Directory.Exists(path))
 			{
 				Directory.CreateDirectory(path);

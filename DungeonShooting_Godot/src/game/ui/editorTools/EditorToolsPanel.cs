@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using Generator;
@@ -14,7 +15,12 @@ public partial class EditorToolsPanel : EditorTools
 
     //询问窗口关闭
     private Action<bool> _onConfirmClose;
-    
+
+    //存放创建房间中选择组的下拉框数据
+    private Dictionary<int, string> _createRoomGroupValueMap = new Dictionary<int, string>();
+    //存放创建房间中选择类型的下拉框数据
+    private Dictionary<int, string> _createRoomTypeValueMap = new Dictionary<int, string>();
+
     public override void OnShowUi()
     {
         //tips
@@ -31,8 +37,31 @@ public partial class EditorToolsPanel : EditorTools
         L_Confirm.Instance.Canceled += OnCanceled;
         L_Confirm.Instance.CloseRequested += OnCanceled;
         L_Confirm.Instance.Confirmed += OnConfirm;
-
+        
         var container = L_ScrollContainer.L_MarginContainer.L_VBoxContainer;
+        
+        //创建ui的下拉框数据
+        {
+            var directoryInfo = new DirectoryInfo(GameConfig.RoomTileDir);
+            var directoryInfoArray = directoryInfo.GetDirectories();
+            for (var i = 0; i < directoryInfoArray.Length; i++)
+            {
+                var text = directoryInfoArray[i].Name;
+                container.L_HBoxContainer6.L_RoomGroupSelect.Instance.AddItem(text, i);
+                _createRoomGroupValueMap.Add(i, text);
+            }
+
+            var dungeonRoomTypes = Enum.GetValues<DungeonRoomType>();
+            for (var i = 0; i < dungeonRoomTypes.Length; i++)
+            {
+                var typeName = DungeonRoomTemplate.DungeonRoomTypeToString(dungeonRoomTypes[i]);
+                var text = typeName + " (" +
+                           DungeonRoomTemplate.DungeonRoomTypeToDescribeString(dungeonRoomTypes[i]) + ")";
+                container.L_HBoxContainer6.L_RoomTypeSelect.Instance.AddItem(text, i);
+                _createRoomTypeValueMap.Add(i, typeName);
+            }
+        }
+
         //重新生成 ResourcePath
         container.L_HBoxContainer.L_Button.Instance.Pressed += GenerateResourcePath;
         //重新打包房间配置
@@ -295,8 +324,14 @@ public partial class EditorToolsPanel : EditorTools
     /// </summary>
     private void GenerateDungeonRoom()
     {
-        var roomName = L_ScrollContainer.L_MarginContainer.L_VBoxContainer.L_HBoxContainer6.L_LineEdit.Instance.Text;
-        ShowConfirm("提示", "是否创建房间：" + roomName, (result) =>
+        var node = L_ScrollContainer.L_MarginContainer.L_VBoxContainer.L_HBoxContainer6;
+        var group = _createRoomGroupValueMap[node.L_RoomGroupSelect.Instance.Selected];
+        var type = _createRoomTypeValueMap[node.L_RoomTypeSelect.Instance.Selected];
+        var roomName = node.L_RoomNameInput.Instance.Text;
+
+        var pathName = group + "/" + type + "/" + roomName;
+        
+        ShowConfirm("提示", "是否创建房间：" + pathName, (result) =>
         {
             if (result)
             {
@@ -308,15 +343,15 @@ public partial class EditorToolsPanel : EditorTools
                 }
 
                 //检查是否有同名的Ui
-                var path = GameConfig.RoomTileDir + roomName + ".tscn";
+                var path = GameConfig.RoomTileDir + pathName + ".tscn";
                 if (File.Exists(path))
                 {
-                    ShowTips("错误", "已经存在相同名称'" + roomName + "'的房间了, 不能重复创建!");
+                    ShowTips("错误", "已经存在相同名称'" + pathName + "'的房间了, 不能重复创建!");
                     return;
                 }
                 
                 //执行创建操作
-                if (DungeonRoomGenerator.CreateDungeonRoom("testGroup", DungeonRoomType.Battle, roomName, true))
+                if (DungeonRoomGenerator.CreateDungeonRoom(group, type, roomName, true))
                 {
                     ShowTips("提示", "创建房间成功!");
                 }
