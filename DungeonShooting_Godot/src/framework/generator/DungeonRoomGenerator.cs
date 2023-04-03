@@ -192,7 +192,8 @@ public static class DungeonRoomGenerator
 			    }
 		    }
 
-		    var list = new List<DungeonRoomSplit>();
+		    var roomGroupMap = new Dictionary<string, DungeonRoomGroup>();
+		    //var list = new List<DungeonRoomSplit>();
 		    //整合操作
 		    foreach (var item in map)
 		    {
@@ -201,13 +202,21 @@ public static class DungeonRoomGenerator
 			    var split = new DungeonRoomSplit();
 			    split.ScenePath = ToResPath(tileDir + path + ".tscn");
 			    split.ConfigPath = ToResPath(configPath);
-			    list.Add(split);
+
+			    if (!roomGroupMap.TryGetValue(item.Value.GroupName, out var group))
+			    {
+				    group = new DungeonRoomGroup();
+				    group.GroupName = item.Value.GroupName;
+				    roomGroupMap.Add(group.GroupName, group);
+			    }
+			    
+			    group.GetRoomList(item.Value.RoomType).Add(split);
 		    }
 
 		    //写出配置
 		    var config = new JsonSerializerOptions();
 		    config.WriteIndented = true;
-		    var text = JsonSerializer.Serialize(list, config);
+		    var text = JsonSerializer.Serialize(roomGroupMap, config);
 		    File.WriteAllText(GameConfig.RoomTileConfigFile, text);
 
 		    GD.Print("地牢房间配置, 重新打包完成!");

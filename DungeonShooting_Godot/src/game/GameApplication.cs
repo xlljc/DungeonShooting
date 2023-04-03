@@ -41,11 +41,11 @@ public partial class GameApplication : Node2D
 	/// 游戏房间
 	/// </summary>
 	public RoomManager RoomManager { get; private set; }
-	
+
 	/// <summary>
 	/// 房间配置
 	/// </summary>
-	public List<DungeonRoomSplit> RoomConfig { get; private set; }
+	public Dictionary<string, DungeonRoomGroup> RoomConfig { get; private set; }
 	
 	/// <summary>
 	/// 游戏视图大小
@@ -130,7 +130,7 @@ public partial class GameApplication : Node2D
 		//加载房间配置信息
 		var file = FileAccess.Open(ResourcePath.resource_map_RoomConfig_json, FileAccess.ModeFlags.Read);
 		var asText = file.GetAsText();
-		RoomConfig = JsonSerializer.Deserialize<List<DungeonRoomSplit>>(asText);
+		RoomConfig = JsonSerializer.Deserialize<Dictionary<string, DungeonRoomGroup>>(asText);
 		file.Dispose();
 	}
 

@@ -62,7 +62,7 @@ public partial class RoomManager : Node2D
 
         var nowTicks = DateTime.Now.Ticks;
         //生成地牢房间
-        _dungeonGenerator = new DungeonGenerator();
+        _dungeonGenerator = new DungeonGenerator("testGroup");
         _dungeonGenerator.Generate();
         
         //填充地牢

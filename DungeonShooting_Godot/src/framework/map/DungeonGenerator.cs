@@ -59,6 +59,9 @@ public class DungeonGenerator
 
     //最大尝试次数
     private int _maxTryCount = 10;
+
+    //房间组名称
+    private string _groupName;
     
     private enum GenerateRoomErrorCode
     {
@@ -75,6 +78,11 @@ public class DungeonGenerator
         // NoProperDoor,
     }
 
+    public DungeonGenerator(string groupName)
+    {
+        _groupName = groupName;
+    }
+    
     /// <summary>
     /// 遍历所有房间
     /// </summary>
@@ -147,7 +155,7 @@ public class DungeonGenerator
         }
 
         //随机选择一个房间
-        var roomSplit = Utils.RandomChoose(GameApplication.Instance.RoomConfig);
+        var roomSplit = Utils.RandomChoose(GameApplication.Instance.RoomConfig[_groupName].BattleList);
         //var roomSplit = GameApplication.Instance.RoomConfig[1];
         var room = new RoomInfo(_count, roomSplit);
         
