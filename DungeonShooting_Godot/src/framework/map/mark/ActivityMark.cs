@@ -37,6 +37,11 @@ public partial class ActivityMark : Node2D
     /// </summary>
     [Export]
     public float DelayTime = 0;
+
+    /// <summary>
+    /// 当前标记所在Tile节点
+    /// </summary>
+    public TileMap TileRoot;
     
     /// <summary>
     /// 绘制的颜色
@@ -135,9 +140,25 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public void SetActive(bool flag)
     {
-        SetProcess(flag);
-        SetProcessInternal(flag);
-        SetPhysicsProcess(flag);
-        SetPhysicsProcessInternal(flag);
+        var parent = GetParent();
+        if (flag)
+        {
+            if (parent == null)
+            {
+                TileRoot.AddChild(this);
+            }
+            else if (parent != TileRoot)
+            {
+                parent.RemoveChild(this);
+                TileRoot.AddChild(this);
+            }
+        }
+        else
+        {
+            if (parent != null)
+            {
+                parent.RemoveChild(this);
+            }
+        }
     }
 }

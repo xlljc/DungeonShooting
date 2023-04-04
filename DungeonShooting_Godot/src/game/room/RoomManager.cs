@@ -28,6 +28,11 @@ public partial class RoomManager : Node2D
     public Player Player { get; private set; }
 
     /// <summary>
+    /// 起始房间
+    /// </summary>
+    public RoomInfo StartRoom => _dungeonGenerator.StartRoom;
+    
+    /// <summary>
     /// 当前玩家所在的房间
     /// </summary>
     public RoomInfo ActiveRoom => Player?.Affiliation?.RoomInfo;
