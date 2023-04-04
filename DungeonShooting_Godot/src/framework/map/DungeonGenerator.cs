@@ -62,6 +62,7 @@ public class DungeonGenerator
 
     //房间组名称
     private string _groupName;
+    private DungeonRoomGroup _roomGroup;
     
     private enum GenerateRoomErrorCode
     {
@@ -81,6 +82,21 @@ public class DungeonGenerator
     public DungeonGenerator(string groupName)
     {
         _groupName = groupName;
+        _roomGroup = GameApplication.Instance.RoomConfig[_groupName];
+        
+        //验证该组是否满足生成地牢的条件
+        if (_roomGroup.InletList.Count == 0)
+        {
+            throw new Exception("当前组'" + groupName + "'中没有起始房间, 不能生成地牢!");
+        }
+        // else if (_roomGroup.OutletList.Count == 0)
+        // {
+        //     throw new Exception("当前组'" + groupName + "'中没有结束房间, 不能生成地牢!");
+        // }
+        // else if (_roomGroup.BattleList.Count == 0)
+        // {
+        //     throw new Exception("当前组'" + groupName + "'中没有战斗房间, 不能生成地牢!");
+        // }
     }
     
     /// <summary>
@@ -113,14 +129,14 @@ public class DungeonGenerator
         if (StartRoom != null) return;
 
         //第一个房间
-        GenerateRoom(null, 0, DungeonRoomType.Inlet, out var startRoom);
+        GenerateRoom(null, 0, GetNextRoomType(), out var startRoom);
         StartRoom = startRoom;
         
         //如果房间数量不够, 就一直生成
         while (_count < _maxCount)
         {
             var room = Utils.RandomChoose(RoomInfos);
-            var errorCode = GenerateRoom(room, Utils.RandomRangeInt(0, 3), DungeonRoomType.Battle, out var nextRoom);
+            var errorCode = GenerateRoom(room, Utils.RandomRangeInt(0, 3), GetNextRoomType(), out var nextRoom);
             if (errorCode == GenerateRoomErrorCode.NoError)
             {
                 _failCount = 0;
@@ -155,8 +171,12 @@ public class DungeonGenerator
         }
 
         //随机选择一个房间
-        var roomSplit = Utils.RandomChoose(GameApplication.Instance.RoomConfig[_groupName].GetRoomList(roomType));
-        //var roomSplit = GameApplication.Instance.RoomConfig[1];
+        var list = _roomGroup.GetRoomList(roomType);
+        if (list.Count == 0) //如果没有指定类型的房间, 就生成战斗房间
+        {
+            list = _roomGroup.BattleList;
+        }
+        var roomSplit = Utils.RandomChoose(list);
         var room = new RoomInfo(_count, roomSplit);
         
         //房间大小
@@ -267,7 +287,7 @@ public class DungeonGenerator
             while (dirList.Count > 0)
             {
                 var randDir = Utils.RandomChoose(dirList);
-                GenerateRoom(room, randDir, DungeonRoomType.Battle, out var nextRoom);
+                GenerateRoom(room, randDir, GetNextRoomType(), out var nextRoom);
                 if (nextRoom == null)
                 {
                     break;
@@ -282,6 +302,22 @@ public class DungeonGenerator
 
         resultRoom = room;
         return GenerateRoomErrorCode.NoError;
+    }
+
+    private DungeonRoomType GetNextRoomType()
+    {
+        if (_count == 0) //生成第一个房间
+        {
+            return DungeonRoomType.Inlet;
+        }
+        else if (_count == _maxCount - 1) //生成最后一个房间
+        {
+            return DungeonRoomType.Outlet;
+        }
+        else
+        {
+            return DungeonRoomType.Battle;
+        }
     }
 
     /// <summary>

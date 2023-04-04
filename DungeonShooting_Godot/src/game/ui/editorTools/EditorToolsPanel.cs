@@ -336,7 +336,7 @@ public partial class EditorToolsPanel : EditorTools
             if (result)
             {
                 //检查名称是否合规
-                if (!Regex.IsMatch(roomName, "^\\w*$"))
+                if (!Regex.IsMatch(roomName, "^\\w+$"))
                 {
                     ShowTips("错误", "房间名称'" + roomName + "'不符合名称约束, 房间名称只允许包含大写字母和数字!");
                     return;

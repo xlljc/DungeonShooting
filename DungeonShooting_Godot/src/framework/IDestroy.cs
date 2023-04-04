@@ -10,7 +10,7 @@ public interface IDestroy
     bool IsDestroyed { get; }
     
     /// <summary>
-    /// 销毁物体接口
+    /// 销毁物体
     /// </summary>
     void Destroy();
 }
