@@ -37,3 +37,4 @@ ResidueAmmo = 30
 Type = 4
 ItemId = "0001"
 WaveNumber = 2
+Altitude = 16

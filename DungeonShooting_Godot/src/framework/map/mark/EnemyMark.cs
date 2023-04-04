@@ -59,7 +59,7 @@ public partial class EnemyMark : ActivityMark
     {
         var pos = GlobalPosition;
         //创建敌人
-        var instance = ActivityObject.Create<Enemy>(GetItemId());
+        var instance = (Enemy)CreateActivityObject();
         instance.PutDown(pos, Layer);
 
         if (!string.IsNullOrWhiteSpace(Weapon1Id))

@@ -39,6 +39,19 @@ public partial class ActivityMark : Node2D
     public float DelayTime = 0;
 
     /// <summary>
+    /// 物体初始海拔高度
+    /// </summary>
+    [ExportGroup("Vertical")]
+    [Export(PropertyHint.Range, "0, 36")]
+    public int Altitude = 0;
+
+    /// <summary>
+    /// 物体初始纵轴速度
+    /// </summary>
+    [Export(PropertyHint.Range, "-1000,1000,0.1")]
+    public float VerticalSpeed = 0;
+
+    /// <summary>
     /// 当前标记所在Tile节点
     /// </summary>
     public TileMap TileRoot;
@@ -126,8 +139,19 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public virtual void Doing(RoomInfo roomInfo)
     {
+
+        CreateActivityObject().PutDown(GlobalPosition, Layer);
+    }
+
+    /// <summary>
+    /// 实例化ItemId指定的物体, 并返回对象实例
+    /// </summary>
+    protected ActivityObject CreateActivityObject()
+    {
         var instance = ActivityObject.Create(GetItemId());
-        instance.PutDown(GlobalPosition, Layer);
+        instance.VerticalSpeed = VerticalSpeed;
+        instance.Altitude = Altitude;
+        return instance;
     }
 
 #if TOOLS

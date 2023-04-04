@@ -31,6 +31,7 @@ script = ExtResource("4_6je2e")
 ResidueAmmo = 12
 Type = 4
 ItemId = "0002"
+Altitude = 16
 
 [node name="WeaponMark2" type="Node2D" parent="."]
 position = Vector2(249, 268)
@@ -38,6 +39,7 @@ script = ExtResource("4_6je2e")
 ResidueAmmo = 7
 Type = 4
 ItemId = "0003"
+Altitude = 16
 
 [node name="EnemyMark3" type="Node2D" parent="."]
 position = Vector2(246, 215)
