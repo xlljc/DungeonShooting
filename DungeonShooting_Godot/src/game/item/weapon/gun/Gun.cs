@@ -3,9 +3,9 @@ using Godot;
 /// <summary>
 /// 普通的枪
 /// </summary>
-[RegisterWeapon("1001", typeof(Gun.RifleAttribute))]
-[RegisterWeapon("1003", typeof(Gun.PistolAttribute))]
-public class Gun : Weapon
+[RegisterWeapon(ActivityIdPrefix.Weapon + "0001", typeof(RifleAttribute))]
+[RegisterWeapon(ActivityIdPrefix.Weapon + "0003", typeof(PistolAttribute))]
+public partial class Gun : Weapon
 {
     //步枪属性数据
     private class RifleAttribute : WeaponAttribute
@@ -13,7 +13,7 @@ public class Gun : Weapon
         public RifleAttribute()
         {
             Name = "步枪";
-            Sprite = ResourcePath.resource_sprite_gun_gun4_png;
+            Sprite2D = ResourcePath.resource_sprite_gun_gun4_png;
             Weight = 40;
             CenterPosition = new Vector2(0.4f, -2.6f);
             StartFiringSpeed = 480;
@@ -28,9 +28,7 @@ public class Gun : Weapon
             MaxAmmoCapacity = 30 * 3;
             //扳机检测间隔
             TriggerInterval = 0f;
-            //连发数量
-            MinContinuousCount = 3;
-            MaxContinuousCount = 3;
+
             //开火前延时
             DelayedTime = 0f;
             //攻击距离
@@ -43,6 +41,13 @@ public class Gun : Weapon
             UpliftAngle = 10;
             //开火位置
             FirePosition = new Vector2(16, 2);
+            
+            AiUseAttribute = Clone();
+            AiUseAttribute.AiTargetLockingTime = 0.5f;
+            AiUseAttribute.TriggerInterval = 3f;
+            AiUseAttribute.ContinuousShoot = false;
+            AiUseAttribute.MinContinuousCount = 3;
+            AiUseAttribute.MaxContinuousCount = 3;
         }
     }
 
@@ -52,11 +57,12 @@ public class Gun : Weapon
         public PistolAttribute()
         {
             Name = "手枪";
-            Sprite = ResourcePath.resource_sprite_gun_gun3_png;
+            Sprite2D = ResourcePath.resource_sprite_gun_gun3_png;
             Weight = 20;
             CenterPosition = new Vector2(0.4f, -2.6f);
             WeightType = WeaponWeightType.DeputyWeapon;
             StartFiringSpeed = 300;
+            FinalFiringSpeed = 300;
             StartScatteringRange = 5;
             FinalScatteringRange = 60;
             ScatteringRangeAddValue = 8f;
@@ -83,36 +89,37 @@ public class Gun : Weapon
             UpliftAngle = 30;
             //开火位置
             FirePosition = new Vector2(10, 2);
+
+            AiUseAttribute = Clone();
+            AiUseAttribute.AiTargetLockingTime = 1f;
+            AiUseAttribute.TriggerInterval = 2f;
         }
     }
-
-    public Gun(string typeId, WeaponAttribute attribute): base(typeId, attribute)
-    {
-    }
-
+    
     protected override void OnFire()
     {
         //创建一个弹壳
+        var startPos = Master.GlobalPosition;
         var startHeight = 6;
-        var direction = GlobalRotationDegrees + Utils.RandRangeInt(-30, 30) + 180;
-        var xf = Utils.RandRangeInt(20, 60);
-        var yf = Utils.RandRangeInt(60, 120);
-        var rotate = Utils.RandRangeInt(-720, 720);
-        var shell = new ShellCase();
-        shell.Throw(new Vector2(10, 5), Master.GlobalPosition, startHeight, direction, xf, yf, rotate, true);
+        var direction = GlobalRotationDegrees + Utils.RandomRangeInt(-30, 30) + 180;
+        var verticalSpeed = Utils.RandomRangeInt(60, 120);
+        var velocity = new Vector2(Utils.RandomRangeInt(20, 60), 0).Rotated(direction * Mathf.Pi / 180);
+        var rotate = Utils.RandomRangeInt(-720, 720);
+        var shell = Create<ShellCase>(ActivityIdPrefix.Shell + "0001");
+        shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
         
-        if (Master == GameApplication.Instance.Room.Player)
+        if (Master == GameApplication.Instance.RoomManager.Player)
         {
             //创建抖动
-            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
+            GameCamera.Main.DirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
         }
 
         //创建开火特效
         var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_ShotFire_tscn);
-        var sprite = packedScene.Instance<Sprite>();
+        var sprite = packedScene.Instantiate<Sprite2D>();
         sprite.GlobalPosition = FirePoint.GlobalPosition;
         sprite.GlobalRotation = FirePoint.GlobalRotation;
-        GameApplication.Instance.Room.GetRoot(true).AddChild(sprite);
+        sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
 
         //播放射击音效
         SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet2_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -8);
@@ -121,15 +128,15 @@ public class Gun : Weapon
     protected override void OnShoot(float fireRotation)
     {
         //创建子弹
-        //CreateBullet(BulletPack, FirePoint.GlobalPosition, fireRotation);
-        var bullet = new Bullet(
-            ResourcePath.prefab_weapon_bullet_Bullet_tscn,
+        const string bulletId = ActivityIdPrefix.Bullet + "0001";
+        var bullet = ActivityObject.Create<Bullet>(bulletId);
+        bullet.Init(
             350,
-            Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
+            Utils.RandomRangeFloat(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,
             fireRotation,
             GetAttackLayer()
         );
-        bullet.PutDown();
+        bullet.PutDown(RoomLayerEnum.YSortLayer);
     }
 }

@@ -71,6 +71,22 @@ public class Holster
     }
 
     /// <summary>
+    /// 返回当前武器袋是否是空的
+    /// </summary>
+    public bool IsEmpty()
+    {
+        for (int i = 0; i < SlotList.Length; i++)
+        {
+            if (SlotList[i].Weapon != null)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    /// <summary>
     /// 返回当前武器袋是否还有空位
     /// </summary>
     public bool HasVacancy()
@@ -90,8 +106,9 @@ public class Holster
     /// <summary>
     /// 根据索引获取武器
     /// </summary>
-    public Weapon GetWeapon(int index) {
-        if (index >= SlotList.Length)
+    public Weapon GetWeapon(int index)
+    {
+        if (index < 0 || index >= SlotList.Length)
         {
             return null;
         }
@@ -107,7 +124,7 @@ public class Holster
         for (int i = 0; i < SlotList.Length; i++)
         {
             var item = SlotList[i];
-            if (item.Weapon != null && item.Weapon.TypeId == id)
+            if (item.Weapon != null && item.Weapon.ItemId == id)
             {
                 return i;
             }
@@ -159,7 +176,7 @@ public class Holster
             if (weapon != null)
             {
                 weapon.GetParent().RemoveChild(weapon);
-                weapon.Remove();
+                weapon.RemoveAt();
                 weapons.Add(weapon);
                 slot.Weapon = null;
             }
@@ -245,7 +262,7 @@ public class Holster
                 ActiveWeapon = null;
             }
         }
-        weapon.Remove();
+        weapon.RemoveAt();
         return weapon;
     }
 

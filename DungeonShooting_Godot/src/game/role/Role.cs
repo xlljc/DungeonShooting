@@ -4,8 +4,13 @@ using Godot;
 /// <summary>
 /// 角色基类
 /// </summary>
-public abstract class Role : ActivityObject
+public abstract partial class Role : ActivityObject
 {
+    /// <summary>
+    /// 是否是 Ai
+    /// </summary>
+    public bool IsAi { get; protected set; } = false;
+    
     /// <summary>
     /// 默认攻击对象层级
     /// </summary>
@@ -31,15 +36,15 @@ public abstract class Role : ActivityObject
     /// </summary>
     public uint AttackLayer { get; set; } = PhysicsLayer.Wall;
 
-    /// <summary>
-    /// 携带的道具包裹
-    /// </summary>
-    public List<object> PropsPack { get; } = new List<object>();
+    // /// <summary>
+    // /// 携带的道具包裹
+    // /// </summary>
+    // public List<object> PropsPack { get; } = new List<object>();
 
     /// <summary>
-    /// 角色携带的枪套
+    /// 角色携带的武器袋
     /// </summary>
-    public Holster Holster { get; }
+    public Holster Holster { get; private set; }
 
     /// <summary>
     /// 武器挂载点
@@ -48,7 +53,7 @@ public abstract class Role : ActivityObject
     /// <summary>
     /// 背后武器的挂载点
     /// </summary>
-    public Position2D BackMountPoint { get; private set; }
+    public Marker2D BackMountPoint { get; private set; }
 
     /// <summary>
     /// 互动碰撞区域
@@ -204,23 +209,14 @@ public abstract class Role : ActivityObject
     protected virtual void OnDie()
     {
     }
-    
-    public Role() : this(ResourcePath.prefab_role_Role_tscn)
-    {
-    }
-    
-    public Role(string scenePath) : base(scenePath)
+
+    public override void OnInit()
     {
         Holster = new Holster(this);
-    }
-    
-    public override void _Ready()
-    {
-        base._Ready();
         _startScale = Scale;
         MountPoint = GetNode<MountRotation>("MountPoint");
         MountPoint.Master = this;
-        BackMountPoint = GetNode<Position2D>("BackMountPoint");
+        BackMountPoint = GetNode<Marker2D>("BackMountPoint");
 
         HurtArea = GetNode<Area2D>("HurtArea");
         HurtArea.CollisionLayer = CollisionLayer;
@@ -230,8 +226,8 @@ public abstract class Role : ActivityObject
 
         //连接互动物体信号
         InteractiveArea = GetNode<Area2D>("InteractiveArea");
-        InteractiveArea.Connect("area_entered", this, nameof(_OnPropsEnter));
-        InteractiveArea.Connect("area_exited", this, nameof(_OnPropsExit));
+        InteractiveArea.BodyEntered += _OnPropsEnter;
+        InteractiveArea.BodyExited += _OnPropsExit;
     }
 
     protected override void Process(float delta)
@@ -242,11 +238,11 @@ public abstract class Role : ActivityObject
             Vector2 pos = LookTarget.GlobalPosition;
             //脸的朝向
             var gPos = GlobalPosition;
-            if (pos.x > gPos.x && Face == FaceDirection.Left)
+            if (pos.X > gPos.X && Face == FaceDirection.Left)
             {
                 Face = FaceDirection.Right;
             }
-            else if (pos.x < gPos.x && Face == FaceDirection.Right)
+            else if (pos.X < gPos.X && Face == FaceDirection.Right)
             {
                 Face = FaceDirection.Left;
             }
@@ -259,7 +255,7 @@ public abstract class Role : ActivityObject
         for (int i = 0; i < _interactiveItemList.Count; i++)
         {
             var item = _interactiveItemList[i];
-            if (item == null)
+            if (item == null || item.IsDestroyed)
             {
                 _interactiveItemList.RemoveAt(i--);
             }
@@ -294,6 +290,22 @@ public abstract class Role : ActivityObject
         }
     }
 
+    protected override void OnAffiliationChange()
+    {
+        //身上的武器的所属区域也得跟着变
+        Holster.ForEach((weapon, i) =>
+        {
+            if (Affiliation != null)
+            {
+                Affiliation.InsertItem(weapon);
+            }
+            else if (weapon.Affiliation != null)
+            {
+                weapon.Affiliation.RemoveItem(weapon);
+            }
+        });
+    }
+
     /// <summary>
     /// 获取当前角色的中心点坐标
     /// </summary>
@@ -312,11 +324,11 @@ public abstract class Role : ActivityObject
         LookTarget = null;
         //脸的朝向
         var gPos = GlobalPosition;
-        if (pos.x > gPos.x && Face == FaceDirection.Left)
+        if (pos.X > gPos.X && Face == FaceDirection.Left)
         {
             Face = FaceDirection.Right;
         }
-        else if (pos.x < gPos.x && Face == FaceDirection.Right)
+        else if (pos.X < gPos.X && Face == FaceDirection.Right)
         {
             Face = FaceDirection.Left;
         }
@@ -330,8 +342,8 @@ public abstract class Role : ActivityObject
     public bool IsPositionInForward(Vector2 pos)
     {
         var gps = GlobalPosition;
-        return (Face == FaceDirection.Left && pos.x <= gps.x) ||
-               (Face == FaceDirection.Right && pos.x >= gps.x);
+        return (Face == FaceDirection.Left && pos.X <= gps.X) ||
+               (Face == FaceDirection.Right && pos.X >= gps.X);
     }
 
     /// <summary>
@@ -397,12 +409,17 @@ public abstract class Role : ActivityObject
     /// <param name="index">武器在武器袋中的位置</param>
     public virtual void ThrowWeapon(int index)
     {
-        var weapon = Holster.RemoveWeapon(index);
-        //播放抛出效果
-        if (weapon != null)
+        var weapon = Holster.GetWeapon(index);
+        if (weapon == null)
         {
-            weapon.ThrowWeapon(this);
+            return;
         }
+
+        var temp = new Vector2(weapon.Attribute.HoldPosition.X, 0);
+        var pos = weapon.GlobalPosition + temp.Rotated(weapon.GlobalRotation);
+        Holster.RemoveWeapon(index);
+        //播放抛出效果
+        weapon.ThrowWeapon(this, pos);
     }
 
     /// <summary>
@@ -465,14 +482,16 @@ public abstract class Role : ActivityObject
         else
         {
             Hp -= damage;
-            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);
-            var blood = packedScene.Instance<Blood>();
-            blood.GlobalPosition = GlobalPosition;
-            blood.Rotation = angle;
-            GameApplication.Instance.Room.GetRoot().AddChild(blood);
+            //播放血液效果
+            // var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);
+            // var blood = packedScene.Instance<Blood>();
+            // blood.GlobalPosition = GlobalPosition;
+            // blood.Rotation = angle;
+            // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
         
-        //PlayHitAnimation();
+        //受伤特效
+        PlayHitAnimation();
         
         //死亡判定
         if (Hp <= 0)
@@ -502,19 +521,18 @@ public abstract class Role : ActivityObject
             else
             {
                 RotationDegrees = 180;
-                Scale = new Vector2(_startScale.x, -_startScale.y);
+                Scale = new Vector2(_startScale.X, -_startScale.Y);
             }
         }
     }
     
     /// <summary>
-    /// 连接信号: InteractiveArea.area_entered
+    /// 连接信号: InteractiveArea.BodyEntered
     /// 与物体碰撞
     /// </summary>
-    private void _OnPropsEnter(Area2D other)
+    private void _OnPropsEnter(Node2D other)
     {
-        ActivityObject propObject = other.AsActivityObject();
-        if (propObject != null)
+        if (other is ActivityObject propObject)
         {
             if (!_interactiveItemList.Contains(propObject))
             {
@@ -524,13 +542,12 @@ public abstract class Role : ActivityObject
     }
 
     /// <summary>
-    /// 连接信号: InteractiveArea.area_exited
+    /// 连接信号: InteractiveArea.BodyExited
     /// 物体离开碰撞区域
     /// </summary>
-    private void _OnPropsExit(Area2D other)
+    private void _OnPropsExit(Node2D other)
     {
-        ActivityObject propObject = other.AsActivityObject();
-        if (propObject != null)
+        if (other is ActivityObject propObject)
         {
             if (_interactiveItemList.Contains(propObject))
             {

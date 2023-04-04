@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using Godot;
 
+/// <summary>
+/// 资源管理器
+/// </summary>
 public static class ResourceManager
 {
     /// <summary>
@@ -50,7 +53,7 @@ public static class ResourceManager
     {
         if (!useCache)
         {
-            T res = ResourceLoader.Load<T>(path, null, true);
+            T res = ResourceLoader.Load<T>(path, null, ResourceLoader.CacheMode.Ignore);
             if (res == null)
             {
                 GD.PrintErr("加载资源失败, 未找到资源: " + path);
@@ -64,18 +67,16 @@ public static class ResourceManager
         {
             return pack as T;
         }
+
+        pack = ResourceLoader.Load<T>(path);
+        if (pack != null)
+        {
+            CachePack.Add(path, pack);
+            return pack as T;
+        }
         else
         {
-            pack = ResourceLoader.Load(path);
-            if (pack != null)
-            {
-                CachePack.Add(path, pack);
-                return pack as T;
-            }
-            else
-            {
-                GD.PrintErr("加载资源失败, 未找到资源: " + path);
-            }
+            GD.PrintErr("加载资源失败, 未找到资源: " + path);
         }
 
         return default;

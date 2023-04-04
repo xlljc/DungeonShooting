@@ -1,4 +1,4 @@
-﻿
+
 using Godot;
 
 /// <summary>
@@ -26,20 +26,25 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         IsInView = true;
     }
 
-    public override void PhysicsProcess(float delta)
+    public override void Process(float delta)
     {
         //先检查弹药是否打光
         if (Master.IsAllWeaponTotalAmmoEmpty())
         {
             //再寻找是否有可用的武器
-            if (Master.CheckUsableWeaponInUnclaimed())
+            var targetWeapon = Master.FindTargetWeapon();
+            if (targetWeapon != null)
             {
-                //切换到寻找武器状态
-                ChangeStateLate(AiStateEnum.AiFindAmmo);
+                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
+            else
+            {
+                //切换到随机移动状态
+                ChangeStateLate(AiStateEnum.AiSurround);
+            }
         }
-        
+
         var playerPos = Player.Current.GetCenterPosition();
 
         //更新玩家位置
@@ -47,10 +52,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            if (Master.NavigationAgent2D.GetTargetLocation() != playerPos)
-            {
-                Master.NavigationAgent2D.SetTargetLocation(playerPos);
-            }
+            Master.NavigationAgent2D.TargetPosition = playerPos;
         }
         else
         {
@@ -74,8 +76,8 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
             //计算移动
-            var nextPos = Master.NavigationAgent2D.GetNextLocation();
-            Master.AnimatedSprite.Animation = AnimatorNames.Run;
+            var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
+            Master.AnimatedSprite.Play(AnimatorNames.Run);
             Master.BasisVelocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
         }
@@ -101,7 +103,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             if (inAttackRange) //在攻击范围内
             {
                 //发起攻击
-                Master.EnemyAttack();
+                Master.EnemyAttack(delta);
                 
                 //距离够近, 可以切换到环绕模式
                 if (Master.GlobalPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(weapon.Attribute.MinDistance, 2) * 0.7f)
@@ -118,7 +120,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
 
     public override void DebugDraw()
     {
-        var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
+        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
         Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Red);
     }
 }

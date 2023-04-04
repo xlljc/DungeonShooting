@@ -1,94 +1,155 @@
-﻿
+
+using System.Collections.Generic;
+using System.Text.Json;
 using Godot;
 
-public class GameApplication : Node2D
+public partial class GameApplication : Node2D
 {
-    public static GameApplication Instance { get; private set; }
+	public static GameApplication Instance { get; private set; }
 
-    /// <summary>
-    /// 是否开启调试
-    /// </summary>
-    [Export] public bool Debug = false;
+	/// <summary>
+	/// 是否开启调试
+	/// </summary>
+	[Export] public bool Debug = false;
 
-    [Export] public PackedScene CursorPack;
+	/// <summary>
+	/// 游戏渲染视口
+	/// </summary>
+	[Export] public SubViewport SubViewport;
 
-    [Export] public NodePath RoomPath;
+	/// <summary>
+	/// SubViewportContainer 组件
+	/// </summary>
+	[Export] public SubViewportContainer SubViewportContainer;
 
-    [Export] public NodePath ViewportPath;
+	/// <summary>
+	/// 场景根节点
+	/// </summary>
+	[Export] public Node2D SceneRoot;
+	
+	/// <summary>
+	/// 全局根节点
+	/// </summary>
+	[Export] public Node2D GlobalNodeRoot;
 
-    [Export] public NodePath ViewportContainerPath;
+	/// <summary>
+	/// 鼠标指针
+	/// </summary>
+	public Cursor Cursor { get; private set; }
+	
+	/// <summary>
+	/// 游戏房间
+	/// </summary>
+	public RoomManager RoomManager { get; private set; }
+	
+	/// <summary>
+	/// 房间配置
+	/// </summary>
+	public List<DungeonRoomSplit> RoomConfig { get; private set; }
+	
+	/// <summary>
+	/// 游戏视图大小
+	/// </summary>
+	public Vector2 ViewportSize { get; private set; } = new Vector2(480, 270);
+	
+	/// <summary>
+	/// 像素缩放
+	/// </summary>
+	public int PixelScale { get; private set; } = 4;
 
-    [Export] public NodePath UiPath;
+	public GameApplication()
+	{
+		Instance = this;
+		
+		InitRoomConfig();
 
-    [Export] public NodePath GlobalNodeRootPath;
+		//初始化 ActivityObject
+		ActivityObject.InitActivity();
+	}
+	
+	public override void _EnterTree()
+	{
+		//随机化种子
+		//GD.Randomize();
+		//固定帧率
+		Engine.MaxFps = 60;
+		//调试绘制开关
+		ActivityObject.IsDebug = Debug;
+		//Engine.TimeScale = 0.2f;
 
-    [Export] public Font Font;
-    
-    /// <summary>
-    /// 鼠标指针
-    /// </summary>
-    public Cursor Cursor { get; private set; }
+		//窗体大小改变
+		GetWindow().SizeChanged += OnWindowSizeChanged;
+		RefreshSubViewportSize();
 
-    /// <summary>
-    /// 游戏房间
-    /// </summary>
-    public RoomManager Room { get; private set; }
+		//初始化ui
+		UiManager.Init();
+		
+		// 初始化鼠标
+		Input.MouseMode = Input.MouseModeEnum.Hidden;
+		Cursor = ResourceManager.Load<PackedScene>(ResourcePath.prefab_Cursor_tscn).Instantiate<Cursor>();
+		var cursorLayer = new CanvasLayer();
+		cursorLayer.Name = "CursorLayer";
+		cursorLayer.Layer = UiManager.GetUiLayer(UiLayer.Pop).Layer + 10;
+		AddChild(cursorLayer);
+		cursorLayer.AddChild(Cursor);
 
-    /// <summary>
-    /// 游戏渲染视口
-    /// </summary>
-    public Viewport Viewport { get; private set; }
+		//打开ui
+		UiManager.Open_RoomUI();
+		
+		RoomManager = ResourceManager.Load<PackedScene>(ResourcePath.scene_Room_tscn).Instantiate<RoomManager>();
+		SceneRoot.AddChild(RoomManager);
+	}
 
-    /// <summary>
-    /// ViewportContainer 组件
-    /// </summary>
-    public ViewportContainer ViewportContainer { get; private set; }
+	public override void _Process(double delta)
+	{
+		InputManager.Update((float)delta);
+	}
 
-    /// <summary>
-    /// 游戏ui对象
-    /// </summary>
-    public RoomUI Ui { get; private set; }
+	/// <summary>
+	/// 将 viewport 以外的全局坐标 转换成 viewport 内的全局坐标
+	/// </summary>
+	public Vector2 GlobalToViewPosition(Vector2 globalPos)
+	{
+		//return globalPos;
+		return globalPos / PixelScale - (ViewportSize / 2) + GameCamera.Main.GlobalPosition;
+	}
 
-    /// <summary>
-    /// 全局根节点
-    /// </summary>
-    public Node2D GlobalNodeRoot { get; private set; }
+	/// <summary>
+	/// 将 viewport 以内的全局坐标 转换成 viewport 外的全局坐标
+	/// </summary>
+	public Vector2 ViewToGlobalPosition(Vector2 viewPos)
+	{
+		// 3.5写法
+		//return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
+		return (viewPos - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (ViewportSize / 2)) * PixelScale;
+	}
 
-    public GameApplication()
-    {
-        Instance = this;
-    }
+	//初始化房间配置
+	private void InitRoomConfig()
+	{
+		//加载房间配置信息
+		var file = FileAccess.Open(ResourcePath.resource_map_RoomConfig_json, FileAccess.ModeFlags.Read);
+		var asText = file.GetAsText();
+		RoomConfig = JsonSerializer.Deserialize<List<DungeonRoomSplit>>(asText);
+		file.Dispose();
+	}
 
-    public override void _EnterTree()
-    {
-        GD.Randomize();
-        ActivityObject.IsDebug = Debug;
-        
-        GlobalNodeRoot = GetNode<Node2D>(GlobalNodeRootPath);
-        // 初始化鼠标
-        Cursor = CursorPack.Instance<Cursor>();
-
-        Room = GetNode<RoomManager>(RoomPath);
-        Viewport = GetNode<Viewport>(ViewportPath);
-        ViewportContainer = GetNode<ViewportContainer>(ViewportContainerPath);
-        Ui = GetNode<RoomUI>(UiPath);
-
-        Ui.AddChild(Cursor);
-    }
-
-    /// <summary>
-    /// 将 viewport 以外的全局坐标 转换成 viewport 内的全局坐标
-    /// </summary>
-    public Vector2 GlobalToViewPosition(Vector2 globalPos)
-    {
-        return globalPos / GameConfig.WindowScale - (GameConfig.ViewportSize / 2) + GameCamera.Main.GlobalPosition;
-    }
-
-    /// <summary>
-    /// 将 viewport 以内的全局坐标 转换成 viewport 外的全局坐标
-    /// </summary>
-    public Vector2 ViewToGlobalPosition(Vector2 viewPos)
-    {
-        return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
-    }
+	//窗体大小改变
+	private void OnWindowSizeChanged()
+	{
+		var size = GetWindow().Size;
+		ViewportSize = size / PixelScale;
+		RefreshSubViewportSize();
+	}
+	
+	//刷新视窗大小
+	private void RefreshSubViewportSize()
+	{
+		var s = new Vector2I((int)ViewportSize.X, (int)ViewportSize.Y);
+		s.X = s.X / 2 * 2;
+		s.Y = s.Y / 2 * 2;
+		SubViewport.Size = s;
+		SubViewportContainer.Scale = new Vector2(PixelScale, PixelScale);
+		SubViewportContainer.Size = s;
+	}
 }

@@ -14,13 +14,13 @@
 // 每个角色都应该有对应的被动  属性 专属武器 
 #endregion
 
-public class CPlusPlus : Player
+public partial class CPlusPlus : Player
 {
 
 
-    public override void _Ready()
+    public override void OnInit()
     {
-        base._Ready();
+        base.OnInit();
         #region 初始属性
 
         MaxHp = 55;

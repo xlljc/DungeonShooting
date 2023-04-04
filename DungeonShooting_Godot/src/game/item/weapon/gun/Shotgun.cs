@@ -1,7 +1,7 @@
 using Godot;
 
-[RegisterWeapon("1002", typeof(Shotgun.ShotgunAttribute))]
-public class Shotgun : Weapon
+[RegisterWeapon(ActivityIdPrefix.Weapon + "0002", typeof(ShotgunAttribute))]
+public partial class Shotgun : Weapon
 {
 
     private class ShotgunAttribute : WeaponAttribute
@@ -9,10 +9,10 @@ public class Shotgun : Weapon
         public ShotgunAttribute()
         {
             Name = "霰弹枪";
-            Sprite = ResourcePath.resource_sprite_gun_gun2_png;
+            Sprite2D = ResourcePath.resource_sprite_gun_gun2_png;
             Weight = 40;
             CenterPosition = new Vector2(0.4f, -2.6f);
-            StartFiringSpeed = 120;
+            StartFiringSpeed = 400;
             StartScatteringRange = 30;
             FinalScatteringRange = 90;
             ScatteringRangeAddValue = 50f;
@@ -24,7 +24,7 @@ public class Shotgun : Weapon
             MaxAmmoCapacity = 42;
             AloneReload = true;
             AloneReloadCanShoot = true;
-            ReloadTime = 0.3f;
+            ReloadTime = 0.6f;
             //连发数量
             MinContinuousCount = 1;
             MaxContinuousCount = 1;
@@ -42,6 +42,10 @@ public class Shotgun : Weapon
             MinBacklash = 5;
             //开火位置
             FirePosition = new Vector2(18, 4);
+
+            AiUseAttribute = Clone();
+            AiUseAttribute.AiTargetLockingTime = 0.2f;
+            AiUseAttribute.TriggerInterval = 3.5f;
         }
     }
     
@@ -50,35 +54,36 @@ public class Shotgun : Weapon
     /// </summary>
     public PackedScene ShellPack;
 
-    public Shotgun(string typeId, WeaponAttribute attribute) : base(typeId, attribute)
+    public override void OnInit()
     {
+        base.OnInit();
         ShellPack = ResourceManager.Load<PackedScene>(ResourcePath.prefab_weapon_shell_ShellCase_tscn);
     }
 
     protected override void OnFire()
     {
         //创建一个弹壳
-        var startPos = GlobalPosition + new Vector2(0, 5);
+        var startPos = Master.GlobalPosition;
         var startHeight = 6;
-        var direction = GlobalRotationDegrees + Utils.RandRangeInt(-30, 30) + 180;
-        var xf = Utils.RandRangeInt(20, 60);
-        var yf = Utils.RandRangeInt(60, 120);
-        var rotate = Utils.RandRangeInt(-720, 720);
-        var shell = new ShellCase();
-        shell.Throw(new Vector2(5, 10), startPos, startHeight, direction, xf, yf, rotate, true);
+        var direction = GlobalRotationDegrees + Utils.RandomRangeInt(-30, 30) + 180;
+        var verticalSpeed = Utils.RandomRangeInt(60, 120);
+        var velocity = new Vector2(Utils.RandomRangeInt(20, 60), 0).Rotated(direction * Mathf.Pi / 180);
+        var rotate = Utils.RandomRangeInt(-720, 720);
+        var shell = Create<ShellCase>(ActivityIdPrefix.Shell + "0001");
+        shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
         
-        if (Master == GameApplication.Instance.Room.Player)
+        if (Master == GameApplication.Instance.RoomManager.Player)
         {
             //创建抖动
-            GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
+            GameCamera.Main.DirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
         }
         
         //创建开火特效
         var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_ShotFire_tscn);
-        var sprite = packedScene.Instance<Sprite>();
+        var sprite = packedScene.Instantiate<Sprite2D>();
         sprite.GlobalPosition = FirePoint.GlobalPosition;
         sprite.GlobalRotation = FirePoint.GlobalRotation;
-        GameApplication.Instance.Room.GetRoot(true).AddChild(sprite);
+        sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         
         //播放射击音效
         SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet3_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -15);
@@ -87,14 +92,15 @@ public class Shotgun : Weapon
     protected override void OnShoot(float fireRotation)
     {
         //创建子弹
-        var bullet = new Bullet(
-            ResourcePath.prefab_weapon_bullet_Bullet_tscn,
-            Utils.RandRangeInt(280, 380),
-            Utils.RandRange(Attribute.MinDistance, Attribute.MaxDistance),
+        const string bulletId = ActivityIdPrefix.Bullet + "0001";
+        var bullet = ActivityObject.Create<Bullet>(bulletId);
+        bullet.Init(
+            Utils.RandomRangeInt(280, 380),
+            Utils.RandomRangeFloat(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,
-            fireRotation + Utils.RandRange(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
+            fireRotation + Utils.RandomRangeFloat(-20 / 180f * Mathf.Pi, 20 / 180f * Mathf.Pi),
             GetAttackLayer()
         );
-        bullet.PutDown();
+        bullet.PutDown(RoomLayerEnum.YSortLayer);
     }
 }

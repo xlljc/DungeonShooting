@@ -3,28 +3,22 @@
 /// </summary>
 public class ResourcePath
 {
-    public const string editor_ActivityObject_svg = "res://editor/ActivityObject.svg";
-    public const string editor_ide_cn_font_12_tres = "res://editor/ide_cn_font_12.tres";
-    public const string editor_ide_cn_font_12_hint_tres = "res://editor/ide_cn_font_12_hint.tres";
-    public const string editor_prefabs_CodeHintItem_tscn = "res://editor/prefabs/CodeHintItem.tscn";
-    public const string editor_prefabs_CodeHintPanel_tscn = "res://editor/prefabs/CodeHintPanel.tscn";
-    public const string editor_prefabs_CodePanel_tscn = "res://editor/prefabs/CodePanel.tscn";
-    public const string editor_prefabs_Editor_tscn = "res://editor/prefabs/Editor.tscn";
+    public const string prefab_Cursor_tscn = "res://prefab/Cursor.tscn";
     public const string prefab_FanCollisionShape_tscn = "res://prefab/FanCollisionShape.tscn";
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
+    public const string prefab_effect_BulletDisappear_tscn = "res://prefab/effect/BulletDisappear.tscn";
     public const string prefab_effect_BulletSmoke_tscn = "res://prefab/effect/BulletSmoke.tscn";
     public const string prefab_effect_FirePart_tscn = "res://prefab/effect/FirePart.tscn";
     public const string prefab_effect_ShotFire_tscn = "res://prefab/effect/ShotFire.tscn";
-    public const string prefab_role_CPlusPlus_tscn = "res://prefab/role/CPlusPlus.tscn";
+    public const string prefab_map_RoomDoor_tscn = "res://prefab/map/RoomDoor.tscn";
     public const string prefab_role_Enemy_tscn = "res://prefab/role/Enemy.tscn";
     public const string prefab_role_Player_tscn = "res://prefab/role/Player.tscn";
     public const string prefab_role_Role_tscn = "res://prefab/role/Role.tscn";
     public const string prefab_test_MoveComponent_tscn = "res://prefab/test/MoveComponent.tscn";
     public const string prefab_test_TestActivity_tscn = "res://prefab/test/TestActivity.tscn";
-    public const string prefab_ui_Cursor_tscn = "res://prefab/ui/Cursor.tscn";
+    public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
+    public const string prefab_ui_MyUi_tscn = "res://prefab/ui/MyUi.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
-    public const string prefab_ui_bar_InteractiveTipBar_tscn = "res://prefab/ui/bar/InteractiveTipBar.tscn";
-    public const string prefab_ui_bar_ReloadBar_tscn = "res://prefab/ui/bar/ReloadBar.tscn";
     public const string prefab_weapon_Knife_tscn = "res://prefab/weapon/Knife.tscn";
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";
     public const string prefab_weapon_bullet_Bullet_tscn = "res://prefab/weapon/bullet/Bullet.tscn";
@@ -32,6 +26,7 @@ public class ResourcePath
     public const string resource_effects_Circle_png = "res://resource/effects/Circle.png";
     public const string resource_effects_Collision_png = "res://resource/effects/Collision.png";
     public const string resource_effects_debug_arrows_png = "res://resource/effects/debug_arrows.png";
+    public const string resource_effects_Explosion_png = "res://resource/effects/Explosion.png";
     public const string resource_effects_Hit_tres = "res://resource/effects/Hit.tres";
     public const string resource_effects_KnifeHit1_tres = "res://resource/effects/KnifeHit1.tres";
     public const string resource_effects_ShotFire_png = "res://resource/effects/ShotFire.png";
@@ -39,9 +34,20 @@ public class ResourcePath
     public const string resource_font_cn_font_12_tres = "res://resource/font/cn_font_12.tres";
     public const string resource_font_cn_font_18_tres = "res://resource/font/cn_font_18.tres";
     public const string resource_font_cn_font_36_tres = "res://resource/font/cn_font_36.tres";
-    public const string resource_map_dungeon_1_tmx = "res://resource/map/dungeon_1.tmx";
-    public const string resource_map_dungeon_test_tmx = "res://resource/map/dungeon_test.tmx";
-    public const string resource_map_itchioDungeonTileset4_tsx = "res://resource/map/itch-io-DungeonTileset4.tsx";
+    public const string resource_map_RoomConfig_json = "res://resource/map/RoomConfig.json";
+    public const string resource_map_tiledata_Room1_json = "res://resource/map/tiledata/Room1.json";
+    public const string resource_map_tiledata_Room2_json = "res://resource/map/tiledata/Room2.json";
+    public const string resource_map_tiledata_Room3_json = "res://resource/map/tiledata/Room3.json";
+    public const string resource_map_tiledata_Room4_json = "res://resource/map/tiledata/Room4.json";
+    public const string resource_map_tiledata_Room5_json = "res://resource/map/tiledata/Room5.json";
+    public const string resource_map_tiledata_Room6_json = "res://resource/map/tiledata/Room6.json";
+    public const string resource_map_tileMaps_Room1_tscn = "res://resource/map/tileMaps/Room1.tscn";
+    public const string resource_map_tileMaps_Room2_tscn = "res://resource/map/tileMaps/Room2.tscn";
+    public const string resource_map_tileMaps_Room3_tscn = "res://resource/map/tileMaps/Room3.tscn";
+    public const string resource_map_tileMaps_Room4_tscn = "res://resource/map/tileMaps/Room4.tscn";
+    public const string resource_map_tileMaps_Room5_tscn = "res://resource/map/tileMaps/Room5.tscn";
+    public const string resource_map_tileMaps_Room6_tscn = "res://resource/map/tileMaps/Room6.tscn";
+    public const string resource_map_tileset_TileSet1_tres = "res://resource/map/tileset/TileSet1.tres";
     public const string resource_materlal_Blend_gdshader = "res://resource/materlal/Blend.gdshader";
     public const string resource_materlal_Blend_tres = "res://resource/materlal/Blend.tres";
     public const string resource_sound_bgm_Intro_ogg = "res://resource/sound/bgm/Intro.ogg";
@@ -241,6 +247,7 @@ public class ResourcePath
     public const string resource_sprite_role_role9_png = "res://resource/sprite/role/role9.png";
     public const string resource_sprite_shell_shellCase_png = "res://resource/sprite/shell/shellCase.png";
     public const string resource_sprite_ui_Cursor_png = "res://resource/sprite/ui/Cursor.png";
+    public const string resource_sprite_ui_CursorCenter_png = "res://resource/sprite/ui/CursorCenter.png";
     public const string resource_sprite_ui_font_bg_png = "res://resource/sprite/ui/font_bg.png";
     public const string resource_sprite_ui_healthBar_png = "res://resource/sprite/ui/healthBar.png";
     public const string resource_sprite_ui_hpBar_png = "res://resource/sprite/ui/hpBar.png";
@@ -261,9 +268,12 @@ public class ResourcePath
     public const string scene_Main_tscn = "res://scene/Main.tscn";
     public const string scene_Room_tscn = "res://scene/Room.tscn";
     public const string scene_test_TestCommpont_tscn = "res://scene/test/TestCommpont.tscn";
+    public const string scene_test_TestGenerateDungeon_tscn = "res://scene/test/TestGenerateDungeon.tscn";
     public const string scene_test_TestNavigation_tscn = "res://scene/test/TestNavigation.tscn";
     public const string scene_test_TestNavigation2_tscn = "res://scene/test/TestNavigation2.tscn";
     public const string scene_test_TestNavigationPolygon_tscn = "res://scene/test/TestNavigationPolygon.tscn";
+    public const string scene_test_TestNewTileMap_tscn = "res://scene/test/TestNewTileMap.tscn";
+    public const string scene_test_TestTileLayer_tscn = "res://scene/test/TestTileLayer.tscn";
     public const string default_bus_layout_tres = "res://default_bus_layout.tres";
     public const string default_env_tres = "res://default_env.tres";
     public const string icon_png = "res://icon.png";

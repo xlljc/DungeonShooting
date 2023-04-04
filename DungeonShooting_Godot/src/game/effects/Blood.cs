@@ -3,7 +3,7 @@ using Godot;
 /// <summary>
 /// 血液溅射效果
 /// </summary>
-public class Blood : CPUParticles2D
+public partial class Blood : CpuParticles2D
 {
 	private float _timer;
 	
@@ -13,9 +13,9 @@ public class Blood : CPUParticles2D
 		ReadyStop();
 	}
 
-	public override void _Process(float delta)
+	public override void _Process(double delta)
 	{
-		_timer += delta;
+		_timer += (float)delta;
 		if (_timer > 15f)
 		{
 			if (_timer > 60f)
@@ -25,7 +25,7 @@ public class Blood : CPUParticles2D
 			else
 			{
 				var color = Modulate;
-				color.a = Mathf.Lerp(1, 0, (_timer - 15f) / 45f);
+				color.A = Mathf.Lerp(1, 0, (_timer - 15f) / 45f);
 				Modulate = color;
 			}
 		}

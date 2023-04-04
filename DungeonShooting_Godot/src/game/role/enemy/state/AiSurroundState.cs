@@ -1,4 +1,4 @@
-﻿
+
 using Godot;
 
 /// <summary>
@@ -20,6 +20,11 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
     
     //下一个移动点
     private Vector2 _nextPosition;
+    
+    //上一帧位置
+    private Vector2 _prevPos;
+    //卡在一个位置的时间
+    private float _lockTimer;
 
     public AiSurroundState() : base(AiStateEnum.AiSurround)
     {
@@ -33,20 +38,20 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         _moveFlag = false;
     }
 
-    public override void PhysicsProcess(float delta)
+    public override void Process(float delta)
     {
         //先检查弹药是否打光
         if (Master.IsAllWeaponTotalAmmoEmpty())
         {
             //再寻找是否有可用的武器
-            if (Master.CheckUsableWeaponInUnclaimed())
+            var targetWeapon = Master.FindTargetWeapon();
+            if (targetWeapon != null)
             {
-                //切换到寻找武器状态
-                ChangeStateLate(AiStateEnum.AiFindAmmo);
+                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
         }
-        
+
         var playerPos = Player.Current.GetCenterPosition();
         var weapon = Master.Holster.ActiveWeapon;
 
@@ -69,7 +74,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         {
             if (_pauseTimer >= 0)
             {
-                Master.AnimatedSprite.Animation = AnimatorNames.Idle;
+                Master.AnimatedSprite.Play(AnimatorNames.Idle);
                 _pauseTimer -= delta;
             }
             else if (_isMoveOver) //移动已经完成
@@ -79,9 +84,15 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
             }
             else
             {
-                if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
+                if (_lockTimer >= 1) //卡在一个点超过一秒
                 {
-                    _pauseTimer = Utils.RandRange(0f, 0.5f);
+                    RunOver(playerPos);
+                    _isMoveOver = false;
+                    _lockTimer = 0;
+                }
+                else if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
+                {
+                    _pauseTimer = Utils.RandomRangeFloat(0f, 0.5f);
                     _isMoveOver = true;
                     _moveFlag = false;
                     Master.BasisVelocity = Vector2.Zero;
@@ -90,17 +101,19 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                 {
                     _moveFlag = true;
                     //计算移动
-                    var nextPos = Master.NavigationAgent2D.GetNextLocation();
-                    Master.AnimatedSprite.Animation = AnimatorNames.Run;
+                    var pos = Master.GlobalPosition;
+                    var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
+                    Master.AnimatedSprite.Play(AnimatorNames.Run);
                     Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                                            Master.MoveSpeed;
                 }
                 else
                 {
+                    var pos = Master.GlobalPosition;
                     var lastSlideCollision = Master.GetLastSlideCollision();
-                    if (lastSlideCollision != null && lastSlideCollision.Collider is Role) //碰到其他角色
+                    if (lastSlideCollision != null && lastSlideCollision.GetCollider() is Role) //碰到其他角色
                     {
-                        _pauseTimer = Utils.RandRange(0f, 0.3f);
+                        _pauseTimer = Utils.RandomRangeFloat(0f, 0.3f);
                         _isMoveOver = true;
                         _moveFlag = false;
                         Master.BasisVelocity = Vector2.Zero;
@@ -108,10 +121,19 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     else
                     {
                         //计算移动
-                        var nextPos = Master.NavigationAgent2D.GetNextLocation();
-                        Master.AnimatedSprite.Animation = AnimatorNames.Run;
-                        Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                        var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
+                        Master.AnimatedSprite.Play(AnimatorNames.Run);
+                        Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
                                                Master.MoveSpeed;
+                    }
+                    
+                    if (_prevPos.DistanceSquaredTo(pos) <= 0.01f)
+                    {
+                        _lockTimer += delta;
+                    }
+                    else
+                    {
+                        _prevPos = pos;
                     }
                 }
 
@@ -125,7 +147,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     else
                     {
                         //发起攻击
-                        Master.EnemyAttack();
+                        Master.EnemyAttack(delta);
                     }
                 }
             }
@@ -138,12 +160,13 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
 
     private void RunOver(Vector2 targetPos)
     {
-        var distance = (int)(Master.Holster.ActiveWeapon.Attribute.MinDistance * 0.7f);
+        var weapon = Master.Holster.ActiveWeapon;
+        var distance = (int)(weapon == null ? 150 : (weapon.Attribute.MinDistance * 0.7f));
         _nextPosition = new Vector2(
-            targetPos.x + Utils.RandRangeInt(-distance, distance),
-            targetPos.y + Utils.RandRangeInt(-distance, distance)
+            targetPos.X + Utils.RandomRangeInt(-distance, distance),
+            targetPos.Y + Utils.RandomRangeInt(-distance, distance)
         );
-        Master.NavigationAgent2D.SetTargetLocation(_nextPosition);
+        Master.NavigationAgent2D.TargetPosition = _nextPosition;
     }
 
     public override void DebugDraw()

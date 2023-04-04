@@ -1,42 +1,41 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://bjf0e6nehg51j"]
 
-[ext_resource path="res://resource/materlal/Blend.gdshader" type="Shader" id=1]
-[ext_resource path="res://addons/dungeonShooting_plugin/ActivityObjectTemplate.cs" type="Script" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="1"]
+[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="2"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="3"]
 
-[sub_resource type="ShaderMaterial" id=1]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rxkv3"]
 resource_local_to_scene = true
-render_priority = 4
-shader = ExtResource( 1 )
-shader_param/blend = Color( 0, 0, 0, 0.470588 )
-shader_param/schedule = 1
+shader = ExtResource("1")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aaga8"]
 resource_local_to_scene = true
-render_priority = 4
-shader = ExtResource( 1 )
-shader_param/blend = Color( 1, 1, 1, 1 )
-shader_param/schedule = 0
+shader = ExtResource("1")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
 
-[sub_resource type="SpriteFrames" id=3]
-animations = [ {
-"frames": [ ExtResource( 3 ) ],
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkdcb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
-} ]
+}]
 
 [node name="TestActivity" type="Node"]
-script = ExtResource( 2 )
+script = ExtResource("2")
 
-[node name="ShadowSprite" type="Sprite" parent="."]
-material = SubResource( 1 )
+[node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -5
+material = SubResource("ShaderMaterial_rxkv3")
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-material = SubResource( 2 )
-frames = SubResource( 3 )
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_aaga8")
+sprite_frames = SubResource("SpriteFrames_kkdcb")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

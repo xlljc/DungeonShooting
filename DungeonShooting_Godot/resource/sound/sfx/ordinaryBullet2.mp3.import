@@ -2,14 +2,18 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-path="res://.import/ordinaryBullet2.mp3-363566e6f98fe28405c9762713f94f39.mp3str"
+uid="uid://ddie4d8go1t8g"
+path="res://.godot/imported/ordinaryBullet2.mp3-363566e6f98fe28405c9762713f94f39.mp3str"
 
 [deps]
 
 source_file="res://resource/sound/sfx/ordinaryBullet2.mp3"
-dest_files=[ "res://.import/ordinaryBullet2.mp3-363566e6f98fe28405c9762713f94f39.mp3str" ]
+dest_files=["res://.godot/imported/ordinaryBullet2.mp3-363566e6f98fe28405c9762713f94f39.mp3str"]
 
 [params]
 
 loop=false
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

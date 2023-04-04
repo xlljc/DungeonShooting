@@ -1,0 +1,26 @@
+[
+  {
+    "ScenePath": "res://resource/map/tileMaps/Room1.tscn",
+    "ConfigPath": "res://resource/map/tiledata/Room1.json"
+  },
+  {
+    "ScenePath": "res://resource/map/tileMaps/Room2.tscn",
+    "ConfigPath": "res://resource/map/tiledata/Room2.json"
+  },
+  {
+    "ScenePath": "res://resource/map/tileMaps/Room3.tscn",
+    "ConfigPath": "res://resource/map/tiledata/Room3.json"
+  },
+  {
+    "ScenePath": "res://resource/map/tileMaps/Room4.tscn",
+    "ConfigPath": "res://resource/map/tiledata/Room4.json"
+  },
+  {
+    "ScenePath": "res://resource/map/tileMaps/Room5.tscn",
+    "ConfigPath": "res://resource/map/tiledata/Room5.json"
+  },
+  {
+    "ScenePath": "res://resource/map/tileMaps/Room6.tscn",
+    "ConfigPath": "res://resource/map/tiledata/Room6.json"
+  }
+]

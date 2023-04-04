@@ -1,4 +1,4 @@
-﻿
+
 using Godot;
 
 /// <summary>
@@ -32,29 +32,26 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
         if (Master.IsAllWeaponTotalAmmoEmpty())
         {
             //再寻找是否有可用的武器
-            if (Master.CheckUsableWeaponInUnclaimed())
+            var targetWeapon = Master.FindTargetWeapon();
+            if (targetWeapon != null)
             {
-                //切换到寻找武器状态
-                ChangeStateLate(AiStateEnum.AiFindAmmo);
+                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
             }
         }
     }
     
-    public override void PhysicsProcess(float delta)
+    public override void Process(float delta)
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
         
-        var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
+        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
         
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            if (Master.NavigationAgent2D.GetTargetLocation() != playerPos)
-            {
-                Master.NavigationAgent2D.SetTargetLocation(playerPos);
-            }
+            Master.NavigationAgent2D.TargetPosition = playerPos;
         }
         else
         {
@@ -67,8 +64,8 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
             //计算移动
-            var nextPos = Master.NavigationAgent2D.GetNextLocation();
-            Master.AnimatedSprite.Animation = AnimatorNames.Run;
+            var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
+            Master.AnimatedSprite.Play(AnimatorNames.Run);
             Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
         }
@@ -115,7 +112,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
 
     public override void DebugDraw()
     {
-        var playerPos = GameApplication.Instance.Room.Player.GetCenterPosition();
+        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
         if (_isInViewRange)
         {
             Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Orange);

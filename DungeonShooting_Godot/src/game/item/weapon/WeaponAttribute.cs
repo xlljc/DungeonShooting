@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 /// <summary>
@@ -20,7 +21,7 @@ public class WeaponAttribute
     /// <summary>
     /// 武器的图片
     /// </summary>
-    public string Sprite = ResourcePath.resource_sprite_gun_gun1_png;
+    public string Sprite2D = ResourcePath.resource_sprite_gun_gun1_png;
     /// <summary>
     /// 是否连续发射, 如果为false, 则每次发射都需要扣动扳机
     /// </summary>
@@ -34,7 +35,7 @@ public class WeaponAttribute
     /// </summary>
     public int MaxAmmoCapacity = 120;
     /// <summary>
-    /// 备用弹药数量
+    /// 起始备用弹药数量
     /// </summary>
     public int StandbyAmmoCapacity = 90;
     /// <summary>
@@ -78,7 +79,7 @@ public class WeaponAttribute
     /// </summary>
     public float StartFiringSpeed = 300;
     /// <summary>
-    /// 最终射速, 最终每分钟能开火次数
+    /// 最终射速, 最终每分钟能开火次数, 仅当 ContinuousShoot 为 true 时生效
     /// </summary>
     public float FinalFiringSpeed = 300;
     /// <summary>
@@ -165,9 +166,77 @@ public class WeaponAttribute
     /// 开火后武器口角度恢复速度倍数
     /// </summary>
     public float UpliftAngleRestore = 1f;
-    
+
+    /// <summary>
+    /// 克隆一份新的属性配置
+    /// </summary>
+    /// <returns></returns>
+    public WeaponAttribute Clone()
+    {
+        var attr = _Clone();
+        if (AiUseAttribute != null)
+        {
+            attr.AiUseAttribute = AiUseAttribute._Clone();
+        }
+        return attr;
+    }
+
+    private WeaponAttribute _Clone()
+    {
+        var attr = new WeaponAttribute();
+        attr.Name = Name;
+        attr.WeaponPrefab = WeaponPrefab;
+        attr.WeightType = WeightType;
+        attr.Sprite2D = Sprite2D;
+        attr.ContinuousShoot = ContinuousShoot;
+        attr.AmmoCapacity = AmmoCapacity;
+        attr.MaxAmmoCapacity = MaxAmmoCapacity;
+        attr.StandbyAmmoCapacity = StandbyAmmoCapacity;
+        attr.ReloadTime = ReloadTime;
+        attr.AloneReload = AloneReload;
+        attr.AloneReloadCount = AloneReloadCount;
+        attr.AloneReloadCanShoot = AloneReloadCanShoot;
+        attr.LooseShoot = LooseShoot;
+        attr.MinChargeTime = MinChargeTime;
+        attr.MinContinuousCount = MinContinuousCount;
+        attr.MaxContinuousCount = MaxContinuousCount;
+        attr.TriggerInterval = TriggerInterval;
+        attr.StartFiringSpeed = StartFiringSpeed;
+        attr.FinalFiringSpeed = FinalFiringSpeed;
+        attr.FiringSpeedAddSpeed = FiringSpeedAddSpeed;
+        attr.FiringSpeedBackSpeed = FiringSpeedBackSpeed;
+        attr.MinFireBulletCount = MinFireBulletCount;
+        attr.MaxFireBulletCount = MaxFireBulletCount;
+        attr.DelayedTime = DelayedTime;
+        attr.StartScatteringRange = StartScatteringRange;
+        attr.FinalScatteringRange = FinalScatteringRange;
+        attr.ScatteringRangeAddValue = ScatteringRangeAddValue;
+        attr.ScatteringRangeBackSpeed = ScatteringRangeBackSpeed;
+        attr.MaxDistance = MaxDistance;
+        attr.MinDistance = MinDistance;
+        attr.CenterPosition = CenterPosition;
+        attr.FirePosition = FirePosition;
+        attr.HoldPosition = HoldPosition;
+        attr.Weight = Weight;
+        attr.MaxBacklash = MaxBacklash;
+        attr.MinBacklash = MinBacklash;
+        attr.BacklashRegressionSpeed = BacklashRegressionSpeed;
+        attr.UpliftAngle = UpliftAngle;
+        attr.DefaultAngle = DefaultAngle;
+        attr.UpliftAngleRestore = UpliftAngleRestore;
+        attr.AiTargetLockingTime = AiTargetLockingTime;
+        return attr;
+    }
+
     //------------------------------ Ai相关 -----------------------------
+
+    /// <summary>
+    /// 用于Ai, 目标锁定时间, 也就是瞄准目标多久才会开火
+    /// </summary>
+    public float AiTargetLockingTime = 0;
     
-    //public bool Ai
-    
+    /// <summary>
+    /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性
+    /// </summary>
+    public WeaponAttribute AiUseAttribute;
 }

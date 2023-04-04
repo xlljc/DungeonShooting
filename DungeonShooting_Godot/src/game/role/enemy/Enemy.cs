@@ -1,4 +1,4 @@
-﻿#region 基础敌人设计思路
+#region 基础敌人设计思路
 /*
 敌人有三种状态: 
 状态1: 未发现玩家, 视野不可穿墙, 该状态下敌人移动比较规律, 移动速度较慢, 一旦玩家进入视野或者听到玩家枪声, 立刻切换至状态3, 该房间的敌人不能再回到状态1
@@ -17,25 +17,33 @@ using Godot;
 /// <summary>
 /// 基础敌人
 /// </summary>
-public class Enemy : Role
+[RegisterActivity(ActivityIdPrefix.Enemy + "0001", ResourcePath.prefab_role_Enemy_tscn)]
+public partial class Enemy : Role
 {
-
     /// <summary>
-    /// 公共属性, 是否找到目标, 如果找到目标, 则所有敌人都会知道玩家的位置
+    /// 公共属性, 是否找到目标, 如果找到目标, 则与目标同房间的所有敌人都会知道目标的位置
     /// </summary>
     public static bool IsFindTarget { get; private set; }
 
     /// <summary>
-    /// 找到的目标的位置, 如果目标在视野内, 则一直更新
+    /// 公共属性, 在哪个区域找到的目标, 所有该区域下的敌人都会知道目标的位置
+    /// </summary>
+    public static HashSet<AffiliationArea> FindTargetAffiliationSet { get; } = new HashSet<AffiliationArea>();
+    
+    /// <summary>
+    /// 公共属性, 找到的目标的位置, 如果目标在视野内, 则一直更新
     /// </summary>
     public static Vector2 FindTargetPosition { get; private set; }
 
-    private static readonly List<Enemy> _enemies = new List<Enemy>();
+    /// <summary>
+    /// 记录所有存活的敌人
+    /// </summary>
+    private static readonly List<Enemy> _enemieList = new List<Enemy>();
 
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
-    public StateController<Enemy, AiStateEnum> StateController { get; }
+    public StateController<Enemy, AiStateEnum> StateController { get; private set; }
 
     /// <summary>
     /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
@@ -55,29 +63,33 @@ public class Enemy : Role
     /// <summary>
     /// 视野检测射线, 朝玩家打射线, 检测是否碰到墙
     /// </summary>
-    public RayCast2D ViewRay { get; }
+    public RayCast2D ViewRay { get; private set; }
 
     /// <summary>
     /// 导航代理
     /// </summary>
-    public NavigationAgent2D NavigationAgent2D { get; }
+    public NavigationAgent2D NavigationAgent2D { get; private set; }
 
     /// <summary>
     /// 导航代理中点
     /// </summary>
-    public Position2D NavigationPoint { get; }
+    public Marker2D NavigationPoint { get; private set; }
 
+    //开火间隙时间
     private float _enemyAttackTimer = 0;
+    //目标在视野内的时间
+    private float _targetInViewTime = 0;
 
-    public Enemy() : base(ResourcePath.prefab_role_Enemy_tscn)
+    public override void OnInit()
     {
-        StateController = new StateController<Enemy, AiStateEnum>();
-        AddComponent(StateController);
+        base.OnInit();
+        IsAi = true;
+        StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
 
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
-        MoveSpeed = 30;
+        MoveSpeed = 20;
 
         Holster.SlotList[2].Enable = true;
         Holster.SlotList[3].Enable = true;
@@ -87,10 +99,10 @@ public class Enemy : Role
 
         //视野射线
         ViewRay = GetNode<RayCast2D>("ViewRay");
-        NavigationPoint = GetNode<Position2D>("NavigationPoint");
+        NavigationPoint = GetNode<Marker2D>("NavigationPoint");
         NavigationAgent2D = NavigationPoint.GetNode<NavigationAgent2D>("NavigationAgent2D");
 
-        //PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Room.Player);
+        //PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Node3D.Player);
 
         //注册Ai状态机
         StateController.Register(new AiNormalState());
@@ -100,29 +112,23 @@ public class Enemy : Role
         StateController.Register(new AiLeaveForState());
         StateController.Register(new AiSurroundState());
         StateController.Register(new AiFindAmmoState());
-    }
-
-    public override void _Ready()
-    {
-        base._Ready();
+        
         //默认状态
         StateController.ChangeState(AiStateEnum.AiNormal);
-
-        NavigationAgent2D.SetTargetLocation(GameApplication.Instance.Room.Player.GlobalPosition);
     }
 
     public override void _EnterTree()
     {
-        if (!_enemies.Contains(this))
+        if (!_enemieList.Contains(this))
         {
-            _enemies.Add(this);
+            _enemieList.Add(this);
         }
     }
 
     public override void _ExitTree()
     {
         base._ExitTree();
-        _enemies.Remove(this);
+        _enemieList.Remove(this);
     }
 
     protected override void OnDie()
@@ -133,13 +139,26 @@ public class Enemy : Role
         {
             weapons[i].ThrowWeapon(this);
         }
+        //派发敌人死亡信号
+        EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
         Destroy();
     }
 
-    protected override void PhysicsProcess(float delta)
+    protected override void Process(float delta)
     {
-        base.PhysicsProcess(delta);
+        base.Process(delta);
         _enemyAttackTimer -= delta;
+
+        //目标在视野内的时间
+        var currState = StateController.CurrState;
+        if (currState == AiStateEnum.AiSurround || currState == AiStateEnum.AiFollowUp)
+        {
+            _targetInViewTime += delta;
+        }
+        else
+        {
+            _targetInViewTime = 0;
+        }
 
         EnemyPickUpWeapon();
     }
@@ -159,32 +178,133 @@ public class Enemy : Role
     /// </summary>
     public bool CheckUsableWeaponInUnclaimed()
     {
-        //如果存在有子弹的武器
         foreach (var unclaimedWeapon in Weapon.UnclaimedWeapons)
         {
-            if (!unclaimedWeapon.IsTotalAmmoEmpty() && !unclaimedWeapon.HasSign(SignNames.AiFindWeaponSign))
+            //判断是否能拾起武器, 条件: 相同的房间
+            if (unclaimedWeapon.Affiliation == Affiliation)
             {
-                return true;
+                if (!unclaimedWeapon.IsTotalAmmoEmpty())
+                {
+                    if (!unclaimedWeapon.HasSign(SignNames.AiFindWeaponSign))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        //判断是否可以移除该标记
+                        var enemy = unclaimedWeapon.GetSign<Enemy>(SignNames.AiFindWeaponSign);
+                        if (enemy == null || enemy.IsDestroyed) //标记当前武器的敌人已经被销毁
+                        {
+                            unclaimedWeapon.RemoveSign(SignNames.AiFindWeaponSign);
+                            return true;
+                        }
+                        else if (!enemy.IsAllWeaponTotalAmmoEmpty()) //标记当前武器的敌人已经有新的武器了
+                        {
+                            unclaimedWeapon.RemoveSign(SignNames.AiFindWeaponSign);
+                            return true;
+                        }
+                    }
+                }
             }
         }
 
         return false;
     }
+    
+    /// <summary>
+    /// 寻找可用的武器
+    /// </summary>
+    public Weapon FindTargetWeapon()
+    {
+        Weapon target = null;
+        var position = Position;
+        foreach (var weapon in Weapon.UnclaimedWeapons)
+        {
+            //判断是否能拾起武器, 条件: 相同的房间, 或者当前房间目前没有战斗, 或者不在战斗房间
+            if (weapon.Affiliation == Affiliation)
+            {
+                //还有弹药
+                if (!weapon.IsTotalAmmoEmpty())
+                {
+                    //查询是否有其他敌人标记要拾起该武器
+                    if (weapon.HasSign(SignNames.AiFindWeaponSign))
+                    {
+                        var enemy = weapon.GetSign<Enemy>(SignNames.AiFindWeaponSign);
+                        if (enemy == this) //就是自己标记的
+                        {
 
+                        }
+                        else if (enemy == null || enemy.IsDestroyed) //标记当前武器的敌人已经被销毁
+                        {
+                            weapon.RemoveSign(SignNames.AiFindWeaponSign);
+                        }
+                        else if (!enemy.IsAllWeaponTotalAmmoEmpty()) //标记当前武器的敌人已经有新的武器了
+                        {
+                            weapon.RemoveSign(SignNames.AiFindWeaponSign);
+                        }
+                        else //放弃这把武器
+                        {
+                            continue;
+                        }
+                    }
+
+                    if (target == null) //第一把武器
+                    {
+                        target = weapon;
+                    }
+                    else if (target.Position.DistanceSquaredTo(position) >
+                             weapon.Position.DistanceSquaredTo(position)) //距离更近
+                    {
+                        target = weapon;
+                    }
+                }
+            }
+        }
+
+        return target;
+    }
+
+    /// <summary>
+    /// 检查是否能切换到 AiStateEnum.AiLeaveFor 状态
+    /// </summary>
+    /// <returns></returns>
+    public bool CanChangeLeaveFor()
+    {
+        if (!IsFindTarget)
+        {
+            return false;
+        }
+
+        var currState = StateController.CurrState;
+        if (currState == AiStateEnum.AiNormal || currState == AiStateEnum.AiProbe)
+        {
+            //判断是否在同一个房间内
+            return FindTargetAffiliationSet.Contains(Affiliation);
+        }
+        
+        return false;
+    }
+    
     /// <summary>
     /// 更新敌人视野
     /// </summary>
     public static void UpdateEnemiesView()
     {
         IsFindTarget = false;
-        for (var i = 0; i < _enemies.Count; i++)
+        FindTargetAffiliationSet.Clear();
+        for (var i = 0; i < _enemieList.Count; i++)
         {
-            var enemy = _enemies[i];
+            var enemy = _enemieList[i];
             var state = enemy.StateController.CurrState;
             if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
             {
-                IsFindTarget = true;
-                FindTargetPosition = Player.Current.GetCenterPosition();
+                if (!IsFindTarget)
+                {
+                    IsFindTarget = true;
+                    FindTargetPosition = Player.Current.GetCenterPosition();
+                    FindTargetAffiliationSet.Add(Player.Current.Affiliation);
+                }
+                FindTargetAffiliationSet.Add(enemy.Affiliation);
             }
         }
     }
@@ -192,7 +312,7 @@ public class Enemy : Role
     /// <summary>
     /// Ai触发的攻击
     /// </summary>
-    public void EnemyAttack()
+    public void EnemyAttack(float delta)
     {
         var weapon = Holster.ActiveWeapon;
         if (weapon != null)
@@ -218,18 +338,25 @@ public class Enemy : Role
             {
                 Reload();
             }
-            else //正常射击
+            else if (_targetInViewTime >= weapon.Attribute.AiTargetLockingTime) //正常射击
             {
-                if (weapon.Attribute.ContinuousShoot) //连发
+                if (weapon.GetDelayedAttackTime() > 0)
                 {
                     Attack();
                 }
-                else //单发
+                else
                 {
-                    if (_enemyAttackTimer <= 0)
+                    if (weapon.Attribute.ContinuousShoot) //连发
                     {
-                        _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed + Utils.RandRange(0, 0.06f);
                         Attack();
+                    }
+                    else //单发
+                    {
+                        if (_enemyAttackTimer <= 0)
+                        {
+                            _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed;
+                            Attack();
+                        }
                     }
                 }
             }
@@ -291,7 +418,7 @@ public class Enemy : Role
     public bool TestViewRayCast(Vector2 target)
     {
         ViewRay.Enabled = true;
-        ViewRay.CastTo = ViewRay.ToLocal(target);
+        ViewRay.TargetPosition = ViewRay.ToLocal(target);
         ViewRay.ForceRaycastUpdate();
         return ViewRay.IsColliding();
     }
@@ -331,7 +458,7 @@ public class Enemy : Role
                 return;
             }
             
-            var index = Holster.FindWeapon((we, i) => we.TypeId == weapon.TypeId);
+            var index = Holster.FindWeapon((we, i) => we.ItemId == weapon.ItemId);
             if (index != -1) //与武器袋中武器类型相同, 补充子弹
             {
                 if (!Holster.GetWeapon(index).IsAmmoFull())
@@ -342,8 +469,9 @@ public class Enemy : Role
                 return;
             }
 
-            var index2 = Holster.FindWeapon((we, i) =>
-                we.Attribute.WeightType == weapon.Attribute.WeightType && we.IsTotalAmmoEmpty());
+            // var index2 = Holster.FindWeapon((we, i) =>
+            //     we.Attribute.WeightType == weapon.Attribute.WeightType && we.IsTotalAmmoEmpty());
+            var index2 = Holster.FindWeapon((we, i) => we.IsTotalAmmoEmpty());
             if (index2 != -1) //扔掉没子弹的武器
             {
                 ThrowWeapon(index2);
@@ -351,11 +479,11 @@ public class Enemy : Role
                 return;
             }
             
-            if (Holster.HasVacancy()) //有空位, 拾起武器
-            {
-                TriggerInteractive();
-                return;
-            }
+            // if (Holster.HasVacancy()) //有空位, 拾起武器
+            // {
+            //     TriggerInteractive();
+            //     return;
+            // }
         }
     }
 

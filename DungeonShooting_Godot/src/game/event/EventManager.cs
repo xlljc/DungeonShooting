@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 
@@ -111,5 +111,13 @@ public static class EventManager
         }
 
         _eventMap.Clear();
+    }
+
+    /// <summary>
+    /// 创建一个事件工厂
+    /// </summary>
+    public static EventFactory CreateEventFactory()
+    {
+        return new EventFactory();
     }
 }
