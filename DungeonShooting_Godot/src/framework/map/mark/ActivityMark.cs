@@ -64,6 +64,12 @@ public partial class ActivityMark : Node2D
 
     public override void _Process(double delta)
     {
+#if TOOLS
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+#endif
         if (_isOver)
         {
             _overTimer += (float)delta;

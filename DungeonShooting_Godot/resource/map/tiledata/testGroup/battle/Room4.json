@@ -7,7 +7,38 @@
     "X": 38,
     "Y": 24
   },
-  "DoorAreaInfos": [],
+  "DoorAreaInfos": [
+    {
+      "Direction": 3,
+      "Start": 16,
+      "End": 240
+    },
+    {
+      "Direction": 3,
+      "Start": 368,
+      "End": 512
+    },
+    {
+      "Direction": 0,
+      "Start": 96,
+      "End": 288
+    },
+    {
+      "Direction": 2,
+      "Start": 368,
+      "End": 512
+    },
+    {
+      "Direction": 2,
+      "Start": 96,
+      "End": 240
+    },
+    {
+      "Direction": 1,
+      "Start": 16,
+      "End": 288
+    }
+  ],
   "NavigationList": [
     {
       "Type": 0,

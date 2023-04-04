@@ -33,7 +33,12 @@
         "ConfigPath": "res://resource/map/tiledata/testGroup/inlet/Room1.json"
       }
     ],
-    "OutletList": [],
+    "OutletList": [
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/outlet/Room1.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/outlet/Room1.json"
+      }
+    ],
     "BossList": [],
     "RewardList": [],
     "ShopList": [],

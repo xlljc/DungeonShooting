@@ -7,13 +7,7 @@
     "X": 20,
     "Y": 13
   },
-  "DoorAreaInfos": [
-    {
-      "Direction": 3,
-      "Start": 32,
-      "End": 256
-    }
-  ],
+  "DoorAreaInfos": [],
   "NavigationList": [
     {
       "Type": 0,
