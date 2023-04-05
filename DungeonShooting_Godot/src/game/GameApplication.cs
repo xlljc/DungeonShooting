@@ -7,12 +7,7 @@ using Godot;
 public partial class GameApplication : Node2D
 {
 	public static GameApplication Instance { get; private set; }
-
-	/// <summary>
-	/// 是否开启调试
-	/// </summary>
-	[Export] public bool Debug = false;
-
+	
 	/// <summary>
 	/// 游戏渲染视口
 	/// </summary>
@@ -32,11 +27,16 @@ public partial class GameApplication : Node2D
 	/// 全局根节点
 	/// </summary>
 	[Export] public Node2D GlobalNodeRoot;
-	
+
+	/// <summary>
+	/// 是否开启调试
+	/// </summary>
+	[ExportGroup("Debug")]
+	[Export] public bool Debug = false;
+
 	/// <summary>
 	/// 测试用, 指定生成的房间
 	/// </summary>
-	[ExportGroup("Test")]
 	[Export]
 	public PackedScene[] DesignatedRoom;
 

@@ -88,7 +88,7 @@ public class DungeonGenerator
     /// </summary>
     public static void SetDesignatedRoom(List<DungeonRoomSplit> list)
     {
-        _designatedRoom = list;
+        _designatedRoom = new List<DungeonRoomSplit>(list);
     }
 #endif
 

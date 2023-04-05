@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cdohv4xeirtuc"]
+[gd_scene load_steps=20 format=3 uid="uid://cdohv4xeirtuc"]
 
 [ext_resource type="PackedScene" uid="uid://b515ti0qinck8" path="res://prefab/role/Role.tscn" id="1"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_nvo1u"]
@@ -15,6 +15,10 @@ resource_local_to_scene = true
 shader = ExtResource("2_nvo1u")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tmewn"]
+atlas = ExtResource("3_55mk2")
+region = Rect2(0, 0, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dvg4a"]
 atlas = ExtResource("3_55mk2")
@@ -66,6 +70,14 @@ region = Rect2(48, 48, 16, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_3poqo"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tmewn")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_dvg4a")
@@ -128,4 +140,3 @@ material = SubResource("ShaderMaterial_vejn8")
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_0gb8j")
 sprite_frames = SubResource("SpriteFrames_3poqo")
-animation = &"idle"
