@@ -17,6 +17,8 @@ script = ExtResource("3_jwvnp")
 Type = 3
 ItemId = "0001"
 Layer = 1
+BirthRect = Vector2i(20, 20)
+DrawColor = Color(1, 0, 0, 1)
 
 [node name="EnemyMark2" type="Node2D" parent="."]
 position = Vector2(261, 217)
@@ -31,6 +33,7 @@ script = ExtResource("4_6je2e")
 ResidueAmmo = 12
 Type = 4
 ItemId = "0002"
+DrawColor = Color(0, 0, 1, 1)
 Altitude = 16
 
 [node name="WeaponMark2" type="Node2D" parent="."]
@@ -39,6 +42,7 @@ script = ExtResource("4_6je2e")
 ResidueAmmo = 7
 Type = 4
 ItemId = "0003"
+DrawColor = Color(0, 0, 1, 1)
 Altitude = 16
 
 [node name="EnemyMark3" type="Node2D" parent="."]
@@ -50,3 +54,4 @@ Type = 3
 ItemId = "0001"
 Layer = 1
 WaveNumber = 2
+DrawColor = Color(1, 0, 0, 1)

@@ -50,7 +50,6 @@ public partial class EnemyMark : ActivityMark
 
     public override void _Ready()
     {
-        DrawColor = Colors.Red;
         Type = ActivityIdPrefix.ActivityPrefixType.Enemy;
         Layer = RoomLayerEnum.YSortLayer;
     }

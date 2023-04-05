@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using Godot;
@@ -31,6 +32,13 @@ public partial class GameApplication : Node2D
 	/// 全局根节点
 	/// </summary>
 	[Export] public Node2D GlobalNodeRoot;
+	
+	/// <summary>
+	/// 测试用, 指定生成的房间
+	/// </summary>
+	[ExportGroup("Test")]
+	[Export]
+	public PackedScene[] DesignatedRoom;
 
 	/// <summary>
 	/// 鼠标指针
@@ -47,6 +55,11 @@ public partial class GameApplication : Node2D
 	/// </summary>
 	public Dictionary<string, DungeonRoomGroup> RoomConfig { get; private set; }
 	
+	/// <summary>
+	/// 房间配置数据, key: 模板房间资源路径
+	/// </summary>
+	public Dictionary<string, DungeonRoomSplit> RoomConfigMap { get; private set; }
+
 	/// <summary>
 	/// 游戏视图大小
 	/// </summary>
@@ -81,6 +94,10 @@ public partial class GameApplication : Node2D
 		GetWindow().SizeChanged += OnWindowSizeChanged;
 		RefreshSubViewportSize();
 
+#if TOOLS
+		InitDesignatedRoom();
+#endif
+		
 		//初始化ui
 		UiManager.Init();
 		
@@ -132,6 +149,19 @@ public partial class GameApplication : Node2D
 		var asText = file.GetAsText();
 		RoomConfig = JsonSerializer.Deserialize<Dictionary<string, DungeonRoomGroup>>(asText);
 		file.Dispose();
+
+		//初始化RoomConfigMap
+		RoomConfigMap = new Dictionary<string, DungeonRoomSplit>();
+		foreach (var dungeonRoomGroup in RoomConfig)
+		{
+			foreach (var dungeonRoomType in Enum.GetValues<DungeonRoomType>())
+			{
+				foreach (var dungeonRoomSplit in dungeonRoomGroup.Value.GetRoomList(dungeonRoomType))
+				{
+					RoomConfigMap.Add(dungeonRoomSplit.ScenePath, dungeonRoomSplit);
+				}
+			}
+		}
 	}
 
 	//窗体大小改变
@@ -152,4 +182,24 @@ public partial class GameApplication : Node2D
 		SubViewportContainer.Scale = new Vector2(PixelScale, PixelScale);
 		SubViewportContainer.Size = s;
 	}
+
+#if TOOLS
+	//调试模式下, 指定生成哪些房间
+	private void InitDesignatedRoom()
+	{
+		if (DesignatedRoom != null && DesignatedRoom.Length > 0)
+		{
+			var list = new List<DungeonRoomSplit>();
+			foreach (var packedScene in DesignatedRoom)
+			{
+				if (RoomConfigMap.TryGetValue(packedScene.ResourcePath, out var dungeonRoomSplit))
+				{
+					list.Add(dungeonRoomSplit);
+				}
+			}
+			DungeonGenerator.SetDesignatedRoom(list);
+		}
+	}
+#endif
+
 }

@@ -20,6 +20,7 @@ Weapon2Ammo = 15
 Type = 3
 ItemId = "0001"
 Layer = 1
+BirthRect = Vector2i(100, 20)
 
 [node name="EnemyMark2" type="Node2D" parent="."]
 position = Vector2(0, 70)
@@ -32,6 +33,7 @@ Type = 3
 ItemId = "0001"
 Layer = 1
 DelayTime = 2.0
+BirthRect = Vector2i(100, 20)
 
 [node name="EnemyMark3" type="Node2D" parent="."]
 position = Vector2(114, -54)

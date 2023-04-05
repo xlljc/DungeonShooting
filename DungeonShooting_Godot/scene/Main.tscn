@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://lbe753cb8heb"]
+[gd_scene load_steps=6 format=3 uid="uid://lbe753cb8heb"]
 
+[ext_resource type="PackedScene" uid="uid://degtollvmf37f" path="res://resource/map/tileMaps/testGroup/battle/Room1.tscn" id="2_b3k0t"]
 [ext_resource type="Script" path="res://src/game/GameApplication.cs" id="3"]
 [ext_resource type="Script" path="res://src/game/camera/GameCamera.cs" id="4_3gsi2"]
 
@@ -26,6 +27,7 @@ SubViewport = NodePath("ViewCanvas/SubViewportContainer/SubViewport")
 SubViewportContainer = NodePath("ViewCanvas/SubViewportContainer")
 SceneRoot = NodePath("ViewCanvas/SubViewportContainer/SubViewport/SceneRoot")
 GlobalNodeRoot = NodePath("GlobalNodeRoot")
+DesignatedRoom = Array[PackedScene]([ExtResource("2_b3k0t")])
 
 [node name="ViewCanvas" type="CanvasLayer" parent="."]
 layer = -1

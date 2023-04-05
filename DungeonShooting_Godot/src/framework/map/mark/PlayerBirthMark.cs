@@ -9,7 +9,6 @@ public partial class PlayerBirthMark : ActivityMark
 {
     public override void _Ready()
     {
-        DrawColor = Colors.Green;
     }
 
     public override void Doing(RoomInfo roomInfo)
