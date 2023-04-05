@@ -41,6 +41,6 @@ public partial class WeaponMark : ActivityMark
         }
 
 
-        instance.PutDown(GlobalPosition, Layer);
+        instance.PutDown(Layer);
     }
 }

@@ -57,10 +57,10 @@ public partial class EnemyMark : ActivityMark
 
     public override void Doing(RoomInfo roomInfo)
     {
-        var pos = GlobalPosition;
+        var pos = Position;
         //创建敌人
         var instance = (Enemy)CreateActivityObject();
-        instance.PutDown(pos, Layer);
+        instance.PutDown(Layer);
 
         if (!string.IsNullOrWhiteSpace(Weapon1Id))
             CreateWeapon(instance, pos, Weapon1Id, Weapon1Ammo);

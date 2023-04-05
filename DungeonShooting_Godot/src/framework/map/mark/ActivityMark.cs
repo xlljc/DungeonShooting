@@ -80,6 +80,7 @@ public partial class ActivityMark : Node2D
 #if TOOLS
         if (Engine.IsEditorHint())
         {
+            QueueRedraw();
             return;
         }
 #endif
@@ -139,16 +140,16 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public virtual void Doing(RoomInfo roomInfo)
     {
-
-        CreateActivityObject().PutDown(GlobalPosition, Layer);
+        CreateActivityObject().PutDown(Layer);
     }
 
     /// <summary>
-    /// 实例化ItemId指定的物体, 并返回对象实例
+    /// 实例化ItemId指定的物体, 并返回对象实例, 函数会自动设置位置
     /// </summary>
     protected ActivityObject CreateActivityObject()
     {
         var instance = ActivityObject.Create(GetItemId());
+        instance.Position = Position;
         instance.VerticalSpeed = VerticalSpeed;
         instance.Altitude = Altitude;
         return instance;
