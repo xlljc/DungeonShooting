@@ -17,9 +17,10 @@ public partial class EditorToolsPanel : EditorTools
     private Action<bool> _onConfirmClose;
 
     //存放创建房间中选择组的下拉框数据
-    private Dictionary<int, string> _createRoomGroupValueMap = new Dictionary<int, string>();
+    private Dictionary<int, string> _createRoomGroupValueMap;
+    
     //存放创建房间中选择类型的下拉框数据
-    private Dictionary<int, string> _createRoomTypeValueMap = new Dictionary<int, string>();
+    private Dictionary<int, string> _createRoomTypeValueMap;
 
     public override void OnShowUi()
     {
@@ -38,30 +39,9 @@ public partial class EditorToolsPanel : EditorTools
         L_Confirm.Instance.CloseRequested += OnCanceled;
         L_Confirm.Instance.Confirmed += OnConfirm;
         
+        InitSelectOptions();
+
         var container = L_ScrollContainer.L_MarginContainer.L_VBoxContainer;
-        
-        //创建ui的下拉框数据
-        {
-            var directoryInfo = new DirectoryInfo(GameConfig.RoomTileDir);
-            var directoryInfoArray = directoryInfo.GetDirectories();
-            for (var i = 0; i < directoryInfoArray.Length; i++)
-            {
-                var text = directoryInfoArray[i].Name;
-                container.L_HBoxContainer6.L_RoomGroupSelect.Instance.AddItem(text, i);
-                _createRoomGroupValueMap.Add(i, text);
-            }
-
-            var dungeonRoomTypes = Enum.GetValues<DungeonRoomType>();
-            for (var i = 0; i < dungeonRoomTypes.Length; i++)
-            {
-                var typeName = DungeonRoomTemplate.DungeonRoomTypeToString(dungeonRoomTypes[i]);
-                var text = typeName + " (" +
-                           DungeonRoomTemplate.DungeonRoomTypeToDescribeString(dungeonRoomTypes[i]) + ")";
-                container.L_HBoxContainer6.L_RoomTypeSelect.Instance.AddItem(text, i);
-                _createRoomTypeValueMap.Add(i, typeName);
-            }
-        }
-
         //重新生成 ResourcePath
         container.L_HBoxContainer.L_Button.Instance.Pressed += GenerateResourcePath;
         //重新打包房间配置
@@ -93,6 +73,44 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer3.L_Button.Instance.Pressed -= OnCreateUI;
         container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
         container.L_HBoxContainer6.L_Button.Instance.Pressed -= GenerateDungeonRoom;
+    }
+
+    public override void Process(float delta)
+    {
+        if (_createRoomGroupValueMap == null || _createRoomTypeValueMap == null)
+        {
+            InitSelectOptions();
+        }
+    }
+
+    //创建ui的下拉框数据
+    private void InitSelectOptions()
+    {
+        _createRoomGroupValueMap = new Dictionary<int, string>();
+        _createRoomTypeValueMap = new Dictionary<int, string>();
+        var container = L_ScrollContainer.L_MarginContainer.L_VBoxContainer;
+        var select1 = container.L_HBoxContainer6.L_RoomGroupSelect.Instance;
+        select1.Clear();
+        var directoryInfo = new DirectoryInfo(GameConfig.RoomTileDir);
+        var directoryInfoArray = directoryInfo.GetDirectories();
+        for (var i = 0; i < directoryInfoArray.Length; i++)
+        {
+            var text = directoryInfoArray[i].Name;
+            select1.AddItem(text, i);
+            _createRoomGroupValueMap.Add(i, text);
+        }
+
+        var select2 = container.L_HBoxContainer6.L_RoomTypeSelect.Instance;
+        select2.Clear();
+        var dungeonRoomTypes = Enum.GetValues<DungeonRoomType>();
+        for (var i = 0; i < dungeonRoomTypes.Length; i++)
+        {
+            var typeName = DungeonRoomTemplate.DungeonRoomTypeToString(dungeonRoomTypes[i]);
+            var text = typeName + " (" +
+                       DungeonRoomTemplate.DungeonRoomTypeToDescribeString(dungeonRoomTypes[i]) + ")";
+            select2.AddItem(text, i);
+            _createRoomTypeValueMap.Add(i, typeName);
+        }
     }
 
     /// <summary>
