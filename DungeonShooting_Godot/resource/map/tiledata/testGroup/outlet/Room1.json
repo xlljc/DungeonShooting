@@ -33,5 +33,6 @@
   ],
   "GroupName": "testGroup",
   "RoomType": 2,
-  "FileName": "Room1"
+  "FileName": "Room1",
+  "Weight": 100
 }

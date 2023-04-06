@@ -10,10 +10,33 @@ using Godot;
 public partial class DungeonRoomTemplate : TileMap
 {
     /// <summary>
+    /// 默认权重值
+    /// </summary>
+    public const int DefaultWeight = 100;
+    
+    /// <summary>
     /// 是否启用编辑模式
     /// </summary>
     [Export]
     public bool EnableEdit = false;
+
+    /// <summary>
+    /// 房间权重, 值越大, 生成地牢是越容易出现该房间
+    /// </summary>
+    [Export(PropertyHint.Range, "1, 500")]
+    public int Weight
+    {
+        get => _weight;
+        set
+        {
+            _weight = value;
+            _changeWeight = true;
+            _changeWeightTimer = 0;
+        }
+    }
+    private int _weight = DefaultWeight;
+    private bool _changeWeight = false;
+    private float _changeWeightTimer = 0;
 
 #if TOOLS
     //是否悬停在线上
@@ -576,6 +599,19 @@ public partial class DungeonRoomTemplate : TileMap
         {
             _clickSave = false;
         }
+        
+        //权重发生改变
+        if (_changeWeight)
+        {
+            _changeWeightTimer += (float)delta;
+            if (_changeWeightTimer > 1)
+            {
+                _changeWeightTimer = 0;
+                _changeWeight = false;
+                //权重改变, 保存数据
+                TriggerSave();
+            }
+        }
     }
     
     private void ClearState()
@@ -776,7 +812,7 @@ public partial class DungeonRoomTemplate : TileMap
         var polygonData = _dungeonTile.GetPolygonData();
         var rect = GetUsedRect();
         SaveConfig(_dungeonRoomInfo.DoorAreaInfos, rect.Position, rect.Size, polygonData.ToList(),
-            _dungeonRoomInfo.GroupName, _dungeonRoomInfo.RoomType, Name);
+            _dungeonRoomInfo.GroupName, _dungeonRoomInfo.RoomType, Name, Weight);
     }
     
     /// <summary>
@@ -794,7 +830,8 @@ public partial class DungeonRoomTemplate : TileMap
     /// <summary>
     /// 保存房间配置
     /// </summary>
-    public static void SaveConfig(List<DoorAreaInfo> doorConfigs, Vector2I position, Vector2I size, List<NavigationPolygonData> polygonData, string groupName, DungeonRoomType roomType, string fileName)
+    public static void SaveConfig(List<DoorAreaInfo> doorConfigs, Vector2I position, Vector2I size, List<NavigationPolygonData> polygonData,
+        string groupName, DungeonRoomType roomType, string fileName, int weight)
     {
         //存入本地
         var path = GameConfig.RoomTileDataDir + groupName + "/" + DungeonRoomTypeToString(roomType);
@@ -811,6 +848,7 @@ public partial class DungeonRoomTemplate : TileMap
         roomInfo.RoomType = roomType;
         roomInfo.GroupName = groupName;
         roomInfo.FileName = fileName;
+        roomInfo.Weight = weight;
         
         var config = new JsonSerializerOptions();
         config.WriteIndented = true;
@@ -840,6 +878,8 @@ public partial class DungeonRoomTemplate : TileMap
                 {
                     doorAreaInfo.CalcPosition(mapRect.Position, mapRect.Size);
                 }
+
+                Weight = _dungeonRoomInfo.Weight;
             }
             catch (Exception e)
             {
@@ -884,6 +924,11 @@ public partial class DungeonRoomTemplate : TileMap
         if (obj.ContainsKey("FileName"))
         {
             roomInfo.FileName = obj["FileName"].AsString();
+        }
+        
+        if (obj.ContainsKey("Weight"))
+        {
+            roomInfo.Weight = obj["Weight"].AsInt32();
         }
 
         if (obj.ContainsKey("DoorAreaInfos"))

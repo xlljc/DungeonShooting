@@ -185,7 +185,7 @@ public static class DungeonRoomGenerator
 					    var polygonData = dungeonTile.GetPolygonData();
 					    
 					    DungeonRoomTemplate.SaveConfig(new List<DoorAreaInfo>(), usedRect.Position, usedRect.Size, polygonData.ToList(),
-						    item.Value.GroupName, item.Value.RoomType, item.Value.FileName);
+						    item.Value.GroupName, item.Value.RoomType, item.Value.FileName, dungeonRoomTemplate.Weight);
 					    dungeonRoomTemplate.QueueFree();
 				    }
 			    }

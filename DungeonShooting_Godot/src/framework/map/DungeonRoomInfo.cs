@@ -48,4 +48,10 @@ public class DungeonRoomInfo
     /// </summary>
     [JsonInclude]
     public string FileName;
+    
+    /// <summary>
+    /// 房间权重, 值越大, 生成地牢是越容易出现该房间
+    /// </summary>
+    [JsonInclude]
+    public int Weight = DungeonRoomTemplate.DefaultWeight;
 }

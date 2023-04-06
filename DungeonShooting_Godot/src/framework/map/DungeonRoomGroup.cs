@@ -1,6 +1,8 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Godot;
 
 /// <summary>
 /// 房间组数据
@@ -55,6 +57,9 @@ public class DungeonRoomGroup
     [JsonInclude]
     public List<DungeonRoomSplit> EventList = new List<DungeonRoomSplit>();
 
+    private bool _init = false;
+    private Dictionary<DungeonRoomType, WeightRandom> _weightRandomMap;
+
     /// <summary>
     /// 获取指定类型房间集合
     /// </summary>
@@ -69,6 +74,58 @@ public class DungeonRoomGroup
             case DungeonRoomType.Reward: return RewardList;
             case DungeonRoomType.Shop: return ShopList;
             case DungeonRoomType.Event: return EventList;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 初始化权重处理
+    /// </summary>
+    public void InitWeight()
+    {
+        if (_init)
+        {
+            return;
+        }
+
+        _init = true;
+        _weightRandomMap = new Dictionary<DungeonRoomType, WeightRandom>();
+        
+        foreach (var roomType in Enum.GetValues<DungeonRoomType>())
+        {
+            InitAdRewardWeight(roomType);
+        }
+    }
+
+    private void InitAdRewardWeight(DungeonRoomType roomType)
+    {
+        var dungeonRoomSplits = GetRoomList(roomType);
+        var weightRandom = new WeightRandom();
+        _weightRandomMap.Add(roomType, weightRandom);
+
+        var list = new List<int>();
+        foreach (var roomSplit in dungeonRoomSplits)
+        {
+            list.Add(roomSplit.RoomInfo.Weight);
+        }
+        weightRandom.InitAdRewardWeight(list.ToArray());
+    }
+
+    /// <summary>
+    /// 根据房间类型和权重获取随机房间
+    /// </summary>
+    public DungeonRoomSplit GetRandomRoom(DungeonRoomType roomType)
+    {
+        if (!_init)
+        {
+            GD.PrintErr("未调用DungeonRoomGroup.InitWeight()来初始化权重!");
+            return null;
+        }
+
+        if (_weightRandomMap.TryGetValue(roomType, out var weightRandom))
+        {
+            return GetRoomList(roomType)[weightRandom.GetRandomIndex()];
         }
 
         return null;

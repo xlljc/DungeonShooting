@@ -25,6 +25,10 @@
       {
         "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room6.tscn",
         "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room6.json"
+      },
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room7.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room7.json"
       }
     ],
     "InletList": [

@@ -114,6 +114,8 @@ public class DungeonGenerator
                 throw new Exception("当前组'" + groupName + "'中没有战斗房间, 不能生成地牢!");
             }
         }
+
+        _roomGroup.InitWeight();
     }
 
     /// <summary>
@@ -137,7 +139,7 @@ public class DungeonGenerator
             EachRoom(next, cb);
         }
     }
-    
+
     /// <summary>
     /// 生成房间
     /// </summary>
@@ -195,9 +197,12 @@ public class DungeonGenerator
             var list = _roomGroup.GetRoomList(roomType);
             if (list.Count == 0) //如果没有指定类型的房间, 就生成战斗房间
             {
-                list = _roomGroup.BattleList;
+                roomSplit = _roomGroup.GetRandomRoom(DungeonRoomType.Battle);
             }
-            roomSplit = Utils.RandomChoose(list);
+            else
+            {
+                roomSplit = _roomGroup.GetRandomRoom(roomType);
+            }
         }
         else //指定了房间
         {
