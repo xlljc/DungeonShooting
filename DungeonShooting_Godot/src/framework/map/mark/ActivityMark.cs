@@ -206,6 +206,11 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public void SetActive(bool flag)
     {
+        // SetProcess(flag);
+        // SetPhysicsProcess(flag);
+        // SetProcessInput(flag);
+        // Visible = flag;
+        
         var parent = GetParent();
         if (flag)
         {
@@ -218,12 +223,14 @@ public partial class ActivityMark : Node2D
                 parent.RemoveChild(this);
                 TileRoot.AddChild(this);
             }
+            Owner = TileRoot;
         }
         else
         {
             if (parent != null)
             {
                 parent.RemoveChild(this);
+                Owner = null;
             }
         }
     }
