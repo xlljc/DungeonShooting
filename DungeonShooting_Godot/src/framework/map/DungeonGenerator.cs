@@ -41,12 +41,12 @@ public class DungeonGenerator
 
     //房间横轴分散程度
     
-    private float _roomHorizontalMinDispersion = 0.3f;
-    private float _roomHorizontalMaxDispersion = 1.2f;
+    private float _roomHorizontalMinDispersion = 0f;
+    private float _roomHorizontalMaxDispersion = 0.9f;
 
     //房间纵轴分散程度
-    private float _roomVerticalMinDispersion = 0.3f;
-    private float _roomVerticalMaxDispersion = 1.2f;
+    private float _roomVerticalMinDispersion = 0f;
+    private float _roomVerticalMaxDispersion = 0.9f;
 
     //区域限制
     private bool _enableLimitRange = true;

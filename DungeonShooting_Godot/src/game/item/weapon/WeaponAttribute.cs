@@ -238,7 +238,7 @@ public class WeaponAttribute
     /// <summary>
     /// 用于Ai, Ai使用该武器发射的子弹速度缩放比
     /// </summary>
-    public float AiBulletSpeedScale = 0.5f;
+    public float AiBulletSpeedScale = 0.7f;
 
     /// <summary>
     /// 用于Ai, Ai使用该武器消耗弹药的概率, (0 - 1)
