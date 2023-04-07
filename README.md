@@ -17,7 +17,6 @@
 
 ### 启动项目
 git仓库的目录结构如下
-> ├ DungeonShooting_Art (美术资源存放目录)  
 > ├ DungeonShooting_Document (项目帮助文档, 更新日志相关的目录)  
 > └ DungeonShooting_Godot (Godot工程目录)
 
