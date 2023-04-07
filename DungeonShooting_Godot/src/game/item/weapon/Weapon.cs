@@ -615,7 +615,18 @@ public abstract partial class Weapon : ActivityObject
         _continuousCount = _continuousCount > 0 ? _continuousCount - 1 : 0;
 
         //减子弹数量
-        CurrAmmo -= UseAmmoCount();
+        if (_originWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
+        {
+            if (Utils.RandomRangeFloat(0, 1) < _weaponAttribute.AiAmmoConsumptionProbability) //触发消耗弹药
+            {
+                CurrAmmo -= UseAmmoCount();
+            }
+        }
+        else
+        {
+            CurrAmmo -= UseAmmoCount();
+        }
+
         //开火间隙
         _fireInterval = 60 / Attribute.StartFiringSpeed;
         //攻击冷却

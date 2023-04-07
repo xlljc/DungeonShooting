@@ -95,6 +95,7 @@ public partial class Shotgun : Weapon
         const string bulletId = ActivityIdPrefix.Bullet + "0001";
         var bullet = ActivityObject.Create<Bullet>(bulletId);
         bullet.Init(
+            this,
             Utils.RandomRangeInt(280, 380),
             Utils.RandomRangeFloat(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,

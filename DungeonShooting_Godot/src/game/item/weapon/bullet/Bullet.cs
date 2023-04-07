@@ -11,6 +11,11 @@ public partial class Bullet : ActivityObject
     /// </summary>
     public Area2D CollisionArea { get; private set; }
 
+    /// <summary>
+    /// 发射该子弹的武器
+    /// </summary>
+    public Weapon Weapon { get; private set; }
+
     // 最大飞行距离
     private float MaxDistance;
 
@@ -20,13 +25,22 @@ public partial class Bullet : ActivityObject
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
 
-    public void Init(float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
+    public void Init(Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
+        Weapon = weapon;
         CollisionArea = GetNode<Area2D>("CollisionArea");
         CollisionArea.CollisionMask = targetLayer;
         CollisionArea.AreaEntered += OnArea2dEntered;
-
-        FlySpeed = speed;
+        
+        //只有玩家使用该武器才能获得正常速度的子弹
+        if (weapon.Master is Player)
+        {
+            FlySpeed = speed;
+        }
+        else
+        {
+            FlySpeed = speed * weapon.Attribute.AiBulletSpeedScale;
+        }
         MaxDistance = maxDistance;
         Position = position;
         Rotation = rotation;
