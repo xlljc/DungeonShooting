@@ -114,5 +114,9 @@
         }
       ]
     }
-  ]
+  ],
+  "GroupName": "testGroup",
+  "RoomType": 0,
+  "FileName": "Room3",
+  "Weight": 100
 }

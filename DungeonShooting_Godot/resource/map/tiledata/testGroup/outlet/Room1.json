@@ -1,0 +1,38 @@
+{
+  "Position": {
+    "X": -4,
+    "Y": -4
+  },
+  "Size": {
+    "X": 14,
+    "Y": 11
+  },
+  "DoorAreaInfos": [],
+  "NavigationList": [
+    {
+      "Type": 0,
+      "Points": [
+        {
+          "X": -40,
+          "Y": -40
+        },
+        {
+          "X": 136,
+          "Y": -40
+        },
+        {
+          "X": 136,
+          "Y": 88
+        },
+        {
+          "X": -40,
+          "Y": 88
+        }
+      ]
+    }
+  ],
+  "GroupName": "testGroup",
+  "RoomType": 2,
+  "FileName": "Room1",
+  "Weight": 100
+}

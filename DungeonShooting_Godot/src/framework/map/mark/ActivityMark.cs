@@ -37,11 +37,36 @@ public partial class ActivityMark : Node2D
     /// </summary>
     [Export]
     public float DelayTime = 0;
+
+    /// <summary>
+    /// 物体会在该矩形区域内随机位置生成
+    /// </summary>
+    [Export]
+    public Vector2I BirthRect = Vector2I.Zero;
     
     /// <summary>
     /// 绘制的颜色
     /// </summary>
-    protected Color DrawColor = new Color(0.4F, 0.56078434F, 0.8784314F);
+    [Export]
+    public Color DrawColor = new Color(1, 1, 1, 1);
+
+    /// <summary>
+    /// 物体初始海拔高度
+    /// </summary>
+    [ExportGroup("Vertical")]
+    [Export(PropertyHint.Range, "0, 36")]
+    public int Altitude = 0;
+
+    /// <summary>
+    /// 物体初始纵轴速度
+    /// </summary>
+    [Export(PropertyHint.Range, "-1000,1000,0.1")]
+    public float VerticalSpeed = 0;
+
+    /// <summary>
+    /// 当前标记所在Tile节点
+    /// </summary>
+    public TileMap TileRoot;
 
     //是否已经结束
     private bool _isOver = true;
@@ -49,6 +74,9 @@ public partial class ActivityMark : Node2D
     private float _timer = 0;
     private RoomInfo _tempRoom;
 
+    //绘制的字体
+    private static Font _drawFont;
+    
     /// <summary>
     /// 获取物体Id
     /// </summary>
@@ -59,6 +87,13 @@ public partial class ActivityMark : Node2D
 
     public override void _Process(double delta)
     {
+#if TOOLS
+        if (Engine.IsEditorHint())
+        {
+            QueueRedraw();
+            return;
+        }
+#endif
         if (_isOver)
         {
             _overTimer += (float)delta;
@@ -115,8 +150,31 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public virtual void Doing(RoomInfo roomInfo)
     {
+        CreateActivityObject().PutDown(Layer);
+    }
+
+    /// <summary>
+    /// 实例化ItemId指定的物体, 并返回对象实例, 函数会自动设置位置
+    /// </summary>
+    protected ActivityObject CreateActivityObject()
+    {
         var instance = ActivityObject.Create(GetItemId());
-        instance.PutDown(GlobalPosition, Layer);
+        var pos = Position;
+        if (BirthRect != Vector2I.Zero)
+        {
+            instance.Position = new Vector2(
+                Utils.RandomRangeInt((int)pos.X - BirthRect.X / 2, (int)pos.X + BirthRect.X / 2),
+                Utils.RandomRangeInt((int)pos.Y - BirthRect.Y / 2, (int)pos.Y + BirthRect.Y / 2)
+            );
+        }
+        else
+        {
+            instance.Position = pos;
+        }
+        
+        instance.VerticalSpeed = VerticalSpeed;
+        instance.Altitude = Altitude;
+        return instance;
     }
 
 #if TOOLS
@@ -124,8 +182,21 @@ public partial class ActivityMark : Node2D
     {
         if (Engine.IsEditorHint() || GameApplication.Instance.Debug)
         {
-            DrawLine(new Vector2(-5, -5), new Vector2(5, 5), DrawColor, 2f);
-            DrawLine(new Vector2(-5, 5), new Vector2(5, -5), DrawColor, 2f);
+            DrawLine(new Vector2(-2, -2), new Vector2(2, 2), DrawColor, 1f);
+            DrawLine(new Vector2(-2, 2), new Vector2(2, -2), DrawColor, 1f);
+
+            if (BirthRect != Vector2.Zero)
+            {
+                var c = DrawColor;
+                c.A = 0.5f;
+                DrawRect(new Rect2(-BirthRect / 2, BirthRect), c, false, 0.5f);
+            }
+
+            if (_drawFont == null)
+            {
+                _drawFont = ResourceManager.Load<Font>(ResourcePath.Silver_ttf);
+            }
+            DrawString(_drawFont, new Vector2(-14, 12), WaveNumber.ToString(), HorizontalAlignment.Center, 28, 14);
         }
     }
 #endif
@@ -135,9 +206,32 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public void SetActive(bool flag)
     {
-        SetProcess(flag);
-        SetProcessInternal(flag);
-        SetPhysicsProcess(flag);
-        SetPhysicsProcessInternal(flag);
+        // SetProcess(flag);
+        // SetPhysicsProcess(flag);
+        // SetProcessInput(flag);
+        // Visible = flag;
+        
+        var parent = GetParent();
+        if (flag)
+        {
+            if (parent == null)
+            {
+                TileRoot.AddChild(this);
+            }
+            else if (parent != TileRoot)
+            {
+                parent.RemoveChild(this);
+                TileRoot.AddChild(this);
+            }
+            Owner = TileRoot;
+        }
+        else
+        {
+            if (parent != null)
+            {
+                parent.RemoveChild(this);
+                Owner = null;
+            }
+        }
     }
 }

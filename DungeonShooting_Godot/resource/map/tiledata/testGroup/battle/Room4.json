@@ -9,17 +9,12 @@
   },
   "DoorAreaInfos": [
     {
-      "Direction": 1,
+      "Direction": 3,
       "Start": 16,
-      "End": 288
-    },
-    {
-      "Direction": 2,
-      "Start": 96,
       "End": 240
     },
     {
-      "Direction": 2,
+      "Direction": 3,
       "Start": 368,
       "End": 512
     },
@@ -29,14 +24,19 @@
       "End": 288
     },
     {
-      "Direction": 3,
+      "Direction": 2,
       "Start": 368,
       "End": 512
     },
     {
-      "Direction": 3,
-      "Start": 16,
+      "Direction": 2,
+      "Start": 96,
       "End": 240
+    },
+    {
+      "Direction": 1,
+      "Start": 16,
+      "End": 288
     }
   ],
   "NavigationList": [
@@ -117,5 +117,9 @@
         }
       ]
     }
-  ]
+  ],
+  "GroupName": "testGroup",
+  "RoomType": 0,
+  "FileName": "Room4",
+  "Weight": 100
 }

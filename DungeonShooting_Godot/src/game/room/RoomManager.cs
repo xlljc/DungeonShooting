@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -27,6 +28,11 @@ public partial class RoomManager : Node2D
     /// </summary>
     public Player Player { get; private set; }
 
+    /// <summary>
+    /// 起始房间
+    /// </summary>
+    public RoomInfo StartRoom => _dungeonGenerator.StartRoom;
+    
     /// <summary>
     /// 当前玩家所在的房间
     /// </summary>
@@ -62,7 +68,7 @@ public partial class RoomManager : Node2D
 
         var nowTicks = DateTime.Now.Ticks;
         //生成地牢房间
-        _dungeonGenerator = new DungeonGenerator();
+        _dungeonGenerator = new DungeonGenerator("testGroup");
         _dungeonGenerator.Generate();
         
         //填充地牢
@@ -86,9 +92,14 @@ public partial class RoomManager : Node2D
         //播放bgm
         //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
+        //初始房间创建玩家标记
+        var playerBirthMark = StartRoom.ActivityMarks.FirstOrDefault(mark => mark is PlayerBirthMark);
         //创建玩家
         Player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
-        Player.Position = new Vector2(30, 30);
+        if (playerBirthMark != null)
+        {
+            Player.Position = playerBirthMark.Position;
+        }
         Player.Name = "Player";
         Player.PutDown(RoomLayerEnum.YSortLayer);
         Player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
@@ -174,7 +185,7 @@ public partial class RoomManager : Node2D
         //创建房间归属区域
         CreateRoomAisleAffiliation(roomInfo);
     }
-    
+
     //挂载房间导航区域
     private void MountNavFromRoomInfo(RoomInfo roomInfo)
     {

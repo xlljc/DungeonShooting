@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 房间的数据描述
 /// </summary>
-public class RoomInfo
+public class RoomInfo : IDestroy
 {
     public RoomInfo(int id, DungeonRoomSplit roomSplit)
     {
@@ -62,7 +62,9 @@ public class RoomInfo
     /// 是否处于闭关状态, 也就是房间门没有主动打开
     /// </summary>
     public bool IsSeclusion { get; private set; } = false;
-
+    
+    public bool IsDestroyed { get; private set; }
+    
     private bool _beReady = false;
     private bool _waveStart = false;
     private int _currWaveIndex = 0;
@@ -120,7 +122,27 @@ public class RoomInfo
     {
         return Position.Y;
     }
+    
+    public void Destroy()
+    {
+        if (IsDestroyed)
+        {
+            return;
+        }
 
+        IsDestroyed = true;
+        foreach (var nextRoom in Next)
+        {
+            nextRoom.Destroy();
+        }
+        Next.Clear();
+        foreach (var activityMark in ActivityMarks)
+        {
+            activityMark.QueueFree();
+        }
+        ActivityMarks.Clear();
+    }
+    
     /// <summary>
     /// 房间准备好了, 准备刷敌人, 并且关闭所有门，
     /// 当清完每一波刷新的敌人后即可开门
@@ -147,10 +169,14 @@ public class RoomInfo
             });
         }
 
-        //关门
-        foreach (var doorInfo in Doors)
+        //不是初始房间才能关门
+        if (RoomSplit.RoomInfo.RoomType != DungeonRoomType.Inlet)
         {
-            doorInfo.Door.CloseDoor();
+            //关门
+            foreach (var doorInfo in Doors)
+            {
+                doorInfo.Door.CloseDoor();
+            }
         }
         
         //执行第一波生成
@@ -167,9 +193,12 @@ public class RoomInfo
             IsSeclusion = false;
             _currActivityMarks.Clear();
             //开门
-            foreach (var doorInfo in Doors)
+            if (RoomSplit.RoomInfo.RoomType != DungeonRoomType.Inlet)
             {
-                doorInfo.Door.OpenDoor();
+                foreach (var doorInfo in Doors)
+                {
+                    doorInfo.Door.OpenDoor();
+                }
             }
         }
         else //执行下一波

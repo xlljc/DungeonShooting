@@ -9,11 +9,6 @@
   },
   "DoorAreaInfos": [
     {
-      "Direction": 1,
-      "Start": 16,
-      "End": 112
-    },
-    {
       "Direction": 3,
       "Start": 16,
       "End": 144
@@ -27,6 +22,11 @@
       "Direction": 2,
       "Start": 112,
       "End": 208
+    },
+    {
+      "Direction": 1,
+      "Start": 16,
+      "End": 112
     }
   ],
   "NavigationList": [
@@ -67,5 +67,9 @@
         }
       ]
     }
-  ]
+  ],
+  "GroupName": "testGroup",
+  "RoomType": 0,
+  "FileName": "Room6",
+  "Weight": 100
 }

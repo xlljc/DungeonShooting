@@ -10,7 +10,7 @@ using Godot;
 /// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [RegisterActivity(id, prefabPath)],
 /// ActivityObject 类会自动扫描并注册物体, 然后使用而是使用 ActivityObject.Create(id) 来创建实例
 /// </summary>
-public abstract partial class ActivityObject : CharacterBody2D
+public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 {
     /// <summary>
     /// 是否是调试模式

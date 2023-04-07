@@ -9,12 +9,12 @@
   },
   "DoorAreaInfos": [
     {
-      "Direction": 0,
+      "Direction": 3,
       "Start": 64,
       "End": 128
     },
     {
-      "Direction": 3,
+      "Direction": 0,
       "Start": 64,
       "End": 128
     },
@@ -136,5 +136,9 @@
         }
       ]
     }
-  ]
+  ],
+  "GroupName": "testGroup",
+  "RoomType": 0,
+  "FileName": "Room5",
+  "Weight": 100
 }

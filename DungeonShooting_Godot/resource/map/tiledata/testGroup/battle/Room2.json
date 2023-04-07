@@ -1,0 +1,101 @@
+{
+  "Position": {
+    "X": -5,
+    "Y": -3
+  },
+  "Size": {
+    "X": 23,
+    "Y": 14
+  },
+  "DoorAreaInfos": [
+    {
+      "Direction": 3,
+      "Start": 16,
+      "End": 224
+    },
+    {
+      "Direction": 3,
+      "Start": 288,
+      "End": 352
+    },
+    {
+      "Direction": 0,
+      "Start": 16,
+      "End": 208
+    },
+    {
+      "Direction": 2,
+      "Start": 144,
+      "End": 352
+    },
+    {
+      "Direction": 2,
+      "Start": 16,
+      "End": 80
+    },
+    {
+      "Direction": 1,
+      "Start": 16,
+      "End": 208
+    }
+  ],
+  "NavigationList": [
+    {
+      "Type": 0,
+      "Points": [
+        {
+          "X": -56,
+          "Y": -24
+        },
+        {
+          "X": 136,
+          "Y": -24
+        },
+        {
+          "X": 136,
+          "Y": 88
+        },
+        {
+          "X": 216,
+          "Y": 88
+        },
+        {
+          "X": 216,
+          "Y": -24
+        },
+        {
+          "X": 264,
+          "Y": -24
+        },
+        {
+          "X": 264,
+          "Y": 152
+        },
+        {
+          "X": 72,
+          "Y": 152
+        },
+        {
+          "X": 72,
+          "Y": 40
+        },
+        {
+          "X": -8,
+          "Y": 40
+        },
+        {
+          "X": -8,
+          "Y": 152
+        },
+        {
+          "X": -56,
+          "Y": 152
+        }
+      ]
+    }
+  ],
+  "GroupName": "testGroup",
+  "RoomType": 0,
+  "FileName": "Room2",
+  "Weight": 100
+}

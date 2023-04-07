@@ -66,6 +66,12 @@ namespace Plugin
                 "res://src/framework/map/mark/WeaponMark.cs",
                 "res://addons/dungeonShooting_plugin/Mark.svg"
             ),
+            new CustomTypeInfo(
+                "PlayerBirthMark",
+                "Node2D",
+                "res://src/framework/map/mark/PlayerBirthMark.cs",
+                "res://addons/dungeonShooting_plugin/Mark.svg"
+            ),
         };
         
         public override void _Process(double delta)

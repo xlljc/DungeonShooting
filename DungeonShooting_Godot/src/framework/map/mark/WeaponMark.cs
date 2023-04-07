@@ -21,7 +21,6 @@ public partial class WeaponMark : ActivityMark
     
     public override void _Ready()
     {
-        DrawColor = Colors.Green;
         Type = ActivityIdPrefix.ActivityPrefixType.Weapon;
         Layer = RoomLayerEnum.NormalLayer;
     }
@@ -29,7 +28,7 @@ public partial class WeaponMark : ActivityMark
     public override void Doing(RoomInfo roomInfo)
     {
         //创建武器
-        var instance = ActivityObject.Create<Weapon>(GetItemId());
+        var instance = (Weapon)CreateActivityObject();
         if (CurrAmmon >= 0)
         {
             instance.SetCurrAmmo(CurrAmmon);   
@@ -39,6 +38,8 @@ public partial class WeaponMark : ActivityMark
         {
             instance.SetResidueAmmo(ResidueAmmo);   
         }
-        instance.PutDown(GlobalPosition, Layer);
+
+
+        instance.PutDown(Layer);
     }
 }
