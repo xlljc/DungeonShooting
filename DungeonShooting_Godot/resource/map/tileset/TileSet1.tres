@@ -392,7 +392,6 @@ texture = ExtResource("1_uvtye")
 1:7/0/terrain_set = 0
 1:7/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 1:7/0/physics_layer_0/angular_velocity = 0.0
-1:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:7/0/terrains_peering_bit/bottom_right_corner = 0
 1:7/0/terrains_peering_bit/bottom_left_corner = 0
 1:7/0/terrains_peering_bit/top_left_corner = 0

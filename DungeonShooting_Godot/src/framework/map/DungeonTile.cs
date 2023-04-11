@@ -474,8 +474,8 @@ public class DungeonTile
             
             var op1 = new SerializeVector2(x - GameConfig.TileCellSize * 1.5f, y + GameConfig.TileCellSize * 1.5f);
             var op2 = new SerializeVector2(x + GameConfig.TileCellSize * 0.5f, y + GameConfig.TileCellSize * 1.5f);
-            var op3 = new SerializeVector2(x + GameConfig.TileCellSize * 0.5f, y + GameConfig.TileCellSize * 2.5f);
-            var op4 = new SerializeVector2(x - GameConfig.TileCellSize * 1.5f, y + GameConfig.TileCellSize * 2.5f);
+            var op3 = new SerializeVector2(x + GameConfig.TileCellSize * 0.5f, y + GameConfig.TileCellSize * 3f);
+            var op4 = new SerializeVector2(x - GameConfig.TileCellSize * 1.5f, y + GameConfig.TileCellSize * 3f);
             AddDoorNavigation(
                 doorInfo, op1, op2, op3, op4,
                 new SerializeVector2(op1),
@@ -508,8 +508,8 @@ public class DungeonTile
             
             var op1 = new SerializeVector2(x - GameConfig.TileCellSize * 1.5f + (rect.Size.X + 1) * GameConfig.TileCellSize, y + GameConfig.TileCellSize * 1.5f);
             var op2 = new SerializeVector2(x + GameConfig.TileCellSize * 0.5f + (rect.Size.X + 1) * GameConfig.TileCellSize, y + GameConfig.TileCellSize * 1.5f);
-            var op3 = new SerializeVector2(x + GameConfig.TileCellSize * 0.5f + (rect.Size.X + 1) * GameConfig.TileCellSize, y + GameConfig.TileCellSize * 2.5f);
-            var op4 = new SerializeVector2(x - GameConfig.TileCellSize * 1.5f + (rect.Size.X + 1) * GameConfig.TileCellSize, y + GameConfig.TileCellSize * 2.5f);
+            var op3 = new SerializeVector2(x + GameConfig.TileCellSize * 0.5f + (rect.Size.X + 1) * GameConfig.TileCellSize, y + GameConfig.TileCellSize * 3f);
+            var op4 = new SerializeVector2(x - GameConfig.TileCellSize * 1.5f + (rect.Size.X + 1) * GameConfig.TileCellSize, y + GameConfig.TileCellSize * 3f);
             AddDoorNavigation(
                 doorInfo, op1, op2, op3, op4,
                 new SerializeVector2(op2.X - GameConfig.TileCellSize, op1.Y),
@@ -540,8 +540,8 @@ public class DungeonTile
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;
             
-            var op1 = new SerializeVector2(x + GameConfig.TileCellSize * 1.5f, y - GameConfig.TileCellSize * 1.5f);
-            var op2 = new SerializeVector2(x + GameConfig.TileCellSize * 2.5f, y - GameConfig.TileCellSize * 1.5f);
+            var op1 = new SerializeVector2(x + GameConfig.TileCellSize * 1.5f, y - GameConfig.TileCellSize * 1f);
+            var op2 = new SerializeVector2(x + GameConfig.TileCellSize * 2.5f, y - GameConfig.TileCellSize * 1f);
             var op3 = new SerializeVector2(x + GameConfig.TileCellSize * 2.5f, y + GameConfig.TileCellSize * 0.5f);
             var op4 = new SerializeVector2(x + GameConfig.TileCellSize * 1.5f, y + GameConfig.TileCellSize * 0.5f);
             AddDoorNavigation(
@@ -573,8 +573,8 @@ public class DungeonTile
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;
             
-            var op1 = new SerializeVector2(x + GameConfig.TileCellSize * 1.5f, y - GameConfig.TileCellSize * 1.5f + (rect.Size.Y + 1) * GameConfig.TileCellSize);
-            var op2 = new SerializeVector2(x + GameConfig.TileCellSize * 2.5f, y - GameConfig.TileCellSize * 1.5f + (rect.Size.Y + 1) * GameConfig.TileCellSize);
+            var op1 = new SerializeVector2(x + GameConfig.TileCellSize * 1.5f, y - GameConfig.TileCellSize * 1f + (rect.Size.Y + 1) * GameConfig.TileCellSize);
+            var op2 = new SerializeVector2(x + GameConfig.TileCellSize * 2.5f, y - GameConfig.TileCellSize * 1f + (rect.Size.Y + 1) * GameConfig.TileCellSize);
             var op3 = new SerializeVector2(x + GameConfig.TileCellSize * 2.5f, y + GameConfig.TileCellSize * 0.5f + (rect.Size.Y + 1) * GameConfig.TileCellSize);
             var op4 = new SerializeVector2(x + GameConfig.TileCellSize * 1.5f, y + GameConfig.TileCellSize * 0.5f + (rect.Size.Y + 1) * GameConfig.TileCellSize);
             AddDoorNavigation(
@@ -835,7 +835,7 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y +  + offset.Y));
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -889,7 +889,8 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        //points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         PutUsePoint(pos);
 
                         tempI--;
@@ -910,7 +911,8 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        //points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -920,7 +922,8 @@ public class DungeonTile
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                            //points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                            points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -943,7 +946,8 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        //points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -964,7 +968,8 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        //points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         PutUsePoint(pos);
 
                         tempI--;
@@ -1041,7 +1046,8 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        //points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         PutUsePoint(pos);
 
                         tempJ++;
@@ -1051,7 +1057,8 @@ public class DungeonTile
                     {
                         if (points.Count == 0)
                         {
-                            points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
+                            //points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
+                            points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         }
 
                         var pos = new Vector2(tempI, tempJ);
@@ -1074,7 +1081,8 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        //points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         PutUsePoint(pos);
 
                         tempJ--;
@@ -1128,7 +1136,8 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        //points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         PutUsePoint(pos);
 
                         tempI++;
@@ -1203,7 +1212,8 @@ public class DungeonTile
                             return polygonData;
                         }
 
-                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        //points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
+                        points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         PutUsePoint(pos);
 
                         tempI++;

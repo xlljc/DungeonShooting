@@ -1,8 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://dl62yuh5q656a"]
+[gd_scene load_steps=9 format=3 uid="uid://dl62yuh5q656a"]
 
 [ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_8es7a"]
 [ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_d8jnk"]
-[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="3_ta10a"]
+[ext_resource type="Texture2D" uid="uid://dviv44fhwvkb1" path="res://resource/sprite/map/door1_down.png" id="3_knmoy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_x5aop"]
 resource_local_to_scene = true
@@ -16,11 +16,15 @@ shader = ExtResource("2_d8jnk")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_wfl7i"]
+atlas = ExtResource("3_knmoy")
+region = Rect2(32, 0, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_ugstb"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_ta10a")
+"texture": SubResource("AtlasTexture_wfl7i")
 }],
 "loop": true,
 "name": &"default",
@@ -41,8 +45,7 @@ material = SubResource("ShaderMaterial_x5aop")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_f8vun")
-position = Vector2(0, -16)
-scale = Vector2(0.5, 0.25)
+position = Vector2(0, -24)
 sprite_frames = SubResource("SpriteFrames_ugstb")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
