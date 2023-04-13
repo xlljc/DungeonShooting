@@ -1,4 +1,6 @@
 ﻿
+using Godot;
+
 /// <summary>
 /// 房间的门, 门有两种状态, 打开和关闭
 /// </summary>
@@ -28,16 +30,29 @@ public partial class RoomDoor : ActivityObject
         switch (doorInfo.Direction)
         {
             case DoorDirection.E:
-                RotationDegrees = 90;
+                //RotationDegrees = 90;
+                AnimatedSprite.Frame = 1;
+                AnimatedSprite.Position = Vector2.Zero;
+                Collision.Position = Vector2.Zero;
+                var collisionShape = (RectangleShape2D)Collision.Shape;
+                collisionShape.Size = new Vector2(14, 32);
                 break;
             case DoorDirection.W:
-                RotationDegrees = 270;
+                //RotationDegrees = 270;
+                AnimatedSprite.Frame = 1;
+                AnimatedSprite.Position = Vector2.Zero;
+                Collision.Position = Vector2.Zero;
+                var collisionShape2 = (RectangleShape2D)Collision.Shape;
+                collisionShape2.Size = new Vector2(14, 32);
                 break;
             case DoorDirection.S:
-                RotationDegrees = 180;
+                //RotationDegrees = 180;
+                AnimatedSprite.Position = new Vector2(0, -8);
                 break;
             case DoorDirection.N:
-                RotationDegrees = 0;
+                ZIndex = GameConfig.MiddleMapLayer;
+                AnimatedSprite.Position = new Vector2(0, -8);
+                //RotationDegrees = 0;
                 break;
         }
     }

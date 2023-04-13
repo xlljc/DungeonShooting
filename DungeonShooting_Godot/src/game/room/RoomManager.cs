@@ -77,7 +77,7 @@ public partial class RoomManager : Node2D
         _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom);
         
         //生成寻路网格， 这一步操作只生成过道的导航
-        _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorMapLayer);
+        _dungeonTile.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
         //挂载过道导航区域
         _dungeonTile.MountNavigationPolygon(this);
         //过道导航区域数据
@@ -230,16 +230,16 @@ public partial class RoomManager : Node2D
             switch (doorInfo.Direction)
             {
                 case DoorDirection.E:
-                    offset = new Vector2(-0.5f, 2);
-                    break;
-                case DoorDirection.W:
                     offset = new Vector2(0.5f, 2);
                     break;
+                case DoorDirection.W:
+                    offset = new Vector2(-0.5f, 2);
+                    break;
                 case DoorDirection.S:
-                    offset = new Vector2(2f, -0.5f);
+                    offset = new Vector2(2f, 1.5f);
                     break;
                 case DoorDirection.N:
-                    offset = new Vector2(2f, 0.5f);
+                    offset = new Vector2(2f, -0.5f);
                     break;
                 default: offset = new Vector2();
                     break;
