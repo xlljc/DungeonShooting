@@ -38,7 +38,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xgcls"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lvvwj"]
+resource_local_to_scene = true
 size = Vector2(32, 23)
 
 [node name="RoomDoor" type="Node"]
@@ -58,4 +59,4 @@ sprite_frames = SubResource("SpriteFrames_ugstb")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -3.5)
-shape = SubResource("RectangleShape2D_xgcls")
+shape = SubResource("RectangleShape2D_lvvwj")

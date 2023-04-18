@@ -30,29 +30,25 @@ public partial class RoomDoor : ActivityObject
         switch (doorInfo.Direction)
         {
             case DoorDirection.E:
-                //RotationDegrees = 90;
                 AnimatedSprite.Frame = 1;
-                AnimatedSprite.Position = Vector2.Zero;
+                AnimatedSprite.Position = new Vector2(0, -8);
                 Collision.Position = Vector2.Zero;
                 var collisionShape = (RectangleShape2D)Collision.Shape;
                 collisionShape.Size = new Vector2(14, 32);
                 break;
             case DoorDirection.W:
-                //RotationDegrees = 270;
                 AnimatedSprite.Frame = 1;
-                AnimatedSprite.Position = Vector2.Zero;
+                AnimatedSprite.Position = new Vector2(0, -8);
                 Collision.Position = Vector2.Zero;
                 var collisionShape2 = (RectangleShape2D)Collision.Shape;
                 collisionShape2.Size = new Vector2(14, 32);
                 break;
             case DoorDirection.S:
-                //RotationDegrees = 180;
                 AnimatedSprite.Position = new Vector2(0, -8);
                 break;
             case DoorDirection.N:
                 ZIndex = GameConfig.MiddleMapLayer;
                 AnimatedSprite.Position = new Vector2(0, -8);
-                //RotationDegrees = 0;
                 break;
         }
     }
