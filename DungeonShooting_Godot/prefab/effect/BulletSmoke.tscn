@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://dtr8nurmv2qtg"]
+[gd_scene load_steps=9 format=3 uid="uid://dtr8nurmv2qtg"]
 
 [ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/effects/Smoke.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bs1lan5uwxyfg" path="res://resource/curve/Curve1.tres" id="1_8pe88"]
 [ext_resource type="Texture2D" uid="uid://dwa4chrugc6b1" path="res://resource/effects/Collision.png" id="2"]
 
 [sub_resource type="CanvasItemMaterial" id="1"]
@@ -8,13 +9,6 @@ particles_animation = true
 particles_anim_h_frames = 3
 particles_anim_v_frames = 1
 particles_anim_loop = false
-
-[sub_resource type="Curve" id="Curve_kve5o"]
-_data = [Vector2(0.00645161, 0), 0.0, 0.0, 0, 0, Vector2(0.151613, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_yr1bt"]
-curve = SubResource("Curve_kve5o")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gpp81"]
 lifetime_randomness = 0.5
@@ -25,7 +19,7 @@ initial_velocity_max = 90.0
 orbit_velocity_min = 0.0
 orbit_velocity_max = 0.0
 angle_max = 360.0
-scale_curve = SubResource("CurveTexture_yr1bt")
+scale_curve = ExtResource("1_8pe88")
 color = Color(0.75, 0.75, 0.75, 0.470588)
 anim_offset_max = 1.0
 

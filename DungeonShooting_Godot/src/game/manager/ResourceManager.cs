@@ -53,7 +53,7 @@ public static class ResourceManager
     {
         if (!useCache)
         {
-            T res = ResourceLoader.Load<T>(path, null, ResourceLoader.CacheMode.Ignore);
+            var res = ResourceLoader.Load<T>(path, null, ResourceLoader.CacheMode.Ignore);
             if (res == null)
             {
                 GD.PrintErr("加载资源失败, 未找到资源: " + path);
@@ -80,5 +80,15 @@ public static class ResourceManager
         }
 
         return default;
+    }
+
+    /// <summary>
+    /// 加载并且实例化场景, 并返回
+    /// </summary>
+    /// <param name="path">场景路径</param>
+    public static T LoadAndInstantiate<T>(string path) where T : Node
+    {
+        var packedScene = Load<PackedScene>(path);
+        return packedScene.Instantiate<T>();
     }
 }

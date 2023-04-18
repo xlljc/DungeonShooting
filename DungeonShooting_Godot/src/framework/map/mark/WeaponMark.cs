@@ -41,5 +41,9 @@ public partial class WeaponMark : ActivityMark
 
 
         instance.PutDown(Layer);
+        
+        var effect1 = ResourceManager.LoadAndInstantiate<Effect1>(ResourcePath.prefab_effect_Effect1_tscn);
+        effect1.Position = instance.Position;
+        effect1.AddToActivityRoot(RoomLayerEnum.NormalLayer);
     }
 }

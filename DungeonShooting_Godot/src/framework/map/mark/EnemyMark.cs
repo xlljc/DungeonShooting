@@ -69,6 +69,10 @@ public partial class EnemyMark : ActivityMark
             CreateWeapon(instance, pos, Weapon3Id, Weapon3Ammo);
         if (!string.IsNullOrWhiteSpace(Weapon4Id))
             CreateWeapon(instance, pos, Weapon4Id, Weapon4Ammo);
+        
+        var effect1 = ResourceManager.LoadAndInstantiate<Effect1>(ResourcePath.prefab_effect_Effect1_tscn);
+        effect1.Position = instance.Position;
+        effect1.AddToActivityRoot(RoomLayerEnum.NormalLayer);
     }
 
     //生成武器

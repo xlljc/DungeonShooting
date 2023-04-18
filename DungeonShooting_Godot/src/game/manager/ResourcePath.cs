@@ -8,6 +8,7 @@ public class ResourcePath
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
     public const string prefab_effect_BulletDisappear_tscn = "res://prefab/effect/BulletDisappear.tscn";
     public const string prefab_effect_BulletSmoke_tscn = "res://prefab/effect/BulletSmoke.tscn";
+    public const string prefab_effect_Effect1_tscn = "res://prefab/effect/Effect1.tscn";
     public const string prefab_effect_FirePart_tscn = "res://prefab/effect/FirePart.tscn";
     public const string prefab_effect_ShotFire_tscn = "res://prefab/effect/ShotFire.tscn";
     public const string prefab_map_RoomDoor_tscn = "res://prefab/map/RoomDoor.tscn";
@@ -22,9 +23,11 @@ public class ResourcePath
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";
     public const string prefab_weapon_bullet_Bullet_tscn = "res://prefab/weapon/bullet/Bullet.tscn";
     public const string prefab_weapon_shell_ShellCase_tscn = "res://prefab/weapon/shell/ShellCase.tscn";
+    public const string resource_curve_Curve1_tres = "res://resource/curve/Curve1.tres";
     public const string resource_effects_Circle_png = "res://resource/effects/Circle.png";
     public const string resource_effects_Collision_png = "res://resource/effects/Collision.png";
     public const string resource_effects_debug_arrows_png = "res://resource/effects/debug_arrows.png";
+    public const string resource_effects_Effect1_png = "res://resource/effects/Effect1.png";
     public const string resource_effects_Explosion_png = "res://resource/effects/Explosion.png";
     public const string resource_effects_Hit_tres = "res://resource/effects/Hit.tres";
     public const string resource_effects_KnifeHit1_tres = "res://resource/effects/KnifeHit1.tres";
@@ -40,6 +43,7 @@ public class ResourcePath
     public const string resource_map_tiledata_testGroup_battle_Room4_json = "res://resource/map/tiledata/testGroup/battle/Room4.json";
     public const string resource_map_tiledata_testGroup_battle_Room5_json = "res://resource/map/tiledata/testGroup/battle/Room5.json";
     public const string resource_map_tiledata_testGroup_battle_Room6_json = "res://resource/map/tiledata/testGroup/battle/Room6.json";
+    public const string resource_map_tiledata_testGroup_battle_Room7_json = "res://resource/map/tiledata/testGroup/battle/Room7.json";
     public const string resource_map_tiledata_testGroup_inlet_Room1_json = "res://resource/map/tiledata/testGroup/inlet/Room1.json";
     public const string resource_map_tiledata_testGroup_outlet_Room1_json = "res://resource/map/tiledata/testGroup/outlet/Room1.json";
     public const string resource_map_tileMaps_testGroup_battle_Room1_tscn = "res://resource/map/tileMaps/testGroup/battle/Room1.tscn";
@@ -48,6 +52,7 @@ public class ResourcePath
     public const string resource_map_tileMaps_testGroup_battle_Room4_tscn = "res://resource/map/tileMaps/testGroup/battle/Room4.tscn";
     public const string resource_map_tileMaps_testGroup_battle_Room5_tscn = "res://resource/map/tileMaps/testGroup/battle/Room5.tscn";
     public const string resource_map_tileMaps_testGroup_battle_Room6_tscn = "res://resource/map/tileMaps/testGroup/battle/Room6.tscn";
+    public const string resource_map_tileMaps_testGroup_battle_Room7_tscn = "res://resource/map/tileMaps/testGroup/battle/Room7.tscn";
     public const string resource_map_tileMaps_testGroup_inlet_Room1_tscn = "res://resource/map/tileMaps/testGroup/inlet/Room1.tscn";
     public const string resource_map_tileMaps_testGroup_outlet_Room1_tscn = "res://resource/map/tileMaps/testGroup/outlet/Room1.tscn";
     public const string resource_map_tileset_TileSet1_tres = "res://resource/map/tileset/TileSet1.tres";
@@ -238,6 +243,7 @@ public class ResourcePath
     public const string resource_sprite_gun_gun8_png = "res://resource/sprite/gun/gun8.png";
     public const string resource_sprite_gun_knife1_png = "res://resource/sprite/gun/knife1.png";
     public const string resource_sprite_gun_out_default_png = "res://resource/sprite/gun/out/default.png";
+    public const string resource_sprite_map_door1_down_png = "res://resource/sprite/map/door1_down.png";
     public const string resource_sprite_role_role1_png = "res://resource/sprite/role/role1.png";
     public const string resource_sprite_role_role10_png = "res://resource/sprite/role/role10.png";
     public const string resource_sprite_role_role2_png = "res://resource/sprite/role/role2.png";
