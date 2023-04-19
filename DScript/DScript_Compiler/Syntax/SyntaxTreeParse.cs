@@ -2,47 +2,50 @@ using System;
 
 namespace DScript.Compiler
 {
+    /// <summary>
+    /// 语法树解析类
+    /// </summary>
     internal class SyntaxTreeParse
     {
         //匹配导入类
         private static readonly MarchData[] ImportMarchData = new[]
         {
-            new MarchData(MarchType.Word),
-            new MarchData("="),
-            new MarchData(MarchType.FullWord)
+            MarchData.FromType(MarchType.Word),
+            MarchData.FromCode("="),
+            MarchData.FromType(MarchType.FullWord)
         };
 
         //匹配声明命名空间
         private static readonly MarchData[] NamespaceMarchData = new[]
         {
-            new MarchData(MarchType.FullWord)
+            MarchData.FromType(MarchType.FullWord)
         };
 
         //匹配声明类
         private static readonly MarchData[] ClassMarchData = new[]
         {
-            new MarchData(MarchType.Word),
-            new MarchData(new MarchData("extends"), new MarchData(MarchType.FullWord))
+            MarchData.FromType(MarchType.Word),
+            MarchData.FromTryMarch(MarchData.FromCode("extends"), MarchData.FromType(MarchType.FullWord))
         };
 
         //匹配函数声明
         private static readonly MarchData[] FunctionMarchData = new[]
         {
-            new MarchData(MarchType.Word),
-            new MarchData(MarchType.ParenthesesGroup),
-            new MarchData(new MarchData(":"), new MarchData(MarchType.FullKeyword)),
-            new MarchData(MarchType.BraceGroup)
+            MarchData.FromType(MarchType.Word),
+            MarchData.FromType(MarchType.ParenthesesGroup),
+            MarchData.FromTryMarch(MarchData.FromCode(":"), MarchData.FromType(MarchType.FullKeyword)),
+            MarchData.FromType(MarchType.BraceGroup)
         };
         
         //匹配变量声明
         private static readonly MarchData[] VarMarchData = new[]
         {
-            new MarchData(MarchType.Word),
-            new MarchData("="),
-            new MarchData(MarchType.Expression)
+            MarchData.FromType(MarchType.Word),
+            MarchData.FromCode("="),
+            MarchData.FromType(MarchType.Expression)
         };
-
-
+        
+        //语法树对象
         private SyntaxTree _syntaxTree;
 
         public SyntaxTreeParse(SyntaxTree syntaxTree)
@@ -75,6 +78,16 @@ namespace DScript.Compiler
                     VarKeyword(token, fileToken);
                     break;
             }
+        }
+
+        /// <summary>
+        /// 解析单词
+        /// </summary>
+        /// <param name="token">单词对象</param>
+        /// <param name="fileToken">关联的文件</param>
+        public void NextWorld(Token token, FileToken fileToken)
+        {
+            LogUtils.Error("未知单词: " + token.Code);
         }
 
         //解析导入
@@ -221,7 +234,14 @@ namespace DScript.Compiler
                 {
                     if (result.Success)
                     {
-                        
+                        var newArr = _syntaxTree.CopyTokens(result.Start, result.End);
+
+                        var str = "";
+                        foreach (var item in newArr)
+                        {
+                            str += item.Code;
+                        }
+                        LogUtils.Log("var匹配成功: " + str);
                     }
                     else
                     {

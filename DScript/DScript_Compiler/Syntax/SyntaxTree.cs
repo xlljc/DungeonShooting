@@ -41,11 +41,20 @@ namespace DScript.Compiler
 
             _currIndex = -1;
             Token? current;
+            //遍历所有token, 解析语法
             while ((current = GetNextToken()) != null)
             {
-                if (current.Type == TokenType.Keyword) //关键字
+                switch (current.Type)
                 {
-                    _treeParse.NextKeyword(current, fileToken);
+                    case TokenType.Keyword: //关键字
+                        _treeParse.NextKeyword(current, fileToken);
+                        break;
+                    case TokenType.Word: //单词
+                        _treeParse.NextWorld(current, fileToken);
+                        break;
+                    default:
+                        LogUtils.Error("未知字符: " + current.Code);
+                        break;
                 }
             }
         }
@@ -209,7 +218,7 @@ namespace DScript.Compiler
         }
 
         /// <summary>
-        /// 回退解析索引
+        /// 回退解析索引, 也就是 index-1
         /// </summary>
         internal int RollbackTokenIndex()
         {

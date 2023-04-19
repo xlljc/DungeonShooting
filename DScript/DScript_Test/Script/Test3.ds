@@ -4,3 +4,4 @@ var c = a;
 var d = a + b;
 var e = 1 + 45;
 var f = (1 + 2) * 3;
+var g = false;

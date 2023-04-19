@@ -13,36 +13,59 @@
             TryMarch,
         }
         
-        public MarchDataType DataType;
+        /// <summary>
+        /// 匹配类型
+        /// </summary>
+        public MarchDataType MarchType;
+        
+        /// <summary>
+        /// 匹配单词
+        /// </summary>
         public string Code;
-        public MarchType MarchType;
-        public MarchData[] MarchDatas;
+        /// <summary>
+        /// 根据 MarchType 枚举匹配
+        /// </summary>
+        public MarchType Type;
+        /// <summary>
+        /// 尝试匹配
+        /// </summary>
+        public MarchData[] TryMarch;
 
+        private MarchData()
+        {
+        }
+        
         /// <summary>
         /// 匹配字符
         /// </summary>
-        public MarchData(string code)
+        public static MarchData FromCode(string code)
         {
-            Code = code;
-            DataType = MarchDataType.Code;
+            var marchData = new MarchData();
+            marchData.Code = code;
+            marchData.MarchType = MarchDataType.Code;
+            return marchData;
         }
 
         /// <summary>
         /// 根据枚举类型匹配
         /// </summary>
-        public MarchData(MarchType type)
+        public static MarchData FromType(MarchType type)
         {
-            MarchType = type;
-            DataType = MarchDataType.MarchType;
+            var marchData = new MarchData();
+            marchData.Type = type;
+            marchData.MarchType = MarchDataType.MarchType;
+            return marchData;
         }
 
         /// <summary>
-        /// 尝试匹配 marchDatas
+        /// 尝试匹配 marchData
         /// </summary>
-        public MarchData(params MarchData[] marchDatas)
+        public static MarchData FromTryMarch(params MarchData[] marchArray)
         {
-            MarchDatas = marchDatas;
-            DataType = MarchDataType.TryMarch;
+            var marchData = new MarchData();
+            marchData.TryMarch = marchArray;
+            marchData.MarchType = MarchDataType.TryMarch;
+            return marchData;
         }
     }
 }

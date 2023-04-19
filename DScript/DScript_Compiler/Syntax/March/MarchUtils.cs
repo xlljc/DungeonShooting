@@ -2,6 +2,9 @@
 
 namespace DScript.Compiler
 {
+    /// <summary>
+    /// 匹配词法工具类
+    /// </summary>
     internal static class MarchUtils
     {
 
@@ -14,7 +17,7 @@ namespace DScript.Compiler
             {
                 var item = marchTypes[i];
 
-                if (item.DataType == MarchData.MarchDataType.Code) //匹配字符串
+                if (item.MarchType == MarchData.MarchDataType.Code) //匹配字符串
                 {
                     syntaxTree.GetNextTokenIgnoreLineFeed(out var tempToken);
                     if (tempToken.Code != item.Code) //匹配失败
@@ -25,9 +28,9 @@ namespace DScript.Compiler
                         return;
                     }
                 }
-                else if (item.DataType == MarchData.MarchDataType.MarchType) //根据枚举类型匹配
+                else if (item.MarchType == MarchData.MarchDataType.MarchType) //根据枚举类型匹配
                 {
-                    if (item.MarchType == MarchType.Word) //匹配单个单词
+                    if (item.Type == MarchType.Word) //匹配单个单词
                     {
                         syntaxTree.GetNextTokenIgnoreLineFeed(out var tempToken);
                         if (tempToken.Type != TokenType.Word) //匹配失败
@@ -38,9 +41,9 @@ namespace DScript.Compiler
                             return;
                         }
                     }
-                    else if (item.MarchType == MarchType.FullWord || item.MarchType == MarchType.FullKeyword) //匹配全路径
+                    else if (item.Type == MarchType.FullWord || item.Type == MarchType.FullKeyword) //匹配全路径
                     {
-                        if (!MarchFullName(syntaxTree, item.MarchType == MarchType.FullKeyword)) //匹配失败
+                        if (!MarchFullName(syntaxTree, item.Type == MarchType.FullKeyword)) //匹配失败
                         {
                             marchResult.Success = false;
                             marchResult.End = syntaxTree.GetTokenIndex();
@@ -48,7 +51,7 @@ namespace DScript.Compiler
                             return;
                         }
                     }
-                    else if (item.MarchType == MarchType.ParenthesesGroup) //匹配小括号
+                    else if (item.Type == MarchType.ParenthesesGroup) //匹配小括号
                     {
                         if (!MarchGroup(syntaxTree, TokenType.ParenthesesLeft, TokenType.ParenthesesRight)) //匹配失败
                         {
@@ -58,7 +61,7 @@ namespace DScript.Compiler
                             return;
                         }
                     }
-                    else if (item.MarchType == MarchType.BracketGroup) //匹配中括号
+                    else if (item.Type == MarchType.BracketGroup) //匹配中括号
                     {
                         if (!MarchGroup(syntaxTree, TokenType.BracketLeft, TokenType.BracketRight)) //匹配失败
                         {
@@ -68,7 +71,7 @@ namespace DScript.Compiler
                             return;
                         }
                     }
-                    else if (item.MarchType == MarchType.BraceGroup) //匹配大括号
+                    else if (item.Type == MarchType.BraceGroup) //匹配大括号
                     {
                         if (!MarchGroup(syntaxTree, TokenType.BraceLeft, TokenType.BraceRight)) //匹配失败
                         {
@@ -78,7 +81,7 @@ namespace DScript.Compiler
                             return;
                         }
                     }
-                    else if (item.MarchType == MarchType.Expression) //表达式
+                    else if (item.Type == MarchType.Expression) //表达式
                     {
                         if (!MarchExpression(syntaxTree))
                         {
@@ -93,7 +96,7 @@ namespace DScript.Compiler
                 {
                     var index = syntaxTree.GetTokenIndex();
                     MarchResult tempResult = null;
-                    March(syntaxTree, item.MarchDatas, result => { tempResult = result; });
+                    March(syntaxTree, item.TryMarch, result => { tempResult = result; });
                     if (tempResult != null && !tempResult.Success) //匹配失败
                     {
                         if (IsEmptyOrLineFeed(syntaxTree, tempResult)) //回退索引
@@ -205,7 +208,7 @@ namespace DScript.Compiler
         private static bool MarchGroup(SyntaxTree syntaxTree, TokenType left, TokenType right)
         {
             syntaxTree.GetNextTokenIgnoreLineFeed(out var tempToken);
-            if (tempToken.Type == left)
+            if (tempToken != null && tempToken.Type == left)
             {
                 int count = 1;
                 while (syntaxTree.HasNextToken())
@@ -232,6 +235,16 @@ namespace DScript.Compiler
         //匹配表达式
         private static bool MarchExpression(SyntaxTree syntaxTree)
         {
+            syntaxTree.GetNextTokenIgnoreLineFeed(out var token);
+            if (token.Type == TokenType.Word) //单词
+            {
+                syntaxTree.GetNextTokenIgnoreLineFeed(out var tempToken);
+                if (tempToken == null || tempToken.Type == TokenType.Word) //第一种情况: 单个单词, 例如: 1, "a", 1.5, false
+                {
+                    return true;
+                }
+            }
+            
             return true;
         }
         
