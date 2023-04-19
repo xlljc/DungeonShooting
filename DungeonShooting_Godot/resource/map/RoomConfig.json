@@ -1,26 +1,51 @@
-[
-  {
-    "ScenePath": "res://resource/map/tileMaps/Room1.tscn",
-    "ConfigPath": "res://resource/map/tiledata/Room1.json"
-  },
-  {
-    "ScenePath": "res://resource/map/tileMaps/Room2.tscn",
-    "ConfigPath": "res://resource/map/tiledata/Room2.json"
-  },
-  {
-    "ScenePath": "res://resource/map/tileMaps/Room3.tscn",
-    "ConfigPath": "res://resource/map/tiledata/Room3.json"
-  },
-  {
-    "ScenePath": "res://resource/map/tileMaps/Room4.tscn",
-    "ConfigPath": "res://resource/map/tiledata/Room4.json"
-  },
-  {
-    "ScenePath": "res://resource/map/tileMaps/Room5.tscn",
-    "ConfigPath": "res://resource/map/tiledata/Room5.json"
-  },
-  {
-    "ScenePath": "res://resource/map/tileMaps/Room6.tscn",
-    "ConfigPath": "res://resource/map/tiledata/Room6.json"
+{
+  "testGroup": {
+    "GroupName": "testGroup",
+    "BattleList": [
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room1.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room1.json"
+      },
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room2.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room2.json"
+      },
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room3.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room3.json"
+      },
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room4.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room4.json"
+      },
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room5.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room5.json"
+      },
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room6.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room6.json"
+      },
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room7.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room7.json"
+      }
+    ],
+    "InletList": [
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/inlet/Room1.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/inlet/Room1.json"
+      }
+    ],
+    "OutletList": [
+      {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/outlet/Room1.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/outlet/Room1.json"
+      }
+    ],
+    "BossList": [],
+    "RewardList": [],
+    "ShopList": [],
+    "EventList": []
   }
-]
+}

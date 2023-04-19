@@ -15,6 +15,14 @@ public static class Utils
     {
         _random = new Random();
     }
+
+    /// <summary>
+    /// 返回一个随机的double值
+    /// </summary>
+    public static double RandomDouble()
+    {
+        return _random.NextDouble();
+    }
     
     /// <summary>
     /// 返回随机 boolean 值

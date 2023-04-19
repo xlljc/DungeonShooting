@@ -15,7 +15,7 @@ public static class ResourcePathGenerator
     //支持后缀
     private static string[] suffix =
     {
-        ".png", ".jpg", ".txt", ".json", ".ini", ".tscn", ".tres", ".otf", ".gdshader", ".ogg", ".mp3", ".wav", ".svg"
+        ".png", ".jpg", ".txt", ".json", ".ini", ".tscn", ".tres", ".otf", ".gdshader", ".ogg", ".mp3", ".wav", ".svg", ".ttf", ".otf"
     };
     //排除第一层的文件夹
     private static string[] exclude =

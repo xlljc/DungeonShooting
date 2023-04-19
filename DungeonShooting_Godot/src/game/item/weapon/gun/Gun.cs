@@ -131,6 +131,7 @@ public partial class Gun : Weapon
         const string bulletId = ActivityIdPrefix.Bullet + "0001";
         var bullet = ActivityObject.Create<Bullet>(bulletId);
         bullet.Init(
+            this,
             350,
             Utils.RandomRangeFloat(Attribute.MinDistance, Attribute.MaxDistance),
             FirePoint.GlobalPosition,

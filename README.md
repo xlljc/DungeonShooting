@@ -1,5 +1,5 @@
 
-一款由Godot开发的地牢射击类型的游戏, 脚本语言使用的是C#, 当前项目使用的Godot版本: Godot_v4.0.1
+一款由Godot开发的地牢射击类型的游戏, 脚本语言使用的是C#, 当前项目使用的Godot版本: Godot_v4.0.2
 
 --- 
 ### 游戏定义
@@ -17,7 +17,6 @@
 
 ### 启动项目
 git仓库的目录结构如下
-> ├ DungeonShooting_Art (美术资源存放目录)  
 > ├ DungeonShooting_Document (项目帮助文档, 更新日志相关的目录)  
 > └ DungeonShooting_Godot (Godot工程目录)
 

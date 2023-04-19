@@ -293,12 +293,48 @@ public abstract partial class EditorTools : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.LineEdit"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.HBoxContainer6.LineEdit
+    /// 类型: <see cref="Godot.LineEdit"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.HBoxContainer6.RoomNameInput
     /// </summary>
-    public class UiNode1_LineEdit : IUiNode<Godot.LineEdit, UiNode1_LineEdit>
+    public class UiNode_RoomNameInput : IUiNode<Godot.LineEdit, UiNode_RoomNameInput>
     {
-        public UiNode1_LineEdit(Godot.LineEdit node) : base(node) {  }
-        public override UiNode1_LineEdit Clone() => new ((Godot.LineEdit)Instance.Duplicate());
+        public UiNode_RoomNameInput(Godot.LineEdit node) : base(node) {  }
+        public override UiNode_RoomNameInput Clone() => new ((Godot.LineEdit)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.HBoxContainer6.Label2
+    /// </summary>
+    public class UiNode_Label2 : IUiNode<Godot.Label, UiNode_Label2>
+    {
+        public UiNode_Label2(Godot.Label node) : base(node) {  }
+        public override UiNode_Label2 Clone() => new ((Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.OptionButton"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.HBoxContainer6.RoomGroupSelect
+    /// </summary>
+    public class UiNode_RoomGroupSelect : IUiNode<Godot.OptionButton, UiNode_RoomGroupSelect>
+    {
+        public UiNode_RoomGroupSelect(Godot.OptionButton node) : base(node) {  }
+        public override UiNode_RoomGroupSelect Clone() => new ((Godot.OptionButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.HBoxContainer6.Label3
+    /// </summary>
+    public class UiNode_Label3 : IUiNode<Godot.Label, UiNode_Label3>
+    {
+        public UiNode_Label3(Godot.Label node) : base(node) {  }
+        public override UiNode_Label3 Clone() => new ((Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.OptionButton"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.HBoxContainer6.RoomTypeSelect
+    /// </summary>
+    public class UiNode_RoomTypeSelect : IUiNode<Godot.OptionButton, UiNode_RoomTypeSelect>
+    {
+        public UiNode_RoomTypeSelect(Godot.OptionButton node) : base(node) {  }
+        public override UiNode_RoomTypeSelect Clone() => new ((Godot.OptionButton)Instance.Duplicate());
     }
 
     /// <summary>
@@ -329,17 +365,69 @@ public abstract partial class EditorTools : UiBase
         private UiNode4_Label _L_Label;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.LineEdit"/>, 节点路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.LineEdit
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.LineEdit"/>, 节点路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.RoomNameInput
         /// </summary>
-        public UiNode1_LineEdit L_LineEdit
+        public UiNode_RoomNameInput L_RoomNameInput
         {
             get
             {
-                if (_L_LineEdit == null) _L_LineEdit = new UiNode1_LineEdit(Instance.GetNodeOrNull<Godot.LineEdit>("LineEdit"));
-                return _L_LineEdit;
+                if (_L_RoomNameInput == null) _L_RoomNameInput = new UiNode_RoomNameInput(Instance.GetNodeOrNull<Godot.LineEdit>("RoomNameInput"));
+                return _L_RoomNameInput;
             }
         }
-        private UiNode1_LineEdit _L_LineEdit;
+        private UiNode_RoomNameInput _L_RoomNameInput;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.Label2
+        /// </summary>
+        public UiNode_Label2 L_Label2
+        {
+            get
+            {
+                if (_L_Label2 == null) _L_Label2 = new UiNode_Label2(Instance.GetNodeOrNull<Godot.Label>("Label2"));
+                return _L_Label2;
+            }
+        }
+        private UiNode_Label2 _L_Label2;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.OptionButton"/>, 节点路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.RoomGroupSelect
+        /// </summary>
+        public UiNode_RoomGroupSelect L_RoomGroupSelect
+        {
+            get
+            {
+                if (_L_RoomGroupSelect == null) _L_RoomGroupSelect = new UiNode_RoomGroupSelect(Instance.GetNodeOrNull<Godot.OptionButton>("RoomGroupSelect"));
+                return _L_RoomGroupSelect;
+            }
+        }
+        private UiNode_RoomGroupSelect _L_RoomGroupSelect;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.Label3
+        /// </summary>
+        public UiNode_Label3 L_Label3
+        {
+            get
+            {
+                if (_L_Label3 == null) _L_Label3 = new UiNode_Label3(Instance.GetNodeOrNull<Godot.Label>("Label3"));
+                return _L_Label3;
+            }
+        }
+        private UiNode_Label3 _L_Label3;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.OptionButton"/>, 节点路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.RoomTypeSelect
+        /// </summary>
+        public UiNode_RoomTypeSelect L_RoomTypeSelect
+        {
+            get
+            {
+                if (_L_RoomTypeSelect == null) _L_RoomTypeSelect = new UiNode_RoomTypeSelect(Instance.GetNodeOrNull<Godot.OptionButton>("RoomTypeSelect"));
+                return _L_RoomTypeSelect;
+            }
+        }
+        private UiNode_RoomTypeSelect _L_RoomTypeSelect;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.Button

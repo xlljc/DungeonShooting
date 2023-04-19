@@ -236,6 +236,16 @@ public class WeaponAttribute
     public float AiTargetLockingTime = 0;
     
     /// <summary>
+    /// 用于Ai, Ai使用该武器发射的子弹速度缩放比
+    /// </summary>
+    public float AiBulletSpeedScale = 0.7f;
+
+    /// <summary>
+    /// 用于Ai, Ai使用该武器消耗弹药的概率, (0 - 1)
+    /// </summary>
+    public float AiAmmoConsumptionProbability = 1f;
+    
+    /// <summary>
     /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性
     /// </summary>
     public WeaponAttribute AiUseAttribute;

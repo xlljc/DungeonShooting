@@ -50,17 +50,16 @@ public partial class EnemyMark : ActivityMark
 
     public override void _Ready()
     {
-        DrawColor = Colors.Red;
         Type = ActivityIdPrefix.ActivityPrefixType.Enemy;
         Layer = RoomLayerEnum.YSortLayer;
     }
 
     public override void Doing(RoomInfo roomInfo)
     {
-        var pos = GlobalPosition;
+        var pos = Position;
         //创建敌人
-        var instance = ActivityObject.Create<Enemy>(GetItemId());
-        instance.PutDown(pos, Layer);
+        var instance = (Enemy)CreateActivityObject();
+        instance.PutDown(Layer);
 
         if (!string.IsNullOrWhiteSpace(Weapon1Id))
             CreateWeapon(instance, pos, Weapon1Id, Weapon1Ammo);
