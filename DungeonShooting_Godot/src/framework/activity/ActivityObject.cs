@@ -628,6 +628,39 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         if (component == null) return null;
         return (T)component;
     }
+
+    /// <summary>
+    /// 设置混色材质的颜色
+    /// </summary>
+    public void SetBlendColor(Color color)
+    {
+        _blendShaderMaterial.SetShaderParameter("blend", color);
+    }
+
+    /// <summary>
+    /// 获取混色材质的颜色
+    /// </summary>
+    public Color GetBlendColor()
+    {
+        return _blendShaderMaterial.GetShaderParameter("blend").AsColor();
+    }
+    
+    /// <summary>
+    /// 设置混色材质的强度
+    /// </summary>
+    public void SetBlendSchedule(float value)
+    {
+        _blendShaderMaterial.SetShaderParameter("schedule", value);
+    }
+
+    /// <summary>
+    /// 获取混色材质的强度
+    /// </summary>
+    public float GetBlendSchedule()
+    {
+        return _blendShaderMaterial.GetShaderParameter("schedule").AsSingle();
+    }
+    
     
     /// <summary>
     /// 每帧调用一次, 为了防止子类覆盖 _Process(), 给 _Process() 加上了 sealed, 子类需要帧循环函数请重写 Process() 函数
@@ -786,7 +819,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         }
 
         // Hit 动画
-        if (_playHit && _blendShaderMaterial != null)
+        if (_playHit)
         {
             if (_playHitSchedule < 0.05f)
             {
