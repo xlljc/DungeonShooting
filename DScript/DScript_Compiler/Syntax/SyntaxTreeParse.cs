@@ -104,7 +104,7 @@ namespace DScript.Compiler
                     else
                     {
                         //import语法错误
-                        throw new Exception("xxx");
+                        throw new System.Exception("xxx");
                     }
                 });
         }
@@ -136,7 +136,7 @@ namespace DScript.Compiler
                     else
                     {
                         //namespace语法错误
-                        throw new Exception("xxx");
+                        throw new System.Exception("xxx");
                     }
                 });
         }
@@ -178,7 +178,7 @@ namespace DScript.Compiler
                     else
                     {
                         //class语法错误
-                        throw new Exception("xxx");
+                        throw new System.Exception("xxx");
                     }
                 });
         }
@@ -204,7 +204,7 @@ namespace DScript.Compiler
                     else
                     {
                         //namespace语法错误
-                        throw new Exception("xxx");
+                        throw new System.Exception("xxx");
                     }
                 });
         }
@@ -226,7 +226,7 @@ namespace DScript.Compiler
                     else
                     {
                         //var语法错误
-                        throw new Exception("xxx");
+                        throw new System.Exception("xxx");
                     }
                 });
         }

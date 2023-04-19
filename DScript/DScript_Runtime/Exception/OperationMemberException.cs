@@ -1,10 +1,13 @@
 
-/// <summary>
-/// 操作成员异常
-/// </summary>
-public class OperationMemberException : ScriptException
+namespace DScript.Exception
 {
-    public OperationMemberException(string message) : base(message)
+    /// <summary>
+    /// 操作成员异常
+    /// </summary>
+    public class OperationMemberException : ScriptException
     {
+        public OperationMemberException(string message) : base(message)
+        {
+        }
     }
 }

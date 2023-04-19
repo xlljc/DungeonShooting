@@ -1,4 +1,6 @@
 
+using DScript.Exception;
+
 namespace DScript.Runtime
 {
     /// <summary>

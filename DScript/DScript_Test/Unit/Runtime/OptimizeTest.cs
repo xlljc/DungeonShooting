@@ -7,7 +7,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 /// <summary>
-/// 优化runtim方案测试
+/// 优化runtime方案测试
 /// </summary>
 public class OptimizeTest : UnitTest
 {

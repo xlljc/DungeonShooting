@@ -1,6 +1,7 @@
 ﻿
 using System.Reflection;
 using System.Text.RegularExpressions;
+using DScript.Generate;
 
 public static class GenerateCode
 {

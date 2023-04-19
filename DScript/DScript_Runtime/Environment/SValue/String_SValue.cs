@@ -1,5 +1,4 @@
-
-using System.Text;
+using DScript.Exception;
 
 namespace DScript.Runtime
 {

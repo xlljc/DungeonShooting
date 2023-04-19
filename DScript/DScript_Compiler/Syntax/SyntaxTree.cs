@@ -31,7 +31,7 @@ namespace DScript.Compiler
             if (_fileTokens.ContainsKey(path))
             {
                 //相同的文件名
-                throw new Exception("xxx");
+                throw new System.Exception("xxx");
             }
 
             FileToken fileToken = new FileToken(path, tokens, this);

@@ -7,10 +7,8 @@
 /DScript/DScript_Runtime/bin
 /DScript/DScript_Runtime_Generate/obj
 /DScript/DScript_Runtime_Generate/bin
-/DScript/DScript_Runtime_Test/obj
-/DScript/DScript_Runtime_Test/bin
-/DScript/DScript_Compiler_Test/bin
-/DScript/DScript_Compiler_Test/obj
+/DScript/DScript_Test/obj
+/DScript/DScript_Test/bin
 /DScript/DScript_Runtime/Backups
 /DScript/DScript.sln.DotSettings.user
 **/.idea

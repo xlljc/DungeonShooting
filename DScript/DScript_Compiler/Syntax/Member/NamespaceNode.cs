@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DScript.Compiler
 {
@@ -41,7 +40,7 @@ namespace DScript.Compiler
                 else
                 {
                     //已经声明了该名称的成员了, 不能再次声明为命名空间
-                    throw new Exception("xxx");
+                    throw new System.Exception("xxx");
                 }
             }
 
@@ -114,7 +113,7 @@ namespace DScript.Compiler
             if (Children.ContainsKey(nodeBase.Name))
             {
                 //命名空间下已经包含相同的成员了
-                throw new Exception("xxx");
+                throw new System.Exception("xxx");
             }
             Children.Add(nodeBase.Name, nodeBase);
         }

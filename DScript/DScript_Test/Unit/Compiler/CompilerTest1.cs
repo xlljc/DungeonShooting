@@ -21,7 +21,7 @@ public class CompilerTest1 : UnitTest
         var arr = tree.GetLexerStrings();
         for (int i = 0; i < arr.Length; i++)
         {
-            Console.WriteLine(arr[i].ToString());
+            LogUtils.Log(arr[i].ToString());
         }
     }
     

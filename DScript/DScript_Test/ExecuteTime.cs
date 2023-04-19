@@ -1,4 +1,5 @@
 ﻿using System;
+using DScript;
 using DScript.Runtime;
 
 public static class ExecuteTime
@@ -23,6 +24,6 @@ public static class ExecuteTime
         var time1 = DateTime.Now.Ticks;
         fun();
         var time2 = DateTime.Now.Ticks;
-        UnitTest.Console.WriteLine(message + ", 执行时间: " + (time2 - time1) / 10000f + "毫秒");
+        LogUtils.Log(message + ", 执行时间: " + (time2 - time1) / 10000f + "毫秒");
     }
 }

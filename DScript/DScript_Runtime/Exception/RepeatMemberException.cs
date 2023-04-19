@@ -1,11 +1,14 @@
 
-/// <summary>
-/// 重复定义成员异常
-/// </summary>
-public class RepeatMemberException : ScriptException
+namespace DScript.Exception
 {
-    public RepeatMemberException(string message) : base(message)
+    /// <summary>
+    /// 重复定义成员异常
+    /// </summary>
+    public class RepeatMemberException : ScriptException
     {
-        
+        public RepeatMemberException(string message) : base(message)
+        {
+
+        }
     }
 }

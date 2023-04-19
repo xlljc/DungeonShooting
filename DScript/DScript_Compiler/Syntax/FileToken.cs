@@ -47,7 +47,7 @@ namespace DScript.Compiler
             if (_hasNamespace) //已经存在命名空间
             {
                 //导入语句必须在声明命名空间之前
-                throw new Exception("xxx");
+                throw new System.Exception("xxx");
             }
             
             if (!Import.ContainsKey(importNode.ImportName))
@@ -57,7 +57,7 @@ namespace DScript.Compiler
             else
             {
                 //导入了相同的名称 {nextToken.Code}
-                throw new Exception("xxx");
+                throw new System.Exception("xxx");
             }
         }
 
@@ -69,12 +69,12 @@ namespace DScript.Compiler
             if (_hasClass) //已经声明类了
             {
                 //声明命名空间必须写在声明类之前
-                throw new Exception("xxx");
+                throw new System.Exception("xxx");
             }
             else if (_hasNamespace) //已经声明命名空间了
             {
                 //该文件已经声明命名空间了, 不能重复声明
-                throw new Exception("xxx");
+                throw new System.Exception("xxx");
             }
 
             NamespaceNode = namespaceNode;
@@ -103,12 +103,12 @@ namespace DScript.Compiler
             if (_hasFunction) //已经声明过函数
             {
                 //声明类必须写在声明函数之前
-                throw new Exception("xxx");
+                throw new System.Exception("xxx");
             }
             else if (_hasClass) //已经声明过类了
             {
                 //该文件已经声明类了, 不能重复声明
-                throw new Exception("xxx");
+                throw new System.Exception("xxx");
             }
 
             var namespaceNode = GetOrCreateNamespace();
