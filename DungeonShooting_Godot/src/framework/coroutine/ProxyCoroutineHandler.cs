@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 /// <summary>
 /// 协程代理类
@@ -18,7 +19,7 @@ public static class ProxyCoroutineHandler
             var item = pairs[i];
             var canNext = true;
 
-            if (item.WaitType == CoroutineData.WaitTypeEnum.WaitForSeconds) //等待秒数
+            if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForSeconds) //等待秒数
             {
                 if (!item.WaitForSeconds.NextStep(delta))
                 {
@@ -26,11 +27,11 @@ public static class ProxyCoroutineHandler
                 }
                 else
                 {
-                    item.WaitType = CoroutineData.WaitTypeEnum.None;
+                    item.WaitState = CoroutineData.WaitTypeEnum.None;
                     item.WaitForSeconds = null;
                 }
             }
-            else if (item.WaitType == CoroutineData.WaitTypeEnum.WaitForFixedProcess) //等待帧数
+            else if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForFixedProcess) //等待帧数
             {
                 if (!item.WaitForFixedProcess.NextStep())
                 {
@@ -38,8 +39,20 @@ public static class ProxyCoroutineHandler
                 }
                 else
                 {
-                    item.WaitType = CoroutineData.WaitTypeEnum.None;
+                    item.WaitState = CoroutineData.WaitTypeEnum.None;
                     item.WaitForFixedProcess = null;
+                }
+            }
+            else if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForTask) //等待Task
+            {
+                if (!item.WaitTask.IsCompleted)
+                {
+                    canNext = false;
+                }
+                else
+                {
+                    item.WaitState = CoroutineData.WaitTypeEnum.None;
+                    item.WaitTask = null;
                 }
             }
 
@@ -76,6 +89,10 @@ public static class ProxyCoroutineHandler
                     {
                         item.WaitFor(process);
                     }
+                    else if (next is Task task) //Task对象
+                    {
+                        item.WaitFor(task);
+                    }
                 }
                 else
                 {
@@ -93,7 +110,7 @@ public static class ProxyCoroutineHandler
     }
     
     /// <summary>
-    /// 代理协程, 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess
+    /// 代理协程, 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task
     /// </summary>
     public static long ProxyStartCoroutine(ref List<CoroutineData> coroutineList, IEnumerator able)
     {

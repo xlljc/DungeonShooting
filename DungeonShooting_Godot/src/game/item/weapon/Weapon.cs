@@ -1035,8 +1035,7 @@ public abstract partial class Weapon : ActivityObject
         //停止动画
         AnimationPlayer.Stop();
         //清除泛白效果
-        ShaderMaterial sm = (ShaderMaterial)AnimatedSprite.Material;
-        sm.SetShaderParameter("schedule", 0);
+        SetBlendSchedule(0);
         ZIndex = 0;
         //禁用碰撞
         Collision.Disabled = true;

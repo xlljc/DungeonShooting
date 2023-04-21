@@ -1,4 +1,6 @@
 ﻿
+using System.Collections;
+using System.Threading.Tasks;
 using Godot;
 
 /// <summary>
@@ -174,7 +176,27 @@ public partial class ActivityMark : Node2D
         
         instance.VerticalSpeed = VerticalSpeed;
         instance.Altitude = Altitude;
+        instance.StartCoroutine(PlayBirthAnimation(instance));
         return instance;
+    }
+
+    private IEnumerator PlayBirthAnimation(ActivityObject instance)
+    {
+        var a = 1.0f;
+        instance.SetBlendColor(Colors.White);
+
+        for (var i = 0; i < 10; i++)
+        {
+            instance.SetBlendSchedule(a);
+            yield return 0;
+        }
+        
+        while (a > 0)
+        {
+            instance.SetBlendSchedule(a);
+            a -= 0.03f;
+            yield return 0;
+        }
     }
 
 #if TOOLS
