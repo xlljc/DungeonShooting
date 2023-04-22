@@ -1,6 +1,5 @@
 ﻿
 using System.Collections;
-using System.Threading.Tasks;
 using Godot;
 
 /// <summary>
@@ -176,14 +175,19 @@ public partial class ActivityMark : Node2D
         
         instance.VerticalSpeed = VerticalSpeed;
         instance.Altitude = Altitude;
-        instance.StartCoroutine(PlayBirthAnimation(instance));
+        instance.StartCoroutine(OnActivityObjectBirth(instance));
         return instance;
     }
-
-    private IEnumerator PlayBirthAnimation(ActivityObject instance)
+    
+    /// <summary>
+    /// 生成 ActivityObject 时调用, 用于出生时的动画效果
+    /// </summary>
+    protected virtual IEnumerator OnActivityObjectBirth(ActivityObject instance)
     {
         var a = 1.0f;
         instance.SetBlendColor(Colors.White);
+        //禁用自定义行为
+        instance.EnableCustomBehavior = false;
 
         for (var i = 0; i < 10; i++)
         {
@@ -197,6 +201,9 @@ public partial class ActivityMark : Node2D
             a -= 0.03f;
             yield return 0;
         }
+        
+        //启用自定义行为
+        instance.EnableCustomBehavior = true;
     }
 
 #if TOOLS

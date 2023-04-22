@@ -142,6 +142,37 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public bool EnableVerticalMotion { get; set; } = true;
 
+    /// <summary>
+    /// 是否启用物体更新行为, 默认 true, 如果禁用, 则会停止当前物体的 Process(), PhysicsProcess() 调用, 并且禁用 Collision 节点, 禁用后所有组件也同样被禁用行为
+    /// </summary>
+    public bool EnableBehavior
+    {
+        get => _enableBehavior;
+        set
+        {
+            if (value != _enableBehavior)
+            {
+                _enableBehavior = value;
+                SetProcess(value);
+                SetPhysicsProcess(value);
+                if (value)
+                {
+                    Collision.Disabled = _enableBehaviorCollisionDisabledFlag;
+                }
+                else
+                {
+                    _enableBehaviorCollisionDisabledFlag = Collision.Disabled;
+                    Collision.Disabled = true;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 是否启用自定义行为, 默认 true, 如果禁用, 则会停止调用子类重写的 Process(), PhysicsProcess() 函数, 并且当前物体除 MoveController 以外的组件 Process(), PhysicsProcess() 也会停止调用
+    /// </summary>
+    public bool EnableCustomBehavior { get; set; } = true;
+    
     // --------------------------------------------------------------------------------
 
     //组件集合
@@ -192,7 +223,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     //落到地上回弹的速度
     private float _resilienceVerticalSpeed = 0;
     private bool _hasResilienceVerticalSpeed = false;
-    
+
+    //是否启用物体行为
+    private bool _enableBehavior = true;
+    private bool _enableBehaviorCollisionDisabledFlag;
+
     // --------------------------------------------------------------------------------
     
     //实例索引
@@ -668,26 +703,41 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public sealed override void _Process(double delta)
     {
         var newDelta = (float)delta;
-        Process(newDelta);
+        if (EnableCustomBehavior)
+        {
+            Process(newDelta);
+        }
         
         //更新组件
         if (_components.Count > 0)
         {
-            var arr = _components.ToArray();
-            for (int i = 0; i < arr.Length; i++)
+            if (EnableCustomBehavior) //启用所有组件
             {
-                if (IsDestroyed) return;
-                var temp = arr[i].Value;
-                if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                var arr = _components.ToArray();
+                for (int i = 0; i < arr.Length; i++)
                 {
-                    if (!temp.IsReady)
+                    if (IsDestroyed) return;
+                    var temp = arr[i].Value;
+                    if (temp != null && temp.ActivityInstance == this && temp.Enable)
                     {
-                        temp.Ready();
-                        temp.IsReady = true;
-                    }
+                        if (!temp.IsReady)
+                        {
+                            temp.Ready();
+                            temp.IsReady = true;
+                        }
 
-                    temp.Process(newDelta);
+                        temp.Process(newDelta);
+                    }
                 }
+            }
+            else //只更新 MoveController 组件
+            {
+                if (!MoveController.IsReady)
+                {
+                    MoveController.Ready();
+                    MoveController.IsReady = true;
+                }
+                MoveController.Process(newDelta);
             }
         }
 
@@ -862,26 +912,41 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public sealed override void _PhysicsProcess(double delta)
     {
         var newDelta = (float)delta;
-        PhysicsProcess(newDelta);
+        if (EnableCustomBehavior)
+        {
+            PhysicsProcess(newDelta);
+        }
         
         //更新组件
         if (_components.Count > 0)
         {
-            var arr = _components.ToArray();
-            for (int i = 0; i < arr.Length; i++)
+            if (EnableCustomBehavior) //启用所有组件
             {
-                if (IsDestroyed) return;
-                var temp = arr[i].Value;
-                if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                var arr = _components.ToArray();
+                for (int i = 0; i < arr.Length; i++)
                 {
-                    if (!temp.IsReady)
+                    if (IsDestroyed) return;
+                    var temp = arr[i].Value;
+                    if (temp != null && temp.ActivityInstance == this && temp.Enable)
                     {
-                        temp.Ready();
-                        temp.IsReady = true;
-                    }
+                        if (!temp.IsReady)
+                        {
+                            temp.Ready();
+                            temp.IsReady = true;
+                        }
 
-                    temp.PhysicsProcess(newDelta);
+                        temp.PhysicsProcess(newDelta);
+                    }
                 }
+            }
+            else //只更新 MoveController 组件
+            {
+                if (!MoveController.IsReady)
+                {
+                    MoveController.Ready();
+                    MoveController.IsReady = true;
+                }
+                MoveController.PhysicsProcess(newDelta);
             }
         }
 

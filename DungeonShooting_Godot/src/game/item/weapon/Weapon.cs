@@ -1003,16 +1003,17 @@ public abstract partial class Weapon : ActivityObject
         Throw(startPosition, startHeight, yf, velocity, rotate);
     }
 
+    protected override void OnThrowStart()
+    {
+        //禁用碰撞
+        Collision.Disabled = true;
+        AnimationPlayer.Play("floodlight");
+    }
+
     protected override void OnThrowOver()
     {
         //启用碰撞
         Collision.Disabled = false;
-        AnimationPlayer.Play("floodlight");
-    }
-
-    public override void PutDown(RoomLayerEnum layer, bool showShadow = true)
-    {
-        base.PutDown(layer, showShadow);
         AnimationPlayer.Play("floodlight");
     }
 
