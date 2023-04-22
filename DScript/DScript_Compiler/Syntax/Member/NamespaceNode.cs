@@ -8,7 +8,7 @@ namespace DScript.Compiler
     public class NamespaceNode : NodeBase
     {
         /// <summary>
-        /// 根据命名空间名称创建或者获取命名空间对象
+        /// 根据命名空间名称创建或者获创建名空间对象
         /// </summary>
         /// <param name="syntaxTree">语法树对象</param>
         /// <param name="fullName">命名空间全称</param>

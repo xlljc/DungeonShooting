@@ -12,6 +12,6 @@ func say(message) {
     }
 }
 
-func vec2Zero(): class {
+func vec2Zero(): Vector2 {
     return Vector2(0, 0)
 }

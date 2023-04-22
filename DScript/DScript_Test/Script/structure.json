@@ -1,0 +1,50 @@
+{
+  "Path": "Test1.ds",
+  "FileName": "Test1.ds",
+  "Import": {
+    "Behavior": {
+      "Name": "Behavior",
+      "FullName": "example.framework.Behavior"
+    },
+    "myName": {
+      "Name": "myName",
+      "FullName": "example"
+    }
+  },
+  "Namespace": "test.aaa",
+  "Define": {
+    "MyClass": {
+      "Type": "class",
+      "Name": "MyClass",
+      "Parent": "example.framework.Behavior",
+      "Members": {
+        "say": {
+          "Name": "say",
+          "Functions": {
+            "1": {
+              "ParamLength": 1,
+              "Param": [
+                {
+                  "Name": "message",
+                  "TypeName": "any"
+                }
+              ],
+              "ReturnType": "any"
+            }
+          }
+        },
+        "vec2Zero": {
+          "Name": "vec2Zero",
+          "Functions": {
+            "0": {
+              "ParamLength": 0,
+              "Param": [
+              ],
+              "ReturnType": "Vector2"
+            }
+          }
+        }
+      }
+    }
+  }
+}

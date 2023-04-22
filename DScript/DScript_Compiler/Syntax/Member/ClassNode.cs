@@ -22,7 +22,10 @@ namespace DScript.Compiler
         /// </summary>
         public readonly string ParentName;
 
-        public readonly Dictionary<string, MemberData> Members = new Dictionary<string, MemberData>();
+        /// <summary>
+        /// 类中定义的成员
+        /// </summary>
+        public readonly Dictionary<string, MemberInfo> Members = new Dictionary<string, MemberInfo>();
 
         public ClassNode(string name, string parent) : base(name)
         {
@@ -41,13 +44,16 @@ namespace DScript.Compiler
             FullName = NamespaceNode.FullName + "." + Name;
         }
 
+        /// <summary>
+        /// 添加函数
+        /// </summary>
         public void AddFunction(FunctionNode functionNode)
         {
             if (!Members.TryGetValue(functionNode.Name, out var memberData))
             {
                 var methodNode = new MethodNode(functionNode.Name);
-                memberData = new MemberData(methodNode, false);
-                methodNode.Functions.Add(functionNode.ParamLength, functionNode);
+                memberData = new MemberInfo(methodNode, false);
+                methodNode.AddFunction(functionNode);
                 Members.Add(methodNode.Name, memberData);
             }
             else
@@ -59,11 +65,7 @@ namespace DScript.Compiler
                 }
 
                 var methodNode = (MethodNode)memberData.Node;
-                if (!methodNode.Functions.TryAdd(functionNode.ParamLength, functionNode))
-                {
-                    //已经声明了相同参数长度的函数 'xxx' 了
-                    throw new System.Exception("xxx");
-                }
+                methodNode.AddFunction(functionNode);
             }
         }
     }

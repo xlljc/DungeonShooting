@@ -19,24 +19,33 @@ namespace DScript.Compiler
         /// 该文件的路径
         /// </summary>
         public string Path;
+        
+        /// <summary>
+        /// 当前文件所包含的 token
+        /// </summary>
         public Token[] Tokens;
+        
+        /// <summary>
+        /// 语法树对象
+        /// </summary>
         public SyntaxTree SyntaxTree;
 
         /// <summary>
         /// 导入的简化名称
         /// </summary>
-        public Dictionary<string, ImportNode> Import = new Dictionary<string, ImportNode>();
+        public Dictionary<string, ImportNode> ImportNode = new Dictionary<string, ImportNode>();
         /// <summary>
         /// 该文件中声明的命名空间
         /// </summary>
         public NamespaceNode NamespaceNode;
         /// <summary>
-        /// 该文件包含的类
+        /// 该文件中定义的成员
         /// </summary>
-        public ClassNode ClassNode;
+        public Dictionary<string, NodeBase> DefineNode = new Dictionary<string, NodeBase>();
         
         private bool _hasNamespace = false;
         private bool _hasClass = false;
+        private ClassNode _classNode;
         private bool _hasFunction = false;
         
         /// <summary>
@@ -50,9 +59,9 @@ namespace DScript.Compiler
                 throw new System.Exception("xxx");
             }
             
-            if (!Import.ContainsKey(importNode.ImportName))
+            if (!ImportNode.ContainsKey(importNode.Name))
             {
-                Import.Add(importNode.ImportName, importNode);
+                ImportNode.Add(importNode.Name, importNode);
             }
             else
             {
@@ -114,22 +123,57 @@ namespace DScript.Compiler
             var namespaceNode = GetOrCreateNamespace();
             classNode.SetNamespace(namespaceNode);
 
-            ClassNode = classNode;
+            _classNode = classNode;
             _hasClass = true;
+            AddDefineNode(classNode);
         }
 
+        /// <summary>
+        /// 添加声明函数
+        /// </summary>
         public void AddFunction(FunctionNode functionNode)
         {
             if (_hasClass) //放入类中
             {
-                ClassNode.AddFunction(functionNode);
+                _classNode.AddFunction(functionNode);
             }
             else //放入命名空间中
             {
                 _hasFunction = true;
                 var namespaceNode = GetOrCreateNamespace();
-                namespaceNode.AddChild(functionNode);
+
+                var nodeBase = namespaceNode.GetChild(functionNode.Name);
+                if (nodeBase == null)
+                {
+                    var methodNode = new MethodNode(functionNode.Name);
+                    methodNode.AddFunction(functionNode);
+                    namespaceNode.AddChild(methodNode);
+                }
+                else if (nodeBase is MethodNode methodNode)
+                {
+                    methodNode.AddFunction(functionNode);
+                }
+                else
+                {
+                    //命名空间中已经声明过 'xxx' 的成员了
+                    throw new System.Exception("xxx");
+                }
+
+                AddDefineNode(functionNode);
             }
+        }
+
+        /// <summary>
+        /// 添加定义成员
+        /// </summary>
+        private void AddDefineNode(NodeBase nodeBase)
+        {
+            if (DefineNode.ContainsKey(nodeBase.Name))
+            {
+                //重复定义名称: name
+                throw new System.Exception("xxx");
+            }
+            DefineNode.Add(nodeBase.Name, nodeBase);
         }
     }
 }

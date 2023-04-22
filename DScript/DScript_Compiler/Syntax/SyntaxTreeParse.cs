@@ -112,7 +112,7 @@ namespace DScript.Compiler
 
                         //添加导入名称
                         var importName = newArr[0];
-                        fileToken.AddImport(new ImportNode(importName.Code, importName.Code, fullName));
+                        fileToken.AddImport(new ImportNode(importName.Code, fullName));
                     }
                     else
                     {

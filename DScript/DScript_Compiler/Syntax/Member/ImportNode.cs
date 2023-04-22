@@ -6,18 +6,12 @@ namespace DScript.Compiler
     public class ImportNode : NodeBase
     {
         /// <summary>
-        /// 导入时简化的名称
-        /// </summary>
-        public string ImportName;
-        
-        /// <summary>
         /// 导入前的全称
         /// </summary>
         public string FullName;
 
-        public ImportNode(string name, string importName, string fullName) : base(name)
+        public ImportNode(string importName, string fullName) : base(importName)
         {
-            ImportName = importName;
             FullName = fullName;
         }
     }

@@ -12,7 +12,7 @@ namespace DScript.Compiler
         /// <summary>
         /// 根命名空间
         /// </summary>
-        public NamespaceNode Root { get; } = new NamespaceNode("global", "global", null);
+        public NamespaceNode Root { get; } = new NamespaceNode("#global", "global", null);
 
         private SyntaxTreeParse _treeParse;
         //已经解析过的文件的信息
@@ -268,6 +268,12 @@ namespace DScript.Compiler
             return _currFileToken.Tokens.Length;
         }
 
+        /// <summary>
+        /// 复制指定位置 Token 并返回
+        /// </summary>
+        /// <param name="start">起始位置</param>
+        /// <param name="end">结束位置</param>
+        /// <param name="ignoreLineFeed">是否忽略换行</param>
         internal Token[] CopyTokens(int start, int end, bool ignoreLineFeed = true)
         {
             if (_currFileToken == null)

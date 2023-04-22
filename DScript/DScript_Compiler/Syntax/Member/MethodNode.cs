@@ -9,5 +9,19 @@ namespace DScript.Compiler
         public MethodNode(string name) : base(name)
         {
         }
+
+        public void AddFunction(FunctionNode functionNode)
+        {
+            var len = functionNode.ParamLength;
+            if (Functions.ContainsKey(len))
+            {
+                //已经声明了相同参数长度的函数 'xxx' 了
+                throw new System.Exception("xxx");
+            }
+            else
+            {
+                Functions.Add(len, functionNode);
+            }
+        }
     }
 }
