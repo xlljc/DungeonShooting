@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://ctbfg0p66xirw"]
+[gd_scene load_steps=4 format=3 uid="uid://ctbfg0p66xirw"]
 
 [ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="1_mx0vc"]
+[ext_resource type="Script" path="res://src/framework/map/mark/EnemyMark.cs" id="3_7acs8"]
 [ext_resource type="Script" path="res://src/framework/map/DungeonRoomTemplate.cs" id="dungeonRoomTemplate"]
 
 [node name="Room5" type="TileMap"]
@@ -8,3 +9,48 @@ tile_set = ExtResource("1_mx0vc")
 format = 2
 layer_0/tile_data = PackedInt32Array(65533, 0, 8, 131069, 0, 8, 196605, 0, 8, 262141, 0, 8, 327677, 131072, 2, 65534, 0, 8, 131070, 0, 8, 196606, 0, 8, 262142, 0, 8, 327678, 196608, 2, 393214, 720896, 2, -1, 0, 8, 65535, 0, 8, 131071, 0, 8, 196607, 0, 8, 262143, 0, 8, 327679, 0, 8, 393215, 196608, 2, 458751, 196608, 3, -196608, 0, 8, -131072, 0, 8, -65536, 0, 8, 0, 0, 8, 65536, 0, 8, 131072, 0, 8, 196608, 0, 8, 262144, 0, 8, 327680, 0, 8, 393216, 0, 8, 458752, 131072, 2, -196607, 0, 8, -131071, 0, 8, -65535, 0, 8, 1, 0, 8, 65537, 65536, 2, 131073, 65536, 7, 196609, 0, 8, 262145, 0, 8, 327681, 0, 8, 393217, 0, 8, 458753, 131072, 2, -196606, 0, 8, -131070, 0, 8, -65534, 0, 8, 2, 0, 8, 65538, 196608, 2, 131074, 196608, 7, 196610, 0, 8, 262146, 0, 8, 327682, 0, 8, 393218, 0, 8, 458754, 131072, 2, -196605, 0, 8, -131069, 0, 8, -65533, 0, 8, 3, 0, 8, 65539, 0, 8, 131075, 0, 8, 196611, 0, 8, 262147, 0, 8, 327683, 0, 8, 393219, 0, 8, 458755, 131072, 2, -196604, 65536, 3, -131068, 65536, 7, -65532, 0, 8, 4, 0, 8, 65540, 0, 8, 131076, 0, 8, 196612, 0, 8, 262148, 0, 8, 327684, 65536, 2, 393220, 65536, 3, 458756, 851968, 2, -131067, 65536, 4, -65531, 65536, 7, 5, 0, 8, 65541, 0, 8, 131077, 0, 8, 196613, 0, 8, 262149, 65536, 2, 327685, 851968, 2, -65530, 131072, 7, 6, 0, 8, 65542, 0, 8, 131078, 0, 8, 196614, 0, 8, 262150, 131072, 2, 7, 65536, 3, 65543, 65536, 3, 131079, 65536, 3, 196615, 65536, 3, 262151, 851968, 2, -4, 196608, 4, 65532, 196608, 3, 131068, 196608, 3, 196604, 196608, 3, 262140, 196608, 3, 327676, 720896, 2, -3, 131072, 7, -65538, 196608, 4, -2, 196608, 7, -196609, 196608, 4, -131073, 196608, 3, -65537, 196608, 7, 524287, 720896, 2, -262144, 131072, 7, -262143, 131072, 7, -262142, 131072, 7, -262141, 131072, 7, -262140, 65536, 4, -65529, 65536, 4)
 script = ExtResource("dungeonRoomTemplate")
+
+[node name="EnemyMark" type="Node2D" parent="."]
+position = Vector2(-15, 36)
+script = ExtResource("3_7acs8")
+Weapon1Id = "0002"
+Weapon1Ammo = 10
+Type = 3
+ItemId = "0001"
+Layer = 1
+DelayTime = 1.0
+BirthRect = Vector2i(30, 30)
+
+[node name="EnemyMark2" type="Node2D" parent="."]
+position = Vector2(81, 36)
+script = ExtResource("3_7acs8")
+Weapon1Id = "0002"
+Weapon1Ammo = 10
+Type = 3
+ItemId = "0001"
+Layer = 1
+BirthRect = Vector2i(30, 30)
+
+[node name="EnemyMark3" type="Node2D" parent="."]
+position = Vector2(32, -19)
+script = ExtResource("3_7acs8")
+Weapon1Id = "0002"
+Weapon1Ammo = 10
+Type = 3
+ItemId = "0001"
+Layer = 1
+WaveNumber = 2
+DelayTime = 0.5
+BirthRect = Vector2i(30, 30)
+
+[node name="EnemyMark4" type="Node2D" parent="."]
+position = Vector2(32, 89)
+script = ExtResource("3_7acs8")
+Weapon1Id = "0002"
+Weapon1Ammo = 10
+Type = 3
+ItemId = "0001"
+Layer = 1
+WaveNumber = 2
+DelayTime = 1.5
+BirthRect = Vector2i(30, 30)

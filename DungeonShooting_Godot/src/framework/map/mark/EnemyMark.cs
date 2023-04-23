@@ -8,6 +8,25 @@ using Godot;
 public partial class EnemyMark : ActivityMark
 {
     /// <summary>
+    /// 脸默认朝向
+    /// </summary>
+    public enum FaceDirectionValueEnum
+    {
+        /// <summary>
+        /// 随机
+        /// </summary>
+        Random,
+        /// <summary>
+        /// 左边
+        /// </summary>
+        Left,
+        /// <summary>
+        /// 右边
+        /// </summary>
+        Right
+    }
+    
+    /// <summary>
     /// 武器1 id, id会自动加上武器前缀
     /// </summary>
     [Export]
@@ -47,6 +66,11 @@ public partial class EnemyMark : ActivityMark
     /// </summary>
     [Export]
     public int Weapon4Ammo = -1;
+    /// <summary>
+    /// 脸默认的朝向
+    /// </summary>
+    [Export]
+    public FaceDirectionValueEnum FaceDirection = FaceDirectionValueEnum.Random;
 
     public override void _Ready()
     {
@@ -59,6 +83,21 @@ public partial class EnemyMark : ActivityMark
         var pos = Position;
         //创建敌人
         var instance = (Enemy)CreateActivityObject();
+        
+        //脸的朝向
+        if (FaceDirection == FaceDirectionValueEnum.Random)
+        {
+            instance.Face = Utils.RandomBoolean() ? global::FaceDirection.Left : global::FaceDirection.Right;
+        }
+        else if (FaceDirection == FaceDirectionValueEnum.Left)
+        {
+            instance.Face = global::FaceDirection.Left;
+        }
+        else
+        {
+            instance.Face = global::FaceDirection.Right;
+        }
+        
         instance.PutDown(Layer);
 
         if (!string.IsNullOrWhiteSpace(Weapon1Id))

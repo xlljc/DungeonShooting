@@ -55,7 +55,7 @@ public partial class ActivityMark : Node2D
     /// 物体初始海拔高度
     /// </summary>
     [ExportGroup("Vertical")]
-    [Export(PropertyHint.Range, "0, 36")]
+    [Export(PropertyHint.Range, "0, 128")]
     public int Altitude = 0;
 
     /// <summary>
@@ -188,6 +188,8 @@ public partial class ActivityMark : Node2D
         instance.SetBlendColor(Colors.White);
         //禁用自定义行为
         instance.EnableCustomBehavior = false;
+        //禁用下坠
+        instance.EnableVerticalMotion = false;
 
         for (var i = 0; i < 10; i++)
         {
@@ -198,12 +200,14 @@ public partial class ActivityMark : Node2D
         while (a > 0)
         {
             instance.SetBlendSchedule(a);
-            a -= 0.03f;
+            a -= 0.05f;
             yield return 0;
         }
         
         //启用自定义行为
         instance.EnableCustomBehavior = true;
+        //启用下坠
+        instance.EnableVerticalMotion = true;
     }
 
 #if TOOLS
@@ -211,14 +215,25 @@ public partial class ActivityMark : Node2D
     {
         if (Engine.IsEditorHint() || GameApplication.Instance.Debug)
         {
-            DrawLine(new Vector2(-2, -2), new Vector2(2, 2), DrawColor, 1f);
-            DrawLine(new Vector2(-2, 2), new Vector2(2, -2), DrawColor, 1f);
+            var drawColor = DrawColor;
+
+            //如果在编辑器中选中了该节点, 则绘更改绘制颜色的透明度
+            var selectedNodes = Plugin.Plugin.Instance?.GetEditorInterface()?.GetSelection()?.GetSelectedNodes();
+            if (selectedNodes != null && selectedNodes.Contains(this))
+            {
+                drawColor.A = 1f;
+            }
+            else
+            {
+                drawColor.A = 0.5f;
+            }
+            
+            DrawLine(new Vector2(-2, -2), new Vector2(2, 2), drawColor, 1f);
+            DrawLine(new Vector2(-2, 2), new Vector2(2, -2), drawColor, 1f);
 
             if (BirthRect != Vector2.Zero)
             {
-                var c = DrawColor;
-                c.A = 0.5f;
-                DrawRect(new Rect2(-BirthRect / 2, BirthRect), c, false, 0.5f);
+                DrawRect(new Rect2(-BirthRect / 2, BirthRect), drawColor, false, 0.5f);
             }
 
             if (_drawFont == null)

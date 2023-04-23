@@ -23,6 +23,7 @@ public partial class WeaponMark : ActivityMark
     {
         Type = ActivityIdPrefix.ActivityPrefixType.Weapon;
         Layer = RoomLayerEnum.NormalLayer;
+        Altitude = 8;
     }
 
     public override void Doing(RoomInfo roomInfo)
@@ -43,7 +44,7 @@ public partial class WeaponMark : ActivityMark
         instance.PutDown(Layer);
         
         var effect1 = ResourceManager.LoadAndInstantiate<Effect1>(ResourcePath.prefab_effect_Effect1_tscn);
-        effect1.Position = instance.Position;
+        effect1.Position = instance.Position + new Vector2(0, -Altitude);
         effect1.AddToActivityRoot(RoomLayerEnum.NormalLayer);
     }
 }
