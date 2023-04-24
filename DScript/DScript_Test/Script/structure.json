@@ -18,8 +18,43 @@
       "Name": "MyClass",
       "Parent": "example.framework.Behavior",
       "Members": {
+        "a": {
+          "Name": "a",
+          "Type": "var",
+          "IsStatic": false,
+          "Body": {
+            "Type": "value",
+            "ValueType": "number",
+            "Value": 1
+          }
+        },
+        "b": {
+          "Name": "b",
+          "Type": "var",
+          "IsStatic": false,
+          "Body": {
+            "Type": "value",
+            "ValueType": "boolean",
+            "Value": false
+          }
+        },
+        "c": {
+          "Name": "c",
+          "Type": "var",
+          "IsStatic": false,
+          "Body": {
+            
+          }
+        },
+        "d": {
+          "Name": "d",
+          "Type": "var",
+          "IsStatic": false
+        },
         "say": {
           "Name": "say",
+          "Type": "function",
+          "IsStatic": false,
           "Functions": {
             "1": {
               "ParamLength": 1,
@@ -35,6 +70,8 @@
         },
         "vec2Zero": {
           "Name": "vec2Zero",
+          "Type": "function",
+          "IsStatic": false,
           "Functions": {
             "0": {
               "ParamLength": 0,

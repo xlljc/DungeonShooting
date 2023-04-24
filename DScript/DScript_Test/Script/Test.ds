@@ -4,6 +4,11 @@ import myName=example
 namespace test.aaa
 class MyClass extends example.framework.Behavior
 
+var a = 1;
+var b = false;
+var c = "123" + 789 + (10 - 5) * 5;
+var d = Math.RandomRange(1, 100) + 100;
+
 func say(message) {
     if (message is number) {
         print("say(number): " + message)
