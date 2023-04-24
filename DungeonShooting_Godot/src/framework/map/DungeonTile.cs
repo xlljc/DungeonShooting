@@ -87,6 +87,8 @@ public class DungeonTile
                  //_tileRoot.AddChild(activityMark);
                  activityMark.Position = roomInfo.GetWorldPosition() + pos;
                  activityMark.TileRoot = _tileRoot;
+                 //预处理
+                 activityMark.Pretreatment();
              }
             roomInfo.ActivityMarks.AddRange(activityMarks);
             
