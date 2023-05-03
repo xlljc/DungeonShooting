@@ -150,6 +150,14 @@ public partial class ActivityMark : Node2D
     }
 
     /// <summary>
+    /// 进行预处理操作
+    /// </summary>
+    public void Pretreatment()
+    {
+        
+    }
+
+    /// <summary>
     /// 标记准备好了
     /// </summary>
     public void BeReady(RoomInfo roomInfo)
