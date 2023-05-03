@@ -1,11 +1,11 @@
 {
   "Position": {
-    "X": -3,
-    "Y": -4
+    "X": -5,
+    "Y": -3
   },
   "Size": {
-    "X": 14,
-    "Y": 9
+    "X": 25,
+    "Y": 16
   },
   "DoorAreaInfos": [],
   "NavigationList": [
@@ -13,26 +13,26 @@
       "Type": 0,
       "Points": [
         {
-          "X": -24,
-          "Y": -40
+          "X": -56,
+          "Y": -24
         },
         {
-          "X": 152,
-          "Y": -40
+          "X": 296,
+          "Y": -24
         },
         {
-          "X": 152,
-          "Y": 64
+          "X": 296,
+          "Y": 192
         },
         {
-          "X": -24,
-          "Y": 64
+          "X": -56,
+          "Y": 192
         }
       ]
     }
   ],
   "GroupName": "testGroup",
   "RoomType": 0,
-  "FileName": "Room7",
+  "FileName": "Room8",
   "Weight": 100
 }

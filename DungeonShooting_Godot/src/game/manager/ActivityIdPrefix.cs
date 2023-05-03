@@ -4,13 +4,41 @@ public static class ActivityIdPrefix
 {
     public enum ActivityPrefixType
     {
+        /// <summary>
+        /// 无前缀
+        /// </summary>
         NonePrefix,
+        /// <summary>
+        /// 玩家
+        /// </summary>
+        Player,
+        /// <summary>
+        /// 测试对象
+        /// </summary>
         Test,
+        /// <summary>
+        /// 角色
+        /// </summary>
         Role,
+        /// <summary>
+        /// 敌人
+        /// </summary>
         Enemy,
+        /// <summary>
+        /// 武器
+        /// </summary>
         Weapon,
+        /// <summary>
+        /// 子弹
+        /// </summary>
         Bullet,
+        /// <summary>
+        /// 弹壳
+        /// </summary>
         Shell,
+        /// <summary>
+        /// 其它类型
+        /// </summary>
         Other,
     }
     
@@ -56,6 +84,7 @@ public static class ActivityIdPrefix
             case ActivityPrefixType.Test:
                 return Test;
             case ActivityPrefixType.Role:
+            case ActivityPrefixType.Player:
                 return Role;
             case ActivityPrefixType.Enemy:
                 return Enemy;

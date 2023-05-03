@@ -93,7 +93,7 @@ public partial class RoomManager : Node2D
         //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
         //初始房间创建玩家标记
-        var playerBirthMark = StartRoom.ActivityMarks.FirstOrDefault(mark => mark is PlayerBirthMark);
+        var playerBirthMark = StartRoom.ActivityMarks.FirstOrDefault(mark => mark.Type == ActivityIdPrefix.ActivityPrefixType.Player);
         //创建玩家
         Player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
         if (playerBirthMark != null)

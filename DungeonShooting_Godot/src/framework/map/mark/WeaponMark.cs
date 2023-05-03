@@ -26,10 +26,10 @@ public partial class WeaponMark : ActivityMark
         Altitude = 8;
     }
 
-    public override void Doing(RoomInfo roomInfo)
+    public override void Doing(ActivityObject activityObject, ActivityExpressionData expressionData, RoomInfo roomInfo)
     {
+        var instance = (Weapon)activityObject;
         //创建武器
-        var instance = (Weapon)CreateActivityObject();
         if (CurrAmmon >= 0)
         {
             instance.SetCurrAmmo(CurrAmmon);   
@@ -39,9 +39,6 @@ public partial class WeaponMark : ActivityMark
         {
             instance.SetResidueAmmo(ResidueAmmo);   
         }
-
-
-        instance.PutDown(Layer);
         
         var effect1 = ResourceManager.LoadAndInstantiate<Effect1>(ResourcePath.prefab_effect_Effect1_tscn);
         effect1.Position = instance.Position + new Vector2(0, -Altitude);

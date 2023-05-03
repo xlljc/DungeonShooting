@@ -1,5 +1,9 @@
 ﻿
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using Godot;
 
 /// <summary>
@@ -15,10 +19,11 @@ public partial class ActivityMark : Node2D
     public ActivityIdPrefix.ActivityPrefixType Type = ActivityIdPrefix.ActivityPrefixType.NonePrefix;
 
     /// <summary>
-    /// 物体id
+    /// 创建物体的表达式, 该表达式计算出的id会自动加上 Type 前缀
+    /// 例如: 0001(w:100,ca:15,ra:30);0002(w:120,ca:10,ra:20)
     /// </summary>
-    [Export]
-    public string ItemId;
+    [Export(PropertyHint.Expression), ActivityExpression]
+    public string ItemExpression;
 
     /// <summary>
     /// 所在层级
@@ -77,15 +82,41 @@ public partial class ActivityMark : Node2D
 
     //绘制的字体
     private static Font _drawFont;
-    
+
+    //已经计算好要生成的物体
+    private Dictionary<string, ActivityExpressionData> _currentExpression = new Dictionary<string, ActivityExpressionData>();
+
+    //存储所有 ActivityMark 和子类中被 [ActivityExpression] 标记的字段名称
+    private static Dictionary<Type, List<string>> _activityExpressionMap = new Dictionary<Type, List<string>>();
+
     /// <summary>
-    /// 获取物体Id
+    /// 对生成的物体执行后续操作
     /// </summary>
-    public string GetItemId()
+    public virtual void Doing(ActivityObject activityObject, ActivityExpressionData expressionData, RoomInfo roomInfo)
     {
-        return ActivityIdPrefix.GetNameByPrefixType(Type) + ItemId;
     }
 
+    public ActivityMark()
+    {
+        //扫描所有 ActivityExpression
+        var type = GetType();
+        if (!_activityExpressionMap.ContainsKey(type))
+        {
+            // 获取类型信息
+            var fieldInfos = new List<string>();
+            var tempList = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
+            foreach (var s in tempList)
+            {
+                if (s.GetCustomAttribute<ActivityExpression>() != null)
+                {
+                    fieldInfos.Add(s.Name);
+                }
+            }
+
+            _activityExpressionMap.Add(type, fieldInfos);
+        }
+    }
+    
     public override void _Process(double delta)
     {
 #if TOOLS
@@ -123,6 +154,10 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public void BeReady(RoomInfo roomInfo)
     {
+        if (_currentExpression == null)
+        {
+            return;
+        }
         _isOver = false;
         _overTimer = 0;
         SetActive(true);
@@ -146,43 +181,56 @@ public partial class ActivityMark : Node2D
         return _isOver && _overTimer >= 1;
     }
 
-    /// <summary>
-    /// 调用该函数表示该标记可以生成物体了
-    /// </summary>
-    public virtual void Doing(RoomInfo roomInfo)
+    private void Doing(RoomInfo roomInfo)
     {
-        CreateActivityObject().PutDown(Layer);
-    }
+        var activityObject = CreateActivityObjectFromExpression(Type, nameof(ItemExpression));
 
-    /// <summary>
-    /// 实例化ItemId指定的物体, 并返回对象实例, 函数会自动设置位置
-    /// </summary>
-    protected ActivityObject CreateActivityObject()
-    {
-        var instance = ActivityObject.Create(GetItemId());
+        if (activityObject == null)
+        {
+            return;
+        }
+        
+        activityObject.VerticalSpeed = VerticalSpeed;
+        activityObject.Altitude = Altitude;
         var pos = Position;
         if (BirthRect != Vector2I.Zero)
         {
-            instance.Position = new Vector2(
+            activityObject.Position = new Vector2(
                 Utils.RandomRangeInt((int)pos.X - BirthRect.X / 2, (int)pos.X + BirthRect.X / 2),
                 Utils.RandomRangeInt((int)pos.Y - BirthRect.Y / 2, (int)pos.Y + BirthRect.Y / 2)
             );
         }
         else
         {
-            instance.Position = pos;
+            activityObject.Position = pos;
         }
+
+        activityObject.StartCoroutine(OnActivityObjectBirth(activityObject));
+        activityObject.PutDown(Layer);
         
-        instance.VerticalSpeed = VerticalSpeed;
-        instance.Altitude = Altitude;
-        instance.StartCoroutine(OnActivityObjectBirth(instance));
-        return instance;
+        Doing(activityObject, _currentExpression[nameof(ItemExpression)], roomInfo);
+    }
+
+    /// <summary>
+    /// 根据预制表达式创建物体并返回
+    /// </summary>
+    /// <param name="type">物体类型</param>
+    /// <param name="expressionFieldName">预制表达式字段名称, 注意是字段名称, 而不是内容</param>
+    public ActivityObject CreateActivityObjectFromExpression(ActivityIdPrefix.ActivityPrefixType type, string expressionFieldName)
+    {
+        if (_currentExpression.TryGetValue(expressionFieldName, out var expressionData))
+        {
+            var id = ActivityIdPrefix.GetNameByPrefixType(type) + expressionData.Id;
+            return ActivityObject.Create(id);
+        }
+
+        return null;
     }
     
     /// <summary>
     /// 生成 ActivityObject 时调用, 用于出生时的动画效果
     /// </summary>
-    protected virtual IEnumerator OnActivityObjectBirth(ActivityObject instance)
+    private IEnumerator OnActivityObjectBirth(ActivityObject instance)
     {
         var a = 1.0f;
         instance.SetBlendColor(Colors.White);
@@ -248,7 +296,7 @@ public partial class ActivityMark : Node2D
     /// <summary>
     /// 设置当前节点是否是活动状态
     /// </summary>
-    public void SetActive(bool flag)
+    private void SetActive(bool flag)
     {
         // SetProcess(flag);
         // SetPhysicsProcess(flag);
@@ -277,5 +325,99 @@ public partial class ActivityMark : Node2D
                 Owner = null;
             }
         }
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// 执行预处理操作
+    /// </summary>
+    public void Pretreatment()
+    {
+        if (_activityExpressionMap.TryGetValue(GetType(), out var list))
+        {
+            foreach (var field in list)
+            {
+                Pretreatment(field);
+            }
+        }
+    }
+
+    private void Pretreatment(string field)
+    {
+        var expressionStr = GetType().GetField(field)?.GetValue(this) as string;
+        if (string.IsNullOrEmpty(expressionStr))
+        {
+            return;
+        }
+        var activityExpression = Parse(expressionStr);
+        if (activityExpression.Count > 0)
+        {
+            //权重列表
+            var list = new List<int>();
+            for (var i = 0; i < activityExpression.Count; i++)
+            {
+                var item = activityExpression[i];
+                if (item.Args.TryGetValue("weight", out var weight)) //获取自定义权重值
+                {
+                    list.Add(int.Parse(weight));
+                }
+                else //默认权重100
+                {
+                    item.Args.Add("weight", "100");
+                    list.Add(100);
+                }
+            }
+            //根据权重随机值
+            var index = Utils.RandomWeight(list);
+            _currentExpression.Add(field, activityExpression[index]);
+        }
+    }
+    
+    private List<ActivityExpressionData> Parse(string str)
+    {
+        var list = new List<ActivityExpressionData>();
+        var exps = str.Split(';');
+        
+        for (var i = 0; i < exps.Length; i++)
+        {
+            var exp = exps[i];
+            //去除空格
+            exp = Regex.Replace(exp, "\\s", "");
+            if (string.IsNullOrEmpty(exp))
+            {
+                continue;
+            }
+            
+            //验证语法
+            if (Regex.IsMatch(exp, "^\\w+(\\((\\w+:\\w+)*(,\\w+:\\w+)*\\))?$"))
+            {
+                if (!exp.Contains('(')) //没有参数
+                {
+                    list.Add(new ActivityExpressionData(exp));
+                }
+                else
+                {
+                    var name = Regex.Match(exp, "^\\w+").Value;
+                    var activityExpression = new ActivityExpressionData(name);
+                    var paramsResult = Regex.Matches(exp, "\\w+:\\w+");
+                    if (paramsResult.Count > 0)
+                    {
+                        foreach (Match result in paramsResult)
+                        {
+                            var valSplit = result.Value.Split(':');
+                            activityExpression.Args.Add(valSplit[0], valSplit[1]);
+                        }
+                    }
+                    list.Add(activityExpression);
+                }
+            }
+            else //语法异常
+            {
+                throw new Exception("表达式语法错误: " + exp);
+            }
+        }
+
+        return list;
     }
 }

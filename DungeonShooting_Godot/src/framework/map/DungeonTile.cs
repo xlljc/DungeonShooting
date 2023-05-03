@@ -87,6 +87,8 @@ public class DungeonTile
                  //_tileRoot.AddChild(activityMark);
                  activityMark.Position = roomInfo.GetWorldPosition() + pos;
                  activityMark.TileRoot = _tileRoot;
+                 //执行预处理操作
+                 activityMark.Pretreatment();
              }
             roomInfo.ActivityMarks.AddRange(activityMarks);
             
@@ -116,7 +118,7 @@ public class DungeonTile
                         }
                         
                         _tileRoot.SetCell(layer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j),
-                            1, atlasCoords);
+                            0, atlasCoords);
                     }
                 }
             }
@@ -396,7 +398,7 @@ public class DungeonTile
         {
             for (int j = 0; j < size.Y; j++)
             {
-                _tileRoot.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), 1, info.AutotileCoord);
+                _tileRoot.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), 0, info.AutotileCoord);
             }
         }
     }
@@ -408,7 +410,7 @@ public class DungeonTile
         {
             for (int j = 0; j < size.Y; j++)
             {
-                _tileRoot.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), -1);
+                _tileRoot.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), 0);
             }
         }
     }

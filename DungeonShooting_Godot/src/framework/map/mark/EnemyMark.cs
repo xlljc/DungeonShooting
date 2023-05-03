@@ -29,43 +29,23 @@ public partial class EnemyMark : ActivityMark
     /// <summary>
     /// 武器1 id, id会自动加上武器前缀
     /// </summary>
-    [Export]
+    [Export(PropertyHint.Expression), ActivityExpression]
     public string Weapon1Id;
-    /// <summary>
-    /// 武器1弹药量, 如果值小于0, 则使用默认弹药量
-    /// </summary>
-    [Export]
-    public int Weapon1Ammo = -1;
     /// <summary>
     /// 武器2 id, id会自动加上武器前缀
     /// </summary>
-    [Export]
+    [Export(PropertyHint.Expression), ActivityExpression]
     public string Weapon2Id;
-    /// <summary>
-    /// 武器2弹药量, 如果值小于0, 则使用默认弹药量
-    /// </summary>
-    [Export]
-    public int Weapon2Ammo = -1;
     /// <summary>
     /// 武器3 id, id会自动加上武器前缀
     /// </summary>
-    [Export]
+    [Export(PropertyHint.Expression), ActivityExpression]
     public string Weapon3Id;
-    /// <summary>
-    /// 武器3弹药量, 如果值小于0, 则使用默认弹药量
-    /// </summary>
-    [Export]
-    public int Weapon3Ammo = -1;
     /// <summary>
     /// 武器4 id, id会自动加上武器前缀
     /// </summary>
-    [Export]
+    [Export(PropertyHint.Expression), ActivityExpression]
     public string Weapon4Id;
-    /// <summary>
-    /// 武器4弹药量, 如果值小于0, 则使用默认弹药量
-    /// </summary>
-    [Export]
-    public int Weapon4Ammo = -1;
     /// <summary>
     /// 脸默认的朝向
     /// </summary>
@@ -78,11 +58,11 @@ public partial class EnemyMark : ActivityMark
         Layer = RoomLayerEnum.YSortLayer;
     }
 
-    public override void Doing(RoomInfo roomInfo)
+    public override void Doing(ActivityObject activityObject, ActivityExpressionData expressionData, RoomInfo roomInfo)
     {
-        var pos = Position;
         //创建敌人
-        var instance = (Enemy)CreateActivityObject();
+        var instance = (Enemy)activityObject;
+        var pos = instance.Position;
         
         //脸的朝向
         if (FaceDirection == FaceDirectionValueEnum.Random)
@@ -97,17 +77,15 @@ public partial class EnemyMark : ActivityMark
         {
             instance.Face = global::FaceDirection.Right;
         }
-        
-        instance.PutDown(Layer);
 
         if (!string.IsNullOrWhiteSpace(Weapon1Id))
-            CreateWeapon(instance, pos, Weapon1Id, Weapon1Ammo);
+            CreateWeapon(instance, pos, nameof(Weapon1Id), -1);
         if (!string.IsNullOrWhiteSpace(Weapon2Id))
-            CreateWeapon(instance, pos, Weapon2Id, Weapon2Ammo);
+            CreateWeapon(instance, pos, nameof(Weapon2Id), -1);
         if (!string.IsNullOrWhiteSpace(Weapon3Id))
-            CreateWeapon(instance, pos, Weapon3Id, Weapon3Ammo);
+            CreateWeapon(instance, pos, nameof(Weapon3Id), -1);
         if (!string.IsNullOrWhiteSpace(Weapon4Id))
-            CreateWeapon(instance, pos, Weapon4Id, Weapon4Ammo);
+            CreateWeapon(instance, pos, nameof(Weapon4Id), -1);
         
         var effect1 = ResourceManager.LoadAndInstantiate<Effect1>(ResourcePath.prefab_effect_Effect1_tscn);
         effect1.Position = instance.Position;
@@ -115,10 +93,9 @@ public partial class EnemyMark : ActivityMark
     }
 
     //生成武器
-    private void CreateWeapon(Enemy instance, Vector2 pos, string id, int ammon)
+    private void CreateWeapon(Enemy instance, Vector2 pos, string fieldName, int ammon)
     {
-        var weaponId = ActivityIdPrefix.GetNameByPrefixType(ActivityIdPrefix.ActivityPrefixType.Weapon) + id;
-        var weapon = ActivityObject.Create<Weapon>(weaponId);
+        var weapon = (Weapon)CreateActivityObjectFromExpression(ActivityIdPrefix.ActivityPrefixType.Weapon, fieldName);
         //设置弹药量
         if (ammon >= 0)
         {
