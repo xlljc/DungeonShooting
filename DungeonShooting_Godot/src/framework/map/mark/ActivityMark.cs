@@ -61,7 +61,7 @@ public partial class ActivityMark : Node2D
     /// </summary>
     [ExportGroup("Vertical")]
     [Export(PropertyHint.Range, "0, 128")]
-    public int Altitude = 0;
+    public int Altitude = 8;
 
     /// <summary>
     /// 物体初始纵轴速度
@@ -92,7 +92,7 @@ public partial class ActivityMark : Node2D
     /// <summary>
     /// 对生成的物体执行后续操作
     /// </summary>
-    public virtual void Doing(ActivityObject activityObject, ActivityExpressionData expressionData, RoomInfo roomInfo)
+    public virtual void Doing(ActivityObjectResult<ActivityObject> result, RoomInfo roomInfo)
     {
     }
 
@@ -154,7 +154,7 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public void BeReady(RoomInfo roomInfo)
     {
-        if (_currentExpression == null)
+        if (_currentExpression == null || Type == ActivityIdPrefix.ActivityPrefixType.Player)
         {
             return;
         }
@@ -183,50 +183,38 @@ public partial class ActivityMark : Node2D
 
     private void Doing(RoomInfo roomInfo)
     {
-        var activityObject = CreateActivityObjectFromExpression(Type, nameof(ItemExpression));
+        var result = CreateActivityObjectFromExpression<ActivityObject>(Type, nameof(ItemExpression));
 
-        if (activityObject == null)
+        if (result == null || result.ActivityObject == null)
         {
             return;
         }
         
-        activityObject.VerticalSpeed = VerticalSpeed;
-        activityObject.Altitude = Altitude;
+        result.ActivityObject.VerticalSpeed = VerticalSpeed;
+        result.ActivityObject.Altitude = Altitude;
         var pos = Position;
         if (BirthRect != Vector2I.Zero)
         {
-            activityObject.Position = new Vector2(
+            result.ActivityObject.Position = new Vector2(
                 Utils.RandomRangeInt((int)pos.X - BirthRect.X / 2, (int)pos.X + BirthRect.X / 2),
                 Utils.RandomRangeInt((int)pos.Y - BirthRect.Y / 2, (int)pos.Y + BirthRect.Y / 2)
             );
         }
         else
         {
-            activityObject.Position = pos;
+            result.ActivityObject.Position = pos;
         }
 
-        activityObject.StartCoroutine(OnActivityObjectBirth(activityObject));
-        activityObject.PutDown(Layer);
+        result.ActivityObject.StartCoroutine(OnActivityObjectBirth(result.ActivityObject));
+        result.ActivityObject.PutDown(Layer);
         
-        Doing(activityObject, _currentExpression[nameof(ItemExpression)], roomInfo);
+        var effect1 = ResourceManager.LoadAndInstantiate<Effect1>(ResourcePath.prefab_effect_Effect1_tscn);
+        effect1.Position = result.ActivityObject.Position + new Vector2(0, -Altitude);
+        effect1.AddToActivityRoot(RoomLayerEnum.NormalLayer);
+        
+        Doing(result, roomInfo);
     }
 
-    /// <summary>
-    /// 根据预制表达式创建物体并返回
-    /// </summary>
-    /// <param name="type">物体类型</param>
-    /// <param name="expressionFieldName">预制表达式字段名称, 注意是字段名称, 而不是内容</param>
-    public ActivityObject CreateActivityObjectFromExpression(ActivityIdPrefix.ActivityPrefixType type, string expressionFieldName)
-    {
-        if (_currentExpression.TryGetValue(expressionFieldName, out var expressionData))
-        {
-            var id = ActivityIdPrefix.GetNameByPrefixType(type) + expressionData.Id;
-            return ActivityObject.Create(id);
-        }
-
-        return null;
-    }
-    
     /// <summary>
     /// 生成 ActivityObject 时调用, 用于出生时的动画效果
     /// </summary>
@@ -348,6 +336,7 @@ public partial class ActivityMark : Node2D
         var expressionStr = GetType().GetField(field)?.GetValue(this) as string;
         if (string.IsNullOrEmpty(expressionStr))
         {
+            _currentExpression.Add(field, new ActivityExpressionData(""));
             return;
         }
         var activityExpression = Parse(expressionStr);
@@ -371,6 +360,10 @@ public partial class ActivityMark : Node2D
             //根据权重随机值
             var index = Utils.RandomWeight(list);
             _currentExpression.Add(field, activityExpression[index]);
+        }
+        else
+        {
+            _currentExpression.Add(field, new ActivityExpressionData(""));
         }
     }
     

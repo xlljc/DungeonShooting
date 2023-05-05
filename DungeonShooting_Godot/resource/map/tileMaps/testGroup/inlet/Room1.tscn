@@ -14,3 +14,4 @@ script = ExtResource("dungeonRoomTemplate")
 position = Vector2(80, 47)
 script = ExtResource("3_pf56w")
 Type = 1
+Altitude = 0

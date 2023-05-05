@@ -37,16 +37,6 @@ public partial class EnemyMark : ActivityMark
     [Export(PropertyHint.Expression), ActivityExpression]
     public string Weapon2Id;
     /// <summary>
-    /// 武器3 id, id会自动加上武器前缀
-    /// </summary>
-    [Export(PropertyHint.Expression), ActivityExpression]
-    public string Weapon3Id;
-    /// <summary>
-    /// 武器4 id, id会自动加上武器前缀
-    /// </summary>
-    [Export(PropertyHint.Expression), ActivityExpression]
-    public string Weapon4Id;
-    /// <summary>
     /// 脸默认的朝向
     /// </summary>
     [Export]
@@ -58,10 +48,10 @@ public partial class EnemyMark : ActivityMark
         Layer = RoomLayerEnum.YSortLayer;
     }
 
-    public override void Doing(ActivityObject activityObject, ActivityExpressionData expressionData, RoomInfo roomInfo)
+    public override void Doing(ActivityObjectResult<ActivityObject> result, RoomInfo roomInfo)
     {
         //创建敌人
-        var instance = (Enemy)activityObject;
+        var instance = (Enemy)result.ActivityObject;
         var pos = instance.Position;
         
         //脸的朝向
@@ -79,32 +69,22 @@ public partial class EnemyMark : ActivityMark
         }
 
         if (!string.IsNullOrWhiteSpace(Weapon1Id))
-            CreateWeapon(instance, pos, nameof(Weapon1Id), -1);
+            CreateWeapon(instance, pos, nameof(Weapon1Id));
         if (!string.IsNullOrWhiteSpace(Weapon2Id))
-            CreateWeapon(instance, pos, nameof(Weapon2Id), -1);
-        if (!string.IsNullOrWhiteSpace(Weapon3Id))
-            CreateWeapon(instance, pos, nameof(Weapon3Id), -1);
-        if (!string.IsNullOrWhiteSpace(Weapon4Id))
-            CreateWeapon(instance, pos, nameof(Weapon4Id), -1);
-        
-        var effect1 = ResourceManager.LoadAndInstantiate<Effect1>(ResourcePath.prefab_effect_Effect1_tscn);
-        effect1.Position = instance.Position;
-        effect1.AddToActivityRoot(RoomLayerEnum.NormalLayer);
+            CreateWeapon(instance, pos, nameof(Weapon2Id));
     }
 
     //生成武器
-    private void CreateWeapon(Enemy instance, Vector2 pos, string fieldName, int ammon)
+    private void CreateWeapon(Enemy enemy, Vector2 pos, string fieldName)
     {
-        var weapon = (Weapon)CreateActivityObjectFromExpression(ActivityIdPrefix.ActivityPrefixType.Weapon, fieldName);
-        //设置弹药量
-        if (ammon >= 0)
+        var result = CreateActivityObjectFromExpression<Weapon>(ActivityIdPrefix.ActivityPrefixType.Weapon, fieldName);
+        if (result != null)
         {
-            weapon.SetTotalAmmo(ammon);
-        }
-        //如果不能放下， 则直接扔地上
-        if (!instance.PickUpWeapon(weapon))
-        {
-            weapon.PutDown(pos, RoomLayerEnum.NormalLayer);
+            //如果不能放下， 则直接扔地上
+            if (!enemy.PickUpWeapon(result.ActivityObject))
+            {
+                result.ActivityObject.PutDown(pos, RoomLayerEnum.NormalLayer);
+            }
         }
     }
 }
