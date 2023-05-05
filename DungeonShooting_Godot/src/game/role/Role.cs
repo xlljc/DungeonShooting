@@ -351,9 +351,9 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsAllWeaponTotalAmmoEmpty()
     {
-        foreach (var weaponSlot in Holster.SlotList)
+        foreach (var weapon in Holster.Weapons)
         {
-            if (weaponSlot.Weapon != null && !weaponSlot.Weapon.IsTotalAmmoEmpty())
+            if (weapon != null && !weapon.IsTotalAmmoEmpty())
             {
                 return false;
             }

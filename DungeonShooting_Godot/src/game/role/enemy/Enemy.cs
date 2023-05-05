@@ -91,9 +91,6 @@ public partial class Enemy : Role
 
         MoveSpeed = 20;
 
-        Holster.SlotList[2].Enable = true;
-        Holster.SlotList[3].Enable = true;
-        
         MaxHp = 20;
         Hp = 20;
 

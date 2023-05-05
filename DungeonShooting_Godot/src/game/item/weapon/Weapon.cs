@@ -949,12 +949,8 @@ public abstract partial class Weapon : ActivityObject
                 if (holster.PickupWeapon(this) == -1)
                 {
                     //替换武器
-                    var slot = holster.SlotList[holster.ActiveIndex];
-                    if (slot.Type == Attribute.WeightType)
-                    {
-                        roleMaster.ThrowWeapon();
-                        roleMaster.PickUpWeapon(this);
-                    }
+                    roleMaster.ThrowWeapon();
+                    roleMaster.PickUpWeapon(this);
                 }
             }
         }
@@ -1077,7 +1073,7 @@ public abstract partial class Weapon : ActivityObject
         HideShadowSprite();
         OnConceal();
     }
-    
+
     //-------------------------------- Ai相关 -----------------------------
 
     /// <summary>
