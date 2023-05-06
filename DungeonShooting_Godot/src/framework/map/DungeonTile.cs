@@ -76,22 +76,39 @@ public class DungeonTile
             var rectPos = roomInfo.RoomSplit.RoomInfo.Position;
             var template = ResourceManager.Load<PackedScene>(roomInfo.RoomSplit.ScenePath);
             var tileInstance = template.Instantiate<DungeonRoomTemplate>();
-             //物体标记
-             var activityMarks = tileInstance.GetMarks();
-             var offset = roomInfo.GetOffsetPosition();
-             foreach (var activityMark in activityMarks)
-             {
-                 activityMark.GetParent().RemoveChild(activityMark);
-                 var pos = activityMark.GlobalPosition - offset;
-                 activityMark.Owner = null;
-                 //_tileRoot.AddChild(activityMark);
-                 activityMark.Position = roomInfo.GetWorldPosition() + pos;
-                 activityMark.TileRoot = _tileRoot;
-                 //执行预处理操作
-                 activityMark.Pretreatment();
-             }
-            roomInfo.ActivityMarks.AddRange(activityMarks);
+            var offset = roomInfo.GetOffsetPosition();
             
+            //其它物体
+            var childCount = tileInstance.GetChildCount();
+            for (var i = 0; i < childCount; i++)
+            {
+                var item = tileInstance.GetChild(i);
+                if (!(item is ActivityMark))
+                {
+                    item.GetParent().RemoveChild(item);
+                    item.Owner = null;
+                    _tileRoot.AddChild(item);
+                    if (item is Node2D node)
+                    {
+                        node.Position = roomInfo.GetWorldPosition() + (node.GlobalPosition - offset);
+                    }
+                }
+            }
+
+            //物体标记
+            var activityMarks = tileInstance.GetMarks();
+            foreach (var activityMark in activityMarks)
+            {
+                activityMark.GetParent().RemoveChild(activityMark);
+                activityMark.Owner = null;
+                //_tileRoot.AddChild(activityMark);
+                activityMark.Position = roomInfo.GetWorldPosition() + (activityMark.GlobalPosition - offset);
+                activityMark.TileRoot = _tileRoot;
+                //执行预处理操作
+                activityMark.Pretreatment();
+            }
+            roomInfo.ActivityMarks.AddRange(activityMarks);
+
             //填充tile操作
             for (int i = 0; i < rectSize.X; i++)
             {
