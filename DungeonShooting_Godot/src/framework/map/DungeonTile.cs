@@ -93,6 +93,9 @@ public class DungeonTile
                         node.Position = roomInfo.GetWorldPosition() + (node.GlobalPosition - offset);
                     }
                 }
+
+                i--;
+                childCount--;
             }
 
             //物体标记
