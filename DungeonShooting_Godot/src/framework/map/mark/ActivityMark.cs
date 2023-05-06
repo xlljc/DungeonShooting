@@ -76,7 +76,7 @@ public partial class ActivityMark : Node2D
 
     //是否已经结束
     private bool _isOver = true;
-    private float _overTimer = 0;
+    private float _overTimer = 1;
     private float _timer = 0;
     private RoomInfo _tempRoom;
 

@@ -15,3 +15,30 @@ position = Vector2(80, 47)
 script = ExtResource("3_pf56w")
 Type = 1
 Altitude = 0
+
+[node name="ActivityMark" type="Node2D" parent="."]
+position = Vector2(126, 21)
+script = ExtResource("3_pf56w")
+Type = 5
+ItemExpression = "0002(ResidueAmmo:15,CurrAmmon:0)"
+
+[node name="ActivityMark2" type="Node2D" parent="."]
+position = Vector2(39, 75)
+script = ExtResource("3_pf56w")
+Type = 5
+ItemExpression = "0001(ResidueAmmo:15,CurrAmmon:0)"
+WaveNumber = 2
+
+[node name="ActivityMark3" type="Node2D" parent="."]
+position = Vector2(128, 74)
+script = ExtResource("3_pf56w")
+Type = 5
+ItemExpression = "0003(ResidueAmmo:15,CurrAmmon:0)"
+WaveNumber = 3
+
+[node name="ActivityMark4" type="Node2D" parent="."]
+position = Vector2(39, 23)
+script = ExtResource("3_pf56w")
+Type = 5
+ItemExpression = "0004(ResidueAmmo:15,CurrAmmon:0)"
+WaveNumber = 4

@@ -290,6 +290,67 @@ public abstract partial class Role : ActivityObject
         }
     }
 
+    /// <summary>
+    /// 当武器放到后背时调用, 用于设置武器位置和角度
+    /// </summary>
+    /// <param name="weapon">武器实例</param>
+    /// <param name="index">放入武器袋的位置</param>
+    public virtual void OnPutBackMount(Weapon weapon, int index)
+    {
+        if (index == 0)
+        {
+            weapon.Position = new Vector2(0, 5);
+            weapon.RotationDegrees = 50;
+            weapon.Scale = new Vector2(-1, 1);
+        }
+        else if (index == 1)
+        {
+            weapon.Position = new Vector2(0, 0);
+            weapon.RotationDegrees = 120;
+            weapon.Scale = new Vector2(1, -1);
+        }
+        else if (index == 2)
+        {
+            weapon.Position = new Vector2(0, 5);
+            weapon.RotationDegrees = 310;
+            weapon.Scale = new Vector2(1, 1);
+        }
+        else if (index == 3)
+        {
+            weapon.Position = new Vector2(0, 0);
+            weapon.RotationDegrees = 60;
+            weapon.Scale = new Vector2(1, 1);
+        }
+        else
+        {
+            weapon.Visible = false;
+        }
+        // if (index == 0)
+        // {
+        //     weapon.Position = new Vector2(0, 5);
+        //     weapon.RotationDegrees = 50;
+        //     weapon.Scale = new Vector2(-1, 1);
+        // }
+        // else if (index == 1)
+        // {
+        //     weapon.Position = new Vector2(0, 0);
+        //     weapon.RotationDegrees = 120;
+        //     weapon.Scale = new Vector2(1, -1);
+        // }
+        // else if (index == 2)
+        // {
+        //     weapon.Position = new Vector2(0, 5);
+        //     weapon.RotationDegrees = 310;
+        //     weapon.Scale = new Vector2(1, 1);
+        // }
+        // else if (index == 3)
+        // {
+        //     weapon.Position = new Vector2(0, 0);
+        //     weapon.RotationDegrees = 60;
+        //     weapon.Scale = new Vector2(1, 1);
+        // }
+    }
+    
     protected override void OnAffiliationChange()
     {
         //身上的武器的所属区域也得跟着变

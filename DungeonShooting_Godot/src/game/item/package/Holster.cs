@@ -340,30 +340,7 @@ public class Holster
             {
                 tempParent.RemoveChild(ActiveWeapon);
                 Master.BackMountPoint.AddChild(ActiveWeapon);
-                if (ActiveIndex == 0)
-                {
-                    ActiveWeapon.Position = new Vector2(0, 5);
-                    ActiveWeapon.RotationDegrees = 50;
-                    ActiveWeapon.Scale = new Vector2(-1, 1);
-                }
-                else if (ActiveIndex == 1)
-                {
-                    ActiveWeapon.Position = new Vector2(0, 0);
-                    ActiveWeapon.RotationDegrees = 120;
-                    ActiveWeapon.Scale = new Vector2(1, -1);
-                }
-                else if (ActiveIndex == 2)
-                {
-                    ActiveWeapon.Position = new Vector2(0, 5);
-                    ActiveWeapon.RotationDegrees = 310;
-                    ActiveWeapon.Scale = new Vector2(1, 1);
-                }
-                else if (ActiveIndex == 3)
-                {
-                    ActiveWeapon.Position = new Vector2(0, 0);
-                    ActiveWeapon.RotationDegrees = 60;
-                    ActiveWeapon.Scale = new Vector2(1, 1);
-                }
+                Master.OnPutBackMount(ActiveWeapon, ActiveIndex);
                 ActiveWeapon.Conceal();
             }
         }
@@ -383,6 +360,7 @@ public class Holster
         weapon.Position = Vector2.Zero;
         weapon.Scale = Vector2.One;
         weapon.RotationDegrees = 0;
+        weapon.Visible = true;
         ActiveWeapon = weapon;
         ActiveIndex = index;
         ActiveWeapon.Active();

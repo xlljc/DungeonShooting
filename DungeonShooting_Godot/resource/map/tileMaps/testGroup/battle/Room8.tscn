@@ -27,7 +27,7 @@ position = Vector2(202, 95)
 script = ExtResource("4_5ha7k")
 Type = 5
 ItemExpression = "0002(ResidueAmmo:15,CurrAmmon:0)"
-DelayTime = 3.0
+WaveNumber = 2
 BirthRect = Vector2i(150, 150)
 
 [node name="EnemyMark2" type="Node2D" parent="."]
@@ -37,5 +37,5 @@ Weapon1Id = "0003(ResidueAmmo:12,CurrAmmon:7)"
 Type = 4
 ItemExpression = "0001"
 Layer = 1
-WaveNumber = 2
+WaveNumber = 3
 Altitude = 0
