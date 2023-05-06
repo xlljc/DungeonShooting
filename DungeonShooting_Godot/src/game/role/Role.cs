@@ -297,58 +297,25 @@ public abstract partial class Role : ActivityObject
     /// <param name="index">放入武器袋的位置</param>
     public virtual void OnPutBackMount(Weapon weapon, int index)
     {
-        if (index == 0)
+        if (index < 8)
         {
-            weapon.Position = new Vector2(0, 5);
-            weapon.RotationDegrees = 50;
-            weapon.Scale = new Vector2(-1, 1);
-        }
-        else if (index == 1)
-        {
-            weapon.Position = new Vector2(0, 0);
-            weapon.RotationDegrees = 120;
-            weapon.Scale = new Vector2(1, -1);
-        }
-        else if (index == 2)
-        {
-            weapon.Position = new Vector2(0, 5);
-            weapon.RotationDegrees = 310;
-            weapon.Scale = new Vector2(1, 1);
-        }
-        else if (index == 3)
-        {
-            weapon.Position = new Vector2(0, 0);
-            weapon.RotationDegrees = 60;
-            weapon.Scale = new Vector2(1, 1);
+            if (index % 2 == 0)
+            {
+                weapon.Position = new Vector2(-4, 5);
+                weapon.RotationDegrees = 90 - (index / 2f) * 20;
+                weapon.Scale = new Vector2(-1, 1);
+            }
+            else
+            {
+                weapon.Position = new Vector2(4, 5);
+                weapon.RotationDegrees = 270 + (index - 1) / 2f * 20;
+                weapon.Scale = new Vector2(1, 1);
+            }
         }
         else
         {
             weapon.Visible = false;
         }
-        // if (index == 0)
-        // {
-        //     weapon.Position = new Vector2(0, 5);
-        //     weapon.RotationDegrees = 50;
-        //     weapon.Scale = new Vector2(-1, 1);
-        // }
-        // else if (index == 1)
-        // {
-        //     weapon.Position = new Vector2(0, 0);
-        //     weapon.RotationDegrees = 120;
-        //     weapon.Scale = new Vector2(1, -1);
-        // }
-        // else if (index == 2)
-        // {
-        //     weapon.Position = new Vector2(0, 5);
-        //     weapon.RotationDegrees = 310;
-        //     weapon.Scale = new Vector2(1, 1);
-        // }
-        // else if (index == 3)
-        // {
-        //     weapon.Position = new Vector2(0, 0);
-        //     weapon.RotationDegrees = 60;
-        //     weapon.Scale = new Vector2(1, 1);
-        // }
     }
     
     protected override void OnAffiliationChange()
