@@ -1002,14 +1002,14 @@ public abstract partial class Weapon : ActivityObject
     protected override void OnThrowStart()
     {
         //禁用碰撞
-        Collision.Disabled = true;
+        //Collision.Disabled = true;
         AnimationPlayer.Play("floodlight");
     }
 
     protected override void OnThrowOver()
     {
         //启用碰撞
-        Collision.Disabled = false;
+        //Collision.Disabled = false;
         AnimationPlayer.Play("floodlight");
     }
 
@@ -1035,7 +1035,7 @@ public abstract partial class Weapon : ActivityObject
         SetBlendSchedule(0);
         ZIndex = 0;
         //禁用碰撞
-        Collision.Disabled = true;
+        //Collision.Disabled = true;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         OnPickUp(master);
@@ -1082,5 +1082,23 @@ public abstract partial class Weapon : ActivityObject
     public float GetAiScore()
     {
         return 1;
+    }
+
+    protected override void PhysicsProcessOver(float delta)
+    {
+        if (IsThrowing)
+        {
+            var collision = GetLastSlideCollision();
+            //collision.GetNormal();
+            if (collision != null)
+            {
+                var force = MoveController.GetForce("throw");
+                if (force != null)
+                {
+                    var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
+                    force.Velocity = force.Velocity.Reflect(no);
+                }
+            }
+        }
     }
 }
