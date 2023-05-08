@@ -84,6 +84,11 @@ public partial class Bullet : ActivityObject
         var role = other.AsActivityObject<Role>();
         if (role != null)
         {
+            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletDisappear_tscn);
+            var node = packedScene.Instantiate<Node2D>();
+            node.GlobalPosition = GlobalPosition;
+            node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+            
             role.CallDeferred(nameof(Role.Hurt), 4, Rotation);
             Destroy();
         }

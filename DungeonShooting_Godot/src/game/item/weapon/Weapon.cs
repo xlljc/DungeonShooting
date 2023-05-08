@@ -1083,22 +1083,4 @@ public abstract partial class Weapon : ActivityObject
     {
         return 1;
     }
-
-    protected override void PhysicsProcessOver(float delta)
-    {
-        if (IsThrowing)
-        {
-            var collision = GetLastSlideCollision();
-            //collision.GetNormal();
-            if (collision != null)
-            {
-                var force = MoveController.GetForce("throw");
-                if (force != null)
-                {
-                    var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
-                    force.Velocity = force.Velocity.Reflect(no);
-                }
-            }
-        }
-    }
 }
