@@ -1040,6 +1040,19 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     }
 
     /// <summary>
+    /// 继承指定物体的运动速率, 该速率可能会有衰减
+    /// </summary>
+    public void InheritVelocity(ActivityObject other)
+    {
+        var velocity = other.Velocity;
+        if (velocity != Vector2.Zero)
+        {
+            var force = MoveController.AddConstantForce(velocity * 0.5f, 15);
+            force.EnableResistanceInTheAir = false;
+        }
+    }
+
+    /// <summary>
     /// 触发投抛动作
     /// </summary>
     private void Throw()

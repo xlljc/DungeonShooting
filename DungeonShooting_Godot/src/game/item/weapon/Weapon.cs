@@ -990,6 +990,9 @@ public abstract partial class Weapon : ActivityObject
 
         var angle = master.MountPoint.GlobalRotationDegrees;
         GlobalRotationDegrees = angle;
+        
+        //继承role的移动速度
+        InheritVelocity(master);
 
         var startHeight = 6;
         var direction = angle + Utils.RandomRangeInt(-20, 20);

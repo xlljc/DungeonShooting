@@ -22,6 +22,11 @@ public class ExternalForce
     public float Resistance { get; set; } = 0;
 
     /// <summary>
+    /// 是否在空中也会受到阻力
+    /// </summary>
+    public bool EnableResistanceInTheAir { get; set; } = true;
+    
+    /// <summary>
     /// 当速度到达 0 后是否自动销毁, 默认 true
     /// </summary>
     public bool AutoDestroy { get; set; } = true;

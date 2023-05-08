@@ -106,6 +106,7 @@ public partial class Gun : Weapon
         var velocity = new Vector2(Utils.RandomRangeInt(20, 60), 0).Rotated(direction * Mathf.Pi / 180);
         var rotate = Utils.RandomRangeInt(-720, 720);
         var shell = Create<ShellCase>(ActivityIdPrefix.Shell + "0001");
+        shell.InheritVelocity(Master);
         shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
         
         if (Master == GameApplication.Instance.RoomManager.Player)

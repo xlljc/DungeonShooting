@@ -85,6 +85,18 @@ public class MoveController : Component
         force.Resistance = resistance;
         return force;
     }
+    
+    /// <summary>
+    /// 快速创建一个外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
+    /// </summary>
+    /// <param name="velocity">外力速率</param>
+    public ExternalForce AddConstantForce(Vector2 velocity)
+    {
+        var force = AddConstantForce("_anonymity_" + _index++);
+        force.Velocity = velocity;
+        return force;
+    }
+
 
     /// <summary>
     /// 根据名称添加一个外力, 并返回创建的外力的对象, 如果存在这个名称的外力, 移除之前的外力, 当速率变为 0 时不会自动销毁
@@ -253,7 +265,7 @@ public class MoveController : Component
                         );
 
                         //力速度衰减
-                        if (force.Resistance != 0)
+                        if (force.Resistance != 0 && (force.EnableResistanceInTheAir || !ActivityInstance.IsThrowing))
                         {
                             force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.Resistance * delta);
                         }
