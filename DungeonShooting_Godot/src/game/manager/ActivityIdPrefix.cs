@@ -37,6 +37,10 @@ public static class ActivityIdPrefix
         /// </summary>
         Shell,
         /// <summary>
+        /// 特效
+        /// </summary>
+        Effect,
+        /// <summary>
         /// 其它类型
         /// </summary>
         Other,
@@ -66,7 +70,10 @@ public static class ActivityIdPrefix
     /// 弹壳
     /// </summary>
     public const string Shell = "shell";
-    
+    /// <summary>
+    /// 特效
+    /// </summary>
+    public const string Effect = "effect";
     /// <summary>
     /// 其他类型
     /// </summary>
@@ -94,6 +101,8 @@ public static class ActivityIdPrefix
                 return Bullet;
             case ActivityPrefixType.Shell:
                 return Shell;
+            case ActivityPrefixType.Effect:
+                return Effect;
             case ActivityPrefixType.Other:
                 return Other;
         }

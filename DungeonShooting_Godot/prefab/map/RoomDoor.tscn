@@ -1,7 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://dl62yuh5q656a"]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_8es7a"]
-[ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_d8jnk"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_d8jnk"]
 [ext_resource type="Texture2D" uid="uid://dviv44fhwvkb1" path="res://resource/sprite/map/door1_down.png" id="3_knmoy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_x5aop"]

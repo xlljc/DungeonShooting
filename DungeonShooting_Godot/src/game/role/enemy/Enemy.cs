@@ -136,6 +136,22 @@ public partial class Enemy : Role
         {
             weapons[i].ThrowWeapon(this);
         }
+
+        var effPos = Position + new Vector2(0, -Altitude);
+        //血液特效
+        var blood = ResourceManager.LoadAndInstantiate<AutoDestroyEffect>(ResourcePath.prefab_effect_activityObject_EnemyBloodEffect_tscn);
+        blood.Position = effPos - new Vector2(0, 12);
+        blood.AddToActivityRoot(RoomLayerEnum.NormalLayer);
+        
+        //创建敌人碎片
+        var count = Utils.RandomRangeInt(3, 6);
+        for (var i = 0; i < count; i++)
+        {
+            var debris = Create(ActivityIdPrefix.Effect + "0001");
+            debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
+            debris.InheritVelocity(this);
+        }
+        
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
         Destroy();

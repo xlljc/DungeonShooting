@@ -301,13 +301,13 @@ public abstract partial class Role : ActivityObject
         {
             if (index % 2 == 0)
             {
-                weapon.Position = new Vector2(-4, 5);
+                weapon.Position = new Vector2(-4, 3);
                 weapon.RotationDegrees = 90 - (index / 2f) * 20;
                 weapon.Scale = new Vector2(-1, 1);
             }
             else
             {
-                weapon.Position = new Vector2(4, 5);
+                weapon.Position = new Vector2(4, 3);
                 weapon.RotationDegrees = 270 + (index - 1) / 2f * 20;
                 weapon.Scale = new Vector2(1, 1);
             }

@@ -68,7 +68,7 @@ public partial class ActivityObjectTemplate : Node
                     sprite.Name = "ShadowSprite";
                     sprite.ZIndex = -1;
                     var material =
-                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
+                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
                     material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
                     material.SetShaderParameter("schedule", 1);
                     sprite.Material = material;
@@ -78,7 +78,7 @@ public partial class ActivityObjectTemplate : Node
                 else if (sprite.Material == null)
                 {
                     var material =
-                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
+                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
                     material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
                     material.SetShaderParameter("schedule", 1);
                     sprite.Material = material;
@@ -91,7 +91,7 @@ public partial class ActivityObjectTemplate : Node
                     animatedSprite = new AnimatedSprite2D();
                     animatedSprite.Name = "AnimatedSprite";
                     var material =
-                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
+                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
                     material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
                     material.SetShaderParameter("schedule", 0);
                     animatedSprite.Material = material;
@@ -101,7 +101,7 @@ public partial class ActivityObjectTemplate : Node
                 else if (animatedSprite.Material == null)
                 {
                     var material =
-                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres, false);
+                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
                     material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
                     material.SetShaderParameter("schedule", 0);
                     animatedSprite.Material = material;

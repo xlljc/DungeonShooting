@@ -556,9 +556,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// 将该节点投抛出去
     /// </summary>
     /// <param name="altitude">初始高度</param>
-    /// <param name="rotate">旋转速度</param>
-    /// <param name="velocity">移动速率</param>
     /// <param name="verticalSpeed">纵轴速度</param>
+    /// <param name="velocity">移动速率</param>
+    /// <param name="rotate">旋转速度</param>
     public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotate)
     {
         var parent = GetParent();
@@ -590,9 +590,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     /// <param name="position">初始位置</param>
     /// <param name="altitude">初始高度</param>
-    /// <param name="rotate">旋转速度</param>
-    /// <param name="velocity">移动速率</param>
     /// <param name="verticalSpeed">纵轴速度</param>
+    /// <param name="velocity">移动速率</param>
+    /// <param name="rotate">旋转速度</param>
     public void Throw(Vector2 position, float altitude, float verticalSpeed, Vector2 velocity, float rotate)
     {
         GlobalPosition = position;

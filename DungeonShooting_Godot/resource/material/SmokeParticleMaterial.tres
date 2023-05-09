@@ -1,0 +1,17 @@
+[gd_resource type="ParticleProcessMaterial" load_steps=2 format=3 uid="uid://c1chld6lkpgji"]
+
+[ext_resource type="Texture2D" uid="uid://bs1lan5uwxyfg" path="res://resource/curve/Curve1.tres" id="1_yr5l8"]
+
+[resource]
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 35.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 0.8
+scale_max = 0.8
+scale_curve = ExtResource("1_yr5l8")
+color = Color(1, 1, 1, 0.533333)
+anim_offset_max = 1.0

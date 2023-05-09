@@ -15,7 +15,7 @@ public static class ResourceManager
         {
             if (_shadowMaterial == null)
             {
-                _shadowMaterial = ResourceLoader.Load<ShaderMaterial>(ResourcePath.resource_materlal_Blend_tres);
+                _shadowMaterial = ResourceLoader.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres);
             }
 
             return _shadowMaterial;
@@ -33,7 +33,7 @@ public static class ResourceManager
         {
             if (_shadowShader == null)
             {
-                _shadowShader = ResourceLoader.Load<Shader>(ResourcePath.resource_materlal_Blend_gdshader);
+                _shadowShader = ResourceLoader.Load<Shader>(ResourcePath.resource_material_Blend_tres);
             }
 
             return _shadowShader;
