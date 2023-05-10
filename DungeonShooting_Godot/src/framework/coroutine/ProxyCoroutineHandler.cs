@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Godot;
 
 /// <summary>
 /// 协程代理类
@@ -55,6 +56,18 @@ public static class ProxyCoroutineHandler
                     item.WaitTask = null;
                 }
             }
+            else if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForSignalAwaiter) //等待信号
+            {
+                if (!item.WaitSignalAwaiter.IsCompleted)
+                {
+                    canNext = false;
+                }
+                else
+                {
+                    item.WaitState = CoroutineData.WaitTypeEnum.None;
+                    item.WaitSignalAwaiter = null;
+                }
+            }
 
             if (canNext)
             {
@@ -93,6 +106,10 @@ public static class ProxyCoroutineHandler
                     {
                         item.WaitFor(task);
                     }
+                    else if (next is SignalAwaiter awaiter) //等待信号
+                    {
+                        item.WaitFor(awaiter);
+                    }
                 }
                 else
                 {
@@ -110,7 +127,7 @@ public static class ProxyCoroutineHandler
     }
     
     /// <summary>
-    /// 代理协程, 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task
+    /// 代理协程, 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task, SignalAwaiter
     /// </summary>
     public static long ProxyStartCoroutine(ref List<CoroutineData> coroutineList, IEnumerator able)
     {
