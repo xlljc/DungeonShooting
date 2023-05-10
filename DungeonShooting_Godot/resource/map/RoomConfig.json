@@ -3,6 +3,10 @@
     "GroupName": "testGroup",
     "BattleList": [
       {
+        "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room1.tscn",
+        "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room1.json"
+      },
+      {
         "ScenePath": "res://resource/map/tileMaps/testGroup/battle/Room8.tscn",
         "ConfigPath": "res://resource/map/tiledata/testGroup/battle/Room8.json"
       }

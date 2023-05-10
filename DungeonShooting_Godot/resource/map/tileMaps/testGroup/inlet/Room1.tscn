@@ -33,7 +33,7 @@ WaveNumber = 2
 position = Vector2(128, 74)
 script = ExtResource("3_pf56w")
 Type = 5
-ItemExpression = "0003(ResidueAmmo:15,CurrAmmon:0)"
+ItemExpression = "0003(ResidueAmmo:12,CurrAmmon:15)"
 WaveNumber = 3
 
 [node name="ActivityMark4" type="Node2D" parent="."]
