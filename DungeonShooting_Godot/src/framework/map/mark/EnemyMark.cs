@@ -46,6 +46,7 @@ public partial class EnemyMark : ActivityMark
     {
         Type = ActivityIdPrefix.ActivityPrefixType.Enemy;
         Layer = RoomLayerEnum.YSortLayer;
+        Altitude = 0;
     }
 
     public override void Doing(ActivityObjectResult<ActivityObject> result, RoomInfo roomInfo)
