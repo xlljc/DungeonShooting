@@ -153,7 +153,7 @@ public partial class GameApplication : Node2D
 	}
 	
 	/// <summary>
-	/// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task
+	/// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task, SignalAwaiter
 	/// </summary>
 	public long StartCoroutine(IEnumerator able)
 	{

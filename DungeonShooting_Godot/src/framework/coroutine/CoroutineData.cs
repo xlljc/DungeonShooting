@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Godot;
 
 /// <summary>
 /// 协程数据
@@ -16,6 +17,7 @@ public class CoroutineData
         WaitForSeconds,
         WaitForFixedProcess,
         WaitForTask,
+        WaitForSignalAwaiter,
     }
 
     /// <summary>
@@ -36,6 +38,7 @@ public class CoroutineData
     public WaitForSeconds WaitForSeconds;
     public WaitForFixedProcess WaitForFixedProcess;
     public Task WaitTask;
+    public SignalAwaiter WaitSignalAwaiter;
 
     public CoroutineData(IEnumerator enumerator)
     {
@@ -59,5 +62,11 @@ public class CoroutineData
     {
         WaitState = WaitTypeEnum.WaitForTask;
         WaitTask = task;
+    }
+    
+    public void WaitFor(SignalAwaiter task)
+    {
+        WaitState = WaitTypeEnum.WaitForSignalAwaiter;
+        WaitSignalAwaiter = task;
     }
 }
