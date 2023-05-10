@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json;
 using Godot;
@@ -70,6 +71,9 @@ public partial class GameApplication : Node2D
 	/// </summary>
 	public int PixelScale { get; private set; } = 4;
 
+	//开启的协程
+	private List<CoroutineData> _coroutineList;
+	
 	public GameApplication()
 	{
 		Instance = this;
@@ -119,7 +123,14 @@ public partial class GameApplication : Node2D
 
 	public override void _Process(double delta)
 	{
-		InputManager.Update((float)delta);
+		var newDelta = (float)delta;
+		InputManager.Update(newDelta);
+		
+		//协程更新
+		if (_coroutineList != null)
+		{
+			ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
+		}
 	}
 
 	/// <summary>
@@ -139,6 +150,30 @@ public partial class GameApplication : Node2D
 		// 3.5写法
 		//return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
 		return (viewPos - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (ViewportSize / 2)) * PixelScale;
+	}
+	
+	/// <summary>
+	/// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task, SignalAwaiter
+	/// </summary>
+	public long StartCoroutine(IEnumerator able)
+	{
+		return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
+	}
+
+	/// <summary>
+	/// 根据协程 id 停止协程
+	/// </summary>
+	public void StopCoroutine(long coroutineId)
+	{
+		ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
+	}
+    
+	/// <summary>
+	/// 停止所有协程
+	/// </summary>
+	public void StopAllCoroutine()
+	{
+		ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
 	}
 
 	//初始化房间配置

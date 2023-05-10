@@ -8,31 +8,10 @@ using Godot;
 public class Holster
 {
     /// <summary>
-    /// 插槽类
-    /// </summary>
-    public class WeaponSlot
-    {
-        /// <summary>
-        /// 是否启用
-        /// </summary>
-        public bool Enable = false;
-        /// <summary>
-        /// 当前插槽存放的武器类型
-        /// </summary>
-        public WeaponWeightType Type = WeaponWeightType.MainWeapon;
-        /// <summary>
-        /// 插槽存放的武器
-        /// </summary>
-        public Weapon Weapon;
-    }
-
-    /// <summary>
     /// 归属者
     /// </summary>
     public Role Master { get; }
-    
-    //public Weapon HandheldWeapon { get; private set; }
-    
+
     /// <summary>
     /// 当前使用的武器对象
     /// </summary>
@@ -44,30 +23,69 @@ public class Holster
     public int ActiveIndex { get; private set; } = 0;
 
     /// <summary>
+    /// 武器袋容量
+    /// </summary>
+    public int Capacity { get; private set; } = 0;
+
+    /// <summary>
     /// 武器插槽
     /// </summary>
-    public WeaponSlot[] SlotList { get; } = new WeaponSlot[4];
+    public Weapon[] Weapons { get; private set;  }
 
     public Holster(Role master)
     {
         Master = master;
+        //默认容量4
+        SetCapacity(4);
+    }
 
-        //创建武器的插槽, 默认前两个都是启用的
-        WeaponSlot slot1 = new WeaponSlot();
-        slot1.Enable = true;
-        SlotList[0] = slot1;
+    /// <summary>
+    /// 修改武器袋容量
+    /// </summary>
+    public void SetCapacity(int capacity)
+    {
+        if (capacity < 0)
+        {
+            capacity = 0;
+        }
 
-        WeaponSlot slot2 = new WeaponSlot();
-        slot2.Enable = true;
-        slot2.Type = WeaponWeightType.DeputyWeapon;
-        SlotList[1] = slot2;
+        if (capacity == Capacity)
+        {
+            return;
+        }
 
-        WeaponSlot slot3 = new WeaponSlot();
-        SlotList[2] = slot3;
+        if (Weapons == null)
+        {
+            Weapons = new Weapon[capacity];
+        }
+        else if (Weapons.Length > capacity) //删减格子
+        {
+            var newArray = new Weapon[capacity];
+            for (var i = 0; i < Weapons.Length; i++)
+            {
+                if (i < capacity)
+                {
+                    newArray[i] = Weapons[i];
+                }
+                else
+                {
+                    Master.ThrowWeapon(i);
+                }
+            }
 
-        WeaponSlot slot4 = new WeaponSlot();
-        slot4.Type = WeaponWeightType.DeputyWeapon;
-        SlotList[3] = slot4;
+            Weapons = newArray;
+        }
+        else //添加格子
+        {
+            var newArray = new Weapon[capacity];
+            for (var i = 0; i < Weapons.Length; i++)
+            {
+                newArray[i] = Weapons[i];
+            }
+            Weapons = newArray;
+        }
+        Capacity = capacity;
+        
     }
 
     /// <summary>
@@ -75,9 +93,9 @@ public class Holster
     /// </summary>
     public bool IsEmpty()
     {
-        for (int i = 0; i < SlotList.Length; i++)
+        for (var i = 0; i < Weapons.Length; i++)
         {
-            if (SlotList[i].Weapon != null)
+            if (Weapons[i] != null)
             {
                 return false;
             }
@@ -91,10 +109,9 @@ public class Holster
     /// </summary>
     public bool HasVacancy()
     {
-        for (int i = 0; i < SlotList.Length; i++)
+        for (var i = 0; i < Weapons.Length; i++)
         {
-            var item = SlotList[i];
-            if (item.Enable && item.Weapon == null)
+            if (Weapons[i] == null)
             {
                 return true;
             }
@@ -108,11 +125,11 @@ public class Holster
     /// </summary>
     public Weapon GetWeapon(int index)
     {
-        if (index < 0 || index >= SlotList.Length)
+        if (index < 0 || index >= Weapons.Length)
         {
             return null;
         }
-        return SlotList[index].Weapon;
+        return Weapons[index];
     }
 
     /// <summary>
@@ -121,10 +138,10 @@ public class Holster
     /// <param name="id">武器id</param>
     public int FindWeapon(string id)
     {
-        for (int i = 0; i < SlotList.Length; i++)
+        for (var i = 0; i < Weapons.Length; i++)
         {
-            var item = SlotList[i];
-            if (item.Weapon != null && item.Weapon.ItemId == id)
+            var item = Weapons[i];
+            if (item != null && item.ItemId == id)
             {
                 return i;
             }
@@ -137,10 +154,10 @@ public class Holster
     /// </summary>
     public int FindWeapon(Func<Weapon, int, bool> handler)
     {
-        for (int i = 0; i < SlotList.Length; i++)
+        for (var i = 0; i < Weapons.Length; i++)
         {
-            var item = SlotList[i];
-            if (item.Weapon != null && handler(item.Weapon, i))
+            var item = Weapons[i];
+            if (item != null && handler(item, i))
             {
                 return i;
             }
@@ -153,12 +170,12 @@ public class Holster
     /// </summary>
     public void ForEach(Action<Weapon, int> handler)
     {
-        for (int i = 0; i < SlotList.Length; i++)
+        for (var i = 0; i < Weapons.Length; i++)
         {
-            var item = SlotList[i];
-            if (item.Weapon != null)
+            var item = Weapons[i];
+            if (item != null)
             {
-                handler(item.Weapon, i);
+                handler(item, i);
             }
         }
     }
@@ -168,17 +185,16 @@ public class Holster
     /// </summary>
     public Weapon[] GetAndClearWeapon()
     {
-        List<Weapon> weapons = new List<Weapon>();
-        for (int i = 0; i < SlotList.Length; i++)
+        var weapons = new List<Weapon>();
+        for (var i = 0; i < Weapons.Length; i++)
         {
-            var slot = SlotList[i];
-            var weapon = slot.Weapon;
+            var weapon = Weapons[i];
             if (weapon != null)
             {
                 weapon.GetParent().RemoveChild(weapon);
                 weapon.RemoveAt();
                 weapons.Add(weapon);
-                slot.Weapon = null;
+                Weapons[i] = null;
             }
         }
 
@@ -191,10 +207,10 @@ public class Holster
     /// <param name="weapon">武器对象</param>
     public bool CanPickupWeapon(Weapon weapon)
     {
-        for (int i = 0; i < SlotList.Length; i++)
+        for (var i = 0; i < Weapons.Length; i++)
         {
-            var item = SlotList[i];
-            if (item.Enable && weapon.Attribute.WeightType == item.Type && item.Weapon == null)
+            var item = Weapons[i];
+            if (item == null)
             {
                 return true;
             }
@@ -214,13 +230,13 @@ public class Holster
         {
             return -1;
         }
-        for (int i = 0; i < SlotList.Length; i++)
+        for (var i = 0; i < Weapons.Length; i++)
         {
-            var item = SlotList[i];
-            if (item.Enable && weapon.Attribute.WeightType == item.Type && item.Weapon == null)
+            var item = Weapons[i];
+            if (item == null)
             {
                 weapon.Pickup();
-                item.Weapon = weapon;
+                Weapons[i] = weapon;
                 weapon.PickUpWeapon(Master);
                 if (exchange)
                 {
@@ -239,18 +255,17 @@ public class Holster
     /// <param name="index">所在武器袋的位置索引</param>
     public Weapon RemoveWeapon(int index)
     {
-        if (index < 0 || index >= SlotList.Length)
+        if (index < 0 || index >= Weapons.Length)
         {
             return null;
         }
-        var slot = SlotList[index];
-        if (slot.Weapon == null)
+        var weapon = Weapons[index];
+        if (weapon == null)
         {
             return null;
         }
-        var weapon = slot.Weapon;
         weapon.GetParent().RemoveChild(weapon);
-        slot.Weapon = null;
+        Weapons[index] = null;
 
         //如果是当前手持的武器, 就需要调用切换武器操作
         if (index == ActiveIndex)
@@ -276,7 +291,7 @@ public class Holster
         {
             if (index < 0)
             {
-                index = SlotList.Length - 1;
+                index = Weapons.Length - 1;
             }
             if (ExchangeByIndex(index))
             {
@@ -294,7 +309,7 @@ public class Holster
         var index = ActiveIndex + 1;
         do
         {
-            if (index >= SlotList.Length)
+            if (index >= Weapons.Length)
             {
                 index = 0;
             }
@@ -313,9 +328,9 @@ public class Holster
     public bool ExchangeByIndex(int index)
     {
         if (index == ActiveIndex && ActiveWeapon != null) return true;
-        if (index < 0 || index > SlotList.Length) return false;
-        var slot = SlotList[index];
-        if (slot == null || slot.Weapon == null) return false;
+        if (index < 0 || index > Weapons.Length) return false;
+        var weapon = Weapons[index];
+        if (weapon == null) return false;
 
         //将上一把武器放到背后
         if (ActiveWeapon != null)
@@ -325,50 +340,28 @@ public class Holster
             {
                 tempParent.RemoveChild(ActiveWeapon);
                 Master.BackMountPoint.AddChild(ActiveWeapon);
-                if (ActiveIndex == 0)
-                {
-                    ActiveWeapon.Position = new Vector2(0, 5);
-                    ActiveWeapon.RotationDegrees = 50;
-                    ActiveWeapon.Scale = new Vector2(-1, 1);
-                }
-                else if (ActiveIndex == 1)
-                {
-                    ActiveWeapon.Position = new Vector2(0, 0);
-                    ActiveWeapon.RotationDegrees = 120;
-                    ActiveWeapon.Scale = new Vector2(1, -1);
-                }
-                else if (ActiveIndex == 2)
-                {
-                    ActiveWeapon.Position = new Vector2(0, 5);
-                    ActiveWeapon.RotationDegrees = 310;
-                    ActiveWeapon.Scale = new Vector2(1, 1);
-                }
-                else if (ActiveIndex == 3)
-                {
-                    ActiveWeapon.Position = new Vector2(0, 0);
-                    ActiveWeapon.RotationDegrees = 60;
-                    ActiveWeapon.Scale = new Vector2(1, 1);
-                }
+                Master.OnPutBackMount(ActiveWeapon, ActiveIndex);
                 ActiveWeapon.Conceal();
             }
         }
 
         //更改父节点
-        var parent = slot.Weapon.GetParentOrNull<Node>();
+        var parent = weapon.GetParentOrNull<Node>();
         if (parent == null)
         {
-            Master.MountPoint.AddChild(slot.Weapon);
+            Master.MountPoint.AddChild(weapon);
         }
         else if (parent != Master.MountPoint)
         {
-            parent.RemoveChild(slot.Weapon);
-            Master.MountPoint.AddChild(slot.Weapon);
+            parent.RemoveChild(weapon);
+            Master.MountPoint.AddChild(weapon);
         }
 
-        slot.Weapon.Position = Vector2.Zero;
-        slot.Weapon.Scale = Vector2.One;
-        slot.Weapon.RotationDegrees = 0;
-        ActiveWeapon = slot.Weapon;
+        weapon.Position = Vector2.Zero;
+        weapon.Scale = Vector2.One;
+        weapon.RotationDegrees = 0;
+        weapon.Visible = true;
+        ActiveWeapon = weapon;
         ActiveIndex = index;
         ActiveWeapon.Active();
         return true;

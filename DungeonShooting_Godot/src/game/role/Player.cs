@@ -28,9 +28,7 @@ public partial class Player : Role
         
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
-        
-        Holster.SlotList[2].Enable = true;
-        Holster.SlotList[3].Enable = true;
+
         //让相机跟随玩家
         // var remoteTransform = new RemoteTransform2D();
         // AddChild(remoteTransform);

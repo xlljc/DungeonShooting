@@ -66,6 +66,14 @@ public class MoveController : Component
     }
 
     /// <summary>
+    /// 获取所有外力的数量
+    /// </summary>
+    public int GetForceCount()
+    {
+        return _forceList.Count;
+    }
+
+    /// <summary>
     /// 快速创建一个外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
     /// </summary>
     /// <param name="velocity">外力速率</param>
@@ -77,6 +85,18 @@ public class MoveController : Component
         force.Resistance = resistance;
         return force;
     }
+    
+    /// <summary>
+    /// 快速创建一个外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
+    /// </summary>
+    /// <param name="velocity">外力速率</param>
+    public ExternalForce AddConstantForce(Vector2 velocity)
+    {
+        var force = AddConstantForce("_anonymity_" + _index++);
+        force.Velocity = velocity;
+        return force;
+    }
+
 
     /// <summary>
     /// 根据名称添加一个外力, 并返回创建的外力的对象, 如果存在这个名称的外力, 移除之前的外力, 当速率变为 0 时不会自动销毁
@@ -204,7 +224,9 @@ public class MoveController : Component
             //计算移动
             ActivityInstance.Velocity = finallyVelocity;
             ActivityInstance.MoveAndSlide();
+            //新速度
             var newVelocity = ActivityInstance.Velocity;
+            
             if (newVelocity.X == 0f && _basisVelocity.X * finallyVelocity.X > 0)
             {
                 _basisVelocity.X = 0;
@@ -214,29 +236,45 @@ public class MoveController : Component
             {
                 _basisVelocity.Y = 0;
             }
-
-            //调整外力速率
-            for (var i = 0; i < _forceList.Count; i++)
+            
+            //是否撞到物体
+            var collision = ActivityInstance.GetLastSlideCollision();
+            if (collision != null) //执行反弹操作
             {
-                var force = _forceList[i];
-                if (force.Enable)
+                var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
+                newVelocity = (finallyVelocity - _basisVelocity).Reflect(no);
+                var length = _forceList.Count;
+                var v = newVelocity / (length / ActivityInstance.BounceStrength);
+                for (var i = 0; i < _forceList.Count; i++)
                 {
-                    var velocity = force.Velocity;
-                    force.Velocity = new Vector2(
-                        newVelocity.X == 0f && velocity.X * finallyVelocity.X > 0 ? 0 : velocity.X,
-                        newVelocity.Y == 0f && velocity.Y * finallyVelocity.Y > 0 ? 0 : velocity.Y
-                    );
-
-                    //力速度衰减
-                    if (force.Resistance != 0)
+                    _forceList[i].Velocity = v;
+                }
+            }
+            else //没有撞到物体
+            {
+                //调整外力速率
+                for (var i = 0; i < _forceList.Count; i++)
+                {
+                    var force = _forceList[i];
+                    if (force.Enable)
                     {
-                        force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.Resistance * delta);
-                    }
+                        var velocity = force.Velocity;
+                        force.Velocity = new Vector2(
+                            newVelocity.X == 0f && velocity.X * finallyVelocity.X > 0 ? 0 : velocity.X,
+                            newVelocity.Y == 0f && velocity.Y * finallyVelocity.Y > 0 ? 0 : velocity.Y
+                        );
 
-                    //自动销毁
-                    if (force.AutoDestroy && force.Velocity == Vector2.Zero)
-                    {
-                        _forceList.RemoveAt(i--);
+                        //力速度衰减
+                        if (force.Resistance != 0 && (force.EnableResistanceInTheAir || !ActivityInstance.IsThrowing))
+                        {
+                            force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.Resistance * delta);
+                        }
+
+                        //自动销毁
+                        if (force.AutoDestroy && force.Velocity == Vector2.Zero)
+                        {
+                            _forceList.RemoveAt(i--);
+                        }
                     }
                 }
             }

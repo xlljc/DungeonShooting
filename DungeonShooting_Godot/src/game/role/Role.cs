@@ -290,6 +290,34 @@ public abstract partial class Role : ActivityObject
         }
     }
 
+    /// <summary>
+    /// 当武器放到后背时调用, 用于设置武器位置和角度
+    /// </summary>
+    /// <param name="weapon">武器实例</param>
+    /// <param name="index">放入武器袋的位置</param>
+    public virtual void OnPutBackMount(Weapon weapon, int index)
+    {
+        if (index < 8)
+        {
+            if (index % 2 == 0)
+            {
+                weapon.Position = new Vector2(-4, 3);
+                weapon.RotationDegrees = 90 - (index / 2f) * 20;
+                weapon.Scale = new Vector2(-1, 1);
+            }
+            else
+            {
+                weapon.Position = new Vector2(4, 3);
+                weapon.RotationDegrees = 270 + (index - 1) / 2f * 20;
+                weapon.Scale = new Vector2(1, 1);
+            }
+        }
+        else
+        {
+            weapon.Visible = false;
+        }
+    }
+    
     protected override void OnAffiliationChange()
     {
         //身上的武器的所属区域也得跟着变
@@ -351,9 +379,9 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsAllWeaponTotalAmmoEmpty()
     {
-        foreach (var weaponSlot in Holster.SlotList)
+        foreach (var weapon in Holster.Weapons)
         {
-            if (weaponSlot.Weapon != null && !weaponSlot.Weapon.IsTotalAmmoEmpty())
+            if (weapon != null && !weapon.IsTotalAmmoEmpty())
             {
                 return false;
             }

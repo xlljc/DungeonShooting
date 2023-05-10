@@ -949,12 +949,8 @@ public abstract partial class Weapon : ActivityObject
                 if (holster.PickupWeapon(this) == -1)
                 {
                     //替换武器
-                    var slot = holster.SlotList[holster.ActiveIndex];
-                    if (slot.Type == Attribute.WeightType)
-                    {
-                        roleMaster.ThrowWeapon();
-                        roleMaster.PickUpWeapon(this);
-                    }
+                    roleMaster.ThrowWeapon();
+                    roleMaster.PickUpWeapon(this);
                 }
             }
         }
@@ -994,6 +990,9 @@ public abstract partial class Weapon : ActivityObject
 
         var angle = master.MountPoint.GlobalRotationDegrees;
         GlobalRotationDegrees = angle;
+        
+        //继承role的移动速度
+        InheritVelocity(master);
 
         var startHeight = 6;
         var direction = angle + Utils.RandomRangeInt(-20, 20);
@@ -1003,16 +1002,17 @@ public abstract partial class Weapon : ActivityObject
         Throw(startPosition, startHeight, yf, velocity, rotate);
     }
 
-    protected override void OnThrowOver()
+    protected override void OnThrowStart()
     {
-        //启用碰撞
-        Collision.Disabled = false;
+        //禁用碰撞
+        //Collision.Disabled = true;
         AnimationPlayer.Play("floodlight");
     }
 
-    public override void PutDown(RoomLayerEnum layer, bool showShadow = true)
+    protected override void OnThrowOver()
     {
-        base.PutDown(layer, showShadow);
+        //启用碰撞
+        //Collision.Disabled = false;
         AnimationPlayer.Play("floodlight");
     }
 
@@ -1035,11 +1035,10 @@ public abstract partial class Weapon : ActivityObject
         //停止动画
         AnimationPlayer.Stop();
         //清除泛白效果
-        ShaderMaterial sm = (ShaderMaterial)AnimatedSprite.Material;
-        sm.SetShaderParameter("schedule", 0);
+        SetBlendSchedule(0);
         ZIndex = 0;
         //禁用碰撞
-        Collision.Disabled = true;
+        //Collision.Disabled = true;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         OnPickUp(master);
@@ -1077,7 +1076,7 @@ public abstract partial class Weapon : ActivityObject
         HideShadowSprite();
         OnConceal();
     }
-    
+
     //-------------------------------- Ai相关 -----------------------------
 
     /// <summary>

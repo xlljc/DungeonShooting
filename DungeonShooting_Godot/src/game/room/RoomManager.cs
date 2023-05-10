@@ -77,7 +77,7 @@ public partial class RoomManager : Node2D
         _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom);
         
         //生成寻路网格， 这一步操作只生成过道的导航
-        _dungeonTile.GenerateNavigationPolygon(DungeonTile.AisleFloorMapLayer);
+        _dungeonTile.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
         //挂载过道导航区域
         _dungeonTile.MountNavigationPolygon(this);
         //过道导航区域数据
@@ -93,7 +93,7 @@ public partial class RoomManager : Node2D
         //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
         //初始房间创建玩家标记
-        var playerBirthMark = StartRoom.ActivityMarks.FirstOrDefault(mark => mark is PlayerBirthMark);
+        var playerBirthMark = StartRoom.ActivityMarks.FirstOrDefault(mark => mark.Type == ActivityIdPrefix.ActivityPrefixType.Player);
         //创建玩家
         Player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
         if (playerBirthMark != null)
@@ -230,16 +230,16 @@ public partial class RoomManager : Node2D
             switch (doorInfo.Direction)
             {
                 case DoorDirection.E:
-                    offset = new Vector2(-0.5f, 2);
-                    break;
-                case DoorDirection.W:
                     offset = new Vector2(0.5f, 2);
                     break;
+                case DoorDirection.W:
+                    offset = new Vector2(-0.5f, 2);
+                    break;
                 case DoorDirection.S:
-                    offset = new Vector2(2f, -0.5f);
+                    offset = new Vector2(2f, 1.5f);
                     break;
                 case DoorDirection.N:
-                    offset = new Vector2(2f, 0.5f);
+                    offset = new Vector2(2f, -0.5f);
                     break;
                 default: offset = new Vector2();
                     break;
@@ -285,7 +285,7 @@ public partial class RoomManager : Node2D
     private void OnCheckEnemy()
     {
         var activeRoom = ActiveRoom;
-        if (activeRoom != null && activeRoom.IsSeclusion)
+        if (activeRoom != null)// && //activeRoom.IsSeclusion)
         {
             if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
             {

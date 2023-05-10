@@ -1,7 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://b515ti0qinck8"]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_hm41b"]
-[ext_resource type="Shader" path="res://resource/materlal/Blend.gdshader" id="2_q6jwp"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_q6jwp"]
 [ext_resource type="Script" path="res://src/game/role/MountRotation.cs" id="4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v2kfw"]

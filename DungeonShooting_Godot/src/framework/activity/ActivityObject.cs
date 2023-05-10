@@ -142,6 +142,37 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public bool EnableVerticalMotion { get; set; } = true;
 
+    /// <summary>
+    /// 是否启用物体更新行为, 默认 true, 如果禁用, 则会停止当前物体的 Process(), PhysicsProcess() 调用, 并且禁用 Collision 节点, 禁用后所有组件也同样被禁用行为
+    /// </summary>
+    public bool EnableBehavior
+    {
+        get => _enableBehavior;
+        set
+        {
+            if (value != _enableBehavior)
+            {
+                _enableBehavior = value;
+                SetProcess(value);
+                SetPhysicsProcess(value);
+                if (value)
+                {
+                    Collision.Disabled = _enableBehaviorCollisionDisabledFlag;
+                }
+                else
+                {
+                    _enableBehaviorCollisionDisabledFlag = Collision.Disabled;
+                    Collision.Disabled = true;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 是否启用自定义行为, 默认 true, 如果禁用, 则会停止调用子类重写的 Process(), PhysicsProcess() 函数, 并且当前物体除 MoveController 以外的组件 Process(), PhysicsProcess() 也会停止调用
+    /// </summary>
+    public bool EnableCustomBehavior { get; set; } = true;
+    
     // --------------------------------------------------------------------------------
 
     //组件集合
@@ -192,7 +223,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     //落到地上回弹的速度
     private float _resilienceVerticalSpeed = 0;
     private bool _hasResilienceVerticalSpeed = false;
-    
+
+    //是否启用物体行为
+    private bool _enableBehavior = true;
+    private bool _enableBehaviorCollisionDisabledFlag;
+
     // --------------------------------------------------------------------------------
     
     //实例索引
@@ -521,9 +556,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// 将该节点投抛出去
     /// </summary>
     /// <param name="altitude">初始高度</param>
-    /// <param name="rotate">旋转速度</param>
-    /// <param name="velocity">移动速率</param>
     /// <param name="verticalSpeed">纵轴速度</param>
+    /// <param name="velocity">移动速率</param>
+    /// <param name="rotate">旋转速度</param>
     public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotate)
     {
         var parent = GetParent();
@@ -555,9 +590,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     /// <param name="position">初始位置</param>
     /// <param name="altitude">初始高度</param>
-    /// <param name="rotate">旋转速度</param>
-    /// <param name="velocity">移动速率</param>
     /// <param name="verticalSpeed">纵轴速度</param>
+    /// <param name="velocity">移动速率</param>
+    /// <param name="rotate">旋转速度</param>
     public void Throw(Vector2 position, float altitude, float verticalSpeed, Vector2 velocity, float rotate)
     {
         GlobalPosition = position;
@@ -628,6 +663,39 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         if (component == null) return null;
         return (T)component;
     }
+
+    /// <summary>
+    /// 设置混色材质的颜色
+    /// </summary>
+    public void SetBlendColor(Color color)
+    {
+        _blendShaderMaterial.SetShaderParameter("blend", color);
+    }
+
+    /// <summary>
+    /// 获取混色材质的颜色
+    /// </summary>
+    public Color GetBlendColor()
+    {
+        return _blendShaderMaterial.GetShaderParameter("blend").AsColor();
+    }
+    
+    /// <summary>
+    /// 设置混色材质的强度
+    /// </summary>
+    public void SetBlendSchedule(float value)
+    {
+        _blendShaderMaterial.SetShaderParameter("schedule", value);
+    }
+
+    /// <summary>
+    /// 获取混色材质的强度
+    /// </summary>
+    public float GetBlendSchedule()
+    {
+        return _blendShaderMaterial.GetShaderParameter("schedule").AsSingle();
+    }
+    
     
     /// <summary>
     /// 每帧调用一次, 为了防止子类覆盖 _Process(), 给 _Process() 加上了 sealed, 子类需要帧循环函数请重写 Process() 函数
@@ -635,26 +703,41 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public sealed override void _Process(double delta)
     {
         var newDelta = (float)delta;
-        Process(newDelta);
+        if (EnableCustomBehavior)
+        {
+            Process(newDelta);
+        }
         
         //更新组件
         if (_components.Count > 0)
         {
-            var arr = _components.ToArray();
-            for (int i = 0; i < arr.Length; i++)
+            if (EnableCustomBehavior) //启用所有组件
             {
-                if (IsDestroyed) return;
-                var temp = arr[i].Value;
-                if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                var arr = _components.ToArray();
+                for (int i = 0; i < arr.Length; i++)
                 {
-                    if (!temp.IsReady)
+                    if (IsDestroyed) return;
+                    var temp = arr[i].Value;
+                    if (temp != null && temp.ActivityInstance == this && temp.Enable)
                     {
-                        temp.Ready();
-                        temp.IsReady = true;
-                    }
+                        if (!temp.IsReady)
+                        {
+                            temp.Ready();
+                            temp.IsReady = true;
+                        }
 
-                    temp.Process(newDelta);
+                        temp.Process(newDelta);
+                    }
                 }
+            }
+            else //只更新 MoveController 组件
+            {
+                if (!MoveController.IsReady)
+                {
+                    MoveController.Ready();
+                    MoveController.IsReady = true;
+                }
+                MoveController.Process(newDelta);
             }
         }
 
@@ -786,7 +869,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         }
 
         // Hit 动画
-        if (_playHit && _blendShaderMaterial != null)
+        if (_playHit)
         {
             if (_playHitSchedule < 0.05f)
             {
@@ -829,26 +912,41 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public sealed override void _PhysicsProcess(double delta)
     {
         var newDelta = (float)delta;
-        PhysicsProcess(newDelta);
+        if (EnableCustomBehavior)
+        {
+            PhysicsProcess(newDelta);
+        }
         
         //更新组件
         if (_components.Count > 0)
         {
-            var arr = _components.ToArray();
-            for (int i = 0; i < arr.Length; i++)
+            if (EnableCustomBehavior) //启用所有组件
             {
-                if (IsDestroyed) return;
-                var temp = arr[i].Value;
-                if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                var arr = _components.ToArray();
+                for (int i = 0; i < arr.Length; i++)
                 {
-                    if (!temp.IsReady)
+                    if (IsDestroyed) return;
+                    var temp = arr[i].Value;
+                    if (temp != null && temp.ActivityInstance == this && temp.Enable)
                     {
-                        temp.Ready();
-                        temp.IsReady = true;
-                    }
+                        if (!temp.IsReady)
+                        {
+                            temp.Ready();
+                            temp.IsReady = true;
+                        }
 
-                    temp.PhysicsProcess(newDelta);
+                        temp.PhysicsProcess(newDelta);
+                    }
                 }
+            }
+            else //只更新 MoveController 组件
+            {
+                if (!MoveController.IsReady)
+                {
+                    MoveController.Ready();
+                    MoveController.IsReady = true;
+                }
+                MoveController.PhysicsProcess(newDelta);
             }
         }
 
@@ -939,6 +1037,19 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public void DelayDestroy()
     {
         CallDeferred(nameof(Destroy));
+    }
+
+    /// <summary>
+    /// 继承指定物体的运动速率, 该速率可能会有衰减
+    /// </summary>
+    public void InheritVelocity(ActivityObject other)
+    {
+        var velocity = other.Velocity;
+        if (velocity != Vector2.Zero)
+        {
+            var force = MoveController.AddConstantForce(velocity * 0.5f, 15);
+            force.EnableResistanceInTheAir = false;
+        }
     }
 
     /// <summary>
@@ -1125,7 +1236,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     }
 
     /// <summary>
-    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess
+    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task, SignalAwaiter
     /// </summary>
     public long StartCoroutine(IEnumerator able)
     {

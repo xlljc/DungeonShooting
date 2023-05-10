@@ -5,6 +5,10 @@
 public static class AnimatorNames
 {
     /// <summary>
+    /// 默认动画
+    /// </summary>
+    public const string Default = "default";
+    /// <summary>
     /// 静止不动
     /// </summary>
     public const string Idle = "idle";

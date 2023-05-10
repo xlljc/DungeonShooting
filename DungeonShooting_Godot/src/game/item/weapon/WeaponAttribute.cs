@@ -243,7 +243,7 @@ public class WeaponAttribute
     /// <summary>
     /// 用于Ai, Ai使用该武器消耗弹药的概率, (0 - 1)
     /// </summary>
-    public float AiAmmoConsumptionProbability = 1f;
+    public float AiAmmoConsumptionProbability = 0f;
     
     /// <summary>
     /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性
