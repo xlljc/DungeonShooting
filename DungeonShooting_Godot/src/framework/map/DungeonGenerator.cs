@@ -60,8 +60,8 @@ public class DungeonGenerator
     //最大尝试次数
     private int _maxTryCount = 10;
 
-    //房间组名称
-    private string _groupName;
+    //地牢配置
+    private DungeonConfig _config;
     private DungeonRoomGroup _roomGroup;
 
     //指定只能生成的房间
@@ -92,26 +92,26 @@ public class DungeonGenerator
     }
 #endif
 
-    public DungeonGenerator(string groupName)
+    public DungeonGenerator(DungeonConfig config)
     {
-        _groupName = groupName;
-        _roomGroup = GameApplication.Instance.RoomConfig[_groupName];
+        _config = config;
+        _roomGroup = GameApplication.Instance.RoomConfig[config.GroupName];
 
         //验证该组是否满足生成地牢的条件
         if (_roomGroup.InletList.Count == 0)
         {
-            throw new Exception("当前组'" + groupName + "'中没有起始房间, 不能生成地牢!");
+            throw new Exception("当前组'" + config.GroupName + "'中没有起始房间, 不能生成地牢!");
         }
         //没有指定房间
         if (_designatedRoom == null || _designatedRoom.Count == 0)
         {
             if (_roomGroup.OutletList.Count == 0)
             {
-                throw new Exception("当前组'" + groupName + "'中没有结束房间, 不能生成地牢!");
+                throw new Exception("当前组'" + config.GroupName + "'中没有结束房间, 不能生成地牢!");
             }
             else if (_roomGroup.BattleList.Count == 0)
             {
-                throw new Exception("当前组'" + groupName + "'中没有战斗房间, 不能生成地牢!");
+                throw new Exception("当前组'" + config.GroupName + "'中没有战斗房间, 不能生成地牢!");
             }
         }
 

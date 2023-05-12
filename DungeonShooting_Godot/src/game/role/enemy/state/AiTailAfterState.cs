@@ -44,7 +44,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
         
-        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
+        var playerPos = Player.Current.GetCenterPosition();
         
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
@@ -112,7 +112,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
 
     public override void DebugDraw()
     {
-        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
+        var playerPos = Player.Current.GetCenterPosition();
         if (_isInViewRange)
         {
             Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Orange);

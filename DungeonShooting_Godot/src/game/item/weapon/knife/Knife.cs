@@ -94,7 +94,7 @@ public partial class Knife : Weapon
         }
 
 
-        if (Master == GameApplication.Instance.RoomManager.Player)
+        if (Master == Player.Current)
         {
             //创建抖动
             //GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation - Mathf.Pi * 0.5f) * 1.5f);

@@ -430,7 +430,7 @@ public abstract partial class Weapon : ActivityObject
     /// <returns></returns>
     public bool IsInGround()
     {
-        return Master == null && GetParent() == GameApplication.Instance.RoomManager.NormalLayer;
+        return Master == null && GetParent() == GameApplication.Instance.World.NormalLayer;
     }
     
     /// <summary>

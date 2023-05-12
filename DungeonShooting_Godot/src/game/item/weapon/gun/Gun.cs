@@ -109,7 +109,7 @@ public partial class Gun : Weapon
         shell.InheritVelocity(Master);
         shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
         
-        if (Master == GameApplication.Instance.RoomManager.Player)
+        if (Master == Player.Current)
         {
             //创建抖动
             GameCamera.Main.DirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);

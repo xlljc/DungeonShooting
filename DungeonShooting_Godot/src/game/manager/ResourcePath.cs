@@ -20,6 +20,7 @@ public class ResourcePath
     public const string prefab_test_MoveComponent_tscn = "res://prefab/test/MoveComponent.tscn";
     public const string prefab_test_TestActivity_tscn = "res://prefab/test/TestActivity.tscn";
     public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
+    public const string prefab_ui_Main_tscn = "res://prefab/ui/Main.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_weapon_Knife_tscn = "res://prefab/weapon/Knife.tscn";
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";
@@ -36,13 +37,17 @@ public class ResourcePath
     public const string resource_effects_ShotFire_png = "res://resource/effects/ShotFire.png";
     public const string resource_effects_Smoke_png = "res://resource/effects/Smoke.png";
     public const string resource_effects_activityObject_Enemy0001_Debris_png = "res://resource/effects/activityObject/Enemy0001_Debris.png";
-    public const string resource_font_cn_font_12_tres = "res://resource/font/cn_font_12.tres";
-    public const string resource_font_cn_font_18_tres = "res://resource/font/cn_font_18.tres";
-    public const string resource_font_cn_font_36_tres = "res://resource/font/cn_font_36.tres";
+    public const string resource_font_DinkieBitmap7pxDemo_ttf = "res://resource/font/DinkieBitmap-7pxDemo.ttf";
+    public const string resource_font_DinkieBitmap9pxDemo_ttf = "res://resource/font/DinkieBitmap-9pxDemo.ttf";
+    public const string resource_font_DinkieBitmap9pxItalicDemo_ttf = "res://resource/font/DinkieBitmap-9pxItalicDemo.ttf";
+    public const string resource_font_VonwaonBitmap12px_ttf = "res://resource/font/VonwaonBitmap-12px.ttf";
+    public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
     public const string resource_map_RoomConfig_json = "res://resource/map/RoomConfig.json";
+    public const string resource_map_tiledata_testGroup_battle_Room1_json = "res://resource/map/tiledata/testGroup/battle/Room1.json";
     public const string resource_map_tiledata_testGroup_battle_Room8_json = "res://resource/map/tiledata/testGroup/battle/Room8.json";
     public const string resource_map_tiledata_testGroup_inlet_Room1_json = "res://resource/map/tiledata/testGroup/inlet/Room1.json";
     public const string resource_map_tiledata_testGroup_outlet_Room1_json = "res://resource/map/tiledata/testGroup/outlet/Room1.json";
+    public const string resource_map_tileMaps_testGroup_battle_Room1_tscn = "res://resource/map/tileMaps/testGroup/battle/Room1.tscn";
     public const string resource_map_tileMaps_testGroup_battle_Room8_tscn = "res://resource/map/tileMaps/testGroup/battle/Room8.tscn";
     public const string resource_map_tileMaps_testGroup_inlet_Room1_tscn = "res://resource/map/tileMaps/testGroup/inlet/Room1.tscn";
     public const string resource_map_tileMaps_testGroup_outlet_Room1_tscn = "res://resource/map/tileMaps/testGroup/outlet/Room1.tscn";
@@ -251,6 +256,7 @@ public class ResourcePath
     public const string resource_sprite_ui_Cursor_png = "res://resource/sprite/ui/Cursor.png";
     public const string resource_sprite_ui_CursorCenter_png = "res://resource/sprite/ui/CursorCenter.png";
     public const string resource_sprite_ui_font_bg_png = "res://resource/sprite/ui/font_bg.png";
+    public const string resource_sprite_ui_GUI_png = "res://resource/sprite/ui/GUI.png";
     public const string resource_sprite_ui_healthBar_png = "res://resource/sprite/ui/healthBar.png";
     public const string resource_sprite_ui_hpBar_png = "res://resource/sprite/ui/hpBar.png";
     public const string resource_sprite_ui_hpSlot_png = "res://resource/sprite/ui/hpSlot.png";
@@ -266,9 +272,10 @@ public class ResourcePath
     public const string resource_sprite_ui_icon_icon_replace_png = "res://resource/sprite/ui/icon/icon_replace.png";
     public const string resource_sprite_ui_keyboard_e_png = "res://resource/sprite/ui/keyboard/e.png";
     public const string resource_theme_mainTheme_tres = "res://resource/theme/mainTheme.tres";
+    public const string resource_theme_theme1_tres = "res://resource/theme/theme1.tres";
     public const string scene_EditorDemo_tscn = "res://scene/EditorDemo.tscn";
     public const string scene_Main_tscn = "res://scene/Main.tscn";
-    public const string scene_Room_tscn = "res://scene/Room.tscn";
+    public const string scene_World_tscn = "res://scene/World.tscn";
     public const string scene_test_TestCommpont_tscn = "res://scene/test/TestCommpont.tscn";
     public const string scene_test_TestExpression_tscn = "res://scene/test/TestExpression.tscn";
     public const string scene_test_TestGenerateDungeon_tscn = "res://scene/test/TestGenerateDungeon.tscn";
@@ -280,6 +287,4 @@ public class ResourcePath
     public const string default_bus_layout_tres = "res://default_bus_layout.tres";
     public const string default_env_tres = "res://default_env.tres";
     public const string icon_png = "res://icon.png";
-    public const string Silver_ttf = "res://Silver.ttf";
-    public const string SourceHanSerifCNSemiBold_otf = "res://SourceHanSerifCN-SemiBold.otf";
 }

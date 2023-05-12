@@ -68,7 +68,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
             Master.BasisVelocity = Vector2.Zero;
         }
 
-        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
+        var playerPos = Player.Current.GetCenterPosition();
         //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
         if (Master.IsInTailAfterViewRange(playerPos))
         {

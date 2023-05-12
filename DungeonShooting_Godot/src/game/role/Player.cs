@@ -10,7 +10,7 @@ public partial class Player : Role
     /// <summary>
     /// 获取当前操作的角色
     /// </summary>
-    public static Player Current => GameApplication.Instance.RoomManager.Player;
+    public static Player Current { get; private set; }
     
     /// <summary>
     /// 移动加速度
@@ -21,6 +21,14 @@ public partial class Player : Role
     /// 移动摩擦力
     /// </summary>
     public float Friction { get; set; } = 800f;
+
+    /// <summary>
+    /// 设置当前操作的玩家对象
+    /// </summary>
+    public static void SetCurrentPlayer(Player player)
+    {
+        Current = player;
+    }
     
     public override void OnInit()
     {

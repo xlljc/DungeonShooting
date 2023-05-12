@@ -37,7 +37,6 @@ enabled=PackedStringArray("res://addons/dungeonShooting_plugin/plugin.cfg")
 [gui]
 
 theme/custom="res://resource/theme/mainTheme.tres"
-theme/custom_font="res://resource/font/cn_font_36.tres"
 
 [importer_defaults]
 

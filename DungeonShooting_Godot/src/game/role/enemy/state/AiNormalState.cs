@@ -61,7 +61,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
         else //没有找到玩家
         {
             //检测玩家
-            var player = GameApplication.Instance.RoomManager.Player;
+            var player = Player.Current;
             //玩家中心点坐标
             var playerPos = player.GetCenterPosition();
 

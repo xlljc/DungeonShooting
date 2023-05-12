@@ -23,6 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_u48k1")
 
 [node name="InteractiveTipBar" type="Node2D" parent="."]
@@ -64,6 +65,7 @@ offset_left = 20.0
 offset_top = 20.0
 offset_right = -20.0
 offset_bottom = -20.0
+mouse_filter = 2
 
 [node name="HealthBar" type="TextureRect" parent="Control"]
 layout_mode = 0

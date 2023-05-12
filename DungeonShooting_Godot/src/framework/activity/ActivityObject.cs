@@ -511,7 +511,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     {
         _currLayer = layer;
         var parent = GetParent();
-        var root = GameApplication.Instance.RoomManager.GetRoomLayer(layer);
+        var root = GameApplication.Instance.World.GetRoomLayer(layer);
         if (parent != root)
         {
             if (parent != null)
@@ -564,12 +564,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         var parent = GetParent();
         if (parent == null)
         {
-            GameApplication.Instance.RoomManager.YSortLayer.AddChild(this);
+            GameApplication.Instance.World.YSortLayer.AddChild(this);
         }
-        else if (parent != GameApplication.Instance.RoomManager.YSortLayer)
+        else if (parent != GameApplication.Instance.World.YSortLayer)
         {
             parent.RemoveChild(this);
-            GameApplication.Instance.RoomManager.YSortLayer.AddChild(this);
+            GameApplication.Instance.World.YSortLayer.AddChild(this);
         }
         
         Altitude = altitude;
@@ -1063,7 +1063,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         {
             this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
-        else if (parent == GameApplication.Instance.RoomManager.NormalLayer)
+        else if (parent == GameApplication.Instance.World.NormalLayer)
         {
             parent.RemoveChild(this);
             this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
@@ -1149,7 +1149,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     private void ThrowOver()
     {
         var parent = GetParent();
-        var roomLayer = GameApplication.Instance.RoomManager.GetRoomLayer(_currLayer);
+        var roomLayer = GameApplication.Instance.World.GetRoomLayer(_currLayer);
         if (parent != roomLayer)
         {
             parent.RemoveChild(this);

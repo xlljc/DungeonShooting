@@ -120,7 +120,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
 
     public override void DebugDraw()
     {
-        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
+        var playerPos = Player.Current.GetCenterPosition();
         Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Red);
     }
 }

@@ -15,7 +15,7 @@ public static class ResourceManager
         {
             if (_shadowMaterial == null)
             {
-                _shadowMaterial = ResourceLoader.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres);
+                _shadowMaterial = Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres);
             }
 
             return _shadowMaterial;
@@ -33,7 +33,7 @@ public static class ResourceManager
         {
             if (_shadowShader == null)
             {
-                _shadowShader = ResourceLoader.Load<Shader>(ResourcePath.resource_material_Blend_tres);
+                _shadowShader = Load<Shader>(ResourcePath.resource_material_Blend_tres);
             }
 
             return _shadowShader;
@@ -42,6 +42,24 @@ public static class ResourceManager
 
     private static Shader _shadowShader;
 
+    /// <summary>
+    /// 默认字体资源
+    /// </summary>
+    public static Font DefaultFont
+    {
+        get
+        {
+            if (_defaultFont == null)
+            {
+                _defaultFont = Load<Font>(ResourcePath.resource_font_VonwaonBitmap16px_ttf);
+            }
+
+            return _defaultFont;
+        }
+    }
+    private static Font _defaultFont;
+    
+    //缓存的资源
     private static readonly Dictionary<string, object> CachePack = new Dictionary<string, object>();
 
     /// <summary>

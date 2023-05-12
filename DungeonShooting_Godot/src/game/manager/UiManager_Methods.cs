@@ -7,6 +7,7 @@ public static partial class UiManager
     public static class UiName
     {
         public const string EditorTools = "EditorTools";
+        public const string Main = "Main";
         public const string RoomUI = "RoomUI";
     }
 
@@ -24,6 +25,22 @@ public static partial class UiManager
     public static UI.EditorTools.EditorToolsPanel[] Get_EditorTools_Instance()
     {
         return GetUiInstance<UI.EditorTools.EditorToolsPanel>(nameof(UI.EditorTools.EditorTools));
+    }
+
+    /// <summary>
+    /// 打开 Main, 并返回UI实例
+    /// </summary>
+    public static UI.Main.MainPanel Open_Main()
+    {
+        return OpenUi<UI.Main.MainPanel>(UiName.Main);
+    }
+
+    /// <summary>
+    /// 获取所有 Main 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.Main.MainPanel[] Get_Main_Instance()
+    {
+        return GetUiInstance<UI.Main.MainPanel>(nameof(UI.Main.Main));
     }
 
     /// <summary>
