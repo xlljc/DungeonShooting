@@ -16,9 +16,9 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
 
     public override void Enter(AiStateEnum prev, params object[] args)
     {
-        if (Enemy.IsFindTarget)
+        if (Master.World.Enemy_IsFindTarget)
         {
-            Master.NavigationAgent2D.TargetPosition = Enemy.FindTargetPosition;
+            Master.NavigationAgent2D.TargetPosition = Master.World.EnemyFindTargetPosition;
         }
         else
         {
@@ -47,7 +47,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            Master.NavigationAgent2D.TargetPosition = Enemy.FindTargetPosition;
+            Master.NavigationAgent2D.TargetPosition = Master.World.EnemyFindTargetPosition;
         }
         else
         {
@@ -58,7 +58,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         {
             //计算移动
             var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-            Master.LookTargetPosition(Enemy.FindTargetPosition);
+            Master.LookTargetPosition(Master.World.EnemyFindTargetPosition);
             Master.AnimatedSprite.Play(AnimatorNames.Run);
             Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;

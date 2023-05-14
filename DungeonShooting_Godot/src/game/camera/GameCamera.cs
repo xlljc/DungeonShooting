@@ -70,7 +70,9 @@ public partial class GameCamera : Camera2D
         // (viewportContainer.Material as ShaderMaterial)?.SetShaderParameter("offset", SubPixelPosition);
         // GlobalPosition = _camPos.Round();
 
-        if (_followTarget != null)
+
+        var world = GameApplication.Instance.World;
+        if (world != null && !world.Pause && _followTarget != null)
         {
             var mousePosition = InputManager.GetViewportMousePosition();
             var targetPosition = _followTarget.GlobalPosition;
@@ -104,7 +106,11 @@ public partial class GameCamera : Camera2D
     public void SetFollowTarget(Role target)
     {
         _followTarget = target;
-        GlobalPosition = target.GlobalPosition;
+        if (target != null)
+        {
+            _camPos = target.GlobalPosition;
+            GlobalPosition = _camPos;
+        }
     }
 
     /// <summary>

@@ -83,10 +83,15 @@ public partial class ActivityObject
     /// </summary>
     public static ActivityObject Create(string itemId)
     {
+        var world = GameApplication.Instance.World;
+        if (world == null)
+        {
+            throw new Exception("实例化 ActivityObject 前请先调用 'GameApplication.Instance.CreateNewWorld()' 初始化 World 对象");
+        }
         if (_activityRegisterMap.TryGetValue(itemId, out var item))
         {
             var instance = item.CallBack();
-            instance._InitNode(item.RegisterActivity.ItemId, item.RegisterActivity.PrefabPath);
+            instance._InitNode(item.RegisterActivity.ItemId, item.RegisterActivity.PrefabPath, world);
             item.RegisterActivity.CustomHandler(instance);
             return instance;
         }

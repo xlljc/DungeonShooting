@@ -9,6 +9,7 @@ public static partial class UiManager
         public const string EditorTools = "EditorTools";
         public const string Main = "Main";
         public const string RoomUI = "RoomUI";
+        public const string Settlement = "Settlement";
     }
 
     /// <summary>
@@ -17,6 +18,30 @@ public static partial class UiManager
     public static UI.EditorTools.EditorToolsPanel Open_EditorTools()
     {
         return OpenUi<UI.EditorTools.EditorToolsPanel>(UiName.EditorTools);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorTools 的所有实例
+    /// </summary>
+    public static void Hide_EditorTools()
+    {
+        var uiInstance = Get_EditorTools_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorTools 的所有实例
+    /// </summary>
+    public static void Dispose_EditorTools()
+    {
+        var uiInstance = Get_EditorTools_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.DisposeUi();
+        }
     }
 
     /// <summary>
@@ -36,6 +61,30 @@ public static partial class UiManager
     }
 
     /// <summary>
+    /// 隐藏 Main 的所有实例
+    /// </summary>
+    public static void Hide_Main()
+    {
+        var uiInstance = Get_Main_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 Main 的所有实例
+    /// </summary>
+    public static void Dispose_Main()
+    {
+        var uiInstance = Get_Main_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.DisposeUi();
+        }
+    }
+
+    /// <summary>
     /// 获取所有 Main 的实例, 如果没有实例, 则返回一个空数组
     /// </summary>
     public static UI.Main.MainPanel[] Get_Main_Instance()
@@ -52,11 +101,75 @@ public static partial class UiManager
     }
 
     /// <summary>
+    /// 隐藏 RoomUI 的所有实例
+    /// </summary>
+    public static void Hide_RoomUI()
+    {
+        var uiInstance = Get_RoomUI_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 RoomUI 的所有实例
+    /// </summary>
+    public static void Dispose_RoomUI()
+    {
+        var uiInstance = Get_RoomUI_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.DisposeUi();
+        }
+    }
+
+    /// <summary>
     /// 获取所有 RoomUI 的实例, 如果没有实例, 则返回一个空数组
     /// </summary>
     public static UI.RoomUI.RoomUIPanel[] Get_RoomUI_Instance()
     {
         return GetUiInstance<UI.RoomUI.RoomUIPanel>(nameof(UI.RoomUI.RoomUI));
+    }
+
+    /// <summary>
+    /// 打开 Settlement, 并返回UI实例
+    /// </summary>
+    public static UI.Settlement.SettlementPanel Open_Settlement()
+    {
+        return OpenUi<UI.Settlement.SettlementPanel>(UiName.Settlement);
+    }
+
+    /// <summary>
+    /// 隐藏 Settlement 的所有实例
+    /// </summary>
+    public static void Hide_Settlement()
+    {
+        var uiInstance = Get_Settlement_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 Settlement 的所有实例
+    /// </summary>
+    public static void Dispose_Settlement()
+    {
+        var uiInstance = Get_Settlement_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.DisposeUi();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 Settlement 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.Settlement.SettlementPanel[] Get_Settlement_Instance()
+    {
+        return GetUiInstance<UI.Settlement.SettlementPanel>(nameof(UI.Settlement.Settlement));
     }
 
 }

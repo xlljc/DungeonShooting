@@ -28,6 +28,9 @@ public partial class Player : Role
     public static void SetCurrentPlayer(Player player)
     {
         Current = player;
+        //设置相机和鼠标跟随玩家
+        GameCamera.Main.SetFollowTarget(player);
+        GameApplication.Instance.Cursor.SetMountRole(player);
     }
     
     public override void OnInit()
@@ -62,6 +65,10 @@ public partial class Player : Role
 
     protected override void Process(float delta)
     {
+        if (IsDie)
+        {
+            return;
+        }
         base.Process(delta);
         //脸的朝向
         if (LookTarget == null)
@@ -104,10 +111,20 @@ public partial class Player : Role
         {
             Attack();
         }
+
+        if (Input.IsKeyPressed(Key.P))
+        {
+            Hurt(1000, 0);
+        }
     }
 
     protected override void PhysicsProcess(float delta)
     {
+        if (IsDie)
+        {
+            return;
+        }
+
         base.PhysicsProcess(delta);
         HandleMoveInput(delta);
         //播放动画
@@ -176,6 +193,13 @@ public partial class Player : Role
     {
         //GameApplication.Instance.Ui.SetMaxShield(maxShield);
         EventManager.EmitEvent(EventEnum.OnPlayerMaxShieldChange, maxShield);
+    }
+
+    protected override void OnDie()
+    {
+        GameCamera.Main.SetFollowTarget(null);
+        UiManager.Open_Settlement();
+        //GameApplication.Instance.World.ProcessMode = ProcessModeEnum.WhenPaused;
     }
 
     /// <summary>

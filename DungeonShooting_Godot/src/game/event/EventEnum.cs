@@ -40,4 +40,12 @@ public enum EventEnum
     /// 刷新玩家手持武器纹理, 参数类型为<see cref="Godot.Texture2D"/>
     /// </summary>
     OnPlayerRefreshWeaponTexture,
+    /// <summary>
+    /// 当玩家进入地牢时调用, 没有参数
+    /// </summary>
+    OnEnterDungeon,
+    /// <summary>
+    /// 当玩家退出地牢时调用, 没有参数
+    /// </summary>
+    OnExitDungeon,
 }

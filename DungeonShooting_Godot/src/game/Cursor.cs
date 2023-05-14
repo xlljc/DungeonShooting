@@ -5,36 +5,6 @@ using Godot;
 /// </summary>
 public partial class Cursor : Node2D
 {
-    public enum CursorStyle
-    {
-        /// <summary>
-        /// 手指
-        /// </summary>
-        Finger,
-        /// <summary>
-        /// 准心模式
-        /// </summary>
-        Sight,
-    }
-
-    /// <summary>
-    /// 准心样式
-    /// </summary>
-    public CursorStyle Style
-    {
-        get => _style;
-        set
-        {
-            if (_style != value)
-            {
-                _style = value; 
-                SetStyle(value);
-            }
-        }
-    }
-
-    private CursorStyle _style;
-    
     /// <summary>
     /// 是否是GUI模式
     /// </summary>
@@ -60,28 +30,21 @@ public partial class Cursor : Node2D
         rt = GetNode<Sprite2D>("RT");
         rb = GetNode<Sprite2D>("RB");
         finger = GetNode<Sprite2D>("Finger");
-        SetStyle(CursorStyle.Finger);
+        SetGuiMode(true);
     }
 
     public override void _Process(double delta)
     {
-        if (_style == CursorStyle.Sight)
+        if (!_isGuiMode)
         {
-            if (_isGuiMode)
+            var targetGun = _mountRole?.Holster.ActiveWeapon;
+            if (targetGun != null)
             {
-                SetScope(0, null);
+                SetScope(targetGun.CurrScatteringRange, targetGun);
             }
             else
             {
-                var targetGun = _mountRole?.Holster.ActiveWeapon;
-                if (targetGun != null)
-                {
-                    SetScope(targetGun.CurrScatteringRange, targetGun);
-                }
-                else
-                {
-                    SetScope(0, null);
-                }
+                SetScope(0, null);
             }
         }
 
@@ -94,6 +57,22 @@ public partial class Cursor : Node2D
     public void SetGuiMode(bool flag)
     {
         _isGuiMode = flag;
+        if (flag) //手指
+        {
+            lt.Visible = false;
+            lb.Visible = false;
+            rt.Visible = false;
+            rb.Visible = false;
+            finger.Visible = true;
+        }
+        else //准心
+        {
+            lt.Visible = true;
+            lb.Visible = true;
+            rt.Visible = true;
+            rb.Visible = true;
+            finger.Visible = false;
+        }
     }
     
     /// <summary>
@@ -118,26 +97,6 @@ public partial class Cursor : Node2D
     public Role GetMountRole()
     {
         return _mountRole;
-    }
-
-    private void SetStyle(CursorStyle style)
-    {
-        if (style == CursorStyle.Finger) //手指
-        {
-            lt.Visible = false;
-            lb.Visible = false;
-            rt.Visible = false;
-            rb.Visible = false;
-            finger.Visible = true;
-        }
-        else if (style == CursorStyle.Sight) //准心
-        {
-            lt.Visible = true;
-            lb.Visible = true;
-            rt.Visible = true;
-            rb.Visible = true;
-            finger.Visible = false;
-        }
     }
 
     /// <summary>

@@ -173,6 +173,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public bool EnableCustomBehavior { get; set; } = true;
     
+    /// <summary>
+    /// 所在的 World 对象
+    /// </summary>
+    public World World { get; private set; }
+    
     // --------------------------------------------------------------------------------
 
     //组件集合
@@ -234,8 +239,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     private static long _instanceIndex = 0;
 
     //初始化节点
-    private void _InitNode(string itemId, string scenePath)
+    private void _InitNode(string itemId, string scenePath, World world)
     {
+        World = world;
         //加载预制体
         var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
         if (tempPrefab == null)

@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using Godot;
 
 /// <summary>
 /// 事件管理器
@@ -57,7 +58,14 @@ public static class EventManager
                 var binder = binders[i];
                 if (!binder.IsDiscard)
                 {
-                    binder.Callback(arg);
+                    try
+                    {
+                        binder.Callback(arg);
+                    }
+                    catch (Exception e)
+                    {
+                        GD.PrintErr($"EventManager 派发事件: '{eventType}' 发生异常: \n" + e.Message + "\n" + e.StackTrace);
+                    }
                 }
             }
         }

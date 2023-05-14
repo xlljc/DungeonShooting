@@ -110,13 +110,10 @@ public partial class GameApplication : Node2D
 		UiManager.Init();
 		// 初始化鼠标
 		InitCursor();
-		//加载世界场景
-		World = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
-		SceneRoot.AddChild(World);
 		//地牢管理器
 		DungeonManager = new DungeonManager();
 		DungeonManager.Name = "DungeonManager";
-		World.AddChild(DungeonManager);
+		SceneRoot.AddChild(DungeonManager);
 		//打开主菜单Ui
 		UiManager.Open_Main();
 	}
@@ -133,6 +130,33 @@ public partial class GameApplication : Node2D
 		}
 	}
 
+	/// <summary>
+	/// 创建新的 World 对象, 相当于清理房间
+	/// </summary>
+	public World CreateNewWorld()
+	{
+		if (World != null)
+		{
+			World.QueueFree();
+		}
+		World = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
+		SceneRoot.AddChild(World);
+		return World;
+	}
+
+	/// <summary>
+	/// 销毁 World 对象, 相当于清理房间
+	/// </summary>
+	public void DestroyWorld()
+	{
+		if (World != null)
+		{
+			World.QueueFree();
+		}
+
+		World = null;
+	}
+	
 	/// <summary>
 	/// 将 viewport 以外的全局坐标 转换成 viewport 内的全局坐标
 	/// </summary>

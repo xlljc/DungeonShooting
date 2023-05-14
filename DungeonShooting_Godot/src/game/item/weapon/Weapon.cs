@@ -8,11 +8,6 @@ using System.Collections.Generic;
 public abstract partial class Weapon : ActivityObject
 {
     /// <summary>
-    /// 所有被扔在地上的武器
-    /// </summary>
-    public static readonly HashSet<Weapon> UnclaimedWeapons = new HashSet<Weapon>();
-
-    /// <summary>
     /// 开火回调事件
     /// </summary>
     public event Action<Weapon> FireEvent;
@@ -288,7 +283,7 @@ public abstract partial class Weapon : ActivityObject
         //收集落在地上的武器
         if (IsInGround())
         {
-            UnclaimedWeapons.Add(this);
+            World.Weapon_UnclaimedWeapons.Add(this);
         }
     }
 
@@ -296,7 +291,7 @@ public abstract partial class Weapon : ActivityObject
     {
         base._ExitTree();
         
-        UnclaimedWeapons.Remove(this);
+        World.Weapon_UnclaimedWeapons.Remove(this);
     }
 
     protected override void Process(float delta)
