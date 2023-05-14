@@ -15,12 +15,11 @@ public partial class SettlementPanel : Settlement
     {
         L_ButtonList.L_Restart.Instance.Pressed -= OnRestartClick;
         L_ButtonList.L_ToMenu.Instance.Pressed -= OnToMenuClick;
-        
     }
 
     private void OnRestartClick()
     {
-        
+        GD.Print("重新开始还没做...");
     }
 
     private void OnToMenuClick()

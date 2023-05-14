@@ -158,6 +158,14 @@ public partial class GameCamera : Camera2D
         }
     }
 
+    /// <summary>
+    /// 播放玩家死亡特写镜头
+    /// </summary>
+    public void PlayPlayerDieFeatures()
+    {
+        
+    }
+
     //抖动调用
     private void _Shake(float delta)
     {

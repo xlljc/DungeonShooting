@@ -34,7 +34,7 @@ public partial class World : Node2D
                 _pause = value;
                 if (value)
                 {
-                    ProcessMode = ProcessModeEnum.Pausable;
+                    ProcessMode = ProcessModeEnum.WhenPaused;
                 }
                 else
                 {

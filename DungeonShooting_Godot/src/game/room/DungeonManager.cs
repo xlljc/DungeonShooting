@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -28,7 +29,8 @@ public partial class DungeonManager : Node2D
     /// 是否在地牢里
     /// </summary>
     public bool IsInDungeon { get; private set; }
-    
+
+    private DungeonConfig _config;
     private DungeonTile _dungeonTile;
     private AutoTileConfig _autoTileConfig;
     private DungeonGenerator _dungeonGenerator;
@@ -53,55 +55,8 @@ public partial class DungeonManager : Node2D
     /// </summary>
     public void LoadDungeon(DungeonConfig config)
     {
-        IsInDungeon = true;
-        var nowTicks = DateTime.Now.Ticks;
-        //创建世界场景
-        _world = GameApplication.Instance.CreateNewWorld();
-        //生成地牢房间
-        _dungeonGenerator = new DungeonGenerator(config);
-        _dungeonGenerator.Generate();
-        
-        //填充地牢
-        _autoTileConfig = new AutoTileConfig();
-        _dungeonTile = new DungeonTile(_world.TileRoot);
-        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom);
-        
-        //生成寻路网格， 这一步操作只生成过道的导航
-        _dungeonTile.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
-        //挂载过道导航区域
-        _dungeonTile.MountNavigationPolygon(_world.TileRoot);
-        //过道导航区域数据
-        _roomStaticNavigationList = new List<NavigationPolygonData>();
-        _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
-        //门导航区域数据
-        _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
-        //初始化所有房间
-        _dungeonGenerator.EachRoom(InitRoom);
-
-        GD.Print("生成地牢用时: " + (DateTime.Now.Ticks - nowTicks) / 10000 + "毫秒");
-
-        //播放bgm
-        //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
-
-        //初始房间创建玩家标记
-        var playerBirthMark = StartRoom.ActivityMarks.FirstOrDefault(mark => mark.Type == ActivityIdPrefix.ActivityPrefixType.Player);
-        //创建玩家
-        var player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
-        if (playerBirthMark != null)
-        {
-            player.Position = playerBirthMark.Position;
-        }
-        player.Name = "Player";
-        Player.SetCurrentPlayer(player);
-        player.PutDown(RoomLayerEnum.YSortLayer);
-        player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
-        
-        GameApplication.Instance.Cursor.SetGuiMode(false);
-        //打开游戏中的ui
-        var roomUi = UiManager.Open_RoomUI();
-        roomUi.InitData(player);
-        //派发进入地牢事件
-        EventManager.EmitEvent(EventEnum.OnEnterDungeon);
+        _config = config;
+        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine());
     }
 
     /// <summary>
@@ -110,22 +65,7 @@ public partial class DungeonManager : Node2D
     public void ExitDungeon()
     {
         IsInDungeon = false;
-
-        _dungeonGenerator.EachRoom(DisposeRoomInfo);
-        _dungeonTile = null;
-        _autoTileConfig = null;
-        _dungeonGenerator = null;
-        _roomStaticNavigationList.Clear();
-        _roomStaticNavigationList = null;
-        
-        UiManager.Hide_RoomUI();
-        Player.SetCurrentPlayer(null);
-        _world = null;
-        GameApplication.Instance.DestroyWorld();
-        //鼠标还原
-        GameApplication.Instance.Cursor.SetGuiMode(false);
-        //派发退出地牢事件
-        EventManager.EmitEvent(EventEnum.OnExitDungeon);
+        GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine());
     }
 
     public override void _PhysicsProcess(double delta)
@@ -152,6 +92,104 @@ public partial class DungeonManager : Node2D
                 QueueRedraw();
             }
         }
+    }
+
+    //执行加载地牢协程
+    private IEnumerator RunLoadDungeonCoroutine()
+    {
+        yield return 0;
+        //打开 loading UI
+        UiManager.Open_Loading();
+        //创建世界场景
+        _world = GameApplication.Instance.CreateNewWorld();
+        yield return new WaitForFixedProcess(10);
+        //生成地牢房间
+        _dungeonGenerator = new DungeonGenerator(_config);
+        _dungeonGenerator.Generate();
+        yield return 0;
+        
+        //填充地牢
+        _autoTileConfig = new AutoTileConfig();
+        _dungeonTile = new DungeonTile(_world.TileRoot);
+        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom);
+        yield return 0;
+        
+        //生成寻路网格， 这一步操作只生成过道的导航
+        _dungeonTile.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
+        yield return 0;
+        //挂载过道导航区域
+        _dungeonTile.MountNavigationPolygon(_world.TileRoot);
+        yield return 0;
+        //过道导航区域数据
+        _roomStaticNavigationList = new List<NavigationPolygonData>();
+        _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
+        yield return 0;
+        //门导航区域数据
+        _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
+        yield return new WaitForFixedProcess(10);
+        //初始化所有房间
+        _dungeonGenerator.EachRoom(InitRoom);
+        yield return new WaitForFixedProcess(10);
+
+        //播放bgm
+        //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
+
+        //初始房间创建玩家标记
+        var playerBirthMark = StartRoom.ActivityMarks.FirstOrDefault(mark => mark.Type == ActivityIdPrefix.ActivityPrefixType.Player);
+        //创建玩家
+        var player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
+        if (playerBirthMark != null)
+        {
+            player.Position = playerBirthMark.Position;
+        }
+        player.Name = "Player";
+        Player.SetCurrentPlayer(player);
+        player.PutDown(RoomLayerEnum.YSortLayer);
+        player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
+        
+        GameApplication.Instance.Cursor.SetGuiMode(false);
+        yield return 0;
+        
+        //打开游戏中的ui
+        var roomUi = UiManager.Open_RoomUI();
+        roomUi.InitData(player);
+        //派发进入地牢事件
+        EventManager.EmitEvent(EventEnum.OnEnterDungeon);
+        //关闭 loading UI
+        UiManager.Dispose_Loading();
+        
+        IsInDungeon = true;
+        yield return 0;
+    }
+
+    private IEnumerator RunExitDungeonCoroutine()
+    {
+        yield return 0;
+        _world.Pause = true;
+        yield return 0;
+        //打开 loading UI
+        UiManager.Open_Loading();
+        _dungeonGenerator.EachRoom(DisposeRoomInfo);
+        yield return 0;
+        _dungeonTile = null;
+        _autoTileConfig = null;
+        _dungeonGenerator = null;
+        _roomStaticNavigationList.Clear();
+        _roomStaticNavigationList = null;
+        
+        UiManager.Hide_RoomUI();
+        yield return new WaitForFixedProcess(10);
+        Player.SetCurrentPlayer(null);
+        _world = null;
+        GameApplication.Instance.DestroyWorld();
+        yield return new WaitForFixedProcess(10);
+        //鼠标还原
+        GameApplication.Instance.Cursor.SetGuiMode(false);
+        //派发退出地牢事件
+        EventManager.EmitEvent(EventEnum.OnExitDungeon);
+        //关闭 loading UI
+        UiManager.Dispose_Loading();
+        yield return 0;
     }
     
     // 初始化房间

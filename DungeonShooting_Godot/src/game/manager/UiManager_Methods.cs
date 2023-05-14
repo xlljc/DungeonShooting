@@ -7,6 +7,7 @@ public static partial class UiManager
     public static class UiName
     {
         public const string EditorTools = "EditorTools";
+        public const string Loading = "Loading";
         public const string Main = "Main";
         public const string RoomUI = "RoomUI";
         public const string Settlement = "Settlement";
@@ -50,6 +51,46 @@ public static partial class UiManager
     public static UI.EditorTools.EditorToolsPanel[] Get_EditorTools_Instance()
     {
         return GetUiInstance<UI.EditorTools.EditorToolsPanel>(nameof(UI.EditorTools.EditorTools));
+    }
+
+    /// <summary>
+    /// 打开 Loading, 并返回UI实例
+    /// </summary>
+    public static UI.Loading.LoadingPanel Open_Loading()
+    {
+        return OpenUi<UI.Loading.LoadingPanel>(UiName.Loading);
+    }
+
+    /// <summary>
+    /// 隐藏 Loading 的所有实例
+    /// </summary>
+    public static void Hide_Loading()
+    {
+        var uiInstance = Get_Loading_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 Loading 的所有实例
+    /// </summary>
+    public static void Dispose_Loading()
+    {
+        var uiInstance = Get_Loading_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.DisposeUi();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 Loading 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.Loading.LoadingPanel[] Get_Loading_Instance()
+    {
+        return GetUiInstance<UI.Loading.LoadingPanel>(nameof(UI.Loading.Loading));
     }
 
     /// <summary>
