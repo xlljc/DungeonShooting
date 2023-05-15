@@ -23,6 +23,7 @@ public partial class MainPanel : Main
     {
         var config = new DungeonConfig();
         config.GroupName = "testGroup";
+        config.RoomCount = 2;
         GameApplication.Instance.DungeonManager.LoadDungeon(config);
         HideUi();
     }

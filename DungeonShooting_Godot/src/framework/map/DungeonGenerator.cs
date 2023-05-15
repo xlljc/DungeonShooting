@@ -17,11 +17,6 @@ public class DungeonGenerator
     /// 起始房间
     /// </summary>
     public RoomInfo StartRoom { get; private set; }
-    
-    /// <summary>
-    /// 生成的房间数量
-    /// </summary>
-    private int _maxCount = 20;
 
     //用于标记地图上的坐标是否被占用
     private Grid<bool> _roomGrid { get; } = new Grid<bool>();
@@ -30,10 +25,10 @@ public class DungeonGenerator
     private int _count = 0;
     
     //宽高
-    private int _roomMinWidth = 15;
-    private int _roomMaxWidth = 35;
-    private int _roomMinHeight = 15;
-    private int _roomMaxHeight = 30;
+    // private int _roomMinWidth = 15;
+    // private int _roomMaxWidth = 35;
+    // private int _roomMinHeight = 15;
+    // private int _roomMaxHeight = 30;
 
     //间隔
     private int _roomMinInterval = 6;
@@ -152,7 +147,7 @@ public class DungeonGenerator
         StartRoom = startRoom;
         
         //如果房间数量不够, 就一直生成
-        while (_count < _maxCount)
+        while (_count < _config.RoomCount)
         {
             var room = Utils.RandomChoose(RoomInfos);
             var errorCode = GenerateRoom(room, Utils.RandomRangeInt(0, 3), GetNextRoomType(), out var nextRoom);
@@ -183,7 +178,7 @@ public class DungeonGenerator
     //生成房间
     private GenerateRoomErrorCode GenerateRoom(RoomInfo prevRoomInfo, int direction, DungeonRoomType roomType, out RoomInfo resultRoom)
     {
-        if (_count >= _maxCount)
+        if (_count >= _config.RoomCount)
         {
             resultRoom = null;
             return GenerateRoomErrorCode.RoomFull;
@@ -216,6 +211,7 @@ public class DungeonGenerator
 
         if (prevRoomInfo != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
         {
+            room.Layer = prevRoomInfo.Layer + 1;
             //生成的位置可能会和上一个房间对不上, 需要多次尝试
             var tryCount = 0; //当前尝试次数
             for (; tryCount < _maxTryCount; tryCount++)
@@ -297,14 +293,15 @@ public class DungeonGenerator
                 return GenerateRoomErrorCode.NoSuitableLocation;
             }
         }
-
-        _count++;
-        RoomInfos.Add(room);
-        if (prevRoomInfo == null)
+        else //第一个房间
         {
+            room.Layer = 0;
             _roomGrid.AddRect(room.Position, room.Size, true);
         }
 
+        _count++;
+        RoomInfos.Add(room);
+        
         //下一个房间
         //0上, 1右, 2下, 3左
         var dirList = new List<int>(new[] { 0, 1, 2, 3 });
@@ -342,7 +339,7 @@ public class DungeonGenerator
         {
             return DungeonRoomType.Inlet;
         }
-        else if (_count == _maxCount - 1) //生成最后一个房间
+        else if (_count == _config.RoomCount - 1) //生成最后一个房间
         {
             return DungeonRoomType.Outlet;
         }
@@ -350,6 +347,38 @@ public class DungeonGenerator
         {
             return DungeonRoomType.Battle;
         }
+    }
+
+    private bool RollbackRoom(RoomInfo roomInfo)
+    {
+        if (roomInfo.Next.Count > 0)
+        {
+            GD.PrintErr("当前房间还有连接的子房间, 不能回滚!");
+            return false;
+        }
+        //退掉占用的房间区域和过道占用区域
+        _roomGrid.RemoveRect(roomInfo.Position, roomInfo.Size);
+        foreach (var rect2 in roomInfo.AisleArea)
+        {
+            _roomGrid.RemoveRect(rect2.Position, rect2.Size);
+        }
+        
+        //roomInfo.Doors[0].
+        if (roomInfo.Prev != null)
+        {
+            roomInfo.Prev.Next.Remove(roomInfo);
+        }
+
+        roomInfo.Prev = null;
+        foreach (var roomInfoDoor in roomInfo.Doors)
+        {
+            var connectDoor = roomInfoDoor.ConnectDoor;
+            connectDoor.RoomInfo.Doors.Remove(connectDoor);
+        }
+        roomInfo.Destroy();
+        
+        _count--;
+        return true;
     }
 
     /// <summary>
@@ -1016,6 +1045,7 @@ public class DungeonGenerator
             return false;
         }
 
+        door2.RoomInfo.AisleArea.Add(new Rect2(pos, size));
         _roomGrid.AddRect(pos, size, true);
         return true;
     }
@@ -1072,6 +1102,8 @@ public class DungeonGenerator
             return false;
         }
 
+        door2.RoomInfo.AisleArea.Add(new Rect2(pos1, size1));
+        door2.RoomInfo.AisleArea.Add(new Rect2(pos2, size2));
         _roomGrid.AddRect(pos1, size1, true);
         _roomGrid.AddRect(pos2, size2, true);
         return true;

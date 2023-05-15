@@ -19,6 +19,11 @@ public class RoomInfo : IDestroy
     public int Id;
 
     /// <summary>
+    /// 层级, 也就是离初始房间间隔多少个房间
+    /// </summary>
+    public int Layer;
+    
+    /// <summary>
     /// 生成该房间使用的配置数据
     /// </summary>
     public DungeonRoomSplit RoomSplit;
@@ -37,6 +42,11 @@ public class RoomInfo : IDestroy
     /// 门
     /// </summary>
     public List<RoomDoorInfo> Doors = new List<RoomDoorInfo>();
+
+    /// <summary>
+    /// 连接该房间的过道占用区域信息
+    /// </summary>
+    public List<Rect2> AisleArea = new List<Rect2>();
 
     /// <summary>
     /// 下一个房间

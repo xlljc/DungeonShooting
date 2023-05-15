@@ -8,5 +8,9 @@ public class DungeonConfig
     /// 地牢组名称
     /// </summary>
     public string GroupName;
-    
+
+    /// <summary>
+    /// 房间数量
+    /// </summary>
+    public int RoomCount = 20;
 }
