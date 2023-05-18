@@ -7,9 +7,10 @@ using Godot;
 /// </summary>
 public class RoomInfo : IDestroy
 {
-    public RoomInfo(int id, DungeonRoomSplit roomSplit)
+    public RoomInfo(int id, DungeonRoomType type, DungeonRoomSplit roomSplit)
     {
         Id = id;
+        RoomType = type;
         RoomSplit = roomSplit;
     }
 
@@ -17,6 +18,11 @@ public class RoomInfo : IDestroy
     /// 房间 id
     /// </summary>
     public int Id;
+
+    /// <summary>
+    /// 房间类型
+    /// </summary>
+    public DungeonRoomType RoomType;
 
     /// <summary>
     /// 层级, 也就是离初始房间间隔多少个房间

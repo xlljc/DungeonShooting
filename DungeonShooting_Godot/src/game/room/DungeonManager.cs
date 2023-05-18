@@ -1,5 +1,4 @@
 ﻿
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 起始房间
     /// </summary>
-    public RoomInfo StartRoom => _dungeonGenerator.StartRoom;
+    public RoomInfo StartRoom => _dungeonGenerator?.StartRoom;
     
     /// <summary>
     /// 当前玩家所在的房间
@@ -362,7 +361,12 @@ public partial class DungeonManager : Node2D
                 Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());
             }
             //绘制房间区域
-            //DrawRoomInfo(_generateDungeon.StartRoom);
+            if (_dungeonGenerator != null)
+            {
+                DrawRoomInfo(StartRoom);
+            }
+            //绘制边缘线
+            
         }
     }
     
@@ -380,7 +384,8 @@ public partial class DungeonManager : Node2D
             DrawRoomInfo(nextRoom);
         }
 
-        DrawString(ResourceManager.DefaultFont, pos1, room.Id.ToString());
+        DrawString(ResourceManager.DefaultFont, pos1 - new Vector2I(0, 10), "Id: " + room.Id.ToString());
+        DrawString(ResourceManager.DefaultFont, pos1 + new Vector2I(0, 10), "Layer: " + room.Layer.ToString());
 
         //绘制门
         foreach (var roomDoor in room.Doors)
