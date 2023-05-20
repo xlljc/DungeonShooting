@@ -48,7 +48,7 @@ WaveNumber = 2
 BirthRect = Vector2i(50, 50)
 
 [node name="EnemyMark3" type="Node2D" parent="."]
-position = Vector2(117, 74)
+position = Vector2(126, 77)
 script = ExtResource("3_68nmn")
 Type = 4
 ItemExpression = "0001"
@@ -108,7 +108,7 @@ BirthRect = Vector2i(30, 30)
 Altitude = 0
 
 [node name="EnemyMark7" type="Node2D" parent="."]
-position = Vector2(3, 75)
+position = Vector2(11, 80)
 script = ExtResource("3_68nmn")
 Type = 4
 ItemExpression = "0001"

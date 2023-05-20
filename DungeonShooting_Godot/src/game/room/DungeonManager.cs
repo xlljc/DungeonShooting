@@ -384,8 +384,8 @@ public partial class DungeonManager : Node2D
             DrawRoomInfo(nextRoom);
         }
 
-        DrawString(ResourceManager.DefaultFont, pos1 - new Vector2I(0, 10), "Id: " + room.Id.ToString());
-        DrawString(ResourceManager.DefaultFont, pos1 + new Vector2I(0, 10), "Layer: " + room.Layer.ToString());
+        DrawString(ResourceManager.DefaultFont16Px, pos1 - new Vector2I(0, 10), "Id: " + room.Id.ToString());
+        DrawString(ResourceManager.DefaultFont16Px, pos1 + new Vector2I(0, 10), "Layer: " + room.Layer.ToString());
 
         //绘制门
         foreach (var roomDoor in room.Doors)

@@ -269,7 +269,7 @@ public partial class ActivityMark : Node2D
                 DrawRect(new Rect2(-BirthRect / 2, BirthRect), drawColor, false, 0.5f);
             }
             
-            DrawString(ResourceManager.DefaultFont, new Vector2(-14, 12), WaveNumber.ToString(), HorizontalAlignment.Center, 28, 14);
+            DrawString(ResourceManager.DefaultFont12Px, new Vector2(-14, 12), WaveNumber.ToString(), HorizontalAlignment.Center, 28, 12);
         }
     }
 #endif

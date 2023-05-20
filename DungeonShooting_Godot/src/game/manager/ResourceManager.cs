@@ -43,21 +43,38 @@ public static class ResourceManager
     private static Shader _shadowShader;
 
     /// <summary>
-    /// 默认字体资源
+    /// 默认字体资源, 字体大小16px
     /// </summary>
-    public static Font DefaultFont
+    public static Font DefaultFont16Px
     {
         get
         {
-            if (_defaultFont == null)
+            if (_defaultFont16Px == null)
             {
-                _defaultFont = Load<Font>(ResourcePath.resource_font_VonwaonBitmap16px_ttf);
+                _defaultFont16Px = Load<Font>(ResourcePath.resource_font_VonwaonBitmap16px_ttf);
             }
 
-            return _defaultFont;
+            return _defaultFont16Px;
         }
     }
-    private static Font _defaultFont;
+    private static Font _defaultFont16Px;
+    
+    /// <summary>
+    /// 默认字体资源, 字体大小12px
+    /// </summary>
+    public static Font DefaultFont12Px
+    {
+        get
+        {
+            if (_defaultFont12Px == null)
+            {
+                _defaultFont12Px = Load<Font>(ResourcePath.resource_font_VonwaonBitmap12px_ttf);
+            }
+
+            return _defaultFont12Px;
+        }
+    }
+    private static Font _defaultFont12Px;
     
     //缓存的资源
     private static readonly Dictionary<string, object> CachePack = new Dictionary<string, object>();
