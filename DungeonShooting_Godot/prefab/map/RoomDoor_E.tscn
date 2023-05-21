@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3 uid="uid://dqs5rvtum3hb7"]
+
+[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_im6r2"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_b0axw"]
+[ext_resource type="SpriteFrames" uid="uid://3ps6h2f54qa5" path="res://resource/spriteFrames/RoomDoor_EW.tres" id="3_07nn2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yvwpk"]
+resource_local_to_scene = true
+shader = ExtResource("2_b0axw")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t4ayq"]
+resource_local_to_scene = true
+shader = ExtResource("2_b0axw")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_opsb6"]
+resource_local_to_scene = true
+size = Vector2(14, 40)
+
+[node name="RoomDoor_N" type="Node"]
+script = ExtResource("1_im6r2")
+IsStatic = true
+collision_layer = 1
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+z_index = -1
+material = SubResource("ShaderMaterial_yvwpk")
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_t4ayq")
+position = Vector2(0, -8)
+sprite_frames = ExtResource("3_07nn2")
+animation = &"openDoor"
+autoplay = "default"
+frame = 9
+frame_progress = 1.0
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_opsb6")

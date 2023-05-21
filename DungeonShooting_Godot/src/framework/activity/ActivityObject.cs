@@ -23,6 +23,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public string ItemId { get; private set; }
 
     /// <summary>
+    /// 是否是静态物体, 如果为true, 则会禁用移动处理
+    /// </summary>
+    public bool IsStatic { get; set; }
+    
+    /// <summary>
     /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite2D", 类型为 AnimatedSprite2D
     /// </summary>
     public AnimatedSprite2D AnimatedSprite { get; private set; }

@@ -1,6 +1,6 @@
 
 /// <summary>
-/// 角色身上预制动画名称
+/// 预制动画名称
 /// </summary>
 public static class AnimatorNames
 {
@@ -24,4 +24,17 @@ public static class AnimatorNames
     /// 翻滚
     /// </summary>
     public const string Roll = "roll";
+    /// <summary>
+    /// 武器泛光动画
+    /// </summary>
+    public const string Floodlight = "floodlight";
+    /// <summary>
+    /// 开门动画
+    /// </summary>
+    public const string OpenDoor = "openDoor";
+    /// <summary>
+    /// 关门动画
+    /// </summary>
+    public const string CloseDoor = "closeDoor";
+
 }

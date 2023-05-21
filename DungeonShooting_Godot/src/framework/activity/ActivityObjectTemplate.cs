@@ -12,6 +12,11 @@ public partial class ActivityObjectTemplate : Node
     // [Export] public RoomLayerEnum DefaultLayer = RoomLayerEnum.NormalLayer;
 
     /// <summary>
+    /// 是否是静态物体
+    /// </summary>
+    [Export] public bool IsStatic = false;
+    
+    /// <summary>
     /// 物体初始缩放
     /// </summary>
     [Export] public Vector2 scale = Vector2.One;

@@ -4,7 +4,11 @@ using Godot;
 /// <summary>
 /// 房间的门, 门有两种状态, 打开和关闭
 /// </summary>
-[RegisterActivity(ActivityIdPrefix.Other + "0001", ResourcePath.prefab_map_RoomDoor_tscn)]
+// [RegisterActivity(ActivityIdPrefix.Other + "0001", ResourcePath.prefab_map_RoomDoor_tscn)]
+[RegisterActivity(ActivityIdPrefix.Other + "door_n", ResourcePath.prefab_map_RoomDoor_N_tscn)]
+[RegisterActivity(ActivityIdPrefix.Other + "door_s", ResourcePath.prefab_map_RoomDoor_S_tscn)]
+[RegisterActivity(ActivityIdPrefix.Other + "door_w", ResourcePath.prefab_map_RoomDoor_W_tscn)]
+[RegisterActivity(ActivityIdPrefix.Other + "door_e", ResourcePath.prefab_map_RoomDoor_E_tscn)]
 public partial class RoomDoor : ActivityObject
 {
     /// <summary>
@@ -27,30 +31,30 @@ public partial class RoomDoor : ActivityObject
         _door = doorInfo;
         OpenDoor();
 
-        switch (doorInfo.Direction)
-        {
-            case DoorDirection.E:
-                AnimatedSprite.Frame = 1;
-                AnimatedSprite.Position = new Vector2(0, -8);
-                Collision.Position = Vector2.Zero;
-                var collisionShape = (RectangleShape2D)Collision.Shape;
-                collisionShape.Size = new Vector2(14, 32);
-                break;
-            case DoorDirection.W:
-                AnimatedSprite.Frame = 1;
-                AnimatedSprite.Position = new Vector2(0, -8);
-                Collision.Position = Vector2.Zero;
-                var collisionShape2 = (RectangleShape2D)Collision.Shape;
-                collisionShape2.Size = new Vector2(14, 32);
-                break;
-            case DoorDirection.S:
-                AnimatedSprite.Position = new Vector2(0, -8);
-                break;
-            case DoorDirection.N:
-                ZIndex = GameConfig.MiddleMapLayer;
-                AnimatedSprite.Position = new Vector2(0, -8);
-                break;
-        }
+        // switch (doorInfo.Direction)
+        // {
+        //     case DoorDirection.E:
+        //         AnimatedSprite.Frame = 1;
+        //         AnimatedSprite.Position = new Vector2(0, -8);
+        //         Collision.Position = Vector2.Zero;
+        //         var collisionShape = (RectangleShape2D)Collision.Shape;
+        //         collisionShape.Size = new Vector2(14, 32);
+        //         break;
+        //     case DoorDirection.W:
+        //         AnimatedSprite.Frame = 1;
+        //         AnimatedSprite.Position = new Vector2(0, -8);
+        //         Collision.Position = Vector2.Zero;
+        //         var collisionShape2 = (RectangleShape2D)Collision.Shape;
+        //         collisionShape2.Size = new Vector2(14, 32);
+        //         break;
+        //     case DoorDirection.S:
+        //         AnimatedSprite.Position = new Vector2(0, -8);
+        //         break;
+        //     case DoorDirection.N:
+        //         ZIndex = GameConfig.MiddleMapLayer;
+        //         AnimatedSprite.Position = new Vector2(0, -8);
+        //         break;
+        // }
     }
 
     /// <summary>
@@ -59,7 +63,7 @@ public partial class RoomDoor : ActivityObject
     public void OpenDoor()
     {
         IsClose = false;
-        Visible = false;
+        //Visible = false;
         Collision.Disabled = true;
         if (_door.Navigation != null)
         {
@@ -68,6 +72,13 @@ public partial class RoomDoor : ActivityObject
             _door.Navigation.CloseNavigationNode.Enabled = false;
             _door.Navigation.CloseNavigationNode.Visible = false;
         }
+        
+        if (AnimatedSprite.SpriteFrames.HasAnimation(AnimatorNames.OpenDoor))
+        {
+            AnimatedSprite.Play(AnimatorNames.OpenDoor);
+        }
+        //调整门的层级
+        ZIndex = GameConfig.FloorMapLayer;
     }
 
     /// <summary>
@@ -76,7 +87,7 @@ public partial class RoomDoor : ActivityObject
     public void CloseDoor()
     {
         IsClose = true;
-        Visible = true;
+        //Visible = true;
         Collision.Disabled = false;
         if (_door.Navigation != null)
         {
@@ -84,6 +95,23 @@ public partial class RoomDoor : ActivityObject
             _door.Navigation.OpenNavigationNode.Visible = false;
             _door.Navigation.CloseNavigationNode.Enabled = true;
             _door.Navigation.CloseNavigationNode.Visible = true;
+        }
+        
+        if (AnimatedSprite.SpriteFrames.HasAnimation(AnimatorNames.CloseDoor))
+        {
+            AnimatedSprite.Play(AnimatorNames.CloseDoor);
+        }
+        //调整门的层级
+        switch (Direction)
+        {
+            case DoorDirection.E:
+            case DoorDirection.W:
+            case DoorDirection.S:
+                ZIndex = GameConfig.TopMapLayer;
+                break;
+            case DoorDirection.N:
+                ZIndex = GameConfig.MiddleMapLayer;
+                break;
         }
     }
 }

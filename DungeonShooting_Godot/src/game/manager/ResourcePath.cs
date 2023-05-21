@@ -14,6 +14,10 @@ public class ResourcePath
     public const string prefab_effect_activityObject_EnemyBloodEffect_tscn = "res://prefab/effect/activityObject/EnemyBloodEffect.tscn";
     public const string prefab_effect_activityObject_EnemyDebris_tscn = "res://prefab/effect/activityObject/EnemyDebris.tscn";
     public const string prefab_map_RoomDoor_tscn = "res://prefab/map/RoomDoor.tscn";
+    public const string prefab_map_RoomDoor_E_tscn = "res://prefab/map/RoomDoor_E.tscn";
+    public const string prefab_map_RoomDoor_N_tscn = "res://prefab/map/RoomDoor_N.tscn";
+    public const string prefab_map_RoomDoor_S_tscn = "res://prefab/map/RoomDoor_S.tscn";
+    public const string prefab_map_RoomDoor_W_tscn = "res://prefab/map/RoomDoor_W.tscn";
     public const string prefab_role_Enemy_tscn = "res://prefab/role/Enemy.tscn";
     public const string prefab_role_Player_tscn = "res://prefab/role/Player.tscn";
     public const string prefab_role_Role_tscn = "res://prefab/role/Role.tscn";
@@ -47,10 +51,12 @@ public class ResourcePath
     public const string resource_map_RoomConfig_json = "res://resource/map/RoomConfig.json";
     public const string resource_map_tiledata_testGroup_battle_Room1_json = "res://resource/map/tiledata/testGroup/battle/Room1.json";
     public const string resource_map_tiledata_testGroup_battle_Room8_json = "res://resource/map/tiledata/testGroup/battle/Room8.json";
+    public const string resource_map_tiledata_testGroup_boss_Room1_json = "res://resource/map/tiledata/testGroup/boss/Room1.json";
     public const string resource_map_tiledata_testGroup_inlet_Room1_json = "res://resource/map/tiledata/testGroup/inlet/Room1.json";
     public const string resource_map_tiledata_testGroup_outlet_Room1_json = "res://resource/map/tiledata/testGroup/outlet/Room1.json";
     public const string resource_map_tileMaps_testGroup_battle_Room1_tscn = "res://resource/map/tileMaps/testGroup/battle/Room1.tscn";
     public const string resource_map_tileMaps_testGroup_battle_Room8_tscn = "res://resource/map/tileMaps/testGroup/battle/Room8.tscn";
+    public const string resource_map_tileMaps_testGroup_boss_Room1_tscn = "res://resource/map/tileMaps/testGroup/boss/Room1.tscn";
     public const string resource_map_tileMaps_testGroup_inlet_Room1_tscn = "res://resource/map/tileMaps/testGroup/inlet/Room1.tscn";
     public const string resource_map_tileMaps_testGroup_outlet_Room1_tscn = "res://resource/map/tileMaps/testGroup/outlet/Room1.tscn";
     public const string resource_map_tileset_TileSet1_tres = "res://resource/map/tileset/TileSet1.tres";

@@ -13,9 +13,8 @@ public partial class MainPanel : Main
 
     public override void OnHideUi()
     {
-        // 这里Godot4.1.dev2会报错, 应该是个bug
-        // L_ButtonList.L_Start.Instance.Pressed -= OnStartGameClick;
-        // L_ButtonList.L_Exit.Instance.Pressed -= OnExitClick;
+        L_ButtonList.L_Start.Instance.Pressed -= OnStartGameClick;
+        L_ButtonList.L_Exit.Instance.Pressed -= OnExitClick;
     }
 
 

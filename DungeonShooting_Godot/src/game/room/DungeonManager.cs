@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -240,27 +241,55 @@ public partial class DungeonManager : Node2D
     {
         foreach (var doorInfo in roomInfo.Doors)
         {
-            var door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "0001");
-            doorInfo.Door = door;
-            Vector2 offset;
+            // var door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "0001");
+            // doorInfo.Door = door;
+            // Vector2 offset;
+            // switch (doorInfo.Direction)
+            // {
+            //     case DoorDirection.E:
+            //         offset = new Vector2(0.5f, 2);
+            //         break;
+            //     case DoorDirection.W:
+            //         offset = new Vector2(-0.5f, 2);
+            //         break;
+            //     case DoorDirection.S:
+            //         offset = new Vector2(2f, 1.5f);
+            //         break;
+            //     case DoorDirection.N:
+            //         offset = new Vector2(2f, -0.5f);
+            //         break;
+            //     default: offset = new Vector2();
+            //         break;
+            // }
+            // door.Position = (doorInfo.OriginPosition + offset) * GameConfig.TileCellSize;
+            
+            RoomDoor door;
             switch (doorInfo.Direction)
             {
                 case DoorDirection.E:
-                    offset = new Vector2(0.5f, 2);
+                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "door_e");
+                    door.Position = (doorInfo.OriginPosition + new Vector2(0.5f, 2)) * GameConfig.TileCellSize;
+                    door.ZIndex = GameConfig.TopMapLayer;
                     break;
                 case DoorDirection.W:
-                    offset = new Vector2(-0.5f, 2);
+                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "door_w");
+                    door.Position = (doorInfo.OriginPosition + new Vector2(-0.5f, 2)) * GameConfig.TileCellSize;
+                    door.ZIndex = GameConfig.TopMapLayer;
                     break;
                 case DoorDirection.S:
-                    offset = new Vector2(2f, 1.5f);
+                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "door_s");
+                    door.Position = (doorInfo.OriginPosition + new Vector2(2f, 1.5f)) * GameConfig.TileCellSize;
+                    door.ZIndex = GameConfig.TopMapLayer;
                     break;
                 case DoorDirection.N:
-                    offset = new Vector2(2f, -0.5f);
+                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "door_n");
+                    door.Position = (doorInfo.OriginPosition + new Vector2(2f, -0.5f)) * GameConfig.TileCellSize;
+                    door.ZIndex = GameConfig.MiddleMapLayer;
                     break;
-                default: offset = new Vector2();
-                    break;
+                default:
+                    return;
             }
-            door.Position = (doorInfo.OriginPosition + offset) * GameConfig.TileCellSize;
+            doorInfo.Door = door;
             door.Init(doorInfo);
             door.PutDown(RoomLayerEnum.NormalLayer, false);
         }
@@ -303,16 +332,19 @@ public partial class DungeonManager : Node2D
         var activeRoom = ActiveRoom;
         if (activeRoom != null)// && //activeRoom.IsSeclusion)
         {
-            if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
+            if (activeRoom.IsSeclusion) //房间处于关上状态
             {
-                //存活敌人数量
-                var count = ActiveAffiliation.FindIncludeItemsCount(
-                    activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
-                );
-                GD.Print("当前房间存活数量: " + count);
-                if (count == 0)
+                if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
                 {
-                    activeRoom.OnClearRoom();
+                    //存活敌人数量
+                    var count = ActiveAffiliation.FindIncludeItemsCount(
+                        activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
+                    );
+                    GD.Print("当前房间存活数量: " + count);
+                    if (count == 0)
+                    {
+                        activeRoom.OnClearRoom();
+                    }
                 }
             }
         }
@@ -361,10 +393,10 @@ public partial class DungeonManager : Node2D
                 Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());
             }
             //绘制房间区域
-            if (_dungeonGenerator != null)
-            {
-                DrawRoomInfo(StartRoom);
-            }
+            // if (_dungeonGenerator != null)
+            // {
+            //     DrawRoomInfo(StartRoom);
+            // }
             //绘制边缘线
             
         }
