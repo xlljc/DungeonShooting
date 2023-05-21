@@ -94,6 +94,22 @@ public partial class Player : Role
         else if (Input.IsActionJustPressed("throw")) //扔掉武器
         {
             ThrowWeapon();
+
+            //测试用的, 所有敌人也扔掉武器
+            if (Affiliation != null)
+            {
+                var enemies = Affiliation.FindIncludeItems(o =>
+                {
+                    return o.CollisionWithMask(PhysicsLayer.Enemy);
+                });
+                foreach (var activityObject in enemies)
+                {
+                    if (activityObject is Enemy enemy)
+                    {
+                        enemy.ThrowWeapon();
+                    }
+                }
+            }
         }
         else if (Input.IsActionJustPressed("interactive")) //互动物体
         {

@@ -33,6 +33,7 @@ material = SubResource("ShaderMaterial_yvwpk")
 material = SubResource("ShaderMaterial_t4ayq")
 position = Vector2(0, -8)
 sprite_frames = ExtResource("3_ptoof")
+autoplay = "default"
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, 4)

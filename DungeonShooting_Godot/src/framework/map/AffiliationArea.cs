@@ -118,6 +118,23 @@ public partial class AffiliationArea : Area2D
         }
         return count;
     }
+
+    /// <summary>
+    /// 查询所有符合条件的对象并返回
+    /// </summary>
+    /// <param name="handler">操作函数, 返回是否满足要求</param>
+    public ActivityObject[] FindIncludeItems(Func<ActivityObject, bool> handler)
+    {
+        var list = new List<ActivityObject>();
+        foreach (var activityObject in _includeItems)
+        {
+            if (handler(activityObject))
+            {
+                list.Add(activityObject);
+            }
+        }
+        return list.ToArray();
+    }
     
     private void OnBodyEntered(Node2D body)
     {

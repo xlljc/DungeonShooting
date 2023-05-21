@@ -241,28 +241,6 @@ public partial class DungeonManager : Node2D
     {
         foreach (var doorInfo in roomInfo.Doors)
         {
-            // var door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "0001");
-            // doorInfo.Door = door;
-            // Vector2 offset;
-            // switch (doorInfo.Direction)
-            // {
-            //     case DoorDirection.E:
-            //         offset = new Vector2(0.5f, 2);
-            //         break;
-            //     case DoorDirection.W:
-            //         offset = new Vector2(-0.5f, 2);
-            //         break;
-            //     case DoorDirection.S:
-            //         offset = new Vector2(2f, 1.5f);
-            //         break;
-            //     case DoorDirection.N:
-            //         offset = new Vector2(2f, -0.5f);
-            //         break;
-            //     default: offset = new Vector2();
-            //         break;
-            // }
-            // door.Position = (doorInfo.OriginPosition + offset) * GameConfig.TileCellSize;
-            
             RoomDoor door;
             switch (doorInfo.Direction)
             {

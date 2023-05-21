@@ -85,7 +85,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <summary>
     /// 是否正在投抛过程中
     /// </summary>
-    public bool IsThrowing => _fallData != null && !_isFallOver;
+    public bool IsThrowing => _throwForce != null && !_isFallOver;
 
     /// <summary>
     /// 当前物体的海拔高度, 如果大于0, 则会做自由落体运动, 也就是执行投抛代码
