@@ -74,7 +74,7 @@ public partial class GameCamera : Camera2D
         var world = GameApplication.Instance.World;
         if (world != null && !world.Pause && _followTarget != null)
         {
-            var mousePosition = InputManager.GetViewportMousePosition();
+            var mousePosition = InputManager.CursorPosition;
             var targetPosition = _followTarget.GlobalPosition;
             Vector2 targetPos;
             if (targetPosition.DistanceSquaredTo(mousePosition) >= (60 / 0.3f) * (60 / 0.3f))

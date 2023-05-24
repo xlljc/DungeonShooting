@@ -74,7 +74,7 @@ public partial class Player : Role
         if (LookTarget == null)
         {
             var gPos = GlobalPosition;
-            Vector2 mousePos = InputManager.GetViewportMousePosition();
+            Vector2 mousePos = InputManager.CursorPosition;
             if (mousePos.X > gPos.X && Face == FaceDirection.Left)
             {
                 Face = FaceDirection.Right;
@@ -87,11 +87,11 @@ public partial class Player : Role
             MountPoint.SetLookAt(mousePos);
         }
 
-        if (Input.IsActionJustPressed("exchange")) //切换武器
+        if (InputManager.Exchange) //切换武器
         {
             ExchangeNext();
         }
-        else if (Input.IsActionJustPressed("throw")) //扔掉武器
+        else if (InputManager.Throw) //扔掉武器
         {
             ThrowWeapon();
 
@@ -111,7 +111,7 @@ public partial class Player : Role
                 }
             }
         }
-        else if (Input.IsActionJustPressed("interactive")) //互动物体
+        else if (InputManager.Interactive) //互动物体
         {
             var item = TriggerInteractive();
             if (item != null)
@@ -119,11 +119,11 @@ public partial class Player : Role
                 RefreshWeaponTexture();
             }
         }
-        else if (Input.IsActionJustPressed("reload")) //换弹
+        else if (InputManager.Reload) //换弹
         {
             Reload();
         }
-        if (Input.IsActionPressed("fire")) //开火
+        if (InputManager.Fire) //开火
         {
             Attack();
         }
@@ -230,8 +230,7 @@ public partial class Player : Role
     private void HandleMoveInput(float delta)
     {
         //角色移动
-        // 得到输入的 vector2  getvector方法返回值已经归一化过了noemalized
-        Vector2 dir = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+        Vector2 dir = InputManager.MoveAxis;
         // 移动. 如果移动的数值接近0(是用 摇杆可能出现 方向 可能会出现浮点)，就friction的值 插值 到 0
         // 如果 有输入 就以当前速度，用acceleration 插值到 对应方向 * 最大速度
         if (Mathf.IsZeroApprox(dir.X))
