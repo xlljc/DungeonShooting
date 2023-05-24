@@ -560,7 +560,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     private void _OnPropsEnter(Node2D other)
     {
-        if (other is ActivityObject propObject)
+        if (other is ActivityObject propObject && !propObject.CollisionWithMask(PhysicsLayer.InHand))
         {
             if (!_interactiveItemList.Contains(propObject))
             {

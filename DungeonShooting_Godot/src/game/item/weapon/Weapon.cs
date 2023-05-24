@@ -156,6 +156,9 @@ public abstract partial class Weapon : ActivityObject
 
     //当前后坐力导致的偏移长度
     private float _currBacklashLength = 0;
+    
+    // ----------------------------------------------
+    private uint _tempLayer;
 
     /// <summary>
     /// 初始化武器属性
@@ -1012,7 +1015,7 @@ public abstract partial class Weapon : ActivityObject
     }
 
     /// <summary>
-    /// 触发拾起
+    /// 触发拾起到 Holster, 这个函数由 Holster 对象调用
     /// </summary>
     public void PickUpWeapon(Role master)
     {
@@ -1034,19 +1037,25 @@ public abstract partial class Weapon : ActivityObject
         ZIndex = 0;
         //禁用碰撞
         //Collision.Disabled = true;
+        //修改层级
+        _tempLayer = CollisionLayer;
+        CollisionLayer = PhysicsLayer.InHand;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         OnPickUp(master);
     }
 
     /// <summary>
-    /// 触发移除, 这个函数由 Holster 对象调用
+    /// 触发从 Holster 中移除, 这个函数由 Holster 对象调用
     /// </summary>
     public void RemoveAt()
     {
         Master = null;
+        CollisionLayer = _tempLayer;
         _weaponAttribute = _originWeaponAttribute;
         AnimatedSprite.Position = Attribute.CenterPosition;
+        //清除 Ai 拾起标记
+        RemoveSign(SignNames.AiFindWeaponSign);
         OnRemove();
     }
 

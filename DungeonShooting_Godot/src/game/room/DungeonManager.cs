@@ -145,7 +145,8 @@ public partial class DungeonManager : Node2D
         player.Name = "Player";
         Player.SetCurrentPlayer(player);
         player.PutDown(RoomLayerEnum.YSortLayer);
-        player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
+        //玩家手上添加武器
+        //player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
         
         GameApplication.Instance.Cursor.SetGuiMode(false);
         yield return 0;

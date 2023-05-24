@@ -95,21 +95,21 @@ public partial class Player : Role
         {
             ThrowWeapon();
 
-            //测试用的, 所有敌人也扔掉武器
-            if (Affiliation != null)
-            {
-                var enemies = Affiliation.FindIncludeItems(o =>
-                {
-                    return o.CollisionWithMask(PhysicsLayer.Enemy);
-                });
-                foreach (var activityObject in enemies)
-                {
-                    if (activityObject is Enemy enemy)
-                    {
-                        enemy.ThrowWeapon();
-                    }
-                }
-            }
+            // //测试用的, 所有敌人也扔掉武器
+            // if (Affiliation != null)
+            // {
+            //     var enemies = Affiliation.FindIncludeItems(o =>
+            //     {
+            //         return o.CollisionWithMask(PhysicsLayer.Enemy);
+            //     });
+            //     foreach (var activityObject in enemies)
+            //     {
+            //         if (activityObject is Enemy enemy)
+            //         {
+            //             enemy.ThrowWeapon();
+            //         }
+            //     }
+            // }
         }
         else if (InputManager.Interactive) //互动物体
         {
