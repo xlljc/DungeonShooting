@@ -3,6 +3,9 @@
 /// </summary>
 public class ResourcePath
 {
+    public const string default_bus_layout_tres = "res://default_bus_layout.tres";
+    public const string default_env_tres = "res://default_env.tres";
+    public const string icon_png = "res://icon.png";
     public const string prefab_Cursor_tscn = "res://prefab/Cursor.tscn";
     public const string prefab_FanCollisionShape_tscn = "res://prefab/FanCollisionShape.tscn";
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
@@ -49,16 +52,6 @@ public class ResourcePath
     public const string resource_font_VonwaonBitmap12px_ttf = "res://resource/font/VonwaonBitmap-12px.ttf";
     public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
     public const string resource_map_RoomConfig_json = "res://resource/map/RoomConfig.json";
-    public const string resource_map_tiledata_testGroup_battle_Room1_json = "res://resource/map/tiledata/testGroup/battle/Room1.json";
-    public const string resource_map_tiledata_testGroup_battle_Room8_json = "res://resource/map/tiledata/testGroup/battle/Room8.json";
-    public const string resource_map_tiledata_testGroup_boss_Room1_json = "res://resource/map/tiledata/testGroup/boss/Room1.json";
-    public const string resource_map_tiledata_testGroup_inlet_Room1_json = "res://resource/map/tiledata/testGroup/inlet/Room1.json";
-    public const string resource_map_tiledata_testGroup_outlet_Room1_json = "res://resource/map/tiledata/testGroup/outlet/Room1.json";
-    public const string resource_map_tileMaps_testGroup_battle_Room1_tscn = "res://resource/map/tileMaps/testGroup/battle/Room1.tscn";
-    public const string resource_map_tileMaps_testGroup_battle_Room8_tscn = "res://resource/map/tileMaps/testGroup/battle/Room8.tscn";
-    public const string resource_map_tileMaps_testGroup_boss_Room1_tscn = "res://resource/map/tileMaps/testGroup/boss/Room1.tscn";
-    public const string resource_map_tileMaps_testGroup_inlet_Room1_tscn = "res://resource/map/tileMaps/testGroup/inlet/Room1.tscn";
-    public const string resource_map_tileMaps_testGroup_outlet_Room1_tscn = "res://resource/map/tileMaps/testGroup/outlet/Room1.tscn";
     public const string resource_map_tileset_TileSet1_tres = "res://resource/map/tileset/TileSet1.tres";
     public const string resource_map_tileset_TileSet_old_tres = "res://resource/map/tileset/TileSet_old.tres";
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";
@@ -279,6 +272,8 @@ public class ResourcePath
     public const string resource_sprite_ui_icon_icon_pickup_png = "res://resource/sprite/ui/icon/icon_pickup.png";
     public const string resource_sprite_ui_icon_icon_replace_png = "res://resource/sprite/ui/icon/icon_replace.png";
     public const string resource_sprite_ui_keyboard_e_png = "res://resource/sprite/ui/keyboard/e.png";
+    public const string resource_spriteFrames_RoomDoor_EW_tres = "res://resource/spriteFrames/RoomDoor_EW.tres";
+    public const string resource_spriteFrames_RoomDoor_NS_tres = "res://resource/spriteFrames/RoomDoor_NS.tres";
     public const string resource_theme_mainTheme_tres = "res://resource/theme/mainTheme.tres";
     public const string resource_theme_theme1_tres = "res://resource/theme/theme1.tres";
     public const string scene_EditorDemo_tscn = "res://scene/EditorDemo.tscn";
@@ -292,7 +287,4 @@ public class ResourcePath
     public const string scene_test_TestNavigationPolygon_tscn = "res://scene/test/TestNavigationPolygon.tscn";
     public const string scene_test_TestNewTileMap_tscn = "res://scene/test/TestNewTileMap.tscn";
     public const string scene_test_TestTileLayer_tscn = "res://scene/test/TestTileLayer.tscn";
-    public const string default_bus_layout_tres = "res://default_bus_layout.tres";
-    public const string default_env_tres = "res://default_env.tres";
-    public const string icon_png = "res://icon.png";
 }
