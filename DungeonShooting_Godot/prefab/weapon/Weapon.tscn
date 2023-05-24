@@ -16,7 +16,7 @@ shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3p5jk"]
-size = Vector2(15.6, 7)
+size = Vector2(19.5, 8.75)
 
 [sub_resource type="Animation" id="Animation_x136i"]
 length = 0.001
@@ -67,16 +67,15 @@ material = SubResource("ShaderMaterial_cbiyh")
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_o36tv")
 position = Vector2(0.4, -2.6)
-scale = Vector2(0.8, 0.8)
 
 [node name="OriginPoint" type="Marker2D" parent="."]
-position = Vector2(-3.6, -1.1)
+position = Vector2(-3, 0)
 
 [node name="ShellPoint" type="Marker2D" parent="."]
-position = Vector2(-2.6, -2.6)
+position = Vector2(0, -2)
 
 [node name="FirePoint" type="Marker2D" parent="."]
-position = Vector2(7.4, -1.1)
+position = Vector2(10, -1)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0.6, 0.2)

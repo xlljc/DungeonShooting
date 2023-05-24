@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://cyrcv2jdgr8cf"]
 
 [ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_hm41b"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_q6jwp"]
@@ -63,5 +63,5 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_n68nu")
 
 [node name="MountPoint" type="Marker2D" parent="."]
-position = Vector2(2, -4)
+position = Vector2(4, -4)
 script = ExtResource("4")

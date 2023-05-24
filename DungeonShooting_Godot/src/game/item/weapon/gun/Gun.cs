@@ -40,7 +40,7 @@ public partial class Gun : Weapon
             //抬起角度
             UpliftAngle = 10;
             //开火位置
-            FirePosition = new Vector2(16, 2);
+            FirePosition = new Vector2(20F, 2.5F);
             
             AiUseAttribute = Clone();
             AiUseAttribute.AiTargetLockingTime = 0.5f;
@@ -88,7 +88,7 @@ public partial class Gun : Weapon
             //抬起角度
             UpliftAngle = 30;
             //开火位置
-            FirePosition = new Vector2(10, 2);
+            FirePosition = new Vector2(12.5F, 2.5F);
 
             AiUseAttribute = Clone();
             AiUseAttribute.AiTargetLockingTime = 1f;
@@ -129,8 +129,7 @@ public partial class Gun : Weapon
     protected override void OnShoot(float fireRotation)
     {
         //创建子弹
-        const string bulletId = ActivityIdPrefix.Bullet + "0001";
-        var bullet = ActivityObject.Create<Bullet>(bulletId);
+        var bullet = ActivityObject.Create<Bullet>(Attribute.BulletId);
         bullet.Init(
             this,
             350,

@@ -94,10 +94,6 @@ public static class ResourcePathGenerator
                 GD.Print("扫描排除路径: " + path);
                 return;
             }
-            else
-            {
-                GD.Print("path: " + path);
-            }
         }
 
         var fileInfos = directoryInfos.GetFiles();

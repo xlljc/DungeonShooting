@@ -41,7 +41,8 @@ public partial class Shotgun : Weapon
             MaxBacklash = 6;
             MinBacklash = 5;
             //开火位置
-            FirePosition = new Vector2(18, 4);
+            FirePosition = new Vector2(22.5F, 5F);
+            BulletId = ActivityIdPrefix.Bullet + "0002";
 
             AiUseAttribute = Clone();
             AiUseAttribute.AiTargetLockingTime = 0.2f;
@@ -93,8 +94,7 @@ public partial class Shotgun : Weapon
     protected override void OnShoot(float fireRotation)
     {
         //创建子弹
-        const string bulletId = ActivityIdPrefix.Bullet + "0001";
-        var bullet = ActivityObject.Create<Bullet>(bulletId);
+        var bullet = ActivityObject.Create<Bullet>(Attribute.BulletId);
         bullet.Init(
             this,
             Utils.RandomRangeInt(280, 380),

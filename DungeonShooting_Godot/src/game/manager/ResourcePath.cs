@@ -33,7 +33,8 @@ public class ResourcePath
     public const string prefab_ui_Settlement_tscn = "res://prefab/ui/Settlement.tscn";
     public const string prefab_weapon_Knife_tscn = "res://prefab/weapon/Knife.tscn";
     public const string prefab_weapon_Weapon_tscn = "res://prefab/weapon/Weapon.tscn";
-    public const string prefab_weapon_bullet_Bullet_tscn = "res://prefab/weapon/bullet/Bullet.tscn";
+    public const string prefab_weapon_bullet_Bullet1_tscn = "res://prefab/weapon/bullet/Bullet1.tscn";
+    public const string prefab_weapon_bullet_Bullet2_tscn = "res://prefab/weapon/bullet/Bullet2.tscn";
     public const string prefab_weapon_shell_ShellCase_tscn = "res://prefab/weapon/shell/ShellCase.tscn";
     public const string resource_curve_Curve1_tres = "res://resource/curve/Curve1.tres";
     public const string resource_effects_Circle_png = "res://resource/effects/Circle.png";
@@ -65,6 +66,7 @@ public class ResourcePath
     public const string resource_sprite_bullet_arrow_png = "res://resource/sprite/bullet/arrow.png";
     public const string resource_sprite_bullet_bullet_png = "res://resource/sprite/bullet/bullet.png";
     public const string resource_sprite_bullet_bullet2_png = "res://resource/sprite/bullet/bullet2.png";
+    public const string resource_sprite_bullet_bullet3_png = "res://resource/sprite/bullet/bullet3.png";
     public const string resource_sprite_effect_KnifeHit1_png = "res://resource/sprite/effect/KnifeHit1.png";
     public const string resource_sprite_effect_Trajectory_png = "res://resource/sprite/effect/Trajectory.png";
     public const string resource_sprite_effect_hit_hit0_png = "res://resource/sprite/effect/hit/hit0.png";

@@ -166,6 +166,10 @@ public class WeaponAttribute
     /// 开火后武器口角度恢复速度倍数
     /// </summary>
     public float UpliftAngleRestore = 1f;
+    /// <summary>
+    /// 默认射出的子弹
+    /// </summary>
+    public string BulletId = ActivityIdPrefix.Bullet + "0001";
 
     /// <summary>
     /// 克隆一份新的属性配置
@@ -225,6 +229,7 @@ public class WeaponAttribute
         attr.DefaultAngle = DefaultAngle;
         attr.UpliftAngleRestore = UpliftAngleRestore;
         attr.AiTargetLockingTime = AiTargetLockingTime;
+        attr.BulletId = BulletId;
         return attr;
     }
 
