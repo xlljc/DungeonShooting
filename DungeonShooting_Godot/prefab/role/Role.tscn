@@ -33,7 +33,7 @@ z_index = -1
 material = SubResource("ShaderMaterial_v2kfw")
 
 [node name="BackMountPoint" type="Marker2D" parent="."]
-position = Vector2(0, -10)
+position = Vector2(0, -12)
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_yif6x")
@@ -63,5 +63,5 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_n68nu")
 
 [node name="MountPoint" type="Marker2D" parent="."]
-position = Vector2(4, -4)
+position = Vector2(1, -7)
 script = ExtResource("4")

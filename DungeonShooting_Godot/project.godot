@@ -182,7 +182,7 @@ roll={
 2d_physics/layer_5="enemy"
 2d_physics/layer_6="affiliation"
 2d_physics/layer_7="onHead"
-2d_physics/layer_8="inHand"
+2d_physics/layer_8="In hand"
 
 [mono]
 
