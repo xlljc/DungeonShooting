@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource path="res://resource/effects/ShotFire.png" type="Texture2D" id=1]
+[ext_resource type="Texture2D" uid="uid://b0jsyrbk4bydt" path="res://resource/sprite/effects/ShotFire.png" id="1"]
+
 
 [sub_resource type="Animation" id=2]
 length = 0.001

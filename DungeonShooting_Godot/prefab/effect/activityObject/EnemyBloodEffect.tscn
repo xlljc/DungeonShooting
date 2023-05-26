@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dv3pstsr56ux7"]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Material" uid="uid://c1chld6lkpgji" path="res://resource/material/SmokeParticleMaterial.tres" id="1_wwb7t"]
-[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/effects/Smoke.png" id="2_5rrhq"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/Smoke.png" id="2_5rrhq"]
 [ext_resource type="Script" path="res://src/game/effects/AutoDestroyEffect.cs" id="3_cvfk3"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_emuda"]
