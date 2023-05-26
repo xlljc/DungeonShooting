@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://dbrig6dq441wo"]
 
-[ext_resource type="PackedScene" uid="uid://b515ti0qinck8" path="res://prefab/role/Role.tscn" id="1_qkqsa"]
+[ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/Role.tscn" id="1_qkqsa"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_1ah5y"]
 [ext_resource type="Texture2D" uid="uid://chd2vtesap5cf" path="res://resource/sprite/role/role1.png" id="3_tqhbo"]
 
@@ -140,10 +140,8 @@ material = SubResource("ShaderMaterial_8vxx6")
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_k8mt5")
 sprite_frames = SubResource("SpriteFrames_m7t3e")
-frame_progress = 0.877597
-
-[node name="HurtArea" parent="." index="4"]
-visible = false
+animation = &"run"
+frame_progress = 0.424118
 
 [node name="ViewRay" type="RayCast2D" parent="." index="6"]
 position = Vector2(0, -8)

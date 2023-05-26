@@ -20,7 +20,7 @@ shader_parameter/schedule = 0
 radius = 4.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1eja2"]
-size = Vector2(10, 15)
+size = Vector2(12, 18)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n68nu"]
 size = Vector2(10, 16.5)
@@ -49,7 +49,7 @@ collision_mask = 0
 monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtArea"]
-position = Vector2(0, -7.5)
+position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_1eja2")
 
 [node name="InteractiveArea" type="Area2D" parent="."]
