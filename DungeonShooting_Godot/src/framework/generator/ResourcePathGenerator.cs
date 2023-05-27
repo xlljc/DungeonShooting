@@ -60,7 +60,7 @@ public static class ResourcePathGenerator
         try
         {
             resultStr = "/// <summary>\n" +
-                        "/// 编辑器下所有资源路径, 该类为 Automation 面板下自动生成的, 请不要手动编辑!\n" +
+                        "/// 编辑器下所有资源路径, 该类为 Tools 面板下自动生成的, 请不要手动编辑!\n" +
                         "/// </summary>\n" +
                         "public class ResourcePath\n" +
                         "{\n";

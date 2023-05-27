@@ -8,7 +8,7 @@ public partial class Knife : Weapon
     {
         public KnifeAttribute()
         {
-            Sprite2D = ResourcePath.resource_sprite_gun_knife1_png;
+            Icon = ResourcePath.resource_sprite_gun_knife1_png;
             WeaponPrefab = ResourcePath.prefab_weapon_Knife_tscn;
             //攻速设置
             StartFiringSpeed = 180;
@@ -44,8 +44,9 @@ public partial class Knife : Weapon
         _hitArea = GetNode<Area2D>("HitArea");
         _hitArea.Monitoring = false;
         _hitArea.Monitorable = false;
-
         _hitArea.BodyEntered += OnBodyEntered;
+        //禁用自动播放动画
+        IsAutoPlaySpriteFrames = false;
     }
 
     protected override void Process(float delta)

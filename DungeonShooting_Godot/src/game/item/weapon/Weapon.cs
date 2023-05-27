@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Collections.Generic;
 
 /// <summary>
 /// 武器的基类
@@ -109,6 +108,10 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     public AnimationPlayer AnimationPlayer { get; private set; }
 
+    /// <summary>
+    /// 是否自动播放 SpriteFrames 的动画
+    /// </summary>
+    public bool IsAutoPlaySpriteFrames { get; set; } = true;
 
     //--------------------------------------------------------------------------------------------
     
@@ -172,9 +175,12 @@ public abstract partial class Weapon : ActivityObject
         FirePoint = GetNode<Marker2D>("FirePoint");
         OriginPoint = GetNode<Marker2D>("OriginPoint");
         ShellPoint = GetNode<Marker2D>("ShellPoint");
-
-        //图标
-        SetDefaultTexture(ResourceLoader.Load<Texture2D>(Attribute.Sprite2D));
+        
+        //设置动画
+        if (attribute.SpriteFrames != null)
+        {
+            AnimatedSprite.SpriteFrames = ResourceManager.Load<SpriteFrames>(attribute.SpriteFrames);
+        }
         AnimatedSprite.Position = Attribute.CenterPosition;
 
         //开火位置
@@ -630,6 +636,11 @@ public abstract partial class Weapon : ActivityObject
         //攻击冷却
         _attackTimer += _fireInterval;
 
+        //播放开火动画
+        if (IsAutoPlaySpriteFrames)
+        {
+            PlaySpriteAnimation(AnimatorNames.Fire);
+        }
         //触发开火函数
         OnFire();
 
@@ -775,6 +786,11 @@ public abstract partial class Weapon : ActivityObject
         {
             Reloading = true;
             ReloadTimer = Attribute.ReloadTime;
+            //播放换弹动画
+            if (IsAutoPlaySpriteFrames)
+            {
+                PlaySpriteAnimation(AnimatorNames.Reload);
+            }
             OnReload();
         }
     }
@@ -824,6 +840,11 @@ public abstract partial class Weapon : ActivityObject
             else
             {
                 ReloadTimer = Attribute.ReloadTime;
+                //播放换弹动画
+                if (IsAutoPlaySpriteFrames)
+                {
+                    PlaySpriteAnimation(AnimatorNames.Reload);
+                }
                 OnReload();
             }
         }
@@ -843,6 +864,16 @@ public abstract partial class Weapon : ActivityObject
             Reloading = false;
             ReloadTimer = 0;
             OnReloadFinish();
+        }
+    }
+    
+    //播放动画
+    private void PlaySpriteAnimation(string name)
+    {
+        var spriteFrames = AnimatedSprite.SpriteFrames;
+        if (spriteFrames != null && spriteFrames.HasAnimation(name))
+        {
+            AnimatedSprite.Play(name);
         }
     }
 

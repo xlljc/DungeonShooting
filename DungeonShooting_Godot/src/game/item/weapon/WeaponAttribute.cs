@@ -19,9 +19,13 @@ public class WeaponAttribute
     /// </summary>
     public WeaponWeightType WeightType = WeaponWeightType.MainWeapon;
     /// <summary>
-    /// 武器的图片
+    /// 武器的图标
     /// </summary>
-    public string Sprite2D = ResourcePath.resource_sprite_gun_gun1_png;
+    public string Icon = ResourcePath.resource_sprite_gun_gun1_png;
+    /// <summary>
+    /// 动画序列帧
+    /// </summary>
+    public string SpriteFrames;
     /// <summary>
     /// 是否连续发射, 如果为false, 则每次发射都需要扣动扳机
     /// </summary>
@@ -170,6 +174,10 @@ public class WeaponAttribute
     /// 默认射出的子弹
     /// </summary>
     public string BulletId = ActivityIdPrefix.Bullet + "0001";
+    /// <summary>
+    /// 投抛状态下物体碰撞器大小
+    /// </summary>
+    public Vector2 ThrowCollisionSize = new Vector2(20, 15);
 
     /// <summary>
     /// 克隆一份新的属性配置
@@ -191,7 +199,8 @@ public class WeaponAttribute
         attr.Name = Name;
         attr.WeaponPrefab = WeaponPrefab;
         attr.WeightType = WeightType;
-        attr.Sprite2D = Sprite2D;
+        attr.Icon = Icon;
+        attr.SpriteFrames = SpriteFrames;
         attr.ContinuousShoot = ContinuousShoot;
         attr.AmmoCapacity = AmmoCapacity;
         attr.MaxAmmoCapacity = MaxAmmoCapacity;
@@ -230,6 +239,7 @@ public class WeaponAttribute
         attr.UpliftAngleRestore = UpliftAngleRestore;
         attr.AiTargetLockingTime = AiTargetLockingTime;
         attr.BulletId = BulletId;
+        attr.ThrowCollisionSize = ThrowCollisionSize;
         return attr;
     }
 

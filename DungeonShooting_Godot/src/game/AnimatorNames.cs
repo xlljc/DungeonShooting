@@ -36,5 +36,12 @@ public static class AnimatorNames
     /// 关门动画
     /// </summary>
     public const string CloseDoor = "closeDoor";
-
+    /// <summary>
+    /// 开火
+    /// </summary>
+    public const string Fire = "fire";
+    /// <summary>
+    /// 换弹
+    /// </summary>
+    public const string Reload = "reload";
 }
