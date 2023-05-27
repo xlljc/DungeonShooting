@@ -1,5 +1,5 @@
 /// <summary>
-/// 编辑器下所有资源路径, 该类为 Automation 面板下自动生成的, 请不要手动编辑!
+/// 编辑器下所有资源路径, 该类为 Tools 面板下自动生成的, 请不要手动编辑!
 /// </summary>
 public class ResourcePath
 {
@@ -63,7 +63,6 @@ public class ResourcePath
     public const string resource_sprite_effects_debug_arrows_png = "res://resource/sprite/effects/debug_arrows.png";
     public const string resource_sprite_effects_Effect1_png = "res://resource/sprite/effects/Effect1.png";
     public const string resource_sprite_effects_Explosion_png = "res://resource/sprite/effects/Explosion.png";
-    public const string resource_sprite_effects_Hit_tres = "res://resource/sprite/effects/Hit.tres";
     public const string resource_sprite_effects_KnifeHit1_png = "res://resource/sprite/effects/KnifeHit1.png";
     public const string resource_sprite_effects_ShotFire_png = "res://resource/sprite/effects/ShotFire.png";
     public const string resource_sprite_effects_Smoke_png = "res://resource/sprite/effects/Smoke.png";
@@ -126,6 +125,9 @@ public class ResourcePath
     public const string resource_spriteFrames_KnifeHit1_tres = "res://resource/spriteFrames/KnifeHit1.tres";
     public const string resource_spriteFrames_RoomDoor_EW_tres = "res://resource/spriteFrames/RoomDoor_EW.tres";
     public const string resource_spriteFrames_RoomDoor_NS_tres = "res://resource/spriteFrames/RoomDoor_NS.tres";
+    public const string resource_spriteFrames_Weapon0001_tres = "res://resource/spriteFrames/Weapon0001.tres";
+    public const string resource_spriteFrames_Weapon0002_tres = "res://resource/spriteFrames/Weapon0002.tres";
+    public const string resource_spriteFrames_Weapon0003_tres = "res://resource/spriteFrames/Weapon0003.tres";
     public const string resource_theme_mainTheme_tres = "res://resource/theme/mainTheme.tres";
     public const string resource_theme_theme1_tres = "res://resource/theme/theme1.tres";
     public const string scene_EditorDemo_tscn = "res://scene/EditorDemo.tscn";

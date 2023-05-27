@@ -46,8 +46,6 @@ public partial class Player : Role
         // MainCamera.Main.GlobalPosition = GlobalPosition;
         // MainCamera.Main.ResetSmoothing();
         // remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
-        
-        RefreshWeaponTexture();
 
         MaxHp = 50;
         Hp = 50;
@@ -113,11 +111,7 @@ public partial class Player : Role
         }
         else if (InputManager.Interactive) //互动物体
         {
-            var item = TriggerInteractive();
-            if (item != null)
-            {
-                RefreshWeaponTexture();
-            }
+            TriggerInteractive();
         }
         else if (InputManager.Reload) //换弹
         {
@@ -145,40 +139,6 @@ public partial class Player : Role
         HandleMoveInput(delta);
         //播放动画
         PlayAnim();
-    }
-
-    public override void ExchangeNext()
-    {
-        base.ExchangeNext();
-        RefreshWeaponTexture();
-    }
-
-    public override void ExchangePrev()
-    {
-        base.ExchangePrev();
-        RefreshWeaponTexture();
-    }
-
-    public override void ThrowWeapon(int index)
-    {
-        base.ThrowWeapon(index);
-        RefreshWeaponTexture();
-    }
-
-    public override void ThrowWeapon()
-    {
-        base.ThrowWeapon();
-        RefreshWeaponTexture();
-    }
-
-    public override bool PickUpWeapon(Weapon weapon, bool exchange = true)
-    {
-        var v = base.PickUpWeapon(weapon, exchange);
-        if (v)
-        {
-            RefreshWeaponTexture();
-        }
-        return v;
     }
 
     protected override void OnChangeHp(int hp)
@@ -216,14 +176,6 @@ public partial class Player : Role
         GameCamera.Main.SetFollowTarget(null);
         UiManager.Open_Settlement();
         //GameApplication.Instance.World.ProcessMode = ProcessModeEnum.WhenPaused;
-    }
-
-    /// <summary>
-    /// 刷新 ui 上手持的物体
-    /// </summary>
-    private void RefreshWeaponTexture()
-    {
-        EventManager.EmitEvent(EventEnum.OnPlayerRefreshWeaponTexture, Holster.ActiveWeapon?.GetDefaultTexture());
     }
 
     //处理角色移动的输入

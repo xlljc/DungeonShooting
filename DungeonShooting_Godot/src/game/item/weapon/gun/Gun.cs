@@ -14,6 +14,7 @@ public partial class Gun : Weapon
         {
             Name = "步枪";
             Icon = ResourcePath.resource_sprite_gun_gun4_png;
+            SpriteFrames = ResourcePath.resource_spriteFrames_Weapon0001_tres;
             Weight = 40;
             CenterPosition = new Vector2(0.4f, -2.6f);
             StartFiringSpeed = 480;
@@ -58,6 +59,7 @@ public partial class Gun : Weapon
         {
             Name = "手枪";
             Icon = ResourcePath.resource_sprite_gun_gun3_png;
+            SpriteFrames = ResourcePath.resource_spriteFrames_Weapon0003_tres;
             Weight = 20;
             CenterPosition = new Vector2(0.4f, -2.6f);
             WeightType = WeaponWeightType.DeputyWeapon;

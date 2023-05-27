@@ -322,7 +322,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         if (_prevAnimation != anim || _prevAnimationFrame != frame)
         {
             var frames = AnimatedSprite.SpriteFrames;
-            if (frames.HasAnimation(anim))
+            if (frames != null && frames.HasAnimation(anim))
             {
                 //切换阴影动画
                 ShadowSprite.Texture = frames.GetFrameTexture(anim, frame);
@@ -377,7 +377,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public Texture2D GetCurrentTexture()
     {
-        return AnimatedSprite.SpriteFrames.GetFrameTexture(AnimatedSprite.Name, AnimatedSprite.Frame);
+        var spriteFrames = AnimatedSprite.SpriteFrames;
+        if (spriteFrames == null)
+        {
+            return null;
+        }
+        return spriteFrames.GetFrameTexture(AnimatedSprite.Animation, AnimatedSprite.Frame);
     }
 
     /// <summary>

@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://5m0qs7m4er5u"]
+
+[ext_resource type="Texture2D" uid="uid://xafbhgrxmosy" path="res://resource/sprite/gun/gun4.png" id="1_narkm"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_narkm")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

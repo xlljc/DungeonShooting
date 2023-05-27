@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://nqiy0jc2ause"]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_ivf53"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_wsh33"]
 [ext_resource type="SpriteFrames" uid="uid://3ps6h2f54qa5" path="res://resource/spriteFrames/RoomDoor_EW.tres" id="3_ptoof"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yvwpk"]
 resource_local_to_scene = true

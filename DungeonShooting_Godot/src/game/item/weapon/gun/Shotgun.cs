@@ -10,6 +10,7 @@ public partial class Shotgun : Weapon
         {
             Name = "霰弹枪";
             Icon = ResourcePath.resource_sprite_gun_gun2_png;
+            SpriteFrames = ResourcePath.resource_spriteFrames_Weapon0002_tres;
             Weight = 40;
             CenterPosition = new Vector2(0.4f, -2.6f);
             StartFiringSpeed = 400;
