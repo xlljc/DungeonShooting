@@ -69,7 +69,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <summary>
     /// 当前物体归属的区域, 如果为 null 代表不属于任何一个区域
     /// </summary>
-    public AffiliationArea Affiliation
+    public AffiliationArea AffiliationArea
     {
         get => _affiliationArea;
         set
@@ -1033,9 +1033,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             arr[i].Value?.Destroy();
         }
         
-        if (Affiliation != null)
+        if (AffiliationArea != null)
         {
-            Affiliation.RemoveItem(this);
+            AffiliationArea.RemoveItem(this);
         }
         
         //临时处理, 4.0 有bug, 不能提前销毁模板实例, 不然关闭游戏会报错!!!

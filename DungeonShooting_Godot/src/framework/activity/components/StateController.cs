@@ -89,7 +89,7 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
     /// <summary>
     /// 立即切换到下一个指定状态, 并且这一帧会被调用 PhysicsProcess
     /// </summary>
-    public void ChangeState(S next, params object[] arg)
+    public void ChangeStateInstant(S next, params object[] arg)
     {
         _changeState(false, next, arg);
     }
@@ -97,7 +97,7 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
     /// <summary>
     /// 切换到下一个指定状态, 下一帧才会调用 PhysicsProcess
     /// </summary>
-    public void ChangeStateLate(S next, params object[] arg)
+    public void ChangeState(S next, params object[] arg)
     {
         _changeState(true, next, arg);
     }

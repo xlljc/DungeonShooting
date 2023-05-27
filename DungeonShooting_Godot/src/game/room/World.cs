@@ -67,7 +67,7 @@ public partial class World : Node2D
     /// <summary>
     /// 公共属性, 敌人找到的目标的位置, 如果目标在视野内, 则一直更新
     /// </summary>
-    public Vector2 EnemyFindTargetPosition { get; set; }
+    public Vector2 Enemy_FindTargetPosition { get; set; }
     
     private bool _pause = false;
     

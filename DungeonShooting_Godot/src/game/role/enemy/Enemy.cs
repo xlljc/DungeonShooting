@@ -91,7 +91,7 @@ public partial class Enemy : Role
         StateController.Register(new AiFindAmmoState());
         
         //默认状态
-        StateController.ChangeState(AiStateEnum.AiNormal);
+        StateController.ChangeStateInstant(AiStateEnum.AiNormal);
     }
 
     public override void _EnterTree()
@@ -162,7 +162,7 @@ public partial class Enemy : Role
         var state = StateController.CurrState;
         if (state == AiStateEnum.AiNormal || state == AiStateEnum.AiProbe || state == AiStateEnum.AiLeaveFor)
         {
-            StateController.ChangeStateLate(AiStateEnum.AiTailAfter);
+            StateController.ChangeState(AiStateEnum.AiTailAfter);
         }
     }
 
@@ -174,7 +174,7 @@ public partial class Enemy : Role
         foreach (var unclaimedWeapon in World.Weapon_UnclaimedWeapons)
         {
             //判断是否能拾起武器, 条件: 相同的房间
-            if (unclaimedWeapon.Affiliation == Affiliation)
+            if (unclaimedWeapon.AffiliationArea == AffiliationArea)
             {
                 if (!unclaimedWeapon.IsTotalAmmoEmpty())
                 {
@@ -214,7 +214,7 @@ public partial class Enemy : Role
         foreach (var weapon in World.Weapon_UnclaimedWeapons)
         {
             //判断是否能拾起武器, 条件: 相同的房间, 或者当前房间目前没有战斗, 或者不在战斗房间
-            if (weapon.Affiliation == Affiliation)
+            if (weapon.AffiliationArea == AffiliationArea)
             {
                 //还有弹药
                 if (!weapon.IsTotalAmmoEmpty())
@@ -272,7 +272,7 @@ public partial class Enemy : Role
         if (currState == AiStateEnum.AiNormal || currState == AiStateEnum.AiProbe)
         {
             //判断是否在同一个房间内
-            return World.Enemy_FindTargetAffiliationSet.Contains(Affiliation);
+            return World.Enemy_FindTargetAffiliationSet.Contains(AffiliationArea);
         }
         
         return false;

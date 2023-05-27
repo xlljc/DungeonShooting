@@ -18,12 +18,12 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 当前玩家所在的房间
     /// </summary>
-    public RoomInfo ActiveRoom => Player.Current?.Affiliation?.RoomInfo;
+    public RoomInfo ActiveRoom => Player.Current?.AffiliationArea?.RoomInfo;
     
     /// <summary>
     /// 当前玩家所在的区域
     /// </summary>
-    public AffiliationArea ActiveAffiliation => Player.Current?.Affiliation;
+    public AffiliationArea ActiveAffiliationArea => Player.Current?.AffiliationArea;
 
     /// <summary>
     /// 是否在地牢里
@@ -294,6 +294,22 @@ public partial class DungeonManager : Node2D
     {
         var room = (RoomInfo)o;
         room.BeReady();
+        //如果关门了, 那么房间外的敌人就会丢失目标
+        if (room.IsSeclusion)
+        {
+            var playerAffiliationArea = Player.Current.AffiliationArea;
+            foreach (var enemy in _world.Enemy_InstanceList)
+            {
+                //不与玩家处于同一个房间
+                if (enemy.AffiliationArea != playerAffiliationArea)
+                {
+                    if (enemy.StateController.CurrState != AiStateEnum.AiNormal)
+                    {
+                        enemy.StateController.ChangeState(AiStateEnum.AiNormal);
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -315,12 +331,12 @@ public partial class DungeonManager : Node2D
             {
                 if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
                 {
-                    //存活敌人数量
-                    var count = ActiveAffiliation.FindIncludeItemsCount(
+                    //是否有存活的敌人
+                    var flag = ActiveAffiliationArea.ExistIncludeItem(
                         activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
                     );
-                    GD.Print("当前房间存活数量: " + count);
-                    if (count == 0)
+                    //GD.Print("当前房间存活数量: " + count);
+                    if (!flag)
                     {
                         activeRoom.OnClearRoom();
                     }
@@ -345,10 +361,10 @@ public partial class DungeonManager : Node2D
                 if (!_world.Enemy_IsFindTarget)
                 {
                     _world.Enemy_IsFindTarget = true;
-                    _world.EnemyFindTargetPosition = Player.Current.GetCenterPosition();
-                    _world.Enemy_FindTargetAffiliationSet.Add(Player.Current.Affiliation);
+                    _world.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
+                    _world.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
                 }
-                _world.Enemy_FindTargetAffiliationSet.Add(enemy.Affiliation);
+                _world.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
             }
         }
     }

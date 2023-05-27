@@ -204,7 +204,7 @@ public class RoomInfo : IDestroy
     /// </summary>
     public void OnClearRoom()
     {
-        if (_currWaveIndex >= ActivityMarks.Count) //所有 mark 全部走完了
+        if (_currWaveIndex >= ActivityMarks.Count) //所有 mark 都走完了
         {
             IsSeclusion = false;
             _currActivityMarks.Clear();

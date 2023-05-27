@@ -18,11 +18,11 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
     {
         if (Master.World.Enemy_IsFindTarget)
         {
-            Master.NavigationAgent2D.TargetPosition = Master.World.EnemyFindTargetPosition;
+            Master.NavigationAgent2D.TargetPosition = Master.World.Enemy_FindTargetPosition;
         }
         else
         {
-            ChangeStateLate(prev);
+            ChangeState(prev);
             return;
         }
 
@@ -33,7 +33,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AiStateEnum.AiFindAmmo, targetWeapon);
             }
         }
     }
@@ -47,7 +47,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            Master.NavigationAgent2D.TargetPosition = Master.World.EnemyFindTargetPosition;
+            Master.NavigationAgent2D.TargetPosition = Master.World.Enemy_FindTargetPosition;
         }
         else
         {
@@ -58,7 +58,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         {
             //计算移动
             var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-            Master.LookTargetPosition(Master.World.EnemyFindTargetPosition);
+            Master.LookTargetPosition(Master.World.Enemy_FindTargetPosition);
             Master.AnimatedSprite.Play(AnimatorNames.Run);
             Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
                               Master.MoveSpeed;
@@ -77,7 +77,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
                 //关闭射线检测
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
-                ChangeStateLate(AiStateEnum.AiFollowUp);
+                ChangeState(AiStateEnum.AiFollowUp);
                 return;
             }
             else
@@ -90,7 +90,7 @@ public class AiLeaveForState : StateBase<Enemy, AiStateEnum>
         //移动到目标掉了, 还没发现目标
         if (Master.NavigationAgent2D.IsNavigationFinished())
         {
-            ChangeStateLate(AiStateEnum.AiNormal);
+            ChangeState(AiStateEnum.AiNormal);
         }
     }
 

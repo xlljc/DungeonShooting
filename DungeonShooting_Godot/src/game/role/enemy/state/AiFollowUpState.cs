@@ -35,13 +35,13 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AiStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
             else
             {
                 //切换到随机移动状态
-                ChangeStateLate(AiStateEnum.AiSurround);
+                ChangeState(AiStateEnum.AiSurround);
             }
         }
 
@@ -108,13 +108,13 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
                 //距离够近, 可以切换到环绕模式
                 if (Master.GlobalPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(weapon.Attribute.MinDistance, 2) * 0.7f)
                 {
-                    ChangeStateLate(AiStateEnum.AiSurround);
+                    ChangeState(AiStateEnum.AiSurround);
                 }
             }
         }
         else
         {
-            ChangeStateLate(AiStateEnum.AiTailAfter);
+            ChangeState(AiStateEnum.AiTailAfter);
         }
     }
 
