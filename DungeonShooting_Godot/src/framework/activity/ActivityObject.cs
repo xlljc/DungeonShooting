@@ -202,7 +202,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     private ShaderMaterial _blendShaderMaterial;
     
     //存储投抛该物体时所产生的数据
-    private ActivityFallData _fallData;
+    private ActivityFallData _fallData = new ActivityFallData();
     
     //所在层级
     private RoomLayerEnum _currLayer;
@@ -589,6 +589,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         }
         
         Altitude = altitude;
+        //Position = Position + new Vector2(0, altitude);
         VerticalSpeed = verticalSpeed;
         ThrowRotationDegreesSpeed = rotate;
         if (_throwForce != null)
@@ -599,6 +600,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         _throwForce = new ExternalForce("throw");
         _throwForce.Velocity = velocity;
         MoveController.AddConstantForce(_throwForce);
+
+        InitThrowData();
     }
 
     /// <summary>
@@ -760,30 +763,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         // 下坠判定
         if (Altitude > 0 || VerticalSpeed != 0)
         {
-            if (_fallData == null)
-            {
-                _fallData = new ActivityFallData();
-            }
-            
             if (_isFallOver) // 没有处于下坠状态, 则进入下坠状态
             {
-                SetFallCollision();
-
-                _isFallOver = false;
-                _firstFall = true;
-                _hasResilienceVerticalSpeed = false;
-                _resilienceVerticalSpeed = 0;
-                
-                if (ThrowCollisionSize.X < 0 && ThrowCollisionSize.Y < 0)
-                {
-                    _throwRectangleShape.Size = GetDefaultTexture().GetSize();
-                }
-                else
-                {
-                    _throwRectangleShape.Size = ThrowCollisionSize;
-                }
-
-                Throw();
+                InitThrowData();
             }
             else
             {
@@ -1174,6 +1156,28 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         RestoreCollision();
 
         OnThrowOver();
+    }
+
+    //初始化投抛状态数据
+    private void InitThrowData()
+    {
+        SetFallCollision();
+
+        _isFallOver = false;
+        _firstFall = true;
+        _hasResilienceVerticalSpeed = false;
+        _resilienceVerticalSpeed = 0;
+                
+        if (ThrowCollisionSize.X < 0 && ThrowCollisionSize.Y < 0)
+        {
+            _throwRectangleShape.Size = GetDefaultTexture().GetSize();
+        }
+        else
+        {
+            _throwRectangleShape.Size = ThrowCollisionSize;
+        }
+
+        Throw();
     }
 
     /// <summary>

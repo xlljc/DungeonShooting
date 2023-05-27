@@ -1023,11 +1023,11 @@ public abstract partial class Weapon : ActivityObject
         //继承role的移动速度
         InheritVelocity(master);
 
-        var startHeight = 6;
+        var startHeight = -master.MountPoint.Position.Y;
         var direction = angle + Utils.RandomRangeInt(-20, 20);
         var velocity = new Vector2(20, 0).Rotated(direction * Mathf.Pi / 180);
         var yf = Utils.RandomRangeInt(50, 70);
-        var rotate = Utils.RandomRangeInt(-90, 90);
+        var rotate = Utils.RandomRangeInt(-60, 60);
         Throw(startPosition, startHeight, yf, velocity, rotate);
     }
 

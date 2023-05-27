@@ -443,8 +443,12 @@ public abstract partial class Role : ActivityObject
             return;
         }
 
-        var temp = new Vector2(weapon.Attribute.HoldPosition.X, 0);
-        var pos = weapon.GlobalPosition + temp.Rotated(weapon.GlobalRotation);
+        var temp = weapon.Attribute.HoldPosition;
+        if (Face == FaceDirection.Left)
+        {
+            temp.Y = -temp.Y;
+        }
+        var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
         Holster.RemoveWeapon(index);
         //播放抛出效果
         weapon.ThrowWeapon(this, pos);
