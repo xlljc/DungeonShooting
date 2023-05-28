@@ -16,7 +16,7 @@ public partial class Gun : Weapon
             Icon = ResourcePath.resource_sprite_gun_gun4_png;
             SpriteFrames = ResourcePath.resource_spriteFrames_Weapon0001_tres;
             Weight = 40;
-            CenterPosition = new Vector2(0.4f, -2.6f);
+            ThrowSpritePosition = new Vector2(0.4f, -2.6f);
             StartFiringSpeed = 480;
             StartScatteringRange = 30;
             FinalScatteringRange = 90;
@@ -41,7 +41,10 @@ public partial class Gun : Weapon
             //抬起角度
             UpliftAngle = 10;
             //开火位置
-            FirePosition = new Vector2(20F, 2.5F);
+            FirePosition = new Vector2(19, -1.5f);
+            //握把位置
+            SpritePosition = new Vector2(4, 0);
+            //ShellPosition = new Vector2(4, -2.5f);
             
             AiUseAttribute = Clone();
             AiUseAttribute.AiTargetLockingTime = 0.5f;
@@ -61,7 +64,7 @@ public partial class Gun : Weapon
             Icon = ResourcePath.resource_sprite_gun_gun3_png;
             SpriteFrames = ResourcePath.resource_spriteFrames_Weapon0003_tres;
             Weight = 20;
-            CenterPosition = new Vector2(0.4f, -2.6f);
+            ThrowSpritePosition = new Vector2(0.4f, -2.6f);
             WeightType = WeaponWeightType.DeputyWeapon;
             StartFiringSpeed = 300;
             FinalFiringSpeed = 300;
@@ -101,15 +104,7 @@ public partial class Gun : Weapon
     protected override void OnFire()
     {
         //创建一个弹壳
-        var startPos = Master.GlobalPosition;
-        var startHeight = 6;
-        var direction = GlobalRotationDegrees + Utils.RandomRangeInt(-30, 30) + 180;
-        var verticalSpeed = Utils.RandomRangeInt(60, 120);
-        var velocity = new Vector2(Utils.RandomRangeInt(20, 60), 0).Rotated(direction * Mathf.Pi / 180);
-        var rotate = Utils.RandomRangeInt(-720, 720);
-        var shell = Create<ShellCase>(ActivityIdPrefix.Shell + "0001");
-        shell.InheritVelocity(Master);
-        shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
+        ThrowShell("0001");
         
         if (Master == Player.Current)
         {

@@ -140,6 +140,7 @@ public partial class DungeonManager : Node2D
         var player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
         if (playerBirthMark != null)
         {
+            //player.Position = new Vector2(50, 50);
             player.Position = playerBirthMark.Position;
         }
         player.Name = "Player";

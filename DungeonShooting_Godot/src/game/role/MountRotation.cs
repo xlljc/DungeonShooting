@@ -19,7 +19,12 @@ public partial class MountRotation : Marker2D
     /// <summary>
     /// 当前节点真实的旋转角度, 角度制
     /// </summary>
-    public float RealAngle { get; private set; }
+    public float RealRotationDegrees { get; private set; }
+    
+    /// <summary>
+    /// 当前节点真实的旋转角度, 弧度制
+    /// </summary>
+    public float RealRotation => Mathf.DegToRad(RealRotationDegrees);
 
     /// <summary>
     /// 设置看向的目标点
@@ -45,7 +50,7 @@ public partial class MountRotation : Marker2D
             angle = Mathf.Clamp(angle, -100, 100);
         }
 
-        RealAngle = angle;
+        RealRotationDegrees = angle;
 
         // if (Master.GlobalPosition.X >= target.X)
         // {

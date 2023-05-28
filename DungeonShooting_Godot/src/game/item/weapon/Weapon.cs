@@ -45,11 +45,6 @@ public abstract partial class Weapon : ActivityObject
     public Marker2D FirePoint { get; private set; }
 
     /// <summary>
-    /// 武器管的原点
-    /// </summary>
-    public Marker2D OriginPoint { get; private set; }
-
-    /// <summary>
     /// 弹壳抛出的点
     /// </summary>
     public Marker2D ShellPoint { get; private set; }
@@ -173,7 +168,6 @@ public abstract partial class Weapon : ActivityObject
 
         AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         FirePoint = GetNode<Marker2D>("FirePoint");
-        OriginPoint = GetNode<Marker2D>("OriginPoint");
         ShellPoint = GetNode<Marker2D>("ShellPoint");
         
         //设置动画
@@ -181,11 +175,12 @@ public abstract partial class Weapon : ActivityObject
         {
             AnimatedSprite.SpriteFrames = ResourceManager.Load<SpriteFrames>(attribute.SpriteFrames);
         }
-        AnimatedSprite.Position = Attribute.CenterPosition;
+        AnimatedSprite.Position = Attribute.ThrowSpritePosition;
 
         //开火位置
-        FirePoint.Position = new Vector2(Attribute.FirePosition.X, -Attribute.FirePosition.Y);
-        OriginPoint.Position = new Vector2(0, -Attribute.FirePosition.Y);
+        FirePoint.Position = Attribute.FirePosition;
+        //弹壳投抛起始位置
+        ShellPoint.Position = Attribute.ShellPosition;
 
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
@@ -654,7 +649,7 @@ public abstract partial class Weapon : ActivityObject
         var tempAngle = Mathf.RadToDeg(tempRotation);
 
         //开火时枪口角度
-        var fireRotation = Mathf.DegToRad(Master.MountPoint.RealAngle) + tempRotation;
+        var fireRotation = Mathf.DegToRad(Master.MountPoint.RealRotationDegrees) + tempRotation;
         //创建子弹
         for (int i = 0; i < bulletCount; i++)
         {
@@ -990,7 +985,7 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     public float GetRealGlobalRotation()
     {
-        return Mathf.DegToRad(Master.MountPoint.RealAngle) + Rotation;
+        return Mathf.DegToRad(Master.MountPoint.RealRotationDegrees) + Rotation;
     }
 
     /// <summary>
@@ -1060,7 +1055,7 @@ public abstract partial class Weapon : ActivityObject
             _weaponAttribute = _originWeaponAttribute;
         }
         //握把位置
-        AnimatedSprite.Position = Attribute.HoldPosition;
+        AnimatedSprite.Position = Attribute.SpritePosition;
         //停止动画
         AnimationPlayer.Stop();
         //清除泛白效果
@@ -1084,7 +1079,7 @@ public abstract partial class Weapon : ActivityObject
         Master = null;
         CollisionLayer = _tempLayer;
         _weaponAttribute = _originWeaponAttribute;
-        AnimatedSprite.Position = Attribute.CenterPosition;
+        AnimatedSprite.Position = Attribute.ThrowSpritePosition;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         OnRemove();
@@ -1112,6 +1107,28 @@ public abstract partial class Weapon : ActivityObject
         OnConceal();
     }
 
+    //-------------------------- ----- 子弹相关 -----------------------------
+
+    /// <summary>
+    /// 投抛弹壳的默认实现方式, shellId为弹壳id, 不需要前缀
+    /// </summary>
+    protected ActivityObject ThrowShell(string shellId)
+    {
+        var shellPosition = Master.MountPoint.Position + ShellPoint.Position;
+        var startPos = ShellPoint.GlobalPosition;
+        var startHeight = -shellPosition.Y;
+        startPos.Y += startHeight;
+        var direction = GlobalRotationDegrees + Utils.RandomRangeInt(-30, 30) + 180;
+        var verticalSpeed = Utils.RandomRangeInt(60, 120);
+        var velocity = new Vector2(Utils.RandomRangeInt(20, 60), 0).Rotated(direction * Mathf.Pi / 180);
+        var rotate = Utils.RandomRangeInt(-720, 720);
+        var shell = Create(ActivityIdPrefix.Shell + shellId);
+        shell.Rotation = Master.MountPoint.RealRotation;
+        shell.InheritVelocity(Master);
+        shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
+        return shell;
+    }
+    
     //-------------------------------- Ai相关 -----------------------------
 
     /// <summary>

@@ -21,7 +21,7 @@ public partial class Knife : Weapon
             AmmoCapacity = 180;
             MaxAmmoCapacity = AmmoCapacity;
             //握把位置
-            HoldPosition = new Vector2(10, 0);
+            SpritePosition = new Vector2(10, 0);
             MaxDistance = MinDistance = 35;
             //后坐力改为向前, 模拟手伸长的效果
             MaxBacklash = -8;

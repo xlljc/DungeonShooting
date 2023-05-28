@@ -12,7 +12,7 @@ public partial class Shotgun : Weapon
             Icon = ResourcePath.resource_sprite_gun_gun2_png;
             SpriteFrames = ResourcePath.resource_spriteFrames_Weapon0002_tres;
             Weight = 40;
-            CenterPosition = new Vector2(0.4f, -2.6f);
+            ThrowSpritePosition = new Vector2(0.4f, -2.6f);
             StartFiringSpeed = 400;
             StartScatteringRange = 30;
             FinalScatteringRange = 90;
@@ -65,15 +65,7 @@ public partial class Shotgun : Weapon
     protected override void OnFire()
     {
         //创建一个弹壳
-        var startPos = Master.GlobalPosition;
-        var startHeight = 6;
-        var direction = GlobalRotationDegrees + Utils.RandomRangeInt(-30, 30) + 180;
-        var verticalSpeed = Utils.RandomRangeInt(60, 120);
-        var velocity = new Vector2(Utils.RandomRangeInt(20, 60), 0).Rotated(direction * Mathf.Pi / 180);
-        var rotate = Utils.RandomRangeInt(-720, 720);
-        var shell = Create<ShellCase>(ActivityIdPrefix.Shell + "0001");
-        shell.InheritVelocity(Master);
-        shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
+        ThrowShell("0001");
         
         if (Master == Player.Current)
         {

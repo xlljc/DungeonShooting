@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://csd4sk65m46qh"]
+
+[ext_resource type="PackedScene" uid="uid://byy386hv6bko0" path="res://prefab/weapon/Weapon.tscn" id="1_byp1d"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_hn05o"]
+[ext_resource type="SpriteFrames" uid="uid://5m0qs7m4er5u" path="res://resource/spriteFrames/Weapon0001.tres" id="3_ee7rd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ki13x"]
+resource_local_to_scene = true
+shader = ExtResource("2_hn05o")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ojsm"]
+resource_local_to_scene = true
+shader = ExtResource("2_hn05o")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
+
+[node name="WeaponPreview" instance=ExtResource("1_byp1d")]
+
+[node name="ShadowSprite" parent="." index="0"]
+material = SubResource("ShaderMaterial_ki13x")
+
+[node name="AnimatedSprite" parent="." index="1"]
+material = SubResource("ShaderMaterial_5ojsm")
+position = Vector2(4, 0)
+sprite_frames = ExtResource("3_ee7rd")
+
+[node name="ShellPoint" parent="." index="2"]
+position = Vector2(5, -2.5)
+
+[node name="FirePoint" parent="." index="3"]
+position = Vector2(18, -1.5)
+
+[node name="Collision" parent="." index="4"]
+position = Vector2(4, 0)

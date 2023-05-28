@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bqf2vks5ggnsp"]
 
-[ext_resource type="Script" path="res://src/game/room/World.cs" id="1_xc5pm"]
-[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="2_n61nn"]
+[ext_resource type="Script" path="res://src/game/room/World.cs" id="1_6b8pf"]
+[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="2_ur13e"]
 
 [sub_resource type="Environment" id="Environment_ji6mi"]
 background_mode = 3
@@ -9,7 +9,7 @@ glow_enabled = true
 glow_intensity = 4.74
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot")]
-script = ExtResource("1_xc5pm")
+script = ExtResource("1_6b8pf")
 NormalLayer = NodePath("NormalLayer")
 YSortLayer = NodePath("YSortLayer")
 TileRoot = NodePath("TileRoot")
@@ -20,7 +20,7 @@ environment = SubResource("Environment_ji6mi")
 
 [node name="TileRoot" type="TileMap" parent="."]
 y_sort_enabled = true
-tile_set = ExtResource("2_n61nn")
+tile_set = ExtResource("2_ur13e")
 format = 2
 layer_0/name = "Floor"
 layer_0/z_index = -10

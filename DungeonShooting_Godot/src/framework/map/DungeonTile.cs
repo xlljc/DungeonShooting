@@ -92,20 +92,21 @@ public class DungeonTile
                     {
                         node.Position = roomInfo.GetWorldPosition() + (node.GlobalPosition - offset);
                     }
+                    
+                    i--;
+                    childCount--;
                 }
-
-                i--;
-                childCount--;
             }
 
             //物体标记
             var activityMarks = tileInstance.GetMarks();
             foreach (var activityMark in activityMarks)
             {
+                var pos = activityMark.Position;
                 activityMark.GetParent().RemoveChild(activityMark);
                 activityMark.Owner = null;
                 //_tileRoot.AddChild(activityMark);
-                activityMark.Position = roomInfo.GetWorldPosition() + (activityMark.GlobalPosition - offset);
+                activityMark.Position = roomInfo.GetWorldPosition() + (pos - offset);
                 activityMark.TileRoot = _tileRoot;
                 //执行预处理操作
                 activityMark.Pretreatment();

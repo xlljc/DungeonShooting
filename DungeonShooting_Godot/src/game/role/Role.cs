@@ -443,7 +443,7 @@ public abstract partial class Role : ActivityObject
             return;
         }
 
-        var temp = weapon.Attribute.HoldPosition;
+        var temp = weapon.Attribute.SpritePosition;
         if (Face == FaceDirection.Left)
         {
             temp.Y = -temp.Y;

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://br2qjnk51rgr3"
-path="res://.godot/imported/bow.png-cf7ed3be40c3c132dffe693ed3eaea62.ctex"
+uid="uid://dj8nrd5od4fcl"
+path="res://.godot/imported/16x16 dungeon ii wall reconfig v04 spritesheet.png-ff78c744bd80f7a90af72583d38712d5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/environment/itch-io-DungeonTileset4/bow/bow.png"
-dest_files=["res://.godot/imported/bow.png-cf7ed3be40c3c132dffe693ed3eaea62.ctex"]
+source_file="res://resource/sprite/map/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"
+dest_files=["res://.godot/imported/16x16 dungeon ii wall reconfig v04 spritesheet.png-ff78c744bd80f7a90af72583d38712d5.ctex"]
 
 [params]
 

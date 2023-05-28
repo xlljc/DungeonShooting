@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buhvcxo2t0w8e"
-path="res://.godot/imported/hit1.png-dff71ff18aaf926e3783079227be8aa0.ctex"
+uid="uid://dviv44fhwvkb1"
+path="res://.godot/imported/door1_down.png-0738db3503e6a0f8ce04f89dbe063801.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/environment/itch-io-DungeonTileset4/bow/effect/hit1.png"
-dest_files=["res://.godot/imported/hit1.png-dff71ff18aaf926e3783079227be8aa0.ctex"]
+source_file="res://resource/sprite/map/map1/door1_down.png"
+dest_files=["res://.godot/imported/door1_down.png-0738db3503e6a0f8ce04f89dbe063801.ctex"]
 
 [params]
 

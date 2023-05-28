@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dj8nrd5od4fcl"
-path="res://.godot/imported/16x16 dungeon ii wall reconfig v04 spritesheet.png-912443f06cd2aff252dec097396c5d34.ctex"
+uid="uid://d2f55lu60x64i"
+path="res://.godot/imported/enemy0001_Debris.png-297a2fb6680cb862a9a085cf58f8268c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/environment/itch-io-DungeonTileset4/16x16 dungeon ii wall reconfig v04 spritesheet.png"
-dest_files=["res://.godot/imported/16x16 dungeon ii wall reconfig v04 spritesheet.png-912443f06cd2aff252dec097396c5d34.ctex"]
+source_file="res://resource/sprite/role/enemy0001/enemy0001_Debris.png"
+dest_files=["res://.godot/imported/enemy0001_Debris.png-297a2fb6680cb862a9a085cf58f8268c.ctex"]
 
 [params]
 

@@ -1,18 +1,18 @@
 [gd_scene load_steps=7 format=3 uid="uid://bj4yr6ru8nhwr"]
 
-[ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/shellCase.png" id="1"]
-[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_nmhqm"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2"]
+[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_5wgsd"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_6in5k"]
+[ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/shellCase.png" id="3_k84jh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_px12l"]
 resource_local_to_scene = true
-shader = ExtResource("2")
+shader = ExtResource("2_6in5k")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7e6fo"]
 resource_local_to_scene = true
-shader = ExtResource("2")
+shader = ExtResource("2_6in5k")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
@@ -20,7 +20,7 @@ shader_parameter/schedule = 0
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1")
+"texture": ExtResource("3_k84jh")
 }],
 "loop": true,
 "name": &"default",
@@ -28,7 +28,7 @@ animations = [{
 }]
 
 [node name="ShellCase" type="Node"]
-script = ExtResource("1_nmhqm")
+script = ExtResource("1_5wgsd")
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1

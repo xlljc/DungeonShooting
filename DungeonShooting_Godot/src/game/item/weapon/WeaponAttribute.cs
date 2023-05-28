@@ -131,17 +131,17 @@ public class WeaponAttribute
     /// </summary>
     public float MinDistance = 800;
     /// <summary>
-    /// 武器精灵的旋转中心坐标
-    /// </summary>
-    public Vector2 CenterPosition = new Vector2(0, 0);
-    /// <summary>
     /// 开火位置
     /// </summary>
     public Vector2 FirePosition = new Vector2(11, 0);
     /// <summary>
-    /// 握把位置
+    /// 精灵位置
     /// </summary>
-    public Vector2 HoldPosition = new Vector2(4, -3);
+    public Vector2 SpritePosition = new Vector2(4, -3);
+    /// <summary>
+    /// 弹壳投抛起始位置
+    /// </summary>
+    public Vector2 ShellPosition = new Vector2(5, -2.5f);
     /// <summary>
     /// 重量
     /// </summary>
@@ -174,6 +174,10 @@ public class WeaponAttribute
     /// 默认射出的子弹
     /// </summary>
     public string BulletId = ActivityIdPrefix.Bullet + "0001";
+    /// <summary>
+    /// 武器精灵投抛时的旋转中心坐标
+    /// </summary>
+    public Vector2 ThrowSpritePosition = new Vector2(0, 0);
     /// <summary>
     /// 投抛状态下物体碰撞器大小
     /// </summary>
@@ -227,9 +231,9 @@ public class WeaponAttribute
         attr.ScatteringRangeBackSpeed = ScatteringRangeBackSpeed;
         attr.MaxDistance = MaxDistance;
         attr.MinDistance = MinDistance;
-        attr.CenterPosition = CenterPosition;
         attr.FirePosition = FirePosition;
-        attr.HoldPosition = HoldPosition;
+        attr.ShellPosition = ShellPosition;
+        attr.SpritePosition = SpritePosition;
         attr.Weight = Weight;
         attr.MaxBacklash = MaxBacklash;
         attr.MinBacklash = MinBacklash;
@@ -239,6 +243,7 @@ public class WeaponAttribute
         attr.UpliftAngleRestore = UpliftAngleRestore;
         attr.AiTargetLockingTime = AiTargetLockingTime;
         attr.BulletId = BulletId;
+        attr.ThrowSpritePosition = ThrowSpritePosition;
         attr.ThrowCollisionSize = ThrowCollisionSize;
         return attr;
     }
