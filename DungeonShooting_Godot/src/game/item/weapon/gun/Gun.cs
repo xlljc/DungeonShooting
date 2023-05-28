@@ -41,10 +41,10 @@ public partial class Gun : Weapon
             //抬起角度
             UpliftAngle = 10;
             //开火位置
-            FirePosition = new Vector2(19, -1.5f);
-            //握把位置
-            SpritePosition = new Vector2(4, 0);
-            //ShellPosition = new Vector2(4, -2.5f);
+            FirePosition = new Vector2(21, -3f);
+            //精灵位置
+            SpritePosition = new Vector2(6, -1);
+            ShellPosition = new Vector2(7.5f, -4.5f);
             
             AiUseAttribute = Clone();
             AiUseAttribute.AiTargetLockingTime = 0.5f;
@@ -93,7 +93,10 @@ public partial class Gun : Weapon
             //抬起角度
             UpliftAngle = 30;
             //开火位置
-            FirePosition = new Vector2(12.5F, 2.5F);
+            FirePosition = new Vector2(13, -2);
+            //精灵位置
+            SpritePosition = new Vector2(5, 0);
+            ShellPosition = new Vector2(5, -3);
 
             AiUseAttribute = Clone();
             AiUseAttribute.AiTargetLockingTime = 1f;

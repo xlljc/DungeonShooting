@@ -23,14 +23,11 @@ material = SubResource("ShaderMaterial_ki13x")
 
 [node name="AnimatedSprite" parent="." index="1"]
 material = SubResource("ShaderMaterial_5ojsm")
-position = Vector2(4, 0)
+position = Vector2(6, -1)
 sprite_frames = ExtResource("3_ee7rd")
 
 [node name="ShellPoint" parent="." index="2"]
-position = Vector2(5, -2.5)
+position = Vector2(7.5, -4.5)
 
 [node name="FirePoint" parent="." index="3"]
-position = Vector2(18, -1.5)
-
-[node name="Collision" parent="." index="4"]
-position = Vector2(4, 0)
+position = Vector2(21, -3)

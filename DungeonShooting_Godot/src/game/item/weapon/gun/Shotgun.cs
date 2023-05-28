@@ -42,7 +42,11 @@ public partial class Shotgun : Weapon
             MaxBacklash = 6;
             MinBacklash = 5;
             //开火位置
-            FirePosition = new Vector2(22.5F, 5F);
+            FirePosition = new Vector2(22, -4);
+            //精灵位置
+            SpritePosition = new Vector2(9, -2);
+            ShellPosition = new Vector2(3, -4);
+            
             BulletId = ActivityIdPrefix.Bullet + "0002";
 
             AiUseAttribute = Clone();

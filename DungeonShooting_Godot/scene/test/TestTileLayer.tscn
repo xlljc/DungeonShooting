@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://d1m4kunwifxax"]
 
 [ext_resource type="Texture2D" uid="uid://dj8nrd5od4fcl" path="res://resource/sprite/map/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png" id="1"]
-[ext_resource type="Texture2D" uid="uid://chd2vtesap5cf" path="res://resource/sprite/role/enemy0001/enemy0001.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://chd2vtesap5cf" path="res://resource/sprite/role/enemy0001/Enemy0001.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://5geiuvv6hyov" path="res://resource/sprite/gun/gun2.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/shellCase.png" id="4"]
 
