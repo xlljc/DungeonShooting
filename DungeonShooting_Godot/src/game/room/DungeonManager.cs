@@ -53,19 +53,19 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 加载地牢
     /// </summary>
-    public void LoadDungeon(DungeonConfig config)
+    public void LoadDungeon(DungeonConfig config, Action finish = null)
     {
         _config = config;
-        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine());
+        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(finish));
     }
 
     /// <summary>
     /// 退出地牢
     /// </summary>
-    public void ExitDungeon()
+    public void ExitDungeon(Action finish = null)
     {
         IsInDungeon = false;
-        GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine());
+        GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(finish));
     }
 
     public override void _PhysicsProcess(double delta)
@@ -95,11 +95,11 @@ public partial class DungeonManager : Node2D
     }
 
     //执行加载地牢协程
-    private IEnumerator RunLoadDungeonCoroutine()
+    private IEnumerator RunLoadDungeonCoroutine(Action finish)
     {
-        yield return 0;
         //打开 loading UI
         UiManager.Open_Loading();
+        yield return 0;
         //创建世界场景
         _world = GameApplication.Instance.CreateNewWorld();
         yield return new WaitForFixedProcess(10);
@@ -157,20 +157,24 @@ public partial class DungeonManager : Node2D
         roomUi.InitData(player);
         //派发进入地牢事件
         EventManager.EmitEvent(EventEnum.OnEnterDungeon);
-        //关闭 loading UI
-        UiManager.Dispose_Loading();
         
         IsInDungeon = true;
         yield return 0;
+        //关闭 loading UI
+        UiManager.Dispose_Loading();
+        if (finish != null)
+        {
+            finish();
+        }
     }
 
-    private IEnumerator RunExitDungeonCoroutine()
+    private IEnumerator RunExitDungeonCoroutine(Action finish)
     {
+        //打开 loading UI
+        UiManager.Open_Loading();
         yield return 0;
         _world.Pause = true;
         yield return 0;
-        //打开 loading UI
-        UiManager.Open_Loading();
         _dungeonGenerator.EachRoom(DisposeRoomInfo);
         yield return 0;
         _dungeonTile = null;
@@ -189,9 +193,13 @@ public partial class DungeonManager : Node2D
         GameApplication.Instance.Cursor.SetGuiMode(false);
         //派发退出地牢事件
         EventManager.EmitEvent(EventEnum.OnExitDungeon);
+        yield return 0;
         //关闭 loading UI
         UiManager.Dispose_Loading();
-        yield return 0;
+        if (finish != null)
+        {
+            finish();
+        }
     }
     
     // 初始化房间

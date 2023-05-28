@@ -75,6 +75,11 @@ public partial class GameApplication : Node2D
 	/// 像素缩放
 	/// </summary>
 	public int PixelScale { get; private set; } = 4;
+	
+	/// <summary>
+	/// 地牢配置信息
+	/// </summary>
+	public DungeonConfig DungeonConfig { get; private set; }
 
 	//开启的协程
 	private List<CoroutineData> _coroutineList;
@@ -87,6 +92,10 @@ public partial class GameApplication : Node2D
 
 		//初始化 ActivityObject
 		ActivityObject.InitActivity();
+		
+		DungeonConfig = new DungeonConfig();
+		DungeonConfig.GroupName = "testGroup";
+		DungeonConfig.RoomCount = 20;
 	}
 	
 	public override void _EnterTree()

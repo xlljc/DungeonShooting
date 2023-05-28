@@ -21,10 +21,7 @@ public partial class MainPanel : Main
     //点击开始游戏
     private void OnStartGameClick()
     {
-        var config = new DungeonConfig();
-        config.GroupName = "testGroup";
-        config.RoomCount = 20;
-        GameApplication.Instance.DungeonManager.LoadDungeon(config);
+        GameApplication.Instance.DungeonManager.LoadDungeon(GameApplication.Instance.DungeonConfig);
         HideUi();
     }
 

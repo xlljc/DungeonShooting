@@ -19,14 +19,21 @@ public partial class SettlementPanel : Settlement
 
     private void OnRestartClick()
     {
-        GD.Print("重新开始还没做...");
+        //GD.Print("重新开始还没做...");
+        HideUi();
+        GameApplication.Instance.DungeonManager.ExitDungeon(() =>
+        {
+            GameApplication.Instance.DungeonManager.LoadDungeon(GameApplication.Instance.DungeonConfig);
+        });
     }
 
     private void OnToMenuClick()
     {
         HideUi();
-        GameApplication.Instance.DungeonManager.ExitDungeon();
-        UiManager.Open_Main();
+        GameApplication.Instance.DungeonManager.ExitDungeon(() =>
+        {
+            UiManager.Open_Main();
+        });
     }
 
 }
