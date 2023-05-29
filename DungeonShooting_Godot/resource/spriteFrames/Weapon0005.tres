@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://djdvlmqsn8bie"]
+
+[ext_resource type="Texture2D" uid="uid://504f1r0mi33n" path="res://resource/sprite/gun/weapon0005/Weapon0005.png" id="1_85vfm"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_85vfm")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

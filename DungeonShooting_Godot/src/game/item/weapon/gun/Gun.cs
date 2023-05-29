@@ -5,6 +5,7 @@ using Godot;
 /// </summary>
 [RegisterWeapon(ActivityIdPrefix.Weapon + "0001", typeof(RifleAttribute))]
 [RegisterWeapon(ActivityIdPrefix.Weapon + "0003", typeof(PistolAttribute))]
+[RegisterWeapon(ActivityIdPrefix.Weapon + "0005", typeof(SniperRifleAttribute))]
 public partial class Gun : Weapon
 {
     //步枪属性数据
@@ -72,6 +73,7 @@ public partial class Gun : Weapon
             FinalScatteringRange = 60;
             ScatteringRangeAddValue = 8f;
             ScatteringRangeBackSpeed = 40;
+            ScatteringRangeBackTime = 0.5f;
             //连发
             ContinuousShoot = false;
             AmmoCapacity = 12;
@@ -91,12 +93,66 @@ public partial class Gun : Weapon
             MinFireBulletCount = 1;
             MaxFireBulletCount = 1;
             //抬起角度
-            UpliftAngle = 30;
+            UpliftAngle = 20;
             //开火位置
             FirePosition = new Vector2(13, -2);
             //精灵位置
             SpritePosition = new Vector2(5, 0);
             ShellPosition = new Vector2(5, -3);
+
+            AiUseAttribute = Clone();
+            AiUseAttribute.AiTargetLockingTime = 1f;
+            AiUseAttribute.TriggerInterval = 2f;
+        }
+    }
+
+    //狙击步枪
+    private class SniperRifleAttribute : WeaponAttribute
+    {
+        public SniperRifleAttribute()
+        {
+            Name = "狙击步枪";
+            Icon = ResourcePath.resource_sprite_gun_gun3_png;
+            SpriteFrames = ResourcePath.resource_spriteFrames_Weapon0005_tres;
+            Weight = 20;
+            ThrowSpritePosition = new Vector2(0.4f, -2.6f);
+            WeightType = WeaponWeightType.DeputyWeapon;
+            StartFiringSpeed = 60;
+            FinalFiringSpeed = 60;
+            StartScatteringRange = 0;
+            FinalScatteringRange = 20;
+            ScatteringRangeAddValue = 10;
+            ScatteringRangeBackSpeed = 10;
+            //连发
+            ContinuousShoot = false;
+            AmmoCapacity = 10;
+            StandbyAmmoCapacity = 50;
+            MaxAmmoCapacity = 50;
+            //扳机检测间隔
+            TriggerInterval = 0.1f;
+            //连发数量
+            MinContinuousCount = 1;
+            MaxContinuousCount = 1;
+            //开火前延时
+            DelayedTime = 0f;
+            //攻击距离
+            MinDistance = 600;
+            MaxDistance = 800;
+            //发射子弹数量
+            MinFireBulletCount = 1;
+            MaxFireBulletCount = 1;
+            //抬起角度
+            UpliftAngle = 15;
+            UpliftAngleRestore = 3.5f;
+            //开火位置
+            FirePosition = new Vector2(28, -3.5f);
+            //精灵位置
+            SpritePosition = new Vector2(9, 0);
+            ShellPosition = new Vector2(7, -3.5f);
+            MinBacklash = 6;
+            MinBacklash = 8;
+            BacklashRegressionSpeed = 20;
+            ReloadTime = 3.5f;
 
             AiUseAttribute = Clone();
             AiUseAttribute.AiTargetLockingTime = 1f;

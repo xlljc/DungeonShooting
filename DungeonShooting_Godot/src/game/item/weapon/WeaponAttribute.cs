@@ -123,6 +123,10 @@ public class WeaponAttribute
     /// </summary>
     public float ScatteringRangeBackSpeed = 10;
     /// <summary>
+    /// 松开扳机多久后开始销退散射值
+    /// </summary>
+    public float ScatteringRangeBackTime = 0f;
+    /// <summary>
     /// 子弹飞行最大距离
     /// </summary>
     public float MaxDistance = 600;
@@ -229,6 +233,7 @@ public class WeaponAttribute
         attr.FinalScatteringRange = FinalScatteringRange;
         attr.ScatteringRangeAddValue = ScatteringRangeAddValue;
         attr.ScatteringRangeBackSpeed = ScatteringRangeBackSpeed;
+        attr.ScatteringRangeBackTime = ScatteringRangeBackTime;
         attr.MaxDistance = MaxDistance;
         attr.MinDistance = MinDistance;
         attr.FirePosition = FirePosition;

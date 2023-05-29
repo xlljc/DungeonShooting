@@ -401,8 +401,11 @@ public abstract partial class Weapon : ActivityObject
 
             if (!_attackFlag && _attackTimer <= 0)
             {
-                CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
-                    Attribute.StartScatteringRange);
+                if (_upTimer >= Attribute.ScatteringRangeBackTime)
+                {
+                    CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
+                        Attribute.StartScatteringRange);
+                }
             }
 
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;

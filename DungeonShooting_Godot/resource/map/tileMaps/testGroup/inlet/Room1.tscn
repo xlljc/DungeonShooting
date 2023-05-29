@@ -22,6 +22,12 @@ script = ExtResource("3_2xj23")
 Type = 5
 ItemExpression = "0002(ResidueAmmo:15,CurrAmmon:0)"
 
+[node name="ActivityMark5" type="Node2D" parent="."]
+position = Vector2(78, 24)
+script = ExtResource("3_2xj23")
+Type = 5
+ItemExpression = "0005(ResidueAmmo:30,CurrAmmon:10)"
+
 [node name="ActivityMark2" type="Node2D" parent="."]
 position = Vector2(39, 75)
 script = ExtResource("3_2xj23")
