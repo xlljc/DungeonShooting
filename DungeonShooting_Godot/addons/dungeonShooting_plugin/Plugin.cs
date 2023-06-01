@@ -43,12 +43,6 @@ namespace Plugin
         private CustomTypeInfo[] _customTypeInfos = new CustomTypeInfo[]
         {
             new CustomTypeInfo(
-                "ActivityObjectTemplate",
-                "Node",
-                "res://src/framework/activity/ActivityObjectTemplate.cs",
-                "res://addons/dungeonShooting_plugin/ActivityObject.svg"
-            ),
-            new CustomTypeInfo(
                 "ActivityMark",
                 "Node2D",
                 "res://src/framework/map/mark/ActivityMark.cs",

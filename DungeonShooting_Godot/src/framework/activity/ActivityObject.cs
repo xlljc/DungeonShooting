@@ -10,6 +10,7 @@ using Godot;
 /// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [RegisterActivity(id, prefabPath)],
 /// ActivityObject 类会自动扫描并注册物体, 然后使用而是使用 ActivityObject.Create(id) 来创建实例
 /// </summary>
+[Tool]
 public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 {
     /// <summary>
@@ -212,9 +213,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     
     //开启的协程
     private List<CoroutineData> _coroutineList;
-    //模板实例
-    private ActivityObjectTemplate _templateInstance;
-    
+
     //物体所在区域
     private AffiliationArea _affiliationArea;
 
@@ -244,56 +243,21 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     private static long _instanceIndex = 0;
 
     //初始化节点
-    private void _InitNode(string itemId, string scenePath, World world)
+    private void _InitNode(string itemId, World world)
     {
         World = world;
-        //加载预制体
-        var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
-        if (tempPrefab == null)
-        {
-            throw new Exception("创建 ActivityObject 没有找到指定挂载的预制体: " + scenePath);
-        }
 
         ItemId = itemId;
         Name = GetType().Name + (_instanceIndex++);
         
-        _templateInstance = tempPrefab.Instantiate<ActivityObjectTemplate>();
-        //移动子节点
-        var count = _templateInstance.GetChildCount();
-        for (int i = 0; i < count; i++)
-        {
-            var body = _templateInstance.GetChild(0);
-            _templateInstance.RemoveChild(body);
-            AddChild(body);
-            body.Owner = this;
-            switch (body.Name)
-            {
-                case "AnimatedSprite":
-                    AnimatedSprite = (AnimatedSprite2D)body;
-                    _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
-                    break;
-                case "ShadowSprite":
-                    ShadowSprite = (Sprite2D)body;
-                    ShadowSprite.Visible = false;
-                    break;
-                case "Collision":
-                    Collision = (CollisionShape2D)body;
-                    break;
-            }
-        }
-        
-        ZIndex = _templateInstance.z_index;
-        CollisionLayer = _templateInstance.collision_layer;
-        CollisionMask = _templateInstance.collision_mask;
-        Scale = _templateInstance.scale;
-        Visible = _templateInstance.visible;
+        AnimatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite");
+        _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
+        ShadowSprite = GetNode<Sprite2D>("ShadowSprite");
+        ShadowSprite.Visible = false;
+        Collision = GetNode<CollisionShape2D>("Collision");
 
         MotionMode = MotionModeEnum.Floating;
-
         MoveController = AddComponent<MoveController>();
-        
-        //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
-        //_templateInstance.CallDeferred(Node.MethodName.QueueFree);
 
         OnInit();
     }
@@ -303,6 +267,86 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public sealed override void _Ready()
     {
+#if TOOLS
+        // 在工具模式下创建的 template 节点自动创建对应的必要子节点
+        if (Engine.IsEditorHint())
+        {
+            var parent = GetParent();
+            if (parent != null)
+            {
+                //寻找 owner
+                Node owner;
+                if (parent.Owner != null)
+                {
+                    owner = parent.Owner;
+                }
+                else if (Plugin.Plugin.Instance.GetEditorInterface().GetEditedSceneRoot() == this)
+                {
+                    owner = this;
+                }
+                else
+                {
+                    owner = parent;
+                }
+
+                var sprite = GetNodeOrNull<Sprite2D>("ShadowSprite");
+                //创建Shadow
+                if (sprite == null)
+                {
+                    sprite = new Sprite2D();
+                    sprite.Name = "ShadowSprite";
+                    sprite.ZIndex = -1;
+                    var material =
+                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
+                    material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
+                    material.SetShaderParameter("schedule", 1);
+                    sprite.Material = material;
+                    AddChild(sprite);
+                    sprite.Owner = owner;
+                }
+                else if (sprite.Material == null)
+                {
+                    var material =
+                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
+                    material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
+                    material.SetShaderParameter("schedule", 1);
+                    sprite.Material = material;
+                }
+
+                var animatedSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite");
+                //创建 Sprite2D
+                if (animatedSprite == null)
+                {
+                    animatedSprite = new AnimatedSprite2D();
+                    animatedSprite.Name = "AnimatedSprite";
+                    var material =
+                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
+                    material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
+                    material.SetShaderParameter("schedule", 0);
+                    animatedSprite.Material = material;
+                    AddChild(animatedSprite);
+                    animatedSprite.Owner = owner;
+                }
+                else if (animatedSprite.Material == null)
+                {
+                    var material =
+                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
+                    material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
+                    material.SetShaderParameter("schedule", 0);
+                    animatedSprite.Material = material;
+                }
+
+                //创建Collision
+                if (GetNodeOrNull("Collision") == null)
+                {
+                    var co = new CollisionShape2D();
+                    co.Name = "Collision";
+                    AddChild(co);
+                    co.Owner = owner;
+                }
+            }
+        }
+#endif
     }
 
     /// <summary>
@@ -1024,9 +1068,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         {
             AffiliationArea.RemoveItem(this);
         }
-        
-        //临时处理, 4.0 有bug, 不能提前销毁模板实例, 不然关闭游戏会报错!!!
-        _templateInstance.QueueFree();
     }
 
     /// <summary>
