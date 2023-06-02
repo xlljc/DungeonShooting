@@ -8,7 +8,7 @@ public partial class TestReadExcel : Node2D
 {
     public override void _Ready()
     {
-        string sourceFile = @"config/Weapon.xlsx";
+        string sourceFile = @"excel/Weapon.xlsx";
  
         IWorkbook workbook = new XSSFWorkbook(sourceFile);
         ISheet sheet1 = workbook.GetSheet("Sheet1");

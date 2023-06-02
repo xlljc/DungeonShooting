@@ -54,6 +54,8 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer5.L_Button.Instance.Pressed += GenerateUiManagerMethods;
         //创建地牢房间
         container.L_HBoxContainer6.L_Button.Instance.Pressed += GenerateDungeonRoom;
+        //导出excel表
+        container.L_HBoxContainer7.L_Button.Instance.Pressed += ExportExcel;
     }
 
     public override void OnHideUi()
@@ -73,6 +75,7 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer3.L_Button.Instance.Pressed -= OnCreateUI;
         container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
         container.L_HBoxContainer6.L_Button.Instance.Pressed -= GenerateDungeonRoom;
+        container.L_HBoxContainer7.L_Button.Instance.Pressed -= ExportExcel;
     }
 
     public override void Process(float delta)
@@ -380,5 +383,22 @@ public partial class EditorToolsPanel : EditorTools
                 
             }
         });
+    }
+
+    /// <summary>
+    /// 导出excel表
+    /// </summary>
+    private void ExportExcel()
+    {
+        if (ExcelGenerator.ExportExcel())
+        {
+            ShowTips("提示", "导出Excel表执行完成!");
+        }
+        else
+        {
+            ShowTips("错误", "导出Excel表执行失败! 前往控制台查看错误日志!");
+        }
+
+        ;
     }
 }
