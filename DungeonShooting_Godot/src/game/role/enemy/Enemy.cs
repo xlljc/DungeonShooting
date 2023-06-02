@@ -16,7 +16,6 @@ using Godot;
 /// <summary>
 /// 基础敌人
 /// </summary>
-[RegisterActivity(ActivityIdPrefix.Enemy + "0001", ResourcePath.prefab_role_Enemy_tscn)]
 public partial class Enemy : Role
 {
     /// <summary>

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/table_data_editor/src/table_data_editor/table_edit/cell/base_cell_element.gd" id="1_wjxc7"]
+
+[node name="base_cell_element" type="MarginContainer"]
+offset_right = 80.0
+offset_bottom = 32.0
+focus_mode = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+script = ExtResource("1_wjxc7")

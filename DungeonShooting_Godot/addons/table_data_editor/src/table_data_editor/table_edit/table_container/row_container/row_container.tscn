@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://dyhbjld6bhk1p"]
+
+[ext_resource type="Script" path="res://addons/table_data_editor/src/table_data_editor/table_edit/table_container/row_container/row_container.gd" id="1_hd2dr"]
+[ext_resource type="PackedScene" path="res://addons/table_data_editor/src/table_data_editor/table_edit/table_container/column_container/column_container.tscn" id="2_cbcfu"]
+
+[node name="row_container" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hd2dr")
+item = ExtResource("2_cbcfu")
+
+[node name="container" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0

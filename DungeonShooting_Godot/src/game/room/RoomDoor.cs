@@ -4,11 +4,6 @@ using Godot;
 /// <summary>
 /// 房间的门, 门有两种状态, 打开和关闭
 /// </summary>
-// [RegisterActivity(ActivityIdPrefix.Other + "0001", ResourcePath.prefab_map_RoomDoor_tscn)]
-[RegisterActivity(ActivityIdPrefix.Other + "door_n", ResourcePath.prefab_map_RoomDoor_N_tscn)]
-[RegisterActivity(ActivityIdPrefix.Other + "door_s", ResourcePath.prefab_map_RoomDoor_S_tscn)]
-[RegisterActivity(ActivityIdPrefix.Other + "door_w", ResourcePath.prefab_map_RoomDoor_W_tscn)]
-[RegisterActivity(ActivityIdPrefix.Other + "door_e", ResourcePath.prefab_map_RoomDoor_E_tscn)]
 public partial class RoomDoor : ActivityObject
 {
     /// <summary>

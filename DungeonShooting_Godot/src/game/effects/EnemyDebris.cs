@@ -2,7 +2,6 @@
 using System.Collections;
 using Godot;
 
-[RegisterActivity(ActivityIdPrefix.Effect + "0001", ResourcePath.prefab_effect_activityObject_EnemyDebris_tscn)]
 public partial class EnemyDebris : ActivityObject
 {
 

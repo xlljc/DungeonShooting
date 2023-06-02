@@ -3,9 +3,6 @@ using Godot;
 /// <summary>
 /// 普通的枪
 /// </summary>
-[RegisterWeapon(ActivityIdPrefix.Weapon + "0001", typeof(RifleAttribute))]
-[RegisterWeapon(ActivityIdPrefix.Weapon + "0003", typeof(PistolAttribute))]
-[RegisterWeapon(ActivityIdPrefix.Weapon + "0005", typeof(SniperRifleAttribute))]
 public partial class Gun : Weapon
 {
     //步枪属性数据

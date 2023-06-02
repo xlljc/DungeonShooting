@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://btcf0syabq2et"]
+
+[ext_resource type="Script" path="res://addons/script_comment_menu/sub_item/override/scene/script_method_list.gd" id="1_ao6ev"]
+[ext_resource type="PackedScene" uid="uid://dmiw7e671j5ox" path="res://addons/script_comment_menu/sub_item/override/scene/item_list.tscn" id="1_rynrx"]
+
+[node name="ScriptMethodList" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ao6ev")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+offset_right = 1024.0
+offset_bottom = 600.0
+
+[node name="ItemList" parent="ScrollContainer" instance=ExtResource("1_rynrx")]

@@ -3,8 +3,6 @@ using Godot;
 /// <summary>
 /// 子弹类
 /// </summary>
-[RegisterActivity(ActivityIdPrefix.Bullet + "0001", ResourcePath.prefab_weapon_bullet_Bullet1_tscn)]
-[RegisterActivity(ActivityIdPrefix.Bullet + "0002", ResourcePath.prefab_weapon_bullet_Bullet2_tscn)]
 public partial class Bullet : ActivityObject
 {
     /// <summary>

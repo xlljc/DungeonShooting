@@ -4,7 +4,6 @@ using Godot;
 /// <summary>
 /// 弹壳类
 /// </summary>
-[RegisterActivity(ActivityIdPrefix.Shell + "0001", ResourcePath.prefab_weapon_shell_ShellCase_tscn)]
 public partial class ShellCase : ActivityObject
 {
     public override void OnInit()

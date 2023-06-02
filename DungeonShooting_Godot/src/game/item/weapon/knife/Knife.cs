@@ -1,7 +1,6 @@
 
 using Godot;
 
-[RegisterWeapon(ActivityIdPrefix.Weapon + "0004", typeof(KnifeAttribute))]
 public partial class Knife : Weapon
 {
     private class KnifeAttribute : WeaponAttribute

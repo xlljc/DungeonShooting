@@ -1,6 +1,5 @@
 using Godot;
 
-[RegisterWeapon(ActivityIdPrefix.Weapon + "0002", typeof(ShotgunAttribute))]
 public partial class Shotgun : Weapon
 {
 

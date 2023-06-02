@@ -4,7 +4,6 @@ using Godot;
 /// <summary>
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
-[RegisterActivity(ActivityIdPrefix.Role + "0001", ResourcePath.prefab_role_Player_tscn)]
 public partial class Player : Role
 {
     /// <summary>

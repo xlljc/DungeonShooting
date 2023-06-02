@@ -1,6 +1,5 @@
 using Godot;
 
-[RegisterActivity(ActivityIdPrefix.Test + "0001", ResourcePath.prefab_test_TestActivity_tscn)]
 public partial class TestActivity : ActivityObject
 {
 	public override void OnInit()

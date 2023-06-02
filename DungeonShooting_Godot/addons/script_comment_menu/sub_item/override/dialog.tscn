@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cnx2ri54w1dpr"]
+
+[ext_resource type="Script" path="res://addons/script_comment_menu/sub_item/override/dialog.gd" id="1_isfs8"]
+[ext_resource type="PackedScene" uid="uid://btcf0syabq2et" path="res://addons/script_comment_menu/sub_item/override/scene/script_method_list.tscn" id="2_lxp0b"]
+
+[node name="Dialog" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_isfs8")
+metadata/_edit_lock_ = true
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+dialog_close_on_escape = false
+
+[node name="ScriptMethodList" parent="ConfirmationDialog" instance=ExtResource("2_lxp0b")]
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 636.0
+offset_bottom = 342.0
