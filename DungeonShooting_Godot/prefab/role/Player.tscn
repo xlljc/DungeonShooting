@@ -1,71 +1,71 @@
 [gd_scene load_steps=20 format=3 uid="uid://cp2uhtlb6h7k2"]
 
-[ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/Role.tscn" id="1"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_nvo1u"]
-[ext_resource type="Texture2D" uid="uid://bhwhhg2dfsr26" path="res://resource/sprite/role/role2.png" id="3_55mk2"]
+[ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/Role.tscn" id="1_4vjqs"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_dgp5f"]
+[ext_resource type="Texture2D" uid="uid://bhwhhg2dfsr26" path="res://resource/sprite/role/role2.png" id="3_i2g22"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vejn8"]
 resource_local_to_scene = true
-shader = ExtResource("2_nvo1u")
+shader = ExtResource("2_dgp5f")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0gb8j"]
 resource_local_to_scene = true
-shader = ExtResource("2_nvo1u")
+shader = ExtResource("2_dgp5f")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tmewn"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(0, 0, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dvg4a"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(0, 24, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kvuct"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(16, 24, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5op76"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(32, 24, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_helyc"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(48, 24, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_67mn8"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(48, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jeywq"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(32, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oycx8"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(16, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tjg1t"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(0, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2ltxw"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(0, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x1va1"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(16, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ic2p5"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(32, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j3hdu"]
-atlas = ExtResource("3_55mk2")
+atlas = ExtResource("3_i2g22")
 region = Rect2(48, 48, 16, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_3poqo"]
@@ -130,7 +130,7 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="Player" instance=ExtResource("1")]
+[node name="Player" instance=ExtResource("1_4vjqs")]
 collision_layer = 8
 collision_mask = 1
 

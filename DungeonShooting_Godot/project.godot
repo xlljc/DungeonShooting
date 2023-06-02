@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="DungeonShooting"
-run/main_scene="res://scene/Main.tscn"
+run/main_scene="res://scene/test/TestReadExcel.tscn"
 config/features=PackedStringArray("4.1", "C#")
 config/icon="res://icon.png"
 
@@ -32,7 +32,7 @@ project/assembly_name="DungeonShooting"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/dungeonShooting_plugin/plugin.cfg", "res://addons/script_comment_menu/plugin.cfg", "res://addons/table_data_editor/plugin.cfg")
+enabled=PackedStringArray("res://addons/dungeonShooting_plugin/plugin.cfg")
 
 [gui]
 

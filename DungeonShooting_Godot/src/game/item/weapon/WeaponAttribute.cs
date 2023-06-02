@@ -23,7 +23,7 @@ public class WeaponAttribute
     /// </summary>
     public string Icon = ResourcePath.resource_sprite_gun_gun1_png;
     /// <summary>
-    /// 动画序列帧
+    /// 动画序列帧资源名称
     /// </summary>
     public string SpriteFrames;
     /// <summary>

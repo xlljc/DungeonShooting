@@ -1,18 +1,18 @@
 [gd_scene load_steps=9 format=3 uid="uid://cyrcv2jdgr8cf"]
 
-[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_7dvg8"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_xadty"]
-[ext_resource type="Script" path="res://src/game/role/MountRotation.cs" id="3_wi3uj"]
+[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_vnmfw"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_mmtpy"]
+[ext_resource type="Script" path="res://src/game/role/MountRotation.cs" id="3_g6ktd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v2kfw"]
 resource_local_to_scene = true
-shader = ExtResource("2_xadty")
+shader = ExtResource("2_mmtpy")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yif6x"]
 resource_local_to_scene = true
-shader = ExtResource("2_xadty")
+shader = ExtResource("2_mmtpy")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
@@ -26,7 +26,7 @@ size = Vector2(12, 18)
 size = Vector2(10, 16.5)
 
 [node name="Role" type="Node"]
-script = ExtResource("1_7dvg8")
+script = ExtResource("1_vnmfw")
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1
@@ -64,4 +64,4 @@ shape = SubResource("RectangleShape2D_n68nu")
 
 [node name="MountPoint" type="Marker2D" parent="."]
 position = Vector2(1, -6)
-script = ExtResource("3_wi3uj")
+script = ExtResource("3_g6ktd")
