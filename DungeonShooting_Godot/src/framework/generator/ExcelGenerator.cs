@@ -1,20 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using Godot;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
 namespace Generator;
 
 public static class ExcelGenerator
 {
+    
+    private class MappingData
+    {
+        public string TypeStr;
+        public string TypeName;
+
+        public MappingData(string typeStr, string typeName)
+        {
+            TypeStr = typeStr;
+            TypeName = typeName;
+        }
+    }
+
+    private class ExcelData
+    {
+        public string TableName;
+        public string OutCode;
+        public Dictionary<string, MappingData> ColumnData = new Dictionary<string, MappingData>();
+        public Dictionary<string, Type> ColumnType = new Dictionary<string, Type>();
+        public List<Dictionary<string, object>> DataList = new List<Dictionary<string, object>>();
+    }
+    
     public static bool ExportExcel()
     {
+        // var config = new JsonSerializerOptions();
+        // config.WriteIndented = true;
+        // var text = JsonSerializer.Serialize(dictionary, config);
         GD.Print("准备导出excel表...");
-
         try
         {
+            var excelDataList = new List<ExcelData>();
+            
             var directoryInfo = new DirectoryInfo(GameConfig.ExcelFilePath);
             if (directoryInfo.Exists)
             {
@@ -24,9 +52,21 @@ public static class ExcelGenerator
                     if (fileInfo.Extension == ".xlsx")
                     {
                         GD.Print("excel表: " + fileInfo.FullName);
-                        ReadExcel(fileInfo.FullName);
+                        excelDataList.Add(ReadExcel(fileInfo.FullName));
                     }
                 }
+            }
+            
+            if (Directory.Exists("src/config"))
+            {
+                Directory.Delete("src/config", true);
+                Directory.CreateDirectory("src/config");
+            }
+            Directory.CreateDirectory("src/config");
+            
+            foreach (var excelData in excelDataList)
+            {
+                File.WriteAllText("src/config/" + excelData.TableName + ".cs", excelData.OutCode);
             }
         }
         catch (Exception e)
@@ -38,81 +78,144 @@ public static class ExcelGenerator
         return true;
     }
 
-    private static void ReadExcel(string excelPath)
+    private static ExcelData ReadExcel(string excelPath)
     {
-        var columnList = new HashSet<string>();
-        
+        var excelData = new ExcelData();
+        //文件名称
         var fileName = Path.GetFileNameWithoutExtension(excelPath).FirstToUpper();
+        excelData.TableName = fileName;
+        //输出代码
         var outStr = $"using System.Text.Json.Serialization;\n";
         outStr += $"using System.Collections.Generic;\n\n";
         outStr += $"namespace Config;\n\n";
         outStr += $"public class {fileName}\n{{\n";
         var sourceFile = excelPath;
 
+        //行数
+        var rowCount = -1;
+        //列数
+        var columnCount = -1;
+        
         //加载表数据
         var workbook = new XSSFWorkbook(sourceFile);
         using (workbook)
         {
             var sheet1 = workbook.GetSheet("Sheet1");
-
-            //解析表
-            var rowCount = sheet1.LastRowNum;
-
+            rowCount = sheet1.LastRowNum;
             //先解析表中的列名, 注释, 类型
-            var columnCount = -1;
             var names = sheet1.GetRow(0);
             var descriptions = sheet1.GetRow(1);
             var types = sheet1.GetRow(2);
             foreach (var cell in names)
             {
-                var value = cell.StringCellValue;
-                if (string.IsNullOrEmpty(value))
+                //字段名称
+                var field = GetCellStringValue(cell);
+                if (string.IsNullOrEmpty(field))
                 {
+                    //到达最后一列了
                     columnCount = cell.ColumnIndex;
                     break;
                 }
-
-                value = value.FirstToUpper();
-                if (!columnList.Add(value))
-                {
-                    throw new Exception($"表'{fileName}'中存在相同名称的列: '{value}'!");
-                }
+                field = field.FirstToUpper();
 
                 outStr += $"    /// <summary>\n";
                 var descriptionCell = descriptions.GetCell(cell.ColumnIndex);
-                var description = descriptionCell.StringCellValue.Replace("\n", " <br/>\n    /// ");
-                var stringCellValue = types.GetCell(cell.ColumnIndex).StringCellValue;
-                string type;
+                //描述
+                string description;
+                if (descriptionCell != null)
+                {
+                    description = GetCellStringValue(descriptionCell).Replace("\n", " <br/>\n    /// ");
+                }
+                else
+                {
+                    description = "";
+                }
+                //类型
+                var typeString = GetCellStringValue(types.GetCell(cell.ColumnIndex));
+                if (string.IsNullOrEmpty(typeString))
+                {
+                    throw new Exception($"表'{fileName}'中'{field}'这一列类型为空!");
+                }
+                
+                //尝试解析类型
+                MappingData mappingData;
                 try
                 {
-                    type = ConvertToType(stringCellValue.Replace(" ", ""));
+                    mappingData = ConvertToType(typeString.Replace(" ", ""));
                 }
                 catch (Exception e)
                 {
-                    throw new Exception($"表'{fileName}'中'{value}'这一列类型描述语法错误: {stringCellValue}");
+                    GD.PrintErr(e.Message);
+                    throw new Exception($"表'{fileName}'中'{field}'这一列类型描述语法错误: {typeString}");
+                }
+                
+                if (!excelData.ColumnData.TryAdd(field, mappingData))
+                {
+                    throw new Exception($"表'{fileName}'中存在相同名称的列: '{field}'!");
                 }
                 outStr += $"    /// {description}\n";
                 outStr += $"    /// </summary>\n";
                 outStr += $"    [JsonInclude]\n";
-                outStr += $"    public {type} {value} {{ get; private set; }}\n\n";
+                outStr += $"    public {mappingData.TypeStr} {field} {{ get; private set; }}\n\n";
             }
         
             outStr += "}";
+            
+            //解析字段类型
+            foreach (var kv in excelData.ColumnData)
+            {
+                var typeName = kv.Value.TypeName;
+                var type = Type.GetType(typeName);
+                if (type == null)
+                {
+                    throw new Exception($"表'{fileName}'中'{kv.Key}'这一列类型未知! " + kv.Value.TypeStr);
+                }
+                excelData.ColumnType.Add(kv.Key, type);
+            }
+            GD.Print("rowCount: " + rowCount);
+            //解析数据
+            for (int i = 3; i <= rowCount; i++)
+            {
+                var row = sheet1.GetRow(i);
+                for (int j = 0; j < columnCount; j++)
+                {
+                    var cell = row.GetCell(j);
+                    // if ()
+                    // {
+                    //     
+                    // }
+                }
+            }
         }
 
-        if (!Directory.Exists("src/config"))
-        {
-            Directory.CreateDirectory("src/config");
-        }
-
-        File.WriteAllText("src/config/" + fileName + ".cs", outStr);
+        excelData.OutCode = outStr;
+        return excelData;
     }
 
-    private static string ConvertToType(string str)
+    private static string GetCellStringValue(ICell cell)
+    {
+        switch (cell.CellType)
+        {
+            case CellType.Numeric:
+                return cell.NumericCellValue.ToString();
+            case CellType.String:
+                return cell.StringCellValue;
+            case CellType.Formula:
+                return cell.CellFormula;
+            case CellType.Boolean:
+                return cell.BooleanCellValue ? "true" : "false";
+        }
+
+        return "";
+    }
+    
+    private static MappingData ConvertToType(string str)
     {
         if (Regex.IsMatch(str, "^\\w+$"))
         {
-            return TypeMapping(str);
+            var typeStr = TypeStrMapping(str);
+            var typeName = TypeNameMapping(str);
+            return new MappingData(typeStr, typeName);
         }
         else if (str.StartsWith('{'))
         {
@@ -122,17 +225,30 @@ public static class ExcelGenerator
             {
                 throw new Exception("类型描述语法错误!");
             }
-            return "Dictionary<" + ConvertToType(tempStr.Substring(0, index)) + ", " + ConvertToType(tempStr.Substring(index + 1)) + ">";
+
+            var keyStr = tempStr.Substring(0, index);
+            if (!IsBaseType(keyStr))
+            {
+                throw new Exception($"字典key类型必须是基础类型!");
+            }
+            var type1 = ConvertToType(keyStr);
+            var type2 = ConvertToType(tempStr.Substring(index + 1));
+            var typeStr = $"Dictionary<{type1.TypeStr}, {type2.TypeStr}>";
+            var typeName = $"System.Collections.Generic.Dictionary`2[[{type1.TypeName}],[{type2.TypeName}]]";
+            return new MappingData(typeStr, typeName);
         }
         else if (str.StartsWith('['))
         {
             var tempStr = str.Substring(1, str.Length - 2);
-            return ConvertToType(tempStr) + "[]";
+            var typeData = ConvertToType(tempStr);
+            var typeStr = typeData.TypeStr + "[]";
+            var typeName = typeData.TypeName + "[]";
+            return new MappingData(typeStr, typeName);
         }
         throw new Exception("类型描述语法错误!");
     }
     
-    private static string TypeMapping(string typeName)
+    private static string TypeStrMapping(string typeName)
     {
         switch (typeName)
         {
@@ -143,5 +259,53 @@ public static class ExcelGenerator
         }
 
         return typeName;
+    }
+
+    private static string TypeNameMapping(string typeName)
+    {
+        switch (typeName)
+        {
+            case "bool":
+            case "boolean": return typeof(bool).FullName;
+            case "byte": return typeof(byte).FullName;
+            case "sbyte": return typeof(sbyte).FullName;
+            case "short": return typeof(short).FullName;
+            case "ushort": return typeof(ushort).FullName;
+            case "int": return typeof(int).FullName;
+            case "uint": return typeof(uint).FullName;
+            case "long": return typeof(long).FullName;
+            case "ulong": return typeof(ulong).FullName;
+            case "string": return typeof(string).FullName;
+            case "float": return typeof(float).FullName;
+            case "double": return typeof(double).FullName;
+            case "vector2": return typeof(SerializeVector2).FullName;
+            case "vector3": return typeof(SerializeVector3).FullName;
+            case "color": return typeof(SerializeColor).FullName;
+        }
+
+        return typeName;
+    }
+
+    private static bool IsBaseType(string typeName)
+    {
+        switch (typeName)
+        {
+            case "bool":
+            case "boolean":
+            case "byte":
+            case "sbyte":
+            case "short":
+            case "ushort":
+            case "int":
+            case "uint":
+            case "long":
+            case "ulong":
+            case "string":
+            case "float":
+            case "double":
+                return true;
+        }
+
+        return false;
     }
 }
