@@ -1,6 +1,6 @@
 namespace Config;
 
-public class Weapon 
+public class Weapon
 {
     /// <summary>
     /// 物体唯一id <br/>
@@ -209,6 +209,52 @@ public class Weapon
     /// <summary>
     /// 投抛状态下物体碰撞器大小
     /// </summary>
-    public Godot.Vector2 ThrowCollisionSize;
+    public SerializeVector2 ThrowCollisionSize;
 
+    public Weapon Clone()
+    {
+        var inst = new Weapon();
+        inst.Id = Id;
+        inst.Prefab = Prefab;
+        inst.Weight = Weight;
+        inst.Name = Name;
+        inst.Icon = Icon;
+        inst.WeightType = WeightType;
+        inst.ContinuousShoot = ContinuousShoot;
+        inst.AmmoCapacity = AmmoCapacity;
+        inst.MaxAmmoCapacity = MaxAmmoCapacity;
+        inst.StandbyAmmoCapacity = StandbyAmmoCapacity;
+        inst.ReloadTime = ReloadTime;
+        inst.AloneReload = AloneReload;
+        inst.AloneReloadCount = AloneReloadCount;
+        inst.AloneReloadCanShoot = AloneReloadCanShoot;
+        inst.LooseShoot = LooseShoot;
+        inst.MinChargeTime = MinChargeTime;
+        inst.MinContinuousCount = MinContinuousCount;
+        inst.MaxContinuousCount = MaxContinuousCount;
+        inst.TriggerInterval = TriggerInterval;
+        inst.StartFiringSpeed = StartFiringSpeed;
+        inst.FinalFiringSpeed = FinalFiringSpeed;
+        inst.FiringSpeedAddSpeed = FiringSpeedAddSpeed;
+        inst.FiringSpeedBackSpeed = FiringSpeedBackSpeed;
+        inst.MinFireBulletCount = MinFireBulletCount;
+        inst.MaxFireBulletCount = MaxFireBulletCount;
+        inst.DelayedTime = DelayedTime;
+        inst.StartScatteringRange = StartScatteringRange;
+        inst.FinalScatteringRange = FinalScatteringRange;
+        inst.ScatteringRangeAddValue = ScatteringRangeAddValue;
+        inst.ScatteringRangeBackSpeed = ScatteringRangeBackSpeed;
+        inst.ScatteringRangeBackTime = ScatteringRangeBackTime;
+        inst.MaxDistance = MaxDistance;
+        inst.MinDistance = MinDistance;
+        inst.MaxBacklash = MaxBacklash;
+        inst.MinBacklash = MinBacklash;
+        inst.BacklashRegressionSpeed = BacklashRegressionSpeed;
+        inst.UpliftAngle = UpliftAngle;
+        inst.DefaultAngle = DefaultAngle;
+        inst.UpliftAngleRestore = UpliftAngleRestore;
+        inst.BulletId = BulletId;
+        inst.ThrowCollisionSize = ThrowCollisionSize;
+        return inst;
+    }
 }

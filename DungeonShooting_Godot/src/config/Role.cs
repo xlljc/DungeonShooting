@@ -1,6 +1,6 @@
 namespace Config;
 
-public class Role 
+public class Role
 {
     /// <summary>
     /// 物体唯一id <br/>
@@ -8,4 +8,10 @@ public class Role
     /// </summary>
     public string Id;
 
+    public Role Clone()
+    {
+        var inst = new Role();
+        inst.Id = Id;
+        return inst;
+    }
 }
