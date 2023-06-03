@@ -28,16 +28,14 @@ public static class ExcelGenerator
     {
         public string TableName;
         public string OutCode;
-        public Dictionary<string, MappingData> ColumnData = new Dictionary<string, MappingData>();
+        public List<string> ColumnNames = new List<string>();
+        public Dictionary<string, MappingData> ColumnMappingData = new Dictionary<string, MappingData>();
         public Dictionary<string, Type> ColumnType = new Dictionary<string, Type>();
         public List<Dictionary<string, object>> DataList = new List<Dictionary<string, object>>();
     }
     
     public static bool ExportExcel()
     {
-        // var config = new JsonSerializerOptions();
-        // config.WriteIndented = true;
-        // var text = JsonSerializer.Serialize(dictionary, config);
         GD.Print("准备导出excel表...");
         try
         {
@@ -60,13 +58,21 @@ public static class ExcelGenerator
             if (Directory.Exists("src/config"))
             {
                 Directory.Delete("src/config", true);
-                Directory.CreateDirectory("src/config");
             }
+            if (Directory.Exists("resource/config"))
+            {
+                Directory.Delete("resource/config", true);
+            }
+            Directory.CreateDirectory("resource/config");
             Directory.CreateDirectory("src/config");
             
+            //保存配置和代码
             foreach (var excelData in excelDataList)
             {
                 File.WriteAllText("src/config/" + excelData.TableName + ".cs", excelData.OutCode);
+                var config = new JsonSerializerOptions();
+                config.WriteIndented = true;
+                File.WriteAllText("resource/config/" + excelData.TableName + ".json", JsonSerializer.Serialize(excelData.DataList, config));
             }
         }
         catch (Exception e)
@@ -106,6 +112,7 @@ public static class ExcelGenerator
             var names = sheet1.GetRow(0);
             var descriptions = sheet1.GetRow(1);
             var types = sheet1.GetRow(2);
+            columnCount = names.LastCellNum;
             foreach (var cell in names)
             {
                 //字段名称
@@ -117,6 +124,7 @@ public static class ExcelGenerator
                     break;
                 }
                 field = field.FirstToUpper();
+                excelData.ColumnNames.Add(field);
 
                 outStr += $"    /// <summary>\n";
                 var descriptionCell = descriptions.GetCell(cell.ColumnIndex);
@@ -145,11 +153,11 @@ public static class ExcelGenerator
                 }
                 catch (Exception e)
                 {
-                    GD.PrintErr(e.Message);
+                    GD.PrintErr(e.ToString());
                     throw new Exception($"表'{fileName}'中'{field}'这一列类型描述语法错误: {typeString}");
                 }
                 
-                if (!excelData.ColumnData.TryAdd(field, mappingData))
+                if (!excelData.ColumnMappingData.TryAdd(field, mappingData))
                 {
                     throw new Exception($"表'{fileName}'中存在相同名称的列: '{field}'!");
                 }
@@ -162,7 +170,7 @@ public static class ExcelGenerator
             outStr += "}";
             
             //解析字段类型
-            foreach (var kv in excelData.ColumnData)
+            foreach (var kv in excelData.ColumnMappingData)
             {
                 var typeName = kv.Value.TypeName;
                 var type = Type.GetType(typeName);
@@ -172,18 +180,90 @@ public static class ExcelGenerator
                 }
                 excelData.ColumnType.Add(kv.Key, type);
             }
-            GD.Print("rowCount: " + rowCount);
+
             //解析数据
             for (int i = 3; i <= rowCount; i++)
             {
+                Dictionary<string, object> data = null;
                 var row = sheet1.GetRow(i);
                 for (int j = 0; j < columnCount; j++)
                 {
                     var cell = row.GetCell(j);
-                    // if ()
-                    // {
-                    //     
-                    // }
+                    var strValue = GetCellStringValue(cell);
+                    //如果这一行的第一列数据为空, 则跳过这一行
+                    if (j == 0 && string.IsNullOrEmpty(strValue))
+                    {
+                        break;
+                    }
+                    else if (data == null)
+                    {
+                        data = new Dictionary<string, object>();
+                        excelData.DataList.Add(data);
+                    }
+
+                    var fieldName = excelData.ColumnNames[j];
+                    var mappingData = excelData.ColumnMappingData[fieldName];
+                    try
+                    {
+                        switch (mappingData.TypeStr)
+                        {
+                            case "bool":
+                            case "boolean":
+                                data.Add(fieldName, GetCellBooleanValue(cell));
+                                break;
+                            case "byte":
+                                data.Add(fieldName, Convert.ToByte(GetCellNumberValue(cell)));
+                                break;
+                            case "sbyte":
+                                data.Add(fieldName, Convert.ToSByte(GetCellNumberValue(cell)));
+                                break;
+                            case "short":
+                                data.Add(fieldName, Convert.ToInt16(GetCellNumberValue(cell)));
+                                break;
+                            case "ushort":
+                                data.Add(fieldName, Convert.ToUInt16(GetCellNumberValue(cell)));
+                                break;
+                            case "int":
+                                data.Add(fieldName, Convert.ToInt32(GetCellNumberValue(cell)));
+                                break;
+                            case "uint":
+                                data.Add(fieldName, Convert.ToUInt32(GetCellNumberValue(cell)));
+                                break;
+                            case "long":
+                                data.Add(fieldName, Convert.ToInt64(GetCellNumberValue(cell)));
+                                break;
+                            case "ulong":
+                                data.Add(fieldName, Convert.ToUInt64(GetCellNumberValue(cell)));
+                                break;
+                            case "float":
+                                data.Add(fieldName, Convert.ToSingle(GetCellNumberValue(cell)));
+                                break;
+                            case "double":
+                                data.Add(fieldName, GetCellNumberValue(cell));
+                                break;
+                            case "string":
+                                data.Add(fieldName, GetCellStringValue(cell));
+                                break;
+                            default:
+                            {
+                                var cellStringValue = GetCellStringValue(cell);
+                                if (cellStringValue.Length == 0)
+                                {
+                                    data.Add(fieldName, null);
+                                }
+                                else
+                                {
+                                    data.Add(fieldName, JsonSerializer.Deserialize(cellStringValue, excelData.ColumnType[fieldName]));
+                                }
+                            }
+                                break;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        GD.PrintErr(e.ToString());
+                        throw new Exception($"解析表'{fileName}'第'{i + 1}'行第'{j + 1}'列数据时发生异常");
+                    }
                 }
             }
         }
@@ -194,6 +274,10 @@ public static class ExcelGenerator
 
     private static string GetCellStringValue(ICell cell)
     {
+        if (cell == null)
+        {
+            return "";
+        }
         switch (cell.CellType)
         {
             case CellType.Numeric:
@@ -207,6 +291,26 @@ public static class ExcelGenerator
         }
 
         return "";
+    }
+
+    private static double GetCellNumberValue(ICell cell)
+    {
+        if (cell == null)
+        {
+            return 0;
+        }
+
+        return cell.NumericCellValue;
+    }
+
+    private static bool GetCellBooleanValue(ICell cell)
+    {
+        if (cell == null)
+        {
+            return false;
+        }
+
+        return cell.BooleanCellValue;
     }
     
     private static MappingData ConvertToType(string str)

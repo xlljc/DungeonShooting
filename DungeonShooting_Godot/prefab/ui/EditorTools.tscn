@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://kw3o772vpne"]
 
-[ext_resource type="Script" path="res://src/game/ui/editorTools/EditorToolsPanel.cs" id="1_hkoia"]
+[ext_resource type="Script" path="res://src/game/ui/editorTools/EditorToolsPanel.cs" id="1_otnjl"]
 
 [node name="EditorTools" type="Control"]
 layout_mode = 3
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_hkoia")
+script = ExtResource("1_otnjl")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
