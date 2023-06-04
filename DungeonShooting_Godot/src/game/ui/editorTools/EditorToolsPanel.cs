@@ -390,15 +390,7 @@ public partial class EditorToolsPanel : EditorTools
     /// </summary>
     private void ExportExcel()
     {
-        if (ExcelGenerator.ExportExcel())
-        {
-            ShowTips("提示", "导出Excel表执行完成!");
-        }
-        else
-        {
-            ShowTips("错误", "导出Excel表执行失败! 前往控制台查看错误日志!");
-        }
-
-        ;
+        ExcelGenerator.ExportExcel();
+        ShowTips("提示", "已启动导表程序, 注意查看控制台信息!");
     }
 }

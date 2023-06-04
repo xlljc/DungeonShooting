@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json;
+using Config;
 using Godot;
 
 public partial class GameApplication : Node2D
@@ -88,8 +89,10 @@ public partial class GameApplication : Node2D
 	{
 		Instance = this;
 		
+		//初始化配置表
+		ExcelConfig.Init();
+		//初始化房间配置数据
 		InitRoomConfig();
-
 		//初始化 ActivityObject
 		ActivityObject.InitActivity();
 		
@@ -100,6 +103,7 @@ public partial class GameApplication : Node2D
 	
 	public override void _EnterTree()
 	{
+		return;
 		//随机化种子
 		//GD.Randomize();
 		//固定帧率

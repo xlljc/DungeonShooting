@@ -72,9 +72,4 @@ public static class GameConfig
     /// 配置层级的自定义数据名称
     /// </summary>
     public const string CustomTileLayerName = "TileLayer";
-
-    /// <summary>
-    /// excel配置文件存放路径
-    /// </summary>
-    public const string ExcelFilePath = "excel/";
 }
