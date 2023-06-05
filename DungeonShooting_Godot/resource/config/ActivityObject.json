@@ -1,0 +1,7 @@
+[
+  {
+    "Id": "role0001",
+    "Type": 3,
+    "Prefab": "res://prefab/role/Player.tscn"
+  }
+]

@@ -8,13 +8,13 @@ namespace Config;
 public static partial class ExcelConfig
 {
     /// <summary>
-    /// Role.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// ActivityObject.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
-    public static List<Role> Role_List { get; private set; }
+    public static List<ActivityObject> ActivityObject_List { get; private set; }
     /// <summary>
-    /// Role.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// ActivityObject.xlsx表数据集合, 里 Map 形式存储, key 为 Id
     /// </summary>
-    public static Dictionary<string, Role> Role_Map { get; private set; }
+    public static Dictionary<string, ActivityObject> ActivityObject_Map { get; private set; }
 
     /// <summary>
     /// Weapon.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
@@ -35,25 +35,25 @@ public static partial class ExcelConfig
         if (_init) return;
         _init = true;
 
-        _InitRoleConfig();
+        _InitActivityObjectConfig();
         _InitWeaponConfig();
     }
-    private static void _InitRoleConfig()
+    private static void _InitActivityObjectConfig()
     {
         try
         {
-            var text = _ReadConfigAsText("res://resource/config/Role.json");
-            Role_List = JsonSerializer.Deserialize<List<Role>>(text);
-            Role_Map = new Dictionary<string, Role>();
-            foreach (var item in Role_List)
+            var text = _ReadConfigAsText("res://resource/config/ActivityObject.json");
+            ActivityObject_List = JsonSerializer.Deserialize<List<ActivityObject>>(text);
+            ActivityObject_Map = new Dictionary<string, ActivityObject>();
+            foreach (var item in ActivityObject_List)
             {
-                Role_Map.Add(item.Id, item);
+                ActivityObject_Map.Add(item.Id, item);
             }
         }
         catch (Exception e)
         {
             GD.PrintErr(e.ToString());
-            throw new Exception("初始化表'Role'失败!");
+            throw new Exception("初始化表'ActivityObject'失败!");
         }
     }
     private static void _InitWeaponConfig()

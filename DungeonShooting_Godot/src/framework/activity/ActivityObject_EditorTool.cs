@@ -1,5 +1,4 @@
 
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -90,8 +89,44 @@ public partial class ActivityObject
                     }
                 }
             }
-            foreach (var propertyInfo in propertyInfoList)
+
+            var tempList = new List<PropertyInfo>();
+            Type tempType = null;
+            var index = -1;
+            for (int i = propertyInfoList.Count - 1; i >= 0; i--)
             {
+                var item = propertyInfoList[i];
+                if (tempType != item.DeclaringType || i == 0)
+                {
+                    if (tempType == null)
+                    {
+                        index = i;
+                    }
+                    else
+                    {
+                        int j;
+                        if (i == 0)
+                        {
+                            j = i;
+                        }
+                        else
+                        {
+                            j = i + 1;
+                        }
+                        for (; j <= index; j++)
+                        {
+                            tempList.Add(propertyInfoList[j]);
+                        }
+
+                        index = i;
+                    }
+                    tempType = item.DeclaringType;
+                }
+            }
+            
+            foreach (var propertyInfo in tempList)
+            {
+                GD.Print("propertyInfo2: " + propertyInfo.Name);
                 var value = propertyInfo.GetValue(this);
                 if (value == null || ((Node)value).GetParent() == null)
                 {

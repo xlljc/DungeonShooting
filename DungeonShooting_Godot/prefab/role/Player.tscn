@@ -1,71 +1,72 @@
-[gd_scene load_steps=20 format=3 uid="uid://cp2uhtlb6h7k2"]
+[gd_scene load_steps=24 format=3 uid="uid://cp2uhtlb6h7k2"]
 
-[ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/Role.tscn" id="1_4vjqs"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_dgp5f"]
-[ext_resource type="Texture2D" uid="uid://bhwhhg2dfsr26" path="res://resource/sprite/role/role2.png" id="3_i2g22"]
+[ext_resource type="Script" path="res://src/game/role/Player.cs" id="1_sq1r0"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_v6n5s"]
+[ext_resource type="Texture2D" uid="uid://bhwhhg2dfsr26" path="res://resource/sprite/role/role2.png" id="3_vci0q"]
+[ext_resource type="Script" path="res://src/game/role/MountRotation.cs" id="4_uh4x0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vejn8"]
 resource_local_to_scene = true
-shader = ExtResource("2_dgp5f")
+shader = ExtResource("2_v6n5s")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0gb8j"]
 resource_local_to_scene = true
-shader = ExtResource("2_dgp5f")
+shader = ExtResource("2_v6n5s")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tmewn"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(0, 0, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dvg4a"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(0, 24, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kvuct"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(16, 24, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5op76"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(32, 24, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_helyc"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(48, 24, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_67mn8"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(48, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jeywq"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(32, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oycx8"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(16, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tjg1t"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(0, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2ltxw"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(0, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x1va1"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(16, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ic2p5"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(32, 48, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j3hdu"]
-atlas = ExtResource("3_i2g22")
+atlas = ExtResource("3_vci0q")
 region = Rect2(48, 48, 16, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_3poqo"]
@@ -130,13 +131,60 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="Player" instance=ExtResource("1_4vjqs")]
-collision_layer = 8
-collision_mask = 1
+[sub_resource type="CircleShape2D" id="CircleShape2D_5pj80"]
+radius = 4.0
 
-[node name="ShadowSprite" parent="." index="0"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1eja2"]
+size = Vector2(12, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n68nu"]
+size = Vector2(10, 16.5)
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("HurtArea", "MountPoint", "BackMountPoint", "InteractiveArea", "ShadowSprite", "AnimatedSprite", "Collision")]
+script = ExtResource("1_sq1r0")
+HurtArea = NodePath("HurtArea")
+MountPoint = NodePath("MountPoint")
+BackMountPoint = NodePath("BackMountPoint")
+InteractiveArea = NodePath("InteractiveArea")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+z_index = -1
 material = SubResource("ShaderMaterial_vejn8")
 
-[node name="AnimatedSprite" parent="." index="2"]
+[node name="BackMountPoint" type="Marker2D" parent="."]
+position = Vector2(0, -12)
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_0gb8j")
+position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_3poqo")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_5pj80")
+
+[node name="HurtArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtArea"]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_1eja2")
+
+[node name="InteractiveArea" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="Collision" type="CollisionShape2D" parent="InteractiveArea"]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_n68nu")
+
+[node name="MountPoint" type="Marker2D" parent="."]
+position = Vector2(1, -6)
+script = ExtResource("4_uh4x0")

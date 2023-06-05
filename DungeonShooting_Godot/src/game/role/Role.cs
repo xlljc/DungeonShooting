@@ -19,7 +19,8 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 伤害区域
     /// </summary>
-    public Area2D HurtArea { get; private set; }
+    [Export, ExportFillNode]
+    public Area2D HurtArea { get; set; }
 
     /// <summary>
     /// 移动速度
@@ -49,16 +50,19 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 武器挂载点
     /// </summary>
-    public MountRotation MountPoint { get; private set; }
+    [Export, ExportFillNode]
+    public MountRotation MountPoint { get; set; }
     /// <summary>
     /// 背后武器的挂载点
     /// </summary>
-    public Marker2D BackMountPoint { get; private set; }
+    [Export, ExportFillNode]
+    public Marker2D BackMountPoint { get; set; }
 
     /// <summary>
     /// 互动碰撞区域
     /// </summary>
-    public Area2D InteractiveArea { get; private set; }
+    [Export, ExportFillNode]
+    public Area2D InteractiveArea { get; set; }
     
     /// <summary>
     /// 脸的朝向
@@ -214,18 +218,14 @@ public abstract partial class Role : ActivityObject
     {
         Holster = new Holster(this);
         _startScale = Scale;
-        MountPoint = GetNode<MountRotation>("MountPoint");
         MountPoint.Master = this;
-        BackMountPoint = GetNode<Marker2D>("BackMountPoint");
-
-        HurtArea = GetNode<Area2D>("HurtArea");
+        
         HurtArea.CollisionLayer = CollisionLayer;
         HurtArea.CollisionMask = 0;
         
         Face = FaceDirection.Right;
 
         //连接互动物体信号
-        InteractiveArea = GetNode<Area2D>("InteractiveArea");
         InteractiveArea.BodyEntered += _OnPropsEnter;
         InteractiveArea.BodyExited += _OnPropsExit;
     }

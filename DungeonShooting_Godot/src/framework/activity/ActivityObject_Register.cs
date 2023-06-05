@@ -1,11 +1,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Godot;
 
 public partial class ActivityObject
 {
+    //负责存放所有注册对象数据
+    private static Dictionary<string, string> _activityRegisterMap = new Dictionary<string, string>();
     private static bool _initState = false;
 
     /// <summary>
@@ -19,7 +20,7 @@ public partial class ActivityObject
         }
 
         _initState = true;
-
+        _InitRegister();
     }
 
     /// <summary>
@@ -27,18 +28,19 @@ public partial class ActivityObject
     /// </summary>
     public static ActivityObject Create(string itemId)
     {
-        // var world = GameApplication.Instance.World;
-        // if (world == null)
-        // {
-        //     throw new Exception("实例化 ActivityObject 前请先调用 'GameApplication.Instance.CreateNewWorld()' 初始化 World 对象");
-        // }
-        // if (_activityRegisterMap.TryGetValue(itemId, out var item))
-        // {
-        //     var instance = item.CallBack();
-        //     instance._InitNode(item.RegisterActivity.ItemId, item.RegisterActivity.PrefabPath, world);
-        //     item.RegisterActivity.CustomHandler(instance);
-        //     return instance;
-        // }
+        var world = GameApplication.Instance.World;
+        if (world == null)
+        {
+            throw new Exception("实例化 ActivityObject 前请先调用 'GameApplication.Instance.CreateNewWorld()' 初始化 World 对象");
+        }
+
+        if (_activityRegisterMap.TryGetValue(itemId, out var path))
+        {
+            var instance = ResourceManager.LoadAndInstantiate<ActivityObject>(path);
+            instance._InitNode(itemId, world);
+            return instance;
+        }
+        GD.PrintErr("创建实例失败, 未找到id为'" + itemId + "'的物体!");
         return null;
     }
 
@@ -52,7 +54,6 @@ public partial class ActivityObject
         {
             return (T)instance;
         }
-        GD.PrintErr("创建实例失败, 未找到id为'" + itemId + "'的物体!");
         return null;
     }
 }

@@ -127,7 +127,7 @@ public partial class GameApplication : Node2D
 		DungeonManager.Name = "DungeonManager";
 		SceneRoot.AddChild(DungeonManager);
 		//打开主菜单Ui
-		//UiManager.Open_Main();
+		UiManager.Open_Main();
 	}
 
 	public override void _Process(double delta)
