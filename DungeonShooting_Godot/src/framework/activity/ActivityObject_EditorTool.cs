@@ -126,7 +126,6 @@ public partial class ActivityObject
             
             foreach (var propertyInfo in tempList)
             {
-                GD.Print("propertyInfo2: " + propertyInfo.Name);
                 var value = propertyInfo.GetValue(this);
                 if (value == null || ((Node)value).GetParent() == null)
                 {

@@ -1,17 +1,17 @@
-[gd_scene load_steps=9 format=3 uid="uid://cxltmhhp4rbyk"]
+[gd_scene load_steps=9 format=3 uid="uid://byy386hv6bko0"]
 
-[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_76n4k"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_qy88l"]
+[ext_resource type="Script" path="res://src/game/item/weapon/gun/Gun.cs" id="1_0ildu"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_yhdim"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
 resource_local_to_scene = true
-shader = ExtResource("2_qy88l")
+shader = ExtResource("2_yhdim")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
 resource_local_to_scene = true
-shader = ExtResource("2_qy88l")
+shader = ExtResource("2_yhdim")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
@@ -56,9 +56,15 @@ _data = {
 "floodlight": SubResource("Animation_3piau")
 }
 
-[node name="Weapon" type="Node"]
-script = ExtResource("1_76n4k")
+[node name="Weapon0001" type="CharacterBody2D" node_paths=PackedStringArray("FirePoint", "ShellPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 4
+script = ExtResource("1_0ildu")
+FirePoint = NodePath("FirePoint")
+ShellPoint = NodePath("ShellPoint")
+AnimationPlayer = NodePath("AnimationPlayer")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1

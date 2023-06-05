@@ -98,7 +98,7 @@ public partial class GameApplication : Node2D
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = "testGroup";
-		DungeonConfig.RoomCount = 20;
+		DungeonConfig.RoomCount = 0;
 	}
 	
 	public override void _EnterTree()

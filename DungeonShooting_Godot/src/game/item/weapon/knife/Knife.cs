@@ -1,6 +1,7 @@
 
 using Godot;
 
+[Tool, GlobalClass]
 public partial class Knife : Weapon
 {
     private class KnifeAttribute : WeaponAttribute

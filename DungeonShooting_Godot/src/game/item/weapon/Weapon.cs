@@ -42,12 +42,14 @@ public abstract partial class Weapon : ActivityObject
     /// <summary>
     /// 武器管的开火点
     /// </summary>
-    public Marker2D FirePoint { get; private set; }
+    [Export, ExportFillNode]
+    public Marker2D FirePoint { get; set; }
 
     /// <summary>
     /// 弹壳抛出的点
     /// </summary>
-    public Marker2D ShellPoint { get; private set; }
+    [Export, ExportFillNode]
+    public Marker2D ShellPoint { get; set; }
 
     /// <summary>
     /// 武器的当前散射半径
@@ -101,7 +103,8 @@ public abstract partial class Weapon : ActivityObject
     /// <summary>
     /// 动画播放器
     /// </summary>
-    public AnimationPlayer AnimationPlayer { get; private set; }
+    [Export, ExportFillNode]
+    public AnimationPlayer AnimationPlayer { get; set; }
 
     /// <summary>
     /// 是否自动播放 SpriteFrames 的动画
@@ -166,10 +169,6 @@ public abstract partial class Weapon : ActivityObject
         _originWeaponAttribute = attribute;
         _weaponAttribute = attribute;
 
-        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-        FirePoint = GetNode<Marker2D>("FirePoint");
-        ShellPoint = GetNode<Marker2D>("ShellPoint");
-        
         //设置动画
         if (attribute.SpriteFrames != null)
         {

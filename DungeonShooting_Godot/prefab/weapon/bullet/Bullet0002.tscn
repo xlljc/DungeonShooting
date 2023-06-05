@@ -1,19 +1,18 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://bqkj0rn72ppge"]
 
-[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_nwypj"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2"]
-[ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/bullet.png" id="3"]
-
+[ext_resource type="Script" path="res://src/game/item/bullet/Bullet.cs" id="1_wphe7"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_l3yjy"]
+[ext_resource type="Texture2D" uid="uid://ctsvj4y1t538u" path="res://resource/sprite/bullet/bullet3.png" id="3_nf7ic"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5a4f2"]
 resource_local_to_scene = true
-shader = ExtResource("2")
+shader = ExtResource("2_l3yjy")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o0655"]
 resource_local_to_scene = true
-shader = ExtResource("2")
+shader = ExtResource("2_l3yjy")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
@@ -21,7 +20,7 @@ shader_parameter/schedule = 0
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3")
+"texture": ExtResource("3_nf7ic")
 }],
 "loop": true,
 "name": &"default",
@@ -31,13 +30,16 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c0onq"]
 size = Vector2(44.72, 12)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lcqb8"]
-size = Vector2(11, 4)
+[sub_resource type="CircleShape2D" id="CircleShape2D_e2yn3"]
+radius = 3.0
 
-[node name="Bullet" type="Node"]
-script = ExtResource("1_nwypj")
+[node name="Bullet0002" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
-collision_mask = 1
+script = ExtResource("1_wphe7")
+CollisionArea = NodePath("CollisionArea")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1
@@ -60,5 +62,4 @@ scale = Vector2(0.226586, 0.333333)
 shape = SubResource("RectangleShape2D_c0onq")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(2.5, 0)
-shape = SubResource("RectangleShape2D_lcqb8")
+shape = SubResource("CircleShape2D_e2yn3")

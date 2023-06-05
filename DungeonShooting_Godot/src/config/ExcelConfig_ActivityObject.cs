@@ -18,11 +18,11 @@ public static partial class ExcelConfig
         /// Test(测试对象): 2 <br/>
         /// Role(角色): 3 <br/>
         /// Enemy(敌人): 4 <br/>
-        /// Weapon(武器): 3 <br/>
-        /// Bullet(子弹): 3 <br/>
-        /// Shell(弹壳): 3 <br/>
-        /// Effect(特效): 3 <br/>
-        /// Other(其它类型): 3
+        /// Weapon(武器): 5 <br/>
+        /// Bullet(子弹): 6 <br/>
+        /// Shell(弹壳): 7 <br/>
+        /// Effect(特效): 8 <br/>
+        /// Other(其它类型): 9
         /// </summary>
         [JsonInclude]
         public int Type { get; private set; }

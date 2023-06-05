@@ -1,50 +1,17 @@
 [gd_scene load_steps=4 format=3 uid="uid://dmeb88jotqro6"]
 
-[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="1_m8ci8"]
-[ext_resource type="Script" path="res://src/framework/map/DungeonRoomTemplate.cs" id="2_d1gn1"]
-[ext_resource type="Script" path="res://src/framework/map/mark/ActivityMark.cs" id="3_w7xdh"]
+[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="1_uyixn"]
+[ext_resource type="Script" path="res://src/framework/map/DungeonRoomTemplate.cs" id="2_8m22j"]
+[ext_resource type="Script" path="res://src/framework/map/mark/ActivityMark.cs" id="3_16tk5"]
 
 [node name="Room1" type="TileMap"]
-tile_set = ExtResource("1_m8ci8")
+tile_set = ExtResource("1_uyixn")
 format = 2
 layer_0/tile_data = PackedInt32Array(327689, 0, 8, 262153, 0, 8, 196617, 0, 8, 131081, 0, 8, 65545, 0, 8, 9, 0, 8, 327688, 0, 8, 262152, 0, 8, 196616, 0, 8, 131080, 0, 8, 65544, 0, 8, 8, 0, 8, 327687, 0, 8, 262151, 0, 8, 196615, 0, 8, 131079, 0, 8, 65543, 0, 8, 7, 0, 8, 327686, 0, 8, 262150, 0, 8, 196614, 0, 8, 131078, 0, 8, 65542, 0, 8, 6, 0, 8, 327685, 0, 8, 262149, 0, 8, 196613, 0, 8, 131077, 0, 8, 65541, 0, 8, 5, 0, 8, 327684, 0, 8, 262148, 0, 8, 196612, 0, 8, 131076, 0, 8, 65540, 0, 8, 4, 0, 8, 327683, 0, 8, 262147, 0, 8, 196611, 0, 8, 131075, 0, 8, 65539, 0, 8, 3, 0, 8, 327682, 0, 8, 262146, 0, 8, 196610, 0, 8, 131074, 0, 8, 65538, 0, 8, 2, 0, 8, 327681, 0, 8, 262145, 0, 8, 196609, 0, 8, 131073, 0, 8, 65537, 0, 8, 1, 0, 8, 327680, 0, 8, 262144, 0, 8, 196608, 0, 8, 131072, 0, 8, 65536, 0, 8, 0, 0, 8, 131071, 196608, 3, 65535, 196608, 3, -1, 196608, 4, -65536, 131072, 7, -65535, 131072, 7, 196607, 196608, 3, 262143, 196608, 3, 327679, 196608, 3, 393215, 196608, 3, 393217, 131072, 2, 393216, 131072, 2, 458751, 720896, 2, -65534, 131072, 7, 393218, 131072, 2, -65533, 131072, 7, 393219, 131072, 2, -65532, 131072, 7, 393220, 131072, 2, -65531, 131072, 7, 393221, 131072, 2, -65530, 131072, 7, 393222, 131072, 2, -65529, 131072, 7, 393223, 131072, 2, -65528, 131072, 7, 393224, 131072, 2, -65527, 131072, 7, 393225, 131072, 2, 10, 65536, 3, 65546, 65536, 3, -65526, 65536, 4, 131082, 65536, 3, 196618, 65536, 3, 262154, 65536, 3, 327690, 65536, 3, 393226, 851968, 2)
-script = ExtResource("2_d1gn1")
+script = ExtResource("2_8m22j")
 
 [node name="Player" type="Node2D" parent="."]
 position = Vector2(80, 47)
-script = ExtResource("3_w7xdh")
+script = ExtResource("3_16tk5")
 Type = 1
 Altitude = 0
-
-[node name="ActivityMark" type="Node2D" parent="."]
-position = Vector2(126, 21)
-script = ExtResource("3_w7xdh")
-Type = 5
-ItemExpression = "0002(ResidueAmmo:15,CurrAmmon:0)"
-
-[node name="ActivityMark5" type="Node2D" parent="."]
-position = Vector2(78, 24)
-script = ExtResource("3_w7xdh")
-Type = 5
-ItemExpression = "0005(ResidueAmmo:30,CurrAmmon:10)"
-
-[node name="ActivityMark2" type="Node2D" parent="."]
-position = Vector2(39, 75)
-script = ExtResource("3_w7xdh")
-Type = 5
-ItemExpression = "0001(ResidueAmmo:15,CurrAmmon:0)"
-WaveNumber = 2
-
-[node name="ActivityMark3" type="Node2D" parent="."]
-position = Vector2(128, 74)
-script = ExtResource("3_w7xdh")
-Type = 5
-ItemExpression = "0003(ResidueAmmo:12,CurrAmmon:15)"
-WaveNumber = 3
-
-[node name="ActivityMark4" type="Node2D" parent="."]
-position = Vector2(39, 23)
-script = ExtResource("3_w7xdh")
-Type = 5
-ItemExpression = "0004(ResidueAmmo:15,CurrAmmon:0)"
-WaveNumber = 4

@@ -3,12 +3,14 @@ using Godot;
 /// <summary>
 /// 子弹类
 /// </summary>
+[Tool, GlobalClass]
 public partial class Bullet : ActivityObject
 {
     /// <summary>
     /// 碰撞区域
     /// </summary>
-    public Area2D CollisionArea { get; private set; }
+    [Export, ExportFillNode]
+    public Area2D CollisionArea { get; set; }
 
     /// <summary>
     /// 发射该子弹的武器
@@ -27,7 +29,6 @@ public partial class Bullet : ActivityObject
     public void Init(Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
         Weapon = weapon;
-        CollisionArea = GetNode<Area2D>("CollisionArea");
         CollisionArea.CollisionMask = targetLayer;
         CollisionArea.AreaEntered += OnArea2dEntered;
         

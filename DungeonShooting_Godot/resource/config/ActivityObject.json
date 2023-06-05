@@ -3,5 +3,45 @@
     "Id": "role0001",
     "Type": 3,
     "Prefab": "res://prefab/role/Player.tscn"
+  },
+  {
+    "Id": "weapon0001",
+    "Type": 5,
+    "Prefab": "res://prefab/weapon/Weapon0001.tscn"
+  },
+  {
+    "Id": "bullet0001",
+    "Type": 6,
+    "Prefab": "res://prefab/weapon/bullet/Bullet0001.tscn"
+  },
+  {
+    "Id": "bullet0002",
+    "Type": 6,
+    "Prefab": "res://prefab/weapon/bullet/Bullet0002.tscn"
+  },
+  {
+    "Id": "shell0001",
+    "Type": 7,
+    "Prefab": "res://prefab/weapon/shell/Shell0001.tscn"
+  },
+  {
+    "Id": "other_door_e",
+    "Type": 9,
+    "Prefab": "res://prefab/map/RoomDoor_E.tscn"
+  },
+  {
+    "Id": "other_door_w",
+    "Type": 9,
+    "Prefab": "res://prefab/map/RoomDoor_W.tscn"
+  },
+  {
+    "Id": "other_door_s",
+    "Type": 9,
+    "Prefab": "res://prefab/map/RoomDoor_S.tscn"
+  },
+  {
+    "Id": "other_door_n",
+    "Type": 9,
+    "Prefab": "res://prefab/map/RoomDoor_N.tscn"
   }
 ]

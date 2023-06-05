@@ -1,22 +1,22 @@
 [gd_scene load_steps=6 format=3 uid="uid://csd4sk65m46qh"]
 
-[ext_resource type="PackedScene" uid="uid://byy386hv6bko0" path="res://prefab/weapon/Weapon.tscn" id="1_kc66u"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_e70v8"]
-[ext_resource type="SpriteFrames" uid="uid://djdvlmqsn8bie" path="res://resource/spriteFrames/Weapon0005.tres" id="3_53icg"]
+[ext_resource type="PackedScene" uid="uid://byy386hv6bko0" path="res://prefab/weapon/Weapon0001.tscn" id="1_m6dhx"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_3enxv"]
+[ext_resource type="SpriteFrames" uid="uid://djdvlmqsn8bie" path="res://resource/spriteFrames/Weapon0005.tres" id="3_rmwmt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ki13x"]
 resource_local_to_scene = true
-shader = ExtResource("2_e70v8")
+shader = ExtResource("2_3enxv")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5ojsm"]
 resource_local_to_scene = true
-shader = ExtResource("2_e70v8")
+shader = ExtResource("2_3enxv")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
-[node name="WeaponPreview" instance=ExtResource("1_kc66u")]
+[node name="WeaponPreview" instance=ExtResource("1_m6dhx")]
 
 [node name="ShadowSprite" parent="." index="0"]
 material = SubResource("ShaderMaterial_ki13x")
@@ -24,7 +24,7 @@ material = SubResource("ShaderMaterial_ki13x")
 [node name="AnimatedSprite" parent="." index="1"]
 material = SubResource("ShaderMaterial_5ojsm")
 position = Vector2(9, 0)
-sprite_frames = ExtResource("3_53icg")
+sprite_frames = ExtResource("3_rmwmt")
 
 [node name="ShellPoint" parent="." index="2"]
 position = Vector2(7, -3.5)

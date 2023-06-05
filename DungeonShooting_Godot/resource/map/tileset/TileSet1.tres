@@ -1,9 +1,9 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b00g22o1cqhe8"]
 
-[ext_resource type="Texture2D" uid="uid://dj8nrd5od4fcl" path="res://resource/sprite/map/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png" id="1_vsl1x"]
+[ext_resource type="Texture2D" uid="uid://dj8nrd5od4fcl" path="res://resource/sprite/map/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png" id="1_5j3le"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yvgyd"]
-texture = ExtResource("1_vsl1x")
+texture = ExtResource("1_5j3le")
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0

@@ -256,22 +256,22 @@ public partial class DungeonManager : Node2D
             switch (doorInfo.Direction)
             {
                 case DoorDirection.E:
-                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "door_e");
+                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "_door_e");
                     door.Position = (doorInfo.OriginPosition + new Vector2(0.5f, 2)) * GameConfig.TileCellSize;
                     door.ZIndex = GameConfig.TopMapLayer;
                     break;
                 case DoorDirection.W:
-                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "door_w");
+                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "_door_w");
                     door.Position = (doorInfo.OriginPosition + new Vector2(-0.5f, 2)) * GameConfig.TileCellSize;
                     door.ZIndex = GameConfig.TopMapLayer;
                     break;
                 case DoorDirection.S:
-                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "door_s");
+                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "_door_s");
                     door.Position = (doorInfo.OriginPosition + new Vector2(2f, 1.5f)) * GameConfig.TileCellSize;
                     door.ZIndex = GameConfig.TopMapLayer;
                     break;
                 case DoorDirection.N:
-                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "door_n");
+                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "_door_n");
                     door.Position = (doorInfo.OriginPosition + new Vector2(2f, -0.5f)) * GameConfig.TileCellSize;
                     door.ZIndex = GameConfig.MiddleMapLayer;
                     break;

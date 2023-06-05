@@ -3,6 +3,7 @@ using Godot;
 /// <summary>
 /// 普通的枪
 /// </summary>
+[Tool, GlobalClass]
 public partial class Gun : Weapon
 {
     //步枪属性数据

@@ -61,6 +61,10 @@ public static class ExcelGenerator
             }
 
             Console.WriteLine($"一共检测到excel表共{excelDataList.Count}张.");
+            if (excelDataList.Count == 0)
+            {
+                return true;
+            }
             
             if (Directory.Exists(CodeOutPath))
             {
@@ -282,6 +286,10 @@ public static class ExcelGenerator
             {
                 Dictionary<string, object> data = null;
                 var row = sheet1.GetRow(i);
+                if (row == null)
+                {
+                    continue;
+                }
                 for (int j = 0; j < columnCount; j++)
                 {
                     var cell = row.GetCell(j);
