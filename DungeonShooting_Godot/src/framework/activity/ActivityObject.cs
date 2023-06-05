@@ -10,7 +10,6 @@ using Godot;
 /// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [RegisterActivity(id, prefabPath)],
 /// ActivityObject 类会自动扫描并注册物体, 然后使用而是使用 ActivityObject.Create(id) 来创建实例
 /// </summary>
-[Tool]
 public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 {
     /// <summary>
@@ -271,80 +270,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         // 在工具模式下创建的 template 节点自动创建对应的必要子节点
         if (Engine.IsEditorHint())
         {
-            var parent = GetParent();
-            if (parent != null)
-            {
-                //寻找 owner
-                Node owner;
-                if (parent.Owner != null)
-                {
-                    owner = parent.Owner;
-                }
-                else if (Plugin.Plugin.Instance.GetEditorInterface().GetEditedSceneRoot() == this)
-                {
-                    owner = this;
-                }
-                else
-                {
-                    owner = parent;
-                }
-
-                var sprite = GetNodeOrNull<Sprite2D>("ShadowSprite");
-                //创建Shadow
-                if (sprite == null)
-                {
-                    sprite = new Sprite2D();
-                    sprite.Name = "ShadowSprite";
-                    sprite.ZIndex = -1;
-                    var material =
-                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
-                    material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
-                    material.SetShaderParameter("schedule", 1);
-                    sprite.Material = material;
-                    AddChild(sprite);
-                    sprite.Owner = owner;
-                }
-                else if (sprite.Material == null)
-                {
-                    var material =
-                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
-                    material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
-                    material.SetShaderParameter("schedule", 1);
-                    sprite.Material = material;
-                }
-
-                var animatedSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite");
-                //创建 Sprite2D
-                if (animatedSprite == null)
-                {
-                    animatedSprite = new AnimatedSprite2D();
-                    animatedSprite.Name = "AnimatedSprite";
-                    var material =
-                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
-                    material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
-                    material.SetShaderParameter("schedule", 0);
-                    animatedSprite.Material = material;
-                    AddChild(animatedSprite);
-                    animatedSprite.Owner = owner;
-                }
-                else if (animatedSprite.Material == null)
-                {
-                    var material =
-                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
-                    material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
-                    material.SetShaderParameter("schedule", 0);
-                    animatedSprite.Material = material;
-                }
-
-                //创建Collision
-                if (GetNodeOrNull("Collision") == null)
-                {
-                    var co = new CollisionShape2D();
-                    co.Name = "Collision";
-                    AddChild(co);
-                    co.Owner = owner;
-                }
-            }
+            _InitNodeInEditor();
         }
 #endif
     }
@@ -765,6 +691,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public sealed override void _Process(double delta)
     {
+#if TOOLS
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+#endif
         var newDelta = (float)delta;
         if (EnableCustomBehavior)
         {
@@ -953,6 +885,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public sealed override void _PhysicsProcess(double delta)
     {
+#if TOOLS
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+#endif
         var newDelta = (float)delta;
         if (EnableCustomBehavior)
         {
@@ -1000,6 +938,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public sealed override void _Draw()
     {
+#if TOOLS
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+#endif
         if (IsDebug)
         {
             DebugDraw();

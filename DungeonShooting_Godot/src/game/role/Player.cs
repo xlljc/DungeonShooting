@@ -4,6 +4,7 @@ using Godot;
 /// <summary>
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
+[Tool, GlobalClass]
 public partial class Player : Role
 {
     /// <summary>

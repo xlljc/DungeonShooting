@@ -103,7 +103,6 @@ public partial class GameApplication : Node2D
 	
 	public override void _EnterTree()
 	{
-		return;
 		//随机化种子
 		//GD.Randomize();
 		//固定帧率
@@ -128,7 +127,7 @@ public partial class GameApplication : Node2D
 		DungeonManager.Name = "DungeonManager";
 		SceneRoot.AddChild(DungeonManager);
 		//打开主菜单Ui
-		UiManager.Open_Main();
+		//UiManager.Open_Main();
 	}
 
 	public override void _Process(double delta)

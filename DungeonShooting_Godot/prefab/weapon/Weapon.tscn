@@ -1,17 +1,17 @@
 [gd_scene load_steps=9 format=3 uid="uid://byy386hv6bko0"]
 
-[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_oxboq"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_sncbp"]
+[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_vfmla"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_5ox1n"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
 resource_local_to_scene = true
-shader = ExtResource("2_sncbp")
+shader = ExtResource("2_5ox1n")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
 resource_local_to_scene = true
-shader = ExtResource("2_sncbp")
+shader = ExtResource("2_5ox1n")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
@@ -57,7 +57,7 @@ _data = {
 }
 
 [node name="Weapon" type="Node"]
-script = ExtResource("1_oxboq")
+script = ExtResource("1_vfmla")
 collision_layer = 4
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
