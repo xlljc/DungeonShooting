@@ -26,21 +26,24 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// 是否是静态物体, 如果为true, 则会禁用移动处理
     /// </summary>
     public bool IsStatic { get; set; }
-    
-    /// <summary>
-    /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite2D", 类型为 AnimatedSprite2D
-    /// </summary>
-    public AnimatedSprite2D AnimatedSprite { get; private set; }
 
     /// <summary>
     /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite2D
     /// </summary>
-    public Sprite2D ShadowSprite { get; private set; }
+    [Export, ExportFillNode]
+    public Sprite2D ShadowSprite { get; set; }
+    
+    /// <summary>
+    /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite2D", 类型为 AnimatedSprite2D
+    /// </summary>
+    [Export, ExportFillNode]
+    public AnimatedSprite2D AnimatedSprite { get; set; }
 
     /// <summary>
     /// 当前物体碰撞器节点, 节点名称必须叫 "Collision", 类型为 CollisionShape2D
     /// </summary>
-    public CollisionShape2D Collision { get; private set; }
+    [Export, ExportFillNode]
+    public CollisionShape2D Collision { get; set; }
 
     /// <summary>
     /// 是否调用过 Destroy() 函数
@@ -62,8 +65,22 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public Vector2 BasisVelocity
     {
-        get => MoveController.BasisVelocity;
-        set => MoveController.BasisVelocity = value;
+        get
+        {
+            if (MoveController != null)
+            {
+                return MoveController.BasisVelocity;
+            }
+
+            return Vector2.Zero;
+        }
+        set
+        {
+            if (MoveController != null)
+            {
+                MoveController.BasisVelocity = value;
+            }
+        }
     }
 
     /// <summary>
@@ -244,16 +261,25 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     //初始化节点
     private void _InitNode(string itemId, World world)
     {
+#if TOOLS
+        if (!Engine.IsEditorHint())
+        {
+            if (GetType().GetCustomAttributes(typeof(ToolAttribute), false).Length == 0)
+            {
+                throw new Exception($"ActivityObject子类'{GetType().FullName}'没有加[Tool]标记!");
+            }
+        }
+#endif
         World = world;
 
         ItemId = itemId;
         Name = GetType().Name + (_instanceIndex++);
         
-        AnimatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite");
+        //AnimatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite");
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
-        ShadowSprite = GetNode<Sprite2D>("ShadowSprite");
+        //ShadowSprite = GetNode<Sprite2D>("ShadowSprite");
         ShadowSprite.Visible = false;
-        Collision = GetNode<CollisionShape2D>("Collision");
+        //Collision = GetNode<CollisionShape2D>("Collision");
 
         MotionMode = MotionModeEnum.Floating;
         MoveController = AddComponent<MoveController>();
@@ -266,6 +292,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public sealed override void _Ready()
     {
+
+    }
+
+    /// <summary>
+    /// 子类需要重写 _EnterTree() 函数, 请重写 EnterTree()
+    /// </summary>
+    public sealed override void _EnterTree()
+    {
 #if TOOLS
         // 在工具模式下创建的 template 节点自动创建对应的必要子节点
         if (Engine.IsEditorHint())
@@ -273,6 +307,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             _InitNodeInEditor();
         }
 #endif
+    }
+    
+    /// <summary>
+    /// 子类需要重写 _ExitTree() 函数, 请重写 ExitTree()
+    /// </summary>
+    public sealed override void _ExitTree()
+    {
+        
     }
 
     /// <summary>
@@ -360,6 +402,22 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public virtual void OnInit()
     {
+    }
+
+    /// <summary>
+    /// 进入场景树时调用
+    /// </summary>
+    public virtual void EnterTree()
+    {
+        
+    }
+
+    /// <summary>
+    /// 离开场景树时调用
+    /// </summary>
+    public virtual void ExitTree()
+    {
+        
     }
     
     /// <summary>

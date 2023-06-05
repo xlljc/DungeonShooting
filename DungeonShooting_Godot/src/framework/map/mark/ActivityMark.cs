@@ -104,7 +104,7 @@ public partial class ActivityMark : Node2D
             var tempList = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
             foreach (var s in tempList)
             {
-                if (s.GetCustomAttribute<ActivityExpression>() != null)
+                if (s.GetCustomAttribute<ActivityExpressionAttribute>() != null)
                 {
                     fieldInfos.Add(s.Name);
                 }

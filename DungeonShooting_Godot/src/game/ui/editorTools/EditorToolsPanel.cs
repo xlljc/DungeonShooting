@@ -393,4 +393,28 @@ public partial class EditorToolsPanel : EditorTools
         ExcelGenerator.ExportExcel();
         ShowTips("提示", "已启动导表程序, 注意查看控制台信息!");
     }
+    
+    /// <summary>
+    /// 在编辑器中打开一个提示窗口
+    /// </summary>
+    public static void ShowTipsInEditor(string title, string message, Action onClose)
+    {
+        var editorToolsInstance = UiManager.Get_EditorTools_Instance();
+        if (editorToolsInstance.Length > 0)
+        {
+            editorToolsInstance[0].ShowTips(title, message, onClose);
+        }
+    }
+    
+    /// <summary>
+    /// 在编辑器中打开一个询问窗口
+    /// </summary>
+    public static void ShowConfirmInEditor(string title, string message, Action<bool> onClose = null)
+    {
+        var editorToolsInstance = UiManager.Get_EditorTools_Instance();
+        if (editorToolsInstance.Length > 0)
+        {
+            editorToolsInstance[0].ShowConfirm(title, message, onClose);
+        }
+    }
 }

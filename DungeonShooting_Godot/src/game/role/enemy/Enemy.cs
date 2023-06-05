@@ -16,6 +16,7 @@ using Godot;
 /// <summary>
 /// 基础敌人
 /// </summary>
+[Tool, GlobalClass]
 public partial class Enemy : Role
 {
     /// <summary>
@@ -92,17 +93,18 @@ public partial class Enemy : Role
         StateController.ChangeStateInstant(AiStateEnum.AiNormal);
     }
 
-    public override void _EnterTree()
+    public override void EnterTree()
     {
+        base.EnterTree();
         if (!World.Enemy_InstanceList.Contains(this))
         {
             World.Enemy_InstanceList.Add(this);
         }
     }
 
-    public override void _ExitTree()
+    public override void ExitTree()
     {
-        base._ExitTree();
+        base.ExitTree();
         World.Enemy_InstanceList.Remove(this);
     }
 
