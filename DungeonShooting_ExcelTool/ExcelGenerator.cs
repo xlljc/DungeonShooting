@@ -190,6 +190,14 @@ public static class ExcelGenerator
         outStr += $"public static partial class ExcelConfig\n{{\n";
         outStr += $"    public class {fileName}\n";
         outStr += $"    {{\n";
+
+        var cloneFuncStr = $"        /// <summary>\n";
+        cloneFuncStr += $"        /// 返回浅拷贝出的新对象\n";
+        cloneFuncStr += $"        /// </summary>\n";
+        cloneFuncStr += $"        public {fileName} Clone()\n";
+        cloneFuncStr += $"        {{\n";
+        cloneFuncStr += $"            var inst = new {fileName}();\n";
+        
         var sourceFile = excelPath;
 
         //行数
@@ -224,6 +232,10 @@ public static class ExcelGenerator
                 }
                 field = field.FirstToUpper();
                 excelData.ColumnNames.Add(field);
+                if (field == "Clone")
+                {
+                    throw new Exception($"表'{fileName}'中不允许有'Clone'字段!");
+                }
 
                 var descriptionCell = descriptions.GetCell(cell.ColumnIndex);
                 //描述
@@ -263,9 +275,14 @@ public static class ExcelGenerator
                 outStr += $"        /// {description}\n";
                 outStr += $"        /// </summary>\n";
                 outStr += $"        [JsonInclude]\n";
-                outStr += $"        public {mappingData.TypeStr} {field} {{ get; private set; }}\n\n";
+                outStr += $"        public {mappingData.TypeStr} {field};\n\n";
+                
+                cloneFuncStr += $"            inst.{field} = {field};\n";
             }
         
+            cloneFuncStr += "            return inst;\n";
+            cloneFuncStr += "        }\n";
+            outStr += cloneFuncStr;
             outStr += "    }\n";
             outStr += "}";
             

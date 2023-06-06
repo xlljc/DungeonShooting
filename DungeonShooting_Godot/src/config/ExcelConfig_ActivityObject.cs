@@ -12,7 +12,7 @@ public static partial class ExcelConfig
         /// 需要添加类型前缀
         /// </summary>
         [JsonInclude]
-        public string Id { get; private set; }
+        public string Id;
 
         /// <summary>
         /// Test(测试对象): 2 <br/>
@@ -25,13 +25,24 @@ public static partial class ExcelConfig
         /// Other(其它类型): 9
         /// </summary>
         [JsonInclude]
-        public int Type { get; private set; }
+        public int Type;
 
         /// <summary>
         /// 物体预制场景路径, 场景根节点必须是ActivityObject子类
         /// </summary>
         [JsonInclude]
-        public string Prefab { get; private set; }
+        public string Prefab;
 
+        /// <summary>
+        /// 返回浅拷贝出的新对象
+        /// </summary>
+        public ActivityObject Clone()
+        {
+            var inst = new ActivityObject();
+            inst.Id = Id;
+            inst.Type = Type;
+            inst.Prefab = Prefab;
+            return inst;
+        }
     }
 }
