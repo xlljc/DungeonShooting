@@ -443,7 +443,7 @@ public abstract partial class Role : ActivityObject
             return;
         }
 
-        var temp = weapon.Attribute.SpritePosition;
+        var temp = weapon.AnimatedSprite.Position;
         if (Face == FaceDirection.Left)
         {
             temp.Y = -temp.Y;
@@ -451,7 +451,7 @@ public abstract partial class Role : ActivityObject
         var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
         Holster.RemoveWeapon(index);
         //播放抛出效果
-        weapon.ThrowWeapon(this, pos);
+        weapon.ThrowWeapon(this, GlobalPosition);
     }
 
     /// <summary>

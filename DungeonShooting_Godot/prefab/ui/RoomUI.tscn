@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dnpguajopuyd7" path="res://resource/sprite/ui/shieldSlot.png" id="9_spw0e"]
 [ext_resource type="Texture2D" uid="uid://h25j6uka74tv" path="res://resource/sprite/ui/shieldBar.png" id="10_8lm6q"]
 [ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/mapBar.png" id="11_yaqsk"]
-[ext_resource type="Texture2D" uid="uid://xafbhgrxmosy" path="res://resource/sprite/gun/gun4.png" id="12_o2big"]
+[ext_resource type="Texture2D" uid="uid://xafbhgrxmosy" path="res://resource/sprite/weapon/gun4.png" id="12_o2big"]
 
 [sub_resource type="Gradient" id="1"]
 colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)

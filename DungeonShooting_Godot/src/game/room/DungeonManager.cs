@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Config;
 using Godot;
 
 /// <summary>
@@ -137,7 +138,7 @@ public partial class DungeonManager : Node2D
         //初始房间创建玩家标记
         var playerBirthMark = StartRoom.ActivityMarks.FirstOrDefault(mark => mark.Type == ActivityIdPrefix.ActivityPrefixType.Player);
         //创建玩家
-        var player = ActivityObject.Create<Player>(ActivityIdPrefix.Role + "0001");
+        var player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
         if (playerBirthMark != null)
         {
             //player.Position = new Vector2(50, 50);
@@ -147,9 +148,11 @@ public partial class DungeonManager : Node2D
         Player.SetCurrentPlayer(player);
         player.PutDown(RoomLayerEnum.YSortLayer);
         //玩家手上添加武器
-        // player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0001"));
-        // player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityIdPrefix.Weapon + "0002"));
-        
+        //player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
+        var weapon = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001);
+        weapon.InitWeapon(ExcelConfig.Weapon_List[0]);
+        weapon.PutDown(player.Position, RoomLayerEnum.NormalLayer);
+
         GameApplication.Instance.Cursor.SetGuiMode(false);
         yield return 0;
         
@@ -256,22 +259,22 @@ public partial class DungeonManager : Node2D
             switch (doorInfo.Direction)
             {
                 case DoorDirection.E:
-                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "_door_e");
+                    door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_e);
                     door.Position = (doorInfo.OriginPosition + new Vector2(0.5f, 2)) * GameConfig.TileCellSize;
                     door.ZIndex = GameConfig.TopMapLayer;
                     break;
                 case DoorDirection.W:
-                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "_door_w");
+                    door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_w);
                     door.Position = (doorInfo.OriginPosition + new Vector2(-0.5f, 2)) * GameConfig.TileCellSize;
                     door.ZIndex = GameConfig.TopMapLayer;
                     break;
                 case DoorDirection.S:
-                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "_door_s");
+                    door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_s);
                     door.Position = (doorInfo.OriginPosition + new Vector2(2f, 1.5f)) * GameConfig.TileCellSize;
                     door.ZIndex = GameConfig.TopMapLayer;
                     break;
                 case DoorDirection.N:
-                    door = ActivityObject.Create<RoomDoor>(ActivityIdPrefix.Other + "_door_n");
+                    door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_n);
                     door.Position = (doorInfo.OriginPosition + new Vector2(2f, -0.5f)) * GameConfig.TileCellSize;
                     door.ZIndex = GameConfig.MiddleMapLayer;
                     break;

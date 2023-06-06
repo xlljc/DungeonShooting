@@ -109,7 +109,7 @@ public partial class GameApplication : Node2D
 		Engine.MaxFps = 60;
 		//调试绘制开关
 		ActivityObject.IsDebug = Debug;
-		//Engine.TimeScale = 0.2f;
+		//Engine.TimeScale = 0.4f;
 
 		//窗体大小改变
 		GetWindow().SizeChanged += OnWindowSizeChanged;

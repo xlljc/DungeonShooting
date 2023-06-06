@@ -110,7 +110,7 @@ public partial class Cursor : Node2D
             var len = GlobalPosition.DistanceTo(tunPos);
             if (targetGun.Attribute != null)
             {
-                len = Mathf.Max(0, len - targetGun.Attribute.FirePosition.X);
+                len = Mathf.Max(0, len - targetGun.FirePoint.Position.X);
             }
             scope = len / GameConfig.ScatteringDistance * scope;
         }

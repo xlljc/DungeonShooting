@@ -34,6 +34,12 @@ public static partial class ExcelConfig
         public string Prefab;
 
         /// <summary>
+        /// 物体备注
+        /// </summary>
+        [JsonInclude]
+        public string Remark;
+
+        /// <summary>
         /// 返回浅拷贝出的新对象
         /// </summary>
         public ActivityObject Clone()
@@ -42,6 +48,7 @@ public static partial class ExcelConfig
             inst.Id = Id;
             inst.Type = Type;
             inst.Prefab = Prefab;
+            inst.Remark = Remark;
             return inst;
         }
     }

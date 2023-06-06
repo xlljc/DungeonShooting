@@ -1,17 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://cxltmhhp4rbyk"]
+[gd_scene load_steps=8 format=3 uid="uid://cxltmhhp4rbyk"]
 
-[ext_resource type="Script" path="res://src/framework/activity/ActivityObjectTemplate.cs" id="1_76n4k"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_qy88l"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_xa8r2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
 resource_local_to_scene = true
-shader = ExtResource("2_qy88l")
+shader = ExtResource("1_xa8r2")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
 resource_local_to_scene = true
-shader = ExtResource("2_qy88l")
+shader = ExtResource("1_xa8r2")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
@@ -56,8 +55,7 @@ _data = {
 "floodlight": SubResource("Animation_3piau")
 }
 
-[node name="Weapon" type="Node"]
-script = ExtResource("1_76n4k")
+[node name="WeaponTemplate" type="CharacterBody2D"]
 collision_layer = 4
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]

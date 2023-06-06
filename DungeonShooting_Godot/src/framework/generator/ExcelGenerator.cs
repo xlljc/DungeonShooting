@@ -40,6 +40,13 @@ public static class ExcelGenerator
         foreach (var item in array)
         {
             var id = item["Id"];
+            var remark = item["Remark"] + "";
+            if (!string.IsNullOrEmpty(remark))
+            {
+                code1 += $"        /// <summary>\n";
+                code1 += $"        /// {remark}\n";
+                code1 += $"        /// </summary>\n";
+            }
             code1 += $"        public const string Id_{id} = \"{id}\";\n";
             code2 += $"        _activityRegisterMap.Add(\"{id}\", \"{item["Prefab"]}\");\n";
         }

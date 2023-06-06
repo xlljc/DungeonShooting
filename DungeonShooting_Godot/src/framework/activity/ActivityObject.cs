@@ -271,19 +271,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         }
 #endif
         World = world;
-
         ItemId = itemId;
         Name = GetType().Name + (_instanceIndex++);
-        
-        //AnimatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite");
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
-        //ShadowSprite = GetNode<Sprite2D>("ShadowSprite");
         ShadowSprite.Visible = false;
-        //Collision = GetNode<CollisionShape2D>("Collision");
-
         MotionMode = MotionModeEnum.Floating;
         MoveController = AddComponent<MoveController>();
-
         OnInit();
     }
 
@@ -1037,7 +1030,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     {
         if (Scale.Y < 0)
         {
-            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -Altitude) - _fallData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
+            var pos = new Vector2(_fallData.OriginSpritePosition.X, -_fallData.OriginSpritePosition.Y);
+            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -Altitude) - pos.Rotated(Rotation + Mathf.Pi);
         }
         else
         {

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using Config;
 
 /// <summary>
 /// 武器的基类
@@ -14,10 +15,10 @@ public abstract partial class Weapon : ActivityObject
     /// <summary>
     /// 武器属性数据
     /// </summary>
-    public WeaponAttribute Attribute => _weaponAttribute;
-
-    private WeaponAttribute _weaponAttribute;
-    private WeaponAttribute _originWeaponAttribute;
+    public ExcelConfig.Weapon Attribute => _weaponAttribute;
+    private ExcelConfig.Weapon _weaponAttribute;
+    private ExcelConfig.Weapon _playerWeaponAttribute;
+    private ExcelConfig.Weapon _aiWeaponAttribute;
 
     /// <summary>
     /// 武器攻击的目标阵营
@@ -164,22 +165,20 @@ public abstract partial class Weapon : ActivityObject
     /// <summary>
     /// 初始化武器属性
     /// </summary>
-    public void InitWeapon(WeaponAttribute attribute)
+    public void InitWeapon(ExcelConfig.Weapon attribute)
     {
-        _originWeaponAttribute = attribute;
+        _playerWeaponAttribute = attribute;
         _weaponAttribute = attribute;
-
-        //设置动画
-        if (attribute.SpriteFrames != null)
+        if (!string.IsNullOrEmpty(attribute.AiUseAttributeId))
         {
-            AnimatedSprite.SpriteFrames = ResourceManager.Load<SpriteFrames>(attribute.SpriteFrames);
+            _aiWeaponAttribute = ExcelConfig.Weapon_Map[attribute.AiUseAttributeId];
         }
-        AnimatedSprite.Position = Attribute.ThrowSpritePosition;
-
-        //开火位置
-        FirePoint.Position = Attribute.FirePosition;
-        //弹壳投抛起始位置
-        ShellPoint.Position = Attribute.ShellPosition;
+        else
+        {
+            _aiWeaponAttribute = attribute;
+        }
+        //未完成
+        //AnimatedSprite.Position = Attribute.ThrowSpritePosition;
 
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
@@ -191,7 +190,7 @@ public abstract partial class Weapon : ActivityObject
         //剩余弹药量
         ResidueAmmo = Mathf.Min(Attribute.StandbyAmmoCapacity + CurrAmmo, Attribute.MaxAmmoCapacity) - CurrAmmo;
         
-        ThrowCollisionSize = new Vector2(20, 15);
+        ThrowCollisionSize = attribute.ThrowCollisionSize.AsVector2();
     }
 
     /// <summary>
@@ -297,6 +296,7 @@ public abstract partial class Weapon : ActivityObject
 
     protected override void Process(float delta)
     {
+        //GD.Print("AnimatedSprite: " + AnimatedSprite.Position);
         //这把武器被扔在地上, 或者当前武器没有被使用
         if (Master == null || Master.Holster.ActiveWeapon != this)
         {
@@ -614,7 +614,7 @@ public abstract partial class Weapon : ActivityObject
         _continuousCount = _continuousCount > 0 ? _continuousCount - 1 : 0;
 
         //减子弹数量
-        if (_originWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
+        if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
         {
             if (Utils.RandomRangeFloat(0, 1) < _weaponAttribute.AiAmmoConsumptionProbability) //触发消耗弹药
             {
@@ -1046,16 +1046,14 @@ public abstract partial class Weapon : ActivityObject
     public void PickUpWeapon(Role master)
     {
         Master = master;
-        if (master.IsAi && _originWeaponAttribute.AiUseAttribute != null)
+        if (master.IsAi)
         {
-            _weaponAttribute = _originWeaponAttribute.AiUseAttribute;
+            _weaponAttribute = _aiWeaponAttribute;
         }
         else
         {
-            _weaponAttribute = _originWeaponAttribute;
+            _weaponAttribute = _playerWeaponAttribute;
         }
-        //握把位置
-        AnimatedSprite.Position = Attribute.SpritePosition;
         //停止动画
         AnimationPlayer.Stop();
         //清除泛白效果
@@ -1078,8 +1076,9 @@ public abstract partial class Weapon : ActivityObject
     {
         Master = null;
         CollisionLayer = _tempLayer;
-        _weaponAttribute = _originWeaponAttribute;
-        AnimatedSprite.Position = Attribute.ThrowSpritePosition;
+        _weaponAttribute = _playerWeaponAttribute;
+        //未完成
+        //AnimatedSprite.Position = Attribute.ThrowSpritePosition;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         OnRemove();

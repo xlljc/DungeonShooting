@@ -2,46 +2,55 @@
   {
     "Id": "role0001",
     "Type": 3,
-    "Prefab": "res://prefab/role/Player.tscn"
+    "Prefab": "res://prefab/role/Role0001.tscn",
+    "Remark": "\u73A9\u5BB6"
   },
   {
     "Id": "weapon0001",
     "Type": 5,
-    "Prefab": "res://prefab/weapon/Weapon0001.tscn"
+    "Prefab": "res://prefab/weapon/Weapon0001.tscn",
+    "Remark": ""
   },
   {
     "Id": "bullet0001",
     "Type": 6,
-    "Prefab": "res://prefab/weapon/bullet/Bullet0001.tscn"
+    "Prefab": "res://prefab/bullet/Bullet0001.tscn",
+    "Remark": ""
   },
   {
     "Id": "bullet0002",
     "Type": 6,
-    "Prefab": "res://prefab/weapon/bullet/Bullet0002.tscn"
+    "Prefab": "res://prefab/bullet/Bullet0001.tscn",
+    "Remark": ""
   },
   {
     "Id": "shell0001",
     "Type": 7,
-    "Prefab": "res://prefab/weapon/shell/Shell0001.tscn"
+    "Prefab": "res://prefab/shell/Shell0001.tscn",
+    "Remark": ""
   },
   {
     "Id": "other_door_e",
     "Type": 9,
-    "Prefab": "res://prefab/map/RoomDoor_E.tscn"
+    "Prefab": "res://prefab/map/RoomDoor_E.tscn",
+    "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u4E1C\u4FA7)"
   },
   {
     "Id": "other_door_w",
     "Type": 9,
-    "Prefab": "res://prefab/map/RoomDoor_W.tscn"
+    "Prefab": "res://prefab/map/RoomDoor_W.tscn",
+    "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u897F\u4FA7)"
   },
   {
     "Id": "other_door_s",
     "Type": 9,
-    "Prefab": "res://prefab/map/RoomDoor_S.tscn"
+    "Prefab": "res://prefab/map/RoomDoor_S.tscn",
+    "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u5357\u4FA7)"
   },
   {
     "Id": "other_door_n",
     "Type": 9,
-    "Prefab": "res://prefab/map/RoomDoor_N.tscn"
+    "Prefab": "res://prefab/map/RoomDoor_N.tscn",
+    "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u5317\u4FA7)"
   }
 ]

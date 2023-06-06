@@ -4,6 +4,7 @@ using Godot;
 /// <summary>
 /// 用于限定 Marker2D 节点的旋转角度
 /// </summary>
+[Tool]
 public partial class MountRotation : Marker2D
 {
     /// <summary>

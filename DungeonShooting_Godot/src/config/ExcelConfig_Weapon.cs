@@ -8,23 +8,16 @@ public static partial class ExcelConfig
     public class Weapon
     {
         /// <summary>
-        /// 物体唯一id <br/>
-        /// 不需要添加类型前缀
+        /// 武器属性id
         /// </summary>
         [JsonInclude]
         public string Id;
 
         /// <summary>
-        /// 武器 Prefab, 必须继承场景 "res://prefab/weapon/Weapon.tscn"
+        /// 属性绑定武器的Id,如果是Ai使用的数据, 则填空串
         /// </summary>
         [JsonInclude]
-        public string Prefab;
-
-        /// <summary>
-        /// 重量
-        /// </summary>
-        [JsonInclude]
-        public float Weight;
+        public string WeaponId;
 
         /// <summary>
         /// 武器显示的名称
@@ -37,6 +30,12 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public string Icon;
+
+        /// <summary>
+        /// 重量
+        /// </summary>
+        [JsonInclude]
+        public float Weight;
 
         /// <summary>
         /// 武器类型: <br/>
@@ -66,13 +65,13 @@ public static partial class ExcelConfig
         public int MaxAmmoCapacity;
 
         /// <summary>
-        /// 起始备用弹药数量
+        /// 默认起始备用弹药数量
         /// </summary>
         [JsonInclude]
         public int StandbyAmmoCapacity;
 
         /// <summary>
-        /// 装弹时间, 单位: 秒
+        /// 装弹时间 (单位: 秒)
         /// </summary>
         [JsonInclude]
         public float ReloadTime;
@@ -198,28 +197,28 @@ public static partial class ExcelConfig
         public float ScatteringRangeBackTime;
 
         /// <summary>
-        /// 子弹飞行最大距离
-        /// </summary>
-        [JsonInclude]
-        public float MaxDistance;
-
-        /// <summary>
         /// 子弹飞行最小距离
         /// </summary>
         [JsonInclude]
         public float MinDistance;
 
         /// <summary>
-        /// 最大后坐力 (仅用于开火后武器身抖动)
+        /// 子弹飞行最大距离
         /// </summary>
         [JsonInclude]
-        public float MaxBacklash;
+        public float MaxDistance;
 
         /// <summary>
         /// 最小后坐力 (仅用于开火后武器身抖动)
         /// </summary>
         [JsonInclude]
         public float MinBacklash;
+
+        /// <summary>
+        /// 最大后坐力 (仅用于开火后武器身抖动)
+        /// </summary>
+        [JsonInclude]
+        public float MaxBacklash;
 
         /// <summary>
         /// 后坐力偏移回归回归速度
@@ -258,16 +257,44 @@ public static partial class ExcelConfig
         public SerializeVector2 ThrowCollisionSize;
 
         /// <summary>
+        /// Ai属性 <br/>
+        /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性
+        /// </summary>
+        [JsonInclude]
+        public string AiUseAttributeId;
+
+        /// <summary>
+        /// Ai属性 <br/>
+        /// 目标锁定时间, 也就是瞄准目标多久才会开火, (单位: 秒)
+        /// </summary>
+        [JsonInclude]
+        public float AiTargetLockingTime;
+
+        /// <summary>
+        /// Ai属性 <br/>
+        /// Ai使用该武器发射的子弹速度缩放比
+        /// </summary>
+        [JsonInclude]
+        public float AiBulletSpeedScale;
+
+        /// <summary>
+        /// Ai属性 <br/>
+        /// Ai使用该武器消耗弹药的概率, (0 - 1)
+        /// </summary>
+        [JsonInclude]
+        public float AiAmmoConsumptionProbability;
+
+        /// <summary>
         /// 返回浅拷贝出的新对象
         /// </summary>
         public Weapon Clone()
         {
             var inst = new Weapon();
             inst.Id = Id;
-            inst.Prefab = Prefab;
-            inst.Weight = Weight;
+            inst.WeaponId = WeaponId;
             inst.Name = Name;
             inst.Icon = Icon;
+            inst.Weight = Weight;
             inst.WeightType = WeightType;
             inst.ContinuousShoot = ContinuousShoot;
             inst.AmmoCapacity = AmmoCapacity;
@@ -294,16 +321,20 @@ public static partial class ExcelConfig
             inst.ScatteringRangeAddValue = ScatteringRangeAddValue;
             inst.ScatteringRangeBackSpeed = ScatteringRangeBackSpeed;
             inst.ScatteringRangeBackTime = ScatteringRangeBackTime;
-            inst.MaxDistance = MaxDistance;
             inst.MinDistance = MinDistance;
-            inst.MaxBacklash = MaxBacklash;
+            inst.MaxDistance = MaxDistance;
             inst.MinBacklash = MinBacklash;
+            inst.MaxBacklash = MaxBacklash;
             inst.BacklashRegressionSpeed = BacklashRegressionSpeed;
             inst.UpliftAngle = UpliftAngle;
             inst.DefaultAngle = DefaultAngle;
             inst.UpliftAngleRestore = UpliftAngleRestore;
             inst.BulletId = BulletId;
             inst.ThrowCollisionSize = ThrowCollisionSize;
+            inst.AiUseAttributeId = AiUseAttributeId;
+            inst.AiTargetLockingTime = AiTargetLockingTime;
+            inst.AiBulletSpeedScale = AiBulletSpeedScale;
+            inst.AiAmmoConsumptionProbability = AiAmmoConsumptionProbability;
             return inst;
         }
     }

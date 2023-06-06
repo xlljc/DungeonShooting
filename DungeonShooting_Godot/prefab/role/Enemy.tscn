@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://dbrig6dq441wo"]
 
-[ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/Role.tscn" id="1_p0w41"]
+[ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/RoleTemplate.tscn" id="1_p0w41"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_xrpvd"]
 [ext_resource type="Texture2D" uid="uid://chd2vtesap5cf" path="res://resource/sprite/role/enemy0001/Enemy0001.png" id="3_b8g1d"]
 
