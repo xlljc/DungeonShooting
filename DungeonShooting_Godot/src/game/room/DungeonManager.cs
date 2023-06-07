@@ -145,8 +145,9 @@ public partial class DungeonManager : Node2D
             player.Position = playerBirthMark.Position;
         }
         player.Name = "Player";
-        Player.SetCurrentPlayer(player);
         player.PutDown(RoomLayerEnum.YSortLayer);
+        Player.SetCurrentPlayer(player);
+
         //玩家手上添加武器
         //player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
         var weapon = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001);
