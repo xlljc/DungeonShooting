@@ -25,6 +25,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <summary>
     /// 是否是静态物体, 如果为true, 则会禁用移动处理
     /// </summary>
+    [Export]
     public bool IsStatic { get; set; }
 
     /// <summary>
@@ -153,10 +154,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// 物体下坠回弹后的运动速度衰减量
     /// </summary>
     public float BounceSpeed { get; set; } = 0.75f;
-    
+
     /// <summary>
     /// 投抛状态下物体碰撞器大小, 如果 (x, y) 都小于 0, 则默认使用 AnimatedSprite 的默认动画第一帧的大小
     /// </summary>
+    [Export]
     public Vector2 ThrowCollisionSize { get; set; } = new Vector2(-1, -1);
 
     /// <summary>
@@ -277,6 +279,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         ShadowSprite.Visible = false;
         MotionMode = MotionModeEnum.Floating;
         MoveController = AddComponent<MoveController>();
+        MoveController.Enable = !IsStatic;
         OnInit();
     }
 
@@ -778,12 +781,16 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             }
             else //只更新 MoveController 组件
             {
-                if (!MoveController.IsReady)
+                if (MoveController.Enable)
                 {
-                    MoveController.Ready();
-                    MoveController.IsReady = true;
+                    if (!MoveController.IsReady)
+                    {
+                        MoveController.Ready();
+                        MoveController.IsReady = true;
+                    }
+
+                    MoveController.Process(newDelta);
                 }
-                MoveController.Process(newDelta);
             }
         }
 
@@ -972,12 +979,16 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             }
             else //只更新 MoveController 组件
             {
-                if (!MoveController.IsReady)
+                if (MoveController.Enable)
                 {
-                    MoveController.Ready();
-                    MoveController.IsReady = true;
+                    if (!MoveController.IsReady)
+                    {
+                        MoveController.Ready();
+                        MoveController.IsReady = true;
+                    }
+
+                    MoveController.PhysicsProcess(newDelta);
                 }
-                MoveController.PhysicsProcess(newDelta);
             }
         }
 
@@ -1138,7 +1149,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             {
                 _throwRectangleShape = new RectangleShape2D();
             }
-
+            
             Collision.Shape = _throwRectangleShape;
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;

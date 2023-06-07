@@ -129,7 +129,7 @@ public partial class ActivityObject
                 var value = propertyInfo.GetValue(this);
                 if (value == null || ((Node)value).GetParent() == null)
                 {
-                    var node = GetNodeOrNull(propertyInfo.Name);
+                    var node = _FindNodeInChild(this, propertyInfo.Name, propertyInfo.PropertyType);
                     if (node == null)
                     {
                         node = (Node)Activator.CreateInstance(propertyInfo.PropertyType);
@@ -143,5 +143,28 @@ public partial class ActivityObject
                 }
             }
         }
+    }
+
+    private Node _FindNodeInChild(Node node, string name, Type type)
+    {
+        var childCount = node.GetChildCount();
+        for (int i = 0; i < childCount; i++)
+        {
+            var child = node.GetChild(i);
+            if (child.Name == name && child.GetType().IsAssignableTo(type))
+            {
+                return child;
+            }
+            else
+            {
+                var result = _FindNodeInChild(child, name, type);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+        }
+
+        return null;
     }
 }

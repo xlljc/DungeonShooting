@@ -54,6 +54,12 @@ public abstract partial class Weapon : ActivityObject
     public Marker2D ShellPoint { get; set; }
 
     /// <summary>
+    /// 武器握把位置
+    /// </summary>
+    [Export, ExportFillNode]
+    public Marker2D GripPoint { get; set; }
+    
+    /// <summary>
     /// 武器的当前散射半径
     /// </summary>
     public float CurrScatteringRange { get; private set; } = 0;
@@ -159,6 +165,9 @@ public abstract partial class Weapon : ActivityObject
 
     //当前后坐力导致的偏移长度
     private float _currBacklashLength = 0;
+
+    //临时存放动画精灵位置
+    private Vector2 _tempAnimatedSpritePosition;
     
     // ----------------------------------------------
     private uint _tempLayer;
@@ -180,7 +189,7 @@ public abstract partial class Weapon : ActivityObject
         _init = true;
         foreach (var weaponAttr in ExcelConfig.Weapon_List)
         {
-            if (string.IsNullOrEmpty(weaponAttr.WeaponId))
+            if (!string.IsNullOrEmpty(weaponAttr.WeaponId))
             {
                 if (!_weaponAttributeMap.TryAdd(weaponAttr.WeaponId, weaponAttr))
                 {
@@ -220,8 +229,6 @@ public abstract partial class Weapon : ActivityObject
         {
             _aiWeaponAttribute = attribute;
         }
-        //未完成
-        //AnimatedSprite.Position = Attribute.ThrowSpritePosition;
 
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
@@ -339,7 +346,6 @@ public abstract partial class Weapon : ActivityObject
 
     protected override void Process(float delta)
     {
-        //GD.Print("AnimatedSprite: " + AnimatedSprite.Position);
         //这把武器被扔在地上, 或者当前武器没有被使用
         if (Master == null || Master.Holster.ActiveWeapon != this)
         {
@@ -1055,14 +1061,15 @@ public abstract partial class Weapon : ActivityObject
             Scale *= new Vector2(1, -1);
         }
 
-        var angle = master.MountPoint.GlobalRotationDegrees;
-        GlobalRotationDegrees = angle;
+        var rotation = master.MountPoint.GlobalRotation;
+        GlobalRotation = rotation;
         
         //继承role的移动速度
         InheritVelocity(master);
 
+        startPosition -= GripPoint.Position.Rotated(rotation);
         var startHeight = -master.MountPoint.Position.Y;
-        var direction = angle + Utils.RandomRangeInt(-20, 20);
+        var direction = Mathf.RadToDeg(rotation) + Utils.RandomRangeInt(-20, 20);
         var velocity = new Vector2(20, 0).Rotated(direction * Mathf.Pi / 180);
         var yf = Utils.RandomRangeInt(50, 70);
         var rotate = Utils.RandomRangeInt(-60, 60);
@@ -1104,6 +1111,10 @@ public abstract partial class Weapon : ActivityObject
         ZIndex = 0;
         //禁用碰撞
         //Collision.Disabled = true;
+        //精灵位置
+        _tempAnimatedSpritePosition = AnimatedSprite.Position;
+        var position = GripPoint.Position;
+        AnimatedSprite.Position = new Vector2(-position.X, -position.Y);
         //修改层级
         _tempLayer = CollisionLayer;
         CollisionLayer = PhysicsLayer.InHand;
@@ -1120,8 +1131,7 @@ public abstract partial class Weapon : ActivityObject
         Master = null;
         CollisionLayer = _tempLayer;
         _weaponAttribute = _playerWeaponAttribute;
-        //未完成
-        //AnimatedSprite.Position = Attribute.ThrowSpritePosition;
+        AnimatedSprite.Position = _tempAnimatedSpritePosition;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         OnRemove();

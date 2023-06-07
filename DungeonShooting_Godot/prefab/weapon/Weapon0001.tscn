@@ -1,10 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://c6etppq4v63xw"]
 
 [ext_resource type="PackedScene" uid="uid://cxltmhhp4rbyk" path="res://prefab/weapon/WeaponTemplate.tscn" id="1_0nysf"]
-[ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="2_bd6qw"]
+[ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="2_28mkv"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_ksckd"]
 [ext_resource type="SpriteFrames" uid="uid://5m0qs7m4er5u" path="res://resource/spriteFrames/Weapon0001.tres" id="4_xo84l"]
-
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5bfqf"]
 resource_local_to_scene = true
@@ -18,10 +17,11 @@ shader = ExtResource("3_ksckd")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
-[node name="Weapon0001" node_paths=PackedStringArray("FirePoint", "ShellPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_0nysf")]
-script = ExtResource("2_bd6qw")
-FirePoint = NodePath("FirePoint")
-ShellPoint = NodePath("ShellPoint")
+[node name="Weapon0001" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_0nysf")]
+script = ExtResource("2_28mkv")
+FirePoint = NodePath("AnimatedSprite/FirePoint")
+ShellPoint = NodePath("AnimatedSprite/ShellPoint")
+GripPoint = NodePath("GripPoint")
 AnimationPlayer = NodePath("AnimationPlayer")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
@@ -32,14 +32,13 @@ material = SubResource("ShaderMaterial_5bfqf")
 
 [node name="AnimatedSprite" parent="." index="1"]
 material = SubResource("ShaderMaterial_bj7y3")
-position = Vector2(4, 1)
 sprite_frames = ExtResource("4_xo84l")
 
-[node name="ShellPoint" parent="." index="2"]
-position = Vector2(5.5, -2.5)
+[node name="ShellPoint" parent="AnimatedSprite" index="0"]
+position = Vector2(1.5, -3.5)
 
-[node name="FirePoint" parent="." index="3"]
-position = Vector2(18, -1)
+[node name="FirePoint" parent="AnimatedSprite" index="1"]
+position = Vector2(14, -2)
 
-[node name="Collision" parent="." index="4"]
-position = Vector2(4, 0)
+[node name="GripPoint" parent="." index="2"]
+position = Vector2(-5, -1)
