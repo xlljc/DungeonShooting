@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using Config;
 
 /// <summary>
@@ -161,6 +162,48 @@ public abstract partial class Weapon : ActivityObject
     
     // ----------------------------------------------
     private uint _tempLayer;
+
+    private static bool _init = false;
+    private static Dictionary<string, ExcelConfig.Weapon> _weaponAttributeMap =
+        new Dictionary<string, ExcelConfig.Weapon>();
+
+    /// <summary>
+    /// 初始化武器属性数据
+    /// </summary>
+    public static void InitWeaponAttribute()
+    {
+        if (_init)
+        {
+            return;
+        }
+
+        _init = true;
+        foreach (var weaponAttr in ExcelConfig.Weapon_List)
+        {
+            if (string.IsNullOrEmpty(weaponAttr.WeaponId))
+            {
+                if (!_weaponAttributeMap.TryAdd(weaponAttr.WeaponId, weaponAttr))
+                {
+                    GD.PrintErr("发现重复注册的武器属性: " + weaponAttr.Id);
+                }
+            }
+        }
+    }
+    
+    private static ExcelConfig.Weapon _GetWeaponAttribute(string itemId)
+    {
+        if (_weaponAttributeMap.TryGetValue(itemId, out var attr))
+        {
+            return attr;
+        }
+
+        throw new Exception($"武器'{itemId}'没有在 Weapon 表中配置属性数据!");
+    }
+    
+    public override void OnInit()
+    {
+        InitWeapon(_GetWeaponAttribute(ItemId));
+    }
 
     /// <summary>
     /// 初始化武器属性

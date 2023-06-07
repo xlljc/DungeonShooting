@@ -95,6 +95,8 @@ public partial class GameApplication : Node2D
 		InitRoomConfig();
 		//初始化 ActivityObject
 		ActivityObject.InitActivity();
+		//初始化武器数据
+		Weapon.InitWeaponAttribute();
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = "testGroup";

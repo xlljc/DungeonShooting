@@ -150,7 +150,6 @@ public partial class DungeonManager : Node2D
         //玩家手上添加武器
         //player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
         var weapon = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001);
-        weapon.InitWeapon(ExcelConfig.Weapon_List[0]);
         weapon.PutDown(player.Position, RoomLayerEnum.NormalLayer);
 
         GameApplication.Instance.Cursor.SetGuiMode(false);

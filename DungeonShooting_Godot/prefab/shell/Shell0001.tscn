@@ -1,8 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://bj4yr6ru8nhwr"]
 
-[ext_resource type="Script" path="res://src/game/item/shell/Shell.cs" id="1_ph0ad"]
+[ext_resource type="Script" path="res://src/game/activity/shell/Shell.cs" id="1_ph0ad"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_k705i"]
 [ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/shellCase.png" id="3_0fth1"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_px12l"]
 resource_local_to_scene = true
