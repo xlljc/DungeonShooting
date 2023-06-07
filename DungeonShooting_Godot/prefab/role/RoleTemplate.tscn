@@ -1,17 +1,17 @@
 [gd_scene load_steps=8 format=3 uid="uid://cyrcv2jdgr8cf"]
 
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_vuu4w"]
-[ext_resource type="Script" path="res://src/game/role/MountRotation.cs" id="2_22sl5"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_xk5yk"]
+[ext_resource type="Script" path="res://src/game/role/MountRotation.cs" id="2_5ddpw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v2kfw"]
 resource_local_to_scene = true
-shader = ExtResource("1_vuu4w")
+shader = ExtResource("1_xk5yk")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yif6x"]
 resource_local_to_scene = true
-shader = ExtResource("1_vuu4w")
+shader = ExtResource("1_xk5yk")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
@@ -62,4 +62,4 @@ shape = SubResource("RectangleShape2D_n68nu")
 
 [node name="MountPoint" type="Marker2D" parent="."]
 position = Vector2(1, -6)
-script = ExtResource("2_22sl5")
+script = ExtResource("2_5ddpw")

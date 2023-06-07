@@ -1,35 +1,23 @@
-[gd_scene load_steps=7 format=3 uid="uid://bj4yr6ru8nhwr"]
+[gd_scene load_steps=6 format=3 uid="uid://bj4yr6ru8nhwr"]
 
-[ext_resource type="Script" path="res://src/game/activity/shell/Shell.cs" id="1_ph0ad"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_k705i"]
-[ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/shellCase.png" id="3_0fth1"]
-
+[ext_resource type="Script" path="res://src/game/activity/shell/Shell.cs" id="1_2g70c"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_tdny6"]
+[ext_resource type="SpriteFrames" uid="uid://b8gksxl7auquc" path="res://resource/spriteFrames/Shell0001.tres" id="3_ujn5y"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_px12l"]
 resource_local_to_scene = true
-shader = ExtResource("2_k705i")
+shader = ExtResource("2_tdny6")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7e6fo"]
 resource_local_to_scene = true
-shader = ExtResource("2_k705i")
+shader = ExtResource("2_tdny6")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_4huvy"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_0fth1")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
 [node name="Shell0001" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
-script = ExtResource("1_ph0ad")
+script = ExtResource("1_2g70c")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
@@ -40,6 +28,6 @@ material = SubResource("ShaderMaterial_px12l")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_7e6fo")
-sprite_frames = SubResource("SpriteFrames_4huvy")
+sprite_frames = ExtResource("3_ujn5y")
 
 [node name="Collision" type="CollisionShape2D" parent="."]

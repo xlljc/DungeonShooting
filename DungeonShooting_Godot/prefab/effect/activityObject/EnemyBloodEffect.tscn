@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://m0s0k5nw7nbi"]
 
-[ext_resource type="Material" uid="uid://c1chld6lkpgji" path="res://resource/material/SmokeParticleMaterial.tres" id="1_wwb7t"]
-[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/Smoke.png" id="2_5rrhq"]
-[ext_resource type="Script" path="res://src/game/effects/AutoDestroyEffect.cs" id="3_cvfk3"]
+[ext_resource type="Material" uid="uid://c1chld6lkpgji" path="res://resource/material/SmokeParticleMaterial.tres" id="1_jp2tw"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/Smoke.png" id="2_xg444"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroyEffect.cs" id="3_lldtd"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_emuda"]
 particles_animation = true
@@ -15,11 +15,11 @@ modulate = Color(0.811765, 0.0980392, 0.0980392, 0.627451)
 material = SubResource("CanvasItemMaterial_emuda")
 emitting = false
 amount = 10
-process_material = ExtResource("1_wwb7t")
-texture = ExtResource("2_5rrhq")
+process_material = ExtResource("1_jp2tw")
+texture = ExtResource("2_xg444")
 lifetime = 1.2
 one_shot = true
 explosiveness = 1.0
 fixed_fps = 20
-script = ExtResource("3_cvfk3")
+script = ExtResource("3_lldtd")
 DelayTime = 1.5

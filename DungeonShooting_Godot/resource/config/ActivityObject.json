@@ -6,9 +6,33 @@
     "Remark": "\u73A9\u5BB6"
   },
   {
+    "Id": "enemy0001",
+    "Type": 4,
+    "Prefab": "res://prefab/role/Enemy0001.tscn",
+    "Remark": "\u654C\u4EBA"
+  },
+  {
     "Id": "weapon0001",
     "Type": 5,
     "Prefab": "res://prefab/weapon/Weapon0001.tscn",
+    "Remark": ""
+  },
+  {
+    "Id": "weapon0002",
+    "Type": 5,
+    "Prefab": "res://prefab/weapon/Weapon0002.tscn",
+    "Remark": ""
+  },
+  {
+    "Id": "weapon0003",
+    "Type": 5,
+    "Prefab": "res://prefab/weapon/Weapon0003.tscn",
+    "Remark": ""
+  },
+  {
+    "Id": "weapon0004",
+    "Type": 5,
+    "Prefab": "res://prefab/weapon/Weapon0004.tscn",
     "Remark": ""
   },
   {
@@ -20,7 +44,7 @@
   {
     "Id": "bullet0002",
     "Type": 6,
-    "Prefab": "res://prefab/bullet/Bullet0001.tscn",
+    "Prefab": "res://prefab/bullet/Bullet0002.tscn",
     "Remark": ""
   },
   {
@@ -28,6 +52,12 @@
     "Type": 7,
     "Prefab": "res://prefab/shell/Shell0001.tscn",
     "Remark": ""
+  },
+  {
+    "Id": "effect0001",
+    "Type": 8,
+    "Prefab": "res://prefab/effect/activityObject/Effect0001.tscn",
+    "Remark": "\u654C\u4EBA\u6B7B\u4EA1\u788E\u7247"
   },
   {
     "Id": "other_door_e",

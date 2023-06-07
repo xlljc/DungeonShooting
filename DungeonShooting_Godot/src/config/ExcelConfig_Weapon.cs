@@ -14,7 +14,7 @@ public static partial class ExcelConfig
         public string Id;
 
         /// <summary>
-        /// 属性绑定武器的Id,如果是Ai使用的数据, 则填空串
+        /// 属性绑定武器的Id,如果是Ai使用的数据, 则填空字符串串
         /// </summary>
         [JsonInclude]
         public string WeaponId;

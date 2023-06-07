@@ -54,22 +54,11 @@ public partial class Shotgun : Weapon
     //         AiUseAttribute.TriggerInterval = 3.5f;
     //     }
     // }
-    
-    /// <summary>
-    /// 弹壳预制体
-    /// </summary>
-    public PackedScene ShellPack;
-
-    public override void OnInit()
-    {
-        base.OnInit();
-        ShellPack = ResourceManager.Load<PackedScene>(ResourcePath.prefab_weapon_shell_ShellCase_tscn);
-    }
 
     protected override void OnFire()
     {
         //创建一个弹壳
-        ThrowShell("0001");
+        ThrowShell(ActivityObject.Ids.Id_shell0001);
         
         if (Master == Player.Current)
         {

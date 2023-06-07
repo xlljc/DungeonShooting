@@ -127,7 +127,7 @@ public partial class Enemy : Role
         var count = Utils.RandomRangeInt(3, 6);
         for (var i = 0; i < count; i++)
         {
-            var debris = Create(ActivityIdPrefix.Effect + "0001");
+            var debris = Create(Ids.Id_effect0001);
             debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
             debris.InheritVelocity(this);
         }

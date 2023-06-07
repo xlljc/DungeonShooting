@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://lbe753cb8heb"]
 
-[ext_resource type="Script" path="res://src/game/GameApplication.cs" id="1_8bmj5"]
-[ext_resource type="Script" path="res://src/game/camera/GameCamera.cs" id="2_5j1s8"]
+[ext_resource type="Script" path="res://src/game/GameApplication.cs" id="1_mh1cq"]
+[ext_resource type="Script" path="res://src/game/camera/GameCamera.cs" id="2_2j367"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
@@ -21,7 +21,7 @@ shader = SubResource("1")
 shader_parameter/offset = Vector2(0, 0)
 
 [node name="Main" type="Node2D" node_paths=PackedStringArray("SubViewport", "SubViewportContainer", "SceneRoot", "GlobalNodeRoot")]
-script = ExtResource("1_8bmj5")
+script = ExtResource("1_mh1cq")
 SubViewport = NodePath("ViewCanvas/SubViewportContainer/SubViewport")
 SubViewportContainer = NodePath("ViewCanvas/SubViewportContainer")
 SceneRoot = NodePath("ViewCanvas/SubViewportContainer/SubViewport/SceneRoot")
@@ -49,6 +49,6 @@ position = Vector2(253, 219)
 process_callback = 0
 limit_smoothed = true
 editor_draw_drag_margin = true
-script = ExtResource("2_5j1s8")
+script = ExtResource("2_2j367")
 
 [node name="GlobalNodeRoot" type="Node2D" parent="."]

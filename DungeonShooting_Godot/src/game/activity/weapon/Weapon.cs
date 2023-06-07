@@ -1174,7 +1174,7 @@ public abstract partial class Weapon : ActivityObject
         var verticalSpeed = Utils.RandomRangeInt(60, 120);
         var velocity = new Vector2(Utils.RandomRangeInt(20, 60), 0).Rotated(direction * Mathf.Pi / 180);
         var rotate = Utils.RandomRangeInt(-720, 720);
-        var shell = Create(ActivityIdPrefix.Shell + shellId);
+        var shell = Create(shellId);
         shell.Rotation = Master.MountPoint.RealRotation;
         shell.InheritVelocity(Master);
         shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
