@@ -301,8 +301,10 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         if (Engine.IsEditorHint())
         {
             _InitNodeInEditor();
+            return;
         }
 #endif
+        EnterTree();
     }
     
     /// <summary>
@@ -310,7 +312,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public sealed override void _ExitTree()
     {
-        
+#if TOOLS
+        // 在工具模式下创建的 template 节点自动创建对应的必要子节点
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+#endif
+        ExitTree();
     }
 
     /// <summary>

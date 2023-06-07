@@ -4,36 +4,7 @@ using Godot;
 [Tool, GlobalClass]
 public partial class Knife : Weapon
 {
-    // private class KnifeAttribute : WeaponAttribute
-    // {
-    //     public KnifeAttribute()
-    //     {
-    //         Icon = ResourcePath.resource_sprite_gun_knife1_png;
-    //         WeaponPrefab = ResourcePath.prefab_weapon_Knife_tscn;
-    //         //攻速设置
-    //         StartFiringSpeed = 180;
-    //         FinalFiringSpeed = StartFiringSpeed;
-    //         //关闭连发
-    //         ContinuousShoot = false;
-    //         //设置成松发开火
-    //         LooseShoot = true;
-    //         //弹药量, 可以理解为耐久度
-    //         AmmoCapacity = 180;
-    //         MaxAmmoCapacity = AmmoCapacity;
-    //         //握把位置
-    //         SpritePosition = new Vector2(10, 0);
-    //         MaxDistance = MinDistance = 35;
-    //         //后坐力改为向前, 模拟手伸长的效果
-    //         MaxBacklash = -8;
-    //         MinBacklash = -8;
-    //         BacklashRegressionSpeed = 24;
-    //         UpliftAngle = -95;
-    //
-    //         //AiUseAttribute = Clone();
-    //         //AiUseAttribute.TriggerInterval = 3f;
-    //     }
-    // }
-
+    
     private Area2D _hitArea;
     private int _attackIndex = 0;
     
