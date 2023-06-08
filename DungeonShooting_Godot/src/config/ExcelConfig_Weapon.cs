@@ -257,8 +257,39 @@ public static partial class ExcelConfig
         public SerializeVector2 ThrowCollisionSize;
 
         /// <summary>
+        /// 射击音效
+        /// </summary>
+        [JsonInclude]
+        public string ShootSound;
+
+        /// <summary>
+        /// 换弹音效
+        /// </summary>
+        [JsonInclude]
+        public string ReloadSound;
+
+        /// <summary>
+        /// 换弹音效延时时间
+        /// </summary>
+        [JsonInclude]
+        public float ReloadSoundDelayTime;
+
+        /// <summary>
+        /// 上膛音效
+        /// </summary>
+        [JsonInclude]
+        public string EquipSound;
+
+        /// <summary>
+        /// 上膛音效延时时间
+        /// </summary>
+        [JsonInclude]
+        public float EquipSoundDelayTime;
+
+        /// <summary>
         /// Ai属性 <br/>
-        /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性
+        /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性 <br/>
+        /// 如果不填则Ai和玩家使用同一种属性
         /// </summary>
         [JsonInclude]
         public string AiUseAttributeId;
@@ -331,6 +362,11 @@ public static partial class ExcelConfig
             inst.UpliftAngleRestore = UpliftAngleRestore;
             inst.BulletId = BulletId;
             inst.ThrowCollisionSize = ThrowCollisionSize;
+            inst.ShootSound = ShootSound;
+            inst.ReloadSound = ReloadSound;
+            inst.ReloadSoundDelayTime = ReloadSoundDelayTime;
+            inst.EquipSound = EquipSound;
+            inst.EquipSoundDelayTime = EquipSoundDelayTime;
             inst.AiUseAttributeId = AiUseAttributeId;
             inst.AiTargetLockingTime = AiTargetLockingTime;
             inst.AiBulletSpeedScale = AiBulletSpeedScale;

@@ -20,6 +20,7 @@ public partial class ActivityObject
         public const string Id_weapon0002 = "weapon0002";
         public const string Id_weapon0003 = "weapon0003";
         public const string Id_weapon0004 = "weapon0004";
+        public const string Id_weapon0005 = "weapon0005";
         public const string Id_bullet0001 = "bullet0001";
         public const string Id_bullet0002 = "bullet0002";
         public const string Id_shell0001 = "shell0001";
@@ -52,6 +53,7 @@ public partial class ActivityObject
         _activityRegisterMap.Add("weapon0002", "res://prefab/weapon/Weapon0002.tscn");
         _activityRegisterMap.Add("weapon0003", "res://prefab/weapon/Weapon0003.tscn");
         _activityRegisterMap.Add("weapon0004", "res://prefab/weapon/Weapon0004.tscn");
+        _activityRegisterMap.Add("weapon0005", "res://prefab/weapon/Weapon0005.tscn");
         _activityRegisterMap.Add("bullet0001", "res://prefab/bullet/Bullet0001.tscn");
         _activityRegisterMap.Add("bullet0002", "res://prefab/bullet/Bullet0002.tscn");
         _activityRegisterMap.Add("shell0001", "res://prefab/shell/Shell0001.tscn");

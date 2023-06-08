@@ -24,13 +24,45 @@ public partial class SoundManager
     /// </summary>
     private partial class AudioPlayer2D : AudioStreamPlayer2D
     {
+        private float _delayTimer = -1;
+        
         public override void _Ready()
         {
             Finished += OnPlayFinish;
         }
 
-        public void OnPlayFinish()
+        /// <summary>
+        /// 延时播放
+        /// </summary>
+        public void DelayPlay(float time)
         {
+            _delayTimer = time;
+        }
+
+        /// <summary>
+        /// 停止播放, 并回收节点
+        /// </summary>
+        public void StopPlay()
+        {
+            Stop();
+            OnPlayFinish();
+        }
+        
+        public override void _Process(double delta)
+        {
+            if (_delayTimer > 0)
+            {
+                _delayTimer -= (float)delta;
+                if (_delayTimer <= 0)
+                {
+                    Play();
+                }
+            }
+        }
+        
+        private void OnPlayFinish()
+        {
+            _delayTimer = -1;
             RecycleAudioPlayer2D(this);
         }
     }
@@ -45,7 +77,16 @@ public partial class SoundManager
             Finished += OnPlayFinish;
         }
 
-        public void OnPlayFinish()
+        /// <summary>
+        /// 停止播放, 并回收节点
+        /// </summary>
+        public void StopPlay()
+        {
+            Stop();
+            OnPlayFinish();
+        }
+        
+        private void OnPlayFinish()
         {
             GetParent().RemoveChild(this);
             Stream = null;
@@ -113,6 +154,35 @@ public partial class SoundManager
         soundNode.Bus = Enum.GetName(typeof(BUS), 1);
         soundNode.VolumeDb = volume;
         soundNode.Play();
+        return soundNode;
+    }
+
+    /// <summary>
+    /// 在指定的节点下延时播放音效 用于音效
+    /// </summary>
+    /// <param name="soundName">音效文件路径</param>
+    /// <param name="pos">发声节点所在全局坐标</param>
+    /// <param name="delayTime">延时时间</param>
+    /// <param name="volume">音量</param>
+    /// <param name="target">挂载节点, 为null则挂载到房间根节点下</param>
+    public static AudioStreamPlayer2D PlaySoundEffectPositionDelay(string soundName, Vector2 pos, float delayTime, float volume = 0.5f, Node2D target = null)
+    {
+        var sound = ResourceManager.Load<AudioStream>(soundName);
+        var soundNode = GetAudioPlayer2DInstance();
+        if (target != null)
+        {
+            target.AddChild(soundNode);
+        }
+        else
+        {
+            GameApplication.Instance.GlobalNodeRoot.AddChild(soundNode);
+        }
+        
+        soundNode.GlobalPosition = pos;
+        soundNode.Stream = sound;
+        soundNode.Bus = Enum.GetName(typeof(BUS), 1);
+        soundNode.VolumeDb = volume;
+        soundNode.DelayPlay(delayTime);
         return soundNode;
     }
 

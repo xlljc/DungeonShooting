@@ -6,12 +6,28 @@ using Godot;
 [Tool, GlobalClass]
 public partial class Gun : Weapon
 {
-    
+    protected override void OnReload()
+    {
+        //播放换弹音效
+        if (!string.IsNullOrEmpty(Attribute.ReloadSound))
+        {
+            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            if (Attribute.ReloadSoundDelayTime <= 0)
+            {
+                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound, position);
+            }
+            else
+            {
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound, position, Attribute.ReloadSoundDelayTime);
+            }
+        }
+    }
+
     protected override void OnFire()
     {
         //创建一个弹壳
         ThrowShell(ActivityObject.Ids.Id_shell0001);
-        
+
         if (Master == Player.Current)
         {
             //创建抖动
@@ -25,8 +41,25 @@ public partial class Gun : Weapon
         sprite.GlobalRotation = FirePoint.GlobalRotation;
         sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
 
+        var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
         //播放射击音效
-        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet2_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -8);
+        if (!string.IsNullOrEmpty(Attribute.ShootSound))
+        {
+            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound, position, 0);
+        }
+        
+        //播放上膛音效
+        if (!string.IsNullOrEmpty(Attribute.EquipSound))
+        {
+            if (Attribute.EquipSoundDelayTime <= 0)
+            {
+                SoundManager.PlaySoundEffectPosition(Attribute.EquipSound, position);
+            }
+            else
+            {
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.EquipSound, position, Attribute.EquipSoundDelayTime);
+            }
+        }
     }
 
     protected override void OnShoot(float fireRotation)

@@ -3,6 +3,11 @@ using Godot;
 [Tool, GlobalClass]
 public partial class Shotgun : Weapon
 {
+    protected override void OnReload()
+    {
+        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_Reloading0003_ogg, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition));
+    }
+
     protected override void OnFire()
     {
         //创建一个弹壳
@@ -22,7 +27,7 @@ public partial class Shotgun : Weapon
         sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         
         //播放射击音效
-        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_ordinaryBullet3_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -15);
+        SoundManager.PlaySoundEffectPosition(ResourcePath.resource_sound_sfx_Shooting0003_mp3, GameApplication.Instance.ViewToGlobalPosition(GlobalPosition), -15);
     }
 
     protected override void OnShoot(float fireRotation)
