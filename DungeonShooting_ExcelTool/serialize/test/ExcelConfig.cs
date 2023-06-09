@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Godot;
+//using Godot;
 
 namespace Config;
 
@@ -15,6 +15,15 @@ public static partial class ExcelConfig
     /// ActivityObject.xlsx表数据集合, 里 Map 形式存储, key 为 Id
     /// </summary>
     public static Dictionary<string, ActivityObject> ActivityObject_Map { get; private set; }
+
+    /// <summary>
+    /// Test.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// </summary>
+    public static List<Test> Test_List { get; private set; }
+    /// <summary>
+    /// Test.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// </summary>
+    public static Dictionary<string, Test> Test_Map { get; private set; }
 
     /// <summary>
     /// Weapon.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
@@ -36,8 +45,10 @@ public static partial class ExcelConfig
         _init = true;
 
         _InitActivityObjectConfig();
+        _InitTestConfig();
         _InitWeaponConfig();
 
+        _InitTestRef();
     }
     private static void _InitActivityObjectConfig()
     {
@@ -53,8 +64,26 @@ public static partial class ExcelConfig
         }
         catch (Exception e)
         {
-            GD.PrintErr(e.ToString());
+            //GD.PrintErr(e.ToString());
             throw new Exception("初始化表'ActivityObject'失败!");
+        }
+    }
+    private static void _InitTestConfig()
+    {
+        try
+        {
+            var text = _ReadConfigAsText("res://resource/config/Test.json");
+            Test_List = JsonSerializer.Deserialize<List<Test>>(text);
+            Test_Map = new Dictionary<string, Test>();
+            foreach (var item in Test_List)
+            {
+                Test_Map.Add(item.Id, item);
+            }
+        }
+        catch (Exception e)
+        {
+            //GD.PrintErr(e.ToString());
+            throw new Exception("初始化表'Test'失败!");
         }
     }
     private static void _InitWeaponConfig()
@@ -71,16 +100,41 @@ public static partial class ExcelConfig
         }
         catch (Exception e)
         {
-            GD.PrintErr(e.ToString());
+            //GD.PrintErr(e.ToString());
             throw new Exception("初始化表'Weapon'失败!");
         }
     }
 
+    private static void _InitTestRef()
+    {
+        foreach (var item in Test_List)
+        {
+            try
+            {
+                item.Weapon = Weapon_Map[item._Weapon];
+                item.ActivityObject = ActivityObject_Map[item._ActivityObject];
+
+                item.Weapons = new Weapon[item._Weapons.Length];
+                for (var i = 0; i < item._Weapons.Length; i++)
+                {
+                    item.Weapons[i] = Weapon_Map[item._Weapons[i]];
+                }
+
+                item.WeaponMap = new Dictionary<string, Weapon>();
+                foreach (var pair in item._WeaponMap)
+                {
+                    item.WeaponMap.Add(pair.Key, Weapon_Map[pair.Value]);
+                }
+            }
+            catch (Exception e)
+            {
+                //GD.PrintErr(e.ToString());
+                throw new Exception("初始化'Test'引用其他表数据失败, 当前行id: " + item.Id);
+            }
+        }
+    }
     private static string _ReadConfigAsText(string path)
     {
-        var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
-        var asText = file.GetAsText();
-        file.Dispose();
-        return asText;
+        return "";
     }
 }

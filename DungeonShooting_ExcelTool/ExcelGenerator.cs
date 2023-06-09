@@ -12,16 +12,44 @@ public static class ExcelGenerator
 #else
     private const string ExcelFilePath = "excel/excelFile";
 #endif
+
+    private static HashSet<string> _excelNames = new HashSet<string>();
+
+    
+    private enum CollectionsType
+    {
+        None,
+        Array,
+        Map
+    }
     
     private class MappingData
     {
+
         public string TypeStr;
         public string TypeName;
+        public CollectionsType CollectionsType;
+        
+        public bool IsRefExcel;
+        public string RefTypeStr;
+        public string RefTypeName;
 
-        public MappingData(string typeStr, string typeName)
+        public MappingData(string typeStr, string typeName, CollectionsType collectionsType)
         {
             TypeStr = typeStr;
             TypeName = typeName;
+            CollectionsType = collectionsType;
+            IsRefExcel = false;
+        }
+        
+        public MappingData(string typeStr, string typeName, CollectionsType collectionsType, string refTypeStr, string refTypeName)
+        {
+            TypeStr = typeStr;
+            TypeName = typeName;
+            CollectionsType = collectionsType;
+            IsRefExcel = true;
+            RefTypeStr = refTypeStr;
+            RefTypeName = refTypeName;
         }
     }
 
@@ -46,6 +74,13 @@ public static class ExcelGenerator
             if (directoryInfo.Exists)
             {
                 var fileInfos = directoryInfo.GetFiles();
+                //记录文件
+                foreach (var fileInfo in fileInfos)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(fileInfo.Name).FirstToUpper();
+                    _excelNames.Add(fileName);
+                }
+                //读取配置文件
                 foreach (var fileInfo in fileInfos)
                 {
                     if (fileInfo.Extension == ".xlsx")
@@ -113,13 +148,49 @@ public static class ExcelGenerator
 
         var fieldCode = "";
         var callFuncCode = "";
+        var callInitRefFuncCode = "";
         var funcCode = "";
+        var initRefFuncCode = "";
         
         foreach (var excelData in excelList)
         {
             var idName = excelData.ColumnNames[0];
             var idTypeStr = excelData.ColumnMappingData[idName].TypeStr;
             
+            //---------------------------- 引用其他表处理 ----------------------------
+            var hasRefColumn = false;
+            var refColumnNoneCode = "";
+            foreach (var columnName in excelData.ColumnNames)
+            {
+                var mappingData = excelData.ColumnMappingData[columnName];
+                if (mappingData.IsRefExcel)
+                {
+                    hasRefColumn = true;
+                    if (mappingData.CollectionsType == CollectionsType.None)
+                    {
+                        refColumnNoneCode += $"                item.{columnName} = {mappingData.RefTypeName}_Map[item.__{columnName}];\n";
+                    }
+                    else if (mappingData.CollectionsType == CollectionsType.Array)
+                    {
+                        refColumnNoneCode += $"                item.{columnName} = new {mappingData.RefTypeName}[item.__{columnName}.Length];\n";
+                        refColumnNoneCode += $"                for (var i = 0; i < item.__{columnName}.Length; i++)\n";
+                        refColumnNoneCode += $"                {{\n";
+                        refColumnNoneCode += $"                    item.{columnName}[i] = {mappingData.RefTypeName}_Map[item.__{columnName}[i]];\n";
+                        refColumnNoneCode += $"                }}\n";
+                    }
+                    else
+                    {
+                        refColumnNoneCode += $"                item.{columnName} = new {mappingData.RefTypeStr}();\n";
+                        refColumnNoneCode += $"                foreach (var pair in item.__{columnName})\n";
+                        refColumnNoneCode += $"                {{\n";
+                        refColumnNoneCode += $"                    item.{columnName}.Add(pair.Key, {mappingData.RefTypeName}_Map[pair.Value]);\n";
+                        refColumnNoneCode += $"                }}\n";
+                    }
+                    refColumnNoneCode += $"\n";
+                }
+            }
+            
+            //----------------------------- 数据集合 ------------------------------------
             fieldCode += $"    /// <summary>\n";
             fieldCode += $"    /// {excelData.TableName}.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同\n";
             fieldCode += $"    /// </summary>\n";
@@ -130,6 +201,7 @@ public static class ExcelGenerator
             fieldCode += $"    public static Dictionary<{idTypeStr}, {excelData.TableName}> {excelData.TableName}_Map {{ get; private set; }}\n";
             fieldCode += $"\n";
             
+            //------------------------------- 初始化函数 -------------------------------------
             callFuncCode += $"        _Init{excelData.TableName}Config();\n";
             
             funcCode += $"    private static void _Init{excelData.TableName}Config()\n";
@@ -137,7 +209,14 @@ public static class ExcelGenerator
             funcCode += $"        try\n";
             funcCode += $"        {{\n";
             funcCode += $"            var text = _ReadConfigAsText(\"res://resource/config/{excelData.TableName}.json\");\n";
-            funcCode += $"            {excelData.TableName}_List = JsonSerializer.Deserialize<List<{excelData.TableName}>>(text);\n";
+            if (hasRefColumn) //存在引用列
+            {
+                funcCode += $"            {excelData.TableName}_List = new List<{excelData.TableName}>(JsonSerializer.Deserialize<List<Ref_{excelData.TableName}>>(text));\n";
+            }
+            else
+            {
+                funcCode += $"            {excelData.TableName}_List = JsonSerializer.Deserialize<List<{excelData.TableName}>>(text);\n";
+            }
             funcCode += $"            {excelData.TableName}_Map = new Dictionary<{idTypeStr}, {excelData.TableName}>();\n";
             funcCode += $"            foreach (var item in {excelData.TableName}_List)\n";
             funcCode += $"            {{\n";
@@ -150,6 +229,29 @@ public static class ExcelGenerator
             funcCode += $"            throw new Exception(\"初始化表'{excelData.TableName}'失败!\");\n";
             funcCode += $"        }}\n";
             funcCode += $"    }}\n";
+
+            
+            //------------------------------- 初始化引用 ---------------------------------
+            if (hasRefColumn)
+            {
+                callInitRefFuncCode += $"        _Init{excelData.TableName}Ref();\n";
+
+                initRefFuncCode += $"    private static void _Init{excelData.TableName}Ref()\n";
+                initRefFuncCode += $"    {{\n";
+                initRefFuncCode += $"        foreach (Ref_{excelData.TableName} item in {excelData.TableName}_List)\n";
+                initRefFuncCode += $"        {{\n";
+                initRefFuncCode += $"            try\n";
+                initRefFuncCode += $"            {{\n";
+                initRefFuncCode += refColumnNoneCode;
+                initRefFuncCode += $"            }}\n";
+                initRefFuncCode += $"            catch (Exception e)\n";
+                initRefFuncCode += $"            {{\n";
+                initRefFuncCode += $"                GD.PrintErr(e.ToString());\n";
+                initRefFuncCode += $"                throw new Exception(\"初始化'{excelData.TableName}'引用其他表数据失败, 当前行id: \" + item.Id);\n";
+                initRefFuncCode += $"            }}\n";
+                initRefFuncCode += $"        }}\n";
+                initRefFuncCode += $"    }}\n";
+            }
         }
 
         code += fieldCode;
@@ -164,8 +266,12 @@ public static class ExcelGenerator
         code += $"        _init = true;\n";
         code += $"\n";
         code += callFuncCode;
+        code += $"\n";
+        code += callInitRefFuncCode;
         code += $"    }}\n";
         code += funcCode;
+        code += $"\n";
+        code += initRefFuncCode;
         code += $"    private static string _ReadConfigAsText(string path)\n";
         code += $"    {{\n";
         code += $"        var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);\n";
@@ -190,7 +296,9 @@ public static class ExcelGenerator
         outStr += $"public static partial class ExcelConfig\n{{\n";
         outStr += $"    public class {fileName}\n";
         outStr += $"    {{\n";
-
+        //继承的带有引用其他表的类代码
+        var outRefStr = "";
+        
         var cloneFuncStr = $"        /// <summary>\n";
         cloneFuncStr += $"        /// 返回浅拷贝出的新对象\n";
         cloneFuncStr += $"        /// </summary>\n";
@@ -274,8 +382,26 @@ public static class ExcelGenerator
                 outStr += $"        /// <summary>\n";
                 outStr += $"        /// {description}\n";
                 outStr += $"        /// </summary>\n";
-                outStr += $"        [JsonInclude]\n";
-                outStr += $"        public {mappingData.TypeStr} {field};\n\n";
+                if (!mappingData.IsRefExcel) //没有引用其他表
+                {
+                    outStr += $"        [JsonInclude]\n";
+                    outStr += $"        public {mappingData.TypeStr} {field};\n\n";
+                }
+                else
+                {
+                    outStr += $"        public {mappingData.RefTypeStr} {field};\n\n";
+                }
+
+                if (mappingData.IsRefExcel) //引用其他表
+                {
+                    if (string.IsNullOrEmpty(outRefStr))
+                    {
+                        outRefStr += $"    private class Ref_{fileName} : {fileName}\n";
+                        outRefStr += $"    {{\n";
+                    }
+                    outRefStr += $"        [JsonInclude]\n";
+                    outRefStr += $"        public {mappingData.TypeStr} __{field};\n\n";
+                }
                 
                 cloneFuncStr += $"            inst.{field} = {field};\n";
             }
@@ -284,6 +410,13 @@ public static class ExcelGenerator
             cloneFuncStr += "        }\n";
             outStr += cloneFuncStr;
             outStr += "    }\n";
+
+            if (!string.IsNullOrEmpty(outRefStr))
+            {
+                outRefStr += "    }\n";
+                outStr += outRefStr;
+            }
+            
             outStr += "}";
             
             //解析字段类型
@@ -324,57 +457,58 @@ public static class ExcelGenerator
 
                     var fieldName = excelData.ColumnNames[j];
                     var mappingData = excelData.ColumnMappingData[fieldName];
+                    var field = mappingData.IsRefExcel ? "__" + fieldName : fieldName;
                     try
                     {
                         switch (mappingData.TypeStr)
                         {
                             case "bool":
                             case "boolean":
-                                data.Add(fieldName, GetCellBooleanValue(cell));
+                                data.Add(field, GetCellBooleanValue(cell));
                                 break;
                             case "byte":
-                                data.Add(fieldName, Convert.ToByte(GetCellNumberValue(cell)));
+                                data.Add(field, Convert.ToByte(GetCellNumberValue(cell)));
                                 break;
                             case "sbyte":
-                                data.Add(fieldName, Convert.ToSByte(GetCellNumberValue(cell)));
+                                data.Add(field, Convert.ToSByte(GetCellNumberValue(cell)));
                                 break;
                             case "short":
-                                data.Add(fieldName, Convert.ToInt16(GetCellNumberValue(cell)));
+                                data.Add(field, Convert.ToInt16(GetCellNumberValue(cell)));
                                 break;
                             case "ushort":
-                                data.Add(fieldName, Convert.ToUInt16(GetCellNumberValue(cell)));
+                                data.Add(field, Convert.ToUInt16(GetCellNumberValue(cell)));
                                 break;
                             case "int":
-                                data.Add(fieldName, Convert.ToInt32(GetCellNumberValue(cell)));
+                                data.Add(field, Convert.ToInt32(GetCellNumberValue(cell)));
                                 break;
                             case "uint":
-                                data.Add(fieldName, Convert.ToUInt32(GetCellNumberValue(cell)));
+                                data.Add(field, Convert.ToUInt32(GetCellNumberValue(cell)));
                                 break;
                             case "long":
-                                data.Add(fieldName, Convert.ToInt64(GetCellNumberValue(cell)));
+                                data.Add(field, Convert.ToInt64(GetCellNumberValue(cell)));
                                 break;
                             case "ulong":
-                                data.Add(fieldName, Convert.ToUInt64(GetCellNumberValue(cell)));
+                                data.Add(field, Convert.ToUInt64(GetCellNumberValue(cell)));
                                 break;
                             case "float":
-                                data.Add(fieldName, Convert.ToSingle(GetCellNumberValue(cell)));
+                                data.Add(field, Convert.ToSingle(GetCellNumberValue(cell)));
                                 break;
                             case "double":
-                                data.Add(fieldName, GetCellNumberValue(cell));
+                                data.Add(field, GetCellNumberValue(cell));
                                 break;
                             case "string":
-                                data.Add(fieldName, GetCellStringValue(cell));
+                                data.Add(field, GetCellStringValue(cell));
                                 break;
                             default:
                             {
                                 var cellStringValue = GetCellStringValue(cell);
                                 if (cellStringValue.Length == 0)
                                 {
-                                    data.Add(fieldName, null);
+                                    data.Add(field, null);
                                 }
                                 else
                                 {
-                                    data.Add(fieldName, JsonSerializer.Deserialize(cellStringValue, excelData.ColumnType[fieldName]));
+                                    data.Add(field, JsonSerializer.Deserialize(cellStringValue, excelData.ColumnType[fieldName]));
                                 }
                             }
                                 break;
@@ -434,15 +568,30 @@ public static class ExcelGenerator
         return cell.BooleanCellValue;
     }
     
-    private static MappingData ConvertToType(string str)
+    private static MappingData ConvertToType(string str, int depth = 0)
     {
         if (Regex.IsMatch(str, "^\\w+$"))
         {
             var typeStr = TypeStrMapping(str);
             var typeName = TypeNameMapping(str);
-            return new MappingData(typeStr, typeName);
+            return new MappingData(typeStr, typeName, CollectionsType.None);
         }
-        else if (str.StartsWith('{'))
+        else if (Regex.IsMatch(str, "^\\$\\w+$")) //引用其他表
+        {
+            var realName = str.Substring(1);
+            if (!_excelNames.Contains(realName))
+            {
+                throw new Exception($"引用表数据失败, 未找到表: {realName}!");
+            }
+
+            if (depth > 1)
+            {
+                throw new Exception("引用表数据失败, 引用表数据仅支持放入第一层的数组和字典!");
+            }
+
+            return new MappingData(TypeStrMapping("string"), TypeNameMapping("string"), CollectionsType.None, realName, realName);
+        }
+        else if (str.StartsWith('{')) //字典
         {
             var tempStr = str.Substring(1, str.Length - 2);
             var index = tempStr.IndexOf(':');
@@ -456,19 +605,35 @@ public static class ExcelGenerator
             {
                 throw new Exception($"字典key类型必须是基础类型!");
             }
-            var type1 = ConvertToType(keyStr);
-            var type2 = ConvertToType(tempStr.Substring(index + 1));
+
+            var type1 = ConvertToType(keyStr, depth + 1);
+            var type2 = ConvertToType(tempStr.Substring(index + 1), depth + 1);
+
             var typeStr = $"Dictionary<{type1.TypeStr}, {type2.TypeStr}>";
             var typeName = $"System.Collections.Generic.Dictionary`2[[{type1.TypeName}],[{type2.TypeName}]]";
-            return new MappingData(typeStr, typeName);
+
+            if (type2.IsRefExcel) //引用过其他表
+            {
+                var refTypeStr = $"Dictionary<{type1.TypeStr}, {type2.RefTypeStr}>";
+                return new MappingData(typeStr, typeName, CollectionsType.Map, refTypeStr, type2.RefTypeName);
+            }
+
+            return new MappingData(typeStr, typeName, CollectionsType.Map);
         }
-        else if (str.StartsWith('['))
+        else if (str.StartsWith('[')) //数组
         {
             var tempStr = str.Substring(1, str.Length - 2);
-            var typeData = ConvertToType(tempStr);
+            var typeData = ConvertToType(tempStr, depth + 1);
             var typeStr = typeData.TypeStr + "[]";
             var typeName = typeData.TypeName + "[]";
-            return new MappingData(typeStr, typeName);
+
+            if (typeData.IsRefExcel) //引用过其他表
+            {
+                var refTypeStr = typeData.RefTypeStr + "[]";
+                return new MappingData(typeStr, typeName, CollectionsType.Array, refTypeStr, typeData.RefTypeName);
+            }
+            
+            return new MappingData(typeStr, typeName, CollectionsType.Array);
         }
         throw new Exception("类型描述语法错误!");
     }
