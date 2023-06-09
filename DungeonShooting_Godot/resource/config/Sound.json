@@ -1,0 +1,38 @@
+[
+  {
+    "Id": "shooting0001",
+    "Path": "res://resource/sound/sfx/Shooting0001.ogg",
+    "Volume": 15,
+    "Remark": ""
+  },
+  {
+    "Id": "shooting0002",
+    "Path": "res://resource/sound/sfx/Shooting0001.ogg",
+    "Volume": 15,
+    "Remark": ""
+  },
+  {
+    "Id": "shooting0003",
+    "Path": "res://resource/sound/sfx/Shooting0003.mp3",
+    "Volume": 0,
+    "Remark": ""
+  },
+  {
+    "Id": "reloading0001",
+    "Path": "res://resource/sound/sfx/Reloading0001.mp3",
+    "Volume": 0,
+    "Remark": ""
+  },
+  {
+    "Id": "reloading0002",
+    "Path": "res://resource/sound/sfx/Reloading0002.ogg",
+    "Volume": 0,
+    "Remark": ""
+  },
+  {
+    "Id": "reloading0004",
+    "Path": "res://resource/sound/sfx/Reloading0004.ogg",
+    "Volume": 0,
+    "Remark": ""
+  }
+]

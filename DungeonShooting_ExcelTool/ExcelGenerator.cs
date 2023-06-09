@@ -168,22 +168,31 @@ public static class ExcelGenerator
                     hasRefColumn = true;
                     if (mappingData.CollectionsType == CollectionsType.None)
                     {
-                        refColumnNoneCode += $"                item.{columnName} = {mappingData.RefTypeName}_Map[item.__{columnName}];\n";
+                        refColumnNoneCode += $"                if (!string.IsNullOrEmpty(item.__{columnName}))\n";
+                        refColumnNoneCode += $"                {{\n";
+                        refColumnNoneCode += $"                    item.{columnName} = {mappingData.RefTypeName}_Map[item.__{columnName}];\n";
+                        refColumnNoneCode += $"                }}\n";
                     }
                     else if (mappingData.CollectionsType == CollectionsType.Array)
                     {
-                        refColumnNoneCode += $"                item.{columnName} = new {mappingData.RefTypeName}[item.__{columnName}.Length];\n";
-                        refColumnNoneCode += $"                for (var i = 0; i < item.__{columnName}.Length; i++)\n";
+                        refColumnNoneCode += $"                if (item.__{columnName} != null)\n";
                         refColumnNoneCode += $"                {{\n";
-                        refColumnNoneCode += $"                    item.{columnName}[i] = {mappingData.RefTypeName}_Map[item.__{columnName}[i]];\n";
+                        refColumnNoneCode += $"                    item.{columnName} = new {mappingData.RefTypeName}[item.__{columnName}.Length];\n";
+                        refColumnNoneCode += $"                    for (var i = 0; i < item.__{columnName}.Length; i++)\n";
+                        refColumnNoneCode += $"                    {{\n";
+                        refColumnNoneCode += $"                        item.{columnName}[i] = {mappingData.RefTypeName}_Map[item.__{columnName}[i]];\n";
+                        refColumnNoneCode += $"                    }}\n";
                         refColumnNoneCode += $"                }}\n";
                     }
                     else
                     {
-                        refColumnNoneCode += $"                item.{columnName} = new {mappingData.RefTypeStr}();\n";
-                        refColumnNoneCode += $"                foreach (var pair in item.__{columnName})\n";
+                        refColumnNoneCode += $"                if (item.__{columnName} != null)\n";
                         refColumnNoneCode += $"                {{\n";
-                        refColumnNoneCode += $"                    item.{columnName}.Add(pair.Key, {mappingData.RefTypeName}_Map[pair.Value]);\n";
+                        refColumnNoneCode += $"                    item.{columnName} = new {mappingData.RefTypeStr}();\n";
+                        refColumnNoneCode += $"                    foreach (var pair in item.__{columnName})\n";
+                        refColumnNoneCode += $"                    {{\n";
+                        refColumnNoneCode += $"                        item.{columnName}.Add(pair.Key, {mappingData.RefTypeName}_Map[pair.Value]);\n";
+                        refColumnNoneCode += $"                    }}\n";
                         refColumnNoneCode += $"                }}\n";
                     }
                     refColumnNoneCode += $"\n";

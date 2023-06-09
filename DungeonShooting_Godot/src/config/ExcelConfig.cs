@@ -17,6 +17,15 @@ public static partial class ExcelConfig
     public static Dictionary<string, ActivityObject> ActivityObject_Map { get; private set; }
 
     /// <summary>
+    /// Sound.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// </summary>
+    public static List<Sound> Sound_List { get; private set; }
+    /// <summary>
+    /// Sound.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// </summary>
+    public static Dictionary<string, Sound> Sound_Map { get; private set; }
+
+    /// <summary>
     /// Weapon.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
     public static List<Weapon> Weapon_List { get; private set; }
@@ -36,8 +45,10 @@ public static partial class ExcelConfig
         _init = true;
 
         _InitActivityObjectConfig();
+        _InitSoundConfig();
         _InitWeaponConfig();
 
+        _InitWeaponRef();
     }
     private static void _InitActivityObjectConfig()
     {
@@ -57,12 +68,30 @@ public static partial class ExcelConfig
             throw new Exception("初始化表'ActivityObject'失败!");
         }
     }
+    private static void _InitSoundConfig()
+    {
+        try
+        {
+            var text = _ReadConfigAsText("res://resource/config/Sound.json");
+            Sound_List = JsonSerializer.Deserialize<List<Sound>>(text);
+            Sound_Map = new Dictionary<string, Sound>();
+            foreach (var item in Sound_List)
+            {
+                Sound_Map.Add(item.Id, item);
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            throw new Exception("初始化表'Sound'失败!");
+        }
+    }
     private static void _InitWeaponConfig()
     {
         try
         {
             var text = _ReadConfigAsText("res://resource/config/Weapon.json");
-            Weapon_List = JsonSerializer.Deserialize<List<Weapon>>(text);
+            Weapon_List = new List<Weapon>(JsonSerializer.Deserialize<List<Ref_Weapon>>(text));
             Weapon_Map = new Dictionary<string, Weapon>();
             foreach (var item in Weapon_List)
             {
@@ -76,6 +105,35 @@ public static partial class ExcelConfig
         }
     }
 
+    private static void _InitWeaponRef()
+    {
+        foreach (Ref_Weapon item in Weapon_List)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(item.__ShootSound))
+                {
+                    item.ShootSound = Sound_Map[item.__ShootSound];
+                }
+
+                if (!string.IsNullOrEmpty(item.__ReloadSound))
+                {
+                    item.ReloadSound = Sound_Map[item.__ReloadSound];
+                }
+
+                if (!string.IsNullOrEmpty(item.__EquipSound))
+                {
+                    item.EquipSound = Sound_Map[item.__EquipSound];
+                }
+
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
+                throw new Exception("初始化'Weapon'引用其他表数据失败, 当前行id: " + item.Id);
+            }
+        }
+    }
     private static string _ReadConfigAsText(string path)
     {
         var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);

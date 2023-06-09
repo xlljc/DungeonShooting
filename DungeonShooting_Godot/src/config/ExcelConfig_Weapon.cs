@@ -259,14 +259,12 @@ public static partial class ExcelConfig
         /// <summary>
         /// 射击音效
         /// </summary>
-        [JsonInclude]
-        public string ShootSound;
+        public Sound ShootSound;
 
         /// <summary>
         /// 换弹音效
         /// </summary>
-        [JsonInclude]
-        public string ReloadSound;
+        public Sound ReloadSound;
 
         /// <summary>
         /// 换弹音效延时时间
@@ -277,8 +275,7 @@ public static partial class ExcelConfig
         /// <summary>
         /// 上膛音效
         /// </summary>
-        [JsonInclude]
-        public string EquipSound;
+        public Sound EquipSound;
 
         /// <summary>
         /// 上膛音效延时时间
@@ -373,5 +370,17 @@ public static partial class ExcelConfig
             inst.AiAmmoConsumptionProbability = AiAmmoConsumptionProbability;
             return inst;
         }
+    }
+    private class Ref_Weapon : Weapon
+    {
+        [JsonInclude]
+        public string __ShootSound;
+
+        [JsonInclude]
+        public string __ReloadSound;
+
+        [JsonInclude]
+        public string __EquipSound;
+
     }
 }

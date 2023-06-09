@@ -9,16 +9,16 @@ public partial class Gun : Weapon
     protected override void OnReload()
     {
         //播放换弹音效
-        if (!string.IsNullOrEmpty(Attribute.ReloadSound))
+        if (Attribute.ReloadSound != null)
         {
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
             if (Attribute.ReloadSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound, position);
+                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound.Path, position, Attribute.ReloadSound.Volume);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound, position, Attribute.ReloadSoundDelayTime);
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound.Path, position, Attribute.ReloadSoundDelayTime, Attribute.ReloadSound.Volume);
             }
         }
     }
@@ -43,21 +43,21 @@ public partial class Gun : Weapon
 
         var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
         //播放射击音效
-        if (!string.IsNullOrEmpty(Attribute.ShootSound))
+        if (Attribute.ShootSound != null)
         {
-            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound, position, 0);
+            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, Attribute.ShootSound.Volume);
         }
         
         //播放上膛音效
-        if (!string.IsNullOrEmpty(Attribute.EquipSound))
+        if (Attribute.EquipSound != null)
         {
             if (Attribute.EquipSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.EquipSound, position);
+                SoundManager.PlaySoundEffectPosition(Attribute.EquipSound.Path, position, Attribute.EquipSound.Volume);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.EquipSound, position, Attribute.EquipSoundDelayTime);
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.EquipSound.Path, position, Attribute.EquipSoundDelayTime, Attribute.EquipSound.Volume);
             }
         }
     }
