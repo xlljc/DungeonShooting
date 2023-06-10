@@ -116,15 +116,15 @@ public partial class SoundManager
     /// 添加并播放音效 用于音效
     /// </summary>
     /// <param name="soundName">音效文件路径</param>
-    /// <param name="volume">音量</param>
-    public static AudioStreamPlayer PlaySoundEffect(string soundName, float volume = 0.5f)
+    /// <param name="volume">音量 (0 - 1)</param>
+    public static AudioStreamPlayer PlaySoundEffect(string soundName, float volume = 1f)
     {
         var sound = ResourceManager.Load<AudioStream>(soundName);
         var soundNode = GetAudioPlayerInstance();
         GameApplication.Instance.GlobalNodeRoot.AddChild(soundNode);
         soundNode.Stream = sound;
         soundNode.Bus = Enum.GetName(typeof(BUS), 1);
-        soundNode.VolumeDb = volume;
+        soundNode.VolumeDb = Mathf.LinearToDb(Mathf.Clamp(volume, 0, 1));
         soundNode.Play();
         return soundNode;
     }
@@ -134,9 +134,9 @@ public partial class SoundManager
     /// </summary>
     /// <param name="soundName">音效文件路径</param>
     /// <param name="pos">发声节点所在全局坐标</param>
-    /// <param name="volume">音量</param>
+    /// <param name="volume">音量 (0 - 1)</param>
     /// <param name="target">挂载节点, 为null则挂载到房间根节点下</param>
-    public static AudioStreamPlayer2D PlaySoundEffectPosition(string soundName, Vector2 pos, float volume = 0.5f, Node2D target = null)
+    public static AudioStreamPlayer2D PlaySoundEffectPosition(string soundName, Vector2 pos, float volume = 1f, Node2D target = null)
     {
         var sound = ResourceManager.Load<AudioStream>(soundName);
         var soundNode = GetAudioPlayer2DInstance();
@@ -152,7 +152,7 @@ public partial class SoundManager
         soundNode.GlobalPosition = pos;
         soundNode.Stream = sound;
         soundNode.Bus = Enum.GetName(typeof(BUS), 1);
-        soundNode.VolumeDb = volume;
+        soundNode.VolumeDb = Mathf.LinearToDb(Mathf.Clamp(volume, 0, 1));
         soundNode.Play();
         return soundNode;
     }
@@ -163,9 +163,9 @@ public partial class SoundManager
     /// <param name="soundName">音效文件路径</param>
     /// <param name="pos">发声节点所在全局坐标</param>
     /// <param name="delayTime">延时时间</param>
-    /// <param name="volume">音量</param>
+    /// <param name="volume">音量 (0 - 1)</param>
     /// <param name="target">挂载节点, 为null则挂载到房间根节点下</param>
-    public static AudioStreamPlayer2D PlaySoundEffectPositionDelay(string soundName, Vector2 pos, float delayTime, float volume = 0.5f, Node2D target = null)
+    public static AudioStreamPlayer2D PlaySoundEffectPositionDelay(string soundName, Vector2 pos, float delayTime, float volume = 1f, Node2D target = null)
     {
         var sound = ResourceManager.Load<AudioStream>(soundName);
         var soundNode = GetAudioPlayer2DInstance();
@@ -181,7 +181,7 @@ public partial class SoundManager
         soundNode.GlobalPosition = pos;
         soundNode.Stream = sound;
         soundNode.Bus = Enum.GetName(typeof(BUS), 1);
-        soundNode.VolumeDb = volume;
+        soundNode.VolumeDb = Mathf.LinearToDb(Mathf.Clamp(volume, 0, 1));
         soundNode.DelayPlay(delayTime);
         return soundNode;
     }

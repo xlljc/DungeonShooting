@@ -20,7 +20,7 @@ public static partial class ExcelConfig
         public string Path;
 
         /// <summary>
-        /// 音量(建议范围:-80到+20)
+        /// 音量(范围0 - 1)
         /// </summary>
         [JsonInclude]
         public float Volume;

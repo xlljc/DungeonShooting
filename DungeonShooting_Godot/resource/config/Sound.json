@@ -2,37 +2,67 @@
   {
     "Id": "shooting0001",
     "Path": "res://resource/sound/sfx/Shooting0001.ogg",
-    "Volume": 15,
-    "Remark": ""
+    "Volume": 1,
+    "Remark": "\u624B\u67AA"
   },
   {
     "Id": "shooting0002",
-    "Path": "res://resource/sound/sfx/Shooting0001.ogg",
-    "Volume": 15,
-    "Remark": ""
+    "Path": "res://resource/sound/sfx/Shooting0002.mp3",
+    "Volume": 1,
+    "Remark": "\u6B65\u67AA(\u6D88\u97F3)"
   },
   {
     "Id": "shooting0003",
     "Path": "res://resource/sound/sfx/Shooting0003.mp3",
-    "Volume": 0,
-    "Remark": ""
+    "Volume": 1,
+    "Remark": "\u9730\u5F39\u67AA"
   },
   {
     "Id": "reloading0001",
     "Path": "res://resource/sound/sfx/Reloading0001.mp3",
-    "Volume": 0,
-    "Remark": ""
+    "Volume": 1,
+    "Remark": "\u624B\u67AA"
   },
   {
     "Id": "reloading0002",
     "Path": "res://resource/sound/sfx/Reloading0002.ogg",
-    "Volume": 0,
+    "Volume": 1,
+    "Remark": "\u9730\u5F39\u67AA\u5355\u72EC\u88C5\u5F39"
+  },
+  {
+    "Id": "equip0001",
+    "Path": "res://resource/sound/sfx/Equip0001.ogg",
+    "Volume": 1,
     "Remark": ""
   },
   {
-    "Id": "reloading0004",
-    "Path": "res://resource/sound/sfx/Reloading0004.ogg",
-    "Volume": 0,
+    "Id": "equip0002",
+    "Path": "res://resource/sound/sfx/Equip0002.ogg",
+    "Volume": 1,
     "Remark": ""
+  },
+  {
+    "Id": "equip0003",
+    "Path": "res://resource/sound/sfx/Equip0003.ogg",
+    "Volume": 1,
+    "Remark": ""
+  },
+  {
+    "Id": "equip0004",
+    "Path": "res://resource/sound/sfx/Equip0004.ogg",
+    "Volume": 1,
+    "Remark": "\u9730\u5F39\u67AA"
+  },
+  {
+    "Id": "equip0005",
+    "Path": "res://resource/sound/sfx/Equip0005.ogg",
+    "Volume": 1,
+    "Remark": "\u9730\u5F39\u67AA"
+  },
+  {
+    "Id": "equip0006",
+    "Path": "res://resource/sound/sfx/Equip0006.ogg",
+    "Volume": 1,
+    "Remark": "\u9730\u5F39\u67AA"
   }
 ]

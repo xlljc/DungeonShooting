@@ -8,19 +8,7 @@ public partial class Gun : Weapon
 {
     protected override void OnReload()
     {
-        //播放换弹音效
-        if (Attribute.ReloadSound != null)
-        {
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            if (Attribute.ReloadSoundDelayTime <= 0)
-            {
-                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound.Path, position, Attribute.ReloadSound.Volume);
-            }
-            else
-            {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound.Path, position, Attribute.ReloadSoundDelayTime, Attribute.ReloadSound.Volume);
-            }
-        }
+        base.OnReload();
     }
 
     protected override void OnFire()
@@ -40,26 +28,6 @@ public partial class Gun : Weapon
         sprite.GlobalPosition = FirePoint.GlobalPosition;
         sprite.GlobalRotation = FirePoint.GlobalRotation;
         sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-
-        var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-        //播放射击音效
-        if (Attribute.ShootSound != null)
-        {
-            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, Attribute.ShootSound.Volume);
-        }
-        
-        //播放上膛音效
-        if (Attribute.EquipSound != null)
-        {
-            if (Attribute.EquipSoundDelayTime <= 0)
-            {
-                SoundManager.PlaySoundEffectPosition(Attribute.EquipSound.Path, position, Attribute.EquipSound.Volume);
-            }
-            else
-            {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.EquipSound.Path, position, Attribute.EquipSoundDelayTime, Attribute.EquipSound.Volume);
-            }
-        }
     }
 
     protected override void OnShoot(float fireRotation)

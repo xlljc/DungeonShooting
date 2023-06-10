@@ -278,12 +278,20 @@ public abstract partial class Weapon : ActivityObject
     }
 
     /// <summary>
-    /// 当开始换弹时调用
+    /// 当换弹时调用, 如果设置单独装弹, 则每装一次弹调用一次该函数
     /// </summary>
     protected virtual void OnReload()
     {
     }
 
+    /// <summary>
+    /// 当开始换弹时调用
+    /// </summary>
+    protected virtual void OnBeginReload()
+    {
+        
+    }
+    
     /// <summary>
     /// 当换弹完成时调用
     /// </summary>
@@ -685,8 +693,30 @@ public abstract partial class Weapon : ActivityObject
         {
             PlaySpriteAnimation(AnimatorNames.Fire);
         }
+        
+        var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+
+        //播放射击音效
+        if (Attribute.ShootSound != null)
+        {
+            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, Attribute.ShootSound.Volume);
+        }
+        
         //触发开火函数
         OnFire();
+        
+        //播放上膛音效
+        if (Attribute.EquipSound != null)
+        {
+            if (Attribute.EquipSoundDelayTime <= 0)
+            {
+                SoundManager.PlaySoundEffectPosition(Attribute.EquipSound.Path, position, Attribute.EquipSound.Volume);
+            }
+            else
+            {
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.EquipSound.Path, position, Attribute.EquipSoundDelayTime, Attribute.EquipSound.Volume);
+            }
+        }
 
         //开火发射的子弹数量
         var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
@@ -830,13 +860,53 @@ public abstract partial class Weapon : ActivityObject
         {
             Reloading = true;
             ReloadTimer = Attribute.ReloadTime;
-            //播放换弹动画
-            if (IsAutoPlaySpriteFrames)
+
+            //播放开始换弹音效
+            if (Attribute.BeginReloadSound != null)
             {
-                PlaySpriteAnimation(AnimatorNames.Reload);
+                var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+                if (Attribute.BeginReloadSoundDelayTime <= 0)
+                {
+                    SoundManager.PlaySoundEffectPosition(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSound.Volume);
+                }
+                else
+                {
+                    SoundManager.PlaySoundEffectPositionDelay(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSoundDelayTime, Attribute.BeginReloadSound.Volume);
+                }
             }
-            OnReload();
+            
+            //第一次换弹
+            OnBeginReload();
+            GD.Print("OnBeginReload.");
+            //换弹处理
+            ReloadHandler();
         }
+    }
+
+    private void ReloadHandler()
+    {
+        //播放换弹动画
+        if (IsAutoPlaySpriteFrames)
+        {
+            PlaySpriteAnimation(AnimatorNames.Reload);
+        }
+            
+        //播放换弹音效
+        if (Attribute.ReloadSound != null)
+        {
+            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            if (Attribute.ReloadSoundDelayTime <= 0)
+            {
+                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound.Path, position, Attribute.ReloadSound.Volume);
+            }
+            else
+            {
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound.Path, position, Attribute.ReloadSoundDelayTime, Attribute.ReloadSound.Volume);
+            }
+        }
+            
+        OnReload();
+        GD.Print("OnReload.");
     }
 
     /// <summary>
@@ -881,15 +951,10 @@ public abstract partial class Weapon : ActivityObject
                 ReloadTimer = 0;
                 OnReloadFinish();
             }
-            else
+            else //继续装弹
             {
                 ReloadTimer = Attribute.ReloadTime;
-                //播放换弹动画
-                if (IsAutoPlaySpriteFrames)
-                {
-                    PlaySpriteAnimation(AnimatorNames.Reload);
-                }
-                OnReload();
+                ReloadHandler();
             }
         }
         else //换弹结束

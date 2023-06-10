@@ -89,6 +89,18 @@ public static partial class ExcelConfig
         public int AloneReloadCount;
 
         /// <summary>
+        /// 单独装弹模式下,从触发装弹到开始装第一发子弹中间的间隔时间, 必须要将 'AloneReload' 属性设置为 true
+        /// </summary>
+        [JsonInclude]
+        public float AutoReloadBeginIntervalTime;
+
+        /// <summary>
+        /// 单独装弹模式下,从装完最后一发子弹到可以射击中间的间隔时间, 必须要将 'AloneReload' 属性设置为 true
+        /// </summary>
+        [JsonInclude]
+        public float AutoReloadFinishIntervalTime;
+
+        /// <summary>
         /// 单独装填的子弹时可以立即射击, 必须要将 'AloneReload' 属性设置为 true
         /// </summary>
         [JsonInclude]
@@ -262,9 +274,31 @@ public static partial class ExcelConfig
         public Sound ShootSound;
 
         /// <summary>
+        /// 开始换弹音效
+        /// </summary>
+        public Sound BeginReloadSound;
+
+        /// <summary>
+        /// 开始换弹音效延时时间
+        /// </summary>
+        [JsonInclude]
+        public float BeginReloadSoundDelayTime;
+
+        /// <summary>
         /// 换弹音效
         /// </summary>
         public Sound ReloadSound;
+
+        /// <summary>
+        /// 换弹结束音效
+        /// </summary>
+        public Sound ReloadFinishSound;
+
+        /// <summary>
+        /// 换弹结束音效延时
+        /// </summary>
+        [JsonInclude]
+        public float ReloadFinishSoundDelayTime;
 
         /// <summary>
         /// 换弹音效延时时间
@@ -282,6 +316,11 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public float EquipSoundDelayTime;
+
+        /// <summary>
+        /// 其他音效
+        /// </summary>
+        public Dictionary<string, Sound> OtherSoundMap;
 
         /// <summary>
         /// Ai属性 <br/>
@@ -331,6 +370,8 @@ public static partial class ExcelConfig
             inst.ReloadTime = ReloadTime;
             inst.AloneReload = AloneReload;
             inst.AloneReloadCount = AloneReloadCount;
+            inst.AutoReloadBeginIntervalTime = AutoReloadBeginIntervalTime;
+            inst.AutoReloadFinishIntervalTime = AutoReloadFinishIntervalTime;
             inst.AloneReloadCanShoot = AloneReloadCanShoot;
             inst.LooseShoot = LooseShoot;
             inst.MinChargeTime = MinChargeTime;
@@ -360,10 +401,15 @@ public static partial class ExcelConfig
             inst.BulletId = BulletId;
             inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.ShootSound = ShootSound;
+            inst.BeginReloadSound = BeginReloadSound;
+            inst.BeginReloadSoundDelayTime = BeginReloadSoundDelayTime;
             inst.ReloadSound = ReloadSound;
+            inst.ReloadFinishSound = ReloadFinishSound;
+            inst.ReloadFinishSoundDelayTime = ReloadFinishSoundDelayTime;
             inst.ReloadSoundDelayTime = ReloadSoundDelayTime;
             inst.EquipSound = EquipSound;
             inst.EquipSoundDelayTime = EquipSoundDelayTime;
+            inst.OtherSoundMap = OtherSoundMap;
             inst.AiUseAttributeId = AiUseAttributeId;
             inst.AiTargetLockingTime = AiTargetLockingTime;
             inst.AiBulletSpeedScale = AiBulletSpeedScale;
@@ -377,10 +423,19 @@ public static partial class ExcelConfig
         public string __ShootSound;
 
         [JsonInclude]
+        public string __BeginReloadSound;
+
+        [JsonInclude]
         public string __ReloadSound;
 
         [JsonInclude]
+        public string __ReloadFinishSound;
+
+        [JsonInclude]
         public string __EquipSound;
+
+        [JsonInclude]
+        public Dictionary<string, string> __OtherSoundMap;
 
     }
 }

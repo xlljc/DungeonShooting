@@ -116,14 +116,33 @@ public static partial class ExcelConfig
                     item.ShootSound = Sound_Map[item.__ShootSound];
                 }
 
+                if (!string.IsNullOrEmpty(item.__BeginReloadSound))
+                {
+                    item.BeginReloadSound = Sound_Map[item.__BeginReloadSound];
+                }
+
                 if (!string.IsNullOrEmpty(item.__ReloadSound))
                 {
                     item.ReloadSound = Sound_Map[item.__ReloadSound];
                 }
 
+                if (!string.IsNullOrEmpty(item.__ReloadFinishSound))
+                {
+                    item.ReloadFinishSound = Sound_Map[item.__ReloadFinishSound];
+                }
+
                 if (!string.IsNullOrEmpty(item.__EquipSound))
                 {
                     item.EquipSound = Sound_Map[item.__EquipSound];
+                }
+
+                if (item.__OtherSoundMap != null)
+                {
+                    item.OtherSoundMap = new Dictionary<string, Sound>();
+                    foreach (var pair in item.__OtherSoundMap)
+                    {
+                        item.OtherSoundMap.Add(pair.Key, Sound_Map[pair.Value]);
+                    }
                 }
 
             }
