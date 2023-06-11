@@ -92,13 +92,13 @@ public static partial class ExcelConfig
         /// 单独装弹模式下,从触发装弹到开始装第一发子弹中间的间隔时间, 必须要将 'AloneReload' 属性设置为 true
         /// </summary>
         [JsonInclude]
-        public float AutoReloadBeginIntervalTime;
+        public float AloneReloadBeginIntervalTime;
 
         /// <summary>
         /// 单独装弹模式下,从装完最后一发子弹到可以射击中间的间隔时间, 必须要将 'AloneReload' 属性设置为 true
         /// </summary>
         [JsonInclude]
-        public float AutoReloadFinishIntervalTime;
+        public float AloneReloadFinishIntervalTime;
 
         /// <summary>
         /// 单独装填的子弹时可以立即射击, 必须要将 'AloneReload' 属性设置为 true
@@ -290,21 +290,22 @@ public static partial class ExcelConfig
         public Sound ReloadSound;
 
         /// <summary>
+        /// 换弹音效延时时间
+        /// </summary>
+        [JsonInclude]
+        public float ReloadSoundDelayTime;
+
+        /// <summary>
         /// 换弹结束音效
         /// </summary>
         public Sound ReloadFinishSound;
 
         /// <summary>
-        /// 换弹结束音效延时
+        /// 换弹结束音效在换弹结束前多久开始 <br/>
+        /// 注意: 如果'AloneReload'为true, 那么当前属性的值应该小于'AloneReloadFinishIntervalTime'
         /// </summary>
         [JsonInclude]
-        public float ReloadFinishSoundDelayTime;
-
-        /// <summary>
-        /// 换弹音效延时时间
-        /// </summary>
-        [JsonInclude]
-        public float ReloadSoundDelayTime;
+        public float ReloadFinishSoundAdvanceTime;
 
         /// <summary>
         /// 上膛音效
@@ -369,8 +370,8 @@ public static partial class ExcelConfig
             inst.ReloadTime = ReloadTime;
             inst.AloneReload = AloneReload;
             inst.AloneReloadCount = AloneReloadCount;
-            inst.AutoReloadBeginIntervalTime = AutoReloadBeginIntervalTime;
-            inst.AutoReloadFinishIntervalTime = AutoReloadFinishIntervalTime;
+            inst.AloneReloadBeginIntervalTime = AloneReloadBeginIntervalTime;
+            inst.AloneReloadFinishIntervalTime = AloneReloadFinishIntervalTime;
             inst.AloneReloadCanShoot = AloneReloadCanShoot;
             inst.LooseShoot = LooseShoot;
             inst.MinChargeTime = MinChargeTime;
@@ -403,9 +404,9 @@ public static partial class ExcelConfig
             inst.BeginReloadSound = BeginReloadSound;
             inst.BeginReloadSoundDelayTime = BeginReloadSoundDelayTime;
             inst.ReloadSound = ReloadSound;
-            inst.ReloadFinishSound = ReloadFinishSound;
-            inst.ReloadFinishSoundDelayTime = ReloadFinishSoundDelayTime;
             inst.ReloadSoundDelayTime = ReloadSoundDelayTime;
+            inst.ReloadFinishSound = ReloadFinishSound;
+            inst.ReloadFinishSoundAdvanceTime = ReloadFinishSoundAdvanceTime;
             inst.EquipSound = EquipSound;
             inst.EquipSoundDelayTime = EquipSoundDelayTime;
             inst.OtherSoundMap = OtherSoundMap;

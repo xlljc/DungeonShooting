@@ -30,6 +30,18 @@
     "Remark": "\u9730\u5F39\u67AA\u5355\u72EC\u88C5\u5F39"
   },
   {
+    "Id": "reloadBegin0002",
+    "Path": "res://resource/sound/sfx/Reloading_begin0002.ogg",
+    "Volume": 1,
+    "Remark": "\u9730\u5F39\u67AA"
+  },
+  {
+    "Id": "reloadFinish0002",
+    "Path": "res://resource/sound/sfx/Reloading_finish0002.ogg",
+    "Volume": 1,
+    "Remark": "\u9730\u5F39\u67AA"
+  },
+  {
     "Id": "equip0001",
     "Path": "res://resource/sound/sfx/Equip0001.ogg",
     "Volume": 1,

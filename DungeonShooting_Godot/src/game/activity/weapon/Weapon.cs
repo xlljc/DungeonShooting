@@ -71,24 +71,40 @@ public abstract partial class Weapon : ActivityObject
     public bool Reloading { get; private set; } = false;
 
     /// <summary>
-    /// 换弹计时器
-    /// </summary>
-    public float ReloadTimer { get; private set; } = 0;
-
-    /// <summary>
-    /// 换弹进度 (0 - 1)
+    /// 换弹进度 (从 0 到 1)
     /// </summary>
     public float ReloadProgress
     {
         get
         {
-            if (Attribute.AloneReload)
+            if (!Reloading)
             {
-                var num = 1f / Attribute.AmmoCapacity;
-                return num * (Attribute.AmmoCapacity - CurrAmmo - 1) + num * (ReloadTimer / Attribute.ReloadTime);
+                return 1;
             }
 
-            return ReloadTimer / Attribute.ReloadTime;
+            if (Attribute.AloneReload)
+            {
+                //总时间
+                var total = Attribute.AloneReloadBeginIntervalTime + (Attribute.ReloadTime * Attribute.AmmoCapacity) + Attribute.AloneReloadFinishIntervalTime;
+                //当前时间
+                float current;
+                if (_aloneReloadState == 1)
+                {
+                    current = (Attribute.AloneReloadBeginIntervalTime - _reloadTimer) + Attribute.ReloadTime * CurrAmmo;
+                }
+                else if (_aloneReloadState == 2)
+                {
+                    current = Attribute.AloneReloadBeginIntervalTime + (Attribute.ReloadTime * (CurrAmmo + (1 - _reloadTimer / Attribute.ReloadTime)));
+                }
+                else
+                {
+                    current = Attribute.AloneReloadBeginIntervalTime + (Attribute.ReloadTime * CurrAmmo) + (Attribute.AloneReloadFinishIntervalTime - _reloadTimer);
+                }
+
+                return current / total;
+            }
+
+            return 1 - _reloadTimer / Attribute.ReloadTime;
         }
     }
 
@@ -171,7 +187,19 @@ public abstract partial class Weapon : ActivityObject
 
     //临时存放动画精灵位置
     private Vector2 _tempAnimatedSpritePosition;
+
+    //换弹计时器
+    private float _reloadTimer = 0;
     
+    //单独换弹设置下的换弹状态, 0: 未换弹, 1: 装第一颗子弹之前, 2: 单独装弹中, 3: 单独装弹完成
+    private byte _aloneReloadState = 0;
+
+    //本次换弹已用时间
+    private float _reloadUseTime = 0;
+
+    //是否播放过换弹完成音效
+    private bool _playReloadFinishSoundFlag = false;
+
     // ----------------------------------------------
     private uint _tempLayer;
 
@@ -383,8 +411,10 @@ public abstract partial class Weapon : ActivityObject
             if (_dirtyFlag)
             {
                 _dirtyFlag = false;
+                _aloneReloadState = 0;
                 Reloading = false;
-                ReloadTimer = 0;
+                _reloadTimer = 0;
+                _reloadUseTime = 0;
                 _attackFlag = false;
                 _continuousCount = 0;
                 _delayedTime = 0;
@@ -399,10 +429,84 @@ public abstract partial class Weapon : ActivityObject
             //换弹
             if (Reloading)
             {
-                ReloadTimer -= delta;
-                if (ReloadTimer <= 0)
+                //换弹用时
+                _reloadUseTime += delta;
+                _reloadTimer -= delta;
+
+                if (Attribute.AloneReload) //单独装弹模式
                 {
-                    ReloadSuccess();
+                    switch (_aloneReloadState)
+                    {
+                        case 0:
+                            GD.PrintErr("AloneReload状态错误!");
+                            break;
+                        case 1: //装第一颗子弹之前
+                        {
+                            if (_reloadTimer <= 0)
+                            {
+                                //开始装第一颗子弹
+                                _aloneReloadState = 2;
+                                ReloadHandler();
+                            }
+                        }
+                            break;
+                        case 2: //单独装弹中
+                        {
+                            if (_reloadTimer <= 0)
+                            {
+                                ReloadSuccess();
+                                if (ResidueAmmo == 0 || CurrAmmo == Attribute.AmmoCapacity) //单独装弹完成
+                                {
+                                    AloneReloadStateFinish();
+                                    if (Attribute.AloneReloadFinishIntervalTime <= 0)
+                                    {
+                                        //换弹完成
+                                        StopReloadState();
+                                        ReloadFinishHandler();
+                                    }
+                                    else
+                                    {
+                                        _reloadTimer = Attribute.AloneReloadFinishIntervalTime;
+                                        _aloneReloadState = 3;
+                                    }
+                                }
+                            }
+                        }
+                            break;
+                        case 3: //单独装弹完成
+                        {
+                            //播放换弹完成音效
+                            if (!_playReloadFinishSoundFlag && Attribute.ReloadFinishSound != null && _reloadTimer <= Attribute.ReloadFinishSoundAdvanceTime)
+                            {
+                                _playReloadFinishSoundFlag = true;
+                                // GD.Print("播放换弹完成音效.");
+                                PlayReloadFinishSound();
+                            }
+                            
+                            if (_reloadTimer <= 0)
+                            {
+                                //换弹完成
+                                StopReloadState();
+                                ReloadFinishHandler();
+                            }
+                        }
+                            break;
+                    }
+                }
+                else //普通换弹模式
+                {
+                    //播放换弹完成音效
+                    if (!_playReloadFinishSoundFlag && Attribute.ReloadFinishSound != null && _reloadTimer <= Attribute.ReloadFinishSoundAdvanceTime)
+                    {
+                        _playReloadFinishSoundFlag = true;
+                        // GD.Print("播放换弹完成音效.");
+                        PlayReloadFinishSound();
+                    }
+
+                    if (_reloadTimer <= 0)
+                    {
+                        ReloadSuccess();
+                    }
                 }
             }
 
@@ -539,14 +643,24 @@ public abstract partial class Weapon : ActivityObject
             var fireFlag = true; //是否能开火
             if (Reloading) //换弹中
             {
-                if (CurrAmmo > 0 && Attribute.AloneReload && Attribute.AloneReloadCanShoot) //立即停止换弹
+                fireFlag = false;
+                if (CurrAmmo > 0 && Attribute.AloneReload && Attribute.AloneReloadCanShoot)
                 {
-                    Reloading = false;
-                    ReloadTimer = 0;
-                }
-                else
-                {
-                    fireFlag = false;
+                    //检查是否允许停止换弹
+                    if (_aloneReloadState == 2 || _aloneReloadState == 1)
+                    {
+                        if (Attribute.AloneReloadFinishIntervalTime <= 0)
+                        {
+                            //换弹完成
+                            StopReloadState();
+                            ReloadFinishHandler();
+                        }
+                        else
+                        {
+                            _reloadTimer = Attribute.AloneReloadFinishIntervalTime;
+                            _aloneReloadState = 3;
+                        }
+                    }
                 }
             }
             else if (CurrAmmo <= 0) //子弹不够
@@ -701,30 +815,15 @@ public abstract partial class Weapon : ActivityObject
         {
             PlaySpriteAnimation(AnimatorNames.Fire);
         }
-        
-        var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
 
         //播放射击音效
-        if (Attribute.ShootSound != null)
-        {
-            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, Attribute.ShootSound.Volume);
-        }
+        PlayShootSound();
         
         //触发开火函数
         OnFire();
         
         //播放上膛音效
-        if (Attribute.EquipSound != null)
-        {
-            if (Attribute.EquipSoundDelayTime <= 0)
-            {
-                SoundManager.PlaySoundEffectPosition(Attribute.EquipSound.Path, position, Attribute.EquipSound.Volume);
-            }
-            else
-            {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.EquipSound.Path, position, Attribute.EquipSoundDelayTime, Attribute.EquipSound.Volume);
-            }
-        }
+        PlayEquipSound();
 
         //开火发射的子弹数量
         var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
@@ -867,39 +966,48 @@ public abstract partial class Weapon : ActivityObject
         if (CurrAmmo < Attribute.AmmoCapacity && ResidueAmmo > 0 && !Reloading)
         {
             Reloading = true;
-            ReloadTimer = Attribute.ReloadTime;
+            _playReloadFinishSoundFlag = false;
 
             //播放开始换弹音效
-            if (Attribute.BeginReloadSound != null)
-            {
-                var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-                if (Attribute.BeginReloadSoundDelayTime <= 0)
-                {
-                    SoundManager.PlaySoundEffectPosition(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSound.Volume);
-                }
-                else
-                {
-                    SoundManager.PlaySoundEffectPositionDelay(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSoundDelayTime, Attribute.BeginReloadSound.Volume);
-                }
-            }
+            PlayBeginReloadSound();
             
+            // GD.Print("开始换弹.");
             //第一次换弹
             OnBeginReload();
-            GD.Print("OnBeginReload.");
-            //换弹处理
-            ReloadHandler();
+
+            if (Attribute.AloneReload)
+            {
+                //单独换弹, 特殊处理
+                AloneReloadHandler();
+            }
+            else
+            {
+                //普通换弹处理
+                ReloadHandler();
+            }
         }
     }
 
-    private void ReloadHandler()
+    //播放换弹开始音效
+    private void PlayBeginReloadSound()
     {
-        //播放换弹动画
-        if (IsAutoPlaySpriteFrames)
+        if (Attribute.BeginReloadSound != null)
         {
-            PlaySpriteAnimation(AnimatorNames.Reload);
+            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            if (Attribute.BeginReloadSoundDelayTime <= 0)
+            {
+                SoundManager.PlaySoundEffectPosition(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSound.Volume);
+            }
+            else
+            {
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSoundDelayTime, Attribute.BeginReloadSound.Volume);
+            }
         }
-            
-        //播放换弹音效
+    }
+    
+    //播放换弹音效
+    private void PlayReloadSound()
+    {
         if (Attribute.ReloadSound != null)
         {
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
@@ -912,9 +1020,99 @@ public abstract partial class Weapon : ActivityObject
                 SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound.Path, position, Attribute.ReloadSoundDelayTime, Attribute.ReloadSound.Volume);
             }
         }
+    }
+    
+    //播放换弹完成音效
+    private void PlayReloadFinishSound()
+    {
+        if (Attribute.ReloadFinishSound != null)
+        {
+            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            SoundManager.PlaySoundEffectPosition(Attribute.ReloadFinishSound.Path, position, Attribute.ReloadFinishSound.Volume);
+        }
+    }
+
+    //播放射击音效
+    private void PlayShootSound()
+    {
+        if (Attribute.ShootSound != null)
+        {
+            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, Attribute.ShootSound.Volume);
+        }
+    }
+
+    //播放上膛音效
+    private void PlayEquipSound()
+    {
+        if (Attribute.EquipSound != null)
+        {
+            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            if (Attribute.EquipSoundDelayTime <= 0)
+            {
+                SoundManager.PlaySoundEffectPosition(Attribute.EquipSound.Path, position, Attribute.EquipSound.Volume);
+            }
+            else
+            {
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.EquipSound.Path, position, Attribute.EquipSoundDelayTime, Attribute.EquipSound.Volume);
+            }
+        }
+    }
+
+    //单独换弹处理
+    private void AloneReloadHandler()
+    {
+        if (Attribute.AloneReloadBeginIntervalTime <= 0)
+        {
+            //开始装第一颗子弹
+            _aloneReloadState = 2;
+            ReloadHandler();
+        }
+        else
+        {
+            _aloneReloadState = 1;
+            _reloadTimer = Attribute.AloneReloadBeginIntervalTime;
+        }
+    }
+
+    //换弹处理逻辑
+    private void ReloadHandler()
+    {
+        _reloadTimer = Attribute.ReloadTime;
+        
+        //播放换弹动画
+        if (IsAutoPlaySpriteFrames)
+        {
+            PlaySpriteAnimation(AnimatorNames.Reload);
+        }
+            
+        //播放换弹音效
+        PlayReloadSound();
             
         OnReload();
-        GD.Print("OnReload.");
+        // GD.Print("装弹.");
+    }
+    
+    //换弹完成处理逻辑
+    private void ReloadFinishHandler()
+    {
+        // GD.Print("装弹完成.");
+        OnReloadFinish();
+    }
+
+    //单独装弹完成
+    private void AloneReloadStateFinish()
+    {
+        // GD.Print("单独装弹完成.");
+    }
+
+    //停止当前的换弹状态
+    private void StopReloadState()
+    {
+        _aloneReloadState = 0;
+        Reloading = false;
+        _reloadTimer = 0;
+        _reloadUseTime = 0;
     }
 
     /// <summary>
@@ -953,15 +1151,8 @@ public abstract partial class Weapon : ActivityObject
                 }
             }
 
-            if (ResidueAmmo == 0 || CurrAmmo == Attribute.AmmoCapacity) //换弹结束
+            if (ResidueAmmo != 0 && CurrAmmo != Attribute.AmmoCapacity) //继续装弹
             {
-                Reloading = false;
-                ReloadTimer = 0;
-                OnReloadFinish();
-            }
-            else //继续装弹
-            {
-                ReloadTimer = Attribute.ReloadTime;
                 ReloadHandler();
             }
         }
@@ -978,9 +1169,8 @@ public abstract partial class Weapon : ActivityObject
                 ResidueAmmo = 0;
             }
 
-            Reloading = false;
-            ReloadTimer = 0;
-            OnReloadFinish();
+            StopReloadState();
+            ReloadFinishHandler();
         }
     }
     
@@ -1142,11 +1332,9 @@ public abstract partial class Weapon : ActivityObject
 
         startPosition -= GripPoint.Position.Rotated(rotation);
         var startHeight = -master.MountPoint.Position.Y;
-        var direction = Mathf.RadToDeg(rotation) + Utils.RandomRangeInt(-20, 20);
-        var velocity = new Vector2(20, 0).Rotated(direction * Mathf.Pi / 180);
+        var velocity = new Vector2(20, 0).Rotated(rotation);
         var yf = Utils.RandomRangeInt(50, 70);
-        var rotate = Utils.RandomRangeInt(-60, 60);
-        Throw(startPosition, startHeight, yf, velocity, rotate);
+        Throw(startPosition, startHeight, yf, velocity, 0);
     }
 
     protected override void OnThrowStart()
