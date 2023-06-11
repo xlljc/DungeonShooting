@@ -11,35 +11,14 @@
 #endregion
 
 
-using System.Collections.Generic;
 using Godot;
 
 /// <summary>
 /// 基础敌人
 /// </summary>
-[RegisterActivity(ActivityIdPrefix.Enemy + "0001", ResourcePath.prefab_role_Enemy_tscn)]
+[Tool, GlobalClass]
 public partial class Enemy : Role
 {
-    /// <summary>
-    /// 公共属性, 是否找到目标, 如果找到目标, 则与目标同房间的所有敌人都会知道目标的位置
-    /// </summary>
-    public static bool IsFindTarget { get; private set; }
-
-    /// <summary>
-    /// 公共属性, 在哪个区域找到的目标, 所有该区域下的敌人都会知道目标的位置
-    /// </summary>
-    public static HashSet<AffiliationArea> FindTargetAffiliationSet { get; } = new HashSet<AffiliationArea>();
-    
-    /// <summary>
-    /// 公共属性, 找到的目标的位置, 如果目标在视野内, 则一直更新
-    /// </summary>
-    public static Vector2 FindTargetPosition { get; private set; }
-
-    /// <summary>
-    /// 记录所有存活的敌人
-    /// </summary>
-    private static readonly List<Enemy> _enemieList = new List<Enemy>();
-
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
@@ -111,21 +90,22 @@ public partial class Enemy : Role
         StateController.Register(new AiFindAmmoState());
         
         //默认状态
-        StateController.ChangeState(AiStateEnum.AiNormal);
+        StateController.ChangeStateInstant(AiStateEnum.AiNormal);
     }
 
-    public override void _EnterTree()
+    public override void EnterTree()
     {
-        if (!_enemieList.Contains(this))
+        base.EnterTree();
+        if (!World.Enemy_InstanceList.Contains(this))
         {
-            _enemieList.Add(this);
+            World.Enemy_InstanceList.Add(this);
         }
     }
 
-    public override void _ExitTree()
+    public override void ExitTree()
     {
-        base._ExitTree();
-        _enemieList.Remove(this);
+        base.ExitTree();
+        World.Enemy_InstanceList.Remove(this);
     }
 
     protected override void OnDie()
@@ -147,7 +127,7 @@ public partial class Enemy : Role
         var count = Utils.RandomRangeInt(3, 6);
         for (var i = 0; i < count; i++)
         {
-            var debris = Create(ActivityIdPrefix.Effect + "0001");
+            var debris = Create(Ids.Id_effect0001);
             debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
             debris.InheritVelocity(this);
         }
@@ -182,7 +162,7 @@ public partial class Enemy : Role
         var state = StateController.CurrState;
         if (state == AiStateEnum.AiNormal || state == AiStateEnum.AiProbe || state == AiStateEnum.AiLeaveFor)
         {
-            StateController.ChangeStateLate(AiStateEnum.AiTailAfter);
+            StateController.ChangeState(AiStateEnum.AiTailAfter);
         }
     }
 
@@ -191,10 +171,10 @@ public partial class Enemy : Role
     /// </summary>
     public bool CheckUsableWeaponInUnclaimed()
     {
-        foreach (var unclaimedWeapon in Weapon.UnclaimedWeapons)
+        foreach (var unclaimedWeapon in World.Weapon_UnclaimedWeapons)
         {
             //判断是否能拾起武器, 条件: 相同的房间
-            if (unclaimedWeapon.Affiliation == Affiliation)
+            if (unclaimedWeapon.AffiliationArea == AffiliationArea)
             {
                 if (!unclaimedWeapon.IsTotalAmmoEmpty())
                 {
@@ -231,10 +211,10 @@ public partial class Enemy : Role
     {
         Weapon target = null;
         var position = Position;
-        foreach (var weapon in Weapon.UnclaimedWeapons)
+        foreach (var weapon in World.Weapon_UnclaimedWeapons)
         {
             //判断是否能拾起武器, 条件: 相同的房间, 或者当前房间目前没有战斗, 或者不在战斗房间
-            if (weapon.Affiliation == Affiliation)
+            if (weapon.AffiliationArea == AffiliationArea)
             {
                 //还有弹药
                 if (!weapon.IsTotalAmmoEmpty())
@@ -283,7 +263,7 @@ public partial class Enemy : Role
     /// <returns></returns>
     public bool CanChangeLeaveFor()
     {
-        if (!IsFindTarget)
+        if (!World.Enemy_IsFindTarget)
         {
             return false;
         }
@@ -292,34 +272,10 @@ public partial class Enemy : Role
         if (currState == AiStateEnum.AiNormal || currState == AiStateEnum.AiProbe)
         {
             //判断是否在同一个房间内
-            return FindTargetAffiliationSet.Contains(Affiliation);
+            return World.Enemy_FindTargetAffiliationSet.Contains(AffiliationArea);
         }
         
         return false;
-    }
-    
-    /// <summary>
-    /// 更新敌人视野
-    /// </summary>
-    public static void UpdateEnemiesView()
-    {
-        IsFindTarget = false;
-        FindTargetAffiliationSet.Clear();
-        for (var i = 0; i < _enemieList.Count; i++)
-        {
-            var enemy = _enemieList[i];
-            var state = enemy.StateController.CurrState;
-            if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
-            {
-                if (!IsFindTarget)
-                {
-                    IsFindTarget = true;
-                    FindTargetPosition = Player.Current.GetCenterPosition();
-                    FindTargetAffiliationSet.Add(Player.Current.Affiliation);
-                }
-                FindTargetAffiliationSet.Add(enemy.Affiliation);
-            }
-        }
     }
 
     /// <summary>

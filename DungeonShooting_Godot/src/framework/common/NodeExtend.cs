@@ -47,6 +47,6 @@ public static class NodeExtend
     /// <param name="layer">放入的层</param>
     public static void AddToActivityRoot(this Node2D node, RoomLayerEnum layer)
     {
-        GameApplication.Instance.RoomManager.GetRoomLayer(layer).AddChild(node);
+        GameApplication.Instance.World.GetRoomLayer(layer).AddChild(node);
     }
 }

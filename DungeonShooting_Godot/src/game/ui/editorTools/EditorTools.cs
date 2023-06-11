@@ -500,6 +500,59 @@ public abstract partial class EditorTools : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.HBoxContainer7.Label
+    /// </summary>
+    public class UiNode6_Label : IUiNode<Godot.Label, UiNode6_Label>
+    {
+        public UiNode6_Label(Godot.Label node) : base(node) {  }
+        public override UiNode6_Label Clone() => new ((Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.HBoxContainer7.Button
+    /// </summary>
+    public class UiNode6_Button : IUiNode<Godot.Button, UiNode6_Button>
+    {
+        public UiNode6_Button(Godot.Button node) : base(node) {  }
+        public override UiNode6_Button Clone() => new ((Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.HBoxContainer7
+    /// </summary>
+    public class UiNode_HBoxContainer7 : IUiNode<Godot.HBoxContainer, UiNode_HBoxContainer7>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.Label
+        /// </summary>
+        public UiNode6_Label L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new UiNode6_Label(Instance.GetNodeOrNull<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private UiNode6_Label _L_Label;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer.Button
+        /// </summary>
+        public UiNode6_Button L_Button
+        {
+            get
+            {
+                if (_L_Button == null) _L_Button = new UiNode6_Button(Instance.GetNodeOrNull<Godot.Button>("Button"));
+                return _L_Button;
+            }
+        }
+        private UiNode6_Button _L_Button;
+
+        public UiNode_HBoxContainer7(Godot.HBoxContainer node) : base(node) {  }
+        public override UiNode_HBoxContainer7 Clone() => new ((Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: EditorTools.ScrollContainer.MarginContainer.VBoxContainer
     /// </summary>
     public class UiNode_VBoxContainer : IUiNode<Godot.VBoxContainer, UiNode_VBoxContainer>
@@ -581,6 +634,19 @@ public abstract partial class EditorTools : UiBase
             }
         }
         private UiNode_HBoxContainer2 _L_HBoxContainer2;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: EditorTools.ScrollContainer.MarginContainer.HBoxContainer7
+        /// </summary>
+        public UiNode_HBoxContainer7 L_HBoxContainer7
+        {
+            get
+            {
+                if (_L_HBoxContainer7 == null) _L_HBoxContainer7 = new UiNode_HBoxContainer7(Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer7"));
+                return _L_HBoxContainer7;
+            }
+        }
+        private UiNode_HBoxContainer7 _L_HBoxContainer7;
 
         public UiNode_VBoxContainer(Godot.VBoxContainer node) : base(node) {  }
         public override UiNode_VBoxContainer Clone() => new ((Godot.VBoxContainer)Instance.Duplicate());

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json;
+using Config;
 using Godot;
 
 public partial class GameApplication : Node2D
@@ -47,10 +48,15 @@ public partial class GameApplication : Node2D
 	public Cursor Cursor { get; private set; }
 	
 	/// <summary>
-	/// 游戏房间
+	/// 游戏世界
 	/// </summary>
-	public RoomManager RoomManager { get; private set; }
+	public World World { get; private set; }
 
+	/// <summary>
+	/// 地牢管理器
+	/// </summary>
+	public DungeonManager DungeonManager { get; private set; }
+	
 	/// <summary>
 	/// 房间配置
 	/// </summary>
@@ -70,6 +76,11 @@ public partial class GameApplication : Node2D
 	/// 像素缩放
 	/// </summary>
 	public int PixelScale { get; private set; } = 4;
+	
+	/// <summary>
+	/// 地牢配置信息
+	/// </summary>
+	public DungeonConfig DungeonConfig { get; private set; }
 
 	//开启的协程
 	private List<CoroutineData> _coroutineList;
@@ -78,10 +89,18 @@ public partial class GameApplication : Node2D
 	{
 		Instance = this;
 		
+		//初始化配置表
+		ExcelConfig.Init();
+		//初始化房间配置数据
 		InitRoomConfig();
-
 		//初始化 ActivityObject
 		ActivityObject.InitActivity();
+		//初始化武器数据
+		Weapon.InitWeaponAttribute();
+		
+		DungeonConfig = new DungeonConfig();
+		DungeonConfig.GroupName = "testGroup";
+		DungeonConfig.RoomCount = 20;
 	}
 	
 	public override void _EnterTree()
@@ -101,24 +120,16 @@ public partial class GameApplication : Node2D
 #if TOOLS
 		InitDesignatedRoom();
 #endif
-		
 		//初始化ui
 		UiManager.Init();
-		
 		// 初始化鼠标
-		Input.MouseMode = Input.MouseModeEnum.Hidden;
-		Cursor = ResourceManager.Load<PackedScene>(ResourcePath.prefab_Cursor_tscn).Instantiate<Cursor>();
-		var cursorLayer = new CanvasLayer();
-		cursorLayer.Name = "CursorLayer";
-		cursorLayer.Layer = UiManager.GetUiLayer(UiLayer.Pop).Layer + 10;
-		AddChild(cursorLayer);
-		cursorLayer.AddChild(Cursor);
-
-		//打开ui
-		UiManager.Open_RoomUI();
-		
-		RoomManager = ResourceManager.Load<PackedScene>(ResourcePath.scene_Room_tscn).Instantiate<RoomManager>();
-		SceneRoot.AddChild(RoomManager);
+		InitCursor();
+		//地牢管理器
+		DungeonManager = new DungeonManager();
+		DungeonManager.Name = "DungeonManager";
+		SceneRoot.AddChild(DungeonManager);
+		//打开主菜单Ui
+		UiManager.Open_Main();
 	}
 
 	public override void _Process(double delta)
@@ -133,6 +144,33 @@ public partial class GameApplication : Node2D
 		}
 	}
 
+	/// <summary>
+	/// 创建新的 World 对象, 相当于清理房间
+	/// </summary>
+	public World CreateNewWorld()
+	{
+		if (World != null)
+		{
+			World.QueueFree();
+		}
+		World = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
+		SceneRoot.AddChild(World);
+		return World;
+	}
+
+	/// <summary>
+	/// 销毁 World 对象, 相当于清理房间
+	/// </summary>
+	public void DestroyWorld()
+	{
+		if (World != null)
+		{
+			World.QueueFree();
+		}
+
+		World = null;
+	}
+	
 	/// <summary>
 	/// 将 viewport 以外的全局坐标 转换成 viewport 内的全局坐标
 	/// </summary>
@@ -216,6 +254,18 @@ public partial class GameApplication : Node2D
 		SubViewport.Size = s;
 		SubViewportContainer.Scale = new Vector2(PixelScale, PixelScale);
 		SubViewportContainer.Size = s;
+	}
+
+	//初始化鼠标
+	private void InitCursor()
+	{
+		Input.MouseMode = Input.MouseModeEnum.Hidden;
+		Cursor = ResourceManager.LoadAndInstantiate<Cursor>(ResourcePath.prefab_Cursor_tscn);
+		var cursorLayer = new CanvasLayer();
+		cursorLayer.Name = "CursorLayer";
+		cursorLayer.Layer = UiManager.GetUiLayer(UiLayer.Pop).Layer + 10;
+		AddChild(cursorLayer);
+		cursorLayer.AddChild(Cursor);
 	}
 
 #if TOOLS

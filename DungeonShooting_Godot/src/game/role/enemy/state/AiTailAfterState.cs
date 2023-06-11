@@ -35,7 +35,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AiStateEnum.AiFindAmmo, targetWeapon);
             }
         }
     }
@@ -44,7 +44,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
         
-        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
+        var playerPos = Player.Current.GetCenterPosition();
         
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
@@ -81,7 +81,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
                 //关闭射线检测
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
-                ChangeStateLate(AiStateEnum.AiFollowUp);
+                ChangeState(AiStateEnum.AiFollowUp);
                 return;
             }
             else
@@ -101,7 +101,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
         {
             if (_viewTimer > 10) //10秒
             {
-                ChangeStateLate(AiStateEnum.AiNormal);
+                ChangeState(AiStateEnum.AiNormal);
             }
             else
             {
@@ -112,7 +112,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
 
     public override void DebugDraw()
     {
-        var playerPos = GameApplication.Instance.RoomManager.Player.GetCenterPosition();
+        var playerPos = Player.Current.GetCenterPosition();
         if (_isInViewRange)
         {
             Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Orange);

@@ -5,7 +5,6 @@ namespace UI.RoomUI;
 public class GunBar
 {
     private RoomUI.UiNode_GunBar _gunBar;
-    private EventBinder _binder;
 
     private int _prevAmmo = -1;
     private int _prevResidue = -1;
@@ -17,12 +16,10 @@ public class GunBar
 
     public void OnShow()
     {
-        _binder = EventManager.AddEventListener(EventEnum.OnPlayerRefreshWeaponTexture, OnPlayerRefreshWeaponTexture);
     }
 
     public void OnHide()
     {
-        _binder.RemoveEventListener();
     }
 
     public void Process(float delta)
@@ -30,7 +27,12 @@ public class GunBar
         var weapon = Player.Current?.Holster.ActiveWeapon;
         if (weapon != null)
         {
+            SetWeaponTexture(weapon.GetCurrentTexture());
             SetWeaponAmmunition(weapon.CurrAmmo, weapon.ResidueAmmo);
+        }
+        else
+        {
+            SetWeaponTexture(null);
         }
     }
 
@@ -65,18 +67,6 @@ public class GunBar
             _gunBar.L_BulletText.Instance.Text = curr + " / " + total;
             _prevAmmo = curr;
             _prevResidue = total;
-        }
-    }
-
-    private void OnPlayerRefreshWeaponTexture(object o)
-    {
-        if (o == null)
-        {
-            SetWeaponTexture(null);
-        }
-        else
-        {
-            SetWeaponTexture((Texture2D)o);
         }
     }
 }

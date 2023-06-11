@@ -54,6 +54,8 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer5.L_Button.Instance.Pressed += GenerateUiManagerMethods;
         //创建地牢房间
         container.L_HBoxContainer6.L_Button.Instance.Pressed += GenerateDungeonRoom;
+        //导出excel表
+        container.L_HBoxContainer7.L_Button.Instance.Pressed += ExportExcel;
     }
 
     public override void OnHideUi()
@@ -73,6 +75,7 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer3.L_Button.Instance.Pressed -= OnCreateUI;
         container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
         container.L_HBoxContainer6.L_Button.Instance.Pressed -= GenerateDungeonRoom;
+        container.L_HBoxContainer7.L_Button.Instance.Pressed -= ExportExcel;
     }
 
     public override void Process(float delta)
@@ -380,5 +383,38 @@ public partial class EditorToolsPanel : EditorTools
                 
             }
         });
+    }
+
+    /// <summary>
+    /// 导出excel表
+    /// </summary>
+    private void ExportExcel()
+    {
+        ExcelGenerator.ExportExcel();
+        ShowTips("提示", "已启动导表程序, 注意查看控制台信息!");
+    }
+    
+    /// <summary>
+    /// 在编辑器中打开一个提示窗口
+    /// </summary>
+    public static void ShowTipsInEditor(string title, string message, Action onClose)
+    {
+        var editorToolsInstance = UiManager.Get_EditorTools_Instance();
+        if (editorToolsInstance.Length > 0)
+        {
+            editorToolsInstance[0].ShowTips(title, message, onClose);
+        }
+    }
+    
+    /// <summary>
+    /// 在编辑器中打开一个询问窗口
+    /// </summary>
+    public static void ShowConfirmInEditor(string title, string message, Action<bool> onClose = null)
+    {
+        var editorToolsInstance = UiManager.Get_EditorTools_Instance();
+        if (editorToolsInstance.Length > 0)
+        {
+            editorToolsInstance[0].ShowConfirm(title, message, onClose);
+        }
     }
 }

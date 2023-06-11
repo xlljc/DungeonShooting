@@ -31,4 +31,8 @@ public class PhysicsLayer
     /// 归属区域判断层级
     /// </summary>
     public const uint Affiliation = 0b100000;
+    /// <summary>
+    /// 在手上
+    /// </summary>
+    public const uint InHand = 0b1000000;
 }

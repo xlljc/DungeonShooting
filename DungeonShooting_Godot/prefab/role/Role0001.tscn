@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3 uid="uid://cxhrcytrx0kcf"]
+
+[ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/RoleTemplate.tscn" id="1_10c2n"]
+[ext_resource type="Script" path="res://src/game/role/Player.cs" id="2_7dmp4"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_rk4gg"]
+[ext_resource type="SpriteFrames" uid="uid://n11thtali6es" path="res://resource/spriteFrames/Role0001.tres" id="4_galcc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lvutq"]
+resource_local_to_scene = true
+shader = ExtResource("3_rk4gg")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ok5s"]
+resource_local_to_scene = true
+shader = ExtResource("3_rk4gg")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
+
+[node name="Role0001" node_paths=PackedStringArray("HurtArea", "MountPoint", "BackMountPoint", "InteractiveArea", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_10c2n")]
+collision_layer = 8
+script = ExtResource("2_7dmp4")
+HurtArea = NodePath("HurtArea")
+MountPoint = NodePath("MountPoint")
+BackMountPoint = NodePath("BackMountPoint")
+InteractiveArea = NodePath("InteractiveArea")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" parent="." index="0"]
+material = SubResource("ShaderMaterial_lvutq")
+
+[node name="AnimatedSprite" parent="." index="2"]
+material = SubResource("ShaderMaterial_5ok5s")
+sprite_frames = ExtResource("4_galcc")
+frame_progress = 0.0995217

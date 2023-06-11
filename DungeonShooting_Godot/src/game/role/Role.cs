@@ -19,7 +19,8 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 伤害区域
     /// </summary>
-    public Area2D HurtArea { get; private set; }
+    [Export, ExportFillNode]
+    public Area2D HurtArea { get; set; }
 
     /// <summary>
     /// 移动速度
@@ -49,16 +50,19 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 武器挂载点
     /// </summary>
-    public MountRotation MountPoint { get; private set; }
+    [Export, ExportFillNode]
+    public MountRotation MountPoint { get; set; }
     /// <summary>
     /// 背后武器的挂载点
     /// </summary>
-    public Marker2D BackMountPoint { get; private set; }
+    [Export, ExportFillNode]
+    public Marker2D BackMountPoint { get; set; }
 
     /// <summary>
     /// 互动碰撞区域
     /// </summary>
-    public Area2D InteractiveArea { get; private set; }
+    [Export, ExportFillNode]
+    public Area2D InteractiveArea { get; set; }
     
     /// <summary>
     /// 脸的朝向
@@ -214,18 +218,14 @@ public abstract partial class Role : ActivityObject
     {
         Holster = new Holster(this);
         _startScale = Scale;
-        MountPoint = GetNode<MountRotation>("MountPoint");
         MountPoint.Master = this;
-        BackMountPoint = GetNode<Marker2D>("BackMountPoint");
-
-        HurtArea = GetNode<Area2D>("HurtArea");
+        
         HurtArea.CollisionLayer = CollisionLayer;
         HurtArea.CollisionMask = 0;
         
         Face = FaceDirection.Right;
 
         //连接互动物体信号
-        InteractiveArea = GetNode<Area2D>("InteractiveArea");
         InteractiveArea.BodyEntered += _OnPropsEnter;
         InteractiveArea.BodyExited += _OnPropsExit;
     }
@@ -323,13 +323,13 @@ public abstract partial class Role : ActivityObject
         //身上的武器的所属区域也得跟着变
         Holster.ForEach((weapon, i) =>
         {
-            if (Affiliation != null)
+            if (AffiliationArea != null)
             {
-                Affiliation.InsertItem(weapon);
+                AffiliationArea.InsertItem(weapon);
             }
-            else if (weapon.Affiliation != null)
+            else if (weapon.AffiliationArea != null)
             {
-                weapon.Affiliation.RemoveItem(weapon);
+                weapon.AffiliationArea.RemoveItem(weapon);
             }
         });
     }
@@ -443,11 +443,15 @@ public abstract partial class Role : ActivityObject
             return;
         }
 
-        var temp = new Vector2(weapon.Attribute.HoldPosition.X, 0);
-        var pos = weapon.GlobalPosition + temp.Rotated(weapon.GlobalRotation);
+        var temp = weapon.AnimatedSprite.Position;
+        if (Face == FaceDirection.Left)
+        {
+            temp.Y = -temp.Y;
+        }
+        var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
         Holster.RemoveWeapon(index);
         //播放抛出效果
-        weapon.ThrowWeapon(this, pos);
+        weapon.ThrowWeapon(this, GlobalPosition);
     }
 
     /// <summary>
@@ -560,7 +564,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     private void _OnPropsEnter(Node2D other)
     {
-        if (other is ActivityObject propObject)
+        if (other is ActivityObject propObject && !propObject.CollisionWithMask(PhysicsLayer.InHand))
         {
             if (!_interactiveItemList.Contains(propObject))
             {

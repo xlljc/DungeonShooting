@@ -80,9 +80,6 @@ public partial class ActivityMark : Node2D
     private float _timer = 0;
     private RoomInfo _tempRoom;
 
-    //绘制的字体
-    private static Font _drawFont;
-
     //已经计算好要生成的物体
     private Dictionary<string, ActivityExpressionData> _currentExpression = new Dictionary<string, ActivityExpressionData>();
 
@@ -107,7 +104,7 @@ public partial class ActivityMark : Node2D
             var tempList = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
             foreach (var s in tempList)
             {
-                if (s.GetCustomAttribute<ActivityExpression>() != null)
+                if (s.GetCustomAttribute<ActivityExpressionAttribute>() != null)
                 {
                     fieldInfos.Add(s.Name);
                 }
@@ -271,12 +268,8 @@ public partial class ActivityMark : Node2D
             {
                 DrawRect(new Rect2(-BirthRect / 2, BirthRect), drawColor, false, 0.5f);
             }
-
-            if (_drawFont == null)
-            {
-                _drawFont = ResourceManager.Load<Font>(ResourcePath.Silver_ttf);
-            }
-            DrawString(_drawFont, new Vector2(-14, 12), WaveNumber.ToString(), HorizontalAlignment.Center, 28, 14);
+            
+            DrawString(ResourceManager.DefaultFont12Px, new Vector2(-14, 12), WaveNumber.ToString(), HorizontalAlignment.Center, 28, 12);
         }
     }
 #endif

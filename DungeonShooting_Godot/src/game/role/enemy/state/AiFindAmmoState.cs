@@ -25,7 +25,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
         if (args.Length == 0)
         {
             GD.PrintErr("进入 AiStateEnum.AiFindAmmo 状态必须要把目标武器当成参数传过来");
-            ChangeStateLate(prev);
+            ChangeState(prev);
             return;
         }
 
@@ -42,7 +42,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
     {
         if (!Master.IsAllWeaponTotalAmmoEmpty()) //已经有弹药了
         {
-            ChangeStateLate(GetNextState());
+            ChangeState(GetNextState());
             return;
         }
 
@@ -70,12 +70,12 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
 
             if (_target == null) //也没有其他可用的武器了
             {
-                ChangeStateLate(GetNextState());
+                ChangeState(GetNextState());
             }
         }
         else if (_target.Master == Master) //已经被自己拾起
         {
-            ChangeStateLate(GetNextState());
+            ChangeState(GetNextState());
         }
         else if (_target.Master != null) //武器已经被其他角色拾起!
         {
@@ -84,7 +84,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
 
             if (_target == null) //也没有其他可用的武器了
             {
-                ChangeStateLate(GetNextState());
+                ChangeState(GetNextState());
             }
         }
         else

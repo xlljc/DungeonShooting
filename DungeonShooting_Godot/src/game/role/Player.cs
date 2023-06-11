@@ -4,13 +4,13 @@ using Godot;
 /// <summary>
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
-[RegisterActivity(ActivityIdPrefix.Role + "0001", ResourcePath.prefab_role_Player_tscn)]
+[Tool, GlobalClass]
 public partial class Player : Role
 {
     /// <summary>
     /// 获取当前操作的角色
     /// </summary>
-    public static Player Current => GameApplication.Instance.RoomManager.Player;
+    public static Player Current { get; private set; }
     
     /// <summary>
     /// 移动加速度
@@ -21,6 +21,17 @@ public partial class Player : Role
     /// 移动摩擦力
     /// </summary>
     public float Friction { get; set; } = 800f;
+
+    /// <summary>
+    /// 设置当前操作的玩家对象
+    /// </summary>
+    public static void SetCurrentPlayer(Player player)
+    {
+        Current = player;
+        //设置相机和鼠标跟随玩家
+        GameCamera.Main.SetFollowTarget(player);
+        GameApplication.Instance.Cursor.SetMountRole(player);
+    }
     
     public override void OnInit()
     {
@@ -35,15 +46,13 @@ public partial class Player : Role
         // MainCamera.Main.GlobalPosition = GlobalPosition;
         // MainCamera.Main.ResetSmoothing();
         // remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
-        
-        RefreshWeaponTexture();
 
         MaxHp = 50;
         Hp = 50;
         MaxShield = 30;
         Shield = 30;
 
-        // // debug用
+        // debug用
         // Acceleration = 3000;
         // Friction = 3000;
         // MoveSpeed = 500;
@@ -54,12 +63,16 @@ public partial class Player : Role
 
     protected override void Process(float delta)
     {
+        if (IsDie)
+        {
+            return;
+        }
         base.Process(delta);
         //脸的朝向
         if (LookTarget == null)
         {
             var gPos = GlobalPosition;
-            Vector2 mousePos = InputManager.GetViewportMousePosition();
+            Vector2 mousePos = InputManager.CursorPosition;
             if (mousePos.X > gPos.X && Face == FaceDirection.Left)
             {
                 Face = FaceDirection.Right;
@@ -72,72 +85,60 @@ public partial class Player : Role
             MountPoint.SetLookAt(mousePos);
         }
 
-        if (Input.IsActionJustPressed("exchange")) //切换武器
+        if (InputManager.Exchange) //切换武器
         {
             ExchangeNext();
         }
-        else if (Input.IsActionJustPressed("throw")) //扔掉武器
+        else if (InputManager.Throw) //扔掉武器
         {
             ThrowWeapon();
+
+            // //测试用的, 所有敌人也扔掉武器
+            // if (Affiliation != null)
+            // {
+            //     var enemies = Affiliation.FindIncludeItems(o =>
+            //     {
+            //         return o.CollisionWithMask(PhysicsLayer.Enemy);
+            //     });
+            //     foreach (var activityObject in enemies)
+            //     {
+            //         if (activityObject is Enemy enemy)
+            //         {
+            //             enemy.ThrowWeapon();
+            //         }
+            //     }
+            // }
         }
-        else if (Input.IsActionJustPressed("interactive")) //互动物体
+        else if (InputManager.Interactive) //互动物体
         {
-            var item = TriggerInteractive();
-            if (item != null)
-            {
-                RefreshWeaponTexture();
-            }
+            TriggerInteractive();
         }
-        else if (Input.IsActionJustPressed("reload")) //换弹
+        else if (InputManager.Reload) //换弹
         {
             Reload();
         }
-        if (Input.IsActionPressed("fire")) //开火
+        if (InputManager.Fire) //开火
         {
             Attack();
+        }
+
+        if (Input.IsKeyPressed(Key.P))
+        {
+            Hurt(1000, 0);
         }
     }
 
     protected override void PhysicsProcess(float delta)
     {
+        if (IsDie)
+        {
+            return;
+        }
+
         base.PhysicsProcess(delta);
         HandleMoveInput(delta);
         //播放动画
         PlayAnim();
-    }
-
-    public override void ExchangeNext()
-    {
-        base.ExchangeNext();
-        RefreshWeaponTexture();
-    }
-
-    public override void ExchangePrev()
-    {
-        base.ExchangePrev();
-        RefreshWeaponTexture();
-    }
-
-    public override void ThrowWeapon(int index)
-    {
-        base.ThrowWeapon(index);
-        RefreshWeaponTexture();
-    }
-
-    public override void ThrowWeapon()
-    {
-        base.ThrowWeapon();
-        RefreshWeaponTexture();
-    }
-
-    public override bool PickUpWeapon(Weapon weapon, bool exchange = true)
-    {
-        var v = base.PickUpWeapon(weapon, exchange);
-        if (v)
-        {
-            RefreshWeaponTexture();
-        }
-        return v;
     }
 
     protected override void OnChangeHp(int hp)
@@ -170,20 +171,18 @@ public partial class Player : Role
         EventManager.EmitEvent(EventEnum.OnPlayerMaxShieldChange, maxShield);
     }
 
-    /// <summary>
-    /// 刷新 ui 上手持的物体
-    /// </summary>
-    private void RefreshWeaponTexture()
+    protected override void OnDie()
     {
-        EventManager.EmitEvent(EventEnum.OnPlayerRefreshWeaponTexture, Holster.ActiveWeapon?.GetDefaultTexture());
+        GameCamera.Main.SetFollowTarget(null);
+        UiManager.Open_Settlement();
+        //GameApplication.Instance.World.ProcessMode = ProcessModeEnum.WhenPaused;
     }
 
     //处理角色移动的输入
     private void HandleMoveInput(float delta)
     {
         //角色移动
-        // 得到输入的 vector2  getvector方法返回值已经归一化过了noemalized
-        Vector2 dir = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+        Vector2 dir = InputManager.MoveAxis;
         // 移动. 如果移动的数值接近0(是用 摇杆可能出现 方向 可能会出现浮点)，就friction的值 插值 到 0
         // 如果 有输入 就以当前速度，用acceleration 插值到 对应方向 * 最大速度
         if (Mathf.IsZeroApprox(dir.X))

@@ -7,9 +7,10 @@ using Godot;
 /// </summary>
 public class RoomInfo : IDestroy
 {
-    public RoomInfo(int id, DungeonRoomSplit roomSplit)
+    public RoomInfo(int id, DungeonRoomType type, DungeonRoomSplit roomSplit)
     {
         Id = id;
+        RoomType = type;
         RoomSplit = roomSplit;
     }
 
@@ -18,6 +19,16 @@ public class RoomInfo : IDestroy
     /// </summary>
     public int Id;
 
+    /// <summary>
+    /// 房间类型
+    /// </summary>
+    public DungeonRoomType RoomType;
+
+    /// <summary>
+    /// 层级, 也就是离初始房间间隔多少个房间
+    /// </summary>
+    public int Layer;
+    
     /// <summary>
     /// 生成该房间使用的配置数据
     /// </summary>
@@ -37,6 +48,11 @@ public class RoomInfo : IDestroy
     /// 门
     /// </summary>
     public List<RoomDoorInfo> Doors = new List<RoomDoorInfo>();
+
+    /// <summary>
+    /// 连接该房间的过道占用区域信息
+    /// </summary>
+    public List<Rect2> AisleArea = new List<Rect2>();
 
     /// <summary>
     /// 下一个房间
@@ -188,7 +204,7 @@ public class RoomInfo : IDestroy
     /// </summary>
     public void OnClearRoom()
     {
-        if (_currWaveIndex >= ActivityMarks.Count) //所有 mark 全部走完了
+        if (_currWaveIndex >= ActivityMarks.Count) //所有 mark 都走完了
         {
             IsSeclusion = false;
             _currActivityMarks.Clear();

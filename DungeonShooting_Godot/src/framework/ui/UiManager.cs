@@ -139,6 +139,54 @@ public static partial class UiManager
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    public static void HideUi(UiBase uiBase)
+    {
+        uiBase.HideUi();
+    }
+    
+    /// <summary>
+    /// 销毁所有Ui
+    /// </summary>
+    public static void DisposeAllUi()
+    {
+        var map = new Dictionary<string, List<UiBase>>();
+        foreach (var item in _recordUiMap)
+        {
+            map.Add(item.Key, new List<UiBase>(item.Value));
+        }
+        
+        foreach (var item in map)
+        {
+            foreach (var uiBase in item.Value)
+            {
+                uiBase.DisposeUi();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 隐藏所有Ui
+    /// </summary>
+    public static void HideAllUi()
+    {
+        var map = new Dictionary<string, List<UiBase>>();
+        foreach (var item in _recordUiMap)
+        {
+            map.Add(item.Key, new List<UiBase>(item.Value));
+        }
+        
+        foreach (var item in map)
+        {
+            foreach (var uiBase in item.Value)
+            {
+                uiBase.HideUi();
+            }
+        }
+    }
+
+    /// <summary>
     /// 获取Ui实例
     /// </summary>
     public static T[] GetUiInstance<T>(string uiName) where T : UiBase

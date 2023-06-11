@@ -15,12 +15,36 @@ public static class ResourcePathGenerator
     //支持后缀
     private static string[] suffix =
     {
-        ".png", ".jpg", ".txt", ".json", ".ini", ".tscn", ".tres", ".otf", ".gdshader", ".ogg", ".mp3", ".wav", ".svg", ".ttf", ".otf"
+        ".png",
+        ".jpg",
+        ".txt",
+        ".json",
+        ".ini",
+        ".tscn",
+        ".tres",
+        ".otf",
+        ".gdshader",
+        ".ogg",
+        ".mp3",
+        ".wav",
+        ".svg",
+        ".ttf",
+        ".otf"
     };
-    //排除第一层的文件夹
+    //排除的文件夹, 斜杠用: /
     private static string[] exclude =
     {
-        ".vscode", ".idea", ".git", ".import", ".mono", "android", "addons", ".godot", ".vs"
+        ".vscode",
+        ".idea",
+        ".git",
+        ".import",
+        ".mono",
+        "android",
+        "addons",
+        ".godot",
+        ".vs",
+        "resource/map/tiledata",
+        "resource/map/tileMaps"
     };
 
     private static string resultStr = "";
@@ -36,7 +60,7 @@ public static class ResourcePathGenerator
         try
         {
             resultStr = "/// <summary>\n" +
-                        "/// 编辑器下所有资源路径, 该类为 Automation 面板下自动生成的, 请不要手动编辑!\n" +
+                        "/// 编辑器下所有资源路径, 该类为 Tools 面板下自动生成的, 请不要手动编辑!\n" +
                         "/// </summary>\n" +
                         "public class ResourcePath\n" +
                         "{\n";
@@ -44,22 +68,7 @@ public static class ResourcePathGenerator
             GD.Print("更新 ResourcePath...");
 
             var directoryInfo = new DirectoryInfo(System.Environment.CurrentDirectory);
-
-            var directories = directoryInfo.GetDirectories();
-            for (int i = 0; i < directories.Length; i++)
-            {
-                var directory = directories[i];
-                if (!exclude.Contains(directory.Name))
-                {
-                    EachDir(directory);
-                }
-            }
-
-            var fileInfos = directoryInfo.GetFiles();
-            for (var i = 0; i < fileInfos.Length; i++)
-            {
-                HandleFile(fileInfos[i]);
-            }
+            EachDir(directoryInfo);
 
             resultStr += "}";
             File.WriteAllText(savePath, resultStr);
@@ -76,6 +85,17 @@ public static class ResourcePathGenerator
     
     private static void EachDir(DirectoryInfo directoryInfos)
     {
+        if (directoryInfos.FullName.Length > System.Environment.CurrentDirectory.Length)
+        {
+            var path = directoryInfos.FullName.Substring(System.Environment.CurrentDirectory.Length + 1);
+            path = path.Replace('\\', '/');
+            if (exclude.Contains(path))
+            {
+                GD.Print("扫描排除路径: " + path);
+                return;
+            }
+        }
+
         var fileInfos = directoryInfos.GetFiles();
         for (var i = 0; i < fileInfos.Length; i++)
         {

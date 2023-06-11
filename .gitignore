@@ -14,3 +14,6 @@
 /DScript/DScript_Runtime/Backups
 /DScript/DScript.sln.DotSettings.user
 **/.idea
+**/~$*
+/DungeonShooting_ExcelTool/obj
+/DungeonShooting_ExcelTool/bin
