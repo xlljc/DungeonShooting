@@ -77,7 +77,7 @@ public static partial class ExcelConfig
         public float ReloadTime;
 
         /// <summary>
-        /// 每粒子弹是否是单独装填, 如果是, 那么每上一发子弹的时间就是 ReloadTime, 可以做霰弹武器装填效果
+        /// 每粒子弹是否是单独装填, 如果是, 那么每上一发子弹的时间就是 ReloadTime, 可以做霰弹枪装填效果
         /// </summary>
         [JsonInclude]
         public bool AloneReload;
@@ -149,7 +149,7 @@ public static partial class ExcelConfig
         public float FinalFiringSpeed;
 
         /// <summary>
-        /// 按下扳机并开火后射速增加速率
+        /// 按下扳机并开火后射速每秒增加量
         /// </summary>
         [JsonInclude]
         public float FiringSpeedAddSpeed;
@@ -197,16 +197,16 @@ public static partial class ExcelConfig
         public float ScatteringRangeAddValue;
 
         /// <summary>
-        /// 松开扳机后散射销退速率
+        /// 散射值销退速率
         /// </summary>
         [JsonInclude]
         public float ScatteringRangeBackSpeed;
 
         /// <summary>
-        /// 松开扳机多久后开始销退散射值 (单位: 秒)
+        /// 开始销退散射值的延时时间
         /// </summary>
         [JsonInclude]
-        public float ScatteringRangeBackTime;
+        public float ScatteringRangeBackDelayTime;
 
         /// <summary>
         /// 子弹飞行最小距离
@@ -389,7 +389,7 @@ public static partial class ExcelConfig
             inst.FinalScatteringRange = FinalScatteringRange;
             inst.ScatteringRangeAddValue = ScatteringRangeAddValue;
             inst.ScatteringRangeBackSpeed = ScatteringRangeBackSpeed;
-            inst.ScatteringRangeBackTime = ScatteringRangeBackTime;
+            inst.ScatteringRangeBackDelayTime = ScatteringRangeBackDelayTime;
             inst.MinDistance = MinDistance;
             inst.MaxDistance = MaxDistance;
             inst.MinBacklash = MinBacklash;

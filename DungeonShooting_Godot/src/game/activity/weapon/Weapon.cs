@@ -141,6 +141,9 @@ public abstract partial class Weapon : ActivityObject
 
     //攻击状态
     private bool _attackFlag = false;
+    
+    //多久没开火了
+    private float _noAttackTime = 0;
 
     //按下的时间
     private float _downTimer = 0;
@@ -354,6 +357,9 @@ public abstract partial class Weapon : ActivityObject
 
     protected override void Process(float delta)
     {
+        //未开火时间
+        _noAttackTime += delta;
+        
         //这把武器被扔在地上, 或者当前武器没有被使用
         if (Master == null || Master.Holster.ActiveWeapon != this)
         {
@@ -453,13 +459,11 @@ public abstract partial class Weapon : ActivityObject
                 TriggerFire();
             }
 
-            if (!_attackFlag && _attackTimer <= 0)
+            //散射值销退
+            if (_noAttackTime >= Attribute.ScatteringRangeBackDelayTime)
             {
-                if (_upTimer >= Attribute.ScatteringRangeBackTime)
-                {
-                    CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
-                        Attribute.StartScatteringRange);
-                }
+                CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
+                    Attribute.StartScatteringRange);
             }
 
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
@@ -668,6 +672,7 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     private void TriggerFire()
     {
+        _noAttackTime = 0;
         _continuousCount = _continuousCount > 0 ? _continuousCount - 1 : 0;
 
         //减子弹数量
@@ -736,7 +741,7 @@ public abstract partial class Weapon : ActivityObject
             OnShoot(fireRotation);
         }
 
-        //当前的散射半径
+        //开火添加散射值
         CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue,
             Attribute.FinalScatteringRange);
         //武器的旋转角度
