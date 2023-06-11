@@ -43,5 +43,9 @@ public static class AnimatorNames
     /// <summary>
     /// 换弹
     /// </summary>
-    public const string Reload = "reload";
+    public const string Reloading = "reloading";
+    /// <summary>
+    /// 子弹上膛
+    /// </summary>
+    public const string Equip = "equip";
 }

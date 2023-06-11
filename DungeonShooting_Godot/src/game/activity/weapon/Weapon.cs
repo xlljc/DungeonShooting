@@ -243,6 +243,7 @@ public abstract partial class Weapon : ActivityObject
     public override void OnInit()
     {
         InitWeapon(_GetWeaponAttribute(ItemId));
+        AnimatedSprite.AnimationFinished += OnAnimationFinished;
     }
 
     /// <summary>
@@ -821,7 +822,20 @@ public abstract partial class Weapon : ActivityObject
         
         //触发开火函数
         OnFire();
-        
+
+        //播放上膛动画
+        if (IsAutoPlaySpriteFrames)
+        {
+            if (Attribute.EquipSoundDelayTime <= 0)
+            {
+                PlaySpriteAnimation(AnimatorNames.Equip);
+            }
+            else
+            {
+                DelayCall(Attribute.EquipSoundDelayTime, PlaySpriteAnimation, AnimatorNames.Equip);
+            }
+        }
+
         //播放上膛音效
         PlayEquipSound();
 
@@ -1083,7 +1097,7 @@ public abstract partial class Weapon : ActivityObject
         //播放换弹动画
         if (IsAutoPlaySpriteFrames)
         {
-            PlaySpriteAnimation(AnimatorNames.Reload);
+            PlaySpriteAnimation(AnimatorNames.Reloading);
         }
             
         //播放换弹音效
@@ -1182,6 +1196,13 @@ public abstract partial class Weapon : ActivityObject
         {
             AnimatedSprite.Play(name);
         }
+    }
+
+    //帧动画播放结束
+    private void OnAnimationFinished()
+    {
+        GD.Print("帧动画播放结束...");
+        AnimatedSprite.Play(AnimatorNames.Default);
     }
 
     public override CheckInteractiveResult CheckInteractive(ActivityObject master)

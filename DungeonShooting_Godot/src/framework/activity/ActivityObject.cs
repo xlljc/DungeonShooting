@@ -851,7 +851,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 
                         MoveController.ScaleAllForce(BounceSpeed);
                         //如果落地高度不够低, 再抛一次
-                        if (Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 1))
+                        if (Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 5))
                         {
                             if (!_hasResilienceVerticalSpeed)
                             {
@@ -860,7 +860,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
                             }
                             else
                             {
-                                _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength;
+                                if (_resilienceVerticalSpeed < 25)
+                                {
+                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength * 0.4f;
+                                }
+                                else
+                                {
+                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength;
+                                }
                             }
                             _verticalSpeed = _resilienceVerticalSpeed;
                             ThrowRotationDegreesSpeed = ThrowRotationDegreesSpeed * BounceStrength;
@@ -1334,5 +1341,61 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public void StopAllCoroutine()
     {
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
+    }
+
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public void DelayCall(float delayTime, Action cb)
+    {
+        StartCoroutine(_DelayCall(delayTime, cb));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public void DelayCall<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    {
+        StartCoroutine(_DelayCall(delayTime, cb, arg1));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public void DelayCall<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    {
+        StartCoroutine(_DelayCall(delayTime, cb, arg1, arg2));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public void DelayCall<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    {
+        StartCoroutine(_DelayCall(delayTime, cb, arg1, arg2, arg3));
+    }
+
+    private IEnumerator _DelayCall(float delayTime, Action cb)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb();
+    }
+    
+    private IEnumerator _DelayCall<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb(arg1);
+    }
+    
+    private IEnumerator _DelayCall<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb(arg1, arg2);
+    }
+    
+    private IEnumerator _DelayCall<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb(arg1,arg2, arg3);
     }
 }
