@@ -145,6 +145,11 @@ public static partial class ExcelConfig
                     }
                 }
 
+                if (!string.IsNullOrEmpty(item.__AiUseAttribute))
+                {
+                    item.AiUseAttribute = Weapon_Map[item.__AiUseAttribute];
+                }
+
             }
             catch (Exception e)
             {

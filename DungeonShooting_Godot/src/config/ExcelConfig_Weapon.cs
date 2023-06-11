@@ -173,7 +173,7 @@ public static partial class ExcelConfig
         public int MaxFireBulletCount;
 
         /// <summary>
-        /// 开火前延时
+        /// 从按下扳机到发射第一发子弹的延时时, 如果中途松开扳机, 那么延时时间会重新计算, 必须将 'LooseShoot' 设置为 false
         /// </summary>
         [JsonInclude]
         public float DelayedTime;
@@ -327,8 +327,7 @@ public static partial class ExcelConfig
         /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性 <br/>
         /// 如果不填则Ai和玩家使用同一种属性
         /// </summary>
-        [JsonInclude]
-        public string AiUseAttributeId;
+        public Weapon AiUseAttribute;
 
         /// <summary>
         /// Ai属性 <br/>
@@ -410,7 +409,7 @@ public static partial class ExcelConfig
             inst.EquipSound = EquipSound;
             inst.EquipSoundDelayTime = EquipSoundDelayTime;
             inst.OtherSoundMap = OtherSoundMap;
-            inst.AiUseAttributeId = AiUseAttributeId;
+            inst.AiUseAttribute = AiUseAttribute;
             inst.AiTargetLockingTime = AiTargetLockingTime;
             inst.AiBulletSpeedScale = AiBulletSpeedScale;
             inst.AiAmmoConsumptionProbability = AiAmmoConsumptionProbability;
@@ -436,6 +435,9 @@ public static partial class ExcelConfig
 
         [JsonInclude]
         public Dictionary<string, string> __OtherSoundMap;
+
+        [JsonInclude]
+        public string __AiUseAttribute;
 
     }
 }

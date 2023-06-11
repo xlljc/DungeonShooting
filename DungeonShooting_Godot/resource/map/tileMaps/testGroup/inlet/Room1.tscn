@@ -43,4 +43,3 @@ position = Vector2(29, 22)
 script = ExtResource("3_m4jrh")
 Type = 5
 ItemExpression = "0005"
-WaveNumber = 4

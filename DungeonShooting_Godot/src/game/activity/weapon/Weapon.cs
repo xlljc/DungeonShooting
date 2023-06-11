@@ -224,9 +224,9 @@ public abstract partial class Weapon : ActivityObject
     {
         _playerWeaponAttribute = attribute;
         _weaponAttribute = attribute;
-        if (!string.IsNullOrEmpty(attribute.AiUseAttributeId))
+        if (attribute.AiUseAttribute != null)
         {
-            _aiWeaponAttribute = ExcelConfig.Weapon_Map[attribute.AiUseAttributeId];
+            _aiWeaponAttribute = attribute.AiUseAttribute;
         }
         else
         {
@@ -564,7 +564,10 @@ public abstract partial class Weapon : ActivityObject
                 if (justDown)
                 {
                     //开火前延时
-                    _delayedTime = Attribute.DelayedTime;
+                    if (!Attribute.LooseShoot)
+                    {
+                        _delayedTime = Attribute.DelayedTime;
+                    }
                     //扳机按下间隔
                     _triggerTimer = Attribute.TriggerInterval;
                     //连发数量
