@@ -54,6 +54,30 @@ public static class UiManagerMethodsGenerator
                                    $"    }}\n" +
                                    $"\n" +
                                    $"    /// <summary>\n" +
+                                   $"    /// 隐藏 {uiName} 的所有实例\n" +
+                                   $"    /// </summary>\n" +
+                                   $"    public static void Hide_{uiName}()\n" +
+                                   $"    {{\n" +
+                                   $"        var uiInstance = Get_{uiName}_Instance();\n" +
+                                   $"        foreach (var uiPanel in uiInstance)\n" +
+                                   $"        {{\n" +
+                                   $"            uiPanel.HideUi();\n" +
+                                   $"        }}\n" +
+                                   $"    }}\n" +
+                                   $"\n" +
+                                   $"    /// <summary>\n" +
+                                   $"    /// 销毁 {uiName} 的所有实例\n" +
+                                   $"    /// </summary>\n" +
+                                   $"    public static void Dispose_{uiName}()\n" +
+                                   $"    {{\n" +
+                                   $"        var uiInstance = Get_{uiName}_Instance();\n" +
+                                   $"        foreach (var uiPanel in uiInstance)\n" +
+                                   $"        {{\n" +
+                                   $"            uiPanel.DisposeUi();\n" +
+                                   $"        }}\n" +
+                                   $"    }}\n" +
+                                   $"\n" +
+                                   $"    /// <summary>\n" +
                                    $"    /// 获取所有 {uiName} 的实例, 如果没有实例, 则返回一个空数组\n" +
                                    $"    /// </summary>\n" +
                                    $"    public static UI.{uiName}.{uiName}Panel[] Get_{uiName}_Instance()\n" +

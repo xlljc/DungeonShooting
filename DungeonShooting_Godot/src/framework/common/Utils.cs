@@ -13,7 +13,11 @@ public static class Utils
     
     static Utils()
     {
-        _random = new Random();
+        var dateTime = DateTime.Now;
+        var num = dateTime.Year * 100000 + dateTime.Month * 100000 + dateTime.Day * 100000 + dateTime.Hour * 10000 + dateTime.Minute * 100 + dateTime.Second;
+        //_random = new Random(0);
+        _random = new Random(num);
+        GD.Print("随机种子为: ", num);
     }
 
     /// <summary>
@@ -95,6 +99,33 @@ public static class Utils
         list.RemoveAt(index);
         return result;
     }
+
+    /// <summary>
+    /// 从权重列表中随机抽取下标值
+    /// </summary>
+    public static int RandomWeight(List<int> weightList)
+    {
+        // 计算总权重
+        var totalWeight = 0;
+        foreach (var weight in weightList)
+        {
+            totalWeight += weight;
+        }
+        
+        var randomNumber = _random.Next(totalWeight);
+        var currentWeight = 0;
+        for (var i = 0; i < weightList.Count; i++)
+        {
+            var value = weightList[i];
+            currentWeight += value;
+            if (randomNumber < currentWeight)
+            {
+                return i;
+            }
+        }
+
+        return RandomRangeInt(0, weightList.Count - 1);
+    }
     
     /// <summary>
     /// 根据四个点计算出矩形
@@ -145,5 +176,13 @@ public static class Utils
     public static string FirstToLower(this string str)
     {
         return str.Substring(0, 1).ToLower() + str.Substring(1);
+    }
+    
+    /// <summary>
+    /// 字符串首字母大写
+    /// </summary>
+    public static string FirstToUpper(this string str)
+    {
+        return str.Substring(0, 1).ToUpper() + str.Substring(1);
     }
 }

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://blp7bo6tyoqlr"]
+
+[ext_resource type="Script" path="res://src/test/TestExpression.cs" id="1_qmchi"]
+
+[node name="TestExpression" type="Node2D"]
+script = ExtResource("1_qmchi")
+Str = "0003;
+0001(w:100,ca:15,ra:30);
+0002(w:120,ca:10,ra:20);"

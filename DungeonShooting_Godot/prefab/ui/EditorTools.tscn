@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://kw3o772vpne"]
 
-[ext_resource type="Script" path="res://src/game/ui/editorTools/EditorToolsPanel.cs" id="1_pav1q"]
+[ext_resource type="Script" path="res://src/game/ui/editorTools/EditorToolsPanel.cs" id="1_43d6l"]
 
 [node name="EditorTools" type="Control"]
 layout_mode = 3
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_pav1q")
+script = ExtResource("1_43d6l")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
@@ -107,6 +107,10 @@ text = "房间所属分组"
 
 [node name="RoomGroupSelect" type="OptionButton" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "testGroup"
+popup/item_0/id = 0
 
 [node name="Label3" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
@@ -114,6 +118,22 @@ text = "房间类型"
 
 [node name="RoomTypeSelect" type="OptionButton" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
+item_count = 7
+selected = 0
+popup/item_0/text = "battle (战斗房间)"
+popup/item_0/id = 0
+popup/item_1/text = "inlet (起始房间)"
+popup/item_1/id = 1
+popup/item_2/text = "outlet (结束房间)"
+popup/item_2/id = 2
+popup/item_3/text = "boss (boss战房间)"
+popup/item_3/id = 3
+popup/item_4/text = "reward (奖励房间)"
+popup/item_4/id = 4
+popup/item_5/text = "shop (商店房间)"
+popup/item_5/id = 5
+popup/item_6/text = "event (事件房间)"
+popup/item_6/id = 6
 
 [node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
@@ -129,6 +149,18 @@ layout_mode = 2
 text = "重新打包地牢房间配置"
 
 [node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "运行"
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "导出Excel表"
+
+[node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer7"]
 layout_mode = 2
 text = "运行"
 

@@ -58,7 +58,7 @@ public class ReloadBar
         var player = Player.Current;
         if (player.Holster.ActiveWeapon != null && player.Holster.ActiveWeapon.Reloading)
         {
-            ShowBar(player.GlobalPosition, 1 - player.Holster.ActiveWeapon.ReloadProgress);
+            ShowBar(player.GlobalPosition, player.Holster.ActiveWeapon.ReloadProgress);
         }
         else
         {

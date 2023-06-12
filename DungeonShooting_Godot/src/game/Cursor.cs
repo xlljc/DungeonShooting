@@ -20,6 +20,7 @@ public partial class Cursor : Node2D
     private Sprite2D lb;
     private Sprite2D rt;
     private Sprite2D rb;
+    private Sprite2D finger;
     
     public override void _Ready()
     {
@@ -28,15 +29,13 @@ public partial class Cursor : Node2D
         lb = GetNode<Sprite2D>("LB");
         rt = GetNode<Sprite2D>("RT");
         rb = GetNode<Sprite2D>("RB");
+        finger = GetNode<Sprite2D>("Finger");
+        SetGuiMode(true);
     }
 
     public override void _Process(double delta)
     {
-        if (_isGuiMode)
-        {
-            SetScope(0, null);
-        }
-        else
+        if (!_isGuiMode)
         {
             var targetGun = _mountRole?.Holster.ActiveWeapon;
             if (targetGun != null)
@@ -58,6 +57,22 @@ public partial class Cursor : Node2D
     public void SetGuiMode(bool flag)
     {
         _isGuiMode = flag;
+        if (flag) //手指
+        {
+            lt.Visible = false;
+            lb.Visible = false;
+            rt.Visible = false;
+            rb.Visible = false;
+            finger.Visible = true;
+        }
+        else //准心
+        {
+            lt.Visible = true;
+            lb.Visible = true;
+            rt.Visible = true;
+            rb.Visible = true;
+            finger.Visible = false;
+        }
     }
     
     /// <summary>
@@ -95,7 +110,7 @@ public partial class Cursor : Node2D
             var len = GlobalPosition.DistanceTo(tunPos);
             if (targetGun.Attribute != null)
             {
-                len = Mathf.Max(0, len - targetGun.Attribute.FirePosition.X);
+                len = Mathf.Max(0, len - targetGun.FirePoint.Position.X);
             }
             scope = len / GameConfig.ScatteringDistance * scope;
         }

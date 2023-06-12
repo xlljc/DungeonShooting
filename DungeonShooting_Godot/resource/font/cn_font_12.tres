@@ -1,9 +1,0 @@
-[gd_resource type="FontFile" load_steps=2 format=2]
-
-[ext_resource path="res://Silver.ttf" type="FontFile" id=1]
-
-[resource]
-size = 12
-extra_spacing_top = -2
-extra_spacing_bottom = -2
-font_data = ExtResource( 1 )

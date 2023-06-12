@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://bvfnnqo71knb"]
+
+[ext_resource type="Script" path="res://src/game/room/RoomDoor.cs" id="1_f3qbq"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_6vvcd"]
+[ext_resource type="SpriteFrames" uid="uid://xs72aopsgpg6" path="res://resource/spriteFrames/RoomDoor_NS.tres" id="3_at5v2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yvwpk"]
+resource_local_to_scene = true
+shader = ExtResource("2_6vvcd")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t4ayq"]
+resource_local_to_scene = true
+shader = ExtResource("2_6vvcd")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_opsb6"]
+resource_local_to_scene = true
+size = Vector2(32, 23)
+
+[node name="RoomDoor_N" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
+script = ExtResource("1_f3qbq")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+z_index = -1
+material = SubResource("ShaderMaterial_yvwpk")
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_t4ayq")
+position = Vector2(0, -8)
+sprite_frames = ExtResource("3_at5v2")
+autoplay = "default"
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3.5)
+shape = SubResource("RectangleShape2D_opsb6")

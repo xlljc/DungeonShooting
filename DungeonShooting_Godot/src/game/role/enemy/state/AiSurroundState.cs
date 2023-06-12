@@ -47,7 +47,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                ChangeStateLate(AiStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AiStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
         }
@@ -142,7 +142,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     var position = Master.GlobalPosition;
                     if (position.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.GetWeaponRange(0.7f), 2)) //玩家离开正常射击范围
                     {
-                        ChangeStateLate(AiStateEnum.AiFollowUp);
+                        ChangeState(AiStateEnum.AiFollowUp);
                     }
                     else
                     {
@@ -154,7 +154,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         }
         else //目标离开视野
         {
-            ChangeStateLate(AiStateEnum.AiTailAfter);
+            ChangeState(AiStateEnum.AiTailAfter);
         }
     }
 

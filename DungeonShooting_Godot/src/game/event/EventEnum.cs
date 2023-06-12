@@ -5,19 +5,19 @@
 public enum EventEnum
 {
     /// <summary>
-    /// 敌人死亡, 参数为死亡的敌人的实例
+    /// 敌人死亡, 参数为死亡的敌人的实例, 参数类型为<see cref="Enemy"/>
     /// </summary>
     OnEnemyDie,
     /// <summary>
-    /// 玩家进入一个房间，参数为房间对象
+    /// 玩家进入一个房间，参数类型为<see cref="RoomInfo"/>
     /// </summary>
     OnPlayerEnterRoom,
     /// <summary>
-    /// 玩家第一次进入某个房间，参数为房间对象
+    /// 玩家第一次进入某个房间，参数类型为<see cref="RoomInfo"/>
     /// </summary>
     OnPlayerFirstEnterRoom,
     /// <summary>
-    /// 玩家可互动对象改变, 参数为 CheckInteractiveResult
+    /// 玩家可互动对象改变, 参数类型为<see cref="CheckInteractiveResult"/>
     /// </summary>
     OnPlayerChangeInteractiveItem,
     /// <summary>
@@ -37,7 +37,11 @@ public enum EventEnum
     /// </summary>
     OnPlayerMaxShieldChange,
     /// <summary>
-    /// 刷新玩家手持武器纹理, 参数为 Texture2D
+    /// 当玩家进入地牢时调用, 没有参数
     /// </summary>
-    OnPlayerRefreshWeaponTexture,
+    OnEnterDungeon,
+    /// <summary>
+    /// 当玩家退出地牢时调用, 没有参数
+    /// </summary>
+    OnExitDungeon,
 }

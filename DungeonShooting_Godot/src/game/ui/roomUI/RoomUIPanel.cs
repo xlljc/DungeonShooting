@@ -38,6 +38,14 @@ public partial class RoomUIPanel : RoomUI
         _gunBar.OnHide();
     }
 
+    public void InitData(Player player)
+    {
+        _healthBar.SetMaxHp(player.MaxHp);
+        _healthBar.SetHp(player.Hp);
+        _healthBar.SetMaxShield(player.MaxShield);
+        _healthBar.SetShield(player.Shield);
+    }
+
     public override void Process(float delta)
     {
         _gunBar.Process(delta);

@@ -43,12 +43,6 @@ namespace Plugin
         private CustomTypeInfo[] _customTypeInfos = new CustomTypeInfo[]
         {
             new CustomTypeInfo(
-                "ActivityObjectTemplate",
-                "Node",
-                "res://src/framework/activity/ActivityObjectTemplate.cs",
-                "res://addons/dungeonShooting_plugin/ActivityObject.svg"
-            ),
-            new CustomTypeInfo(
                 "ActivityMark",
                 "Node2D",
                 "res://src/framework/map/mark/ActivityMark.cs",
@@ -58,18 +52,6 @@ namespace Plugin
                 "EnemyMark",
                 "Node2D",
                 "res://src/framework/map/mark/EnemyMark.cs",
-                "res://addons/dungeonShooting_plugin/Mark.svg"
-            ),
-            new CustomTypeInfo(
-                "WeaponMark",
-                "Node2D",
-                "res://src/framework/map/mark/WeaponMark.cs",
-                "res://addons/dungeonShooting_plugin/Mark.svg"
-            ),
-            new CustomTypeInfo(
-                "PlayerBirthMark",
-                "Node2D",
-                "res://src/framework/map/mark/PlayerBirthMark.cs",
                 "res://addons/dungeonShooting_plugin/Mark.svg"
             ),
         };

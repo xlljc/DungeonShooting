@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Material" uid="uid://c1chld6lkpgji" path="res://resource/material/SmokeParticleMaterial.tres" id="1_dxavj"]
+[ext_resource type="Texture2D" uid="uid://bs1lan5uwxyfg" path="res://resource/curve/Curve1.tres" id="1_s60r7"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/Smoke.png" id="2_3kyig"]
+[ext_resource type="Texture2D" uid="uid://csud4e6kc3iku" path="res://resource/sprite/effects/Effect1.png" id="3_1mceu"]
+[ext_resource type="Script" path="res://src/game/effects/Effect1.cs" id="3_ax5u4"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ipadv"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pgx85"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 40.0
+initial_velocity_max = 70.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 0.2
+scale_max = 0.3
+scale_curve = ExtResource("1_s60r7")
+
+[node name="Effect1" type="GPUParticles2D"]
+modulate = Color(0.760784, 0.760784, 0.760784, 0.533333)
+z_index = 5
+material = SubResource("CanvasItemMaterial_ipadv")
+emitting = false
+amount = 10
+process_material = ExtResource("1_dxavj")
+texture = ExtResource("2_3kyig")
+lifetime = 0.7
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 20
+script = ExtResource("3_ax5u4")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_pgx85")
+texture = ExtResource("3_1mceu")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 0.5
+fixed_fps = 20

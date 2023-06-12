@@ -23,19 +23,28 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public string ItemId { get; private set; }
 
     /// <summary>
-    /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite2D", 类型为 AnimatedSprite2D
+    /// 是否是静态物体, 如果为true, 则会禁用移动处理
     /// </summary>
-    public AnimatedSprite2D AnimatedSprite { get; private set; }
+    [Export]
+    public bool IsStatic { get; set; }
 
     /// <summary>
     /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite2D
     /// </summary>
-    public Sprite2D ShadowSprite { get; private set; }
+    [Export, ExportFillNode]
+    public Sprite2D ShadowSprite { get; set; }
+    
+    /// <summary>
+    /// 当前物体显示的精灵图像, 节点名称必须叫 "AnimatedSprite2D", 类型为 AnimatedSprite2D
+    /// </summary>
+    [Export, ExportFillNode]
+    public AnimatedSprite2D AnimatedSprite { get; set; }
 
     /// <summary>
     /// 当前物体碰撞器节点, 节点名称必须叫 "Collision", 类型为 CollisionShape2D
     /// </summary>
-    public CollisionShape2D Collision { get; private set; }
+    [Export, ExportFillNode]
+    public CollisionShape2D Collision { get; set; }
 
     /// <summary>
     /// 是否调用过 Destroy() 函数
@@ -57,14 +66,28 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public Vector2 BasisVelocity
     {
-        get => MoveController.BasisVelocity;
-        set => MoveController.BasisVelocity = value;
+        get
+        {
+            if (MoveController != null)
+            {
+                return MoveController.BasisVelocity;
+            }
+
+            return Vector2.Zero;
+        }
+        set
+        {
+            if (MoveController != null)
+            {
+                MoveController.BasisVelocity = value;
+            }
+        }
     }
 
     /// <summary>
     /// 当前物体归属的区域, 如果为 null 代表不属于任何一个区域
     /// </summary>
-    public AffiliationArea Affiliation
+    public AffiliationArea AffiliationArea
     {
         get => _affiliationArea;
         set
@@ -80,7 +103,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <summary>
     /// 是否正在投抛过程中
     /// </summary>
-    public bool IsThrowing => _fallData != null && !_isFallOver;
+    public bool IsThrowing => _throwForce != null && !_isFallOver;
 
     /// <summary>
     /// 当前物体的海拔高度, 如果大于0, 则会做自由落体运动, 也就是执行投抛代码
@@ -131,10 +154,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// 物体下坠回弹后的运动速度衰减量
     /// </summary>
     public float BounceSpeed { get; set; } = 0.75f;
-    
+
     /// <summary>
     /// 投抛状态下物体碰撞器大小, 如果 (x, y) 都小于 0, 则默认使用 AnimatedSprite 的默认动画第一帧的大小
     /// </summary>
+    [Export]
     public Vector2 ThrowCollisionSize { get; set; } = new Vector2(-1, -1);
 
     /// <summary>
@@ -142,6 +166,42 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public bool EnableVerticalMotion { get; set; } = true;
 
+    /// <summary>
+    /// 是否启用物体更新行为, 默认 true, 如果禁用, 则会停止当前物体的 Process(), PhysicsProcess() 调用, 并且禁用 Collision 节点, 禁用后所有组件也同样被禁用行为
+    /// </summary>
+    public bool EnableBehavior
+    {
+        get => _enableBehavior;
+        set
+        {
+            if (value != _enableBehavior)
+            {
+                _enableBehavior = value;
+                SetProcess(value);
+                SetPhysicsProcess(value);
+                if (value)
+                {
+                    Collision.Disabled = _enableBehaviorCollisionDisabledFlag;
+                }
+                else
+                {
+                    _enableBehaviorCollisionDisabledFlag = Collision.Disabled;
+                    Collision.Disabled = true;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 是否启用自定义行为, 默认 true, 如果禁用, 则会停止调用子类重写的 Process(), PhysicsProcess() 函数, 并且当前物体除 MoveController 以外的组件 Process(), PhysicsProcess() 也会停止调用
+    /// </summary>
+    public bool EnableCustomBehavior { get; set; } = true;
+    
+    /// <summary>
+    /// 所在的 World 对象
+    /// </summary>
+    public World World { get; private set; }
+    
     // --------------------------------------------------------------------------------
 
     //组件集合
@@ -161,7 +221,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     private ShaderMaterial _blendShaderMaterial;
     
     //存储投抛该物体时所产生的数据
-    private ActivityFallData _fallData;
+    private ActivityFallData _fallData = new ActivityFallData();
     
     //所在层级
     private RoomLayerEnum _currLayer;
@@ -171,9 +231,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     
     //开启的协程
     private List<CoroutineData> _coroutineList;
-    //模板实例
-    private ActivityObjectTemplate _templateInstance;
-    
+
     //物体所在区域
     private AffiliationArea _affiliationArea;
 
@@ -192,63 +250,36 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     //落到地上回弹的速度
     private float _resilienceVerticalSpeed = 0;
     private bool _hasResilienceVerticalSpeed = false;
-    
+
+    //是否启用物体行为
+    private bool _enableBehavior = true;
+    private bool _enableBehaviorCollisionDisabledFlag;
+
     // --------------------------------------------------------------------------------
     
     //实例索引
     private static long _instanceIndex = 0;
 
     //初始化节点
-    private void _InitNode(string itemId, string scenePath)
+    private void _InitNode(string itemId, World world)
     {
-        //加载预制体
-        var tempPrefab = ResourceManager.Load<PackedScene>(scenePath);
-        if (tempPrefab == null)
+#if TOOLS
+        if (!Engine.IsEditorHint())
         {
-            throw new Exception("创建 ActivityObject 没有找到指定挂载的预制体: " + scenePath);
-        }
-
-        ItemId = itemId;
-        Name = GetType().Name + (_instanceIndex++);
-        
-        _templateInstance = tempPrefab.Instantiate<ActivityObjectTemplate>();
-        //移动子节点
-        var count = _templateInstance.GetChildCount();
-        for (int i = 0; i < count; i++)
-        {
-            var body = _templateInstance.GetChild(0);
-            _templateInstance.RemoveChild(body);
-            AddChild(body);
-            body.Owner = this;
-            switch (body.Name)
+            if (GetType().GetCustomAttributes(typeof(ToolAttribute), false).Length == 0)
             {
-                case "AnimatedSprite":
-                    AnimatedSprite = (AnimatedSprite2D)body;
-                    _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
-                    break;
-                case "ShadowSprite":
-                    ShadowSprite = (Sprite2D)body;
-                    ShadowSprite.Visible = false;
-                    break;
-                case "Collision":
-                    Collision = (CollisionShape2D)body;
-                    break;
+                throw new Exception($"ActivityObject子类'{GetType().FullName}'没有加[Tool]标记!");
             }
         }
-        
-        ZIndex = _templateInstance.z_index;
-        CollisionLayer = _templateInstance.collision_layer;
-        CollisionMask = _templateInstance.collision_mask;
-        Scale = _templateInstance.scale;
-        Visible = _templateInstance.visible;
-
+#endif
+        World = world;
+        ItemId = itemId;
+        Name = GetType().Name + (_instanceIndex++);
+        _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
+        ShadowSprite.Visible = false;
         MotionMode = MotionModeEnum.Floating;
-
         MoveController = AddComponent<MoveController>();
-        
-        //临时处理, 4.0 有bug, 不能销毁模板实例, 不然关闭游戏会报错!!!
-        //_templateInstance.CallDeferred(Node.MethodName.QueueFree);
-
+        MoveController.Enable = !IsStatic;
         OnInit();
     }
 
@@ -257,6 +288,38 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public sealed override void _Ready()
     {
+
+    }
+
+    /// <summary>
+    /// 子类需要重写 _EnterTree() 函数, 请重写 EnterTree()
+    /// </summary>
+    public sealed override void _EnterTree()
+    {
+#if TOOLS
+        // 在工具模式下创建的 template 节点自动创建对应的必要子节点
+        if (Engine.IsEditorHint())
+        {
+            _InitNodeInEditor();
+            return;
+        }
+#endif
+        EnterTree();
+    }
+    
+    /// <summary>
+    /// 子类需要重写 _ExitTree() 函数, 请重写 ExitTree()
+    /// </summary>
+    public sealed override void _ExitTree()
+    {
+#if TOOLS
+        // 在工具模式下创建的 template 节点自动创建对应的必要子节点
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+#endif
+        ExitTree();
     }
 
     /// <summary>
@@ -276,7 +339,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         if (_prevAnimation != anim || _prevAnimationFrame != frame)
         {
             var frames = AnimatedSprite.SpriteFrames;
-            if (frames.HasAnimation(anim))
+            if (frames != null && frames.HasAnimation(anim))
             {
                 //切换阴影动画
                 ShadowSprite.Texture = frames.GetFrameTexture(anim, frame);
@@ -331,7 +394,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public Texture2D GetCurrentTexture()
     {
-        return AnimatedSprite.SpriteFrames.GetFrameTexture(AnimatedSprite.Name, AnimatedSprite.Frame);
+        var spriteFrames = AnimatedSprite.SpriteFrames;
+        if (spriteFrames == null)
+        {
+            return null;
+        }
+        return spriteFrames.GetFrameTexture(AnimatedSprite.Animation, AnimatedSprite.Frame);
     }
 
     /// <summary>
@@ -339,6 +407,22 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public virtual void OnInit()
     {
+    }
+
+    /// <summary>
+    /// 进入场景树时调用
+    /// </summary>
+    public virtual void EnterTree()
+    {
+        
+    }
+
+    /// <summary>
+    /// 离开场景树时调用
+    /// </summary>
+    public virtual void ExitTree()
+    {
+        
     }
     
     /// <summary>
@@ -476,7 +560,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     {
         _currLayer = layer;
         var parent = GetParent();
-        var root = GameApplication.Instance.RoomManager.GetRoomLayer(layer);
+        var root = GameApplication.Instance.World.GetRoomLayer(layer);
         if (parent != root)
         {
             if (parent != null)
@@ -521,23 +605,24 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// 将该节点投抛出去
     /// </summary>
     /// <param name="altitude">初始高度</param>
-    /// <param name="rotate">旋转速度</param>
-    /// <param name="velocity">移动速率</param>
     /// <param name="verticalSpeed">纵轴速度</param>
+    /// <param name="velocity">移动速率</param>
+    /// <param name="rotate">旋转速度</param>
     public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotate)
     {
         var parent = GetParent();
         if (parent == null)
         {
-            GameApplication.Instance.RoomManager.YSortLayer.AddChild(this);
+            GameApplication.Instance.World.YSortLayer.AddChild(this);
         }
-        else if (parent != GameApplication.Instance.RoomManager.YSortLayer)
+        else if (parent != GameApplication.Instance.World.YSortLayer)
         {
             parent.RemoveChild(this);
-            GameApplication.Instance.RoomManager.YSortLayer.AddChild(this);
+            GameApplication.Instance.World.YSortLayer.AddChild(this);
         }
         
         Altitude = altitude;
+        //Position = Position + new Vector2(0, altitude);
         VerticalSpeed = verticalSpeed;
         ThrowRotationDegreesSpeed = rotate;
         if (_throwForce != null)
@@ -548,6 +633,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         _throwForce = new ExternalForce("throw");
         _throwForce.Velocity = velocity;
         MoveController.AddConstantForce(_throwForce);
+
+        InitThrowData();
     }
 
     /// <summary>
@@ -555,9 +642,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     /// <param name="position">初始位置</param>
     /// <param name="altitude">初始高度</param>
-    /// <param name="rotate">旋转速度</param>
-    /// <param name="velocity">移动速率</param>
     /// <param name="verticalSpeed">纵轴速度</param>
+    /// <param name="velocity">移动速率</param>
+    /// <param name="rotate">旋转速度</param>
     public void Throw(Vector2 position, float altitude, float verticalSpeed, Vector2 velocity, float rotate)
     {
         GlobalPosition = position;
@@ -628,32 +715,90 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         if (component == null) return null;
         return (T)component;
     }
+
+    /// <summary>
+    /// 设置混色材质的颜色
+    /// </summary>
+    public void SetBlendColor(Color color)
+    {
+        _blendShaderMaterial.SetShaderParameter("blend", color);
+    }
+
+    /// <summary>
+    /// 获取混色材质的颜色
+    /// </summary>
+    public Color GetBlendColor()
+    {
+        return _blendShaderMaterial.GetShaderParameter("blend").AsColor();
+    }
+    
+    /// <summary>
+    /// 设置混色材质的强度
+    /// </summary>
+    public void SetBlendSchedule(float value)
+    {
+        _blendShaderMaterial.SetShaderParameter("schedule", value);
+    }
+
+    /// <summary>
+    /// 获取混色材质的强度
+    /// </summary>
+    public float GetBlendSchedule()
+    {
+        return _blendShaderMaterial.GetShaderParameter("schedule").AsSingle();
+    }
+    
     
     /// <summary>
     /// 每帧调用一次, 为了防止子类覆盖 _Process(), 给 _Process() 加上了 sealed, 子类需要帧循环函数请重写 Process() 函数
     /// </summary>
     public sealed override void _Process(double delta)
     {
+#if TOOLS
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+#endif
         var newDelta = (float)delta;
-        Process(newDelta);
+        if (EnableCustomBehavior)
+        {
+            Process(newDelta);
+        }
         
         //更新组件
         if (_components.Count > 0)
         {
-            var arr = _components.ToArray();
-            for (int i = 0; i < arr.Length; i++)
+            if (EnableCustomBehavior) //启用所有组件
             {
-                if (IsDestroyed) return;
-                var temp = arr[i].Value;
-                if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                var arr = _components.ToArray();
+                for (int i = 0; i < arr.Length; i++)
                 {
-                    if (!temp.IsReady)
+                    if (IsDestroyed) return;
+                    var temp = arr[i].Value;
+                    if (temp != null && temp.ActivityInstance == this && temp.Enable)
                     {
-                        temp.Ready();
-                        temp.IsReady = true;
+                        if (!temp.IsReady)
+                        {
+                            temp.Ready();
+                            temp.IsReady = true;
+                        }
+
+                        temp.Process(newDelta);
+                    }
+                }
+            }
+            else //只更新 MoveController 组件
+            {
+                if (MoveController.Enable)
+                {
+                    if (!MoveController.IsReady)
+                    {
+                        MoveController.Ready();
+                        MoveController.IsReady = true;
                     }
 
-                    temp.Process(newDelta);
+                    MoveController.Process(newDelta);
                 }
             }
         }
@@ -661,30 +806,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         // 下坠判定
         if (Altitude > 0 || VerticalSpeed != 0)
         {
-            if (_fallData == null)
-            {
-                _fallData = new ActivityFallData();
-            }
-            
             if (_isFallOver) // 没有处于下坠状态, 则进入下坠状态
             {
-                SetFallCollision();
-
-                _isFallOver = false;
-                _firstFall = true;
-                _hasResilienceVerticalSpeed = false;
-                _resilienceVerticalSpeed = 0;
-                
-                if (ThrowCollisionSize.X < 0 && ThrowCollisionSize.Y < 0)
-                {
-                    _throwRectangleShape.Size = GetDefaultTexture().GetSize();
-                }
-                else
-                {
-                    _throwRectangleShape.Size = ThrowCollisionSize;
-                }
-
-                Throw();
+                InitThrowData();
             }
             else
             {
@@ -727,7 +851,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 
                         MoveController.ScaleAllForce(BounceSpeed);
                         //如果落地高度不够低, 再抛一次
-                        if (Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 1))
+                        if (Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 5))
                         {
                             if (!_hasResilienceVerticalSpeed)
                             {
@@ -736,7 +860,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
                             }
                             else
                             {
-                                _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength;
+                                if (_resilienceVerticalSpeed < 25)
+                                {
+                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength * 0.4f;
+                                }
+                                else
+                                {
+                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength;
+                                }
                             }
                             _verticalSpeed = _resilienceVerticalSpeed;
                             ThrowRotationDegreesSpeed = ThrowRotationDegreesSpeed * BounceStrength;
@@ -786,7 +917,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         }
 
         // Hit 动画
-        if (_playHit && _blendShaderMaterial != null)
+        if (_playHit)
         {
             if (_playHitSchedule < 0.05f)
             {
@@ -828,26 +959,51 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public sealed override void _PhysicsProcess(double delta)
     {
+#if TOOLS
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+#endif
         var newDelta = (float)delta;
-        PhysicsProcess(newDelta);
+        if (EnableCustomBehavior)
+        {
+            PhysicsProcess(newDelta);
+        }
         
         //更新组件
         if (_components.Count > 0)
         {
-            var arr = _components.ToArray();
-            for (int i = 0; i < arr.Length; i++)
+            if (EnableCustomBehavior) //启用所有组件
             {
-                if (IsDestroyed) return;
-                var temp = arr[i].Value;
-                if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                var arr = _components.ToArray();
+                for (int i = 0; i < arr.Length; i++)
                 {
-                    if (!temp.IsReady)
+                    if (IsDestroyed) return;
+                    var temp = arr[i].Value;
+                    if (temp != null && temp.ActivityInstance == this && temp.Enable)
                     {
-                        temp.Ready();
-                        temp.IsReady = true;
+                        if (!temp.IsReady)
+                        {
+                            temp.Ready();
+                            temp.IsReady = true;
+                        }
+
+                        temp.PhysicsProcess(newDelta);
+                    }
+                }
+            }
+            else //只更新 MoveController 组件
+            {
+                if (MoveController.Enable)
+                {
+                    if (!MoveController.IsReady)
+                    {
+                        MoveController.Ready();
+                        MoveController.IsReady = true;
                     }
 
-                    temp.PhysicsProcess(newDelta);
+                    MoveController.PhysicsProcess(newDelta);
                 }
             }
         }
@@ -860,6 +1016,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public sealed override void _Draw()
     {
+#if TOOLS
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+#endif
         if (IsDebug)
         {
             DebugDraw();
@@ -895,7 +1057,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     {
         if (Scale.Y < 0)
         {
-            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -Altitude) - _fallData.OriginSpritePosition.Rotated(Rotation) * Scale.Abs();
+            var pos = new Vector2(_fallData.OriginSpritePosition.X, -_fallData.OriginSpritePosition.Y);
+            AnimatedSprite.GlobalPosition = GlobalPosition + new Vector2(0, -Altitude) - pos.Rotated(Rotation + Mathf.Pi);
         }
         else
         {
@@ -924,13 +1087,10 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             arr[i].Value?.Destroy();
         }
         
-        if (Affiliation != null)
+        if (AffiliationArea != null)
         {
-            Affiliation.RemoveItem(this);
+            AffiliationArea.RemoveItem(this);
         }
-        
-        //临时处理, 4.0 有bug, 不能提前销毁模板实例, 不然关闭游戏会报错!!!
-        _templateInstance.QueueFree();
     }
 
     /// <summary>
@@ -939,6 +1099,19 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public void DelayDestroy()
     {
         CallDeferred(nameof(Destroy));
+    }
+
+    /// <summary>
+    /// 继承指定物体的运动速率, 该速率可能会有衰减
+    /// </summary>
+    public void InheritVelocity(ActivityObject other)
+    {
+        var velocity = other.Velocity;
+        if (velocity != Vector2.Zero)
+        {
+            var force = MoveController.AddConstantForce(velocity * 0.5f, 15);
+            force.EnableResistanceInTheAir = false;
+        }
     }
 
     /// <summary>
@@ -952,7 +1125,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         {
             this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
-        else if (parent == GameApplication.Instance.RoomManager.NormalLayer)
+        else if (parent == GameApplication.Instance.World.NormalLayer)
         {
             parent.RemoveChild(this);
             this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
@@ -992,7 +1165,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             {
                 _throwRectangleShape = new RectangleShape2D();
             }
-
+            
             Collision.Shape = _throwRectangleShape;
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
@@ -1038,7 +1211,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     private void ThrowOver()
     {
         var parent = GetParent();
-        var roomLayer = GameApplication.Instance.RoomManager.GetRoomLayer(_currLayer);
+        var roomLayer = GameApplication.Instance.World.GetRoomLayer(_currLayer);
         if (parent != roomLayer)
         {
             parent.RemoveChild(this);
@@ -1047,6 +1220,28 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         RestoreCollision();
 
         OnThrowOver();
+    }
+
+    //初始化投抛状态数据
+    private void InitThrowData()
+    {
+        SetFallCollision();
+
+        _isFallOver = false;
+        _firstFall = true;
+        _hasResilienceVerticalSpeed = false;
+        _resilienceVerticalSpeed = 0;
+                
+        if (ThrowCollisionSize.X < 0 && ThrowCollisionSize.Y < 0)
+        {
+            _throwRectangleShape.Size = GetDefaultTexture().GetSize();
+        }
+        else
+        {
+            _throwRectangleShape.Size = ThrowCollisionSize;
+        }
+
+        Throw();
     }
 
     /// <summary>
@@ -1125,7 +1320,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     }
 
     /// <summary>
-    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess
+    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task, SignalAwaiter
     /// </summary>
     public long StartCoroutine(IEnumerator able)
     {
@@ -1146,5 +1341,61 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public void StopAllCoroutine()
     {
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
+    }
+
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public void DelayCall(float delayTime, Action cb)
+    {
+        StartCoroutine(_DelayCall(delayTime, cb));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public void DelayCall<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    {
+        StartCoroutine(_DelayCall(delayTime, cb, arg1));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public void DelayCall<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    {
+        StartCoroutine(_DelayCall(delayTime, cb, arg1, arg2));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public void DelayCall<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    {
+        StartCoroutine(_DelayCall(delayTime, cb, arg1, arg2, arg3));
+    }
+
+    private IEnumerator _DelayCall(float delayTime, Action cb)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb();
+    }
+    
+    private IEnumerator _DelayCall<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb(arg1);
+    }
+    
+    private IEnumerator _DelayCall<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb(arg1, arg2);
+    }
+    
+    private IEnumerator _DelayCall<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb(arg1,arg2, arg3);
     }
 }

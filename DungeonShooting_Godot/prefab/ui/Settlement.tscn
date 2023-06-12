@@ -1,0 +1,63 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8rugox2mbl3v"]
+
+[ext_resource type="Script" path="res://src/game/ui/settlement/SettlementPanel.cs" id="1_ayhkb"]
+[ext_resource type="Theme" uid="uid://drb1ajgvcih7p" path="res://resource/theme/theme1.tres" id="2_63mpy"]
+
+[node name="Settlement" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ayhkb")
+
+[node name="Bg" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.27451)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 268.0
+offset_bottom = 311.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 160
+text = "Game Over!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonList" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -96.0
+offset_top = -641.0
+offset_right = 96.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Restart" type="Button" parent="ButtonList"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+focus_neighbor_top = NodePath("../ToMenu")
+theme = ExtResource("2_63mpy")
+text = "重新开始
+"
+
+[node name="ToMenu" type="Button" parent="ButtonList"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../Restart")
+theme = ExtResource("2_63mpy")
+text = "回到主菜单"

@@ -62,16 +62,16 @@ public partial class AffiliationArea : Area2D
     /// </summary>
     public void InsertItem(ActivityObject activityObject)
     {
-        if (activityObject.Affiliation == this)
+        if (activityObject.AffiliationArea == this)
         {
             return;
         }
 
-        if (activityObject.Affiliation != null)
+        if (activityObject.AffiliationArea != null)
         {
             _includeItems.Remove(activityObject);
         }
-        activityObject.Affiliation = this;
+        activityObject.AffiliationArea = this;
         _includeItems.Add(activityObject);
 
         //如果是玩家
@@ -86,11 +86,11 @@ public partial class AffiliationArea : Area2D
     /// </summary>
     public void RemoveItem(ActivityObject activityObject)
     {
-        if (activityObject.Affiliation == null)
+        if (activityObject.AffiliationArea == null)
         {
             return;
         }
-        activityObject.Affiliation = null;
+        activityObject.AffiliationArea = null;
         _includeItems.Remove(activityObject);
     }
 
@@ -117,6 +117,40 @@ public partial class AffiliationArea : Area2D
             }
         }
         return count;
+    }
+
+    /// <summary>
+    /// 查询所有符合条件的对象并返回
+    /// </summary>
+    /// <param name="handler">操作函数, 返回是否满足要求</param>
+    public ActivityObject[] FindIncludeItems(Func<ActivityObject, bool> handler)
+    {
+        var list = new List<ActivityObject>();
+        foreach (var activityObject in _includeItems)
+        {
+            if (handler(activityObject))
+            {
+                list.Add(activityObject);
+            }
+        }
+        return list.ToArray();
+    }
+
+    /// <summary>
+    /// 检查是否有符合条件的对象
+    /// </summary>
+    /// <param name="handler">操作函数, 返回是否满足要求</param>
+    public bool ExistIncludeItem(Func<ActivityObject, bool> handler)
+    {
+        foreach (var activityObject in _includeItems)
+        {
+            if (handler(activityObject))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     
     private void OnBodyEntered(Node2D body)

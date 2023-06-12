@@ -1,8 +1,10 @@
 ﻿
+using Godot;
+
 /// <summary>
 /// 房间的门, 门有两种状态, 打开和关闭
 /// </summary>
-[RegisterActivity(ActivityIdPrefix.Other + "0001", ResourcePath.prefab_map_RoomDoor_tscn)]
+[Tool, GlobalClass]
 public partial class RoomDoor : ActivityObject
 {
     /// <summary>
@@ -16,6 +18,12 @@ public partial class RoomDoor : ActivityObject
     public bool IsClose { get; private set; }
     
     private RoomDoorInfo _door;
+    private bool waitDisabledCollision = false;
+
+    public override void OnInit()
+    {
+        AnimatedSprite.AnimationFinished += OnAnimationFinished;
+    }
 
     /// <summary>
     /// 初始化调用
@@ -23,23 +31,8 @@ public partial class RoomDoor : ActivityObject
     public void Init(RoomDoorInfo doorInfo)
     {
         _door = doorInfo;
-        OpenDoor();
-
-        switch (doorInfo.Direction)
-        {
-            case DoorDirection.E:
-                RotationDegrees = 90;
-                break;
-            case DoorDirection.W:
-                RotationDegrees = 270;
-                break;
-            case DoorDirection.S:
-                RotationDegrees = 180;
-                break;
-            case DoorDirection.N:
-                RotationDegrees = 0;
-                break;
-        }
+        IsClose = false;
+        OpenDoorHandler();
     }
 
     /// <summary>
@@ -48,14 +41,11 @@ public partial class RoomDoor : ActivityObject
     public void OpenDoor()
     {
         IsClose = false;
-        Visible = false;
-        Collision.Disabled = true;
-        if (_door.Navigation != null)
+        //Visible = false;
+        waitDisabledCollision = true;
+        if (AnimatedSprite.SpriteFrames.HasAnimation(AnimatorNames.OpenDoor))
         {
-            _door.Navigation.OpenNavigationNode.Enabled = true;
-            _door.Navigation.OpenNavigationNode.Visible = true;
-            _door.Navigation.CloseNavigationNode.Enabled = false;
-            _door.Navigation.CloseNavigationNode.Visible = false;
+            AnimatedSprite.Play(AnimatorNames.OpenDoor);
         }
     }
 
@@ -65,7 +55,7 @@ public partial class RoomDoor : ActivityObject
     public void CloseDoor()
     {
         IsClose = true;
-        Visible = true;
+        //Visible = true;
         Collision.Disabled = false;
         if (_door.Navigation != null)
         {
@@ -74,5 +64,45 @@ public partial class RoomDoor : ActivityObject
             _door.Navigation.CloseNavigationNode.Enabled = true;
             _door.Navigation.CloseNavigationNode.Visible = true;
         }
+        
+        if (AnimatedSprite.SpriteFrames.HasAnimation(AnimatorNames.CloseDoor))
+        {
+            AnimatedSprite.Play(AnimatorNames.CloseDoor);
+        }
+        //调整门的层级
+        switch (Direction)
+        {
+            case DoorDirection.E:
+            case DoorDirection.W:
+            case DoorDirection.S:
+                ZIndex = GameConfig.TopMapLayer;
+                break;
+            case DoorDirection.N:
+                ZIndex = GameConfig.MiddleMapLayer;
+                break;
+        }
+    }
+
+    private void OnAnimationFinished()
+    {
+        if (!IsClose && waitDisabledCollision) //开门动画播放完成
+        {
+            waitDisabledCollision = false;
+            OpenDoorHandler();
+        }
+    }
+
+    private void OpenDoorHandler()
+    {
+        Collision.Disabled = true;
+        if (_door.Navigation != null)
+        {
+            _door.Navigation.OpenNavigationNode.Enabled = true;
+            _door.Navigation.OpenNavigationNode.Visible = true;
+            _door.Navigation.CloseNavigationNode.Enabled = false;
+            _door.Navigation.CloseNavigationNode.Visible = false;
+        }
+        //调整门的层级
+        ZIndex = GameConfig.FloorMapLayer;
     }
 }

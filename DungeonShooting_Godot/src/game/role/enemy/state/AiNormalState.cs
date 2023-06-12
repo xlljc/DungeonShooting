@@ -49,19 +49,19 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
         //其他敌人发现玩家
         if (Master.CanChangeLeaveFor())
         {
-            ChangeStateLate(AiStateEnum.AiLeaveFor);
+            ChangeState(AiStateEnum.AiLeaveFor);
             return;
         }
 
         if (_isFindPlayer) //已经找到玩家了
         {
             //现临时处理, 直接切换状态
-            ChangeStateLate(AiStateEnum.AiTailAfter);
+            ChangeState(AiStateEnum.AiTailAfter);
         }
         else //没有找到玩家
         {
             //检测玩家
-            var player = GameApplication.Instance.RoomManager.Player;
+            var player = Player.Current;
             //玩家中心点坐标
             var playerPos = player.GetCenterPosition();
 

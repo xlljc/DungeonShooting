@@ -70,9 +70,11 @@ public partial class GameCamera : Camera2D
         // (viewportContainer.Material as ShaderMaterial)?.SetShaderParameter("offset", SubPixelPosition);
         // GlobalPosition = _camPos.Round();
 
-        if (_followTarget != null)
+
+        var world = GameApplication.Instance.World;
+        if (world != null && !world.Pause && _followTarget != null)
         {
-            var mousePosition = InputManager.GetViewportMousePosition();
+            var mousePosition = InputManager.CursorPosition;
             var targetPosition = _followTarget.GlobalPosition;
             Vector2 targetPos;
             if (targetPosition.DistanceSquaredTo(mousePosition) >= (60 / 0.3f) * (60 / 0.3f))
@@ -104,7 +106,11 @@ public partial class GameCamera : Camera2D
     public void SetFollowTarget(Role target)
     {
         _followTarget = target;
-        GlobalPosition = target.GlobalPosition;
+        if (target != null)
+        {
+            _camPos = target.GlobalPosition;
+            GlobalPosition = _camPos;
+        }
     }
 
     /// <summary>
@@ -150,6 +156,14 @@ public partial class GameCamera : Camera2D
             await ToSignal(sceneTreeTimer, Timer.SignalName.Timeout);
             _shakeMap.Remove(tempIndex);
         }
+    }
+
+    /// <summary>
+    /// 播放玩家死亡特写镜头
+    /// </summary>
+    public void PlayPlayerDieFeatures()
+    {
+        
     }
 
     //抖动调用

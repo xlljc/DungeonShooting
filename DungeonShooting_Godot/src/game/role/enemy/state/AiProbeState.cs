@@ -13,7 +13,7 @@ public class AiProbeState : StateBase<Enemy, AiStateEnum>
         //其他敌人发现玩家
         if (Master.CanChangeLeaveFor())
         {
-            ChangeStateLate(AiStateEnum.AiLeaveFor);
+            ChangeState(AiStateEnum.AiLeaveFor);
             return;
         }
     }
