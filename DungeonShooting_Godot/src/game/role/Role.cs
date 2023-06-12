@@ -448,7 +448,7 @@ public abstract partial class Role : ActivityObject
         {
             temp.Y = -temp.Y;
         }
-        var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
+        //var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
         Holster.RemoveWeapon(index);
         //播放抛出效果
         weapon.ThrowWeapon(this, GlobalPosition);
