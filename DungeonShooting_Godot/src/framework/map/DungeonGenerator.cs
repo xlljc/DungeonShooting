@@ -407,7 +407,7 @@ public class DungeonGenerator
             }
 
             //尝试次数用光了, 还没有找到合适的位置
-            if (tryCount >= _maxTryCount)
+            if (tryCount >= maxTryCount)
             {
                 resultRoom = null;
                 return GenerateRoomErrorCode.NoSuitableLocation;
