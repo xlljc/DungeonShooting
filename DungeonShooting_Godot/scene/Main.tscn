@@ -26,6 +26,7 @@ SubViewport = NodePath("ViewCanvas/SubViewportContainer/SubViewport")
 SubViewportContainer = NodePath("ViewCanvas/SubViewportContainer")
 SceneRoot = NodePath("ViewCanvas/SubViewportContainer/SubViewport/SceneRoot")
 GlobalNodeRoot = NodePath("GlobalNodeRoot")
+Debug = true
 
 [node name="ViewCanvas" type="CanvasLayer" parent="."]
 layer = -1

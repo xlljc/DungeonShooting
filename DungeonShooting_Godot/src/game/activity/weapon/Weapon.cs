@@ -194,6 +194,9 @@ public abstract partial class Weapon : ActivityObject
     //单独换弹设置下的换弹状态, 0: 未换弹, 1: 装第一颗子弹之前, 2: 单独装弹中, 3: 单独装弹完成
     private byte _aloneReloadState = 0;
 
+    //单独换弹状态下是否强制结束换弹过程
+    private bool _aloneReloadStop = false;
+    
     //本次换弹已用时间
     private float _reloadUseTime = 0;
 
@@ -449,6 +452,7 @@ public abstract partial class Weapon : ActivityObject
                                 _aloneReloadState = 2;
                                 ReloadHandler();
                             }
+                            _aloneReloadStop = false;
                         }
                             break;
                         case 2: //单独装弹中
@@ -456,7 +460,7 @@ public abstract partial class Weapon : ActivityObject
                             if (_reloadTimer <= 0)
                             {
                                 ReloadSuccess();
-                                if (ResidueAmmo == 0 || CurrAmmo == Attribute.AmmoCapacity) //单独装弹完成
+                                if (_aloneReloadStop || ResidueAmmo == 0 || CurrAmmo == Attribute.AmmoCapacity) //单独装弹完成
                                 {
                                     AloneReloadStateFinish();
                                     if (Attribute.AloneReloadFinishIntervalTime <= 0)
@@ -490,6 +494,7 @@ public abstract partial class Weapon : ActivityObject
                                 StopReloadState();
                                 ReloadFinishHandler();
                             }
+                            _aloneReloadStop = false;
                         }
                             break;
                     }
@@ -650,17 +655,8 @@ public abstract partial class Weapon : ActivityObject
                     //检查是否允许停止换弹
                     if (_aloneReloadState == 2 || _aloneReloadState == 1)
                     {
-                        if (Attribute.AloneReloadFinishIntervalTime <= 0)
-                        {
-                            //换弹完成
-                            StopReloadState();
-                            ReloadFinishHandler();
-                        }
-                        else
-                        {
-                            _reloadTimer = Attribute.AloneReloadFinishIntervalTime;
-                            _aloneReloadState = 3;
-                        }
+                        //强制结束
+                        _aloneReloadStop = true;
                     }
                 }
             }
@@ -1444,7 +1440,7 @@ public abstract partial class Weapon : ActivityObject
     //-------------------------- ----- 子弹相关 -----------------------------
 
     /// <summary>
-    /// 投抛弹壳的默认实现方式, shellId为弹壳id, 不需要前缀
+    /// 投抛弹壳的默认实现方式, shellId为弹壳id
     /// </summary>
     protected ActivityObject ThrowShell(string shellId)
     {
@@ -1461,6 +1457,25 @@ public abstract partial class Weapon : ActivityObject
         shell.InheritVelocity(Master);
         shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
         return shell;
+    }
+
+    /// <summary>
+    /// 发射子弹的默认实现方式, bulletId为子弹id
+    /// </summary>
+    protected Bullet ShootBullet(float fireRotation, string bulletId)
+    {
+        //创建子弹
+        var bullet = Create<Bullet>(bulletId);
+        bullet.Init(
+            this,
+            Utils.RandomRangeFloat(Attribute.BulletMinSpeed, Attribute.BulletMaxSpeed),
+            Utils.RandomRangeFloat(Attribute.BulletMinDistance, Attribute.BulletMaxDistance),
+            FirePoint.GlobalPosition,
+            fireRotation + Mathf.DegToRad(Utils.RandomRangeFloat(Attribute.BulletMinDeviationAngle, Attribute.BulletMaxDeviationAngle)),
+            GetAttackLayer()
+        );
+        bullet.PutDown(RoomLayerEnum.YSortLayer);
+        return bullet;
     }
     
     //-------------------------------- Ai相关 -----------------------------

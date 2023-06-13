@@ -1,152 +1,194 @@
 [
   {
     "Id": "shooting0001",
-    "Path": "res://resource/sound/sfx/Shooting0001.ogg",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0001.ogg",
     "Volume": 1,
     "Remark": "\u624B\u67AA"
   },
   {
     "Id": "shooting0002",
-    "Path": "res://resource/sound/sfx/Shooting0002.mp3",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0002.ogg",
     "Volume": 1,
     "Remark": "\u6B65\u67AA(\u6D88\u97F3)"
   },
   {
     "Id": "shooting0003",
-    "Path": "res://resource/sound/sfx/Shooting0003.mp3",
-    "Volume": 1,
+    "Path": "res://resource/sound/sfx/shooting/Shooting0003.ogg",
+    "Volume": 0.8,
     "Remark": "\u9730\u5F39\u67AA"
   },
   {
     "Id": "shooting0004",
-    "Path": "res://resource/sound/sfx/Shooting0004.ogg",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0004.ogg",
     "Volume": 1,
     "Remark": "\u624B\u67AA"
   },
   {
+    "Id": "shooting0005",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0005.ogg",
+    "Volume": 1,
+    "Remark": "\u6B65\u67AA"
+  },
+  {
+    "Id": "shooting0006",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0006.ogg",
+    "Volume": 1,
+    "Remark": "\u51B2\u950B\u67AA"
+  },
+  {
+    "Id": "shooting0007",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0007.ogg",
+    "Volume": 1,
+    "Remark": "\u6B65\u67AA"
+  },
+  {
+    "Id": "shooting0008",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0008.ogg",
+    "Volume": 1,
+    "Remark": "\u72D9\u51FB\u67AA"
+  },
+  {
     "Id": "reloading0001",
-    "Path": "res://resource/sound/sfx/Reloading0001.ogg",
+    "Path": "res://resource/sound/sfx/reloading/Reloading0001.ogg",
     "Volume": 1,
     "Remark": "\u624B\u67AA"
   },
   {
     "Id": "reloading0002",
-    "Path": "res://resource/sound/sfx/Reloading0002.ogg",
+    "Path": "res://resource/sound/sfx/reloading/Reloading0002.ogg",
     "Volume": 1,
     "Remark": "\u9730\u5F39\u67AA\u5355\u72EC\u88C5\u5F39"
   },
   {
     "Id": "reloadBegin0002",
-    "Path": "res://resource/sound/sfx/Reloading_begin0002.ogg",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0002.ogg",
     "Volume": 1,
     "Remark": "\u9730\u5F39\u67AA"
   },
   {
     "Id": "reloadBegin0003",
-    "Path": "res://resource/sound/sfx/Reloading_begin0003.ogg",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0003.ogg",
     "Volume": 1,
     "Remark": "\u6B65\u67AA"
   },
   {
     "Id": "reloadBegin0004",
-    "Path": "res://resource/sound/sfx/Reloading_begin0004.ogg",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0004.ogg",
     "Volume": 1,
     "Remark": "\u6B65\u67AA"
   },
   {
+    "Id": "reloadBegin0005",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0005.ogg",
+    "Volume": 1,
+    "Remark": "\u51B2\u950B\u67AA"
+  },
+  {
+    "Id": "reloadBegin0009",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0009.ogg",
+    "Volume": 1,
+    "Remark": "\u72D9\u51FB\u67AA"
+  },
+  {
     "Id": "reloadFinish0002",
-    "Path": "res://resource/sound/sfx/Reloading_finish0002.ogg",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_finish0002.ogg",
     "Volume": 1,
     "Remark": "\u9730\u5F39\u67AA"
   },
   {
     "Id": "equip0001",
-    "Path": "res://resource/sound/sfx/Equip0001.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0001.ogg",
     "Volume": 1,
     "Remark": ""
   },
   {
     "Id": "equip0002",
-    "Path": "res://resource/sound/sfx/Equip0002.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0002.ogg",
     "Volume": 1,
     "Remark": ""
   },
   {
     "Id": "equip0003",
-    "Path": "res://resource/sound/sfx/Equip0003.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0003.ogg",
     "Volume": 1,
     "Remark": ""
   },
   {
     "Id": "equip0004",
-    "Path": "res://resource/sound/sfx/Equip0004.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0004.ogg",
     "Volume": 1,
     "Remark": "\u9730\u5F39\u67AA"
   },
   {
     "Id": "equip0005",
-    "Path": "res://resource/sound/sfx/Equip0005.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0005.ogg",
     "Volume": 1,
     "Remark": "\u9730\u5F39\u67AA"
   },
   {
     "Id": "equip0006",
-    "Path": "res://resource/sound/sfx/Equip0006.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0006.ogg",
     "Volume": 1,
     "Remark": "\u9730\u5F39\u67AA"
   },
   {
     "Id": "equip0007",
-    "Path": "res://resource/sound/sfx/Equip0007.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0007.ogg",
     "Volume": 1,
     "Remark": "\u72D9\u51FB\u67AA"
   },
   {
     "Id": "equip0008",
-    "Path": "res://resource/sound/sfx/Equip0008.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0008.ogg",
     "Volume": 1,
     "Remark": "\u72D9\u51FB\u67AA"
   },
   {
     "Id": "equip0009",
-    "Path": "res://resource/sound/sfx/Equip0009.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0009.ogg",
     "Volume": 1,
     "Remark": "\u72D9\u51FB\u67AA"
   },
   {
     "Id": "equip0010",
-    "Path": "res://resource/sound/sfx/Equip0010.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0010.ogg",
     "Volume": 1,
     "Remark": "\u6B65\u67AA"
   },
   {
     "Id": "equip0011",
-    "Path": "res://resource/sound/sfx/Equip0011.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0011.ogg",
     "Volume": 1,
     "Remark": "\u6B65\u67AA"
   },
   {
     "Id": "equip0012",
-    "Path": "res://resource/sound/sfx/Equip0012.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0012.ogg",
     "Volume": 1,
     "Remark": "\u6B65\u67AA"
   },
   {
     "Id": "equip0013",
-    "Path": "res://resource/sound/sfx/Equip0013.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0013.ogg",
     "Volume": 1,
     "Remark": "\u6B65\u67AA"
   },
   {
     "Id": "equip0014",
-    "Path": "res://resource/sound/sfx/Equip0014.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0014.ogg",
     "Volume": 1,
     "Remark": "\u624B\u67AA"
   },
   {
     "Id": "equip0015",
-    "Path": "res://resource/sound/sfx/Equip0015.ogg",
+    "Path": "res://resource/sound/sfx/equip/Equip0015.ogg",
     "Volume": 1,
     "Remark": "\u624B\u67AA"
+  },
+  {
+    "Id": "equip0016",
+    "Path": "res://resource/sound/sfx/equip/Equip0016.ogg",
+    "Volume": 1,
+    "Remark": "\u51B2\u950B\u67AA"
   }
 ]

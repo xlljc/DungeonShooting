@@ -24,16 +24,6 @@ public partial class Shotgun : Weapon
 
     protected override void OnShoot(float fireRotation)
     {
-        //创建子弹
-        var bullet = ActivityObject.Create<Bullet>(Attribute.BulletId);
-        bullet.Init(
-            this,
-            Utils.RandomRangeInt(280, 380),
-            Utils.RandomRangeFloat(Attribute.MinDistance, Attribute.MaxDistance),
-            FirePoint.GlobalPosition,
-            fireRotation + Utils.RandomRangeFloat(Mathf.DegToRad(-10), Mathf.DegToRad(10)),
-            GetAttackLayer()
-        );
-        bullet.PutDown(RoomLayerEnum.YSortLayer);
+        ShootBullet(fireRotation, Attribute.BulletId);
     }
 }

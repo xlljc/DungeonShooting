@@ -42,6 +42,12 @@
     "Remark": ""
   },
   {
+    "Id": "weapon0006",
+    "Type": 5,
+    "Prefab": "res://prefab/weapon/Weapon0006.tscn",
+    "Remark": ""
+  },
+  {
     "Id": "bullet0001",
     "Type": 6,
     "Prefab": "res://prefab/bullet/Bullet0001.tscn",

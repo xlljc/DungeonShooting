@@ -15,9 +15,9 @@ public static class Utils
     {
         var dateTime = DateTime.Now;
         var num = dateTime.Year * 100000 + dateTime.Month * 100000 + dateTime.Day * 100000 + dateTime.Hour * 10000 + dateTime.Minute * 100 + dateTime.Second;
-        //_random = new Random(0);
-        _random = new Random(num);
-        GD.Print("随机种子为: ", num);
+        _random = new Random(204313957);
+        //_random = new Random(num);
+        //GD.Print("随机种子为: ", num);
     }
 
     /// <summary>
