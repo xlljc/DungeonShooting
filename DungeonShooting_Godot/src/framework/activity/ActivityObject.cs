@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using Godot;
 
 /// <summary>
-/// 房间内活动物体基类, 所有物体都必须继承该类,
-/// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, 
-/// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [RegisterActivity(id, prefabPath)],
-/// ActivityObject 类会自动扫描并注册物体, 然后使用而是使用 ActivityObject.Create(id) 来创建实例
+/// 房间内活动物体基类, 所有物体都必须继承该类,<br/>
+/// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, <br/>
+/// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [Tool], 并在 ActivityObject.xlsx 配置文件中注册物体, 导出配置表后使用 ActivityObject.Create(id) 来创建实例.<br/>
 /// </summary>
 public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 {
@@ -1346,54 +1345,54 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall(float delayTime, Action cb)
+    public void CallDelay(float delayTime, Action cb)
     {
-        StartCoroutine(_DelayCall(delayTime, cb));
+        StartCoroutine(_CallDelay(delayTime, cb));
     }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    public void CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
     {
-        StartCoroutine(_DelayCall(delayTime, cb, arg1));
+        StartCoroutine(_CallDelay(delayTime, cb, arg1));
     }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    public void CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
     {
-        StartCoroutine(_DelayCall(delayTime, cb, arg1, arg2));
+        StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2));
     }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    public void CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
     {
-        StartCoroutine(_DelayCall(delayTime, cb, arg1, arg2, arg3));
+        StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2, arg3));
     }
 
-    private IEnumerator _DelayCall(float delayTime, Action cb)
+    private IEnumerator _CallDelay(float delayTime, Action cb)
     {
         yield return new WaitForSeconds(delayTime);
         cb();
     }
     
-    private IEnumerator _DelayCall<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    private IEnumerator _CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1);
     }
     
-    private IEnumerator _DelayCall<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    private IEnumerator _CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1, arg2);
     }
     
-    private IEnumerator _DelayCall<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    private IEnumerator _CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1,arg2, arg3);

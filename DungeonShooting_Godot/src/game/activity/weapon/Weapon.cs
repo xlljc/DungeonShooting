@@ -828,7 +828,7 @@ public abstract partial class Weapon : ActivityObject
             }
             else
             {
-                DelayCall(Attribute.EquipSoundDelayTime, PlaySpriteAnimation, AnimatorNames.Equip);
+                CallDelay(Attribute.EquipSoundDelayTime, PlaySpriteAnimation, AnimatorNames.Equip);
             }
         }
 
