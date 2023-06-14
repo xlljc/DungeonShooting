@@ -1161,7 +1161,7 @@ public abstract partial class Weapon : ActivityObject
                 }
             }
 
-            if (ResidueAmmo != 0 && CurrAmmo != Attribute.AmmoCapacity) //继续装弹
+            if (!_aloneReloadStop && ResidueAmmo != 0 && CurrAmmo != Attribute.AmmoCapacity) //继续装弹
             {
                 ReloadHandler();
             }
@@ -1197,7 +1197,7 @@ public abstract partial class Weapon : ActivityObject
     //帧动画播放结束
     private void OnAnimationFinished()
     {
-        GD.Print("帧动画播放结束...");
+        // GD.Print("帧动画播放结束...");
         AnimatedSprite.Play(AnimatorNames.Default);
     }
 

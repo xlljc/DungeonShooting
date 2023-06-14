@@ -20,7 +20,7 @@ Altitude = 0
 position = Vector2(129, 68)
 script = ExtResource("3_m4jrh")
 Type = 5
-ItemExpression = "0002"
+ItemExpression = "0002(CurrAmmon:0)"
 WaveNumber = 2
 
 [node name="ActivityMark5" type="Node2D" parent="."]
