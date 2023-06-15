@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dmeb88jotqro6"]
+[gd_scene load_steps=5 format=3 uid="uid://dmeb88jotqro6"]
 
 [ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="1_osa3n"]
 [ext_resource type="Script" path="res://src/framework/map/DungeonRoomTemplate.cs" id="2_erhdx"]
 [ext_resource type="Script" path="res://src/framework/map/mark/ActivityMark.cs" id="3_m4jrh"]
+[ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/bullet.png" id="4_d1cfc"]
 
 [node name="Room1" type="TileMap"]
 tile_set = ExtResource("1_osa3n")
@@ -50,3 +51,8 @@ script = ExtResource("3_m4jrh")
 Type = 5
 ItemExpression = "0006"
 WaveNumber = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(61, 25)
+rotation = 0.785398
+texture = ExtResource("4_d1cfc")
