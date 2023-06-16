@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class TestOptimizeSprite : Node2D
@@ -5,6 +6,25 @@ public partial class TestOptimizeSprite : Node2D
     [Export()] public Texture2D Texture2D;
 
     public override void _Ready()
+    {
+        var imageCanvas = new ImageCanvas(200, 200);
+        imageCanvas.Scale = new Vector2(4, 4);
+        imageCanvas.DrawImageInCanvas(Texture2D, 10, 30, 0, 0, 0, false);
+        var time = DateTime.Now;
+        //imageCanvas.DrawImageInCanvas(Texture2D, 50, 30, 30, 0, 0, true);
+        GD.Print("useTime: " + (DateTime.Now - time).TotalMilliseconds);
+        var time2 = DateTime.Now;
+        //imageCanvas.DrawImageInCanvas(Texture2D, 100, 100, 0, 0, 0, false);
+        //imageCanvas.DrawImageInCanvas(Texture2D, 100, 100, 90, Texture2D.GetWidth() / 2, Texture2D.GetHeight() / 2, false);
+        imageCanvas.DrawImageInCanvas(Texture2D, 100, 100, 300, 0, 0, false);
+        //imageCanvas.DrawImageInCanvas(Texture2D, 100, 100, 145, (int)(Texture2D.GetWidth() * 0.2f), (int)(Texture2D.GetHeight() * 0.2f), false);
+        //imageCanvas.DrawImageInCanvas(Texture2D, 140, 30, 270, 0, 0, true);
+
+        GD.Print("useTime: " + (DateTime.Now - time2).TotalMilliseconds);
+        AddChild(imageCanvas);
+    }
+
+    private void Test1()
     {
         var canvas = Image.Create(150, 150, false, Image.Format.Rgba8);
 
@@ -17,8 +37,10 @@ public partial class TestOptimizeSprite : Node2D
         }
 
         var image = Texture2D.GetImage();
-        
-        RotateImage(image, canvas, 50, 50, 0, image.GetWidth(), image.GetHeight());
+        image.FlipX();
+        image.Rotate180();
+        canvas.BlitRect(image, new Rect2I(0, 0, image.GetWidth(), image.GetHeight()), new Vector2I(10, 10));
+        //RotateImage(image, canvas, 50, 50, 30, image.GetWidth(), image.GetHeight());
 
         //RotateImage(imgData, image, 0);
 
@@ -40,59 +62,5 @@ public partial class TestOptimizeSprite : Node2D
         sprite2D.Position = new Vector2(900, 500);
         sprite2D.Scale = new Vector2(5, 5);
         AddChild(sprite2D);
-    }
-
-    public void RotateImage(Image origin, Image canvas, int x, int y, float angle, int centerX, int centerY)
-    {
-        angle = Mathf.DegToRad(angle);
-        var width = origin.GetWidth();
-        var height = origin.GetHeight();
-
-        var cosAngle = Mathf.Cos(angle);
-        var sinAngle = Mathf.Sin(angle);
-
-        var newWidth = width * Mathf.Abs(cosAngle) + height * sinAngle;
-        var newHeight = width * sinAngle + height * Mathf.Abs(cosAngle);
-
-        var num1 = -0.5f * newWidth * cosAngle - 0.5f * newHeight * sinAngle + 0.5f * width;
-        var num2 = 0.5f * newWidth * sinAngle - 0.5f * newHeight * cosAngle + 0.5f * height;
-
-        var offsetX =
-            (int)((centerX / sinAngle +
-                   (0.5f * newWidth * sinAngle - 0.5f * newHeight * cosAngle + 0.5f * height) /
-                   cosAngle -
-                   (-0.5f * newWidth * cosAngle - 0.5f * newHeight * sinAngle + 0.5f * width) /
-                   sinAngle - centerY / cosAngle) /
-                  (cosAngle / sinAngle + sinAngle / cosAngle));
-
-        var offsetY =
-            (int)((centerX / cosAngle -
-                      (-0.5f * newWidth * cosAngle - 0.5f * newHeight * sinAngle + 0.5f * width) /
-                      cosAngle -
-                      (0.5f * newWidth * sinAngle - 0.5f * newHeight * cosAngle + 0.5f * height) /
-                      sinAngle + centerY / sinAngle) /
-                  (sinAngle / cosAngle + cosAngle / sinAngle));
-
-
-        for (int x2 = 0; x2 < newWidth; x2++)
-        {
-            for (int y2 = 0; y2 < newHeight; y2++)
-            {
-                //如果(x1,y1)不在原图宽高所表示范围内，则（x2,y2）处的像素值设置为0或255
-                var x1 = x2 * cosAngle + y2 * sinAngle + num1;
-                var y1 = -x2 * sinAngle + y2 * cosAngle + num2;
-
-                if (x1 < 0 || x1 >= width || y1 < 0 || y1 >= height)
-                {
-                    //image.SetPixel(x, y, new Color(0, 0, 0, 0));
-                    //在图片外
-                    continue;
-                }
-
-                //如果(x1,y1)在原图宽高所表示范围内，使用最近邻插值或双线性插值，求出（x2,y2）处的像素值
-                canvas.SetPixel(x2 + x - offsetX, y2 + y - offsetY,
-                    origin.GetPixel(Mathf.FloorToInt(x1), Mathf.FloorToInt(y1)));
-            }
-        }
     }
 }
