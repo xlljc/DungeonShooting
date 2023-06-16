@@ -1,8 +1,8 @@
 [gd_scene load_steps=3 format=3 uid="uid://crwmgbequhxf3"]
 
 [ext_resource type="Script" path="res://src/test/TestOptimizeSprite.cs" id="1_rwuav"]
-[ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/bullet.png" id="2_q71c5"]
+[ext_resource type="Texture2D" uid="uid://civvcowt2wklr" path="res://resource/sprite/weapon/weapon0001/Weapon0001.png" id="2_qvs0g"]
 
 [node name="TestOptimizeSprite" type="Node2D"]
 script = ExtResource("1_rwuav")
-Texture2D = ExtResource("2_q71c5")
+Texture2D = ExtResource("2_qvs0g")

@@ -54,5 +54,5 @@ WaveNumber = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(61, 25)
-rotation = 0.785398
+rotation = 0.523599
 texture = ExtResource("4_d1cfc")
