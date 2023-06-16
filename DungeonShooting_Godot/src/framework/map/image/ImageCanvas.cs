@@ -1,55 +1,63 @@
+
 using Godot;
 
-public partial class TestOptimizeSprite : Node2D
+public partial class ImageCanvas : Sprite2D
 {
-    [Export()] public Texture2D Texture2D;
+    public int Width { get; }
+    public int Height { get; }
+
+    private Image _canvas;
+    private ImageTexture _texture;
+
+    public ImageCanvas(int width, int height)
+    {
+        Width = width;
+        Height = height;
+        
+        _canvas = Image.Create(width, height, false, Image.Format.Rgba8);
+    }
 
     public override void _Ready()
     {
-        var canvas = Image.Create(150, 150, false, Image.Format.Rgba8);
-
-        for (int x = 0; x < 150; x++)
-        {
-            for (int y = 0; y < 150; y++)
-            {
-                canvas.SetPixel(x, y, Colors.Gray);
-            }
-        }
-
-        var image = Texture2D.GetImage();
-        
-        RotateImage(image, canvas, 50, 50, 0, image.GetWidth(), image.GetHeight());
-
-        //RotateImage(imgData, image, 0);
-
-        for (int i = 0; i < canvas.GetWidth(); i++)
-        {
-            canvas.SetPixel(i, 50, Colors.Black);
-            canvas.SetPixel(i, 50 + image.GetHeight() / 2, Colors.Green);
-        }
-
-        for (int i = 0; i < canvas.GetHeight(); i++)
-        {
-            canvas.SetPixel(50, i, Colors.Black);
-            canvas.SetPixel(50 + image.GetWidth() / 2, i, Colors.Green);
-        }
-
-        var imageTexture = ImageTexture.CreateFromImage(canvas);
-        var sprite2D = new Sprite2D();
-        sprite2D.Texture = imageTexture;
-        sprite2D.Position = new Vector2(900, 500);
-        sprite2D.Scale = new Vector2(5, 5);
-        AddChild(sprite2D);
+        var imageTexture = ImageTexture.CreateFromImage(_canvas);
+        Texture = imageTexture;
     }
-
-    public void RotateImage(Image origin, Image canvas, int x, int y, float angle, int centerX, int centerY)
+    
+    public void DrawImageInCanvas(Texture2D texture, int x, int y, float angle, int centerX, int centerY, bool flipY)
     {
-        angle = Mathf.DegToRad(angle);
+        var image = texture.GetImage();
+        var newAngle = Mathf.RoundToInt(Utils.ConvertAngle(angle));
+
+        if (newAngle == 0) //原图, 直接画上去
+        {
+            //_canvas.BlitRectMask();
+        }
+        else if (newAngle == 90) //旋转90度
+        {
+            
+        }
+        else if (newAngle == 180) //旋转180度
+        {
+            
+        }
+        else if (newAngle == 270) //旋转270度
+        {
+            
+        }
+        else
+        {
+            
+        }
+    }
+    
+    private void DrawRotateImage(Image origin, Image canvas, int x, int y, int angle, int centerX, int centerY)
+    {
+        var rotation = Mathf.DegToRad(angle);
         var width = origin.GetWidth();
         var height = origin.GetHeight();
 
-        var cosAngle = Mathf.Cos(angle);
-        var sinAngle = Mathf.Sin(angle);
+        var cosAngle = Mathf.Cos(rotation);
+        var sinAngle = Mathf.Sin(rotation);
 
         var newWidth = width * Mathf.Abs(cosAngle) + height * sinAngle;
         var newHeight = width * sinAngle + height * Mathf.Abs(cosAngle);

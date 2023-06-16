@@ -169,6 +169,21 @@ public static class Utils
             }
         }
     }
+    
+    /// <summary>
+    /// 将一个任意角度转为0到360度
+    /// </summary>
+    public static float ConvertAngle(float angle)
+    {
+        angle %= 360; // 取余
+
+        if (angle < 0) // 如果角度为负数，转为正数
+        {
+            angle += 360;
+        }
+
+        return angle;
+    }
 
     /// <summary>
     /// 字符串首字母小写
