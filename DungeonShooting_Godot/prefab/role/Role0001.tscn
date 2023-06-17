@@ -9,13 +9,13 @@
 resource_local_to_scene = true
 shader = ExtResource("3_rk4gg")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
-shader_parameter/schedule = 1
+shader_parameter/schedule = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5ok5s"]
 resource_local_to_scene = true
 shader = ExtResource("3_rk4gg")
 shader_parameter/blend = Color(1, 1, 1, 1)
-shader_parameter/schedule = 0
+shader_parameter/schedule = 0.0
 
 [node name="Role0001" node_paths=PackedStringArray("HurtArea", "MountPoint", "BackMountPoint", "InteractiveArea", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_10c2n")]
 collision_layer = 8

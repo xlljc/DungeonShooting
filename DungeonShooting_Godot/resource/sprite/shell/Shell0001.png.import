@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dto03bc2qbhnj"
-path="res://.godot/imported/shellCase.png-4975fbe4d212e558e86355116ac96ab2.ctex"
+path="res://.godot/imported/Shell0001.png-f6d706707815430fcb975fd0121be274.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/shell/shellCase.png"
-dest_files=["res://.godot/imported/shellCase.png-4975fbe4d212e558e86355116ac96ab2.ctex"]
+source_file="res://resource/sprite/shell/Shell0001.png"
+dest_files=["res://.godot/imported/Shell0001.png-f6d706707815430fcb975fd0121be274.ctex"]
 
 [params]
 

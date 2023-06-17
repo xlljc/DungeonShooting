@@ -99,7 +99,11 @@ public partial class ImageCanvas : Sprite2D, IDestroy
             {
                 image.FlipY();
             }
-
+            
+            if (image.GetFormat() != Image.Format.Rgba8)
+            {
+                image.Convert(Image.Format.Rgba8);
+            }
             _canvas.BlendRect(image, new Rect2I(0, 0, image.GetWidth(), image.GetHeight()),
                 new Vector2I(item.X - item.CenterX, item.Y - item.CenterY));
         }
@@ -208,6 +212,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
     }
 
     //--------------------------------------------------------------------------------------------------------------
+    
     private class EnqueueItem
     {
         public ImageCanvas Canvas;
@@ -220,6 +225,11 @@ public partial class ImageCanvas : Sprite2D, IDestroy
         public bool FlipY;
     }
 
+    /// <summary>
+    /// 同一帧下将队列里的image绘制到指定画布下最大消耗时间, 如果绘制的时间超过了这个值, 则队列中后面的image将会放到下一帧绘制
+    /// </summary>
+    public static float MaxHandlerTime { get; set; } = 2f;
+    
     private static readonly Queue<EnqueueItem> _enqueueItems = new Queue<EnqueueItem>();
     private static readonly HashSet<ImageCanvas> _redrawCanvas = new HashSet<ImageCanvas>();
 
@@ -235,7 +245,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
 
             var c = _enqueueItems.Count;
             //执行绘制操作
-            //绘制的总时间不能超过2毫秒, 如果超过了, 那就下一帧再画其它的吧
+            //绘制的总时间不能超过MaxHandlerTime, 如果超过了, 那就下一帧再画其它的吧
             do
             {
                 var item = _enqueueItems.Dequeue();
@@ -244,7 +254,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
                     item.Canvas.HandlerDrawImageInCanvas(item);
                     _redrawCanvas.Add(item.Canvas);
                 }
-            } while (_enqueueItems.Count > 0 && (DateTime.Now - startTime).TotalMilliseconds < 2);
+            } while (_enqueueItems.Count > 0 && (DateTime.Now - startTime).TotalMilliseconds < MaxHandlerTime);
 
             if (_enqueueItems.Count > 0)
             {

@@ -86,6 +86,8 @@ public class ResourcePath
     public const string resource_sound_sfx_reloading_Reloading_begin0005_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0005.ogg";
     public const string resource_sound_sfx_reloading_Reloading_begin0006_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0006.ogg";
     public const string resource_sound_sfx_reloading_Reloading_begin0007_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0007.ogg";
+    public const string resource_sound_sfx_reloading_Reloading_begin0008_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0008.ogg";
+    public const string resource_sound_sfx_reloading_Reloading_begin0009_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0009.ogg";
     public const string resource_sound_sfx_reloading_Reloading_finish0001_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0001.ogg";
     public const string resource_sound_sfx_reloading_Reloading_finish0002_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0002.ogg";
     public const string resource_sound_sfx_shooting_Shooting0001_ogg = "res://resource/sound/sfx/shooting/Shooting0001.ogg";
@@ -94,6 +96,8 @@ public class ResourcePath
     public const string resource_sound_sfx_shooting_Shooting0004_ogg = "res://resource/sound/sfx/shooting/Shooting0004.ogg";
     public const string resource_sound_sfx_shooting_Shooting0005_ogg = "res://resource/sound/sfx/shooting/Shooting0005.ogg";
     public const string resource_sound_sfx_shooting_Shooting0006_ogg = "res://resource/sound/sfx/shooting/Shooting0006.ogg";
+    public const string resource_sound_sfx_shooting_Shooting0007_ogg = "res://resource/sound/sfx/shooting/Shooting0007.ogg";
+    public const string resource_sound_sfx_shooting_Shooting0008_ogg = "res://resource/sound/sfx/shooting/Shooting0008.ogg";
     public const string resource_sprite_bullet_arrow_png = "res://resource/sprite/bullet/arrow.png";
     public const string resource_sprite_bullet_bullet_png = "res://resource/sprite/bullet/bullet.png";
     public const string resource_sprite_bullet_bullet2_png = "res://resource/sprite/bullet/bullet2.png";
@@ -180,6 +184,7 @@ public class ResourcePath
     public const string scene_test_TestNavigation2_tscn = "res://scene/test/TestNavigation2.tscn";
     public const string scene_test_TestNavigationPolygon_tscn = "res://scene/test/TestNavigationPolygon.tscn";
     public const string scene_test_TestNewTileMap_tscn = "res://scene/test/TestNewTileMap.tscn";
+    public const string scene_test_TestOptimizeSprite_tscn = "res://scene/test/TestOptimizeSprite.tscn";
     public const string scene_test_TestReadExcel_tscn = "res://scene/test/TestReadExcel.tscn";
     public const string scene_test_TestTileLayer_tscn = "res://scene/test/TestTileLayer.tscn";
 }
