@@ -7,19 +7,35 @@ public partial class TestOptimizeSprite : Node2D
     public override void _Ready()
     {
         ImageCanvas.MaxHandlerTime = 16;
-        var imageCanvas = new ImageCanvas(1920, 1080);
-
-        for (int i = 0; i < 10000; i++)
+        var scale = 10;
+        var imageCanvas = new ImageCanvas(1920 / scale, 1080 / scale);
+        imageCanvas.Scale = new Vector2(scale, scale);
+        var delta = 360f / (15 * 8);
+        var angle = 0f;
+        for (int i = 0; i < 15; i++)
         {
-            var texture = Utils.RandomChoose(ImageList);
-            var centerX = Utils.RandomRangeInt(0, texture.GetWidth() - 1);
-            var centerY = Utils.RandomRangeInt(0, texture.GetHeight() - 1);
-            var angle = Utils.RandomRangeInt(0, 360);
-            imageCanvas.DrawImageInCanvas(texture,
-                Utils.RandomRangeInt(0, imageCanvas.Width), Utils.RandomRangeInt(0, imageCanvas.Height),
-                angle, centerX, centerY, Utils.RandomBoolean()
-            );
+            for (int j = 0; j < 8; j++)
+            {
+                //var texture = Utils.RandomChoose(ImageList);
+                var texture = ImageList[6];
+                var centerX = 0;
+                var centerY = 0;
+                //var angle = Utils.RandomRangeInt(0, 360);
+                GD.Print($"x: {i}, y: {j}, angle: " + angle);
+                imageCanvas.DrawImageInCanvas(texture,
+                    //Utils.RandomRangeInt(0, imageCanvas.Width), Utils.RandomRangeInt(0, imageCanvas.Height),
+                    10 + i * 10, 10 + j * 10,
+                    angle, centerX, centerY, false
+                );
+                angle += delta;
+            }
         }
+
+        //var texture = ImageList[6];
+        //imageCanvas.DrawImageInCanvas(texture, imageCanvas.Width / 2, imageCanvas.Height / 2, 0, 0, 0, false);
+        //imageCanvas.DrawImageInCanvas(texture, imageCanvas.Width / 2, imageCanvas.Height / 2, 45, texture.GetWidth() - 1, texture.GetHeight() - 1, false);
+
+
 
         AddChild(imageCanvas);
     }

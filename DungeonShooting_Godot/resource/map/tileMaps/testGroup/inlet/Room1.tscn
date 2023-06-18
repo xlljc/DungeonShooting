@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dmeb88jotqro6"]
+[gd_scene load_steps=6 format=3 uid="uid://dmeb88jotqro6"]
 
 [ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="1_osa3n"]
 [ext_resource type="Script" path="res://src/framework/map/DungeonRoomTemplate.cs" id="2_erhdx"]
 [ext_resource type="Script" path="res://src/framework/map/mark/ActivityMark.cs" id="3_m4jrh"]
 [ext_resource type="Texture2D" uid="uid://civvcowt2wklr" path="res://resource/sprite/weapon/weapon0001/Weapon0001.png" id="4_wtntr"]
+[ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/Shell0001.png" id="5_amyos"]
 
 [node name="Room1" type="TileMap"]
 tile_set = ExtResource("1_osa3n")
@@ -54,5 +55,10 @@ WaveNumber = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(61, 25)
-rotation = 5.23599
+rotation = -0.785398
 texture = ExtResource("4_wtntr")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(120, 51)
+rotation = 0.785398
+texture = ExtResource("5_amyos")

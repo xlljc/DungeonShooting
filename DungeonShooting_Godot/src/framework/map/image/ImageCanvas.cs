@@ -35,7 +35,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
         {
             _canvas.SetPixel(i, h / 2, Colors.Green);
         }
-
+        
         for (int j = 0; j < h; j++)
         {
             _canvas.SetPixel(w / 2, j, Colors.Green);
@@ -148,7 +148,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
         var sinAngle = Mathf.Sin(rotation);
         if (cosAngle == 0)
         {
-            cosAngle = 1e-6f;
+            cosAngle = -1e-6f;
         }
 
         if (sinAngle == 0)
@@ -181,18 +181,28 @@ public partial class ImageCanvas : Sprite2D, IDestroy
 
         var cw = _canvas.GetWidth();
         var ch = _canvas.GetHeight();
+        
+        var numX = Mathf.Min(num1, (newWidth - 1) * cosAngle + (newHeight - 1) * sinAngle + num1);
+        var numY = Mathf.Min(num2, -(newWidth - 1) * sinAngle + (newHeight - 1) * cosAngle + num2);
+
         for (var x2 = 0; x2 < newWidth; x2++)
         {
             for (var y2 = 0; y2 < newHeight; y2++)
             {
-                var x1 = Mathf.RoundToInt(x2 * cosAngle + y2 * sinAngle + num1);
-                var y1 = Mathf.RoundToInt(-x2 * sinAngle + y2 * cosAngle + num2);
+                //映射到原图的位置
+                // var x1 = x2 * cosAngle + y2 * sinAngle + num1;
+                // var y1 = -x2 * sinAngle + y2 * cosAngle + num2;
+                
+                
+                var x1 = Mathf.FloorToInt(x2 * cosAngle + y2 * sinAngle + num1 - numX);
+                var y1 = Mathf.FloorToInt(-x2 * sinAngle + y2 * cosAngle + num2 - numY);
 
                 if (x1 < 0 || x1 >= width || y1 < 0 || y1 >= height)
                 {
                     //在图片外
                     continue;
                 }
+
 
                 var cx = x2 + x - offsetX;
                 if (cx < 0 || cx >= cw)
@@ -206,7 +216,11 @@ public partial class ImageCanvas : Sprite2D, IDestroy
                     continue;
                 }
 
-                _canvas.SetPixel(cx, cy, _canvas.GetPixel(cx, cy).Blend(origin.GetPixel(x1, y1)));
+                //_canvas.SetPixel(cx, cy, origin.GetPixel(x1, y1));
+                _canvas.SetPixel(cx, cy, _canvas.GetPixel(cx, cy).Blend(origin.GetPixel(
+                    //Mathf.RoundToInt(x1), Mathf.RoundToInt(y1)
+                    x1, y1
+                )));
             }
         }
     }
