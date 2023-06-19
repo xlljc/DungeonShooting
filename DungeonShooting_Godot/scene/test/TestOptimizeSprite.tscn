@@ -1,25 +1,18 @@
-[gd_scene load_steps=11 format=3 uid="uid://crwmgbequhxf3"]
+[gd_scene load_steps=3 format=3 uid="uid://crwmgbequhxf3"]
 
 [ext_resource type="Script" path="res://src/test/TestOptimizeSprite.cs" id="1_rwuav"]
 [ext_resource type="Texture2D" uid="uid://civvcowt2wklr" path="res://resource/sprite/weapon/weapon0001/Weapon0001.png" id="2_qvs0g"]
-[ext_resource type="Texture2D" uid="uid://b53kofmyan42g" path="res://resource/sprite/weapon/weapon0002/Weapon0002.png" id="3_jejmg"]
-[ext_resource type="Texture2D" uid="uid://clgf63extg800" path="res://resource/sprite/weapon/weapon0003/Weapon0003.png" id="4_twsss"]
-[ext_resource type="Texture2D" uid="uid://504f1r0mi33n" path="res://resource/sprite/weapon/weapon0005/Weapon0005.png" id="5_bdcjp"]
-[ext_resource type="Texture2D" uid="uid://dn0un05nr8xun" path="res://resource/sprite/weapon/weapon0006/Weapon0006.png" id="6_sqcu7"]
-[ext_resource type="Texture2D" uid="uid://bxhbsq0wb2yo1" path="res://resource/sprite/weapon/knife1.png" id="7_w4iwy"]
-[ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/Shell0001.png" id="8_csd6d"]
-[ext_resource type="Texture2D" uid="uid://yn8t7ovmt4gj" path="res://resource/sprite/weapon/gun1.png" id="9_mddgj"]
-[ext_resource type="Texture2D" uid="uid://5geiuvv6hyov" path="res://resource/sprite/weapon/gun2.png" id="10_rxwsh"]
 
 [node name="TestOptimizeSprite" type="Node2D" node_paths=PackedStringArray("SubViewport", "ViewCamera")]
 script = ExtResource("1_rwuav")
-ImageList = Array[Texture2D]([ExtResource("2_qvs0g"), ExtResource("3_jejmg"), ExtResource("4_twsss"), ExtResource("5_bdcjp"), ExtResource("6_sqcu7"), ExtResource("7_w4iwy"), ExtResource("8_csd6d"), ExtResource("9_mddgj"), ExtResource("10_rxwsh")])
+ImageList = Array[Texture2D]([ExtResource("2_qvs0g")])
 SubViewport = NodePath("SubViewport")
 ViewCamera = NodePath("SubViewport/Camera2D")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true
 canvas_item_default_texture_filter = 0
+size = Vector2i(1024, 185)
 render_target_update_mode = 4
 
 [node name="Camera2D" type="Camera2D" parent="SubViewport"]

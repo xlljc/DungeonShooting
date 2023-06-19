@@ -25,8 +25,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
 
         _canvas = Image.Create(width, height, false, Image.Format.Rgba8);
         _texture = ImageTexture.CreateFromImage(_canvas);
-
-        //_canvas.Fill(Colors.Gray);
+        
         var w = _canvas.GetWidth();
         var h = _canvas.GetHeight();
         for (int i = 0; i < w; i++)
@@ -67,8 +66,58 @@ public partial class ImageCanvas : Sprite2D, IDestroy
         item.CenterX = centerX;
         item.CenterY = centerY;
         item.FlipY = flipY;
+        
+        var cosAngle = Mathf.Cos(item.Rotation);
+        var sinAngle = Mathf.Sin(item.Rotation);
+        if (cosAngle == 0)
+        {
+            cosAngle = 1e-6f;
+        }
 
-        _enqueueItems.Enqueue(item);
+        if (sinAngle == 0)
+        {
+            sinAngle = 1e-6f;
+        }
+
+        var width = item.SrcImage.GetWidth();
+        var height = item.SrcImage.GetHeight();
+        if (width > 128)
+        {
+            GD.PrintErr("警告: 图像宽度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
+        }
+        if (height > 128)
+        {
+            GD.PrintErr("警告: 图像高度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
+        }
+        //旋转后的图片宽高
+        item.RenderWidth = Mathf.CeilToInt(width * Mathf.Abs(cosAngle) + height * sinAngle) + 2;
+        item.RenderHeight = Mathf.CeilToInt(width * sinAngle + height * Mathf.Abs(cosAngle)) + 2;
+
+        if (item.RenderWidth >= RenderViewportSize.X)
+        {
+            GD.PrintErr($"图像旋转后的宽度大于{RenderViewportSize.X}, 不支持绘制到 ImageCanvas 下!");
+            return;
+        }
+        
+        //旋转后的图像中心点偏移
+        item.RenderOffsetX =
+            (int)((item.CenterX / sinAngle +
+                   (0.5f * item.RenderWidth * sinAngle - 0.5f * item.RenderHeight * cosAngle +
+                    0.5f * height) /
+                   cosAngle -
+                   (-0.5f * item.RenderWidth * cosAngle - 0.5f * item.RenderHeight * sinAngle +
+                    0.5f * width) /
+                   sinAngle - item.CenterY / cosAngle) /
+                  (cosAngle / sinAngle + sinAngle / cosAngle)) + 1;
+        item.RenderOffsetY =
+            (int)((item.CenterX / cosAngle -
+                      (-0.5f * item.RenderWidth * cosAngle - 0.5f * item.RenderHeight * sinAngle + 0.5f * width) /
+                      cosAngle -
+                      (0.5f * item.RenderWidth * sinAngle - 0.5f * item.RenderHeight * cosAngle + 0.5f * height) /
+                      sinAngle + item.CenterY / sinAngle) /
+                  (sinAngle / cosAngle + cosAngle / sinAngle)) + 1;
+
+        _queueItems.Enqueue(item);
     }
 
     public void Destroy()
@@ -87,10 +136,5 @@ public partial class ImageCanvas : Sprite2D, IDestroy
     private void Redraw()
     {
         _texture.Update(_canvas);
-    }
-
-    private void HandlerDrawImageInCanvas(ImageRenderData item)
-    {
-        
     }
 }

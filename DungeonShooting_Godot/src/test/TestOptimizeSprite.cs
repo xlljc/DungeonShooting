@@ -10,7 +10,7 @@ public partial class TestOptimizeSprite : Node2D
 
     public override void _Ready()
     {
-        ImageCanvas.Init(SubViewport, ViewCamera.Position);
+        ImageCanvas.Init(SubViewport);
         ImageCanvas.MaxHandlerTime = 4;
         
         var scale = 10;
