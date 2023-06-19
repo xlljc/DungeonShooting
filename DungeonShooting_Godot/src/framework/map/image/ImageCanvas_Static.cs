@@ -33,7 +33,7 @@ public partial class ImageCanvas
     /// <summary>
     /// 渲染窗口大小
     /// </summary>
-    public static Vector2 RenderViewportSize { get; private set; }
+    public static Vector2I RenderViewportSize { get; private set; }
     
     //预渲染队列
     private static readonly Queue<ImageRenderData> _queueItems = new Queue<ImageRenderData>();
@@ -48,11 +48,20 @@ public partial class ImageCanvas
     /// <summary>
     /// 初始化 viewport
     /// </summary>
-    public static void Init(SubViewport renderViewport)
+    public static void Init(Node root)
     {
-        RenderViewportSize = renderViewport.Size;
-        RenderViewport = renderViewport;
-        _viewportTexture = renderViewport.GetTexture();
+        RenderViewportSize = new Vector2I(1024, 185);
+        RenderViewport = new SubViewport();
+        RenderViewport.Size = RenderViewportSize;
+        RenderViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Always;
+        RenderViewport.TransparentBg = true;
+        RenderViewport.CanvasItemDefaultTextureFilter = Viewport.DefaultCanvasItemTextureFilter.Nearest;
+        var camera = new Camera2D();
+        camera.AnchorMode = Camera2D.AnchorModeEnum.FixedTopLeft;
+        RenderViewport.AddChild(camera);
+        _viewportTexture = RenderViewport.GetTexture();
+
+        root.AddChild(RenderViewport);
         RenderingServer.FramePostDraw += OnFramePostDraw;
     }
 

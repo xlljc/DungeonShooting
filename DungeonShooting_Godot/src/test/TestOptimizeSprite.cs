@@ -4,15 +4,11 @@ public partial class TestOptimizeSprite : Node2D
 {
     [Export()] public Texture2D[] ImageList;
 
-    [Export()] public SubViewport SubViewport;
-
-    [Export()] public Camera2D ViewCamera;
-
     [Export()] public Label Label;
     
     public override void _Ready()
     {
-        ImageCanvas.Init(SubViewport);
+        ImageCanvas.Init(GetTree().CurrentScene);
         ImageCanvas.MaxHandlerTime = 4;
         
         var scale = 2;
