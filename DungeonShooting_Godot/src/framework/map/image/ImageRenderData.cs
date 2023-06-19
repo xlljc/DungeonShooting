@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using Godot;
 
 public class ImageRenderData
@@ -36,6 +37,14 @@ public class ImageRenderData
     /// 是否翻转y轴
     /// </summary>
     public bool FlipY;
+    /// <summary>
+    /// 旋转角度是否大于180度
+    /// </summary>
+    public bool RotationGreaterThanPi = false;
+    /// <summary>
+    /// 绘制完成的回调函数
+    /// </summary>
+    public Action OnDrawingComplete;
     
     //----------------------------------------------------------------------
     /// <summary>

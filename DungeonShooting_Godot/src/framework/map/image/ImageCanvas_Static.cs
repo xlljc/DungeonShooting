@@ -43,6 +43,7 @@ public partial class ImageCanvas
     private static readonly Stack<ImageRenderSprite> _renderSpriteStack = new Stack<ImageRenderSprite>();
 
     private static readonly List<AreaPlaceholder> _placeholders = new List<AreaPlaceholder>();
+    private static ViewportTexture _viewportTexture;
 
     /// <summary>
     /// 初始化 viewport
@@ -51,6 +52,7 @@ public partial class ImageCanvas
     {
         RenderViewportSize = renderViewport.Size;
         RenderViewport = renderViewport;
+        _viewportTexture = renderViewport.GetTexture();
         RenderingServer.FramePostDraw += OnFramePostDraw;
     }
 
@@ -65,18 +67,7 @@ public partial class ImageCanvas
 
         for (var i = 0; i < _placeholders.Count; i++)
         {
-            if (i == 0) //第一个
-            {
-                var item = _placeholders[i];
-                var end = width - 1;
-                if (end < item.Start)
-                {
-                    var result = new AreaPlaceholder(0, end);
-                    _placeholders.Insert(0, result);
-                    return result;
-                }
-            }
-            else if (i == _placeholders.Count - 1) //最后一个
+            if (i == _placeholders.Count - 1) //最后一个
             {
                 var item = _placeholders[i];
                 var end = item.End + width;
@@ -84,6 +75,17 @@ public partial class ImageCanvas
                 {
                     var result = new AreaPlaceholder(item.End + 1, end);
                     _placeholders.Add(result);
+                    return result;
+                }
+            }
+            else if (i == 0) //第一个
+            {
+                var item = _placeholders[i];
+                var end = width - 1;
+                if (end < item.Start)
+                {
+                    var result = new AreaPlaceholder(0, end);
+                    _placeholders.Insert(0, result);
                     return result;
                 }
             }
@@ -158,12 +160,13 @@ public partial class ImageCanvas
         //上一帧绘制的image
         if (_drawingQueueItems.Count > 0)
         {
-            var startTime = DateTime.Now;
-            
             var redrawCanvas = new HashSet<ImageCanvas>();
-            var viewportTexture = RenderViewport.GetTexture();
-            using (var image = viewportTexture.GetImage())
+            List<ImageRenderData> callDrawingCompleteList = null;
+            using (var image = _viewportTexture.GetImage())
             {
+                var startTime = DateTime.Now;
+                //File.WriteAllBytes("d:/image.png", image.SavePngToBuffer());
+                //绘制完成需要调用回调的列表
                 var index = 0;
                 do
                 {
@@ -174,6 +177,14 @@ public partial class ImageCanvas
                         //处理绘图
                         HandleDrawing(index, image, item);
                         index++;
+                        if (item.OnDrawingComplete != null)
+                        {
+                            if (callDrawingCompleteList == null)
+                            {
+                                callDrawingCompleteList = new List<ImageRenderData>();
+                            }
+                            callDrawingCompleteList.Add(item);
+                        }
                     }
 
                     //移除站位符
@@ -191,13 +202,29 @@ public partial class ImageCanvas
                     }
                 } while (_drawingQueueItems.Count > 0 && (DateTime.Now - startTime).TotalMilliseconds < step1Time);
 
-                GD.Print($"当前帧绘制完成数量: {index}, 绘制队列数量: {_drawingQueueItems.Count}");
+                GD.Print($"当前帧绘制完成数量: {index}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
+                
             }
 
             //重绘画布
             foreach (var drawCanvas in redrawCanvas)
             {
                 drawCanvas.Redraw();
+            }
+            //调用完成回调
+            if (callDrawingCompleteList != null)
+            {
+                foreach (var imageRenderData in callDrawingCompleteList)
+                {
+                    try
+                    {
+                        imageRenderData.OnDrawingComplete();
+                    }
+                    catch (Exception e)
+                    {
+                        GD.PrintErr("在ImageCanvas中调用回调OnDrawingComplete()发生异常: " + e);
+                    }
+                }
             }
         }
 
@@ -238,7 +265,7 @@ public partial class ImageCanvas
                 }
             }
             
-            GD.Print($"当前帧进入绘制绘队列数量: {index}, 待绘制队列数量: {_queueItems.Count}, 绘制队列数量: {_drawingQueueItems.Count}");
+            GD.Print($"当前帧进入绘制绘队列数量: {index}, 待绘制队列数量: {_queueItems.Count}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
         }
     }
 
@@ -246,7 +273,7 @@ public partial class ImageCanvas
     {
         //截取Viewport像素点
         item.ImageCanvas._canvas.BlendRect(image,
-            new Rect2I(item.RenderX, item.RenderY,item.RenderWidth, item.RenderHeight),
+            new Rect2I(item.AreaPlaceholder.Start, 0,item.RenderWidth, item.RenderHeight),
             new Vector2I(item.X - item.RenderOffsetX, item.Y - item.RenderOffsetY)
         );
 
@@ -264,15 +291,28 @@ public partial class ImageCanvas
         }
 
         item.AreaPlaceholder = placeholder;
-        
-        //计算渲染在 viewport 上的位置
+
         item.RenderX = placeholder.Start + item.RenderOffsetX;
         item.RenderY = item.RenderOffsetY;
-
         var renderSprite = GetRenderSprite(new Vector2(item.RenderX, item.RenderY));
         item.RenderSprite = renderSprite;
-        //设置中心点
-        renderSprite.Sprite.Offset = new Vector2(item.CenterX, item.CenterY);
+        if (item.RotationGreaterThanPi) //角度大于180度
+        {
+            item.SrcImage.FlipX();
+            if (!item.FlipY)
+            {
+                item.SrcImage.FlipY();
+            }
+        }
+        else
+        {
+            if (item.FlipY)
+            {
+                item.SrcImage.FlipY();
+            }
+        }
+        renderSprite.Sprite.Offset = new Vector2(-item.CenterX, -item.CenterY);
+        
         //设置旋转
         renderSprite.Sprite.Rotation = item.Rotation;
 

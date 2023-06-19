@@ -1,4 +1,5 @@
 
+using System;
 using Godot;
 
 public partial class ImageCanvas : Sprite2D, IDestroy
@@ -26,17 +27,17 @@ public partial class ImageCanvas : Sprite2D, IDestroy
         _canvas = Image.Create(width, height, false, Image.Format.Rgba8);
         _texture = ImageTexture.CreateFromImage(_canvas);
         
-        var w = _canvas.GetWidth();
-        var h = _canvas.GetHeight();
-        for (int i = 0; i < w; i++)
-        {
-            _canvas.SetPixel(i, h / 2, Colors.Green);
-        }
-        
-        for (int j = 0; j < h; j++)
-        {
-            _canvas.SetPixel(w / 2, j, Colors.Green);
-        }
+        // var w = _canvas.GetWidth();
+        // var h = _canvas.GetHeight();
+        // for (int i = 0; i < w; i++)
+        // {
+        //     _canvas.SetPixel(i, h / 2, Colors.Green);
+        // }
+        //
+        // for (int j = 0; j < h; j++)
+        // {
+        //     _canvas.SetPixel(w / 2, j, Colors.Green);
+        // }
     }
 
     public override void _Ready()
@@ -55,16 +56,35 @@ public partial class ImageCanvas : Sprite2D, IDestroy
     /// <param name="centerX">旋转中心点x</param>
     /// <param name="centerY">旋转中心点y</param>
     /// <param name="flipY">是否翻转y轴</param>
-    public void DrawImageInCanvas(Texture2D texture, int x, int y, float angle, int centerX, int centerY, bool flipY)
+    /// <param name="onDrawingComplete">绘制完成的回调函数</param>
+    public void DrawImageInCanvas(Texture2D texture, int x, int y, float angle, int centerX, int centerY, bool flipY, Action onDrawingComplete = null)
     {
         var item = new ImageRenderData();
+        item.OnDrawingComplete = onDrawingComplete;
         item.ImageCanvas = this;
         item.SrcImage = texture.GetImage();
+        var width = item.SrcImage.GetWidth();
+        var height = item.SrcImage.GetHeight();
+        if (width > 128)
+        {
+            GD.PrintErr("警告: 图像宽度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
+        }
+        if (height > 128)
+        {
+            GD.PrintErr("警告: 图像高度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
+        }
         item.X = x;
         item.Y = y;
         item.Rotation = Mathf.DegToRad(Mathf.RoundToInt(Utils.ConvertAngle(angle)));
         item.CenterX = centerX;
         item.CenterY = centerY;
+        if (item.Rotation > Mathf.Pi)
+        {
+            item.CenterX = width - item.CenterX;
+            item.CenterY = height - item.CenterY;
+            item.Rotation -= Mathf.Pi;
+            item.RotationGreaterThanPi = true;
+        }
         item.FlipY = flipY;
         
         var cosAngle = Mathf.Cos(item.Rotation);
@@ -79,16 +99,6 @@ public partial class ImageCanvas : Sprite2D, IDestroy
             sinAngle = 1e-6f;
         }
 
-        var width = item.SrcImage.GetWidth();
-        var height = item.SrcImage.GetHeight();
-        if (width > 128)
-        {
-            GD.PrintErr("警告: 图像宽度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
-        }
-        if (height > 128)
-        {
-            GD.PrintErr("警告: 图像高度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
-        }
         //旋转后的图片宽高
         item.RenderWidth = Mathf.CeilToInt(width * Mathf.Abs(cosAngle) + height * sinAngle) + 2;
         item.RenderHeight = Mathf.CeilToInt(width * sinAngle + height * Mathf.Abs(cosAngle)) + 2;
