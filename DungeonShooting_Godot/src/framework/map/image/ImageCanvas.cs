@@ -143,6 +143,23 @@ public partial class ImageCanvas : Sprite2D, IDestroy
         _texture.Dispose();
     }
 
+    /// <summary>
+    /// 使用透明色替换掉整个画布
+    /// </summary>
+    public void Clear()
+    {
+        Clear(new Color(0, 0, 0, 0));
+    }
+
+    /// <summary>
+    /// 使用指定颜色替换掉整个画布
+    /// </summary>
+    public void Clear(Color color)
+    {
+        _canvas.Fill(color);
+        Redraw();
+    }
+    
     private void Redraw()
     {
         _texture.Update(_canvas);

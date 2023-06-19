@@ -29,7 +29,7 @@ public class RoomDoorInfo
     /// <summary>
     /// 原点坐标, 单位: 格
     /// </summary>
-    public Vector2 OriginPosition;
+    public Vector2I OriginPosition;
 
     /// <summary>
     /// 与下一道门是否有交叉点
@@ -39,7 +39,7 @@ public class RoomDoorInfo
     /// <summary>
     /// 与下一道门的交叉点, 单位: 格
     /// </summary>
-    public Vector2 Cross;
+    public Vector2I Cross;
 
     /// <summary>
     /// 占位导航网格
@@ -50,4 +50,15 @@ public class RoomDoorInfo
     /// 门实例
     /// </summary>
     public RoomDoor Door;
+
+    /// <summary>
+    /// 世界坐标下的原点坐标, 单位: 像素
+    /// </summary>
+    public Vector2I GetWorldOriginPosition()
+    {
+        return new Vector2I(
+            OriginPosition.X * GameConfig.TileCellSize,
+            OriginPosition.Y * GameConfig.TileCellSize
+        );
+    }
 }

@@ -52,11 +52,13 @@ public partial class ImageCanvas
     {
         RenderViewportSize = new Vector2I(1024, 185);
         RenderViewport = new SubViewport();
+        RenderViewport.Name = "ImageCanvasViewport";
         RenderViewport.Size = RenderViewportSize;
         RenderViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Always;
         RenderViewport.TransparentBg = true;
         RenderViewport.CanvasItemDefaultTextureFilter = Viewport.DefaultCanvasItemTextureFilter.Nearest;
         var camera = new Camera2D();
+        camera.Name = "ImageCanvasCamera";
         camera.AnchorMode = Camera2D.AnchorModeEnum.FixedTopLeft;
         RenderViewport.AddChild(camera);
         _viewportTexture = RenderViewport.GetTexture();
