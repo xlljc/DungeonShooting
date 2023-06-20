@@ -397,13 +397,13 @@ public partial class DungeonManager : Node2D
         minY -= GameConfig.TileCellSize;
         maxX += GameConfig.TileCellSize;
         maxY += GameConfig.TileCellSize;
-        var staticSpriteCanvas = new RoomStaticSpriteCanvas(
+        var staticSpriteCanvas = new RoomStaticImageCanvas(
             _world.StaticSpriteRoot,
             new Vector2I(minX, minY),
             maxX - minX, maxY - minY
         );
         staticSpriteCanvas.RoomOffset = new Vector2I(worldPos.X - minX, worldPos.Y - minY);
-        roomInfo.StaticSpriteCanvas = staticSpriteCanvas;
+        roomInfo.StaticImageCanvas = staticSpriteCanvas;
     }
 
     /// <summary>

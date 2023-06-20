@@ -14,6 +14,10 @@ public class ImageRenderData
     /// </summary>
     public Image SrcImage;
     /// <summary>
+    /// 渲染材质
+    /// </summary>
+    public Material Material;
+    /// <summary>
     /// x坐标
     /// </summary>
     public int X;

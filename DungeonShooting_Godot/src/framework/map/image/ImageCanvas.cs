@@ -50,6 +50,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
     /// 添加到预渲染队列中
     /// </summary>
     /// <param name="texture">需要渲染的纹理</param>
+    /// <param name="material">渲染材质, 不需要则传null</param>
     /// <param name="x">离画布左上角x坐标</param>
     /// <param name="y">离画布左上角y坐标</param>
     /// <param name="angle">旋转角度, 角度制</param>
@@ -57,12 +58,13 @@ public partial class ImageCanvas : Sprite2D, IDestroy
     /// <param name="centerY">旋转中心点y</param>
     /// <param name="flipY">是否翻转y轴</param>
     /// <param name="onDrawingComplete">绘制完成的回调函数</param>
-    public void DrawImageInCanvas(Texture2D texture, int x, int y, float angle, int centerX, int centerY, bool flipY, Action onDrawingComplete = null)
+    public void DrawImageInCanvas(Texture2D texture, Material material, int x, int y, float angle, int centerX, int centerY, bool flipY, Action onDrawingComplete = null)
     {
         var item = new ImageRenderData();
         item.OnDrawingComplete = onDrawingComplete;
         item.ImageCanvas = this;
         item.SrcImage = texture.GetImage();
+        item.Material = material;
         var width = item.SrcImage.GetWidth();
         var height = item.SrcImage.GetHeight();
         if (width > 128)
@@ -129,7 +131,30 @@ public partial class ImageCanvas : Sprite2D, IDestroy
 
         _queueItems.Enqueue(item);
     }
-
+    
+    public void DrawActivityObjectInCanvas(ActivityObject activityObject, Action onDrawingComplete = null)
+    {
+        if (activityObject.AffiliationArea == null)
+        {
+            return;
+        }
+        var staticImageCanvas = activityObject.AffiliationArea.RoomInfo.StaticImageCanvas;
+        var texture = activityObject.GetCurrentTexture();
+        if (texture != null)
+        {
+            var pos = staticImageCanvas.ToImageCanvasPosition(activityObject.GlobalPosition);
+            var spriteOffset = activityObject.AnimatedSprite.Offset;
+            var centerX = (int)-spriteOffset.X;
+            var centerY = (int)-spriteOffset.Y;
+            DrawImageInCanvas(
+                texture, activityObject.AnimatedSprite.Material,
+                pos.X, pos.Y,
+                activityObject.AnimatedSprite.GlobalRotationDegrees,
+                centerX, centerY, false
+            );
+        }
+    }
+    
     public void Destroy()
     {
         if (IsDestroyed)

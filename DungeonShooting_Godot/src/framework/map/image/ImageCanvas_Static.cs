@@ -322,6 +322,8 @@ public partial class ImageCanvas
                 item.SrcImage.FlipY();
             }
         }
+
+        renderSprite.Sprite.Material = item.Material;
         renderSprite.Sprite.Offset = new Vector2(-item.CenterX, -item.CenterY);
         
         //设置旋转

@@ -77,7 +77,7 @@ public class RoomInfo : IDestroy
     /// <summary>
     /// 静态精灵绘制画布
     /// </summary>
-    public RoomStaticSpriteCanvas StaticSpriteCanvas;
+    public RoomStaticImageCanvas StaticImageCanvas;
 
     /// <summary>
     /// 是否处于闭关状态, 也就是房间门没有主动打开
@@ -180,9 +180,9 @@ public class RoomInfo : IDestroy
         }
         ActivityMarks.Clear();
         
-        if (StaticSpriteCanvas != null)
+        if (StaticImageCanvas != null)
         {
-            StaticSpriteCanvas.Destroy();
+            StaticImageCanvas.Destroy();
         }
     }
     

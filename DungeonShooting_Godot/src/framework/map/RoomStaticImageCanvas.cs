@@ -1,7 +1,7 @@
 ﻿
 using Godot;
 
-public class RoomStaticSpriteCanvas : IDestroy
+public class RoomStaticImageCanvas : IDestroy
 {
     public bool IsDestroyed { get; private set; }
     /// <summary>
@@ -13,12 +13,21 @@ public class RoomStaticSpriteCanvas : IDestroy
     /// </summary>
     public Vector2I RoomOffset { get; set; }
 
-    public RoomStaticSpriteCanvas(Node root, Vector2I position, int width, int height)
+    public RoomStaticImageCanvas(Node root, Vector2I position, int width, int height)
     {
         CanvasSprite = new ImageCanvas(width, height);
         //CanvasSprite.Clear(new Color(1, 1, 1, 0.2f));
         CanvasSprite.GlobalPosition = position;
         root.AddChild(CanvasSprite);
+    }
+
+    /// <summary>
+    /// 将世界坐标转为画布下的坐标
+    /// </summary>
+    public Vector2I ToImageCanvasPosition(Vector2 pos)
+    {
+        pos = pos - CanvasSprite.GlobalPosition;
+        return new Vector2I((int)pos.X, (int)pos.Y);
     }
 
     public void Destroy()
