@@ -1456,6 +1456,7 @@ public abstract partial class Weapon : ActivityObject
         shell.Rotation = Master.MountPoint.RealRotation;
         shell.InheritVelocity(Master);
         shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
+        Master.AffiliationArea.InsertItem(shell);
         return shell;
     }
 
