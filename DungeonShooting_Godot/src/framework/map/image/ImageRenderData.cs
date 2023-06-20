@@ -49,6 +49,10 @@ public class ImageRenderData
     /// 绘制完成的回调函数
     /// </summary>
     public Action OnDrawingComplete;
+    /// <summary>
+    /// 是否启用插队, 当进入渲染队列前, 如果前面有 image 因为过大而堵塞入口, 如果开启插队, 那么当前的 image 就会排到前面去尝试进入渲染队列
+    /// </summary>
+    public bool EnableQueueCutting;
     
     //----------------------------------------------------------------------
     /// <summary>

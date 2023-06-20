@@ -2,6 +2,11 @@
 using System;
 using Godot;
 
+/// <summary>
+/// 静态图像画布类, 用于处理游戏中大量静态物体的解决方案<br/>
+/// 将物体纹理绘直接绘制到画布上, 这样大大减少GPU开销, 从而提高帧率<br/>
+/// 图像旋转遵循完美像素
+/// </summary>
 public partial class ImageCanvas : Sprite2D, IDestroy
 {
     /// <summary>
@@ -26,18 +31,6 @@ public partial class ImageCanvas : Sprite2D, IDestroy
 
         _canvas = Image.Create(width, height, false, Image.Format.Rgba8);
         _texture = ImageTexture.CreateFromImage(_canvas);
-        
-        // var w = _canvas.GetWidth();
-        // var h = _canvas.GetHeight();
-        // for (int i = 0; i < w; i++)
-        // {
-        //     _canvas.SetPixel(i, h / 2, Colors.Green);
-        // }
-        //
-        // for (int j = 0; j < h; j++)
-        // {
-        //     _canvas.SetPixel(w / 2, j, Colors.Green);
-        // }
     }
 
     public override void _Ready()
@@ -47,7 +40,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
     }
 
     /// <summary>
-    /// 添加到预渲染队列中
+    /// 将指定纹理添加到预渲染队列中, 完成后会调用 onDrawingComplete 回调函数
     /// </summary>
     /// <param name="texture">需要渲染的纹理</param>
     /// <param name="material">渲染材质, 不需要则传null</param>
@@ -58,10 +51,15 @@ public partial class ImageCanvas : Sprite2D, IDestroy
     /// <param name="centerY">旋转中心点y</param>
     /// <param name="flipY">是否翻转y轴</param>
     /// <param name="onDrawingComplete">绘制完成的回调函数</param>
-    public void DrawImageInCanvas(Texture2D texture, Material material, int x, int y, float angle, int centerX, int centerY, bool flipY, Action onDrawingComplete = null)
+    public void DrawImageInCanvas(Texture2D texture, Material material, float x, float y, float angle, int centerX, int centerY, bool flipY, Action onDrawingComplete = null)
+    {
+        DrawImageInCanvas(texture, material, x, y, angle, centerX, centerY, flipY, true, onDrawingComplete);
+    }
+    private void DrawImageInCanvas(Texture2D texture, Material material, float x, float y, float angle, int centerX, int centerY, bool flipY, bool enableQueueCutting, Action onDrawingComplete)
     {
         var item = new ImageRenderData();
         item.OnDrawingComplete = onDrawingComplete;
+        item.EnableQueueCutting = enableQueueCutting;
         item.ImageCanvas = this;
         item.SrcImage = texture.GetImage();
         item.Material = material;
@@ -75,8 +73,8 @@ public partial class ImageCanvas : Sprite2D, IDestroy
         {
             GD.PrintErr("警告: 图像高度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
         }
-        item.X = x;
-        item.Y = y;
+        item.X = Mathf.RoundToInt(x);
+        item.Y = Mathf.RoundToInt(y);
         item.Rotation = Mathf.DegToRad(Mathf.RoundToInt(Utils.ConvertAngle(angle)));
         item.CenterX = centerX;
         item.CenterY = centerY;
@@ -129,28 +127,69 @@ public partial class ImageCanvas : Sprite2D, IDestroy
                       sinAngle + item.CenterY / sinAngle) /
                   (sinAngle / cosAngle + cosAngle / sinAngle)) + 1;
 
-        _queueItems.Enqueue(item);
+        _queueItems.Add(item);
     }
     
-    public void DrawActivityObjectInCanvas(ActivityObject activityObject, Action onDrawingComplete = null)
+    /// <summary>
+    /// 将指定 ActivityObject 添加到预渲染队列中, 完成后会调用 onDrawingComplete 回调函数
+    /// </summary>
+    /// <param name="activityObject">物体实例</param>
+    /// <param name="x">离画布左上角x坐标</param>
+    /// <param name="y">离画布左上角y坐标</param>
+    /// <param name="onDrawingComplete">绘制完成的回调</param>
+    public void DrawActivityObjectInCanvas(ActivityObject activityObject, float x, float y, Action onDrawingComplete = null)
     {
-        if (activityObject.AffiliationArea == null)
+        //是否翻转y轴
+        var flipY = activityObject.Scale.Y < 0;
+
+        var animatedSprite = activityObject.AnimatedSprite;
+        var animatedSpritePosition = animatedSprite.Position;
+        var ax = x + animatedSpritePosition.X;
+        var ay = y + animatedSpritePosition.X;
+
+        //先绘制阴影
+        var shadowSprite = activityObject.ShadowSprite;
+        var shadowSpriteTexture = activityObject.ShadowSprite.Texture;
+        if (shadowSpriteTexture != null)
         {
-            return;
+            var spriteOffset = shadowSprite.Offset;
+            var centerX = (int)-spriteOffset.X;
+            var centerY = (int)-spriteOffset.Y;
+            var angle = Utils.ConvertAngle(shadowSprite.GlobalRotationDegrees);
+            if (shadowSprite.Centered)
+            {
+                centerX += shadowSpriteTexture.GetWidth() / 2;
+                centerY += shadowSpriteTexture.GetHeight() / 2;
+            }
+            
+            DrawImageInCanvas(
+                shadowSprite.Texture, shadowSprite.Material,
+                ax + activityObject.ShadowOffset.X, ay + activityObject.ShadowOffset.Y,
+                angle,
+                centerX, centerY, flipY,
+                true, null
+            );
         }
-        var staticImageCanvas = activityObject.AffiliationArea.RoomInfo.StaticImageCanvas;
+        
+        //再绘制纹理
         var texture = activityObject.GetCurrentTexture();
         if (texture != null)
         {
-            var pos = staticImageCanvas.ToImageCanvasPosition(activityObject.GlobalPosition);
-            var spriteOffset = activityObject.AnimatedSprite.Offset;
+            var spriteOffset = animatedSprite.Offset;
             var centerX = (int)-spriteOffset.X;
             var centerY = (int)-spriteOffset.Y;
+            if (animatedSprite.Centered)
+            {
+                centerX += texture.GetWidth() / 2;
+                centerY += texture.GetHeight() / 2;
+            }
+            //为了保证阴影在此之前渲染, 所以必须关闭插队渲染
             DrawImageInCanvas(
-                texture, activityObject.AnimatedSprite.Material,
-                pos.X, pos.Y,
-                activityObject.AnimatedSprite.GlobalRotationDegrees,
-                centerX, centerY, false
+                texture, animatedSprite.Material,
+                ax, ay,
+                animatedSprite.GlobalRotationDegrees,
+                centerX, centerY, flipY,
+                false, onDrawingComplete
             );
         }
     }

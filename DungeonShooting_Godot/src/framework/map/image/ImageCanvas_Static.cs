@@ -35,8 +35,8 @@ public partial class ImageCanvas
     /// </summary>
     public static Vector2I RenderViewportSize { get; private set; }
     
-    //预渲染队列
-    private static readonly Queue<ImageRenderData> _queueItems = new Queue<ImageRenderData>();
+    //预渲染队列, 这里不用 Queue 是因为大图尝试添加到渲染队列可能失败, 为了不影响
+    private static readonly List<ImageRenderData> _queueItems = new List<ImageRenderData>();
     //渲染中的队列
     private static readonly Queue<ImageRenderData> _drawingQueueItems = new Queue<ImageRenderData>();
     //负责渲染的Sprite回收堆栈
@@ -146,6 +146,7 @@ public partial class ImageCanvas
     {
         RenderViewport.RemoveChild(renderSprite.Sprite);
         _renderSpriteStack.Push(renderSprite);
+        renderSprite.Sprite.Material = null;
     }
 
     private static void OnFramePostDraw()
@@ -186,7 +187,7 @@ public partial class ImageCanvas
                     {
                         redrawCanvas.Add(item.ImageCanvas);
                         //处理绘图
-                        HandleDrawing(index, image, item);
+                        HandleDrawing(image, item);
                         index++;
                         if (item.OnDrawingComplete != null)
                         {
@@ -243,36 +244,40 @@ public partial class ImageCanvas
         if (_queueItems.Count > 0)
         {
             var startTime = DateTime.Now;
-            List<ImageRenderData> retryList = null;
-            var index = 0;
+            var hasFail = false;
             //执行绘制操作
-            do
+            var index = 0;
+            for (var i = 0; i < _queueItems.Count; i++)
             {
-                var item = _queueItems.Dequeue();
+                var item = _queueItems[i];
                 if (!item.ImageCanvas.IsDestroyed)
                 {
-                    //排队绘制
-                    if (HandleEnqueueDrawing(index, item))
+                    if (hasFail && !item.EnableQueueCutting) //禁用插队
                     {
+                        continue;
+                    }
+                    //排队绘制
+                    if (HandleEnqueueDrawing(item))
+                    {
+                        _queueItems.RemoveAt(i);
+                        i--;
                         index++;
                     }
-                    else //添加失败
+                    else //进入渲染队列失败
                     {
-                        if (retryList == null)
-                        {
-                            retryList = new List<ImageRenderData>();
-                        }
-                        retryList.Add(item);
+                        hasFail = true;
                     }
                 }
-
-            } while (_queueItems.Count > 0 && (DateTime.Now - startTime).TotalMilliseconds < step2Time);
-
-            if (retryList != null)
-            {
-                foreach (var renderData in retryList)
+                else
                 {
-                    _queueItems.Enqueue(renderData);
+                    _queueItems.RemoveAt(i);
+                    i--;
+                }
+                
+                //计算超时
+                if ((DateTime.Now - startTime).TotalMilliseconds >= step2Time)
+                {
+                    break;
                 }
             }
             
@@ -280,7 +285,7 @@ public partial class ImageCanvas
         }
     }
 
-    private static void HandleDrawing(int index, Image image, ImageRenderData item)
+    private static void HandleDrawing(Image image, ImageRenderData item)
     {
         //截取Viewport像素点
         item.ImageCanvas._canvas.BlendRect(image,
@@ -293,7 +298,7 @@ public partial class ImageCanvas
     }
     
     //处理排队绘制
-    private static bool HandleEnqueueDrawing(int index, ImageRenderData item)
+    private static bool HandleEnqueueDrawing(ImageRenderData item)
     {
         var placeholder = FindNotchPlaceholder(item.RenderWidth);
         if (placeholder == null) //没有找到合适的位置

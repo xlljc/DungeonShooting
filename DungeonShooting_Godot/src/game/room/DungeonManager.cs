@@ -303,7 +303,7 @@ public partial class DungeonManager : Node2D
             roomInfo.GetWorldPosition() + new Vector2(GameConfig.TileCellSize, GameConfig.TileCellSize),
             (roomInfo.Size - new Vector2I(2, 2)) * GameConfig.TileCellSize));
         
-        roomInfo.Affiliation = affiliation;
+        roomInfo.AffiliationArea = affiliation;
         _world.AffiliationAreaRoot.AddChild(affiliation);
     }
 

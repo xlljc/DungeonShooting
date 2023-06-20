@@ -1395,7 +1395,7 @@ public abstract partial class Weapon : ActivityObject
         AnimatedSprite.Position = new Vector2(-position.X, -position.Y);
         //修改层级
         _tempLayer = CollisionLayer;
-        CollisionLayer = PhysicsLayer.InHand;
+        CollisionLayer = PhysicsLayer.OnHand;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         OnPickUp(master);

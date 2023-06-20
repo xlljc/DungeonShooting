@@ -72,7 +72,7 @@ public class RoomInfo : IDestroy
     /// <summary>
     /// 当前房间归属区域
     /// </summary>
-    public AffiliationArea Affiliation;
+    public AffiliationArea AffiliationArea;
 
     /// <summary>
     /// 静态精灵绘制画布

@@ -24,10 +24,9 @@ public class RoomStaticImageCanvas : IDestroy
     /// <summary>
     /// 将世界坐标转为画布下的坐标
     /// </summary>
-    public Vector2I ToImageCanvasPosition(Vector2 pos)
+    public Vector2 ToImageCanvasPosition(Vector2 pos)
     {
-        pos = pos - CanvasSprite.GlobalPosition;
-        return new Vector2I((int)pos.X, (int)pos.Y);
+        return pos - CanvasSprite.GlobalPosition;
     }
 
     public void Destroy()

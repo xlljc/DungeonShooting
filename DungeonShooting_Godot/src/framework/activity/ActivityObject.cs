@@ -254,6 +254,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     private bool _enableBehavior = true;
     private bool _enableBehaviorCollisionDisabledFlag;
 
+    private bool _processingBecomesStaticImage = false;
+
     // --------------------------------------------------------------------------------
     
     //实例索引
@@ -606,8 +608,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <param name="altitude">初始高度</param>
     /// <param name="verticalSpeed">纵轴速度</param>
     /// <param name="velocity">移动速率</param>
-    /// <param name="rotate">旋转速度</param>
-    public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotate)
+    /// <param name="rotateSpeed">旋转速度</param>
+    public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotateSpeed)
     {
         var parent = GetParent();
         if (parent == null)
@@ -623,7 +625,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         Altitude = altitude;
         //Position = Position + new Vector2(0, altitude);
         VerticalSpeed = verticalSpeed;
-        ThrowRotationDegreesSpeed = rotate;
+        ThrowRotationDegreesSpeed = rotateSpeed;
         if (_throwForce != null)
         {
             MoveController.RemoveForce(_throwForce);
@@ -643,11 +645,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <param name="altitude">初始高度</param>
     /// <param name="verticalSpeed">纵轴速度</param>
     /// <param name="velocity">移动速率</param>
-    /// <param name="rotate">旋转速度</param>
-    public void Throw(Vector2 position, float altitude, float verticalSpeed, Vector2 velocity, float rotate)
+    /// <param name="rotateSpeed">旋转速度</param>
+    public void Throw(Vector2 position, float altitude, float verticalSpeed, Vector2 velocity, float rotateSpeed)
     {
         GlobalPosition = position;
-        Throw(altitude, verticalSpeed, velocity, rotate);
+        Throw(altitude, verticalSpeed, velocity, rotateSpeed);
     }
 
 
@@ -1175,7 +1177,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
             CollisionMask = 1;
-            CollisionLayer = 0;
+            CollisionLayer = PhysicsLayer.Throwing;
             _fallData.UseOrigin = false;
         }
     }
@@ -1396,5 +1398,40 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1,arg2, arg3);
+    }
+
+    /// <summary>
+    /// 将当前 ActivityObject 变成静态图像绘制到地面上, 用于优化渲染大量物体<br/>
+    /// 调用该函数后会排队进入渲染队列, 并且禁用所有行为, 当渲染完成后会销毁当前对象, 也就是调用 Destroy() 函数<br/>
+    /// </summary>
+    public void BecomesStaticImage()
+    {
+        if (AffiliationArea == null)
+        {
+            GD.PrintErr($"调用函数: BecomesStaticImage() 失败, 物体{Name}没有归属区域, 无法确定绘制到哪个ImageCanvas上");
+            return;
+        }
+
+        if (_processingBecomesStaticImage)
+        {
+            return;
+        }
+
+        _processingBecomesStaticImage = true;
+        EnableBehavior = false;
+        var staticImageCanvas = AffiliationArea.RoomInfo.StaticImageCanvas;
+        var (x, y) = staticImageCanvas.ToImageCanvasPosition(GlobalPosition);
+        staticImageCanvas.CanvasSprite.DrawActivityObjectInCanvas(this, x, y, () =>
+        {
+            Destroy();
+        });
+    }
+
+    /// <summary>
+    /// 是否正在处理成为静态图片
+    /// </summary>
+    public bool IsProcessingBecomesStaticImage()
+    {
+        return _processingBecomesStaticImage;
     }
 }

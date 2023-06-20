@@ -1,7 +1,7 @@
 shader_type canvas_item;
 
 uniform vec4 blend : source_color = vec4(1.0, 1.0, 1.0, 1.0);
-uniform float schedule = 1.0;
+uniform float schedule = 0.0;
 
 void fragment() {
 	vec4 textureColor = texture(TEXTURE, UV);
