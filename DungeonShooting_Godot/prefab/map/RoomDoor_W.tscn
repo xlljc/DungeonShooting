@@ -8,13 +8,13 @@
 resource_local_to_scene = true
 shader = ExtResource("2_wx2w3")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
-shader_parameter/schedule = 1
+shader_parameter/schedule = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t4ayq"]
 resource_local_to_scene = true
 shader = ExtResource("2_wx2w3")
 shader_parameter/blend = Color(1, 1, 1, 1)
-shader_parameter/schedule = 0
+shader_parameter/schedule = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ko2r"]
 resource_local_to_scene = true

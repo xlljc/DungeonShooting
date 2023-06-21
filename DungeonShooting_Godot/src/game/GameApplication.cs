@@ -88,7 +88,7 @@ public partial class GameApplication : Node2D
 	public GameApplication()
 	{
 		Instance = this;
-		
+
 		//初始化配置表
 		ExcelConfig.Init();
 		//初始化房间配置数据
@@ -113,6 +113,8 @@ public partial class GameApplication : Node2D
 		ActivityObject.IsDebug = Debug;
 		//Engine.TimeScale = 0.2f;
 
+		ImageCanvas.Init(GetTree().CurrentScene);
+		
 		//窗体大小改变
 		GetWindow().SizeChanged += OnWindowSizeChanged;
 		RefreshSubViewportSize();

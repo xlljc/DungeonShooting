@@ -209,18 +209,6 @@ public static partial class ExcelConfig
         public float ScatteringRangeBackDelayTime;
 
         /// <summary>
-        /// 子弹飞行最小距离
-        /// </summary>
-        [JsonInclude]
-        public float MinDistance;
-
-        /// <summary>
-        /// 子弹飞行最大距离
-        /// </summary>
-        [JsonInclude]
-        public float MaxDistance;
-
-        /// <summary>
         /// 最小后坐力 (仅用于开火后武器身抖动)
         /// </summary>
         [JsonInclude]
@@ -261,6 +249,43 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public string BulletId;
+
+        /// <summary>
+        /// 子弹最小偏移角度 <br/>
+        /// 用于设置子弹偏移朝向, 该属性和射半径效果类似, 但与其不同的是, 散射半径是用来控制枪口朝向的, 而该属性是控制子弹朝向的, 可用于制作霰弹枪子弹效果
+        /// </summary>
+        [JsonInclude]
+        public float BulletMinDeviationAngle;
+
+        /// <summary>
+        /// 子弹最大偏移角度
+        /// </summary>
+        [JsonInclude]
+        public float BulletMaxDeviationAngle;
+
+        /// <summary>
+        /// 子弹最大初速度
+        /// </summary>
+        [JsonInclude]
+        public float BulletMaxSpeed;
+
+        /// <summary>
+        /// 子弹最小初速度
+        /// </summary>
+        [JsonInclude]
+        public float BulletMinSpeed;
+
+        /// <summary>
+        /// 子弹飞行最小距离
+        /// </summary>
+        [JsonInclude]
+        public float BulletMinDistance;
+
+        /// <summary>
+        /// 子弹飞行最大距离
+        /// </summary>
+        [JsonInclude]
+        public float BulletMaxDistance;
 
         /// <summary>
         /// 投抛状态下物体碰撞器大小
@@ -390,8 +415,6 @@ public static partial class ExcelConfig
             inst.ScatteringRangeAddValue = ScatteringRangeAddValue;
             inst.ScatteringRangeBackSpeed = ScatteringRangeBackSpeed;
             inst.ScatteringRangeBackDelayTime = ScatteringRangeBackDelayTime;
-            inst.MinDistance = MinDistance;
-            inst.MaxDistance = MaxDistance;
             inst.MinBacklash = MinBacklash;
             inst.MaxBacklash = MaxBacklash;
             inst.BacklashRegressionSpeed = BacklashRegressionSpeed;
@@ -399,6 +422,12 @@ public static partial class ExcelConfig
             inst.DefaultAngle = DefaultAngle;
             inst.UpliftAngleRestore = UpliftAngleRestore;
             inst.BulletId = BulletId;
+            inst.BulletMinDeviationAngle = BulletMinDeviationAngle;
+            inst.BulletMaxDeviationAngle = BulletMaxDeviationAngle;
+            inst.BulletMaxSpeed = BulletMaxSpeed;
+            inst.BulletMinSpeed = BulletMinSpeed;
+            inst.BulletMinDistance = BulletMinDistance;
+            inst.BulletMaxDistance = BulletMaxDistance;
             inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.ShootSound = ShootSound;
             inst.BeginReloadSound = BeginReloadSound;

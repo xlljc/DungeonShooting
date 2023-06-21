@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using Godot;
 
 /// <summary>
-/// 房间内活动物体基类, 所有物体都必须继承该类,
-/// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, 
-/// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [RegisterActivity(id, prefabPath)],
-/// ActivityObject 类会自动扫描并注册物体, 然后使用而是使用 ActivityObject.Create(id) 来创建实例
+/// 房间内活动物体基类, 所有物体都必须继承该类,<br/>
+/// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, <br/>
+/// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [Tool], 并在 ActivityObject.xlsx 配置文件中注册物体, 导出配置表后使用 ActivityObject.Create(id) 来创建实例.<br/>
 /// </summary>
 public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 {
@@ -254,6 +253,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     //是否启用物体行为
     private bool _enableBehavior = true;
     private bool _enableBehaviorCollisionDisabledFlag;
+
+    private bool _processingBecomesStaticImage = false;
 
     // --------------------------------------------------------------------------------
     
@@ -607,8 +608,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <param name="altitude">初始高度</param>
     /// <param name="verticalSpeed">纵轴速度</param>
     /// <param name="velocity">移动速率</param>
-    /// <param name="rotate">旋转速度</param>
-    public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotate)
+    /// <param name="rotateSpeed">旋转速度</param>
+    public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotateSpeed)
     {
         var parent = GetParent();
         if (parent == null)
@@ -624,7 +625,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         Altitude = altitude;
         //Position = Position + new Vector2(0, altitude);
         VerticalSpeed = verticalSpeed;
-        ThrowRotationDegreesSpeed = rotate;
+        ThrowRotationDegreesSpeed = rotateSpeed;
         if (_throwForce != null)
         {
             MoveController.RemoveForce(_throwForce);
@@ -644,11 +645,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <param name="altitude">初始高度</param>
     /// <param name="verticalSpeed">纵轴速度</param>
     /// <param name="velocity">移动速率</param>
-    /// <param name="rotate">旋转速度</param>
-    public void Throw(Vector2 position, float altitude, float verticalSpeed, Vector2 velocity, float rotate)
+    /// <param name="rotateSpeed">旋转速度</param>
+    public void Throw(Vector2 position, float altitude, float verticalSpeed, Vector2 velocity, float rotateSpeed)
     {
         GlobalPosition = position;
-        Throw(altitude, verticalSpeed, velocity, rotate);
+        Throw(altitude, verticalSpeed, velocity, rotateSpeed);
     }
 
 
@@ -1176,7 +1177,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
             CollisionMask = 1;
-            CollisionLayer = 0;
+            CollisionLayer = PhysicsLayer.Throwing;
             _fallData.UseOrigin = false;
         }
     }
@@ -1346,56 +1347,91 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall(float delayTime, Action cb)
+    public void CallDelay(float delayTime, Action cb)
     {
-        StartCoroutine(_DelayCall(delayTime, cb));
+        StartCoroutine(_CallDelay(delayTime, cb));
     }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    public void CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
     {
-        StartCoroutine(_DelayCall(delayTime, cb, arg1));
+        StartCoroutine(_CallDelay(delayTime, cb, arg1));
     }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    public void CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
     {
-        StartCoroutine(_DelayCall(delayTime, cb, arg1, arg2));
+        StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2));
     }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    public void CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
     {
-        StartCoroutine(_DelayCall(delayTime, cb, arg1, arg2, arg3));
+        StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2, arg3));
     }
 
-    private IEnumerator _DelayCall(float delayTime, Action cb)
+    private IEnumerator _CallDelay(float delayTime, Action cb)
     {
         yield return new WaitForSeconds(delayTime);
         cb();
     }
     
-    private IEnumerator _DelayCall<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    private IEnumerator _CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1);
     }
     
-    private IEnumerator _DelayCall<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    private IEnumerator _CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1, arg2);
     }
     
-    private IEnumerator _DelayCall<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    private IEnumerator _CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1,arg2, arg3);
+    }
+
+    /// <summary>
+    /// 将当前 ActivityObject 变成静态图像绘制到地面上, 用于优化渲染大量物体<br/>
+    /// 调用该函数后会排队进入渲染队列, 并且禁用所有行为, 当渲染完成后会销毁当前对象, 也就是调用 Destroy() 函数<br/>
+    /// </summary>
+    public void BecomesStaticImage()
+    {
+        if (AffiliationArea == null)
+        {
+            GD.PrintErr($"调用函数: BecomesStaticImage() 失败, 物体{Name}没有归属区域, 无法确定绘制到哪个ImageCanvas上");
+            return;
+        }
+
+        if (_processingBecomesStaticImage)
+        {
+            return;
+        }
+
+        _processingBecomesStaticImage = true;
+        EnableBehavior = false;
+        var staticImageCanvas = AffiliationArea.RoomInfo.StaticImageCanvas;
+        var (x, y) = staticImageCanvas.ToImageCanvasPosition(GlobalPosition);
+        staticImageCanvas.CanvasSprite.DrawActivityObjectInCanvas(this, x, y, () =>
+        {
+            Destroy();
+        });
+    }
+
+    /// <summary>
+    /// 是否正在处理成为静态图片
+    /// </summary>
+    public bool IsProcessingBecomesStaticImage()
+    {
+        return _processingBecomesStaticImage;
     }
 }

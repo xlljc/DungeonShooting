@@ -20,6 +20,9 @@ public partial class World : Node2D
     /// 地图根节点
     /// </summary>
     [Export] public TileMap TileRoot;
+
+    [Export] public Node2D StaticSpriteRoot;
+    [Export] public Node2D AffiliationAreaRoot;
     
     /// <summary>
     /// 是否暂停

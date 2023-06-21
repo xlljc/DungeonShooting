@@ -8,33 +8,44 @@ using UI.EditorTools;
 public partial class ActivityObject
 {
     /// <summary>
-    /// 该函数只会在编辑器中调用, 用于自定义处理被 [ExportFill] 标记后自动创建的节点
+    /// 该函数只会在编辑器中调用, 用于处理被 [ExportFill] 标记属性节点, 当在编辑器中切换页签或者创建 ActivityObject 时会调用该函数
     /// </summary>
     /// <param name="propertyName">属性名称</param>
     /// <param name="node">节点实例</param>
-    protected virtual void OnExportFillNode(string propertyName, Node node)
+    /// <param name="isJustCreated">是否刚刚创建</param>
+    protected virtual void OnExamineExportFillNode(string propertyName, Node node, bool isJustCreated)
     {
         switch (propertyName)
         {
             case "ShadowSprite":
             {
                 var sprite = (Sprite2D)node;
-                sprite.ZIndex = -1;
-                var material =
-                    ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
-                material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
-                material.SetShaderParameter("schedule", 1);
-                sprite.Material = material;
+                if (isJustCreated)
+                {
+                    sprite.ZIndex = -1;
+                }
+
+                if (sprite.Material == null)
+                {
+                    var material =
+                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
+                    material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
+                    material.SetShaderParameter("schedule", 1);
+                    sprite.Material = material;
+                }
             }
                 break;
             case "AnimatedSprite":
             {
                 var animatedSprite = (AnimatedSprite2D)node;
-                var material =
-                    ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
-                material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
-                material.SetShaderParameter("schedule", 0);
-                animatedSprite.Material = material;
+                if (animatedSprite.Material == null)
+                {
+                    var material =
+                        ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
+                    material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
+                    material.SetShaderParameter("schedule", 0);
+                    animatedSprite.Material = material;
+                }
             }
                 break;
             case "Collision":
@@ -136,10 +147,18 @@ public partial class ActivityObject
                         AddChild(node);
                         node.Name = propertyInfo.Name;
                         node.Owner = owner;
-                        //自定义处理导出的节点
-                        OnExportFillNode(propertyInfo.Name, node);
+                        
+                        OnExamineExportFillNode(propertyInfo.Name, node, true);
+                    }
+                    else
+                    {
+                        OnExamineExportFillNode(propertyInfo.Name, node, false);
                     }
                     propertyInfo.SetValue(this, node);
+                }
+                else
+                {
+                    OnExamineExportFillNode(propertyInfo.Name, (Node)value, false);
                 }
             }
         }

@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://doj2eilx1xtxf"]
 
-[ext_resource type="Script" path="res://src/game/activity/weapon/gun/Shotgun.cs" id="1_8kiv4"]
+[ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="1_hgtyo"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_8nvny"]
 [ext_resource type="SpriteFrames" uid="uid://domhmo4flmlt0" path="res://resource/spriteFrames/Weapon0002.tres" id="3_4h3je"]
 
@@ -8,13 +8,13 @@
 resource_local_to_scene = true
 shader = ExtResource("2_8nvny")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
-shader_parameter/schedule = 1
+shader_parameter/schedule = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
 resource_local_to_scene = true
 shader = ExtResource("2_8nvny")
 shader_parameter/blend = Color(1, 1, 1, 1)
-shader_parameter/schedule = 0
+shader_parameter/schedule = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3p5jk"]
 size = Vector2(19.5, 8.75)
@@ -59,7 +59,7 @@ _data = {
 
 [node name="Weapon0002" type="CharacterBody2D" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 4
-script = ExtResource("1_8kiv4")
+script = ExtResource("1_hgtyo")
 FirePoint = NodePath("AnimatedSprite/FirePoint")
 ShellPoint = NodePath("AnimatedSprite/ShellPoint")
 GripPoint = NodePath("GripPoint")

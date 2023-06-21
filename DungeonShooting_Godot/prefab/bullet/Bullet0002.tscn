@@ -4,17 +4,17 @@
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_n44pd"]
 [ext_resource type="SpriteFrames" uid="uid://bpeodjqiy3mil" path="res://resource/spriteFrames/Bullet0002.tres" id="3_uvuj8"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5a4f2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
 resource_local_to_scene = true
 shader = ExtResource("2_n44pd")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
-shader_parameter/schedule = 1
+shader_parameter/schedule = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o0655"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p0wfd"]
 resource_local_to_scene = true
 shader = ExtResource("2_n44pd")
 shader_parameter/blend = Color(1, 1, 1, 1)
-shader_parameter/schedule = 0
+shader_parameter/schedule = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c0onq"]
 size = Vector2(44.72, 12)
@@ -32,11 +32,11 @@ Collision = NodePath("Collision")
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1
-material = SubResource("ShaderMaterial_5a4f2")
+material = SubResource("ShaderMaterial_v77gw")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 modulate = Color(1.8, 1.8, 1.8, 1)
-material = SubResource("ShaderMaterial_o0655")
+material = SubResource("ShaderMaterial_p0wfd")
 sprite_frames = ExtResource("3_uvuj8")
 
 [node name="CollisionArea" type="Area2D" parent="."]

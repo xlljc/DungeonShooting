@@ -6,11 +6,6 @@ using Godot;
 [Tool, GlobalClass]
 public partial class Gun : Weapon
 {
-    protected override void OnReload()
-    {
-        base.OnReload();
-    }
-
     protected override void OnFire()
     {
         //创建一个弹壳
@@ -32,16 +27,6 @@ public partial class Gun : Weapon
 
     protected override void OnShoot(float fireRotation)
     {
-        //创建子弹
-        var bullet = ActivityObject.Create<Bullet>(Attribute.BulletId);
-        bullet.Init(
-            this,
-            350,
-            Utils.RandomRangeFloat(Attribute.MinDistance, Attribute.MaxDistance),
-            FirePoint.GlobalPosition,
-            fireRotation,
-            GetAttackLayer()
-        );
-        bullet.PutDown(RoomLayerEnum.YSortLayer);
+        ShootBullet(fireRotation, Attribute.BulletId);
     }
 }

@@ -341,7 +341,7 @@ public partial class Enemy : Role
         if (Holster.ActiveWeapon != null)
         {
             var attribute = Holster.ActiveWeapon.Attribute;
-            return Mathf.Lerp(attribute.MinDistance, attribute.MaxDistance, weight);
+            return Mathf.Lerp(attribute.BulletMinDistance, attribute.BulletMaxDistance, weight);
         }
 
         return 0;
