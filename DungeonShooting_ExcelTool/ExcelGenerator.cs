@@ -7,11 +7,7 @@ public static class ExcelGenerator
 {
     private const string CodeOutPath = "src/config/";
     private const string JsonOutPath = "resource/config/";
-#if DEBUG
     private const string ExcelFilePath = "excelFile";
-#else
-    private const string ExcelFilePath = "excel/excelFile";
-#endif
 
     private static HashSet<string> _excelNames = new HashSet<string>();
 
@@ -62,15 +58,23 @@ public static class ExcelGenerator
         public Dictionary<string, Type> ColumnType = new Dictionary<string, Type>();
         public List<Dictionary<string, object>> DataList = new List<Dictionary<string, object>>();
     }
-    
+
     public static bool ExportExcel()
     {
+        return ExportExcel(ExcelFilePath, JsonOutPath, CodeOutPath);
+    }
+    
+    public static bool ExportExcel(string excelFilePath, string jsonOutPath, string codeOutPath)
+    {
         Console.WriteLine("当前路径: " + Environment.CurrentDirectory);
+        Console.WriteLine("excel路径: " + excelFilePath);
+        Console.WriteLine("json输出路径: " + jsonOutPath);
+        Console.WriteLine("cs代码输出路径: " + codeOutPath);
         try
         {
             var excelDataList = new List<ExcelData>();
             
-            var directoryInfo = new DirectoryInfo(ExcelFilePath);
+            var directoryInfo = new DirectoryInfo(excelFilePath);
             if (directoryInfo.Exists)
             {
                 var fileInfos = directoryInfo.GetFiles();
@@ -101,29 +105,29 @@ public static class ExcelGenerator
                 return true;
             }
             
-            if (Directory.Exists(CodeOutPath))
+            if (Directory.Exists(codeOutPath))
             {
-                Directory.Delete(CodeOutPath, true);
+                Directory.Delete(codeOutPath, true);
             }
-            if (Directory.Exists(JsonOutPath))
+            if (Directory.Exists(jsonOutPath))
             {
-                Directory.Delete(JsonOutPath, true);
+                Directory.Delete(jsonOutPath, true);
             }
-            Directory.CreateDirectory(CodeOutPath);
-            Directory.CreateDirectory(JsonOutPath);
+            Directory.CreateDirectory(codeOutPath);
+            Directory.CreateDirectory(jsonOutPath);
             
             //保存配置和代码
             foreach (var excelData in excelDataList)
             {
-                File.WriteAllText(CodeOutPath + "ExcelConfig_" + excelData.TableName + ".cs", excelData.OutCode);
+                File.WriteAllText(codeOutPath + "ExcelConfig_" + excelData.TableName + ".cs", excelData.OutCode);
                 var config = new JsonSerializerOptions();
                 config.WriteIndented = true;
-                File.WriteAllText(JsonOutPath + excelData.TableName + ".json", JsonSerializer.Serialize(excelData.DataList, config));
+                File.WriteAllText(jsonOutPath + excelData.TableName + ".json", JsonSerializer.Serialize(excelData.DataList, config));
             }
             
             //生成加载代码
             var code = GeneratorInitCode(excelDataList);
-            File.WriteAllText(CodeOutPath + "ExcelConfig.cs", code);
+            File.WriteAllText(codeOutPath + "ExcelConfig.cs", code);
         }
         catch (Exception e)
         {

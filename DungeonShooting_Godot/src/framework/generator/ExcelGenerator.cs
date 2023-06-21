@@ -11,7 +11,10 @@ public static class ExcelGenerator
     public static void ExportExcel()
     {
         var arr = new Array();
-        OS.Execute("excel/DungeonShooting_ExcelTool.exe", new string[0], arr);
+        var excelPath = "excel/excelFile/";
+        var jsonPath = "resource/config/";
+        var codePath = "src/config/";
+        OS.Execute("excel/DungeonShooting_ExcelTool.exe", new string[] { excelPath, jsonPath, codePath }, arr);
         foreach (var message in arr)
         {
             GD.Print(message);
