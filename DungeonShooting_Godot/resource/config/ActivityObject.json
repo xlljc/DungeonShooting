@@ -66,6 +66,18 @@
     "Remark": ""
   },
   {
+    "Id": "shell0002",
+    "Type": 7,
+    "Prefab": "res://prefab/shell/Shell0002.tscn",
+    "Remark": ""
+  },
+  {
+    "Id": "shell0003",
+    "Type": 7,
+    "Prefab": "res://prefab/shell/Shell0003.tscn",
+    "Remark": ""
+  },
+  {
     "Id": "effect0001",
     "Type": 8,
     "Prefab": "res://prefab/effect/activityObject/Effect0001.tscn",

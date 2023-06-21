@@ -40,7 +40,7 @@ public partial class Knife : Weapon
         }
     }
 
-    protected override void OnStartCharge()
+    protected override void OnBeginCharge()
     {
         //开始蓄力时武器角度上抬120度
         RotationDegrees = -120;

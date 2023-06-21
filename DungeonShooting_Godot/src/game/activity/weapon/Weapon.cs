@@ -9,11 +9,6 @@ using Config;
 public abstract partial class Weapon : ActivityObject
 {
     /// <summary>
-    /// 开火回调事件
-    /// </summary>
-    public event Action<Weapon> FireEvent;
-
-    /// <summary>
     /// 武器属性数据
     /// </summary>
     public ExcelConfig.Weapon Attribute => _weaponAttribute;
@@ -203,6 +198,12 @@ public abstract partial class Weapon : ActivityObject
     //是否播放过换弹完成音效
     private bool _playReloadFinishSoundFlag = false;
 
+    //上膛状态,-1: 等待执行自动上膛 , 0: 未上膛, 1: 上膛中, 2: 已经完成上膛
+    private sbyte _beLoadedState = 2;
+
+    //上膛计时器
+    private float _beLoadedStateTimer = -1;
+
     // ----------------------------------------------
     private uint _tempLayer;
 
@@ -289,6 +290,20 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     /// <param name="fireRotation">开火时枪口旋转角度</param>
     protected abstract void OnShoot(float fireRotation);
+
+    /// <summary>
+    /// 上膛开始时调用
+    /// </summary>
+    protected virtual void OnBeginBeLoaded()
+    {
+    }
+    
+    /// <summary>
+    /// 上膛结束时调用
+    /// </summary>
+    protected virtual void OnBeLoadedFinish()
+    {
+    }
     
     /// <summary>
     /// 当按下扳机时调用
@@ -308,7 +323,7 @@ public abstract partial class Weapon : ActivityObject
     /// 开始蓄力时调用, 
     /// 注意, 该函数仅在 Attribute.LooseShoot == false 时才能被调用
     /// </summary>
-    protected virtual void OnStartCharge()
+    protected virtual void OnBeginCharge()
     {
     }
 
@@ -334,6 +349,13 @@ public abstract partial class Weapon : ActivityObject
     {
     }
 
+    /// <summary>
+    /// 单独装弹完成时调用
+    /// </summary>
+    protected virtual void OnAloneReloadStateFinish()
+    {
+    }
+    
     /// <summary>
     /// 当武器被拾起时调用
     /// </summary>
@@ -425,11 +447,26 @@ public abstract partial class Weapon : ActivityObject
                 _upTimer = 0;
                 _looseShootFlag = false;
                 _chargeTime = 0;
+                _beLoadedStateTimer = -1;
             }
         }
         else //正在使用中
         {
             _dirtyFlag = true;
+            
+            //上膛
+            if (_beLoadedState == 1)
+            {
+                _beLoadedStateTimer -= delta;
+                //上膛完成
+                if (_beLoadedStateTimer <= 0)
+                {
+                    _beLoadedStateTimer = -1;
+                    _beLoadedState = 2;
+                    OnBeLoadedFinish();
+                }
+            }
+            
             //换弹
             if (Reloading)
             {
@@ -516,7 +553,7 @@ public abstract partial class Weapon : ActivityObject
                 }
             }
 
-            // 攻击的计时器
+            //攻击的计时器
             if (_attackTimer > 0)
             {
                 _attackTimer -= delta;
@@ -526,6 +563,11 @@ public abstract partial class Weapon : ActivityObject
                     _attackTimer = 0;
                     //枪口默认角度
                     RotationDegrees = -Attribute.DefaultAngle;
+                    //自动上膛
+                    if (_beLoadedState == -1)
+                    {
+                        BeLoadedHandler();
+                    }
                 }
             }
             else if (_delayedTime > 0) //攻击延时
@@ -567,6 +609,12 @@ public abstract partial class Weapon : ActivityObject
             {
                 //连发开火
                 TriggerFire();
+                //连发最后一发打完了
+                if (_continuousCount <= 0)
+                {
+                    //执行上膛逻辑
+                    RunBeLoaded();
+                }
             }
 
             //散射值销退
@@ -613,99 +661,121 @@ public abstract partial class Weapon : ActivityObject
         
         //是否第一帧按下
         var justDown = _downTimer == 0;
-        //是否能发射
-        var flag = false;
-        if (_continuousCount <= 0) //不能处于连发状态下
+        
+        if (_beLoadedState == 0 || _beLoadedState == -1)  //需要执行上膛操作
         {
-            if (Attribute.ContinuousShoot) //自动射击
+            if (_attackTimer <= 0 && justDown)
             {
-                if (_triggerTimer > 0)
+                BeLoadedHandler();
+            }
+        }
+        else if (_beLoadedState == 1)  //上膛中
+        {
+            
+        }
+        else //上膛完成
+        {
+            //是否能发射
+            var flag = false;
+            if (_continuousCount <= 0) //不能处于连发状态下
+            {
+                if (Attribute.ContinuousShoot) //自动射击
                 {
-                    if (_continuousShootFlag)
+                    if (_triggerTimer > 0)
+                    {
+                        if (_continuousShootFlag)
+                        {
+                            flag = true;
+                        }
+                    }
+                    else
+                    {
+                        flag = true;
+                        if (_delayedTime <= 0 && _attackTimer <= 0)
+                        {
+                            _continuousShootFlag = true;
+                        }
+                    }
+                }
+                else //半自动
+                {
+                    if (justDown && _triggerTimer <= 0 && _attackTimer <= 0)
                     {
                         flag = true;
                     }
                 }
-                else
+            }
+
+            if (flag)
+            {
+                var fireFlag = true; //是否能开火
+                if (Reloading) //换弹中
                 {
-                    flag = true;
+                    fireFlag = false;
+                    if (CurrAmmo > 0 && Attribute.AloneReload && Attribute.AloneReloadCanShoot)
+                    {
+                        //检查是否允许停止换弹
+                        if (_aloneReloadState == 2 || _aloneReloadState == 1)
+                        {
+                            //强制结束
+                            _aloneReloadStop = true;
+                        }
+                    }
+                }
+                else if (CurrAmmo <= 0) //子弹不够
+                {
+                    fireFlag = false;
+                    if (justDown)
+                    {
+                        //第一帧按下, 触发换弹
+                        Reload();
+                    }
+                }
+
+                if (fireFlag)
+                {
+                    if (justDown)
+                    {
+                        //开火前延时
+                        if (!Attribute.LooseShoot)
+                        {
+                            _delayedTime = Attribute.DelayedTime;
+                        }
+                        //扳机按下间隔
+                        _triggerTimer = Attribute.TriggerInterval;
+                        //连发数量
+                        if (!Attribute.ContinuousShoot)
+                        {
+                            _continuousCount =
+                                Utils.RandomRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
+                        }
+                    }
+
                     if (_delayedTime <= 0 && _attackTimer <= 0)
                     {
-                        _continuousShootFlag = true;
-                    }
-                }
-            }
-            else //半自动
-            {
-                if (justDown && _triggerTimer <= 0 && _attackTimer <= 0)
-                {
-                    flag = true;
-                }
-            }
-        }
+                        if (Attribute.LooseShoot) //松发开火
+                        {
+                            _looseShootFlag = true;
+                            OnBeginCharge();
+                        }
+                        else
+                        {
+                            //开火
+                            TriggerFire();
 
-        if (flag)
-        {
-            var fireFlag = true; //是否能开火
-            if (Reloading) //换弹中
-            {
-                fireFlag = false;
-                if (CurrAmmo > 0 && Attribute.AloneReload && Attribute.AloneReloadCanShoot)
-                {
-                    //检查是否允许停止换弹
-                    if (_aloneReloadState == 2 || _aloneReloadState == 1)
-                    {
-                        //强制结束
-                        _aloneReloadStop = true;
+                            //非连射模式
+                            if (!Attribute.ContinuousShoot && _continuousCount <= 0)
+                            {
+                                //执行上膛逻辑
+                                RunBeLoaded();
+                            }
+                        }
                     }
-                }
-            }
-            else if (CurrAmmo <= 0) //子弹不够
-            {
-                fireFlag = false;
-                if (justDown)
-                {
-                    //第一帧按下, 触发换弹
-                    Reload();
-                }
-            }
 
-            if (fireFlag)
-            {
-                if (justDown)
-                {
-                    //开火前延时
-                    if (!Attribute.LooseShoot)
-                    {
-                        _delayedTime = Attribute.DelayedTime;
-                    }
-                    //扳机按下间隔
-                    _triggerTimer = Attribute.TriggerInterval;
-                    //连发数量
-                    if (!Attribute.ContinuousShoot)
-                    {
-                        _continuousCount =
-                            Utils.RandomRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
-                    }
+                    _attackFlag = true;
                 }
 
-                if (_delayedTime <= 0 && _attackTimer <= 0)
-                {
-                    if (Attribute.LooseShoot) //松发开火
-                    {
-                        _looseShootFlag = true;
-                        OnStartCharge();
-                    }
-                    else
-                    {
-                        //开火
-                        TriggerFire();
-                    }
-                }
-
-                _attackFlag = true;
             }
-
         }
 
         _triggerFlag = true;
@@ -770,6 +840,12 @@ public abstract partial class Weapon : ActivityObject
             if (_chargeTime >= Attribute.MinChargeTime) //判断蓄力是否够了
             {
                 TriggerFire();
+                //非连射模式
+                if (!Attribute.ContinuousShoot && _continuousCount <= 0)
+                {
+                    //执行上膛逻辑
+                    RunBeLoaded();
+                }
             }
             else //不能攻击
             {
@@ -787,7 +863,6 @@ public abstract partial class Weapon : ActivityObject
     private void TriggerFire()
     {
         _noAttackTime = 0;
-        _continuousCount = _continuousCount > 0 ? _continuousCount - 1 : 0;
 
         //减子弹数量
         if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
@@ -800,6 +875,15 @@ public abstract partial class Weapon : ActivityObject
         else
         {
             CurrAmmo -= UseAmmoCount();
+        }
+
+        if (CurrAmmo == 0)
+        {
+            _continuousCount = 0;
+        }
+        else
+        {
+            _continuousCount = _continuousCount > 0 ? _continuousCount - 1 : 0;
         }
 
         //开火间隙
@@ -818,22 +902,6 @@ public abstract partial class Weapon : ActivityObject
         
         //触发开火函数
         OnFire();
-
-        //播放上膛动画
-        if (IsAutoPlaySpriteFrames)
-        {
-            if (Attribute.EquipSoundDelayTime <= 0)
-            {
-                PlaySpriteAnimation(AnimatorNames.Equip);
-            }
-            else
-            {
-                CallDelay(Attribute.EquipSoundDelayTime, PlaySpriteAnimation, AnimatorNames.Equip);
-            }
-        }
-
-        //播放上膛音效
-        PlayEquipSound();
 
         //开火发射的子弹数量
         var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
@@ -868,11 +936,6 @@ public abstract partial class Weapon : ActivityObject
             -max, max
         );
         Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
-
-        if (FireEvent != null)
-        {
-            FireEvent(this);
-        }
     }
 
     /// <summary>
@@ -1053,19 +1116,42 @@ public abstract partial class Weapon : ActivityObject
     }
 
     //播放上膛音效
-    private void PlayEquipSound()
+    private void PlayBeLoadedSound()
     {
-        if (Attribute.EquipSound != null)
+        if (Attribute.BeLoadedSound != null)
         {
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            if (Attribute.EquipSoundDelayTime <= 0)
+            if (Attribute.BeLoadedSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.EquipSound.Path, position, Attribute.EquipSound.Volume);
+                SoundManager.PlaySoundEffectPosition(Attribute.BeLoadedSound.Path, position, Attribute.BeLoadedSound.Volume);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.EquipSound.Path, position, Attribute.EquipSoundDelayTime, Attribute.EquipSound.Volume);
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeLoadedSound.Path, position, Attribute.BeLoadedSoundDelayTime, Attribute.BeLoadedSound.Volume);
             }
+        }
+    }
+
+    //执行上膛逻辑
+    private void RunBeLoaded()
+    {
+        if (Attribute.AutoBeLoaded)
+        {
+            if (_attackTimer <= 0)
+            {
+                //执行自动上膛
+                BeLoadedHandler();
+            }
+            else if (CurrAmmo > 0)
+            {
+                //等待执行自动上膛
+                _beLoadedState = -1;
+            }
+        }
+        else if (CurrAmmo > 0)
+        {
+            //手动上膛
+            _beLoadedState = 0;
         }
     }
 
@@ -1114,6 +1200,43 @@ public abstract partial class Weapon : ActivityObject
     private void AloneReloadStateFinish()
     {
         // GD.Print("单独装弹完成.");
+        OnAloneReloadStateFinish();
+    }
+
+    //上膛处理
+    private void BeLoadedHandler()
+    {
+        //开始上膛
+        OnBeginBeLoaded();
+
+        //上膛时间为0, 直接结束上膛
+        if (Attribute.BeLoadedTime <= 0)
+        {
+            //直接上膛完成
+            _beLoadedState = 2;
+            OnBeLoadedFinish();
+            return;
+        }
+        
+        //上膛中
+        _beLoadedState = 1;
+        _beLoadedStateTimer = Attribute.BeLoadedTime;
+        
+        //播放上膛动画
+        if (IsAutoPlaySpriteFrames)
+        {
+            if (Attribute.BeLoadedSoundDelayTime <= 0)
+            {
+                PlaySpriteAnimation(AnimatorNames.BeLoaded);
+            }
+            else
+            {
+                CallDelay(Attribute.BeLoadedSoundDelayTime, PlaySpriteAnimation, AnimatorNames.BeLoaded);
+            }
+        }
+
+        //播放上膛音效
+        PlayBeLoadedSound();
     }
 
     //停止当前的换弹状态

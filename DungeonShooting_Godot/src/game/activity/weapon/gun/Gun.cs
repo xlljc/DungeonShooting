@@ -9,7 +9,7 @@ public partial class Gun : Weapon
     protected override void OnFire()
     {
         //创建一个弹壳
-        ThrowShell(ActivityObject.Ids.Id_shell0001);
+        ThrowShell(Attribute.ShellId);
 
         if (Master == Player.Current)
         {

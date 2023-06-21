@@ -25,6 +25,8 @@ public partial class ActivityObject
         public const string Id_bullet0001 = "bullet0001";
         public const string Id_bullet0002 = "bullet0002";
         public const string Id_shell0001 = "shell0001";
+        public const string Id_shell0002 = "shell0002";
+        public const string Id_shell0003 = "shell0003";
         /// <summary>
         /// 敌人死亡碎片
         /// </summary>
@@ -59,6 +61,8 @@ public partial class ActivityObject
         _activityRegisterMap.Add("bullet0001", "res://prefab/bullet/Bullet0001.tscn");
         _activityRegisterMap.Add("bullet0002", "res://prefab/bullet/Bullet0002.tscn");
         _activityRegisterMap.Add("shell0001", "res://prefab/shell/Shell0001.tscn");
+        _activityRegisterMap.Add("shell0002", "res://prefab/shell/Shell0002.tscn");
+        _activityRegisterMap.Add("shell0003", "res://prefab/shell/Shell0003.tscn");
         _activityRegisterMap.Add("effect0001", "res://prefab/effect/activityObject/Effect0001.tscn");
         _activityRegisterMap.Add("other_door_e", "res://prefab/map/RoomDoor_E.tscn");
         _activityRegisterMap.Add("other_door_w", "res://prefab/map/RoomDoor_W.tscn");
