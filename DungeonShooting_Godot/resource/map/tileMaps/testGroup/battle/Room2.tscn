@@ -153,7 +153,7 @@ Altitude = 0
 [node name="EnemyMark13" type="Node2D" parent="."]
 position = Vector2(211, 79)
 script = ExtResource("3_v71xh")
-Weapon1Id = "0005(ResidueAmmo:10,CurrAmmon:0)"
+Weapon1Id = "0005(ResidueAmmo:0,CurrAmmon:10)"
 Type = 4
 ItemExpression = "0001"
 Layer = 1

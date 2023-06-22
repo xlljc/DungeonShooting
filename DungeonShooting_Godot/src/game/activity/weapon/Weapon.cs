@@ -1090,13 +1090,14 @@ public abstract partial class Weapon : ActivityObject
         if (Attribute.BeginReloadSound != null)
         {
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            var volume = SoundManager.CalcRoleVolume(Attribute.BeginReloadSound.Volume, Master);
             if (Attribute.BeginReloadSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSound.Volume);
+                SoundManager.PlaySoundEffectPosition(Attribute.BeginReloadSound.Path, position, volume);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSoundDelayTime, Attribute.BeginReloadSound.Volume);
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSoundDelayTime, volume);
             }
         }
     }
@@ -1107,13 +1108,14 @@ public abstract partial class Weapon : ActivityObject
         if (Attribute.ReloadSound != null)
         {
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            var volume = SoundManager.CalcRoleVolume(Attribute.ReloadSound.Volume, Master);
             if (Attribute.ReloadSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound.Path, position, Attribute.ReloadSound.Volume);
+                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound.Path, position, volume);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound.Path, position, Attribute.ReloadSoundDelayTime, Attribute.ReloadSound.Volume);
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound.Path, position, Attribute.ReloadSoundDelayTime, volume);
             }
         }
     }
@@ -1123,8 +1125,9 @@ public abstract partial class Weapon : ActivityObject
     {
         if (Attribute.ReloadFinishSound != null)
         {
+            var volume = SoundManager.CalcRoleVolume(Attribute.ReloadFinishSound.Volume, Master);
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            SoundManager.PlaySoundEffectPosition(Attribute.ReloadFinishSound.Path, position, Attribute.ReloadFinishSound.Volume);
+            SoundManager.PlaySoundEffectPosition(Attribute.ReloadFinishSound.Path, position, volume);
         }
     }
 
@@ -1133,8 +1136,9 @@ public abstract partial class Weapon : ActivityObject
     {
         if (Attribute.ShootSound != null)
         {
+            var volume = SoundManager.CalcRoleVolume(Attribute.ShootSound.Volume, Master);
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, Attribute.ShootSound.Volume);
+            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, volume);
         }
     }
 
@@ -1144,13 +1148,14 @@ public abstract partial class Weapon : ActivityObject
         if (Attribute.BeLoadedSound != null)
         {
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            var volume = SoundManager.CalcRoleVolume(Attribute.BeLoadedSound.Volume, Master);
             if (Attribute.BeLoadedSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.BeLoadedSound.Path, position, Attribute.BeLoadedSound.Volume);
+                SoundManager.PlaySoundEffectPosition(Attribute.BeLoadedSound.Path, position, volume);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeLoadedSound.Path, position, Attribute.BeLoadedSoundDelayTime, Attribute.BeLoadedSound.Volume);
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeLoadedSound.Path, position, Attribute.BeLoadedSoundDelayTime, volume);
             }
         }
     }

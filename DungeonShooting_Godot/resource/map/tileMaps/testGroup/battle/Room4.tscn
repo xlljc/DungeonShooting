@@ -149,7 +149,7 @@ Altitude = 0
 
 [node name="EnemyMark13" type="Node2D" parent="."]
 script = ExtResource("3_tkueb")
-Weapon1Id = "0005(ResidueAmmo:10,CurrAmmon:0)"
+Weapon1Id = "0005(ResidueAmmo:0,CurrAmmon:10)"
 Type = 4
 ItemExpression = "0001"
 Layer = 1
@@ -161,7 +161,7 @@ Altitude = 0
 [node name="EnemyMark14" type="Node2D" parent="."]
 position = Vector2(346, -8)
 script = ExtResource("3_tkueb")
-Weapon1Id = "0005(ResidueAmmo:10,CurrAmmon:0)"
+Weapon1Id = "0005(ResidueAmmo:0,CurrAmmon:10)"
 Type = 4
 ItemExpression = "0001"
 Layer = 1
@@ -173,7 +173,7 @@ Altitude = 0
 [node name="EnemyMark15" type="Node2D" parent="."]
 position = Vector2(359, 312)
 script = ExtResource("3_tkueb")
-Weapon1Id = "0005(ResidueAmmo:10,CurrAmmon:0)"
+Weapon1Id = "0005(ResidueAmmo:0,CurrAmmon:10)"
 Type = 4
 ItemExpression = "0001"
 Layer = 1
@@ -185,7 +185,7 @@ Altitude = 0
 [node name="EnemyMark16" type="Node2D" parent="."]
 position = Vector2(-8, 311)
 script = ExtResource("3_tkueb")
-Weapon1Id = "0005(ResidueAmmo:10,CurrAmmon:0)"
+Weapon1Id = "0005(ResidueAmmo:0,CurrAmmon:10)"
 Type = 4
 ItemExpression = "0001"
 Layer = 1
