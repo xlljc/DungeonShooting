@@ -263,17 +263,16 @@ public static partial class ExcelConfig
         public string BulletId;
 
         /// <summary>
-        /// 默认抛出的弹壳
+        /// 子弹造成的最大伤害
         /// </summary>
         [JsonInclude]
-        public string ShellId;
+        public int BulletMaxHarm;
 
         /// <summary>
-        /// 投抛弹壳的延时时间, 在射击或者上膛后会触发抛弹壳效果 <br/>
-        /// 如果为负数, 则不自动抛弹
+        /// 子弹造成的最小伤害
         /// </summary>
         [JsonInclude]
-        public float ThrowShellDelayTime;
+        public int BulletMinHarm;
 
         /// <summary>
         /// 子弹最小偏移角度 <br/>
@@ -311,6 +310,19 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public float BulletMaxDistance;
+
+        /// <summary>
+        /// 默认抛出的弹壳
+        /// </summary>
+        [JsonInclude]
+        public string ShellId;
+
+        /// <summary>
+        /// 投抛弹壳的延时时间, 在射击或者上膛后会触发抛弹壳效果 <br/>
+        /// 如果为负数, 则不自动抛弹
+        /// </summary>
+        [JsonInclude]
+        public float ThrowShellDelayTime;
 
         /// <summary>
         /// 投抛状态下物体碰撞器大小
@@ -449,14 +461,16 @@ public static partial class ExcelConfig
             inst.DefaultAngle = DefaultAngle;
             inst.UpliftAngleRestore = UpliftAngleRestore;
             inst.BulletId = BulletId;
-            inst.ShellId = ShellId;
-            inst.ThrowShellDelayTime = ThrowShellDelayTime;
+            inst.BulletMaxHarm = BulletMaxHarm;
+            inst.BulletMinHarm = BulletMinHarm;
             inst.BulletMinDeviationAngle = BulletMinDeviationAngle;
             inst.BulletMaxDeviationAngle = BulletMaxDeviationAngle;
             inst.BulletMaxSpeed = BulletMaxSpeed;
             inst.BulletMinSpeed = BulletMinSpeed;
             inst.BulletMinDistance = BulletMinDistance;
             inst.BulletMaxDistance = BulletMaxDistance;
+            inst.ShellId = ShellId;
+            inst.ThrowShellDelayTime = ThrowShellDelayTime;
             inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.ShootSound = ShootSound;
             inst.BeginReloadSound = BeginReloadSound;

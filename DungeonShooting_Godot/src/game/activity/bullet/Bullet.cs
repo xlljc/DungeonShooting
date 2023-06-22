@@ -17,6 +17,16 @@ public partial class Bullet : ActivityObject
     /// </summary>
     public Weapon Weapon { get; private set; }
 
+    /// <summary>
+    /// 最小伤害
+    /// </summary>
+    public int MinHarm { get; set; } = 4;
+    
+    /// <summary>
+    /// 最大伤害
+    /// </summary>
+    public int MaxHarm { get; set; } = 4;
+
     // 最大飞行距离
     private float MaxDistance;
 
@@ -89,7 +99,7 @@ public partial class Bullet : ActivityObject
             node.GlobalPosition = GlobalPosition;
             node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
             
-            role.CallDeferred(nameof(Role.Hurt), 4, Rotation);
+            role.CallDeferred(nameof(Role.Hurt), Utils.RandomRangeInt(MinHarm, MaxHarm), Rotation);
             Destroy();
         }
     }

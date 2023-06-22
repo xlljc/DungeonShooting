@@ -1078,6 +1078,9 @@ public abstract partial class Weapon : ActivityObject
                 //普通换弹处理
                 ReloadHandler();
             }
+            
+            //上膛标记完成
+            _beLoadedState = 2;
         }
     }
 
@@ -1218,7 +1221,6 @@ public abstract partial class Weapon : ActivityObject
     private void ReloadFinishHandler()
     {
         // GD.Print("装弹完成.");
-        _beLoadedState = 2;
         OnReloadFinish();
     }
 
@@ -1644,6 +1646,8 @@ public abstract partial class Weapon : ActivityObject
             fireRotation + Mathf.DegToRad(Utils.RandomRangeFloat(Attribute.BulletMinDeviationAngle, Attribute.BulletMaxDeviationAngle)),
             GetAttackLayer()
         );
+        bullet.MinHarm = Attribute.BulletMinHarm;
+        bullet.MaxHarm = Attribute.BulletMaxHarm;
         bullet.PutDown(RoomLayerEnum.YSortLayer);
         return bullet;
     }
