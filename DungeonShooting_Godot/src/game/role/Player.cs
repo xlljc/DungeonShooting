@@ -174,6 +174,8 @@ public partial class Player : Role
     protected override void OnDie()
     {
         GameCamera.Main.SetFollowTarget(null);
+        BasisVelocity = Vector2.Zero;
+        MoveController.ClearForce();
         UiManager.Open_Settlement();
         //GameApplication.Instance.World.ProcessMode = ProcessModeEnum.WhenPaused;
     }

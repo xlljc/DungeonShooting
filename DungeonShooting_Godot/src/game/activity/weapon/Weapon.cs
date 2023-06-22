@@ -1408,7 +1408,7 @@ public abstract partial class Weapon : ActivityObject
                         result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_pickup_png;
                         return result;
                     }
-                    else if (masterWeapon != null && masterWeapon.Attribute.WeightType == Attribute.WeightType) //替换武器
+                    else if (masterWeapon != null) //替换武器  // && masterWeapon.Attribute.WeightType == Attribute.WeightType)
                     {
                         //可以互动, 切换武器
                         result.CanInteractive = true;
@@ -1615,7 +1615,7 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     protected ActivityObject ThrowShell(string shellId, float speedScale = 1)
     {
-        var shellPosition = Master.MountPoint.Position + ShellPoint.Position;
+        var shellPosition = (Master != null ? Master.MountPoint.Position : Position) + ShellPoint.Position;
         var startPos = ShellPoint.GlobalPosition;
         var startHeight = -shellPosition.Y;
         startPos.Y += startHeight;
@@ -1624,10 +1624,18 @@ public abstract partial class Weapon : ActivityObject
         var velocity = new Vector2(Utils.RandomRangeInt((int)(20 * speedScale), (int)(60 * speedScale)), 0).Rotated(direction * Mathf.Pi / 180);
         var rotate = Utils.RandomRangeInt((int)(-720 * speedScale), (int)(720 * speedScale));
         var shell = Create(shellId);
-        shell.Rotation = Master.MountPoint.RealRotation;
-        shell.InheritVelocity(Master);
+        shell.Rotation = (Master != null ? Master.MountPoint.RealRotation : Rotation);
+        shell.InheritVelocity(Master != null ? Master : this);
         shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
-        Master.AffiliationArea.InsertItem(shell);
+        if (Master == null)
+        {
+            AffiliationArea.InsertItem(shell);
+        }
+        else
+        {
+            Master.AffiliationArea.InsertItem(shell);
+        }
+        
         return shell;
     }
 

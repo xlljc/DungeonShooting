@@ -214,8 +214,7 @@ public partial class ImageCanvas
                     }
                 } while (_drawingQueueItems.Count > 0 && (DateTime.Now - startTime).TotalMilliseconds < step1Time);
 
-                GD.Print($"当前帧绘制完成数量: {index}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
-                
+                //GD.Print($"当前帧绘制完成数量: {index}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
             }
 
             //重绘画布
@@ -281,7 +280,7 @@ public partial class ImageCanvas
                 }
             }
             
-            GD.Print($"当前帧进入绘制绘队列数量: {index}, 待绘制队列数量: {_queueItems.Count}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
+            //GD.Print($"当前帧进入绘制绘队列数量: {index}, 待绘制队列数量: {_queueItems.Count}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
         }
     }
 
