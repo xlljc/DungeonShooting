@@ -8,9 +8,6 @@ public partial class Gun : Weapon
 {
     protected override void OnFire()
     {
-        //创建一个弹壳
-        ThrowShell(Attribute.ShellId);
-
         if (Master == Player.Current)
         {
             //创建抖动

@@ -339,7 +339,6 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     protected virtual void OnBeginReload()
     {
-        
     }
     
     /// <summary>
@@ -664,9 +663,18 @@ public abstract partial class Weapon : ActivityObject
         
         if (_beLoadedState == 0 || _beLoadedState == -1)  //需要执行上膛操作
         {
-            if (_attackTimer <= 0 && justDown)
+            if (justDown && !Reloading)
             {
-                BeLoadedHandler();
+                if (CurrAmmo <= 0)
+                {
+                    //子弹不够, 触发换弹
+                    Reload();
+                }
+                else if (_attackTimer <= 0)
+                {
+                    //触发上膛操作
+                    BeLoadedHandler();
+                }
             }
         }
         else if (_beLoadedState == 1)  //上膛中
@@ -900,6 +908,12 @@ public abstract partial class Weapon : ActivityObject
         //播放射击音效
         PlayShootSound();
         
+        //抛弹
+        if (Attribute.ContinuousShoot && Attribute.ShellId != null)
+        {
+            ThrowShellHandler(1f);
+        }
+        
         //触发开火函数
         OnFire();
 
@@ -1036,7 +1050,7 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     public void Reload()
     {
-        if (CurrAmmo < Attribute.AmmoCapacity && ResidueAmmo > 0 && !Reloading)
+        if (CurrAmmo < Attribute.AmmoCapacity && ResidueAmmo > 0 && !Reloading && _beLoadedState != 1)
         {
             Reloading = true;
             _playReloadFinishSoundFlag = false;
@@ -1045,6 +1059,12 @@ public abstract partial class Weapon : ActivityObject
             PlayBeginReloadSound();
             
             // GD.Print("开始换弹.");
+            //抛弹
+            if (!Attribute.ContinuousShoot && (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0 && Attribute.ShellId != null)
+            {
+                ThrowShellHandler(0.6f);
+            }
+            
             //第一次换弹
             OnBeginReload();
 
@@ -1147,8 +1167,13 @@ public abstract partial class Weapon : ActivityObject
                 //等待执行自动上膛
                 _beLoadedState = -1;
             }
+            else
+            {
+                //没子弹了, 需要手动上膛
+                _beLoadedState = 0;
+            }
         }
-        else if (CurrAmmo > 0)
+        else
         {
             //手动上膛
             _beLoadedState = 0;
@@ -1193,6 +1218,7 @@ public abstract partial class Weapon : ActivityObject
     private void ReloadFinishHandler()
     {
         // GD.Print("装弹完成.");
+        _beLoadedState = 2;
         OnReloadFinish();
     }
 
@@ -1206,6 +1232,12 @@ public abstract partial class Weapon : ActivityObject
     //上膛处理
     private void BeLoadedHandler()
     {
+        //上膛抛弹
+        if (!Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0 && Attribute.ShellId != null)
+        {
+            ThrowShellHandler(0.6f);
+        }
+
         //开始上膛
         OnBeginBeLoaded();
 
@@ -1237,6 +1269,20 @@ public abstract partial class Weapon : ActivityObject
 
         //播放上膛音效
         PlayBeLoadedSound();
+    }
+
+    //抛弹逻辑
+    private void ThrowShellHandler(float speedScale)
+    {
+        //创建一个弹壳
+        if (Attribute.ThrowShellDelayTime > 0)
+        {
+            CallDelay(Attribute.ThrowShellDelayTime, () => ThrowShell(Attribute.ShellId, speedScale));
+        }
+        else if (Attribute.ThrowShellDelayTime == 0)
+        {
+            ThrowShell(Attribute.ShellId, speedScale);
+        }
     }
 
     //停止当前的换弹状态
@@ -1565,16 +1611,16 @@ public abstract partial class Weapon : ActivityObject
     /// <summary>
     /// 投抛弹壳的默认实现方式, shellId为弹壳id
     /// </summary>
-    protected ActivityObject ThrowShell(string shellId)
+    protected ActivityObject ThrowShell(string shellId, float speedScale = 1)
     {
         var shellPosition = Master.MountPoint.Position + ShellPoint.Position;
         var startPos = ShellPoint.GlobalPosition;
         var startHeight = -shellPosition.Y;
         startPos.Y += startHeight;
         var direction = GlobalRotationDegrees + Utils.RandomRangeInt(-30, 30) + 180;
-        var verticalSpeed = Utils.RandomRangeInt(60, 120);
-        var velocity = new Vector2(Utils.RandomRangeInt(20, 60), 0).Rotated(direction * Mathf.Pi / 180);
-        var rotate = Utils.RandomRangeInt(-720, 720);
+        var verticalSpeed = Utils.RandomRangeInt((int)(60 * speedScale), (int)(120 * speedScale));
+        var velocity = new Vector2(Utils.RandomRangeInt((int)(20 * speedScale), (int)(60 * speedScale)), 0).Rotated(direction * Mathf.Pi / 180);
+        var rotate = Utils.RandomRangeInt((int)(-720 * speedScale), (int)(720 * speedScale));
         var shell = Create(shellId);
         shell.Rotation = Master.MountPoint.RealRotation;
         shell.InheritVelocity(Master);

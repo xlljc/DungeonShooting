@@ -269,6 +269,13 @@ public static partial class ExcelConfig
         public string ShellId;
 
         /// <summary>
+        /// 投抛弹壳的延时时间, 在射击或者上膛后会触发抛弹壳效果 <br/>
+        /// 如果为负数, 则不自动抛弹
+        /// </summary>
+        [JsonInclude]
+        public float ThrowShellDelayTime;
+
+        /// <summary>
         /// 子弹最小偏移角度 <br/>
         /// 用于设置子弹偏移朝向, 该属性和射半径效果类似, 但与其不同的是, 散射半径是用来控制枪口朝向的, 而该属性是控制子弹朝向的, 可用于制作霰弹枪子弹效果
         /// </summary>
@@ -443,6 +450,7 @@ public static partial class ExcelConfig
             inst.UpliftAngleRestore = UpliftAngleRestore;
             inst.BulletId = BulletId;
             inst.ShellId = ShellId;
+            inst.ThrowShellDelayTime = ThrowShellDelayTime;
             inst.BulletMinDeviationAngle = BulletMinDeviationAngle;
             inst.BulletMaxDeviationAngle = BulletMaxDeviationAngle;
             inst.BulletMaxSpeed = BulletMaxSpeed;
