@@ -35,7 +35,7 @@ Altitude = 0
 position = Vector2(115, 24)
 script = ExtResource("4_vkqhy")
 Type = 5
-ItemExpression = "0003(ResidueAmmo:6,CurrAmmon:10)"
+ItemExpression = "0003(ResidueAmmo:6,CurrAmmon:12)"
 DelayTime = 2.0
 BirthRect = Vector2i(50, 50)
 
@@ -43,7 +43,7 @@ BirthRect = Vector2i(50, 50)
 position = Vector2(116, -39)
 script = ExtResource("4_vkqhy")
 Type = 5
-ItemExpression = "0003(ResidueAmmo:6,CurrAmmon:10)"
+ItemExpression = "0003(ResidueAmmo:6,CurrAmmon:12)"
 WaveNumber = 2
 BirthRect = Vector2i(50, 50)
 
@@ -73,7 +73,7 @@ Altitude = 0
 position = Vector2(117, 70)
 script = ExtResource("4_vkqhy")
 Type = 5
-ItemExpression = "0002(ResidueAmmo:7,CurrAmmon:10)"
+ItemExpression = "0002(ResidueAmmo:7,CurrAmmon:7)"
 WaveNumber = 3
 BirthRect = Vector2i(50, 50)
 
@@ -81,7 +81,7 @@ BirthRect = Vector2i(50, 50)
 position = Vector2(221, -27)
 script = ExtResource("4_vkqhy")
 Type = 5
-ItemExpression = "0002(ResidueAmmo:7,CurrAmmon:10)"
+ItemExpression = "0002(ResidueAmmo:7,CurrAmmon:7)"
 WaveNumber = 3
 BirthRect = Vector2i(50, 50)
 
@@ -121,7 +121,7 @@ Altitude = 0
 [node name="EnemyMark8" type="Node2D" parent="."]
 position = Vector2(118, 16)
 script = ExtResource("3_68nmn")
-Weapon1Id = "0002(ResidueAmmo:7,CurrAmmon:10)"
+Weapon1Id = "0002(ResidueAmmo:7,CurrAmmon:7)"
 Type = 4
 ItemExpression = "0001"
 Layer = 1

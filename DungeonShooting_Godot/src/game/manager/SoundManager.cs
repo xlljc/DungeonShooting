@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Godot;
 
@@ -16,27 +17,51 @@ public enum BUS
 /// </summary>
 public partial class SoundManager
 {
-    private static Stack<AudioPlayer2D> _streamPlayer2DStack = new Stack<AudioPlayer2D>();
-    private static Stack<AudioPlayer> _streamPlayerStack = new Stack<AudioPlayer>();
+    /// <summary>
+    /// 全局音效音量, 范围 0 - 1
+    /// </summary>
+    public static float SoundVolume { get; set; } = 0.4f;
+    
+    private static Stack<GameAudioPlayer2D> _streamPlayer2DStack = new Stack<GameAudioPlayer2D>();
+    private static Stack<GameAudioPlayer> _streamPlayerStack = new Stack<GameAudioPlayer>();
+    private static HashSet<string> _playingSoundResourceList = new HashSet<string>();
 
     /// <summary>
     /// 2D音频播放节点
     /// </summary>
-    private partial class AudioPlayer2D : AudioStreamPlayer2D
+    public partial class GameAudioPlayer2D : AudioStreamPlayer2D
     {
-        private float _delayTimer = -1;
-        
         public override void _Ready()
         {
             Finished += OnPlayFinish;
         }
 
-        /// <summary>
-        /// 延时播放
-        /// </summary>
-        public void DelayPlay(float time)
+        public void PlaySoundByResource(string path, float delayTime)
         {
-            _delayTimer = time;
+            if (delayTime <= 0)
+            {
+                PlaySoundByResource(path);
+            }
+            else
+            {
+                GameApplication.Instance.StartCoroutine(DelayPlay(path, delayTime));
+            }
+        }
+
+        public void PlaySoundByResource(string path)
+        {
+            if (_playingSoundResourceList.Contains(path))
+            {
+                GD.Print("重复播放: " + path);
+            }
+            else
+            {
+                _playingSoundResourceList.Add(path);
+                var sound = ResourceManager.Load<AudioStream>(path);
+                Stream = sound;
+                Bus = Enum.GetName(typeof(BUS), 1);
+                Play();
+            }
         }
 
         /// <summary>
@@ -47,31 +72,25 @@ public partial class SoundManager
             Stop();
             OnPlayFinish();
         }
-        
-        public override void _Process(double delta)
-        {
-            if (_delayTimer > 0)
-            {
-                _delayTimer -= (float)delta;
-                if (_delayTimer <= 0)
-                {
-                    Play();
-                }
-            }
-        }
-        
+
         private void OnPlayFinish()
         {
-            _delayTimer = -1;
             RecycleAudioPlayer2D(this);
+        }
+
+        private IEnumerator DelayPlay(string path, float delayTime)
+        {
+            yield return new WaitForSeconds(delayTime);
+            PlaySoundByResource(path);
         }
     }
 
     /// <summary>
     /// 音频播放节点
     /// </summary>
-    private partial class AudioPlayer : AudioStreamPlayer
+    public partial class GameAudioPlayer : AudioStreamPlayer
     {
+        public string SoundResourceName { get; set; }
         public override void _Ready()
         {
             Finished += OnPlayFinish;
@@ -95,12 +114,17 @@ public partial class SoundManager
         }
     }
 
+    public static void Update(float delta)
+    {
+        _playingSoundResourceList.Clear();
+    }
+    
     /// <summary>
     /// 播放声音 用于bgm
     /// </summary>
     /// <param name="soundName">bgm路径</param>
     /// <param name="volume">音量</param>
-    public static AudioStreamPlayer PlayMusic(string soundName, float volume = 0.5f)
+    public static GameAudioPlayer PlayMusic(string soundName, float volume = 0.5f)
     {
         var sound = ResourceManager.Load<AudioStream>(soundName);
         var soundNode = GetAudioPlayerInstance();
@@ -117,7 +141,7 @@ public partial class SoundManager
     /// </summary>
     /// <param name="soundName">音效文件路径</param>
     /// <param name="volume">音量 (0 - 1)</param>
-    public static AudioStreamPlayer PlaySoundEffect(string soundName, float volume = 1f)
+    public static GameAudioPlayer PlaySoundEffect(string soundName, float volume = 1f)
     {
         var sound = ResourceManager.Load<AudioStream>(soundName);
         var soundNode = GetAudioPlayerInstance();
@@ -136,25 +160,9 @@ public partial class SoundManager
     /// <param name="pos">发声节点所在全局坐标</param>
     /// <param name="volume">音量 (0 - 1)</param>
     /// <param name="target">挂载节点, 为null则挂载到房间根节点下</param>
-    public static AudioStreamPlayer2D PlaySoundEffectPosition(string soundName, Vector2 pos, float volume = 1f, Node2D target = null)
+    public static GameAudioPlayer2D PlaySoundEffectPosition(string soundName, Vector2 pos, float volume = 1f, Node2D target = null)
     {
-        var sound = ResourceManager.Load<AudioStream>(soundName);
-        var soundNode = GetAudioPlayer2DInstance();
-        if (target != null)
-        {
-            target.AddChild(soundNode);
-        }
-        else
-        {
-            GameApplication.Instance.GlobalNodeRoot.AddChild(soundNode);
-        }
-        
-        soundNode.GlobalPosition = pos;
-        soundNode.Stream = sound;
-        soundNode.Bus = Enum.GetName(typeof(BUS), 1);
-        soundNode.VolumeDb = Mathf.LinearToDb(Mathf.Clamp(volume, 0, 1));
-        soundNode.Play();
-        return soundNode;
+        return PlaySoundEffectPositionDelay(soundName, pos, 0, volume, target);
     }
 
     /// <summary>
@@ -165,9 +173,8 @@ public partial class SoundManager
     /// <param name="delayTime">延时时间</param>
     /// <param name="volume">音量 (0 - 1)</param>
     /// <param name="target">挂载节点, 为null则挂载到房间根节点下</param>
-    public static AudioStreamPlayer2D PlaySoundEffectPositionDelay(string soundName, Vector2 pos, float delayTime, float volume = 1f, Node2D target = null)
+    public static GameAudioPlayer2D PlaySoundEffectPositionDelay(string soundName, Vector2 pos, float delayTime, float volume = 1f, Node2D target = null)
     {
-        var sound = ResourceManager.Load<AudioStream>(soundName);
         var soundNode = GetAudioPlayer2DInstance();
         if (target != null)
         {
@@ -179,24 +186,22 @@ public partial class SoundManager
         }
         
         soundNode.GlobalPosition = pos;
-        soundNode.Stream = sound;
-        soundNode.Bus = Enum.GetName(typeof(BUS), 1);
-        soundNode.VolumeDb = Mathf.LinearToDb(Mathf.Clamp(volume, 0, 1));
-        soundNode.DelayPlay(delayTime);
+        soundNode.VolumeDb = Mathf.LinearToDb(Mathf.Clamp(volume * SoundVolume, 0, 1));
+        soundNode.PlaySoundByResource(soundName, delayTime);
         return soundNode;
     }
 
     /// <summary>
     /// 获取2D音频播放节点
     /// </summary>
-    private static AudioPlayer2D GetAudioPlayer2DInstance()
+    private static GameAudioPlayer2D GetAudioPlayer2DInstance()
     {
         if (_streamPlayer2DStack.Count > 0)
         {
             return _streamPlayer2DStack.Pop();
         }
 
-        var inst = new AudioPlayer2D();
+        var inst = new GameAudioPlayer2D();
         inst.AreaMask = 0;
         return inst;
     }
@@ -204,20 +209,20 @@ public partial class SoundManager
     /// <summary>
     /// 获取音频播放节点
     /// </summary>
-    private static AudioPlayer GetAudioPlayerInstance()
+    private static GameAudioPlayer GetAudioPlayerInstance()
     {
         if (_streamPlayerStack.Count > 0)
         {
             return _streamPlayerStack.Pop();
         }
 
-        return new AudioPlayer();
+        return new GameAudioPlayer();
     }
 
     /// <summary>
     /// 回收2D音频播放节点
     /// </summary>
-    private static void RecycleAudioPlayer2D(AudioPlayer2D inst)
+    private static void RecycleAudioPlayer2D(GameAudioPlayer2D inst)
     {
         var parent = inst.GetParent();
         if (parent != null)
@@ -232,8 +237,21 @@ public partial class SoundManager
     /// <summary>
     /// 回收音频播放节点
     /// </summary>
-    private static void RecycleAudioPlayer(AudioPlayer inst)
+    private static void RecycleAudioPlayer(GameAudioPlayer inst)
     {
         _streamPlayerStack.Push(inst);
+    }
+
+    /// <summary>
+    /// 计算指定角色播放音效使用的音量
+    /// </summary>
+    public static float CalcRoleVolume(float volume, Role role)
+    {
+        if (role is not Player)
+        {
+            return volume * 0.4f;
+        }
+
+        return volume;
     }
 }

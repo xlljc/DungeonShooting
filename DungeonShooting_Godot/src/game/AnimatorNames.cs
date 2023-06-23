@@ -47,5 +47,5 @@ public static class AnimatorNames
     /// <summary>
     /// 子弹上膛
     /// </summary>
-    public const string Equip = "equip";
+    public const string BeLoaded = "beLoaded";
 }

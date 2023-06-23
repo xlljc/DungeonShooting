@@ -75,7 +75,7 @@ material = SubResource("ShaderMaterial_cbiyh")
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_o36tv")
 sprite_frames = ExtResource("3_4h3je")
-animation = &"equip"
+animation = &"beLoaded"
 
 [node name="ShellPoint" type="Marker2D" parent="AnimatedSprite"]
 position = Vector2(-3, -2)

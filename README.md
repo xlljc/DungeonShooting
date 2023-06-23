@@ -1,5 +1,5 @@
 
-一款由Godot开发的地牢射击类型的游戏, 脚本语言使用的是C#, 当前项目使用的Godot版本: Godot_v4.1.dev
+一款由Godot开发的地牢射击类型的游戏, 脚本语言使用的是C#, 当前项目使用的Godot版本: Godot_v4.1.beta
 
 --- 
 ### 游戏定义
@@ -18,6 +18,7 @@
 ### 启动项目
 git仓库的目录结构如下
 > ├ DungeonShooting_Document (项目帮助文档, 更新日志相关的目录)  
+> ├ DungeonShooting_ExcelTool (项目excel配置表导出工具源代码)  
 > └ DungeonShooting_Godot (Godot工程目录)
 
 下载好指定的Godot版本, 注意使用的是Godot_Mono版, 使用Godot打开`DungeonShooting_Godot/project.godot`, 如果是第一次打开项目会弹出一个找不到资源的提示, 这是因为项目没有编译过, 点击Godot右上角`build`, 然后打`开项目设置`, 在`插件`这一个页签下启用`DungeonShooting_plugin`这个插件, 然后项目就可以正常运行了

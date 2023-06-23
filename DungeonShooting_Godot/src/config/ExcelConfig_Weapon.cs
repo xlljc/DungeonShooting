@@ -119,13 +119,25 @@ public static partial class ExcelConfig
         public float MinChargeTime;
 
         /// <summary>
-        /// 连续发射最小次数, 仅当 ContinuousShoot 为 false 时生效
+        /// 单次射击后是否自动执行上膛操作, 必须将 'ContinuousShoot' 设置为 false
+        /// </summary>
+        [JsonInclude]
+        public bool AutoBeLoaded;
+
+        /// <summary>
+        /// 上膛时间, 如果时间为0, 则不会播放上膛动画和音效, 可以视为没有上膛动作, 必须将 'ContinuousShoot' 设置为 false
+        /// </summary>
+        [JsonInclude]
+        public float BeLoadedTime;
+
+        /// <summary>
+        /// 连续发射最小次数, 仅当 'ContinuousShoot' 为 false 时生效
         /// </summary>
         [JsonInclude]
         public int MinContinuousCount;
 
         /// <summary>
-        /// 连续发射最大次数, 仅当 ContinuousShoot 为 false 时生效
+        /// 连续发射最大次数, 仅当 'ContinuousShoot' 为 false 时生效
         /// </summary>
         [JsonInclude]
         public int MaxContinuousCount;
@@ -143,7 +155,7 @@ public static partial class ExcelConfig
         public float StartFiringSpeed;
 
         /// <summary>
-        /// 最终射速, 最终每分钟能开火次数, 仅当 ContinuousShoot 为 true 时生效
+        /// 最终射速, 最终每分钟能开火次数, 仅当 'ContinuousShoot' 为 true 时生效
         /// </summary>
         [JsonInclude]
         public float FinalFiringSpeed;
@@ -251,6 +263,18 @@ public static partial class ExcelConfig
         public string BulletId;
 
         /// <summary>
+        /// 子弹造成的最大伤害
+        /// </summary>
+        [JsonInclude]
+        public int BulletMaxHarm;
+
+        /// <summary>
+        /// 子弹造成的最小伤害
+        /// </summary>
+        [JsonInclude]
+        public int BulletMinHarm;
+
+        /// <summary>
         /// 子弹最小偏移角度 <br/>
         /// 用于设置子弹偏移朝向, 该属性和射半径效果类似, 但与其不同的是, 散射半径是用来控制枪口朝向的, 而该属性是控制子弹朝向的, 可用于制作霰弹枪子弹效果
         /// </summary>
@@ -286,6 +310,19 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public float BulletMaxDistance;
+
+        /// <summary>
+        /// 默认抛出的弹壳
+        /// </summary>
+        [JsonInclude]
+        public string ShellId;
+
+        /// <summary>
+        /// 投抛弹壳的延时时间, 在射击或者上膛后会触发抛弹壳效果 <br/>
+        /// 如果为负数, 则不自动抛弹
+        /// </summary>
+        [JsonInclude]
+        public float ThrowShellDelayTime;
 
         /// <summary>
         /// 投抛状态下物体碰撞器大小
@@ -335,13 +372,13 @@ public static partial class ExcelConfig
         /// <summary>
         /// 上膛音效
         /// </summary>
-        public Sound EquipSound;
+        public Sound BeLoadedSound;
 
         /// <summary>
-        /// 上膛音效延时时间
+        /// 上膛音效延时时间, 这个时间应该小于'BeLoadedTime'
         /// </summary>
         [JsonInclude]
-        public float EquipSoundDelayTime;
+        public float BeLoadedSoundDelayTime;
 
         /// <summary>
         /// 其他音效
@@ -400,6 +437,8 @@ public static partial class ExcelConfig
             inst.AloneReloadCanShoot = AloneReloadCanShoot;
             inst.LooseShoot = LooseShoot;
             inst.MinChargeTime = MinChargeTime;
+            inst.AutoBeLoaded = AutoBeLoaded;
+            inst.BeLoadedTime = BeLoadedTime;
             inst.MinContinuousCount = MinContinuousCount;
             inst.MaxContinuousCount = MaxContinuousCount;
             inst.TriggerInterval = TriggerInterval;
@@ -422,12 +461,16 @@ public static partial class ExcelConfig
             inst.DefaultAngle = DefaultAngle;
             inst.UpliftAngleRestore = UpliftAngleRestore;
             inst.BulletId = BulletId;
+            inst.BulletMaxHarm = BulletMaxHarm;
+            inst.BulletMinHarm = BulletMinHarm;
             inst.BulletMinDeviationAngle = BulletMinDeviationAngle;
             inst.BulletMaxDeviationAngle = BulletMaxDeviationAngle;
             inst.BulletMaxSpeed = BulletMaxSpeed;
             inst.BulletMinSpeed = BulletMinSpeed;
             inst.BulletMinDistance = BulletMinDistance;
             inst.BulletMaxDistance = BulletMaxDistance;
+            inst.ShellId = ShellId;
+            inst.ThrowShellDelayTime = ThrowShellDelayTime;
             inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.ShootSound = ShootSound;
             inst.BeginReloadSound = BeginReloadSound;
@@ -436,8 +479,8 @@ public static partial class ExcelConfig
             inst.ReloadSoundDelayTime = ReloadSoundDelayTime;
             inst.ReloadFinishSound = ReloadFinishSound;
             inst.ReloadFinishSoundAdvanceTime = ReloadFinishSoundAdvanceTime;
-            inst.EquipSound = EquipSound;
-            inst.EquipSoundDelayTime = EquipSoundDelayTime;
+            inst.BeLoadedSound = BeLoadedSound;
+            inst.BeLoadedSoundDelayTime = BeLoadedSoundDelayTime;
             inst.OtherSoundMap = OtherSoundMap;
             inst.AiUseAttribute = AiUseAttribute;
             inst.AiTargetLockingTime = AiTargetLockingTime;
@@ -461,7 +504,7 @@ public static partial class ExcelConfig
         public string __ReloadFinishSound;
 
         [JsonInclude]
-        public string __EquipSound;
+        public string __BeLoadedSound;
 
         [JsonInclude]
         public Dictionary<string, string> __OtherSoundMap;

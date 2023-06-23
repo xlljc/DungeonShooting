@@ -138,6 +138,7 @@ public partial class GameApplication : Node2D
 	{
 		var newDelta = (float)delta;
 		InputManager.Update(newDelta);
+		SoundManager.Update(newDelta);
 		
 		//协程更新
 		if (_coroutineList != null)

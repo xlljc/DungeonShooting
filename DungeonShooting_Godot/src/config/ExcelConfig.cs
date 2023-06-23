@@ -131,9 +131,9 @@ public static partial class ExcelConfig
                     item.ReloadFinishSound = Sound_Map[item.__ReloadFinishSound];
                 }
 
-                if (!string.IsNullOrEmpty(item.__EquipSound))
+                if (!string.IsNullOrEmpty(item.__BeLoadedSound))
                 {
-                    item.EquipSound = Sound_Map[item.__EquipSound];
+                    item.BeLoadedSound = Sound_Map[item.__BeLoadedSound];
                 }
 
                 if (item.__OtherSoundMap != null)

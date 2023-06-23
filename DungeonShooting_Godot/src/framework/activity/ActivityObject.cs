@@ -94,7 +94,10 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             if (value != _affiliationArea)
             {
                 _affiliationArea = value;
-                OnAffiliationChange();
+                if (!IsDestroyed)
+                {
+                    OnAffiliationChange();
+                }
             }
         }
     }
@@ -1079,6 +1082,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         }
 
         IsDestroyed = true;
+        if (AffiliationArea != null)
+        {
+            AffiliationArea.RemoveItem(this);
+        }
+        
         QueueFree();
         OnDestroy();
 

@@ -31,14 +31,6 @@ region = Rect2(180, 0, 36, 15)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_2tglc")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_b4jme")
 }, {
 "duration": 1.0,
@@ -57,6 +49,14 @@ animations = [{
 "texture": SubResource("AtlasTexture_p0dy6")
 }],
 "loop": false,
-"name": &"equip",
+"name": &"beLoaded",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_2tglc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
 }]
