@@ -16,37 +16,9 @@ script = ExtResource("3_m4jrh")
 Type = 1
 Altitude = 0
 
-[node name="ActivityMark4" type="Node2D" parent="."]
-position = Vector2(129, 68)
-script = ExtResource("3_m4jrh")
-Type = 5
-ItemExpression = "0002"
-WaveNumber = 2
-
-[node name="ActivityMark5" type="Node2D" parent="."]
-position = Vector2(128, 20)
-script = ExtResource("3_m4jrh")
-Type = 5
-ItemExpression = "0005"
-WaveNumber = 2
-
-[node name="ActivityMark6" type="Node2D" parent="."]
-position = Vector2(31, 18)
-script = ExtResource("3_m4jrh")
-Type = 5
-ItemExpression = "0001"
-WaveNumber = 2
-
 [node name="ActivityMark7" type="Node2D" parent="."]
-position = Vector2(31, 72)
+position = Vector2(79, 76)
 script = ExtResource("3_m4jrh")
 Type = 5
 ItemExpression = "0003"
-WaveNumber = 2
-
-[node name="ActivityMark8" type="Node2D" parent="."]
-position = Vector2(61, 62)
-script = ExtResource("3_m4jrh")
-Type = 5
-ItemExpression = "0006"
 WaveNumber = 2
