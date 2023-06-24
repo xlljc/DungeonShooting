@@ -200,6 +200,15 @@ public abstract partial class Role : ActivityObject
     }
 
     /// <summary>
+    /// 受到伤害时调用, 用于改变受到的伤害值
+    /// </summary>
+    /// <param name="damage">受到的伤害</param>
+    protected virtual int OnHandlerHurt(int damage)
+    {
+        return damage;
+    }
+    
+    /// <summary>
     /// 当可互动的物体改变时调用, result 参数为 null 表示变为不可互动
     /// </summary>
     /// <param name="result">检测是否可互动时的返回值</param>
@@ -506,6 +515,12 @@ public abstract partial class Role : ActivityObject
     /// <param name="angle">角度</param>
     public virtual void Hurt(int damage, float angle)
     {
+        damage = OnHandlerHurt(damage);
+        if (damage <= 0)
+        {
+            return;
+        }
+        
         OnHit(damage);
         if (Shield > 0)
         {

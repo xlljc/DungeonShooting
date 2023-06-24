@@ -163,7 +163,7 @@ public partial class DungeonManager : Node2D
         
         //打开游戏中的ui
         var roomUi = UiManager.Open_RoomUI();
-        roomUi.InitData(player);
+        roomUi.InitData();
         //派发进入地牢事件
         EventManager.EmitEvent(EventEnum.OnEnterDungeon);
         

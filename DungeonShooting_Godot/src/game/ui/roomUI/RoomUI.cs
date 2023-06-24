@@ -178,100 +178,34 @@ public abstract partial class RoomUI : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.HealthBar.HpSlot.HpBar
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.LifeBar.Life
     /// </summary>
-    public class UiNode_HpBar : IUiNode<Godot.TextureRect, UiNode_HpBar>
+    public class UiNode_Life : IUiNode<Godot.TextureRect, UiNode_Life>
     {
-        public UiNode_HpBar(Godot.TextureRect node) : base(node) {  }
-        public override UiNode_HpBar Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public UiNode_Life(Godot.TextureRect node) : base(node) {  }
+        public override UiNode_Life Clone() => new ((Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.HealthBar.HpSlot
+    /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.LifeBar
     /// </summary>
-    public class UiNode_HpSlot : IUiNode<Godot.NinePatchRect, UiNode_HpSlot>
+    public class UiNode_LifeBar : IUiNode<Godot.Control, UiNode_LifeBar>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.HealthBar.HpBar
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.Life
         /// </summary>
-        public UiNode_HpBar L_HpBar
+        public UiNode_Life L_Life
         {
             get
             {
-                if (_L_HpBar == null) _L_HpBar = new UiNode_HpBar(Instance.GetNodeOrNull<Godot.TextureRect>("HpBar"));
-                return _L_HpBar;
+                if (_L_Life == null) _L_Life = new UiNode_Life(Instance.GetNodeOrNull<Godot.TextureRect>("Life"));
+                return _L_Life;
             }
         }
-        private UiNode_HpBar _L_HpBar;
+        private UiNode_Life _L_Life;
 
-        public UiNode_HpSlot(Godot.NinePatchRect node) : base(node) {  }
-        public override UiNode_HpSlot Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.HealthBar.ShieldSlot.ShieldBar
-    /// </summary>
-    public class UiNode_ShieldBar : IUiNode<Godot.TextureRect, UiNode_ShieldBar>
-    {
-        public UiNode_ShieldBar(Godot.TextureRect node) : base(node) {  }
-        public override UiNode_ShieldBar Clone() => new ((Godot.TextureRect)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.HealthBar.ShieldSlot
-    /// </summary>
-    public class UiNode_ShieldSlot : IUiNode<Godot.NinePatchRect, UiNode_ShieldSlot>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.HealthBar.ShieldBar
-        /// </summary>
-        public UiNode_ShieldBar L_ShieldBar
-        {
-            get
-            {
-                if (_L_ShieldBar == null) _L_ShieldBar = new UiNode_ShieldBar(Instance.GetNodeOrNull<Godot.TextureRect>("ShieldBar"));
-                return _L_ShieldBar;
-            }
-        }
-        private UiNode_ShieldBar _L_ShieldBar;
-
-        public UiNode_ShieldSlot(Godot.NinePatchRect node) : base(node) {  }
-        public override UiNode_ShieldSlot Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.HealthBar
-    /// </summary>
-    public class UiNode_HealthBar : IUiNode<Godot.TextureRect, UiNode_HealthBar>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.HpSlot
-        /// </summary>
-        public UiNode_HpSlot L_HpSlot
-        {
-            get
-            {
-                if (_L_HpSlot == null) _L_HpSlot = new UiNode_HpSlot(Instance.GetNodeOrNull<Godot.NinePatchRect>("HpSlot"));
-                return _L_HpSlot;
-            }
-        }
-        private UiNode_HpSlot _L_HpSlot;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.ShieldSlot
-        /// </summary>
-        public UiNode_ShieldSlot L_ShieldSlot
-        {
-            get
-            {
-                if (_L_ShieldSlot == null) _L_ShieldSlot = new UiNode_ShieldSlot(Instance.GetNodeOrNull<Godot.NinePatchRect>("ShieldSlot"));
-                return _L_ShieldSlot;
-            }
-        }
-        private UiNode_ShieldSlot _L_ShieldSlot;
-
-        public UiNode_HealthBar(Godot.TextureRect node) : base(node) {  }
-        public override UiNode_HealthBar Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public UiNode_LifeBar(Godot.Control node) : base(node) {  }
+        public override UiNode_LifeBar Clone() => new ((Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
@@ -342,17 +276,17 @@ public abstract partial class RoomUI : UiBase
     public class UiNode_Control : IUiNode<Godot.Control, UiNode_Control>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.HealthBar
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.LifeBar
         /// </summary>
-        public UiNode_HealthBar L_HealthBar
+        public UiNode_LifeBar L_LifeBar
         {
             get
             {
-                if (_L_HealthBar == null) _L_HealthBar = new UiNode_HealthBar(Instance.GetNodeOrNull<Godot.TextureRect>("HealthBar"));
-                return _L_HealthBar;
+                if (_L_LifeBar == null) _L_LifeBar = new UiNode_LifeBar(Instance.GetNodeOrNull<Godot.Control>("LifeBar"));
+                return _L_LifeBar;
             }
         }
-        private UiNode_HealthBar _L_HealthBar;
+        private UiNode_LifeBar _L_LifeBar;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.MapBar

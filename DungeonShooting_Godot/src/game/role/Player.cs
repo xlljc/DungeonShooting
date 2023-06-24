@@ -47,10 +47,10 @@ public partial class Player : Role
         // MainCamera.Main.ResetSmoothing();
         // remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
 
-        MaxHp = 50;
-        Hp = 50;
-        MaxShield = 30;
-        Shield = 30;
+        MaxHp = 6;
+        Hp = 6;
+        MaxShield = 2;
+        Shield = 2;
 
         // debug用
         // Acceleration = 3000;
@@ -139,6 +139,12 @@ public partial class Player : Role
         HandleMoveInput(delta);
         //播放动画
         PlayAnim();
+    }
+
+    protected override int OnHandlerHurt(int damage)
+    {
+        //修改受到的伤害, 每次只受到1点伤害
+        return 1;
     }
 
     protected override void OnChangeHp(int hp)
