@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Godot;
 
@@ -117,7 +118,7 @@ public abstract partial class Role : ActivityObject
             int temp = _shield;
             _shield = value;
             //护盾被破坏
-            if (temp > 0 && _shield <= 0) OnShieldDamage();
+            if (temp > 0 && _shield <= 0) OnShieldDestroy();
             //护盾值改变
             if (temp != _shield) OnChangeShield(_shield);
         }
@@ -140,6 +141,40 @@ public abstract partial class Role : ActivityObject
     private int _maxShield = 0;
 
     /// <summary>
+    /// 单格护盾恢复时间
+    /// </summary>
+    private float ShieldRecoveryTime { get; set; } = 8;
+    
+    /// <summary>
+    /// 无敌状态
+    /// </summary>
+    public bool Invincible
+    {
+        get => _invincible;
+        set
+        {
+            if (_invincible != value)
+            {
+                if (value) //无敌状态
+                {
+                    HurtArea.CollisionLayer = _currentLayer;
+                    _flashingInvincibleTimer = -1;
+                    _flashingInvincibleFlag = false;
+                }
+                else //正常状态
+                {
+                    HurtArea.CollisionLayer = _currentLayer;
+                    SetBlendAlpha(1);
+                }
+            }
+
+            _invincible = value;
+        }
+    }
+
+    private bool _invincible = false;
+    
+    /// <summary>
     /// 当前角色所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
@@ -150,6 +185,15 @@ public abstract partial class Role : ActivityObject
     private readonly List<ActivityObject> _interactiveItemList = new List<ActivityObject>();
 
     private CheckInteractiveResult _tempResultData;
+    private uint _currentLayer;
+    //闪烁计时器
+    private float _flashingInvincibleTimer = -1;
+    //闪烁状态
+    private bool _flashingInvincibleFlag = false;
+    //闪烁动画协程id
+    private long _invincibleFlashingId = -1;
+    //护盾恢复计时器
+    private float _shieldRecoveryTimer = 0;
 
     /// <summary>
     /// 可以互动的道具
@@ -187,7 +231,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 当护盾被破坏时调用
     /// </summary>
-    protected virtual void OnShieldDamage()
+    protected virtual void OnShieldDestroy()
     {
     }
 
@@ -195,7 +239,8 @@ public abstract partial class Role : ActivityObject
     /// 当受伤时调用
     /// </summary>
     /// <param name="damage">受到的伤害</param>
-    protected virtual void OnHit(int damage)
+    /// <param name="realHarm">是否受到真实伤害, 如果为false, 则表示该伤害被互动格挡掉了</param>
+    protected virtual void OnHit(int damage, bool realHarm)
     {
     }
 
@@ -231,9 +276,10 @@ public abstract partial class Role : ActivityObject
         
         HurtArea.CollisionLayer = CollisionLayer;
         HurtArea.CollisionMask = 0;
+        _currentLayer = HurtArea.CollisionLayer;
         
         Face = FaceDirection.Right;
-
+        
         //连接互动物体信号
         InteractiveArea.BodyEntered += _OnPropsEnter;
         InteractiveArea.BodyExited += _OnPropsExit;
@@ -296,6 +342,44 @@ public abstract partial class Role : ActivityObject
         {
             InteractiveItem = null;
             ChangeInteractiveItem(null);
+        }
+
+        //无敌状态, 播放闪烁动画
+        if (Invincible)
+        {
+            _flashingInvincibleTimer -= delta;
+            if (_flashingInvincibleTimer <= 0)
+            {
+                _flashingInvincibleTimer = 0.15f;
+                if (_flashingInvincibleFlag)
+                {
+                    _flashingInvincibleFlag = false;
+                    SetBlendAlpha(0.7f);
+                }
+                else
+                {
+                    _flashingInvincibleFlag = true;
+                    SetBlendAlpha(0);
+                }
+            }
+
+            _shieldRecoveryTimer = 0;
+        }
+        else //恢复护盾
+        {
+            if (Shield < MaxShield)
+            {
+                _shieldRecoveryTimer += delta;
+                if (_shieldRecoveryTimer >= ShieldRecoveryTime) //时间到, 恢复
+                {
+                    Shield++;
+                    _shieldRecoveryTimer = 0;
+                }
+            }
+            else
+            {
+                _shieldRecoveryTimer = 0;
+            }
         }
     }
 
@@ -515,14 +599,21 @@ public abstract partial class Role : ActivityObject
     /// <param name="angle">角度</param>
     public virtual void Hurt(int damage, float angle)
     {
+        //受伤闪烁, 无敌状态
+        if (Invincible)
+        {
+            return;
+        }
+        
+        //计算真正受到的伤害
         damage = OnHandlerHurt(damage);
         if (damage <= 0)
         {
             return;
         }
-        
-        OnHit(damage);
-        if (Shield > 0)
+
+        var flag = Shield > 0;
+        if (flag)
         {
             Shield -= damage;
         }
@@ -536,6 +627,7 @@ public abstract partial class Role : ActivityObject
             // blood.Rotation = angle;
             // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
+        OnHit(damage, !flag);
         
         //受伤特效
         PlayHitAnimation();
@@ -550,6 +642,41 @@ public abstract partial class Role : ActivityObject
                 OnDie();
             }
         }
+    }
+
+    /// <summary>
+    /// 播放无敌状态闪烁动画
+    /// </summary>
+    /// <param name="time">持续时间</param>
+    public void PlayInvincibleFlashing(float time)
+    {
+        Invincible = true;
+        if (_invincibleFlashingId >= 0) //上一个还没结束
+        {
+            StopCoroutine(_invincibleFlashingId);
+        }
+
+        _invincibleFlashingId = StartCoroutine(RunInvincibleFlashing(time));
+    }
+
+    /// <summary>
+    /// 停止无敌状态闪烁动画
+    /// </summary>
+    public void StopInvincibleFlashing()
+    {
+        Invincible = false;
+        if (_invincibleFlashingId >= 0)
+        {
+            StopCoroutine(_invincibleFlashingId);
+            _invincibleFlashingId = -1;
+        }
+    }
+
+    private IEnumerator RunInvincibleFlashing(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _invincibleFlashingId = -1;
+        Invincible = false;
     }
 
     /// <summary>

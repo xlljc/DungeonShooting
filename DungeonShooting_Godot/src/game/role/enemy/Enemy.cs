@@ -156,7 +156,7 @@ public partial class Enemy : Role
         EnemyPickUpWeapon();
     }
 
-    protected override void OnHit(int damage)
+    protected override void OnHit(int damage, bool realHarm)
     {
         //受到伤害
         var state = StateController.CurrState;

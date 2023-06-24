@@ -147,6 +147,19 @@ public partial class Player : Role
         return 1;
     }
 
+    protected override void OnHit(int damage, bool realHarm)
+    {
+        //进入无敌状态
+        if (realHarm) //真实伤害
+        {
+            PlayInvincibleFlashing(1.5f);
+        }
+        else //护盾抵消掉的
+        {
+            PlayInvincibleFlashing(0.5f);
+        }
+    }
+
     protected override void OnChangeHp(int hp)
     {
         //GameApplication.Instance.Ui.SetHp(hp);
