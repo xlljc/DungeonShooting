@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dbrig6dq441wo"]
 
 [ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/RoleTemplate.tscn" id="1_5po38"]
-[ext_resource type="Script" path="res://src/game/role/enemy/Enemy.cs" id="2_1plrq"]
+[ext_resource type="Script" path="res://src/game/activity/role/enemy/Enemy.cs" id="2_1plrq"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_x8agd"]
 [ext_resource type="SpriteFrames" uid="uid://cnctpyrn02rhd" path="res://resource/spriteFrames/Role1001.tres" id="4_qv8w5"]
 

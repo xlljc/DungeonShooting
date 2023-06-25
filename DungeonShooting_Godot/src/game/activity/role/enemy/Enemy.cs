@@ -65,10 +65,10 @@ public partial class Enemy : Role
         IsAi = true;
         StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
 
-        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Player;
+        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
-        MoveSpeed = 20;
+        RoleState.MoveSpeed = 20;
 
         MaxHp = 20;
         Hp = 20;
@@ -427,7 +427,7 @@ public partial class Enemy : Role
                 return;
             }
             
-            var index = Holster.FindWeapon((we, i) => we.ItemId == weapon.ItemId);
+            var index = Holster.FindWeapon((we, i) => we.ItemConfig.Id == weapon.ItemConfig.Id);
             if (index != -1) //与武器袋中武器类型相同, 补充子弹
             {
                 if (!Holster.GetWeapon(index).IsAmmoFull())

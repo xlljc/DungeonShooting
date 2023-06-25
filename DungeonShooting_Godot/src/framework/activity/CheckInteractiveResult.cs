@@ -25,4 +25,18 @@ public class CheckInteractiveResult
     {
         Target = target;
     }
+    
+    public CheckInteractiveResult(ActivityObject target, bool canInteractive)
+    {
+        Target = target;
+        CanInteractive = canInteractive;
+    }
+    
+    public CheckInteractiveResult(ActivityObject target, bool canInteractive, string message, string showIcon)
+    {
+        Target = target;
+        CanInteractive = canInteractive;
+        Message = message;
+        ShowIcon = showIcon;
+    }
 }

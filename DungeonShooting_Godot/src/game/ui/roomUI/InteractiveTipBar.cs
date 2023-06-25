@@ -67,7 +67,8 @@ public class InteractiveTipBar
         {
             var result = (CheckInteractiveResult)o;
             var interactiveItem = Player.Current.InteractiveItem;
-            if (interactiveItem is Weapon)
+            //if (interactiveItem is Weapon)
+            if (!string.IsNullOrEmpty(result.ShowIcon))
             {
                 _interactiveTarget = interactiveItem;
                 //显示互动提示

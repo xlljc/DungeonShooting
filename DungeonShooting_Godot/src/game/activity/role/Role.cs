@@ -11,22 +11,22 @@ public abstract partial class Role : ActivityObject
     /// 是否是 Ai
     /// </summary>
     public bool IsAi { get; protected set; } = false;
+
+    /// <summary>
+    /// 角色属性
+    /// </summary>
+    public RoleState RoleState { get; } = new RoleState();
     
     /// <summary>
     /// 默认攻击对象层级
     /// </summary>
-    public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Wall | PhysicsLayer.Props;
+    public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Wall | PhysicsLayer.Prop;
     
     /// <summary>
     /// 伤害区域
     /// </summary>
     [Export, ExportFillNode]
     public Area2D HurtArea { get; set; }
-
-    /// <summary>
-    /// 移动速度
-    /// </summary>
-    public float MoveSpeed = 120f;
 
     /// <summary>
     /// 所属阵营
@@ -733,5 +733,10 @@ public abstract partial class Role : ActivityObject
                 ChangeInteractiveItem(null);
             }
         }
+    }
+
+    public void PushBuff(Buff buff)
+    {
+        
     }
 }

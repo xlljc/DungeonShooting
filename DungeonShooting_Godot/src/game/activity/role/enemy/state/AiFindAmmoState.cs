@@ -108,7 +108,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
                 Master.AnimatedSprite.Play(AnimatorNames.Run);
                 Master.BasisVelocity =
                     (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                    Master.MoveSpeed;
+                    Master.RoleState.MoveSpeed;
             }
             else
             {

@@ -103,7 +103,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
                     var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
                     Master.AnimatedSprite.Play(AnimatorNames.Run);
                     Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
-                                           Master.MoveSpeed;
+                                           Master.RoleState.MoveSpeed;
                     _prevPos = pos;
                 }
                 else
@@ -123,7 +123,7 @@ public class AiNormalState : StateBase<Enemy, AiStateEnum>
                         var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
                         Master.AnimatedSprite.Play(AnimatorNames.Run);
                         Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
-                                               Master.MoveSpeed;
+                                               Master.RoleState.MoveSpeed;
                     }
 
                     if (_prevPos.DistanceSquaredTo(pos) <= 0.01f)

@@ -105,7 +105,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
                     Master.AnimatedSprite.Play(AnimatorNames.Run);
                     Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                                           Master.MoveSpeed;
+                                           Master.RoleState.MoveSpeed;
                 }
                 else
                 {
@@ -124,7 +124,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                         var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
                         Master.AnimatedSprite.Play(AnimatorNames.Run);
                         Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
-                                               Master.MoveSpeed;
+                                               Master.RoleState.MoveSpeed;
                     }
                     
                     if (_prevPos.DistanceSquaredTo(pos) <= 0.01f)

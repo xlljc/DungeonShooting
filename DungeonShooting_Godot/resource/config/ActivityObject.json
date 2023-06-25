@@ -3,108 +3,152 @@
     "Id": "role0001",
     "Type": 3,
     "Prefab": "res://prefab/role/Role0001.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": "\u73A9\u5BB6"
   },
   {
     "Id": "enemy0001",
     "Type": 4,
     "Prefab": "res://prefab/role/Enemy0001.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": "\u654C\u4EBA"
   },
   {
     "Id": "weapon0001",
     "Type": 5,
     "Prefab": "res://prefab/weapon/Weapon0001.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "weapon0002",
     "Type": 5,
     "Prefab": "res://prefab/weapon/Weapon0002.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "weapon0003",
     "Type": 5,
     "Prefab": "res://prefab/weapon/Weapon0003.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "weapon0004",
     "Type": 5,
     "Prefab": "res://prefab/weapon/Weapon0004.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "weapon0005",
     "Type": 5,
     "Prefab": "res://prefab/weapon/Weapon0005.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "weapon0006",
     "Type": 5,
     "Prefab": "res://prefab/weapon/Weapon0006.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "bullet0001",
     "Type": 6,
     "Prefab": "res://prefab/bullet/Bullet0001.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "bullet0002",
     "Type": 6,
     "Prefab": "res://prefab/bullet/Bullet0002.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "shell0001",
     "Type": 7,
     "Prefab": "res://prefab/shell/Shell0001.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "shell0002",
     "Type": 7,
     "Prefab": "res://prefab/shell/Shell0002.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "shell0003",
     "Type": 7,
     "Prefab": "res://prefab/shell/Shell0003.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": ""
   },
   {
     "Id": "effect0001",
     "Type": 8,
     "Prefab": "res://prefab/effect/activityObject/Effect0001.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": "\u654C\u4EBA\u6B7B\u4EA1\u788E\u7247"
   },
   {
-    "Id": "other_door_e",
+    "Id": "prop0001",
     "Type": 9,
+    "Prefab": "res://prefab/prop/buff/Prop0001.tscn",
+    "ItemName": "\u978B\u5B50",
+    "ItemDescription": "\u589E\u52A0\u79FB\u52A8\u901F\u5EA6",
+    "Remark": "\u589E\u52A0\u79FB\u901F\u7684buff"
+  },
+  {
+    "Id": "other_door_e",
+    "Type": 99,
     "Prefab": "res://prefab/map/RoomDoor_E.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u4E1C\u4FA7)"
   },
   {
     "Id": "other_door_w",
-    "Type": 9,
+    "Type": 99,
     "Prefab": "res://prefab/map/RoomDoor_W.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u897F\u4FA7)"
   },
   {
     "Id": "other_door_s",
-    "Type": 9,
+    "Type": 99,
     "Prefab": "res://prefab/map/RoomDoor_S.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u5357\u4FA7)"
   },
   {
     "Id": "other_door_n",
-    "Type": 9,
+    "Type": 99,
     "Prefab": "res://prefab/map/RoomDoor_N.tscn",
+    "ItemName": "",
+    "ItemDescription": "",
     "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u5317\u4FA7)"
   }
 ]

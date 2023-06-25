@@ -22,7 +22,8 @@ public static partial class ExcelConfig
         /// Bullet(子弹): 6 <br/>
         /// Shell(弹壳): 7 <br/>
         /// Effect(特效): 8 <br/>
-        /// Other(其它类型): 9
+        /// Prop(道具): 9 <br/>
+        /// Other(其它类型): 99
         /// </summary>
         [JsonInclude]
         public int Type;
@@ -32,6 +33,18 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public string Prefab;
+
+        /// <summary>
+        /// 物体名称
+        /// </summary>
+        [JsonInclude]
+        public string ItemName;
+
+        /// <summary>
+        /// 物体描述
+        /// </summary>
+        [JsonInclude]
+        public string ItemDescription;
 
         /// <summary>
         /// 物体备注
@@ -48,6 +61,8 @@ public static partial class ExcelConfig
             inst.Id = Id;
             inst.Type = Type;
             inst.Prefab = Prefab;
+            inst.ItemName = ItemName;
+            inst.ItemDescription = ItemDescription;
             inst.Remark = Remark;
             return inst;
         }

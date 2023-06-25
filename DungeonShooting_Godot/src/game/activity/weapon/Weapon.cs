@@ -246,7 +246,7 @@ public abstract partial class Weapon : ActivityObject
     
     public override void OnInit()
     {
-        InitWeapon(_GetWeaponAttribute(ItemId));
+        InitWeapon(_GetWeaponAttribute(ItemConfig.Id));
         AnimatedSprite.AnimationFinished += OnAnimationFinished;
     }
 
@@ -269,7 +269,7 @@ public abstract partial class Weapon : ActivityObject
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
             Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
-            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + ItemId);
+            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + ItemConfig.Id);
         }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
@@ -366,7 +366,8 @@ public abstract partial class Weapon : ActivityObject
     /// <summary>
     /// 当武器从武器袋中移除时调用
     /// </summary>
-    protected virtual void OnRemove()
+    /// <param name="master">移除该武器的角色</param>
+    protected virtual void OnRemove(Role master)
     {
     }
 
@@ -1387,7 +1388,7 @@ public abstract partial class Weapon : ActivityObject
             {
                 var masterWeapon = roleMaster.Holster.ActiveWeapon;
                 //查找是否有同类型武器
-                var index = roleMaster.Holster.FindWeapon(ItemId);
+                var index = roleMaster.Holster.FindWeapon(ItemConfig.Id);
                 if (index != -1) //如果有这个武器
                 {
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
@@ -1434,7 +1435,7 @@ public abstract partial class Weapon : ActivityObject
         {
             var holster = roleMaster.Holster;
             //查找是否有同类型武器
-            var index = holster.FindWeapon(ItemId);
+            var index = holster.FindWeapon(ItemConfig.Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
@@ -1582,13 +1583,14 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     public void RemoveAt()
     {
+        var master = Master;
         Master = null;
         CollisionLayer = _tempLayer;
         _weaponAttribute = _playerWeaponAttribute;
         AnimatedSprite.Position = _tempAnimatedSpritePosition;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
-        OnRemove();
+        OnRemove(master);
     }
 
     /// <summary>

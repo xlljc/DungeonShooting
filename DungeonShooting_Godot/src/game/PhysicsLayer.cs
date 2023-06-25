@@ -18,7 +18,7 @@ public class PhysicsLayer
     /// <summary>
     /// 道具
     /// </summary>
-    public const uint Props = 0b100;
+    public const uint Prop = 0b100;
     /// <summary>
     /// 玩家
     /// </summary>

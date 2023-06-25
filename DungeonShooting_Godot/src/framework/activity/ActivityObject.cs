@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Config;
 using Godot;
 
 /// <summary>
@@ -17,9 +18,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public static bool IsDebug { get; set; }
 
     /// <summary>
-    /// 当前物体类型id, 用于区分是否是同一种物体, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemId 为 null
+    /// 当前物体对应的配置数据, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemConfig 为 null
     /// </summary>
-    public string ItemId { get; private set; }
+    public ExcelConfig.ActivityObject ItemConfig { get; private set; }
 
     /// <summary>
     /// 是否是静态物体, 如果为true, 则会禁用移动处理
@@ -264,7 +265,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     private static long _instanceIndex = 0;
 
     //初始化节点
-    private void _InitNode(string itemId, World world)
+    private void _InitNode(RegisterActivityData activityData, World world)
     {
 #if TOOLS
         if (!Engine.IsEditorHint())
@@ -276,7 +277,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         }
 #endif
         World = world;
-        ItemId = itemId;
+        ItemConfig = activityData.Config;
         Name = GetType().Name + (_instanceIndex++);
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
         _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;

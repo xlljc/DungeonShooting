@@ -7,5 +7,5 @@ public class RoleState
     /// <summary>
     /// 移动速度
     /// </summary>
-    public float MoveSpeed;
+    public float MoveSpeed = 120f;
 }

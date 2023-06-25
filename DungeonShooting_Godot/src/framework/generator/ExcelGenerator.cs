@@ -43,18 +43,18 @@ public static class ExcelGenerator
         foreach (var item in array)
         {
             var id = item["Id"];
+            var name = item["ItemName"] + "";
             var remark = item["Remark"] + "";
-            if (!string.IsNullOrEmpty(remark))
-            {
-                code1 += $"        /// <summary>\n";
-                code1 += $"        /// {remark}\n";
-                code1 += $"        /// </summary>\n";
-            }
+            code1 += $"        /// <summary>\n";
+            code1 += $"        /// 名称: {name} <br/>\n";
+            code1 += $"        /// 备注: {remark.Replace("\n", " <br/>\n        /// ")}\n";
+            code1 += $"        /// </summary>\n";
             code1 += $"        public const string Id_{id} = \"{id}\";\n";
-            code2 += $"        _activityRegisterMap.Add(\"{id}\", \"{item["Prefab"]}\");\n";
+            code2 += $"        _activityRegisterMap.Add(\"{id}\", new RegisterActivityData(\"{item["Prefab"]}\", ExcelConfig.ActivityObject_Map[\"{id}\"]));\n";
         }
         
-        var str = $"/// <summary>\n";
+        var str = $"using Config;\n\n";
+        str += $"/// <summary>\n";
         str += $"/// 根据配置表注册物体, 该类是自动生成的, 请不要手动编辑!\n";
         str += $"/// </summary>\n";
         str += $"public partial class ActivityObject\n";

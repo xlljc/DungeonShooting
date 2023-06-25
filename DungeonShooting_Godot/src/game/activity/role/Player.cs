@@ -37,7 +37,7 @@ public partial class Player : Role
     {
         base.OnInit();
         
-        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Props | PhysicsLayer.Enemy;
+        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 
         //让相机跟随玩家
@@ -212,7 +212,7 @@ public partial class Player : Role
         }
         else
         {
-            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.X, dir.X * MoveSpeed, Acceleration * delta),
+            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.X, dir.X * RoleState.MoveSpeed, Acceleration * delta),
                 BasisVelocity.Y);
         }
 
@@ -223,7 +223,7 @@ public partial class Player : Role
         else
         {
             BasisVelocity = new Vector2(BasisVelocity.X,
-                Mathf.MoveToward(BasisVelocity.Y, dir.Y * MoveSpeed, Acceleration * delta));
+                Mathf.MoveToward(BasisVelocity.Y, dir.Y * RoleState.MoveSpeed, Acceleration * delta));
         }
     }
 

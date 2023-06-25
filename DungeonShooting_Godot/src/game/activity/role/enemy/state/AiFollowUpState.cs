@@ -79,7 +79,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
             Master.AnimatedSprite.Play(AnimatorNames.Run);
             Master.BasisVelocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
-                              Master.MoveSpeed;
+                              Master.RoleState.MoveSpeed;
         }
         else
         {
