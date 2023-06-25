@@ -490,11 +490,7 @@ public partial class DungeonManager : Node2D
 
     private void DisposeRoomInfo(RoomInfo roomInfo)
     {
-        foreach (var activityMark in roomInfo.ActivityMarks)
-        {
-            activityMark.QueueFree();
-        }
-        roomInfo.ActivityMarks.Clear();
+        roomInfo.Destroy();
     }
     
     public override void _Draw()

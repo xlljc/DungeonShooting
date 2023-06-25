@@ -154,6 +154,7 @@ public partial class GameApplication : Node2D
 	{
 		if (World != null)
 		{
+			ClearWorld();
 			World.QueueFree();
 		}
 		World = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
@@ -168,6 +169,7 @@ public partial class GameApplication : Node2D
 	{
 		if (World != null)
 		{
+			ClearWorld();
 			World.QueueFree();
 		}
 
@@ -269,6 +271,30 @@ public partial class GameApplication : Node2D
 		cursorLayer.Layer = UiManager.GetUiLayer(UiLayer.Pop).Layer + 10;
 		AddChild(cursorLayer);
 		cursorLayer.AddChild(Cursor);
+	}
+
+	//清理世界
+	private void ClearWorld()
+	{
+		
+		var childCount = World.NormalLayer.GetChildCount();
+		for (var i = 0; i < childCount; i++)
+		{
+			var c = World.NormalLayer.GetChild(i);
+			if (c is IDestroy destroy)
+			{
+				destroy.Destroy();
+			}
+		}
+		childCount = World.YSortLayer.GetChildCount();
+		for (var i = 0; i < childCount; i++)
+		{
+			var c = World.YSortLayer.GetChild(i);
+			if (c is IDestroy destroy)
+			{
+				destroy.Destroy();
+			}
+		}
 	}
 
 #if TOOLS
