@@ -208,8 +208,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
-    //是否初始化阴影
-    private bool _initShadow;
     //上一帧动画名称
     private string _prevAnimation;
     //上一帧动画
@@ -221,6 +219,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 
     //混色shader材质
     private ShaderMaterial _blendShaderMaterial;
+    private ShaderMaterial _shadowBlendShaderMaterial;
     
     //存储投抛该物体时所产生的数据
     private ActivityFallData _fallData = new ActivityFallData();
@@ -280,6 +279,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         ItemId = itemId;
         Name = GetType().Name + (_instanceIndex++);
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
+        _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
         ShadowSprite.Visible = false;
         MotionMode = MotionModeEnum.Floating;
         MoveController = AddComponent<MoveController>();
@@ -331,12 +331,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public void ShowShadowSprite()
     {
-        if (!_initShadow)
-        {
-            _initShadow = true;
-            ShadowSprite.Material = ResourceManager.BlendMaterial;
-        }
-
         var anim = AnimatedSprite.Animation;
         
         var frame = AnimatedSprite.Frame;
@@ -751,7 +745,23 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     {
         return _blendShaderMaterial.GetShaderParameter("schedule").AsSingle();
     }
+
+    /// <summary>
+    /// 设置透明度
+    /// </summary>
+    public void SetBlendAlpha(float value)
+    {
+        _blendShaderMaterial.SetShaderParameter("alpha", value);
+        _shadowBlendShaderMaterial.SetShaderParameter("alpha", value);
+    }
     
+    /// <summary>
+    /// 获取透明度
+    /// </summary>
+    public float SetBlendAlpha()
+    {
+        return _blendShaderMaterial.GetShaderParameter("alpha").AsSingle();
+    }
     
     /// <summary>
     /// 每帧调用一次, 为了防止子类覆盖 _Process(), 给 _Process() 加上了 sealed, 子类需要帧循环函数请重写 Process() 函数

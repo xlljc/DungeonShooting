@@ -1,15 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://bvpmtfupny8iu"]
+[gd_scene load_steps=10 format=3 uid="uid://bvpmtfupny8iu"]
 
 [ext_resource type="Script" path="res://src/game/ui/roomUI/RoomUIPanel.cs" id="1_tfcrp"]
 [ext_resource type="Texture2D" uid="uid://b67i86mtqrn32" path="res://resource/sprite/ui/icon/icon_bullet.png" id="2_a2ohq"]
 [ext_resource type="Texture2D" uid="uid://dxstii6f4l8m0" path="res://resource/sprite/ui/keyboard/e.png" id="3_h7n2a"]
 [ext_resource type="Texture2D" uid="uid://cukrx5yyqw86o" path="res://resource/sprite/ui/reloadBar.png" id="4_nt6mj"]
 [ext_resource type="Texture2D" uid="uid://cx3i1nkcc4307" path="res://resource/sprite/ui/reloadBarBlock.png" id="5_wob8d"]
-[ext_resource type="Texture2D" uid="uid://u5ul7fu8wv1a" path="res://resource/sprite/ui/healthBar.png" id="6_e4f48"]
-[ext_resource type="Texture2D" uid="uid://djcdjrs07ighv" path="res://resource/sprite/ui/hpSlot.png" id="7_kk5l8"]
-[ext_resource type="Texture2D" uid="uid://bxd75tme0v3pb" path="res://resource/sprite/ui/hpBar.png" id="8_j85pm"]
-[ext_resource type="Texture2D" uid="uid://dnpguajopuyd7" path="res://resource/sprite/ui/shieldSlot.png" id="9_spw0e"]
-[ext_resource type="Texture2D" uid="uid://h25j6uka74tv" path="res://resource/sprite/ui/shieldBar.png" id="10_8lm6q"]
+[ext_resource type="Texture2D" uid="uid://blywnftxn1cfd" path="res://resource/sprite/ui/Life_full.png" id="11_y2dqd"]
 [ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/mapBar.png" id="11_yaqsk"]
 [ext_resource type="Texture2D" uid="uid://xafbhgrxmosy" path="res://resource/sprite/weapon/gun4.png" id="12_o2big"]
 
@@ -67,54 +63,17 @@ offset_right = -20.0
 offset_bottom = -20.0
 mouse_filter = 2
 
-[node name="HealthBar" type="TextureRect" parent="Control"]
-layout_mode = 0
-offset_right = 14.0
-offset_bottom = 14.0
+[node name="LifeBar" type="Control" parent="Control"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 scale = Vector2(4, 4)
-texture = ExtResource("6_e4f48")
 
-[node name="HpSlot" type="NinePatchRect" parent="Control/HealthBar"]
-layout_mode = 0
-offset_left = 13.0
-offset_top = 1.0
-offset_right = 66.0
-offset_bottom = 9.0
-texture = ExtResource("7_kk5l8")
-patch_margin_left = 1
-patch_margin_top = 1
-patch_margin_right = 2
-patch_margin_bottom = 1
-
-[node name="HpBar" type="TextureRect" parent="Control/HealthBar/HpSlot"]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 2.0
-offset_right = 51.0
-offset_bottom = 6.0
-texture = ExtResource("8_j85pm")
-expand_mode = 1
-
-[node name="ShieldSlot" type="NinePatchRect" parent="Control/HealthBar"]
-layout_mode = 0
-offset_left = 13.0
-offset_top = 8.0
-offset_right = 65.0
-offset_bottom = 13.0
-texture = ExtResource("9_spw0e")
-patch_margin_left = 1
-patch_margin_top = 1
-patch_margin_right = 1
-patch_margin_bottom = 1
-
-[node name="ShieldBar" type="TextureRect" parent="Control/HealthBar/ShieldSlot"]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 51.0
-offset_bottom = 4.0
-texture = ExtResource("10_8lm6q")
-expand_mode = 1
+[node name="Life" type="TextureRect" parent="Control/LifeBar"]
+layout_mode = 2
+offset_right = 12.0
+offset_bottom = 10.0
+texture = ExtResource("11_y2dqd")
 
 [node name="MapBar" type="TextureRect" parent="Control"]
 layout_mode = 1
