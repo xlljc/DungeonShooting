@@ -735,6 +735,10 @@ public abstract partial class Role : ActivityObject
         }
     }
 
+    /// <summary>
+    /// 添加被动
+    /// </summary>
+    /// <param name="buff"></param>
     public void PushBuff(Buff buff)
     {
         

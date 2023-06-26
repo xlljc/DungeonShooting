@@ -631,7 +631,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 
         _throwForce = new ExternalForce("throw");
         _throwForce.Velocity = velocity;
-        MoveController.AddConstantForce(_throwForce);
+        MoveController.AddForce(_throwForce);
 
         InitThrowData();
     }
@@ -1122,16 +1122,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     }
 
     /// <summary>
-    /// 继承指定物体的运动速率, 该速率可能会有衰减
+    /// 继承指定物体的运动速率
     /// </summary>
-    public void InheritVelocity(ActivityObject other)
+    public void InheritVelocity(ActivityObject other, float scale = 0.5f)
     {
-        var velocity = other.Velocity;
-        if (velocity != Vector2.Zero)
-        {
-            var force = MoveController.AddConstantForce(velocity * 0.5f, 15);
-            force.EnableResistanceInTheAir = false;
-        }
+        MoveController.AddVelocity(other.Velocity * scale);
     }
 
     /// <summary>
