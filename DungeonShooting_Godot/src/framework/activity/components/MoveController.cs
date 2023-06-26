@@ -211,6 +211,7 @@ public class MoveController : Component
     {
         if (_basisVelocity == Vector2.Zero && _forceList.Count == 0)
         {
+            ActivityInstance.Velocity = Vector2.Zero;
             return;
         }
 

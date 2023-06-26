@@ -105,6 +105,27 @@
     "Prefab": "res://prefab/prop/buff/Prop0001.tscn"
   },
   {
+    "Id": "prop0002",
+    "Type": 9,
+    "Name": "\u5FC3\u4E4B\u5BB9\u5668",
+    "Remark": "\u589E\u52A0\u8840\u91CF\u4E0A\u9650",
+    "Prefab": "res://prefab/prop/buff/Prop0002.tscn"
+  },
+  {
+    "Id": "prop0003",
+    "Type": 9,
+    "Name": "\u62A4\u76FE",
+    "Remark": "\u589E\u52A0\u62A4\u76FE\u4E0A\u9650",
+    "Prefab": "res://prefab/prop/buff/Prop0003.tscn"
+  },
+  {
+    "Id": "prop0004",
+    "Type": 9,
+    "Name": "\u62A4\u76FE\u5FEB\u901F\u6062\u590D",
+    "Remark": "\u63D0\u9AD8\u62A4\u76FE\u6062\u590D\u901F\u5EA6",
+    "Prefab": "res://prefab/prop/buff/Prop0004.tscn"
+  },
+  {
     "Id": "other_door_e",
     "Type": 99,
     "Name": "",

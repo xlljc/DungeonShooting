@@ -11,16 +11,6 @@ public partial class Player : Role
     /// 获取当前操作的角色
     /// </summary>
     public static Player Current { get; private set; }
-    
-    /// <summary>
-    /// 移动加速度
-    /// </summary>
-    public float Acceleration { get; set; } = 1500f;
-    
-    /// <summary>
-    /// 移动摩擦力
-    /// </summary>
-    public float Friction { get; set; } = 800f;
 
     /// <summary>
     /// 设置当前操作的玩家对象
@@ -49,8 +39,8 @@ public partial class Player : Role
 
         MaxHp = 6;
         Hp = 6;
-        MaxShield = 2;
-        Shield = 2;
+        MaxShield = 0;
+        Shield = 0;
 
         // debug用
         // Acceleration = 3000;
@@ -208,22 +198,22 @@ public partial class Player : Role
         // 如果 有输入 就以当前速度，用acceleration 插值到 对应方向 * 最大速度
         if (Mathf.IsZeroApprox(dir.X))
         {
-            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.X, 0, Friction * delta), BasisVelocity.Y);
+            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.X, 0, RoleState.Friction * delta), BasisVelocity.Y);
         }
         else
         {
-            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.X, dir.X * RoleState.MoveSpeed, Acceleration * delta),
+            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.X, dir.X * RoleState.MoveSpeed, RoleState.Acceleration * delta),
                 BasisVelocity.Y);
         }
 
         if (Mathf.IsZeroApprox(dir.Y))
         {
-            BasisVelocity = new Vector2(BasisVelocity.X, Mathf.MoveToward(BasisVelocity.Y, 0, Friction * delta));
+            BasisVelocity = new Vector2(BasisVelocity.X, Mathf.MoveToward(BasisVelocity.Y, 0, RoleState.Friction * delta));
         }
         else
         {
             BasisVelocity = new Vector2(BasisVelocity.X,
-                Mathf.MoveToward(BasisVelocity.Y, dir.Y * RoleState.MoveSpeed, Acceleration * delta));
+                Mathf.MoveToward(BasisVelocity.Y, dir.Y * RoleState.MoveSpeed, RoleState.Acceleration * delta));
         }
     }
 

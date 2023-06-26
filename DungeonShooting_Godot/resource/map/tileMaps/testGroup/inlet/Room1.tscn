@@ -29,3 +29,24 @@ script = ExtResource("3_m4jrh")
 Type = 9
 ItemExpression = "0001"
 WaveNumber = 2
+
+[node name="ActivityMark9" type="Node2D" parent="."]
+position = Vector2(125, 68)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0002"
+WaveNumber = 2
+
+[node name="ActivityMark10" type="Node2D" parent="."]
+position = Vector2(124, 18)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0003"
+WaveNumber = 2
+
+[node name="ActivityMark11" type="Node2D" parent="."]
+position = Vector2(34, 19)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0004"
+WaveNumber = 2

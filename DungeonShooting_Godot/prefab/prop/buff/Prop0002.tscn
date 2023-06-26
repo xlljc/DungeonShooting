@@ -1,19 +1,19 @@
-[gd_scene load_steps=7 format=3 uid="uid://cb4k0wmt3rhjc"]
+[gd_scene load_steps=7 format=3 uid="uid://cnh7h0ti23dwm"]
 
-[ext_resource type="Script" path="res://src/game/activity/prop/buff/MoveSpeedBuff.cs" id="1_haxff"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_ao13f"]
-[ext_resource type="SpriteFrames" uid="uid://wtvfyprel72y" path="res://resource/spriteFrames/Buff0001.tres" id="3_jv1el"]
+[ext_resource type="Script" path="res://src/game/activity/prop/buff/HeartContainerBuff.cs" id="1_1kha7"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_cwlyf"]
+[ext_resource type="SpriteFrames" uid="uid://7t57gsyff470" path="res://resource/spriteFrames/Buff0002.tres" id="3_k4xtc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mrkt4"]
 resource_local_to_scene = true
-shader = ExtResource("2_ao13f")
+shader = ExtResource("2_cwlyf")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
 shader_parameter/alpha = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b6ii6"]
 resource_local_to_scene = true
-shader = ExtResource("2_ao13f")
+shader = ExtResource("2_cwlyf")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/alpha = 1.0
@@ -21,9 +21,9 @@ shader_parameter/alpha = 1.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpqup"]
 size = Vector2(12, 10)
 
-[node name="Prop0001" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="Prop0002" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 4
-script = ExtResource("1_haxff")
+script = ExtResource("1_1kha7")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
@@ -34,7 +34,7 @@ material = SubResource("ShaderMaterial_mrkt4")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_b6ii6")
-sprite_frames = ExtResource("3_jv1el")
+sprite_frames = ExtResource("3_k4xtc")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_cpqup")

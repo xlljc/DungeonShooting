@@ -10,12 +10,14 @@ resource_local_to_scene = true
 shader = ExtResource("2_b3d83")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
+shader_parameter/alpha = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_08fn3"]
 resource_local_to_scene = true
 shader = ExtResource("2_b3d83")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
+shader_parameter/alpha = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cldwb"]
 atlas = ExtResource("3_ntutm")

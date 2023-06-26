@@ -82,11 +82,14 @@ public abstract partial class Role : ActivityObject
     public int Hp
     {
         get => _hp;
-        protected set
+        set
         {
             int temp = _hp;
             _hp = value;
-            if (temp != _hp) OnChangeHp(_hp);
+            if (temp != _hp)
+            {
+                OnChangeHp(_hp);
+            }
         }
     }
     private int _hp = 20;
@@ -97,12 +100,20 @@ public abstract partial class Role : ActivityObject
     public int MaxHp
     {
         get => _maxHp;
-        protected set
+        set
         {
             int temp = _maxHp;
             _maxHp = value;
-            //护盾值改变
-            if (temp != _maxHp) OnChangeMaxHp(_maxHp);
+            //最大血量值改变
+            if (temp != _maxHp)
+            {
+                OnChangeMaxHp(_maxHp);
+            }
+            //调整血量
+            if (Hp > _maxHp)
+            {
+                Hp = _maxHp;
+            }
         }
     }
     private int _maxHp = 20;
@@ -113,14 +124,20 @@ public abstract partial class Role : ActivityObject
     public int Shield
     {
         get => _shield;
-        protected set
+        set
         {
             int temp = _shield;
             _shield = value;
             //护盾被破坏
-            if (temp > 0 && _shield <= 0) OnShieldDestroy();
+            if (temp > 0 && _shield <= 0 && _maxShield > 0)
+            {
+                OnShieldDestroy();
+            }
             //护盾值改变
-            if (temp != _shield) OnChangeShield(_shield);
+            if (temp != _shield)
+            {
+                OnChangeShield(_shield);
+            }
         }
     }
     private int _shield = 0;
@@ -131,20 +148,24 @@ public abstract partial class Role : ActivityObject
     public int MaxShield
     {
         get => _maxShield;
-        protected set
+        set
         {
             int temp = _maxShield;
             _maxShield = value;
-            if (temp != _maxShield) OnChangeMaxShield(_maxShield);
+            //最大护盾值改变
+            if (temp != _maxShield)
+            {
+                OnChangeMaxShield(_maxShield);
+            }
+            //调整护盾值
+            if (Shield > _maxShield)
+            {
+                Shield = _maxShield;
+            }
         }
     }
     private int _maxShield = 0;
 
-    /// <summary>
-    /// 单格护盾恢复时间
-    /// </summary>
-    private float ShieldRecoveryTime { get; set; } = 8;
-    
     /// <summary>
     /// 无敌状态
     /// </summary>
@@ -370,7 +391,7 @@ public abstract partial class Role : ActivityObject
             if (Shield < MaxShield)
             {
                 _shieldRecoveryTimer += delta;
-                if (_shieldRecoveryTimer >= ShieldRecoveryTime) //时间到, 恢复
+                if (_shieldRecoveryTimer >= RoleState.ShieldRecoveryTime) //时间到, 恢复
                 {
                     Shield++;
                     _shieldRecoveryTimer = 0;
