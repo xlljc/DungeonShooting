@@ -610,7 +610,7 @@ public abstract partial class Weapon : ActivityObject
                 //连发开火
                 TriggerFire();
                 //连发最后一发打完了
-                if (_continuousCount <= 0)
+                if (Attribute.ManualBeLoaded && _continuousCount <= 0)
                 {
                     //执行上膛逻辑
                     RunBeLoaded();
@@ -773,7 +773,7 @@ public abstract partial class Weapon : ActivityObject
                             TriggerFire();
 
                             //非连射模式
-                            if (!Attribute.ContinuousShoot && _continuousCount <= 0)
+                            if (!Attribute.ContinuousShoot && Attribute.ManualBeLoaded && _continuousCount <= 0)
                             {
                                 //执行上膛逻辑
                                 RunBeLoaded();
@@ -850,7 +850,7 @@ public abstract partial class Weapon : ActivityObject
             {
                 TriggerFire();
                 //非连射模式
-                if (!Attribute.ContinuousShoot && _continuousCount <= 0)
+                if (!Attribute.ContinuousShoot && Attribute.ManualBeLoaded && _continuousCount <= 0)
                 {
                     //执行上膛逻辑
                     RunBeLoaded();
@@ -910,7 +910,7 @@ public abstract partial class Weapon : ActivityObject
         PlayShootSound();
         
         //抛弹
-        if (Attribute.ContinuousShoot && Attribute.ShellId != null)
+        if ((Attribute.ContinuousShoot || !Attribute.ManualBeLoaded) && Attribute.ShellId != null)
         {
             ThrowShellHandler(1f);
         }
@@ -1164,7 +1164,7 @@ public abstract partial class Weapon : ActivityObject
     //执行上膛逻辑
     private void RunBeLoaded()
     {
-        if (Attribute.AutoBeLoaded)
+        if (Attribute.AutoManualBeLoaded)
         {
             if (_attackTimer <= 0)
             {
@@ -1398,7 +1398,7 @@ public abstract partial class Weapon : ActivityObject
                         {
                             //可以互动拾起弹药
                             result.CanInteractive = true;
-                            result.Message = Attribute.Name;
+                            result.Message = ItemConfig.Name;
                             result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_bullet_png;
                             return result;
                         }
@@ -1410,7 +1410,7 @@ public abstract partial class Weapon : ActivityObject
                     {
                         //可以互动, 拾起武器
                         result.CanInteractive = true;
-                        result.Message = Attribute.Name;
+                        result.Message = ItemConfig.Name;
                         result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_pickup_png;
                         return result;
                     }
@@ -1418,7 +1418,7 @@ public abstract partial class Weapon : ActivityObject
                     {
                         //可以互动, 切换武器
                         result.CanInteractive = true;
-                        result.Message = Attribute.Name;
+                        result.Message = ItemConfig.Name;
                         result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_replace_png;
                         return result;
                     }
@@ -1520,15 +1520,15 @@ public abstract partial class Weapon : ActivityObject
 
         var rotation = master.MountPoint.GlobalRotation;
         GlobalRotation = rotation;
-        
-        //继承role的移动速度
-        InheritVelocity(master);
 
         startPosition -= GripPoint.Position.Rotated(rotation);
         var startHeight = -master.MountPoint.Position.Y;
         var velocity = new Vector2(20, 0).Rotated(rotation);
         var yf = Utils.RandomRangeInt(50, 70);
         Throw(startPosition, startHeight, yf, velocity, 0);
+        
+        //继承role的移动速度
+        InheritVelocity(master);
     }
 
     protected override void OnThrowStart()
@@ -1632,8 +1632,8 @@ public abstract partial class Weapon : ActivityObject
         var rotate = Utils.RandomRangeInt((int)(-720 * speedScale), (int)(720 * speedScale));
         var shell = Create(shellId);
         shell.Rotation = (Master != null ? Master.MountPoint.RealRotation : Rotation);
-        shell.InheritVelocity(Master != null ? Master : this);
         shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
+        shell.InheritVelocity(Master != null ? Master : this);
         if (Master == null)
         {
             AffiliationArea.InsertItem(shell);

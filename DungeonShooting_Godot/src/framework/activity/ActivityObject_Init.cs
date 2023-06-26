@@ -21,32 +21,32 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_enemy0001 = "enemy0001";
         /// <summary>
-        /// 名称:  <br/>
+        /// 名称: 步枪 <br/>
         /// 备注: 
         /// </summary>
         public const string Id_weapon0001 = "weapon0001";
         /// <summary>
-        /// 名称:  <br/>
+        /// 名称: 霰弹枪 <br/>
         /// 备注: 
         /// </summary>
         public const string Id_weapon0002 = "weapon0002";
         /// <summary>
-        /// 名称:  <br/>
+        /// 名称: 手枪 <br/>
         /// 备注: 
         /// </summary>
         public const string Id_weapon0003 = "weapon0003";
         /// <summary>
-        /// 名称:  <br/>
+        /// 名称: 刀 <br/>
         /// 备注: 
         /// </summary>
         public const string Id_weapon0004 = "weapon0004";
         /// <summary>
-        /// 名称:  <br/>
+        /// 名称: 狙击枪 <br/>
         /// 备注: 
         /// </summary>
         public const string Id_weapon0005 = "weapon0005";
         /// <summary>
-        /// 名称:  <br/>
+        /// 名称: 冲锋枪 <br/>
         /// 备注: 
         /// </summary>
         public const string Id_weapon0006 = "weapon0006";

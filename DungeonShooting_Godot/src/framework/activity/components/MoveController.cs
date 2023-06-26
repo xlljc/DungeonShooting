@@ -45,7 +45,7 @@ public class MoveController : Component
     }
 
     /// <summary>
-    /// 给当前控制器添加指定外力速率, 并且平均分配给基础速率和外力速率
+    /// 给当前控制器添加指定外力速率, 并且平均分配给所有外力速率
     /// </summary>
     public void AddVelocity(Vector2 velocity)
     {
@@ -54,12 +54,11 @@ public class MoveController : Component
             var forceCount = GetForceCount();
             if (forceCount == 0)
             {
-                _basisVelocity += velocity;
+                AddForce(velocity);
             }
             else
             {
-                var tempV = velocity / (forceCount + 1);
-                _basisVelocity += tempV;
+                var tempV = velocity / forceCount;
                 for (var i = 0; i < _forceList.Count; i++)
                 {
                     _forceList[i].Velocity += tempV;

@@ -43,7 +43,7 @@ public static class ExcelGenerator
         foreach (var item in array)
         {
             var id = item["Id"];
-            var name = item["ItemName"] + "";
+            var name = item["Name"] + "";
             var remark = item["Remark"] + "";
             code1 += $"        /// <summary>\n";
             code1 += $"        /// 名称: {name} <br/>\n";

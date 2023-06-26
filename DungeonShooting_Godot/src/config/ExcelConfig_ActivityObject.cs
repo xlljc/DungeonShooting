@@ -29,28 +29,22 @@ public static partial class ExcelConfig
         public int Type;
 
         /// <summary>
-        /// 物体预制场景路径, 场景根节点必须是ActivityObject子类
-        /// </summary>
-        [JsonInclude]
-        public string Prefab;
-
-        /// <summary>
         /// 物体名称
         /// </summary>
         [JsonInclude]
-        public string ItemName;
-
-        /// <summary>
-        /// 物体描述
-        /// </summary>
-        [JsonInclude]
-        public string ItemDescription;
+        public string Name;
 
         /// <summary>
         /// 物体备注
         /// </summary>
         [JsonInclude]
         public string Remark;
+
+        /// <summary>
+        /// 物体预制场景路径, 场景根节点必须是ActivityObject子类
+        /// </summary>
+        [JsonInclude]
+        public string Prefab;
 
         /// <summary>
         /// 返回浅拷贝出的新对象
@@ -60,10 +54,9 @@ public static partial class ExcelConfig
             var inst = new ActivityObject();
             inst.Id = Id;
             inst.Type = Type;
-            inst.Prefab = Prefab;
-            inst.ItemName = ItemName;
-            inst.ItemDescription = ItemDescription;
+            inst.Name = Name;
             inst.Remark = Remark;
+            inst.Prefab = Prefab;
             return inst;
         }
     }
