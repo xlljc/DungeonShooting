@@ -142,11 +142,11 @@ public partial class Player : Role
         //进入无敌状态
         if (realHarm) //真实伤害
         {
-            PlayInvincibleFlashing(1.5f);
+            PlayInvincibleFlashing(RoleState.WoundedInvincibleTime);
         }
         else //护盾抵消掉的
         {
-            PlayInvincibleFlashing(0.5f);
+            PlayInvincibleFlashing(RoleState.ShieldInvincibleTime);
         }
     }
 

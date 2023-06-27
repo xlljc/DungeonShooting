@@ -628,11 +628,6 @@ public abstract partial class Role : ActivityObject
         
         //计算真正受到的伤害
         damage = OnHandlerHurt(damage);
-        if (damage <= 0)
-        {
-            return;
-        }
-
         var flag = Shield > 0;
         if (flag)
         {
@@ -640,6 +635,11 @@ public abstract partial class Role : ActivityObject
         }
         else
         {
+            damage = RoleState.CallCalcHurtDamageEvent(damage);
+            if (damage < 0)
+            {
+                return;
+            }
             Hp -= damage;
             //播放血液效果
             // var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);

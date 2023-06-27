@@ -910,7 +910,7 @@ public abstract partial class Weapon : ActivityObject
         PlayShootSound();
         
         //抛弹
-        if ((Attribute.ContinuousShoot || !Attribute.ManualBeLoaded) && Attribute.ShellId != null)
+        if ((Attribute.ContinuousShoot || !Attribute.ManualBeLoaded))
         {
             ThrowShellHandler(1f);
         }
@@ -1061,7 +1061,7 @@ public abstract partial class Weapon : ActivityObject
             
             // GD.Print("开始换弹.");
             //抛弹
-            if (!Attribute.ContinuousShoot && (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0 && Attribute.ShellId != null)
+            if (!Attribute.ContinuousShoot && (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0)
             {
                 ThrowShellHandler(0.6f);
             }
@@ -1241,7 +1241,7 @@ public abstract partial class Weapon : ActivityObject
     private void BeLoadedHandler()
     {
         //上膛抛弹
-        if (!Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0 && Attribute.ShellId != null)
+        if (!Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
         {
             ThrowShellHandler(0.6f);
         }
@@ -1282,6 +1282,10 @@ public abstract partial class Weapon : ActivityObject
     //抛弹逻辑
     private void ThrowShellHandler(float speedScale)
     {
+        if (string.IsNullOrEmpty(Attribute.ShellId))
+        {
+            return;
+        }
         //创建一个弹壳
         if (Attribute.ThrowShellDelayTime > 0)
         {
