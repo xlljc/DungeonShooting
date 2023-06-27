@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="1_aeolk"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_4yjnk"]
-[ext_resource type="SpriteFrames" uid="uid://c7dt1uwdybn5" path="res://resource/spriteFrames/Weapon0003.tres" id="3_upkjt"]
+[ext_resource type="SpriteFrames" uid="uid://c7dt1uwdybn5" path="res://resource/spriteFrames/weapon/Weapon0003.tres" id="3_upkjt"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
 resource_local_to_scene = true

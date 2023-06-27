@@ -137,10 +137,10 @@ public partial class ActivityObject
         _activityRegisterMap.Add("shell0002", new RegisterActivityData("res://prefab/shell/Shell0002.tscn", ExcelConfig.ActivityObject_Map["shell0002"]));
         _activityRegisterMap.Add("shell0003", new RegisterActivityData("res://prefab/shell/Shell0003.tscn", ExcelConfig.ActivityObject_Map["shell0003"]));
         _activityRegisterMap.Add("effect0001", new RegisterActivityData("res://prefab/effect/activityObject/Effect0001.tscn", ExcelConfig.ActivityObject_Map["effect0001"]));
-        _activityRegisterMap.Add("prop0001", new RegisterActivityData("res://prefab/prop/buff/Prop0001.tscn", ExcelConfig.ActivityObject_Map["prop0001"]));
-        _activityRegisterMap.Add("prop0002", new RegisterActivityData("res://prefab/prop/buff/Prop0002.tscn", ExcelConfig.ActivityObject_Map["prop0002"]));
-        _activityRegisterMap.Add("prop0003", new RegisterActivityData("res://prefab/prop/buff/Prop0003.tscn", ExcelConfig.ActivityObject_Map["prop0003"]));
-        _activityRegisterMap.Add("prop0004", new RegisterActivityData("res://prefab/prop/buff/Prop0004.tscn", ExcelConfig.ActivityObject_Map["prop0004"]));
+        _activityRegisterMap.Add("prop0001", new RegisterActivityData("res://prefab/prop/buff/Buff0001.tscn", ExcelConfig.ActivityObject_Map["prop0001"]));
+        _activityRegisterMap.Add("prop0002", new RegisterActivityData("res://prefab/prop/buff/Buff0002.tscn", ExcelConfig.ActivityObject_Map["prop0002"]));
+        _activityRegisterMap.Add("prop0003", new RegisterActivityData("res://prefab/prop/buff/Buff0003.tscn", ExcelConfig.ActivityObject_Map["prop0003"]));
+        _activityRegisterMap.Add("prop0004", new RegisterActivityData("res://prefab/prop/buff/Buff0004.tscn", ExcelConfig.ActivityObject_Map["prop0004"]));
         _activityRegisterMap.Add("other_door_e", new RegisterActivityData("res://prefab/map/RoomDoor_E.tscn", ExcelConfig.ActivityObject_Map["other_door_e"]));
         _activityRegisterMap.Add("other_door_w", new RegisterActivityData("res://prefab/map/RoomDoor_W.tscn", ExcelConfig.ActivityObject_Map["other_door_w"]));
         _activityRegisterMap.Add("other_door_s", new RegisterActivityData("res://prefab/map/RoomDoor_S.tscn", ExcelConfig.ActivityObject_Map["other_door_s"]));

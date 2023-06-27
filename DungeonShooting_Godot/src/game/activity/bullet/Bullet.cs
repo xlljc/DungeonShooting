@@ -16,6 +16,11 @@ public partial class Bullet : ActivityObject
     /// 发射该子弹的武器
     /// </summary>
     public Weapon Weapon { get; private set; }
+    
+    /// <summary>
+    /// 发射该子弹的角色
+    /// </summary>
+    public Role Role { get; private set; }
 
     /// <summary>
     /// 最小伤害
@@ -39,6 +44,7 @@ public partial class Bullet : ActivityObject
     public void Init(Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
         Weapon = weapon;
+        Role = weapon.Master;
         CollisionArea.CollisionMask = targetLayer;
         CollisionArea.AreaEntered += OnArea2dEntered;
         
@@ -98,8 +104,10 @@ public partial class Bullet : ActivityObject
             var node = packedScene.Instantiate<Node2D>();
             node.GlobalPosition = GlobalPosition;
             node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-            
-            role.CallDeferred(nameof(Role.Hurt), Utils.RandomRangeInt(MinHarm, MaxHarm), Rotation);
+
+            //计算子弹造成的伤害
+            var damage = role.RoleState.CallCalcDamageEvent(Utils.RandomRangeInt(MinHarm, MaxHarm));
+            role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
             Destroy();
         }
     }

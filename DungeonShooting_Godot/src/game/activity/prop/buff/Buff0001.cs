@@ -5,7 +5,7 @@ using Godot;
 /// 移速 buff, 移速 + 3
 /// </summary>
 [GlobalClass, Tool]
-public partial class MoveSpeedBuff : Buff
+public partial class Buff0001 : Buff
 {
     protected override void OnPickUp(Role master)
     {

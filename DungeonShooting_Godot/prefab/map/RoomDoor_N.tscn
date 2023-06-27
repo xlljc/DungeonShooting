@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" path="res://src/game/room/RoomDoor.cs" id="1_220be"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_h5ru6"]
-[ext_resource type="SpriteFrames" uid="uid://xs72aopsgpg6" path="res://resource/spriteFrames/RoomDoor_NS.tres" id="3_apluc"]
+[ext_resource type="SpriteFrames" uid="uid://xs72aopsgpg6" path="res://resource/spriteFrames/other/RoomDoor_NS.tres" id="3_apluc"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yvwpk"]
 resource_local_to_scene = true

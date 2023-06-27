@@ -1,19 +1,19 @@
 [gd_scene load_steps=7 format=3 uid="uid://im64ft74hmmg"]
 
-[ext_resource type="Script" path="res://src/game/activity/prop/buff/ShieldContainerBuff.cs" id="1_10xkd"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_q55qh"]
-[ext_resource type="SpriteFrames" uid="uid://nqoieett75t3" path="res://resource/spriteFrames/Buff0003.tres" id="3_tffkd"]
+[ext_resource type="Script" path="res://src/game/activity/prop/buff/Buff0003.cs" id="1_put1t"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_r3cwy"]
+[ext_resource type="SpriteFrames" uid="uid://nqoieett75t3" path="res://resource/spriteFrames/prop/buff/Buff0003.tres" id="3_cdr8i"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mrkt4"]
 resource_local_to_scene = true
-shader = ExtResource("2_q55qh")
+shader = ExtResource("2_r3cwy")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
 shader_parameter/alpha = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b6ii6"]
 resource_local_to_scene = true
-shader = ExtResource("2_q55qh")
+shader = ExtResource("2_r3cwy")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/alpha = 1.0
@@ -21,9 +21,9 @@ shader_parameter/alpha = 1.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpqup"]
 size = Vector2(12, 10)
 
-[node name="Prop0003" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="Buff0003" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 4
-script = ExtResource("1_10xkd")
+script = ExtResource("1_put1t")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
@@ -34,7 +34,7 @@ material = SubResource("ShaderMaterial_mrkt4")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_b6ii6")
-sprite_frames = ExtResource("3_tffkd")
+sprite_frames = ExtResource("3_cdr8i")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_cpqup")

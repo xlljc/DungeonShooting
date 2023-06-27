@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/RoleTemplate.tscn" id="1_10c2n"]
 [ext_resource type="Script" path="res://src/game/activity/role/Player.cs" id="2_i08u4"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_rk4gg"]
-[ext_resource type="SpriteFrames" uid="uid://n11thtali6es" path="res://resource/spriteFrames/Role0001.tres" id="4_galcc"]
+[ext_resource type="SpriteFrames" uid="uid://n11thtali6es" path="res://resource/spriteFrames/role/Role0001.tres" id="4_galcc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lvutq"]
 resource_local_to_scene = true

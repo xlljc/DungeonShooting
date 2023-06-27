@@ -2,19 +2,19 @@
 using Godot;
 
 /// <summary>
-/// 护盾上限buff, 护盾 + 1
+/// 血量上限buff, 心之容器 + 1
 /// </summary>
 [GlobalClass, Tool]
-public partial class ShieldContainerBuff : Buff
+public partial class Buff0002 : Buff
 {
     protected override void OnPickUp(Role master)
     {
-        master.MaxShield += 1;
-        master.Shield += 1;
+        master.MaxHp += 2;
+        master.Hp += 2;
     }
 
     protected override void OnRemove(Role master)
     {
-        master.MaxShield -= 1;
+        master.MaxHp -= 2;
     }
 }
