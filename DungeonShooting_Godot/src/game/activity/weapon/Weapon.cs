@@ -238,7 +238,7 @@ public abstract partial class Weapon : ActivityObject
     {
         if (_weaponAttributeMap.TryGetValue(itemId, out var attr))
         {
-            return attr;
+            return attr.Clone();
         }
 
         throw new Exception($"武器'{itemId}'没有在 Weapon 表中配置属性数据!");
@@ -422,8 +422,7 @@ public abstract partial class Weapon : ActivityObject
             //攻击冷却计时
             _attackTimer = _attackTimer > 0 ? _attackTimer - delta : 0;
             //武器的当前散射半径
-            CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
-                Attribute.StartScatteringRange);
+            ScatteringRangeBackHandler(delta);
             //松开扳机
             if (_triggerFlag || _downTimer > 0)
             {
@@ -620,8 +619,7 @@ public abstract partial class Weapon : ActivityObject
             //散射值销退
             if (_noAttackTime >= Attribute.ScatteringRangeBackDelayTime)
             {
-                CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
-                    Attribute.StartScatteringRange);
+                ScatteringRangeBackHandler(delta);
             }
 
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
@@ -937,8 +935,8 @@ public abstract partial class Weapon : ActivityObject
         }
 
         //开火添加散射值
-        CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue,
-            Attribute.FinalScatteringRange);
+        ScatteringRangeAddHandler();
+        
         //武器的旋转角度
         tempAngle -= Attribute.UpliftAngle;
         RotationDegrees = tempAngle;
@@ -1294,6 +1292,50 @@ public abstract partial class Weapon : ActivityObject
         else if (Attribute.ThrowShellDelayTime == 0)
         {
             ThrowShell(Attribute.ShellId, speedScale);
+        }
+    }
+
+    //散射值消退处理
+    private void ScatteringRangeBackHandler(float delta)
+    {
+        var startScatteringRange = Attribute.StartScatteringRange;
+        var finalScatteringRange = Attribute.FinalScatteringRange;
+        if (Master != null)
+        {
+            startScatteringRange += Master.RoleState.WeaponMinScatteringRangeIncrement;
+            finalScatteringRange += Master.RoleState.WeaponFinalScatteringRangeIncrement;
+        }
+        if (startScatteringRange <= finalScatteringRange)
+        {
+            CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
+                startScatteringRange);
+        }
+        else
+        {
+            CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeBackSpeed * delta,
+                startScatteringRange);
+        }
+    }
+
+    //散射值添加处理
+    private void ScatteringRangeAddHandler()
+    {
+        var startScatteringRange = Attribute.StartScatteringRange;
+        var finalScatteringRange = Attribute.FinalScatteringRange;
+        if (Master != null)
+        {
+            startScatteringRange += Master.RoleState.WeaponMinScatteringRangeIncrement;
+            finalScatteringRange += Master.RoleState.WeaponFinalScatteringRangeIncrement;
+        }
+        if (startScatteringRange <= finalScatteringRange)
+        {
+            CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue,
+                finalScatteringRange);
+        }
+        else
+        {
+            CurrScatteringRange = Mathf.Min(CurrScatteringRange - Attribute.ScatteringRangeAddValue,
+                finalScatteringRange);
         }
     }
 
