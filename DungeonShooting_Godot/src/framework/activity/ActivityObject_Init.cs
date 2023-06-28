@@ -116,6 +116,21 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_prop0007 = "prop0007";
         /// <summary>
+        /// 名称: 眼镜 <br/>
+        /// 备注: 提高武器精准度
+        /// </summary>
+        public const string Id_prop0008 = "prop0008";
+        /// <summary>
+        /// 名称: 高速子弹 <br/>
+        /// 备注: 提高子弹速度和射程
+        /// </summary>
+        public const string Id_prop0009 = "prop0009";
+        /// <summary>
+        /// 名称: 分裂子弹 <br/>
+        /// 备注: 子弹数量翻倍, 但是精准度和伤害降低
+        /// </summary>
+        public const string Id_prop0010 = "prop0010";
+        /// <summary>
         /// 名称:  <br/>
         /// 备注: 地牢房间的门(东侧)
         /// </summary>
@@ -159,6 +174,9 @@ public partial class ActivityObject
         _activityRegisterMap.Add("prop0005", new RegisterActivityData("res://prefab/prop/buff/Buff0005.tscn", ExcelConfig.ActivityObject_Map["prop0005"]));
         _activityRegisterMap.Add("prop0006", new RegisterActivityData("res://prefab/prop/buff/Buff0006.tscn", ExcelConfig.ActivityObject_Map["prop0006"]));
         _activityRegisterMap.Add("prop0007", new RegisterActivityData("res://prefab/prop/buff/Buff0007.tscn", ExcelConfig.ActivityObject_Map["prop0007"]));
+        _activityRegisterMap.Add("prop0008", new RegisterActivityData("res://prefab/prop/buff/Buff0008.tscn", ExcelConfig.ActivityObject_Map["prop0008"]));
+        _activityRegisterMap.Add("prop0009", new RegisterActivityData("res://prefab/prop/buff/Buff0009.tscn", ExcelConfig.ActivityObject_Map["prop0009"]));
+        _activityRegisterMap.Add("prop0010", new RegisterActivityData("res://prefab/prop/buff/Buff0010.tscn", ExcelConfig.ActivityObject_Map["prop0010"]));
         _activityRegisterMap.Add("other_door_e", new RegisterActivityData("res://prefab/map/RoomDoor_E.tscn", ExcelConfig.ActivityObject_Map["other_door_e"]));
         _activityRegisterMap.Add("other_door_w", new RegisterActivityData("res://prefab/map/RoomDoor_W.tscn", ExcelConfig.ActivityObject_Map["other_door_w"]));
         _activityRegisterMap.Add("other_door_s", new RegisterActivityData("res://prefab/map/RoomDoor_S.tscn", ExcelConfig.ActivityObject_Map["other_door_s"]));

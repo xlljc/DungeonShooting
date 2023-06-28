@@ -916,8 +916,7 @@ public abstract partial class Weapon : ActivityObject
         //触发开火函数
         OnFire();
 
-        //开火发射的子弹数量
-        var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
+
         //武器口角度
         var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
 
@@ -926,7 +925,16 @@ public abstract partial class Weapon : ActivityObject
         var tempAngle = Mathf.RadToDeg(tempRotation);
 
         //开火时枪口角度
-        var fireRotation = Mathf.DegToRad(Master.MountPoint.RealRotationDegrees) + tempRotation;
+        var fireRotation = tempRotation;
+        
+        //开火发射的子弹数量
+        var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
+        if (Master != null)
+        {
+            bulletCount = Master.RoleState.CallCalcBulletCountEvent(this, bulletCount);
+            fireRotation += Mathf.DegToRad(Master.MountPoint.RealRotationDegrees);
+        }
+        
         //创建子弹
         for (int i = 0; i < bulletCount; i++)
         {
@@ -1302,8 +1310,8 @@ public abstract partial class Weapon : ActivityObject
         var finalScatteringRange = Attribute.FinalScatteringRange;
         if (Master != null)
         {
-            startScatteringRange += Master.RoleState.WeaponMinScatteringRangeIncrement;
-            finalScatteringRange += Master.RoleState.WeaponFinalScatteringRangeIncrement;
+            startScatteringRange = Master.RoleState.CallCalcStartScatteringEvent(this, startScatteringRange);
+            finalScatteringRange = Master.RoleState.CallCalcFinalScatteringEvent(this, finalScatteringRange);
         }
         if (startScatteringRange <= finalScatteringRange)
         {
@@ -1324,8 +1332,8 @@ public abstract partial class Weapon : ActivityObject
         var finalScatteringRange = Attribute.FinalScatteringRange;
         if (Master != null)
         {
-            startScatteringRange += Master.RoleState.WeaponMinScatteringRangeIncrement;
-            finalScatteringRange += Master.RoleState.WeaponFinalScatteringRangeIncrement;
+            startScatteringRange = Master.RoleState.CallCalcStartScatteringEvent(this, startScatteringRange);
+            finalScatteringRange = Master.RoleState.CallCalcFinalScatteringEvent(this, finalScatteringRange);
         }
         if (startScatteringRange <= finalScatteringRange)
         {
@@ -1697,14 +1705,24 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     protected Bullet ShootBullet(float fireRotation, string bulletId)
     {
+        var speed = Utils.RandomRangeFloat(Attribute.BulletMinSpeed, Attribute.BulletMaxSpeed);
+        var distance = Utils.RandomRangeFloat(Attribute.BulletMinDistance, Attribute.BulletMaxDistance);
+        var deviationAngle =
+            Utils.RandomRangeFloat(Attribute.BulletMinDeviationAngle, Attribute.BulletMaxDeviationAngle);
+        if (Master != null)
+        {
+            speed = Master.RoleState.CallCalcBulletSpeedEvent(this, speed);
+            distance = Master.RoleState.CallCalcBulletDistanceEvent(this, distance);
+            deviationAngle = Master.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+        }
         //创建子弹
         var bullet = Create<Bullet>(bulletId);
         bullet.Init(
             this,
-            Utils.RandomRangeFloat(Attribute.BulletMinSpeed, Attribute.BulletMaxSpeed),
-            Utils.RandomRangeFloat(Attribute.BulletMinDistance, Attribute.BulletMaxDistance),
+            speed,
+            distance,
             FirePoint.GlobalPosition,
-            fireRotation + Mathf.DegToRad(Utils.RandomRangeFloat(Attribute.BulletMinDeviationAngle, Attribute.BulletMaxDeviationAngle)),
+            fireRotation + Mathf.DegToRad(deviationAngle),
             GetAttackLayer()
         );
         bullet.MinHarm = Attribute.BulletMinHarm;

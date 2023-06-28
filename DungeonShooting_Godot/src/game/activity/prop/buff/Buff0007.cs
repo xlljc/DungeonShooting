@@ -17,7 +17,7 @@ public partial class Buff0007 : Buff
         master.RoleState.CalcHurtDamageEvent -= CalcHurtDamageEvent;
     }
 
-    private void CalcHurtDamageEvent(RefValue<int> refValue)
+    private void CalcHurtDamageEvent(int originDamage, RefValue<int> refValue)
     {
         if (refValue.Value > 0 && Utils.RandomBoolean(0.15f))
         {

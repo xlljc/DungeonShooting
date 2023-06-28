@@ -17,8 +17,8 @@ public partial class Buff0005 : Buff
         master.RoleState.CalcDamageEvent -= CalcDamage;
     }
 
-    private void CalcDamage(RefValue<int> refValue)
+    private void CalcDamage(int originDamage, RefValue<int> refValue)
     {
-        refValue.Value = Mathf.CeilToInt(refValue.Value * 1.2f);
+        refValue.Value += Mathf.CeilToInt(originDamage * 0.2f);
     }
 }
