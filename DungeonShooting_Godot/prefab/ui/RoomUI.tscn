@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bvpmtfupny8iu"]
+[gd_scene load_steps=11 format=3 uid="uid://bvpmtfupny8iu"]
 
 [ext_resource type="Script" path="res://src/game/ui/roomUI/RoomUIPanel.cs" id="1_tfcrp"]
 [ext_resource type="Texture2D" uid="uid://b67i86mtqrn32" path="res://resource/sprite/ui/icon/icon_bullet.png" id="2_a2ohq"]
@@ -12,6 +12,11 @@
 [sub_resource type="Gradient" id="1"]
 colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
 
+[sub_resource type="LabelSettings" id="LabelSettings_toas6"]
+font_size = 32
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
 [node name="RoomUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -21,47 +26,107 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_tfcrp")
+metadata/_edit_vertical_guides_ = [960.0]
+metadata/_edit_horizontal_guides_ = [552.0]
 
-[node name="InteractiveTipBar" type="Node2D" parent="."]
-z_index = 10
-position = Vector2(961, 553)
+[node name="InteractiveTipBar" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 960.0
+offset_top = 552.0
+offset_right = 960.0
+offset_bottom = 552.0
 scale = Vector2(4, 4)
 
-[node name="Icon" type="Sprite2D" parent="InteractiveTipBar"]
-position = Vector2(0, -25)
+[node name="Icon" type="TextureRect" parent="InteractiveTipBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -34.0
+offset_right = 8.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_a2ohq")
 
-[node name="InteractiveIcon" type="Sprite2D" parent="InteractiveTipBar"]
+[node name="InteractiveIcon" type="TextureRect" parent="InteractiveTipBar"]
 visible = false
-position = Vector2(0, -30)
+layout_mode = 0
+offset_top = -30.0
+offset_bottom = -30.0
 texture = ExtResource("3_h7n2a")
 
 [node name="Line2D" type="Line2D" parent="InteractiveTipBar"]
-points = PackedVector2Array(0, -17, 0, -15.0938, 0, 0)
+points = PackedVector2Array(0, -18, 0, 0)
 width = 2.0
 gradient = SubResource("1")
 
-[node name="ReloadBar" type="Node2D" parent="."]
-z_index = 15
-position = Vector2(961, 553)
+[node name="NameLabel" type="Label" parent="InteractiveTipBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -58.0
+offset_right = 224.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.25, 0.25)
+text = "物体名称"
+label_settings = SubResource("LabelSettings_toas6")
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2
+clip_text = true
+text_overrun_behavior = 2
+
+[node name="ReloadBar" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 960.0
+offset_top = 552.0
+offset_right = 960.0
+offset_bottom = 552.0
 scale = Vector2(4, 4)
 
-[node name="Slot" type="Sprite2D" parent="ReloadBar"]
-position = Vector2(0, -24)
+[node name="Slot" type="TextureRect" parent="ReloadBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -26.0
+offset_right = 14.0
+offset_bottom = -21.0
+grow_horizontal = 2
+grow_vertical = 0
 texture = ExtResource("4_nt6mj")
 
 [node name="Block" type="Sprite2D" parent="ReloadBar/Slot"]
+position = Vector2(1, 0)
 texture = ExtResource("5_wob8d")
+centered = false
 
 [node name="Control" type="Control" parent="."]
-anchors_preset = 0
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
 offset_top = 20.0
 offset_right = -20.0
 offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_lock_ = true
 
 [node name="LifeBar" type="Control" parent="Control"]
 anchors_preset = 0

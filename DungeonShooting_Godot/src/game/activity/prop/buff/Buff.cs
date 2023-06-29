@@ -36,7 +36,7 @@ public abstract partial class Buff : Prop
     {
         if (master is Player)
         {
-            return new CheckInteractiveResult(this, true, "拾起道具", ResourcePath.resource_sprite_ui_icon_icon_pickup_png);
+            return new CheckInteractiveResult(this, true, ResourcePath.resource_sprite_ui_icon_icon_pickup_png);
         }
         return base.CheckInteractive(master);
     }

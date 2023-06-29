@@ -1452,7 +1452,6 @@ public abstract partial class Weapon : ActivityObject
                         {
                             //可以互动拾起弹药
                             result.CanInteractive = true;
-                            result.Message = ItemConfig.Name;
                             result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_bullet_png;
                             return result;
                         }
@@ -1464,7 +1463,6 @@ public abstract partial class Weapon : ActivityObject
                     {
                         //可以互动, 拾起武器
                         result.CanInteractive = true;
-                        result.Message = ItemConfig.Name;
                         result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_pickup_png;
                         return result;
                     }
@@ -1472,7 +1470,6 @@ public abstract partial class Weapon : ActivityObject
                     {
                         //可以互动, 切换武器
                         result.CanInteractive = true;
-                        result.Message = ItemConfig.Name;
                         result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_replace_png;
                         return result;
                     }
