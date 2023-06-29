@@ -6,11 +6,52 @@ public static partial class UiManager
 
     public static class UiName
     {
+        public const string BottomTips = "BottomTips";
         public const string EditorTools = "EditorTools";
         public const string Loading = "Loading";
         public const string Main = "Main";
         public const string RoomUI = "RoomUI";
         public const string Settlement = "Settlement";
+    }
+
+    /// <summary>
+    /// 打开 BottomTips, 并返回UI实例
+    /// </summary>
+    public static UI.BottomTips.BottomTipsPanel Open_BottomTips()
+    {
+        return OpenUi<UI.BottomTips.BottomTipsPanel>(UiName.BottomTips);
+    }
+
+    /// <summary>
+    /// 隐藏 BottomTips 的所有实例
+    /// </summary>
+    public static void Hide_BottomTips()
+    {
+        var uiInstance = Get_BottomTips_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 BottomTips 的所有实例
+    /// </summary>
+    public static void Dispose_BottomTips()
+    {
+        var uiInstance = Get_BottomTips_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.DisposeUi();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 BottomTips 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.BottomTips.BottomTipsPanel[] Get_BottomTips_Instance()
+    {
+        return GetUiInstance<UI.BottomTips.BottomTipsPanel>(nameof(UI.BottomTips.BottomTips));
     }
 
     /// <summary>

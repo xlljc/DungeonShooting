@@ -26,8 +26,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_tfcrp")
-metadata/_edit_vertical_guides_ = [960.0]
-metadata/_edit_horizontal_guides_ = [552.0]
 
 [node name="InteractiveTipBar" type="Control" parent="."]
 anchors_preset = 0

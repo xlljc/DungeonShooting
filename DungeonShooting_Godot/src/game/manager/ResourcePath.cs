@@ -31,6 +31,9 @@ public class ResourcePath
     public const string prefab_prop_buff_Buff0005_tscn = "res://prefab/prop/buff/Buff0005.tscn";
     public const string prefab_prop_buff_Buff0006_tscn = "res://prefab/prop/buff/Buff0006.tscn";
     public const string prefab_prop_buff_Buff0007_tscn = "res://prefab/prop/buff/Buff0007.tscn";
+    public const string prefab_prop_buff_Buff0008_tscn = "res://prefab/prop/buff/Buff0008.tscn";
+    public const string prefab_prop_buff_Buff0009_tscn = "res://prefab/prop/buff/Buff0009.tscn";
+    public const string prefab_prop_buff_Buff0010_tscn = "res://prefab/prop/buff/Buff0010.tscn";
     public const string prefab_role_Enemy0001_tscn = "res://prefab/role/Enemy0001.tscn";
     public const string prefab_role_Role0001_tscn = "res://prefab/role/Role0001.tscn";
     public const string prefab_role_RoleTemplate_tscn = "res://prefab/role/RoleTemplate.tscn";
@@ -39,6 +42,7 @@ public class ResourcePath
     public const string prefab_shell_Shell0003_tscn = "res://prefab/shell/Shell0003.tscn";
     public const string prefab_test_MoveComponent_tscn = "res://prefab/test/MoveComponent.tscn";
     public const string prefab_test_TestActivity_tscn = "res://prefab/test/TestActivity.tscn";
+    public const string prefab_ui_BottomTips_tscn = "res://prefab/ui/BottomTips.tscn";
     public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
     public const string prefab_ui_Loading_tscn = "res://prefab/ui/Loading.tscn";
     public const string prefab_ui_Main_tscn = "res://prefab/ui/Main.tscn";
@@ -129,6 +133,9 @@ public class ResourcePath
     public const string resource_sprite_prop_buff_Buff0005_png = "res://resource/sprite/prop/buff/Buff0005.png";
     public const string resource_sprite_prop_buff_Buff0006_png = "res://resource/sprite/prop/buff/Buff0006.png";
     public const string resource_sprite_prop_buff_Buff0007_png = "res://resource/sprite/prop/buff/Buff0007.png";
+    public const string resource_sprite_prop_buff_Buff0008_png = "res://resource/sprite/prop/buff/Buff0008.png";
+    public const string resource_sprite_prop_buff_Buff0009_png = "res://resource/sprite/prop/buff/Buff0009.png";
+    public const string resource_sprite_prop_buff_Buff0010_png = "res://resource/sprite/prop/buff/Buff0010.png";
     public const string resource_sprite_role_role10_png = "res://resource/sprite/role/role10.png";
     public const string resource_sprite_role_role2_png = "res://resource/sprite/role/role2.png";
     public const string resource_sprite_role_role3_png = "res://resource/sprite/role/role3.png";
@@ -194,6 +201,9 @@ public class ResourcePath
     public const string resource_spriteFrames_prop_buff_Buff0005_tres = "res://resource/spriteFrames/prop/buff/Buff0005.tres";
     public const string resource_spriteFrames_prop_buff_Buff0006_tres = "res://resource/spriteFrames/prop/buff/Buff0006.tres";
     public const string resource_spriteFrames_prop_buff_Buff0007_tres = "res://resource/spriteFrames/prop/buff/Buff0007.tres";
+    public const string resource_spriteFrames_prop_buff_Buff0008_tres = "res://resource/spriteFrames/prop/buff/Buff0008.tres";
+    public const string resource_spriteFrames_prop_buff_Buff0009_tres = "res://resource/spriteFrames/prop/buff/Buff0009.tres";
+    public const string resource_spriteFrames_prop_buff_Buff0010_tres = "res://resource/spriteFrames/prop/buff/Buff0010.tres";
     public const string resource_spriteFrames_role_Role0001_tres = "res://resource/spriteFrames/role/Role0001.tres";
     public const string resource_spriteFrames_role_Role1001_tres = "res://resource/spriteFrames/role/Role1001.tres";
     public const string resource_spriteFrames_shell_Shell0001_tres = "res://resource/spriteFrames/shell/Shell0001.tres";

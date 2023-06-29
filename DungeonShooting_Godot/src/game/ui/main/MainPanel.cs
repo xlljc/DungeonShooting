@@ -9,6 +9,8 @@ public partial class MainPanel : Main
     {
         L_ButtonList.L_Start.Instance.Pressed += OnStartGameClick;
         L_ButtonList.L_Exit.Instance.Pressed += OnExitClick;
+
+        UiManager.Open_BottomTips();
     }
 
     public override void OnHideUi()
