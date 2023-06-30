@@ -130,6 +130,33 @@ public partial class Player : Role
         //播放动画
         PlayAnim();
     }
+    
+    public override bool PickUpWeapon(Weapon weapon, bool exchange = true)
+    {
+        //拾起武器
+        var result = base.PickUpWeapon(weapon, exchange);
+        if (result)
+        {
+            EventManager.EmitEvent(EventEnum.OnPlayerPickUpWeapon, weapon);
+        }
+        return result;
+    }
+
+    public override void ThrowWeapon()
+    {
+        //扔掉武器
+        var weapon = Holster.ActiveWeapon;
+        base.ThrowWeapon();
+        EventManager.EmitEvent(EventEnum.OnPlayerThrowWeapon, weapon);
+    }
+
+    public override void ThrowWeapon(int index)
+    {
+        //扔掉武器
+        var weapon = Holster.GetWeapon(index);
+        base.ThrowWeapon(index);
+        EventManager.EmitEvent(EventEnum.OnPlayerThrowWeapon, weapon);
+    }
 
     protected override int OnHandlerHurt(int damage)
     {

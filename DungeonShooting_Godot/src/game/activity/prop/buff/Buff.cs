@@ -27,7 +27,7 @@ public abstract partial class Buff : Prop
         {
             Pickup();
             Master = role;
-            role.PushBuff(this);
+            role.PushProp(this);
             OnPickUp(role);
         }
     }

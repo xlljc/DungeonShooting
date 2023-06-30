@@ -1,5 +1,6 @@
 
 using Godot;
+using UI.BottomTips;
 
 namespace UI.RoomUI;
 
@@ -12,6 +13,7 @@ public partial class RoomUIPanel : RoomUI
     private InteractiveTipBar _interactiveTipBar;
     private GunBar _gunBar;
     private LifeBar _lifeBar;
+    private EventFactory _factory;
 
     public override void OnCreateUi()
     {
@@ -27,6 +29,9 @@ public partial class RoomUIPanel : RoomUI
         _interactiveTipBar.OnShow();
         _gunBar.OnShow();
         _lifeBar.OnShow();
+
+        _factory = EventManager.CreateEventFactory();
+        _factory.AddEventListener(EventEnum.OnPlayerPickUpProp, OnPlayerPickUpProp);
     }
 
     public override void OnHideUi()
@@ -35,6 +40,9 @@ public partial class RoomUIPanel : RoomUI
         _interactiveTipBar.OnHide();
         _gunBar.OnHide();
         _lifeBar.OnHide();
+        
+        _factory.RemoveAllEventListener();
+        _factory = null;
     }
 
     public void InitData()
@@ -46,5 +54,13 @@ public partial class RoomUIPanel : RoomUI
     {
         _gunBar.Process(delta);
         _lifeBar.Process(delta);
+    }
+
+    //玩家拾起道具, 弹出提示
+    private void OnPlayerPickUpProp(object propObj)
+    {
+        var prop = (Prop)propObj;
+        var message = $"{prop.ItemConfig.Name}\n{prop.ItemConfig.Remark}";
+        BottomTipsPanel.ShowTips(prop.GetDefaultTexture(), message);
     }
 }

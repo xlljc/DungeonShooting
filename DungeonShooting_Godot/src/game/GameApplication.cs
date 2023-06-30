@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Config;
 using Godot;
+using UI.BottomTips;
 
 public partial class GameApplication : Node2D
 {
@@ -130,6 +131,8 @@ public partial class GameApplication : Node2D
 		DungeonManager = new DungeonManager();
 		DungeonManager.Name = "DungeonManager";
 		SceneRoot.AddChild(DungeonManager);
+
+		BottomTipsPanel.Init();
 		//打开主菜单Ui
 		UiManager.Open_Main();
 	}

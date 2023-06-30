@@ -38,10 +38,10 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public uint AttackLayer { get; set; } = PhysicsLayer.Wall;
 
-    // /// <summary>
-    // /// 携带的道具包裹
-    // /// </summary>
-    // public List<object> PropsPack { get; } = new List<object>();
+    /// <summary>
+    /// 携带的道具包裹
+    /// </summary>
+    public List<Prop> PropsPack { get; } = new List<Prop>();
 
     /// <summary>
     /// 角色携带的武器袋
@@ -202,7 +202,7 @@ public abstract partial class Role : ActivityObject
 
     //初始缩放
     private Vector2 _startScale;
-    //所有角色碰撞的道具
+    //所有角色碰撞的物体
     private readonly List<ActivityObject> _interactiveItemList = new List<ActivityObject>();
 
     private CheckInteractiveResult _tempResultData;
@@ -217,7 +217,7 @@ public abstract partial class Role : ActivityObject
     private float _shieldRecoveryTimer = 0;
 
     /// <summary>
-    /// 可以互动的道具
+    /// 可以互动的物体
     /// </summary>
     public ActivityObject InteractiveItem { get; private set; }
 
@@ -326,7 +326,7 @@ public abstract partial class Role : ActivityObject
             MountPoint.SetLookAt(pos);
         }
         
-        //检查可互动的道具
+        //检查可互动的物体
         bool findFlag = false;
         for (int i = 0; i < _interactiveItemList.Count; i++)
         {
@@ -337,7 +337,7 @@ public abstract partial class Role : ActivityObject
             }
             else
             {
-                //找到可互动的道具了
+                //找到可互动的物体了
                 if (!findFlag)
                 {
                     var result = item.CheckInteractive(this);
@@ -358,7 +358,7 @@ public abstract partial class Role : ActivityObject
                 }
             }
         }
-        //没有可互动的道具
+        //没有可互动的物体
         if (!findFlag && InteractiveItem != null)
         {
             InteractiveItem = null;
@@ -757,11 +757,17 @@ public abstract partial class Role : ActivityObject
     }
 
     /// <summary>
-    /// 添加被动
+    /// 添加道具
     /// </summary>
     /// <param name="buff"></param>
-    public void PushBuff(Buff buff)
+    public void PushProp(Buff buff)
     {
-        
+        if (PropsPack.Contains(buff))
+        {
+            GD.PrintErr("道具已经在包裹中了!");
+            return;
+        }
+        PropsPack.Add(buff);
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, buff);
     }
 }

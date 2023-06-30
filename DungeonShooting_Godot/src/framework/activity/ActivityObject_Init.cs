@@ -82,21 +82,21 @@ public partial class ActivityObject
         public const string Id_effect0001 = "effect0001";
         /// <summary>
         /// 名称: 鞋子 <br/>
-        /// 备注: 增加移速的buff
+        /// 备注: 提高移动速度
         /// </summary>
         public const string Id_prop0001 = "prop0001";
         /// <summary>
         /// 名称: 心之容器 <br/>
-        /// 备注: 增加血量上限
+        /// 备注: 提高血量上限
         /// </summary>
         public const string Id_prop0002 = "prop0002";
         /// <summary>
         /// 名称: 护盾 <br/>
-        /// 备注: 增加护盾上限
+        /// 备注: 可以抵挡子弹，随时间推移自动恢复
         /// </summary>
         public const string Id_prop0003 = "prop0003";
         /// <summary>
-        /// 名称: 护盾快速恢复 <br/>
+        /// 名称: 护盾计时器 <br/>
         /// 备注: 提高护盾恢复速度
         /// </summary>
         public const string Id_prop0004 = "prop0004";
@@ -106,12 +106,12 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_prop0005 = "prop0005";
         /// <summary>
-        /// 名称: 加强无敌时间 <br/>
+        /// 名称: 红宝石戒指 <br/>
         /// 备注: 受伤后延长无敌时间
         /// </summary>
         public const string Id_prop0006 = "prop0006";
         /// <summary>
-        /// 名称: 抵消伤害的护盾 <br/>
+        /// 名称: 备用护盾 <br/>
         /// 备注: 受伤时有一定概率抵消伤害
         /// </summary>
         public const string Id_prop0007 = "prop0007";

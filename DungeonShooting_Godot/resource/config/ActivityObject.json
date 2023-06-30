@@ -101,27 +101,27 @@
     "Id": "prop0001",
     "Type": 9,
     "Name": "\u978B\u5B50",
-    "Remark": "\u589E\u52A0\u79FB\u901F\u7684buff",
+    "Remark": "\u63D0\u9AD8\u79FB\u52A8\u901F\u5EA6",
     "Prefab": "res://prefab/prop/buff/Buff0001.tscn"
   },
   {
     "Id": "prop0002",
     "Type": 9,
     "Name": "\u5FC3\u4E4B\u5BB9\u5668",
-    "Remark": "\u589E\u52A0\u8840\u91CF\u4E0A\u9650",
+    "Remark": "\u63D0\u9AD8\u8840\u91CF\u4E0A\u9650",
     "Prefab": "res://prefab/prop/buff/Buff0002.tscn"
   },
   {
     "Id": "prop0003",
     "Type": 9,
     "Name": "\u62A4\u76FE",
-    "Remark": "\u589E\u52A0\u62A4\u76FE\u4E0A\u9650",
+    "Remark": "\u53EF\u4EE5\u62B5\u6321\u5B50\u5F39\uFF0C\u968F\u65F6\u95F4\u63A8\u79FB\u81EA\u52A8\u6062\u590D",
     "Prefab": "res://prefab/prop/buff/Buff0003.tscn"
   },
   {
     "Id": "prop0004",
     "Type": 9,
-    "Name": "\u62A4\u76FE\u5FEB\u901F\u6062\u590D",
+    "Name": "\u62A4\u76FE\u8BA1\u65F6\u5668",
     "Remark": "\u63D0\u9AD8\u62A4\u76FE\u6062\u590D\u901F\u5EA6",
     "Prefab": "res://prefab/prop/buff/Buff0004.tscn"
   },
@@ -135,14 +135,14 @@
   {
     "Id": "prop0006",
     "Type": 9,
-    "Name": "\u52A0\u5F3A\u65E0\u654C\u65F6\u95F4",
+    "Name": "\u7EA2\u5B9D\u77F3\u6212\u6307",
     "Remark": "\u53D7\u4F24\u540E\u5EF6\u957F\u65E0\u654C\u65F6\u95F4",
     "Prefab": "res://prefab/prop/buff/Buff0006.tscn"
   },
   {
     "Id": "prop0007",
     "Type": 9,
-    "Name": "\u62B5\u6D88\u4F24\u5BB3\u7684\u62A4\u76FE",
+    "Name": "\u5907\u7528\u62A4\u76FE",
     "Remark": "\u53D7\u4F24\u65F6\u6709\u4E00\u5B9A\u6982\u7387\u62B5\u6D88\u4F24\u5BB3",
     "Prefab": "res://prefab/prop/buff/Buff0007.tscn"
   },

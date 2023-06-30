@@ -48,4 +48,12 @@ public static class AnimatorNames
     /// 子弹上膛
     /// </summary>
     public const string BeLoaded = "beLoaded";
+    /// <summary>
+    /// ui入场
+    /// </summary>
+    public const string In = "in";
+    /// <summary>
+    /// ui出场
+    /// </summary>
+    public const string Out = "out";
 }
