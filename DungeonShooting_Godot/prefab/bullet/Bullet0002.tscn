@@ -4,18 +4,25 @@
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_n44pd"]
 [ext_resource type="SpriteFrames" uid="uid://bpeodjqiy3mil" path="res://resource/spriteFrames/bullet/Bullet0002.tres" id="3_uvuj8"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
 resource_local_to_scene = true
 shader = ExtResource("2_n44pd")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p0wfd"]
 resource_local_to_scene = true
 shader = ExtResource("2_n44pd")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c0onq"]
 size = Vector2(44.72, 12)

@@ -1,13 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://bvpmtfupny8iu"]
+[gd_scene load_steps=12 format=3 uid="uid://bvpmtfupny8iu"]
 
 [ext_resource type="Script" path="res://src/game/ui/roomUI/RoomUIPanel.cs" id="1_tfcrp"]
 [ext_resource type="Texture2D" uid="uid://b67i86mtqrn32" path="res://resource/sprite/ui/icon/icon_bullet.png" id="2_a2ohq"]
 [ext_resource type="Texture2D" uid="uid://dxstii6f4l8m0" path="res://resource/sprite/ui/keyboard/e.png" id="3_h7n2a"]
 [ext_resource type="Texture2D" uid="uid://cukrx5yyqw86o" path="res://resource/sprite/ui/reloadBar.png" id="4_nt6mj"]
 [ext_resource type="Texture2D" uid="uid://cx3i1nkcc4307" path="res://resource/sprite/ui/reloadBarBlock.png" id="5_wob8d"]
+[ext_resource type="Material" uid="uid://cces3bhds7jyi" path="res://resource/material/Blend.tres" id="8_vboii"]
+[ext_resource type="Texture2D" uid="uid://civvcowt2wklr" path="res://resource/sprite/weapon/weapon0001/Weapon0001.png" id="9_txd6n"]
 [ext_resource type="Texture2D" uid="uid://blywnftxn1cfd" path="res://resource/sprite/ui/Life_full.png" id="11_y2dqd"]
 [ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/mapBar.png" id="11_yaqsk"]
-[ext_resource type="Texture2D" uid="uid://xafbhgrxmosy" path="res://resource/sprite/weapon/gun4.png" id="12_o2big"]
 
 [sub_resource type="Gradient" id="1"]
 colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
@@ -159,6 +160,7 @@ offset_right = 264.0
 offset_bottom = 0.00146484
 
 [node name="GunSprite" type="TextureRect" parent="Control/GunBar"]
+material = ExtResource("8_vboii")
 layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
@@ -169,7 +171,7 @@ offset_top = -132.0
 offset_right = -66.0
 offset_bottom = -66.0
 scale = Vector2(4, 4)
-texture = ExtResource("12_o2big")
+texture = ExtResource("9_txd6n")
 stretch_mode = 3
 
 [node name="BulletText" type="Label" parent="Control/GunBar"]
