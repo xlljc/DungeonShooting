@@ -4,6 +4,12 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
+/// <summary>
+/// Ui网格组件
+/// </summary>
+/// <typeparam name="TNodeType">原生Godot类型</typeparam>
+/// <typeparam name="TUiNodeType">Ui节点类型</typeparam>
+/// <typeparam name="TData">传给Cell的数据类型</typeparam>
 public partial class UiGrid<TNodeType, TUiNodeType, TData> : GridContainer, IDestroy where TNodeType : Node where TUiNodeType : IUiNode<TNodeType, TUiNodeType>
 {
     public bool IsDestroyed { get; private set; }

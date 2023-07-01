@@ -402,6 +402,13 @@ public abstract partial class Role : ActivityObject
                 _shieldRecoveryTimer = 0;
             }
         }
+
+        //道具调用更新
+        var props = PropsPack.ToArray();
+        foreach (var prop in props)
+        {
+            prop.PackProcess(delta);
+        }
     }
 
     /// <summary>
@@ -649,7 +656,7 @@ public abstract partial class Role : ActivityObject
             // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
         OnHit(damage, !flag);
-        
+
         //受伤特效
         PlayHitAnimation();
         
@@ -759,15 +766,28 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 添加道具
     /// </summary>
-    /// <param name="buff"></param>
-    public void PushProp(Buff buff)
+    public void PushProp(Prop prop)
     {
-        if (PropsPack.Contains(buff))
+        if (PropsPack.Contains(prop))
         {
             GD.PrintErr("道具已经在包裹中了!");
             return;
         }
-        PropsPack.Add(buff);
-        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, buff);
+        PropsPack.Add(prop);
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, prop);
+    }
+
+    /// <summary>
+    /// 移除道具
+    /// </summary>
+    public bool RemoveProp(Prop prop)
+    {
+        if (PropsPack.Remove(prop))
+        {
+            EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, prop);
+            return true;
+        }
+        GD.PrintErr("当前道具不在角色包裹中!");
+        return false;
     }
 }
