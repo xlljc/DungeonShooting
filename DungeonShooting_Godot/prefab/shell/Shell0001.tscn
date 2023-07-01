@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" path="res://src/game/activity/shell/Shell.cs" id="1_2g70c"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_tdny6"]
-[ext_resource type="SpriteFrames" uid="uid://b8gksxl7auquc" path="res://resource/spriteFrames/Shell0001.tres" id="3_ujn5y"]
+[ext_resource type="SpriteFrames" uid="uid://b8gksxl7auquc" path="res://resource/spriteFrames/shell/Shell0001.tres" id="3_ujn5y"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_px12l"]
 resource_local_to_scene = true

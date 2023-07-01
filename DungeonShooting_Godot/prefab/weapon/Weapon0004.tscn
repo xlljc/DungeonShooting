@@ -3,8 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://cxltmhhp4rbyk" path="res://prefab/weapon/WeaponTemplate.tscn" id="1_kg172"]
 [ext_resource type="Script" path="res://src/game/activity/weapon/knife/Knife.cs" id="2_v1wer"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_63s5g"]
-[ext_resource type="SpriteFrames" uid="uid://k2tktysa7j86" path="res://resource/spriteFrames/Weapon0004.tres" id="4_uymcs"]
+[ext_resource type="SpriteFrames" uid="uid://k2tktysa7j86" path="res://resource/spriteFrames/weapon/Weapon0004.tres" id="4_uymcs"]
 [ext_resource type="PackedScene" path="res://prefab/FanCollisionShape.tscn" id="5_nr15b"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o5ytq"]
 resource_local_to_scene = true

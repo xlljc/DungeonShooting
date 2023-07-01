@@ -9,14 +9,14 @@ public class ReloadBar
 {
     private RoomUI.UiNode_ReloadBar _reloadBar;
     private int width;
-    private float startX;
+    private float startX = 1;
 
     public ReloadBar(RoomUI.UiNode_ReloadBar reloadBar)
     {
         reloadBar.Instance.Visible = false;
         _reloadBar = reloadBar;
         width = _reloadBar.L_Slot.Instance.Texture.GetWidth();
-        startX = -(width - 3) / 2f;
+        //startX = -(width - 3) / 2f;
     }
     
     public void OnShow()

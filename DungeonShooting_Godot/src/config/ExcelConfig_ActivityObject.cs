@@ -22,22 +22,29 @@ public static partial class ExcelConfig
         /// Bullet(子弹): 6 <br/>
         /// Shell(弹壳): 7 <br/>
         /// Effect(特效): 8 <br/>
-        /// Other(其它类型): 9
+        /// Prop(道具): 9 <br/>
+        /// Other(其它类型): 99
         /// </summary>
         [JsonInclude]
         public int Type;
 
         /// <summary>
-        /// 物体预制场景路径, 场景根节点必须是ActivityObject子类
+        /// 物体名称
         /// </summary>
         [JsonInclude]
-        public string Prefab;
+        public string Name;
 
         /// <summary>
         /// 物体备注
         /// </summary>
         [JsonInclude]
         public string Remark;
+
+        /// <summary>
+        /// 物体预制场景路径, 场景根节点必须是ActivityObject子类
+        /// </summary>
+        [JsonInclude]
+        public string Prefab;
 
         /// <summary>
         /// 返回浅拷贝出的新对象
@@ -47,8 +54,9 @@ public static partial class ExcelConfig
             var inst = new ActivityObject();
             inst.Id = Id;
             inst.Type = Type;
-            inst.Prefab = Prefab;
+            inst.Name = Name;
             inst.Remark = Remark;
+            inst.Prefab = Prefab;
             return inst;
         }
     }

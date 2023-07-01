@@ -22,3 +22,73 @@ script = ExtResource("3_m4jrh")
 Type = 5
 ItemExpression = "0003"
 WaveNumber = 2
+
+[node name="ActivityMark8" type="Node2D" parent="."]
+position = Vector2(126, 41)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0001"
+WaveNumber = 2
+
+[node name="ActivityMark9" type="Node2D" parent="."]
+position = Vector2(125, 68)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0002"
+WaveNumber = 2
+
+[node name="ActivityMark10" type="Node2D" parent="."]
+position = Vector2(124, 18)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0003"
+WaveNumber = 2
+
+[node name="ActivityMark11" type="Node2D" parent="."]
+position = Vector2(34, 19)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0004"
+WaveNumber = 2
+
+[node name="ActivityMark12" type="Node2D" parent="."]
+position = Vector2(64, 21)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0005"
+WaveNumber = 2
+
+[node name="ActivityMark13" type="Node2D" parent="."]
+position = Vector2(93, 22)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0006"
+WaveNumber = 2
+
+[node name="ActivityMark14" type="Node2D" parent="."]
+position = Vector2(32, 46)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0007"
+WaveNumber = 2
+
+[node name="ActivityMark15" type="Node2D" parent="."]
+position = Vector2(56, 55)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0008"
+WaveNumber = 2
+
+[node name="ActivityMark16" type="Node2D" parent="."]
+position = Vector2(27, 76)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0009"
+WaveNumber = 2
+
+[node name="ActivityMark17" type="Node2D" parent="."]
+position = Vector2(49, 79)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "0010"
+WaveNumber = 2

@@ -6,26 +6,26 @@ namespace UI.RoomUI;
 public abstract partial class RoomUI : UiBase
 {
     /// <summary>
-    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: RoomUI.InteractiveTipBar
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.InteractiveTipBar
     /// </summary>
     public UiNode_InteractiveTipBar L_InteractiveTipBar
     {
         get
         {
-            if (_L_InteractiveTipBar == null) _L_InteractiveTipBar = new UiNode_InteractiveTipBar(GetNodeOrNull<Godot.Node2D>("InteractiveTipBar"));
+            if (_L_InteractiveTipBar == null) _L_InteractiveTipBar = new UiNode_InteractiveTipBar(GetNodeOrNull<Godot.Control>("InteractiveTipBar"));
             return _L_InteractiveTipBar;
         }
     }
     private UiNode_InteractiveTipBar _L_InteractiveTipBar;
 
     /// <summary>
-    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: RoomUI.ReloadBar
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.ReloadBar
     /// </summary>
     public UiNode_ReloadBar L_ReloadBar
     {
         get
         {
-            if (_L_ReloadBar == null) _L_ReloadBar = new UiNode_ReloadBar(GetNodeOrNull<Godot.Node2D>("ReloadBar"));
+            if (_L_ReloadBar == null) _L_ReloadBar = new UiNode_ReloadBar(GetNodeOrNull<Godot.Control>("ReloadBar"));
             return _L_ReloadBar;
         }
     }
@@ -50,21 +50,21 @@ public abstract partial class RoomUI : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.InteractiveTipBar.Icon
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.InteractiveTipBar.Icon
     /// </summary>
-    public class UiNode_Icon : IUiNode<Godot.Sprite2D, UiNode_Icon>
+    public class UiNode_Icon : IUiNode<Godot.TextureRect, UiNode_Icon>
     {
-        public UiNode_Icon(Godot.Sprite2D node) : base(node) {  }
-        public override UiNode_Icon Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
+        public UiNode_Icon(Godot.TextureRect node) : base(node) {  }
+        public override UiNode_Icon Clone() => new ((Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.InteractiveTipBar.InteractiveIcon
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.InteractiveTipBar.InteractiveIcon
     /// </summary>
-    public class UiNode_InteractiveIcon : IUiNode<Godot.Sprite2D, UiNode_InteractiveIcon>
+    public class UiNode_InteractiveIcon : IUiNode<Godot.TextureRect, UiNode_InteractiveIcon>
     {
-        public UiNode_InteractiveIcon(Godot.Sprite2D node) : base(node) {  }
-        public override UiNode_InteractiveIcon Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
+        public UiNode_InteractiveIcon(Godot.TextureRect node) : base(node) {  }
+        public override UiNode_InteractiveIcon Clone() => new ((Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
@@ -77,31 +77,40 @@ public abstract partial class RoomUI : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Node2D"/>, 路径: RoomUI.InteractiveTipBar
+    /// 类型: <see cref="Godot.Label"/>, 路径: RoomUI.InteractiveTipBar.NameLabel
     /// </summary>
-    public class UiNode_InteractiveTipBar : IUiNode<Godot.Node2D, UiNode_InteractiveTipBar>
+    public class UiNode_NameLabel : IUiNode<Godot.Label, UiNode_NameLabel>
+    {
+        public UiNode_NameLabel(Godot.Label node) : base(node) {  }
+        public override UiNode_NameLabel Clone() => new ((Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.InteractiveTipBar
+    /// </summary>
+    public class UiNode_InteractiveTipBar : IUiNode<Godot.Control, UiNode_InteractiveTipBar>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Icon
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Icon
         /// </summary>
         public UiNode_Icon L_Icon
         {
             get
             {
-                if (_L_Icon == null) _L_Icon = new UiNode_Icon(Instance.GetNodeOrNull<Godot.Sprite2D>("Icon"));
+                if (_L_Icon == null) _L_Icon = new UiNode_Icon(Instance.GetNodeOrNull<Godot.TextureRect>("Icon"));
                 return _L_Icon;
             }
         }
         private UiNode_Icon _L_Icon;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.InteractiveIcon
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.InteractiveIcon
         /// </summary>
         public UiNode_InteractiveIcon L_InteractiveIcon
         {
             get
             {
-                if (_L_InteractiveIcon == null) _L_InteractiveIcon = new UiNode_InteractiveIcon(Instance.GetNodeOrNull<Godot.Sprite2D>("InteractiveIcon"));
+                if (_L_InteractiveIcon == null) _L_InteractiveIcon = new UiNode_InteractiveIcon(Instance.GetNodeOrNull<Godot.TextureRect>("InteractiveIcon"));
                 return _L_InteractiveIcon;
             }
         }
@@ -120,8 +129,21 @@ public abstract partial class RoomUI : UiBase
         }
         private UiNode_Line2D _L_Line2D;
 
-        public UiNode_InteractiveTipBar(Godot.Node2D node) : base(node) {  }
-        public override UiNode_InteractiveTipBar Clone() => new ((Godot.Node2D)Instance.Duplicate());
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: RoomUI.NameLabel
+        /// </summary>
+        public UiNode_NameLabel L_NameLabel
+        {
+            get
+            {
+                if (_L_NameLabel == null) _L_NameLabel = new UiNode_NameLabel(Instance.GetNodeOrNull<Godot.Label>("NameLabel"));
+                return _L_NameLabel;
+            }
+        }
+        private UiNode_NameLabel _L_NameLabel;
+
+        public UiNode_InteractiveTipBar(Godot.Control node) : base(node) {  }
+        public override UiNode_InteractiveTipBar Clone() => new ((Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
@@ -134,9 +156,9 @@ public abstract partial class RoomUI : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.ReloadBar.Slot
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.ReloadBar.Slot
     /// </summary>
-    public class UiNode_Slot : IUiNode<Godot.Sprite2D, UiNode_Slot>
+    public class UiNode_Slot : IUiNode<Godot.TextureRect, UiNode_Slot>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.ReloadBar.Block
@@ -151,30 +173,30 @@ public abstract partial class RoomUI : UiBase
         }
         private UiNode_Block _L_Block;
 
-        public UiNode_Slot(Godot.Sprite2D node) : base(node) {  }
-        public override UiNode_Slot Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
+        public UiNode_Slot(Godot.TextureRect node) : base(node) {  }
+        public override UiNode_Slot Clone() => new ((Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Node2D"/>, 路径: RoomUI.ReloadBar
+    /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.ReloadBar
     /// </summary>
-    public class UiNode_ReloadBar : IUiNode<Godot.Node2D, UiNode_ReloadBar>
+    public class UiNode_ReloadBar : IUiNode<Godot.Control, UiNode_ReloadBar>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Slot
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Slot
         /// </summary>
         public UiNode_Slot L_Slot
         {
             get
             {
-                if (_L_Slot == null) _L_Slot = new UiNode_Slot(Instance.GetNodeOrNull<Godot.Sprite2D>("Slot"));
+                if (_L_Slot == null) _L_Slot = new UiNode_Slot(Instance.GetNodeOrNull<Godot.TextureRect>("Slot"));
                 return _L_Slot;
             }
         }
         private UiNode_Slot _L_Slot;
 
-        public UiNode_ReloadBar(Godot.Node2D node) : base(node) {  }
-        public override UiNode_ReloadBar Clone() => new ((Godot.Node2D)Instance.Duplicate());
+        public UiNode_ReloadBar(Godot.Control node) : base(node) {  }
+        public override UiNode_ReloadBar Clone() => new ((Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>

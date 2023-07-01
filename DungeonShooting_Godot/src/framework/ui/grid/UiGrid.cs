@@ -97,8 +97,11 @@ public partial class UiGrid<TNodeType, TUiNodeType, TData> : GridContainer, IDes
             return _cellPool.Pop();
         }
 
-        var cell = Activator.CreateInstance(_cellType);
-        var uiCell = (UiCell<TNodeType, TUiNodeType, TData>)cell;
+        var uiCell = Activator.CreateInstance(_cellType) as UiCell<TNodeType, TUiNodeType, TData>;
+        if (uiCell is null)
+        {
+            throw new Exception($"cellType 无法转为'{typeof(UiCell<TNodeType, TUiNodeType, TData>).FullName}'类型!");
+        }
         uiCell.CellNode = _template.Clone();
         uiCell.Grid = this;
         uiCell.OnInit();

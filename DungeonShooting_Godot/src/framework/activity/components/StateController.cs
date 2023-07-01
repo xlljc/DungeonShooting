@@ -78,16 +78,16 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
     /// </summary>
     public StateBase<T, S> GetState(S state)
     {
-        if (_states.ContainsKey(state))
+        if (_states.TryGetValue(state, out var temp))
         {
-            return _states[state];
+            return temp;
         }
 
         return null;
     }
 
     /// <summary>
-    /// 立即切换到下一个指定状态, 并且这一帧会被调用 PhysicsProcess
+    /// 立即切换到下一个指定状态, 并且这一帧会被调用 Process
     /// </summary>
     public void ChangeStateInstant(S next, params object[] arg)
     {
@@ -95,7 +95,7 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
     }
 
     /// <summary>
-    /// 切换到下一个指定状态, 下一帧才会调用 PhysicsProcess
+    /// 切换到下一个指定状态, 下一帧才会调用 Process
     /// </summary>
     public void ChangeState(S next, params object[] arg)
     {

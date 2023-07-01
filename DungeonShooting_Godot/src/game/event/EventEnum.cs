@@ -37,6 +37,23 @@ public enum EventEnum
     /// </summary>
     OnPlayerMaxShieldChange,
     /// <summary>
+    /// 玩家拾起武器, 参数为<see cref="Weapon"/>
+    /// </summary>
+    OnPlayerPickUpWeapon,
+    /// <summary>
+    /// 玩家丢弃武器, 参数为<see cref="Weapon"/>
+    /// </summary>
+    OnPlayerThrowWeapon,
+    /// <summary>
+    /// 玩家拾起道具, 参数为<see cref="Prop"/>
+    /// </summary>
+    OnPlayerPickUpProp,
+    /// <summary>
+    /// 玩家丢弃道具, 参数为<see cref="Prop"/>
+    /// </summary>
+    OnPlayerThrowProp,
+    
+    /// <summary>
     /// 当玩家进入地牢时调用, 没有参数
     /// </summary>
     OnEnterDungeon,

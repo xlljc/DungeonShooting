@@ -141,7 +141,7 @@ public class Holster
         for (var i = 0; i < Weapons.Length; i++)
         {
             var item = Weapons[i];
-            if (item != null && item.ItemId == id)
+            if (item != null && item.ItemConfig.Id == id)
             {
                 return i;
             }

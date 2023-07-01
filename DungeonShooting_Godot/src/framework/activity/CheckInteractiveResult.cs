@@ -13,10 +13,6 @@ public class CheckInteractiveResult
     /// </summary>
     public bool CanInteractive;
     /// <summary>
-    /// 互动提示信息
-    /// </summary>
-    public string Message;
-    /// <summary>
     /// 互动提示显示的图标
     /// </summary>
     public string ShowIcon;
@@ -24,5 +20,18 @@ public class CheckInteractiveResult
     public CheckInteractiveResult(ActivityObject target)
     {
         Target = target;
+    }
+    
+    public CheckInteractiveResult(ActivityObject target, bool canInteractive)
+    {
+        Target = target;
+        CanInteractive = canInteractive;
+    }
+    
+    public CheckInteractiveResult(ActivityObject target, bool canInteractive, string showIcon)
+    {
+        Target = target;
+        CanInteractive = canInteractive;
+        ShowIcon = showIcon;
     }
 }

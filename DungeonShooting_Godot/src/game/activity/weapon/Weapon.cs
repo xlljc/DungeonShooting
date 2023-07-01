@@ -238,7 +238,7 @@ public abstract partial class Weapon : ActivityObject
     {
         if (_weaponAttributeMap.TryGetValue(itemId, out var attr))
         {
-            return attr;
+            return attr.Clone();
         }
 
         throw new Exception($"武器'{itemId}'没有在 Weapon 表中配置属性数据!");
@@ -246,7 +246,7 @@ public abstract partial class Weapon : ActivityObject
     
     public override void OnInit()
     {
-        InitWeapon(_GetWeaponAttribute(ItemId));
+        InitWeapon(_GetWeaponAttribute(ItemConfig.Id));
         AnimatedSprite.AnimationFinished += OnAnimationFinished;
     }
 
@@ -269,7 +269,7 @@ public abstract partial class Weapon : ActivityObject
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
             Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
-            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + ItemId);
+            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + ItemConfig.Id);
         }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
@@ -366,7 +366,8 @@ public abstract partial class Weapon : ActivityObject
     /// <summary>
     /// 当武器从武器袋中移除时调用
     /// </summary>
-    protected virtual void OnRemove()
+    /// <param name="master">移除该武器的角色</param>
+    protected virtual void OnRemove(Role master)
     {
     }
 
@@ -421,8 +422,7 @@ public abstract partial class Weapon : ActivityObject
             //攻击冷却计时
             _attackTimer = _attackTimer > 0 ? _attackTimer - delta : 0;
             //武器的当前散射半径
-            CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
-                Attribute.StartScatteringRange);
+            ScatteringRangeBackHandler(delta);
             //松开扳机
             if (_triggerFlag || _downTimer > 0)
             {
@@ -609,7 +609,7 @@ public abstract partial class Weapon : ActivityObject
                 //连发开火
                 TriggerFire();
                 //连发最后一发打完了
-                if (_continuousCount <= 0)
+                if (Attribute.ManualBeLoaded && _continuousCount <= 0)
                 {
                     //执行上膛逻辑
                     RunBeLoaded();
@@ -619,8 +619,7 @@ public abstract partial class Weapon : ActivityObject
             //散射值销退
             if (_noAttackTime >= Attribute.ScatteringRangeBackDelayTime)
             {
-                CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
-                    Attribute.StartScatteringRange);
+                ScatteringRangeBackHandler(delta);
             }
 
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
@@ -772,7 +771,7 @@ public abstract partial class Weapon : ActivityObject
                             TriggerFire();
 
                             //非连射模式
-                            if (!Attribute.ContinuousShoot && _continuousCount <= 0)
+                            if (!Attribute.ContinuousShoot && Attribute.ManualBeLoaded && _continuousCount <= 0)
                             {
                                 //执行上膛逻辑
                                 RunBeLoaded();
@@ -849,7 +848,7 @@ public abstract partial class Weapon : ActivityObject
             {
                 TriggerFire();
                 //非连射模式
-                if (!Attribute.ContinuousShoot && _continuousCount <= 0)
+                if (!Attribute.ContinuousShoot && Attribute.ManualBeLoaded && _continuousCount <= 0)
                 {
                     //执行上膛逻辑
                     RunBeLoaded();
@@ -909,7 +908,7 @@ public abstract partial class Weapon : ActivityObject
         PlayShootSound();
         
         //抛弹
-        if (Attribute.ContinuousShoot && Attribute.ShellId != null)
+        if ((Attribute.ContinuousShoot || !Attribute.ManualBeLoaded))
         {
             ThrowShellHandler(1f);
         }
@@ -917,8 +916,7 @@ public abstract partial class Weapon : ActivityObject
         //触发开火函数
         OnFire();
 
-        //开火发射的子弹数量
-        var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
+
         //武器口角度
         var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
 
@@ -927,7 +925,16 @@ public abstract partial class Weapon : ActivityObject
         var tempAngle = Mathf.RadToDeg(tempRotation);
 
         //开火时枪口角度
-        var fireRotation = Mathf.DegToRad(Master.MountPoint.RealRotationDegrees) + tempRotation;
+        var fireRotation = tempRotation;
+        
+        //开火发射的子弹数量
+        var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
+        if (Master != null)
+        {
+            bulletCount = Master.RoleState.CallCalcBulletCountEvent(this, bulletCount);
+            fireRotation += Mathf.DegToRad(Master.MountPoint.RealRotationDegrees);
+        }
+        
         //创建子弹
         for (int i = 0; i < bulletCount; i++)
         {
@@ -936,8 +943,8 @@ public abstract partial class Weapon : ActivityObject
         }
 
         //开火添加散射值
-        CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue,
-            Attribute.FinalScatteringRange);
+        ScatteringRangeAddHandler();
+        
         //武器的旋转角度
         tempAngle -= Attribute.UpliftAngle;
         RotationDegrees = tempAngle;
@@ -1060,7 +1067,7 @@ public abstract partial class Weapon : ActivityObject
             
             // GD.Print("开始换弹.");
             //抛弹
-            if (!Attribute.ContinuousShoot && (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0 && Attribute.ShellId != null)
+            if (!Attribute.ContinuousShoot && (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0)
             {
                 ThrowShellHandler(0.6f);
             }
@@ -1163,7 +1170,7 @@ public abstract partial class Weapon : ActivityObject
     //执行上膛逻辑
     private void RunBeLoaded()
     {
-        if (Attribute.AutoBeLoaded)
+        if (Attribute.AutoManualBeLoaded)
         {
             if (_attackTimer <= 0)
             {
@@ -1240,7 +1247,7 @@ public abstract partial class Weapon : ActivityObject
     private void BeLoadedHandler()
     {
         //上膛抛弹
-        if (!Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0 && Attribute.ShellId != null)
+        if (!Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
         {
             ThrowShellHandler(0.6f);
         }
@@ -1281,6 +1288,10 @@ public abstract partial class Weapon : ActivityObject
     //抛弹逻辑
     private void ThrowShellHandler(float speedScale)
     {
+        if (string.IsNullOrEmpty(Attribute.ShellId))
+        {
+            return;
+        }
         //创建一个弹壳
         if (Attribute.ThrowShellDelayTime > 0)
         {
@@ -1289,6 +1300,50 @@ public abstract partial class Weapon : ActivityObject
         else if (Attribute.ThrowShellDelayTime == 0)
         {
             ThrowShell(Attribute.ShellId, speedScale);
+        }
+    }
+
+    //散射值消退处理
+    private void ScatteringRangeBackHandler(float delta)
+    {
+        var startScatteringRange = Attribute.StartScatteringRange;
+        var finalScatteringRange = Attribute.FinalScatteringRange;
+        if (Master != null)
+        {
+            startScatteringRange = Master.RoleState.CallCalcStartScatteringEvent(this, startScatteringRange);
+            finalScatteringRange = Master.RoleState.CallCalcFinalScatteringEvent(this, finalScatteringRange);
+        }
+        if (startScatteringRange <= finalScatteringRange)
+        {
+            CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
+                startScatteringRange);
+        }
+        else
+        {
+            CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeBackSpeed * delta,
+                startScatteringRange);
+        }
+    }
+
+    //散射值添加处理
+    private void ScatteringRangeAddHandler()
+    {
+        var startScatteringRange = Attribute.StartScatteringRange;
+        var finalScatteringRange = Attribute.FinalScatteringRange;
+        if (Master != null)
+        {
+            startScatteringRange = Master.RoleState.CallCalcStartScatteringEvent(this, startScatteringRange);
+            finalScatteringRange = Master.RoleState.CallCalcFinalScatteringEvent(this, finalScatteringRange);
+        }
+        if (startScatteringRange <= finalScatteringRange)
+        {
+            CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue,
+                finalScatteringRange);
+        }
+        else
+        {
+            CurrScatteringRange = Mathf.Min(CurrScatteringRange - Attribute.ScatteringRangeAddValue,
+                finalScatteringRange);
         }
     }
 
@@ -1387,7 +1442,7 @@ public abstract partial class Weapon : ActivityObject
             {
                 var masterWeapon = roleMaster.Holster.ActiveWeapon;
                 //查找是否有同类型武器
-                var index = roleMaster.Holster.FindWeapon(ItemId);
+                var index = roleMaster.Holster.FindWeapon(ItemConfig.Id);
                 if (index != -1) //如果有这个武器
                 {
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
@@ -1397,7 +1452,6 @@ public abstract partial class Weapon : ActivityObject
                         {
                             //可以互动拾起弹药
                             result.CanInteractive = true;
-                            result.Message = Attribute.Name;
                             result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_bullet_png;
                             return result;
                         }
@@ -1409,7 +1463,6 @@ public abstract partial class Weapon : ActivityObject
                     {
                         //可以互动, 拾起武器
                         result.CanInteractive = true;
-                        result.Message = Attribute.Name;
                         result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_pickup_png;
                         return result;
                     }
@@ -1417,7 +1470,6 @@ public abstract partial class Weapon : ActivityObject
                     {
                         //可以互动, 切换武器
                         result.CanInteractive = true;
-                        result.Message = Attribute.Name;
                         result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_replace_png;
                         return result;
                     }
@@ -1434,7 +1486,7 @@ public abstract partial class Weapon : ActivityObject
         {
             var holster = roleMaster.Holster;
             //查找是否有同类型武器
-            var index = holster.FindWeapon(ItemId);
+            var index = holster.FindWeapon(ItemConfig.Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
@@ -1519,15 +1571,15 @@ public abstract partial class Weapon : ActivityObject
 
         var rotation = master.MountPoint.GlobalRotation;
         GlobalRotation = rotation;
-        
-        //继承role的移动速度
-        InheritVelocity(master);
 
         startPosition -= GripPoint.Position.Rotated(rotation);
         var startHeight = -master.MountPoint.Position.Y;
         var velocity = new Vector2(20, 0).Rotated(rotation);
         var yf = Utils.RandomRangeInt(50, 70);
         Throw(startPosition, startHeight, yf, velocity, 0);
+        
+        //继承role的移动速度
+        InheritVelocity(master);
     }
 
     protected override void OnThrowStart()
@@ -1582,13 +1634,14 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     public void RemoveAt()
     {
+        var master = Master;
         Master = null;
         CollisionLayer = _tempLayer;
         _weaponAttribute = _playerWeaponAttribute;
         AnimatedSprite.Position = _tempAnimatedSpritePosition;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
-        OnRemove();
+        OnRemove(master);
     }
 
     /// <summary>
@@ -1630,8 +1683,8 @@ public abstract partial class Weapon : ActivityObject
         var rotate = Utils.RandomRangeInt((int)(-720 * speedScale), (int)(720 * speedScale));
         var shell = Create(shellId);
         shell.Rotation = (Master != null ? Master.MountPoint.RealRotation : Rotation);
-        shell.InheritVelocity(Master != null ? Master : this);
         shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
+        shell.InheritVelocity(Master != null ? Master : this);
         if (Master == null)
         {
             AffiliationArea.InsertItem(shell);
@@ -1649,14 +1702,24 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     protected Bullet ShootBullet(float fireRotation, string bulletId)
     {
+        var speed = Utils.RandomRangeFloat(Attribute.BulletMinSpeed, Attribute.BulletMaxSpeed);
+        var distance = Utils.RandomRangeFloat(Attribute.BulletMinDistance, Attribute.BulletMaxDistance);
+        var deviationAngle =
+            Utils.RandomRangeFloat(Attribute.BulletMinDeviationAngle, Attribute.BulletMaxDeviationAngle);
+        if (Master != null)
+        {
+            speed = Master.RoleState.CallCalcBulletSpeedEvent(this, speed);
+            distance = Master.RoleState.CallCalcBulletDistanceEvent(this, distance);
+            deviationAngle = Master.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+        }
         //创建子弹
         var bullet = Create<Bullet>(bulletId);
         bullet.Init(
             this,
-            Utils.RandomRangeFloat(Attribute.BulletMinSpeed, Attribute.BulletMaxSpeed),
-            Utils.RandomRangeFloat(Attribute.BulletMinDistance, Attribute.BulletMaxDistance),
+            speed,
+            distance,
             FirePoint.GlobalPosition,
-            fireRotation + Mathf.DegToRad(Utils.RandomRangeFloat(Attribute.BulletMinDeviationAngle, Attribute.BulletMaxDeviationAngle)),
+            fireRotation + Mathf.DegToRad(deviationAngle),
             GetAttackLayer()
         );
         bullet.MinHarm = Attribute.BulletMinHarm;

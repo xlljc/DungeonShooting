@@ -20,10 +20,10 @@ public static partial class ExcelConfig
         public string WeaponId;
 
         /// <summary>
-        /// 武器显示的名称
+        /// 备注
         /// </summary>
         [JsonInclude]
-        public string Name;
+        public string Remark;
 
         /// <summary>
         /// 武器的图标
@@ -119,13 +119,19 @@ public static partial class ExcelConfig
         public float MinChargeTime;
 
         /// <summary>
-        /// 单次射击后是否自动执行上膛操作, 必须将 'ContinuousShoot' 设置为 false
+        /// 单次射击后是否需要手动上膛动作, 必须将 'ContinuousShoot' 设置为 false
         /// </summary>
         [JsonInclude]
-        public bool AutoBeLoaded;
+        public bool ManualBeLoaded;
 
         /// <summary>
-        /// 上膛时间, 如果时间为0, 则不会播放上膛动画和音效, 可以视为没有上膛动作, 必须将 'ContinuousShoot' 设置为 false
+        /// 手动上膛模式下, 单次射击后是否自动执行上膛操作, 必须将 'ManualBeLoaded' 设置为 true
+        /// </summary>
+        [JsonInclude]
+        public bool AutoManualBeLoaded;
+
+        /// <summary>
+        /// 上膛时间, 如果时间为0, 则不会播放上膛动画和音效, 可以视为没有上膛动作, 必须将 'ManualBeLoaded' 设置为 true
         /// </summary>
         [JsonInclude]
         public float BeLoadedTime;
@@ -421,7 +427,7 @@ public static partial class ExcelConfig
             var inst = new Weapon();
             inst.Id = Id;
             inst.WeaponId = WeaponId;
-            inst.Name = Name;
+            inst.Remark = Remark;
             inst.Icon = Icon;
             inst.Weight = Weight;
             inst.WeightType = WeightType;
@@ -437,7 +443,8 @@ public static partial class ExcelConfig
             inst.AloneReloadCanShoot = AloneReloadCanShoot;
             inst.LooseShoot = LooseShoot;
             inst.MinChargeTime = MinChargeTime;
-            inst.AutoBeLoaded = AutoBeLoaded;
+            inst.ManualBeLoaded = ManualBeLoaded;
+            inst.AutoManualBeLoaded = AutoManualBeLoaded;
             inst.BeLoadedTime = BeLoadedTime;
             inst.MinContinuousCount = MinContinuousCount;
             inst.MaxContinuousCount = MaxContinuousCount;

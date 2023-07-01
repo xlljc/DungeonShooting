@@ -34,6 +34,13 @@ public static class Utils
     public static bool RandomBoolean()
     {
         return _random.NextSingle() >= 0.5f;
+    }    
+    /// <summary>
+    /// 指定概率会返回 true, probability 范围 0 - 1
+    /// </summary>
+    public static bool RandomBoolean(float probability)
+    {
+        return _random.NextSingle() <= probability;
     }
 
     /// <summary>
