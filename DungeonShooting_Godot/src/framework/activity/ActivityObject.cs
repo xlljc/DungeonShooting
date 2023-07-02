@@ -204,7 +204,60 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// 所在的 World 对象
     /// </summary>
     public World World { get; private set; }
-    
+
+    /// <summary>
+    /// 是否开启描边
+    /// </summary>
+    public bool ShowOutline
+    {
+        get => _showOutline;
+        set
+        {
+            if (_blendShaderMaterial != null)
+            {
+                if (value != _showOutline)
+                {
+                    _blendShaderMaterial.SetShaderParameter("show_outline", value);
+                    if (_shadowBlendShaderMaterial != null)
+                    {
+                        _shadowBlendShaderMaterial.SetShaderParameter("show_outline", value);
+                    }
+                    _showOutline = value;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 描边颜色
+    /// </summary>
+    public Color OutlineColor
+    {
+        get
+        {
+            if (!_initOutlineColor)
+            {
+                _initOutlineColor = true;
+                if (_blendShaderMaterial != null)
+                {
+                    _outlineColor = _blendShaderMaterial.GetShaderParameter("outline_color").AsColor();
+                }
+            }
+
+            return _outlineColor;
+        }
+        set
+        {
+            _initOutlineColor = true;
+            if (value != _outlineColor)
+            {
+                _blendShaderMaterial.SetShaderParameter("outline_color", value);
+            }
+
+            _outlineColor = value;
+        }
+    }
+
     // --------------------------------------------------------------------------------
 
     //组件集合
@@ -264,6 +317,13 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     //实例索引
     private static long _instanceIndex = 0;
 
+    //是否启用描边
+    private bool _showOutline = false;
+    
+    //描边颜色
+    private bool _initOutlineColor = false;
+    private Color _outlineColor = new Color(0, 0, 0, 1);
+
     //初始化节点
     private void _InitNode(RegisterActivityData activityData, World world)
     {
@@ -281,6 +341,16 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         Name = GetType().Name + (_instanceIndex++);
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
         _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
+        if (_blendShaderMaterial != null)
+        {
+            _showOutline = _blendShaderMaterial.GetShaderParameter("show_outline").AsBool();
+        }
+
+        if (_shadowBlendShaderMaterial != null)
+        {
+            _shadowBlendShaderMaterial.SetShaderParameter("show_outline", _showOutline);
+        }
+
         ShadowSprite.Visible = false;
         MotionMode = MotionModeEnum.Floating;
         MoveController = AddComponent<MoveController>();

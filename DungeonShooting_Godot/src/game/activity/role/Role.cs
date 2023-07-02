@@ -204,8 +204,8 @@ public abstract partial class Role : ActivityObject
     private Vector2 _startScale;
     //所有角色碰撞的物体
     private readonly List<ActivityObject> _interactiveItemList = new List<ActivityObject>();
-
-    private CheckInteractiveResult _tempResultData;
+    //当前可互动的物体
+    private CheckInteractiveResult _currentResultData;
     private uint _currentLayer;
     //闪烁计时器
     private float _flashingInvincibleTimer = -1;
@@ -277,8 +277,9 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 当可互动的物体改变时调用, result 参数为 null 表示变为不可互动
     /// </summary>
-    /// <param name="result">检测是否可互动时的返回值</param>
-    protected virtual void ChangeInteractiveItem(CheckInteractiveResult result)
+    /// <param name="prev">上一个互动的物体</param>
+    /// <param name="result">当前物体, 检测是否可互动时的返回值</param>
+    protected virtual void ChangeInteractiveItem(CheckInteractiveResult prev, CheckInteractiveResult result)
     {
     }
 
@@ -341,28 +342,32 @@ public abstract partial class Role : ActivityObject
                 if (!findFlag)
                 {
                     var result = item.CheckInteractive(this);
+                    var prev = _currentResultData;
+                    _currentResultData = result;
                     if (result.CanInteractive) //可以互动
                     {
                         findFlag = true;
                         if (InteractiveItem != item) //更改互动物体
                         {
                             InteractiveItem = item;
-                            ChangeInteractiveItem(result);
+                            ChangeInteractiveItem(prev, result);
                         }
-                        else if (result.ShowIcon != _tempResultData.ShowIcon) //切换状态
+                        else if (result.ShowIcon != _currentResultData.ShowIcon) //切换状态
                         {
-                            ChangeInteractiveItem(result);
+                            ChangeInteractiveItem(prev, result);
                         }
                     }
-                    _tempResultData = result;
+                    
                 }
             }
         }
         //没有可互动的物体
         if (!findFlag && InteractiveItem != null)
         {
+            var prev = _currentResultData;
+            _currentResultData = null;
             InteractiveItem = null;
-            ChangeInteractiveItem(null);
+            ChangeInteractiveItem(prev, null);
         }
 
         //无敌状态, 播放闪烁动画
@@ -757,8 +762,10 @@ public abstract partial class Role : ActivityObject
             }
             if (InteractiveItem == propObject)
             {
+                var prev = _currentResultData;
+                _currentResultData = null;
                 InteractiveItem = null;
-                ChangeInteractiveItem(null);
+                ChangeInteractiveItem(prev, null);
             }
         }
     }

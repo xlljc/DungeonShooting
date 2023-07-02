@@ -130,7 +130,7 @@ public partial class Player : Role
         //播放动画
         PlayAnim();
     }
-    
+
     public override bool PickUpWeapon(Weapon weapon, bool exchange = true)
     {
         //拾起武器
@@ -189,8 +189,16 @@ public partial class Player : Role
         EventManager.EmitEvent(EventEnum.OnPlayerMaxHpChange, maxHp);
     }
 
-    protected override void ChangeInteractiveItem(CheckInteractiveResult result)
+    protected override void ChangeInteractiveItem(CheckInteractiveResult prev, CheckInteractiveResult result)
     {
+        if (prev != null && prev.Target.ShowOutline)
+        {
+            prev.Target.OutlineColor = Colors.Black;
+        }
+        if (result != null && result.Target.ShowOutline)
+        {
+            result.Target.OutlineColor = Colors.White;
+        }
         //派发互动对象改变事件
         EventManager.EmitEvent(EventEnum.OnPlayerChangeInteractiveItem, result);
     }
