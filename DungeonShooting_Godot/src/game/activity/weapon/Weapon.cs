@@ -1523,6 +1523,14 @@ public abstract partial class Weapon : ActivityObject
                 if (flag)
                 {
                     Throw(GlobalPosition, 0, Utils.RandomRangeInt(20, 50), Vector2.Zero, Utils.RandomRangeInt(-180, 180));
+                    //没有子弹了, 停止播放泛白效果
+                    if (IsTotalAmmoEmpty())
+                    {
+                        //停止动画
+                        AnimationPlayer.Stop();
+                        //清除泛白效果
+                        SetBlendSchedule(0);
+                    }
                 }
             }
             else //没有武器
@@ -1586,14 +1594,18 @@ public abstract partial class Weapon : ActivityObject
     {
         //禁用碰撞
         //Collision.Disabled = true;
-        AnimationPlayer.Play(AnimatorNames.Floodlight);
+        //AnimationPlayer.Play(AnimatorNames.Floodlight);
     }
 
     protected override void OnThrowOver()
     {
         //启用碰撞
         //Collision.Disabled = false;
-        AnimationPlayer.Play(AnimatorNames.Floodlight);
+        //还有弹药, 播放泛白效果
+        if (!IsTotalAmmoEmpty())
+        {
+            AnimationPlayer.Play(AnimatorNames.Floodlight);
+        }
     }
 
     /// <summary>
