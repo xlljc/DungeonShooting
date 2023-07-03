@@ -16,7 +16,7 @@ using Godot;
 /// <summary>
 /// 基础敌人
 /// </summary>
-[Tool, GlobalClass]
+[Tool]
 public partial class Enemy : Role
 {
     /// <summary>

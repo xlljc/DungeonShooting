@@ -3,7 +3,7 @@ using Godot;
 /// <summary>
 /// 子弹类
 /// </summary>
-[Tool, GlobalClass]
+[Tool]
 public partial class Bullet : ActivityObject
 {
     /// <summary>

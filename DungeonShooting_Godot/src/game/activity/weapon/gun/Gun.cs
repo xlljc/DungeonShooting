@@ -3,7 +3,7 @@ using Godot;
 /// <summary>
 /// 普通的枪
 /// </summary>
-[Tool, GlobalClass]
+[Tool]
 public partial class Gun : Weapon
 {
     protected override void OnFire()

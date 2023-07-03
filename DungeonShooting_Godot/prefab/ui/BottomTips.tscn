@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dxmjm1pgctyid"]
 
 [ext_resource type="Script" path="res://src/game/ui/bottomTips/BottomTipsPanel.cs" id="1_c63vs"]
-[ext_resource type="Texture2D" uid="uid://bls55gj8h3mgv" path="res://resource/sprite/prop/buff/Buff0001.png" id="2_gaykt"]
+[ext_resource type="Texture2D" uid="uid://bls55gj8h3mgv" path="res://resource/sprite/prop/buff/BuffProp0001.png" id="2_gaykt"]
 [ext_resource type="Material" uid="uid://cces3bhds7jyi" path="res://resource/material/Blend.tres" id="2_syy07"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xtn1u"]

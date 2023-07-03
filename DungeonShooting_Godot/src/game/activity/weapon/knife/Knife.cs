@@ -1,7 +1,7 @@
 
 using Godot;
 
-[Tool, GlobalClass]
+[Tool]
 public partial class Knife : Weapon
 {
     

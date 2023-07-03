@@ -290,6 +290,20 @@ public abstract partial class Role : ActivityObject
     {
     }
 
+    /// <summary>
+    /// 当往背包中添加道具时调用
+    /// </summary>
+    protected virtual void OnPushProp(Prop prop)
+    {
+    }
+
+    /// <summary>
+    /// 当从背包中移除道具时调用
+    /// </summary>
+    protected virtual void OnRemoveProp(Prop prop)
+    {
+    }
+
     public override void OnInit()
     {
         Holster = new Holster(this);
@@ -781,7 +795,7 @@ public abstract partial class Role : ActivityObject
             return;
         }
         PropsPack.Add(prop);
-        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, prop);
+        OnPushProp(prop);
     }
 
     /// <summary>
@@ -791,7 +805,7 @@ public abstract partial class Role : ActivityObject
     {
         if (PropsPack.Remove(prop))
         {
-            EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, prop);
+            OnRemoveProp(prop);
             return true;
         }
         GD.PrintErr("当前道具不在角色包裹中!");

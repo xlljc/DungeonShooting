@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
-[Tool, GlobalClass]
+[Tool]
 public partial class Player : Role
 {
     /// <summary>
@@ -222,6 +222,16 @@ public partial class Player : Role
         MoveController.ClearForce();
         UiManager.Open_Settlement();
         //GameApplication.Instance.World.ProcessMode = ProcessModeEnum.WhenPaused;
+    }
+
+    protected override void OnPushProp(Prop prop)
+    {
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, prop);
+    }
+
+    protected override void OnRemoveProp(Prop prop)
+    {
+        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, prop);
     }
 
     //处理角色移动的输入

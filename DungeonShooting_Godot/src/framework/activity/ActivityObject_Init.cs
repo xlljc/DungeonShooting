@@ -131,6 +131,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_prop0010 = "prop0010";
         /// <summary>
+        /// 名称: 医药箱 <br/>
+        /// 备注: 使用后回复一颗红心
+        /// </summary>
+        public const string Id_prop5000 = "prop5000";
+        /// <summary>
         /// 名称:  <br/>
         /// 备注: 地牢房间的门(东侧)
         /// </summary>
@@ -167,16 +172,17 @@ public partial class ActivityObject
         _activityRegisterMap.Add("shell0002", new RegisterActivityData("res://prefab/shell/Shell0002.tscn", ExcelConfig.ActivityObject_Map["shell0002"]));
         _activityRegisterMap.Add("shell0003", new RegisterActivityData("res://prefab/shell/Shell0003.tscn", ExcelConfig.ActivityObject_Map["shell0003"]));
         _activityRegisterMap.Add("effect0001", new RegisterActivityData("res://prefab/effect/activityObject/Effect0001.tscn", ExcelConfig.ActivityObject_Map["effect0001"]));
-        _activityRegisterMap.Add("prop0001", new RegisterActivityData("res://prefab/prop/buff/Buff0001.tscn", ExcelConfig.ActivityObject_Map["prop0001"]));
-        _activityRegisterMap.Add("prop0002", new RegisterActivityData("res://prefab/prop/buff/Buff0002.tscn", ExcelConfig.ActivityObject_Map["prop0002"]));
-        _activityRegisterMap.Add("prop0003", new RegisterActivityData("res://prefab/prop/buff/Buff0003.tscn", ExcelConfig.ActivityObject_Map["prop0003"]));
-        _activityRegisterMap.Add("prop0004", new RegisterActivityData("res://prefab/prop/buff/Buff0004.tscn", ExcelConfig.ActivityObject_Map["prop0004"]));
-        _activityRegisterMap.Add("prop0005", new RegisterActivityData("res://prefab/prop/buff/Buff0005.tscn", ExcelConfig.ActivityObject_Map["prop0005"]));
-        _activityRegisterMap.Add("prop0006", new RegisterActivityData("res://prefab/prop/buff/Buff0006.tscn", ExcelConfig.ActivityObject_Map["prop0006"]));
-        _activityRegisterMap.Add("prop0007", new RegisterActivityData("res://prefab/prop/buff/Buff0007.tscn", ExcelConfig.ActivityObject_Map["prop0007"]));
-        _activityRegisterMap.Add("prop0008", new RegisterActivityData("res://prefab/prop/buff/Buff0008.tscn", ExcelConfig.ActivityObject_Map["prop0008"]));
-        _activityRegisterMap.Add("prop0009", new RegisterActivityData("res://prefab/prop/buff/Buff0009.tscn", ExcelConfig.ActivityObject_Map["prop0009"]));
-        _activityRegisterMap.Add("prop0010", new RegisterActivityData("res://prefab/prop/buff/Buff0010.tscn", ExcelConfig.ActivityObject_Map["prop0010"]));
+        _activityRegisterMap.Add("prop0001", new RegisterActivityData("res://prefab/prop/buff/BuffProp0001.tscn", ExcelConfig.ActivityObject_Map["prop0001"]));
+        _activityRegisterMap.Add("prop0002", new RegisterActivityData("res://prefab/prop/buff/BuffProp0002.tscn", ExcelConfig.ActivityObject_Map["prop0002"]));
+        _activityRegisterMap.Add("prop0003", new RegisterActivityData("res://prefab/prop/buff/BuffProp0003.tscn", ExcelConfig.ActivityObject_Map["prop0003"]));
+        _activityRegisterMap.Add("prop0004", new RegisterActivityData("res://prefab/prop/buff/BuffProp0004.tscn", ExcelConfig.ActivityObject_Map["prop0004"]));
+        _activityRegisterMap.Add("prop0005", new RegisterActivityData("res://prefab/prop/buff/BuffProp0005.tscn", ExcelConfig.ActivityObject_Map["prop0005"]));
+        _activityRegisterMap.Add("prop0006", new RegisterActivityData("res://prefab/prop/buff/BuffProp0006.tscn", ExcelConfig.ActivityObject_Map["prop0006"]));
+        _activityRegisterMap.Add("prop0007", new RegisterActivityData("res://prefab/prop/buff/BuffProp0007.tscn", ExcelConfig.ActivityObject_Map["prop0007"]));
+        _activityRegisterMap.Add("prop0008", new RegisterActivityData("res://prefab/prop/buff/BuffProp0008.tscn", ExcelConfig.ActivityObject_Map["prop0008"]));
+        _activityRegisterMap.Add("prop0009", new RegisterActivityData("res://prefab/prop/buff/BuffProp0009.tscn", ExcelConfig.ActivityObject_Map["prop0009"]));
+        _activityRegisterMap.Add("prop0010", new RegisterActivityData("res://prefab/prop/buff/BuffProp0010.tscn", ExcelConfig.ActivityObject_Map["prop0010"]));
+        _activityRegisterMap.Add("prop5000", new RegisterActivityData("res://prefab/prop/active/ActiveProp5000.tscn", ExcelConfig.ActivityObject_Map["prop5000"]));
         _activityRegisterMap.Add("other_door_e", new RegisterActivityData("res://prefab/map/RoomDoor_E.tscn", ExcelConfig.ActivityObject_Map["other_door_e"]));
         _activityRegisterMap.Add("other_door_w", new RegisterActivityData("res://prefab/map/RoomDoor_W.tscn", ExcelConfig.ActivityObject_Map["other_door_w"]));
         _activityRegisterMap.Add("other_door_s", new RegisterActivityData("res://prefab/map/RoomDoor_S.tscn", ExcelConfig.ActivityObject_Map["other_door_s"]));

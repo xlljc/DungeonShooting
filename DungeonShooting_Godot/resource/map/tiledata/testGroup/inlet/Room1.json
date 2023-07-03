@@ -1,38 +1,38 @@
 {
-  "Position": {
-    "X": -1,
-    "Y": -1
-  },
-  "Size": {
-    "X": 12,
-    "Y": 8
-  },
-  "DoorAreaInfos": [],
-  "NavigationList": [
-    {
-      "Type": 0,
-      "Points": [
-        {
-          "X": 8,
-          "Y": 8
-        },
-        {
-          "X": 152,
-          "Y": 8
-        },
-        {
-          "X": 152,
-          "Y": 96
-        },
-        {
-          "X": 8,
-          "Y": 96
-        }
-      ]
-    }
-  ],
-  "GroupName": "testGroup",
-  "RoomType": 1,
-  "FileName": "Room1",
-  "Weight": 100
+	"Position": {
+		"X": -1,
+		"Y": -1
+	},
+	"Size": {
+		"X": 12,
+		"Y": 8
+	},
+	"DoorAreaInfos": [],
+	"NavigationList": [
+		{
+			"Type": 0,
+			"Points": [
+				{
+					"X": 8,
+					"Y": 8
+				},
+				{
+					"X": 152,
+					"Y": 8
+				},
+				{
+					"X": 152,
+					"Y": 96
+				},
+				{
+					"X": 8,
+					"Y": 96
+				}
+			]
+		}
+	],
+	"GroupName": "testGroup",
+	"RoomType": 1,
+	"FileName": "Room1",
+	"Weight": 100
 }

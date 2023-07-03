@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 弹壳类
 /// </summary>
-[Tool, GlobalClass]
+[Tool]
 public partial class Shell : ActivityObject
 {
     public override void OnInit()

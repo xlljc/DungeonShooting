@@ -27,7 +27,6 @@ public abstract partial class Prop : ActivityObject
     /// </summary>
     public virtual void PackProcess(float delta)
     {
-        
     }
 
     public override void Interactive(ActivityObject master)
