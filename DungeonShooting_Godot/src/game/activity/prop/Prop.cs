@@ -33,7 +33,6 @@ public abstract partial class Prop : ActivityObject, IPackageItem
         if (master is Role role)
         {
             Pickup();
-            Master = role;
             role.PushProp(this);
             OnPickUp(role);
         }
@@ -43,7 +42,7 @@ public abstract partial class Prop : ActivityObject, IPackageItem
     {
         if (master is Player)
         {
-            return new CheckInteractiveResult(this, true, ResourcePath.resource_sprite_ui_icon_icon_pickup_png);
+            return new CheckInteractiveResult(this, true, CheckInteractiveResult.InteractiveType.PickUp);
         }
         return base.CheckInteractive(master);
     }

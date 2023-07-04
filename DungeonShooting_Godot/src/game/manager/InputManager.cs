@@ -34,7 +34,7 @@ public static class InputManager
     /// <summary>
     /// 是否按下使用道具按钮, 键鼠: 键盘F
     /// </summary>
-    public static bool UseProp { get; private set; }
+    public static bool UseActiveProp { get; private set; }
     
     /// <summary>
     /// 是否按下切换道具按钮, 键鼠: 键盘Z
@@ -84,13 +84,13 @@ public static class InputManager
         var application = GameApplication.Instance;
         MoveAxis = Input.GetVector("move_left", "move_right", "move_up", "move_down");
         CursorPosition = application.GlobalToViewPosition(application.GetGlobalMousePosition());
-        ExchangeWeapon = Input.IsActionJustPressed("exchange");
-        ThrowWeapon = Input.IsActionJustPressed("throw");
+        ExchangeWeapon = Input.IsActionJustPressed("exchangeWeapon");
+        ThrowWeapon = Input.IsActionJustPressed("throwWeapon");
         Interactive = Input.IsActionJustPressed("interactive");
         Reload = Input.IsActionJustPressed("reload");
         Fire = Input.IsActionPressed("fire");
-        MeleeAttack = Input.IsActionPressed("meleeAttack");
-        Roll = Input.IsActionPressed("roll");
+        MeleeAttack = Input.IsActionJustPressed("meleeAttack");
+        Roll = Input.IsActionJustPressed("roll");
+        UseActiveProp = Input.IsActionJustPressed("useActiveProp");
     }
-
 }

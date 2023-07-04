@@ -63,7 +63,7 @@ public class WeaponBar
     {
         if (curr != _prevAmmo || total != _prevResidue)
         {
-            _weaponBar.L_AmmoCount.Instance.Text = curr + "/" + total;
+            _weaponBar.L_AmmoCount.Instance.Text = curr + " / " + total;
             _prevAmmo = curr;
             _prevResidue = total;
         }

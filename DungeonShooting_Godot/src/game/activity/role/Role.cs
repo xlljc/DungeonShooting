@@ -39,9 +39,14 @@ public abstract partial class Role : ActivityObject
     public uint AttackLayer { get; set; } = PhysicsLayer.Wall;
 
     /// <summary>
-    /// 携带的道具包裹
+    /// 携带的被动道具包裹
     /// </summary>
-    public Package<Prop> PropsPack { get; private set; }
+    public List<BuffProp> BuffPropPack { get; } = new List<BuffProp>();
+
+    /// <summary>
+    /// 携带的主动道具包裹
+    /// </summary>
+    public Package<ActiveProp> ActivePropsPack { get; private set; }
 
     /// <summary>
     /// 角色携带的武器背包
@@ -85,7 +90,7 @@ public abstract partial class Role : ActivityObject
         set
         {
             int temp = _hp;
-            _hp = value;
+            _hp = Mathf.Clamp(value, 0, _maxHp);
             if (temp != _hp)
             {
                 OnChangeHp(_hp);
@@ -306,7 +311,7 @@ public abstract partial class Role : ActivityObject
 
     public override void OnInit()
     {
-        PropsPack = new Package<Prop>(this);
+        ActivePropsPack = new Package<ActiveProp>(this);
         WeaponPack = new Package<Weapon>(this);
         _startScale = Scale;
         MountPoint.Master = this;
@@ -367,7 +372,7 @@ public abstract partial class Role : ActivityObject
                             InteractiveItem = item;
                             ChangeInteractiveItem(prev, result);
                         }
-                        else if (result.ShowIcon != _currentResultData.ShowIcon) //切换状态
+                        else if (result.Type != _currentResultData.Type) //切换状态
                         {
                             ChangeInteractiveItem(prev, result);
                         }
@@ -423,8 +428,18 @@ public abstract partial class Role : ActivityObject
             }
         }
 
-        //道具调用更新
-        var props = (Prop[])PropsPack.ItemSlot.Clone();
+        //被动道具更新
+        if (BuffPropPack.Count > 0)
+        {
+            var buffProps = BuffPropPack.ToArray();
+            foreach (var prop in buffProps)
+            {
+                prop.PackProcess(delta);
+            }
+        }
+        
+        //主动道具调用更新
+        var props = (Prop[])ActivePropsPack.ItemSlot.Clone();
         foreach (var prop in props)
         {
             if (prop != null)
@@ -478,6 +493,14 @@ public abstract partial class Role : ActivityObject
         });
     }
 
+    /// <summary>
+    /// 是否是满血
+    /// </summary>
+    public bool IsHpFull()
+    {
+        return Hp >= MaxHp;
+    }
+    
     /// <summary>
     /// 获取当前角色的中心点坐标
     /// </summary>
@@ -644,6 +667,18 @@ public abstract partial class Role : ActivityObject
     }
 
     /// <summary>
+    /// 触发使用道具
+    /// </summary>
+    public virtual void UseActiveProp()
+    {
+        var activeItem = ActivePropsPack.ActiveItem;
+        if (activeItem != null)
+        {
+            activeItem.Use();
+        }
+    }
+
+    /// <summary>
     /// 受到伤害, 如果是在碰撞信号处理函数中调用该函数, 请使用 CallDeferred 来延时调用, 否则很有可能导致报错
     /// </summary>
     /// <param name="damage">伤害的量</param>
@@ -793,12 +828,29 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public void PushProp(Prop prop)
     {
-        if (PropsPack.PickupItem(prop) == -1)
+        if (prop is ActiveProp activeProp) //主动道具
         {
-            GD.PrintErr("道具无法存入背包中!");
-            return;
+            if (ActivePropsPack.PickupItem(activeProp) == -1)
+            {
+                GD.PrintErr("主动道具无法存入背包中!");
+                return;
+            }
+            OnPushProp(prop);
         }
-        OnPushProp(prop);
+        else if (prop is BuffProp buffProp) //被动道具
+        {
+            if (BuffPropPack.Contains(buffProp))
+            {
+                GD.PrintErr("被动道具已经在背包中了!");
+                return;
+            }
+            BuffPropPack.Add(buffProp);
+            OnPushProp(prop);
+        }
+        else
+        {
+            GD.PrintErr("尚未被支持的道具类型: " + prop.GetType().FullName);
+        }
     }
 
     /// <summary>
@@ -806,12 +858,28 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool RemoveProp(Prop prop)
     {
-        if (PropsPack.RemoveItem(prop) != null)
+        if (prop is ActiveProp activeProp) //主动道具
         {
-            OnRemoveProp(prop);
-            return true;
+            if (ActivePropsPack.RemoveItem(activeProp) != null)
+            {
+                OnRemoveProp(prop);
+                return true;
+            }
+            GD.PrintErr("当前道具不在角色背包中!");
+            return false;
         }
-        GD.PrintErr("当前道具不在角色背包中!");
+        else if (prop is BuffProp buffProp) //被动道具
+        {
+            if (BuffPropPack.Contains(buffProp))
+            {
+                OnRemoveProp(prop);
+                BuffPropPack.Remove(buffProp);
+                return true;
+            }
+            GD.PrintErr("被动道具不在背包中!");
+            return false;
+        }
+        GD.PrintErr("尚未被支持的道具类型: " + prop.GetType().FullName);
         return false;
     }
 }

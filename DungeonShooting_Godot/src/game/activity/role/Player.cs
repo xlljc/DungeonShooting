@@ -112,6 +112,11 @@ public partial class Player : Role
             Attack();
         }
 
+        if (InputManager.UseActiveProp) //使用道具
+        {
+            UseActiveProp();
+        }
+
         if (Input.IsKeyPressed(Key.P))
         {
             Hurt(1000, 0);

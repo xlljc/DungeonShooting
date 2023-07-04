@@ -24,9 +24,10 @@ public class ActivePropBar
 
     public void Process(float delta)
     {
-        var prop = Player.Current?.PropsPack.ActiveItem;
+        var prop = Player.Current?.ActivePropsPack.ActiveItem;
         if (prop != null)
         {
+            SetActivePropCount(prop.Count);
             SetActivePropTexture(prop.GetCurrentTexture());
         }
         else
@@ -45,6 +46,19 @@ public class ActivePropBar
         else
         {
             _activePropBar.Instance.Visible = false;
+        }
+    }
+
+    public void SetActivePropCount(int count)
+    {
+        if (count > 1)
+        {
+            _activePropBar.L_ActivePropPanel.L_ActivePropCount.Instance.Visible = true;
+            _activePropBar.L_ActivePropPanel.L_ActivePropCount.Instance.Text = count.ToString();
+        }
+        else
+        {
+            _activePropBar.L_ActivePropPanel.L_ActivePropCount.Instance.Visible = false;
         }
     }
 }

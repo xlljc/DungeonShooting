@@ -1451,7 +1451,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                         {
                             //可以互动拾起弹药
                             result.CanInteractive = true;
-                            result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_bullet_png;
+                            result.Type = CheckInteractiveResult.InteractiveType.Bullet;
                             return result;
                         }
                     }
@@ -1462,14 +1462,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                     {
                         //可以互动, 拾起武器
                         result.CanInteractive = true;
-                        result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_pickup_png;
+                        result.Type = CheckInteractiveResult.InteractiveType.PickUp;
                         return result;
                     }
                     else if (masterWeapon != null) //替换武器  // && masterWeapon.Attribute.WeightType == Attribute.WeightType)
                     {
                         //可以互动, 切换武器
                         result.CanInteractive = true;
-                        result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_replace_png;
+                        result.Type = CheckInteractiveResult.InteractiveType.Replace;
                         return result;
                     }
                 }
