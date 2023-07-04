@@ -116,7 +116,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 返回是否真正使用该武器
     /// </summary>
-    public bool IsActive => Master != null && Master.Holster.ActiveItem == this;
+    public bool IsActive => Master != null && Master.WeaponPack.ActiveItem == this;
     
     /// <summary>
     /// 动画播放器
@@ -414,7 +414,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         _noAttackTime += delta;
         
         //这把武器被扔在地上, 或者当前武器没有被使用
-        if (Master == null || Master.Holster.ActiveItem != this)
+        if (Master == null || Master.WeaponPack.ActiveItem != this)
         {
             //_triggerTimer
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
@@ -1439,14 +1439,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         {
             if (Master == null)
             {
-                var masterWeapon = roleMaster.Holster.ActiveItem;
+                var masterWeapon = roleMaster.WeaponPack.ActiveItem;
                 //查找是否有同类型武器
-                var index = roleMaster.Holster.FindItem(ItemConfig.Id);
+                var index = roleMaster.WeaponPack.FindIndex(ItemConfig.Id);
                 if (index != -1) //如果有这个武器
                 {
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
                     {
-                        var targetWeapon = roleMaster.Holster.GetItem(index);
+                        var targetWeapon = roleMaster.WeaponPack.GetItem(index);
                         if (!targetWeapon.IsAmmoFull()) //背包里面的武器子弹未满
                         {
                             //可以互动拾起弹药
@@ -1458,7 +1458,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                 }
                 else //没有武器
                 {
-                    if (roleMaster.Holster.CanPickupItem(this)) //能拾起武器
+                    if (roleMaster.WeaponPack.CanPickupItem(this)) //能拾起武器
                     {
                         //可以互动, 拾起武器
                         result.CanInteractive = true;
@@ -1483,9 +1483,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (master is Role roleMaster) //与role互动
         {
-            var holster = roleMaster.Holster;
+            var holster = roleMaster.WeaponPack;
             //查找是否有同类型武器
-            var index = holster.FindItem(ItemConfig.Id);
+            var index = holster.FindIndex(ItemConfig.Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了

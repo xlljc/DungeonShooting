@@ -145,7 +145,7 @@ public partial class Player : Role
     public override void ThrowWeapon()
     {
         //扔掉武器
-        var weapon = Holster.ActiveItem;
+        var weapon = WeaponPack.ActiveItem;
         base.ThrowWeapon();
         EventManager.EmitEvent(EventEnum.OnPlayerRemoveWeapon, weapon);
     }
@@ -153,7 +153,7 @@ public partial class Player : Role
     public override void ThrowWeapon(int index)
     {
         //扔掉武器
-        var weapon = Holster.GetItem(index);
+        var weapon = WeaponPack.GetItem(index);
         base.ThrowWeapon(index);
         EventManager.EmitEvent(EventEnum.OnPlayerRemoveWeapon, weapon);
     }

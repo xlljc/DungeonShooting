@@ -41,12 +41,12 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 携带的道具包裹
     /// </summary>
-    public List<Prop> PropsPack { get; } = new List<Prop>();
+    public Package<Prop> PropsPack { get; private set; }
 
     /// <summary>
-    /// 角色携带的武器袋
+    /// 角色携带的武器背包
     /// </summary>
-    public Package<Weapon> Holster { get; private set; }
+    public Package<Weapon> WeaponPack { get; private set; }
 
     /// <summary>
     /// 武器挂载点
@@ -306,7 +306,8 @@ public abstract partial class Role : ActivityObject
 
     public override void OnInit()
     {
-        Holster = new Package<Weapon>(this);
+        PropsPack = new Package<Prop>(this);
+        WeaponPack = new Package<Weapon>(this);
         _startScale = Scale;
         MountPoint.Master = this;
         
@@ -423,10 +424,13 @@ public abstract partial class Role : ActivityObject
         }
 
         //道具调用更新
-        var props = PropsPack.ToArray();
+        var props = (Prop[])PropsPack.ItemSlot.Clone();
         foreach (var prop in props)
         {
-            prop.PackProcess(delta);
+            if (prop != null)
+            {
+                prop.PackProcess(delta);
+            }
         }
     }
 
@@ -461,7 +465,7 @@ public abstract partial class Role : ActivityObject
     protected override void OnAffiliationChange()
     {
         //身上的武器的所属区域也得跟着变
-        Holster.ForEach((weapon, i) =>
+        WeaponPack.ForEach((weapon, i) =>
         {
             if (AffiliationArea != null)
             {
@@ -519,7 +523,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsAllWeaponTotalAmmoEmpty()
     {
-        foreach (var weapon in Holster.ItemSlot)
+        foreach (var weapon in WeaponPack.ItemSlot)
         {
             if (weapon != null && !weapon.IsTotalAmmoEmpty())
             {
@@ -537,7 +541,7 @@ public abstract partial class Role : ActivityObject
     /// <param name="exchange">是否立即切换到该武器, 默认 true </param>
     public virtual bool PickUpWeapon(Weapon weapon, bool exchange = true)
     {
-        if (Holster.PickupItem(weapon, exchange) != -1)
+        if (WeaponPack.PickupItem(weapon, exchange) != -1)
         {
             //从可互动队列中移除
             _interactiveItemList.Remove(weapon);
@@ -552,7 +556,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void ExchangeNext()
     {
-        Holster.ExchangeNext();
+        WeaponPack.ExchangeNext();
     }
 
     /// <summary>
@@ -560,7 +564,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void ExchangePrev()
     {
-        Holster.ExchangePrev();
+        WeaponPack.ExchangePrev();
     }
 
     /// <summary>
@@ -568,7 +572,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void ThrowWeapon()
     {
-        ThrowWeapon(Holster.ActiveIndex);
+        ThrowWeapon(WeaponPack.ActiveIndex);
     }
 
     /// <summary>
@@ -577,7 +581,7 @@ public abstract partial class Role : ActivityObject
     /// <param name="index">武器在武器袋中的位置</param>
     public virtual void ThrowWeapon(int index)
     {
-        var weapon = Holster.GetItem(index);
+        var weapon = WeaponPack.GetItem(index);
         if (weapon == null)
         {
             return;
@@ -589,7 +593,7 @@ public abstract partial class Role : ActivityObject
             temp.Y = -temp.Y;
         }
         //var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
-        Holster.RemoveItem(index);
+        WeaponPack.RemoveItem(index);
         //播放抛出效果
         weapon.ThrowWeapon(this, GlobalPosition);
     }
@@ -622,9 +626,9 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void Reload()
     {
-        if (Holster.ActiveItem != null)
+        if (WeaponPack.ActiveItem != null)
         {
-            Holster.ActiveItem.Reload();
+            WeaponPack.ActiveItem.Reload();
         }
     }
 
@@ -633,9 +637,9 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void Attack()
     {
-        if (Holster.ActiveItem != null)
+        if (WeaponPack.ActiveItem != null)
         {
-            Holster.ActiveItem.Trigger();
+            WeaponPack.ActiveItem.Trigger();
         }
     }
 
@@ -789,12 +793,11 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public void PushProp(Prop prop)
     {
-        if (PropsPack.Contains(prop))
+        if (PropsPack.PickupItem(prop) == -1)
         {
-            GD.PrintErr("道具已经在包裹中了!");
+            GD.PrintErr("道具无法存入背包中!");
             return;
         }
-        PropsPack.Add(prop);
         OnPushProp(prop);
     }
 
@@ -803,12 +806,12 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool RemoveProp(Prop prop)
     {
-        if (PropsPack.Remove(prop))
+        if (PropsPack.RemoveItem(prop) != null)
         {
             OnRemoveProp(prop);
             return true;
         }
-        GD.PrintErr("当前道具不在角色包裹中!");
+        GD.PrintErr("当前道具不在角色背包中!");
         return false;
     }
 }

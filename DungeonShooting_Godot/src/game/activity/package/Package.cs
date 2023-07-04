@@ -19,7 +19,7 @@ public class Package<T> where T : ActivityObject, IPackageItem
     public int ActiveIndex { get; private set; } = 0;
 
     /// <summary>
-    /// 物体袋容量
+    /// 物体背包容量
     /// </summary>
     public int Capacity { get; private set; } = 0;
 
@@ -36,7 +36,7 @@ public class Package<T> where T : ActivityObject, IPackageItem
     }
 
     /// <summary>
-    /// 修改物体袋容量
+    /// 修改物体背包容量
     /// </summary>
     public void SetCapacity(int capacity)
     {
@@ -89,7 +89,7 @@ public class Package<T> where T : ActivityObject, IPackageItem
     }
 
     /// <summary>
-    /// 返回当前物体袋是否是空的
+    /// 返回当前物体背包是否是空的
     /// </summary>
     public bool IsEmpty()
     {
@@ -105,7 +105,7 @@ public class Package<T> where T : ActivityObject, IPackageItem
     }
     
     /// <summary>
-    /// 返回当前物体袋是否还有空位
+    /// 返回当前物体背包是否还有空位
     /// </summary>
     public bool HasVacancy()
     {
@@ -133,10 +133,10 @@ public class Package<T> where T : ActivityObject, IPackageItem
     }
 
     /// <summary>
-    /// 根据物体id查找物体袋中该物体所在的位置, 如果没有, 则返回 -1
+    /// 根据物体id查找物体背包中该物体所在的位置, 如果没有, 则返回 -1
     /// </summary>
     /// <param name="id">物体id</param>
-    public int FindItem(string id)
+    public int FindIndex(string id)
     {
         for (var i = 0; i < ItemSlot.Length; i++)
         {
@@ -150,9 +150,9 @@ public class Package<T> where T : ActivityObject, IPackageItem
     }
 
     /// <summary>
-    /// 通过回调函数查询物体在物体袋中的位置, 如果没有, 则返回 -1
+    /// 通过回调函数查询物体在物体背包中的位置, 如果没有, 则返回 -1
     /// </summary>
-    public int FindItem(Func<T, int, bool> handler)
+    public int FindIndex(Func<T, int, bool> handler)
     {
         for (var i = 0; i < ItemSlot.Length; i++)
         {
@@ -181,7 +181,7 @@ public class Package<T> where T : ActivityObject, IPackageItem
     }
 
     /// <summary>
-    /// 从物体袋中移除所有物体, 并返回
+    /// 从物体背包中移除所有物体, 并返回
     /// </summary>
     public T[] GetAndClearItem()
     {
@@ -222,7 +222,7 @@ public class Package<T> where T : ActivityObject, IPackageItem
     }
 
     /// <summary>
-    /// 拾起物体, 存入物体袋中, 返回存放在物体袋的位置, 如果容不下这个物体, 则会返回 -1
+    /// 拾起物体, 存入物体背包中, 返回存放在物体背包的位置, 如果容不下这个物体, 则会返回 -1
     /// </summary>
     /// <param name="item">物体对象</param>
     /// <param name="exchange">是否立即切换到该物体, 默认 true </param>
@@ -256,7 +256,7 @@ public class Package<T> where T : ActivityObject, IPackageItem
     /// <summary>
     /// 移除指定位置的物体, 并返回这个物体对象, 如果移除正在使用的这个物体, 则会自动切换到上一个物体
     /// </summary>
-    /// <param name="index">所在物体袋的位置索引</param>
+    /// <param name="index">所在物体背包的位置索引</param>
     public T RemoveItem(int index)
     {
         if (index < 0 || index >= ItemSlot.Length)
@@ -287,6 +287,14 @@ public class Package<T> where T : ActivityObject, IPackageItem
         // item.GetParent().RemoveChild(item);
         // item.Remove();
         return item;
+    }
+
+    /// <summary>
+    /// 移除指定位置的物体, 并返回这个物体对象, 如果移除正在使用的这个物体, 则会自动切换到上一个物体
+    /// </summary>
+    public T RemoveItem(T item)
+    {
+        return RemoveItem(IndexOf(item));
     }
 
     /// <summary>
@@ -351,5 +359,48 @@ public class Package<T> where T : ActivityObject, IPackageItem
         ActiveIndex = index;
         ActiveItem.OnActiveItem();
         return true;
+    }
+
+    /// <summary>
+    /// 返回背包中是否有指定物体
+    /// </summary>
+    public bool Contains(T item)
+    {
+        if (ItemSlot == null)
+        {
+            return false;
+        }
+
+        foreach (var packageItem in ItemSlot)
+        {
+            if (packageItem == item)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 返回指定物体在当前背包中的索引, 如果不在背包中, 则返回 -1
+    /// </summary>
+    public int IndexOf(T item)
+    {
+        if (ItemSlot == null)
+        {
+            return -1;
+        }
+
+        for (var i = 0; i < ItemSlot.Length; i++)
+        {
+            var packageItem = ItemSlot[i];
+            if (packageItem == item)
+            {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }
