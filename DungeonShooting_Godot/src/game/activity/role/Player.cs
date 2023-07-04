@@ -75,11 +75,11 @@ public partial class Player : Role
             MountPoint.SetLookAt(mousePos);
         }
 
-        if (InputManager.Exchange) //切换武器
+        if (InputManager.ExchangeWeapon) //切换武器
         {
             ExchangeNext();
         }
-        else if (InputManager.Throw) //扔掉武器
+        else if (InputManager.ThrowWeapon) //扔掉武器
         {
             ThrowWeapon();
 

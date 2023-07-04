@@ -22,10 +22,24 @@ public class ActivePropBar
         
     }
 
+    public void Process(float delta)
+    {
+        var prop = Player.Current?.PropsPack.ActiveItem;
+        if (prop != null)
+        {
+            SetActivePropTexture(prop.GetCurrentTexture());
+        }
+        else
+        {
+            SetActivePropTexture(null);
+        }
+    }
+    
     public void SetActivePropTexture(Texture2D texture)
     {
         if (texture != null)
         {
+            _activePropBar.L_ActivePropPanel.L_ActivePropSprite.Instance.Texture = texture;
             _activePropBar.Instance.Visible = true;
         }
         else

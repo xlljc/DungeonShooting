@@ -57,6 +57,7 @@ public partial class RoomUIPanel : RoomUI
     public override void Process(float delta)
     {
         _weaponBar.Process(delta);
+        _activePropBar.Process(delta);
         _lifeBar.Process(delta);
     }
 
