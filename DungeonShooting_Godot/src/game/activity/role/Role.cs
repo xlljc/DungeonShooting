@@ -46,7 +46,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 角色携带的武器袋
     /// </summary>
-    public Holster Holster { get; private set; }
+    public Package<Weapon> Holster { get; private set; }
 
     /// <summary>
     /// 武器挂载点
@@ -199,6 +199,11 @@ public abstract partial class Role : ActivityObject
     /// 当前角色所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
+    
+    /// <summary>
+    /// 当前可以互动的物体
+    /// </summary>
+    public ActivityObject InteractiveItem { get; private set; }
 
     //初始缩放
     private Vector2 _startScale;
@@ -215,11 +220,6 @@ public abstract partial class Role : ActivityObject
     private long _invincibleFlashingId = -1;
     //护盾恢复计时器
     private float _shieldRecoveryTimer = 0;
-
-    /// <summary>
-    /// 可以互动的物体
-    /// </summary>
-    public ActivityObject InteractiveItem { get; private set; }
 
     /// <summary>
     /// 当血量改变时调用
@@ -306,7 +306,7 @@ public abstract partial class Role : ActivityObject
 
     public override void OnInit()
     {
-        Holster = new Holster(this);
+        Holster = new Package<Weapon>(this);
         _startScale = Scale;
         MountPoint.Master = this;
         
@@ -519,7 +519,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsAllWeaponTotalAmmoEmpty()
     {
-        foreach (var weapon in Holster.Weapons)
+        foreach (var weapon in Holster.ItemSlot)
         {
             if (weapon != null && !weapon.IsTotalAmmoEmpty())
             {
@@ -537,7 +537,7 @@ public abstract partial class Role : ActivityObject
     /// <param name="exchange">是否立即切换到该武器, 默认 true </param>
     public virtual bool PickUpWeapon(Weapon weapon, bool exchange = true)
     {
-        if (Holster.PickupWeapon(weapon, exchange) != -1)
+        if (Holster.PickupItem(weapon, exchange) != -1)
         {
             //从可互动队列中移除
             _interactiveItemList.Remove(weapon);
@@ -577,7 +577,7 @@ public abstract partial class Role : ActivityObject
     /// <param name="index">武器在武器袋中的位置</param>
     public virtual void ThrowWeapon(int index)
     {
-        var weapon = Holster.GetWeapon(index);
+        var weapon = Holster.GetItem(index);
         if (weapon == null)
         {
             return;
@@ -589,7 +589,7 @@ public abstract partial class Role : ActivityObject
             temp.Y = -temp.Y;
         }
         //var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
-        Holster.RemoveWeapon(index);
+        Holster.RemoveItem(index);
         //播放抛出效果
         weapon.ThrowWeapon(this, GlobalPosition);
     }
@@ -622,9 +622,9 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void Reload()
     {
-        if (Holster.ActiveWeapon != null)
+        if (Holster.ActiveItem != null)
         {
-            Holster.ActiveWeapon.Reload();
+            Holster.ActiveItem.Reload();
         }
     }
 
@@ -633,9 +633,9 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void Attack()
     {
-        if (Holster.ActiveWeapon != null)
+        if (Holster.ActiveItem != null)
         {
-            Holster.ActiveWeapon.Trigger();
+            Holster.ActiveItem.Trigger();
         }
     }
 

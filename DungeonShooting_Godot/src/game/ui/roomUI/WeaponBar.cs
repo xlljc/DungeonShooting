@@ -25,7 +25,7 @@ public class WeaponBar
 
     public void Process(float delta)
     {
-        var weapon = Player.Current?.Holster.ActiveWeapon;
+        var weapon = Player.Current?.Holster.ActiveItem;
         if (weapon != null)
         {
             SetWeaponTexture(weapon.GetCurrentTexture());

@@ -111,7 +111,7 @@ public partial class Enemy : Role
     protected override void OnDie()
     {
         //扔掉所有武器
-        var weapons = Holster.GetAndClearWeapon();
+        var weapons = Holster.GetAndClearItem();
         for (var i = 0; i < weapons.Length; i++)
         {
             weapons[i].ThrowWeapon(this);
@@ -283,13 +283,13 @@ public partial class Enemy : Role
     /// </summary>
     public void EnemyAttack(float delta)
     {
-        var weapon = Holster.ActiveWeapon;
+        var weapon = Holster.ActiveItem;
         if (weapon != null)
         {
             if (weapon.IsTotalAmmoEmpty()) //当前武器弹药打空
             {
                 //切换到有子弹的武器
-                var index = Holster.FindWeapon((we, i) => !we.IsTotalAmmoEmpty());
+                var index = Holster.FindItem((we, i) => !we.IsTotalAmmoEmpty());
                 if (index != -1)
                 {
                     Holster.ExchangeByIndex(index);
@@ -338,9 +338,9 @@ public partial class Enemy : Role
     /// <param name="weight">从最小到最大距离的过渡量, 0 - 1, 默认 0.5</param>
     public float GetWeaponRange(float weight = 0.5f)
     {
-        if (Holster.ActiveWeapon != null)
+        if (Holster.ActiveItem != null)
         {
-            var attribute = Holster.ActiveWeapon.Attribute;
+            var attribute = Holster.ActiveItem.Attribute;
             return Mathf.Lerp(attribute.BulletMinDistance, attribute.BulletMaxDistance, weight);
         }
 
@@ -415,7 +415,7 @@ public partial class Enemy : Role
         //拾起地上的武器
         if (InteractiveItem is Weapon weapon)
         {
-            if (Holster.ActiveWeapon == null) //手上没有武器, 无论如何也要拾起
+            if (Holster.ActiveItem == null) //手上没有武器, 无论如何也要拾起
             {
                 TriggerInteractive();
                 return;
@@ -427,10 +427,10 @@ public partial class Enemy : Role
                 return;
             }
             
-            var index = Holster.FindWeapon((we, i) => we.ItemConfig.Id == weapon.ItemConfig.Id);
+            var index = Holster.FindItem((we, i) => we.ItemConfig.Id == weapon.ItemConfig.Id);
             if (index != -1) //与武器袋中武器类型相同, 补充子弹
             {
-                if (!Holster.GetWeapon(index).IsAmmoFull())
+                if (!Holster.GetItem(index).IsAmmoFull())
                 {
                     TriggerInteractive();
                 }
@@ -440,7 +440,7 @@ public partial class Enemy : Role
 
             // var index2 = Holster.FindWeapon((we, i) =>
             //     we.Attribute.WeightType == weapon.Attribute.WeightType && we.IsTotalAmmoEmpty());
-            var index2 = Holster.FindWeapon((we, i) => we.IsTotalAmmoEmpty());
+            var index2 = Holster.FindItem((we, i) => we.IsTotalAmmoEmpty());
             if (index2 != -1) //扔掉没子弹的武器
             {
                 ThrowWeapon(index2);

@@ -37,7 +37,7 @@ public partial class Cursor : Node2D
     {
         if (!_isGuiMode)
         {
-            var targetGun = _mountRole?.Holster.ActiveWeapon;
+            var targetGun = _mountRole?.Holster.ActiveItem;
             if (targetGun != null)
             {
                 SetScope(targetGun.CurrScatteringRange, targetGun);

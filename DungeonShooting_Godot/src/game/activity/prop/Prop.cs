@@ -2,13 +2,12 @@
 /// <summary>
 /// 道具基类
 /// </summary>
-public abstract partial class Prop : ActivityObject
+public abstract partial class Prop : ActivityObject, IPackageItem
 {
-    /// <summary>
-    /// 道具的拥有者
-    /// </summary>
-    public Role Master { get; private set; }
-    
+    public Role Master { get; set; }
+
+    public int PackageIndex { get; set; } = -1;
+
     /// <summary>
     /// 当被动被道具被拾起时调用
     /// </summary>
@@ -47,5 +46,30 @@ public abstract partial class Prop : ActivityObject
             return new CheckInteractiveResult(this, true, ResourcePath.resource_sprite_ui_icon_icon_pickup_png);
         }
         return base.CheckInteractive(master);
+    }
+    
+    public void OnRemoveItem()
+    {
+        
+    }
+
+    public void OnPickUpItem()
+    {
+        
+    }
+
+    public void OnActiveItem()
+    {
+        
+    }
+
+    public void OnConcealItem()
+    {
+        
+    }
+
+    public void OnOverflowItem()
+    {
+        
     }
 }

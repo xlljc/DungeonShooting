@@ -56,9 +56,9 @@ public class ReloadBar
     public void OnCameraPositionUpdate(float delta)
     {
         var player = Player.Current;
-        if (player.Holster.ActiveWeapon != null && player.Holster.ActiveWeapon.Reloading)
+        if (player.Holster.ActiveItem != null && player.Holster.ActiveItem.Reloading)
         {
-            ShowBar(player.GlobalPosition, player.Holster.ActiveWeapon.ReloadProgress);
+            ShowBar(player.GlobalPosition, player.Holster.ActiveItem.ReloadProgress);
         }
         else
         {

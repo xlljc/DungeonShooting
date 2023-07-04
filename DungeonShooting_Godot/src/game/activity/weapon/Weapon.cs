@@ -6,7 +6,7 @@ using Config;
 /// <summary>
 /// 武器的基类
 /// </summary>
-public abstract partial class Weapon : ActivityObject
+public abstract partial class Weapon : ActivityObject, IPackageItem
 {
     /// <summary>
     /// 武器属性数据
@@ -21,10 +21,9 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     public CampEnum TargetCamp { get; set; }
 
-    /// <summary>
-    /// 该武器的拥有者
-    /// </summary>
-    public Role Master { get; private set; }
+    public Role Master { get; set; }
+
+    public int PackageIndex { get; set; } = -1;
 
     /// <summary>
     /// 当前弹夹弹药剩余量
@@ -117,7 +116,7 @@ public abstract partial class Weapon : ActivityObject
     /// <summary>
     /// 返回是否真正使用该武器
     /// </summary>
-    public bool IsActive => Master != null && Master.Holster.ActiveWeapon == this;
+    public bool IsActive => Master != null && Master.Holster.ActiveItem == this;
     
     /// <summary>
     /// 动画播放器
@@ -415,7 +414,7 @@ public abstract partial class Weapon : ActivityObject
         _noAttackTime += delta;
         
         //这把武器被扔在地上, 或者当前武器没有被使用
-        if (Master == null || Master.Holster.ActiveWeapon != this)
+        if (Master == null || Master.Holster.ActiveItem != this)
         {
             //_triggerTimer
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
@@ -1440,14 +1439,14 @@ public abstract partial class Weapon : ActivityObject
         {
             if (Master == null)
             {
-                var masterWeapon = roleMaster.Holster.ActiveWeapon;
+                var masterWeapon = roleMaster.Holster.ActiveItem;
                 //查找是否有同类型武器
-                var index = roleMaster.Holster.FindWeapon(ItemConfig.Id);
+                var index = roleMaster.Holster.FindItem(ItemConfig.Id);
                 if (index != -1) //如果有这个武器
                 {
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
                     {
-                        var targetWeapon = roleMaster.Holster.GetWeapon(index);
+                        var targetWeapon = roleMaster.Holster.GetItem(index);
                         if (!targetWeapon.IsAmmoFull()) //背包里面的武器子弹未满
                         {
                             //可以互动拾起弹药
@@ -1459,7 +1458,7 @@ public abstract partial class Weapon : ActivityObject
                 }
                 else //没有武器
                 {
-                    if (roleMaster.Holster.CanPickupWeapon(this)) //能拾起武器
+                    if (roleMaster.Holster.CanPickupItem(this)) //能拾起武器
                     {
                         //可以互动, 拾起武器
                         result.CanInteractive = true;
@@ -1486,7 +1485,7 @@ public abstract partial class Weapon : ActivityObject
         {
             var holster = roleMaster.Holster;
             //查找是否有同类型武器
-            var index = holster.FindWeapon(ItemConfig.Id);
+            var index = holster.FindItem(ItemConfig.Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
@@ -1494,7 +1493,7 @@ public abstract partial class Weapon : ActivityObject
                     return;
                 }
 
-                var weapon = holster.GetWeapon(index);
+                var weapon = holster.GetItem(index);
                 //子弹上限
                 var maxCount = Attribute.MaxAmmoCapacity;
                 //是否捡到子弹
@@ -1535,7 +1534,7 @@ public abstract partial class Weapon : ActivityObject
             }
             else //没有武器
             {
-                if (holster.PickupWeapon(this) == -1)
+                if (holster.PickupItem(this) == -1)
                 {
                     //替换武器
                     roleMaster.ThrowWeapon();
@@ -1609,12 +1608,42 @@ public abstract partial class Weapon : ActivityObject
     }
 
     /// <summary>
-    /// 触发拾起到 Holster, 这个函数由 Holster 对象调用
+    /// 触发启用武器, 这个函数由 Holster 对象调用
     /// </summary>
-    public void PickUpWeapon(Role master)
+    private void Active()
     {
-        Master = master;
-        if (master.IsAi)
+        //调整阴影
+        ShadowOffset = new Vector2(0, Master.GlobalPosition.Y - GlobalPosition.Y);
+        //枪口默认抬起角度
+        RotationDegrees = -Attribute.DefaultAngle;
+        ShowShadowSprite();
+        OnActive();
+    }
+
+    /// <summary>
+    /// 触发收起武器, 这个函数由 Holster 对象调用
+    /// </summary>
+    private void Conceal()
+    {
+        HideShadowSprite();
+        OnConceal();
+    }
+    
+    public void OnRemoveItem()
+    {
+        GetParent().RemoveChild(this);
+        CollisionLayer = _tempLayer;
+        _weaponAttribute = _playerWeaponAttribute;
+        AnimatedSprite.Position = _tempAnimatedSpritePosition;
+        //清除 Ai 拾起标记
+        RemoveSign(SignNames.AiFindWeaponSign);
+        OnRemove(Master);
+    }
+
+    public void OnPickUpItem()
+    {
+        Pickup();
+        if (Master.IsAi)
         {
             _weaponAttribute = _aiWeaponAttribute;
         }
@@ -1638,44 +1667,45 @@ public abstract partial class Weapon : ActivityObject
         CollisionLayer = PhysicsLayer.OnHand;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
-        OnPickUp(master);
+        OnPickUp(Master);
     }
 
-    /// <summary>
-    /// 触发从 Holster 中移除, 这个函数由 Holster 对象调用
-    /// </summary>
-    public void RemoveAt()
+    public void OnActiveItem()
     {
-        var master = Master;
-        Master = null;
-        CollisionLayer = _tempLayer;
-        _weaponAttribute = _playerWeaponAttribute;
-        AnimatedSprite.Position = _tempAnimatedSpritePosition;
-        //清除 Ai 拾起标记
-        RemoveSign(SignNames.AiFindWeaponSign);
-        OnRemove(master);
+        //更改父节点
+        var parent = GetParentOrNull<Node>();
+        if (parent == null)
+        {
+            Master.MountPoint.AddChild(this);
+        }
+        else if (parent != Master.MountPoint)
+        {
+            parent.RemoveChild(this);
+            Master.MountPoint.AddChild(this);
+        }
+
+        Position = Vector2.Zero;
+        Scale = Vector2.One;
+        RotationDegrees = 0;
+        Visible = true;
+        Active();
     }
 
-    /// <summary>
-    /// 触发启用武器
-    /// </summary>
-    public void Active()
+    public void OnConcealItem()
     {
-        //调整阴影
-        ShadowOffset = new Vector2(0, Master.GlobalPosition.Y - GlobalPosition.Y);
-        //枪口默认抬起角度
-        RotationDegrees = -Attribute.DefaultAngle;
-        ShowShadowSprite();
-        OnActive();
+        var tempParent = GetParentOrNull<Node2D>();
+        if (tempParent != null)
+        {
+            tempParent.RemoveChild(this);
+            Master.BackMountPoint.AddChild(this);
+            Master.OnPutBackMount(this, PackageIndex);
+            Conceal();
+        }
     }
 
-    /// <summary>
-    /// 触发收起武器
-    /// </summary>
-    public void Conceal()
+    public void OnOverflowItem()
     {
-        HideShadowSprite();
-        OnConceal();
+        Master.ThrowWeapon(PackageIndex);
     }
 
     //-------------------------- ----- 子弹相关 -----------------------------
