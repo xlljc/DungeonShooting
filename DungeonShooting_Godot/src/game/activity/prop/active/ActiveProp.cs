@@ -1,4 +1,6 @@
 
+using Godot;
+
 /// <summary>
 /// 主动使用道具
 /// </summary>
@@ -7,12 +9,45 @@ public abstract partial class ActiveProp : Prop
     /// <summary>
     /// 道具可使用次数
     /// </summary>
-    public int Count { get; set; } = 1;
+    public int Count
+    {
+        get => _count;
+        set
+        {
+            var temp = _count;
+            _count = Mathf.Clamp(value, 0, _maxCount);
+            if (temp != _count)
+            {
+                OnChangeCount();
+            }
+        }
+    }
+
+    private int _count = 1;
 
     /// <summary>
     /// 道具最大可使用次数
     /// </summary>
-    public int MaxCount { get; set; } = 1;
+    public int MaxCount
+    {
+        get => _maxCount;
+        set
+        {
+            var temp = _maxCount;
+            _maxCount = Mathf.Max(1, value);
+            if (temp != _maxCount)
+            {
+                OnChangeMaxCount();
+            }
+
+            if (Count > _maxCount)
+            {
+                Count = _maxCount;
+            }
+        }
+    }
+
+    private int _maxCount = 1;
 
     /// <summary>
     /// 道具当前叠加数量
@@ -54,6 +89,14 @@ public abstract partial class ActiveProp : Prop
     }
 
     protected override void OnRemove(Role master)
+    {
+    }
+
+    protected virtual void OnChangeCount()
+    {
+    }
+
+    protected virtual void OnChangeMaxCount()
     {
     }
     
