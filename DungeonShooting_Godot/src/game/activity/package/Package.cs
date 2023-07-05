@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 
-public class Package<T> where T : ActivityObject, IPackageItem
+public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
 {
+    public bool IsDestroyed { get; private set; }
+    
     /// <summary>
     /// 归属者
     /// </summary>
@@ -402,5 +404,24 @@ public class Package<T> where T : ActivityObject, IPackageItem
         }
 
         return -1;
+    }
+    
+    public void Destroy()
+    {
+        if (IsDestroyed)
+        {
+            return;
+        }
+
+        IsDestroyed = true;
+        for (var i = 0; i < ItemSlot.Length; i++)
+        {
+            var activityObject = ItemSlot[i];
+            if (activityObject != null)
+            {
+                activityObject.Destroy();
+                ItemSlot[i] = null;
+            }
+        }
     }
 }

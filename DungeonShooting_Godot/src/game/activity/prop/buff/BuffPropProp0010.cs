@@ -12,6 +12,7 @@ public partial class BuffPropProp0010 : BuffProp
         master.RoleState.CalcBulletCountEvent += CalcBulletCountEvent;
         master.RoleState.CalcBulletDeviationAngleEvent += CalcBulletDeviationAngleEvent;
         master.RoleState.CalcDamageEvent += CalcDamageEvent;
+        master.RoleState.CalcBulletSpeedEvent += CalcBulletSpeedEvent;
     }
 
     protected override void OnRemove(Role master)
@@ -19,6 +20,7 @@ public partial class BuffPropProp0010 : BuffProp
         master.RoleState.CalcBulletCountEvent -= CalcBulletCountEvent;
         master.RoleState.CalcBulletDeviationAngleEvent -= CalcBulletDeviationAngleEvent;
         master.RoleState.CalcDamageEvent -= CalcDamageEvent;
+        master.RoleState.CalcBulletSpeedEvent -= CalcBulletSpeedEvent;
     }
     
     private void CalcBulletCountEvent(Weapon weapon, int originCount, RefValue<int> refValue)
@@ -28,7 +30,7 @@ public partial class BuffPropProp0010 : BuffProp
 
     private void CalcBulletDeviationAngleEvent(Weapon weapon, float originAngle, RefValue<float> refValue)
     {
-        refValue.Value += Utils.RandomRangeFloat(-10, 10);
+        refValue.Value += Utils.RandomRangeFloat(-8, 8);
     }
     
     private void CalcDamageEvent(int originDamage, RefValue<int> refValue)
@@ -39,5 +41,10 @@ public partial class BuffPropProp0010 : BuffProp
         }
 
         refValue.Value = Mathf.Max(1, refValue.Value - Mathf.FloorToInt(originDamage * 0.4f));
+    }
+    
+    private void CalcBulletSpeedEvent(Weapon weapon, float originSpeed, RefValue<float> speed)
+    {
+        speed.Value += originSpeed * Utils.RandomRangeFloat(-0.05f, 0.05f);
     }
 }

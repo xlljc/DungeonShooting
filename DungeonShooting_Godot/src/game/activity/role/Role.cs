@@ -882,4 +882,16 @@ public abstract partial class Role : ActivityObject
         GD.PrintErr("尚未被支持的道具类型: " + prop.GetType().FullName);
         return false;
     }
+
+    protected override void OnDestroy()
+    {
+        //销毁道具
+        foreach (var buffProp in BuffPropPack)
+        {
+            buffProp.Destroy();
+        }
+        BuffPropPack.Clear();
+        ActivePropsPack.Destroy();
+        WeaponPack.Destroy();
+    }
 }

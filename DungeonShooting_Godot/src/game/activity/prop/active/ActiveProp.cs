@@ -50,39 +50,47 @@ public abstract partial class ActiveProp : Prop
     private int _maxCount = 1;
 
     /// <summary>
-    /// 道具当前叠加数量
-    /// </summary>
-    public int OverlaysCount { get; set; } = 1;
-
-    /// <summary>
-    /// 道具最大叠加数量
-    /// </summary>
-    public int MaxOverlaysCount { get; set; } = 1;
-    
-    /// <summary>
     /// 使用一次后的冷却时间, 单位: 秒
     /// </summary>
-    public float CooldownTime { get; set; } = 1f;
+    public float CooldownTime { get; set; } = 2f;
     
     /// <summary>
     /// 当道具使用完后是否自动销毁
     /// </summary>
-    public bool AutoDestroy { get; set; } = true;
+    public bool AutoDestroy { get; set; } = false;
 
     /// <summary>
     /// 道具充能进度, 必须要充能完成才能使用, 值范围: 0 - 1
     /// </summary>
-    public float ChargeProgress { get; set; } = 1;
+    public float ChargeProgress
+    {
+        get => _chargeProgress;
+        set
+        {
+            var temp = _chargeProgress;
+            _chargeProgress = Mathf.Clamp(value, 0, 1);
+            if (temp != _chargeProgress)
+            {
+                OnChangeChargeProgress();
+            }
+        }
+    }
+
+    private float _chargeProgress = 1;
+
+
+    //冷却计时器
+    private float _cooldownTimer = 0;
     
     /// <summary>
-    /// 是否可以使用
+    /// 当检测是否可以使用时调用
     /// </summary>
-    public abstract bool CanUse();
-    
+    public abstract bool OnCheckUse();
+
     /// <summary>
-    /// 当道具被使用时调用
+    /// 当道具被使用时调用, 函数返回值为消耗数量
     /// </summary>
-    protected abstract void OnUse();
+    protected abstract int OnUse();
 
     protected override void OnPickUp(Role master)
     {
@@ -92,12 +100,55 @@ public abstract partial class ActiveProp : Prop
     {
     }
 
+    /// <summary>
+    /// 道具数量改变时调用
+    /// </summary>
     protected virtual void OnChangeCount()
     {
     }
 
+    /// <summary>
+    /// 道具最大数量改变时调用
+    /// </summary>
     protected virtual void OnChangeMaxCount()
     {
+    }
+
+    /// <summary>
+    /// 道具充能进度改变时调用
+    /// </summary>
+    protected virtual void OnChangeChargeProgress()
+    {
+    }
+
+    /// <summary>
+    /// 冷却完成时调用
+    /// </summary>
+    protected virtual void OnCooldownFinish()
+    {
+    }
+    
+    public override void PackProcess(float delta)
+    {
+        if (_cooldownTimer > 0)
+        {
+            _cooldownTimer -= delta;
+
+            //冷却完成
+            if (_cooldownTimer <= 0)
+            {
+                _cooldownTimer = 0;
+                OnCooldownFinish();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 检测是否可以使用当前道具
+    /// </summary>
+    public bool CheckUse()
+    {
+        return ChargeProgress >= 1 && _cooldownTimer <= 0 && Count > 0 && OnCheckUse();
     }
     
     /// <summary>
@@ -105,9 +156,38 @@ public abstract partial class ActiveProp : Prop
     /// </summary>
     public void Use()
     {
-        if (ChargeProgress >= 1 && CanUse())
+        if (Master == null)
         {
-            OnUse();
+            return;
         }
+        if (CheckUse()) //可以使用道具
+        {
+            var num = OnUse();
+            if (num != 0)
+            {
+                Count -= num;
+            }
+
+            //冷却计时器
+            _cooldownTimer = CooldownTime;
+            if (Count == 0 && AutoDestroy) //用光了, 自动销毁
+            {
+                Master.RemoveProp(this);
+                Destroy();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 获取冷却进度 0 - 1
+    /// </summary>
+    public float GetCooldownProgress()
+    {
+        if (_cooldownTimer <= 0)
+        {
+            return 1;
+        }
+
+        return (CooldownTime - _cooldownTimer) / CooldownTime;
     }
 }

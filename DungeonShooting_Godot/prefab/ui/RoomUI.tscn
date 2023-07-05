@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bvpmtfupny8iu"]
+[gd_scene load_steps=17 format=3 uid="uid://bvpmtfupny8iu"]
 
 [ext_resource type="Script" path="res://src/game/ui/roomUI/RoomUIPanel.cs" id="1_tfcrp"]
 [ext_resource type="Texture2D" uid="uid://b67i86mtqrn32" path="res://resource/sprite/ui/roomUI/icon_bullet.png" id="2_ruc0p"]
@@ -7,10 +7,11 @@
 [ext_resource type="Texture2D" uid="uid://cx3i1nkcc4307" path="res://resource/sprite/ui/roomUI/ReloadBarBlock.png" id="5_w3lq2"]
 [ext_resource type="Texture2D" uid="uid://blywnftxn1cfd" path="res://resource/sprite/ui/roomUI/Life_full.png" id="6_ggviq"]
 [ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/roomUI/MapBar.png" id="7_p6pvs"]
-[ext_resource type="Material" uid="uid://cces3bhds7jyi" path="res://resource/material/Blend.tres" id="8_vboii"]
 [ext_resource type="Texture2D" uid="uid://cu0wlvrbntvyd" path="res://resource/sprite/prop/active/ActiveProp5000.png" id="10_5d4np"]
+[ext_resource type="Texture2D" uid="uid://b8u6s5n37157" path="res://resource/sprite/ui/roomUI/Panel2.png" id="10_eokvx"]
 [ext_resource type="Texture2D" uid="uid://0swkya4hn82c" path="res://resource/sprite/ui/roomUI/Panel.png" id="10_q3fs8"]
 [ext_resource type="Texture2D" uid="uid://504f1r0mi33n" path="res://resource/sprite/weapon/weapon0005/Weapon0005.png" id="11_lsai4"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="12_fgyob"]
 
 [sub_resource type="Gradient" id="1"]
 colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
@@ -19,6 +20,26 @@ colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
 font_size = 32
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_msp2c"]
+resource_local_to_scene = true
+shader = ExtResource("12_fgyob")
+shader_parameter/blend = Color(0, 0, 0, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0.941176, 0.941176, 0.941176, 1)
+shader_parameter/outline_rainbow = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7pkeh"]
+resource_local_to_scene = true
+shader = ExtResource("12_fgyob")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0.941176, 0.941176, 0.941176, 1)
+shader_parameter/outline_rainbow = false
 
 [node name="RoomUI" type="Control"]
 layout_mode = 3
@@ -166,22 +187,24 @@ offset_bottom = -79.0
 grow_vertical = 0
 scale = Vector2(4, 4)
 
-[node name="ActivePropPanel" type="NinePatchRect" parent="Control/ActivePropBar"]
+[node name="ActivePropBg" type="NinePatchRect" parent="Control/ActivePropBar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("10_q3fs8")
-region_rect = Rect2(0, 0, 8, 8)
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
+region_rect = Rect2(2, 2, 4, 4)
+patch_margin_left = 4
+patch_margin_right = 4
 
-[node name="ActivePropSprite" type="TextureRect" parent="Control/ActivePropBar/ActivePropPanel"]
-material = ExtResource("8_vboii")
+[node name="ActivePropSprite" type="TextureRect" parent="Control/ActivePropBar"]
+material = SubResource("ShaderMaterial_msp2c")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -191,7 +214,21 @@ grow_vertical = 2
 texture = ExtResource("10_5d4np")
 stretch_mode = 3
 
-[node name="ActivePropCount" type="Label" parent="Control/ActivePropBar/ActivePropPanel"]
+[node name="ActivePropGrey" type="ColorRect" parent="Control/ActivePropBar"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.717647)
+
+[node name="ActivePropCount" type="Label" parent="Control/ActivePropBar"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -209,6 +246,20 @@ text = "10
 "
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="ActivePropPanel" type="NinePatchRect" parent="Control/ActivePropBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_eokvx")
+region_rect = Rect2(0, 0, 8, 8)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
 
 [node name="WeaponBar" type="Control" parent="Control"]
 layout_mode = 1
@@ -240,7 +291,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 
 [node name="WeaponSprite" type="TextureRect" parent="Control/WeaponBar/WeaponPanel"]
-material = ExtResource("8_vboii")
+material = SubResource("ShaderMaterial_7pkeh")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

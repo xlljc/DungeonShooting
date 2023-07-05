@@ -5,7 +5,7 @@
 [resource]
 resource_local_to_scene = true
 shader = ExtResource("1")
-shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/blend = Color(0, 0, 0, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/alpha = 1.0
 shader_parameter/show_outline = true
