@@ -190,7 +190,7 @@ public abstract partial class Role : ActivityObject
                 else //正常状态
                 {
                     HurtArea.CollisionLayer = _currentLayer;
-                    SetBlendAlpha(1);
+                    SetBlendColor(new Color(1, 1, 1, 1));
                 }
             }
 
@@ -400,12 +400,12 @@ public abstract partial class Role : ActivityObject
                 if (_flashingInvincibleFlag)
                 {
                     _flashingInvincibleFlag = false;
-                    SetBlendAlpha(0.7f);
+                    SetBlendColor(new Color(1, 1, 1, 0.7f));
                 }
                 else
                 {
                     _flashingInvincibleFlag = true;
-                    SetBlendAlpha(0);
+                    SetBlendColor(new Color(1, 1, 1, 0));
                 }
             }
 

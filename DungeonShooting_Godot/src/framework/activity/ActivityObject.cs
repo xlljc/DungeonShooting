@@ -818,20 +818,20 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     }
 
     /// <summary>
-    /// 设置透明度
+    /// 设置混色颜色
     /// </summary>
-    public void SetBlendAlpha(float value)
+    public void SetBlendModulate(Color color)
     {
-        _blendShaderMaterial.SetShaderParameter("alpha", value);
-        _shadowBlendShaderMaterial.SetShaderParameter("alpha", value);
+        _blendShaderMaterial.SetShaderParameter("modulate", color);
+        _shadowBlendShaderMaterial.SetShaderParameter("modulate", color);
     }
     
     /// <summary>
-    /// 获取透明度
+    /// 获取混色颜色
     /// </summary>
-    public float SetBlendAlpha()
+    public Color SetBlendModulate()
     {
-        return _blendShaderMaterial.GetShaderParameter("alpha").AsSingle();
+        return _blendShaderMaterial.GetShaderParameter("modulate").AsColor();
     }
     
     /// <summary>

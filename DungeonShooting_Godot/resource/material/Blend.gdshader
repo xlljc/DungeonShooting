@@ -5,7 +5,8 @@ uniform vec4 blend : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 //混合度
 uniform float schedule : hint_range(0.0, 1.0) = 0.0;
 //透明度
-uniform float alpha : hint_range(0.0, 1.0) = 1.0;
+//uniform float alpha : hint_range(0.0, 1.0) = 1.0;
+uniform vec4 modulate : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 //------------------ 轮廓相关 --------------
 uniform bool show_outline = true;
@@ -45,6 +46,6 @@ void fragment() {
 	
 	vec4 col = mix(COLOR, blend, schedule);
 	col = mix(vec4(0.0, 0.0, 0.0, 0.0), col, COLOR.a);
-	col.a *= alpha;
+	col *= modulate;
 	COLOR = col;
 }
