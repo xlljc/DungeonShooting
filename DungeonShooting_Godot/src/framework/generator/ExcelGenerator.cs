@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if TOOLS
+
+using System;
 using System.IO;
 using System.Text.Json;
 using Godot;
@@ -77,3 +79,5 @@ public static class ExcelGenerator
         File.WriteAllText("src/framework/activity/ActivityObject_Init.cs", str);
     }
 }
+
+#endif

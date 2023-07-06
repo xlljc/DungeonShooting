@@ -1,4 +1,6 @@
 
+#if TOOLS
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -64,13 +66,11 @@ public static class DungeonRoomGenerator
 			
 			//生成 UiManager_Methods.cs 代码
 			UiManagerMethodsGenerator.Generate();
-#if TOOLS
 			//打开房间
 			if (open)
 			{
 				Plugin.Plugin.Instance.GetEditorInterface().OpenSceneFromPath(prefabResPath);
-			}   
-#endif
+			}
 		}
 		catch (Exception e)
 		{
@@ -267,3 +267,6 @@ public static class DungeonRoomGenerator
 	    return name;
     }
 }
+
+
+#endif

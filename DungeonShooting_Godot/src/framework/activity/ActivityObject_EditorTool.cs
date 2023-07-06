@@ -58,6 +58,7 @@ public partial class ActivityObject
         }
     }
 
+#if TOOLS
     private void _InitNodeInEditor()
     {
         var parent = GetParent();
@@ -188,4 +189,5 @@ public partial class ActivityObject
 
         return null;
     }
+#endif
 }

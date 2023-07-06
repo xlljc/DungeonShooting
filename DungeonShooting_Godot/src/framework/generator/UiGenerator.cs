@@ -1,3 +1,4 @@
+#if TOOLS
 
 using System;
 using System.Collections.Generic;
@@ -74,13 +75,13 @@ public static class UiGenerator
             
             //生成 UiManager_Methods.cs 代码
             UiManagerMethodsGenerator.Generate();
-#if TOOLS
+
             //打开ui
             if (open)
             {
                 Plugin.Plugin.Instance.GetEditorInterface().OpenSceneFromPath(prefabResPath);
             }   
-#endif
+
         }
         catch (Exception e)
         {
@@ -334,3 +335,5 @@ public static class UiGenerator
     }
     
 }
+
+#endif
