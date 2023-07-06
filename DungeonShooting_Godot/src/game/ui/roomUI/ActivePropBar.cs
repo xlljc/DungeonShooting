@@ -6,15 +6,18 @@ public class ActivePropBar
 {
     private RoomUI.UiNode_ActivePropBar _activePropBar;
     private ShaderMaterial _shaderMaterial;
-    private Rect2 _startRect;
+    private Vector2 _startPos;
+    private Vector2 _startSize;
 
     public ActivePropBar(RoomUI.UiNode_ActivePropBar activePropBar)
     {
         _activePropBar = activePropBar;
         _shaderMaterial = (ShaderMaterial)_activePropBar.L_ActivePropSprite.Instance.Material;
-        _startRect = _activePropBar.L_ActivePropGrey.Instance.GetRect();
+        _startPos = _activePropBar.L_ActivePropGrey.Instance.Position;
+        _startSize = _activePropBar.L_ActivePropGrey.Instance.Scale;
 
         SetActivePropTexture(null);
+        SetChargeProgressVisible(false);
     }
     
     public void OnShow()
@@ -102,14 +105,46 @@ public class ActivePropBar
         {
             colorRect.Visible = true;
 
-            var height = _startRect.Size.Y * progress;
-            var size = colorRect.Size;
-            size.Y = height;
-            colorRect.Size = size;
+            //调整蒙板高度
+            var rect = colorRect.RegionRect;
+            var size = rect.Size;
+            size.Y = progress;
+            rect.Size = size;
+            colorRect.RegionRect = rect;
 
+            //调整蒙板位置
+            var height = _startSize.Y * progress;
             var position = colorRect.Position;
-            position.Y = _startRect.Position.Y + (_startRect.Size.Y - height);
+            position.Y = _startPos.Y + (_startSize.Y - height);
             colorRect.Position = position;
+        }
+    }
+
+    /// <summary>
+    /// 设置充能进度条是否显示
+    /// </summary>
+    public void SetChargeProgressVisible(bool visible)
+    {
+        var ninePatchRect = _activePropBar.L_ActivePropChargeProgress.Instance;
+        ninePatchRect.Visible = visible;
+        //调整冷却蒙板大小
+        var sprite = _activePropBar.L_ActivePropGrey.Instance;
+        if (visible)
+        {
+            var rect = ninePatchRect.GetRect();
+            
+            var position = sprite.Position;
+            position.X = _startPos.X + rect.Size.X - 1;
+            sprite.Position = position;
+
+            var scale = sprite.Scale;
+            scale.X = _startSize.X - rect.Size.X + 1;
+            sprite.Scale = scale;
+        }
+        else
+        {
+            sprite.Position = _startPos;
+            sprite.Scale = _startSize;
         }
     }
 }
