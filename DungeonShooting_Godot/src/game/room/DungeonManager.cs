@@ -162,8 +162,7 @@ public partial class DungeonManager : Node2D
         yield return 0;
         
         //打开游戏中的ui
-        var roomUi = UiManager.Open_RoomUI();
-        roomUi.InitData();
+        UiManager.Open_RoomUI();
         //派发进入地牢事件
         EventManager.EmitEvent(EventEnum.OnEnterDungeon);
         
@@ -331,29 +330,29 @@ public partial class DungeonManager : Node2D
                     var py2 = py1 + 4 * GameConfig.TileCellSize;
                     if (px1 < minX)
                     {
-                        minX = (int)px1;
+                        minX = px1;
                     }
                     else if (px1 > maxX)
                     {
-                        maxX = (int)px1;
+                        maxX = px1;
                     }
 
                     if (py1 < minY)
                     {
-                        minY = (int)py1;
+                        minY = py1;
                     }
                     else if (py1 > maxY)
                     {
-                        maxY = (int)py1;
+                        maxY = py1;
                     }
                     
                     if (py2 < minY)
                     {
-                        minY = (int)py2;
+                        minY = py2;
                     }
                     else if (py2 > maxY)
                     {
-                        maxY = (int)py2;
+                        maxY = py2;
                     }
                 }
                     break;
@@ -364,29 +363,29 @@ public partial class DungeonManager : Node2D
                     var px2 = px1 + 4 * GameConfig.TileCellSize;
                     if (px1 < minX)
                     {
-                        minX = (int)px1;
+                        minX = px1;
                     }
                     else if (px1 > maxX)
                     {
-                        maxX = (int)px1;
+                        maxX = px1;
                     }
 
                     if (py1 < minY)
                     {
-                        minY = (int)py1;
+                        minY = py1;
                     }
                     else if (py1 > maxY)
                     {
-                        maxY = (int)py1;
+                        maxY = py1;
                     }
                     
                     if (px2 < minX)
                     {
-                        minX = (int)px2;
+                        minX = px2;
                     }
                     else if (px2 > maxX)
                     {
-                        maxX = (int)px2;
+                        maxX = px2;
                     }
                 }
                     break;

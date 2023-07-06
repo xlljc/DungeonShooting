@@ -7,6 +7,9 @@ using Godot;
 
 namespace UI.EditorTools;
 
+/// <summary>
+/// Godot编辑器扩展工具
+/// </summary>
 [Tool]
 public partial class EditorToolsPanel : EditorTools
 {

@@ -3,6 +3,9 @@ using Godot;
 
 namespace UI.BottomTips;
 
+/// <summary>
+/// 底部提示面板
+/// </summary>
 public partial class BottomTipsPanel : BottomTips
 {
     private long _id = -1;

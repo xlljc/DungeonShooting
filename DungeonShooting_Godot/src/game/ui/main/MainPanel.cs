@@ -2,6 +2,9 @@ using Godot;
 
 namespace UI.Main;
 
+/// <summary>
+/// 主菜单
+/// </summary>
 public partial class MainPanel : Main
 {
 

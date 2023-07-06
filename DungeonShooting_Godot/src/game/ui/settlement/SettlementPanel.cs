@@ -2,6 +2,9 @@ using Godot;
 
 namespace UI.Settlement;
 
+/// <summary>
+/// 结算面板
+/// </summary>
 public partial class SettlementPanel : Settlement
 {
 
@@ -17,9 +20,9 @@ public partial class SettlementPanel : Settlement
         L_ButtonList.L_ToMenu.Instance.Pressed -= OnToMenuClick;
     }
 
+    //重新开始
     private void OnRestartClick()
     {
-        //GD.Print("重新开始还没做...");
         HideUi();
         GameApplication.Instance.DungeonManager.ExitDungeon(() =>
         {
@@ -27,6 +30,7 @@ public partial class SettlementPanel : Settlement
         });
     }
 
+    //回到主菜单
     private void OnToMenuClick()
     {
         HideUi();

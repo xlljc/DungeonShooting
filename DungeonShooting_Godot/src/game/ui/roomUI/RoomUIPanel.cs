@@ -4,7 +4,7 @@ using UI.BottomTips;
 namespace UI.RoomUI;
 
 /// <summary>
-/// 房间中的ui
+/// 地牢房间中的ui
 /// </summary>
 public partial class RoomUIPanel : RoomUI
 {
@@ -47,11 +47,6 @@ public partial class RoomUIPanel : RoomUI
         
         _factory.RemoveAllEventListener();
         _factory = null;
-    }
-
-    public void InitData()
-    {
-        _lifeBar.RefreshLife();
     }
 
     public override void Process(float delta)

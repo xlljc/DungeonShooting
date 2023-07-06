@@ -2,11 +2,7 @@
 
 [ext_resource type="Script" path="res://src/game/room/World.cs" id="1_kt3mm"]
 [ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="2_p6iui"]
-
-[sub_resource type="Environment" id="Environment_ji6mi"]
-background_mode = 3
-glow_enabled = true
-glow_intensity = 4.74
+[ext_resource type="Environment" uid="uid://cu80ujuqcj7gx" path="res://resource/Enviromenent.tres" id="2_tgvam"]
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot")]
 script = ExtResource("1_kt3mm")
@@ -18,7 +14,7 @@ AffiliationAreaRoot = NodePath("AffiliationAreaRoot")
 metadata/_edit_vertical_guides_ = []
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_ji6mi")
+environment = ExtResource("2_tgvam")
 
 [node name="TileRoot" type="TileMap" parent="."]
 y_sort_enabled = true
