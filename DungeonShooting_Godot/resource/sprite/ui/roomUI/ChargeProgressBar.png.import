@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ck0w7at3oat5"
-path="res://.godot/imported/ChargeProgress.png-a966b083a7f0e9adb2c3b308c3007e22.ctex"
+uid="uid://dwysndc5ffski"
+path="res://.godot/imported/ChargeProgressBar.png-74d561037ef0bfb8e76d62f233513b79.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/ui/roomUI/ChargeProgress.png"
-dest_files=["res://.godot/imported/ChargeProgress.png-a966b083a7f0e9adb2c3b308c3007e22.ctex"]
+source_file="res://resource/sprite/ui/roomUI/ChargeProgressBar.png"
+dest_files=["res://.godot/imported/ChargeProgressBar.png-74d561037ef0bfb8e76d62f233513b79.ctex"]
 
 [params]
 

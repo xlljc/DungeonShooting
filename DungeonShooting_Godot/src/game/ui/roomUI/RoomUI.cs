@@ -258,12 +258,12 @@ public abstract partial class RoomUI : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropGrey
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Control.ActivePropBar.CooldownProgress
     /// </summary>
-    public class UiNode_ActivePropGrey : IUiNode<Godot.Sprite2D, UiNode_ActivePropGrey>
+    public class UiNode_CooldownProgress : IUiNode<Godot.Sprite2D, UiNode_CooldownProgress>
     {
-        public UiNode_ActivePropGrey(Godot.Sprite2D node) : base(node) {  }
-        public override UiNode_ActivePropGrey Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
+        public UiNode_CooldownProgress(Godot.Sprite2D node) : base(node) {  }
+        public override UiNode_CooldownProgress Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
     }
 
     /// <summary>
@@ -285,12 +285,21 @@ public abstract partial class RoomUI : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropChargeProgress
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.ActivePropBar.ChargeProgressBar
     /// </summary>
-    public class UiNode_ActivePropChargeProgress : IUiNode<Godot.NinePatchRect, UiNode_ActivePropChargeProgress>
+    public class UiNode_ChargeProgressBar : IUiNode<Godot.NinePatchRect, UiNode_ChargeProgressBar>
     {
-        public UiNode_ActivePropChargeProgress(Godot.NinePatchRect node) : base(node) {  }
-        public override UiNode_ActivePropChargeProgress Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
+        public UiNode_ChargeProgressBar(Godot.NinePatchRect node) : base(node) {  }
+        public override UiNode_ChargeProgressBar Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Control.ActivePropBar.ChargeProgress
+    /// </summary>
+    public class UiNode_ChargeProgress : IUiNode<Godot.Sprite2D, UiNode_ChargeProgress>
+    {
+        public UiNode_ChargeProgress(Godot.Sprite2D node) : base(node) {  }
+        public override UiNode_ChargeProgress Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
     }
 
     /// <summary>
@@ -325,17 +334,17 @@ public abstract partial class RoomUI : UiBase
         private UiNode_ActivePropSprite _L_ActivePropSprite;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Control.ActivePropGrey
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Control.CooldownProgress
         /// </summary>
-        public UiNode_ActivePropGrey L_ActivePropGrey
+        public UiNode_CooldownProgress L_CooldownProgress
         {
             get
             {
-                if (_L_ActivePropGrey == null) _L_ActivePropGrey = new UiNode_ActivePropGrey(Instance.GetNodeOrNull<Godot.Sprite2D>("ActivePropGrey"));
-                return _L_ActivePropGrey;
+                if (_L_CooldownProgress == null) _L_CooldownProgress = new UiNode_CooldownProgress(Instance.GetNodeOrNull<Godot.Sprite2D>("CooldownProgress"));
+                return _L_CooldownProgress;
             }
         }
-        private UiNode_ActivePropGrey _L_ActivePropGrey;
+        private UiNode_CooldownProgress _L_CooldownProgress;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: RoomUI.Control.ActivePropCount
@@ -364,17 +373,30 @@ public abstract partial class RoomUI : UiBase
         private UiNode_ActivePropPanel _L_ActivePropPanel;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.ActivePropChargeProgress
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.ChargeProgressBar
         /// </summary>
-        public UiNode_ActivePropChargeProgress L_ActivePropChargeProgress
+        public UiNode_ChargeProgressBar L_ChargeProgressBar
         {
             get
             {
-                if (_L_ActivePropChargeProgress == null) _L_ActivePropChargeProgress = new UiNode_ActivePropChargeProgress(Instance.GetNodeOrNull<Godot.NinePatchRect>("ActivePropChargeProgress"));
-                return _L_ActivePropChargeProgress;
+                if (_L_ChargeProgressBar == null) _L_ChargeProgressBar = new UiNode_ChargeProgressBar(Instance.GetNodeOrNull<Godot.NinePatchRect>("ChargeProgressBar"));
+                return _L_ChargeProgressBar;
             }
         }
-        private UiNode_ActivePropChargeProgress _L_ActivePropChargeProgress;
+        private UiNode_ChargeProgressBar _L_ChargeProgressBar;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Control.ChargeProgress
+        /// </summary>
+        public UiNode_ChargeProgress L_ChargeProgress
+        {
+            get
+            {
+                if (_L_ChargeProgress == null) _L_ChargeProgress = new UiNode_ChargeProgress(Instance.GetNodeOrNull<Godot.Sprite2D>("ChargeProgress"));
+                return _L_ChargeProgress;
+            }
+        }
+        private UiNode_ChargeProgress _L_ChargeProgress;
 
         public UiNode_ActivePropBar(Godot.Control node) : base(node) {  }
         public override UiNode_ActivePropBar Clone() => new ((Godot.Control)Instance.Duplicate());

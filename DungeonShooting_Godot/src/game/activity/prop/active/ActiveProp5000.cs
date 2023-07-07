@@ -1,6 +1,9 @@
 ﻿
 using Godot;
 
+/// <summary>
+/// 医药箱, 使用后恢复一颗红心
+/// </summary>
 [Tool]
 public partial class ActiveProp5000 : ActiveProp
 {
@@ -8,8 +11,6 @@ public partial class ActiveProp5000 : ActiveProp
     {
         AutoDestroy = true;
         MaxCount = 20;
-        Count = 20;
-        CooldownTime = 5;
     }
 
     public override bool OnCheckUse()

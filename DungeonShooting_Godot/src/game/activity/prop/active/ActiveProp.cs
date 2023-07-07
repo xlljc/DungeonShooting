@@ -77,7 +77,11 @@ public abstract partial class ActiveProp : Prop
     }
 
     private float _chargeProgress = 1;
-
+    
+    /// <summary>
+    /// 自动充能速度, 也就是每秒充能进度, 如果为0则表示不就行自动充能
+    /// </summary>
+    public float AutoChargeSpeed { get; set; }
 
     //冷却计时器
     private float _cooldownTimer = 0;
@@ -130,6 +134,7 @@ public abstract partial class ActiveProp : Prop
     
     public override void PackProcess(float delta)
     {
+        //冷却
         if (_cooldownTimer > 0)
         {
             _cooldownTimer -= delta;
@@ -140,6 +145,12 @@ public abstract partial class ActiveProp : Prop
                 _cooldownTimer = 0;
                 OnCooldownFinish();
             }
+        }
+        
+        //自动充能
+        if (AutoChargeSpeed > 0 && ChargeProgress < 1)
+        {
+            ChargeProgress += AutoChargeSpeed * delta;
         }
     }
 

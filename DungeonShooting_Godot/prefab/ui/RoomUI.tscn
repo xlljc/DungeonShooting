@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bvpmtfupny8iu"]
+[gd_scene load_steps=20 format=3 uid="uid://bvpmtfupny8iu"]
 
 [ext_resource type="Script" path="res://src/game/ui/roomUI/RoomUIPanel.cs" id="1_tfcrp"]
 [ext_resource type="Texture2D" uid="uid://b67i86mtqrn32" path="res://resource/sprite/ui/roomUI/icon_bullet.png" id="2_ruc0p"]
@@ -13,7 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://504f1r0mi33n" path="res://resource/sprite/weapon/weapon0005/Weapon0005.png" id="11_lsai4"]
 [ext_resource type="Texture2D" uid="uid://bsu7re1lxnr72" path="res://resource/sprite/ui/roomUI/Cooldown.png" id="11_p0smc"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="12_fgyob"]
-[ext_resource type="Texture2D" uid="uid://dwysndc5ffski" path="res://resource/sprite/ui/roomUI/ChargeProgress.png" id="13_vuglj"]
+[ext_resource type="Texture2D" uid="uid://dwysndc5ffski" path="res://resource/sprite/ui/roomUI/ChargeProgressBar.png" id="13_6w7qi"]
+[ext_resource type="Texture2D" uid="uid://ck0w7at3oat5" path="res://resource/sprite/ui/roomUI/ChargeProgress.png" id="13_vuglj"]
 
 [sub_resource type="Gradient" id="1"]
 colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
@@ -218,7 +219,7 @@ grow_vertical = 2
 texture = ExtResource("10_5d4np")
 stretch_mode = 3
 
-[node name="ActivePropGrey" type="Sprite2D" parent="Control/ActivePropBar"]
+[node name="CooldownProgress" type="Sprite2D" parent="Control/ActivePropBar"]
 position = Vector2(1, 0.99999)
 scale = Vector2(43, 25)
 texture = ExtResource("11_p0smc")
@@ -259,17 +260,24 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="ActivePropChargeProgress" type="NinePatchRect" parent="Control/ActivePropBar"]
+[node name="ChargeProgressBar" type="NinePatchRect" parent="Control/ActivePropBar"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 5.0
 grow_vertical = 2
-texture = ExtResource("13_vuglj")
+texture = ExtResource("13_6w7qi")
 patch_margin_left = 2
 patch_margin_top = 3
 patch_margin_right = 1
 patch_margin_bottom = 3
+
+[node name="ChargeProgress" type="Sprite2D" parent="Control/ActivePropBar"]
+position = Vector2(1, 1)
+texture = ExtResource("13_vuglj")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 3, 25)
 
 [node name="WeaponBar" type="Control" parent="Control"]
 layout_mode = 1

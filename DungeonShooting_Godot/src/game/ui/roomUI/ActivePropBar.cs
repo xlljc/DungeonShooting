@@ -6,18 +6,24 @@ public class ActivePropBar
 {
     private RoomUI.UiNode_ActivePropBar _activePropBar;
     private ShaderMaterial _shaderMaterial;
-    private Vector2 _startPos;
-    private Vector2 _startSize;
+    private Vector2 _startCooldownPos;
+    private Vector2 _startCooldownSize;
+    private Vector2 _startChargePos;
+    private Rect2 _startChargeRect;
+
+    private bool _initCooldown = false;
 
     public ActivePropBar(RoomUI.UiNode_ActivePropBar activePropBar)
     {
         _activePropBar = activePropBar;
         _shaderMaterial = (ShaderMaterial)_activePropBar.L_ActivePropSprite.Instance.Material;
-        _startPos = _activePropBar.L_ActivePropGrey.Instance.Position;
-        _startSize = _activePropBar.L_ActivePropGrey.Instance.Scale;
+        _startCooldownPos = _activePropBar.L_CooldownProgress.Instance.Position;
+        _startCooldownSize = _activePropBar.L_CooldownProgress.Instance.Scale;
+        _startChargePos = _activePropBar.L_ChargeProgress.Instance.Position;
+        _startChargeRect = _activePropBar.L_ChargeProgress.Instance.RegionRect;
 
         SetActivePropTexture(null);
-        SetChargeProgressVisible(false);
+        SetChargeProgress(1);
     }
     
     public void OnShow()
@@ -49,7 +55,10 @@ public class ActivePropBar
             }
             
             //冷却
-            SetActivePropCooldownProgress(prop.GetCooldownProgress());
+            SetCooldownProgress(prop.GetCooldownProgress());
+            
+            //充能进度
+            SetChargeProgress(prop.ChargeProgress);
         }
         else
         {
@@ -93,10 +102,10 @@ public class ActivePropBar
     /// 设置道具冷却进度
     /// </summary>
     /// <param name="progress">进度: 0 - 1</param>
-    public void SetActivePropCooldownProgress(float progress)
+    public void SetCooldownProgress(float progress)
     {
         progress = 1 - progress;
-        var colorRect = _activePropBar.L_ActivePropGrey.Instance;
+        var colorRect = _activePropBar.L_CooldownProgress.Instance;
         if (progress <= 0)
         {
             colorRect.Visible = false;
@@ -113,9 +122,9 @@ public class ActivePropBar
             colorRect.RegionRect = rect;
 
             //调整蒙板位置
-            var height = _startSize.Y * progress;
+            var height = _startCooldownSize.Y * progress;
             var position = colorRect.Position;
-            position.Y = _startPos.Y + (_startSize.Y - height);
+            position.Y = _startCooldownPos.Y + (_startCooldownSize.Y - height);
             colorRect.Position = position;
         }
     }
@@ -125,26 +134,72 @@ public class ActivePropBar
     /// </summary>
     public void SetChargeProgressVisible(bool visible)
     {
-        var ninePatchRect = _activePropBar.L_ActivePropChargeProgress.Instance;
+        var ninePatchRect = _activePropBar.L_ChargeProgressBar.Instance;
+        var sprite = _activePropBar.L_CooldownProgress.Instance;
+        sprite.Visible = visible;
+        if (ninePatchRect.Visible == visible && _initCooldown)
+        {
+            return;
+        }
+
+        _initCooldown = true;
+
         ninePatchRect.Visible = visible;
+        _activePropBar.L_ChargeProgress.Instance.Visible = visible;
         //调整冷却蒙板大小
-        var sprite = _activePropBar.L_ActivePropGrey.Instance;
         if (visible)
         {
             var rect = ninePatchRect.GetRect();
             
             var position = sprite.Position;
-            position.X = _startPos.X + rect.Size.X - 1;
+            position.X = _startCooldownPos.X + rect.Size.X - 1;
             sprite.Position = position;
 
             var scale = sprite.Scale;
-            scale.X = _startSize.X - rect.Size.X + 1;
+            scale.X = _startCooldownSize.X - rect.Size.X + 1;
             sprite.Scale = scale;
         }
         else
         {
-            sprite.Position = _startPos;
-            sprite.Scale = _startSize;
+            sprite.Position = _startCooldownPos;
+            sprite.Scale = _startCooldownSize;
+        }
+    }
+
+    /// <summary>
+    /// 设置充能进度
+    /// </summary>
+    /// <param name="progress">进度: 0 - 1</param>
+    public void SetChargeProgress(float progress)
+    {
+        if (progress >= 1)
+        {
+            SetChargeProgressVisible(false);
+        }
+        else
+        {
+            SetChargeProgressVisible(true);
+
+            var height = _startChargeRect.Size.Y * progress;
+            var rectY = _startChargeRect.Size.Y * (1 - progress);
+            var posY = _startChargePos.Y + rectY;
+
+            var sprite = _activePropBar.L_ChargeProgress.Instance;
+            
+            var position = sprite.Position;
+            position.Y = posY;
+            sprite.Position = position;
+
+            var rect = sprite.RegionRect;
+            var rectPosition = rect.Position;
+            rectPosition.Y = rectY;
+            rect.Position = rectPosition;
+
+            var rectSize = rect.Size;
+            rectSize.Y = height;
+            rect.Size = rectSize;
+
+            sprite.RegionRect = rect;
         }
     }
 }
