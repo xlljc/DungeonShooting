@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// 物体背包类
+/// </summary>
 public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
 {
     public bool IsDestroyed { get; private set; }
@@ -30,11 +33,10 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
     /// </summary>
     public T[] ItemSlot { get; private set; }
 
-    public Package(Role master)
+    public Package(Role master, int capacity)
     {
         Master = master;
-        //默认容量4
-        SetCapacity(4);
+        SetCapacity(capacity);
     }
 
     /// <summary>
@@ -404,6 +406,50 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
         }
 
         return -1;
+    }
+
+    /// <summary>
+    /// 返回指定 id 的物体在背包中的索引, 如果不在背包中, 则返回 -1
+    /// </summary>
+    public int IndexOfByItemId(string itemId)
+    {
+        if (ItemSlot == null)
+        {
+            return -1;
+        }
+
+        for (var i = 0; i < ItemSlot.Length; i++)
+        {
+            var packageItem = ItemSlot[i];
+            if (packageItem != null && packageItem.ItemConfig.Id == itemId)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /// <summary>
+    /// 获取背包中指定 id 的物体, 如果有多个相同 id 的物体, 则返回第一个匹配的物体
+    /// </summary>
+    public T GetItemById(string itemId)
+    {
+        if (ItemSlot == null)
+        {
+            return null;
+        }
+
+        for (var i = 0; i < ItemSlot.Length; i++)
+        {
+            var packageItem = ItemSlot[i];
+            if (packageItem != null && packageItem.ItemConfig.Id == itemId)
+            {
+                return packageItem;
+            }
+        }
+
+        return null;
     }
     
     public void Destroy()

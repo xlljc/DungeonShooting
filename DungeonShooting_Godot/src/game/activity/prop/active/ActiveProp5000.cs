@@ -11,6 +11,7 @@ public partial class ActiveProp5000 : ActiveProp
     {
         AutoDestroy = true;
         MaxCount = 20;
+        Superposition = true;
     }
 
     public override bool OnCheckUse()

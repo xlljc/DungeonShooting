@@ -28,13 +28,47 @@ public abstract partial class Prop : ActivityObject, IPackageItem
     {
     }
 
+        
+    public virtual void OnRemoveItem()
+    {
+        
+    }
+
+    public virtual void OnPickUpItem()
+    {
+        
+    }
+
+    public virtual void OnActiveItem()
+    {
+        
+    }
+
+    public virtual void OnConcealItem()
+    {
+        
+    }
+
+    public virtual void OnOverflowItem()
+    {
+        
+    }
+    
+    /// <summary>
+    /// 执行将当前道具放入角色背包的操作
+    /// </summary>
+    protected void PushToRole(Role role)
+    {
+        Pickup();
+        role.PushProp(this);
+        OnPickUp(role);
+    }
+    
     public override void Interactive(ActivityObject master)
     {
         if (master is Role role)
         {
-            Pickup();
-            role.PushProp(this);
-            OnPickUp(role);
+            PushToRole(role);
         }
     }
 
@@ -46,29 +80,5 @@ public abstract partial class Prop : ActivityObject, IPackageItem
         }
         return base.CheckInteractive(master);
     }
-    
-    public void OnRemoveItem()
-    {
-        
-    }
 
-    public void OnPickUpItem()
-    {
-        
-    }
-
-    public void OnActiveItem()
-    {
-        
-    }
-
-    public void OnConcealItem()
-    {
-        
-    }
-
-    public void OnOverflowItem()
-    {
-        
-    }
 }

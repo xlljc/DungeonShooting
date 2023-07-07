@@ -99,3 +99,10 @@ script = ExtResource("3_m4jrh")
 Type = 9
 ItemExpression = "5000"
 WaveNumber = 3
+
+[node name="ActivityMark19" type="Node2D" parent="."]
+position = Vector2(106, 31)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "5000"
+WaveNumber = 3

@@ -7,6 +7,11 @@ using Godot;
 public abstract partial class ActiveProp : Prop
 {
     /// <summary>
+    /// 道具是否可以叠加
+    /// </summary>
+    public bool Superposition { get; set; } = false;
+    
+    /// <summary>
     /// 道具可使用次数
     /// </summary>
     public int Count
@@ -131,9 +136,18 @@ public abstract partial class ActiveProp : Prop
     protected virtual void OnCooldownFinish()
     {
     }
-    
+
+    protected override void ProcessOver(float delta)
+    {
+        CheckAutoDestroy();
+    }
+
     public override void PackProcess(float delta)
     {
+        if (CheckAutoDestroy())
+        {
+            return;
+        }
         //冷却
         if (_cooldownTimer > 0)
         {
@@ -154,6 +168,22 @@ public abstract partial class ActiveProp : Prop
         }
     }
 
+    //检测是否达到自动销毁的条件
+    private bool CheckAutoDestroy()
+    {
+        if (Count == 0 && AutoDestroy) //用光了, 自动销毁
+        {
+            if (Master != null)
+            {
+                Master.RemoveProp(this);
+            }
+            Destroy();
+            return true;
+        }
+
+        return false;
+    }
+    
     /// <summary>
     /// 检测是否可以使用当前道具
     /// </summary>
@@ -181,11 +211,6 @@ public abstract partial class ActiveProp : Prop
 
             //冷却计时器
             _cooldownTimer = CooldownTime;
-            if (Count == 0 && AutoDestroy) //用光了, 自动销毁
-            {
-                Master.RemoveProp(this);
-                Destroy();
-            }
         }
     }
 
@@ -200,5 +225,83 @@ public abstract partial class ActiveProp : Prop
         }
 
         return (CooldownTime - _cooldownTimer) / CooldownTime;
+    }
+
+    public override void Interactive(ActivityObject master)
+    {
+        if (master is Player player)
+        {
+            //查找相同类型的物体
+            ActiveProp item;
+            if (Superposition && (item = player.ActivePropsPack.GetItemById(ItemConfig.Id)) != null) //走叠加逻辑
+            {
+                if (item.Count < item.MaxCount) //可以叠加
+                {
+                    if (item.Count + Count > item.MaxCount)
+                    {
+                        Count -= item.MaxCount - item.Count;
+                        item.Count = item.MaxCount;
+                    }
+                    else
+                    {
+                        item.Count += Count;
+                        Count = 0;
+                    }
+                }
+                else //该道具不能拾起
+                {
+                    return;
+                }
+            }
+            else //正常拾起
+            {
+                if (player.ActivePropsPack.HasVacancy()) //还有空位
+                {
+                    PushToRole(player);
+                }
+                else //没有空位了
+                {
+                    //替换手中的道具
+                    
+                }
+            }
+            
+            return;
+        }
+
+        base.Interactive(master);
+    }
+
+    public override CheckInteractiveResult CheckInteractive(ActivityObject master)
+    {
+        if (master is Player player)
+        {
+            //查找相同类型的物体
+            ActiveProp item;
+            if (Superposition && (item = player.ActivePropsPack.GetItemById(ItemConfig.Id)) != null) //走叠加逻辑
+            {
+                if (item.Count < item.MaxCount) //可以叠加
+                {
+                    return new CheckInteractiveResult(this, true, CheckInteractiveResult.InteractiveType.Bullet);
+                }
+                else //该道具不能拾起
+                {
+                    return new CheckInteractiveResult(this);
+                }
+            }
+            else //正常拾起
+            {
+                if (player.ActivePropsPack.HasVacancy()) //还有空位
+                {
+                    return new CheckInteractiveResult(this, true, CheckInteractiveResult.InteractiveType.PickUp);
+                }
+                else //没有空位了
+                {
+                    //替换手中的道具
+                    return new CheckInteractiveResult(this, true, CheckInteractiveResult.InteractiveType.Replace);
+                }
+            }
+        }
+        return base.CheckInteractive(master);
     }
 }

@@ -311,8 +311,8 @@ public abstract partial class Role : ActivityObject
 
     public override void OnInit()
     {
-        ActivePropsPack = new Package<ActiveProp>(this);
-        WeaponPack = new Package<Weapon>(this);
+        ActivePropsPack = new Package<ActiveProp>(this, 1);
+        WeaponPack = new Package<Weapon>(this, 4);
         _startScale = Scale;
         MountPoint.Master = this;
         
@@ -434,7 +434,10 @@ public abstract partial class Role : ActivityObject
             var buffProps = BuffPropPack.ToArray();
             foreach (var prop in buffProps)
             {
-                prop.PackProcess(delta);
+                if (!prop.IsDestroyed)
+                {
+                    prop.PackProcess(delta);
+                }
             }
         }
         
@@ -442,7 +445,7 @@ public abstract partial class Role : ActivityObject
         var props = (Prop[])ActivePropsPack.ItemSlot.Clone();
         foreach (var prop in props)
         {
-            if (prop != null)
+            if (prop != null && !prop.IsDestroyed)
             {
                 prop.PackProcess(delta);
             }

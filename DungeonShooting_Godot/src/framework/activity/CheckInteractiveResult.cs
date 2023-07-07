@@ -29,7 +29,7 @@ public class CheckInteractiveResult
     /// <summary>
     /// 是否可以互动
     /// </summary>
-    public bool CanInteractive;
+    public bool CanInteractive = false;
     /// <summary>
     /// 互动提示类型
     /// </summary>

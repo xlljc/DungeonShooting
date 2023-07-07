@@ -135,8 +135,7 @@ public class ActivePropBar
     public void SetChargeProgressVisible(bool visible)
     {
         var ninePatchRect = _activePropBar.L_ChargeProgressBar.Instance;
-        var sprite = _activePropBar.L_CooldownProgress.Instance;
-        sprite.Visible = visible;
+        _activePropBar.L_ChargeProgress.Instance.Visible = visible;
         if (ninePatchRect.Visible == visible && _initCooldown)
         {
             return;
@@ -144,8 +143,8 @@ public class ActivePropBar
 
         _initCooldown = true;
 
+        var sprite = _activePropBar.L_CooldownProgress.Instance;
         ninePatchRect.Visible = visible;
-        _activePropBar.L_ChargeProgress.Instance.Visible = visible;
         //调整冷却蒙板大小
         if (visible)
         {
