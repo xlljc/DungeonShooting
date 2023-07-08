@@ -56,6 +56,13 @@
     "Prefab": "res://prefab/weapon/Weapon0006.tscn"
   },
   {
+    "Id": "weapon0007",
+    "Type": 5,
+    "Name": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
+    "Remark": "",
+    "Prefab": "res://prefab/weapon/Weapon0007.tscn"
+  },
+  {
     "Id": "bullet0001",
     "Type": 6,
     "Name": "",
@@ -68,6 +75,13 @@
     "Name": "",
     "Remark": "",
     "Prefab": "res://prefab/bullet/Bullet0002.tscn"
+  },
+  {
+    "Id": "bullet0003",
+    "Type": 6,
+    "Name": "",
+    "Remark": "",
+    "Prefab": "res://prefab/bullet/Bullet0003.tscn"
   },
   {
     "Id": "shell0001",

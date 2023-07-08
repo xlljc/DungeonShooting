@@ -23,6 +23,13 @@ Type = 5
 ItemExpression = "0003"
 WaveNumber = 2
 
+[node name="ActivityMark22" type="Node2D" parent="."]
+position = Vector2(63, 73)
+script = ExtResource("3_m4jrh")
+Type = 5
+ItemExpression = "0007"
+WaveNumber = 2
+
 [node name="ActivityMark8" type="Node2D" parent="."]
 position = Vector2(126, 41)
 script = ExtResource("3_m4jrh")

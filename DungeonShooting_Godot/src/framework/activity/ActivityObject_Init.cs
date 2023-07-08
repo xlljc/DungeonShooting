@@ -51,6 +51,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_weapon0006 = "weapon0006";
         /// <summary>
+        /// 名称: 汤姆逊冲锋枪 <br/>
+        /// 备注: 
+        /// </summary>
+        public const string Id_weapon0007 = "weapon0007";
+        /// <summary>
         /// 名称:  <br/>
         /// 备注: 
         /// </summary>
@@ -60,6 +65,11 @@ public partial class ActivityObject
         /// 备注: 
         /// </summary>
         public const string Id_bullet0002 = "bullet0002";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 备注: 
+        /// </summary>
+        public const string Id_bullet0003 = "bullet0003";
         /// <summary>
         /// 名称:  <br/>
         /// 备注: 
@@ -171,8 +181,10 @@ public partial class ActivityObject
         _activityRegisterMap.Add("weapon0004", new RegisterActivityData("res://prefab/weapon/Weapon0004.tscn", ExcelConfig.ActivityObject_Map["weapon0004"]));
         _activityRegisterMap.Add("weapon0005", new RegisterActivityData("res://prefab/weapon/Weapon0005.tscn", ExcelConfig.ActivityObject_Map["weapon0005"]));
         _activityRegisterMap.Add("weapon0006", new RegisterActivityData("res://prefab/weapon/Weapon0006.tscn", ExcelConfig.ActivityObject_Map["weapon0006"]));
+        _activityRegisterMap.Add("weapon0007", new RegisterActivityData("res://prefab/weapon/Weapon0007.tscn", ExcelConfig.ActivityObject_Map["weapon0007"]));
         _activityRegisterMap.Add("bullet0001", new RegisterActivityData("res://prefab/bullet/Bullet0001.tscn", ExcelConfig.ActivityObject_Map["bullet0001"]));
         _activityRegisterMap.Add("bullet0002", new RegisterActivityData("res://prefab/bullet/Bullet0002.tscn", ExcelConfig.ActivityObject_Map["bullet0002"]));
+        _activityRegisterMap.Add("bullet0003", new RegisterActivityData("res://prefab/bullet/Bullet0003.tscn", ExcelConfig.ActivityObject_Map["bullet0003"]));
         _activityRegisterMap.Add("shell0001", new RegisterActivityData("res://prefab/shell/Shell0001.tscn", ExcelConfig.ActivityObject_Map["shell0001"]));
         _activityRegisterMap.Add("shell0002", new RegisterActivityData("res://prefab/shell/Shell0002.tscn", ExcelConfig.ActivityObject_Map["shell0002"]));
         _activityRegisterMap.Add("shell0003", new RegisterActivityData("res://prefab/shell/Shell0003.tscn", ExcelConfig.ActivityObject_Map["shell0003"]));

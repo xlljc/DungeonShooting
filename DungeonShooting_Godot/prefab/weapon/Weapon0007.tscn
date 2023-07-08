@@ -1,12 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://uydtgdanj0kx"]
+[gd_scene load_steps=10 format=3 uid="uid://btd0wc11ajcuo"]
 
-[ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="1_5nx8j"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_rp1bw"]
-[ext_resource type="SpriteFrames" uid="uid://dx1mjbx4acs3q" path="res://resource/spriteFrames/weapon/Weapon0006.tres" id="2_j3sji"]
+[ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="1_exwbu"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_7rywx"]
+[ext_resource type="SpriteFrames" uid="uid://xxyokrbt10xm" path="res://resource/spriteFrames/weapon/Weapon0007.tres" id="3_ms2gs"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
 resource_local_to_scene = true
-shader = ExtResource("1_rp1bw")
+shader = ExtResource("2_7rywx")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
@@ -16,7 +16,7 @@ shader_parameter/outline_rainbow = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
 resource_local_to_scene = true
-shader = ExtResource("1_rp1bw")
+shader = ExtResource("2_7rywx")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
@@ -65,9 +65,9 @@ _data = {
 "floodlight": SubResource("Animation_3piau")
 }
 
-[node name="Weapon0006" type="CharacterBody2D" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="Weapon0007" type="CharacterBody2D" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 4
-script = ExtResource("1_5nx8j")
+script = ExtResource("1_exwbu")
 FirePoint = NodePath("AnimatedSprite/FirePoint")
 ShellPoint = NodePath("AnimatedSprite/ShellPoint")
 GripPoint = NodePath("GripPoint")
@@ -82,16 +82,16 @@ material = SubResource("ShaderMaterial_cbiyh")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_o36tv")
-sprite_frames = ExtResource("2_j3sji")
+sprite_frames = ExtResource("3_ms2gs")
 
 [node name="ShellPoint" type="Marker2D" parent="AnimatedSprite"]
-position = Vector2(-3, -2.5)
+position = Vector2(-1, -3)
 
 [node name="FirePoint" type="Marker2D" parent="AnimatedSprite"]
-position = Vector2(8, -2.5)
+position = Vector2(13, -3)
 
 [node name="GripPoint" type="Marker2D" parent="."]
-position = Vector2(-4, 1)
+position = Vector2(-6, 0)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_3p5jk")

@@ -84,10 +84,22 @@
     "Remark": "\u51B2\u950B\u67AA"
   },
   {
+    "Id": "reloadBegin0006",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0006.ogg",
+    "Volume": 1,
+    "Remark": ""
+  },
+  {
     "Id": "reloadBegin0009",
     "Path": "res://resource/sound/sfx/reloading/Reloading_begin0009.ogg",
     "Volume": 1,
     "Remark": "\u72D9\u51FB\u67AA"
+  },
+  {
+    "Id": "reloadBegin0010",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0010.ogg",
+    "Volume": 1,
+    "Remark": ""
   },
   {
     "Id": "reloadFinish0002",
@@ -190,5 +202,11 @@
     "Path": "res://resource/sound/sfx/beLoaded/BeLoaded0016.ogg",
     "Volume": 1,
     "Remark": "\u51B2\u950B\u67AA"
+  },
+  {
+    "Id": "beLoaded0017",
+    "Path": "res://resource/sound/sfx/beLoaded/BeLoaded0017.ogg",
+    "Volume": 1,
+    "Remark": ""
   }
 ]
