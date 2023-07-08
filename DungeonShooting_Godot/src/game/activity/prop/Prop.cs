@@ -46,18 +46,10 @@ public abstract partial class Prop : ActivityObject
     {
         //阴影偏移
         ShadowOffset = new Vector2(0, 2);
-
-        if (master.Face == FaceDirection.Left)
-        {
-            Scale *= new Vector2(1, -1);
-        }
-
-        var rotation = master.MountPoint.GlobalRotation;
-        GlobalRotation = rotation;
-        
+        GlobalRotation = 0;
         var startHeight = -master.MountPoint.Position.Y;
         Throw(startPosition, startHeight, 0, Vector2.Zero, 0);
-        
+
         //继承role的移动速度
         InheritVelocity(master);
     }

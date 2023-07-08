@@ -106,3 +106,17 @@ script = ExtResource("3_m4jrh")
 Type = 9
 ItemExpression = "5000"
 WaveNumber = 3
+
+[node name="ActivityMark20" type="Node2D" parent="."]
+position = Vector2(139, 26)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "5001"
+WaveNumber = 3
+
+[node name="ActivityMark21" type="Node2D" parent="."]
+position = Vector2(140, 50)
+script = ExtResource("3_m4jrh")
+Type = 9
+ItemExpression = "5001"
+WaveNumber = 3

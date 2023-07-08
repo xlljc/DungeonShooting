@@ -133,10 +133,15 @@ public abstract partial class ActiveProp : Prop, IPackageItem
 
     protected override void ProcessOver(float delta)
     {
-        CheckAutoDestroy();
+        RunUpdate(delta);
     }
 
     public override void PackProcess(float delta)
+    {
+        RunUpdate(delta);
+    }
+
+    private void RunUpdate(float delta)
     {
         if (CheckAutoDestroy())
         {
@@ -228,14 +233,12 @@ public abstract partial class ActiveProp : Prop, IPackageItem
             var item = player.ActivePropsPack.GetItemById(ItemConfig.Id);
             if (item == null) //没有同类型物体
             {
-                if (player.ActivePropsPack.HasVacancy()) //还有空位, 拾起道具
+                if (!player.ActivePropsPack.HasVacancy()) //没有空位置, 扔掉当前道具
                 {
-                    Pickup();
-                    player.PickUpActiveProp(this);
+                    player.ThrowActiveProp(player.ActivePropsPack.ActiveIndex);
                 }
-
                 //替换手中的道具
-                player.ThrowActiveProp(player.ActivePropsPack.ActiveIndex);
+                player.PickUpActiveProp(this);
             }
             else
             {
@@ -289,6 +292,7 @@ public abstract partial class ActiveProp : Prop, IPackageItem
 
     public override void OnPickUpItem()
     {
+        Pickup();
     }
 
     public override void OnRemoveItem()

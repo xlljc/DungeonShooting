@@ -209,23 +209,6 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
     }
 
     /// <summary>
-    /// 返回是否能放入物体
-    /// </summary>
-    /// <param name="item">物体对象</param>
-    public bool CanPickupItem(T item)
-    {
-        for (var i = 0; i < ItemSlot.Length; i++)
-        {
-            var tempItem = ItemSlot[i];
-            if (tempItem == null)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /// <summary>
     /// 拾起物体, 存入物体背包中, 返回存放在物体背包的位置, 如果容不下这个物体, 则会返回 -1
     /// </summary>
     /// <param name="item">物体对象</param>

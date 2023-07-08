@@ -1458,7 +1458,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                 }
                 else //没有武器
                 {
-                    if (roleMaster.WeaponPack.CanPickupItem(this)) //能拾起武器
+                    if (roleMaster.WeaponPack.HasVacancy()) //有空位, 能拾起武器
                     {
                         //可以互动, 拾起武器
                         result.CanInteractive = true;
@@ -1534,12 +1534,12 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             }
             else //没有武器
             {
-                if (holster.PickupItem(this) == -1)
+                if (!holster.HasVacancy()) //没有空位置, 扔掉当前武器
                 {
                     //替换武器
                     roleMaster.ThrowWeapon();
-                    roleMaster.PickUpWeapon(this);
                 }
+                roleMaster.PickUpWeapon(this);
             }
         }
     }

@@ -107,6 +107,7 @@ public partial class Player : Role
         {
             Reload();
         }
+
         if (InputManager.Fire) //开火
         {
             Attack();
@@ -115,6 +116,10 @@ public partial class Player : Role
         if (InputManager.UseActiveProp) //使用道具
         {
             UseActiveProp();
+        }
+        else if (InputManager.RemoveProp) //扔掉道具
+        {
+            ThrowActiveProp();
         }
 
         if (Input.IsKeyPressed(Key.P))
@@ -209,17 +214,26 @@ public partial class Player : Role
         BasisVelocity = Vector2.Zero;
         MoveController.ClearForce();
         UiManager.Open_Settlement();
-        //GameApplication.Instance.World.ProcessMode = ProcessModeEnum.WhenPaused;
     }
 
-    protected override void OnPickUpProp(Prop prop)
+    protected override void OnPickUpActiveProp(ActiveProp activeProp)
     {
-        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, prop);
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, activeProp);
     }
 
-    protected override void OnRemoveProp(Prop prop)
+    protected override void OnRemoveActiveProp(ActiveProp activeProp)
     {
-        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, prop);
+        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, activeProp);
+    }
+
+    protected override void OnPickUpBuffProp(BuffProp buffProp)
+    {
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, buffProp);
+    }
+
+    protected override void OnRemoveBuffProp(BuffProp buffProp)
+    {
+        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, buffProp);
     }
 
     //处理角色移动的输入

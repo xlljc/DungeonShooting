@@ -317,16 +317,37 @@ public abstract partial class Role : ActivityObject
     }
 
     /// <summary>
-    /// 当拾起某个道具时调用
+    /// 当拾起某个主动道具时调用
     /// </summary>
-    protected virtual void OnPickUpProp(Prop prop)
+    protected virtual void OnPickUpActiveProp(ActiveProp activeProp)
     {
     }
 
     /// <summary>
-    /// 当移除某个道具时调用
+    /// 当移除某个主动道具时调用
     /// </summary>
-    protected virtual void OnRemoveProp(Prop prop)
+    protected virtual void OnRemoveActiveProp(ActiveProp activeProp)
+    {
+    }
+    
+    /// <summary>
+    /// 当切换到某个主动道具时调用
+    /// </summary>
+    protected virtual void OnExchangeActiveProp(ActiveProp activeProp)
+    {
+    }
+    
+    /// <summary>
+    /// 当拾起某个被动道具时调用
+    /// </summary>
+    protected virtual void OnPickUpBuffProp(BuffProp buffProp)
+    {
+    }
+
+    /// <summary>
+    /// 当移除某个被动道具时调用
+    /// </summary>
+    protected virtual void OnRemoveBuffProp(BuffProp buffProp)
     {
     }
 
@@ -669,7 +690,7 @@ public abstract partial class Role : ActivityObject
         {
             //从可互动队列中移除
             _interactiveItemList.Remove(activeProp);
-            OnPickUpProp(activeProp);
+            OnPickUpActiveProp(activeProp);
             return true;
         }
 
@@ -681,7 +702,12 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public void ExchangeNextActiveProp()
     {
+        var prop = ActivePropsPack.ActiveItem;
         ActivePropsPack.ExchangeNext();
+        if (prop != ActivePropsPack.ActiveItem)
+        {
+            OnExchangeActiveProp(ActivePropsPack.ActiveItem);
+        }
     }
 
     /// <summary>
@@ -689,7 +715,12 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public void ExchangePrevActiveProp()
     {
+        var prop = ActivePropsPack.ActiveItem;
         ActivePropsPack.ExchangePrev();
+        if (prop != ActivePropsPack.ActiveItem)
+        {
+            OnExchangeActiveProp(ActivePropsPack.ActiveItem);
+        }
     }
     
     /// <summary>
@@ -712,7 +743,7 @@ public abstract partial class Role : ActivityObject
         }
 
         ActivePropsPack.RemoveItem(index);
-        OnRemoveProp(activeProp);
+        OnRemoveActiveProp(activeProp);
         //播放抛出效果
         activeProp.ThrowProp(this, GlobalPosition);
     }
@@ -730,7 +761,7 @@ public abstract partial class Role : ActivityObject
         }
         BuffPropPack.Add(buffProp);
         buffProp.Master = this;
-        OnPickUpProp(buffProp);
+        OnPickUpBuffProp(buffProp);
         buffProp.OnPickUpItem();
         return true;
     }
@@ -764,7 +795,7 @@ public abstract partial class Role : ActivityObject
         var buffProp = BuffPropPack[index];
         BuffPropPack.RemoveAt(index);
         buffProp.OnRemoveItem();
-        OnRemoveProp(buffProp);
+        OnRemoveBuffProp(buffProp);
         buffProp.Master = null;
         //播放抛出效果
         buffProp.ThrowProp(this, GlobalPosition);

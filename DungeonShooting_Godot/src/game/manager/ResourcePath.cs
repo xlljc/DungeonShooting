@@ -26,6 +26,7 @@ public class ResourcePath
     public const string prefab_map_RoomDoor_W_tscn = "res://prefab/map/RoomDoor_W.tscn";
     public const string prefab_prop_PropTemplate_tscn = "res://prefab/prop/PropTemplate.tscn";
     public const string prefab_prop_active_ActiveProp5000_tscn = "res://prefab/prop/active/ActiveProp5000.tscn";
+    public const string prefab_prop_active_ActiveProp5001_tscn = "res://prefab/prop/active/ActiveProp5001.tscn";
     public const string prefab_prop_buff_BuffProp0001_tscn = "res://prefab/prop/buff/BuffProp0001.tscn";
     public const string prefab_prop_buff_BuffProp0002_tscn = "res://prefab/prop/buff/BuffProp0002.tscn";
     public const string prefab_prop_buff_BuffProp0003_tscn = "res://prefab/prop/buff/BuffProp0003.tscn";
@@ -58,6 +59,7 @@ public class ResourcePath
     public const string prefab_weapon_Weapon0005_tscn = "res://prefab/weapon/Weapon0005.tscn";
     public const string prefab_weapon_Weapon0006_tscn = "res://prefab/weapon/Weapon0006.tscn";
     public const string prefab_weapon_WeaponTemplate_tscn = "res://prefab/weapon/WeaponTemplate.tscn";
+    public const string resource_Enviromenent_tres = "res://resource/Enviromenent.tres";
     public const string resource_config_ActivityObject_json = "res://resource/config/ActivityObject.json";
     public const string resource_config_Sound_json = "res://resource/config/Sound.json";
     public const string resource_config_Weapon_json = "res://resource/config/Weapon.json";
@@ -130,6 +132,7 @@ public class ResourcePath
     public const string resource_sprite_map_map1_door1_down_png = "res://resource/sprite/map/map1/door1_down.png";
     public const string resource_sprite_map_map1_website_txt = "res://resource/sprite/map/map1/website.txt";
     public const string resource_sprite_prop_active_ActiveProp5000_png = "res://resource/sprite/prop/active/ActiveProp5000.png";
+    public const string resource_sprite_prop_active_ActiveProp5001_png = "res://resource/sprite/prop/active/ActiveProp5001.png";
     public const string resource_sprite_prop_buff_BuffProp0001_png = "res://resource/sprite/prop/buff/BuffProp0001.png";
     public const string resource_sprite_prop_buff_BuffProp0002_png = "res://resource/sprite/prop/buff/BuffProp0002.png";
     public const string resource_sprite_prop_buff_BuffProp0003_png = "res://resource/sprite/prop/buff/BuffProp0003.png";
@@ -159,6 +162,9 @@ public class ResourcePath
     public const string resource_sprite_ui_font_bg_png = "res://resource/sprite/ui/font_bg.png";
     public const string resource_sprite_ui_GUI_png = "res://resource/sprite/ui/GUI.png";
     public const string resource_sprite_ui_keyboard_e_png = "res://resource/sprite/ui/keyboard/e.png";
+    public const string resource_sprite_ui_roomUI_ChargeProgress_png = "res://resource/sprite/ui/roomUI/ChargeProgress.png";
+    public const string resource_sprite_ui_roomUI_ChargeProgressBar_png = "res://resource/sprite/ui/roomUI/ChargeProgressBar.png";
+    public const string resource_sprite_ui_roomUI_Cooldown_png = "res://resource/sprite/ui/roomUI/Cooldown.png";
     public const string resource_sprite_ui_roomUI_icon_bullet_png = "res://resource/sprite/ui/roomUI/icon_bullet.png";
     public const string resource_sprite_ui_roomUI_icon_pickup_png = "res://resource/sprite/ui/roomUI/icon_pickup.png";
     public const string resource_sprite_ui_roomUI_icon_replace_png = "res://resource/sprite/ui/roomUI/icon_replace.png";
@@ -167,6 +173,7 @@ public class ResourcePath
     public const string resource_sprite_ui_roomUI_Life_half_png = "res://resource/sprite/ui/roomUI/Life_half.png";
     public const string resource_sprite_ui_roomUI_MapBar_png = "res://resource/sprite/ui/roomUI/MapBar.png";
     public const string resource_sprite_ui_roomUI_Panel_png = "res://resource/sprite/ui/roomUI/Panel.png";
+    public const string resource_sprite_ui_roomUI_Panel2_png = "res://resource/sprite/ui/roomUI/Panel2.png";
     public const string resource_sprite_ui_roomUI_ReloadBar_png = "res://resource/sprite/ui/roomUI/ReloadBar.png";
     public const string resource_sprite_ui_roomUI_ReloadBarBlock_png = "res://resource/sprite/ui/roomUI/ReloadBarBlock.png";
     public const string resource_sprite_ui_roomUI_Shield_empty_png = "res://resource/sprite/ui/roomUI/Shield_empty.png";
@@ -193,6 +200,7 @@ public class ResourcePath
     public const string resource_spriteFrames_other_RoomDoor_EW_tres = "res://resource/spriteFrames/other/RoomDoor_EW.tres";
     public const string resource_spriteFrames_other_RoomDoor_NS_tres = "res://resource/spriteFrames/other/RoomDoor_NS.tres";
     public const string resource_spriteFrames_prop_active_ActiveProp5000_tres = "res://resource/spriteFrames/prop/active/ActiveProp5000.tres";
+    public const string resource_spriteFrames_prop_active_ActiveProp5001_tres = "res://resource/spriteFrames/prop/active/ActiveProp5001.tres";
     public const string resource_spriteFrames_prop_buff_BuffProp0001_tres = "res://resource/spriteFrames/prop/buff/BuffProp0001.tres";
     public const string resource_spriteFrames_prop_buff_BuffProp0002_tres = "res://resource/spriteFrames/prop/buff/BuffProp0002.tres";
     public const string resource_spriteFrames_prop_buff_BuffProp0003_tres = "res://resource/spriteFrames/prop/buff/BuffProp0003.tres";

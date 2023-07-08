@@ -175,6 +175,13 @@
     "Prefab": "res://prefab/prop/active/ActiveProp5000.tscn"
   },
   {
+    "Id": "prop5001",
+    "Type": 9,
+    "Name": "\u5F39\u836F\u7BB1",
+    "Remark": "\u4F7F\u7528\u540E\u8865\u5145\u5F53\u524D\u6B66\u5668\u5907\u7528\u5F39\u836F",
+    "Prefab": "res://prefab/prop/active/ActiveProp5001.tscn"
+  },
+  {
     "Id": "other_door_e",
     "Type": 99,
     "Name": "",

@@ -92,5 +92,6 @@ public static class InputManager
         MeleeAttack = Input.IsActionJustPressed("meleeAttack");
         Roll = Input.IsActionJustPressed("roll");
         UseActiveProp = Input.IsActionJustPressed("useActiveProp");
+        RemoveProp = Input.IsActionJustPressed("removeProp");
     }
 }

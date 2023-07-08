@@ -113,6 +113,7 @@ public partial class Bullet : ActivityObject
                 damage = Role.RoleState.CallCalcDamageEvent(damage);
                 GD.Print($"原伤害: {d}, 计算伤害: {damage}");
             }
+            
             role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
             Destroy();
         }

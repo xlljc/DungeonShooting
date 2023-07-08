@@ -136,6 +136,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_prop5000 = "prop5000";
         /// <summary>
+        /// 名称: 弹药箱 <br/>
+        /// 备注: 使用后补充当前武器备用弹药
+        /// </summary>
+        public const string Id_prop5001 = "prop5001";
+        /// <summary>
         /// 名称:  <br/>
         /// 备注: 地牢房间的门(东侧)
         /// </summary>
@@ -183,6 +188,7 @@ public partial class ActivityObject
         _activityRegisterMap.Add("prop0009", new RegisterActivityData("res://prefab/prop/buff/BuffProp0009.tscn", ExcelConfig.ActivityObject_Map["prop0009"]));
         _activityRegisterMap.Add("prop0010", new RegisterActivityData("res://prefab/prop/buff/BuffProp0010.tscn", ExcelConfig.ActivityObject_Map["prop0010"]));
         _activityRegisterMap.Add("prop5000", new RegisterActivityData("res://prefab/prop/active/ActiveProp5000.tscn", ExcelConfig.ActivityObject_Map["prop5000"]));
+        _activityRegisterMap.Add("prop5001", new RegisterActivityData("res://prefab/prop/active/ActiveProp5001.tscn", ExcelConfig.ActivityObject_Map["prop5001"]));
         _activityRegisterMap.Add("other_door_e", new RegisterActivityData("res://prefab/map/RoomDoor_E.tscn", ExcelConfig.ActivityObject_Map["other_door_e"]));
         _activityRegisterMap.Add("other_door_w", new RegisterActivityData("res://prefab/map/RoomDoor_W.tscn", ExcelConfig.ActivityObject_Map["other_door_w"]));
         _activityRegisterMap.Add("other_door_s", new RegisterActivityData("res://prefab/map/RoomDoor_S.tscn", ExcelConfig.ActivityObject_Map["other_door_s"]));
