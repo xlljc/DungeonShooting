@@ -7,14 +7,14 @@ using Godot;
 [Tool]
 public partial class BuffPropProp0005 : BuffProp
 {
-    protected override void OnPickUp(Role master)
+    public override void OnPickUpItem()
     {
-        master.RoleState.CalcDamageEvent += CalcDamage;
+        Master.RoleState.CalcDamageEvent += CalcDamage;
     }
 
-    protected override void OnRemove(Role master)
+    public override void OnRemoveItem()
     {
-        master.RoleState.CalcDamageEvent -= CalcDamage;
+        Master.RoleState.CalcDamageEvent -= CalcDamage;
     }
 
     private void CalcDamage(int originDamage, RefValue<int> refValue)

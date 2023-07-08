@@ -7,16 +7,16 @@ using Godot;
 [Tool]
 public partial class BuffPropProp0008 : BuffProp
 {
-    protected override void OnPickUp(Role master)
+    public override void OnPickUpItem()
     {
-        master.RoleState.CalcStartScatteringEvent += CalcStartScatteringEvent;
-        master.RoleState.CalcFinalScatteringEvent += CalcFinalScatteringEvent;
+        Master.RoleState.CalcStartScatteringEvent += CalcStartScatteringEvent;
+        Master.RoleState.CalcFinalScatteringEvent += CalcFinalScatteringEvent;
     }
 
-    protected override void OnRemove(Role master)
+    public override void OnRemoveItem()
     {
-        master.RoleState.CalcStartScatteringEvent -= CalcStartScatteringEvent;
-        master.RoleState.CalcFinalScatteringEvent -= CalcFinalScatteringEvent;
+        Master.RoleState.CalcStartScatteringEvent -= CalcStartScatteringEvent;
+        Master.RoleState.CalcFinalScatteringEvent -= CalcFinalScatteringEvent;
     }
 
     private void CalcStartScatteringEvent(Weapon weapon, float originValue, RefValue<float> refValue)

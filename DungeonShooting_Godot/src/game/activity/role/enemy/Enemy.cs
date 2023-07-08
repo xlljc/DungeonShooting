@@ -428,7 +428,7 @@ public partial class Enemy : Role
             }
             
             var index = WeaponPack.FindIndex((we, i) => we.ItemConfig.Id == weapon.ItemConfig.Id);
-            if (index != -1) //与武器袋中武器类型相同, 补充子弹
+            if (index != -1) //与武器背包中武器类型相同, 补充子弹
             {
                 if (!WeaponPack.GetItem(index).IsAmmoFull())
                 {

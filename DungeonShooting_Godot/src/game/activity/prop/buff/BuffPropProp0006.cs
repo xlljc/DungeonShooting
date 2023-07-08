@@ -7,13 +7,13 @@ using Godot;
 [Tool]
 public partial class BuffPropProp0006 : BuffProp
 {
-    protected override void OnPickUp(Role master)
+    public override void OnPickUpItem()
     {
-        master.RoleState.WoundedInvincibleTime += 2f;
+        Master.RoleState.WoundedInvincibleTime += 2f;
     }
 
-    protected override void OnRemove(Role master)
+    public override void OnRemoveItem()
     {
-        master.RoleState.WoundedInvincibleTime -= 2f;
+        Master.RoleState.WoundedInvincibleTime -= 2f;
     }
 }

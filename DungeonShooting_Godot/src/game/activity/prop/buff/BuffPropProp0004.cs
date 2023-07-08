@@ -7,13 +7,13 @@ using Godot;
 [Tool]
 public partial class BuffPropProp0004 : BuffProp
 {
-    protected override void OnPickUp(Role master)
+    public override void OnPickUpItem()
     {
-        master.RoleState.ShieldRecoveryTime -= 1.5f;
+        Master.RoleState.ShieldRecoveryTime -= 1.5f;
     }
 
-    protected override void OnRemove(Role master)
+    public override void OnRemoveItem()
     {
-        master.RoleState.ShieldRecoveryTime += 1.5f;
+        Master.RoleState.ShieldRecoveryTime += 1.5f;
     }
 }

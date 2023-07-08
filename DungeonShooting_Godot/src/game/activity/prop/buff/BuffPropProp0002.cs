@@ -7,14 +7,14 @@ using Godot;
 [Tool]
 public partial class BuffPropProp0002 : BuffProp
 {
-    protected override void OnPickUp(Role master)
+    public override void OnPickUpItem()
     {
-        master.MaxHp += 2;
-        master.Hp += 2;
+        Master.MaxHp += 2;
+        Master.Hp += 2;
     }
 
-    protected override void OnRemove(Role master)
+    public override void OnRemoveItem()
     {
-        master.MaxHp -= 2;
+        Master.MaxHp -= 2;
     }
 }

@@ -1,25 +1,25 @@
 ﻿
+using Godot;
+
 /// <summary>
 /// 道具基类
 /// </summary>
-public abstract partial class Prop : ActivityObject, IPackageItem
+public abstract partial class Prop : ActivityObject
 {
+    /// <summary>
+    /// 道具所属角色
+    /// </summary>
     public Role Master { get; set; }
 
-    public int PackageIndex { get; set; } = -1;
+    /// <summary>
+    /// 当道具被拾起时调用 (在 Master 赋值之后调用)
+    /// </summary>
+    public abstract void OnPickUpItem();
 
     /// <summary>
-    /// 当被动被道具被拾起时调用
+    /// 当道具被移除时调用 (在 Master 置为 null 之前调用)
     /// </summary>
-    /// <param name="master">拾起该道具的角色</param>
-    protected abstract void OnPickUp(Role master);
-
-    /// <summary>
-    /// 当被动道具被移除时调用
-    /// </summary>
-    /// <param name="master">移除该道具的角色</param>
-    protected abstract void OnRemove(Role master);
-
+    public abstract void OnRemoveItem();
 
     /// <summary>
     /// 如果道具放入了角色背包中, 则每帧调用
@@ -28,57 +28,37 @@ public abstract partial class Prop : ActivityObject, IPackageItem
     {
     }
 
-        
-    public virtual void OnRemoveItem()
+    /// <summary>
+    /// 触发扔掉道具效果, 并不会管道具是否在道具背包中
+    /// </summary>
+    /// <param name="master">触发扔掉该道具的的角色</param>
+    public void ThrowProp(Role master)
     {
-        
-    }
-
-    public virtual void OnPickUpItem()
-    {
-        
-    }
-
-    public virtual void OnActiveItem()
-    {
-        
-    }
-
-    public virtual void OnConcealItem()
-    {
-        
-    }
-
-    public virtual void OnOverflowItem()
-    {
-        
+        ThrowProp(master, master.GlobalPosition);
     }
     
     /// <summary>
-    /// 执行将当前道具放入角色背包的操作
+    /// 触发扔掉道具效果, 并不会管道具是否在道具背包中
     /// </summary>
-    protected void PushToRole(Role role)
+    /// <param name="master">触发扔掉该道具的的角色</param>
+    /// <param name="startPosition">投抛起始位置</param>
+    public void ThrowProp(Role master, Vector2 startPosition)
     {
-        Pickup();
-        role.PushProp(this);
-        OnPickUp(role);
-    }
-    
-    public override void Interactive(ActivityObject master)
-    {
-        if (master is Role role)
-        {
-            PushToRole(role);
-        }
-    }
+        //阴影偏移
+        ShadowOffset = new Vector2(0, 2);
 
-    public override CheckInteractiveResult CheckInteractive(ActivityObject master)
-    {
-        if (master is Player)
+        if (master.Face == FaceDirection.Left)
         {
-            return new CheckInteractiveResult(this, true, CheckInteractiveResult.InteractiveType.PickUp);
+            Scale *= new Vector2(1, -1);
         }
-        return base.CheckInteractive(master);
-    }
 
+        var rotation = master.MountPoint.GlobalRotation;
+        GlobalRotation = rotation;
+        
+        var startHeight = -master.MountPoint.Position.Y;
+        Throw(startPosition, startHeight, 0, Vector2.Zero, 0);
+        
+        //继承role的移动速度
+        InheritVelocity(master);
+    }
 }

@@ -77,7 +77,7 @@ public partial class Player : Role
 
         if (InputManager.ExchangeWeapon) //切换武器
         {
-            ExchangeNext();
+            ExchangeNextWeapon();
         }
         else if (InputManager.ThrowWeapon) //扔掉武器
         {
@@ -136,30 +136,13 @@ public partial class Player : Role
         PlayAnim();
     }
 
-    public override bool PickUpWeapon(Weapon weapon, bool exchange = true)
+    protected override void OnPickUpWeapon(Weapon weapon)
     {
-        //拾起武器
-        var result = base.PickUpWeapon(weapon, exchange);
-        if (result)
-        {
-            EventManager.EmitEvent(EventEnum.OnPlayerPickUpWeapon, weapon);
-        }
-        return result;
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpWeapon, weapon);
     }
 
-    public override void ThrowWeapon()
+    protected override void OnThrowWeapon(Weapon weapon)
     {
-        //扔掉武器
-        var weapon = WeaponPack.ActiveItem;
-        base.ThrowWeapon();
-        EventManager.EmitEvent(EventEnum.OnPlayerRemoveWeapon, weapon);
-    }
-
-    public override void ThrowWeapon(int index)
-    {
-        //扔掉武器
-        var weapon = WeaponPack.GetItem(index);
-        base.ThrowWeapon(index);
         EventManager.EmitEvent(EventEnum.OnPlayerRemoveWeapon, weapon);
     }
 
@@ -229,7 +212,7 @@ public partial class Player : Role
         //GameApplication.Instance.World.ProcessMode = ProcessModeEnum.WhenPaused;
     }
 
-    protected override void OnPushProp(Prop prop)
+    protected override void OnPickUpProp(Prop prop)
     {
         EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, prop);
     }

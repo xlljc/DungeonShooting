@@ -7,14 +7,14 @@ using Godot;
 [Tool]
 public partial class BuffPropProp0003 : BuffProp
 {
-    protected override void OnPickUp(Role master)
+    public override void OnPickUpItem()
     {
-        master.MaxShield += 1;
-        master.Shield += 1;
+        Master.MaxShield += 1;
+        Master.Shield += 1;
     }
 
-    protected override void OnRemove(Role master)
+    public override void OnRemoveItem()
     {
-        master.MaxShield -= 1;
+        Master.MaxShield -= 1;
     }
 }

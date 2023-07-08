@@ -11,7 +11,7 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
     /// <summary>
     /// 归属者
     /// </summary>
-    public Role Master { get; }
+    public Role Master { get; private set; }
 
     /// <summary>
     /// 当前使用的物体对象

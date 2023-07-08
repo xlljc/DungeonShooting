@@ -7,20 +7,20 @@ using Godot;
 [Tool]
 public partial class BuffPropProp0010 : BuffProp
 {
-    protected override void OnPickUp(Role master)
+    public override void OnPickUpItem()
     {
-        master.RoleState.CalcBulletCountEvent += CalcBulletCountEvent;
-        master.RoleState.CalcBulletDeviationAngleEvent += CalcBulletDeviationAngleEvent;
-        master.RoleState.CalcDamageEvent += CalcDamageEvent;
-        master.RoleState.CalcBulletSpeedEvent += CalcBulletSpeedEvent;
+        Master.RoleState.CalcBulletCountEvent += CalcBulletCountEvent;
+        Master.RoleState.CalcBulletDeviationAngleEvent += CalcBulletDeviationAngleEvent;
+        Master.RoleState.CalcDamageEvent += CalcDamageEvent;
+        Master.RoleState.CalcBulletSpeedEvent += CalcBulletSpeedEvent;
     }
 
-    protected override void OnRemove(Role master)
+    public override void OnRemoveItem()
     {
-        master.RoleState.CalcBulletCountEvent -= CalcBulletCountEvent;
-        master.RoleState.CalcBulletDeviationAngleEvent -= CalcBulletDeviationAngleEvent;
-        master.RoleState.CalcDamageEvent -= CalcDamageEvent;
-        master.RoleState.CalcBulletSpeedEvent -= CalcBulletSpeedEvent;
+        Master.RoleState.CalcBulletCountEvent -= CalcBulletCountEvent;
+        Master.RoleState.CalcBulletDeviationAngleEvent -= CalcBulletDeviationAngleEvent;
+        Master.RoleState.CalcDamageEvent -= CalcDamageEvent;
+        Master.RoleState.CalcBulletSpeedEvent -= CalcBulletSpeedEvent;
     }
     
     private void CalcBulletCountEvent(Weapon weapon, int originCount, RefValue<int> refValue)

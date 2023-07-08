@@ -109,7 +109,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public bool IsCharging => _looseShootFlag;
 
     /// <summary>
-    /// 返回武器是否在武器袋中
+    /// 返回武器是否在武器背包中
     /// </summary>
     public bool IsInHolster => Master != null;
 
@@ -363,7 +363,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     }
 
     /// <summary>
-    /// 当武器从武器袋中移除时调用
+    /// 当武器从武器背包中移除时调用
     /// </summary>
     /// <param name="master">移除该武器的角色</param>
     protected virtual void OnRemove(Role master)
@@ -1553,7 +1553,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     }
 
     /// <summary>
-    /// 触发扔掉武器抛出的效果, 并不会管武器是否在武器袋中
+    /// 触发扔掉武器时抛出的效果, 并不会管武器是否在武器背包中
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
     public void ThrowWeapon(Role master)
@@ -1562,7 +1562,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     }
 
     /// <summary>
-    /// 触发扔掉武器抛出的效果, 并不会管武器是否在武器袋中
+    /// 触发扔掉武器时抛出的效果, 并不会管武器是否在武器背包中
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
     /// <param name="startPosition">投抛起始位置</param>

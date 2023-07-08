@@ -15,12 +15,12 @@ public interface IPackageItem
     int PackageIndex { get; set; }
 
     /// <summary>
-    /// 当物体拾起并放入背包时调用
+    /// 当物体拾起并放入背包时调用 (在 Master 赋值之后调用)
     /// </summary>
     void OnPickUpItem();
     
     /// <summary>
-    /// 当物体从背包中移除时调用
+    /// 当物体从背包中移除时调用 (在 Master 置为 null 之前调用)
     /// </summary>
     void OnRemoveItem();
     

@@ -7,16 +7,16 @@ using Godot;
 [Tool]
 public partial class BuffPropProp0009 : BuffProp
 {
-    protected override void OnPickUp(Role master)
+    public override void OnPickUpItem()
     {
-        master.RoleState.CalcBulletSpeedEvent += CalcBulletSpeedEvent;
-        master.RoleState.CalcBulletDistanceEvent += CalcBulletDistanceEvent;
+        Master.RoleState.CalcBulletSpeedEvent += CalcBulletSpeedEvent;
+        Master.RoleState.CalcBulletDistanceEvent += CalcBulletDistanceEvent;
     }
     
-    protected override void OnRemove(Role master)
+    public override void OnRemoveItem()
     {
-        master.RoleState.CalcBulletSpeedEvent -= CalcBulletSpeedEvent;
-        master.RoleState.CalcBulletDistanceEvent -= CalcBulletDistanceEvent;
+        Master.RoleState.CalcBulletSpeedEvent -= CalcBulletSpeedEvent;
+        Master.RoleState.CalcBulletDistanceEvent -= CalcBulletDistanceEvent;
     }
     
     private void CalcBulletSpeedEvent(Weapon weapon, float originSpeed, RefValue<float> speed)

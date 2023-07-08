@@ -10,7 +10,7 @@ public partial class ActiveProp5000 : ActiveProp
     public override void OnInit()
     {
         AutoDestroy = true;
-        MaxCount = 20;
+        MaxCount = 10;
         Superposition = true;
     }
 

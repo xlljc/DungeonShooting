@@ -296,14 +296,35 @@ public abstract partial class Role : ActivityObject
     }
 
     /// <summary>
-    /// 当往背包中添加道具时调用
+    /// 当拾起某个武器时调用
     /// </summary>
-    protected virtual void OnPushProp(Prop prop)
+    protected virtual void OnPickUpWeapon(Weapon weapon)
+    {
+    }
+    
+    /// <summary>
+    /// 当扔掉某个武器时调用
+    /// </summary>
+    protected virtual void OnThrowWeapon(Weapon weapon)
     {
     }
 
     /// <summary>
-    /// 当从背包中移除道具时调用
+    /// 当切换到某个武器时调用
+    /// </summary>
+    protected virtual void OnExchangeWeapon(Weapon weapon)
+    {
+    }
+
+    /// <summary>
+    /// 当拾起某个道具时调用
+    /// </summary>
+    protected virtual void OnPickUpProp(Prop prop)
+    {
+    }
+
+    /// <summary>
+    /// 当移除某个道具时调用
     /// </summary>
     protected virtual void OnRemoveProp(Prop prop)
     {
@@ -456,7 +477,7 @@ public abstract partial class Role : ActivityObject
     /// 当武器放到后背时调用, 用于设置武器位置和角度
     /// </summary>
     /// <param name="weapon">武器实例</param>
-    /// <param name="index">放入武器袋的位置</param>
+    /// <param name="index">放入武器背包的位置</param>
     public virtual void OnPutBackMount(Weapon weapon, int index)
     {
         if (index < 8)
@@ -560,17 +581,20 @@ public abstract partial class Role : ActivityObject
         return true;
     }
     
+    //-------------------------------------------------------------------------------------
+    
     /// <summary>
-    /// 拾起一个武器, 返回是否成功拾取, 如果不想立刻切换到该武器, exchange 请传 false
+    /// 拾起一个武器, 返回是否成功拾起, 如果不想立刻切换到该武器, exchange 请传 false
     /// </summary>
     /// <param name="weapon">武器对象</param>
     /// <param name="exchange">是否立即切换到该武器, 默认 true </param>
-    public virtual bool PickUpWeapon(Weapon weapon, bool exchange = true)
+    public bool PickUpWeapon(Weapon weapon, bool exchange = true)
     {
         if (WeaponPack.PickupItem(weapon, exchange) != -1)
         {
             //从可互动队列中移除
             _interactiveItemList.Remove(weapon);
+            OnPickUpWeapon(weapon);
             return true;
         }
 
@@ -580,23 +604,33 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 切换到下一个武器
     /// </summary>
-    public virtual void ExchangeNext()
+    public void ExchangeNextWeapon()
     {
+        var weapon = WeaponPack.ActiveItem;
         WeaponPack.ExchangeNext();
+        if (WeaponPack.ActiveItem != weapon)
+        {
+            OnExchangeWeapon(WeaponPack.ActiveItem);
+        }
     }
 
     /// <summary>
     /// 切换到上一个武器
     /// </summary>
-    public virtual void ExchangePrev()
+    public void ExchangePrevWeapon()
     {
+        var weapon = WeaponPack.ActiveItem;
         WeaponPack.ExchangePrev();
+        if (WeaponPack.ActiveItem != weapon)
+        {
+            OnExchangeWeapon(WeaponPack.ActiveItem);
+        }
     }
 
     /// <summary>
     /// 扔掉当前使用的武器, 切换到上一个武器
     /// </summary>
-    public virtual void ThrowWeapon()
+    public void ThrowWeapon()
     {
         ThrowWeapon(WeaponPack.ActiveIndex);
     }
@@ -604,8 +638,8 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 扔掉指定位置的武器
     /// </summary>
-    /// <param name="index">武器在武器袋中的位置</param>
-    public virtual void ThrowWeapon(int index)
+    /// <param name="index">武器在武器背包中的位置</param>
+    public void ThrowWeapon(int index)
     {
         var weapon = WeaponPack.GetItem(index);
         if (weapon == null)
@@ -624,6 +658,120 @@ public abstract partial class Role : ActivityObject
         weapon.ThrowWeapon(this, GlobalPosition);
     }
 
+    /// <summary>
+    /// 拾起主动道具, 返回是否成功拾起, 如果不想立刻切换到该道具, exchange 请传 false
+    /// </summary>
+    /// <param name="activeProp">主动道具对象</param>
+    /// <param name="exchange">是否立即切换到该道具, 默认 true </param>
+    public bool PickUpActiveProp(ActiveProp activeProp, bool exchange = true)
+    {
+        if (ActivePropsPack.PickupItem(activeProp, exchange) != -1)
+        {
+            //从可互动队列中移除
+            _interactiveItemList.Remove(activeProp);
+            OnPickUpProp(activeProp);
+            return true;
+        }
+
+        return false;
+    }
+    
+    /// <summary>
+    /// 切换到下一个武器
+    /// </summary>
+    public void ExchangeNextActiveProp()
+    {
+        ActivePropsPack.ExchangeNext();
+    }
+
+    /// <summary>
+    /// 切换到上一个武器
+    /// </summary>
+    public void ExchangePrevActiveProp()
+    {
+        ActivePropsPack.ExchangePrev();
+    }
+    
+    /// <summary>
+    /// 扔掉当前使用的道具
+    /// </summary>
+    public void ThrowActiveProp()
+    {
+        ThrowActiveProp(ActivePropsPack.ActiveIndex);
+    }
+    
+    /// <summary>
+    /// 扔掉指定位置上的主动道具
+    /// </summary>
+    public void ThrowActiveProp(int index)
+    {
+        var activeProp = ActivePropsPack.GetItem(index);
+        if (activeProp == null)
+        {
+            return;
+        }
+
+        ActivePropsPack.RemoveItem(index);
+        OnRemoveProp(activeProp);
+        //播放抛出效果
+        activeProp.ThrowProp(this, GlobalPosition);
+    }
+
+    /// <summary>
+    /// 拾起被动道具, 返回是否成功拾起
+    /// </summary>
+    /// <param name="buffProp">被动道具对象</param>
+    public bool PickUpBuffProp(BuffProp buffProp)
+    {
+        if (BuffPropPack.Contains(buffProp))
+        {
+            GD.PrintErr("被动道具已经在背包中了!");
+            return false;
+        }
+        BuffPropPack.Add(buffProp);
+        buffProp.Master = this;
+        OnPickUpProp(buffProp);
+        buffProp.OnPickUpItem();
+        return true;
+    }
+
+    /// <summary>
+    /// 扔掉指定的被动道具
+    /// </summary>
+    /// <param name="buffProp"></param>
+    public void ThrowBuffProp(BuffProp buffProp)
+    {
+        var index = BuffPropPack.IndexOf(buffProp);
+        if (index < 0)
+        {
+            GD.PrintErr("当前道具不在角色背包中!");
+            return;
+        }
+        
+        ThrowBuffProp(index);
+    }
+    
+    /// <summary>
+    /// 扔掉指定位置上的被动道具
+    /// </summary>
+    public void ThrowBuffProp(int index)
+    {
+        if (index < 0 || index >= BuffPropPack.Count)
+        {
+            return;
+        }
+
+        var buffProp = BuffPropPack[index];
+        BuffPropPack.RemoveAt(index);
+        buffProp.OnRemoveItem();
+        OnRemoveProp(buffProp);
+        buffProp.Master = null;
+        //播放抛出效果
+        buffProp.ThrowProp(this, GlobalPosition);
+    }
+
+    //-------------------------------------------------------------------------------------
+    
     /// <summary>
     /// 返回是否存在可互动的物体
     /// </summary>
@@ -824,66 +972,6 @@ public abstract partial class Role : ActivityObject
                 ChangeInteractiveItem(prev, null);
             }
         }
-    }
-
-    /// <summary>
-    /// 添加道具
-    /// </summary>
-    public void PushProp(Prop prop)
-    {
-        if (prop is ActiveProp activeProp) //主动道具
-        {
-            if (ActivePropsPack.PickupItem(activeProp) == -1)
-            {
-                GD.PrintErr("主动道具无法存入背包中!");
-                return;
-            }
-            OnPushProp(prop);
-        }
-        else if (prop is BuffProp buffProp) //被动道具
-        {
-            if (BuffPropPack.Contains(buffProp))
-            {
-                GD.PrintErr("被动道具已经在背包中了!");
-                return;
-            }
-            BuffPropPack.Add(buffProp);
-            OnPushProp(prop);
-        }
-        else
-        {
-            GD.PrintErr("尚未被支持的道具类型: " + prop.GetType().FullName);
-        }
-    }
-
-    /// <summary>
-    /// 移除道具
-    /// </summary>
-    public bool RemoveProp(Prop prop)
-    {
-        if (prop is ActiveProp activeProp) //主动道具
-        {
-            if (ActivePropsPack.RemoveItem(activeProp) != null)
-            {
-                OnRemoveProp(prop);
-                return true;
-            }
-            GD.PrintErr("当前道具不在角色背包中!");
-            return false;
-        }
-        else if (prop is BuffProp buffProp) //被动道具
-        {
-            if (BuffPropPack.Contains(buffProp))
-            {
-                OnRemoveProp(prop);
-                BuffPropPack.Remove(buffProp);
-                return true;
-            }
-            GD.PrintErr("被动道具不在背包中!");
-            return false;
-        }
-        GD.PrintErr("尚未被支持的道具类型: " + prop.GetType().FullName);
-        return false;
     }
 
     protected override void OnDestroy()

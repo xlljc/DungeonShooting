@@ -7,17 +7,17 @@ using Godot;
 [Tool]
 public partial class BuffPropProp0001 : BuffProp
 {
-    protected override void OnPickUp(Role master)
+    public override void OnPickUpItem()
     {
-        master.RoleState.MoveSpeed += 30;
-        master.RoleState.Acceleration += 400;
-        master.RoleState.Friction += 300;
+        Master.RoleState.MoveSpeed += 30;
+        Master.RoleState.Acceleration += 400;
+        Master.RoleState.Friction += 300;
     }
 
-    protected override void OnRemove(Role master)
+    public override void OnRemoveItem()
     {
-        master.RoleState.MoveSpeed -= 30;
-        master.RoleState.Acceleration -= 400;
-        master.RoleState.Friction -= 300;
+        Master.RoleState.MoveSpeed -= 30;
+        Master.RoleState.Acceleration -= 400;
+        Master.RoleState.Friction -= 300;
     }
 }
