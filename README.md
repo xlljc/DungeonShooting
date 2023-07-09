@@ -1,5 +1,5 @@
 
-一款由Godot开发的地牢射击类型的游戏, 脚本语言使用的是C#, 当前项目使用的Godot版本: Godot_v4.1.beta
+一款由Godot开发的地牢射击类型的游戏, 脚本语言使用的是C#, 当前项目使用的Godot版本: Godot_v4.1
 
 --- 
 ### 游戏定义
@@ -25,6 +25,6 @@ git仓库的目录结构如下
 
 --- 
 ### 其他
-**开发日志:** [开发日志.md](DungeonShooting_Document/开发日志.md)  
-**项目帮助文档:** [帮助文档.md](DungeonShooting_Document/项目帮助文档.md)  
-**项目看板:** https://trello.com/b/a8UGxnTl/dungeonshooting
+**开发日志:** [开发日志.md](DungeonShooting_Document/开发日志.md)
+**项目看板:** https://trello.com/b/a8UGxnTl/dungeonshooting  
+**哔哩哔哩:** https://space.bilibili.com/259437820
