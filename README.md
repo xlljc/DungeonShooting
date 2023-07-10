@@ -25,6 +25,6 @@ git仓库的目录结构如下
 
 --- 
 ### 其他
-**开发日志:** [开发日志.md](DungeonShooting_Document/开发日志.md)
+**开发日志:** [开发日志.md](DungeonShooting_Document/开发日志.md)  
 **项目看板:** https://trello.com/b/a8UGxnTl/dungeonshooting  
 **哔哩哔哩:** https://space.bilibili.com/259437820
