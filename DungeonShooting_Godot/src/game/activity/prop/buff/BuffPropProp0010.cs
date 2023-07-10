@@ -30,7 +30,7 @@ public partial class BuffPropProp0010 : BuffProp
 
     private void CalcBulletDeviationAngleEvent(Weapon weapon, float originAngle, RefValue<float> refValue)
     {
-        refValue.Value += Utils.RandomRangeFloat(-8, 8);
+        refValue.Value += Utils.Random.RandomRangeFloat(-8, 8);
     }
     
     private void CalcDamageEvent(int originDamage, RefValue<int> refValue)
@@ -45,6 +45,6 @@ public partial class BuffPropProp0010 : BuffProp
     
     private void CalcBulletSpeedEvent(Weapon weapon, float originSpeed, RefValue<float> speed)
     {
-        speed.Value += originSpeed * Utils.RandomRangeFloat(-0.05f, 0.05f);
+        speed.Value += originSpeed * Utils.Random.RandomRangeFloat(-0.05f, 0.05f);
     }
 }

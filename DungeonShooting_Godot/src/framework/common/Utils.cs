@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -8,132 +6,17 @@ using Godot;
 /// </summary>
 public static class Utils
 {
-
-    private static readonly Random _random;
+    /// <summary>
+    /// 默认随机数对象
+    /// </summary>
+    public static SeedRandom Random { get; }
     
     static Utils()
     {
-        var dateTime = DateTime.Now;
-        var num = dateTime.Year * 100000 + dateTime.Month * 100000 + dateTime.Day * 100000 + dateTime.Hour * 10000 + dateTime.Minute * 100 + dateTime.Second;
-        //_random = new Random(204313957);
-        _random = new Random(num);
-        GD.Print("随机种子为: ", num);
+        Random = new SeedRandom();
+        GD.Print("随机种子为: ", Random.Seed);
     }
 
-    /// <summary>
-    /// 返回一个随机的double值
-    /// </summary>
-    public static double RandomDouble()
-    {
-        return _random.NextDouble();
-    }
-    
-    /// <summary>
-    /// 返回随机 boolean 值
-    /// </summary>
-    public static bool RandomBoolean()
-    {
-        return _random.NextSingle() >= 0.5f;
-    }    
-    /// <summary>
-    /// 指定概率会返回 true, probability 范围 0 - 1
-    /// </summary>
-    public static bool RandomBoolean(float probability)
-    {
-        return _random.NextSingle() <= probability;
-    }
-
-    /// <summary>
-    /// 返回一个区间内的随机小数
-    /// </summary>
-    public static float RandomRangeFloat(float min, float max)
-    {
-        if (min == max) return min;
-        if (min > max)
-            return _random.NextSingle() * (min - max) + max;
-        return _random.NextSingle() * (max - min) + min;
-    }
-
-    /// <summary>
-    /// 返回一个区间内的随机整数
-    /// </summary>
-    public static int RandomRangeInt(int min, int max)
-    {
-        if (min == max) return min;
-        if (min > max)
-            return Mathf.FloorToInt(_random.NextSingle() * (min - max + 1) + max);
-        return Mathf.FloorToInt(_random.NextSingle() * (max - min + 1) + min);
-    }
-
-    /// <summary>
-    /// 随机返回其中一个参数
-    /// </summary>
-    public static T RandomChoose<T>(params T[] list)
-    {
-        if (list.Length == 0)
-        {
-            return default;
-        }
-
-        return list[RandomRangeInt(0, list.Length - 1)];
-    }
-
-    /// <summary>
-    /// 随机返回集合中的一个元素
-    /// </summary>
-    public static T RandomChoose<T>(List<T> list)
-    {
-        if (list.Count == 0)
-        {
-            return default;
-        }
-
-        return list[RandomRangeInt(0, list.Count - 1)];
-    }
-
-    /// <summary>
-    /// 随机返回集合中的一个元素, 并将其从集合中移除
-    /// </summary>
-    public static T RandomChooseAndRemove<T>(List<T> list)
-    {
-        if (list.Count == 0)
-        {
-            return default;
-        }
-
-        var index = RandomRangeInt(0, list.Count - 1);
-        var result = list[index];
-        list.RemoveAt(index);
-        return result;
-    }
-
-    /// <summary>
-    /// 从权重列表中随机抽取下标值
-    /// </summary>
-    public static int RandomWeight(List<int> weightList)
-    {
-        // 计算总权重
-        var totalWeight = 0;
-        foreach (var weight in weightList)
-        {
-            totalWeight += weight;
-        }
-        
-        var randomNumber = _random.Next(totalWeight);
-        var currentWeight = 0;
-        for (var i = 0; i < weightList.Count; i++)
-        {
-            var value = weightList[i];
-            currentWeight += value;
-            if (randomNumber < currentWeight)
-            {
-                return i;
-            }
-        }
-
-        return RandomRangeInt(0, weightList.Count - 1);
-    }
-    
     /// <summary>
     /// 根据四个点计算出矩形
     /// </summary>

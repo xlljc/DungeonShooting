@@ -111,7 +111,7 @@ public partial class DungeonManager : Node2D
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
         _dungeonTile = new DungeonTile(_world.TileRoot);
-        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom);
+        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom, _dungeonGenerator.Random);
         yield return 0;
         
         //生成寻路网格， 这一步操作只生成过道的导航

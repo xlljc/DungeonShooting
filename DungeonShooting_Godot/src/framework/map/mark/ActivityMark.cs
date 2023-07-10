@@ -73,6 +73,11 @@ public partial class ActivityMark : Node2D
     /// 当前标记所在Tile节点
     /// </summary>
     public TileMap TileRoot;
+    
+    /// <summary>
+    /// 随机数对象
+    /// </summary>
+    public SeedRandom Random { get; private set; }
 
     //是否已经结束
     private bool _isOver = true;
@@ -193,8 +198,8 @@ public partial class ActivityMark : Node2D
         if (BirthRect != Vector2I.Zero)
         {
             result.ActivityObject.Position = new Vector2(
-                Utils.RandomRangeInt((int)pos.X - BirthRect.X / 2, (int)pos.X + BirthRect.X / 2),
-                Utils.RandomRangeInt((int)pos.Y - BirthRect.Y / 2, (int)pos.Y + BirthRect.Y / 2)
+                Random.RandomRangeInt((int)pos.X - BirthRect.X / 2, (int)pos.X + BirthRect.X / 2),
+                Random.RandomRangeInt((int)pos.Y - BirthRect.Y / 2, (int)pos.Y + BirthRect.Y / 2)
             );
         }
         else
@@ -313,8 +318,9 @@ public partial class ActivityMark : Node2D
     /// <summary>
     /// 执行预处理操作
     /// </summary>
-    public void Pretreatment()
+    public void Pretreatment(SeedRandom random)
     {
+        Random = random;
         if (_activityExpressionMap.TryGetValue(GetType(), out var list))
         {
             foreach (var field in list)
@@ -351,7 +357,7 @@ public partial class ActivityMark : Node2D
                 }
             }
             //根据权重随机值
-            var index = Utils.RandomWeight(list);
+            var index = Random.RandomWeight(list);
             _currentExpression.Add(field, activityExpression[index]);
         }
         else

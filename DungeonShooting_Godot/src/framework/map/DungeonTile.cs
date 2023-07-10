@@ -34,17 +34,17 @@ public class DungeonTile
     /// <summary>
     /// 根据 startRoom 和 config 数据自动填充 tileMap 参数中的地图数据
     /// </summary>
-    public void AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoom)
+    public void AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoom, SeedRandom random)
     {
         _connectNavigationItemList.Clear();
-        _AutoFillRoomTile(config, startRoom);
+        _AutoFillRoomTile(config, startRoom, random);
     }
     
-    private void _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo)
+    private void _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo, SeedRandom random)
     {
         foreach (var info in roomInfo.Next)
         {
-            _AutoFillRoomTile(config, info);
+            _AutoFillRoomTile(config, info, random);
         }
         
         //铺房间
@@ -109,7 +109,7 @@ public class DungeonTile
                 activityMark.Position = roomInfo.GetWorldPosition() + (pos - offset);
                 activityMark.TileRoot = _tileRoot;
                 //执行预处理操作
-                activityMark.Pretreatment();
+                activityMark.Pretreatment(random);
             }
             roomInfo.ActivityMarks.AddRange(activityMarks);
 

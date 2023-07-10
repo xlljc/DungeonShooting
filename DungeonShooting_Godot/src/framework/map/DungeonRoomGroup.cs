@@ -82,7 +82,7 @@ public class DungeonRoomGroup
     /// <summary>
     /// 初始化权重处理
     /// </summary>
-    public void InitWeight()
+    public void InitWeight(SeedRandom random)
     {
         if (_init)
         {
@@ -94,14 +94,14 @@ public class DungeonRoomGroup
         
         foreach (var roomType in Enum.GetValues<DungeonRoomType>())
         {
-            InitAdRewardWeight(roomType);
+            InitAdRewardWeight(roomType, random);
         }
     }
 
-    private void InitAdRewardWeight(DungeonRoomType roomType)
+    private void InitAdRewardWeight(DungeonRoomType roomType, SeedRandom random)
     {
         var dungeonRoomSplits = GetRoomList(roomType);
-        var weightRandom = new WeightRandom();
+        var weightRandom = new WeightRandom(random);
         _weightRandomMap.Add(roomType, weightRandom);
 
         var list = new List<int>();

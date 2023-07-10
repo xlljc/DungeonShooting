@@ -58,7 +58,7 @@ public partial class EnemyMark : ActivityMark
         //脸的朝向
         if (FaceDirection == FaceDirectionValueEnum.Random)
         {
-            instance.Face = Utils.RandomBoolean() ? global::FaceDirection.Left : global::FaceDirection.Right;
+            instance.Face = Random.RandomBoolean() ? global::FaceDirection.Left : global::FaceDirection.Right;
         }
         else if (FaceDirection == FaceDirectionValueEnum.Left)
         {

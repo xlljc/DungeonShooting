@@ -92,7 +92,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                 }
                 else if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
                 {
-                    _pauseTimer = Utils.RandomRangeFloat(0f, 0.5f);
+                    _pauseTimer = Utils.Random.RandomRangeFloat(0f, 0.5f);
                     _isMoveOver = true;
                     _moveFlag = false;
                     Master.BasisVelocity = Vector2.Zero;
@@ -113,7 +113,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     var lastSlideCollision = Master.GetLastSlideCollision();
                     if (lastSlideCollision != null && lastSlideCollision.GetCollider() is Role) //碰到其他角色
                     {
-                        _pauseTimer = Utils.RandomRangeFloat(0f, 0.3f);
+                        _pauseTimer = Utils.Random.RandomRangeFloat(0f, 0.3f);
                         _isMoveOver = true;
                         _moveFlag = false;
                         Master.BasisVelocity = Vector2.Zero;
@@ -163,8 +163,8 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         var weapon = Master.WeaponPack.ActiveItem;
         var distance = (int)(weapon == null ? 150 : (weapon.Attribute.BulletMinDistance * 0.7f));
         _nextPosition = new Vector2(
-            targetPos.X + Utils.RandomRangeInt(-distance, distance),
-            targetPos.Y + Utils.RandomRangeInt(-distance, distance)
+            targetPos.X + Utils.Random.RandomRangeInt(-distance, distance),
+            targetPos.Y + Utils.Random.RandomRangeInt(-distance, distance)
         );
         Master.NavigationAgent2D.TargetPosition = _nextPosition;
     }

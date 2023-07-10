@@ -106,7 +106,7 @@ public partial class Bullet : ActivityObject
             node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
 
             //计算子弹造成的伤害
-            var damage = Utils.RandomRangeInt(MinHarm, MaxHarm);
+            var damage = Utils.Random.RandomRangeInt(MinHarm, MaxHarm);
             if (Role != null)
             {
                 var d = damage;

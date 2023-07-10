@@ -27,6 +27,11 @@ public class DungeonGenerator
     /// boss房间
     /// </summary>
     public List<RoomInfo> BossRoom { get; } = new List<RoomInfo>();
+    
+    /// <summary>
+    /// 随机数对象
+    /// </summary>
+    public SeedRandom Random { get; }
 
     //用于标记地图上的坐标是否被占用
     private Grid<bool> _roomGrid { get; } = new Grid<bool>();
@@ -39,12 +44,6 @@ public class DungeonGenerator
     //下一个房间类型
     private DungeonRoomType _nextRoomType = DungeonRoomType.Battle;
     
-    //宽高
-    // private int _roomMinWidth = 15;
-    // private int _roomMaxWidth = 35;
-    // private int _roomMinHeight = 15;
-    // private int _roomMaxHeight = 30;
-
     //间隔
     private int _roomMinInterval = 6;
     private int _roomMaxInterval = 10;
@@ -60,8 +59,8 @@ public class DungeonGenerator
 
     //区域限制
     private bool _enableLimitRange = true;
-    private int _rangeX = 110;
-    private int _rangeY = 110;
+    private int _rangeX = 200;
+    private int _rangeY = 200;
     
     //找房间失败次数, 过大则会关闭区域限制
     private int _maxFailCount = 10;
@@ -77,6 +76,7 @@ public class DungeonGenerator
 
     //指定只能生成的房间
     private static List<DungeonRoomSplit> _designatedRoom;
+    
 
     private enum GenerateRoomErrorCode
     {
@@ -105,6 +105,8 @@ public class DungeonGenerator
     {
         _config = config;
         _roomGroup = GameApplication.Instance.RoomConfig[config.GroupName];
+        Random = new SeedRandom();
+        GD.Print("创建地牢生成器, 随机种子: " + Random.Seed);
 
         //验证该组是否满足生成地牢的条件
         if (_roomGroup.InletList.Count == 0)
@@ -124,7 +126,7 @@ public class DungeonGenerator
             }
         }
 
-        _roomGroup.InitWeight();
+        _roomGroup.InitWeight(Random);
     }
 
     /// <summary>
@@ -199,12 +201,12 @@ public class DungeonGenerator
                 }
                 else
                 {
-                    tempPrevRoom = Utils.RandomChoose(RoomInfos);
+                    tempPrevRoom = Random.RandomChoose(RoomInfos);
                 }
             }
             else
             {
-                tempPrevRoom = Utils.RandomChoose(RoomInfos);
+                tempPrevRoom = Random.RandomChoose(RoomInfos);
             }
             
             //生成下一个房间
@@ -229,7 +231,7 @@ public class DungeonGenerator
                 else if (nextRoomType == DungeonRoomType.Battle)
                 {
                     chainTryCount = 0;
-                    chainMaxTryCount = Utils.RandomRangeInt(1, 3);
+                    chainMaxTryCount = Random.RandomRangeInt(1, 3);
                 }
                 prevRoom = nextRoom;
                 CalcNextRoomType(prevRoom);
@@ -307,7 +309,7 @@ public class DungeonGenerator
         }
         else //指定了房间
         {
-            roomSplit = Utils.RandomChoose(_designatedRoom);
+            roomSplit = Random.RandomChoose(_designatedRoom);
         }
         
         var room = new RoomInfo(_id, roomType, roomSplit);
@@ -335,19 +337,19 @@ public class DungeonGenerator
             }
             for (; tryCount < maxTryCount; tryCount++)
             {
-                var direction = Utils.RandomRangeInt(0, 3);
+                var direction = Random.RandomRangeInt(0, 3);
                 //房间间隔
-                var space = Utils.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
+                var space = Random.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
                 //中心偏移
                 int offset;
                 if (direction == 0 || direction == 2)
                 {
-                    offset = Utils.RandomRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
+                    offset = Random.RandomRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
                         (int)(prevRoomInfo.Size.X * _roomVerticalMaxDispersion));
                 }
                 else
                 {
-                    offset = Utils.RandomRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
+                    offset = Random.RandomRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
                         (int)(prevRoomInfo.Size.Y * _roomHorizontalMaxDispersion));
                 }
 
@@ -546,7 +548,7 @@ public class DungeonGenerator
             }
         }
 
-        return Utils.RandomChoose(list);
+        return Random.RandomChoose(list);
     }
     
     /// <summary>
@@ -565,7 +567,7 @@ public class DungeonGenerator
         nextRoomDoor.ConnectDoor = roomDoor;
 
         //先寻找直通门
-        if (Utils.RandomBoolean())
+        if (Random.RandomBoolean())
         {
             //直行通道, 优先横轴
             if (TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor)
@@ -605,8 +607,8 @@ public class DungeonGenerator
             while (rangeList.Count > 0)
             {
                 //找到重叠区域
-                var range = Utils.RandomChooseAndRemove(rangeList);
-                var x = Utils.RandomRangeInt(range.X, range.Y);
+                var range = Random.RandomChooseAndRemove(rangeList);
+                var x = Random.RandomRangeInt(range.X, range.Y);
                 
                 if (room.GetVerticalStart() < nextRoom.GetVerticalStart()) //room在上, nextRoom在下
                 {
@@ -657,8 +659,8 @@ public class DungeonGenerator
             while (rangeList.Count > 0)
             {
                 //找到重叠区域
-                var range = Utils.RandomChooseAndRemove(rangeList);
-                var y = Utils.RandomRangeInt(range.X, range.Y);
+                var range = Random.RandomChooseAndRemove(rangeList);
+                var y = Random.RandomRangeInt(range.X, range.Y);
                 
                 if (room.GetHorizontalStart() < nextRoom.GetHorizontalStart()) //room在左, nextRoom在右
                 {
@@ -704,7 +706,7 @@ public class DungeonGenerator
         {
             if (room.GetVerticalStart() > nextRoom.GetVerticalStart())
             {
-                if (Utils.RandomBoolean()) //↑ //→
+                if (Random.RandomBoolean()) //↑ //→
                 {
                     if (!TryConnect_NE_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
                         !TryConnect_WS_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
@@ -723,7 +725,7 @@ public class DungeonGenerator
             }
             else
             {
-                if (Utils.RandomBoolean()) //↓ //→
+                if (Random.RandomBoolean()) //↓ //→
                 {
                     if (!TryConnect_SE_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
                         !TryConnect_WN_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
@@ -745,7 +747,7 @@ public class DungeonGenerator
         {
             if (room.GetVerticalStart() > nextRoom.GetVerticalStart()) //→ //↓
             {
-                if (Utils.RandomBoolean())
+                if (Random.RandomBoolean())
                 {
                     if (!TryConnect_ES_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
                         !TryConnect_NW_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
@@ -764,7 +766,7 @@ public class DungeonGenerator
             }
             else
             {
-                if (Utils.RandomBoolean()) //→ //↑
+                if (Random.RandomBoolean()) //→ //↑
                 {
                     if (!TryConnect_EN_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
                         !TryConnect_SW_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
