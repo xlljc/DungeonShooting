@@ -68,6 +68,15 @@ public abstract partial class Main : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: Main.ButtonList.Tools
+    /// </summary>
+    public class UiNode_Tools : IUiNode<Godot.Button, UiNode_Tools>
+    {
+        public UiNode_Tools(Godot.Button node) : base(node) {  }
+        public override UiNode_Tools Clone() => new ((Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: Main.ButtonList.Setting
     /// </summary>
     public class UiNode_Setting : IUiNode<Godot.Button, UiNode_Setting>
@@ -102,6 +111,19 @@ public abstract partial class Main : UiBase
             }
         }
         private UiNode_Start _L_Start;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: Main.Tools
+        /// </summary>
+        public UiNode_Tools L_Tools
+        {
+            get
+            {
+                if (_L_Tools == null) _L_Tools = new UiNode_Tools(Instance.GetNodeOrNull<Godot.Button>("Tools"));
+                return _L_Tools;
+            }
+        }
+        private UiNode_Tools _L_Tools;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: Main.Setting
@@ -141,5 +163,41 @@ public abstract partial class Main : UiBase
         public UiNode_Version(Godot.Label node) : base(node) {  }
         public override UiNode_Version Clone() => new ((Godot.Label)Instance.Duplicate());
     }
+
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Main.MainPanel"/>, 节点路径: Main.Title
+    /// </summary>
+    public UiNode_Title S_Title => L_Title;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Main.ButtonList.Start
+    /// </summary>
+    public UiNode_Start S_Start => L_ButtonList.L_Start;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Main.ButtonList.Tools
+    /// </summary>
+    public UiNode_Tools S_Tools => L_ButtonList.L_Tools;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Main.ButtonList.Setting
+    /// </summary>
+    public UiNode_Setting S_Setting => L_ButtonList.L_Setting;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Main.ButtonList.Exit
+    /// </summary>
+    public UiNode_Exit S_Exit => L_ButtonList.L_Exit;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Main.MainPanel"/>, 节点路径: Main.ButtonList
+    /// </summary>
+    public UiNode_ButtonList S_ButtonList => L_ButtonList;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Main.MainPanel"/>, 节点路径: Main.Version
+    /// </summary>
+    public UiNode_Version S_Version => L_Version;
 
 }

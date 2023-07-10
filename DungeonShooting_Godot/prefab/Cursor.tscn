@@ -43,7 +43,7 @@ region_rect = Rect2(73, 41, 4, 4)
 
 [node name="Finger" type="Sprite2D" parent="."]
 visible = false
-position = Vector2(8, 6)
+position = Vector2(8, 12)
 scale = Vector2(4, 4)
 texture = ExtResource("3_ni3bs")
 region_enabled = true

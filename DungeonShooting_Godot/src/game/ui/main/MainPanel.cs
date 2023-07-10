@@ -10,14 +10,16 @@ public partial class MainPanel : Main
 
     public override void OnShowUi()
     {
-        L_ButtonList.L_Start.Instance.Pressed += OnStartGameClick;
-        L_ButtonList.L_Exit.Instance.Pressed += OnExitClick;
+        S_Start.Instance.Pressed += OnStartGameClick;
+        S_Exit.Instance.Pressed += OnExitClick;
+        S_Tools.Instance.Pressed += OnToolsClick;
     }
 
     public override void OnHideUi()
     {
-        L_ButtonList.L_Start.Instance.Pressed -= OnStartGameClick;
-        L_ButtonList.L_Exit.Instance.Pressed -= OnExitClick;
+        S_Start.Instance.Pressed -= OnStartGameClick;
+        S_Exit.Instance.Pressed -= OnExitClick;
+        S_Tools.Instance.Pressed -= OnToolsClick;
     }
 
 
@@ -32,5 +34,12 @@ public partial class MainPanel : Main
     private void OnExitClick()
     {
         GetTree().Quit();
+    }
+
+    //点击开发者工具
+    private void OnToolsClick()
+    {
+        UiManager.Open_MapEditor();
+        HideUi();
     }
 }

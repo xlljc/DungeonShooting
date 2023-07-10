@@ -90,4 +90,12 @@ public static class Utils
     {
         return str.Substring(0, 1).ToUpper() + str.Substring(1);
     }
+
+    /// <summary>
+    /// 将 Vector2 类型转为 Vector2I 类型
+    /// </summary>
+    public static Vector2I AsVector2I(this Vector2 vector2)
+    {
+        return new Vector2I((int)vector2.X, (int)vector2.Y);
+    }
 }

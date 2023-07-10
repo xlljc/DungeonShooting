@@ -98,7 +98,7 @@ public static class UiGenerator
     public static void GenerateUiCode(Node control, string path)
     {
         _nodeNameMap.Clear();
-        var uiNode = EachNode(control);
+        var uiNode = EachNode(control.Name, control);
         var code = GenerateClassCode(uiNode);
         File.WriteAllText(path, code);
     }
@@ -116,7 +116,7 @@ public static class UiGenerator
             var path = GameConfig.UiCodeDir + uiName.FirstToLower() + "/" + uiName + ".cs";
             GD.Print("重新生成ui代码: " + path);
 
-            var uiNode = EachNodeFromEditor(control);
+            var uiNode = EachNodeFromEditor(control.Name, control);
             var code = GenerateClassCode(uiNode);
             File.WriteAllText(path, code);
         }
@@ -132,9 +132,9 @@ public static class UiGenerator
     private static string GenerateClassCode(UiNodeInfo uiNodeInfo)
     {
         return $"namespace UI.{uiNodeInfo.OriginName};\n\n" +
-               $"/// <summary>\n" + 
-               $"/// Ui代码, 该类是根据ui场景自动生成的, 请不要手动编辑该类, 以免造成代码丢失\n" + 
-               $"/// </summary>\n" + 
+               $"/// <summary>\n" +
+               $"/// Ui代码, 该类是根据ui场景自动生成的, 请不要手动编辑该类, 以免造成代码丢失\n" +
+               $"/// </summary>\n" +
                $"public abstract partial class {uiNodeInfo.OriginName} : UiBase\n" +
                $"{{\n" +
                GeneratePropertyListClassCode("", uiNodeInfo.OriginName + ".", uiNodeInfo, "    ") +
@@ -144,9 +144,11 @@ public static class UiGenerator
                $"    }}\n" +
                $"\n" +
                GenerateAllChildrenClassCode(uiNodeInfo.OriginName + ".", uiNodeInfo, "    ") +
+               $"\n" +
+               GenerateSoleLayerCode(uiNodeInfo, uiNodeInfo, "", uiNodeInfo.OriginName, "    ") +
                $"}}\n";
     }
-
+    
     private static string GenerateAllChildrenClassCode(string parent, UiNodeInfo uiNodeInfo, string retraction)
     {
         var str = "";
@@ -166,13 +168,13 @@ public static class UiGenerator
     private static string GenerateChildrenClassCode(string parent, UiNodeInfo uiNodeInfo, string retraction)
     {
         return retraction + $"/// <summary>\n" + 
-               retraction + $"/// 类型: <see cref=\"{uiNodeInfo.TypeName}\"/>, 路径: {parent}{uiNodeInfo.OriginName}\n" + 
+               retraction + $"/// 类型: <see cref=\"{uiNodeInfo.NodeTypeName}\"/>, 路径: {parent}{uiNodeInfo.OriginName}\n" + 
                retraction + $"/// </summary>\n" + 
-               retraction + $"public class {uiNodeInfo.ClassName} : IUiNode<{uiNodeInfo.TypeName}, {uiNodeInfo.ClassName}>\n" +
+               retraction + $"public class {uiNodeInfo.ClassName} : IUiNode<{uiNodeInfo.NodeTypeName}, {uiNodeInfo.ClassName}>\n" +
                retraction + $"{{\n" +
                GeneratePropertyListClassCode("Instance.", parent, uiNodeInfo, retraction + "    ") + 
-               retraction + $"    public {uiNodeInfo.ClassName}({uiNodeInfo.TypeName} node) : base(node) {{  }}\n" +
-               retraction + $"    public override {uiNodeInfo.ClassName} Clone() => new (({uiNodeInfo.TypeName})Instance.Duplicate());\n" +
+               retraction + $"    public {uiNodeInfo.ClassName}({uiNodeInfo.NodeTypeName} node) : base(node) {{  }}\n" +
+               retraction + $"    public override {uiNodeInfo.ClassName} Clone() => new (({uiNodeInfo.NodeTypeName})Instance.Duplicate());\n" +
                retraction + $"}}\n\n";
     }
 
@@ -194,23 +196,73 @@ public static class UiGenerator
     private static string GeneratePropertyCode(string target, string parent, UiNodeInfo uiNodeInfo, string retraction)
     {
         return retraction + $"/// <summary>\n" + 
-               retraction + $"/// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref=\"{uiNodeInfo.TypeName}\"/>, 节点路径: {parent}{uiNodeInfo.OriginName}\n" + 
+               retraction + $"/// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref=\"{uiNodeInfo.NodeTypeName}\"/>, 节点路径: {parent}{uiNodeInfo.OriginName}\n" + 
                retraction + $"/// </summary>\n" + 
                retraction + $"public {uiNodeInfo.ClassName} {uiNodeInfo.Name}\n" +
                retraction + $"{{\n" + 
                retraction + $"    get\n" + 
                retraction + $"    {{\n" + 
-               retraction + $"        if (_{uiNodeInfo.Name} == null) _{uiNodeInfo.Name} = new {uiNodeInfo.ClassName}({target}GetNodeOrNull<{uiNodeInfo.TypeName}>(\"{uiNodeInfo.OriginName}\"));\n" + 
+               retraction + $"        if (_{uiNodeInfo.Name} == null) _{uiNodeInfo.Name} = new {uiNodeInfo.ClassName}({target}GetNodeOrNull<{uiNodeInfo.NodeTypeName}>(\"{uiNodeInfo.OriginName}\"));\n" + 
                retraction + $"        return _{uiNodeInfo.Name};\n" + 
                retraction + $"    }}\n" + 
                retraction + $"}}\n" +
                retraction + $"private {uiNodeInfo.ClassName} _{uiNodeInfo.Name};\n\n";
     }
+
+    private static string GenerateSoleLayerCode(UiNodeInfo rootNode, UiNodeInfo uiNodeInfo, string layerName, string parent, string retraction)
+    {
+        var str = "";
+        if (uiNodeInfo.Children != null)
+        {
+            foreach (var nodeInfo in uiNodeInfo.Children)
+            {
+                var layer = layerName;
+                if (layerName.Length > 0)
+                {
+                    layer += ".";
+                }
+
+                layer += nodeInfo.Name;
+                var path = parent + "." + nodeInfo.OriginName;
+                str += GenerateSoleLayerCode(rootNode, nodeInfo, layer, path, retraction);
+                if (IsSoleNameNode(rootNode, nodeInfo))
+                {
+                    str += $"{retraction}/// <summary>\n";
+                    str += $"{retraction}/// 场景中唯一名称的节点, 节点类型: <see cref=\"{uiNodeInfo.NodeTypeName}\"/>, 节点路径: {path}\n";
+                    str += $"{retraction}/// </summary>\n";
+                    str += $"{retraction}public {nodeInfo.ClassName} S_{nodeInfo.OriginName} => {layer};\n\n";
+                }
+            }
+        }
+        return str;
+    }
+
+    //返回指定节点在当前场景中是否是唯一名称的节点
+    private static bool IsSoleNameNode(UiNodeInfo parentNodeInfo, UiNodeInfo uiNodeInfo)
+    {
+        if (parentNodeInfo.Children != null)
+        {
+            foreach (var nodeInfo in parentNodeInfo.Children)
+            {
+                if (nodeInfo != uiNodeInfo && nodeInfo.OriginName == uiNodeInfo.OriginName)
+                {
+                    return false;
+                }
+
+                if (!IsSoleNameNode(nodeInfo, uiNodeInfo))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
     
     /// <summary>
     /// 递归解析节点, 并生成 UiNodeInfo 数据
     /// </summary>
-    private static UiNodeInfo EachNode(Node node)
+    private static UiNodeInfo EachNode(string uiRootName, Node node)
     {
         var originName = Regex.Replace(node.Name, "[^\\w]", "");
         //类定义该图层的类名
@@ -218,16 +270,16 @@ public static class UiGenerator
         if (_nodeNameMap.ContainsKey(originName)) //有同名图层, 为了防止类名冲突, 需要在 UiNode 后面加上索引
         {
             var count = _nodeNameMap[originName];
-            className = "UiNode" + (count) + "_" + originName;
+            className = uiRootName + (count) + "_" + originName;
             _nodeNameMap[originName] = count + 1;
         }
         else
         {
-            className = "UiNode" + "_" + originName;
+            className = uiRootName + "_" + originName;
             _nodeNameMap.Add(originName, 1);
         }
         
-        var uiNode = new UiNodeInfo("L_" + originName, originName, className, node.GetType().FullName);
+        var uiNode = new UiNodeInfo(uiRootName, "L_" + originName, originName, className, node.GetType().FullName);
 
         var childCount = node.GetChildCount();
         if (childCount > 0)
@@ -242,7 +294,7 @@ public static class UiGenerator
                         uiNode.Children = new List<UiNodeInfo>();
                     }
 
-                    uiNode.Children.Add(EachNode(children));
+                    uiNode.Children.Add(EachNode(uiRootName, children));
                 }
             }
         }
@@ -253,7 +305,7 @@ public static class UiGenerator
     /// <summary>
     /// 在编辑器下递归解析节点, 由于编辑器下绑定用户脚本的节点无法直接判断节点类型, 那么就只能获取节点的脚本然后解析名称和命名空间
     /// </summary>
-    private static UiNodeInfo EachNodeFromEditor(Node node)
+    private static UiNodeInfo EachNodeFromEditor(string uiRootName, Node node)
     {
         UiNodeInfo uiNode;
         //原名称
@@ -265,19 +317,19 @@ public static class UiGenerator
         if (_nodeNameMap.ContainsKey(originName)) //有同名图层, 为了防止类名冲突, 需要在 UiNode 后面加上索引
         {
             var count = _nodeNameMap[originName];
-            className = "UiNode" + (count) + "_" + originName;
+            className = uiRootName + (count) + "_" + originName;
             _nodeNameMap[originName] = count + 1;
         }
         else
         {
-            className = "UiNode" + "_" + originName;
+            className = uiRootName + "_" + originName;
             _nodeNameMap.Add(originName, 1);
         }
 
         var script = node.GetScript().As<CSharpScript>();
         if (script == null) //无脚本, 说明是内置节点
         {
-            uiNode = new UiNodeInfo(fieldName, originName, className, node.GetType().FullName);
+            uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, node.GetType().FullName);
         }
         else //存在脚本
         {
@@ -288,11 +340,11 @@ public static class UiGenerator
             var match = Regex.Match(script.SourceCode, "(?<=namespace\\s+)[\\w\\.]+");
             if (match.Success) //存在命名空间
             {
-                uiNode = new UiNodeInfo(fieldName, originName, className, match.Value + "." + fileName);
+                uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, match.Value + "." + fileName);
             }
             else //不存在命名空间
             {
-                uiNode = new UiNodeInfo(fieldName, originName, className, fileName);
+                uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, fileName);
             }
         }
         
@@ -309,7 +361,7 @@ public static class UiGenerator
                         uiNode.Children = new List<UiNodeInfo>();
                     }
 
-                    uiNode.Children.Add(EachNodeFromEditor(children));
+                    uiNode.Children.Add(EachNodeFromEditor(uiRootName, children));
                 }
             }
         }
@@ -319,18 +371,38 @@ public static class UiGenerator
 
     private class UiNodeInfo
     {
+        /// <summary>
+        /// 层级名称
+        /// </summary>
         public string Name;
+        /// <summary>
+        /// 层级原名称
+        /// </summary>
         public string OriginName;
+        /// <summary>
+        /// 层级类名
+        /// </summary>
         public string ClassName;
-        public string TypeName;
+        /// <summary>
+        /// Godot节点类型名称
+        /// </summary>
+        public string NodeTypeName;
+        /// <summary>
+        /// 子节点
+        /// </summary>
         public List<UiNodeInfo> Children;
-
-        public UiNodeInfo(string name, string originName, string className, string typeName)
+        /// <summary>
+        /// Ui根节点名称
+        /// </summary>
+        public string UiRootName;
+        
+        public UiNodeInfo(string uiRootName, string name, string originName, string className, string nodeTypeName)
         {
+            UiRootName = uiRootName;
             Name = name;
             OriginName = originName;
             ClassName = className;
-            TypeName = typeName;
+            NodeTypeName = nodeTypeName;
         }
     }
     
