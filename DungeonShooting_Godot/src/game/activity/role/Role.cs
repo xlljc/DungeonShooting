@@ -39,14 +39,19 @@ public abstract partial class Role : ActivityObject
     public uint AttackLayer { get; set; } = PhysicsLayer.Wall;
 
     /// <summary>
-    /// 携带的道具包裹
+    /// 携带的被动道具包裹
     /// </summary>
-    public List<Prop> PropsPack { get; } = new List<Prop>();
+    public List<BuffProp> BuffPropPack { get; } = new List<BuffProp>();
 
     /// <summary>
-    /// 角色携带的武器袋
+    /// 携带的主动道具包裹
     /// </summary>
-    public Holster Holster { get; private set; }
+    public Package<ActiveProp> ActivePropsPack { get; private set; }
+
+    /// <summary>
+    /// 角色携带的武器背包
+    /// </summary>
+    public Package<Weapon> WeaponPack { get; private set; }
 
     /// <summary>
     /// 武器挂载点
@@ -85,7 +90,7 @@ public abstract partial class Role : ActivityObject
         set
         {
             int temp = _hp;
-            _hp = value;
+            _hp = Mathf.Clamp(value, 0, _maxHp);
             if (temp != _hp)
             {
                 OnChangeHp(_hp);
@@ -185,7 +190,7 @@ public abstract partial class Role : ActivityObject
                 else //正常状态
                 {
                     HurtArea.CollisionLayer = _currentLayer;
-                    SetBlendAlpha(1);
+                    SetBlendModulate(new Color(1, 1, 1, 1));
                 }
             }
 
@@ -199,13 +204,18 @@ public abstract partial class Role : ActivityObject
     /// 当前角色所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
+    
+    /// <summary>
+    /// 当前可以互动的物体
+    /// </summary>
+    public ActivityObject InteractiveItem { get; private set; }
 
     //初始缩放
     private Vector2 _startScale;
     //所有角色碰撞的物体
     private readonly List<ActivityObject> _interactiveItemList = new List<ActivityObject>();
-
-    private CheckInteractiveResult _tempResultData;
+    //当前可互动的物体
+    private CheckInteractiveResult _currentResultData;
     private uint _currentLayer;
     //闪烁计时器
     private float _flashingInvincibleTimer = -1;
@@ -215,11 +225,6 @@ public abstract partial class Role : ActivityObject
     private long _invincibleFlashingId = -1;
     //护盾恢复计时器
     private float _shieldRecoveryTimer = 0;
-
-    /// <summary>
-    /// 可以互动的物体
-    /// </summary>
-    public ActivityObject InteractiveItem { get; private set; }
 
     /// <summary>
     /// 当血量改变时调用
@@ -277,8 +282,9 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 当可互动的物体改变时调用, result 参数为 null 表示变为不可互动
     /// </summary>
-    /// <param name="result">检测是否可互动时的返回值</param>
-    protected virtual void ChangeInteractiveItem(CheckInteractiveResult result)
+    /// <param name="prev">上一个互动的物体</param>
+    /// <param name="result">当前物体, 检测是否可互动时的返回值</param>
+    protected virtual void ChangeInteractiveItem(CheckInteractiveResult prev, CheckInteractiveResult result)
     {
     }
 
@@ -289,9 +295,66 @@ public abstract partial class Role : ActivityObject
     {
     }
 
+    /// <summary>
+    /// 当拾起某个武器时调用
+    /// </summary>
+    protected virtual void OnPickUpWeapon(Weapon weapon)
+    {
+    }
+    
+    /// <summary>
+    /// 当扔掉某个武器时调用
+    /// </summary>
+    protected virtual void OnThrowWeapon(Weapon weapon)
+    {
+    }
+
+    /// <summary>
+    /// 当切换到某个武器时调用
+    /// </summary>
+    protected virtual void OnExchangeWeapon(Weapon weapon)
+    {
+    }
+
+    /// <summary>
+    /// 当拾起某个主动道具时调用
+    /// </summary>
+    protected virtual void OnPickUpActiveProp(ActiveProp activeProp)
+    {
+    }
+
+    /// <summary>
+    /// 当移除某个主动道具时调用
+    /// </summary>
+    protected virtual void OnRemoveActiveProp(ActiveProp activeProp)
+    {
+    }
+    
+    /// <summary>
+    /// 当切换到某个主动道具时调用
+    /// </summary>
+    protected virtual void OnExchangeActiveProp(ActiveProp activeProp)
+    {
+    }
+    
+    /// <summary>
+    /// 当拾起某个被动道具时调用
+    /// </summary>
+    protected virtual void OnPickUpBuffProp(BuffProp buffProp)
+    {
+    }
+
+    /// <summary>
+    /// 当移除某个被动道具时调用
+    /// </summary>
+    protected virtual void OnRemoveBuffProp(BuffProp buffProp)
+    {
+    }
+
     public override void OnInit()
     {
-        Holster = new Holster(this);
+        ActivePropsPack = new Package<ActiveProp>(this, 1);
+        WeaponPack = new Package<Weapon>(this, 4);
         _startScale = Scale;
         MountPoint.Master = this;
         
@@ -341,28 +404,32 @@ public abstract partial class Role : ActivityObject
                 if (!findFlag)
                 {
                     var result = item.CheckInteractive(this);
+                    var prev = _currentResultData;
+                    _currentResultData = result;
                     if (result.CanInteractive) //可以互动
                     {
                         findFlag = true;
                         if (InteractiveItem != item) //更改互动物体
                         {
                             InteractiveItem = item;
-                            ChangeInteractiveItem(result);
+                            ChangeInteractiveItem(prev, result);
                         }
-                        else if (result.ShowIcon != _tempResultData.ShowIcon) //切换状态
+                        else if (result.Type != _currentResultData.Type) //切换状态
                         {
-                            ChangeInteractiveItem(result);
+                            ChangeInteractiveItem(prev, result);
                         }
                     }
-                    _tempResultData = result;
+                    
                 }
             }
         }
         //没有可互动的物体
         if (!findFlag && InteractiveItem != null)
         {
+            var prev = _currentResultData;
+            _currentResultData = null;
             InteractiveItem = null;
-            ChangeInteractiveItem(null);
+            ChangeInteractiveItem(prev, null);
         }
 
         //无敌状态, 播放闪烁动画
@@ -375,12 +442,12 @@ public abstract partial class Role : ActivityObject
                 if (_flashingInvincibleFlag)
                 {
                     _flashingInvincibleFlag = false;
-                    SetBlendAlpha(0.7f);
+                    SetBlendModulate(new Color(1, 1, 1, 0.7f));
                 }
                 else
                 {
                     _flashingInvincibleFlag = true;
-                    SetBlendAlpha(0);
+                    SetBlendModulate(new Color(1, 1, 1, 0));
                 }
             }
 
@@ -402,13 +469,36 @@ public abstract partial class Role : ActivityObject
                 _shieldRecoveryTimer = 0;
             }
         }
+
+        //被动道具更新
+        if (BuffPropPack.Count > 0)
+        {
+            var buffProps = BuffPropPack.ToArray();
+            foreach (var prop in buffProps)
+            {
+                if (!prop.IsDestroyed)
+                {
+                    prop.PackProcess(delta);
+                }
+            }
+        }
+        
+        //主动道具调用更新
+        var props = (Prop[])ActivePropsPack.ItemSlot.Clone();
+        foreach (var prop in props)
+        {
+            if (prop != null && !prop.IsDestroyed)
+            {
+                prop.PackProcess(delta);
+            }
+        }
     }
 
     /// <summary>
     /// 当武器放到后背时调用, 用于设置武器位置和角度
     /// </summary>
     /// <param name="weapon">武器实例</param>
-    /// <param name="index">放入武器袋的位置</param>
+    /// <param name="index">放入武器背包的位置</param>
     public virtual void OnPutBackMount(Weapon weapon, int index)
     {
         if (index < 8)
@@ -435,7 +525,7 @@ public abstract partial class Role : ActivityObject
     protected override void OnAffiliationChange()
     {
         //身上的武器的所属区域也得跟着变
-        Holster.ForEach((weapon, i) =>
+        WeaponPack.ForEach((weapon, i) =>
         {
             if (AffiliationArea != null)
             {
@@ -448,6 +538,14 @@ public abstract partial class Role : ActivityObject
         });
     }
 
+    /// <summary>
+    /// 是否是满血
+    /// </summary>
+    public bool IsHpFull()
+    {
+        return Hp >= MaxHp;
+    }
+    
     /// <summary>
     /// 获取当前角色的中心点坐标
     /// </summary>
@@ -493,7 +591,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsAllWeaponTotalAmmoEmpty()
     {
-        foreach (var weapon in Holster.Weapons)
+        foreach (var weapon in WeaponPack.ItemSlot)
         {
             if (weapon != null && !weapon.IsTotalAmmoEmpty())
             {
@@ -504,17 +602,20 @@ public abstract partial class Role : ActivityObject
         return true;
     }
     
+    //-------------------------------------------------------------------------------------
+    
     /// <summary>
-    /// 拾起一个武器, 返回是否成功拾取, 如果不想立刻切换到该武器, exchange 请传 false
+    /// 拾起一个武器, 返回是否成功拾起, 如果不想立刻切换到该武器, exchange 请传 false
     /// </summary>
     /// <param name="weapon">武器对象</param>
     /// <param name="exchange">是否立即切换到该武器, 默认 true </param>
-    public virtual bool PickUpWeapon(Weapon weapon, bool exchange = true)
+    public bool PickUpWeapon(Weapon weapon, bool exchange = true)
     {
-        if (Holster.PickupWeapon(weapon, exchange) != -1)
+        if (WeaponPack.PickupItem(weapon, exchange) != -1)
         {
             //从可互动队列中移除
             _interactiveItemList.Remove(weapon);
+            OnPickUpWeapon(weapon);
             return true;
         }
 
@@ -524,34 +625,44 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 切换到下一个武器
     /// </summary>
-    public virtual void ExchangeNext()
+    public void ExchangeNextWeapon()
     {
-        Holster.ExchangeNext();
+        var weapon = WeaponPack.ActiveItem;
+        WeaponPack.ExchangeNext();
+        if (WeaponPack.ActiveItem != weapon)
+        {
+            OnExchangeWeapon(WeaponPack.ActiveItem);
+        }
     }
 
     /// <summary>
     /// 切换到上一个武器
     /// </summary>
-    public virtual void ExchangePrev()
+    public void ExchangePrevWeapon()
     {
-        Holster.ExchangePrev();
+        var weapon = WeaponPack.ActiveItem;
+        WeaponPack.ExchangePrev();
+        if (WeaponPack.ActiveItem != weapon)
+        {
+            OnExchangeWeapon(WeaponPack.ActiveItem);
+        }
     }
 
     /// <summary>
     /// 扔掉当前使用的武器, 切换到上一个武器
     /// </summary>
-    public virtual void ThrowWeapon()
+    public void ThrowWeapon()
     {
-        ThrowWeapon(Holster.ActiveIndex);
+        ThrowWeapon(WeaponPack.ActiveIndex);
     }
 
     /// <summary>
     /// 扔掉指定位置的武器
     /// </summary>
-    /// <param name="index">武器在武器袋中的位置</param>
-    public virtual void ThrowWeapon(int index)
+    /// <param name="index">武器在武器背包中的位置</param>
+    public void ThrowWeapon(int index)
     {
-        var weapon = Holster.GetWeapon(index);
+        var weapon = WeaponPack.GetItem(index);
         if (weapon == null)
         {
             return;
@@ -563,11 +674,135 @@ public abstract partial class Role : ActivityObject
             temp.Y = -temp.Y;
         }
         //var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
-        Holster.RemoveWeapon(index);
+        WeaponPack.RemoveItem(index);
         //播放抛出效果
         weapon.ThrowWeapon(this, GlobalPosition);
     }
 
+    /// <summary>
+    /// 拾起主动道具, 返回是否成功拾起, 如果不想立刻切换到该道具, exchange 请传 false
+    /// </summary>
+    /// <param name="activeProp">主动道具对象</param>
+    /// <param name="exchange">是否立即切换到该道具, 默认 true </param>
+    public bool PickUpActiveProp(ActiveProp activeProp, bool exchange = true)
+    {
+        if (ActivePropsPack.PickupItem(activeProp, exchange) != -1)
+        {
+            //从可互动队列中移除
+            _interactiveItemList.Remove(activeProp);
+            OnPickUpActiveProp(activeProp);
+            return true;
+        }
+
+        return false;
+    }
+    
+    /// <summary>
+    /// 切换到下一个武器
+    /// </summary>
+    public void ExchangeNextActiveProp()
+    {
+        var prop = ActivePropsPack.ActiveItem;
+        ActivePropsPack.ExchangeNext();
+        if (prop != ActivePropsPack.ActiveItem)
+        {
+            OnExchangeActiveProp(ActivePropsPack.ActiveItem);
+        }
+    }
+
+    /// <summary>
+    /// 切换到上一个武器
+    /// </summary>
+    public void ExchangePrevActiveProp()
+    {
+        var prop = ActivePropsPack.ActiveItem;
+        ActivePropsPack.ExchangePrev();
+        if (prop != ActivePropsPack.ActiveItem)
+        {
+            OnExchangeActiveProp(ActivePropsPack.ActiveItem);
+        }
+    }
+    
+    /// <summary>
+    /// 扔掉当前使用的道具
+    /// </summary>
+    public void ThrowActiveProp()
+    {
+        ThrowActiveProp(ActivePropsPack.ActiveIndex);
+    }
+    
+    /// <summary>
+    /// 扔掉指定位置上的主动道具
+    /// </summary>
+    public void ThrowActiveProp(int index)
+    {
+        var activeProp = ActivePropsPack.GetItem(index);
+        if (activeProp == null)
+        {
+            return;
+        }
+
+        ActivePropsPack.RemoveItem(index);
+        OnRemoveActiveProp(activeProp);
+        //播放抛出效果
+        activeProp.ThrowProp(this, GlobalPosition);
+    }
+
+    /// <summary>
+    /// 拾起被动道具, 返回是否成功拾起
+    /// </summary>
+    /// <param name="buffProp">被动道具对象</param>
+    public bool PickUpBuffProp(BuffProp buffProp)
+    {
+        if (BuffPropPack.Contains(buffProp))
+        {
+            GD.PrintErr("被动道具已经在背包中了!");
+            return false;
+        }
+        BuffPropPack.Add(buffProp);
+        buffProp.Master = this;
+        OnPickUpBuffProp(buffProp);
+        buffProp.OnPickUpItem();
+        return true;
+    }
+
+    /// <summary>
+    /// 扔掉指定的被动道具
+    /// </summary>
+    /// <param name="buffProp"></param>
+    public void ThrowBuffProp(BuffProp buffProp)
+    {
+        var index = BuffPropPack.IndexOf(buffProp);
+        if (index < 0)
+        {
+            GD.PrintErr("当前道具不在角色背包中!");
+            return;
+        }
+        
+        ThrowBuffProp(index);
+    }
+    
+    /// <summary>
+    /// 扔掉指定位置上的被动道具
+    /// </summary>
+    public void ThrowBuffProp(int index)
+    {
+        if (index < 0 || index >= BuffPropPack.Count)
+        {
+            return;
+        }
+
+        var buffProp = BuffPropPack[index];
+        BuffPropPack.RemoveAt(index);
+        buffProp.OnRemoveItem();
+        OnRemoveBuffProp(buffProp);
+        buffProp.Master = null;
+        //播放抛出效果
+        buffProp.ThrowProp(this, GlobalPosition);
+    }
+
+    //-------------------------------------------------------------------------------------
+    
     /// <summary>
     /// 返回是否存在可互动的物体
     /// </summary>
@@ -596,9 +831,9 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void Reload()
     {
-        if (Holster.ActiveWeapon != null)
+        if (WeaponPack.ActiveItem != null)
         {
-            Holster.ActiveWeapon.Reload();
+            WeaponPack.ActiveItem.Reload();
         }
     }
 
@@ -607,9 +842,21 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void Attack()
     {
-        if (Holster.ActiveWeapon != null)
+        if (WeaponPack.ActiveItem != null)
         {
-            Holster.ActiveWeapon.Trigger();
+            WeaponPack.ActiveItem.Trigger();
+        }
+    }
+
+    /// <summary>
+    /// 触发使用道具
+    /// </summary>
+    public virtual void UseActiveProp()
+    {
+        var activeItem = ActivePropsPack.ActiveItem;
+        if (activeItem != null)
+        {
+            activeItem.Use();
         }
     }
 
@@ -649,7 +896,7 @@ public abstract partial class Role : ActivityObject
             // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
         OnHit(damage, !flag);
-        
+
         //受伤特效
         PlayHitAnimation();
         
@@ -750,24 +997,23 @@ public abstract partial class Role : ActivityObject
             }
             if (InteractiveItem == propObject)
             {
+                var prev = _currentResultData;
+                _currentResultData = null;
                 InteractiveItem = null;
-                ChangeInteractiveItem(null);
+                ChangeInteractiveItem(prev, null);
             }
         }
     }
 
-    /// <summary>
-    /// 添加道具
-    /// </summary>
-    /// <param name="buff"></param>
-    public void PushProp(Buff buff)
+    protected override void OnDestroy()
     {
-        if (PropsPack.Contains(buff))
+        //销毁道具
+        foreach (var buffProp in BuffPropPack)
         {
-            GD.PrintErr("道具已经在包裹中了!");
-            return;
+            buffProp.Destroy();
         }
-        PropsPack.Add(buff);
-        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, buff);
+        BuffPropPack.Clear();
+        ActivePropsPack.Destroy();
+        WeaponPack.Destroy();
     }
 }

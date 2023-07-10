@@ -4,18 +4,25 @@
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_rp1bw"]
 [ext_resource type="SpriteFrames" uid="uid://dx1mjbx4acs3q" path="res://resource/spriteFrames/weapon/Weapon0006.tres" id="2_j3sji"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
 resource_local_to_scene = true
 shader = ExtResource("1_rp1bw")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
 resource_local_to_scene = true
 shader = ExtResource("1_rp1bw")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3p5jk"]
 size = Vector2(12, 10)

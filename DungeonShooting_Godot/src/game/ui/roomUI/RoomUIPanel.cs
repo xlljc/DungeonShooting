@@ -1,25 +1,27 @@
 
-using Godot;
 using UI.BottomTips;
 
 namespace UI.RoomUI;
 
 /// <summary>
-/// 房间中的ui
+/// 地牢房间中的ui
 /// </summary>
 public partial class RoomUIPanel : RoomUI
 {
     private ReloadBar _reloadBar;
     private InteractiveTipBar _interactiveTipBar;
-    private GunBar _gunBar;
+    private WeaponBar _weaponBar;
+    private ActivePropBar _activePropBar;
     private LifeBar _lifeBar;
+    
     private EventFactory _factory;
 
     public override void OnCreateUi()
     {
         _reloadBar = new ReloadBar(L_ReloadBar);
         _interactiveTipBar = new InteractiveTipBar(L_InteractiveTipBar);
-        _gunBar = new GunBar(L_Control.L_GunBar);
+        _weaponBar = new WeaponBar(L_Control.L_WeaponBar);
+        _activePropBar = new ActivePropBar(L_Control.L_ActivePropBar);
         _lifeBar = new LifeBar(L_Control.L_LifeBar);
     }
 
@@ -27,7 +29,8 @@ public partial class RoomUIPanel : RoomUI
     {
         _reloadBar.OnShow();
         _interactiveTipBar.OnShow();
-        _gunBar.OnShow();
+        _weaponBar.OnShow();
+        _activePropBar.OnShow();
         _lifeBar.OnShow();
 
         _factory = EventManager.CreateEventFactory();
@@ -38,21 +41,18 @@ public partial class RoomUIPanel : RoomUI
     {
         _reloadBar.OnHide();
         _interactiveTipBar.OnHide();
-        _gunBar.OnHide();
+        _weaponBar.OnHide();
+        _activePropBar.OnHide();
         _lifeBar.OnHide();
         
         _factory.RemoveAllEventListener();
         _factory = null;
     }
 
-    public void InitData()
-    {
-        _lifeBar.RefreshLife();
-    }
-
     public override void Process(float delta)
     {
-        _gunBar.Process(delta);
+        _weaponBar.Process(delta);
+        _activePropBar.Process(delta);
         _lifeBar.Process(delta);
     }
 

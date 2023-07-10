@@ -17,13 +17,6 @@ public class LifeBar
         var uiNodeLife = lifeBar.L_Life;
 
         _grid = new UiGrid<TextureRect, RoomUI.UiNode_Life, LifeIconEnum>(uiNodeLife, typeof(LifeCell), 20, 1, 2);
-
-
-        // _grid.Add(LifeIconEnum.FullHeart);
-        // _grid.Add(LifeIconEnum.HalfHeart);
-        // _grid.Add(LifeIconEnum.EmptyHeart);
-        // _grid.Add(LifeIconEnum.FullShield);
-        // _grid.Add(LifeIconEnum.EmptyShield);
     }
 
     public void OnShow()
@@ -33,6 +26,7 @@ public class LifeBar
         _eventFactory.AddEventListener(EventEnum.OnPlayerMaxHpChange, o => RefreshLife());
         _eventFactory.AddEventListener(EventEnum.OnPlayerShieldChange, o => RefreshLife());
         _eventFactory.AddEventListener(EventEnum.OnPlayerMaxShieldChange, o => RefreshLife());
+        RefreshLife();
     }
 
     public void OnHide()

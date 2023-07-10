@@ -31,7 +31,7 @@ public partial class ActivityObject
                         ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
                     material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
                     material.SetShaderParameter("schedule", 1);
-                    material.SetShaderParameter("alpha", 1);
+                    material.SetShaderParameter("modulate", new Color(1, 1, 1, 1));
                     sprite.Material = material;
                 }
             }
@@ -45,7 +45,7 @@ public partial class ActivityObject
                         ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
                     material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
                     material.SetShaderParameter("schedule", 0);
-                    material.SetShaderParameter("alpha", 1);
+                    material.SetShaderParameter("modulate", new Color(1, 1, 1, 1));
                     animatedSprite.Material = material;
                 }
             }
@@ -58,6 +58,7 @@ public partial class ActivityObject
         }
     }
 
+#if TOOLS
     private void _InitNodeInEditor()
     {
         var parent = GetParent();
@@ -188,4 +189,5 @@ public partial class ActivityObject
 
         return null;
     }
+#endif
 }

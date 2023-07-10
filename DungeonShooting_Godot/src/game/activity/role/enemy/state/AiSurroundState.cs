@@ -53,7 +53,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         }
 
         var playerPos = Player.Current.GetCenterPosition();
-        var weapon = Master.Holster.ActiveWeapon;
+        var weapon = Master.WeaponPack.ActiveItem;
 
         //枪口指向玩家
         Master.LookTargetPosition(playerPos);
@@ -160,7 +160,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
 
     private void RunOver(Vector2 targetPos)
     {
-        var weapon = Master.Holster.ActiveWeapon;
+        var weapon = Master.WeaponPack.ActiveItem;
         var distance = (int)(weapon == null ? 150 : (weapon.Attribute.BulletMinDistance * 0.7f));
         _nextPosition = new Vector2(
             targetPos.X + Utils.RandomRangeInt(-distance, distance),

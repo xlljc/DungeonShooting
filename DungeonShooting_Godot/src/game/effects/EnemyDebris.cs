@@ -2,7 +2,7 @@
 using System.Collections;
 using Godot;
 
-[Tool, GlobalClass]
+[Tool]
 public partial class EnemyDebris : ActivityObject
 {
 

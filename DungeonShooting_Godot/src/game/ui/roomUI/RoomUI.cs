@@ -240,56 +240,241 @@ public abstract partial class RoomUI : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.GunBar.GunSprite
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropBg
     /// </summary>
-    public class UiNode_GunSprite : IUiNode<Godot.TextureRect, UiNode_GunSprite>
+    public class UiNode_ActivePropBg : IUiNode<Godot.NinePatchRect, UiNode_ActivePropBg>
     {
-        public UiNode_GunSprite(Godot.TextureRect node) : base(node) {  }
-        public override UiNode_GunSprite Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public UiNode_ActivePropBg(Godot.NinePatchRect node) : base(node) {  }
+        public override UiNode_ActivePropBg Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: RoomUI.Control.GunBar.BulletText
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropSprite
     /// </summary>
-    public class UiNode_BulletText : IUiNode<Godot.Label, UiNode_BulletText>
+    public class UiNode_ActivePropSprite : IUiNode<Godot.TextureRect, UiNode_ActivePropSprite>
     {
-        public UiNode_BulletText(Godot.Label node) : base(node) {  }
-        public override UiNode_BulletText Clone() => new ((Godot.Label)Instance.Duplicate());
+        public UiNode_ActivePropSprite(Godot.TextureRect node) : base(node) {  }
+        public override UiNode_ActivePropSprite Clone() => new ((Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.GunBar
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Control.ActivePropBar.CooldownProgress
     /// </summary>
-    public class UiNode_GunBar : IUiNode<Godot.Control, UiNode_GunBar>
+    public class UiNode_CooldownProgress : IUiNode<Godot.Sprite2D, UiNode_CooldownProgress>
+    {
+        public UiNode_CooldownProgress(Godot.Sprite2D node) : base(node) {  }
+        public override UiNode_CooldownProgress Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropCount
+    /// </summary>
+    public class UiNode_ActivePropCount : IUiNode<Godot.Label, UiNode_ActivePropCount>
+    {
+        public UiNode_ActivePropCount(Godot.Label node) : base(node) {  }
+        public override UiNode_ActivePropCount Clone() => new ((Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropPanel
+    /// </summary>
+    public class UiNode_ActivePropPanel : IUiNode<Godot.NinePatchRect, UiNode_ActivePropPanel>
+    {
+        public UiNode_ActivePropPanel(Godot.NinePatchRect node) : base(node) {  }
+        public override UiNode_ActivePropPanel Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.ActivePropBar.ChargeProgressBar
+    /// </summary>
+    public class UiNode_ChargeProgressBar : IUiNode<Godot.NinePatchRect, UiNode_ChargeProgressBar>
+    {
+        public UiNode_ChargeProgressBar(Godot.NinePatchRect node) : base(node) {  }
+        public override UiNode_ChargeProgressBar Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Control.ActivePropBar.ChargeProgress
+    /// </summary>
+    public class UiNode_ChargeProgress : IUiNode<Godot.Sprite2D, UiNode_ChargeProgress>
+    {
+        public UiNode_ChargeProgress(Godot.Sprite2D node) : base(node) {  }
+        public override UiNode_ChargeProgress Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.ActivePropBar
+    /// </summary>
+    public class UiNode_ActivePropBar : IUiNode<Godot.Control, UiNode_ActivePropBar>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.GunSprite
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.ActivePropBg
         /// </summary>
-        public UiNode_GunSprite L_GunSprite
+        public UiNode_ActivePropBg L_ActivePropBg
         {
             get
             {
-                if (_L_GunSprite == null) _L_GunSprite = new UiNode_GunSprite(Instance.GetNodeOrNull<Godot.TextureRect>("GunSprite"));
-                return _L_GunSprite;
+                if (_L_ActivePropBg == null) _L_ActivePropBg = new UiNode_ActivePropBg(Instance.GetNodeOrNull<Godot.NinePatchRect>("ActivePropBg"));
+                return _L_ActivePropBg;
             }
         }
-        private UiNode_GunSprite _L_GunSprite;
+        private UiNode_ActivePropBg _L_ActivePropBg;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: RoomUI.Control.BulletText
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.ActivePropSprite
         /// </summary>
-        public UiNode_BulletText L_BulletText
+        public UiNode_ActivePropSprite L_ActivePropSprite
         {
             get
             {
-                if (_L_BulletText == null) _L_BulletText = new UiNode_BulletText(Instance.GetNodeOrNull<Godot.Label>("BulletText"));
-                return _L_BulletText;
+                if (_L_ActivePropSprite == null) _L_ActivePropSprite = new UiNode_ActivePropSprite(Instance.GetNodeOrNull<Godot.TextureRect>("ActivePropSprite"));
+                return _L_ActivePropSprite;
             }
         }
-        private UiNode_BulletText _L_BulletText;
+        private UiNode_ActivePropSprite _L_ActivePropSprite;
 
-        public UiNode_GunBar(Godot.Control node) : base(node) {  }
-        public override UiNode_GunBar Clone() => new ((Godot.Control)Instance.Duplicate());
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Control.CooldownProgress
+        /// </summary>
+        public UiNode_CooldownProgress L_CooldownProgress
+        {
+            get
+            {
+                if (_L_CooldownProgress == null) _L_CooldownProgress = new UiNode_CooldownProgress(Instance.GetNodeOrNull<Godot.Sprite2D>("CooldownProgress"));
+                return _L_CooldownProgress;
+            }
+        }
+        private UiNode_CooldownProgress _L_CooldownProgress;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: RoomUI.Control.ActivePropCount
+        /// </summary>
+        public UiNode_ActivePropCount L_ActivePropCount
+        {
+            get
+            {
+                if (_L_ActivePropCount == null) _L_ActivePropCount = new UiNode_ActivePropCount(Instance.GetNodeOrNull<Godot.Label>("ActivePropCount"));
+                return _L_ActivePropCount;
+            }
+        }
+        private UiNode_ActivePropCount _L_ActivePropCount;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.ActivePropPanel
+        /// </summary>
+        public UiNode_ActivePropPanel L_ActivePropPanel
+        {
+            get
+            {
+                if (_L_ActivePropPanel == null) _L_ActivePropPanel = new UiNode_ActivePropPanel(Instance.GetNodeOrNull<Godot.NinePatchRect>("ActivePropPanel"));
+                return _L_ActivePropPanel;
+            }
+        }
+        private UiNode_ActivePropPanel _L_ActivePropPanel;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.ChargeProgressBar
+        /// </summary>
+        public UiNode_ChargeProgressBar L_ChargeProgressBar
+        {
+            get
+            {
+                if (_L_ChargeProgressBar == null) _L_ChargeProgressBar = new UiNode_ChargeProgressBar(Instance.GetNodeOrNull<Godot.NinePatchRect>("ChargeProgressBar"));
+                return _L_ChargeProgressBar;
+            }
+        }
+        private UiNode_ChargeProgressBar _L_ChargeProgressBar;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.Control.ChargeProgress
+        /// </summary>
+        public UiNode_ChargeProgress L_ChargeProgress
+        {
+            get
+            {
+                if (_L_ChargeProgress == null) _L_ChargeProgress = new UiNode_ChargeProgress(Instance.GetNodeOrNull<Godot.Sprite2D>("ChargeProgress"));
+                return _L_ChargeProgress;
+            }
+        }
+        private UiNode_ChargeProgress _L_ChargeProgress;
+
+        public UiNode_ActivePropBar(Godot.Control node) : base(node) {  }
+        public override UiNode_ActivePropBar Clone() => new ((Godot.Control)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.WeaponBar.WeaponPanel.WeaponSprite
+    /// </summary>
+    public class UiNode_WeaponSprite : IUiNode<Godot.TextureRect, UiNode_WeaponSprite>
+    {
+        public UiNode_WeaponSprite(Godot.TextureRect node) : base(node) {  }
+        public override UiNode_WeaponSprite Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.WeaponBar.WeaponPanel
+    /// </summary>
+    public class UiNode_WeaponPanel : IUiNode<Godot.NinePatchRect, UiNode_WeaponPanel>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.WeaponBar.WeaponSprite
+        /// </summary>
+        public UiNode_WeaponSprite L_WeaponSprite
+        {
+            get
+            {
+                if (_L_WeaponSprite == null) _L_WeaponSprite = new UiNode_WeaponSprite(Instance.GetNodeOrNull<Godot.TextureRect>("WeaponSprite"));
+                return _L_WeaponSprite;
+            }
+        }
+        private UiNode_WeaponSprite _L_WeaponSprite;
+
+        public UiNode_WeaponPanel(Godot.NinePatchRect node) : base(node) {  }
+        public override UiNode_WeaponPanel Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: RoomUI.Control.WeaponBar.AmmoCount
+    /// </summary>
+    public class UiNode_AmmoCount : IUiNode<Godot.Label, UiNode_AmmoCount>
+    {
+        public UiNode_AmmoCount(Godot.Label node) : base(node) {  }
+        public override UiNode_AmmoCount Clone() => new ((Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.WeaponBar
+    /// </summary>
+    public class UiNode_WeaponBar : IUiNode<Godot.Control, UiNode_WeaponBar>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.WeaponPanel
+        /// </summary>
+        public UiNode_WeaponPanel L_WeaponPanel
+        {
+            get
+            {
+                if (_L_WeaponPanel == null) _L_WeaponPanel = new UiNode_WeaponPanel(Instance.GetNodeOrNull<Godot.NinePatchRect>("WeaponPanel"));
+                return _L_WeaponPanel;
+            }
+        }
+        private UiNode_WeaponPanel _L_WeaponPanel;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: RoomUI.Control.AmmoCount
+        /// </summary>
+        public UiNode_AmmoCount L_AmmoCount
+        {
+            get
+            {
+                if (_L_AmmoCount == null) _L_AmmoCount = new UiNode_AmmoCount(Instance.GetNodeOrNull<Godot.Label>("AmmoCount"));
+                return _L_AmmoCount;
+            }
+        }
+        private UiNode_AmmoCount _L_AmmoCount;
+
+        public UiNode_WeaponBar(Godot.Control node) : base(node) {  }
+        public override UiNode_WeaponBar Clone() => new ((Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
@@ -324,17 +509,30 @@ public abstract partial class RoomUI : UiBase
         private UiNode_MapBar _L_MapBar;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.GunBar
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.ActivePropBar
         /// </summary>
-        public UiNode_GunBar L_GunBar
+        public UiNode_ActivePropBar L_ActivePropBar
         {
             get
             {
-                if (_L_GunBar == null) _L_GunBar = new UiNode_GunBar(Instance.GetNodeOrNull<Godot.Control>("GunBar"));
-                return _L_GunBar;
+                if (_L_ActivePropBar == null) _L_ActivePropBar = new UiNode_ActivePropBar(Instance.GetNodeOrNull<Godot.Control>("ActivePropBar"));
+                return _L_ActivePropBar;
             }
         }
-        private UiNode_GunBar _L_GunBar;
+        private UiNode_ActivePropBar _L_ActivePropBar;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.WeaponBar
+        /// </summary>
+        public UiNode_WeaponBar L_WeaponBar
+        {
+            get
+            {
+                if (_L_WeaponBar == null) _L_WeaponBar = new UiNode_WeaponBar(Instance.GetNodeOrNull<Godot.Control>("WeaponBar"));
+                return _L_WeaponBar;
+            }
+        }
+        private UiNode_WeaponBar _L_WeaponBar;
 
         public UiNode_Control(Godot.Control node) : base(node) {  }
         public override UiNode_Control Clone() => new ((Godot.Control)Instance.Duplicate());

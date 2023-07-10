@@ -4,18 +4,25 @@
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_tdny6"]
 [ext_resource type="SpriteFrames" uid="uid://b8gksxl7auquc" path="res://resource/spriteFrames/shell/Shell0001.tres" id="3_ujn5y"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_px12l"]
 resource_local_to_scene = true
 shader = ExtResource("2_tdny6")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7e6fo"]
 resource_local_to_scene = true
 shader = ExtResource("2_tdny6")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [node name="Shell0001" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 128

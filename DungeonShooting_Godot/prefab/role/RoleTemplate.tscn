@@ -3,18 +3,25 @@
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_xk5yk"]
 [ext_resource type="Script" path="res://src/game/activity/role/MountRotation.cs" id="2_5ddpw"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v2kfw"]
 resource_local_to_scene = true
 shader = ExtResource("1_xk5yk")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
-shader_parameter/schedule = 1
+shader_parameter/schedule = 0.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yif6x"]
 resource_local_to_scene = true
 shader = ExtResource("1_xk5yk")
 shader_parameter/blend = Color(1, 1, 1, 1)
-shader_parameter/schedule = 0
+shader_parameter/schedule = 0.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5pj80"]
 radius = 4.0

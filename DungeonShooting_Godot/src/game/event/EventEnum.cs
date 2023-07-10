@@ -43,7 +43,7 @@ public enum EventEnum
     /// <summary>
     /// 玩家丢弃武器, 参数为<see cref="Weapon"/>
     /// </summary>
-    OnPlayerThrowWeapon,
+    OnPlayerRemoveWeapon,
     /// <summary>
     /// 玩家拾起道具, 参数为<see cref="Prop"/>
     /// </summary>
@@ -51,7 +51,7 @@ public enum EventEnum
     /// <summary>
     /// 玩家丢弃道具, 参数为<see cref="Prop"/>
     /// </summary>
-    OnPlayerThrowProp,
+    OnPlayerRemoveProp,
     
     /// <summary>
     /// 当玩家进入地牢时调用, 没有参数

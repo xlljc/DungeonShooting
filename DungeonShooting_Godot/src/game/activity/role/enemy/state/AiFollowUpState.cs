@@ -64,7 +64,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         //是否在攻击范围内
         var inAttackRange = false;
 
-        var weapon = Master.Holster.ActiveWeapon;
+        var weapon = Master.WeaponPack.ActiveItem;
         if (weapon != null)
         {
             inAttackRange = masterPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(Master.GetWeaponRange(0.7f), 2);

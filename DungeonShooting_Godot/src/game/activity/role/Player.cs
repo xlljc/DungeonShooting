@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
-[Tool, GlobalClass]
+[Tool]
 public partial class Player : Role
 {
     /// <summary>
@@ -75,11 +75,11 @@ public partial class Player : Role
             MountPoint.SetLookAt(mousePos);
         }
 
-        if (InputManager.Exchange) //切换武器
+        if (InputManager.ExchangeWeapon) //切换武器
         {
-            ExchangeNext();
+            ExchangeNextWeapon();
         }
-        else if (InputManager.Throw) //扔掉武器
+        else if (InputManager.ThrowWeapon) //扔掉武器
         {
             ThrowWeapon();
 
@@ -107,9 +107,19 @@ public partial class Player : Role
         {
             Reload();
         }
+
         if (InputManager.Fire) //开火
         {
             Attack();
+        }
+
+        if (InputManager.UseActiveProp) //使用道具
+        {
+            UseActiveProp();
+        }
+        else if (InputManager.RemoveProp) //扔掉道具
+        {
+            ThrowActiveProp();
         }
 
         if (Input.IsKeyPressed(Key.P))
@@ -130,32 +140,15 @@ public partial class Player : Role
         //播放动画
         PlayAnim();
     }
-    
-    public override bool PickUpWeapon(Weapon weapon, bool exchange = true)
+
+    protected override void OnPickUpWeapon(Weapon weapon)
     {
-        //拾起武器
-        var result = base.PickUpWeapon(weapon, exchange);
-        if (result)
-        {
-            EventManager.EmitEvent(EventEnum.OnPlayerPickUpWeapon, weapon);
-        }
-        return result;
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpWeapon, weapon);
     }
 
-    public override void ThrowWeapon()
+    protected override void OnThrowWeapon(Weapon weapon)
     {
-        //扔掉武器
-        var weapon = Holster.ActiveWeapon;
-        base.ThrowWeapon();
-        EventManager.EmitEvent(EventEnum.OnPlayerThrowWeapon, weapon);
-    }
-
-    public override void ThrowWeapon(int index)
-    {
-        //扔掉武器
-        var weapon = Holster.GetWeapon(index);
-        base.ThrowWeapon(index);
-        EventManager.EmitEvent(EventEnum.OnPlayerThrowWeapon, weapon);
+        EventManager.EmitEvent(EventEnum.OnPlayerRemoveWeapon, weapon);
     }
 
     protected override int OnHandlerHurt(int damage)
@@ -189,8 +182,16 @@ public partial class Player : Role
         EventManager.EmitEvent(EventEnum.OnPlayerMaxHpChange, maxHp);
     }
 
-    protected override void ChangeInteractiveItem(CheckInteractiveResult result)
+    protected override void ChangeInteractiveItem(CheckInteractiveResult prev, CheckInteractiveResult result)
     {
+        if (prev != null && prev.Target.ShowOutline)
+        {
+            prev.Target.OutlineColor = Colors.Black;
+        }
+        if (result != null && result.Target.ShowOutline)
+        {
+            result.Target.OutlineColor = Colors.White;
+        }
         //派发互动对象改变事件
         EventManager.EmitEvent(EventEnum.OnPlayerChangeInteractiveItem, result);
     }
@@ -213,7 +214,26 @@ public partial class Player : Role
         BasisVelocity = Vector2.Zero;
         MoveController.ClearForce();
         UiManager.Open_Settlement();
-        //GameApplication.Instance.World.ProcessMode = ProcessModeEnum.WhenPaused;
+    }
+
+    protected override void OnPickUpActiveProp(ActiveProp activeProp)
+    {
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, activeProp);
+    }
+
+    protected override void OnRemoveActiveProp(ActiveProp activeProp)
+    {
+        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, activeProp);
+    }
+
+    protected override void OnPickUpBuffProp(BuffProp buffProp)
+    {
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, buffProp);
+    }
+
+    protected override void OnRemoveBuffProp(BuffProp buffProp)
+    {
+        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, buffProp);
     }
 
     //处理角色移动的输入

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if TOOLS
+
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using Godot;
@@ -104,3 +106,5 @@ public static class UiManagerMethodsGenerator
         return true;
     }
 }
+
+#endif

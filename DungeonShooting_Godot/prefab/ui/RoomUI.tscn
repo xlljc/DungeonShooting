@@ -1,13 +1,20 @@
-[gd_scene load_steps=11 format=3 uid="uid://bvpmtfupny8iu"]
+[gd_scene load_steps=20 format=3 uid="uid://bvpmtfupny8iu"]
 
 [ext_resource type="Script" path="res://src/game/ui/roomUI/RoomUIPanel.cs" id="1_tfcrp"]
-[ext_resource type="Texture2D" uid="uid://b67i86mtqrn32" path="res://resource/sprite/ui/icon/icon_bullet.png" id="2_a2ohq"]
+[ext_resource type="Texture2D" uid="uid://b67i86mtqrn32" path="res://resource/sprite/ui/roomUI/icon_bullet.png" id="2_ruc0p"]
 [ext_resource type="Texture2D" uid="uid://dxstii6f4l8m0" path="res://resource/sprite/ui/keyboard/e.png" id="3_h7n2a"]
-[ext_resource type="Texture2D" uid="uid://cukrx5yyqw86o" path="res://resource/sprite/ui/reloadBar.png" id="4_nt6mj"]
-[ext_resource type="Texture2D" uid="uid://cx3i1nkcc4307" path="res://resource/sprite/ui/reloadBarBlock.png" id="5_wob8d"]
-[ext_resource type="Texture2D" uid="uid://blywnftxn1cfd" path="res://resource/sprite/ui/Life_full.png" id="11_y2dqd"]
-[ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/mapBar.png" id="11_yaqsk"]
-[ext_resource type="Texture2D" uid="uid://xafbhgrxmosy" path="res://resource/sprite/weapon/gun4.png" id="12_o2big"]
+[ext_resource type="Texture2D" uid="uid://cukrx5yyqw86o" path="res://resource/sprite/ui/roomUI/ReloadBar.png" id="4_hy44s"]
+[ext_resource type="Texture2D" uid="uid://cx3i1nkcc4307" path="res://resource/sprite/ui/roomUI/ReloadBarBlock.png" id="5_w3lq2"]
+[ext_resource type="Texture2D" uid="uid://blywnftxn1cfd" path="res://resource/sprite/ui/roomUI/Life_full.png" id="6_ggviq"]
+[ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/roomUI/MapBar.png" id="7_p6pvs"]
+[ext_resource type="Texture2D" uid="uid://cu0wlvrbntvyd" path="res://resource/sprite/prop/active/ActiveProp5000.png" id="10_5d4np"]
+[ext_resource type="Texture2D" uid="uid://b8u6s5n37157" path="res://resource/sprite/ui/roomUI/Panel2.png" id="10_eokvx"]
+[ext_resource type="Texture2D" uid="uid://0swkya4hn82c" path="res://resource/sprite/ui/roomUI/Panel.png" id="10_q3fs8"]
+[ext_resource type="Texture2D" uid="uid://504f1r0mi33n" path="res://resource/sprite/weapon/weapon0005/Weapon0005.png" id="11_lsai4"]
+[ext_resource type="Texture2D" uid="uid://bsu7re1lxnr72" path="res://resource/sprite/ui/roomUI/Cooldown.png" id="11_p0smc"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="12_fgyob"]
+[ext_resource type="Texture2D" uid="uid://dwysndc5ffski" path="res://resource/sprite/ui/roomUI/ChargeProgressBar.png" id="13_6w7qi"]
+[ext_resource type="Texture2D" uid="uid://ck0w7at3oat5" path="res://resource/sprite/ui/roomUI/ChargeProgress.png" id="13_vuglj"]
 
 [sub_resource type="Gradient" id="1"]
 colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
@@ -16,6 +23,26 @@ colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
 font_size = 32
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_msp2c"]
+resource_local_to_scene = true
+shader = ExtResource("12_fgyob")
+shader_parameter/blend = Color(0, 0, 0, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0.941176, 0.941176, 0.941176, 1)
+shader_parameter/outline_rainbow = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7pkeh"]
+resource_local_to_scene = true
+shader = ExtResource("12_fgyob")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0.941176, 0.941176, 0.941176, 1)
+shader_parameter/outline_rainbow = false
 
 [node name="RoomUI" type="Control"]
 layout_mode = 3
@@ -26,6 +53,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_tfcrp")
+metadata/_edit_vertical_guides_ = [1901.0]
+metadata/_edit_horizontal_guides_ = [954.0, 1062.0]
 
 [node name="InteractiveTipBar" type="Control" parent="."]
 anchors_preset = 0
@@ -48,7 +77,7 @@ offset_right = 8.0
 offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_a2ohq")
+texture = ExtResource("2_ruc0p")
 
 [node name="InteractiveIcon" type="TextureRect" parent="InteractiveTipBar"]
 visible = false
@@ -105,11 +134,11 @@ offset_right = 14.0
 offset_bottom = -21.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("4_nt6mj")
+texture = ExtResource("4_hy44s")
 
 [node name="Block" type="Sprite2D" parent="ReloadBar/Slot"]
 position = Vector2(1, 0)
-texture = ExtResource("5_wob8d")
+texture = ExtResource("5_w3lq2")
 centered = false
 
 [node name="Control" type="Control" parent="."]
@@ -136,7 +165,7 @@ scale = Vector2(4, 4)
 layout_mode = 2
 offset_right = 12.0
 offset_bottom = 10.0
-texture = ExtResource("11_y2dqd")
+texture = ExtResource("6_ggviq")
 
 [node name="MapBar" type="TextureRect" parent="Control"]
 layout_mode = 1
@@ -148,38 +177,158 @@ offset_right = -132.0
 offset_bottom = 44.0
 grow_horizontal = 0
 scale = Vector2(4, 4)
-texture = ExtResource("11_yaqsk")
+texture = ExtResource("7_p6pvs")
 
-[node name="GunBar" type="Control" parent="Control"]
-anchors_preset = 0
+[node name="ActivePropBar" type="Control" parent="Control"]
+layout_mode = 1
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -264.0
-offset_right = 264.0
-offset_bottom = 0.00146484
-
-[node name="GunSprite" type="TextureRect" parent="Control/GunBar"]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -132.0
-offset_top = -132.0
-offset_right = -66.0
-offset_bottom = -66.0
+offset_top = -106.0
+offset_right = 45.0
+offset_bottom = -79.0
+grow_vertical = 0
 scale = Vector2(4, 4)
-texture = ExtResource("12_o2big")
+
+[node name="ActivePropBg" type="NinePatchRect" parent="Control/ActivePropBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_q3fs8")
+region_rect = Rect2(2, 2, 4, 4)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="ActivePropSprite" type="TextureRect" parent="Control/ActivePropBar"]
+material = SubResource("ShaderMaterial_msp2c")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_5d4np")
 stretch_mode = 3
 
-[node name="BulletText" type="Label" parent="Control/GunBar"]
-layout_mode = 0
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -89.0
-offset_top = 39.0
-offset_right = 89.0
-offset_bottom = 74.0
+[node name="CooldownProgress" type="Sprite2D" parent="Control/ActivePropBar"]
+position = Vector2(1, 0.99999)
+scale = Vector2(43, 25)
+texture = ExtResource("11_p0smc")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 1, 1)
+
+[node name="ActivePropCount" type="Label" parent="Control/ActivePropBar"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -43.0
+offset_top = -10.75
+offset_right = 121.0
+offset_bottom = 32.25
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.25, 0.25)
+text = "10
+"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ActivePropPanel" type="NinePatchRect" parent="Control/ActivePropBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_eokvx")
+region_rect = Rect2(0, 0, 8, 8)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="ChargeProgressBar" type="NinePatchRect" parent="Control/ActivePropBar"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 5.0
+grow_vertical = 2
+texture = ExtResource("13_6w7qi")
+patch_margin_left = 2
+patch_margin_top = 3
+patch_margin_right = 1
+patch_margin_bottom = 3
+
+[node name="ChargeProgress" type="Sprite2D" parent="Control/ActivePropBar"]
+position = Vector2(1, 1)
+texture = ExtResource("13_vuglj")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 3, 25)
+
+[node name="WeaponBar" type="Control" parent="Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -261.0
+offset_top = -150.0
+offset_right = -196.0
+offset_bottom = -112.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(4, 4)
+
+[node name="WeaponPanel" type="NinePatchRect" parent="Control/WeaponBar"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = 11.0
+offset_right = 53.0
+grow_vertical = 2
+texture = ExtResource("10_q3fs8")
+region_rect = Rect2(0, 0, 8, 8)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="WeaponSprite" type="TextureRect" parent="Control/WeaponBar/WeaponPanel"]
+material = SubResource("ShaderMaterial_7pkeh")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_lsai4")
+stretch_mode = 3
+
+[node name="AmmoCount" type="Label" parent="Control/WeaponBar"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -56.5
+offset_right = 121.5
+offset_bottom = 43.0
+grow_horizontal = 0
+scale = Vector2(0.25, 0.25)
 text = "30/90"
-horizontal_alignment = 1
+horizontal_alignment = 2
 vertical_alignment = 1
