@@ -43,6 +43,7 @@ grow_vertical = 2
 
 [node name="SubViewport" type="SubViewport" parent="Bg/HSplitContainer/Left/MapView"]
 handle_input_locally = false
+canvas_item_default_texture_filter = 0
 size = Vector2i(1000, 1080)
 render_target_update_mode = 4
 
