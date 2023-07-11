@@ -118,6 +118,15 @@ public static class UiGenerator
 
             var uiNode = EachNodeFromEditor(control.Name, control);
             var code = GenerateClassCode(uiNode);
+            
+            foreach (var pair in _nodeNameMap)
+            {
+                if (pair.Value > 1)
+                {
+                    GD.Print($"检测到同名节点: '{pair.Key}', 使用该名称的节点将无法生成唯一节点属性!");
+                }
+            }
+            
             File.WriteAllText(path, code);
         }
         catch (Exception e)
@@ -145,7 +154,7 @@ public static class UiGenerator
                $"\n" +
                GenerateAllChildrenClassCode(uiNodeInfo.OriginName + ".", uiNodeInfo, "    ") +
                $"\n" +
-               GenerateSoleLayerCode(uiNodeInfo, uiNodeInfo, "", uiNodeInfo.OriginName, "    ") +
+               GenerateSoleLayerCode(uiNodeInfo, "", uiNodeInfo.OriginName, "    ") +
                $"}}\n";
     }
     
@@ -209,7 +218,7 @@ public static class UiGenerator
                retraction + $"private {uiNodeInfo.ClassName} _{uiNodeInfo.Name};\n\n";
     }
 
-    private static string GenerateSoleLayerCode(UiNodeInfo rootNode, UiNodeInfo uiNodeInfo, string layerName, string parent, string retraction)
+    private static string GenerateSoleLayerCode(UiNodeInfo uiNodeInfo, string layerName, string parent, string retraction)
     {
         var str = "";
         if (uiNodeInfo.Children != null)
@@ -224,8 +233,8 @@ public static class UiGenerator
 
                 layer += nodeInfo.Name;
                 var path = parent + "." + nodeInfo.OriginName;
-                str += GenerateSoleLayerCode(rootNode, nodeInfo, layer, path, retraction);
-                if (IsSoleNameNode(rootNode, nodeInfo))
+                str += GenerateSoleLayerCode(nodeInfo, layer, path, retraction);
+                if (IsSoleNameNode(nodeInfo))
                 {
                     str += $"{retraction}/// <summary>\n";
                     str += $"{retraction}/// 场景中唯一名称的节点, 节点类型: <see cref=\"{uiNodeInfo.NodeTypeName}\"/>, 节点路径: {path}\n";
@@ -238,25 +247,14 @@ public static class UiGenerator
     }
 
     //返回指定节点在当前场景中是否是唯一名称的节点
-    private static bool IsSoleNameNode(UiNodeInfo parentNodeInfo, UiNodeInfo uiNodeInfo)
+    private static bool IsSoleNameNode(UiNodeInfo uiNodeInfo)
     {
-        if (parentNodeInfo.Children != null)
+        if (!_nodeNameMap.TryGetValue(uiNodeInfo.OriginName, out var count))
         {
-            foreach (var nodeInfo in parentNodeInfo.Children)
-            {
-                if (nodeInfo != uiNodeInfo && nodeInfo.OriginName == uiNodeInfo.OriginName)
-                {
-                    return false;
-                }
-
-                if (!IsSoleNameNode(nodeInfo, uiNodeInfo))
-                {
-                    return false;
-                }
-            }
+            return true;
         }
 
-        return true;
+        return count <= 1;
     }
     
     /// <summary>
@@ -270,7 +268,7 @@ public static class UiGenerator
         if (_nodeNameMap.ContainsKey(originName)) //有同名图层, 为了防止类名冲突, 需要在 UiNode 后面加上索引
         {
             var count = _nodeNameMap[originName];
-            className = uiRootName + (count) + "_" + originName;
+            className = uiRootName + "_" + originName + "_" + count;
             _nodeNameMap[originName] = count + 1;
         }
         else

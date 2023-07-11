@@ -6,17 +6,17 @@ namespace UI.RoomUI;
 public class LifeBar
 {
 
-    private RoomUI.UiNode_LifeBar _bar;
-    private UiGrid<TextureRect, RoomUI.UiNode_Life, LifeIconEnum> _grid;
+    private RoomUI.RoomUI_LifeBar _bar;
+    private UiGrid<TextureRect, RoomUI.RoomUI_Life, LifeIconEnum> _grid;
     private EventFactory _eventFactory;
     private bool _refreshFlag = false;
 
-    public LifeBar(RoomUI.UiNode_LifeBar lifeBar)
+    public LifeBar(RoomUI.RoomUI_LifeBar lifeBar)
     {
         _bar = lifeBar;
         var uiNodeLife = lifeBar.L_Life;
 
-        _grid = new UiGrid<TextureRect, RoomUI.UiNode_Life, LifeIconEnum>(uiNodeLife, typeof(LifeCell), 20, 1, 2);
+        _grid = new UiGrid<TextureRect, RoomUI.RoomUI_Life, LifeIconEnum>(uiNodeLife, typeof(LifeCell), 20, 1, 2);
     }
 
     public void OnShow()

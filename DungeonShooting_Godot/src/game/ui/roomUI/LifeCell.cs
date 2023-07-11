@@ -2,7 +2,7 @@
 
 namespace UI.RoomUI;
 
-public class LifeCell : UiCell<TextureRect, RoomUI.UiNode_Life, LifeIconEnum>
+public class LifeCell : UiCell<TextureRect, RoomUI.RoomUI_Life, LifeIconEnum>
 {
     private int _type = -1;
 
