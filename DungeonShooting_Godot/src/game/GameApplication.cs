@@ -134,7 +134,8 @@ public partial class GameApplication : Node2D
 
 		BottomTipsPanel.Init();
 		//打开主菜单Ui
-		UiManager.Open_Main();
+		//UiManager.Open_Main();
+		UiManager.Open_MapEditor();
 	}
 
 	public override void _Process(double delta)

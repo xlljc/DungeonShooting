@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://csbxfkdupsckv"]
+[gd_scene load_steps=4 format=3 uid="uid://csbxfkdupsckv"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/MapEditorPanel.cs" id="1_5s7a0"]
+[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="2_nr5lp"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/TileView/EditorTileMap.cs" id="2_waq8f"]
 
 [node name="MapEditor" type="Control"]
@@ -47,6 +48,7 @@ render_target_update_mode = 4
 
 [node name="TileMap" type="TileMap" parent="Bg/HSplitContainer/Left/MapView/SubViewport"]
 scale = Vector2(4, 4)
+tile_set = ExtResource("2_nr5lp")
 format = 2
 script = ExtResource("2_waq8f")
 

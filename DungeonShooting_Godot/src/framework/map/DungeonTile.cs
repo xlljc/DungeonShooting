@@ -419,7 +419,7 @@ public class DungeonTile
         {
             for (int j = 0; j < size.Y; j++)
             {
-                _tileRoot.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), 0, info.AutotileCoord);
+                _tileRoot.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), 0, info.AutoTileCoord);
             }
         }
     }
