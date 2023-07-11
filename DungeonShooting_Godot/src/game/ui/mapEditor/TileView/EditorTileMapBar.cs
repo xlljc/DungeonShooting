@@ -11,18 +11,21 @@ public class EditorTileMapBar
 
     public void OnShow()
     {
-        
+        _editorTileMap.L_Draw.Instance.Draw += OnDrawGuides;
     }
 
     public void OnHide()
     {
-        
+        _editorTileMap.L_Draw.Instance.Draw -= OnDrawGuides;
     }
 
     public void Process(float delta)
     {
-        _editorTileMap.Instance.QueueRedraw();
+        _editorTileMap.L_Draw.Instance.QueueRedraw();
     }
-    
-    
+
+    private void OnDrawGuides()
+    {
+        _editorTileMap.Instance.DrawGuides(_editorTileMap.L_Draw.Instance);
+    }
 }

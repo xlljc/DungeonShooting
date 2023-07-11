@@ -24,10 +24,32 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Node2D"/>, 路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.Draw
+    /// </summary>
+    public class MapEditor_Draw : IUiNode<Godot.Node2D, MapEditor_Draw>
+    {
+        public MapEditor_Draw(Godot.Node2D node) : base(node) {  }
+        public override MapEditor_Draw Clone() => new ((Godot.Node2D)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="UI.MapEditor.EditorTileMap"/>, 路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap
     /// </summary>
     public class MapEditor_TileMap : IUiNode<UI.MapEditor.EditorTileMap, MapEditor_TileMap>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.Draw
+        /// </summary>
+        public MapEditor_Draw L_Draw
+        {
+            get
+            {
+                if (_L_Draw == null) _L_Draw = new MapEditor_Draw(Instance.GetNodeOrNull<Godot.Node2D>("Draw"));
+                return _L_Draw;
+            }
+        }
+        private MapEditor_Draw _L_Draw;
+
         public MapEditor_TileMap(UI.MapEditor.EditorTileMap node) : base(node) {  }
         public override MapEditor_TileMap Clone() => new ((UI.MapEditor.EditorTileMap)Instance.Duplicate());
     }
@@ -164,6 +186,11 @@ public abstract partial class MapEditor : UiBase
         public override MapEditor_Bg Clone() => new ((Godot.Panel)Instance.Duplicate());
     }
 
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditor.EditorTileMap"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.Draw
+    /// </summary>
+    public MapEditor_Draw S_Draw => L_Bg.L_HSplitContainer.L_Left.L_MapView.L_SubViewport.L_TileMap.L_Draw;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SubViewport"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap
