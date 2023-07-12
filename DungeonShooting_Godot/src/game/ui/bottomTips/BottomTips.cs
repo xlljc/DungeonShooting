@@ -166,37 +166,37 @@ public abstract partial class BottomTips : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.AspectRatioContainer"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer.AspectRatioContainer.TextureRect
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer.AspectRatioContainer.TextureRect
     /// </summary>
     public BottomTips_TextureRect S_TextureRect => L_Panel.L_MarginContainer.L_CenterContainer.L_HBoxContainer.L_AspectRatioContainer.L_TextureRect;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer.AspectRatioContainer
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.AspectRatioContainer"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer.AspectRatioContainer
     /// </summary>
     public BottomTips_AspectRatioContainer S_AspectRatioContainer => L_Panel.L_MarginContainer.L_CenterContainer.L_HBoxContainer.L_AspectRatioContainer;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer.Label
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer.Label
     /// </summary>
     public BottomTips_Label S_Label => L_Panel.L_MarginContainer.L_CenterContainer.L_HBoxContainer.L_Label;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CenterContainer"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer
     /// </summary>
     public BottomTips_HBoxContainer S_HBoxContainer => L_Panel.L_MarginContainer.L_CenterContainer.L_HBoxContainer;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CenterContainer"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer
     /// </summary>
     public BottomTips_CenterContainer S_CenterContainer => L_Panel.L_MarginContainer.L_CenterContainer;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.PanelContainer"/>, 节点路径: BottomTips.Panel.MarginContainer
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: BottomTips.Panel.MarginContainer
     /// </summary>
     public BottomTips_MarginContainer S_MarginContainer => L_Panel.L_MarginContainer;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.BottomTips.BottomTipsPanel"/>, 节点路径: BottomTips.Panel
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.PanelContainer"/>, 节点路径: BottomTips.Panel
     /// </summary>
     public BottomTips_Panel S_Panel => L_Panel;
 

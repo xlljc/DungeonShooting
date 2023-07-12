@@ -52,7 +52,7 @@ public class RoomInfo : IDestroy
     /// <summary>
     /// 连接该房间的过道占用区域信息
     /// </summary>
-    public List<Rect2> AisleArea = new List<Rect2>();
+    public List<Rect2I> AisleArea = new List<Rect2I>();
 
     /// <summary>
     /// 下一个房间

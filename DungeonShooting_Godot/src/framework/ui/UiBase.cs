@@ -155,8 +155,16 @@ public abstract partial class UiBase : Control
         {
             foreach (var uiBase in _nestedUiSet)
             {
+                uiBase._targetUi = null;
                 uiBase.DisposeUi();
             }
+            _nestedUiSet.Clear();
+        }
+
+        //在父Ui中移除当前Ui
+        if (_targetUi != null)
+        {
+            _targetUi.RecordNestedUi(this, UiManager.RecordType.Close);
         }
         
         QueueFree();

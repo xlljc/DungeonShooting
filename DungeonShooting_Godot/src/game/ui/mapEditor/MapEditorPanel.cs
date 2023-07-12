@@ -1,15 +1,21 @@
 using Godot;
+using UI.MapEditorTools;
 
 namespace UI.MapEditor;
 
 public partial class MapEditorPanel : MapEditor
 {
-    private EditorTileMapBar _editorTileMapBar;
+    /// <summary>
+    /// 左上角工具面板
+    /// </summary>
+    public MapEditorToolsPanel ToolsPanel { get; private set; }
     
+    private EditorTileMapBar _editorTileMapBar;
+
     public override void OnCreateUi()
     {
-        _editorTileMapBar = new EditorTileMapBar(S_TileMap);
-        S_CanvasLayer.OpenNestedUi(UiManager.UiName.MapEditorTools);
+        _editorTileMapBar = new EditorTileMapBar(this, S_TileMap);
+        ToolsPanel = S_CanvasLayer.OpenNestedUi<MapEditorToolsPanel>(UiManager.UiName.MapEditorTools);
     }
 
     public override void OnShowUi()
@@ -23,7 +29,6 @@ public partial class MapEditorPanel : MapEditor
     public override void OnHideUi()
     {
         S_Left.Instance.Resized -= OnMapViewResized;
-        
         _editorTileMapBar.OnHide();
     }
 

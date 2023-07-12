@@ -210,47 +210,47 @@ public abstract partial class MapEditor : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditor.EditorTileMap"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.Draw
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.Draw
     /// </summary>
     public MapEditor_Draw S_Draw => L_Bg.L_HSplitContainer.L_Left.L_MapView.L_SubViewport.L_TileMap.L_Draw;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SubViewport"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditor.EditorTileMap"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap
     /// </summary>
     public MapEditor_TileMap S_TileMap => L_Bg.L_HSplitContainer.L_Left.L_MapView.L_SubViewport.L_TileMap;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SubViewport"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.CanvasLayer
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CanvasLayer"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.CanvasLayer
     /// </summary>
     public MapEditor_CanvasLayer S_CanvasLayer => L_Bg.L_HSplitContainer.L_Left.L_MapView.L_SubViewport.L_CanvasLayer;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SubViewportContainer"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SubViewport"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport
     /// </summary>
     public MapEditor_SubViewport S_SubViewport => L_Bg.L_HSplitContainer.L_Left.L_MapView.L_SubViewport;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SubViewportContainer"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView
     /// </summary>
     public MapEditor_MapView S_MapView => L_Bg.L_HSplitContainer.L_Left.L_MapView;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HSplitContainer"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left
     /// </summary>
     public MapEditor_Left S_Left => L_Bg.L_HSplitContainer.L_Left;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HSplitContainer"/>, 节点路径: MapEditor.Bg.HSplitContainer.Right
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg.HSplitContainer.Right
     /// </summary>
     public MapEditor_Right S_Right => L_Bg.L_HSplitContainer.L_Right;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg.HSplitContainer
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HSplitContainer"/>, 节点路径: MapEditor.Bg.HSplitContainer
     /// </summary>
     public MapEditor_HSplitContainer S_HSplitContainer => L_Bg.L_HSplitContainer;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditor.MapEditorPanel"/>, 节点路径: MapEditor.Bg
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg
     /// </summary>
     public MapEditor_Bg S_Bg => L_Bg;
 

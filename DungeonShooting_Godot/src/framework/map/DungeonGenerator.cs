@@ -388,14 +388,14 @@ public class DungeonGenerator
                 }
 
                 //是否碰到其他房间或者过道
-                if (_roomGrid.RectCollision(room.Position - new Vector2(GameConfig.RoomSpace, GameConfig.RoomSpace), room.Size + new Vector2(GameConfig.RoomSpace * 2, GameConfig.RoomSpace * 2)))
+                if (_roomGrid.RectCollision(room.Position - new Vector2I(GameConfig.RoomSpace, GameConfig.RoomSpace), room.Size + new Vector2I(GameConfig.RoomSpace * 2, GameConfig.RoomSpace * 2)))
                 {
                     //碰到其他墙壁, 再一次尝试
                     continue;
                     //return GenerateRoomErrorCode.HasCollision;
                 }
 
-                _roomGrid.AddRect(room.Position, room.Size, true);
+                _roomGrid.SetRect(room.Position, room.Size, true);
 
                 //找门, 与上一个房间是否能连通
                 if (!ConnectDoor(prevRoomInfo, room))
@@ -418,7 +418,7 @@ public class DungeonGenerator
         else //第一个房间
         {
             room.Layer = 0;
-            _roomGrid.AddRect(room.Position, room.Size, true);
+            _roomGrid.SetRect(room.Position, room.Size, true);
         }
 
         if (IsParticipateCounting(room))
@@ -1191,23 +1191,23 @@ public class DungeonGenerator
     {
         var point1 = door1.OriginPosition;
         var point2 = door2.OriginPosition;
-        var pos = new Vector2(Mathf.Min(point1.X, point2.X), Mathf.Min(point1.Y, point2.Y));
-        var size = new Vector2(
+        var pos = new Vector2I(Mathf.Min(point1.X, point2.X), Mathf.Min(point1.Y, point2.Y));
+        var size = new Vector2I(
             point1.X == point2.X ? GameConfig.CorridorWidth : Mathf.Abs(point1.X - point2.X),
             point1.Y == point2.Y ? GameConfig.CorridorWidth : Mathf.Abs(point1.Y - point2.Y)
         );
 
-        Vector2 collPos;
-        Vector2 collSize;
+        Vector2I collPos;
+        Vector2I collSize;
         if (point1.X == point2.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos = new Vector2(pos.X - GameConfig.RoomSpace, pos.Y);
-            collSize = new Vector2(size.X + GameConfig.RoomSpace * 2, size.Y);
+            collPos = new Vector2I(pos.X - GameConfig.RoomSpace, pos.Y);
+            collSize = new Vector2I(size.X + GameConfig.RoomSpace * 2, size.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos = new Vector2(pos.X, pos.Y - GameConfig.RoomSpace);
-            collSize = new Vector2(size.X, size.Y + GameConfig.RoomSpace * 2);
+            collPos = new Vector2I(pos.X, pos.Y - GameConfig.RoomSpace);
+            collSize = new Vector2I(size.X, size.Y + GameConfig.RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos, collSize))
@@ -1215,38 +1215,38 @@ public class DungeonGenerator
             return false;
         }
 
-        door2.RoomInfo.AisleArea.Add(new Rect2(pos, size));
-        _roomGrid.AddRect(pos, size, true);
+        door2.RoomInfo.AisleArea.Add(new Rect2I(pos, size));
+        _roomGrid.SetRect(pos, size, true);
         return true;
     }
 
     //将两个门间的过道占用数据存入RoomGrid, 该重载加入拐角点
-    private bool AddCorridorToGridRange(RoomDoorInfo door1, RoomDoorInfo door2, Vector2 cross)
+    private bool AddCorridorToGridRange(RoomDoorInfo door1, RoomDoorInfo door2, Vector2I cross)
     {
         var point1 = door1.OriginPosition;
         var point2 = door2.OriginPosition;
-        var pos1 = new Vector2(Mathf.Min(point1.X, cross.X), Mathf.Min(point1.Y, cross.Y));
-        var size1 = new Vector2(
+        var pos1 = new Vector2I(Mathf.Min(point1.X, cross.X), Mathf.Min(point1.Y, cross.Y));
+        var size1 = new Vector2I(
             point1.X == cross.X ? GameConfig.CorridorWidth : Mathf.Abs(point1.X - cross.X),
             point1.Y == cross.Y ? GameConfig.CorridorWidth : Mathf.Abs(point1.Y - cross.Y)
         );
-        var pos2 = new Vector2(Mathf.Min(point2.X, cross.X), Mathf.Min(point2.Y, cross.Y));
-        var size2 = new Vector2(
+        var pos2 = new Vector2I(Mathf.Min(point2.X, cross.X), Mathf.Min(point2.Y, cross.Y));
+        var size2 = new Vector2I(
             point2.X == cross.X ? GameConfig.CorridorWidth : Mathf.Abs(point2.X - cross.X),
             point2.Y == cross.Y ? GameConfig.CorridorWidth : Mathf.Abs(point2.Y - cross.Y)
         );
 
-        Vector2 collPos1;
-        Vector2 collSize1;
+        Vector2I collPos1;
+        Vector2I collSize1;
         if (point1.X == cross.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos1 = new Vector2(pos1.X - GameConfig.RoomSpace, pos1.Y);
-            collSize1 = new Vector2(size1.X + GameConfig.RoomSpace * 2, size1.Y);
+            collPos1 = new Vector2I(pos1.X - GameConfig.RoomSpace, pos1.Y);
+            collSize1 = new Vector2I(size1.X + GameConfig.RoomSpace * 2, size1.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos1 = new Vector2(pos1.X, pos1.Y - GameConfig.RoomSpace);
-            collSize1 = new Vector2(size1.X, size1.Y + GameConfig.RoomSpace * 2);
+            collPos1 = new Vector2I(pos1.X, pos1.Y - GameConfig.RoomSpace);
+            collSize1 = new Vector2I(size1.X, size1.Y + GameConfig.RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos1, collSize1))
@@ -1254,17 +1254,17 @@ public class DungeonGenerator
             return false;
         }
 
-        Vector2 collPos2;
-        Vector2 collSize2;
+        Vector2I collPos2;
+        Vector2I collSize2;
         if (point2.X == cross.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos2 = new Vector2(pos2.X - GameConfig.RoomSpace, pos2.Y);
-            collSize2 = new Vector2(size2.X + GameConfig.RoomSpace * 2, size2.Y);
+            collPos2 = new Vector2I(pos2.X - GameConfig.RoomSpace, pos2.Y);
+            collSize2 = new Vector2I(size2.X + GameConfig.RoomSpace * 2, size2.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos2 = new Vector2(pos2.X, pos2.Y - GameConfig.RoomSpace);
-            collSize2 = new Vector2(size2.X, size2.Y + GameConfig.RoomSpace * 2);
+            collPos2 = new Vector2I(pos2.X, pos2.Y - GameConfig.RoomSpace);
+            collSize2 = new Vector2I(size2.X, size2.Y + GameConfig.RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos2, collSize2))
@@ -1272,10 +1272,10 @@ public class DungeonGenerator
             return false;
         }
 
-        door2.RoomInfo.AisleArea.Add(new Rect2(pos1, size1));
-        door2.RoomInfo.AisleArea.Add(new Rect2(pos2, size2));
-        _roomGrid.AddRect(pos1, size1, true);
-        _roomGrid.AddRect(pos2, size2, true);
+        door2.RoomInfo.AisleArea.Add(new Rect2I(pos1, size1));
+        door2.RoomInfo.AisleArea.Add(new Rect2I(pos2, size2));
+        _roomGrid.SetRect(pos1, size1, true);
+        _roomGrid.SetRect(pos2, size2, true);
         return true;
     }
 }

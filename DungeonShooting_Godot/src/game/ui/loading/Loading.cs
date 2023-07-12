@@ -56,12 +56,12 @@ public abstract partial class Loading : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Loading.LoadingPanel"/>, 节点路径: Loading.ColorRect
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: Loading.ColorRect
     /// </summary>
     public Loading_ColorRect S_ColorRect => L_ColorRect;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Loading.LoadingPanel"/>, 节点路径: Loading.Label
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: Loading.Label
     /// </summary>
     public Loading_Label S_Label => L_Label;
 

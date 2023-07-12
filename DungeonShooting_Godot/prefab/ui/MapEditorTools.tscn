@@ -10,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_mqp1c")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -22,27 +23,26 @@ offset_top = 19.0
 offset_right = -20.0
 offset_bottom = 83.0
 grow_horizontal = 0
-mouse_filter = 0
 
-[node name="TextureButton" type="TextureButton" parent="HBoxContainer"]
+[node name="HandTool" type="TextureButton" parent="HBoxContainer"]
 layout_mode = 2
 texture_normal = ExtResource("2_rwvbg")
 texture_pressed = ExtResource("2_rwvbg")
 texture_hover = ExtResource("2_rwvbg")
 
-[node name="TextureButton2" type="TextureButton" parent="HBoxContainer"]
+[node name="PenTool" type="TextureButton" parent="HBoxContainer"]
 layout_mode = 2
 texture_normal = ExtResource("2_rwvbg")
 texture_pressed = ExtResource("2_rwvbg")
 texture_hover = ExtResource("2_rwvbg")
 
-[node name="TextureButton3" type="TextureButton" parent="HBoxContainer"]
+[node name="RectTool" type="TextureButton" parent="HBoxContainer"]
 layout_mode = 2
 texture_normal = ExtResource("2_rwvbg")
 texture_pressed = ExtResource("2_rwvbg")
 texture_hover = ExtResource("2_rwvbg")
 
-[node name="TextureButton4" type="TextureButton" parent="HBoxContainer"]
+[node name="CenterTool" type="TextureButton" parent="HBoxContainer"]
 layout_mode = 2
 texture_normal = ExtResource("2_rwvbg")
 texture_pressed = ExtResource("2_rwvbg")

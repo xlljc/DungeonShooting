@@ -122,27 +122,27 @@ public abstract partial class Settlement : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Settlement.SettlementPanel"/>, 节点路径: Settlement.Bg
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: Settlement.Bg
     /// </summary>
     public Settlement_Bg S_Bg => L_Bg;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Settlement.SettlementPanel"/>, 节点路径: Settlement.Title
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: Settlement.Title
     /// </summary>
     public Settlement_Title S_Title => L_Title;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Settlement.ButtonList.Restart
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: Settlement.ButtonList.Restart
     /// </summary>
     public Settlement_Restart S_Restart => L_ButtonList.L_Restart;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Settlement.ButtonList.ToMenu
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: Settlement.ButtonList.ToMenu
     /// </summary>
     public Settlement_ToMenu S_ToMenu => L_ButtonList.L_ToMenu;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Settlement.SettlementPanel"/>, 节点路径: Settlement.ButtonList
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Settlement.ButtonList
     /// </summary>
     public Settlement_ButtonList S_ButtonList => L_ButtonList;
 

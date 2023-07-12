@@ -246,7 +246,7 @@ public static class UiGenerator
                 if (IsSoleNameNode(nodeInfo))
                 {
                     str += $"{retraction}/// <summary>\n";
-                    str += $"{retraction}/// 场景中唯一名称的节点, 节点类型: <see cref=\"{uiNodeInfo.NodeTypeName}\"/>, 节点路径: {path}\n";
+                    str += $"{retraction}/// 场景中唯一名称的节点, 节点类型: <see cref=\"{nodeInfo.NodeTypeName}\"/>, 节点路径: {path}\n";
                     str += $"{retraction}/// </summary>\n";
                     str += $"{retraction}public {nodeInfo.ClassName} S_{nodeInfo.OriginName} => {layer};\n\n";
                 }

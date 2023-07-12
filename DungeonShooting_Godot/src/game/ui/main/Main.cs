@@ -166,37 +166,37 @@ public abstract partial class Main : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Main.MainPanel"/>, 节点路径: Main.Title
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: Main.Title
     /// </summary>
     public Main_Title S_Title => L_Title;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Main.ButtonList.Start
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: Main.ButtonList.Start
     /// </summary>
     public Main_Start S_Start => L_ButtonList.L_Start;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Main.ButtonList.Tools
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: Main.ButtonList.Tools
     /// </summary>
     public Main_Tools S_Tools => L_ButtonList.L_Tools;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Main.ButtonList.Setting
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: Main.ButtonList.Setting
     /// </summary>
     public Main_Setting S_Setting => L_ButtonList.L_Setting;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Main.ButtonList.Exit
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: Main.ButtonList.Exit
     /// </summary>
     public Main_Exit S_Exit => L_ButtonList.L_Exit;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Main.MainPanel"/>, 节点路径: Main.ButtonList
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Main.ButtonList
     /// </summary>
     public Main_ButtonList S_ButtonList => L_ButtonList;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.Main.MainPanel"/>, 节点路径: Main.Version
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: Main.Version
     /// </summary>
     public Main_Version S_Version => L_Version;
 

@@ -98,4 +98,14 @@ public static class Utils
     {
         return new Vector2I((int)vector2.X, (int)vector2.Y);
     }
+
+    /// <summary>
+    /// 返回指定坐标是否在UI节范围点内
+    /// </summary>
+    public static bool IsPositionOver(this Control control, Vector2 position)
+    {
+        var rect = control.GetRect();
+        return position.X >= rect.Position.X && position.X <= rect.End.X &&
+               position.Y >= rect.Position.Y && position.Y <= rect.End.Y;
+    }
 }
