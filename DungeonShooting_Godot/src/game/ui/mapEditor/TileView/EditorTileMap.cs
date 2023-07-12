@@ -60,10 +60,14 @@ public partial class EditorTileMap : TileMap
         }
         else if (_isRightPressed) //右键擦除
         {
-            if (_prevMouseCellPosition != _mouseCellPosition)
+            if (Input.IsKeyPressed(Key.Shift)) //按住shift擦除矩形
+            {
+                _drawFullRect = true;
+            }
+            else if (_prevMouseCellPosition != _mouseCellPosition)
             {
                 _prevMouseCellPosition = _mouseCellPosition;
-                EraseCell(GameConfig.FloorMapLayer, _mouseCellPosition);
+                EraseSingleAutoCell(_mouseCellPosition);
             }
         }
         else if (_isMiddlePressed) //中建移动
@@ -101,7 +105,7 @@ public partial class EditorTileMap : TileMap
             var pos = cellPos * size;
             canvasItem.DrawRect(new Rect2(pos, _mousePosition - pos + temp), Colors.Wheat, false);
         }
-        else
+        else //绘制单格
         {
             canvasItem.DrawRect(new Rect2(_mousePosition, TileSet.TileSize), Colors.Wheat, false);
         }
@@ -130,6 +134,19 @@ public partial class EditorTileMap : TileMap
             }
             else if (mouseButton.ButtonIndex == MouseButton.Right) //右键
             {
+                if (mouseButton.Pressed) //按下
+                {
+                    _mouseStartCellPosition = LocalToMap(GetLocalMousePosition());
+                }
+                else
+                {
+                    if (_drawFullRect) //松开, 提交擦除的矩形区域
+                    {
+                        EraseRectAutoCell(_mouseStartCellPosition, _mouseCellPosition);
+                        _drawFullRect = false;
+                    }
+                }
+                
                 _isRightPressed = mouseButton.Pressed;
             }
             else if (mouseButton.ButtonIndex == MouseButton.WheelDown)
@@ -148,7 +165,6 @@ public partial class EditorTileMap : TileMap
                 if (_isMiddlePressed)
                 {
                     _moveOffset = Position - mouseButton.GlobalPosition;
-                    GD.Print(_moveOffset);
                 }
             }
         }
@@ -190,10 +206,7 @@ public partial class EditorTileMap : TileMap
     private void SetSingleAutoCell(Vector2I position)
     {
         //绘制自动图块
-        var arr = new Array<Vector2I>(new []
-        {
-            position
-        });
+        var arr = new Array<Vector2I>(new [] { position });
         SetCellsTerrainConnect(GameConfig.FloorMapLayer, arr, 0, 0, false);
     }
     
@@ -227,5 +240,38 @@ public partial class EditorTileMap : TileMap
 
         var arr = new Array<Vector2I>(array);
         SetCellsTerrainConnect(GameConfig.FloorMapLayer, arr, 0, 0, false);
+    }
+
+    //擦除单个自动图块
+    private void EraseSingleAutoCell(Vector2I position)
+    {
+        EraseCell(GameConfig.FloorMapLayer, position);
+    }
+    
+    //擦除一个区域内的自动贴图
+    private void EraseRectAutoCell(Vector2I start, Vector2I end)
+    {
+        if (start.X > end.X)
+        {
+            var temp = end.X;
+            end.X = start.X;
+            start.X = temp;
+        }
+        if (start.Y > end.Y)
+        {
+            var temp = end.Y;
+            end.Y = start.Y;
+            start.Y = temp;
+        }
+
+        var x = end.X - start.X + 1;
+        var y = end.Y - start.Y + 1;
+        for (var i = 0; i < x; i++)
+        {
+            for (var j = 0; j < y; j++)
+            {
+                EraseCell(GameConfig.FloorMapLayer, new Vector2I(start.X + i, start.Y + j));
+            }
+        }
     }
 }
