@@ -179,11 +179,11 @@ public static class UiGenerator
         return retraction + $"/// <summary>\n" + 
                retraction + $"/// 类型: <see cref=\"{uiNodeInfo.NodeTypeName}\"/>, 路径: {parent}{uiNodeInfo.OriginName}\n" + 
                retraction + $"/// </summary>\n" + 
-               retraction + $"public class {uiNodeInfo.ClassName} : IUiNode<{uiNodeInfo.NodeTypeName}, {uiNodeInfo.ClassName}>\n" +
+               retraction + $"public class {uiNodeInfo.ClassName} : UiNode<{uiNodeInfo.UiRootName}, {uiNodeInfo.NodeTypeName}, {uiNodeInfo.ClassName}>\n" +
                retraction + $"{{\n" +
                GeneratePropertyListClassCode("Instance.", parent, uiNodeInfo, retraction + "    ") + 
-               retraction + $"    public {uiNodeInfo.ClassName}({uiNodeInfo.NodeTypeName} node) : base(node) {{  }}\n" +
-               retraction + $"    public override {uiNodeInfo.ClassName} Clone() => new (({uiNodeInfo.NodeTypeName})Instance.Duplicate());\n" +
+               retraction + $"    public {uiNodeInfo.ClassName}({uiNodeInfo.UiRootName} uiPanel, {uiNodeInfo.NodeTypeName} node) : base(uiPanel, node) {{  }}\n" +
+               retraction + $"    public override {uiNodeInfo.ClassName} Clone() => new (UiPanel, ({uiNodeInfo.NodeTypeName})Instance.Duplicate());\n" +
                retraction + $"}}\n\n";
     }
 
@@ -204,6 +204,15 @@ public static class UiGenerator
     
     private static string GeneratePropertyCode(string target, string parent, UiNodeInfo uiNodeInfo, string retraction)
     {
+        string uiPanel;
+        if (string.IsNullOrEmpty(target))
+        {
+            uiPanel = "this";
+        }
+        else
+        {
+            uiPanel = "UiPanel";
+        }
         return retraction + $"/// <summary>\n" + 
                retraction + $"/// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref=\"{uiNodeInfo.NodeTypeName}\"/>, 节点路径: {parent}{uiNodeInfo.OriginName}\n" + 
                retraction + $"/// </summary>\n" + 
@@ -211,7 +220,7 @@ public static class UiGenerator
                retraction + $"{{\n" + 
                retraction + $"    get\n" + 
                retraction + $"    {{\n" + 
-               retraction + $"        if (_{uiNodeInfo.Name} == null) _{uiNodeInfo.Name} = new {uiNodeInfo.ClassName}({target}GetNodeOrNull<{uiNodeInfo.NodeTypeName}>(\"{uiNodeInfo.OriginName}\"));\n" + 
+               retraction + $"        if (_{uiNodeInfo.Name} == null) _{uiNodeInfo.Name} = new {uiNodeInfo.ClassName}({uiPanel}, {target}GetNodeOrNull<{uiNodeInfo.NodeTypeName}>(\"{uiNodeInfo.OriginName}\"));\n" + 
                retraction + $"        return _{uiNodeInfo.Name};\n" + 
                retraction + $"    }}\n" + 
                retraction + $"}}\n" +

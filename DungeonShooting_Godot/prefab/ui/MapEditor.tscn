@@ -57,6 +57,9 @@ script = ExtResource("2_waq8f")
 [node name="Draw" type="Node2D" parent="Bg/HSplitContainer/Left/MapView/SubViewport/TileMap"]
 z_index = 100
 
+[node name="CanvasLayer" type="CanvasLayer" parent="Bg/HSplitContainer/Left/MapView/SubViewport"]
+layer = 2
+
 [node name="Right" type="Panel" parent="Bg/HSplitContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2

@@ -11,6 +11,7 @@ public static partial class UiManager
         public const string Loading = "Loading";
         public const string Main = "Main";
         public const string MapEditor = "MapEditor";
+        public const string MapEditorTools = "MapEditorTools";
         public const string RoomUI = "RoomUI";
         public const string Settlement = "Settlement";
     }
@@ -213,6 +214,46 @@ public static partial class UiManager
     public static UI.MapEditor.MapEditorPanel[] Get_MapEditor_Instance()
     {
         return GetUiInstance<UI.MapEditor.MapEditorPanel>(nameof(UI.MapEditor.MapEditor));
+    }
+
+    /// <summary>
+    /// 打开 MapEditorTools, 并返回UI实例
+    /// </summary>
+    public static UI.MapEditorTools.MapEditorToolsPanel Open_MapEditorTools()
+    {
+        return OpenUi<UI.MapEditorTools.MapEditorToolsPanel>(UiName.MapEditorTools);
+    }
+
+    /// <summary>
+    /// 隐藏 MapEditorTools 的所有实例
+    /// </summary>
+    public static void Hide_MapEditorTools()
+    {
+        var uiInstance = Get_MapEditorTools_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 MapEditorTools 的所有实例
+    /// </summary>
+    public static void Dispose_MapEditorTools()
+    {
+        var uiInstance = Get_MapEditorTools_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.DisposeUi();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 MapEditorTools 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.MapEditorTools.MapEditorToolsPanel[] Get_MapEditorTools_Instance()
+    {
+        return GetUiInstance<UI.MapEditorTools.MapEditorToolsPanel>(nameof(UI.MapEditorTools.MapEditorTools));
     }
 
     /// <summary>

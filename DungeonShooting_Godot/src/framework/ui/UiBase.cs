@@ -44,7 +44,11 @@ public abstract partial class UiBase : Control
 
     //开启的协程
     private List<CoroutineData> _coroutineList;
-    
+    //嵌套打开的Ui列表
+    private HashSet<UiBase> _nestedUiSet;
+    //所属父级Ui, UiNode.RecordNestedUi() 嵌套打开的 Ui 将被赋予此值
+    private UiBase _targetUi;
+
     public UiBase(string uiName)
     {
         UiName = uiName;
@@ -96,6 +100,15 @@ public abstract partial class UiBase : Control
         IsOpen = true;
         Visible = true;
         OnShowUi();
+        
+        //子Ui调用显示
+        if (_nestedUiSet != null)
+        {
+            foreach (var uiBase in _nestedUiSet)
+            {
+                uiBase.ShowUi();
+            }
+        }
     }
     
     /// <summary>
@@ -111,6 +124,15 @@ public abstract partial class UiBase : Control
         IsOpen = false;
         Visible = false;
         OnHideUi();
+        
+        //子Ui调用隐藏
+        if (_nestedUiSet != null)
+        {
+            foreach (var uiBase in _nestedUiSet)
+            {
+                uiBase.HideUi();
+            }
+        }
     }
 
     /// <summary>
@@ -127,6 +149,16 @@ public abstract partial class UiBase : Control
         HideUi();
         IsDisposed = true;
         OnDisposeUi();
+        
+        //子Ui调用销毁
+        if (_nestedUiSet != null)
+        {
+            foreach (var uiBase in _nestedUiSet)
+            {
+                uiBase.DisposeUi();
+            }
+        }
+        
         QueueFree();
     }
 
@@ -139,6 +171,46 @@ public abstract partial class UiBase : Control
         if (_coroutineList != null)
         {
             ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
+        }
+    }
+
+    /// <summary>
+    /// 记录嵌套打开/关闭的UI
+    /// </summary>
+    public void RecordNestedUi(UiBase uiBase, UiManager.RecordType type)
+    {
+        if (type == UiManager.RecordType.Open)
+        {
+            if (uiBase._targetUi != null && uiBase._targetUi != this)
+            {
+                GD.PrintErr($"子Ui:'{uiBase.UiName}'已经被其他Ui:'{uiBase._targetUi.UiName}'嵌套打开!");
+                uiBase._targetUi.RecordNestedUi(uiBase, UiManager.RecordType.Close);
+            }
+            if (_nestedUiSet == null)
+            {
+                _nestedUiSet = new HashSet<UiBase>();
+            }
+
+            uiBase._targetUi = this;
+            _nestedUiSet.Add(uiBase);
+        }
+        else
+        {
+            if (uiBase._targetUi == this)
+            {
+                uiBase._targetUi = null;
+            }
+            else
+            {
+                GD.PrintErr($"当前Ui:'{UiName}'没有嵌套打开子Ui:'{uiBase.UiName}'!");
+                return;
+            }
+            
+            if (_nestedUiSet == null)
+            {
+                return;
+            }
+            _nestedUiSet.Remove(uiBase);
         }
     }
 

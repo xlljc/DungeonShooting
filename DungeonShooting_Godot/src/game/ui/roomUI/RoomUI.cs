@@ -12,7 +12,7 @@ public abstract partial class RoomUI : UiBase
     {
         get
         {
-            if (_L_InteractiveTipBar == null) _L_InteractiveTipBar = new RoomUI_InteractiveTipBar(GetNodeOrNull<Godot.Control>("InteractiveTipBar"));
+            if (_L_InteractiveTipBar == null) _L_InteractiveTipBar = new RoomUI_InteractiveTipBar(this, GetNodeOrNull<Godot.Control>("InteractiveTipBar"));
             return _L_InteractiveTipBar;
         }
     }
@@ -25,7 +25,7 @@ public abstract partial class RoomUI : UiBase
     {
         get
         {
-            if (_L_ReloadBar == null) _L_ReloadBar = new RoomUI_ReloadBar(GetNodeOrNull<Godot.Control>("ReloadBar"));
+            if (_L_ReloadBar == null) _L_ReloadBar = new RoomUI_ReloadBar(this, GetNodeOrNull<Godot.Control>("ReloadBar"));
             return _L_ReloadBar;
         }
     }
@@ -38,7 +38,7 @@ public abstract partial class RoomUI : UiBase
     {
         get
         {
-            if (_L_Control == null) _L_Control = new RoomUI_Control(GetNodeOrNull<Godot.Control>("Control"));
+            if (_L_Control == null) _L_Control = new RoomUI_Control(this, GetNodeOrNull<Godot.Control>("Control"));
             return _L_Control;
         }
     }
@@ -52,43 +52,43 @@ public abstract partial class RoomUI : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.InteractiveTipBar.Icon
     /// </summary>
-    public class RoomUI_Icon : IUiNode<Godot.TextureRect, RoomUI_Icon>
+    public class RoomUI_Icon : UiNode<RoomUI, Godot.TextureRect, RoomUI_Icon>
     {
-        public RoomUI_Icon(Godot.TextureRect node) : base(node) {  }
-        public override RoomUI_Icon Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public RoomUI_Icon(RoomUI uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override RoomUI_Icon Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.InteractiveTipBar.InteractiveIcon
     /// </summary>
-    public class RoomUI_InteractiveIcon : IUiNode<Godot.TextureRect, RoomUI_InteractiveIcon>
+    public class RoomUI_InteractiveIcon : UiNode<RoomUI, Godot.TextureRect, RoomUI_InteractiveIcon>
     {
-        public RoomUI_InteractiveIcon(Godot.TextureRect node) : base(node) {  }
-        public override RoomUI_InteractiveIcon Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public RoomUI_InteractiveIcon(RoomUI uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override RoomUI_InteractiveIcon Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Line2D"/>, 路径: RoomUI.InteractiveTipBar.Line2D
     /// </summary>
-    public class RoomUI_Line2D : IUiNode<Godot.Line2D, RoomUI_Line2D>
+    public class RoomUI_Line2D : UiNode<RoomUI, Godot.Line2D, RoomUI_Line2D>
     {
-        public RoomUI_Line2D(Godot.Line2D node) : base(node) {  }
-        public override RoomUI_Line2D Clone() => new ((Godot.Line2D)Instance.Duplicate());
+        public RoomUI_Line2D(RoomUI uiPanel, Godot.Line2D node) : base(uiPanel, node) {  }
+        public override RoomUI_Line2D Clone() => new (UiPanel, (Godot.Line2D)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Label"/>, 路径: RoomUI.InteractiveTipBar.NameLabel
     /// </summary>
-    public class RoomUI_NameLabel : IUiNode<Godot.Label, RoomUI_NameLabel>
+    public class RoomUI_NameLabel : UiNode<RoomUI, Godot.Label, RoomUI_NameLabel>
     {
-        public RoomUI_NameLabel(Godot.Label node) : base(node) {  }
-        public override RoomUI_NameLabel Clone() => new ((Godot.Label)Instance.Duplicate());
+        public RoomUI_NameLabel(RoomUI uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override RoomUI_NameLabel Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.InteractiveTipBar
     /// </summary>
-    public class RoomUI_InteractiveTipBar : IUiNode<Godot.Control, RoomUI_InteractiveTipBar>
+    public class RoomUI_InteractiveTipBar : UiNode<RoomUI, Godot.Control, RoomUI_InteractiveTipBar>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Icon
@@ -97,7 +97,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_Icon == null) _L_Icon = new RoomUI_Icon(Instance.GetNodeOrNull<Godot.TextureRect>("Icon"));
+                if (_L_Icon == null) _L_Icon = new RoomUI_Icon(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("Icon"));
                 return _L_Icon;
             }
         }
@@ -110,7 +110,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_InteractiveIcon == null) _L_InteractiveIcon = new RoomUI_InteractiveIcon(Instance.GetNodeOrNull<Godot.TextureRect>("InteractiveIcon"));
+                if (_L_InteractiveIcon == null) _L_InteractiveIcon = new RoomUI_InteractiveIcon(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("InteractiveIcon"));
                 return _L_InteractiveIcon;
             }
         }
@@ -123,7 +123,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_Line2D == null) _L_Line2D = new RoomUI_Line2D(Instance.GetNodeOrNull<Godot.Line2D>("Line2D"));
+                if (_L_Line2D == null) _L_Line2D = new RoomUI_Line2D(UiPanel, Instance.GetNodeOrNull<Godot.Line2D>("Line2D"));
                 return _L_Line2D;
             }
         }
@@ -136,29 +136,29 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_NameLabel == null) _L_NameLabel = new RoomUI_NameLabel(Instance.GetNodeOrNull<Godot.Label>("NameLabel"));
+                if (_L_NameLabel == null) _L_NameLabel = new RoomUI_NameLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("NameLabel"));
                 return _L_NameLabel;
             }
         }
         private RoomUI_NameLabel _L_NameLabel;
 
-        public RoomUI_InteractiveTipBar(Godot.Control node) : base(node) {  }
-        public override RoomUI_InteractiveTipBar Clone() => new ((Godot.Control)Instance.Duplicate());
+        public RoomUI_InteractiveTipBar(RoomUI uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override RoomUI_InteractiveTipBar Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.ReloadBar.Slot.Block
     /// </summary>
-    public class RoomUI_Block : IUiNode<Godot.Sprite2D, RoomUI_Block>
+    public class RoomUI_Block : UiNode<RoomUI, Godot.Sprite2D, RoomUI_Block>
     {
-        public RoomUI_Block(Godot.Sprite2D node) : base(node) {  }
-        public override RoomUI_Block Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
+        public RoomUI_Block(RoomUI uiPanel, Godot.Sprite2D node) : base(uiPanel, node) {  }
+        public override RoomUI_Block Clone() => new (UiPanel, (Godot.Sprite2D)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.ReloadBar.Slot
     /// </summary>
-    public class RoomUI_Slot : IUiNode<Godot.TextureRect, RoomUI_Slot>
+    public class RoomUI_Slot : UiNode<RoomUI, Godot.TextureRect, RoomUI_Slot>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: RoomUI.ReloadBar.Block
@@ -167,20 +167,20 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_Block == null) _L_Block = new RoomUI_Block(Instance.GetNodeOrNull<Godot.Sprite2D>("Block"));
+                if (_L_Block == null) _L_Block = new RoomUI_Block(UiPanel, Instance.GetNodeOrNull<Godot.Sprite2D>("Block"));
                 return _L_Block;
             }
         }
         private RoomUI_Block _L_Block;
 
-        public RoomUI_Slot(Godot.TextureRect node) : base(node) {  }
-        public override RoomUI_Slot Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public RoomUI_Slot(RoomUI uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override RoomUI_Slot Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.ReloadBar
     /// </summary>
-    public class RoomUI_ReloadBar : IUiNode<Godot.Control, RoomUI_ReloadBar>
+    public class RoomUI_ReloadBar : UiNode<RoomUI, Godot.Control, RoomUI_ReloadBar>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Slot
@@ -189,29 +189,29 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_Slot == null) _L_Slot = new RoomUI_Slot(Instance.GetNodeOrNull<Godot.TextureRect>("Slot"));
+                if (_L_Slot == null) _L_Slot = new RoomUI_Slot(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("Slot"));
                 return _L_Slot;
             }
         }
         private RoomUI_Slot _L_Slot;
 
-        public RoomUI_ReloadBar(Godot.Control node) : base(node) {  }
-        public override RoomUI_ReloadBar Clone() => new ((Godot.Control)Instance.Duplicate());
+        public RoomUI_ReloadBar(RoomUI uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override RoomUI_ReloadBar Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.LifeBar.Life
     /// </summary>
-    public class RoomUI_Life : IUiNode<Godot.TextureRect, RoomUI_Life>
+    public class RoomUI_Life : UiNode<RoomUI, Godot.TextureRect, RoomUI_Life>
     {
-        public RoomUI_Life(Godot.TextureRect node) : base(node) {  }
-        public override RoomUI_Life Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public RoomUI_Life(RoomUI uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override RoomUI_Life Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.LifeBar
     /// </summary>
-    public class RoomUI_LifeBar : IUiNode<Godot.Control, RoomUI_LifeBar>
+    public class RoomUI_LifeBar : UiNode<RoomUI, Godot.Control, RoomUI_LifeBar>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.Life
@@ -220,92 +220,92 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_Life == null) _L_Life = new RoomUI_Life(Instance.GetNodeOrNull<Godot.TextureRect>("Life"));
+                if (_L_Life == null) _L_Life = new RoomUI_Life(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("Life"));
                 return _L_Life;
             }
         }
         private RoomUI_Life _L_Life;
 
-        public RoomUI_LifeBar(Godot.Control node) : base(node) {  }
-        public override RoomUI_LifeBar Clone() => new ((Godot.Control)Instance.Duplicate());
+        public RoomUI_LifeBar(RoomUI uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override RoomUI_LifeBar Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.MapBar
     /// </summary>
-    public class RoomUI_MapBar : IUiNode<Godot.TextureRect, RoomUI_MapBar>
+    public class RoomUI_MapBar : UiNode<RoomUI, Godot.TextureRect, RoomUI_MapBar>
     {
-        public RoomUI_MapBar(Godot.TextureRect node) : base(node) {  }
-        public override RoomUI_MapBar Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public RoomUI_MapBar(RoomUI uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override RoomUI_MapBar Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropBg
     /// </summary>
-    public class RoomUI_ActivePropBg : IUiNode<Godot.NinePatchRect, RoomUI_ActivePropBg>
+    public class RoomUI_ActivePropBg : UiNode<RoomUI, Godot.NinePatchRect, RoomUI_ActivePropBg>
     {
-        public RoomUI_ActivePropBg(Godot.NinePatchRect node) : base(node) {  }
-        public override RoomUI_ActivePropBg Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
+        public RoomUI_ActivePropBg(RoomUI uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override RoomUI_ActivePropBg Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropSprite
     /// </summary>
-    public class RoomUI_ActivePropSprite : IUiNode<Godot.TextureRect, RoomUI_ActivePropSprite>
+    public class RoomUI_ActivePropSprite : UiNode<RoomUI, Godot.TextureRect, RoomUI_ActivePropSprite>
     {
-        public RoomUI_ActivePropSprite(Godot.TextureRect node) : base(node) {  }
-        public override RoomUI_ActivePropSprite Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public RoomUI_ActivePropSprite(RoomUI uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override RoomUI_ActivePropSprite Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Control.ActivePropBar.CooldownProgress
     /// </summary>
-    public class RoomUI_CooldownProgress : IUiNode<Godot.Sprite2D, RoomUI_CooldownProgress>
+    public class RoomUI_CooldownProgress : UiNode<RoomUI, Godot.Sprite2D, RoomUI_CooldownProgress>
     {
-        public RoomUI_CooldownProgress(Godot.Sprite2D node) : base(node) {  }
-        public override RoomUI_CooldownProgress Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
+        public RoomUI_CooldownProgress(RoomUI uiPanel, Godot.Sprite2D node) : base(uiPanel, node) {  }
+        public override RoomUI_CooldownProgress Clone() => new (UiPanel, (Godot.Sprite2D)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Label"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropCount
     /// </summary>
-    public class RoomUI_ActivePropCount : IUiNode<Godot.Label, RoomUI_ActivePropCount>
+    public class RoomUI_ActivePropCount : UiNode<RoomUI, Godot.Label, RoomUI_ActivePropCount>
     {
-        public RoomUI_ActivePropCount(Godot.Label node) : base(node) {  }
-        public override RoomUI_ActivePropCount Clone() => new ((Godot.Label)Instance.Duplicate());
+        public RoomUI_ActivePropCount(RoomUI uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override RoomUI_ActivePropCount Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropPanel
     /// </summary>
-    public class RoomUI_ActivePropPanel : IUiNode<Godot.NinePatchRect, RoomUI_ActivePropPanel>
+    public class RoomUI_ActivePropPanel : UiNode<RoomUI, Godot.NinePatchRect, RoomUI_ActivePropPanel>
     {
-        public RoomUI_ActivePropPanel(Godot.NinePatchRect node) : base(node) {  }
-        public override RoomUI_ActivePropPanel Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
+        public RoomUI_ActivePropPanel(RoomUI uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override RoomUI_ActivePropPanel Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.ActivePropBar.ChargeProgressBar
     /// </summary>
-    public class RoomUI_ChargeProgressBar : IUiNode<Godot.NinePatchRect, RoomUI_ChargeProgressBar>
+    public class RoomUI_ChargeProgressBar : UiNode<RoomUI, Godot.NinePatchRect, RoomUI_ChargeProgressBar>
     {
-        public RoomUI_ChargeProgressBar(Godot.NinePatchRect node) : base(node) {  }
-        public override RoomUI_ChargeProgressBar Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
+        public RoomUI_ChargeProgressBar(RoomUI uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override RoomUI_ChargeProgressBar Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Sprite2D"/>, 路径: RoomUI.Control.ActivePropBar.ChargeProgress
     /// </summary>
-    public class RoomUI_ChargeProgress : IUiNode<Godot.Sprite2D, RoomUI_ChargeProgress>
+    public class RoomUI_ChargeProgress : UiNode<RoomUI, Godot.Sprite2D, RoomUI_ChargeProgress>
     {
-        public RoomUI_ChargeProgress(Godot.Sprite2D node) : base(node) {  }
-        public override RoomUI_ChargeProgress Clone() => new ((Godot.Sprite2D)Instance.Duplicate());
+        public RoomUI_ChargeProgress(RoomUI uiPanel, Godot.Sprite2D node) : base(uiPanel, node) {  }
+        public override RoomUI_ChargeProgress Clone() => new (UiPanel, (Godot.Sprite2D)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.ActivePropBar
     /// </summary>
-    public class RoomUI_ActivePropBar : IUiNode<Godot.Control, RoomUI_ActivePropBar>
+    public class RoomUI_ActivePropBar : UiNode<RoomUI, Godot.Control, RoomUI_ActivePropBar>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.ActivePropBg
@@ -314,7 +314,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_ActivePropBg == null) _L_ActivePropBg = new RoomUI_ActivePropBg(Instance.GetNodeOrNull<Godot.NinePatchRect>("ActivePropBg"));
+                if (_L_ActivePropBg == null) _L_ActivePropBg = new RoomUI_ActivePropBg(UiPanel, Instance.GetNodeOrNull<Godot.NinePatchRect>("ActivePropBg"));
                 return _L_ActivePropBg;
             }
         }
@@ -327,7 +327,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_ActivePropSprite == null) _L_ActivePropSprite = new RoomUI_ActivePropSprite(Instance.GetNodeOrNull<Godot.TextureRect>("ActivePropSprite"));
+                if (_L_ActivePropSprite == null) _L_ActivePropSprite = new RoomUI_ActivePropSprite(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("ActivePropSprite"));
                 return _L_ActivePropSprite;
             }
         }
@@ -340,7 +340,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_CooldownProgress == null) _L_CooldownProgress = new RoomUI_CooldownProgress(Instance.GetNodeOrNull<Godot.Sprite2D>("CooldownProgress"));
+                if (_L_CooldownProgress == null) _L_CooldownProgress = new RoomUI_CooldownProgress(UiPanel, Instance.GetNodeOrNull<Godot.Sprite2D>("CooldownProgress"));
                 return _L_CooldownProgress;
             }
         }
@@ -353,7 +353,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_ActivePropCount == null) _L_ActivePropCount = new RoomUI_ActivePropCount(Instance.GetNodeOrNull<Godot.Label>("ActivePropCount"));
+                if (_L_ActivePropCount == null) _L_ActivePropCount = new RoomUI_ActivePropCount(UiPanel, Instance.GetNodeOrNull<Godot.Label>("ActivePropCount"));
                 return _L_ActivePropCount;
             }
         }
@@ -366,7 +366,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_ActivePropPanel == null) _L_ActivePropPanel = new RoomUI_ActivePropPanel(Instance.GetNodeOrNull<Godot.NinePatchRect>("ActivePropPanel"));
+                if (_L_ActivePropPanel == null) _L_ActivePropPanel = new RoomUI_ActivePropPanel(UiPanel, Instance.GetNodeOrNull<Godot.NinePatchRect>("ActivePropPanel"));
                 return _L_ActivePropPanel;
             }
         }
@@ -379,7 +379,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_ChargeProgressBar == null) _L_ChargeProgressBar = new RoomUI_ChargeProgressBar(Instance.GetNodeOrNull<Godot.NinePatchRect>("ChargeProgressBar"));
+                if (_L_ChargeProgressBar == null) _L_ChargeProgressBar = new RoomUI_ChargeProgressBar(UiPanel, Instance.GetNodeOrNull<Godot.NinePatchRect>("ChargeProgressBar"));
                 return _L_ChargeProgressBar;
             }
         }
@@ -392,29 +392,29 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_ChargeProgress == null) _L_ChargeProgress = new RoomUI_ChargeProgress(Instance.GetNodeOrNull<Godot.Sprite2D>("ChargeProgress"));
+                if (_L_ChargeProgress == null) _L_ChargeProgress = new RoomUI_ChargeProgress(UiPanel, Instance.GetNodeOrNull<Godot.Sprite2D>("ChargeProgress"));
                 return _L_ChargeProgress;
             }
         }
         private RoomUI_ChargeProgress _L_ChargeProgress;
 
-        public RoomUI_ActivePropBar(Godot.Control node) : base(node) {  }
-        public override RoomUI_ActivePropBar Clone() => new ((Godot.Control)Instance.Duplicate());
+        public RoomUI_ActivePropBar(RoomUI uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override RoomUI_ActivePropBar Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.WeaponBar.WeaponPanel.WeaponSprite
     /// </summary>
-    public class RoomUI_WeaponSprite : IUiNode<Godot.TextureRect, RoomUI_WeaponSprite>
+    public class RoomUI_WeaponSprite : UiNode<RoomUI, Godot.TextureRect, RoomUI_WeaponSprite>
     {
-        public RoomUI_WeaponSprite(Godot.TextureRect node) : base(node) {  }
-        public override RoomUI_WeaponSprite Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public RoomUI_WeaponSprite(RoomUI uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override RoomUI_WeaponSprite Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.WeaponBar.WeaponPanel
     /// </summary>
-    public class RoomUI_WeaponPanel : IUiNode<Godot.NinePatchRect, RoomUI_WeaponPanel>
+    public class RoomUI_WeaponPanel : UiNode<RoomUI, Godot.NinePatchRect, RoomUI_WeaponPanel>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.WeaponBar.WeaponSprite
@@ -423,29 +423,29 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_WeaponSprite == null) _L_WeaponSprite = new RoomUI_WeaponSprite(Instance.GetNodeOrNull<Godot.TextureRect>("WeaponSprite"));
+                if (_L_WeaponSprite == null) _L_WeaponSprite = new RoomUI_WeaponSprite(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("WeaponSprite"));
                 return _L_WeaponSprite;
             }
         }
         private RoomUI_WeaponSprite _L_WeaponSprite;
 
-        public RoomUI_WeaponPanel(Godot.NinePatchRect node) : base(node) {  }
-        public override RoomUI_WeaponPanel Clone() => new ((Godot.NinePatchRect)Instance.Duplicate());
+        public RoomUI_WeaponPanel(RoomUI uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override RoomUI_WeaponPanel Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Label"/>, 路径: RoomUI.Control.WeaponBar.AmmoCount
     /// </summary>
-    public class RoomUI_AmmoCount : IUiNode<Godot.Label, RoomUI_AmmoCount>
+    public class RoomUI_AmmoCount : UiNode<RoomUI, Godot.Label, RoomUI_AmmoCount>
     {
-        public RoomUI_AmmoCount(Godot.Label node) : base(node) {  }
-        public override RoomUI_AmmoCount Clone() => new ((Godot.Label)Instance.Duplicate());
+        public RoomUI_AmmoCount(RoomUI uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override RoomUI_AmmoCount Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.WeaponBar
     /// </summary>
-    public class RoomUI_WeaponBar : IUiNode<Godot.Control, RoomUI_WeaponBar>
+    public class RoomUI_WeaponBar : UiNode<RoomUI, Godot.Control, RoomUI_WeaponBar>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.WeaponPanel
@@ -454,7 +454,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_WeaponPanel == null) _L_WeaponPanel = new RoomUI_WeaponPanel(Instance.GetNodeOrNull<Godot.NinePatchRect>("WeaponPanel"));
+                if (_L_WeaponPanel == null) _L_WeaponPanel = new RoomUI_WeaponPanel(UiPanel, Instance.GetNodeOrNull<Godot.NinePatchRect>("WeaponPanel"));
                 return _L_WeaponPanel;
             }
         }
@@ -467,20 +467,20 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_AmmoCount == null) _L_AmmoCount = new RoomUI_AmmoCount(Instance.GetNodeOrNull<Godot.Label>("AmmoCount"));
+                if (_L_AmmoCount == null) _L_AmmoCount = new RoomUI_AmmoCount(UiPanel, Instance.GetNodeOrNull<Godot.Label>("AmmoCount"));
                 return _L_AmmoCount;
             }
         }
         private RoomUI_AmmoCount _L_AmmoCount;
 
-        public RoomUI_WeaponBar(Godot.Control node) : base(node) {  }
-        public override RoomUI_WeaponBar Clone() => new ((Godot.Control)Instance.Duplicate());
+        public RoomUI_WeaponBar(RoomUI uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override RoomUI_WeaponBar Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control
     /// </summary>
-    public class RoomUI_Control : IUiNode<Godot.Control, RoomUI_Control>
+    public class RoomUI_Control : UiNode<RoomUI, Godot.Control, RoomUI_Control>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.LifeBar
@@ -489,7 +489,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_LifeBar == null) _L_LifeBar = new RoomUI_LifeBar(Instance.GetNodeOrNull<Godot.Control>("LifeBar"));
+                if (_L_LifeBar == null) _L_LifeBar = new RoomUI_LifeBar(UiPanel, Instance.GetNodeOrNull<Godot.Control>("LifeBar"));
                 return _L_LifeBar;
             }
         }
@@ -502,7 +502,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_MapBar == null) _L_MapBar = new RoomUI_MapBar(Instance.GetNodeOrNull<Godot.TextureRect>("MapBar"));
+                if (_L_MapBar == null) _L_MapBar = new RoomUI_MapBar(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("MapBar"));
                 return _L_MapBar;
             }
         }
@@ -515,7 +515,7 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_ActivePropBar == null) _L_ActivePropBar = new RoomUI_ActivePropBar(Instance.GetNodeOrNull<Godot.Control>("ActivePropBar"));
+                if (_L_ActivePropBar == null) _L_ActivePropBar = new RoomUI_ActivePropBar(UiPanel, Instance.GetNodeOrNull<Godot.Control>("ActivePropBar"));
                 return _L_ActivePropBar;
             }
         }
@@ -528,14 +528,14 @@ public abstract partial class RoomUI : UiBase
         {
             get
             {
-                if (_L_WeaponBar == null) _L_WeaponBar = new RoomUI_WeaponBar(Instance.GetNodeOrNull<Godot.Control>("WeaponBar"));
+                if (_L_WeaponBar == null) _L_WeaponBar = new RoomUI_WeaponBar(UiPanel, Instance.GetNodeOrNull<Godot.Control>("WeaponBar"));
                 return _L_WeaponBar;
             }
         }
         private RoomUI_WeaponBar _L_WeaponBar;
 
-        public RoomUI_Control(Godot.Control node) : base(node) {  }
-        public override RoomUI_Control Clone() => new ((Godot.Control)Instance.Duplicate());
+        public RoomUI_Control(RoomUI uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override RoomUI_Control Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
 

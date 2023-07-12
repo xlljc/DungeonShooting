@@ -12,7 +12,7 @@ public abstract partial class BottomTips : UiBase
     {
         get
         {
-            if (_L_Panel == null) _L_Panel = new BottomTips_Panel(GetNodeOrNull<Godot.PanelContainer>("Panel"));
+            if (_L_Panel == null) _L_Panel = new BottomTips_Panel(this, GetNodeOrNull<Godot.PanelContainer>("Panel"));
             return _L_Panel;
         }
     }
@@ -26,16 +26,16 @@ public abstract partial class BottomTips : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer.AspectRatioContainer.TextureRect
     /// </summary>
-    public class BottomTips_TextureRect : IUiNode<Godot.TextureRect, BottomTips_TextureRect>
+    public class BottomTips_TextureRect : UiNode<BottomTips, Godot.TextureRect, BottomTips_TextureRect>
     {
-        public BottomTips_TextureRect(Godot.TextureRect node) : base(node) {  }
-        public override BottomTips_TextureRect Clone() => new ((Godot.TextureRect)Instance.Duplicate());
+        public BottomTips_TextureRect(BottomTips uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override BottomTips_TextureRect Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.AspectRatioContainer"/>, 路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer.AspectRatioContainer
     /// </summary>
-    public class BottomTips_AspectRatioContainer : IUiNode<Godot.AspectRatioContainer, BottomTips_AspectRatioContainer>
+    public class BottomTips_AspectRatioContainer : UiNode<BottomTips, Godot.AspectRatioContainer, BottomTips_AspectRatioContainer>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer.TextureRect
@@ -44,29 +44,29 @@ public abstract partial class BottomTips : UiBase
         {
             get
             {
-                if (_L_TextureRect == null) _L_TextureRect = new BottomTips_TextureRect(Instance.GetNodeOrNull<Godot.TextureRect>("TextureRect"));
+                if (_L_TextureRect == null) _L_TextureRect = new BottomTips_TextureRect(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("TextureRect"));
                 return _L_TextureRect;
             }
         }
         private BottomTips_TextureRect _L_TextureRect;
 
-        public BottomTips_AspectRatioContainer(Godot.AspectRatioContainer node) : base(node) {  }
-        public override BottomTips_AspectRatioContainer Clone() => new ((Godot.AspectRatioContainer)Instance.Duplicate());
+        public BottomTips_AspectRatioContainer(BottomTips uiPanel, Godot.AspectRatioContainer node) : base(uiPanel, node) {  }
+        public override BottomTips_AspectRatioContainer Clone() => new (UiPanel, (Godot.AspectRatioContainer)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Label"/>, 路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer.Label
     /// </summary>
-    public class BottomTips_Label : IUiNode<Godot.Label, BottomTips_Label>
+    public class BottomTips_Label : UiNode<BottomTips, Godot.Label, BottomTips_Label>
     {
-        public BottomTips_Label(Godot.Label node) : base(node) {  }
-        public override BottomTips_Label Clone() => new ((Godot.Label)Instance.Duplicate());
+        public BottomTips_Label(BottomTips uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override BottomTips_Label Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: BottomTips.Panel.MarginContainer.CenterContainer.HBoxContainer
     /// </summary>
-    public class BottomTips_HBoxContainer : IUiNode<Godot.HBoxContainer, BottomTips_HBoxContainer>
+    public class BottomTips_HBoxContainer : UiNode<BottomTips, Godot.HBoxContainer, BottomTips_HBoxContainer>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.AspectRatioContainer"/>, 节点路径: BottomTips.Panel.MarginContainer.CenterContainer.AspectRatioContainer
@@ -75,7 +75,7 @@ public abstract partial class BottomTips : UiBase
         {
             get
             {
-                if (_L_AspectRatioContainer == null) _L_AspectRatioContainer = new BottomTips_AspectRatioContainer(Instance.GetNodeOrNull<Godot.AspectRatioContainer>("AspectRatioContainer"));
+                if (_L_AspectRatioContainer == null) _L_AspectRatioContainer = new BottomTips_AspectRatioContainer(UiPanel, Instance.GetNodeOrNull<Godot.AspectRatioContainer>("AspectRatioContainer"));
                 return _L_AspectRatioContainer;
             }
         }
@@ -88,20 +88,20 @@ public abstract partial class BottomTips : UiBase
         {
             get
             {
-                if (_L_Label == null) _L_Label = new BottomTips_Label(Instance.GetNodeOrNull<Godot.Label>("Label"));
+                if (_L_Label == null) _L_Label = new BottomTips_Label(UiPanel, Instance.GetNodeOrNull<Godot.Label>("Label"));
                 return _L_Label;
             }
         }
         private BottomTips_Label _L_Label;
 
-        public BottomTips_HBoxContainer(Godot.HBoxContainer node) : base(node) {  }
-        public override BottomTips_HBoxContainer Clone() => new ((Godot.HBoxContainer)Instance.Duplicate());
+        public BottomTips_HBoxContainer(BottomTips uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override BottomTips_HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.CenterContainer"/>, 路径: BottomTips.Panel.MarginContainer.CenterContainer
     /// </summary>
-    public class BottomTips_CenterContainer : IUiNode<Godot.CenterContainer, BottomTips_CenterContainer>
+    public class BottomTips_CenterContainer : UiNode<BottomTips, Godot.CenterContainer, BottomTips_CenterContainer>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: BottomTips.Panel.MarginContainer.HBoxContainer
@@ -110,20 +110,20 @@ public abstract partial class BottomTips : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new BottomTips_HBoxContainer(Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new BottomTips_HBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
         private BottomTips_HBoxContainer _L_HBoxContainer;
 
-        public BottomTips_CenterContainer(Godot.CenterContainer node) : base(node) {  }
-        public override BottomTips_CenterContainer Clone() => new ((Godot.CenterContainer)Instance.Duplicate());
+        public BottomTips_CenterContainer(BottomTips uiPanel, Godot.CenterContainer node) : base(uiPanel, node) {  }
+        public override BottomTips_CenterContainer Clone() => new (UiPanel, (Godot.CenterContainer)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.MarginContainer"/>, 路径: BottomTips.Panel.MarginContainer
     /// </summary>
-    public class BottomTips_MarginContainer : IUiNode<Godot.MarginContainer, BottomTips_MarginContainer>
+    public class BottomTips_MarginContainer : UiNode<BottomTips, Godot.MarginContainer, BottomTips_MarginContainer>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.CenterContainer"/>, 节点路径: BottomTips.Panel.CenterContainer
@@ -132,20 +132,20 @@ public abstract partial class BottomTips : UiBase
         {
             get
             {
-                if (_L_CenterContainer == null) _L_CenterContainer = new BottomTips_CenterContainer(Instance.GetNodeOrNull<Godot.CenterContainer>("CenterContainer"));
+                if (_L_CenterContainer == null) _L_CenterContainer = new BottomTips_CenterContainer(UiPanel, Instance.GetNodeOrNull<Godot.CenterContainer>("CenterContainer"));
                 return _L_CenterContainer;
             }
         }
         private BottomTips_CenterContainer _L_CenterContainer;
 
-        public BottomTips_MarginContainer(Godot.MarginContainer node) : base(node) {  }
-        public override BottomTips_MarginContainer Clone() => new ((Godot.MarginContainer)Instance.Duplicate());
+        public BottomTips_MarginContainer(BottomTips uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
+        public override BottomTips_MarginContainer Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.PanelContainer"/>, 路径: BottomTips.Panel
     /// </summary>
-    public class BottomTips_Panel : IUiNode<Godot.PanelContainer, BottomTips_Panel>
+    public class BottomTips_Panel : UiNode<BottomTips, Godot.PanelContainer, BottomTips_Panel>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: BottomTips.MarginContainer
@@ -154,14 +154,14 @@ public abstract partial class BottomTips : UiBase
         {
             get
             {
-                if (_L_MarginContainer == null) _L_MarginContainer = new BottomTips_MarginContainer(Instance.GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
+                if (_L_MarginContainer == null) _L_MarginContainer = new BottomTips_MarginContainer(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
                 return _L_MarginContainer;
             }
         }
         private BottomTips_MarginContainer _L_MarginContainer;
 
-        public BottomTips_Panel(Godot.PanelContainer node) : base(node) {  }
-        public override BottomTips_Panel Clone() => new ((Godot.PanelContainer)Instance.Duplicate());
+        public BottomTips_Panel(BottomTips uiPanel, Godot.PanelContainer node) : base(uiPanel, node) {  }
+        public override BottomTips_Panel Clone() => new (UiPanel, (Godot.PanelContainer)Instance.Duplicate());
     }
 
 

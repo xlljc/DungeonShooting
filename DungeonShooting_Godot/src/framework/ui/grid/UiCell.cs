@@ -1,12 +1,12 @@
 ﻿
 using Godot;
 
-public abstract class UiCell<TNodeType, TUiNodeType, T> : IDestroy where TNodeType : Node where TUiNodeType : IUiNode<TNodeType, TUiNodeType>
+public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiCellNode
 {
     public bool IsDestroyed { get; private set; }
     
-    public UiGrid<TNodeType, TUiNodeType, T> Grid { get; set; }
-    public TUiNodeType CellNode { get; set; }
+    public UiGrid<TUiCellNode, T> Grid { get; set; }
+    public TUiCellNode CellNode { get; set; }
     public T Data { get; set; }
 
     public virtual void OnInit()

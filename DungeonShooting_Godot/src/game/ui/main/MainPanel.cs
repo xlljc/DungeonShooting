@@ -21,8 +21,7 @@ public partial class MainPanel : Main
         S_Exit.Instance.Pressed -= OnExitClick;
         S_Tools.Instance.Pressed -= OnToolsClick;
     }
-
-
+    
     //点击开始游戏
     private void OnStartGameClick()
     {

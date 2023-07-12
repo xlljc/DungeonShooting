@@ -12,7 +12,7 @@ public abstract partial class Loading : UiBase
     {
         get
         {
-            if (_L_ColorRect == null) _L_ColorRect = new Loading_ColorRect(GetNodeOrNull<Godot.ColorRect>("ColorRect"));
+            if (_L_ColorRect == null) _L_ColorRect = new Loading_ColorRect(this, GetNodeOrNull<Godot.ColorRect>("ColorRect"));
             return _L_ColorRect;
         }
     }
@@ -25,7 +25,7 @@ public abstract partial class Loading : UiBase
     {
         get
         {
-            if (_L_Label == null) _L_Label = new Loading_Label(GetNodeOrNull<Godot.Label>("Label"));
+            if (_L_Label == null) _L_Label = new Loading_Label(this, GetNodeOrNull<Godot.Label>("Label"));
             return _L_Label;
         }
     }
@@ -39,19 +39,19 @@ public abstract partial class Loading : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.ColorRect"/>, 路径: Loading.ColorRect
     /// </summary>
-    public class Loading_ColorRect : IUiNode<Godot.ColorRect, Loading_ColorRect>
+    public class Loading_ColorRect : UiNode<Loading, Godot.ColorRect, Loading_ColorRect>
     {
-        public Loading_ColorRect(Godot.ColorRect node) : base(node) {  }
-        public override Loading_ColorRect Clone() => new ((Godot.ColorRect)Instance.Duplicate());
+        public Loading_ColorRect(Loading uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override Loading_ColorRect Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Label"/>, 路径: Loading.Label
     /// </summary>
-    public class Loading_Label : IUiNode<Godot.Label, Loading_Label>
+    public class Loading_Label : UiNode<Loading, Godot.Label, Loading_Label>
     {
-        public Loading_Label(Godot.Label node) : base(node) {  }
-        public override Loading_Label Clone() => new ((Godot.Label)Instance.Duplicate());
+        public Loading_Label(Loading uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Loading_Label Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
 

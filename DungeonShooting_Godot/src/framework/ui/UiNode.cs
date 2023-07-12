@@ -2,12 +2,28 @@
 using Godot;
 
 /// <summary>
-/// Ui节点代码接口
+/// Ui节点父类, 无泛型无属性
 /// </summary>
+public abstract class UiNode
+{
+}
+
+/// <summary>
+/// Ui节点父类
+/// </summary>
+/// <typeparam name="TUi">所属Ui面板类型</typeparam>
 /// <typeparam name="TNodeType">Godot中的节点类型</typeparam>
 /// <typeparam name="TCloneType">克隆该对象返回的类型</typeparam>
-public abstract class IUiNode<TNodeType, TCloneType> : IClone<TCloneType> where TNodeType : Node
+public abstract class UiNode<TUi, TNodeType, TCloneType>
+    : UiNode, IUiCellNode, IClone<TCloneType>
+    where TUi : UiBase
+    where TNodeType : Node
+    where TCloneType : IUiCellNode
 {
+    /// <summary>
+    /// 当前Ui节点所属的Ui面板对象
+    /// </summary>
+    public TUi UiPanel { get; }
     /// <summary>
     /// Godot节点实例
     /// </summary>
@@ -18,8 +34,9 @@ public abstract class IUiNode<TNodeType, TCloneType> : IClone<TCloneType> where 
     /// </summary>
     public abstract TCloneType Clone();
 
-    public IUiNode(TNodeType node)
+    public UiNode(TUi uiPanel, TNodeType node)
     {
+        UiPanel = uiPanel;
         Instance = node;
     }
     
@@ -31,6 +48,7 @@ public abstract class IUiNode<TNodeType, TCloneType> : IClone<TCloneType> where 
         var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
         Instance.AddChild(uiBase);
+        UiPanel.RecordNestedUi(uiBase, UiManager.RecordType.Open);
         
         uiBase.OnCreateUi();
         uiBase.ShowUi();
@@ -43,5 +61,15 @@ public abstract class IUiNode<TNodeType, TCloneType> : IClone<TCloneType> where 
     public T OpenNestedUi<T>(string uiName) where T : UiBase
     {
         return (T)OpenNestedUi(uiName);
+    }
+
+    public Node GetUiInstance()
+    {
+        return Instance;
+    }
+
+    public IUiCellNode CloneUiCell()
+    {
+        return Clone();
     }
 }

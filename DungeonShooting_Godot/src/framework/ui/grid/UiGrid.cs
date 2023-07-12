@@ -10,21 +10,22 @@ using Godot;
 /// <typeparam name="TNodeType">原生Godot类型</typeparam>
 /// <typeparam name="TUiNodeType">Ui节点类型</typeparam>
 /// <typeparam name="TData">传给Cell的数据类型</typeparam>
-public partial class UiGrid<TNodeType, TUiNodeType, TData> : GridContainer, IDestroy where TNodeType : Node where TUiNodeType : IUiNode<TNodeType, TUiNodeType>
+public partial class UiGrid<TUiCellNode, TData> : GridContainer, IDestroy where TUiCellNode : IUiCellNode
 {
     public bool IsDestroyed { get; private set; }
-    private TUiNodeType _template;
+    private TUiCellNode _template;
     private Node _parent;
     private Type _cellType;
-    private Stack<UiCell<TNodeType, TUiNodeType, TData>> _cellPool = new Stack<UiCell<TNodeType, TUiNodeType, TData>>();
-    private List<UiCell<TNodeType, TUiNodeType, TData>> _cellList = new List<UiCell<TNodeType, TUiNodeType, TData>>();
+    private Stack<UiCell<TUiCellNode, TData>> _cellPool = new Stack<UiCell<TUiCellNode, TData>>();
+    private List<UiCell<TUiCellNode, TData>> _cellList = new List<UiCell<TUiCellNode, TData>>();
 
-    public UiGrid(TUiNodeType template, Type cellType, int columns, int offsetX, int offsetY)
+    public UiGrid(TUiCellNode template, Type cellType, int columns, int offsetX, int offsetY)
     {
         _template = template;
         _cellType = cellType;
-        _parent = _template.Instance.GetParent();
-        _parent.RemoveChild(_template.Instance);
+        var uiInstance = _template.GetUiInstance();
+        _parent = uiInstance.GetParent();
+        _parent.RemoveChild(uiInstance);
         _parent.AddChild(this);
         Columns = columns;
         AddThemeConstantOverride("h_separation", offsetX);
@@ -33,7 +34,7 @@ public partial class UiGrid<TNodeType, TUiNodeType, TData> : GridContainer, IDes
 
     public override void _Ready()
     {
-        if (_template.Instance is Control control)
+        if (_template.GetUiInstance() is Control control)
         {
             Position = control.Position;
         }
@@ -47,7 +48,7 @@ public partial class UiGrid<TNodeType, TUiNodeType, TData> : GridContainer, IDes
             {
                 var cell = GetCellInstance();
                 _cellList.Add(cell);
-                AddChild(cell.CellNode.Instance);
+                AddChild(cell.CellNode.GetUiInstance());
             } while (array.Length > _cellList.Count);
         }
         else if(array.Length < _cellList.Count)
@@ -71,7 +72,7 @@ public partial class UiGrid<TNodeType, TUiNodeType, TData> : GridContainer, IDes
     {
         var cell = GetCellInstance();
         _cellList.Add(cell);
-        AddChild(cell.CellNode.Instance);
+        AddChild(cell.CellNode.GetUiInstance());
         cell.OnSetData(data);
     }
     
@@ -96,27 +97,27 @@ public partial class UiGrid<TNodeType, TUiNodeType, TData> : GridContainer, IDes
         _cellPool = null;
     }
 
-    private UiCell<TNodeType, TUiNodeType, TData> GetCellInstance()
+    private UiCell<TUiCellNode, TData> GetCellInstance()
     {
         if (_cellPool.Count > 0)
         {
             return _cellPool.Pop();
         }
 
-        var uiCell = Activator.CreateInstance(_cellType) as UiCell<TNodeType, TUiNodeType, TData>;
+        var uiCell = Activator.CreateInstance(_cellType) as UiCell<TUiCellNode, TData>;
         if (uiCell is null)
         {
-            throw new Exception($"cellType 无法转为'{typeof(UiCell<TNodeType, TUiNodeType, TData>).FullName}'类型!");
+            throw new Exception($"cellType 无法转为'{typeof(UiCell<TUiCellNode, TData>).FullName}'类型!");
         }
-        uiCell.CellNode = _template.Clone();
+        uiCell.CellNode = (TUiCellNode)_template.CloneUiCell();
         uiCell.Grid = this;
         uiCell.OnInit();
         return uiCell;
     }
 
-    private void ReclaimCellInstance(UiCell<TNodeType, TUiNodeType, TData> cell)
+    private void ReclaimCellInstance(UiCell<TUiCellNode, TData> cell)
     {
-        RemoveChild(cell.CellNode.Instance);
+        RemoveChild(cell.CellNode.GetUiInstance());
         _cellPool.Push(cell);
     }
 }

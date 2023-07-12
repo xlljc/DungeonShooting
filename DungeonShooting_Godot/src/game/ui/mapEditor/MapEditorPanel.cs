@@ -9,6 +9,7 @@ public partial class MapEditorPanel : MapEditor
     public override void OnCreateUi()
     {
         _editorTileMapBar = new EditorTileMapBar(S_TileMap);
+        S_CanvasLayer.OpenNestedUi(UiManager.UiName.MapEditorTools);
     }
 
     public override void OnShowUi()
@@ -34,7 +35,6 @@ public partial class MapEditorPanel : MapEditor
     //调整地图显示区域大小
     private void OnMapViewResized()
     {
-        GD.Print(S_Left.Instance.Size);
         S_SubViewport.Instance.Size = S_Left.Instance.Size.AsVector2I();
     }
 }

@@ -7,7 +7,7 @@ public class LifeBar
 {
 
     private RoomUI.RoomUI_LifeBar _bar;
-    private UiGrid<TextureRect, RoomUI.RoomUI_Life, LifeIconEnum> _grid;
+    private UiGrid<RoomUI.RoomUI_Life, LifeIconEnum> _grid;
     private EventFactory _eventFactory;
     private bool _refreshFlag = false;
 
@@ -16,7 +16,7 @@ public class LifeBar
         _bar = lifeBar;
         var uiNodeLife = lifeBar.L_Life;
 
-        _grid = new UiGrid<TextureRect, RoomUI.RoomUI_Life, LifeIconEnum>(uiNodeLife, typeof(LifeCell), 20, 1, 2);
+        _grid = new UiGrid<RoomUI.RoomUI_Life, LifeIconEnum>(uiNodeLife, typeof(LifeCell), 20, 1, 2);
     }
 
     public void OnShow()

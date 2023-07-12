@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4u66mxndxbrg"]
+
+[ext_resource type="Script" path="res://src/game/ui/mapEditorTools/MapEditorToolsPanel.cs" id="1_mqp1c"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_rwvbg"]
+
+[node name="MapEditorTools" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mqp1c")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -288.0
+offset_top = 19.0
+offset_right = -20.0
+offset_bottom = 83.0
+grow_horizontal = 0
+mouse_filter = 0
+
+[node name="TextureButton" type="TextureButton" parent="HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_rwvbg")
+texture_pressed = ExtResource("2_rwvbg")
+texture_hover = ExtResource("2_rwvbg")
+
+[node name="TextureButton2" type="TextureButton" parent="HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_rwvbg")
+texture_pressed = ExtResource("2_rwvbg")
+texture_hover = ExtResource("2_rwvbg")
+
+[node name="TextureButton3" type="TextureButton" parent="HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_rwvbg")
+texture_pressed = ExtResource("2_rwvbg")
+texture_hover = ExtResource("2_rwvbg")
+
+[node name="TextureButton4" type="TextureButton" parent="HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_rwvbg")
+texture_pressed = ExtResource("2_rwvbg")
+texture_hover = ExtResource("2_rwvbg")
