@@ -16,7 +16,7 @@ public class EditorTileMapBar
 
     public void OnShow()
     {
-        _editorTileMap.L_Draw.Instance.Draw += OnDrawGuides;
+        _editorTileMap.L_Brush.Instance.Draw += OnDrawGuides;
         _editorPanel.ToolsPanel.S_HandTool.Instance.Pressed += _editorTileMap.Instance.OnSelectHandTool;
         _editorPanel.ToolsPanel.S_PenTool.Instance.Pressed += _editorTileMap.Instance.OnSelectPenTool;
         _editorPanel.ToolsPanel.S_RectTool.Instance.Pressed += _editorTileMap.Instance.OnSelectRectTool;
@@ -25,7 +25,7 @@ public class EditorTileMapBar
 
     public void OnHide()
     {
-        _editorTileMap.L_Draw.Instance.Draw -= OnDrawGuides;
+        _editorTileMap.L_Brush.Instance.Draw -= OnDrawGuides;
         _editorPanel.ToolsPanel.S_HandTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectHandTool;
         _editorPanel.ToolsPanel.S_PenTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectPenTool;
         _editorPanel.ToolsPanel.S_RectTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectRectTool;
@@ -34,11 +34,11 @@ public class EditorTileMapBar
 
     public void Process(float delta)
     {
-        _editorTileMap.L_Draw.Instance.QueueRedraw();
+        _editorTileMap.L_Brush.Instance.QueueRedraw();
     }
 
     private void OnDrawGuides()
     {
-        _editorTileMap.Instance.DrawGuides(_editorTileMap.L_Draw.Instance);
+        _editorTileMap.Instance.DrawGuides(_editorTileMap.L_Brush.Instance);
     }
 }

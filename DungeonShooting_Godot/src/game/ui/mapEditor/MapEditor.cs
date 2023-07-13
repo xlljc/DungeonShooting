@@ -24,12 +24,43 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Node2D"/>, 路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.Draw
+    /// 类型: <see cref="Godot.AnimationPlayer"/>, 路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.ErrorCell.ErrorCellAnimationPlayer
     /// </summary>
-    public class MapEditor_Draw : UiNode<MapEditor, Godot.Node2D, MapEditor_Draw>
+    public class MapEditor_ErrorCellAnimationPlayer : UiNode<MapEditor, Godot.AnimationPlayer, MapEditor_ErrorCellAnimationPlayer>
     {
-        public MapEditor_Draw(MapEditor uiPanel, Godot.Node2D node) : base(uiPanel, node) {  }
-        public override MapEditor_Draw Clone() => new (UiPanel, (Godot.Node2D)Instance.Duplicate());
+        public MapEditor_ErrorCellAnimationPlayer(MapEditor uiPanel, Godot.AnimationPlayer node) : base(uiPanel, node) {  }
+        public override MapEditor_ErrorCellAnimationPlayer Clone() => new (UiPanel, (Godot.AnimationPlayer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.ErrorCell
+    /// </summary>
+    public class MapEditor_ErrorCell : UiNode<MapEditor, Godot.Sprite2D, MapEditor_ErrorCell>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.AnimationPlayer"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.ErrorCellAnimationPlayer
+        /// </summary>
+        public MapEditor_ErrorCellAnimationPlayer L_ErrorCellAnimationPlayer
+        {
+            get
+            {
+                if (_L_ErrorCellAnimationPlayer == null) _L_ErrorCellAnimationPlayer = new MapEditor_ErrorCellAnimationPlayer(UiPanel, Instance.GetNodeOrNull<Godot.AnimationPlayer>("ErrorCellAnimationPlayer"));
+                return _L_ErrorCellAnimationPlayer;
+            }
+        }
+        private MapEditor_ErrorCellAnimationPlayer _L_ErrorCellAnimationPlayer;
+
+        public MapEditor_ErrorCell(MapEditor uiPanel, Godot.Sprite2D node) : base(uiPanel, node) {  }
+        public override MapEditor_ErrorCell Clone() => new (UiPanel, (Godot.Sprite2D)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Node2D"/>, 路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.Brush
+    /// </summary>
+    public class MapEditor_Brush : UiNode<MapEditor, Godot.Node2D, MapEditor_Brush>
+    {
+        public MapEditor_Brush(MapEditor uiPanel, Godot.Node2D node) : base(uiPanel, node) {  }
+        public override MapEditor_Brush Clone() => new (UiPanel, (Godot.Node2D)Instance.Duplicate());
     }
 
     /// <summary>
@@ -38,17 +69,30 @@ public abstract partial class MapEditor : UiBase
     public class MapEditor_TileMap : UiNode<MapEditor, UI.MapEditor.EditorTileMap, MapEditor_TileMap>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.Draw
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.ErrorCell
         /// </summary>
-        public MapEditor_Draw L_Draw
+        public MapEditor_ErrorCell L_ErrorCell
         {
             get
             {
-                if (_L_Draw == null) _L_Draw = new MapEditor_Draw(UiPanel, Instance.GetNodeOrNull<Godot.Node2D>("Draw"));
-                return _L_Draw;
+                if (_L_ErrorCell == null) _L_ErrorCell = new MapEditor_ErrorCell(UiPanel, Instance.GetNodeOrNull<Godot.Sprite2D>("ErrorCell"));
+                return _L_ErrorCell;
             }
         }
-        private MapEditor_Draw _L_Draw;
+        private MapEditor_ErrorCell _L_ErrorCell;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.Brush
+        /// </summary>
+        public MapEditor_Brush L_Brush
+        {
+            get
+            {
+                if (_L_Brush == null) _L_Brush = new MapEditor_Brush(UiPanel, Instance.GetNodeOrNull<Godot.Node2D>("Brush"));
+                return _L_Brush;
+            }
+        }
+        private MapEditor_Brush _L_Brush;
 
         public MapEditor_TileMap(MapEditor uiPanel, UI.MapEditor.EditorTileMap node) : base(uiPanel, node) {  }
         public override MapEditor_TileMap Clone() => new (UiPanel, (UI.MapEditor.EditorTileMap)Instance.Duplicate());
@@ -210,9 +254,19 @@ public abstract partial class MapEditor : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.Draw
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.AnimationPlayer"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.ErrorCell.ErrorCellAnimationPlayer
     /// </summary>
-    public MapEditor_Draw S_Draw => L_Bg.L_HSplitContainer.L_Left.L_MapView.L_SubViewport.L_TileMap.L_Draw;
+    public MapEditor_ErrorCellAnimationPlayer S_ErrorCellAnimationPlayer => L_Bg.L_HSplitContainer.L_Left.L_MapView.L_SubViewport.L_TileMap.L_ErrorCell.L_ErrorCellAnimationPlayer;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.ErrorCell
+    /// </summary>
+    public MapEditor_ErrorCell S_ErrorCell => L_Bg.L_HSplitContainer.L_Left.L_MapView.L_SubViewport.L_TileMap.L_ErrorCell;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap.Brush
+    /// </summary>
+    public MapEditor_Brush S_Brush => L_Bg.L_HSplitContainer.L_Left.L_MapView.L_SubViewport.L_TileMap.L_Brush;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditor.EditorTileMap"/>, 节点路径: MapEditor.Bg.HSplitContainer.Left.MapView.SubViewport.TileMap

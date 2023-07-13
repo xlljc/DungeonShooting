@@ -56,4 +56,8 @@ public static class AnimatorNames
     /// ui出场
     /// </summary>
     public const string Out = "out";
+    /// <summary>
+    /// 显示动画
+    /// </summary>
+    public const string Show = "show";
 }

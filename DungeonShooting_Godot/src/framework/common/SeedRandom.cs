@@ -28,6 +28,7 @@ public class SeedRandom
         var num = dateTime.Year * 100000 + dateTime.Month * 100000 + dateTime.Day * 100000 + dateTime.Hour * 10000 + dateTime.Minute * 100 + dateTime.Second;
         num += _staticSeed;
         _staticSeed += 11111;
+        Seed = num;
         _random = new Random(num);
     }
     

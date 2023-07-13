@@ -1027,6 +1027,7 @@ public class DungeonTile
         var offset = new Vector2(size.X * 0.5f, size.Y * 0.5f);
         //找到路, 向右开始找边界
         var startPos = new Vector2(i - 1, j);
+        PutUsePoint(startPos);
 
         var tempI = i;
         var tempJ = j;
