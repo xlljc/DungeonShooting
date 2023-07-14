@@ -334,19 +334,6 @@ public partial class EditorTileMap : TileMap
         _generateNavigationTimer = 3;
         EraseCell(GetFloorLayer(), position);
         _autoCellLayerGrid.Remove(position.X, position.Y);
-        
-        //执行刷墙逻辑
-        
-        // //先检测对角是否有地板
-        // var left = _autoCellLayerGrid.Get(position.X - 1, position.Y);
-        // var right = _autoCellLayerGrid.Get(position.X + 1, position.Y);
-        // var top = _autoCellLayerGrid.Get(position.X, position.Y + 1);
-        // var down = _autoCellLayerGrid.Get(position.X, position.Y - 1);
-        //
-        // if ((left && right) || (top && down))
-        // {
-        //     GD.Print("错误的地图块...");
-        // }
     }
     
     //擦除一个区域内的自动贴图
@@ -379,6 +366,28 @@ public partial class EditorTileMap : TileMap
         _autoCellLayerGrid.RemoveRect(start, new Vector2I(width, height));
     }
 
+    private bool CheckTerrain()
+    {
+        var usedRect = GetUsedRect();
+        var x = usedRect.Position.X;
+        var y = usedRect.Position.Y;
+        var w = usedRect.Size.X;
+        var h = usedRect.Size.Y;
+        //执行刷墙逻辑
+        
+        // //先检测对角是否有地板
+        // var left = _autoCellLayerGrid.Get(position.X - 1, position.Y);
+        // var right = _autoCellLayerGrid.Get(position.X + 1, position.Y);
+        // var top = _autoCellLayerGrid.Get(position.X, position.Y + 1);
+        // var down = _autoCellLayerGrid.Get(position.X, position.Y - 1);
+        //
+        // if ((left && right) || (top && down))
+        // {
+        //     GD.Print("错误的地图块...");
+        // }
+        return true;
+    }
+    
     //生成自动图块 (地形)
     private void GenerateTerrain()
     {

@@ -159,8 +159,8 @@ public class ResourcePath
     public const string resource_sprite_role_role7_png = "res://resource/sprite/role/role7.png";
     public const string resource_sprite_role_role8_png = "res://resource/sprite/role/role8.png";
     public const string resource_sprite_role_role9_png = "res://resource/sprite/role/role9.png";
-    public const string resource_sprite_role_enemy0001_Enemy0001_png = "res://resource/sprite/role/enemy0001/Enemy0001.png";
-    public const string resource_sprite_role_enemy0001_Enemy0001_Debris_png = "res://resource/sprite/role/enemy0001/Enemy0001_Debris.png";
+    public const string resource_sprite_role_enemy0001_enemy0001_png = "res://resource/sprite/role/enemy0001/enemy0001.png";
+    public const string resource_sprite_role_enemy0001_enemy0001_Debris_png = "res://resource/sprite/role/enemy0001/enemy0001_Debris.png";
     public const string resource_sprite_shell_Shell0001_png = "res://resource/sprite/shell/Shell0001.png";
     public const string resource_sprite_shell_Shell0002_png = "res://resource/sprite/shell/Shell0002.png";
     public const string resource_sprite_shell_Shell0003_png = "res://resource/sprite/shell/Shell0003.png";
@@ -169,6 +169,7 @@ public class ResourcePath
     public const string resource_sprite_ui_font_bg_png = "res://resource/sprite/ui/font_bg.png";
     public const string resource_sprite_ui_GUI_png = "res://resource/sprite/ui/GUI.png";
     public const string resource_sprite_ui_keyboard_e_png = "res://resource/sprite/ui/keyboard/e.png";
+    public const string resource_sprite_ui_mapEditor_ErrorCell_png = "res://resource/sprite/ui/mapEditor/ErrorCell.png";
     public const string resource_sprite_ui_roomUI_ChargeProgress_png = "res://resource/sprite/ui/roomUI/ChargeProgress.png";
     public const string resource_sprite_ui_roomUI_ChargeProgressBar_png = "res://resource/sprite/ui/roomUI/ChargeProgressBar.png";
     public const string resource_sprite_ui_roomUI_Cooldown_png = "res://resource/sprite/ui/roomUI/Cooldown.png";
@@ -234,7 +235,6 @@ public class ResourcePath
     public const string resource_spriteFrames_weapon_Weapon0007_tres = "res://resource/spriteFrames/weapon/Weapon0007.tres";
     public const string resource_theme_mainTheme_tres = "res://resource/theme/mainTheme.tres";
     public const string resource_theme_theme1_tres = "res://resource/theme/theme1.tres";
-    public const string scene_EditorDemo_tscn = "res://scene/EditorDemo.tscn";
     public const string scene_Main_tscn = "res://scene/Main.tscn";
     public const string scene_World_tscn = "res://scene/World.tscn";
     public const string scene_test_TestCommpont_tscn = "res://scene/test/TestCommpont.tscn";
