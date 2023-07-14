@@ -26,6 +26,14 @@ public class Grid<T>
 
         return false;
     }
+    
+    /// <summary>
+    /// 返回指定xy位置是否有数据
+    /// </summary>
+    public bool Contains(Vector2I pos)
+    {
+        return Contains(pos.X, pos.Y);
+    }
 
     /// <summary>
     /// 设置指定xy位置的数据
@@ -45,6 +53,14 @@ public class Grid<T>
     }
 
     /// <summary>
+    /// 设置指定坐标的数据
+    /// </summary>
+    public void Set(Vector2I pos, T data)
+    {
+        Set(pos.X, pos.Y, data);
+    }
+
+    /// <summary>
     /// 获取指定xy位置的数据
     /// </summary>
     public T Get(int x, int y)
@@ -58,6 +74,14 @@ public class Grid<T>
         }
 
         return default;
+    }
+
+    /// <summary>
+    /// 获取指定坐标的数据
+    /// </summary>
+    public T Get(Vector2I pos)
+    {
+        return Get(pos.X, pos.Y);
     }
 
     /// <summary>

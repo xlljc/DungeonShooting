@@ -59,13 +59,23 @@ public partial class EditorTileMap : TileMap
     private Grid<bool> _autoCellLayerGrid = new Grid<bool>();
     //用于生成导航网格
     private DungeonTile _dungeonTile;
-    private float _generateNavigationTimer = -1;
+    //停止绘制多久后开始执行生成操作
+    private float _generateInterval = 3f;
+    //生成自动图块和导航网格的计时器
+    private float _generateTimer = -1;
+    //检测地形结果
+    private bool _checkTerrainFlag = true;
+    //错误地形位置
+    private Vector2I _checkTerrainErrorPosition = Vector2I.Zero;
+    //是否执行生成地形成功
+    private bool _isGenerateTerrain = false;
     
     //--------- 配置数据 -------------
     private int _sourceId = 0;
     private int _terrainSet = 0;
     private int _terrain = 0;
     private Vector2I _floorAtlasCoords = new Vector2I(0, 8);
+    private AutoTileConfig _autoTileConfig = new AutoTileConfig();
     //-------------------------------
 
     public override void _Ready()
@@ -135,13 +145,26 @@ public partial class EditorTileMap : TileMap
         }
 
         //绘制停止指定时间后, 生成导航网格
-        if (_generateNavigationTimer > 0)
+        if (_generateTimer > 0)
         {
-            _generateNavigationTimer -= newDelta;
-            if (_generateNavigationTimer <= 0)
+            _generateTimer -= newDelta;
+            if (_generateTimer <= 0)
             {
-                GD.Print("开始绘制导航网格...");
-                GenerateNavigation();
+                GD.Print("开始检测是否可以生成地形...");
+                if (CheckTerrain())
+                {
+                    GD.Print("开始绘制导航网格...");
+                    if (GenerateNavigation())
+                    {
+                        GD.Print("开始绘制自动贴图...");
+                        GenerateTerrain();
+                        _isGenerateTerrain = true;
+                    }
+                }
+                else
+                {
+                    SetErrorCell(_checkTerrainErrorPosition);
+                }
             }
         }
     }
@@ -154,13 +177,16 @@ public partial class EditorTileMap : TileMap
         //轴线
         canvasItem.DrawLine(new Vector2(0, 2000), new Vector2(0, -2000), Colors.Green);
         canvasItem.DrawLine(new Vector2(2000, 0), new Vector2( -2000, 0), Colors.Red);
-
-        //绘制导航网格
-        var result = _dungeonTile.GetGenerateNavigationResult();
-        if (result != null && result.Success)
+        
+        if (_checkTerrainFlag) //已经通过地形检测
         {
-            var polygonData = _dungeonTile.GetPolygonData();
-            Utils.DrawNavigationPolygon(canvasItem, polygonData, 1);
+            //绘制导航网格
+            var result = _dungeonTile.GetGenerateNavigationResult();
+            if (result != null && result.Success)
+            {
+                var polygonData = _dungeonTile.GetPolygonData();
+                Utils.DrawNavigationPolygon(canvasItem, polygonData, 1);
+            }
         }
 
         if (_drawFullRect) //绘制填充矩形
@@ -247,14 +273,6 @@ public partial class EditorTileMap : TileMap
                 }
             }
         }
-        else if (@event is InputEventKey eventKey)
-        {
-            //测试生成自动图块
-            if (eventKey.KeyLabel == Key.M && eventKey.Pressed)
-            {
-                GenerateTerrain();
-            }
-        }
     }
 
     //缩小
@@ -292,15 +310,18 @@ public partial class EditorTileMap : TileMap
     //绘制单个自动贴图
     private void SetSingleAutoCell(Vector2I position)
     {
-        _generateNavigationTimer = 3;
         SetCell(GetFloorLayer(), position, _sourceId, _floorAtlasCoords);
-        _autoCellLayerGrid.Set(position.X, position.Y, true);
+        if (!_autoCellLayerGrid.Contains(position.X, position.Y))
+        {
+            ResetGenerateTimer();
+            _autoCellLayerGrid.Set(position.X, position.Y, true);
+        }
     }
     
     //绘制区域自动贴图
     private void SetRectAutoCell(Vector2I start, Vector2I end)
     {
-        _generateNavigationTimer = 3;
+        ResetGenerateTimer();
         
         if (start.X > end.X)
         {
@@ -331,15 +352,17 @@ public partial class EditorTileMap : TileMap
     //擦除单个自动图块
     private void EraseSingleAutoCell(Vector2I position)
     {
-        _generateNavigationTimer = 3;
         EraseCell(GetFloorLayer(), position);
-        _autoCellLayerGrid.Remove(position.X, position.Y);
+        if (_autoCellLayerGrid.Remove(position.X, position.Y))
+        {
+            ResetGenerateTimer();
+        }
     }
     
     //擦除一个区域内的自动贴图
     private void EraseRectAutoCell(Vector2I start, Vector2I end)
     {
-        _generateNavigationTimer = 3;
+        ResetGenerateTimer();
         
         if (start.X > end.X)
         {
@@ -366,6 +389,16 @@ public partial class EditorTileMap : TileMap
         _autoCellLayerGrid.RemoveRect(start, new Vector2I(width, height));
     }
 
+    //重置计时器
+    private void ResetGenerateTimer()
+    {
+        _generateTimer = _generateInterval;
+        _isGenerateTerrain = false;
+        SetLayerEnabled(AutoTopLayer, false);
+        SetLayerEnabled(AutoMiddleLayer, false);
+    }
+    
+    //检测是否有不合规的图块, 返回true表示图块正常
     private bool CheckTerrain()
     {
         var usedRect = GetUsedRect();
@@ -373,18 +406,31 @@ public partial class EditorTileMap : TileMap
         var y = usedRect.Position.Y;
         var w = usedRect.Size.X;
         var h = usedRect.Size.Y;
-        //执行刷墙逻辑
-        
-        // //先检测对角是否有地板
-        // var left = _autoCellLayerGrid.Get(position.X - 1, position.Y);
-        // var right = _autoCellLayerGrid.Get(position.X + 1, position.Y);
-        // var top = _autoCellLayerGrid.Get(position.X, position.Y + 1);
-        // var down = _autoCellLayerGrid.Get(position.X, position.Y - 1);
-        //
-        // if ((left && right) || (top && down))
-        // {
-        //     GD.Print("错误的地图块...");
-        // }
+
+        for (var i = 0; i < w; i++)
+        {
+            for (var j = 0; j < h; j++)
+            {
+                var pos = new Vector2I(x + i, y + j);
+                if (GetCellSourceId(AutoFloorLayer, pos) == -1)
+                {
+                    //先检测对角是否有地板
+                    var left = _autoCellLayerGrid.Get(pos.X - 1, pos.Y);
+                    var right = _autoCellLayerGrid.Get(pos.X + 1, pos.Y);
+                    var top = _autoCellLayerGrid.Get(pos.X, pos.Y + 1);
+                    var down = _autoCellLayerGrid.Get(pos.X, pos.Y - 1);
+                    
+                    if ((left && right) || (top && down))
+                    {
+                        _checkTerrainFlag = false;
+                        _checkTerrainErrorPosition = pos;
+                        return false;
+                    }
+                }
+            }
+        }
+
+        _checkTerrainFlag = true;
         return true;
     }
     
@@ -392,6 +438,7 @@ public partial class EditorTileMap : TileMap
     private void GenerateTerrain()
     {
         ClearLayer(AutoFloorLayer);
+        
         var list = new List<Vector2I>();
         _autoCellLayerGrid.ForEach((x, y, data) =>
         {
@@ -402,22 +449,80 @@ public partial class EditorTileMap : TileMap
         });
         var arr = new Array<Vector2I>(list);
         SetCellsTerrainConnect(AutoFloorLayer, arr, _terrainSet, _terrain, false);
+        MoveTerrainCell();
+    }
+
+    //将自动生成的图块从 AutoFloorLayer 移动到指定图层中
+    private void MoveTerrainCell()
+    {
+        SetLayerEnabled(AutoTopLayer, true);
+        SetLayerEnabled(AutoMiddleLayer, true);
+        ClearLayer(AutoTopLayer);
+        ClearLayer(AutoMiddleLayer);
+        
+        var usedRect = GetUsedRect();
+        var x = usedRect.Position.X;
+        var y = usedRect.Position.Y;
+        var w = usedRect.Size.X;
+        var h = usedRect.Size.Y;
+
+        for (var i = 0; i < w; i++)
+        {
+            for (var j = 0; j < h; j++)
+            {
+                var pos = new Vector2I(x + i, y + j);
+                if (!_autoCellLayerGrid.Contains(pos) && GetCellSourceId(AutoFloorLayer, pos) != -1)
+                {
+                    var atlasCoords = GetCellAtlasCoords(AutoFloorLayer, pos);
+                    var layer = _autoTileConfig.GetLayer(atlasCoords);
+                    if (layer == GameConfig.MiddleMapLayer)
+                    {
+                        layer = AutoMiddleLayer;
+                    }
+                    else if (layer == GameConfig.TopMapLayer)
+                    {
+                        layer = AutoTopLayer;
+                    }
+                    else
+                    {
+                        GD.PrintErr($"异常图块: {pos}, 这个图块的图集坐标'{atlasCoords}'不属于'MiddleMapLayer'和'TopMapLayer'!");
+                        continue;
+                    }
+                    EraseCell(AutoFloorLayer, pos);
+                    SetCell(layer, pos, _sourceId, atlasCoords);
+                }
+            }
+        }
     }
 
     //生成导航网格
-    private void GenerateNavigation()
+    private bool GenerateNavigation()
     {
         _dungeonTile.GenerateNavigationPolygon(AutoFloorLayer);
         var result = _dungeonTile.GetGenerateNavigationResult();
         if (result.Success)
         {
-            MapEditorPanel.S_ErrorCellAnimationPlayer.Instance.Stop();
+            CloseErrorCell();
         }
         else
         {
-            MapEditorPanel.S_ErrorCell.Instance.Position = result.Exception.Point * CellQuadrantSize;
-            MapEditorPanel.S_ErrorCellAnimationPlayer.Instance.Play(AnimatorNames.Show);
+            SetErrorCell(result.Exception.Point);
         }
+
+        return result.Success;
+    }
+
+    //设置显示的错误cell, 会标记上红色的闪烁动画
+    private void SetErrorCell(Vector2I pos)
+    {
+        MapEditorPanel.S_ErrorCell.Instance.Position = pos * CellQuadrantSize;
+        MapEditorPanel.S_ErrorCellAnimationPlayer.Instance.Play(AnimatorNames.Show);
+    }
+
+    //关闭显示的错误cell
+    private void CloseErrorCell()
+    {
+        MapEditorPanel.S_ErrorCellAnimationPlayer.Instance.Stop();
     }
 
     private int GetFloorLayer()

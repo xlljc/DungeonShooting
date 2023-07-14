@@ -10,7 +10,7 @@ public class DungeonTile
     //--------------------- 导航 -------------------------
     
     //已经标记过的点
-    private readonly HashSet<Vector2> _usePoints = new HashSet<Vector2>();
+    private readonly HashSet<Vector2I> _usePoints = new HashSet<Vector2I>();
 
     //导航区域数据
     private readonly List<NavigationPolygonData> _polygonDataList = new List<NavigationPolygonData>();
@@ -127,17 +127,8 @@ public class DungeonTile
                         // var customData = tileInstance.GetCellTileData(0, coords).GetCustomData(CustomTileLayerName);
                         // var layer = customData.AsInt32();
                         // layer = Mathf.Clamp(layer, GameConfig.FloorMapLayer, GameConfig.TopMapLayer);
-                        
-                        var layer = GameConfig.FloorMapLayer;
-                        if (config.MiddleLayerAtlasCoords.Contains(atlasCoords))
-                        {
-                            layer = GameConfig.MiddleMapLayer;
-                        }
-                        else if (config.TopLayerAtlasCoords.Contains(atlasCoords))
-                        {
-                            layer = GameConfig.TopMapLayer;
-                        }
-                        
+
+                        var layer = config.GetLayer(atlasCoords);
                         _tileRoot.SetCell(layer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j),
                             0, atlasCoords);
                     }
@@ -648,7 +639,7 @@ public class DungeonTile
                 {
                     if (IsWayTile(layer, i, j))
                     {
-                        if (!_usePoints.Contains(new Vector2(i, j)))
+                        if (!_usePoints.Contains(new Vector2I(i, j)))
                         {
                             NavigationPolygonData polygonData = null;
 
@@ -782,7 +773,7 @@ public class DungeonTile
         var dir = 0;
         var offset = new Vector2(size.X * 0.5f, size.Y * 0.5f);
         //找到路, 向右开始找边界
-        var startPos = new Vector2(i, j);
+        var startPos = new Vector2I(i, j);
 
         var tempI = i;
         var tempJ = j;
@@ -797,7 +788,7 @@ public class DungeonTile
                     {
                         dir = 3;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -816,13 +807,13 @@ public class DungeonTile
                             points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
-                        PutUsePoint(new Vector2(tempI, tempJ));
+                        PutUsePoint(new Vector2I(tempI, tempJ));
                         tempI++;
                         break;
                     }
@@ -830,7 +821,7 @@ public class DungeonTile
                     {
                         dir = 1;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -843,7 +834,7 @@ public class DungeonTile
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 1: //下
                 {
@@ -851,7 +842,7 @@ public class DungeonTile
                     {
                         dir = 0;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -870,13 +861,13 @@ public class DungeonTile
                             points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
-                        PutUsePoint(new Vector2(tempI, tempJ));
+                        PutUsePoint(new Vector2I(tempI, tempJ));
                         tempJ++;
                         break;
                     }
@@ -884,7 +875,7 @@ public class DungeonTile
                     {
                         dir = 2;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -898,7 +889,7 @@ public class DungeonTile
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 2: //左
                 {
@@ -906,7 +897,7 @@ public class DungeonTile
                     {
                         dir = 1;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -927,13 +918,13 @@ public class DungeonTile
                             points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         }
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
-                        PutUsePoint(new Vector2(tempI, tempJ));
+                        PutUsePoint(new Vector2I(tempI, tempJ));
                         tempI--;
                         break;
                     }
@@ -941,7 +932,7 @@ public class DungeonTile
                     {
                         dir = 3;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -955,7 +946,7 @@ public class DungeonTile
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 3: //上
                 {
@@ -963,7 +954,7 @@ public class DungeonTile
                     {
                         dir = 2;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -983,13 +974,13 @@ public class DungeonTile
                             points.Add(new SerializeVector2(tempI * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
-                        PutUsePoint(new Vector2(tempI, tempJ));
+                        PutUsePoint(new Vector2I(tempI, tempJ));
                         tempJ--;
                         break;
                     }
@@ -997,7 +988,7 @@ public class DungeonTile
                     {
                         dir = 0;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -1010,7 +1001,7 @@ public class DungeonTile
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
             }
         }
@@ -1026,7 +1017,7 @@ public class DungeonTile
         var dir = 0;
         var offset = new Vector2(size.X * 0.5f, size.Y * 0.5f);
         //找到路, 向右开始找边界
-        var startPos = new Vector2(i - 1, j);
+        var startPos = new Vector2I(i - 1, j);
         PutUsePoint(startPos);
 
         var tempI = i;
@@ -1042,7 +1033,7 @@ public class DungeonTile
                     {
                         dir = 1;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -1063,13 +1054,13 @@ public class DungeonTile
                             points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y * 2));
                         }
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
-                        PutUsePoint(new Vector2(tempI, tempJ));
+                        PutUsePoint(new Vector2I(tempI, tempJ));
                         tempI++;
                         break;
                     }
@@ -1077,7 +1068,7 @@ public class DungeonTile
                     {
                         dir = 3;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -1091,7 +1082,7 @@ public class DungeonTile
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 1: //下
                 {
@@ -1099,7 +1090,7 @@ public class DungeonTile
                     {
                         dir = 2;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -1118,13 +1109,13 @@ public class DungeonTile
                             points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
-                        PutUsePoint(new Vector2(tempI, tempJ));
+                        PutUsePoint(new Vector2I(tempI, tempJ));
                         tempJ++;
                         break;
                     }
@@ -1132,7 +1123,7 @@ public class DungeonTile
                     {
                         dir = 0;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -1146,7 +1137,7 @@ public class DungeonTile
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 2: //左
                 {
@@ -1154,7 +1145,7 @@ public class DungeonTile
                     {
                         dir = 3;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -1173,13 +1164,13 @@ public class DungeonTile
                             points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
-                        PutUsePoint(new Vector2(tempI, tempJ));
+                        PutUsePoint(new Vector2I(tempI, tempJ));
                         tempI--;
                         break;
                     }
@@ -1187,7 +1178,7 @@ public class DungeonTile
                     {
                         dir = 1;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -1200,7 +1191,7 @@ public class DungeonTile
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 3: //上
                 {
@@ -1208,7 +1199,7 @@ public class DungeonTile
                     {
                         dir = 0;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -1228,13 +1219,13 @@ public class DungeonTile
                             points.Add(new SerializeVector2((tempI - 1) * size.X + offset.X, tempJ * size.Y + offset.Y));
                         }
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
                         }
 
-                        PutUsePoint(new Vector2(tempI, tempJ));
+                        PutUsePoint(new Vector2I(tempI, tempJ));
                         tempJ--;
                         break;
                     }
@@ -1242,7 +1233,7 @@ public class DungeonTile
                     {
                         dir = 2;
 
-                        var pos = new Vector2(tempI, tempJ);
+                        var pos = new Vector2I(tempI, tempJ);
                         if (points.Count > 1 && pos == startPos)
                         {
                             return polygonData;
@@ -1255,14 +1246,14 @@ public class DungeonTile
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
             }
         }
     }
 
     //记录导航网格中已经使用过的坐标
-    private void PutUsePoint(Vector2 pos)
+    private void PutUsePoint(Vector2I pos)
     {
         if (_usePoints.Contains(pos))
         {

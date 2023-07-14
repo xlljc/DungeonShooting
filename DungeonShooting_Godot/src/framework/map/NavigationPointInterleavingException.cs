@@ -10,9 +10,9 @@ public class NavigationPointInterleavingException : Exception
     /// <summary>
     /// 交错点
     /// </summary>
-    public Vector2 Point { get; }
+    public Vector2I Point { get; }
     
-    public NavigationPointInterleavingException(Vector2 point, string message): base(message)
+    public NavigationPointInterleavingException(Vector2I point, string message): base(message)
     {
         Point = point;
     }
