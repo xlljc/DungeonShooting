@@ -7,7 +7,7 @@ using Godot;
 /// Ui 基类
 /// </summary>
 [Tool]
-public abstract partial class UiBase : Control
+public abstract partial class UiBase : Control, ICoroutine
 {
     /// <summary>
     /// 当前 UI 所属层级
@@ -172,6 +172,10 @@ public abstract partial class UiBase : Control
 
     public sealed override void _Process(double delta)
     {
+        if (!IsOpen)
+        {
+            return;
+        }
         var newDelta = (float)delta;
         Process(newDelta);
         
@@ -221,26 +225,17 @@ public abstract partial class UiBase : Control
             _nestedUiSet.Remove(uiBase);
         }
     }
-
-    /// <summary>
-    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task, SignalAwaiter
-    /// </summary>
+    
     public long StartCoroutine(IEnumerator able)
     {
         return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
     }
-
-    /// <summary>
-    /// 根据协程 id 停止协程
-    /// </summary>
+    
     public void StopCoroutine(long coroutineId)
     {
         ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
     }
     
-    /// <summary>
-    /// 停止所有协程
-    /// </summary>
     public void StopAllCoroutine()
     {
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);

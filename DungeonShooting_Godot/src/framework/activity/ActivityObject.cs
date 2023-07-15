@@ -10,7 +10,7 @@ using Godot;
 /// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, <br/>
 /// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [Tool], 并在 ActivityObject.xlsx 配置文件中注册物体, 导出配置表后使用 ActivityObject.Create(id) 来创建实例.<br/>
 /// </summary>
-public abstract partial class ActivityObject : CharacterBody2D, IDestroy
+public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
 {
     /// <summary>
     /// 是否是调试模式
@@ -1405,26 +1405,17 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         _playHit = true;
         _playHitSchedule = 0;
     }
-
-    /// <summary>
-    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task, SignalAwaiter
-    /// </summary>
+    
     public long StartCoroutine(IEnumerator able)
     {
         return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
     }
-
-    /// <summary>
-    /// 根据协程 id 停止协程
-    /// </summary>
+    
     public void StopCoroutine(long coroutineId)
     {
         ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
     }
     
-    /// <summary>
-    /// 停止所有协程
-    /// </summary>
     public void StopAllCoroutine()
     {
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);

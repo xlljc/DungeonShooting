@@ -7,7 +7,7 @@ using Config;
 using Godot;
 using UI.BottomTips;
 
-public partial class GameApplication : Node2D
+public partial class GameApplication : Node2D, ICoroutine
 {
 	public static GameApplication Instance { get; private set; }
 	
@@ -199,25 +199,16 @@ public partial class GameApplication : Node2D
 		return (viewPos - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (ViewportSize / 2)) * PixelScale;
 	}
 	
-	/// <summary>
-	/// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task, SignalAwaiter
-	/// </summary>
 	public long StartCoroutine(IEnumerator able)
 	{
 		return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
 	}
-
-	/// <summary>
-	/// 根据协程 id 停止协程
-	/// </summary>
+	
 	public void StopCoroutine(long coroutineId)
 	{
 		ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
 	}
-    
-	/// <summary>
-	/// 停止所有协程
-	/// </summary>
+	
 	public void StopAllCoroutine()
 	{
 		ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
