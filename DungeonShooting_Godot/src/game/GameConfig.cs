@@ -37,7 +37,7 @@ public static class GameConfig
     /// <summary>
     /// 地图描述数据路径
     /// </summary>
-    public const string RoomTileDataDir = "resource/map/tiledata/";
+    public const string RoomTileDataDir = "resource/map/tileData/";
     /// <summary>
     /// 房间配置汇总数据路径
     /// </summary>

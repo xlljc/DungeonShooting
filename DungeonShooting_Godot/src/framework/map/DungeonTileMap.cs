@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 地牢地砖管理类, 提供一些操作 TileMap 和计算导航的接口
 /// </summary>
-public class DungeonTile
+public class DungeonTileMap
 {
     //--------------------- 导航 -------------------------
     
@@ -26,7 +26,7 @@ public class DungeonTile
     //生成导航的结果
     private GenerateNavigationResult _generateNavigationResult;
 
-    public DungeonTile(TileMap tileRoot)
+    public DungeonTileMap(TileMap tileRoot)
     {
         _tileRoot = tileRoot;
     }

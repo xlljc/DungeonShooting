@@ -178,7 +178,7 @@ public static class DungeonRoomGenerator
 				    {
 					    var dungeonRoomTemplate = packedScene.Instantiate<DungeonRoomTemplate>();
 					    var usedRect = dungeonRoomTemplate.GetUsedRect();
-					    var dungeonTile = new DungeonTile(dungeonRoomTemplate);
+					    var dungeonTile = new DungeonTileMap(dungeonRoomTemplate);
 					    dungeonTile.SetFloorAtlasCoords(new List<Vector2I>() { new Vector2I(0, 8) });
 					    //计算导航网格
 					    dungeonTile.GenerateNavigationPolygon(0);
@@ -200,7 +200,7 @@ public static class DungeonRoomGenerator
 			    var configPath = tileDataDir + path + ".json";
 			    var split = new DungeonRoomSplit();
 			    split.ScenePath = ToResPath(tileDir + path + ".tscn");
-			    split.ConfigPath = ToResPath(configPath);
+			    split.RoomPath = ToResPath(configPath);
 
 			    if (!roomGroupMap.TryGetValue(item.Value.GroupName, out var group))
 			    {

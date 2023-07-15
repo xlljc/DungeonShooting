@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://d1os2i60rnd0i"]
 
-[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="1_83m2u"]
+[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/TileSet1.tres" id="1_83m2u"]
 [ext_resource type="Script" path="res://src/framework/map/mark/EnemyMark.cs" id="3_g5jtq"]
 [ext_resource type="Script" path="res://src/framework/map/DungeonRoomTemplate.cs" id="dungeonRoomTemplate"]
 

@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using Godot;
 using Godot.Collections;
 
@@ -58,7 +62,7 @@ public partial class EditorTileMap : TileMap
     //负责存储自动图块数据
     private Grid<bool> _autoCellLayerGrid = new Grid<bool>();
     //用于生成导航网格
-    private DungeonTile _dungeonTile;
+    private DungeonTileMap _dungeonTileMap;
     //停止绘制多久后开始执行生成操作
     private float _generateInterval = 3f;
     //生成自动图块和导航网格的计时器
@@ -74,7 +78,6 @@ public partial class EditorTileMap : TileMap
     private int _sourceId = 0;
     private int _terrainSet = 0;
     private int _terrain = 0;
-    private Vector2I _floorAtlasCoords = new Vector2I(0, 8);
     private AutoTileConfig _autoTileConfig = new AutoTileConfig();
     //-------------------------------
 
@@ -92,8 +95,8 @@ public partial class EditorTileMap : TileMap
         AddLayer(CustomTopLayer);
         SetLayerZIndex(CustomTopLayer, CustomTopLayer);
 
-        _dungeonTile = new DungeonTile(this);
-        _dungeonTile.SetFloorAtlasCoords(new List<Vector2I>(new []{ _floorAtlasCoords }));
+        _dungeonTileMap = new DungeonTileMap(this);
+        _dungeonTileMap.SetFloorAtlasCoords(new List<Vector2I>(new []{ _autoTileConfig.Floor.AutoTileCoord }));
     }
 
     public override void _Process(double delta)
@@ -181,10 +184,10 @@ public partial class EditorTileMap : TileMap
         if (_checkTerrainFlag) //已经通过地形检测
         {
             //绘制导航网格
-            var result = _dungeonTile.GetGenerateNavigationResult();
+            var result = _dungeonTileMap.GetGenerateNavigationResult();
             if (result != null && result.Success)
             {
-                var polygonData = _dungeonTile.GetPolygonData();
+                var polygonData = _dungeonTileMap.GetPolygonData();
                 Utils.DrawNavigationPolygon(canvasItem, polygonData, 1);
             }
         }
@@ -206,11 +209,11 @@ public partial class EditorTileMap : TileMap
             }
 
             var pos = cellPos * size;
-            canvasItem.DrawRect(new Rect2(pos, _mousePosition - pos + temp), Colors.Wheat, false);
+            canvasItem.DrawRect(new Rect2(pos, _mousePosition - pos + temp), Colors.White, false, 2f / Scale.X);
         }
         else //绘制单格
         {
-            canvasItem.DrawRect(new Rect2(_mousePosition, TileSet.TileSize), Colors.Wheat, false);
+            canvasItem.DrawRect(new Rect2(_mousePosition, TileSet.TileSize), Colors.White, false, 2f / Scale.X);
         }
     }
 
@@ -273,6 +276,56 @@ public partial class EditorTileMap : TileMap
                 }
             }
         }
+        else if (@event is InputEventKey eventKey)
+        {
+            if (eventKey.Pressed && eventKey.Keycode == Key.M)
+            {
+                GD.Print("测试保存地牢房间数据...");
+                var tileInfo = new DungeonTileInfo();
+                tileInfo.NavigationList = _dungeonTileMap.GetPolygonData().ToList();
+                tileInfo.Floor = new List<int>();
+                tileInfo.Middle = new List<int>();
+                tileInfo.Top = new List<int>();
+
+                var floor = GetUsedCellsById(AutoFloorLayer, _sourceId);
+                foreach (var pos in floor)
+                {
+                    var atlasCoords = GetCellAtlasCoords(AutoFloorLayer, pos);
+                    tileInfo.Floor.Add(pos.X);
+                    tileInfo.Floor.Add(pos.Y);
+                    tileInfo.Floor.Add(_sourceId);
+                    tileInfo.Floor.Add(atlasCoords.X);
+                    tileInfo.Floor.Add(atlasCoords.Y);
+                }
+                
+                var middle = GetUsedCellsById(AutoMiddleLayer, _sourceId);
+                foreach (var pos in middle)
+                {
+                    var atlasCoords = GetCellAtlasCoords(AutoMiddleLayer, pos);
+                    tileInfo.Middle.Add(pos.X);
+                    tileInfo.Middle.Add(pos.Y);
+                    tileInfo.Middle.Add(_sourceId);
+                    tileInfo.Middle.Add(atlasCoords.X);
+                    tileInfo.Middle.Add(atlasCoords.Y);
+                }
+                
+                var top = GetUsedCellsById(AutoTopLayer, _sourceId);
+                foreach (var pos in top)
+                {
+                    var atlasCoords = GetCellAtlasCoords(AutoTopLayer, pos);
+                    tileInfo.Top.Add(pos.X);
+                    tileInfo.Top.Add(pos.Y);
+                    tileInfo.Top.Add(_sourceId);
+                    tileInfo.Top.Add(atlasCoords.X);
+                    tileInfo.Top.Add(atlasCoords.Y);
+                }
+                
+                // var config = new JsonSerializerOptions();
+                // config.WriteIndented = true;
+                var jsonStr = JsonSerializer.Serialize(tileInfo);
+                File.WriteAllText("D:\\test.json", jsonStr);
+            }
+        }
     }
 
     //缩小
@@ -310,7 +363,7 @@ public partial class EditorTileMap : TileMap
     //绘制单个自动贴图
     private void SetSingleAutoCell(Vector2I position)
     {
-        SetCell(GetFloorLayer(), position, _sourceId, _floorAtlasCoords);
+        SetCell(GetFloorLayer(), position, _sourceId, _autoTileConfig.Floor.AutoTileCoord);
         if (!_autoCellLayerGrid.Contains(position.X, position.Y))
         {
             ResetGenerateTimer();
@@ -342,7 +395,7 @@ public partial class EditorTileMap : TileMap
         {
             for (var j = 0; j < height; j++)
             {
-                SetCell(GetFloorLayer(), new Vector2I(start.X + i, start.Y + j), _sourceId, _floorAtlasCoords);
+                SetCell(GetFloorLayer(), new Vector2I(start.X + i, start.Y + j), _sourceId, _autoTileConfig.Floor.AutoTileCoord);
             }
         }
 
@@ -498,8 +551,8 @@ public partial class EditorTileMap : TileMap
     //生成导航网格
     private bool GenerateNavigation()
     {
-        _dungeonTile.GenerateNavigationPolygon(AutoFloorLayer);
-        var result = _dungeonTile.GetGenerateNavigationResult();
+        _dungeonTileMap.GenerateNavigationPolygon(AutoFloorLayer);
+        var result = _dungeonTileMap.GetGenerateNavigationResult();
         if (result.Success)
         {
             CloseErrorCell();

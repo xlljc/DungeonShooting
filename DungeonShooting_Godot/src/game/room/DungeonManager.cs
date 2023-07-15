@@ -32,7 +32,7 @@ public partial class DungeonManager : Node2D
     public bool IsInDungeon { get; private set; }
 
     private DungeonConfig _config;
-    private DungeonTile _dungeonTile;
+    private DungeonTileMap _dungeonTileMap;
     private AutoTileConfig _autoTileConfig;
     private DungeonGenerator _dungeonGenerator;
     //房间内所有静态导航网格数据
@@ -110,22 +110,22 @@ public partial class DungeonManager : Node2D
         
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
-        _dungeonTile = new DungeonTile(_world.TileRoot);
-        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom, _dungeonGenerator.Random);
+        _dungeonTileMap = new DungeonTileMap(_world.TileRoot);
+        _dungeonTileMap.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom, _dungeonGenerator.Random);
         yield return 0;
         
         //生成寻路网格， 这一步操作只生成过道的导航
-        _dungeonTile.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
+        _dungeonTileMap.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
         yield return 0;
         //挂载过道导航区域
-        _dungeonTile.MountNavigationPolygon(_world.TileRoot);
+        _dungeonTileMap.MountNavigationPolygon(_world.TileRoot);
         yield return 0;
         //过道导航区域数据
         _roomStaticNavigationList = new List<NavigationPolygonData>();
-        _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
+        _roomStaticNavigationList.AddRange(_dungeonTileMap.GetPolygonData());
         yield return 0;
         //门导航区域数据
-        _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
+        _roomStaticNavigationList.AddRange(_dungeonTileMap.GetConnectDoorPolygonData());
         yield return new WaitForFixedProcess(10);
         //初始化所有房间
         _dungeonGenerator.EachRoom(InitRoom);
@@ -185,7 +185,7 @@ public partial class DungeonManager : Node2D
         yield return 0;
         _dungeonGenerator.EachRoom(DisposeRoomInfo);
         yield return 0;
-        _dungeonTile = null;
+        _dungeonTileMap = null;
         _autoTileConfig = null;
         _dungeonGenerator = null;
         _roomStaticNavigationList.Clear();
@@ -496,7 +496,7 @@ public partial class DungeonManager : Node2D
     {
         if (GameApplication.Instance.Debug)
         {
-            if (_dungeonTile != null)
+            if (_dungeonTileMap != null)
             {
                 //绘制ai寻路区域
                 Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());

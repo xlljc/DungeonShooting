@@ -69,7 +69,7 @@ public partial class DungeonRoomTemplate : TileMap
     //是否能是否按下
     private bool _clickSave = false;
 
-    private DungeonTile _dungeonTile;
+    private DungeonTileMap _dungeonTileMap;
     private TileDrawHandler _tileDrawHandler;
 
     //计算导航的计时器
@@ -213,14 +213,14 @@ public partial class DungeonRoomTemplate : TileMap
                 }
                 
                 //绘制导航, 现在有点问题, 绘制的内容会被自身的 tile 所挡住
-                if (RoomTemplate._dungeonTile != null)
+                if (RoomTemplate._dungeonTileMap != null)
                 {
-                    var result = RoomTemplate._dungeonTile.GetGenerateNavigationResult();
+                    var result = RoomTemplate._dungeonTileMap.GetGenerateNavigationResult();
                     if (result != null)
                     {
                         if (result.Success)
                         {
-                            var polygonData = RoomTemplate._dungeonTile.GetPolygonData();
+                            var polygonData = RoomTemplate._dungeonTileMap.GetPolygonData();
                             Utils.DrawNavigationPolygon(this, polygonData, 2);
                         }
                         else
@@ -260,10 +260,10 @@ public partial class DungeonRoomTemplate : TileMap
             return;
         }
 
-        if (_dungeonTile == null)
+        if (_dungeonTileMap == null)
         {
-            _dungeonTile = new DungeonTile(this);
-            _dungeonTile.SetFloorAtlasCoords(new List<Vector2I>() { new Vector2I(0, 8) });
+            _dungeonTileMap = new DungeonTileMap(this);
+            _dungeonTileMap.SetFloorAtlasCoords(new List<Vector2I>() { new Vector2I(0, 8) });
             OnTileChanged();
             var callable = new Callable(this, nameof(OnTileChanged));
             if (!IsConnected("changed", callable))
@@ -296,7 +296,7 @@ public partial class DungeonRoomTemplate : TileMap
             //重新计算导航
             if (_calcTileNavTimer <= 0)
             {
-                _dungeonTile.GenerateNavigationPolygon(0);
+                _dungeonTileMap.GenerateNavigationPolygon(0);
             }
         }
 
@@ -808,8 +808,8 @@ public partial class DungeonRoomTemplate : TileMap
             return;
         }
         //计算导航网格
-        _dungeonTile.GenerateNavigationPolygon(0);
-        var polygonData = _dungeonTile.GetPolygonData();
+        _dungeonTileMap.GenerateNavigationPolygon(0);
+        var polygonData = _dungeonTileMap.GetPolygonData();
         var rect = GetUsedRect();
         SaveConfig(_dungeonRoomInfo.DoorAreaInfos, rect.Position, rect.Size, polygonData.ToList(),
             _dungeonRoomInfo.GroupName, _dungeonRoomInfo.RoomType, Name, Weight);

@@ -126,4 +126,17 @@ public static class ResourceManager
         var packedScene = Load<PackedScene>(path);
         return packedScene.Instantiate<T>();
     }
+
+    /// <summary>
+    /// 读取文本资源
+    /// </summary>
+    public static string LoadText(string path)
+    {
+        string text;
+        using (var fileAccess = FileAccess.Open(path, FileAccess.ModeFlags.Read))
+        {
+            text = fileAccess.GetAsText();
+        }
+        return text;
+    }
 }

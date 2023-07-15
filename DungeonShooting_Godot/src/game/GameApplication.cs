@@ -218,10 +218,8 @@ public partial class GameApplication : Node2D, ICoroutine
 	private void InitRoomConfig()
 	{
 		//加载房间配置信息
-		var file = FileAccess.Open(ResourcePath.resource_map_RoomConfig_json, FileAccess.ModeFlags.Read);
-		var asText = file.GetAsText();
+		var asText = ResourceManager.LoadText(ResourcePath.resource_map_RoomConfig_json);
 		RoomConfig = JsonSerializer.Deserialize<Dictionary<string, DungeonRoomGroup>>(asText);
-		file.Dispose();
 
 		//初始化RoomConfigMap
 		RoomConfigMap = new Dictionary<string, DungeonRoomSplit>();
