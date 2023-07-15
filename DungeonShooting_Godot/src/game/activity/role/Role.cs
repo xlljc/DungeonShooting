@@ -522,7 +522,7 @@ public abstract partial class Role : ActivityObject
         }
     }
     
-    protected override void OnAffiliationChange()
+    protected override void OnAffiliationChange(AffiliationArea prevArea)
     {
         //身上的武器的所属区域也得跟着变
         WeaponPack.ForEach((weapon, i) =>

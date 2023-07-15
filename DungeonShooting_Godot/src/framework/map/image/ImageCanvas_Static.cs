@@ -35,7 +35,7 @@ public partial class ImageCanvas
     /// </summary>
     public static Vector2I RenderViewportSize { get; private set; }
     
-    //预渲染队列, 这里不用 Queue 是因为大图尝试添加到渲染队列可能失败, 为了不影响
+    //预渲染队列, 这里不用 Queue 是因为大图尝试添加到渲染队列可能失败, 为了不影响渲染顺序, 所以使用 List
     private static readonly List<ImageRenderData> _queueItems = new List<ImageRenderData>();
     //渲染中的队列
     private static readonly Queue<ImageRenderData> _drawingQueueItems = new Queue<ImageRenderData>();

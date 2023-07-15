@@ -94,10 +94,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         {
             if (value != _affiliationArea)
             {
+                var prev = _affiliationArea;
                 _affiliationArea = value;
                 if (!IsDestroyed)
                 {
-                    OnAffiliationChange();
+                    OnAffiliationChange(prev);
                 }
             }
         }
@@ -591,7 +592,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <summary>
     /// 归属区域发生改变
     /// </summary>
-    protected virtual void OnAffiliationChange()
+    /// <param name="prevArea">上一个区域, 注意可能为空</param>
+    protected virtual void OnAffiliationChange(AffiliationArea prevArea)
     {
     }
 
@@ -1490,15 +1492,15 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public void BecomesStaticImage()
     {
+        if (_processingBecomesStaticImage)
+        {
+            return;
+        }
+        
         if (AffiliationArea == null)
         {
             GD.PrintErr($"调用函数: BecomesStaticImage() 失败, 物体{Name}没有归属区域, 无法确定绘制到哪个ImageCanvas上, 直接执行销毁");
             Destroy();
-            return;
-        }
-
-        if (_processingBecomesStaticImage)
-        {
             return;
         }
 
