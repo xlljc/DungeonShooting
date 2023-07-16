@@ -116,9 +116,9 @@ public partial class EditorToolsPanel : EditorTools
         var dungeonRoomTypes = Enum.GetValues<DungeonRoomType>();
         for (var i = 0; i < dungeonRoomTypes.Length; i++)
         {
-            var typeName = DungeonRoomTemplate.DungeonRoomTypeToString(dungeonRoomTypes[i]);
+            var typeName = DungeonManager.DungeonRoomTypeToString(dungeonRoomTypes[i]);
             var text = typeName + " (" +
-                       DungeonRoomTemplate.DungeonRoomTypeToDescribeString(dungeonRoomTypes[i]) + ")";
+                       DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomTypes[i]) + ")";
             select2.AddItem(text, i);
             _createRoomTypeValueMap.Add(i, typeName);
         }

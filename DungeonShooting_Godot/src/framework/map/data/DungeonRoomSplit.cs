@@ -54,4 +54,24 @@ public class DungeonRoomSplit
     }
 
     private DungeonRoomInfo _roomInfo;
+
+    /// <summary>
+    /// 房间地块配置数据
+    /// </summary>
+    [JsonIgnore]
+    public DungeonTileInfo TileInfo
+    {
+        get
+        {
+            if (_tileInfo == null)
+            {
+                var asText = ResourceManager.LoadText(TilePath);
+                _tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(asText);
+            }
+
+            return _tileInfo;
+        }
+    }
+
+    private DungeonTileInfo _tileInfo;
 }

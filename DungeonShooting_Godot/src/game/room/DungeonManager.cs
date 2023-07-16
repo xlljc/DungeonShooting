@@ -226,10 +226,10 @@ public partial class DungeonManager : Node2D
     //挂载房间导航区域
     private void MountNavFromRoomInfo(RoomInfo roomInfo)
     {
-        var polygonArray = roomInfo.RoomSplit.RoomInfo.NavigationList.ToArray();
+        var polygonArray = roomInfo.RoomSplit.TileInfo.NavigationList;
         var polygon = new NavigationPolygon();
         var offset = roomInfo.GetOffsetPosition();
-        for (var i = 0; i < polygonArray.Length; i++)
+        for (var i = 0; i < polygonArray.Count; i++)
         {
             var navigationPolygonData = polygonArray[i];
             var polygonPointArray = navigationPolygonData.GetPoints();
@@ -560,5 +560,44 @@ public partial class DungeonManager : Node2D
                 DrawRect(new Rect2(roomDoor.Cross * cellSize, new Vector2(cellSize * 4, cellSize * 4)), Colors.Yellow, false);
             }
         }
+    }
+    
+    /// <summary>
+    /// 将房间类型枚举转为字符串
+    /// </summary>
+    public static string DungeonRoomTypeToString(DungeonRoomType roomType)
+    {
+        switch (roomType)
+        {
+            case DungeonRoomType.Battle: return "battle";
+            case DungeonRoomType.Inlet: return "inlet";
+            case DungeonRoomType.Outlet: return "outlet";
+            case DungeonRoomType.Boss: return "boss";
+            case DungeonRoomType.Reward: return "reward";
+            case DungeonRoomType.Shop: return "shop";
+            case DungeonRoomType.Event: return "event";
+        }
+
+        return "battle";
+    }
+    
+        
+    /// <summary>
+    /// 将房间类型枚举转为描述字符串
+    /// </summary>
+    public static string DungeonRoomTypeToDescribeString(DungeonRoomType roomType)
+    {
+        switch (roomType)
+        {
+            case DungeonRoomType.Battle: return "战斗房间";
+            case DungeonRoomType.Inlet: return "起始房间";
+            case DungeonRoomType.Outlet: return "结束房间";
+            case DungeonRoomType.Boss: return "boss战房间";
+            case DungeonRoomType.Reward: return "奖励房间";
+            case DungeonRoomType.Shop: return "商店房间";
+            case DungeonRoomType.Event: return "事件房间";
+        }
+
+        return "战斗房间";
     }
 }

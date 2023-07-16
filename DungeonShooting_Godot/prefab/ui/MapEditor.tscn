@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://csbxfkdupsckv"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/MapEditorPanel.cs" id="1_5s7a0"]
-[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="2_vrg60"]
+[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/TileSet1.tres" id="2_vrg60"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/TileView/EditorTileMap.cs" id="2_waq8f"]
 [ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/mapEditor/ErrorCell.png" id="4_465u2"]
 

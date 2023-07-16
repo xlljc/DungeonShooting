@@ -31,13 +31,9 @@ public static class GameConfig
     public const int RoomSpace = 4;
     
     /// <summary>
-    /// 地图场景路径
+    /// 地图配置路径
     /// </summary>
     public const string RoomTileDir = "resource/map/tileMaps/";
-    /// <summary>
-    /// 地图描述数据路径
-    /// </summary>
-    public const string RoomTileDataDir = "resource/map/tileData/";
     /// <summary>
     /// 房间配置汇总数据路径
     /// </summary>

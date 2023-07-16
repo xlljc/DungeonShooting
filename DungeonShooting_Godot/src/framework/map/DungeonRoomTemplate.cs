@@ -1,19 +1,15 @@
-
+/*
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using Generator;
 using Godot;
 
 [Tool]
 public partial class DungeonRoomTemplate : TileMap
-{
-    /// <summary>
-    /// 默认权重值
-    /// </summary>
-    public const int DefaultWeight = 100;
-    
+{    
     /// <summary>
     /// 是否启用编辑模式
     /// </summary>
@@ -802,16 +798,15 @@ public partial class DungeonRoomTemplate : TileMap
     private void TriggerSave()
     {
         //如果没有找到对应的场景文件，则不保存
-        var path = _dungeonRoomInfo.GroupName + "/" + DungeonRoomTypeToString(_dungeonRoomInfo.RoomType) + "/" + _dungeonRoomInfo.FileName;
+        var path = _dungeonRoomInfo.GroupName + "/" + DungeonManager.DungeonRoomTypeToString(_dungeonRoomInfo.RoomType) + "/" + _dungeonRoomInfo.FileName;
         if (!File.Exists(GameConfig.RoomTileDir + path + ".tscn"))
         {
             return;
         }
         //计算导航网格
         _dungeonTileMap.GenerateNavigationPolygon(0);
-        var polygonData = _dungeonTileMap.GetPolygonData();
         var rect = GetUsedRect();
-        SaveConfig(_dungeonRoomInfo.DoorAreaInfos, rect.Position, rect.Size, polygonData.ToList(),
+        DungeonRoomInfo.SaveConfig(_dungeonRoomInfo.DoorAreaInfos, rect.Position, rect.Size,
             _dungeonRoomInfo.GroupName, _dungeonRoomInfo.RoomType, Name, Weight);
     }
     
@@ -825,38 +820,6 @@ public partial class DungeonRoomTemplate : TileMap
         var pos = usedRect.Position * tileMap.TileSet.TileSize;
         var size = usedRect.Size * tileMap.TileSet.TileSize;
         return new Rect2(tileMap.ToLocal(pos), size);
-    }
-    
-    /// <summary>
-    /// 保存房间配置
-    /// </summary>
-    public static void SaveConfig(List<DoorAreaInfo> doorConfigs, Vector2I position, Vector2I size, List<NavigationPolygonData> polygonData,
-        string groupName, DungeonRoomType roomType, string fileName, int weight)
-    {
-        //存入本地
-        var path = GameConfig.RoomTileDataDir + groupName + "/" + DungeonRoomTypeToString(roomType);
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
-
-        var roomInfo = new DungeonRoomInfo();
-        roomInfo.Position = new SerializeVector2(position);
-        roomInfo.Size = new SerializeVector2(size);
-        roomInfo.DoorAreaInfos = doorConfigs;
-        roomInfo.NavigationList = polygonData;
-        roomInfo.RoomType = roomType;
-        roomInfo.GroupName = groupName;
-        roomInfo.FileName = fileName;
-        roomInfo.Weight = weight;
-        
-        var config = new JsonSerializerOptions();
-        config.WriteIndented = true;
-        
-        path += "/" + fileName + ".json";
-        var jsonStr = JsonSerializer.Serialize(roomInfo, config);
-        File.WriteAllText(path, jsonStr);
-        GD.Print("保存房间配置成功！路径为：" + path);
     }
 
     /// <summary>
@@ -946,69 +909,7 @@ public partial class DungeonRoomTemplate : TileMap
             }
         }
 
-        if (obj.ContainsKey("NavigationList"))
-        {
-            var navigationArray = obj["NavigationList"].AsGodotArray<Variant>();
-            roomInfo.NavigationList = new List<NavigationPolygonData>();
-            for (var i = 0; i < navigationArray.Count; i++)
-            {
-                var navigation = navigationArray[i].AsGodotDictionary();
-                var polygonData = new NavigationPolygonData();
-
-                polygonData.Type = (NavigationPolygonType)navigation["Type"].AsInt32();
-                var points = new List<Vector2>();
-                var pointArray = navigation["Points"].AsGodotArray<Variant>();
-                for (var j = 0; j < pointArray.Count; j++)
-                {
-                    var point = pointArray[j].AsGodotDictionary();
-                    points.Add(new Vector2(point["X"].AsInt32(), point["Y"].AsInt32()));
-                }
-                polygonData.SetPoints(points.ToArray());
-
-                roomInfo.NavigationList.Add(polygonData);
-            }
-        }
-
         return roomInfo;
-    }
-    
-    /// <summary>
-    /// 将房间类型枚举转为字符串
-    /// </summary>
-    public static string DungeonRoomTypeToString(DungeonRoomType roomType)
-    {
-        switch (roomType)
-        {
-            case DungeonRoomType.Battle: return "battle";
-            case DungeonRoomType.Inlet: return "inlet";
-            case DungeonRoomType.Outlet: return "outlet";
-            case DungeonRoomType.Boss: return "boss";
-            case DungeonRoomType.Reward: return "reward";
-            case DungeonRoomType.Shop: return "shop";
-            case DungeonRoomType.Event: return "event";
-        }
-
-        return "battle";
-    }
-    
-        
-    /// <summary>
-    /// 将房间类型枚举转为描述字符串
-    /// </summary>
-    public static string DungeonRoomTypeToDescribeString(DungeonRoomType roomType)
-    {
-        switch (roomType)
-        {
-            case DungeonRoomType.Battle: return "战斗房间";
-            case DungeonRoomType.Inlet: return "起始房间";
-            case DungeonRoomType.Outlet: return "结束房间";
-            case DungeonRoomType.Boss: return "boss战房间";
-            case DungeonRoomType.Reward: return "奖励房间";
-            case DungeonRoomType.Shop: return "商店房间";
-            case DungeonRoomType.Event: return "事件房间";
-        }
-
-        return "战斗房间";
     }
 #endif
 
@@ -1038,3 +939,4 @@ public partial class DungeonRoomTemplate : TileMap
         }
     }
 }
+*/

@@ -81,6 +81,14 @@ public partial class EditorTileMap : TileMap
     private int _terrainSet = 0;
     private int _terrain = 0;
     private AutoTileConfig _autoTileConfig = new AutoTileConfig();
+
+    private string _groupName = "testGroup1";
+    private string _fileName = "Room2";
+    private Vector2I _roomPosition;
+    private Vector2I _roomSize;
+    private List<DoorAreaInfo> _doorConfigs = new List<DoorAreaInfo>();
+    private DungeonRoomType _roomType = DungeonRoomType.Battle;
+    private int _weight = 100;
     //-------------------------------
 
     public override void _Ready()
@@ -142,6 +150,8 @@ public partial class EditorTileMap : TileMap
             _generateTimer -= newDelta;
             if (_generateTimer <= 0)
             {
+                //计算区域
+                CalcRect();
                 GD.Print("开始检测是否可以生成地形...");
                 if (CheckTerrain())
                 {
@@ -170,6 +180,14 @@ public partial class EditorTileMap : TileMap
         canvasItem.DrawLine(new Vector2(0, 2000), new Vector2(0, -2000), Colors.Green);
         canvasItem.DrawLine(new Vector2(2000, 0), new Vector2( -2000, 0), Colors.Red);
         
+        //绘制房间区域
+        if (_roomSize.X != 0 && _roomSize.Y != 0)
+        {
+            var size = TileSet.TileSize;
+            canvasItem.DrawRect(new Rect2((_roomPosition - Vector2I.One) * size, (_roomSize + new Vector2I(2, 2)) * size),
+                Colors.Aqua, false, 5f / Scale.X);
+        }
+        
         if (_checkTerrainFlag) //已经通过地形检测
         {
             //绘制导航网格
@@ -177,7 +195,7 @@ public partial class EditorTileMap : TileMap
             if (result != null && result.Success)
             {
                 var polygonData = _dungeonTileMap.GetPolygonData();
-                Utils.DrawNavigationPolygon(canvasItem, polygonData, 1);
+                Utils.DrawNavigationPolygon(canvasItem, polygonData, 3f / Scale.X);
             }
         }
 
@@ -270,7 +288,7 @@ public partial class EditorTileMap : TileMap
             if (eventKey.Pressed && eventKey.Keycode == Key.M)
             {
                 GD.Print("测试保存地牢房间数据...");
-                SaveTile();
+                TriggerSave();
             }
         }
     }
@@ -306,27 +324,17 @@ public partial class EditorTileMap : TileMap
     }
 
     //保存地牢
-    private void SaveTile()
+    private void TriggerSave()
     {
-        var tileInfo = new DungeonTileInfo();
-        tileInfo.NavigationList = _dungeonTileMap.GetPolygonData().ToList();
-        tileInfo.Floor = new List<int>();
-        tileInfo.Middle = new List<int>();
-        tileInfo.Top = new List<int>();
-
-        PushLayerDataToList(AutoFloorLayer, _sourceId, tileInfo.Floor);
-        PushLayerDataToList(AutoMiddleLayer, _sourceId, tileInfo.Middle);
-        PushLayerDataToList(AutoTopLayer, _sourceId, tileInfo.Top);
-        
-        var jsonStr = JsonSerializer.Serialize(tileInfo);
-        File.WriteAllText("D:\\test.json", jsonStr);
+        SaveRoomInfoConfig();
+        SaveTileInfoConfig();
     }
 
     //加载地牢
     public void LoadTile()
     {
         InitLayer();
-        var text = ResourceManager.LoadText("D:\\test.json");
+        var text = ResourceManager.LoadText("D:\\GameProject\\DungeonShooting\\DungeonShooting_Godot\\resource\\map\\tileMaps\\testGroup1\\battle\\Room2\\Room2_tileInfo.json");
         var tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(text);
 
         //地块数据
@@ -481,18 +489,26 @@ public partial class EditorTileMap : TileMap
     {
         _generateTimer = _generateInterval;
         _isGenerateTerrain = false;
-        SetLayerEnabled(AutoTopLayer, false);
-        SetLayerEnabled(AutoMiddleLayer, false);
+        _dungeonTileMap.ClearPolygonData();
+        ClearLayer(AutoTopLayer);
+        ClearLayer(AutoMiddleLayer);
+    }
+
+    //从新计算房间区域
+    private void CalcRect()
+    {
+        var rect = GetUsedRect();
+        _roomPosition = rect.Position;
+        _roomSize = rect.Size;
     }
     
     //检测是否有不合规的图块, 返回true表示图块正常
     private bool CheckTerrain()
     {
-        var usedRect = GetUsedRect();
-        var x = usedRect.Position.X;
-        var y = usedRect.Position.Y;
-        var w = usedRect.Size.X;
-        var h = usedRect.Size.Y;
+        var x = _roomPosition.X;
+        var y = _roomPosition.Y;
+        var w = _roomSize.X;
+        var h = _roomSize.Y;
 
         for (var i = 0; i < w; i++)
         {
@@ -542,16 +558,13 @@ public partial class EditorTileMap : TileMap
     //将自动生成的图块从 AutoFloorLayer 移动到指定图层中
     private void MoveTerrainCell()
     {
-        SetLayerEnabled(AutoTopLayer, true);
-        SetLayerEnabled(AutoMiddleLayer, true);
         ClearLayer(AutoTopLayer);
         ClearLayer(AutoMiddleLayer);
         
-        var usedRect = GetUsedRect();
-        var x = usedRect.Position.X;
-        var y = usedRect.Position.Y;
-        var w = usedRect.Size.X;
-        var h = usedRect.Size.Y;
+        var x = _roomPosition.X;
+        var y = _roomPosition.Y;
+        var w = _roomSize.X;
+        var h = _roomSize.Y;
 
         for (var i = 0; i < w; i++)
         {
@@ -657,5 +670,56 @@ public partial class EditorTileMap : TileMap
     public void OnClickCenterTool()
     {
         Position = MapEditorPanel.S_SubViewport.Instance.Size / 2;
+    }
+    
+    //保存房间配置
+    private void SaveRoomInfoConfig()
+    {
+        //存入本地
+        var path = GameConfig.RoomTileDir + _groupName + "/" +
+                   DungeonManager.DungeonRoomTypeToString(_roomType) + "/" + _fileName;
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        
+        var roomInfo = new DungeonRoomInfo();
+        roomInfo.Position = new SerializeVector2(_roomPosition);
+        roomInfo.Size = new SerializeVector2(_roomSize);
+        roomInfo.DoorAreaInfos = _doorConfigs;
+        roomInfo.RoomType = _roomType;
+        roomInfo.GroupName = _groupName;
+        roomInfo.FileName = _fileName;
+        roomInfo.Weight = _weight;
+
+        path += "/" + _fileName + "_roomInfo.json";
+        var jsonStr = JsonSerializer.Serialize(roomInfo);
+        File.WriteAllText(path, jsonStr);
+    }
+
+    //保存地块数据
+    public void SaveTileInfoConfig()
+    {
+        //存入本地
+        var path = GameConfig.RoomTileDir + _groupName + "/" +
+                   DungeonManager.DungeonRoomTypeToString(_roomType) + "/" + _fileName;
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        
+        var tileInfo = new DungeonTileInfo();
+        tileInfo.NavigationList = _dungeonTileMap.GetPolygonData().ToList();
+        tileInfo.Floor = new List<int>();
+        tileInfo.Middle = new List<int>();
+        tileInfo.Top = new List<int>();
+
+        PushLayerDataToList(AutoFloorLayer, _sourceId, tileInfo.Floor);
+        PushLayerDataToList(AutoMiddleLayer, _sourceId, tileInfo.Middle);
+        PushLayerDataToList(AutoTopLayer, _sourceId, tileInfo.Top);
+        
+        path += "/" + _fileName + "_tileInfo.json";
+        var jsonStr = JsonSerializer.Serialize(tileInfo);
+        File.WriteAllText(path, jsonStr);
     }
 }

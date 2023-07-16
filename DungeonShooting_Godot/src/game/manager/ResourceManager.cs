@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -6,6 +7,11 @@ using Godot;
 /// </summary>
 public static class ResourceManager
 {
+    /// <summary>
+    /// 默认权重值
+    /// </summary>
+    public const int DefaultWeight = 100;
+    
     /// <summary>
     /// 颜色混合材质
     /// </summary>
@@ -138,5 +144,28 @@ public static class ResourceManager
             text = fileAccess.GetAsText();
         }
         return text;
+    }
+    
+    /// <summary>
+    /// 将普通路径转化为 Godot 资源路径
+    /// </summary>
+    public static string ToResPath(string path)
+    {
+        var field = path.Replace("\\", "/");
+        return "res://" + field;
+    }
+
+    /// <summary>
+    /// 移除资源后缀名
+    /// </summary>
+    public static string RemoveExtension(string name)
+    {
+        var index = name.LastIndexOf(".", StringComparison.Ordinal);
+        if (index >= 0)
+        {
+            return name.Substring(0, index);
+        }
+
+        return name;
     }
 }
