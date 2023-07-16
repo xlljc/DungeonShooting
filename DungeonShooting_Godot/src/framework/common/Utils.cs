@@ -44,17 +44,23 @@ public static class Utils
         for (var i = 0; i < polygonData.Length; i++)
         {
             var item = polygonData[i];
-            if (item.Points.Count >= 2)
+            var points = item.GetPoints();
+            if (points.Length>= 2)
             {
-                var array = item.ConvertPointsToVector2Array().ToList();
-                array.Add(array[0]);
+                var array = new Vector2[points.Length + 1];
+                for (var j = 0; j < points.Length; j++)
+                {
+                    array[j] = points[j];
+                }
+
+                array[array.Length - 1] = points[0];
                 if (item.Type == NavigationPolygonType.In)
                 {
-                    canvasItem.DrawPolyline(array.ToArray(), Colors.Yellow, width);
+                    canvasItem.DrawPolyline(array, Colors.Yellow, width);
                 }
                 else
                 {
-                    canvasItem.DrawPolyline(array.ToArray(), Colors.Red, width);
+                    canvasItem.DrawPolyline(array, Colors.Red, width);
                 }
             }
         }

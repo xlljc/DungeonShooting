@@ -12,6 +12,8 @@ public class EditorTileMapBar
         _editorTileMap = editorTileMap;
         _editorPanel = editorPanel;
         _editorTileMap.Instance.MapEditorPanel = editorPanel;
+        //测试加载地牢
+        _editorTileMap.Instance.LoadTile();
     }
 
     public void OnShow()

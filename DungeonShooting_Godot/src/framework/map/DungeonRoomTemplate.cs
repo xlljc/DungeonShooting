@@ -956,13 +956,14 @@ public partial class DungeonRoomTemplate : TileMap
                 var polygonData = new NavigationPolygonData();
 
                 polygonData.Type = (NavigationPolygonType)navigation["Type"].AsInt32();
-                polygonData.Points = new List<SerializeVector2>();
+                var points = new List<Vector2>();
                 var pointArray = navigation["Points"].AsGodotArray<Variant>();
                 for (var j = 0; j < pointArray.Count; j++)
                 {
                     var point = pointArray[j].AsGodotDictionary();
-                    polygonData.Points.Add(new SerializeVector2(point["X"].AsInt32(), point["Y"].AsInt32()));
+                    points.Add(new Vector2(point["X"].AsInt32(), point["Y"].AsInt32()));
                 }
+                polygonData.SetPoints(points.ToArray());
 
                 roomInfo.NavigationList.Add(polygonData);
             }

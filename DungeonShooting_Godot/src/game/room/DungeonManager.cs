@@ -232,22 +232,18 @@ public partial class DungeonManager : Node2D
         for (var i = 0; i < polygonArray.Length; i++)
         {
             var navigationPolygonData = polygonArray[i];
-            var polygonPointArray = navigationPolygonData.ConvertPointsToVector2Array();
+            var polygonPointArray = navigationPolygonData.GetPoints();
             //这里的位置需要加上房间位置
             for (var j = 0; j < polygonPointArray.Length; j++)
             {
                 polygonPointArray[j] = polygonPointArray[j] + roomInfo.GetWorldPosition() - offset;
             }
             polygon.AddOutline(polygonPointArray);
-            
-            var points = new List<SerializeVector2>();
-            for (var j = 0; j < polygonPointArray.Length; j++)
-            {
-                points.Add(new SerializeVector2(polygonPointArray[j]));
-            }
-            
+
             //存入汇总列表
-            _roomStaticNavigationList.Add(new NavigationPolygonData(navigationPolygonData.Type, points));
+            var polygonData = new NavigationPolygonData(navigationPolygonData.Type);
+            polygonData.SetPoints(polygonPointArray);
+            _roomStaticNavigationList.Add(polygonData);
         }
         polygon.MakePolygonsFromOutlines();
         var navigationPolygon = new NavigationRegion2D();

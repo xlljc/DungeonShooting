@@ -73,6 +73,8 @@ public partial class EditorTileMap : TileMap
     private Vector2I _checkTerrainErrorPosition = Vector2I.Zero;
     //是否执行生成地形成功
     private bool _isGenerateTerrain = false;
+
+    private bool _initLayer = false;
     
     //--------- 配置数据 -------------
     private int _sourceId = 0;
@@ -83,20 +85,7 @@ public partial class EditorTileMap : TileMap
 
     public override void _Ready()
     {
-        //初始化层级数据
-        AddLayer(CustomFloorLayer);
-        SetLayerZIndex(CustomFloorLayer, CustomFloorLayer);
-        AddLayer(AutoMiddleLayer);
-        SetLayerZIndex(AutoMiddleLayer, AutoMiddleLayer);
-        AddLayer(CustomMiddleLayer);
-        SetLayerZIndex(CustomMiddleLayer, CustomMiddleLayer);
-        AddLayer(AutoTopLayer);
-        SetLayerZIndex(AutoTopLayer, AutoTopLayer);
-        AddLayer(CustomTopLayer);
-        SetLayerZIndex(CustomTopLayer, CustomTopLayer);
-
-        _dungeonTileMap = new DungeonTileMap(this);
-        _dungeonTileMap.SetFloorAtlasCoords(new List<Vector2I>(new []{ _autoTileConfig.Floor.AutoTileCoord }));
+        InitLayer();
     }
 
     public override void _Process(double delta)
@@ -281,51 +270,96 @@ public partial class EditorTileMap : TileMap
             if (eventKey.Pressed && eventKey.Keycode == Key.M)
             {
                 GD.Print("测试保存地牢房间数据...");
-                var tileInfo = new DungeonTileInfo();
-                tileInfo.NavigationList = _dungeonTileMap.GetPolygonData().ToList();
-                tileInfo.Floor = new List<int>();
-                tileInfo.Middle = new List<int>();
-                tileInfo.Top = new List<int>();
-
-                var floor = GetUsedCellsById(AutoFloorLayer, _sourceId);
-                foreach (var pos in floor)
-                {
-                    var atlasCoords = GetCellAtlasCoords(AutoFloorLayer, pos);
-                    tileInfo.Floor.Add(pos.X);
-                    tileInfo.Floor.Add(pos.Y);
-                    tileInfo.Floor.Add(_sourceId);
-                    tileInfo.Floor.Add(atlasCoords.X);
-                    tileInfo.Floor.Add(atlasCoords.Y);
-                }
-                
-                var middle = GetUsedCellsById(AutoMiddleLayer, _sourceId);
-                foreach (var pos in middle)
-                {
-                    var atlasCoords = GetCellAtlasCoords(AutoMiddleLayer, pos);
-                    tileInfo.Middle.Add(pos.X);
-                    tileInfo.Middle.Add(pos.Y);
-                    tileInfo.Middle.Add(_sourceId);
-                    tileInfo.Middle.Add(atlasCoords.X);
-                    tileInfo.Middle.Add(atlasCoords.Y);
-                }
-                
-                var top = GetUsedCellsById(AutoTopLayer, _sourceId);
-                foreach (var pos in top)
-                {
-                    var atlasCoords = GetCellAtlasCoords(AutoTopLayer, pos);
-                    tileInfo.Top.Add(pos.X);
-                    tileInfo.Top.Add(pos.Y);
-                    tileInfo.Top.Add(_sourceId);
-                    tileInfo.Top.Add(atlasCoords.X);
-                    tileInfo.Top.Add(atlasCoords.Y);
-                }
-                
-                // var config = new JsonSerializerOptions();
-                // config.WriteIndented = true;
-                var jsonStr = JsonSerializer.Serialize(tileInfo);
-                File.WriteAllText("D:\\test.json", jsonStr);
+                SaveTile();
             }
         }
+    }
+
+    //将指定层数据存入list中
+    private void PushLayerDataToList(int layer, int sourceId, List<int> list)
+    {
+        var layerArray = GetUsedCellsById(layer, sourceId);
+        foreach (var pos in layerArray)
+        {
+            var atlasCoords = GetCellAtlasCoords(layer, pos);
+            list.Add(pos.X);
+            list.Add(pos.Y);
+            list.Add(_sourceId);
+            list.Add(atlasCoords.X);
+            list.Add(atlasCoords.Y);
+        }
+    }
+
+    private void SetLayerDataFromList(int layer, List<int> list)
+    {
+        for (var i = 0; i < list.Count; i += 5)
+        {
+            var pos = new Vector2I(list[i], list[i + 1]);
+            var sourceId = list[i + 2];
+            var atlasCoords = new Vector2I(list[i + 3], list[i + 4]);
+            SetCell(layer, pos, sourceId, atlasCoords);
+            if (layer == AutoFloorLayer)
+            {
+                _autoCellLayerGrid.Set(pos, true);
+            }
+        }
+    }
+
+    //保存地牢
+    private void SaveTile()
+    {
+        var tileInfo = new DungeonTileInfo();
+        tileInfo.NavigationList = _dungeonTileMap.GetPolygonData().ToList();
+        tileInfo.Floor = new List<int>();
+        tileInfo.Middle = new List<int>();
+        tileInfo.Top = new List<int>();
+
+        PushLayerDataToList(AutoFloorLayer, _sourceId, tileInfo.Floor);
+        PushLayerDataToList(AutoMiddleLayer, _sourceId, tileInfo.Middle);
+        PushLayerDataToList(AutoTopLayer, _sourceId, tileInfo.Top);
+        
+        var jsonStr = JsonSerializer.Serialize(tileInfo);
+        File.WriteAllText("D:\\test.json", jsonStr);
+    }
+
+    //加载地牢
+    public void LoadTile()
+    {
+        InitLayer();
+        var text = ResourceManager.LoadText("D:\\test.json");
+        var tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(text);
+
+        //地块数据
+        SetLayerDataFromList(AutoFloorLayer, tileInfo.Floor);
+        SetLayerDataFromList(AutoMiddleLayer, tileInfo.Middle);
+        SetLayerDataFromList(AutoTopLayer, tileInfo.Top);
+        
+        //导航网格数据
+        _dungeonTileMap.SetPolygonData(tileInfo.NavigationList);
+    }
+
+    private void InitLayer()
+    {
+        if (_initLayer)
+        {
+            return;
+        }
+
+        _initLayer = true;
+        //初始化层级数据
+        AddLayer(CustomFloorLayer);
+        SetLayerZIndex(CustomFloorLayer, CustomFloorLayer);
+        AddLayer(AutoMiddleLayer);
+        SetLayerZIndex(AutoMiddleLayer, AutoMiddleLayer);
+        AddLayer(CustomMiddleLayer);
+        SetLayerZIndex(CustomMiddleLayer, CustomMiddleLayer);
+        AddLayer(AutoTopLayer);
+        SetLayerZIndex(AutoTopLayer, AutoTopLayer);
+        AddLayer(CustomTopLayer);
+        SetLayerZIndex(CustomTopLayer, CustomTopLayer);
+
+        _dungeonTileMap = new DungeonTileMap(this);
+        _dungeonTileMap.SetFloorAtlasCoords(new List<Vector2I>(new []{ _autoTileConfig.Floor.AutoTileCoord }));
     }
 
     //缩小
