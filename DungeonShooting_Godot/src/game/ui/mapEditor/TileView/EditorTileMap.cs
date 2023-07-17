@@ -331,9 +331,12 @@ public partial class EditorTileMap : TileMap
     }
 
     //加载地牢
-    public void LoadTile()
+    public void LoadTile(string roomName)
     {
         InitLayer();
+        var path = GetConfigPath();
+        var tileInfoConfigPath = path + "/" + GetTileInfoConfigName(_fileName);
+        
         var text = ResourceManager.LoadText("D:\\GameProject\\DungeonShooting\\DungeonShooting_Godot\\resource\\map\\tileMaps\\testGroup1\\battle\\Room2\\Room2_tileInfo.json");
         var tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(text);
 
@@ -676,8 +679,7 @@ public partial class EditorTileMap : TileMap
     private void SaveRoomInfoConfig()
     {
         //存入本地
-        var path = GameConfig.RoomTileDir + _groupName + "/" +
-                   DungeonManager.DungeonRoomTypeToString(_roomType) + "/" + _fileName;
+        var path = GetConfigPath();
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -692,7 +694,7 @@ public partial class EditorTileMap : TileMap
         roomInfo.FileName = _fileName;
         roomInfo.Weight = _weight;
 
-        path += "/" + _fileName + "_roomInfo.json";
+        path += "/" + GetRoomInfoConfigName(_fileName);
         var jsonStr = JsonSerializer.Serialize(roomInfo);
         File.WriteAllText(path, jsonStr);
     }
@@ -701,8 +703,7 @@ public partial class EditorTileMap : TileMap
     public void SaveTileInfoConfig()
     {
         //存入本地
-        var path = GameConfig.RoomTileDir + _groupName + "/" +
-                   DungeonManager.DungeonRoomTypeToString(_roomType) + "/" + _fileName;
+        var path = GetConfigPath();
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -718,8 +719,24 @@ public partial class EditorTileMap : TileMap
         PushLayerDataToList(AutoMiddleLayer, _sourceId, tileInfo.Middle);
         PushLayerDataToList(AutoTopLayer, _sourceId, tileInfo.Top);
         
-        path += "/" + _fileName + "_tileInfo.json";
+        path += "/" + GetTileInfoConfigName(_fileName);
         var jsonStr = JsonSerializer.Serialize(tileInfo);
         File.WriteAllText(path, jsonStr);
+    }
+
+    public string GetConfigPath()
+    {
+        return GameConfig.RoomTileDir + _groupName + "/" +
+               DungeonManager.DungeonRoomTypeToString(_roomType) + "/" + _fileName;
+    }
+
+    public string GetTileInfoConfigName(string roomName)
+    {
+        return roomName + "_tileInfo.json";
+    }
+    
+    public string GetRoomInfoConfigName(string roomName)
+    {
+        return roomName + "_roomInfo.json";
     }
 }
