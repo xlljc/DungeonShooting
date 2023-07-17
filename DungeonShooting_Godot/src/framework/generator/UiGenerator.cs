@@ -32,12 +32,12 @@ public static class UiGenerator
                              $"public partial class {uiName}Panel : {uiName}\n" +
                              $"{{\n" +
                              $"\n" +
-                             $"    public override void OnShowUi()\n" +
+                             $"    public override void OnCreateUi()\n" +
                              $"    {{\n" +
                              $"        \n" +
                              $"    }}\n" +
                              $"\n" +
-                             $"    public override void OnHideUi()\n" +
+                             $"    public override void OnDisposeUi()\n" +
                              $"    {{\n" +
                              $"        \n" +
                              $"    }}\n" +
@@ -277,12 +277,12 @@ public static class UiGenerator
         if (_nodeNameMap.ContainsKey(originName)) //有同名图层, 为了防止类名冲突, 需要在 UiNode 后面加上索引
         {
             var count = _nodeNameMap[originName];
-            className = uiRootName + "_" + originName + "_" + count;
+            className = originName + "_" + count;
             _nodeNameMap[originName] = count + 1;
         }
         else
         {
-            className = uiRootName + "_" + originName;
+            className = originName;
             _nodeNameMap.Add(originName, 1);
         }
         
@@ -324,12 +324,12 @@ public static class UiGenerator
         if (_nodeNameMap.ContainsKey(originName)) //有同名图层, 为了防止类名冲突, 需要在 UiNode 后面加上索引
         {
             var count = _nodeNameMap[originName];
-            className = uiRootName + (count) + "_" + originName;
+            className = originName + "_" + count;
             _nodeNameMap[originName] = count + 1;
         }
         else
         {
-            className = uiRootName + "_" + originName;
+            className = originName;
             _nodeNameMap.Add(originName, 1);
         }
 

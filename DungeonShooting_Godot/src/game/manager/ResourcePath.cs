@@ -52,6 +52,7 @@ public class ResourcePath
     public const string prefab_ui_Loading_tscn = "res://prefab/ui/Loading.tscn";
     public const string prefab_ui_Main_tscn = "res://prefab/ui/Main.tscn";
     public const string prefab_ui_MapEditor_tscn = "res://prefab/ui/MapEditor.tscn";
+    public const string prefab_ui_MapEditorProject_tscn = "res://prefab/ui/MapEditorProject.tscn";
     public const string prefab_ui_MapEditorTools_tscn = "res://prefab/ui/MapEditorTools.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_ui_Settlement_tscn = "res://prefab/ui/Settlement.tscn";
@@ -74,8 +75,8 @@ public class ResourcePath
     public const string resource_font_VonwaonBitmap12px_ttf = "res://resource/font/VonwaonBitmap-12px.ttf";
     public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
     public const string resource_map_RoomConfig_json = "res://resource/map/RoomConfig.json";
-    public const string resource_map_tileset_TileSet1_tres = "res://resource/map/tileset/TileSet1.tres";
-    public const string resource_map_tileset_TileSet_old_tres = "res://resource/map/tileset/TileSet_old.tres";
+    public const string resource_map_tileSet_TileSet1_tres = "res://resource/map/tileSet/TileSet1.tres";
+    public const string resource_map_tileSet_TileSet_old_tres = "res://resource/map/tileSet/TileSet_old.tres";
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";
     public const string resource_material_Blend_tres = "res://resource/material/Blend.tres";
     public const string resource_material_SmokeParticleMaterial_tres = "res://resource/material/SmokeParticleMaterial.tres";
@@ -159,8 +160,8 @@ public class ResourcePath
     public const string resource_sprite_role_role7_png = "res://resource/sprite/role/role7.png";
     public const string resource_sprite_role_role8_png = "res://resource/sprite/role/role8.png";
     public const string resource_sprite_role_role9_png = "res://resource/sprite/role/role9.png";
-    public const string resource_sprite_role_enemy0001_enemy0001_png = "res://resource/sprite/role/enemy0001/enemy0001.png";
-    public const string resource_sprite_role_enemy0001_enemy0001_Debris_png = "res://resource/sprite/role/enemy0001/enemy0001_Debris.png";
+    public const string resource_sprite_role_enemy0001_Enemy0001_png = "res://resource/sprite/role/enemy0001/Enemy0001.png";
+    public const string resource_sprite_role_enemy0001_Enemy0001_Debris_png = "res://resource/sprite/role/enemy0001/Enemy0001_Debris.png";
     public const string resource_sprite_shell_Shell0001_png = "res://resource/sprite/shell/Shell0001.png";
     public const string resource_sprite_shell_Shell0002_png = "res://resource/sprite/shell/Shell0002.png";
     public const string resource_sprite_shell_Shell0003_png = "res://resource/sprite/shell/Shell0003.png";

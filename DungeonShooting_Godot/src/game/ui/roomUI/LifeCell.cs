@@ -6,7 +6,7 @@ public class LifeCell : UiCell<RoomUI.RoomUI_Life, LifeIconEnum>
 {
     private int _type = -1;
 
-    public override void OnSetData(LifeIconEnum data)
+    protected override void OnSetData(LifeIconEnum data)
     {
         if (_type == (int)data)
         {

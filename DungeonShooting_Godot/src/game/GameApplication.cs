@@ -135,7 +135,8 @@ public partial class GameApplication : Node2D, ICoroutine
 		BottomTipsPanel.Init();
 		//打开主菜单Ui
 		//UiManager.Open_Main();
-		UiManager.Open_MapEditor();
+		//UiManager.Open_MapEditor();
+		UiManager.Open_MapEditorProject();
 	}
 
 	public override void _Process(double delta)

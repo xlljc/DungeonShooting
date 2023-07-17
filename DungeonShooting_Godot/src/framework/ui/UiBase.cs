@@ -55,23 +55,27 @@ public abstract partial class UiBase : Control, ICoroutine
         //记录ui打开
         UiManager.RecordUi(this, UiManager.RecordType.Open);
     }
-    
+
     /// <summary>
     /// 创建当前ui时调用
     /// </summary>
     public virtual void OnCreateUi()
     {
     }
-    
+
     /// <summary>
     /// 当前ui显示时调用
     /// </summary>
-    public abstract void OnShowUi();
+    public virtual void OnShowUi()
+    {
+    }
 
     /// <summary>
     /// 当前ui隐藏时调用
     /// </summary>
-    public abstract void OnHideUi();
+    public virtual void OnHideUi()
+    {
+    }
 
     /// <summary>
     /// 销毁当前ui时调用
