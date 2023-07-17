@@ -82,6 +82,7 @@ public partial class EditorTileMap : TileMap
     private int _terrain = 0;
     private AutoTileConfig _autoTileConfig = new AutoTileConfig();
 
+    private string _dir;
     private string _groupName = "testGroup1";
     private string _fileName = "Room2";
     private Vector2I _roomPosition;
@@ -151,7 +152,7 @@ public partial class EditorTileMap : TileMap
             if (_generateTimer <= 0)
             {
                 //计算区域
-                CalcRect();
+                CalcTileRect();
                 GD.Print("开始检测是否可以生成地形...");
                 if (CheckTerrain())
                 {
@@ -330,16 +331,50 @@ public partial class EditorTileMap : TileMap
         SaveTileInfoConfig();
     }
 
-    //加载地牢
-    public void LoadTile(string roomName)
+    /// <summary>
+    /// 加载地牢, 返回是否加载成功
+    /// </summary>
+    /// <param name="dir">文件夹路径</param>
+    /// <param name="groupName">房间组名</param>
+    /// <param name="roomType">房间类型</param>
+    /// <param name="roomName">房间名称</param>
+    public bool Load(string dir, string groupName, DungeonRoomType roomType, string roomName)
     {
-        InitLayer();
-        var path = GetConfigPath();
-        var tileInfoConfigPath = path + "/" + GetTileInfoConfigName(_fileName);
-        
-        var text = ResourceManager.LoadText("D:\\GameProject\\DungeonShooting\\DungeonShooting_Godot\\resource\\map\\tileMaps\\testGroup1\\battle\\Room2\\Room2_tileInfo.json");
-        var tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(text);
+        _dir = dir;
+        _groupName = groupName;
+        _roomType = roomType;
+        _fileName = roomName;
 
+        var path = GetConfigPath(dir, groupName, roomType, roomName) + "/";
+        var tileInfoConfigPath = path + GetTileInfoConfigName(_fileName);
+        var roomInfoConfigPath = path + GetRoomInfoConfigName(_fileName);
+
+        if (!File.Exists(tileInfoConfigPath))
+        {
+            GD.PrintErr("地牢编辑器加载地牢时未找到文件: " + tileInfoConfigPath);
+            return false;
+        }
+        if (!File.Exists(roomInfoConfigPath))
+        {
+            GD.PrintErr("地牢编辑器加载地牢时未找到文件: " + roomInfoConfigPath);
+            return false;
+        }
+        
+        var text = ResourceManager.LoadText(tileInfoConfigPath);
+        var tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(text);
+        
+        var text2 = ResourceManager.LoadText(roomInfoConfigPath);
+        var roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(text2);
+
+        _roomPosition = roomInfo.Position.AsVector2I();
+        _roomSize = roomInfo.Size.AsVector2I();
+        _doorConfigs.Clear();
+        _doorConfigs.AddRange(roomInfo.DoorAreaInfos);
+        _weight = roomInfo.Weight;
+        
+        //初始化层级数据
+        InitLayer();
+        
         //地块数据
         SetLayerDataFromList(AutoFloorLayer, tileInfo.Floor);
         SetLayerDataFromList(AutoMiddleLayer, tileInfo.Middle);
@@ -347,6 +382,8 @@ public partial class EditorTileMap : TileMap
         
         //导航网格数据
         _dungeonTileMap.SetPolygonData(tileInfo.NavigationList);
+
+        return true;
     }
 
     private void InitLayer()
@@ -498,7 +535,7 @@ public partial class EditorTileMap : TileMap
     }
 
     //从新计算房间区域
-    private void CalcRect()
+    private void CalcTileRect()
     {
         var rect = GetUsedRect();
         _roomPosition = rect.Position;
@@ -672,14 +709,22 @@ public partial class EditorTileMap : TileMap
     /// </summary>
     public void OnClickCenterTool()
     {
-        Position = MapEditorPanel.S_SubViewport.Instance.Size / 2;
+        var pos = MapEditorPanel.S_SubViewport.Instance.Size / 2;
+        if (_roomSize.X == 0 && _roomSize.Y == 0) //聚焦原点
+        {
+            Position = pos;
+        }
+        else //聚焦地图中心点
+        {
+            Position = pos - (_roomPosition + _roomSize / 2) * TileSet.TileSize * Scale;
+        }
     }
-    
+
     //保存房间配置
     private void SaveRoomInfoConfig()
     {
         //存入本地
-        var path = GetConfigPath();
+        var path = GetConfigPath(_dir, _groupName, _roomType, _fileName);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -703,7 +748,7 @@ public partial class EditorTileMap : TileMap
     public void SaveTileInfoConfig()
     {
         //存入本地
-        var path = GetConfigPath();
+        var path = GetConfigPath(_dir, _groupName, _roomType, _fileName);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -724,18 +769,17 @@ public partial class EditorTileMap : TileMap
         File.WriteAllText(path, jsonStr);
     }
 
-    public string GetConfigPath()
+    private string GetConfigPath(string dir, string groupName, DungeonRoomType roomType, string fileName)
     {
-        return GameConfig.RoomTileDir + _groupName + "/" +
-               DungeonManager.DungeonRoomTypeToString(_roomType) + "/" + _fileName;
+        return dir + groupName + "/" + DungeonManager.DungeonRoomTypeToString(roomType) + "/" + fileName;
     }
 
-    public string GetTileInfoConfigName(string roomName)
+    private string GetTileInfoConfigName(string roomName)
     {
         return roomName + "_tileInfo.json";
     }
     
-    public string GetRoomInfoConfigName(string roomName)
+    private string GetRoomInfoConfigName(string roomName)
     {
         return roomName + "_roomInfo.json";
     }

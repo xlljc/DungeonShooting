@@ -13,7 +13,7 @@ public class EditorTileMapBar
         _editorPanel = editorPanel;
         _editorTileMap.Instance.MapEditorPanel = editorPanel;
         //测试加载地牢
-        _editorTileMap.Instance.LoadTile();
+        _editorTileMap.Instance.Load(GameConfig.RoomTileDir, "testGroup1", DungeonRoomType.Battle, "Room2");
     }
 
     public void OnShow()

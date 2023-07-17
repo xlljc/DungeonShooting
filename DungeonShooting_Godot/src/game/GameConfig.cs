@@ -29,7 +29,7 @@ public static class GameConfig
     /// 房间最小间距
     /// </summary>
     public const int RoomSpace = 4;
-    
+
     /// <summary>
     /// 地图配置路径
     /// </summary>
