@@ -1,32 +1,37 @@
+using System.Linq;
 using Godot;
 
 namespace UI.MapEditorProject;
 
 public partial class MapEditorProjectPanel : MapEditorProject
 {
-
-    private UiGrid<GroupButton, string> _groupGrid;
-    private UiGrid<RoomButton, string> _roomGrid;
+    /// <summary>
+    /// 当前选中的组
+    /// </summary>
+    public MapProjectManager.MapGroupInfo SelectGroupInfo;
+    /// <summary>
+    /// 选中的组所包含的房间数据
+    /// </summary>
+    public MapProjectManager.MapRoomInfo[] SelectRoomInfo;
+    
+    private UiGrid<GroupButton, MapProjectManager.MapGroupInfo> _groupGrid;
+    private UiGrid<RoomButton, MapProjectManager.MapRoomInfo> _roomGrid;
 
     public override void OnCreateUi()
     {
-        _groupGrid = new UiGrid<GroupButton, string>(S_GroupButton, typeof(GroupButtonCell), 1, 0, 2);
+        _groupGrid = new UiGrid<GroupButton, MapProjectManager.MapGroupInfo>(S_GroupButton, typeof(GroupButtonCell));
+        _groupGrid.SetCellOffset(new Vector2I(0, 2));
         _groupGrid.SetHorizontalExpand(true);
-        _groupGrid.SetDataList(new []{ "1", "2", "3", "4", "5", "1", "2", "3", "4", "5", "1", "2", "3", "4", "5", "1", "2", "3", "4", "5", "1", "2", "3", "4", "5", "1", "2", "3", "4", "5" });
 
-        _roomGrid = new UiGrid<RoomButton, string>(S_RoomButton, typeof(RoomButtonCell), 5, 5, 5);
+        _roomGrid = new UiGrid<RoomButton, MapProjectManager.MapRoomInfo>(S_RoomButton, typeof(RoomButtonCell));
+        _roomGrid.SetAutoColumns(true);
+        _roomGrid.SetCellOffset(new Vector2I(10, 10));
         _roomGrid.SetHorizontalExpand(true);
-        _roomGrid.SetDataList(new []{ "1", "2", "3", "4", "5", "1", "2", "3", "4", "5", "1", "2", "3", "4", "5", "1", "2", "3", "4", "5", "1", "2", "3", "4", "5", "1", "2", "3", "4", "5" });
     }
 
     public override void OnShowUi()
     {
-        
-    }
-
-    public override void OnHideUi()
-    {
-        
+        RefreshGroup();
     }
 
     public override void OnDisposeUi()
@@ -36,5 +41,28 @@ public partial class MapEditorProjectPanel : MapEditorProject
         
         _roomGrid.Destroy();
         _roomGrid = null;
+    }
+
+    public void RefreshGroup()
+    {
+        MapProjectManager.RefreshMapGroup();
+        _groupGrid.SetDataList(MapProjectManager.GroupData.Values.ToArray());
+    }
+
+    public void SelectGroup(MapProjectManager.MapGroupInfo group)
+    {
+        SelectGroupInfo = group;
+        SelectRoomInfo = MapProjectManager.LoadRoom(group.RootPath, group.Name);
+        _roomGrid.SetDataList(SelectRoomInfo);
+    }
+
+    public void SelectRoom(MapProjectManager.MapRoomInfo room)
+    {
+        HideUi();
+        //打开地牢Ui
+        var mapEditor = UiManager.Open_MapEditor();
+        mapEditor.PrevUi = this;
+        //加载地牢
+        mapEditor.LoadMap(room.RootPath, room.Group, room.RoomType, room.Name);
     }
 }

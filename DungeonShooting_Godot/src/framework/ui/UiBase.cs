@@ -42,6 +42,11 @@ public abstract partial class UiBase : Control, ICoroutine
     /// </summary>
     public bool IsDisposed { get; private set; } = false;
 
+    /// <summary>
+    /// 负责记录上一个Ui
+    /// </summary>
+    public UiBase PrevUi { get; set; }
+
     //开启的协程
     private List<CoroutineData> _coroutineList;
     //嵌套打开的Ui列表

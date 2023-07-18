@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://dh7y03tq6v0a2"]
+[gd_scene load_steps=3 format=3 uid="uid://dh7y03tq6v0a2"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorProject/MapEditorProjectPanel.cs" id="1_5aioo"]
-[ext_resource type="Texture2D" uid="uid://chd1r5artktp" path="res://resource/sprite/ui/mapEditorProject/CellBg.png" id="2_6xs3a"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_xh3iw"]
 
 [node name="MapEditorProject" type="Control"]
@@ -31,19 +30,18 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="Panel" type="Panel" parent="Bg/VBoxContainer"]
-custom_minimum_size = Vector2(0, 150)
+[node name="Head" type="Panel" parent="Bg/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/Panel"]
+[node name="Back" type="Button" parent="Bg/VBoxContainer/Head"]
 layout_mode = 2
-offset_top = 4.0
-offset_right = 1920.0
-offset_bottom = 44.0
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 88.0
+offset_bottom = 62.0
+size_flags_horizontal = 0
+text = "←"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Bg/VBoxContainer"]
 layout_mode = 2
@@ -53,7 +51,7 @@ theme_override_constants/separation = 0
 [node name="Panel" type="Panel" parent="Bg/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 3.0
+size_flags_stretch_ratio = 2.0
 
 [node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel"]
 layout_mode = 1
@@ -81,7 +79,7 @@ text_overrun_behavior = 3
 [node name="Panel2" type="Panel" parent="Bg/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 7.0
+size_flags_stretch_ratio = 8.0
 
 [node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel2"]
 layout_mode = 1
@@ -98,19 +96,18 @@ theme_override_constants/margin_bottom = 12
 [node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer"]
 layout_mode = 2
 
-[node name="RoomButton" type="TextureButton" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/ScrollContainer"]
+[node name="RoomButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/ScrollContainer"]
 custom_minimum_size = Vector2(200, 285)
 layout_mode = 2
-texture_normal = ExtResource("2_6xs3a")
-texture_pressed = ExtResource("2_6xs3a")
-texture_hover = ExtResource("2_6xs3a")
-stretch_mode = 0
 
 [node name="PreviewImage" type="TextureRect" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/ScrollContainer/RoomButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
 offset_bottom = -85.0
 grow_horizontal = 2
 grow_vertical = 2

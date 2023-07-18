@@ -14,14 +14,19 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
     public bool IsDestroyed { get; private set; }
     
     private TUiCellNode _template;
+    private Vector2 _size = Vector2.Zero;
     private Node _parent;
     private Type _cellType;
     private Stack<UiCell<TUiCellNode, TData>> _cellPool = new Stack<UiCell<TUiCellNode, TData>>();
     private List<UiCell<TUiCellNode, TData>> _cellList = new List<UiCell<TUiCellNode, TData>>();
 
+    
     private GridContainer _gridContainer;
+    private Vector2I _cellOffset;
+    private int _columns;
+    private bool _autoColumns;
 
-    public UiGrid(TUiCellNode template, Type cellType, int columns, int offsetX, int offsetY)
+    public UiGrid(TUiCellNode template, Type cellType)
     {
         _gridContainer = new GridContainer();
         _gridContainer.Ready += OnReady;
@@ -31,11 +36,72 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
         _parent = uiInstance.GetParent();
         _parent.RemoveChild(uiInstance);
         _parent.AddChild(_gridContainer);
-        _gridContainer.Columns = columns;
-        _gridContainer.AddThemeConstantOverride("h_separation", offsetX);
-        _gridContainer.AddThemeConstantOverride("v_separation", offsetY);
+        if (uiInstance is Control control)
+        {
+            _size = control.Size;
+        }
+    }
+    
+    public void SetCellOffset(Vector2I offset)
+    {
+        if (_gridContainer != null)
+        {
+            _cellOffset = offset;
+            _gridContainer.AddThemeConstantOverride("h_separation", offset.X);
+            _gridContainer.AddThemeConstantOverride("v_separation", offset.Y);
+        }
     }
 
+    public Vector2I GetCellOffset()
+    {
+        return _cellOffset;
+    }
+    
+    public void SetColumns(int columns)
+    {
+        _columns = columns;
+        if (_gridContainer != null)
+        {
+            _gridContainer.Columns = columns;
+        }
+    }
+
+    public int GetColumns()
+    {
+        if (_gridContainer != null)
+        {
+            return _gridContainer.Columns;
+        }
+
+        return _columns;
+    }
+
+    public void SetAutoColumns(bool flag)
+    {
+        if (flag != _autoColumns)
+        {
+            _autoColumns = flag;
+            if (_gridContainer != null)
+            {
+                if (_autoColumns)
+                {
+                    _gridContainer.Resized += OnGridResized;
+                    OnGridResized();
+                }
+                else
+                {
+                    _gridContainer.Columns = _columns;
+                    _gridContainer.Resized -= OnGridResized;
+                }
+            }
+        }
+    }
+
+    public bool GetAutoColumns()
+    {
+        return _autoColumns;
+    }
+    
     public void SetHorizontalExpand(bool flag)
     {
         if (_gridContainer != null)
@@ -49,6 +115,16 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
                 _gridContainer.SizeFlagsHorizontal ^= Control.SizeFlags.Expand;
             }
         }
+    }
+
+    public bool GetHorizontalExpand()
+    {
+        if (_gridContainer != null)
+        {
+            return (_gridContainer.SizeFlagsHorizontal & Control.SizeFlags.Expand) != 0;
+        }
+
+        return false;
     }
     
     /// <summary>
@@ -113,7 +189,10 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
         }
         _cellList = null;
         _cellPool = null;
-        _gridContainer.QueueFree();
+        if (_gridContainer != null)
+        {
+            _gridContainer.QueueFree();
+        }
     }
 
     private void OnReady()
@@ -145,5 +224,21 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
     {
         _gridContainer.RemoveChild(cell.CellNode.GetUiInstance());
         _cellPool.Push(cell);
+    }
+
+    private void OnGridResized()
+    {
+        if (_autoColumns && _gridContainer != null)
+        {
+            var width = _gridContainer.Size.X;
+            if (width <= _size.X + _cellOffset.X)
+            {
+                _gridContainer.Columns = 1;
+            }
+            else
+            {
+                _gridContainer.Columns = Mathf.FloorToInt(width / (_size.X + _cellOffset.X));
+            }
+        }
     }
 }

@@ -383,6 +383,9 @@ public partial class EditorTileMap : TileMap
         //导航网格数据
         _dungeonTileMap.SetPolygonData(tileInfo.NavigationList);
 
+        //聚焦
+        //MapEditorPanel.CallDelay(0.1f, OnClickCenterTool);
+        CallDeferred(nameof(OnClickCenterTool));
         return true;
     }
 

@@ -5,15 +5,13 @@ namespace UI.MapEditor;
 public class EditorTileMapBar
 {
     private MapEditorPanel _editorPanel;
-    private MapEditor.MapEditor_TileMap _editorTileMap;
+    private MapEditor.TileMap _editorTileMap;
     
-    public EditorTileMapBar(MapEditorPanel editorPanel, MapEditor.MapEditor_TileMap editorTileMap)
+    public EditorTileMapBar(MapEditorPanel editorPanel, MapEditor.TileMap editorTileMap)
     {
         _editorTileMap = editorTileMap;
         _editorPanel = editorPanel;
         _editorTileMap.Instance.MapEditorPanel = editorPanel;
-        //测试加载地牢
-        _editorTileMap.Instance.Load(GameConfig.RoomTileDir, "testGroup1", DungeonRoomType.Battle, "Room2");
     }
 
     public void OnShow()

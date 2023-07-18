@@ -16,7 +16,9 @@ public class LifeBar
         _bar = lifeBar;
         var uiNodeLife = lifeBar.L_Life;
 
-        _grid = new UiGrid<RoomUI.RoomUI_Life, LifeIconEnum>(uiNodeLife, typeof(LifeCell), 20, 1, 2);
+        _grid = new UiGrid<RoomUI.RoomUI_Life, LifeIconEnum>(uiNodeLife, typeof(LifeCell));
+        _grid.SetColumns(20);
+        _grid.SetCellOffset(new Vector2I(1, 2));
     }
 
     public void OnShow()
