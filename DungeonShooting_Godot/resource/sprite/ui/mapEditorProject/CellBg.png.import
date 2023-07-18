@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2f55lu60x64i"
-path="res://.godot/imported/enemy0001_Debris.png-297a2fb6680cb862a9a085cf58f8268c.ctex"
+uid="uid://chd1r5artktp"
+path="res://.godot/imported/CellBg.png-fd013af36fe871178b0c4d9d0b2ecb6f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/role/enemy0001/enemy0001_Debris.png"
-dest_files=["res://.godot/imported/enemy0001_Debris.png-297a2fb6680cb862a9a085cf58f8268c.ctex"]
+source_file="res://resource/sprite/ui/mapEditorProject/CellBg.png"
+dest_files=["res://.godot/imported/CellBg.png-fd013af36fe871178b0c4d9d0b2ecb6f.ctex"]
 
 [params]
 
