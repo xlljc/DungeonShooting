@@ -55,7 +55,82 @@ public abstract partial class MapEditorProject : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.ScrollContainer.GroupButton
+    /// 类型: <see cref="Godot.TextEdit"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.HBoxContainer.GroupSearchInput
+    /// </summary>
+    public class GroupSearchInput : UiNode<MapEditorProject, Godot.TextEdit, GroupSearchInput>
+    {
+        public GroupSearchInput(MapEditorProject uiPanel, Godot.TextEdit node) : base(uiPanel, node) {  }
+        public override GroupSearchInput Clone() => new (UiPanel, (Godot.TextEdit)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.HBoxContainer.GroupSearchButton
+    /// </summary>
+    public class GroupSearchButton : UiNode<MapEditorProject, Godot.Button, GroupSearchButton>
+    {
+        public GroupSearchButton(MapEditorProject uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override GroupSearchButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.HBoxContainer.GroupAddButton
+    /// </summary>
+    public class GroupAddButton : UiNode<MapEditorProject, Godot.Button, GroupAddButton>
+    {
+        public GroupAddButton(MapEditorProject uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override GroupAddButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.HBoxContainer
+    /// </summary>
+    public class HBoxContainer_1 : UiNode<MapEditorProject, Godot.HBoxContainer, HBoxContainer_1>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextEdit"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.GroupSearchInput
+        /// </summary>
+        public GroupSearchInput L_GroupSearchInput
+        {
+            get
+            {
+                if (_L_GroupSearchInput == null) _L_GroupSearchInput = new GroupSearchInput(UiPanel, Instance.GetNodeOrNull<Godot.TextEdit>("GroupSearchInput"));
+                return _L_GroupSearchInput;
+            }
+        }
+        private GroupSearchInput _L_GroupSearchInput;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.GroupSearchButton
+        /// </summary>
+        public GroupSearchButton L_GroupSearchButton
+        {
+            get
+            {
+                if (_L_GroupSearchButton == null) _L_GroupSearchButton = new GroupSearchButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("GroupSearchButton"));
+                return _L_GroupSearchButton;
+            }
+        }
+        private GroupSearchButton _L_GroupSearchButton;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.GroupAddButton
+        /// </summary>
+        public GroupAddButton L_GroupAddButton
+        {
+            get
+            {
+                if (_L_GroupAddButton == null) _L_GroupAddButton = new GroupAddButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("GroupAddButton"));
+                return _L_GroupAddButton;
+            }
+        }
+        private GroupAddButton _L_GroupAddButton;
+
+        public HBoxContainer_1(MapEditorProject uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer_1 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.GroupButton
     /// </summary>
     public class GroupButton : UiNode<MapEditorProject, Godot.Button, GroupButton>
     {
@@ -64,12 +139,12 @@ public abstract partial class MapEditorProject : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.ScrollContainer"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.ScrollContainer
+    /// 类型: <see cref="Godot.ScrollContainer"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer
     /// </summary>
     public class ScrollContainer : UiNode<MapEditorProject, Godot.ScrollContainer, ScrollContainer>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.GroupButton
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.GroupButton
         /// </summary>
         public GroupButton L_GroupButton
         {
@@ -86,12 +161,25 @@ public abstract partial class MapEditorProject : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.MarginContainer"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer
+    /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer
     /// </summary>
-    public class MarginContainer : UiNode<MapEditorProject, Godot.MarginContainer, MarginContainer>
+    public class VBoxContainer_1 : UiNode<MapEditorProject, Godot.VBoxContainer, VBoxContainer_1>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.ScrollContainer
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.HBoxContainer
+        /// </summary>
+        public HBoxContainer_1 L_HBoxContainer
+        {
+            get
+            {
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                return _L_HBoxContainer;
+            }
+        }
+        private HBoxContainer_1 _L_HBoxContainer;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.ScrollContainer
         /// </summary>
         public ScrollContainer L_ScrollContainer
         {
@@ -102,6 +190,28 @@ public abstract partial class MapEditorProject : UiBase
             }
         }
         private ScrollContainer _L_ScrollContainer;
+
+        public VBoxContainer_1(MapEditorProject uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
+        public override VBoxContainer_1 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.MarginContainer"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer
+    /// </summary>
+    public class MarginContainer : UiNode<MapEditorProject, Godot.MarginContainer, MarginContainer>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.VBoxContainer
+        /// </summary>
+        public VBoxContainer_1 L_VBoxContainer
+        {
+            get
+            {
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                return _L_VBoxContainer;
+            }
+        }
+        private VBoxContainer_1 _L_VBoxContainer;
 
         public MarginContainer(MapEditorProject uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
         public override MarginContainer Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
@@ -374,9 +484,24 @@ public abstract partial class MapEditorProject : UiBase
     public Head S_Head => L_Bg.L_VBoxContainer.L_Head;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.ScrollContainer.GroupButton
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextEdit"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.HBoxContainer.GroupSearchInput
     /// </summary>
-    public GroupButton S_GroupButton => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel.L_MarginContainer.L_ScrollContainer.L_GroupButton;
+    public GroupSearchInput S_GroupSearchInput => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel.L_MarginContainer.L_VBoxContainer.L_HBoxContainer.L_GroupSearchInput;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.HBoxContainer.GroupSearchButton
+    /// </summary>
+    public GroupSearchButton S_GroupSearchButton => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel.L_MarginContainer.L_VBoxContainer.L_HBoxContainer.L_GroupSearchButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.HBoxContainer.GroupAddButton
+    /// </summary>
+    public GroupAddButton S_GroupAddButton => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel.L_MarginContainer.L_VBoxContainer.L_HBoxContainer.L_GroupAddButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.GroupButton
+    /// </summary>
+    public GroupButton S_GroupButton => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel.L_MarginContainer.L_VBoxContainer.L_ScrollContainer.L_GroupButton;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel
@@ -407,16 +532,6 @@ public abstract partial class MapEditorProject : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2
     /// </summary>
     public Panel2 S_Panel2 => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel2;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer
-    /// </summary>
-    public HBoxContainer S_HBoxContainer => L_Bg.L_VBoxContainer.L_HBoxContainer;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorProject.Bg.VBoxContainer
-    /// </summary>
-    public VBoxContainer S_VBoxContainer => L_Bg.L_VBoxContainer;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditorProject.Bg
