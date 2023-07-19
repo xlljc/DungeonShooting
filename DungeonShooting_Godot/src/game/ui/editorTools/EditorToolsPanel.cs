@@ -186,7 +186,7 @@ public partial class EditorToolsPanel : EditorTools
     /// <param name="onClose">当窗口关闭时的回调</param>
     public void ShowTips(string title, string message, Action onClose = null)
     {
-        ShowTips(title, message, 200, 124, onClose);
+        ShowTips(title, message, 350, 200, onClose);
     }
 
     /// <summary>
@@ -224,7 +224,7 @@ public partial class EditorToolsPanel : EditorTools
     /// <param name="onClose">当窗口关闭时的回调, 参数如果为 true 表示点击了确定按钮</param>
     public void ShowConfirm(string title, string message, Action<bool> onClose = null)
     {
-        ShowConfirm(title, message, 200, 124, onClose);
+        ShowConfirm(title, message, 350, 200, onClose);
     }
 
     /// <summary>

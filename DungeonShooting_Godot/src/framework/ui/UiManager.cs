@@ -109,15 +109,34 @@ public static partial class UiManager
     }
 
     /// <summary>
-    /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
+    /// 根据Ui资源路径创建Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/><br/>
+    /// 该函数不会自动打开Ui, 需要手动调用 ShowUi() 函数来显示Ui
     /// </summary>
-    public static UiBase OpenUi(string uiName)
+    public static UiBase CreateUi(string uiName)
     {
         var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
         var canvasLayer = GetUiLayer(uiBase.Layer);
         canvasLayer.AddChild(uiBase);
         uiBase.OnCreateUi();
+        return uiBase;
+    }
+
+    /// <summary>
+    /// 根据Ui资源路径创建Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/><br/>
+    /// 该函数不会自动打开Ui, 需要手动调用 ShowUi() 函数来显示Ui
+    /// </summary>
+    public static T CreateUi<T>(string uiName) where T : UiBase
+    {
+        return (T)CreateUi(uiName);
+    }
+    
+    /// <summary>
+    /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
+    /// </summary>
+    public static UiBase OpenUi(string uiName)
+    {
+        var uiBase = CreateUi(uiName);
         uiBase.ShowUi();
         return uiBase;
     }

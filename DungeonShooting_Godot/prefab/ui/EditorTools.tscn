@@ -166,9 +166,10 @@ text = "运行"
 
 [node name="Confirm" type="ConfirmationDialog" parent="."]
 initial_position = 1
-size = Vector2i(200, 124)
+size = Vector2i(350, 200)
 unresizable = true
 
 [node name="Tips" type="AcceptDialog" parent="."]
 initial_position = 1
+size = Vector2i(350, 200)
 unresizable = true
