@@ -259,7 +259,6 @@ public partial class GameApplication : Node2D, ICoroutine
 	//初始化鼠标
 	private void InitCursor()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Hidden;
 		Cursor = ResourceManager.LoadAndInstantiate<Cursor>(ResourcePath.prefab_Cursor_tscn);
 		var cursorLayer = new CanvasLayer();
 		cursorLayer.Name = "CursorLayer";

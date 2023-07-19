@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Godot;
 
@@ -19,6 +20,16 @@ public partial class MapEditorProjectPanel : MapEditorProject
 
     public override void OnCreateUi()
     {
+        //初始化枚举选项
+        var roomTypes = Enum.GetValues<DungeonRoomType>();
+        var optionButton = S_RoomTypeButton.Instance;
+        optionButton.AddItem("全部", 1);
+        for (var i = 0; i < roomTypes.Length; i++)
+        {
+            var dungeonRoomType = roomTypes[i];
+            optionButton.AddItem(DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomType), i + 1);
+        }
+
         _groupGrid = new UiGrid<GroupButton, MapProjectManager.MapGroupInfo>(S_GroupButton, typeof(GroupButtonCell));
         _groupGrid.SetCellOffset(new Vector2I(0, 2));
         _groupGrid.SetHorizontalExpand(true);

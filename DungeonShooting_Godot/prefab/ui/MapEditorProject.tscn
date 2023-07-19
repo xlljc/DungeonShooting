@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://dh7y03tq6v0a2"]
+[gd_scene load_steps=6 format=3 uid="uid://dh7y03tq6v0a2"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorProject/MapEditorProjectPanel.cs" id="1_5aioo"]
+[ext_resource type="Texture2D" uid="uid://blfvsup876agh" path="res://resource/sprite/ui/mapEditorProject/Search.png" id="2_gi4tc"]
+[ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/mapEditorProject/Back.png" id="2_whp38"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_xh3iw"]
+[ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/mapEditorProject/Add.png" id="4_qc7mu"]
 
 [node name="MapEditorProject" type="Control"]
 layout_mode = 3
@@ -36,12 +39,13 @@ layout_mode = 2
 
 [node name="Back" type="Button" parent="Bg/VBoxContainer/Head"]
 layout_mode = 2
-offset_left = 12.0
-offset_top = 8.0
-offset_right = 88.0
-offset_bottom = 62.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 62.0
+offset_bottom = 68.0
 size_flags_horizontal = 0
-text = "←"
+icon = ExtResource("2_whp38")
+icon_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Bg/VBoxContainer"]
 layout_mode = 2
@@ -72,18 +76,18 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 
-[node name="GroupSearchInput" type="TextEdit" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="GroupSearchInput" type="LineEdit" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "121212"
+placeholder_text = "搜索"
 
 [node name="GroupSearchButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "搜索"
+icon = ExtResource("2_gi4tc")
 
 [node name="GroupAddButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "+"
+icon = ExtResource("4_qc7mu")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -114,14 +118,39 @@ theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer"]
 layout_mode = 2
 
-[node name="RoomButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/ScrollContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+
+[node name="RoomSearchInput" type="LineEdit" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+placeholder_text = "搜索"
+
+[node name="RoomTypeButton" type="OptionButton" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="RoomSearchButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("2_gi4tc")
+
+[node name="RoomAddButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("4_qc7mu")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RoomButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer"]
 custom_minimum_size = Vector2(200, 285)
 layout_mode = 2
 
-[node name="PreviewImage" type="TextureRect" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/ScrollContainer/RoomButton"]
+[node name="PreviewImage" type="TextureRect" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer/RoomButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -136,7 +165,7 @@ mouse_filter = 2
 texture = ExtResource("2_xh3iw")
 stretch_mode = 5
 
-[node name="RoomName" type="Label" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/ScrollContainer/RoomButton"]
+[node name="RoomName" type="Label" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer/RoomButton"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -151,7 +180,7 @@ horizontal_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="RoomType" type="Label" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/ScrollContainer/RoomButton"]
+[node name="RoomType" type="Label" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer/RoomButton"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0

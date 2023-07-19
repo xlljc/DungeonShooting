@@ -165,12 +165,14 @@ public class ResourcePath
     public const string resource_sprite_shell_Shell0001_png = "res://resource/sprite/shell/Shell0001.png";
     public const string resource_sprite_shell_Shell0002_png = "res://resource/sprite/shell/Shell0002.png";
     public const string resource_sprite_shell_Shell0003_png = "res://resource/sprite/shell/Shell0003.png";
-    public const string resource_sprite_ui_CursorCenter_png = "res://resource/sprite/ui/CursorCenter.png";
-    public const string resource_sprite_ui_cursors_png = "res://resource/sprite/ui/cursors.png";
     public const string resource_sprite_ui_font_bg_png = "res://resource/sprite/ui/font_bg.png";
     public const string resource_sprite_ui_GUI_png = "res://resource/sprite/ui/GUI.png";
     public const string resource_sprite_ui_keyboard_e_png = "res://resource/sprite/ui/keyboard/e.png";
     public const string resource_sprite_ui_mapEditor_ErrorCell_png = "res://resource/sprite/ui/mapEditor/ErrorCell.png";
+    public const string resource_sprite_ui_mapEditorProject_Add_png = "res://resource/sprite/ui/mapEditorProject/Add.png";
+    public const string resource_sprite_ui_mapEditorProject_Back_png = "res://resource/sprite/ui/mapEditorProject/Back.png";
+    public const string resource_sprite_ui_mapEditorProject_CellBg_png = "res://resource/sprite/ui/mapEditorProject/CellBg.png";
+    public const string resource_sprite_ui_mapEditorProject_Search_png = "res://resource/sprite/ui/mapEditorProject/Search.png";
     public const string resource_sprite_ui_roomUI_ChargeProgress_png = "res://resource/sprite/ui/roomUI/ChargeProgress.png";
     public const string resource_sprite_ui_roomUI_ChargeProgressBar_png = "res://resource/sprite/ui/roomUI/ChargeProgressBar.png";
     public const string resource_sprite_ui_roomUI_Cooldown_png = "res://resource/sprite/ui/roomUI/Cooldown.png";
@@ -187,6 +189,9 @@ public class ResourcePath
     public const string resource_sprite_ui_roomUI_ReloadBarBlock_png = "res://resource/sprite/ui/roomUI/ReloadBarBlock.png";
     public const string resource_sprite_ui_roomUI_Shield_empty_png = "res://resource/sprite/ui/roomUI/Shield_empty.png";
     public const string resource_sprite_ui_roomUI_Shield_full_png = "res://resource/sprite/ui/roomUI/Shield_full.png";
+    public const string resource_sprite_ui_sursors_CursorCenter_png = "res://resource/sprite/ui/sursors/CursorCenter.png";
+    public const string resource_sprite_ui_sursors_Cursors_png = "res://resource/sprite/ui/sursors/Cursors.png";
+    public const string resource_sprite_ui_sursors_Cursors_Ui_png = "res://resource/sprite/ui/sursors/Cursors_Ui.png";
     public const string resource_sprite_weapon_bow_png = "res://resource/sprite/weapon/bow.png";
     public const string resource_sprite_weapon_gun1_png = "res://resource/sprite/weapon/gun1.png";
     public const string resource_sprite_weapon_gun2_png = "res://resource/sprite/weapon/gun2.png";

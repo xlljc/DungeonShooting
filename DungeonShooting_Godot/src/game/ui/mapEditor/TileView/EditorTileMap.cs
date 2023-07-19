@@ -280,7 +280,7 @@ public partial class EditorTileMap : TileMap
                 _isMiddlePressed = mouseButton.Pressed;
                 if (_isMiddlePressed)
                 {
-                    _moveOffset = Position - mouseButton.GlobalPosition;
+                    _moveOffset = Position - GetGlobalMousePosition();
                 }
             }
         }

@@ -127,9 +127,10 @@ public static class ResourceManager
     /// 加载并且实例化场景, 并返回
     /// </summary>
     /// <param name="path">场景路径</param>
-    public static T LoadAndInstantiate<T>(string path) where T : Node
+    /// <param name="useCache">是否使用缓存中的资源</param>
+    public static T LoadAndInstantiate<T>(string path, bool useCache = true) where T : Node
     {
-        var packedScene = Load<PackedScene>(path);
+        var packedScene = Load<PackedScene>(path, useCache);
         return packedScene.Instantiate<T>();
     }
 
@@ -144,6 +145,16 @@ public static class ResourceManager
             text = fileAccess.GetAsText();
         }
         return text;
+    }
+
+    /// <summary>
+    /// 加载2d纹理资源
+    /// </summary>
+    /// <param name="path">资源路径</param>
+    /// <param name="useCache">是否使用缓存中的资源</param>
+    public static Texture2D LoadTexture2D(string path, bool useCache = true)
+    {
+        return Load<Texture2D>(path, useCache);
     }
     
     /// <summary>

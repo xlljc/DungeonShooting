@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://csbxfkdupsckv"]
+[gd_scene load_steps=9 format=3 uid="uid://csbxfkdupsckv"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/MapEditorPanel.cs" id="1_5s7a0"]
-[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileset/TileSet1.tres" id="2_vrg60"]
+[ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/mapEditorProject/Back.png" id="2_s2w5x"]
+[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/TileSet1.tres" id="2_vrg60"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/TileView/EditorTileMap.cs" id="2_waq8f"]
 [ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/mapEditor/ErrorCell.png" id="4_465u2"]
 
@@ -98,12 +99,13 @@ layout_mode = 2
 
 [node name="Back" type="Button" parent="Bg/VBoxContainer/Head"]
 layout_mode = 2
-offset_left = 12.0
-offset_top = 8.0
-offset_right = 88.0
-offset_bottom = 62.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 62.0
+offset_bottom = 68.0
 size_flags_horizontal = 0
-text = "←"
+icon = ExtResource("2_s2w5x")
+icon_alignment = 1
 
 [node name="HSplitContainer" type="HSplitContainer" parent="Bg/VBoxContainer"]
 layout_mode = 2
