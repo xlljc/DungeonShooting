@@ -62,6 +62,13 @@ public abstract partial class UiBase : Control, ICoroutine
     }
 
     /// <summary>
+    /// 用于初始化打开的子Ui, 在 OnCreateUi() 之后调用
+    /// </summary>
+    public virtual void OnInitNestedUi()
+    {
+    }
+    
+    /// <summary>
     /// 创建当前ui时调用
     /// </summary>
     public virtual void OnCreateUi()

@@ -78,7 +78,7 @@ public static partial class UiManager
     }
 
     /// <summary>
-    /// 记录ui的创建或者销毁
+    /// 记录ui的创建或者销毁, 子 ui 通过 UiBase.RecordNestedUi() 来记录
     /// </summary>
     public static void RecordUi(UiBase uiBase, RecordType type)
     {
@@ -119,6 +119,7 @@ public static partial class UiManager
         var canvasLayer = GetUiLayer(uiBase.Layer);
         canvasLayer.AddChild(uiBase);
         uiBase.OnCreateUi();
+        uiBase.OnInitNestedUi();
         return uiBase;
     }
 

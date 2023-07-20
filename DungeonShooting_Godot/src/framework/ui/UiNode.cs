@@ -51,6 +51,7 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         UiPanel.RecordNestedUi(uiBase, UiManager.RecordType.Open);
         
         uiBase.OnCreateUi();
+        uiBase.OnInitNestedUi();
         if (UiPanel.IsOpen)
         {
             uiBase.ShowUi();

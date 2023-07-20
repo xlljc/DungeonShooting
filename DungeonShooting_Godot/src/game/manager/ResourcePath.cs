@@ -57,6 +57,7 @@ public class ResourcePath
     public const string prefab_ui_MapEditorTools_tscn = "res://prefab/ui/MapEditorTools.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_ui_Settlement_tscn = "res://prefab/ui/Settlement.tscn";
+    public const string prefab_ui_TestUi_tscn = "res://prefab/ui/TestUi.tscn";
     public const string prefab_weapon_Weapon0001_tscn = "res://prefab/weapon/Weapon0001.tscn";
     public const string prefab_weapon_Weapon0002_tscn = "res://prefab/weapon/Weapon0002.tscn";
     public const string prefab_weapon_Weapon0003_tscn = "res://prefab/weapon/Weapon0003.tscn";

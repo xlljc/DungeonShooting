@@ -10,5 +10,9 @@ public abstract partial class MapEditorCreateRoom : UiBase
     {
     }
 
+    public sealed override void OnInitNestedUi()
+    {
+    }
+
 
 }

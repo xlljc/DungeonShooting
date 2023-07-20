@@ -98,7 +98,7 @@ public static class UiGenerator
     public static void GenerateUiCode(Node control, string path)
     {
         _nodeNameMap.Clear();
-        var uiNode = EachNode(control.Name, control);
+        var uiNode = EachNodeFromEditor(control.Name, control);
         var code = GenerateClassCode(uiNode);
         File.WriteAllText(path, code);
     }
@@ -140,22 +140,52 @@ public static class UiGenerator
 
     private static string GenerateClassCode(UiNodeInfo uiNodeInfo)
     {
+        var retraction = "    ";
         return $"namespace UI.{uiNodeInfo.OriginName};\n\n" +
                $"/// <summary>\n" +
                $"/// Ui代码, 该类是根据ui场景自动生成的, 请不要手动编辑该类, 以免造成代码丢失\n" +
                $"/// </summary>\n" +
                $"public abstract partial class {uiNodeInfo.OriginName} : UiBase\n" +
                $"{{\n" +
-               GeneratePropertyListClassCode("", uiNodeInfo.OriginName + ".", uiNodeInfo, "    ") +
+               GeneratePropertyListClassCode("", uiNodeInfo.OriginName + ".", uiNodeInfo, retraction) +
                $"\n" +
                $"    public {uiNodeInfo.OriginName}() : base(nameof({uiNodeInfo.OriginName}))\n" +
                $"    {{\n" +
                $"    }}\n" +
                $"\n" +
-               GenerateAllChildrenClassCode(uiNodeInfo.OriginName + ".", uiNodeInfo, "    ") +
+               $"    public sealed override void OnInitNestedUi()\n" +
+               $"    {{\n" +
+               GenerateInitNestedUi("", uiNodeInfo, retraction) +
+               $"    }}\n" +
                $"\n" +
-               GenerateSoleLayerCode(uiNodeInfo, "", uiNodeInfo.OriginName, "    ") +
+               GenerateAllChildrenClassCode(uiNodeInfo.OriginName + ".", uiNodeInfo, retraction) +
+               $"\n" +
+               GenerateSoleLayerCode(uiNodeInfo, "", uiNodeInfo.OriginName, retraction) +
                $"}}\n";
+    }
+
+    private static string GenerateInitNestedUi(string layer, UiNodeInfo uiNodeInfo, string retraction)
+    {
+        var str = "";
+        if (uiNodeInfo.IsRefUi)
+        {
+            str += retraction + $"    RecordNestedUi({layer}Instance, UiManager.RecordType.Open);\n";
+            str += retraction + $"    {layer}Instance.OnCreateUi();\n";
+            str += retraction + $"    {layer}Instance.OnInitNestedUi();\n\n";
+        }
+        else
+        {
+            if (uiNodeInfo.Children != null)
+            {
+                for (var i = 0; i < uiNodeInfo.Children.Count; i++)
+                {
+                    var item = uiNodeInfo.Children[i];
+                    str += GenerateInitNestedUi(layer + item.Name + ".", item, retraction);
+                }
+            }
+        }
+
+        return str;
     }
     
     private static string GenerateAllChildrenClassCode(string parent, UiNodeInfo uiNodeInfo, string retraction)
@@ -176,6 +206,24 @@ public static class UiGenerator
     
     private static string GenerateChildrenClassCode(string parent, UiNodeInfo uiNodeInfo, string retraction)
     {
+        string cloneCode;
+
+        if (uiNodeInfo.IsRefUi)
+        {
+            cloneCode = retraction + $"    public override {uiNodeInfo.ClassName} Clone()\n";
+            cloneCode += retraction + $"    {{\n";
+            cloneCode += retraction + $"        var uiNode = new {uiNodeInfo.ClassName}(UiPanel, ({uiNodeInfo.NodeTypeName})Instance.Duplicate());\n";
+            cloneCode += retraction + $"        UiPanel.RecordNestedUi(uiNode.Instance, UiManager.RecordType.Open);\n";
+            cloneCode += retraction + $"        uiNode.Instance.OnCreateUi();\n";
+            cloneCode += retraction + $"        uiNode.Instance.OnInitNestedUi();\n";
+            cloneCode += retraction + $"        return uiNode;\n";
+            cloneCode += retraction + $"    }}\n";
+        }
+        else
+        {
+            cloneCode = retraction + $"    public override {uiNodeInfo.ClassName} Clone() => new (UiPanel, ({uiNodeInfo.NodeTypeName})Instance.Duplicate());\n";
+        }
+        
         return retraction + $"/// <summary>\n" + 
                retraction + $"/// 类型: <see cref=\"{uiNodeInfo.NodeTypeName}\"/>, 路径: {parent}{uiNodeInfo.OriginName}\n" + 
                retraction + $"/// </summary>\n" + 
@@ -183,7 +231,7 @@ public static class UiGenerator
                retraction + $"{{\n" +
                GeneratePropertyListClassCode("Instance.", parent, uiNodeInfo, retraction + "    ") + 
                retraction + $"    public {uiNodeInfo.ClassName}({uiNodeInfo.UiRootName} uiPanel, {uiNodeInfo.NodeTypeName} node) : base(uiPanel, node) {{  }}\n" +
-               retraction + $"    public override {uiNodeInfo.ClassName} Clone() => new (UiPanel, ({uiNodeInfo.NodeTypeName})Instance.Duplicate());\n" +
+               cloneCode +
                retraction + $"}}\n\n";
     }
 
@@ -265,49 +313,6 @@ public static class UiGenerator
 
         return count <= 1;
     }
-    
-    /// <summary>
-    /// 递归解析节点, 并生成 UiNodeInfo 数据
-    /// </summary>
-    private static UiNodeInfo EachNode(string uiRootName, Node node)
-    {
-        var originName = Regex.Replace(node.Name, "[^\\w]", "");
-        //类定义该图层的类名
-        string className;
-        if (_nodeNameMap.ContainsKey(originName)) //有同名图层, 为了防止类名冲突, 需要在 UiNode 后面加上索引
-        {
-            var count = _nodeNameMap[originName];
-            className = originName + "_" + count;
-            _nodeNameMap[originName] = count + 1;
-        }
-        else
-        {
-            className = originName;
-            _nodeNameMap.Add(originName, 1);
-        }
-        
-        var uiNode = new UiNodeInfo(uiRootName, "L_" + originName, originName, className, node.GetType().FullName);
-
-        var childCount = node.GetChildCount();
-        if (childCount > 0)
-        {
-            for (var i = 0; i < childCount; i++)
-            {
-                var children = node.GetChild(i);
-                if (children != null)
-                {
-                    if (uiNode.Children == null)
-                    {
-                        uiNode.Children = new List<UiNodeInfo>();
-                    }
-
-                    uiNode.Children.Add(EachNode(uiRootName, children));
-                }
-            }
-        }
-
-        return uiNode;
-    }
 
     /// <summary>
     /// 在编辑器下递归解析节点, 由于编辑器下绑定用户脚本的节点无法直接判断节点类型, 那么就只能获取节点的脚本然后解析名称和命名空间
@@ -353,6 +358,22 @@ public static class UiGenerator
             {
                 uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, fileName);
             }
+            //检测是否是引用Ui
+            if (fileName.EndsWith("Panel"))
+            {
+                var childUiName = fileName.Substring(0, fileName.Length - 5);
+                if (childUiName != uiRootName && File.Exists(GameConfig.UiPrefabDir + childUiName + ".tscn"))
+                {
+                    //是引用Ui
+                    uiNode.IsRefUi = true;
+                }
+            }
+        }
+        
+        //如果是引用Ui, 就没有必要递归子节点了
+        if (uiNode.IsRefUi)
+        {
+            return uiNode;
         }
         
         var childCount = node.GetChildCount();
@@ -402,6 +423,10 @@ public static class UiGenerator
         /// Ui根节点名称
         /// </summary>
         public string UiRootName;
+        /// <summary>
+        /// 是否是引用Ui
+        /// </summary>
+        public bool IsRefUi;
         
         public UiNodeInfo(string uiRootName, string name, string originName, string className, string nodeTypeName)
         {
