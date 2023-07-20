@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw342xeqc5div"]
+
+[ext_resource type="Script" path="res://src/game/ui/editorWindow/EditorWindowPanel.cs" id="1_bfitg"]
+
+[node name="EditorWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_bfitg")
+Layer = 3
+
+[node name="Window" type="Window" parent="."]
+title = "标题"
+initial_position = 1
+size = Vector2i(500, 350)
+visible = false
+min_size = Vector2i(500, 350)
+theme_override_constants/title_height = 33
+
+[node name="Panel" type="Panel" parent="Window"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Body" type="MarginContainer" parent="Window/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Window/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="CustomButton" type="CenterContainer" parent="Window/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="Window/Panel/VBoxContainer/HBoxContainer/CustomButton"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "确定"

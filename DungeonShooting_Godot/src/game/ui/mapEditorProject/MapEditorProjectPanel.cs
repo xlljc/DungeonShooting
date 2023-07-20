@@ -111,6 +111,9 @@ public partial class MapEditorProjectPanel : MapEditorProject
     //创建地牢房间按钮点击
     private void OnCreateRoomClick()
     {
-        UiManager.Open_MapEditorCreateRoom();
+        var window = UiManager.Open_EditorWindow();
+        window.SetWindowTitle("创建地牢房间");
+        window.SetWindowSize(new Vector2I(1000, 800));
+        window.OpenBody(UiManager.UiName.MapEditorCreateRoom);
     }
 }

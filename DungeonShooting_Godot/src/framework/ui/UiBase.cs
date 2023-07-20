@@ -16,18 +16,6 @@ public abstract partial class UiBase : Control, ICoroutine
     public UiLayer Layer = UiLayer.Middle;
 
     /// <summary>
-    /// Ui 模式, 单例/正常模式
-    /// </summary>
-    [Export]
-    public UiMode Mode = UiMode.Normal;
-
-    /// <summary>
-    /// 阻止下层 Ui 点击
-    /// </summary>
-    [Export]
-    public bool KeepOut = false;
-
-    /// <summary>
     /// ui名称
     /// </summary>
     public string UiName { get; } 

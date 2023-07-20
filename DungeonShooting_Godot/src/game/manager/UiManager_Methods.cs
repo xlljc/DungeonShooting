@@ -8,6 +8,7 @@ public static partial class UiManager
     {
         public const string BottomTips = "BottomTips";
         public const string EditorTools = "EditorTools";
+        public const string EditorWindow = "EditorWindow";
         public const string Loading = "Loading";
         public const string Main = "Main";
         public const string MapEditor = "MapEditor";
@@ -96,6 +97,46 @@ public static partial class UiManager
     public static UI.EditorTools.EditorToolsPanel[] Get_EditorTools_Instance()
     {
         return GetUiInstance<UI.EditorTools.EditorToolsPanel>(nameof(UI.EditorTools.EditorTools));
+    }
+
+    /// <summary>
+    /// 打开 EditorWindow, 并返回UI实例
+    /// </summary>
+    public static UI.EditorWindow.EditorWindowPanel Open_EditorWindow()
+    {
+        return OpenUi<UI.EditorWindow.EditorWindowPanel>(UiName.EditorWindow);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorWindow 的所有实例
+    /// </summary>
+    public static void Hide_EditorWindow()
+    {
+        var uiInstance = Get_EditorWindow_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorWindow 的所有实例
+    /// </summary>
+    public static void Dispose_EditorWindow()
+    {
+        var uiInstance = Get_EditorWindow_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.DisposeUi();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorWindow 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorWindow.EditorWindowPanel[] Get_EditorWindow_Instance()
+    {
+        return GetUiInstance<UI.EditorWindow.EditorWindowPanel>(nameof(UI.EditorWindow.EditorWindow));
     }
 
     /// <summary>
