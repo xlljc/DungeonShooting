@@ -78,6 +78,7 @@ public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiC
             return;
         }
 
+        OnDestroy();
         IsDestroyed = true;
     }
 }

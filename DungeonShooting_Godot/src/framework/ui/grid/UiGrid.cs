@@ -19,7 +19,6 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
     private Type _cellType;
     private Stack<UiCell<TUiCellNode, TData>> _cellPool = new Stack<UiCell<TUiCellNode, TData>>();
     private List<UiCell<TUiCellNode, TData>> _cellList = new List<UiCell<TUiCellNode, TData>>();
-
     
     private GridContainer _gridContainer;
     private Vector2I _cellOffset;
@@ -42,6 +41,9 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
         }
     }
     
+    /// <summary>
+    /// 设置每个 Cell 之间的偏移量
+    /// </summary>
     public void SetCellOffset(Vector2I offset)
     {
         if (_gridContainer != null)
@@ -52,11 +54,17 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
         }
     }
 
+    /// <summary>
+    /// 获取每个 Cell 之间的偏移量
+    /// </summary>
     public Vector2I GetCellOffset()
     {
         return _cellOffset;
     }
     
+    /// <summary>
+    /// 设置列数
+    /// </summary>
     public void SetColumns(int columns)
     {
         _columns = columns;
@@ -66,6 +74,9 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
         }
     }
 
+    /// <summary>
+    /// 获取列数
+    /// </summary>
     public int GetColumns()
     {
         if (_gridContainer != null)
@@ -76,6 +87,9 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
         return _columns;
     }
 
+    /// <summary>
+    /// 设置是否开启自动扩展列, 如果开启, 则组件会根据 GridContainer 组件所占用的宽度自动设置列数
+    /// </summary>
     public void SetAutoColumns(bool flag)
     {
         if (flag != _autoColumns)
@@ -97,11 +111,17 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
         }
     }
 
+    /// <summary>
+    /// 获取是否开启自动扩展列
+    /// </summary>
     public bool GetAutoColumns()
     {
         return _autoColumns;
     }
     
+    /// <summary>
+    /// 设置当前组布局方式是否横向扩展, 如果为 true, 则 GridContainer 的宽度会撑满父物体
+    /// </summary>
     public void SetHorizontalExpand(bool flag)
     {
         if (_gridContainer != null)
@@ -116,7 +136,10 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
             }
         }
     }
-
+    
+    /// <summary>
+    /// 获取当前组布局方式是否横向扩展
+    /// </summary>
     public bool GetHorizontalExpand()
     {
         if (_gridContainer != null)
@@ -126,9 +149,56 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
 
         return false;
     }
-    
+
     /// <summary>
-    /// 设置当前网格组件中的所有数据
+    /// 获取所有数据
+    /// </summary>
+    public TData[] GetAllData()
+    {
+        var array = new TData[_cellList.Count];
+        for (var i = 0; i < _cellList.Count; i++)
+        {
+            array[i] = _cellList[i].Data;
+        }
+        return array;
+    }
+
+    /// <summary>
+    /// 获取所有 Cell 对象
+    /// </summary>
+    public UiCell<TUiCellNode, TData>[] GetAllCell()
+    {
+        return _cellList.ToArray();
+    }
+
+    /// <summary>
+    /// 根据指定索引获取数据
+    /// </summary>
+    public TData GetData(int index)
+    {
+        if (index < 0 || index >= _cellList.Count)
+        {
+            return default;
+        }
+
+        return _cellList[index].Data;
+    }
+
+    /// <summary>
+    /// 根据指定索引获取 Cell 对象
+    /// </summary>
+    public UiCell<TUiCellNode, TData> GetCell(int index)
+    {
+        if (index < 0 || index >= _cellList.Count)
+        {
+            return default;
+        }
+
+        return _cellList[index];
+    }
+
+    /// <summary>
+    /// 设置当前网格组件中的所有数据, 性能较低
     /// </summary>
     public void SetDataList(TData[] array)
     {
@@ -161,7 +231,6 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
     /// <summary>
     /// 添加单条数据
     /// </summary>
-    /// <param name="data"></param>
     public void Add(TData data)
     {
         var cell = GetCellInstance();
@@ -169,7 +238,22 @@ public partial class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : I
         _gridContainer.AddChild(cell.CellNode.GetUiInstance());
         cell.SetData(data);
     }
+
+    /// <summary>
+    /// 修改指定索引的位置的 cell 数据
+    /// </summary>
+    public void UpdateByIndex(int index, TData data)
+    {
+        var uiCell = GetCell(index);
+        if (uiCell != null)
+        {
+            uiCell.SetData(data);
+        }
+    }
     
+    /// <summary>
+    /// 销毁当前网格组件
+    /// </summary>
     public void Destroy()
     {
         if (IsDestroyed)
