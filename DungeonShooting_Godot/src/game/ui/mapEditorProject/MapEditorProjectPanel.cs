@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using Godot;
+using UI.EditorWindow;
+using UI.MapEditorCreateRoom;
 
 namespace UI.MapEditorProject;
 
@@ -15,7 +17,9 @@ public partial class MapEditorProjectPanel : MapEditorProject
     /// </summary>
     public MapProjectManager.MapRoomInfo[] SelectRoomInfo;
     
+    //当前显示的组数据
     private UiGrid<GroupButton, MapProjectManager.MapGroupInfo> _groupGrid;
+    //当前显示的房间数据
     private UiGrid<RoomButton, MapProjectManager.MapRoomInfo> _roomGrid;
 
     public override void OnCreateUi()
@@ -23,11 +27,11 @@ public partial class MapEditorProjectPanel : MapEditorProject
         //初始化枚举选项
         var roomTypes = Enum.GetValues<DungeonRoomType>();
         var optionButton = S_RoomTypeButton.Instance;
-        optionButton.AddItem("全部", 1);
+        optionButton.AddItem("全部", -1);
         for (var i = 0; i < roomTypes.Length; i++)
         {
             var dungeonRoomType = roomTypes[i];
-            optionButton.AddItem(DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomType), i + 1);
+            optionButton.AddItem(DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomType), (int)dungeonRoomType);
         }
 
         _groupGrid = new UiGrid<GroupButton, MapProjectManager.MapGroupInfo>(S_GroupButton, typeof(GroupButtonCell));
@@ -78,6 +82,9 @@ public partial class MapEditorProjectPanel : MapEditorProject
         _roomGrid.SetDataList(SelectRoomInfo);
     }
 
+    /// <summary>
+    /// 选择地图并打开地图编辑器
+    /// </summary>
     public void SelectRoom(MapProjectManager.MapRoomInfo room)
     {
         HideUi();
@@ -113,7 +120,35 @@ public partial class MapEditorProjectPanel : MapEditorProject
     {
         var window = UiManager.Open_EditorWindow();
         window.SetWindowTitle("创建地牢房间");
-        window.SetWindowSize(new Vector2I(1000, 800));
-        window.OpenBody(UiManager.UiName.MapEditorCreateRoom);
+        window.SetWindowSize(new Vector2I(700, 500));
+        var body = window.OpenBody<MapEditorCreateRoomPanel>(UiManager.UiName.MapEditorCreateRoom);
+        if (SelectGroupInfo != null)
+        {
+            body.SetSelectGroup(SelectGroupInfo.Name);
+        }
+        body.SetSelectType(S_RoomTypeButton.Instance.Selected);
+        
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                //获取填写的数据, 并创建ui
+                var mapRoomInfo = body.GetRoomInfo();
+                if (mapRoomInfo != null)
+                {
+                    window.CloseWindow();
+                    CreateRoom(mapRoomInfo);
+                }
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    //创建房间
+    private void CreateRoom(MapProjectManager.MapRoomInfo roomInfo)
+    {
+        
     }
 }

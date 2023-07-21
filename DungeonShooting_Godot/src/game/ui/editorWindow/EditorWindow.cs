@@ -6,6 +6,19 @@ namespace UI.EditorWindow;
 public abstract partial class EditorWindow : UiBase
 {
     /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: EditorWindow.Bg
+    /// </summary>
+    public Bg L_Bg
+    {
+        get
+        {
+            if (_L_Bg == null) _L_Bg = new Bg(this, GetNodeOrNull<Godot.ColorRect>("Bg"));
+            return _L_Bg;
+        }
+    }
+    private Bg _L_Bg;
+
+    /// <summary>
     /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Window"/>, 节点路径: EditorWindow.Window
     /// </summary>
     public Window L_Window
@@ -25,6 +38,15 @@ public abstract partial class EditorWindow : UiBase
 
     public sealed override void OnInitNestedUi()
     {
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: EditorWindow.Bg
+    /// </summary>
+    public class Bg : UiNode<EditorWindow, Godot.ColorRect, Bg>
+    {
+        public Bg(EditorWindow uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override Bg Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
     }
 
     /// <summary>
@@ -168,6 +190,11 @@ public abstract partial class EditorWindow : UiBase
         public override Window Clone() => new (UiPanel, (Godot.Window)Instance.Duplicate());
     }
 
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: EditorWindow.Bg
+    /// </summary>
+    public Bg S_Bg => L_Bg;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: EditorWindow.Window.Panel.VBoxContainer.Body

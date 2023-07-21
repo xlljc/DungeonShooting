@@ -1,4 +1,6 @@
-﻿namespace UI.MapEditorProject;
+﻿using Godot;
+
+namespace UI.MapEditorProject;
 
 public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, MapProjectManager.MapGroupInfo>
 {
@@ -13,14 +15,15 @@ public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, MapProjectMa
         CellNode.Instance.TooltipText = "路径: " + data.FullPath;
     }
 
-    protected override void OnDestroy()
+    protected override void OnRefreshIndex()
     {
-        CellNode.Instance.Pressed -= OnClick;
+        GD.Print("刷新索引: " + Index);
     }
 
     //选中工程
     private void OnClick()
     {
+        Grid.SelectIndex = Index;
         ((MapEditorProjectPanel)CellNode.UiPanel).SelectGroup(Data);
     }
 }

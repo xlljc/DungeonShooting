@@ -7,6 +7,7 @@ public static partial class UiManager
     public static class UiName
     {
         public const string BottomTips = "BottomTips";
+        public const string EditorTips = "EditorTips";
         public const string EditorTools = "EditorTools";
         public const string EditorWindow = "EditorWindow";
         public const string Loading = "Loading";
@@ -57,6 +58,46 @@ public static partial class UiManager
     public static UI.BottomTips.BottomTipsPanel[] Get_BottomTips_Instance()
     {
         return GetUiInstance<UI.BottomTips.BottomTipsPanel>(nameof(UI.BottomTips.BottomTips));
+    }
+
+    /// <summary>
+    /// 打开 EditorTips, 并返回UI实例
+    /// </summary>
+    public static UI.EditorTips.EditorTipsPanel Open_EditorTips()
+    {
+        return OpenUi<UI.EditorTips.EditorTipsPanel>(UiName.EditorTips);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorTips 的所有实例
+    /// </summary>
+    public static void Hide_EditorTips()
+    {
+        var uiInstance = Get_EditorTips_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorTips 的所有实例
+    /// </summary>
+    public static void Dispose_EditorTips()
+    {
+        var uiInstance = Get_EditorTips_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.DisposeUi();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorTips 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorTips.EditorTipsPanel[] Get_EditorTips_Instance()
+    {
+        return GetUiInstance<UI.EditorTips.EditorTipsPanel>(nameof(UI.EditorTips.EditorTips));
     }
 
     /// <summary>
