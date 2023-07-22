@@ -16,11 +16,12 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         //初始化选项
         var groupButton = S_GroupSelect.Instance;
         var index = 0;
-        foreach (var mapGroupInfo in MapProjectManager.GroupData)
+        foreach (var mapGroupInfo in MapProjectManager.GroupMap)
         {
             var id = index++;
-            _groupMap.Add(mapGroupInfo.Value.Name, id);
-            groupButton.AddItem(mapGroupInfo.Value.Name, id);
+            var groupGroupName = mapGroupInfo.Value.GroupName;
+            _groupMap.Add(groupGroupName, id);
+            groupButton.AddItem(groupGroupName, id);
         }
 
         var selectButton = S_TypeSelect.Instance;
@@ -58,14 +59,15 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
     /// <summary>
     /// 填完数据后获取数据对象, 并进行验证, 如果验证失败, 则返回 null
     /// </summary>
-    public MapProjectManager.MapRoomInfo GetRoomInfo()
+    public DungeonRoomSplit GetRoomInfo()
     {
-        var mapRoomInfo = new MapProjectManager.MapRoomInfo();
-        mapRoomInfo.Name = S_RoomNameInput.Instance.Text;
+        var roomInfo = new DungeonRoomInfo();
+        roomInfo.RoomName = S_RoomNameInput.Instance.Text;
+        roomInfo.Remark = S_RemarkInput.Instance.Text;
         //检查名称是否合规
-        if (!Regex.IsMatch(mapRoomInfo.Name, "^\\w+$"))
+        if (!Regex.IsMatch(roomInfo.RoomName, "^\\w+$"))
         {
-            EditorTipsManager.ShowTips("错误", "房间名称'" + mapRoomInfo.Name + "'不符合名称约束, 房间名称只允许包含大小写字母和数字!");
+            EditorTipsManager.ShowTips("错误", "房间名称'" + roomInfo.RoomName + "'不符合名称约束, 房间名称只允许包含大小写字母和数字!");
             return null;
         }
         
@@ -74,29 +76,45 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         {
             if (pair.Value == groupIndex)
             {
-                mapRoomInfo.Group = pair.Key;
+                roomInfo.GroupName = pair.Key;
             }
         }
 
-        if (mapRoomInfo.Group == null)
+        if (roomInfo.GroupName == null)
         {
             EditorTipsManager.ShowTips("错误", "组名错误!");
             return null;
         }
         
         var typeIndex = S_TypeSelect.Instance.Selected;
-        mapRoomInfo.RoomType = (DungeonRoomType)typeIndex;
+        roomInfo.RoomType = (DungeonRoomType)typeIndex;
         
         //检测是否有同名房间
-        var temp = mapRoomInfo.Group + "/" + DungeonManager.DungeonRoomTypeToString(mapRoomInfo.RoomType) + "/" + mapRoomInfo.Name;
-        var path = GameConfig.RoomTileDir + temp;
-        var dir = new DirectoryInfo(path);
+        var temp = roomInfo.GroupName + "/" + DungeonManager.DungeonRoomTypeToString(roomInfo.RoomType) + "/" + roomInfo.RoomName;
+        var dirPath = MapProjectManager.CustomMapPath + temp;
+        var dir = new DirectoryInfo(dirPath);
         if (dir.Exists && dir.GetFiles().Length > 0)
         {
             EditorTipsManager.ShowTips("错误", $"已经有相同路径的房间了!\n路径: {temp}");
             return null;
         }
-        
-        return mapRoomInfo;
+
+        roomInfo.Size = new SerializeVector2();
+        roomInfo.Position = new SerializeVector2();
+        roomInfo.DoorAreaInfos = new List<DoorAreaInfo>();
+
+        var roomSplit = new DungeonRoomSplit();
+        roomSplit.RoomPath = dirPath + "/" + MapProjectManager.GetRoomInfoConfigName(roomInfo.RoomName);
+        roomSplit.RoomInfo = roomInfo;
+
+        var tileInfo = new DungeonTileInfo();
+        tileInfo.NavigationList = new List<NavigationPolygonData>();
+        tileInfo.Floor = new List<int>();
+        tileInfo.Middle = new List<int>();
+        tileInfo.Top = new List<int>();
+
+        roomSplit.TilePath = dirPath + "/" + MapProjectManager.GetTileInfoConfigName(roomInfo.RoomName);
+        roomSplit.TileInfo = tileInfo;
+        return roomSplit;
     }
 }

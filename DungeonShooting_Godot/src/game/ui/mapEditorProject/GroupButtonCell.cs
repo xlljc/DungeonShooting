@@ -2,17 +2,17 @@
 
 namespace UI.MapEditorProject;
 
-public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, MapProjectManager.MapGroupInfo>
+public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, DungeonRoomGroup>
 {
     protected override void OnInit()
     {
         CellNode.Instance.Pressed += OnClick;
     }
 
-    protected override void OnSetData(MapProjectManager.MapGroupInfo data)
+    protected override void OnSetData(DungeonRoomGroup info)
     {
-        CellNode.Instance.Text = data.Name;
-        CellNode.Instance.TooltipText = "路径: " + data.FullPath;
+        CellNode.Instance.Text = info.GroupName;
+        CellNode.Instance.TooltipText = "路径: " + MapProjectManager.CustomMapPath + "/" + info.GroupName;
     }
 
     protected override void OnRefreshIndex()

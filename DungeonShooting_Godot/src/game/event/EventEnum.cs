@@ -61,4 +61,16 @@ public enum EventEnum
     /// 当玩家退出地牢时调用, 没有参数
     /// </summary>
     OnExitDungeon,
+    
+    
+    //------------------------- 编辑器相关 --------------------------
+    
+    /// <summary>
+    /// 创建地牢组完成时调用, 参数为<see cref="DungeonRoomGroup"/>
+    /// </summary>
+    OnCreateGroupFinish,
+    /// <summary>
+    /// 创建地牢房间完成时调用, 参数为<see cref="DungeonRoomSplit"/>
+    /// </summary>
+    OnCreateRoomFinish,
 }

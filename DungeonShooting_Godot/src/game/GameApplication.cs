@@ -220,21 +220,22 @@ public partial class GameApplication : Node2D, ICoroutine
 	private void InitRoomConfig()
 	{
 		//加载房间配置信息
-		var asText = ResourceManager.LoadText(ResourcePath.resource_map_RoomConfig_json);
+		var asText = ResourceManager.LoadText("res://resource/map/tileMaps/GroupConfig.json");
 		RoomConfig = JsonSerializer.Deserialize<Dictionary<string, DungeonRoomGroup>>(asText);
 
 		//初始化RoomConfigMap
 		RoomConfigMap = new Dictionary<string, DungeonRoomSplit>();
-		foreach (var dungeonRoomGroup in RoomConfig)
-		{
-			foreach (var dungeonRoomType in Enum.GetValues<DungeonRoomType>())
-			{
-				foreach (var dungeonRoomSplit in dungeonRoomGroup.Value.GetRoomList(dungeonRoomType))
-				{
-					RoomConfigMap.Add(dungeonRoomSplit.ScenePath, dungeonRoomSplit);
-				}
-			}
-		}
+		//加载流程更改
+		// foreach (var dungeonRoomGroup in RoomConfig)
+		// {
+		// 	foreach (var dungeonRoomType in Enum.GetValues<DungeonRoomType>())
+		// 	{
+		// 		foreach (var dungeonRoomSplit in dungeonRoomGroup.Value.GetRoomList(dungeonRoomType))
+		// 		{
+		// 			RoomConfigMap.Add(dungeonRoomSplit.ScenePath, dungeonRoomSplit);
+		// 		}
+		// 	}
+		// }
 	}
 
 	//窗体大小改变

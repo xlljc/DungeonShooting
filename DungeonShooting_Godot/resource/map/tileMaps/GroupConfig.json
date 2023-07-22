@@ -1,0 +1,30 @@
+{
+  "TestGroup1": {
+    "GroupName": "TestGroup1",
+    "BattleList": [
+      {
+        "Ready": false,
+        "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_roomInfo.json",
+        "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_tileInfo.json"
+      }
+    ],
+    "InletList": [],
+    "OutletList": [],
+    "BossList": [],
+    "RewardList": [],
+    "ShopList": [],
+    "EventList": [],
+    "Remark": "\u6D4B\u8BD5\u7EC4"
+  },
+  "TestGroup2": {
+    "GroupName": "TestGroup2",
+    "BattleList": [],
+    "InletList": [],
+    "OutletList": [],
+    "BossList": [],
+    "RewardList": [],
+    "ShopList": [],
+    "EventList": [],
+    "Remark": "\u6D4B\u8BD5\u7EC4"
+  }
+}

@@ -2,62 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using Godot;
 
 public static class MapProjectManager
 {
-    public class MapGroupInfo
-    {
-        /// <summary>
-        /// 组名称
-        /// </summary>
-        public string Name;
-        /// <summary>
-        /// 组路径
-        /// </summary>
-        public string FullPath;
-        /// <summary>
-        /// 当前组所在的文件夹
-        /// </summary>
-        public string RootPath;
-    }
-
-    public class MapRoomInfo
-    {
-        /// <summary>
-        /// 房间名称
-        /// </summary>
-        public string Name;
-        /// <summary>
-        /// 组名称
-        /// </summary>
-        public string Group;
-        /// <summary>
-        /// 房间类型
-        /// </summary>
-        public DungeonRoomType RoomType;
-        /// <summary>
-        /// 文件夹路径
-        /// </summary>
-        public string FullPath;
-        /// <summary>
-        /// 预览图片
-        /// </summary>
-        public string PrevImage;
-        /// <summary>
-        /// 当前组所在的文件夹
-        /// </summary>
-        public string RootPath;
-    }
-    
     /// <summary>
     /// 扫描路径
     /// </summary>
-    public static readonly List<string> ScannerPaths = new List<string>();
+    public static string CustomMapPath { get; private set; }
+
     /// <summary>
-    /// 组列表数据
+    /// 地牢组数据, key: 组名称
     /// </summary>
-    public static readonly Dictionary<string, MapGroupInfo> GroupData = new Dictionary<string, MapGroupInfo>();
+    public static Dictionary<string, DungeonRoomGroup> GroupMap { get; private set; }
 
     private static bool _init;
     
@@ -70,7 +28,7 @@ public static class MapProjectManager
 
         _init = true;
 #if TOOLS
-        ScannerPaths.Add(GameConfig.RoomTileDir);
+        CustomMapPath = GameConfig.RoomTileDir;
 #endif
     }
 
@@ -79,73 +37,141 @@ public static class MapProjectManager
     /// </summary>
     public static void RefreshMapGroup()
     {
-        GroupData.Clear();
-        foreach (var path in ScannerPaths)
+        var configFile = CustomMapPath + "/" + GameConfig.RoomGroupConfigFile;
+        if (File.Exists(configFile))
         {
-            if (Directory.Exists(path))
+            var configText = File.ReadAllText(configFile);
+            GroupMap = JsonSerializer.Deserialize<Dictionary<string, DungeonRoomGroup>>(configText);
+            foreach (var item in GroupMap)
             {
-                var info = new DirectoryInfo(path);
-                var directoryInfos = info.GetDirectories();
-                foreach (var directoryInfo in directoryInfos)
+                var config = item.Value;
+                foreach (var roomSplit in config.BattleList)
                 {
-                    var projectInfo = new MapGroupInfo();
-                    projectInfo.Name = directoryInfo.Name;
-                    projectInfo.FullPath = directoryInfo.FullName;
-                    projectInfo.RootPath = info.FullName;
-                    GroupData.TryAdd(projectInfo.FullPath, projectInfo);
+                    _ = roomSplit.RoomInfo;
+                }
+
+                foreach (var roomSplit in config.BossList)
+                {
+                    _ = roomSplit.RoomInfo;
+                }
+
+                foreach (var roomSplit in config.InletList)
+                {
+                    _ = roomSplit.RoomInfo;
+                }
+
+                foreach (var roomSplit in config.OutletList)
+                {
+                    _ = roomSplit.RoomInfo;
+                }
+
+                foreach (var roomSplit in config.EventList)
+                {
+                    _ = roomSplit.RoomInfo;
+                }
+
+                foreach (var roomSplit in config.RewardList)
+                {
+                    _ = roomSplit.RoomInfo;
+                }
+
+                foreach (var roomSplit in config.ShopList)
+                {
+                    _ = roomSplit.RoomInfo;
                 }
             }
-            else
-            {
-                GD.PrintErr("刷新地图组时发现不存在的路径: " + path);
-            }
         }
+        else
+        {
+            GD.Print("刷新地图组时未找到配置文件: " + configFile + ", 执行创建文件");
+            GroupMap = new Dictionary<string, DungeonRoomGroup>();
+            File.WriteAllText(configFile, "{}");
+        }
+    }
+    
+    /// <summary>
+    /// 获取地牢房间配置文件加载路径
+    /// </summary>
+    /// <param name="groupName">组名</param>
+    /// <param name="roomType">房间类型</param>
+    /// <param name="roomName">房间名称</param>
+    public static string GetConfigPath(string groupName, DungeonRoomType roomType, string roomName)
+    {
+        return CustomMapPath + groupName + "/" + DungeonManager.DungeonRoomTypeToString(roomType) + "/" + roomName;
     }
 
     /// <summary>
-    /// 根据路径加载房间
+    /// 获取房间地块配置文件名称
     /// </summary>
-    public static MapRoomInfo[] LoadRoom(string rootPath, string groupName)
+    public static string GetTileInfoConfigName(string roomName)
     {
-        var path = rootPath + "\\" + groupName;
-        if (!Directory.Exists(path))
-        {
-            GD.PrintErr("加载地牢房间时发现不存在的路径: " + path);
-            return new MapRoomInfo[0];
-        }
-
-        var list = new List<MapRoomInfo>();
-        var dir = new DirectoryInfo(path);
-        var roomTypes = Enum.GetValues<DungeonRoomType>();
-        foreach (var dungeonRoomType in roomTypes)
-        {
-            LoadRoomByType(list, dir, rootPath, groupName, dungeonRoomType);
-        }
-
-        return list.ToArray();
+        return roomName + "_tileInfo.json";
+    }
+    
+    /// <summary>
+    /// 获取房间基础配置文件名称
+    /// </summary>
+    public static string GetRoomInfoConfigName(string roomName)
+    {
+        return roomName + "_roomInfo.json";
     }
 
-    private static void LoadRoomByType(List<MapRoomInfo> list, DirectoryInfo dir, string rootPath, string groupName, DungeonRoomType roomType)
+    /// <summary>
+    /// 创建地牢组
+    /// </summary>
+    public static void CreateGroup(DungeonRoomGroup group)
     {
-        var typeName = DungeonManager.DungeonRoomTypeToString(roomType);
-        var path = dir.FullName + "\\" + typeName;
-        if (Directory.Exists(path))
+        if (GroupMap.ContainsKey(group.GroupName))
         {
-            var tempDir = new DirectoryInfo(path);
-            var directoryInfos = tempDir.GetDirectories();
-            foreach (var directoryInfo in directoryInfos)
+            GD.PrintErr($"已经存在相同的地牢组: {group.GroupName}");
+            return;
+        }
+        var configFile = CustomMapPath + "/" + GameConfig.RoomGroupConfigFile;
+        GroupMap.Add(group.GroupName, group);
+        //将组数据保存为json
+        var options = new JsonSerializerOptions();
+        options.WriteIndented = true;
+        var jsonText = JsonSerializer.Serialize(GroupMap, options);
+        File.WriteAllText(configFile, jsonText);
+        //创建完成事件
+        EventManager.EmitEvent(EventEnum.OnCreateGroupFinish, group);
+    }
+
+    /// <summary>
+    /// 创建地牢房间
+    /// </summary>
+    public static void CreateRoom(DungeonRoomSplit roomSplit)
+    {
+        var groupName = roomSplit.RoomInfo.GroupName;
+        if (GroupMap.TryGetValue(groupName, out var group))
+        {
+            var configFile = CustomMapPath + "/" + GameConfig.RoomGroupConfigFile;
+            var roomList = group.GetRoomList(roomSplit.RoomInfo.RoomType);
+            roomList.Add(roomSplit);
+
+            var configPath = GetConfigPath(roomSplit.RoomInfo.GroupName, roomSplit.RoomInfo.RoomType, roomSplit.RoomInfo.RoomName);
+            if (!Directory.Exists(configPath))
             {
-                if (directoryInfo.GetFiles().Length > 0)
-                {
-                    var room = new MapRoomInfo();
-                    room.Name = directoryInfo.Name;
-                    room.FullPath = directoryInfo.FullName;
-                    room.RoomType = roomType;
-                    room.Group = groupName;
-                    room.RootPath = rootPath;
-                    list.Add(room);
-                }
+                Directory.CreateDirectory(configPath);
             }
+
+            //将组数据保存为json
+            var options = new JsonSerializerOptions();
+            options.WriteIndented = true;
+            var jsonText = JsonSerializer.Serialize(GroupMap, options);
+            File.WriteAllText(configFile, jsonText);
+            //将房间数据保存为json
+            var jsonText2 = JsonSerializer.Serialize(roomSplit.RoomInfo);
+            File.WriteAllText(roomSplit.RoomPath, jsonText2);
+            //将房间地块保存为json
+            var jsonText3 = JsonSerializer.Serialize(roomSplit.TileInfo);
+            File.WriteAllText(roomSplit.TilePath, jsonText3);
+            //创建完成事件
+            EventManager.EmitEvent(EventEnum.OnCreateGroupFinish, roomSplit);
+        }
+        else
+        {
+            GD.PrintErr($"未找到地牢组: {groupName}");
         }
     }
 }

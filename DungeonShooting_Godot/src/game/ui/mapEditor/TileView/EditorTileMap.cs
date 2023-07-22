@@ -81,15 +81,14 @@ public partial class EditorTileMap : TileMap
     private int _terrainSet = 0;
     private int _terrain = 0;
     private AutoTileConfig _autoTileConfig = new AutoTileConfig();
+    
+    //原数据
+    private DungeonRoomSplit _roomSplit;
 
-    private string _dir;
-    private string _groupName = "testGroup1";
-    private string _fileName = "Room2";
+    //变动过的数据
     private Vector2I _roomPosition;
     private Vector2I _roomSize;
     private List<DoorAreaInfo> _doorConfigs = new List<DoorAreaInfo>();
-    private DungeonRoomType _roomType = DungeonRoomType.Battle;
-    private int _weight = 100;
     //-------------------------------
 
     public override void _Ready()
@@ -334,44 +333,17 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 加载地牢, 返回是否加载成功
     /// </summary>
-    /// <param name="dir">文件夹路径</param>
-    /// <param name="groupName">房间组名</param>
-    /// <param name="roomType">房间类型</param>
-    /// <param name="roomName">房间名称</param>
-    public bool Load(string dir, string groupName, DungeonRoomType roomType, string roomName)
+    public bool Load(DungeonRoomSplit roomSplit)
     {
-        _dir = dir;
-        _groupName = groupName;
-        _roomType = roomType;
-        _fileName = roomName;
-
-        var path = GetConfigPath(dir, groupName, roomType, roomName) + "/";
-        var tileInfoConfigPath = path + GetTileInfoConfigName(_fileName);
-        var roomInfoConfigPath = path + GetRoomInfoConfigName(_fileName);
-
-        if (!File.Exists(tileInfoConfigPath))
-        {
-            GD.PrintErr("地牢编辑器加载地牢时未找到文件: " + tileInfoConfigPath);
-            return false;
-        }
-        if (!File.Exists(roomInfoConfigPath))
-        {
-            GD.PrintErr("地牢编辑器加载地牢时未找到文件: " + roomInfoConfigPath);
-            return false;
-        }
-        
-        var text = ResourceManager.LoadText(tileInfoConfigPath);
-        var tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(text);
-        
-        var text2 = ResourceManager.LoadText(roomInfoConfigPath);
-        var roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(text2);
+        _roomSplit = roomSplit;
+        var roomInfo = roomSplit.RoomInfo;
+        var tileInfo = roomSplit.TileInfo;
 
         _roomPosition = roomInfo.Position.AsVector2I();
         _roomSize = roomInfo.Size.AsVector2I();
         _doorConfigs.Clear();
         _doorConfigs.AddRange(roomInfo.DoorAreaInfos);
-        _weight = roomInfo.Weight;
-        
+
         //初始化层级数据
         InitLayer();
         
@@ -727,22 +699,19 @@ public partial class EditorTileMap : TileMap
     private void SaveRoomInfoConfig()
     {
         //存入本地
-        var path = GetConfigPath(_dir, _groupName, _roomType, _fileName);
+        var roomInfo = _roomSplit.RoomInfo;
+        var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
         
-        var roomInfo = new DungeonRoomInfo();
         roomInfo.Position = new SerializeVector2(_roomPosition);
         roomInfo.Size = new SerializeVector2(_roomSize);
-        roomInfo.DoorAreaInfos = _doorConfigs;
-        roomInfo.RoomType = _roomType;
-        roomInfo.GroupName = _groupName;
-        roomInfo.FileName = _fileName;
-        roomInfo.Weight = _weight;
+        roomInfo.DoorAreaInfos.Clear();
+        roomInfo.DoorAreaInfos.AddRange(_doorConfigs);
 
-        path += "/" + GetRoomInfoConfigName(_fileName);
+        path += "/" + MapProjectManager.GetRoomInfoConfigName(roomInfo.RoomName);
         var jsonStr = JsonSerializer.Serialize(roomInfo);
         File.WriteAllText(path, jsonStr);
     }
@@ -751,7 +720,8 @@ public partial class EditorTileMap : TileMap
     public void SaveTileInfoConfig()
     {
         //存入本地
-        var path = GetConfigPath(_dir, _groupName, _roomType, _fileName);
+        var roomInfo = _roomSplit.RoomInfo;
+        var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -767,23 +737,8 @@ public partial class EditorTileMap : TileMap
         PushLayerDataToList(AutoMiddleLayer, _sourceId, tileInfo.Middle);
         PushLayerDataToList(AutoTopLayer, _sourceId, tileInfo.Top);
         
-        path += "/" + GetTileInfoConfigName(_fileName);
+        path += "/" + MapProjectManager.GetTileInfoConfigName(roomInfo.RoomName);
         var jsonStr = JsonSerializer.Serialize(tileInfo);
         File.WriteAllText(path, jsonStr);
-    }
-
-    private string GetConfigPath(string dir, string groupName, DungeonRoomType roomType, string fileName)
-    {
-        return dir + groupName + "/" + DungeonManager.DungeonRoomTypeToString(roomType) + "/" + fileName;
-    }
-
-    private string GetTileInfoConfigName(string roomName)
-    {
-        return roomName + "_tileInfo.json";
-    }
-    
-    private string GetRoomInfoConfigName(string roomName)
-    {
-        return roomName + "_roomInfo.json";
     }
 }

@@ -35,9 +35,9 @@ public static class GameConfig
     /// </summary>
     public const string RoomTileDir = "resource/map/tileMaps/";
     /// <summary>
-    /// 房间配置汇总数据路径
+    /// 房间组配置文件名称
     /// </summary>
-    public const string RoomTileConfigFile = "resource/map/RoomConfig.json";
+    public const string RoomGroupConfigFile = "GroupConfig.json";
     /// <summary>
     /// ui预制体路径
     /// </summary>

@@ -44,13 +44,9 @@ public partial class MapEditorPanel : MapEditor
     /// <summary>
     /// 加载地牢, 返回是否加载成功
     /// </summary>
-    /// <param name="dir">文件夹路径</param>
-    /// <param name="groupName">房间组名</param>
-    /// <param name="roomType">房间类型</param>
-    /// <param name="roomName">房间名称</param>
-    public bool LoadMap(string dir, string groupName, DungeonRoomType roomType, string roomName)
+    public bool LoadMap(DungeonRoomSplit roomSplit)
     {
-        return S_TileMap.Instance.Load(dir, groupName, roomType, roomName);
+        return S_TileMap.Instance.Load(roomSplit);
     }
     
     //调整地图显示区域大小

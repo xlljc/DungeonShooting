@@ -54,6 +54,7 @@ public class ResourcePath
     public const string prefab_ui_Loading_tscn = "res://prefab/ui/Loading.tscn";
     public const string prefab_ui_Main_tscn = "res://prefab/ui/Main.tscn";
     public const string prefab_ui_MapEditor_tscn = "res://prefab/ui/MapEditor.tscn";
+    public const string prefab_ui_MapEditorCreateGroup_tscn = "res://prefab/ui/MapEditorCreateGroup.tscn";
     public const string prefab_ui_MapEditorCreateRoom_tscn = "res://prefab/ui/MapEditorCreateRoom.tscn";
     public const string prefab_ui_MapEditorProject_tscn = "res://prefab/ui/MapEditorProject.tscn";
     public const string prefab_ui_MapEditorTools_tscn = "res://prefab/ui/MapEditorTools.tscn";
@@ -77,7 +78,6 @@ public class ResourcePath
     public const string resource_font_DinkieBitmap9pxItalicDemo_ttf = "res://resource/font/DinkieBitmap-9pxItalicDemo.ttf";
     public const string resource_font_VonwaonBitmap12px_ttf = "res://resource/font/VonwaonBitmap-12px.ttf";
     public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
-    public const string resource_map_RoomConfig_json = "res://resource/map/RoomConfig.json";
     public const string resource_map_tileSet_TileSet1_tres = "res://resource/map/tileSet/TileSet1.tres";
     public const string resource_map_tileSet_TileSet_old_tres = "res://resource/map/tileSet/TileSet_old.tres";
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";

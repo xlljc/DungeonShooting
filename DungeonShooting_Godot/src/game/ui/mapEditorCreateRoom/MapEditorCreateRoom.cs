@@ -240,6 +240,59 @@ public abstract partial class MapEditorCreateRoom : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateRoom.MarginContainer.VBoxContainer.HBoxContainer5.RemarkNameLabel
+    /// </summary>
+    public class RemarkNameLabel : UiNode<MapEditorCreateRoom, Godot.Label, RemarkNameLabel>
+    {
+        public RemarkNameLabel(MapEditorCreateRoom uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override RemarkNameLabel Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextEdit"/>, 路径: MapEditorCreateRoom.MarginContainer.VBoxContainer.HBoxContainer5.RemarkInput
+    /// </summary>
+    public class RemarkInput : UiNode<MapEditorCreateRoom, Godot.TextEdit, RemarkInput>
+    {
+        public RemarkInput(MapEditorCreateRoom uiPanel, Godot.TextEdit node) : base(uiPanel, node) {  }
+        public override RemarkInput Clone() => new (UiPanel, (Godot.TextEdit)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateRoom.MarginContainer.VBoxContainer.HBoxContainer5
+    /// </summary>
+    public class HBoxContainer5 : UiNode<MapEditorCreateRoom, Godot.HBoxContainer, HBoxContainer5>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateRoom.MarginContainer.VBoxContainer.RemarkNameLabel
+        /// </summary>
+        public RemarkNameLabel L_RemarkNameLabel
+        {
+            get
+            {
+                if (_L_RemarkNameLabel == null) _L_RemarkNameLabel = new RemarkNameLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("RemarkNameLabel"));
+                return _L_RemarkNameLabel;
+            }
+        }
+        private RemarkNameLabel _L_RemarkNameLabel;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextEdit"/>, 节点路径: MapEditorCreateRoom.MarginContainer.VBoxContainer.RemarkInput
+        /// </summary>
+        public RemarkInput L_RemarkInput
+        {
+            get
+            {
+                if (_L_RemarkInput == null) _L_RemarkInput = new RemarkInput(UiPanel, Instance.GetNodeOrNull<Godot.TextEdit>("RemarkInput"));
+                return _L_RemarkInput;
+            }
+        }
+        private RemarkInput _L_RemarkInput;
+
+        public HBoxContainer5(MapEditorCreateRoom uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer5 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: MapEditorCreateRoom.MarginContainer.VBoxContainer
     /// </summary>
     public class VBoxContainer : UiNode<MapEditorCreateRoom, Godot.VBoxContainer, VBoxContainer>
@@ -295,6 +348,19 @@ public abstract partial class MapEditorCreateRoom : UiBase
             }
         }
         private HBoxContainer4 _L_HBoxContainer4;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateRoom.MarginContainer.HBoxContainer5
+        /// </summary>
+        public HBoxContainer5 L_HBoxContainer5
+        {
+            get
+            {
+                if (_L_HBoxContainer5 == null) _L_HBoxContainer5 = new HBoxContainer5(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer5"));
+                return _L_HBoxContainer5;
+            }
+        }
+        private HBoxContainer5 _L_HBoxContainer5;
 
         public VBoxContainer(MapEditorCreateRoom uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
         public override VBoxContainer Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
@@ -382,6 +448,21 @@ public abstract partial class MapEditorCreateRoom : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateRoom.MarginContainer.VBoxContainer.HBoxContainer4
     /// </summary>
     public HBoxContainer4 S_HBoxContainer4 => L_MarginContainer.L_VBoxContainer.L_HBoxContainer4;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateRoom.MarginContainer.VBoxContainer.HBoxContainer5.RemarkNameLabel
+    /// </summary>
+    public RemarkNameLabel S_RemarkNameLabel => L_MarginContainer.L_VBoxContainer.L_HBoxContainer5.L_RemarkNameLabel;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextEdit"/>, 节点路径: MapEditorCreateRoom.MarginContainer.VBoxContainer.HBoxContainer5.RemarkInput
+    /// </summary>
+    public RemarkInput S_RemarkInput => L_MarginContainer.L_VBoxContainer.L_HBoxContainer5.L_RemarkInput;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateRoom.MarginContainer.VBoxContainer.HBoxContainer5
+    /// </summary>
+    public HBoxContainer5 S_HBoxContainer5 => L_MarginContainer.L_VBoxContainer.L_HBoxContainer5;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorCreateRoom.MarginContainer.VBoxContainer

@@ -13,6 +13,7 @@ public static partial class UiManager
         public const string Loading = "Loading";
         public const string Main = "Main";
         public const string MapEditor = "MapEditor";
+        public const string MapEditorCreateGroup = "MapEditorCreateGroup";
         public const string MapEditorCreateRoom = "MapEditorCreateRoom";
         public const string MapEditorProject = "MapEditorProject";
         public const string MapEditorTools = "MapEditorTools";
@@ -298,6 +299,46 @@ public static partial class UiManager
     public static UI.MapEditor.MapEditorPanel[] Get_MapEditor_Instance()
     {
         return GetUiInstance<UI.MapEditor.MapEditorPanel>(nameof(UI.MapEditor.MapEditor));
+    }
+
+    /// <summary>
+    /// 打开 MapEditorCreateGroup, 并返回UI实例
+    /// </summary>
+    public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel Open_MapEditorCreateGroup()
+    {
+        return OpenUi<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(UiName.MapEditorCreateGroup);
+    }
+
+    /// <summary>
+    /// 隐藏 MapEditorCreateGroup 的所有实例
+    /// </summary>
+    public static void Hide_MapEditorCreateGroup()
+    {
+        var uiInstance = Get_MapEditorCreateGroup_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 MapEditorCreateGroup 的所有实例
+    /// </summary>
+    public static void Dispose_MapEditorCreateGroup()
+    {
+        var uiInstance = Get_MapEditorCreateGroup_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.DisposeUi();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 MapEditorCreateGroup 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel[] Get_MapEditorCreateGroup_Instance()
+    {
+        return GetUiInstance<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(nameof(UI.MapEditorCreateGroup.MapEditorCreateGroup));
     }
 
     /// <summary>

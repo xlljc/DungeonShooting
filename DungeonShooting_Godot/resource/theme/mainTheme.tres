@@ -485,4 +485,7 @@ LineEdit/styles/focus = SubResource("StyleBoxFlat_em2wh")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_0jpwx")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_c3u8l")
 Panel/styles/panel = SubResource("57")
+TextEdit/styles/focus = SubResource("StyleBoxFlat_em2wh")
+TextEdit/styles/normal = SubResource("StyleBoxFlat_0jpwx")
+TextEdit/styles/read_only = SubResource("StyleBoxFlat_c3u8l")
 TooltipLabel/font_sizes/font_size = 32

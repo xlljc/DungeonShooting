@@ -57,8 +57,31 @@ public class DungeonRoomGroup
     [JsonInclude]
     public List<DungeonRoomSplit> EventList = new List<DungeonRoomSplit>();
 
+    /// <summary>
+    /// 组包住
+    /// </summary>
+    [JsonInclude]
+    public string Remark;
+    
     private bool _init = false;
     private Dictionary<DungeonRoomType, WeightRandom> _weightRandomMap;
+
+    /// <summary>
+    /// 获取所有房间数据
+    /// </summary>
+    public List<DungeonRoomSplit> GetAllRoomList()
+    {
+        var list = new List<DungeonRoomSplit>();
+        list.AddRange(BattleList);
+        list.AddRange(InletList);
+        list.AddRange(OutletList);
+        list.AddRange(BossList);
+        list.AddRange(ShopList);
+        list.AddRange(RewardList);
+        list.AddRange(ShopList);
+        list.AddRange(EventList);
+        return list;
+    }
 
     /// <summary>
     /// 获取指定类型房间集合

@@ -8,11 +8,11 @@ using System.Text.Json.Serialization;
 public class DungeonRoomSplit
 {
     /// <summary>
-    /// 房间场景路径
+    /// 当前房间是否绘制完成, 也就是是否可用
     /// </summary>
     [JsonInclude]
-    public string ScenePath;
-    
+    public bool Ready;
+
     /// <summary>
     /// 房间配置路径
     /// </summary>
@@ -26,14 +26,14 @@ public class DungeonRoomSplit
     public string TilePath;
 
     /// <summary>
-    /// 房间配置数据, 第一次获取会要在资源中加载数据
+    /// 房间配置数据, 第一次获取会在资源中加载数据
     /// </summary>
     [JsonIgnore]
     public DungeonRoomInfo RoomInfo
     {
         get
         {
-            if (_roomInfo == null)
+            if (_roomInfo == null && RoomPath != null)
             {
                 var asText = ResourceManager.LoadText(RoomPath);
                 _roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(asText);
@@ -51,6 +51,7 @@ public class DungeonRoomSplit
 
             return _roomInfo;
         }
+        set => _roomInfo = value;
     }
 
     private DungeonRoomInfo _roomInfo;
@@ -63,7 +64,7 @@ public class DungeonRoomSplit
     {
         get
         {
-            if (_tileInfo == null)
+            if (_tileInfo == null && TilePath != null)
             {
                 var asText = ResourceManager.LoadText(TilePath);
                 _tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(asText);
@@ -71,6 +72,7 @@ public class DungeonRoomSplit
 
             return _tileInfo;
         }
+        set => _tileInfo = value;
     }
 
     private DungeonTileInfo _tileInfo;

@@ -43,6 +43,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 80.0
+placeholder_text = "请输入房间名称"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -94,3 +95,23 @@ size_flags_stretch_ratio = 80.0
 min_value = 1.0
 max_value = 1000.0
 value = 100.0
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RemarkNameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+size_flags_stretch_ratio = 20.0
+text = "房间备注："
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="RemarkInput" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer5"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 80.0
+placeholder_text = "选填"
+wrap_mode = 1
