@@ -184,7 +184,7 @@ public partial class EditorTileMap : TileMap
         if (_roomSize.X != 0 && _roomSize.Y != 0)
         {
             var size = TileSet.TileSize;
-            canvasItem.DrawRect(new Rect2((_roomPosition - Vector2I.One) * size, (_roomSize + new Vector2I(2, 2)) * size),
+            canvasItem.DrawRect(new Rect2(_roomPosition * size, _roomSize * size),
                 Colors.Aqua, false, 5f / Scale.X);
         }
         
@@ -566,7 +566,11 @@ public partial class EditorTileMap : TileMap
             }
         });
         var arr = new Array<Vector2I>(list);
+        //绘制自动图块
         SetCellsTerrainConnect(AutoFloorLayer, arr, _terrainSet, _terrain, false);
+        //计算区域
+        CalcTileRect();
+        //将墙壁移动到指定层
         MoveTerrainCell();
     }
 
