@@ -33,28 +33,42 @@ public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiC
     /// <summary>
     /// 当前cell初始化时调用
     /// </summary>
-    protected virtual void OnInit()
+    public virtual void OnInit()
     {
     }
 
     /// <summary>
     /// 当前cell被分配值时调用
     /// </summary>
-    protected virtual void OnSetData(T data)
+    public virtual void OnSetData(T data)
     {
     }
 
     /// <summary>
+    /// 当启用当前 Cell 时调用
+    /// </summary>
+    public virtual void OnEnable()
+    {
+    }
+
+    /// <summary>
+    /// 当禁用当前 Cell 时调用
+    /// </summary>
+    public virtual void OnDisable()
+    {
+    }
+    
+    /// <summary>
     /// 当前 Cell 选中时调用, 设置 UiGrid.SelectIndex 时触发
     /// </summary>
-    protected virtual void OnSelect()
+    public virtual void OnSelect()
     {
     }
 
     /// <summary>
     /// 当前 Cell 取消选中时调用, 设置 UiGrid.SelectIndex 时触发
     /// </summary>
-    protected virtual void OnUnSelect()
+    public virtual void OnUnSelect()
     {
     }
 
@@ -62,14 +76,14 @@ public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiC
     /// 当 Cell 索引发生改变时调用, 在 UiGrid 中调用 Insert(), Remove() 等函数时被动触发当前 Cell 索引值改变, Cell 业务逻辑需要用到索引值时, 那么就可以重写该函数<br/>
     /// 注意: 该函数第一次调用会在 OnSetData() 之前调用
     /// </summary>
-    protected virtual void OnRefreshIndex()
+    public virtual void OnRefreshIndex()
     {
     }
 
     /// <summary>
     /// 销毁当前cell时调用
     /// </summary>
-    protected virtual void OnDestroy()
+    public virtual void OnDestroy()
     {
     }
 
@@ -97,22 +111,6 @@ public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiC
     {
         Data = data;
         OnSetData(data);
-    }
-
-    /// <summary>
-    /// 选中当前 Cell, 这个函数由 UiGrid 调用
-    /// </summary>
-    public void Select()
-    {
-        OnSelect();
-    }
-
-    /// <summary>
-    /// 取消选中当前 Cell , 这个函数由 UiGrid 调用
-    /// </summary>
-    public void UnSelect()
-    {
-        OnUnSelect();
     }
 
     /// <summary>

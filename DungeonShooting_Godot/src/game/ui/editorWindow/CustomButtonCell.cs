@@ -2,17 +2,17 @@
 
 public class CustomButtonCell : UiCell<EditorWindow.CustomButton, EditorWindowPanel.ButtonData>
 {
-    protected override void OnInit()
+    public override void OnInit()
     {
         CellNode.L_Button.Instance.Pressed += OnClick;
     }
 
-    protected override void OnSetData(EditorWindowPanel.ButtonData data)
+    public override void OnSetData(EditorWindowPanel.ButtonData data)
     {
         CellNode.L_Button.Instance.Text = data.Text;
     }
 
-    protected override void OnDestroy()
+    public override void OnDestroy()
     {
         CellNode.L_Button.Instance.Pressed -= OnClick;
     }

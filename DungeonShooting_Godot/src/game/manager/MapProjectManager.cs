@@ -167,7 +167,7 @@ public static class MapProjectManager
             var jsonText3 = JsonSerializer.Serialize(roomSplit.TileInfo);
             File.WriteAllText(roomSplit.TilePath, jsonText3);
             //创建完成事件
-            EventManager.EmitEvent(EventEnum.OnCreateGroupFinish, roomSplit);
+            EventManager.EmitEvent(EventEnum.OnCreateRoomFinish, roomSplit);
         }
         else
         {

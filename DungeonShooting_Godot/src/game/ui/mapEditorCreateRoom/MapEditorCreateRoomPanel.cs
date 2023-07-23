@@ -86,8 +86,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
             return null;
         }
         
-        var typeIndex = S_TypeSelect.Instance.Selected;
-        roomInfo.RoomType = (DungeonRoomType)typeIndex;
+        roomInfo.RoomType = (DungeonRoomType)S_TypeSelect.Instance.GetSelectedId();
         
         //检测是否有同名房间
         var temp = roomInfo.GroupName + "/" + DungeonManager.DungeonRoomTypeToString(roomInfo.RoomType) + "/" + roomInfo.RoomName;

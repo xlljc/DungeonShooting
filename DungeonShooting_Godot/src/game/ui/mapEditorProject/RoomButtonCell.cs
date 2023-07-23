@@ -5,14 +5,14 @@ namespace UI.MapEditorProject;
 public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSplit>
 {
     private bool _focus = false;
-    
-    protected override void OnInit()
+
+    public override void OnInit()
     {
         CellNode.Instance.Pressed += OnClick;
         CellNode.Instance.FocusExited += OnFocusExited;
     }
 
-    protected override void OnSetData(DungeonRoomSplit data)
+    public override void OnSetData(DungeonRoomSplit data)
     {
         _focus = false;
         CellNode.L_RoomName.Instance.Text = data.RoomInfo.RoomName;
@@ -21,7 +21,7 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
         CellNode.Instance.ReleaseFocus();
     }
 
-    protected override void OnDestroy()
+    public override void OnDestroy()
     {
         CellNode.Instance.Pressed -= OnClick;
         CellNode.Instance.FocusExited -= OnFocusExited;

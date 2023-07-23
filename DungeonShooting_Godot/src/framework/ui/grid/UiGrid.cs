@@ -31,14 +31,14 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
                 if (prevIndex >= 0 && prevIndex < _cellList.Count)
                 {
                     var uiCell = _cellList[prevIndex];
-                    uiCell.UnSelect();
+                    uiCell.OnUnSelect();
                 }
                 
                 //选中新的
                 if (newIndex >= 0)
                 {
                     var uiCell = _cellList[newIndex];
-                    uiCell.Select();
+                    uiCell.OnSelect();
                 }
             }
         }
@@ -267,6 +267,8 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     /// </summary>
     public void Add(TData data)
     {
+        //取消选中
+        SelectIndex = -1;
         var cell = GetCellInstance();
         _gridContainer.AddChild(cell.CellNode.GetUiInstance());
         cell.SetData(data);
@@ -281,6 +283,18 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
         if (uiCell != null)
         {
             uiCell.SetData(data);
+        }
+    }
+
+    /// <summary>
+    /// 移除所有 Cell
+    /// </summary>
+    public void RemoveAll()
+    {
+        var uiCells = _cellList.ToArray();
+        foreach (var uiCell in uiCells)
+        {
+            ReclaimCellInstance(uiCell);
         }
     }
     
@@ -320,13 +334,15 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
             _gridContainer.Position = control.Position;
         }
     }
-    
+
+    //获取 cell 实例
     private UiCell<TUiCellNode, TData> GetCellInstance()
     {
         if (_cellPool.Count > 0)
         {
             var cell = _cellPool.Pop();
             cell.SetIndex(_cellList.Count);
+            cell.OnEnable();
             _cellList.Add(cell);
             return cell;
         }
@@ -336,13 +352,16 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
         {
             throw new Exception($"cellType 无法转为'{typeof(UiCell<TUiCellNode, TData>).FullName}'类型!");
         }
-        uiCell.Init(this, (TUiCellNode)_template.CloneUiCell(), _cellList.Count);
         _cellList.Add(uiCell);
+        uiCell.Init(this, (TUiCellNode)_template.CloneUiCell(), _cellList.Count);
+        uiCell.OnEnable();
         return uiCell;
     }
 
+    //回收 cell
     private void ReclaimCellInstance(UiCell<TUiCellNode, TData> cell)
     {
+        cell.OnDisable();
         _gridContainer.RemoveChild(cell.CellNode.GetUiInstance());
         _cellPool.Push(cell);
     }

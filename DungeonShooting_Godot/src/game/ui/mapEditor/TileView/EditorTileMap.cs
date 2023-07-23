@@ -287,7 +287,7 @@ public partial class EditorTileMap : TileMap
         {
             if (eventKey.Pressed && eventKey.Keycode == Key.M)
             {
-                GD.Print("测试保存地牢房间数据...");
+                GD.Print("保存地牢房间数据...");
                 TriggerSave();
             }
         }
@@ -726,12 +726,13 @@ public partial class EditorTileMap : TileMap
         {
             Directory.CreateDirectory(path);
         }
-        
-        var tileInfo = new DungeonTileInfo();
-        tileInfo.NavigationList = _dungeonTileMap.GetPolygonData().ToList();
-        tileInfo.Floor = new List<int>();
-        tileInfo.Middle = new List<int>();
-        tileInfo.Top = new List<int>();
+
+        var tileInfo = _roomSplit.TileInfo;
+        tileInfo.NavigationList.Clear();
+        tileInfo.NavigationList.AddRange(_dungeonTileMap.GetPolygonData());
+        tileInfo.Floor.Clear();
+        tileInfo.Middle.Clear();
+        tileInfo.Top.Clear();
 
         PushLayerDataToList(AutoFloorLayer, _sourceId, tileInfo.Floor);
         PushLayerDataToList(AutoMiddleLayer, _sourceId, tileInfo.Middle);
