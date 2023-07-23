@@ -80,6 +80,52 @@ public static class Utils
 
         return angle;
     }
+    
+    /// <summary>
+    /// 根据步长吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static float Adsorption(float value, float step)
+    {
+        var f = Mathf.Round(value / step);
+        return f * step;
+    }
+    
+    /// <summary>
+    /// 根据步长吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static int Adsorption(float value, int step)
+    {
+        var f = Mathf.RoundToInt(value / step);
+        return f * step;
+    }
+    
+    /// <summary>
+    /// 根据步长吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static Vector2 Adsorption(Vector2 value, Vector2 step)
+    {
+        var x = Mathf.Round(value.X / step.X);
+        var y = Mathf.Round(value.Y / step.Y);
+        return new Vector2(x * step.X, y * step.Y);
+    }
+    
+    /// <summary>
+    /// 根据步长吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static Vector2I Adsorption(Vector2 value, Vector2I step)
+    {
+        var x = Mathf.RoundToInt(value.X / step.X);
+        var y = Mathf.RoundToInt(value.Y / step.Y);
+        return new Vector2I(x * step.X, y * step.Y);
+    }
 
     /// <summary>
     /// 字符串首字母小写

@@ -14,6 +14,7 @@ namespace Generator;
 public static class UiGenerator
 {
     private static Dictionary<string, int> _nodeNameMap = new Dictionary<string, int>();
+    private static int _nestedIndex = 1;
 
     /// <summary>
     /// 根据名称在编辑器中创建Ui, open 表示创建完成后是否在编辑器中打开这个ui
@@ -98,6 +99,7 @@ public static class UiGenerator
     public static void GenerateUiCode(Node control, string path)
     {
         _nodeNameMap.Clear();
+        _nestedIndex = 1;
         var uiNode = EachNodeFromEditor(control.Name, control);
         var code = GenerateClassCode(uiNode);
         File.WriteAllText(path, code);
@@ -111,7 +113,8 @@ public static class UiGenerator
         try
         {
             _nodeNameMap.Clear();
-        
+            _nestedIndex = 1;
+            
             var uiName = control.Name.ToString();
             var path = GameConfig.UiCodeDir + uiName.FirstToLower() + "/" + uiName + ".cs";
             GD.Print("重新生成ui代码: " + path);
@@ -169,9 +172,11 @@ public static class UiGenerator
         var str = "";
         if (uiNodeInfo.IsRefUi)
         {
-            str += retraction + $"    RecordNestedUi({layer}Instance, UiManager.RecordType.Open);\n";
-            str += retraction + $"    {layer}Instance.OnCreateUi();\n";
-            str += retraction + $"    {layer}Instance.OnInitNestedUi();\n\n";
+            var uiInst = "inst" + _nestedIndex++;
+            str += retraction + $"    var {uiInst} = {layer}Instance;\n";
+            str += retraction + $"    RecordNestedUi({uiInst}, UiManager.RecordType.Open);\n";
+            str += retraction + $"    {uiInst}.OnCreateUi();\n";
+            str += retraction + $"    {uiInst}.OnInitNestedUi();\n\n";
         }
         else
         {

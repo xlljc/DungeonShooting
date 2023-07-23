@@ -23,6 +23,15 @@ public abstract partial class MapEditor : UiBase
     {
     }
 
+    public sealed override void OnInitNestedUi()
+    {
+        var inst1 = L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left.L_MarginContainer.L_MapView.L_SubViewport.L_CanvasLayer.L_MapEditorTools.Instance;
+        RecordNestedUi(inst1, UiManager.RecordType.Open);
+        inst1.OnCreateUi();
+        inst1.OnInitNestedUi();
+
+    }
+
     /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: MapEditor.Bg.VBoxContainer.Head.Back
     /// </summary>
@@ -130,10 +139,39 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="UI.MapEditorTools.MapEditorToolsPanel"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.CanvasLayer.MapEditorTools
+    /// </summary>
+    public class MapEditorTools : UiNode<MapEditor, UI.MapEditorTools.MapEditorToolsPanel, MapEditorTools>
+    {
+        public MapEditorTools(MapEditor uiPanel, UI.MapEditorTools.MapEditorToolsPanel node) : base(uiPanel, node) {  }
+        public override MapEditorTools Clone()
+        {
+            var uiNode = new MapEditorTools(UiPanel, (UI.MapEditorTools.MapEditorToolsPanel)Instance.Duplicate());
+            UiPanel.RecordNestedUi(uiNode.Instance, UiManager.RecordType.Open);
+            uiNode.Instance.OnCreateUi();
+            uiNode.Instance.OnInitNestedUi();
+            return uiNode;
+        }
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.CanvasLayer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.CanvasLayer
     /// </summary>
     public class CanvasLayer : UiNode<MapEditor, Godot.CanvasLayer, CanvasLayer>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorTools.MapEditorToolsPanel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.MapEditorTools
+        /// </summary>
+        public MapEditorTools L_MapEditorTools
+        {
+            get
+            {
+                if (_L_MapEditorTools == null) _L_MapEditorTools = new MapEditorTools(UiPanel, Instance.GetNodeOrNull<UI.MapEditorTools.MapEditorToolsPanel>("MapEditorTools"));
+                return _L_MapEditorTools;
+            }
+        }
+        private MapEditorTools _L_MapEditorTools;
+
         public CanvasLayer(MapEditor uiPanel, Godot.CanvasLayer node) : base(uiPanel, node) {  }
         public override CanvasLayer Clone() => new (UiPanel, (Godot.CanvasLayer)Instance.Duplicate());
     }
@@ -370,6 +408,11 @@ public abstract partial class MapEditor : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditor.EditorTileMap"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.TileMap
     /// </summary>
     public TileMap S_TileMap => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left.L_MarginContainer.L_MapView.L_SubViewport.L_TileMap;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorTools.MapEditorToolsPanel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.CanvasLayer.MapEditorTools
+    /// </summary>
+    public MapEditorTools S_MapEditorTools => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left.L_MarginContainer.L_MapView.L_SubViewport.L_CanvasLayer.L_MapEditorTools;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CanvasLayer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.CanvasLayer

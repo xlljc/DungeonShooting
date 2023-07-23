@@ -12,24 +12,27 @@ public class EditorTileMapBar
         _editorTileMap = editorTileMap;
         _editorPanel = editorPanel;
         _editorTileMap.Instance.MapEditorPanel = editorPanel;
+        _editorTileMap.Instance.MapEditorToolsPanel = editorPanel.S_MapEditorTools.Instance;
     }
 
     public void OnShow()
     {
         _editorTileMap.L_Brush.Instance.Draw += OnDrawGuides;
-        _editorPanel.ToolsPanel.S_HandTool.Instance.Pressed += _editorTileMap.Instance.OnSelectHandTool;
-        _editorPanel.ToolsPanel.S_PenTool.Instance.Pressed += _editorTileMap.Instance.OnSelectPenTool;
-        _editorPanel.ToolsPanel.S_RectTool.Instance.Pressed += _editorTileMap.Instance.OnSelectRectTool;
-        _editorPanel.ToolsPanel.S_CenterTool.Instance.Pressed += _editorTileMap.Instance.OnClickCenterTool;
+        var mapEditorToolsPanel = _editorPanel.S_MapEditorTools.Instance;
+        mapEditorToolsPanel.S_HandTool.Instance.Pressed += _editorTileMap.Instance.OnSelectHandTool;
+        mapEditorToolsPanel.S_PenTool.Instance.Pressed += _editorTileMap.Instance.OnSelectPenTool;
+        mapEditorToolsPanel.S_RectTool.Instance.Pressed += _editorTileMap.Instance.OnSelectRectTool;
+        mapEditorToolsPanel.S_CenterTool.Instance.Pressed += _editorTileMap.Instance.OnClickCenterTool;
     }
 
     public void OnHide()
     {
         _editorTileMap.L_Brush.Instance.Draw -= OnDrawGuides;
-        _editorPanel.ToolsPanel.S_HandTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectHandTool;
-        _editorPanel.ToolsPanel.S_PenTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectPenTool;
-        _editorPanel.ToolsPanel.S_RectTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectRectTool;
-        _editorPanel.ToolsPanel.S_CenterTool.Instance.Pressed -= _editorTileMap.Instance.OnClickCenterTool;
+        var mapEditorToolsPanel = _editorPanel.S_MapEditorTools.Instance;
+        mapEditorToolsPanel.S_HandTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectHandTool;
+        mapEditorToolsPanel.S_PenTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectPenTool;
+        mapEditorToolsPanel.S_RectTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectRectTool;
+        mapEditorToolsPanel.S_CenterTool.Instance.Pressed -= _editorTileMap.Instance.OnClickCenterTool;
     }
 
     public void Process(float delta)

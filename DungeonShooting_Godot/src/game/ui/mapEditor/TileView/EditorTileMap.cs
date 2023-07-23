@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using Godot;
 using Godot.Collections;
+using UI.MapEditorTools;
 
 namespace UI.MapEditor;
 
@@ -39,6 +40,11 @@ public partial class EditorTileMap : TileMap
     /// 所属地图编辑器UI
     /// </summary>
     public MapEditorPanel MapEditorPanel { get; set; }
+    
+    /// <summary>
+    /// 编辑器工具UI
+    /// </summary>
+    public MapEditorToolsPanel MapEditorToolsPanel { get; set; }
     
     //鼠标坐标
     private Vector2 _mousePosition;
@@ -106,11 +112,11 @@ public partial class EditorTileMap : TileMap
             _mouseCellPosition.X * GameConfig.TileCellSize,
             _mouseCellPosition.Y * GameConfig.TileCellSize
         );
-
-        if (!MapEditorPanel.ToolsPanel.S_HBoxContainer.Instance.IsPositionOver(GetGlobalMousePosition())) //不在Ui节点上
+        
+        if (!MapEditorToolsPanel.S_HBoxContainer.Instance.IsPositionOver(GetGlobalMousePosition())) //不在Ui节点上
         {
             //左键绘制
-            if (_isLeftPressed)
+            if (_isLeftPressed && false)
             {
                 if (Input.IsKeyPressed(Key.Shift)) //按住shift绘制矩形
                 {
@@ -124,7 +130,7 @@ public partial class EditorTileMap : TileMap
                     SetSingleAutoCell(_mouseCellPosition);
                 }
             }
-            else if (_isRightPressed) //右键擦除
+            else if (_isRightPressed && false) //右键擦除
             {
                 if (Input.IsKeyPressed(Key.Shift)) //按住shift擦除矩形
                 {
@@ -137,10 +143,10 @@ public partial class EditorTileMap : TileMap
                     EraseSingleAutoCell(_mouseCellPosition);
                 }
             }
-            else if (_isMiddlePressed) //中建移动
+            else if (_isMiddlePressed) //中键移动
             {
                 //GD.Print("移动...");
-                Position = GetGlobalMousePosition() + _moveOffset;
+                SetMapPosition(GetGlobalMousePosition() + _moveOffset);
             }
         }
 
@@ -393,7 +399,7 @@ public partial class EditorTileMap : TileMap
         if (scale.LengthSquared() >= 0.5f)
         {
             Scale = scale;
-            Position += pos * 0.1f * scale;
+            SetMapPosition(Position + pos * 0.1f * scale);
         }
         else
         {
@@ -409,7 +415,7 @@ public partial class EditorTileMap : TileMap
         if (scale.LengthSquared() <= 2000)
         {
             Scale = scale;
-            Position -= pos * 0.1f * prevScale;
+            SetMapPosition(Position - pos * 0.1f * prevScale);
         }
         else
         {
@@ -691,11 +697,11 @@ public partial class EditorTileMap : TileMap
         var pos = MapEditorPanel.S_SubViewport.Instance.Size / 2;
         if (_roomSize.X == 0 && _roomSize.Y == 0) //聚焦原点
         {
-            Position = pos;
+            SetMapPosition(pos);
         }
         else //聚焦地图中心点
         {
-            Position = pos - (_roomPosition + _roomSize / 2) * TileSet.TileSize * Scale;
+            SetMapPosition(pos - (_roomPosition + _roomSize / 2) * TileSet.TileSize * Scale);
         }
     }
 
@@ -745,5 +751,12 @@ public partial class EditorTileMap : TileMap
         path += "/" + MapProjectManager.GetTileInfoConfigName(roomInfo.RoomName);
         var jsonStr = JsonSerializer.Serialize(tileInfo);
         File.WriteAllText(path, jsonStr);
+    }
+
+    //设置地图坐标
+    private void SetMapPosition(Vector2 pos)
+    {
+        Position = pos;
+        MapEditorToolsPanel.SetDoorToolTransform(pos, Scale);
     }
 }

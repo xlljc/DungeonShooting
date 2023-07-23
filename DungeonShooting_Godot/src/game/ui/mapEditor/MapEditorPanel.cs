@@ -5,19 +5,11 @@ namespace UI.MapEditor;
 
 public partial class MapEditorPanel : MapEditor
 {
-    /// <summary>
-    /// 左上角工具面板
-    /// </summary>
-    public MapEditorToolsPanel ToolsPanel { get; private set; }
-    
     private EditorTileMapBar _editorTileMapBar;
 
     public override void OnCreateUi()
     {
         _editorTileMapBar = new EditorTileMapBar(this, S_TileMap);
-        ToolsPanel = S_CanvasLayer.OpenNestedUi<MapEditorToolsPanel>(UiManager.UiName.MapEditorTools);
-        
-        //S_HSplitContainer.Instance.AnchorLeft
     }
 
     public override void OnShowUi()

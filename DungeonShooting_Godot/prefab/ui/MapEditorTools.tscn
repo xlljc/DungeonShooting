@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://b4u66mxndxbrg"]
+[gd_scene load_steps=7 format=3 uid="uid://b4u66mxndxbrg"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/MapEditorToolsPanel.cs" id="1_mqp1c"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_rwvbg"]
+[ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorDragArea.cs" id="3_3w0w6"]
+[ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorDragButton.cs" id="3_45muq"]
+[ext_resource type="Texture2D" uid="uid://4wupcp53rrpi" path="res://resource/sprite/ui/mapEditorTools/DoorDragButton.png" id="3_trbb5"]
+[ext_resource type="Texture2D" uid="uid://dcq8xinoyvo85" path="res://resource/sprite/ui/mapEditorTools/DoorDragButton_down.png" id="4_12cej"]
 
 [node name="MapEditorTools" type="Control"]
 layout_mode = 3
@@ -47,3 +51,49 @@ layout_mode = 2
 texture_normal = ExtResource("2_rwvbg")
 texture_pressed = ExtResource("2_rwvbg")
 texture_hover = ExtResource("2_rwvbg")
+
+[node name="DoorToolTemplate" type="Control" parent="."]
+anchors_preset = 0
+script = ExtResource("3_3w0w6")
+
+[node name="DoorArea" type="ColorRect" parent="DoorToolTemplate"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -32.0
+offset_right = 64.0
+grow_vertical = 0
+color = Color(0.184314, 1, 0.0392157, 0.188235)
+
+[node name="StartBtn" type="TextureButton" parent="DoorToolTemplate"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -36.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("3_trbb5")
+texture_pressed = ExtResource("4_12cej")
+texture_hover = ExtResource("4_12cej")
+stretch_mode = 0
+script = ExtResource("3_45muq")
+
+[node name="EndBtn" type="TextureButton" parent="DoorToolTemplate"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -36.0
+offset_right = 66.0
+grow_vertical = 0
+texture_normal = ExtResource("3_trbb5")
+texture_pressed = ExtResource("4_12cej")
+texture_hover = ExtResource("4_12cej")
+stretch_mode = 0
+script = ExtResource("3_45muq")
