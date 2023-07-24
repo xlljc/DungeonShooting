@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://bbjyakayescy5"]
+
+[ext_resource type="Texture2D" uid="uid://fby848tbodc" path="res://resource/sprite/prop/active/ActiveProp5001.png" id="1_1xlxo"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1xlxo")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

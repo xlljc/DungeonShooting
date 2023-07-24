@@ -1,0 +1,74 @@
+[gd_scene load_steps=5 format=3 uid="uid://dxmjm1pgctyid"]
+
+[ext_resource type="Script" path="res://src/game/ui/bottomTips/BottomTipsPanel.cs" id="1_c63vs"]
+[ext_resource type="Texture2D" uid="uid://bls55gj8h3mgv" path="res://resource/sprite/prop/buff/BuffProp0001.png" id="2_gaykt"]
+[ext_resource type="Material" uid="uid://cces3bhds7jyi" path="res://resource/material/Blend.tres" id="2_syy07"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_xtn1u"]
+line_spacing = 8.0
+font_size = 32
+
+[node name="BottomTips" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_c63vs")
+Layer = 3
+Mode = 1
+metadata/_edit_vertical_guides_ = [960.0]
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -134.5
+offset_top = 38.0
+offset_right = 141.5
+offset_bottom = 122.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 10
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/CenterContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="Panel/MarginContainer/CenterContainer/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Panel/MarginContainer/CenterContainer/HBoxContainer/AspectRatioContainer"]
+material = ExtResource("2_syy07")
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_gaykt")
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+text = "提示内容"
+label_settings = SubResource("LabelSettings_xtn1u")
+horizontal_alignment = 1
+vertical_alignment = 1

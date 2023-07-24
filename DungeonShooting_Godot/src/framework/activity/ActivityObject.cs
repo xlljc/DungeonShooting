@@ -2,13 +2,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Config;
 using Godot;
 
 /// <summary>
-/// 房间内活动物体基类, 所有物体都必须继承该类,
-/// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, 
-/// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [RegisterActivity(id, prefabPath)],
-/// ActivityObject 类会自动扫描并注册物体, 然后使用而是使用 ActivityObject.Create(id) 来创建实例
+/// 房间内活动物体基类, 所有物体都必须继承该类,<br/>
+/// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, <br/>
+/// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [Tool], 并在 ActivityObject.xlsx 配置文件中注册物体, 导出配置表后使用 ActivityObject.Create(id) 来创建实例.<br/>
 /// </summary>
 public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 {
@@ -18,9 +18,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public static bool IsDebug { get; set; }
 
     /// <summary>
-    /// 当前物体类型id, 用于区分是否是同一种物体, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemId 为 null
+    /// 当前物体对应的配置数据, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemConfig 为 null
     /// </summary>
-    public string ItemId { get; private set; }
+    public ExcelConfig.ActivityObject ItemConfig { get; private set; }
 
     /// <summary>
     /// 是否是静态物体, 如果为true, 则会禁用移动处理
@@ -95,7 +95,10 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             if (value != _affiliationArea)
             {
                 _affiliationArea = value;
-                OnAffiliationChange();
+                if (!IsDestroyed)
+                {
+                    OnAffiliationChange();
+                }
             }
         }
     }
@@ -201,13 +204,64 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// 所在的 World 对象
     /// </summary>
     public World World { get; private set; }
-    
+
+    /// <summary>
+    /// 是否开启描边
+    /// </summary>
+    public bool ShowOutline
+    {
+        get => _showOutline;
+        set
+        {
+            if (_blendShaderMaterial != null)
+            {
+                if (value != _showOutline)
+                {
+                    _blendShaderMaterial.SetShaderParameter("show_outline", value);
+                    if (_shadowBlendShaderMaterial != null)
+                    {
+                        _shadowBlendShaderMaterial.SetShaderParameter("show_outline", value);
+                    }
+                    _showOutline = value;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 描边颜色
+    /// </summary>
+    public Color OutlineColor
+    {
+        get
+        {
+            if (!_initOutlineColor)
+            {
+                _initOutlineColor = true;
+                if (_blendShaderMaterial != null)
+                {
+                    _outlineColor = _blendShaderMaterial.GetShaderParameter("outline_color").AsColor();
+                }
+            }
+
+            return _outlineColor;
+        }
+        set
+        {
+            _initOutlineColor = true;
+            if (value != _outlineColor)
+            {
+                _blendShaderMaterial.SetShaderParameter("outline_color", value);
+            }
+
+            _outlineColor = value;
+        }
+    }
+
     // --------------------------------------------------------------------------------
 
     //组件集合
     private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
-    //是否初始化阴影
-    private bool _initShadow;
     //上一帧动画名称
     private string _prevAnimation;
     //上一帧动画
@@ -219,6 +273,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 
     //混色shader材质
     private ShaderMaterial _blendShaderMaterial;
+    private ShaderMaterial _shadowBlendShaderMaterial;
     
     //存储投抛该物体时所产生的数据
     private ActivityFallData _fallData = new ActivityFallData();
@@ -255,13 +310,22 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     private bool _enableBehavior = true;
     private bool _enableBehaviorCollisionDisabledFlag;
 
+    private bool _processingBecomesStaticImage = false;
+
     // --------------------------------------------------------------------------------
     
     //实例索引
     private static long _instanceIndex = 0;
 
+    //是否启用描边
+    private bool _showOutline = false;
+    
+    //描边颜色
+    private bool _initOutlineColor = false;
+    private Color _outlineColor = new Color(0, 0, 0, 1);
+
     //初始化节点
-    private void _InitNode(string itemId, World world)
+    private void _InitNode(RegisterActivityData activityData, World world)
     {
 #if TOOLS
         if (!Engine.IsEditorHint())
@@ -273,9 +337,20 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         }
 #endif
         World = world;
-        ItemId = itemId;
+        ItemConfig = activityData.Config;
         Name = GetType().Name + (_instanceIndex++);
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
+        _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
+        if (_blendShaderMaterial != null)
+        {
+            _showOutline = _blendShaderMaterial.GetShaderParameter("show_outline").AsBool();
+        }
+
+        if (_shadowBlendShaderMaterial != null)
+        {
+            _shadowBlendShaderMaterial.SetShaderParameter("show_outline", _showOutline);
+        }
+
         ShadowSprite.Visible = false;
         MotionMode = MotionModeEnum.Floating;
         MoveController = AddComponent<MoveController>();
@@ -327,12 +402,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public void ShowShadowSprite()
     {
-        if (!_initShadow)
-        {
-            _initShadow = true;
-            ShadowSprite.Material = ResourceManager.BlendMaterial;
-        }
-
         var anim = AnimatedSprite.Animation;
         
         var frame = AnimatedSprite.Frame;
@@ -607,8 +676,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <param name="altitude">初始高度</param>
     /// <param name="verticalSpeed">纵轴速度</param>
     /// <param name="velocity">移动速率</param>
-    /// <param name="rotate">旋转速度</param>
-    public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotate)
+    /// <param name="rotateSpeed">旋转速度</param>
+    public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotateSpeed)
     {
         var parent = GetParent();
         if (parent == null)
@@ -624,7 +693,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         Altitude = altitude;
         //Position = Position + new Vector2(0, altitude);
         VerticalSpeed = verticalSpeed;
-        ThrowRotationDegreesSpeed = rotate;
+        ThrowRotationDegreesSpeed = rotateSpeed;
         if (_throwForce != null)
         {
             MoveController.RemoveForce(_throwForce);
@@ -632,7 +701,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
 
         _throwForce = new ExternalForce("throw");
         _throwForce.Velocity = velocity;
-        MoveController.AddConstantForce(_throwForce);
+        MoveController.AddForce(_throwForce);
 
         InitThrowData();
     }
@@ -644,11 +713,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <param name="altitude">初始高度</param>
     /// <param name="verticalSpeed">纵轴速度</param>
     /// <param name="velocity">移动速率</param>
-    /// <param name="rotate">旋转速度</param>
-    public void Throw(Vector2 position, float altitude, float verticalSpeed, Vector2 velocity, float rotate)
+    /// <param name="rotateSpeed">旋转速度</param>
+    public void Throw(Vector2 position, float altitude, float verticalSpeed, Vector2 velocity, float rotateSpeed)
     {
         GlobalPosition = position;
-        Throw(altitude, verticalSpeed, velocity, rotate);
+        Throw(altitude, verticalSpeed, velocity, rotateSpeed);
     }
 
 
@@ -747,7 +816,23 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     {
         return _blendShaderMaterial.GetShaderParameter("schedule").AsSingle();
     }
+
+    /// <summary>
+    /// 设置混色颜色
+    /// </summary>
+    public void SetBlendModulate(Color color)
+    {
+        _blendShaderMaterial.SetShaderParameter("modulate", color);
+        _shadowBlendShaderMaterial.SetShaderParameter("modulate", color);
+    }
     
+    /// <summary>
+    /// 获取混色颜色
+    /// </summary>
+    public Color SetBlendModulate()
+    {
+        return _blendShaderMaterial.GetShaderParameter("modulate").AsColor();
+    }
     
     /// <summary>
     /// 每帧调用一次, 为了防止子类覆盖 _Process(), 给 _Process() 加上了 sealed, 子类需要帧循环函数请重写 Process() 函数
@@ -1078,6 +1163,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         }
 
         IsDestroyed = true;
+        if (AffiliationArea != null)
+        {
+            AffiliationArea.RemoveItem(this);
+        }
+        
         QueueFree();
         OnDestroy();
 
@@ -1102,16 +1192,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     }
 
     /// <summary>
-    /// 继承指定物体的运动速率, 该速率可能会有衰减
+    /// 继承指定物体的运动速率
     /// </summary>
-    public void InheritVelocity(ActivityObject other)
+    public void InheritVelocity(ActivityObject other, float scale = 0.5f)
     {
-        var velocity = other.Velocity;
-        if (velocity != Vector2.Zero)
-        {
-            var force = MoveController.AddConstantForce(velocity * 0.5f, 15);
-            force.EnableResistanceInTheAir = false;
-        }
+        MoveController.AddVelocity(other.Velocity * scale);
     }
 
     /// <summary>
@@ -1176,7 +1261,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
             CollisionMask = 1;
-            CollisionLayer = 0;
+            CollisionLayer = PhysicsLayer.Throwing;
             _fallData.UseOrigin = false;
         }
     }
@@ -1346,56 +1431,92 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall(float delayTime, Action cb)
+    public void CallDelay(float delayTime, Action cb)
     {
-        StartCoroutine(_DelayCall(delayTime, cb));
+        StartCoroutine(_CallDelay(delayTime, cb));
     }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    public void CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
     {
-        StartCoroutine(_DelayCall(delayTime, cb, arg1));
+        StartCoroutine(_CallDelay(delayTime, cb, arg1));
     }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    public void CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
     {
-        StartCoroutine(_DelayCall(delayTime, cb, arg1, arg2));
+        StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2));
     }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数
     /// </summary>
-    public void DelayCall<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    public void CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
     {
-        StartCoroutine(_DelayCall(delayTime, cb, arg1, arg2, arg3));
+        StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2, arg3));
     }
 
-    private IEnumerator _DelayCall(float delayTime, Action cb)
+    private IEnumerator _CallDelay(float delayTime, Action cb)
     {
         yield return new WaitForSeconds(delayTime);
         cb();
     }
     
-    private IEnumerator _DelayCall<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    private IEnumerator _CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1);
     }
     
-    private IEnumerator _DelayCall<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    private IEnumerator _CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1, arg2);
     }
     
-    private IEnumerator _DelayCall<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    private IEnumerator _CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1,arg2, arg3);
+    }
+
+    /// <summary>
+    /// 将当前 ActivityObject 变成静态图像绘制到地面上, 用于优化渲染大量物体<br/>
+    /// 调用该函数后会排队进入渲染队列, 并且禁用所有行为, 当渲染完成后会销毁当前对象, 也就是调用 Destroy() 函数<br/>
+    /// </summary>
+    public void BecomesStaticImage()
+    {
+        if (AffiliationArea == null)
+        {
+            GD.PrintErr($"调用函数: BecomesStaticImage() 失败, 物体{Name}没有归属区域, 无法确定绘制到哪个ImageCanvas上, 直接执行销毁");
+            Destroy();
+            return;
+        }
+
+        if (_processingBecomesStaticImage)
+        {
+            return;
+        }
+
+        _processingBecomesStaticImage = true;
+        EnableBehavior = false;
+        var staticImageCanvas = AffiliationArea.RoomInfo.StaticImageCanvas;
+        var (x, y) = staticImageCanvas.ToImageCanvasPosition(GlobalPosition);
+        staticImageCanvas.CanvasSprite.DrawActivityObjectInCanvas(this, x, y, () =>
+        {
+            Destroy();
+        });
+    }
+
+    /// <summary>
+    /// 是否正在处理成为静态图片
+    /// </summary>
+    public bool IsProcessingBecomesStaticImage()
+    {
+        return _processingBecomesStaticImage;
     }
 }

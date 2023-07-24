@@ -43,6 +43,29 @@ public class MoveController : Component
 
         BasisVelocity *= scale;
     }
+
+    /// <summary>
+    /// 给当前控制器添加指定外力速率, 并且平均分配给所有外力速率
+    /// </summary>
+    public void AddVelocity(Vector2 velocity)
+    {
+        if (velocity != Vector2.Zero)
+        {
+            var forceCount = GetForceCount();
+            if (forceCount == 0)
+            {
+                AddForce(velocity);
+            }
+            else
+            {
+                var tempV = velocity / forceCount;
+                for (var i = 0; i < _forceList.Count; i++)
+                {
+                    _forceList[i].Velocity += tempV;
+                }
+            }
+        }
+    }
     
     /// <summary>
     /// 设置所有力对象, 包括基础速率
@@ -78,9 +101,9 @@ public class MoveController : Component
     /// </summary>
     /// <param name="velocity">外力速率</param>
     /// <param name="resistance">阻力大小</param>
-    public ExternalForce AddConstantForce(Vector2 velocity, float resistance)
+    public ExternalForce AddForce(Vector2 velocity, float resistance)
     {
-        var force = AddConstantForce("_anonymity_" + _index++);
+        var force = AddForce("_anonymity_" + _index++);
         force.Velocity = velocity;
         force.Resistance = resistance;
         return force;
@@ -90,9 +113,9 @@ public class MoveController : Component
     /// 快速创建一个外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
     /// </summary>
     /// <param name="velocity">外力速率</param>
-    public ExternalForce AddConstantForce(Vector2 velocity)
+    public ExternalForce AddForce(Vector2 velocity)
     {
-        var force = AddConstantForce("_anonymity_" + _index++);
+        var force = AddForce("_anonymity_" + _index++);
         force.Velocity = velocity;
         return force;
     }
@@ -101,18 +124,18 @@ public class MoveController : Component
     /// <summary>
     /// 根据名称添加一个外力, 并返回创建的外力的对象, 如果存在这个名称的外力, 移除之前的外力, 当速率变为 0 时不会自动销毁
     /// </summary>
-    public ExternalForce AddConstantForce(string name)
+    public ExternalForce AddForce(string name)
     {
         var f = new ExternalForce(name);
         f.AutoDestroy = false;
-        AddConstantForce(f);
+        AddForce(f);
         return f;
     }
 
     /// <summary>
     /// 根据对象添加一个外力力, 如果存在这个名称的外力, 移除之前的外力
     /// </summary>
-    public T AddConstantForce<T>(T force) where T : ExternalForce
+    public T AddForce<T>(T force) where T : ExternalForce
     {
         RemoveForce(force.Name);
         _forceList.Add(force);
@@ -188,6 +211,7 @@ public class MoveController : Component
     {
         if (_basisVelocity == Vector2.Zero && _forceList.Count == 0)
         {
+            ActivityInstance.Velocity = Vector2.Zero;
             return;
         }
 

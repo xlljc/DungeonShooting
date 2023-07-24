@@ -6,13 +6,8 @@ using Config;
 /// <summary>
 /// 武器的基类
 /// </summary>
-public abstract partial class Weapon : ActivityObject
+public abstract partial class Weapon : ActivityObject, IPackageItem
 {
-    /// <summary>
-    /// 开火回调事件
-    /// </summary>
-    public event Action<Weapon> FireEvent;
-
     /// <summary>
     /// 武器属性数据
     /// </summary>
@@ -26,10 +21,9 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     public CampEnum TargetCamp { get; set; }
 
-    /// <summary>
-    /// 该武器的拥有者
-    /// </summary>
-    public Role Master { get; private set; }
+    public Role Master { get; set; }
+
+    public int PackageIndex { get; set; } = -1;
 
     /// <summary>
     /// 当前弹夹弹药剩余量
@@ -115,14 +109,14 @@ public abstract partial class Weapon : ActivityObject
     public bool IsCharging => _looseShootFlag;
 
     /// <summary>
-    /// 返回武器是否在武器袋中
+    /// 返回武器是否在武器背包中
     /// </summary>
     public bool IsInHolster => Master != null;
 
     /// <summary>
     /// 返回是否真正使用该武器
     /// </summary>
-    public bool IsActive => Master != null && Master.Holster.ActiveWeapon == this;
+    public bool IsActive => Master != null && Master.WeaponPack.ActiveItem == this;
     
     /// <summary>
     /// 动画播放器
@@ -194,11 +188,20 @@ public abstract partial class Weapon : ActivityObject
     //单独换弹设置下的换弹状态, 0: 未换弹, 1: 装第一颗子弹之前, 2: 单独装弹中, 3: 单独装弹完成
     private byte _aloneReloadState = 0;
 
+    //单独换弹状态下是否强制结束换弹过程
+    private bool _aloneReloadStop = false;
+    
     //本次换弹已用时间
     private float _reloadUseTime = 0;
 
     //是否播放过换弹完成音效
     private bool _playReloadFinishSoundFlag = false;
+
+    //上膛状态,-1: 等待执行自动上膛 , 0: 未上膛, 1: 上膛中, 2: 已经完成上膛
+    private sbyte _beLoadedState = 2;
+
+    //上膛计时器
+    private float _beLoadedStateTimer = -1;
 
     // ----------------------------------------------
     private uint _tempLayer;
@@ -234,7 +237,7 @@ public abstract partial class Weapon : ActivityObject
     {
         if (_weaponAttributeMap.TryGetValue(itemId, out var attr))
         {
-            return attr;
+            return attr.Clone();
         }
 
         throw new Exception($"武器'{itemId}'没有在 Weapon 表中配置属性数据!");
@@ -242,7 +245,7 @@ public abstract partial class Weapon : ActivityObject
     
     public override void OnInit()
     {
-        InitWeapon(_GetWeaponAttribute(ItemId));
+        InitWeapon(_GetWeaponAttribute(ItemConfig.Id));
         AnimatedSprite.AnimationFinished += OnAnimationFinished;
     }
 
@@ -265,7 +268,7 @@ public abstract partial class Weapon : ActivityObject
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
             Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
-            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + ItemId);
+            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + ItemConfig.Id);
         }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
@@ -286,6 +289,20 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     /// <param name="fireRotation">开火时枪口旋转角度</param>
     protected abstract void OnShoot(float fireRotation);
+
+    /// <summary>
+    /// 上膛开始时调用
+    /// </summary>
+    protected virtual void OnBeginBeLoaded()
+    {
+    }
+    
+    /// <summary>
+    /// 上膛结束时调用
+    /// </summary>
+    protected virtual void OnBeLoadedFinish()
+    {
+    }
     
     /// <summary>
     /// 当按下扳机时调用
@@ -305,7 +322,7 @@ public abstract partial class Weapon : ActivityObject
     /// 开始蓄力时调用, 
     /// 注意, 该函数仅在 Attribute.LooseShoot == false 时才能被调用
     /// </summary>
-    protected virtual void OnStartCharge()
+    protected virtual void OnBeginCharge()
     {
     }
 
@@ -321,7 +338,6 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     protected virtual void OnBeginReload()
     {
-        
     }
     
     /// <summary>
@@ -332,6 +348,13 @@ public abstract partial class Weapon : ActivityObject
     }
 
     /// <summary>
+    /// 单独装弹完成时调用
+    /// </summary>
+    protected virtual void OnAloneReloadStateFinish()
+    {
+    }
+    
+    /// <summary>
     /// 当武器被拾起时调用
     /// </summary>
     /// <param name="master">拾起该武器的角色</param>
@@ -340,9 +363,10 @@ public abstract partial class Weapon : ActivityObject
     }
 
     /// <summary>
-    /// 当武器从武器袋中移除时调用
+    /// 当武器从武器背包中移除时调用
     /// </summary>
-    protected virtual void OnRemove()
+    /// <param name="master">移除该武器的角色</param>
+    protected virtual void OnRemove(Role master)
     {
     }
 
@@ -390,15 +414,14 @@ public abstract partial class Weapon : ActivityObject
         _noAttackTime += delta;
         
         //这把武器被扔在地上, 或者当前武器没有被使用
-        if (Master == null || Master.Holster.ActiveWeapon != this)
+        if (Master == null || Master.WeaponPack.ActiveItem != this)
         {
             //_triggerTimer
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
             //攻击冷却计时
             _attackTimer = _attackTimer > 0 ? _attackTimer - delta : 0;
             //武器的当前散射半径
-            CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
-                Attribute.StartScatteringRange);
+            ScatteringRangeBackHandler(delta);
             //松开扳机
             if (_triggerFlag || _downTimer > 0)
             {
@@ -422,11 +445,26 @@ public abstract partial class Weapon : ActivityObject
                 _upTimer = 0;
                 _looseShootFlag = false;
                 _chargeTime = 0;
+                _beLoadedStateTimer = -1;
             }
         }
         else //正在使用中
         {
             _dirtyFlag = true;
+            
+            //上膛
+            if (_beLoadedState == 1)
+            {
+                _beLoadedStateTimer -= delta;
+                //上膛完成
+                if (_beLoadedStateTimer <= 0)
+                {
+                    _beLoadedStateTimer = -1;
+                    _beLoadedState = 2;
+                    OnBeLoadedFinish();
+                }
+            }
+            
             //换弹
             if (Reloading)
             {
@@ -449,6 +487,7 @@ public abstract partial class Weapon : ActivityObject
                                 _aloneReloadState = 2;
                                 ReloadHandler();
                             }
+                            _aloneReloadStop = false;
                         }
                             break;
                         case 2: //单独装弹中
@@ -456,7 +495,7 @@ public abstract partial class Weapon : ActivityObject
                             if (_reloadTimer <= 0)
                             {
                                 ReloadSuccess();
-                                if (ResidueAmmo == 0 || CurrAmmo == Attribute.AmmoCapacity) //单独装弹完成
+                                if (_aloneReloadStop || ResidueAmmo == 0 || CurrAmmo == Attribute.AmmoCapacity) //单独装弹完成
                                 {
                                     AloneReloadStateFinish();
                                     if (Attribute.AloneReloadFinishIntervalTime <= 0)
@@ -490,6 +529,7 @@ public abstract partial class Weapon : ActivityObject
                                 StopReloadState();
                                 ReloadFinishHandler();
                             }
+                            _aloneReloadStop = false;
                         }
                             break;
                     }
@@ -511,7 +551,7 @@ public abstract partial class Weapon : ActivityObject
                 }
             }
 
-            // 攻击的计时器
+            //攻击的计时器
             if (_attackTimer > 0)
             {
                 _attackTimer -= delta;
@@ -521,6 +561,11 @@ public abstract partial class Weapon : ActivityObject
                     _attackTimer = 0;
                     //枪口默认角度
                     RotationDegrees = -Attribute.DefaultAngle;
+                    //自动上膛
+                    if (_beLoadedState == -1)
+                    {
+                        BeLoadedHandler();
+                    }
                 }
             }
             else if (_delayedTime > 0) //攻击延时
@@ -562,13 +607,18 @@ public abstract partial class Weapon : ActivityObject
             {
                 //连发开火
                 TriggerFire();
+                //连发最后一发打完了
+                if (Attribute.ManualBeLoaded && _continuousCount <= 0)
+                {
+                    //执行上膛逻辑
+                    RunBeLoaded();
+                }
             }
 
             //散射值销退
             if (_noAttackTime >= Attribute.ScatteringRangeBackDelayTime)
             {
-                CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
-                    Attribute.StartScatteringRange);
+                ScatteringRangeBackHandler(delta);
             }
 
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
@@ -608,108 +658,130 @@ public abstract partial class Weapon : ActivityObject
         
         //是否第一帧按下
         var justDown = _downTimer == 0;
-        //是否能发射
-        var flag = false;
-        if (_continuousCount <= 0) //不能处于连发状态下
+        
+        if (_beLoadedState == 0 || _beLoadedState == -1)  //需要执行上膛操作
         {
-            if (Attribute.ContinuousShoot) //自动射击
+            if (justDown && !Reloading)
             {
-                if (_triggerTimer > 0)
+                if (CurrAmmo <= 0)
                 {
-                    if (_continuousShootFlag)
+                    //子弹不够, 触发换弹
+                    Reload();
+                }
+                else if (_attackTimer <= 0)
+                {
+                    //触发上膛操作
+                    BeLoadedHandler();
+                }
+            }
+        }
+        else if (_beLoadedState == 1)  //上膛中
+        {
+            
+        }
+        else //上膛完成
+        {
+            //是否能发射
+            var flag = false;
+            if (_continuousCount <= 0) //不能处于连发状态下
+            {
+                if (Attribute.ContinuousShoot) //自动射击
+                {
+                    if (_triggerTimer > 0)
+                    {
+                        if (_continuousShootFlag)
+                        {
+                            flag = true;
+                        }
+                    }
+                    else
+                    {
+                        flag = true;
+                        if (_delayedTime <= 0 && _attackTimer <= 0)
+                        {
+                            _continuousShootFlag = true;
+                        }
+                    }
+                }
+                else //半自动
+                {
+                    if (justDown && _triggerTimer <= 0 && _attackTimer <= 0)
                     {
                         flag = true;
                     }
                 }
-                else
+            }
+
+            if (flag)
+            {
+                var fireFlag = true; //是否能开火
+                if (Reloading) //换弹中
                 {
-                    flag = true;
-                    if (_delayedTime <= 0 && _attackTimer <= 0)
+                    fireFlag = false;
+                    if (CurrAmmo > 0 && Attribute.AloneReload && Attribute.AloneReloadCanShoot)
                     {
-                        _continuousShootFlag = true;
+                        //检查是否允许停止换弹
+                        if (_aloneReloadState == 2 || _aloneReloadState == 1)
+                        {
+                            //强制结束
+                            _aloneReloadStop = true;
+                        }
                     }
                 }
-            }
-            else //半自动
-            {
-                if (justDown && _triggerTimer <= 0 && _attackTimer <= 0)
+                else if (CurrAmmo <= 0) //子弹不够
                 {
-                    flag = true;
-                }
-            }
-        }
-
-        if (flag)
-        {
-            var fireFlag = true; //是否能开火
-            if (Reloading) //换弹中
-            {
-                fireFlag = false;
-                if (CurrAmmo > 0 && Attribute.AloneReload && Attribute.AloneReloadCanShoot)
-                {
-                    //检查是否允许停止换弹
-                    if (_aloneReloadState == 2 || _aloneReloadState == 1)
+                    fireFlag = false;
+                    if (justDown)
                     {
-                        if (Attribute.AloneReloadFinishIntervalTime <= 0)
+                        //第一帧按下, 触发换弹
+                        Reload();
+                    }
+                }
+
+                if (fireFlag)
+                {
+                    if (justDown)
+                    {
+                        //开火前延时
+                        if (!Attribute.LooseShoot)
                         {
-                            //换弹完成
-                            StopReloadState();
-                            ReloadFinishHandler();
+                            _delayedTime = Attribute.DelayedTime;
+                        }
+                        //扳机按下间隔
+                        _triggerTimer = Attribute.TriggerInterval;
+                        //连发数量
+                        if (!Attribute.ContinuousShoot)
+                        {
+                            _continuousCount =
+                                Utils.RandomRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
+                        }
+                    }
+
+                    if (_delayedTime <= 0 && _attackTimer <= 0)
+                    {
+                        if (Attribute.LooseShoot) //松发开火
+                        {
+                            _looseShootFlag = true;
+                            OnBeginCharge();
                         }
                         else
                         {
-                            _reloadTimer = Attribute.AloneReloadFinishIntervalTime;
-                            _aloneReloadState = 3;
+                            //开火
+                            TriggerFire();
+
+                            //非连射模式
+                            if (!Attribute.ContinuousShoot && Attribute.ManualBeLoaded && _continuousCount <= 0)
+                            {
+                                //执行上膛逻辑
+                                RunBeLoaded();
+                            }
                         }
                     }
+
+                    _attackFlag = true;
                 }
+
             }
-            else if (CurrAmmo <= 0) //子弹不够
-            {
-                fireFlag = false;
-                if (justDown)
-                {
-                    //第一帧按下, 触发换弹
-                    Reload();
-                }
-            }
-
-            if (fireFlag)
-            {
-                if (justDown)
-                {
-                    //开火前延时
-                    if (!Attribute.LooseShoot)
-                    {
-                        _delayedTime = Attribute.DelayedTime;
-                    }
-                    //扳机按下间隔
-                    _triggerTimer = Attribute.TriggerInterval;
-                    //连发数量
-                    if (!Attribute.ContinuousShoot)
-                    {
-                        _continuousCount =
-                            Utils.RandomRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
-                    }
-                }
-
-                if (_delayedTime <= 0 && _attackTimer <= 0)
-                {
-                    if (Attribute.LooseShoot) //松发开火
-                    {
-                        _looseShootFlag = true;
-                        OnStartCharge();
-                    }
-                    else
-                    {
-                        //开火
-                        TriggerFire();
-                    }
-                }
-
-                _attackFlag = true;
-            }
-
         }
 
         _triggerFlag = true;
@@ -774,6 +846,12 @@ public abstract partial class Weapon : ActivityObject
             if (_chargeTime >= Attribute.MinChargeTime) //判断蓄力是否够了
             {
                 TriggerFire();
+                //非连射模式
+                if (!Attribute.ContinuousShoot && Attribute.ManualBeLoaded && _continuousCount <= 0)
+                {
+                    //执行上膛逻辑
+                    RunBeLoaded();
+                }
             }
             else //不能攻击
             {
@@ -791,7 +869,6 @@ public abstract partial class Weapon : ActivityObject
     private void TriggerFire()
     {
         _noAttackTime = 0;
-        _continuousCount = _continuousCount > 0 ? _continuousCount - 1 : 0;
 
         //减子弹数量
         if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
@@ -804,6 +881,15 @@ public abstract partial class Weapon : ActivityObject
         else
         {
             CurrAmmo -= UseAmmoCount();
+        }
+
+        if (CurrAmmo == 0)
+        {
+            _continuousCount = 0;
+        }
+        else
+        {
+            _continuousCount = _continuousCount > 0 ? _continuousCount - 1 : 0;
         }
 
         //开火间隙
@@ -820,27 +906,16 @@ public abstract partial class Weapon : ActivityObject
         //播放射击音效
         PlayShootSound();
         
+        //抛弹
+        if ((Attribute.ContinuousShoot || !Attribute.ManualBeLoaded))
+        {
+            ThrowShellHandler(1f);
+        }
+        
         //触发开火函数
         OnFire();
 
-        //播放上膛动画
-        if (IsAutoPlaySpriteFrames)
-        {
-            if (Attribute.EquipSoundDelayTime <= 0)
-            {
-                PlaySpriteAnimation(AnimatorNames.Equip);
-            }
-            else
-            {
-                DelayCall(Attribute.EquipSoundDelayTime, PlaySpriteAnimation, AnimatorNames.Equip);
-            }
-        }
 
-        //播放上膛音效
-        PlayEquipSound();
-
-        //开火发射的子弹数量
-        var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
         //武器口角度
         var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
 
@@ -849,7 +924,16 @@ public abstract partial class Weapon : ActivityObject
         var tempAngle = Mathf.RadToDeg(tempRotation);
 
         //开火时枪口角度
-        var fireRotation = Mathf.DegToRad(Master.MountPoint.RealRotationDegrees) + tempRotation;
+        var fireRotation = tempRotation;
+        
+        //开火发射的子弹数量
+        var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
+        if (Master != null)
+        {
+            bulletCount = Master.RoleState.CallCalcBulletCountEvent(this, bulletCount);
+            fireRotation += Mathf.DegToRad(Master.MountPoint.RealRotationDegrees);
+        }
+        
         //创建子弹
         for (int i = 0; i < bulletCount; i++)
         {
@@ -858,8 +942,8 @@ public abstract partial class Weapon : ActivityObject
         }
 
         //开火添加散射值
-        CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue,
-            Attribute.FinalScatteringRange);
+        ScatteringRangeAddHandler();
+        
         //武器的旋转角度
         tempAngle -= Attribute.UpliftAngle;
         RotationDegrees = tempAngle;
@@ -872,11 +956,6 @@ public abstract partial class Weapon : ActivityObject
             -max, max
         );
         Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
-
-        if (FireEvent != null)
-        {
-            FireEvent(this);
-        }
     }
 
     /// <summary>
@@ -977,7 +1056,7 @@ public abstract partial class Weapon : ActivityObject
     /// </summary>
     public void Reload()
     {
-        if (CurrAmmo < Attribute.AmmoCapacity && ResidueAmmo > 0 && !Reloading)
+        if (CurrAmmo < Attribute.AmmoCapacity && ResidueAmmo > 0 && !Reloading && _beLoadedState != 1)
         {
             Reloading = true;
             _playReloadFinishSoundFlag = false;
@@ -986,6 +1065,12 @@ public abstract partial class Weapon : ActivityObject
             PlayBeginReloadSound();
             
             // GD.Print("开始换弹.");
+            //抛弹
+            if (!Attribute.ContinuousShoot && (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0)
+            {
+                ThrowShellHandler(0.6f);
+            }
+            
             //第一次换弹
             OnBeginReload();
 
@@ -999,6 +1084,9 @@ public abstract partial class Weapon : ActivityObject
                 //普通换弹处理
                 ReloadHandler();
             }
+            
+            //上膛标记完成
+            _beLoadedState = 2;
         }
     }
 
@@ -1008,13 +1096,14 @@ public abstract partial class Weapon : ActivityObject
         if (Attribute.BeginReloadSound != null)
         {
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            var volume = SoundManager.CalcRoleVolume(Attribute.BeginReloadSound.Volume, Master);
             if (Attribute.BeginReloadSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSound.Volume);
+                SoundManager.PlaySoundEffectPosition(Attribute.BeginReloadSound.Path, position, volume);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSoundDelayTime, Attribute.BeginReloadSound.Volume);
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSoundDelayTime, volume);
             }
         }
     }
@@ -1025,13 +1114,14 @@ public abstract partial class Weapon : ActivityObject
         if (Attribute.ReloadSound != null)
         {
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
+            var volume = SoundManager.CalcRoleVolume(Attribute.ReloadSound.Volume, Master);
             if (Attribute.ReloadSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound.Path, position, Attribute.ReloadSound.Volume);
+                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound.Path, position, volume);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound.Path, position, Attribute.ReloadSoundDelayTime, Attribute.ReloadSound.Volume);
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound.Path, position, Attribute.ReloadSoundDelayTime, volume);
             }
         }
     }
@@ -1041,8 +1131,9 @@ public abstract partial class Weapon : ActivityObject
     {
         if (Attribute.ReloadFinishSound != null)
         {
+            var volume = SoundManager.CalcRoleVolume(Attribute.ReloadFinishSound.Volume, Master);
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            SoundManager.PlaySoundEffectPosition(Attribute.ReloadFinishSound.Path, position, Attribute.ReloadFinishSound.Volume);
+            SoundManager.PlaySoundEffectPosition(Attribute.ReloadFinishSound.Path, position, volume);
         }
     }
 
@@ -1051,25 +1142,55 @@ public abstract partial class Weapon : ActivityObject
     {
         if (Attribute.ShootSound != null)
         {
+            var volume = SoundManager.CalcRoleVolume(Attribute.ShootSound.Volume, Master);
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, Attribute.ShootSound.Volume);
+            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, volume);
         }
     }
 
     //播放上膛音效
-    private void PlayEquipSound()
+    private void PlayBeLoadedSound()
     {
-        if (Attribute.EquipSound != null)
+        if (Attribute.BeLoadedSound != null)
         {
             var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            if (Attribute.EquipSoundDelayTime <= 0)
+            var volume = SoundManager.CalcRoleVolume(Attribute.BeLoadedSound.Volume, Master);
+            if (Attribute.BeLoadedSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.EquipSound.Path, position, Attribute.EquipSound.Volume);
+                SoundManager.PlaySoundEffectPosition(Attribute.BeLoadedSound.Path, position, volume);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.EquipSound.Path, position, Attribute.EquipSoundDelayTime, Attribute.EquipSound.Volume);
+                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeLoadedSound.Path, position, Attribute.BeLoadedSoundDelayTime, volume);
             }
+        }
+    }
+
+    //执行上膛逻辑
+    private void RunBeLoaded()
+    {
+        if (Attribute.AutoManualBeLoaded)
+        {
+            if (_attackTimer <= 0)
+            {
+                //执行自动上膛
+                BeLoadedHandler();
+            }
+            else if (CurrAmmo > 0)
+            {
+                //等待执行自动上膛
+                _beLoadedState = -1;
+            }
+            else
+            {
+                //没子弹了, 需要手动上膛
+                _beLoadedState = 0;
+            }
+        }
+        else
+        {
+            //手动上膛
+            _beLoadedState = 0;
         }
     }
 
@@ -1118,6 +1239,111 @@ public abstract partial class Weapon : ActivityObject
     private void AloneReloadStateFinish()
     {
         // GD.Print("单独装弹完成.");
+        OnAloneReloadStateFinish();
+    }
+
+    //上膛处理
+    private void BeLoadedHandler()
+    {
+        //上膛抛弹
+        if (!Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
+        {
+            ThrowShellHandler(0.6f);
+        }
+
+        //开始上膛
+        OnBeginBeLoaded();
+
+        //上膛时间为0, 直接结束上膛
+        if (Attribute.BeLoadedTime <= 0)
+        {
+            //直接上膛完成
+            _beLoadedState = 2;
+            OnBeLoadedFinish();
+            return;
+        }
+        
+        //上膛中
+        _beLoadedState = 1;
+        _beLoadedStateTimer = Attribute.BeLoadedTime;
+        
+        //播放上膛动画
+        if (IsAutoPlaySpriteFrames)
+        {
+            if (Attribute.BeLoadedSoundDelayTime <= 0)
+            {
+                PlaySpriteAnimation(AnimatorNames.BeLoaded);
+            }
+            else
+            {
+                CallDelay(Attribute.BeLoadedSoundDelayTime, PlaySpriteAnimation, AnimatorNames.BeLoaded);
+            }
+        }
+
+        //播放上膛音效
+        PlayBeLoadedSound();
+    }
+
+    //抛弹逻辑
+    private void ThrowShellHandler(float speedScale)
+    {
+        if (string.IsNullOrEmpty(Attribute.ShellId))
+        {
+            return;
+        }
+        //创建一个弹壳
+        if (Attribute.ThrowShellDelayTime > 0)
+        {
+            CallDelay(Attribute.ThrowShellDelayTime, () => ThrowShell(Attribute.ShellId, speedScale));
+        }
+        else if (Attribute.ThrowShellDelayTime == 0)
+        {
+            ThrowShell(Attribute.ShellId, speedScale);
+        }
+    }
+
+    //散射值消退处理
+    private void ScatteringRangeBackHandler(float delta)
+    {
+        var startScatteringRange = Attribute.StartScatteringRange;
+        var finalScatteringRange = Attribute.FinalScatteringRange;
+        if (Master != null)
+        {
+            startScatteringRange = Master.RoleState.CallCalcStartScatteringEvent(this, startScatteringRange);
+            finalScatteringRange = Master.RoleState.CallCalcFinalScatteringEvent(this, finalScatteringRange);
+        }
+        if (startScatteringRange <= finalScatteringRange)
+        {
+            CurrScatteringRange = Mathf.Max(CurrScatteringRange - Attribute.ScatteringRangeBackSpeed * delta,
+                startScatteringRange);
+        }
+        else
+        {
+            CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeBackSpeed * delta,
+                startScatteringRange);
+        }
+    }
+
+    //散射值添加处理
+    private void ScatteringRangeAddHandler()
+    {
+        var startScatteringRange = Attribute.StartScatteringRange;
+        var finalScatteringRange = Attribute.FinalScatteringRange;
+        if (Master != null)
+        {
+            startScatteringRange = Master.RoleState.CallCalcStartScatteringEvent(this, startScatteringRange);
+            finalScatteringRange = Master.RoleState.CallCalcFinalScatteringEvent(this, finalScatteringRange);
+        }
+        if (startScatteringRange <= finalScatteringRange)
+        {
+            CurrScatteringRange = Mathf.Min(CurrScatteringRange + Attribute.ScatteringRangeAddValue,
+                finalScatteringRange);
+        }
+        else
+        {
+            CurrScatteringRange = Mathf.Min(CurrScatteringRange - Attribute.ScatteringRangeAddValue,
+                finalScatteringRange);
+        }
     }
 
     //停止当前的换弹状态
@@ -1165,7 +1391,7 @@ public abstract partial class Weapon : ActivityObject
                 }
             }
 
-            if (ResidueAmmo != 0 && CurrAmmo != Attribute.AmmoCapacity) //继续装弹
+            if (!_aloneReloadStop && ResidueAmmo != 0 && CurrAmmo != Attribute.AmmoCapacity) //继续装弹
             {
                 ReloadHandler();
             }
@@ -1201,7 +1427,7 @@ public abstract partial class Weapon : ActivityObject
     //帧动画播放结束
     private void OnAnimationFinished()
     {
-        GD.Print("帧动画播放结束...");
+        // GD.Print("帧动画播放结束...");
         AnimatedSprite.Play(AnimatorNames.Default);
     }
 
@@ -1213,40 +1439,37 @@ public abstract partial class Weapon : ActivityObject
         {
             if (Master == null)
             {
-                var masterWeapon = roleMaster.Holster.ActiveWeapon;
+                var masterWeapon = roleMaster.WeaponPack.ActiveItem;
                 //查找是否有同类型武器
-                var index = roleMaster.Holster.FindWeapon(ItemId);
+                var index = roleMaster.WeaponPack.FindIndex(ItemConfig.Id);
                 if (index != -1) //如果有这个武器
                 {
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
                     {
-                        var targetWeapon = roleMaster.Holster.GetWeapon(index);
+                        var targetWeapon = roleMaster.WeaponPack.GetItem(index);
                         if (!targetWeapon.IsAmmoFull()) //背包里面的武器子弹未满
                         {
                             //可以互动拾起弹药
                             result.CanInteractive = true;
-                            result.Message = Attribute.Name;
-                            result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_bullet_png;
+                            result.Type = CheckInteractiveResult.InteractiveType.Bullet;
                             return result;
                         }
                     }
                 }
                 else //没有武器
                 {
-                    if (roleMaster.Holster.CanPickupWeapon(this)) //能拾起武器
+                    if (roleMaster.WeaponPack.HasVacancy()) //有空位, 能拾起武器
                     {
                         //可以互动, 拾起武器
                         result.CanInteractive = true;
-                        result.Message = Attribute.Name;
-                        result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_pickup_png;
+                        result.Type = CheckInteractiveResult.InteractiveType.PickUp;
                         return result;
                     }
-                    else if (masterWeapon != null && masterWeapon.Attribute.WeightType == Attribute.WeightType) //替换武器
+                    else if (masterWeapon != null) //替换武器  // && masterWeapon.Attribute.WeightType == Attribute.WeightType)
                     {
                         //可以互动, 切换武器
                         result.CanInteractive = true;
-                        result.Message = Attribute.Name;
-                        result.ShowIcon = ResourcePath.resource_sprite_ui_icon_icon_replace_png;
+                        result.Type = CheckInteractiveResult.InteractiveType.Replace;
                         return result;
                     }
                 }
@@ -1260,9 +1483,9 @@ public abstract partial class Weapon : ActivityObject
     {
         if (master is Role roleMaster) //与role互动
         {
-            var holster = roleMaster.Holster;
+            var holster = roleMaster.WeaponPack;
             //查找是否有同类型武器
-            var index = holster.FindWeapon(ItemId);
+            var index = holster.FindIndex(ItemConfig.Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
@@ -1270,7 +1493,7 @@ public abstract partial class Weapon : ActivityObject
                     return;
                 }
 
-                var weapon = holster.GetWeapon(index);
+                var weapon = holster.GetItem(index);
                 //子弹上限
                 var maxCount = Attribute.MaxAmmoCapacity;
                 //是否捡到子弹
@@ -1299,16 +1522,24 @@ public abstract partial class Weapon : ActivityObject
                 if (flag)
                 {
                     Throw(GlobalPosition, 0, Utils.RandomRangeInt(20, 50), Vector2.Zero, Utils.RandomRangeInt(-180, 180));
+                    //没有子弹了, 停止播放泛白效果
+                    if (IsTotalAmmoEmpty())
+                    {
+                        //停止动画
+                        AnimationPlayer.Stop();
+                        //清除泛白效果
+                        SetBlendSchedule(0);
+                    }
                 }
             }
             else //没有武器
             {
-                if (holster.PickupWeapon(this) == -1)
+                if (!holster.HasVacancy()) //没有空位置, 扔掉当前武器
                 {
                     //替换武器
                     roleMaster.ThrowWeapon();
-                    roleMaster.PickUpWeapon(this);
                 }
+                roleMaster.PickUpWeapon(this);
             }
         }
     }
@@ -1322,7 +1553,7 @@ public abstract partial class Weapon : ActivityObject
     }
 
     /// <summary>
-    /// 触发扔掉武器抛出的效果, 并不会管武器是否在武器袋中
+    /// 触发扔掉武器时抛出的效果, 并不会管武器是否在武器背包中
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
     public void ThrowWeapon(Role master)
@@ -1331,7 +1562,7 @@ public abstract partial class Weapon : ActivityObject
     }
 
     /// <summary>
-    /// 触发扔掉武器抛出的效果, 并不会管武器是否在武器袋中
+    /// 触发扔掉武器时抛出的效果, 并不会管武器是否在武器背包中
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
     /// <param name="startPosition">投抛起始位置</param>
@@ -1347,38 +1578,72 @@ public abstract partial class Weapon : ActivityObject
 
         var rotation = master.MountPoint.GlobalRotation;
         GlobalRotation = rotation;
-        
-        //继承role的移动速度
-        InheritVelocity(master);
 
         startPosition -= GripPoint.Position.Rotated(rotation);
         var startHeight = -master.MountPoint.Position.Y;
         var velocity = new Vector2(20, 0).Rotated(rotation);
         var yf = Utils.RandomRangeInt(50, 70);
         Throw(startPosition, startHeight, yf, velocity, 0);
+        
+        //继承role的移动速度
+        InheritVelocity(master);
     }
 
     protected override void OnThrowStart()
     {
         //禁用碰撞
         //Collision.Disabled = true;
-        AnimationPlayer.Play(AnimatorNames.Floodlight);
+        //AnimationPlayer.Play(AnimatorNames.Floodlight);
     }
 
     protected override void OnThrowOver()
     {
         //启用碰撞
         //Collision.Disabled = false;
-        AnimationPlayer.Play(AnimatorNames.Floodlight);
+        //还有弹药, 播放泛白效果
+        if (!IsTotalAmmoEmpty())
+        {
+            AnimationPlayer.Play(AnimatorNames.Floodlight);
+        }
     }
 
     /// <summary>
-    /// 触发拾起到 Holster, 这个函数由 Holster 对象调用
+    /// 触发启用武器, 这个函数由 Holster 对象调用
     /// </summary>
-    public void PickUpWeapon(Role master)
+    private void Active()
     {
-        Master = master;
-        if (master.IsAi)
+        //调整阴影
+        ShadowOffset = new Vector2(0, Master.GlobalPosition.Y - GlobalPosition.Y);
+        //枪口默认抬起角度
+        RotationDegrees = -Attribute.DefaultAngle;
+        ShowShadowSprite();
+        OnActive();
+    }
+
+    /// <summary>
+    /// 触发收起武器, 这个函数由 Holster 对象调用
+    /// </summary>
+    private void Conceal()
+    {
+        HideShadowSprite();
+        OnConceal();
+    }
+    
+    public void OnRemoveItem()
+    {
+        GetParent().RemoveChild(this);
+        CollisionLayer = _tempLayer;
+        _weaponAttribute = _playerWeaponAttribute;
+        AnimatedSprite.Position = _tempAnimatedSpritePosition;
+        //清除 Ai 拾起标记
+        RemoveSign(SignNames.AiFindWeaponSign);
+        OnRemove(Master);
+    }
+
+    public void OnPickUpItem()
+    {
+        Pickup();
+        if (Master.IsAi)
         {
             _weaponAttribute = _aiWeaponAttribute;
         }
@@ -1399,68 +1664,110 @@ public abstract partial class Weapon : ActivityObject
         AnimatedSprite.Position = new Vector2(-position.X, -position.Y);
         //修改层级
         _tempLayer = CollisionLayer;
-        CollisionLayer = PhysicsLayer.InHand;
+        CollisionLayer = PhysicsLayer.OnHand;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
-        OnPickUp(master);
+        OnPickUp(Master);
     }
 
-    /// <summary>
-    /// 触发从 Holster 中移除, 这个函数由 Holster 对象调用
-    /// </summary>
-    public void RemoveAt()
+    public void OnActiveItem()
     {
-        Master = null;
-        CollisionLayer = _tempLayer;
-        _weaponAttribute = _playerWeaponAttribute;
-        AnimatedSprite.Position = _tempAnimatedSpritePosition;
-        //清除 Ai 拾起标记
-        RemoveSign(SignNames.AiFindWeaponSign);
-        OnRemove();
+        //更改父节点
+        var parent = GetParentOrNull<Node>();
+        if (parent == null)
+        {
+            Master.MountPoint.AddChild(this);
+        }
+        else if (parent != Master.MountPoint)
+        {
+            parent.RemoveChild(this);
+            Master.MountPoint.AddChild(this);
+        }
+
+        Position = Vector2.Zero;
+        Scale = Vector2.One;
+        RotationDegrees = 0;
+        Visible = true;
+        Active();
     }
 
-    /// <summary>
-    /// 触发启用武器
-    /// </summary>
-    public void Active()
+    public void OnConcealItem()
     {
-        //调整阴影
-        ShadowOffset = new Vector2(0, Master.GlobalPosition.Y - GlobalPosition.Y);
-        //枪口默认抬起角度
-        RotationDegrees = -Attribute.DefaultAngle;
-        ShowShadowSprite();
-        OnActive();
+        var tempParent = GetParentOrNull<Node2D>();
+        if (tempParent != null)
+        {
+            tempParent.RemoveChild(this);
+            Master.BackMountPoint.AddChild(this);
+            Master.OnPutBackMount(this, PackageIndex);
+            Conceal();
+        }
     }
 
-    /// <summary>
-    /// 触发收起武器
-    /// </summary>
-    public void Conceal()
+    public void OnOverflowItem()
     {
-        HideShadowSprite();
-        OnConceal();
+        Master.ThrowWeapon(PackageIndex);
     }
 
     //-------------------------- ----- 子弹相关 -----------------------------
 
     /// <summary>
-    /// 投抛弹壳的默认实现方式, shellId为弹壳id, 不需要前缀
+    /// 投抛弹壳的默认实现方式, shellId为弹壳id
     /// </summary>
-    protected ActivityObject ThrowShell(string shellId)
+    protected ActivityObject ThrowShell(string shellId, float speedScale = 1)
     {
-        var shellPosition = Master.MountPoint.Position + ShellPoint.Position;
+        var shellPosition = (Master != null ? Master.MountPoint.Position : Position) + ShellPoint.Position;
         var startPos = ShellPoint.GlobalPosition;
         var startHeight = -shellPosition.Y;
         startPos.Y += startHeight;
         var direction = GlobalRotationDegrees + Utils.RandomRangeInt(-30, 30) + 180;
-        var verticalSpeed = Utils.RandomRangeInt(60, 120);
-        var velocity = new Vector2(Utils.RandomRangeInt(20, 60), 0).Rotated(direction * Mathf.Pi / 180);
-        var rotate = Utils.RandomRangeInt(-720, 720);
+        var verticalSpeed = Utils.RandomRangeInt((int)(60 * speedScale), (int)(120 * speedScale));
+        var velocity = new Vector2(Utils.RandomRangeInt((int)(20 * speedScale), (int)(60 * speedScale)), 0).Rotated(direction * Mathf.Pi / 180);
+        var rotate = Utils.RandomRangeInt((int)(-720 * speedScale), (int)(720 * speedScale));
         var shell = Create(shellId);
-        shell.Rotation = Master.MountPoint.RealRotation;
-        shell.InheritVelocity(Master);
+        shell.Rotation = (Master != null ? Master.MountPoint.RealRotation : Rotation);
         shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
+        shell.InheritVelocity(Master != null ? Master : this);
+        if (Master == null)
+        {
+            AffiliationArea.InsertItem(shell);
+        }
+        else
+        {
+            Master.AffiliationArea.InsertItem(shell);
+        }
+        
         return shell;
+    }
+
+    /// <summary>
+    /// 发射子弹的默认实现方式, bulletId为子弹id
+    /// </summary>
+    protected Bullet ShootBullet(float fireRotation, string bulletId)
+    {
+        var speed = Utils.RandomRangeFloat(Attribute.BulletMinSpeed, Attribute.BulletMaxSpeed);
+        var distance = Utils.RandomRangeFloat(Attribute.BulletMinDistance, Attribute.BulletMaxDistance);
+        var deviationAngle =
+            Utils.RandomRangeFloat(Attribute.BulletMinDeviationAngle, Attribute.BulletMaxDeviationAngle);
+        if (Master != null)
+        {
+            speed = Master.RoleState.CallCalcBulletSpeedEvent(this, speed);
+            distance = Master.RoleState.CallCalcBulletDistanceEvent(this, distance);
+            deviationAngle = Master.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+        }
+        //创建子弹
+        var bullet = Create<Bullet>(bulletId);
+        bullet.Init(
+            this,
+            speed,
+            distance,
+            FirePoint.GlobalPosition,
+            fireRotation + Mathf.DegToRad(deviationAngle),
+            GetAttackLayer()
+        );
+        bullet.MinHarm = Attribute.BulletMinHarm;
+        bullet.MaxHarm = Attribute.BulletMaxHarm;
+        bullet.PutDown(RoomLayerEnum.YSortLayer);
+        return bullet;
     }
     
     //-------------------------------- Ai相关 -----------------------------

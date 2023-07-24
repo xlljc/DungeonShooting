@@ -72,7 +72,12 @@ public class RoomInfo : IDestroy
     /// <summary>
     /// 当前房间归属区域
     /// </summary>
-    public AffiliationArea Affiliation;
+    public AffiliationArea AffiliationArea;
+
+    /// <summary>
+    /// 静态精灵绘制画布
+    /// </summary>
+    public RoomStaticImageCanvas StaticImageCanvas;
 
     /// <summary>
     /// 是否处于闭关状态, 也就是房间门没有主动打开
@@ -90,9 +95,9 @@ public class RoomInfo : IDestroy
     /// <summary>
     /// 获取房间的全局坐标, 单位: 像素
     /// </summary>
-    public Vector2 GetWorldPosition()
+    public Vector2I GetWorldPosition()
     {
-        return new Vector2(
+        return new Vector2I(
             Position.X * GameConfig.TileCellSize,
             Position.Y * GameConfig.TileCellSize
         );
@@ -102,9 +107,9 @@ public class RoomInfo : IDestroy
     /// 获取房间左上角的 Tile 距离全局坐标原点的偏移, 单位: 像素
     /// </summary>
     /// <returns></returns>
-    public Vector2 GetOffsetPosition()
+    public Vector2I GetOffsetPosition()
     {
-        return RoomSplit.RoomInfo.Position.AsVector2() * GameConfig.TileCellSize;
+        return RoomSplit.RoomInfo.Position.AsVector2I() * GameConfig.TileCellSize;
     }
     
     /// <summary>
@@ -138,6 +143,23 @@ public class RoomInfo : IDestroy
     {
         return Position.Y;
     }
+
+    /// <summary>
+    /// 获取房间宽度, 单位: 像素
+    /// </summary>
+    public int GetWidth()
+    {
+        return Size.X * GameConfig.TileCellSize;
+    }
+    
+    
+    /// <summary>
+    /// 获取房间高度, 单位: 像素
+    /// </summary>
+    public int GetHeight()
+    {
+        return Size.Y * GameConfig.TileCellSize;
+    }
     
     public void Destroy()
     {
@@ -157,6 +179,11 @@ public class RoomInfo : IDestroy
             activityMark.QueueFree();
         }
         ActivityMarks.Clear();
+        
+        if (StaticImageCanvas != null)
+        {
+            StaticImageCanvas.Destroy();
+        }
     }
     
     /// <summary>

@@ -2,7 +2,7 @@
 using System.Collections;
 using Godot;
 
-[Tool, GlobalClass]
+[Tool]
 public partial class EnemyDebris : ActivityObject
 {
 
@@ -30,8 +30,6 @@ public partial class EnemyDebris : ActivityObject
         yield return new WaitForSeconds(Utils.RandomRangeFloat(1f, 2.5f));
         gpuParticles2D.Emitting = false;
         yield return new WaitForSeconds(1);
-        gpuParticles2D.QueueFree();
-        EnableBehavior = false;
-        Collision.QueueFree();
+        BecomesStaticImage();
     }
 }

@@ -6,7 +6,7 @@ using Godot;
 /// </summary>
 /// <typeparam name="TNodeType">Godot中的节点类型</typeparam>
 /// <typeparam name="TCloneType">克隆该对象返回的类型</typeparam>
-public abstract class IUiNode<TNodeType, TCloneType> where TNodeType : Node
+public abstract class IUiNode<TNodeType, TCloneType> : IClone<TCloneType> where TNodeType : Node
 {
     /// <summary>
     /// Godot节点实例

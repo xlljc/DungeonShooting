@@ -2,14 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using Generator;
 using Godot;
+
+#if TOOLS
+using Generator;
+#endif
 
 namespace UI.EditorTools;
 
+/// <summary>
+/// Godot编辑器扩展工具
+/// </summary>
 [Tool]
 public partial class EditorToolsPanel : EditorTools
 {
+    
+#if TOOLS
     //Tips 关闭回调
     private Action _onTipsClose;
 
@@ -233,7 +241,6 @@ public partial class EditorToolsPanel : EditorTools
     /// </summary>
     private void OnGenerateCurrentUiCode()
     {
-#if TOOLS
         if (Plugin.Plugin.Instance != null)
         {
             var root = Plugin.Plugin.Instance.GetEditorInterface().GetEditedSceneRoot();
@@ -253,7 +260,6 @@ public partial class EditorToolsPanel : EditorTools
                 ShowTips("错误", "当前的场景不是受管束的UI场景!");
             }
         }
-#endif
     }
     
     /// <summary>
@@ -417,4 +423,13 @@ public partial class EditorToolsPanel : EditorTools
             editorToolsInstance[0].ShowConfirm(title, message, onClose);
         }
     }
+#else
+    public override void OnShowUi()
+    {
+    }
+    
+    public override void OnHideUi()
+    {
+    }
+#endif
 }

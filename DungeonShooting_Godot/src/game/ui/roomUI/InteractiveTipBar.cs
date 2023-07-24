@@ -8,7 +8,6 @@ namespace UI.RoomUI;
 public class InteractiveTipBar
 {
     private RoomUI.UiNode_InteractiveTipBar _interactiveTipBar;
-    private string _currImage;
     private EventBinder _binder;
     private ActivityObject _interactiveTarget;
     
@@ -43,16 +42,14 @@ public class InteractiveTipBar
     /// 显示互动提示ui
     /// </summary>
     /// <param name="target">所在坐标</param>
+    /// <param name="showText">显示文本</param>
     /// <param name="icon">显示图标</param>
-	public void ShowBar(ActivityObject target, string icon)
+    public void ShowBar(ActivityObject target, string showText, Texture2D icon)
     {
         _interactiveTipBar.Instance.GlobalPosition = target.GlobalPosition;
-        if (_currImage != icon)
-        {
-            _currImage = icon;
-            _interactiveTipBar.L_Icon.Instance.Texture = ResourceManager.Load<Texture2D>(icon);
-        }
+        _interactiveTipBar.L_Icon.Instance.Texture = icon;
         _interactiveTipBar.Instance.Visible = true;
+        _interactiveTipBar.L_NameLabel.Instance.Text = showText;
     }
 
     public void OnPlayerChangeInteractiveItem(object o)
@@ -67,11 +64,13 @@ public class InteractiveTipBar
         {
             var result = (CheckInteractiveResult)o;
             var interactiveItem = Player.Current.InteractiveItem;
-            if (interactiveItem is Weapon)
+            //if (interactiveItem is Weapon)
+            var icon = result.GetIcon();
+            if (icon != null)
             {
                 _interactiveTarget = interactiveItem;
                 //显示互动提示
-                ShowBar(result.Target, result.ShowIcon);
+                ShowBar(result.Target, result.Target.ItemConfig.Name, icon);
             }
             else
             {

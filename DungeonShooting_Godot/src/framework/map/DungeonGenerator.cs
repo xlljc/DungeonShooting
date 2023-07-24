@@ -407,7 +407,7 @@ public class DungeonGenerator
             }
 
             //尝试次数用光了, 还没有找到合适的位置
-            if (tryCount >= _maxTryCount)
+            if (tryCount >= maxTryCount)
             {
                 resultRoom = null;
                 return GenerateRoomErrorCode.NoSuitableLocation;
@@ -612,15 +612,15 @@ public class DungeonGenerator
                 {
                     roomDoor.Direction = DoorDirection.S;
                     nextRoomDoor.Direction = DoorDirection.N;
-                    roomDoor.OriginPosition = new Vector2(x, room.GetVerticalEnd());
-                    nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.GetVerticalStart());
+                    roomDoor.OriginPosition = new Vector2I(x, room.GetVerticalEnd());
+                    nextRoomDoor.OriginPosition = new Vector2I(x, nextRoom.GetVerticalStart());
                 }
                 else //room在下, nextRoom在上
                 {
                     roomDoor.Direction = DoorDirection.N;
                     nextRoomDoor.Direction = DoorDirection.S;
-                    roomDoor.OriginPosition = new Vector2(x, room.GetVerticalStart());
-                    nextRoomDoor.OriginPosition = new Vector2(x, nextRoom.GetVerticalEnd());
+                    roomDoor.OriginPosition = new Vector2I(x, room.GetVerticalStart());
+                    nextRoomDoor.OriginPosition = new Vector2I(x, nextRoom.GetVerticalEnd());
                 }
 
                 //判断门之间的通道是否有物体碰到
@@ -664,15 +664,15 @@ public class DungeonGenerator
                 {
                     roomDoor.Direction = DoorDirection.E;
                     nextRoomDoor.Direction = DoorDirection.W;
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(), y);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart(), y);
+                    roomDoor.OriginPosition = new Vector2I(room.GetHorizontalEnd(), y);
+                    nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart(), y);
                 }
                 else //room在右, nextRoom在左
                 {
                     roomDoor.Direction = DoorDirection.W;
                     nextRoomDoor.Direction = DoorDirection.E;
-                    roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart(), y);
-                    nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalEnd(), y);
+                    roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart(), y);
+                    nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalEnd(), y);
                 }
 
                 //判断门之间的通道是否有物体碰到
@@ -698,7 +698,7 @@ public class DungeonGenerator
     private bool TryConnectCrossDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
     {
         //焦点
-        Vector2 cross = default;
+        Vector2I cross = default;
 
         if (room.GetHorizontalStart() > nextRoom.GetHorizontalStart())
         {
@@ -929,7 +929,7 @@ public class DungeonGenerator
         }
     }
 
-    private bool TryConnect_NE_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    private bool TryConnect_NE_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
@@ -941,14 +941,14 @@ public class DungeonGenerator
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalEnd(),
+        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalEnd(),
             nextRoom.GetVerticalStart() + offset2);
-        cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
+        cross = new Vector2I(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
         return true;
     }
 
-    private bool TryConnect_WS_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    private bool TryConnect_WS_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         //ok
         var offset1 = 0;
@@ -961,13 +961,13 @@ public class DungeonGenerator
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset1);
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2, nextRoom.GetVerticalEnd());
-        cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
+        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart(), room.GetVerticalStart() + offset1);
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart() + offset2, nextRoom.GetVerticalEnd());
+        cross = new Vector2I(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
     }
 
-    private bool TryConnect_SE_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    private bool TryConnect_SE_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
@@ -979,14 +979,14 @@ public class DungeonGenerator
             return false;
         }
 
-        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalEnd());
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalEnd(),
+        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart() + offset1, room.GetVerticalEnd());
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalEnd(),
             nextRoom.GetVerticalStart() + offset2);
-        cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
+        cross = new Vector2I(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
         return true;
     }
 
-    private bool TryConnect_WN_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    private bool TryConnect_WN_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
@@ -999,14 +999,14 @@ public class DungeonGenerator
         }
 
         roomDoor.OriginPosition =
-            new Vector2(room.GetHorizontalStart(), room.GetVerticalStart() + offset1); //
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2,
+            new Vector2I(room.GetHorizontalStart(), room.GetVerticalStart() + offset1); //
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart() + offset2,
             nextRoom.GetVerticalStart());
-        cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
+        cross = new Vector2I(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
     }
     
-    private bool TryConnect_ES_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    private bool TryConnect_ES_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
@@ -1018,14 +1018,14 @@ public class DungeonGenerator
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(), room.GetVerticalStart() + offset1);
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2,
+        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalEnd(), room.GetVerticalStart() + offset1);
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart() + offset2,
             nextRoom.GetVerticalEnd());
-        cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
+        cross = new Vector2I(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
     }
     
-    private bool TryConnect_NW_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    private bool TryConnect_NW_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
@@ -1037,14 +1037,14 @@ public class DungeonGenerator
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart(),
+        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart(),
             nextRoom.GetVerticalStart() + offset2);
-        cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
+        cross = new Vector2I(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
         return true;
     }
     
-    private bool TryConnect_EN_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    private bool TryConnect_EN_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
@@ -1056,14 +1056,14 @@ public class DungeonGenerator
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2(room.GetHorizontalEnd(),
+        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalEnd(),
             room.GetVerticalStart() + offset1);
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart() + offset2, nextRoom.GetVerticalStart());
-        cross = new Vector2(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart() + offset2, nextRoom.GetVerticalStart());
+        cross = new Vector2I(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
     }
 
-    private bool TryConnect_SW_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2 cross)
+    private bool TryConnect_SW_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
@@ -1075,10 +1075,10 @@ public class DungeonGenerator
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2(room.GetHorizontalStart() + offset1,
+        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart() + offset1,
             room.GetVerticalEnd());
-        nextRoomDoor.OriginPosition = new Vector2(nextRoom.GetHorizontalStart(), nextRoom.GetVerticalStart() + offset2);
-        cross = new Vector2(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart(), nextRoom.GetVerticalStart() + offset2);
+        cross = new Vector2I(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
         return true;
     }
 

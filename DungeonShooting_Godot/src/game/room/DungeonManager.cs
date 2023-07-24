@@ -40,7 +40,6 @@ public partial class DungeonManager : Node2D
     private World _world;
     
     //用于检查房间敌人的计时器
-    private int _affiliationIndex = 0;
     private float _checkEnemyTimer = 0;
 
 
@@ -163,8 +162,7 @@ public partial class DungeonManager : Node2D
         yield return 0;
         
         //打开游戏中的ui
-        var roomUi = UiManager.Open_RoomUI();
-        roomUi.InitData(player);
+        UiManager.Open_RoomUI();
         //派发进入地牢事件
         EventManager.EmitEvent(EventEnum.OnEnterDungeon);
         
@@ -220,7 +218,9 @@ public partial class DungeonManager : Node2D
         //创建门
         CreateDoor(roomInfo);
         //创建房间归属区域
-        CreateRoomAisleAffiliation(roomInfo);
+        CreateRoomAffiliation(roomInfo);
+        //创建静态精灵画布
+        CreateRoomStaticSpriteCanvas(roomInfo);
     }
     
     //挂载房间导航区域
@@ -294,18 +294,117 @@ public partial class DungeonManager : Node2D
     }
 
     //创建房间归属区域
-    private void CreateRoomAisleAffiliation(RoomInfo roomInfo)
+    private void CreateRoomAffiliation(RoomInfo roomInfo)
     {
         var affiliation = new AffiliationArea();
-        affiliation.Name = "AffiliationArea" + (_affiliationIndex++);
+        affiliation.Name = "AffiliationArea" + roomInfo.Id;
         affiliation.Init(roomInfo, new Rect2(
             roomInfo.GetWorldPosition() + new Vector2(GameConfig.TileCellSize, GameConfig.TileCellSize),
             (roomInfo.Size - new Vector2I(2, 2)) * GameConfig.TileCellSize));
         
-        roomInfo.Affiliation = affiliation;
-        _world.AddChild(affiliation);
+        roomInfo.AffiliationArea = affiliation;
+        _world.AffiliationAreaRoot.AddChild(affiliation);
     }
-    
+
+    //创建静态精灵画布
+    private void CreateRoomStaticSpriteCanvas(RoomInfo roomInfo)
+    {
+        var worldPos = roomInfo.GetWorldPosition();
+        var pos = new Vector2I((int)worldPos.X, (int)worldPos.Y);
+        
+        int minX = pos.X;
+        int minY = pos.Y;
+        int maxX = minX + roomInfo.GetWidth();
+        int maxY = minY + roomInfo.GetHeight();
+
+        //遍历每一个连接的门, 计算计算canvas覆盖范围
+        foreach (var doorInfo in roomInfo.Doors)
+        {
+            var connectDoor = doorInfo.ConnectDoor;
+            switch (connectDoor.Direction)
+            {
+                case DoorDirection.E:
+                case DoorDirection.W:
+                {
+                    var (px1, py1) = connectDoor.GetWorldOriginPosition();
+                    var py2 = py1 + 4 * GameConfig.TileCellSize;
+                    if (px1 < minX)
+                    {
+                        minX = px1;
+                    }
+                    else if (px1 > maxX)
+                    {
+                        maxX = px1;
+                    }
+
+                    if (py1 < minY)
+                    {
+                        minY = py1;
+                    }
+                    else if (py1 > maxY)
+                    {
+                        maxY = py1;
+                    }
+                    
+                    if (py2 < minY)
+                    {
+                        minY = py2;
+                    }
+                    else if (py2 > maxY)
+                    {
+                        maxY = py2;
+                    }
+                }
+                    break;
+                case DoorDirection.S:
+                case DoorDirection.N:
+                {
+                    var (px1, py1) = connectDoor.GetWorldOriginPosition();
+                    var px2 = px1 + 4 * GameConfig.TileCellSize;
+                    if (px1 < minX)
+                    {
+                        minX = px1;
+                    }
+                    else if (px1 > maxX)
+                    {
+                        maxX = px1;
+                    }
+
+                    if (py1 < minY)
+                    {
+                        minY = py1;
+                    }
+                    else if (py1 > maxY)
+                    {
+                        maxY = py1;
+                    }
+                    
+                    if (px2 < minX)
+                    {
+                        minX = px2;
+                    }
+                    else if (px2 > maxX)
+                    {
+                        maxX = px2;
+                    }
+                }
+                    break;
+            }
+        }
+
+        minX -= GameConfig.TileCellSize;
+        minY -= GameConfig.TileCellSize;
+        maxX += GameConfig.TileCellSize;
+        maxY += GameConfig.TileCellSize;
+        var staticSpriteCanvas = new RoomStaticImageCanvas(
+            _world.StaticSpriteRoot,
+            new Vector2I(minX, minY),
+            maxX - minX, maxY - minY
+        );
+        staticSpriteCanvas.RoomOffset = new Vector2I(worldPos.X - minX, worldPos.Y - minY);
+        roomInfo.StaticImageCanvas = staticSpriteCanvas;
+    }
+
     /// <summary>
     /// 玩家第一次进入某个房间回调
     /// </summary>
@@ -390,11 +489,7 @@ public partial class DungeonManager : Node2D
 
     private void DisposeRoomInfo(RoomInfo roomInfo)
     {
-        foreach (var activityMark in roomInfo.ActivityMarks)
-        {
-            activityMark.QueueFree();
-        }
-        roomInfo.ActivityMarks.Clear();
+        roomInfo.Destroy();
     }
     
     public override void _Draw()

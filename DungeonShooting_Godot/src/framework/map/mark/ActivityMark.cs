@@ -9,7 +9,7 @@ using Godot;
 /// <summary>
 /// 物体生成标记
 /// </summary>
-[Tool]
+[Tool, GlobalClass]
 public partial class ActivityMark : Node2D
 {
     /// <summary>

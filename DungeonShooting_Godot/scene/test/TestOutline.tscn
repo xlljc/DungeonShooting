@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://bbwws7qlqlc0m"]
+
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_r82n1"]
+[ext_resource type="Texture2D" uid="uid://bls55gj8h3mgv" path="res://resource/sprite/prop/buff/BuffProp0001.png" id="2_yce7u"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lhoej"]
+shader = ExtResource("1_r82n1")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+
+[node name="TestOutline" type="CharacterBody2D"]
+metadata/_edit_vertical_guides_ = [-9.0]
+metadata/_edit_horizontal_guides_ = [-7.0]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_lhoej")
+position = Vector2(1, 0)
+texture = ExtResource("2_yce7u")

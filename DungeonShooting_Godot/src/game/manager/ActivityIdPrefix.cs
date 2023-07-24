@@ -41,9 +41,13 @@ public static class ActivityIdPrefix
         /// </summary>
         Effect,
         /// <summary>
+        /// 道具
+        /// </summary>
+        Prop,
+        /// <summary>
         /// 其它类型
         /// </summary>
-        Other,
+        Other = 99,
     }
     
     /// <summary>
@@ -75,6 +79,10 @@ public static class ActivityIdPrefix
     /// </summary>
     public const string Effect = "effect";
     /// <summary>
+    /// 道具
+    /// </summary>
+    public const string Prop = "prop";
+    /// <summary>
     /// 其他类型
     /// </summary>
     public const string Other = "other";
@@ -103,6 +111,8 @@ public static class ActivityIdPrefix
                 return Shell;
             case ActivityPrefixType.Effect:
                 return Effect;
+            case ActivityPrefixType.Prop:
+                return Prop;
             case ActivityPrefixType.Other:
                 return Other;
         }

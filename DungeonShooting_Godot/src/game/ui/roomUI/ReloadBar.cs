@@ -9,14 +9,14 @@ public class ReloadBar
 {
     private RoomUI.UiNode_ReloadBar _reloadBar;
     private int width;
-    private float startX;
+    private float startX = 1;
 
     public ReloadBar(RoomUI.UiNode_ReloadBar reloadBar)
     {
         reloadBar.Instance.Visible = false;
         _reloadBar = reloadBar;
         width = _reloadBar.L_Slot.Instance.Texture.GetWidth();
-        startX = -(width - 3) / 2f;
+        //startX = -(width - 3) / 2f;
     }
     
     public void OnShow()
@@ -56,9 +56,9 @@ public class ReloadBar
     public void OnCameraPositionUpdate(float delta)
     {
         var player = Player.Current;
-        if (player.Holster.ActiveWeapon != null && player.Holster.ActiveWeapon.Reloading)
+        if (player.WeaponPack.ActiveItem != null && player.WeaponPack.ActiveItem.Reloading)
         {
-            ShowBar(player.GlobalPosition, player.Holster.ActiveWeapon.ReloadProgress);
+            ShowBar(player.GlobalPosition, player.WeaponPack.ActiveItem.ReloadProgress);
         }
         else
         {

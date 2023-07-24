@@ -52,7 +52,7 @@ public partial class AffiliationArea : Area2D
         Monitoring = true;
         Monitorable = false;
         CollisionLayer = PhysicsLayer.None;
-        CollisionMask = PhysicsLayer.Props | PhysicsLayer.Player | PhysicsLayer.Enemy;
+        CollisionMask = PhysicsLayer.Prop | PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Shell | PhysicsLayer.Throwing;
 
         BodyEntered += OnBodyEntered;
     }

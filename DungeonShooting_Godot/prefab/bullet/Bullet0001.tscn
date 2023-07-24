@@ -1,21 +1,28 @@
-[gd_scene load_steps=9 format=3 uid="uid://bj4kmvt8jg1cf"]
+[gd_scene load_steps=8 format=3 uid="uid://bj4kmvt8jg1cf"]
 
 [ext_resource type="Script" path="res://src/game/activity/bullet/Bullet.cs" id="1_82ma0"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_p12d3"]
-[ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/bullet.png" id="3_hjgpe"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_6wvtu"]
+[ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/bullet0001.png" id="3_hjgpe"]
 
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5a4f2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w5w0i"]
 resource_local_to_scene = true
-shader = ExtResource("2_p12d3")
+shader = ExtResource("2_6wvtu")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
-shader_parameter/schedule = 1
+shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o0655"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qhkgc"]
 resource_local_to_scene = true
-shader = ExtResource("2_p12d3")
+shader = ExtResource("2_6wvtu")
 shader_parameter/blend = Color(1, 1, 1, 1)
-shader_parameter/schedule = 0
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5wvmf"]
 animations = [{
@@ -27,9 +34,6 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_c0onq"]
-size = Vector2(44.72, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lcqb8"]
 size = Vector2(11, 4)
@@ -44,11 +48,10 @@ Collision = NodePath("Collision")
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1
-material = SubResource("ShaderMaterial_5a4f2")
+material = SubResource("ShaderMaterial_w5w0i")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-modulate = Color(1.8, 1.8, 1.8, 1)
-material = SubResource("ShaderMaterial_o0655")
+material = SubResource("ShaderMaterial_qhkgc")
 sprite_frames = SubResource("SpriteFrames_5wvmf")
 
 [node name="CollisionArea" type="Area2D" parent="."]
@@ -59,8 +62,7 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
 position = Vector2(2.93353, 0)
-scale = Vector2(0.226586, 0.333333)
-shape = SubResource("RectangleShape2D_c0onq")
+shape = SubResource("RectangleShape2D_lcqb8")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(2.5, 0)

@@ -1,11 +1,13 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cces3bhds7jyi"]
 
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1"]
 
-
 [resource]
 resource_local_to_scene = true
-render_priority = 4
-shader = ExtResource( 1 )
-shader_param/blend = Color( 0, 0, 0, 0.470588 )
-shader_param/schedule = 1
+shader = ExtResource("1")
+shader_parameter/blend = Color(0, 0, 0, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0.941176, 0.941176, 0.941176, 1)
+shader_parameter/outline_rainbow = false

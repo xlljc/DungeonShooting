@@ -2,19 +2,27 @@
 
 [ext_resource type="Script" path="res://src/game/room/RoomDoor.cs" id="1_220be"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_h5ru6"]
-[ext_resource type="SpriteFrames" uid="uid://xs72aopsgpg6" path="res://resource/spriteFrames/RoomDoor_NS.tres" id="3_apluc"]
+[ext_resource type="SpriteFrames" uid="uid://xs72aopsgpg6" path="res://resource/spriteFrames/other/RoomDoor_NS.tres" id="3_apluc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yvwpk"]
 resource_local_to_scene = true
 shader = ExtResource("2_h5ru6")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
-shader_parameter/schedule = 1
+shader_parameter/schedule = 1.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t4ayq"]
 resource_local_to_scene = true
 shader = ExtResource("2_h5ru6")
 shader_parameter/blend = Color(1, 1, 1, 1)
-shader_parameter/schedule = 0
+shader_parameter/schedule = 0.0
+shader_parameter/alpha = 1.0
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_opsb6"]
 resource_local_to_scene = true

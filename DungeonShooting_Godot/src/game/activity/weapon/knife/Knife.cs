@@ -1,7 +1,7 @@
 
 using Godot;
 
-[Tool, GlobalClass]
+[Tool]
 public partial class Knife : Weapon
 {
     
@@ -40,7 +40,7 @@ public partial class Knife : Weapon
         }
     }
 
-    protected override void OnStartCharge()
+    protected override void OnBeginCharge()
     {
         //开始蓄力时武器角度上抬120度
         RotationDegrees = -120;
@@ -59,7 +59,7 @@ public partial class Knife : Weapon
         {
             //播放挥刀特效
             SpecialEffectManager.Play(
-                ResourcePath.resource_spriteFrames_KnifeHit1_tres, "default",
+                ResourcePath.resource_spriteFrames_effect_KnifeHit1_tres, "default",
                 Master.MountPoint.GlobalPosition, GlobalRotation + Mathf.Pi * 0.5f, new Vector2((int)Master.Face, 1) * AnimatedSprite.Scale,
                 new Vector2(17, 4), 1
             );
@@ -92,7 +92,8 @@ public partial class Knife : Weapon
         {
             if (activityObject is Role role)
             {
-                role.CallDeferred(nameof(Role.Hurt), 10, (role.GetCenterPosition() - GlobalPosition).Angle());
+                role.CallDeferred(nameof(Role.Hurt), 
+                    Utils.RandomRangeInt(Attribute.BulletMinHarm, Attribute.BulletMaxHarm), (role.GetCenterPosition() - GlobalPosition).Angle());
             }
         }
     }

@@ -9,7 +9,7 @@ using Godot;
 /// </summary>
 public class CoroutineData
 {
-    private static long _id;
+    private static long _id = 1;
     
     public enum WaitTypeEnum
     {

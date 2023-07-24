@@ -3,19 +3,11 @@ using Godot;
 /// <summary>
 /// 普通的枪
 /// </summary>
-[Tool, GlobalClass]
+[Tool]
 public partial class Gun : Weapon
 {
-    protected override void OnReload()
-    {
-        base.OnReload();
-    }
-
     protected override void OnFire()
     {
-        //创建一个弹壳
-        ThrowShell(ActivityObject.Ids.Id_shell0001);
-
         if (Master == Player.Current)
         {
             //创建抖动
@@ -32,16 +24,6 @@ public partial class Gun : Weapon
 
     protected override void OnShoot(float fireRotation)
     {
-        //创建子弹
-        var bullet = ActivityObject.Create<Bullet>(Attribute.BulletId);
-        bullet.Init(
-            this,
-            350,
-            Utils.RandomRangeFloat(Attribute.MinDistance, Attribute.MaxDistance),
-            FirePoint.GlobalPosition,
-            fireRotation,
-            GetAttackLayer()
-        );
-        bullet.PutDown(RoomLayerEnum.YSortLayer);
+        ShootBullet(fireRotation, Attribute.BulletId);
     }
 }

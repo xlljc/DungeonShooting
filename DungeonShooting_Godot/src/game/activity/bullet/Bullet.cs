@@ -3,7 +3,7 @@ using Godot;
 /// <summary>
 /// 子弹类
 /// </summary>
-[Tool, GlobalClass]
+[Tool]
 public partial class Bullet : ActivityObject
 {
     /// <summary>
@@ -16,6 +16,21 @@ public partial class Bullet : ActivityObject
     /// 发射该子弹的武器
     /// </summary>
     public Weapon Weapon { get; private set; }
+    
+    /// <summary>
+    /// 发射该子弹的角色
+    /// </summary>
+    public Role Role { get; private set; }
+
+    /// <summary>
+    /// 最小伤害
+    /// </summary>
+    public int MinHarm { get; set; } = 4;
+    
+    /// <summary>
+    /// 最大伤害
+    /// </summary>
+    public int MaxHarm { get; set; } = 4;
 
     // 最大飞行距离
     private float MaxDistance;
@@ -29,6 +44,7 @@ public partial class Bullet : ActivityObject
     public void Init(Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
         Weapon = weapon;
+        Role = weapon.Master;
         CollisionArea.CollisionMask = targetLayer;
         CollisionArea.AreaEntered += OnArea2dEntered;
         
@@ -88,8 +104,17 @@ public partial class Bullet : ActivityObject
             var node = packedScene.Instantiate<Node2D>();
             node.GlobalPosition = GlobalPosition;
             node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+
+            //计算子弹造成的伤害
+            var damage = Utils.RandomRangeInt(MinHarm, MaxHarm);
+            if (Role != null)
+            {
+                var d = damage;
+                damage = Role.RoleState.CallCalcDamageEvent(damage);
+                GD.Print($"原伤害: {d}, 计算伤害: {damage}");
+            }
             
-            role.CallDeferred(nameof(Role.Hurt), 4, Rotation);
+            role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
             Destroy();
         }
     }

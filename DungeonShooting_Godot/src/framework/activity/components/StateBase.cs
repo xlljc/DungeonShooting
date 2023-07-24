@@ -75,7 +75,7 @@ public abstract class StateBase<T, S> where T : ActivityObject where S : Enum
     }
 
     /// <summary>
-    /// 立即切换到下一个指定状态, 并且这一帧会被调用 PhysicsProcess
+    /// 立即切换到下一个指定状态, 并且这一帧会被调用 Process
     /// </summary>
     public void ChangeStateInstant(S next, params object[] args)
     {
@@ -83,7 +83,7 @@ public abstract class StateBase<T, S> where T : ActivityObject where S : Enum
     }
     
     /// <summary>
-    /// 切换到下一个指定状态, 下一帧才会调用 PhysicsProcess
+    /// 切换到下一个指定状态, 下一帧才会调用 Process
     /// </summary>
     public void ChangeState(S next, params object[] args)
     {

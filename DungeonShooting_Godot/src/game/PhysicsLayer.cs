@@ -18,7 +18,7 @@ public class PhysicsLayer
     /// <summary>
     /// 道具
     /// </summary>
-    public const uint Props = 0b100;
+    public const uint Prop = 0b100;
     /// <summary>
     /// 玩家
     /// </summary>
@@ -34,5 +34,13 @@ public class PhysicsLayer
     /// <summary>
     /// 在手上
     /// </summary>
-    public const uint InHand = 0b1000000;
+    public const uint OnHand = 0b1000000;
+    /// <summary>
+    /// 弹壳
+    /// </summary>
+    public const uint Shell = 0b10000000;
+    /// <summary>
+    /// 投抛中
+    /// </summary>
+    public const uint Throwing = 0b100000000;
 }

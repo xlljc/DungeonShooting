@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 针对敌人生成位置的标记
 /// </summary>
-[Tool]
+[Tool, GlobalClass]
 public partial class EnemyMark : ActivityMark
 {
     /// <summary>
