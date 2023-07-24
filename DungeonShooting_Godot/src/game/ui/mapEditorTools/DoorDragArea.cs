@@ -12,6 +12,11 @@ public partial class DoorDragArea : Control
     //错误时的颜色
     private static Color _errorColor = new Color(1, 0, 0, 0.1882353F);
 
+    /// <summary>
+    /// 朝向
+    /// </summary>
+    public DoorDirection Direction { get; private set; }
+    
     private MapEditorTools.DoorToolTemplate _node;
     private Vector2 _startTempPos;
     private Vector2 _endTempPos;
@@ -23,24 +28,56 @@ public partial class DoorDragArea : Control
     private bool _canComment = true;
     //开始拖拽时的区域
     private Vector2I _startDragRange;
-    
+    //原始缩放
+    private Vector2 _originScale;
+
     public void SetDoorDragAreaNode(MapEditorTools.DoorToolTemplate node)
     {
         _node = node;
+        _originScale = Scale;
         _defaultColor = _node.L_DoorArea.Instance.Color;
         _node.L_StartBtn.Instance.DragEvent += OnStartAreaDrag;
         _node.L_EndBtn.Instance.DragEvent += OnEndAreaDrag;
         
         SetDoorAreaSize(GameConfig.TileCellSize * 4);
+        SetDoorAreaDirection(DoorDirection.N);
     }
 
+    /// <summary>
+    /// 设置门区域的方向
+    /// </summary>
+    public void SetDoorAreaDirection(DoorDirection direction)
+    {
+        Direction = direction;
+        if (direction == DoorDirection.N)
+        {
+            _originScale = new Vector2(1, 1);
+            RotationDegrees = 0;
+        }
+        else if (direction == DoorDirection.E)
+        {
+            _originScale = new Vector2(1, 1);
+            RotationDegrees = 90;
+        }
+        else if (direction == DoorDirection.S)
+        {
+            _originScale = new Vector2(-1, 1);
+            RotationDegrees = 180;
+        }
+        else
+        {
+            _originScale = new Vector2(-1, 1);
+            RotationDegrees = 270;
+        }
+    }
+    
     /// <summary>
     /// 设置位置和缩放, 用于跟随地图
     /// </summary>
     public void SetDoorAreaTransform(Vector2 pos, Vector2 scale)
     {
         Position = pos;
-        Scale = scale;
+        Scale = _originScale * scale;
     }
     
     /// <summary>

@@ -31,6 +31,20 @@ public partial class DoorDragButton : TextureButton
             if (DragEvent != null)
             {
                 var offset = Utils.Adsorption((GetGlobalMousePosition() - _startPos) / _parent.Scale, _stepValue);
+                //处理朝向问题
+                if (_parent.Direction == DoorDirection.E)
+                {
+                    offset = new Vector2(offset.Y, offset.X);
+                }
+                else if (_parent.Direction == DoorDirection.S)
+                {
+                    offset = new Vector2(-offset.X, offset.Y);
+                }
+                else if (_parent.Direction == DoorDirection.W)
+                {
+                    offset = new Vector2(offset.Y, -offset.X);
+                }
+                
                 if (offset != _prevPos)
                 {
                     _prevPos = offset;
