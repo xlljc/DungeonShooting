@@ -43,6 +43,7 @@ public partial class DoorDragButton : TextureButton
     private void OnButtonDown()
     {
         _down = true;
+        Modulate = new Color(0.7f, 0.7f, 0.7f, 1);
         _startPos = GetGlobalMousePosition();
         _prevPos = Vector2.Zero;
         if (DragEvent != null)
@@ -54,6 +55,7 @@ public partial class DoorDragButton : TextureButton
     private void OnButtonUp()
     {
         _down = false;
+        Modulate = new Color(1, 1, 1, 1);
         if (DragEvent != null)
         {
             var offset = Utils.Adsorption((GetGlobalMousePosition() - _startPos) / _parent.Scale, _stepValue);

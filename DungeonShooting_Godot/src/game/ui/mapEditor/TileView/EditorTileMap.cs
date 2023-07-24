@@ -11,6 +11,27 @@ namespace UI.MapEditor;
 
 public partial class EditorTileMap : TileMap
 {
+    
+    public enum MouseLeftButtonType
+    {
+        /// <summary>
+        /// 无状态
+        /// </summary>
+        None,
+        /// <summary>
+        /// 拖拽模式
+        /// </summary>
+        Drag,
+        /// <summary>
+        /// 笔
+        /// </summary>
+        Pen,
+        /// <summary>
+        /// 区域模式
+        /// </summary>
+        Area
+    }
+    
     /// <summary>
     /// 自动图块地板层
     /// </summary>
@@ -46,6 +67,8 @@ public partial class EditorTileMap : TileMap
     /// </summary>
     public MapEditorToolsPanel MapEditorToolsPanel { get; set; }
     
+    //是否启用绘制图块
+    private MouseLeftButtonType _mouseLeftButtonType = MouseLeftButtonType.None;
     //鼠标坐标
     private Vector2 _mousePosition;
     //鼠标所在的cell坐标
@@ -79,9 +102,8 @@ public partial class EditorTileMap : TileMap
     private Vector2I _checkTerrainErrorPosition = Vector2I.Zero;
     //是否执行生成地形成功
     private bool _isGenerateTerrain = false;
-
     private bool _initLayer = false;
-    
+
     //--------- 配置数据 -------------
     private int _sourceId = 0;
     private int _terrainSet = 0;
@@ -116,7 +138,7 @@ public partial class EditorTileMap : TileMap
         if (!MapEditorToolsPanel.S_HBoxContainer.Instance.IsPositionOver(GetGlobalMousePosition())) //不在Ui节点上
         {
             //左键绘制
-            if (_isLeftPressed && false)
+            if (_isLeftPressed && _mouseLeftButtonType == MouseLeftButtonType.Pen)
             {
                 if (Input.IsKeyPressed(Key.Shift)) //按住shift绘制矩形
                 {
@@ -130,7 +152,7 @@ public partial class EditorTileMap : TileMap
                     SetSingleAutoCell(_mouseCellPosition);
                 }
             }
-            else if (_isRightPressed && false) //右键擦除
+            else if (_isRightPressed && _mouseLeftButtonType == MouseLeftButtonType.Pen) //右键擦除
             {
                 if (Input.IsKeyPressed(Key.Shift)) //按住shift擦除矩形
                 {
@@ -205,28 +227,31 @@ public partial class EditorTileMap : TileMap
             }
         }
 
-        if (_drawFullRect) //绘制填充矩形
+        if (_mouseLeftButtonType == MouseLeftButtonType.Pen || _mouseLeftButtonType == MouseLeftButtonType.Area)
         {
-            var size = TileSet.TileSize;
-            var cellPos = _mouseStartCellPosition;
-            var temp = size;
-            if (_mouseStartCellPosition.X > _mouseCellPosition.X)
+            if (_drawFullRect) //绘制填充矩形
             {
-                cellPos.X += 1;
-                temp.X -= size.X;
-            }
-            if (_mouseStartCellPosition.Y > _mouseCellPosition.Y)
-            {
-                cellPos.Y += 1;
-                temp.Y -= size.Y;
-            }
+                var size = TileSet.TileSize;
+                var cellPos = _mouseStartCellPosition;
+                var temp = size;
+                if (_mouseStartCellPosition.X > _mouseCellPosition.X)
+                {
+                    cellPos.X += 1;
+                    temp.X -= size.X;
+                }
+                if (_mouseStartCellPosition.Y > _mouseCellPosition.Y)
+                {
+                    cellPos.Y += 1;
+                    temp.Y -= size.Y;
+                }
 
-            var pos = cellPos * size;
-            canvasItem.DrawRect(new Rect2(pos, _mousePosition - pos + temp), Colors.White, false, 2f / Scale.X);
-        }
-        else //绘制单格
-        {
-            canvasItem.DrawRect(new Rect2(_mousePosition, TileSet.TileSize), Colors.White, false, 2f / Scale.X);
+                var pos = cellPos * size;
+                canvasItem.DrawRect(new Rect2(pos, _mousePosition - pos + temp), Colors.White, false, 2f / Scale.X);
+            }
+            else //绘制单格
+            {
+                canvasItem.DrawRect(new Rect2(_mousePosition, TileSet.TileSize), Colors.White, false, 2f / Scale.X);
+            }
         }
     }
 
