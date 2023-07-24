@@ -30,17 +30,28 @@ public partial class DoorDragArea : Control
     private Vector2I _startDragRange;
     //原始缩放
     private Vector2 _originScale;
+    //原始坐标
+    private Vector2 _originPosition;
 
     public void SetDoorDragAreaNode(MapEditorTools.DoorToolTemplate node)
     {
         _node = node;
         _originScale = Scale;
+        _originPosition = Position;
         _defaultColor = _node.L_DoorArea.Instance.Color;
         _node.L_StartBtn.Instance.DragEvent += OnStartAreaDrag;
         _node.L_EndBtn.Instance.DragEvent += OnEndAreaDrag;
         
         SetDoorAreaSize(GameConfig.TileCellSize * 4);
         SetDoorAreaDirection(DoorDirection.N);
+    }
+
+    /// <summary>
+    /// 设置门区域的位置
+    /// </summary>
+    public void SetDoorAreaPosition(Vector2 position)
+    {
+        _originPosition = position;
     }
 
     /// <summary>
@@ -76,7 +87,7 @@ public partial class DoorDragArea : Control
     /// </summary>
     public void SetDoorAreaTransform(Vector2 pos, Vector2 scale)
     {
-        Position = pos;
+        Position = _originPosition * scale + pos;
         Scale = _originScale * scale;
     }
     

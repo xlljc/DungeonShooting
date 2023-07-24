@@ -389,6 +389,8 @@ public partial class EditorTileMap : TileMap
         //聚焦
         //MapEditorPanel.CallDelay(0.1f, OnClickCenterTool);
         CallDeferred(nameof(OnClickCenterTool));
+        
+        MapEditorToolsPanel.S_DoorToolTemplate.Instance.SetDoorAreaPosition(_roomPosition * GameConfig.TileCellSize);
         return true;
     }
 
