@@ -26,6 +26,10 @@ public static class GameConfig
     /// </summary>
     public const int TileCellSize = 16;
     /// <summary>
+    /// 游戏地图网格大小, 向量表示
+    /// </summary>
+    public static readonly Vector2I TileCellSizeVector2I = new Vector2I(TileCellSize, TileCellSize);
+    /// <summary>
     /// 房间最小间距
     /// </summary>
     public const int RoomSpace = 4;

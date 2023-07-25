@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 用于描述门生成区域
 /// </summary>
-public class DoorAreaInfo
+public class DoorAreaInfo : IClone<DoorAreaInfo>
 {
     /// <summary>
     /// 门方向
@@ -68,4 +68,15 @@ public class DoorAreaInfo
                 break;
         }
     }
+
+    public DoorAreaInfo Clone()
+    {
+        var data = new DoorAreaInfo();
+        data.Start = Start;
+        data.End = End;
+        data.Direction = Direction;
+        return data;
+    }
+    
+    
 }

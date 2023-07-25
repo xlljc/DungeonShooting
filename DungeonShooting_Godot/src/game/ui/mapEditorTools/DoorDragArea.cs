@@ -5,7 +5,7 @@ namespace UI.MapEditorTools;
 public partial class DoorDragArea : Control
 {
     /// <summary>
-    /// 当前区域所占大小
+    /// 当前区域所占大小, 单位: 像素
     /// </summary>
     public Vector2 AreaSize => new Vector2(_areaSize, GameConfig.TileCellSize * 2);
 
@@ -23,21 +23,15 @@ public partial class DoorDragArea : Control
     //默认颜色
     private Color _defaultColor;
     //区域大小, 单位: 像素
-    private int _areaSize;
+    private int _areaSize = GameConfig.TileCellSize * 4;
     //拖拽松手后是否可以提交
     private bool _canComment = true;
     //开始拖拽时的区域
     private Vector2I _startDragRange;
-    //原始缩放
-    private Vector2 _originScale;
-    //原始坐标
-    private Vector2 _originPosition;
 
     public void SetDoorDragAreaNode(MapEditorTools.DoorToolTemplate node)
     {
         _node = node;
-        _originScale = Scale;
-        _originPosition = Position;
         _defaultColor = _node.L_DoorArea.Instance.Color;
         _node.L_StartBtn.Instance.DragEvent += OnStartAreaDrag;
         _node.L_EndBtn.Instance.DragEvent += OnEndAreaDrag;
@@ -47,11 +41,11 @@ public partial class DoorDragArea : Control
     }
 
     /// <summary>
-    /// 设置门区域的位置
+    /// 设置门区域的位置, 单位: 像素
     /// </summary>
     public void SetDoorAreaPosition(Vector2 position)
     {
-        _originPosition = position;
+        Position = position;
     }
 
     /// <summary>
@@ -62,66 +56,55 @@ public partial class DoorDragArea : Control
         Direction = direction;
         if (direction == DoorDirection.N)
         {
-            _originScale = new Vector2(1, 1);
+            Scale = new Vector2(1, 1);
             RotationDegrees = 0;
         }
         else if (direction == DoorDirection.E)
         {
-            _originScale = new Vector2(1, 1);
+            Scale = new Vector2(1, 1);
             RotationDegrees = 90;
         }
         else if (direction == DoorDirection.S)
         {
-            _originScale = new Vector2(-1, 1);
+            Scale = new Vector2(-1, 1);
             RotationDegrees = 180;
         }
         else
         {
-            _originScale = new Vector2(-1, 1);
+            Scale = new Vector2(-1, 1);
             RotationDegrees = 270;
         }
     }
-    
-    /// <summary>
-    /// 设置位置和缩放, 用于跟随地图
-    /// </summary>
-    public void SetDoorAreaTransform(Vector2 pos, Vector2 scale)
-    {
-        Position = _originPosition * scale + pos;
-        Scale = _originScale * scale;
-    }
-    
+
     /// <summary>
     /// 获取门区域所占范围, 单位: 像素, 返回的 Vector2I 的 x 代表起始坐标, y 代表结束坐标
     /// </summary>
     /// <returns></returns>
     public Vector2I GetDoorAreaRange()
     {
-        return new Vector2I((int)_node.L_StartBtn.Instance.Position.X, _areaSize);
+        return new Vector2I((int)(_node.L_StartBtn.Instance.Position.X + _node.L_StartBtn.Instance.Size.X), _areaSize);
     }
 
     /// <summary>
-    /// 设置门区域所占范围,
+    /// 设置门区域所占范围, 单位: 像素
     /// </summary>
     public void SetDoorAreaRange(int start, int size)
     {
         var startPosition = _node.L_StartBtn.Instance.Position;
-        startPosition.X = start;
+        startPosition.X = start - _node.L_StartBtn.Instance.Size.X;
         _node.L_StartBtn.Instance.Position = startPosition;
         
         SetDoorAreaSize(size);
     }
-    
+
     /// <summary>
-    /// 设置区域大小
+    /// 设置区域大小, 单位: 像素
     /// </summary>
     public void SetDoorAreaSize(int value)
     {
-        if (_areaSize != value)
-        {
-            _areaSize = value;
-            RefreshArea();
-        }
+        _areaSize = value;
+        RefreshArea();
+        GD.Print("size: " + GetDoorAreaRange());
     }
 
     //刷新区域位置

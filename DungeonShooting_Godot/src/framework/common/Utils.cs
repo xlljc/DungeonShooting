@@ -158,9 +158,10 @@ public static class Utils
     /// </summary>
     public static bool IsPositionOver(this Control control, Vector2 position)
     {
-        var rect = control.GetRect();
-        return position.X >= rect.Position.X && position.X <= rect.End.X &&
-               position.Y >= rect.Position.Y && position.Y <= rect.End.Y;
+        var globalPosition = control.GlobalPosition;
+        var size = control.Size * control.Scale;
+        return position.X >= globalPosition.X && position.X <= (globalPosition.X + size.X) &&
+               position.Y >= globalPosition.Y && position.Y <= (globalPosition.Y + size.Y);
     }
 
 

@@ -6,6 +6,7 @@ namespace UI.MapEditorTools;
 public partial class DoorDragButton : TextureButton
 {
     private static Vector2 _stepValue = new Vector2(GameConfig.TileCellSize, GameConfig.TileCellSize);
+
     
     /// <summary>
     /// 拖拽当前物体的回调函数, 第一个参数为拖拽状态, 第二个参数为相对于初始点的拖拽偏移坐标
@@ -16,6 +17,7 @@ public partial class DoorDragButton : TextureButton
     private bool _down;
     private Vector2 _startPos;
     private Vector2 _prevPos;
+    private MapEditorToolsPanel _mapEditorToolsPanel;
     
     public override void _Ready()
     {
@@ -24,13 +26,19 @@ public partial class DoorDragButton : TextureButton
         ButtonUp += OnButtonUp;
     }
 
+    public void SetMapEditorToolsPanel(MapEditorToolsPanel panel)
+    {
+        _mapEditorToolsPanel = panel;
+    }
+    
     public override void _Process(double delta)
     {
         if (_down)
         {
             if (DragEvent != null)
             {
-                var offset = Utils.Adsorption((GetGlobalMousePosition() - _startPos) / _parent.Scale, _stepValue);
+                var value = (GetGlobalMousePosition() - _startPos) / _parent.Scale / _mapEditorToolsPanel.S_DoorToolRoot.Instance.Scale;
+                var offset = Utils.Adsorption(value, _stepValue);
                 //处理朝向问题
                 if (_parent.Direction == DoorDirection.E)
                 {
@@ -72,7 +80,8 @@ public partial class DoorDragButton : TextureButton
         Modulate = new Color(1, 1, 1, 1);
         if (DragEvent != null)
         {
-            var offset = Utils.Adsorption((GetGlobalMousePosition() - _startPos) / _parent.Scale, _stepValue);
+            var value = (GetGlobalMousePosition() - _startPos) / _parent.Scale / _mapEditorToolsPanel.S_DoorToolRoot.Instance.Scale;
+            var offset = Utils.Adsorption(value, _stepValue);
             _prevPos = offset;
             DragEvent(DragState.DragEnd, offset);
         }

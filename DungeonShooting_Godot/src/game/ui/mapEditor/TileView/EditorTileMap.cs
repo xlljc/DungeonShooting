@@ -114,7 +114,10 @@ public partial class EditorTileMap : TileMap
     private DungeonRoomSplit _roomSplit;
 
     //变动过的数据
+    
+    //地图位置, 单位: 格
     private Vector2I _roomPosition;
+    //地图大小, 单位: 格
     private Vector2I _roomSize;
     private List<DoorAreaInfo> _doorConfigs = new List<DoorAreaInfo>();
     //-------------------------------
@@ -371,9 +374,12 @@ public partial class EditorTileMap : TileMap
         var tileInfo = roomSplit.TileInfo;
 
         _roomPosition = roomInfo.Position.AsVector2I();
-        _roomSize = roomInfo.Size.AsVector2I();
+        SetMapSize(roomInfo.Size.AsVector2I());
         _doorConfigs.Clear();
-        _doorConfigs.AddRange(roomInfo.DoorAreaInfos);
+        foreach (var doorAreaInfo in roomInfo.DoorAreaInfos)
+        {
+            _doorConfigs.Add(doorAreaInfo.Clone());
+        }
 
         //初始化层级数据
         InitLayer();
@@ -389,8 +395,12 @@ public partial class EditorTileMap : TileMap
         //聚焦
         //MapEditorPanel.CallDelay(0.1f, OnClickCenterTool);
         CallDeferred(nameof(OnClickCenterTool));
-        
-        MapEditorToolsPanel.S_DoorToolTemplate.Instance.SetDoorAreaPosition(_roomPosition * GameConfig.TileCellSize);
+
+        var doorPos = (_roomPosition + new Vector2I(_roomSize.X - 1, 1)) * GameConfig.TileCellSize;
+        MapEditorToolsPanel.CreateDoorTool(
+            doorPos, DoorDirection.E,
+            0 * GameConfig.TileCellSize, 4 * GameConfig.TileCellSize
+        );
         return true;
     }
 
@@ -547,7 +557,7 @@ public partial class EditorTileMap : TileMap
     {
         var rect = GetUsedRect();
         _roomPosition = rect.Position;
-        _roomSize = rect.Size;
+        SetMapSize(rect.Size);
     }
     
     //检测是否有不合规的图块, 返回true表示图块正常
@@ -732,6 +742,11 @@ public partial class EditorTileMap : TileMap
         }
     }
 
+    public void Create_N_DoorArea()
+    {
+        
+    }
+
     //保存房间配置
     private void SaveRoomInfoConfig()
     {
@@ -785,5 +800,15 @@ public partial class EditorTileMap : TileMap
     {
         Position = pos;
         MapEditorToolsPanel.SetDoorToolTransform(pos, Scale);
+    }
+
+    //设置地图大小
+    private void SetMapSize(Vector2I size)
+    {
+        if (_roomSize != size)
+        {
+            _roomSize = size;
+            MapEditorToolsPanel.SetDoorHoverToolTransform(_roomPosition, _roomSize);
+        }
     }
 }

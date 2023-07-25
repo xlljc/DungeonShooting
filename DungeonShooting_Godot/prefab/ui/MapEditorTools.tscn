@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://b4u66mxndxbrg"]
+[gd_scene load_steps=7 format=3 uid="uid://b4u66mxndxbrg"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/MapEditorToolsPanel.cs" id="1_mqp1c"]
+[ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorHoverArea.cs" id="2_6qfy3"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_rwvbg"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorDragArea.cs" id="3_3w0w6"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorDragButton.cs" id="3_45muq"]
@@ -15,6 +16,134 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_mqp1c")
+
+[node name="DoorToolRoot" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="N_HoverRoot" type="Control" parent="DoorToolRoot"]
+anchors_preset = 0
+
+[node name="N_HoverArea" type="ColorRect" parent="DoorToolRoot/N_HoverRoot"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -36.0
+offset_right = 160.0
+grow_vertical = 0
+color = Color(1, 1, 1, 0)
+script = ExtResource("2_6qfy3")
+
+[node name="E_HoverRoot" type="Control" parent="DoorToolRoot"]
+anchors_preset = 0
+rotation = 1.5708
+
+[node name="E_HoverArea" type="ColorRect" parent="DoorToolRoot/E_HoverRoot"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -36.0
+offset_right = 160.0
+grow_vertical = 0
+color = Color(1, 1, 1, 0)
+script = ExtResource("2_6qfy3")
+
+[node name="S_HoverRoot" type="Control" parent="DoorToolRoot"]
+anchors_preset = 0
+rotation = 3.14159
+scale = Vector2(-1, 1)
+
+[node name="S_HoverArea" type="ColorRect" parent="DoorToolRoot/S_HoverRoot"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -36.0
+offset_right = 160.0
+grow_vertical = 0
+color = Color(1, 1, 1, 0)
+script = ExtResource("2_6qfy3")
+
+[node name="W_HoverRoot" type="Control" parent="DoorToolRoot"]
+anchors_preset = 0
+rotation = 4.71239
+scale = Vector2(-1, 1)
+
+[node name="W_HoverArea" type="ColorRect" parent="DoorToolRoot/W_HoverRoot"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -36.0
+offset_right = 160.0
+grow_vertical = 0
+color = Color(1, 1, 1, 0)
+script = ExtResource("2_6qfy3")
+
+[node name="HoverPrevRoot" type="Control" parent="DoorToolRoot"]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="HoverPrev" type="TextureRect" parent="DoorToolRoot/HoverPrevRoot"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -1.5
+offset_top = -36.0
+offset_right = 1.5
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("3_trbb5")
+
+[node name="DoorToolTemplate" type="Control" parent="DoorToolRoot"]
+anchors_preset = 0
+script = ExtResource("3_3w0w6")
+
+[node name="DoorArea" type="ColorRect" parent="DoorToolRoot/DoorToolTemplate"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -32.0
+offset_right = 64.0
+grow_vertical = 0
+color = Color(0.184314, 1, 0.0392157, 0.188235)
+
+[node name="StartBtn" type="TextureButton" parent="DoorToolRoot/DoorToolTemplate"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = -36.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 1
+texture_normal = ExtResource("3_trbb5")
+stretch_mode = 0
+script = ExtResource("3_45muq")
+
+[node name="EndBtn" type="TextureButton" parent="DoorToolRoot/DoorToolTemplate"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -36.0
+offset_right = 67.0
+grow_vertical = 0
+texture_normal = ExtResource("3_trbb5")
+stretch_mode = 0
+script = ExtResource("3_45muq")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -50,45 +179,3 @@ layout_mode = 2
 texture_normal = ExtResource("2_rwvbg")
 texture_pressed = ExtResource("2_rwvbg")
 texture_hover = ExtResource("2_rwvbg")
-
-[node name="DoorToolTemplate" type="Control" parent="."]
-anchors_preset = 0
-script = ExtResource("3_3w0w6")
-
-[node name="DoorArea" type="ColorRect" parent="DoorToolTemplate"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -32.0
-offset_right = 64.0
-grow_vertical = 0
-color = Color(0.184314, 1, 0.0392157, 0.188235)
-
-[node name="StartBtn" type="TextureButton" parent="DoorToolTemplate"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_top = -36.0
-grow_horizontal = 0
-grow_vertical = 0
-texture_normal = ExtResource("3_trbb5")
-stretch_mode = 0
-script = ExtResource("3_45muq")
-
-[node name="EndBtn" type="TextureButton" parent="DoorToolTemplate"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 64.0
-offset_top = -36.0
-offset_right = 66.0
-grow_vertical = 0
-texture_normal = ExtResource("3_trbb5")
-stretch_mode = 0
-script = ExtResource("3_45muq")
