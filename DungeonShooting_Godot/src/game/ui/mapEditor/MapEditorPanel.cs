@@ -52,7 +52,7 @@ public partial class MapEditorPanel : MapEditor
         //返回上一个Ui
         if (PrevUi != null)
         {
-            DisposeUi();
+            Destroy();
             PrevUi.ShowUi();
         }
     }

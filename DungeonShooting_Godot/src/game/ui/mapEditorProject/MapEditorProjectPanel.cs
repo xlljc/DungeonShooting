@@ -64,7 +64,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
         _eventFactory.RemoveAllEventListener();
     }
 
-    public override void OnDisposeUi()
+    public override void OnDestroyUi()
     {
         _groupGrid.Destroy();
         _groupGrid = null;

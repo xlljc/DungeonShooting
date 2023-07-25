@@ -22,6 +22,14 @@ public static partial class UiManager
     }
 
     /// <summary>
+    /// 创建 BottomTips, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.BottomTips.BottomTipsPanel Create_BottomTips()
+    {
+        return CreateUi<UI.BottomTips.BottomTipsPanel>(UiName.BottomTips);
+    }
+
+    /// <summary>
     /// 打开 BottomTips, 并返回UI实例
     /// </summary>
     public static UI.BottomTips.BottomTipsPanel Open_BottomTips()
@@ -44,12 +52,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 BottomTips 的所有实例
     /// </summary>
-    public static void Dispose_BottomTips()
+    public static void Destroy_BottomTips()
     {
         var uiInstance = Get_BottomTips_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -59,6 +67,14 @@ public static partial class UiManager
     public static UI.BottomTips.BottomTipsPanel[] Get_BottomTips_Instance()
     {
         return GetUiInstance<UI.BottomTips.BottomTipsPanel>(nameof(UI.BottomTips.BottomTips));
+    }
+
+    /// <summary>
+    /// 创建 EditorTips, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorTips.EditorTipsPanel Create_EditorTips()
+    {
+        return CreateUi<UI.EditorTips.EditorTipsPanel>(UiName.EditorTips);
     }
 
     /// <summary>
@@ -84,12 +100,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 EditorTips 的所有实例
     /// </summary>
-    public static void Dispose_EditorTips()
+    public static void Destroy_EditorTips()
     {
         var uiInstance = Get_EditorTips_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -99,6 +115,14 @@ public static partial class UiManager
     public static UI.EditorTips.EditorTipsPanel[] Get_EditorTips_Instance()
     {
         return GetUiInstance<UI.EditorTips.EditorTipsPanel>(nameof(UI.EditorTips.EditorTips));
+    }
+
+    /// <summary>
+    /// 创建 EditorTools, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorTools.EditorToolsPanel Create_EditorTools()
+    {
+        return CreateUi<UI.EditorTools.EditorToolsPanel>(UiName.EditorTools);
     }
 
     /// <summary>
@@ -124,12 +148,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 EditorTools 的所有实例
     /// </summary>
-    public static void Dispose_EditorTools()
+    public static void Destroy_EditorTools()
     {
         var uiInstance = Get_EditorTools_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -139,6 +163,14 @@ public static partial class UiManager
     public static UI.EditorTools.EditorToolsPanel[] Get_EditorTools_Instance()
     {
         return GetUiInstance<UI.EditorTools.EditorToolsPanel>(nameof(UI.EditorTools.EditorTools));
+    }
+
+    /// <summary>
+    /// 创建 EditorWindow, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorWindow.EditorWindowPanel Create_EditorWindow()
+    {
+        return CreateUi<UI.EditorWindow.EditorWindowPanel>(UiName.EditorWindow);
     }
 
     /// <summary>
@@ -164,12 +196,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 EditorWindow 的所有实例
     /// </summary>
-    public static void Dispose_EditorWindow()
+    public static void Destroy_EditorWindow()
     {
         var uiInstance = Get_EditorWindow_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -179,6 +211,14 @@ public static partial class UiManager
     public static UI.EditorWindow.EditorWindowPanel[] Get_EditorWindow_Instance()
     {
         return GetUiInstance<UI.EditorWindow.EditorWindowPanel>(nameof(UI.EditorWindow.EditorWindow));
+    }
+
+    /// <summary>
+    /// 创建 Loading, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.Loading.LoadingPanel Create_Loading()
+    {
+        return CreateUi<UI.Loading.LoadingPanel>(UiName.Loading);
     }
 
     /// <summary>
@@ -204,12 +244,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 Loading 的所有实例
     /// </summary>
-    public static void Dispose_Loading()
+    public static void Destroy_Loading()
     {
         var uiInstance = Get_Loading_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -219,6 +259,14 @@ public static partial class UiManager
     public static UI.Loading.LoadingPanel[] Get_Loading_Instance()
     {
         return GetUiInstance<UI.Loading.LoadingPanel>(nameof(UI.Loading.Loading));
+    }
+
+    /// <summary>
+    /// 创建 Main, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.Main.MainPanel Create_Main()
+    {
+        return CreateUi<UI.Main.MainPanel>(UiName.Main);
     }
 
     /// <summary>
@@ -244,12 +292,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 Main 的所有实例
     /// </summary>
-    public static void Dispose_Main()
+    public static void Destroy_Main()
     {
         var uiInstance = Get_Main_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -259,6 +307,14 @@ public static partial class UiManager
     public static UI.Main.MainPanel[] Get_Main_Instance()
     {
         return GetUiInstance<UI.Main.MainPanel>(nameof(UI.Main.Main));
+    }
+
+    /// <summary>
+    /// 创建 MapEditor, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditor.MapEditorPanel Create_MapEditor()
+    {
+        return CreateUi<UI.MapEditor.MapEditorPanel>(UiName.MapEditor);
     }
 
     /// <summary>
@@ -284,12 +340,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 MapEditor 的所有实例
     /// </summary>
-    public static void Dispose_MapEditor()
+    public static void Destroy_MapEditor()
     {
         var uiInstance = Get_MapEditor_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -299,6 +355,14 @@ public static partial class UiManager
     public static UI.MapEditor.MapEditorPanel[] Get_MapEditor_Instance()
     {
         return GetUiInstance<UI.MapEditor.MapEditorPanel>(nameof(UI.MapEditor.MapEditor));
+    }
+
+    /// <summary>
+    /// 创建 MapEditorCreateGroup, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel Create_MapEditorCreateGroup()
+    {
+        return CreateUi<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(UiName.MapEditorCreateGroup);
     }
 
     /// <summary>
@@ -324,12 +388,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 MapEditorCreateGroup 的所有实例
     /// </summary>
-    public static void Dispose_MapEditorCreateGroup()
+    public static void Destroy_MapEditorCreateGroup()
     {
         var uiInstance = Get_MapEditorCreateGroup_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -339,6 +403,14 @@ public static partial class UiManager
     public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel[] Get_MapEditorCreateGroup_Instance()
     {
         return GetUiInstance<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(nameof(UI.MapEditorCreateGroup.MapEditorCreateGroup));
+    }
+
+    /// <summary>
+    /// 创建 MapEditorCreateRoom, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorCreateRoom.MapEditorCreateRoomPanel Create_MapEditorCreateRoom()
+    {
+        return CreateUi<UI.MapEditorCreateRoom.MapEditorCreateRoomPanel>(UiName.MapEditorCreateRoom);
     }
 
     /// <summary>
@@ -364,12 +436,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 MapEditorCreateRoom 的所有实例
     /// </summary>
-    public static void Dispose_MapEditorCreateRoom()
+    public static void Destroy_MapEditorCreateRoom()
     {
         var uiInstance = Get_MapEditorCreateRoom_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -379,6 +451,14 @@ public static partial class UiManager
     public static UI.MapEditorCreateRoom.MapEditorCreateRoomPanel[] Get_MapEditorCreateRoom_Instance()
     {
         return GetUiInstance<UI.MapEditorCreateRoom.MapEditorCreateRoomPanel>(nameof(UI.MapEditorCreateRoom.MapEditorCreateRoom));
+    }
+
+    /// <summary>
+    /// 创建 MapEditorProject, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorProject.MapEditorProjectPanel Create_MapEditorProject()
+    {
+        return CreateUi<UI.MapEditorProject.MapEditorProjectPanel>(UiName.MapEditorProject);
     }
 
     /// <summary>
@@ -404,12 +484,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 MapEditorProject 的所有实例
     /// </summary>
-    public static void Dispose_MapEditorProject()
+    public static void Destroy_MapEditorProject()
     {
         var uiInstance = Get_MapEditorProject_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -419,6 +499,14 @@ public static partial class UiManager
     public static UI.MapEditorProject.MapEditorProjectPanel[] Get_MapEditorProject_Instance()
     {
         return GetUiInstance<UI.MapEditorProject.MapEditorProjectPanel>(nameof(UI.MapEditorProject.MapEditorProject));
+    }
+
+    /// <summary>
+    /// 创建 MapEditorTools, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorTools.MapEditorToolsPanel Create_MapEditorTools()
+    {
+        return CreateUi<UI.MapEditorTools.MapEditorToolsPanel>(UiName.MapEditorTools);
     }
 
     /// <summary>
@@ -444,12 +532,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 MapEditorTools 的所有实例
     /// </summary>
-    public static void Dispose_MapEditorTools()
+    public static void Destroy_MapEditorTools()
     {
         var uiInstance = Get_MapEditorTools_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -459,6 +547,14 @@ public static partial class UiManager
     public static UI.MapEditorTools.MapEditorToolsPanel[] Get_MapEditorTools_Instance()
     {
         return GetUiInstance<UI.MapEditorTools.MapEditorToolsPanel>(nameof(UI.MapEditorTools.MapEditorTools));
+    }
+
+    /// <summary>
+    /// 创建 RoomUI, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.RoomUI.RoomUIPanel Create_RoomUI()
+    {
+        return CreateUi<UI.RoomUI.RoomUIPanel>(UiName.RoomUI);
     }
 
     /// <summary>
@@ -484,12 +580,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 RoomUI 的所有实例
     /// </summary>
-    public static void Dispose_RoomUI()
+    public static void Destroy_RoomUI()
     {
         var uiInstance = Get_RoomUI_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 
@@ -499,6 +595,14 @@ public static partial class UiManager
     public static UI.RoomUI.RoomUIPanel[] Get_RoomUI_Instance()
     {
         return GetUiInstance<UI.RoomUI.RoomUIPanel>(nameof(UI.RoomUI.RoomUI));
+    }
+
+    /// <summary>
+    /// 创建 Settlement, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.Settlement.SettlementPanel Create_Settlement()
+    {
+        return CreateUi<UI.Settlement.SettlementPanel>(UiName.Settlement);
     }
 
     /// <summary>
@@ -524,12 +628,12 @@ public static partial class UiManager
     /// <summary>
     /// 销毁 Settlement 的所有实例
     /// </summary>
-    public static void Dispose_Settlement()
+    public static void Destroy_Settlement()
     {
         var uiInstance = Get_Settlement_Instance();
         foreach (var uiPanel in uiInstance)
         {
-            uiPanel.DisposeUi();
+            uiPanel.Destroy();
         }
     }
 

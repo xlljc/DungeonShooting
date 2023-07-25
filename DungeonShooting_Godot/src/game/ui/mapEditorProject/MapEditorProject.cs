@@ -23,6 +23,10 @@ public abstract partial class MapEditorProject : UiBase
     {
     }
 
+    public sealed override void OnInitNestedUi()
+    {
+    }
+
     /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.Head.Back
     /// </summary>

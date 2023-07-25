@@ -169,7 +169,7 @@ public partial class DungeonManager : Node2D
         IsInDungeon = true;
         yield return 0;
         //关闭 loading UI
-        UiManager.Dispose_Loading();
+        UiManager.Destroy_Loading();
         if (finish != null)
         {
             finish();
@@ -203,7 +203,7 @@ public partial class DungeonManager : Node2D
         EventManager.EmitEvent(EventEnum.OnExitDungeon);
         yield return 0;
         //关闭 loading UI
-        UiManager.Dispose_Loading();
+        UiManager.Destroy_Loading();
         if (finish != null)
         {
             finish();

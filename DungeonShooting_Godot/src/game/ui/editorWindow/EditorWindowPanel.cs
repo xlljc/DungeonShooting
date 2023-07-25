@@ -114,6 +114,6 @@ public partial class EditorWindowPanel : EditorWindow
         {
             CloseEvent();
         }
-        DisposeUi();
+        Destroy();
     }
 }

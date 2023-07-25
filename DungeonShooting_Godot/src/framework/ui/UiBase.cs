@@ -7,7 +7,7 @@ using Godot;
 /// Ui 基类
 /// </summary>
 [Tool]
-public abstract partial class UiBase : Control, ICoroutine
+public abstract partial class UiBase : Control, IDestroy, ICoroutine
 {
     /// <summary>
     /// 当前 UI 所属层级
@@ -24,11 +24,8 @@ public abstract partial class UiBase : Control, ICoroutine
     /// 是否已经打开ui
     /// </summary>
     public bool IsOpen { get; private set; } = false;
-    
-    /// <summary>
-    /// 是否已经销毁
-    /// </summary>
-    public bool IsDisposed { get; private set; } = false;
+
+    public bool IsDestroyed { get; private set; }
 
     /// <summary>
     /// 负责记录上一个Ui
@@ -80,7 +77,7 @@ public abstract partial class UiBase : Control, ICoroutine
     /// <summary>
     /// 销毁当前ui时调用
     /// </summary>
-    public virtual void OnDisposeUi()
+    public virtual void OnDestroyUi()
     {
     }
 
@@ -142,17 +139,17 @@ public abstract partial class UiBase : Control, ICoroutine
     /// <summary>
     /// 关闭并销毁ui
     /// </summary>
-    public void DisposeUi()
+    public void Destroy()
     {
-        if (IsDisposed)
+        if (IsDestroyed)
         {
             return;
         }
         //记录ui关闭
         UiManager.RecordUi(this, UiManager.RecordType.Close);
         HideUi();
-        IsDisposed = true;
-        OnDisposeUi();
+        IsDestroyed = true;
+        OnDestroyUi();
         
         //子Ui调用销毁
         if (_nestedUiSet != null)
@@ -160,7 +157,7 @@ public abstract partial class UiBase : Control, ICoroutine
             foreach (var uiBase in _nestedUiSet)
             {
                 uiBase._targetUi = null;
-                uiBase.DisposeUi();
+                uiBase.Destroy();
             }
             _nestedUiSet.Clear();
         }

@@ -38,7 +38,7 @@ public static class UiGenerator
                              $"        \n" +
                              $"    }}\n" +
                              $"\n" +
-                             $"    public override void OnDisposeUi()\n" +
+                             $"    public override void OnDestroyUi()\n" +
                              $"    {{\n" +
                              $"        \n" +
                              $"    }}\n" +

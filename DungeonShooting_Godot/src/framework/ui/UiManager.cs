@@ -153,9 +153,9 @@ public static partial class UiManager
     /// <summary>
     /// 销毁指定Ui
     /// </summary>
-    public static void DisposeUi(UiBase uiBase)
+    public static void DestroyUi(UiBase uiBase)
     {
-        uiBase.DisposeUi();
+        uiBase.Destroy();
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ public static partial class UiManager
     /// <summary>
     /// 销毁所有Ui
     /// </summary>
-    public static void DisposeAllUi()
+    public static void DestroyAllUi()
     {
         var map = new Dictionary<string, List<UiBase>>();
         foreach (var item in _recordUiMap)
@@ -181,7 +181,7 @@ public static partial class UiManager
         {
             foreach (var uiBase in item.Value)
             {
-                uiBase.DisposeUi();
+                uiBase.Destroy();
             }
         }
     }

@@ -7,7 +7,7 @@ using Godot;
 
 /// <summary>
 /// 房间内活动物体基类, 所有物体都必须继承该类,<br/>
-/// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, <br/>
+/// 该类提供基础物体运动模拟, 互动接口, 自定义组件, 协程等功能<br/>
 /// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [Tool], 并在 ActivityObject.xlsx 配置文件中注册物体, 导出配置表后使用 ActivityObject.Create(id) 来创建实例.<br/>
 /// </summary>
 public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
@@ -1196,6 +1196,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <summary>
     /// 继承指定物体的运动速率
     /// </summary>
+    /// <param name="other">目标对象</param>
+    /// <param name="scale">继承的速率缩放</param>
     public void InheritVelocity(ActivityObject other, float scale = 0.5f)
     {
         MoveController.AddVelocity(other.Velocity * scale);
@@ -1442,8 +1444,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         _processingBecomesStaticImage = true;
         EnableBehavior = false;
         var staticImageCanvas = AffiliationArea.RoomInfo.StaticImageCanvas;
-        var (x, y) = staticImageCanvas.ToImageCanvasPosition(GlobalPosition);
-        staticImageCanvas.CanvasSprite.DrawActivityObjectInCanvas(this, x, y, () =>
+        var position = staticImageCanvas.ToImageCanvasPosition(GlobalPosition);
+        staticImageCanvas.CanvasSprite.DrawActivityObjectInCanvas(this, position.X, position.Y, () =>
         {
             Destroy();
         });

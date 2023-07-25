@@ -37,5 +37,6 @@ public class RoomStaticImageCanvas : IDestroy
         }
 
         IsDestroyed = true;
+        CanvasSprite.Destroy();
     }
 }

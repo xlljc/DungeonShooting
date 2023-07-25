@@ -30,13 +30,6 @@ public partial class Player : Role
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 
-        //让相机跟随玩家
-        // var remoteTransform = new RemoteTransform2D();
-        // AddChild(remoteTransform);
-        // MainCamera.Main.GlobalPosition = GlobalPosition;
-        // MainCamera.Main.ResetSmoothing();
-        // remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
-
         MaxHp = 6;
         Hp = 6;
         MaxShield = 0;
