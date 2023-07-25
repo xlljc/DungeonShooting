@@ -1276,7 +1276,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             }
             else
             {
-                CallDelay(Attribute.BeLoadedSoundDelayTime, PlaySpriteAnimation, AnimatorNames.BeLoaded);
+                this.CallDelay(Attribute.BeLoadedSoundDelayTime, PlaySpriteAnimation, AnimatorNames.BeLoaded);
             }
         }
 
@@ -1294,7 +1294,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         //创建一个弹壳
         if (Attribute.ThrowShellDelayTime > 0)
         {
-            CallDelay(Attribute.ThrowShellDelayTime, () => ThrowShell(Attribute.ShellId, speedScale));
+            this.CallDelay(Attribute.ThrowShellDelayTime, () => ThrowShell(Attribute.ShellId, speedScale));
         }
         else if (Attribute.ThrowShellDelayTime == 0)
         {

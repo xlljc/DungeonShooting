@@ -1422,62 +1422,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     }
 
     /// <summary>
-    /// 延时指定时间调用一个回调函数
-    /// </summary>
-    public void CallDelay(float delayTime, Action cb)
-    {
-        StartCoroutine(_CallDelay(delayTime, cb));
-    }
-    
-    /// <summary>
-    /// 延时指定时间调用一个回调函数
-    /// </summary>
-    public void CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
-    {
-        StartCoroutine(_CallDelay(delayTime, cb, arg1));
-    }
-    
-    /// <summary>
-    /// 延时指定时间调用一个回调函数
-    /// </summary>
-    public void CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
-    {
-        StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2));
-    }
-    
-    /// <summary>
-    /// 延时指定时间调用一个回调函数
-    /// </summary>
-    public void CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
-    {
-        StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2, arg3));
-    }
-
-    private IEnumerator _CallDelay(float delayTime, Action cb)
-    {
-        yield return new WaitForSeconds(delayTime);
-        cb();
-    }
-    
-    private IEnumerator _CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
-    {
-        yield return new WaitForSeconds(delayTime);
-        cb(arg1);
-    }
-    
-    private IEnumerator _CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
-    {
-        yield return new WaitForSeconds(delayTime);
-        cb(arg1, arg2);
-    }
-    
-    private IEnumerator _CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
-    {
-        yield return new WaitForSeconds(delayTime);
-        cb(arg1,arg2, arg3);
-    }
-
-    /// <summary>
     /// 将当前 ActivityObject 变成静态图像绘制到地面上, 用于优化渲染大量物体<br/>
     /// 调用该函数后会排队进入渲染队列, 并且禁用所有行为, 当渲染完成后会销毁当前对象, 也就是调用 Destroy() 函数<br/>
     /// </summary>
