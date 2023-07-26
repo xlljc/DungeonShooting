@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 
 namespace UI.MapEditorTools;
 
@@ -28,6 +29,12 @@ public partial class DoorDragArea : Control
     private bool _canComment = true;
     //开始拖拽时的区域
     private Vector2I _startDragRange;
+    //是否是拖拽模式
+    private bool _isDragMode = false;
+    //拖拽模式提交回调
+    private Action<int, int> _onSubmit;
+    //拖拽模式取消时回调
+    private Action _onCancel;
 
     public void SetDoorDragAreaNode(MapEditorTools.DoorToolTemplate node)
     {
@@ -38,6 +45,32 @@ public partial class DoorDragArea : Control
         
         SetDoorAreaSize(GameConfig.TileCellSize * 4);
         SetDoorAreaDirection(DoorDirection.N);
+    }
+
+    public override void _Process(double delta)
+    {
+        if (_isDragMode)
+        {
+            if (!Input.IsMouseButtonPressed(MouseButton.Left)) //松开了右键
+            {
+                _isDragMode = false;
+                if (_canComment) //可以提交
+                {
+                    if (_onSubmit != null)
+                    {
+                        var doorAreaRange = GetDoorAreaRange();
+                        _onSubmit(doorAreaRange.X, doorAreaRange.Y);
+                    }
+                }
+                else //不能提交
+                {
+                    if (_onCancel != null)
+                    {
+                        _onCancel();
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -95,6 +128,18 @@ public partial class DoorDragArea : Control
         _node.L_StartBtn.Instance.Position = startPosition;
         
         SetDoorAreaSize(size);
+    }
+
+    /// <summary>
+    /// 设置区域起始坐标
+    /// </summary>
+    public void SetDoorAreaStart(int start)
+    {
+        var startPosition = _node.L_StartBtn.Instance.Position;
+        startPosition.X = start - _node.L_StartBtn.Instance.Size.X;
+        _node.L_StartBtn.Instance.Position = startPosition;
+        
+        RefreshArea();
     }
 
     /// <summary>
@@ -229,5 +274,19 @@ public partial class DoorDragArea : Control
                 SetDoorAreaRange(_startDragRange.X, _startDragRange.Y);
             }
         }
+    }
+
+    /// <summary>
+    /// 将该区域变为拖拽模式, 用于创建门区域
+    /// </summary>
+    /// <param name="onSubmit">成功提交时回调, 参数1为起始点, 参数2为大小</param>
+    /// <param name="onCancel">取消时调用</param>
+    public void MakeDragMode(Action<int, int> onSubmit, Action onCancel)
+    {
+        _canComment = false;
+        _isDragMode = true;
+        _onSubmit = onSubmit;
+        _onCancel = onCancel;
+        _node.L_EndBtn.Instance.EmitSignal(BaseButton.SignalName.ButtonDown);
     }
 }

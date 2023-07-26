@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -31,17 +32,25 @@ public partial class MapEditorToolsPanel : MapEditorTools
         S_DoorToolTemplate.Instance.QueueFree();
     }
 
+    public override void Process(float delta)
+    {
+        S_HoverPreviewRoot.Instance.Visible = ActiveHoverArea != null && !ActiveHoverArea.IsDrag;
+    }
+
     /// <summary>
     /// 设置活动的鼠标悬停的区域
     /// </summary>
     public void SetActiveHoverArea(DoorHoverArea hoverArea)
     {
         ActiveHoverArea = hoverArea;
-        // if (hoverArea != null)
-        // {
-        //     S_HoverPrevRoot.Instance.Reparent(hoverArea.GetParent(), false);
-        //     S_HoverPrevRoot.Instance.Visible = false;
-        // }
+        if (hoverArea != null)
+        {
+            S_HoverPreviewRoot.Instance.Reparent(hoverArea.GetParent(), false);
+        }
+        else
+        {
+            S_HoverPreviewRoot.Instance.Reparent(S_DoorToolRoot.Instance, false);
+        }
     }
     
     /// <summary>
@@ -58,6 +67,28 @@ public partial class MapEditorToolsPanel : MapEditorTools
         inst.Instance.SetDoorAreaDirection(direction);
         inst.Instance.SetDoorAreaRange(start, size);
         return inst;
+    }
+
+    /// <summary>
+    /// 创建拖拽状态下的门区域工具, 用于创建门区域
+    /// </summary>
+    /// <param name="position">原点坐标, 单位: 像素</param>
+    /// <param name="direction">方向</param>
+    /// <param name="start">起始位置, 单位: 像素</param>
+    /// <param name="onSubmit">成功提交时回调, 参数1为起始点, 参数2为大小</param>
+    public void CreateDragDoorTool(Vector2 position, DoorDirection direction, int start, Action<int, int> onSubmit)
+    {
+        var inst = CreateDoorToolInstance();
+        inst.Instance.SetDoorAreaPosition(position);
+        inst.Instance.SetDoorAreaDirection(direction);
+        inst.Instance.SetDoorAreaRange(start, 0);
+        inst.Instance.MakeDragMode(
+            (s, e) =>
+            {
+                RemoveDoorTool(inst);
+                onSubmit(s, e);
+            },
+            () => RemoveDoorTool(inst));
     }
 
     /// <summary>

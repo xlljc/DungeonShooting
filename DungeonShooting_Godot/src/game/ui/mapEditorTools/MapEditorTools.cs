@@ -165,34 +165,34 @@ public abstract partial class MapEditorTools : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorTools.DoorToolRoot.HoverPrevRoot.HoverPrev
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorTools.DoorToolRoot.HoverPreviewRoot.HoverPreview
     /// </summary>
-    public class HoverPrev : UiNode<MapEditorTools, Godot.TextureRect, HoverPrev>
+    public class HoverPreview : UiNode<MapEditorTools, Godot.TextureRect, HoverPreview>
     {
-        public HoverPrev(MapEditorTools uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
-        public override HoverPrev Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+        public HoverPreview(MapEditorTools uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override HoverPreview Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.DoorToolRoot.HoverPrevRoot
+    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.DoorToolRoot.HoverPreviewRoot
     /// </summary>
-    public class HoverPrevRoot : UiNode<MapEditorTools, Godot.Control, HoverPrevRoot>
+    public class HoverPreviewRoot : UiNode<MapEditorTools, Godot.Control, HoverPreviewRoot>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.DoorToolRoot.HoverPrev
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.DoorToolRoot.HoverPreview
         /// </summary>
-        public HoverPrev L_HoverPrev
+        public HoverPreview L_HoverPreview
         {
             get
             {
-                if (_L_HoverPrev == null) _L_HoverPrev = new HoverPrev(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("HoverPrev"));
-                return _L_HoverPrev;
+                if (_L_HoverPreview == null) _L_HoverPreview = new HoverPreview(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("HoverPreview"));
+                return _L_HoverPreview;
             }
         }
-        private HoverPrev _L_HoverPrev;
+        private HoverPreview _L_HoverPreview;
 
-        public HoverPrevRoot(MapEditorTools uiPanel, Godot.Control node) : base(uiPanel, node) {  }
-        public override HoverPrevRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+        public HoverPreviewRoot(MapEditorTools uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override HoverPreviewRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
@@ -328,17 +328,17 @@ public abstract partial class MapEditorTools : UiBase
         private W_HoverRoot _L_W_HoverRoot;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.HoverPrevRoot
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.HoverPreviewRoot
         /// </summary>
-        public HoverPrevRoot L_HoverPrevRoot
+        public HoverPreviewRoot L_HoverPreviewRoot
         {
             get
             {
-                if (_L_HoverPrevRoot == null) _L_HoverPrevRoot = new HoverPrevRoot(UiPanel, Instance.GetNodeOrNull<Godot.Control>("HoverPrevRoot"));
-                return _L_HoverPrevRoot;
+                if (_L_HoverPreviewRoot == null) _L_HoverPreviewRoot = new HoverPreviewRoot(UiPanel, Instance.GetNodeOrNull<Godot.Control>("HoverPreviewRoot"));
+                return _L_HoverPreviewRoot;
             }
         }
-        private HoverPrevRoot _L_HoverPrevRoot;
+        private HoverPreviewRoot _L_HoverPreviewRoot;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorTools.DoorDragArea"/>, 节点路径: MapEditorTools.DoorToolTemplate
@@ -496,14 +496,14 @@ public abstract partial class MapEditorTools : UiBase
     public W_HoverRoot S_W_HoverRoot => L_DoorToolRoot.L_W_HoverRoot;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.DoorToolRoot.HoverPrevRoot.HoverPrev
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.DoorToolRoot.HoverPreviewRoot.HoverPreview
     /// </summary>
-    public HoverPrev S_HoverPrev => L_DoorToolRoot.L_HoverPrevRoot.L_HoverPrev;
+    public HoverPreview S_HoverPreview => L_DoorToolRoot.L_HoverPreviewRoot.L_HoverPreview;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.DoorToolRoot.HoverPrevRoot
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.DoorToolRoot.HoverPreviewRoot
     /// </summary>
-    public HoverPrevRoot S_HoverPrevRoot => L_DoorToolRoot.L_HoverPrevRoot;
+    public HoverPreviewRoot S_HoverPreviewRoot => L_DoorToolRoot.L_HoverPreviewRoot;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: MapEditorTools.DoorToolRoot.DoorToolTemplate.DoorArea

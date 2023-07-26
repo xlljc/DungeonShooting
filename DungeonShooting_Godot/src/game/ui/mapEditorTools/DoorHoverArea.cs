@@ -12,13 +12,13 @@ public partial class DoorHoverArea : ColorRect
     /// 房间门的朝向
     /// </summary>
     public DoorDirection Direction { get; private set; }
+    /// <summary>
+    /// 是否拖拽中
+    /// </summary>
+    public bool IsDrag { get; private set; }
 
     private bool _mouseHover;
-    private bool _isDrag;
     private Control _parent;
-
-    private MapEditorTools.DoorToolTemplate _dragArea;
-    private MapEditorTools.HoverPrevRoot _cloneRoot;
     
     public override void _Ready()
     {
@@ -35,37 +35,40 @@ public partial class DoorHoverArea : ColorRect
 
     public override void _Process(double delta)
     {
-
         if (_mouseHover && MapEditorToolsPanel.ActiveHoverArea == this)
         {
-            var globalPosition = _parent.GlobalPosition;
             var start = Utils.Adsorption(_parent.GetLocalMousePosition().X, GameConfig.TileCellSize);
-            //MapEditorToolsPanel.S_HoverPrevRoot.Instance.Visible = true;
-            //MapEditorToolsPanel.S_HoverPrevRoot.Instance.GlobalPosition = new Vector2();
+            MapEditorToolsPanel.S_HoverPreviewRoot.Instance.Position = new Vector2(start, 0);
             
-            if (!_isDrag)
+            if (!IsDrag)
             {
                 if (Input.IsMouseButtonPressed(MouseButton.Left))
                 {
-                    _isDrag = true;
-                    _dragArea = MapEditorToolsPanel.CreateDoorTool(globalPosition, Direction, start, 4 * GameConfig.TileCellSize);
+                    GD.Print("开始...");
+                    IsDrag = true;
+                    MapEditorToolsPanel.CreateDragDoorTool(_parent.Position, Direction, start, OnSubmitDoorArea);
                 }
             }
             else
             {
                 if (!Input.IsMouseButtonPressed(MouseButton.Left))
                 {
-                    _isDrag = false;
-                    MapEditorToolsPanel.RemoveDoorTool(_dragArea);
-                    _dragArea = null;
+                    GD.Print("结束...");
+                    IsDrag = false;
                 }
             }
         }
     }
 
+    //提交门区域
+    private void OnSubmitDoorArea(int start, int end)
+    {
+        
+    }
+    
     private void OnMouseEnter()
     {
-        if (MapEditorToolsPanel.ActiveHoverArea == null || !MapEditorToolsPanel.ActiveHoverArea._isDrag)
+        if (MapEditorToolsPanel.ActiveHoverArea == null || !MapEditorToolsPanel.ActiveHoverArea.IsDrag)
         {
             _mouseHover = true;
             MapEditorToolsPanel.SetActiveHoverArea(this);
@@ -74,10 +77,13 @@ public partial class DoorHoverArea : ColorRect
     
     private void OnMouseExit()
     {
-        if (MapEditorToolsPanel.ActiveHoverArea == null || !MapEditorToolsPanel.ActiveHoverArea._isDrag)
+        if (MapEditorToolsPanel.ActiveHoverArea == null || !MapEditorToolsPanel.ActiveHoverArea.IsDrag)
         {
             _mouseHover = false;
-            MapEditorToolsPanel.S_HoverPrevRoot.Instance.Visible = false;
+            if (MapEditorToolsPanel.ActiveHoverArea == this)
+            {
+                MapEditorToolsPanel.SetActiveHoverArea(null);
+            }
         }
     }
 }

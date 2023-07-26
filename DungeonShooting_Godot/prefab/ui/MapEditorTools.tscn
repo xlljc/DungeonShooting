@@ -61,6 +61,7 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
+offset_left = -9.12665e-05
 offset_top = -36.0
 offset_right = 160.0
 grow_vertical = 0
@@ -83,20 +84,21 @@ grow_vertical = 0
 color = Color(1, 1, 1, 0)
 script = ExtResource("2_6qfy3")
 
-[node name="HoverPrevRoot" type="Control" parent="DoorToolRoot"]
+[node name="HoverPreviewRoot" type="Control" parent="DoorToolRoot"]
+visible = false
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="HoverPrev" type="TextureRect" parent="DoorToolRoot/HoverPrevRoot"]
+[node name="HoverPreview" type="TextureRect" parent="DoorToolRoot/HoverPreviewRoot"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -1.5
+offset_left = -2.0
 offset_top = -36.0
-offset_right = 1.5
+offset_right = 2.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -123,7 +125,7 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -3.0
+offset_left = -4.0
 offset_top = -36.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -139,7 +141,7 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 64.0
 offset_top = -36.0
-offset_right = 67.0
+offset_right = 68.0
 grow_vertical = 0
 texture_normal = ExtResource("3_trbb5")
 stretch_mode = 0
