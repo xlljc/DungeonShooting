@@ -17,6 +17,9 @@ public partial class DoorDragArea : Control
     /// 朝向
     /// </summary>
     public DoorDirection Direction { get; private set; }
+
+    private DoorDragButton _startButton;
+    private DoorDragButton _endButton;
     
     private MapEditorTools.DoorToolTemplate _node;
     private Vector2 _startTempPos;
@@ -40,8 +43,11 @@ public partial class DoorDragArea : Control
     {
         _node = node;
         _defaultColor = _node.L_DoorArea.Instance.Color;
-        _node.L_StartBtn.Instance.DragEvent += OnStartAreaDrag;
-        _node.L_EndBtn.Instance.DragEvent += OnEndAreaDrag;
+        _startButton = _node.L_StartBtn.Instance;
+        _endButton = _node.L_EndBtn.Instance;
+        
+        _startButton.DragEvent += OnStartAreaDrag;
+        _endButton.DragEvent += OnEndAreaDrag;
         
         SetDoorAreaSize(GameConfig.TileCellSize * 4);
         SetDoorAreaDirection(DoorDirection.N);
@@ -56,10 +62,15 @@ public partial class DoorDragArea : Control
                 _isDragMode = false;
                 if (_canComment) //可以提交
                 {
+                    _isDragMode = false;
+                    _onCancel = null;
+                    _startButton.EmitSignal(BaseButton.SignalName.ButtonUp);
+                    _endButton.EmitSignal(BaseButton.SignalName.ButtonUp);
                     if (_onSubmit != null)
                     {
                         var doorAreaRange = GetDoorAreaRange();
                         _onSubmit(doorAreaRange.X, doorAreaRange.Y);
+                        _onSubmit = null;
                     }
                 }
                 else //不能提交
@@ -115,7 +126,7 @@ public partial class DoorDragArea : Control
     /// <returns></returns>
     public Vector2I GetDoorAreaRange()
     {
-        return new Vector2I((int)(_node.L_StartBtn.Instance.Position.X + _node.L_StartBtn.Instance.Size.X), _areaSize);
+        return new Vector2I((int)(_startButton.Position.X + _startButton.Size.X), _areaSize);
     }
 
     /// <summary>
@@ -123,9 +134,9 @@ public partial class DoorDragArea : Control
     /// </summary>
     public void SetDoorAreaRange(int start, int size)
     {
-        var startPosition = _node.L_StartBtn.Instance.Position;
-        startPosition.X = start - _node.L_StartBtn.Instance.Size.X;
-        _node.L_StartBtn.Instance.Position = startPosition;
+        var startPosition = _startButton.Position;
+        startPosition.X = start - _startButton.Size.X;
+        _startButton.Position = startPosition;
         
         SetDoorAreaSize(size);
     }
@@ -135,9 +146,9 @@ public partial class DoorDragArea : Control
     /// </summary>
     public void SetDoorAreaStart(int start)
     {
-        var startPosition = _node.L_StartBtn.Instance.Position;
-        startPosition.X = start - _node.L_StartBtn.Instance.Size.X;
-        _node.L_StartBtn.Instance.Position = startPosition;
+        var startPosition = _startButton.Position;
+        startPosition.X = start - _startButton.Size.X;
+        _startButton.Position = startPosition;
         
         RefreshArea();
     }
@@ -149,7 +160,7 @@ public partial class DoorDragArea : Control
     {
         _areaSize = value;
         RefreshArea();
-        GD.Print("size: " + GetDoorAreaRange());
+        //GD.Print("size: " + GetDoorAreaRange());
     }
 
     //刷新区域位置
@@ -157,13 +168,13 @@ public partial class DoorDragArea : Control
     {
         var colorRect = _node.L_DoorArea.Instance;
         var position = colorRect.Position;
-        position.X = _node.L_StartBtn.Instance.Position.X + _node.L_StartBtn.Instance.Size.X;
+        position.X = _startButton.Position.X + _startButton.Size.X;
         colorRect.Position = position;
         colorRect.Size = AreaSize;
 
-        var position2 = _node.L_EndBtn.Instance.Position;
+        var position2 = _endButton.Position;
         position2.X = position.X + AreaSize.X;
-        _node.L_EndBtn.Instance.Position = position2;
+        _endButton.Position = position2;
     }
     
     //拖拽起始点
@@ -172,19 +183,40 @@ public partial class DoorDragArea : Control
         if (dragState == DragState.DragStart)
         {
             _canComment = true;
-            _startTempPos = _node.L_StartBtn.Instance.Position;
+            _startTempPos = _startButton.Position;
             _startDragRange = GetDoorAreaRange();
         }
         else if (dragState == DragState.DragMove)
         {
+            if (_isDragMode)
+            {
+                offset.X -= GameConfig.TileCellSize;
+            }
+            
             var position = _startTempPos;
             position.X = position.X += offset.X;
-            var endPosition = _node.L_EndBtn.Instance.Position;
+            var endPosition = _endButton.Position;
+
+            //拖拽模式
+            if (_isDragMode)
+            {
+                if (position.X > endPosition.X) //该换方向了
+                {
+                    _startButton.EmitSignal(BaseButton.SignalName.ButtonUp);
+                    _endButton.EmitSignal(BaseButton.SignalName.ButtonDown);
+
+                    if (Mathf.Abs(position.X - endPosition.X) >= GameConfig.TileCellSize * 4 && !_canComment)
+                    {
+                        _canComment = true;
+                        _node.L_DoorArea.Instance.Color = _defaultColor;
+                    }
+                    return;
+                }
+            }
             
             //计算区域大小
-            var areaSize = (int)(endPosition.X - position.X - _node.L_StartBtn.Instance.Size.X);
-            
-            _node.L_StartBtn.Instance.Position = position;
+            var areaSize = (int)(endPosition.X - position.X - _startButton.Size.X);
+            _startButton.Position = position;
             //刷新区域位置
             SetDoorAreaSize(areaSize);
             
@@ -227,24 +259,40 @@ public partial class DoorDragArea : Control
         if (dragState == DragState.DragStart)
         {
             _canComment = true;
-            _endTempPos = _node.L_EndBtn.Instance.Position;
+            _endTempPos = _endButton.Position;
             _startDragRange = GetDoorAreaRange();
         }
         else if (dragState == DragState.DragMove)
         {
             var position = _endTempPos;
             position.X = position.X += offset.X;
+            var startPosition = _startButton.Position;
+            
+            //拖拽模式
+            if (_isDragMode)
+            {
+                if (position.X < startPosition.X) //该换方向了
+                {
+                    _endButton.EmitSignal(BaseButton.SignalName.ButtonUp);
+                    _startButton.EmitSignal(BaseButton.SignalName.ButtonDown);
 
+                    if (Mathf.Abs(position.X - startPosition.X) >= GameConfig.TileCellSize * 4 && !_canComment)
+                    {
+                        _canComment = true;
+                        _node.L_DoorArea.Instance.Color = _defaultColor;
+                    }
+                    return;
+                }
+            }
+            
             //区域大小
-            var areaSize = (int)(position.X - _node.L_StartBtn.Instance.Position.X - _node.L_StartBtn.Instance.Size.X);
+            var areaSize = (int)(position.X - _startButton.Position.X - _startButton.Size.X);
             //刷新区域位置
             SetDoorAreaSize(areaSize);
             
             //终点坐标必须要大于起始点坐标
-            var startPosition = _node.L_StartBtn.Instance.Position;
             if (position.X > startPosition.X)
             {
-
                 //区域必须大于等于 4 格宽度
                 if (areaSize >= GameConfig.TileCellSize * 4)
                 {
@@ -256,7 +304,7 @@ public partial class DoorDragArea : Control
                     return;
                 }
             }
-            
+
             //错误的位置
             if (_canComment)
             {
@@ -287,6 +335,6 @@ public partial class DoorDragArea : Control
         _isDragMode = true;
         _onSubmit = onSubmit;
         _onCancel = onCancel;
-        _node.L_EndBtn.Instance.EmitSignal(BaseButton.SignalName.ButtonDown);
+        _endButton.EmitSignal(BaseButton.SignalName.ButtonDown);
     }
 }

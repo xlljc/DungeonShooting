@@ -63,7 +63,7 @@ public partial class DoorHoverArea : ColorRect
     //提交门区域
     private void OnSubmitDoorArea(int start, int end)
     {
-        
+        GD.Print("提交区域: " + start + ", " + end);
     }
     
     private void OnMouseEnter()

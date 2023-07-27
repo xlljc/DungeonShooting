@@ -64,10 +64,14 @@ public partial class DoorDragButton : TextureButton
 
     private void OnButtonDown()
     {
+        if (_down)
+        {
+            return;
+        }
         _down = true;
         Modulate = new Color(0.7f, 0.7f, 0.7f, 1);
         _startPos = GetGlobalMousePosition();
-        _prevPos = Vector2.Zero;
+        _prevPos = new Vector2(-99999, -99999);
         if (DragEvent != null)
         {
             DragEvent(DragState.DragStart, Vector2.Zero);
@@ -76,6 +80,10 @@ public partial class DoorDragButton : TextureButton
 
     private void OnButtonUp()
     {
+        if (!_down)
+        {
+            return;
+        }
         _down = false;
         Modulate = new Color(1, 1, 1, 1);
         if (DragEvent != null)

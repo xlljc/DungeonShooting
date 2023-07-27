@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Godot;
 
 /// <summary>
@@ -48,5 +49,95 @@ public static class NodeExtend
     public static void AddToActivityRoot(this Node2D node, RoomLayerEnum layer)
     {
         GameApplication.Instance.World.GetRoomLayer(layer).AddChild(node);
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public static void CallDelay(this ICoroutine coroutine, float delayTime, Action cb)
+    {
+        coroutine.StartCoroutine(_CallDelay(delayTime, cb));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public static void CallDelay<T1>(this ICoroutine coroutine, float delayTime, Action<T1> cb, T1 arg1)
+    {
+        coroutine.StartCoroutine(_CallDelay(delayTime, cb, arg1));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public static void CallDelay<T1, T2>(this ICoroutine coroutine, float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    {
+        coroutine.StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public static void CallDelay<T1, T2, T3>(this ICoroutine coroutine, float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    {
+        coroutine.StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2, arg3));
+    }
+    
+    //---------------------------
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public static void CallDelayInNode(this Node node, float delayTime, Action cb)
+    {
+        GameApplication.Instance.StartCoroutine(_CallDelay(delayTime, cb));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public static void CallDelayInNode<T1>(this Node node, float delayTime, Action<T1> cb, T1 arg1)
+    {
+        GameApplication.Instance.StartCoroutine(_CallDelay(delayTime, cb, arg1));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public static void CallDelayInNode<T1, T2>(this Node node, float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    {
+        GameApplication.Instance.StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2));
+    }
+    
+    /// <summary>
+    /// 延时指定时间调用一个回调函数
+    /// </summary>
+    public static void CallDelayInNode<T1, T2, T3>(this Node node, float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    {
+        GameApplication.Instance.StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2, arg3));
+    }
+    
+    private static IEnumerator _CallDelay(float delayTime, Action cb)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb();
+    }
+    
+    private static IEnumerator _CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb(arg1);
+    }
+    
+    private static IEnumerator _CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb(arg1, arg2);
+    }
+    
+    private static IEnumerator _CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
+    {
+        yield return new WaitForSeconds(delayTime);
+        cb(arg1,arg2, arg3);
     }
 }

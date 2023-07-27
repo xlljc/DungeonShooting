@@ -82,13 +82,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         inst.Instance.SetDoorAreaPosition(position);
         inst.Instance.SetDoorAreaDirection(direction);
         inst.Instance.SetDoorAreaRange(start, 0);
-        inst.Instance.MakeDragMode(
-            (s, e) =>
-            {
-                RemoveDoorTool(inst);
-                onSubmit(s, e);
-            },
-            () => RemoveDoorTool(inst));
+        inst.Instance.MakeDragMode(onSubmit, () => RemoveDoorTool(inst));
     }
 
     /// <summary>
