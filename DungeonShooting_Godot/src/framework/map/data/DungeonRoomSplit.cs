@@ -38,15 +38,15 @@ public class DungeonRoomSplit
                 var asText = ResourceManager.LoadText(RoomPath);
                 _roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(asText);
 
-                //需要处理 DoorAreaInfos 长度为 0 的房间, 并为其配置默认值
-                var areaInfos = _roomInfo.DoorAreaInfos;
-                if (areaInfos.Count == 0)
-                {
-                    areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize, (_roomInfo.Size.X - 1) * GameConfig.TileCellSize));
-                    areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize, (_roomInfo.Size.X - 1) * GameConfig.TileCellSize));
-                    areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize, (_roomInfo.Size.Y - 1) * GameConfig.TileCellSize));
-                    areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize, (_roomInfo.Size.Y - 1) * GameConfig.TileCellSize));
-                }
+                // //需要处理 DoorAreaInfos 长度为 0 的房间, 并为其配置默认值
+                // var areaInfos = _roomInfo.DoorAreaInfos;
+                // if (areaInfos.Count == 0)
+                // {
+                //     areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize, (_roomInfo.Size.X - 1) * GameConfig.TileCellSize));
+                //     areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize, (_roomInfo.Size.X - 1) * GameConfig.TileCellSize));
+                //     areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize, (_roomInfo.Size.Y - 1) * GameConfig.TileCellSize));
+                //     areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize, (_roomInfo.Size.Y - 1) * GameConfig.TileCellSize));
+                // }
             }
 
             return _roomInfo;

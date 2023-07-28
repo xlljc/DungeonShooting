@@ -17,6 +17,16 @@ public partial class DoorDragArea : Control
     /// 朝向
     /// </summary>
     public DoorDirection Direction { get; private set; }
+    
+    /// <summary>
+    /// 绑定的数据
+    /// </summary>
+    public DoorAreaInfo DoorAreaInfo { get; set; }
+    
+    /// <summary>
+    /// 所属 Ui 对象
+    /// </summary>
+    public MapEditorToolsPanel MapEditorToolsPanel { get; private set; }
 
     private DoorDragButton _startButton;
     private DoorDragButton _endButton;
@@ -35,13 +45,14 @@ public partial class DoorDragArea : Control
     //是否是拖拽模式
     private bool _isDragMode = false;
     //拖拽模式提交回调
-    private Action<int, int> _onSubmit;
+    private Action<DoorDirection, int, int> _onSubmit;
     //拖拽模式取消时回调
     private Action _onCancel;
 
     public void SetDoorDragAreaNode(MapEditorTools.DoorToolTemplate node)
     {
         _node = node;
+        MapEditorToolsPanel = (MapEditorToolsPanel)node.UiPanel;
         _defaultColor = _node.L_DoorArea.Instance.Color;
         _startButton = _node.L_StartBtn.Instance;
         _endButton = _node.L_EndBtn.Instance;
@@ -69,7 +80,7 @@ public partial class DoorDragArea : Control
                     if (_onSubmit != null)
                     {
                         var doorAreaRange = GetDoorAreaRange();
-                        _onSubmit(doorAreaRange.X, doorAreaRange.Y);
+                        _onSubmit(Direction, doorAreaRange.X, doorAreaRange.Y);
                         _onSubmit = null;
                     }
                 }
@@ -126,7 +137,8 @@ public partial class DoorDragArea : Control
     /// <returns></returns>
     public Vector2I GetDoorAreaRange()
     {
-        return new Vector2I((int)(_startButton.Position.X + _startButton.Size.X), _areaSize);
+        var start = (int)(_startButton.Position.X + _startButton.Size.X);
+        return new Vector2I(start, start + _areaSize);
     }
 
     /// <summary>
@@ -182,6 +194,7 @@ public partial class DoorDragArea : Control
     {
         if (dragState == DragState.DragStart)
         {
+            DoorHoverArea.IsDrag = true;
             _canComment = true;
             _startTempPos = _startButton.Position;
             _startDragRange = GetDoorAreaRange();
@@ -226,12 +239,23 @@ public partial class DoorDragArea : Control
                 //区域必须大于等于 4 格宽度
                 if (areaSize >= GameConfig.TileCellSize * 4)
                 {
-                    if (!_canComment)
+                    if (DoorAreaInfo == null)
                     {
+                        //可以提交
                         _canComment = true;
                         _node.L_DoorArea.Instance.Color = _defaultColor;
+                        return;
                     }
-                    return;
+                    var doorAreaRange = GetDoorAreaRange();
+                    //检测是否撞到其他区域
+                    var checkResult = MapEditorToolsPanel.EditorMap.Instance.CheckDoorArea(DoorAreaInfo, doorAreaRange.X, doorAreaRange.Y);
+                    if (checkResult)
+                    {
+                        //可以提交
+                        _canComment = true;
+                        _node.L_DoorArea.Instance.Color = _defaultColor;
+                        return;
+                    }
                 }
             }
 
@@ -244,12 +268,18 @@ public partial class DoorDragArea : Control
         }
         else
         {
+            DoorHoverArea.IsDrag = false;
             //松手后如果不能提交, 则还原初始位置
             if (!_canComment)
             {
                 _canComment = true;
                 _node.L_DoorArea.Instance.Color = _defaultColor;
-                SetDoorAreaRange(_startDragRange.X, _startDragRange.Y);
+                SetDoorAreaRange(_startDragRange.X, _startDragRange.Y - _startDragRange.X);
+            }
+            else
+            {
+                //提交数据
+                SubmitData();
             }
         }
     }
@@ -258,6 +288,7 @@ public partial class DoorDragArea : Control
     {
         if (dragState == DragState.DragStart)
         {
+            DoorHoverArea.IsDrag = true;
             _canComment = true;
             _endTempPos = _endButton.Position;
             _startDragRange = GetDoorAreaRange();
@@ -296,12 +327,23 @@ public partial class DoorDragArea : Control
                 //区域必须大于等于 4 格宽度
                 if (areaSize >= GameConfig.TileCellSize * 4)
                 {
-                    if (!_canComment)
+                    if (DoorAreaInfo == null)
                     {
+                        //可以提交
                         _canComment = true;
                         _node.L_DoorArea.Instance.Color = _defaultColor;
+                        return;
                     }
-                    return;
+                    var doorAreaRange = GetDoorAreaRange();
+                    //检测是否撞到其他区域
+                    var checkResult = MapEditorToolsPanel.EditorMap.Instance.CheckDoorArea(DoorAreaInfo, doorAreaRange.X, doorAreaRange.Y);
+                    if (checkResult)
+                    {
+                        //可以提交
+                        _canComment = true;
+                        _node.L_DoorArea.Instance.Color = _defaultColor;
+                        return;
+                    }
                 }
             }
 
@@ -314,12 +356,18 @@ public partial class DoorDragArea : Control
         }
         else
         {
+            DoorHoverArea.IsDrag = false;
             //松手后如果不能提交, 则还原初始位置
             if (!_canComment)
             {
                 _canComment = true;
                 _node.L_DoorArea.Instance.Color = _defaultColor;
-                SetDoorAreaRange(_startDragRange.X, _startDragRange.Y);
+                SetDoorAreaRange(_startDragRange.X, _startDragRange.Y - _startDragRange.X);
+            }
+            else
+            {
+                //提交数据
+                SubmitData();
             }
         }
     }
@@ -327,14 +375,27 @@ public partial class DoorDragArea : Control
     /// <summary>
     /// 将该区域变为拖拽模式, 用于创建门区域
     /// </summary>
-    /// <param name="onSubmit">成功提交时回调, 参数1为起始点, 参数2为大小</param>
+    /// <param name="onSubmit">成功提交时回调, 参数1为方向, 参数2为起始点, 参数3为大小</param>
     /// <param name="onCancel">取消时调用</param>
-    public void MakeDragMode(Action<int, int> onSubmit, Action onCancel)
+    public void MakeDragMode(Action<DoorDirection, int, int> onSubmit, Action onCancel)
     {
         _canComment = false;
         _isDragMode = true;
         _onSubmit = onSubmit;
         _onCancel = onCancel;
         _endButton.EmitSignal(BaseButton.SignalName.ButtonDown);
+    }
+
+    //提交数据
+    private void SubmitData()
+    {
+        //保存数据
+        if (DoorAreaInfo != null)
+        {
+            var doorAreaRange = GetDoorAreaRange();
+            DoorAreaInfo.Start = doorAreaRange.X;
+            DoorAreaInfo.End = doorAreaRange.Y;
+            GD.Print("submit: " + doorAreaRange);
+        }
     }
 }

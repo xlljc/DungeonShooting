@@ -10,7 +10,12 @@ public partial class MapEditorToolsPanel : MapEditorTools
     /// 鼠标悬停区域
     /// </summary>
     public DoorHoverArea ActiveHoverArea { get; private set; }
-    
+
+    /// <summary>
+    /// 所属编辑器Tile对象
+    /// </summary>
+    public MapEditor.MapEditor.TileMap EditorMap { get; set; }
+
     private List<DoorToolTemplate> _doorTools = new List<DoorToolTemplate>();
 
     public override void OnCreateUi()
@@ -34,7 +39,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
 
     public override void Process(float delta)
     {
-        S_HoverPreviewRoot.Instance.Visible = ActiveHoverArea != null && !ActiveHoverArea.IsDrag;
+        S_HoverPreviewRoot.Instance.Visible = ActiveHoverArea != null && !DoorHoverArea.IsDrag;
     }
 
     /// <summary>
@@ -75,14 +80,21 @@ public partial class MapEditorToolsPanel : MapEditorTools
     /// <param name="position">原点坐标, 单位: 像素</param>
     /// <param name="direction">方向</param>
     /// <param name="start">起始位置, 单位: 像素</param>
-    /// <param name="onSubmit">成功提交时回调, 参数1为起始点, 参数2为大小</param>
-    public void CreateDragDoorTool(Vector2 position, DoorDirection direction, int start, Action<int, int> onSubmit)
+    /// <param name="onSubmit">成功提交时回调, 参数1为方向, 参数2为起始点, 参数3为大小</param>
+    /// <param name="onCancel">取消提交时调用</param>
+    public DoorToolTemplate CreateDragDoorTool(Vector2 position, DoorDirection direction, int start,
+        Action<DoorDirection, int, int> onSubmit, Action onCancel)
     {
         var inst = CreateDoorToolInstance();
         inst.Instance.SetDoorAreaPosition(position);
         inst.Instance.SetDoorAreaDirection(direction);
         inst.Instance.SetDoorAreaRange(start, 0);
-        inst.Instance.MakeDragMode(onSubmit, () => RemoveDoorTool(inst));
+        inst.Instance.MakeDragMode(onSubmit, () =>
+        {
+            RemoveDoorTool(inst);
+            onCancel();
+        });
+        return inst;
     }
 
     /// <summary>

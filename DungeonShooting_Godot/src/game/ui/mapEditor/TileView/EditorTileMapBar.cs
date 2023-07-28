@@ -13,6 +13,7 @@ public class EditorTileMapBar
         _editorPanel = editorPanel;
         _editorTileMap.Instance.MapEditorPanel = editorPanel;
         _editorTileMap.Instance.MapEditorToolsPanel = editorPanel.S_MapEditorTools.Instance;
+        _editorTileMap.Instance.MapEditorToolsPanel.EditorMap = _editorTileMap;
     }
 
     public void OnShow()

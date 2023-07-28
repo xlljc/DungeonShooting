@@ -396,11 +396,11 @@ public partial class EditorTileMap : TileMap
         //MapEditorPanel.CallDelay(0.1f, OnClickCenterTool);
         CallDeferred(nameof(OnClickCenterTool));
 
-        var doorPos = (_roomPosition + new Vector2I(_roomSize.X - 1, 1)) * GameConfig.TileCellSize;
-        MapEditorToolsPanel.CreateDoorTool(
-            doorPos, DoorDirection.E,
-            0 * GameConfig.TileCellSize, 4 * GameConfig.TileCellSize
-        );
+        // var doorPos = (_roomPosition + new Vector2I(_roomSize.X - 1, 1)) * GameConfig.TileCellSize;
+        // MapEditorToolsPanel.CreateDoorTool(
+        //     doorPos, DoorDirection.E,
+        //     0 * GameConfig.TileCellSize, 4 * GameConfig.TileCellSize
+        // );
         return true;
     }
 
@@ -742,11 +742,75 @@ public partial class EditorTileMap : TileMap
         }
     }
 
-    public void Create_N_DoorArea()
+    /// <summary>
+    /// 创建地牢房间门区域
+    /// </summary>
+    /// <param name="direction">门方向</param>
+    /// <param name="start">起始坐标, 单位: 像素</param>
+    /// <param name="end">结束坐标, 单位: 像素</param>
+    public DoorAreaInfo CreateDoorArea(DoorDirection direction, int start, int end)
     {
-        
+        var doorAreaInfo = new DoorAreaInfo();
+        doorAreaInfo.Direction = direction;
+        doorAreaInfo.Start = start;
+        doorAreaInfo.End = end;
+        //doorAreaInfo.CalcPosition(_roomPosition, _roomSize);
+        _doorConfigs.Add(doorAreaInfo);
+        return doorAreaInfo;
     }
 
+    /// <summary>
+    /// 检测门区域数据是否可以提交
+    /// </summary>
+    /// <param name="direction">门方向</param>
+    /// <param name="start">起始坐标, 单位: 像素</param>
+    /// <param name="end">结束坐标, 单位: 像素</param>
+    /// <returns></returns>
+    public bool CheckDoorArea(DoorDirection direction, int start, int end)
+    {
+        foreach (var item in _doorConfigs)
+        {
+            if (item.Direction == direction)
+            {
+                if (CheckValueCollision(item.Start, item.End, start, end))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    
+    /// <summary>
+    /// 检测门区域数据是否可以提交
+    /// </summary>
+    /// <param name="target">需要检测的门</param>
+    /// <param name="start">起始坐标, 单位: 像素</param>
+    /// <param name="end">结束坐标, 单位: 像素</param>
+    /// <returns></returns>
+    public bool CheckDoorArea(DoorAreaInfo target, int start, int end)
+    {
+        foreach (var item in _doorConfigs)
+        {
+            if (item.Direction == target.Direction && item != target)
+            {
+                if (CheckValueCollision(item.Start, item.End, start, end))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    
+    private bool CheckValueCollision(float o1, float o2, float h1, float h2)
+    {
+        var size = GameConfig.TileCellSize;
+        return !(h2 < o1 - 3 * size || o2 + 3 * size < h1);
+    }
+    
     //保存房间配置
     private void SaveRoomInfoConfig()
     {
