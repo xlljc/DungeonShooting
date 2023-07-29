@@ -42,7 +42,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         S_HoverPreviewRoot.Instance.Visible = ActiveHoverArea != null && !DoorHoverArea.IsDrag;
     }
 
-    public DoorHoverArea GetDoorHoverAreaByDir(DoorDirection direction)
+    public DoorHoverArea GetDoorHoverAreaByDirection(DoorDirection direction)
     {
         switch (direction)
         {
@@ -69,37 +69,33 @@ public partial class MapEditorToolsPanel : MapEditorTools
             S_HoverPreviewRoot.Instance.Reparent(S_DoorToolRoot.Instance, false);
         }
     }
-    
+
     /// <summary>
     /// 创建门区域设置工具
     /// </summary>
-    /// <param name="position">原点坐标, 单位: 像素</param>
-    /// <param name="direction">方向</param>
-    /// <param name="start">起始位置, 单位: 像素</param>
-    /// <param name="size">区域大小, 单位: 像素</param>
-    public DoorToolTemplate CreateDoorTool(Vector2 position, DoorDirection direction, int start, int size)
+    /// <param name="doorAreaInfo">门区域数据</param>
+    public DoorToolTemplate CreateDoorTool(DoorAreaInfo doorAreaInfo)
     {
-        var inst = CreateDoorToolInstance(GetDoorHoverAreaByDir(direction));
-        inst.Instance.SetDoorAreaPosition(position);
-        inst.Instance.SetDoorAreaDirection(direction);
-        inst.Instance.SetDoorAreaRange(start, size);
+        var doorHoverArea = GetDoorHoverAreaByDirection(doorAreaInfo.Direction);
+        var inst = CreateDoorToolInstance(doorHoverArea);
+        inst.Instance.DoorAreaInfo = doorAreaInfo;
+        inst.Instance.SetDoorAreaPosition(doorHoverArea.GetParent<Control>().Position);
+        inst.Instance.SetDoorAreaRange(doorAreaInfo.Start, doorAreaInfo.End - doorAreaInfo.Start);
         return inst;
     }
 
     /// <summary>
     /// 创建拖拽状态下的门区域工具, 用于创建门区域
     /// </summary>
-    /// <param name="position">原点坐标, 单位: 像素</param>
-    /// <param name="direction">方向</param>
+    /// <param name="doorHoverArea">悬停区域</param>
     /// <param name="start">起始位置, 单位: 像素</param>
     /// <param name="onSubmit">成功提交时回调, 参数1为方向, 参数2为起始点, 参数3为大小</param>
     /// <param name="onCancel">取消提交时调用</param>
-    public DoorToolTemplate CreateDragDoorTool(Vector2 position, DoorDirection direction, int start,
+    public DoorToolTemplate CreateDragDoorTool(DoorHoverArea doorHoverArea, int start,
         Action<DoorDirection, int, int> onSubmit, Action onCancel)
     {
-        var inst = CreateDoorToolInstance(GetDoorHoverAreaByDir(direction));
-        inst.Instance.SetDoorAreaPosition(position);
-        inst.Instance.SetDoorAreaDirection(direction);
+        var inst = CreateDoorToolInstance(doorHoverArea);
+        inst.Instance.SetDoorAreaPosition(doorHoverArea.GetParent<Control>().Position);
         inst.Instance.SetDoorAreaRange(start, 0);
         inst.Instance.MakeDragMode(onSubmit, () =>
         {
@@ -115,6 +111,10 @@ public partial class MapEditorToolsPanel : MapEditorTools
     public void RemoveDoorTool(DoorToolTemplate toolInstance)
     {
         _doorTools.Remove(toolInstance);
+        if (toolInstance.Instance.DoorAreaInfo != null)
+        {
+            EditorMap.Instance.RemoveDoorArea(toolInstance.Instance.DoorAreaInfo);
+        }
         toolInstance.Instance.QueueFree();
     }
 
@@ -156,6 +156,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         doorTool.Instance.SetDoorDragAreaNode(doorTool);
         doorTool.L_StartBtn.Instance.SetMapEditorToolsPanel(this);
         doorTool.L_EndBtn.Instance.SetMapEditorToolsPanel(this);
+        doorTool.Instance.SetDoorHoverArea(doorHoverArea);
         _doorTools.Add(doorTool);
         return doorTool;
     }

@@ -56,7 +56,7 @@ public partial class DoorHoverArea : ColorRect
                     if (Input.IsMouseButtonPressed(MouseButton.Left))
                     {
                         IsDrag = true;
-                        _currToolTemplate = MapEditorToolsPanel.CreateDragDoorTool(_parent.Position, Direction, start,
+                        _currToolTemplate = MapEditorToolsPanel.CreateDragDoorTool(this, start,
                             OnSubmitDoorArea, OnCancelDoorArea);
                     }
                 }

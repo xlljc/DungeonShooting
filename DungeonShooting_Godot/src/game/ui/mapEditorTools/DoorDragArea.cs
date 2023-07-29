@@ -24,13 +24,19 @@ public partial class DoorDragArea : Control
     public DoorAreaInfo DoorAreaInfo { get; set; }
     
     /// <summary>
+    /// 所属悬停区域
+    /// </summary>
+    public DoorHoverArea DoorHoverArea { get; private set; }
+    
+    /// <summary>
     /// 所属 Ui 对象
     /// </summary>
     public MapEditorToolsPanel MapEditorToolsPanel { get; private set; }
 
     private DoorDragButton _startButton;
     private DoorDragButton _endButton;
-    
+
+    private bool _mouseHover = false;
     private MapEditorTools.DoorToolTemplate _node;
     private Vector2 _startTempPos;
     private Vector2 _endTempPos;
@@ -59,14 +65,19 @@ public partial class DoorDragArea : Control
         
         _startButton.DragEvent += OnStartAreaDrag;
         _endButton.DragEvent += OnEndAreaDrag;
+        node.L_DoorArea.Instance.MouseEntered += OnMouseEntered;
+        node.L_DoorArea.Instance.MouseExited += OnMouseExited;
         
         SetDoorAreaSize(GameConfig.TileCellSize * 4);
-        SetDoorAreaDirection(DoorDirection.N);
     }
 
     public override void _Process(double delta)
     {
-        if (_isDragMode)
+        if (_mouseHover && !DoorHoverArea.IsDrag && Input.IsMouseButtonPressed(MouseButton.Right)) //右键删除区域
+        {
+            MapEditorToolsPanel.RemoveDoorTool(_node);
+        }
+        else if (_isDragMode)
         {
             if (!Input.IsMouseButtonPressed(MouseButton.Left)) //松开了右键
             {
@@ -104,22 +115,23 @@ public partial class DoorDragArea : Control
     }
 
     /// <summary>
-    /// 设置门区域的方向
+    /// 设置所属悬停区域
     /// </summary>
-    public void SetDoorAreaDirection(DoorDirection direction)
+    public void SetDoorHoverArea(DoorHoverArea hoverArea)
     {
-        Direction = direction;
-        if (direction == DoorDirection.N)
+        DoorHoverArea = hoverArea;
+        Direction = hoverArea.Direction;
+        if (Direction == DoorDirection.N)
         {
             Scale = new Vector2(1, 1);
             RotationDegrees = 0;
         }
-        else if (direction == DoorDirection.E)
+        else if (Direction == DoorDirection.E)
         {
             Scale = new Vector2(1, 1);
             RotationDegrees = 90;
         }
-        else if (direction == DoorDirection.S)
+        else if (Direction == DoorDirection.S)
         {
             Scale = new Vector2(-1, 1);
             RotationDegrees = 180;
@@ -207,7 +219,7 @@ public partial class DoorDragArea : Control
             }
             
             var position = _startTempPos;
-            position.X = position.X += offset.X;
+            position.X += offset.X + _startButton.Size.X;
             var endPosition = _endButton.Position;
 
             //拖拽模式
@@ -228,27 +240,28 @@ public partial class DoorDragArea : Control
             }
             
             //计算区域大小
-            var areaSize = (int)(endPosition.X - position.X - _startButton.Size.X);
-            _startButton.Position = position;
+            var areaSize = (int)(endPosition.X - position.X);
+            _startButton.Position = position - new Vector2(_startButton.Size.X, 0);
             //刷新区域位置
             SetDoorAreaSize(areaSize);
             
             //起始点坐标必须要小于终点坐标, 且起点坐标大于0
-            if (position.X < endPosition.X && position.X >= 0)
+            if (position.X < endPosition.X && (DoorHoverArea == null || position.X >= 0))
             {
                 //区域必须大于等于 4 格宽度
                 if (areaSize >= GameConfig.TileCellSize * 4)
                 {
-                    if (DoorAreaInfo == null)
-                    {
-                        //可以提交
-                        _canComment = true;
-                        _node.L_DoorArea.Instance.Color = _defaultColor;
-                        return;
-                    }
                     var doorAreaRange = GetDoorAreaRange();
                     //检测是否撞到其他区域
-                    var checkResult = MapEditorToolsPanel.EditorMap.Instance.CheckDoorArea(DoorAreaInfo, doorAreaRange.X, doorAreaRange.Y);
+                    bool checkResult;
+                    if (DoorAreaInfo == null)
+                    {
+                        checkResult = MapEditorToolsPanel.EditorMap.Instance.CheckDoorArea(Direction, doorAreaRange.X, doorAreaRange.Y);
+                    }
+                    else
+                    {
+                        checkResult = MapEditorToolsPanel.EditorMap.Instance.CheckDoorArea(DoorAreaInfo, doorAreaRange.X, doorAreaRange.Y);
+                    }
                     if (checkResult)
                     {
                         //可以提交
@@ -281,6 +294,10 @@ public partial class DoorDragArea : Control
                 //提交数据
                 SubmitData();
             }
+            if (DoorHoverArea != null)
+            {
+                DoorHoverArea.EmitSignal(Control.SignalName.MouseExited);
+            }
         }
     }
     
@@ -297,7 +314,7 @@ public partial class DoorDragArea : Control
         {
             var position = _endTempPos;
             position.X = position.X += offset.X;
-            var startPosition = _startButton.Position;
+            var startPosition = _startButton.Position + new Vector2(_startButton.Size.X, 0);
             
             //拖拽模式
             if (_isDragMode)
@@ -317,26 +334,27 @@ public partial class DoorDragArea : Control
             }
             
             //区域大小
-            var areaSize = (int)(position.X - _startButton.Position.X - _startButton.Size.X);
+            var areaSize = (int)(position.X - startPosition.X);
             //刷新区域位置
             SetDoorAreaSize(areaSize);
             
             //终点坐标必须要大于起始点坐标, 且终点坐标必须小于宽度
-            if (position.X > startPosition.X && position.X < startPosition.X + _areaSize)
+            if (position.X > startPosition.X && (DoorHoverArea == null || position.X <= DoorHoverArea.Size.X))
             {
                 //区域必须大于等于 4 格宽度
                 if (areaSize >= GameConfig.TileCellSize * 4)
                 {
-                    if (DoorAreaInfo == null)
-                    {
-                        //可以提交
-                        _canComment = true;
-                        _node.L_DoorArea.Instance.Color = _defaultColor;
-                        return;
-                    }
                     var doorAreaRange = GetDoorAreaRange();
                     //检测是否撞到其他区域
-                    var checkResult = MapEditorToolsPanel.EditorMap.Instance.CheckDoorArea(DoorAreaInfo, doorAreaRange.X, doorAreaRange.Y);
+                    bool checkResult;
+                    if (DoorAreaInfo == null)
+                    {
+                        checkResult = MapEditorToolsPanel.EditorMap.Instance.CheckDoorArea(Direction, doorAreaRange.X, doorAreaRange.Y);
+                    }
+                    else
+                    {
+                        checkResult = MapEditorToolsPanel.EditorMap.Instance.CheckDoorArea(DoorAreaInfo, doorAreaRange.X, doorAreaRange.Y);
+                    }
                     if (checkResult)
                     {
                         //可以提交
@@ -368,6 +386,10 @@ public partial class DoorDragArea : Control
             {
                 //提交数据
                 SubmitData();
+            }
+            if (DoorHoverArea != null)
+            {
+                DoorHoverArea.EmitSignal(Control.SignalName.MouseExited);
             }
         }
     }
@@ -397,5 +419,15 @@ public partial class DoorDragArea : Control
             DoorAreaInfo.End = doorAreaRange.Y;
             GD.Print("submit: " + doorAreaRange);
         }
+    }
+
+    private void OnMouseEntered()
+    {
+        _mouseHover = true;
+    }
+    
+    private void OnMouseExited()
+    {
+        _mouseHover = false;
     }
 }

@@ -401,6 +401,11 @@ public partial class EditorTileMap : TileMap
         //     doorPos, DoorDirection.E,
         //     0 * GameConfig.TileCellSize, 4 * GameConfig.TileCellSize
         // );
+        //加载门编辑区域
+        foreach (var doorAreaInfo in _doorConfigs)
+        {
+            MapEditorToolsPanel.CreateDoorTool(doorAreaInfo);
+        }
         return true;
     }
 
@@ -788,7 +793,6 @@ public partial class EditorTileMap : TileMap
     /// <param name="target">需要检测的门</param>
     /// <param name="start">起始坐标, 单位: 像素</param>
     /// <param name="end">结束坐标, 单位: 像素</param>
-    /// <returns></returns>
     public bool CheckDoorArea(DoorAreaInfo target, int start, int end)
     {
         foreach (var item in _doorConfigs)
@@ -809,6 +813,14 @@ public partial class EditorTileMap : TileMap
     {
         var size = GameConfig.TileCellSize;
         return !(h2 < o1 - 3 * size || o2 + 3 * size < h1);
+    }
+
+    /// <summary>
+    /// 移除门区域数据
+    /// </summary>
+    public void RemoveDoorArea(DoorAreaInfo doorAreaInfo)
+    {
+        _doorConfigs.Remove(doorAreaInfo);
     }
     
     //保存房间配置
