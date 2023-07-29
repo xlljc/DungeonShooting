@@ -233,8 +233,8 @@ public partial class DoorDragArea : Control
             //刷新区域位置
             SetDoorAreaSize(areaSize);
             
-            //起始点坐标必须要小于终点坐标
-            if (position.X < endPosition.X)
+            //起始点坐标必须要小于终点坐标, 且起点坐标大于0
+            if (position.X < endPosition.X && position.X >= 0)
             {
                 //区域必须大于等于 4 格宽度
                 if (areaSize >= GameConfig.TileCellSize * 4)
@@ -321,8 +321,8 @@ public partial class DoorDragArea : Control
             //刷新区域位置
             SetDoorAreaSize(areaSize);
             
-            //终点坐标必须要大于起始点坐标
-            if (position.X > startPosition.X)
+            //终点坐标必须要大于起始点坐标, 且终点坐标必须小于宽度
+            if (position.X > startPosition.X && position.X < startPosition.X + _areaSize)
             {
                 //区域必须大于等于 4 格宽度
                 if (areaSize >= GameConfig.TileCellSize * 4)

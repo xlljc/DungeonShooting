@@ -42,6 +42,18 @@ public partial class MapEditorToolsPanel : MapEditorTools
         S_HoverPreviewRoot.Instance.Visible = ActiveHoverArea != null && !DoorHoverArea.IsDrag;
     }
 
+    public DoorHoverArea GetDoorHoverAreaByDir(DoorDirection direction)
+    {
+        switch (direction)
+        {
+            case DoorDirection.E: return S_E_HoverArea.Instance;
+            case DoorDirection.N: return S_N_HoverArea.Instance;
+            case DoorDirection.W: return S_W_HoverArea.Instance;
+            case DoorDirection.S: return S_S_HoverArea.Instance;
+        }
+        return null;
+    }
+
     /// <summary>
     /// 设置活动的鼠标悬停的区域
     /// </summary>
@@ -67,7 +79,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
     /// <param name="size">区域大小, 单位: 像素</param>
     public DoorToolTemplate CreateDoorTool(Vector2 position, DoorDirection direction, int start, int size)
     {
-        var inst = CreateDoorToolInstance();
+        var inst = CreateDoorToolInstance(GetDoorHoverAreaByDir(direction));
         inst.Instance.SetDoorAreaPosition(position);
         inst.Instance.SetDoorAreaDirection(direction);
         inst.Instance.SetDoorAreaRange(start, size);
@@ -85,7 +97,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
     public DoorToolTemplate CreateDragDoorTool(Vector2 position, DoorDirection direction, int start,
         Action<DoorDirection, int, int> onSubmit, Action onCancel)
     {
-        var inst = CreateDoorToolInstance();
+        var inst = CreateDoorToolInstance(GetDoorHoverAreaByDir(direction));
         inst.Instance.SetDoorAreaPosition(position);
         inst.Instance.SetDoorAreaDirection(direction);
         inst.Instance.SetDoorAreaRange(start, 0);
@@ -137,7 +149,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         S_W_HoverArea.Instance.Size = new Vector2(size.Y - GameConfig.TileCellSize * 2, S_W_HoverArea.Instance.Size.Y);
     }
     
-    private DoorToolTemplate CreateDoorToolInstance()
+    private DoorToolTemplate CreateDoorToolInstance(DoorHoverArea doorHoverArea)
     {
         var doorTool = S_DoorToolTemplate.Clone();
         S_DoorToolRoot.Instance.AddChild(doorTool.Instance);
