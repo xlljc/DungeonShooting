@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=59 format=3 uid="uid://ds668te2rph30"]
+[gd_resource type="Theme" load_steps=60 format=3 uid="uid://ds668te2rph30"]
 
 [ext_resource type="FontFile" uid="uid://cad0in7dtweo5" path="res://resource/font/VonwaonBitmap-16px.ttf" id="1_1e6k7"]
 
@@ -378,6 +378,23 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.188235, 0.188235, 0.188235, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kt3n1"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
 [resource]
 default_font = ExtResource("1_1e6k7")
 default_font_size = 32
@@ -489,3 +506,4 @@ TextEdit/styles/focus = SubResource("StyleBoxFlat_em2wh")
 TextEdit/styles/normal = SubResource("StyleBoxFlat_0jpwx")
 TextEdit/styles/read_only = SubResource("StyleBoxFlat_c3u8l")
 TooltipLabel/font_sizes/font_size = 32
+Tree/styles/focus = SubResource("StyleBoxFlat_kt3n1")

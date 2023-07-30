@@ -183,7 +183,12 @@ public class ResourcePath
     public const string resource_sprite_ui_mapEditorTools_DoorDragButton_hover_png = "res://resource/sprite/ui/mapEditorTools/DoorDragButton_hover.png";
     public const string resource_sprite_ui_mapEditorTools_DoorTool_png = "res://resource/sprite/ui/mapEditorTools/DoorTool.png";
     public const string resource_sprite_ui_mapEditorTools_DragTool_png = "res://resource/sprite/ui/mapEditorTools/DragTool.png";
+    public const string resource_sprite_ui_mapEditorTools_Hide_png = "res://resource/sprite/ui/mapEditorTools/Hide.png";
+    public const string resource_sprite_ui_mapEditorTools_Lock_png = "res://resource/sprite/ui/mapEditorTools/Lock.png";
     public const string resource_sprite_ui_mapEditorTools_PenTool_png = "res://resource/sprite/ui/mapEditorTools/PenTool.png";
+    public const string resource_sprite_ui_mapEditorTools_ToolSelect_png = "res://resource/sprite/ui/mapEditorTools/ToolSelect.png";
+    public const string resource_sprite_ui_mapEditorTools_Unlock_png = "res://resource/sprite/ui/mapEditorTools/Unlock.png";
+    public const string resource_sprite_ui_mapEditorTools_Visible_png = "res://resource/sprite/ui/mapEditorTools/Visible.png";
     public const string resource_sprite_ui_roomUI_ChargeProgress_png = "res://resource/sprite/ui/roomUI/ChargeProgress.png";
     public const string resource_sprite_ui_roomUI_ChargeProgressBar_png = "res://resource/sprite/ui/roomUI/ChargeProgressBar.png";
     public const string resource_sprite_ui_roomUI_Cooldown_png = "res://resource/sprite/ui/roomUI/Cooldown.png";

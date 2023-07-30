@@ -1,11 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://csbxfkdupsckv"]
+[gd_scene load_steps=12 format=3 uid="uid://csbxfkdupsckv"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/MapEditorPanel.cs" id="1_5s7a0"]
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/mapEditorProject/Back.png" id="2_s2w5x"]
 [ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/TileSet1.tres" id="2_vrg60"]
-[ext_resource type="Script" path="res://src/game/ui/mapEditor/TileView/EditorTileMap.cs" id="2_waq8f"]
 [ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/mapEditor/ErrorCell.png" id="4_465u2"]
+[ext_resource type="Script" path="res://src/game/ui/mapEditor/tileView/EditorTileMap.cs" id="4_wbtsa"]
 [ext_resource type="PackedScene" uid="uid://b4u66mxndxbrg" path="res://prefab/ui/MapEditorTools.tscn" id="6_7pvgu"]
+[ext_resource type="Texture2D" uid="uid://dmm8jw06bhffh" path="res://resource/sprite/ui/mapEditorTools/Lock.png" id="7_lli1g"]
+[ext_resource type="Texture2D" uid="uid://dqvg18aacx6db" path="res://resource/sprite/ui/mapEditorTools/Visible.png" id="8_gm7y5"]
 
 [sub_resource type="Animation" id="Animation_o3btm"]
 length = 0.001
@@ -144,7 +146,7 @@ position = Vector2(500, 540)
 scale = Vector2(4, 4)
 tile_set = ExtResource("2_vrg60")
 format = 2
-script = ExtResource("2_waq8f")
+script = ExtResource("4_wbtsa")
 
 [node name="ErrorCell" type="Sprite2D" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport/TileMap"]
 visible = false
@@ -172,3 +174,47 @@ custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="TabContainer" type="TabContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MapLayer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LayerButton" type="Button" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer/ScrollContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "layer1"
+icon = ExtResource("7_lli1g")
+alignment = 0
+
+[node name="VisibleButton" type="TextureButton" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer/ScrollContainer/LayerButton"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -55.0
+grow_horizontal = 0
+grow_vertical = 2
+texture_normal = ExtResource("8_gm7y5")
+stretch_mode = 3

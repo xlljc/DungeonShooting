@@ -68,6 +68,16 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         return (T)OpenNestedUi(uiName);
     }
 
+    /// <summary>
+    /// 克隆当前节点, 并放到同父节点下
+    /// </summary>
+    public TCloneType CloneAndPut()
+    {
+        var inst = Clone();
+        Instance.GetParent().AddChild(inst.GetUiInstance());
+        return inst;
+    }
+    
     public Node GetUiInstance()
     {
         return Instance;

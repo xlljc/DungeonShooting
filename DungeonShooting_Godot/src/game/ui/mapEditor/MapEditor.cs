@@ -278,10 +278,142 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.ScrollContainer.LayerButton.VisibleButton
+    /// </summary>
+    public class VisibleButton : UiNode<MapEditor, Godot.TextureButton, VisibleButton>
+    {
+        public VisibleButton(MapEditor uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override VisibleButton Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.ScrollContainer.LayerButton
+    /// </summary>
+    public class LayerButton : UiNode<MapEditor, Godot.Button, LayerButton>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.ScrollContainer.VisibleButton
+        /// </summary>
+        public VisibleButton L_VisibleButton
+        {
+            get
+            {
+                if (_L_VisibleButton == null) _L_VisibleButton = new VisibleButton(UiPanel, Instance.GetNodeOrNull<Godot.TextureButton>("VisibleButton"));
+                return _L_VisibleButton;
+            }
+        }
+        private VisibleButton _L_VisibleButton;
+
+        public LayerButton(MapEditor uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override LayerButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.ScrollContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.ScrollContainer
+    /// </summary>
+    public class ScrollContainer : UiNode<MapEditor, Godot.ScrollContainer, ScrollContainer>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.LayerButton
+        /// </summary>
+        public LayerButton L_LayerButton
+        {
+            get
+            {
+                if (_L_LayerButton == null) _L_LayerButton = new LayerButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("LayerButton"));
+                return _L_LayerButton;
+            }
+        }
+        private LayerButton _L_LayerButton;
+
+        public ScrollContainer(MapEditor uiPanel, Godot.ScrollContainer node) : base(uiPanel, node) {  }
+        public override ScrollContainer Clone() => new (UiPanel, (Godot.ScrollContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.MarginContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer
+    /// </summary>
+    public class MapLayer : UiNode<MapEditor, Godot.MarginContainer, MapLayer>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.ScrollContainer
+        /// </summary>
+        public ScrollContainer L_ScrollContainer
+        {
+            get
+            {
+                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer(UiPanel, Instance.GetNodeOrNull<Godot.ScrollContainer>("ScrollContainer"));
+                return _L_ScrollContainer;
+            }
+        }
+        private ScrollContainer _L_ScrollContainer;
+
+        public MapLayer(MapEditor uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
+        public override MapLayer Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TabContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer
+    /// </summary>
+    public class TabContainer : UiNode<MapEditor, Godot.TabContainer, TabContainer>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.MapLayer
+        /// </summary>
+        public MapLayer L_MapLayer
+        {
+            get
+            {
+                if (_L_MapLayer == null) _L_MapLayer = new MapLayer(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MapLayer"));
+                return _L_MapLayer;
+            }
+        }
+        private MapLayer _L_MapLayer;
+
+        public TabContainer(MapEditor uiPanel, Godot.TabContainer node) : base(uiPanel, node) {  }
+        public override TabContainer Clone() => new (UiPanel, (Godot.TabContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.MarginContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer
+    /// </summary>
+    public class MarginContainer_1 : UiNode<MapEditor, Godot.MarginContainer, MarginContainer_1>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TabContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.TabContainer
+        /// </summary>
+        public TabContainer L_TabContainer
+        {
+            get
+            {
+                if (_L_TabContainer == null) _L_TabContainer = new TabContainer(UiPanel, Instance.GetNodeOrNull<Godot.TabContainer>("TabContainer"));
+                return _L_TabContainer;
+            }
+        }
+        private TabContainer _L_TabContainer;
+
+        public MarginContainer_1(MapEditor uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
+        public override MarginContainer_1 Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Panel"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right
     /// </summary>
     public class Right : UiNode<MapEditor, Godot.Panel, Right>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.MarginContainer
+        /// </summary>
+        public MarginContainer_1 L_MarginContainer
+        {
+            get
+            {
+                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
+                return _L_MarginContainer;
+            }
+        }
+        private MarginContainer_1 _L_MarginContainer;
+
         public Right(MapEditor uiPanel, Godot.Panel node) : base(uiPanel, node) {  }
         public override Right Clone() => new (UiPanel, (Godot.Panel)Instance.Duplicate());
     }
@@ -430,14 +562,34 @@ public abstract partial class MapEditor : UiBase
     public MapView S_MapView => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left.L_MarginContainer.L_MapView;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer
-    /// </summary>
-    public MarginContainer S_MarginContainer => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left.L_MarginContainer;
-
-    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left
     /// </summary>
     public Left S_Left => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.ScrollContainer.LayerButton.VisibleButton
+    /// </summary>
+    public VisibleButton S_VisibleButton => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer.L_ScrollContainer.L_LayerButton.L_VisibleButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.ScrollContainer.LayerButton
+    /// </summary>
+    public LayerButton S_LayerButton => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer.L_ScrollContainer.L_LayerButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.ScrollContainer
+    /// </summary>
+    public ScrollContainer S_ScrollContainer => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer.L_ScrollContainer;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer
+    /// </summary>
+    public MapLayer S_MapLayer => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TabContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer
+    /// </summary>
+    public TabContainer S_TabContainer => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right
