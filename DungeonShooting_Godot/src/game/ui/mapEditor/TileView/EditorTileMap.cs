@@ -74,7 +74,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 左键功能
     /// </summary>
-    public MouseButtonType MouseType { get; set; } = MouseButtonType.Area;
+    public MouseButtonType MouseType { get; set; } = MouseButtonType.Pen;
     
     //鼠标坐标
     private Vector2 _mousePosition;
@@ -396,7 +396,7 @@ public partial class EditorTileMap : TileMap
         var tileInfo = roomSplit.TileInfo;
 
         _roomPosition = roomInfo.Position.AsVector2I();
-        SetMapSize(roomInfo.Size.AsVector2I());
+        SetMapSize(roomInfo.Size.AsVector2I(), true);
         _doorConfigs.Clear();
         foreach (var doorAreaInfo in roomInfo.DoorAreaInfos)
         {
@@ -416,7 +416,7 @@ public partial class EditorTileMap : TileMap
 
         //聚焦
         //MapEditorPanel.CallDelay(0.1f, OnClickCenterTool);
-        CallDeferred(nameof(OnClickCenterTool));
+        //CallDeferred(nameof(OnClickCenterTool), null);
         
         //加载门编辑区域
         foreach (var doorAreaInfo in _doorConfigs)
@@ -575,14 +575,11 @@ public partial class EditorTileMap : TileMap
     }
 
     //重新计算房间区域
-    private void CalcTileRect(bool sendMessage)
+    private void CalcTileRect(bool refreshDoorTrans)
     {
         var rect = GetUsedRect();
         _roomPosition = rect.Position;
-        if (sendMessage)
-        {
-            SetMapSize(rect.Size);
-        }
+        SetMapSize(rect.Size, refreshDoorTrans);
     }
     
     //检测是否有不合规的图块, 返回true表示图块正常
@@ -738,7 +735,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 选中拖拽功能
     /// </summary>
-    public void OnSelectHandTool()
+    public void OnSelectHandTool(object arg)
     {
         MouseType = MouseButtonType.Drag;
     }
@@ -746,7 +743,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 选中画笔攻击
     /// </summary>
-    public void OnSelectPenTool()
+    public void OnSelectPenTool(object arg)
     {
         MouseType = MouseButtonType.Pen;
     }
@@ -754,7 +751,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 选中绘制区域功能
     /// </summary>
-    public void OnSelectRectTool()
+    public void OnSelectRectTool(object arg)
     {
         MouseType = MouseButtonType.Area;
     }
@@ -762,7 +759,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 选择编辑门区域
     /// </summary>
-    public void OnSelectDoorTool()
+    public void OnSelectDoorTool(object arg)
     {
         MouseType = MouseButtonType.Door;
     }
@@ -770,7 +767,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 聚焦
     /// </summary>
-    public void OnClickCenterTool()
+    public void OnClickCenterTool(object arg)
     {
         var pos = MapEditorPanel.S_SubViewport.Instance.Size / 2;
         if (_roomSize.X == 0 && _roomSize.Y == 0) //聚焦原点
@@ -915,12 +912,16 @@ public partial class EditorTileMap : TileMap
     }
 
     //设置地图大小
-    private void SetMapSize(Vector2I size)
+    private void SetMapSize(Vector2I size, bool refreshDoorTrans)
     {
         if (_roomSize != size)
         {
             _roomSize = size;
-            MapEditorToolsPanel.SetDoorHoverToolTransform(_roomPosition, _roomSize);
+
+            if (refreshDoorTrans)
+            {
+                MapEditorToolsPanel.SetDoorHoverToolTransform(_roomPosition, _roomSize);
+            }
         }
     }
 }

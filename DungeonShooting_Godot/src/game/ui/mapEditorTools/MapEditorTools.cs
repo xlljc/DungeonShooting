@@ -358,48 +358,34 @@ public abstract partial class MapEditorTools : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureButton"/>, 路径: MapEditorTools.HBoxContainer.HandTool
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorTools.HBoxContainer.ToolButton.Select
     /// </summary>
-    public class HandTool : UiNode<MapEditorTools, Godot.TextureButton, HandTool>
+    public class Select : UiNode<MapEditorTools, Godot.TextureRect, Select>
     {
-        public HandTool(MapEditorTools uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
-        public override HandTool Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+        public Select(MapEditorTools uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override Select Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureButton"/>, 路径: MapEditorTools.HBoxContainer.PenTool
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: MapEditorTools.HBoxContainer.ToolButton
     /// </summary>
-    public class PenTool : UiNode<MapEditorTools, Godot.TextureButton, PenTool>
+    public class ToolButton : UiNode<MapEditorTools, Godot.TextureButton, ToolButton>
     {
-        public PenTool(MapEditorTools uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
-        public override PenTool Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
-    }
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.HBoxContainer.Select
+        /// </summary>
+        public Select L_Select
+        {
+            get
+            {
+                if (_L_Select == null) _L_Select = new Select(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("Select"));
+                return _L_Select;
+            }
+        }
+        private Select _L_Select;
 
-    /// <summary>
-    /// 类型: <see cref="Godot.TextureButton"/>, 路径: MapEditorTools.HBoxContainer.RectTool
-    /// </summary>
-    public class RectTool : UiNode<MapEditorTools, Godot.TextureButton, RectTool>
-    {
-        public RectTool(MapEditorTools uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
-        public override RectTool Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.TextureButton"/>, 路径: MapEditorTools.HBoxContainer.DoorTool
-    /// </summary>
-    public class DoorTool : UiNode<MapEditorTools, Godot.TextureButton, DoorTool>
-    {
-        public DoorTool(MapEditorTools uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
-        public override DoorTool Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.TextureButton"/>, 路径: MapEditorTools.HBoxContainer.CenterTool
-    /// </summary>
-    public class CenterTool : UiNode<MapEditorTools, Godot.TextureButton, CenterTool>
-    {
-        public CenterTool(MapEditorTools uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
-        public override CenterTool Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+        public ToolButton(MapEditorTools uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override ToolButton Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
     }
 
     /// <summary>
@@ -408,69 +394,17 @@ public abstract partial class MapEditorTools : UiBase
     public class HBoxContainer : UiNode<MapEditorTools, Godot.HBoxContainer, HBoxContainer>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.HandTool
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.ToolButton
         /// </summary>
-        public HandTool L_HandTool
+        public ToolButton L_ToolButton
         {
             get
             {
-                if (_L_HandTool == null) _L_HandTool = new HandTool(UiPanel, Instance.GetNodeOrNull<Godot.TextureButton>("HandTool"));
-                return _L_HandTool;
+                if (_L_ToolButton == null) _L_ToolButton = new ToolButton(UiPanel, Instance.GetNodeOrNull<Godot.TextureButton>("ToolButton"));
+                return _L_ToolButton;
             }
         }
-        private HandTool _L_HandTool;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.PenTool
-        /// </summary>
-        public PenTool L_PenTool
-        {
-            get
-            {
-                if (_L_PenTool == null) _L_PenTool = new PenTool(UiPanel, Instance.GetNodeOrNull<Godot.TextureButton>("PenTool"));
-                return _L_PenTool;
-            }
-        }
-        private PenTool _L_PenTool;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.RectTool
-        /// </summary>
-        public RectTool L_RectTool
-        {
-            get
-            {
-                if (_L_RectTool == null) _L_RectTool = new RectTool(UiPanel, Instance.GetNodeOrNull<Godot.TextureButton>("RectTool"));
-                return _L_RectTool;
-            }
-        }
-        private RectTool _L_RectTool;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.DoorTool
-        /// </summary>
-        public DoorTool L_DoorTool
-        {
-            get
-            {
-                if (_L_DoorTool == null) _L_DoorTool = new DoorTool(UiPanel, Instance.GetNodeOrNull<Godot.TextureButton>("DoorTool"));
-                return _L_DoorTool;
-            }
-        }
-        private DoorTool _L_DoorTool;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.CenterTool
-        /// </summary>
-        public CenterTool L_CenterTool
-        {
-            get
-            {
-                if (_L_CenterTool == null) _L_CenterTool = new CenterTool(UiPanel, Instance.GetNodeOrNull<Godot.TextureButton>("CenterTool"));
-                return _L_CenterTool;
-            }
-        }
-        private CenterTool _L_CenterTool;
+        private ToolButton _L_ToolButton;
 
         public HBoxContainer(MapEditorTools uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
         public override HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
@@ -553,29 +487,14 @@ public abstract partial class MapEditorTools : UiBase
     public DoorToolRoot S_DoorToolRoot => L_DoorToolRoot;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.HBoxContainer.HandTool
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.HBoxContainer.ToolButton.Select
     /// </summary>
-    public HandTool S_HandTool => L_HBoxContainer.L_HandTool;
+    public Select S_Select => L_HBoxContainer.L_ToolButton.L_Select;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.HBoxContainer.PenTool
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.HBoxContainer.ToolButton
     /// </summary>
-    public PenTool S_PenTool => L_HBoxContainer.L_PenTool;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.HBoxContainer.RectTool
-    /// </summary>
-    public RectTool S_RectTool => L_HBoxContainer.L_RectTool;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.HBoxContainer.DoorTool
-    /// </summary>
-    public DoorTool S_DoorTool => L_HBoxContainer.L_DoorTool;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.HBoxContainer.CenterTool
-    /// </summary>
-    public CenterTool S_CenterTool => L_HBoxContainer.L_CenterTool;
+    public ToolButton S_ToolButton => L_HBoxContainer.L_ToolButton;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorTools.HBoxContainer

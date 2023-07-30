@@ -73,4 +73,24 @@ public enum EventEnum
     /// 创建地牢房间完成时调用, 参数为<see cref="DungeonRoomSplit"/>
     /// </summary>
     OnCreateRoomFinish,
+    /// <summary>
+    /// 选中拖拽工具
+    /// </summary>
+    OnSelectDragTool,
+    /// <summary>
+    /// 选中绘制工具
+    /// </summary>
+    OnSelectPenTool,
+    /// <summary>
+    /// 选中绘制区域工具
+    /// </summary>
+    OnSelectRectTool,
+    /// <summary>
+    /// 选中编辑门区域工具
+    /// </summary>
+    OnSelectDoorTool,
+    /// <summary>
+    /// 点击跳转到地图中心点
+    /// </summary>
+    OnClickCenterTool,
 }

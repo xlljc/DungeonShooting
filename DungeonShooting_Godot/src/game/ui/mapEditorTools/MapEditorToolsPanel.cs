@@ -7,6 +7,20 @@ namespace UI.MapEditorTools;
 
 public partial class MapEditorToolsPanel : MapEditorTools
 {
+    public class ToolBtnData
+    {
+        public bool CanSelect = false;
+        public string Icon;
+        public Action OnClick;
+
+        public ToolBtnData(bool canSelect, string icon, Action onClick)
+        {
+            CanSelect = canSelect;
+            Icon = icon;
+            OnClick = onClick;
+        }
+    }
+    
     /// <summary>
     /// 鼠标悬停区域
     /// </summary>
@@ -18,6 +32,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
     public MapEditor.MapEditor.TileMap EditorMap { get; set; }
 
     private List<DoorToolTemplate> _doorTools = new List<DoorToolTemplate>();
+    private UiGrid<ToolButton, ToolBtnData> _toolGrid;
 
     public override void OnCreateUi()
     {
@@ -26,16 +41,46 @@ public partial class MapEditorToolsPanel : MapEditorTools
         S_W_HoverArea.Instance.Init(this, DoorDirection.W);
         S_E_HoverArea.Instance.Init(this, DoorDirection.E);
         S_DoorToolRoot.Instance.RemoveChild(S_DoorToolTemplate.Instance);
+
+        _toolGrid = new UiGrid<ToolButton, ToolBtnData>(S_ToolButton, typeof(ToolButtonCell));
+        _toolGrid.SetColumns(10);
+        //拖拽按钮
+        _toolGrid.Add(new ToolBtnData(true, ResourcePath.resource_sprite_ui_mapEditorTools_DragTool_png, () =>
+        {
+            EventManager.EmitEvent(EventEnum.OnSelectDragTool);
+        }));
+        //画笔按钮
+        _toolGrid.Add(new ToolBtnData(true, ResourcePath.resource_sprite_ui_mapEditorTools_PenTool_png, () =>
+        {
+            EventManager.EmitEvent(EventEnum.OnSelectPenTool);
+        }));
+        //绘制区域按钮
+        _toolGrid.Add(new ToolBtnData(true, ResourcePath.resource_sprite_ui_mapEditorTools_AreaTool_png, () =>
+        {
+            EventManager.EmitEvent(EventEnum.OnSelectRectTool);
+        }));
+        //编辑门区域按钮
+        _toolGrid.Add(new ToolBtnData(true, ResourcePath.resource_sprite_ui_mapEditorTools_DoorTool_png, () =>
+        {
+            EventManager.EmitEvent(EventEnum.OnSelectDoorTool);
+        }));
+        //聚焦按钮
+        _toolGrid.Add(new ToolBtnData(false, ResourcePath.resource_sprite_ui_mapEditorTools_CenterTool_png, () =>
+        {
+            EventManager.EmitEvent(EventEnum.OnClickCenterTool);
+        }));
+        _toolGrid.SelectIndex = 1;
     }
 
     public override void OnShowUi()
     {
-        S_PenTool.Instance.EmitSignal(BaseButton.SignalName.Pressed);
+        EventManager.EmitEvent(EventEnum.OnClickCenterTool);
     }
 
     public override void OnDestroyUi()
     {
         S_DoorToolTemplate.Instance.QueueFree();
+        _toolGrid.Destroy();
     }
 
     public override void Process(float delta)

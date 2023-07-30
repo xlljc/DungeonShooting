@@ -353,7 +353,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
             throw new Exception($"cellType 无法转为'{typeof(UiCell<TUiCellNode, TData>).FullName}'类型!");
         }
         _cellList.Add(uiCell);
-        uiCell.Init(this, (TUiCellNode)_template.CloneUiCell(), _cellList.Count);
+        uiCell.Init(this, (TUiCellNode)_template.CloneUiCell(), _cellList.Count - 1);
         uiCell.OnEnable();
         return uiCell;
     }

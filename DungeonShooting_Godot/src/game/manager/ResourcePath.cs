@@ -60,7 +60,6 @@ public class ResourcePath
     public const string prefab_ui_MapEditorTools_tscn = "res://prefab/ui/MapEditorTools.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_ui_Settlement_tscn = "res://prefab/ui/Settlement.tscn";
-    public const string prefab_ui_TesetUi_tscn = "res://prefab/ui/TesetUi.tscn";
     public const string prefab_weapon_Weapon0001_tscn = "res://prefab/weapon/Weapon0001.tscn";
     public const string prefab_weapon_Weapon0002_tscn = "res://prefab/weapon/Weapon0002.tscn";
     public const string prefab_weapon_Weapon0003_tscn = "res://prefab/weapon/Weapon0003.tscn";
@@ -177,9 +176,14 @@ public class ResourcePath
     public const string resource_sprite_ui_mapEditorProject_Back_png = "res://resource/sprite/ui/mapEditorProject/Back.png";
     public const string resource_sprite_ui_mapEditorProject_CellBg_png = "res://resource/sprite/ui/mapEditorProject/CellBg.png";
     public const string resource_sprite_ui_mapEditorProject_Search_png = "res://resource/sprite/ui/mapEditorProject/Search.png";
+    public const string resource_sprite_ui_mapEditorTools_AreaTool_png = "res://resource/sprite/ui/mapEditorTools/AreaTool.png";
+    public const string resource_sprite_ui_mapEditorTools_CenterTool_png = "res://resource/sprite/ui/mapEditorTools/CenterTool.png";
     public const string resource_sprite_ui_mapEditorTools_DoorDragButton_png = "res://resource/sprite/ui/mapEditorTools/DoorDragButton.png";
     public const string resource_sprite_ui_mapEditorTools_DoorDragButton_down_png = "res://resource/sprite/ui/mapEditorTools/DoorDragButton_down.png";
     public const string resource_sprite_ui_mapEditorTools_DoorDragButton_hover_png = "res://resource/sprite/ui/mapEditorTools/DoorDragButton_hover.png";
+    public const string resource_sprite_ui_mapEditorTools_DoorTool_png = "res://resource/sprite/ui/mapEditorTools/DoorTool.png";
+    public const string resource_sprite_ui_mapEditorTools_DragTool_png = "res://resource/sprite/ui/mapEditorTools/DragTool.png";
+    public const string resource_sprite_ui_mapEditorTools_PenTool_png = "res://resource/sprite/ui/mapEditorTools/PenTool.png";
     public const string resource_sprite_ui_roomUI_ChargeProgress_png = "res://resource/sprite/ui/roomUI/ChargeProgress.png";
     public const string resource_sprite_ui_roomUI_ChargeProgressBar_png = "res://resource/sprite/ui/roomUI/ChargeProgressBar.png";
     public const string resource_sprite_ui_roomUI_Cooldown_png = "res://resource/sprite/ui/roomUI/Cooldown.png";

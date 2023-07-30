@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://b4u66mxndxbrg"]
+[gd_scene load_steps=8 format=3 uid="uid://b4u66mxndxbrg"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/MapEditorToolsPanel.cs" id="1_mqp1c"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorHoverArea.cs" id="2_6qfy3"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorDragArea.cs" id="3_3w0w6"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorDragButton.cs" id="3_45muq"]
 [ext_resource type="Texture2D" uid="uid://4wupcp53rrpi" path="res://resource/sprite/ui/mapEditorTools/DoorDragButton.png" id="3_trbb5"]
+[ext_resource type="Texture2D" uid="uid://cuntr7hec044f" path="res://resource/sprite/ui/mapEditorTools/ToolSelect.png" id="7_mqmd6"]
 
 [node name="MapEditorTools" type="Control"]
 layout_mode = 3
@@ -33,7 +34,7 @@ anchor_bottom = 1.0
 offset_top = -36.0
 offset_right = 160.0
 grow_vertical = 0
-color = Color(1, 1, 1, 0.313726)
+color = Color(1, 1, 1, 0)
 script = ExtResource("2_6qfy3")
 
 [node name="E_HoverRoot" type="Control" parent="DoorToolRoot"]
@@ -48,7 +49,7 @@ anchor_bottom = 1.0
 offset_top = -36.0
 offset_right = 160.0
 grow_vertical = 0
-color = Color(1, 1, 1, 0.313726)
+color = Color(1, 1, 1, 0)
 script = ExtResource("2_6qfy3")
 
 [node name="S_HoverRoot" type="Control" parent="DoorToolRoot"]
@@ -65,7 +66,7 @@ offset_left = -9.12665e-05
 offset_top = -36.0
 offset_right = 160.0
 grow_vertical = 0
-color = Color(1, 1, 1, 0.313726)
+color = Color(1, 1, 1, 0)
 script = ExtResource("2_6qfy3")
 
 [node name="W_HoverRoot" type="Control" parent="DoorToolRoot"]
@@ -81,7 +82,7 @@ anchor_bottom = 1.0
 offset_top = -36.0
 offset_right = 160.0
 grow_vertical = 0
-color = Color(1, 1, 1, 0.313726)
+color = Color(1, 1, 1, 0)
 script = ExtResource("2_6qfy3")
 
 [node name="HoverPreviewRoot" type="Control" parent="DoorToolRoot"]
@@ -152,38 +153,21 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -288.0
+offset_left = -84.0
 offset_top = 19.0
 offset_right = -20.0
 offset_bottom = 83.0
 grow_horizontal = 0
 
-[node name="HandTool" type="TextureButton" parent="HBoxContainer"]
+[node name="ToolButton" type="TextureButton" parent="HBoxContainer"]
 layout_mode = 2
 texture_normal = ExtResource("2_rwvbg")
-texture_pressed = ExtResource("2_rwvbg")
-texture_hover = ExtResource("2_rwvbg")
 
-[node name="PenTool" type="TextureButton" parent="HBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("2_rwvbg")
-texture_pressed = ExtResource("2_rwvbg")
-texture_hover = ExtResource("2_rwvbg")
-
-[node name="RectTool" type="TextureButton" parent="HBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("2_rwvbg")
-texture_pressed = ExtResource("2_rwvbg")
-texture_hover = ExtResource("2_rwvbg")
-
-[node name="DoorTool" type="TextureButton" parent="HBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("2_rwvbg")
-texture_pressed = ExtResource("2_rwvbg")
-texture_hover = ExtResource("2_rwvbg")
-
-[node name="CenterTool" type="TextureButton" parent="HBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("2_rwvbg")
-texture_pressed = ExtResource("2_rwvbg")
-texture_hover = ExtResource("2_rwvbg")
+[node name="Select" type="TextureRect" parent="HBoxContainer/ToolButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_mqmd6")
