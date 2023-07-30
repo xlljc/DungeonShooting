@@ -1,4 +1,5 @@
 using Godot;
+using UI.MapEditor;
 using UI.MapEditorTools;
 
 public partial class DoorHoverArea : ColorRect
@@ -85,6 +86,10 @@ public partial class DoorHoverArea : ColorRect
 
     private void OnMouseEnter()
     {
+        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Door)
+        {
+            return;
+        }
         if (MapEditorToolsPanel.ActiveHoverArea == null || !IsDrag)
         {
             _mouseHover = true;
@@ -94,6 +99,10 @@ public partial class DoorHoverArea : ColorRect
     
     private void OnMouseExit()
     {
+        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Door)
+        {
+            return;
+        }
         if (MapEditorToolsPanel.ActiveHoverArea == null || !IsDrag)
         {
             _mouseHover = false;

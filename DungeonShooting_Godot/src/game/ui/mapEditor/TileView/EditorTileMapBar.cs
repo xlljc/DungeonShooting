@@ -23,6 +23,7 @@ public class EditorTileMapBar
         mapEditorToolsPanel.S_HandTool.Instance.Pressed += _editorTileMap.Instance.OnSelectHandTool;
         mapEditorToolsPanel.S_PenTool.Instance.Pressed += _editorTileMap.Instance.OnSelectPenTool;
         mapEditorToolsPanel.S_RectTool.Instance.Pressed += _editorTileMap.Instance.OnSelectRectTool;
+        mapEditorToolsPanel.S_DoorTool.Instance.Pressed += _editorTileMap.Instance.OnSelectDoorTool;
         mapEditorToolsPanel.S_CenterTool.Instance.Pressed += _editorTileMap.Instance.OnClickCenterTool;
     }
 
@@ -33,6 +34,7 @@ public class EditorTileMapBar
         mapEditorToolsPanel.S_HandTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectHandTool;
         mapEditorToolsPanel.S_PenTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectPenTool;
         mapEditorToolsPanel.S_RectTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectRectTool;
+        mapEditorToolsPanel.S_DoorTool.Instance.Pressed -= _editorTileMap.Instance.OnSelectDoorTool;
         mapEditorToolsPanel.S_CenterTool.Instance.Pressed -= _editorTileMap.Instance.OnClickCenterTool;
     }
 

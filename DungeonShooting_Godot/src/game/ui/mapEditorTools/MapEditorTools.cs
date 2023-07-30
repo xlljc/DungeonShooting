@@ -385,6 +385,15 @@ public abstract partial class MapEditorTools : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: MapEditorTools.HBoxContainer.DoorTool
+    /// </summary>
+    public class DoorTool : UiNode<MapEditorTools, Godot.TextureButton, DoorTool>
+    {
+        public DoorTool(MapEditorTools uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override DoorTool Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.TextureButton"/>, 路径: MapEditorTools.HBoxContainer.CenterTool
     /// </summary>
     public class CenterTool : UiNode<MapEditorTools, Godot.TextureButton, CenterTool>
@@ -436,6 +445,19 @@ public abstract partial class MapEditorTools : UiBase
             }
         }
         private RectTool _L_RectTool;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.DoorTool
+        /// </summary>
+        public DoorTool L_DoorTool
+        {
+            get
+            {
+                if (_L_DoorTool == null) _L_DoorTool = new DoorTool(UiPanel, Instance.GetNodeOrNull<Godot.TextureButton>("DoorTool"));
+                return _L_DoorTool;
+            }
+        }
+        private DoorTool _L_DoorTool;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.CenterTool
@@ -544,6 +566,11 @@ public abstract partial class MapEditorTools : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.HBoxContainer.RectTool
     /// </summary>
     public RectTool S_RectTool => L_HBoxContainer.L_RectTool;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.HBoxContainer.DoorTool
+    /// </summary>
+    public DoorTool S_DoorTool => L_HBoxContainer.L_DoorTool;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.HBoxContainer.CenterTool

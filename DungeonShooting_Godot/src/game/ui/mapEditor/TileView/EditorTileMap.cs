@@ -12,7 +12,7 @@ namespace UI.MapEditor;
 public partial class EditorTileMap : TileMap
 {
     
-    public enum MouseLeftButtonType
+    public enum MouseButtonType
     {
         /// <summary>
         /// 无状态
@@ -27,9 +27,13 @@ public partial class EditorTileMap : TileMap
         /// </summary>
         Pen,
         /// <summary>
-        /// 区域模式
+        /// 绘制区域模式
         /// </summary>
-        Area
+        Area,
+        /// <summary>
+        /// 编辑门区域模式
+        /// </summary>
+        Door,
     }
     
     /// <summary>
@@ -67,8 +71,11 @@ public partial class EditorTileMap : TileMap
     /// </summary>
     public MapEditorToolsPanel MapEditorToolsPanel { get; set; }
     
-    //是否启用绘制图块
-    private MouseLeftButtonType _mouseLeftButtonType = MouseLeftButtonType.None;
+    /// <summary>
+    /// 左键功能
+    /// </summary>
+    public MouseButtonType MouseType { get; set; } = MouseButtonType.Area;
+    
     //鼠标坐标
     private Vector2 _mousePosition;
     //鼠标所在的cell坐标
@@ -141,36 +148,49 @@ public partial class EditorTileMap : TileMap
         if (!MapEditorToolsPanel.S_HBoxContainer.Instance.IsPositionOver(GetGlobalMousePosition())) //不在Ui节点上
         {
             //左键绘制
-            if (_isLeftPressed && _mouseLeftButtonType == MouseLeftButtonType.Pen)
+            if (_isLeftPressed)
             {
-                if (Input.IsKeyPressed(Key.Shift)) //按住shift绘制矩形
+                if (MouseType == MouseButtonType.Pen) //绘制单格
+                {
+                    if (_prevMouseCellPosition != _mouseCellPosition || !_changeFlag) //鼠标位置变过
+                    {
+                        _changeFlag = true;
+                        _prevMouseCellPosition = _mouseCellPosition;
+                        //绘制自动图块
+                        SetSingleAutoCell(_mouseCellPosition);
+                    }
+                }
+                else if (MouseType == MouseButtonType.Area) //绘制区域
                 {
                     _drawFullRect = true;
                 }
-                else if (_prevMouseCellPosition != _mouseCellPosition || !_changeFlag) //鼠标位置变过
+                else if (MouseType == MouseButtonType.Drag) //拖拽
                 {
-                    _changeFlag = true;
-                    _prevMouseCellPosition = _mouseCellPosition;
-                    //绘制自动图块
-                    SetSingleAutoCell(_mouseCellPosition);
+                    SetMapPosition(GetGlobalMousePosition() + _moveOffset);
                 }
             }
-            else if (_isRightPressed && _mouseLeftButtonType == MouseLeftButtonType.Pen) //右键擦除
+            else if (_isRightPressed) //右键擦除
             {
-                if (Input.IsKeyPressed(Key.Shift)) //按住shift擦除矩形
+                if (MouseType == MouseButtonType.Pen) //绘制单格
+                {
+                    if (_prevMouseCellPosition != _mouseCellPosition || !_changeFlag) //鼠标位置变过
+                    {
+                        _changeFlag = true;
+                        _prevMouseCellPosition = _mouseCellPosition;
+                        EraseSingleAutoCell(_mouseCellPosition);
+                    }
+                }
+                else if (MouseType == MouseButtonType.Area) //绘制区域
                 {
                     _drawFullRect = true;
                 }
-                else if (_prevMouseCellPosition != _mouseCellPosition || !_changeFlag) //鼠标位置变过
+                else if (MouseType == MouseButtonType.Drag) //拖拽
                 {
-                    _changeFlag = true;
-                    _prevMouseCellPosition = _mouseCellPosition;
-                    EraseSingleAutoCell(_mouseCellPosition);
+                    SetMapPosition(GetGlobalMousePosition() + _moveOffset);
                 }
             }
             else if (_isMiddlePressed) //中键移动
             {
-                //GD.Print("移动...");
                 SetMapPosition(GetGlobalMousePosition() + _moveOffset);
             }
         }
@@ -182,7 +202,7 @@ public partial class EditorTileMap : TileMap
             if (_generateTimer <= 0)
             {
                 //计算区域
-                CalcTileRect();
+                CalcTileRect(false);
                 GD.Print("开始检测是否可以生成地形...");
                 if (CheckTerrain())
                 {
@@ -230,7 +250,7 @@ public partial class EditorTileMap : TileMap
             }
         }
 
-        if (_mouseLeftButtonType == MouseLeftButtonType.Pen || _mouseLeftButtonType == MouseLeftButtonType.Area)
+        if (MouseType == MouseButtonType.Pen || MouseType == MouseButtonType.Area)
         {
             if (_drawFullRect) //绘制填充矩形
             {
@@ -266,6 +286,7 @@ public partial class EditorTileMap : TileMap
             {
                 if (mouseButton.Pressed) //按下
                 {
+                    _moveOffset = Position - GetGlobalMousePosition();
                     _mouseStartCellPosition = LocalToMap(GetLocalMousePosition());
                 }
                 else
@@ -284,6 +305,7 @@ public partial class EditorTileMap : TileMap
             {
                 if (mouseButton.Pressed) //按下
                 {
+                    _moveOffset = Position - GetGlobalMousePosition();
                     _mouseStartCellPosition = LocalToMap(GetLocalMousePosition());
                 }
                 else
@@ -395,12 +417,7 @@ public partial class EditorTileMap : TileMap
         //聚焦
         //MapEditorPanel.CallDelay(0.1f, OnClickCenterTool);
         CallDeferred(nameof(OnClickCenterTool));
-
-        // var doorPos = (_roomPosition + new Vector2I(_roomSize.X - 1, 1)) * GameConfig.TileCellSize;
-        // MapEditorToolsPanel.CreateDoorTool(
-        //     doorPos, DoorDirection.E,
-        //     0 * GameConfig.TileCellSize, 4 * GameConfig.TileCellSize
-        // );
+        
         //加载门编辑区域
         foreach (var doorAreaInfo in _doorConfigs)
         {
@@ -557,12 +574,15 @@ public partial class EditorTileMap : TileMap
         ClearLayer(AutoMiddleLayer);
     }
 
-    //从新计算房间区域
-    private void CalcTileRect()
+    //重新计算房间区域
+    private void CalcTileRect(bool sendMessage)
     {
         var rect = GetUsedRect();
         _roomPosition = rect.Position;
-        SetMapSize(rect.Size);
+        if (sendMessage)
+        {
+            SetMapSize(rect.Size);
+        }
     }
     
     //检测是否有不合规的图块, 返回true表示图块正常
@@ -580,13 +600,21 @@ public partial class EditorTileMap : TileMap
                 var pos = new Vector2I(x + i, y + j);
                 if (GetCellSourceId(AutoFloorLayer, pos) == -1)
                 {
-                    //先检测对角是否有地板
-                    var left = _autoCellLayerGrid.Get(pos.X - 1, pos.Y);
-                    var right = _autoCellLayerGrid.Get(pos.X + 1, pos.Y);
-                    var top = _autoCellLayerGrid.Get(pos.X, pos.Y + 1);
-                    var down = _autoCellLayerGrid.Get(pos.X, pos.Y - 1);
+                    //先检测对边是否有地板
+                    if ((_autoCellLayerGrid.Get(pos.X - 1, pos.Y) && _autoCellLayerGrid.Get(pos.X + 1, pos.Y)) //left & right
+                        || (_autoCellLayerGrid.Get(pos.X, pos.Y + 1) && _autoCellLayerGrid.Get(pos.X, pos.Y - 1))) //top & down
+                    {
+                        _checkTerrainFlag = false;
+                        _checkTerrainErrorPosition = pos;
+                        return false;
+                    }
                     
-                    if ((left && right) || (top && down))
+                    //再检测对角是否有地板
+                    var topLeft = _autoCellLayerGrid.Get(pos.X - 1, pos.Y + 1); //top-left
+                    var downRight = _autoCellLayerGrid.Get(pos.X + 1, pos.Y - 1); //down-right
+                    var downLeft = _autoCellLayerGrid.Get(pos.X - 1, pos.Y - 1); //down-left
+                    var topRight = _autoCellLayerGrid.Get(pos.X + 1, pos.Y + 1); //top-right
+                    if ((topLeft && downRight && !downLeft && !topRight) || (!topLeft && !downRight && downLeft && topRight))
                     {
                         _checkTerrainFlag = false;
                         _checkTerrainErrorPosition = pos;
@@ -617,7 +645,7 @@ public partial class EditorTileMap : TileMap
         //绘制自动图块
         SetCellsTerrainConnect(AutoFloorLayer, arr, _terrainSet, _terrain, false);
         //计算区域
-        CalcTileRect();
+        CalcTileRect(true);
         //将墙壁移动到指定层
         MoveTerrainCell();
     }
@@ -712,7 +740,7 @@ public partial class EditorTileMap : TileMap
     /// </summary>
     public void OnSelectHandTool()
     {
-        
+        MouseType = MouseButtonType.Drag;
     }
     
     /// <summary>
@@ -720,7 +748,7 @@ public partial class EditorTileMap : TileMap
     /// </summary>
     public void OnSelectPenTool()
     {
-        
+        MouseType = MouseButtonType.Pen;
     }
 
     /// <summary>
@@ -728,7 +756,15 @@ public partial class EditorTileMap : TileMap
     /// </summary>
     public void OnSelectRectTool()
     {
-        
+        MouseType = MouseButtonType.Area;
+    }
+
+    /// <summary>
+    /// 选择编辑门区域
+    /// </summary>
+    public void OnSelectDoorTool()
+    {
+        MouseType = MouseButtonType.Door;
     }
 
     /// <summary>

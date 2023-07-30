@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using UI.MapEditor;
 
 namespace UI.MapEditorTools;
 
@@ -40,9 +41,17 @@ public partial class MapEditorToolsPanel : MapEditorTools
     public override void Process(float delta)
     {
         S_HoverPreviewRoot.Instance.Visible = ActiveHoverArea != null && !DoorHoverArea.IsDrag;
+        if (EditorMap.Instance.MouseType == EditorTileMap.MouseButtonType.Door)
+        {
+            S_DoorToolRoot.Instance.Modulate = new Color(1, 1, 1, 1);
+        }
+        else
+        {
+            S_DoorToolRoot.Instance.Modulate = new Color(1, 1, 1, 0.4f);
+        }
     }
 
-    public DoorHoverArea GetDoorHoverAreaByDirection(DoorDirection direction)
+    public DoorHoverArea GetDoorHoverArea(DoorDirection direction)
     {
         switch (direction)
         {
@@ -50,6 +59,18 @@ public partial class MapEditorToolsPanel : MapEditorTools
             case DoorDirection.N: return S_N_HoverArea.Instance;
             case DoorDirection.W: return S_W_HoverArea.Instance;
             case DoorDirection.S: return S_S_HoverArea.Instance;
+        }
+        return null;
+    }
+    
+    public Control GetDoorHoverAreaRoot(DoorDirection direction)
+    {
+        switch (direction)
+        {
+            case DoorDirection.E: return S_E_HoverRoot.Instance;
+            case DoorDirection.N: return S_N_HoverRoot.Instance;
+            case DoorDirection.W: return S_W_HoverRoot.Instance;
+            case DoorDirection.S: return S_S_HoverRoot.Instance;
         }
         return null;
     }
@@ -76,11 +97,11 @@ public partial class MapEditorToolsPanel : MapEditorTools
     /// <param name="doorAreaInfo">门区域数据</param>
     public DoorToolTemplate CreateDoorTool(DoorAreaInfo doorAreaInfo)
     {
-        var doorHoverArea = GetDoorHoverAreaByDirection(doorAreaInfo.Direction);
+        var doorHoverArea = GetDoorHoverArea(doorAreaInfo.Direction);
         var inst = CreateDoorToolInstance(doorHoverArea);
         inst.Instance.DoorAreaInfo = doorAreaInfo;
-        inst.Instance.SetDoorAreaPosition(doorHoverArea.GetParent<Control>().Position);
-        inst.Instance.SetDoorAreaRange(doorAreaInfo.Start, doorAreaInfo.End - doorAreaInfo.Start);
+        inst.Instance.SetDoorAreaPosition(GetDoorHoverAreaRoot(doorAreaInfo.Direction).Position);
+        inst.Instance.SetDoorAreaRange(doorAreaInfo.Start, doorAreaInfo.End);
         return inst;
     }
 
@@ -95,8 +116,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
         Action<DoorDirection, int, int> onSubmit, Action onCancel)
     {
         var inst = CreateDoorToolInstance(doorHoverArea);
-        inst.Instance.SetDoorAreaPosition(doorHoverArea.GetParent<Control>().Position);
-        inst.Instance.SetDoorAreaRange(start, 0);
+        inst.Instance.SetDoorAreaPosition(GetDoorHoverAreaRoot(doorHoverArea.Direction).Position);
+        inst.Instance.SetDoorAreaRange(start, start);
         inst.Instance.MakeDragMode(onSubmit, () =>
         {
             RemoveDoorTool(inst);
@@ -138,15 +159,125 @@ public partial class MapEditorToolsPanel : MapEditorTools
     {
         position *= GameConfig.TileCellSize;
         size *= GameConfig.TileCellSize;
-        S_N_HoverRoot.Instance.Position = position + GameConfig.TileCellSizeVector2I;
-        S_E_HoverRoot.Instance.Position = new Vector2(position.X + size.X - GameConfig.TileCellSize, position.Y + GameConfig.TileCellSize);
-        S_S_HoverRoot.Instance.Position = new Vector2(position.X + GameConfig.TileCellSize, position.Y + size.Y - GameConfig.TileCellSize);
-        S_W_HoverRoot.Instance.Position = position + GameConfig.TileCellSizeVector2I;
+
+        var nPos1 = S_N_HoverRoot.Instance.Position;
+        var ePos1 = S_E_HoverRoot.Instance.Position;
+        var sPos1 = S_S_HoverRoot.Instance.Position;
+        var wPos1 = S_W_HoverRoot.Instance.Position;
+        var nPos2 = position + GameConfig.TileCellSizeVector2I;
+        var ePos2 = new Vector2(position.X + size.X - GameConfig.TileCellSize, position.Y + GameConfig.TileCellSize);
+        var sPos2 = new Vector2(position.X + GameConfig.TileCellSize, position.Y + size.Y - GameConfig.TileCellSize);
+        var wPos2 = position + GameConfig.TileCellSizeVector2I;
+
+        var nSize2 = new Vector2(size.X - GameConfig.TileCellSize * 2, S_N_HoverArea.Instance.Size.Y);
+        var eSize2 = new Vector2(size.Y - GameConfig.TileCellSize * 2, S_E_HoverArea.Instance.Size.Y);
+        var sSize2 = new Vector2(size.X - GameConfig.TileCellSize * 2, S_S_HoverArea.Instance.Size.Y);
+        var wSize2 = new Vector2(size.Y - GameConfig.TileCellSize * 2, S_W_HoverArea.Instance.Size.Y);
         
-        S_N_HoverArea.Instance.Size = new Vector2(size.X - GameConfig.TileCellSize * 2, S_N_HoverArea.Instance.Size.Y);
-        S_E_HoverArea.Instance.Size = new Vector2(size.Y - GameConfig.TileCellSize * 2, S_E_HoverArea.Instance.Size.Y);
-        S_S_HoverArea.Instance.Size = new Vector2(size.X - GameConfig.TileCellSize * 2, S_S_HoverArea.Instance.Size.Y);
-        S_W_HoverArea.Instance.Size = new Vector2(size.Y - GameConfig.TileCellSize * 2, S_W_HoverArea.Instance.Size.Y);
+        S_N_HoverRoot.Instance.Position = nPos2;
+        S_E_HoverRoot.Instance.Position = ePos2;
+        S_S_HoverRoot.Instance.Position = sPos2;
+        S_W_HoverRoot.Instance.Position = wPos2;
+        
+        S_N_HoverArea.Instance.Size = nSize2;
+        S_E_HoverArea.Instance.Size = eSize2;
+        S_S_HoverArea.Instance.Size = sSize2;
+        S_W_HoverArea.Instance.Size = wSize2;
+        
+        //调整门区域
+        for (var i = 0; i < _doorTools.Count; i++)
+        {
+            var doorTool = _doorTools[i];
+            var direction = doorTool.Instance.Direction;
+            var areaRoot = GetDoorHoverAreaRoot(direction);
+            var doorAreaRange = doorTool.Instance.GetDoorAreaRange();
+            doorTool.Instance.SetDoorAreaPosition(areaRoot.Position);
+
+            if (direction == DoorDirection.N)
+            {
+                var hOffset = (int)(nPos2.X - nPos1.X);
+                doorAreaRange.X -= hOffset;
+                doorAreaRange.Y -= hOffset;
+
+                if (doorAreaRange.X >= 0 && doorAreaRange.Y <= nSize2.X) //允许提交
+                {
+                    doorTool.Instance.SetDoorAreaRange(doorAreaRange.X, doorAreaRange.Y);
+                    if (doorTool.Instance.DoorAreaInfo != null)
+                    {
+                        doorTool.Instance.DoorAreaInfo.Start = doorAreaRange.X;
+                        doorTool.Instance.DoorAreaInfo.End = doorAreaRange.Y;
+                    }
+                }
+                else //如果超出区域, 则删除
+                {
+                    RemoveDoorTool(doorTool);
+                    i--;
+                }
+            }
+            else if (direction == DoorDirection.S)
+            {
+                var hOffset = (int)(sPos2.X - sPos1.X);
+                doorAreaRange.X -= hOffset;
+                doorAreaRange.Y -= hOffset;
+
+                if (doorAreaRange.X >= 0 && doorAreaRange.Y <= sSize2.X) //允许提交
+                {
+                    doorTool.Instance.SetDoorAreaRange(doorAreaRange.X, doorAreaRange.Y);
+                    if (doorTool.Instance.DoorAreaInfo != null)
+                    {
+                        doorTool.Instance.DoorAreaInfo.Start = doorAreaRange.X;
+                        doorTool.Instance.DoorAreaInfo.End = doorAreaRange.Y;
+                    }
+                }
+                else //如果超出区域, 则删除
+                {
+                    RemoveDoorTool(doorTool);
+                    i--;
+                }
+            }
+            else if (direction == DoorDirection.E)
+            {
+                var vOffset = (int)(ePos2.Y - ePos1.Y);
+                doorAreaRange.X -= vOffset;
+                doorAreaRange.Y -= vOffset;
+
+                if (doorAreaRange.X >= 0 && doorAreaRange.Y <= eSize2.X) //允许提交
+                {
+                    doorTool.Instance.SetDoorAreaRange(doorAreaRange.X, doorAreaRange.Y);
+                    if (doorTool.Instance.DoorAreaInfo != null)
+                    {
+                        doorTool.Instance.DoorAreaInfo.Start = doorAreaRange.X;
+                        doorTool.Instance.DoorAreaInfo.End = doorAreaRange.Y;
+                    }
+                }
+                else //如果超出区域, 则删除
+                {
+                    RemoveDoorTool(doorTool);
+                    i--;
+                }
+            }
+            else if (direction == DoorDirection.W)
+            {
+                var vOffset = (int)(wPos2.Y - wPos1.Y);
+                doorAreaRange.X -= vOffset;
+                doorAreaRange.Y -= vOffset;
+
+                if (doorAreaRange.X >= 0 && doorAreaRange.Y <= wSize2.X) //允许提交
+                {
+                    doorTool.Instance.SetDoorAreaRange(doorAreaRange.X, doorAreaRange.Y);
+                    if (doorTool.Instance.DoorAreaInfo != null)
+                    {
+                        doorTool.Instance.DoorAreaInfo.Start = doorAreaRange.X;
+                        doorTool.Instance.DoorAreaInfo.End = doorAreaRange.Y;
+                    }
+                }
+                else //如果超出区域, 则删除
+                {
+                    RemoveDoorTool(doorTool);
+                    i--;
+                }
+            }
+        }
     }
     
     private DoorToolTemplate CreateDoorToolInstance(DoorHoverArea doorHoverArea)

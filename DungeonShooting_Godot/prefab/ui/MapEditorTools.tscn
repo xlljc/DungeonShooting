@@ -33,7 +33,7 @@ anchor_bottom = 1.0
 offset_top = -36.0
 offset_right = 160.0
 grow_vertical = 0
-color = Color(1, 1, 1, 0)
+color = Color(1, 1, 1, 0.313726)
 script = ExtResource("2_6qfy3")
 
 [node name="E_HoverRoot" type="Control" parent="DoorToolRoot"]
@@ -48,7 +48,7 @@ anchor_bottom = 1.0
 offset_top = -36.0
 offset_right = 160.0
 grow_vertical = 0
-color = Color(1, 1, 1, 0)
+color = Color(1, 1, 1, 0.313726)
 script = ExtResource("2_6qfy3")
 
 [node name="S_HoverRoot" type="Control" parent="DoorToolRoot"]
@@ -65,7 +65,7 @@ offset_left = -9.12665e-05
 offset_top = -36.0
 offset_right = 160.0
 grow_vertical = 0
-color = Color(1, 1, 1, 0)
+color = Color(1, 1, 1, 0.313726)
 script = ExtResource("2_6qfy3")
 
 [node name="W_HoverRoot" type="Control" parent="DoorToolRoot"]
@@ -81,7 +81,7 @@ anchor_bottom = 1.0
 offset_top = -36.0
 offset_right = 160.0
 grow_vertical = 0
-color = Color(1, 1, 1, 0)
+color = Color(1, 1, 1, 0.313726)
 script = ExtResource("2_6qfy3")
 
 [node name="HoverPreviewRoot" type="Control" parent="DoorToolRoot"]
@@ -171,6 +171,12 @@ texture_pressed = ExtResource("2_rwvbg")
 texture_hover = ExtResource("2_rwvbg")
 
 [node name="RectTool" type="TextureButton" parent="HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_rwvbg")
+texture_pressed = ExtResource("2_rwvbg")
+texture_hover = ExtResource("2_rwvbg")
+
+[node name="DoorTool" type="TextureButton" parent="HBoxContainer"]
 layout_mode = 2
 texture_normal = ExtResource("2_rwvbg")
 texture_pressed = ExtResource("2_rwvbg")

@@ -1,5 +1,6 @@
 ﻿using System;
 using Godot;
+using UI.MapEditor;
 
 namespace UI.MapEditorTools;
 
@@ -156,13 +157,13 @@ public partial class DoorDragArea : Control
     /// <summary>
     /// 设置门区域所占范围, 单位: 像素
     /// </summary>
-    public void SetDoorAreaRange(int start, int size)
+    public void SetDoorAreaRange(int start, int end)
     {
         var startPosition = _startButton.Position;
         startPosition.X = start - _startButton.Size.X;
         _startButton.Position = startPosition;
         
-        SetDoorAreaSize(size);
+        SetDoorAreaSize(end - start);
     }
 
     /// <summary>
@@ -287,7 +288,7 @@ public partial class DoorDragArea : Control
             {
                 _canComment = true;
                 _node.L_DoorArea.Instance.Color = _defaultColor;
-                SetDoorAreaRange(_startDragRange.X, _startDragRange.Y - _startDragRange.X);
+                SetDoorAreaRange(_startDragRange.X, _startDragRange.Y);
             }
             else
             {
@@ -380,7 +381,7 @@ public partial class DoorDragArea : Control
             {
                 _canComment = true;
                 _node.L_DoorArea.Instance.Color = _defaultColor;
-                SetDoorAreaRange(_startDragRange.X, _startDragRange.Y - _startDragRange.X);
+                SetDoorAreaRange(_startDragRange.X, _startDragRange.Y);
             }
             else
             {
@@ -423,11 +424,19 @@ public partial class DoorDragArea : Control
 
     private void OnMouseEntered()
     {
+        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Door)
+        {
+            return;
+        }
         _mouseHover = true;
     }
     
     private void OnMouseExited()
     {
+        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Door)
+        {
+            return;
+        }
         _mouseHover = false;
     }
 }

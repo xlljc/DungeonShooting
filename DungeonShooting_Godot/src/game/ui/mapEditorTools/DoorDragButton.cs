@@ -1,5 +1,6 @@
 ﻿using System;
 using Godot;
+using UI.MapEditor;
 
 namespace UI.MapEditorTools;
 
@@ -64,6 +65,10 @@ public partial class DoorDragButton : TextureButton
 
     private void OnButtonDown()
     {
+        if (_mapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Door)
+        {
+            return;
+        }
         if (_down)
         {
             return;
@@ -80,6 +85,10 @@ public partial class DoorDragButton : TextureButton
 
     private void OnButtonUp()
     {
+        if (_mapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Door)
+        {
+            return;
+        }
         if (!_down)
         {
             return;
