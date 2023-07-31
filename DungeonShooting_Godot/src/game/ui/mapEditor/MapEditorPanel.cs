@@ -11,6 +11,7 @@ public partial class MapEditorPanel : MapEditor
     public override void OnCreateUi()
     {
         S_TabContainer.Instance.SetTabTitle(0, "地图");
+        S_TabContainer.Instance.SetTabTitle(1, "对象");
         //S_MapLayer.Instance.Init(S_MapLayer);
         
         _editorTileMapBar = new EditorTileMapBar(this, S_TileMap);

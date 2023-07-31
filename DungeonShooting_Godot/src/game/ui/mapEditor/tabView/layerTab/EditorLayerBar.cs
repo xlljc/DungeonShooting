@@ -35,7 +35,7 @@ public class EditorLayerBar
     {
         _mapEditorPanel = mapEditorPanel;
         _mapLayer = mapLayer;
-        _grid = new UiGrid<MapEditor.LayerButton, LayerButtonData>(mapLayer.L_ScrollContainer.L_LayerButton, typeof(LayerButtonCell));
+        _grid = new UiGrid<MapEditor.LayerButton, LayerButtonData>(mapLayer.L_VBoxContainer.L_ScrollContainer.L_LayerButton, typeof(LayerButtonCell));
         _grid.SetCellOffset(new Vector2I(0, 2));
         _grid.SetHorizontalExpand(true);
         

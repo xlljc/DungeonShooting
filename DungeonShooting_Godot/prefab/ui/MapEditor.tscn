@@ -192,14 +192,22 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="MapLayer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_top = 10
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer"]
+layout_mode = 2
+
+[node name="LayerLabel" type="Label" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer/VBoxContainer"]
+layout_mode = 2
+text = "地图层级:"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="LayerButton" type="Button" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer/ScrollContainer"]
+[node name="LayerButton" type="Button" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer/VBoxContainer/ScrollContainer"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -207,7 +215,7 @@ text = "layer1"
 icon = ExtResource("7_lli1g")
 alignment = 0
 
-[node name="VisibleButton" type="TextureButton" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer/ScrollContainer/LayerButton"]
+[node name="VisibleButton" type="TextureButton" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer/VBoxContainer/ScrollContainer/LayerButton"]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -218,3 +226,14 @@ grow_horizontal = 0
 grow_vertical = 2
 texture_normal = ExtResource("8_gm7y5")
 stretch_mode = 3
+
+[node name="MarkLayer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MarkLayer"]
+layout_mode = 2
+
+[node name="MarkLabel" type="Label" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MarkLayer/VBoxContainer"]
+layout_mode = 2
+text = "对象生成标记"
