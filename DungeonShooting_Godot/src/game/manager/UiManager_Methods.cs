@@ -18,6 +18,7 @@ public static partial class UiManager
         public const string MapEditorMapLayer = "MapEditorMapLayer";
         public const string MapEditorMapMark = "MapEditorMapMark";
         public const string MapEditorProject = "MapEditorProject";
+        public const string MapEditorSelectObject = "MapEditorSelectObject";
         public const string MapEditorTools = "MapEditorTools";
         public const string RoomUI = "RoomUI";
         public const string Settlement = "Settlement";
@@ -597,6 +598,54 @@ public static partial class UiManager
     public static UI.MapEditorProject.MapEditorProjectPanel[] Get_MapEditorProject_Instance()
     {
         return GetUiInstance<UI.MapEditorProject.MapEditorProjectPanel>(nameof(UI.MapEditorProject.MapEditorProject));
+    }
+
+    /// <summary>
+    /// 创建 MapEditorSelectObject, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorSelectObject.MapEditorSelectObjectPanel Create_MapEditorSelectObject()
+    {
+        return CreateUi<UI.MapEditorSelectObject.MapEditorSelectObjectPanel>(UiName.MapEditorSelectObject);
+    }
+
+    /// <summary>
+    /// 打开 MapEditorSelectObject, 并返回UI实例
+    /// </summary>
+    public static UI.MapEditorSelectObject.MapEditorSelectObjectPanel Open_MapEditorSelectObject()
+    {
+        return OpenUi<UI.MapEditorSelectObject.MapEditorSelectObjectPanel>(UiName.MapEditorSelectObject);
+    }
+
+    /// <summary>
+    /// 隐藏 MapEditorSelectObject 的所有实例
+    /// </summary>
+    public static void Hide_MapEditorSelectObject()
+    {
+        var uiInstance = Get_MapEditorSelectObject_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 MapEditorSelectObject 的所有实例
+    /// </summary>
+    public static void Destroy_MapEditorSelectObject()
+    {
+        var uiInstance = Get_MapEditorSelectObject_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 MapEditorSelectObject 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.MapEditorSelectObject.MapEditorSelectObjectPanel[] Get_MapEditorSelectObject_Instance()
+    {
+        return GetUiInstance<UI.MapEditorSelectObject.MapEditorSelectObjectPanel>(nameof(UI.MapEditorSelectObject.MapEditorSelectObject));
     }
 
     /// <summary>

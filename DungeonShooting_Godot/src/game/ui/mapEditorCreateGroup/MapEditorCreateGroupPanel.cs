@@ -18,7 +18,7 @@ public partial class MapEditorCreateGroupPanel : MapEditorCreateGroup
         //检查名称是否合规
         if (!Regex.IsMatch(groupName, "^\\w+$"))
         {
-            EditorTipsManager.ShowTips("错误", "组名称'" + groupName + "'不符合名称约束, 组名称只允许包含大小写字母和数字!");
+            EditorWindowManager.ShowTips("错误", "组名称'" + groupName + "'不符合名称约束, 组名称只允许包含大小写字母和数字!");
             return null;
         }
         
@@ -27,7 +27,7 @@ public partial class MapEditorCreateGroupPanel : MapEditorCreateGroup
         var dir = new DirectoryInfo(path);
         if (dir.Exists && dir.GetDirectories().Length > 0)
         {
-            EditorTipsManager.ShowTips("错误", $"已经有相同路径的房间了!");
+            EditorWindowManager.ShowTips("错误", $"已经有相同路径的房间了!");
             return null;
         }
 

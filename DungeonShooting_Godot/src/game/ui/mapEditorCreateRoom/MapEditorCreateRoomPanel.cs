@@ -67,7 +67,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         //检查名称是否合规
         if (!Regex.IsMatch(roomInfo.RoomName, "^\\w+$"))
         {
-            EditorTipsManager.ShowTips("错误", "房间名称'" + roomInfo.RoomName + "'不符合名称约束, 房间名称只允许包含大小写字母和数字!");
+            EditorWindowManager.ShowTips("错误", "房间名称'" + roomInfo.RoomName + "'不符合名称约束, 房间名称只允许包含大小写字母和数字!");
             return null;
         }
         
@@ -82,7 +82,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
 
         if (roomInfo.GroupName == null)
         {
-            EditorTipsManager.ShowTips("错误", "组名错误!");
+            EditorWindowManager.ShowTips("错误", "组名错误!");
             return null;
         }
         
@@ -94,7 +94,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         var dir = new DirectoryInfo(dirPath);
         if (dir.Exists && dir.GetFiles().Length > 0)
         {
-            EditorTipsManager.ShowTips("错误", $"已经有相同路径的房间了!\n路径: {temp}");
+            EditorWindowManager.ShowTips("错误", $"已经有相同路径的房间了!\n路径: {temp}");
             return null;
         }
 

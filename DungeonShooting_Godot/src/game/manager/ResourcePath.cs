@@ -38,7 +38,6 @@ public class ResourcePath
     public const string prefab_prop_buff_BuffProp0008_tscn = "res://prefab/prop/buff/BuffProp0008.tscn";
     public const string prefab_prop_buff_BuffProp0009_tscn = "res://prefab/prop/buff/BuffProp0009.tscn";
     public const string prefab_prop_buff_BuffProp0010_tscn = "res://prefab/prop/buff/BuffProp0010.tscn";
-    public const string prefab_prop_buff_Weapon0005_png = "res://prefab/prop/buff/Weapon0005.png";
     public const string prefab_role_Enemy0001_tscn = "res://prefab/role/Enemy0001.tscn";
     public const string prefab_role_Role0001_tscn = "res://prefab/role/Role0001.tscn";
     public const string prefab_role_RoleTemplate_tscn = "res://prefab/role/RoleTemplate.tscn";
@@ -59,6 +58,7 @@ public class ResourcePath
     public const string prefab_ui_MapEditorMapLayer_tscn = "res://prefab/ui/MapEditorMapLayer.tscn";
     public const string prefab_ui_MapEditorMapMark_tscn = "res://prefab/ui/MapEditorMapMark.tscn";
     public const string prefab_ui_MapEditorProject_tscn = "res://prefab/ui/MapEditorProject.tscn";
+    public const string prefab_ui_MapEditorSelectObject_tscn = "res://prefab/ui/MapEditorSelectObject.tscn";
     public const string prefab_ui_MapEditorTools_tscn = "res://prefab/ui/MapEditorTools.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_ui_Settlement_tscn = "res://prefab/ui/Settlement.tscn";

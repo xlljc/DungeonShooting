@@ -3,224 +3,320 @@
     "Id": "role0001",
     "Type": 3,
     "Name": "",
-    "Remark": "\u73A9\u5BB6",
-    "Prefab": "res://prefab/role/Role0001.tscn"
+    "Intro": "\u73A9\u5BB6",
+    "Details": "",
+    "Prefab": "res://prefab/role/Role0001.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "enemy0001",
     "Type": 4,
     "Name": "",
-    "Remark": "\u654C\u4EBA",
-    "Prefab": "res://prefab/role/Enemy0001.tscn"
+    "Intro": "\u654C\u4EBA",
+    "Details": "",
+    "Prefab": "res://prefab/role/Enemy0001.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "weapon0001",
     "Type": 5,
     "Name": "\u6B65\u67AA",
-    "Remark": "",
-    "Prefab": "res://prefab/weapon/Weapon0001.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/weapon/Weapon0001.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0001/Weapon0001.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "weapon0002",
     "Type": 5,
     "Name": "\u9730\u5F39\u67AA",
-    "Remark": "",
-    "Prefab": "res://prefab/weapon/Weapon0002.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/weapon/Weapon0002.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0002/Weapon0002.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "weapon0003",
     "Type": 5,
     "Name": "\u624B\u67AA",
-    "Remark": "",
-    "Prefab": "res://prefab/weapon/Weapon0003.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/weapon/Weapon0003.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0003/Weapon0003.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "weapon0004",
     "Type": 5,
     "Name": "\u5200",
-    "Remark": "",
-    "Prefab": "res://prefab/weapon/Weapon0004.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/weapon/Weapon0004.tscn",
+    "Icon": "res://resource/sprite/weapon/knife1.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "weapon0005",
     "Type": 5,
     "Name": "\u72D9\u51FB\u67AA",
-    "Remark": "",
-    "Prefab": "res://prefab/weapon/Weapon0005.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/weapon/Weapon0005.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0005/Weapon0005.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "weapon0006",
     "Type": 5,
     "Name": "\u51B2\u950B\u67AA",
-    "Remark": "",
-    "Prefab": "res://prefab/weapon/Weapon0006.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/weapon/Weapon0006.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0006/Weapon0006.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "weapon0007",
     "Type": 5,
     "Name": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
-    "Remark": "",
-    "Prefab": "res://prefab/weapon/Weapon0007.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/weapon/Weapon0007.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0007/Weapon0007.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "bullet0001",
     "Type": 6,
     "Name": "",
-    "Remark": "",
-    "Prefab": "res://prefab/bullet/Bullet0001.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/bullet/Bullet0001.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "bullet0002",
     "Type": 6,
     "Name": "",
-    "Remark": "",
-    "Prefab": "res://prefab/bullet/Bullet0002.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/bullet/Bullet0002.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "bullet0003",
     "Type": 6,
     "Name": "",
-    "Remark": "",
-    "Prefab": "res://prefab/bullet/Bullet0003.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/bullet/Bullet0003.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "shell0001",
     "Type": 7,
     "Name": "",
-    "Remark": "",
-    "Prefab": "res://prefab/shell/Shell0001.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/shell/Shell0001.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "shell0002",
     "Type": 7,
     "Name": "",
-    "Remark": "",
-    "Prefab": "res://prefab/shell/Shell0002.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/shell/Shell0002.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "shell0003",
     "Type": 7,
     "Name": "",
-    "Remark": "",
-    "Prefab": "res://prefab/shell/Shell0003.tscn"
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/shell/Shell0003.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "effect0001",
     "Type": 8,
     "Name": "",
-    "Remark": "\u654C\u4EBA\u6B7B\u4EA1\u788E\u7247",
-    "Prefab": "res://prefab/effect/activityObject/Effect0001.tscn"
+    "Intro": "\u654C\u4EBA\u6B7B\u4EA1\u788E\u7247",
+    "Details": "",
+    "Prefab": "res://prefab/effect/activityObject/Effect0001.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "prop0001",
     "Type": 9,
     "Name": "\u978B\u5B50",
-    "Remark": "\u63D0\u9AD8\u79FB\u52A8\u901F\u5EA6",
-    "Prefab": "res://prefab/prop/buff/BuffProp0001.tscn"
+    "Intro": "\u63D0\u9AD8\u79FB\u52A8\u901F\u5EA6",
+    "Details": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0001.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0001.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop0002",
     "Type": 9,
     "Name": "\u5FC3\u4E4B\u5BB9\u5668",
-    "Remark": "\u63D0\u9AD8\u8840\u91CF\u4E0A\u9650",
-    "Prefab": "res://prefab/prop/buff/BuffProp0002.tscn"
+    "Intro": "\u63D0\u9AD8\u8840\u91CF\u4E0A\u9650",
+    "Details": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0002.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0002.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop0003",
     "Type": 9,
     "Name": "\u62A4\u76FE",
-    "Remark": "\u53EF\u4EE5\u62B5\u6321\u5B50\u5F39\uFF0C\u968F\u65F6\u95F4\u63A8\u79FB\u81EA\u52A8\u6062\u590D",
-    "Prefab": "res://prefab/prop/buff/BuffProp0003.tscn"
+    "Intro": "\u53EF\u4EE5\u62B5\u6321\u5B50\u5F39\uFF0C\u968F\u65F6\u95F4\u63A8\u79FB\u81EA\u52A8\u6062\u590D",
+    "Details": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0003.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0003.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop0004",
     "Type": 9,
     "Name": "\u62A4\u76FE\u8BA1\u65F6\u5668",
-    "Remark": "\u63D0\u9AD8\u62A4\u76FE\u6062\u590D\u901F\u5EA6",
-    "Prefab": "res://prefab/prop/buff/BuffProp0004.tscn"
+    "Intro": "\u63D0\u9AD8\u62A4\u76FE\u6062\u590D\u901F\u5EA6",
+    "Details": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0004.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0004.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop0005",
     "Type": 9,
     "Name": "\u6740\u4F24\u5F39",
-    "Remark": "\u63D0\u9AD8\u5B50\u5F39\u4F24\u5BB3",
-    "Prefab": "res://prefab/prop/buff/BuffProp0005.tscn"
+    "Intro": "\u63D0\u9AD8\u5B50\u5F39\u4F24\u5BB3",
+    "Details": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0005.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0005.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop0006",
     "Type": 9,
     "Name": "\u7EA2\u5B9D\u77F3\u6212\u6307",
-    "Remark": "\u53D7\u4F24\u540E\u5EF6\u957F\u65E0\u654C\u65F6\u95F4",
-    "Prefab": "res://prefab/prop/buff/BuffProp0006.tscn"
+    "Intro": "\u53D7\u4F24\u540E\u5EF6\u957F\u65E0\u654C\u65F6\u95F4",
+    "Details": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0006.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0006.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop0007",
     "Type": 9,
     "Name": "\u5907\u7528\u62A4\u76FE",
-    "Remark": "\u53D7\u4F24\u65F6\u6709\u4E00\u5B9A\u6982\u7387\u62B5\u6D88\u4F24\u5BB3",
-    "Prefab": "res://prefab/prop/buff/BuffProp0007.tscn"
+    "Intro": "\u53D7\u4F24\u65F6\u6709\u4E00\u5B9A\u6982\u7387\u62B5\u6D88\u4F24\u5BB3",
+    "Details": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0007.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0007.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop0008",
     "Type": 9,
     "Name": "\u773C\u955C",
-    "Remark": "\u63D0\u9AD8\u6B66\u5668\u7CBE\u51C6\u5EA6",
-    "Prefab": "res://prefab/prop/buff/BuffProp0008.tscn"
+    "Intro": "\u63D0\u9AD8\u6B66\u5668\u7CBE\u51C6\u5EA6",
+    "Details": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0008.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0008.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop0009",
     "Type": 9,
     "Name": "\u9AD8\u901F\u5B50\u5F39",
-    "Remark": "\u63D0\u9AD8\u5B50\u5F39\u901F\u5EA6\u548C\u5C04\u7A0B",
-    "Prefab": "res://prefab/prop/buff/BuffProp0009.tscn"
+    "Intro": "\u63D0\u9AD8\u5B50\u5F39\u901F\u5EA6\u548C\u5C04\u7A0B",
+    "Details": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0009.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0009.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop0010",
     "Type": 9,
     "Name": "\u5206\u88C2\u5B50\u5F39",
-    "Remark": "\u5B50\u5F39\u6570\u91CF\u7FFB\u500D, \u4F46\u662F\u7CBE\u51C6\u5EA6\u548C\u4F24\u5BB3\u964D\u4F4E",
-    "Prefab": "res://prefab/prop/buff/BuffProp0010.tscn"
+    "Intro": "\u5B50\u5F39\u6570\u91CF\u7FFB\u500D, \u4F46\u662F\u7CBE\u51C6\u5EA6\u548C\u4F24\u5BB3\u964D\u4F4E",
+    "Details": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0010.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0010.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop5000",
     "Type": 9,
     "Name": "\u533B\u836F\u7BB1",
-    "Remark": "\u4F7F\u7528\u540E\u56DE\u590D\u4E00\u9897\u7EA2\u5FC3",
-    "Prefab": "res://prefab/prop/active/ActiveProp5000.tscn"
+    "Intro": "\u4F7F\u7528\u540E\u56DE\u590D\u4E00\u9897\u7EA2\u5FC3",
+    "Details": "",
+    "Prefab": "res://prefab/prop/active/ActiveProp5000.tscn",
+    "Icon": "res://resource/sprite/prop/active/ActiveProp5000.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "prop5001",
     "Type": 9,
     "Name": "\u5F39\u836F\u7BB1",
-    "Remark": "\u4F7F\u7528\u540E\u8865\u5145\u5F53\u524D\u6B66\u5668\u5907\u7528\u5F39\u836F",
-    "Prefab": "res://prefab/prop/active/ActiveProp5001.tscn"
+    "Intro": "\u4F7F\u7528\u540E\u8865\u5145\u5F53\u524D\u6B66\u5668\u5907\u7528\u5F39\u836F",
+    "Details": "",
+    "Prefab": "res://prefab/prop/active/ActiveProp5001.tscn",
+    "Icon": "res://resource/sprite/prop/active/ActiveProp5001.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "other_door_e",
     "Type": 99,
     "Name": "",
-    "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u4E1C\u4FA7)",
-    "Prefab": "res://prefab/map/RoomDoor_E.tscn"
+    "Intro": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u4E1C\u4FA7)",
+    "Details": "",
+    "Prefab": "res://prefab/map/RoomDoor_E.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "other_door_w",
     "Type": 99,
     "Name": "",
-    "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u897F\u4FA7)",
-    "Prefab": "res://prefab/map/RoomDoor_W.tscn"
+    "Intro": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u897F\u4FA7)",
+    "Details": "",
+    "Prefab": "res://prefab/map/RoomDoor_W.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "other_door_s",
     "Type": 99,
     "Name": "",
-    "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u5357\u4FA7)",
-    "Prefab": "res://prefab/map/RoomDoor_S.tscn"
+    "Intro": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u5357\u4FA7)",
+    "Details": "",
+    "Prefab": "res://prefab/map/RoomDoor_S.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   },
   {
     "Id": "other_door_n",
     "Type": 99,
     "Name": "",
-    "Remark": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u5317\u4FA7)",
-    "Prefab": "res://prefab/map/RoomDoor_N.tscn"
+    "Intro": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u5317\u4FA7)",
+    "Details": "",
+    "Prefab": "res://prefab/map/RoomDoor_N.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   }
 ]

@@ -1,0 +1,57 @@
+[gd_scene load_steps=3 format=3 uid="uid://ie52mo5t6l2h"]
+
+[ext_resource type="Script" path="res://src/game/ui/mapEditorSelectObject/MapEditorSelectObjectPanel.cs" id="1_hdfkd"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_b0yuv"]
+
+[node name="MapEditorSelectObject" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_hdfkd")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ObjectButton" type="Button" parent="ScrollContainer"]
+custom_minimum_size = Vector2(150, 192)
+layout_mode = 2
+
+[node name="PreviewImage" type="TextureRect" parent="ScrollContainer/ObjectButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -44.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_b0yuv")
+stretch_mode = 5
+
+[node name="ObjectName" type="Label" parent="ScrollContainer/ObjectButton"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -43.0
+offset_right = 150.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.5, 0.5)
+text = "武器"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+text_overrun_behavior = 3

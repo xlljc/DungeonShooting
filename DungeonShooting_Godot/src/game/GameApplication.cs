@@ -138,6 +138,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		//UiManager.Open_Main();
 		//UiManager.Open_MapEditor();
 		UiManager.Open_MapEditorProject();
+		//EditorWindowManager.ShowSelectObject("选择物体");
 	}
 
 	public override void _Process(double delta)

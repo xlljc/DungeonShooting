@@ -22,6 +22,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.235294)
 
 [node name="Window" type="Window" parent="."]
+canvas_item_default_texture_filter = 0
 title = "标题"
 initial_position = 1
 size = Vector2i(500, 350)

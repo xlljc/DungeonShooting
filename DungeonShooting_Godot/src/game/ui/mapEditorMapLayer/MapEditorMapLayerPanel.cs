@@ -46,7 +46,7 @@ public partial class MapEditorMapLayerPanel : MapEditorMapLayer
 
     public override void OnDestroyUi()
     {
-        
+        _grid.Destroy();
     }
 
 }

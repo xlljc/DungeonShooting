@@ -3,7 +3,7 @@ using System;
 using UI.EditorTips;
 using UI.EditorWindow;
 
-public static class EditorTipsManager
+public static class EditorWindowManager
 {
     /// <summary>
     /// 弹出通用提示面板
@@ -27,5 +27,12 @@ public static class EditorTipsManager
         );
         var body = window.OpenBody<EditorTipsPanel>(UiManager.UiName.EditorTips);
         body.SetMessage(message);
+    }
+
+    public static void ShowSelectObject(string title)
+    {
+        var window = UiManager.Open_EditorWindow();
+        window.SetWindowTitle(title);
+        window.OpenBody(UiManager.UiName.MapEditorSelectObject);
     }
 }
