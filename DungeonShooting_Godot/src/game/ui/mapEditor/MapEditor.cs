@@ -406,6 +406,112 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.OptionButton"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.HBoxContainer.PreinstallOption
+    /// </summary>
+    public class PreinstallOption : UiNode<MapEditor, Godot.OptionButton, PreinstallOption>
+    {
+        public PreinstallOption(MapEditor uiPanel, Godot.OptionButton node) : base(uiPanel, node) {  }
+        public override PreinstallOption Clone() => new (UiPanel, (Godot.OptionButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.HBoxContainer.AddPreinstall
+    /// </summary>
+    public class AddPreinstall : UiNode<MapEditor, Godot.Button, AddPreinstall>
+    {
+        public AddPreinstall(MapEditor uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override AddPreinstall Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.HBoxContainer.EditPreinstall
+    /// </summary>
+    public class EditPreinstall : UiNode<MapEditor, Godot.Button, EditPreinstall>
+    {
+        public EditPreinstall(MapEditor uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override EditPreinstall Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.HBoxContainer.DeletePreinstall
+    /// </summary>
+    public class DeletePreinstall : UiNode<MapEditor, Godot.Button, DeletePreinstall>
+    {
+        public DeletePreinstall(MapEditor uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override DeletePreinstall Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.HBoxContainer
+    /// </summary>
+    public class HBoxContainer : UiNode<MapEditor, Godot.HBoxContainer, HBoxContainer>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.OptionButton"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.PreinstallOption
+        /// </summary>
+        public PreinstallOption L_PreinstallOption
+        {
+            get
+            {
+                if (_L_PreinstallOption == null) _L_PreinstallOption = new PreinstallOption(UiPanel, Instance.GetNodeOrNull<Godot.OptionButton>("PreinstallOption"));
+                return _L_PreinstallOption;
+            }
+        }
+        private PreinstallOption _L_PreinstallOption;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.AddPreinstall
+        /// </summary>
+        public AddPreinstall L_AddPreinstall
+        {
+            get
+            {
+                if (_L_AddPreinstall == null) _L_AddPreinstall = new AddPreinstall(UiPanel, Instance.GetNodeOrNull<Godot.Button>("AddPreinstall"));
+                return _L_AddPreinstall;
+            }
+        }
+        private AddPreinstall _L_AddPreinstall;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.EditPreinstall
+        /// </summary>
+        public EditPreinstall L_EditPreinstall
+        {
+            get
+            {
+                if (_L_EditPreinstall == null) _L_EditPreinstall = new EditPreinstall(UiPanel, Instance.GetNodeOrNull<Godot.Button>("EditPreinstall"));
+                return _L_EditPreinstall;
+            }
+        }
+        private EditPreinstall _L_EditPreinstall;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.DeletePreinstall
+        /// </summary>
+        public DeletePreinstall L_DeletePreinstall
+        {
+            get
+            {
+                if (_L_DeletePreinstall == null) _L_DeletePreinstall = new DeletePreinstall(UiPanel, Instance.GetNodeOrNull<Godot.Button>("DeletePreinstall"));
+                return _L_DeletePreinstall;
+            }
+        }
+        private DeletePreinstall _L_DeletePreinstall;
+
+        public HBoxContainer(MapEditor uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.ScrollContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.ScrollContainer
+    /// </summary>
+    public class ScrollContainer_1 : UiNode<MapEditor, Godot.ScrollContainer, ScrollContainer_1>
+    {
+        public ScrollContainer_1(MapEditor uiPanel, Godot.ScrollContainer node) : base(uiPanel, node) {  }
+        public override ScrollContainer_1 Clone() => new (UiPanel, (Godot.ScrollContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer
     /// </summary>
     public class VBoxContainer_2 : UiNode<MapEditor, Godot.VBoxContainer, VBoxContainer_2>
@@ -422,6 +528,32 @@ public abstract partial class MapEditor : UiBase
             }
         }
         private MarkLabel _L_MarkLabel;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.HBoxContainer
+        /// </summary>
+        public HBoxContainer L_HBoxContainer
+        {
+            get
+            {
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                return _L_HBoxContainer;
+            }
+        }
+        private HBoxContainer _L_HBoxContainer;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.ScrollContainer
+        /// </summary>
+        public ScrollContainer_1 L_ScrollContainer
+        {
+            get
+            {
+                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.ScrollContainer>("ScrollContainer"));
+                return _L_ScrollContainer;
+            }
+        }
+        private ScrollContainer_1 _L_ScrollContainer;
 
         public VBoxContainer_2(MapEditor uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
         public override VBoxContainer_2 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
@@ -692,11 +824,6 @@ public abstract partial class MapEditor : UiBase
     public LayerButton S_LayerButton => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer.L_VBoxContainer.L_ScrollContainer.L_LayerButton;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.VBoxContainer.ScrollContainer
-    /// </summary>
-    public ScrollContainer S_ScrollContainer => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer.L_VBoxContainer.L_ScrollContainer;
-
-    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer
     /// </summary>
     public MapLayer S_MapLayer => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer;
@@ -705,6 +832,31 @@ public abstract partial class MapEditor : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.MarkLabel
     /// </summary>
     public MarkLabel S_MarkLabel => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MarkLayer.L_VBoxContainer.L_MarkLabel;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.OptionButton"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.HBoxContainer.PreinstallOption
+    /// </summary>
+    public PreinstallOption S_PreinstallOption => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MarkLayer.L_VBoxContainer.L_HBoxContainer.L_PreinstallOption;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.HBoxContainer.AddPreinstall
+    /// </summary>
+    public AddPreinstall S_AddPreinstall => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MarkLayer.L_VBoxContainer.L_HBoxContainer.L_AddPreinstall;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.HBoxContainer.EditPreinstall
+    /// </summary>
+    public EditPreinstall S_EditPreinstall => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MarkLayer.L_VBoxContainer.L_HBoxContainer.L_EditPreinstall;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.HBoxContainer.DeletePreinstall
+    /// </summary>
+    public DeletePreinstall S_DeletePreinstall => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MarkLayer.L_VBoxContainer.L_HBoxContainer.L_DeletePreinstall;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer.VBoxContainer.HBoxContainer
+    /// </summary>
+    public HBoxContainer S_HBoxContainer => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MarkLayer.L_VBoxContainer.L_HBoxContainer;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MarkLayer
