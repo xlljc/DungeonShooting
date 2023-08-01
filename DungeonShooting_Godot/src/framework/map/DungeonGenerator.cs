@@ -1127,7 +1127,7 @@ public class DungeonGenerator
                         //交集范围够生成门
                         if (range.Y - range.X >= GameConfig.CorridorWidth * GameConfig.TileCellSize)
                         {
-                            rangeList.Add(new Vector2I((int)(range.X / 16), (int)(range.Y / 16) - GameConfig.CorridorWidth));
+                            rangeList.Add(new Vector2I((int)(range.X / GameConfig.TileCellSize), (int)(range.Y / GameConfig.TileCellSize) - GameConfig.CorridorWidth));
                         }
                     }
                 }
