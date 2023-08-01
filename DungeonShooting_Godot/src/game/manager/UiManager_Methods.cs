@@ -15,6 +15,8 @@ public static partial class UiManager
         public const string MapEditor = "MapEditor";
         public const string MapEditorCreateGroup = "MapEditorCreateGroup";
         public const string MapEditorCreateRoom = "MapEditorCreateRoom";
+        public const string MapEditorMapLayer = "MapEditorMapLayer";
+        public const string MapEditorMapMark = "MapEditorMapMark";
         public const string MapEditorProject = "MapEditorProject";
         public const string MapEditorTools = "MapEditorTools";
         public const string RoomUI = "RoomUI";
@@ -451,6 +453,102 @@ public static partial class UiManager
     public static UI.MapEditorCreateRoom.MapEditorCreateRoomPanel[] Get_MapEditorCreateRoom_Instance()
     {
         return GetUiInstance<UI.MapEditorCreateRoom.MapEditorCreateRoomPanel>(nameof(UI.MapEditorCreateRoom.MapEditorCreateRoom));
+    }
+
+    /// <summary>
+    /// 创建 MapEditorMapLayer, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorMapLayer.MapEditorMapLayerPanel Create_MapEditorMapLayer()
+    {
+        return CreateUi<UI.MapEditorMapLayer.MapEditorMapLayerPanel>(UiName.MapEditorMapLayer);
+    }
+
+    /// <summary>
+    /// 打开 MapEditorMapLayer, 并返回UI实例
+    /// </summary>
+    public static UI.MapEditorMapLayer.MapEditorMapLayerPanel Open_MapEditorMapLayer()
+    {
+        return OpenUi<UI.MapEditorMapLayer.MapEditorMapLayerPanel>(UiName.MapEditorMapLayer);
+    }
+
+    /// <summary>
+    /// 隐藏 MapEditorMapLayer 的所有实例
+    /// </summary>
+    public static void Hide_MapEditorMapLayer()
+    {
+        var uiInstance = Get_MapEditorMapLayer_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 MapEditorMapLayer 的所有实例
+    /// </summary>
+    public static void Destroy_MapEditorMapLayer()
+    {
+        var uiInstance = Get_MapEditorMapLayer_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 MapEditorMapLayer 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.MapEditorMapLayer.MapEditorMapLayerPanel[] Get_MapEditorMapLayer_Instance()
+    {
+        return GetUiInstance<UI.MapEditorMapLayer.MapEditorMapLayerPanel>(nameof(UI.MapEditorMapLayer.MapEditorMapLayer));
+    }
+
+    /// <summary>
+    /// 创建 MapEditorMapMark, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorMapMark.MapEditorMapMarkPanel Create_MapEditorMapMark()
+    {
+        return CreateUi<UI.MapEditorMapMark.MapEditorMapMarkPanel>(UiName.MapEditorMapMark);
+    }
+
+    /// <summary>
+    /// 打开 MapEditorMapMark, 并返回UI实例
+    /// </summary>
+    public static UI.MapEditorMapMark.MapEditorMapMarkPanel Open_MapEditorMapMark()
+    {
+        return OpenUi<UI.MapEditorMapMark.MapEditorMapMarkPanel>(UiName.MapEditorMapMark);
+    }
+
+    /// <summary>
+    /// 隐藏 MapEditorMapMark 的所有实例
+    /// </summary>
+    public static void Hide_MapEditorMapMark()
+    {
+        var uiInstance = Get_MapEditorMapMark_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 MapEditorMapMark 的所有实例
+    /// </summary>
+    public static void Destroy_MapEditorMapMark()
+    {
+        var uiInstance = Get_MapEditorMapMark_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 MapEditorMapMark 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.MapEditorMapMark.MapEditorMapMarkPanel[] Get_MapEditorMapMark_Instance()
+    {
+        return GetUiInstance<UI.MapEditorMapMark.MapEditorMapMarkPanel>(nameof(UI.MapEditorMapMark.MapEditorMapMark));
     }
 
     /// <summary>

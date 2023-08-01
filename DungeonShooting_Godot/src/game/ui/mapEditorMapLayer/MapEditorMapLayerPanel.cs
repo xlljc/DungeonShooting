@@ -1,8 +1,9 @@
-﻿using Godot;
+using Godot;
+using UI.MapEditor;
 
-namespace UI.MapEditor;
+namespace UI.MapEditorMapLayer;
 
-public class EditorLayerBar
+public partial class MapEditorMapLayerPanel : MapEditorMapLayer
 {
     public class LayerButtonData
     {
@@ -27,15 +28,11 @@ public class EditorLayerBar
         }
     }
     
-    private readonly MapEditorPanel _mapEditorPanel;
-    private readonly MapEditor.MapLayer _mapLayer;
-    private readonly UiGrid<MapEditor.LayerButton, LayerButtonData> _grid;
-
-    public EditorLayerBar(MapEditorPanel mapEditorPanel, MapEditor.MapLayer mapLayer)
+    private UiGrid<LayerButton, LayerButtonData> _grid;
+    
+    public override void OnCreateUi()
     {
-        _mapEditorPanel = mapEditorPanel;
-        _mapLayer = mapLayer;
-        _grid = new UiGrid<MapEditor.LayerButton, LayerButtonData>(mapLayer.L_VBoxContainer.L_ScrollContainer.L_LayerButton, typeof(LayerButtonCell));
+        _grid = new UiGrid<LayerButton, LayerButtonData>(S_LayerButton, typeof(LayerButtonCell));
         _grid.SetCellOffset(new Vector2I(0, 2));
         _grid.SetHorizontalExpand(true);
         
@@ -47,23 +44,9 @@ public class EditorLayerBar
         _grid.Add(new LayerButtonData("自定义高层", false, EditorTileMap.CustomTopLayer));
     }
 
-    public void OnShow()
+    public override void OnDestroyUi()
     {
         
     }
 
-    public void OnHide()
-    {
-        
-    }
-
-    public void OnDestroy()
-    {
-        _grid.Destroy();
-    }
-
-    public void Process(float delta)
-    {
-        
-    }
 }

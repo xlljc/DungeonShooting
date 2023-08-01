@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2wslibovwv7w"
-path="res://.godot/imported/CenterTool.png-79d25e576bc6161126fe504f63db716b.ctex"
+uid="uid://cf5jw35388hto"
+path="res://.godot/imported/DragTool.png-2f2a7cc185c6c4cb1014bbd422748bb0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/ui/mapEditorTools/CenterTool.png"
-dest_files=["res://.godot/imported/CenterTool.png-79d25e576bc6161126fe504f63db716b.ctex"]
+source_file="res://resource/sprite/ui/commonIcon/DragTool.png"
+dest_files=["res://.godot/imported/DragTool.png-2f2a7cc185c6c4cb1014bbd422748bb0.ctex"]
 
 [params]
 

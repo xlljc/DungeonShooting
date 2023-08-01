@@ -26,11 +26,11 @@ public partial class MapEditorProjectPanel : MapEditorProject
         //初始化枚举选项
         var roomTypes = Enum.GetValues<DungeonRoomType>();
         var optionButton = S_RoomTypeButton.Instance;
-        optionButton.AddItem("全部", -1);
+        optionButton.AddItem("全部", 0);
         for (var i = 0; i < roomTypes.Length; i++)
         {
             var dungeonRoomType = roomTypes[i];
-            optionButton.AddItem(DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomType), (int)dungeonRoomType);
+            optionButton.AddItem(DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomType), (int)dungeonRoomType + 1);
         }
 
         _groupGrid = new UiGrid<GroupButton, DungeonRoomGroup>(S_GroupButton, typeof(GroupButtonCell));
@@ -153,7 +153,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
             //类型搜索
             if (roomType > 0)
             {
-                var type = (DungeonRoomType)roomType;
+                var type = (DungeonRoomType)(roomType - 1);
                 result = result.Where(split => split.RoomInfo.RoomType == type);
             }
             

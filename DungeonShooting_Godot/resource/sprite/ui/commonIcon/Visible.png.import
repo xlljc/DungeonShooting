@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmm8jw06bhffh"
-path="res://.godot/imported/Lock.png-04701e8ff332d79831f8e7e3966494e3.ctex"
+uid="uid://dqvg18aacx6db"
+path="res://.godot/imported/Visible.png-4c1ece1a99e6985ec91c751931e614c1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/ui/mapEditorTools/Lock.png"
-dest_files=["res://.godot/imported/Lock.png-04701e8ff332d79831f8e7e3966494e3.ctex"]
+source_file="res://resource/sprite/ui/commonIcon/Visible.png"
+dest_files=["res://.godot/imported/Visible.png-4c1ece1a99e6985ec91c751931e614c1.ctex"]
 
 [params]
 

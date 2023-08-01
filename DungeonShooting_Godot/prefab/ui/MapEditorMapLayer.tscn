@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://bb2ekkpxifd7g"]
+
+[ext_resource type="Script" path="res://src/game/ui/mapEditorMapLayer/MapEditorMapLayerPanel.cs" id="1_3j05m"]
+[ext_resource type="Texture2D" uid="uid://dmm8jw06bhffh" path="res://resource/sprite/ui/commonIcon/Lock.png" id="2_pfhyj"]
+[ext_resource type="Texture2D" uid="uid://dqvg18aacx6db" path="res://resource/sprite/ui/commonIcon/Visible.png" id="3_rqjh4"]
+
+[node name="MapEditorMapLayer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_3j05m")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LayerLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "地图层级："
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LayerButton" type="Button" parent="VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "layer1"
+icon = ExtResource("2_pfhyj")
+alignment = 0
+
+[node name="VisibleButton" type="TextureButton" parent="VBoxContainer/ScrollContainer/LayerButton"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -55.0
+grow_horizontal = 0
+grow_vertical = 2
+texture_normal = ExtResource("3_rqjh4")
+stretch_mode = 3

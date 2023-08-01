@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7w6pbk7aucee"
-path="res://.godot/imported/AreaTool.png-3c7e64e3d5aded201fb8eb7fce2fc4c0.ctex"
+uid="uid://dggb6p4sdmfry"
+path="res://.godot/imported/Edit.png-e197be1526d051ddb37fe0759e8310cb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/ui/mapEditorTools/AreaTool.png"
-dest_files=["res://.godot/imported/AreaTool.png-3c7e64e3d5aded201fb8eb7fce2fc4c0.ctex"]
+source_file="res://resource/sprite/ui/commonIcon/Edit.png"
+dest_files=["res://.godot/imported/Edit.png-e197be1526d051ddb37fe0759e8310cb.ctex"]
 
 [params]
 

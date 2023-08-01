@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8yxnnif4j2ov"
-path="res://.godot/imported/PenTool.png-ff76effc9da04ac9923ff0b95925a1ab.ctex"
+uid="uid://cajcnlimvoxk"
+path="res://.godot/imported/Back.png-4f6c04af710e74226c20bed5c5343f81.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/ui/mapEditorTools/PenTool.png"
-dest_files=["res://.godot/imported/PenTool.png-ff76effc9da04ac9923ff0b95925a1ab.ctex"]
+source_file="res://resource/sprite/ui/commonIcon/Back.png"
+dest_files=["res://.godot/imported/Back.png-4f6c04af710e74226c20bed5c5343f81.ctex"]
 
 [params]
 

@@ -6,7 +6,6 @@ using Godot;
 /// <summary>
 /// Ui 基类
 /// </summary>
-[Tool]
 public abstract partial class UiBase : Control, IDestroy, ICoroutine
 {
     /// <summary>
@@ -32,12 +31,16 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     /// </summary>
     public UiBase PrevUi { get; set; }
 
+    /// <summary>
+    /// 所属父级Ui, 仅当通过 UiNode.OpenNestedUi() 打开时才会赋值<br/>
+    /// 注意: 如果是在预制体中放置的子 Ui, 那么子 Ui 的该属性会在 OnCreateUi() 之后赋值
+    /// </summary>
+    public UiBase ParentUi { get; private set; }
+
     //开启的协程
     private List<CoroutineData> _coroutineList;
     //嵌套打开的Ui列表
     private HashSet<UiBase> _nestedUiSet;
-    //所属父级Ui, UiNode.RecordNestedUi() 嵌套打开的 Ui 将被赋予此值
-    private UiBase _targetUi;
 
     public UiBase(string uiName)
     {
@@ -47,16 +50,16 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     }
 
     /// <summary>
-    /// 用于初始化打开的子Ui, 在 OnCreateUi() 之后调用
+    /// 创建当前ui时调用
     /// </summary>
-    public virtual void OnInitNestedUi()
+    public virtual void OnCreateUi()
     {
     }
     
     /// <summary>
-    /// 创建当前ui时调用
+    /// 用于初始化打开的子Ui, 在 OnCreateUi() 之后调用
     /// </summary>
-    public virtual void OnCreateUi()
+    public virtual void OnInitNestedUi()
     {
     }
 
@@ -156,16 +159,16 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         {
             foreach (var uiBase in _nestedUiSet)
             {
-                uiBase._targetUi = null;
+                uiBase.ParentUi = null;
                 uiBase.Destroy();
             }
             _nestedUiSet.Clear();
         }
 
         //在父Ui中移除当前Ui
-        if (_targetUi != null)
+        if (ParentUi != null)
         {
-            _targetUi.RecordNestedUi(this, UiManager.RecordType.Close);
+            ParentUi.RecordNestedUi(this, UiManager.RecordType.Close);
         }
         
         QueueFree();
@@ -194,24 +197,24 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     {
         if (type == UiManager.RecordType.Open)
         {
-            if (uiBase._targetUi != null && uiBase._targetUi != this)
+            if (uiBase.ParentUi != null && uiBase.ParentUi != this)
             {
-                GD.PrintErr($"子Ui:'{uiBase.UiName}'已经被其他Ui:'{uiBase._targetUi.UiName}'嵌套打开!");
-                uiBase._targetUi.RecordNestedUi(uiBase, UiManager.RecordType.Close);
+                GD.PrintErr($"子Ui:'{uiBase.UiName}'已经被其他Ui:'{uiBase.ParentUi.UiName}'嵌套打开!");
+                uiBase.ParentUi.RecordNestedUi(uiBase, UiManager.RecordType.Close);
             }
             if (_nestedUiSet == null)
             {
                 _nestedUiSet = new HashSet<UiBase>();
             }
 
-            uiBase._targetUi = this;
+            uiBase.ParentUi = this;
             _nestedUiSet.Add(uiBase);
         }
         else
         {
-            if (uiBase._targetUi == this)
+            if (uiBase.ParentUi == this)
             {
-                uiBase._targetUi = null;
+                uiBase.ParentUi = null;
             }
             else
             {
