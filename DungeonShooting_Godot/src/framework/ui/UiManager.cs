@@ -21,6 +21,9 @@ public static partial class UiManager
 
     private static Dictionary<string, List<UiBase>> _recordUiMap = new Dictionary<string, List<UiBase>>();
 
+    /// <summary>
+    /// 初始化Ui管理器
+    /// </summary>
     public static void Init()
     {
         if (_init)

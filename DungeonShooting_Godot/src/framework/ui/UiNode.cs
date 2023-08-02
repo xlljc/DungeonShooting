@@ -6,6 +6,15 @@ using Godot;
 /// </summary>
 public abstract class UiNode
 {
+    /// <summary>
+    /// 获取Ui实例
+    /// </summary>
+    public abstract Node GetUiInstance();
+
+    /// <summary>
+    /// 获取克隆的Ui实例
+    /// </summary>
+    public abstract IUiCellNode CloneUiCell();
 }
 
 /// <summary>
@@ -78,12 +87,12 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         return inst;
     }
     
-    public Node GetUiInstance()
+    public override Node GetUiInstance()
     {
         return Instance;
     }
 
-    public IUiCellNode CloneUiCell()
+    public override IUiCellNode CloneUiCell()
     {
         return Clone();
     }
