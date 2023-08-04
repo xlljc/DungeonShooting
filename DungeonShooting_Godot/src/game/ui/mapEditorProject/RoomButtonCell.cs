@@ -8,7 +8,6 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
 
     public override void OnInit()
     {
-        CellNode.Instance.Pressed += OnClick;
         CellNode.Instance.FocusExited += OnFocusExited;
     }
 
@@ -23,11 +22,10 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
 
     public override void OnDestroy()
     {
-        CellNode.Instance.Pressed -= OnClick;
         CellNode.Instance.FocusExited -= OnFocusExited;
     }
 
-    private void OnClick()
+    public override void OnClick()
     {
         if (_focus)
         {

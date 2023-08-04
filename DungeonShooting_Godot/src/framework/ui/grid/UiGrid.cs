@@ -24,6 +24,16 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
             var newIndex = Mathf.Clamp(value, -1, _cellList.Count - 1);
             if (_selectIndex != newIndex)
             {
+                //检测新的 Cell 是否可以被选中
+                if (newIndex >= 0)
+                {
+                    var uiCell = _cellList[newIndex];
+                    //不能被选中, 直接跳出
+                    if (!uiCell.CanSelect())
+                    {
+                        return;
+                    }
+                }
                 var prevIndex = _selectIndex;
                 _selectIndex = newIndex;
 

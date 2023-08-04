@@ -4,11 +4,6 @@ namespace UI.MapEditorProject;
 
 public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, DungeonRoomGroup>
 {
-    public override void OnInit()
-    {
-        CellNode.Instance.Pressed += OnClick;
-    }
-
     public override void OnSetData(DungeonRoomGroup info)
     {
         CellNode.Instance.Text = info.GroupName;
@@ -21,9 +16,8 @@ public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, DungeonRoomG
     }
 
     //选中工程
-    private void OnClick()
+    public override void OnClick()
     {
-        Grid.SelectIndex = Index;
         ((MapEditorProjectPanel)CellNode.UiPanel).SelectGroup(Data);
     }
 }

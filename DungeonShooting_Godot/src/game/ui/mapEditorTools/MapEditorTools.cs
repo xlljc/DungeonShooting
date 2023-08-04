@@ -358,12 +358,12 @@ public abstract partial class MapEditorTools : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorTools.HBoxContainer.ToolButton.Select
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: MapEditorTools.HBoxContainer.ToolButton.Select
     /// </summary>
-    public class Select : UiNode<MapEditorTools, Godot.TextureRect, Select>
+    public class Select : UiNode<MapEditorTools, Godot.NinePatchRect, Select>
     {
-        public Select(MapEditorTools uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
-        public override Select Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+        public Select(MapEditorTools uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override Select Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
     }
 
     /// <summary>
@@ -372,13 +372,13 @@ public abstract partial class MapEditorTools : UiBase
     public class ToolButton : UiNode<MapEditorTools, Godot.TextureButton, ToolButton>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.HBoxContainer.Select
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorTools.HBoxContainer.Select
         /// </summary>
         public Select L_Select
         {
             get
             {
-                if (_L_Select == null) _L_Select = new Select(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("Select"));
+                if (_L_Select == null) _L_Select = new Select(UiPanel, Instance.GetNodeOrNull<Godot.NinePatchRect>("Select"));
                 return _L_Select;
             }
         }
@@ -487,7 +487,7 @@ public abstract partial class MapEditorTools : UiBase
     public DoorToolRoot S_DoorToolRoot => L_DoorToolRoot;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.HBoxContainer.ToolButton.Select
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorTools.HBoxContainer.ToolButton.Select
     /// </summary>
     public Select S_Select => L_HBoxContainer.L_ToolButton.L_Select;
 

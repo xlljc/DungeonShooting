@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorDragArea.cs" id="3_3w0w6"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorDragButton.cs" id="3_45muq"]
 [ext_resource type="Texture2D" uid="uid://4wupcp53rrpi" path="res://resource/sprite/ui/mapEditorTools/DoorDragButton.png" id="3_trbb5"]
-[ext_resource type="Texture2D" uid="uid://cuntr7hec044f" path="res://resource/sprite/ui/mapEditorTools/ToolSelect.png" id="7_mqmd6"]
+[ext_resource type="Texture2D" uid="uid://cuntr7hec044f" path="res://resource/sprite/ui/commonIcon/Select.png" id="7_mqmd6"]
 
 [node name="MapEditorTools" type="Control"]
 layout_mode = 3
@@ -163,7 +163,7 @@ grow_horizontal = 0
 layout_mode = 2
 texture_normal = ExtResource("2_rwvbg")
 
-[node name="Select" type="TextureRect" parent="HBoxContainer/ToolButton"]
+[node name="Select" type="NinePatchRect" parent="HBoxContainer/ToolButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -171,3 +171,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("7_mqmd6")
+region_rect = Rect2(0, 0, 36, 36)
+patch_margin_left = 12
+patch_margin_top = 12
+patch_margin_right = 12
+patch_margin_bottom = 12

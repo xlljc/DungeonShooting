@@ -4,13 +4,17 @@ public class ToolButtonCell : UiCell<MapEditorTools.ToolButton, MapEditorToolsPa
 {
     public override void OnInit()
     {
-        CellNode.Instance.Pressed += OnClick;
         CellNode.L_Select.Instance.Visible = false;
     }
 
     public override void OnSetData(MapEditorToolsPanel.ToolBtnData data)
     {
         CellNode.Instance.TextureNormal = ResourceManager.LoadTexture2D(data.Icon);
+    }
+
+    public override bool CanSelect()
+    {
+        return Data.CanSelect;
     }
 
     public override void OnSelect()
@@ -23,12 +27,9 @@ public class ToolButtonCell : UiCell<MapEditorTools.ToolButton, MapEditorToolsPa
         CellNode.L_Select.Instance.Visible = false;
     }
 
-    private void OnClick()
+    public override void OnClick()
     {
-        if (Data.CanSelect)
-        {
-            Grid.SelectIndex = Index;
-        }
         Data.OnClick();
     }
+
 }

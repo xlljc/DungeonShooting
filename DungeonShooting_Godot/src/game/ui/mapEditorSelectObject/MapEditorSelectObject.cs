@@ -46,6 +46,15 @@ public abstract partial class MapEditorSelectObject : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: MapEditorSelectObject.ScrollContainer.ObjectButton.SelectImage
+    /// </summary>
+    public class SelectImage : UiNode<MapEditorSelectObject, Godot.NinePatchRect, SelectImage>
+    {
+        public SelectImage(MapEditorSelectObject uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override SelectImage Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorSelectObject.ScrollContainer.ObjectButton
     /// </summary>
     public class ObjectButton : UiNode<MapEditorSelectObject, Godot.Button, ObjectButton>
@@ -75,6 +84,19 @@ public abstract partial class MapEditorSelectObject : UiBase
             }
         }
         private ObjectName _L_ObjectName;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorSelectObject.ScrollContainer.SelectImage
+        /// </summary>
+        public SelectImage L_SelectImage
+        {
+            get
+            {
+                if (_L_SelectImage == null) _L_SelectImage = new SelectImage(UiPanel, Instance.GetNodeOrNull<Godot.NinePatchRect>("SelectImage"));
+                return _L_SelectImage;
+            }
+        }
+        private SelectImage _L_SelectImage;
 
         public ObjectButton(MapEditorSelectObject uiPanel, Godot.Button node) : base(uiPanel, node) {  }
         public override ObjectButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
@@ -112,6 +134,11 @@ public abstract partial class MapEditorSelectObject : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorSelectObject.ScrollContainer.ObjectButton.ObjectName
     /// </summary>
     public ObjectName S_ObjectName => L_ScrollContainer.L_ObjectButton.L_ObjectName;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorSelectObject.ScrollContainer.ObjectButton.SelectImage
+    /// </summary>
+    public SelectImage S_SelectImage => L_ScrollContainer.L_ObjectButton.L_SelectImage;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorSelectObject.ScrollContainer.ObjectButton

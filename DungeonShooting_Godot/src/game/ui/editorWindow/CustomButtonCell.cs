@@ -4,7 +4,7 @@ public class CustomButtonCell : UiCell<EditorWindow.CustomButton, EditorWindowPa
 {
     public override void OnInit()
     {
-        CellNode.L_Button.Instance.Pressed += OnClick;
+        CellNode.L_Button.Instance.Pressed += Click;
     }
 
     public override void OnSetData(EditorWindowPanel.ButtonData data)
@@ -17,7 +17,7 @@ public class CustomButtonCell : UiCell<EditorWindow.CustomButton, EditorWindowPa
         CellNode.L_Button.Instance.Pressed -= OnClick;
     }
 
-    private void OnClick()
+    public override void OnClick()
     {
         if (Data.Callback != null)
         {

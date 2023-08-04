@@ -14,6 +14,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
         _grid = new UiGrid<ObjectButton, ExcelConfig.ActivityObject>(S_ObjectButton, typeof(ObjectButtonCell));
         _grid.SetAutoColumns(true);
         _grid.SetHorizontalExpand(true);
+        _grid.SetCellOffset(new Vector2I(10, 10));
         
         _grid.SetDataList(ExcelConfig.ActivityObject_List.Where(o =>
         {

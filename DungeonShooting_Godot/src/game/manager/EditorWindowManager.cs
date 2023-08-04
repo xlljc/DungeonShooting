@@ -1,5 +1,6 @@
 ﻿
 using System;
+using Godot;
 using UI.EditorTips;
 using UI.EditorWindow;
 
@@ -32,6 +33,7 @@ public static class EditorWindowManager
     public static void ShowSelectObject(string title)
     {
         var window = UiManager.Open_EditorWindow();
+        window.S_Window.Instance.Size = new Vector2I(900, 600);
         window.SetWindowTitle(title);
         window.OpenBody(UiManager.UiName.MapEditorSelectObject);
     }

@@ -1,4 +1,6 @@
 ﻿
+using Godot;
+
 /// <summary>
 /// 网格组件中单个格子的数据处理类
 /// </summary>
@@ -45,6 +47,13 @@ public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiC
     }
 
     /// <summary>
+    /// 当当前Ui被点击时调用, 如果 Cell 的模板为 BaseButton 类型, 则 UiCell 会自动绑定点击事件
+    /// </summary>
+    public virtual void OnClick()
+    {
+    }
+
+    /// <summary>
     /// 当启用当前 Cell 时调用
     /// </summary>
     public virtual void OnEnable()
@@ -56,6 +65,14 @@ public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiC
     /// </summary>
     public virtual void OnDisable()
     {
+    }
+
+    /// <summary>
+    /// 当检测当前 Cell 是否可以被选中时调用
+    /// </summary>
+    public virtual bool CanSelect()
+    {
+        return true;
     }
     
     /// <summary>
@@ -100,6 +117,11 @@ public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiC
         _init = true;
         Grid = grid;
         CellNode = cellNode;
+        //绑定点击事件
+        if (cellNode.GetUiInstance() is BaseButton button)
+        {
+            button.Pressed += Click;
+        }
         OnInit();
         SetIndex(index);
     }
@@ -123,6 +145,15 @@ public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiC
             Index = index;
             OnRefreshIndex();
         }
+    }
+
+    /// <summary>
+    /// 触发点击当前Ui, 如果 Cell 的模板为 BaseButton 类型, 则 UiCell 会自动绑定点击事件
+    /// </summary>
+    public void Click()
+    {
+        Grid.SelectIndex = Index;
+        OnClick();
     }
     
     public void Destroy()

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cuntr7hec044f"
-path="res://.godot/imported/ToolSelect.png-5b1837e456ff32d51515f4fadfb6daea.ctex"
+uid="uid://dligpyhp72sg7"
+path="res://.godot/imported/Left.png-378d8dc69fe2734c1201d2a52875a630.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/ui/mapEditorTools/ToolSelect.png"
-dest_files=["res://.godot/imported/ToolSelect.png-5b1837e456ff32d51515f4fadfb6daea.ctex"]
+source_file="res://resource/sprite/ui/commonIcon/Left.png"
+dest_files=["res://.godot/imported/Left.png-378d8dc69fe2734c1201d2a52875a630.ctex"]
 
 [params]
 
