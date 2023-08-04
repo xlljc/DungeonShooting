@@ -26,14 +26,14 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
             {
                 var prevIndex = _selectIndex;
                 _selectIndex = newIndex;
-                
+
                 //取消选中上一个
                 if (prevIndex >= 0 && prevIndex < _cellList.Count)
                 {
                     var uiCell = _cellList[prevIndex];
                     uiCell.OnUnSelect();
                 }
-                
+
                 //选中新的
                 if (newIndex >= 0)
                 {
@@ -43,14 +43,14 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
             }
         }
     }
-    
+
     private TUiCellNode _template;
     private Vector2 _size = Vector2.Zero;
     private Node _parent;
     private Type _cellType;
     private Stack<UiCell<TUiCellNode, TData>> _cellPool = new Stack<UiCell<TUiCellNode, TData>>();
     private List<UiCell<TUiCellNode, TData>> _cellList = new List<UiCell<TUiCellNode, TData>>();
-    
+
     private GridContainer _gridContainer;
     private Vector2I _cellOffset;
     private int _columns;
@@ -73,7 +73,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
             _size = control.Size;
         }
     }
-    
+
     /// <summary>
     /// 设置每个 Cell 之间的偏移量
     /// </summary>
@@ -94,7 +94,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     {
         return _cellOffset;
     }
-    
+
     /// <summary>
     /// 设置列数
     /// </summary>
@@ -151,7 +151,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     {
         return _autoColumns;
     }
-    
+
     /// <summary>
     /// 设置当前组布局方式是否横向扩展, 如果为 true, 则 GridContainer 的宽度会撑满父物体
     /// </summary>
@@ -169,7 +169,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
             }
         }
     }
-    
+
     /// <summary>
     /// 获取当前组布局方式是否横向扩展
     /// </summary>
@@ -193,6 +193,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
         {
             array[i] = _cellList[i].Data;
         }
+
         return array;
     }
 
@@ -231,7 +232,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     }
 
     /// <summary>
-    /// 设置当前网格组件中的所有数据, 性能较低
+    /// 设置当前网格组件中的所有 Cell 数据, 性能较低
     /// </summary>
     public void SetDataList(TData[] array)
     {
@@ -245,7 +246,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
                 _gridContainer.AddChild(cell.CellNode.GetUiInstance());
             } while (array.Length > _cellList.Count);
         }
-        else if(array.Length < _cellList.Count)
+        else if (array.Length < _cellList.Count)
         {
             do
             {
@@ -263,7 +264,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     }
 
     /// <summary>
-    /// 添加单条数据
+    /// 添加单条 Cell 数据
     /// </summary>
     public void Add(TData data)
     {
@@ -275,7 +276,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     }
 
     /// <summary>
-    /// 修改指定索引的位置的 cell 数据
+    /// 修改指定索引的位置的 Cell 数据
     /// </summary>
     public void UpdateByIndex(int index, TData data)
     {
@@ -287,17 +288,46 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     }
 
     /// <summary>
+    /// 移除指定索引的 Cell
+    /// </summary>
+    /// <param name="index"></param>
+    public void RemoveByIndex(int index)
+    {
+        if (index < 0 || index >= _cellList.Count)
+        {
+            return;
+        }
+
+        if (index >= _selectIndex)
+        {
+            //取消选中
+            SelectIndex = -1;
+        }
+        var uiCell = _cellList[index];
+        _cellList.RemoveAt(index);
+        ReclaimCellInstance(uiCell);
+        //更新后面的索引
+        for (var i = index; i < _cellList.Count; i++)
+        {
+            var tempCell = _cellList[i];
+            tempCell.SetIndex(i);
+        }
+    }
+
+    /// <summary>
     /// 移除所有 Cell
     /// </summary>
     public void RemoveAll()
     {
+        //取消选中
+        SelectIndex = -1;
         var uiCells = _cellList.ToArray();
         foreach (var uiCell in uiCells)
         {
             ReclaimCellInstance(uiCell);
         }
     }
-    
+
     /// <summary>
     /// 销毁当前网格组件
     /// </summary>
@@ -309,15 +339,17 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
         }
 
         IsDestroyed = true;
-        
+
         for (var i = 0; i < _cellList.Count; i++)
         {
             _cellList[i].Destroy();
         }
+
         foreach (var uiCell in _cellPool)
         {
             uiCell.Destroy();
         }
+
         _cellList = null;
         _cellPool = null;
         if (_gridContainer != null)
@@ -352,6 +384,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
         {
             throw new Exception($"cellType 无法转为'{typeof(UiCell<TUiCellNode, TData>).FullName}'类型!");
         }
+
         _cellList.Add(uiCell);
         uiCell.Init(this, (TUiCellNode)_template.CloneUiCell(), _cellList.Count - 1);
         uiCell.OnEnable();

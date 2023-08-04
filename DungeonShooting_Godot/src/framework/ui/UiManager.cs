@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -115,10 +116,17 @@ public static partial class UiManager
     /// 根据Ui资源路径创建Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/><br/>
     /// 该函数不会自动打开Ui, 需要手动调用 ShowUi() 函数来显示Ui
     /// </summary>
-    public static UiBase CreateUi(string uiName)
+    /// <param name="uiName">Ui名称</param>
+    /// <param name="prevUi">上一级Ui, 用于UIBase.OpenPrevUi()函数返回上一级Ui</param>
+    public static UiBase CreateUi(string uiName, UiBase prevUi = null)
     {
-        var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
+        if (!_init)
+        {
+            throw new Exception("未初始化 UiManager!, 请先调用 UiManager.Init() 函数!");
+        }
+        var packedScene = ResourceLoader.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
+        uiBase.PrevUi = prevUi;
         var canvasLayer = GetUiLayer(uiBase.Layer);
         canvasLayer.AddChild(uiBase);
         uiBase.OnCreateUi();
@@ -130,17 +138,21 @@ public static partial class UiManager
     /// 根据Ui资源路径创建Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/><br/>
     /// 该函数不会自动打开Ui, 需要手动调用 ShowUi() 函数来显示Ui
     /// </summary>
-    public static T CreateUi<T>(string uiName) where T : UiBase
+    /// <param name="uiName">Ui名称</param>
+    /// <param name="prevUi">上一级Ui, 用于UIBase.OpenPrevUi()函数返回上一级Ui</param>
+    public static T CreateUi<T>(string uiName, UiBase prevUi = null) where T : UiBase
     {
-        return (T)CreateUi(uiName);
+        return (T)CreateUi(uiName, prevUi);
     }
-    
+
     /// <summary>
     /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
     /// </summary>
-    public static UiBase OpenUi(string uiName)
+    /// <param name="uiName">Ui名称</param>
+    /// <param name="prevUi">上一级Ui, 用于UIBase.OpenPrevUi()函数返回上一级Ui</param>
+    public static UiBase OpenUi(string uiName, UiBase prevUi = null)
     {
-        var uiBase = CreateUi(uiName);
+        var uiBase = CreateUi(uiName, prevUi);
         uiBase.ShowUi();
         return uiBase;
     }
@@ -148,10 +160,13 @@ public static partial class UiManager
     /// <summary>
     /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
     /// </summary>
-    public static T OpenUi<T>(string uiName) where T : UiBase
+    /// <param name="uiName">Ui名称</param>
+    /// <param name="prevUi">上一级Ui, 用于UIBase.OpenPrevUi()函数返回上一级Ui</param>
+    public static T OpenUi<T>(string uiName, UiBase prevUi = null) where T : UiBase
     {
-        return (T)OpenUi(uiName);
+        return (T)OpenUi(uiName, prevUi);
     }
+
 
     /// <summary>
     /// 销毁指定Ui

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Godot;
@@ -229,7 +228,44 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             _nestedUiSet.Remove(uiBase);
         }
     }
+
+    /// <summary>
+    /// 打开下一级Ui, 当前Ui会被隐藏
+    /// </summary>
+    /// <param name="uiName">下一级Ui的名称</param>
+    public UiBase OpenNextUi(string uiName)
+    {
+        var uiBase = UiManager.OpenUi(uiName, this);
+        HideUi();
+        return uiBase;
+    }
     
+    
+    /// <summary>
+    /// 打开下一级Ui, 当前Ui会被隐藏
+    /// </summary>
+    /// <param name="uiName">下一级Ui的名称</param>
+    public T OpenNextUi<T>(string uiName) where T : UiBase
+    {
+        return (T)OpenNextUi(uiName);
+    }
+
+    /// <summary>
+    /// 返回上一级Ui, 当前Ui会被销毁
+    /// </summary>
+    public void OpenPrevUi()
+    {
+        Destroy();
+        if (PrevUi == null)
+        {
+            GD.PrintErr($"Ui: {UiName} 没有记录上一级Ui!");
+        }
+        else
+        {
+            PrevUi.ShowUi();
+        }
+    }
+
     public long StartCoroutine(IEnumerator able)
     {
         return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
