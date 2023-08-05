@@ -16,9 +16,9 @@ public partial class MapEditorCreateGroupPanel : MapEditorCreateGroup
         var groupName = S_GroupNameInput.Instance.Text;
         
         //检查名称是否合规
-        if (!Regex.IsMatch(groupName, "^\\w+$"))
+        if (string.IsNullOrEmpty(groupName))
         {
-            EditorWindowManager.ShowTips("错误", "组名称'" + groupName + "'不符合名称约束, 组名称只允许包含大小写字母和数字!");
+            EditorWindowManager.ShowTips("错误", "组名称不能为空!");
             return null;
         }
         

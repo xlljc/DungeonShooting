@@ -32,7 +32,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
 
     /// <summary>
     /// 所属父级Ui, 仅当通过 UiNode.OpenNestedUi() 打开时才会赋值<br/>
-    /// 注意: 如果是在预制体中放置的子 Ui, 那么子 Ui 的该属性会在 OnCreateUi() 之后赋值
+    /// 注意: 如果是在预制体中放置的子 Ui, 那么子 Ui 的该属性会在 父 Ui 的 OnCreateUi() 之后赋值
     /// </summary>
     public UiBase ParentUi { get; private set; }
 

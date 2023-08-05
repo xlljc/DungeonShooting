@@ -50,6 +50,29 @@ public static class NodeExtend
     {
         GameApplication.Instance.World.GetRoomLayer(layer).AddChild(node);
     }
+
+    /// <summary>
+    /// 设置Ui布局方式是否横向扩展, 如果为 true, 则 GridContainer 的宽度会撑满父物体
+    /// </summary>
+    public static void SetHorizontalExpand(this Control control, bool flag)
+    {
+        if (flag)
+        {
+            control.SizeFlagsHorizontal |= Control.SizeFlags.Expand;
+        }
+        else if ((control.SizeFlagsHorizontal & Control.SizeFlags.Expand) != 0)
+        {
+            control.SizeFlagsHorizontal ^= Control.SizeFlags.Expand;
+        }
+    }
+
+    /// <summary>
+    /// 获取Ui布局方式是否横向扩展
+    /// </summary>
+    public static bool GetHorizontalExpand(this Control control)
+    {
+        return (control.SizeFlagsHorizontal & Control.SizeFlags.Expand) != 0;
+    }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数

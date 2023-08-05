@@ -34,16 +34,7 @@ public partial class EditorWindowPanel : EditorWindow
     public override void OnCreateUi()
     {
         S_CustomButton.Instance.Visible = false;
-    }
-
-    public override void OnShowUi()
-    {
         S_Window.Instance.CloseRequested += CloseWindow;
-    }
-
-    public override void OnHideUi()
-    {
-        S_Window.Instance.CloseRequested -= CloseWindow;
     }
 
     /// <summary>

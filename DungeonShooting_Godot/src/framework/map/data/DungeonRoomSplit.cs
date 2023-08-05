@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -26,6 +27,12 @@ public class DungeonRoomSplit
     public string TilePath;
 
     /// <summary>
+    /// 房间预设配置数据
+    /// </summary>
+    [JsonInclude]
+    public string PreinstallPath;
+
+    /// <summary>
     /// 房间配置数据, 第一次获取会在资源中加载数据
     /// </summary>
     [JsonIgnore]
@@ -35,18 +42,7 @@ public class DungeonRoomSplit
         {
             if (_roomInfo == null && RoomPath != null)
             {
-                var asText = ResourceManager.LoadText(RoomPath);
-                _roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(asText);
-
-                // //需要处理 DoorAreaInfos 长度为 0 的房间, 并为其配置默认值
-                // var areaInfos = _roomInfo.DoorAreaInfos;
-                // if (areaInfos.Count == 0)
-                // {
-                //     areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize, (_roomInfo.Size.X - 1) * GameConfig.TileCellSize));
-                //     areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize, (_roomInfo.Size.X - 1) * GameConfig.TileCellSize));
-                //     areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize, (_roomInfo.Size.Y - 1) * GameConfig.TileCellSize));
-                //     areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize, (_roomInfo.Size.Y - 1) * GameConfig.TileCellSize));
-                // }
+                ReloadRoomInfo();
             }
 
             return _roomInfo;
@@ -66,8 +62,7 @@ public class DungeonRoomSplit
         {
             if (_tileInfo == null && TilePath != null)
             {
-                var asText = ResourceManager.LoadText(TilePath);
-                _tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(asText);
+                ReloadTileInfo();
             }
 
             return _tileInfo;
@@ -76,4 +71,62 @@ public class DungeonRoomSplit
     }
 
     private DungeonTileInfo _tileInfo;
+    
+    /// <summary>
+    /// 房间预设数据
+    /// </summary>
+    [JsonIgnore]
+    public List<RoomPreinstall> Preinstall
+    {
+        get
+        {
+            if (_preinstall == null && PreinstallPath != null)
+            {
+                ReloadPreinstall();
+            }
+
+            return _preinstall;
+        }
+        set => _preinstall = value;
+    }
+
+    private List<RoomPreinstall> _preinstall;
+
+
+    /// <summary>
+    /// 重新加载房间数据
+    /// </summary>
+    public void ReloadRoomInfo()
+    {
+        var asText = ResourceManager.LoadText(RoomPath);
+        _roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(asText);
+
+        // //需要处理 DoorAreaInfos 长度为 0 的房间, 并为其配置默认值
+        // var areaInfos = _roomInfo.DoorAreaInfos;
+        // if (areaInfos.Count == 0)
+        // {
+        //     areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize, (_roomInfo.Size.X - 1) * GameConfig.TileCellSize));
+        //     areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize, (_roomInfo.Size.X - 1) * GameConfig.TileCellSize));
+        //     areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize, (_roomInfo.Size.Y - 1) * GameConfig.TileCellSize));
+        //     areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize, (_roomInfo.Size.Y - 1) * GameConfig.TileCellSize));
+        // }
+    }
+
+    /// <summary>
+    /// 重新加载房间地块配置数据
+    /// </summary>
+    public void ReloadTileInfo()
+    {
+        var asText = ResourceManager.LoadText(TilePath);
+        _tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(asText);
+    }
+
+    /// <summary>
+    /// 重新加载房间预设数据
+    /// </summary>
+    public void ReloadPreinstall()
+    {
+        var asText = ResourceManager.LoadText(PreinstallPath);
+        _preinstall = JsonSerializer.Deserialize<List<RoomPreinstall>>(asText);
+    }
 }

@@ -14,6 +14,7 @@ public static partial class UiManager
         public const string Main = "Main";
         public const string MapEditor = "MapEditor";
         public const string MapEditorCreateGroup = "MapEditorCreateGroup";
+        public const string MapEditorCreatePreinstall = "MapEditorCreatePreinstall";
         public const string MapEditorCreateRoom = "MapEditorCreateRoom";
         public const string MapEditorMapLayer = "MapEditorMapLayer";
         public const string MapEditorMapMark = "MapEditorMapMark";
@@ -406,6 +407,54 @@ public static partial class UiManager
     public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel[] Get_MapEditorCreateGroup_Instance()
     {
         return GetUiInstance<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(nameof(UI.MapEditorCreateGroup.MapEditorCreateGroup));
+    }
+
+    /// <summary>
+    /// 创建 MapEditorCreatePreinstall, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel Create_MapEditorCreatePreinstall()
+    {
+        return CreateUi<UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel>(UiName.MapEditorCreatePreinstall);
+    }
+
+    /// <summary>
+    /// 打开 MapEditorCreatePreinstall, 并返回UI实例
+    /// </summary>
+    public static UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel Open_MapEditorCreatePreinstall()
+    {
+        return OpenUi<UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel>(UiName.MapEditorCreatePreinstall);
+    }
+
+    /// <summary>
+    /// 隐藏 MapEditorCreatePreinstall 的所有实例
+    /// </summary>
+    public static void Hide_MapEditorCreatePreinstall()
+    {
+        var uiInstance = Get_MapEditorCreatePreinstall_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 MapEditorCreatePreinstall 的所有实例
+    /// </summary>
+    public static void Destroy_MapEditorCreatePreinstall()
+    {
+        var uiInstance = Get_MapEditorCreatePreinstall_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 MapEditorCreatePreinstall 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel[] Get_MapEditorCreatePreinstall_Instance()
+    {
+        return GetUiInstance<UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel>(nameof(UI.MapEditorCreatePreinstall.MapEditorCreatePreinstall));
     }
 
     /// <summary>

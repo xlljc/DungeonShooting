@@ -41,14 +41,15 @@ public partial class MapEditorProjectPanel : MapEditorProject
         _roomGrid.SetAutoColumns(true);
         _roomGrid.SetCellOffset(new Vector2I(10, 10));
         _roomGrid.SetHorizontalExpand(true);
-    }
-
-    public override void OnShowUi()
-    {
+        
         S_GroupSearchButton.Instance.Pressed += OnSearchGroupButtonClick;
         S_RoomSearchButton.Instance.Pressed += OnSearchRoomButtonClick;
         S_RoomAddButton.Instance.Pressed += OnCreateRoomClick;
         S_GroupAddButton.Instance.Pressed += OnCreateGroupClick;
+    }
+
+    public override void OnShowUi()
+    {
         RefreshGroup();
         _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnCreateGroupFinish, OnCreateGroupFinish);
@@ -57,10 +58,6 @@ public partial class MapEditorProjectPanel : MapEditorProject
 
     public override void OnHideUi()
     {
-        S_GroupSearchButton.Instance.Pressed -= OnSearchGroupButtonClick;
-        S_RoomSearchButton.Instance.Pressed -= OnSearchRoomButtonClick;
-        S_RoomAddButton.Instance.Pressed -= OnCreateRoomClick;
-        S_GroupAddButton.Instance.Pressed -= OnCreateGroupClick;
         _eventFactory.RemoveAllEventListener();
     }
 
@@ -97,11 +94,13 @@ public partial class MapEditorProjectPanel : MapEditorProject
     public void SelectRoom(DungeonRoomSplit room)
     {
         HideUi();
-        //打开地牢Ui
-        var mapEditor = UiManager.Open_MapEditor();
+        //创建地牢Ui
+        var mapEditor = UiManager.Create_MapEditor();
         mapEditor.PrevUi = this;
         //加载地牢
         mapEditor.LoadMap(room);
+        //打开Ui
+        mapEditor.ShowUi();
     }
     
     //搜索组按钮点击
@@ -168,57 +167,14 @@ public partial class MapEditorProjectPanel : MapEditorProject
     //创建组按钮点击
     private void OnCreateGroupClick()
     {
-        var window = UiManager.Open_EditorWindow();
-        window.SetWindowTitle("创建地牢组");
-        window.SetWindowSize(new Vector2I(700, 500));
-        var body = window.OpenBody<MapEditorCreateGroupPanel>(UiManager.UiName.MapEditorCreateGroup);
-        window.SetButtonList(
-            new EditorWindowPanel.ButtonData("确定", () =>
-            {
-                //获取填写的数据, 并创建ui
-                var groupInfo = body.GetGroupInfo();
-                if (groupInfo != null)
-                {
-                    window.CloseWindow();
-                    CreateGroup(groupInfo);
-                }
-            }),
-            new EditorWindowPanel.ButtonData("取消", () =>
-            {
-                window.CloseWindow();
-            })
-        );
+        EditorWindowManager.ShowCreateGroup(CreateGroup);
     }
     
     //创建地牢房间按钮点击
     private void OnCreateRoomClick()
     {
-        var window = UiManager.Open_EditorWindow();
-        window.SetWindowTitle("创建地牢房间");
-        window.SetWindowSize(new Vector2I(700, 600));
-        var body = window.OpenBody<MapEditorCreateRoomPanel>(UiManager.UiName.MapEditorCreateRoom);
-        if (SelectGroupInfo != null)
-        {
-            body.SetSelectGroup(SelectGroupInfo.GroupName);
-        }
-        body.SetSelectType(Mathf.Max(S_RoomTypeButton.Instance.Selected - 1, 0));
-        
-        window.SetButtonList(
-            new EditorWindowPanel.ButtonData("确定", () =>
-            {
-                //获取填写的数据, 并创建ui
-                var roomSplit = body.GetRoomInfo();
-                if (roomSplit != null)
-                {
-                    window.CloseWindow();
-                    CreateRoom(roomSplit);
-                }
-            }),
-            new EditorWindowPanel.ButtonData("取消", () =>
-            {
-                window.CloseWindow();
-            })
-        );
+        var groupName = SelectGroupInfo != null ? SelectGroupInfo.GroupName : null;
+        EditorWindowManager.ShowCreateRoom(groupName, Mathf.Max(S_RoomTypeButton.Instance.Selected - 1, 0), CreateRoom);
     }
 
     //创建地牢组

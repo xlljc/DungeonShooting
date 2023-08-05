@@ -54,6 +54,7 @@ public class ResourcePath
     public const string prefab_ui_Main_tscn = "res://prefab/ui/Main.tscn";
     public const string prefab_ui_MapEditor_tscn = "res://prefab/ui/MapEditor.tscn";
     public const string prefab_ui_MapEditorCreateGroup_tscn = "res://prefab/ui/MapEditorCreateGroup.tscn";
+    public const string prefab_ui_MapEditorCreatePreinstall_tscn = "res://prefab/ui/MapEditorCreatePreinstall.tscn";
     public const string prefab_ui_MapEditorCreateRoom_tscn = "res://prefab/ui/MapEditorCreateRoom.tscn";
     public const string prefab_ui_MapEditorMapLayer_tscn = "res://prefab/ui/MapEditorMapLayer.tscn";
     public const string prefab_ui_MapEditorMapMark_tscn = "res://prefab/ui/MapEditorMapMark.tscn";

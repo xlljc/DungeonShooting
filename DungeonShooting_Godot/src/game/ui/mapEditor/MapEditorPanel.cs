@@ -58,10 +58,6 @@ public partial class MapEditorPanel : MapEditor
     private void OnBackClick()
     {
         //返回上一个Ui
-        if (PrevUi != null)
-        {
-            Destroy();
-            PrevUi.ShowUi();
-        }
+        OpenPrevUi();
     }
 }

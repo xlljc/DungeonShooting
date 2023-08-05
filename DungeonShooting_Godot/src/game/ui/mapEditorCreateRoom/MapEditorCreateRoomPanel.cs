@@ -65,9 +65,9 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         roomInfo.RoomName = S_RoomNameInput.Instance.Text;
         roomInfo.Remark = S_RemarkInput.Instance.Text;
         //检查名称是否合规
-        if (!Regex.IsMatch(roomInfo.RoomName, "^\\w+$"))
+        if (string.IsNullOrEmpty(roomInfo.RoomName))
         {
-            EditorWindowManager.ShowTips("错误", "房间名称'" + roomInfo.RoomName + "'不符合名称约束, 房间名称只允许包含大小写字母和数字!");
+            EditorWindowManager.ShowTips("错误", "房间名称不能为空!");
             return null;
         }
         
@@ -98,6 +98,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
             return null;
         }
 
+        roomInfo.Weight = (int)S_WeightInput.Instance.Value;
         roomInfo.Size = new SerializeVector2();
         roomInfo.Position = new SerializeVector2();
         roomInfo.DoorAreaInfos = new List<DoorAreaInfo>();
@@ -111,9 +112,12 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         tileInfo.Floor = new List<int>();
         tileInfo.Middle = new List<int>();
         tileInfo.Top = new List<int>();
-
+        
         roomSplit.TilePath = dirPath + "/" + MapProjectManager.GetTileInfoConfigName(roomInfo.RoomName);
         roomSplit.TileInfo = tileInfo;
+
+        roomSplit.PreinstallPath = dirPath + "/" + MapProjectManager.GetRoomPreinstallConfigName(roomInfo.RoomName);
+        roomSplit.Preinstall = new List<RoomPreinstall>();
         return roomSplit;
     }
 }

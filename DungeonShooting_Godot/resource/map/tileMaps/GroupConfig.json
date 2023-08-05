@@ -5,26 +5,11 @@
       {
         "Ready": false,
         "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_roomInfo.json",
-        "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_tileInfo.json"
-      },
-      {
-        "Ready": false,
-        "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room2/Room2_roomInfo.json",
-        "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room2/Room2_tileInfo.json"
-      },
-      {
-        "Ready": false,
-        "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_roomInfo.json",
-        "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_tileInfo.json"
+        "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_tileInfo.json",
+        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_preinstall.json"
       }
     ],
-    "InletList": [
-      {
-        "Ready": false,
-        "RoomPath": "resource/map/tileMaps/TestGroup1/inlet/Room1/Room1_roomInfo.json",
-        "TilePath": "resource/map/tileMaps/TestGroup1/inlet/Room1/Room1_tileInfo.json"
-      }
-    ],
+    "InletList": [],
     "OutletList": [],
     "BossList": [],
     "RewardList": [],

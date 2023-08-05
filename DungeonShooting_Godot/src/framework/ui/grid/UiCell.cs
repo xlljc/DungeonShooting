@@ -6,13 +6,10 @@ using Godot;
 /// </summary>
 /// <typeparam name="TUiCellNode">ui节点类型</typeparam>
 /// <typeparam name="T">数据类型</typeparam>
-public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiCellNode
+public abstract class UiCell<TUiCellNode, T> : IUiCell where TUiCellNode : IUiCellNode
 {
     public bool IsDestroyed { get; private set; }
-
-    /// <summary>
-    /// 当前 Cell 在 UiGrid 组件中的索引位置
-    /// </summary>
+    
     public int Index { get; private set; } = -1;
     
     /// <summary>
@@ -61,30 +58,21 @@ public abstract class UiCell<TUiCellNode, T> : IDestroy where TUiCellNode : IUiC
     }
 
     /// <summary>
-    /// 当禁用当前 Cell 时调用
+    /// 当禁用当前 Cell 时调用, 也就是被回收时调用
     /// </summary>
     public virtual void OnDisable()
     {
     }
 
-    /// <summary>
-    /// 当检测当前 Cell 是否可以被选中时调用
-    /// </summary>
     public virtual bool CanSelect()
     {
         return true;
     }
     
-    /// <summary>
-    /// 当前 Cell 选中时调用, 设置 UiGrid.SelectIndex 时触发
-    /// </summary>
     public virtual void OnSelect()
     {
     }
-
-    /// <summary>
-    /// 当前 Cell 取消选中时调用, 设置 UiGrid.SelectIndex 时触发
-    /// </summary>
+    
     public virtual void OnUnSelect()
     {
     }

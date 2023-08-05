@@ -117,6 +117,14 @@ public static class MapProjectManager
     }
 
     /// <summary>
+    /// 获取房间预设数据配置文件名称
+    /// </summary>
+    public static string GetRoomPreinstallConfigName(string roomName)
+    {
+        return roomName + "_preinstall.json";
+    }
+
+    /// <summary>
     /// 创建地牢组
     /// </summary>
     public static void CreateGroup(DungeonRoomGroup group)
@@ -166,6 +174,9 @@ public static class MapProjectManager
             //将房间地块保存为json
             var jsonText3 = JsonSerializer.Serialize(roomSplit.TileInfo);
             File.WriteAllText(roomSplit.TilePath, jsonText3);
+            //将预设保存为json
+            var jsonText4 = JsonSerializer.Serialize(roomSplit.Preinstall);
+            File.WriteAllText(roomSplit.PreinstallPath, jsonText4);
             //创建完成事件
             EventManager.EmitEvent(EventEnum.OnCreateRoomFinish, roomSplit);
         }

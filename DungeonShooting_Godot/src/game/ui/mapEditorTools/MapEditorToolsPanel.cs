@@ -72,11 +72,6 @@ public partial class MapEditorToolsPanel : MapEditorTools
         _toolGrid.SelectIndex = 1;
     }
 
-    public override void OnShowUi()
-    {
-        EventManager.EmitEvent(EventEnum.OnClickCenterTool);
-    }
-
     public override void OnDestroyUi()
     {
         S_DoorToolTemplate.Instance.QueueFree();

@@ -115,8 +115,10 @@ public partial class EditorTileMap : TileMap
     private int _terrain = 0;
     private AutoTileConfig _autoTileConfig = new AutoTileConfig();
     
-    //原数据
-    private DungeonRoomSplit _roomSplit;
+    /// <summary>
+    /// 正在编辑的房间数据
+    /// </summary>
+    public DungeonRoomSplit RoomSplit { get; private set; }
 
     //变动过的数据
     
@@ -382,6 +384,7 @@ public partial class EditorTileMap : TileMap
     {
         SaveRoomInfoConfig();
         SaveTileInfoConfig();
+        SavePreinstallConfig();
     }
 
     /// <summary>
@@ -389,7 +392,12 @@ public partial class EditorTileMap : TileMap
     /// </summary>
     public bool Load(DungeonRoomSplit roomSplit)
     {
-        _roomSplit = roomSplit;
+        //重新加载数据
+        roomSplit.ReloadRoomInfo();
+        roomSplit.ReloadTileInfo();
+        roomSplit.ReloadPreinstall();
+        
+        RoomSplit = roomSplit;
         var roomInfo = roomSplit.RoomInfo;
         var tileInfo = roomSplit.TileInfo;
 
@@ -421,6 +429,9 @@ public partial class EditorTileMap : TileMap
         {
             MapEditorToolsPanel.CreateDoorTool(doorAreaInfo);
         }
+        
+        //聚焦
+        OnClickCenterTool(null);
         return true;
     }
 
@@ -858,7 +869,7 @@ public partial class EditorTileMap : TileMap
     private void SaveRoomInfoConfig()
     {
         //存入本地
-        var roomInfo = _roomSplit.RoomInfo;
+        var roomInfo = RoomSplit.RoomInfo;
         var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
         if (!Directory.Exists(path))
         {
@@ -879,14 +890,14 @@ public partial class EditorTileMap : TileMap
     public void SaveTileInfoConfig()
     {
         //存入本地
-        var roomInfo = _roomSplit.RoomInfo;
+        var roomInfo = RoomSplit.RoomInfo;
         var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
 
-        var tileInfo = _roomSplit.TileInfo;
+        var tileInfo = RoomSplit.TileInfo;
         tileInfo.NavigationList.Clear();
         tileInfo.NavigationList.AddRange(_dungeonTileMap.GetPolygonData());
         tileInfo.Floor.Clear();
@@ -899,6 +910,22 @@ public partial class EditorTileMap : TileMap
         
         path += "/" + MapProjectManager.GetTileInfoConfigName(roomInfo.RoomName);
         var jsonStr = JsonSerializer.Serialize(tileInfo);
+        File.WriteAllText(path, jsonStr);
+    }
+
+    //保存预设数据
+    public void SavePreinstallConfig()
+    {
+        //存入本地
+        var roomInfo = RoomSplit.RoomInfo;
+        var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        path += "/" + MapProjectManager.GetRoomPreinstallConfigName(roomInfo.RoomName);
+        var jsonStr = JsonSerializer.Serialize(RoomSplit.Preinstall);
         File.WriteAllText(path, jsonStr);
     }
 

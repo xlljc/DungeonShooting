@@ -9,13 +9,10 @@ using Godot;
 /// </summary>
 /// <typeparam name="TUiCellNode">Ui节点类型</typeparam>
 /// <typeparam name="TData">传给Cell的数据类型</typeparam>
-public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNode
+public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNode
 {
     public bool IsDestroyed { get; private set; }
-
-    /// <summary>
-    /// 当前选中的 Cell 索引
-    /// </summary>
+    
     public int SelectIndex
     {
         get => _selectIndex;
@@ -53,19 +50,32 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
             }
         }
     }
+    
+    public bool Visible
+    {
+        get => _gridContainer.Visible;
+        set => _gridContainer.Visible = value;
+    }
 
+    //模板对象
     private TUiCellNode _template;
+    //模板大小
     private Vector2 _size = Vector2.Zero;
-    private Node _parent;
+    //cell逻辑处理类
     private Type _cellType;
+    //当前活动的cell池
     private Stack<UiCell<TUiCellNode, TData>> _cellPool = new Stack<UiCell<TUiCellNode, TData>>();
+    //当前已被回收的cell池
     private List<UiCell<TUiCellNode, TData>> _cellList = new List<UiCell<TUiCellNode, TData>>();
-
+    //godot原生网格组件
     private GridContainer _gridContainer;
+    //单个cell偏移
     private Vector2I _cellOffset;
+    //列数
     private int _columns;
+    //是否自动扩展列数
     private bool _autoColumns;
-
+    //选中的cell索引
     private int _selectIndex = -1;
 
     public UiGrid(TUiCellNode template, Type cellType)
@@ -75,9 +85,8 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
         _template = template;
         _cellType = cellType;
         var uiInstance = _template.GetUiInstance();
-        _parent = uiInstance.GetParent();
-        _parent.RemoveChild(uiInstance);
-        _parent.AddChild(_gridContainer);
+        uiInstance.AddSibling(_gridContainer);
+        uiInstance.GetParent().RemoveChild(uiInstance);
         if (uiInstance is Control control)
         {
             _size = control.Size;
@@ -87,14 +96,11 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     /// <summary>
     /// 设置每个 Cell 之间的偏移量
     /// </summary>
-    public void SetCellOffset(Vector2I offset)
+    public void  SetCellOffset(Vector2I offset)
     {
-        if (_gridContainer != null)
-        {
-            _cellOffset = offset;
-            _gridContainer.AddThemeConstantOverride("h_separation", offset.X);
-            _gridContainer.AddThemeConstantOverride("v_separation", offset.Y);
-        }
+        _cellOffset = offset;
+        _gridContainer.AddThemeConstantOverride("h_separation", offset.X);
+        _gridContainer.AddThemeConstantOverride("v_separation", offset.Y);
     }
 
     /// <summary>
@@ -111,10 +117,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     public void SetColumns(int columns)
     {
         _columns = columns;
-        if (_gridContainer != null)
-        {
-            _gridContainer.Columns = columns;
-        }
+        _gridContainer.Columns = columns;
     }
 
     /// <summary>
@@ -122,12 +125,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     /// </summary>
     public int GetColumns()
     {
-        if (_gridContainer != null)
-        {
-            return _gridContainer.Columns;
-        }
-
-        return _columns;
+        return _gridContainer.Columns;
     }
 
     /// <summary>
@@ -138,18 +136,15 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
         if (flag != _autoColumns)
         {
             _autoColumns = flag;
-            if (_gridContainer != null)
+            if (_autoColumns)
             {
-                if (_autoColumns)
-                {
-                    _gridContainer.Resized += OnGridResized;
-                    OnGridResized();
-                }
-                else
-                {
-                    _gridContainer.Columns = _columns;
-                    _gridContainer.Resized -= OnGridResized;
-                }
+                _gridContainer.Resized += OnGridResized;
+                OnGridResized();
+            }
+            else
+            {
+                _gridContainer.Columns = _columns;
+                _gridContainer.Resized -= OnGridResized;
             }
         }
     }
@@ -163,34 +158,19 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
     }
 
     /// <summary>
-    /// 设置当前组布局方式是否横向扩展, 如果为 true, 则 GridContainer 的宽度会撑满父物体
+    /// 设置当前组件布局方式是否横向扩展, 如果为 true, 则 GridContainer 的宽度会撑满父物体
     /// </summary>
     public void SetHorizontalExpand(bool flag)
     {
-        if (_gridContainer != null)
-        {
-            if (flag)
-            {
-                _gridContainer.SizeFlagsHorizontal |= Control.SizeFlags.Expand;
-            }
-            else if ((_gridContainer.SizeFlagsHorizontal & Control.SizeFlags.Expand) != 0)
-            {
-                _gridContainer.SizeFlagsHorizontal ^= Control.SizeFlags.Expand;
-            }
-        }
+        _gridContainer.SetHorizontalExpand(flag);
     }
 
     /// <summary>
-    /// 获取当前组布局方式是否横向扩展
+    /// 获取当前组件布局方式是否横向扩展
     /// </summary>
     public bool GetHorizontalExpand()
     {
-        if (_gridContainer != null)
-        {
-            return (_gridContainer.SizeFlagsHorizontal & Control.SizeFlags.Expand) != 0;
-        }
-
-        return false;
+        return _gridContainer.GetHorizontalExpand();
     }
 
     /// <summary>
@@ -362,10 +342,7 @@ public class UiGrid<TUiCellNode, TData> : IDestroy where TUiCellNode : IUiCellNo
 
         _cellList = null;
         _cellPool = null;
-        if (_gridContainer != null)
-        {
-            _gridContainer.QueueFree();
-        }
+        _gridContainer.QueueFree();
     }
 
     private void OnReady()

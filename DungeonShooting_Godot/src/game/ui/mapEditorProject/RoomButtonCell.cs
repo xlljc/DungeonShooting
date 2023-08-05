@@ -30,7 +30,7 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
         if (_focus)
         {
             //打开房间编辑器
-            ((MapEditorProjectPanel)CellNode.UiPanel).SelectRoom(Data);
+            CellNode.UiPanel.SelectRoom(Data);
             CellNode.Instance.ReleaseFocus();
         }
         else

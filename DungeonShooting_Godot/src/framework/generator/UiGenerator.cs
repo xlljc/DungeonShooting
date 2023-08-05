@@ -232,10 +232,10 @@ public static class UiGenerator
         return retraction + $"/// <summary>\n" + 
                retraction + $"/// 类型: <see cref=\"{uiNodeInfo.NodeTypeName}\"/>, 路径: {parent}{uiNodeInfo.OriginName}\n" + 
                retraction + $"/// </summary>\n" + 
-               retraction + $"public class {uiNodeInfo.ClassName} : UiNode<{uiNodeInfo.UiRootName}, {uiNodeInfo.NodeTypeName}, {uiNodeInfo.ClassName}>\n" +
+               retraction + $"public class {uiNodeInfo.ClassName} : UiNode<{uiNodeInfo.UiRootName}Panel, {uiNodeInfo.NodeTypeName}, {uiNodeInfo.ClassName}>\n" +
                retraction + $"{{\n" +
                GeneratePropertyListClassCode("Instance.", parent, uiNodeInfo, retraction + "    ") + 
-               retraction + $"    public {uiNodeInfo.ClassName}({uiNodeInfo.UiRootName} uiPanel, {uiNodeInfo.NodeTypeName} node) : base(uiPanel, node) {{  }}\n" +
+               retraction + $"    public {uiNodeInfo.ClassName}({uiNodeInfo.UiRootName}Panel uiPanel, {uiNodeInfo.NodeTypeName} node) : base(uiPanel, node) {{  }}\n" +
                cloneCode +
                retraction + $"}}\n\n";
     }
@@ -260,7 +260,7 @@ public static class UiGenerator
         string uiPanel;
         if (string.IsNullOrEmpty(target))
         {
-            uiPanel = "this";
+            uiPanel = $"({uiNodeInfo.UiRootName}Panel)this";
         }
         else
         {

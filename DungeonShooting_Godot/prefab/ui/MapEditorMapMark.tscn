@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://peo0n8bl15y5"]
+[gd_scene load_steps=8 format=3 uid="uid://peo0n8bl15y5"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorMapMark/MapEditorMapMarkPanel.cs" id="1_dudey"]
 [ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="2_osya0"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="4_urq7y"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="5_3tml0"]
 [ext_resource type="Texture2D" uid="uid://d4gduco55dqpk" path="res://resource/sprite/ui/commonIcon/Down.png" id="5_x5dpw"]
+[ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="6_jpt3y"]
 
 [node name="MapEditorMapMark" type="Control"]
 layout_mode = 3
@@ -55,15 +56,11 @@ text = "编辑对象："
 visible = false
 layout_mode = 2
 
-[node name="AddMark" type="Button" parent="VBoxContainer/DynamicTool"]
-layout_mode = 2
-icon = ExtResource("2_osya0")
-
-[node name="EditMark" type="Button" parent="VBoxContainer/DynamicTool"]
+[node name="EditButton" type="Button" parent="VBoxContainer/DynamicTool"]
 layout_mode = 2
 icon = ExtResource("3_wwaki")
 
-[node name="DeleteMark" type="Button" parent="VBoxContainer/DynamicTool"]
+[node name="DeleteButton" type="Button" parent="VBoxContainer/DynamicTool"]
 layout_mode = 2
 icon = ExtResource("4_urq7y")
 
@@ -76,35 +73,76 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="WaveTemplate" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="AddWaveButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "添加波数"
+
+[node name="WaveItem" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveTemplate"]
+[node name="WaveContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem"]
 layout_mode = 2
 
-[node name="TextureButton" type="TextureButton" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveTemplate/HBoxContainer"]
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/WaveContainer"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 texture_normal = ExtResource("5_x5dpw")
 stretch_mode = 3
 
-[node name="WaveButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveTemplate/HBoxContainer"]
+[node name="WaveButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/WaveContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "第1波"
 alignment = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveTemplate"]
+[node name="Select" type="NinePatchRect" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/WaveContainer/WaveButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_jpt3y")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem"]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveTemplate/MarginContainer"]
+[node name="AddMarkButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/MarginContainer"]
+layout_mode = 2
+text = "添加标记"
+icon_alignment = 1
+
+[node name="MarkContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+
+[node name="MarkItem" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/MarkContainer"]
 layout_mode = 2
 
-[node name="MarkButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveTemplate/MarginContainer/HBoxContainer"]
+[node name="MarkButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/MarkContainer/MarkItem"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "敌人(1001)"
 icon = ExtResource("5_3tml0")
 alignment = 0
+
+[node name="Select" type="NinePatchRect" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/MarkContainer/MarkItem/MarkButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_jpt3y")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
