@@ -7,7 +7,7 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
 
     public override void OnCreateUi()
     {
-        
+        S_AddMark.Instance.Pressed += OnAddMark;
     }
 
     public override void OnDestroyUi()
@@ -15,4 +15,8 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         
     }
 
+    private void OnAddMark()
+    {
+        EditorWindowManager.ShowSelectObject("选择物体");
+    }
 }

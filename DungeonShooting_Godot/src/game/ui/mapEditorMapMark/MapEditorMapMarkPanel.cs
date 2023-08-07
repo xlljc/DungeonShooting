@@ -78,7 +78,14 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             optionButton.AddItem($"{item.Name} ({item.Weight})");
         }
 
-        optionButton.Selected = selectIndex;
+        if (selectIndex == -1 && preinstall.Count > 0)
+        {
+            OnItemSelected(0);
+        }
+        else
+        {
+            OnItemSelected(selectIndex);
+        }
     }
 
     /// <summary>

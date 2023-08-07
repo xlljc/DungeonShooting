@@ -161,7 +161,7 @@ public static class EditorWindowManager
     {
         var window = UiManager.Open_EditorWindow();
         window.SetWindowTitle("创建标记");
-        window.SetWindowSize(new Vector2I(700, 600));
+        window.SetWindowSize(new Vector2I(1200, 900));
         var body = window.OpenBody<MapEditorCreateMarkPanel>(UiManager.UiName.MapEditorCreateMark);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
@@ -183,8 +183,18 @@ public static class EditorWindowManager
     public static void ShowSelectObject(string title)
     {
         var window = UiManager.Open_EditorWindow();
-        window.S_Window.Instance.Size = new Vector2I(900, 600);
+        window.S_Window.Instance.Size = new Vector2I(1000, 700);
         window.SetWindowTitle(title);
         window.OpenBody(UiManager.UiName.MapEditorSelectObject);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                window.CloseWindow();
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
     }
 }

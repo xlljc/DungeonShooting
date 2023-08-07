@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://ie52mo5t6l2h"]
+[gd_scene load_steps=5 format=3 uid="uid://ie52mo5t6l2h"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorSelectObject/MapEditorSelectObjectPanel.cs" id="1_hdfkd"]
 [ext_resource type="Material" uid="uid://cces3bhds7jyi" path="res://resource/material/Blend.tres" id="2_j6gjm"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="3_4nhjm"]
+[ext_resource type="Texture2D" uid="uid://blfvsup876agh" path="res://resource/sprite/ui/commonIcon/Search.png" id="3_laasd"]
 
 [node name="MapEditorSelectObject" type="Control"]
 layout_mode = 3
@@ -13,7 +14,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hdfkd")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="HBoxContainer" type="HSplitContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,11 +22,106 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ObjectButton" type="Button" parent="ScrollContainer"]
-custom_minimum_size = Vector2(150, 192)
+[node name="Panel" type="Panel" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 25.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Panel/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TypeButton" type="Button" parent="HBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "所有类型"
+
+[node name="Select" type="NinePatchRect" parent="HBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer/TypeButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_4nhjm")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Panel2" type="Panel" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 75.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/Panel2/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Panel2/MarginContainer/VBoxContainer2/MarginContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/Panel2/MarginContainer/VBoxContainer2/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 44)
+layout_mode = 2
+size_flags_vertical = 4
+placeholder_text = "搜索名称/id"
+
+[node name="Search" type="Button" parent="HBoxContainer/Panel2/MarginContainer/VBoxContainer2/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+size_flags_vertical = 4
+icon = ExtResource("3_laasd")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/Panel2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 75.0
+
+[node name="ObjectButton" type="Button" parent="HBoxContainer/Panel2/MarginContainer/VBoxContainer2/ScrollContainer"]
+custom_minimum_size = Vector2(124, 160)
 layout_mode = 2
 
-[node name="PreviewImage" type="TextureRect" parent="ScrollContainer/ObjectButton"]
+[node name="PreviewImage" type="TextureRect" parent="HBoxContainer/Panel2/MarginContainer/VBoxContainer2/ScrollContainer/ObjectButton"]
 material = ExtResource("2_j6gjm")
 layout_mode = 1
 anchors_preset = 15
@@ -34,20 +130,20 @@ anchor_bottom = 1.0
 offset_left = 2.0
 offset_top = 2.0
 offset_right = -2.0
-offset_bottom = -44.0
+offset_bottom = -38.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 stretch_mode = 5
 
-[node name="ObjectName" type="Label" parent="ScrollContainer/ObjectButton"]
+[node name="ObjectName" type="Label" parent="HBoxContainer/Panel2/MarginContainer/VBoxContainer2/ScrollContainer/ObjectButton"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -43.0
-offset_right = 150.0
+offset_right = 124.0
 offset_bottom = 43.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -59,7 +155,7 @@ autowrap_mode = 3
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="SelectImage" type="NinePatchRect" parent="ScrollContainer/ObjectButton"]
+[node name="Select" type="NinePatchRect" parent="HBoxContainer/Panel2/MarginContainer/VBoxContainer2/ScrollContainer/ObjectButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

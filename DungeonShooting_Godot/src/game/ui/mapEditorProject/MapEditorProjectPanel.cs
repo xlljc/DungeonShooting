@@ -41,6 +41,16 @@ public partial class MapEditorProjectPanel : MapEditorProject
         _roomGrid.SetAutoColumns(true);
         _roomGrid.SetCellOffset(new Vector2I(10, 10));
         _roomGrid.SetHorizontalExpand(true);
+
+        if (PrevUi != null)
+        {
+            S_Back.Instance.Visible = true;
+            S_Back.Instance.Pressed += OpenPrevUi;
+        }
+        else
+        {
+            S_Back.Instance.Visible = false;
+        }
         
         S_GroupSearchButton.Instance.Pressed += OnSearchGroupButtonClick;
         S_RoomSearchButton.Instance.Pressed += OnSearchRoomButtonClick;

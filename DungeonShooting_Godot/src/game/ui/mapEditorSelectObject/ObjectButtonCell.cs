@@ -6,7 +6,7 @@ public class ObjectButtonCell : UiCell<MapEditorSelectObject.ObjectButton, Excel
 {
     public override void OnInit()
     {
-        CellNode.L_SelectImage.Instance.Visible = false;
+        CellNode.L_Select.Instance.Visible = false;
     }
 
     public override void OnSetData(ExcelConfig.ActivityObject data)
@@ -14,17 +14,22 @@ public class ObjectButtonCell : UiCell<MapEditorSelectObject.ObjectButton, Excel
         CellNode.L_ObjectName.Instance.Text = data.Name;
         if (!string.IsNullOrEmpty(data.Icon))
         {
+            CellNode.L_PreviewImage.Instance.Visible = true;
             CellNode.L_PreviewImage.Instance.Texture = ResourceManager.LoadTexture2D(data.Icon);
+        }
+        else
+        {
+            CellNode.L_PreviewImage.Instance.Visible = false;
         }
     }
 
     public override void OnSelect()
     {
-        CellNode.L_SelectImage.Instance.Visible = true;
+        CellNode.L_Select.Instance.Visible = true;
     }
 
     public override void OnUnSelect()
     {
-        CellNode.L_SelectImage.Instance.Visible = false;
+        CellNode.L_Select.Instance.Visible = false;
     }
 }
