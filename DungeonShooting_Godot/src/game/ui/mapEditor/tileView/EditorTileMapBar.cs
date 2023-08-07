@@ -14,12 +14,8 @@ public class EditorTileMapBar
         _editorTileMap.Instance.MapEditorToolsPanel = editorPanel.S_MapEditorTools.Instance;
         _editorTileMap.Instance.MapEditorToolsPanel.EditorMap = _editorTileMap;
 
-        _eventFactory = EventManager.CreateEventFactory();
-    }
-
-    public void OnShow()
-    {
         _editorTileMap.L_Brush.Instance.Draw += OnDrawGuides;
+        _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnSelectDragTool, _editorTileMap.Instance.OnSelectHandTool);
         _eventFactory.AddEventListener(EventEnum.OnSelectPenTool, _editorTileMap.Instance.OnSelectPenTool);
         _eventFactory.AddEventListener(EventEnum.OnSelectRectTool, _editorTileMap.Instance.OnSelectRectTool);
@@ -27,10 +23,14 @@ public class EditorTileMapBar
         _eventFactory.AddEventListener(EventEnum.OnClickCenterTool, _editorTileMap.Instance.OnClickCenterTool);
     }
 
+    public void OnShow()
+    {
+
+    }
+
     public void OnHide()
     {
-        _editorTileMap.L_Brush.Instance.Draw -= OnDrawGuides;
-        _eventFactory.RemoveAllEventListener();
+        
     }
 
     public void Process(float delta)
@@ -45,6 +45,7 @@ public class EditorTileMapBar
 
     public void OnDestroy()
     {
-        
+        _editorTileMap.L_Brush.Instance.Draw -= OnDrawGuides;
+        _eventFactory.RemoveAllEventListener();
     }
 }

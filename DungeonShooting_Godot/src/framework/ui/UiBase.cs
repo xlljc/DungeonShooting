@@ -35,6 +35,12 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     /// 注意: 如果是在预制体中放置的子 Ui, 那么子 Ui 的该属性会在 父 Ui 的 OnCreateUi() 之后赋值
     /// </summary>
     public UiBase ParentUi { get; private set; }
+    
+    /// <summary>
+    /// 所属父级节点, 仅当通过 UiNode.OpenNestedUi() 打开时才会赋值<br/>
+    /// 注意: 如果是在预制体中放置的子 Ui, 那么子 Ui 的该属性会在 父 Ui 的 OnCreateUi() 之后赋值
+    /// </summary>
+    public UiNode ParentNode { get; private set; }
 
     //开启的协程
     private List<CoroutineData> _coroutineList;
@@ -167,7 +173,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         //在父Ui中移除当前Ui
         if (ParentUi != null)
         {
-            ParentUi.RecordNestedUi(this, UiManager.RecordType.Close);
+            ParentUi.RecordNestedUi(this, null, UiManager.RecordType.Close);
         }
         
         QueueFree();
@@ -190,16 +196,45 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     }
 
     /// <summary>
+    /// 嵌套打开子ui
+    /// </summary>
+    public UiBase OpenNestedUi(string uiName, UiBase prevUi = null)
+    {
+        var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
+        var uiBase = packedScene.Instantiate<UiBase>();
+        uiBase.PrevUi = prevUi;
+        AddChild(uiBase);
+        RecordNestedUi(uiBase, null, UiManager.RecordType.Open);
+        
+        uiBase.OnCreateUi();
+        uiBase.OnInitNestedUi();
+        if (IsOpen)
+        {
+            uiBase.ShowUi();
+        }
+        
+        return uiBase;
+    }
+
+    /// <summary>
+    /// 嵌套打开子ui
+    /// </summary>
+    public T OpenNestedUi<T>(string uiName, UiBase prevUi = null) where T : UiBase
+    {
+        return (T)OpenNestedUi(uiName, prevUi);
+    }
+
+    /// <summary>
     /// 记录嵌套打开/关闭的UI
     /// </summary>
-    public void RecordNestedUi(UiBase uiBase, UiManager.RecordType type)
+    public void RecordNestedUi(UiBase uiBase, UiNode node, UiManager.RecordType type)
     {
         if (type == UiManager.RecordType.Open)
         {
             if (uiBase.ParentUi != null && uiBase.ParentUi != this)
             {
                 GD.PrintErr($"子Ui:'{uiBase.UiName}'已经被其他Ui:'{uiBase.ParentUi.UiName}'嵌套打开!");
-                uiBase.ParentUi.RecordNestedUi(uiBase, UiManager.RecordType.Close);
+                uiBase.ParentUi.RecordNestedUi(uiBase, node, UiManager.RecordType.Close);
             }
             if (_nestedUiSet == null)
             {
@@ -207,6 +242,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             }
 
             uiBase.ParentUi = this;
+            uiBase.ParentNode = node;
             _nestedUiSet.Add(uiBase);
         }
         else
@@ -214,6 +250,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             if (uiBase.ParentUi == this)
             {
                 uiBase.ParentUi = null;
+                uiBase.ParentNode = null;
             }
             else
             {
@@ -235,7 +272,22 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     /// <param name="uiName">下一级Ui的名称</param>
     public UiBase OpenNextUi(string uiName)
     {
-        var uiBase = UiManager.OpenUi(uiName, this);
+        UiBase uiBase;
+        if (ParentUi != null) //说明当前Ui是嵌套Ui
+        {
+            if (ParentNode != null) //子层级打开
+            {
+                uiBase = ParentNode.OpenNestedUi(uiName, this);
+            }
+            else
+            {
+                uiBase = ParentUi.OpenNestedUi(uiName, this);
+            }
+        }
+        else //正常打开
+        {
+            uiBase = UiManager.OpenUi(uiName, this);
+        }
         HideUi();
         return uiBase;
     }

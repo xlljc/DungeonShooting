@@ -14,6 +14,7 @@ public static partial class UiManager
         public const string Main = "Main";
         public const string MapEditor = "MapEditor";
         public const string MapEditorCreateGroup = "MapEditorCreateGroup";
+        public const string MapEditorCreateMark = "MapEditorCreateMark";
         public const string MapEditorCreatePreinstall = "MapEditorCreatePreinstall";
         public const string MapEditorCreateRoom = "MapEditorCreateRoom";
         public const string MapEditorMapLayer = "MapEditorMapLayer";
@@ -407,6 +408,54 @@ public static partial class UiManager
     public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel[] Get_MapEditorCreateGroup_Instance()
     {
         return GetUiInstance<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(nameof(UI.MapEditorCreateGroup.MapEditorCreateGroup));
+    }
+
+    /// <summary>
+    /// 创建 MapEditorCreateMark, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorCreateMark.MapEditorCreateMarkPanel Create_MapEditorCreateMark()
+    {
+        return CreateUi<UI.MapEditorCreateMark.MapEditorCreateMarkPanel>(UiName.MapEditorCreateMark);
+    }
+
+    /// <summary>
+    /// 打开 MapEditorCreateMark, 并返回UI实例
+    /// </summary>
+    public static UI.MapEditorCreateMark.MapEditorCreateMarkPanel Open_MapEditorCreateMark()
+    {
+        return OpenUi<UI.MapEditorCreateMark.MapEditorCreateMarkPanel>(UiName.MapEditorCreateMark);
+    }
+
+    /// <summary>
+    /// 隐藏 MapEditorCreateMark 的所有实例
+    /// </summary>
+    public static void Hide_MapEditorCreateMark()
+    {
+        var uiInstance = Get_MapEditorCreateMark_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 MapEditorCreateMark 的所有实例
+    /// </summary>
+    public static void Destroy_MapEditorCreateMark()
+    {
+        var uiInstance = Get_MapEditorCreateMark_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 MapEditorCreateMark 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.MapEditorCreateMark.MapEditorCreateMarkPanel[] Get_MapEditorCreateMark_Instance()
+    {
+        return GetUiInstance<UI.MapEditorCreateMark.MapEditorCreateMarkPanel>(nameof(UI.MapEditorCreateMark.MapEditorCreateMark));
     }
 
     /// <summary>

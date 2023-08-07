@@ -1,26 +1,28 @@
-﻿using Godot;
+﻿using System.Collections.Generic;
+using Godot;
 
 namespace UI.MapEditorMapMark;
 
-public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, object>
+public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
 {
-    private UiGrid<MapEditorMapMark.MarkItem, object> _grid;
+    private UiGrid<MapEditorMapMark.MarkItem, MarkInfo> _grid;
     
     public override void OnInit()
     {
         CellNode.L_WaveContainer.L_WaveButton.Instance.Pressed += OnClick;
         CellNode.L_WaveContainer.L_TextureButton.Instance.Pressed += OnExpandOrClose;
+        CellNode.L_MarginContainer.L_AddMarkButton.Instance.Pressed += OnAddMark;
 
         CellNode.L_MarkContainer.L_MarkItem.Instance.SetHorizontalExpand(true);
-        _grid = new UiGrid<MapEditorMapMark.MarkItem, object>(CellNode.L_MarkContainer.L_MarkItem, typeof(EditorMarkCell));
+        _grid = new UiGrid<MapEditorMapMark.MarkItem, MarkInfo>(CellNode.L_MarkContainer.L_MarkItem, typeof(EditorMarkCell));
         _grid.SetColumns(1);
         _grid.SetHorizontalExpand(true);
         _grid.SetCellOffset(new Vector2I(0, 5));
     }
 
-    public override void OnSetData(object data)
+    public override void OnSetData(List<MarkInfo> data)
     {
-        //_grid.SetDataList(new object[] { 1, 2, 3, 4, 5, 6, 7 });
+        _grid.SetDataList(data.ToArray());
     }
 
     public override void OnRefreshIndex()
@@ -33,6 +35,14 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, object>
         _grid.Destroy();
     }
 
+    private void OnAddMark()
+    {
+        EditorWindowManager.ShowCreateMark();
+        // var info = new MarkInfo();
+        // Data.Add(info);
+        // _grid.Add(info);
+    }
+    
     //展开/收起按钮点击
     private void OnExpandOrClose()
     {

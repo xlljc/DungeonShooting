@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 /// <summary>
@@ -23,4 +24,10 @@ public class RoomPreinstall
     /// </summary>
     [JsonInclude]
     public string Remark;
+
+    /// <summary>
+    /// 波数数据
+    /// </summary>
+    [JsonInclude]
+    public List<List<MarkInfo>> WaveList;
 }

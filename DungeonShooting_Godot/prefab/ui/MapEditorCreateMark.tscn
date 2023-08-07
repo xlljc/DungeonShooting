@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bt4xo2lb4h4rx"]
+
+[ext_resource type="Script" path="res://src/game/ui/mapEditorCreateMark/MapEditorCreateMarkPanel.cs" id="1_cjivg"]
+
+[node name="MapEditorCreateMark" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_cjivg")

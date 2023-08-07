@@ -1,6 +1,8 @@
-﻿namespace UI.MapEditorMapMark;
+﻿using System.Collections.Generic;
 
-public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, object>
+namespace UI.MapEditorMapMark;
+
+public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MarkInfo>
 {
     public override void OnInit()
     {

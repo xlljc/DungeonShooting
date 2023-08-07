@@ -5,6 +5,7 @@ using Godot;
 using UI.EditorTips;
 using UI.EditorWindow;
 using UI.MapEditorCreateGroup;
+using UI.MapEditorCreateMark;
 using UI.MapEditorCreatePreinstall;
 using UI.MapEditorCreateRoom;
 
@@ -148,6 +149,29 @@ public static class EditorWindowManager
                     window.CloseWindow();
                     onCreatePreinstall(roomPreinstall);
                 }
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    public static void ShowCreateMark()
+    {
+        var window = UiManager.Open_EditorWindow();
+        window.SetWindowTitle("创建标记");
+        window.SetWindowSize(new Vector2I(700, 600));
+        var body = window.OpenBody<MapEditorCreateMarkPanel>(UiManager.UiName.MapEditorCreateMark);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                // var roomPreinstall = body.GetRoomPreinstall(list);
+                // if (roomPreinstall != null)
+                // {
+                //     window.CloseWindow();
+                //     onCreatePreinstall(roomPreinstall);
+                // }
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {

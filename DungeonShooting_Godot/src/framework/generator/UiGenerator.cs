@@ -167,16 +167,19 @@ public static class UiGenerator
                $"}}\n";
     }
 
-    private static string GenerateInitNestedUi(string layer, UiNodeInfo uiNodeInfo, string retraction)
+    private static string GenerateInitNestedUi(string parent, UiNodeInfo uiNodeInfo, string retraction)
     {
         var str = "";
         if (uiNodeInfo.IsRefUi)
         {
-            var uiInst = "inst" + _nestedIndex++;
-            str += retraction + $"    var {uiInst} = {layer}Instance;\n";
-            str += retraction + $"    RecordNestedUi({uiInst}, UiManager.RecordType.Open);\n";
-            str += retraction + $"    {uiInst}.OnCreateUi();\n";
-            str += retraction + $"    {uiInst}.OnInitNestedUi();\n\n";
+            var parentUi = "inst" + _nestedIndex++;
+            var uiNode = $"{parentUi}.{uiNodeInfo.Name}.Instance";
+            var parentNode = string.IsNullOrEmpty(parent) ? "this" : parent;
+            var parentNode2 = string.IsNullOrEmpty(parent) ? "null" : parentUi;
+            str += retraction + $"    var {parentUi} = {parentNode};\n";
+            str += retraction + $"    RecordNestedUi({uiNode}, {parentNode2}, UiManager.RecordType.Open);\n";
+            str += retraction + $"    {uiNode}.OnCreateUi();\n";
+            str += retraction + $"    {uiNode}.OnInitNestedUi();\n\n";
         }
         else
         {
@@ -185,7 +188,14 @@ public static class UiGenerator
                 for (var i = 0; i < uiNodeInfo.Children.Count; i++)
                 {
                     var item = uiNodeInfo.Children[i];
-                    str += GenerateInitNestedUi(layer + item.Name + ".", item, retraction);
+                    if (uiNodeInfo.OriginName == uiNodeInfo.UiRootName)
+                    {
+                        str += GenerateInitNestedUi("", item, retraction);
+                    }
+                    else
+                    {
+                        str += GenerateInitNestedUi(parent + (string.IsNullOrEmpty(parent)? "" : ".") + uiNodeInfo.Name, item, retraction);
+                    }
                 }
             }
         }
@@ -218,7 +228,7 @@ public static class UiGenerator
             cloneCode = retraction + $"    public override {uiNodeInfo.ClassName} Clone()\n";
             cloneCode += retraction + $"    {{\n";
             cloneCode += retraction + $"        var uiNode = new {uiNodeInfo.ClassName}(UiPanel, ({uiNodeInfo.NodeTypeName})Instance.Duplicate());\n";
-            cloneCode += retraction + $"        UiPanel.RecordNestedUi(uiNode.Instance, UiManager.RecordType.Open);\n";
+            cloneCode += retraction + $"        UiPanel.RecordNestedUi(uiNode.Instance, this, UiManager.RecordType.Open);\n";
             cloneCode += retraction + $"        uiNode.Instance.OnCreateUi();\n";
             cloneCode += retraction + $"        uiNode.Instance.OnInitNestedUi();\n";
             cloneCode += retraction + $"        return uiNode;\n";

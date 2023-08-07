@@ -7,6 +7,21 @@ using Godot;
 public abstract class UiNode
 {
     /// <summary>
+    /// 嵌套打开子ui
+    /// </summary>
+    public abstract UiBase OpenNestedUi(string uiName, UiBase prevUi = null);
+
+    /// <summary>
+    /// 嵌套打开子ui
+    /// </summary>
+    public abstract T OpenNestedUi<T>(string uiName, UiBase prevUi = null) where T : UiBase;
+    
+    /// <summary>
+    /// 获取所属Ui面板
+    /// </summary>
+    public abstract UiBase GetUiPanel();
+    
+    /// <summary>
     /// 获取Ui实例
     /// </summary>
     public abstract Node GetUiInstance();
@@ -49,15 +64,13 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         Instance = node;
     }
     
-    /// <summary>
-    /// 嵌套打开子ui
-    /// </summary>
-    public UiBase OpenNestedUi(string uiName)
+    public override UiBase OpenNestedUi(string uiName, UiBase prevUi = null)
     {
         var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
+        uiBase.PrevUi = prevUi;
         Instance.AddChild(uiBase);
-        UiPanel.RecordNestedUi(uiBase, UiManager.RecordType.Open);
+        UiPanel.RecordNestedUi(uiBase, this, UiManager.RecordType.Open);
         
         uiBase.OnCreateUi();
         uiBase.OnInitNestedUi();
@@ -69,12 +82,9 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         return uiBase;
     }
     
-    /// <summary>
-    /// 嵌套打开子ui
-    /// </summary>
-    public T OpenNestedUi<T>(string uiName) where T : UiBase
+    public override T OpenNestedUi<T>(string uiName, UiBase prevUi = null)
     {
-        return (T)OpenNestedUi(uiName);
+        return (T)OpenNestedUi(uiName, prevUi);
     }
 
     /// <summary>
@@ -86,7 +96,12 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         Instance.GetParent().AddChild(inst.GetUiInstance());
         return inst;
     }
-    
+
+    public override UiBase GetUiPanel()
+    {
+        return UiPanel;
+    }
+
     public override Node GetUiInstance()
     {
         return Instance;

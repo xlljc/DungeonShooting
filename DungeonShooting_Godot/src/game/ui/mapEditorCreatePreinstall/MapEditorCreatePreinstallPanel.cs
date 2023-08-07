@@ -30,6 +30,7 @@ public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
         }
 
         data.Remark = S_RemarkInput.Instance.Text;
+        data.WaveList = new List<List<MarkInfo>>();
         data.Weight = (int)S_WeightInput.Instance.Value;
         return data;
     }

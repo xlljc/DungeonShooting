@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using UI.MapEditor;
 
@@ -27,7 +28,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public EditorTileMap EditorTileMap { get; private set; }
     
-    private UiGrid<WaveItem, object> _grid;
+    private UiGrid<WaveItem, List<MarkInfo>> _grid;
 
     public override void OnCreateUi()
     {
@@ -37,11 +38,11 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         S_DynamicTool.Instance.GetParent().RemoveChild(S_DynamicTool.Instance);
         S_DynamicTool.Instance.Visible = true;
         
-        _grid = new UiGrid<WaveItem, object>(S_WaveItem, typeof(EditorWaveCell));
+        _grid = new UiGrid<WaveItem, List<MarkInfo>>(S_WaveItem, typeof(EditorWaveCell));
         _grid.SetCellOffset(new Vector2I(0, 10));
         _grid.SetColumns(1);
-        
-        //_grid.SetDataList(new object[] { 1, 2, 3, 4});
+
+        S_PreinstallOption.Instance.ItemSelected += OnItemSelected;
         S_AddPreinstall.Instance.Pressed += OnAddPreinstall;
         S_AddWaveButton.Instance.Pressed += OnAddWave;
         
@@ -69,10 +70,31 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         optionButton.Clear();
         foreach (var item in preinstall)
         {
+            if (item.WaveList == null)
+            {
+                item.WaveList = new List<List<MarkInfo>>();
+            }
+
             optionButton.AddItem($"{item.Name} ({item.Weight})");
         }
 
         optionButton.Selected = selectIndex;
+    }
+
+    /// <summary>
+    /// 下拉框选中项
+    /// </summary>
+    public void OnItemSelected(long index)
+    {
+        var preinstall = EditorTileMap.RoomSplit.Preinstall;
+        if (index >= 0 && index <= preinstall.Count)
+        {
+            _grid.SetDataList(preinstall[(int)index].WaveList.ToArray());
+        }
+        else
+        {
+            _grid.RemoveAll();
+        }
     }
     
     /// <summary>
@@ -146,11 +168,23 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnAddWave()
     {
-        if (S_PreinstallOption.Instance.Selected == -1)
+        var index = S_PreinstallOption.Instance.Selected;
+        if (index == -1)
         {
             EditorWindowManager.ShowTips("警告", "请先选择预设!");
             return;
         }
+
+        var preinstall = EditorTileMap.RoomSplit.Preinstall;
+        if (index >= preinstall.Count)
+        {
+            EditorWindowManager.ShowTips("警告", "未知预设选项!");
+            return;
+        }
+        var item = preinstall[index];
+        var wave = new List<MarkInfo>();
+        item.WaveList.Add(wave);
+        _grid.Add(wave);
     }
     
     /// <summary>
