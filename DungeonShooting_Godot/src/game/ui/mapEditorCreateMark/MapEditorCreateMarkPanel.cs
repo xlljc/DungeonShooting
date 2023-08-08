@@ -17,6 +17,6 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
 
     private void OnAddMark()
     {
-        EditorWindowManager.ShowSelectObject("选择物体");
+        EditorWindowManager.ShowSelectObject("选择物体", this);
     }
 }

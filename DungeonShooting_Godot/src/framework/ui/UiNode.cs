@@ -2,44 +2,13 @@
 using Godot;
 
 /// <summary>
-/// Ui节点父类, 无泛型无属性
-/// </summary>
-public abstract class UiNode
-{
-    /// <summary>
-    /// 嵌套打开子ui
-    /// </summary>
-    public abstract UiBase OpenNestedUi(string uiName, UiBase prevUi = null);
-
-    /// <summary>
-    /// 嵌套打开子ui
-    /// </summary>
-    public abstract T OpenNestedUi<T>(string uiName, UiBase prevUi = null) where T : UiBase;
-    
-    /// <summary>
-    /// 获取所属Ui面板
-    /// </summary>
-    public abstract UiBase GetUiPanel();
-    
-    /// <summary>
-    /// 获取Ui实例
-    /// </summary>
-    public abstract Node GetUiInstance();
-
-    /// <summary>
-    /// 获取克隆的Ui实例
-    /// </summary>
-    public abstract IUiCellNode CloneUiCell();
-}
-
-/// <summary>
 /// Ui节点父类
 /// </summary>
 /// <typeparam name="TUi">所属Ui面板类型</typeparam>
 /// <typeparam name="TNodeType">Godot中的节点类型</typeparam>
 /// <typeparam name="TCloneType">克隆该对象返回的类型</typeparam>
 public abstract class UiNode<TUi, TNodeType, TCloneType>
-    : UiNode, IUiCellNode, IClone<TCloneType>
+    : IUiNode, IUiCellNode, IClone<TCloneType>
     where TUi : UiBase
     where TNodeType : Node
     where TCloneType : IUiCellNode
@@ -64,7 +33,7 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         Instance = node;
     }
     
-    public override UiBase OpenNestedUi(string uiName, UiBase prevUi = null)
+    public UiBase OpenNestedUi(string uiName, UiBase prevUi = null)
     {
         var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
@@ -81,8 +50,8 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         
         return uiBase;
     }
-    
-    public override T OpenNestedUi<T>(string uiName, UiBase prevUi = null)
+
+    public T OpenNestedUi<T>(string uiName, UiBase prevUi = null) where T : UiBase
     {
         return (T)OpenNestedUi(uiName, prevUi);
     }
@@ -97,17 +66,17 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         return inst;
     }
 
-    public override UiBase GetUiPanel()
+    public UiBase GetUiPanel()
     {
         return UiPanel;
     }
 
-    public override Node GetUiInstance()
+    public Node GetUiInstance()
     {
         return Instance;
     }
 
-    public override IUiCellNode CloneUiCell()
+    public IUiCellNode CloneUiCell()
     {
         return Clone();
     }

@@ -180,9 +180,18 @@ public static class EditorWindowManager
         );
     }
     
-    public static void ShowSelectObject(string title)
+    public static void ShowSelectObject(string title, UiBase parentUi = null)
     {
-        var window = UiManager.Open_EditorWindow();
+        EditorWindowPanel window;
+        if (parentUi != null)
+        {
+            window = parentUi.OpenNestedUi<EditorWindowPanel>(UiManager.UiName.EditorWindow);
+        }
+        else
+        {
+            window = UiManager.Open_EditorWindow();
+        }
+
         window.S_Window.Instance.Size = new Vector2I(1000, 700);
         window.SetWindowTitle(title);
         window.OpenBody(UiManager.UiName.MapEditorSelectObject);

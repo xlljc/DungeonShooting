@@ -27,6 +27,7 @@ title = "标题"
 initial_position = 1
 size = Vector2i(500, 350)
 visible = false
+exclusive = true
 min_size = Vector2i(500, 350)
 theme_override_constants/title_height = 33
 

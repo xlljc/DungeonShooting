@@ -29,7 +29,7 @@ public partial class EditorWindowPanel : EditorWindow
     /// </summary>
     public event Action CloseEvent;
 
-    private UiGrid<EditorWindow.CustomButton, ButtonData> _uiGrid;
+    private UiGrid<CustomButton, ButtonData> _uiGrid;
 
     public override void OnCreateUi()
     {

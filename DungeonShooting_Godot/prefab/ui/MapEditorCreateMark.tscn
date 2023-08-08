@@ -64,3 +64,20 @@ custom_arrow_step = 0.1
 layout_mode = 2
 size_flags_horizontal = 4
 text = "添加物体"
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarkObject" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 43.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Panel/MarkObject"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "123456"
+horizontal_alignment = 2

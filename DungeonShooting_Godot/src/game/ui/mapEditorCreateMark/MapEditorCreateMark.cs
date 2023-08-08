@@ -143,6 +143,59 @@ public abstract partial class MapEditorCreateMark : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarkObject.Label
+    /// </summary>
+    public class Label : UiNode<MapEditorCreateMarkPanel, Godot.Label, Label>
+    {
+        public Label(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarkObject
+    /// </summary>
+    public class MarkObject : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, MarkObject>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.Label
+        /// </summary>
+        public Label L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label(UiPanel, Instance.GetNodeOrNull<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label _L_Label;
+
+        public MarkObject(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override MarkObject Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Panel"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel
+    /// </summary>
+    public class Panel : UiNode<MapEditorCreateMarkPanel, Godot.Panel, Panel>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.MarkObject
+        /// </summary>
+        public MarkObject L_MarkObject
+        {
+            get
+            {
+                if (_L_MarkObject == null) _L_MarkObject = new MarkObject(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("MarkObject"));
+                return _L_MarkObject;
+            }
+        }
+        private MarkObject _L_MarkObject;
+
+        public Panel(MapEditorCreateMarkPanel uiPanel, Godot.Panel node) : base(uiPanel, node) {  }
+        public override Panel Clone() => new (UiPanel, (Godot.Panel)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer
     /// </summary>
     public class VBoxContainer : UiNode<MapEditorCreateMarkPanel, Godot.VBoxContainer, VBoxContainer>
@@ -185,6 +238,19 @@ public abstract partial class MapEditorCreateMark : UiBase
             }
         }
         private AddMark _L_AddMark;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditorCreateMark.MarginContainer.Panel
+        /// </summary>
+        public Panel L_Panel
+        {
+            get
+            {
+                if (_L_Panel == null) _L_Panel = new Panel(UiPanel, Instance.GetNodeOrNull<Godot.Panel>("Panel"));
+                return _L_Panel;
+            }
+        }
+        private Panel _L_Panel;
 
         public VBoxContainer(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
         public override VBoxContainer Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
@@ -247,6 +313,21 @@ public abstract partial class MapEditorCreateMark : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.AddMark
     /// </summary>
     public AddMark S_AddMark => L_MarginContainer.L_VBoxContainer.L_AddMark;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarkObject.Label
+    /// </summary>
+    public Label S_Label => L_MarginContainer.L_VBoxContainer.L_Panel.L_MarkObject.L_Label;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarkObject
+    /// </summary>
+    public MarkObject S_MarkObject => L_MarginContainer.L_VBoxContainer.L_Panel.L_MarkObject;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel
+    /// </summary>
+    public Panel S_Panel => L_MarginContainer.L_VBoxContainer.L_Panel;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer

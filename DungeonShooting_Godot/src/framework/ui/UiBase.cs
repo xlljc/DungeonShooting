@@ -40,7 +40,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     /// 所属父级节点, 仅当通过 UiNode.OpenNestedUi() 打开时才会赋值<br/>
     /// 注意: 如果是在预制体中放置的子 Ui, 那么子 Ui 的该属性会在 父 Ui 的 OnCreateUi() 之后赋值
     /// </summary>
-    public UiNode ParentNode { get; private set; }
+    public IUiNode ParentNode { get; private set; }
 
     //开启的协程
     private List<CoroutineData> _coroutineList;
@@ -227,7 +227,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     /// <summary>
     /// 记录嵌套打开/关闭的UI
     /// </summary>
-    public void RecordNestedUi(UiBase uiBase, UiNode node, UiManager.RecordType type)
+    public void RecordNestedUi(UiBase uiBase, IUiNode node, UiManager.RecordType type)
     {
         if (type == UiManager.RecordType.Open)
         {
