@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Config;
 using Godot;
@@ -6,6 +7,11 @@ namespace UI.MapEditorSelectObject;
 
 public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
 {
+    /// <summary>
+    /// 双击选中物体事件
+    /// </summary>
+    public event Action<ExcelConfig.ActivityObject> SelectObjectEvent;
+    
     public class TypeButtonData
     {
         /// <summary>
@@ -85,5 +91,24 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
             }
         ).ToArray();
         _objectGrid.SetDataList(arr);
+    }
+
+    /// <summary>
+    /// 选中对象
+    /// </summary>
+    public void SelectCell(ExcelConfig.ActivityObject activityObject)
+    {
+        if (SelectObjectEvent != null)
+        {
+            SelectObjectEvent(activityObject);
+        }
+    }
+
+    /// <summary>
+    /// 获取选中的数据
+    /// </summary>
+    public ExcelConfig.ActivityObject GetSelectData()
+    {
+        return _objectGrid.SelectData;
     }
 }

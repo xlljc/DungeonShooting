@@ -60,6 +60,20 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     }
 
     /// <summary>
+    /// 获取当前选中的预设
+    /// </summary>
+    public RoomPreinstall GetSelectPreinstall()
+    {
+        var index = S_PreinstallOption.Instance.Selected;
+        var preinstall = EditorTileMap.RoomSplit.Preinstall;
+        if (index >= preinstall.Count)
+        {
+            return null;
+        }
+        return preinstall[index];
+    }
+
+    /// <summary>
     /// 刷新预设下拉框
     /// </summary>
     public void RefreshPreinstallSelect(int index = -1)

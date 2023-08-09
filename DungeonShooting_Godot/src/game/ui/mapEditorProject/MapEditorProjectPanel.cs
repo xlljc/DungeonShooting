@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using UI.EditorWindow;
-using UI.MapEditorCreateGroup;
-using UI.MapEditorCreateRoom;
 
 namespace UI.MapEditorProject;
 

@@ -35,9 +35,13 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         _grid.Destroy();
     }
 
+    //添加标记
     private void OnAddMark()
     {
-        EditorWindowManager.ShowCreateMark();
+        //当前选中的预设
+        var preinstall = CellNode.UiPanel.GetSelectPreinstall();
+        //打开添加标记页面
+        EditorWindowManager.ShowCreateMark(preinstall, Index);
         // var info = new MarkInfo();
         // Data.Add(info);
         // _grid.Add(info);
@@ -57,7 +61,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         }
         else
         {
-            textureButton.TextureNormal = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Left_png);
+            textureButton.TextureNormal = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Right_png);
         }
     }
 

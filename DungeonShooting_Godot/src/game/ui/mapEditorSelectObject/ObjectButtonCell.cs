@@ -23,6 +23,12 @@ public class ObjectButtonCell : UiCell<MapEditorSelectObject.ObjectButton, Excel
             CellNode.L_PreviewImage.Instance.Visible = false;
         }
     }
+    
+    public override void OnDoubleClick()
+    {
+        //双击选择该对象
+        CellNode.UiPanel.SelectCell(Data);
+    }
 
     public override void OnSelect()
     {

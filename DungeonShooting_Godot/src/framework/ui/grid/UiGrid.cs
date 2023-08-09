@@ -50,6 +50,11 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
             }
         }
     }
+
+    /// <summary>
+    /// 选中的 Cell 包含的数据
+    /// </summary>
+    public TData SelectData => _selectIndex >= 0 ? _cellList[_selectIndex].Data : default;
     
     public bool Visible
     {
@@ -64,9 +69,9 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
     //cell逻辑处理类
     private Type _cellType;
     //当前活动的cell池
-    private Stack<UiCell<TUiCellNode, TData>> _cellPool = new Stack<UiCell<TUiCellNode, TData>>();
-    //当前已被回收的cell池
     private List<UiCell<TUiCellNode, TData>> _cellList = new List<UiCell<TUiCellNode, TData>>();
+    //当前已被回收的cell池
+    private Stack<UiCell<TUiCellNode, TData>> _cellPool = new Stack<UiCell<TUiCellNode, TData>>();
     //godot原生网格组件
     private UiGridContainer _gridContainer;
     //单个cell偏移

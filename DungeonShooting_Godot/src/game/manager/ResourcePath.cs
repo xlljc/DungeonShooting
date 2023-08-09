@@ -184,9 +184,9 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_DragTool_png = "res://resource/sprite/ui/commonIcon/DragTool.png";
     public const string resource_sprite_ui_commonIcon_Edit_png = "res://resource/sprite/ui/commonIcon/Edit.png";
     public const string resource_sprite_ui_commonIcon_Hide_png = "res://resource/sprite/ui/commonIcon/Hide.png";
-    public const string resource_sprite_ui_commonIcon_Left_png = "res://resource/sprite/ui/commonIcon/Left.png";
     public const string resource_sprite_ui_commonIcon_Lock_png = "res://resource/sprite/ui/commonIcon/Lock.png";
     public const string resource_sprite_ui_commonIcon_PenTool_png = "res://resource/sprite/ui/commonIcon/PenTool.png";
+    public const string resource_sprite_ui_commonIcon_Right_png = "res://resource/sprite/ui/commonIcon/Right.png";
     public const string resource_sprite_ui_commonIcon_Search_png = "res://resource/sprite/ui/commonIcon/Search.png";
     public const string resource_sprite_ui_commonIcon_Select_png = "res://resource/sprite/ui/commonIcon/Select.png";
     public const string resource_sprite_ui_commonIcon_Select2_png = "res://resource/sprite/ui/commonIcon/Select2.png";
