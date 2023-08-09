@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Godot;
 
 /// <summary>
@@ -9,6 +10,8 @@ using Godot;
 public abstract class UiCell<TUiCellNode, T> : IUiCell where TUiCellNode : IUiCellNode
 {
     public bool IsDestroyed { get; private set; }
+    
+    public bool Enable { get; private set; }
     
     public int Index { get; private set; } = -1;
     
@@ -28,10 +31,9 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell where TUiCellNode : IUiCe
     public T Data { get; private set; }
 
     private bool _init = false;
-
-    /// <summary>
-    /// 当前cell初始化时调用
-    /// </summary>
+    //上一次点击的时间
+    private long _prevClickTime = -1;
+    
     public virtual void OnInit()
     {
     }
@@ -43,23 +45,23 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell where TUiCellNode : IUiCe
     {
     }
 
-    /// <summary>
-    /// 当当前Ui被点击时调用, 如果 Cell 的模板为 BaseButton 类型, 则 UiCell 会自动绑定点击事件
-    /// </summary>
+
+    public virtual void Process(float delta)
+    {
+    }
+    
     public virtual void OnClick()
     {
     }
 
-    /// <summary>
-    /// 当启用当前 Cell 时调用
-    /// </summary>
+    public virtual void OnDoubleClick()
+    {
+    }
+    
     public virtual void OnEnable()
     {
     }
-
-    /// <summary>
-    /// 当禁用当前 Cell 时调用, 也就是被回收时调用
-    /// </summary>
+    
     public virtual void OnDisable()
     {
     }
@@ -76,18 +78,11 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell where TUiCellNode : IUiCe
     public virtual void OnUnSelect()
     {
     }
-
-    /// <summary>
-    /// 当 Cell 索引发生改变时调用, 在 UiGrid 中调用 Insert(), Remove() 等函数时被动触发当前 Cell 索引值改变, Cell 业务逻辑需要用到索引值时, 那么就可以重写该函数<br/>
-    /// 注意: 该函数第一次调用会在 OnSetData() 之前调用
-    /// </summary>
+    
     public virtual void OnRefreshIndex()
     {
     }
-
-    /// <summary>
-    /// 销毁当前cell时调用
-    /// </summary>
+    
     public virtual void OnDestroy()
     {
     }
@@ -113,9 +108,9 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell where TUiCellNode : IUiCe
         OnInit();
         SetIndex(index);
     }
-
+    
     /// <summary>
-    /// 设置当前cell的值, 这个函数由 UiGrid 调用
+    /// 设置当前 Cell 的值, 该函数由 UiGrid 调用
     /// </summary>
     public void SetData(T data)
     {
@@ -124,7 +119,7 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell where TUiCellNode : IUiCe
     }
 
     /// <summary>
-    /// 设置当前 Cell 的索引
+    /// 设置当前 Cell 的索引, 该函数由 UiGrid 对象调用
     /// </summary>
     public void SetIndex(int index)
     {
@@ -136,12 +131,44 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell where TUiCellNode : IUiCe
     }
 
     /// <summary>
+    /// 设置是否启用该 Cell, 该函数由 UiGrid 对象调用
+    /// </summary>
+    public void SetEnable(bool value)
+    {
+        Enable = value;
+        if (value)
+        {
+            OnEnable();
+        }
+        else
+        {
+            OnDisable();
+        }
+    }
+
+    /// <summary>
     /// 触发点击当前Ui, 如果 Cell 的模板为 BaseButton 类型, 则 UiCell 会自动绑定点击事件
     /// </summary>
     public void Click()
     {
         Grid.SelectIndex = Index;
         OnClick();
+
+        //双击判定
+        if (_prevClickTime >= 0)
+        {
+            var now = DateTime.Now.Ticks / 10000;
+            if (now <= _prevClickTime + 500)
+            {
+                OnDoubleClick();
+            }
+
+            _prevClickTime = -1;
+        }
+        else
+        {
+            _prevClickTime = DateTime.Now.Ticks / 10000;
+        }
     }
     
     public void Destroy()

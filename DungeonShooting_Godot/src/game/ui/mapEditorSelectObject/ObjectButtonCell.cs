@@ -1,4 +1,5 @@
 ﻿using Config;
+using Godot;
 
 namespace UI.MapEditorSelectObject;
 

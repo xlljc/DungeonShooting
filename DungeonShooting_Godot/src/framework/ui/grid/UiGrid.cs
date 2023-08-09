@@ -68,7 +68,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
     //当前已被回收的cell池
     private List<UiCell<TUiCellNode, TData>> _cellList = new List<UiCell<TUiCellNode, TData>>();
     //godot原生网格组件
-    private GridContainer _gridContainer;
+    private UiGridContainer _gridContainer;
     //单个cell偏移
     private Vector2I _cellOffset;
     //列数
@@ -80,7 +80,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
 
     public UiGrid(TUiCellNode template, Type cellType)
     {
-        _gridContainer = new GridContainer();
+        _gridContainer = new UiGridContainer(OnReady, OnProcess);
         _gridContainer.Ready += OnReady;
         _template = template;
         _cellType = cellType;
@@ -344,13 +344,30 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
         _cellPool = null;
         _gridContainer.QueueFree();
     }
-
+    
     private void OnReady()
     {
-        _gridContainer.Ready -= OnReady;
         if (_template.GetUiInstance() is Control control)
         {
             _gridContainer.Position = control.Position;
+        }
+    }
+    
+    private void OnProcess(float delta)
+    {
+        if (IsDestroyed)
+        {
+            return;
+        }
+        //调用 cell 更新
+        var uiCells = _cellPool.ToArray();
+        for (var i = 0; i < uiCells.Length; i++)
+        {
+            var item = uiCells[i];
+            if (item.Enable)
+            {
+                item.Process(delta);
+            }
         }
     }
 
@@ -361,7 +378,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
         {
             var cell = _cellPool.Pop();
             cell.SetIndex(_cellList.Count);
-            cell.OnEnable();
+            cell.SetEnable(true);
             _cellList.Add(cell);
             return cell;
         }
@@ -374,14 +391,14 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
 
         _cellList.Add(uiCell);
         uiCell.Init(this, (TUiCellNode)_template.CloneUiCell(), _cellList.Count - 1);
-        uiCell.OnEnable();
+        uiCell.SetEnable(true);
         return uiCell;
     }
 
     //回收 cell
     private void ReclaimCellInstance(UiCell<TUiCellNode, TData> cell)
     {
-        cell.OnDisable();
+        cell.SetEnable(false);
         _gridContainer.RemoveChild(cell.CellNode.GetUiInstance());
         _cellPool.Push(cell);
     }
