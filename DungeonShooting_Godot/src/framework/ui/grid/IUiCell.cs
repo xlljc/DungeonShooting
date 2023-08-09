@@ -20,7 +20,7 @@ public interface IUiCell : IDestroy
     void OnInit();
 
     /// <summary>
-    /// 如果启用了当前 Cell, 则调用
+    /// 如果启用了当前 Cell, 则每帧调用
     /// </summary>
     void Process(float delta);
     

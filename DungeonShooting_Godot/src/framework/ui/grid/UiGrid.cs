@@ -355,7 +355,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
     
     private void OnProcess(float delta)
     {
-        if (IsDestroyed)
+        if (IsDestroyed || !_template.GetUiPanel().IsOpen)
         {
             return;
         }

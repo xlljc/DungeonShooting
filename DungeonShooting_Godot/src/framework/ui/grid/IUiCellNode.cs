@@ -15,4 +15,9 @@ public interface IUiCellNode
     /// 克隆并返回新的节点实例
     /// </summary>
     IUiCellNode CloneUiCell();
+
+    /// <summary>
+    /// 获取所属 Ui 面板
+    /// </summary>
+    UiBase GetUiPanel();
 }
