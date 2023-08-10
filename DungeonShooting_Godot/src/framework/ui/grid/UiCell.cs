@@ -163,7 +163,7 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell where TUiCellNode : IUiCe
                 OnDoubleClick();
             }
 
-            _prevClickTime = -1;
+            _prevClickTime = now;
         }
         else
         {

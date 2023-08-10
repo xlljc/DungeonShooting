@@ -30,4 +30,14 @@ public interface IUiNode
     /// 获取克隆的Ui实例
     /// </summary>
     IUiCellNode CloneUiCell();
+
+    /// <summary>
+    /// 添加子级Ui节点
+    /// </summary>
+    void AddChild(IUiNode uiNode);
+
+    /// <summary>
+    /// 移除子级Ui节点
+    /// </summary>
+    void RemoveChild(IUiNode uiNode);
 }

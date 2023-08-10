@@ -80,4 +80,14 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
     {
         return Clone();
     }
+
+    public void AddChild(IUiNode uiNode)
+    {
+        Instance.AddChild(uiNode.GetUiInstance());
+    }
+
+    public void RemoveChild(IUiNode uiNode)
+    {
+        Instance.RemoveChild(uiNode.GetUiInstance());
+    }
 }
