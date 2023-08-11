@@ -41,12 +41,17 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         //当前选中的预设
         var preinstall = CellNode.UiPanel.GetSelectPreinstall();
         //打开添加标记页面
-        EditorWindowManager.ShowCreateMark(preinstall, Index);
-        // var info = new MarkInfo();
-        // Data.Add(info);
-        // _grid.Add(info);
+        EditorWindowManager.ShowCreateMark(preinstall, Index, OnCreateMarkInfo);
     }
-    
+
+    //创建的标记完成
+    private void OnCreateMarkInfo(MarkInfo markInfo)
+    {
+        var preinstall = CellNode.UiPanel.GetSelectPreinstall();
+        preinstall.WaveList[Index].Add(markInfo);
+        _grid.Add(markInfo);
+    }
+
     //展开/收起按钮点击
     private void OnExpandOrClose()
     {

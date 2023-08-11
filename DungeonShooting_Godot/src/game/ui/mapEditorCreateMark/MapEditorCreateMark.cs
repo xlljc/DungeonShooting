@@ -32,13 +32,13 @@ public abstract partial class MapEditorCreateMark : UiBase
     private ExpandPanel _L_ExpandPanel;
 
     /// <summary>
-    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.NumberBar
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorCreateMark.NumberAttribute"/>, 节点路径: MapEditorCreateMark.NumberBar
     /// </summary>
     public NumberBar L_NumberBar
     {
         get
         {
-            if (_L_NumberBar == null) _L_NumberBar = new NumberBar((MapEditorCreateMarkPanel)this, GetNodeOrNull<Godot.HBoxContainer>("NumberBar"));
+            if (_L_NumberBar == null) _L_NumberBar = new NumberBar((MapEditorCreateMarkPanel)this, GetNodeOrNull<UI.MapEditorCreateMark.NumberAttribute>("NumberBar"));
             return _L_NumberBar;
         }
     }
@@ -754,12 +754,12 @@ public abstract partial class MapEditorCreateMark : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.NumberBar.AttName
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.NumberBar.AttrName
     /// </summary>
-    public class AttName : UiNode<MapEditorCreateMarkPanel, Godot.Label, AttName>
+    public class AttrName : UiNode<MapEditorCreateMarkPanel, Godot.Label, AttrName>
     {
-        public AttName(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
-        public override AttName Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+        public AttrName(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override AttrName Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
     /// <summary>
@@ -772,22 +772,22 @@ public abstract partial class MapEditorCreateMark : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.NumberBar
+    /// 类型: <see cref="UI.MapEditorCreateMark.NumberAttribute"/>, 路径: MapEditorCreateMark.NumberBar
     /// </summary>
-    public class NumberBar : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, NumberBar>
+    public class NumberBar : UiNode<MapEditorCreateMarkPanel, UI.MapEditorCreateMark.NumberAttribute, NumberBar>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.AttName
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.AttrName
         /// </summary>
-        public AttName L_AttName
+        public AttrName L_AttrName
         {
             get
             {
-                if (_L_AttName == null) _L_AttName = new AttName(UiPanel, Instance.GetNodeOrNull<Godot.Label>("AttName"));
-                return _L_AttName;
+                if (_L_AttrName == null) _L_AttrName = new AttrName(UiPanel, Instance.GetNodeOrNull<Godot.Label>("AttrName"));
+                return _L_AttrName;
             }
         }
-        private AttName _L_AttName;
+        private AttrName _L_AttrName;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.NumInput
@@ -802,8 +802,8 @@ public abstract partial class MapEditorCreateMark : UiBase
         }
         private NumInput _L_NumInput;
 
-        public NumberBar(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
-        public override NumberBar Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+        public NumberBar(MapEditorCreateMarkPanel uiPanel, UI.MapEditorCreateMark.NumberAttribute node) : base(uiPanel, node) {  }
+        public override NumberBar Clone() => new (UiPanel, (UI.MapEditorCreateMark.NumberAttribute)Instance.Duplicate());
     }
 
 
@@ -948,9 +948,9 @@ public abstract partial class MapEditorCreateMark : UiBase
     public ExpandPanel S_ExpandPanel => L_ExpandPanel;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.NumberBar.AttName
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.NumberBar.AttrName
     /// </summary>
-    public AttName S_AttName => L_NumberBar.L_AttName;
+    public AttrName S_AttrName => L_NumberBar.L_AttrName;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.NumberBar.NumInput
@@ -958,7 +958,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     public NumInput S_NumInput => L_NumberBar.L_NumInput;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.NumberBar
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorCreateMark.NumberAttribute"/>, 节点路径: MapEditorCreateMark.NumberBar
     /// </summary>
     public NumberBar S_NumberBar => L_NumberBar;
 

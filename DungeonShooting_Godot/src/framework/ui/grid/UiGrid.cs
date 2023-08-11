@@ -62,6 +62,8 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
         set => _gridContainer.Visible = value;
     }
 
+    public int Count => _cellList.Count;
+    
     //模板对象
     private TUiCellNode _template;
     //模板大小

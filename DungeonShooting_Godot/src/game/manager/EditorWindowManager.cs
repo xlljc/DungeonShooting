@@ -167,7 +167,8 @@ public static class EditorWindowManager
     /// </summary>
     /// <param name="preinstall">房间预设信息</param>
     /// <param name="waveIndex">当前波数据</param>
-    public static void ShowCreateMark(RoomPreinstall preinstall, int waveIndex)
+    /// <param name="onCreateMarkInfo">创建标记回调</param>
+    public static void ShowCreateMark(RoomPreinstall preinstall, int waveIndex, Action<MarkInfo> onCreateMarkInfo)
     {
         var window = UiManager.Open_EditorWindow();
         window.SetWindowTitle("创建标记");
@@ -177,12 +178,12 @@ public static class EditorWindowManager
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
-                // var roomPreinstall = body.GetRoomPreinstall(list);
-                // if (roomPreinstall != null)
-                // {
-                //     window.CloseWindow();
-                //     onCreatePreinstall(roomPreinstall);
-                // }
+                var markInfo = body.GetMarkInfo();
+                if (markInfo != null)
+                {
+                    window.CloseWindow();
+                    onCreateMarkInfo(markInfo);
+                }
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {

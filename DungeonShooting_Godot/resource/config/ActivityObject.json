@@ -12,12 +12,12 @@
   {
     "Id": "enemy0001",
     "Type": 4,
-    "Name": "",
+    "Name": "\u654C\u4EBA",
     "Intro": "\u654C\u4EBA",
     "Details": "",
     "Prefab": "res://prefab/role/Enemy0001.tscn",
-    "Icon": "",
-    "ShowInMapEditor": false
+    "Icon": "res://resource/sprite/role/enemy0001/Enemy0001_Icon.png",
+    "ShowInMapEditor": true
   },
   {
     "Id": "weapon0001",

@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 /// <summary>
-/// 标记数据
+/// 标记项数据
 /// </summary>
-public class MarkInfo
+public class MarkInfoItem
 {
     /// <summary>
-    /// 所在坐标
+    /// 物体Id
     /// </summary>
     [JsonInclude]
-    public SerializeVector2 Position;
-
-    /// <summary>
-    /// 延时时间
-    /// </summary>
-    [JsonInclude]
-    public float DelayTime;
+    public string Id;
     
     /// <summary>
-    /// 标记列表数据
+    /// 权重
     /// </summary>
     [JsonInclude]
-    public List<MarkInfoItem> MarkList;
+    public int Weight;
+    
+    /// <summary>
+    /// 额外属性
+    /// </summary>
+    [JsonInclude]
+    public Dictionary<string, string> Attr;
 }

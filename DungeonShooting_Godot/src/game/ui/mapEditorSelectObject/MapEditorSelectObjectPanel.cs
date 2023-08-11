@@ -87,7 +87,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
             o =>
             {
                 return (string.IsNullOrEmpty(name) || o.Name.Contains(name) || o.Id.Contains(name)) &&
-                       (type < 0 ? _typeArray.Contains(o.Type) : o.Type == type);
+                       (type < 0 ? _typeArray.Contains(o.Type) : o.Type == type) && o.ShowInMapEditor;
             }
         ).ToArray();
         _objectGrid.SetDataList(arr);

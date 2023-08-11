@@ -31,6 +31,10 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
     {
         UiPanel = uiPanel;
         Instance = node;
+        if (node is IUiNodeScript uiNodeScript)
+        {
+            uiNodeScript.SetUiNode(this);
+        }
     }
     
     public UiBase OpenNestedUi(string uiName, UiBase prevUi = null)
@@ -86,8 +90,23 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         Instance.AddChild(uiNode.GetUiInstance());
     }
 
+    public void AddChild(Node node)
+    {
+        Instance.AddChild(node);
+    }
+    
     public void RemoveChild(IUiNode uiNode)
     {
         Instance.RemoveChild(uiNode.GetUiInstance());
+    }
+    
+    public void RemoveChild(Node node)
+    {
+        Instance.RemoveChild(node);
+    }
+
+    public void QueueFree()
+    {
+        Instance.QueueFree();
     }
 }
