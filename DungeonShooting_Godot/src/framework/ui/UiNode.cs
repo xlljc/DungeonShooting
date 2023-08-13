@@ -109,4 +109,19 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
     {
         Instance.QueueFree();
     }
+
+    public void Reparent(IUiNode uiNode)
+    {
+        Instance.Reparent(uiNode.GetUiInstance());
+    }
+    
+    public void Reparent(Node node)
+    {
+        Instance.Reparent(node);
+    }
+
+    public Node GetParent()
+    {
+        return Instance.GetParent();
+    }
 }

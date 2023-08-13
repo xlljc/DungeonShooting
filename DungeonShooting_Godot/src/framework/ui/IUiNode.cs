@@ -55,4 +55,19 @@ public interface IUiNode
     /// 销毁当前节点
     /// </summary>
     void QueueFree();
+
+    /// <summary>
+    /// 更改父节点, 但是当前节点的父节点不能为空
+    /// </summary>
+    void Reparent(IUiNode uiNode);
+    
+    /// <summary>
+    /// 更改父节点, 但是当前节点的父节点不能为空
+    /// </summary>
+    void Reparent(Node node);
+
+    /// <summary>
+    /// 获取父节点
+    /// </summary>
+    Node GetParent();
 }

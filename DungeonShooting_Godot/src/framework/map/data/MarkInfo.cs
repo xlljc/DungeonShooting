@@ -14,6 +14,12 @@ public class MarkInfo
     public SerializeVector2 Position;
 
     /// <summary>
+    /// 区域大小
+    /// </summary>
+    [JsonInclude]
+    public SerializeVector2 Size;
+    
+    /// <summary>
     /// 延时时间
     /// </summary>
     [JsonInclude]

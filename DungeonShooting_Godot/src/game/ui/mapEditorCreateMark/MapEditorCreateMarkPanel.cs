@@ -28,20 +28,6 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
     {
         _grid.Destroy();
     }
-    
-    /// <summary>
-    /// 初始化数据
-    /// </summary>
-    public void InitData(RoomPreinstall preinstall, int waveIndex)
-    {
-        var optionButton = S_WaveOption.Instance;
-        for (var i = 0; i < preinstall.WaveList.Count; i++)
-        {
-            optionButton.AddItem($"第{i + 1}波");
-        }
-
-        optionButton.Selected = waveIndex;
-    }
 
     /// <summary>
     /// 获取填写的标记数据
@@ -52,6 +38,9 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         data.Position = new SerializeVector2();
         data.MarkList = new List<MarkInfoItem>();
         data.DelayTime = (float)S_DelayInput.Instance.Value;
+        data.Position = new SerializeVector2((float)S_PosX.Instance.Value, (float)S_PosY.Instance.Value);
+        data.Size = new SerializeVector2((float)S_SizeX.Instance.Value, (float)S_SizeY.Instance.Value);
+        
         var gridCount = _grid.Count;
         for (var i = 0; i < gridCount; i++)
         {

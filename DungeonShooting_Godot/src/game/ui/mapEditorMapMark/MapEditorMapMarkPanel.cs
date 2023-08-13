@@ -28,15 +28,21 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public EditorTileMap EditorTileMap { get; private set; }
     
+    //波数网格组件
     private UiGrid<WaveItem, List<MarkInfo>> _grid;
+
+    /// <summary>
+    /// 波数网格选中的索引
+    /// </summary>
+    public int WaveSelectIndex { get; set; } = -1;
 
     public override void OnCreateUi()
     {
         var editorPanel = (MapEditorPanel)ParentUi;
         EditorTileMap = editorPanel.S_TileMap.Instance;
 
-        S_DynamicTool.Instance.GetParent().RemoveChild(S_DynamicTool.Instance);
-        S_DynamicTool.Instance.Visible = true;
+        //S_DynamicTool.Instance.GetParent().RemoveChild(S_DynamicTool.Instance);
+        S_DynamicTool.Instance.Visible = false;
         
         _grid = new UiGrid<WaveItem, List<MarkInfo>>(S_WaveItem, typeof(EditorWaveCell));
         _grid.SetCellOffset(new Vector2I(0, 10));
@@ -45,7 +51,9 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         S_PreinstallOption.Instance.ItemSelected += OnItemSelected;
         S_AddPreinstall.Instance.Pressed += OnAddPreinstall;
         S_AddWaveButton.Instance.Pressed += OnAddWave;
-        
+
+        S_EditButton.Instance.Pressed += OnToolEditClick;
+        S_DeleteButton.Instance.Pressed += OnToolDeleteClick;
         //S_Test.Instance.
     }
 
@@ -137,6 +145,19 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             return;
         }
 
+        if (toolType == SelectToolType.Wave) //不需要显示编辑波数按钮
+        {
+            S_DynamicTool.L_EditButton.Instance.Visible = false;
+        }
+        else
+        {
+            S_DynamicTool.L_EditButton.Instance.Visible = true;
+        }
+
+        //显示工具
+        S_DynamicTool.Instance.Visible = true;
+        
+        //改变所在父节点
         var parent = S_DynamicTool.Instance.GetParent();
         if (parent != null)
         {
@@ -162,7 +183,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         {
             return;
         }
-        var parent = S_DynamicTool.Instance.GetParent();
+        var parent = S_DynamicTool.GetParent();
         if (parent != null)
         {
             parent.RemoveChild(S_DynamicTool.Instance);
@@ -207,13 +228,27 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         item.WaveList.Add(wave);
         _grid.Add(wave);
     }
-    
-    /// <summary>
-    /// 编辑波数据
-    /// </summary>
-    public void OnEditWave()
+
+    //工具节点编辑按钮点击
+    private void OnToolEditClick()
     {
-        
+        if (ToolType == SelectToolType.Mark)
+        {
+            OnEditMark();
+        }
+    }
+    
+    //工具节点删除按钮点击
+    private void OnToolDeleteClick()
+    {
+        if (ToolType == SelectToolType.Wave)
+        {
+            OnDeleteWave();
+        }
+        else if (ToolType == SelectToolType.Mark)
+        {
+            OnDeleteMark();
+        }
     }
 
 
@@ -222,7 +257,25 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeleteWave()
     {
+        var index = WaveSelectIndex;
+        if (index < 0)
+        {
+            return;
+        }
         
+        var selectPreinstall = GetSelectPreinstall();
+        if (selectPreinstall == null)
+        {
+            return;
+        }
+        
+        //隐藏工具
+        S_DynamicTool.Reparent(this);
+        S_DynamicTool.Instance.Visible = false;
+        //移除数据
+        selectPreinstall.WaveList.RemoveAt(index);
+        _grid.RemoveByIndex(index);
+        WaveSelectIndex = -1;
     }
 
     /// <summary>

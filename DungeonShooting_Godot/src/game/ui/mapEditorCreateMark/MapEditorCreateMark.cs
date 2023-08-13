@@ -54,21 +54,153 @@ public abstract partial class MapEditorCreateMark : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.WaveNameLabel
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.PosLabel
     /// </summary>
-    public class WaveNameLabel : UiNode<MapEditorCreateMarkPanel, Godot.Label, WaveNameLabel>
+    public class PosLabel : UiNode<MapEditorCreateMarkPanel, Godot.Label, PosLabel>
     {
-        public WaveNameLabel(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
-        public override WaveNameLabel Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+        public PosLabel(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override PosLabel Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.OptionButton"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.WaveOption
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.HBoxContainer.Label
     /// </summary>
-    public class WaveOption : UiNode<MapEditorCreateMarkPanel, Godot.OptionButton, WaveOption>
+    public class Label : UiNode<MapEditorCreateMarkPanel, Godot.Label, Label>
     {
-        public WaveOption(MapEditorCreateMarkPanel uiPanel, Godot.OptionButton node) : base(uiPanel, node) {  }
-        public override WaveOption Clone() => new (UiPanel, (Godot.OptionButton)Instance.Duplicate());
+        public Label(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.SpinBox"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.HBoxContainer.PosX
+    /// </summary>
+    public class PosX : UiNode<MapEditorCreateMarkPanel, Godot.SpinBox, PosX>
+    {
+        public PosX(MapEditorCreateMarkPanel uiPanel, Godot.SpinBox node) : base(uiPanel, node) {  }
+        public override PosX Clone() => new (UiPanel, (Godot.SpinBox)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.HBoxContainer
+    /// </summary>
+    public class HBoxContainer : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.Label
+        /// </summary>
+        public Label L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label(UiPanel, Instance.GetNodeOrNull<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label _L_Label;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.PosX
+        /// </summary>
+        public PosX L_PosX
+        {
+            get
+            {
+                if (_L_PosX == null) _L_PosX = new PosX(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("PosX"));
+                return _L_PosX;
+            }
+        }
+        private PosX _L_PosX;
+
+        public HBoxContainer(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.HBoxContainer2.Label
+    /// </summary>
+    public class Label_1 : UiNode<MapEditorCreateMarkPanel, Godot.Label, Label_1>
+    {
+        public Label_1(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label_1 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.SpinBox"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.HBoxContainer2.PosY
+    /// </summary>
+    public class PosY : UiNode<MapEditorCreateMarkPanel, Godot.SpinBox, PosY>
+    {
+        public PosY(MapEditorCreateMarkPanel uiPanel, Godot.SpinBox node) : base(uiPanel, node) {  }
+        public override PosY Clone() => new (UiPanel, (Godot.SpinBox)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.HBoxContainer2
+    /// </summary>
+    public class HBoxContainer2_1 : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer2_1>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.Label
+        /// </summary>
+        public Label_1 L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label_1(UiPanel, Instance.GetNodeOrNull<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label_1 _L_Label;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.PosY
+        /// </summary>
+        public PosY L_PosY
+        {
+            get
+            {
+                if (_L_PosY == null) _L_PosY = new PosY(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("PosY"));
+                return _L_PosY;
+            }
+        }
+        private PosY _L_PosY;
+
+        public HBoxContainer2_1(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer2_1 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer
+    /// </summary>
+    public class VBoxContainer_1 : UiNode<MapEditorCreateMarkPanel, Godot.VBoxContainer, VBoxContainer_1>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.HBoxContainer
+        /// </summary>
+        public HBoxContainer L_HBoxContainer
+        {
+            get
+            {
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                return _L_HBoxContainer;
+            }
+        }
+        private HBoxContainer _L_HBoxContainer;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.HBoxContainer2
+        /// </summary>
+        public HBoxContainer2_1 L_HBoxContainer2
+        {
+            get
+            {
+                if (_L_HBoxContainer2 == null) _L_HBoxContainer2 = new HBoxContainer2_1(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer2"));
+                return _L_HBoxContainer2;
+            }
+        }
+        private HBoxContainer2_1 _L_HBoxContainer2;
+
+        public VBoxContainer_1(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
+        public override VBoxContainer_1 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -77,33 +209,218 @@ public abstract partial class MapEditorCreateMark : UiBase
     public class HBoxContainer2 : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer2>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.WaveNameLabel
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.PosLabel
         /// </summary>
-        public WaveNameLabel L_WaveNameLabel
+        public PosLabel L_PosLabel
         {
             get
             {
-                if (_L_WaveNameLabel == null) _L_WaveNameLabel = new WaveNameLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("WaveNameLabel"));
-                return _L_WaveNameLabel;
+                if (_L_PosLabel == null) _L_PosLabel = new PosLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("PosLabel"));
+                return _L_PosLabel;
             }
         }
-        private WaveNameLabel _L_WaveNameLabel;
+        private PosLabel _L_PosLabel;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.OptionButton"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.WaveOption
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer
         /// </summary>
-        public WaveOption L_WaveOption
+        public VBoxContainer_1 L_VBoxContainer
         {
             get
             {
-                if (_L_WaveOption == null) _L_WaveOption = new WaveOption(UiPanel, Instance.GetNodeOrNull<Godot.OptionButton>("WaveOption"));
-                return _L_WaveOption;
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                return _L_VBoxContainer;
             }
         }
-        private WaveOption _L_WaveOption;
+        private VBoxContainer_1 _L_VBoxContainer;
 
         public HBoxContainer2(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
         public override HBoxContainer2 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.SizeLabel
+    /// </summary>
+    public class SizeLabel : UiNode<MapEditorCreateMarkPanel, Godot.Label, SizeLabel>
+    {
+        public SizeLabel(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override SizeLabel Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.HBoxContainer.Label
+    /// </summary>
+    public class Label_2 : UiNode<MapEditorCreateMarkPanel, Godot.Label, Label_2>
+    {
+        public Label_2(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label_2 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.SpinBox"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.HBoxContainer.SizeX
+    /// </summary>
+    public class SizeX : UiNode<MapEditorCreateMarkPanel, Godot.SpinBox, SizeX>
+    {
+        public SizeX(MapEditorCreateMarkPanel uiPanel, Godot.SpinBox node) : base(uiPanel, node) {  }
+        public override SizeX Clone() => new (UiPanel, (Godot.SpinBox)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.HBoxContainer
+    /// </summary>
+    public class HBoxContainer_1 : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer_1>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.Label
+        /// </summary>
+        public Label_2 L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label_2(UiPanel, Instance.GetNodeOrNull<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label_2 _L_Label;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.SizeX
+        /// </summary>
+        public SizeX L_SizeX
+        {
+            get
+            {
+                if (_L_SizeX == null) _L_SizeX = new SizeX(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("SizeX"));
+                return _L_SizeX;
+            }
+        }
+        private SizeX _L_SizeX;
+
+        public HBoxContainer_1(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer_1 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.HBoxContainer2.Label
+    /// </summary>
+    public class Label_3 : UiNode<MapEditorCreateMarkPanel, Godot.Label, Label_3>
+    {
+        public Label_3(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label_3 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.SpinBox"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.HBoxContainer2.SizeY
+    /// </summary>
+    public class SizeY : UiNode<MapEditorCreateMarkPanel, Godot.SpinBox, SizeY>
+    {
+        public SizeY(MapEditorCreateMarkPanel uiPanel, Godot.SpinBox node) : base(uiPanel, node) {  }
+        public override SizeY Clone() => new (UiPanel, (Godot.SpinBox)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.HBoxContainer2
+    /// </summary>
+    public class HBoxContainer2_2 : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer2_2>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.Label
+        /// </summary>
+        public Label_3 L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label_3(UiPanel, Instance.GetNodeOrNull<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label_3 _L_Label;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.SizeY
+        /// </summary>
+        public SizeY L_SizeY
+        {
+            get
+            {
+                if (_L_SizeY == null) _L_SizeY = new SizeY(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("SizeY"));
+                return _L_SizeY;
+            }
+        }
+        private SizeY _L_SizeY;
+
+        public HBoxContainer2_2(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer2_2 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer
+    /// </summary>
+    public class VBoxContainer_2 : UiNode<MapEditorCreateMarkPanel, Godot.VBoxContainer, VBoxContainer_2>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.HBoxContainer
+        /// </summary>
+        public HBoxContainer_1 L_HBoxContainer
+        {
+            get
+            {
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                return _L_HBoxContainer;
+            }
+        }
+        private HBoxContainer_1 _L_HBoxContainer;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.HBoxContainer2
+        /// </summary>
+        public HBoxContainer2_2 L_HBoxContainer2
+        {
+            get
+            {
+                if (_L_HBoxContainer2 == null) _L_HBoxContainer2 = new HBoxContainer2_2(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer2"));
+                return _L_HBoxContainer2;
+            }
+        }
+        private HBoxContainer2_2 _L_HBoxContainer2;
+
+        public VBoxContainer_2(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
+        public override VBoxContainer_2 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3
+    /// </summary>
+    public class HBoxContainer3_1 : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer3_1>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.SizeLabel
+        /// </summary>
+        public SizeLabel L_SizeLabel
+        {
+            get
+            {
+                if (_L_SizeLabel == null) _L_SizeLabel = new SizeLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("SizeLabel"));
+                return _L_SizeLabel;
+            }
+        }
+        private SizeLabel _L_SizeLabel;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer
+        /// </summary>
+        public VBoxContainer_2 L_VBoxContainer
+        {
+            get
+            {
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_2(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                return _L_VBoxContainer;
+            }
+        }
+        private VBoxContainer_2 _L_VBoxContainer;
+
+        public HBoxContainer3_1(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer3_1 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -127,7 +444,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer
     /// </summary>
-    public class HBoxContainer : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer>
+    public class HBoxContainer_2 : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer_2>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.DelayNameLabel
@@ -155,8 +472,8 @@ public abstract partial class MapEditorCreateMark : UiBase
         }
         private DelayInput _L_DelayInput;
 
-        public HBoxContainer(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
-        public override HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+        public HBoxContainer_2(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer_2 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -178,17 +495,30 @@ public abstract partial class MapEditorCreateMark : UiBase
         private HBoxContainer2 _L_HBoxContainer2;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3
         /// </summary>
-        public HBoxContainer L_HBoxContainer
+        public HBoxContainer3_1 L_HBoxContainer3
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer3 == null) _L_HBoxContainer3 = new HBoxContainer3_1(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer3"));
+                return _L_HBoxContainer3;
+            }
+        }
+        private HBoxContainer3_1 _L_HBoxContainer3;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer
+        /// </summary>
+        public HBoxContainer_2 L_HBoxContainer
+        {
+            get
+            {
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_2(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
-        private HBoxContainer _L_HBoxContainer;
+        private HBoxContainer_2 _L_HBoxContainer;
 
         public HBoxContainer3(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
         public override HBoxContainer3 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
@@ -269,7 +599,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.VBoxContainer.HBoxContainer
     /// </summary>
-    public class HBoxContainer_1 : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer_1>
+    public class HBoxContainer_3 : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer_3>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.VBoxContainer.Control
@@ -362,8 +692,8 @@ public abstract partial class MapEditorCreateMark : UiBase
         }
         private ExtraTitle _L_ExtraTitle;
 
-        public HBoxContainer_1(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
-        public override HBoxContainer_1 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+        public HBoxContainer_3(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer_3 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -454,7 +784,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.VBoxContainer.ScrollContainer.MarkObject.HBoxContainer
     /// </summary>
-    public class HBoxContainer_2 : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer_2>
+    public class HBoxContainer_4 : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, HBoxContainer_4>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.VBoxContainer.ScrollContainer.MarkObject.ExpandButton
@@ -547,8 +877,8 @@ public abstract partial class MapEditorCreateMark : UiBase
         }
         private CenterContainer _L_CenterContainer;
 
-        public HBoxContainer_2(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
-        public override HBoxContainer_2 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+        public HBoxContainer_4(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer_4 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -559,15 +889,15 @@ public abstract partial class MapEditorCreateMark : UiBase
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.VBoxContainer.ScrollContainer.HBoxContainer
         /// </summary>
-        public HBoxContainer_2 L_HBoxContainer
+        public HBoxContainer_4 L_HBoxContainer
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_2(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_4(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
-        private HBoxContainer_2 _L_HBoxContainer;
+        private HBoxContainer_4 _L_HBoxContainer;
 
         public MarkObject(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
         public override MarkObject Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
@@ -598,20 +928,20 @@ public abstract partial class MapEditorCreateMark : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.VBoxContainer
     /// </summary>
-    public class VBoxContainer_1 : UiNode<MapEditorCreateMarkPanel, Godot.VBoxContainer, VBoxContainer_1>
+    public class VBoxContainer_3 : UiNode<MapEditorCreateMarkPanel, Godot.VBoxContainer, VBoxContainer_3>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.HBoxContainer
         /// </summary>
-        public HBoxContainer_1 L_HBoxContainer
+        public HBoxContainer_3 L_HBoxContainer
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_3(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
-        private HBoxContainer_1 _L_HBoxContainer;
+        private HBoxContainer_3 _L_HBoxContainer;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.ScrollContainer
@@ -626,8 +956,8 @@ public abstract partial class MapEditorCreateMark : UiBase
         }
         private ScrollContainer _L_ScrollContainer;
 
-        public VBoxContainer_1(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
-        public override VBoxContainer_1 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
+        public VBoxContainer_3(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
+        public override VBoxContainer_3 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -638,15 +968,15 @@ public abstract partial class MapEditorCreateMark : UiBase
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.VBoxContainer
         /// </summary>
-        public VBoxContainer_1 L_VBoxContainer
+        public VBoxContainer_3 L_VBoxContainer
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_3(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
-        private VBoxContainer_1 _L_VBoxContainer;
+        private VBoxContainer_3 _L_VBoxContainer;
 
         public Panel(MapEditorCreateMarkPanel uiPanel, Godot.Panel node) : base(uiPanel, node) {  }
         public override Panel Clone() => new (UiPanel, (Godot.Panel)Instance.Duplicate());
@@ -808,19 +1138,34 @@ public abstract partial class MapEditorCreateMark : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.WaveNameLabel
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.PosLabel
     /// </summary>
-    public WaveNameLabel S_WaveNameLabel => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer2.L_WaveNameLabel;
+    public PosLabel S_PosLabel => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer2.L_PosLabel;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.OptionButton"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.WaveOption
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.HBoxContainer.PosX
     /// </summary>
-    public WaveOption S_WaveOption => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer2.L_WaveOption;
+    public PosX S_PosX => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer2.L_VBoxContainer.L_HBoxContainer.L_PosX;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer2.VBoxContainer.HBoxContainer2.PosY
     /// </summary>
-    public HBoxContainer2 S_HBoxContainer2 => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer2;
+    public PosY S_PosY => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer2.L_VBoxContainer.L_HBoxContainer2.L_PosY;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.SizeLabel
+    /// </summary>
+    public SizeLabel S_SizeLabel => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer3.L_SizeLabel;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.HBoxContainer.SizeX
+    /// </summary>
+    public SizeX S_SizeX => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer3.L_VBoxContainer.L_HBoxContainer.L_SizeX;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer3.VBoxContainer.HBoxContainer2.SizeY
+    /// </summary>
+    public SizeY S_SizeY => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer3.L_VBoxContainer.L_HBoxContainer2.L_SizeY;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer.DelayNameLabel
@@ -831,11 +1176,6 @@ public abstract partial class MapEditorCreateMark : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.HBoxContainer.DelayInput
     /// </summary>
     public DelayInput S_DelayInput => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer.L_DelayInput;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3
-    /// </summary>
-    public HBoxContainer3 S_HBoxContainer3 => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.AddMark

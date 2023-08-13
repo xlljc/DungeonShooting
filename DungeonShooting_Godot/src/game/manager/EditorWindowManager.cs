@@ -165,16 +165,13 @@ public static class EditorWindowManager
     /// <summary>
     /// 打开创建标记页面
     /// </summary>
-    /// <param name="preinstall">房间预设信息</param>
-    /// <param name="waveIndex">当前波数据</param>
     /// <param name="onCreateMarkInfo">创建标记回调</param>
-    public static void ShowCreateMark(RoomPreinstall preinstall, int waveIndex, Action<MarkInfo> onCreateMarkInfo)
+    public static void ShowCreateMark(Action<MarkInfo> onCreateMarkInfo)
     {
         var window = UiManager.Open_EditorWindow();
         window.SetWindowTitle("创建标记");
         window.SetWindowSize(new Vector2I(1400, 900));
         var body = window.OpenBody<MapEditorCreateMarkPanel>(UiManager.UiName.MapEditorCreateMark);
-        body.InitData(preinstall, waveIndex);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {

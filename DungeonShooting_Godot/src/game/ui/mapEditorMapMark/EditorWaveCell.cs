@@ -9,6 +9,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
     
     public override void OnInit()
     {
+        //这里不绑定 Click 函数, 而是绑定 OnClick, 因为 Select 交给 MapEditorMapMarkPanel 处理了
         CellNode.L_WaveContainer.L_WaveButton.Instance.Pressed += OnClick;
         CellNode.L_WaveContainer.L_TextureButton.Instance.Pressed += OnExpandOrClose;
         CellNode.L_MarginContainer.L_AddMarkButton.Instance.Pressed += OnAddMark;
@@ -38,11 +39,9 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
     //添加标记
     private void OnAddMark()
     {
-        //当前选中的预设
-        var preinstall = CellNode.UiPanel.GetSelectPreinstall();
         //打开添加标记页面
-        EditorWindowManager.ShowCreateMark(preinstall, Index, OnCreateMarkInfo);
-    }
+        EditorWindowManager.ShowCreateMark(OnCreateMarkInfo);
+    }   
 
     //创建的标记完成
     private void OnCreateMarkInfo(MarkInfo markInfo)
@@ -72,6 +71,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
 
     public override void OnClick()
     {
+        CellNode.UiPanel.WaveSelectIndex = Index;
         CellNode.UiPanel.SetSelectCell(this, CellNode.L_WaveContainer.Instance, MapEditorMapMarkPanel.SelectToolType.Wave);
     }
 
