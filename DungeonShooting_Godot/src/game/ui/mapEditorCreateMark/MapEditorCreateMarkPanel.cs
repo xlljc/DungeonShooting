@@ -34,6 +34,12 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
     /// </summary>
     public MarkInfo GetMarkInfo()
     {
+        if (_grid.Count == 0)
+        {
+            EditorWindowManager.ShowTips("警告", "必须添加一个物体!");
+            return null;
+        }
+        
         var data = new MarkInfo();
         data.Position = new SerializeVector2();
         data.MarkList = new List<MarkInfoItem>();

@@ -32,6 +32,10 @@ public partial class MarkTool : TextureRect, IUiNodeScript
                     if (!Input.IsMouseButtonPressed(MouseButton.Left))
                     {
                         _isMOve = false;
+                        if (_toolNode.UiPanel.ActiveMark == this)
+                        {
+                            _toolNode.UiPanel.SetActiveMark(null);
+                        }
                     }
                 }
                 else if (!_isMOve)
@@ -40,15 +44,19 @@ public partial class MarkTool : TextureRect, IUiNodeScript
                     {
                         _isMOve = true;
                         _offset = GlobalPosition - GetGlobalMousePosition();
+                        if (_toolNode.UiPanel.ActiveMark == null)
+                        {
+                            _toolNode.UiPanel.SetActiveMark(this);
+                        }
                     }
                 }
             }
 
             //移动中
-            if (_isMOve)
+            if (_isMOve && _toolNode.UiPanel.ActiveMark == this)
             {
                 GlobalPosition = _offset + GetGlobalMousePosition().Round();
-                _markInfo.Position = new SerializeVector2(Position.Round());
+                _markInfo.Position = new SerializeVector2((Position + (Size / 2).Ceil()).Round());
             }
             
             //QueueRedraw();
@@ -58,6 +66,7 @@ public partial class MarkTool : TextureRect, IUiNodeScript
     public void InitData(MarkInfo markInfo)
     {
         _markInfo = markInfo;
+        Position = markInfo.Position.AsVector2() - (Size / 2).Ceil();
     }
     
     private void OnMouseEntered()

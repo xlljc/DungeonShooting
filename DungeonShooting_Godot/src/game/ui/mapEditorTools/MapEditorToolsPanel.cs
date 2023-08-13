@@ -25,11 +25,17 @@ public partial class MapEditorToolsPanel : MapEditorTools
     /// 鼠标悬停区域
     /// </summary>
     public DoorHoverArea ActiveHoverArea { get; private set; }
+    
+    /// <summary>
+    /// 鼠标选中的标记对象
+    /// </summary>
+    public MarkTool ActiveMark { get; private set; }
 
     /// <summary>
     /// 所属编辑器Tile对象
     /// </summary>
     public MapEditor.MapEditor.TileMap EditorMap { get; set; }
+    
 
     private List<DoorToolTemplate> _doorTools = new List<DoorToolTemplate>();
     private UiGrid<ToolButton, ToolBtnData> _toolGrid;
@@ -98,7 +104,6 @@ public partial class MapEditorToolsPanel : MapEditorTools
         var cloneAndPut = S_MarkTemplate.CloneAndPut();
         _markToolsMap.Add(markInfo, cloneAndPut);
         cloneAndPut.Instance.Visible = true;
-        cloneAndPut.Instance.Position = markInfo.Position.AsVector2();
         cloneAndPut.Instance.InitData(markInfo);
     }
     
@@ -146,6 +151,14 @@ public partial class MapEditorToolsPanel : MapEditorTools
         {
             S_HoverPreviewRoot.Instance.Reparent(S_ToolRoot.Instance, false);
         }
+    }
+
+    /// <summary>
+    /// 设置当前活动的标记
+    /// </summary>
+    public void SetActiveMark(MarkTool markTool)
+    {
+        ActiveMark = markTool;
     }
 
     /// <summary>
