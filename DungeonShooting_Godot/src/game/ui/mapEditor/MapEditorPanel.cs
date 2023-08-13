@@ -1,5 +1,4 @@
 using Godot;
-using UI.MapEditorTools;
 
 namespace UI.MapEditor;
 

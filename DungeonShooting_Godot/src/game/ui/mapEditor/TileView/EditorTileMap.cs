@@ -933,7 +933,7 @@ public partial class EditorTileMap : TileMap
     private void SetMapPosition(Vector2 pos)
     {
         Position = pos;
-        MapEditorToolsPanel.SetDoorToolTransform(pos, Scale);
+        MapEditorToolsPanel.SetToolTransform(pos, Scale);
     }
 
     //设置地图大小

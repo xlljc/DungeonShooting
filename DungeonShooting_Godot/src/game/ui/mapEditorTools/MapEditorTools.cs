@@ -6,17 +6,17 @@ namespace UI.MapEditorTools;
 public abstract partial class MapEditorTools : UiBase
 {
     /// <summary>
-    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.DoorToolRoot
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.ToolRoot
     /// </summary>
-    public DoorToolRoot L_DoorToolRoot
+    public ToolRoot L_ToolRoot
     {
         get
         {
-            if (_L_DoorToolRoot == null) _L_DoorToolRoot = new DoorToolRoot(this, GetNodeOrNull<Godot.Control>("DoorToolRoot"));
-            return _L_DoorToolRoot;
+            if (_L_ToolRoot == null) _L_ToolRoot = new ToolRoot((MapEditorToolsPanel)this, GetNodeOrNull<Godot.Control>("ToolRoot"));
+            return _L_ToolRoot;
         }
     }
-    private DoorToolRoot _L_DoorToolRoot;
+    private ToolRoot _L_ToolRoot;
 
     /// <summary>
     /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorTools.HBoxContainer
@@ -25,7 +25,7 @@ public abstract partial class MapEditorTools : UiBase
     {
         get
         {
-            if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(this, GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+            if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer((MapEditorToolsPanel)this, GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
             return _L_HBoxContainer;
         }
     }
@@ -38,24 +38,26 @@ public abstract partial class MapEditorTools : UiBase
 
     public sealed override void OnInitNestedUi()
     {
+        _ = L_ToolRoot.L_MarkTemplate;
+
     }
 
     /// <summary>
-    /// 类型: <see cref="DoorHoverArea"/>, 路径: MapEditorTools.DoorToolRoot.N_HoverRoot.N_HoverArea
+    /// 类型: <see cref="DoorHoverArea"/>, 路径: MapEditorTools.ToolRoot.N_HoverRoot.N_HoverArea
     /// </summary>
-    public class N_HoverArea : UiNode<MapEditorTools, DoorHoverArea, N_HoverArea>
+    public class N_HoverArea : UiNode<MapEditorToolsPanel, DoorHoverArea, N_HoverArea>
     {
-        public N_HoverArea(MapEditorTools uiPanel, DoorHoverArea node) : base(uiPanel, node) {  }
+        public N_HoverArea(MapEditorToolsPanel uiPanel, DoorHoverArea node) : base(uiPanel, node) {  }
         public override N_HoverArea Clone() => new (UiPanel, (DoorHoverArea)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.DoorToolRoot.N_HoverRoot
+    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.ToolRoot.N_HoverRoot
     /// </summary>
-    public class N_HoverRoot : UiNode<MapEditorTools, Godot.Control, N_HoverRoot>
+    public class N_HoverRoot : UiNode<MapEditorToolsPanel, Godot.Control, N_HoverRoot>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.DoorToolRoot.N_HoverArea
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.ToolRoot.N_HoverArea
         /// </summary>
         public N_HoverArea L_N_HoverArea
         {
@@ -67,26 +69,26 @@ public abstract partial class MapEditorTools : UiBase
         }
         private N_HoverArea _L_N_HoverArea;
 
-        public N_HoverRoot(MapEditorTools uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public N_HoverRoot(MapEditorToolsPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override N_HoverRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="DoorHoverArea"/>, 路径: MapEditorTools.DoorToolRoot.E_HoverRoot.E_HoverArea
+    /// 类型: <see cref="DoorHoverArea"/>, 路径: MapEditorTools.ToolRoot.E_HoverRoot.E_HoverArea
     /// </summary>
-    public class E_HoverArea : UiNode<MapEditorTools, DoorHoverArea, E_HoverArea>
+    public class E_HoverArea : UiNode<MapEditorToolsPanel, DoorHoverArea, E_HoverArea>
     {
-        public E_HoverArea(MapEditorTools uiPanel, DoorHoverArea node) : base(uiPanel, node) {  }
+        public E_HoverArea(MapEditorToolsPanel uiPanel, DoorHoverArea node) : base(uiPanel, node) {  }
         public override E_HoverArea Clone() => new (UiPanel, (DoorHoverArea)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.DoorToolRoot.E_HoverRoot
+    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.ToolRoot.E_HoverRoot
     /// </summary>
-    public class E_HoverRoot : UiNode<MapEditorTools, Godot.Control, E_HoverRoot>
+    public class E_HoverRoot : UiNode<MapEditorToolsPanel, Godot.Control, E_HoverRoot>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.DoorToolRoot.E_HoverArea
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.ToolRoot.E_HoverArea
         /// </summary>
         public E_HoverArea L_E_HoverArea
         {
@@ -98,26 +100,26 @@ public abstract partial class MapEditorTools : UiBase
         }
         private E_HoverArea _L_E_HoverArea;
 
-        public E_HoverRoot(MapEditorTools uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public E_HoverRoot(MapEditorToolsPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override E_HoverRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="DoorHoverArea"/>, 路径: MapEditorTools.DoorToolRoot.S_HoverRoot.S_HoverArea
+    /// 类型: <see cref="DoorHoverArea"/>, 路径: MapEditorTools.ToolRoot.S_HoverRoot.S_HoverArea
     /// </summary>
-    public class S_HoverArea : UiNode<MapEditorTools, DoorHoverArea, S_HoverArea>
+    public class S_HoverArea : UiNode<MapEditorToolsPanel, DoorHoverArea, S_HoverArea>
     {
-        public S_HoverArea(MapEditorTools uiPanel, DoorHoverArea node) : base(uiPanel, node) {  }
+        public S_HoverArea(MapEditorToolsPanel uiPanel, DoorHoverArea node) : base(uiPanel, node) {  }
         public override S_HoverArea Clone() => new (UiPanel, (DoorHoverArea)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.DoorToolRoot.S_HoverRoot
+    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.ToolRoot.S_HoverRoot
     /// </summary>
-    public class S_HoverRoot : UiNode<MapEditorTools, Godot.Control, S_HoverRoot>
+    public class S_HoverRoot : UiNode<MapEditorToolsPanel, Godot.Control, S_HoverRoot>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.DoorToolRoot.S_HoverArea
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.ToolRoot.S_HoverArea
         /// </summary>
         public S_HoverArea L_S_HoverArea
         {
@@ -129,26 +131,26 @@ public abstract partial class MapEditorTools : UiBase
         }
         private S_HoverArea _L_S_HoverArea;
 
-        public S_HoverRoot(MapEditorTools uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public S_HoverRoot(MapEditorToolsPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override S_HoverRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="DoorHoverArea"/>, 路径: MapEditorTools.DoorToolRoot.W_HoverRoot.W_HoverArea
+    /// 类型: <see cref="DoorHoverArea"/>, 路径: MapEditorTools.ToolRoot.W_HoverRoot.W_HoverArea
     /// </summary>
-    public class W_HoverArea : UiNode<MapEditorTools, DoorHoverArea, W_HoverArea>
+    public class W_HoverArea : UiNode<MapEditorToolsPanel, DoorHoverArea, W_HoverArea>
     {
-        public W_HoverArea(MapEditorTools uiPanel, DoorHoverArea node) : base(uiPanel, node) {  }
+        public W_HoverArea(MapEditorToolsPanel uiPanel, DoorHoverArea node) : base(uiPanel, node) {  }
         public override W_HoverArea Clone() => new (UiPanel, (DoorHoverArea)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.DoorToolRoot.W_HoverRoot
+    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.ToolRoot.W_HoverRoot
     /// </summary>
-    public class W_HoverRoot : UiNode<MapEditorTools, Godot.Control, W_HoverRoot>
+    public class W_HoverRoot : UiNode<MapEditorToolsPanel, Godot.Control, W_HoverRoot>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.DoorToolRoot.W_HoverArea
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.ToolRoot.W_HoverArea
         /// </summary>
         public W_HoverArea L_W_HoverArea
         {
@@ -160,26 +162,26 @@ public abstract partial class MapEditorTools : UiBase
         }
         private W_HoverArea _L_W_HoverArea;
 
-        public W_HoverRoot(MapEditorTools uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public W_HoverRoot(MapEditorToolsPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override W_HoverRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorTools.DoorToolRoot.HoverPreviewRoot.HoverPreview
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorTools.ToolRoot.HoverPreviewRoot.HoverPreview
     /// </summary>
-    public class HoverPreview : UiNode<MapEditorTools, Godot.TextureRect, HoverPreview>
+    public class HoverPreview : UiNode<MapEditorToolsPanel, Godot.TextureRect, HoverPreview>
     {
-        public HoverPreview(MapEditorTools uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public HoverPreview(MapEditorToolsPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
         public override HoverPreview Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.DoorToolRoot.HoverPreviewRoot
+    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.ToolRoot.HoverPreviewRoot
     /// </summary>
-    public class HoverPreviewRoot : UiNode<MapEditorTools, Godot.Control, HoverPreviewRoot>
+    public class HoverPreviewRoot : UiNode<MapEditorToolsPanel, Godot.Control, HoverPreviewRoot>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.DoorToolRoot.HoverPreview
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.ToolRoot.HoverPreview
         /// </summary>
         public HoverPreview L_HoverPreview
         {
@@ -191,44 +193,44 @@ public abstract partial class MapEditorTools : UiBase
         }
         private HoverPreview _L_HoverPreview;
 
-        public HoverPreviewRoot(MapEditorTools uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public HoverPreviewRoot(MapEditorToolsPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override HoverPreviewRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.ColorRect"/>, 路径: MapEditorTools.DoorToolRoot.DoorToolTemplate.DoorArea
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: MapEditorTools.ToolRoot.DoorToolTemplate.DoorArea
     /// </summary>
-    public class DoorArea : UiNode<MapEditorTools, Godot.ColorRect, DoorArea>
+    public class DoorArea : UiNode<MapEditorToolsPanel, Godot.ColorRect, DoorArea>
     {
-        public DoorArea(MapEditorTools uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public DoorArea(MapEditorToolsPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
         public override DoorArea Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 路径: MapEditorTools.DoorToolRoot.DoorToolTemplate.StartBtn
+    /// 类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 路径: MapEditorTools.ToolRoot.DoorToolTemplate.StartBtn
     /// </summary>
-    public class StartBtn : UiNode<MapEditorTools, UI.MapEditorTools.DoorDragButton, StartBtn>
+    public class StartBtn : UiNode<MapEditorToolsPanel, UI.MapEditorTools.DoorDragButton, StartBtn>
     {
-        public StartBtn(MapEditorTools uiPanel, UI.MapEditorTools.DoorDragButton node) : base(uiPanel, node) {  }
+        public StartBtn(MapEditorToolsPanel uiPanel, UI.MapEditorTools.DoorDragButton node) : base(uiPanel, node) {  }
         public override StartBtn Clone() => new (UiPanel, (UI.MapEditorTools.DoorDragButton)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 路径: MapEditorTools.DoorToolRoot.DoorToolTemplate.EndBtn
+    /// 类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 路径: MapEditorTools.ToolRoot.DoorToolTemplate.EndBtn
     /// </summary>
-    public class EndBtn : UiNode<MapEditorTools, UI.MapEditorTools.DoorDragButton, EndBtn>
+    public class EndBtn : UiNode<MapEditorToolsPanel, UI.MapEditorTools.DoorDragButton, EndBtn>
     {
-        public EndBtn(MapEditorTools uiPanel, UI.MapEditorTools.DoorDragButton node) : base(uiPanel, node) {  }
+        public EndBtn(MapEditorToolsPanel uiPanel, UI.MapEditorTools.DoorDragButton node) : base(uiPanel, node) {  }
         public override EndBtn Clone() => new (UiPanel, (UI.MapEditorTools.DoorDragButton)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.MapEditorTools.DoorDragArea"/>, 路径: MapEditorTools.DoorToolRoot.DoorToolTemplate
+    /// 类型: <see cref="UI.MapEditorTools.DoorDragArea"/>, 路径: MapEditorTools.ToolRoot.DoorToolTemplate
     /// </summary>
-    public class DoorToolTemplate : UiNode<MapEditorTools, UI.MapEditorTools.DoorDragArea, DoorToolTemplate>
+    public class DoorToolTemplate : UiNode<MapEditorToolsPanel, UI.MapEditorTools.DoorDragArea, DoorToolTemplate>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: MapEditorTools.DoorToolRoot.DoorArea
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: MapEditorTools.ToolRoot.DoorArea
         /// </summary>
         public DoorArea L_DoorArea
         {
@@ -241,7 +243,7 @@ public abstract partial class MapEditorTools : UiBase
         private DoorArea _L_DoorArea;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 节点路径: MapEditorTools.DoorToolRoot.StartBtn
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 节点路径: MapEditorTools.ToolRoot.StartBtn
         /// </summary>
         public StartBtn L_StartBtn
         {
@@ -254,7 +256,7 @@ public abstract partial class MapEditorTools : UiBase
         private StartBtn _L_StartBtn;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 节点路径: MapEditorTools.DoorToolRoot.EndBtn
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 节点路径: MapEditorTools.ToolRoot.EndBtn
         /// </summary>
         public EndBtn L_EndBtn
         {
@@ -266,14 +268,23 @@ public abstract partial class MapEditorTools : UiBase
         }
         private EndBtn _L_EndBtn;
 
-        public DoorToolTemplate(MapEditorTools uiPanel, UI.MapEditorTools.DoorDragArea node) : base(uiPanel, node) {  }
+        public DoorToolTemplate(MapEditorToolsPanel uiPanel, UI.MapEditorTools.DoorDragArea node) : base(uiPanel, node) {  }
         public override DoorToolTemplate Clone() => new (UiPanel, (UI.MapEditorTools.DoorDragArea)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.DoorToolRoot
+    /// 类型: <see cref="UI.MapEditorTools.MarkTool"/>, 路径: MapEditorTools.ToolRoot.MarkTemplate
     /// </summary>
-    public class DoorToolRoot : UiNode<MapEditorTools, Godot.Control, DoorToolRoot>
+    public class MarkTemplate : UiNode<MapEditorToolsPanel, UI.MapEditorTools.MarkTool, MarkTemplate>
+    {
+        public MarkTemplate(MapEditorToolsPanel uiPanel, UI.MapEditorTools.MarkTool node) : base(uiPanel, node) {  }
+        public override MarkTemplate Clone() => new (UiPanel, (UI.MapEditorTools.MarkTool)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorTools.ToolRoot
+    /// </summary>
+    public class ToolRoot : UiNode<MapEditorToolsPanel, Godot.Control, ToolRoot>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.N_HoverRoot
@@ -353,23 +364,36 @@ public abstract partial class MapEditorTools : UiBase
         }
         private DoorToolTemplate _L_DoorToolTemplate;
 
-        public DoorToolRoot(MapEditorTools uiPanel, Godot.Control node) : base(uiPanel, node) {  }
-        public override DoorToolRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorTools.MarkTool"/>, 节点路径: MapEditorTools.MarkTemplate
+        /// </summary>
+        public MarkTemplate L_MarkTemplate
+        {
+            get
+            {
+                if (_L_MarkTemplate == null) _L_MarkTemplate = new MarkTemplate(UiPanel, Instance.GetNodeOrNull<UI.MapEditorTools.MarkTool>("MarkTemplate"));
+                return _L_MarkTemplate;
+            }
+        }
+        private MarkTemplate _L_MarkTemplate;
+
+        public ToolRoot(MapEditorToolsPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override ToolRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: MapEditorTools.HBoxContainer.ToolButton.Select
     /// </summary>
-    public class Select : UiNode<MapEditorTools, Godot.NinePatchRect, Select>
+    public class Select : UiNode<MapEditorToolsPanel, Godot.NinePatchRect, Select>
     {
-        public Select(MapEditorTools uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public Select(MapEditorToolsPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
         public override Select Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.TextureButton"/>, 路径: MapEditorTools.HBoxContainer.ToolButton
     /// </summary>
-    public class ToolButton : UiNode<MapEditorTools, Godot.TextureButton, ToolButton>
+    public class ToolButton : UiNode<MapEditorToolsPanel, Godot.TextureButton, ToolButton>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorTools.HBoxContainer.Select
@@ -384,14 +408,14 @@ public abstract partial class MapEditorTools : UiBase
         }
         private Select _L_Select;
 
-        public ToolButton(MapEditorTools uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public ToolButton(MapEditorToolsPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
         public override ToolButton Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorTools.HBoxContainer
     /// </summary>
-    public class HBoxContainer : UiNode<MapEditorTools, Godot.HBoxContainer, HBoxContainer>
+    public class HBoxContainer : UiNode<MapEditorToolsPanel, Godot.HBoxContainer, HBoxContainer>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: MapEditorTools.ToolButton
@@ -406,85 +430,90 @@ public abstract partial class MapEditorTools : UiBase
         }
         private ToolButton _L_ToolButton;
 
-        public HBoxContainer(MapEditorTools uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public HBoxContainer(MapEditorToolsPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
         public override HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
     }
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.DoorToolRoot.N_HoverRoot.N_HoverArea
+    /// 场景中唯一名称的节点, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.ToolRoot.N_HoverRoot.N_HoverArea
     /// </summary>
-    public N_HoverArea S_N_HoverArea => L_DoorToolRoot.L_N_HoverRoot.L_N_HoverArea;
+    public N_HoverArea S_N_HoverArea => L_ToolRoot.L_N_HoverRoot.L_N_HoverArea;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.DoorToolRoot.N_HoverRoot
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.ToolRoot.N_HoverRoot
     /// </summary>
-    public N_HoverRoot S_N_HoverRoot => L_DoorToolRoot.L_N_HoverRoot;
+    public N_HoverRoot S_N_HoverRoot => L_ToolRoot.L_N_HoverRoot;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.DoorToolRoot.E_HoverRoot.E_HoverArea
+    /// 场景中唯一名称的节点, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.ToolRoot.E_HoverRoot.E_HoverArea
     /// </summary>
-    public E_HoverArea S_E_HoverArea => L_DoorToolRoot.L_E_HoverRoot.L_E_HoverArea;
+    public E_HoverArea S_E_HoverArea => L_ToolRoot.L_E_HoverRoot.L_E_HoverArea;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.DoorToolRoot.E_HoverRoot
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.ToolRoot.E_HoverRoot
     /// </summary>
-    public E_HoverRoot S_E_HoverRoot => L_DoorToolRoot.L_E_HoverRoot;
+    public E_HoverRoot S_E_HoverRoot => L_ToolRoot.L_E_HoverRoot;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.DoorToolRoot.S_HoverRoot.S_HoverArea
+    /// 场景中唯一名称的节点, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.ToolRoot.S_HoverRoot.S_HoverArea
     /// </summary>
-    public S_HoverArea S_S_HoverArea => L_DoorToolRoot.L_S_HoverRoot.L_S_HoverArea;
+    public S_HoverArea S_S_HoverArea => L_ToolRoot.L_S_HoverRoot.L_S_HoverArea;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.DoorToolRoot.S_HoverRoot
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.ToolRoot.S_HoverRoot
     /// </summary>
-    public S_HoverRoot S_S_HoverRoot => L_DoorToolRoot.L_S_HoverRoot;
+    public S_HoverRoot S_S_HoverRoot => L_ToolRoot.L_S_HoverRoot;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.DoorToolRoot.W_HoverRoot.W_HoverArea
+    /// 场景中唯一名称的节点, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.ToolRoot.W_HoverRoot.W_HoverArea
     /// </summary>
-    public W_HoverArea S_W_HoverArea => L_DoorToolRoot.L_W_HoverRoot.L_W_HoverArea;
+    public W_HoverArea S_W_HoverArea => L_ToolRoot.L_W_HoverRoot.L_W_HoverArea;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.DoorToolRoot.W_HoverRoot
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.ToolRoot.W_HoverRoot
     /// </summary>
-    public W_HoverRoot S_W_HoverRoot => L_DoorToolRoot.L_W_HoverRoot;
+    public W_HoverRoot S_W_HoverRoot => L_ToolRoot.L_W_HoverRoot;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.DoorToolRoot.HoverPreviewRoot.HoverPreview
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorTools.ToolRoot.HoverPreviewRoot.HoverPreview
     /// </summary>
-    public HoverPreview S_HoverPreview => L_DoorToolRoot.L_HoverPreviewRoot.L_HoverPreview;
+    public HoverPreview S_HoverPreview => L_ToolRoot.L_HoverPreviewRoot.L_HoverPreview;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.DoorToolRoot.HoverPreviewRoot
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.ToolRoot.HoverPreviewRoot
     /// </summary>
-    public HoverPreviewRoot S_HoverPreviewRoot => L_DoorToolRoot.L_HoverPreviewRoot;
+    public HoverPreviewRoot S_HoverPreviewRoot => L_ToolRoot.L_HoverPreviewRoot;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: MapEditorTools.DoorToolRoot.DoorToolTemplate.DoorArea
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: MapEditorTools.ToolRoot.DoorToolTemplate.DoorArea
     /// </summary>
-    public DoorArea S_DoorArea => L_DoorToolRoot.L_DoorToolTemplate.L_DoorArea;
+    public DoorArea S_DoorArea => L_ToolRoot.L_DoorToolTemplate.L_DoorArea;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 节点路径: MapEditorTools.DoorToolRoot.DoorToolTemplate.StartBtn
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 节点路径: MapEditorTools.ToolRoot.DoorToolTemplate.StartBtn
     /// </summary>
-    public StartBtn S_StartBtn => L_DoorToolRoot.L_DoorToolTemplate.L_StartBtn;
+    public StartBtn S_StartBtn => L_ToolRoot.L_DoorToolTemplate.L_StartBtn;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 节点路径: MapEditorTools.DoorToolRoot.DoorToolTemplate.EndBtn
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorTools.DoorDragButton"/>, 节点路径: MapEditorTools.ToolRoot.DoorToolTemplate.EndBtn
     /// </summary>
-    public EndBtn S_EndBtn => L_DoorToolRoot.L_DoorToolTemplate.L_EndBtn;
+    public EndBtn S_EndBtn => L_ToolRoot.L_DoorToolTemplate.L_EndBtn;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorTools.DoorDragArea"/>, 节点路径: MapEditorTools.DoorToolRoot.DoorToolTemplate
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorTools.DoorDragArea"/>, 节点路径: MapEditorTools.ToolRoot.DoorToolTemplate
     /// </summary>
-    public DoorToolTemplate S_DoorToolTemplate => L_DoorToolRoot.L_DoorToolTemplate;
+    public DoorToolTemplate S_DoorToolTemplate => L_ToolRoot.L_DoorToolTemplate;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.DoorToolRoot
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorTools.MarkTool"/>, 节点路径: MapEditorTools.ToolRoot.MarkTemplate
     /// </summary>
-    public DoorToolRoot S_DoorToolRoot => L_DoorToolRoot;
+    public MarkTemplate S_MarkTemplate => L_ToolRoot.L_MarkTemplate;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorTools.ToolRoot
+    /// </summary>
+    public ToolRoot S_ToolRoot => L_ToolRoot;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorTools.HBoxContainer.ToolButton.Select

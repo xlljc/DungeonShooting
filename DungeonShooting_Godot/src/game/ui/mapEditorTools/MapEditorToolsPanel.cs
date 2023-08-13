@@ -33,6 +33,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
 
     private List<DoorToolTemplate> _doorTools = new List<DoorToolTemplate>();
     private UiGrid<ToolButton, ToolBtnData> _toolGrid;
+    private Dictionary<MarkInfo, MarkTemplate> _markToolsMap = new Dictionary<MarkInfo, MarkTemplate>();
 
     public override void OnCreateUi()
     {
@@ -40,7 +41,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
         S_S_HoverArea.Instance.Init(this, DoorDirection.S);
         S_W_HoverArea.Instance.Init(this, DoorDirection.W);
         S_E_HoverArea.Instance.Init(this, DoorDirection.E);
-        S_DoorToolRoot.Instance.RemoveChild(S_DoorToolTemplate.Instance);
+        S_ToolRoot.Instance.RemoveChild(S_DoorToolTemplate.Instance);
+        S_MarkTemplate.Instance.Visible = false;
 
         _toolGrid = new UiGrid<ToolButton, ToolBtnData>(S_ToolButton, typeof(ToolButtonCell));
         _toolGrid.SetColumns(10);
@@ -83,14 +85,26 @@ public partial class MapEditorToolsPanel : MapEditorTools
         S_HoverPreviewRoot.Instance.Visible = ActiveHoverArea != null && !DoorHoverArea.IsDrag;
         if (EditorMap.Instance.MouseType == EditorTileMap.MouseButtonType.Door)
         {
-            S_DoorToolRoot.Instance.Modulate = new Color(1, 1, 1, 1);
+            S_ToolRoot.Instance.Modulate = new Color(1, 1, 1, 1);
         }
         else
         {
-            S_DoorToolRoot.Instance.Modulate = new Color(1, 1, 1, 0.4f);
+            S_ToolRoot.Instance.Modulate = new Color(1, 1, 1, 0.4f);
         }
     }
 
+    public void CreateMarkTool(MarkInfo markInfo)
+    {
+        var cloneAndPut = S_MarkTemplate.CloneAndPut();
+        _markToolsMap.Add(markInfo, cloneAndPut);
+        cloneAndPut.Instance.Visible = true;
+        cloneAndPut.Instance.Position = markInfo.Position.AsVector2();
+        cloneAndPut.Instance.InitData(markInfo);
+    }
+    
+    /// <summary>
+    /// 获取门区域对象
+    /// </summary>
     public DoorHoverArea GetDoorHoverArea(DoorDirection direction)
     {
         switch (direction)
@@ -103,6 +117,9 @@ public partial class MapEditorToolsPanel : MapEditorTools
         return null;
     }
     
+    /// <summary>
+    /// 获取门区域根节点
+    /// </summary>
     public Control GetDoorHoverAreaRoot(DoorDirection direction)
     {
         switch (direction)
@@ -127,7 +144,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         }
         else
         {
-            S_HoverPreviewRoot.Instance.Reparent(S_DoorToolRoot.Instance, false);
+            S_HoverPreviewRoot.Instance.Reparent(S_ToolRoot.Instance, false);
         }
     }
 
@@ -180,14 +197,14 @@ public partial class MapEditorToolsPanel : MapEditorTools
     }
 
     /// <summary>
-    /// 设置门区域工具的大小和缩放
+    /// 设置工具根节点的大小和缩放
     /// </summary>
     /// <param name="pos">坐标</param>
     /// <param name="scale">缩放</param>
-    public void SetDoorToolTransform(Vector2 pos, Vector2 scale)
+    public void SetToolTransform(Vector2 pos, Vector2 scale)
     {
-        S_DoorToolRoot.Instance.Position = pos;
-        S_DoorToolRoot.Instance.Scale = scale;
+        S_ToolRoot.Instance.Position = pos;
+        S_ToolRoot.Instance.Scale = scale;
     }
 
     /// <summary>
@@ -323,7 +340,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
     private DoorToolTemplate CreateDoorToolInstance(DoorHoverArea doorHoverArea)
     {
         var doorTool = S_DoorToolTemplate.Clone();
-        S_DoorToolRoot.Instance.AddChild(doorTool.Instance);
+        S_ToolRoot.Instance.AddChild(doorTool.Instance);
         doorTool.Instance.SetDoorDragAreaNode(doorTool);
         doorTool.L_StartBtn.Instance.SetMapEditorToolsPanel(this);
         doorTool.L_EndBtn.Instance.SetMapEditorToolsPanel(this);

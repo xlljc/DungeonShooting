@@ -158,6 +158,8 @@ public static class UiGenerator
                $"\n" +
                $"    public sealed override void OnInitNestedUi()\n" +
                $"    {{\n" +
+               GenerateUiScriptCode("", uiNodeInfo, retraction) +
+               $"\n" +
                GenerateInitNestedUi("", uiNodeInfo, retraction) +
                $"    }}\n" +
                $"\n" +
@@ -165,6 +167,36 @@ public static class UiGenerator
                $"\n" +
                GenerateSoleLayerCode(uiNodeInfo, "", uiNodeInfo.OriginName, retraction) +
                $"}}\n";
+    }
+
+    private static string GenerateUiScriptCode(string parent, UiNodeInfo uiNodeInfo, string retraction)
+    {
+        var str = "";
+        var node = parent + (string.IsNullOrEmpty(parent) ? "" : ".") + uiNodeInfo.Name;
+        if (uiNodeInfo.IsNodeScript)
+        {
+            str += retraction + $"    _ = {node};\n";
+        }
+        else
+        {
+            if (uiNodeInfo.Children != null)
+            {
+                for (var i = 0; i < uiNodeInfo.Children.Count; i++)
+                {
+                    var item = uiNodeInfo.Children[i];
+                    if (uiNodeInfo.OriginName == uiNodeInfo.UiRootName)
+                    {
+                        str += GenerateUiScriptCode("", item, retraction);
+                    }
+                    else
+                    {
+                        str += GenerateUiScriptCode(node, item, retraction);
+                    }
+                }
+            }
+        }
+        
+        return str;
     }
 
     private static string GenerateInitNestedUi(string parent, UiNodeInfo uiNodeInfo, string retraction)
@@ -356,7 +388,7 @@ public static class UiGenerator
         var script = node.GetScript().As<CSharpScript>();
         if (script == null) //无脚本, 说明是内置节点
         {
-            uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, node.GetType().FullName);
+            uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, node.GetType().FullName, false);
         }
         else //存在脚本
         {
@@ -365,13 +397,16 @@ public static class UiGenerator
             var fileName = script.ResourcePath.Substring(index + 1, script.ResourcePath.Length - index - 3 - 1);
             //在源代码中寻找命名空间
             var match = Regex.Match(script.SourceCode, "(?<=namespace\\s+)[\\w\\.]+");
+            bool isNodeScript;
             if (match.Success) //存在命名空间
             {
-                uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, match.Value + "." + fileName);
+                isNodeScript = IsNodeScript(match.Value + "." + fileName);
+                uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, match.Value + "." + fileName, isNodeScript);
             }
             else //不存在命名空间
             {
-                uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, fileName);
+                isNodeScript = IsNodeScript(fileName);
+                uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, fileName, isNodeScript);
             }
             //检测是否是引用Ui
             if (fileName.EndsWith("Panel"))
@@ -412,6 +447,17 @@ public static class UiGenerator
         return uiNode;
     }
 
+    private static bool IsNodeScript(string typeName)
+    {
+        var type = typeof(UiGenerator).Assembly.GetType(typeName);
+        if (type == null)
+        {
+            return false;
+        }
+
+        return type.IsAssignableTo(typeof(IUiNodeScript));
+    }
+
     private class UiNodeInfo
     {
         /// <summary>
@@ -439,17 +485,22 @@ public static class UiGenerator
         /// </summary>
         public string UiRootName;
         /// <summary>
+        /// 是否实现了 IUiNodeScript 接口
+        /// </summary>
+        public bool IsNodeScript;
+        /// <summary>
         /// 是否是引用Ui
         /// </summary>
         public bool IsRefUi;
         
-        public UiNodeInfo(string uiRootName, string name, string originName, string className, string nodeTypeName)
+        public UiNodeInfo(string uiRootName, string name, string originName, string className, string nodeTypeName, bool isNodeScript)
         {
             UiRootName = uiRootName;
             Name = name;
             OriginName = originName;
             ClassName = className;
             NodeTypeName = nodeTypeName;
+            IsNodeScript = isNodeScript;
         }
     }
     

@@ -38,7 +38,7 @@ public partial class DoorDragButton : TextureButton
         {
             if (DragEvent != null)
             {
-                var value = (GetGlobalMousePosition() - _startPos) / _parent.Scale / _mapEditorToolsPanel.S_DoorToolRoot.Instance.Scale;
+                var value = (GetGlobalMousePosition() - _startPos) / _parent.Scale / _mapEditorToolsPanel.S_ToolRoot.Instance.Scale;
                 var offset = Utils.Adsorption(value, _stepValue);
                 //处理朝向问题
                 if (_parent.Direction == DoorDirection.E)
@@ -97,7 +97,7 @@ public partial class DoorDragButton : TextureButton
         Modulate = new Color(1, 1, 1, 1);
         if (DragEvent != null)
         {
-            var value = (GetGlobalMousePosition() - _startPos) / _parent.Scale / _mapEditorToolsPanel.S_DoorToolRoot.Instance.Scale;
+            var value = (GetGlobalMousePosition() - _startPos) / _parent.Scale / _mapEditorToolsPanel.S_ToolRoot.Instance.Scale;
             var offset = Utils.Adsorption(value, _stepValue);
             _prevPos = offset;
             DragEvent(DragState.DragEnd, offset);

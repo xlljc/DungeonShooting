@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Godot;
+using UI.MapEditor;
 
 namespace UI.MapEditorMapMark;
 
@@ -49,6 +50,9 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         var preinstall = CellNode.UiPanel.GetSelectPreinstall();
         preinstall.WaveList[Index].Add(markInfo);
         _grid.Add(markInfo);
+        //添加标记工具
+        var editorPanel = (MapEditorPanel)CellNode.UiPanel.ParentUi;
+        editorPanel.S_MapEditorTools.Instance.CreateMarkTool(markInfo);
     }
 
     //展开/收起按钮点击

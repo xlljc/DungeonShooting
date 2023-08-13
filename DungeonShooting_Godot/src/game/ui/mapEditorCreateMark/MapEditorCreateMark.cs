@@ -51,6 +51,8 @@ public abstract partial class MapEditorCreateMark : UiBase
 
     public sealed override void OnInitNestedUi()
     {
+        _ = L_NumberBar;
+
     }
 
     /// <summary>
