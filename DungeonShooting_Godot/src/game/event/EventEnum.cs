@@ -93,4 +93,20 @@ public enum EventEnum
     /// 点击跳转到地图中心点
     /// </summary>
     OnClickCenterTool,
+    /// <summary>
+    /// 选中预设, , 参数<see cref="int"/>
+    /// </summary>
+    OnSelectPreinstall,
+    /// <summary>
+    /// 创建标记, 参数<see cref="MarkInfo"/>
+    /// </summary>
+    OnCreateMark,
+    /// <summary>
+    /// 选中标记, 参数<see cref="MarkInfo"/>或者null
+    /// </summary>
+    OnSelectMark,
+    /// <summary>
+    /// 删除标记, 参数<see cref="MarkInfo"/>
+    /// </summary>
+    OnDeleteMark,
 }

@@ -36,10 +36,11 @@ public partial class MapEditorToolsPanel : MapEditorTools
     /// </summary>
     public MapEditor.MapEditor.TileMap EditorMap { get; set; }
     
-
     private List<DoorToolTemplate> _doorTools = new List<DoorToolTemplate>();
     private UiGrid<ToolButton, ToolBtnData> _toolGrid;
-    private Dictionary<MarkInfo, MarkTemplate> _markToolsMap = new Dictionary<MarkInfo, MarkTemplate>();
+    //当前预设的所有标记
+    private Dictionary<MarkInfo, MarkTemplate> _currMarkToolsMap = new Dictionary<MarkInfo, MarkTemplate>();
+    private EventFactory _eventFactory;
 
     public override void OnCreateUi()
     {
@@ -80,6 +81,20 @@ public partial class MapEditorToolsPanel : MapEditorTools
         _toolGrid.SelectIndex = 1;
     }
 
+    public override void OnShowUi()
+    {
+        _eventFactory = EventManager.CreateEventFactory();
+        _eventFactory.AddEventListener(EventEnum.OnCreateMark, OnCreateMarkTool);
+        _eventFactory.AddEventListener(EventEnum.OnSelectMark, OnSelectMarkTool);
+        _eventFactory.AddEventListener(EventEnum.OnSelectPreinstall, RefreshMark);
+    }
+
+    public override void OnHideUi()
+    {
+        _eventFactory.RemoveAllEventListener();
+        _eventFactory = null;
+    }
+
     public override void OnDestroyUi()
     {
         S_DoorToolTemplate.Instance.QueueFree();
@@ -99,12 +114,58 @@ public partial class MapEditorToolsPanel : MapEditorTools
         }
     }
 
-    public void CreateMarkTool(MarkInfo markInfo)
+    //刷新标记
+    private void RefreshMark(object arg)
+    {
+        //删除之前的数据
+        foreach (var keyValuePair in _currMarkToolsMap)
+        {
+            keyValuePair.Value.QueueFree();
+        }
+        _currMarkToolsMap.Clear();
+        //添加新的数据
+        var selectPreinstall = EditorMap.Instance.SelectPreinstall;
+        if (selectPreinstall != null)
+        {
+            foreach (var markInfos in selectPreinstall.WaveList)
+            {
+                foreach (var markInfo in markInfos)
+                {
+                    CreateMarkTool(markInfo);
+                }
+            }
+        }
+    }
+
+    //创建标记
+    private void OnCreateMarkTool(object arg)
+    {
+        var markInfo = (MarkInfo)arg;
+        CreateMarkTool(markInfo);
+    }
+
+    //创建标记
+    private void CreateMarkTool(MarkInfo markInfo)
     {
         var cloneAndPut = S_MarkTemplate.CloneAndPut();
-        _markToolsMap.Add(markInfo, cloneAndPut);
+        _currMarkToolsMap.Add(markInfo, cloneAndPut);
         cloneAndPut.Instance.Visible = true;
         cloneAndPut.Instance.InitData(markInfo);
+    }
+
+    //选中标记
+    private void OnSelectMarkTool(object arg)
+    {
+        if (arg is MarkInfo markInfo)
+        {
+            if (markInfo != ActiveMark.MarkInfo)
+            {
+                if (_currMarkToolsMap.TryGetValue(markInfo, out var markTemplate))
+                {
+                    SetActiveMark(markTemplate.Instance);
+                }
+            }
+        }
     }
     
     /// <summary>
@@ -158,7 +219,25 @@ public partial class MapEditorToolsPanel : MapEditorTools
     /// </summary>
     public void SetActiveMark(MarkTool markTool)
     {
+        if (ActiveMark == markTool)
+        {
+            return;
+        }
+
+        if (ActiveMark != null)
+        {
+            ActiveMark.Modulate = Colors.White;
+        }
         ActiveMark = markTool;
+        if (markTool != null)
+        {
+            markTool.Modulate = Colors.Green;
+            EventManager.EmitEvent(EventEnum.OnSelectMark, markTool.MarkInfo);
+        }
+        else
+        {
+            EventManager.EmitEvent(EventEnum.OnSelectMark);
+        }
     }
 
     /// <summary>

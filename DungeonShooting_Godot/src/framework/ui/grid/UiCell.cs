@@ -7,7 +7,7 @@ using Godot;
 /// </summary>
 /// <typeparam name="TUiCellNode">ui节点类型</typeparam>
 /// <typeparam name="T">数据类型</typeparam>
-public abstract class UiCell<TUiCellNode, T> : IUiCell where TUiCellNode : IUiCellNode
+public abstract class UiCell<TUiCellNode, T> : IUiCell, IData<T> where TUiCellNode : IUiCellNode
 {
     public bool IsDestroyed { get; private set; }
     
