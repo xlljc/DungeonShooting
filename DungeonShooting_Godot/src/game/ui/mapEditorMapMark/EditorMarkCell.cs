@@ -45,6 +45,8 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MarkInfo>
     public override void OnSelect()
     {
         CellNode.L_MarkButton.L_Select.Instance.Visible = true;
+        //选中标记
+        EventManager.EmitEvent(EventEnum.OnSelectMark, Data);
     }
 
     public override void OnUnSelect()

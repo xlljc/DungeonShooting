@@ -7,10 +7,14 @@ namespace UI.MapEditorTools;
 /// </summary>
 public partial class MarkTool : TextureRect, IUiNodeScript
 {
-    private MapEditorTools.MarkTemplate _toolNode;
-    private MarkInfo _markInfo;
+    /// <summary>
+    /// 绑定的数据
+    /// </summary>
+    public MarkInfo MarkInfo { get; private set; }
     private bool _enter;
     private bool _isMOve;
+    private MapEditorTools.MarkTemplate _toolNode;
+    private bool _isDown;
     private Vector2 _offset;
     
     public void SetUiNode(IUiNode uiNode)
@@ -22,50 +26,53 @@ public partial class MarkTool : TextureRect, IUiNodeScript
 
     public override void _Process(double delta)
     {
-        if (_toolNode != null && _markInfo != null)
+        if (_toolNode != null && MarkInfo != null)
         {
-            //鼠标在节点内
             if (_enter)
             {
-                if (_isMOve)
+                if (_isDown)
                 {
+                    //松开鼠标
                     if (!Input.IsMouseButtonPressed(MouseButton.Left))
                     {
+                        _isDown = false;
                         _isMOve = false;
-                        if (_toolNode.UiPanel.ActiveMark == this)
-                        {
-                            _toolNode.UiPanel.SetActiveMark(null);
-                        }
                     }
                 }
-                else if (!_isMOve)
+                else if (!_isDown)
                 {
+                    //按下鼠标
                     if (Input.IsMouseButtonPressed(MouseButton.Left))
                     {
-                        _isMOve = true;
-                        _offset = GlobalPosition - GetGlobalMousePosition();
-                        if (_toolNode.UiPanel.ActiveMark == null)
+                        _isDown = true;
+                        if (_toolNode.UiPanel.ActiveMark != this)
                         {
+                            _isMOve = false;
                             _toolNode.UiPanel.SetActiveMark(this);
+                        }
+                        else
+                        {
+                            _offset = GlobalPosition - GetGlobalMousePosition();
+                            _isMOve = true;
                         }
                     }
                 }
             }
-
+            
             //移动中
             if (_isMOve && _toolNode.UiPanel.ActiveMark == this)
             {
                 GlobalPosition = _offset + GetGlobalMousePosition().Round();
-                _markInfo.Position = new SerializeVector2((Position + (Size / 2).Ceil()).Round());
+                MarkInfo.Position = new SerializeVector2((Position + (Size / 2).Ceil()).Round());
             }
-            
-            //QueueRedraw();
+
+            QueueRedraw();
         }
     }
     
     public void InitData(MarkInfo markInfo)
     {
-        _markInfo = markInfo;
+        MarkInfo = markInfo;
         Position = markInfo.Position.AsVector2() - (Size / 2).Ceil();
     }
     
@@ -76,17 +83,15 @@ public partial class MarkTool : TextureRect, IUiNodeScript
 
     private void OnMouseExited()
     {
-        if (!Input.IsMouseButtonPressed(MouseButton.Left))
-        {
-            _enter = false;
-        }
+        _enter = false;
     }
 
-    // public override void _Draw()
-    // {
-    //     if (_markInfo != null && _markInfo.Size.X != 0 && _markInfo.Size.Y != 0)
-    //     {
-    //         
-    //     }
-    // }
+    public override void _Draw()
+    {
+        if (MarkInfo != null && MarkInfo.Size.X != 0 && MarkInfo.Size.Y != 0)
+        {
+            var size = MarkInfo.Size.AsVector2();
+            DrawRect(new Rect2(-size / 2 + Size / 2, size.X, size.Y), new Color(1, 1, 1, 0.3f), false, 1);
+        }
+    }
 }

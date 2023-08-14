@@ -30,11 +30,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     
     //波数网格组件
     private UiGrid<WaveItem, List<MarkInfo>> _grid;
-
-    /// <summary>
-    /// 波数网格选中的索引
-    /// </summary>
-    public int WaveSelectIndex { get; set; } = -1;
+    private EventFactory _eventFactory;
 
     public override void OnCreateUi()
     {
@@ -54,12 +50,19 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
 
         S_EditButton.Instance.Pressed += OnToolEditClick;
         S_DeleteButton.Instance.Pressed += OnToolDeleteClick;
-        //S_Test.Instance.
     }
 
     public override void OnShowUi()
     {
+        _eventFactory = EventManager.CreateEventFactory();
+        _eventFactory.AddEventListener(EventEnum.OnSelectMark, OnSelectMark);
         RefreshPreinstallSelect();
+    }
+
+    public override void OnHideUi()
+    {
+        _eventFactory.RemoveAllEventListener();
+        _eventFactory = null;
     }
 
     public override void OnDestroyUi()
@@ -67,6 +70,38 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         _grid.Destroy();
     }
 
+    //选中标记回调
+    private void OnSelectMark(object arg)
+    {
+        if (arg is MarkInfo markInfo && (SelectCell is not EditorMarkCell || (SelectCell is EditorMarkCell markCell && markCell.Data != markInfo)))
+        {
+            var selectPreinstall = GetSelectPreinstall();
+            if (selectPreinstall != null)
+            {
+                for (var i = 0; i < selectPreinstall.WaveList.Count; i++)
+                {
+                    var wave = selectPreinstall.WaveList[i];
+                    for (var j = 0; j < wave.Count; j++)
+                    {
+                        var tempMark = wave[j];
+                        if (tempMark == markInfo)
+                        {
+                            var waveCell = (EditorWaveCell)_grid.GetCell(i);
+                            var cell = (EditorMarkCell)waveCell.MarkGrid.GetCell(j);
+                            //如果没有展开, 则调用展开方法
+                            if (!waveCell.IsExpand())
+                            {
+                                waveCell.OnExpandOrClose();
+                            }
+                            //选中物体
+                            SetSelectCell(cell, cell.CellNode.Instance, SelectToolType.Mark);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// 获取当前选中的预设
     /// </summary>
@@ -115,6 +150,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnItemSelected(long index)
     {
+        EditorTileMap.SelectPreinstallIndex = (int)index;
         var preinstall = EditorTileMap.RoomSplit.Preinstall;
         if (index >= 0 && index <= preinstall.Count)
         {
@@ -257,7 +293,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeleteWave()
     {
-        var index = WaveSelectIndex;
+        var index = EditorTileMap.SelectWaveIndex;
         if (index < 0)
         {
             return;
@@ -275,7 +311,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         //移除数据
         selectPreinstall.WaveList.RemoveAt(index);
         _grid.RemoveByIndex(index);
-        WaveSelectIndex = -1;
+        EditorTileMap.SelectWaveIndex = -1;
     }
 
     /// <summary>

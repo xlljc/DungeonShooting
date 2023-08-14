@@ -6,7 +6,7 @@ namespace UI.MapEditorMapMark;
 
 public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
 {
-    private UiGrid<MapEditorMapMark.MarkItem, MarkInfo> _grid;
+    public UiGrid<MapEditorMapMark.MarkItem, MarkInfo> MarkGrid;
     
     public override void OnInit()
     {
@@ -16,15 +16,15 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         CellNode.L_MarginContainer.L_AddMarkButton.Instance.Pressed += OnAddMark;
 
         CellNode.L_MarkContainer.L_MarkItem.Instance.SetHorizontalExpand(true);
-        _grid = new UiGrid<MapEditorMapMark.MarkItem, MarkInfo>(CellNode.L_MarkContainer.L_MarkItem, typeof(EditorMarkCell));
-        _grid.SetColumns(1);
-        _grid.SetHorizontalExpand(true);
-        _grid.SetCellOffset(new Vector2I(0, 5));
+        MarkGrid = new UiGrid<MapEditorMapMark.MarkItem, MarkInfo>(CellNode.L_MarkContainer.L_MarkItem, typeof(EditorMarkCell));
+        MarkGrid.SetColumns(1);
+        MarkGrid.SetHorizontalExpand(true);
+        MarkGrid.SetCellOffset(new Vector2I(0, 5));
     }
 
     public override void OnSetData(List<MarkInfo> data)
     {
-        _grid.SetDataList(data.ToArray());
+        MarkGrid.SetDataList(data.ToArray());
     }
 
     public override void OnRefreshIndex()
@@ -34,7 +34,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
 
     public override void OnDestroy()
     {
-        _grid.Destroy();
+        MarkGrid.Destroy();
     }
 
     //添加标记
@@ -49,14 +49,15 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
     {
         var preinstall = CellNode.UiPanel.GetSelectPreinstall();
         preinstall.WaveList[Index].Add(markInfo);
-        _grid.Add(markInfo);
+        MarkGrid.Add(markInfo);
         //添加标记工具
-        var editorPanel = (MapEditorPanel)CellNode.UiPanel.ParentUi;
-        editorPanel.S_MapEditorTools.Instance.CreateMarkTool(markInfo);
+        EventManager.EmitEvent(EventEnum.OnCreateMark, markInfo);
     }
 
-    //展开/收起按钮点击
-    private void OnExpandOrClose()
+    /// <summary>
+    /// 展开/收起按钮点击
+    /// </summary>
+    public void OnExpandOrClose()
     {
         var marginContainer = CellNode.L_MarkContainer.Instance;
         var flag = !marginContainer.Visible;
@@ -73,9 +74,17 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         }
     }
 
+    /// <summary>
+    /// 是否展开
+    /// </summary>
+    public bool IsExpand()
+    {
+        return CellNode.L_MarkContainer.Instance.Visible;
+    }
+
     public override void OnClick()
     {
-        CellNode.UiPanel.WaveSelectIndex = Index;
+        CellNode.UiPanel.EditorTileMap.SelectWaveIndex = Index;
         CellNode.UiPanel.SetSelectCell(this, CellNode.L_WaveContainer.Instance, MapEditorMapMarkPanel.SelectToolType.Wave);
     }
 

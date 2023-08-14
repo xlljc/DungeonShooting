@@ -119,6 +119,45 @@ public partial class EditorTileMap : TileMap
     /// 正在编辑的房间数据
     /// </summary>
     public DungeonRoomSplit RoomSplit { get; private set; }
+    
+    /// <summary>
+    /// 波数网格选中的索引
+    /// </summary>
+    public int SelectWaveIndex { get; set; } = -1;
+
+    /// <summary>
+    /// 选中的预设
+    /// </summary>
+    public int SelectPreinstallIndex
+    {
+        get => _selectPreinstallIndex;
+        set
+        {
+            if (_selectPreinstallIndex != value)
+            {
+                _selectPreinstallIndex = value;
+                EventManager.EmitEvent(EventEnum.OnSelectPreinstall);
+            }
+        }
+    }
+
+    private int _selectPreinstallIndex = -1;
+
+    /// <summary>
+    /// 当前选中的预设
+    /// </summary>
+    public RoomPreinstall SelectPreinstall
+    {
+        get
+        {
+            if (SelectPreinstallIndex == -1 || SelectPreinstallIndex >= RoomSplit.Preinstall.Count)
+            {
+                return null;
+            }
+
+            return RoomSplit.Preinstall[SelectPreinstallIndex];
+        }
+    }
 
     //变动过的数据
     
