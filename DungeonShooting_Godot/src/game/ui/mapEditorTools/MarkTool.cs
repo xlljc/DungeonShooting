@@ -16,12 +16,18 @@ public partial class MarkTool : TextureRect, IUiNodeScript
     private MapEditorTools.MarkTemplate _toolNode;
     private bool _isDown;
     private Vector2 _offset;
+    private MarkAreaTool _markAreaToolUp;
     
     public void SetUiNode(IUiNode uiNode)
     {
         _toolNode = (MapEditorTools.MarkTemplate)uiNode;
         _toolNode.Instance.MouseEntered += OnMouseEntered;
         _toolNode.Instance.MouseExited += OnMouseExited;
+        
+        _markAreaToolUp = new MarkAreaTool();
+        _markAreaToolUp.Position = Size / 2;
+        _markAreaToolUp.Visible = false;
+        AddChild(_markAreaToolUp);
     }
 
     public override void _Process(double delta)
@@ -68,12 +74,18 @@ public partial class MarkTool : TextureRect, IUiNodeScript
 
             QueueRedraw();
         }
+        
+        RefreshAreaTool();
     }
     
+    /// <summary>
+    /// 初始化数据
+    /// </summary>
     public void InitData(MarkInfo markInfo)
     {
         MarkInfo = markInfo;
         Position = markInfo.Position.AsVector2() - (Size / 2).Ceil();
+        RefreshAreaTool();
     }
     
     private void OnMouseEntered()
@@ -88,10 +100,24 @@ public partial class MarkTool : TextureRect, IUiNodeScript
 
     public override void _Draw()
     {
-        if (MarkInfo != null && MarkInfo.Size.X != 0 && MarkInfo.Size.Y != 0)
+        if (MarkInfo != null && MarkInfo.Size.X > 0 && MarkInfo.Size.Y > 0)
         {
             var size = MarkInfo.Size.AsVector2();
             DrawRect(new Rect2(-size / 2 + Size / 2, size.X, size.Y), new Color(1, 1, 1, 0.3f), false, 1);
+        }
+    }
+
+    //刷新区域标记工具数据
+    private void RefreshAreaTool()
+    {
+        if (_toolNode.UiPanel.ActiveMark == this && MarkInfo.Size.X > 0 && MarkInfo.Size.Y > 0)
+        {
+            _markAreaToolUp.Visible = true;
+            _markAreaToolUp.SetSize((int)MarkInfo.Size.X, (int)MarkInfo.Size.Y);
+        }
+        else
+        {
+            _markAreaToolUp.Visible = false;
         }
     }
 }
