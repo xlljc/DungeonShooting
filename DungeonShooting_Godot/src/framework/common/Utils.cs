@@ -160,4 +160,13 @@ public static class Utils
         return position.X >= globalPosition.X && position.X <= (globalPosition.X + size.X) &&
                position.Y >= globalPosition.Y && position.Y <= (globalPosition.Y + size.Y);
     }
+
+    /// <summary>
+    /// 判断点是否在区域内
+    /// </summary>
+    public static bool IsPositionInRect(Vector2 pos, Rect2 rect2)
+    {
+        return pos.X >= rect2.Position.X && pos.X <= rect2.Position.X + rect2.Size.X &&
+               pos.Y >= rect2.Position.Y && pos.Y <= rect2.Position.Y + rect2.Size.Y;
+    }
 }

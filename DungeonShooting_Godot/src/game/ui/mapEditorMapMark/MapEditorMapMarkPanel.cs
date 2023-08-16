@@ -308,6 +308,12 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         //隐藏工具
         S_DynamicTool.Reparent(this);
         S_DynamicTool.Instance.Visible = false;
+        //派发移除标记事件
+        var list = selectPreinstall.WaveList[index];
+        foreach (var markInfo in list)
+        {
+            EventManager.EmitEvent(EventEnum.OnDeleteMark, markInfo);
+        }
         //移除数据
         selectPreinstall.WaveList.RemoveAt(index);
         _grid.RemoveByIndex(index);

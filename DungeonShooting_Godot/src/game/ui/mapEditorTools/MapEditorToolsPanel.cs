@@ -86,6 +86,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnCreateMark, OnCreateMarkTool);
         _eventFactory.AddEventListener(EventEnum.OnSelectMark, OnSelectMarkTool);
+        _eventFactory.AddEventListener(EventEnum.OnDeleteMark, OnDeleteMarkTool);
         _eventFactory.AddEventListener(EventEnum.OnSelectPreinstall, RefreshMark);
     }
 
@@ -158,12 +159,29 @@ public partial class MapEditorToolsPanel : MapEditorTools
     {
         if (arg is MarkInfo markInfo)
         {
-            if (markInfo != ActiveMark.MarkInfo)
+            if (ActiveMark == null || markInfo != ActiveMark.MarkInfo)
             {
                 if (_currMarkToolsMap.TryGetValue(markInfo, out var markTemplate))
                 {
                     SetActiveMark(markTemplate.Instance);
                 }
+            }
+        }
+    }
+
+    //删除标记
+    private void OnDeleteMarkTool(object arg)
+    {
+        if (arg is MarkInfo markInfo)
+        {
+            if (_currMarkToolsMap.TryGetValue(markInfo, out var markTemplate))
+            {
+                if (ActiveMark == markTemplate.Instance)
+                {
+                    SetActiveMark(null);
+                }
+                markTemplate.QueueFree();
+                _currMarkToolsMap.Remove(markInfo);
             }
         }
     }

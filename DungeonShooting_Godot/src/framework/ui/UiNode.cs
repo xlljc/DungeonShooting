@@ -37,6 +37,7 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         }
     }
     
+    //已知问题: 通过 OpenNestedUi() 打开子Ui, 然后再克隆当前节点, 被克隆出来的节点的子Ui不会被调用生命周期函数, 也就是没有被记录
     public UiBase OpenNestedUi(string uiName, UiBase prevUi = null)
     {
         var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
