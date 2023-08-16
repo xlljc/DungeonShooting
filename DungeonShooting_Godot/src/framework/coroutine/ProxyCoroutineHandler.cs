@@ -71,10 +71,10 @@ public static class ProxyCoroutineHandler
 
             if (canNext)
             {
-                if (item.Enumerator.MoveNext()) //嵌套协程
+                if (item.Enumerator.MoveNext())
                 {
                     var next = item.Enumerator.Current;
-                    if (next is IEnumerable enumerable)
+                    if (next is IEnumerable enumerable) //嵌套协程
                     {
                         if (item.EnumeratorStack == null)
                         {
@@ -84,7 +84,7 @@ public static class ProxyCoroutineHandler
                         item.EnumeratorStack.Push(item.Enumerator);
                         item.Enumerator = enumerable.GetEnumerator();
                     }
-                    else if (next is IEnumerator enumerator)
+                    else if (next is IEnumerator enumerator) //嵌套协程
                     {
                         if (item.EnumeratorStack == null)
                         {
