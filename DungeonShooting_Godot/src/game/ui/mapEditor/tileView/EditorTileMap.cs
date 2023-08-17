@@ -159,6 +159,11 @@ public partial class EditorTileMap : TileMap
         }
     }
 
+    /// <summary>
+    /// 选中的标记
+    /// </summary>
+    public MarkTool SelectMark => MapEditorToolsPanel.ActiveMark;
+
     //变动过的数据
     
     //地图位置, 单位: 格

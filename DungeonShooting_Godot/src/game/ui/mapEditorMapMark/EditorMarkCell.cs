@@ -1,24 +1,23 @@
-﻿using System.Collections.Generic;
-using Config;
+﻿using Config;
 
 namespace UI.MapEditorMapMark;
 
-public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MarkInfo>
+public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMarkPanel.MarkCellData>
 {
     public override void OnInit()
     {
         CellNode.L_MarkButton.Instance.Pressed += OnClick;
     }
 
-    public override void OnSetData(MarkInfo data)
+    public override void OnSetData(MapEditorMapMarkPanel.MarkCellData data)
     {
         var text = "";
-        if (data.MarkList != null)
+        if (data.MarkInfo.MarkList != null)
         {
             var str = "";
-            for (var i = 0; i < data.MarkList.Count; i++)
+            for (var i = 0; i < data.MarkInfo.MarkList.Count; i++)
             {
-                var markInfoItem = data.MarkList[i];
+                var markInfoItem = data.MarkInfo.MarkList[i];
                 if (i > 0)
                 {
                     str += "，";
@@ -33,7 +32,7 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MarkInfo>
             text += "空";
         }
 
-        text += "\n" + data.DelayTime + "秒";
+        text += "\n" + data.MarkInfo.DelayTime + "秒";
         CellNode.L_MarkButton.Instance.Text = text;
     }
 

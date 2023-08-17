@@ -22,7 +22,7 @@ public partial class MarkTool : TextureRect, IUiNodeScript
     private bool _isDown;
     private Vector2 _offset;
     private MarkAreaTool _markAreaToolUp;
-    
+
     public void SetUiNode(IUiNode uiNode)
     {
         _toolNode = (MapEditorTools.MarkTemplate)uiNode;
@@ -53,7 +53,9 @@ public partial class MarkTool : TextureRect, IUiNodeScript
                 else if (!_isDown)
                 {
                     //按下鼠标
-                    if (!_markAreaToolUp.IsDrag && Input.IsMouseButtonPressed(MouseButton.Left))
+                    var activeMark = _toolNode.UiPanel.ActiveMark;
+                    if ((activeMark == null || (!activeMark.IsDrag && !activeMark._markAreaToolUp.IsDrag))
+                        && !_markAreaToolUp.IsDrag && Input.IsMouseButtonPressed(MouseButton.Left))
                     {
                         _isDown = true;
                         if (_toolNode.UiPanel.ActiveMark != this)

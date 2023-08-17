@@ -12,6 +12,18 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         Wave,
         Mark
     }
+
+    public class MarkCellData
+    {
+        public UiGrid<WaveItem, List<MarkInfo>> ParentGrid;
+        public MarkInfo MarkInfo;
+
+        public MarkCellData(UiGrid<WaveItem, List<MarkInfo>> parentGrid, MarkInfo markInfo)
+        {
+            ParentGrid = parentGrid;
+            MarkInfo = markInfo;
+        }
+    }
     
     /// <summary>
     /// 选中的cell选项
@@ -73,7 +85,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     //选中标记回调
     private void OnSelectMark(object arg)
     {
-        if (arg is MarkInfo markInfo && (SelectCell is not EditorMarkCell || (SelectCell is EditorMarkCell markCell && markCell.Data != markInfo)))
+        if (arg is MarkInfo markInfo && (SelectCell is not EditorMarkCell || (SelectCell is EditorMarkCell markCell && markCell.Data.MarkInfo != markInfo)))
         {
             var selectPreinstall = GetSelectPreinstall();
             if (selectPreinstall != null)
@@ -319,14 +331,6 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         _grid.RemoveByIndex(index);
         EditorTileMap.SelectWaveIndex = -1;
     }
-
-    /// <summary>
-    /// 添加标记
-    /// </summary>
-    public void OnAddMark()
-    {
-        
-    }
     
     /// <summary>
     /// 编辑标记数据
@@ -342,5 +346,29 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     public void OnDeleteMark()
     {
         
+        if (SelectCell is EditorMarkCell markCell)
+        {
+            var index = EditorTileMap.SelectWaveIndex;
+            if (index < 0)
+            {
+                return;
+            }
+        
+            var selectPreinstall = GetSelectPreinstall();
+            if (selectPreinstall == null)
+            {
+                return;
+            }
+
+            var waveCell = (EditorWaveCell)_grid.GetCell(index);
+            //隐藏工具
+            S_DynamicTool.Reparent(this);
+            S_DynamicTool.Instance.Visible = false;
+            var markInfo = waveCell.Data[index];
+            //派发移除标记事件
+            EventManager.EmitEvent(EventEnum.OnDeleteMark, markInfo);
+            waveCell.MarkGrid.RemoveByIndex(index);
+            waveCell.Data.RemoveAt(index);
+        }
     }
 }

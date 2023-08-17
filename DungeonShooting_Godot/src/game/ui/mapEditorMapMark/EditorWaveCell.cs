@@ -6,7 +6,7 @@ namespace UI.MapEditorMapMark;
 
 public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
 {
-    public UiGrid<MapEditorMapMark.MarkItem, MarkInfo> MarkGrid;
+    public UiGrid<MapEditorMapMark.MarkItem, MapEditorMapMarkPanel.MarkCellData> MarkGrid;
     
     public override void OnInit()
     {
@@ -16,7 +16,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         CellNode.L_MarginContainer.L_AddMarkButton.Instance.Pressed += OnAddMark;
 
         CellNode.L_MarkContainer.L_MarkItem.Instance.SetHorizontalExpand(true);
-        MarkGrid = new UiGrid<MapEditorMapMark.MarkItem, MarkInfo>(CellNode.L_MarkContainer.L_MarkItem, typeof(EditorMarkCell));
+        MarkGrid = new UiGrid<MapEditorMapMark.MarkItem, MapEditorMapMarkPanel.MarkCellData>(CellNode.L_MarkContainer.L_MarkItem, typeof(EditorMarkCell));
         MarkGrid.SetColumns(1);
         MarkGrid.SetHorizontalExpand(true);
         MarkGrid.SetCellOffset(new Vector2I(0, 5));
@@ -24,7 +24,12 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
 
     public override void OnSetData(List<MarkInfo> data)
     {
-        MarkGrid.SetDataList(data.ToArray());
+        var array = new MapEditorMapMarkPanel.MarkCellData[data.Count];
+        for (var i = 0; i < data.Count; i++)
+        {
+            array[i] = new MapEditorMapMarkPanel.MarkCellData(Grid, data[i]);
+        }
+        MarkGrid.SetDataList(array);
     }
 
     public override void OnRefreshIndex()
@@ -49,7 +54,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
     {
         var preinstall = CellNode.UiPanel.GetSelectPreinstall();
         preinstall.WaveList[Index].Add(markInfo);
-        MarkGrid.Add(markInfo);
+        MarkGrid.Add(new MapEditorMapMarkPanel.MarkCellData(Grid, markInfo));
         //添加标记工具
         EventManager.EmitEvent(EventEnum.OnCreateMark, markInfo);
     }

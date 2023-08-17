@@ -20,6 +20,8 @@ public partial class MarkAreaTool : Node2D
     private bool _mouseInRT = false;
     private bool _mouseInLB = false;
     private bool _mouseInRB = false;
+    //是否绘制角
+    private bool _showCornerBlock = false;
 
     private MarkInfo _markInfo;
     private MarkTool _markTool;
@@ -33,6 +35,7 @@ public partial class MarkAreaTool : Node2D
     private Vector2 _prevMousePosition;
     private Vector2 _startPosition;
     private float _startWidth;
+    private float _startHeight;
     
     public void InitData(MapEditorTools.ToolRoot toolRoot, MarkTool markTool)
     {
@@ -48,6 +51,8 @@ public partial class MarkAreaTool : Node2D
             return;
         }
 
+        _showCornerBlock = _markInfo.Size.X >= 4 && _markInfo.Size.Y >= 4;
+        var globalMousePosition = GetGlobalMousePosition();
         if (IsDrag) //按下拖拽按钮
         {
             if (!Input.IsMouseButtonPressed(MouseButton.Left)) //松开拖拽
@@ -56,19 +61,70 @@ public partial class MarkAreaTool : Node2D
             }
             else //拖拽中
             {
-                var pos = GetGlobalMousePosition();
+                var pos = globalMousePosition;
                 if (pos != _prevMousePosition)
                 {
+
                     if (_mouseInL)
                     {
-                        var offset = GetGlobalMousePosition() - _startMousePosition;
-                        offset = offset / _toolRoot.Instance.Scale;
-                        var newWidth = Mathf.Max(1, (int)(_startWidth - offset.X));
+                        var offset = globalMousePosition - _startMousePosition;
+                        offset = offset / _toolRoot.Instance.Scale * 2f;
+                        var newWidth = Mathf.Max(2, (int)(_startWidth - offset.X));
                         _markInfo.Size = new SerializeVector2(newWidth, _markInfo.Size.Y);
-                        var end = (int)(_startPosition.X + _startWidth / 2f);
-                        var newX = (int)(end - newWidth / 2f);
-                        _markTool.Position = new Vector2(newX, _markTool.Position.Y);
-                        GD.Print("newWidth: " + newWidth);
+                    }
+                    else if (_mouseInR)
+                    {
+                        var offset = _startMousePosition - globalMousePosition;
+                        offset = offset / _toolRoot.Instance.Scale * 2f;
+                        var newWidth = Mathf.Max(2, (int)(_startWidth - offset.X));
+                        _markInfo.Size = new SerializeVector2(newWidth, _markInfo.Size.Y);
+                    }
+                    else if (_mouseInT)
+                    {
+                        var offset = globalMousePosition - _startMousePosition;
+                        offset = offset / _toolRoot.Instance.Scale * 2f;
+                        var newHeight = Mathf.Max(2, (int)(_startHeight - offset.Y));
+                        _markInfo.Size = new SerializeVector2(_markInfo.Size.X, newHeight);
+                    }
+                    else if (_mouseInB)
+                    {
+                        var offset = _startMousePosition - globalMousePosition;
+                        offset = offset / _toolRoot.Instance.Scale * 2f;
+                        var newHeight = Mathf.Max(2, (int)(_startHeight - offset.Y));
+                        _markInfo.Size = new SerializeVector2(_markInfo.Size.X, newHeight);
+                    }
+                    //----------------------------------------------------------------------------------
+                    else if (_mouseInLT)
+                    {
+                        var offset = globalMousePosition - _startMousePosition;
+                        offset = offset / _toolRoot.Instance.Scale * 2f;
+                        var newWidth = Mathf.Max(2, (int)(_startWidth - offset.X));
+                        var newHeight = Mathf.Max(2, (int)(_startHeight - offset.Y));
+                        _markInfo.Size = new SerializeVector2(newWidth, newHeight);
+                    }
+                    else if (_mouseInLB)
+                    {
+                        var offsetX = (globalMousePosition.X - _startMousePosition.X) / _toolRoot.Instance.Scale.X * 2f;
+                        var offsetY = (_startMousePosition.Y - globalMousePosition.Y) / _toolRoot.Instance.Scale.Y * 2f;
+                        var newWidth = Mathf.Max(2, (int)(_startWidth - offsetX));
+                        var newHeight = Mathf.Max(2, (int)(_startHeight - offsetY));
+                        _markInfo.Size = new SerializeVector2(newWidth, newHeight);
+                    }
+                    else if (_mouseInRT)
+                    {
+                        var offsetX = (_startMousePosition.X - globalMousePosition.X) / _toolRoot.Instance.Scale.X * 2f;
+                        var offsetY = (globalMousePosition.Y - _startMousePosition.Y) / _toolRoot.Instance.Scale.Y * 2f;
+                        var newWidth = Mathf.Max(2, (int)(_startWidth - offsetX));
+                        var newHeight = Mathf.Max(2, (int)(_startHeight - offsetY));
+                        _markInfo.Size = new SerializeVector2(newWidth, newHeight);
+                    }
+                    else if (_mouseInRB)
+                    {
+                        var offset = _startMousePosition - globalMousePosition;
+                        offset = offset / _toolRoot.Instance.Scale * 2f;
+                        var newWidth = Mathf.Max(2, (int)(_startWidth - offset.X));
+                        var newHeight = Mathf.Max(2, (int)(_startHeight - offset.Y));
+                        _markInfo.Size = new SerializeVector2(newWidth, newHeight);
                     }
                     _prevMousePosition = pos;
                 }
@@ -88,22 +144,22 @@ public partial class MarkAreaTool : Node2D
             var flag = false;
             var mousePosition = GetLocalMousePosition();
             //判断鼠标是否在点上
-            if (Utils.IsPositionInRect(mousePosition, GetLeftTopRect()))
+            if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetLeftTopRect()))
             {
                 _mouseInLT = true;
                 flag = true;
             }
-            else if (Utils.IsPositionInRect(mousePosition, GetRightTopRect()))
+            else if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetRightTopRect()))
             {
                 _mouseInRT = true;
                 flag = true;
             }
-            else if (Utils.IsPositionInRect(mousePosition, GetLeftBottomRect()))
+            else if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetLeftBottomRect()))
             {
                 _mouseInLB = true;
                 flag = true;
             }
-            else if (Utils.IsPositionInRect(mousePosition, GetRightBottomRect()))
+            else if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetRightBottomRect()))
             {
                 _mouseInRB = true;
                 flag = true;
@@ -134,10 +190,11 @@ public partial class MarkAreaTool : Node2D
                 if (Input.IsMouseButtonPressed(MouseButton.Left))
                 {
                     IsDrag = true;
-                    _startMousePosition = GetGlobalMousePosition();
+                    _startMousePosition = globalMousePosition;
                     _prevMousePosition = _startMousePosition;
                     _startPosition = _markTool.Position;
                     _startWidth = _markInfo.Size.X;
+                    _startHeight = _markInfo.Size.Y;
                 }
             }
         }
@@ -155,11 +212,14 @@ public partial class MarkAreaTool : Node2D
         DrawRect(GetBottomRect(), _mouseInB ? _sideHoverColor : _sideColor);
         DrawRect(GetLeftRect(), _mouseInL ? _sideHoverColor : _sideColor);
         DrawRect(GetRightRect(), _mouseInR ? _sideHoverColor : _sideColor);
-        //绘制角
-        DrawRect(GetLeftTopRect(), _mouseInLT ? _cornerHoverColor : _cornerColor);
-        DrawRect(GetLeftBottomRect(), _mouseInLB ? _cornerHoverColor : _cornerColor);
-        DrawRect(GetRightTopRect(), _mouseInRT ? _cornerHoverColor : _cornerColor);
-        DrawRect(GetRightBottomRect(), _mouseInRB ? _cornerHoverColor : _cornerColor);
+        if (_showCornerBlock)
+        {
+            //绘制角
+            DrawRect(GetLeftTopRect(), _mouseInLT ? _cornerHoverColor : _cornerColor);
+            DrawRect(GetLeftBottomRect(), _mouseInLB ? _cornerHoverColor : _cornerColor);
+            DrawRect(GetRightTopRect(), _mouseInRT ? _cornerHoverColor : _cornerColor);
+            DrawRect(GetRightBottomRect(), _mouseInRB ? _cornerHoverColor : _cornerColor);
+        }
     }
 
     private Rect2 GetTopRect()
