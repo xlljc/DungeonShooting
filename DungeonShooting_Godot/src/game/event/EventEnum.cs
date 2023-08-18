@@ -88,7 +88,7 @@ public enum EventEnum
     /// <summary>
     /// 选中编辑门区域工具
     /// </summary>
-    OnSelectDoorTool,
+    OnSelectEditTool,
     /// <summary>
     /// 点击跳转到地图中心点
     /// </summary>
@@ -97,6 +97,10 @@ public enum EventEnum
     /// 选中预设, , 参数<see cref="int"/>
     /// </summary>
     OnSelectPreinstall,
+    /// <summary>
+    /// 选中波数, 参数<see cref="int"/>或者null
+    /// </summary>
+    OnSelectWave,
     /// <summary>
     /// 创建标记, 参数<see cref="MarkInfo"/>
     /// </summary>

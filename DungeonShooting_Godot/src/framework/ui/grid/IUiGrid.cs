@@ -19,4 +19,9 @@ public interface IUiGrid : IDestroy
     /// 当前网格组件数据大小
     /// </summary>
     int Count { get; }
+
+    /// <summary>
+    /// 触发点击 Cell
+    /// </summary>
+    void Click(int index);
 }

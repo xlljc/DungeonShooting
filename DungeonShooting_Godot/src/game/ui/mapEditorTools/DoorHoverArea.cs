@@ -86,7 +86,7 @@ public partial class DoorHoverArea : ColorRect
 
     private void OnMouseEnter()
     {
-        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Door)
+        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Edit)
         {
             return;
         }
@@ -99,7 +99,7 @@ public partial class DoorHoverArea : ColorRect
     
     private void OnMouseExit()
     {
-        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Door)
+        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Edit)
         {
             return;
         }

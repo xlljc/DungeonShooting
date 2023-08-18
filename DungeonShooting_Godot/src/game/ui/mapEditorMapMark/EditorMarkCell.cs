@@ -1,4 +1,5 @@
 ﻿using Config;
+using UI.MapEditor;
 
 namespace UI.MapEditorMapMark;
 
@@ -38,14 +39,23 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
 
     public override void OnClick()
     {
+        CellNode.UiPanel.EditorTileMap.SelectWaveIndex = Data.ParentCell.Index;
+        //派发选中波数事件
+        EventManager.EmitEvent(EventEnum.OnSelectWave, Data.ParentCell.Index);
         CellNode.UiPanel.SetSelectCell(this, CellNode.Instance, MapEditorMapMarkPanel.SelectToolType.Mark);
+        //需要切换回编辑工具
+        if (CellNode.UiPanel.EditorTileMap.MouseType != EditorTileMap.MouseButtonType.Edit)
+        {
+            //选中标记
+            EventManager.EmitEvent(EventEnum.OnSelectMark, Data.MarkInfo);
+        }
     }
 
     public override void OnSelect()
     {
         CellNode.L_MarkButton.L_Select.Instance.Visible = true;
         //选中标记
-        EventManager.EmitEvent(EventEnum.OnSelectMark, Data);
+        EventManager.EmitEvent(EventEnum.OnSelectMark, Data.MarkInfo);
     }
 
     public override void OnUnSelect()

@@ -27,7 +27,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         var array = new MapEditorMapMarkPanel.MarkCellData[data.Count];
         for (var i = 0; i < data.Count; i++)
         {
-            array[i] = new MapEditorMapMarkPanel.MarkCellData(Grid, data[i]);
+            array[i] = new MapEditorMapMarkPanel.MarkCellData(this, data[i]);
         }
         MarkGrid.SetDataList(array);
     }
@@ -54,9 +54,12 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
     {
         var preinstall = CellNode.UiPanel.GetSelectPreinstall();
         preinstall.WaveList[Index].Add(markInfo);
-        MarkGrid.Add(new MapEditorMapMarkPanel.MarkCellData(Grid, markInfo));
+        MarkGrid.Add(new MapEditorMapMarkPanel.MarkCellData(this, markInfo));
         //添加标记工具
         EventManager.EmitEvent(EventEnum.OnCreateMark, markInfo);
+        //选中最后一个
+        //MarkGrid.SelectIndex
+        MarkGrid.Click(MarkGrid.Count - 1);
     }
 
     /// <summary>
@@ -90,6 +93,8 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
     public override void OnClick()
     {
         CellNode.UiPanel.EditorTileMap.SelectWaveIndex = Index;
+        //派发选中波数事件
+        EventManager.EmitEvent(EventEnum.OnSelectWave, Index);
         CellNode.UiPanel.SetSelectCell(this, CellNode.L_WaveContainer.Instance, MapEditorMapMarkPanel.SelectToolType.Wave);
     }
 

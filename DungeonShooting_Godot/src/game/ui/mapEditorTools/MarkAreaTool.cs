@@ -1,4 +1,5 @@
 ﻿using Godot;
+using UI.MapEditor;
 using Color = Godot.Color;
 
 namespace UI.MapEditorTools;
@@ -142,47 +143,51 @@ public partial class MarkAreaTool : Node2D
             _mouseInRB = false;
 
             var flag = false;
-            var mousePosition = GetLocalMousePosition();
-            //判断鼠标是否在点上
-            if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetLeftTopRect()))
+            //必须要选中
+            if (_toolRoot.UiPanel.EditorMap.Instance.MouseType == EditorTileMap.MouseButtonType.Edit)
             {
-                _mouseInLT = true;
-                flag = true;
-            }
-            else if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetRightTopRect()))
-            {
-                _mouseInRT = true;
-                flag = true;
-            }
-            else if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetLeftBottomRect()))
-            {
-                _mouseInLB = true;
-                flag = true;
-            }
-            else if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetRightBottomRect()))
-            {
-                _mouseInRB = true;
-                flag = true;
-            }
-            else if (Utils.IsPositionInRect(mousePosition, GetLeftRect()))
-            {
-                _mouseInL = true;
-                flag = true;
-            }
-            else if (Utils.IsPositionInRect(mousePosition, GetRightRect()))
-            {
-                _mouseInR = true;
-                flag = true;
-            }
-            else if (Utils.IsPositionInRect(mousePosition, GetTopRect()))
-            {
-                _mouseInT = true;
-                flag = true;
-            }
-            else if (Utils.IsPositionInRect(mousePosition, GetBottomRect()))
-            {
-                _mouseInB = true;
-                flag = true;
+                var mousePosition = GetLocalMousePosition();
+                //判断鼠标是否在点上
+                if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetLeftTopRect()))
+                {
+                    _mouseInLT = true;
+                    flag = true;
+                }
+                else if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetRightTopRect()))
+                {
+                    _mouseInRT = true;
+                    flag = true;
+                }
+                else if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetLeftBottomRect()))
+                {
+                    _mouseInLB = true;
+                    flag = true;
+                }
+                else if (_showCornerBlock && Utils.IsPositionInRect(mousePosition, GetRightBottomRect()))
+                {
+                    _mouseInRB = true;
+                    flag = true;
+                }
+                else if (Utils.IsPositionInRect(mousePosition, GetLeftRect()))
+                {
+                    _mouseInL = true;
+                    flag = true;
+                }
+                else if (Utils.IsPositionInRect(mousePosition, GetRightRect()))
+                {
+                    _mouseInR = true;
+                    flag = true;
+                }
+                else if (Utils.IsPositionInRect(mousePosition, GetTopRect()))
+                {
+                    _mouseInT = true;
+                    flag = true;
+                }
+                else if (Utils.IsPositionInRect(mousePosition, GetBottomRect()))
+                {
+                    _mouseInB = true;
+                    flag = true;
+                }
             }
 
             if (flag)

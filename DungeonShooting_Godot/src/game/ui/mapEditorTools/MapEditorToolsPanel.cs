@@ -9,8 +9,11 @@ public partial class MapEditorToolsPanel : MapEditorTools
 {
     public class ToolBtnData
     {
+        //是否可以选中
         public bool CanSelect = false;
+        //工具图标
         public string Icon;
+        //点击时回调
         public Action OnClick;
 
         public ToolBtnData(bool canSelect, string icon, Action onClick)
@@ -34,16 +37,19 @@ public partial class MapEditorToolsPanel : MapEditorTools
     /// <summary>
     /// 所属编辑器Tile对象
     /// </summary>
-    public MapEditor.MapEditor.TileMap EditorMap { get; set; }
+    public MapEditor.MapEditor.TileMap EditorMap { get; private set; }
     
     private List<DoorToolTemplate> _doorTools = new List<DoorToolTemplate>();
     private UiGrid<ToolButton, ToolBtnData> _toolGrid;
     //当前预设的所有标记
     private Dictionary<MarkInfo, MarkTemplate> _currMarkToolsMap = new Dictionary<MarkInfo, MarkTemplate>();
     private EventFactory _eventFactory;
+    private int _editToolIndex;
 
     public override void OnCreateUi()
     {
+        EditorMap = ((MapEditorPanel)ParentUi).S_TileMap;
+        
         S_N_HoverArea.Instance.Init(this, DoorDirection.N);
         S_S_HoverArea.Instance.Init(this, DoorDirection.S);
         S_W_HoverArea.Instance.Init(this, DoorDirection.W);
@@ -68,11 +74,12 @@ public partial class MapEditorToolsPanel : MapEditorTools
         {
             EventManager.EmitEvent(EventEnum.OnSelectRectTool);
         }));
-        //编辑门区域按钮
+        //编辑攻击按钮
         _toolGrid.Add(new ToolBtnData(true, ResourcePath.resource_sprite_ui_commonIcon_DoorTool_png, () =>
         {
-            EventManager.EmitEvent(EventEnum.OnSelectDoorTool);
+            EventManager.EmitEvent(EventEnum.OnSelectEditTool);
         }));
+        _editToolIndex = _toolGrid.Count - 1;
         //聚焦按钮
         _toolGrid.Add(new ToolBtnData(false, ResourcePath.resource_sprite_ui_commonIcon_CenterTool_png, () =>
         {
@@ -105,7 +112,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
     public override void Process(float delta)
     {
         S_HoverPreviewRoot.Instance.Visible = ActiveHoverArea != null && !DoorHoverArea.IsDrag;
-        if (EditorMap.Instance.MouseType == EditorTileMap.MouseButtonType.Door)
+        if (EditorMap.Instance.MouseType == EditorTileMap.MouseButtonType.Edit)
         {
             S_ToolRoot.Instance.Modulate = new Color(1, 1, 1, 1);
         }
@@ -165,6 +172,12 @@ public partial class MapEditorToolsPanel : MapEditorTools
                 {
                     SetActiveMark(markTemplate.Instance);
                 }
+            }
+
+            //选中编辑工具
+            if (_toolGrid.SelectIndex != _editToolIndex)
+            {
+                _toolGrid.Click(_editToolIndex);
             }
         }
     }
@@ -242,14 +255,14 @@ public partial class MapEditorToolsPanel : MapEditorTools
             return;
         }
 
-        if (ActiveMark != null)
+        if (ActiveMark != null) //取消选中上一个
         {
-            ActiveMark.Modulate = Colors.White;
+            ActiveMark.OnUnSelect();
         }
         ActiveMark = markTool;
-        if (markTool != null)
+        if (markTool != null) //选中当前
         {
-            markTool.Modulate = Colors.Green;
+            ActiveMark.OnSelect();
             EventManager.EmitEvent(EventEnum.OnSelectMark, markTool.MarkInfo);
         }
         else

@@ -15,12 +15,12 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
 
     public class MarkCellData
     {
-        public UiGrid<WaveItem, List<MarkInfo>> ParentGrid;
+        public EditorWaveCell ParentCell;
         public MarkInfo MarkInfo;
 
-        public MarkCellData(UiGrid<WaveItem, List<MarkInfo>> parentGrid, MarkInfo markInfo)
+        public MarkCellData(EditorWaveCell parentCell, MarkInfo markInfo)
         {
-            ParentGrid = parentGrid;
+            ParentCell = parentCell;
             MarkInfo = markInfo;
         }
     }
@@ -106,7 +106,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                                 waveCell.OnExpandOrClose();
                             }
                             //选中物体
-                            SetSelectCell(cell, cell.CellNode.Instance, SelectToolType.Mark);
+                            cell.OnClick();
                         }
                     }
                 }
@@ -330,6 +330,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         selectPreinstall.WaveList.RemoveAt(index);
         _grid.RemoveByIndex(index);
         EditorTileMap.SelectWaveIndex = -1;
+        //派发选中波数事件
+        EventManager.EmitEvent(EventEnum.OnSelectWave, -1);
     }
     
     /// <summary>
@@ -345,7 +347,6 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeleteMark()
     {
-        
         if (SelectCell is EditorMarkCell markCell)
         {
             var index = EditorTileMap.SelectWaveIndex;
@@ -364,11 +365,12 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             //隐藏工具
             S_DynamicTool.Reparent(this);
             S_DynamicTool.Instance.Visible = false;
-            var markInfo = waveCell.Data[index];
+            var markCellIndex = markCell.Index;
+            var markInfo = waveCell.Data[markCellIndex];
             //派发移除标记事件
             EventManager.EmitEvent(EventEnum.OnDeleteMark, markInfo);
-            waveCell.MarkGrid.RemoveByIndex(index);
-            waveCell.Data.RemoveAt(index);
+            waveCell.MarkGrid.RemoveByIndex(markCellIndex);
+            waveCell.Data.RemoveAt(markCellIndex);
         }
     }
 }

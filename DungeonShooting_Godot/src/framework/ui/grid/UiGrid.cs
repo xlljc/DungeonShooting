@@ -324,7 +324,17 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
             ReclaimCellInstance(uiCell);
         }
     }
-
+    
+    public void Click(int index)
+    {
+        if (index < 0 || index >= _cellList.Count)
+        {
+            return;
+        }
+        
+        _cellList[index].Click();
+    }
+    
     /// <summary>
     /// 销毁当前网格组件
     /// </summary>
