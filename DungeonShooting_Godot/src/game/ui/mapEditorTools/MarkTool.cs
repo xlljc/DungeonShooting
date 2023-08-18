@@ -1,4 +1,5 @@
 ﻿using Godot;
+using UI.MapEditor;
 
 namespace UI.MapEditorTools;
 
@@ -22,7 +23,7 @@ public partial class MarkTool : TextureRect, IUiNodeScript
     private bool _isDown;
     private Vector2 _offset;
     private MarkAreaTool _markAreaToolUp;
-
+    
     public void SetUiNode(IUiNode uiNode)
     {
         _toolNode = (MapEditorTools.MarkTemplate)uiNode;
@@ -39,39 +40,37 @@ public partial class MarkTool : TextureRect, IUiNodeScript
     {
         if (_toolNode != null && MarkInfo != null)
         {
-            if (_enter)
+            if (_isDown)
             {
-                if (_isDown)
+                //松开鼠标或者在拖拽区域
+                if (!Input.IsMouseButtonPressed(MouseButton.Left) || _markAreaToolUp.IsDrag)
                 {
-                    //松开鼠标或者在拖拽区域
-                    if (!Input.IsMouseButtonPressed(MouseButton.Left) || _markAreaToolUp.IsDrag)
-                    {
-                        _isDown = false;
-                        IsDrag = false;
-                    }
+                    _isDown = false;
+                    IsDrag = false;
                 }
-                else if (!_isDown)
+            }
+            else if (_enter && !_isDown)
+            {
+                //判断是否可以选中
+                var activeMark = _toolNode.UiPanel.ActiveMark;
+                if ((activeMark == null || (!activeMark.IsDrag && !activeMark._markAreaToolUp.IsDrag)) &&
+                    !_markAreaToolUp.IsDrag && Input.IsMouseButtonPressed(MouseButton.Left) &&
+                    _toolNode.UiPanel.EditorMap.Instance.MouseType == EditorTileMap.MouseButtonType.Edit)
                 {
-                    //按下鼠标
-                    var activeMark = _toolNode.UiPanel.ActiveMark;
-                    if ((activeMark == null || (!activeMark.IsDrag && !activeMark._markAreaToolUp.IsDrag))
-                        && !_markAreaToolUp.IsDrag && Input.IsMouseButtonPressed(MouseButton.Left))
+                    _isDown = true;
+                    if (_toolNode.UiPanel.ActiveMark != this)
                     {
-                        _isDown = true;
-                        if (_toolNode.UiPanel.ActiveMark != this)
-                        {
-                            IsDrag = false;
-                            _toolNode.UiPanel.SetActiveMark(this);
-                        }
-                        else
-                        {
-                            _offset = GlobalPosition - GetGlobalMousePosition();
-                            IsDrag = true;
-                        }
+                        IsDrag = false;
+                        _toolNode.UiPanel.SetActiveMark(this);
+                    }
+                    else
+                    {
+                        _offset = GlobalPosition - GetGlobalMousePosition();
+                        IsDrag = true;
                     }
                 }
             }
-            
+
             //拖拽中
             if (IsDrag && _toolNode.UiPanel.ActiveMark == this)
             {
@@ -119,5 +118,23 @@ public partial class MarkTool : TextureRect, IUiNodeScript
             var size = MarkInfo.Size.AsVector2();
             DrawRect(new Rect2(-size / 2 + Size / 2, size.X, size.Y), new Color(1, 1, 1, 0.3f), false, 1);
         }
+    }
+
+    /// <summary>
+    /// 选中标记
+    /// </summary>
+    public void OnSelect()
+    {
+        var a = Modulate.A;
+        Modulate = new Color(0, 1, 0, a);
+    }
+
+    /// <summary>
+    /// 取消选中标记
+    /// </summary>
+    public void OnUnSelect()
+    {
+        var a = Modulate.A;
+        Modulate = new Color(1, 1, 1, a);
     }
 }

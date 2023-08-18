@@ -29,9 +29,9 @@ public partial class EditorTileMap : TileMap
         /// </summary>
         Area,
         /// <summary>
-        /// 编辑门区域模式
+        /// 编辑工具模式
         /// </summary>
-        Door,
+        Edit,
     }
     
     /// <summary>
@@ -72,7 +72,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 左键功能
     /// </summary>
-    public MouseButtonType MouseType { get; set; } = MouseButtonType.Pen;
+    public MouseButtonType MouseType { get; private set; } = MouseButtonType.Pen;
     
     //鼠标坐标
     private Vector2 _mousePosition;
@@ -158,6 +158,11 @@ public partial class EditorTileMap : TileMap
             return RoomSplit.Preinstall[SelectPreinstallIndex];
         }
     }
+
+    /// <summary>
+    /// 选中的标记
+    /// </summary>
+    public MarkTool SelectMark => MapEditorToolsPanel.ActiveMark;
 
     //变动过的数据
     
@@ -807,9 +812,9 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 选择编辑门区域
     /// </summary>
-    public void OnSelectDoorTool(object arg)
+    public void OnSelectEditTool(object arg)
     {
-        MouseType = MouseButtonType.Door;
+        MouseType = MouseButtonType.Edit;
     }
 
     /// <summary>

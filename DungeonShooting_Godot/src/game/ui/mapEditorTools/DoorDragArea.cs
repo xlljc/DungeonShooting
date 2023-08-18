@@ -424,7 +424,7 @@ public partial class DoorDragArea : Control
 
     private void OnMouseEntered()
     {
-        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Door)
+        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Edit)
         {
             return;
         }
@@ -433,7 +433,7 @@ public partial class DoorDragArea : Control
     
     private void OnMouseExited()
     {
-        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Door)
+        if (MapEditorToolsPanel.EditorMap.Instance.MouseType != EditorTileMap.MouseButtonType.Edit)
         {
             return;
         }
