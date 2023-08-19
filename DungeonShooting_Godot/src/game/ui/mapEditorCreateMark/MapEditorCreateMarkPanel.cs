@@ -28,6 +28,19 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
     {
         _grid.Destroy();
     }
+    
+    /// <summary>
+    /// 初始化面板数据
+    /// </summary>
+    public void InitData(MarkInfo data)
+    {
+        S_SizeX.Instance.Value = data.Size.X;
+        S_SizeY.Instance.Value = data.Size.Y;
+        S_PosX.Instance.Value = data.Position.X;
+        S_PosY.Instance.Value = data.Position.Y;
+        S_DelayInput.Instance.Value = data.DelayTime;
+        _grid.SetDataList(data.MarkList.ToArray());
+    }
 
     /// <summary>
     /// 获取填写的标记数据
@@ -63,13 +76,13 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
     /// </summary>
     /// <param name="attrName">属性字符串名称</param>
     /// <param name="attrLabel">属性名称</param>
-    public NumberAttribute CreateNumberBar(string attrName, string attrLabel)
+    public NumberBar CreateNumberBar(string attrName, string attrLabel)
     {
         var numberBar = S_NumberBar.Clone();
         numberBar.Instance.AttrName = attrName;
         numberBar.L_AttrName.Instance.Text = attrLabel;
         numberBar.Instance.Visible = true;
-        return numberBar.Instance;
+        return numberBar;
     }
 
     //点击添加标记按钮

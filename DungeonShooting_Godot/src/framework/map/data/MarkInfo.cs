@@ -30,4 +30,15 @@ public class MarkInfo
     /// </summary>
     [JsonInclude]
     public List<MarkInfoItem> MarkList;
+
+    /// <summary>
+    /// 从指定 MarkInfo 克隆数据, 浅拷贝
+    /// </summary>
+    public void CloneFrom(MarkInfo mark)
+    {
+        Position = mark.Position;
+        Size = mark.Size;
+        DelayTime = mark.DelayTime;
+        MarkList = mark.MarkList;
+    }
 }

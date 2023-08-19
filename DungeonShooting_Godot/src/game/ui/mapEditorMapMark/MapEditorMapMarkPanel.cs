@@ -339,7 +339,19 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnEditMark()
     {
-        
+        if (SelectCell is EditorMarkCell markCell)
+        {
+            var dataMarkInfo = markCell.Data.MarkInfo;
+            //打开编辑面板
+            EditorWindowManager.ShowEditMark(dataMarkInfo, (mark) =>
+            {
+                //为了引用不变, 所以这里使用克隆数据
+                dataMarkInfo.CloneFrom(mark);
+                //刷新 Cell
+                markCell.SetData(markCell.Data);
+                EventManager.EmitEvent(EventEnum.OnEditMark, dataMarkInfo);
+            });
+        }
     }
     
     /// <summary>

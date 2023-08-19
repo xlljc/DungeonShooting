@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Config;
 
 namespace UI.MapEditorCreateMark;
@@ -9,7 +10,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
     //是否展开
     private bool _isExpand = false;
     private MapEditorCreateMark.ExpandPanel _expandPanel;
-    private List<AttributeBase> _attributeBases;
+    private List<MapEditorCreateMark.NumberBar> _attributeBases;
     private ExcelConfig.ActivityObject _activityObject;
     
     public override void OnInit()
@@ -20,7 +21,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
 
     public override void OnSetData(MarkInfoItem data)
     {
-        //记得判断随机对象, 后面在做
+        //记得判断随机对象, 后面再做
         
 
         _activityObject = ExcelConfig.ActivityObject_Map[data.Id];
@@ -74,7 +75,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
             markInfoItem.Attr = new Dictionary<string, string>();
             foreach (var attributeBase in _attributeBases)
             {
-                markInfoItem.Attr.Add(attributeBase.AttrName, attributeBase.GetAttributeValue());
+                markInfoItem.Attr.Add(attributeBase.Instance.AttrName, attributeBase.Instance.GetAttributeValue());
             }
         }
         return markInfoItem;
@@ -131,13 +132,38 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
             var numberBar2 = CellNode.UiPanel.CreateNumberBar("ResidueAmmo", "剩余弹药量：");
             _expandPanel.L_ExpandGrid.AddChild(numberBar);
             _expandPanel.L_ExpandGrid.AddChild(numberBar2);
-            _attributeBases = new List<AttributeBase>();
+            _attributeBases = new List<MapEditorCreateMark.NumberBar>();
             _attributeBases.Add(numberBar);
             _attributeBases.Add(numberBar2);
-
+            
             if (markInfoItem != null) //初始化数据
             {
-                
+                numberBar.L_NumInput.Instance.MinValue = 0;
+                numberBar2.L_NumInput.Instance.MinValue = 0;
+                //武器配置数据
+                var weapon = ExcelConfig.Weapon_List.Find(weapon => weapon.WeaponId == activityObject.Id);
+                if (weapon != null)
+                {
+                    numberBar.L_NumInput.Instance.MaxValue = weapon.AmmoCapacity; //弹夹上限
+                    numberBar2.L_NumInput.Instance.MaxValue = weapon.MaxAmmoCapacity; //容量上限
+                }
+
+                if (markInfoItem.Attr != null)
+                {
+                    if (markInfoItem.Attr.TryGetValue("CurrAmmon", out var currAmmon)) //弹夹弹药量
+                    {
+                        numberBar.L_NumInput.Instance.Value = float.Parse(currAmmon);
+                    }
+                    if (markInfoItem.Attr.TryGetValue("ResidueAmmo", out var residueAmmo)) //剩余弹药量
+                    {
+                        numberBar2.L_NumInput.Instance.Value = float.Parse(residueAmmo);
+                    }
+                }
+                else
+                {
+                    numberBar.L_NumInput.Instance.Value = numberBar.L_NumInput.Instance.MaxValue;
+                    numberBar2.L_NumInput.Instance.Value = (int)(numberBar2.L_NumInput.Instance.MaxValue / 2);
+                }
             }
         }
         else if (activityObject.Type == 4) //敌人
@@ -148,14 +174,39 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
             _expandPanel.L_ExpandGrid.AddChild(numberBar);
             _expandPanel.L_ExpandGrid.AddChild(numberBar2);
             _expandPanel.L_ExpandGrid.AddChild(numberBar3);
-            _attributeBases = new List<AttributeBase>();
+            _attributeBases = new List<MapEditorCreateMark.NumberBar>();
             _attributeBases.Add(numberBar);
             _attributeBases.Add(numberBar2);
             _attributeBases.Add(numberBar3);
             
             if (markInfoItem != null) //初始化数据
             {
+                numberBar2.L_NumInput.Instance.MinValue = 0;
+                numberBar3.L_NumInput.Instance.MinValue = 0;
+                //武器配置数据
+                var weapon = ExcelConfig.Weapon_List.Find(weapon => weapon.WeaponId == activityObject.Id);
+                if (weapon != null)
+                {
+                    numberBar2.L_NumInput.Instance.MaxValue = weapon.AmmoCapacity; //弹夹上限
+                    numberBar3.L_NumInput.Instance.MaxValue = weapon.MaxAmmoCapacity; //容量上限
+                }
                 
+                if (markInfoItem.Attr != null)
+                {
+                    if (markInfoItem.Attr.TryGetValue("CurrAmmon", out var currAmmon)) //弹夹弹药量
+                    {
+                        numberBar2.L_NumInput.Instance.Value = float.Parse(currAmmon);
+                    }
+                    if (markInfoItem.Attr.TryGetValue("ResidueAmmo", out var residueAmmo)) //剩余弹药量
+                    {
+                        numberBar3.L_NumInput.Instance.Value = float.Parse(residueAmmo);
+                    }
+                }
+                else
+                {
+                    numberBar2.L_NumInput.Instance.Value = numberBar2.L_NumInput.Instance.MaxValue;
+                    numberBar3.L_NumInput.Instance.Value = (int)(numberBar3.L_NumInput.Instance.MaxValue / 2);
+                }
             }
         }
     }

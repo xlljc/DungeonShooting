@@ -98,13 +98,17 @@ public enum EventEnum
     /// </summary>
     OnSelectPreinstall,
     /// <summary>
-    /// 选中波数, 参数<see cref="int"/>或者null
+    /// 选中波数, 参数<see cref="int"/>
     /// </summary>
     OnSelectWave,
     /// <summary>
     /// 创建标记, 参数<see cref="MarkInfo"/>
     /// </summary>
     OnCreateMark,
+    /// <summary>
+    /// 修改标记, 参数<see cref="MarkInfo"/>
+    /// </summary>
+    OnEditMark,
     /// <summary>
     /// 选中标记, 参数<see cref="MarkInfo"/>或者null
     /// </summary>

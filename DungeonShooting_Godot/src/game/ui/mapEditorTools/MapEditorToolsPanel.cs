@@ -91,9 +91,11 @@ public partial class MapEditorToolsPanel : MapEditorTools
     public override void OnShowUi()
     {
         _eventFactory = EventManager.CreateEventFactory();
+        _eventFactory.AddEventListener(EventEnum.OnSelectWave, OnSelectWaveTool);
         _eventFactory.AddEventListener(EventEnum.OnCreateMark, OnCreateMarkTool);
         _eventFactory.AddEventListener(EventEnum.OnSelectMark, OnSelectMarkTool);
         _eventFactory.AddEventListener(EventEnum.OnDeleteMark, OnDeleteMarkTool);
+        _eventFactory.AddEventListener(EventEnum.OnEditMark, OnEditMarkTool);
         _eventFactory.AddEventListener(EventEnum.OnSelectPreinstall, RefreshMark);
     }
 
@@ -145,6 +147,31 @@ public partial class MapEditorToolsPanel : MapEditorTools
         }
     }
 
+    //选中波数
+    private void OnSelectWaveTool(object arg)
+    {
+        var selectIndex = (int)arg;
+        var waveList = EditorMap.Instance.SelectPreinstall.WaveList;
+        for (var i = 0; i < waveList.Count; i++)
+        {
+            var wave = waveList[i];
+            foreach (var markInfo in wave)
+            {
+                if (_currMarkToolsMap.TryGetValue(markInfo, out var markTemplate))
+                {
+                    if (i == selectIndex) //选中当前波数, 透明度改为1
+                    {
+                        markTemplate.Instance.SetModulateAlpha(1f);
+                    }
+                    else //未选中当前波数, 透明度改为0.6
+                    {
+                        markTemplate.Instance.SetModulateAlpha(0.45f);
+                    }
+                }
+            }
+        }
+    }
+    
     //创建标记
     private void OnCreateMarkTool(object arg)
     {
@@ -195,6 +222,19 @@ public partial class MapEditorToolsPanel : MapEditorTools
                 }
                 markTemplate.QueueFree();
                 _currMarkToolsMap.Remove(markInfo);
+            }
+        }
+    }
+
+    //编辑标记
+    private void OnEditMarkTool(object arg)
+    {
+        if (arg is MarkInfo markInfo)
+        {
+            if (_currMarkToolsMap.TryGetValue(markInfo, out var markTemplate))
+            {
+                //更新坐标
+                markTemplate.Instance.Position = markInfo.Position.AsVector2();
             }
         }
     }

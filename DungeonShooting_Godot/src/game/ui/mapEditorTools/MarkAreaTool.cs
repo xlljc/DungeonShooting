@@ -70,28 +70,28 @@ public partial class MarkAreaTool : Node2D
                     {
                         var offset = globalMousePosition - _startMousePosition;
                         offset = offset / _toolRoot.Instance.Scale * 2f;
-                        var newWidth = Mathf.Max(2, (int)(_startWidth - offset.X));
+                        var newWidth = Mathf.Max(0, (int)(_startWidth - offset.X));
                         _markInfo.Size = new SerializeVector2(newWidth, _markInfo.Size.Y);
                     }
                     else if (_mouseInR)
                     {
                         var offset = _startMousePosition - globalMousePosition;
                         offset = offset / _toolRoot.Instance.Scale * 2f;
-                        var newWidth = Mathf.Max(2, (int)(_startWidth - offset.X));
+                        var newWidth = Mathf.Max(0, (int)(_startWidth - offset.X));
                         _markInfo.Size = new SerializeVector2(newWidth, _markInfo.Size.Y);
                     }
                     else if (_mouseInT)
                     {
                         var offset = globalMousePosition - _startMousePosition;
                         offset = offset / _toolRoot.Instance.Scale * 2f;
-                        var newHeight = Mathf.Max(2, (int)(_startHeight - offset.Y));
+                        var newHeight = Mathf.Max(0, (int)(_startHeight - offset.Y));
                         _markInfo.Size = new SerializeVector2(_markInfo.Size.X, newHeight);
                     }
                     else if (_mouseInB)
                     {
                         var offset = _startMousePosition - globalMousePosition;
                         offset = offset / _toolRoot.Instance.Scale * 2f;
-                        var newHeight = Mathf.Max(2, (int)(_startHeight - offset.Y));
+                        var newHeight = Mathf.Max(0, (int)(_startHeight - offset.Y));
                         _markInfo.Size = new SerializeVector2(_markInfo.Size.X, newHeight);
                     }
                     //----------------------------------------------------------------------------------
@@ -99,32 +99,32 @@ public partial class MarkAreaTool : Node2D
                     {
                         var offset = globalMousePosition - _startMousePosition;
                         offset = offset / _toolRoot.Instance.Scale * 2f;
-                        var newWidth = Mathf.Max(2, (int)(_startWidth - offset.X));
-                        var newHeight = Mathf.Max(2, (int)(_startHeight - offset.Y));
+                        var newWidth = Mathf.Max(0, (int)(_startWidth - offset.X));
+                        var newHeight = Mathf.Max(0, (int)(_startHeight - offset.Y));
                         _markInfo.Size = new SerializeVector2(newWidth, newHeight);
                     }
                     else if (_mouseInLB)
                     {
                         var offsetX = (globalMousePosition.X - _startMousePosition.X) / _toolRoot.Instance.Scale.X * 2f;
                         var offsetY = (_startMousePosition.Y - globalMousePosition.Y) / _toolRoot.Instance.Scale.Y * 2f;
-                        var newWidth = Mathf.Max(2, (int)(_startWidth - offsetX));
-                        var newHeight = Mathf.Max(2, (int)(_startHeight - offsetY));
+                        var newWidth = Mathf.Max(0, (int)(_startWidth - offsetX));
+                        var newHeight = Mathf.Max(0, (int)(_startHeight - offsetY));
                         _markInfo.Size = new SerializeVector2(newWidth, newHeight);
                     }
                     else if (_mouseInRT)
                     {
                         var offsetX = (_startMousePosition.X - globalMousePosition.X) / _toolRoot.Instance.Scale.X * 2f;
                         var offsetY = (globalMousePosition.Y - _startMousePosition.Y) / _toolRoot.Instance.Scale.Y * 2f;
-                        var newWidth = Mathf.Max(2, (int)(_startWidth - offsetX));
-                        var newHeight = Mathf.Max(2, (int)(_startHeight - offsetY));
+                        var newWidth = Mathf.Max(0, (int)(_startWidth - offsetX));
+                        var newHeight = Mathf.Max(0, (int)(_startHeight - offsetY));
                         _markInfo.Size = new SerializeVector2(newWidth, newHeight);
                     }
                     else if (_mouseInRB)
                     {
                         var offset = _startMousePosition - globalMousePosition;
                         offset = offset / _toolRoot.Instance.Scale * 2f;
-                        var newWidth = Mathf.Max(2, (int)(_startWidth - offset.X));
-                        var newHeight = Mathf.Max(2, (int)(_startHeight - offset.Y));
+                        var newWidth = Mathf.Max(0, (int)(_startWidth - offset.X));
+                        var newHeight = Mathf.Max(0, (int)(_startHeight - offset.Y));
                         _markInfo.Size = new SerializeVector2(newWidth, newHeight);
                     }
                     _prevMousePosition = pos;
@@ -229,41 +229,41 @@ public partial class MarkAreaTool : Node2D
 
     private Rect2 GetTopRect()
     {
-        return new Rect2(-_markInfo.Size.X / 2f + 0.5f, -_markInfo.Size.Y / 2f - 0.5f, _markInfo.Size.X - 1, 1);
+        return new Rect2(-(_markInfo.Size.X + 2) / 2f + 0.5f, -(_markInfo.Size.Y + 2) / 2f - 0.5f, (_markInfo.Size.X + 2) - 1, 1);
     }
     
     private Rect2 GetBottomRect()
     {
-        return new Rect2(-_markInfo.Size.X / 2f + 0.5f, _markInfo.Size.Y / 2f - 0.5f, _markInfo.Size.X - 1, 1);
+        return new Rect2(-(_markInfo.Size.X + 2) / 2f + 0.5f, (_markInfo.Size.Y + 2) / 2f - 0.5f, (_markInfo.Size.X + 2) - 1, 1);
     }
 
     private Rect2 GetLeftRect()
     {
-        return new Rect2(-_markInfo.Size.X / 2f - 0.5f, -_markInfo.Size.Y / 2f + 0.5f, 1, _markInfo.Size.Y - 1);
+        return new Rect2(-(_markInfo.Size.X + 2) / 2f - 0.5f, -(_markInfo.Size.Y + 2) / 2f + 0.5f, 1, (_markInfo.Size.Y + 2) - 1);
     }
     
     private Rect2 GetRightRect()
     {
-        return new Rect2(_markInfo.Size.X / 2f - 0.5f, -_markInfo.Size.Y / 2f + 0.5f, 1, _markInfo.Size.Y - 1);
+        return new Rect2((_markInfo.Size.X + 2) / 2f - 0.5f, -(_markInfo.Size.Y + 2) / 2f + 0.5f, 1, (_markInfo.Size.Y + 2) - 1);
     }
 
     private Rect2 GetLeftTopRect()
     {
-        return new Rect2(-_markInfo.Size.X / 2f - 1.5f, -_markInfo.Size.Y / 2f - 1.5f, 3, 3);
+        return new Rect2(-(_markInfo.Size.X + 2) / 2f - 1.5f, -(_markInfo.Size.Y + 2) / 2f - 1.5f, 3, 3);
     }
     
     private Rect2 GetLeftBottomRect()
     {
-        return new Rect2(-_markInfo.Size.X / 2f - 1.5f, _markInfo.Size.Y / 2f - 1.5f, 3, 3);
+        return new Rect2(-(_markInfo.Size.X + 2) / 2f - 1.5f, (_markInfo.Size.Y + 2) / 2f - 1.5f, 3, 3);
     }
     
     private Rect2 GetRightTopRect()
     {
-        return new Rect2(_markInfo.Size.X / 2f - 1.5f, -_markInfo.Size.Y / 2f - 1.5f, 3, 3);
+        return new Rect2((_markInfo.Size.X + 2) / 2f - 1.5f, -(_markInfo.Size.Y + 2) / 2f - 1.5f, 3, 3);
     }
     
     private Rect2 GetRightBottomRect()
     {
-        return new Rect2(_markInfo.Size.X / 2f - 1.5f, _markInfo.Size.Y / 2f - 1.5f, 3, 3);
+        return new Rect2((_markInfo.Size.X + 2) / 2f - 1.5f, (_markInfo.Size.Y + 2) / 2f - 1.5f, 3, 3);
     }
 }

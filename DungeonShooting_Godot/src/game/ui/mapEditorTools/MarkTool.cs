@@ -79,7 +79,7 @@ public partial class MarkTool : TextureRect, IUiNodeScript
             }
 
             //只有选中物体才会显示拖拽区域
-            if (_toolNode.UiPanel.ActiveMark == this && MarkInfo.Size.X > 0 && MarkInfo.Size.Y > 0)
+            if (_toolNode.UiPanel.ActiveMark == this)
             {
                 _markAreaToolUp.Visible = true;
             }
@@ -113,10 +113,10 @@ public partial class MarkTool : TextureRect, IUiNodeScript
 
     public override void _Draw()
     {
-        if (MarkInfo != null && MarkInfo.Size.X > 0 && MarkInfo.Size.Y > 0 && !_markAreaToolUp.Visible)
+        if (MarkInfo != null && !_markAreaToolUp.Visible)
         {
-            var size = MarkInfo.Size.AsVector2();
-            DrawRect(new Rect2(-size / 2 + Size / 2, size.X, size.Y), new Color(1, 1, 1, 0.3f), false, 1);
+            var size = new Vector2(MarkInfo.Size.X + 2, MarkInfo.Size.Y + 2);
+            DrawRect(new Rect2(-size / 2 + Size / 2, size.X, size.Y), new Color(1, 1, 1, 0.7f), false, 1);
         }
     }
 
@@ -136,5 +136,15 @@ public partial class MarkTool : TextureRect, IUiNodeScript
     {
         var a = Modulate.A;
         Modulate = new Color(1, 1, 1, a);
+    }
+
+    /// <summary>
+    /// 设置透明度值
+    /// </summary>
+    public void SetModulateAlpha(float a)
+    {
+        var m = Modulate;
+        m.A = a;
+        Modulate = m;
     }
 }
