@@ -81,7 +81,9 @@ public partial class ObjectAttribute : AttributeBase
             _objectBar.L_HBoxContainer.L_ObjectIcon.Instance.Texture = ResourceManager.LoadTexture2D(o.Icon);
             //弹药
             _currAmmonAttr.L_NumInput.Instance.MaxValue = weapon.AmmoCapacity;
+            _currAmmonAttr.L_NumInput.Instance.Value = weapon.AmmoCapacity;
             _residueAmmoAttr.L_NumInput.Instance.MaxValue = weapon.MaxAmmoCapacity;
+            _residueAmmoAttr.L_NumInput.Instance.Value = weapon.AmmoCapacity;
         }
     }
 

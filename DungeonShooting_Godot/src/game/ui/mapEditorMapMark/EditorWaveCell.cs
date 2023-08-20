@@ -30,6 +30,8 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
             array[i] = new MapEditorMapMarkPanel.MarkCellData(this, data[i]);
         }
         MarkGrid.SetDataList(array);
+        //执行排序操作
+        MarkGrid.Sort();
     }
 
     public override void OnRefreshIndex()
@@ -60,6 +62,8 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         //选中最后一个
         //MarkGrid.SelectIndex
         MarkGrid.Click(MarkGrid.Count - 1);
+        //执行排序操作
+        MarkGrid.Sort();
     }
 
     /// <summary>

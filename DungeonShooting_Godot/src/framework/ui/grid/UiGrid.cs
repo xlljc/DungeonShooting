@@ -334,6 +334,48 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
         
         _cellList[index].Click();
     }
+
+    /// <summary>
+    /// 对所有已经启用的 Cell 进行排序操作, 排序时会调用 Cell 的 OnSort() 函数用于处理排序逻辑<br/>
+    /// 注意: 排序会影响 Cell 的 Index
+    /// </summary>
+    public void Sort()
+    {
+        if (_cellList.Count <= 0)
+        {
+            return;
+        }
+        //这里记录 SelectIndex 是让排序后 SelectIndex 指向的 Cell 不变
+        var selectIndex = SelectIndex;
+        var selectCell = GetCell(selectIndex);
+        //执行排序操作
+        Utils.QuickSort(_cellList, (a, b) => a.OnSort(b));
+        if (selectIndex >= 0)
+        {
+            selectIndex = _cellList.FindIndex(cell => cell == selectCell);
+        }
+        //先移除所有节点
+        for (var i = 0; i < _cellList.Count; i++)
+        {
+            _gridContainer.RemoveChild(_cellList[i].CellNode.GetUiInstance());
+        }
+
+        if (selectIndex >= 0)
+        {
+            _selectIndex = selectIndex;
+        }
+        //以新的顺序加入GridContainer
+        for (var i = 0; i < _cellList.Count; i++)
+        {
+            _gridContainer.AddChild(_cellList[i].CellNode.GetUiInstance());
+        }
+        //刷新Index
+        for (var i = 0; i < _cellList.Count; i++)
+        {
+            var cell = _cellList[i];
+            cell.SetIndex(i);
+        }
+    }
     
     /// <summary>
     /// 销毁当前网格组件

@@ -92,23 +92,24 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             var selectPreinstall = GetSelectPreinstall();
             if (selectPreinstall != null)
             {
-                for (var i = 0; i < selectPreinstall.WaveList.Count; i++)
+                var waveCells = _grid.GetAllCell();
+                foreach (var waveCell in waveCells)
                 {
-                    var wave = selectPreinstall.WaveList[i];
-                    for (var j = 0; j < wave.Count; j++)
+                    var tempWaveCell = (EditorWaveCell)waveCell;
+                    var markCells = tempWaveCell.MarkGrid.GetAllCell();
+                    for (var i = 0; i < markCells.Length; i++)
                     {
-                        var tempMark = wave[j];
-                        if (tempMark == markInfo)
+                        var tempMarkCell = (EditorMarkCell)markCells[i];
+                        if (tempMarkCell.Data.MarkInfo == markInfo)
                         {
-                            var waveCell = (EditorWaveCell)_grid.GetCell(i);
-                            var cell = (EditorMarkCell)waveCell.MarkGrid.GetCell(j);
                             //如果没有展开, 则调用展开方法
-                            if (!waveCell.IsExpand())
+                            if (!tempWaveCell.IsExpand())
                             {
-                                waveCell.OnExpandOrClose();
+                                tempWaveCell.OnExpandOrClose();
                             }
                             //选中物体
-                            cell.OnClick();
+                            tempMarkCell.OnClick();
+                            return;
                         }
                     }
                 }
@@ -397,6 +398,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 dataMarkInfo.CloneFrom(mark);
                 //刷新 Cell
                 markCell.SetData(markCell.Data);
+                //执行排序
+                markCell.Grid.Sort();
                 EventManager.EmitEvent(EventEnum.OnEditMark, dataMarkInfo);
             });
         }

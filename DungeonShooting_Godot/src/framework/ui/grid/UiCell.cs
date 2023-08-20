@@ -88,6 +88,17 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell, IData<T> where TUiCellNo
     }
 
     /// <summary>
+    /// 当 Cell 参与排序时调用, 参数 other 为需要对比的另一个 Cell 对象<br/>
+    /// 函数返回 -1 表示当前 Cell 在 other 之前<br/>
+    /// 函数返回 0 表示当前 Cell 和 other 位置相同<br/>
+    /// 函数返回 1 表示当前 Cell 和 other 之后<br/>
+    /// </summary>
+    public virtual int OnSort(UiCell<TUiCellNode, T> other)
+    {
+        return 0;
+    }
+
+    /// <summary>
     /// 初始化数据
     /// </summary>
     public void Init(UiGrid<TUiCellNode, T> grid, TUiCellNode cellNode, int index)

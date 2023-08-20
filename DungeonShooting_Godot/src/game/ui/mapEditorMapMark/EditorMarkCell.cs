@@ -70,4 +70,21 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
     {
         CellNode.L_MarkButton.L_Select.Instance.Visible = false;
     }
+
+    public override int OnSort(UiCell<MapEditorMapMark.MarkItem, MapEditorMapMarkPanel.MarkCellData> other)
+    {
+        if (!Data.MarkInfo.Preloading && other.Data.MarkInfo.Preloading)
+        {
+            return 0;
+        }
+        else if (Data.MarkInfo.Preloading)
+        {
+            return -1;
+        }
+        else if (other.Data.MarkInfo.Preloading)
+        {
+            return 1;
+        }
+        return (int)(Data.MarkInfo.DelayTime * 1000 - other.Data.MarkInfo.DelayTime * 1000);
+    }
 }

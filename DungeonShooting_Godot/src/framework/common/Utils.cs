@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -168,5 +170,95 @@ public static class Utils
     {
         return pos.X >= rect2.Position.X && pos.X <= rect2.Position.X + rect2.Size.X &&
                pos.Y >= rect2.Position.Y && pos.Y <= rect2.Position.Y + rect2.Size.Y;
+    }
+    
+    /// <summary>
+    /// 使用快速排序算法对 arr 进行排序操作
+    /// </summary>
+    /// <param name="arr">需要进行排序的数组</param>
+    /// <param name="comparison">自定义比较规则</param>
+    public static void QuickSort<T>(T[] arr, Comparison<T> comparison)
+    {
+        QuickSort(arr, 0, arr.Length - 1, comparison);
+    }
+    
+    /// <summary>
+    /// 使用快速排序算法对 arr 进行排序操作
+    /// </summary>
+    /// <param name="arr">需要进行排序的数组</param>
+    /// <param name="comparison">自定义比较规则</param>
+    public static void QuickSort<T>(List<T> arr, Comparison<T> comparison)
+    {
+        QuickSort(arr, 0, arr.Count - 1, comparison);
+    }
+
+    private static void QuickSort<T>(T[] arr, int low, int high, Comparison<T> comparison)
+    {
+        if (low < high)
+        {
+            int pivotIndex = Partition(arr, low, high, comparison);
+            QuickSort(arr, low, pivotIndex - 1, comparison);
+            QuickSort(arr, pivotIndex + 1, high, comparison);
+        }
+    }
+    
+    private static void QuickSort<T>(List<T> arr, int low, int high, Comparison<T> comparison)
+    {
+        if (low < high)
+        {
+            int pivotIndex = Partition(arr, low, high, comparison);
+            QuickSort(arr, low, pivotIndex - 1, comparison);
+            QuickSort(arr, pivotIndex + 1, high, comparison);
+        }
+    }
+
+    private static int Partition<T>(T[] arr, int low, int high, Comparison<T> comparison)
+    {
+        T pivot = arr[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++)
+        {
+            if (comparison(arr[j], pivot) < 0)
+            {
+                i++;
+                Swap(arr, i, j);
+            }
+        }
+
+        Swap(arr, i + 1, high);
+        return i + 1;
+    }
+    
+    private static int Partition<T>(List<T> arr, int low, int high, Comparison<T> comparison)
+    {
+        T pivot = arr[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++)
+        {
+            if (comparison(arr[j], pivot) < 0)
+            {
+                i++;
+                Swap(arr, i, j);
+            }
+        }
+
+        Swap(arr, i + 1, high);
+        return i + 1;
+    }
+    
+    private static void Swap<T>(T[] arr, int i, int j)
+    {
+        T temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    private static void Swap<T>(List<T> arr, int i, int j)
+    {
+        T temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
 }

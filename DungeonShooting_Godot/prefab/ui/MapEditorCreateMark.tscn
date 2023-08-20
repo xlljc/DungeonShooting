@@ -115,6 +115,7 @@ text = "X"
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 max_value = 9999.0
+value = 16.0
 custom_arrow_step = 1.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer3/VBoxContainer"]
@@ -129,6 +130,7 @@ text = "Y"
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 max_value = 9999.0
+value = 16.0
 custom_arrow_step = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
