@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bt4xo2lb4h4rx"]
+[gd_scene load_steps=9 format=3 uid="uid://bt4xo2lb4h4rx"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorCreateMark/MapEditorCreateMarkPanel.cs" id="1_cjivg"]
 [ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="2_pxemo"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="3_7xihk"]
 [ext_resource type="Texture2D" uid="uid://dligpyhp72sg7" path="res://resource/sprite/ui/commonIcon/Right.png" id="3_v5clf"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorCreateMark/attribute/NumberAttribute.cs" id="6_1ym7l"]
+[ext_resource type="Script" path="res://src/game/ui/mapEditorCreateMark/attribute/ObjectAttribute.cs" id="7_516p2"]
+[ext_resource type="Texture2D" uid="uid://dggb6p4sdmfry" path="res://resource/sprite/ui/commonIcon/Edit.png" id="7_yeuy4"]
 
 [node name="MapEditorCreateMark" type="Control"]
 layout_mode = 3
@@ -24,7 +26,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 50
+theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
@@ -129,11 +131,38 @@ layout_mode = 2
 max_value = 9999.0
 custom_arrow_step = 1.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DelayNameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer"]
+[node name="PreloadingContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PreloadingNameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/PreloadingContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+size_flags_stretch_ratio = 30.0
+text = "提前加载："
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="PreloadingCheck" type="CheckBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/PreloadingContainer"]
+custom_minimum_size = Vector2(0, 43)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 70.0
+flat = true
+
+[node name="DelayContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DelayNameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/DelayContainer"]
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -142,11 +171,11 @@ text = "延时时间(秒)："
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="DelayInput" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer"]
+[node name="DelayInput" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/DelayContainer"]
 custom_minimum_size = Vector2(0, 43)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 0
+size_flags_vertical = 4
 size_flags_stretch_ratio = 70.0
 max_value = 30.0
 step = 0.01
@@ -179,7 +208,7 @@ custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 
 [node name="IconTitle" type="Label" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "图标"
 horizontal_alignment = 1
@@ -226,15 +255,19 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarkObject" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer"]
+[node name="MarkObject" type="PanelContainer" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
-[node name="ExpandButton" type="Button" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/HBoxContainer"]
+[node name="ExpandButton" type="Button" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 size_flags_vertical = 4
@@ -242,13 +275,13 @@ icon = ExtResource("3_v5clf")
 flat = true
 icon_alignment = 1
 
-[node name="Icon" type="TextureRect" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer"]
 material = ExtResource("2_xb40b")
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 stretch_mode = 5
 
-[node name="IdLabel" type="Label" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/HBoxContainer"]
+[node name="IdLabel" type="Label" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -257,7 +290,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/HBoxContainer"]
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -266,7 +299,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="TypeLabel" type="Label" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/HBoxContainer"]
+[node name="TypeLabel" type="Label" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -275,7 +308,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="LineEdit" type="SpinBox" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/HBoxContainer"]
+[node name="LineEdit" type="SpinBox" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(150, 43)
 layout_mode = 2
 size_flags_vertical = 4
@@ -283,11 +316,11 @@ max_value = 1000.0
 value = 100.0
 custom_arrow_step = 1.0
 
-[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/HBoxContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DeleteButton" type="Button" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/HBoxContainer/CenterContainer"]
+[node name="DeleteButton" type="Button" parent="MarginContainer/VBoxContainer/Panel/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer/CenterContainer"]
 custom_minimum_size = Vector2(43, 43)
 layout_mode = 2
 size_flags_vertical = 4
@@ -295,36 +328,112 @@ icon = ExtResource("3_7xihk")
 
 [node name="ExpandPanel" type="MarginContainer" parent="."]
 layout_mode = 2
-offset_left = 68.0
-offset_top = -588.0
-offset_right = 332.0
-offset_bottom = -518.0
+offset_top = -423.0
+offset_right = 667.0
+offset_bottom = -353.0
 theme_override_constants/margin_left = 80
 theme_override_constants/margin_right = 2
 
 [node name="ExpandGrid" type="GridContainer" parent="ExpandPanel"]
 layout_mode = 2
-columns = 3
 
-[node name="NumberBar" type="HBoxContainer" parent="."]
+[node name="NumberBar" type="Control" parent="."]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
-offset_left = 107.0
-offset_top = -362.0
-offset_right = 289.0
-offset_bottom = -292.0
+anchors_preset = 0
+offset_top = -320.0
+offset_right = 700.0
+offset_bottom = -250.0
 size_flags_horizontal = 3
 script = ExtResource("6_1ym7l")
 
 [node name="AttrName" type="Label" parent="NumberBar"]
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -21.5
+offset_right = 250.0
+offset_bottom = 21.5
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 40.0
 text = "属性:"
 
 [node name="NumInput" type="SpinBox" parent="NumberBar"]
 custom_minimum_size = Vector2(0, 43)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 250.0
+offset_top = -21.0
+offset_right = 414.0
+offset_bottom = 22.0
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 size_flags_stretch_ratio = 60.0
+
+[node name="ObjectBar" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+anchors_preset = 0
+offset_top = -234.0
+offset_right = 700.0
+offset_bottom = -164.0
+size_flags_horizontal = 3
+script = ExtResource("7_516p2")
+
+[node name="AttrName" type="Label" parent="ObjectBar"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -21.5
+offset_right = 250.0
+offset_bottom = 21.5
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 25.0
+text = "物体:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ObjectBar"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 250.0
+offset_top = -35.0
+offset_right = 539.0
+offset_bottom = 35.0
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 75.0
+
+[node name="SelectButton" type="Button" parent="ObjectBar/HBoxContainer"]
+custom_minimum_size = Vector2(43, 43)
+layout_mode = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 60.0
+icon = ExtResource("7_yeuy4")
+
+[node name="ObjectIcon" type="TextureRect" parent="ObjectBar/HBoxContainer"]
+visible = false
+material = ExtResource("2_xb40b")
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="ObjectName" type="Label" parent="ObjectBar/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "<未选择>"
+
+[node name="DeleteButton" type="Button" parent="ObjectBar/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(43, 43)
+layout_mode = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 60.0
+icon = ExtResource("3_7xihk")

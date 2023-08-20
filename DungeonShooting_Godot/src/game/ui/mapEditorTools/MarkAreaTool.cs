@@ -47,7 +47,7 @@ public partial class MarkAreaTool : Node2D
 
     public override void _Process(double delta)
     {
-        if (!Visible || _markInfo == null)
+        if (!Visible || _markInfo == null || _toolRoot.UiPanel.IsOpenPopUps || !_toolRoot.UiPanel.S_ToolRoot.Instance.Visible)
         {
             return;
         }

@@ -9,7 +9,7 @@ public partial class ActivityMark
     /// </summary>
     /// <param name="type">物体类型</param>
     /// <param name="expressionFieldName">预制表达式字段名称, 注意是字段名称, 而不是内容</param>
-    public ActivityObjectResult<T> CreateActivityObjectFromExpression<T>(ActivityIdPrefix.ActivityPrefixType type, string expressionFieldName) where T : ActivityObject
+    public ActivityObjectResult<T> CreateActivityObjectFromExpression<T>(ActivityType type, string expressionFieldName) where T : ActivityObject
     {
         if (_currentExpression.TryGetValue(expressionFieldName, out var expressionData))
         {
@@ -17,7 +17,7 @@ public partial class ActivityMark
             {
                 return null;
             }
-            var id = ActivityIdPrefix.GetNameByPrefixType(type) + expressionData.Id;
+            var id = ActivityId.GetIdPrefix(type) + expressionData.Id;
             var activityObject = ActivityObject.Create<T>(id);
             if (activityObject == null)
             {
@@ -32,21 +32,21 @@ public partial class ActivityMark
         return null;
     }
 
-    private void HandlerExpressionArgs(ActivityIdPrefix.ActivityPrefixType type, ActivityObject instance, ActivityExpressionData expressionData)
+    private void HandlerExpressionArgs(ActivityType type, ActivityObject instance, ActivityExpressionData expressionData)
     {
         switch (type)
         {
-            case ActivityIdPrefix.ActivityPrefixType.NonePrefix:
+            case ActivityType.None:
                 break;
-            case ActivityIdPrefix.ActivityPrefixType.Player:
+            case ActivityType.Player:
                 break;
-            case ActivityIdPrefix.ActivityPrefixType.Test:
+            case ActivityType.Test:
                 break;
-            case ActivityIdPrefix.ActivityPrefixType.Role:
+            case ActivityType.Role:
                 break;
-            case ActivityIdPrefix.ActivityPrefixType.Enemy:
+            case ActivityType.Enemy:
                 break;
-            case ActivityIdPrefix.ActivityPrefixType.Weapon:
+            case ActivityType.Weapon:
             {
                 var weapon = (Weapon)instance;
                 //当前弹夹弹药量
@@ -61,11 +61,11 @@ public partial class ActivityMark
                 }
             }
                 break;
-            case ActivityIdPrefix.ActivityPrefixType.Bullet:
+            case ActivityType.Bullet:
                 break;
-            case ActivityIdPrefix.ActivityPrefixType.Shell:
+            case ActivityType.Shell:
                 break;
-            case ActivityIdPrefix.ActivityPrefixType.Other:
+            case ActivityType.Other:
                 break;
         }
     }

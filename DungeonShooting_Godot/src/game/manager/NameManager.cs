@@ -6,28 +6,28 @@ public class NameManager
     /// </summary>
     public static string GetActivityTypeName(int type)
     {
-        switch ((ActivityIdPrefix.ActivityPrefixType)type)
+        switch ((ActivityType)type)
         {
-            case ActivityIdPrefix.ActivityPrefixType.NonePrefix:
+            case ActivityType.None:
                 return "";
-            case ActivityIdPrefix.ActivityPrefixType.Test:
+            case ActivityType.Test:
                 return "测试";
-            case ActivityIdPrefix.ActivityPrefixType.Role:
-            case ActivityIdPrefix.ActivityPrefixType.Player:
+            case ActivityType.Role:
+            case ActivityType.Player:
                 return "角色";
-            case ActivityIdPrefix.ActivityPrefixType.Enemy:
+            case ActivityType.Enemy:
                 return "敌人";
-            case ActivityIdPrefix.ActivityPrefixType.Weapon:
+            case ActivityType.Weapon:
                 return "武器";
-            case ActivityIdPrefix.ActivityPrefixType.Bullet:
+            case ActivityType.Bullet:
                 return "子弹";
-            case ActivityIdPrefix.ActivityPrefixType.Shell:
+            case ActivityType.Shell:
                 return "弹壳";
-            case ActivityIdPrefix.ActivityPrefixType.Effect:
+            case ActivityType.Effect:
                 return "特效";
-            case ActivityIdPrefix.ActivityPrefixType.Prop:
+            case ActivityType.Prop:
                 return "道具";
-            case ActivityIdPrefix.ActivityPrefixType.Other:
+            case ActivityType.Other:
                 return "其他";
         }
 

@@ -42,6 +42,7 @@ public partial class MapEditorMapLayerPanel : MapEditorMapLayer
         _grid.Add(new LayerButtonData("自定义中层", false, EditorTileMap.CustomMiddleLayer));
         _grid.Add(new LayerButtonData("高层自动图块", true, EditorTileMap.AutoTopLayer));
         _grid.Add(new LayerButtonData("自定义高层", false, EditorTileMap.CustomTopLayer));
+        _grid.Add(new LayerButtonData("标记数据层", false, EditorTileMap.MarkLayer));
     }
 
     public override void OnDestroyUi()

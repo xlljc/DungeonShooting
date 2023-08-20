@@ -126,6 +126,7 @@ public static partial class UiManager
         }
         var packedScene = ResourceLoader.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
+        uiBase.Visible = false;
         uiBase.PrevUi = prevUi;
         var canvasLayer = GetUiLayer(uiBase.Layer);
         canvasLayer.AddChild(uiBase);
@@ -240,5 +241,18 @@ public static partial class UiManager
         }
 
         return new T[0];
+    }
+
+    /// <summary>
+    /// 获取Ui实例数量
+    /// </summary>
+    public static int GetUiInstanceCount(string uiName)
+    {
+        if (_recordUiMap.TryGetValue(uiName, out var list))
+        {
+            return list.Count;
+        }
+
+        return 0;
     }
 }

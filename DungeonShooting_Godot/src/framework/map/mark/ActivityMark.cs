@@ -16,7 +16,7 @@ public partial class ActivityMark : Node2D
     /// 物体类型
     /// </summary>
     [Export]
-    public ActivityIdPrefix.ActivityPrefixType Type = ActivityIdPrefix.ActivityPrefixType.NonePrefix;
+    public ActivityType Type = ActivityType.None;
 
     /// <summary>
     /// 创建物体的表达式, 该表达式计算出的id会自动加上 Type 前缀
@@ -156,7 +156,7 @@ public partial class ActivityMark : Node2D
     /// </summary>
     public void BeReady(RoomInfo roomInfo)
     {
-        if (_currentExpression == null || Type == ActivityIdPrefix.ActivityPrefixType.Player)
+        if (_currentExpression == null || Type == ActivityType.Player)
         {
             return;
         }

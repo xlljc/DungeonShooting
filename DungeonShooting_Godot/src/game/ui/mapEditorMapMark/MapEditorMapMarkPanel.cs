@@ -305,33 +305,39 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeleteWave()
     {
-        var index = EditorTileMap.SelectWaveIndex;
-        if (index < 0)
+        EditorWindowManager.ShowConfirm("提示", "是否删除当前波？", v =>
         {
-            return;
-        }
+            if (v)
+            {
+                var index = EditorTileMap.SelectWaveIndex;
+                if (index < 0)
+                {
+                    return;
+                }
         
-        var selectPreinstall = GetSelectPreinstall();
-        if (selectPreinstall == null)
-        {
-            return;
-        }
+                var selectPreinstall = GetSelectPreinstall();
+                if (selectPreinstall == null)
+                {
+                    return;
+                }
         
-        //隐藏工具
-        S_DynamicTool.Reparent(this);
-        S_DynamicTool.Instance.Visible = false;
-        //派发移除标记事件
-        var list = selectPreinstall.WaveList[index];
-        foreach (var markInfo in list)
-        {
-            EventManager.EmitEvent(EventEnum.OnDeleteMark, markInfo);
-        }
-        //移除数据
-        selectPreinstall.WaveList.RemoveAt(index);
-        _grid.RemoveByIndex(index);
-        EditorTileMap.SelectWaveIndex = -1;
-        //派发选中波数事件
-        EventManager.EmitEvent(EventEnum.OnSelectWave, -1);
+                //隐藏工具
+                S_DynamicTool.Reparent(this);
+                S_DynamicTool.Instance.Visible = false;
+                //派发移除标记事件
+                var list = selectPreinstall.WaveList[index];
+                foreach (var markInfo in list)
+                {
+                    EventManager.EmitEvent(EventEnum.OnDeleteMark, markInfo);
+                }
+                //移除数据
+                selectPreinstall.WaveList.RemoveAt(index);
+                _grid.RemoveByIndex(index);
+                EditorTileMap.SelectWaveIndex = -1;
+                //派发选中波数事件
+                EventManager.EmitEvent(EventEnum.OnSelectWave, -1);
+            }
+        });
     }
     
     /// <summary>
@@ -359,30 +365,36 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeleteMark()
     {
-        if (SelectCell is EditorMarkCell markCell)
+        EditorWindowManager.ShowConfirm("提示", "是否删除当前标记？", v =>
         {
-            var index = EditorTileMap.SelectWaveIndex;
-            if (index < 0)
+            if (v)
             {
-                return;
-            }
+                if (SelectCell is EditorMarkCell markCell)
+                {
+                    var index = EditorTileMap.SelectWaveIndex;
+                    if (index < 0)
+                    {
+                        return;
+                    }
         
-            var selectPreinstall = GetSelectPreinstall();
-            if (selectPreinstall == null)
-            {
-                return;
-            }
+                    var selectPreinstall = GetSelectPreinstall();
+                    if (selectPreinstall == null)
+                    {
+                        return;
+                    }
 
-            var waveCell = (EditorWaveCell)_grid.GetCell(index);
-            //隐藏工具
-            S_DynamicTool.Reparent(this);
-            S_DynamicTool.Instance.Visible = false;
-            var markCellIndex = markCell.Index;
-            var markInfo = waveCell.Data[markCellIndex];
-            //派发移除标记事件
-            EventManager.EmitEvent(EventEnum.OnDeleteMark, markInfo);
-            waveCell.MarkGrid.RemoveByIndex(markCellIndex);
-            waveCell.Data.RemoveAt(markCellIndex);
-        }
+                    var waveCell = (EditorWaveCell)_grid.GetCell(index);
+                    //隐藏工具
+                    S_DynamicTool.Reparent(this);
+                    S_DynamicTool.Instance.Visible = false;
+                    var markCellIndex = markCell.Index;
+                    var markInfo = waveCell.Data[markCellIndex];
+                    //派发移除标记事件
+                    EventManager.EmitEvent(EventEnum.OnDeleteMark, markInfo);
+                    waveCell.MarkGrid.RemoveByIndex(markCellIndex);
+                    waveCell.Data.RemoveAt(markCellIndex);
+                }
+            }
+        });
     }
 }

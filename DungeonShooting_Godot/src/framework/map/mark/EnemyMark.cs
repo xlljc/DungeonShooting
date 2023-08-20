@@ -44,7 +44,7 @@ public partial class EnemyMark : ActivityMark
 
     public override void _Ready()
     {
-        Type = ActivityIdPrefix.ActivityPrefixType.Enemy;
+        Type = ActivityType.Enemy;
         Layer = RoomLayerEnum.YSortLayer;
         Altitude = 0;
     }
@@ -78,7 +78,7 @@ public partial class EnemyMark : ActivityMark
     //生成武器
     private void CreateWeapon(Enemy enemy, Vector2 pos, string fieldName)
     {
-        var result = CreateActivityObjectFromExpression<Weapon>(ActivityIdPrefix.ActivityPrefixType.Weapon, fieldName);
+        var result = CreateActivityObjectFromExpression<Weapon>(ActivityType.Weapon, fieldName);
         if (result != null)
         {
             //如果不能放下， 则直接扔地上

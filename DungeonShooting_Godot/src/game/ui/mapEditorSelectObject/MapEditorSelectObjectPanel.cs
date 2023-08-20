@@ -44,23 +44,37 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
         _typeGrid.SetColumns(1);
         _typeGrid.SetHorizontalExpand(true);
         _typeGrid.SetCellOffset(new Vector2I(0, 5));
-        _typeGrid.Add(new TypeButtonData("所有", -1));
-        _typeGrid.Add(new TypeButtonData("武器", 5));
-        _typeGrid.Add(new TypeButtonData("道具", 9));
-        _typeGrid.Add(new TypeButtonData("敌人", 4));
         
         _objectGrid = new UiGrid<ObjectButton, ExcelConfig.ActivityObject>(S_ObjectButton, typeof(ObjectButtonCell));
         _objectGrid.SetAutoColumns(true);
         _objectGrid.SetHorizontalExpand(true);
         _objectGrid.SetCellOffset(new Vector2I(10, 10));
-        
-        _typeGrid.SelectIndex = 0;
     }
 
     public override void OnDestroyUi()
     {
         _typeGrid.Destroy();
         _objectGrid.Destroy();
+    }
+
+    /// <summary>
+    /// 设置显示的物体类型
+    /// </summary>
+    public void SetShowType(ActivityType activityType)
+    {
+        _typeGrid.RemoveAll();
+        if (activityType == ActivityType.None)
+        {
+            _typeGrid.Add(new TypeButtonData("所有", -1));
+            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(ActivityType.Weapon), (int)ActivityType.Weapon));
+            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(ActivityType.Prop), (int)ActivityType.Prop));
+            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(ActivityType.Enemy), (int)ActivityType.Enemy));
+        }
+        else
+        {
+            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(activityType), (int)activityType));
+        }
+        _typeGrid.SelectIndex = 0;
     }
 
     /// <summary>
@@ -86,8 +100,9 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
         var arr = ExcelConfig.ActivityObject_List.Where(
             o =>
             {
-                return (string.IsNullOrEmpty(name) || o.Name.Contains(name) || o.Id.Contains(name)) &&
-                       (type < 0 ? _typeArray.Contains(o.Type) : o.Type == type) && o.ShowInMapEditor;
+                return o.ShowInMapEditor &&
+                       (string.IsNullOrEmpty(name) || o.Name.Contains(name) || o.Id.Contains(name)) &&
+                       (type < 0 ? _typeArray.Contains(o.Type) : o.Type == type);
             }
         ).ToArray();
         _objectGrid.SetDataList(arr);

@@ -39,6 +39,11 @@ public partial class MapEditorToolsPanel : MapEditorTools
     /// </summary>
     public MapEditor.MapEditor.TileMap EditorMap { get; private set; }
     
+    /// <summary>
+    /// 是否打开弹窗
+    /// </summary>
+    public bool IsOpenPopUps { get; private set; }
+    
     private List<DoorToolTemplate> _doorTools = new List<DoorToolTemplate>();
     private UiGrid<ToolButton, ToolBtnData> _toolGrid;
     //当前预设的所有标记
@@ -122,6 +127,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
         {
             S_ToolRoot.Instance.Modulate = new Color(1, 1, 1, 0.4f);
         }
+
+        IsOpenPopUps = UiManager.GetUiInstanceCount(UiManager.UiName.EditorWindow) > 0;
     }
 
     //刷新标记

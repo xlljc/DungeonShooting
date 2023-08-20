@@ -58,6 +58,10 @@ public partial class EditorTileMap : TileMap
     /// 自定义图块顶层
     /// </summary>
     public const int CustomTopLayer = 5;
+    /// <summary>
+    /// 标记数据层
+    /// </summary>
+    public const int MarkLayer = 10;
     
     /// <summary>
     /// 所属地图编辑器UI

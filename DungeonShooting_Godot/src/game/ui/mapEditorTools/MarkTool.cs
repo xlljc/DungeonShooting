@@ -38,7 +38,7 @@ public partial class MarkTool : TextureRect, IUiNodeScript
 
     public override void _Process(double delta)
     {
-        if (_toolNode != null && MarkInfo != null)
+        if (_toolNode != null && MarkInfo != null && _toolNode.UiPanel.S_ToolRoot.Instance.Visible)
         {
             if (_isDown)
             {

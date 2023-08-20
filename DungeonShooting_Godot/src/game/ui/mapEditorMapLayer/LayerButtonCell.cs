@@ -26,7 +26,14 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, MapEditorMa
         var panel = CellNode.UiPanel.ParentUi as MapEditorPanel;
         if (panel != null)
         {
-            _visible = panel.S_TileMap.Instance.IsLayerEnabled(data.Layer);
+            if (Data.Layer == EditorTileMap.MarkLayer) //标记层
+            {
+                _visible = true;
+            }
+            else
+            {
+                _visible = panel.S_TileMap.Instance.IsLayerEnabled(data.Layer);
+            }
             SetVisibleIcon(_visible);
         }
     }
@@ -37,7 +44,14 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, MapEditorMa
         if (panel != null)
         {
             _visible = !_visible;
-            panel.S_TileMap.Instance.SetLayerEnabled(Data.Layer, _visible);
+            if (Data.Layer == EditorTileMap.MarkLayer) //隐藏标记层
+            {
+                panel.S_MapEditorTools.Instance.S_ToolRoot.Instance.Visible = _visible;
+            }
+            else //隐藏地图层级
+            {
+                panel.S_TileMap.Instance.SetLayerEnabled(Data.Layer, _visible);
+            }
             SetVisibleIcon(_visible);
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Config;
 
 namespace UI.MapEditorCreateMark;
@@ -10,13 +9,13 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
     //是否展开
     private bool _isExpand = false;
     private MapEditorCreateMark.ExpandPanel _expandPanel;
-    private List<MapEditorCreateMark.NumberBar> _attributeBases;
+    private List<AttributeBase> _attributeBases;
     private ExcelConfig.ActivityObject _activityObject;
     
     public override void OnInit()
     {
-        CellNode.L_HBoxContainer.L_ExpandButton.Instance.Pressed += OnExpandClick;
-        CellNode.L_HBoxContainer.L_CenterContainer.L_DeleteButton.Instance.Pressed += OnDeleteClick;
+        CellNode.L_VBoxContainer.L_HBoxContainer.L_ExpandButton.Instance.Pressed += OnExpandClick;
+        CellNode.L_VBoxContainer.L_HBoxContainer.L_CenterContainer.L_DeleteButton.Instance.Pressed += OnDeleteClick;
     }
 
     public override void OnSetData(MarkInfoItem data)
@@ -27,19 +26,19 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         _activityObject = ExcelConfig.ActivityObject_Map[data.Id];
         if (string.IsNullOrEmpty(_activityObject.Icon))
         {
-            CellNode.L_HBoxContainer.L_Icon.Instance.Visible = false;
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Visible = false;
         }
         else
         {
-            CellNode.L_HBoxContainer.L_Icon.Instance.Visible = true;
-            CellNode.L_HBoxContainer.L_Icon.Instance.Texture = ResourceManager.LoadTexture2D(_activityObject.Icon);
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Visible = true;
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Texture = ResourceManager.LoadTexture2D(_activityObject.Icon);
         }
         //物体Id
-        CellNode.L_HBoxContainer.L_IdLabel.Instance.Text = data.Id;
+        CellNode.L_VBoxContainer.L_HBoxContainer.L_IdLabel.Instance.Text = data.Id;
         //物体名称
-        CellNode.L_HBoxContainer.L_NameLabel.Instance.Text = _activityObject.Name;
+        CellNode.L_VBoxContainer.L_HBoxContainer.L_NameLabel.Instance.Text = _activityObject.Name;
         //物体类型
-        CellNode.L_HBoxContainer.L_TypeLabel.Instance.Text = NameManager.GetActivityTypeName(_activityObject.Type);
+        CellNode.L_VBoxContainer.L_HBoxContainer.L_TypeLabel.Instance.Text = NameManager.GetActivityTypeName(_activityObject.Type);
         
         // 包含额外属性
         if (_activityObject.Type == 5 || _activityObject.Type == 4)
@@ -75,7 +74,10 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
             markInfoItem.Attr = new Dictionary<string, string>();
             foreach (var attributeBase in _attributeBases)
             {
-                markInfoItem.Attr.Add(attributeBase.Instance.AttrName, attributeBase.Instance.GetAttributeValue());
+                if (attributeBase.Visible)
+                {
+                    markInfoItem.Attr.Add(attributeBase.AttrName, attributeBase.GetAttributeValue());
+                }
             }
         }
         return markInfoItem;
@@ -100,12 +102,12 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         _isExpand = flag;
         if (_isExpand)
         {
-            CellNode.L_HBoxContainer.L_ExpandButton.Instance.Icon =
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_ExpandButton.Instance.Icon =
                 ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Down_png);
         }
         else
         {
-            CellNode.L_HBoxContainer.L_ExpandButton.Instance.Icon =
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_ExpandButton.Instance.Icon =
                 ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Right_png);
         }
 
@@ -124,7 +126,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         
         _expandPanel = CellNode.UiPanel.S_ExpandPanel.Clone();
         _expandPanel.Instance.Visible = _isExpand;
-        CellNode.AddChild(_expandPanel);
+        CellNode.L_VBoxContainer.AddChild(_expandPanel);
 
         if (activityObject.Type == 5) //武器类型
         {
@@ -132,9 +134,9 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
             var numberBar2 = CellNode.UiPanel.CreateNumberBar("ResidueAmmo", "剩余弹药量：");
             _expandPanel.L_ExpandGrid.AddChild(numberBar);
             _expandPanel.L_ExpandGrid.AddChild(numberBar2);
-            _attributeBases = new List<MapEditorCreateMark.NumberBar>();
-            _attributeBases.Add(numberBar);
-            _attributeBases.Add(numberBar2);
+            _attributeBases = new List<AttributeBase>();
+            _attributeBases.Add(numberBar.Instance);
+            _attributeBases.Add(numberBar2.Instance);
             
             if (markInfoItem != null) //初始化数据
             {
@@ -168,16 +170,17 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         }
         else if (activityObject.Type == 4) //敌人
         {
-            var numberBar = CellNode.UiPanel.CreateNumberBar("Weapon", "携带武器：");
+            var weaponBar = CellNode.UiPanel.CreateObjectBar("Weapon", "携带武器：", ActivityType.Weapon);
             var numberBar2 = CellNode.UiPanel.CreateNumberBar("CurrAmmon", "弹夹弹药量：");
             var numberBar3 = CellNode.UiPanel.CreateNumberBar("ResidueAmmo", "剩余弹药量：");
-            _expandPanel.L_ExpandGrid.AddChild(numberBar);
+            weaponBar.Instance.SetRelevancyAttr(numberBar2, numberBar3);
+            _expandPanel.L_ExpandGrid.AddChild(weaponBar);
             _expandPanel.L_ExpandGrid.AddChild(numberBar2);
             _expandPanel.L_ExpandGrid.AddChild(numberBar3);
-            _attributeBases = new List<MapEditorCreateMark.NumberBar>();
-            _attributeBases.Add(numberBar);
-            _attributeBases.Add(numberBar2);
-            _attributeBases.Add(numberBar3);
+            _attributeBases = new List<AttributeBase>();
+            _attributeBases.Add(weaponBar.Instance);
+            _attributeBases.Add(numberBar2.Instance);
+            _attributeBases.Add(numberBar3.Instance);
             
             if (markInfoItem != null) //初始化数据
             {
@@ -193,6 +196,10 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                 
                 if (markInfoItem.Attr != null)
                 {
+                    if (markInfoItem.Attr.TryGetValue("Weapon", out var weaponId)) //武器
+                    {
+                        weaponBar.Instance.SelectWeapon(ExcelConfig.Weapon_List.Find(w => w.WeaponId == weaponId));
+                    }
                     if (markInfoItem.Attr.TryGetValue("CurrAmmon", out var currAmmon)) //弹夹弹药量
                     {
                         numberBar2.L_NumInput.Instance.Value = float.Parse(currAmmon);

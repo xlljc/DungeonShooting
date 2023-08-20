@@ -5,20 +5,15 @@ namespace UI.MapEditorCreateMark;
 
 public partial class NumberAttribute : AttributeBase
 {
-    private MapEditorCreateMark.NumberBar NumberBar;
+    private MapEditorCreateMark.NumberBar _numberBar;
 
     public override void SetUiNode(IUiNode uiNode)
     {
-        NumberBar = (MapEditorCreateMark.NumberBar)uiNode;
+        _numberBar = (MapEditorCreateMark.NumberBar)uiNode;
     }
-
-    public override void SetAttributeLabel(string text)
-    {
-        NumberBar.L_AttrName.Instance.Text = text;
-    }
-
+    
     public override string GetAttributeValue()
     {
-        return NumberBar.L_NumInput.Instance.Value.ToString(CultureInfo.InvariantCulture);
+        return _numberBar.L_NumInput.Instance.Value.ToString(CultureInfo.InvariantCulture);
     }
 }

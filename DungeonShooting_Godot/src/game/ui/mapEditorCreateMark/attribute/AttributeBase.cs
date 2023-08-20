@@ -2,7 +2,7 @@
 
 namespace UI.MapEditorCreateMark;
 
-public abstract partial class AttributeBase : HBoxContainer, IUiNodeScript
+public abstract partial class AttributeBase : Control, IUiNodeScript
 {
     /// <summary>
     /// 属性名称
@@ -10,11 +10,6 @@ public abstract partial class AttributeBase : HBoxContainer, IUiNodeScript
     public string AttrName { get; set; }
     
     public abstract void SetUiNode(IUiNode uiNode);
-    
-    /// <summary>
-    /// 设置属性显示名称
-    /// </summary>
-    public abstract void SetAttributeLabel(string text);
 
     /// <summary>
     /// 获取属性值
