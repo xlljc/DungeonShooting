@@ -94,7 +94,7 @@ public enum EventEnum
     /// </summary>
     OnClickCenterTool,
     /// <summary>
-    /// 选中预设, , 参数<see cref="int"/>
+    /// 选中预设, 参数<see cref="int"/>
     /// </summary>
     OnSelectPreinstall,
     /// <summary>

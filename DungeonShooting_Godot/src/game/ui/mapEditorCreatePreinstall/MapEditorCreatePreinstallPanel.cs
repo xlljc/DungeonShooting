@@ -6,6 +6,16 @@ namespace UI.MapEditorCreatePreinstall;
 
 public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
 {
+    private RoomPreinstall _roomPreinstall;
+    
+    public void InitData(RoomPreinstall preinstall)
+    {
+        _roomPreinstall = preinstall;
+        S_PreinstallNameInput.Instance.Text = preinstall.Name;
+        S_WeightInput.Instance.Value = preinstall.Weight;
+        S_RemarkInput.Instance.Text = preinstall.Remark;
+    }
+    
     /// <summary>
     /// 填完数据后创建数据进行验证并创建数据对象, 如果验证失败, 则返回null
     /// </summary>
@@ -22,7 +32,7 @@ public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
             return null;
         }
 
-        var index = roomPreinstalls.FindIndex(preinstall => preinstall.Name == data.Name);
+        var index = roomPreinstalls.FindIndex(preinstall => preinstall.Name == data.Name && preinstall != _roomPreinstall);
         if (index >= 0)
         {
             EditorWindowManager.ShowTips("错误", "当前房间已经存在预设名称'" + data.Name + "', 请使用其他名称!");
@@ -32,7 +42,10 @@ public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
         data.Remark = S_RemarkInput.Instance.Text;
         data.WaveList = new List<List<MarkInfo>>();
         data.Weight = (int)S_WeightInput.Instance.Value;
+        if (_roomPreinstall != null)
+        {
+            data.WaveList = _roomPreinstall.WaveList;
+        }
         return data;
     }
-    
 }

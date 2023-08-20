@@ -12,7 +12,7 @@ public abstract partial class MapEditor : UiBase
     {
         get
         {
-            if (_L_Bg == null) _L_Bg = new Bg((MapEditorPanel)this, GetNodeOrNull<Godot.Panel>("Bg"));
+            if (_L_Bg == null) _L_Bg = new Bg((MapEditorPanel)this, GetNode<Godot.Panel>("Bg"));
             return _L_Bg;
         }
     }
@@ -53,6 +53,33 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditor.Bg.VBoxContainer.Head.Save
+    /// </summary>
+    public class Save : UiNode<MapEditorPanel, Godot.Button, Save>
+    {
+        public Save(MapEditorPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override Save Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditor.Bg.VBoxContainer.Head.Title
+    /// </summary>
+    public class Title : UiNode<MapEditorPanel, Godot.Label, Title>
+    {
+        public Title(MapEditorPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Title Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditor.Bg.VBoxContainer.Head.Play
+    /// </summary>
+    public class Play : UiNode<MapEditorPanel, Godot.Button, Play>
+    {
+        public Play(MapEditorPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override Play Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Panel"/>, 路径: MapEditor.Bg.VBoxContainer.Head
     /// </summary>
     public class Head : UiNode<MapEditorPanel, Godot.Panel, Head>
@@ -64,11 +91,50 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_Back == null) _L_Back = new Back(UiPanel, Instance.GetNodeOrNull<Godot.Button>("Back"));
+                if (_L_Back == null) _L_Back = new Back(UiPanel, Instance.GetNode<Godot.Button>("Back"));
                 return _L_Back;
             }
         }
         private Back _L_Back;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.Save
+        /// </summary>
+        public Save L_Save
+        {
+            get
+            {
+                if (_L_Save == null) _L_Save = new Save(UiPanel, Instance.GetNode<Godot.Button>("Save"));
+                return _L_Save;
+            }
+        }
+        private Save _L_Save;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditor.Bg.VBoxContainer.Title
+        /// </summary>
+        public Title L_Title
+        {
+            get
+            {
+                if (_L_Title == null) _L_Title = new Title(UiPanel, Instance.GetNode<Godot.Label>("Title"));
+                return _L_Title;
+            }
+        }
+        private Title _L_Title;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.Play
+        /// </summary>
+        public Play L_Play
+        {
+            get
+            {
+                if (_L_Play == null) _L_Play = new Play(UiPanel, Instance.GetNode<Godot.Button>("Play"));
+                return _L_Play;
+            }
+        }
+        private Play _L_Play;
 
         public Head(MapEditorPanel uiPanel, Godot.Panel node) : base(uiPanel, node) {  }
         public override Head Clone() => new (UiPanel, (Godot.Panel)Instance.Duplicate());
@@ -95,7 +161,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_ErrorCellAnimationPlayer == null) _L_ErrorCellAnimationPlayer = new ErrorCellAnimationPlayer(UiPanel, Instance.GetNodeOrNull<Godot.AnimationPlayer>("ErrorCellAnimationPlayer"));
+                if (_L_ErrorCellAnimationPlayer == null) _L_ErrorCellAnimationPlayer = new ErrorCellAnimationPlayer(UiPanel, Instance.GetNode<Godot.AnimationPlayer>("ErrorCellAnimationPlayer"));
                 return _L_ErrorCellAnimationPlayer;
             }
         }
@@ -126,7 +192,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_ErrorCell == null) _L_ErrorCell = new ErrorCell(UiPanel, Instance.GetNodeOrNull<Godot.Sprite2D>("ErrorCell"));
+                if (_L_ErrorCell == null) _L_ErrorCell = new ErrorCell(UiPanel, Instance.GetNode<Godot.Sprite2D>("ErrorCell"));
                 return _L_ErrorCell;
             }
         }
@@ -139,7 +205,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_Brush == null) _L_Brush = new Brush(UiPanel, Instance.GetNodeOrNull<Godot.Node2D>("Brush"));
+                if (_L_Brush == null) _L_Brush = new Brush(UiPanel, Instance.GetNode<Godot.Node2D>("Brush"));
                 return _L_Brush;
             }
         }
@@ -177,7 +243,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_MapEditorTools == null) _L_MapEditorTools = new MapEditorTools(UiPanel, Instance.GetNodeOrNull<UI.MapEditorTools.MapEditorToolsPanel>("MapEditorTools"));
+                if (_L_MapEditorTools == null) _L_MapEditorTools = new MapEditorTools(UiPanel, Instance.GetNode<UI.MapEditorTools.MapEditorToolsPanel>("MapEditorTools"));
                 return _L_MapEditorTools;
             }
         }
@@ -199,7 +265,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_TileMap == null) _L_TileMap = new TileMap(UiPanel, Instance.GetNodeOrNull<UI.MapEditor.EditorTileMap>("TileMap"));
+                if (_L_TileMap == null) _L_TileMap = new TileMap(UiPanel, Instance.GetNode<UI.MapEditor.EditorTileMap>("TileMap"));
                 return _L_TileMap;
             }
         }
@@ -212,7 +278,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_CanvasLayer == null) _L_CanvasLayer = new CanvasLayer(UiPanel, Instance.GetNodeOrNull<Godot.CanvasLayer>("CanvasLayer"));
+                if (_L_CanvasLayer == null) _L_CanvasLayer = new CanvasLayer(UiPanel, Instance.GetNode<Godot.CanvasLayer>("CanvasLayer"));
                 return _L_CanvasLayer;
             }
         }
@@ -234,7 +300,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_SubViewport == null) _L_SubViewport = new SubViewport(UiPanel, Instance.GetNodeOrNull<Godot.SubViewport>("SubViewport"));
+                if (_L_SubViewport == null) _L_SubViewport = new SubViewport(UiPanel, Instance.GetNode<Godot.SubViewport>("SubViewport"));
                 return _L_SubViewport;
             }
         }
@@ -256,7 +322,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_MapView == null) _L_MapView = new MapView(UiPanel, Instance.GetNodeOrNull<Godot.SubViewportContainer>("MapView"));
+                if (_L_MapView == null) _L_MapView = new MapView(UiPanel, Instance.GetNode<Godot.SubViewportContainer>("MapView"));
                 return _L_MapView;
             }
         }
@@ -278,7 +344,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
+                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer(UiPanel, Instance.GetNode<Godot.MarginContainer>("MarginContainer"));
                 return _L_MarginContainer;
             }
         }
@@ -316,7 +382,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_MapEditorMapLayer == null) _L_MapEditorMapLayer = new MapEditorMapLayer(UiPanel, Instance.GetNodeOrNull<UI.MapEditorMapLayer.MapEditorMapLayerPanel>("MapEditorMapLayer"));
+                if (_L_MapEditorMapLayer == null) _L_MapEditorMapLayer = new MapEditorMapLayer(UiPanel, Instance.GetNode<UI.MapEditorMapLayer.MapEditorMapLayerPanel>("MapEditorMapLayer"));
                 return _L_MapEditorMapLayer;
             }
         }
@@ -354,7 +420,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_MapEditorMapMark == null) _L_MapEditorMapMark = new MapEditorMapMark(UiPanel, Instance.GetNodeOrNull<UI.MapEditorMapMark.MapEditorMapMarkPanel>("MapEditorMapMark"));
+                if (_L_MapEditorMapMark == null) _L_MapEditorMapMark = new MapEditorMapMark(UiPanel, Instance.GetNode<UI.MapEditorMapMark.MapEditorMapMarkPanel>("MapEditorMapMark"));
                 return _L_MapEditorMapMark;
             }
         }
@@ -376,7 +442,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_MapLayer == null) _L_MapLayer = new MapLayer(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MapLayer"));
+                if (_L_MapLayer == null) _L_MapLayer = new MapLayer(UiPanel, Instance.GetNode<Godot.MarginContainer>("MapLayer"));
                 return _L_MapLayer;
             }
         }
@@ -389,7 +455,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_MapMark == null) _L_MapMark = new MapMark(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MapMark"));
+                if (_L_MapMark == null) _L_MapMark = new MapMark(UiPanel, Instance.GetNode<Godot.MarginContainer>("MapMark"));
                 return _L_MapMark;
             }
         }
@@ -411,7 +477,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_TabContainer == null) _L_TabContainer = new TabContainer(UiPanel, Instance.GetNodeOrNull<Godot.TabContainer>("TabContainer"));
+                if (_L_TabContainer == null) _L_TabContainer = new TabContainer(UiPanel, Instance.GetNode<Godot.TabContainer>("TabContainer"));
                 return _L_TabContainer;
             }
         }
@@ -433,7 +499,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
+                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer_1(UiPanel, Instance.GetNode<Godot.MarginContainer>("MarginContainer"));
                 return _L_MarginContainer;
             }
         }
@@ -455,7 +521,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_Left == null) _L_Left = new Left(UiPanel, Instance.GetNodeOrNull<Godot.Panel>("Left"));
+                if (_L_Left == null) _L_Left = new Left(UiPanel, Instance.GetNode<Godot.Panel>("Left"));
                 return _L_Left;
             }
         }
@@ -468,7 +534,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_Right == null) _L_Right = new Right(UiPanel, Instance.GetNodeOrNull<Godot.Panel>("Right"));
+                if (_L_Right == null) _L_Right = new Right(UiPanel, Instance.GetNode<Godot.Panel>("Right"));
                 return _L_Right;
             }
         }
@@ -490,7 +556,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_Head == null) _L_Head = new Head(UiPanel, Instance.GetNodeOrNull<Godot.Panel>("Head"));
+                if (_L_Head == null) _L_Head = new Head(UiPanel, Instance.GetNode<Godot.Panel>("Head"));
                 return _L_Head;
             }
         }
@@ -503,7 +569,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_HSplitContainer == null) _L_HSplitContainer = new HSplitContainer(UiPanel, Instance.GetNodeOrNull<Godot.HSplitContainer>("HSplitContainer"));
+                if (_L_HSplitContainer == null) _L_HSplitContainer = new HSplitContainer(UiPanel, Instance.GetNode<Godot.HSplitContainer>("HSplitContainer"));
                 return _L_HSplitContainer;
             }
         }
@@ -525,7 +591,7 @@ public abstract partial class MapEditor : UiBase
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
@@ -540,6 +606,21 @@ public abstract partial class MapEditor : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.Head.Back
     /// </summary>
     public Back S_Back => L_Bg.L_VBoxContainer.L_Head.L_Back;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.Head.Save
+    /// </summary>
+    public Save S_Save => L_Bg.L_VBoxContainer.L_Head.L_Save;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditor.Bg.VBoxContainer.Head.Title
+    /// </summary>
+    public Title S_Title => L_Bg.L_VBoxContainer.L_Head.L_Title;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.Head.Play
+    /// </summary>
+    public Play S_Play => L_Bg.L_VBoxContainer.L_Head.L_Play;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg.VBoxContainer.Head

@@ -5,9 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://dggb6p4sdmfry" path="res://resource/sprite/ui/commonIcon/Edit.png" id="3_wwaki"]
 [ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="4_urq7y"]
 [ext_resource type="Texture2D" uid="uid://d4gduco55dqpk" path="res://resource/sprite/ui/commonIcon/Down.png" id="5_x5dpw"]
-[ext_resource type="Texture2D" uid="uid://dxpdjj1abmejh" path="res://resource/sprite/ui/commonIcon/DoorTool.png" id="6_he4th"]
+[ext_resource type="Texture2D" uid="uid://cgtmjuiks7mot" path="res://resource/sprite/ui/commonIcon/WaveCell.png" id="6_eod5i"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="6_jpt3y"]
-[ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="7_jnnw0"]
+[ext_resource type="Texture2D" uid="uid://bylf0kxccwgdw" path="res://resource/sprite/ui/commonIcon/MarkCell.png" id="8_xyhe6"]
 
 [node name="MapEditorMapMark" type="Control"]
 layout_mode = 3
@@ -95,7 +95,7 @@ stretch_mode = 3
 layout_mode = 2
 size_flags_horizontal = 3
 text = "第1波"
-icon = ExtResource("6_he4th")
+icon = ExtResource("6_eod5i")
 alignment = 0
 
 [node name="Select" type="NinePatchRect" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/WaveContainer/WaveButton"]
@@ -132,7 +132,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1001"
-icon = ExtResource("7_jnnw0")
+icon = ExtResource("8_xyhe6")
 alignment = 0
 text_overrun_behavior = 3
 

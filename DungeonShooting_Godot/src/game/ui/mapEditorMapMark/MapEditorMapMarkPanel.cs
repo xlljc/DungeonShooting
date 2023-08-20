@@ -58,6 +58,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
 
         S_PreinstallOption.Instance.ItemSelected += OnItemSelected;
         S_AddPreinstall.Instance.Pressed += OnAddPreinstall;
+        S_EditPreinstall.Instance.Pressed += OnEditPreinstall;
+        S_DeletePreinstall.Instance.Pressed += OnDeletePreinstall;
         S_AddWaveButton.Instance.Pressed += OnAddWave;
 
         S_EditButton.Instance.Pressed += OnToolEditClick;
@@ -135,7 +137,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     {
         var preinstall = EditorTileMap.RoomSplit.Preinstall;
         var optionButton = S_PreinstallOption.Instance;
-        var selectIndex = index < 0 ? optionButton.Selected : index;
+        var selectIndex = index < 0 ? (preinstall.Count > 0 ? 0 : -1) : index;
         optionButton.Clear();
         foreach (var item in preinstall)
         {
@@ -146,15 +148,10 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
 
             optionButton.AddItem($"{item.Name} ({item.Weight})");
         }
-
-        if (selectIndex == -1 && preinstall.Count > 0)
-        {
-            OnItemSelected(0);
-        }
-        else
-        {
-            OnItemSelected(selectIndex);
-        }
+        
+        //下拉框选中项
+        optionButton.Selected = selectIndex;
+        OnItemSelected(selectIndex);
     }
 
     /// <summary>
@@ -252,8 +249,51 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         var roomSplitPreinstall = EditorTileMap.RoomSplit.Preinstall;
         EditorWindowManager.ShowCreatePreinstall(roomSplitPreinstall, preinstall =>
         {
+            //创建逻辑
             roomSplitPreinstall.Add(preinstall);
             RefreshPreinstallSelect(roomSplitPreinstall.Count - 1);
+        });
+    }
+
+    /// <summary>
+    /// 编辑预设
+    /// </summary>
+    public void OnEditPreinstall()
+    {
+        var roomSplitPreinstall = EditorTileMap.RoomSplit.Preinstall;
+        var selectPreinstall = GetSelectPreinstall();
+        EditorWindowManager.ShowEditPreinstall(roomSplitPreinstall, selectPreinstall, preinstall =>
+        {
+            //修改逻辑
+            selectPreinstall.CloneFrom(preinstall);
+            //修改下拉菜单数据
+            var optionButton = S_PreinstallOption.Instance;
+            optionButton.SetItemText(optionButton.Selected, $"{preinstall.Name} ({preinstall.Weight})");
+        });
+    }
+
+    /// <summary>
+    /// 删除预设
+    /// </summary>
+    public void OnDeletePreinstall()
+    {
+        var index = EditorTileMap.SelectPreinstallIndex;
+        if (index < 0)
+        {
+            return;
+        }
+        
+        EditorWindowManager.ShowConfirm("提示", "是否删除当前预设？", v =>
+        {
+            if (v)
+            {
+                //先把选中项置为-1
+                EditorTileMap.SelectPreinstallIndex = -1;
+                //移除预设数据
+                EditorTileMap.RoomSplit.Preinstall.RemoveAt(index);
+                //刷新选项
+                RefreshPreinstallSelect(EditorTileMap.RoomSplit.Preinstall.Count - 1);
+            }
         });
     }
 
@@ -309,28 +349,28 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeleteWave()
     {
-        EditorWindowManager.ShowConfirm("提示", "是否删除当前波？", v =>
+        var index = EditorTileMap.SelectWaveIndex;
+        if (index < 0)
+        {
+            return;
+        }
+        
+        var selectPreinstall = GetSelectPreinstall();
+        if (selectPreinstall == null)
+        {
+            return;
+        }
+
+        var wave = selectPreinstall.WaveList[index];
+        EditorWindowManager.ShowConfirm("提示", $"是否删除当前波？\n当前波数包含{wave.Count}个标记", v =>
         {
             if (v)
             {
-                var index = EditorTileMap.SelectWaveIndex;
-                if (index < 0)
-                {
-                    return;
-                }
-        
-                var selectPreinstall = GetSelectPreinstall();
-                if (selectPreinstall == null)
-                {
-                    return;
-                }
-        
                 //隐藏工具
                 S_DynamicTool.Reparent(this);
                 S_DynamicTool.Instance.Visible = false;
                 //派发移除标记事件
-                var list = selectPreinstall.WaveList[index];
-                foreach (var markInfo in list)
+                foreach (var markInfo in wave)
                 {
                     EventManager.EmitEvent(EventEnum.OnDeleteMark, markInfo);
                 }
@@ -367,24 +407,24 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeleteMark()
     {
-        EditorWindowManager.ShowConfirm("提示", "是否删除当前标记？", v =>
+        if (SelectCell is EditorMarkCell markCell)
         {
-            if (v)
+            var index = EditorTileMap.SelectWaveIndex;
+            if (index < 0)
             {
-                if (SelectCell is EditorMarkCell markCell)
-                {
-                    var index = EditorTileMap.SelectWaveIndex;
-                    if (index < 0)
-                    {
-                        return;
-                    }
-        
-                    var selectPreinstall = GetSelectPreinstall();
-                    if (selectPreinstall == null)
-                    {
-                        return;
-                    }
+                return;
+            }
 
+            var selectPreinstall = GetSelectPreinstall();
+            if (selectPreinstall == null)
+            {
+                return;
+            }
+
+            EditorWindowManager.ShowConfirm("提示", "是否删除当前标记？", v =>
+            {
+                if (v)
+                {
                     var waveCell = (EditorWaveCell)_grid.GetCell(index);
                     //隐藏工具
                     S_DynamicTool.Reparent(this);
@@ -396,7 +436,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                     waveCell.MarkGrid.RemoveByIndex(markCellIndex);
                     waveCell.Data.RemoveAt(markCellIndex);
                 }
-            }
-        });
+            });
+        }
     }
 }

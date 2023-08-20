@@ -30,4 +30,15 @@ public class RoomPreinstall
     /// </summary>
     [JsonInclude]
     public List<List<MarkInfo>> WaveList;
+
+    /// <summary>
+    /// 从指定对象浅拷贝数据
+    /// </summary>
+    public void CloneFrom(RoomPreinstall preinstall)
+    {
+        Name = preinstall.Name;
+        Weight = preinstall.Weight;
+        Remark = preinstall.Remark;
+        WaveList = preinstall.WaveList;
+    }
 }

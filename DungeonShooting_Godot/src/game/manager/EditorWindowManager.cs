@@ -162,6 +162,36 @@ public static class EditorWindowManager
     }
 
     /// <summary>
+    /// 打开编辑房间预设弹窗
+    /// </summary>
+    /// <param name="list">当前房间已经包含的所有预设列表</param>
+    /// <param name="preinstall">需要编辑的预设数据</param>
+    /// <param name="onSavePreinstall">保存时的回调</param>
+    public static void ShowEditPreinstall(List<RoomPreinstall> list, RoomPreinstall preinstall, Action<RoomPreinstall> onSavePreinstall)
+    {
+        var window = UiManager.Open_EditorWindow();
+        window.SetWindowTitle("创建房间预设");
+        window.SetWindowSize(new Vector2I(700, 600));
+        var body = window.OpenBody<MapEditorCreatePreinstallPanel>(UiManager.UiName.MapEditorCreatePreinstall);
+        body.InitData(preinstall);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                var roomPreinstall = body.GetRoomPreinstall(list);
+                if (roomPreinstall != null)
+                {
+                    window.CloseWindow();
+                    onSavePreinstall(roomPreinstall);
+                }
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
     /// 打开创建标记页面
     /// </summary>
     /// <param name="onCreateMarkInfo">创建标记回调</param>

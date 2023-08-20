@@ -400,14 +400,6 @@ public partial class EditorTileMap : TileMap
                 }
             }
         }
-        else if (@event is InputEventKey eventKey)
-        {
-            if (eventKey.Pressed && eventKey.Keycode == Key.M)
-            {
-                GD.Print("保存地牢房间数据...");
-                TriggerSave();
-            }
-        }
     }
 
     //将指定层数据存入list中
@@ -440,9 +432,12 @@ public partial class EditorTileMap : TileMap
         }
     }
 
-    //保存地牢
-    private void TriggerSave()
+    /// <summary>
+    /// 触发保存地图数据
+    /// </summary>
+    public void TriggerSave()
     {
+        GD.Print("保存地牢房间数据...");
         SaveRoomInfoConfig();
         SaveTileInfoConfig();
         SavePreinstallConfig();
