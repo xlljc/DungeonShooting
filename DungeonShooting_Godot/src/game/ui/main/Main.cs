@@ -132,7 +132,7 @@ public abstract partial class Main : UiBase
         {
             get
             {
-                if (_L_Setting == null) _L_Setting = new Main_Setting(UiPanel, Instance.GetNodeOrNull<Godot.Button>("Setting"));
+                if (_L_Setting == null) _L_Setting = new Main_Setting(UiPanel, Instance.GetNode<Godot.Button>("Setting"));
                 return _L_Setting;
             }
         }
