@@ -186,13 +186,6 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
             {
                 numberBar2.L_NumInput.Instance.MinValue = 0;
                 numberBar3.L_NumInput.Instance.MinValue = 0;
-                //武器配置数据
-                var weapon = ExcelConfig.Weapon_List.Find(weapon => weapon.WeaponId == activityObject.Id);
-                if (weapon != null)
-                {
-                    numberBar2.L_NumInput.Instance.MaxValue = weapon.AmmoCapacity; //弹夹上限
-                    numberBar3.L_NumInput.Instance.MaxValue = weapon.MaxAmmoCapacity; //容量上限
-                }
                 
                 if (markInfoItem.Attr != null)
                 {

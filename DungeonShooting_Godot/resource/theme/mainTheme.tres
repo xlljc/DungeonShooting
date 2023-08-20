@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=60 format=3 uid="uid://ds668te2rph30"]
+[gd_resource type="Theme" load_steps=61 format=3 uid="uid://ds668te2rph30"]
 
 [ext_resource type="FontFile" uid="uid://cad0in7dtweo5" path="res://resource/font/VonwaonBitmap-16px.ttf" id="1_1e6k7"]
 
@@ -378,6 +378,13 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.188235, 0.188235, 0.188235, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yeu07"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kt3n1"]
 content_margin_left = 4.0
 content_margin_top = 4.0
@@ -502,6 +509,7 @@ LineEdit/styles/focus = SubResource("StyleBoxFlat_em2wh")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_0jpwx")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_c3u8l")
 Panel/styles/panel = SubResource("57")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_yeu07")
 TextEdit/styles/focus = SubResource("StyleBoxFlat_em2wh")
 TextEdit/styles/normal = SubResource("StyleBoxFlat_0jpwx")
 TextEdit/styles/read_only = SubResource("StyleBoxFlat_c3u8l")

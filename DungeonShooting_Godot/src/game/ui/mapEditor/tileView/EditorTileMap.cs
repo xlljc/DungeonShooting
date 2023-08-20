@@ -58,6 +58,10 @@ public partial class EditorTileMap : TileMap
     /// 自定义图块顶层
     /// </summary>
     public const int CustomTopLayer = 5;
+    /// <summary>
+    /// 标记数据层
+    /// </summary>
+    public const int MarkLayer = 10;
     
     /// <summary>
     /// 所属地图编辑器UI
@@ -119,11 +123,24 @@ public partial class EditorTileMap : TileMap
     /// 正在编辑的房间数据
     /// </summary>
     public DungeonRoomSplit RoomSplit { get; private set; }
-    
+
     /// <summary>
     /// 波数网格选中的索引
     /// </summary>
-    public int SelectWaveIndex { get; set; } = -1;
+    public int SelectWaveIndex
+    {
+        get => _selectWaveIndex;
+        set
+        {
+            if (_selectWaveIndex != value)
+            {
+                _selectWaveIndex = value;
+                EventManager.EmitEvent(EventEnum.OnSelectWave, value);
+            }
+        }
+    }
+
+    private int _selectWaveIndex = -1;
 
     /// <summary>
     /// 选中的预设
@@ -136,7 +153,7 @@ public partial class EditorTileMap : TileMap
             if (_selectPreinstallIndex != value)
             {
                 _selectPreinstallIndex = value;
-                EventManager.EmitEvent(EventEnum.OnSelectPreinstall);
+                EventManager.EmitEvent(EventEnum.OnSelectPreinstall, value);
             }
         }
     }

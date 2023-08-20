@@ -13,7 +13,8 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
     public override void OnSetData(MapEditorMapMarkPanel.MarkCellData data)
     {
         var text = "";
-        if (data.MarkInfo.MarkList != null)
+        //物体名称
+        if (data.MarkInfo.MarkList != null && data.MarkInfo.MarkList.Count > 0)
         {
             var str = "";
             for (var i = 0; i < data.MarkInfo.MarkList.Count; i++)
@@ -33,15 +34,22 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
             text += "空";
         }
 
-        text += "\n" + data.MarkInfo.DelayTime + "秒";
+        //延时时间
+        if (data.MarkInfo.Preloading)
+        {
+            text += "\n提前加载";
+        }
+        else
+        {
+            text += "\n" + data.MarkInfo.DelayTime + "秒";
+        }
+        
         CellNode.L_MarkButton.Instance.Text = text;
     }
 
     public override void OnClick()
     {
         CellNode.UiPanel.EditorTileMap.SelectWaveIndex = Data.ParentCell.Index;
-        //派发选中波数事件
-        EventManager.EmitEvent(EventEnum.OnSelectWave, Data.ParentCell.Index);
         CellNode.UiPanel.SetSelectCell(this, CellNode.Instance, MapEditorMapMarkPanel.SelectToolType.Mark);
         //需要切换回编辑工具
         if (CellNode.UiPanel.EditorTileMap.MouseType != EditorTileMap.MouseButtonType.Edit)

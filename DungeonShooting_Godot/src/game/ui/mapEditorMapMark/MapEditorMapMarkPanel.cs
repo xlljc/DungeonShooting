@@ -162,6 +162,10 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnItemSelected(long index)
     {
+        //清除选中项
+        RemoveSelectCell();
+        EditorTileMap.SelectWaveIndex = -1;
+        //记录选中波数
         EditorTileMap.SelectPreinstallIndex = (int)index;
         var preinstall = EditorTileMap.RoomSplit.Preinstall;
         if (index >= 0 && index <= preinstall.Count)
@@ -334,8 +338,6 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 selectPreinstall.WaveList.RemoveAt(index);
                 _grid.RemoveByIndex(index);
                 EditorTileMap.SelectWaveIndex = -1;
-                //派发选中波数事件
-                EventManager.EmitEvent(EventEnum.OnSelectWave, -1);
             }
         });
     }

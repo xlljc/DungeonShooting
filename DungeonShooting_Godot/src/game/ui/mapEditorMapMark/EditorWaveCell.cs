@@ -93,8 +93,6 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
     public override void OnClick()
     {
         CellNode.UiPanel.EditorTileMap.SelectWaveIndex = Index;
-        //派发选中波数事件
-        EventManager.EmitEvent(EventEnum.OnSelectWave, Index);
         CellNode.UiPanel.SetSelectCell(this, CellNode.L_WaveContainer.Instance, MapEditorMapMarkPanel.SelectToolType.Wave);
     }
 

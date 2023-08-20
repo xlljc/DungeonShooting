@@ -28,7 +28,7 @@ public partial class ObjectAttribute : AttributeBase
         {
             return null;
         }
-        return _selectWeapon.Id;
+        return _selectWeapon.WeaponId;
     }
 
     //点击编辑按钮

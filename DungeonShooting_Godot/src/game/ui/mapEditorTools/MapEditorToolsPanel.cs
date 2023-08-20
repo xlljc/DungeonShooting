@@ -134,6 +134,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
     //刷新标记
     private void RefreshMark(object arg)
     {
+        ActiveMark = null;
         //删除之前的数据
         foreach (var keyValuePair in _currMarkToolsMap)
         {
