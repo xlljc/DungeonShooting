@@ -215,6 +215,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         else //显示编辑按钮
         {
             S_DynamicTool.L_EditButton.Instance.Visible = true;
+            S_DynamicTool.L_DeleteButton.Instance.Visible = true;
         }
 
         //显示工具

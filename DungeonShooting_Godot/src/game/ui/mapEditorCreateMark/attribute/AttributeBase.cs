@@ -10,6 +10,7 @@ public abstract partial class AttributeBase : Control, IUiNodeScript
     public string AttrName { get; set; }
     
     public abstract void SetUiNode(IUiNode uiNode);
+    public abstract void OnDestroy();
 
     /// <summary>
     /// 获取属性值

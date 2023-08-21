@@ -9,4 +9,9 @@ public interface IUiNodeScript
     /// 设置所属Ui节点对象, 该函数会在 _Ready() 之后调用
     /// </summary>
     void SetUiNode(IUiNode uiNode);
+
+    /// <summary>
+    /// 当前Ui被销毁时调用
+    /// </summary>
+    void OnDestroy();
 }

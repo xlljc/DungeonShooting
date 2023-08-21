@@ -36,6 +36,10 @@ public partial class MarkTool : TextureRect, IUiNodeScript
         AddChild(_markAreaToolUp);
     }
 
+    public void OnDestroy()
+    {
+    }
+
     public override void _Process(double delta)
     {
         if (_toolNode != null && MarkInfo != null && _toolNode.UiPanel.S_ToolRoot.Instance.Visible)

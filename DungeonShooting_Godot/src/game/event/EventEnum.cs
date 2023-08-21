@@ -74,6 +74,14 @@ public enum EventEnum
     /// </summary>
     OnCreateRoomFinish,
     /// <summary>
+    /// 标记房间数据脏了, 也就是数据有修改
+    /// </summary>
+    OnEditorDirty,
+    /// <summary>
+    /// 编辑器触发保存
+    /// </summary>
+    OnEditorSave,
+    /// <summary>
     /// 选中拖拽工具
     /// </summary>
     OnSelectDragTool,

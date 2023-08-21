@@ -29,7 +29,16 @@ public static class MapProjectManager
         _init = true;
 #if TOOLS
         CustomMapPath = GameConfig.RoomTileDir;
+#else
+        CustomMapPath = "";
 #endif
+        EventManager.AddEventListener(EventEnum.OnEditorSave, OnRoomSave);
+    }
+
+    //房间保存时回调
+    private static void OnRoomSave(object obj)
+    {
+        SaveGroupMap();
     }
 
     /// <summary>
@@ -37,7 +46,7 @@ public static class MapProjectManager
     /// </summary>
     public static void RefreshMapGroup()
     {
-        var configFile = CustomMapPath + "/" + GameConfig.RoomGroupConfigFile;
+        var configFile = CustomMapPath + GameConfig.RoomGroupConfigFile;
         if (File.Exists(configFile))
         {
             var configText = File.ReadAllText(configFile);
@@ -134,13 +143,9 @@ public static class MapProjectManager
             GD.PrintErr($"已经存在相同的地牢组: {group.GroupName}");
             return;
         }
-        var configFile = CustomMapPath + "/" + GameConfig.RoomGroupConfigFile;
         GroupMap.Add(group.GroupName, group);
         //将组数据保存为json
-        var options = new JsonSerializerOptions();
-        options.WriteIndented = true;
-        var jsonText = JsonSerializer.Serialize(GroupMap, options);
-        File.WriteAllText(configFile, jsonText);
+        SaveGroupMap();
         //创建完成事件
         EventManager.EmitEvent(EventEnum.OnCreateGroupFinish, group);
     }
@@ -153,7 +158,7 @@ public static class MapProjectManager
         var groupName = roomSplit.RoomInfo.GroupName;
         if (GroupMap.TryGetValue(groupName, out var group))
         {
-            var configFile = CustomMapPath + "/" + GameConfig.RoomGroupConfigFile;
+            var configFile = CustomMapPath + GameConfig.RoomGroupConfigFile;
             var roomList = group.GetRoomList(roomSplit.RoomInfo.RoomType);
             roomList.Add(roomSplit);
 
@@ -184,5 +189,17 @@ public static class MapProjectManager
         {
             GD.PrintErr($"未找到地牢组: {groupName}");
         }
+    }
+
+    /// <summary>
+    /// 保存所有组数据
+    /// </summary>
+    public static void SaveGroupMap()
+    {
+        var configFile = CustomMapPath + GameConfig.RoomGroupConfigFile;
+        var options = new JsonSerializerOptions();
+        options.WriteIndented = true;
+        var jsonText = JsonSerializer.Serialize(GroupMap, options);
+        File.WriteAllText(configFile, jsonText);
     }
 }

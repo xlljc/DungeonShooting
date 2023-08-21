@@ -11,7 +11,12 @@ public partial class NumberAttribute : AttributeBase
     {
         _numberBar = (MapEditorCreateMark.NumberBar)uiNode;
     }
-    
+
+    public override void OnDestroy()
+    {
+        
+    }
+
     public override string GetAttributeValue()
     {
         return _numberBar.L_NumInput.Instance.Value.ToString(CultureInfo.InvariantCulture);

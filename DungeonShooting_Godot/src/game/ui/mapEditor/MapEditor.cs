@@ -25,6 +25,7 @@ public abstract partial class MapEditor : UiBase
 
     public sealed override void OnInitNestedUi()
     {
+        _ = L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left.L_MarginContainer.L_MapView.L_SubViewport.L_TileMap;
 
         var inst1 = L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left.L_MarginContainer.L_MapView.L_SubViewport.L_CanvasLayer;
         RecordNestedUi(inst1.L_MapEditorTools.Instance, inst1, UiManager.RecordType.Open);

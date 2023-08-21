@@ -365,6 +365,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
             EditorMap.Instance.RemoveDoorArea(toolInstance.Instance.DoorAreaInfo);
         }
         toolInstance.Instance.QueueFree();
+        //派发修改数据修改事件
+        EventManager.EmitEvent(EventEnum.OnEditorDirty);
     }
 
     /// <summary>
