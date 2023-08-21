@@ -194,14 +194,16 @@ public static class EditorWindowManager
     /// <summary>
     /// 打开创建标记页面
     /// </summary>
+    /// <param name="preloading">是否提前加载</param>
     /// <param name="onCreateMarkInfo">创建标记回调</param>
     /// <param name="parentUi">所属父级Ui</param>
-    public static void ShowCreateMark(Action<MarkInfo> onCreateMarkInfo, UiBase parentUi = null)
+    public static void ShowCreateMark(bool preloading, Action<MarkInfo> onCreateMarkInfo , UiBase parentUi = null)
     {
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("创建标记");
         window.SetWindowSize(new Vector2I(1400, 900));
         var body = window.OpenBody<MapEditorCreateMarkPanel>(UiManager.UiName.MapEditorCreateMark);
+        body.InitData(preloading);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
@@ -223,15 +225,16 @@ public static class EditorWindowManager
     /// 打开编辑标记页面
     /// </summary>
     /// <param name="data">标记数据对象</param>
+    /// <param name="preloading">是否提前加载</param>
     /// <param name="onSaveMarkInfo">保存时回调</param>
     /// <param name="parentUi">所属父级Ui</param>
-    public static void ShowEditMark(MarkInfo data, Action<MarkInfo> onSaveMarkInfo, UiBase parentUi = null)
+    public static void ShowEditMark(MarkInfo data, bool preloading, Action<MarkInfo> onSaveMarkInfo, UiBase parentUi = null)
     {
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("编辑标记");
         window.SetWindowSize(new Vector2I(1400, 900));
         var body = window.OpenBody<MapEditorCreateMarkPanel>(UiManager.UiName.MapEditorCreateMark);
-        body.InitData(data);
+        body.InitData(data, preloading);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {

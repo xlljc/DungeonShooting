@@ -15,13 +15,24 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
 
     public class MarkCellData
     {
+        /// <summary>
+        /// 所在的父级 Cell
+        /// </summary>
         public EditorWaveCell ParentCell;
+        /// <summary>
+        /// 标记数据对象
+        /// </summary>
         public MarkInfo MarkInfo;
+        /// <summary>
+        /// 是否提前加载
+        /// </summary>
+        public bool Preloading;
 
-        public MarkCellData(EditorWaveCell parentCell, MarkInfo markInfo)
+        public MarkCellData(EditorWaveCell parentCell, MarkInfo markInfo, bool preloading)
         {
             ParentCell = parentCell;
             MarkInfo = markInfo;
+            Preloading = preloading;
         }
     }
     
@@ -144,7 +155,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         {
             if (item.WaveList == null)
             {
-                item.WaveList = new List<List<MarkInfo>>();
+                item.InitWaveList();
             }
 
             optionButton.AddItem($"{item.Name} ({item.Weight})");
@@ -198,8 +209,10 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         if (toolType == SelectToolType.Wave) //不需要显示编辑波数按钮
         {
             S_DynamicTool.L_EditButton.Instance.Visible = false;
+            //预加载波不能删除
+            S_DynamicTool.L_DeleteButton.Instance.Visible = uiCell.Index != 0;
         }
-        else
+        else //显示编辑按钮
         {
             S_DynamicTool.L_EditButton.Instance.Visible = true;
         }
@@ -392,7 +405,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         {
             var dataMarkInfo = markCell.Data.MarkInfo;
             //打开编辑面板
-            EditorWindowManager.ShowEditMark(dataMarkInfo, (mark) =>
+            EditorWindowManager.ShowEditMark(dataMarkInfo, markCell.Data.Preloading, (mark) =>
             {
                 //为了引用不变, 所以这里使用克隆数据
                 dataMarkInfo.CloneFrom(mark);

@@ -18,12 +18,6 @@ public class MarkInfo
     /// </summary>
     [JsonInclude]
     public SerializeVector2 Size;
-
-    /// <summary>
-    /// 标记数据是否在玩家进入房间前加载, 如果为 true, 则 DelayTime 会失效
-    /// </summary>
-    [JsonInclude]
-    public bool Preloading;
     
     /// <summary>
     /// 延时时间
@@ -45,7 +39,6 @@ public class MarkInfo
         Position = mark.Position;
         Size = mark.Size;
         DelayTime = mark.DelayTime;
-        Preloading = mark.Preloading;
         MarkList = mark.MarkList;
     }
 }

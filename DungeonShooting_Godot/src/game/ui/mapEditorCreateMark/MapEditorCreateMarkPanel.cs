@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Config;
 using Godot;
-using UI.MapEditor;
 
 namespace UI.MapEditorCreateMark;
 
@@ -9,6 +8,8 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
 {
 
     private UiGrid<MarkObject, MarkInfoItem> _grid;
+    private MarkInfo _markInfo;
+    private bool _preloading;
     
     public override void OnCreateUi()
     {
@@ -19,8 +20,6 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         
         //添加标记按钮
         S_AddMark.Instance.Pressed += OnAddMark;
-        //提前加载按钮
-        S_PreloadingCheck.Instance.Pressed += OnPreloadingCheck;
 
         _grid = new UiGrid<MarkObject, MarkInfoItem>(S_MarkObject, typeof(MarkObjectCell));
         _grid.SetColumns(1);
@@ -33,20 +32,47 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
     {
         _grid.Destroy();
     }
+
+    /// <summary>
+    /// 初始化面板数据, 用于创建数据
+    /// </summary>
+    /// <param name="preloading">是否提前加载</param>
+    public void InitData(bool preloading)
+    {
+        _preloading = preloading;
+        if (preloading)
+        {
+            S_DelayContainer.Instance.Visible = false;
+        }
+        else
+        {
+            S_DelayContainer.Instance.Visible = true;
+        }
+    }
     
     /// <summary>
-    /// 初始化面板数据
+    /// 初始化面板数据, 用于编辑数据
     /// </summary>
-    public void InitData(MarkInfo data)
+    /// <param name="data">标记数据</param>
+    /// <param name="preloading">是否提前加载</param>
+    public void InitData(MarkInfo data, bool preloading)
     {
+        _markInfo = data;
+        _preloading = preloading;
         S_SizeX.Instance.Value = data.Size.X;
         S_SizeY.Instance.Value = data.Size.Y;
         S_PosX.Instance.Value = data.Position.X;
         S_PosY.Instance.Value = data.Position.Y;
-        S_DelayInput.Instance.Value = data.DelayTime;
-        S_PreloadingCheck.Instance.ButtonPressed = data.Preloading;
+        if (preloading)
+        {
+            S_DelayContainer.Instance.Visible = false;
+        }
+        else
+        {
+            S_DelayContainer.Instance.Visible = true;
+            S_DelayInput.Instance.Value = data.DelayTime;
+        }
         _grid.SetDataList(data.MarkList.ToArray());
-        OnPreloadingCheck();
     }
 
     /// <summary>
@@ -63,8 +89,7 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         var data = new MarkInfo();
         data.Position = new SerializeVector2();
         data.MarkList = new List<MarkInfoItem>();
-        data.Preloading = S_PreloadingCheck.Instance.ButtonPressed;
-        if (!data.Preloading)
+        if (!_preloading)
         {
             data.DelayTime = (float)S_DelayInput.Instance.Value;
         }
@@ -131,19 +156,5 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
             Id = activityObject.Id,
             Weight = 100
         });
-    }
-
-    //点击提前加载
-    private void OnPreloadingCheck()
-    {
-        var buttonPressed = S_PreloadingCheck.Instance.ButtonPressed;
-        if (buttonPressed) //启用提前加载
-        {
-            S_DelayContainer.Instance.Visible = false;
-        }
-        else //禁用提前加载
-        {
-            S_DelayContainer.Instance.Visible = true;
-        }
     }
 }

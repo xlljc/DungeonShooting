@@ -35,7 +35,7 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
         }
 
         //延时时间
-        if (data.MarkInfo.Preloading)
+        if (data.Preloading)
         {
             text += "\n提前加载";
         }
@@ -73,15 +73,15 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
 
     public override int OnSort(UiCell<MapEditorMapMark.MarkItem, MapEditorMapMarkPanel.MarkCellData> other)
     {
-        if (!Data.MarkInfo.Preloading && other.Data.MarkInfo.Preloading)
+        if (!Data.Preloading && other.Data.Preloading)
         {
             return 0;
         }
-        else if (Data.MarkInfo.Preloading)
+        else if (Data.Preloading)
         {
             return -1;
         }
-        else if (other.Data.MarkInfo.Preloading)
+        else if (other.Data.Preloading)
         {
             return 1;
         }

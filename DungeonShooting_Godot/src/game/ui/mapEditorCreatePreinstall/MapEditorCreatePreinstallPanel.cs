@@ -8,6 +8,9 @@ public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
 {
     private RoomPreinstall _roomPreinstall;
     
+    /// <summary>
+    /// 初始化房间预设数据, 用于编辑预设
+    /// </summary>
     public void InitData(RoomPreinstall preinstall)
     {
         _roomPreinstall = preinstall;
@@ -40,12 +43,17 @@ public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
         }
 
         data.Remark = S_RemarkInput.Instance.Text;
-        data.WaveList = new List<List<MarkInfo>>();
         data.Weight = (int)S_WeightInput.Instance.Value;
-        if (_roomPreinstall != null)
+        if (_roomPreinstall != null) //编辑数据
         {
             data.WaveList = _roomPreinstall.WaveList;
         }
+        else //创建数据
+        {
+            //预加载波
+            data.InitWaveList();
+        }
+
         return data;
     }
 }

@@ -133,37 +133,11 @@ max_value = 9999.0
 value = 16.0
 custom_arrow_step = 1.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="DelayContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PreloadingContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PreloadingNameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/PreloadingContainer"]
-custom_minimum_size = Vector2(250, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 0
-size_flags_stretch_ratio = 30.0
-text = "提前加载："
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="PreloadingCheck" type="CheckBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/PreloadingContainer"]
-custom_minimum_size = Vector2(0, 43)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-size_flags_stretch_ratio = 70.0
-flat = true
-
-[node name="DelayContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="DelayNameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/DelayContainer"]
+[node name="DelayNameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/DelayContainer"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -173,11 +147,11 @@ text = "延时时间(秒)："
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="DelayInput" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/DelayContainer"]
+[node name="DelayInput" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/DelayContainer"]
 custom_minimum_size = Vector2(0, 43)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
+size_flags_vertical = 0
 size_flags_stretch_ratio = 70.0
 max_value = 30.0
 step = 0.01

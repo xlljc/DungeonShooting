@@ -8,18 +8,11 @@ namespace UI.Main;
 public partial class MainPanel : Main
 {
 
-    public override void OnShowUi()
+    public override void OnCreateUi()
     {
         S_Start.Instance.Pressed += OnStartGameClick;
         S_Exit.Instance.Pressed += OnExitClick;
         S_Tools.Instance.Pressed += OnToolsClick;
-    }
-
-    public override void OnHideUi()
-    {
-        S_Start.Instance.Pressed -= OnStartGameClick;
-        S_Exit.Instance.Pressed -= OnExitClick;
-        S_Tools.Instance.Pressed -= OnToolsClick;
     }
     
     //点击开始游戏

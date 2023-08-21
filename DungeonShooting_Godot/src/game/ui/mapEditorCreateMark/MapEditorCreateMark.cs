@@ -12,7 +12,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     {
         get
         {
-            if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer((MapEditorCreateMarkPanel)this, GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
+            if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer((MapEditorCreateMarkPanel)this, GetNode<Godot.MarginContainer>("MarginContainer"));
             return _L_MarginContainer;
         }
     }
@@ -25,7 +25,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     {
         get
         {
-            if (_L_ExpandPanel == null) _L_ExpandPanel = new ExpandPanel((MapEditorCreateMarkPanel)this, GetNodeOrNull<Godot.MarginContainer>("ExpandPanel"));
+            if (_L_ExpandPanel == null) _L_ExpandPanel = new ExpandPanel((MapEditorCreateMarkPanel)this, GetNode<Godot.MarginContainer>("ExpandPanel"));
             return _L_ExpandPanel;
         }
     }
@@ -38,7 +38,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     {
         get
         {
-            if (_L_NumberBar == null) _L_NumberBar = new NumberBar((MapEditorCreateMarkPanel)this, GetNodeOrNull<UI.MapEditorCreateMark.NumberAttribute>("NumberBar"));
+            if (_L_NumberBar == null) _L_NumberBar = new NumberBar((MapEditorCreateMarkPanel)this, GetNode<UI.MapEditorCreateMark.NumberAttribute>("NumberBar"));
             return _L_NumberBar;
         }
     }
@@ -51,7 +51,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     {
         get
         {
-            if (_L_ObjectBar == null) _L_ObjectBar = new ObjectBar((MapEditorCreateMarkPanel)this, GetNodeOrNull<UI.MapEditorCreateMark.ObjectAttribute>("ObjectBar"));
+            if (_L_ObjectBar == null) _L_ObjectBar = new ObjectBar((MapEditorCreateMarkPanel)this, GetNode<UI.MapEditorCreateMark.ObjectAttribute>("ObjectBar"));
             return _L_ObjectBar;
         }
     }
@@ -108,7 +108,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_Label == null) _L_Label = new Label(UiPanel, Instance.GetNodeOrNull<Godot.Label>("Label"));
+                if (_L_Label == null) _L_Label = new Label(UiPanel, Instance.GetNode<Godot.Label>("Label"));
                 return _L_Label;
             }
         }
@@ -121,7 +121,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_PosX == null) _L_PosX = new PosX(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("PosX"));
+                if (_L_PosX == null) _L_PosX = new PosX(UiPanel, Instance.GetNode<Godot.SpinBox>("PosX"));
                 return _L_PosX;
             }
         }
@@ -161,7 +161,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_Label == null) _L_Label = new Label_1(UiPanel, Instance.GetNodeOrNull<Godot.Label>("Label"));
+                if (_L_Label == null) _L_Label = new Label_1(UiPanel, Instance.GetNode<Godot.Label>("Label"));
                 return _L_Label;
             }
         }
@@ -174,7 +174,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_PosY == null) _L_PosY = new PosY(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("PosY"));
+                if (_L_PosY == null) _L_PosY = new PosY(UiPanel, Instance.GetNode<Godot.SpinBox>("PosY"));
                 return _L_PosY;
             }
         }
@@ -196,7 +196,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
@@ -209,7 +209,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer2 == null) _L_HBoxContainer2 = new HBoxContainer2_1(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer2"));
+                if (_L_HBoxContainer2 == null) _L_HBoxContainer2 = new HBoxContainer2_1(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer2"));
                 return _L_HBoxContainer2;
             }
         }
@@ -231,7 +231,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_PosLabel == null) _L_PosLabel = new PosLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("PosLabel"));
+                if (_L_PosLabel == null) _L_PosLabel = new PosLabel(UiPanel, Instance.GetNode<Godot.Label>("PosLabel"));
                 return _L_PosLabel;
             }
         }
@@ -244,7 +244,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_1(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
@@ -293,7 +293,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_Label == null) _L_Label = new Label_2(UiPanel, Instance.GetNodeOrNull<Godot.Label>("Label"));
+                if (_L_Label == null) _L_Label = new Label_2(UiPanel, Instance.GetNode<Godot.Label>("Label"));
                 return _L_Label;
             }
         }
@@ -306,7 +306,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_SizeX == null) _L_SizeX = new SizeX(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("SizeX"));
+                if (_L_SizeX == null) _L_SizeX = new SizeX(UiPanel, Instance.GetNode<Godot.SpinBox>("SizeX"));
                 return _L_SizeX;
             }
         }
@@ -346,7 +346,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_Label == null) _L_Label = new Label_3(UiPanel, Instance.GetNodeOrNull<Godot.Label>("Label"));
+                if (_L_Label == null) _L_Label = new Label_3(UiPanel, Instance.GetNode<Godot.Label>("Label"));
                 return _L_Label;
             }
         }
@@ -359,7 +359,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_SizeY == null) _L_SizeY = new SizeY(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("SizeY"));
+                if (_L_SizeY == null) _L_SizeY = new SizeY(UiPanel, Instance.GetNode<Godot.SpinBox>("SizeY"));
                 return _L_SizeY;
             }
         }
@@ -381,7 +381,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_1(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
@@ -394,7 +394,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer2 == null) _L_HBoxContainer2 = new HBoxContainer2_2(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer2"));
+                if (_L_HBoxContainer2 == null) _L_HBoxContainer2 = new HBoxContainer2_2(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer2"));
                 return _L_HBoxContainer2;
             }
         }
@@ -416,7 +416,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_SizeLabel == null) _L_SizeLabel = new SizeLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("SizeLabel"));
+                if (_L_SizeLabel == null) _L_SizeLabel = new SizeLabel(UiPanel, Instance.GetNode<Godot.Label>("SizeLabel"));
                 return _L_SizeLabel;
             }
         }
@@ -429,7 +429,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_2(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_2(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
@@ -440,60 +440,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.PreloadingContainer.PreloadingNameLabel
-    /// </summary>
-    public class PreloadingNameLabel : UiNode<MapEditorCreateMarkPanel, Godot.Label, PreloadingNameLabel>
-    {
-        public PreloadingNameLabel(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
-        public override PreloadingNameLabel Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.CheckBox"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.PreloadingContainer.PreloadingCheck
-    /// </summary>
-    public class PreloadingCheck : UiNode<MapEditorCreateMarkPanel, Godot.CheckBox, PreloadingCheck>
-    {
-        public PreloadingCheck(MapEditorCreateMarkPanel uiPanel, Godot.CheckBox node) : base(uiPanel, node) {  }
-        public override PreloadingCheck Clone() => new (UiPanel, (Godot.CheckBox)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.PreloadingContainer
-    /// </summary>
-    public class PreloadingContainer : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, PreloadingContainer>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.PreloadingNameLabel
-        /// </summary>
-        public PreloadingNameLabel L_PreloadingNameLabel
-        {
-            get
-            {
-                if (_L_PreloadingNameLabel == null) _L_PreloadingNameLabel = new PreloadingNameLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("PreloadingNameLabel"));
-                return _L_PreloadingNameLabel;
-            }
-        }
-        private PreloadingNameLabel _L_PreloadingNameLabel;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.CheckBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.PreloadingCheck
-        /// </summary>
-        public PreloadingCheck L_PreloadingCheck
-        {
-            get
-            {
-                if (_L_PreloadingCheck == null) _L_PreloadingCheck = new PreloadingCheck(UiPanel, Instance.GetNodeOrNull<Godot.CheckBox>("PreloadingCheck"));
-                return _L_PreloadingCheck;
-            }
-        }
-        private PreloadingCheck _L_PreloadingCheck;
-
-        public PreloadingContainer(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
-        public override PreloadingContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.DelayContainer.DelayNameLabel
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.DelayContainer.DelayNameLabel
     /// </summary>
     public class DelayNameLabel : UiNode<MapEditorCreateMarkPanel, Godot.Label, DelayNameLabel>
     {
@@ -502,7 +449,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.SpinBox"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.DelayContainer.DelayInput
+    /// 类型: <see cref="Godot.SpinBox"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.DelayContainer.DelayInput
     /// </summary>
     public class DelayInput : UiNode<MapEditorCreateMarkPanel, Godot.SpinBox, DelayInput>
     {
@@ -511,31 +458,31 @@ public abstract partial class MapEditorCreateMark : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.DelayContainer
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.DelayContainer
     /// </summary>
     public class DelayContainer : UiNode<MapEditorCreateMarkPanel, Godot.HBoxContainer, DelayContainer>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.DelayNameLabel
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.DelayNameLabel
         /// </summary>
         public DelayNameLabel L_DelayNameLabel
         {
             get
             {
-                if (_L_DelayNameLabel == null) _L_DelayNameLabel = new DelayNameLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("DelayNameLabel"));
+                if (_L_DelayNameLabel == null) _L_DelayNameLabel = new DelayNameLabel(UiPanel, Instance.GetNode<Godot.Label>("DelayNameLabel"));
                 return _L_DelayNameLabel;
             }
         }
         private DelayNameLabel _L_DelayNameLabel;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.DelayInput
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.DelayInput
         /// </summary>
         public DelayInput L_DelayInput
         {
             get
             {
-                if (_L_DelayInput == null) _L_DelayInput = new DelayInput(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("DelayInput"));
+                if (_L_DelayInput == null) _L_DelayInput = new DelayInput(UiPanel, Instance.GetNode<Godot.SpinBox>("DelayInput"));
                 return _L_DelayInput;
             }
         }
@@ -543,41 +490,6 @@ public abstract partial class MapEditorCreateMark : UiBase
 
         public DelayContainer(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
         public override DelayContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer
-    /// </summary>
-    public class VBoxContainer_3 : UiNode<MapEditorCreateMarkPanel, Godot.VBoxContainer, VBoxContainer_3>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.PreloadingContainer
-        /// </summary>
-        public PreloadingContainer L_PreloadingContainer
-        {
-            get
-            {
-                if (_L_PreloadingContainer == null) _L_PreloadingContainer = new PreloadingContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("PreloadingContainer"));
-                return _L_PreloadingContainer;
-            }
-        }
-        private PreloadingContainer _L_PreloadingContainer;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.DelayContainer
-        /// </summary>
-        public DelayContainer L_DelayContainer
-        {
-            get
-            {
-                if (_L_DelayContainer == null) _L_DelayContainer = new DelayContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("DelayContainer"));
-                return _L_DelayContainer;
-            }
-        }
-        private DelayContainer _L_DelayContainer;
-
-        public VBoxContainer_3(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
-        public override VBoxContainer_3 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -592,7 +504,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer2 == null) _L_HBoxContainer2 = new HBoxContainer2(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer2"));
+                if (_L_HBoxContainer2 == null) _L_HBoxContainer2 = new HBoxContainer2(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer2"));
                 return _L_HBoxContainer2;
             }
         }
@@ -605,24 +517,24 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer3 == null) _L_HBoxContainer3 = new HBoxContainer3_1(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer3"));
+                if (_L_HBoxContainer3 == null) _L_HBoxContainer3 = new HBoxContainer3_1(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer3"));
                 return _L_HBoxContainer3;
             }
         }
         private HBoxContainer3_1 _L_HBoxContainer3;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.VBoxContainer
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.DelayContainer
         /// </summary>
-        public VBoxContainer_3 L_VBoxContainer
+        public DelayContainer L_DelayContainer
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_3(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
-                return _L_VBoxContainer;
+                if (_L_DelayContainer == null) _L_DelayContainer = new DelayContainer(UiPanel, Instance.GetNode<Godot.HBoxContainer>("DelayContainer"));
+                return _L_DelayContainer;
             }
         }
-        private VBoxContainer_3 _L_VBoxContainer;
+        private DelayContainer _L_DelayContainer;
 
         public HBoxContainer3(MapEditorCreateMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
         public override HBoxContainer3 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
@@ -712,7 +624,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_Control == null) _L_Control = new Control(UiPanel, Instance.GetNodeOrNull<Godot.Control>("Control"));
+                if (_L_Control == null) _L_Control = new Control(UiPanel, Instance.GetNode<Godot.Control>("Control"));
                 return _L_Control;
             }
         }
@@ -725,7 +637,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_IconTitle == null) _L_IconTitle = new IconTitle(UiPanel, Instance.GetNodeOrNull<Godot.Label>("IconTitle"));
+                if (_L_IconTitle == null) _L_IconTitle = new IconTitle(UiPanel, Instance.GetNode<Godot.Label>("IconTitle"));
                 return _L_IconTitle;
             }
         }
@@ -738,7 +650,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_IdTitle == null) _L_IdTitle = new IdTitle(UiPanel, Instance.GetNodeOrNull<Godot.Label>("IdTitle"));
+                if (_L_IdTitle == null) _L_IdTitle = new IdTitle(UiPanel, Instance.GetNode<Godot.Label>("IdTitle"));
                 return _L_IdTitle;
             }
         }
@@ -751,7 +663,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_NameTitle == null) _L_NameTitle = new NameTitle(UiPanel, Instance.GetNodeOrNull<Godot.Label>("NameTitle"));
+                if (_L_NameTitle == null) _L_NameTitle = new NameTitle(UiPanel, Instance.GetNode<Godot.Label>("NameTitle"));
                 return _L_NameTitle;
             }
         }
@@ -764,7 +676,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_TypeTitle == null) _L_TypeTitle = new TypeTitle(UiPanel, Instance.GetNodeOrNull<Godot.Label>("TypeTitle"));
+                if (_L_TypeTitle == null) _L_TypeTitle = new TypeTitle(UiPanel, Instance.GetNode<Godot.Label>("TypeTitle"));
                 return _L_TypeTitle;
             }
         }
@@ -777,7 +689,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_WeightTitle == null) _L_WeightTitle = new WeightTitle(UiPanel, Instance.GetNodeOrNull<Godot.Label>("WeightTitle"));
+                if (_L_WeightTitle == null) _L_WeightTitle = new WeightTitle(UiPanel, Instance.GetNode<Godot.Label>("WeightTitle"));
                 return _L_WeightTitle;
             }
         }
@@ -790,7 +702,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_ExtraTitle == null) _L_ExtraTitle = new ExtraTitle(UiPanel, Instance.GetNodeOrNull<Godot.Label>("ExtraTitle"));
+                if (_L_ExtraTitle == null) _L_ExtraTitle = new ExtraTitle(UiPanel, Instance.GetNode<Godot.Label>("ExtraTitle"));
                 return _L_ExtraTitle;
             }
         }
@@ -875,7 +787,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_DeleteButton == null) _L_DeleteButton = new DeleteButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("DeleteButton"));
+                if (_L_DeleteButton == null) _L_DeleteButton = new DeleteButton(UiPanel, Instance.GetNode<Godot.Button>("DeleteButton"));
                 return _L_DeleteButton;
             }
         }
@@ -897,7 +809,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_ExpandButton == null) _L_ExpandButton = new ExpandButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("ExpandButton"));
+                if (_L_ExpandButton == null) _L_ExpandButton = new ExpandButton(UiPanel, Instance.GetNode<Godot.Button>("ExpandButton"));
                 return _L_ExpandButton;
             }
         }
@@ -910,7 +822,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_Icon == null) _L_Icon = new Icon(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("Icon"));
+                if (_L_Icon == null) _L_Icon = new Icon(UiPanel, Instance.GetNode<Godot.TextureRect>("Icon"));
                 return _L_Icon;
             }
         }
@@ -923,7 +835,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_IdLabel == null) _L_IdLabel = new IdLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("IdLabel"));
+                if (_L_IdLabel == null) _L_IdLabel = new IdLabel(UiPanel, Instance.GetNode<Godot.Label>("IdLabel"));
                 return _L_IdLabel;
             }
         }
@@ -936,7 +848,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_NameLabel == null) _L_NameLabel = new NameLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("NameLabel"));
+                if (_L_NameLabel == null) _L_NameLabel = new NameLabel(UiPanel, Instance.GetNode<Godot.Label>("NameLabel"));
                 return _L_NameLabel;
             }
         }
@@ -949,7 +861,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_TypeLabel == null) _L_TypeLabel = new TypeLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("TypeLabel"));
+                if (_L_TypeLabel == null) _L_TypeLabel = new TypeLabel(UiPanel, Instance.GetNode<Godot.Label>("TypeLabel"));
                 return _L_TypeLabel;
             }
         }
@@ -962,7 +874,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_LineEdit == null) _L_LineEdit = new LineEdit(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("LineEdit"));
+                if (_L_LineEdit == null) _L_LineEdit = new LineEdit(UiPanel, Instance.GetNode<Godot.SpinBox>("LineEdit"));
                 return _L_LineEdit;
             }
         }
@@ -975,7 +887,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_CenterContainer == null) _L_CenterContainer = new CenterContainer(UiPanel, Instance.GetNodeOrNull<Godot.CenterContainer>("CenterContainer"));
+                if (_L_CenterContainer == null) _L_CenterContainer = new CenterContainer(UiPanel, Instance.GetNode<Godot.CenterContainer>("CenterContainer"));
                 return _L_CenterContainer;
             }
         }
@@ -988,7 +900,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.MarkObject.VBoxContainer
     /// </summary>
-    public class VBoxContainer_5 : UiNode<MapEditorCreateMarkPanel, Godot.VBoxContainer, VBoxContainer_5>
+    public class VBoxContainer_4 : UiNode<MapEditorCreateMarkPanel, Godot.VBoxContainer, VBoxContainer_4>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.MarkObject.HBoxContainer
@@ -997,14 +909,14 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_3(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_3(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
         private HBoxContainer_3 _L_HBoxContainer;
 
-        public VBoxContainer_5(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
-        public override VBoxContainer_5 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
+        public VBoxContainer_4(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
+        public override VBoxContainer_4 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -1015,15 +927,15 @@ public abstract partial class MapEditorCreateMark : UiBase
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.VBoxContainer
         /// </summary>
-        public VBoxContainer_5 L_VBoxContainer
+        public VBoxContainer_4 L_VBoxContainer
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_5(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_4(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
-        private VBoxContainer_5 _L_VBoxContainer;
+        private VBoxContainer_4 _L_VBoxContainer;
 
         public MarkObject(MapEditorCreateMarkPanel uiPanel, Godot.PanelContainer node) : base(uiPanel, node) {  }
         public override MarkObject Clone() => new (UiPanel, (Godot.PanelContainer)Instance.Duplicate());
@@ -1041,7 +953,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_MarkObject == null) _L_MarkObject = new MarkObject(UiPanel, Instance.GetNodeOrNull<Godot.PanelContainer>("MarkObject"));
+                if (_L_MarkObject == null) _L_MarkObject = new MarkObject(UiPanel, Instance.GetNode<Godot.PanelContainer>("MarkObject"));
                 return _L_MarkObject;
             }
         }
@@ -1054,7 +966,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     /// <summary>
     /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer
     /// </summary>
-    public class VBoxContainer_4 : UiNode<MapEditorCreateMarkPanel, Godot.VBoxContainer, VBoxContainer_4>
+    public class VBoxContainer_3 : UiNode<MapEditorCreateMarkPanel, Godot.VBoxContainer, VBoxContainer_3>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.HBoxContainer
@@ -1063,7 +975,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_2(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_2(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
@@ -1076,14 +988,14 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer(UiPanel, Instance.GetNodeOrNull<Godot.ScrollContainer>("ScrollContainer"));
+                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer(UiPanel, Instance.GetNode<Godot.ScrollContainer>("ScrollContainer"));
                 return _L_ScrollContainer;
             }
         }
         private ScrollContainer _L_ScrollContainer;
 
-        public VBoxContainer_4(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
-        public override VBoxContainer_4 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
+        public VBoxContainer_3(MapEditorCreateMarkPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
+        public override VBoxContainer_3 Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -1094,15 +1006,15 @@ public abstract partial class MapEditorCreateMark : UiBase
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.VBoxContainer
         /// </summary>
-        public VBoxContainer_4 L_VBoxContainer
+        public VBoxContainer_3 L_VBoxContainer
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_4(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_3(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
-        private VBoxContainer_4 _L_VBoxContainer;
+        private VBoxContainer_3 _L_VBoxContainer;
 
         public MarginContainer_1(MapEditorCreateMarkPanel uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
         public override MarginContainer_1 Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
@@ -1120,7 +1032,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
+                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer_1(UiPanel, Instance.GetNode<Godot.MarginContainer>("MarginContainer"));
                 return _L_MarginContainer;
             }
         }
@@ -1142,7 +1054,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer3 == null) _L_HBoxContainer3 = new HBoxContainer3(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer3"));
+                if (_L_HBoxContainer3 == null) _L_HBoxContainer3 = new HBoxContainer3(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer3"));
                 return _L_HBoxContainer3;
             }
         }
@@ -1155,7 +1067,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_AddMark == null) _L_AddMark = new AddMark(UiPanel, Instance.GetNodeOrNull<Godot.Button>("AddMark"));
+                if (_L_AddMark == null) _L_AddMark = new AddMark(UiPanel, Instance.GetNode<Godot.Button>("AddMark"));
                 return _L_AddMark;
             }
         }
@@ -1168,7 +1080,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_Panel == null) _L_Panel = new Panel(UiPanel, Instance.GetNodeOrNull<Godot.Panel>("Panel"));
+                if (_L_Panel == null) _L_Panel = new Panel(UiPanel, Instance.GetNode<Godot.Panel>("Panel"));
                 return _L_Panel;
             }
         }
@@ -1190,7 +1102,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
@@ -1221,7 +1133,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_ExpandGrid == null) _L_ExpandGrid = new ExpandGrid(UiPanel, Instance.GetNodeOrNull<Godot.GridContainer>("ExpandGrid"));
+                if (_L_ExpandGrid == null) _L_ExpandGrid = new ExpandGrid(UiPanel, Instance.GetNode<Godot.GridContainer>("ExpandGrid"));
                 return _L_ExpandGrid;
             }
         }
@@ -1261,7 +1173,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_AttrName == null) _L_AttrName = new AttrName(UiPanel, Instance.GetNodeOrNull<Godot.Label>("AttrName"));
+                if (_L_AttrName == null) _L_AttrName = new AttrName(UiPanel, Instance.GetNode<Godot.Label>("AttrName"));
                 return _L_AttrName;
             }
         }
@@ -1274,7 +1186,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_NumInput == null) _L_NumInput = new NumInput(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("NumInput"));
+                if (_L_NumInput == null) _L_NumInput = new NumInput(UiPanel, Instance.GetNode<Godot.SpinBox>("NumInput"));
                 return _L_NumInput;
             }
         }
@@ -1341,7 +1253,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_SelectButton == null) _L_SelectButton = new SelectButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("SelectButton"));
+                if (_L_SelectButton == null) _L_SelectButton = new SelectButton(UiPanel, Instance.GetNode<Godot.Button>("SelectButton"));
                 return _L_SelectButton;
             }
         }
@@ -1354,7 +1266,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_ObjectIcon == null) _L_ObjectIcon = new ObjectIcon(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("ObjectIcon"));
+                if (_L_ObjectIcon == null) _L_ObjectIcon = new ObjectIcon(UiPanel, Instance.GetNode<Godot.TextureRect>("ObjectIcon"));
                 return _L_ObjectIcon;
             }
         }
@@ -1367,7 +1279,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_ObjectName == null) _L_ObjectName = new ObjectName(UiPanel, Instance.GetNodeOrNull<Godot.Label>("ObjectName"));
+                if (_L_ObjectName == null) _L_ObjectName = new ObjectName(UiPanel, Instance.GetNode<Godot.Label>("ObjectName"));
                 return _L_ObjectName;
             }
         }
@@ -1380,7 +1292,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_DeleteButton == null) _L_DeleteButton = new DeleteButton_1(UiPanel, Instance.GetNodeOrNull<Godot.Button>("DeleteButton"));
+                if (_L_DeleteButton == null) _L_DeleteButton = new DeleteButton_1(UiPanel, Instance.GetNode<Godot.Button>("DeleteButton"));
                 return _L_DeleteButton;
             }
         }
@@ -1402,7 +1314,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_AttrName == null) _L_AttrName = new AttrName_1(UiPanel, Instance.GetNodeOrNull<Godot.Label>("AttrName"));
+                if (_L_AttrName == null) _L_AttrName = new AttrName_1(UiPanel, Instance.GetNode<Godot.Label>("AttrName"));
                 return _L_AttrName;
             }
         }
@@ -1415,7 +1327,7 @@ public abstract partial class MapEditorCreateMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_4(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_4(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
@@ -1457,34 +1369,19 @@ public abstract partial class MapEditorCreateMark : UiBase
     public SizeY S_SizeY => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_HBoxContainer3.L_VBoxContainer.L_HBoxContainer2.L_SizeY;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.PreloadingContainer.PreloadingNameLabel
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.DelayContainer.DelayNameLabel
     /// </summary>
-    public PreloadingNameLabel S_PreloadingNameLabel => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_VBoxContainer.L_PreloadingContainer.L_PreloadingNameLabel;
+    public DelayNameLabel S_DelayNameLabel => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_DelayContainer.L_DelayNameLabel;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CheckBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.PreloadingContainer.PreloadingCheck
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.DelayContainer.DelayInput
     /// </summary>
-    public PreloadingCheck S_PreloadingCheck => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_VBoxContainer.L_PreloadingContainer.L_PreloadingCheck;
+    public DelayInput S_DelayInput => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_DelayContainer.L_DelayInput;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.PreloadingContainer
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.DelayContainer
     /// </summary>
-    public PreloadingContainer S_PreloadingContainer => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_VBoxContainer.L_PreloadingContainer;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.DelayContainer.DelayNameLabel
-    /// </summary>
-    public DelayNameLabel S_DelayNameLabel => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_VBoxContainer.L_DelayContainer.L_DelayNameLabel;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.DelayContainer.DelayInput
-    /// </summary>
-    public DelayInput S_DelayInput => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_VBoxContainer.L_DelayContainer.L_DelayInput;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.HBoxContainer3.VBoxContainer.DelayContainer
-    /// </summary>
-    public DelayContainer S_DelayContainer => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_VBoxContainer.L_DelayContainer;
+    public DelayContainer S_DelayContainer => L_MarginContainer.L_VBoxContainer.L_HBoxContainer3.L_DelayContainer;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.AddMark

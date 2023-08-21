@@ -27,7 +27,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         var array = new MapEditorMapMarkPanel.MarkCellData[data.Count];
         for (var i = 0; i < data.Count; i++)
         {
-            array[i] = new MapEditorMapMarkPanel.MarkCellData(this, data[i]);
+            array[i] = new MapEditorMapMarkPanel.MarkCellData(this, data[i], Index == 0);
         }
         MarkGrid.SetDataList(array);
         //执行排序操作
@@ -36,7 +36,14 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
 
     public override void OnRefreshIndex()
     {
-        CellNode.L_WaveContainer.L_WaveButton.Instance.Text = $"第{Index + 1}波";
+        if (Index == 0)
+        {
+            CellNode.L_WaveContainer.L_WaveButton.Instance.Text = $"提前加载波";
+        }
+        else
+        {
+            CellNode.L_WaveContainer.L_WaveButton.Instance.Text = $"第{Index}波";
+        }
     }
 
     public override void OnDestroy()
@@ -48,7 +55,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
     private void OnAddMark()
     {
         //打开添加标记页面
-        EditorWindowManager.ShowCreateMark(OnCreateMarkInfo);
+        EditorWindowManager.ShowCreateMark(Index == 0, OnCreateMarkInfo);
     }   
 
     //创建的标记完成
@@ -56,7 +63,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
     {
         var preinstall = CellNode.UiPanel.GetSelectPreinstall();
         preinstall.WaveList[Index].Add(markInfo);
-        MarkGrid.Add(new MapEditorMapMarkPanel.MarkCellData(this, markInfo));
+        MarkGrid.Add(new MapEditorMapMarkPanel.MarkCellData(this, markInfo, Index == 0));
         //添加标记工具
         EventManager.EmitEvent(EventEnum.OnCreateMark, markInfo);
         //选中最后一个

@@ -41,4 +41,15 @@ public class RoomPreinstall
         Remark = preinstall.Remark;
         WaveList = preinstall.WaveList;
     }
+
+    /// <summary>
+    /// 初始化波数据
+    /// </summary>
+    public void InitWaveList()
+    {
+        WaveList = new List<List<MarkInfo>>
+        {
+            new List<MarkInfo>()
+        };
+    }
 }
