@@ -71,6 +71,8 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         MarkGrid.Click(MarkGrid.Count - 1);
         //执行排序操作
         MarkGrid.Sort();
+        //派发数据修改事件
+        EventManager.EmitEvent(EventEnum.OnEditorDirty);
     }
 
     /// <summary>

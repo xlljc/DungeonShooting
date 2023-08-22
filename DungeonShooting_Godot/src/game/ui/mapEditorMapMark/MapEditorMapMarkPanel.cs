@@ -267,6 +267,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             //创建逻辑
             roomSplitPreinstall.Add(preinstall);
             RefreshPreinstallSelect(roomSplitPreinstall.Count - 1);
+            //派发数据修改事件
+            EventManager.EmitEvent(EventEnum.OnEditorDirty);
         });
     }
 
@@ -284,6 +286,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             //修改下拉菜单数据
             var optionButton = S_PreinstallOption.Instance;
             optionButton.SetItemText(optionButton.Selected, $"{preinstall.Name} ({preinstall.Weight})");
+            //派发数据修改事件
+            EventManager.EmitEvent(EventEnum.OnEditorDirty);
         });
     }
 
@@ -308,6 +312,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 EditorTileMap.RoomSplit.Preinstall.RemoveAt(index);
                 //刷新选项
                 RefreshPreinstallSelect(EditorTileMap.RoomSplit.Preinstall.Count - 1);
+                //派发数据修改事件
+                EventManager.EmitEvent(EventEnum.OnEditorDirty);
             }
         });
     }
@@ -334,6 +340,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         var wave = new List<MarkInfo>();
         item.WaveList.Add(wave);
         _grid.Add(wave);
+        //派发数据修改事件
+        EventManager.EmitEvent(EventEnum.OnEditorDirty);
     }
 
     //工具节点编辑按钮点击
@@ -393,6 +401,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 selectPreinstall.WaveList.RemoveAt(index);
                 _grid.RemoveByIndex(index);
                 EditorTileMap.SelectWaveIndex = -1;
+                //派发数据修改事件
+                EventManager.EmitEvent(EventEnum.OnEditorDirty);
             }
         });
     }
@@ -415,6 +425,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 //执行排序
                 markCell.Grid.Sort();
                 EventManager.EmitEvent(EventEnum.OnEditMark, dataMarkInfo);
+                //派发数据修改事件
+                EventManager.EmitEvent(EventEnum.OnEditorDirty);
             });
         }
     }
@@ -452,6 +464,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                     EventManager.EmitEvent(EventEnum.OnDeleteMark, markInfo);
                     waveCell.MarkGrid.RemoveByIndex(markCellIndex);
                     waveCell.Data.RemoveAt(markCellIndex);
+                    //派发数据修改事件
+                    EventManager.EmitEvent(EventEnum.OnEditorDirty);
                 }
             });
         }
