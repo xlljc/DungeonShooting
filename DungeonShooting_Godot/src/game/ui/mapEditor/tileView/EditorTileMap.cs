@@ -587,10 +587,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             Scale = scale;
             SetMapPosition(Position + pos * 0.1f * scale);
         }
-        else
-        {
-            GD.Print("太小了");
-        }
     }
     //放大
     private void Magnify()
@@ -602,10 +598,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         {
             Scale = scale;
             SetMapPosition(Position - pos * 0.1f * prevScale);
-        }
-        else
-        {
-            GD.Print("太大了");
         }
     }
 

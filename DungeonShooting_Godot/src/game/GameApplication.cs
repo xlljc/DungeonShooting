@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using Config;
 using Godot;
@@ -38,12 +39,6 @@ public partial class GameApplication : Node2D, ICoroutine
 	[Export] public bool Debug = false;
 
 	/// <summary>
-	/// 测试用, 指定生成的房间
-	/// </summary>
-	[Export]
-	public PackedScene[] DesignatedRoom;
-
-	/// <summary>
 	/// 鼠标指针
 	/// </summary>
 	public Cursor Cursor { get; private set; }
@@ -63,10 +58,10 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// </summary>
 	public Dictionary<string, DungeonRoomGroup> RoomConfig { get; private set; }
 	
-	/// <summary>
-	/// 房间配置数据, key: 模板房间资源路径
-	/// </summary>
-	public Dictionary<string, DungeonRoomSplit> RoomConfigMap { get; private set; }
+	// /// <summary>
+	// /// 房间配置数据, key: 模板房间资源路径
+	// /// </summary>
+	// public Dictionary<string, DungeonRoomSplit> RoomConfigMap { get; private set; }
 
 	/// <summary>
 	/// 游戏视图大小
@@ -100,7 +95,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		Weapon.InitWeaponAttribute();
 		
 		DungeonConfig = new DungeonConfig();
-		DungeonConfig.GroupName = "testGroup";
+		DungeonConfig.GroupName = RoomConfig.FirstOrDefault().Key;
 		DungeonConfig.RoomCount = 20;
 	}
 	
@@ -119,10 +114,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		//窗体大小改变
 		GetWindow().SizeChanged += OnWindowSizeChanged;
 		RefreshSubViewportSize();
-
-#if TOOLS
-		InitDesignatedRoom();
-#endif
+        
 		//初始化ui
 		UiManager.Init();
 		// 初始化鼠标
@@ -135,10 +127,8 @@ public partial class GameApplication : Node2D, ICoroutine
 		MapProjectManager.Init();
 		BottomTipsPanel.Init();
 		//打开主菜单Ui
-		//UiManager.Open_Main();
-		//UiManager.Open_MapEditor();
-		UiManager.Open_MapEditorProject();
-		//EditorWindowManager.ShowSelectObject("选择物体");
+		UiManager.Open_Main();
+		//UiManager.Open_MapEditorProject();
 	}
 
 	public override void _Process(double delta)
@@ -225,7 +215,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		RoomConfig = JsonSerializer.Deserialize<Dictionary<string, DungeonRoomGroup>>(asText);
 
 		//初始化RoomConfigMap
-		RoomConfigMap = new Dictionary<string, DungeonRoomSplit>();
+		//RoomConfigMap = new Dictionary<string, DungeonRoomSplit>();
 		//加载流程更改
 		// foreach (var dungeonRoomGroup in RoomConfig)
 		// {
@@ -292,24 +282,4 @@ public partial class GameApplication : Node2D, ICoroutine
 			}
 		}
 	}
-
-#if TOOLS
-	//调试模式下, 指定生成哪些房间
-	private void InitDesignatedRoom()
-	{
-		if (DesignatedRoom != null && DesignatedRoom.Length > 0)
-		{
-			var list = new List<DungeonRoomSplit>();
-			foreach (var packedScene in DesignatedRoom)
-			{
-				if (RoomConfigMap.TryGetValue(packedScene.ResourcePath, out var dungeonRoomSplit))
-				{
-					list.Add(dungeonRoomSplit);
-				}
-			}
-			DungeonGenerator.SetDesignatedRoom(list);
-		}
-	}
-#endif
-
 }

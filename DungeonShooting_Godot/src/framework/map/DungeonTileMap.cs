@@ -72,12 +72,46 @@ public class DungeonTileMap
         }
         else
         {
+            var rectSize = roomInfo.RoomSplit.RoomInfo.Size;
+            var rectPos = roomInfo.RoomSplit.RoomInfo.Position;
+            var offset = roomInfo.GetOffsetPosition() / GameConfig.TileCellSizeVector2I;
+            //填充tile操作
+            var tileInfo = roomInfo.RoomSplit.TileInfo;
+            for (var i = 0; i < tileInfo.Floor.Count; i += 5)
+            {
+                var posX = tileInfo.Floor[i];
+                var posY = tileInfo.Floor[i + 1];
+                var sourceId = tileInfo.Floor[i + 2];
+                var atlasCoordsX = tileInfo.Floor[i + 3];
+                var atlasCoordsY = tileInfo.Floor[i + 4];
+                var pos = new Vector2I(roomInfo.Position.X + posX - offset.X, roomInfo.Position.Y + posY - offset.Y);
+                _tileRoot.SetCell(GameConfig.FloorMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
+            }
+            for (var i = 0; i < tileInfo.Middle.Count; i += 5)
+            {
+                var posX = tileInfo.Middle[i];
+                var posY = tileInfo.Middle[i + 1];
+                var sourceId = tileInfo.Middle[i + 2];
+                var atlasCoordsX = tileInfo.Middle[i + 3];
+                var atlasCoordsY = tileInfo.Middle[i + 4];
+                var pos = new Vector2I(roomInfo.Position.X + posX - offset.X, roomInfo.Position.Y + posY - offset.Y);
+                _tileRoot.SetCell(GameConfig.MiddleMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
+            }
+            for (var i = 0; i < tileInfo.Top.Count; i += 5)
+            {
+                var posX = tileInfo.Top[i];
+                var posY = tileInfo.Top[i + 1];
+                var sourceId = tileInfo.Top[i + 2];
+                var atlasCoordsX = tileInfo.Top[i + 3];
+                var atlasCoordsY = tileInfo.Top[i + 4];
+                var pos = new Vector2I(roomInfo.Position.X + posX - offset.X, roomInfo.Position.Y + posY - offset.Y);
+                _tileRoot.SetCell(GameConfig.TopMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
+            }
+
             GD.PrintErr("初始化流程得改");
-            // var rectSize = roomInfo.RoomSplit.RoomInfo.Size;
-            // var rectPos = roomInfo.RoomSplit.RoomInfo.Position;
+            //roomInfo.RoomSplit.TileInfo.
             // var template = ResourceManager.Load<PackedScene>(roomInfo.RoomSplit.ScenePath);
             // var tileInstance = template.Instantiate<DungeonRoomTemplate>();
-            // var offset = roomInfo.GetOffsetPosition();
             //
             // //其它物体
             // var childCount = tileInstance.GetChildCount();
@@ -597,17 +631,6 @@ public class DungeonTileMap
 
         _connectNavigationItemList.Add(new DoorNavigationInfo(doorInfo, openPolygonData, closePolygonData));
     }
-    
-    //报错数据
-    // private void TestData()
-    // {
-    //     _polygonDataList.Clear();
-    //     _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(-456, 712), new Vector2(-440, 712), new Vector2(-440, 792), new Vector2(-456, 792) })});
-    //     _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.In, Points = new List<Vector2>(new []{ new Vector2(-1048, 744), new Vector2(-840, 744), new Vector2(-840, 840), new Vector2(-1048, 840) })});
-    //     _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(488, 920), new Vector2(504, 920), new Vector2(504, 1128), new Vector2(488, 1128) })});
-    //     _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(1320, 984), new Vector2(1352, 984), new Vector2(1352, 1096), new Vector2(1432, 1096), new Vector2(1432, 984), new Vector2(1576, 984), new Vector2(1576, 1128), new Vector2(1544, 1128), new Vector2(1544, 1000), new Vector2(1464, 1000), new Vector2(1464, 1128), new Vector2(1320, 1128) })});
-    //     _polygonDataList.Add(new NavigationPolygonData(){Type = NavigationPolygonType.Out, Points = new List<Vector2>(new []{ new Vector2(712, 1432), new Vector2(984, 1432), new Vector2(984, 1592), new Vector2(712, 1592) })});
-    // }
 
     /// <summary>
     /// 计算并动生成导航区域, layer 为需要计算的层级，如果没有设置 floorAtlasCoords，则该 layer 下不为空的地砖都将视为可行走区域

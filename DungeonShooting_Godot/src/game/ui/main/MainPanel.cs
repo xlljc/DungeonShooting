@@ -31,7 +31,6 @@ public partial class MainPanel : Main
     //点击开发者工具
     private void OnToolsClick()
     {
-        UiManager.Open_MapEditorProject();
-        HideUi();
+        OpenNextUi(UiManager.UiName.MapEditorProject);
     }
 }
