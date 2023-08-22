@@ -23,6 +23,7 @@ public partial class MarkTool : TextureRect, IUiNodeScript
     private bool _isDown;
     private Vector2 _offset;
     private MarkAreaTool _markAreaToolUp;
+    private Vector2 _startPos;
     
     public void SetUiNode(IUiNode uiNode)
     {
@@ -51,6 +52,13 @@ public partial class MarkTool : TextureRect, IUiNodeScript
                 {
                     _isDown = false;
                     IsDrag = false;
+                    //移动过, 就派发修改事件
+                    var pos = GlobalPosition;
+                    if (_startPos != pos)
+                    {
+                        _startPos = pos;
+                        EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                    }
                 }
             }
             else if (_enter && !_isDown)
@@ -71,6 +79,7 @@ public partial class MarkTool : TextureRect, IUiNodeScript
                     {
                         _offset = GlobalPosition - GetGlobalMousePosition();
                         IsDrag = true;
+                        _startPos = GlobalPosition;
                     }
                 }
             }
@@ -102,6 +111,7 @@ public partial class MarkTool : TextureRect, IUiNodeScript
     {
         MarkInfo = markInfo;
         Position = markInfo.Position.AsVector2() - (Size / 2).Ceil();
+        _startPos = GlobalPosition;
         _markAreaToolUp.InitData(_toolNode.UiPanel.S_ToolRoot, this);
     }
     

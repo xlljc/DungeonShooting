@@ -43,6 +43,8 @@ public partial class MarkAreaTool : Node2D
         _toolRoot = toolRoot;
         _markTool = markTool;
         _markInfo = markTool.MarkInfo;
+        _startWidth = _markInfo.Size.X;
+        _startHeight = _markInfo.Size.Y;
     }
 
     public override void _Process(double delta)
@@ -58,6 +60,13 @@ public partial class MarkAreaTool : Node2D
         {
             if (!Input.IsMouseButtonPressed(MouseButton.Left)) //松开拖拽
             {
+                if (_markInfo.Size.X != _startWidth || _markInfo.Size.Y != _startHeight)
+                {
+                    _startWidth = _markInfo.Size.X;
+                    _startHeight = _markInfo.Size.Y;
+                    //派发修改事件
+                    EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                }
                 IsDrag = false;
             }
             else //拖拽中
