@@ -7,7 +7,7 @@ using UI.MapEditorTools;
 
 namespace UI.MapEditor;
 
-public partial class EditorTileMap : TileMap
+public partial class EditorTileMap : TileMap, IUiNodeScript
 {
     
     public enum MouseButtonType
@@ -110,7 +110,7 @@ public partial class EditorTileMap : TileMap
     //错误地形位置
     private Vector2I _checkTerrainErrorPosition = Vector2I.Zero;
     //是否执行生成地形成功
-    private bool _isGenerateTerrain = false;
+    private bool _isGenerateTerrain = true;
     private bool _initLayer = false;
 
     //--------- 配置数据 -------------
@@ -123,6 +123,16 @@ public partial class EditorTileMap : TileMap
     /// 正在编辑的房间数据
     /// </summary>
     public DungeonRoomSplit RoomSplit { get; private set; }
+    
+    /// <summary>
+    /// 数据是否脏了, 也就是是否有修改
+    /// </summary>
+    public bool IsDirty { get; private set; }
+
+    /// <summary>
+    /// 地图是否有错误
+    /// </summary>
+    public bool HasError => !_isGenerateTerrain;
 
     /// <summary>
     /// 波数网格选中的索引
@@ -189,6 +199,24 @@ public partial class EditorTileMap : TileMap
     private Vector2I _roomSize;
     private List<DoorAreaInfo> _doorConfigs = new List<DoorAreaInfo>();
     //-------------------------------
+    private MapEditor.TileMap _editorTileMap;
+    private EventFactory _eventFactory;
+
+    public void SetUiNode(IUiNode uiNode)
+    {
+        _editorTileMap = (MapEditor.TileMap)uiNode;
+        _editorTileMap.Instance.MapEditorPanel = _editorTileMap.UiPanel;
+        _editorTileMap.Instance.MapEditorToolsPanel = _editorTileMap.UiPanel.S_MapEditorTools.Instance;
+
+        _editorTileMap.L_Brush.Instance.Draw += DrawGuides;
+        _eventFactory = EventManager.CreateEventFactory();
+        _eventFactory.AddEventListener(EventEnum.OnSelectDragTool, _editorTileMap.Instance.OnSelectHandTool);
+        _eventFactory.AddEventListener(EventEnum.OnSelectPenTool, _editorTileMap.Instance.OnSelectPenTool);
+        _eventFactory.AddEventListener(EventEnum.OnSelectRectTool, _editorTileMap.Instance.OnSelectRectTool);
+        _eventFactory.AddEventListener(EventEnum.OnSelectEditTool, _editorTileMap.Instance.OnSelectEditTool);
+        _eventFactory.AddEventListener(EventEnum.OnClickCenterTool, _editorTileMap.Instance.OnClickCenterTool);
+        _eventFactory.AddEventListener(EventEnum.OnEditorDirty, _editorTileMap.Instance.OnEditorDirty);
+    }
 
     public override void _Ready()
     {
@@ -197,6 +225,9 @@ public partial class EditorTileMap : TileMap
 
     public override void _Process(double delta)
     {
+        //触发绘制辅助线
+        _editorTileMap.L_Brush.Instance.QueueRedraw();
+        
         var newDelta = (float)delta;
         _drawFullRect = false;
         var position = GetLocalMousePosition();
@@ -262,23 +293,8 @@ public partial class EditorTileMap : TileMap
             _generateTimer -= newDelta;
             if (_generateTimer <= 0)
             {
-                //计算区域
-                CalcTileRect(false);
-                GD.Print("开始检测是否可以生成地形...");
-                if (CheckTerrain())
-                {
-                    GD.Print("开始绘制导航网格...");
-                    if (GenerateNavigation())
-                    {
-                        GD.Print("开始绘制自动贴图...");
-                        GenerateTerrain();
-                        _isGenerateTerrain = true;
-                    }
-                }
-                else
-                {
-                    SetErrorCell(_checkTerrainErrorPosition);
-                }
+                //检测地形
+                RunCheckHandler();
             }
         }
     }
@@ -286,8 +302,9 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 绘制辅助线
     /// </summary>
-    public void DrawGuides(CanvasItem canvasItem)
+    public void DrawGuides()
     {
+        CanvasItem canvasItem = _editorTileMap.L_Brush.Instance;
         //轴线
         canvasItem.DrawLine(new Vector2(0, 2000), new Vector2(0, -2000), Colors.Green);
         canvasItem.DrawLine(new Vector2(2000, 0), new Vector2( -2000, 0), Colors.Red);
@@ -402,6 +419,41 @@ public partial class EditorTileMap : TileMap
         }
     }
 
+    /// <summary>
+    /// 尝试运行检查, 如果已经运行过了, 则没有效果
+    /// </summary>
+    public void TryRunCheckHandler()
+    {
+        if (_generateTimer > 0)
+        {
+            _generateTimer = -1;
+            RunCheckHandler();
+        }
+    }
+    
+    //执行检测地形操作
+    private void RunCheckHandler()
+    {
+        _isGenerateTerrain = false;
+        //计算区域
+        CalcTileRect(false);
+        GD.Print("开始检测是否可以生成地形...");
+        if (CheckTerrain())
+        {
+            GD.Print("开始绘制导航网格...");
+            if (GenerateNavigation())
+            {
+                GD.Print("开始绘制自动贴图...");
+                GenerateTerrain();
+                _isGenerateTerrain = true;
+            }
+        }
+        else
+        {
+            SetErrorCell(_checkTerrainErrorPosition);
+        }
+    }
+
     //将指定层数据存入list中
     private void PushLayerDataToList(int layer, int sourceId, List<int> list)
     {
@@ -438,9 +490,14 @@ public partial class EditorTileMap : TileMap
     public void TriggerSave()
     {
         GD.Print("保存地牢房间数据...");
+        RoomSplit.Ready = !HasError;
         SaveRoomInfoConfig();
         SaveTileInfoConfig();
         SavePreinstallConfig();
+        IsDirty = false;
+        MapEditorPanel.SetTitleDirty(false);
+        //派发保存事件
+        EventManager.EmitEvent(EventEnum.OnEditorSave);
     }
 
     /// <summary>
@@ -476,6 +533,11 @@ public partial class EditorTileMap : TileMap
         //导航网格数据
         _dungeonTileMap.SetPolygonData(tileInfo.NavigationList);
 
+        //如果有错误, 则找出错误的点位
+        if (!roomSplit.Ready)
+        {
+            RunCheckHandler();
+        }
         //聚焦
         //MapEditorPanel.CallDelay(0.1f, OnClickCenterTool);
         //CallDeferred(nameof(OnClickCenterTool), null);
@@ -637,6 +699,8 @@ public partial class EditorTileMap : TileMap
         _dungeonTileMap.ClearPolygonData();
         ClearLayer(AutoTopLayer);
         ClearLayer(AutoMiddleLayer);
+        //标记有修改数据
+        EventManager.EmitEvent(EventEnum.OnEditorDirty);
     }
 
     //重新计算房间区域
@@ -800,7 +864,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 选中拖拽功能
     /// </summary>
-    public void OnSelectHandTool(object arg)
+    private void OnSelectHandTool(object arg)
     {
         MouseType = MouseButtonType.Drag;
     }
@@ -808,7 +872,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 选中画笔攻击
     /// </summary>
-    public void OnSelectPenTool(object arg)
+    private void OnSelectPenTool(object arg)
     {
         MouseType = MouseButtonType.Pen;
     }
@@ -816,7 +880,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 选中绘制区域功能
     /// </summary>
-    public void OnSelectRectTool(object arg)
+    private void OnSelectRectTool(object arg)
     {
         MouseType = MouseButtonType.Area;
     }
@@ -824,7 +888,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 选择编辑门区域
     /// </summary>
-    public void OnSelectEditTool(object arg)
+    private void OnSelectEditTool(object arg)
     {
         MouseType = MouseButtonType.Edit;
     }
@@ -832,7 +896,7 @@ public partial class EditorTileMap : TileMap
     /// <summary>
     /// 聚焦
     /// </summary>
-    public void OnClickCenterTool(object arg)
+    private void OnClickCenterTool(object arg)
     {
         var pos = MapEditorPanel.S_SubViewport.Instance.Size / 2;
         if (_roomSize.X == 0 && _roomSize.Y == 0) //聚焦原点
@@ -843,6 +907,13 @@ public partial class EditorTileMap : TileMap
         {
             SetMapPosition(pos - (_roomPosition + _roomSize / 2) * TileSet.TileSize * Scale);
         }
+    }
+    
+    //房间数据有修改
+    private void OnEditorDirty(object obj)
+    {
+        IsDirty = true;
+        MapEditorPanel.SetTitleDirty(true);
     }
 
     /// <summary>
@@ -932,8 +1003,17 @@ public partial class EditorTileMap : TileMap
             Directory.CreateDirectory(path);
         }
         
-        roomInfo.Position = new SerializeVector2(_roomPosition);
-        roomInfo.Size = new SerializeVector2(_roomSize);
+        if (!HasError) //没有错误
+        {
+            roomInfo.Size = new SerializeVector2(_roomSize);
+            roomInfo.Position = new SerializeVector2(_roomPosition);
+        }
+        else
+        {
+            roomInfo.Position = new SerializeVector2(_roomPosition - Vector2I.One);
+            roomInfo.Size = new SerializeVector2(_roomSize + new Vector2I(2, 2));
+        }
+
         roomInfo.DoorAreaInfos.Clear();
         roomInfo.DoorAreaInfos.AddRange(_doorConfigs);
 
@@ -1004,5 +1084,10 @@ public partial class EditorTileMap : TileMap
                 MapEditorToolsPanel.SetDoorHoverToolTransform(_roomPosition, _roomSize);
             }
         }
+    }
+    
+    public void OnDestroy()
+    {
+        _eventFactory.RemoveAllEventListener();
     }
 }

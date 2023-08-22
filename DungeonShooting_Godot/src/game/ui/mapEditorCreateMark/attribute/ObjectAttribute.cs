@@ -22,6 +22,11 @@ public partial class ObjectAttribute : AttributeBase
         _objectBar.L_HBoxContainer.L_DeleteButton.Instance.Pressed += OnClickDelete;
     }
 
+    public override void OnDestroy()
+    {
+        
+    }
+
     public override string GetAttributeValue()
     {
         if (_selectWeapon == null)

@@ -46,6 +46,8 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     private List<CoroutineData> _coroutineList;
     //嵌套打开的Ui列表
     private HashSet<UiBase> _nestedUiSet;
+    //当前Ui包含的 IUiNodeScript 接口, 关闭Ui是需要调用 IUiNodeScript.OnDestroy()
+    private HashSet<IUiNodeScript> _nodeScripts;
 
     public UiBase(string uiName)
     {
@@ -169,6 +171,15 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             }
             _nestedUiSet.Clear();
         }
+        
+        //销毁 IUiNodeScript
+        if (_nodeScripts != null)
+        {
+            foreach (var uiNodeScript in _nodeScripts)
+            {
+                uiNodeScript.OnDestroy();
+            }
+        }
 
         //在父Ui中移除当前Ui
         if (ParentUi != null)
@@ -264,6 +275,18 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             }
             _nestedUiSet.Remove(uiBase);
         }
+    }
+
+    /// <summary>
+    /// 记录当前Ui包含的 IUiNodeScript 接口
+    /// </summary>
+    public void RecordUiNodeScript(IUiNodeScript nodeScript)
+    {
+        if (_nodeScripts == null)
+        {
+            _nodeScripts = new HashSet<IUiNodeScript>();
+        }
+        _nodeScripts.Add(nodeScript);
     }
 
     /// <summary>

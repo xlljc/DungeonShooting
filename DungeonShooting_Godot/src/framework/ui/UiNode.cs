@@ -33,6 +33,7 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
         Instance = node;
         if (node is IUiNodeScript uiNodeScript)
         {
+            uiPanel.RecordUiNodeScript(uiNodeScript);
             uiNodeScript.SetUiNode(this);
         }
     }

@@ -34,7 +34,7 @@ public partial class EditorWindowPanel : EditorWindow
     public override void OnCreateUi()
     {
         S_CustomButton.Instance.Visible = false;
-        S_Window.Instance.CloseRequested += CloseWindow;
+        S_Window.Instance.CloseRequested += OnCloseWindow;
     }
 
     /// <summary>
@@ -99,12 +99,18 @@ public partial class EditorWindowPanel : EditorWindow
     /// <summary>
     /// 关闭窗口
     /// </summary>
-    public void CloseWindow()
+    /// <param name="triggerEvent">是否派发关闭窗口的事件</param>
+    public void CloseWindow(bool triggerEvent = true)
     {
-        if (CloseEvent != null)
+        if (triggerEvent && CloseEvent != null)
         {
             CloseEvent();
         }
         Destroy();
+    }
+
+    private void OnCloseWindow()
+    {
+        CloseWindow();
     }
 }

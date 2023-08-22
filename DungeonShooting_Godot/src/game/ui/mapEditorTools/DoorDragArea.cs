@@ -418,7 +418,9 @@ public partial class DoorDragArea : Control
             var doorAreaRange = GetDoorAreaRange();
             DoorAreaInfo.Start = doorAreaRange.X;
             DoorAreaInfo.End = doorAreaRange.Y;
-            GD.Print("submit: " + doorAreaRange);
+            GD.Print("提交修改: " + doorAreaRange);
+            //派发修改数据修改事件
+            EventManager.EmitEvent(EventEnum.OnEditorDirty);
         }
     }
 

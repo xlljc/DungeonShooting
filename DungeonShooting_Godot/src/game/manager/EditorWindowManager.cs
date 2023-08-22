@@ -56,12 +56,51 @@ public static class EditorWindowManager
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
-                window.CloseWindow();
+                window.CloseWindow(false);
                 onClose(true);
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {
                 window.CloseWindow();
+            })
+        );
+        var body = window.OpenBody<EditorTipsPanel>(UiManager.UiName.EditorTips);
+        body.SetMessage(message);
+    }
+    
+    /// <summary>
+    /// 弹出询问窗口, 包含3个按钮
+    /// </summary>
+    /// <param name="title">标题</param>
+    /// <param name="message">显示内容</param>
+    /// <param name="btn1">按钮1文本</param>
+    /// <param name="btn2">按钮2文本</param>
+    /// <param name="btn3">按钮3文本</param>
+    /// <param name="onClose">关闭时的回调, 参数如果为点击按钮的索引表示点击了确定, -1表示点击了x</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowConfirm(string title, string message, string btn1, string btn2, string btn3, Action<int> onClose, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle(title);
+        window.CloseEvent += () =>
+        {
+            onClose(-1);
+        };
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData(btn1, () =>
+            {
+                window.CloseWindow(false);
+                onClose(0);
+            }),
+            new EditorWindowPanel.ButtonData(btn2, () =>
+            {
+                window.CloseWindow(false);
+                onClose(1);
+            }),
+            new EditorWindowPanel.ButtonData(btn3, () =>
+            {
+                window.CloseWindow(false);
+                onClose(2);
             })
         );
         var body = window.OpenBody<EditorTipsPanel>(UiManager.UiName.EditorTips);
