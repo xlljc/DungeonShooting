@@ -232,11 +232,12 @@ public partial class DungeonManager : Node2D
         for (var i = 0; i < polygonArray.Count; i++)
         {
             var navigationPolygonData = polygonArray[i];
-            var polygonPointArray = navigationPolygonData.GetPoints();
+            var tempPosArray = navigationPolygonData.GetPoints();
+            var polygonPointArray = new Vector2[tempPosArray.Length];
             //这里的位置需要加上房间位置
-            for (var j = 0; j < polygonPointArray.Length; j++)
+            for (var j = 0; j < tempPosArray.Length; j++)
             {
-                polygonPointArray[j] = polygonPointArray[j] + roomInfo.GetWorldPosition() - offset;
+                polygonPointArray[j] = tempPosArray[j] + roomInfo.GetWorldPosition() - offset;
             }
             polygon.AddOutline(polygonPointArray);
 

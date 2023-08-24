@@ -72,9 +72,9 @@ public class DungeonTileMap
         }
         else
         {
-            var rectSize = roomInfo.RoomSplit.RoomInfo.Size;
-            var rectPos = roomInfo.RoomSplit.RoomInfo.Position;
-            var offset = roomInfo.GetOffsetPosition() / GameConfig.TileCellSizeVector2I;
+            //var rectSize = roomInfo.RoomSplit.RoomInfo.Size;
+            var rectPos = roomInfo.RoomSplit.RoomInfo.Position.AsVector2I();
+            //var offset = roomInfo.GetOffsetPosition() / GameConfig.TileCellSizeVector2I;
             //填充tile操作
             var tileInfo = roomInfo.RoomSplit.TileInfo;
             for (var i = 0; i < tileInfo.Floor.Count; i += 5)
@@ -84,7 +84,7 @@ public class DungeonTileMap
                 var sourceId = tileInfo.Floor[i + 2];
                 var atlasCoordsX = tileInfo.Floor[i + 3];
                 var atlasCoordsY = tileInfo.Floor[i + 4];
-                var pos = new Vector2I(roomInfo.Position.X + posX - offset.X, roomInfo.Position.Y + posY - offset.Y);
+                var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
                 _tileRoot.SetCell(GameConfig.FloorMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
             }
             for (var i = 0; i < tileInfo.Middle.Count; i += 5)
@@ -94,7 +94,7 @@ public class DungeonTileMap
                 var sourceId = tileInfo.Middle[i + 2];
                 var atlasCoordsX = tileInfo.Middle[i + 3];
                 var atlasCoordsY = tileInfo.Middle[i + 4];
-                var pos = new Vector2I(roomInfo.Position.X + posX - offset.X, roomInfo.Position.Y + posY - offset.Y);
+                var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
                 _tileRoot.SetCell(GameConfig.MiddleMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
             }
             for (var i = 0; i < tileInfo.Top.Count; i += 5)
@@ -104,7 +104,7 @@ public class DungeonTileMap
                 var sourceId = tileInfo.Top[i + 2];
                 var atlasCoordsX = tileInfo.Top[i + 3];
                 var atlasCoordsY = tileInfo.Top[i + 4];
-                var pos = new Vector2I(roomInfo.Position.X + posX - offset.X, roomInfo.Position.Y + posY - offset.Y);
+                var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
                 _tileRoot.SetCell(GameConfig.TopMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
             }
 

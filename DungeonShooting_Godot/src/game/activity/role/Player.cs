@@ -36,12 +36,12 @@ public partial class Player : Role
         Shield = 0;
 
         // debug用
-        // Acceleration = 3000;
-        // Friction = 3000;
-        // MoveSpeed = 500;
-        // CollisionLayer = 0;
-        // CollisionMask = 0;
-        // GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        RoleState.Acceleration = 3000;
+        RoleState.Friction = 3000;
+        RoleState.MoveSpeed = 500;
+        CollisionLayer = 0;
+        CollisionMask = 0;
+        GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
     }
 
     protected override void Process(float delta)
