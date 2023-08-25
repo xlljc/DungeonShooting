@@ -9,7 +9,7 @@ using System.Text.Json.Serialization;
 public class DungeonRoomSplit
 {
     /// <summary>
-    /// 当前房间是否绘制完成, 也就是是否可用
+    /// 当前房间是否绘制完成, 也就是是否可用, 条件: 房间绘制没有异常, 预设数量大于 0
     /// </summary>
     [JsonInclude]
     public bool Ready;
@@ -76,7 +76,7 @@ public class DungeonRoomSplit
     /// 房间预设数据
     /// </summary>
     [JsonIgnore]
-    public List<RoomPreinstall> Preinstall
+    public List<RoomPreinstallInfo> Preinstall
     {
         get
         {
@@ -90,7 +90,7 @@ public class DungeonRoomSplit
         set => _preinstall = value;
     }
 
-    private List<RoomPreinstall> _preinstall;
+    private List<RoomPreinstallInfo> _preinstall;
 
 
     /// <summary>
@@ -100,16 +100,6 @@ public class DungeonRoomSplit
     {
         var asText = ResourceManager.LoadText(RoomPath);
         _roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(asText);
-
-        // //需要处理 DoorAreaInfos 长度为 0 的房间, 并为其配置默认值
-        // var areaInfos = _roomInfo.DoorAreaInfos;
-        // if (areaInfos.Count == 0)
-        // {
-        //     areaInfos.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize, (_roomInfo.Size.X - 1) * GameConfig.TileCellSize));
-        //     areaInfos.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize, (_roomInfo.Size.X - 1) * GameConfig.TileCellSize));
-        //     areaInfos.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize, (_roomInfo.Size.Y - 1) * GameConfig.TileCellSize));
-        //     areaInfos.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize, (_roomInfo.Size.Y - 1) * GameConfig.TileCellSize));
-        // }
     }
 
     /// <summary>
@@ -127,6 +117,6 @@ public class DungeonRoomSplit
     public void ReloadPreinstall()
     {
         var asText = ResourceManager.LoadText(PreinstallPath);
-        _preinstall = JsonSerializer.Deserialize<List<RoomPreinstall>>(asText);
+        _preinstall = JsonSerializer.Deserialize<List<RoomPreinstallInfo>>(asText);
     }
 }

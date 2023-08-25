@@ -207,26 +207,48 @@ public partial class GameApplication : Node2D, ICoroutine
 		ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
 	}
 
+	public void SetRoomConfig(Dictionary<string,DungeonRoomGroup> roomConfig)
+	{
+		RoomConfig = roomConfig;
+		InitReadyRoom();
+	}
+
 	//初始化房间配置
 	private void InitRoomConfig()
 	{
 		//加载房间配置信息
-		var asText = ResourceManager.LoadText("res://resource/map/tileMaps/GroupConfig.json");
+		var asText = ResourceManager.LoadText("res://resource/map/tileMaps/" + GameConfig.RoomGroupConfigFile);
 		RoomConfig = JsonSerializer.Deserialize<Dictionary<string, DungeonRoomGroup>>(asText);
 
-		//初始化RoomConfigMap
-		//RoomConfigMap = new Dictionary<string, DungeonRoomSplit>();
-		//加载流程更改
-		// foreach (var dungeonRoomGroup in RoomConfig)
-		// {
-		// 	foreach (var dungeonRoomType in Enum.GetValues<DungeonRoomType>())
-		// 	{
-		// 		foreach (var dungeonRoomSplit in dungeonRoomGroup.Value.GetRoomList(dungeonRoomType))
-		// 		{
-		// 			RoomConfigMap.Add(dungeonRoomSplit.ScenePath, dungeonRoomSplit);
-		// 		}
-		// 	}
-		// }
+		InitReadyRoom();
+	}
+	
+	//初始化房间数据
+	private void InitReadyRoom()
+	{
+		foreach (var dungeonRoomGroup in RoomConfig)
+		{
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.BattleList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.InletList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.OutletList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.BossList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.ShopList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.RewardList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.EventList);
+		}
+	}
+	
+	//移除未准备好的房间
+	private void RemoveUnreadyRooms(List<DungeonRoomSplit> roomInfos)
+	{
+		for (var i = 0; i < roomInfos.Count; i++)
+		{
+			if (!roomInfos[i].Ready)
+			{
+				roomInfos.RemoveAt(i);
+				i--;
+			}
+		}
 	}
 
 	//窗体大小改变

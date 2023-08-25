@@ -2,11 +2,11 @@
   {
     "Id": "role0001",
     "Type": 3,
-    "Name": "",
+    "Name": "\u73A9\u5BB6",
     "Intro": "\u73A9\u5BB6",
     "Details": "",
     "Prefab": "res://prefab/role/Role0001.tscn",
-    "Icon": "",
+    "Icon": "res://resource/sprite/role/role0001/Role0001_Icon.png",
     "ShowInMapEditor": false
   },
   {

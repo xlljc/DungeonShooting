@@ -173,7 +173,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <summary>
     /// 当前选中的预设
     /// </summary>
-    public RoomPreinstall SelectPreinstall
+    public RoomPreinstallInfo SelectPreinstallInfo
     {
         get
         {
@@ -190,6 +190,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// 选中的标记
     /// </summary>
     public MarkTool SelectMark => MapEditorToolsPanel.ActiveMark;
+
+    /// <summary>
+    /// 当前的房间大小
+    /// </summary>
+    public Vector2I RoomSize => _roomSize;
 
     //变动过的数据
     
@@ -490,7 +495,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public void TriggerSave()
     {
         GD.Print("保存地牢房间数据...");
-        RoomSplit.Ready = !HasError;
+        //是否准备好
+        RoomSplit.Ready = !HasError && RoomSplit.Preinstall != null && RoomSplit.Preinstall.Count > 0;
         SaveRoomInfoConfig();
         SaveTileInfoConfig();
         SavePreinstallConfig();

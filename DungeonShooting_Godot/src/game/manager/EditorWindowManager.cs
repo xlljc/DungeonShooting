@@ -175,14 +175,16 @@ public static class EditorWindowManager
     /// <summary>
     /// 打开创建房间预设弹窗
     /// </summary>
+    /// <param name="roomType">当前房间的类型</param>
     /// <param name="list">当前房间已经包含的所有预设列表</param>
     /// <param name="onCreatePreinstall">创建成功时的回调</param>
-    public static void ShowCreatePreinstall(List<RoomPreinstall> list, Action<RoomPreinstall> onCreatePreinstall)
+    public static void ShowCreatePreinstall(DungeonRoomType roomType, List<RoomPreinstallInfo> list, Action<RoomPreinstallInfo> onCreatePreinstall)
     {
         var window = UiManager.Open_EditorWindow();
         window.SetWindowTitle("创建房间预设");
         window.SetWindowSize(new Vector2I(700, 600));
         var body = window.OpenBody<MapEditorCreatePreinstallPanel>(UiManager.UiName.MapEditorCreatePreinstall);
+        body.InitData(roomType);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
@@ -203,16 +205,17 @@ public static class EditorWindowManager
     /// <summary>
     /// 打开编辑房间预设弹窗
     /// </summary>
+    /// <param name="roomType">当前房间的类型</param>
     /// <param name="list">当前房间已经包含的所有预设列表</param>
-    /// <param name="preinstall">需要编辑的预设数据</param>
+    /// <param name="preinstallInfo">需要编辑的预设数据</param>
     /// <param name="onSavePreinstall">保存时的回调</param>
-    public static void ShowEditPreinstall(List<RoomPreinstall> list, RoomPreinstall preinstall, Action<RoomPreinstall> onSavePreinstall)
+    public static void ShowEditPreinstall(DungeonRoomType roomType, List<RoomPreinstallInfo> list, RoomPreinstallInfo preinstallInfo, Action<RoomPreinstallInfo> onSavePreinstall)
     {
         var window = UiManager.Open_EditorWindow();
         window.SetWindowTitle("创建房间预设");
         window.SetWindowSize(new Vector2I(700, 600));
         var body = window.OpenBody<MapEditorCreatePreinstallPanel>(UiManager.UiName.MapEditorCreatePreinstall);
-        body.InitData(preinstall);
+        body.InitData(roomType, preinstallInfo);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {

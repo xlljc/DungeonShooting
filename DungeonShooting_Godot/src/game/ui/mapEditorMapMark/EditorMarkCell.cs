@@ -31,7 +31,14 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
         }
         else
         {
-            text += "空";
+            if (data.MarkInfo.SpecialMarkType == SpecialMarkType.BirthPoint)
+            {
+                text = "出生标记";
+            }
+            else
+            {
+                text += "空";
+            }
         }
 
         //延时时间

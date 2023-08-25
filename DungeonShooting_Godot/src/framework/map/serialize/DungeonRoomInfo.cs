@@ -54,4 +54,27 @@ public class DungeonRoomInfo
     /// </summary>
     [JsonInclude]
     public string Remark;
+
+    private List<DoorAreaInfo> _completionDoorArea;
+
+    /// <summary>
+    /// 获取门区域配置数据, 如果该函数会自动填充未配置的数据
+    /// </summary>
+    public List<DoorAreaInfo> GetCompletionDoorArea()
+    {
+        if (_completionDoorArea == null)
+        {
+            //需要处理 DoorAreaInfos 长度为 0 的房间, 并为其配置默认值
+            _completionDoorArea = new List<DoorAreaInfo>(DoorAreaInfos);
+            if (_completionDoorArea.Count == 0)
+            {
+                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize, ((int)Size.X - 1) * GameConfig.TileCellSize));
+                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize, ((int)Size.X - 1) * GameConfig.TileCellSize));
+                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize, ((int)Size.Y - 1) * GameConfig.TileCellSize));
+                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize, ((int)Size.Y - 1) * GameConfig.TileCellSize));
+            }
+        }
+        
+        return _completionDoorArea;
+    }
 }

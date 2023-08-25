@@ -9,10 +9,16 @@
         "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_preinstall.json"
       },
       {
-        "Ready": true,
+        "Ready": false,
         "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room2/Room2_roomInfo.json",
         "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room2/Room2_tileInfo.json",
         "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room2/Room2_preinstall.json"
+      },
+      {
+        "Ready": false,
+        "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_roomInfo.json",
+        "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_tileInfo.json",
+        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_preinstall.json"
       }
     ],
     "InletList": [
@@ -25,7 +31,7 @@
     ],
     "OutletList": [
       {
-        "Ready": true,
+        "Ready": false,
         "RoomPath": "resource/map/tileMaps/TestGroup1/outlet/End1/End1_roomInfo.json",
         "TilePath": "resource/map/tileMaps/TestGroup1/outlet/End1/End1_tileInfo.json",
         "PreinstallPath": "resource/map/tileMaps/TestGroup1/outlet/End1/End1_preinstall.json"

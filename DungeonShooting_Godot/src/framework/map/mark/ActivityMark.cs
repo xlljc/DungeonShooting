@@ -83,7 +83,7 @@ public partial class ActivityMark : Node2D
     private bool _isOver = true;
     private float _overTimer = 1;
     private float _timer = 0;
-    private RoomInfo _tempRoom;
+    private RoomInfo _tempRoomInfo;
 
     //已经计算好要生成的物体
     private Dictionary<string, ActivityExpressionData> _currentExpression = new Dictionary<string, ActivityExpressionData>();
@@ -143,8 +143,8 @@ public partial class ActivityMark : Node2D
                 _timer += (float)delta;
                 if (_timer >= DelayTime)
                 {
-                    Doing(_tempRoom);
-                    _tempRoom = null;
+                    Doing(_tempRoomInfo);
+                    _tempRoomInfo = null;
                     _isOver = true;
                 }
             }
@@ -171,7 +171,7 @@ public partial class ActivityMark : Node2D
         else
         {
             _timer = 0;
-            _tempRoom = roomInfo;
+            _tempRoomInfo = roomInfo;
         }
     }
 

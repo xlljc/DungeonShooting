@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 /// <summary>
 /// 房间预设数据
 /// </summary>
-public class RoomPreinstall
+public class RoomPreinstallInfo
 {
     /// <summary>
     /// 预设名称
@@ -34,12 +34,12 @@ public class RoomPreinstall
     /// <summary>
     /// 从指定对象浅拷贝数据
     /// </summary>
-    public void CloneFrom(RoomPreinstall preinstall)
+    public void CloneFrom(RoomPreinstallInfo preinstallInfo)
     {
-        Name = preinstall.Name;
-        Weight = preinstall.Weight;
-        Remark = preinstall.Remark;
-        WaveList = preinstall.WaveList;
+        Name = preinstallInfo.Name;
+        Weight = preinstallInfo.Weight;
+        Remark = preinstallInfo.Remark;
+        WaveList = preinstallInfo.WaveList;
     }
 
     /// <summary>

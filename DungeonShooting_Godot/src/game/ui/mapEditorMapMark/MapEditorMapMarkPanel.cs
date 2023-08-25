@@ -131,7 +131,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// <summary>
     /// 获取当前选中的预设
     /// </summary>
-    public RoomPreinstall GetSelectPreinstall()
+    public RoomPreinstallInfo GetSelectPreinstall()
     {
         var index = S_PreinstallOption.Instance.Selected;
         var preinstall = EditorTileMap.RoomSplit.Preinstall;
@@ -206,16 +206,27 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             return;
         }
 
-        if (toolType == SelectToolType.Wave) //不需要显示编辑波数按钮
+        if (toolType == SelectToolType.Wave)
         {
+            //不需要显示编辑波数按钮
             S_DynamicTool.L_EditButton.Instance.Visible = false;
             //预加载波不能删除
             S_DynamicTool.L_DeleteButton.Instance.Visible = uiCell.Index != 0;
         }
         else //显示编辑按钮
         {
-            S_DynamicTool.L_EditButton.Instance.Visible = true;
-            S_DynamicTool.L_DeleteButton.Instance.Visible = true;
+            var markCell = (EditorMarkCell)uiCell;
+            var markType = markCell.Data.MarkInfo.SpecialMarkType;
+            if (markType == SpecialMarkType.BirthPoint) //某些特殊标记不能删除
+            {
+                S_DynamicTool.L_EditButton.Instance.Visible = true;
+                S_DynamicTool.L_DeleteButton.Instance.Visible = false;
+            }
+            else //普通标记
+            {
+                S_DynamicTool.L_EditButton.Instance.Visible = true;
+                S_DynamicTool.L_DeleteButton.Instance.Visible = true;
+            }
         }
 
         //显示工具
@@ -261,8 +272,9 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnAddPreinstall()
     {
+        var roomInfoRoomType = EditorTileMap.RoomSplit.RoomInfo.RoomType;
         var roomSplitPreinstall = EditorTileMap.RoomSplit.Preinstall;
-        EditorWindowManager.ShowCreatePreinstall(roomSplitPreinstall, preinstall =>
+        EditorWindowManager.ShowCreatePreinstall(roomInfoRoomType, roomSplitPreinstall, preinstall =>
         {
             //创建逻辑
             roomSplitPreinstall.Add(preinstall);
@@ -277,9 +289,10 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnEditPreinstall()
     {
+        var roomInfoRoomType = EditorTileMap.RoomSplit.RoomInfo.RoomType;
         var roomSplitPreinstall = EditorTileMap.RoomSplit.Preinstall;
         var selectPreinstall = GetSelectPreinstall();
-        EditorWindowManager.ShowEditPreinstall(roomSplitPreinstall, selectPreinstall, preinstall =>
+        EditorWindowManager.ShowEditPreinstall(roomInfoRoomType, roomSplitPreinstall, selectPreinstall, preinstall =>
         {
             //修改逻辑
             selectPreinstall.CloneFrom(preinstall);

@@ -49,10 +49,12 @@ public partial class MarkAreaTool : Node2D
 
     public override void _Process(double delta)
     {
-        if (!Visible || _markInfo == null || _toolRoot.UiPanel.IsOpenPopUps || !_toolRoot.UiPanel.S_ToolRoot.Instance.Visible)
+        if (!Visible || _markInfo == null || _toolRoot.UiPanel.IsOpenPopUps ||
+            !_toolRoot.UiPanel.S_ToolRoot.Instance.Visible || DoorHoverArea.IsDrag)
         {
             return;
         }
+        
 
         _showCornerBlock = _markInfo.Size.X >= 4 && _markInfo.Size.Y >= 4;
         var globalMousePosition = GetGlobalMousePosition();

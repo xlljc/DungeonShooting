@@ -14,12 +14,12 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 起始房间
     /// </summary>
-    public RoomInfo StartRoom => _dungeonGenerator?.StartRoom;
+    public RoomInfo StartRoomInfo => _dungeonGenerator?.StartRoomInfo;
     
     /// <summary>
     /// 当前玩家所在的房间
     /// </summary>
-    public RoomInfo ActiveRoom => Player.Current?.AffiliationArea?.RoomInfo;
+    public RoomInfo ActiveRoomInfo => Player.Current?.AffiliationArea?.RoomInfo;
     
     /// <summary>
     /// 当前玩家所在的区域
@@ -111,7 +111,7 @@ public partial class DungeonManager : Node2D
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
         _dungeonTileMap = new DungeonTileMap(_world.TileRoot);
-        _dungeonTileMap.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom, _dungeonGenerator.Random);
+        _dungeonTileMap.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoomInfo, _dungeonGenerator.Random);
         yield return 0;
         
         //生成寻路网格， 这一步操作只生成过道的导航
@@ -135,7 +135,7 @@ public partial class DungeonManager : Node2D
         //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
         //初始房间创建玩家标记
-        var playerBirthMark = StartRoom.ActivityMarks.FirstOrDefault(mark => mark.Type == ActivityType.Player);
+        var playerBirthMark = StartRoomInfo.ActivityMarks.FirstOrDefault(mark => mark.Type == ActivityType.Player);
         //创建玩家
         var player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
         if (playerBirthMark != null)
@@ -167,6 +167,7 @@ public partial class DungeonManager : Node2D
         EventManager.EmitEvent(EventEnum.OnEnterDungeon);
         
         IsInDungeon = true;
+        QueueRedraw();
         yield return 0;
         //关闭 loading UI
         UiManager.Destroy_Loading();
@@ -197,8 +198,9 @@ public partial class DungeonManager : Node2D
         _world = null;
         GameApplication.Instance.DestroyWorld();
         yield return new WaitForFixedProcess(10);
+        QueueRedraw();
         //鼠标还原
-        GameApplication.Instance.Cursor.SetGuiMode(false);
+        GameApplication.Instance.Cursor.SetGuiMode(true);
         //派发退出地牢事件
         EventManager.EmitEvent(EventEnum.OnExitDungeon);
         yield return 0;
@@ -439,7 +441,7 @@ public partial class DungeonManager : Node2D
     /// </summary>
     private void OnCheckEnemy()
     {
-        var activeRoom = ActiveRoom;
+        var activeRoom = ActiveRoomInfo;
         if (activeRoom != null)// && //activeRoom.IsSeclusion)
         {
             if (activeRoom.IsSeclusion) //房间处于关上状态
@@ -509,24 +511,24 @@ public partial class DungeonManager : Node2D
     }
     
     //绘制房间区域, debug 用
-    private void DrawRoomInfo(RoomInfo room)
+    private void DrawRoomInfo(RoomInfo roomInfo)
     {
         var cellSize = _world.TileRoot.CellQuadrantSize;
-        var pos1 = (room.Position + room.Size / 2) * cellSize;
+        var pos1 = (roomInfo.Position + roomInfo.Size / 2) * cellSize;
         
         //绘制下一个房间
-        foreach (var nextRoom in room.Next)
+        foreach (var nextRoom in roomInfo.Next)
         {
             var pos2 = (nextRoom.Position + nextRoom.Size / 2) * cellSize;
             DrawLine(pos1, pos2, Colors.Red);
             DrawRoomInfo(nextRoom);
         }
 
-        DrawString(ResourceManager.DefaultFont16Px, pos1 - new Vector2I(0, 10), "Id: " + room.Id.ToString());
-        DrawString(ResourceManager.DefaultFont16Px, pos1 + new Vector2I(0, 10), "Layer: " + room.Layer.ToString());
+        DrawString(ResourceManager.DefaultFont16Px, pos1 - new Vector2I(0, 10), "Id: " + roomInfo.Id.ToString());
+        DrawString(ResourceManager.DefaultFont16Px, pos1 + new Vector2I(0, 10), "Layer: " + roomInfo.Layer.ToString());
 
         //绘制门
-        foreach (var roomDoor in room.Doors)
+        foreach (var roomDoor in roomInfo.Doors)
         {
             var originPos = roomDoor.OriginPosition * cellSize;
             switch (roomDoor.Direction)
@@ -554,7 +556,7 @@ public partial class DungeonManager : Node2D
             }
             
             //绘制房间区域
-            DrawRect(new Rect2(room.Position * cellSize, room.Size * cellSize), Colors.Blue, false);
+            DrawRect(new Rect2(roomInfo.Position * cellSize, roomInfo.Size * cellSize), Colors.Blue, false);
 
             if (roomDoor.HasCross && roomDoor.RoomInfo.Id < roomDoor.ConnectRoom.Id)
             {

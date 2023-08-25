@@ -24,4 +24,10 @@ public class MarkInfoItem
     /// </summary>
     [JsonInclude]
     public Dictionary<string, string> Attr;
+
+    /// <summary>
+    /// 所属标记类型
+    /// </summary>
+    [JsonIgnore]
+    public SpecialMarkType SpecialMarkType = SpecialMarkType.Normal;
 }

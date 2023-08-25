@@ -72,7 +72,23 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
             S_DelayContainer.Instance.Visible = true;
             S_DelayInput.Instance.Value = data.DelayTime;
         }
-        _grid.SetDataList(data.MarkList.ToArray());
+
+        if (_markInfo.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
+        {
+            var markInfoItem = new MarkInfoItem();
+            markInfoItem.Id = ActivityObject.Ids.Id_role0001;
+            markInfoItem.SpecialMarkType = _markInfo.SpecialMarkType;
+            _grid.Add(markInfoItem);
+            //隐藏选项
+            S_AddMark.Instance.Visible = false;
+            S_DelayContainer.Instance.Visible = false;
+        }
+        else //普通标记
+        {
+            _grid.SetDataList(data.MarkList.ToArray());
+            S_AddMark.Instance.Visible = true;
+            S_DelayContainer.Instance.Visible = true;
+        }
     }
 
     /// <summary>
@@ -100,13 +116,29 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         data.Position = new SerializeVector2((float)S_PosX.Instance.Value, (float)S_PosY.Instance.Value);
         data.Size = new SerializeVector2((float)S_SizeX.Instance.Value, (float)S_SizeY.Instance.Value);
         
-        //标记物体数据
-        var gridCount = _grid.Count;
-        for (var i = 0; i < gridCount; i++)
+        if (_markInfo != null)
         {
-            var uiCell = (MarkObjectCell)_grid.GetCell(i);
-            var markInfoItem = uiCell.GetMarkInfoItem();
-            data.MarkList.Add(markInfoItem);
+            data.SpecialMarkType = _markInfo.SpecialMarkType;
+        }
+        else
+        {
+            data.SpecialMarkType = SpecialMarkType.Normal;
+        }
+        
+        //标记物体数据
+        if (data.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
+        {
+            
+        }
+        else //普通标记
+        {
+            var gridCount = _grid.Count;
+            for (var i = 0; i < gridCount; i++)
+            {
+                var uiCell = (MarkObjectCell)_grid.GetCell(i);
+                var markInfoItem = uiCell.GetMarkInfoItem();
+                data.MarkList.Add(markInfoItem);
+            }
         }
 
         return data;

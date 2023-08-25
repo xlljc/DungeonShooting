@@ -11,7 +11,7 @@ public partial class ActivityObject
     public static class Ids
     {
         /// <summary>
-        /// 名称:  <br/>
+        /// 名称: 玩家 <br/>
         /// 简介: 玩家
         /// </summary>
         public const string Id_role0001 = "role0001";

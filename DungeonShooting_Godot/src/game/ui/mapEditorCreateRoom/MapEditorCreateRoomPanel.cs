@@ -117,7 +117,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         roomSplit.TileInfo = tileInfo;
 
         roomSplit.PreinstallPath = dirPath + "/" + MapProjectManager.GetRoomPreinstallConfigName(roomInfo.RoomName);
-        roomSplit.Preinstall = new List<RoomPreinstall>();
+        roomSplit.Preinstall = new List<RoomPreinstallInfo>();
         return roomSplit;
     }
 }

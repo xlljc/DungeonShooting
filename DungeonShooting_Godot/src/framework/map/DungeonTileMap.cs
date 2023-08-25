@@ -34,10 +34,10 @@ public class DungeonTileMap
     /// <summary>
     /// 根据 startRoom 和 config 数据自动填充 tileMap 参数中的地图数据
     /// </summary>
-    public void AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoom, SeedRandom random)
+    public void AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoomInfo, SeedRandom random)
     {
         _connectNavigationItemList.Clear();
-        _AutoFillRoomTile(config, startRoom, random);
+        _AutoFillRoomTile(config, startRoomInfo, random);
     }
     
     private void _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo, SeedRandom random)
@@ -75,6 +75,7 @@ public class DungeonTileMap
             //var rectSize = roomInfo.RoomSplit.RoomInfo.Size;
             var rectPos = roomInfo.RoomSplit.RoomInfo.Position.AsVector2I();
             //var offset = roomInfo.GetOffsetPosition() / GameConfig.TileCellSizeVector2I;
+            
             //填充tile操作
             var tileInfo = roomInfo.RoomSplit.TileInfo;
             for (var i = 0; i < tileInfo.Floor.Count; i += 5)
@@ -108,7 +109,9 @@ public class DungeonTileMap
                 _tileRoot.SetCell(GameConfig.TopMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
             }
 
-            GD.PrintErr("初始化流程得改");
+            //初始化标记
+            //roomInfo.RoomSplit.Preinstall.
+            
             //roomInfo.RoomSplit.TileInfo.
             // var template = ResourceManager.Load<PackedScene>(roomInfo.RoomSplit.ScenePath);
             // var tileInstance = template.Instantiate<DungeonRoomTemplate>();
@@ -681,7 +684,7 @@ public class DungeonTileMap
 
             _generateNavigationResult = new GenerateNavigationResult(true);
         }
-        catch (NavigationPointInterleavingException e)
+        catch (NavigationPointException e)
         {
             _usePoints.Clear();
             _polygonDataList.Clear();
@@ -876,7 +879,7 @@ public class DungeonTileMap
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 1: //下
                 {
@@ -934,7 +937,7 @@ public class DungeonTileMap
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 2: //左
                 {
@@ -994,7 +997,7 @@ public class DungeonTileMap
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 3: //上
                 {
@@ -1052,7 +1055,7 @@ public class DungeonTileMap
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
             }
         }
@@ -1136,7 +1139,7 @@ public class DungeonTileMap
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 1: //下
                 {
@@ -1194,7 +1197,7 @@ public class DungeonTileMap
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 2: //左
                 {
@@ -1251,7 +1254,7 @@ public class DungeonTileMap
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
                 case 3: //上
                 {
@@ -1309,7 +1312,7 @@ public class DungeonTileMap
                         break;
                     }
 
-                    throw new NavigationPointInterleavingException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
+                    throw new NavigationPointException(new Vector2I(tempI, tempJ), "生成导航多边形发生错误! 点: " + new Vector2I(tempI, tempJ) + "发生交错!");
                 }
             }
         }
@@ -1320,7 +1323,7 @@ public class DungeonTileMap
     {
         if (_usePoints.Contains(pos))
         {
-            throw new NavigationPointInterleavingException(pos, "生成导航多边形发生错误! 点: " + pos + "发生交错!");
+            throw new NavigationPointException(pos, "生成导航多边形发生错误! 点: " + pos + "发生交错!");
         }
 
         _usePoints.Add(pos);

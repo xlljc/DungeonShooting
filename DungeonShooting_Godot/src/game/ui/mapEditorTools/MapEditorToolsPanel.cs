@@ -142,7 +142,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         }
         _currMarkToolsMap.Clear();
         //添加新的数据
-        var selectPreinstall = EditorMap.Instance.SelectPreinstall;
+        var selectPreinstall = EditorMap.Instance.SelectPreinstallInfo;
         if (selectPreinstall != null)
         {
             foreach (var markInfos in selectPreinstall.WaveList)
@@ -159,7 +159,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
     private void OnSelectWaveTool(object arg)
     {
         var selectIndex = (int)arg;
-        var waveList = EditorMap.Instance.SelectPreinstall.WaveList;
+        var waveList = EditorMap.Instance.SelectPreinstallInfo.WaveList;
         for (var i = 0; i < waveList.Count; i++)
         {
             var wave = waveList[i];

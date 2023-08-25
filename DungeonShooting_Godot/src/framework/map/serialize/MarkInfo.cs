@@ -18,6 +18,12 @@ public class MarkInfo
     /// </summary>
     [JsonInclude]
     public SerializeVector2 Size;
+
+    /// <summary>
+    /// 特殊标记类型
+    /// </summary>
+    [JsonInclude]
+    public SpecialMarkType SpecialMarkType = SpecialMarkType.Normal;
     
     /// <summary>
     /// 延时时间

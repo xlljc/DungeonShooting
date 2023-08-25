@@ -7,7 +7,7 @@ using Godot;
 /// <summary>
 /// 房间组数据
 /// </summary>
-public class DungeonRoomGroup
+public class DungeonRoomGroup : IClone<DungeonRoomGroup>
 {
     /// <summary>
     /// 组名称
@@ -65,7 +65,8 @@ public class DungeonRoomGroup
     
     private bool _init = false;
     private Dictionary<DungeonRoomType, WeightRandom> _weightRandomMap;
-
+    private List<DungeonRoomSplit> _readyBattleList;
+    
     /// <summary>
     /// 获取所有房间数据
     /// </summary>
@@ -78,7 +79,6 @@ public class DungeonRoomGroup
         list.AddRange(BossList);
         list.AddRange(ShopList);
         list.AddRange(RewardList);
-        list.AddRange(ShopList);
         list.AddRange(EventList);
         return list;
     }
@@ -152,5 +152,19 @@ public class DungeonRoomGroup
         }
 
         return null;
+    }
+    
+    public DungeonRoomGroup Clone()
+    {
+        var inst = new DungeonRoomGroup();
+        inst.GroupName = GroupName;
+        inst.BattleList.AddRange(BattleList);
+        inst.InletList.AddRange(InletList);
+        inst.OutletList.AddRange(OutletList);
+        inst.BossList.AddRange(BossList);
+        inst.ShopList.AddRange(ShopList);
+        inst.RewardList.AddRange(RewardList);
+        inst.EventList.AddRange(EventList);
+        return inst;
     }
 }

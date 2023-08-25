@@ -201,5 +201,13 @@ public static class MapProjectManager
         options.WriteIndented = true;
         var jsonText = JsonSerializer.Serialize(GroupMap, options);
         File.WriteAllText(configFile, jsonText);
+        
+        //更新GameApplication中的房间数据
+        var dic = new Dictionary<string, DungeonRoomGroup>();
+        foreach (var dungeonRoomGroup in GroupMap)
+        {
+            dic.Add(dungeonRoomGroup.Key, dungeonRoomGroup.Value.Clone());
+        }
+        GameApplication.Instance.SetRoomConfig(dic);
     }
 }

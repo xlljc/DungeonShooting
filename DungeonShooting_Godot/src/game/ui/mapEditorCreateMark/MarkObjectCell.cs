@@ -48,6 +48,15 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                 CreateExpandPanel(_activityObject, data);
             }
         }
+
+        if (data.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
+        {
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_CenterContainer.L_DeleteButton.Instance.Visible = false;
+        }
+        else //普通标记
+        {
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_CenterContainer.L_DeleteButton.Instance.Visible = true;
+        }
     }
 
     public override void OnDisable()

@@ -41,7 +41,8 @@ public partial class Player : Role
         RoleState.MoveSpeed = 500;
         CollisionLayer = 0;
         CollisionMask = 0;
-        GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        GameCamera.Main.Zoom = new Vector2(.75f, 0.75f);
+        //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
     }
 
     protected override void Process(float delta)
@@ -117,6 +118,8 @@ public partial class Player : Role
 
         if (Input.IsKeyPressed(Key.P))
         {
+            //Hurt(1000, 0);
+            Hp = 0;
             Hurt(1000, 0);
         }
     }
