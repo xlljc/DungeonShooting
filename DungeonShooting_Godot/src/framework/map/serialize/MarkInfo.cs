@@ -26,7 +26,7 @@ public class MarkInfo
     public SpecialMarkType SpecialMarkType = SpecialMarkType.Normal;
     
     /// <summary>
-    /// 延时时间
+    /// 延时时间, 单位: 秒
     /// </summary>
     [JsonInclude]
     public float DelayTime;

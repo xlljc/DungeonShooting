@@ -135,7 +135,7 @@ public partial class DungeonManager : Node2D
         //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
         //初始房间创建玩家标记
-        var playerBirthMark = StartRoomInfo.ActivityMarks.FirstOrDefault(mark => mark.Type == ActivityType.Player);
+        var playerBirthMark = StartRoomInfo.RoomPreinstall.GetPlayerBirthMark();
         //创建玩家
         var player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
         if (playerBirthMark != null)

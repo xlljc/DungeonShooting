@@ -65,9 +65,9 @@ public class RoomInfo : IDestroy
     public RoomInfo Prev;
 
     /// <summary>
-    /// 物体生成标记
+    /// 当前房间使用的预设
     /// </summary>
-    public List<ActivityMark> ActivityMarks = new List<ActivityMark>();
+    public RoomPreinstall RoomPreinstall;
 
     /// <summary>
     /// 当前房间归属区域
@@ -86,11 +86,11 @@ public class RoomInfo : IDestroy
     
     public bool IsDestroyed { get; private set; }
     
-    private bool _beReady = false;
-    private bool _waveStart = false;
-    private int _currWaveIndex = 0;
-    private int _currWaveNumber = 0;
-    private List<ActivityMark> _currActivityMarks = new List<ActivityMark>();
+    // private bool _beReady = false;
+    // private bool _waveStart = false;
+    // private int _currWaveIndex = 0;
+    // private int _currWaveNumber = 0;
+    //private List<ActivityMark> _currActivityMarks = new List<ActivityMark>();
 
     /// <summary>
     /// 获取房间的全局坐标, 单位: 像素
@@ -174,11 +174,17 @@ public class RoomInfo : IDestroy
             nextRoom.Destroy();
         }
         Next.Clear();
-        foreach (var activityMark in ActivityMarks)
+        if (RoomPreinstall != null)
         {
-            activityMark.QueueFree();
+            RoomPreinstall.Destroy();
+            RoomPreinstall = null;
         }
-        ActivityMarks.Clear();
+
+        // foreach (var activityMark in ActivityMarks)
+        // {
+        //     activityMark.QueueFree();
+        // }
+        // ActivityMarks.Clear();
         
         if (StaticImageCanvas != null)
         {
@@ -192,38 +198,38 @@ public class RoomInfo : IDestroy
     /// </summary>
     public void BeReady()
     {
-        //没有标记, 啥都不要做
-        if (ActivityMarks.Count == 0)
-        {
-            _beReady = true;
-            IsSeclusion = false;
-            return;
-        }
-        IsSeclusion = true;
-        _waveStart = false;
-
-        if (!_beReady)
-        {
-            _beReady = true;
-            //按照 WaveNumber 排序
-            ActivityMarks.Sort((x, y) =>
-            {
-                return x.WaveNumber - y.WaveNumber;
-            });
-        }
-
-        //不是初始房间才能关门
-        if (RoomSplit.RoomInfo.RoomType != DungeonRoomType.Inlet)
-        {
-            //关门
-            foreach (var doorInfo in Doors)
-            {
-                doorInfo.Door.CloseDoor();
-            }
-        }
-        
-        //执行第一波生成
-        NextWave();
+        // //没有标记, 啥都不要做
+        // if (ActivityMarks.Count == 0)
+        // {
+        //     _beReady = true;
+        //     IsSeclusion = false;
+        //     return;
+        // }
+        // IsSeclusion = true;
+        // _waveStart = false;
+        //
+        // if (!_beReady)
+        // {
+        //     _beReady = true;
+        //     //按照 WaveNumber 排序
+        //     ActivityMarks.Sort((x, y) =>
+        //     {
+        //         return x.WaveNumber - y.WaveNumber;
+        //     });
+        // }
+        //
+        // //不是初始房间才能关门
+        // if (RoomSplit.RoomInfo.RoomType != DungeonRoomType.Inlet)
+        // {
+        //     //关门
+        //     foreach (var doorInfo in Doors)
+        //     {
+        //         doorInfo.Door.CloseDoor();
+        //     }
+        // }
+        //
+        // //执行第一波生成
+        // NextWave();
     }
 
     /// <summary>
@@ -231,23 +237,23 @@ public class RoomInfo : IDestroy
     /// </summary>
     public void OnClearRoom()
     {
-        if (_currWaveIndex >= ActivityMarks.Count) //所有 mark 都走完了
-        {
-            IsSeclusion = false;
-            _currActivityMarks.Clear();
-            //开门
-            if (RoomSplit.RoomInfo.RoomType != DungeonRoomType.Inlet)
-            {
-                foreach (var doorInfo in Doors)
-                {
-                    doorInfo.Door.OpenDoor();
-                }
-            }
-        }
-        else //执行下一波
-        {
-            NextWave();
-        }
+        // if (_currWaveIndex >= ActivityMarks.Count) //所有 mark 都走完了
+        // {
+        //     IsSeclusion = false;
+        //     _currActivityMarks.Clear();
+        //     //开门
+        //     if (RoomSplit.RoomInfo.RoomType != DungeonRoomType.Inlet)
+        //     {
+        //         foreach (var doorInfo in Doors)
+        //         {
+        //             doorInfo.Door.OpenDoor();
+        //         }
+        //     }
+        // }
+        // else //执行下一波
+        // {
+        //     NextWave();
+        // }
     }
 
     /// <summary>
@@ -255,13 +261,13 @@ public class RoomInfo : IDestroy
     /// </summary>
     public bool IsCurrWaveOver()
     {
-        for (var i = 0; i < _currActivityMarks.Count; i++)
-        {
-            if (!_currActivityMarks[i].IsOver())
-            {
-                return false;
-            }
-        }
+        // for (var i = 0; i < _currActivityMarks.Count; i++)
+        // {
+        //     if (!_currActivityMarks[i].IsOver())
+        //     {
+        //         return false;
+        //     }
+        // }
 
         return true;
     }
@@ -271,29 +277,29 @@ public class RoomInfo : IDestroy
     /// </summary>
     private void NextWave()
     {
-        if (!_waveStart)
-        {
-            _waveStart = true;
-            _currWaveIndex = 0;
-            _currWaveNumber = ActivityMarks[0].WaveNumber;
-        }
-        GD.Print("执行下一波, 当前: " + _currWaveNumber);
-        
-        _currActivityMarks.Clear();
-        //根据标记生成对象
-        for (; _currWaveIndex < ActivityMarks.Count; _currWaveIndex++)
-        {
-            var mark = ActivityMarks[_currWaveIndex];
-            if (mark.WaveNumber != _currWaveNumber) //当前这波已经执行完成了
-            {
-                _currWaveNumber = mark.WaveNumber;
-                break;
-            }
-            else //生成操作
-            {
-                mark.BeReady(this);
-                _currActivityMarks.Add(mark);
-            }
-        }
+        // if (!_waveStart)
+        // {
+        //     _waveStart = true;
+        //     _currWaveIndex = 0;
+        //     _currWaveNumber = ActivityMarks[0].WaveNumber;
+        // }
+        // GD.Print("执行下一波, 当前: " + _currWaveNumber);
+        //
+        // _currActivityMarks.Clear();
+        // //根据标记生成对象
+        // for (; _currWaveIndex < ActivityMarks.Count; _currWaveIndex++)
+        // {
+        //     var mark = ActivityMarks[_currWaveIndex];
+        //     if (mark.WaveNumber != _currWaveNumber) //当前这波已经执行完成了
+        //     {
+        //         _currWaveNumber = mark.WaveNumber;
+        //         break;
+        //     }
+        //     else //生成操作
+        //     {
+        //         mark.BeReady(this);
+        //         _currActivityMarks.Add(mark);
+        //     }
+        // }
     }
 }

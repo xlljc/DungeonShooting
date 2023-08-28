@@ -31,7 +31,7 @@
     ],
     "OutletList": [
       {
-        "Ready": false,
+        "Ready": true,
         "RoomPath": "resource/map/tileMaps/TestGroup1/outlet/End1/End1_roomInfo.json",
         "TilePath": "resource/map/tileMaps/TestGroup1/outlet/End1/End1_tileInfo.json",
         "PreinstallPath": "resource/map/tileMaps/TestGroup1/outlet/End1/End1_preinstall.json"

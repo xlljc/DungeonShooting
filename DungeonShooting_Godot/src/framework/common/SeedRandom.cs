@@ -145,4 +145,31 @@ public class SeedRandom
 
         return RandomRangeInt(0, weightList.Count - 1);
     }
+    
+    /// <summary>
+    /// 从权重列表中随机抽取下标值
+    /// </summary>
+    public int RandomWeight(int[] weightList)
+    {
+        // 计算总权重
+        var totalWeight = 0;
+        foreach (var weight in weightList)
+        {
+            totalWeight += weight;
+        }
+        
+        var randomNumber = _random.Next(totalWeight);
+        var currentWeight = 0;
+        for (var i = 0; i < weightList.Length; i++)
+        {
+            var value = weightList[i];
+            currentWeight += value;
+            if (randomNumber < currentWeight)
+            {
+                return i;
+            }
+        }
+
+        return RandomRangeInt(0, weightList.Length - 1);
+    }
 }

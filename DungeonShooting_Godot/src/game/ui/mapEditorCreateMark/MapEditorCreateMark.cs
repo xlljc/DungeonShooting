@@ -758,12 +758,12 @@ public abstract partial class MapEditorCreateMark : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.SpinBox"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.MarkObject.VBoxContainer.HBoxContainer.LineEdit
+    /// 类型: <see cref="Godot.SpinBox"/>, 路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.MarkObject.VBoxContainer.HBoxContainer.WeightEdit
     /// </summary>
-    public class LineEdit : UiNode<MapEditorCreateMarkPanel, Godot.SpinBox, LineEdit>
+    public class WeightEdit : UiNode<MapEditorCreateMarkPanel, Godot.SpinBox, WeightEdit>
     {
-        public LineEdit(MapEditorCreateMarkPanel uiPanel, Godot.SpinBox node) : base(uiPanel, node) {  }
-        public override LineEdit Clone() => new (UiPanel, (Godot.SpinBox)Instance.Duplicate());
+        public WeightEdit(MapEditorCreateMarkPanel uiPanel, Godot.SpinBox node) : base(uiPanel, node) {  }
+        public override WeightEdit Clone() => new (UiPanel, (Godot.SpinBox)Instance.Duplicate());
     }
 
     /// <summary>
@@ -868,17 +868,17 @@ public abstract partial class MapEditorCreateMark : UiBase
         private TypeLabel _L_TypeLabel;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.MarkObject.VBoxContainer.LineEdit
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.MarkObject.VBoxContainer.WeightEdit
         /// </summary>
-        public LineEdit L_LineEdit
+        public WeightEdit L_WeightEdit
         {
             get
             {
-                if (_L_LineEdit == null) _L_LineEdit = new LineEdit(UiPanel, Instance.GetNode<Godot.SpinBox>("LineEdit"));
-                return _L_LineEdit;
+                if (_L_WeightEdit == null) _L_WeightEdit = new WeightEdit(UiPanel, Instance.GetNode<Godot.SpinBox>("WeightEdit"));
+                return _L_WeightEdit;
             }
         }
-        private LineEdit _L_LineEdit;
+        private WeightEdit _L_WeightEdit;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.CenterContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.MarkObject.VBoxContainer.CenterContainer
@@ -1449,9 +1449,9 @@ public abstract partial class MapEditorCreateMark : UiBase
     public TypeLabel S_TypeLabel => L_MarginContainer.L_VBoxContainer.L_Panel.L_MarginContainer.L_VBoxContainer.L_ScrollContainer.L_MarkObject.L_VBoxContainer.L_HBoxContainer.L_TypeLabel;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.MarkObject.VBoxContainer.HBoxContainer.LineEdit
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SpinBox"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.MarkObject.VBoxContainer.HBoxContainer.WeightEdit
     /// </summary>
-    public LineEdit S_LineEdit => L_MarginContainer.L_VBoxContainer.L_Panel.L_MarginContainer.L_VBoxContainer.L_ScrollContainer.L_MarkObject.L_VBoxContainer.L_HBoxContainer.L_LineEdit;
+    public WeightEdit S_WeightEdit => L_MarginContainer.L_VBoxContainer.L_Panel.L_MarginContainer.L_VBoxContainer.L_ScrollContainer.L_MarkObject.L_VBoxContainer.L_HBoxContainer.L_WeightEdit;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CenterContainer"/>, 节点路径: MapEditorCreateMark.MarginContainer.VBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.MarkObject.VBoxContainer.HBoxContainer.CenterContainer

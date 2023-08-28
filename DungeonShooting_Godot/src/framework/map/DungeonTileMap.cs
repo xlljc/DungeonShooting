@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -108,10 +109,27 @@ public class DungeonTileMap
                 var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
                 _tileRoot.SetCell(GameConfig.TopMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
             }
+            //随机选择预设
+            RoomPreinstallInfo preinstallInfo;
+            if (roomInfo.RoomSplit.Preinstall.Count == 1)
+            {
+                preinstallInfo = roomInfo.RoomSplit.Preinstall[0];
+            }
+            else
+            {
+                var weights = roomInfo.RoomSplit.Preinstall.Select(info => info.Weight).ToArray();
+                var index = random.RandomWeight(weights);
+                preinstallInfo = roomInfo.RoomSplit.Preinstall[index];
+            }
+
+            var roomPreinstall = new RoomPreinstall(roomInfo, preinstallInfo);
+            roomInfo.RoomPreinstall = roomPreinstall;
+            //执行预处理操作
+            roomPreinstall.Pretreatment(random);
 
             //初始化标记
             //roomInfo.RoomSplit.Preinstall.
-            
+
             //roomInfo.RoomSplit.TileInfo.
             // var template = ResourceManager.Load<PackedScene>(roomInfo.RoomSplit.ScenePath);
             // var tileInstance = template.Instantiate<DungeonRoomTemplate>();

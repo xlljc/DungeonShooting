@@ -291,7 +291,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="LineEdit" type="SpinBox" parent="MarginContainer/VBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer"]
+[node name="WeightEdit" type="SpinBox" parent="MarginContainer/VBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(150, 43)
 layout_mode = 2
 size_flags_vertical = 4

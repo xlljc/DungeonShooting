@@ -319,6 +319,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
         //取消选中
         SelectIndex = -1;
         var uiCells = _cellList.ToArray();
+        _cellList.Clear();
         foreach (var uiCell in uiCells)
         {
             ReclaimCellInstance(uiCell);
@@ -349,7 +350,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
         var selectIndex = SelectIndex;
         var selectCell = GetCell(selectIndex);
         //执行排序操作
-        Utils.QuickSort(_cellList, (a, b) => a.OnSort(b));
+        _cellList.Sort((a, b) => a.OnSort(b));
         if (selectIndex >= 0)
         {
             selectIndex = _cellList.FindIndex(cell => cell == selectCell);
