@@ -1417,7 +1417,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     {
         ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
     }
-    
+
+    public bool IsCoroutineOver(long coroutineId)
+    {
+        return ProxyCoroutineHandler.ProxyIsCoroutineOver(ref _coroutineList, coroutineId);
+    }
+
     public void StopAllCoroutine()
     {
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,111 +18,118 @@ public static class ProxyCoroutineHandler
         var pairs = coroutineList.ToArray();
         for (var i = 0; i < pairs.Length; i++)
         {
-            var item = pairs[i];
-            var canNext = true;
+            try
+            {
+                var item = pairs[i];
+                var canNext = true;
 
-            if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForSeconds) //等待秒数
-            {
-                if (!item.WaitForSeconds.NextStep(delta))
+                if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForSeconds) //等待秒数
                 {
-                    canNext = false;
-                }
-                else
-                {
-                    item.WaitState = CoroutineData.WaitTypeEnum.None;
-                    item.WaitForSeconds = null;
-                }
-            }
-            else if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForFixedProcess) //等待帧数
-            {
-                if (!item.WaitForFixedProcess.NextStep())
-                {
-                    canNext = false;
-                }
-                else
-                {
-                    item.WaitState = CoroutineData.WaitTypeEnum.None;
-                    item.WaitForFixedProcess = null;
-                }
-            }
-            else if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForTask) //等待Task
-            {
-                if (!item.WaitTask.IsCompleted)
-                {
-                    canNext = false;
-                }
-                else
-                {
-                    item.WaitState = CoroutineData.WaitTypeEnum.None;
-                    item.WaitTask = null;
-                }
-            }
-            else if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForSignalAwaiter) //等待信号
-            {
-                if (!item.WaitSignalAwaiter.IsCompleted)
-                {
-                    canNext = false;
-                }
-                else
-                {
-                    item.WaitState = CoroutineData.WaitTypeEnum.None;
-                    item.WaitSignalAwaiter = null;
-                }
-            }
-
-            if (canNext)
-            {
-                if (item.Enumerator.MoveNext())
-                {
-                    var next = item.Enumerator.Current;
-                    if (next is IEnumerable enumerable) //嵌套协程
+                    if (!item.WaitForSeconds.NextStep(delta))
                     {
-                        if (item.EnumeratorStack == null)
-                        {
-                            item.EnumeratorStack = new Stack<IEnumerator>();
-                        }
-
-                        item.EnumeratorStack.Push(item.Enumerator);
-                        item.Enumerator = enumerable.GetEnumerator();
-                    }
-                    else if (next is IEnumerator enumerator) //嵌套协程
-                    {
-                        if (item.EnumeratorStack == null)
-                        {
-                            item.EnumeratorStack = new Stack<IEnumerator>();
-                        }
-
-                        item.EnumeratorStack.Push(item.Enumerator);
-                        item.Enumerator = enumerator;
-                    }
-                    else if (next is WaitForSeconds seconds) //等待秒数
-                    {
-                        item.WaitFor(seconds);
-                    }
-                    else if (next is WaitForFixedProcess process) //等待帧数
-                    {
-                        item.WaitFor(process);
-                    }
-                    else if (next is Task task) //Task对象
-                    {
-                        item.WaitFor(task);
-                    }
-                    else if (next is SignalAwaiter awaiter) //等待信号
-                    {
-                        item.WaitFor(awaiter);
-                    }
-                }
-                else
-                {
-                    if (item.EnumeratorStack == null || item.EnumeratorStack.Count == 0)
-                    {
-                        ProxyStopCoroutine(ref coroutineList, item.Id);
+                        canNext = false;
                     }
                     else
                     {
-                        item.Enumerator = item.EnumeratorStack.Pop();
+                        item.WaitState = CoroutineData.WaitTypeEnum.None;
+                        item.WaitForSeconds = null;
                     }
                 }
+                else if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForFixedProcess) //等待帧数
+                {
+                    if (!item.WaitForFixedProcess.NextStep())
+                    {
+                        canNext = false;
+                    }
+                    else
+                    {
+                        item.WaitState = CoroutineData.WaitTypeEnum.None;
+                        item.WaitForFixedProcess = null;
+                    }
+                }
+                else if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForTask) //等待Task
+                {
+                    if (!item.WaitTask.IsCompleted)
+                    {
+                        canNext = false;
+                    }
+                    else
+                    {
+                        item.WaitState = CoroutineData.WaitTypeEnum.None;
+                        item.WaitTask = null;
+                    }
+                }
+                else if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForSignalAwaiter) //等待信号
+                {
+                    if (!item.WaitSignalAwaiter.IsCompleted)
+                    {
+                        canNext = false;
+                    }
+                    else
+                    {
+                        item.WaitState = CoroutineData.WaitTypeEnum.None;
+                        item.WaitSignalAwaiter = null;
+                    }
+                }
+
+                if (canNext)
+                {
+                    if (item.Enumerator.MoveNext())
+                    {
+                        var next = item.Enumerator.Current;
+                        if (next is IEnumerable enumerable) //嵌套协程
+                        {
+                            if (item.EnumeratorStack == null)
+                            {
+                                item.EnumeratorStack = new Stack<IEnumerator>();
+                            }
+
+                            item.EnumeratorStack.Push(item.Enumerator);
+                            item.Enumerator = enumerable.GetEnumerator();
+                        }
+                        else if (next is IEnumerator enumerator) //嵌套协程
+                        {
+                            if (item.EnumeratorStack == null)
+                            {
+                                item.EnumeratorStack = new Stack<IEnumerator>();
+                            }
+
+                            item.EnumeratorStack.Push(item.Enumerator);
+                            item.Enumerator = enumerator;
+                        }
+                        else if (next is WaitForSeconds seconds) //等待秒数
+                        {
+                            item.WaitFor(seconds);
+                        }
+                        else if (next is WaitForFixedProcess process) //等待帧数
+                        {
+                            item.WaitFor(process);
+                        }
+                        else if (next is Task task) //Task对象
+                        {
+                            item.WaitFor(task);
+                        }
+                        else if (next is SignalAwaiter awaiter) //等待信号
+                        {
+                            item.WaitFor(awaiter);
+                        }
+                    }
+                    else
+                    {
+                        if (item.EnumeratorStack == null || item.EnumeratorStack.Count == 0)
+                        {
+                            ProxyStopCoroutine(ref coroutineList, item.Id);
+                        }
+                        else
+                        {
+                            item.Enumerator = item.EnumeratorStack.Pop();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr("执行协程发生异常: \n" + e);
             }
         }
     }
@@ -158,6 +166,26 @@ public static class ProxyCoroutineHandler
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// 代理协程, 根据 id 返回指定协程是否结束
+    /// </summary>
+    public static bool ProxyIsCoroutineOver(ref List<CoroutineData> coroutineList, long coroutineId)
+    {
+        if (coroutineList != null)
+        {
+            for (var i = 0; i < coroutineList.Count; i++)
+            {
+                var item = coroutineList[i];
+                if (item.Id == coroutineId)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
     
     /// <summary>

@@ -9,8 +9,12 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
     //是否展开
     private bool _isExpand = false;
     private MapEditorCreateMark.ExpandPanel _expandPanel;
+    //自定义额外属性
     private List<AttributeBase> _attributeBases;
     private ExcelConfig.ActivityObject _activityObject;
+
+    private MapEditorCreateMark.NumberBar _altitude;
+    private MapEditorCreateMark.NumberBar _vSpeed;
     
     public override void OnInit()
     {
@@ -21,9 +25,8 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
     public override void OnSetData(MarkInfoItem data)
     {
         //记得判断随机对象, 后面再做
-        
-
         _activityObject = ExcelConfig.ActivityObject_Map[data.Id];
+        //图标
         if (string.IsNullOrEmpty(_activityObject.Icon))
         {
             CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Visible = false;
@@ -39,16 +42,9 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         CellNode.L_VBoxContainer.L_HBoxContainer.L_NameLabel.Instance.Text = _activityObject.Name;
         //物体类型
         CellNode.L_VBoxContainer.L_HBoxContainer.L_TypeLabel.Instance.Text = NameManager.GetActivityTypeName(_activityObject.Type);
+        //权重
+        CellNode.L_VBoxContainer.L_HBoxContainer.L_WeightEdit.Instance.Value = data.Weight;
         
-        // 包含额外属性
-        if (_activityObject.Type == 5 || _activityObject.Type == 4)
-        {
-            if (_expandPanel == null)
-            {
-                CreateExpandPanel(_activityObject, data);
-            }
-        }
-
         if (data.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
         {
             CellNode.L_VBoxContainer.L_HBoxContainer.L_CenterContainer.L_DeleteButton.Instance.Visible = false;
@@ -56,8 +52,18 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         }
         else //普通标记
         {
+            // 包含额外属性
+            if (_expandPanel == null)
+            {
+                CreateExpandPanel(_activityObject, data);
+            }
             CellNode.L_VBoxContainer.L_HBoxContainer.L_CenterContainer.L_DeleteButton.Instance.Visible = true;
             CellNode.L_VBoxContainer.L_HBoxContainer.L_WeightEdit.Instance.Visible = true;
+
+            //海拔高度
+            _altitude.L_NumInput.Instance.Value = data.Altitude;
+            //纵轴速度
+            _vSpeed.L_NumInput.Instance.Value = data.VerticalSpeed;
         }
     }
 
@@ -69,6 +75,8 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
             _attributeBases = null;
             _expandPanel.QueueFree();
             _expandPanel = null;
+            _altitude = null;
+            _vSpeed = null;
         }
 
         SetExpandState(false);
@@ -80,21 +88,45 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
     public MarkInfoItem GetMarkInfoItem()
     {
         var markInfoItem = Data;
-        if (_activityObject.Type == 5 || _activityObject.Type == 4)
+        
+        //额外属性
+        if (_attributeBases != null)
         {
-            markInfoItem.Attr = new Dictionary<string, string>();
+            markInfoItem.Attr = null;
             foreach (var attributeBase in _attributeBases)
             {
                 if (attributeBase.Visible)
                 {
+                    if (attributeBase.AttrName == "VSpeed" || attributeBase.AttrName == "Altitude") //不能是公共属性
+                    {
+                        continue;
+                    }
+
+                    if (markInfoItem.Attr == null)
+                    {
+                        markInfoItem.Attr = new Dictionary<string, string>();
+                    }
                     markInfoItem.Attr.Add(attributeBase.AttrName, attributeBase.GetAttributeValue());
                 }
             }
         }
 
+
         if (Data.SpecialMarkType == SpecialMarkType.Normal)
         {
+            //权重
             markInfoItem.Weight = (int)CellNode.L_VBoxContainer.L_HBoxContainer.L_WeightEdit.Instance.Value;
+        }
+
+        //海拔高度
+        if (_altitude != null && _altitude.Instance.Visible)
+        {
+            markInfoItem.Altitude = (int)_altitude.L_NumInput.Instance.Value;
+        }
+        //纵轴速度
+        if (_vSpeed != null && _vSpeed.Instance.Visible)//海拔高度
+        {
+            markInfoItem.VerticalSpeed = (float)_vSpeed.L_NumInput.Instance.Value;
         }
 
         return markInfoItem;
@@ -144,8 +176,20 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         _expandPanel = CellNode.UiPanel.S_ExpandPanel.Clone();
         _expandPanel.Instance.Visible = _isExpand;
         CellNode.L_VBoxContainer.AddChild(_expandPanel);
-
-        if (activityObject.Type == 5) //武器类型
+        
+        //公有类型
+        _altitude = CellNode.UiPanel.CreateNumberBar("Altitude", "初始纵轴高度：");
+        _vSpeed = CellNode.UiPanel.CreateNumberBar("VSpeed", "初始纵轴速度：");
+        _altitude.L_NumInput.Instance.MaxValue = 128;
+        _altitude.L_NumInput.Instance.MinValue = 0;
+        _altitude.L_NumInput.Instance.Step = 1;
+        _vSpeed.L_NumInput.Instance.MaxValue = 1000;
+        _vSpeed.L_NumInput.Instance.MinValue = -1000;
+        _vSpeed.L_NumInput.Instance.Step = 0.1;
+        _expandPanel.L_ExpandGrid.AddChild(_altitude);
+        _expandPanel.L_ExpandGrid.AddChild(_vSpeed);
+        
+        if (activityObject.Type == (int)ActivityType.Weapon) //武器类型
         {
             var numberBar = CellNode.UiPanel.CreateNumberBar("CurrAmmon", "弹夹弹药量：");
             var numberBar2 = CellNode.UiPanel.CreateNumberBar("ResidueAmmo", "剩余弹药量：");
@@ -185,7 +229,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                 }
             }
         }
-        else if (activityObject.Type == 4) //敌人
+        else if (activityObject.Type == (int)ActivityType.Enemy) //敌人
         {
             var weaponBar = CellNode.UiPanel.CreateObjectBar("Weapon", "携带武器：", ActivityType.Weapon);
             var numberBar2 = CellNode.UiPanel.CreateNumberBar("CurrAmmon", "弹夹弹药量：");

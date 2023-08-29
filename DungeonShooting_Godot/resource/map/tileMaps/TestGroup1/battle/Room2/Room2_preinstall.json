@@ -1,1 +1,1 @@
-[]
+[{"Name":"test1","Weight":100,"Remark":"","WaveList":[[],[{"Position":{"X":39,"Y":-36},"Size":{"X":86,"Y":90},"SpecialMarkType":0,"DelayTime":0,"MarkList":[{"Id":"enemy0001","Weight":100,"Attr":{"Weapon":"weapon0005","CurrAmmon":"10","ResidueAmmo":"10"}},{"Id":"enemy0001","Weight":100,"Attr":{"Weapon":"weapon0003","CurrAmmon":"12","ResidueAmmo":"12"}}]},{"Position":{"X":-58,"Y":62},"Size":{"X":103,"Y":73},"SpecialMarkType":0,"DelayTime":3,"MarkList":[{"Id":"enemy0001","Weight":100,"Attr":{"Weapon":"weapon0006","CurrAmmon":"20","ResidueAmmo":"20"}}]}]]}]

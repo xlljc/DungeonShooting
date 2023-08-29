@@ -17,6 +17,11 @@ public interface ICoroutine
     public void StopCoroutine(long coroutineId);
 
     /// <summary>
+    /// 根据协程 id 判断该协程是否结束
+    /// </summary>
+    public bool IsCoroutineOver(long coroutineId);
+    
+    /// <summary>
     /// 停止所有协程
     /// </summary>
     public void StopAllCoroutine();

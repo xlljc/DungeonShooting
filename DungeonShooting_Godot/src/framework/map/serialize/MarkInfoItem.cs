@@ -24,6 +24,18 @@ public class MarkInfoItem
     /// </summary>
     [JsonInclude]
     public Dictionary<string, string> Attr;
+    
+    /// <summary>
+    /// 物体初始海拔高度
+    /// </summary>
+    [JsonInclude]
+    public int Altitude;
+
+    /// <summary>
+    /// 物体初始纵轴速度
+    /// </summary>
+    [JsonInclude]
+    public float VerticalSpeed;
 
     /// <summary>
     /// 所属标记类型

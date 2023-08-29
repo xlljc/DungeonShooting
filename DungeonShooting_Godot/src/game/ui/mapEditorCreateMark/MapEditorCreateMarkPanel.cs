@@ -180,13 +180,23 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         EditorWindowManager.ShowSelectObject(ActivityType.None, OnSelectObject, this);
     }
 
-    //选中物体回调
+    //选中物体回调, 创建标记数据
     private void OnSelectObject(ExcelConfig.ActivityObject activityObject)
     {
+        //初始值
+        
+        //初始高度
+        var altitude = 0;
+        if (activityObject.Type == (int)ActivityType.Weapon || activityObject.Type == (int)ActivityType.Prop)
+        {
+            altitude = 8;
+        }
+
         _grid.Add(new MarkInfoItem()
         {
             Id = activityObject.Id,
-            Weight = 100
+            Weight = 100,
+            Altitude = altitude
         });
     }
 }

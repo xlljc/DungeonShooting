@@ -28,4 +28,21 @@ public class ActivityMark
     /// 延时时间, 单位: 秒
     /// </summary>
     public float DelayTime { get; set; }
+
+     /// <summary>
+     /// 物体初始海拔高度
+     /// </summary>
+     public int Altitude = 8;
+
+     /// <summary>
+     /// 物体初始纵轴速度
+     /// </summary>
+     public float VerticalSpeed = 0;
+    
+    /// <summary>
+    /// 物体类型
+    /// </summary>
+    public ActivityType ActivityType { get; set; }
+    
+    
 }

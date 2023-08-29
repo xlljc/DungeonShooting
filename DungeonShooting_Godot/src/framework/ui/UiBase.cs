@@ -351,6 +351,11 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
     }
     
+    public bool IsCoroutineOver(long coroutineId)
+    {
+        return ProxyCoroutineHandler.ProxyIsCoroutineOver(ref _coroutineList, coroutineId);
+    }
+    
     public void StopAllCoroutine()
     {
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);

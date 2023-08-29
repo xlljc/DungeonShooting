@@ -68,7 +68,7 @@ public partial class DungeonManager : Node2D
         GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(finish));
     }
 
-    public override void _PhysicsProcess(double delta)
+    public override void _Process(double delta)
     {
         if (IsInDungeon)
         {
@@ -79,13 +79,8 @@ public partial class DungeonManager : Node2D
                 //检查房间内的敌人存活状况
                 OnCheckEnemy();
             }
-        }
-    }
-
-    public override void _Process(double delta)
-    {
-        if (IsInDungeon)
-        {
+            
+            //更新敌人视野
             UpdateEnemiesView();
             if (GameApplication.Instance.Debug)
             {
@@ -146,6 +141,9 @@ public partial class DungeonManager : Node2D
         player.Name = "Player";
         player.PutDown(RoomLayerEnum.YSortLayer);
         Player.SetCurrentPlayer(player);
+        
+        //地牢加载即将完成
+        _dungeonGenerator.EachRoom(info => info.OnReady());
 
         //玩家手上添加武器
         //player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
@@ -410,7 +408,7 @@ public partial class DungeonManager : Node2D
     private void OnPlayerFirstEnterRoom(object o)
     {
         var room = (RoomInfo)o;
-        room.BeReady();
+        room.OnFirstEnter();
         //如果关门了, 那么房间外的敌人就会丢失目标
         if (room.IsSeclusion)
         {
