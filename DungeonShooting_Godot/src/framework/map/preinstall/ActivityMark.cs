@@ -15,10 +15,15 @@ public class ActivityMark
     public Vector2 Position { get; set; }
 
     /// <summary>
-    /// 额外属性
+    /// 额外属性, 不要自行修改字典内的属性数据, 要改的话请在 DerivedAttr 上改
     /// </summary>
     public Dictionary<string, string> Attr { get; set; }
-
+    
+    /// <summary>
+    /// 衍生属性, 可随意修改值
+    /// </summary>
+    public Dictionary<string, string> DerivedAttr { get; set; }
+    
     /// <summary>
     /// 特殊标记类型
     /// </summary>

@@ -17,6 +17,7 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         S_ExpandPanel.Instance.Visible = false;
         S_NumberBar.Instance.Visible = false;
         S_ObjectBar.Instance.Visible = false;
+        S_OptionBar.Instance.Visible = false;
         
         //添加标记按钮
         S_AddMark.Instance.Pressed += OnAddMark;
@@ -172,6 +173,21 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         objectBar.L_AttrName.Instance.Text = attrLabel;
         objectBar.Instance.Visible = true;
         return objectBar;
+    }
+
+    /// <summary>
+    /// 创建选项属性数据
+    /// </summary>
+    /// <param name="attrName">属性字符串名称</param>
+    /// <param name="attrLabel">属性显示名称</param>
+    /// <returns></returns>
+    public OptionBar CreateOptionBar(string attrName, string attrLabel)
+    {
+        var optionBar = S_OptionBar.Clone();
+        optionBar.Instance.AttrName = attrName;
+        optionBar.L_AttrName.Instance.Text = attrLabel;
+        optionBar.Instance.Visible = true;
+        return optionBar;
     }
 
     //点击添加标记按钮

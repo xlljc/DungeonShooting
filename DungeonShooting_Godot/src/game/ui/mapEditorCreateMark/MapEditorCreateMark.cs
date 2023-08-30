@@ -45,6 +45,19 @@ public abstract partial class MapEditorCreateMark : UiBase
     private NumberBar _L_NumberBar;
 
     /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorCreateMark.OptionAttribute"/>, 节点路径: MapEditorCreateMark.OptionBar
+    /// </summary>
+    public OptionBar L_OptionBar
+    {
+        get
+        {
+            if (_L_OptionBar == null) _L_OptionBar = new OptionBar((MapEditorCreateMarkPanel)this, GetNode<UI.MapEditorCreateMark.OptionAttribute>("OptionBar"));
+            return _L_OptionBar;
+        }
+    }
+    private OptionBar _L_OptionBar;
+
+    /// <summary>
     /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorCreateMark.ObjectAttribute"/>, 节点路径: MapEditorCreateMark.ObjectBar
     /// </summary>
     public ObjectBar L_ObjectBar
@@ -65,6 +78,7 @@ public abstract partial class MapEditorCreateMark : UiBase
     public sealed override void OnInitNestedUi()
     {
         _ = L_NumberBar;
+        _ = L_OptionBar;
         _ = L_ObjectBar;
 
     }
@@ -1197,12 +1211,65 @@ public abstract partial class MapEditorCreateMark : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.ObjectBar.AttrName
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.OptionBar.AttrName
     /// </summary>
     public class AttrName_1 : UiNode<MapEditorCreateMarkPanel, Godot.Label, AttrName_1>
     {
         public AttrName_1(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
         public override AttrName_1 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.OptionButton"/>, 路径: MapEditorCreateMark.OptionBar.OptionInput
+    /// </summary>
+    public class OptionInput : UiNode<MapEditorCreateMarkPanel, Godot.OptionButton, OptionInput>
+    {
+        public OptionInput(MapEditorCreateMarkPanel uiPanel, Godot.OptionButton node) : base(uiPanel, node) {  }
+        public override OptionInput Clone() => new (UiPanel, (Godot.OptionButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="UI.MapEditorCreateMark.OptionAttribute"/>, 路径: MapEditorCreateMark.OptionBar
+    /// </summary>
+    public class OptionBar : UiNode<MapEditorCreateMarkPanel, UI.MapEditorCreateMark.OptionAttribute, OptionBar>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.AttrName
+        /// </summary>
+        public AttrName_1 L_AttrName
+        {
+            get
+            {
+                if (_L_AttrName == null) _L_AttrName = new AttrName_1(UiPanel, Instance.GetNode<Godot.Label>("AttrName"));
+                return _L_AttrName;
+            }
+        }
+        private AttrName_1 _L_AttrName;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.OptionButton"/>, 节点路径: MapEditorCreateMark.OptionInput
+        /// </summary>
+        public OptionInput L_OptionInput
+        {
+            get
+            {
+                if (_L_OptionInput == null) _L_OptionInput = new OptionInput(UiPanel, Instance.GetNode<Godot.OptionButton>("OptionInput"));
+                return _L_OptionInput;
+            }
+        }
+        private OptionInput _L_OptionInput;
+
+        public OptionBar(MapEditorCreateMarkPanel uiPanel, UI.MapEditorCreateMark.OptionAttribute node) : base(uiPanel, node) {  }
+        public override OptionBar Clone() => new (UiPanel, (UI.MapEditorCreateMark.OptionAttribute)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreateMark.ObjectBar.AttrName
+    /// </summary>
+    public class AttrName_2 : UiNode<MapEditorCreateMarkPanel, Godot.Label, AttrName_2>
+    {
+        public AttrName_2(MapEditorCreateMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override AttrName_2 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
     /// <summary>
@@ -1310,15 +1377,15 @@ public abstract partial class MapEditorCreateMark : UiBase
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreateMark.AttrName
         /// </summary>
-        public AttrName_1 L_AttrName
+        public AttrName_2 L_AttrName
         {
             get
             {
-                if (_L_AttrName == null) _L_AttrName = new AttrName_1(UiPanel, Instance.GetNode<Godot.Label>("AttrName"));
+                if (_L_AttrName == null) _L_AttrName = new AttrName_2(UiPanel, Instance.GetNode<Godot.Label>("AttrName"));
                 return _L_AttrName;
             }
         }
-        private AttrName_1 _L_AttrName;
+        private AttrName_2 _L_AttrName;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreateMark.HBoxContainer
@@ -1492,6 +1559,16 @@ public abstract partial class MapEditorCreateMark : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorCreateMark.NumberAttribute"/>, 节点路径: MapEditorCreateMark.NumberBar
     /// </summary>
     public NumberBar S_NumberBar => L_NumberBar;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.OptionButton"/>, 节点路径: MapEditorCreateMark.OptionBar.OptionInput
+    /// </summary>
+    public OptionInput S_OptionInput => L_OptionBar.L_OptionInput;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorCreateMark.OptionAttribute"/>, 节点路径: MapEditorCreateMark.OptionBar
+    /// </summary>
+    public OptionBar S_OptionBar => L_OptionBar;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorCreateMark.ObjectBar.HBoxContainer.SelectButton

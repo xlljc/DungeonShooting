@@ -78,7 +78,7 @@ public enum EventEnum
     /// </summary>
     OnEditorDirty,
     /// <summary>
-    /// 编辑器触发保存
+    /// 编辑器触发保存, 参数为<see cref="DungeonRoomSplit"/>>
     /// </summary>
     OnEditorSave,
     /// <summary>

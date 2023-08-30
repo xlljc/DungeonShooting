@@ -109,18 +109,18 @@ public class DungeonGenerator
         //验证该组是否满足生成地牢的条件
         if (_roomGroup.InletList.Count == 0)
         {
-            throw new Exception("当前组'" + config.GroupName + "'中没有起始房间, 不能生成地牢!");
+            throw new Exception("当前组'" + config.GroupName + "'中没有可用的起始房间, 不能生成地牢!");
         }
         //没有指定房间
         if (_designatedRoom == null || _designatedRoom.Count == 0)
         {
             if (_roomGroup.OutletList.Count == 0)
             {
-                throw new Exception("当前组'" + config.GroupName + "'中没有结束房间, 不能生成地牢!");
+                throw new Exception("当前组'" + config.GroupName + "'中没有可用的结束房间, 不能生成地牢!");
             }
             else if (_roomGroup.BattleList.Count == 0)
             {
-                throw new Exception("当前组'" + config.GroupName + "'中没有战斗房间, 不能生成地牢!");
+                throw new Exception("当前组'" + config.GroupName + "'中没有可用的战斗房间, 不能生成地牢!");
             }
         }
 

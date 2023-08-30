@@ -18,9 +18,9 @@ public static class ProxyCoroutineHandler
         var pairs = coroutineList.ToArray();
         for (var i = 0; i < pairs.Length; i++)
         {
+            var item = pairs[i];
             try
             {
-                var item = pairs[i];
                 var canNext = true;
 
                 if (item.WaitState == CoroutineData.WaitTypeEnum.WaitForSeconds) //等待秒数
@@ -130,6 +130,7 @@ public static class ProxyCoroutineHandler
             catch (Exception e)
             {
                 GD.PrintErr("执行协程发生异常: \n" + e);
+                ProxyStopCoroutine(ref coroutineList, item.Id);
             }
         }
     }

@@ -29,6 +29,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public bool IsStatic { get; set; }
 
     /// <summary>
+    /// 是否显示阴影
+    /// </summary>
+    public bool IsShowShadow { get; private set; }
+    
+    /// <summary>
     /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite2D
     /// </summary>
     [Export, ExportFillNode]
@@ -399,7 +404,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     }
 
     /// <summary>
-    /// 显示阴影
+    /// 显示并更新阴影
     /// </summary>
     public void ShowShadowSprite()
     {
@@ -419,6 +424,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         _prevAnimation = anim;
         _prevAnimationFrame = frame;
 
+        IsShowShadow = true;
         CalcShadow();
         ShadowSprite.Visible = true;
     }
@@ -429,6 +435,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public void HideShadowSprite()
     {
         ShadowSprite.Visible = false;
+        IsShowShadow = false;
     }
 
     /// <summary>

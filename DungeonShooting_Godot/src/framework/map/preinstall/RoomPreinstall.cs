@@ -99,12 +99,27 @@ public class RoomPreinstall : IDestroy
 
                     mark.Id = markInfoItem.Id;
                     mark.Attr = markInfoItem.Attr;
+                    mark.DerivedAttr = new Dictionary<string, string>();
                     mark.VerticalSpeed = markInfoItem.VerticalSpeed;
                     mark.Altitude = markInfoItem.Altitude;
                     mark.ActivityType = (ActivityType)ExcelConfig.ActivityObject_Map[markInfoItem.Id].Type;
-                    if (mark.ActivityType == ActivityType.Enemy)
+
+                    if (mark.ActivityType == ActivityType.Enemy) //敌人类型
                     {
                         _hsaEnemy = true;
+                        if (!mark.Attr.TryGetValue("Face", out var face) || face == "0") //随机方向
+                        {
+                            mark.DerivedAttr.Add("Face",
+                                random.RandomChoose(
+                                    ((int)FaceDirection.Left).ToString(),
+                                    ((int)FaceDirection.Right).ToString()
+                                )
+                            );
+                        }
+                        else //指定方向
+                        {
+                            mark.DerivedAttr.Add("Face", face);
+                        }
                     }
                 }
                 else if (markInfo.SpecialMarkType == SpecialMarkType.BirthPoint) //玩家出生标记
@@ -350,6 +365,12 @@ public class RoomPreinstall : IDestroy
                         weapon.SetResidueAmmo(int.Parse(residueAmmo));
                     }
                 }
+            }
+
+            if (activityMark.DerivedAttr.TryGetValue("Face", out var face)) //脸朝向, 应该只有 -1 和 1
+            {
+                var faceDir = int.Parse(face);
+                enemy.Face = (FaceDirection)faceDir;
             }
         }
     }

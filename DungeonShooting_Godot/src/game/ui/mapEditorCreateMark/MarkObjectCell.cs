@@ -59,11 +59,6 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
             }
             CellNode.L_VBoxContainer.L_HBoxContainer.L_CenterContainer.L_DeleteButton.Instance.Visible = true;
             CellNode.L_VBoxContainer.L_HBoxContainer.L_WeightEdit.Instance.Visible = true;
-
-            //海拔高度
-            _altitude.L_NumInput.Instance.Value = data.Altitude;
-            //纵轴速度
-            _vSpeed.L_NumInput.Instance.Value = data.VerticalSpeed;
         }
     }
 
@@ -191,13 +186,20 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
 
         if (markInfoItem != null)
         {
-            if (markInfoItem.Attr != null)
+            if (markInfoItem.Attr == null)
             {
                 //初始高度
                 if (activityObject.Type == (int)ActivityType.Weapon || activityObject.Type == (int)ActivityType.Prop)
                 {
                     _altitude.L_NumInput.Instance.Value = 8;
                 }
+            }
+            else
+            {
+                //海拔高度
+                _altitude.L_NumInput.Instance.Value = markInfoItem.Altitude;
+                //纵轴速度
+                _vSpeed.L_NumInput.Instance.Value = markInfoItem.VerticalSpeed;
             }
         }
         
@@ -243,7 +245,10 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         }
         else if (activityObject.Type == (int)ActivityType.Enemy) //敌人
         {
-            var faceBar = CellNode.UiPanel.CreateNumberBar("Face", "脸朝向：");
+            var faceBar = CellNode.UiPanel.CreateOptionBar("Face", "脸朝向：");
+            faceBar.Instance.AddItem("随机", 0);
+            faceBar.Instance.AddItem("左", (int)FaceDirection.Left);
+            faceBar.Instance.AddItem("右", (int)FaceDirection.Right);
             var weaponBar = CellNode.UiPanel.CreateObjectBar("Weapon", "携带武器：", ActivityType.Weapon);
             var numberBar2 = CellNode.UiPanel.CreateNumberBar("CurrAmmon", "弹夹弹药量：");
             var numberBar3 = CellNode.UiPanel.CreateNumberBar("ResidueAmmo", "剩余弹药量：");
@@ -267,7 +272,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                 {
                     if (markInfoItem.Attr.TryGetValue("Face", out var face)) //朝向
                     {
-                        faceBar.L_NumInput.Instance.Value = int.Parse(face);
+                        faceBar.Instance.SetSelectItem(int.Parse(face));
                     }
                     if (markInfoItem.Attr.TryGetValue("Weapon", out var weaponId)) //武器
                     {
@@ -284,6 +289,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                 }
                 else
                 {
+                    faceBar.Instance.SetSelectItem(0);
                     numberBar2.L_NumInput.Instance.Value = numberBar2.L_NumInput.Instance.MaxValue;
                     numberBar3.L_NumInput.Instance.Value = (int)(numberBar3.L_NumInput.Instance.MaxValue / 2);
                 }

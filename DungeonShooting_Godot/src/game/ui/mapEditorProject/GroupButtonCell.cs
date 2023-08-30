@@ -18,6 +18,6 @@ public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, DungeonRoomG
     //选中工程
     public override void OnClick()
     {
-        ((MapEditorProjectPanel)CellNode.UiPanel).SelectGroup(Data);
+        CellNode.UiPanel.SelectGroup(Data);
     }
 }

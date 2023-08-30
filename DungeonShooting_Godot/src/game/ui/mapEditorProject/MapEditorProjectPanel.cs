@@ -113,6 +113,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
     //搜索组按钮点击
     private void OnSearchGroupButtonClick()
     {
+        var select = _groupGrid.SelectIndex;
         //输入文本
         var text = S_GroupSearchInput.Instance.Text;
         if (!string.IsNullOrEmpty(text))
@@ -132,6 +133,8 @@ public partial class MapEditorProjectPanel : MapEditorProject
         {
             _groupGrid.SetDataList(MapProjectManager.GroupMap.Values.ToArray());
         }
+
+        _roomGrid.SelectIndex = select;
     }
 
     //搜索房间按钮点击
