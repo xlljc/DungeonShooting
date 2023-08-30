@@ -159,7 +159,7 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
     }
 
     /// <summary>
-    /// 创选择物体属性数据
+    /// 创建选择物体属性数据
     /// </summary>
     /// <param name="attrName">属性字符串名称</param>
     /// <param name="attrLabel">属性显示名称</param>
@@ -183,20 +183,10 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
     //选中物体回调, 创建标记数据
     private void OnSelectObject(ExcelConfig.ActivityObject activityObject)
     {
-        //初始值
-        
-        //初始高度
-        var altitude = 0;
-        if (activityObject.Type == (int)ActivityType.Weapon || activityObject.Type == (int)ActivityType.Prop)
-        {
-            altitude = 8;
-        }
-
         _grid.Add(new MarkInfoItem()
         {
             Id = activityObject.Id,
             Weight = 100,
-            Altitude = altitude
         });
     }
 }

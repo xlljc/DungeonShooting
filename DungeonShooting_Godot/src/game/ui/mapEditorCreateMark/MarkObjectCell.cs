@@ -188,6 +188,18 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         _vSpeed.L_NumInput.Instance.Step = 0.1;
         _expandPanel.L_ExpandGrid.AddChild(_altitude);
         _expandPanel.L_ExpandGrid.AddChild(_vSpeed);
+
+        if (markInfoItem != null)
+        {
+            if (markInfoItem.Attr != null)
+            {
+                //初始高度
+                if (activityObject.Type == (int)ActivityType.Weapon || activityObject.Type == (int)ActivityType.Prop)
+                {
+                    _altitude.L_NumInput.Instance.Value = 8;
+                }
+            }
+        }
         
         if (activityObject.Type == (int)ActivityType.Weapon) //武器类型
         {
@@ -231,14 +243,17 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         }
         else if (activityObject.Type == (int)ActivityType.Enemy) //敌人
         {
+            var faceBar = CellNode.UiPanel.CreateNumberBar("Face", "脸朝向：");
             var weaponBar = CellNode.UiPanel.CreateObjectBar("Weapon", "携带武器：", ActivityType.Weapon);
             var numberBar2 = CellNode.UiPanel.CreateNumberBar("CurrAmmon", "弹夹弹药量：");
             var numberBar3 = CellNode.UiPanel.CreateNumberBar("ResidueAmmo", "剩余弹药量：");
             weaponBar.Instance.SetRelevancyAttr(numberBar2, numberBar3);
+            _expandPanel.L_ExpandGrid.AddChild(faceBar);
             _expandPanel.L_ExpandGrid.AddChild(weaponBar);
             _expandPanel.L_ExpandGrid.AddChild(numberBar2);
             _expandPanel.L_ExpandGrid.AddChild(numberBar3);
             _attributeBases = new List<AttributeBase>();
+            _attributeBases.Add(faceBar.Instance);
             _attributeBases.Add(weaponBar.Instance);
             _attributeBases.Add(numberBar2.Instance);
             _attributeBases.Add(numberBar3.Instance);
@@ -250,6 +265,10 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                 
                 if (markInfoItem.Attr != null)
                 {
+                    if (markInfoItem.Attr.TryGetValue("Face", out var face)) //朝向
+                    {
+                        faceBar.L_NumInput.Instance.Value = int.Parse(face);
+                    }
                     if (markInfoItem.Attr.TryGetValue("Weapon", out var weaponId)) //武器
                     {
                         weaponBar.Instance.SelectWeapon(ExcelConfig.Weapon_List.Find(w => w.WeaponId == weaponId));
