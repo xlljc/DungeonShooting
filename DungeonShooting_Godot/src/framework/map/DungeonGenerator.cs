@@ -74,10 +74,6 @@ public class DungeonGenerator
     private DungeonConfig _config;
     private DungeonRoomGroup _roomGroup;
 
-    //指定只能生成的房间
-    private static List<DungeonRoomSplit> _designatedRoom;
-    
-
     private enum GenerateRoomErrorCode
     {
         NoError,
@@ -91,14 +87,6 @@ public class DungeonGenerator
         // NoProperDoor,
     }
     
-    /// <summary>
-    /// 用于调试, 设置生成器只能生成哪些房间
-    /// </summary>
-    public static void SetDesignatedRoom(List<DungeonRoomSplit> list)
-    {
-        _designatedRoom = new List<DungeonRoomSplit>(list);
-    }
-
     public DungeonGenerator(DungeonConfig config)
     {
         _config = config;
@@ -112,7 +100,7 @@ public class DungeonGenerator
             throw new Exception("当前组'" + config.GroupName + "'中没有可用的起始房间, 不能生成地牢!");
         }
         //没有指定房间
-        if (_designatedRoom == null || _designatedRoom.Count == 0)
+        if (config.HasDesignatedRoom)
         {
             if (_roomGroup.OutletList.Count == 0)
             {
@@ -291,8 +279,11 @@ public class DungeonGenerator
         // }
 
         DungeonRoomSplit roomSplit;
-        //没有指定房间
-        if (roomType == DungeonRoomType.Inlet || _designatedRoom == null || _designatedRoom.Count == 0)
+        if (_config.HasDesignatedRoom && _config.DesignatedType == roomType) //执行指定了房间
+        {
+            roomSplit = Random.RandomChoose(_config.DesignatedRoom);
+        }
+        else //没有指定房间
         {
             //随机选择一个房间
             var list = _roomGroup.GetRoomList(roomType);
@@ -304,10 +295,6 @@ public class DungeonGenerator
             {
                 roomSplit = _roomGroup.GetRandomRoom(roomType);
             }
-        }
-        else //指定了房间
-        {
-            roomSplit = Random.RandomChoose(_designatedRoom);
         }
         
         var room = new RoomInfo(_id, roomType, roomSplit);

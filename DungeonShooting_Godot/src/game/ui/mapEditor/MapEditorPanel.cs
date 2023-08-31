@@ -4,6 +4,24 @@ namespace UI.MapEditor;
 
 public partial class MapEditorPanel : MapEditor
 {
+    private class CheckResult
+    {
+        /// <summary>
+        /// 是否存在错误
+        /// </summary>
+        public bool HasError;
+        /// <summary>
+        /// 错误消息
+        /// </summary>
+        public string Message;
+
+        public CheckResult(bool hasError, string message)
+        {
+            HasError = hasError;
+            Message = message;
+        }
+    }
+    
     private string _title;
     
     public override void OnCreateUi()
@@ -14,11 +32,39 @@ public partial class MapEditorPanel : MapEditor
         S_Left.Instance.Resized += OnMapViewResized;
         S_Back.Instance.Pressed += OnBackClick;
         S_Save.Instance.Pressed += OnSave;
+        S_Play.Instance.Pressed += OnPlay;
     }
 
     public override void OnShowUi()
     {
         OnMapViewResized();
+    }
+
+    public override void OnDestroyUi()
+    {
+        //清除选中的预设
+        EditorManager.SetSelectPreinstallIndex(-1);
+        //清除选中的波
+        EditorManager.SetSelectWaveIndex(-1);
+        //清除选中的标记
+        EditorManager.SetSelectMark(null);
+    }
+
+    //点击播放按钮
+    private void OnPlay()
+    {
+        S_TileMap.Instance.TryRunCheckHandler();
+        var check = CheckError();
+        //有错误数据
+        if (check.HasError)
+        {
+            EditorWindowManager.ShowTips("提示", check.Message + "，不能运行房间！");
+            return;
+        }
+        //保存数据
+        S_TileMap.Instance.TriggerSave();
+        //执行运行
+        EditorPlayManager.Play(this);
     }
 
     /// <summary>
@@ -56,10 +102,11 @@ public partial class MapEditorPanel : MapEditor
     private void OnSave()
     {
         S_TileMap.Instance.TryRunCheckHandler();
+        var check = CheckError();
         //有错误的数据
-        if (S_TileMap.Instance.HasError)
+        if (check.HasError)
         {
-            EditorWindowManager.ShowConfirm("提示", "当前房间地块存在绘制错误，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
+            EditorWindowManager.ShowConfirm("提示", check.Message + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
             {
                 if (v)
                 {
@@ -85,9 +132,10 @@ public partial class MapEditorPanel : MapEditor
             {
                 if (index == 0) //保存并退出
                 {
-                    if (S_TileMap.Instance.HasError) //有错误
+                    var check = CheckError();
+                    if (check.HasError) //有错误
                     {
-                        EditorWindowManager.ShowConfirm("提示", "当前房间地块存在绘制错误，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
+                        EditorWindowManager.ShowConfirm("提示", check.Message + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
                         {
                             if (v)
                             {
@@ -118,9 +166,10 @@ public partial class MapEditorPanel : MapEditor
         }
         else //没有修改数据
         {
-            if (S_TileMap.Instance.HasError) //有错误
+            var check = CheckError();
+            if (check.HasError) //有错误
             {
-                EditorWindowManager.ShowConfirm("提示", "当前房间地块存在绘制错误，如果不解决错误就退出，运行游戏将不会刷出该房间！\n是否仍要退出？", (v) =>
+                EditorWindowManager.ShowConfirm("提示", check .Message + "，如果不解决错误就退出，运行游戏将不会刷出该房间！\n是否仍要退出？", (v) =>
                 {
                     if (v)
                     {
@@ -135,5 +184,20 @@ public partial class MapEditorPanel : MapEditor
                 OpenPrevUi();
             }
         }
+    }
+
+    private CheckResult CheckError()
+    {
+        if (S_TileMap.Instance.HasError) //地图绘制错误
+        {
+            return new CheckResult(true, "当前房间地块存在绘制错误");
+        }
+
+        if (EditorManager.SelectRoom.Preinstall == null || EditorManager.SelectRoom.Preinstall.Count == 0)
+        {
+            return new CheckResult(true, "当前房间没有预设");
+        }
+
+        return new CheckResult(false, null);
     }
 }

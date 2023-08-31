@@ -7,11 +7,6 @@ namespace UI.MapEditorProject;
 
 public partial class MapEditorProjectPanel : MapEditorProject
 {
-    /// <summary>
-    /// 当前选中的组
-    /// </summary>
-    public DungeonRoomGroup SelectGroupInfo;
-
     //当前显示的组数据
     private UiGrid<GroupButton, DungeonRoomGroup> _groupGrid;
     //当前显示的房间数据
@@ -53,23 +48,22 @@ public partial class MapEditorProjectPanel : MapEditorProject
         S_RoomSearchButton.Instance.Pressed += OnSearchRoomButtonClick;
         S_RoomAddButton.Instance.Pressed += OnCreateRoomClick;
         S_GroupAddButton.Instance.Pressed += OnCreateGroupClick;
-    }
-
-    public override void OnShowUi()
-    {
-        RefreshGroup();
+        
         _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnCreateGroupFinish, OnCreateGroupFinish);
         _eventFactory.AddEventListener(EventEnum.OnCreateRoomFinish, OnCreateRoomFinish);
     }
 
-    public override void OnHideUi()
+    public override void OnShowUi()
     {
-        _eventFactory.RemoveAllEventListener();
+        RefreshGroup();
+
     }
 
     public override void OnDestroyUi()
     {
+        _eventFactory.RemoveAllEventListener();
+        _eventFactory = null;
         _groupGrid.Destroy();
         _groupGrid = null;
         
@@ -91,7 +85,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
     /// </summary>
     public void SelectGroup(DungeonRoomGroup group)
     {
-        SelectGroupInfo = group;
+        EditorManager.SetSelectDungeonGroup(group);
         OnSearchRoomButtonClick();
     }
 
@@ -100,6 +94,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
     /// </summary>
     public void SelectRoom(DungeonRoomSplit room)
     {
+        EditorManager.SetSelectRoom(room);
         HideUi();
         //创建地牢Ui
         var mapEditor = UiManager.Create_MapEditor();
@@ -140,14 +135,14 @@ public partial class MapEditorProjectPanel : MapEditorProject
     //搜索房间按钮点击
     private void OnSearchRoomButtonClick()
     {
-        if (SelectGroupInfo != null)
+        if (EditorManager.SelectDungeonGroup != null)
         {
             //输入文本
             var text = S_RoomSearchInput.Instance.Text;
             //房间类型
             var roomType = S_RoomTypeButton.Instance.GetSelectedId();
 
-            IEnumerable<DungeonRoomSplit> result = SelectGroupInfo.GetAllRoomList();
+            IEnumerable<DungeonRoomSplit> result = EditorManager.SelectDungeonGroup.GetAllRoomList();
             
             //名称搜索
             if (!string.IsNullOrEmpty(text))
@@ -183,7 +178,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
     //创建地牢房间按钮点击
     private void OnCreateRoomClick()
     {
-        var groupName = SelectGroupInfo != null ? SelectGroupInfo.GroupName : null;
+        var groupName = EditorManager.SelectDungeonGroup != null ? EditorManager.SelectDungeonGroup.GroupName : null;
         EditorWindowManager.ShowCreateRoom(groupName, Mathf.Max(S_RoomTypeButton.Instance.Selected - 1, 0), CreateRoom);
     }
 

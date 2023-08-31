@@ -103,6 +103,11 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     /// </summary>
     public void ShowUi()
     {
+        if (IsDestroyed)
+        {
+            GD.PrintErr($"当前Ui: {UiName}已经被销毁!");
+            return;
+        }
         if (IsOpen)
         {
             return;
@@ -127,6 +132,11 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     /// </summary>
     public void HideUi()
     {
+        if (IsDestroyed)
+        {
+            GD.PrintErr($"当前Ui: {UiName}已经被销毁!");
+            return;
+        }
         if (!IsOpen)
         {
             return;

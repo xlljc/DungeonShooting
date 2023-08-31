@@ -105,7 +105,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
 
     public override void OnClick()
     {
-        CellNode.UiPanel.EditorTileMap.SelectWaveIndex = Index;
+        EditorManager.SetSelectWaveIndex(Index);
         CellNode.UiPanel.SetSelectCell(this, CellNode.L_WaveContainer.Instance, MapEditorMapMarkPanel.SelectToolType.Wave);
     }
 

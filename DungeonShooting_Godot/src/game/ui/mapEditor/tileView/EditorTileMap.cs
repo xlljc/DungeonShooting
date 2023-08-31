@@ -118,11 +118,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private int _terrainSet = 0;
     private int _terrain = 0;
     private AutoTileConfig _autoTileConfig = new AutoTileConfig();
-    
+
     /// <summary>
     /// 正在编辑的房间数据
     /// </summary>
-    public DungeonRoomSplit RoomSplit { get; private set; }
+    private DungeonRoomSplit _roomSplit;
     
     /// <summary>
     /// 数据是否脏了, 也就是是否有修改
@@ -133,63 +133,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// 地图是否有错误
     /// </summary>
     public bool HasError => !_isGenerateTerrain;
-
-    /// <summary>
-    /// 波数网格选中的索引
-    /// </summary>
-    public int SelectWaveIndex
-    {
-        get => _selectWaveIndex;
-        set
-        {
-            if (_selectWaveIndex != value)
-            {
-                _selectWaveIndex = value;
-                EventManager.EmitEvent(EventEnum.OnSelectWave, value);
-            }
-        }
-    }
-
-    private int _selectWaveIndex = -1;
-
-    /// <summary>
-    /// 选中的预设
-    /// </summary>
-    public int SelectPreinstallIndex
-    {
-        get => _selectPreinstallIndex;
-        set
-        {
-            if (_selectPreinstallIndex != value)
-            {
-                _selectPreinstallIndex = value;
-                EventManager.EmitEvent(EventEnum.OnSelectPreinstall, value);
-            }
-        }
-    }
-
-    private int _selectPreinstallIndex = -1;
-
-    /// <summary>
-    /// 当前选中的预设
-    /// </summary>
-    public RoomPreinstallInfo SelectPreinstallInfo
-    {
-        get
-        {
-            if (SelectPreinstallIndex == -1 || SelectPreinstallIndex >= RoomSplit.Preinstall.Count)
-            {
-                return null;
-            }
-
-            return RoomSplit.Preinstall[SelectPreinstallIndex];
-        }
-    }
-
-    /// <summary>
-    /// 选中的标记
-    /// </summary>
-    public MarkTool SelectMark => MapEditorToolsPanel.ActiveMark;
 
     /// <summary>
     /// 当前的房间大小
@@ -496,7 +439,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         GD.Print("保存地牢房间数据...");
         //是否准备好
-        RoomSplit.Ready = !HasError && RoomSplit.Preinstall != null && RoomSplit.Preinstall.Count > 0;
+        _roomSplit.Ready = !HasError && _roomSplit.Preinstall != null && _roomSplit.Preinstall.Count > 0;
         SaveRoomInfoConfig();
         SaveTileInfoConfig();
         SavePreinstallConfig();
@@ -516,7 +459,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         roomSplit.ReloadTileInfo();
         roomSplit.ReloadPreinstall();
         
-        RoomSplit = roomSplit;
+        _roomSplit = roomSplit;
         var roomInfo = roomSplit.RoomInfo;
         var tileInfo = roomSplit.TileInfo;
 
@@ -994,7 +937,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private void SaveRoomInfoConfig()
     {
         //存入本地
-        var roomInfo = RoomSplit.RoomInfo;
+        var roomInfo = _roomSplit.RoomInfo;
         var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
         if (!Directory.Exists(path))
         {
@@ -1024,14 +967,14 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public void SaveTileInfoConfig()
     {
         //存入本地
-        var roomInfo = RoomSplit.RoomInfo;
+        var roomInfo = _roomSplit.RoomInfo;
         var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
 
-        var tileInfo = RoomSplit.TileInfo;
+        var tileInfo = _roomSplit.TileInfo;
         tileInfo.NavigationList.Clear();
         tileInfo.NavigationList.AddRange(_dungeonTileMap.GetPolygonData());
         tileInfo.Floor.Clear();
@@ -1051,7 +994,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public void SavePreinstallConfig()
     {
         //存入本地
-        var roomInfo = RoomSplit.RoomInfo;
+        var roomInfo = _roomSplit.RoomInfo;
         var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
         if (!Directory.Exists(path))
         {
@@ -1059,7 +1002,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
 
         path += "/" + MapProjectManager.GetRoomPreinstallConfigName(roomInfo.RoomName);
-        var jsonStr = JsonSerializer.Serialize(RoomSplit.Preinstall);
+        var jsonStr = JsonSerializer.Serialize(_roomSplit.Preinstall);
         File.WriteAllText(path, jsonStr);
     }
 

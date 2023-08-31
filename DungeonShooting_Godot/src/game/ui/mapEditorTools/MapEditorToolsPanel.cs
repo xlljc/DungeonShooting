@@ -91,10 +91,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
             EventManager.EmitEvent(EventEnum.OnClickCenterTool);
         }));
         _toolGrid.SelectIndex = 1;
-    }
-
-    public override void OnShowUi()
-    {
+        
         _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnSelectWave, OnSelectWaveTool);
         _eventFactory.AddEventListener(EventEnum.OnCreateMark, OnCreateMarkTool);
@@ -104,14 +101,10 @@ public partial class MapEditorToolsPanel : MapEditorTools
         _eventFactory.AddEventListener(EventEnum.OnSelectPreinstall, RefreshMark);
     }
 
-    public override void OnHideUi()
+    public override void OnDestroyUi()
     {
         _eventFactory.RemoveAllEventListener();
         _eventFactory = null;
-    }
-
-    public override void OnDestroyUi()
-    {
         S_DoorToolTemplate.Instance.QueueFree();
         _toolGrid.Destroy();
     }
@@ -142,7 +135,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         }
         _currMarkToolsMap.Clear();
         //添加新的数据
-        var selectPreinstall = EditorMap.Instance.SelectPreinstallInfo;
+        var selectPreinstall = EditorManager.SelectPreinstall;
         if (selectPreinstall != null)
         {
             foreach (var markInfos in selectPreinstall.WaveList)
@@ -158,8 +151,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
     //选中波数
     private void OnSelectWaveTool(object arg)
     {
-        var selectIndex = (int)arg;
-        var waveList = EditorMap.Instance.SelectPreinstallInfo.WaveList;
+        var selectIndex = EditorManager.SelectWaveIndex;
+        var waveList = EditorManager.SelectPreinstall.WaveList;
         for (var i = 0; i < waveList.Count; i++)
         {
             var wave = waveList[i];
@@ -311,11 +304,11 @@ public partial class MapEditorToolsPanel : MapEditorTools
         if (markTool != null) //选中当前
         {
             ActiveMark.OnSelect();
-            EventManager.EmitEvent(EventEnum.OnSelectMark, markTool.MarkInfo);
+            EditorManager.SetSelectMark(markTool.MarkInfo);
         }
         else
         {
-            EventManager.EmitEvent(EventEnum.OnSelectMark);
+            EditorManager.SetSelectMark(null);
         }
     }
 

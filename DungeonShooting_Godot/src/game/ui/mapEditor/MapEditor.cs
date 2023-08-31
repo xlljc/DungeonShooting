@@ -81,6 +81,15 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditor.Bg.VBoxContainer.Head.PlaySetting
+    /// </summary>
+    public class PlaySetting : UiNode<MapEditorPanel, Godot.Button, PlaySetting>
+    {
+        public PlaySetting(MapEditorPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override PlaySetting Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Panel"/>, 路径: MapEditor.Bg.VBoxContainer.Head
     /// </summary>
     public class Head : UiNode<MapEditorPanel, Godot.Panel, Head>
@@ -136,6 +145,19 @@ public abstract partial class MapEditor : UiBase
             }
         }
         private Play _L_Play;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.PlaySetting
+        /// </summary>
+        public PlaySetting L_PlaySetting
+        {
+            get
+            {
+                if (_L_PlaySetting == null) _L_PlaySetting = new PlaySetting(UiPanel, Instance.GetNode<Godot.Button>("PlaySetting"));
+                return _L_PlaySetting;
+            }
+        }
+        private PlaySetting _L_PlaySetting;
 
         public Head(MapEditorPanel uiPanel, Godot.Panel node) : base(uiPanel, node) {  }
         public override Head Clone() => new (UiPanel, (Godot.Panel)Instance.Duplicate());
@@ -622,6 +644,11 @@ public abstract partial class MapEditor : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.Head.Play
     /// </summary>
     public Play S_Play => L_Bg.L_VBoxContainer.L_Head.L_Play;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditor.Bg.VBoxContainer.Head.PlaySetting
+    /// </summary>
+    public PlaySetting S_PlaySetting => L_Bg.L_VBoxContainer.L_Head.L_PlaySetting;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg.VBoxContainer.Head

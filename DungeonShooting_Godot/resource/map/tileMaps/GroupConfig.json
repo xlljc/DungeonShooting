@@ -19,6 +19,12 @@
         "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_roomInfo.json",
         "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_tileInfo.json",
         "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_preinstall.json"
+      },
+      {
+        "Ready": true,
+        "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room4/Room4_roomInfo.json",
+        "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room4/Room4_tileInfo.json",
+        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room4/Room4_preinstall.json"
       }
     ],
     "InletList": [

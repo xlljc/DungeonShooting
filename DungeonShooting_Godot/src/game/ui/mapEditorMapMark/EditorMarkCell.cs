@@ -56,13 +56,13 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
 
     public override void OnClick()
     {
-        CellNode.UiPanel.EditorTileMap.SelectWaveIndex = Data.ParentCell.Index;
+        EditorManager.SetSelectWaveIndex(Data.ParentCell.Index);
         CellNode.UiPanel.SetSelectCell(this, CellNode.Instance, MapEditorMapMarkPanel.SelectToolType.Mark);
         //需要切换回编辑工具
         if (CellNode.UiPanel.EditorTileMap.MouseType != EditorTileMap.MouseButtonType.Edit)
         {
             //选中标记
-            EventManager.EmitEvent(EventEnum.OnSelectMark, Data.MarkInfo);
+            EditorManager.SetSelectMark(Data.MarkInfo);
         }
     }
 
@@ -70,7 +70,7 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
     {
         CellNode.L_MarkButton.L_Select.Instance.Visible = true;
         //选中标记
-        EventManager.EmitEvent(EventEnum.OnSelectMark, Data.MarkInfo);
+        EditorManager.SetSelectMark(Data.MarkInfo);
     }
 
     public override void OnUnSelect()

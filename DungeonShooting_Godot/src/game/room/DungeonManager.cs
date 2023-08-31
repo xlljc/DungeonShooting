@@ -2,8 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Config;
 using Godot;
 
 /// <summary>
@@ -31,7 +29,17 @@ public partial class DungeonManager : Node2D
     /// </summary>
     public bool IsInDungeon { get; private set; }
 
-    private DungeonConfig _config;
+    /// <summary>
+    /// 是否是编辑器模式
+    /// </summary>
+    public bool IsEditorMode { get; private set; }
+    
+    /// <summary>
+    /// 当前使用的配置
+    /// </summary>
+    public DungeonConfig CurrConfig { get; private set; }
+    
+    private UiBase _prevUi;
     private DungeonTileMap _dungeonTileMap;
     private AutoTileConfig _autoTileConfig;
     private DungeonGenerator _dungeonGenerator;
@@ -55,8 +63,23 @@ public partial class DungeonManager : Node2D
     /// </summary>
     public void LoadDungeon(DungeonConfig config, Action finish = null)
     {
-        _config = config;
+        IsEditorMode = false;
+        CurrConfig = config;
         GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(finish));
+    }
+    
+    
+    /// <summary>
+    /// 重启地牢
+    /// </summary>
+    public void RestartDungeon(DungeonConfig config)
+    {
+        IsEditorMode = false;
+        CurrConfig = config;
+        ExitDungeon(() =>
+        {
+            LoadDungeon(CurrConfig);
+        });
     }
 
     /// <summary>
@@ -67,6 +90,59 @@ public partial class DungeonManager : Node2D
         IsInDungeon = false;
         GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(finish));
     }
+    
+    //-------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// 在编辑器模式下进入地牢
+    /// </summary>
+    /// <param name="config">地牢配置</param>
+    public void EditorPlayDungeon(DungeonConfig config)
+    {
+        IsEditorMode = true;
+        CurrConfig = config;
+        if (_prevUi != null)
+        {
+            _prevUi.HideUi();
+        }
+        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(null));
+    }
+    
+    /// <summary>
+    /// 在编辑器模式下进入地牢
+    /// </summary>
+    /// <param name="prevUi">记录上一个Ui</param>
+    /// <param name="config">地牢配置</param>
+    public void EditorPlayDungeon(UiBase prevUi, DungeonConfig config)
+    {
+        IsEditorMode = true;
+        CurrConfig = config;
+        _prevUi = prevUi;
+        if (_prevUi != null)
+        {
+            _prevUi.HideUi();
+        }
+        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(null));
+    }
+
+    /// <summary>
+    /// 在编辑器模式下退出地牢, 并且打开上一个Ui
+    /// </summary>
+    public void EditorExitDungeon()
+    {
+        IsInDungeon = false;
+        GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(() =>
+        {
+            IsEditorMode = false;
+            //显示上一个Ui
+            if (_prevUi != null)
+            {
+                _prevUi.ShowUi();
+            }
+        }));
+    }
+    
+    //-------------------------------------------------------------------------------------
 
     public override void _Process(double delta)
     {
@@ -99,7 +175,7 @@ public partial class DungeonManager : Node2D
         _world = GameApplication.Instance.CreateNewWorld();
         yield return new WaitForFixedProcess(10);
         //生成地牢房间
-        _dungeonGenerator = new DungeonGenerator(_config);
+        _dungeonGenerator = new DungeonGenerator(CurrConfig);
         _dungeonGenerator.Generate();
         yield return 0;
         

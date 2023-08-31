@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 /// <summary>
 /// 事件类型枚举
 /// </summary>
@@ -102,11 +104,19 @@ public enum EventEnum
     /// </summary>
     OnClickCenterTool,
     /// <summary>
-    /// 选中预设, 参数<see cref="int"/>
+    /// 选中地牢组, 参数<see cref="DungeonRoomGroup"/>
+    /// </summary>
+    OnSelectGroup,
+    /// <summary>
+    /// 选中房间, 参数<see cref="DungeonRoomSplit"/>
+    /// </summary>
+    OnSelectRoom,
+    /// <summary>
+    /// 选中预设, 参数<see cref="RoomPreinstallInfo"/>
     /// </summary>
     OnSelectPreinstall,
     /// <summary>
-    /// 选中波数, 参数<see cref="int"/>
+    /// 选中波数, 参数 <see cref="List{T}"/>, T 为 <see cref="MarkInfo"/>
     /// </summary>
     OnSelectWave,
     /// <summary>

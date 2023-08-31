@@ -75,23 +75,16 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
 
         S_EditButton.Instance.Pressed += OnToolEditClick;
         S_DeleteButton.Instance.Pressed += OnToolDeleteClick;
-    }
-
-    public override void OnShowUi()
-    {
+        
         _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnSelectMark, OnSelectMark);
         RefreshPreinstallSelect();
     }
 
-    public override void OnHideUi()
+    public override void OnDestroyUi()
     {
         _eventFactory.RemoveAllEventListener();
         _eventFactory = null;
-    }
-
-    public override void OnDestroyUi()
-    {
         _grid.Destroy();
     }
 
@@ -134,7 +127,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     public RoomPreinstallInfo GetSelectPreinstall()
     {
         var index = S_PreinstallOption.Instance.Selected;
-        var preinstall = EditorTileMap.RoomSplit.Preinstall;
+        var preinstall = EditorManager.SelectRoom.Preinstall;
         if (index >= preinstall.Count)
         {
             return null;
@@ -147,7 +140,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void RefreshPreinstallSelect(int index = -1)
     {
-        var preinstall = EditorTileMap.RoomSplit.Preinstall;
+        var preinstall = EditorManager.SelectRoom.Preinstall;
         var optionButton = S_PreinstallOption.Instance;
         var selectIndex = index < 0 ? (preinstall.Count > 0 ? 0 : -1) : index;
         optionButton.Clear();
@@ -173,10 +166,10 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     {
         //清除选中项
         RemoveSelectCell();
-        EditorTileMap.SelectWaveIndex = -1;
+        EditorManager.SetSelectWaveIndex(-1);
         //记录选中波数
-        EditorTileMap.SelectPreinstallIndex = (int)index;
-        var preinstall = EditorTileMap.RoomSplit.Preinstall;
+        EditorManager.SetSelectPreinstallIndex((int)index);
+        var preinstall = EditorManager.SelectRoom.Preinstall;
         if (index >= 0 && index <= preinstall.Count)
         {
             _grid.SetDataList(preinstall[(int)index].WaveList.ToArray());
@@ -272,8 +265,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnAddPreinstall()
     {
-        var roomInfoRoomType = EditorTileMap.RoomSplit.RoomInfo.RoomType;
-        var roomSplitPreinstall = EditorTileMap.RoomSplit.Preinstall;
+        var roomInfoRoomType = EditorManager.SelectRoom.RoomInfo.RoomType;
+        var roomSplitPreinstall = EditorManager.SelectRoom.Preinstall;
         EditorWindowManager.ShowCreatePreinstall(roomInfoRoomType, roomSplitPreinstall, preinstall =>
         {
             //创建逻辑
@@ -289,8 +282,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnEditPreinstall()
     {
-        var roomInfoRoomType = EditorTileMap.RoomSplit.RoomInfo.RoomType;
-        var roomSplitPreinstall = EditorTileMap.RoomSplit.Preinstall;
+        var roomInfoRoomType = EditorManager.SelectRoom.RoomInfo.RoomType;
+        var roomSplitPreinstall = EditorManager.SelectRoom.Preinstall;
         var selectPreinstall = GetSelectPreinstall();
         EditorWindowManager.ShowEditPreinstall(roomInfoRoomType, roomSplitPreinstall, selectPreinstall, preinstall =>
         {
@@ -309,7 +302,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeletePreinstall()
     {
-        var index = EditorTileMap.SelectPreinstallIndex;
+        var index = EditorManager.SelectPreinstallIndex;
         if (index < 0)
         {
             return;
@@ -320,11 +313,11 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             if (v)
             {
                 //先把选中项置为-1
-                EditorTileMap.SelectPreinstallIndex = -1;
+                EditorManager.SetSelectPreinstallIndex(-1);
                 //移除预设数据
-                EditorTileMap.RoomSplit.Preinstall.RemoveAt(index);
+                EditorManager.SelectRoom.Preinstall.RemoveAt(index);
                 //刷新选项
-                RefreshPreinstallSelect(EditorTileMap.RoomSplit.Preinstall.Count - 1);
+                RefreshPreinstallSelect(EditorManager.SelectRoom.Preinstall.Count - 1);
                 //派发数据修改事件
                 EventManager.EmitEvent(EventEnum.OnEditorDirty);
             }
@@ -343,7 +336,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             return;
         }
 
-        var preinstall = EditorTileMap.RoomSplit.Preinstall;
+        var preinstall = EditorManager.SelectRoom.Preinstall;
         if (index >= preinstall.Count)
         {
             EditorWindowManager.ShowTips("警告", "未知预设选项!");
@@ -385,7 +378,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeleteWave()
     {
-        var index = EditorTileMap.SelectWaveIndex;
+        var index = EditorManager.SelectWaveIndex;
         if (index < 0)
         {
             return;
@@ -413,7 +406,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 //移除数据
                 selectPreinstall.WaveList.RemoveAt(index);
                 _grid.RemoveByIndex(index);
-                EditorTileMap.SelectWaveIndex = -1;
+                EditorManager.SetSelectWaveIndex(-1);
                 //派发数据修改事件
                 EventManager.EmitEvent(EventEnum.OnEditorDirty);
             }
@@ -451,7 +444,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     {
         if (SelectCell is EditorMarkCell markCell)
         {
-            var index = EditorTileMap.SelectWaveIndex;
+            var index = EditorManager.SelectWaveIndex;
             if (index < 0)
             {
                 return;

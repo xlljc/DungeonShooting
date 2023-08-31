@@ -111,16 +111,24 @@ public class DungeonTileMap
             }
             //随机选择预设
             RoomPreinstallInfo preinstallInfo;
-            if (roomInfo.RoomSplit.Preinstall.Count == 1)
+            if (EditorPlayManager.IsPlay && roomInfo.RoomType == GameApplication.Instance.DungeonManager.CurrConfig.DesignatedType) //编辑器模式, 指定预设
             {
-                preinstallInfo = roomInfo.RoomSplit.Preinstall[0];
+                preinstallInfo = EditorManager.SelectPreinstall;
             }
-            else
+            else //普通模式
             {
-                var weights = roomInfo.RoomSplit.Preinstall.Select(info => info.Weight).ToArray();
-                var index = random.RandomWeight(weights);
-                preinstallInfo = roomInfo.RoomSplit.Preinstall[index];
+                if (roomInfo.RoomSplit.Preinstall.Count == 1)
+                {
+                    preinstallInfo = roomInfo.RoomSplit.Preinstall[0];
+                }
+                else
+                {
+                    var weights = roomInfo.RoomSplit.Preinstall.Select(info => info.Weight).ToArray();
+                    var index = random.RandomWeight(weights);
+                    preinstallInfo = roomInfo.RoomSplit.Preinstall[index];
+                }
             }
+
 
             var roomPreinstall = new RoomPreinstall(roomInfo, preinstallInfo);
             roomInfo.RoomPreinstall = roomPreinstall;
