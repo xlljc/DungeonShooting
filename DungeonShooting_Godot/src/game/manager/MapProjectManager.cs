@@ -174,14 +174,11 @@ public static class MapProjectManager
             var jsonText = JsonSerializer.Serialize(GroupMap, options);
             File.WriteAllText(configFile, jsonText);
             //将房间数据保存为json
-            var jsonText2 = JsonSerializer.Serialize(roomSplit.RoomInfo);
-            File.WriteAllText(roomSplit.RoomPath, jsonText2);
+            SaveRoomInfo(roomSplit);
             //将房间地块保存为json
-            var jsonText3 = JsonSerializer.Serialize(roomSplit.TileInfo);
-            File.WriteAllText(roomSplit.TilePath, jsonText3);
+            SaveRoomTileInfo(roomSplit);
             //将预设保存为json
-            var jsonText4 = JsonSerializer.Serialize(roomSplit.Preinstall);
-            File.WriteAllText(roomSplit.PreinstallPath, jsonText4);
+            SaveRoomPreinstall(roomSplit);
             //创建完成事件
             EventManager.EmitEvent(EventEnum.OnCreateRoomFinish, roomSplit);
         }
@@ -209,6 +206,51 @@ public static class MapProjectManager
             dic.Add(dungeonRoomGroup.Key, dungeonRoomGroup.Value.Clone());
         }
         GameApplication.Instance.SetRoomConfig(dic);
+    }
+
+    /// <summary>
+    /// 保存房间数据
+    /// </summary>
+    public static void SaveRoomInfo(DungeonRoomSplit roomSplit)
+    {
+        var roomInfo = roomSplit.RoomInfo;
+        var path = GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        var jsonText = JsonSerializer.Serialize(roomInfo);
+        File.WriteAllText(roomSplit.RoomPath, jsonText);
+    }
+    
+    /// <summary>
+    /// 保存房间地块数据
+    /// </summary>
+    public static void SaveRoomTileInfo(DungeonRoomSplit roomSplit)
+    {
+        var roomInfo = roomSplit.RoomInfo;
+        var path = GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        var jsonText = JsonSerializer.Serialize(roomSplit.TileInfo);
+        File.WriteAllText(roomSplit.TilePath, jsonText);
+    }
+    
+    /// <summary>
+    /// 保存房间预设数据
+    /// </summary>
+    public static void SaveRoomPreinstall(DungeonRoomSplit roomSplit)
+    {
+        var roomInfo = roomSplit.RoomInfo;
+        var path = GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        var jsonText = JsonSerializer.Serialize(roomSplit.Preinstall);
+        File.WriteAllText(roomSplit.PreinstallPath, jsonText);
     }
 
     /// <summary>

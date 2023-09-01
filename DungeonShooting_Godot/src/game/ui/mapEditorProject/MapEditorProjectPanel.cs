@@ -188,7 +188,20 @@ public partial class MapEditorProjectPanel : MapEditorProject
     //编辑房间
     private void OnEditRoom()
     {
-        
+        var selectRoom = _roomGrid.SelectData;
+        if (selectRoom == null)
+        {
+            EditorWindowManager.ShowTips("提示", "请选择需要编辑的房间！");
+        }
+        else
+        {
+            EditorWindowManager.ShowEditRoom(selectRoom, (room) =>
+            {
+                //保存房间数据
+                MapProjectManager.SaveRoomInfo(room);
+                OnSearchRoomButtonClick();
+            });
+        }
     }
     
     //删除房间

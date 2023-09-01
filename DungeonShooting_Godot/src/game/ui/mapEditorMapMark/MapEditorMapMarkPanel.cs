@@ -287,8 +287,6 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         var selectPreinstall = GetSelectPreinstall();
         EditorWindowManager.ShowEditPreinstall(roomInfoRoomType, roomSplitPreinstall, selectPreinstall, preinstall =>
         {
-            //修改逻辑
-            selectPreinstall.CloneFrom(preinstall);
             //修改下拉菜单数据
             var optionButton = S_PreinstallOption.Instance;
             optionButton.SetItemText(optionButton.Selected, $"{preinstall.Name} ({preinstall.Weight})");

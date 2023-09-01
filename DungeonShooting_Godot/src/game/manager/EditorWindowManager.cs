@@ -173,6 +173,37 @@ public static class EditorWindowManager
     }
 
     /// <summary>
+    /// 编辑地牢房间
+    /// </summary>
+    /// <param name="roomSplit">原数据</param>
+    /// <param name="onSave">保存时回调</param>
+    public static void ShowEditRoom(DungeonRoomSplit roomSplit, Action<DungeonRoomSplit> onSave)
+    {
+        var window = UiManager.Open_EditorWindow();
+        window.SetWindowTitle("编辑地牢房间");
+        window.SetWindowSize(new Vector2I(700, 600));
+        var body = window.OpenBody<MapEditorCreateRoomPanel>(UiManager.UiName.MapEditorCreateRoom);
+        body.InitEditData(roomSplit);
+        
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                //获取填写的数据, 并创建ui
+                var saveData = body.GetRoomInfo();
+                if (saveData != null)
+                {
+                    window.CloseWindow();
+                    onSave(saveData);
+                }
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
     /// 打开创建房间预设弹窗
     /// </summary>
     /// <param name="roomType">当前房间的类型</param>

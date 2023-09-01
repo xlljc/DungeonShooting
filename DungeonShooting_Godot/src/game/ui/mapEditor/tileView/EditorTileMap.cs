@@ -940,11 +940,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         //存入本地
         var roomInfo = CurrRoomSplit.RoomInfo;
-        var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
         
         if (!HasError) //没有错误
         {
@@ -960,23 +955,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         roomInfo.DoorAreaInfos.Clear();
         roomInfo.DoorAreaInfos.AddRange(CurrDoorConfigs);
         roomInfo.ClearCompletionDoorArea();
-
-        path += "/" + MapProjectManager.GetRoomInfoConfigName(roomInfo.RoomName);
-        var jsonStr = JsonSerializer.Serialize(roomInfo);
-        File.WriteAllText(path, jsonStr);
+        MapProjectManager.SaveRoomInfo(CurrRoomSplit);
     }
 
     //保存地块数据
     public void SaveTileInfoConfig()
     {
         //存入本地
-        var roomInfo = CurrRoomSplit.RoomInfo;
-        var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
-
         var tileInfo = CurrRoomSplit.TileInfo;
         tileInfo.NavigationList.Clear();
         tileInfo.NavigationList.AddRange(_dungeonTileMap.GetPolygonData());
@@ -987,26 +972,14 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         PushLayerDataToList(AutoFloorLayer, _sourceId, tileInfo.Floor);
         PushLayerDataToList(AutoMiddleLayer, _sourceId, tileInfo.Middle);
         PushLayerDataToList(AutoTopLayer, _sourceId, tileInfo.Top);
-        
-        path += "/" + MapProjectManager.GetTileInfoConfigName(roomInfo.RoomName);
-        var jsonStr = JsonSerializer.Serialize(tileInfo);
-        File.WriteAllText(path, jsonStr);
+        MapProjectManager.SaveRoomTileInfo(CurrRoomSplit);
     }
 
     //保存预设数据
     public void SavePreinstallConfig()
     {
         //存入本地
-        var roomInfo = CurrRoomSplit.RoomInfo;
-        var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
-
-        path += "/" + MapProjectManager.GetRoomPreinstallConfigName(roomInfo.RoomName);
-        var jsonStr = JsonSerializer.Serialize(CurrRoomSplit.Preinstall);
-        File.WriteAllText(path, jsonStr);
+        MapProjectManager.SaveRoomPreinstall(CurrRoomSplit);
     }
 
     //设置地图坐标

@@ -32,17 +32,6 @@ public class RoomPreinstallInfo
     public List<List<MarkInfo>> WaveList;
 
     /// <summary>
-    /// 从指定对象浅拷贝数据
-    /// </summary>
-    public void CloneFrom(RoomPreinstallInfo preinstallInfo)
-    {
-        Name = preinstallInfo.Name;
-        Weight = preinstallInfo.Weight;
-        Remark = preinstallInfo.Remark;
-        WaveList = preinstallInfo.WaveList;
-    }
-
-    /// <summary>
     /// 初始化波数据
     /// </summary>
     public void InitWaveList()

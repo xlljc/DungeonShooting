@@ -34,35 +34,51 @@ public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
     /// </summary>
     public RoomPreinstallInfo GetRoomPreinstall(List<RoomPreinstallInfo> roomPreinstalls)
     {
-        var data = new RoomPreinstallInfo();
-        data.Name = S_PreinstallNameInput.Instance.Text;
-        //检查名称是否合规
-        if (string.IsNullOrEmpty(data.Name))
-        {
-            EditorWindowManager.ShowTips("错误", "预设名称不能为空!");
-            return null;
-        }
-
-        var index = roomPreinstalls.FindIndex(preinstall => preinstall.Name == data.Name && preinstall != _roomPreinstallInfo);
-        if (index >= 0)
-        {
-            EditorWindowManager.ShowTips("错误", "当前房间已经存在预设名称'" + data.Name + "', 请使用其他名称!");
-            return null;
-        }
-
-        data.Remark = S_RemarkInput.Instance.Text;
-        data.Weight = (int)S_WeightInput.Instance.Value;
+        RoomPreinstallInfo data;
         if (_roomPreinstallInfo != null) //编辑数据
         {
-            data.WaveList = _roomPreinstallInfo.WaveList;
+            data = _roomPreinstallInfo;
+            data.Name = S_PreinstallNameInput.Instance.Text;
+            //检查名称是否合规
+            if (string.IsNullOrEmpty(data.Name))
+            {
+                EditorWindowManager.ShowTips("错误", "预设名称不能为空!");
+                return null;
+            }
+            var index = roomPreinstalls.FindIndex(preinstall => preinstall.Name == data.Name && preinstall != _roomPreinstallInfo);
+            if (index >= 0)
+            {
+                EditorWindowManager.ShowTips("错误", "当前房间已经存在预设名称'" + data.Name + "', 请使用其他名称!");
+                return null;
+            }
+            
+            data.Remark = S_RemarkInput.Instance.Text;
+            data.Weight = (int)S_WeightInput.Instance.Value;
         }
         else //创建数据
         {
+            data = new RoomPreinstallInfo();
+            data.Name = S_PreinstallNameInput.Instance.Text;
+            //检查名称是否合规
+            if (string.IsNullOrEmpty(data.Name))
+            {
+                EditorWindowManager.ShowTips("错误", "预设名称不能为空!");
+                return null;
+            }
+
+            var index = roomPreinstalls.FindIndex(preinstall => preinstall.Name == data.Name);
+            if (index >= 0)
+            {
+                EditorWindowManager.ShowTips("错误", "当前房间已经存在预设名称'" + data.Name + "', 请使用其他名称!");
+                return null;
+            }
+
+            data.Remark = S_RemarkInput.Instance.Text;
+            data.Weight = (int)S_WeightInput.Instance.Value;
             //预加载波
             data.InitWaveList();
             CreateSpecialMark(data.WaveList);
         }
-
         return data;
     }
 
