@@ -25,11 +25,11 @@ public partial class MapEditorProjectPanel : MapEditorProject
             optionButton.AddItem(DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomType), (int)dungeonRoomType + 1);
         }
 
-        _groupGrid = new UiGrid<GroupButton, DungeonRoomGroup>(S_GroupButton, typeof(GroupButtonCell));
+        _groupGrid = new UiGrid<MapEditorProject.GroupButton, DungeonRoomGroup>(S_GroupButton, typeof(GroupButtonCell));
         _groupGrid.SetCellOffset(new Vector2I(0, 2));
         _groupGrid.SetHorizontalExpand(true);
 
-        _roomGrid = new UiGrid<RoomButton, DungeonRoomSplit>(S_RoomButton, typeof(RoomButtonCell));
+        _roomGrid = new UiGrid<MapEditorProject.RoomButton, DungeonRoomSplit>(S_RoomButton, typeof(RoomButtonCell));
         _roomGrid.SetAutoColumns(true);
         _roomGrid.SetCellOffset(new Vector2I(10, 10));
         _roomGrid.SetHorizontalExpand(true);
@@ -47,6 +47,8 @@ public partial class MapEditorProjectPanel : MapEditorProject
         S_GroupSearchButton.Instance.Pressed += OnSearchGroupButtonClick;
         S_RoomSearchButton.Instance.Pressed += OnSearchRoomButtonClick;
         S_RoomAddButton.Instance.Pressed += OnCreateRoomClick;
+        S_RoomEditButton.Instance.Pressed += OnEditRoom;
+        S_RoomDeleteButton.Instance.Pressed += OnDeleteRoom;
         S_GroupAddButton.Instance.Pressed += OnCreateGroupClick;
         
         _eventFactory = EventManager.CreateEventFactory();
@@ -180,6 +182,38 @@ public partial class MapEditorProjectPanel : MapEditorProject
     {
         var groupName = EditorManager.SelectDungeonGroup != null ? EditorManager.SelectDungeonGroup.GroupName : null;
         EditorWindowManager.ShowCreateRoom(groupName, Mathf.Max(S_RoomTypeButton.Instance.Selected - 1, 0), CreateRoom);
+    }
+    
+    
+    //编辑房间
+    private void OnEditRoom()
+    {
+        
+    }
+    
+    //删除房间
+    private void OnDeleteRoom()
+    {
+        var selectRoom = _roomGrid.SelectData;
+        if (selectRoom == null)
+        {
+            EditorWindowManager.ShowTips("提示", "请选择需要删除的房间！");
+        }
+        else
+        {
+            EditorWindowManager.ShowConfirm("提示", $"是否删除房间: {selectRoom.RoomInfo.RoomName}, 该操作无法撤销！", result =>
+            {
+                if (result)
+                {
+                    //删除房间
+                    if (MapProjectManager.DeleteRoom(EditorManager.SelectDungeonGroup, selectRoom))
+                    {
+                        MapProjectManager.SaveGroupMap();
+                        OnSearchRoomButtonClick();
+                    }
+                }
+            });
+        }
     }
 
     //创建地牢组

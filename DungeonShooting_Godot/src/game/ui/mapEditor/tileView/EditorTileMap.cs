@@ -122,7 +122,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <summary>
     /// 正在编辑的房间数据
     /// </summary>
-    private DungeonRoomSplit _roomSplit;
+    public DungeonRoomSplit CurrRoomSplit;
     
     /// <summary>
     /// 数据是否脏了, 也就是是否有修改
@@ -134,18 +134,20 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// </summary>
     public bool HasError => !_isGenerateTerrain;
 
-    /// <summary>
-    /// 当前的房间大小
-    /// </summary>
-    public Vector2I RoomSize => _roomSize;
-
     //变动过的数据
     
-    //地图位置, 单位: 格
-    private Vector2I _roomPosition;
-    //地图大小, 单位: 格
-    private Vector2I _roomSize;
-    private List<DoorAreaInfo> _doorConfigs = new List<DoorAreaInfo>();
+    /// <summary>
+    /// 地图位置, 单位: 格
+    /// </summary>
+    public Vector2I CurrRoomPosition { get; private set; }
+    /// <summary>
+    /// 当前地图大小, 单位: 格
+    /// </summary>
+    public Vector2I CurrRoomSize { get; private set; }
+    /// <summary>
+    /// 当前编辑的门数据
+    /// </summary>
+    public List<DoorAreaInfo> CurrDoorConfigs { get; } = new List<DoorAreaInfo>();
     //-------------------------------
     private MapEditor.TileMap _editorTileMap;
     private EventFactory _eventFactory;
@@ -258,10 +260,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         canvasItem.DrawLine(new Vector2(2000, 0), new Vector2( -2000, 0), Colors.Red);
         
         //绘制房间区域
-        if (_roomSize.X != 0 && _roomSize.Y != 0)
+        if (CurrRoomSize.X != 0 && CurrRoomSize.Y != 0)
         {
             var size = TileSet.TileSize;
-            canvasItem.DrawRect(new Rect2(_roomPosition * size, _roomSize * size),
+            canvasItem.DrawRect(new Rect2(CurrRoomPosition * size, CurrRoomSize * size),
                 Colors.Aqua, false, 5f / Scale.X);
         }
         
@@ -439,7 +441,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         GD.Print("保存地牢房间数据...");
         //是否准备好
-        _roomSplit.Ready = !HasError && _roomSplit.Preinstall != null && _roomSplit.Preinstall.Count > 0;
+        CurrRoomSplit.Ready = !HasError && CurrRoomSplit.Preinstall != null && CurrRoomSplit.Preinstall.Count > 0;
         SaveRoomInfoConfig();
         SaveTileInfoConfig();
         SavePreinstallConfig();
@@ -459,16 +461,16 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         roomSplit.ReloadTileInfo();
         roomSplit.ReloadPreinstall();
         
-        _roomSplit = roomSplit;
+        CurrRoomSplit = roomSplit;
         var roomInfo = roomSplit.RoomInfo;
         var tileInfo = roomSplit.TileInfo;
 
-        _roomPosition = roomInfo.Position.AsVector2I();
+        CurrRoomPosition = roomInfo.Position.AsVector2I();
         SetMapSize(roomInfo.Size.AsVector2I(), true);
-        _doorConfigs.Clear();
+        CurrDoorConfigs.Clear();
         foreach (var doorAreaInfo in roomInfo.DoorAreaInfos)
         {
-            _doorConfigs.Add(doorAreaInfo.Clone());
+            CurrDoorConfigs.Add(doorAreaInfo.Clone());
         }
 
         //初始化层级数据
@@ -492,7 +494,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //CallDeferred(nameof(OnClickCenterTool), null);
         
         //加载门编辑区域
-        foreach (var doorAreaInfo in _doorConfigs)
+        foreach (var doorAreaInfo in CurrDoorConfigs)
         {
             MapEditorToolsPanel.CreateDoorTool(doorAreaInfo);
         }
@@ -648,17 +650,17 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private void CalcTileRect(bool refreshDoorTrans)
     {
         var rect = GetUsedRect();
-        _roomPosition = rect.Position;
+        CurrRoomPosition = rect.Position;
         SetMapSize(rect.Size, refreshDoorTrans);
     }
     
     //检测是否有不合规的图块, 返回true表示图块正常
     private bool CheckTerrain()
     {
-        var x = _roomPosition.X;
-        var y = _roomPosition.Y;
-        var w = _roomSize.X;
-        var h = _roomSize.Y;
+        var x = CurrRoomPosition.X;
+        var y = CurrRoomPosition.Y;
+        var w = CurrRoomSize.X;
+        var h = CurrRoomSize.Y;
 
         for (var i = 0; i < w; i++)
         {
@@ -723,10 +725,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         ClearLayer(AutoTopLayer);
         ClearLayer(AutoMiddleLayer);
         
-        var x = _roomPosition.X;
-        var y = _roomPosition.Y;
-        var w = _roomSize.X;
-        var h = _roomSize.Y;
+        var x = CurrRoomPosition.X;
+        var y = CurrRoomPosition.Y;
+        var w = CurrRoomSize.X;
+        var h = CurrRoomSize.Y;
 
         for (var i = 0; i < w; i++)
         {
@@ -840,13 +842,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private void OnClickCenterTool(object arg)
     {
         var pos = MapEditorPanel.S_SubViewport.Instance.Size / 2;
-        if (_roomSize.X == 0 && _roomSize.Y == 0) //聚焦原点
+        if (CurrRoomSize.X == 0 && CurrRoomSize.Y == 0) //聚焦原点
         {
             SetMapPosition(pos);
         }
         else //聚焦地图中心点
         {
-            SetMapPosition(pos - (_roomPosition + _roomSize / 2) * TileSet.TileSize * Scale);
+            SetMapPosition(pos - (CurrRoomPosition + CurrRoomSize / 2) * TileSet.TileSize * Scale);
         }
     }
     
@@ -870,7 +872,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         doorAreaInfo.Start = start;
         doorAreaInfo.End = end;
         //doorAreaInfo.CalcPosition(_roomPosition, _roomSize);
-        _doorConfigs.Add(doorAreaInfo);
+        CurrDoorConfigs.Add(doorAreaInfo);
         return doorAreaInfo;
     }
 
@@ -883,7 +885,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <returns></returns>
     public bool CheckDoorArea(DoorDirection direction, int start, int end)
     {
-        foreach (var item in _doorConfigs)
+        foreach (var item in CurrDoorConfigs)
         {
             if (item.Direction == direction)
             {
@@ -905,7 +907,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <param name="end">结束坐标, 单位: 像素</param>
     public bool CheckDoorArea(DoorAreaInfo target, int start, int end)
     {
-        foreach (var item in _doorConfigs)
+        foreach (var item in CurrDoorConfigs)
         {
             if (item.Direction == target.Direction && item != target)
             {
@@ -930,14 +932,14 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// </summary>
     public void RemoveDoorArea(DoorAreaInfo doorAreaInfo)
     {
-        _doorConfigs.Remove(doorAreaInfo);
+        CurrDoorConfigs.Remove(doorAreaInfo);
     }
     
     //保存房间配置
     private void SaveRoomInfoConfig()
     {
         //存入本地
-        var roomInfo = _roomSplit.RoomInfo;
+        var roomInfo = CurrRoomSplit.RoomInfo;
         var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
         if (!Directory.Exists(path))
         {
@@ -946,17 +948,17 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         
         if (!HasError) //没有错误
         {
-            roomInfo.Size = new SerializeVector2(_roomSize);
-            roomInfo.Position = new SerializeVector2(_roomPosition);
+            roomInfo.Size = new SerializeVector2(CurrRoomSize);
+            roomInfo.Position = new SerializeVector2(CurrRoomPosition);
         }
         else
         {
-            roomInfo.Position = new SerializeVector2(_roomPosition - Vector2I.One);
-            roomInfo.Size = new SerializeVector2(_roomSize + new Vector2I(2, 2));
+            roomInfo.Position = new SerializeVector2(CurrRoomPosition - Vector2I.One);
+            roomInfo.Size = new SerializeVector2(CurrRoomSize + new Vector2I(2, 2));
         }
 
         roomInfo.DoorAreaInfos.Clear();
-        roomInfo.DoorAreaInfos.AddRange(_doorConfigs);
+        roomInfo.DoorAreaInfos.AddRange(CurrDoorConfigs);
         roomInfo.ClearCompletionDoorArea();
 
         path += "/" + MapProjectManager.GetRoomInfoConfigName(roomInfo.RoomName);
@@ -968,14 +970,14 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public void SaveTileInfoConfig()
     {
         //存入本地
-        var roomInfo = _roomSplit.RoomInfo;
+        var roomInfo = CurrRoomSplit.RoomInfo;
         var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
 
-        var tileInfo = _roomSplit.TileInfo;
+        var tileInfo = CurrRoomSplit.TileInfo;
         tileInfo.NavigationList.Clear();
         tileInfo.NavigationList.AddRange(_dungeonTileMap.GetPolygonData());
         tileInfo.Floor.Clear();
@@ -995,7 +997,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public void SavePreinstallConfig()
     {
         //存入本地
-        var roomInfo = _roomSplit.RoomInfo;
+        var roomInfo = CurrRoomSplit.RoomInfo;
         var path = MapProjectManager.GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
         if (!Directory.Exists(path))
         {
@@ -1003,7 +1005,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
 
         path += "/" + MapProjectManager.GetRoomPreinstallConfigName(roomInfo.RoomName);
-        var jsonStr = JsonSerializer.Serialize(_roomSplit.Preinstall);
+        var jsonStr = JsonSerializer.Serialize(CurrRoomSplit.Preinstall);
         File.WriteAllText(path, jsonStr);
     }
 
@@ -1017,13 +1019,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //设置地图大小
     private void SetMapSize(Vector2I size, bool refreshDoorTrans)
     {
-        if (_roomSize != size)
+        if (CurrRoomSize != size)
         {
-            _roomSize = size;
+            CurrRoomSize = size;
 
             if (refreshDoorTrans)
             {
-                MapEditorToolsPanel.SetDoorHoverToolTransform(_roomPosition, _roomSize);
+                MapEditorToolsPanel.SetDoorHoverToolTransform(CurrRoomPosition, CurrRoomSize);
             }
         }
     }

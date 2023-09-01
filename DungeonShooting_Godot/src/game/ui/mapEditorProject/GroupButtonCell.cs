@@ -4,6 +4,11 @@ namespace UI.MapEditorProject;
 
 public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, DungeonRoomGroup>
 {
+    public override void OnInit()
+    {
+        CellNode.L_SelectTexture.Instance.Visible = false;
+    }
+
     public override void OnSetData(DungeonRoomGroup info)
     {
         CellNode.Instance.Text = info.GroupName;
@@ -19,5 +24,15 @@ public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, DungeonRoomG
     public override void OnClick()
     {
         CellNode.UiPanel.SelectGroup(Data);
+    }
+
+    public override void OnSelect()
+    {
+        CellNode.L_SelectTexture.Instance.Visible = true;
+    }
+
+    public override void OnUnSelect()
+    {
+        CellNode.L_SelectTexture.Instance.Visible = false;
     }
 }

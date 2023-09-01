@@ -83,7 +83,10 @@ public class DungeonRoomInfo
     /// </summary>
     public void ClearCompletionDoorArea()
     {
-        _completionDoorArea.Clear();
-        _completionDoorArea = null;
+        if (_completionDoorArea != null)
+        {
+            _completionDoorArea.Clear();
+            _completionDoorArea = null;
+        }
     }
 }

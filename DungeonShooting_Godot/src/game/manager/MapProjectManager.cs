@@ -210,4 +210,23 @@ public static class MapProjectManager
         }
         GameApplication.Instance.SetRoomConfig(dic);
     }
+
+    /// <summary>
+    /// 从指定组中删除房间, 返回是否删除成功
+    /// </summary>
+    public static bool DeleteRoom(DungeonRoomGroup group, DungeonRoomSplit roomSplit)
+    {
+        if (group.RemoveRoom(roomSplit))
+        {
+            var path = GetConfigPath(group.GroupName, roomSplit.RoomInfo.RoomType, roomSplit.RoomInfo.RoomName);
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -94,7 +94,7 @@ public partial class DoorHoverArea : ColorRect
         }
         if (MapEditorToolsPanel.ActiveHoverArea == null || !IsDrag)
         {
-            var roomSize = MapEditorToolsPanel.EditorMap.Instance.RoomSize;
+            var roomSize = MapEditorToolsPanel.EditorMap.Instance.CurrRoomSize;
             //房间大小为0, 不能放置门区域
             if (roomSize.X == 0 && roomSize.Y == 0)
             {

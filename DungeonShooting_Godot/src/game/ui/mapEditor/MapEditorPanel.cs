@@ -188,16 +188,40 @@ public partial class MapEditorPanel : MapEditor
 
     private CheckResult CheckError()
     {
-        if (S_TileMap.Instance.HasError) //地图绘制错误
+        var editorTileMap = S_TileMap.Instance;
+        if (editorTileMap.HasError) //地图绘制错误
         {
             return new CheckResult(true, "当前房间地块存在绘制错误");
         }
-
+        
         if (EditorManager.SelectRoom.Preinstall == null || EditorManager.SelectRoom.Preinstall.Count == 0)
         {
             return new CheckResult(true, "当前房间没有预设");
         }
 
+        if (editorTileMap.CurrDoorConfigs.Count > 0)
+        {
+            var flag = false;
+            var dir = -1;
+            foreach (var roomInfoDoorAreaInfo in editorTileMap.CurrDoorConfigs)
+            {
+                if (dir == -1)
+                {
+                    dir = (int)roomInfoDoorAreaInfo.Direction;
+                }
+                else if (dir != (int)roomInfoDoorAreaInfo.Direction)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (!flag)
+            {
+                return new CheckResult(true, "当前房间至少要有两个不同方向的门区域");
+            }
+        }
+        
         return new CheckResult(false, null);
     }
 }

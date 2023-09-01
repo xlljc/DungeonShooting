@@ -103,6 +103,43 @@ public class DungeonRoomGroup : IClone<DungeonRoomGroup>
     }
 
     /// <summary>
+    /// 移除一个房间, 返回是否移除成功
+    /// </summary>
+    public bool RemoveRoom(DungeonRoomSplit roomSplit)
+    {
+        if (BattleList.Remove(roomSplit))
+        {
+            return true;
+        }
+        if (InletList.Remove(roomSplit))
+        {
+            return true;
+        }
+        if (OutletList.Remove(roomSplit))
+        {
+            return true;
+        }
+        if (BossList.Remove(roomSplit))
+        {
+            return true;
+        }
+        if (RewardList.Remove(roomSplit))
+        {
+            return true;
+        }
+        if (ShopList.Remove(roomSplit))
+        {
+            return true;
+        }
+        if (EventList.Remove(roomSplit))
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /// <summary>
     /// 初始化权重处理
     /// </summary>
     public void InitWeight(SeedRandom random)

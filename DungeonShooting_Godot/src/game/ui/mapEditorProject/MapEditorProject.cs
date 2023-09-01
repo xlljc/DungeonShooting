@@ -12,7 +12,7 @@ public abstract partial class MapEditorProject : UiBase
     {
         get
         {
-            if (_L_Bg == null) _L_Bg = new Bg((MapEditorProjectPanel)this, GetNodeOrNull<Godot.Panel>("Bg"));
+            if (_L_Bg == null) _L_Bg = new Bg((MapEditorProjectPanel)this, GetNode<Godot.Panel>("Bg"));
             return _L_Bg;
         }
     }
@@ -25,6 +25,7 @@ public abstract partial class MapEditorProject : UiBase
 
     public sealed override void OnInitNestedUi()
     {
+
     }
 
     /// <summary>
@@ -48,7 +49,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_Back == null) _L_Back = new Back(UiPanel, Instance.GetNodeOrNull<Godot.Button>("Back"));
+                if (_L_Back == null) _L_Back = new Back(UiPanel, Instance.GetNode<Godot.Button>("Back"));
                 return _L_Back;
             }
         }
@@ -97,7 +98,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_GroupSearchInput == null) _L_GroupSearchInput = new GroupSearchInput(UiPanel, Instance.GetNodeOrNull<Godot.LineEdit>("GroupSearchInput"));
+                if (_L_GroupSearchInput == null) _L_GroupSearchInput = new GroupSearchInput(UiPanel, Instance.GetNode<Godot.LineEdit>("GroupSearchInput"));
                 return _L_GroupSearchInput;
             }
         }
@@ -110,7 +111,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_GroupSearchButton == null) _L_GroupSearchButton = new GroupSearchButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("GroupSearchButton"));
+                if (_L_GroupSearchButton == null) _L_GroupSearchButton = new GroupSearchButton(UiPanel, Instance.GetNode<Godot.Button>("GroupSearchButton"));
                 return _L_GroupSearchButton;
             }
         }
@@ -123,7 +124,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_GroupAddButton == null) _L_GroupAddButton = new GroupAddButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("GroupAddButton"));
+                if (_L_GroupAddButton == null) _L_GroupAddButton = new GroupAddButton(UiPanel, Instance.GetNode<Godot.Button>("GroupAddButton"));
                 return _L_GroupAddButton;
             }
         }
@@ -134,10 +135,32 @@ public abstract partial class MapEditorProject : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.GroupButton.SelectTexture
+    /// </summary>
+    public class SelectTexture : UiNode<MapEditorProjectPanel, Godot.NinePatchRect, SelectTexture>
+    {
+        public SelectTexture(MapEditorProjectPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override SelectTexture Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.GroupButton
     /// </summary>
     public class GroupButton : UiNode<MapEditorProjectPanel, Godot.Button, GroupButton>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel.MarginContainer.VBoxContainer.ScrollContainer.SelectTexture
+        /// </summary>
+        public SelectTexture L_SelectTexture
+        {
+            get
+            {
+                if (_L_SelectTexture == null) _L_SelectTexture = new SelectTexture(UiPanel, Instance.GetNode<Godot.NinePatchRect>("SelectTexture"));
+                return _L_SelectTexture;
+            }
+        }
+        private SelectTexture _L_SelectTexture;
+
         public GroupButton(MapEditorProjectPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
         public override GroupButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
     }
@@ -154,7 +177,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_GroupButton == null) _L_GroupButton = new GroupButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("GroupButton"));
+                if (_L_GroupButton == null) _L_GroupButton = new GroupButton(UiPanel, Instance.GetNode<Godot.Button>("GroupButton"));
                 return _L_GroupButton;
             }
         }
@@ -176,7 +199,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_1(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
@@ -189,7 +212,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer(UiPanel, Instance.GetNodeOrNull<Godot.ScrollContainer>("ScrollContainer"));
+                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer(UiPanel, Instance.GetNode<Godot.ScrollContainer>("ScrollContainer"));
                 return _L_ScrollContainer;
             }
         }
@@ -211,7 +234,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_1(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
@@ -233,7 +256,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
+                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer(UiPanel, Instance.GetNode<Godot.MarginContainer>("MarginContainer"));
                 return _L_MarginContainer;
             }
         }
@@ -280,6 +303,24 @@ public abstract partial class MapEditorProject : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.HBoxContainer.RoomEditButton
+    /// </summary>
+    public class RoomEditButton : UiNode<MapEditorProjectPanel, Godot.Button, RoomEditButton>
+    {
+        public RoomEditButton(MapEditorProjectPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override RoomEditButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.HBoxContainer.RoomDeleteButton
+    /// </summary>
+    public class RoomDeleteButton : UiNode<MapEditorProjectPanel, Godot.Button, RoomDeleteButton>
+    {
+        public RoomDeleteButton(MapEditorProjectPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override RoomDeleteButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.HBoxContainer
     /// </summary>
     public class HBoxContainer_2 : UiNode<MapEditorProjectPanel, Godot.HBoxContainer, HBoxContainer_2>
@@ -291,7 +332,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_RoomSearchInput == null) _L_RoomSearchInput = new RoomSearchInput(UiPanel, Instance.GetNodeOrNull<Godot.LineEdit>("RoomSearchInput"));
+                if (_L_RoomSearchInput == null) _L_RoomSearchInput = new RoomSearchInput(UiPanel, Instance.GetNode<Godot.LineEdit>("RoomSearchInput"));
                 return _L_RoomSearchInput;
             }
         }
@@ -304,7 +345,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_RoomTypeButton == null) _L_RoomTypeButton = new RoomTypeButton(UiPanel, Instance.GetNodeOrNull<Godot.OptionButton>("RoomTypeButton"));
+                if (_L_RoomTypeButton == null) _L_RoomTypeButton = new RoomTypeButton(UiPanel, Instance.GetNode<Godot.OptionButton>("RoomTypeButton"));
                 return _L_RoomTypeButton;
             }
         }
@@ -317,7 +358,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_RoomSearchButton == null) _L_RoomSearchButton = new RoomSearchButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("RoomSearchButton"));
+                if (_L_RoomSearchButton == null) _L_RoomSearchButton = new RoomSearchButton(UiPanel, Instance.GetNode<Godot.Button>("RoomSearchButton"));
                 return _L_RoomSearchButton;
             }
         }
@@ -330,11 +371,37 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_RoomAddButton == null) _L_RoomAddButton = new RoomAddButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("RoomAddButton"));
+                if (_L_RoomAddButton == null) _L_RoomAddButton = new RoomAddButton(UiPanel, Instance.GetNode<Godot.Button>("RoomAddButton"));
                 return _L_RoomAddButton;
             }
         }
         private RoomAddButton _L_RoomAddButton;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.RoomEditButton
+        /// </summary>
+        public RoomEditButton L_RoomEditButton
+        {
+            get
+            {
+                if (_L_RoomEditButton == null) _L_RoomEditButton = new RoomEditButton(UiPanel, Instance.GetNode<Godot.Button>("RoomEditButton"));
+                return _L_RoomEditButton;
+            }
+        }
+        private RoomEditButton _L_RoomEditButton;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.RoomDeleteButton
+        /// </summary>
+        public RoomDeleteButton L_RoomDeleteButton
+        {
+            get
+            {
+                if (_L_RoomDeleteButton == null) _L_RoomDeleteButton = new RoomDeleteButton(UiPanel, Instance.GetNode<Godot.Button>("RoomDeleteButton"));
+                return _L_RoomDeleteButton;
+            }
+        }
+        private RoomDeleteButton _L_RoomDeleteButton;
 
         public HBoxContainer_2(MapEditorProjectPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
         public override HBoxContainer_2 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
@@ -368,6 +435,15 @@ public abstract partial class MapEditorProject : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.ScrollContainer.RoomButton.SelectTexture
+    /// </summary>
+    public class SelectTexture_1 : UiNode<MapEditorProjectPanel, Godot.NinePatchRect, SelectTexture_1>
+    {
+        public SelectTexture_1(MapEditorProjectPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override SelectTexture_1 Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.ScrollContainer.RoomButton
     /// </summary>
     public class RoomButton : UiNode<MapEditorProjectPanel, Godot.Button, RoomButton>
@@ -379,7 +455,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_PreviewImage == null) _L_PreviewImage = new PreviewImage(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("PreviewImage"));
+                if (_L_PreviewImage == null) _L_PreviewImage = new PreviewImage(UiPanel, Instance.GetNode<Godot.TextureRect>("PreviewImage"));
                 return _L_PreviewImage;
             }
         }
@@ -392,7 +468,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_RoomName == null) _L_RoomName = new RoomName(UiPanel, Instance.GetNodeOrNull<Godot.Label>("RoomName"));
+                if (_L_RoomName == null) _L_RoomName = new RoomName(UiPanel, Instance.GetNode<Godot.Label>("RoomName"));
                 return _L_RoomName;
             }
         }
@@ -405,11 +481,24 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_RoomType == null) _L_RoomType = new RoomType(UiPanel, Instance.GetNodeOrNull<Godot.Label>("RoomType"));
+                if (_L_RoomType == null) _L_RoomType = new RoomType(UiPanel, Instance.GetNode<Godot.Label>("RoomType"));
                 return _L_RoomType;
             }
         }
         private RoomType _L_RoomType;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.ScrollContainer.SelectTexture
+        /// </summary>
+        public SelectTexture_1 L_SelectTexture
+        {
+            get
+            {
+                if (_L_SelectTexture == null) _L_SelectTexture = new SelectTexture_1(UiPanel, Instance.GetNode<Godot.NinePatchRect>("SelectTexture"));
+                return _L_SelectTexture;
+            }
+        }
+        private SelectTexture_1 _L_SelectTexture;
 
         public RoomButton(MapEditorProjectPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
         public override RoomButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
@@ -427,7 +516,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_RoomButton == null) _L_RoomButton = new RoomButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("RoomButton"));
+                if (_L_RoomButton == null) _L_RoomButton = new RoomButton(UiPanel, Instance.GetNode<Godot.Button>("RoomButton"));
                 return _L_RoomButton;
             }
         }
@@ -449,7 +538,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_2(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer_2(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
@@ -462,7 +551,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.ScrollContainer>("ScrollContainer"));
+                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer_1(UiPanel, Instance.GetNode<Godot.ScrollContainer>("ScrollContainer"));
                 return _L_ScrollContainer;
             }
         }
@@ -484,7 +573,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_2(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_2(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
@@ -506,7 +595,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
+                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer_1(UiPanel, Instance.GetNode<Godot.MarginContainer>("MarginContainer"));
                 return _L_MarginContainer;
             }
         }
@@ -528,7 +617,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_Panel == null) _L_Panel = new Panel(UiPanel, Instance.GetNodeOrNull<Godot.Panel>("Panel"));
+                if (_L_Panel == null) _L_Panel = new Panel(UiPanel, Instance.GetNode<Godot.Panel>("Panel"));
                 return _L_Panel;
             }
         }
@@ -541,7 +630,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_Panel2 == null) _L_Panel2 = new Panel2(UiPanel, Instance.GetNodeOrNull<Godot.Panel>("Panel2"));
+                if (_L_Panel2 == null) _L_Panel2 = new Panel2(UiPanel, Instance.GetNode<Godot.Panel>("Panel2"));
                 return _L_Panel2;
             }
         }
@@ -563,7 +652,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_Head == null) _L_Head = new Head(UiPanel, Instance.GetNodeOrNull<Godot.Panel>("Head"));
+                if (_L_Head == null) _L_Head = new Head(UiPanel, Instance.GetNode<Godot.Panel>("Head"));
                 return _L_Head;
             }
         }
@@ -576,7 +665,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
@@ -598,7 +687,7 @@ public abstract partial class MapEditorProject : UiBase
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
@@ -663,6 +752,16 @@ public abstract partial class MapEditorProject : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.HBoxContainer.RoomAddButton
     /// </summary>
     public RoomAddButton S_RoomAddButton => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel2.L_MarginContainer.L_VBoxContainer.L_HBoxContainer.L_RoomAddButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.HBoxContainer.RoomEditButton
+    /// </summary>
+    public RoomEditButton S_RoomEditButton => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel2.L_MarginContainer.L_VBoxContainer.L_HBoxContainer.L_RoomEditButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.HBoxContainer.RoomDeleteButton
+    /// </summary>
+    public RoomDeleteButton S_RoomDeleteButton => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel2.L_MarginContainer.L_VBoxContainer.L_HBoxContainer.L_RoomDeleteButton;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.ScrollContainer.RoomButton.PreviewImage
