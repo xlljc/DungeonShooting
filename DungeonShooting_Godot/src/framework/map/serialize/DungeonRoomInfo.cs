@@ -77,4 +77,13 @@ public class DungeonRoomInfo
         
         return _completionDoorArea;
     }
+
+    /// <summary>
+    /// 清除门区域配置数据, 再次调用 GetCompletionDoorArea() 会重新计算 DoorAreaInfo 数据
+    /// </summary>
+    public void ClearCompletionDoorArea()
+    {
+        _completionDoorArea.Clear();
+        _completionDoorArea = null;
+    }
 }

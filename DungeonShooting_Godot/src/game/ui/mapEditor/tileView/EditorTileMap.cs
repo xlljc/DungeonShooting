@@ -957,6 +957,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
         roomInfo.DoorAreaInfos.Clear();
         roomInfo.DoorAreaInfos.AddRange(_doorConfigs);
+        roomInfo.ClearCompletionDoorArea();
 
         path += "/" + MapProjectManager.GetRoomInfoConfigName(roomInfo.RoomName);
         var jsonStr = JsonSerializer.Serialize(roomInfo);
