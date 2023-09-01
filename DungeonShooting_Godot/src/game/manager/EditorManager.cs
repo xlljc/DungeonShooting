@@ -103,7 +103,6 @@ public static class EditorManager
         }
         else if (SelectWaveIndex != index)
         {
-            SelectWaveIndex = index;
             if (index < 0 || SelectPreinstall.WaveList == null || index >= SelectPreinstall.WaveList.Count)
             {
                 if (SelectWaveIndex != -1)
@@ -132,5 +131,25 @@ public static class EditorManager
             SelectMark = markInfo;
             EventManager.EmitEvent(EventEnum.OnSelectMark, markInfo);
         }
+    }
+    
+    /// <summary>
+    /// 根据 RoomErrorType 枚举获取房间错误信息
+    /// </summary>
+    public static string GetRoomErrorTypeMessage(RoomErrorType errorType)
+    {
+        switch (errorType)
+        {
+            case RoomErrorType.None:
+                return "";
+            case RoomErrorType.TileError:
+                return "房间地块存在绘制错误";
+            case RoomErrorType.DoorAreaError:
+                return "房间至少要有两个不同方向的门区域";
+            case RoomErrorType.NoPreinstallError:
+                return "房间没有预设";
+        }
+
+        return null;
     }
 }

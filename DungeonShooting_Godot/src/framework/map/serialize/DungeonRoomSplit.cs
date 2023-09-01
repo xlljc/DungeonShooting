@@ -9,10 +9,10 @@ using System.Text.Json.Serialization;
 public class DungeonRoomSplit
 {
     /// <summary>
-    /// 当前房间是否绘制完成, 也就是是否可用, 条件: 房间绘制没有异常, 预设数量大于 0
+    /// 房间异常类型
     /// </summary>
     [JsonInclude]
-    public bool Ready;
+    public RoomErrorType ErrorType;
 
     /// <summary>
     /// 房间配置路径

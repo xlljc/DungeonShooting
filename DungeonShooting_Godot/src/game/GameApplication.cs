@@ -248,7 +248,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	{
 		for (var i = 0; i < roomInfos.Count; i++)
 		{
-			if (!roomInfos[i].Ready)
+			if (roomInfos[i].ErrorType != RoomErrorType.None) //存在错误
 			{
 				roomInfos.RemoveAt(i);
 				i--;

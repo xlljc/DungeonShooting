@@ -444,6 +444,15 @@ public abstract partial class MapEditorProject : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.ScrollContainer.RoomButton.ErrorTexture
+    /// </summary>
+    public class ErrorTexture : UiNode<MapEditorProjectPanel, Godot.TextureRect, ErrorTexture>
+    {
+        public ErrorTexture(MapEditorProjectPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override ErrorTexture Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.ScrollContainer.RoomButton
     /// </summary>
     public class RoomButton : UiNode<MapEditorProjectPanel, Godot.Button, RoomButton>
@@ -499,6 +508,19 @@ public abstract partial class MapEditorProject : UiBase
             }
         }
         private SelectTexture_1 _L_SelectTexture;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.ScrollContainer.ErrorTexture
+        /// </summary>
+        public ErrorTexture L_ErrorTexture
+        {
+            get
+            {
+                if (_L_ErrorTexture == null) _L_ErrorTexture = new ErrorTexture(UiPanel, Instance.GetNode<Godot.TextureRect>("ErrorTexture"));
+                return _L_ErrorTexture;
+            }
+        }
+        private ErrorTexture _L_ErrorTexture;
 
         public RoomButton(MapEditorProjectPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
         public override RoomButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
@@ -777,6 +799,11 @@ public abstract partial class MapEditorProject : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.ScrollContainer.RoomButton.RoomType
     /// </summary>
     public RoomType S_RoomType => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel2.L_MarginContainer.L_VBoxContainer.L_ScrollContainer.L_RoomButton.L_RoomType;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.ScrollContainer.RoomButton.ErrorTexture
+    /// </summary>
+    public ErrorTexture S_ErrorTexture => L_Bg.L_VBoxContainer.L_HBoxContainer.L_Panel2.L_MarginContainer.L_VBoxContainer.L_ScrollContainer.L_RoomButton.L_ErrorTexture;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.HBoxContainer.Panel2.MarginContainer.VBoxContainer.ScrollContainer.RoomButton

@@ -54,6 +54,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         //房间类型
         SetSelectType((int)roomSplit.RoomInfo.RoomType);
         //不可编辑
+        S_RoomNameInput.Instance.Editable = false;
         S_GroupSelect.Instance.Disabled = true;
         S_TypeSelect.Instance.Disabled = true;
     }
@@ -88,29 +89,8 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         if (_roomSplit != null) //修改数据
         {
             var roomInfo = _roomSplit.RoomInfo;
-            roomInfo.RoomName = S_RoomNameInput.Instance.Text;
             roomInfo.Remark = S_RemarkInput.Instance.Text;
             roomInfo.Weight = (int)S_WeightInput.Instance.Value;
-
-            //检查名称是否合规
-            if (string.IsNullOrEmpty(roomInfo.RoomName))
-            {
-                EditorWindowManager.ShowTips("错误", "房间名称不能为空!");
-                return null;
-            }
-            //检测是否有同名房间
-            if (_roomSplit.RoomInfo.RoomName != roomInfo.RoomName)
-            {
-                var temp = roomInfo.GroupName + "/" + DungeonManager.DungeonRoomTypeToString(roomInfo.RoomType) + "/" +
-                           roomInfo.RoomName;
-                var dirPath = MapProjectManager.CustomMapPath + temp;
-                var dir = new DirectoryInfo(dirPath);
-                if (dir.Exists && dir.GetFiles().Length > 0)
-                {
-                    EditorWindowManager.ShowTips("错误", $"已经有相同路径的房间了!\n路径: {temp}");
-                    return null;
-                }
-            }
             return _roomSplit;
         }
         else

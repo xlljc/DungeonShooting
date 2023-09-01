@@ -11,14 +11,14 @@ public partial class MapEditorPanel : MapEditor
         /// </summary>
         public bool HasError;
         /// <summary>
-        /// 错误消息
+        /// 房间异常类型
         /// </summary>
-        public string Message;
+        public RoomErrorType ErrorType;
 
-        public CheckResult(bool hasError, string message)
+        public CheckResult(bool hasError, RoomErrorType errorType)
         {
             HasError = hasError;
-            Message = message;
+            ErrorType = errorType;
         }
     }
     
@@ -58,11 +58,11 @@ public partial class MapEditorPanel : MapEditor
         //有错误数据
         if (check.HasError)
         {
-            EditorWindowManager.ShowTips("提示", check.Message + "，不能运行房间！");
+            EditorWindowManager.ShowTips("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，不能运行房间！");
             return;
         }
         //保存数据
-        S_TileMap.Instance.TriggerSave();
+        S_TileMap.Instance.TriggerSave(RoomErrorType.None);
         //执行运行
         EditorPlayManager.Play(this);
     }
@@ -106,17 +106,17 @@ public partial class MapEditorPanel : MapEditor
         //有错误的数据
         if (check.HasError)
         {
-            EditorWindowManager.ShowConfirm("提示", check.Message + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
+            EditorWindowManager.ShowConfirm("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
             {
                 if (v)
                 {
-                    S_TileMap.Instance.TriggerSave();
+                    S_TileMap.Instance.TriggerSave(check.ErrorType);
                 }
             });
         }
         else
         {
-            S_TileMap.Instance.TriggerSave();
+            S_TileMap.Instance.TriggerSave(check.ErrorType);
         }
     }
 
@@ -135,11 +135,11 @@ public partial class MapEditorPanel : MapEditor
                     var check = CheckError();
                     if (check.HasError) //有错误
                     {
-                        EditorWindowManager.ShowConfirm("提示", check.Message + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
+                        EditorWindowManager.ShowConfirm("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
                         {
                             if (v)
                             {
-                                S_TileMap.Instance.TriggerSave();
+                                S_TileMap.Instance.TriggerSave(check.ErrorType);
                                 //返回上一个Ui
                                 OpenPrevUi();
                             }
@@ -152,7 +152,7 @@ public partial class MapEditorPanel : MapEditor
                     }
                     else //没有错误
                     {
-                        S_TileMap.Instance.TriggerSave();
+                        S_TileMap.Instance.TriggerSave(check.ErrorType);
                         //返回上一个Ui
                         OpenPrevUi();
                     }
@@ -169,7 +169,7 @@ public partial class MapEditorPanel : MapEditor
             var check = CheckError();
             if (check.HasError) //有错误
             {
-                EditorWindowManager.ShowConfirm("提示", check .Message + "，如果不解决错误就退出，运行游戏将不会刷出该房间！\n是否仍要退出？", (v) =>
+                EditorWindowManager.ShowConfirm("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果不解决错误就退出，运行游戏将不会刷出该房间！\n是否仍要退出？", (v) =>
                 {
                     if (v)
                     {
@@ -189,14 +189,9 @@ public partial class MapEditorPanel : MapEditor
     private CheckResult CheckError()
     {
         var editorTileMap = S_TileMap.Instance;
-        if (editorTileMap.HasError) //地图绘制错误
+        if (editorTileMap.HasTerrainError) //地图绘制错误
         {
-            return new CheckResult(true, "当前房间地块存在绘制错误");
-        }
-        
-        if (EditorManager.SelectRoom.Preinstall == null || EditorManager.SelectRoom.Preinstall.Count == 0)
-        {
-            return new CheckResult(true, "当前房间没有预设");
+            return new CheckResult(true, RoomErrorType.TileError);
         }
 
         if (editorTileMap.CurrDoorConfigs.Count > 0)
@@ -218,10 +213,15 @@ public partial class MapEditorPanel : MapEditor
 
             if (!flag)
             {
-                return new CheckResult(true, "当前房间至少要有两个不同方向的门区域");
+                return new CheckResult(true, RoomErrorType.DoorAreaError);
             }
         }
         
-        return new CheckResult(false, null);
+        if (EditorManager.SelectRoom.Preinstall == null || EditorManager.SelectRoom.Preinstall.Count == 0)
+        {
+            return new CheckResult(true, RoomErrorType.NoPreinstallError);
+        }
+        
+        return new CheckResult(false, RoomErrorType.None);
     }
 }

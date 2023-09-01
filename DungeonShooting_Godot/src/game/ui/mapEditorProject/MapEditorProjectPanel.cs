@@ -59,7 +59,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
     public override void OnShowUi()
     {
         RefreshGroup();
-
+        OnSearchRoomButtonClick();
     }
 
     public override void OnDestroyUi()

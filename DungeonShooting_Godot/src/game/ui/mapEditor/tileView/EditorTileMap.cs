@@ -130,9 +130,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public bool IsDirty { get; private set; }
 
     /// <summary>
-    /// 地图是否有错误
+    /// 地图是否有绘制错误
     /// </summary>
-    public bool HasError => !_isGenerateTerrain;
+    public bool HasTerrainError => !_isGenerateTerrain;
 
     //变动过的数据
     
@@ -437,11 +437,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <summary>
     /// 触发保存地图数据
     /// </summary>
-    public void TriggerSave()
+    public void TriggerSave(RoomErrorType errorType)
     {
         GD.Print("保存地牢房间数据...");
-        //是否准备好
-        CurrRoomSplit.Ready = !HasError && CurrRoomSplit.Preinstall != null && CurrRoomSplit.Preinstall.Count > 0;
+        CurrRoomSplit.ErrorType = errorType;
         SaveRoomInfoConfig();
         SaveTileInfoConfig();
         SavePreinstallConfig();
@@ -484,8 +483,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //导航网格数据
         _dungeonTileMap.SetPolygonData(tileInfo.NavigationList);
 
-        //如果有错误, 则找出错误的点位
-        if (!roomSplit.Ready)
+        //如果有图块错误, 则找出错误的点位
+        if (roomSplit.ErrorType == RoomErrorType.TileError)
         {
             RunCheckHandler();
         }
@@ -941,7 +940,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //存入本地
         var roomInfo = CurrRoomSplit.RoomInfo;
         
-        if (!HasError) //没有错误
+        if (!HasTerrainError) //没有绘制错误
         {
             roomInfo.Size = new SerializeVector2(CurrRoomSize);
             roomInfo.Position = new SerializeVector2(CurrRoomPosition);

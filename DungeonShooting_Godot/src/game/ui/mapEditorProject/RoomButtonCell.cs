@@ -13,7 +13,25 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
     {
         CellNode.L_RoomName.Instance.Text = data.RoomInfo.RoomName;
         CellNode.L_RoomType.Instance.Text = DungeonManager.DungeonRoomTypeToDescribeString(data.RoomInfo.RoomType);
-        CellNode.Instance.TooltipText = "路径: " + data.RoomPath;
+        //提示
+        var tipText = "权重: " + data.RoomInfo.Weight;
+        
+        //错误消息
+        if (data.ErrorType == RoomErrorType.None)
+        {
+            CellNode.L_ErrorTexture.Instance.Visible = false;
+        }
+        else
+        {
+            CellNode.L_ErrorTexture.Instance.Visible = true;
+            tipText += "\n错误: " + EditorManager.GetRoomErrorTypeMessage(data.ErrorType);
+        }
+        
+        if (!string.IsNullOrEmpty(data.RoomInfo.Remark))
+        {
+            tipText += "\n备注: " + data.RoomInfo.Remark;
+        }
+        CellNode.Instance.TooltipText = tipText;
     }
 
     public override void OnDoubleClick()

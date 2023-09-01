@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dh7y03tq6v0a2"]
+[gd_scene load_steps=10 format=3 uid="uid://dh7y03tq6v0a2"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorProject/MapEditorProjectPanel.cs" id="1_5aioo"]
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_v0ry0"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="5_rcbyx"]
 [ext_resource type="Texture2D" uid="uid://dggb6p4sdmfry" path="res://resource/sprite/ui/commonIcon/Edit.png" id="6_qalh0"]
 [ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="7_lnry3"]
+[ext_resource type="Texture2D" uid="uid://c4ltpf5a3egu1" path="res://resource/sprite/ui/commonIcon/Error_mini.png" id="9_xrt38"]
 
 [node name="MapEditorProject" type="Control"]
 layout_mode = 3
@@ -232,3 +233,11 @@ patch_margin_left = 3
 patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
+
+[node name="ErrorTexture" type="TextureRect" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer/RoomButton"]
+layout_mode = 0
+offset_left = 157.0
+offset_top = 159.0
+offset_right = 197.0
+offset_bottom = 199.0
+texture = ExtResource("9_xrt38")
