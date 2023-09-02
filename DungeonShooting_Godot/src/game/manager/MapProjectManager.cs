@@ -254,6 +254,21 @@ public static class MapProjectManager
     }
 
     /// <summary>
+    /// 保存预览图
+    /// </summary>
+    public static void SaveRoomPreviewImage(DungeonRoomSplit roomSplit, Image image)
+    {
+        var roomInfo = roomSplit.RoomInfo;
+        var path = GetConfigPath(roomInfo.GroupName,roomInfo.RoomType, roomInfo.RoomName);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        image.SaveJpg(roomSplit.PreviewPath);
+    }
+
+    /// <summary>
     /// 从指定组中删除房间, 返回是否删除成功
     /// </summary>
     public static bool DeleteRoom(DungeonRoomGroup group, DungeonRoomSplit roomSplit)

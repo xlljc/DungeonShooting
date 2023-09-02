@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Godot;
 
 /// <summary>
 /// 房间配置文件相关信息, 将会在 RoomConfig.json 中汇总
@@ -31,6 +32,12 @@ public class DungeonRoomSplit
     /// </summary>
     [JsonInclude]
     public string PreinstallPath;
+
+    /// <summary>
+    /// 预览图路径
+    /// </summary>
+    [JsonInclude]
+    public string PreviewPath;
 
     /// <summary>
     /// 房间配置数据, 第一次获取会在资源中加载数据
@@ -91,8 +98,7 @@ public class DungeonRoomSplit
     }
 
     private List<RoomPreinstallInfo> _preinstall;
-
-
+    
     /// <summary>
     /// 重新加载房间数据
     /// </summary>

@@ -6,25 +6,29 @@
         "ErrorType": 0,
         "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_roomInfo.json",
         "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_tileInfo.json",
-        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_preinstall.json"
+        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room1/Room1_preinstall.json",
+        "PreviewPath": null
       },
       {
         "ErrorType": 0,
         "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room2/Room2_roomInfo.json",
         "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room2/Room2_tileInfo.json",
-        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room2/Room2_preinstall.json"
+        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room2/Room2_preinstall.json",
+        "PreviewPath": null
       },
       {
         "ErrorType": 0,
         "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_roomInfo.json",
         "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_tileInfo.json",
-        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_preinstall.json"
+        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room3/Room3_preinstall.json",
+        "PreviewPath": null
       },
       {
         "ErrorType": 0,
         "RoomPath": "resource/map/tileMaps/TestGroup1/battle/Room4/Room4_roomInfo.json",
         "TilePath": "resource/map/tileMaps/TestGroup1/battle/Room4/Room4_tileInfo.json",
-        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room4/Room4_preinstall.json"
+        "PreinstallPath": "resource/map/tileMaps/TestGroup1/battle/Room4/Room4_preinstall.json",
+        "PreviewPath": null
       }
     ],
     "InletList": [
@@ -32,7 +36,8 @@
         "ErrorType": 0,
         "RoomPath": "resource/map/tileMaps/TestGroup1/inlet/Start1/Start1_roomInfo.json",
         "TilePath": "resource/map/tileMaps/TestGroup1/inlet/Start1/Start1_tileInfo.json",
-        "PreinstallPath": "resource/map/tileMaps/TestGroup1/inlet/Start1/Start1_preinstall.json"
+        "PreinstallPath": "resource/map/tileMaps/TestGroup1/inlet/Start1/Start1_preinstall.json",
+        "PreviewPath": null
       }
     ],
     "OutletList": [
@@ -40,7 +45,8 @@
         "ErrorType": 0,
         "RoomPath": "resource/map/tileMaps/TestGroup1/outlet/End1/End1_roomInfo.json",
         "TilePath": "resource/map/tileMaps/TestGroup1/outlet/End1/End1_tileInfo.json",
-        "PreinstallPath": "resource/map/tileMaps/TestGroup1/outlet/End1/End1_preinstall.json"
+        "PreinstallPath": "resource/map/tileMaps/TestGroup1/outlet/End1/End1_preinstall.json",
+        "PreviewPath": null
       }
     ],
     "BossList": [],

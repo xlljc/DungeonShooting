@@ -263,6 +263,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// </summary>
     public void DrawGuides()
     {
+        if (_hasPreviewImage)
+        {
+            return;
+        }
         CanvasItem canvasItem = _editorTileMap.L_Brush.Instance;
         //轴线
         canvasItem.DrawLine(new Vector2(0, 2000), new Vector2(0, -2000), Colors.Green);
@@ -1016,8 +1020,26 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
     }
 
+    private bool _hasPreviewImage = false;
+    private Action _previewFinish;
+    private int _previewIndex = 0;
+    private bool _tempAutoFloorLayer;
+    private bool _tempCustomFloorLayer;
+    private bool _tempAutoMiddleLayer;
+    private bool _tempCustomMiddleLayer;
+    private bool _tempAutoTopLayer;
+    private bool _tempCustomTopLayer;
+
     private void RunSavePreviewImage(Action action)
     {
+        if (_hasPreviewImage)
+        {
+            return;
+        }
+
+        _previewIndex = 0;
+        _previewFinish = action;
+        _hasPreviewImage = true;
         //先截图, 将图像数据放置到 S_MapView2 节点上
         var subViewport = MapEditorPanel.S_SubViewport.Instance;
         var viewportTexture = subViewport.GetTexture();
@@ -1027,18 +1049,57 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         textureRect.Visible = true;
         
         //隐藏工具栏
-        //MapEditorToolsPanel.
-        
-        // using (var image = viewportTexture.GetImage())
-        // {
-        //     GD.Print("test1:" + image.IsCompressed());
-        //     image.Resize(196, 196, Image.Interpolation.Lanczos);
-        //     image.SavePng("D:\\test.png");
-        // }
+        MapEditorToolsPanel.Visible = false;
+        //显示所有层级
+        _tempAutoFloorLayer = IsLayerEnabled(AutoFloorLayer);
+        _tempCustomFloorLayer = IsLayerEnabled(CustomFloorLayer);
+        _tempAutoMiddleLayer = IsLayerEnabled(AutoMiddleLayer);
+        _tempCustomMiddleLayer = IsLayerEnabled(CustomMiddleLayer);
+        _tempAutoTopLayer = IsLayerEnabled(AutoTopLayer);
+        _tempCustomTopLayer = IsLayerEnabled(CustomTopLayer);
+
+        SetLayerEnabled(AutoFloorLayer, true);
+        SetLayerEnabled(CustomFloorLayer, true);
+        SetLayerEnabled(AutoMiddleLayer, true);
+        SetLayerEnabled(CustomMiddleLayer, true);
+        SetLayerEnabled(AutoTopLayer, true);
+        SetLayerEnabled(CustomTopLayer, true);
     }
 
     private void OnFramePostDraw()
     {
-        
+        if (_hasPreviewImage)
+        {
+            _previewIndex++;
+            if (_previewIndex == 2)
+            {
+                var textureRect = MapEditorPanel.S_MapView2.Instance;
+                var texture = textureRect.Texture;
+                textureRect.Texture = null;
+                texture.Dispose();
+                textureRect.Visible = false;
+                //还原工具栏
+                MapEditorToolsPanel.Visible = true;
+                //还原层级显示
+                SetLayerEnabled(AutoFloorLayer, _tempAutoFloorLayer);
+                SetLayerEnabled(CustomFloorLayer, _tempCustomFloorLayer);
+                SetLayerEnabled(AutoMiddleLayer, _tempAutoMiddleLayer);
+                SetLayerEnabled(CustomMiddleLayer, _tempCustomMiddleLayer);
+                SetLayerEnabled(AutoTopLayer, _tempAutoTopLayer);
+                SetLayerEnabled(CustomTopLayer, _tempCustomTopLayer);
+
+                //保存截图
+                var subViewport = MapEditorPanel.S_SubViewport.Instance;
+                var viewportTexture = subViewport.GetTexture();
+                using (var image = viewportTexture.GetImage())
+                {
+                    image.Resize(196, 196, Image.Interpolation.Lanczos);
+                    image.SavePng("D:\\test.png");
+                }
+                
+                _previewFinish();
+                _hasPreviewImage = false;
+            }
+        }
     }
 }
