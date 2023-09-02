@@ -1088,14 +1088,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 SetLayerEnabled(AutoTopLayer, _tempAutoTopLayer);
                 SetLayerEnabled(CustomTopLayer, _tempCustomTopLayer);
 
-                //保存截图
+                //保存预览图
                 var subViewport = MapEditorPanel.S_SubViewport.Instance;
                 var viewportTexture = subViewport.GetTexture();
-                using (var image = viewportTexture.GetImage())
-                {
-                    image.Resize(196, 196, Image.Interpolation.Lanczos);
-                    image.SavePng("D:\\test.png");
-                }
+                var image = viewportTexture.GetImage();
+                image.Resize(GameConfig.PreviewImageSize, GameConfig.PreviewImageSize, Image.Interpolation.Nearest);
+                CurrRoomSplit.PreviewImage = ImageTexture.CreateFromImage(image);
+                MapProjectManager.SaveRoomPreviewImage(CurrRoomSplit, image);
                 
                 _previewFinish();
                 _hasPreviewImage = false;

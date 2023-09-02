@@ -9,15 +9,19 @@ public enum RoomErrorType
     /// </summary>
     None = 0,
     /// <summary>
+    /// 空房间
+    /// </summary>
+    Empty = 1,
+    /// <summary>
     /// 地图绘制错误
     /// </summary>
-    TileError = 1,
+    TileError = 2,
     /// <summary>
     /// 门区域绘制错误
     /// </summary>
-    DoorAreaError = 2, 
+    DoorAreaError = 3, 
     /// <summary>
     /// 没有预设
     /// </summary>
-    NoPreinstallError = 3
+    NoPreinstallError = 4
 }

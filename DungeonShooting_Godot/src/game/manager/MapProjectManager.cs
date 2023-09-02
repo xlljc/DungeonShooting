@@ -110,30 +110,6 @@ public static class MapProjectManager
     }
 
     /// <summary>
-    /// 获取房间地块配置文件名称
-    /// </summary>
-    public static string GetTileInfoConfigName(string roomName)
-    {
-        return roomName + "_tileInfo.json";
-    }
-    
-    /// <summary>
-    /// 获取房间基础配置文件名称
-    /// </summary>
-    public static string GetRoomInfoConfigName(string roomName)
-    {
-        return roomName + "_roomInfo.json";
-    }
-
-    /// <summary>
-    /// 获取房间预设数据配置文件名称
-    /// </summary>
-    public static string GetRoomPreinstallConfigName(string roomName)
-    {
-        return roomName + "_preinstall.json";
-    }
-
-    /// <summary>
     /// 创建地牢组
     /// </summary>
     public static void CreateGroup(DungeonRoomGroup group)
@@ -265,7 +241,7 @@ public static class MapProjectManager
             Directory.CreateDirectory(path);
         }
 
-        image.SaveJpg(roomSplit.PreviewPath);
+        image.SavePng(roomSplit.PreviewPath);
     }
 
     /// <summary>

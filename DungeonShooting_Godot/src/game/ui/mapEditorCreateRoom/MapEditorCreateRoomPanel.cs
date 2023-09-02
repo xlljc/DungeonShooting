@@ -124,7 +124,6 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
             }
             
             
-            
             //检测是否有同名房间
             var temp = roomInfo.GroupName + "/" + DungeonManager.DungeonRoomTypeToString(roomInfo.RoomType) + "/" + roomInfo.RoomName;
             var dirPath = MapProjectManager.CustomMapPath + temp;
@@ -134,14 +133,14 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
                 EditorWindowManager.ShowTips("错误", $"已经有相同路径的房间了!\n路径: {temp}");
                 return null;
             }
-
             
             roomInfo.Size = new SerializeVector2();
             roomInfo.Position = new SerializeVector2();
             roomInfo.DoorAreaInfos = new List<DoorAreaInfo>();
 
             var roomSplit = new DungeonRoomSplit();
-            roomSplit.RoomPath = dirPath + "/" + MapProjectManager.GetRoomInfoConfigName(roomInfo.RoomName);
+            roomSplit.ErrorType = RoomErrorType.Empty;
+            roomSplit.Path = dirPath;
             roomSplit.RoomInfo = roomInfo;
 
             var tileInfo = new DungeonTileInfo();
@@ -149,11 +148,8 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
             tileInfo.Floor = new List<int>();
             tileInfo.Middle = new List<int>();
             tileInfo.Top = new List<int>();
-            
-            roomSplit.TilePath = dirPath + "/" + MapProjectManager.GetTileInfoConfigName(roomInfo.RoomName);
-            roomSplit.TileInfo = tileInfo;
 
-            roomSplit.PreinstallPath = dirPath + "/" + MapProjectManager.GetRoomPreinstallConfigName(roomInfo.RoomName);
+            roomSplit.TileInfo = tileInfo;
             roomSplit.Preinstall = new List<RoomPreinstallInfo>();
             return roomSplit;
         }

@@ -72,4 +72,9 @@ public static class GameConfig
     /// 配置层级的自定义数据名称
     /// </summary>
     public const string CustomTileLayerName = "TileLayer";
+
+    /// <summary>
+    /// 预览图大小
+    /// </summary>
+    public const int PreviewImageSize = 196;
 }

@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Godot;
@@ -16,28 +17,34 @@ public class DungeonRoomSplit
     public RoomErrorType ErrorType;
 
     /// <summary>
-    /// 房间配置路径
+    /// 该房间的文件夹路径
     /// </summary>
     [JsonInclude]
-    public string RoomPath;
+    public string Path;
+
+    /// <summary>
+    /// 房间配置路径
+    /// </summary>
+    [JsonIgnore]
+    public string RoomPath => Path + "/RoomInfo.json";
 
     /// <summary>
     /// 房间地块配置数据
     /// </summary>
-    [JsonInclude]
-    public string TilePath;
+    [JsonIgnore]
+    public string TilePath => Path + "/TileInfo.json";
 
     /// <summary>
     /// 房间预设配置数据
     /// </summary>
-    [JsonInclude]
-    public string PreinstallPath;
+    [JsonIgnore]
+    public string PreinstallPath => Path + "/Preinstall.json";
 
     /// <summary>
     /// 预览图路径
     /// </summary>
-    [JsonInclude]
-    public string PreviewPath;
+    [JsonIgnore]
+    public string PreviewPath => Path + "/Preview.png";
 
     /// <summary>
     /// 房间配置数据, 第一次获取会在资源中加载数据
@@ -98,6 +105,34 @@ public class DungeonRoomSplit
     }
 
     private List<RoomPreinstallInfo> _preinstall;
+
+    /// <summary>
+    /// 预览图
+    /// </summary>
+    [JsonIgnore]
+    public Texture2D PreviewImage
+    {
+        get
+        {
+            if (_previewImage == null)
+            {
+                ReloadPreviewImage();
+            }
+
+            return _previewImage;
+        }
+        set
+        {
+            if (_previewImage != null)
+            {
+                _previewImage.Dispose();
+            }
+
+            _previewImage = value;
+        }
+    }
+    
+    private Texture2D _previewImage;
     
     /// <summary>
     /// 重新加载房间数据
@@ -124,5 +159,45 @@ public class DungeonRoomSplit
     {
         var asText = ResourceManager.LoadText(PreinstallPath);
         _preinstall = JsonSerializer.Deserialize<List<RoomPreinstallInfo>>(asText);
+    }
+
+    /// <summary>
+    /// 重新加载预览图片
+    /// </summary>
+    public void ReloadPreviewImage()
+    {
+        if (_previewImage != null)
+        {
+            _previewImage.Dispose();
+        }
+        
+        if (File.Exists(PreviewPath))
+        {
+            var bytes = File.ReadAllBytes(PreviewPath);
+            
+            var image = Image.Create(GameConfig.PreviewImageSize, GameConfig.PreviewImageSize, false, Image.Format.Rgb8);
+            image.LoadPngFromBuffer(bytes);
+            _previewImage = ImageTexture.CreateFromImage(image);
+        }
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        
+        if (obj is DungeonRoomSplit roomSplit)
+        {
+            return roomSplit.Path == Path;
+        }
+
+        return this == obj;
+    }
+
+    public override int GetHashCode()
+    {
+        return Path.GetHashCode();
     }
 }

@@ -142,6 +142,8 @@ public static class EditorManager
         {
             case RoomErrorType.None:
                 return "";
+            case RoomErrorType.Empty:
+                return "房间没有绘制地块";
             case RoomErrorType.TileError:
                 return "房间地块存在绘制错误";
             case RoomErrorType.DoorAreaError:

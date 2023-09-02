@@ -78,8 +78,10 @@ public partial class MapEditorProjectPanel : MapEditorProject
     /// </summary>
     public void RefreshGroup()
     {
+        var index = _groupGrid.SelectIndex;
         MapProjectManager.RefreshMapGroup();
         OnSearchGroupButtonClick();
+        _groupGrid.SelectIndex = index;
     }
 
     /// <summary>

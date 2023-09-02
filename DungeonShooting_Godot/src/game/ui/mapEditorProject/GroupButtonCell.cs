@@ -21,13 +21,9 @@ public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, DungeonRoomG
     }
 
     //选中工程
-    public override void OnClick()
-    {
-        CellNode.UiPanel.SelectGroup(Data);
-    }
-
     public override void OnSelect()
     {
+        CellNode.UiPanel.SelectGroup(Data);
         CellNode.L_SelectTexture.Instance.Visible = true;
     }
 

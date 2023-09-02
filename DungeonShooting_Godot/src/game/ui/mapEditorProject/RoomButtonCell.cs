@@ -13,6 +13,10 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
     {
         CellNode.L_RoomName.Instance.Text = data.RoomInfo.RoomName;
         CellNode.L_RoomType.Instance.Text = DungeonManager.DungeonRoomTypeToDescribeString(data.RoomInfo.RoomType);
+        
+        //预览图
+        CellNode.L_PreviewImage.Instance.Texture = data.PreviewImage;
+        
         //提示
         var tipText = "权重: " + data.RoomInfo.Weight;
         
@@ -32,6 +36,11 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
             tipText += "\n备注: " + data.RoomInfo.Remark;
         }
         CellNode.Instance.TooltipText = tipText;
+    }
+
+    public override void OnDisable()
+    {
+        CellNode.L_PreviewImage.Instance.Texture = null;
     }
 
     public override void OnDoubleClick()

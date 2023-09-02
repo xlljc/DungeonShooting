@@ -189,7 +189,11 @@ public partial class MapEditorPanel : MapEditor
     private CheckResult CheckError()
     {
         var editorTileMap = S_TileMap.Instance;
-        if (editorTileMap.HasTerrainError) //地图绘制错误
+        if (editorTileMap.CurrRoomSize == Vector2I.Zero)
+        {
+            return new CheckResult(true, RoomErrorType.Empty);
+        }
+        else if (editorTileMap.HasTerrainError) //地图绘制错误
         {
             return new CheckResult(true, RoomErrorType.TileError);
         }
