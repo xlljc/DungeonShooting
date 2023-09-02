@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Godot;
@@ -166,8 +167,16 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         _eventFactory.AddEventListener(EventEnum.OnSelectEditTool, _editorTileMap.Instance.OnSelectEditTool);
         _eventFactory.AddEventListener(EventEnum.OnClickCenterTool, _editorTileMap.Instance.OnClickCenterTool);
         _eventFactory.AddEventListener(EventEnum.OnEditorDirty, _editorTileMap.Instance.OnEditorDirty);
+
+        RenderingServer.FramePostDraw += OnFramePostDraw;
     }
 
+    public void OnDestroy()
+    {
+        _eventFactory.RemoveAllEventListener();
+        RenderingServer.FramePostDraw -= OnFramePostDraw;
+    }
+    
     public override void _Ready()
     {
         InitLayer();
@@ -440,14 +449,19 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public void TriggerSave(RoomErrorType errorType)
     {
         GD.Print("保存地牢房间数据...");
-        CurrRoomSplit.ErrorType = errorType;
-        SaveRoomInfoConfig();
-        SaveTileInfoConfig();
-        SavePreinstallConfig();
-        IsDirty = false;
-        MapEditorPanel.SetTitleDirty(false);
-        //派发保存事件
-        EventManager.EmitEvent(EventEnum.OnEditorSave);
+        //执行创建预览图流程
+        RunSavePreviewImage(() =>
+        {
+            //执行保存数据流程
+            CurrRoomSplit.ErrorType = errorType;
+            SaveRoomInfoConfig();
+            SaveTileInfoConfig();
+            SavePreinstallConfig();
+            IsDirty = false;
+            MapEditorPanel.SetTitleDirty(false);
+            //派发保存事件
+            EventManager.EmitEvent(EventEnum.OnEditorSave);
+        });
     }
 
     /// <summary>
@@ -1001,9 +1015,30 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             }
         }
     }
-    
-    public void OnDestroy()
+
+    private void RunSavePreviewImage(Action action)
     {
-        _eventFactory.RemoveAllEventListener();
+        //先截图, 将图像数据放置到 S_MapView2 节点上
+        var subViewport = MapEditorPanel.S_SubViewport.Instance;
+        var viewportTexture = subViewport.GetTexture();
+        var tex = ImageTexture.CreateFromImage(viewportTexture.GetImage());
+        var textureRect = MapEditorPanel.S_MapView2.Instance;
+        textureRect.Texture = tex;
+        textureRect.Visible = true;
+        
+        //隐藏工具栏
+        //MapEditorToolsPanel.
+        
+        // using (var image = viewportTexture.GetImage())
+        // {
+        //     GD.Print("test1:" + image.IsCompressed());
+        //     image.Resize(196, 196, Image.Interpolation.Lanczos);
+        //     image.SavePng("D:\\test.png");
+        // }
+    }
+
+    private void OnFramePostDraw()
+    {
+        
     }
 }

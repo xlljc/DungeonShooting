@@ -48,16 +48,5 @@
     "ShopList": [],
     "EventList": [],
     "Remark": "\u6D4B\u8BD5\u7EC4"
-  },
-  "TestGroup2": {
-    "GroupName": "TestGroup2",
-    "BattleList": [],
-    "InletList": [],
-    "OutletList": [],
-    "BossList": [],
-    "RewardList": [],
-    "ShopList": [],
-    "EventList": [],
-    "Remark": "\u6D4B\u8BD5\u7EC4"
   }
 }

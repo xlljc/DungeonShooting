@@ -334,6 +334,15 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView2
+    /// </summary>
+    public class MapView2 : UiNode<MapEditorPanel, Godot.TextureRect, MapView2>
+    {
+        public MapView2(MapEditorPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override MapView2 Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.MarginContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer
     /// </summary>
     public class MarginContainer : UiNode<MapEditorPanel, Godot.MarginContainer, MarginContainer>
@@ -350,6 +359,19 @@ public abstract partial class MapEditor : UiBase
             }
         }
         private MapView _L_MapView;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MapView2
+        /// </summary>
+        public MapView2 L_MapView2
+        {
+            get
+            {
+                if (_L_MapView2 == null) _L_MapView2 = new MapView2(UiPanel, Instance.GetNode<Godot.TextureRect>("MapView2"));
+                return _L_MapView2;
+            }
+        }
+        private MapView2 _L_MapView2;
 
         public MarginContainer(MapEditorPanel uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
         public override MarginContainer Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
@@ -694,6 +716,11 @@ public abstract partial class MapEditor : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.SubViewportContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView
     /// </summary>
     public MapView S_MapView => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left.L_MarginContainer.L_MapView;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView2
+    /// </summary>
+    public MapView2 S_MapView2 => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left.L_MarginContainer.L_MapView2;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left

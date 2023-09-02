@@ -179,7 +179,6 @@ public partial class ImageCanvas
                 var startTime = DateTime.Now;
                 //File.WriteAllBytes("d:/image.png", image.SavePngToBuffer());
                 //绘制完成需要调用回调的列表
-                var index = 0;
                 do
                 {
                     var item = _drawingQueueItems.Dequeue();
@@ -188,7 +187,6 @@ public partial class ImageCanvas
                         redrawCanvas.Add(item.ImageCanvas);
                         //处理绘图
                         HandleDrawing(image, item);
-                        index++;
                         if (item.OnDrawingComplete != null)
                         {
                             if (callDrawingCompleteList == null)
@@ -245,7 +243,6 @@ public partial class ImageCanvas
             var startTime = DateTime.Now;
             var hasFail = false;
             //执行绘制操作
-            var index = 0;
             for (var i = 0; i < _queueItems.Count; i++)
             {
                 var item = _queueItems[i];
@@ -260,7 +257,6 @@ public partial class ImageCanvas
                     {
                         _queueItems.RemoveAt(i);
                         i--;
-                        index++;
                     }
                     else //进入渲染队列失败
                     {

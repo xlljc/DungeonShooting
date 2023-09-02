@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cn64eauvwx1uj"
-path="res://.godot/imported/Enemy0001_Debris.png-ac416dc79cd3c1217b27e1ef1fbe0d0b.ctex"
+path="res://.godot/imported/enemy0001_Debris.png-297a2fb6680cb862a9a085cf58f8268c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/role/enemy0001/Enemy0001_Debris.png"
-dest_files=["res://.godot/imported/Enemy0001_Debris.png-ac416dc79cd3c1217b27e1ef1fbe0d0b.ctex"]
+source_file="res://resource/sprite/role/enemy0001/enemy0001_Debris.png"
+dest_files=["res://.godot/imported/enemy0001_Debris.png-297a2fb6680cb862a9a085cf58f8268c.ctex"]
 
 [params]
 
