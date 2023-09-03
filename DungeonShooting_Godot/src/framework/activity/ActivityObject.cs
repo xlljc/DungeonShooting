@@ -1181,14 +1181,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         OnDestroy();
 
         var arr = _components.ToArray();
-        for (int i = 0; i < arr.Length; i++)
+        for (var i = 0; i < arr.Length; i++)
         {
             arr[i].Value?.Destroy();
-        }
-        
-        if (AffiliationArea != null)
-        {
-            AffiliationArea.RemoveItem(this);
         }
     }
 

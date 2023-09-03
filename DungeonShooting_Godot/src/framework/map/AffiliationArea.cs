@@ -69,7 +69,7 @@ public partial class AffiliationArea : Area2D
 
         if (activityObject.AffiliationArea != null)
         {
-            _includeItems.Remove(activityObject);
+            activityObject.AffiliationArea._includeItems.Remove(activityObject);
         }
         activityObject.AffiliationArea = this;
         _includeItems.Add(activityObject);
@@ -111,7 +111,7 @@ public partial class AffiliationArea : Area2D
         var count = 0;
         foreach (var activityObject in _includeItems)
         {
-            if (handler(activityObject))
+            if (!activityObject.IsDestroyed && handler(activityObject))
             {
                 count++;
             }
@@ -128,7 +128,7 @@ public partial class AffiliationArea : Area2D
         var list = new List<ActivityObject>();
         foreach (var activityObject in _includeItems)
         {
-            if (handler(activityObject))
+            if (!activityObject.IsDestroyed && handler(activityObject))
             {
                 list.Add(activityObject);
             }
@@ -144,7 +144,7 @@ public partial class AffiliationArea : Area2D
     {
         foreach (var activityObject in _includeItems)
         {
-            if (handler(activityObject))
+            if (!activityObject.IsDestroyed && handler(activityObject))
             {
                 return true;
             }

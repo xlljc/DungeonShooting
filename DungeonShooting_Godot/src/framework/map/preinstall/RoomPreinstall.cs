@@ -196,9 +196,12 @@ public class RoomPreinstall : IDestroy
 
         IsRunWave = true;
         _currWaveIndex = 1;
-        GD.Print("执行第一波");
-        _coroutineId = GameApplication.Instance.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
-        _currWaveIndex++;
+        if (_currWaveIndex < WaveList.Count)
+        {
+            GD.Print("执行第一波");
+            _coroutineId = GameApplication.Instance.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
+            _currWaveIndex++;
+        }
     }
 
     public void NextWave()

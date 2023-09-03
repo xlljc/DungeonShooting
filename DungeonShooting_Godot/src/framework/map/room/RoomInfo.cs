@@ -205,22 +205,23 @@ public class RoomInfo : IDestroy
         {
             return;
         }
-        //没有额外标记, 啥都不要做
-        if (RoomPreinstall.WaveCount <= 1)
-        {
-            IsSeclusion = false;
-            return;
-        }
-        IsSeclusion = true;
         
         //会刷新敌人才要关门
-        if (RoomPreinstall.HasEnemy())
+        var enemies = GameApplication.Instance.DungeonManager.World.Enemy_InstanceList;
+        if (RoomPreinstall.HasEnemy() ||
+            enemies.FindIndex(item => item.AffiliationArea == AffiliationArea) != -1)
         {
             //关门
             foreach (var doorInfo in Doors)
             {
                 doorInfo.Door.CloseDoor();
             }
+            IsSeclusion = true;
+        }
+        else if (RoomPreinstall.WaveCount <= 1) //没有额外标记, 啥都不要做
+        {
+            IsSeclusion = false;
+            return;
         }
 
         //执行第一波生成

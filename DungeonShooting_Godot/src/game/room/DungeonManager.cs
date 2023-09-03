@@ -39,13 +39,17 @@ public partial class DungeonManager : Node2D
     /// </summary>
     public DungeonConfig CurrConfig { get; private set; }
     
+    /// <summary>
+    /// 当前使用的世界对象
+    /// </summary>
+    public World World { get; private set; }
+    
     private UiBase _prevUi;
     private DungeonTileMap _dungeonTileMap;
     private AutoTileConfig _autoTileConfig;
     private DungeonGenerator _dungeonGenerator;
     //房间内所有静态导航网格数据
     private List<NavigationPolygonData> _roomStaticNavigationList;
-    private World _world;
     
     //用于检查房间敌人的计时器
     private float _checkEnemyTimer = 0;
@@ -172,7 +176,7 @@ public partial class DungeonManager : Node2D
         UiManager.Open_Loading();
         yield return 0;
         //创建世界场景
-        _world = GameApplication.Instance.CreateNewWorld();
+        World = GameApplication.Instance.CreateNewWorld();
         yield return new WaitForFixedProcess(10);
         //生成地牢房间
         _dungeonGenerator = new DungeonGenerator(CurrConfig);
@@ -181,7 +185,7 @@ public partial class DungeonManager : Node2D
         
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
-        _dungeonTileMap = new DungeonTileMap(_world.TileRoot);
+        _dungeonTileMap = new DungeonTileMap(World.TileRoot);
         _dungeonTileMap.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoomInfo, _dungeonGenerator.Random);
         yield return 0;
         
@@ -189,7 +193,7 @@ public partial class DungeonManager : Node2D
         _dungeonTileMap.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
         yield return 0;
         //挂载过道导航区域
-        _dungeonTileMap.MountNavigationPolygon(_world.TileRoot);
+        _dungeonTileMap.MountNavigationPolygon(World.TileRoot);
         yield return 0;
         //过道导航区域数据
         _roomStaticNavigationList = new List<NavigationPolygonData>();
@@ -256,7 +260,7 @@ public partial class DungeonManager : Node2D
         //打开 loading UI
         UiManager.Open_Loading();
         yield return 0;
-        _world.Pause = true;
+        World.Pause = true;
         yield return 0;
         _dungeonGenerator.EachRoom(DisposeRoomInfo);
         yield return 0;
@@ -269,7 +273,7 @@ public partial class DungeonManager : Node2D
         UiManager.Hide_RoomUI();
         yield return new WaitForFixedProcess(10);
         Player.SetCurrentPlayer(null);
-        _world = null;
+        World = null;
         GameApplication.Instance.DestroyWorld();
         yield return new WaitForFixedProcess(10);
         QueueRedraw();
@@ -326,7 +330,7 @@ public partial class DungeonManager : Node2D
         var navigationPolygon = new NavigationRegion2D();
         navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
         navigationPolygon.NavigationPolygon = polygon;
-        _world.TileRoot.AddChild(navigationPolygon);
+        World.TileRoot.AddChild(navigationPolygon);
     }
 
     //创建门
@@ -376,7 +380,7 @@ public partial class DungeonManager : Node2D
             (roomInfo.Size - new Vector2I(2, 2)) * GameConfig.TileCellSize));
         
         roomInfo.AffiliationArea = affiliation;
-        _world.AffiliationAreaRoot.AddChild(affiliation);
+        World.AffiliationAreaRoot.AddChild(affiliation);
     }
 
     //创建静态精灵画布
@@ -470,7 +474,7 @@ public partial class DungeonManager : Node2D
         maxX += GameConfig.TileCellSize;
         maxY += GameConfig.TileCellSize;
         var staticSpriteCanvas = new RoomStaticImageCanvas(
-            _world.StaticSpriteRoot,
+            World.StaticSpriteRoot,
             new Vector2I(minX, minY),
             maxX - minX, maxY - minY
         );
@@ -489,7 +493,7 @@ public partial class DungeonManager : Node2D
         if (room.IsSeclusion)
         {
             var playerAffiliationArea = Player.Current.AffiliationArea;
-            foreach (var enemy in _world.Enemy_InstanceList)
+            foreach (var enemy in World.Enemy_InstanceList)
             {
                 //不与玩家处于同一个房间
                 if (enemy.AffiliationArea != playerAffiliationArea)
@@ -541,21 +545,21 @@ public partial class DungeonManager : Node2D
     /// </summary>
     private void UpdateEnemiesView()
     {
-        _world.Enemy_IsFindTarget = false;
-        _world.Enemy_FindTargetAffiliationSet.Clear();
-        for (var i = 0; i < _world.Enemy_InstanceList.Count; i++)
+        World.Enemy_IsFindTarget = false;
+        World.Enemy_FindTargetAffiliationSet.Clear();
+        for (var i = 0; i < World.Enemy_InstanceList.Count; i++)
         {
-            var enemy = _world.Enemy_InstanceList[i];
+            var enemy = World.Enemy_InstanceList[i];
             var state = enemy.StateController.CurrState;
             if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
             {
-                if (!_world.Enemy_IsFindTarget)
+                if (!World.Enemy_IsFindTarget)
                 {
-                    _world.Enemy_IsFindTarget = true;
-                    _world.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
-                    _world.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
+                    World.Enemy_IsFindTarget = true;
+                    World.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
+                    World.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
                 }
-                _world.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
+                World.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
             }
         }
     }
@@ -587,7 +591,7 @@ public partial class DungeonManager : Node2D
     //绘制房间区域, debug 用
     private void DrawRoomInfo(RoomInfo roomInfo)
     {
-        var cellSize = _world.TileRoot.CellQuadrantSize;
+        var cellSize = World.TileRoot.CellQuadrantSize;
         var pos1 = (roomInfo.Position + roomInfo.Size / 2) * cellSize;
         
         //绘制下一个房间
