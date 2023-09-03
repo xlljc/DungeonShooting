@@ -96,9 +96,8 @@ public partial class MapEditorProjectPanel : MapEditorProject
     /// <summary>
     /// 选择地图并打开地图编辑器
     /// </summary>
-    public void SelectRoom(DungeonRoomSplit room)
+    public void OpenSelectRoom(DungeonRoomSplit room)
     {
-        EditorManager.SetSelectRoom(room);
         HideUi();
         //创建地牢Ui
         var mapEditor = UiManager.Create_MapEditor();

@@ -677,4 +677,32 @@ public partial class DungeonManager : Node2D
 
         return "战斗房间";
     }
+
+    /// <summary>
+    /// 检测地牢是否可以执行生成
+    /// </summary>
+    /// <param name="groupName">组名称</param>
+    public static DungeonCheckState CheckDungeon(string groupName)
+    {
+        if (GameApplication.Instance.RoomConfig.TryGetValue(groupName, out var group))
+        {
+            //验证该组是否满足生成地牢的条件
+            if (group.InletList.Count == 0)
+            {
+                return new DungeonCheckState(true, "当没有可用的起始房间!");
+            }
+            else if (group.OutletList.Count == 0)
+            {
+                return new DungeonCheckState(true, "没有可用的结束房间!");
+            }
+            else if (group.BattleList.Count == 0)
+            {
+                return new DungeonCheckState(true, "没有可用的战斗房间!");
+            }
+
+            return new DungeonCheckState(false, null);
+        }
+
+        return new DungeonCheckState(true, "未找到地牢组");
+    }
 }

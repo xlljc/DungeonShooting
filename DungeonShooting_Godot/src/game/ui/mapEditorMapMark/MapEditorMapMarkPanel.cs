@@ -78,7 +78,6 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         
         _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnSelectMark, OnSelectMark);
-        RefreshPreinstallSelect();
     }
 
     public override void OnDestroyUi()

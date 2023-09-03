@@ -91,27 +91,16 @@ public class DungeonGenerator
     {
         _config = config;
         _roomGroup = GameApplication.Instance.RoomConfig[config.GroupName];
-        Random = new SeedRandom();
-        GD.Print("创建地牢生成器, 随机种子: " + Random.Seed);
 
         //验证该组是否满足生成地牢的条件
-        if (_roomGroup.InletList.Count == 0)
+        var result = DungeonManager.CheckDungeon(config.GroupName);
+        if (result.HasError)
         {
-            throw new Exception("当前组'" + config.GroupName + "'中没有可用的起始房间, 不能生成地牢!");
+            throw new Exception("当前组'" + config.GroupName + "'" + result.ErrorMessage + ", 不能生成地牢!");
         }
-        //没有指定房间
-        if (config.HasDesignatedRoom)
-        {
-            if (_roomGroup.OutletList.Count == 0)
-            {
-                throw new Exception("当前组'" + config.GroupName + "'中没有可用的结束房间, 不能生成地牢!");
-            }
-            else if (_roomGroup.BattleList.Count == 0)
-            {
-                throw new Exception("当前组'" + config.GroupName + "'中没有可用的战斗房间, 不能生成地牢!");
-            }
-        }
-
+        
+        Random = new SeedRandom();
+        GD.Print("创建地牢生成器, 随机种子: " + Random.Seed);
         _roomGroup.InitWeight(Random);
     }
 

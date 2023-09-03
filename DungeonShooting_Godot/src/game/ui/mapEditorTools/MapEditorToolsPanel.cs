@@ -151,6 +151,12 @@ public partial class MapEditorToolsPanel : MapEditorTools
     //选中波数
     private void OnSelectWaveTool(object arg)
     {
+        //选中编辑工具
+        if (_toolGrid.SelectIndex != _editToolIndex)
+        {
+            _toolGrid.Click(_editToolIndex);
+        }
+        
         var selectIndex = EditorManager.SelectWaveIndex;
         var waveList = EditorManager.SelectPreinstall.WaveList;
         for (var i = 0; i < waveList.Count; i++)
@@ -200,12 +206,6 @@ public partial class MapEditorToolsPanel : MapEditorTools
                 {
                     SetActiveMark(markTemplate.Instance);
                 }
-            }
-
-            //选中编辑工具
-            if (_toolGrid.SelectIndex != _editToolIndex)
-            {
-                _toolGrid.Click(_editToolIndex);
             }
         }
     }

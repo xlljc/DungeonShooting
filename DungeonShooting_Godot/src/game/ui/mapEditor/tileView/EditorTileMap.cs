@@ -450,7 +450,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <summary>
     /// 触发保存地图数据
     /// </summary>
-    public void TriggerSave(RoomErrorType errorType)
+    public void TriggerSave(RoomErrorType errorType, Action finish)
     {
         GD.Print("保存地牢房间数据...");
         //执行创建预览图流程
@@ -465,6 +465,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             MapEditorPanel.SetTitleDirty(false);
             //派发保存事件
             EventManager.EmitEvent(EventEnum.OnEditorSave);
+            if (finish != null)
+            {
+                finish();
+            }
         });
     }
 
@@ -1023,6 +1027,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private bool _hasPreviewImage = false;
     private Action _previewFinish;
     private int _previewIndex = 0;
+    private Vector2I _tempViewportSize;
+    private Vector2 _tempMapPos;
+    private Vector2 _tempMapScale;
     private bool _tempAutoFloorLayer;
     private bool _tempCustomFloorLayer;
     private bool _tempAutoMiddleLayer;
@@ -1047,6 +1054,28 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         var textureRect = MapEditorPanel.S_MapView2.Instance;
         textureRect.Texture = tex;
         textureRect.Visible = true;
+        //调整绘制视图大小
+        _tempViewportSize = subViewport.Size;
+        subViewport.Size = new Vector2I(GameConfig.PreviewImageSize, GameConfig.PreviewImageSize);
+        //调整tileMap
+        _tempMapPos = Position;
+        _tempMapScale = Scale;
+        
+        //中心点
+        var pos = new Vector2(GameConfig.PreviewImageSize / 2f, GameConfig.PreviewImageSize / 2f);
+        if (CurrRoomSize.X == 0 && CurrRoomSize.Y == 0) //聚焦原点
+        {
+            Position = pos;
+        }
+        else //聚焦地图中心点
+        {
+            var tempPos = new Vector2(CurrRoomSize.X + 2, CurrRoomSize.Y + 2);
+            var mapSize = tempPos * TileSet.TileSize;
+            var axis = Mathf.Max(mapSize.X, mapSize.Y);
+            var targetScale = GameConfig.PreviewImageSize / axis;
+            Scale = new Vector2(targetScale, targetScale);
+            Position = pos - (CurrRoomPosition + tempPos / 2f - Vector2.One) * TileSet.TileSize * targetScale;
+        }
         
         //隐藏工具栏
         MapEditorToolsPanel.Visible = false;
@@ -1078,6 +1107,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 textureRect.Texture = null;
                 texture.Dispose();
                 textureRect.Visible = false;
+                
                 //还原工具栏
                 MapEditorToolsPanel.Visible = true;
                 //还原层级显示
@@ -1095,6 +1125,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 image.Resize(GameConfig.PreviewImageSize, GameConfig.PreviewImageSize, Image.Interpolation.Nearest);
                 CurrRoomSplit.PreviewImage = ImageTexture.CreateFromImage(image);
                 MapProjectManager.SaveRoomPreviewImage(CurrRoomSplit, image);
+                
+                //还原tileMap
+                Position = _tempMapPos;
+                Scale = _tempMapScale;
+                
+                //还原绘制视图
+                subViewport.Size = _tempViewportSize;
                 
                 _previewFinish();
                 _hasPreviewImage = false;

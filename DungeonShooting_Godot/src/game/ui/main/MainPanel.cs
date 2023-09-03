@@ -18,8 +18,18 @@ public partial class MainPanel : Main
     //点击开始游戏
     private void OnStartGameClick()
     {
-        GameApplication.Instance.DungeonManager.LoadDungeon(GameApplication.Instance.DungeonConfig);
-        HideUi();
+        //验证该组是否满足生成地牢的条件
+        var config = GameApplication.Instance.DungeonConfig;
+        var result = DungeonManager.CheckDungeon(config.GroupName);
+        if (result.HasError)
+        {
+            EditorWindowManager.ShowTips("警告", "当前组'" + config.GroupName + "'" + result.ErrorMessage + ", 不能生成地牢!");
+        }
+        else
+        {
+            GameApplication.Instance.DungeonManager.LoadDungeon(config);
+            HideUi();
+        }
     }
 
     //退出游戏

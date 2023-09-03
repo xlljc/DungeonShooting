@@ -42,12 +42,12 @@ public partial class MapEditorPanel : MapEditor
 
     public override void OnDestroyUi()
     {
-        //清除选中的预设
-        EditorManager.SetSelectPreinstallIndex(-1);
-        //清除选中的波
-        EditorManager.SetSelectWaveIndex(-1);
         //清除选中的标记
         EditorManager.SetSelectMark(null);
+        //清除选中的波
+        EditorManager.SetSelectWaveIndex(-1);
+        //清除选中的预设
+        EditorManager.SetSelectPreinstallIndex(-1);
     }
 
     //点击播放按钮
@@ -62,9 +62,20 @@ public partial class MapEditorPanel : MapEditor
             return;
         }
         //保存数据
-        S_TileMap.Instance.TriggerSave(RoomErrorType.None);
-        //执行运行
-        EditorPlayManager.Play(this);
+        S_TileMap.Instance.TriggerSave(RoomErrorType.None, () =>
+        {
+            var groupName = EditorManager.SelectDungeonGroup.GroupName;
+            var result = DungeonManager.CheckDungeon(groupName);
+            if (result.HasError)
+            {
+                EditorWindowManager.ShowTips("警告", "当前组'" + groupName + "'" + result.ErrorMessage + ", 不能生成地牢!");
+            }
+            else
+            {
+                //执行运行
+                EditorPlayManager.Play(this);
+            }
+        });
     }
 
     /// <summary>
@@ -74,7 +85,9 @@ public partial class MapEditorPanel : MapEditor
     {
         _title = "正在编辑：" + roomSplit.RoomInfo.RoomName;
         S_Title.Instance.Text = _title;
-        return S_TileMap.Instance.Load(roomSplit);
+        var loadMap = S_TileMap.Instance.Load(roomSplit);
+        S_MapEditorMapMark.Instance.RefreshPreinstallSelect();
+        return loadMap;
     }
 
     /// <summary>
@@ -110,13 +123,13 @@ public partial class MapEditorPanel : MapEditor
             {
                 if (v)
                 {
-                    S_TileMap.Instance.TriggerSave(check.ErrorType);
+                    S_TileMap.Instance.TriggerSave(check.ErrorType, null);
                 }
             });
         }
         else
         {
-            S_TileMap.Instance.TriggerSave(check.ErrorType);
+            S_TileMap.Instance.TriggerSave(check.ErrorType, null);
         }
     }
 
@@ -139,9 +152,11 @@ public partial class MapEditorPanel : MapEditor
                         {
                             if (v)
                             {
-                                S_TileMap.Instance.TriggerSave(check.ErrorType);
-                                //返回上一个Ui
-                                OpenPrevUi();
+                                S_TileMap.Instance.TriggerSave(check.ErrorType, () =>
+                                {
+                                    //返回上一个Ui
+                                    OpenPrevUi();
+                                });
                             }
                             else
                             {
@@ -152,9 +167,11 @@ public partial class MapEditorPanel : MapEditor
                     }
                     else //没有错误
                     {
-                        S_TileMap.Instance.TriggerSave(check.ErrorType);
-                        //返回上一个Ui
-                        OpenPrevUi();
+                        S_TileMap.Instance.TriggerSave(check.ErrorType, () =>
+                        {
+                            //返回上一个Ui
+                            OpenPrevUi();
+                        });
                     }
                 }
                 else if (index == 1)

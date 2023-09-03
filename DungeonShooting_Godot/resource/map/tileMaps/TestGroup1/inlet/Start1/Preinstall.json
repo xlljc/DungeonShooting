@@ -1,0 +1,1 @@
+[{"Name":"test1","Weight":100,"Remark":"","WaveList":[[{"Position":{"X":8,"Y":19},"Size":{"X":0,"Y":0},"SpecialMarkType":1,"DelayTime":0,"MarkList":[]},{"Position":{"X":8,"Y":19},"Size":{"X":83,"Y":73},"SpecialMarkType":0,"DelayTime":0,"MarkList":[{"Id":"weapon0001","Weight":100,"Attr":{"CurrAmmon":"30","ResidueAmmo":"210"},"Altitude":8,"VerticalSpeed":0}]}]]}]

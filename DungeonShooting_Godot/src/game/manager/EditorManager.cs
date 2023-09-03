@@ -21,7 +21,18 @@ public static class EditorManager
     /// <summary>
     /// 当前使用的预设
     /// </summary>
-    public static RoomPreinstallInfo SelectPreinstall { get; private set; }
+    public static RoomPreinstallInfo SelectPreinstall
+    {
+        get
+        {
+            if (SelectPreinstallIndex < 0 || SelectPreinstallIndex >= SelectRoom.Preinstall.Count)
+            {
+                return null;
+            }
+
+            return SelectRoom.Preinstall[SelectPreinstallIndex];
+        }
+    }
 
     /// <summary>
     /// 当前选中的波索引
@@ -31,7 +42,24 @@ public static class EditorManager
     /// <summary>
     /// 当前选中的波
     /// </summary>
-    public static List<MarkInfo> SelectWave { get; private set; }
+    public static List<MarkInfo> SelectWave
+    {
+        get
+        {
+            var preinstall = SelectPreinstall;
+            if (preinstall == null)
+            {
+                return null;
+            }
+
+            if (SelectWaveIndex < 0 || SelectWaveIndex > preinstall.WaveList.Count)
+            {
+                return null;
+            }
+
+            return preinstall.WaveList[SelectWaveIndex];
+        }
+    }
     
     /// <summary>
     /// 当前选中的标记
@@ -49,7 +77,7 @@ public static class EditorManager
 
     public static void SetSelectRoom(DungeonRoomSplit roomSplit)
     {
-        if (SelectRoom != roomSplit)
+        if (!ReferenceEquals(SelectRoom, roomSplit))
         {
             SelectRoom = roomSplit;
             EventManager.EmitEvent(EventEnum.OnSelectRoom, SelectRoom);
@@ -63,30 +91,21 @@ public static class EditorManager
             if (SelectPreinstallIndex != -1)
             {
                 SelectPreinstallIndex = -1;
-                SelectPreinstall = null;
+                EventManager.EmitEvent(EventEnum.OnSelectPreinstall, SelectPreinstall);
+            }
+        }
+        else if (index < 0 || SelectRoom.Preinstall == null || index >= SelectRoom.Preinstall.Count)
+        {
+            if (SelectPreinstallIndex != -1)
+            {
+                SelectPreinstallIndex = -1;
                 EventManager.EmitEvent(EventEnum.OnSelectPreinstall, SelectPreinstall);
             }
         }
         else if (SelectPreinstallIndex != index)
         {
-            if (index < 0 || SelectRoom.Preinstall == null || index >= SelectRoom.Preinstall.Count)
-            {
-                if (SelectPreinstallIndex != -1)
-                {
-                    SelectPreinstallIndex = -1;
-                    SelectPreinstall = null;
-                    EventManager.EmitEvent(EventEnum.OnSelectPreinstall, SelectPreinstall);
-                }
-            }
-            else
-            {
-                if (SelectPreinstallIndex != index)
-                {
-                    SelectPreinstallIndex = index;
-                    SelectPreinstall = SelectRoom.Preinstall[index];
-                    EventManager.EmitEvent(EventEnum.OnSelectPreinstall, SelectPreinstall);
-                }
-            }
+            SelectPreinstallIndex = index;
+            EventManager.EmitEvent(EventEnum.OnSelectPreinstall, SelectPreinstall);
         }
     }
 
@@ -97,7 +116,6 @@ public static class EditorManager
             if (SelectWaveIndex != -1)
             {
                 SelectWaveIndex = -1;
-                SelectWave = null;
                 EventManager.EmitEvent(EventEnum.OnSelectWave, SelectWave);
             }
         }
@@ -108,7 +126,6 @@ public static class EditorManager
                 if (SelectWaveIndex != -1)
                 {
                     SelectWaveIndex = -1;
-                    SelectWave = null;
                     EventManager.EmitEvent(EventEnum.OnSelectWave, SelectWave);
                 }
             }
@@ -117,7 +134,6 @@ public static class EditorManager
                 if (SelectWaveIndex != index)
                 {
                     SelectWaveIndex = index;
-                    SelectWave = SelectPreinstall.WaveList[index];
                     EventManager.EmitEvent(EventEnum.OnSelectWave, SelectWave);
                 }
             }

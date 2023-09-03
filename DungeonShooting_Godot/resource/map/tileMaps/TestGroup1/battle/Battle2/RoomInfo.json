@@ -1,1 +1,1 @@
-{"Position":{"X":-8,"Y":-10},"Size":{"X":18,"Y":17},"DoorAreaInfos":[],"GroupName":"TestGroup1","RoomType":0,"RoomName":"Battle2","Weight":100,"Remark":""}
+{"Position":{"X":-8,"Y":-6},"Size":{"X":25,"Y":22},"DoorAreaInfos":[{"Direction":3,"Start":0,"End":64},{"Direction":1,"Start":0,"End":240},{"Direction":2,"Start":96,"End":368},{"Direction":0,"Start":240,"End":320},{"Direction":0,"Start":0,"End":112},{"Direction":3,"Start":144,"End":368}],"GroupName":"TestGroup1","RoomType":0,"RoomName":"Battle2","Weight":100,"Remark":""}

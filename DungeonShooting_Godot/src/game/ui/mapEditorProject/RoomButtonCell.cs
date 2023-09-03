@@ -46,11 +46,12 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
     public override void OnDoubleClick()
     {
         //打开房间编辑器
-        CellNode.UiPanel.SelectRoom(Data);
+        CellNode.UiPanel.OpenSelectRoom(Data);
     }
     
     public override void OnSelect()
     {
+        EditorManager.SetSelectRoom(Data);
         CellNode.L_SelectTexture.Instance.Visible = true;
     }
 
