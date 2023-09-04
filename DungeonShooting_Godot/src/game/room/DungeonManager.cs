@@ -526,8 +526,8 @@ public partial class DungeonManager : Node2D
             {
                 if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
                 {
-                    //是否有存活的敌人
-                    var flag = ActiveAffiliationArea.ExistIncludeItem(
+                    //房间内是否有存活的敌人
+                    var flag = ActiveAffiliationArea.ExistEnterItem(
                         activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
                     );
                     //GD.Print("当前房间存活数量: " + count);

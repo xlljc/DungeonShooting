@@ -1,6 +1,4 @@
 ﻿
-
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -195,18 +193,26 @@ public class RoomPreinstall : IDestroy
         }
 
         IsRunWave = true;
+        
         _currWaveIndex = 1;
-        if (_currWaveIndex < WaveList.Count)
+        //判断房间内是否已经有敌人了, 没有才能执行第1波
+        var flag = RoomInfo.AffiliationArea.ExistEnterItem(
+            activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
+        );
+        if (!flag)
         {
-            GD.Print("执行第一波");
-            _coroutineId = GameApplication.Instance.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
-            _currWaveIndex++;
+            if (_currWaveIndex < WaveList.Count)
+            {
+                GD.Print($"执行第{_currWaveIndex}波");
+                _coroutineId = GameApplication.Instance.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
+                _currWaveIndex++;
+            }
         }
     }
 
     public void NextWave()
     {
-        GD.Print("执行下一波, 当前: " + _currWaveIndex);
+        GD.Print($"执行第{_currWaveIndex}波");
         _coroutineId = GameApplication.Instance.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
         _currWaveIndex++;
     }
