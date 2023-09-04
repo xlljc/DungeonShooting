@@ -208,23 +208,31 @@ public class RoomInfo : IDestroy
             return;
         }
         
-        //会刷新敌人才要关门
-        var enemies = GameApplication.Instance.DungeonManager.World.Enemy_InstanceList;
-        if (RoomPreinstall.HasEnemy() ||
-            enemies.FindIndex(item => item.AffiliationArea == AffiliationArea) != -1)
+        //房间内有敌人, 或者会刷新敌人才会关门
+        var hasEnemy = false;
+        if (AffiliationArea.ExistEnterItem(activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy))) //先判断房间里面是否有敌人
         {
-            //关门
-            foreach (var doorInfo in Doors)
-            {
-                doorInfo.Door.CloseDoor();
-            }
-            IsSeclusion = true;
+            hasEnemy = true;
         }
-        else if (RoomPreinstall.WaveCount <= 1) //没有额外标记, 啥都不要做
+        else if (RoomPreinstall.HasEnemy()) //在判断是否会刷出敌人
+        {
+            hasEnemy = true;
+        }
+
+        if (!hasEnemy) //没有敌人, 不关门
         {
             IsSeclusion = false;
+            //执行第一波生成
+            RoomPreinstall.StartWave();
             return;
         }
+        
+        //关门
+        foreach (var doorInfo in Doors)
+        {
+            doorInfo.Door.CloseDoor();
+        }
+        IsSeclusion = true;
 
         //执行第一波生成
         RoomPreinstall.StartWave();
@@ -246,26 +254,12 @@ public class RoomInfo : IDestroy
                     doorInfo.Door.OpenDoor();
                 }
             }
+            //所有标记执行完成
+            RoomPreinstall.OverWave();
         }
         else //执行下一波
         {
-            NextWave();
+            RoomPreinstall.NextWave();
         }
-    }
-
-    /// <summary>
-    /// 返回当前这一波所有的标记的 Doing 函数是否执行完成
-    /// </summary>
-    public bool IsCurrWaveOver()
-    {
-        return RoomPreinstall.IsCurrWaveOver();
-    }
-
-    /// <summary>
-    /// 执行下一轮标记
-    /// </summary>
-    private void NextWave()
-    {
-        RoomPreinstall.NextWave();
     }
 }

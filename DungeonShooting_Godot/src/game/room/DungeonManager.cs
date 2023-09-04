@@ -520,11 +520,11 @@ public partial class DungeonManager : Node2D
     private void OnCheckEnemy()
     {
         var activeRoom = ActiveRoomInfo;
-        if (activeRoom != null)// && //activeRoom.IsSeclusion)
+        if (activeRoom != null)
         {
-            if (activeRoom.IsSeclusion) //房间处于关上状态
+            if (activeRoom.RoomPreinstall.IsRunWave) //正在生成标记
             {
-                if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
+                if (activeRoom.RoomPreinstall.IsCurrWaveOver()) //所有标记执行完成
                 {
                     //房间内是否有存活的敌人
                     var flag = ActiveAffiliationArea.ExistEnterItem(

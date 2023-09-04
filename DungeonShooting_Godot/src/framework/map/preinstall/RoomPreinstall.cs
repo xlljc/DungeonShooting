@@ -50,6 +50,26 @@ public class RoomPreinstall : IDestroy
     private int _currWaveIndex = 0;
     //执行生成标记的协程id
     private long _coroutineId = -1;
+    //提前加载列表
+    private List<PreloadData> _readyList;
+
+    private class PreloadData
+    {
+        /// <summary>
+        /// 实例对象
+        /// </summary>
+        public ActivityObject ActivityObject;
+        /// <summary>
+        /// 所在层级
+        /// </summary>
+        public RoomLayerEnum Layer;
+
+        public PreloadData(ActivityObject activityObject, RoomLayerEnum layer)
+        {
+            ActivityObject = activityObject;
+            Layer = layer;
+        }
+    }
 
     public RoomPreinstall(RoomInfo roomInfo, RoomPreinstallInfo roomPreinstallInfo)
     {
@@ -164,6 +184,7 @@ public class RoomPreinstall : IDestroy
     public void OnReady()
     {
         _currWaveIndex = 0;
+        //加载提前生成的物体
         if (WaveList.Count > 0)
         {
             var activityMarks = WaveList[0];
@@ -174,7 +195,11 @@ public class RoomPreinstall : IDestroy
                     var activityObject = CreateItem(activityMark);
                     //初始化属性
                     InitAttr(activityObject, activityMark);
-                    activityObject.PutDown(GetDefaultLayer(activityMark));
+                    if (_readyList == null)
+                    {
+                        _readyList = new List<PreloadData>();
+                    }
+                    _readyList.Add(new PreloadData(activityObject, GetDefaultLayer(activityMark)));
                 }
             }
         }
@@ -193,13 +218,35 @@ public class RoomPreinstall : IDestroy
         }
 
         IsRunWave = true;
-        
+
         _currWaveIndex = 1;
-        //判断房间内是否已经有敌人了, 没有才能执行第1波
-        var flag = RoomInfo.AffiliationArea.ExistEnterItem(
-            activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
-        );
-        if (!flag)
+        //判断房间内是否已经有敌人了
+        var hasEnemy = false;
+        if (_readyList != null && _readyList.Count > 0)
+        {
+            foreach (var preloadData in _readyList)
+            {
+                //有敌人
+                if (!hasEnemy && preloadData.ActivityObject.CollisionWithMask(PhysicsLayer.Enemy))
+                {
+                    hasEnemy = true;
+                }
+
+                preloadData.ActivityObject.PutDown(preloadData.Layer);
+            }
+
+            _readyList.Clear();
+            _readyList = null;
+        }
+
+        if (!hasEnemy)
+        {
+            hasEnemy = RoomInfo.AffiliationArea.ExistIncludeItem(
+                activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
+            );
+        }
+
+        if (!hasEnemy) //没有敌人才能执行第1波
         {
             if (_currWaveIndex < WaveList.Count)
             {
@@ -210,13 +257,29 @@ public class RoomPreinstall : IDestroy
         }
     }
 
+    /// <summary>
+    /// 执行下一波
+    /// </summary>
     public void NextWave()
     {
+        if (!IsRunWave)
+        {
+            return;
+        }
+        
         GD.Print($"执行第{_currWaveIndex}波");
         _coroutineId = GameApplication.Instance.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
         _currWaveIndex++;
     }
 
+    /// <summary>
+    /// 结束生成标记
+    /// </summary>
+    public void OverWave()
+    {
+        IsRunWave = false;
+    }
+    
     //执行实例化标记物体
     private IEnumerator RunMark(List<ActivityMark> activityMarks)
     {
@@ -339,6 +402,15 @@ public class RoomPreinstall : IDestroy
         }
 
         WaveList.Clear();
+        if (_readyList != null)
+        {
+            foreach (var preloadData in _readyList)
+            {
+                preloadData.ActivityObject.Destroy();
+            }
+
+            _readyList.Clear();
+        }
     }
 
     //初始化物体属性

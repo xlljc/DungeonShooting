@@ -79,6 +79,10 @@ public partial class MapEditorProjectPanel : MapEditorProject
     public void RefreshGroup()
     {
         var index = _groupGrid.SelectIndex;
+        if (index == -1)
+        {
+            index = 0;
+        }
         MapProjectManager.RefreshMapGroup();
         OnSearchGroupButtonClick();
         _groupGrid.SelectIndex = index;
