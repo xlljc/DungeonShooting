@@ -1,13 +1,18 @@
-﻿using Config;
+﻿using System;
+using Config;
 using UI.MapEditor;
 
 namespace UI.MapEditorMapMark;
 
 public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMarkPanel.MarkCellData>
 {
+    //上一次点击的时间
+    private long _prevClickTime2 = -1;
+    
     public override void OnInit()
     {
-        CellNode.L_MarkButton.Instance.Pressed += OnClick;
+        //这里不绑定 Click 函数, 而是绑定 OnClickHandler, 因为 Select 交给 MapEditorMapMarkPanel 处理了
+        CellNode.L_MarkButton.Instance.Pressed += OnClickHandler;
     }
 
     public override void OnSetData(MapEditorMapMarkPanel.MarkCellData data)
@@ -54,16 +59,35 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
         CellNode.L_MarkButton.Instance.Text = text;
     }
 
-    public override void OnClick()
+    public void OnClickHandler()
     {
         EditorManager.SetSelectWaveIndex(Data.ParentCell.Index);
         CellNode.UiPanel.SetSelectCell(this, CellNode.Instance, MapEditorMapMarkPanel.SelectToolType.Mark);
-        //需要切换回编辑工具
-        if (CellNode.UiPanel.EditorTileMap.MouseType != EditorTileMap.MouseButtonType.Edit)
+        //选中标记
+        EditorManager.SetSelectMark(Data.MarkInfo);
+        
+        //双击判定
+        if (_prevClickTime2 >= 0)
         {
-            //选中标记
-            EditorManager.SetSelectMark(Data.MarkInfo);
+            var now = DateTime.Now.Ticks / 10000;
+            if (now <= _prevClickTime2 + 500)
+            {
+                OnDoubleClickHandler();
+            }
+
+            _prevClickTime2 = now;
         }
+        else
+        {
+            _prevClickTime2 = DateTime.Now.Ticks / 10000;
+        }
+    }
+
+    public void OnDoubleClickHandler()
+    {
+        //双击聚焦标记
+        var position = Data.MarkInfo.Position.AsVector2();
+        CellNode.UiPanel.EditorTileMap.SetLookPosition(position);
     }
 
     public override void OnSelect()

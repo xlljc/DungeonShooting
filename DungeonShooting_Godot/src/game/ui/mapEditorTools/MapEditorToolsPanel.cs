@@ -198,6 +198,12 @@ public partial class MapEditorToolsPanel : MapEditorTools
     //选中标记
     private void OnSelectMarkTool(object arg)
     {
+        //选中编辑工具
+        if (_toolGrid.SelectIndex != _editToolIndex)
+        {
+            _toolGrid.Click(_editToolIndex);
+        }
+        
         if (arg is MarkInfo markInfo)
         {
             if (ActiveMark == null || markInfo != ActiveMark.MarkInfo)
@@ -207,6 +213,10 @@ public partial class MapEditorToolsPanel : MapEditorTools
                     SetActiveMark(markTemplate.Instance);
                 }
             }
+        }
+        else if (arg == null && ActiveMark != null)
+        {
+            SetActiveMark(null);
         }
     }
 

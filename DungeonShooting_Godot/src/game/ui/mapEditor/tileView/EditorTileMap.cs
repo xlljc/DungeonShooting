@@ -67,7 +67,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <summary>
     /// 所属地图编辑器UI
     /// </summary>
-    public MapEditorPanel MapEditorPanel { get; set; }
+    public MapEditorPanel MapEditorPanel { get; private set; }
     
     /// <summary>
     /// 编辑器工具UI
@@ -156,17 +156,17 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public void SetUiNode(IUiNode uiNode)
     {
         _editorTileMap = (MapEditor.TileMap)uiNode;
-        _editorTileMap.Instance.MapEditorPanel = _editorTileMap.UiPanel;
-        _editorTileMap.Instance.MapEditorToolsPanel = _editorTileMap.UiPanel.S_MapEditorTools.Instance;
+        MapEditorPanel = _editorTileMap.UiPanel;
+        MapEditorToolsPanel = _editorTileMap.UiPanel.S_MapEditorTools.Instance;
 
         _editorTileMap.L_Brush.Instance.Draw += DrawGuides;
         _eventFactory = EventManager.CreateEventFactory();
-        _eventFactory.AddEventListener(EventEnum.OnSelectDragTool, _editorTileMap.Instance.OnSelectHandTool);
-        _eventFactory.AddEventListener(EventEnum.OnSelectPenTool, _editorTileMap.Instance.OnSelectPenTool);
-        _eventFactory.AddEventListener(EventEnum.OnSelectRectTool, _editorTileMap.Instance.OnSelectRectTool);
-        _eventFactory.AddEventListener(EventEnum.OnSelectEditTool, _editorTileMap.Instance.OnSelectEditTool);
-        _eventFactory.AddEventListener(EventEnum.OnClickCenterTool, _editorTileMap.Instance.OnClickCenterTool);
-        _eventFactory.AddEventListener(EventEnum.OnEditorDirty, _editorTileMap.Instance.OnEditorDirty);
+        _eventFactory.AddEventListener(EventEnum.OnSelectDragTool, OnSelectHandTool);
+        _eventFactory.AddEventListener(EventEnum.OnSelectPenTool, OnSelectPenTool);
+        _eventFactory.AddEventListener(EventEnum.OnSelectRectTool, OnSelectRectTool);
+        _eventFactory.AddEventListener(EventEnum.OnSelectEditTool, OnSelectEditTool);
+        _eventFactory.AddEventListener(EventEnum.OnClickCenterTool, OnClickCenterTool);
+        _eventFactory.AddEventListener(EventEnum.OnEditorDirty, OnEditorDirty);
 
         RenderingServer.FramePostDraw += OnFramePostDraw;
     }
@@ -996,15 +996,38 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         MapProjectManager.SaveRoomTileInfo(CurrRoomSplit);
     }
 
-    //保存预设数据
+    /// <summary>
+    /// 保存预设数据
+    /// </summary>
     public void SavePreinstallConfig()
     {
         //存入本地
         MapProjectManager.SaveRoomPreinstall(CurrRoomSplit);
     }
 
-    //设置地图坐标
-    private void SetMapPosition(Vector2 pos)
+    /// <summary>
+    /// 获取相机中心点坐标
+    /// </summary>
+    public Vector2I GetCenterPosition()
+    {
+        var pos = ToLocal(MapEditorPanel.S_SubViewport.Instance.Size / 2);
+        return new Vector2I((int)pos.X, (int)pos.Y);
+    }
+    
+    /// <summary>
+    /// 设置相机看向的点
+    /// </summary>
+    public void SetLookPosition(Vector2 pos)
+    {
+        SetMapPosition(-pos * Scale + MapEditorPanel.S_SubViewport.Instance.Size / 2);
+        //SetMapPosition(pos * Scale);
+        //SetMapPosition(pos + MapEditorPanel.S_SubViewport.Instance.Size / 2);
+    }
+    
+    /// <summary>
+    /// 设置地图坐标
+    /// </summary>
+    public void SetMapPosition(Vector2 pos)
     {
         Position = pos;
         MapEditorToolsPanel.SetToolTransform(pos, Scale);

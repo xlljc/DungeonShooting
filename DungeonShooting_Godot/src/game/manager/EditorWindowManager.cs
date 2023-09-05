@@ -267,16 +267,17 @@ public static class EditorWindowManager
     /// <summary>
     /// 打开创建标记页面
     /// </summary>
+    /// <param name="position">初始坐标</param>
     /// <param name="preloading">是否提前加载</param>
     /// <param name="onCreateMarkInfo">创建标记回调</param>
     /// <param name="parentUi">所属父级Ui</param>
-    public static void ShowCreateMark(bool preloading, Action<MarkInfo> onCreateMarkInfo , UiBase parentUi = null)
+    public static void ShowCreateMark(Vector2I position, bool preloading, Action<MarkInfo> onCreateMarkInfo , UiBase parentUi = null)
     {
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("创建标记");
         window.SetWindowSize(new Vector2I(1400, 900));
         var body = window.OpenBody<MapEditorCreateMarkPanel>(UiManager.UiName.MapEditorCreateMark);
-        body.InitData(preloading);
+        body.InitData(position, preloading);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {

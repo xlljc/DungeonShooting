@@ -111,7 +111,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                                 tempWaveCell.OnExpandOrClose();
                             }
                             //选中物体
-                            tempMarkCell.OnClick();
+                            tempMarkCell.OnClickHandler();
                             return;
                         }
                     }

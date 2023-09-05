@@ -33,7 +33,12 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell, IData<T> where TUiCellNo
     private bool _init = false;
     //上一次点击的时间
     private long _prevClickTime = -1;
-    
+
+    public IUiGrid GetGrid()
+    {
+        return Grid;
+    }
+
     public virtual void OnInit()
     {
     }

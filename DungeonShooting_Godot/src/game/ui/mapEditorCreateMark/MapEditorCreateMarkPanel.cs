@@ -37,8 +37,9 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
     /// <summary>
     /// 初始化面板数据, 用于创建数据
     /// </summary>
+    /// <param name="position">初始坐标</param>
     /// <param name="preloading">是否提前加载</param>
-    public void InitData(bool preloading)
+    public void InitData(Vector2I position, bool preloading)
     {
         _preloading = preloading;
         if (preloading)
@@ -49,6 +50,9 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         {
             S_DelayContainer.Instance.Visible = true;
         }
+
+        S_PosX.Instance.Value = position.X;
+        S_PosY.Instance.Value = position.Y;
     }
     
     /// <summary>

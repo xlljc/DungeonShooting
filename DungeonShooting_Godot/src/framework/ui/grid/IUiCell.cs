@@ -15,6 +15,11 @@ public interface IUiCell : IDestroy
     int Index { get; }
 
     /// <summary>
+    /// 获取所在网格组件
+    /// </summary>
+    IUiGrid GetGrid();
+
+    /// <summary>
     /// 当前 Cell 初始化时调用
     /// </summary>
     void OnInit();
@@ -23,6 +28,11 @@ public interface IUiCell : IDestroy
     /// 如果启用了当前 Cell, 则每帧调用
     /// </summary>
     void Process(float delta);
+    
+    /// <summary>
+    /// 触发当前 Cell 的点击
+    /// </summary>
+    void Click();
     
     /// <summary>
     /// 当前Ui被点击时调用<br/>
@@ -51,7 +61,7 @@ public interface IUiCell : IDestroy
     /// 当检测当前 Cell 是否可以被选中时调用
     /// </summary>
     bool CanSelect();
-
+    
     /// <summary>
     /// 当前 Cell 选中时调用, 设置 UiGrid.SelectIndex 时触发
     /// </summary>
