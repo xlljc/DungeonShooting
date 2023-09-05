@@ -41,7 +41,7 @@ public partial class Player : Role
         // RoleState.MoveSpeed = 500;
         // CollisionLayer = 0;
         // CollisionMask = 0;
-        // GameCamera.Main.Zoom = new Vector2(.75f, 0.75f);
+        // GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
         // //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
     }
 

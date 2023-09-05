@@ -45,17 +45,16 @@ public class DungeonGenerator
     private DungeonRoomType _nextRoomType = DungeonRoomType.Battle;
     
     //间隔
-    private int _roomMinInterval = 6;
-    private int _roomMaxInterval = 10;
+    private int _roomMinInterval = 5;
+    private int _roomMaxInterval = 6;
 
     //房间横轴分散程度
-    
     private float _roomHorizontalMinDispersion = 0f;
-    private float _roomHorizontalMaxDispersion = 0.7f;
+    private float _roomHorizontalMaxDispersion = 0.5f;
 
     //房间纵轴分散程度
     private float _roomVerticalMinDispersion = 0f;
-    private float _roomVerticalMaxDispersion = 0.7f;
+    private float _roomVerticalMaxDispersion = 0.5f;
 
     //区域限制
     private bool _enableLimitRange = true;

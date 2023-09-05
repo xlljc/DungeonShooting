@@ -184,8 +184,11 @@ public class RoomInfo : IDestroy
         {
             StaticImageCanvas.Destroy();
         }
-        
-        AffiliationArea.Destroy();
+
+        if (AffiliationArea != null)
+        {
+            AffiliationArea.Destroy();
+        }
     }
     
     /// <summary>
