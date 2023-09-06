@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://b8ogu2l8pa70y"]
 
 [ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/Smoke.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://bs1lan5uwxyfg" path="res://resource/curve/Curve1.tres" id="1_8pe88"]
