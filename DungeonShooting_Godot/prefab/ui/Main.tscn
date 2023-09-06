@@ -47,6 +47,15 @@ theme = ExtResource("2_bbd6i")
 text = "开始游戏
 "
 
+[node name="Tools" type="Button" parent="ButtonList"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+focus_neighbor_top = NodePath("../Start")
+focus_neighbor_bottom = NodePath("../Exit")
+theme = ExtResource("2_bbd6i")
+theme_override_font_sizes/font_size = 32
+text = "开发者工具"
+
 [node name="Setting" type="Button" parent="ButtonList"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2

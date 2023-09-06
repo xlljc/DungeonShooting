@@ -4,12 +4,12 @@ namespace UI.RoomUI;
 
 public class WeaponBar
 {
-    private RoomUI.UiNode_WeaponBar _weaponBar;
+    private RoomUI.RoomUI_WeaponBar _weaponBar;
 
     private int _prevAmmo = -1;
     private int _prevResidue = -1;
     
-    public WeaponBar(RoomUI.UiNode_WeaponBar weaponBar)
+    public WeaponBar(RoomUI.RoomUI_WeaponBar weaponBar)
     {
         _weaponBar = weaponBar;
         SetWeaponTexture(null);

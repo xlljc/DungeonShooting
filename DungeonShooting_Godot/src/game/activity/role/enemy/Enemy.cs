@@ -124,7 +124,7 @@ public partial class Enemy : Role
         blood.AddToActivityRoot(RoomLayerEnum.NormalLayer);
         
         //创建敌人碎片
-        var count = Utils.RandomRangeInt(3, 6);
+        var count = Utils.Random.RandomRangeInt(3, 6);
         for (var i = 0; i < count; i++)
         {
             var debris = Create(Ids.Id_effect0001);

@@ -19,14 +19,14 @@ public partial class TestOptimizeSprite : Node2D
         
         for (int i = 0; i < 50000; i++)
         {
-            var texture = Utils.RandomChoose(ImageList);
-            var x = Utils.RandomRangeInt(0, imageCanvas.Width);
-            var y = Utils.RandomRangeInt(0, imageCanvas.Height);
-            var centerX = Utils.RandomRangeInt(0, texture.GetWidth());
-            var centerY = Utils.RandomRangeInt(0, texture.GetHeight());
-            var angle = Utils.RandomRangeInt(0, 360);
+            var texture = Utils.Random.RandomChoose(ImageList);
+            var x = Utils.Random.RandomRangeInt(0, imageCanvas.Width);
+            var y = Utils.Random.RandomRangeInt(0, imageCanvas.Height);
+            var centerX = Utils.Random.RandomRangeInt(0, texture.GetWidth());
+            var centerY = Utils.Random.RandomRangeInt(0, texture.GetHeight());
+            var angle = Utils.Random.RandomRangeInt(0, 360);
             imageCanvas.DrawImageInCanvas(texture, null, x, y,
-                angle, centerX, centerY, Utils.RandomBoolean(),
+                angle, centerX, centerY, Utils.Random.RandomBoolean(),
                 () =>
                 {
                     successCount++;

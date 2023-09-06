@@ -19,7 +19,7 @@ public partial class BuffPropProp0007 : BuffProp
 
     private void CalcHurtDamageEvent(int originDamage, RefValue<int> refValue)
     {
-        if (refValue.Value > 0 && Utils.RandomBoolean(0.15f))
+        if (refValue.Value > 0 && Utils.Random.RandomBoolean(0.15f))
         {
             refValue.Value = 0;
         }

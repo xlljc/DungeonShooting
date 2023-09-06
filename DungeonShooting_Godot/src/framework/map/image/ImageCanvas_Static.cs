@@ -35,7 +35,7 @@ public partial class ImageCanvas
     /// </summary>
     public static Vector2I RenderViewportSize { get; private set; }
     
-    //预渲染队列, 这里不用 Queue 是因为大图尝试添加到渲染队列可能失败, 为了不影响
+    //预渲染队列, 这里不用 Queue 是因为大图尝试添加到渲染队列可能失败, 为了不影响渲染顺序, 所以使用 List
     private static readonly List<ImageRenderData> _queueItems = new List<ImageRenderData>();
     //渲染中的队列
     private static readonly Queue<ImageRenderData> _drawingQueueItems = new Queue<ImageRenderData>();
@@ -179,7 +179,6 @@ public partial class ImageCanvas
                 var startTime = DateTime.Now;
                 //File.WriteAllBytes("d:/image.png", image.SavePngToBuffer());
                 //绘制完成需要调用回调的列表
-                var index = 0;
                 do
                 {
                     var item = _drawingQueueItems.Dequeue();
@@ -188,7 +187,6 @@ public partial class ImageCanvas
                         redrawCanvas.Add(item.ImageCanvas);
                         //处理绘图
                         HandleDrawing(image, item);
-                        index++;
                         if (item.OnDrawingComplete != null)
                         {
                             if (callDrawingCompleteList == null)
@@ -245,7 +243,6 @@ public partial class ImageCanvas
             var startTime = DateTime.Now;
             var hasFail = false;
             //执行绘制操作
-            var index = 0;
             for (var i = 0; i < _queueItems.Count; i++)
             {
                 var item = _queueItems[i];
@@ -260,7 +257,6 @@ public partial class ImageCanvas
                     {
                         _queueItems.RemoveAt(i);
                         i--;
-                        index++;
                     }
                     else //进入渲染队列失败
                     {

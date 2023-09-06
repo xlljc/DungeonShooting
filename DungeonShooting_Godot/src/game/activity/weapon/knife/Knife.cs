@@ -93,7 +93,7 @@ public partial class Knife : Weapon
             if (activityObject is Role role)
             {
                 role.CallDeferred(nameof(Role.Hurt), 
-                    Utils.RandomRangeInt(Attribute.BulletMinHarm, Attribute.BulletMaxHarm), (role.GetCenterPosition() - GlobalPosition).Angle());
+                    Utils.Random.RandomRangeInt(Attribute.BulletMinHarm, Attribute.BulletMaxHarm), (role.GetCenterPosition() - GlobalPosition).Angle());
             }
         }
     }

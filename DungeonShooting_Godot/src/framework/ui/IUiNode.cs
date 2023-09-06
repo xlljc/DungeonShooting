@@ -1,47 +1,73 @@
-
+﻿
 using Godot;
 
 /// <summary>
-/// Ui节点代码接口
+/// Ui节点接口
 /// </summary>
-/// <typeparam name="TNodeType">Godot中的节点类型</typeparam>
-/// <typeparam name="TCloneType">克隆该对象返回的类型</typeparam>
-public abstract class IUiNode<TNodeType, TCloneType> : IClone<TCloneType> where TNodeType : Node
+public interface IUiNode
 {
     /// <summary>
-    /// Godot节点实例
+    /// 嵌套打开子ui
     /// </summary>
-    public TNodeType Instance { get; }
-    /// <summary>
-    /// 克隆当前对象, 并返回新的对象,
-    /// 注意: 如果子节点改名或者移动层级, 那么有可能对导致属性中的子节点无法访问
-    /// </summary>
-    public abstract TCloneType Clone();
+    UiBase OpenNestedUi(string uiName, UiBase prevUi = null);
 
-    public IUiNode(TNodeType node)
-    {
-        Instance = node;
-    }
-    
     /// <summary>
     /// 嵌套打开子ui
     /// </summary>
-    public UiBase OpenNestedUi(string uiName)
-    {
-        var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
-        var uiBase = packedScene.Instantiate<UiBase>();
-        Instance.AddChild(uiBase);
-        
-        uiBase.OnCreateUi();
-        uiBase.ShowUi();
-        return uiBase;
-    }
+    T OpenNestedUi<T>(string uiName, UiBase prevUi = null) where T : UiBase;
     
     /// <summary>
-    /// 嵌套打开子ui
+    /// 获取所属Ui面板
     /// </summary>
-    public T OpenNestedUi<T>(string uiName) where T : UiBase
-    {
-        return (T)OpenNestedUi(uiName);
-    }
+    UiBase GetUiPanel();
+    
+    /// <summary>
+    /// 获取Ui实例
+    /// </summary>
+    Node GetUiInstance();
+
+    /// <summary>
+    /// 获取克隆的Ui实例
+    /// </summary>
+    IUiCellNode CloneUiCell();
+
+    /// <summary>
+    /// 添加子级Ui节点
+    /// </summary>
+    void AddChild(IUiNode uiNode);
+    
+    /// <summary>
+    /// 添加子级Ui节点
+    /// </summary>
+    void AddChild(Node node);
+
+    /// <summary>
+    /// 移除子级Ui节点
+    /// </summary>
+    void RemoveChild(IUiNode uiNode);
+    
+    /// <summary>
+    /// 移除子级Ui节点
+    /// </summary>
+    void RemoveChild(Node node);
+
+    /// <summary>
+    /// 销毁当前节点
+    /// </summary>
+    void QueueFree();
+
+    /// <summary>
+    /// 更改父节点, 但是当前节点的父节点不能为空
+    /// </summary>
+    void Reparent(IUiNode uiNode);
+    
+    /// <summary>
+    /// 更改父节点, 但是当前节点的父节点不能为空
+    /// </summary>
+    void Reparent(Node node);
+
+    /// <summary>
+    /// 获取父节点
+    /// </summary>
+    Node GetParent();
 }

@@ -49,8 +49,7 @@ public partial class BottomTipsPanel : BottomTips
     /// </summary>
     public void SetIcon(Texture2D icon)
     {
-        L_Panel.L_MarginContainer.L_CenterContainer.L_HBoxContainer.L_AspectRatioContainer.L_TextureRect.Instance
-            .Texture = icon;
+        S_TextureRect.Instance.Texture = icon;
     }
     
     /// <summary>
@@ -58,7 +57,7 @@ public partial class BottomTipsPanel : BottomTips
     /// </summary>
     public void SetMessage(string message)
     {
-        L_Panel.L_MarginContainer.L_CenterContainer.L_HBoxContainer.L_Label.Instance.Text = message;
+        S_Label.Instance.Text = message;
     }
 
     private IEnumerator RunAnimation(Texture2D icon, string message)
@@ -109,8 +108,7 @@ public partial class BottomTipsPanel : BottomTips
     private static BottomTipsPanel _instance;
     public static void Init()
     {
-        _instance = UiManager.Open_BottomTips();
-        _instance.HideUi();
+        _instance = UiManager.CreateUi<BottomTipsPanel>(UiManager.UiName.BottomTips);
     }
 
     /// <summary>

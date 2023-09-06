@@ -7,11 +7,11 @@ namespace UI.RoomUI;
 /// </summary>
 public class InteractiveTipBar
 {
-    private RoomUI.UiNode_InteractiveTipBar _interactiveTipBar;
+    private RoomUI.RoomUI_InteractiveTipBar _interactiveTipBar;
     private EventBinder _binder;
     private ActivityObject _interactiveTarget;
     
-    public InteractiveTipBar(RoomUI.UiNode_InteractiveTipBar interactiveTipBar)
+    public InteractiveTipBar(RoomUI.RoomUI_InteractiveTipBar interactiveTipBar)
     {
         interactiveTipBar.Instance.Visible = false;
         _interactiveTipBar = interactiveTipBar;

@@ -60,7 +60,7 @@ public partial class RoomUIPanel : RoomUI
     private void OnPlayerPickUpProp(object propObj)
     {
         var prop = (Prop)propObj;
-        var message = $"{prop.ItemConfig.Name}\n{prop.ItemConfig.Remark}";
+        var message = $"{prop.ItemConfig.Name}\n{prop.ItemConfig.Intro}";
         BottomTipsPanel.ShowTips(prop.GetDefaultTexture(), message);
     }
 }

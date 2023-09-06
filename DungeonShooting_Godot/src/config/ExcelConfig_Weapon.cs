@@ -26,12 +26,6 @@ public static partial class ExcelConfig
         public string Remark;
 
         /// <summary>
-        /// 武器的图标
-        /// </summary>
-        [JsonInclude]
-        public string Icon;
-
-        /// <summary>
         /// 重量
         /// </summary>
         [JsonInclude]
@@ -428,7 +422,6 @@ public static partial class ExcelConfig
             inst.Id = Id;
             inst.WeaponId = WeaponId;
             inst.Remark = Remark;
-            inst.Icon = Icon;
             inst.Weight = Weight;
             inst.WeightType = WeightType;
             inst.ContinuousShoot = ContinuousShoot;

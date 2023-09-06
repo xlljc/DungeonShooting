@@ -7,10 +7,10 @@ using Godot;
 
 /// <summary>
 /// 房间内活动物体基类, 所有物体都必须继承该类,<br/>
-/// ActivityObject 使用的时候代码和场景分离的设计模式, 所以创建时必须指定模板场景路径, 这样做的好处是一个模板场景可以用在多个代码类上, 同样一个代码类也可以指定不同的目模板场景, <br/>
+/// 该类提供基础物体运动模拟, 互动接口, 自定义组件, 协程等功能<br/>
 /// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [Tool], 并在 ActivityObject.xlsx 配置文件中注册物体, 导出配置表后使用 ActivityObject.Create(id) 来创建实例.<br/>
 /// </summary>
-public abstract partial class ActivityObject : CharacterBody2D, IDestroy
+public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
 {
     /// <summary>
     /// 是否是调试模式
@@ -28,6 +28,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     [Export]
     public bool IsStatic { get; set; }
 
+    /// <summary>
+    /// 是否显示阴影
+    /// </summary>
+    public bool IsShowShadow { get; private set; }
+    
     /// <summary>
     /// 当前物体显示的阴影图像, 节点名称必须叫 "ShadowSprite", 类型为 Sprite2D
     /// </summary>
@@ -94,10 +99,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         {
             if (value != _affiliationArea)
             {
+                var prev = _affiliationArea;
                 _affiliationArea = value;
                 if (!IsDestroyed)
                 {
-                    OnAffiliationChange();
+                    OnAffiliationChange(prev);
                 }
             }
         }
@@ -398,7 +404,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     }
 
     /// <summary>
-    /// 显示阴影
+    /// 显示并更新阴影
     /// </summary>
     public void ShowShadowSprite()
     {
@@ -418,6 +424,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         _prevAnimation = anim;
         _prevAnimationFrame = frame;
 
+        IsShowShadow = true;
         CalcShadow();
         ShadowSprite.Visible = true;
     }
@@ -428,6 +435,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     public void HideShadowSprite()
     {
         ShadowSprite.Visible = false;
+        IsShowShadow = false;
     }
 
     /// <summary>
@@ -591,7 +599,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <summary>
     /// 归属区域发生改变
     /// </summary>
-    protected virtual void OnAffiliationChange()
+    /// <param name="prevArea">上一个区域, 注意可能为空</param>
+    protected virtual void OnAffiliationChange(AffiliationArea prevArea)
     {
     }
 
@@ -1172,14 +1181,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         OnDestroy();
 
         var arr = _components.ToArray();
-        for (int i = 0; i < arr.Length; i++)
+        for (var i = 0; i < arr.Length; i++)
         {
             arr[i].Value?.Destroy();
-        }
-        
-        if (AffiliationArea != null)
-        {
-            AffiliationArea.RemoveItem(this);
         }
     }
 
@@ -1194,6 +1198,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// <summary>
     /// 继承指定物体的运动速率
     /// </summary>
+    /// <param name="other">目标对象</param>
+    /// <param name="scale">继承的速率缩放</param>
     public void InheritVelocity(ActivityObject other, float scale = 0.5f)
     {
         MoveController.AddVelocity(other.Velocity * scale);
@@ -1403,85 +1409,25 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
         _playHit = true;
         _playHitSchedule = 0;
     }
-
-    /// <summary>
-    /// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task, SignalAwaiter
-    /// </summary>
+    
     public long StartCoroutine(IEnumerator able)
     {
         return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
     }
-
-    /// <summary>
-    /// 根据协程 id 停止协程
-    /// </summary>
+    
     public void StopCoroutine(long coroutineId)
     {
         ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
     }
-    
-    /// <summary>
-    /// 停止所有协程
-    /// </summary>
+
+    public bool IsCoroutineOver(long coroutineId)
+    {
+        return ProxyCoroutineHandler.ProxyIsCoroutineOver(ref _coroutineList, coroutineId);
+    }
+
     public void StopAllCoroutine()
     {
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
-    }
-
-    /// <summary>
-    /// 延时指定时间调用一个回调函数
-    /// </summary>
-    public void CallDelay(float delayTime, Action cb)
-    {
-        StartCoroutine(_CallDelay(delayTime, cb));
-    }
-    
-    /// <summary>
-    /// 延时指定时间调用一个回调函数
-    /// </summary>
-    public void CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
-    {
-        StartCoroutine(_CallDelay(delayTime, cb, arg1));
-    }
-    
-    /// <summary>
-    /// 延时指定时间调用一个回调函数
-    /// </summary>
-    public void CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
-    {
-        StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2));
-    }
-    
-    /// <summary>
-    /// 延时指定时间调用一个回调函数
-    /// </summary>
-    public void CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
-    {
-        StartCoroutine(_CallDelay(delayTime, cb, arg1, arg2, arg3));
-    }
-
-    private IEnumerator _CallDelay(float delayTime, Action cb)
-    {
-        yield return new WaitForSeconds(delayTime);
-        cb();
-    }
-    
-    private IEnumerator _CallDelay<T1>(float delayTime, Action<T1> cb, T1 arg1)
-    {
-        yield return new WaitForSeconds(delayTime);
-        cb(arg1);
-    }
-    
-    private IEnumerator _CallDelay<T1, T2>(float delayTime, Action<T1, T2> cb, T1 arg1, T2 arg2)
-    {
-        yield return new WaitForSeconds(delayTime);
-        cb(arg1, arg2);
-    }
-    
-    private IEnumerator _CallDelay<T1, T2, T3>(float delayTime, Action<T1, T2, T3> cb, T1 arg1, T2 arg2, T3 arg3)
-    {
-        yield return new WaitForSeconds(delayTime);
-        cb(arg1,arg2, arg3);
     }
 
     /// <summary>
@@ -1490,6 +1436,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
     /// </summary>
     public void BecomesStaticImage()
     {
+        if (_processingBecomesStaticImage)
+        {
+            return;
+        }
+        
         if (AffiliationArea == null)
         {
             GD.PrintErr($"调用函数: BecomesStaticImage() 失败, 物体{Name}没有归属区域, 无法确定绘制到哪个ImageCanvas上, 直接执行销毁");
@@ -1497,16 +1448,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy
             return;
         }
 
-        if (_processingBecomesStaticImage)
-        {
-            return;
-        }
-
         _processingBecomesStaticImage = true;
         EnableBehavior = false;
         var staticImageCanvas = AffiliationArea.RoomInfo.StaticImageCanvas;
-        var (x, y) = staticImageCanvas.ToImageCanvasPosition(GlobalPosition);
-        staticImageCanvas.CanvasSprite.DrawActivityObjectInCanvas(this, x, y, () =>
+        var position = staticImageCanvas.ToImageCanvasPosition(GlobalPosition);
+        staticImageCanvas.CanvasSprite.DrawActivityObjectInCanvas(this, position.X, position.Y, () =>
         {
             Destroy();
         });

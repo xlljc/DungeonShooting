@@ -8,7 +8,13 @@ using System.Linq;
 public class WeightRandom
 {
     private (float, int)[] _prepareAdRewardWeight;
+    private SeedRandom _random;
 
+    public WeightRandom(SeedRandom random)
+    {
+        _random = random;
+    }
+    
     /// <summary>
     /// 初始化权重列表
     /// </summary>
@@ -59,7 +65,7 @@ public class WeightRandom
     /// </summary>
     public int GetRandomIndex()
     {
-        var randomNum = Utils.RandomDouble() * _prepareAdRewardWeight.Length;
+        var randomNum = _random.RandomDouble() * _prepareAdRewardWeight.Length;
         var intRan = (int)Math.Floor(randomNum);
         var p = _prepareAdRewardWeight[intRan];
         if (p.Item1 > randomNum - intRan)

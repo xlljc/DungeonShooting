@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 /// <summary>
 /// 生成地牢的配置
 /// </summary>
@@ -13,4 +15,19 @@ public class DungeonConfig
     /// 房间数量
     /// </summary>
     public int RoomCount = 20;
+
+    /// <summary>
+    /// 是否指定了房间
+    /// </summary>
+    public bool HasDesignatedRoom => DesignatedRoom != null && DesignatedRoom.Count > 0;
+    
+    /// <summary>
+    /// 指定房间类型
+    /// </summary>
+    public DungeonRoomType DesignatedType;
+    
+    /// <summary>
+    /// 指定房间列表
+    /// </summary>
+    public List<DungeonRoomSplit> DesignatedRoom;
 }

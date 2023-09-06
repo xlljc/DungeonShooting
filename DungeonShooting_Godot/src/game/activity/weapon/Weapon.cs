@@ -753,7 +753,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                         if (!Attribute.ContinuousShoot)
                         {
                             _continuousCount =
-                                Utils.RandomRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
+                                Utils.Random.RandomRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
                         }
                     }
 
@@ -873,7 +873,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         //减子弹数量
         if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
         {
-            if (Utils.RandomRangeFloat(0, 1) < _weaponAttribute.AiAmmoConsumptionProbability) //触发消耗弹药
+            if (Utils.Random.RandomRangeFloat(0, 1) < _weaponAttribute.AiAmmoConsumptionProbability) //触发消耗弹药
             {
                 CurrAmmo -= UseAmmoCount();
             }
@@ -920,14 +920,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         var angle = new Vector2(GameConfig.ScatteringDistance, CurrScatteringRange).Angle();
 
         //先算武器口方向
-        var tempRotation = Utils.RandomRangeFloat(-angle, angle);
+        var tempRotation = Utils.Random.RandomRangeFloat(-angle, angle);
         var tempAngle = Mathf.RadToDeg(tempRotation);
 
         //开火时枪口角度
         var fireRotation = tempRotation;
         
         //开火发射的子弹数量
-        var bulletCount = Utils.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
+        var bulletCount = Utils.Random.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
         if (Master != null)
         {
             bulletCount = Master.RoleState.CallCalcBulletCountEvent(this, bulletCount);
@@ -952,7 +952,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         //武器身位置
         var max = Mathf.Abs(Mathf.Max(Attribute.MaxBacklash, Attribute.MinBacklash));
         _currBacklashLength = Mathf.Clamp(
-            _currBacklashLength - Utils.RandomRangeFloat(Attribute.MinBacklash, Attribute.MaxBacklash),
+            _currBacklashLength - Utils.Random.RandomRangeFloat(Attribute.MinBacklash, Attribute.MaxBacklash),
             -max, max
         );
         Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
@@ -1276,7 +1276,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             }
             else
             {
-                CallDelay(Attribute.BeLoadedSoundDelayTime, PlaySpriteAnimation, AnimatorNames.BeLoaded);
+                this.CallDelay(Attribute.BeLoadedSoundDelayTime, PlaySpriteAnimation, AnimatorNames.BeLoaded);
             }
         }
 
@@ -1294,7 +1294,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         //创建一个弹壳
         if (Attribute.ThrowShellDelayTime > 0)
         {
-            CallDelay(Attribute.ThrowShellDelayTime, () => ThrowShell(Attribute.ShellId, speedScale));
+            this.CallDelay(Attribute.ThrowShellDelayTime, () => ThrowShell(Attribute.ShellId, speedScale));
         }
         else if (Attribute.ThrowShellDelayTime == 0)
         {
@@ -1521,7 +1521,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                 //播放互动效果
                 if (flag)
                 {
-                    Throw(GlobalPosition, 0, Utils.RandomRangeInt(20, 50), Vector2.Zero, Utils.RandomRangeInt(-180, 180));
+                    Throw(GlobalPosition, 0, Utils.Random.RandomRangeInt(20, 50), Vector2.Zero, Utils.Random.RandomRangeInt(-180, 180));
                     //没有子弹了, 停止播放泛白效果
                     if (IsTotalAmmoEmpty())
                     {
@@ -1582,7 +1582,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         startPosition -= GripPoint.Position.Rotated(rotation);
         var startHeight = -master.MountPoint.Position.Y;
         var velocity = new Vector2(20, 0).Rotated(rotation);
-        var yf = Utils.RandomRangeInt(50, 70);
+        var yf = Utils.Random.RandomRangeInt(50, 70);
         Throw(startPosition, startHeight, yf, velocity, 0);
         
         //继承role的移动速度
@@ -1613,7 +1613,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     private void Active()
     {
         //调整阴影
-        ShadowOffset = new Vector2(0, Master.GlobalPosition.Y - GlobalPosition.Y);
+        //ShadowOffset = new Vector2(0, Master.GlobalPosition.Y - GlobalPosition.Y);
+        ShadowOffset = new Vector2(0, -Master.MountPoint.Position.Y);
         //枪口默认抬起角度
         RotationDegrees = -Attribute.DefaultAngle;
         ShowShadowSprite();
@@ -1719,10 +1720,10 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         var startPos = ShellPoint.GlobalPosition;
         var startHeight = -shellPosition.Y;
         startPos.Y += startHeight;
-        var direction = GlobalRotationDegrees + Utils.RandomRangeInt(-30, 30) + 180;
-        var verticalSpeed = Utils.RandomRangeInt((int)(60 * speedScale), (int)(120 * speedScale));
-        var velocity = new Vector2(Utils.RandomRangeInt((int)(20 * speedScale), (int)(60 * speedScale)), 0).Rotated(direction * Mathf.Pi / 180);
-        var rotate = Utils.RandomRangeInt((int)(-720 * speedScale), (int)(720 * speedScale));
+        var direction = GlobalRotationDegrees + Utils.Random.RandomRangeInt(-30, 30) + 180;
+        var verticalSpeed = Utils.Random.RandomRangeInt((int)(60 * speedScale), (int)(120 * speedScale));
+        var velocity = new Vector2(Utils.Random.RandomRangeInt((int)(20 * speedScale), (int)(60 * speedScale)), 0).Rotated(direction * Mathf.Pi / 180);
+        var rotate = Utils.Random.RandomRangeInt((int)(-720 * speedScale), (int)(720 * speedScale));
         var shell = Create(shellId);
         shell.Rotation = (Master != null ? Master.MountPoint.RealRotation : Rotation);
         shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
@@ -1744,10 +1745,10 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     protected Bullet ShootBullet(float fireRotation, string bulletId)
     {
-        var speed = Utils.RandomRangeFloat(Attribute.BulletMinSpeed, Attribute.BulletMaxSpeed);
-        var distance = Utils.RandomRangeFloat(Attribute.BulletMinDistance, Attribute.BulletMaxDistance);
+        var speed = Utils.Random.RandomRangeFloat(Attribute.BulletMinSpeed, Attribute.BulletMaxSpeed);
+        var distance = Utils.Random.RandomRangeFloat(Attribute.BulletMinDistance, Attribute.BulletMaxDistance);
         var deviationAngle =
-            Utils.RandomRangeFloat(Attribute.BulletMinDeviationAngle, Attribute.BulletMaxDeviationAngle);
+            Utils.Random.RandomRangeFloat(Attribute.BulletMinDeviationAngle, Attribute.BulletMaxDeviationAngle);
         if (Master != null)
         {
             speed = Master.RoleState.CallCalcBulletSpeedEvent(this, speed);

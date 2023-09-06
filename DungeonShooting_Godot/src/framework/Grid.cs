@@ -1,5 +1,4 @@
 
-using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -27,6 +26,14 @@ public class Grid<T>
 
         return false;
     }
+    
+    /// <summary>
+    /// 返回指定xy位置是否有数据
+    /// </summary>
+    public bool Contains(Vector2I pos)
+    {
+        return Contains(pos.X, pos.Y);
+    }
 
     /// <summary>
     /// 设置指定xy位置的数据
@@ -46,16 +53,48 @@ public class Grid<T>
     }
 
     /// <summary>
+    /// 设置指定坐标的数据
+    /// </summary>
+    public void Set(Vector2I pos, T data)
+    {
+        Set(pos.X, pos.Y, data);
+    }
+
+    /// <summary>
     /// 获取指定xy位置的数据
     /// </summary>
     public T Get(int x, int y)
     {
         if (_map.TryGetValue(x, out var value))
         {
-            return value[y];
+            if (value.TryGetValue(y, out var v))
+            {
+                return v;
+            }
         }
 
         return default;
+    }
+
+    /// <summary>
+    /// 获取指定坐标的数据
+    /// </summary>
+    public T Get(Vector2I pos)
+    {
+        return Get(pos.X, pos.Y);
+    }
+
+    /// <summary>
+    /// 移除指定xy位置存储的数据
+    /// </summary>
+    public bool Remove(int x, int y)
+    {
+        if (_map.TryGetValue(x, out var value))
+        {
+            return value.Remove(y);
+        }
+
+        return false;
     }
     
     /// <summary>
@@ -64,10 +103,10 @@ public class Grid<T>
     /// <param name="pos">起点位置</param>
     /// <param name="size">区域大小</param>
     /// <param name="data">数据</param>
-    public void AddRect(Vector2 pos, Vector2 size, T data)
+    public void SetRect(Vector2I pos, Vector2I size, T data)
     {
-        var x = (int)pos.X;
-        var y = (int)pos.Y;
+        var x = pos.X;
+        var y = pos.Y;
         for (var i = 0; i < size.X; i++)
         {
             for (var j = 0; j < size.Y; j++)
@@ -91,10 +130,10 @@ public class Grid<T>
     /// </summary>
     /// <param name="pos">起点位置</param>
     /// <param name="size">区域大小</param>
-    public void RemoveRect(Vector2 pos, Vector2 size)
+    public void RemoveRect(Vector2I pos, Vector2I size)
     {
-        var x = (int)pos.X;
-        var y = (int)pos.Y;
+        var x = pos.X;
+        var y = pos.Y;
         for (var i = 0; i < size.X; i++)
         {
             for (var j = 0; j < size.Y; j++)
@@ -124,12 +163,12 @@ public class Grid<T>
     /// </summary>
     /// <param name="pos">起点位置</param>
     /// <param name="size">区域大小</param>
-    public bool RectCollision(Vector2 pos, Vector2 size)
+    public bool RectCollision(Vector2I pos, Vector2I size)
     {
-        var x = (int)pos.X;
-        var y = (int)pos.Y;
-        var w = (int)size.X;
-        var h = (int)size.Y;
+        var x = pos.X;
+        var y = pos.Y;
+        var w = size.X;
+        var h = size.Y;
         //先判断四个角
         if (Contains(x, y) || Contains(x + w - 1, y) || Contains(x, y + h - 1) || Contains(x + w - 1, y + h - 1))
         {

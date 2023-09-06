@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -21,6 +22,9 @@ public static partial class UiManager
 
     private static Dictionary<string, List<UiBase>> _recordUiMap = new Dictionary<string, List<UiBase>>();
 
+    /// <summary>
+    /// 初始化Ui管理器
+    /// </summary>
     public static void Init()
     {
         if (_init)
@@ -78,7 +82,7 @@ public static partial class UiManager
     }
 
     /// <summary>
-    /// 记录ui的创建或者销毁
+    /// 记录ui的创建或者销毁, 子 ui 通过 UiBase.RecordNestedUi() 来记录
     /// </summary>
     public static void RecordUi(UiBase uiBase, RecordType type)
     {
@@ -109,15 +113,47 @@ public static partial class UiManager
     }
 
     /// <summary>
-    /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
+    /// 根据Ui资源路径创建Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/><br/>
+    /// 该函数不会自动打开Ui, 需要手动调用 ShowUi() 函数来显示Ui
     /// </summary>
-    public static UiBase OpenUi(string uiName)
+    /// <param name="uiName">Ui名称</param>
+    /// <param name="prevUi">上一级Ui, 用于UIBase.OpenPrevUi()函数返回上一级Ui</param>
+    public static UiBase CreateUi(string uiName, UiBase prevUi = null)
     {
-        var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
+        if (!_init)
+        {
+            throw new Exception("未初始化 UiManager!, 请先调用 UiManager.Init() 函数!");
+        }
+        var packedScene = ResourceLoader.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
+        uiBase.Visible = false;
+        uiBase.PrevUi = prevUi;
         var canvasLayer = GetUiLayer(uiBase.Layer);
         canvasLayer.AddChild(uiBase);
         uiBase.OnCreateUi();
+        uiBase.OnInitNestedUi();
+        return uiBase;
+    }
+
+    /// <summary>
+    /// 根据Ui资源路径创建Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/><br/>
+    /// 该函数不会自动打开Ui, 需要手动调用 ShowUi() 函数来显示Ui
+    /// </summary>
+    /// <param name="uiName">Ui名称</param>
+    /// <param name="prevUi">上一级Ui, 用于UIBase.OpenPrevUi()函数返回上一级Ui</param>
+    public static T CreateUi<T>(string uiName, UiBase prevUi = null) where T : UiBase
+    {
+        return (T)CreateUi(uiName, prevUi);
+    }
+
+    /// <summary>
+    /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
+    /// </summary>
+    /// <param name="uiName">Ui名称</param>
+    /// <param name="prevUi">上一级Ui, 用于UIBase.OpenPrevUi()函数返回上一级Ui</param>
+    public static UiBase OpenUi(string uiName, UiBase prevUi = null)
+    {
+        var uiBase = CreateUi(uiName, prevUi);
         uiBase.ShowUi();
         return uiBase;
     }
@@ -125,17 +161,20 @@ public static partial class UiManager
     /// <summary>
     /// 根据Ui资源路径打开Ui, 并返回Ui实例, 该Ui资源的场景根节点必须继承<see cref="UiBase"/>
     /// </summary>
-    public static T OpenUi<T>(string uiName) where T : UiBase
+    /// <param name="uiName">Ui名称</param>
+    /// <param name="prevUi">上一级Ui, 用于UIBase.OpenPrevUi()函数返回上一级Ui</param>
+    public static T OpenUi<T>(string uiName, UiBase prevUi = null) where T : UiBase
     {
-        return (T)OpenUi(uiName);
+        return (T)OpenUi(uiName, prevUi);
     }
+
 
     /// <summary>
     /// 销毁指定Ui
     /// </summary>
-    public static void DisposeUi(UiBase uiBase)
+    public static void DestroyUi(UiBase uiBase)
     {
-        uiBase.DisposeUi();
+        uiBase.Destroy();
     }
 
     /// <summary>
@@ -149,7 +188,7 @@ public static partial class UiManager
     /// <summary>
     /// 销毁所有Ui
     /// </summary>
-    public static void DisposeAllUi()
+    public static void DestroyAllUi()
     {
         var map = new Dictionary<string, List<UiBase>>();
         foreach (var item in _recordUiMap)
@@ -161,7 +200,7 @@ public static partial class UiManager
         {
             foreach (var uiBase in item.Value)
             {
-                uiBase.DisposeUi();
+                uiBase.Destroy();
             }
         }
     }
@@ -202,5 +241,18 @@ public static partial class UiManager
         }
 
         return new T[0];
+    }
+
+    /// <summary>
+    /// 获取Ui实例数量
+    /// </summary>
+    public static int GetUiInstanceCount(string uiName)
+    {
+        if (_recordUiMap.TryGetValue(uiName, out var list))
+        {
+            return list.Count;
+        }
+
+        return 0;
     }
 }

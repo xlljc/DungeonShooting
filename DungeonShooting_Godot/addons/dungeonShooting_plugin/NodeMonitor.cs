@@ -12,14 +12,28 @@ public class NodeMonitor
 {
     private class SceneNode : IEquatable<SceneNode>
     {
-        public SceneNode(string type, string name)
+        public SceneNode(string type, string name, string scriptPath)
         {
             Type = type;
             Name = name;
+            ScriptPath = scriptPath;
         }
 
+        /// <summary>
+        /// 节点类型
+        /// </summary>
         public string Type;
+        /// <summary>
+        /// 节点名称
+        /// </summary>
         public string Name;
+        /// <summary>
+        /// 节点脚本路径
+        /// </summary>
+        public string ScriptPath;
+        /// <summary>
+        /// 子节点
+        /// </summary>
         public List<SceneNode> Children = new List<SceneNode>();
 
         public bool Equals(SceneNode other)
@@ -29,7 +43,7 @@ public class NodeMonitor
                 return false;
             }
 
-            if (other.Name != Name || other.Type != Type)
+            if (other.Name != Name || other.Type != Type || other.ScriptPath != ScriptPath)
             {
                 return false;
             }
@@ -127,7 +141,17 @@ public class NodeMonitor
     
     private SceneNode ParseNodeTree(Node node)
     {
-        var uiNode = new SceneNode(node.GetType().FullName, node.Name);
+        var script = node.GetScript().As<CSharpScript>();
+        string scriptPath;
+        if (script == null)
+        {
+            scriptPath = null;
+        }
+        else
+        {
+            scriptPath = script.ResourcePath;
+        }
+        var uiNode = new SceneNode(node.GetType().FullName, node.Name, scriptPath);
         var count = node.GetChildCount();
         for (var i = 0; i < count; i++)
         {

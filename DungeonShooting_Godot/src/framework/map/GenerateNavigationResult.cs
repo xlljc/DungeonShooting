@@ -4,7 +4,7 @@
 /// </summary>
 public class GenerateNavigationResult
 {
-    public GenerateNavigationResult(bool success, NavigationPointInterleavingException exception = null)
+    public GenerateNavigationResult(bool success, NavigationPointException exception = null)
     {
         Success = success;
         Exception = exception;
@@ -18,5 +18,5 @@ public class GenerateNavigationResult
     /// <summary>
     /// 异常信息
     /// </summary>
-    public NavigationPointInterleavingException Exception;
+    public NavigationPointException Exception;
 }

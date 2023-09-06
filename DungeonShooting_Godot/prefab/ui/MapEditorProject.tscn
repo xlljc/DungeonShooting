@@ -1,0 +1,241 @@
+[gd_scene load_steps=9 format=3 uid="uid://dh7y03tq6v0a2"]
+
+[ext_resource type="Script" path="res://src/game/ui/mapEditorProject/MapEditorProjectPanel.cs" id="1_5aioo"]
+[ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_v0ry0"]
+[ext_resource type="Texture2D" uid="uid://blfvsup876agh" path="res://resource/sprite/ui/commonIcon/Search.png" id="3_f5h8c"]
+[ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="4_okvq0"]
+[ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="5_rcbyx"]
+[ext_resource type="Texture2D" uid="uid://dggb6p4sdmfry" path="res://resource/sprite/ui/commonIcon/Edit.png" id="6_qalh0"]
+[ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="7_lnry3"]
+[ext_resource type="Texture2D" uid="uid://c4ltpf5a3egu1" path="res://resource/sprite/ui/commonIcon/Error_mini.png" id="9_xrt38"]
+
+[node name="MapEditorProject" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5aioo")
+metadata/_edit_horizontal_guides_ = [449.0]
+
+[node name="Bg" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Bg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Head" type="Panel" parent="Bg/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="Back" type="Button" parent="Bg/VBoxContainer/Head"]
+layout_mode = 2
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 62.0
+offset_bottom = 68.0
+size_flags_horizontal = 0
+icon = ExtResource("2_v0ry0")
+icon_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Bg/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Panel" type="Panel" parent="Bg/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+
+[node name="GroupSearchInput" type="LineEdit" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "搜索"
+
+[node name="GroupSearchButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("3_f5h8c")
+
+[node name="GroupAddButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("4_okvq0")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GroupButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "testGroup1"
+alignment = 0
+text_overrun_behavior = 3
+
+[node name="SelectTexture" type="NinePatchRect" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer/GroupButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_rcbyx")
+region_rect = Rect2(0, 0, 36, 36)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Panel2" type="Panel" parent="Bg/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 8.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+
+[node name="RoomSearchInput" type="LineEdit" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+placeholder_text = "搜索"
+
+[node name="RoomTypeButton" type="OptionButton" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="RoomSearchButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("3_f5h8c")
+
+[node name="RoomAddButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("4_okvq0")
+
+[node name="RoomEditButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("6_qalh0")
+
+[node name="RoomDeleteButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("7_lnry3")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RoomButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(200, 285)
+layout_mode = 2
+
+[node name="PreviewImage" type="TextureRect" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer/RoomButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -87.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch_mode = 5
+
+[node name="RoomName" type="Label" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer/RoomButton"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -86.0
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Room1"
+horizontal_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="RoomType" type="Label" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer/RoomButton"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -43.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "战斗"
+horizontal_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="SelectTexture" type="NinePatchRect" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer/RoomButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_rcbyx")
+region_rect = Rect2(0, 0, 36, 36)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="ErrorTexture" type="TextureRect" parent="Bg/VBoxContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/ScrollContainer/RoomButton"]
+layout_mode = 0
+offset_left = 157.0
+offset_top = 158.0
+offset_right = 197.0
+offset_bottom = 198.0
+texture = ExtResource("9_xrt38")
