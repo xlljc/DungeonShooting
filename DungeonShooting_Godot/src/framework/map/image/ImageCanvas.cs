@@ -106,6 +106,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
         if (item.RenderWidth >= RenderViewportSize.X)
         {
             GD.PrintErr($"图像旋转后的宽度大于{RenderViewportSize.X}, 不支持绘制到 ImageCanvas 下!");
+            item.SrcImage.Dispose();
             return;
         }
         

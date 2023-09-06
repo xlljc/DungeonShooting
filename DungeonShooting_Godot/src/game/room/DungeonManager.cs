@@ -2,8 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Config;
 using Godot;
 
 /// <summary>
@@ -14,12 +12,12 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 起始房间
     /// </summary>
-    public RoomInfo StartRoom => _dungeonGenerator?.StartRoom;
+    public RoomInfo StartRoomInfo => _dungeonGenerator?.StartRoomInfo;
     
     /// <summary>
     /// 当前玩家所在的房间
     /// </summary>
-    public RoomInfo ActiveRoom => Player.Current?.AffiliationArea?.RoomInfo;
+    public RoomInfo ActiveRoomInfo => Player.Current?.AffiliationArea?.RoomInfo;
     
     /// <summary>
     /// 当前玩家所在的区域
@@ -31,13 +29,27 @@ public partial class DungeonManager : Node2D
     /// </summary>
     public bool IsInDungeon { get; private set; }
 
-    private DungeonConfig _config;
-    private DungeonTile _dungeonTile;
+    /// <summary>
+    /// 是否是编辑器模式
+    /// </summary>
+    public bool IsEditorMode { get; private set; }
+    
+    /// <summary>
+    /// 当前使用的配置
+    /// </summary>
+    public DungeonConfig CurrConfig { get; private set; }
+    
+    /// <summary>
+    /// 当前使用的世界对象
+    /// </summary>
+    public World World { get; private set; }
+    
+    private UiBase _prevUi;
+    private DungeonTileMap _dungeonTileMap;
     private AutoTileConfig _autoTileConfig;
     private DungeonGenerator _dungeonGenerator;
     //房间内所有静态导航网格数据
     private List<NavigationPolygonData> _roomStaticNavigationList;
-    private World _world;
     
     //用于检查房间敌人的计时器
     private float _checkEnemyTimer = 0;
@@ -55,8 +67,23 @@ public partial class DungeonManager : Node2D
     /// </summary>
     public void LoadDungeon(DungeonConfig config, Action finish = null)
     {
-        _config = config;
+        IsEditorMode = false;
+        CurrConfig = config;
         GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(finish));
+    }
+    
+    
+    /// <summary>
+    /// 重启地牢
+    /// </summary>
+    public void RestartDungeon(DungeonConfig config)
+    {
+        IsEditorMode = false;
+        CurrConfig = config;
+        ExitDungeon(() =>
+        {
+            LoadDungeon(CurrConfig);
+        });
     }
 
     /// <summary>
@@ -67,8 +94,61 @@ public partial class DungeonManager : Node2D
         IsInDungeon = false;
         GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(finish));
     }
+    
+    //-------------------------------------------------------------------------------------
 
-    public override void _PhysicsProcess(double delta)
+    /// <summary>
+    /// 在编辑器模式下进入地牢
+    /// </summary>
+    /// <param name="config">地牢配置</param>
+    public void EditorPlayDungeon(DungeonConfig config)
+    {
+        IsEditorMode = true;
+        CurrConfig = config;
+        if (_prevUi != null)
+        {
+            _prevUi.HideUi();
+        }
+        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(null));
+    }
+    
+    /// <summary>
+    /// 在编辑器模式下进入地牢
+    /// </summary>
+    /// <param name="prevUi">记录上一个Ui</param>
+    /// <param name="config">地牢配置</param>
+    public void EditorPlayDungeon(UiBase prevUi, DungeonConfig config)
+    {
+        IsEditorMode = true;
+        CurrConfig = config;
+        _prevUi = prevUi;
+        if (_prevUi != null)
+        {
+            _prevUi.HideUi();
+        }
+        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(null));
+    }
+
+    /// <summary>
+    /// 在编辑器模式下退出地牢, 并且打开上一个Ui
+    /// </summary>
+    public void EditorExitDungeon()
+    {
+        IsInDungeon = false;
+        GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(() =>
+        {
+            IsEditorMode = false;
+            //显示上一个Ui
+            if (_prevUi != null)
+            {
+                _prevUi.ShowUi();
+            }
+        }));
+    }
+    
+    //-------------------------------------------------------------------------------------
+
+    public override void _Process(double delta)
     {
         if (IsInDungeon)
         {
@@ -79,13 +159,8 @@ public partial class DungeonManager : Node2D
                 //检查房间内的敌人存活状况
                 OnCheckEnemy();
             }
-        }
-    }
-
-    public override void _Process(double delta)
-    {
-        if (IsInDungeon)
-        {
+            
+            //更新敌人视野
             UpdateEnemiesView();
             if (GameApplication.Instance.Debug)
             {
@@ -101,31 +176,31 @@ public partial class DungeonManager : Node2D
         UiManager.Open_Loading();
         yield return 0;
         //创建世界场景
-        _world = GameApplication.Instance.CreateNewWorld();
+        World = GameApplication.Instance.CreateNewWorld();
         yield return new WaitForFixedProcess(10);
         //生成地牢房间
-        _dungeonGenerator = new DungeonGenerator(_config);
+        _dungeonGenerator = new DungeonGenerator(CurrConfig);
         _dungeonGenerator.Generate();
         yield return 0;
         
         //填充地牢
         _autoTileConfig = new AutoTileConfig();
-        _dungeonTile = new DungeonTile(_world.TileRoot);
-        _dungeonTile.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoom, _dungeonGenerator.Random);
+        _dungeonTileMap = new DungeonTileMap(World.TileRoot);
+        _dungeonTileMap.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoomInfo, _dungeonGenerator.Random);
         yield return 0;
         
         //生成寻路网格， 这一步操作只生成过道的导航
-        _dungeonTile.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
+        _dungeonTileMap.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
         yield return 0;
         //挂载过道导航区域
-        _dungeonTile.MountNavigationPolygon(_world.TileRoot);
+        _dungeonTileMap.MountNavigationPolygon(World.TileRoot);
         yield return 0;
         //过道导航区域数据
         _roomStaticNavigationList = new List<NavigationPolygonData>();
-        _roomStaticNavigationList.AddRange(_dungeonTile.GetPolygonData());
+        _roomStaticNavigationList.AddRange(_dungeonTileMap.GetPolygonData());
         yield return 0;
         //门导航区域数据
-        _roomStaticNavigationList.AddRange(_dungeonTile.GetConnectDoorPolygonData());
+        _roomStaticNavigationList.AddRange(_dungeonTileMap.GetConnectDoorPolygonData());
         yield return new WaitForFixedProcess(10);
         //初始化所有房间
         _dungeonGenerator.EachRoom(InitRoom);
@@ -135,7 +210,7 @@ public partial class DungeonManager : Node2D
         //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
         //初始房间创建玩家标记
-        var playerBirthMark = StartRoom.ActivityMarks.FirstOrDefault(mark => mark.Type == ActivityIdPrefix.ActivityPrefixType.Player);
+        var playerBirthMark = StartRoomInfo.RoomPreinstall.GetPlayerBirthMark();
         //创建玩家
         var player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
         if (playerBirthMark != null)
@@ -146,6 +221,9 @@ public partial class DungeonManager : Node2D
         player.Name = "Player";
         player.PutDown(RoomLayerEnum.YSortLayer);
         Player.SetCurrentPlayer(player);
+        
+        //地牢加载即将完成
+        _dungeonGenerator.EachRoom(info => info.OnReady());
 
         //玩家手上添加武器
         //player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
@@ -167,9 +245,10 @@ public partial class DungeonManager : Node2D
         EventManager.EmitEvent(EventEnum.OnEnterDungeon);
         
         IsInDungeon = true;
+        QueueRedraw();
         yield return 0;
         //关闭 loading UI
-        UiManager.Dispose_Loading();
+        UiManager.Destroy_Loading();
         if (finish != null)
         {
             finish();
@@ -181,11 +260,11 @@ public partial class DungeonManager : Node2D
         //打开 loading UI
         UiManager.Open_Loading();
         yield return 0;
-        _world.Pause = true;
+        World.Pause = true;
         yield return 0;
         _dungeonGenerator.EachRoom(DisposeRoomInfo);
         yield return 0;
-        _dungeonTile = null;
+        _dungeonTileMap = null;
         _autoTileConfig = null;
         _dungeonGenerator = null;
         _roomStaticNavigationList.Clear();
@@ -194,16 +273,17 @@ public partial class DungeonManager : Node2D
         UiManager.Hide_RoomUI();
         yield return new WaitForFixedProcess(10);
         Player.SetCurrentPlayer(null);
-        _world = null;
+        World = null;
         GameApplication.Instance.DestroyWorld();
         yield return new WaitForFixedProcess(10);
+        QueueRedraw();
         //鼠标还原
-        GameApplication.Instance.Cursor.SetGuiMode(false);
+        GameApplication.Instance.Cursor.SetGuiMode(true);
         //派发退出地牢事件
         EventManager.EmitEvent(EventEnum.OnExitDungeon);
         yield return 0;
         //关闭 loading UI
-        UiManager.Dispose_Loading();
+        UiManager.Destroy_Loading();
         if (finish != null)
         {
             finish();
@@ -226,34 +306,31 @@ public partial class DungeonManager : Node2D
     //挂载房间导航区域
     private void MountNavFromRoomInfo(RoomInfo roomInfo)
     {
-        var polygonArray = roomInfo.RoomSplit.RoomInfo.NavigationList.ToArray();
+        var polygonArray = roomInfo.RoomSplit.TileInfo.NavigationList;
         var polygon = new NavigationPolygon();
         var offset = roomInfo.GetOffsetPosition();
-        for (var i = 0; i < polygonArray.Length; i++)
+        for (var i = 0; i < polygonArray.Count; i++)
         {
             var navigationPolygonData = polygonArray[i];
-            var polygonPointArray = navigationPolygonData.ConvertPointsToVector2Array();
+            var tempPosArray = navigationPolygonData.GetPoints();
+            var polygonPointArray = new Vector2[tempPosArray.Length];
             //这里的位置需要加上房间位置
-            for (var j = 0; j < polygonPointArray.Length; j++)
+            for (var j = 0; j < tempPosArray.Length; j++)
             {
-                polygonPointArray[j] = polygonPointArray[j] + roomInfo.GetWorldPosition() - offset;
+                polygonPointArray[j] = tempPosArray[j] + roomInfo.GetWorldPosition() - offset;
             }
             polygon.AddOutline(polygonPointArray);
-            
-            var points = new List<SerializeVector2>();
-            for (var j = 0; j < polygonPointArray.Length; j++)
-            {
-                points.Add(new SerializeVector2(polygonPointArray[j]));
-            }
-            
+
             //存入汇总列表
-            _roomStaticNavigationList.Add(new NavigationPolygonData(navigationPolygonData.Type, points));
+            var polygonData = new NavigationPolygonData(navigationPolygonData.Type);
+            polygonData.SetPoints(polygonPointArray);
+            _roomStaticNavigationList.Add(polygonData);
         }
         polygon.MakePolygonsFromOutlines();
         var navigationPolygon = new NavigationRegion2D();
         navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
         navigationPolygon.NavigationPolygon = polygon;
-        _world.TileRoot.AddChild(navigationPolygon);
+        World.TileRoot.AddChild(navigationPolygon);
     }
 
     //创建门
@@ -303,7 +380,7 @@ public partial class DungeonManager : Node2D
             (roomInfo.Size - new Vector2I(2, 2)) * GameConfig.TileCellSize));
         
         roomInfo.AffiliationArea = affiliation;
-        _world.AffiliationAreaRoot.AddChild(affiliation);
+        World.AffiliationAreaRoot.AddChild(affiliation);
     }
 
     //创建静态精灵画布
@@ -397,7 +474,7 @@ public partial class DungeonManager : Node2D
         maxX += GameConfig.TileCellSize;
         maxY += GameConfig.TileCellSize;
         var staticSpriteCanvas = new RoomStaticImageCanvas(
-            _world.StaticSpriteRoot,
+            World.StaticSpriteRoot,
             new Vector2I(minX, minY),
             maxX - minX, maxY - minY
         );
@@ -411,12 +488,12 @@ public partial class DungeonManager : Node2D
     private void OnPlayerFirstEnterRoom(object o)
     {
         var room = (RoomInfo)o;
-        room.BeReady();
+        room.OnFirstEnter();
         //如果关门了, 那么房间外的敌人就会丢失目标
         if (room.IsSeclusion)
         {
             var playerAffiliationArea = Player.Current.AffiliationArea;
-            foreach (var enemy in _world.Enemy_InstanceList)
+            foreach (var enemy in World.Enemy_InstanceList)
             {
                 //不与玩家处于同一个房间
                 if (enemy.AffiliationArea != playerAffiliationArea)
@@ -442,15 +519,15 @@ public partial class DungeonManager : Node2D
     /// </summary>
     private void OnCheckEnemy()
     {
-        var activeRoom = ActiveRoom;
-        if (activeRoom != null)// && //activeRoom.IsSeclusion)
+        var activeRoom = ActiveRoomInfo;
+        if (activeRoom != null)
         {
-            if (activeRoom.IsSeclusion) //房间处于关上状态
+            if (activeRoom.RoomPreinstall.IsRunWave) //正在生成标记
             {
-                if (activeRoom.IsCurrWaveOver()) //所有标记执行完成
+                if (activeRoom.RoomPreinstall.IsCurrWaveOver()) //所有标记执行完成
                 {
-                    //是否有存活的敌人
-                    var flag = ActiveAffiliationArea.ExistIncludeItem(
+                    //房间内是否有存活的敌人
+                    var flag = ActiveAffiliationArea.ExistEnterItem(
                         activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
                     );
                     //GD.Print("当前房间存活数量: " + count);
@@ -468,21 +545,21 @@ public partial class DungeonManager : Node2D
     /// </summary>
     private void UpdateEnemiesView()
     {
-        _world.Enemy_IsFindTarget = false;
-        _world.Enemy_FindTargetAffiliationSet.Clear();
-        for (var i = 0; i < _world.Enemy_InstanceList.Count; i++)
+        World.Enemy_IsFindTarget = false;
+        World.Enemy_FindTargetAffiliationSet.Clear();
+        for (var i = 0; i < World.Enemy_InstanceList.Count; i++)
         {
-            var enemy = _world.Enemy_InstanceList[i];
+            var enemy = World.Enemy_InstanceList[i];
             var state = enemy.StateController.CurrState;
             if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
             {
-                if (!_world.Enemy_IsFindTarget)
+                if (!World.Enemy_IsFindTarget)
                 {
-                    _world.Enemy_IsFindTarget = true;
-                    _world.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
-                    _world.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
+                    World.Enemy_IsFindTarget = true;
+                    World.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
+                    World.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
                 }
-                _world.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
+                World.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
             }
         }
     }
@@ -496,7 +573,7 @@ public partial class DungeonManager : Node2D
     {
         if (GameApplication.Instance.Debug)
         {
-            if (_dungeonTile != null)
+            if (_dungeonTileMap != null)
             {
                 //绘制ai寻路区域
                 Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());
@@ -512,24 +589,24 @@ public partial class DungeonManager : Node2D
     }
     
     //绘制房间区域, debug 用
-    private void DrawRoomInfo(RoomInfo room)
+    private void DrawRoomInfo(RoomInfo roomInfo)
     {
-        var cellSize = _world.TileRoot.CellQuadrantSize;
-        var pos1 = (room.Position + room.Size / 2) * cellSize;
+        var cellSize = World.TileRoot.CellQuadrantSize;
+        var pos1 = (roomInfo.Position + roomInfo.Size / 2) * cellSize;
         
         //绘制下一个房间
-        foreach (var nextRoom in room.Next)
+        foreach (var nextRoom in roomInfo.Next)
         {
             var pos2 = (nextRoom.Position + nextRoom.Size / 2) * cellSize;
             DrawLine(pos1, pos2, Colors.Red);
             DrawRoomInfo(nextRoom);
         }
 
-        DrawString(ResourceManager.DefaultFont16Px, pos1 - new Vector2I(0, 10), "Id: " + room.Id.ToString());
-        DrawString(ResourceManager.DefaultFont16Px, pos1 + new Vector2I(0, 10), "Layer: " + room.Layer.ToString());
+        DrawString(ResourceManager.DefaultFont16Px, pos1 - new Vector2I(0, 10), "Id: " + roomInfo.Id.ToString());
+        DrawString(ResourceManager.DefaultFont16Px, pos1 + new Vector2I(0, 10), "Layer: " + roomInfo.Layer.ToString());
 
         //绘制门
-        foreach (var roomDoor in room.Doors)
+        foreach (var roomDoor in roomInfo.Doors)
         {
             var originPos = roomDoor.OriginPosition * cellSize;
             switch (roomDoor.Direction)
@@ -557,12 +634,79 @@ public partial class DungeonManager : Node2D
             }
             
             //绘制房间区域
-            DrawRect(new Rect2(room.Position * cellSize, room.Size * cellSize), Colors.Blue, false);
+            DrawRect(new Rect2(roomInfo.Position * cellSize, roomInfo.Size * cellSize), Colors.Blue, false);
 
             if (roomDoor.HasCross && roomDoor.RoomInfo.Id < roomDoor.ConnectRoom.Id)
             {
                 DrawRect(new Rect2(roomDoor.Cross * cellSize, new Vector2(cellSize * 4, cellSize * 4)), Colors.Yellow, false);
             }
         }
+    }
+    
+    /// <summary>
+    /// 将房间类型枚举转为字符串
+    /// </summary>
+    public static string DungeonRoomTypeToString(DungeonRoomType roomType)
+    {
+        switch (roomType)
+        {
+            case DungeonRoomType.Battle: return "battle";
+            case DungeonRoomType.Inlet: return "inlet";
+            case DungeonRoomType.Outlet: return "outlet";
+            case DungeonRoomType.Boss: return "boss";
+            case DungeonRoomType.Reward: return "reward";
+            case DungeonRoomType.Shop: return "shop";
+            case DungeonRoomType.Event: return "event";
+        }
+
+        return "battle";
+    }
+    
+        
+    /// <summary>
+    /// 将房间类型枚举转为描述字符串
+    /// </summary>
+    public static string DungeonRoomTypeToDescribeString(DungeonRoomType roomType)
+    {
+        switch (roomType)
+        {
+            case DungeonRoomType.Battle: return "战斗房间";
+            case DungeonRoomType.Inlet: return "起始房间";
+            case DungeonRoomType.Outlet: return "结束房间";
+            case DungeonRoomType.Boss: return "Boss房间";
+            case DungeonRoomType.Reward: return "奖励房间";
+            case DungeonRoomType.Shop: return "商店房间";
+            case DungeonRoomType.Event: return "事件房间";
+        }
+
+        return "战斗房间";
+    }
+
+    /// <summary>
+    /// 检测地牢是否可以执行生成
+    /// </summary>
+    /// <param name="groupName">组名称</param>
+    public static DungeonCheckState CheckDungeon(string groupName)
+    {
+        if (GameApplication.Instance.RoomConfig.TryGetValue(groupName, out var group))
+        {
+            //验证该组是否满足生成地牢的条件
+            if (group.InletList.Count == 0)
+            {
+                return new DungeonCheckState(true, "当没有可用的起始房间!");
+            }
+            else if (group.OutletList.Count == 0)
+            {
+                return new DungeonCheckState(true, "没有可用的结束房间!");
+            }
+            else if (group.BattleList.Count == 0)
+            {
+                return new DungeonCheckState(true, "没有可用的战斗房间!");
+            }
+
+            return new DungeonCheckState(false, null);
+        }
+
+        return new DungeonCheckState(true, "未找到地牢组");
     }
 }

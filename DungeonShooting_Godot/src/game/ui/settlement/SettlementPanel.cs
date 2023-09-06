@@ -7,37 +7,46 @@ namespace UI.Settlement;
 /// </summary>
 public partial class SettlementPanel : Settlement
 {
-
-    public override void OnShowUi()
+    public override void OnCreateUi()
     {
-        L_ButtonList.L_Restart.Instance.Pressed += OnRestartClick;
-        L_ButtonList.L_ToMenu.Instance.Pressed += OnToMenuClick;
-    }
+        S_Restart.Instance.Pressed += OnRestartClick;
+        S_ToMenu.Instance.Pressed += OnToMenuClick;
 
-    public override void OnHideUi()
-    {
-        L_ButtonList.L_Restart.Instance.Pressed -= OnRestartClick;
-        L_ButtonList.L_ToMenu.Instance.Pressed -= OnToMenuClick;
+        if (GameApplication.Instance.DungeonManager.IsEditorMode) //在编辑器模式下打开的Ui
+        {
+            S_ToMenu.Instance.Text = "返回编辑器";
+        }
     }
-
+    
     //重新开始
     private void OnRestartClick()
     {
-        HideUi();
-        GameApplication.Instance.DungeonManager.ExitDungeon(() =>
+        Destroy();
+        if (GameApplication.Instance.DungeonManager.IsEditorMode) //在编辑器模式下打开的Ui
         {
-            GameApplication.Instance.DungeonManager.LoadDungeon(GameApplication.Instance.DungeonConfig);
-        });
+            EditorPlayManager.Restart();
+        }
+        else //正常重新开始
+        {
+            GameApplication.Instance.DungeonManager.RestartDungeon(GameApplication.Instance.DungeonConfig);
+        }
     }
 
     //回到主菜单
     private void OnToMenuClick()
     {
-        HideUi();
-        GameApplication.Instance.DungeonManager.ExitDungeon(() =>
+        Destroy();
+        if (GameApplication.Instance.DungeonManager.IsEditorMode) //在编辑器模式下打开的Ui
         {
-            UiManager.Open_Main();
-        });
+            EditorPlayManager.Exit();
+        }
+        else //正常关闭Ui
+        {
+            GameApplication.Instance.DungeonManager.ExitDungeon(() =>
+            {
+                UiManager.Open_Main();
+            });
+        }
     }
 
 }

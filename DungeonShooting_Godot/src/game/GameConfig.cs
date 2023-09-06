@@ -26,22 +26,22 @@ public static class GameConfig
     /// </summary>
     public const int TileCellSize = 16;
     /// <summary>
+    /// 游戏地图网格大小, 向量表示
+    /// </summary>
+    public static readonly Vector2I TileCellSizeVector2I = new Vector2I(TileCellSize, TileCellSize);
+    /// <summary>
     /// 房间最小间距
     /// </summary>
     public const int RoomSpace = 4;
-    
+
     /// <summary>
-    /// 地图场景路径
+    /// 地图配置路径
     /// </summary>
     public const string RoomTileDir = "resource/map/tileMaps/";
     /// <summary>
-    /// 地图描述数据路径
+    /// 房间组配置文件名称
     /// </summary>
-    public const string RoomTileDataDir = "resource/map/tiledata/";
-    /// <summary>
-    /// 房间配置汇总数据路径
-    /// </summary>
-    public const string RoomTileConfigFile = "resource/map/RoomConfig.json";
+    public const string RoomGroupConfigFile = "GroupConfig.json";
     /// <summary>
     /// ui预制体路径
     /// </summary>
@@ -72,4 +72,9 @@ public static class GameConfig
     /// 配置层级的自定义数据名称
     /// </summary>
     public const string CustomTileLayerName = "TileLayer";
+
+    /// <summary>
+    /// 预览图大小
+    /// </summary>
+    public const int PreviewImageSize = 196;
 }

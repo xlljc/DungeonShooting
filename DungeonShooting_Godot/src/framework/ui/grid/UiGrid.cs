@@ -7,50 +7,243 @@ using Godot;
 /// <summary>
 /// Ui网格组件
 /// </summary>
-/// <typeparam name="TNodeType">原生Godot类型</typeparam>
-/// <typeparam name="TUiNodeType">Ui节点类型</typeparam>
+/// <typeparam name="TUiCellNode">Ui节点类型</typeparam>
 /// <typeparam name="TData">传给Cell的数据类型</typeparam>
-public partial class UiGrid<TNodeType, TUiNodeType, TData> : GridContainer, IDestroy where TNodeType : Node where TUiNodeType : IUiNode<TNodeType, TUiNodeType>
+public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNode
 {
     public bool IsDestroyed { get; private set; }
-    private TUiNodeType _template;
-    private Node _parent;
-    private Type _cellType;
-    private Stack<UiCell<TNodeType, TUiNodeType, TData>> _cellPool = new Stack<UiCell<TNodeType, TUiNodeType, TData>>();
-    private List<UiCell<TNodeType, TUiNodeType, TData>> _cellList = new List<UiCell<TNodeType, TUiNodeType, TData>>();
-
-    public UiGrid(TUiNodeType template, Type cellType, int columns, int offsetX, int offsetY)
+    
+    public int SelectIndex
     {
-        _template = template;
-        _cellType = cellType;
-        _parent = _template.Instance.GetParent();
-        _parent.RemoveChild(_template.Instance);
-        _parent.AddChild(this);
-        Columns = columns;
-        AddThemeConstantOverride("h_separation", offsetX);
-        AddThemeConstantOverride("v_separation", offsetY);
-    }
-
-    public override void _Ready()
-    {
-        if (_template.Instance is Control control)
+        get => _selectIndex;
+        set
         {
-            Position = control.Position;
+            var newIndex = Mathf.Clamp(value, -1, _cellList.Count - 1);
+            if (_selectIndex != newIndex)
+            {
+                //检测新的 Cell 是否可以被选中
+                if (newIndex >= 0)
+                {
+                    var uiCell = _cellList[newIndex];
+                    //不能被选中, 直接跳出
+                    if (!uiCell.CanSelect())
+                    {
+                        return;
+                    }
+                }
+                var prevIndex = _selectIndex;
+                _selectIndex = newIndex;
+
+                //取消选中上一个
+                if (prevIndex >= 0 && prevIndex < _cellList.Count)
+                {
+                    var uiCell = _cellList[prevIndex];
+                    uiCell.OnUnSelect();
+                }
+
+                //选中新的
+                if (newIndex >= 0)
+                {
+                    var uiCell = _cellList[newIndex];
+                    uiCell.OnSelect();
+                }
+            }
         }
     }
 
+    /// <summary>
+    /// 选中的 Cell 包含的数据
+    /// </summary>
+    public TData SelectData => _selectIndex >= 0 ? _cellList[_selectIndex].Data : default;
+    
+    public bool Visible
+    {
+        get => _gridContainer.Visible;
+        set => _gridContainer.Visible = value;
+    }
+
+    public int Count => _cellList.Count;
+    
+    //模板对象
+    private TUiCellNode _template;
+    //模板大小
+    private Vector2 _size = Vector2.Zero;
+    //cell逻辑处理类
+    private Type _cellType;
+    //当前活动的cell池
+    private List<UiCell<TUiCellNode, TData>> _cellList = new List<UiCell<TUiCellNode, TData>>();
+    //当前已被回收的cell池
+    private Stack<UiCell<TUiCellNode, TData>> _cellPool = new Stack<UiCell<TUiCellNode, TData>>();
+    //godot原生网格组件
+    private UiGridContainer _gridContainer;
+    //单个cell偏移
+    private Vector2I _cellOffset;
+    //列数
+    private int _columns;
+    //是否自动扩展列数
+    private bool _autoColumns;
+    //选中的cell索引
+    private int _selectIndex = -1;
+
+    public UiGrid(TUiCellNode template, Type cellType)
+    {
+        _gridContainer = new UiGridContainer(OnReady, OnProcess);
+        _gridContainer.Ready += OnReady;
+        _template = template;
+        _cellType = cellType;
+        var uiInstance = _template.GetUiInstance();
+        uiInstance.AddSibling(_gridContainer);
+        uiInstance.GetParent().RemoveChild(uiInstance);
+        if (uiInstance is Control control)
+        {
+            _size = control.Size;
+        }
+    }
+
+    /// <summary>
+    /// 设置每个 Cell 之间的偏移量
+    /// </summary>
+    public void  SetCellOffset(Vector2I offset)
+    {
+        _cellOffset = offset;
+        _gridContainer.AddThemeConstantOverride("h_separation", offset.X);
+        _gridContainer.AddThemeConstantOverride("v_separation", offset.Y);
+    }
+
+    /// <summary>
+    /// 获取每个 Cell 之间的偏移量
+    /// </summary>
+    public Vector2I GetCellOffset()
+    {
+        return _cellOffset;
+    }
+
+    /// <summary>
+    /// 设置列数
+    /// </summary>
+    public void SetColumns(int columns)
+    {
+        _columns = columns;
+        _gridContainer.Columns = columns;
+    }
+
+    /// <summary>
+    /// 获取列数
+    /// </summary>
+    public int GetColumns()
+    {
+        return _gridContainer.Columns;
+    }
+
+    /// <summary>
+    /// 设置是否开启自动扩展列, 如果开启, 则组件会根据 GridContainer 组件所占用的宽度自动设置列数
+    /// </summary>
+    public void SetAutoColumns(bool flag)
+    {
+        if (flag != _autoColumns)
+        {
+            _autoColumns = flag;
+            if (_autoColumns)
+            {
+                _gridContainer.Resized += OnGridResized;
+                OnGridResized();
+            }
+            else
+            {
+                _gridContainer.Columns = _columns;
+                _gridContainer.Resized -= OnGridResized;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 获取是否开启自动扩展列
+    /// </summary>
+    public bool GetAutoColumns()
+    {
+        return _autoColumns;
+    }
+
+    /// <summary>
+    /// 设置当前组件布局方式是否横向扩展, 如果为 true, 则 GridContainer 的宽度会撑满父物体
+    /// </summary>
+    public void SetHorizontalExpand(bool flag)
+    {
+        _gridContainer.SetHorizontalExpand(flag);
+    }
+
+    /// <summary>
+    /// 获取当前组件布局方式是否横向扩展
+    /// </summary>
+    public bool GetHorizontalExpand()
+    {
+        return _gridContainer.GetHorizontalExpand();
+    }
+
+    /// <summary>
+    /// 获取所有数据
+    /// </summary>
+    public TData[] GetAllData()
+    {
+        var array = new TData[_cellList.Count];
+        for (var i = 0; i < _cellList.Count; i++)
+        {
+            array[i] = _cellList[i].Data;
+        }
+
+        return array;
+    }
+
+    /// <summary>
+    /// 获取所有 Cell 对象
+    /// </summary>
+    public UiCell<TUiCellNode, TData>[] GetAllCell()
+    {
+        return _cellList.ToArray();
+    }
+
+    /// <summary>
+    /// 根据指定索引获取数据
+    /// </summary>
+    public TData GetData(int index)
+    {
+        if (index < 0 || index >= _cellList.Count)
+        {
+            return default;
+        }
+
+        return _cellList[index].Data;
+    }
+
+    /// <summary>
+    /// 根据指定索引获取 Cell 对象
+    /// </summary>
+    public UiCell<TUiCellNode, TData> GetCell(int index)
+    {
+        if (index < 0 || index >= _cellList.Count)
+        {
+            return default;
+        }
+
+        return _cellList[index];
+    }
+
+    /// <summary>
+    /// 设置当前网格组件中的所有 Cell 数据, 性能较低
+    /// </summary>
     public void SetDataList(TData[] array)
     {
+        //取消选中
+        SelectIndex = -1;
         if (array.Length > _cellList.Count)
         {
             do
             {
                 var cell = GetCellInstance();
-                _cellList.Add(cell);
-                AddChild(cell.CellNode.Instance);
+                _gridContainer.AddChild(cell.CellNode.GetUiInstance());
             } while (array.Length > _cellList.Count);
         }
-        else if(array.Length < _cellList.Count)
+        else if (array.Length < _cellList.Count)
         {
             do
             {
@@ -63,18 +256,131 @@ public partial class UiGrid<TNodeType, TUiNodeType, TData> : GridContainer, IDes
         for (var i = 0; i < _cellList.Count; i++)
         {
             var data = array[i];
-            _cellList[i].OnSetData(data);
+            _cellList[i].SetData(data);
         }
     }
 
+    /// <summary>
+    /// 添加单条 Cell 数据
+    /// </summary>
     public void Add(TData data)
     {
+        //取消选中
+        SelectIndex = -1;
         var cell = GetCellInstance();
-        _cellList.Add(cell);
-        AddChild(cell.CellNode.Instance);
-        cell.OnSetData(data);
+        _gridContainer.AddChild(cell.CellNode.GetUiInstance());
+        cell.SetData(data);
+    }
+
+    /// <summary>
+    /// 修改指定索引的位置的 Cell 数据
+    /// </summary>
+    public void UpdateByIndex(int index, TData data)
+    {
+        var uiCell = GetCell(index);
+        if (uiCell != null)
+        {
+            uiCell.SetData(data);
+        }
+    }
+
+    /// <summary>
+    /// 移除指定索引的 Cell
+    /// </summary>
+    /// <param name="index"></param>
+    public void RemoveByIndex(int index)
+    {
+        if (index < 0 || index >= _cellList.Count)
+        {
+            return;
+        }
+
+        if (index >= _selectIndex)
+        {
+            //取消选中
+            SelectIndex = -1;
+        }
+        var uiCell = _cellList[index];
+        _cellList.RemoveAt(index);
+        ReclaimCellInstance(uiCell);
+        //更新后面的索引
+        for (var i = index; i < _cellList.Count; i++)
+        {
+            var tempCell = _cellList[i];
+            tempCell.SetIndex(i);
+        }
+    }
+
+    /// <summary>
+    /// 移除所有 Cell
+    /// </summary>
+    public void RemoveAll()
+    {
+        //取消选中
+        SelectIndex = -1;
+        var uiCells = _cellList.ToArray();
+        _cellList.Clear();
+        foreach (var uiCell in uiCells)
+        {
+            ReclaimCellInstance(uiCell);
+        }
     }
     
+    public void Click(int index)
+    {
+        if (index < 0 || index >= _cellList.Count)
+        {
+            return;
+        }
+        
+        _cellList[index].Click();
+    }
+
+    /// <summary>
+    /// 对所有已经启用的 Cell 进行排序操作, 排序时会调用 Cell 的 OnSort() 函数用于处理排序逻辑<br/>
+    /// 注意: 排序会影响 Cell 的 Index
+    /// </summary>
+    public void Sort()
+    {
+        if (_cellList.Count <= 0)
+        {
+            return;
+        }
+        //这里记录 SelectIndex 是让排序后 SelectIndex 指向的 Cell 不变
+        var selectIndex = SelectIndex;
+        var selectCell = GetCell(selectIndex);
+        //执行排序操作
+        _cellList.Sort((a, b) => a.OnSort(b));
+        if (selectIndex >= 0)
+        {
+            selectIndex = _cellList.FindIndex(cell => cell == selectCell);
+        }
+        //先移除所有节点
+        for (var i = 0; i < _cellList.Count; i++)
+        {
+            _gridContainer.RemoveChild(_cellList[i].CellNode.GetUiInstance());
+        }
+
+        if (selectIndex >= 0)
+        {
+            _selectIndex = selectIndex;
+        }
+        //以新的顺序加入GridContainer
+        for (var i = 0; i < _cellList.Count; i++)
+        {
+            _gridContainer.AddChild(_cellList[i].CellNode.GetUiInstance());
+        }
+        //刷新Index
+        for (var i = 0; i < _cellList.Count; i++)
+        {
+            var cell = _cellList[i];
+            cell.SetIndex(i);
+        }
+    }
+    
+    /// <summary>
+    /// 销毁当前网格组件
+    /// </summary>
     public void Destroy()
     {
         if (IsDestroyed)
@@ -83,40 +389,93 @@ public partial class UiGrid<TNodeType, TUiNodeType, TData> : GridContainer, IDes
         }
 
         IsDestroyed = true;
-        
+
         for (var i = 0; i < _cellList.Count; i++)
         {
             _cellList[i].Destroy();
         }
+
         foreach (var uiCell in _cellPool)
         {
             uiCell.Destroy();
         }
+
         _cellList = null;
         _cellPool = null;
+        _gridContainer.QueueFree();
+    }
+    
+    private void OnReady()
+    {
+        if (_template.GetUiInstance() is Control control)
+        {
+            _gridContainer.Position = control.Position;
+        }
+    }
+    
+    private void OnProcess(float delta)
+    {
+        if (IsDestroyed || !_template.GetUiPanel().IsOpen)
+        {
+            return;
+        }
+        //调用 cell 更新
+        var uiCells = _cellPool.ToArray();
+        for (var i = 0; i < uiCells.Length; i++)
+        {
+            var item = uiCells[i];
+            if (item.Enable)
+            {
+                item.Process(delta);
+            }
+        }
     }
 
-    private UiCell<TNodeType, TUiNodeType, TData> GetCellInstance()
+    //获取 cell 实例
+    private UiCell<TUiCellNode, TData> GetCellInstance()
     {
         if (_cellPool.Count > 0)
         {
-            return _cellPool.Pop();
+            var cell = _cellPool.Pop();
+            cell.SetIndex(_cellList.Count);
+            cell.SetEnable(true);
+            _cellList.Add(cell);
+            return cell;
         }
 
-        var uiCell = Activator.CreateInstance(_cellType) as UiCell<TNodeType, TUiNodeType, TData>;
+        var uiCell = Activator.CreateInstance(_cellType) as UiCell<TUiCellNode, TData>;
         if (uiCell is null)
         {
-            throw new Exception($"cellType 无法转为'{typeof(UiCell<TNodeType, TUiNodeType, TData>).FullName}'类型!");
+            throw new Exception($"cellType 无法转为'{typeof(UiCell<TUiCellNode, TData>).FullName}'类型!");
         }
-        uiCell.CellNode = _template.Clone();
-        uiCell.Grid = this;
-        uiCell.OnInit();
+
+        _cellList.Add(uiCell);
+        uiCell.Init(this, (TUiCellNode)_template.CloneUiCell(), _cellList.Count - 1);
+        uiCell.SetEnable(true);
         return uiCell;
     }
 
-    private void ReclaimCellInstance(UiCell<TNodeType, TUiNodeType, TData> cell)
+    //回收 cell
+    private void ReclaimCellInstance(UiCell<TUiCellNode, TData> cell)
     {
-        RemoveChild(cell.CellNode.Instance);
+        cell.SetEnable(false);
+        _gridContainer.RemoveChild(cell.CellNode.GetUiInstance());
         _cellPool.Push(cell);
+    }
+
+    private void OnGridResized()
+    {
+        if (_autoColumns && _gridContainer != null)
+        {
+            var width = _gridContainer.Size.X;
+            if (width <= _size.X + _cellOffset.X)
+            {
+                _gridContainer.Columns = 1;
+            }
+            else
+            {
+                _gridContainer.Columns = Mathf.FloorToInt(width / (_size.X + _cellOffset.X));
+            }
+        }
     }
 }

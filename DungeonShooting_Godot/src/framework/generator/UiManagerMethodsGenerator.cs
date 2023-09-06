@@ -47,7 +47,16 @@ public static class UiManagerMethodsGenerator
                 {
                     var uiName = fileInfo.Name.Substring(0, fileInfo.Name.Length - 5);
                     uiNameClass += $"        public const string {uiName} = \"{uiName}\";\n";
+                    
                     methodClass += $"    /// <summary>\n" +
+                                   $"    /// 创建 {uiName}, 并返回UI实例, 该函数不会打开 Ui\n" +
+                                   $"    /// </summary>\n" +
+                                   $"    public static UI.{uiName}.{uiName}Panel Create_{uiName}()\n" +
+                                   $"    {{\n" +
+                                   $"        return CreateUi<UI.{uiName}.{uiName}Panel>(UiName.{uiName});\n" +
+                                   $"    }}\n" +
+                                   $"\n" +
+                                   $"    /// <summary>\n" +
                                    $"    /// 打开 {uiName}, 并返回UI实例\n" +
                                    $"    /// </summary>\n" +
                                    $"    public static UI.{uiName}.{uiName}Panel Open_{uiName}()\n" +
@@ -70,12 +79,12 @@ public static class UiManagerMethodsGenerator
                                    $"    /// <summary>\n" +
                                    $"    /// 销毁 {uiName} 的所有实例\n" +
                                    $"    /// </summary>\n" +
-                                   $"    public static void Dispose_{uiName}()\n" +
+                                   $"    public static void Destroy_{uiName}()\n" +
                                    $"    {{\n" +
                                    $"        var uiInstance = Get_{uiName}_Instance();\n" +
                                    $"        foreach (var uiPanel in uiInstance)\n" +
                                    $"        {{\n" +
-                                   $"            uiPanel.DisposeUi();\n" +
+                                   $"            uiPanel.Destroy();\n" +
                                    $"        }}\n" +
                                    $"    }}\n" +
                                    $"\n" +

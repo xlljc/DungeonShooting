@@ -30,25 +30,19 @@ public partial class Player : Role
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 
-        //让相机跟随玩家
-        // var remoteTransform = new RemoteTransform2D();
-        // AddChild(remoteTransform);
-        // MainCamera.Main.GlobalPosition = GlobalPosition;
-        // MainCamera.Main.ResetSmoothing();
-        // remoteTransform.RemotePath = remoteTransform.GetPathTo(MainCamera.Main);
-
         MaxHp = 6;
         Hp = 6;
         MaxShield = 0;
         Shield = 0;
 
         // debug用
-        // Acceleration = 3000;
-        // Friction = 3000;
-        // MoveSpeed = 500;
+        // RoleState.Acceleration = 3000;
+        // RoleState.Friction = 3000;
+        // RoleState.MoveSpeed = 500;
         // CollisionLayer = 0;
         // CollisionMask = 0;
-        // GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        // GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
+        // //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
     }
 
     protected override void Process(float delta)
@@ -124,6 +118,8 @@ public partial class Player : Role
 
         if (Input.IsKeyPressed(Key.P))
         {
+            //Hurt(1000, 0);
+            Hp = 0;
             Hurt(1000, 0);
         }
     }

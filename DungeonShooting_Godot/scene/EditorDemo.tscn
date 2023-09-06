@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=2]
-
-[ext_resource path="res://editor/prefabs/Editor.tscn" type="PackedScene" id=1]
-
-[node name="EditorDemo" type="Node2D"]
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Editor" parent="CanvasLayer" instance=ExtResource( 1 )]

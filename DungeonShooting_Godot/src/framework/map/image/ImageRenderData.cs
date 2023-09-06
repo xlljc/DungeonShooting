@@ -83,5 +83,8 @@ public class ImageRenderData
     /// 渲染在 viewport 上中心点y轴偏移量
     /// </summary>
     public int RenderOffsetY;
+    /// <summary>
+    /// 占用区域
+    /// </summary>
     public ImageCanvas.AreaPlaceholder AreaPlaceholder;
 }

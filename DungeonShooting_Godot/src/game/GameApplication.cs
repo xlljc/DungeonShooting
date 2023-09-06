@@ -2,12 +2,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using Config;
 using Godot;
 using UI.BottomTips;
 
-public partial class GameApplication : Node2D
+public partial class GameApplication : Node2D, ICoroutine
 {
 	public static GameApplication Instance { get; private set; }
 	
@@ -38,12 +39,6 @@ public partial class GameApplication : Node2D
 	[Export] public bool Debug = false;
 
 	/// <summary>
-	/// 测试用, 指定生成的房间
-	/// </summary>
-	[Export]
-	public PackedScene[] DesignatedRoom;
-
-	/// <summary>
 	/// 鼠标指针
 	/// </summary>
 	public Cursor Cursor { get; private set; }
@@ -63,10 +58,10 @@ public partial class GameApplication : Node2D
 	/// </summary>
 	public Dictionary<string, DungeonRoomGroup> RoomConfig { get; private set; }
 	
-	/// <summary>
-	/// 房间配置数据, key: 模板房间资源路径
-	/// </summary>
-	public Dictionary<string, DungeonRoomSplit> RoomConfigMap { get; private set; }
+	// /// <summary>
+	// /// 房间配置数据, key: 模板房间资源路径
+	// /// </summary>
+	// public Dictionary<string, DungeonRoomSplit> RoomConfigMap { get; private set; }
 
 	/// <summary>
 	/// 游戏视图大小
@@ -100,7 +95,7 @@ public partial class GameApplication : Node2D
 		Weapon.InitWeaponAttribute();
 		
 		DungeonConfig = new DungeonConfig();
-		DungeonConfig.GroupName = "testGroup";
+		DungeonConfig.GroupName = RoomConfig.FirstOrDefault().Key;
 		DungeonConfig.RoomCount = 20;
 	}
 	
@@ -119,10 +114,7 @@ public partial class GameApplication : Node2D
 		//窗体大小改变
 		GetWindow().SizeChanged += OnWindowSizeChanged;
 		RefreshSubViewportSize();
-
-#if TOOLS
-		InitDesignatedRoom();
-#endif
+        
 		//初始化ui
 		UiManager.Init();
 		// 初始化鼠标
@@ -132,9 +124,11 @@ public partial class GameApplication : Node2D
 		DungeonManager.Name = "DungeonManager";
 		SceneRoot.AddChild(DungeonManager);
 
+		MapProjectManager.Init();
 		BottomTipsPanel.Init();
 		//打开主菜单Ui
 		UiManager.Open_Main();
+		//UiManager.Open_MapEditorProject();
 	}
 
 	public override void _Process(double delta)
@@ -198,49 +192,66 @@ public partial class GameApplication : Node2D
 		return (viewPos - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (ViewportSize / 2)) * PixelScale;
 	}
 	
-	/// <summary>
-	/// 开启一个协程, 返回协程 id, 协程是在普通帧执行的, 支持: 协程嵌套, WaitForSeconds, WaitForFixedProcess, Task, SignalAwaiter
-	/// </summary>
 	public long StartCoroutine(IEnumerator able)
 	{
 		return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
 	}
-
-	/// <summary>
-	/// 根据协程 id 停止协程
-	/// </summary>
+	
 	public void StopCoroutine(long coroutineId)
 	{
 		ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
 	}
-    
-	/// <summary>
-	/// 停止所有协程
-	/// </summary>
+
+	public bool IsCoroutineOver(long coroutineId)
+	{
+		return ProxyCoroutineHandler.ProxyIsCoroutineOver(ref _coroutineList, coroutineId);
+	}
+
 	public void StopAllCoroutine()
 	{
 		ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
+	}
+
+	public void SetRoomConfig(Dictionary<string,DungeonRoomGroup> roomConfig)
+	{
+		RoomConfig = roomConfig;
+		InitReadyRoom();
 	}
 
 	//初始化房间配置
 	private void InitRoomConfig()
 	{
 		//加载房间配置信息
-		var file = FileAccess.Open(ResourcePath.resource_map_RoomConfig_json, FileAccess.ModeFlags.Read);
-		var asText = file.GetAsText();
+		var asText = ResourceManager.LoadText("res://resource/map/tileMaps/" + GameConfig.RoomGroupConfigFile);
 		RoomConfig = JsonSerializer.Deserialize<Dictionary<string, DungeonRoomGroup>>(asText);
-		file.Dispose();
 
-		//初始化RoomConfigMap
-		RoomConfigMap = new Dictionary<string, DungeonRoomSplit>();
+		InitReadyRoom();
+	}
+	
+	//初始化房间数据
+	private void InitReadyRoom()
+	{
 		foreach (var dungeonRoomGroup in RoomConfig)
 		{
-			foreach (var dungeonRoomType in Enum.GetValues<DungeonRoomType>())
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.BattleList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.InletList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.OutletList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.BossList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.ShopList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.RewardList);
+			RemoveUnreadyRooms(dungeonRoomGroup.Value.EventList);
+		}
+	}
+	
+	//移除未准备好的房间
+	private void RemoveUnreadyRooms(List<DungeonRoomSplit> roomInfos)
+	{
+		for (var i = 0; i < roomInfos.Count; i++)
+		{
+			if (roomInfos[i].ErrorType != RoomErrorType.None) //存在错误
 			{
-				foreach (var dungeonRoomSplit in dungeonRoomGroup.Value.GetRoomList(dungeonRoomType))
-				{
-					RoomConfigMap.Add(dungeonRoomSplit.ScenePath, dungeonRoomSplit);
-				}
+				roomInfos.RemoveAt(i);
+				i--;
 			}
 		}
 	}
@@ -267,7 +278,6 @@ public partial class GameApplication : Node2D
 	//初始化鼠标
 	private void InitCursor()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Hidden;
 		Cursor = ResourceManager.LoadAndInstantiate<Cursor>(ResourcePath.prefab_Cursor_tscn);
 		var cursorLayer = new CanvasLayer();
 		cursorLayer.Name = "CursorLayer";
@@ -299,24 +309,4 @@ public partial class GameApplication : Node2D
 			}
 		}
 	}
-
-#if TOOLS
-	//调试模式下, 指定生成哪些房间
-	private void InitDesignatedRoom()
-	{
-		if (DesignatedRoom != null && DesignatedRoom.Length > 0)
-		{
-			var list = new List<DungeonRoomSplit>();
-			foreach (var packedScene in DesignatedRoom)
-			{
-				if (RoomConfigMap.TryGetValue(packedScene.ResourcePath, out var dungeonRoomSplit))
-				{
-					list.Add(dungeonRoomSplit);
-				}
-			}
-			DungeonGenerator.SetDesignatedRoom(list);
-		}
-	}
-#endif
-
 }

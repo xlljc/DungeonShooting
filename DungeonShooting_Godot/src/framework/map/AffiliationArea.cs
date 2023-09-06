@@ -6,17 +6,24 @@ using Godot;
 /// <summary>
 /// 归属区域
 /// </summary>
-public partial class AffiliationArea : Area2D
+public partial class AffiliationArea : Area2D, IDestroy
 {
+    public bool IsDestroyed { get; private set; }
+
     /// <summary>
     /// 当前实例所属房间
     /// </summary>
     public RoomInfo RoomInfo;
     
     /// <summary>
-    /// 当前归属区域包含的所有物体对象
+    /// 当前归属区域包含的所有物体对象, 物体进入另一个区域时才会从该集合中移除
     /// </summary>
     private readonly HashSet<ActivityObject> _includeItems = new HashSet<ActivityObject>();
+
+    /// <summary>
+    /// 已经进入 AffiliationArea 所在范围内的物体, 物体一旦离开该区域就会立刻从该集合中删除
+    /// </summary>
+    private readonly HashSet<ActivityObject> _enterItems = new HashSet<ActivityObject>();
     
     /// <summary>
     /// 玩家是否是第一次进入
@@ -55,6 +62,7 @@ public partial class AffiliationArea : Area2D
         CollisionMask = PhysicsLayer.Prop | PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Shell | PhysicsLayer.Throwing;
 
         BodyEntered += OnBodyEntered;
+        BodyExited += OnBodyExited;
     }
 
     /// <summary>
@@ -69,7 +77,7 @@ public partial class AffiliationArea : Area2D
 
         if (activityObject.AffiliationArea != null)
         {
-            _includeItems.Remove(activityObject);
+            activityObject.AffiliationArea._includeItems.Remove(activityObject);
         }
         activityObject.AffiliationArea = this;
         _includeItems.Add(activityObject);
@@ -111,7 +119,7 @@ public partial class AffiliationArea : Area2D
         var count = 0;
         foreach (var activityObject in _includeItems)
         {
-            if (handler(activityObject))
+            if (!activityObject.IsDestroyed && handler(activityObject))
             {
                 count++;
             }
@@ -128,7 +136,7 @@ public partial class AffiliationArea : Area2D
         var list = new List<ActivityObject>();
         foreach (var activityObject in _includeItems)
         {
-            if (handler(activityObject))
+            if (!activityObject.IsDestroyed && handler(activityObject))
             {
                 list.Add(activityObject);
             }
@@ -144,7 +152,7 @@ public partial class AffiliationArea : Area2D
     {
         foreach (var activityObject in _includeItems)
         {
-            if (handler(activityObject))
+            if (!activityObject.IsDestroyed && handler(activityObject))
             {
                 return true;
             }
@@ -153,12 +161,88 @@ public partial class AffiliationArea : Area2D
         return false;
     }
     
+    /// <summary>
+    /// 获取进入该区域中物体的总数
+    /// </summary>
+    public int GetEnterItemsCount()
+    {
+        return _enterItems.Count;
+    }
+    
+    /// <summary>
+    /// 统计进入该区域且符合条件的数量
+    /// </summary>
+    /// <param name="handler">操作函数, 返回是否满足要求</param>
+    public int FindEnterItemsCount(Func<ActivityObject, bool> handler)
+    {
+        var count = 0;
+        foreach (var activityObject in _enterItems)
+        {
+            if (!activityObject.IsDestroyed && handler(activityObject))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    /// <summary>
+    /// 查询所有进入该区域且符合条件的对象并返回
+    /// </summary>
+    /// <param name="handler">操作函数, 返回是否满足要求</param>
+    public ActivityObject[] FindEnterItems(Func<ActivityObject, bool> handler)
+    {
+        var list = new List<ActivityObject>();
+        foreach (var activityObject in _enterItems)
+        {
+            if (!activityObject.IsDestroyed && handler(activityObject))
+            {
+                list.Add(activityObject);
+            }
+        }
+        return list.ToArray();
+    }
+
+    /// <summary>
+    /// 检查是否有进入该区域且符合条件的对象
+    /// </summary>
+    /// <param name="handler">操作函数, 返回是否满足要求</param>
+    public bool ExistEnterItem(Func<ActivityObject, bool> handler)
+    {
+        foreach (var activityObject in _enterItems)
+        {
+            if (!activityObject.IsDestroyed && handler(activityObject))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 返回物体是否进入了该区域
+    /// </summary>
+    public bool IsEnter(ActivityObject activityObject)
+    {
+        return _enterItems.Contains(activityObject);
+    }
+    
     private void OnBodyEntered(Node2D body)
     {
         if (body is ActivityObject activityObject)
         {
+            _enterItems.Add(activityObject);
             //注意需要延时调用
             CallDeferred(nameof(InsertItem), activityObject);
+        }
+    }
+    
+    private void OnBodyExited(Node2D body)
+    {
+        if (body is ActivityObject activityObject)
+        {
+            _enterItems.Remove(activityObject);
         }
     }
 
@@ -171,5 +255,19 @@ public partial class AffiliationArea : Area2D
             IsFirstEnterFlag = false;
         }
         EventManager.EmitEvent(EventEnum.OnPlayerEnterRoom, RoomInfo);
+    }
+
+    
+    public void Destroy()
+    {
+        if (IsDestroyed)
+        {
+            return;
+        }
+
+        IsDestroyed = true;
+        QueueFree();
+        _includeItems.Clear();
+        _enterItems.Clear();
     }
 }

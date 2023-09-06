@@ -8,116 +8,147 @@ public abstract partial class Settlement : UiBase
     /// <summary>
     /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: Settlement.Bg
     /// </summary>
-    public UiNode_Bg L_Bg
+    public Bg L_Bg
     {
         get
         {
-            if (_L_Bg == null) _L_Bg = new UiNode_Bg(GetNodeOrNull<Godot.ColorRect>("Bg"));
+            if (_L_Bg == null) _L_Bg = new Bg((SettlementPanel)this, GetNode<Godot.ColorRect>("Bg"));
             return _L_Bg;
         }
     }
-    private UiNode_Bg _L_Bg;
+    private Bg _L_Bg;
 
     /// <summary>
     /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: Settlement.Title
     /// </summary>
-    public UiNode_Title L_Title
+    public Title L_Title
     {
         get
         {
-            if (_L_Title == null) _L_Title = new UiNode_Title(GetNodeOrNull<Godot.Label>("Title"));
+            if (_L_Title == null) _L_Title = new Title((SettlementPanel)this, GetNode<Godot.Label>("Title"));
             return _L_Title;
         }
     }
-    private UiNode_Title _L_Title;
+    private Title _L_Title;
 
     /// <summary>
     /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Settlement.ButtonList
     /// </summary>
-    public UiNode_ButtonList L_ButtonList
+    public ButtonList L_ButtonList
     {
         get
         {
-            if (_L_ButtonList == null) _L_ButtonList = new UiNode_ButtonList(GetNodeOrNull<Godot.VBoxContainer>("ButtonList"));
+            if (_L_ButtonList == null) _L_ButtonList = new ButtonList((SettlementPanel)this, GetNode<Godot.VBoxContainer>("ButtonList"));
             return _L_ButtonList;
         }
     }
-    private UiNode_ButtonList _L_ButtonList;
+    private ButtonList _L_ButtonList;
 
 
     public Settlement() : base(nameof(Settlement))
     {
     }
 
+    public sealed override void OnInitNestedUi()
+    {
+
+    }
+
     /// <summary>
     /// 类型: <see cref="Godot.ColorRect"/>, 路径: Settlement.Bg
     /// </summary>
-    public class UiNode_Bg : IUiNode<Godot.ColorRect, UiNode_Bg>
+    public class Bg : UiNode<SettlementPanel, Godot.ColorRect, Bg>
     {
-        public UiNode_Bg(Godot.ColorRect node) : base(node) {  }
-        public override UiNode_Bg Clone() => new ((Godot.ColorRect)Instance.Duplicate());
+        public Bg(SettlementPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override Bg Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Label"/>, 路径: Settlement.Title
     /// </summary>
-    public class UiNode_Title : IUiNode<Godot.Label, UiNode_Title>
+    public class Title : UiNode<SettlementPanel, Godot.Label, Title>
     {
-        public UiNode_Title(Godot.Label node) : base(node) {  }
-        public override UiNode_Title Clone() => new ((Godot.Label)Instance.Duplicate());
+        public Title(SettlementPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Title Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: Settlement.ButtonList.Restart
     /// </summary>
-    public class UiNode_Restart : IUiNode<Godot.Button, UiNode_Restart>
+    public class Restart : UiNode<SettlementPanel, Godot.Button, Restart>
     {
-        public UiNode_Restart(Godot.Button node) : base(node) {  }
-        public override UiNode_Restart Clone() => new ((Godot.Button)Instance.Duplicate());
+        public Restart(SettlementPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override Restart Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: Settlement.ButtonList.ToMenu
     /// </summary>
-    public class UiNode_ToMenu : IUiNode<Godot.Button, UiNode_ToMenu>
+    public class ToMenu : UiNode<SettlementPanel, Godot.Button, ToMenu>
     {
-        public UiNode_ToMenu(Godot.Button node) : base(node) {  }
-        public override UiNode_ToMenu Clone() => new ((Godot.Button)Instance.Duplicate());
+        public ToMenu(SettlementPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override ToMenu Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
     }
 
     /// <summary>
     /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: Settlement.ButtonList
     /// </summary>
-    public class UiNode_ButtonList : IUiNode<Godot.VBoxContainer, UiNode_ButtonList>
+    public class ButtonList : UiNode<SettlementPanel, Godot.VBoxContainer, ButtonList>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: Settlement.Restart
         /// </summary>
-        public UiNode_Restart L_Restart
+        public Restart L_Restart
         {
             get
             {
-                if (_L_Restart == null) _L_Restart = new UiNode_Restart(Instance.GetNodeOrNull<Godot.Button>("Restart"));
+                if (_L_Restart == null) _L_Restart = new Restart(UiPanel, Instance.GetNode<Godot.Button>("Restart"));
                 return _L_Restart;
             }
         }
-        private UiNode_Restart _L_Restart;
+        private Restart _L_Restart;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: Settlement.ToMenu
         /// </summary>
-        public UiNode_ToMenu L_ToMenu
+        public ToMenu L_ToMenu
         {
             get
             {
-                if (_L_ToMenu == null) _L_ToMenu = new UiNode_ToMenu(Instance.GetNodeOrNull<Godot.Button>("ToMenu"));
+                if (_L_ToMenu == null) _L_ToMenu = new ToMenu(UiPanel, Instance.GetNode<Godot.Button>("ToMenu"));
                 return _L_ToMenu;
             }
         }
-        private UiNode_ToMenu _L_ToMenu;
+        private ToMenu _L_ToMenu;
 
-        public UiNode_ButtonList(Godot.VBoxContainer node) : base(node) {  }
-        public override UiNode_ButtonList Clone() => new ((Godot.VBoxContainer)Instance.Duplicate());
+        public ButtonList(SettlementPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
+        public override ButtonList Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
     }
+
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: Settlement.Bg
+    /// </summary>
+    public Bg S_Bg => L_Bg;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: Settlement.Title
+    /// </summary>
+    public Title S_Title => L_Title;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: Settlement.ButtonList.Restart
+    /// </summary>
+    public Restart S_Restart => L_ButtonList.L_Restart;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: Settlement.ButtonList.ToMenu
+    /// </summary>
+    public ToMenu S_ToMenu => L_ButtonList.L_ToMenu;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Settlement.ButtonList
+    /// </summary>
+    public ButtonList S_ButtonList => L_ButtonList;
 
 }

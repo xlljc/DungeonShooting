@@ -8,29 +8,39 @@ namespace UI.Main;
 public partial class MainPanel : Main
 {
 
-    public override void OnShowUi()
+    public override void OnCreateUi()
     {
-        L_ButtonList.L_Start.Instance.Pressed += OnStartGameClick;
-        L_ButtonList.L_Exit.Instance.Pressed += OnExitClick;
+        S_Start.Instance.Pressed += OnStartGameClick;
+        S_Exit.Instance.Pressed += OnExitClick;
+        S_Tools.Instance.Pressed += OnToolsClick;
     }
-
-    public override void OnHideUi()
-    {
-        L_ButtonList.L_Start.Instance.Pressed -= OnStartGameClick;
-        L_ButtonList.L_Exit.Instance.Pressed -= OnExitClick;
-    }
-
-
+    
     //点击开始游戏
     private void OnStartGameClick()
     {
-        GameApplication.Instance.DungeonManager.LoadDungeon(GameApplication.Instance.DungeonConfig);
-        HideUi();
+        //验证该组是否满足生成地牢的条件
+        var config = GameApplication.Instance.DungeonConfig;
+        var result = DungeonManager.CheckDungeon(config.GroupName);
+        if (result.HasError)
+        {
+            EditorWindowManager.ShowTips("警告", "当前组'" + config.GroupName + "'" + result.ErrorMessage + ", 不能生成地牢!");
+        }
+        else
+        {
+            GameApplication.Instance.DungeonManager.LoadDungeon(config);
+            HideUi();
+        }
     }
 
     //退出游戏
     private void OnExitClick()
     {
         GetTree().Quit();
+    }
+
+    //点击开发者工具
+    private void OnToolsClick()
+    {
+        OpenNextUi(UiManager.UiName.MapEditorProject);
     }
 }
