@@ -158,7 +158,7 @@ namespace Plugin
 
                 try
                 {
-                    _editorTools.OnDisposeUi();
+                    _editorTools.OnDestroyUi();
                 }
                 catch (Exception e)
                 {

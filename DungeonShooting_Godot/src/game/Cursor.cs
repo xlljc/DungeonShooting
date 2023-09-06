@@ -20,16 +20,19 @@ public partial class Cursor : Node2D
     private Sprite2D lb;
     private Sprite2D rt;
     private Sprite2D rb;
-    private Sprite2D finger;
-    
+
+    private Texture2D _cursorUi;
+
     public override void _Ready()
     {
+        _cursorUi = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_sursors_Cursors_Ui_png);
+        //Input.SetCustomMouseCursor(_cursorUi, Input.CursorShape.Arrow, new Vector2(6, 6));
+        
         center = GetNode<Sprite2D>("Center");
         lt = GetNode<Sprite2D>("LT");
         lb = GetNode<Sprite2D>("LB");
         rt = GetNode<Sprite2D>("RT");
         rb = GetNode<Sprite2D>("RB");
-        finger = GetNode<Sprite2D>("Finger");
         SetGuiMode(true);
     }
 
@@ -46,9 +49,8 @@ public partial class Cursor : Node2D
             {
                 SetScope(0, null);
             }
+            SetCursorPos();
         }
-
-        SetCursorPos();
     }
 
     /// <summary>
@@ -63,7 +65,7 @@ public partial class Cursor : Node2D
             lb.Visible = false;
             rt.Visible = false;
             rb.Visible = false;
-            finger.Visible = true;
+            Input.MouseMode = Input.MouseModeEnum.Visible;
         }
         else //准心
         {
@@ -71,7 +73,7 @@ public partial class Cursor : Node2D
             lb.Visible = true;
             rt.Visible = true;
             rb.Visible = true;
-            finger.Visible = false;
+            Input.MouseMode = Input.MouseModeEnum.Hidden;
         }
     }
     

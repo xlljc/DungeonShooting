@@ -6,10 +6,10 @@ using Godot;
 /// </summary>
 public class TileCellInfo
 {
-    public TileCellInfo(int id, Vector2I? autotileCoord)
+    public TileCellInfo(int id, Vector2I autoTileCoord)
     {
         Id = id;
-        AutotileCoord = autotileCoord;
+        AutoTileCoord = autoTileCoord;
     }
 
     /// <summary>
@@ -20,5 +20,5 @@ public class TileCellInfo
     /// <summary>
     /// 如果是图块集, 该属性就表示在图块集的位置
     /// </summary>
-    public Vector2I? AutotileCoord;
+    public Vector2I AutoTileCoord;
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -6,6 +7,11 @@ using Godot;
 /// </summary>
 public static class ResourceManager
 {
+    /// <summary>
+    /// 默认权重值
+    /// </summary>
+    public const int DefaultWeight = 100;
+    
     /// <summary>
     /// 颜色混合材质
     /// </summary>
@@ -121,9 +127,56 @@ public static class ResourceManager
     /// 加载并且实例化场景, 并返回
     /// </summary>
     /// <param name="path">场景路径</param>
-    public static T LoadAndInstantiate<T>(string path) where T : Node
+    /// <param name="useCache">是否使用缓存中的资源</param>
+    public static T LoadAndInstantiate<T>(string path, bool useCache = true) where T : Node
     {
-        var packedScene = Load<PackedScene>(path);
+        var packedScene = Load<PackedScene>(path, useCache);
         return packedScene.Instantiate<T>();
+    }
+
+    /// <summary>
+    /// 读取文本资源
+    /// </summary>
+    public static string LoadText(string path)
+    {
+        string text;
+        using (var fileAccess = FileAccess.Open(path, FileAccess.ModeFlags.Read))
+        {
+            text = fileAccess.GetAsText();
+        }
+        return text;
+    }
+
+    /// <summary>
+    /// 加载2d纹理资源
+    /// </summary>
+    /// <param name="path">资源路径</param>
+    /// <param name="useCache">是否使用缓存中的资源</param>
+    public static Texture2D LoadTexture2D(string path, bool useCache = true)
+    {
+        return Load<Texture2D>(path, useCache);
+    }
+    
+    /// <summary>
+    /// 将普通路径转化为 Godot 资源路径
+    /// </summary>
+    public static string ToResPath(string path)
+    {
+        var field = path.Replace("\\", "/");
+        return "res://" + field;
+    }
+
+    /// <summary>
+    /// 移除资源后缀名
+    /// </summary>
+    public static string RemoveExtension(string name)
+    {
+        var index = name.LastIndexOf(".", StringComparison.Ordinal);
+        if (index >= 0)
+        {
+            return name.Substring(0, index);
+        }
+
+        return name;
     }
 }

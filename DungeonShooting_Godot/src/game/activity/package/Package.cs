@@ -261,7 +261,7 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
         if (index == ActiveIndex)
         {
             //没有其他物体了
-            if (ExchangePrev() == index)
+            if (ExchangePrev(true) == index)
             {
                 ActiveIndex = 0;
                 ActiveItem = null;
@@ -289,6 +289,11 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
     /// </summary>
     public int ExchangePrev()
     {
+        return ExchangePrev(false);
+    }
+    
+    private int ExchangePrev(bool removeFlag)
+    {
         var index = ActiveIndex - 1;
         do
         {
@@ -296,7 +301,7 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
             {
                 index = ItemSlot.Length - 1;
             }
-            if (ExchangeByIndex(index))
+            if (ExchangeByIndex(index, removeFlag))
             {
                 return index;
             }
@@ -329,13 +334,18 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
     /// </summary>
     public bool ExchangeByIndex(int index)
     {
+        return ExchangeByIndex(index, false);
+    }
+
+    private bool ExchangeByIndex(int index, bool removeFlag)
+    {
         if (index == ActiveIndex && ActiveItem != null) return true;
         if (index < 0 || index > ItemSlot.Length) return false;
         var item = ItemSlot[index];
         if (item == null) return false;
 
         //将上一个物体放到背后
-        if (ActiveItem != null)
+        if (!removeFlag && ActiveItem != null)
         {
             //收起物体
             ActiveItem.OnConcealItem();

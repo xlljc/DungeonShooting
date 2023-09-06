@@ -35,16 +35,37 @@ public static partial class ExcelConfig
         public string Name;
 
         /// <summary>
-        /// 物体备注
+        /// 物体简介 <br/>
+        /// 一句对物体简短的介绍, 比如拾起物体时弹出的描述
         /// </summary>
         [JsonInclude]
-        public string Remark;
+        public string Intro;
+
+        /// <summary>
+        /// 物体详情 <br/>
+        /// 在图鉴中的描述
+        /// </summary>
+        [JsonInclude]
+        public string Details;
 
         /// <summary>
         /// 物体预制场景路径, 场景根节点必须是ActivityObject子类
         /// </summary>
         [JsonInclude]
         public string Prefab;
+
+        /// <summary>
+        /// 物体图标 <br/>
+        /// 如果不需要在图鉴或者地图编辑器中显示该物体, 则可以不用设置
+        /// </summary>
+        [JsonInclude]
+        public string Icon;
+
+        /// <summary>
+        /// 是否在地图编辑器中显示该物体
+        /// </summary>
+        [JsonInclude]
+        public bool ShowInMapEditor;
 
         /// <summary>
         /// 返回浅拷贝出的新对象
@@ -55,8 +76,11 @@ public static partial class ExcelConfig
             inst.Id = Id;
             inst.Type = Type;
             inst.Name = Name;
-            inst.Remark = Remark;
+            inst.Intro = Intro;
+            inst.Details = Details;
             inst.Prefab = Prefab;
+            inst.Icon = Icon;
+            inst.ShowInMapEditor = ShowInMapEditor;
             return inst;
         }
     }

@@ -116,9 +116,9 @@ public partial class EditorToolsPanel : EditorTools
         var dungeonRoomTypes = Enum.GetValues<DungeonRoomType>();
         for (var i = 0; i < dungeonRoomTypes.Length; i++)
         {
-            var typeName = DungeonRoomTemplate.DungeonRoomTypeToString(dungeonRoomTypes[i]);
+            var typeName = DungeonManager.DungeonRoomTypeToString(dungeonRoomTypes[i]);
             var text = typeName + " (" +
-                       DungeonRoomTemplate.DungeonRoomTypeToDescribeString(dungeonRoomTypes[i]) + ")";
+                       DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomTypes[i]) + ")";
             select2.AddItem(text, i);
             _createRoomTypeValueMap.Add(i, typeName);
         }
@@ -186,7 +186,7 @@ public partial class EditorToolsPanel : EditorTools
     /// <param name="onClose">当窗口关闭时的回调</param>
     public void ShowTips(string title, string message, Action onClose = null)
     {
-        ShowTips(title, message, 200, 124, onClose);
+        ShowTips(title, message, 350, 200, onClose);
     }
 
     /// <summary>
@@ -224,7 +224,7 @@ public partial class EditorToolsPanel : EditorTools
     /// <param name="onClose">当窗口关闭时的回调, 参数如果为 true 表示点击了确定按钮</param>
     public void ShowConfirm(string title, string message, Action<bool> onClose = null)
     {
-        ShowConfirm(title, message, 200, 124, onClose);
+        ShowConfirm(title, message, 350, 200, onClose);
     }
 
     /// <summary>

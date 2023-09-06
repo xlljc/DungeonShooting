@@ -16,17 +16,22 @@ public class DungeonGenerator
     /// <summary>
     /// 起始房间
     /// </summary>
-    public RoomInfo StartRoom { get; private set; }
+    public RoomInfo StartRoomInfo { get; private set; }
     
     /// <summary>
     /// 结束房间
     /// </summary>
-    public RoomInfo EndRoom { get; private set; }
+    public RoomInfo EndRoomInfo { get; private set; }
 
     /// <summary>
     /// boss房间
     /// </summary>
     public List<RoomInfo> BossRoom { get; } = new List<RoomInfo>();
+    
+    /// <summary>
+    /// 随机数对象
+    /// </summary>
+    public SeedRandom Random { get; }
 
     //用于标记地图上的坐标是否被占用
     private Grid<bool> _roomGrid { get; } = new Grid<bool>();
@@ -39,29 +44,22 @@ public class DungeonGenerator
     //下一个房间类型
     private DungeonRoomType _nextRoomType = DungeonRoomType.Battle;
     
-    //宽高
-    // private int _roomMinWidth = 15;
-    // private int _roomMaxWidth = 35;
-    // private int _roomMinHeight = 15;
-    // private int _roomMaxHeight = 30;
-
     //间隔
-    private int _roomMinInterval = 6;
-    private int _roomMaxInterval = 10;
+    private int _roomMinInterval = 5;
+    private int _roomMaxInterval = 6;
 
     //房间横轴分散程度
-    
     private float _roomHorizontalMinDispersion = 0f;
-    private float _roomHorizontalMaxDispersion = 0.7f;
+    private float _roomHorizontalMaxDispersion = 0.5f;
 
     //房间纵轴分散程度
     private float _roomVerticalMinDispersion = 0f;
-    private float _roomVerticalMaxDispersion = 0.7f;
+    private float _roomVerticalMaxDispersion = 0.5f;
 
     //区域限制
     private bool _enableLimitRange = true;
-    private int _rangeX = 110;
-    private int _rangeY = 110;
+    private int _rangeX = 200;
+    private int _rangeY = 200;
     
     //找房间失败次数, 过大则会关闭区域限制
     private int _maxFailCount = 10;
@@ -75,9 +73,6 @@ public class DungeonGenerator
     private DungeonConfig _config;
     private DungeonRoomGroup _roomGroup;
 
-    //指定只能生成的房间
-    private static List<DungeonRoomSplit> _designatedRoom;
-
     private enum GenerateRoomErrorCode
     {
         NoError,
@@ -90,41 +85,22 @@ public class DungeonGenerator
         // //没有合适的门
         // NoProperDoor,
     }
-
-#if TOOLS
-    /// <summary>
-    /// 用于调试, 设置生成器只能生成哪些房间
-    /// </summary>
-    public static void SetDesignatedRoom(List<DungeonRoomSplit> list)
-    {
-        _designatedRoom = new List<DungeonRoomSplit>(list);
-    }
-#endif
-
+    
     public DungeonGenerator(DungeonConfig config)
     {
         _config = config;
         _roomGroup = GameApplication.Instance.RoomConfig[config.GroupName];
 
         //验证该组是否满足生成地牢的条件
-        if (_roomGroup.InletList.Count == 0)
+        var result = DungeonManager.CheckDungeon(config.GroupName);
+        if (result.HasError)
         {
-            throw new Exception("当前组'" + config.GroupName + "'中没有起始房间, 不能生成地牢!");
+            throw new Exception("当前组'" + config.GroupName + "'" + result.ErrorMessage + ", 不能生成地牢!");
         }
-        //没有指定房间
-        if (_designatedRoom == null || _designatedRoom.Count == 0)
-        {
-            if (_roomGroup.OutletList.Count == 0)
-            {
-                throw new Exception("当前组'" + config.GroupName + "'中没有结束房间, 不能生成地牢!");
-            }
-            else if (_roomGroup.BattleList.Count == 0)
-            {
-                throw new Exception("当前组'" + config.GroupName + "'中没有战斗房间, 不能生成地牢!");
-            }
-        }
-
-        _roomGroup.InitWeight();
+        
+        Random = new SeedRandom();
+        GD.Print("创建地牢生成器, 随机种子: " + Random.Seed);
+        _roomGroup.InitWeight(Random);
     }
 
     /// <summary>
@@ -132,7 +108,7 @@ public class DungeonGenerator
     /// </summary>
     public void EachRoom(Action<RoomInfo> cb)
     {
-        EachRoom(StartRoom, cb);
+        EachRoom(StartRoomInfo, cb);
     }
 
     private void EachRoom(RoomInfo roomInfo, Action<RoomInfo> cb)
@@ -154,68 +130,68 @@ public class DungeonGenerator
     /// </summary>
     public void Generate()
     {
-        if (StartRoom != null) return;
+        if (StartRoomInfo != null) return;
         
         CalcNextRoomType(null);
         //用于排除上一级房间
         var excludePrevRoom = new List<RoomInfo>();
         //上一个房间
-        RoomInfo prevRoom = null;
+        RoomInfo prevRoomInfo = null;
         
         var chainTryCount = 0;
         var chainMaxTryCount = 3;
 
         //如果房间数量不够, 就一直生成
-        while (_count < _config.RoomCount || EndRoom == null)
+        while (_count < _config.RoomCount || EndRoomInfo == null)
         {
             var nextRoomType = GetNextRoomType();
             
             //上一个房间
-            RoomInfo tempPrevRoom;
+            RoomInfo tempPrevRoomInfo;
             if (nextRoomType == DungeonRoomType.Inlet)
             {
-                tempPrevRoom = null;
+                tempPrevRoomInfo = null;
             }
             else if (nextRoomType == DungeonRoomType.Boss)
             {
-                tempPrevRoom = FindMaxLayerRoom(excludePrevRoom);
+                tempPrevRoomInfo = FindMaxLayerRoom(excludePrevRoom);
             }
             else if (nextRoomType == DungeonRoomType.Outlet)
             {
-                tempPrevRoom = prevRoom;
+                tempPrevRoomInfo = prevRoomInfo;
             }
             else if (nextRoomType == DungeonRoomType.Battle)
             {
                 if (chainTryCount < chainMaxTryCount)
                 {
-                    if (prevRoom != null && prevRoom.Layer > 6) //层数太高, 下一个房间生成在低层级
+                    if (prevRoomInfo != null && prevRoomInfo.Layer > 6) //层数太高, 下一个房间生成在低层级
                     {
-                        tempPrevRoom = RoundRoomLessThanLayer(3);
+                        tempPrevRoomInfo = RoundRoomLessThanLayer(3);
                     }
                     else
                     {
-                        tempPrevRoom = prevRoom;
+                        tempPrevRoomInfo = prevRoomInfo;
                     }
                 }
                 else
                 {
-                    tempPrevRoom = Utils.RandomChoose(RoomInfos);
+                    tempPrevRoomInfo = Random.RandomChoose(RoomInfos);
                 }
             }
             else
             {
-                tempPrevRoom = Utils.RandomChoose(RoomInfos);
+                tempPrevRoomInfo = Random.RandomChoose(RoomInfos);
             }
             
             //生成下一个房间
-            var errorCode = GenerateRoom(tempPrevRoom, nextRoomType, out var nextRoom);
+            var errorCode = GenerateRoom(tempPrevRoomInfo, nextRoomType, out var nextRoom);
             if (errorCode == GenerateRoomErrorCode.NoError) //生成成功
             {
                 _failCount = 0;
                 RoomInfos.Add(nextRoom);
                 if (nextRoomType == DungeonRoomType.Inlet)
                 {
-                    StartRoom = nextRoom;
+                    StartRoomInfo = nextRoom;
                 }
                 else if (nextRoomType == DungeonRoomType.Boss) //boss房间
                 {
@@ -224,22 +200,22 @@ public class DungeonGenerator
                 }
                 else if (nextRoomType == DungeonRoomType.Outlet)
                 {
-                    EndRoom = nextRoom;
+                    EndRoomInfo = nextRoom;
                 }
                 else if (nextRoomType == DungeonRoomType.Battle)
                 {
                     chainTryCount = 0;
-                    chainMaxTryCount = Utils.RandomRangeInt(1, 3);
+                    chainMaxTryCount = Random.RandomRangeInt(1, 3);
                 }
-                prevRoom = nextRoom;
-                CalcNextRoomType(prevRoom);
+                prevRoomInfo = nextRoom;
+                CalcNextRoomType(prevRoomInfo);
             }
             else //生成失败
             {
                 if (nextRoomType == DungeonRoomType.Boss)
                 {
                     //生成boss房间成功
-                    excludePrevRoom.Add(tempPrevRoom);
+                    excludePrevRoom.Add(tempPrevRoomInfo);
                     if (excludePrevRoom.Count >= RoomInfos.Count)
                     {
                         //全都没找到合适的, 那就再来一遍
@@ -249,13 +225,13 @@ public class DungeonGenerator
                 else if (nextRoomType == DungeonRoomType.Outlet)
                 {
                     //生成结束房间失败, 那么只能回滚boss房间
-                    if (prevRoom != null)
+                    if (prevRoomInfo != null)
                     {
-                        var bossPrev = prevRoom.Prev;
-                        BossRoom.Remove(prevRoom);
-                        RollbackRoom(prevRoom);
+                        var bossPrev = prevRoomInfo.Prev;
+                        BossRoom.Remove(prevRoomInfo);
+                        RollbackRoom(prevRoomInfo);
                         CalcNextRoomType(bossPrev);
-                        prevRoom = null;
+                        prevRoomInfo = null;
                     }
                 }
                 else if (nextRoomType == DungeonRoomType.Battle)
@@ -282,7 +258,7 @@ public class DungeonGenerator
     }
 
     //生成房间
-    private GenerateRoomErrorCode GenerateRoom(RoomInfo prevRoomInfo, DungeonRoomType roomType, out RoomInfo resultRoom)
+    private GenerateRoomErrorCode GenerateRoom(RoomInfo prevRoomInfo, DungeonRoomType roomType, out RoomInfo resultRoomInfo)
     {
         // if (_count >= _config.RoomCount)
         // {
@@ -291,8 +267,11 @@ public class DungeonGenerator
         // }
 
         DungeonRoomSplit roomSplit;
-        //没有指定房间
-        if (roomType == DungeonRoomType.Inlet || _designatedRoom == null || _designatedRoom.Count == 0)
+        if (_config.HasDesignatedRoom && _config.DesignatedType == roomType) //执行指定了房间
+        {
+            roomSplit = Random.RandomChoose(_config.DesignatedRoom);
+        }
+        else //没有指定房间
         {
             //随机选择一个房间
             var list = _roomGroup.GetRoomList(roomType);
@@ -304,10 +283,6 @@ public class DungeonGenerator
             {
                 roomSplit = _roomGroup.GetRandomRoom(roomType);
             }
-        }
-        else //指定了房间
-        {
-            roomSplit = Utils.RandomChoose(_designatedRoom);
         }
         
         var room = new RoomInfo(_id, roomType, roomSplit);
@@ -335,19 +310,19 @@ public class DungeonGenerator
             }
             for (; tryCount < maxTryCount; tryCount++)
             {
-                var direction = Utils.RandomRangeInt(0, 3);
+                var direction = Random.RandomRangeInt(0, 3);
                 //房间间隔
-                var space = Utils.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
+                var space = Random.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
                 //中心偏移
                 int offset;
                 if (direction == 0 || direction == 2)
                 {
-                    offset = Utils.RandomRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
+                    offset = Random.RandomRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
                         (int)(prevRoomInfo.Size.X * _roomVerticalMaxDispersion));
                 }
                 else
                 {
-                    offset = Utils.RandomRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
+                    offset = Random.RandomRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
                         (int)(prevRoomInfo.Size.Y * _roomHorizontalMaxDispersion));
                 }
 
@@ -380,20 +355,20 @@ public class DungeonGenerator
                         room.GetVerticalStart() < -_rangeY || room.GetVerticalEnd() > _rangeY)
                     {
                         //超出区域, 直接跳出尝试的循环, 返回 null
-                        resultRoom = null;
+                        resultRoomInfo = null;
                         return GenerateRoomErrorCode.OutArea;
                     }
                 }
 
                 //是否碰到其他房间或者过道
-                if (_roomGrid.RectCollision(room.Position - new Vector2(GameConfig.RoomSpace, GameConfig.RoomSpace), room.Size + new Vector2(GameConfig.RoomSpace * 2, GameConfig.RoomSpace * 2)))
+                if (_roomGrid.RectCollision(room.Position - new Vector2I(GameConfig.RoomSpace, GameConfig.RoomSpace), room.Size + new Vector2I(GameConfig.RoomSpace * 2, GameConfig.RoomSpace * 2)))
                 {
                     //碰到其他墙壁, 再一次尝试
                     continue;
                     //return GenerateRoomErrorCode.HasCollision;
                 }
 
-                _roomGrid.AddRect(room.Position, room.Size, true);
+                _roomGrid.SetRect(room.Position, room.Size, true);
 
                 //找门, 与上一个房间是否能连通
                 if (!ConnectDoor(prevRoomInfo, room))
@@ -409,14 +384,14 @@ public class DungeonGenerator
             //尝试次数用光了, 还没有找到合适的位置
             if (tryCount >= maxTryCount)
             {
-                resultRoom = null;
+                resultRoomInfo = null;
                 return GenerateRoomErrorCode.NoSuitableLocation;
             }
         }
         else //第一个房间
         {
             room.Layer = 0;
-            _roomGrid.AddRect(room.Position, room.Size, true);
+            _roomGrid.SetRect(room.Position, room.Size, true);
         }
 
         if (IsParticipateCounting(room))
@@ -430,7 +405,7 @@ public class DungeonGenerator
         {
             prevRoomInfo.Next.Add(room);
         }
-        resultRoom = room;
+        resultRoomInfo = room;
         return GenerateRoomErrorCode.NoError;
     }
 
@@ -546,30 +521,30 @@ public class DungeonGenerator
             }
         }
 
-        return Utils.RandomChoose(list);
+        return Random.RandomChoose(list);
     }
     
     /// <summary>
     /// 找两个房间的门
     /// </summary>
-    private bool ConnectDoor(RoomInfo room, RoomInfo nextRoom)
+    private bool ConnectDoor(RoomInfo roomInfo, RoomInfo nextRoomInfo)
     {
         //门描述
         var roomDoor = new RoomDoorInfo();
         var nextRoomDoor = new RoomDoorInfo();
-        roomDoor.RoomInfo = room;
-        nextRoomDoor.RoomInfo = nextRoom;
-        roomDoor.ConnectRoom = nextRoom;
+        roomDoor.RoomInfo = roomInfo;
+        nextRoomDoor.RoomInfo = nextRoomInfo;
+        roomDoor.ConnectRoom = nextRoomInfo;
         roomDoor.ConnectDoor = nextRoomDoor;
-        nextRoomDoor.ConnectRoom = room;
+        nextRoomDoor.ConnectRoom = roomInfo;
         nextRoomDoor.ConnectDoor = roomDoor;
 
         //先寻找直通门
-        if (Utils.RandomBoolean())
+        if (Random.RandomBoolean())
         {
             //直行通道, 优先横轴
-            if (TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor)
-                || TryConnectVerticalDoor(room, roomDoor, nextRoom, nextRoomDoor))
+            if (TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
+                || TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
             {
                 return true;
             }
@@ -577,50 +552,50 @@ public class DungeonGenerator
         else
         {
             //直行通道, 优先纵轴
-            if (TryConnectVerticalDoor(room, roomDoor, nextRoom, nextRoomDoor)
-                || TryConnectHorizontalDoor(room, roomDoor, nextRoom, nextRoomDoor))
+            if (TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
+                || TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
             {
                 return true;
             }
         }
         
         //包含拐角的通道
-        return TryConnectCrossDoor(room, roomDoor, nextRoom, nextRoomDoor);
+        return TryConnectCrossDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor);
     }
 
     /// <summary>
     /// 尝试寻找横轴方向上两个房间的连通的门, 只查找直线通道, 返回是否找到
     /// </summary>
-    private bool TryConnectHorizontalDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
+    private bool TryConnectHorizontalDoor(RoomInfo roomInfo, RoomDoorInfo roomDoor, RoomInfo nextRoomInfo, RoomDoorInfo nextRoomDoor)
     {
-        var overlapX = Mathf.Min(room.GetHorizontalEnd(), nextRoom.GetHorizontalEnd()) -
-                       Mathf.Max(room.GetHorizontalStart(), nextRoom.GetHorizontalStart());
+        var overlapX = Mathf.Min(roomInfo.GetHorizontalEnd(), nextRoomInfo.GetHorizontalEnd()) -
+                       Mathf.Max(roomInfo.GetHorizontalStart(), nextRoomInfo.GetHorizontalStart());
         //这种情况下x轴有重叠
         if (overlapX >= 6)
         {
             //找到重叠区域
-            var rangeList = FindPassage(room, nextRoom, 
-                room.GetVerticalStart() < nextRoom.GetVerticalStart() ? DoorDirection.S : DoorDirection.N);
+            var rangeList = FindPassage(roomInfo, nextRoomInfo, 
+                roomInfo.GetVerticalStart() < nextRoomInfo.GetVerticalStart() ? DoorDirection.S : DoorDirection.N);
             
             while (rangeList.Count > 0)
             {
                 //找到重叠区域
-                var range = Utils.RandomChooseAndRemove(rangeList);
-                var x = Utils.RandomRangeInt(range.X, range.Y);
+                var range = Random.RandomChooseAndRemove(rangeList);
+                var x = Random.RandomRangeInt(range.X, range.Y);
                 
-                if (room.GetVerticalStart() < nextRoom.GetVerticalStart()) //room在上, nextRoom在下
+                if (roomInfo.GetVerticalStart() < nextRoomInfo.GetVerticalStart()) //room在上, nextRoom在下
                 {
                     roomDoor.Direction = DoorDirection.S;
                     nextRoomDoor.Direction = DoorDirection.N;
-                    roomDoor.OriginPosition = new Vector2I(x, room.GetVerticalEnd());
-                    nextRoomDoor.OriginPosition = new Vector2I(x, nextRoom.GetVerticalStart());
+                    roomDoor.OriginPosition = new Vector2I(x, roomInfo.GetVerticalEnd());
+                    nextRoomDoor.OriginPosition = new Vector2I(x, nextRoomInfo.GetVerticalStart());
                 }
                 else //room在下, nextRoom在上
                 {
                     roomDoor.Direction = DoorDirection.N;
                     nextRoomDoor.Direction = DoorDirection.S;
-                    roomDoor.OriginPosition = new Vector2I(x, room.GetVerticalStart());
-                    nextRoomDoor.OriginPosition = new Vector2I(x, nextRoom.GetVerticalEnd());
+                    roomDoor.OriginPosition = new Vector2I(x, roomInfo.GetVerticalStart());
+                    nextRoomDoor.OriginPosition = new Vector2I(x, nextRoomInfo.GetVerticalEnd());
                 }
 
                 //判断门之间的通道是否有物体碰到
@@ -631,8 +606,8 @@ public class DungeonGenerator
                 }
 
                 //没有撞到物体
-                room.Doors.Add(roomDoor);
-                nextRoom.Doors.Add(nextRoomDoor);
+                roomInfo.Doors.Add(roomDoor);
+                nextRoomInfo.Doors.Add(nextRoomDoor);
                 return true;
             }
         }
@@ -643,36 +618,36 @@ public class DungeonGenerator
     /// <summary>
     /// 尝试寻找纵轴方向上两个房间的连通的门, 只查找直线通道, 返回是否找到
     /// </summary>
-    private bool TryConnectVerticalDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
+    private bool TryConnectVerticalDoor(RoomInfo roomInfo, RoomDoorInfo roomDoor, RoomInfo nextRoomInfo, RoomDoorInfo nextRoomDoor)
     {
-        var overlapY = Mathf.Min(room.GetVerticalEnd(), nextRoom.GetVerticalEnd()) -
-                       Mathf.Max(room.GetVerticalStart(), nextRoom.GetVerticalStart());
+        var overlapY = Mathf.Min(roomInfo.GetVerticalEnd(), nextRoomInfo.GetVerticalEnd()) -
+                       Mathf.Max(roomInfo.GetVerticalStart(), nextRoomInfo.GetVerticalStart());
         //这种情况下y轴有重叠
         if (overlapY >= 6)
         {
             //找到重叠区域
-            var rangeList = FindPassage(room, nextRoom, 
-                room.GetHorizontalStart() < nextRoom.GetHorizontalStart() ? DoorDirection.E : DoorDirection.W);
+            var rangeList = FindPassage(roomInfo, nextRoomInfo, 
+                roomInfo.GetHorizontalStart() < nextRoomInfo.GetHorizontalStart() ? DoorDirection.E : DoorDirection.W);
 
             while (rangeList.Count > 0)
             {
                 //找到重叠区域
-                var range = Utils.RandomChooseAndRemove(rangeList);
-                var y = Utils.RandomRangeInt(range.X, range.Y);
+                var range = Random.RandomChooseAndRemove(rangeList);
+                var y = Random.RandomRangeInt(range.X, range.Y);
                 
-                if (room.GetHorizontalStart() < nextRoom.GetHorizontalStart()) //room在左, nextRoom在右
+                if (roomInfo.GetHorizontalStart() < nextRoomInfo.GetHorizontalStart()) //room在左, nextRoom在右
                 {
                     roomDoor.Direction = DoorDirection.E;
                     nextRoomDoor.Direction = DoorDirection.W;
-                    roomDoor.OriginPosition = new Vector2I(room.GetHorizontalEnd(), y);
-                    nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart(), y);
+                    roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalEnd(), y);
+                    nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalStart(), y);
                 }
                 else //room在右, nextRoom在左
                 {
                     roomDoor.Direction = DoorDirection.W;
                     nextRoomDoor.Direction = DoorDirection.E;
-                    roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart(), y);
-                    nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalEnd(), y);
+                    roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalStart(), y);
+                    nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalEnd(), y);
                 }
 
                 //判断门之间的通道是否有物体碰到
@@ -683,8 +658,8 @@ public class DungeonGenerator
                 }
 
                 //没有撞到物体
-                room.Doors.Add(roomDoor);
-                nextRoom.Doors.Add(nextRoomDoor);
+                roomInfo.Doors.Add(roomDoor);
+                nextRoomInfo.Doors.Add(nextRoomDoor);
                 return true;
             }
         }
@@ -695,27 +670,27 @@ public class DungeonGenerator
     /// <summary>
     /// 尝试寻找包含拐角的两个房间的连通的门, 返回是否找到
     /// </summary>
-    private bool TryConnectCrossDoor(RoomInfo room, RoomDoorInfo roomDoor, RoomInfo nextRoom, RoomDoorInfo nextRoomDoor)
+    private bool TryConnectCrossDoor(RoomInfo roomInfo, RoomDoorInfo roomDoor, RoomInfo nextRoomInfo, RoomDoorInfo nextRoomDoor)
     {
         //焦点
         Vector2I cross = default;
 
-        if (room.GetHorizontalStart() > nextRoom.GetHorizontalStart())
+        if (roomInfo.GetHorizontalStart() > nextRoomInfo.GetHorizontalStart())
         {
-            if (room.GetVerticalStart() > nextRoom.GetVerticalStart())
+            if (roomInfo.GetVerticalStart() > nextRoomInfo.GetVerticalStart())
             {
-                if (Utils.RandomBoolean()) //↑ //→
+                if (Random.RandomBoolean()) //↑ //→
                 {
-                    if (!TryConnect_NE_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
-                        !TryConnect_WS_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
+                    if (!TryConnect_NE_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_WS_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
                 }
                 else //← //↓
                 {
-                    if (!TryConnect_WS_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
-                        !TryConnect_NE_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
+                    if (!TryConnect_WS_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_NE_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
@@ -723,18 +698,18 @@ public class DungeonGenerator
             }
             else
             {
-                if (Utils.RandomBoolean()) //↓ //→
+                if (Random.RandomBoolean()) //↓ //→
                 {
-                    if (!TryConnect_SE_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
-                        !TryConnect_WN_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
+                    if (!TryConnect_SE_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_WN_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
                 }
                 else //← //↑
                 {
-                    if (!TryConnect_WN_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
-                        !TryConnect_SE_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
+                    if (!TryConnect_WN_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_SE_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
@@ -743,20 +718,20 @@ public class DungeonGenerator
         }
         else
         {
-            if (room.GetVerticalStart() > nextRoom.GetVerticalStart()) //→ //↓
+            if (roomInfo.GetVerticalStart() > nextRoomInfo.GetVerticalStart()) //→ //↓
             {
-                if (Utils.RandomBoolean())
+                if (Random.RandomBoolean())
                 {
-                    if (!TryConnect_ES_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
-                        !TryConnect_NW_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
+                    if (!TryConnect_ES_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_NW_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
                 }
                 else //↑ //←
                 {
-                    if (!TryConnect_NW_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
-                        !TryConnect_ES_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
+                    if (!TryConnect_NW_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_ES_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
@@ -764,18 +739,18 @@ public class DungeonGenerator
             }
             else
             {
-                if (Utils.RandomBoolean()) //→ //↑
+                if (Random.RandomBoolean()) //→ //↑
                 {
-                    if (!TryConnect_EN_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
-                        !TryConnect_SW_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
+                    if (!TryConnect_EN_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_SW_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
                 }
                 else //↓ //←
                 {
-                    if (!TryConnect_SW_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross) &&
-                        !TryConnect_EN_Door(room, nextRoom, roomDoor, nextRoomDoor, ref cross))
+                    if (!TryConnect_SW_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
+                        !TryConnect_EN_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
                     {
                         return false;
                     }
@@ -795,24 +770,24 @@ public class DungeonGenerator
         nextRoomDoor.HasCross = true;
         nextRoomDoor.Cross = cross;
 
-        room.Doors.Add(roomDoor);
-        nextRoom.Doors.Add(nextRoomDoor);
+        roomInfo.Doors.Add(roomDoor);
+        nextRoomInfo.Doors.Add(nextRoomDoor);
         return true;
     }
 
-    private bool FindCrossPassage(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor,ref int offset1, ref int offset2)
+    private bool FindCrossPassage(RoomInfo roomInfo, RoomInfo nextRoomInfo, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor,ref int offset1, ref int offset2)
     {
-        var room1 = room.RoomSplit.RoomInfo;
-        var room2 = nextRoom.RoomSplit.RoomInfo;
+        var room1 = roomInfo.RoomSplit.RoomInfo;
+        var room2 = nextRoomInfo.RoomSplit.RoomInfo;
         
         int? temp1 = null;
         int? temp2 = null;
 
-        foreach (var areaInfo1 in room1.DoorAreaInfos)
+        foreach (var areaInfo1 in room1.GetCompletionDoorArea())
         {
             if (areaInfo1.Direction == roomDoor.Direction)
             {
-                FindCrossPassage_Area(areaInfo1, room, nextRoom, ref temp1);
+                FindCrossPassage_Area(areaInfo1, roomInfo, nextRoomInfo, ref temp1);
             }
         }
         
@@ -821,11 +796,11 @@ public class DungeonGenerator
             return false;
         }
 
-        foreach (var areaInfo2 in room2.DoorAreaInfos)
+        foreach (var areaInfo2 in room2.GetCompletionDoorArea())
         {
             if (areaInfo2.Direction == nextRoomDoor.Direction)
             {
-                FindCrossPassage_Area(areaInfo2, nextRoom, room, ref temp2);
+                FindCrossPassage_Area(areaInfo2, nextRoomInfo, roomInfo, ref temp2);
             }
         }
 
@@ -929,26 +904,26 @@ public class DungeonGenerator
         }
     }
 
-    private bool TryConnect_NE_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
+    private bool TryConnect_NE_Door(RoomInfo roomInfo, RoomInfo nextRoomInfo, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
         roomDoor.Direction = DoorDirection.N; //↑
         nextRoomDoor.Direction = DoorDirection.E; //→
 
-        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        if (!FindCrossPassage(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref offset1, ref offset2))
         {
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
-        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalEnd(),
-            nextRoom.GetVerticalStart() + offset2);
+        roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalStart() + offset1, roomInfo.GetVerticalStart());
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalEnd(),
+            nextRoomInfo.GetVerticalStart() + offset2);
         cross = new Vector2I(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
         return true;
     }
 
-    private bool TryConnect_WS_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
+    private bool TryConnect_WS_Door(RoomInfo roomInfo, RoomInfo nextRoomInfo, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         //ok
         var offset1 = 0;
@@ -956,128 +931,128 @@ public class DungeonGenerator
         roomDoor.Direction = DoorDirection.W; //←
         nextRoomDoor.Direction = DoorDirection.S; //↓
                 
-        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        if (!FindCrossPassage(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref offset1, ref offset2))
         {
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart(), room.GetVerticalStart() + offset1);
-        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart() + offset2, nextRoom.GetVerticalEnd());
+        roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalStart(), roomInfo.GetVerticalStart() + offset1);
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalStart() + offset2, nextRoomInfo.GetVerticalEnd());
         cross = new Vector2I(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
     }
 
-    private bool TryConnect_SE_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
+    private bool TryConnect_SE_Door(RoomInfo roomInfo, RoomInfo nextRoomInfo, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
         roomDoor.Direction = DoorDirection.S; //↓
         nextRoomDoor.Direction = DoorDirection.E; //→
                     
-        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        if (!FindCrossPassage(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref offset1, ref offset2))
         {
             return false;
         }
 
-        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart() + offset1, room.GetVerticalEnd());
-        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalEnd(),
-            nextRoom.GetVerticalStart() + offset2);
+        roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalStart() + offset1, roomInfo.GetVerticalEnd());
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalEnd(),
+            nextRoomInfo.GetVerticalStart() + offset2);
         cross = new Vector2I(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
         return true;
     }
 
-    private bool TryConnect_WN_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
+    private bool TryConnect_WN_Door(RoomInfo roomInfo, RoomInfo nextRoomInfo, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
         roomDoor.Direction = DoorDirection.W; //←
         nextRoomDoor.Direction = DoorDirection.N; //↑
                     
-        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        if (!FindCrossPassage(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref offset1, ref offset2))
         {
             return false;
         }
 
         roomDoor.OriginPosition =
-            new Vector2I(room.GetHorizontalStart(), room.GetVerticalStart() + offset1); //
-        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart() + offset2,
-            nextRoom.GetVerticalStart());
+            new Vector2I(roomInfo.GetHorizontalStart(), roomInfo.GetVerticalStart() + offset1); //
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalStart() + offset2,
+            nextRoomInfo.GetVerticalStart());
         cross = new Vector2I(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
     }
     
-    private bool TryConnect_ES_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
+    private bool TryConnect_ES_Door(RoomInfo roomInfo, RoomInfo nextRoomInfo, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
         roomDoor.Direction = DoorDirection.E; //→
         nextRoomDoor.Direction = DoorDirection.S; //↓
 
-        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        if (!FindCrossPassage(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref offset1, ref offset2))
         {
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalEnd(), room.GetVerticalStart() + offset1);
-        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart() + offset2,
-            nextRoom.GetVerticalEnd());
+        roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalEnd(), roomInfo.GetVerticalStart() + offset1);
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalStart() + offset2,
+            nextRoomInfo.GetVerticalEnd());
         cross = new Vector2I(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
     }
     
-    private bool TryConnect_NW_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
+    private bool TryConnect_NW_Door(RoomInfo roomInfo, RoomInfo nextRoomInfo, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
         roomDoor.Direction = DoorDirection.N; //↑
         nextRoomDoor.Direction = DoorDirection.W; //←
 
-        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        if (!FindCrossPassage(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref offset1, ref offset2))
         {
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart() + offset1, room.GetVerticalStart());
-        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart(),
-            nextRoom.GetVerticalStart() + offset2);
+        roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalStart() + offset1, roomInfo.GetVerticalStart());
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalStart(),
+            nextRoomInfo.GetVerticalStart() + offset2);
         cross = new Vector2I(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
         return true;
     }
     
-    private bool TryConnect_EN_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
+    private bool TryConnect_EN_Door(RoomInfo roomInfo, RoomInfo nextRoomInfo, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
         roomDoor.Direction = DoorDirection.E; //→
         nextRoomDoor.Direction = DoorDirection.N; //↑
 
-        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        if (!FindCrossPassage(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref offset1, ref offset2))
         {
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalEnd(),
-            room.GetVerticalStart() + offset1);
-        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart() + offset2, nextRoom.GetVerticalStart());
+        roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalEnd(),
+            roomInfo.GetVerticalStart() + offset1);
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalStart() + offset2, nextRoomInfo.GetVerticalStart());
         cross = new Vector2I(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
         return true;
     }
 
-    private bool TryConnect_SW_Door(RoomInfo room, RoomInfo nextRoom, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
+    private bool TryConnect_SW_Door(RoomInfo roomInfo, RoomInfo nextRoomInfo, RoomDoorInfo roomDoor, RoomDoorInfo nextRoomDoor, ref Vector2I cross)
     {
         var offset1 = 0;
         var offset2 = 0;
         roomDoor.Direction = DoorDirection.S; //↓
         nextRoomDoor.Direction = DoorDirection.W; //←
 
-        if (!FindCrossPassage(room, nextRoom, roomDoor, nextRoomDoor, ref offset1, ref offset2))
+        if (!FindCrossPassage(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref offset1, ref offset2))
         {
             return false;
         }
                     
-        roomDoor.OriginPosition = new Vector2I(room.GetHorizontalStart() + offset1,
-            room.GetVerticalEnd());
-        nextRoomDoor.OriginPosition = new Vector2I(nextRoom.GetHorizontalStart(), nextRoom.GetVerticalStart() + offset2);
+        roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalStart() + offset1,
+            roomInfo.GetVerticalEnd());
+        nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalStart(), nextRoomInfo.GetVerticalStart() + offset2);
         cross = new Vector2I(roomDoor.OriginPosition.X, nextRoomDoor.OriginPosition.Y);
         return true;
     }
@@ -1085,25 +1060,25 @@ public class DungeonGenerator
     /// <summary>
     /// 查找房间的连接通道, 函数返回是否找到对应的门, 通过 result 返回 x/y 轴坐标
     /// </summary>
-    /// <param name="room">第一个房间</param>
-    /// <param name="nextRoom">第二个房间</param>
+    /// <param name="roomInfo">第一个房间</param>
+    /// <param name="nextRoomInfo">第二个房间</param>
     /// <param name="direction">第一个房间连接方向</param>
-    private List<Vector2I> FindPassage(RoomInfo room, RoomInfo nextRoom, DoorDirection direction)
+    private List<Vector2I> FindPassage(RoomInfo roomInfo, RoomInfo nextRoomInfo, DoorDirection direction)
     {
-        var room1 = room.RoomSplit.RoomInfo;
-        var room2 = nextRoom.RoomSplit.RoomInfo;
+        var room1 = roomInfo.RoomSplit.RoomInfo;
+        var room2 = nextRoomInfo.RoomSplit.RoomInfo;
         
         //用于存储符合生成条件的区域
         var rangeList = new List<Vector2I>();
         
-        foreach (var doorAreaInfo1 in room1.DoorAreaInfos)
+        foreach (var doorAreaInfo1 in room1.GetCompletionDoorArea())
         {
             if (doorAreaInfo1.Direction == direction)
             {
                 //第二个门的方向
                 var direction2 = GetReverseDirection(direction);
                 
-                foreach (var doorAreaInfo2 in room2.DoorAreaInfos)
+                foreach (var doorAreaInfo2 in room2.GetCompletionDoorArea())
                 {
                     if (doorAreaInfo2.Direction == direction2)
                     {
@@ -1111,21 +1086,21 @@ public class DungeonGenerator
                         if (direction == DoorDirection.E || direction == DoorDirection.W) //第二个门向← 或者 第二个门向→
                         {
                             range = CalcOverlapRange(
-                                room.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo1.Start, room.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo1.End,
-                                nextRoom.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo2.Start, nextRoom.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo2.End
+                                roomInfo.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo1.Start, roomInfo.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo1.End,
+                                nextRoomInfo.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo2.Start, nextRoomInfo.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo2.End
                             );
                         }
                         else //第二个门向↑ 或者 第二个门向↓
                         {
                             range = CalcOverlapRange(
-                                room.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo1.Start, room.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo1.End,
-                                nextRoom.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo2.Start, nextRoom.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo2.End
+                                roomInfo.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo1.Start, roomInfo.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo1.End,
+                                nextRoomInfo.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo2.Start, nextRoomInfo.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo2.End
                             );
                         }
                         //交集范围够生成门
                         if (range.Y - range.X >= GameConfig.CorridorWidth * GameConfig.TileCellSize)
                         {
-                            rangeList.Add(new Vector2I((int)(range.X / 16), (int)(range.Y / 16) - GameConfig.CorridorWidth));
+                            rangeList.Add(new Vector2I((int)(range.X / GameConfig.TileCellSize), (int)(range.Y / GameConfig.TileCellSize) - GameConfig.CorridorWidth));
                         }
                     }
                 }
@@ -1189,23 +1164,23 @@ public class DungeonGenerator
     {
         var point1 = door1.OriginPosition;
         var point2 = door2.OriginPosition;
-        var pos = new Vector2(Mathf.Min(point1.X, point2.X), Mathf.Min(point1.Y, point2.Y));
-        var size = new Vector2(
+        var pos = new Vector2I(Mathf.Min(point1.X, point2.X), Mathf.Min(point1.Y, point2.Y));
+        var size = new Vector2I(
             point1.X == point2.X ? GameConfig.CorridorWidth : Mathf.Abs(point1.X - point2.X),
             point1.Y == point2.Y ? GameConfig.CorridorWidth : Mathf.Abs(point1.Y - point2.Y)
         );
 
-        Vector2 collPos;
-        Vector2 collSize;
+        Vector2I collPos;
+        Vector2I collSize;
         if (point1.X == point2.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos = new Vector2(pos.X - GameConfig.RoomSpace, pos.Y);
-            collSize = new Vector2(size.X + GameConfig.RoomSpace * 2, size.Y);
+            collPos = new Vector2I(pos.X - GameConfig.RoomSpace, pos.Y);
+            collSize = new Vector2I(size.X + GameConfig.RoomSpace * 2, size.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos = new Vector2(pos.X, pos.Y - GameConfig.RoomSpace);
-            collSize = new Vector2(size.X, size.Y + GameConfig.RoomSpace * 2);
+            collPos = new Vector2I(pos.X, pos.Y - GameConfig.RoomSpace);
+            collSize = new Vector2I(size.X, size.Y + GameConfig.RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos, collSize))
@@ -1213,38 +1188,38 @@ public class DungeonGenerator
             return false;
         }
 
-        door2.RoomInfo.AisleArea.Add(new Rect2(pos, size));
-        _roomGrid.AddRect(pos, size, true);
+        door2.RoomInfo.AisleArea.Add(new Rect2I(pos, size));
+        _roomGrid.SetRect(pos, size, true);
         return true;
     }
 
     //将两个门间的过道占用数据存入RoomGrid, 该重载加入拐角点
-    private bool AddCorridorToGridRange(RoomDoorInfo door1, RoomDoorInfo door2, Vector2 cross)
+    private bool AddCorridorToGridRange(RoomDoorInfo door1, RoomDoorInfo door2, Vector2I cross)
     {
         var point1 = door1.OriginPosition;
         var point2 = door2.OriginPosition;
-        var pos1 = new Vector2(Mathf.Min(point1.X, cross.X), Mathf.Min(point1.Y, cross.Y));
-        var size1 = new Vector2(
+        var pos1 = new Vector2I(Mathf.Min(point1.X, cross.X), Mathf.Min(point1.Y, cross.Y));
+        var size1 = new Vector2I(
             point1.X == cross.X ? GameConfig.CorridorWidth : Mathf.Abs(point1.X - cross.X),
             point1.Y == cross.Y ? GameConfig.CorridorWidth : Mathf.Abs(point1.Y - cross.Y)
         );
-        var pos2 = new Vector2(Mathf.Min(point2.X, cross.X), Mathf.Min(point2.Y, cross.Y));
-        var size2 = new Vector2(
+        var pos2 = new Vector2I(Mathf.Min(point2.X, cross.X), Mathf.Min(point2.Y, cross.Y));
+        var size2 = new Vector2I(
             point2.X == cross.X ? GameConfig.CorridorWidth : Mathf.Abs(point2.X - cross.X),
             point2.Y == cross.Y ? GameConfig.CorridorWidth : Mathf.Abs(point2.Y - cross.Y)
         );
 
-        Vector2 collPos1;
-        Vector2 collSize1;
+        Vector2I collPos1;
+        Vector2I collSize1;
         if (point1.X == cross.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos1 = new Vector2(pos1.X - GameConfig.RoomSpace, pos1.Y);
-            collSize1 = new Vector2(size1.X + GameConfig.RoomSpace * 2, size1.Y);
+            collPos1 = new Vector2I(pos1.X - GameConfig.RoomSpace, pos1.Y);
+            collSize1 = new Vector2I(size1.X + GameConfig.RoomSpace * 2, size1.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos1 = new Vector2(pos1.X, pos1.Y - GameConfig.RoomSpace);
-            collSize1 = new Vector2(size1.X, size1.Y + GameConfig.RoomSpace * 2);
+            collPos1 = new Vector2I(pos1.X, pos1.Y - GameConfig.RoomSpace);
+            collSize1 = new Vector2I(size1.X, size1.Y + GameConfig.RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos1, collSize1))
@@ -1252,17 +1227,17 @@ public class DungeonGenerator
             return false;
         }
 
-        Vector2 collPos2;
-        Vector2 collSize2;
+        Vector2I collPos2;
+        Vector2I collSize2;
         if (point2.X == cross.X) //纵向加宽, 防止贴到其它墙
         {
-            collPos2 = new Vector2(pos2.X - GameConfig.RoomSpace, pos2.Y);
-            collSize2 = new Vector2(size2.X + GameConfig.RoomSpace * 2, size2.Y);
+            collPos2 = new Vector2I(pos2.X - GameConfig.RoomSpace, pos2.Y);
+            collSize2 = new Vector2I(size2.X + GameConfig.RoomSpace * 2, size2.Y);
         }
         else //横向加宽, 防止贴到其它墙
         {
-            collPos2 = new Vector2(pos2.X, pos2.Y - GameConfig.RoomSpace);
-            collSize2 = new Vector2(size2.X, size2.Y + GameConfig.RoomSpace * 2);
+            collPos2 = new Vector2I(pos2.X, pos2.Y - GameConfig.RoomSpace);
+            collSize2 = new Vector2I(size2.X, size2.Y + GameConfig.RoomSpace * 2);
         }
 
         if (_roomGrid.RectCollision(collPos2, collSize2))
@@ -1270,10 +1245,10 @@ public class DungeonGenerator
             return false;
         }
 
-        door2.RoomInfo.AisleArea.Add(new Rect2(pos1, size1));
-        door2.RoomInfo.AisleArea.Add(new Rect2(pos2, size2));
-        _roomGrid.AddRect(pos1, size1, true);
-        _roomGrid.AddRect(pos2, size2, true);
+        door2.RoomInfo.AisleArea.Add(new Rect2I(pos1, size1));
+        door2.RoomInfo.AisleArea.Add(new Rect2I(pos2, size2));
+        _roomGrid.SetRect(pos1, size1, true);
+        _roomGrid.SetRect(pos2, size2, true);
         return true;
     }
 }

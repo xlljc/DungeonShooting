@@ -11,13 +11,13 @@ public partial class EnemyDebris : ActivityObject
     public override void OnInit()
     {
         var frameCount = AnimatedSprite.SpriteFrames.GetFrameCount(AnimatorNames.Default);
-        AnimatedSprite.Frame = Utils.RandomRangeInt(0, frameCount - 1);
+        AnimatedSprite.Frame = Utils.Random.RandomRangeInt(0, frameCount - 1);
 
         Throw(
-            Utils.RandomRangeInt(0, 16),
-            Utils.RandomRangeInt(10, 60),
-            new Vector2(Utils.RandomRangeInt(-25, 25), Utils.RandomRangeInt(-25, 25)),
-            Utils.RandomRangeInt(-360, 360)
+            Utils.Random.RandomRangeInt(0, 16),
+            Utils.Random.RandomRangeInt(10, 60),
+            new Vector2(Utils.Random.RandomRangeInt(-25, 25), Utils.Random.RandomRangeInt(-25, 25)),
+            Utils.Random.RandomRangeInt(-360, 360)
         );
 
         StartCoroutine(EmitParticles());
@@ -27,7 +27,7 @@ public partial class EnemyDebris : ActivityObject
     {
         var gpuParticles2D = GetNode<GpuParticles2D>("GPUParticles2D");
         gpuParticles2D.Emitting = true;
-        yield return new WaitForSeconds(Utils.RandomRangeFloat(1f, 2.5f));
+        yield return new WaitForSeconds(Utils.Random.RandomRangeFloat(1f, 2.5f));
         gpuParticles2D.Emitting = false;
         yield return new WaitForSeconds(1);
         BecomesStaticImage();
