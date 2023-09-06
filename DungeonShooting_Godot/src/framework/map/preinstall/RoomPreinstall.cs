@@ -327,11 +327,8 @@ public class RoomPreinstall : IDestroy
         //禁用下坠
         instance.EnableVerticalMotion = false;
 
-        for (var i = 0; i < 10; i++)
-        {
-            instance.SetBlendSchedule(a);
-            yield return 0;
-        }
+        instance.SetBlendSchedule(a);
+        yield return new WaitForFixedProcess(10);
 
         while (a > 0)
         {
@@ -339,6 +336,7 @@ public class RoomPreinstall : IDestroy
             a -= 0.05f;
             yield return 0;
         }
+        instance.SetBlendSchedule(0);
 
         //启用自定义行为
         instance.EnableCustomBehavior = true;

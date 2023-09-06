@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=8 format=3 uid="uid://dbhgioeoksa7"]
 
 [ext_resource type="Material" uid="uid://c1chld6lkpgji" path="res://resource/material/SmokeParticleMaterial.tres" id="1_dxavj"]
 [ext_resource type="Texture2D" uid="uid://bs1lan5uwxyfg" path="res://resource/curve/Curve1.tres" id="1_s60r7"]
@@ -12,7 +12,7 @@ particles_anim_h_frames = 3
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pgx85"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_p8jst"]
 particle_flag_align_y = true
 particle_flag_disable_z = true
 spread = 180.0
@@ -41,7 +41,7 @@ script = ExtResource("3_ax5u4")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 emitting = false
-process_material = SubResource("ParticleProcessMaterial_pgx85")
+process_material = SubResource("ParticleProcessMaterial_p8jst")
 texture = ExtResource("3_1mceu")
 lifetime = 0.5
 one_shot = true

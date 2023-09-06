@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/game/effects/EnemyDebris.cs" id="1_jnsw0"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_b3d83"]
-[ext_resource type="Texture2D" uid="uid://d2f55lu60x64i" path="res://resource/sprite/role/enemy0001/Enemy0001_Debris.png" id="3_ntutm"]
+[ext_resource type="Texture2D" uid="uid://cn64eauvwx1uj" path="res://resource/sprite/role/enemy0001/Enemy0001_Debris.png" id="3_ntutm"]
 [ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/Smoke.png" id="4_egbbr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s1mj2"]
@@ -10,7 +10,7 @@ resource_local_to_scene = true
 shader = ExtResource("2_b3d83")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
-shader_parameter/alpha = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
@@ -19,7 +19,7 @@ shader_parameter/outline_rainbow = false
 shader = ExtResource("2_b3d83")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
-shader_parameter/alpha = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
