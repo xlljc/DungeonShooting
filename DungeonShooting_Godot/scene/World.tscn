@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqf2vks5ggnsp"]
+[gd_scene load_steps=4 format=3 uid="uid://bqf2vks5ggnsp"]
 
 [ext_resource type="Script" path="res://src/game/room/World.cs" id="1_kt3mm"]
 [ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/TileSet1.tres" id="2_p6iui"]
+
+[sub_resource type="Environment" id="Environment_g06jj"]
+background_mode = 3
+glow_enabled = true
+glow_normalized = true
+glow_blend_mode = 1
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot")]
 script = ExtResource("1_kt3mm")
@@ -11,6 +17,9 @@ TileRoot = NodePath("TileRoot")
 StaticSpriteRoot = NodePath("StaticSpriteRoot")
 AffiliationAreaRoot = NodePath("AffiliationAreaRoot")
 metadata/_edit_vertical_guides_ = []
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_g06jj")
 
 [node name="TileRoot" type="TileMap" parent="."]
 y_sort_enabled = true
