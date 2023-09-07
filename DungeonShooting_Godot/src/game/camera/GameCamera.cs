@@ -29,6 +29,11 @@ public partial class GameCamera : Camera2D
     public bool EnableShake { get; set; } = true;
 
     /// <summary>
+    /// 镜头跟随鼠标进度 (0 - 1)
+    /// </summary>
+    public float FollowsMouseAmount = 0.15f;
+    
+    /// <summary>
     /// 相机跟随目标
     /// </summary>
     private Role _followTarget;
@@ -77,13 +82,15 @@ public partial class GameCamera : Camera2D
             var mousePosition = InputManager.CursorPosition;
             var targetPosition = _followTarget.GlobalPosition;
             Vector2 targetPos;
-            if (targetPosition.DistanceSquaredTo(mousePosition) >= 39999.992F) // >= (60 / 0.3f) * (60 / 0.3f)
+            //if (targetPosition.DistanceSquaredTo(mousePosition) >= 39999.992F) // >= (60 / 0.3f) * (60 / 0.3f)
+            if (targetPosition.DistanceSquaredTo(mousePosition) >= (60 / FollowsMouseAmount) * (60 / FollowsMouseAmount))
             {
                 targetPos = targetPosition.MoveToward(mousePosition, 60);
             }
             else
             {
-                targetPos = targetPosition.Lerp(mousePosition, 0.3f); //这里的0.3就是上面的 (60 / 0.3f) * (60 / 0.3f) 中的 0.3
+                //targetPos = targetPosition.Lerp(mousePosition, 0.3f); //这里的0.3就是上面的 (60 / 0.3f) * (60 / 0.3f) 中的 0.3
+                targetPos = targetPosition.Lerp(mousePosition, FollowsMouseAmount);
             }
             _camPos = _camPos.Lerp(targetPos, 20 * newDelta);
             GlobalPosition = _camPos.Round();

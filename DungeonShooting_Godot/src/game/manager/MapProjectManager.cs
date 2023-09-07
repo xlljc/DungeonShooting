@@ -30,7 +30,8 @@ public static class MapProjectManager
 #if TOOLS
         CustomMapPath = GameConfig.RoomTileDir;
 #else
-        CustomMapPath = "";
+        CustomMapPath = GameConfig.RoomTileDir;
+        //CustomMapPath = "";
 #endif
         EventManager.AddEventListener(EventEnum.OnEditorSave, OnRoomSave);
     }

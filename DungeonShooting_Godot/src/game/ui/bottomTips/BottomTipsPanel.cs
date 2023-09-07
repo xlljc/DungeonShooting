@@ -20,16 +20,7 @@ public partial class BottomTipsPanel : BottomTips
     {
         _offsetY = L_Panel.Instance.Position.Y - (Position.Y + Size.Y);
     }
-
-    public override void OnShowUi()
-    {
-
-    }
-
-    public override void OnHideUi()
-    {
-        
-    }
+    
 
     /// <summary>
     /// 执行入场流程
@@ -109,6 +100,7 @@ public partial class BottomTipsPanel : BottomTips
     public static void Init()
     {
         _instance = UiManager.CreateUi<BottomTipsPanel>(UiManager.UiName.BottomTips);
+        _instance.ShowUi();
     }
 
     /// <summary>
