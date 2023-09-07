@@ -92,7 +92,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     }
 
     /// <summary>
-    /// 每帧调用一次
+    /// 如果 Ui 处于打开状态, 则每帧调用一次
     /// </summary>
     public virtual void Process(float delta)
     {
