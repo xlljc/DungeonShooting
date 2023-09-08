@@ -31,6 +31,8 @@ public partial class AffiliationArea : Area2D, IDestroy
     public bool IsFirstEnterFlag { get; private set; } = true;
     
     private bool _init = false;
+    private Vector2 _initSize;
+    private RectangleShape2D _shape;
     
     /// <summary>
     /// 根据矩形区域初始化归属区域
@@ -44,10 +46,12 @@ public partial class AffiliationArea : Area2D, IDestroy
 
         _init = true;
 
+        _initSize = rect2.Size;
         RoomInfo = roomInfo;
         var collisionShape = new CollisionShape2D();
         collisionShape.GlobalPosition = rect2.Position + rect2.Size / 2;
         var shape = new RectangleShape2D();
+        _shape = shape;
         shape.Size = rect2.Size;
         collisionShape.Shape = shape;
         AddChild(collisionShape);
@@ -269,5 +273,21 @@ public partial class AffiliationArea : Area2D, IDestroy
         QueueFree();
         _includeItems.Clear();
         _enterItems.Clear();
+    }
+
+    /// <summary>
+    /// 在初始区域的基础上扩展区域, size为扩展大小
+    /// </summary>
+    public void ExtendedRegion(Vector2 size)
+    {
+        _shape.Size = _initSize + size;
+    }
+
+    /// <summary>
+    /// 将区域还原到初始大小
+    /// </summary>
+    public void RestoreRegion()
+    {
+        _shape.Size = _initSize;
     }
 }
