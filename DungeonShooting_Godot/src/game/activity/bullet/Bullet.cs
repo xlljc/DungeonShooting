@@ -41,7 +41,17 @@ public partial class Bullet : ActivityObject
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
 
-    public void Init(Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
+    /// <summary>
+    /// 初始化子弹属性
+    /// </summary>
+    /// <param name="trigger">触发开火的角色</param>
+    /// <param name="weapon">射出该子弹的武器</param>
+    /// <param name="speed">速度</param>
+    /// <param name="maxDistance">最大飞行距离</param>
+    /// <param name="position">位置</param>
+    /// <param name="rotation">角度</param>
+    /// <param name="targetLayer">攻击目标层级</param>
+    public void Init(Role trigger,Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
         Weapon = weapon;
         Role = weapon.Master;
@@ -49,13 +59,13 @@ public partial class Bullet : ActivityObject
         CollisionArea.AreaEntered += OnArea2dEntered;
         
         //只有玩家使用该武器才能获得正常速度的子弹
-        if (weapon.Master is Player)
+        if (trigger != null && !trigger.IsAi)
         {
             FlySpeed = speed;
         }
         else
         {
-            FlySpeed = speed * weapon.Attribute.AiBulletSpeedScale;
+            FlySpeed = speed * weapon.AiUseAttribute.AiBulletSpeedScale;
         }
         MaxDistance = maxDistance;
         Position = position;

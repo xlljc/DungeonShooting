@@ -105,6 +105,11 @@ public partial class Player : Role
         if (InputManager.Fire) //开火
         {
             Attack();
+            // var weaponArray = AffiliationArea.FindEnterItems(o => o is Weapon);
+            // foreach (Weapon activityObject in weaponArray)
+            // {
+            //     activityObject.Trigger(this);
+            // }
         }
 
         if (InputManager.UseActiveProp) //使用道具

@@ -9,9 +9,15 @@ using Config;
 public abstract partial class Weapon : ActivityObject, IPackageItem
 {
     /// <summary>
-    /// 武器属性数据
+    /// 武器使用的属性数据, 该属性会根据是否是玩家使用武器, 如果是Ai使用武器, 则会返回 AiUseAttribute 的属性对象
     /// </summary>
     public ExcelConfig.Weapon Attribute => _weaponAttribute;
+
+    /// <summary>
+    /// Ai使用该武器的属性
+    /// </summary>
+    public ExcelConfig.Weapon AiUseAttribute => _aiWeaponAttribute;
+    
     private ExcelConfig.Weapon _weaponAttribute;
     private ExcelConfig.Weapon _playerWeaponAttribute;
     private ExcelConfig.Weapon _aiWeaponAttribute;
@@ -130,6 +136,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public bool IsAutoPlaySpriteFrames { get; set; } = true;
 
     //--------------------------------------------------------------------------------------------
+    
+    //触发按下扳机的角色
+    private Role _attackTrigger;
     
     //是否按下
     private bool _triggerFlag = false;
@@ -287,7 +296,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// 发射子弹时调用的函数, 每发射一枚子弹调用一次,
     /// 如果做霰弹武器效果, 一次开火发射5枚子弹, 则该函数调用5次
     /// </summary>
-    /// <param name="fireRotation">开火时枪口旋转角度</param>
+    /// <param name="fireRotation">开火时枪口旋转角度, 弧度制</param>
     protected abstract void OnShoot(float fireRotation);
 
     /// <summary>
@@ -606,7 +615,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             if (!_looseShootFlag && _continuousCount > 0 && _delayedTime <= 0 && _attackTimer <= 0)
             {
                 //连发开火
-                TriggerFire();
+                TriggerFire(_attackTrigger);
                 //连发最后一发打完了
                 if (Attribute.ManualBeLoaded && _continuousCount <= 0)
                 {
@@ -647,21 +656,25 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         return Master == null && GetParent() == GameApplication.Instance.World.NormalLayer;
     }
-    
+
     /// <summary>
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
-    public void Trigger()
+    /// <param name="trigger">按下扳机的角色, 如果传 null, 则视为走火</param>
+    public void Trigger(Role trigger)
     {
         //这一帧已经按过了, 不需要再按下
         if (_triggerFlag) return;
+        
+        _triggerFlag = true;
+        _attackTrigger = trigger;
         
         //是否第一帧按下
         var justDown = _downTimer == 0;
         
         if (_beLoadedState == 0 || _beLoadedState == -1)  //需要执行上膛操作
         {
-            if (justDown && !Reloading)
+            if (justDown && !Reloading && Master != null)
             {
                 if (CurrAmmo <= 0)
                 {
@@ -731,7 +744,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                 else if (CurrAmmo <= 0) //子弹不够
                 {
                     fireFlag = false;
-                    if (justDown)
+                    if (justDown && Master != null)
                     {
                         //第一帧按下, 触发换弹
                         Reload();
@@ -767,7 +780,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                         else
                         {
                             //开火
-                            TriggerFire();
+                            TriggerFire(_attackTrigger);
 
                             //非连射模式
                             if (!Attribute.ContinuousShoot && Attribute.ManualBeLoaded && _continuousCount <= 0)
@@ -783,8 +796,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
 
             }
         }
-
-        _triggerFlag = true;
     }
 
     /// <summary>
@@ -845,7 +856,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             _looseShootFlag = false;
             if (_chargeTime >= Attribute.MinChargeTime) //判断蓄力是否够了
             {
-                TriggerFire();
+                TriggerFire(_attackTrigger);
                 //非连射模式
                 if (!Attribute.ContinuousShoot && Attribute.ManualBeLoaded && _continuousCount <= 0)
                 {
@@ -866,7 +877,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 触发开火
     /// </summary>
-    private void TriggerFire()
+    private void TriggerFire(Role trigger)
     {
         _noAttackTime = 0;
 
@@ -931,11 +942,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         if (Master != null)
         {
             bulletCount = Master.RoleState.CallCalcBulletCountEvent(this, bulletCount);
-            fireRotation += Mathf.DegToRad(Master.MountPoint.RealRotationDegrees);
+            fireRotation += Master.MountPoint.RealRotation;
+        }
+        else
+        {
+            fireRotation += GlobalRotation;
         }
         
         //创建子弹
-        for (int i = 0; i < bulletCount; i++)
+        for (var i = 0; i < bulletCount; i++)
         {
             //发射子弹
             OnShoot(fireRotation);
@@ -946,16 +961,23 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         
         //武器的旋转角度
         tempAngle -= Attribute.UpliftAngle;
-        RotationDegrees = tempAngle;
         _fireAngle = tempAngle;
         
-        //武器身位置
-        var max = Mathf.Abs(Mathf.Max(Attribute.MaxBacklash, Attribute.MinBacklash));
-        _currBacklashLength = Mathf.Clamp(
-            _currBacklashLength - Utils.Random.RandomRangeFloat(Attribute.MinBacklash, Attribute.MaxBacklash),
-            -max, max
-        );
-        Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
+        if (Master != null) //是否被拾起
+        {
+            //武器身位置
+            var max = Mathf.Abs(Mathf.Max(Attribute.MaxBacklash, Attribute.MinBacklash));
+            _currBacklashLength = Mathf.Clamp(
+                _currBacklashLength - Utils.Random.RandomRangeFloat(Attribute.MinBacklash, Attribute.MaxBacklash),
+                -max, max
+            );
+            Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
+            RotationDegrees = tempAngle;
+        }
+        else
+        {
+            
+        }
     }
 
     /// <summary>
@@ -1721,10 +1743,19 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     protected ActivityObject ThrowShell(string shellId, float speedScale = 1)
     {
-        var shellPosition = (Master != null ? Master.MountPoint.Position : Position) + ShellPoint.Position;
         var startPos = ShellPoint.GlobalPosition;
-        var startHeight = -shellPosition.Y;
-        startPos.Y += startHeight;
+        float startHeight;
+        if (Master != null)
+        {
+            var shellPosition = (Master != null ? Master.MountPoint.Position : Position) + ShellPoint.Position;
+            startHeight = -shellPosition.Y;
+            startPos.Y += startHeight;
+        }
+        else
+        {
+            startHeight = Altitude;
+        }
+
         var direction = GlobalRotationDegrees + Utils.Random.RandomRangeInt(-30, 30) + 180;
         var verticalSpeed = Utils.Random.RandomRangeInt((int)(60 * speedScale), (int)(120 * speedScale));
         var velocity = new Vector2(Utils.Random.RandomRangeInt((int)(20 * speedScale), (int)(60 * speedScale)), 0).Rotated(direction * Mathf.Pi / 180);
@@ -1760,15 +1791,18 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             distance = Master.RoleState.CallCalcBulletDistanceEvent(this, distance);
             deviationAngle = Master.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
         }
+
+        var attackLayer = _attackTrigger != null ? _attackTrigger.AttackLayer : GetAttackLayer();
         //创建子弹
         var bullet = Create<Bullet>(bulletId);
         bullet.Init(
+            _attackTrigger,
             this,
             speed,
             distance,
             FirePoint.GlobalPosition,
             fireRotation + Mathf.DegToRad(deviationAngle),
-            GetAttackLayer()
+            attackLayer
         );
         bullet.MinHarm = Attribute.BulletMinHarm;
         bullet.MaxHarm = Attribute.BulletMaxHarm;
