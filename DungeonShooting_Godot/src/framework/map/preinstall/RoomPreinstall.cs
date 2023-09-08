@@ -292,8 +292,6 @@ public class RoomPreinstall : IDestroy
                 if (activityMark.MarkType == SpecialMarkType.Normal)
                 {
                     var activityObject = CreateItem(activityMark);
-                    activityObject.VerticalSpeed = activityMark.VerticalSpeed;
-                    activityObject.Altitude = activityMark.Altitude;
                     //初始化属性
                     InitAttr(activityObject, activityMark);
                     //播放出生动画
@@ -359,6 +357,8 @@ public class RoomPreinstall : IDestroy
     {
         var activityObject = ActivityObject.Create(activityMark.Id);
         activityObject.Position = activityMark.Position;
+        activityObject.VerticalSpeed = activityMark.VerticalSpeed;
+        activityObject.Altitude = activityMark.Altitude;
         return activityObject;
     }
 

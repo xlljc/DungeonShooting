@@ -1632,6 +1632,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     
     public void OnRemoveItem()
     {
+        //要重置部分重要属性属性
+        if (Master.IsAi)
+        {
+            _triggerTimer = 0;
+        }
         GetParent().RemoveChild(this);
         CollisionLayer = _tempLayer;
         _weaponAttribute = _playerWeaponAttribute;
