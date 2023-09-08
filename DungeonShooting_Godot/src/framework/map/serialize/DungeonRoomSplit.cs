@@ -139,7 +139,7 @@ public class DungeonRoomSplit
     /// </summary>
     public void ReloadRoomInfo()
     {
-        var asText = ResourceManager.LoadText(RoomPath);
+        var asText = ResourceManager.LoadText("res://" + RoomPath);
         _roomInfo = JsonSerializer.Deserialize<DungeonRoomInfo>(asText);
     }
 
@@ -148,7 +148,7 @@ public class DungeonRoomSplit
     /// </summary>
     public void ReloadTileInfo()
     {
-        var asText = ResourceManager.LoadText(TilePath);
+        var asText = ResourceManager.LoadText("res://" + TilePath);
         _tileInfo = JsonSerializer.Deserialize<DungeonTileInfo>(asText);
     }
 
@@ -157,7 +157,7 @@ public class DungeonRoomSplit
     /// </summary>
     public void ReloadPreinstall()
     {
-        var asText = ResourceManager.LoadText(PreinstallPath);
+        var asText = ResourceManager.LoadText("res://" + PreinstallPath);
         _preinstall = JsonSerializer.Deserialize<List<RoomPreinstallInfo>>(asText);
     }
 
