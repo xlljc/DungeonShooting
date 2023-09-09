@@ -20,35 +20,23 @@ public class CompilerTest1 : UnitTest
         ExecuteTime.Run("执行用时", () =>
         {
             tree.FromSource(text);
-            //var arr = tree.GetLexerStrings();
-            // for (int i = 0; i < arr.Length; i++)
-            // {
-            //     LogUtils.Log(arr[i].ToString());
-            // }
+            var arr = tree.GetLexerStrings();
+             for (int i = 0; i < arr.Length; i++)
+             {
+                 LogUtils.Log(arr[i].ToString());
+             }
         });
 
     }
-    
-    [Fact(DisplayName = "Test2, 测试解析语法树")]
+
+    [Fact(DisplayName = "Test2, 测试解析表达式")]
     public void Test2()
     {
-        var fileName = "Script/Test2.ds";
-        var text = File.ReadAllText(fileName);
+        var code = "1 + 1";
         var tree = new Lexer();
-        tree.FromSource(text);
+        tree.FromSource(code);
         var syntaxTree = new SyntaxTree();
-        syntaxTree.ParseToken(fileName, tree.GetLexerStrings());
-    }
-
-    [Fact(DisplayName = "Test3, 测试解析表达式")]
-    public void Test3()
-    {
-        var fileName = "Script/Test3.ds";
-        var text = File.ReadAllText(fileName);
-        var tree = new Lexer();
-        tree.FromSource(text);
-        var syntaxTree = new SyntaxTree();
-        syntaxTree.ParseToken(fileName, tree.GetLexerStrings());
+        syntaxTree.ParseToken("noname", tree.GetLexerStrings());
     }
 
 }

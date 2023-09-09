@@ -40,7 +40,7 @@ namespace DScript.Compiler
             "if",
             "else",
             "continue",
-            "macro"
+            "as"
         };
 
         /// <summary>

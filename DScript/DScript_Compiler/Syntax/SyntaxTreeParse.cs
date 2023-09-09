@@ -90,6 +90,11 @@ namespace DScript.Compiler
             LogUtils.Error("未知单词: " + token.Code);
         }
 
+        public void NextNumber(Token token, FileToken fileToken)
+        {
+            
+        }
+
         //解析导入
         private void ImportKeyword(Token token, FileToken fileToken)
         {

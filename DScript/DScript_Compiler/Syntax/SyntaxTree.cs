@@ -52,6 +52,8 @@ namespace DScript.Compiler
                     case TokenType.Word: //单词
                         _treeParse.NextWorld(current, fileToken);
                         break;
+                    case TokenType.Number: //单词
+                        
                     default:
                         LogUtils.Error("未知字符: " + current.Code);
                         break;

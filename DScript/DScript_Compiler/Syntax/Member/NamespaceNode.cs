@@ -96,7 +96,7 @@ namespace DScript.Compiler
         public readonly NamespaceNode Parent;
 
         /// <summary>
-        /// 不要使用构造创建 NamespaceNode, 请使用 NamespaceNode.FromNamespace()
+        /// 不要直接使用构造创建 NamespaceNode, 请使用 NamespaceNode.FromNamespace()
         /// </summary>
         internal NamespaceNode(string fullName, string name, NamespaceNode parent) : base(name)
         {
