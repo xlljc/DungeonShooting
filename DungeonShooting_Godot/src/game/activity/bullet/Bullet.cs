@@ -77,7 +77,7 @@ public partial class Bullet : ActivityObject
         if (Player.Current.CollisionWithMask(targetLayer))
         {
             ShowOutline = true;
-            OutlineColor = new Color(1, 0, 0, 0.9f);
+            OutlineColor = new Color(1, 0, 0);
         }
     }
 
