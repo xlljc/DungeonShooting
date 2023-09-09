@@ -51,7 +51,7 @@ public partial class Bullet : ActivityObject
     /// <param name="position">位置</param>
     /// <param name="rotation">角度</param>
     /// <param name="targetLayer">攻击目标层级</param>
-    public void Init(Role trigger,Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
+    public void Init(Role trigger, Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
         Weapon = weapon;
         Role = weapon.Master;
@@ -71,8 +71,14 @@ public partial class Bullet : ActivityObject
         Position = position;
         Rotation = rotation;
         ShadowOffset = new Vector2(0, 5);
-
         BasisVelocity = new Vector2(FlySpeed, 0).Rotated(Rotation);
+        
+        //如果子弹会对玩家造成伤害, 则显示红色描边
+        if (Player.Current.CollisionWithMask(targetLayer))
+        {
+            ShowOutline = true;
+            OutlineColor = new Color(1, 0, 0, 0.9f);
+        }
     }
 
     protected override void PhysicsProcessOver(float delta)
