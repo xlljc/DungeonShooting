@@ -21,6 +21,7 @@ const float light_offset = 0.5;
 void fragment() {
 	//显示轮廓
 	if (show_outline) {
+		vec4 color = texture(TEXTURE, UV);
 		vec2 size = TEXTURE_PIXEL_SIZE;
 		float outline;
 		outline = texture(TEXTURE, UV + vec2(-size.x, 0)).a;
@@ -29,18 +30,19 @@ void fragment() {
 		outline += texture(TEXTURE, UV + vec2(0, -size.y)).a;
 		outline = min(outline, 1.0);
 		
-		vec4 animated_line_color = vec4(
-			light_offset + sin(2.0 * 3.14 * frequency * TIME),
-			light_offset + sin(2.0 * 3.14 * frequency * TIME + radians(120.0)),
-			light_offset + sin(2.0 * 3.14 * frequency * TIME + radians(240.0)),
-			1.0
-		);
-		
-		vec4 color = texture(TEXTURE, UV);
-		if (outline_rainbow){
-			COLOR = mix(color, animated_line_color, outline - color.a);
-		} else {
-			COLOR = mix(color, outline_color , outline - color.a);
+		if (color.a == 0.0 && outline > 0.0) {
+			vec4 animated_line_color = vec4(
+				light_offset + sin(2.0 * 3.14 * frequency * TIME),
+				light_offset + sin(2.0 * 3.14 * frequency * TIME + radians(120.0)),
+				light_offset + sin(2.0 * 3.14 * frequency * TIME + radians(240.0)),
+				1.0
+			);
+
+			if (outline_rainbow){
+				COLOR = mix(color, animated_line_color, 1);
+			} else {
+				COLOR = mix(color, outline_color , 1);
+			}
 		}
 	}
 	

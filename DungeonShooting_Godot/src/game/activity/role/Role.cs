@@ -844,7 +844,7 @@ public abstract partial class Role : ActivityObject
     {
         if (WeaponPack.ActiveItem != null)
         {
-            WeaponPack.ActiveItem.Trigger();
+            WeaponPack.ActiveItem.Trigger(this);
         }
     }
 
