@@ -1,10 +1,11 @@
 
+using System.Collections;
 using Godot;
 
 /// <summary>
 /// 组件基类, 用于挂载到游戏物体上, 相比于原生 Node 更加轻量化, 实例化 Component 不会创建额外的 Node, 可以大量添加组件
 /// </summary>
-public abstract class Component : IProcess, IDestroy
+public abstract class Component : IProcess, IDestroy, ICoroutine
 {
     /// <summary>
     /// 当前组件所挂载的游戏对象
@@ -211,5 +212,25 @@ public abstract class Component : IProcess, IDestroy
         IsDestroyed = true;
         ActivityInstance.RemoveComponent(this);
         OnDestroy();
+    }
+
+    public long StartCoroutine(IEnumerator able)
+    {
+        return ActivityInstance.StartCoroutine(able);
+    }
+
+    public void StopCoroutine(long coroutineId)
+    {
+        ActivityInstance.StopCoroutine(coroutineId);
+    }
+
+    public bool IsCoroutineOver(long coroutineId)
+    {
+        return ActivityInstance.IsCoroutineOver(coroutineId);
+    }
+
+    public void StopAllCoroutine()
+    {
+        ActivityInstance.StopAllCoroutine();
     }
 }

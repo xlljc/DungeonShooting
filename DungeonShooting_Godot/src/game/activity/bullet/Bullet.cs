@@ -74,11 +74,11 @@ public partial class Bullet : ActivityObject
         BasisVelocity = new Vector2(FlySpeed, 0).Rotated(Rotation);
         
         //如果子弹会对玩家造成伤害, 则显示红色描边
-        if (Player.Current.CollisionWithMask(targetLayer))
-        {
-            ShowOutline = true;
-            OutlineColor = new Color(1, 0, 0, 0.9f);
-        }
+        // if (Player.Current.CollisionWithMask(targetLayer))
+        // {
+        //     ShowOutline = true;
+        //     OutlineColor = new Color(1, 0, 0, 0.9f);
+        // }
     }
 
     protected override void PhysicsProcessOver(float delta)

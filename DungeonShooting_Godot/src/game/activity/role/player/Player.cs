@@ -11,6 +11,16 @@ public partial class Player : Role
     /// 获取当前操作的角色
     /// </summary>
     public static Player Current { get; private set; }
+    
+    /// <summary>
+    /// 玩家身上的状态机控制器
+    /// </summary>
+    public StateController<Player, PlayerStateEnum> StateController { get; private set; }
+    
+    /// <summary>
+    /// 是否翻滚中
+    /// </summary>
+    public bool IsRolling { get; private set; }
 
     /// <summary>
     /// 设置当前操作的玩家对象
@@ -26,7 +36,9 @@ public partial class Player : Role
     public override void OnInit()
     {
         base.OnInit();
-        
+
+        IsAi = false;
+        StateController = AddComponent<StateController<Player, PlayerStateEnum>>();
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 
@@ -43,6 +55,13 @@ public partial class Player : Role
         // CollisionMask = 0;
         // GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
         // //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        
+        //注册状态机
+        StateController.Register(new PlayerIdleState());
+        StateController.Register(new PlayerMoveState());
+        StateController.Register(new PlayerRollState());
+        //默认状态
+        StateController.ChangeStateInstant(PlayerStateEnum.Idle);
     }
 
     protected override void Process(float delta)
@@ -104,12 +123,15 @@ public partial class Player : Role
 
         if (InputManager.Fire) //开火
         {
-            Attack();
-            // var weaponArray = AffiliationArea.FindEnterItems(o => o is Weapon);
-            // foreach (Weapon activityObject in weaponArray)
-            // {
-            //     activityObject.Trigger(this);
-            // }
+            if (StateController.CurrState != PlayerStateEnum.Roll) //不能是翻滚状态
+            {
+                Attack();
+                // var weaponArray = AffiliationArea.FindEnterItems(o => o is Weapon);
+                // foreach (Weapon activityObject in weaponArray)
+                // {
+                //     activityObject.Trigger(this);
+                // }
+            }
         }
 
         if (InputManager.UseActiveProp) //使用道具
@@ -121,7 +143,7 @@ public partial class Player : Role
             ThrowActiveProp();
         }
 
-        if (Input.IsKeyPressed(Key.P))
+        if (Input.IsKeyPressed(Key.P)) //测试用, 自杀
         {
             //Hurt(1000, 0);
             Hp = 0;
@@ -129,18 +151,19 @@ public partial class Player : Role
         }
     }
 
-    protected override void PhysicsProcess(float delta)
-    {
-        if (IsDie)
-        {
-            return;
-        }
-
-        base.PhysicsProcess(delta);
-        HandleMoveInput(delta);
-        //播放动画
-        PlayAnim();
-    }
+    // protected override void PhysicsProcess(float delta)
+    // {
+    //     if (IsDie)
+    //     {
+    //         return;
+    //     }
+    //
+    //     base.PhysicsProcess(delta);
+    //     //处理移动
+    //     HandleMoveInput(delta);
+    //     //播放动画
+    //     PlayAnim();
+    // }
 
     protected override void OnPickUpWeapon(Weapon weapon)
     {
@@ -211,6 +234,7 @@ public partial class Player : Role
 
     protected override void OnDie()
     {
+        StateController.Enable = false;
         GameCamera.Main.SetFollowTarget(null);
         BasisVelocity = Vector2.Zero;
         MoveController.ClearForce();
@@ -237,11 +261,12 @@ public partial class Player : Role
         EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, buffProp);
     }
 
-    //处理角色移动的输入
-    private void HandleMoveInput(float delta)
+    /// <summary>
+    /// 处理角色移动的输入
+    /// </summary>
+    public void HandleMoveInput(float delta)
     {
-        //角色移动
-        Vector2 dir = InputManager.MoveAxis;
+        var dir = InputManager.MoveAxis;
         // 移动. 如果移动的数值接近0(是用 摇杆可能出现 方向 可能会出现浮点)，就friction的值 插值 到 0
         // 如果 有输入 就以当前速度，用acceleration 插值到 对应方向 * 最大速度
         if (Mathf.IsZeroApprox(dir.X))
@@ -250,8 +275,7 @@ public partial class Player : Role
         }
         else
         {
-            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.X, dir.X * RoleState.MoveSpeed, RoleState.Acceleration * delta),
-                BasisVelocity.Y);
+            BasisVelocity = new Vector2(Mathf.MoveToward(BasisVelocity.X, dir.X * RoleState.MoveSpeed, RoleState.Acceleration * delta), BasisVelocity.Y);
         }
 
         if (Mathf.IsZeroApprox(dir.Y))
@@ -260,28 +284,7 @@ public partial class Player : Role
         }
         else
         {
-            BasisVelocity = new Vector2(BasisVelocity.X,
-                Mathf.MoveToward(BasisVelocity.Y, dir.Y * RoleState.MoveSpeed, RoleState.Acceleration * delta));
-        }
-    }
-
-    // 播放动画
-    private void PlayAnim()
-    {
-        if (BasisVelocity != Vector2.Zero)
-        {
-            if ((Face == FaceDirection.Right && BasisVelocity.X >= 0) || Face == FaceDirection.Left && BasisVelocity.X <= 0) //向前走
-            {
-                AnimatedSprite.Play(AnimatorNames.Run);
-            }
-            else if ((Face == FaceDirection.Right && BasisVelocity.X < 0) || Face == FaceDirection.Left && BasisVelocity.X > 0) //向后走
-            {
-                AnimatedSprite.Play(AnimatorNames.ReverseRun);
-            }
-        }
-        else
-        {
-            AnimatedSprite.Play(AnimatorNames.Idle);
+            BasisVelocity = new Vector2(BasisVelocity.X, Mathf.MoveToward(BasisVelocity.Y, dir.Y * RoleState.MoveSpeed, RoleState.Acceleration * delta));
         }
     }
 }

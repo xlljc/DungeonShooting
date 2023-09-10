@@ -8,7 +8,7 @@ resource_local_to_scene = true
 shader = ExtResource("1_xk5yk")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 0.0
-shader_parameter/alpha = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
@@ -18,7 +18,7 @@ resource_local_to_scene = true
 shader = ExtResource("1_xk5yk")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
-shader_parameter/alpha = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
@@ -54,7 +54,7 @@ collision_layer = 0
 collision_mask = 0
 monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtArea"]
+[node name="HurtCollision" type="CollisionShape2D" parent="HurtArea"]
 position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_1eja2")
 
@@ -64,7 +64,7 @@ collision_layer = 0
 collision_mask = 4
 monitorable = false
 
-[node name="Collision" type="CollisionShape2D" parent="InteractiveArea"]
+[node name="InteractiveCollision" type="CollisionShape2D" parent="InteractiveArea"]
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_n68nu")
 

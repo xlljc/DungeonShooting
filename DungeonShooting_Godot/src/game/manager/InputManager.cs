@@ -7,7 +7,7 @@ using Godot;
 public static class InputManager
 {
     /// <summary>
-    /// 移动方向, 键鼠: 键盘WASD
+    /// 移动方向, 已经归一化, 键鼠: 键盘WASD
     /// </summary>
     public static Vector2 MoveAxis { get; private set; }
     
