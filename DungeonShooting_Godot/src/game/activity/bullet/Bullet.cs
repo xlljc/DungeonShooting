@@ -1,3 +1,4 @@
+using System.Collections;
 using Godot;
 
 /// <summary>
@@ -78,6 +79,16 @@ public partial class Bullet : ActivityObject
         {
             ShowOutline = true;
             OutlineColor = new Color(1, 0, 0);
+            StartCoroutine(BorderFlashes());
+        }
+    }
+    
+    private IEnumerator BorderFlashes()
+    {
+        while (true)
+        {
+            ShowOutline = !ShowOutline;
+            yield return new WaitForSeconds(0.12f);
         }
     }
 
@@ -133,5 +144,10 @@ public partial class Bullet : ActivityObject
             role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
             Destroy();
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        StopAllCoroutine();
     }
 }
