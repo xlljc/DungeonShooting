@@ -222,6 +222,13 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public ActivityObject InteractiveItem { get; private set; }
 
+    /// <summary>
+    /// 是否可以翻滚
+    /// </summary>
+    public bool CanRoll => _rollCoolingTimer <= 0;
+    
+    //翻滚冷却计时器
+    private float _rollCoolingTimer = 0;
     //初始缩放
     private Vector2 _startScale;
     //所有角色碰撞的物体
@@ -383,6 +390,11 @@ public abstract partial class Role : ActivityObject
 
     protected override void Process(float delta)
     {
+        if (_rollCoolingTimer > 0)
+        {
+            _rollCoolingTimer -= delta;
+        }
+
         //看向目标
         if (LookTarget != null)
         {
@@ -1027,5 +1039,13 @@ public abstract partial class Role : ActivityObject
         BuffPropPack.Clear();
         ActivePropsPack.Destroy();
         WeaponPack.Destroy();
+    }
+
+    /// <summary>
+    /// 翻滚结束
+    /// </summary>
+    public void OverRoll()
+    {
+        _rollCoolingTimer = RoleState.RollTime;
     }
 }
