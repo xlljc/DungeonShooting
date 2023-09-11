@@ -27,6 +27,12 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     [Export, ExportFillNode]
     public Area2D HurtArea { get; set; }
+    
+    /// <summary>
+    /// 伤害区域碰撞器
+    /// </summary>
+    [Export, ExportFillNode]
+    public CollisionShape2D HurtCollision { get; set; }
 
     /// <summary>
     /// 所属阵营
@@ -69,6 +75,12 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     [Export, ExportFillNode]
     public Area2D InteractiveArea { get; set; }
+    
+    /// <summary>
+    /// 互动区域碰撞器
+    /// </summary>
+    [Export, ExportFillNode]
+    public CollisionShape2D InteractiveCollision { get; set; }
     
     /// <summary>
     /// 脸的朝向

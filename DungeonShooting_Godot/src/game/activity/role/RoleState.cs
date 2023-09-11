@@ -15,6 +15,11 @@ public class RoleState
     /// 移动加速度
     /// </summary>
     public float Acceleration = 1500f;
+
+    /// <summary>
+    /// 翻滚速度
+    /// </summary>
+    public float RollSpeed = 180f;
     
     /// <summary>
     /// 移动摩擦力
