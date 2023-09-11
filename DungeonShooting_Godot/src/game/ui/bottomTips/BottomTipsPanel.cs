@@ -20,16 +20,7 @@ public partial class BottomTipsPanel : BottomTips
     {
         _offsetY = L_Panel.Instance.Position.Y - (Position.Y + Size.Y);
     }
-
-    public override void OnShowUi()
-    {
-
-    }
-
-    public override void OnHideUi()
-    {
-        
-    }
+    
 
     /// <summary>
     /// 执行入场流程
@@ -41,7 +32,10 @@ public partial class BottomTipsPanel : BottomTips
             StopCoroutine(_id);
             HideUi();
         }
-        _id = StartCoroutine(RunAnimation(icon, message));
+        SetIcon(icon);
+        SetMessage(message);
+        _id = StartCoroutine(RunAnimation());
+        ShowUi();
     }
 
     /// <summary>
@@ -60,18 +54,13 @@ public partial class BottomTipsPanel : BottomTips
         S_Label.Instance.Text = message;
     }
 
-    private IEnumerator RunAnimation(Texture2D icon, string message)
+    private IEnumerator RunAnimation()
     {
         //还原位置
         var pos = L_Panel.Instance.Position;
         pos.Y = Position.Y + Size.Y + _offsetY;
         L_Panel.Instance.Position = pos;
-        
-        SetIcon(icon);
-        SetMessage(message);
-        
-        yield return 0;
-        ShowUi();
+
         L_Panel.Instance.ResetSize();
         yield return 0;
         //重新计算中心点

@@ -18,7 +18,6 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_c63vs")
 Layer = 3
-Mode = 1
 metadata/_edit_vertical_guides_ = [960.0]
 
 [node name="Panel" type="PanelContainer" parent="."]

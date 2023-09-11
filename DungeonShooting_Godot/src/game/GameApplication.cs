@@ -222,7 +222,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	private void InitRoomConfig()
 	{
 		//加载房间配置信息
-		var asText = ResourceManager.LoadText("res://resource/map/tileMaps/" + GameConfig.RoomGroupConfigFile);
+		var asText = ResourceManager.LoadText("res://" + GameConfig.RoomTileDir + GameConfig.RoomGroupConfigFile);
 		RoomConfig = JsonSerializer.Deserialize<Dictionary<string, DungeonRoomGroup>>(asText);
 
 		InitReadyRoom();

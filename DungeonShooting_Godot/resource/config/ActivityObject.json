@@ -16,7 +16,7 @@
     "Intro": "\u654C\u4EBA",
     "Details": "",
     "Prefab": "res://prefab/role/Enemy0001.tscn",
-    "Icon": "res://resource/sprite/role/enemy0001/Enemy0001_Icon.png",
+    "Icon": "res://resource/sprite/role/enemy0001/enemy0001_Icon.png",
     "ShowInMapEditor": true
   },
   {

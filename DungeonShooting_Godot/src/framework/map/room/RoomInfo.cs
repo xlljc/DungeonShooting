@@ -85,6 +85,7 @@ public class RoomInfo : IDestroy
     public bool IsSeclusion { get; private set; } = false;
     
     public bool IsDestroyed { get; private set; }
+    private bool _openDoorFlag = true;
     
     // private bool _beReady = false;
     // private bool _waveStart = false;
@@ -229,12 +230,9 @@ public class RoomInfo : IDestroy
             RoomPreinstall.StartWave();
             return;
         }
-        
+
         //关门
-        foreach (var doorInfo in Doors)
-        {
-            doorInfo.Door.CloseDoor();
-        }
+        CloseDoor();
         IsSeclusion = true;
 
         //执行第一波生成
@@ -249,13 +247,10 @@ public class RoomInfo : IDestroy
         if (RoomPreinstall.IsLastWave) //所有 mark 都走完了
         {
             IsSeclusion = false;
-            //开门
             if (RoomPreinstall.HasEnemy())
             {
-                foreach (var doorInfo in Doors)
-                {
-                    doorInfo.Door.OpenDoor();
-                }
+                //开门
+                OpenDoor();
             }
             //所有标记执行完成
             RoomPreinstall.OverWave();
@@ -263,6 +258,40 @@ public class RoomInfo : IDestroy
         else //执行下一波
         {
             RoomPreinstall.NextWave();
+        }
+    }
+
+    /// <summary>
+    /// 打开所有门
+    /// </summary>
+    public void OpenDoor()
+    {
+        if (!_openDoorFlag)
+        {
+            _openDoorFlag = true;
+            AffiliationArea.RestoreRegion();
+        }
+        
+        foreach (var doorInfo in Doors)
+        {
+            doorInfo.Door.OpenDoor();
+        }
+    }
+
+    /// <summary>
+    /// 关闭所有门
+    /// </summary>
+    public void CloseDoor()
+    {
+        if (_openDoorFlag)
+        {
+            _openDoorFlag = false;
+            AffiliationArea.ExtendedRegion(new Vector2(GameConfig.TileCellSize * 4, GameConfig.TileCellSize * 4));
+        }
+
+        foreach (var doorInfo in Doors)
+        {
+            doorInfo.Door.CloseDoor();
         }
     }
 }
