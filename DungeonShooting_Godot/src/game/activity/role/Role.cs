@@ -81,6 +81,11 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     [Export, ExportFillNode]
     public CollisionShape2D InteractiveCollision { get; set; }
+
+    /// <summary>
+    /// 武器挂载点是否始终指向目标
+    /// </summary>
+    public bool MountLookTarget { get; set; } = true;
     
     /// <summary>
     /// 脸的朝向
@@ -226,6 +231,11 @@ public abstract partial class Role : ActivityObject
     /// 是否可以翻滚
     /// </summary>
     public bool CanRoll => _rollCoolingTimer <= 0;
+
+    /// <summary>
+    /// 是否处于近战攻击中
+    /// </summary>
+    public bool IsMeleeAttack { get; private set; }
     
     //翻滚冷却计时器
     private float _rollCoolingTimer = 0;
@@ -409,8 +419,12 @@ public abstract partial class Role : ActivityObject
             {
                 Face = FaceDirection.Left;
             }
-            //枪口跟随目标
-            MountPoint.SetLookAt(pos);
+
+            if (MountLookTarget)
+            {
+                //枪口跟随目标
+                MountPoint.SetLookAt(pos);
+            }
         }
         
         //检查可互动的物体
@@ -582,7 +596,6 @@ public abstract partial class Role : ActivityObject
     /// 使角色看向指定的坐标,
     /// 注意, 调用该函数会清空 LookTarget, 因为拥有 LookTarget 时也会每帧更新玩家视野位置
     /// </summary>
-    /// <param name="pos"></param>
     public void LookTargetPosition(Vector2 pos)
     {
         LookTarget = null;
@@ -596,8 +609,12 @@ public abstract partial class Role : ActivityObject
         {
             Face = FaceDirection.Left;
         }
-        //枪口跟随目标
-        MountPoint.SetLookAt(pos);
+
+        if (MountLookTarget)
+        {
+            //枪口跟随目标
+            MountPoint.SetLookAt(pos);
+        }
     }
     
     /// <summary>
@@ -866,9 +883,31 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void Attack()
     {
-        if (WeaponPack.ActiveItem != null)
+        if (!IsMeleeAttack && WeaponPack.ActiveItem != null)
         {
             WeaponPack.ActiveItem.Trigger(this);
+        }
+    }
+
+    /// <summary>
+    /// 触发近战攻击
+    /// </summary>
+    public virtual void MeleeAttack()
+    {
+        if (IsMeleeAttack)
+        {
+            return;
+        }
+
+        if (WeaponPack.ActiveItem != null)
+        {
+            IsMeleeAttack = true;
+            WeaponPack.ActiveItem.TriggerMeleeAttack(this);
+            //播放近战动画
+            PlayAnimation_MeleeAttack(() =>
+            {
+                IsMeleeAttack = false;
+            });
         }
     }
 
