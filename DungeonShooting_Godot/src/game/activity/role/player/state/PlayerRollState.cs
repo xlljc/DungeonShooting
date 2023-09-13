@@ -54,6 +54,7 @@ public class PlayerRollState : StateBase<Player, PlayerStateEnum>
     {
         yield return Master.AnimatedSprite.ToSignal(Master.AnimatedSprite, AnimatedSprite2D.SignalName.AnimationFinished);
         _coroutineId = -1;
+        Master.OverRoll();
         if (InputManager.MoveAxis != Vector2.Zero) //切换到移动状态
         {
             ChangeState(PlayerStateEnum.Move);

@@ -21,7 +21,7 @@ public class PlayerIdleState : StateBase<Player, PlayerStateEnum>
         var dir = InputManager.MoveAxis;
         if (dir != Vector2.Zero)
         {
-            if (InputManager.Roll) //按下翻滚
+            if (InputManager.Roll && Master.CanRoll) //按下翻滚
             {
                 ChangeState(PlayerStateEnum.Roll);
             }

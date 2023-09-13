@@ -84,8 +84,12 @@ public partial class Player : Role
             {
                 Face = FaceDirection.Left;
             }
-            //枪口跟随鼠标
-            MountPoint.SetLookAt(mousePos);
+
+            if (MountLookTarget)
+            {
+                //枪口跟随鼠标
+                MountPoint.SetLookAt(mousePos);
+            }
         }
 
         if (InputManager.ExchangeWeapon) //切换武器
@@ -121,7 +125,14 @@ public partial class Player : Role
             Reload();
         }
 
-        if (InputManager.Fire) //开火
+        if (InputManager.MeleeAttack) //近战攻击
+        {
+            if (StateController.CurrState != PlayerStateEnum.Roll) //不能是翻滚状态
+            {
+                MeleeAttack();
+            }
+        }
+        else if (InputManager.Fire) //正常开火
         {
             if (StateController.CurrState != PlayerStateEnum.Roll) //不能是翻滚状态
             {

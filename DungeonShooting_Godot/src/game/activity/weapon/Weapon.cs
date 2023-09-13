@@ -981,6 +981,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     }
 
     /// <summary>
+    /// 触发武器的近战攻击
+    /// </summary>
+    public void TriggerMeleeAttack(Role trigger)
+    {
+        
+    }
+    
+    /// <summary>
     /// 获取武器攻击的目标层级
     /// </summary>
     /// <returns></returns>

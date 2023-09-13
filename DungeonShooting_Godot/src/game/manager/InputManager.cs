@@ -62,17 +62,17 @@ public static class InputManager
     public static bool Fire { get; private set; }
     
     /// <summary>
-    /// 是否按钮近战攻击按钮 (使用远程武器发起的近战攻击), 键鼠: 鼠标右键
+    /// 是否按钮近战攻击按钮 (使用远程武器发起的近战攻击), 键鼠: 键盘Space
     /// </summary>
     public static bool MeleeAttack { get; private set; }
     
     /// <summary>
-    /// 是否按下翻滚按钮, 键鼠: 键盘Space
+    /// 是否按下翻滚按钮, 键鼠: 鼠标右键
     /// </summary>
     public static bool Roll { get; private set; }
     
     /// <summary>
-    /// 是否按下打开地图按钮,  键鼠: 键盘Ctrl
+    /// 是否按下打开地图按钮, 键鼠: 键盘Ctrl
     /// </summary>
     public static bool Map { get; private set; }
 

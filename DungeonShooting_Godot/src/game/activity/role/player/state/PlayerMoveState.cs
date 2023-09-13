@@ -24,7 +24,7 @@ public class PlayerMoveState : StateBase<Player, PlayerStateEnum>
         }
         else
         {
-            if (InputManager.Roll) //翻滚
+            if (InputManager.Roll && Master.CanRoll) //翻滚
             {
                 ChangeState(PlayerStateEnum.Roll);
             }

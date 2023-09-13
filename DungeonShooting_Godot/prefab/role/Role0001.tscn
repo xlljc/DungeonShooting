@@ -44,6 +44,3 @@ material = SubResource("ShaderMaterial_lvutq")
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_8hgu2")
 sprite_frames = ExtResource("4_galcc")
-
-[node name="MountPoint" parent="." index="6"]
-position = Vector2(2, -8)
