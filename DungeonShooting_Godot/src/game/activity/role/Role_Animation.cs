@@ -19,9 +19,9 @@ public partial class Role
         var tween = CreateTween();
         tween.SetParallel();
         
-        tween.TweenProperty(MountPoint, "rotation_degrees", r - 60, 0.15);
-        tween.TweenProperty(MountPoint, "position", p2, 0.15);
-        tween.TweenProperty(MountPoint, "position", p2, 0.15);
+        tween.TweenProperty(MountPoint, "rotation_degrees", r - 60, 0.12);
+        tween.TweenProperty(MountPoint, "position", p2, 0.12);
+        tween.TweenProperty(MountPoint, "position", p2, 0.12);
         tween.Chain();
 
         tween.TweenCallback(Callable.From(() =>
@@ -35,12 +35,12 @@ public partial class Role
             if (Face == FaceDirection.Right)
             {
                 //GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(r - 90)) * 5);
-                GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(r - 180)) * 5);
+                GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(r - 180)) * 6);
             }
             else
             {
                 //GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(270 - r)) * 5);
-                GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(-r)) * 5);
+                GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(-r)) * 6);
             }
             //播放特效
             var sprite = ResourceManager.LoadAndInstantiate<AutoDestroySprite>(ResourcePath.prefab_effect_weapon_MeleeAttack1_tscn);
@@ -52,8 +52,8 @@ public partial class Role
         }));
         tween.Chain();
         
-        tween.TweenProperty(MountPoint, "rotation_degrees", r, 0.3);
-        tween.TweenProperty(MountPoint, "position", p1, 0.3);
+        tween.TweenProperty(MountPoint, "rotation_degrees", r, 0.2);
+        tween.TweenProperty(MountPoint, "position", p1, 0.2);
         tween.Chain();
         
         tween.TweenCallback(Callable.From(() =>

@@ -49,7 +49,7 @@ public class RoleState
     /// <summary>
     /// 近战攻击间隔时间
     /// </summary>
-    public float MeleeAttackTime = 0.6f;
+    public float MeleeAttackTime = 0.5f;
 
     /// <summary>
     /// 攻击/发射后计算伤害
