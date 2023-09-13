@@ -425,7 +425,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         _prevAnimationFrame = frame;
 
         IsShowShadow = true;
-        CalcTransform();
+        CalcShadowTransform();
         ShadowSprite.Visible = true;
     }
 
@@ -659,7 +659,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             {
                 //注意需要延时调用
                 CallDeferred(nameof(ShowShadowSprite));
-                CalcTransform();
+                CalcShadowTransform();
             }
         }
         else
@@ -1008,7 +1008,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             _prevAnimationFrame = frame;
 
             //计算阴影
-            CalcTransform();
+            CalcShadowTransform();
         }
 
         // Hit 动画
@@ -1136,7 +1136,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <summary>
     /// 重新计算物体阴影的位置和旋转信息, 无论是否显示阴影
     /// </summary>
-    public void CalcTransform()
+    public void CalcShadowTransform()
     {
         //缩放
         ShadowSprite.Scale = AnimatedSprite.Scale;

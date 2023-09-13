@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://cylm455bsio3g"]
+
+[ext_resource type="Texture2D" uid="uid://7jhe2mmctmr1" path="res://resource/sprite/effects/weapon/MeleeAttack1.png" id="1_bjxle"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_bjagc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h5mw5"]
+atlas = ExtResource("1_bjxle")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rjd0g"]
+atlas = ExtResource("1_bjxle")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q06ex"]
+atlas = ExtResource("1_bjxle")
+region = Rect2(32, 0, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hkcv6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h5mw5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rjd0g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q06ex")
+}],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
+
+[node name="MeleeAttack1" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_hkcv6")
+autoplay = "default"
+script = ExtResource("2_bjagc")
+DelayTime = 0.15

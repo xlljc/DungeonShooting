@@ -78,6 +78,22 @@ public class SeedRandom
     }
 
     /// <summary>
+    /// 根据配置表中配置的范围数据, 随机返回范围内的一个值
+    /// </summary>
+    public int RandomConfigRange(int[] range)
+    {
+        return RandomRangeInt(Utils.GetConfigRangeStart(range), Utils.GetConfigRangeEnd(range));
+    }
+
+    /// <summary>
+    /// 根据配置表中配置的范围数据, 随机返回范围内的一个值
+    /// </summary>
+    public float RandomConfigRange(float[] range)
+    {
+        return RandomRangeFloat(Utils.GetConfigRangeStart(range), Utils.GetConfigRangeEnd(range));
+    }
+
+    /// <summary>
     /// 随机返回其中一个参数
     /// </summary>
     public T RandomChoose<T>(params T[] list)

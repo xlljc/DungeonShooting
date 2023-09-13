@@ -20,42 +20,57 @@
     "ManualBeLoaded": false,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 0,
     "StartFiringSpeed": 480,
     "FinalFiringSpeed": 480,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 5,
     "FinalScatteringRange": 45,
     "ScatteringRangeAddValue": 3,
     "ScatteringRangeBackSpeed": 40,
     "ScatteringRangeBackDelayTime": 0.5,
-    "MinBacklash": 2,
-    "MaxBacklash": 4,
+    "BacklashRange": [
+      2,
+      4
+    ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 10,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletMaxHarm": 4,
-    "BulletMinHarm": 4,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 320,
-    "BulletMinSpeed": 350,
-    "BulletMinDistance": 300,
-    "BulletMaxDistance": 400,
+    "BulletHarmRange": [
+      4
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      320,
+      350
+    ],
+    "BulletDistanceRange": [
+      300,
+      400
+    ],
     "ShellId": "shell0001",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0005",
     "__BeginReloadSound": "reloadBegin0004",
     "BeginReloadSoundDelayTime": 0.2,
@@ -92,42 +107,57 @@
     "ManualBeLoaded": false,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0,
-    "MinContinuousCount": 3,
-    "MaxContinuousCount": 3,
+    "ContinuousCountRange": [
+      3
+    ],
     "TriggerInterval": 3,
     "StartFiringSpeed": 480,
     "FinalFiringSpeed": 480,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 5,
     "FinalScatteringRange": 45,
     "ScatteringRangeAddValue": 3,
     "ScatteringRangeBackSpeed": 40,
     "ScatteringRangeBackDelayTime": 0.5,
-    "MinBacklash": 2,
-    "MaxBacklash": 4,
+    "BacklashRange": [
+      2,
+      4
+    ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 10,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletMaxHarm": 4,
-    "BulletMinHarm": 4,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 320,
-    "BulletMinSpeed": 350,
-    "BulletMinDistance": 300,
-    "BulletMaxDistance": 400,
+    "BulletHarmRange": [
+      4
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      320,
+      350
+    ],
+    "BulletDistanceRange": [
+      300,
+      400
+    ],
     "ShellId": "shell0001",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0005",
     "__BeginReloadSound": "reloadBegin0004",
     "BeginReloadSoundDelayTime": 0.2,
@@ -164,42 +194,58 @@
     "ManualBeLoaded": true,
     "AutoManualBeLoaded": true,
     "BeLoadedTime": 0.6,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 0,
     "StartFiringSpeed": 120,
     "FinalFiringSpeed": 120,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 5,
-    "MaxFireBulletCount": 5,
+    "FireBulletCountRange": [
+      5
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 12,
     "FinalScatteringRange": 30,
     "ScatteringRangeAddValue": 20,
     "ScatteringRangeBackSpeed": 40,
     "ScatteringRangeBackDelayTime": 0.5,
-    "MinBacklash": 5,
-    "MaxBacklash": 6,
+    "BacklashRange": [
+      5,
+      6
+    ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0002",
-    "BulletMaxHarm": 4,
-    "BulletMinHarm": 4,
-    "BulletMinDeviationAngle": -10,
-    "BulletMaxDeviationAngle": 10,
-    "BulletMaxSpeed": 280,
-    "BulletMinSpeed": 380,
-    "BulletMinDistance": 200,
-    "BulletMaxDistance": 250,
+    "BulletHarmRange": [
+      4
+    ],
+    "BulletDeviationAngleRange": [
+      -10,
+      10
+    ],
+    "BulletSpeedRange": [
+      280,
+      380
+    ],
+    "BulletDistanceRange": [
+      200,
+      250
+    ],
     "ShellId": "shell0002",
     "ThrowShellDelayTime": 0.2,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0003",
     "__BeginReloadSound": "reloadBegin0002",
     "BeginReloadSoundDelayTime": 0,
@@ -236,42 +282,58 @@
     "ManualBeLoaded": true,
     "AutoManualBeLoaded": true,
     "BeLoadedTime": 0.6,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 3.5,
     "StartFiringSpeed": 120,
     "FinalFiringSpeed": 120,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 5,
-    "MaxFireBulletCount": 5,
+    "FireBulletCountRange": [
+      5
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 12,
     "FinalScatteringRange": 30,
     "ScatteringRangeAddValue": 20,
     "ScatteringRangeBackSpeed": 40,
     "ScatteringRangeBackDelayTime": 0.5,
-    "MinBacklash": 5,
-    "MaxBacklash": 6,
+    "BacklashRange": [
+      5,
+      6
+    ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0002",
-    "BulletMaxHarm": 4,
-    "BulletMinHarm": 4,
-    "BulletMinDeviationAngle": -10,
-    "BulletMaxDeviationAngle": 10,
-    "BulletMaxSpeed": 280,
-    "BulletMinSpeed": 380,
-    "BulletMinDistance": 200,
-    "BulletMaxDistance": 250,
+    "BulletHarmRange": [
+      4
+    ],
+    "BulletDeviationAngleRange": [
+      -10,
+      10
+    ],
+    "BulletSpeedRange": [
+      280,
+      380
+    ],
+    "BulletDistanceRange": [
+      200,
+      250
+    ],
     "ShellId": "shell0002",
     "ThrowShellDelayTime": 0.2,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0003",
     "__BeginReloadSound": "reloadBegin0002",
     "BeginReloadSoundDelayTime": 0,
@@ -308,42 +370,57 @@
     "ManualBeLoaded": false,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0.05,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 0,
     "StartFiringSpeed": 460,
     "FinalFiringSpeed": 460,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 5,
     "FinalScatteringRange": 25,
     "ScatteringRangeAddValue": 4,
     "ScatteringRangeBackSpeed": 40,
     "ScatteringRangeBackDelayTime": 0.5,
-    "MinBacklash": 3,
-    "MaxBacklash": 5,
+    "BacklashRange": [
+      3,
+      5
+    ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 20,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletMaxHarm": 4,
-    "BulletMinHarm": 4,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 320,
-    "BulletMinSpeed": 350,
-    "BulletMinDistance": 250,
-    "BulletMaxDistance": 300,
+    "BulletHarmRange": [
+      4
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      320,
+      350
+    ],
+    "BulletDistanceRange": [
+      250,
+      300
+    ],
     "ShellId": "shell0001",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0004",
     "__BeginReloadSound": "reloading0001",
     "BeginReloadSoundDelayTime": 0,
@@ -380,42 +457,57 @@
     "ManualBeLoaded": false,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0.05,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 2,
     "StartFiringSpeed": 300,
     "FinalFiringSpeed": 300,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 5,
     "FinalScatteringRange": 25,
     "ScatteringRangeAddValue": 4,
     "ScatteringRangeBackSpeed": 40,
     "ScatteringRangeBackDelayTime": 0.5,
-    "MinBacklash": 3,
-    "MaxBacklash": 5,
+    "BacklashRange": [
+      3,
+      5
+    ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 20,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletMaxHarm": 4,
-    "BulletMinHarm": 4,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 320,
-    "BulletMinSpeed": 350,
-    "BulletMinDistance": 250,
-    "BulletMaxDistance": 300,
+    "BulletHarmRange": [
+      4
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      320,
+      350
+    ],
+    "BulletDistanceRange": [
+      250,
+      300
+    ],
     "ShellId": "shell0001",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0004",
     "__BeginReloadSound": "reloading0001",
     "BeginReloadSoundDelayTime": 0,
@@ -452,42 +544,54 @@
     "ManualBeLoaded": false,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 0,
     "StartFiringSpeed": 180,
     "FinalFiringSpeed": 180,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 0,
     "FinalScatteringRange": 0,
     "ScatteringRangeAddValue": 0,
     "ScatteringRangeBackSpeed": 0,
     "ScatteringRangeBackDelayTime": 0,
-    "MinBacklash": -8,
-    "MaxBacklash": -8,
+    "BacklashRange": [
+      -8
+    ],
     "BacklashRegressionSpeed": 24,
     "UpliftAngle": -95,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletMaxHarm": 25,
-    "BulletMinHarm": 25,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 350,
-    "BulletMinSpeed": 350,
-    "BulletMinDistance": 35,
-    "BulletMaxDistance": 35,
+    "BulletHarmRange": [
+      25
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      350
+    ],
+    "BulletDistanceRange": [
+      35
+    ],
     "ShellId": "",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "",
     "__BeginReloadSound": "",
     "BeginReloadSoundDelayTime": 0,
@@ -524,42 +628,54 @@
     "ManualBeLoaded": false,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 3,
     "StartFiringSpeed": 180,
     "FinalFiringSpeed": 180,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 0,
     "FinalScatteringRange": 0,
     "ScatteringRangeAddValue": 0,
     "ScatteringRangeBackSpeed": 0,
     "ScatteringRangeBackDelayTime": 0,
-    "MinBacklash": -8,
-    "MaxBacklash": -8,
+    "BacklashRange": [
+      -8
+    ],
     "BacklashRegressionSpeed": 24,
     "UpliftAngle": -95,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletMaxHarm": 25,
-    "BulletMinHarm": 25,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 350,
-    "BulletMinSpeed": 350,
-    "BulletMinDistance": 35,
-    "BulletMaxDistance": 35,
+    "BulletHarmRange": [
+      25
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      350
+    ],
+    "BulletDistanceRange": [
+      35
+    ],
     "ShellId": "",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "",
     "__BeginReloadSound": "",
     "BeginReloadSoundDelayTime": 0,
@@ -596,42 +712,57 @@
     "ManualBeLoaded": true,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0.9,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 0,
     "StartFiringSpeed": 150,
     "FinalFiringSpeed": 150,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 3,
     "FinalScatteringRange": 60,
     "ScatteringRangeAddValue": 40,
     "ScatteringRangeBackSpeed": 40,
     "ScatteringRangeBackDelayTime": 0.8,
-    "MinBacklash": 5,
-    "MaxBacklash": 7,
+    "BacklashRange": [
+      5,
+      7
+    ],
     "BacklashRegressionSpeed": 20,
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletMaxHarm": 30,
-    "BulletMinHarm": 30,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 600,
-    "BulletMinSpeed": 620,
-    "BulletMinDistance": 700,
-    "BulletMaxDistance": 900,
+    "BulletHarmRange": [
+      30
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      600,
+      620
+    ],
+    "BulletDistanceRange": [
+      700,
+      900
+    ],
     "ShellId": "shell0003",
     "ThrowShellDelayTime": 0.2,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0008",
     "__BeginReloadSound": "reloadBegin0009",
     "BeginReloadSoundDelayTime": 0,
@@ -668,42 +799,57 @@
     "ManualBeLoaded": true,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0.9,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 5,
     "StartFiringSpeed": 150,
     "FinalFiringSpeed": 150,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 3,
     "FinalScatteringRange": 60,
     "ScatteringRangeAddValue": 40,
     "ScatteringRangeBackSpeed": 40,
     "ScatteringRangeBackDelayTime": 0.8,
-    "MinBacklash": 5,
-    "MaxBacklash": 7,
+    "BacklashRange": [
+      5,
+      7
+    ],
     "BacklashRegressionSpeed": 20,
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletMaxHarm": 30,
-    "BulletMinHarm": 30,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 600,
-    "BulletMinSpeed": 620,
-    "BulletMinDistance": 700,
-    "BulletMaxDistance": 900,
+    "BulletHarmRange": [
+      30
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      600,
+      620
+    ],
+    "BulletDistanceRange": [
+      700,
+      900
+    ],
     "ShellId": "shell0003",
     "ThrowShellDelayTime": 0.2,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0008",
     "__BeginReloadSound": "reloadBegin0009",
     "BeginReloadSoundDelayTime": 0,
@@ -740,42 +886,57 @@
     "ManualBeLoaded": false,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 0,
     "StartFiringSpeed": 700,
     "FinalFiringSpeed": 700,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 3,
     "FinalScatteringRange": 30,
     "ScatteringRangeAddValue": 2,
     "ScatteringRangeBackSpeed": 40,
     "ScatteringRangeBackDelayTime": 0.3,
-    "MinBacklash": 1,
-    "MaxBacklash": 2,
+    "BacklashRange": [
+      1,
+      2
+    ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0002",
-    "BulletMaxHarm": 3,
-    "BulletMinHarm": 3,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 320,
-    "BulletMinSpeed": 340,
-    "BulletMinDistance": 300,
-    "BulletMaxDistance": 400,
+    "BulletHarmRange": [
+      3
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      320,
+      340
+    ],
+    "BulletDistanceRange": [
+      300,
+      400
+    ],
     "ShellId": "shell0001",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0002",
     "__BeginReloadSound": "reloadBegin0005",
     "BeginReloadSoundDelayTime": 0.2,
@@ -812,42 +973,57 @@
     "ManualBeLoaded": false,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0,
-    "MinContinuousCount": 5,
-    "MaxContinuousCount": 5,
+    "ContinuousCountRange": [
+      5
+    ],
     "TriggerInterval": 3.5,
     "StartFiringSpeed": 700,
     "FinalFiringSpeed": 700,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 3,
     "FinalScatteringRange": 30,
     "ScatteringRangeAddValue": 2,
     "ScatteringRangeBackSpeed": 30,
     "ScatteringRangeBackDelayTime": 0.3,
-    "MinBacklash": 1,
-    "MaxBacklash": 2,
+    "BacklashRange": [
+      1,
+      2
+    ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0002",
-    "BulletMaxHarm": 3,
-    "BulletMinHarm": 3,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 320,
-    "BulletMinSpeed": 340,
-    "BulletMinDistance": 300,
-    "BulletMaxDistance": 400,
+    "BulletHarmRange": [
+      3
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      320,
+      340
+    ],
+    "BulletDistanceRange": [
+      300,
+      400
+    ],
     "ShellId": "shell0001",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0002",
     "__BeginReloadSound": "reloadBegin0005",
     "BeginReloadSoundDelayTime": 0.2,
@@ -884,42 +1060,57 @@
     "ManualBeLoaded": false,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0,
-    "MinContinuousCount": 1,
-    "MaxContinuousCount": 1,
+    "ContinuousCountRange": [
+      1
+    ],
     "TriggerInterval": 0,
     "StartFiringSpeed": 700,
     "FinalFiringSpeed": 700,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 6,
     "FinalScatteringRange": 60,
     "ScatteringRangeAddValue": 3,
     "ScatteringRangeBackSpeed": 50,
     "ScatteringRangeBackDelayTime": 0.3,
-    "MinBacklash": 1,
-    "MaxBacklash": 2,
+    "BacklashRange": [
+      1,
+      2
+    ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0003",
-    "BulletMaxHarm": 3,
-    "BulletMinHarm": 3,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 300,
-    "BulletMinSpeed": 330,
-    "BulletMinDistance": 270,
-    "BulletMaxDistance": 360,
+    "BulletHarmRange": [
+      3
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      300,
+      330
+    ],
+    "BulletDistanceRange": [
+      270,
+      360
+    ],
     "ShellId": "shell0001",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0007",
     "__BeginReloadSound": "reloadBegin0006",
     "BeginReloadSoundDelayTime": 0.2,
@@ -956,42 +1147,57 @@
     "ManualBeLoaded": false,
     "AutoManualBeLoaded": false,
     "BeLoadedTime": 0,
-    "MinContinuousCount": 10,
-    "MaxContinuousCount": 10,
+    "ContinuousCountRange": [
+      10
+    ],
     "TriggerInterval": 5,
     "StartFiringSpeed": 200,
     "FinalFiringSpeed": 200,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
-    "MinFireBulletCount": 1,
-    "MaxFireBulletCount": 1,
+    "FireBulletCountRange": [
+      1
+    ],
     "DelayedTime": 0,
     "StartScatteringRange": 10,
     "FinalScatteringRange": 30,
     "ScatteringRangeAddValue": 3,
     "ScatteringRangeBackSpeed": 50,
     "ScatteringRangeBackDelayTime": 0.3,
-    "MinBacklash": 1,
-    "MaxBacklash": 2,
+    "BacklashRange": [
+      1,
+      2
+    ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0003",
-    "BulletMaxHarm": 3,
-    "BulletMinHarm": 3,
-    "BulletMinDeviationAngle": 0,
-    "BulletMaxDeviationAngle": 0,
-    "BulletMaxSpeed": 300,
-    "BulletMinSpeed": 330,
-    "BulletMinDistance": 270,
-    "BulletMaxDistance": 360,
+    "BulletHarmRange": [
+      3
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      300,
+      330
+    ],
+    "BulletDistanceRange": [
+      270,
+      360
+    ],
     "ShellId": "shell0001",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
     },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      5,
+      8
+    ],
     "__ShootSound": "shooting0007",
     "__BeginReloadSound": "reloadBegin0006",
     "BeginReloadSoundDelayTime": 0.2,

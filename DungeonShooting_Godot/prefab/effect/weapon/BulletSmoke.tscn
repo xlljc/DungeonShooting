@@ -1,8 +1,9 @@
 [gd_scene load_steps=9 format=3]
 
-[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/Smoke.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://bs1lan5uwxyfg" path="res://resource/curve/Curve1.tres" id="1_8pe88"]
 [ext_resource type="Texture2D" uid="uid://dwa4chrugc6b1" path="res://resource/sprite/effects/Collision.png" id="2"]
+
 
 [sub_resource type="CanvasItemMaterial" id="1"]
 particles_animation = true

@@ -119,7 +119,7 @@ public partial class Enemy : Role
 
         var effPos = Position + new Vector2(0, -Altitude);
         //血液特效
-        var blood = ResourceManager.LoadAndInstantiate<AutoDestroyEffect>(ResourcePath.prefab_effect_activityObject_EnemyBloodEffect_tscn);
+        var blood = ResourceManager.LoadAndInstantiate<AutoDestroyParticles>(ResourcePath.prefab_effect_enemy_EnemyBloodEffect_tscn);
         blood.Position = effPos - new Vector2(0, 12);
         blood.AddToActivityRoot(RoomLayerEnum.NormalLayer);
         
@@ -341,7 +341,7 @@ public partial class Enemy : Role
         if (WeaponPack.ActiveItem != null)
         {
             var attribute = WeaponPack.ActiveItem.Attribute;
-            return Mathf.Lerp(attribute.BulletMinDistance, attribute.BulletMaxDistance, weight);
+            return Mathf.Lerp(Utils.GetConfigRangeStart(attribute.BulletDistanceRange), Utils.GetConfigRangeEnd(attribute.BulletDistanceRange), weight);
         }
 
         return 0;

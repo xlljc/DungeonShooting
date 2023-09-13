@@ -15,11 +15,13 @@ public partial class Gun : Weapon
         }
 
         //创建开火特效
-        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_ShotFire_tscn);
-        var sprite = packedScene.Instantiate<Sprite2D>();
-        sprite.GlobalPosition = FirePoint.GlobalPosition;
-        sprite.GlobalRotation = FirePoint.GlobalRotation;
-        sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_ShotFire_tscn);
+        var sprite = packedScene.Instantiate<AutoDestroySprite>();
+        // sprite.GlobalPosition = FirePoint.GlobalPosition;
+        // sprite.GlobalRotation = FirePoint.GlobalRotation;
+        // sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+        sprite.Position = GetLocalFirePosition();
+        AddChild(sprite);
     }
 
     protected override void OnShoot(float fireRotation)

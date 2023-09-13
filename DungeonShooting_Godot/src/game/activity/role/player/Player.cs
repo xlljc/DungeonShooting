@@ -125,14 +125,19 @@ public partial class Player : Role
             Reload();
         }
 
+        var meleeAttackFlag = false;
         if (InputManager.MeleeAttack) //近战攻击
         {
             if (StateController.CurrState != PlayerStateEnum.Roll) //不能是翻滚状态
             {
-                MeleeAttack();
+                if (WeaponPack.ActiveItem != null && WeaponPack.ActiveItem.Attribute.CanMeleeAttack)
+                {
+                    meleeAttackFlag = true;
+                    MeleeAttack();
+                }
             }
         }
-        else if (InputManager.Fire) //正常开火
+        if (!meleeAttackFlag && InputManager.Fire) //正常开火
         {
             if (StateController.CurrState != PlayerStateEnum.Roll) //不能是翻滚状态
             {

@@ -254,6 +254,8 @@ public abstract partial class Role : ActivityObject
     private long _invincibleFlashingId = -1;
     //护盾恢复计时器
     private float _shieldRecoveryTimer = 0;
+    //近战计时器
+    private float _meleeAttackTimer = 0;
 
     /// <summary>
     /// 当血量改变时调用
@@ -405,6 +407,11 @@ public abstract partial class Role : ActivityObject
             _rollCoolingTimer -= delta;
         }
 
+        if (_meleeAttackTimer > 0)
+        {
+            _meleeAttackTimer -= delta;
+        }
+        
         //看向目标
         if (LookTarget != null)
         {
@@ -894,18 +901,22 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void MeleeAttack()
     {
-        if (IsMeleeAttack)
+        if (IsMeleeAttack || _meleeAttackTimer > 0)
         {
             return;
         }
 
-        if (WeaponPack.ActiveItem != null)
+        if (WeaponPack.ActiveItem != null && WeaponPack.ActiveItem.Attribute.CanMeleeAttack)
         {
             IsMeleeAttack = true;
+            _meleeAttackTimer = RoleState.MeleeAttackTime;
+            MountLookTarget = false;
+            
             WeaponPack.ActiveItem.TriggerMeleeAttack(this);
             //播放近战动画
             PlayAnimation_MeleeAttack(() =>
             {
+                MountLookTarget = true;
                 IsMeleeAttack = false;
             });
         }
