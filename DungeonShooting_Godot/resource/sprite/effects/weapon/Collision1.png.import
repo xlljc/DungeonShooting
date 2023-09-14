@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://h7hkgbwj1li"
-path="res://.godot/imported/Smoke.png-6cf8f8f0055f43a859d02942814cba94.ctex"
+uid="uid://dwa4chrugc6b1"
+path="res://.godot/imported/Collision1.png-21b57f1716aaa61033dc15fa90c3af13.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/effects/Smoke.png"
-dest_files=["res://.godot/imported/Smoke.png-6cf8f8f0055f43a859d02942814cba94.ctex"]
+source_file="res://resource/sprite/effects/weapon/Collision1.png"
+dest_files=["res://.godot/imported/Collision1.png-21b57f1716aaa61033dc15fa90c3af13.ctex"]
 
 [params]
 

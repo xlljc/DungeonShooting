@@ -17,14 +17,24 @@ public class RoleState
     public float Acceleration = 1500f;
     
     /// <summary>
-    /// 移动摩擦力
+    /// 移动摩擦力, 仅用于人物基础移动
     /// </summary>
     public float Friction = 900f;
     
     /// <summary>
+    /// 翻滚速度
+    /// </summary>
+    public float RollSpeed = 180f;
+
+    /// <summary>
+    /// 翻滚冷却时间
+    /// </summary>
+    public float RollTime = 0.5f;
+    
+    /// <summary>
     /// 单格护盾恢复时间, 单位: 秒
     /// </summary>
-    public float ShieldRecoveryTime = 8;
+    public float ShieldRecoveryTime = 18;
 
     /// <summary>
     /// 受伤后的无敌时间, 单位: 秒
@@ -34,7 +44,12 @@ public class RoleState
     /// <summary>
     /// 护盾被攻击后的无敌时间, 单位: 秒
     /// </summary>
-    public float ShieldInvincibleTime = 0.5f;
+    public float ShieldInvincibleTime = 0.4f;
+
+    /// <summary>
+    /// 近战攻击间隔时间
+    /// </summary>
+    public float MeleeAttackTime = 0.5f;
 
     /// <summary>
     /// 攻击/发射后计算伤害

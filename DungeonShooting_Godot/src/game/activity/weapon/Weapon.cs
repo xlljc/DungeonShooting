@@ -765,8 +765,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                         //连发数量
                         if (!Attribute.ContinuousShoot)
                         {
-                            _continuousCount =
-                                Utils.Random.RandomRangeInt(Attribute.MinContinuousCount, Attribute.MaxContinuousCount);
+                            _continuousCount = Utils.Random.RandomConfigRange(Attribute.ContinuousCountRange);
                         }
                     }
 
@@ -938,7 +937,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         var fireRotation = tempRotation;
         
         //开火发射的子弹数量
-        var bulletCount = Utils.Random.RandomRangeInt(Attribute.MaxFireBulletCount, Attribute.MinFireBulletCount);
+        var bulletCount = Utils.Random.RandomConfigRange(Attribute.FireBulletCountRange);
         if (Master != null)
         {
             bulletCount = Master.RoleState.CallCalcBulletCountEvent(this, bulletCount);
@@ -966,9 +965,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         if (Master != null) //是否被拾起
         {
             //武器身位置
-            var max = Mathf.Abs(Mathf.Max(Attribute.MaxBacklash, Attribute.MinBacklash));
+            var max = Mathf.Abs(Mathf.Max(Utils.GetConfigRangeStart(Attribute.BacklashRange), Utils.GetConfigRangeEnd(Attribute.BacklashRange)));
             _currBacklashLength = Mathf.Clamp(
-                _currBacklashLength - Utils.Random.RandomRangeFloat(Attribute.MinBacklash, Attribute.MaxBacklash),
+                _currBacklashLength - Utils.Random.RandomConfigRange(Attribute.BacklashRange),
                 -max, max
             );
             Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
@@ -980,6 +979,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
     }
 
+    /// <summary>
+    /// 触发武器的近战攻击
+    /// </summary>
+    public void TriggerMeleeAttack(Role trigger)
+    {
+        
+    }
+    
     /// <summary>
     /// 获取武器攻击的目标层级
     /// </summary>
@@ -1736,6 +1743,22 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         Master.ThrowWeapon(PackageIndex);
     }
 
+    /// <summary>
+    /// 获取相对于武器本地坐标的开火位置
+    /// </summary>
+    public Vector2 GetLocalFirePosition()
+    {
+        return AnimatedSprite.Position + FirePoint.Position;
+    }
+    
+    /// <summary>
+    /// 获取相对于武器本地坐标的抛壳位置
+    /// </summary>
+    public Vector2 GetLocalShellPosition()
+    {
+        return AnimatedSprite.Position + ShellPoint.Position;
+    }
+    
     //-------------------------- ----- 子弹相关 -----------------------------
 
     /// <summary>
@@ -1781,10 +1804,10 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     protected Bullet ShootBullet(float fireRotation, string bulletId)
     {
-        var speed = Utils.Random.RandomRangeFloat(Attribute.BulletMinSpeed, Attribute.BulletMaxSpeed);
-        var distance = Utils.Random.RandomRangeFloat(Attribute.BulletMinDistance, Attribute.BulletMaxDistance);
+        var speed = Utils.Random.RandomConfigRange(Attribute.BulletSpeedRange);
+        var distance = Utils.Random.RandomConfigRange(Attribute.BulletDistanceRange);
         var deviationAngle =
-            Utils.Random.RandomRangeFloat(Attribute.BulletMinDeviationAngle, Attribute.BulletMaxDeviationAngle);
+            Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
         if (Master != null)
         {
             speed = Master.RoleState.CallCalcBulletSpeedEvent(this, speed);
@@ -1804,8 +1827,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             fireRotation + Mathf.DegToRad(deviationAngle),
             attackLayer
         );
-        bullet.MinHarm = Attribute.BulletMinHarm;
-        bullet.MaxHarm = Attribute.BulletMaxHarm;
+        bullet.MinHarm = Utils.GetConfigRangeStart(Attribute.BulletHarmRange);
+        bullet.MaxHarm = Utils.GetConfigRangeEnd(Attribute.BulletHarmRange);
         bullet.PutDown(RoomLayerEnum.YSortLayer);
         return bullet;
     }

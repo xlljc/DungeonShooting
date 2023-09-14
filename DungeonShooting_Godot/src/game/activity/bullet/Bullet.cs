@@ -100,7 +100,7 @@ public partial class Bullet : ActivityObject
         if (lastSlideCollision != null)
         {
             //创建粒子特效
-            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletSmoke_tscn);
+            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletSmoke_tscn);
             var smoke = packedScene.Instantiate<GpuParticles2D>();
             smoke.GlobalPosition = lastSlideCollision.GetPosition();
             smoke.GlobalRotation = lastSlideCollision.GetNormal().Angle();
@@ -113,7 +113,7 @@ public partial class Bullet : ActivityObject
         CurrFlyDistance += FlySpeed * delta;
         if (CurrFlyDistance >= MaxDistance)
         {
-            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletDisappear_tscn);
+            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletDisappear_tscn);
             var node = packedScene.Instantiate<Node2D>();
             node.GlobalPosition = GlobalPosition;
             node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
@@ -127,7 +127,7 @@ public partial class Bullet : ActivityObject
         var role = other.AsActivityObject<Role>();
         if (role != null)
         {
-            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_BulletDisappear_tscn);
+            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletDisappear_tscn);
             var node = packedScene.Instantiate<Node2D>();
             node.GlobalPosition = GlobalPosition;
             node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
@@ -138,7 +138,6 @@ public partial class Bullet : ActivityObject
             {
                 var d = damage;
                 damage = Role.RoleState.CallCalcDamageEvent(damage);
-                GD.Print($"原伤害: {d}, 计算伤害: {damage}");
             }
             
             role.CallDeferred(nameof(Role.Hurt), damage, Rotation);

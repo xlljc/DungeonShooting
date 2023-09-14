@@ -33,7 +33,7 @@ public abstract partial class ActiveProp : Prop, IPackageItem
     private int _count = 1;
 
     /// <summary>
-    /// 道具最大可使用次数
+    /// 道具最大叠加用次数
     /// </summary>
     public int MaxCount
     {
@@ -238,7 +238,10 @@ public abstract partial class ActiveProp : Prop, IPackageItem
                     player.ThrowActiveProp(player.ActivePropsPack.ActiveIndex);
                 }
                 //替换手中的道具
-                player.PickUpActiveProp(this);
+                if (player.PickUpActiveProp(this))
+                {
+                    Pickup();
+                }
             }
             else
             {
@@ -255,6 +258,7 @@ public abstract partial class ActiveProp : Prop, IPackageItem
                         item.Count += Count;
                         Count = 0;
                     }
+                    Destroy();
                 }
             }
         }
@@ -292,7 +296,6 @@ public abstract partial class ActiveProp : Prop, IPackageItem
 
     public override void OnPickUpItem()
     {
-        Pickup();
     }
 
     public override void OnRemoveItem()

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dx07ta0asnmuw"
-path="res://.godot/imported/KnifeHit1.png-6ddd3aef14cf0bb7d2f668cd41ac74d0.ctex"
+uid="uid://7jhe2mmctmr1"
+path="res://.godot/imported/MeleeAttack1.png-fcea1547355ce99fe204cf5180b8c02d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/effects/KnifeHit1.png"
-dest_files=["res://.godot/imported/KnifeHit1.png-6ddd3aef14cf0bb7d2f668cd41ac74d0.ctex"]
+source_file="res://resource/sprite/effects/weapon/MeleeAttack1.png"
+dest_files=["res://.godot/imported/MeleeAttack1.png-fcea1547355ce99fe204cf5180b8c02d.ctex"]
 
 [params]
 

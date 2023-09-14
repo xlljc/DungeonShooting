@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b0jsyrbk4bydt"
-path="res://.godot/imported/ShotFire.png-19fbeb61d685dfc2c763d73aa70d548b.ctex"
+path="res://.godot/imported/ShotFire.png-c837a3bb80e273a615c459f36fadc870.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/effects/ShotFire.png"
-dest_files=["res://.godot/imported/ShotFire.png-19fbeb61d685dfc2c763d73aa70d548b.ctex"]
+source_file="res://resource/sprite/effects/weapon/ShotFire.png"
+dest_files=["res://.godot/imported/ShotFire.png-c837a3bb80e273a615c459f36fadc870.ctex"]
 
 [params]
 
