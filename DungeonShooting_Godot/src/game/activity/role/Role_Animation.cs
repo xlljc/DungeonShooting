@@ -44,12 +44,15 @@ public partial class Role
             }
             //播放特效
             var sprite = ResourceManager.LoadAndInstantiate<AutoDestroySprite>(ResourcePath.prefab_effect_weapon_MeleeAttack1_tscn);
-            var localFirePosition = activeItem.GetLocalFirePosition();
-            localFirePosition.X *= 0.85f;
+            var localFirePosition = activeItem.GetLocalFirePosition() - activeItem.GripPoint.Position;
+            localFirePosition.X *= 0.9f;
             sprite.Position = p1 + localFirePosition.Rotated(Mathf.DegToRad(r));
             sprite.RotationDegrees = r;
             AddChild(sprite);
         }));
+        tween.Chain();
+
+        tween.TweenInterval(0.1f);
         tween.Chain();
         
         tween.TweenProperty(MountPoint, "rotation_degrees", r, 0.2);
