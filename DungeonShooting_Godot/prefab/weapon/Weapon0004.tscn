@@ -6,18 +6,25 @@
 [ext_resource type="SpriteFrames" uid="uid://k2tktysa7j86" path="res://resource/spriteFrames/weapon/Weapon0004.tres" id="4_uymcs"]
 [ext_resource type="PackedScene" path="res://prefab/FanCollisionShape.tscn" id="5_nr15b"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o5ytq"]
 resource_local_to_scene = true
 shader = ExtResource("3_63s5g")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rtliw"]
 resource_local_to_scene = true
 shader = ExtResource("3_63s5g")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [node name="Weapon0004" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_kg172")]
 script = ExtResource("2_v1wer")
