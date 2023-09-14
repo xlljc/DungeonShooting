@@ -188,8 +188,8 @@ public partial class ActivityObject
         _activityRegisterMap.Add("shell0001", new RegisterActivityData("res://prefab/shell/Shell0001.tscn", ExcelConfig.ActivityObject_Map["shell0001"]));
         _activityRegisterMap.Add("shell0002", new RegisterActivityData("res://prefab/shell/Shell0002.tscn", ExcelConfig.ActivityObject_Map["shell0002"]));
         _activityRegisterMap.Add("shell0003", new RegisterActivityData("res://prefab/shell/Shell0003.tscn", ExcelConfig.ActivityObject_Map["shell0003"]));
-        _activityRegisterMap.Add("effect0001", new RegisterActivityData("res://prefab/effect/activityObject/Effect0001.tscn", ExcelConfig.ActivityObject_Map["effect0001"]));
-        _activityRegisterMap.Add("prop0001", new RegisterActivityData("res://prefab/prop/buff/BuffProp0001.tscn", ExcelConfig.ActivityObject_Map["prop0001"]));
+        _activityRegisterMap.Add("effect0001", new RegisterActivityData("res://prefab/effect/enemy/Effect0001.tscn", ExcelConfig.ActivityObject_Map["effect0001"]));
+        _activityRegisterMap.Add("prop0001", new RegisterActivityData("res://prefab/effect/enemy/Effect0001.tscn", ExcelConfig.ActivityObject_Map["prop0001"]));
         _activityRegisterMap.Add("prop0002", new RegisterActivityData("res://prefab/prop/buff/BuffProp0002.tscn", ExcelConfig.ActivityObject_Map["prop0002"]));
         _activityRegisterMap.Add("prop0003", new RegisterActivityData("res://prefab/prop/buff/BuffProp0003.tscn", ExcelConfig.ActivityObject_Map["prop0003"]));
         _activityRegisterMap.Add("prop0004", new RegisterActivityData("res://prefab/prop/buff/BuffProp0004.tscn", ExcelConfig.ActivityObject_Map["prop0004"]));

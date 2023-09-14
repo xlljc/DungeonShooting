@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class Effect1 : AutoDestroyEffect
+public partial class Effect1 : AutoDestroyParticles
 {
     public override void _Ready()
     {

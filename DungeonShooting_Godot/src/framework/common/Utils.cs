@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -170,5 +168,47 @@ public static class Utils
     {
         return pos.X >= rect2.Position.X && pos.X <= rect2.Position.X + rect2.Size.X &&
                pos.Y >= rect2.Position.Y && pos.Y <= rect2.Position.Y + rect2.Size.Y;
+    }
+
+    /// <summary>
+    /// 返回区域起始值, 用于获取配置表范围配置数据
+    /// </summary>
+    public static int GetConfigRangeStart(int[] range)
+    {
+        return range[0];
+    }
+    
+    /// <summary>
+    /// 返回区域结束值, 用于获取配置表范围配置数据
+    /// </summary>
+    public static int GetConfigRangeEnd(int[] range)
+    {
+        if (range.Length > 1)
+        {
+            return range[1];
+        }
+
+        return range[0];
+    }
+    
+    /// <summary>
+    /// 返回区域起始值, 用于获取配置表范围配置数据
+    /// </summary>
+    public static float GetConfigRangeStart(float[] range)
+    {
+        return range[0];
+    }
+    
+    /// <summary>
+    /// 返回区域结束值, 用于获取配置表范围配置数据
+    /// </summary>
+    public static float GetConfigRangeEnd(float[] range)
+    {
+        if (range.Length > 1)
+        {
+            return range[1];
+        }
+
+        return range[0];
     }
 }

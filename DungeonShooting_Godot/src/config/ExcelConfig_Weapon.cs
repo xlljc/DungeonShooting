@@ -131,16 +131,11 @@ public static partial class ExcelConfig
         public float BeLoadedTime;
 
         /// <summary>
-        /// 连续发射最小次数, 仅当 'ContinuousShoot' 为 false 时生效
+        /// 连续发射次数范围, 仅当 'ContinuousShoot' 为 false 时生效 <br/>
+        /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public int MinContinuousCount;
-
-        /// <summary>
-        /// 连续发射最大次数, 仅当 'ContinuousShoot' 为 false 时生效
-        /// </summary>
-        [JsonInclude]
-        public int MaxContinuousCount;
+        public int[] ContinuousCountRange;
 
         /// <summary>
         /// 按下一次扳机后需要多长时间才能再次感应按下
@@ -173,16 +168,11 @@ public static partial class ExcelConfig
         public float FiringSpeedBackSpeed;
 
         /// <summary>
-        /// 单次开火发射子弹最小数量
+        /// 单次开火发射子弹数量范围 <br/>
+        /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public int MinFireBulletCount;
-
-        /// <summary>
-        /// 单次开火发射子弹最大数量
-        /// </summary>
-        [JsonInclude]
-        public int MaxFireBulletCount;
+        public int[] FireBulletCountRange;
 
         /// <summary>
         /// 从按下扳机到发射第一发子弹的延时时, 如果中途松开扳机, 那么延时时间会重新计算, 必须将 'LooseShoot' 设置为 false
@@ -221,16 +211,11 @@ public static partial class ExcelConfig
         public float ScatteringRangeBackDelayTime;
 
         /// <summary>
-        /// 最小后坐力 (仅用于开火后武器身抖动)
+        /// 后坐力范围 (仅用于开火后武器身抖动) <br/>
+        /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public float MinBacklash;
-
-        /// <summary>
-        /// 最大后坐力 (仅用于开火后武器身抖动)
-        /// </summary>
-        [JsonInclude]
-        public float MaxBacklash;
+        public float[] BacklashRange;
 
         /// <summary>
         /// 后坐力偏移回归回归速度
@@ -263,53 +248,33 @@ public static partial class ExcelConfig
         public string BulletId;
 
         /// <summary>
-        /// 子弹造成的最大伤害
+        /// 子弹造成的伤害范围 <br/>
+        /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public int BulletMaxHarm;
+        public int[] BulletHarmRange;
 
         /// <summary>
-        /// 子弹造成的最小伤害
+        /// 子弹偏移角度范围 <br/>
+        /// 用于设置子弹偏移朝向, 该属性和射半径效果类似, 但与其不同的是, 散射半径是用来控制枪口朝向的, 而该属性是控制子弹朝向的, 可用于制作霰弹枪子弹效果 <br/>
+        /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public int BulletMinHarm;
+        public float[] BulletDeviationAngleRange;
 
         /// <summary>
-        /// 子弹最小偏移角度 <br/>
-        /// 用于设置子弹偏移朝向, 该属性和射半径效果类似, 但与其不同的是, 散射半径是用来控制枪口朝向的, 而该属性是控制子弹朝向的, 可用于制作霰弹枪子弹效果
+        /// 子弹初速度范围 <br/>
+        /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public float BulletMinDeviationAngle;
+        public float[] BulletSpeedRange;
 
         /// <summary>
-        /// 子弹最大偏移角度
+        /// 子弹飞行距离范围 <br/>
+        /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public float BulletMaxDeviationAngle;
-
-        /// <summary>
-        /// 子弹最大初速度
-        /// </summary>
-        [JsonInclude]
-        public float BulletMaxSpeed;
-
-        /// <summary>
-        /// 子弹最小初速度
-        /// </summary>
-        [JsonInclude]
-        public float BulletMinSpeed;
-
-        /// <summary>
-        /// 子弹飞行最小距离
-        /// </summary>
-        [JsonInclude]
-        public float BulletMinDistance;
-
-        /// <summary>
-        /// 子弹飞行最大距离
-        /// </summary>
-        [JsonInclude]
-        public float BulletMaxDistance;
+        public float[] BulletDistanceRange;
 
         /// <summary>
         /// 默认抛出的弹壳
@@ -329,6 +294,19 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public SerializeVector2 ThrowCollisionSize;
+
+        /// <summary>
+        /// 是否可以触发近战攻击
+        /// </summary>
+        [JsonInclude]
+        public bool CanMeleeAttack;
+
+        /// <summary>
+        /// 近战攻击伤害范围 <br/>
+        /// 格式为格式为[value]或者[min,max]
+        /// </summary>
+        [JsonInclude]
+        public int[] MeleeAttackHarmRange;
 
         /// <summary>
         /// 射击音效
@@ -439,39 +417,34 @@ public static partial class ExcelConfig
             inst.ManualBeLoaded = ManualBeLoaded;
             inst.AutoManualBeLoaded = AutoManualBeLoaded;
             inst.BeLoadedTime = BeLoadedTime;
-            inst.MinContinuousCount = MinContinuousCount;
-            inst.MaxContinuousCount = MaxContinuousCount;
+            inst.ContinuousCountRange = ContinuousCountRange;
             inst.TriggerInterval = TriggerInterval;
             inst.StartFiringSpeed = StartFiringSpeed;
             inst.FinalFiringSpeed = FinalFiringSpeed;
             inst.FiringSpeedAddSpeed = FiringSpeedAddSpeed;
             inst.FiringSpeedBackSpeed = FiringSpeedBackSpeed;
-            inst.MinFireBulletCount = MinFireBulletCount;
-            inst.MaxFireBulletCount = MaxFireBulletCount;
+            inst.FireBulletCountRange = FireBulletCountRange;
             inst.DelayedTime = DelayedTime;
             inst.StartScatteringRange = StartScatteringRange;
             inst.FinalScatteringRange = FinalScatteringRange;
             inst.ScatteringRangeAddValue = ScatteringRangeAddValue;
             inst.ScatteringRangeBackSpeed = ScatteringRangeBackSpeed;
             inst.ScatteringRangeBackDelayTime = ScatteringRangeBackDelayTime;
-            inst.MinBacklash = MinBacklash;
-            inst.MaxBacklash = MaxBacklash;
+            inst.BacklashRange = BacklashRange;
             inst.BacklashRegressionSpeed = BacklashRegressionSpeed;
             inst.UpliftAngle = UpliftAngle;
             inst.DefaultAngle = DefaultAngle;
             inst.UpliftAngleRestore = UpliftAngleRestore;
             inst.BulletId = BulletId;
-            inst.BulletMaxHarm = BulletMaxHarm;
-            inst.BulletMinHarm = BulletMinHarm;
-            inst.BulletMinDeviationAngle = BulletMinDeviationAngle;
-            inst.BulletMaxDeviationAngle = BulletMaxDeviationAngle;
-            inst.BulletMaxSpeed = BulletMaxSpeed;
-            inst.BulletMinSpeed = BulletMinSpeed;
-            inst.BulletMinDistance = BulletMinDistance;
-            inst.BulletMaxDistance = BulletMaxDistance;
+            inst.BulletHarmRange = BulletHarmRange;
+            inst.BulletDeviationAngleRange = BulletDeviationAngleRange;
+            inst.BulletSpeedRange = BulletSpeedRange;
+            inst.BulletDistanceRange = BulletDistanceRange;
             inst.ShellId = ShellId;
             inst.ThrowShellDelayTime = ThrowShellDelayTime;
             inst.ThrowCollisionSize = ThrowCollisionSize;
+            inst.CanMeleeAttack = CanMeleeAttack;
+            inst.MeleeAttackHarmRange = MeleeAttackHarmRange;
             inst.ShootSound = ShootSound;
             inst.BeginReloadSound = BeginReloadSound;
             inst.BeginReloadSoundDelayTime = BeginReloadSoundDelayTime;

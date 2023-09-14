@@ -155,7 +155,7 @@
     "Name": "",
     "Intro": "\u654C\u4EBA\u6B7B\u4EA1\u788E\u7247",
     "Details": "",
-    "Prefab": "res://prefab/effect/activityObject/Effect0001.tscn",
+    "Prefab": "res://prefab/effect/enemy/Effect0001.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
@@ -165,7 +165,7 @@
     "Name": "\u978B\u5B50",
     "Intro": "\u63D0\u9AD8\u79FB\u52A8\u901F\u5EA6",
     "Details": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0001.tscn",
+    "Prefab": "res://prefab/effect/enemy/Effect0001.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0001.png",
     "ShowInMapEditor": true
   },
