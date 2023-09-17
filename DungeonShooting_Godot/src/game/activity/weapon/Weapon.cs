@@ -1806,8 +1806,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         var speed = Utils.Random.RandomConfigRange(Attribute.BulletSpeedRange);
         var distance = Utils.Random.RandomConfigRange(Attribute.BulletDistanceRange);
-        var deviationAngle =
-            Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
+        var deviationAngle = Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
         if (Master != null)
         {
             speed = Master.RoleState.CallCalcBulletSpeedEvent(this, speed);
@@ -1827,8 +1826,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             fireRotation + Mathf.DegToRad(deviationAngle),
             attackLayer
         );
-        bullet.MinHarm = Utils.GetConfigRangeStart(Attribute.BulletHarmRange);
-        bullet.MaxHarm = Utils.GetConfigRangeEnd(Attribute.BulletHarmRange);
+        bullet.MinHarm = Utils.GetConfigRangeStart(Attribute.HarmRange);
+        bullet.MaxHarm = Utils.GetConfigRangeEnd(Attribute.HarmRange);
         bullet.PutDown(RoomLayerEnum.YSortLayer);
         return bullet;
     }

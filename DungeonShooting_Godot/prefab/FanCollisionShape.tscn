@@ -1,4 +1,0 @@
-[gd_scene format=2]
-
-[node name="FanCollisionShape" type="CollisionPolygon2D"]
-polygon = PackedVector2Array( 0, -10, 5, -9, 9, -5, 10, 0, 9, 5, 5, 9, 0, 10 )

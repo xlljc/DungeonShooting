@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxq8wfeda4huc"]
+
+[ext_resource type="SpriteFrames" uid="uid://dj8o7ws03bik4" path="res://resource/spriteFrames/effect/KnifeHit1.tres" id="1_ds7pw"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_hl3gp"]
+
+[node name="MeleeAttack2" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_ds7pw")
+autoplay = "default"
+script = ExtResource("2_hl3gp")
+DelayTime = 0.12

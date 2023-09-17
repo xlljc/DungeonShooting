@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://uydtgdanj0kx"]
+[gd_scene load_steps=8 format=3 uid="uid://bg7ggha8wqys6"]
 
 [ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="1_5nx8j"]
+[ext_resource type="PackedScene" uid="uid://cxltmhhp4rbyk" path="res://prefab/weapon/WeaponTemplate.tscn" id="1_kx4jd"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_rp1bw"]
 [ext_resource type="SpriteFrames" uid="uid://dx1mjbx4acs3q" path="res://resource/spriteFrames/weapon/Weapon0006.tres" id="2_j3sji"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m6bme"]
 resource_local_to_scene = true
 shader = ExtResource("1_rp1bw")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
@@ -14,7 +15,7 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fqjj0"]
 resource_local_to_scene = true
 shader = ExtResource("1_rp1bw")
 shader_parameter/blend = Color(1, 1, 1, 1)
@@ -24,49 +25,10 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_3p5jk"]
-size = Vector2(12, 10)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iq77m"]
+size = Vector2(12, 8)
 
-[sub_resource type="Animation" id="Animation_x136i"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0]
-}
-
-[sub_resource type="Animation" id="Animation_3piau"]
-resource_name = "floodlight"
-length = 3.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 2.3, 2.6, 2.7, 3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [0, 0, 0.5, 0.5, 0]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_trkjd"]
-_data = {
-"RESET": SubResource("Animation_x136i"),
-"floodlight": SubResource("Animation_3piau")
-}
-
-[node name="Weapon0006" type="CharacterBody2D" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision")]
-collision_layer = 4
+[node name="Weapon0006" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_kx4jd")]
 script = ExtResource("1_5nx8j")
 FirePoint = NodePath("AnimatedSprite/FirePoint")
 ShellPoint = NodePath("AnimatedSprite/ShellPoint")
@@ -76,27 +38,22 @@ ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
 
-[node name="ShadowSprite" type="Sprite2D" parent="."]
-z_index = -1
-material = SubResource("ShaderMaterial_cbiyh")
+[node name="ShadowSprite" parent="." index="0"]
+material = SubResource("ShaderMaterial_m6bme")
 
-[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-material = SubResource("ShaderMaterial_o36tv")
+[node name="AnimatedSprite" parent="." index="1"]
+material = SubResource("ShaderMaterial_fqjj0")
 sprite_frames = ExtResource("2_j3sji")
 
-[node name="ShellPoint" type="Marker2D" parent="AnimatedSprite"]
+[node name="ShellPoint" parent="AnimatedSprite" index="0"]
 position = Vector2(-3, -2.5)
 
-[node name="FirePoint" type="Marker2D" parent="AnimatedSprite"]
+[node name="FirePoint" parent="AnimatedSprite" index="1"]
 position = Vector2(8, -2.5)
 
-[node name="GripPoint" type="Marker2D" parent="."]
+[node name="GripPoint" parent="." index="2"]
 position = Vector2(-4, 1)
 
-[node name="Collision" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_3p5jk")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_trkjd")
-}
+[node name="Collision" parent="." index="3"]
+position = Vector2(-1, 0)
+shape = SubResource("RectangleShape2D_iq77m")

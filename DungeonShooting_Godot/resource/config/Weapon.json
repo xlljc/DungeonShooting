@@ -46,7 +46,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletHarmRange": [
+    "HarmRange": [
       4
     ],
     "BulletDeviationAngleRange": [
@@ -68,8 +68,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0005",
     "__BeginReloadSound": "reloadBegin0004",
@@ -133,7 +132,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletHarmRange": [
+    "HarmRange": [
       4
     ],
     "BulletDeviationAngleRange": [
@@ -155,8 +154,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0005",
     "__BeginReloadSound": "reloadBegin0004",
@@ -220,7 +218,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0002",
-    "BulletHarmRange": [
+    "HarmRange": [
       4
     ],
     "BulletDeviationAngleRange": [
@@ -243,8 +241,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0003",
     "__BeginReloadSound": "reloadBegin0002",
@@ -308,7 +305,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0002",
-    "BulletHarmRange": [
+    "HarmRange": [
       4
     ],
     "BulletDeviationAngleRange": [
@@ -331,8 +328,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0003",
     "__BeginReloadSound": "reloadBegin0002",
@@ -396,7 +392,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletHarmRange": [
+    "HarmRange": [
       4
     ],
     "BulletDeviationAngleRange": [
@@ -418,8 +414,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0004",
     "__BeginReloadSound": "reloading0001",
@@ -483,7 +478,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletHarmRange": [
+    "HarmRange": [
       4
     ],
     "BulletDeviationAngleRange": [
@@ -505,8 +500,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0004",
     "__BeginReloadSound": "reloading0001",
@@ -569,7 +563,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletHarmRange": [
+    "HarmRange": [
       25
     ],
     "BulletDeviationAngleRange": [
@@ -589,8 +583,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "",
     "__BeginReloadSound": "",
@@ -653,7 +646,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletHarmRange": [
+    "HarmRange": [
       25
     ],
     "BulletDeviationAngleRange": [
@@ -673,8 +666,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "",
     "__BeginReloadSound": "",
@@ -738,7 +730,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletHarmRange": [
+    "HarmRange": [
       30
     ],
     "BulletDeviationAngleRange": [
@@ -760,8 +752,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0008",
     "__BeginReloadSound": "reloadBegin0009",
@@ -825,7 +816,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0001",
-    "BulletHarmRange": [
+    "HarmRange": [
       30
     ],
     "BulletDeviationAngleRange": [
@@ -847,8 +838,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0008",
     "__BeginReloadSound": "reloadBegin0009",
@@ -912,7 +902,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0002",
-    "BulletHarmRange": [
+    "HarmRange": [
       3
     ],
     "BulletDeviationAngleRange": [
@@ -934,8 +924,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0002",
     "__BeginReloadSound": "reloadBegin0005",
@@ -999,7 +988,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0002",
-    "BulletHarmRange": [
+    "HarmRange": [
       3
     ],
     "BulletDeviationAngleRange": [
@@ -1021,8 +1010,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0002",
     "__BeginReloadSound": "reloadBegin0005",
@@ -1086,7 +1074,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0003",
-    "BulletHarmRange": [
+    "HarmRange": [
       3
     ],
     "BulletDeviationAngleRange": [
@@ -1108,8 +1096,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0007",
     "__BeginReloadSound": "reloadBegin0006",
@@ -1173,7 +1160,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "BulletId": "bullet0003",
-    "BulletHarmRange": [
+    "HarmRange": [
       3
     ],
     "BulletDeviationAngleRange": [
@@ -1195,8 +1182,7 @@
     },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
-      5,
-      8
+      10
     ],
     "__ShootSound": "shooting0007",
     "__BeginReloadSound": "reloadBegin0006",

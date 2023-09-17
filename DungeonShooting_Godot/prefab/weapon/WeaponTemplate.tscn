@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cxltmhhp4rbyk"]
+[gd_scene load_steps=7 format=3 uid="uid://cxltmhhp4rbyk"]
 
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_3p8rg"]
 
@@ -21,9 +21,6 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_3p5jk"]
-size = Vector2(19.5, 8.75)
 
 [sub_resource type="Animation" id="Animation_x136i"]
 length = 0.001
@@ -82,16 +79,8 @@ position = Vector2(10, -2)
 [node name="GripPoint" type="Marker2D" parent="."]
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_3p5jk")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_trkjd")
 }
-
-[node name="MeleeAttackArea" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 0
-monitorable = false
-
-[node name="MeleeAttackCollision" type="CollisionPolygon2D" parent="MeleeAttackArea"]

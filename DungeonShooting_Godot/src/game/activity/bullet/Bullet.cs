@@ -125,7 +125,6 @@ public partial class Bullet : ActivityObject
             var damage = Utils.Random.RandomRangeInt(MinHarm, MaxHarm);
             if (Role != null)
             {
-                var d = damage;
                 damage = Role.RoleState.CallCalcDamageEvent(damage);
             }
             

@@ -71,3 +71,10 @@ shape = SubResource("RectangleShape2D_n68nu")
 [node name="MountPoint" type="Marker2D" parent="."]
 position = Vector2(2, -8)
 script = ExtResource("2_5ddpw")
+
+[node name="MeleeAttackArea" type="Area2D" parent="MountPoint"]
+collision_layer = 0
+collision_mask = 0
+monitorable = false
+
+[node name="MeleeAttackCollision" type="CollisionPolygon2D" parent="MountPoint/MeleeAttackArea"]

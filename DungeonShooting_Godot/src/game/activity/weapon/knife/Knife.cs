@@ -1,21 +1,43 @@
 
 using Godot;
 
+/// <summary>
+/// 近战武器,刀
+/// </summary>
 [Tool]
 public partial class Knife : Weapon
 {
+    /// <summary>
+    /// 近战攻击范围
+    /// </summary>
+    [Export]
+    public int AttackRange { get; set; } = 41;
+
+    /// <summary>
+    /// 开始蓄力时武器抬起角度
+    /// </summary>
+    [Export]
+    public int BeginChargeAngle { get; set; } = 120;
     
     private Area2D _hitArea;
     private int _attackIndex = 0;
+    private CollisionPolygon2D _collisionPolygon;
     
     public override void OnInit()
     {
         base.OnInit();
         
         _hitArea = GetNode<Area2D>("HitArea");
+        _collisionPolygon = new CollisionPolygon2D();
+        var a = Mathf.Abs(-BeginChargeAngle + Attribute.UpliftAngle);
+        var ca = Utils.ConvertAngle(-a / 2f);
+        _collisionPolygon.Polygon = Utils.CreateSectorPolygon(ca, AttackRange, a, 6);
+        _hitArea.AddChild(_collisionPolygon);
+        
         _hitArea.Monitoring = false;
         _hitArea.Monitorable = false;
         _hitArea.BodyEntered += OnBodyEntered;
+
         //禁用自动播放动画
         IsAutoPlaySpriteFrames = false;
     }
@@ -42,8 +64,8 @@ public partial class Knife : Weapon
 
     protected override void OnBeginCharge()
     {
-        //开始蓄力时武器角度上抬120度
-        RotationDegrees = -120;
+        //开始蓄力时武器角度
+        RotationDegrees = -BeginChargeAngle;
     }
 
     protected override void OnFire()
@@ -59,8 +81,11 @@ public partial class Knife : Weapon
         {
             //播放挥刀特效
             SpecialEffectManager.Play(
+                Master,
                 ResourcePath.resource_spriteFrames_effect_KnifeHit1_tres, "default",
-                Master.MountPoint.GlobalPosition, GlobalRotation + Mathf.Pi * 0.5f, new Vector2((int)Master.Face, 1) * AnimatedSprite.Scale,
+                Master.MountPoint.Position,
+                Master.MountPoint.Rotation + Mathf.DegToRad(Attribute.UpliftAngle + 60),
+                AnimatedSprite.Scale,
                 new Vector2(17, 4), 1
             );
         }
@@ -68,8 +93,18 @@ public partial class Knife : Weapon
 
         if (Master == Player.Current)
         {
-            //创建抖动
-            //GameCamera.Main.ProcessDirectionalShake(Vector2.Right.Rotated(GlobalRotation - Mathf.Pi * 0.5f) * 1.5f);
+            var r = Master.MountPoint.RotationDegrees;
+            //创建屏幕抖动
+            if (Master.Face == FaceDirection.Right)
+            {
+                //GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(r - 90)) * 5);
+                GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(r - 180)) * 7);
+            }
+            else
+            {
+                //GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(270 - r)) * 5);
+                GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(-r)) * 7);
+            }
         }
     }
 
@@ -86,14 +121,19 @@ public partial class Knife : Weapon
 
     private void OnBodyEntered(Node2D body)
     {
-        GD.Print("碰到物体: " + body.Name);
+        //GD.Print("碰到物体: " + body.Name);
         var activityObject = body.AsActivityObject();
         if (activityObject != null)
         {
             if (activityObject is Role role)
             {
-                role.CallDeferred(nameof(Role.Hurt), 
-                    Utils.Random.RandomConfigRange(Attribute.BulletHarmRange), (role.GetCenterPosition() - GlobalPosition).Angle());
+                var damage = Utils.Random.RandomConfigRange(Attribute.HarmRange);
+                if (Master != null)
+                {
+                    damage = Master.RoleState.CallCalcDamageEvent(damage);
+                }
+                
+                role.CallDeferred(nameof(Role.Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());
             }
         }
     }

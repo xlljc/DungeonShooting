@@ -131,7 +131,7 @@ public static partial class ExcelConfig
         public float BeLoadedTime;
 
         /// <summary>
-        /// 连续发射次数范围, 仅当 'ContinuousShoot' 为 false 时生效 <br/>
+        /// 连续发射次数区间, 仅当 'ContinuousShoot' 为 false 时生效 <br/>
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
@@ -168,7 +168,7 @@ public static partial class ExcelConfig
         public float FiringSpeedBackSpeed;
 
         /// <summary>
-        /// 单次开火发射子弹数量范围 <br/>
+        /// 单次开火发射子弹数量区间 <br/>
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
@@ -211,7 +211,7 @@ public static partial class ExcelConfig
         public float ScatteringRangeBackDelayTime;
 
         /// <summary>
-        /// 后坐力范围 (仅用于开火后武器身抖动) <br/>
+        /// 后坐力区间 (仅用于开火后武器身抖动) <br/>
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
@@ -248,14 +248,14 @@ public static partial class ExcelConfig
         public string BulletId;
 
         /// <summary>
-        /// 子弹造成的伤害范围 <br/>
+        /// 造成的伤害区间 <br/>
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public int[] BulletHarmRange;
+        public int[] HarmRange;
 
         /// <summary>
-        /// 子弹偏移角度范围 <br/>
+        /// 子弹偏移角度区间 <br/>
         /// 用于设置子弹偏移朝向, 该属性和射半径效果类似, 但与其不同的是, 散射半径是用来控制枪口朝向的, 而该属性是控制子弹朝向的, 可用于制作霰弹枪子弹效果 <br/>
         /// 格式为[value]或者[min,max]
         /// </summary>
@@ -263,14 +263,14 @@ public static partial class ExcelConfig
         public float[] BulletDeviationAngleRange;
 
         /// <summary>
-        /// 子弹初速度范围 <br/>
+        /// 子弹初速度区间 <br/>
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
         public float[] BulletSpeedRange;
 
         /// <summary>
-        /// 子弹飞行距离范围 <br/>
+        /// 子弹飞行距离区间 <br/>
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
@@ -302,7 +302,7 @@ public static partial class ExcelConfig
         public bool CanMeleeAttack;
 
         /// <summary>
-        /// 近战攻击伤害范围 <br/>
+        /// 近战攻击伤害区间 <br/>
         /// 格式为格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
@@ -436,7 +436,7 @@ public static partial class ExcelConfig
             inst.DefaultAngle = DefaultAngle;
             inst.UpliftAngleRestore = UpliftAngleRestore;
             inst.BulletId = BulletId;
-            inst.BulletHarmRange = BulletHarmRange;
+            inst.HarmRange = HarmRange;
             inst.BulletDeviationAngleRange = BulletDeviationAngleRange;
             inst.BulletSpeedRange = BulletSpeedRange;
             inst.BulletDistanceRange = BulletDistanceRange;
