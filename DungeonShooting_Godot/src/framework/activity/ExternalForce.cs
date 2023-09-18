@@ -17,24 +17,34 @@ public class ExternalForce
     public bool Enable { get; set; } = true;
 
     /// <summary>
-    /// 阻力大小, 也就是速度每秒衰减的量
-    /// </summary>
-    public float Resistance { get; set; } = 0;
-
-    /// <summary>
     /// 是否在空中也会受到阻力
     /// </summary>
     public bool EnableResistanceInTheAir { get; set; } = true;
     
     /// <summary>
-    /// 当速度到达 0 后是否自动销毁, 默认 true
+    /// 当速度(Velocity和RotationSpeed)到达 0 后是否自动销毁, 默认 true
     /// </summary>
     public bool AutoDestroy { get; set; } = true;
+    
+    /// <summary>
+    /// 速率的阻力大小, 也就是速度每秒衰减的量
+    /// </summary>
+    public float VelocityResistance { get; set; }
     
     /// <summary>
     /// 当前力的速率
     /// </summary>
     public Vector2 Velocity { get; set; } = Vector2.Zero;
+
+    /// <summary>
+    /// 当前力对物体造成的旋转速度, 弧度制
+    /// </summary>
+    public float RotationSpeed { get; set; }
+    
+    /// <summary>
+    /// 旋转速率阻力大小, 也就是速度每秒衰减的量
+    /// </summary>
+    public float RotationResistance { get; set; }
 
     /// <summary>
     /// 物理帧更新

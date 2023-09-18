@@ -1138,6 +1138,17 @@ public abstract partial class Role : ActivityObject
             {
                 var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
                 damage = RoleState.CallCalcDamageEvent(damage);
+                
+                //击退
+                if (role is not Player) //目标不是玩家才会触发击退
+                {
+                    var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
+                    var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRnage);
+                    var position = role.GlobalPosition - MountPoint.GlobalPosition;
+                    var v2 = position.Normalized() * repel;
+                    role.MoveController.AddForce(v2, repel * 2);
+                }
+                
                 role.CallDeferred(nameof(Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());
             }
             else if (activityObject is Bullet bullet) //攻击子弹

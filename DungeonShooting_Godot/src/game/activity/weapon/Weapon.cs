@@ -975,7 +975,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         tempAngle -= Attribute.UpliftAngle;
         _fireAngle = tempAngle;
         
-        if (Master != null) //是否被拾起
+        if (Master != null) //被拾起
         {
             //武器身位置
             var max = Mathf.Abs(Mathf.Max(Utils.GetConfigRangeStart(Attribute.BacklashRange), Utils.GetConfigRangeEnd(Attribute.BacklashRange)));
@@ -986,9 +986,12 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
             RotationDegrees = tempAngle;
         }
-        else
+        else //在地上
         {
-            
+            var v = Utils.Random.RandomConfigRange(Attribute.BacklashRange) * 5;
+            var externalForce = MoveController.AddForce(new Vector2(-v, 0).Rotated(Rotation), v * 2);
+            externalForce.RotationSpeed = -Mathf.DegToRad(40);
+            externalForce.RotationResistance = Mathf.DegToRad(80);
         }
     }
 

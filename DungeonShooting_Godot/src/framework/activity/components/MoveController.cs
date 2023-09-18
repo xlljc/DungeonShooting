@@ -104,8 +104,9 @@ public class MoveController : Component
     public ExternalForce AddForce(Vector2 velocity, float resistance)
     {
         var force = AddForce("_anonymity_" + _index++);
+        force.AutoDestroy = true;
         force.Velocity = velocity;
-        force.Resistance = resistance;
+        force.VelocityResistance = resistance;
         return force;
     }
     
@@ -224,7 +225,7 @@ public class MoveController : Component
             {
                 force.PhysicsProcess(delta);
                 //自动销毁
-                if (force.AutoDestroy && force.Velocity == Vector2.Zero)
+                if (CheckAutoDestroy(force))
                 {
                     _forceList.Remove(force);
                     externalForces[i] = null;
@@ -234,15 +235,35 @@ public class MoveController : Component
 
         //外力总和
         var finallyEf = new Vector2();
+        //旋转速率总和
+        var rotationSpeed = 0f;
         foreach (var force in externalForces)
         {
             if (force != null && force.Enable)
+            {
                 finallyEf += force.Velocity;
+                rotationSpeed += force.RotationSpeed;
+            }
+        }
+
+        //处理旋转
+        if (rotationSpeed != 0)
+        {
+            ActivityInstance.Rotation += rotationSpeed * delta;
+        }
+        //衰减旋转速率
+        for (var i = 0; i < _forceList.Count; i++)
+        {
+            var force = _forceList[i];
+            if (force.RotationResistance != 0 && (force.EnableResistanceInTheAir || !ActivityInstance.IsThrowing))
+            {
+                force.RotationSpeed = Mathf.MoveToward(force.RotationSpeed, 0, force.RotationResistance * delta);
+            }
         }
 
         //最终速率
         var finallyVelocity = _basisVelocity + finallyEf;
-
+        //处理移动
         if (finallyVelocity != Vector2.Zero)
         {
             //计算移动
@@ -289,15 +310,9 @@ public class MoveController : Component
                         );
 
                         //力速度衰减
-                        if (force.Resistance != 0 && (force.EnableResistanceInTheAir || !ActivityInstance.IsThrowing))
+                        if (force.VelocityResistance != 0 && (force.EnableResistanceInTheAir || !ActivityInstance.IsThrowing))
                         {
-                            force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.Resistance * delta);
-                        }
-
-                        //自动销毁
-                        if (force.AutoDestroy && force.Velocity == Vector2.Zero)
-                        {
-                            _forceList.RemoveAt(i--);
+                            force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.VelocityResistance * delta);
                         }
                     }
                 }
@@ -307,6 +322,12 @@ public class MoveController : Component
         {
             ActivityInstance.Velocity = Vector2.Zero;
         }
+    }
+
+    //检测是否达到自动销毁的条件
+    private bool CheckAutoDestroy(ExternalForce force)
+    {
+        return force.AutoDestroy && force.Velocity == Vector2.Zero && force.RotationSpeed == 0;
     }
 
     public override void DebugDraw()

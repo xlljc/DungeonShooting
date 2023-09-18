@@ -261,7 +261,8 @@ public static partial class ExcelConfig
         public int[] HarmRange;
 
         /// <summary>
-        /// 造成伤害后击退值区间,按每发子弹算击退 <br/>
+        /// 造成伤害后击退值区间 <br/>
+        /// 如果发射子弹,则按每发子弹算击退 <br/>
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
@@ -320,6 +321,13 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public int[] MeleeAttackHarmRange;
+
+        /// <summary>
+        /// 近战攻击造成伤害后击退值区间 <br/>
+        /// 格式为[value]或者[min,max]
+        /// </summary>
+        [JsonInclude]
+        public float[] MeleeAttackRepelRnage;
 
         /// <summary>
         /// 射击音效
@@ -460,6 +468,7 @@ public static partial class ExcelConfig
             inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.CanMeleeAttack = CanMeleeAttack;
             inst.MeleeAttackHarmRange = MeleeAttackHarmRange;
+            inst.MeleeAttackRepelRnage = MeleeAttackRepelRnage;
             inst.ShootSound = ShootSound;
             inst.BeginReloadSound = BeginReloadSound;
             inst.BeginReloadSoundDelayTime = BeginReloadSoundDelayTime;

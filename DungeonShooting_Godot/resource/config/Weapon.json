@@ -74,6 +74,9 @@
     "MeleeAttackHarmRange": [
       10
     ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
     "__ShootSound": "shooting0005",
     "__BeginReloadSound": "reloadBegin0004",
     "BeginReloadSoundDelayTime": 0.2,
@@ -163,6 +166,9 @@
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
+    ],
+    "MeleeAttackRepelRnage": [
+      100
     ],
     "__ShootSound": "shooting0005",
     "__BeginReloadSound": "reloadBegin0004",
@@ -255,6 +261,9 @@
     "MeleeAttackHarmRange": [
       10
     ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
     "__ShootSound": "shooting0003",
     "__BeginReloadSound": "reloadBegin0002",
     "BeginReloadSoundDelayTime": 0,
@@ -346,6 +355,9 @@
     "MeleeAttackHarmRange": [
       10
     ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
     "__ShootSound": "shooting0003",
     "__BeginReloadSound": "reloadBegin0002",
     "BeginReloadSoundDelayTime": 0,
@@ -435,6 +447,9 @@
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
+    ],
+    "MeleeAttackRepelRnage": [
+      100
     ],
     "__ShootSound": "shooting0004",
     "__BeginReloadSound": "reloading0001",
@@ -526,6 +541,9 @@
     "MeleeAttackHarmRange": [
       10
     ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
     "__ShootSound": "shooting0004",
     "__BeginReloadSound": "reloading0001",
     "BeginReloadSoundDelayTime": 0,
@@ -613,6 +631,9 @@
     "MeleeAttackHarmRange": [
       10
     ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
     "__ShootSound": "",
     "__BeginReloadSound": "",
     "BeginReloadSoundDelayTime": 0,
@@ -699,6 +720,9 @@
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
+    ],
+    "MeleeAttackRepelRnage": [
+      100
     ],
     "__ShootSound": "",
     "__BeginReloadSound": "",
@@ -790,6 +814,9 @@
     "MeleeAttackHarmRange": [
       10
     ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
     "__ShootSound": "shooting0008",
     "__BeginReloadSound": "reloadBegin0009",
     "BeginReloadSoundDelayTime": 0,
@@ -879,6 +906,9 @@
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
+    ],
+    "MeleeAttackRepelRnage": [
+      100
     ],
     "__ShootSound": "shooting0008",
     "__BeginReloadSound": "reloadBegin0009",
@@ -970,6 +1000,9 @@
     "MeleeAttackHarmRange": [
       10
     ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
     "__ShootSound": "shooting0002",
     "__BeginReloadSound": "reloadBegin0005",
     "BeginReloadSoundDelayTime": 0.2,
@@ -1059,6 +1092,9 @@
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
+    ],
+    "MeleeAttackRepelRnage": [
+      100
     ],
     "__ShootSound": "shooting0002",
     "__BeginReloadSound": "reloadBegin0005",
@@ -1150,6 +1186,9 @@
     "MeleeAttackHarmRange": [
       10
     ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
     "__ShootSound": "shooting0007",
     "__BeginReloadSound": "reloadBegin0006",
     "BeginReloadSoundDelayTime": 0.2,
@@ -1239,6 +1278,9 @@
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
+    ],
+    "MeleeAttackRepelRnage": [
+      100
     ],
     "__ShootSound": "shooting0007",
     "__BeginReloadSound": "reloadBegin0006",
