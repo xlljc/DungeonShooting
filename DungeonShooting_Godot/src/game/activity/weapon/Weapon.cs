@@ -135,6 +135,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     public bool IsAutoPlaySpriteFrames { get; set; } = true;
 
+    /// <summary>
+    /// 在没有所属 Master 的时候是否可以触发扳机
+    /// </summary>
+    public bool NoMasterCanTrigger { get; set; } = true;
+    
     //--------------------------------------------------------------------------------------------
     
     //触发按下扳机的角色
@@ -663,6 +668,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <param name="trigger">按下扳机的角色, 如果传 null, 则视为走火</param>
     public void Trigger(Role trigger)
     {
+        //不能触发扳机
+        if (!NoMasterCanTrigger && Master == null) return;
+
         //这一帧已经按过了, 不需要再按下
         if (_triggerFlag) return;
         

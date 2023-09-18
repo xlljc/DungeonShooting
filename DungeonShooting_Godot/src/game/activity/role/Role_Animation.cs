@@ -19,9 +19,9 @@ public partial class Role
         var tween = CreateTween();
         tween.SetParallel();
         
-        tween.TweenProperty(MountPoint, "rotation_degrees", r - MeleeAttackAngle / 2f, 0.12);
-        tween.TweenProperty(MountPoint, "position", p2, 0.12);
-        tween.TweenProperty(MountPoint, "position", p2, 0.12);
+        tween.TweenProperty(MountPoint, "rotation_degrees", r - MeleeAttackAngle / 2f, 0.1);
+        tween.TweenProperty(MountPoint, "position", p2, 0.1);
+        tween.TweenProperty(MountPoint, "position", p2, 0.1);
         tween.Chain();
 
         tween.TweenCallback(Callable.From(() =>

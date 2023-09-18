@@ -1117,7 +1117,7 @@ public abstract partial class Role : ActivityObject
                 MeleeAttackAngle,
                 6
             );
-            MeleeAttackArea.CollisionMask = AttackLayer;
+            MeleeAttackArea.CollisionMask = AttackLayer | PhysicsLayer.Bullet;
         }
     }
 
@@ -1134,11 +1134,20 @@ public abstract partial class Role : ActivityObject
         var activityObject = body.AsActivityObject();
         if (activityObject != null)
         {
-            if (activityObject is Role role)
+            if (activityObject is Role role) //攻击角色
             {
                 var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
                 damage = RoleState.CallCalcDamageEvent(damage);
                 role.CallDeferred(nameof(Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());
+            }
+            else if (activityObject is Bullet bullet) //攻击子弹
+            {
+                var attackLayer = bullet.AttackLayer;
+                if (CollisionWithMask(attackLayer)) //是攻击玩家的子弹
+                {
+                    bullet.PlayDisappearEffect();
+                    bullet.Destroy();
+                }
             }
         }
     }

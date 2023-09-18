@@ -26,7 +26,9 @@ public partial class Knife : Weapon
     public override void OnInit()
     {
         base.OnInit();
-        
+
+        //没有Master时不能触发开火
+        NoMasterCanTrigger = false;
         _hitArea = GetNode<Area2D>("HitArea");
         _collisionPolygon = new CollisionPolygon2D();
         var a = Mathf.Abs(-BeginChargeAngle + Attribute.UpliftAngle);
@@ -72,7 +74,7 @@ public partial class Knife : Weapon
     {
         GD.Print("近战武器攻击! 蓄力时长: " + GetTriggerChargeTime() + ", 扳机按下时长: " + GetTriggerDownTime());
         //更新碰撞层级
-        _hitArea.CollisionMask = GetAttackLayer();
+        _hitArea.CollisionMask = GetAttackLayer() | PhysicsLayer.Bullet;
         //启用碰撞
         _hitArea.Monitoring = true;
         _attackIndex = 0;
@@ -125,7 +127,7 @@ public partial class Knife : Weapon
         var activityObject = body.AsActivityObject();
         if (activityObject != null)
         {
-            if (activityObject is Role role)
+            if (activityObject is Role role) //碰到角色
             {
                 var damage = Utils.Random.RandomConfigRange(Attribute.HarmRange);
                 if (Master != null)
@@ -134,6 +136,17 @@ public partial class Knife : Weapon
                 }
                 
                 role.CallDeferred(nameof(Role.Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());
+            }
+            else if (activityObject is Bullet bullet) //攻击子弹
+            {
+                var attackLayer = bullet.AttackLayer;
+                if (Master.CollisionWithMask(attackLayer)) //是攻击玩家的子弹
+                {
+                    bullet.PlayDisappearEffect();
+                    bullet.BasisVelocity = bullet.BasisVelocity.Rotated(Mathf.Pi);
+                    bullet.Rotation += Mathf.Pi;
+                    bullet.AttackLayer = Master.AttackLayer;
+                }
             }
         }
     }

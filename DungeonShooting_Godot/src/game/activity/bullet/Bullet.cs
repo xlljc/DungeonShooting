@@ -13,6 +13,15 @@ public partial class Bullet : ActivityObject
     public Area2D CollisionArea { get; set; }
 
     /// <summary>
+    /// 攻击的层级
+    /// </summary>
+    public uint AttackLayer
+    {
+        get => CollisionArea.CollisionMask;
+        set => CollisionArea.CollisionMask = value;
+    }
+
+    /// <summary>
     /// 发射该子弹的武器
     /// </summary>
     public Weapon Weapon { get; private set; }
@@ -55,7 +64,7 @@ public partial class Bullet : ActivityObject
     {
         Weapon = weapon;
         Role = weapon.Master;
-        CollisionArea.CollisionMask = targetLayer;
+        AttackLayer = targetLayer;
         CollisionArea.AreaEntered += OnArea2dEntered;
         
         //只有玩家使用该武器才能获得正常速度的子弹
@@ -81,6 +90,17 @@ public partial class Bullet : ActivityObject
         // }
     }
 
+    /// <summary>
+    /// 播放子弹消失的特效
+    /// </summary>
+    public virtual void PlayDisappearEffect()
+    {
+        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletDisappear_tscn);
+        var node = packedScene.Instantiate<Node2D>();
+        node.GlobalPosition = GlobalPosition;
+        node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+    }
+    
     protected override void PhysicsProcessOver(float delta)
     {
         //移动
@@ -102,15 +122,11 @@ public partial class Bullet : ActivityObject
         CurrFlyDistance += FlySpeed * delta;
         if (CurrFlyDistance >= MaxDistance)
         {
-            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletDisappear_tscn);
-            var node = packedScene.Instantiate<Node2D>();
-            node.GlobalPosition = GlobalPosition;
-            node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-            
+            PlayDisappearEffect();
             Destroy();
         }
     }
-
+    
     private void OnArea2dEntered(Area2D other)
     {
         var role = other.AsActivityObject<Role>();
