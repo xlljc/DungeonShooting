@@ -211,6 +211,12 @@ public static partial class ExcelConfig
         public float ScatteringRangeBackDelayTime;
 
         /// <summary>
+        /// 开火后相机抖动强度,只有玩家拾起武器开火才会抖动相机
+        /// </summary>
+        [JsonInclude]
+        public float CameraShake;
+
+        /// <summary>
         /// 后坐力区间 (仅用于开火后武器身抖动) <br/>
         /// 格式为[value]或者[min,max]
         /// </summary>
@@ -253,6 +259,13 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public int[] HarmRange;
+
+        /// <summary>
+        /// 造成伤害后击退值区间,按每发子弹算击退 <br/>
+        /// 格式为[value]或者[min,max]
+        /// </summary>
+        [JsonInclude]
+        public float[] RepelRnage;
 
         /// <summary>
         /// 子弹偏移角度区间 <br/>
@@ -430,6 +443,7 @@ public static partial class ExcelConfig
             inst.ScatteringRangeAddValue = ScatteringRangeAddValue;
             inst.ScatteringRangeBackSpeed = ScatteringRangeBackSpeed;
             inst.ScatteringRangeBackDelayTime = ScatteringRangeBackDelayTime;
+            inst.CameraShake = CameraShake;
             inst.BacklashRange = BacklashRange;
             inst.BacklashRegressionSpeed = BacklashRegressionSpeed;
             inst.UpliftAngle = UpliftAngle;
@@ -437,6 +451,7 @@ public static partial class ExcelConfig
             inst.UpliftAngleRestore = UpliftAngleRestore;
             inst.BulletId = BulletId;
             inst.HarmRange = HarmRange;
+            inst.RepelRnage = RepelRnage;
             inst.BulletDeviationAngleRange = BulletDeviationAngleRange;
             inst.BulletSpeedRange = BulletSpeedRange;
             inst.BulletDistanceRange = BulletDistanceRange;

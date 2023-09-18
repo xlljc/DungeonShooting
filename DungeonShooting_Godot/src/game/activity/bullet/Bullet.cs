@@ -40,6 +40,11 @@ public partial class Bullet : ActivityObject
     /// 最大伤害
     /// </summary>
     public int MaxHarm { get; set; } = 4;
+    
+    /// <summary>
+    /// 发射该子弹的角色
+    /// </summary>
+    public Role Trigger { get; private set; }
 
     // 最大飞行距离
     private float MaxDistance;
@@ -62,13 +67,13 @@ public partial class Bullet : ActivityObject
     /// <param name="targetLayer">攻击目标层级</param>
     public void Init(Role trigger, Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
+        Trigger = trigger;
         Weapon = weapon;
         Role = weapon.Master;
         AttackLayer = targetLayer;
         CollisionArea.AreaEntered += OnArea2dEntered;
         
-        //只有玩家使用该武器才能获得正常速度的子弹
-        if (trigger != null && !trigger.IsAi)
+        if (trigger != null && !trigger.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
         {
             FlySpeed = speed;
         }
@@ -143,7 +148,16 @@ public partial class Bullet : ActivityObject
             {
                 damage = Role.RoleState.CallCalcDamageEvent(damage);
             }
+
+            //击退
+            if (role is not Player) //目标不是玩家才会触发击退
+            {
+                var attr = Trigger != null && !Trigger.IsAi ? Weapon.PlayerUseAttribute : Weapon.AiUseAttribute;
+                var repel = Utils.Random.RandomConfigRange(attr.RepelRnage);
+                role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel, repel * 2);
+            }
             
+            //造成伤害
             role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
             Destroy();
         }

@@ -100,12 +100,12 @@ public partial class Knife : Weapon
             if (Master.Face == FaceDirection.Right)
             {
                 //GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(r - 90)) * 5);
-                GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(r - 180)) * 7);
+                GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(r - 180)) * Attribute.CameraShake);
             }
             else
             {
                 //GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(270 - r)) * 5);
-                GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(-r)) * 7);
+                GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(-r)) * Attribute.CameraShake);
             }
         }
     }
@@ -130,11 +130,18 @@ public partial class Knife : Weapon
             if (activityObject is Role role) //碰到角色
             {
                 var damage = Utils.Random.RandomConfigRange(Attribute.HarmRange);
-                if (Master != null)
+                damage = Master.RoleState.CallCalcDamageEvent(damage);
+                //击退
+                if (role is not Player) //目标不是玩家才会触发击退
                 {
-                    damage = Master.RoleState.CallCalcDamageEvent(damage);
+                    var attr = Master.IsAi ? AiUseAttribute : PlayerUseAttribute;
+                    var repel = Utils.Random.RandomConfigRange(attr.RepelRnage);
+                    var position = role.GlobalPosition - Master.MountPoint.GlobalPosition;
+                    var v2 = position.Normalized() * repel;
+                    role.MoveController.AddForce(v2, repel * 2);
                 }
                 
+                //造成伤害
                 role.CallDeferred(nameof(Role.Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());
             }
             else if (activityObject is Bullet bullet) //攻击子弹

@@ -17,6 +17,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// Ai使用该武器的属性
     /// </summary>
     public ExcelConfig.Weapon AiUseAttribute => _aiWeaponAttribute;
+
+    /// <summary>
+    /// 玩家使用该武器的属性
+    /// </summary>
+    public ExcelConfig.Weapon PlayerUseAttribute => _playerWeaponAttribute;
     
     private ExcelConfig.Weapon _weaponAttribute;
     private ExcelConfig.Weapon _playerWeaponAttribute;
