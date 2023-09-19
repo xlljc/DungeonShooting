@@ -254,6 +254,11 @@ public partial class Player : Role
         GameCamera.Main.SetFollowTarget(null);
         BasisVelocity = Vector2.Zero;
         MoveController.ClearForce();
+
+        //暂停游戏
+        GameApplication.Instance.World.Pause = true;
+        //弹出结算面板
+        GameApplication.Instance.Cursor.SetGuiMode(true);
         UiManager.Open_Settlement();
     }
 

@@ -1,10 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
 using Godot;
 
 /// <summary>
 /// 游戏世界
 /// </summary>
-public partial class World : Node2D
+public partial class World : Node2D, ICoroutine
 {
     /// <summary>
     /// //对象根节点
@@ -73,10 +74,20 @@ public partial class World : Node2D
     public Vector2 Enemy_FindTargetPosition { get; set; }
     
     private bool _pause = false;
-    
+    private List<CoroutineData> _coroutineList;
+
     public override void _Ready()
     {
         TileRoot.YSortEnabled = false;
+    }
+
+    public override void _Process(double delta)
+    {
+        //协程更新
+        if (_coroutineList != null)
+        {
+            ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, (float)delta);
+        }
     }
 
     /// <summary>
@@ -95,4 +106,23 @@ public partial class World : Node2D
         return null;
     }
     
+    public long StartCoroutine(IEnumerator able)
+    {
+        return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
+    }
+	
+    public void StopCoroutine(long coroutineId)
+    {
+        ProxyCoroutineHandler.ProxyStopCoroutine(ref _coroutineList, coroutineId);
+    }
+
+    public bool IsCoroutineOver(long coroutineId)
+    {
+        return ProxyCoroutineHandler.ProxyIsCoroutineOver(ref _coroutineList, coroutineId);
+    }
+
+    public void StopAllCoroutine()
+    {
+        ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
+    }
 }

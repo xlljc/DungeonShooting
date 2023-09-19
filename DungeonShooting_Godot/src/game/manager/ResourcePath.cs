@@ -9,7 +9,6 @@ public class ResourcePath
     public const string excel_DungeonShooting_ExcelTool_deps_json = "res://excel/DungeonShooting_ExcelTool.deps.json";
     public const string excel_DungeonShooting_ExcelTool_runtimeconfig_json = "res://excel/DungeonShooting_ExcelTool.runtimeconfig.json";
     public const string prefab_Cursor_tscn = "res://prefab/Cursor.tscn";
-    public const string prefab_FanCollisionShape_tscn = "res://prefab/FanCollisionShape.tscn";
     public const string prefab_bullet_Bullet0001_tscn = "res://prefab/bullet/Bullet0001.tscn";
     public const string prefab_bullet_Bullet0002_tscn = "res://prefab/bullet/Bullet0002.tscn";
     public const string prefab_bullet_Bullet0003_tscn = "res://prefab/bullet/Bullet0003.tscn";
@@ -21,6 +20,7 @@ public class ResourcePath
     public const string prefab_effect_weapon_BulletSmoke_tscn = "res://prefab/effect/weapon/BulletSmoke.tscn";
     public const string prefab_effect_weapon_FirePart_tscn = "res://prefab/effect/weapon/FirePart.tscn";
     public const string prefab_effect_weapon_MeleeAttack1_tscn = "res://prefab/effect/weapon/MeleeAttack1.tscn";
+    public const string prefab_effect_weapon_MeleeAttack2_tscn = "res://prefab/effect/weapon/MeleeAttack2.tscn";
     public const string prefab_effect_weapon_ShotFire_tscn = "res://prefab/effect/weapon/ShotFire.tscn";
     public const string prefab_map_RoomDoor_E_tscn = "res://prefab/map/RoomDoor_E.tscn";
     public const string prefab_map_RoomDoor_N_tscn = "res://prefab/map/RoomDoor_N.tscn";
@@ -63,6 +63,7 @@ public class ResourcePath
     public const string prefab_ui_MapEditorProject_tscn = "res://prefab/ui/MapEditorProject.tscn";
     public const string prefab_ui_MapEditorSelectObject_tscn = "res://prefab/ui/MapEditorSelectObject.tscn";
     public const string prefab_ui_MapEditorTools_tscn = "res://prefab/ui/MapEditorTools.tscn";
+    public const string prefab_ui_PauseMenu_tscn = "res://prefab/ui/PauseMenu.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
     public const string prefab_ui_Settlement_tscn = "res://prefab/ui/Settlement.tscn";
     public const string prefab_weapon_Weapon0001_tscn = "res://prefab/weapon/Weapon0001.tscn";
@@ -303,6 +304,7 @@ public class ResourcePath
     public const string scene_Main_tscn = "res://scene/Main.tscn";
     public const string scene_World_tscn = "res://scene/World.tscn";
     public const string scene_test_TestCommpont_tscn = "res://scene/test/TestCommpont.tscn";
+    public const string scene_test_TestCreateSector_tscn = "res://scene/test/TestCreateSector.tscn";
     public const string scene_test_TestExpression_tscn = "res://scene/test/TestExpression.tscn";
     public const string scene_test_TestGenerateDungeon_tscn = "res://scene/test/TestGenerateDungeon.tscn";
     public const string scene_test_TestNavigation2_tscn = "res://scene/test/TestNavigation2.tscn";

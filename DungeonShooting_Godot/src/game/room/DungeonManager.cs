@@ -72,7 +72,6 @@ public partial class DungeonManager : Node2D
         GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(finish));
     }
     
-    
     /// <summary>
     /// 重启地牢
     /// </summary>
@@ -152,6 +151,21 @@ public partial class DungeonManager : Node2D
     {
         if (IsInDungeon)
         {
+            if (World.Pause) //已经暂停
+            {
+                return;
+            }
+            
+            //暂停游戏
+            if (Input.IsActionJustPressed("ui_cancel"))
+            {
+                World.Pause = true;
+                //鼠标改为Ui鼠标
+                GameApplication.Instance.Cursor.SetGuiMode(true);
+                //打开暂停Ui
+                UiManager.Open_PauseMenu();
+            }
+            
             _checkEnemyTimer += (float)delta;
             if (_checkEnemyTimer >= 1)
             {

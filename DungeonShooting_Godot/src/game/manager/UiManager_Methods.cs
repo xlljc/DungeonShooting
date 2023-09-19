@@ -22,6 +22,7 @@ public static partial class UiManager
         public const string MapEditorProject = "MapEditorProject";
         public const string MapEditorSelectObject = "MapEditorSelectObject";
         public const string MapEditorTools = "MapEditorTools";
+        public const string PauseMenu = "PauseMenu";
         public const string RoomUI = "RoomUI";
         public const string Settlement = "Settlement";
     }
@@ -792,6 +793,54 @@ public static partial class UiManager
     public static UI.MapEditorTools.MapEditorToolsPanel[] Get_MapEditorTools_Instance()
     {
         return GetUiInstance<UI.MapEditorTools.MapEditorToolsPanel>(nameof(UI.MapEditorTools.MapEditorTools));
+    }
+
+    /// <summary>
+    /// 创建 PauseMenu, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.PauseMenu.PauseMenuPanel Create_PauseMenu()
+    {
+        return CreateUi<UI.PauseMenu.PauseMenuPanel>(UiName.PauseMenu);
+    }
+
+    /// <summary>
+    /// 打开 PauseMenu, 并返回UI实例
+    /// </summary>
+    public static UI.PauseMenu.PauseMenuPanel Open_PauseMenu()
+    {
+        return OpenUi<UI.PauseMenu.PauseMenuPanel>(UiName.PauseMenu);
+    }
+
+    /// <summary>
+    /// 隐藏 PauseMenu 的所有实例
+    /// </summary>
+    public static void Hide_PauseMenu()
+    {
+        var uiInstance = Get_PauseMenu_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 PauseMenu 的所有实例
+    /// </summary>
+    public static void Destroy_PauseMenu()
+    {
+        var uiInstance = Get_PauseMenu_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 PauseMenu 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.PauseMenu.PauseMenuPanel[] Get_PauseMenu_Instance()
+    {
+        return GetUiInstance<UI.PauseMenu.PauseMenuPanel>(nameof(UI.PauseMenu.PauseMenu));
     }
 
     /// <summary>
