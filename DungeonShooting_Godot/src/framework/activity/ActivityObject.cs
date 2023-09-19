@@ -115,7 +115,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public bool IsThrowing => _throwForce != null && !_isFallOver;
 
     /// <summary>
-    /// 当前物体的海拔高度, 如果大于0, 则会做自由落体运动, 也就是执行投抛代码
+    /// 当前物体的海拔高度, 如果大于0, 则会做自由落体运动, 也就是执行投抛逻辑
     /// </summary>
     public float Altitude
     {
@@ -143,11 +143,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     }
 
     private float _verticalSpeed;
-    
-    /// <summary>
-    /// 物体投抛时旋转速度, 角度制
-    /// </summary>
-    public float ThrowRotationDegreesSpeed { get; set; }
 
     /// <summary>
     /// 落地之后是否回弹
@@ -163,6 +158,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// 物体下坠回弹后的运动速度衰减量
     /// </summary>
     public float BounceSpeed { get; set; } = 0.75f;
+    
+    /// <summary>
+    /// 物体下坠回弹后的旋转速度衰减量
+    /// </summary>
+    public float BounceRotationSpeed { get; set; } = 0.5f;
 
     /// <summary>
     /// 投抛状态下物体碰撞器大小, 如果 (x, y) 都小于 0, 则默认使用 AnimatedSprite 的默认动画第一帧的大小
@@ -205,6 +205,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// 是否启用自定义行为, 默认 true, 如果禁用, 则会停止调用子类重写的 Process(), PhysicsProcess() 函数, 并且当前物体除 MoveController 以外的组件 Process(), PhysicsProcess() 也会停止调用
     /// </summary>
     public bool EnableCustomBehavior { get; set; } = true;
+    
+    /// <summary>
+    /// 物体材质数据
+    /// </summary>
+    public ActivityMaterial ActivityMaterial { get; private set; }
     
     /// <summary>
     /// 所在的 World 对象
@@ -703,7 +708,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         Altitude = altitude;
         //Position = Position + new Vector2(0, altitude);
         VerticalSpeed = verticalSpeed;
-        ThrowRotationDegreesSpeed = rotateSpeed;
+        //ThrowRotationDegreesSpeed = rotateSpeed;
         if (_throwForce != null)
         {
             MoveController.RemoveForce(_throwForce);
@@ -711,6 +716,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
 
         _throwForce = new ExternalForce(ForceNames.Throw);
         _throwForce.Velocity = velocity;
+        _throwForce.RotationSpeed = Mathf.DegToRad(rotateSpeed);
         MoveController.AddForce(_throwForce);
 
         InitThrowData();
@@ -909,7 +915,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             {
                 if (EnableVerticalMotion) //如果启用了纵向运动, 则更新运动
                 {
-                    GlobalRotationDegrees = GlobalRotationDegrees + ThrowRotationDegreesSpeed * newDelta;
+                    //GlobalRotationDegrees = GlobalRotationDegrees + ThrowRotationDegreesSpeed * newDelta;
 
                     var ysp = VerticalSpeed;
 
@@ -944,7 +950,15 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                             OnFirstFallToGround();
                         }
 
-                        MoveController.ScaleAllForce(BounceSpeed);
+                        if (_throwForce != null)
+                        {
+                            //缩放移动速度
+                            //MoveController.ScaleAllForce(BounceSpeed);
+                            _throwForce.Velocity *= BounceSpeed;
+                            //缩放旋转速度
+                            //MoveController.ScaleAllRotationSpeed(BounceStrength);
+                            _throwForce.RotationSpeed *= BounceRotationSpeed;
+                        }
                         //如果落地高度不够低, 再抛一次
                         if (Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 5))
                         {
@@ -965,7 +979,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                                 }
                             }
                             _verticalSpeed = _resilienceVerticalSpeed;
-                            ThrowRotationDegreesSpeed = ThrowRotationDegreesSpeed * BounceStrength;
                             _isFallOver = false;
 
                             OnFallToGround();
