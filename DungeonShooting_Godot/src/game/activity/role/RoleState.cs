@@ -87,7 +87,6 @@ public class RoleState
     /// 武器初始散射值增量
     /// </summary>
     public event Action<Weapon, float, RefValue<float>> CalcStartScatteringEvent;
-
     public float CallCalcStartScatteringEvent(Weapon weapon, float value)
     {
         if (CalcStartScatteringEvent != null)

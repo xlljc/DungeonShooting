@@ -211,4 +211,43 @@ public static class Utils
 
         return range[0];
     }
+
+    /// <summary>
+    /// 创建扇形多边形区域数据, 返回坐标点
+    /// </summary>
+    /// <param name="centerAngle">中心角度, 角度制</param>
+    /// <param name="radius">扇形半径</param>
+    /// <param name="range">扇形开口角度, 角度制</param>
+    /// <param name="edgesCount">扇形弧度边的数量</param>
+    /// <param name="offset">整体偏移坐标, 默认0</param>
+    public static Vector2[] CreateSectorPolygon(float centerAngle, float radius, float range, uint edgesCount, Vector2? offset = null)
+    {
+        var point = new Vector2[edgesCount + 2];
+        var edgesAngle = range / edgesCount;
+        var startAngle = centerAngle - range * 0.5f;
+        var temp = new Vector2(radius, 0);
+
+        for (var i = 0; i <= edgesCount; i++)
+        {
+            if (offset == null)
+            {
+                point[i] = temp.Rotated(Mathf.DegToRad(startAngle + edgesAngle * i));
+            }
+            else
+            {
+                point[i] = temp.Rotated(Mathf.DegToRad(startAngle + edgesAngle * i)) + offset.Value;
+            }
+        }
+
+        if (offset == null)
+        {
+            point[point.Length - 1] = Vector2.Zero;
+        }
+        else
+        {
+            point[point.Length - 1] = offset.Value;
+        }
+        
+        return point;
+    }
 }

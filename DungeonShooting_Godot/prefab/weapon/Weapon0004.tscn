@@ -4,20 +4,29 @@
 [ext_resource type="Script" path="res://src/game/activity/weapon/knife/Knife.cs" id="2_v1wer"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_63s5g"]
 [ext_resource type="SpriteFrames" uid="uid://k2tktysa7j86" path="res://resource/spriteFrames/weapon/Weapon0004.tres" id="4_uymcs"]
-[ext_resource type="PackedScene" path="res://prefab/FanCollisionShape.tscn" id="5_nr15b"]
-
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o5ytq"]
 resource_local_to_scene = true
 shader = ExtResource("3_63s5g")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rtliw"]
 resource_local_to_scene = true
 shader = ExtResource("3_63s5g")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yks6x"]
+size = Vector2(26, 2)
 
 [node name="Weapon0004" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_kg172")]
 script = ExtResource("2_v1wer")
@@ -36,13 +45,19 @@ material = SubResource("ShaderMaterial_o5ytq")
 material = SubResource("ShaderMaterial_rtliw")
 sprite_frames = ExtResource("4_uymcs")
 
+[node name="ShellPoint" parent="AnimatedSprite" index="0"]
+position = Vector2(0, -1)
+
+[node name="FirePoint" parent="AnimatedSprite" index="1"]
+position = Vector2(12, -1)
+
 [node name="GripPoint" parent="." index="2"]
 position = Vector2(-12, -1)
+
+[node name="Collision" parent="." index="3"]
+position = Vector2(-1, -1)
+shape = SubResource("RectangleShape2D_yks6x")
 
 [node name="HitArea" type="Area2D" parent="." index="4"]
 monitoring = false
 monitorable = false
-
-[node name="FanCollisionShape" parent="HitArea" index="0" instance=ExtResource("5_nr15b")]
-rotation = -1.5708
-scale = Vector2(3, 3)

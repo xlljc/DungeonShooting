@@ -11,7 +11,7 @@ public partial class Gun : Weapon
         if (Master == Player.Current)
         {
             //创建抖动
-            GameCamera.Main.DirectionalShake(Vector2.Right.Rotated(GlobalRotation) * 2f);
+            GameCamera.Main.DirectionalShake(Vector2.Right.Rotated(GlobalRotation) * Attribute.CameraShake);
         }
 
         //创建开火特效

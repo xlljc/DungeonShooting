@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c6etppq4v63xw"]
+[gd_scene load_steps=8 format=3 uid="uid://c6etppq4v63xw"]
 
 [ext_resource type="PackedScene" uid="uid://cxltmhhp4rbyk" path="res://prefab/weapon/WeaponTemplate.tscn" id="1_ykl0r"]
 [ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="2_t56pk"]
@@ -25,6 +25,9 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7i6da"]
+size = Vector2(22, 8.25)
+
 [node name="Weapon0001" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_ykl0r")]
 script = ExtResource("2_t56pk")
 FirePoint = NodePath("AnimatedSprite/FirePoint")
@@ -50,3 +53,7 @@ position = Vector2(15, -2)
 
 [node name="GripPoint" parent="." index="2"]
 position = Vector2(-5, -1)
+
+[node name="Collision" parent="." index="3"]
+position = Vector2(0, -0.875)
+shape = SubResource("RectangleShape2D_7i6da")

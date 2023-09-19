@@ -709,7 +709,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             MoveController.RemoveForce(_throwForce);
         }
 
-        _throwForce = new ExternalForce("throw");
+        _throwForce = new ExternalForce(ForceNames.Throw);
         _throwForce.Velocity = velocity;
         MoveController.AddForce(_throwForce);
 

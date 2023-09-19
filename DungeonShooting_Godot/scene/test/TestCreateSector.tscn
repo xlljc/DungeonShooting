@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://d4axmwaqk1f55"]
+
+[ext_resource type="Script" path="res://src/test/TestCreateSector.cs" id="1_ieqp4"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_73jok"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_42m3w"]
+
+[node name="TestCreateSector" type="Node2D"]
+script = ExtResource("1_ieqp4")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(959, 505)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D/CollisionPolygon2D"]
+texture = ExtResource("2_73jok")
+
+[node name="Area2D2" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2"]
+shape = SubResource("CircleShape2D_42m3w")

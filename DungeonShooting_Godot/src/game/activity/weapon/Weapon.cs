@@ -17,6 +17,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// Ai使用该武器的属性
     /// </summary>
     public ExcelConfig.Weapon AiUseAttribute => _aiWeaponAttribute;
+
+    /// <summary>
+    /// 玩家使用该武器的属性
+    /// </summary>
+    public ExcelConfig.Weapon PlayerUseAttribute => _playerWeaponAttribute;
     
     private ExcelConfig.Weapon _weaponAttribute;
     private ExcelConfig.Weapon _playerWeaponAttribute;
@@ -135,6 +140,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     public bool IsAutoPlaySpriteFrames { get; set; } = true;
 
+    /// <summary>
+    /// 在没有所属 Master 的时候是否可以触发扳机
+    /// </summary>
+    public bool NoMasterCanTrigger { get; set; } = true;
+    
     //--------------------------------------------------------------------------------------------
     
     //触发按下扳机的角色
@@ -663,6 +673,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <param name="trigger">按下扳机的角色, 如果传 null, 则视为走火</param>
     public void Trigger(Role trigger)
     {
+        //不能触发扳机
+        if (!NoMasterCanTrigger && Master == null) return;
+
         //这一帧已经按过了, 不需要再按下
         if (_triggerFlag) return;
         
@@ -962,7 +975,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         tempAngle -= Attribute.UpliftAngle;
         _fireAngle = tempAngle;
         
-        if (Master != null) //是否被拾起
+        if (Master != null) //被拾起
         {
             //武器身位置
             var max = Mathf.Abs(Mathf.Max(Utils.GetConfigRangeStart(Attribute.BacklashRange), Utils.GetConfigRangeEnd(Attribute.BacklashRange)));
@@ -973,9 +986,12 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
             RotationDegrees = tempAngle;
         }
-        else
+        else //在地上
         {
-            
+            var v = Utils.Random.RandomConfigRange(Attribute.BacklashRange) * 5;
+            var externalForce = MoveController.AddForce(new Vector2(-v, 0).Rotated(Rotation), v * 2);
+            externalForce.RotationSpeed = -Mathf.DegToRad(40);
+            externalForce.RotationResistance = Mathf.DegToRad(80);
         }
     }
 
@@ -1806,8 +1822,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         var speed = Utils.Random.RandomConfigRange(Attribute.BulletSpeedRange);
         var distance = Utils.Random.RandomConfigRange(Attribute.BulletDistanceRange);
-        var deviationAngle =
-            Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
+        var deviationAngle = Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
         if (Master != null)
         {
             speed = Master.RoleState.CallCalcBulletSpeedEvent(this, speed);
@@ -1827,8 +1842,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             fireRotation + Mathf.DegToRad(deviationAngle),
             attackLayer
         );
-        bullet.MinHarm = Utils.GetConfigRangeStart(Attribute.BulletHarmRange);
-        bullet.MaxHarm = Utils.GetConfigRangeEnd(Attribute.BulletHarmRange);
+        bullet.MinHarm = Utils.GetConfigRangeStart(Attribute.HarmRange);
+        bullet.MaxHarm = Utils.GetConfigRangeEnd(Attribute.HarmRange);
         bullet.PutDown(RoomLayerEnum.YSortLayer);
         return bullet;
     }
