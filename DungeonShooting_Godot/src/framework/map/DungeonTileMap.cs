@@ -671,7 +671,7 @@ public class DungeonTileMap
 
         try
         {
-            var size = new Vector2(_tileRoot.CellQuadrantSize, _tileRoot.CellQuadrantSize);
+            var size = new Vector2(GameConfig.TileCellSize, GameConfig.TileCellSize);
 
             var rect = _tileRoot.GetUsedRect();
 

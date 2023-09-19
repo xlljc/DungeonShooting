@@ -591,7 +591,7 @@ public partial class DungeonManager : Node2D
     //绘制房间区域, debug 用
     private void DrawRoomInfo(RoomInfo roomInfo)
     {
-        var cellSize = World.TileRoot.CellQuadrantSize;
+        var cellSize = GameConfig.TileCellSize;
         var pos1 = (roomInfo.Position + roomInfo.Size / 2) * cellSize;
         
         //绘制下一个房间
