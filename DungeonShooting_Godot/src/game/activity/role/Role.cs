@@ -981,11 +981,10 @@ public abstract partial class Role : ActivityObject
         else
         {
             damage = RoleState.CallCalcHurtDamageEvent(damage);
-            if (damage < 0)
+            if (damage > 0)
             {
-                return;
+                Hp -= damage;
             }
-            Hp -= damage;
             //播放血液效果
             // var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);
             // var blood = packedScene.Instance<Blood>();

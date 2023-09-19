@@ -22,7 +22,7 @@ public class ExternalForce
     public bool EnableResistanceInTheAir { get; set; } = true;
     
     /// <summary>
-    /// 当速度(Velocity和RotationSpeed)到达 0 后是否自动销毁, 默认 true
+    /// 当速度( Velocity 和 RotationSpeed )到达 0 后是否自动销毁, 默认 true
     /// </summary>
     public bool AutoDestroy { get; set; } = true;
     
