@@ -308,4 +308,10 @@ public partial class Player : Role
             BasisVelocity = new Vector2(BasisVelocity.X, Mathf.MoveToward(BasisVelocity.Y, dir.Y * RoleState.MoveSpeed, RoleState.Acceleration * delta));
         }
     }
+
+    protected override void DebugDraw()
+    {
+        base.DebugDraw();
+        DrawArc(new Vector2(0, -8), 50, 0, Mathf.Pi * 2f, 20, Colors.Red, 1);
+    }
 }
