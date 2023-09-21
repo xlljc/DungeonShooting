@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 游戏世界
 /// </summary>
-public partial class World : Node2D, ICoroutine
+public partial class World : CanvasModulate, ICoroutine
 {
     /// <summary>
     /// //对象根节点

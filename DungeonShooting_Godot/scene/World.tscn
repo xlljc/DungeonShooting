@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/game/room/World.cs" id="1_kt3mm"]
 [ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/TileSet1.tres" id="2_p6iui"]
 
-[node name="World" type="Node2D" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot")]
+[node name="World" type="CanvasModulate" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot")]
 script = ExtResource("1_kt3mm")
 NormalLayer = NodePath("NormalLayer")
 YSortLayer = NodePath("YSortLayer")

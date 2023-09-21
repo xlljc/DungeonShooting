@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgbjg8virrams"]
+
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="1_bty2r"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="1_d62vx"]
+
+[node name="TestRoomFog" type="Node2D"]
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(369, 280)
+scale = Vector2(5, 5)
+texture = ExtResource("1_bty2r")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+position = Vector2(-16, 33)
+color = Color(0.352941, 0.352941, 0.352941, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasModulate"]
+position = Vector2(368, 326)
+scale = Vector2(9.17187, 8.46875)
+texture = ExtResource("1_d62vx")

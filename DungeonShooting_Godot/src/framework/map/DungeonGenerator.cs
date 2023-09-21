@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Godot;
 
@@ -122,6 +123,28 @@ public class DungeonGenerator
         foreach (var next in roomInfo.Next)
         {
             EachRoom(next, cb);
+        }
+    }
+    
+    /// <summary>
+    /// 用于协程中的遍历所有房间
+    /// </summary>
+    public IEnumerator EachRoomCoroutine(Action<RoomInfo> cb)
+    {
+        return EachRoomCoroutine(StartRoomInfo, cb);
+    }
+    
+    private IEnumerator EachRoomCoroutine(RoomInfo roomInfo, Action<RoomInfo> cb)
+    {
+        if (roomInfo == null)
+        {
+            yield break;
+        }
+
+        cb(roomInfo);
+        foreach (var next in roomInfo.Next)
+        {
+            yield return EachRoomCoroutine(next, cb);
         }
     }
 

@@ -191,7 +191,7 @@ public partial class DungeonManager : Node2D
         yield return 0;
         //创建世界场景
         World = GameApplication.Instance.CreateNewWorld();
-        yield return new WaitForFixedProcess(10);
+        yield return 0;
         //生成地牢房间
         _dungeonGenerator = new DungeonGenerator(CurrConfig);
         _dungeonGenerator.Generate();
@@ -215,14 +215,17 @@ public partial class DungeonManager : Node2D
         yield return 0;
         //门导航区域数据
         _roomStaticNavigationList.AddRange(_dungeonTileMap.GetConnectDoorPolygonData());
-        yield return new WaitForFixedProcess(10);
+        yield return 0;
         //初始化所有房间
-        _dungeonGenerator.EachRoom(InitRoom);
-        yield return new WaitForFixedProcess(10);
+        yield return _dungeonGenerator.EachRoomCoroutine(InitRoom);
+        yield return 0;
 
         //播放bgm
         //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
+        //地牢加载即将完成
+        yield return _dungeonGenerator.EachRoomCoroutine(info => info.OnReady());
+        
         //初始房间创建玩家标记
         var playerBirthMark = StartRoomInfo.RoomPreinstall.GetPlayerBirthMark();
         //创建玩家
@@ -235,9 +238,7 @@ public partial class DungeonManager : Node2D
         player.Name = "Player";
         player.PutDown(RoomLayerEnum.YSortLayer);
         Player.SetCurrentPlayer(player);
-        
-        //地牢加载即将完成
-        _dungeonGenerator.EachRoom(info => info.OnReady());
+        yield return 0;
 
         //玩家手上添加武器
         //player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
@@ -269,6 +270,7 @@ public partial class DungeonManager : Node2D
         }
     }
 
+    //执行退出地牢流程
     private IEnumerator RunExitDungeonCoroutine(Action finish)
     {
         //打开 loading UI
@@ -285,11 +287,11 @@ public partial class DungeonManager : Node2D
         _roomStaticNavigationList = null;
         
         UiManager.Hide_RoomUI();
-        yield return new WaitForFixedProcess(10);
+        yield return 0;
         Player.SetCurrentPlayer(null);
         World = null;
         GameApplication.Instance.DestroyWorld();
-        yield return new WaitForFixedProcess(10);
+        yield return 0;
         QueueRedraw();
         //鼠标还原
         GameApplication.Instance.Cursor.SetGuiMode(true);
@@ -315,6 +317,8 @@ public partial class DungeonManager : Node2D
         CreateRoomAffiliation(roomInfo);
         //创建静态精灵画布
         CreateRoomStaticSpriteCanvas(roomInfo);
+        //创建迷雾遮罩
+        
     }
     
     //挂载房间导航区域
