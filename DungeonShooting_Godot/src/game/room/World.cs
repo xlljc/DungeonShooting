@@ -24,6 +24,7 @@ public partial class World : CanvasModulate, ICoroutine
 
     [Export] public Node2D StaticSpriteRoot;
     [Export] public Node2D AffiliationAreaRoot;
+    [Export] public Node2D FogMaskRoot;
     
     /// <summary>
     /// 是否暂停

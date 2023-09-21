@@ -6,15 +6,26 @@
 [node name="TestRoomFog" type="Node2D"]
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(369, 280)
-scale = Vector2(5, 5)
+position = Vector2(705, -196)
+scale = Vector2(50, 50)
+color = Color(1, 1, 1, 0.180392)
+blend_mode = 2
+range_item_cull_mask = 3
+texture = ExtResource("1_bty2r")
+
+[node name="PointLight2D2" type="PointLight2D" parent="."]
+position = Vector2(372, 65)
+scale = Vector2(50, 50)
+blend_mode = 2
 texture = ExtResource("1_bty2r")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
+light_mask = 3
 position = Vector2(-16, 33)
-color = Color(0.352941, 0.352941, 0.352941, 1)
+color = Color(0, 0, 0, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="CanvasModulate"]
-position = Vector2(368, 326)
-scale = Vector2(9.17187, 8.46875)
+light_mask = 3
+position = Vector2(117, 318)
+scale = Vector2(50, 46.168)
 texture = ExtResource("1_d62vx")

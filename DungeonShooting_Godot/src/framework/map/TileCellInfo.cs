@@ -13,7 +13,7 @@ public class TileCellInfo
     }
 
     /// <summary>
-    /// 在TileSet中的图块id
+    /// 在TileSet中的图块id, 也就是sourceId
     /// </summary>
     public int Id;
     

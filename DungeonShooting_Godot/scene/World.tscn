@@ -3,13 +3,15 @@
 [ext_resource type="Script" path="res://src/game/room/World.cs" id="1_kt3mm"]
 [ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/TileSet1.tres" id="2_p6iui"]
 
-[node name="World" type="CanvasModulate" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot")]
+[node name="World" type="CanvasModulate" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot", "FogMaskRoot")]
+color = Color(0, 0, 0, 1)
 script = ExtResource("1_kt3mm")
 NormalLayer = NodePath("NormalLayer")
 YSortLayer = NodePath("YSortLayer")
 TileRoot = NodePath("TileRoot")
 StaticSpriteRoot = NodePath("StaticSpriteRoot")
 AffiliationAreaRoot = NodePath("AffiliationAreaRoot")
+FogMaskRoot = NodePath("FogMaskRoot")
 metadata/_edit_vertical_guides_ = []
 
 [node name="TileRoot" type="TileMap" parent="."]
@@ -50,3 +52,5 @@ z_index = -1
 y_sort_enabled = true
 
 [node name="AffiliationAreaRoot" type="Node2D" parent="."]
+
+[node name="FogMaskRoot" type="Node2D" parent="."]
