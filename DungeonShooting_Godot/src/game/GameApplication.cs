@@ -36,7 +36,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// 是否开启调试
 	/// </summary>
 	[ExportGroup("Debug")]
-	[Export] public bool Debug = false;
+	[Export] public bool Debug;
 
 	/// <summary>
 	/// 鼠标指针

@@ -254,6 +254,11 @@ public partial class Player : Role
         GameCamera.Main.SetFollowTarget(null);
         BasisVelocity = Vector2.Zero;
         MoveController.ClearForce();
+
+        //暂停游戏
+        GameApplication.Instance.World.Pause = true;
+        //弹出结算面板
+        GameApplication.Instance.Cursor.SetGuiMode(true);
         UiManager.Open_Settlement();
     }
 
@@ -302,5 +307,11 @@ public partial class Player : Role
         {
             BasisVelocity = new Vector2(BasisVelocity.X, Mathf.MoveToward(BasisVelocity.Y, dir.Y * RoleState.MoveSpeed, RoleState.Acceleration * delta));
         }
+    }
+
+    protected override void DebugDraw()
+    {
+        base.DebugDraw();
+        DrawArc(new Vector2(0, -8), 50, 0, Mathf.Pi * 2f, 20, Colors.Red, 1);
     }
 }

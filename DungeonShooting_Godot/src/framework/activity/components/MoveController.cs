@@ -271,33 +271,33 @@ public class MoveController : Component
             return;
         }
 
-        //先调用更新
-        var externalForces = _forceList.ToArray();
-        for (var i = 0; i < externalForces.Length; i++)
-        {
-            var force = externalForces[i];
-            if (force.Enable)
-            {
-                force.PhysicsProcess(delta);
-                //自动销毁
-                if (CheckAutoDestroy(force))
-                {
-                    _forceList.Remove(force);
-                    externalForces[i] = null;
-                }
-            }
-        }
-
         //外力总和
         var finallyEf = new Vector2();
         //旋转速率总和
         var rotationSpeed = 0f;
-        foreach (var force in externalForces)
+        
+        //先调用更新
+        if (_forceList.Count > 0)
         {
-            if (force != null && force.Enable)
+            var externalForces = _forceList.ToArray();
+            for (var i = 0; i < externalForces.Length; i++)
             {
-                finallyEf += force.Velocity;
-                rotationSpeed += force.RotationSpeed;
+                var force = externalForces[i];
+                if (force.Enable)
+                {
+                    force.PhysicsProcess(delta);
+                    //自动销毁
+                    if (CheckAutoDestroy(force))
+                    {
+                        _forceList.Remove(force);
+                        externalForces[i] = null;
+                    }
+                    else
+                    {
+                        finallyEf += force.Velocity;
+                        rotationSpeed += force.RotationSpeed;
+                    }
+                }
             }
         }
 

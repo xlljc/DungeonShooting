@@ -251,7 +251,7 @@ public class RoomPreinstall : IDestroy
             if (_currWaveIndex < WaveList.Count)
             {
                 GD.Print($"执行第{_currWaveIndex}波");
-                _coroutineId = GameApplication.Instance.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
+                _coroutineId = GameApplication.Instance.World.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
                 _currWaveIndex++;
             }
         }
@@ -268,7 +268,7 @@ public class RoomPreinstall : IDestroy
         }
         
         GD.Print($"执行第{_currWaveIndex}波");
-        _coroutineId = GameApplication.Instance.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
+        _coroutineId = GameApplication.Instance.World.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
         _currWaveIndex++;
     }
 
