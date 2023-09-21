@@ -1133,14 +1133,17 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         if (IsDebug)
         {
             DebugDraw();
-            var arr = _components.ToArray();
-            for (int i = 0; i < arr.Length; i++)
+            if (_components.Count > 0)
             {
-                if (IsDestroyed) return;
-                var temp = arr[i].Value;
-                if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                var arr = _components.ToArray();
+                for (int i = 0; i < arr.Length; i++)
                 {
-                    temp.DebugDraw();
+                    if (IsDestroyed) return;
+                    var temp = arr[i].Value;
+                    if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                    {
+                        temp.DebugDraw();
+                    }
                 }
             }
         }
