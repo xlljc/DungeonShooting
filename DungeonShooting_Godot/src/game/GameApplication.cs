@@ -96,11 +96,13 @@ public partial class GameApplication : Node2D, ICoroutine
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = RoomConfig.FirstOrDefault().Key;
-		DungeonConfig.RoomCount = 20;
+		DungeonConfig.RoomCount = 0;
 	}
 	
 	public override void _EnterTree()
 	{
+		//背景颜色
+		RenderingServer.SetDefaultClearColor(new Color(0, 0, 0, 1));
 		//随机化种子
 		//GD.Randomize();
 		//固定帧率

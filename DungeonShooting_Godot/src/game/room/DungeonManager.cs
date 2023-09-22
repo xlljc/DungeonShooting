@@ -43,10 +43,14 @@ public partial class DungeonManager : Node2D
     /// 当前使用的世界对象
     /// </summary>
     public World World { get; private set; }
+
+    /// <summary>
+    /// 自动图块配置
+    /// </summary>
+    public AutoTileConfig AutoTileConfig { get; private set; }
     
     private UiBase _prevUi;
     private DungeonTileMap _dungeonTileMap;
-    private AutoTileConfig _autoTileConfig;
     private DungeonGenerator _dungeonGenerator;
     //房间内所有静态导航网格数据
     private List<NavigationPolygonData> _roomStaticNavigationList;
@@ -193,15 +197,16 @@ public partial class DungeonManager : Node2D
         World = GameApplication.Instance.CreateNewWorld();
         yield return 0;
         //生成地牢房间
-        _dungeonGenerator = new DungeonGenerator(CurrConfig);
+        var random = new SeedRandom(1);
+        _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
         _dungeonGenerator.Generate();
         yield return 0;
         
         //填充地牢
-        _autoTileConfig = new AutoTileConfig();
+        AutoTileConfig = new AutoTileConfig();
         _dungeonTileMap = new DungeonTileMap(World.TileRoot);
-        yield return _dungeonTileMap.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoomInfo, _dungeonGenerator.Random);
-        yield return _dungeonTileMap.AddOutlineTile(_autoTileConfig.WALL_BLOCK);
+        yield return _dungeonTileMap.AutoFillRoomTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, random);
+        yield return _dungeonTileMap.AddOutlineTile(AutoTileConfig.WALL_BLOCK);
         
         //生成寻路网格， 这一步操作只生成过道的导航
         _dungeonTileMap.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
@@ -215,7 +220,6 @@ public partial class DungeonManager : Node2D
         yield return 0;
         //门导航区域数据
         _roomStaticNavigationList.AddRange(_dungeonTileMap.GetConnectDoorPolygonData());
-        yield return 0;
         //初始化所有房间
         yield return _dungeonGenerator.EachRoomCoroutine(InitRoom);
 
@@ -280,7 +284,7 @@ public partial class DungeonManager : Node2D
         _dungeonGenerator.EachRoom(DisposeRoomInfo);
         yield return 0;
         _dungeonTileMap = null;
-        _autoTileConfig = null;
+        AutoTileConfig = null;
         _dungeonGenerator = null;
         _roomStaticNavigationList.Clear();
         _roomStaticNavigationList = null;
@@ -429,10 +433,11 @@ public partial class DungeonManager : Node2D
         roomInfo.RoomFogMask = roomFog;
         roomFog.Init(roomInfo, new Rect2I(
             roomInfo.GetWorldPosition() - GameConfig.TileCellSizeVector2I,
-            (roomInfo.Size + new Vector2I(2, 2)) * GameConfig.TileCellSize));
+            (roomInfo.Size + new Vector2I(2, 2)) * GameConfig.TileCellSize)
+        );
         World.FogMaskRoot.AddChild(roomFog);
     }
-    
+
     /// <summary>
     /// 玩家第一次进入某个房间回调
     /// </summary>

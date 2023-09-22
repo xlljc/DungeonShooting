@@ -482,9 +482,9 @@ public class DungeonTileMap
         var rect = _tileRoot.GetUsedRect();
         var endX = rect.End.X + 1;
         var endY = rect.End.Y + 1;
-        for (int x = rect.Position.X; x <= endX; x++)
+        for (int x = rect.Position.X - 1; x <= endX; x++)
         {
-            for (int y = rect.Position.Y; y <= endY; y++)
+            for (int y = rect.Position.Y - 1; y <= endY; y++)
             {
                 if (c++ > 1000) //份帧处理, 不要挤在一帧
                 {
