@@ -121,37 +121,37 @@ public partial class RoomFogMask : PointLight2D, IDestroy
                 //说明是外层墙壁
                 if (tileMap.GetCellAtlasCoords(GameConfig.TopMapLayer, pos) == wallCoord)
                 {
-                    //FillBlock(i, j, image);
-                    var left = IsNotWallCell(tileMap, new Vector2I(pos.X + 1, pos.Y), wallCoord);
-                    var right = IsNotWallCell(tileMap, new Vector2I(pos.X - 1, pos.Y), wallCoord);
-                    var top = IsNotWallCell(tileMap, new Vector2I(pos.X, pos.Y + 1), wallCoord);
-                    var down = IsNotWallCell(tileMap, new Vector2I(pos.X, pos.Y - 1), wallCoord);
-                    var c = 0;
-                    if (left) c++;
-                    if (right) c++;
-                    if (top) c++;
-                    if (down) c++;
-                    //判断方向
-                    if ((left && right) || (top && down) || c > 2)
+                    var left = IsEmptyCell(tileMap, new Vector2I(pos.X - 1, pos.Y));
+                    var right = IsEmptyCell(tileMap, new Vector2I(pos.X + 1, pos.Y));
+                    var top = IsEmptyCell(tileMap, new Vector2I(pos.X, pos.Y - 1));
+                    var down = IsEmptyCell(tileMap, new Vector2I(pos.X, pos.Y + 1));
+                    
+                    var leftTop = IsEmptyCell(tileMap, new Vector2I(pos.X - 1, pos.Y - 1));
+                    var leftDown = IsEmptyCell(tileMap, new Vector2I(pos.X - 1, pos.Y + 1));
+                    var rightTop = IsEmptyCell(tileMap, new Vector2I(pos.X + 1, pos.Y - 1));
+                    var rightDown = IsEmptyCell(tileMap, new Vector2I(pos.X + 1, pos.Y + 1));
+
+                    if (!left && !right && !top && !down && !leftTop && !leftDown && !rightTop && !rightDown)
                     {
                         continue;
                     }
-                    else if (left && top) //内轮廓左上
+                    else if (leftTop && left && top) //外轮廓, 左上
                     {
-                        FillTransitionImage(i, j, image, _inLeftTopTransition);
+                        FillTransitionImage(i, j, image, _leftTopTransition);
                     }
-                    else if (left && down) //内轮廓左下
+                    else if (leftDown && left && down) //外轮廓, 左下
                     {
-                        FillTransitionImage(i, j, image, _inLeftDownTransition);
+                        FillTransitionImage(i, j, image, _leftDownTransition);
                     }
-                    else if (right && top) //内轮廓右上
+                    else if (rightTop && right && top) //外轮廓, 右上
                     {
-                        FillTransitionImage(i, j, image, _inRightTopTransition);
+                        FillTransitionImage(i, j, image, _rightTopTransition);
                     }
-                    else if (right && down) //内轮廓右下
+                    else if (rightDown && right && down) //外轮廓, 右下
                     {
-                        FillTransitionImage(i, j, image, _inRightDownTransition);
+                        FillTransitionImage(i, j, image, _rightDownTransition);
                     }
+                    //-------------------------
                     else if (left) //左
                     {
                         FillTransitionImage(i, j, image, _leftTransition);
@@ -168,22 +168,24 @@ public partial class RoomFogMask : PointLight2D, IDestroy
                     {
                         FillTransitionImage(i, j, image, _downTransition);
                     }
-                    else if (IsNotWallCell(tileMap, new Vector2I(pos.X + 1, pos.Y + 1), wallCoord)) //外轮廓左上
+                    //--------------------------
+                    else if (leftTop) //内轮廓, 左上
                     {
-                        FillTransitionImage(i, j, image, _leftTopTransition);
+                        FillTransitionImage(i, j, image, _inLeftTopTransition);
                     }
-                    else if (IsNotWallCell(tileMap, new Vector2I(pos.X + 1, pos.Y - 1), wallCoord)) //外轮廓左下
+                    else if (leftDown) //内轮廓, 左下
                     {
-                        FillTransitionImage(i, j, image, _leftDownTransition);
+                        FillTransitionImage(i, j, image, _inLeftDownTransition);
                     }
-                    else if (IsNotWallCell(tileMap, new Vector2I(pos.X - 1, pos.Y + 1), wallCoord)) //外轮廓右上
+                    else if (rightTop) //内轮廓, 右上
                     {
-                        FillTransitionImage(i, j, image, _rightTopTransition);
+                        FillTransitionImage(i, j, image, _inRightTopTransition);
                     }
-                    else if (IsNotWallCell(tileMap, new Vector2I(pos.X - 1, pos.Y - 1), wallCoord)) //外轮廓右下
+                    else if (rightDown) //内轮廓, 右下
                     {
-                        FillTransitionImage(i, j, image, _rightDownTransition);
+                        FillTransitionImage(i, j, image, _inRightDownTransition);
                     }
+                    //------------------------
                     else //全黑
                     {
                         FillBlock(i, j, image);
@@ -215,6 +217,12 @@ public partial class RoomFogMask : PointLight2D, IDestroy
         );
     }
 
+    private bool IsEmptyCell(TileMap tileMap, Vector2I pos)
+    {
+        return tileMap.GetCellSourceId(GameConfig.TopMapLayer, pos) == -1 &&
+               tileMap.GetCellSourceId(GameConfig.MiddleMapLayer, pos) == -1;
+    }
+    
     //判断是否是墙壁
     private bool IsNotWallCell(TileMap tileMap, Vector2I pos, Vector2I wallCoord)
     {
