@@ -43,10 +43,14 @@ public partial class DungeonManager : Node2D
     /// 当前使用的世界对象
     /// </summary>
     public World World { get; private set; }
+
+    /// <summary>
+    /// 自动图块配置
+    /// </summary>
+    public AutoTileConfig AutoTileConfig { get; private set; }
     
     private UiBase _prevUi;
     private DungeonTileMap _dungeonTileMap;
-    private AutoTileConfig _autoTileConfig;
     private DungeonGenerator _dungeonGenerator;
     //房间内所有静态导航网格数据
     private List<NavigationPolygonData> _roomStaticNavigationList;
@@ -191,17 +195,18 @@ public partial class DungeonManager : Node2D
         yield return 0;
         //创建世界场景
         World = GameApplication.Instance.CreateNewWorld();
-        yield return new WaitForFixedProcess(10);
+        yield return 0;
         //生成地牢房间
-        _dungeonGenerator = new DungeonGenerator(CurrConfig);
+        var random = new SeedRandom(1);
+        _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
         _dungeonGenerator.Generate();
         yield return 0;
         
         //填充地牢
-        _autoTileConfig = new AutoTileConfig();
+        AutoTileConfig = new AutoTileConfig();
         _dungeonTileMap = new DungeonTileMap(World.TileRoot);
-        _dungeonTileMap.AutoFillRoomTile(_autoTileConfig, _dungeonGenerator.StartRoomInfo, _dungeonGenerator.Random);
-        yield return 0;
+        yield return _dungeonTileMap.AutoFillRoomTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, random);
+        yield return _dungeonTileMap.AddOutlineTile(AutoTileConfig.WALL_BLOCK);
         
         //生成寻路网格， 这一步操作只生成过道的导航
         _dungeonTileMap.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
@@ -215,14 +220,15 @@ public partial class DungeonManager : Node2D
         yield return 0;
         //门导航区域数据
         _roomStaticNavigationList.AddRange(_dungeonTileMap.GetConnectDoorPolygonData());
-        yield return new WaitForFixedProcess(10);
         //初始化所有房间
-        _dungeonGenerator.EachRoom(InitRoom);
-        yield return new WaitForFixedProcess(10);
+        yield return _dungeonGenerator.EachRoomCoroutine(InitRoom);
 
         //播放bgm
         //SoundManager.PlayMusic(ResourcePath.resource_sound_bgm_Intro_ogg, -17f);
 
+        //地牢加载即将完成
+        yield return _dungeonGenerator.EachRoomCoroutine(info => info.OnReady());
+        
         //初始房间创建玩家标记
         var playerBirthMark = StartRoomInfo.RoomPreinstall.GetPlayerBirthMark();
         //创建玩家
@@ -235,9 +241,7 @@ public partial class DungeonManager : Node2D
         player.Name = "Player";
         player.PutDown(RoomLayerEnum.YSortLayer);
         Player.SetCurrentPlayer(player);
-        
-        //地牢加载即将完成
-        _dungeonGenerator.EachRoom(info => info.OnReady());
+        yield return 0;
 
         //玩家手上添加武器
         //player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
@@ -269,6 +273,7 @@ public partial class DungeonManager : Node2D
         }
     }
 
+    //执行退出地牢流程
     private IEnumerator RunExitDungeonCoroutine(Action finish)
     {
         //打开 loading UI
@@ -279,17 +284,17 @@ public partial class DungeonManager : Node2D
         _dungeonGenerator.EachRoom(DisposeRoomInfo);
         yield return 0;
         _dungeonTileMap = null;
-        _autoTileConfig = null;
+        AutoTileConfig = null;
         _dungeonGenerator = null;
         _roomStaticNavigationList.Clear();
         _roomStaticNavigationList = null;
         
         UiManager.Hide_RoomUI();
-        yield return new WaitForFixedProcess(10);
+        yield return 0;
         Player.SetCurrentPlayer(null);
         World = null;
         GameApplication.Instance.DestroyWorld();
-        yield return new WaitForFixedProcess(10);
+        yield return 0;
         QueueRedraw();
         //鼠标还原
         GameApplication.Instance.Cursor.SetGuiMode(true);
@@ -307,6 +312,7 @@ public partial class DungeonManager : Node2D
     // 初始化房间
     private void InitRoom(RoomInfo roomInfo)
     {
+        roomInfo.CalcOuterRange();
         //挂载房间导航区域
         MountNavFromRoomInfo(roomInfo);
         //创建门
@@ -315,6 +321,8 @@ public partial class DungeonManager : Node2D
         CreateRoomAffiliation(roomInfo);
         //创建静态精灵画布
         CreateRoomStaticSpriteCanvas(roomInfo);
+        //创建迷雾遮罩
+        CreateRoomFogMask(roomInfo);
     }
     
     //挂载房间导航区域
@@ -389,8 +397,8 @@ public partial class DungeonManager : Node2D
     {
         var affiliation = new AffiliationArea();
         affiliation.Name = "AffiliationArea" + roomInfo.Id;
-        affiliation.Init(roomInfo, new Rect2(
-            roomInfo.GetWorldPosition() + new Vector2(GameConfig.TileCellSize, GameConfig.TileCellSize),
+        affiliation.Init(roomInfo, new Rect2I(
+            roomInfo.GetWorldPosition() + GameConfig.TileCellSizeVector2I,
             (roomInfo.Size - new Vector2I(2, 2)) * GameConfig.TileCellSize));
         
         roomInfo.AffiliationArea = affiliation;
@@ -401,92 +409,13 @@ public partial class DungeonManager : Node2D
     private void CreateRoomStaticSpriteCanvas(RoomInfo roomInfo)
     {
         var worldPos = roomInfo.GetWorldPosition();
-        var pos = new Vector2I((int)worldPos.X, (int)worldPos.Y);
-        
-        int minX = pos.X;
-        int minY = pos.Y;
-        int maxX = minX + roomInfo.GetWidth();
-        int maxY = minY + roomInfo.GetHeight();
+        var rect = roomInfo.OuterRange;
 
-        //遍历每一个连接的门, 计算计算canvas覆盖范围
-        foreach (var doorInfo in roomInfo.Doors)
-        {
-            var connectDoor = doorInfo.ConnectDoor;
-            switch (connectDoor.Direction)
-            {
-                case DoorDirection.E:
-                case DoorDirection.W:
-                {
-                    var (px1, py1) = connectDoor.GetWorldOriginPosition();
-                    var py2 = py1 + 4 * GameConfig.TileCellSize;
-                    if (px1 < minX)
-                    {
-                        minX = px1;
-                    }
-                    else if (px1 > maxX)
-                    {
-                        maxX = px1;
-                    }
+        int minX = rect.Position.X - GameConfig.TileCellSize;
+        int minY = rect.Position.Y - GameConfig.TileCellSize;
+        int maxX = rect.End.X + GameConfig.TileCellSize;
+        int maxY = rect.End.Y + GameConfig.TileCellSize;
 
-                    if (py1 < minY)
-                    {
-                        minY = py1;
-                    }
-                    else if (py1 > maxY)
-                    {
-                        maxY = py1;
-                    }
-                    
-                    if (py2 < minY)
-                    {
-                        minY = py2;
-                    }
-                    else if (py2 > maxY)
-                    {
-                        maxY = py2;
-                    }
-                }
-                    break;
-                case DoorDirection.S:
-                case DoorDirection.N:
-                {
-                    var (px1, py1) = connectDoor.GetWorldOriginPosition();
-                    var px2 = px1 + 4 * GameConfig.TileCellSize;
-                    if (px1 < minX)
-                    {
-                        minX = px1;
-                    }
-                    else if (px1 > maxX)
-                    {
-                        maxX = px1;
-                    }
-
-                    if (py1 < minY)
-                    {
-                        minY = py1;
-                    }
-                    else if (py1 > maxY)
-                    {
-                        maxY = py1;
-                    }
-                    
-                    if (px2 < minX)
-                    {
-                        minX = px2;
-                    }
-                    else if (px2 > maxX)
-                    {
-                        maxX = px2;
-                    }
-                }
-                    break;
-            }
-        }
-
-        minX -= GameConfig.TileCellSize;
-        minY -= GameConfig.TileCellSize;
-        maxX += GameConfig.TileCellSize;
-        maxY += GameConfig.TileCellSize;
         var staticSpriteCanvas = new RoomStaticImageCanvas(
             World.StaticSpriteRoot,
             new Vector2I(minX, minY),
@@ -494,6 +423,19 @@ public partial class DungeonManager : Node2D
         );
         staticSpriteCanvas.RoomOffset = new Vector2I(worldPos.X - minX, worldPos.Y - minY);
         roomInfo.StaticImageCanvas = staticSpriteCanvas;
+    }
+
+    //创建迷雾遮罩
+    private void CreateRoomFogMask(RoomInfo roomInfo)
+    {
+        var roomFog = new RoomFogMask();
+        roomFog.Name = "FogMask" + roomFog.IsDestroyed;
+        roomInfo.RoomFogMask = roomFog;
+        roomFog.Init(roomInfo, new Rect2I(
+            roomInfo.GetWorldPosition() - GameConfig.TileCellSizeVector2I,
+            (roomInfo.Size + new Vector2I(2, 2)) * GameConfig.TileCellSize)
+        );
+        World.FogMaskRoot.AddChild(roomFog);
     }
 
     /// <summary>

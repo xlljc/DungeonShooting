@@ -42,18 +42,18 @@ namespace Plugin
         //自定义节点
         private CustomTypeInfo[] _customTypeInfos = new CustomTypeInfo[]
         {
-            new CustomTypeInfo(
-                "ActivityMark",
-                "Node2D",
-                "res://src/framework/map/mark/ActivityMark.cs",
-                "res://addons/dungeonShooting_plugin/Mark.svg"
-            ),
-            new CustomTypeInfo(
-                "EnemyMark",
-                "Node2D",
-                "res://src/framework/map/mark/EnemyMark.cs",
-                "res://addons/dungeonShooting_plugin/Mark.svg"
-            ),
+            // new CustomTypeInfo(
+            //     "ActivityMark",
+            //     "Node2D",
+            //     "res://src/framework/map/mark/ActivityMark.cs",
+            //     "res://addons/dungeonShooting_plugin/Mark.svg"
+            // ),
+            // new CustomTypeInfo(
+            //     "EnemyMark",
+            //     "Node2D",
+            //     "res://src/framework/map/mark/EnemyMark.cs",
+            //     "res://addons/dungeonShooting_plugin/Mark.svg"
+            // ),
         };
         
         public override void _Process(double delta)

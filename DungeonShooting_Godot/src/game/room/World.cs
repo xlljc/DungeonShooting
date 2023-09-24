@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 游戏世界
 /// </summary>
-public partial class World : Node2D, ICoroutine
+public partial class World : CanvasModulate, ICoroutine
 {
     /// <summary>
     /// //对象根节点
@@ -24,6 +24,7 @@ public partial class World : Node2D, ICoroutine
 
     [Export] public Node2D StaticSpriteRoot;
     [Export] public Node2D AffiliationAreaRoot;
+    [Export] public Node2D FogMaskRoot;
     
     /// <summary>
     /// 是否暂停

@@ -10,13 +10,15 @@ glow_normalized = true
 glow_strength = 1.05
 glow_blend_mode = 1
 
-[node name="World" type="Node2D" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot")]
+[node name="World" type="CanvasModulate" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot", "FogMaskRoot")]
+color = Color(0, 0, 0, 1)
 script = ExtResource("1_kt3mm")
 NormalLayer = NodePath("NormalLayer")
 YSortLayer = NodePath("YSortLayer")
 TileRoot = NodePath("TileRoot")
 StaticSpriteRoot = NodePath("StaticSpriteRoot")
 AffiliationAreaRoot = NodePath("AffiliationAreaRoot")
+FogMaskRoot = NodePath("FogMaskRoot")
 metadata/_edit_vertical_guides_ = []
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -59,3 +61,5 @@ z_index = -1
 y_sort_enabled = true
 
 [node name="AffiliationAreaRoot" type="Node2D" parent="."]
+
+[node name="FogMaskRoot" type="Node2D" parent="."]

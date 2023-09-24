@@ -80,6 +80,16 @@ public class RoomInfo : IDestroy
     public RoomStaticImageCanvas StaticImageCanvas;
 
     /// <summary>
+    /// 房间迷雾
+    /// </summary>
+    public RoomFogMask RoomFogMask;
+    
+    /// <summary>
+    /// 房间算上连接通道所占用的区域
+    /// </summary>
+    public Rect2I OuterRange { get; private set; }
+
+    /// <summary>
     /// 是否处于闭关状态, 也就是房间门没有主动打开
     /// </summary>
     public bool IsSeclusion { get; private set; } = false;
@@ -93,6 +103,96 @@ public class RoomInfo : IDestroy
     // private int _currWaveNumber = 0;
     //private List<ActivityMark> _currActivityMarks = new List<ActivityMark>();
 
+    /// <summary>
+    /// 重新计算占用的区域
+    /// </summary>
+    public void CalcOuterRange()
+    {
+        var worldPos = GetWorldPosition();
+        var pos = new Vector2I((int)worldPos.X, (int)worldPos.Y);
+        int minX = pos.X;
+        int minY = pos.Y;
+        int maxX = minX + GetWidth();
+        int maxY = minY + GetHeight();
+
+        //遍历每一个连接的门, 计算计算canvas覆盖范围
+        foreach (var doorInfo in Doors)
+        {
+            var connectDoor = doorInfo.ConnectDoor;
+            switch (connectDoor.Direction)
+            {
+                case DoorDirection.E:
+                case DoorDirection.W:
+                {
+                    var (px1, py1) = connectDoor.GetWorldOriginPosition();
+                    var py2 = py1 + 4 * GameConfig.TileCellSize;
+                    if (px1 < minX)
+                    {
+                        minX = px1;
+                    }
+                    else if (px1 > maxX)
+                    {
+                        maxX = px1;
+                    }
+
+                    if (py1 < minY)
+                    {
+                        minY = py1;
+                    }
+                    else if (py1 > maxY)
+                    {
+                        maxY = py1;
+                    }
+                    
+                    if (py2 < minY)
+                    {
+                        minY = py2;
+                    }
+                    else if (py2 > maxY)
+                    {
+                        maxY = py2;
+                    }
+                }
+                    break;
+                case DoorDirection.S:
+                case DoorDirection.N:
+                {
+                    var (px1, py1) = connectDoor.GetWorldOriginPosition();
+                    var px2 = px1 + 4 * GameConfig.TileCellSize;
+                    if (px1 < minX)
+                    {
+                        minX = px1;
+                    }
+                    else if (px1 > maxX)
+                    {
+                        maxX = px1;
+                    }
+
+                    if (py1 < minY)
+                    {
+                        minY = py1;
+                    }
+                    else if (py1 > maxY)
+                    {
+                        maxY = py1;
+                    }
+                    
+                    if (px2 < minX)
+                    {
+                        minX = px2;
+                    }
+                    else if (px2 > maxX)
+                    {
+                        maxX = px2;
+                    }
+                }
+                    break;
+            }
+        }
+
+        OuterRange = new Rect2I(minX, minY, maxX - minX, maxY - minY);
+    }
+    
     /// <summary>
     /// 获取房间的全局坐标, 单位: 像素
     /// </summary>
@@ -184,6 +284,11 @@ public class RoomInfo : IDestroy
         if (StaticImageCanvas != null)
         {
             StaticImageCanvas.Destroy();
+        }
+
+        if (RoomFogMask != null)
+        {
+            RoomFogMask.Destroy();
         }
 
         if (AffiliationArea != null)

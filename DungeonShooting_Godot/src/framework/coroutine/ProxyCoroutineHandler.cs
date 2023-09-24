@@ -81,17 +81,7 @@ public static class ProxyCoroutineHandler
                     if (item.Enumerator.MoveNext())
                     {
                         var next = item.Enumerator.Current;
-                        if (next is IEnumerable enumerable) //嵌套协程
-                        {
-                            if (item.EnumeratorStack == null)
-                            {
-                                item.EnumeratorStack = new Stack<IEnumerator>();
-                            }
-
-                            item.EnumeratorStack.Push(item.Enumerator);
-                            item.Enumerator = enumerable.GetEnumerator();
-                        }
-                        else if (next is IEnumerator enumerator) //嵌套协程
+                        if (next is IEnumerator enumerator) //嵌套协程
                         {
                             if (item.EnumeratorStack == null)
                             {
@@ -100,6 +90,16 @@ public static class ProxyCoroutineHandler
 
                             item.EnumeratorStack.Push(item.Enumerator);
                             item.Enumerator = enumerator;
+                        }
+                        else if (next is IEnumerable enumerable) //嵌套协程
+                        {
+                            if (item.EnumeratorStack == null)
+                            {
+                                item.EnumeratorStack = new Stack<IEnumerator>();
+                            }
+
+                            item.EnumeratorStack.Push(item.Enumerator);
+                            item.Enumerator = enumerable.GetEnumerator();
                         }
                         else if (next is WaitForSeconds seconds) //等待秒数
                         {

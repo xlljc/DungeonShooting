@@ -22,6 +22,8 @@ public class AutoTileConfig
     public TileCellInfo OUT_RT = new TileCellInfo(0, new Vector2I(3, 2));
     public TileCellInfo OUT_RB = new TileCellInfo(0, new Vector2I(3, 7));
     
+    public TileCellInfo WALL_BLOCK = new TileCellInfo(0, new Vector2I(2, 3));
+    
     private List<Vector2I> _middleLayerAtlasCoords = new List<Vector2I>()
     {
         new Vector2I(1, 6),

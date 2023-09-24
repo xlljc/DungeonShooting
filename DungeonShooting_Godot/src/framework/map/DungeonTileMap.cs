@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -33,23 +34,23 @@ public class DungeonTileMap
     }
 
     /// <summary>
-    /// 根据 startRoom 和 config 数据自动填充 tileMap 参数中的地图数据
+    /// 根据 startRoom 和 config 数据自动填充 tileMap 参数中的地图数据, 该函数为协程函数
     /// </summary>
-    public void AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoomInfo, SeedRandom random)
+    public IEnumerator AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoomInfo, SeedRandom random)
     {
         _connectNavigationItemList.Clear();
-        _AutoFillRoomTile(config, startRoomInfo, random);
+        yield return _AutoFillRoomTile(config, startRoomInfo, random);
     }
     
-    private void _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo, SeedRandom random)
+    private IEnumerator _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo, SeedRandom random)
     {
         foreach (var info in roomInfo.Next)
         {
-            _AutoFillRoomTile(config, info, random);
+            yield return _AutoFillRoomTile(config, info, random);
         }
         
         //铺房间
-        if (roomInfo.RoomSplit == null)
+        if (roomInfo.RoomSplit == null) //自动填充的矩形房间, 现已经弃用
         {
             FillRect(GameConfig.FloorMapLayer, config.Floor, roomInfo.Position + Vector2.One,
                 roomInfo.Size - new Vector2(2, 2));
@@ -79,6 +80,7 @@ public class DungeonTileMap
             
             //填充tile操作
             var tileInfo = roomInfo.RoomSplit.TileInfo;
+            //底层
             for (var i = 0; i < tileInfo.Floor.Count; i += 5)
             {
                 var posX = tileInfo.Floor[i];
@@ -89,6 +91,7 @@ public class DungeonTileMap
                 var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
                 _tileRoot.SetCell(GameConfig.FloorMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
             }
+            //中层
             for (var i = 0; i < tileInfo.Middle.Count; i += 5)
             {
                 var posX = tileInfo.Middle[i];
@@ -99,6 +102,7 @@ public class DungeonTileMap
                 var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
                 _tileRoot.SetCell(GameConfig.MiddleMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
             }
+            //顶层
             for (var i = 0; i < tileInfo.Top.Count; i += 5)
             {
                 var posX = tileInfo.Top[i];
@@ -109,6 +113,7 @@ public class DungeonTileMap
                 var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
                 _tileRoot.SetCell(GameConfig.TopMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
             }
+            
             //随机选择预设
             RoomPreinstallInfo preinstallInfo;
             if (EditorPlayManager.IsPlay && roomInfo.RoomType == GameApplication.Instance.DungeonManager.CurrConfig.DesignatedType) //编辑器模式, 指定预设
@@ -188,7 +193,7 @@ public class DungeonTileMap
             //         {
             //             // 在 Godot 4.0 中使用以下这段代码区分层级, 会导致游戏关闭时有概率报错卡死, 目前尚不清楚原因
             //             //获取自定义层级
-            //             // var customData = tileInstance.GetCellTileData(0, coords).GetCustomData(CustomTileLayerName);
+            //             // var customData = tileInstance.GetCellSourceId(0, coords).GetCustomData(CustomTileLayerName);
             //             // var layer = customData.AsInt32();
             //             // layer = Mathf.Clamp(layer, GameConfig.FloorMapLayer, GameConfig.TopMapLayer);
             //
@@ -467,6 +472,83 @@ public class DungeonTileMap
         }
     }
 
+    /// <summary>
+    /// 给TileMap添加轮廓, 该函数为协程函数
+    /// </summary>
+    /// <param name="tileCellInfo">描轮廓的Tile</param>
+    public IEnumerator AddOutlineTile(TileCellInfo tileCellInfo)
+    {
+        var c = 0;
+        var rect = _tileRoot.GetUsedRect();
+        var endX = rect.End.X + 1;
+        var endY = rect.End.Y + 1;
+        for (int x = rect.Position.X - 1; x <= endX; x++)
+        {
+            for (int y = rect.Position.Y - 1; y <= endY; y++)
+            {
+                if (c++ > 1000) //份帧处理, 不要挤在一帧
+                {
+                    c = 0;
+                    yield return 0;
+                }
+                var pos = new Vector2I(x, y);
+                var flag1 = _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, pos) != -1 ||
+                            _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, pos) != -1 ||
+                            _tileRoot.GetCellSourceId(GameConfig.AisleFloorMapLayer, pos) != -1 ||
+                            (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, pos) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, pos) != tileCellInfo.AutoTileCoord);
+                if (!flag1) //空地
+                {
+                    var posDown = new Vector2I(pos.X, pos.Y + 1);
+                    var posTop = new Vector2I(pos.X, pos.Y - 1);
+                    var posLeft = new Vector2I(pos.X - 1, pos.Y);
+                    var posRight = new Vector2I(pos.X + 1, pos.Y);
+                    
+                    var posLD = new Vector2I(pos.X - 1, pos.Y + 1);
+                    var posLT = new Vector2I(pos.X - 1, pos.Y - 1);
+                    var posRD = new Vector2I(pos.X + 1, pos.Y + 1);
+                    var posRT = new Vector2I(pos.X + 1, pos.Y - 1);
+                    
+                    var flag2 = _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posDown) != -1 ||
+                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posDown) != -1 ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posDown) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posDown) != tileCellInfo.AutoTileCoord) ||
+
+                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posTop) != -1 ||
+                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posTop) != -1 ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posTop) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posTop) != tileCellInfo.AutoTileCoord) ||
+
+                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posLeft) != -1 ||
+                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posLeft) != -1 ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLeft) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLeft) != tileCellInfo.AutoTileCoord) ||
+
+                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posRight) != -1 ||
+                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posRight) != -1 ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRight) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRight) != tileCellInfo.AutoTileCoord) ||
+                                //
+                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posLD) != -1 ||
+                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posLD) != -1 ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLD) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLD) != tileCellInfo.AutoTileCoord) ||
+
+                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posLT) != -1 ||
+                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posLT) != -1 ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLT) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLT) != tileCellInfo.AutoTileCoord) ||
+
+                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posRD) != -1 ||
+                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posRD) != -1 ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRD) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRD) != tileCellInfo.AutoTileCoord) ||
+
+                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posRT) != -1 ||
+                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posRT) != -1 ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRT) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRT) != tileCellInfo.AutoTileCoord);
+                    
+                    if (flag2) //非空地, 那么说明这个点需要填充 WALL_BLOCK
+                    {
+                        _tileRoot.SetCell(GameConfig.TopMapLayer, pos, tileCellInfo.Id, tileCellInfo.AutoTileCoord);
+                    }
+                }
+            }
+        }
+    }
+    
     //填充tile区域
     private void FillRect(int layer, TileCellInfo info, Vector2 pos, Vector2 size)
     {
@@ -824,7 +906,7 @@ public class DungeonTileMap
     {
         if (_floorAtlasCoords == null || _floorAtlasCoords.Count == 0)
         {
-            return _tileRoot.GetCellTileData(layer, new Vector2I(x, y)) != null;
+            return _tileRoot.GetCellSourceId(layer, new Vector2I(x, y)) != -1;
         }
 
         var result = _tileRoot.GetCellAtlasCoords(layer, new Vector2I(x, y));

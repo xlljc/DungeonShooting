@@ -145,6 +145,9 @@ public class ResourcePath
     public const string resource_sprite_effects_weapon_KnifeHit1_png = "res://resource/sprite/effects/weapon/KnifeHit1.png";
     public const string resource_sprite_effects_weapon_MeleeAttack1_png = "res://resource/sprite/effects/weapon/MeleeAttack1.png";
     public const string resource_sprite_effects_weapon_ShotFire_png = "res://resource/sprite/effects/weapon/ShotFire.png";
+    public const string resource_sprite_map_WallTransition1_png = "res://resource/sprite/map/WallTransition1.png";
+    public const string resource_sprite_map_WallTransition2_png = "res://resource/sprite/map/WallTransition2.png";
+    public const string resource_sprite_map_WallTransition3_png = "res://resource/sprite/map/WallTransition3.png";
     public const string resource_sprite_map_map1_16x16dungeoniiwallreconfigv04spritesheet_png = "res://resource/sprite/map/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png";
     public const string resource_sprite_map_map1_door1_down_png = "res://resource/sprite/map/map1/door1_down.png";
     public const string resource_sprite_map_map1_website_txt = "res://resource/sprite/map/map1/website.txt";
@@ -312,5 +315,6 @@ public class ResourcePath
     public const string scene_test_TestOptimizeSprite_tscn = "res://scene/test/TestOptimizeSprite.tscn";
     public const string scene_test_TestOutline_tscn = "res://scene/test/TestOutline.tscn";
     public const string scene_test_TestReadExcel_tscn = "res://scene/test/TestReadExcel.tscn";
+    public const string scene_test_TestRoomFog_tscn = "res://scene/test/TestRoomFog.tscn";
     public const string scene_test_TestTileLayer_tscn = "res://scene/test/TestTileLayer.tscn";
 }
