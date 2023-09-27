@@ -109,11 +109,11 @@ public class RoomInfo : IDestroy
     public void CalcOuterRange()
     {
         var worldPos = GetWorldPosition();
-        var pos = new Vector2I((int)worldPos.X, (int)worldPos.Y);
-        int minX = pos.X;
-        int minY = pos.Y;
-        int maxX = minX + GetWidth();
-        int maxY = minY + GetHeight();
+        var pos = new Vector2I(worldPos.X, worldPos.Y);
+        var minX = pos.X;
+        var minY = pos.Y;
+        var maxX = minX + GetWidth();
+        var maxY = minY + GetHeight();
 
         //遍历每一个连接的门, 计算计算canvas覆盖范围
         foreach (var doorInfo in Doors)
@@ -398,5 +398,22 @@ public class RoomInfo : IDestroy
         {
             doorInfo.Door.CloseDoor();
         }
+    }
+
+    /// <summary>
+    /// 获取该房间所有正向的门，nextRoom.id > this.id
+    /// </summary>
+    public RoomDoorInfo[] GetForwardDoors()
+    {
+        var temp = new List<RoomDoorInfo>();
+        foreach (var doorInfo in Doors)
+        {
+            if (doorInfo.ConnectRoom.Id > Id)
+            {
+                temp.Add(doorInfo);
+            }
+        }
+
+        return temp.ToArray();
     }
 }

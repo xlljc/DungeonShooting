@@ -87,7 +87,6 @@ public partial class RoomFogMask : PointLight2D, IDestroy
         
         //处理边缘过渡
         HandlerTransition(roomInfo, img);
-        
         Texture = ImageTexture.CreateFromImage(img);
     }
     

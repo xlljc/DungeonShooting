@@ -17,7 +17,7 @@ public static class Utils
     }
 
     /// <summary>
-    /// 根据四个点计算出矩形
+    /// 根据两个点计算出矩形
     /// </summary>
     public static Rect2 CalcRect(float start1, float end1, float start2, float end2)
     {

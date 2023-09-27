@@ -207,266 +207,264 @@ public class DungeonTileMap
             // tileInstance.CallDeferred(Node.MethodName.QueueFree);
         }
 
+        var doors = roomInfo.GetForwardDoors();
         //铺过道
-        foreach (var doorInfo in roomInfo.Doors)
+        foreach (var doorInfo in doors)
         {
-            if (doorInfo.ConnectRoom.Id > roomInfo.Id)
+            //普通的直线连接
+            var doorDir1 = doorInfo.Direction;
+            var doorDir2 = doorInfo.ConnectDoor.Direction;
+            if (!doorInfo.HasCross)
             {
-                //普通的直线连接
-                var doorDir1 = doorInfo.Direction;
-                var doorDir2 = doorInfo.ConnectDoor.Direction;
-                if (!doorInfo.HasCross)
+                var rect = Utils.CalcRect(
+                    doorInfo.OriginPosition.X,
+                    doorInfo.OriginPosition.Y,
+                    doorInfo.ConnectDoor.OriginPosition.X,
+                    doorInfo.ConnectDoor.OriginPosition.Y
+                );
+    
+                switch (doorDir1)
                 {
-                    var rect = Utils.CalcRect(
-                        doorInfo.OriginPosition.X,
-                        doorInfo.OriginPosition.Y,
-                        doorInfo.ConnectDoor.OriginPosition.X,
-                        doorInfo.ConnectDoor.OriginPosition.Y
-                    );
-        
-                    switch (doorDir1)
-                    {
-                        case DoorDirection.E:
-                            rect.Size = new Vector2(rect.Size.X, GameConfig.CorridorWidth);
-                            FullHorizontalAisle(config, rect);
-                            FullHorizontalAisleLeft(config, rect, doorInfo);
-                            FullHorizontalAisleRight(config, rect, doorInfo.ConnectDoor);
-                            break;
-                        case DoorDirection.W:
-                            rect.Size = new Vector2(rect.Size.X, GameConfig.CorridorWidth);
-                            FullHorizontalAisle(config, rect);
-                            FullHorizontalAisleLeft(config, rect, doorInfo.ConnectDoor);
-                            FullHorizontalAisleRight(config, rect, doorInfo);
-                            break;
-                        
-                        case DoorDirection.S:
-                            rect.Size = new Vector2(GameConfig.CorridorWidth, rect.Size.Y);
-                            FullVerticalAisle(config, rect);
-                            FullVerticalAisleUp(config, rect, doorInfo);
-                            FullVerticalAisleDown(config, rect, doorInfo.ConnectDoor);
-                            break;
-                        case DoorDirection.N:
-                            rect.Size = new Vector2(GameConfig.CorridorWidth, rect.Size.Y);
-                            FullVerticalAisle(config, rect);
-                            FullVerticalAisleUp(config, rect, doorInfo.ConnectDoor);
-                            FullVerticalAisleDown(config, rect, doorInfo);
-                            break;
-                    }
-                }
-                else //带交叉点
-                {
-                    //方向, 0横向, 1纵向
-                    var dir1 = 0;
-                    var dir2 = 0;
-        
-                    Rect2 rect;
-                    Rect2 rect2;
-        
-                    //计算范围
-                    switch (doorDir1)
-                    {
-                        case DoorDirection.E: //→
-                            rect = new Rect2(
-                                doorInfo.OriginPosition.X,
-                                doorInfo.OriginPosition.Y,
-                                doorInfo.Cross.X - doorInfo.OriginPosition.X,
-                                GameConfig.CorridorWidth
-                            );
-                            break;
-                        case DoorDirection.W: //←
-                            rect = new Rect2(
-                                doorInfo.Cross.X + GameConfig.CorridorWidth,
-                                doorInfo.Cross.Y,
-                                doorInfo.OriginPosition.X - (doorInfo.Cross.X + GameConfig.CorridorWidth),
-                                GameConfig.CorridorWidth
-                            );
-                            break;
-                        case DoorDirection.S: //↓
-                            dir1 = 1;
-                            rect = new Rect2(
-                                doorInfo.OriginPosition.X,
-                                doorInfo.OriginPosition.Y,
-                                GameConfig.CorridorWidth,
-                                doorInfo.Cross.Y - doorInfo.OriginPosition.Y
-                            );
-                            break;
-                        case DoorDirection.N: //↑
-                            dir1 = 1;
-                            rect = new Rect2(
-                                doorInfo.Cross.X,
-                                doorInfo.Cross.Y + GameConfig.CorridorWidth,
-                                GameConfig.CorridorWidth,
-                                doorInfo.OriginPosition.Y - (doorInfo.Cross.Y + GameConfig.CorridorWidth)
-                            );
-                            break;
-                        default:
-                            rect = new Rect2();
-                            break;
-                    }
-        
-                    switch (doorDir2)
-                    {
-                        case DoorDirection.E: //→
-                            rect2 = new Rect2(
-                                doorInfo.ConnectDoor.OriginPosition.X,
-                                doorInfo.ConnectDoor.OriginPosition.Y,
-                                doorInfo.Cross.X - doorInfo.ConnectDoor.OriginPosition.X,
-                                GameConfig.CorridorWidth
-                            );
-                            break;
-                        case DoorDirection.W: //←
-                            rect2 = new Rect2(
-                                doorInfo.Cross.X + GameConfig.CorridorWidth,
-                                doorInfo.Cross.Y,
-                                doorInfo.ConnectDoor.OriginPosition.X -
-                                (doorInfo.Cross.X + GameConfig.CorridorWidth),
-                                GameConfig.CorridorWidth
-                            );
-                            break;
-                        case DoorDirection.S: //↓
-                            dir2 = 1;
-                            rect2 = new Rect2(
-                                doorInfo.ConnectDoor.OriginPosition.X,
-                                doorInfo.ConnectDoor.OriginPosition.Y,
-                                GameConfig.CorridorWidth,
-                                doorInfo.Cross.Y - doorInfo.ConnectDoor.OriginPosition.Y
-                            );
-                            break;
-                        case DoorDirection.N: //↑
-                            dir2 = 1;
-                            rect2 = new Rect2(
-                                doorInfo.Cross.X,
-                                doorInfo.Cross.Y + GameConfig.CorridorWidth,
-                                GameConfig.CorridorWidth,
-                                doorInfo.ConnectDoor.OriginPosition.Y -
-                                (doorInfo.Cross.Y + GameConfig.CorridorWidth)
-                            );
-                            break;
-                        default:
-                            rect2 = new Rect2();
-                            break;
-                    }
-        
-                    FillRect(GameConfig.AisleFloorMapLayer, config.Floor, doorInfo.Cross + Vector2.One,
-                        new Vector2(GameConfig.CorridorWidth - 2, GameConfig.CorridorWidth - 2));
-        
-                    //墙壁, 0横向, 1纵向
-                    if (dir1 == 0)
-                    {
+                    case DoorDirection.E:
+                        rect.Size = new Vector2(rect.Size.X, GameConfig.CorridorWidth);
                         FullHorizontalAisle(config, rect);
-                        FullHorizontalAisleLeft(config, rect, doorDir1 == DoorDirection.E ? doorInfo : null);
-                        FullHorizontalAisleRight(config, rect, doorDir1 == DoorDirection.W ? doorInfo : null);
-                    }
-                    else
-                    {
+                        FullHorizontalAisleLeft(config, rect, doorInfo);
+                        FullHorizontalAisleRight(config, rect, doorInfo.ConnectDoor);
+                        break;
+                    case DoorDirection.W:
+                        rect.Size = new Vector2(rect.Size.X, GameConfig.CorridorWidth);
+                        FullHorizontalAisle(config, rect);
+                        FullHorizontalAisleLeft(config, rect, doorInfo.ConnectDoor);
+                        FullHorizontalAisleRight(config, rect, doorInfo);
+                        break;
+                    
+                    case DoorDirection.S:
+                        rect.Size = new Vector2(GameConfig.CorridorWidth, rect.Size.Y);
                         FullVerticalAisle(config, rect);
-                        FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
-                        FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
-                    }
-        
-                    if (dir2 == 0)
-                    {
-                        FullHorizontalAisle(config, rect2);
-                        FullHorizontalAisleLeft(config, rect2, doorDir2 == DoorDirection.E ? doorInfo.ConnectDoor : null);
-                        FullHorizontalAisleRight(config, rect2, doorDir2 == DoorDirection.W ? doorInfo.ConnectDoor : null);
-                    }
-                    else
-                    {
-                        FullVerticalAisle(config, rect2);
-                        FullVerticalAisleUp(config, rect2, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
-                        FullVerticalAisleDown(config, rect2, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
-                    }
-        
-                    if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
-                        (doorDir2 == DoorDirection.N && doorDir1 == DoorDirection.E))
-                    {
-                        FillRect(GameConfig.TopMapLayer, config.OUT_RT,
-                            doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
-                            Vector2.One);
-                        FillRect(GameConfig.TopMapLayer, config.IN_RT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0),
-                            Vector2.One);
-                        FillRect(GameConfig.MiddleMapLayer, config.T, doorInfo.Cross, new Vector2(GameConfig.CorridorWidth - 1, 1));
-                        FillRect(GameConfig.TopMapLayer, config.R, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 1),
-                            new Vector2(1, GameConfig.CorridorWidth - 1));
-                    }
-                    else if ((doorDir1 == DoorDirection.E && doorDir2 == DoorDirection.S) || //→↓
-                             (doorDir2 == DoorDirection.E && doorDir1 == DoorDirection.S))
-                    {
-                        FillRect(GameConfig.MiddleMapLayer, config.OUT_RB, doorInfo.Cross, Vector2.One);
-                        FillRect(GameConfig.TopMapLayer, config.IN_RB,
-                            doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1,
-                                GameConfig.CorridorWidth - 1),
-                            Vector2.One);
-                        FillRect(GameConfig.TopMapLayer, config.R, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0),
-                            new Vector2(1, GameConfig.CorridorWidth - 1));
-                        FillRect(GameConfig.TopMapLayer, config.B, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
-                            new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    }
-                    else if ((doorDir1 == DoorDirection.S && doorDir2 == DoorDirection.W) || //↓←
-                             (doorDir2 == DoorDirection.S && doorDir1 == DoorDirection.W))
-                    {
-                        FillRect(GameConfig.MiddleMapLayer, config.OUT_LB,
-                            doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), Vector2.One);
-                        FillRect(GameConfig.TopMapLayer, config.IN_LB, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
-                            Vector2.One);
-                        FillRect(GameConfig.TopMapLayer, config.L, doorInfo.Cross, new Vector2(1, GameConfig.CorridorWidth - 1));
-                        FillRect(GameConfig.TopMapLayer, config.B, doorInfo.Cross + new Vector2(1, GameConfig.CorridorWidth - 1),
-                            new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    }
-                    else if ((doorDir1 == DoorDirection.W && doorDir2 == DoorDirection.N) || //←↑
-                             (doorDir2 == DoorDirection.W && doorDir1 == DoorDirection.N))
-                    {
-                        FillRect(GameConfig.TopMapLayer, config.OUT_LT,
-                            doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1,
-                                GameConfig.CorridorWidth - 1),
-                            Vector2.One);
-                        FillRect(GameConfig.TopMapLayer, config.IN_LT, doorInfo.Cross, Vector2.One);
-                        FillRect(GameConfig.MiddleMapLayer, config.T, doorInfo.Cross + new Vector2(1, 0),
-                            new Vector2(GameConfig.CorridorWidth - 1, 1));
-                        FillRect(GameConfig.TopMapLayer, config.L, doorInfo.Cross + new Vector2(0, 1),
-                            new Vector2(1, GameConfig.CorridorWidth - 1));
-                    }
-        
-                    //在房间墙上开洞
-                    switch (doorDir1)
-                    {
-                        case DoorDirection.E: //→
-                            ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(-1, 1),
-                                new Vector2(1, rect.Size.Y - 2));
-                            break;
-                        case DoorDirection.W: //←
-                            ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(0, 1),
-                                new Vector2(1, rect.Size.Y - 2));
-                            break;
-                        case DoorDirection.S: //↓
-                            ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(1, -1),
-                                new Vector2(rect.Size.X - 2, 1));
-                            break;
-                        case DoorDirection.N: //↑
-                            ClearRect(GameConfig.MiddleMapLayer, doorInfo.OriginPosition + new Vector2(1, 2),
-                                new Vector2(rect.Size.X - 2, 1));
-                            break;
-                    }
-        
-                    switch (doorDir2)
-                    {
-                        case DoorDirection.E: //→
-                            ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1),
-                                new Vector2(1, rect2.Size.Y - 2));
-                            break;
-                        case DoorDirection.W: //←
-                            ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1),
-                                new Vector2(1, rect2.Size.Y - 2));
-                            break;
-                        case DoorDirection.S: //↓
-                            ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1),
-                                new Vector2(rect2.Size.X - 2, 1));
-                            break;
-                        case DoorDirection.N: //↑
-                            ClearRect(GameConfig.MiddleMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0),
-                                new Vector2(rect2.Size.X - 2, 1));
-                            break;
-                    }
+                        FullVerticalAisleUp(config, rect, doorInfo);
+                        FullVerticalAisleDown(config, rect, doorInfo.ConnectDoor);
+                        break;
+                    case DoorDirection.N:
+                        rect.Size = new Vector2(GameConfig.CorridorWidth, rect.Size.Y);
+                        FullVerticalAisle(config, rect);
+                        FullVerticalAisleUp(config, rect, doorInfo.ConnectDoor);
+                        FullVerticalAisleDown(config, rect, doorInfo);
+                        break;
+                }
+            }
+            else //带交叉点
+            {
+                //方向, 0横向, 1纵向
+                var dir1 = 0;
+                var dir2 = 0;
+    
+                Rect2 rect;
+                Rect2 rect2;
+    
+                //计算范围
+                switch (doorDir1)
+                {
+                    case DoorDirection.E: //→
+                        rect = new Rect2(
+                            doorInfo.OriginPosition.X,
+                            doorInfo.OriginPosition.Y,
+                            doorInfo.Cross.X - doorInfo.OriginPosition.X,
+                            GameConfig.CorridorWidth
+                        );
+                        break;
+                    case DoorDirection.W: //←
+                        rect = new Rect2(
+                            doorInfo.Cross.X + GameConfig.CorridorWidth,
+                            doorInfo.Cross.Y,
+                            doorInfo.OriginPosition.X - (doorInfo.Cross.X + GameConfig.CorridorWidth),
+                            GameConfig.CorridorWidth
+                        );
+                        break;
+                    case DoorDirection.S: //↓
+                        dir1 = 1;
+                        rect = new Rect2(
+                            doorInfo.OriginPosition.X,
+                            doorInfo.OriginPosition.Y,
+                            GameConfig.CorridorWidth,
+                            doorInfo.Cross.Y - doorInfo.OriginPosition.Y
+                        );
+                        break;
+                    case DoorDirection.N: //↑
+                        dir1 = 1;
+                        rect = new Rect2(
+                            doorInfo.Cross.X,
+                            doorInfo.Cross.Y + GameConfig.CorridorWidth,
+                            GameConfig.CorridorWidth,
+                            doorInfo.OriginPosition.Y - (doorInfo.Cross.Y + GameConfig.CorridorWidth)
+                        );
+                        break;
+                    default:
+                        rect = new Rect2();
+                        break;
+                }
+    
+                switch (doorDir2)
+                {
+                    case DoorDirection.E: //→
+                        rect2 = new Rect2(
+                            doorInfo.ConnectDoor.OriginPosition.X,
+                            doorInfo.ConnectDoor.OriginPosition.Y,
+                            doorInfo.Cross.X - doorInfo.ConnectDoor.OriginPosition.X,
+                            GameConfig.CorridorWidth
+                        );
+                        break;
+                    case DoorDirection.W: //←
+                        rect2 = new Rect2(
+                            doorInfo.Cross.X + GameConfig.CorridorWidth,
+                            doorInfo.Cross.Y,
+                            doorInfo.ConnectDoor.OriginPosition.X -
+                            (doorInfo.Cross.X + GameConfig.CorridorWidth),
+                            GameConfig.CorridorWidth
+                        );
+                        break;
+                    case DoorDirection.S: //↓
+                        dir2 = 1;
+                        rect2 = new Rect2(
+                            doorInfo.ConnectDoor.OriginPosition.X,
+                            doorInfo.ConnectDoor.OriginPosition.Y,
+                            GameConfig.CorridorWidth,
+                            doorInfo.Cross.Y - doorInfo.ConnectDoor.OriginPosition.Y
+                        );
+                        break;
+                    case DoorDirection.N: //↑
+                        dir2 = 1;
+                        rect2 = new Rect2(
+                            doorInfo.Cross.X,
+                            doorInfo.Cross.Y + GameConfig.CorridorWidth,
+                            GameConfig.CorridorWidth,
+                            doorInfo.ConnectDoor.OriginPosition.Y -
+                            (doorInfo.Cross.Y + GameConfig.CorridorWidth)
+                        );
+                        break;
+                    default:
+                        rect2 = new Rect2();
+                        break;
+                }
+    
+                FillRect(GameConfig.AisleFloorMapLayer, config.Floor, doorInfo.Cross + Vector2.One,
+                    new Vector2(GameConfig.CorridorWidth - 2, GameConfig.CorridorWidth - 2));
+    
+                //墙壁, 0横向, 1纵向
+                if (dir1 == 0)
+                {
+                    FullHorizontalAisle(config, rect);
+                    FullHorizontalAisleLeft(config, rect, doorDir1 == DoorDirection.E ? doorInfo : null);
+                    FullHorizontalAisleRight(config, rect, doorDir1 == DoorDirection.W ? doorInfo : null);
+                }
+                else
+                {
+                    FullVerticalAisle(config, rect);
+                    FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
+                    FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
+                }
+    
+                if (dir2 == 0)
+                {
+                    FullHorizontalAisle(config, rect2);
+                    FullHorizontalAisleLeft(config, rect2, doorDir2 == DoorDirection.E ? doorInfo.ConnectDoor : null);
+                    FullHorizontalAisleRight(config, rect2, doorDir2 == DoorDirection.W ? doorInfo.ConnectDoor : null);
+                }
+                else
+                {
+                    FullVerticalAisle(config, rect2);
+                    FullVerticalAisleUp(config, rect2, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
+                    FullVerticalAisleDown(config, rect2, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
+                }
+    
+                if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
+                    (doorDir2 == DoorDirection.N && doorDir1 == DoorDirection.E))
+                {
+                    FillRect(GameConfig.TopMapLayer, config.OUT_RT,
+                        doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
+                        Vector2.One);
+                    FillRect(GameConfig.TopMapLayer, config.IN_RT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0),
+                        Vector2.One);
+                    FillRect(GameConfig.MiddleMapLayer, config.T, doorInfo.Cross, new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(GameConfig.TopMapLayer, config.R, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 1),
+                        new Vector2(1, GameConfig.CorridorWidth - 1));
+                }
+                else if ((doorDir1 == DoorDirection.E && doorDir2 == DoorDirection.S) || //→↓
+                         (doorDir2 == DoorDirection.E && doorDir1 == DoorDirection.S))
+                {
+                    FillRect(GameConfig.MiddleMapLayer, config.OUT_RB, doorInfo.Cross, Vector2.One);
+                    FillRect(GameConfig.TopMapLayer, config.IN_RB,
+                        doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1,
+                            GameConfig.CorridorWidth - 1),
+                        Vector2.One);
+                    FillRect(GameConfig.TopMapLayer, config.R, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0),
+                        new Vector2(1, GameConfig.CorridorWidth - 1));
+                    FillRect(GameConfig.TopMapLayer, config.B, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
+                        new Vector2(GameConfig.CorridorWidth - 1, 1));
+                }
+                else if ((doorDir1 == DoorDirection.S && doorDir2 == DoorDirection.W) || //↓←
+                         (doorDir2 == DoorDirection.S && doorDir1 == DoorDirection.W))
+                {
+                    FillRect(GameConfig.MiddleMapLayer, config.OUT_LB,
+                        doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), Vector2.One);
+                    FillRect(GameConfig.TopMapLayer, config.IN_LB, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
+                        Vector2.One);
+                    FillRect(GameConfig.TopMapLayer, config.L, doorInfo.Cross, new Vector2(1, GameConfig.CorridorWidth - 1));
+                    FillRect(GameConfig.TopMapLayer, config.B, doorInfo.Cross + new Vector2(1, GameConfig.CorridorWidth - 1),
+                        new Vector2(GameConfig.CorridorWidth - 1, 1));
+                }
+                else if ((doorDir1 == DoorDirection.W && doorDir2 == DoorDirection.N) || //←↑
+                         (doorDir2 == DoorDirection.W && doorDir1 == DoorDirection.N))
+                {
+                    FillRect(GameConfig.TopMapLayer, config.OUT_LT,
+                        doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1,
+                            GameConfig.CorridorWidth - 1),
+                        Vector2.One);
+                    FillRect(GameConfig.TopMapLayer, config.IN_LT, doorInfo.Cross, Vector2.One);
+                    FillRect(GameConfig.MiddleMapLayer, config.T, doorInfo.Cross + new Vector2(1, 0),
+                        new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(GameConfig.TopMapLayer, config.L, doorInfo.Cross + new Vector2(0, 1),
+                        new Vector2(1, GameConfig.CorridorWidth - 1));
+                }
+    
+                //在房间墙上开洞
+                switch (doorDir1)
+                {
+                    case DoorDirection.E: //→
+                        ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(-1, 1),
+                            new Vector2(1, rect.Size.Y - 2));
+                        break;
+                    case DoorDirection.W: //←
+                        ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(0, 1),
+                            new Vector2(1, rect.Size.Y - 2));
+                        break;
+                    case DoorDirection.S: //↓
+                        ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(1, -1),
+                            new Vector2(rect.Size.X - 2, 1));
+                        break;
+                    case DoorDirection.N: //↑
+                        ClearRect(GameConfig.MiddleMapLayer, doorInfo.OriginPosition + new Vector2(1, 2),
+                            new Vector2(rect.Size.X - 2, 1));
+                        break;
+                }
+    
+                switch (doorDir2)
+                {
+                    case DoorDirection.E: //→
+                        ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1),
+                            new Vector2(1, rect2.Size.Y - 2));
+                        break;
+                    case DoorDirection.W: //←
+                        ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1),
+                            new Vector2(1, rect2.Size.Y - 2));
+                        break;
+                    case DoorDirection.S: //↓
+                        ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1),
+                            new Vector2(rect2.Size.X - 2, 1));
+                        break;
+                    case DoorDirection.N: //↑
+                        ClearRect(GameConfig.MiddleMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0),
+                            new Vector2(rect2.Size.X - 2, 1));
+                        break;
                 }
             }
         }

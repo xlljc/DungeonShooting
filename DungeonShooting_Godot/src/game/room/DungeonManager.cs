@@ -197,7 +197,7 @@ public partial class DungeonManager : Node2D
         World = GameApplication.Instance.CreateNewWorld();
         yield return 0;
         //生成地牢房间
-        var random = new SeedRandom(1);
+        var random = new SeedRandom(2);
         _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
         _dungeonGenerator.Generate();
         yield return 0;
@@ -429,6 +429,7 @@ public partial class DungeonManager : Node2D
     private void CreateRoomFogMask(RoomInfo roomInfo)
     {
         var roomFog = new RoomFogMask();
+        //roomFog.BlendMode = Light2D.BlendModeEnum.Mix;
         roomFog.Name = "FogMask" + roomFog.IsDestroyed;
         roomInfo.RoomFogMask = roomFog;
         roomFog.Init(roomInfo, new Rect2I(
@@ -436,6 +437,32 @@ public partial class DungeonManager : Node2D
             (roomInfo.Size + new Vector2I(2, 2)) * GameConfig.TileCellSize)
         );
         World.FogMaskRoot.AddChild(roomFog);
+
+        //正向门
+        var roomDoorInfos = roomInfo.GetForwardDoors();
+        foreach (var roomDoorInfo in roomDoorInfos)
+        {
+            var p1 = roomDoorInfo.GetWorldOriginPosition();
+            var p2 = roomDoorInfo.ConnectDoor.GetWorldOriginPosition();
+            var calcRect = Utils.CalcRect(p1.X, p1.Y, p2.X, p2.Y);
+            if (calcRect.Size.X == 0)
+            {
+                calcRect.Size += new Vector2(4 * GameConfig.TileCellSize, 0);
+            }
+            else if (calcRect.Size.Y == 0)
+            {
+                calcRect.Size += new Vector2(0, 4 * GameConfig.TileCellSize);
+            }
+            
+            var calcRectSize = calcRect.Size.AsVector2I();
+            var image = Image.Create(calcRectSize.X, calcRectSize.Y, false, Image.Format.Rgba8);
+            image.Fill(Colors.White);
+            var sprite2D = new PointLight2D();
+            //sprite2D.BlendMode = Light2D.BlendModeEnum.Mix;
+            sprite2D.Texture = ImageTexture.CreateFromImage(image);
+            sprite2D.Position = calcRect.Position + calcRect.Size / 2;
+            World.FogMaskRoot.AddChild(sprite2D);
+        }
     }
 
     /// <summary>
