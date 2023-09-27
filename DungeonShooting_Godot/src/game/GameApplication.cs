@@ -96,7 +96,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = RoomConfig.FirstOrDefault().Key;
-		DungeonConfig.RoomCount = 0;
+		DungeonConfig.RoomCount = 10;
 	}
 	
 	public override void _EnterTree()
@@ -110,12 +110,14 @@ public partial class GameApplication : Node2D, ICoroutine
 		//调试绘制开关
 		ActivityObject.IsDebug = Debug;
 		//Engine.TimeScale = 0.2f;
-
-		ImageCanvas.Init(GetTree().CurrentScene);
 		
+		//调整窗口分辨率
+		OnWindowSizeChanged();
+		RefreshSubViewportSize();
 		//窗体大小改变
 		GetWindow().SizeChanged += OnWindowSizeChanged;
-		RefreshSubViewportSize();
+		
+		ImageCanvas.Init(GetTree().CurrentScene);
         
 		//初始化ui
 		UiManager.Init();

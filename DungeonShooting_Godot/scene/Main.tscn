@@ -40,7 +40,7 @@ scale = Vector2(4, 4)
 [node name="SubViewport" type="SubViewport" parent="ViewCanvas/SubViewportContainer"]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(480, 270)
+size = Vector2i(320, 180)
 render_target_update_mode = 4
 
 [node name="SceneRoot" type="Node2D" parent="ViewCanvas/SubViewportContainer/SubViewport"]
