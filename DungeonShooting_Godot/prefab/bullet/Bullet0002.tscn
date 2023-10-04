@@ -43,7 +43,7 @@ z_index = -1
 material = SubResource("ShaderMaterial_v77gw")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-modulate = Color(1.8, 1.8, 1.8, 1)
+modulate = Color(1.6, 1.6, 1.6, 1)
 material = SubResource("ShaderMaterial_p0wfd")
 sprite_frames = ExtResource("3_uvuj8")
 

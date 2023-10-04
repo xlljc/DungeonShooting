@@ -429,7 +429,8 @@ public partial class DungeonManager : Node2D
     private void CreateRoomFogMask(RoomInfo roomInfo)
     {
         var roomFog = new RoomFogMask();
-        //roomFog.BlendMode = Light2D.BlendModeEnum.Mix;
+        //
+        roomFog.BlendMode = Light2D.BlendModeEnum.Mix;
         roomFog.Name = "FogMask" + roomFog.IsDestroyed;
         roomInfo.RoomFogMask = roomFog;
         roomFog.Init(roomInfo, new Rect2I(
@@ -458,7 +459,8 @@ public partial class DungeonManager : Node2D
             var image = Image.Create(calcRectSize.X, calcRectSize.Y, false, Image.Format.Rgba8);
             image.Fill(Colors.White);
             var sprite2D = new PointLight2D();
-            //sprite2D.BlendMode = Light2D.BlendModeEnum.Mix;
+            //
+            sprite2D.BlendMode = Light2D.BlendModeEnum.Mix;
             sprite2D.Texture = ImageTexture.CreateFromImage(image);
             sprite2D.Position = calcRect.Position + calcRect.Size / 2;
             World.FogMaskRoot.AddChild(sprite2D);
