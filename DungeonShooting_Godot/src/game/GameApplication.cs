@@ -36,7 +36,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// 是否开启调试
 	/// </summary>
 	[ExportGroup("Debug")]
-	[Export] public bool Debug = false;
+	[Export] public bool Debug;
 
 	/// <summary>
 	/// 鼠标指针
@@ -96,11 +96,13 @@ public partial class GameApplication : Node2D, ICoroutine
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = RoomConfig.FirstOrDefault().Key;
-		DungeonConfig.RoomCount = 20;
+		DungeonConfig.RoomCount = 10;
 	}
 	
 	public override void _EnterTree()
 	{
+		//背景颜色
+		RenderingServer.SetDefaultClearColor(new Color(0, 0, 0, 1));
 		//随机化种子
 		//GD.Randomize();
 		//固定帧率
@@ -108,12 +110,14 @@ public partial class GameApplication : Node2D, ICoroutine
 		//调试绘制开关
 		ActivityObject.IsDebug = Debug;
 		//Engine.TimeScale = 0.2f;
-
-		ImageCanvas.Init(GetTree().CurrentScene);
 		
+		//调整窗口分辨率
+		OnWindowSizeChanged();
+		RefreshSubViewportSize();
 		//窗体大小改变
 		GetWindow().SizeChanged += OnWindowSizeChanged;
-		RefreshSubViewportSize();
+		
+		ImageCanvas.Init(GetTree().CurrentScene);
         
 		//初始化ui
 		UiManager.Init();

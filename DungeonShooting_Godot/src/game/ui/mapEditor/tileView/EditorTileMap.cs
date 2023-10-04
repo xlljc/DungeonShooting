@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
 using Godot;
 using Godot.Collections;
 using UI.MapEditorTools;
@@ -800,7 +798,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //设置显示的错误cell, 会标记上红色的闪烁动画
     private void SetErrorCell(Vector2I pos)
     {
-        MapEditorPanel.S_ErrorCell.Instance.Position = pos * CellQuadrantSize;
+        MapEditorPanel.S_ErrorCell.Instance.Position = pos * GameConfig.TileCellSize;
         MapEditorPanel.S_ErrorCellAnimationPlayer.Instance.Play(AnimatorNames.Show);
     }
 

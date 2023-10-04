@@ -19,6 +19,10 @@
       {
         "ErrorType": 0,
         "Path": "resource/map/tileMaps/TestGroup1/inlet/Start1"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/TestGroup1/inlet/Start2"
       }
     ],
     "OutletList": [

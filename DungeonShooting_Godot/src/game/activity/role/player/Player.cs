@@ -48,13 +48,13 @@ public partial class Player : Role
         Shield = 0;
 
         // debug用
-        // RoleState.Acceleration = 3000;
-        // RoleState.Friction = 3000;
-        // RoleState.MoveSpeed = 500;
-        // CollisionLayer = 0;
-        // CollisionMask = 0;
-        // GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
-        // //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        RoleState.Acceleration = 3000;
+        RoleState.Friction = 3000;
+        RoleState.MoveSpeed = 500;
+        CollisionLayer = 0;
+        CollisionMask = 0;
+        //GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
+        //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
         
         //注册状态机
         StateController.Register(new PlayerIdleState());
@@ -254,6 +254,11 @@ public partial class Player : Role
         GameCamera.Main.SetFollowTarget(null);
         BasisVelocity = Vector2.Zero;
         MoveController.ClearForce();
+
+        //暂停游戏
+        GameApplication.Instance.World.Pause = true;
+        //弹出结算面板
+        GameApplication.Instance.Cursor.SetGuiMode(true);
         UiManager.Open_Settlement();
     }
 
@@ -302,5 +307,11 @@ public partial class Player : Role
         {
             BasisVelocity = new Vector2(BasisVelocity.X, Mathf.MoveToward(BasisVelocity.Y, dir.Y * RoleState.MoveSpeed, RoleState.Acceleration * delta));
         }
+    }
+
+    protected override void DebugDraw()
+    {
+        base.DebugDraw();
+        DrawArc(new Vector2(0, -8), 50, 0, Mathf.Pi * 2f, 20, Colors.Red, 1);
     }
 }

@@ -37,7 +37,7 @@ public partial class AffiliationArea : Area2D, IDestroy
     /// <summary>
     /// 根据矩形区域初始化归属区域
     /// </summary>
-    public void Init(RoomInfo roomInfo, Rect2 rect2)
+    public void Init(RoomInfo roomInfo, Rect2I rect2)
     {
         if (_init)
         {

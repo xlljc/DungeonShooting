@@ -32,9 +32,9 @@ public class MoveController : Component
     private Vector2 _basisVelocity = Vector2.Zero;
 
     /// <summary>
-    /// 缩放所有力对象, 包括基础速率
+    /// 缩放所有外力对象的速率, 包括基础速率
     /// </summary>
-    public void ScaleAllForce(float scale)
+    public void ScaleAllVelocity(float scale)
     {
         foreach (var externalForce in _forceList)
         {
@@ -43,9 +43,20 @@ public class MoveController : Component
 
         BasisVelocity *= scale;
     }
+    
+    /// <summary>
+    /// 缩放所有外力对象的旋转速率
+    /// </summary>
+    public void ScaleAllRotationSpeed(float scale)
+    {
+        foreach (var externalForce in _forceList)
+        {
+            externalForce.RotationSpeed *= scale;
+        }
+    }
 
     /// <summary>
-    /// 给当前控制器添加指定外力速率, 并且平均分配给所有外力速率
+    /// 添加外力速率, 并且平均分配给所有外力速率
     /// </summary>
     public void AddVelocity(Vector2 velocity)
     {
@@ -68,9 +79,28 @@ public class MoveController : Component
     }
     
     /// <summary>
-    /// 设置所有力对象, 包括基础速率
+    /// 添加外力旋转速率, 并且平均分配给所有外力旋转速率
     /// </summary>
-    public void SetAllForce(Vector2 value)
+    public void AddRotationSpeed(float speed)
+    {
+        if (speed != 0)
+        {
+            var forceCount = GetForceCount();
+            if (forceCount > 0)
+            {
+                var tempS = speed / forceCount;
+                for (var i = 0; i < _forceList.Count; i++)
+                {
+                    _forceList[i].RotationSpeed += tempS;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 设置所有外力对象的速率
+    /// </summary>
+    public void SetAllVelocity(Vector2 value)
     {
         foreach (var externalForce in _forceList)
         {
@@ -78,6 +108,17 @@ public class MoveController : Component
         }
 
         BasisVelocity = value;
+    }
+    
+    /// <summary>
+    /// 设置所有外力对象的旋转速率
+    /// </summary>
+    public void SetAllRotationSpeed(float speed)
+    {
+        foreach (var externalForce in _forceList)
+        {
+            externalForce.RotationSpeed = speed;
+        }
     }
     
     /// <summary>
@@ -97,7 +138,7 @@ public class MoveController : Component
     }
 
     /// <summary>
-    /// 快速创建一个外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
+    /// 快速创建一个速率外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
     /// </summary>
     /// <param name="velocity">外力速率</param>
     /// <param name="resistance">阻力大小</param>
@@ -110,6 +151,20 @@ public class MoveController : Component
         return force;
     }
     
+    /// <summary>
+    /// 快速创建一个旋转外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
+    /// </summary>
+    /// <param name="rotationSpeed">外力旋转速率, 弧度制</param>
+    /// <param name="resistance">阻力大小</param>
+    public ExternalForce AddForce(float rotationSpeed, float resistance)
+    {
+        var force = AddForce("_anonymity_" + _index++);
+        force.AutoDestroy = true;
+        force.RotationSpeed = rotationSpeed;
+        force.RotationResistance = resistance;
+        return force;
+    }
+
     /// <summary>
     /// 快速创建一个外力, 该外力为匿名外力, 当速率变为 0 时自动销毁
     /// </summary>
@@ -216,33 +271,33 @@ public class MoveController : Component
             return;
         }
 
-        //先调用更新
-        var externalForces = _forceList.ToArray();
-        for (var i = 0; i < externalForces.Length; i++)
-        {
-            var force = externalForces[i];
-            if (force.Enable)
-            {
-                force.PhysicsProcess(delta);
-                //自动销毁
-                if (CheckAutoDestroy(force))
-                {
-                    _forceList.Remove(force);
-                    externalForces[i] = null;
-                }
-            }
-        }
-
         //外力总和
         var finallyEf = new Vector2();
         //旋转速率总和
         var rotationSpeed = 0f;
-        foreach (var force in externalForces)
+        
+        //先调用更新
+        if (_forceList.Count > 0)
         {
-            if (force != null && force.Enable)
+            var externalForces = _forceList.ToArray();
+            for (var i = 0; i < externalForces.Length; i++)
             {
-                finallyEf += force.Velocity;
-                rotationSpeed += force.RotationSpeed;
+                var force = externalForces[i];
+                if (force.Enable)
+                {
+                    force.PhysicsProcess(delta);
+                    //自动销毁
+                    if (CheckAutoDestroy(force))
+                    {
+                        _forceList.Remove(force);
+                        externalForces[i] = null;
+                    }
+                    else
+                    {
+                        finallyEf += force.Velocity;
+                        rotationSpeed += force.RotationSpeed;
+                    }
+                }
             }
         }
 
