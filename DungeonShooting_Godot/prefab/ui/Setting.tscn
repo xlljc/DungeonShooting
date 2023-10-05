@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=3 uid="uid://bnwweusrc44xy"]
+
+[ext_resource type="Script" path="res://src/game/ui/setting/SettingPanel.cs" id="1_ff0oi"]
+[ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_vgl60"]
+
+[node name="Setting" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_ff0oi")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.109804, 0.0666667, 0.0901961, 1)
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 0
+offset_right = 98.0
+offset_bottom = 98.0
+icon = ExtResource("2_vgl60")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 98.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 48
+text = "游戏设置"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 123.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FullScreen" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="VBoxContainer/FullScreen"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "全屏"
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/FullScreen"]
+layout_mode = 2
+size_flags_horizontal = 10

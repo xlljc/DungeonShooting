@@ -1,8 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://csbxfkdupsckv"]
+[gd_scene load_steps=14 format=3 uid="uid://csbxfkdupsckv"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/MapEditorPanel.cs" id="1_5s7a0"]
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_gkcw7"]
-[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/TileSet1.tres" id="2_vrg60"]
 [ext_resource type="Texture2D" uid="uid://cat35d7ueu7gu" path="res://resource/sprite/ui/commonIcon/Save.png" id="3_qq8k4"]
 [ext_resource type="Texture2D" uid="uid://7l7aqhsaexoh" path="res://resource/sprite/ui/commonIcon/Play.png" id="4_2imnr"]
 [ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/mapEditor/ErrorCell.png" id="4_465u2"]
@@ -196,7 +195,6 @@ render_target_update_mode = 4
 [node name="TileMap" type="TileMap" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport"]
 position = Vector2(500, 540)
 scale = Vector2(4, 4)
-tile_set = ExtResource("2_vrg60")
 format = 2
 script = ExtResource("4_mhy1a")
 

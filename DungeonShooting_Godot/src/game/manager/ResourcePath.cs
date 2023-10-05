@@ -65,6 +65,7 @@ public class ResourcePath
     public const string prefab_ui_MapEditorTools_tscn = "res://prefab/ui/MapEditorTools.tscn";
     public const string prefab_ui_PauseMenu_tscn = "res://prefab/ui/PauseMenu.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
+    public const string prefab_ui_Setting_tscn = "res://prefab/ui/Setting.tscn";
     public const string prefab_ui_Settlement_tscn = "res://prefab/ui/Settlement.tscn";
     public const string prefab_weapon_Weapon0001_tscn = "res://prefab/weapon/Weapon0001.tscn";
     public const string prefab_weapon_Weapon0002_tscn = "res://prefab/weapon/Weapon0002.tscn";
@@ -83,8 +84,10 @@ public class ResourcePath
     public const string resource_font_DinkieBitmap9pxItalicDemo_ttf = "res://resource/font/DinkieBitmap-9pxItalicDemo.ttf";
     public const string resource_font_VonwaonBitmap12px_ttf = "res://resource/font/VonwaonBitmap-12px.ttf";
     public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
-    public const string resource_map_tileSet_TileSet1_tres = "res://resource/map/tileSet/TileSet1.tres";
     public const string resource_map_tileSet_TileSet_old_tres = "res://resource/map/tileSet/TileSet_old.tres";
+    public const string resource_map_tileSet_map1_TileSet1_tres = "res://resource/map/tileSet/map1/TileSet1.tres";
+    public const string resource_map_tileSet_map1_website_txt = "res://resource/map/tileSet/map1/website.txt";
+    public const string resource_map_tileSprite_map1_16x16dungeoniiwallreconfigv04spritesheet_png = "res://resource/map/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png";
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";
     public const string resource_material_Blend_tres = "res://resource/material/Blend.tres";
     public const string resource_material_SmokeParticleMaterial_tres = "res://resource/material/SmokeParticleMaterial.tres";
@@ -145,12 +148,10 @@ public class ResourcePath
     public const string resource_sprite_effects_weapon_KnifeHit1_png = "res://resource/sprite/effects/weapon/KnifeHit1.png";
     public const string resource_sprite_effects_weapon_MeleeAttack1_png = "res://resource/sprite/effects/weapon/MeleeAttack1.png";
     public const string resource_sprite_effects_weapon_ShotFire_png = "res://resource/sprite/effects/weapon/ShotFire.png";
+    public const string resource_sprite_map_door1_down_png = "res://resource/sprite/map/door1_down.png";
     public const string resource_sprite_map_WallTransition1_png = "res://resource/sprite/map/WallTransition1.png";
     public const string resource_sprite_map_WallTransition2_png = "res://resource/sprite/map/WallTransition2.png";
     public const string resource_sprite_map_WallTransition3_png = "res://resource/sprite/map/WallTransition3.png";
-    public const string resource_sprite_map_map1_16x16dungeoniiwallreconfigv04spritesheet_png = "res://resource/sprite/map/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png";
-    public const string resource_sprite_map_map1_door1_down_png = "res://resource/sprite/map/map1/door1_down.png";
-    public const string resource_sprite_map_map1_website_txt = "res://resource/sprite/map/map1/website.txt";
     public const string resource_sprite_prop_active_ActiveProp5000_png = "res://resource/sprite/prop/active/ActiveProp5000.png";
     public const string resource_sprite_prop_active_ActiveProp5001_png = "res://resource/sprite/prop/active/ActiveProp5001.png";
     public const string resource_sprite_prop_buff_BuffProp0001_png = "res://resource/sprite/prop/buff/BuffProp0001.png";

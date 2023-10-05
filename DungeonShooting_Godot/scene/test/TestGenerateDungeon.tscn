@@ -1,7 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://5bbx1u0od3jm"]
 
 [ext_resource type="Script" path="res://src/test/TestGenerateDungeon.cs" id="1"]
-[ext_resource type="Texture2D" uid="uid://dj8nrd5od4fcl" path="res://resource/sprite/map/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dj8nrd5od4fcl" path="res://resource/map/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png" id="2"]
+
 
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rvg0t"]
