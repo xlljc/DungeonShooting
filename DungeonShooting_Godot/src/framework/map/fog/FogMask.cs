@@ -64,35 +64,50 @@ public partial class FogMask : PointLight2D, IDestroy
         _inRightTopTransition = temp3.GetImage();
         _inRightTopTransition.Rotate180();
     }
-    
+
     /// <summary>
-    /// 初始化房间迷雾遮罩
+    /// 初始化迷雾遮罩
     /// </summary>
-    /// <param name="roomInfo">房间对象</param>
-    /// <param name="rect2">迷雾所占区域</param>
-    public void InitRoomFog(RoomInfo roomInfo, Rect2I rect2)
+    /// <param name="position">起始位置, 单位: 格</param>
+    /// <param name="size">大小, 单位: 格</param>
+    /// <param name="alpha">透明度</param>
+    public void InitFog(Vector2I position, Vector2I size, float alpha = 0)
     {
         if (_init)
         {
             return;
         }
         InitSprite();
-        GlobalPosition = rect2.Position + rect2.Size / 2;
+        GlobalPosition = new Vector2(
+            (position.X + size.X / 2f) * GameConfig.TileCellSize,
+            (position.Y + size.Y / 2f) * GameConfig.TileCellSize
+        );
         
         //创建光纹理
-        Width = rect2.Size.X;
-        Height = rect2.Size.Y;
+        Width = (size.X + 2) * GameConfig.TileCellSize;
+        Height = (size.Y + 2) * GameConfig.TileCellSize;
         var img = Image.Create(Width, Height, false, Image.Format.Rgba8);
         img.Fill(Colors.White);
         
         //处理边缘过渡
-        HandlerTransition(roomInfo, img);
+        HandlerTransition(position, size, img);
         Texture = ImageTexture.CreateFromImage(img);
+
+        var c = Color;
+        c.A = alpha;
+        Color = c;
     }
 
-    public void InitAisleFog()
+    /// <summary>
+    /// 使颜色的 alpha 通道过渡到指定的值
+    /// </summary>
+    /// <param name="targetAlpha">透明度值</param>
+    /// <param name="time">过渡时间</param>
+    public void TransitionAlpha(float targetAlpha, float time)
     {
-        
+        var tween = CreateTween();
+        tween.TweenProperty(this, "color", new Color(1, 1, 1, targetAlpha), time);
+        tween.Play();
     }
     
     public void Destroy()
@@ -106,13 +121,13 @@ public partial class FogMask : PointLight2D, IDestroy
         QueueFree();
     }
 
-    private void HandlerTransition(RoomInfo roomInfo, Image image)
+    private void HandlerTransition(Vector2I position, Vector2I size, Image image)
     {
         var tileMap = GameApplication.Instance.World.TileRoot;
         var autoConfig = GameApplication.Instance.DungeonManager.AutoTileConfig;
         var wallCoord = autoConfig.WALL_BLOCK.AutoTileCoord;
-        var (x, y) = roomInfo.Position;
-        var (width, height) = roomInfo.Size;
+        var (x, y) = position;
+        var (width, height) = size;
         x -= 1;
         y -= 1;
         width += 2;

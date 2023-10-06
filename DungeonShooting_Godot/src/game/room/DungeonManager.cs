@@ -197,7 +197,7 @@ public partial class DungeonManager : Node2D
         World = GameApplication.Instance.CreateNewWorld();
         yield return 0;
         //生成地牢房间
-        var random = new SeedRandom(2);
+        var random = new SeedRandom();
         _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
         _dungeonGenerator.Generate();
         yield return 0;
@@ -429,47 +429,94 @@ public partial class DungeonManager : Node2D
     private void CreateRoomFogMask(RoomInfo roomInfo)
     {
         var roomFog = new FogMask();
-        //
-        //roomFog.BlendMode = Light2D.BlendModeEnum.Mix;
+        roomFog.BlendMode = Light2D.BlendModeEnum.Mix;
         roomFog.Name = "FogMask" + roomFog.IsDestroyed;
-        roomInfo.FogMask = roomFog;
-        roomFog.InitRoomFog(roomInfo, new Rect2I(
-            roomInfo.GetWorldPosition() - GameConfig.TileCellSizeVector2I,
-            (roomInfo.Size + new Vector2I(2, 2)) * GameConfig.TileCellSize)
-        );
+        float alpha;
+        if (roomInfo.RoomType == DungeonRoomType.Inlet) //起始房间没有迷雾
+        {
+            alpha = 1;
+        }
+        else
+        {
+            alpha = 0;
+        }
+        roomFog.InitFog(roomInfo.Position, roomInfo.Size, alpha);
+
         World.FogMaskRoot.AddChild(roomFog);
+        roomInfo.FogMask = roomFog;
 
         //正向门
         var roomDoorInfos = roomInfo.GetForwardDoors();
         //生成通道迷雾
         foreach (var roomDoorInfo in roomDoorInfos)
         {
-            // var p1 = roomDoorInfo.GetWorldOriginPosition();
-            // var p2 = roomDoorInfo.ConnectDoor.GetWorldOriginPosition();
-            // var calcRect = Utils.CalcRect(p1.X, p1.Y, p2.X, p2.Y);
-            // if (calcRect.Size.X == 0)
-            // {
-            //     calcRect.Size += new Vector2I(4 * GameConfig.TileCellSize, 0);
-            // }
-            // else if (calcRect.Size.Y == 0)
-            // {
-            //     calcRect.Size += new Vector2I(0, 4 * GameConfig.TileCellSize);
-            // }
             if (!roomDoorInfo.HasCross)
             {
                 var calcRect = roomDoorInfo.GetAisleRect();
-                calcRect.Size *= GameConfig.TileCellSize;
-                calcRect.Position *= GameConfig.TileCellSize;
+                if (roomDoorInfo.Direction == DoorDirection.E || roomDoorInfo.Direction == DoorDirection.W)
+                {
+                    calcRect.Position += new Vector2I(2, 0);
+                    calcRect.Size -= new Vector2I(4, 0);
+                }
+                else
+                {
+                    calcRect.Position += new Vector2I(0, 2);
+                    calcRect.Size -= new Vector2I(0, 4);
+                }
+                var aisleFog = new FogMask();
+                aisleFog.BlendMode = Light2D.BlendModeEnum.Mix;
+                aisleFog.InitFog(calcRect.Position, calcRect.Size, alpha);
+                World.FogMaskRoot.AddChild(aisleFog);
+                roomDoorInfo.FogMask = aisleFog;
+                roomDoorInfo.ConnectDoor.FogMask = aisleFog;
+            }
+            else
+            {
+                var aisleRect = roomDoorInfo.GetCrossAisleRect();
+                var calcAisleRect = aisleRect.CalcAisleRect();
+
+                switch (roomDoorInfo.Direction)
+                {
+                    case DoorDirection.E:
+                        calcAisleRect.Position += new Vector2I(2, 0);
+                        calcAisleRect.Size -= new Vector2I(2, 0);
+                        break;
+                    case DoorDirection.W:
+                        calcAisleRect.Size -= new Vector2I(2, 0);
+                        break;
+                    case DoorDirection.S:
+                        calcAisleRect.Position += new Vector2I(0, 2);
+                        calcAisleRect.Size -= new Vector2I(0, 2);
+                        break;
+                    case DoorDirection.N:
+                        calcAisleRect.Size -= new Vector2I(0, 2);
+                        break;
+                }
                 
-                var calcRectSize = calcRect.Size;
-                var image = Image.Create(calcRectSize.X, calcRectSize.Y, false, Image.Format.Rgba8);
-                image.Fill(Colors.White);
-                var sprite2D = new FogMask();
-                //
-                //sprite2D.BlendMode = Light2D.BlendModeEnum.Mix;
-                sprite2D.Texture = ImageTexture.CreateFromImage(image);
-                sprite2D.Position = calcRect.Position + calcRect.Size / 2;
-                World.FogMaskRoot.AddChild(sprite2D);
+                switch (roomDoorInfo.ConnectDoor.Direction)
+                {
+                    case DoorDirection.E:
+                        calcAisleRect.Position += new Vector2I(2, 0);
+                        calcAisleRect.Size -= new Vector2I(2, 0);
+                        break;
+                    case DoorDirection.W:
+                        calcAisleRect.Size -= new Vector2I(2, 0);
+                        break;
+                    case DoorDirection.S:
+                        calcAisleRect.Position += new Vector2I(0, 2);
+                        calcAisleRect.Size -= new Vector2I(0, 2);
+                        break;
+                    case DoorDirection.N:
+                        calcAisleRect.Size -= new Vector2I(0, 2);
+                        break;
+                }
+                
+                var aisleFog = new FogMask();
+                aisleFog.BlendMode = Light2D.BlendModeEnum.Mix;
+                aisleFog.InitFog(calcAisleRect.Position, calcAisleRect.Size, alpha);
+                World.FogMaskRoot.AddChild(aisleFog);
+                roomDoorInfo.FogMask = aisleFog;
+                roomDoorInfo.ConnectDoor.FogMask = aisleFog;
             }
         }
     }

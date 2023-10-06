@@ -270,27 +270,39 @@ public class RoomInfo : IDestroy
         }
 
         IsDestroyed = true;
+        //递归销毁下一个房间
         foreach (var nextRoom in Next)
         {
             nextRoom.Destroy();
         }
         Next.Clear();
+        
+        //销毁连接的门
+        foreach (var roomDoorInfo in Doors)
+        {
+            roomDoorInfo.Destroy();
+        }
+        
+        //销毁预设
         if (RoomPreinstall != null)
         {
             RoomPreinstall.Destroy();
             RoomPreinstall = null;
         }
         
+        //销毁画布
         if (StaticImageCanvas != null)
         {
             StaticImageCanvas.Destroy();
         }
 
+        //销毁迷雾
         if (FogMask != null)
         {
             FogMask.Destroy();
         }
 
+        //销毁所属区域对象
         if (AffiliationArea != null)
         {
             AffiliationArea.Destroy();
@@ -315,6 +327,12 @@ public class RoomInfo : IDestroy
         if (RoomPreinstall.IsRunWave)
         {
             return;
+        }
+        
+        //清除迷雾
+        if (FogMask != null && FogMask.Color.A < 1)
+        {
+            FogMask.TransitionAlpha(1, 0.3f);
         }
         
         //房间内有敌人, 或者会刷新敌人才会关门
@@ -381,6 +399,16 @@ public class RoomInfo : IDestroy
         {
             doorInfo.Door.OpenDoor();
         }
+        
+        //清除过道的迷雾
+        foreach (var roomDoorInfo in GetForwardDoors())
+        {
+            if (roomDoorInfo.FogMask != null && roomDoorInfo.FogMask.Color.A < 1)
+            {
+                roomDoorInfo.FogMask.TransitionAlpha(1, 0.3f);
+            }
+        }
+
     }
 
     /// <summary>

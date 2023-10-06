@@ -5,8 +5,10 @@ using Godot;
 /// <summary>
 /// 房间的门
 /// </summary>
-public class RoomDoorInfo
+public class RoomDoorInfo : IDestroy
 {
+    public bool IsDestroyed { get; private set; }
+    
     /// <summary>
     /// 所在墙面方向
     /// </summary>
@@ -51,6 +53,11 @@ public class RoomDoorInfo
     /// 门实例
     /// </summary>
     public RoomDoor Door;
+
+    /// <summary>
+    /// 过道的迷雾
+    /// </summary>
+    public FogMask FogMask;
 
     /// <summary>
     /// 世界坐标下的原点坐标, 单位: 像素
@@ -110,14 +117,14 @@ public class RoomDoorInfo
             throw new Exception("当前门连接的过道不包含交叉点, 请改用 GetAisleRect() 函数!");
         }
 
-        Rect2 rect;
-        Rect2 rect2;
+        Rect2I rect;
+        Rect2I rect2;
 
         //计算范围
         switch (Direction)
         {
             case DoorDirection.E: //→
-                rect = new Rect2(
+                rect = new Rect2I(
                     OriginPosition.X,
                     OriginPosition.Y,
                     Cross.X - OriginPosition.X,
@@ -125,7 +132,7 @@ public class RoomDoorInfo
                 );
                 break;
             case DoorDirection.W: //←
-                rect = new Rect2(
+                rect = new Rect2I(
                     Cross.X + GameConfig.CorridorWidth,
                     Cross.Y,
                     OriginPosition.X - (Cross.X + GameConfig.CorridorWidth),
@@ -133,7 +140,7 @@ public class RoomDoorInfo
                 );
                 break;
             case DoorDirection.S: //↓
-                rect = new Rect2(
+                rect = new Rect2I(
                     OriginPosition.X,
                     OriginPosition.Y,
                     GameConfig.CorridorWidth,
@@ -141,7 +148,7 @@ public class RoomDoorInfo
                 );
                 break;
             case DoorDirection.N: //↑
-                rect = new Rect2(
+                rect = new Rect2I(
                     Cross.X,
                     Cross.Y + GameConfig.CorridorWidth,
                     GameConfig.CorridorWidth,
@@ -149,14 +156,14 @@ public class RoomDoorInfo
                 );
                 break;
             default:
-                rect = new Rect2();
+                rect = new Rect2I();
                 break;
         }
 
         switch (ConnectDoor.Direction)
         {
             case DoorDirection.E: //→
-                rect2 = new Rect2(
+                rect2 = new Rect2I(
                     ConnectDoor.OriginPosition.X,
                     ConnectDoor.OriginPosition.Y,
                     Cross.X - ConnectDoor.OriginPosition.X,
@@ -164,7 +171,7 @@ public class RoomDoorInfo
                 );
                 break;
             case DoorDirection.W: //←
-                rect2 = new Rect2(
+                rect2 = new Rect2I(
                     Cross.X + GameConfig.CorridorWidth,
                     Cross.Y,
                     ConnectDoor.OriginPosition.X -
@@ -173,7 +180,7 @@ public class RoomDoorInfo
                 );
                 break;
             case DoorDirection.S: //↓
-                rect2 = new Rect2(
+                rect2 = new Rect2I(
                     ConnectDoor.OriginPosition.X,
                     ConnectDoor.OriginPosition.Y,
                     GameConfig.CorridorWidth,
@@ -181,7 +188,7 @@ public class RoomDoorInfo
                 );
                 break;
             case DoorDirection.N: //↑
-                rect2 = new Rect2(
+                rect2 = new Rect2I(
                     Cross.X,
                     Cross.Y + GameConfig.CorridorWidth,
                     GameConfig.CorridorWidth,
@@ -190,7 +197,7 @@ public class RoomDoorInfo
                 );
                 break;
             default:
-                rect2 = new Rect2();
+                rect2 = new Rect2I();
                 break;
         }
 
@@ -198,7 +205,21 @@ public class RoomDoorInfo
         {
             Rect1 = rect,
             Rect2 = rect2,
-            Cross = new Rect2(Cross + Vector2.One, new Vector2(GameConfig.CorridorWidth - 2, GameConfig.CorridorWidth - 2))
+            Cross = new Rect2I(Cross + Vector2I.One, new Vector2I(GameConfig.CorridorWidth - 2, GameConfig.CorridorWidth - 2))
         };
+    }
+    
+    public void Destroy()
+    {
+        if (IsDestroyed)
+        {
+            return;
+        }
+
+        IsDestroyed = true;
+        if (FogMask != null)
+        {
+            FogMask.Destroy();
+        }
     }
 }
