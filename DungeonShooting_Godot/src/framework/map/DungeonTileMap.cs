@@ -139,72 +139,6 @@ public class DungeonTileMap
             roomInfo.RoomPreinstall = roomPreinstall;
             //执行预处理操作
             roomPreinstall.Pretreatment(random);
-
-            //初始化标记
-            //roomInfo.RoomSplit.Preinstall.
-
-            //roomInfo.RoomSplit.TileInfo.
-            // var template = ResourceManager.Load<PackedScene>(roomInfo.RoomSplit.ScenePath);
-            // var tileInstance = template.Instantiate<DungeonRoomTemplate>();
-            //
-            // //其它物体
-            // var childCount = tileInstance.GetChildCount();
-            // for (var i = 0; i < childCount; i++)
-            // {
-            //     var item = tileInstance.GetChild(i);
-            //     if (!(item is ActivityMark))
-            //     {
-            //         item.GetParent().RemoveChild(item);
-            //         item.Owner = null;
-            //         _tileRoot.AddChild(item);
-            //         if (item is Node2D node)
-            //         {
-            //             node.Position = roomInfo.GetWorldPosition() + (node.GlobalPosition - offset);
-            //         }
-            //         
-            //         i--;
-            //         childCount--;
-            //     }
-            // }
-            //
-            // //物体标记
-            // var activityMarks = tileInstance.GetMarks();
-            // foreach (var activityMark in activityMarks)
-            // {
-            //     var pos = activityMark.Position;
-            //     activityMark.GetParent().RemoveChild(activityMark);
-            //     activityMark.Owner = null;
-            //     //_tileRoot.AddChild(activityMark);
-            //     activityMark.Position = roomInfo.GetWorldPosition() + (pos - offset);
-            //     activityMark.TileRoot = _tileRoot;
-            //     //执行预处理操作
-            //     activityMark.Pretreatment(random);
-            // }
-            // roomInfo.ActivityMarks.AddRange(activityMarks);
-            //
-            // //填充tile操作
-            // for (int i = 0; i < rectSize.X; i++)
-            // {
-            //     for (int j = 0; j < rectSize.Y; j++)
-            //     {
-            //         var coords = new Vector2I((int)(rectPos.X + i), (int)(rectPos.Y + j));
-            //         var atlasCoords = tileInstance.GetCellAtlasCoords(0, coords);
-            //         if (atlasCoords.X != -1 && atlasCoords.Y != -1)
-            //         {
-            //             // 在 Godot 4.0 中使用以下这段代码区分层级, 会导致游戏关闭时有概率报错卡死, 目前尚不清楚原因
-            //             //获取自定义层级
-            //             // var customData = tileInstance.GetCellSourceId(0, coords).GetCustomData(CustomTileLayerName);
-            //             // var layer = customData.AsInt32();
-            //             // layer = Mathf.Clamp(layer, GameConfig.FloorMapLayer, GameConfig.TopMapLayer);
-            //
-            //             var layer = config.GetLayer(atlasCoords);
-            //             _tileRoot.SetCell(layer, new Vector2I(roomInfo.Position.X + i, roomInfo.Position.Y + j),
-            //                 0, atlasCoords);
-            //         }
-            //     }
-            // }
-            //
-            // tileInstance.CallDeferred(Node.MethodName.QueueFree);
         }
 
         var doors = roomInfo.GetForwardDoors();
@@ -216,36 +150,26 @@ public class DungeonTileMap
             var doorDir2 = doorInfo.ConnectDoor.Direction;
             if (!doorInfo.HasCross)
             {
-                var rect = Utils.CalcRect(
-                    doorInfo.OriginPosition.X,
-                    doorInfo.OriginPosition.Y,
-                    doorInfo.ConnectDoor.OriginPosition.X,
-                    doorInfo.ConnectDoor.OriginPosition.Y
-                );
-    
+                var rect = doorInfo.GetAisleRect();
                 switch (doorDir1)
                 {
                     case DoorDirection.E:
-                        rect.Size = new Vector2(rect.Size.X, GameConfig.CorridorWidth);
                         FullHorizontalAisle(config, rect);
                         FullHorizontalAisleLeft(config, rect, doorInfo);
                         FullHorizontalAisleRight(config, rect, doorInfo.ConnectDoor);
                         break;
                     case DoorDirection.W:
-                        rect.Size = new Vector2(rect.Size.X, GameConfig.CorridorWidth);
                         FullHorizontalAisle(config, rect);
                         FullHorizontalAisleLeft(config, rect, doorInfo.ConnectDoor);
                         FullHorizontalAisleRight(config, rect, doorInfo);
                         break;
                     
                     case DoorDirection.S:
-                        rect.Size = new Vector2(GameConfig.CorridorWidth, rect.Size.Y);
                         FullVerticalAisle(config, rect);
                         FullVerticalAisleUp(config, rect, doorInfo);
                         FullVerticalAisleDown(config, rect, doorInfo.ConnectDoor);
                         break;
                     case DoorDirection.N:
-                        rect.Size = new Vector2(GameConfig.CorridorWidth, rect.Size.Y);
                         FullVerticalAisle(config, rect);
                         FullVerticalAisleUp(config, rect, doorInfo.ConnectDoor);
                         FullVerticalAisleDown(config, rect, doorInfo);
@@ -257,98 +181,43 @@ public class DungeonTileMap
                 //方向, 0横向, 1纵向
                 var dir1 = 0;
                 var dir2 = 0;
-    
-                Rect2 rect;
-                Rect2 rect2;
+
+                var aisleRect = doorInfo.GetCrossAisleRect();
+                var rect = aisleRect.Rect1;
+                var rect2 = aisleRect.Rect2;
     
                 //计算范围
                 switch (doorDir1)
                 {
                     case DoorDirection.E: //→
-                        rect = new Rect2(
-                            doorInfo.OriginPosition.X,
-                            doorInfo.OriginPosition.Y,
-                            doorInfo.Cross.X - doorInfo.OriginPosition.X,
-                            GameConfig.CorridorWidth
-                        );
                         break;
                     case DoorDirection.W: //←
-                        rect = new Rect2(
-                            doorInfo.Cross.X + GameConfig.CorridorWidth,
-                            doorInfo.Cross.Y,
-                            doorInfo.OriginPosition.X - (doorInfo.Cross.X + GameConfig.CorridorWidth),
-                            GameConfig.CorridorWidth
-                        );
                         break;
                     case DoorDirection.S: //↓
                         dir1 = 1;
-                        rect = new Rect2(
-                            doorInfo.OriginPosition.X,
-                            doorInfo.OriginPosition.Y,
-                            GameConfig.CorridorWidth,
-                            doorInfo.Cross.Y - doorInfo.OriginPosition.Y
-                        );
                         break;
                     case DoorDirection.N: //↑
                         dir1 = 1;
-                        rect = new Rect2(
-                            doorInfo.Cross.X,
-                            doorInfo.Cross.Y + GameConfig.CorridorWidth,
-                            GameConfig.CorridorWidth,
-                            doorInfo.OriginPosition.Y - (doorInfo.Cross.Y + GameConfig.CorridorWidth)
-                        );
-                        break;
-                    default:
-                        rect = new Rect2();
                         break;
                 }
     
                 switch (doorDir2)
                 {
                     case DoorDirection.E: //→
-                        rect2 = new Rect2(
-                            doorInfo.ConnectDoor.OriginPosition.X,
-                            doorInfo.ConnectDoor.OriginPosition.Y,
-                            doorInfo.Cross.X - doorInfo.ConnectDoor.OriginPosition.X,
-                            GameConfig.CorridorWidth
-                        );
                         break;
                     case DoorDirection.W: //←
-                        rect2 = new Rect2(
-                            doorInfo.Cross.X + GameConfig.CorridorWidth,
-                            doorInfo.Cross.Y,
-                            doorInfo.ConnectDoor.OriginPosition.X -
-                            (doorInfo.Cross.X + GameConfig.CorridorWidth),
-                            GameConfig.CorridorWidth
-                        );
                         break;
                     case DoorDirection.S: //↓
                         dir2 = 1;
-                        rect2 = new Rect2(
-                            doorInfo.ConnectDoor.OriginPosition.X,
-                            doorInfo.ConnectDoor.OriginPosition.Y,
-                            GameConfig.CorridorWidth,
-                            doorInfo.Cross.Y - doorInfo.ConnectDoor.OriginPosition.Y
-                        );
                         break;
                     case DoorDirection.N: //↑
                         dir2 = 1;
-                        rect2 = new Rect2(
-                            doorInfo.Cross.X,
-                            doorInfo.Cross.Y + GameConfig.CorridorWidth,
-                            GameConfig.CorridorWidth,
-                            doorInfo.ConnectDoor.OriginPosition.Y -
-                            (doorInfo.Cross.Y + GameConfig.CorridorWidth)
-                        );
-                        break;
-                    default:
-                        rect2 = new Rect2();
                         break;
                 }
     
-                FillRect(GameConfig.AisleFloorMapLayer, config.Floor, doorInfo.Cross + Vector2.One,
-                    new Vector2(GameConfig.CorridorWidth - 2, GameConfig.CorridorWidth - 2));
-    
+                //填充交叉点
+                FillRect(GameConfig.AisleFloorMapLayer, config.Floor, aisleRect.Cross.Position, aisleRect.Cross.Size);
+
                 //墙壁, 0横向, 1纵向
                 if (dir1 == 0)
                 {

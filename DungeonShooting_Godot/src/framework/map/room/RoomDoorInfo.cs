@@ -1,4 +1,5 @@
 
+using System;
 using Godot;
 
 /// <summary>
@@ -60,5 +61,144 @@ public class RoomDoorInfo
             OriginPosition.X * GameConfig.TileCellSize,
             OriginPosition.Y * GameConfig.TileCellSize
         );
+    }
+
+    /// <summary>
+    /// 获取直连门过道区域数据, 单位: 格, 如果当前门连接区域带交叉点, 则报错
+    /// </summary>
+    public Rect2I GetAisleRect()
+    {
+        if (HasCross)
+        {
+            throw new Exception("当前门连接的过道包含交叉点, 请改用 GetCrossAisleRect() 函数!");
+        }
+        
+        var rect = Utils.CalcRect(
+            OriginPosition.X,
+            OriginPosition.Y,
+            ConnectDoor.OriginPosition.X,
+            ConnectDoor.OriginPosition.Y
+        );
+    
+        switch (Direction)
+        {
+            case DoorDirection.E:
+                rect.Size = new Vector2I(rect.Size.X, GameConfig.CorridorWidth);
+                break;
+            case DoorDirection.W:
+                rect.Size = new Vector2I(rect.Size.X, GameConfig.CorridorWidth);
+                break;
+                    
+            case DoorDirection.S:
+                rect.Size = new Vector2I(GameConfig.CorridorWidth, rect.Size.Y);
+                break;
+            case DoorDirection.N:
+                rect.Size = new Vector2I(GameConfig.CorridorWidth, rect.Size.Y);
+                break;
+        }
+
+        return rect;
+    }
+
+    /// <summary>
+    /// 获取交叉门过道区域数据, 单位: 格, 如果当前门连接区域不带交叉点, 则报错
+    /// </summary>
+    public CrossAisleRectData GetCrossAisleRect()
+    {
+        if (!HasCross)
+        {
+            throw new Exception("当前门连接的过道不包含交叉点, 请改用 GetAisleRect() 函数!");
+        }
+
+        Rect2 rect;
+        Rect2 rect2;
+
+        //计算范围
+        switch (Direction)
+        {
+            case DoorDirection.E: //→
+                rect = new Rect2(
+                    OriginPosition.X,
+                    OriginPosition.Y,
+                    Cross.X - OriginPosition.X,
+                    GameConfig.CorridorWidth
+                );
+                break;
+            case DoorDirection.W: //←
+                rect = new Rect2(
+                    Cross.X + GameConfig.CorridorWidth,
+                    Cross.Y,
+                    OriginPosition.X - (Cross.X + GameConfig.CorridorWidth),
+                    GameConfig.CorridorWidth
+                );
+                break;
+            case DoorDirection.S: //↓
+                rect = new Rect2(
+                    OriginPosition.X,
+                    OriginPosition.Y,
+                    GameConfig.CorridorWidth,
+                    Cross.Y - OriginPosition.Y
+                );
+                break;
+            case DoorDirection.N: //↑
+                rect = new Rect2(
+                    Cross.X,
+                    Cross.Y + GameConfig.CorridorWidth,
+                    GameConfig.CorridorWidth,
+                    OriginPosition.Y - (Cross.Y + GameConfig.CorridorWidth)
+                );
+                break;
+            default:
+                rect = new Rect2();
+                break;
+        }
+
+        switch (ConnectDoor.Direction)
+        {
+            case DoorDirection.E: //→
+                rect2 = new Rect2(
+                    ConnectDoor.OriginPosition.X,
+                    ConnectDoor.OriginPosition.Y,
+                    Cross.X - ConnectDoor.OriginPosition.X,
+                    GameConfig.CorridorWidth
+                );
+                break;
+            case DoorDirection.W: //←
+                rect2 = new Rect2(
+                    Cross.X + GameConfig.CorridorWidth,
+                    Cross.Y,
+                    ConnectDoor.OriginPosition.X -
+                    (Cross.X + GameConfig.CorridorWidth),
+                    GameConfig.CorridorWidth
+                );
+                break;
+            case DoorDirection.S: //↓
+                rect2 = new Rect2(
+                    ConnectDoor.OriginPosition.X,
+                    ConnectDoor.OriginPosition.Y,
+                    GameConfig.CorridorWidth,
+                    Cross.Y - ConnectDoor.OriginPosition.Y
+                );
+                break;
+            case DoorDirection.N: //↑
+                rect2 = new Rect2(
+                    Cross.X,
+                    Cross.Y + GameConfig.CorridorWidth,
+                    GameConfig.CorridorWidth,
+                    ConnectDoor.OriginPosition.Y -
+                    (Cross.Y + GameConfig.CorridorWidth)
+                );
+                break;
+            default:
+                rect2 = new Rect2();
+                break;
+        }
+
+        return new CrossAisleRectData()
+        {
+            Rect1 = rect,
+            Rect2 = rect2,
+            Cross = new Rect2(Cross + Vector2.One, new Vector2(GameConfig.CorridorWidth - 2, GameConfig.CorridorWidth - 2))
+        };
     }
 }

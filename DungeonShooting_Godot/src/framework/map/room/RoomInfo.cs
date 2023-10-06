@@ -82,7 +82,7 @@ public class RoomInfo : IDestroy
     /// <summary>
     /// 房间迷雾
     /// </summary>
-    public RoomFogMask RoomFogMask;
+    public FogMask FogMask;
     
     /// <summary>
     /// 房间算上连接通道所占用的区域
@@ -286,9 +286,9 @@ public class RoomInfo : IDestroy
             StaticImageCanvas.Destroy();
         }
 
-        if (RoomFogMask != null)
+        if (FogMask != null)
         {
-            RoomFogMask.Destroy();
+            FogMask.Destroy();
         }
 
         if (AffiliationArea != null)

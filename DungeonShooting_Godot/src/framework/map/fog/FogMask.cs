@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 迷雾遮罩
 /// </summary>
-public partial class RoomFogMask : PointLight2D, IDestroy
+public partial class FogMask : PointLight2D, IDestroy
 {
     public int Width { get; private set; }
     public int Height { get; private set; }
@@ -66,11 +66,11 @@ public partial class RoomFogMask : PointLight2D, IDestroy
     }
     
     /// <summary>
-    /// 初始化贩房间迷雾遮罩
+    /// 初始化房间迷雾遮罩
     /// </summary>
     /// <param name="roomInfo">房间对象</param>
     /// <param name="rect2">迷雾所占区域</param>
-    public void Init(RoomInfo roomInfo, Rect2I rect2)
+    public void InitRoomFog(RoomInfo roomInfo, Rect2I rect2)
     {
         if (_init)
         {
@@ -88,6 +88,11 @@ public partial class RoomFogMask : PointLight2D, IDestroy
         //处理边缘过渡
         HandlerTransition(roomInfo, img);
         Texture = ImageTexture.CreateFromImage(img);
+    }
+
+    public void InitAisleFog()
+    {
+        
     }
     
     public void Destroy()

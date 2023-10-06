@@ -28,6 +28,17 @@ public static class Utils
     }
     
     /// <summary>
+    /// 根据两个点计算出矩形
+    /// </summary>
+    public static Rect2I CalcRect(int start1, int end1, int start2, int end2)
+    {
+        return new Rect2I(
+            Mathf.Min(start1, start2), Mathf.Min(end1, end2),
+            Mathf.Abs(start1 - start2), Mathf.Abs(end1 - end2)
+        );
+    }
+    
+    /// <summary>
     /// 返回碰撞层 mask 是否会检测 layer 
     /// </summary>
     public static bool CollisionMaskWithLayer(uint mask, uint layer)

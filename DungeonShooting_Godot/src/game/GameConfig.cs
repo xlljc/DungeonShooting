@@ -22,7 +22,7 @@ public static class GameConfig
     /// </summary>
     public const int CorridorWidth = 4;
     /// <summary>
-    /// 游戏地图网格大小
+    /// 游戏地图网格大小, 值为 16
     /// </summary>
     public const int TileCellSize = 16;
     /// <summary>
