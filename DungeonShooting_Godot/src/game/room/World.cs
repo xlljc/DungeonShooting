@@ -8,6 +8,11 @@ using Godot;
 public partial class World : CanvasModulate, ICoroutine
 {
     /// <summary>
+    /// 当前的游戏世界对象
+    /// </summary>
+    public static World Current => GameApplication.Instance.World;
+    
+    /// <summary>
     /// //对象根节点
     /// </summary>
     [Export] public Node2D NormalLayer;

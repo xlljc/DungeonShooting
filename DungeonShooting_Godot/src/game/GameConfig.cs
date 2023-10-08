@@ -77,4 +77,9 @@ public static class GameConfig
     /// 预览图大小
     /// </summary>
     public const int PreviewImageSize = 196;
+
+    /// <summary>
+    /// 变暗迷雾的透明度值
+    /// </summary>
+    public const float DarkFogAlpha = 0.2f;
 }

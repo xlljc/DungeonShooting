@@ -1,4 +1,6 @@
 ﻿
+using System;
+using System.Collections;
 using Godot;
 
 /// <summary>
@@ -29,6 +31,7 @@ public partial class FogMask : PointLight2D, IDestroy
     
     private static bool _initSprite = false;
 
+    private long _cid = -1;
     private static void InitSprite()
     {
         if (_initSprite)
@@ -105,9 +108,26 @@ public partial class FogMask : PointLight2D, IDestroy
     /// <param name="time">过渡时间</param>
     public void TransitionAlpha(float targetAlpha, float time)
     {
-        var tween = CreateTween();
-        tween.TweenProperty(this, "color", new Color(1, 1, 1, targetAlpha), time);
-        tween.Play();
+        if (_cid >= 0)
+        {
+            World.Current.StopCoroutine(_cid);
+        }
+        
+        _cid = World.Current.StartCoroutine(RunTransitionAlpha(targetAlpha, time));
+    }
+
+    private IEnumerator RunTransitionAlpha(float targetAlpha, float time)
+    {
+        var originColor = Color;
+        var a = originColor.A;
+        var delta = Mathf.Abs(a - targetAlpha) / time;
+        while (Math.Abs(a - targetAlpha) > 0.001f)
+        {
+            a = Mathf.MoveToward(a, targetAlpha, delta * (float)World.Current.GetProcessDeltaTime());
+            Color = new Color(1, 1, 1, a);
+            yield return null;
+        }
+        _cid = -1;
     }
     
     public void Destroy()

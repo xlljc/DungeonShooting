@@ -560,6 +560,7 @@ public class DungeonGenerator
         var roomDoor = new RoomDoorInfo();
         var nextRoomDoor = new RoomDoorInfo();
         roomDoor.RoomInfo = roomInfo;
+        roomDoor.IsForward = true;
         nextRoomDoor.RoomInfo = nextRoomInfo;
         roomDoor.ConnectRoom = nextRoomInfo;
         roomDoor.ConnectDoor = nextRoomDoor;

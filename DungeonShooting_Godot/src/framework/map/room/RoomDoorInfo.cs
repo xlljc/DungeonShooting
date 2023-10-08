@@ -8,11 +8,16 @@ using Godot;
 public class RoomDoorInfo : IDestroy
 {
     public bool IsDestroyed { get; private set; }
-    
+
     /// <summary>
     /// 所在墙面方向
     /// </summary>
     public DoorDirection Direction;
+
+    /// <summary>
+    /// 是否是正向的门
+    /// </summary>
+    public bool IsForward;
 
     /// <summary>
     /// 所在的房间
@@ -58,6 +63,16 @@ public class RoomDoorInfo : IDestroy
     /// 过道的迷雾
     /// </summary>
     public FogMask FogMask;
+
+    /// <summary>
+    /// 过道迷雾区域
+    /// </summary>
+    public AisleFogArea AisleFogArea;
+
+    /// <summary>
+    /// 当前门连接的过道是否探索过
+    /// </summary>
+    public bool IsExplored { get; private set; } = false;
 
     /// <summary>
     /// 世界坐标下的原点坐标, 单位: 像素
@@ -220,6 +235,37 @@ public class RoomDoorInfo : IDestroy
         if (FogMask != null)
         {
             FogMask.Destroy();
+        }
+
+        if (AisleFogArea != null)
+        {
+            AisleFogArea.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 清除过道迷雾
+    /// </summary>
+    public void ClearFog()
+    {
+        IsExplored = true;
+        ConnectDoor.IsExplored = true;
+        if (FogMask != null && Math.Abs(FogMask.Color.A - 1f) > 0.001f)
+        {
+            FogMask.TransitionAlpha(1, 0.3f);
+        }
+    }
+
+    /// <summary>
+    /// 将过道迷雾变暗
+    /// </summary>
+    public void DarkFog()
+    {
+        IsExplored = true;
+        ConnectDoor.IsExplored = true;
+        if (FogMask != null && Math.Abs(FogMask.Color.A - GameConfig.DarkFogAlpha) > 0.001f)
+        {
+            FogMask.TransitionAlpha(GameConfig.DarkFogAlpha, 0.3f);
         }
     }
 }

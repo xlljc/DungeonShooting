@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -329,12 +330,6 @@ public class RoomInfo : IDestroy
             return;
         }
         
-        //清除迷雾
-        if (FogMask != null && FogMask.Color.A < 1)
-        {
-            FogMask.TransitionAlpha(1, 0.3f);
-        }
-        
         //房间内有敌人, 或者会刷新敌人才会关门
         var hasEnemy = false;
         if (AffiliationArea.ExistEnterItem(activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy))) //先判断房间里面是否有敌人
@@ -398,17 +393,14 @@ public class RoomInfo : IDestroy
         foreach (var doorInfo in Doors)
         {
             doorInfo.Door.OpenDoor();
-        }
-        
-        //清除过道的迷雾
-        foreach (var roomDoorInfo in GetForwardDoors())
-        {
-            if (roomDoorInfo.FogMask != null && roomDoorInfo.FogMask.Color.A < 1)
+            
+            //过道迷雾
+            doorInfo.AisleFogArea.Monitoring = true;
+            if (doorInfo.IsExplored)
             {
-                roomDoorInfo.FogMask.TransitionAlpha(1, 0.3f);
+                doorInfo.ClearFog();
             }
         }
-
     }
 
     /// <summary>
@@ -425,23 +417,53 @@ public class RoomInfo : IDestroy
         foreach (var doorInfo in Doors)
         {
             doorInfo.Door.CloseDoor();
+            
+            //过道迷雾
+            doorInfo.AisleFogArea.Monitoring = false;
+            if (doorInfo.IsExplored)
+            {
+                doorInfo.DarkFog();
+            }
         }
     }
 
     /// <summary>
-    /// 获取该房间所有正向的门，nextRoom.id > this.id
+    /// 获取该房间所有正向的门
     /// </summary>
     public RoomDoorInfo[] GetForwardDoors()
     {
         var temp = new List<RoomDoorInfo>();
         foreach (var doorInfo in Doors)
         {
-            if (doorInfo.ConnectRoom.Id > Id)
+            if (doorInfo.IsForward)
+            //if (doorInfo.ConnectRoom.Id > Id)
             {
                 temp.Add(doorInfo);
             }
         }
 
         return temp.ToArray();
+    }
+
+    /// <summary>
+    /// 清除迷雾
+    /// </summary>
+    public void ClearFog()
+    {
+        if (FogMask != null && Math.Abs(FogMask.Color.A - 1) > 0.001f)
+        {
+            FogMask.TransitionAlpha(1, 0.3f);
+        }
+    }
+    
+    /// <summary>
+    /// 将迷雾变暗
+    /// </summary>
+    public void DarkFog()
+    {
+        if (FogMask != null && Math.Abs(FogMask.Color.A - GameConfig.DarkFogAlpha) > 0.001f)
+        {
+            FogMask.TransitionAlpha(GameConfig.DarkFogAlpha, 0.3f);
+        }
     }
 }

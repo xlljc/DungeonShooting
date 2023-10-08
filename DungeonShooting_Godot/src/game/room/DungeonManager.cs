@@ -57,6 +57,8 @@ public partial class DungeonManager : Node2D
     
     //用于检查房间敌人的计时器
     private float _checkEnemyTimer = 0;
+    //用于记录玩家上一个所在区域
+    private AffiliationArea _affiliationAreaFlag;
 
 
     public DungeonManager()
@@ -450,9 +452,12 @@ public partial class DungeonManager : Node2D
         //生成通道迷雾
         foreach (var roomDoorInfo in roomDoorInfos)
         {
+            Rect2I calcRect;
+            Rect2I fogAreaRect;
             if (!roomDoorInfo.HasCross)
             {
-                var calcRect = roomDoorInfo.GetAisleRect();
+                calcRect = roomDoorInfo.GetAisleRect();
+                fogAreaRect = calcRect;
                 if (roomDoorInfo.Direction == DoorDirection.E || roomDoorInfo.Direction == DoorDirection.W)
                 {
                     calcRect.Position += new Vector2I(2, 0);
@@ -463,61 +468,64 @@ public partial class DungeonManager : Node2D
                     calcRect.Position += new Vector2I(0, 2);
                     calcRect.Size -= new Vector2I(0, 4);
                 }
-                var aisleFog = new FogMask();
-                aisleFog.BlendMode = Light2D.BlendModeEnum.Mix;
-                aisleFog.InitFog(calcRect.Position, calcRect.Size, alpha);
-                World.FogMaskRoot.AddChild(aisleFog);
-                roomDoorInfo.FogMask = aisleFog;
-                roomDoorInfo.ConnectDoor.FogMask = aisleFog;
             }
             else
             {
                 var aisleRect = roomDoorInfo.GetCrossAisleRect();
-                var calcAisleRect = aisleRect.CalcAisleRect();
+                calcRect = aisleRect.CalcAisleRect();
+                fogAreaRect = calcRect;
 
                 switch (roomDoorInfo.Direction)
                 {
                     case DoorDirection.E:
-                        calcAisleRect.Position += new Vector2I(2, 0);
-                        calcAisleRect.Size -= new Vector2I(2, 0);
+                        calcRect.Position += new Vector2I(2, 0);
+                        calcRect.Size -= new Vector2I(2, 0);
                         break;
                     case DoorDirection.W:
-                        calcAisleRect.Size -= new Vector2I(2, 0);
+                        calcRect.Size -= new Vector2I(2, 0);
                         break;
                     case DoorDirection.S:
-                        calcAisleRect.Position += new Vector2I(0, 2);
-                        calcAisleRect.Size -= new Vector2I(0, 2);
+                        calcRect.Position += new Vector2I(0, 2);
+                        calcRect.Size -= new Vector2I(0, 2);
                         break;
                     case DoorDirection.N:
-                        calcAisleRect.Size -= new Vector2I(0, 2);
+                        calcRect.Size -= new Vector2I(0, 2);
                         break;
                 }
                 
                 switch (roomDoorInfo.ConnectDoor.Direction)
                 {
                     case DoorDirection.E:
-                        calcAisleRect.Position += new Vector2I(2, 0);
-                        calcAisleRect.Size -= new Vector2I(2, 0);
+                        calcRect.Position += new Vector2I(2, 0);
+                        calcRect.Size -= new Vector2I(2, 0);
                         break;
                     case DoorDirection.W:
-                        calcAisleRect.Size -= new Vector2I(2, 0);
+                        calcRect.Size -= new Vector2I(2, 0);
                         break;
                     case DoorDirection.S:
-                        calcAisleRect.Position += new Vector2I(0, 2);
-                        calcAisleRect.Size -= new Vector2I(0, 2);
+                        calcRect.Position += new Vector2I(0, 2);
+                        calcRect.Size -= new Vector2I(0, 2);
                         break;
                     case DoorDirection.N:
-                        calcAisleRect.Size -= new Vector2I(0, 2);
+                        calcRect.Size -= new Vector2I(0, 2);
                         break;
                 }
-                
-                var aisleFog = new FogMask();
-                aisleFog.BlendMode = Light2D.BlendModeEnum.Mix;
-                aisleFog.InitFog(calcAisleRect.Position, calcAisleRect.Size, alpha);
-                World.FogMaskRoot.AddChild(aisleFog);
-                roomDoorInfo.FogMask = aisleFog;
-                roomDoorInfo.ConnectDoor.FogMask = aisleFog;
             }
+            
+            //过道迷雾遮罩
+            var aisleFog = new FogMask();
+            aisleFog.BlendMode = Light2D.BlendModeEnum.Mix;
+            aisleFog.InitFog(calcRect.Position, calcRect.Size);
+            World.FogMaskRoot.AddChild(aisleFog);
+            roomDoorInfo.FogMask = aisleFog;
+            roomDoorInfo.ConnectDoor.FogMask = aisleFog;
+            
+            //过道迷雾区域
+            var fogArea = new AisleFogArea();
+            fogArea.Init(roomDoorInfo, new Rect2I(fogAreaRect.Position * GameConfig.TileCellSize, fogAreaRect.Size * GameConfig.TileCellSize));
+            roomDoorInfo.AisleFogArea = fogArea;
+            roomDoorInfo.ConnectDoor.AisleFogArea = fogArea;
+            World.AffiliationAreaRoot.AddChild(fogArea);
         }
     }
 
@@ -551,6 +559,26 @@ public partial class DungeonManager : Node2D
     /// </summary>
     private void OnPlayerEnterRoom(object o)
     {
+        var roomInfo = (RoomInfo)o;
+        if (_affiliationAreaFlag != roomInfo.AffiliationArea)
+        {
+            if (_affiliationAreaFlag != null)
+            {
+                if (!_affiliationAreaFlag.IsDestroyed)
+                {
+                    //上一个房间变暗
+                    _affiliationAreaFlag.RoomInfo.DarkFog();
+                }
+            }
+            
+            if (!roomInfo.AffiliationArea.IsDestroyed)
+            {
+                //当前房间变亮
+                roomInfo.ClearFog();
+            }
+
+            _affiliationAreaFlag = roomInfo.AffiliationArea;
+        }
     }
     
     /// <summary>
