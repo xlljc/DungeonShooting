@@ -428,24 +428,6 @@ public class RoomInfo : IDestroy
     }
 
     /// <summary>
-    /// 获取该房间所有正向的门
-    /// </summary>
-    public RoomDoorInfo[] GetForwardDoors()
-    {
-        var temp = new List<RoomDoorInfo>();
-        foreach (var doorInfo in Doors)
-        {
-            if (doorInfo.IsForward)
-            //if (doorInfo.ConnectRoom.Id > Id)
-            {
-                temp.Add(doorInfo);
-            }
-        }
-
-        return temp.ToArray();
-    }
-
-    /// <summary>
     /// 清除迷雾
     /// </summary>
     public void ClearFog()

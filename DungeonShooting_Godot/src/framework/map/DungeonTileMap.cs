@@ -141,10 +141,14 @@ public class DungeonTileMap
             roomPreinstall.Pretreatment(random);
         }
 
-        var doors = roomInfo.GetForwardDoors();
         //铺过道
-        foreach (var doorInfo in doors)
+        foreach (var doorInfo in roomInfo.Doors)
         {
+            //必须是正向门
+            if (!doorInfo.IsForward)
+            {
+                continue;
+            }
             //普通的直线连接
             var doorDir1 = doorInfo.Direction;
             var doorDir2 = doorInfo.ConnectDoor.Direction;
