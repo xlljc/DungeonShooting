@@ -109,6 +109,7 @@ public partial class FogMask : PointLight2D, IDestroy
         var c = Color;
         c.A = alpha;
         Color = c;
+        TargetAlpha = alpha;
     }
 
     /// <summary>

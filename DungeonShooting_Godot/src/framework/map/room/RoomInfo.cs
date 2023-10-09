@@ -434,8 +434,8 @@ public class RoomInfo : IDestroy
     {
         if (FogMask != null && Math.Abs(FogMask.Color.A - 1) > 0.001f)
         {
+            FogMask.TransitionAlpha(1, GameConfig.FogTransitionTime);
             RefreshPreviewFog(1);
-            FogMask.TransitionAlpha(1, 0.3f);
         }
     }
     
@@ -446,8 +446,8 @@ public class RoomInfo : IDestroy
     {
         if (FogMask != null && Math.Abs(FogMask.Color.A - GameConfig.DarkFogAlpha) > 0.001f)
         {
+            FogMask.TransitionAlpha(GameConfig.DarkFogAlpha, GameConfig.FogTransitionTime);
             RefreshPreviewFog(GameConfig.DarkFogAlpha);
-            FogMask.TransitionAlpha(GameConfig.DarkFogAlpha, 0.3f);
         }
     }
 
@@ -461,19 +461,30 @@ public class RoomInfo : IDestroy
         foreach (var roomDoorInfo in Doors)
         {
             var aisleAlpha = roomDoorInfo.FogMask.TargetAlpha;
-            if (roomFogAlpha < 1 && aisleAlpha < 1) //隐藏预览
+            if ((roomFogAlpha < 1 && aisleAlpha < 1) || Math.Abs(roomFogAlpha - aisleAlpha) < 0.001f) //隐藏预览
             {
-                roomDoorInfo.PreviewFogMask.SetActive(false);
+                roomDoorInfo.PreviewFogMask.TransitionToHide(GameConfig.FogTransitionTime);
             }
             else if (aisleAlpha >= 1) //预览房间
             {
                 roomDoorInfo.PreviewFogMask.SetActive(true);
                 roomDoorInfo.PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Room);
+
+                //播放过渡动画
+                var targetAlpha = 1 - roomFogAlpha;
+                roomDoorInfo.PreviewFogMask.Color = new Color(1, 1, 1, 0);
+                roomDoorInfo.PreviewFogMask.TransitionAlpha(targetAlpha, GameConfig.FogTransitionTime);
             }
             else if (roomFogAlpha >= 1) //预览过道
             {
                 roomDoorInfo.PreviewFogMask.SetActive(true);
                 roomDoorInfo.PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Aisle);
+
+                //播放过渡动画
+                var targetAlpha = 1 - aisleAlpha;
+                //GD.Print("targetAlpha: " + targetAlpha);
+                roomDoorInfo.PreviewFogMask.Color = new Color(1, 1, 1, 0.2f);
+                roomDoorInfo.PreviewFogMask.TransitionAlpha(targetAlpha, GameConfig.FogTransitionTime);
             }
         }
     }

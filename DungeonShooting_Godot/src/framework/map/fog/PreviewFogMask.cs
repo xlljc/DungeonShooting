@@ -1,4 +1,6 @@
 ﻿
+using System;
+using System.Collections;
 using Godot;
 
 /// <summary>
@@ -28,10 +30,16 @@ public partial class PreviewFogMask : PointLight2D, IDestroy
     /// </summary>
     public PreviewFogType FogType { get; private set; }
 
+    /// <summary>
+    /// 迷雾透明度值, 这个值在调用 TransitionAlpha() 时改变, 用于透明度判断
+    /// </summary>
+    public float TargetAlpha { get; private set; }
+    
     private float _previewAisleAngle;
     private float _previewRoomAngle;
     private Vector2 _previewAislePosition;
     private Vector2 _previewRoomPosition;
+    private long _cid;
     
     private static void InitTexture()
     {
@@ -55,16 +63,83 @@ public partial class PreviewFogMask : PointLight2D, IDestroy
         DoorInfo = doorInfo;
         if (doorInfo.Direction == DoorDirection.E)
         {
-            _previewAislePosition = doorInfo.Door.GlobalPosition + new Vector2(16, 0);
+            _previewAislePosition = doorInfo.Door.GlobalPosition + new Vector2(GameConfig.TileCellSize, 0);
             _previewAisleAngle = 90;
+            
+            _previewRoomPosition = doorInfo.Door.GlobalPosition + new Vector2(-GameConfig.TileCellSize, 0);
+            _previewRoomAngle = 270;
         }
         else if (doorInfo.Direction == DoorDirection.W)
         {
-            _previewRoomPosition = doorInfo.Door.GlobalPosition + new Vector2(16, 0);
+            _previewAislePosition = doorInfo.Door.GlobalPosition + new Vector2(-GameConfig.TileCellSize, 0);
+            _previewAisleAngle = 270;
+            
+            _previewRoomPosition = doorInfo.Door.GlobalPosition + new Vector2(GameConfig.TileCellSize, 0);
             _previewRoomAngle = 90;
+        }
+        else if (doorInfo.Direction == DoorDirection.N)
+        {
+            _previewAislePosition = doorInfo.Door.GlobalPosition + new Vector2(0, -GameConfig.TileCellSize);
+            _previewAisleAngle = 0;
+            
+            _previewRoomPosition = doorInfo.Door.GlobalPosition + new Vector2(0, GameConfig.TileCellSize);
+            _previewRoomAngle = 180;
+        }
+        else if (doorInfo.Direction == DoorDirection.S)
+        {
+            _previewAislePosition = doorInfo.Door.GlobalPosition;
+            _previewAisleAngle = 180;
+            
+            _previewRoomPosition = doorInfo.Door.GlobalPosition + new Vector2(0, -GameConfig.TileCellSize * 2);
+            _previewRoomAngle = 0;
         }
 
         RefreshPreviewFogType(PreviewFogType.Aisle);
+    }
+    
+    /// <summary>
+    /// 使颜色的 alpha 通道过渡到指定的值
+    /// </summary>
+    /// <param name="targetAlpha">透明度值</param>
+    /// <param name="time">过渡时间</param>
+    public void TransitionAlpha(float targetAlpha, float time)
+    {
+        TargetAlpha = targetAlpha;
+        if (_cid >= 0)
+        {
+            World.Current.StopCoroutine(_cid);
+        }
+        
+        _cid = World.Current.StartCoroutine(RunTransitionAlpha(targetAlpha, time, false));
+    }
+
+    public void TransitionToHide(float time)
+    {
+        TargetAlpha = 0;
+        if (_cid >= 0)
+        {
+            World.Current.StopCoroutine(_cid);
+        }
+        
+        _cid = World.Current.StartCoroutine(RunTransitionAlpha(TargetAlpha, time, true));
+    }
+
+    private IEnumerator RunTransitionAlpha(float targetAlpha, float time, bool hide)
+    {
+        var originColor = Color;
+        var a = originColor.A;
+        var delta = Mathf.Abs(a - targetAlpha) / time;
+        while (Math.Abs(a - targetAlpha) > 0.001f)
+        {
+            a = Mathf.MoveToward(a, targetAlpha, delta * (float)World.Current.GetProcessDeltaTime());
+            Color = new Color(1, 1, 1, a);
+            yield return null;
+        }
+        _cid = -1;
+        if (hide)
+        {
+            this.SetActive(false);
+        }
     }
 
     /// <summary>

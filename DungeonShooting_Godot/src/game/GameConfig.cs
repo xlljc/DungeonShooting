@@ -82,4 +82,9 @@ public static class GameConfig
     /// 变暗迷雾的透明度值
     /// </summary>
     public const float DarkFogAlpha = 0.2f;
+
+    /// <summary>
+    /// 迷雾过渡时间
+    /// </summary>
+    public const float FogTransitionTime = 0.3f;
 }

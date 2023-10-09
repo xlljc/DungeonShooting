@@ -165,6 +165,14 @@ public partial class Player : Role
             Hp = 0;
             Hurt(1000, 0);
         }
+        else if (Input.IsKeyPressed(Key.O)) //测试用, 消灭房间内所有敌人
+        {
+            var enemyList = AffiliationArea.FindIncludeItems(o => o.CollisionWithMask(PhysicsLayer.Enemy));
+            foreach (var enemy in enemyList)
+            {
+                ((Enemy)enemy).Hurt(1000, 0);
+            }
+        }
     }
 
     // protected override void PhysicsProcess(float delta)
