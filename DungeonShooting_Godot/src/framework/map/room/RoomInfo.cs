@@ -340,7 +340,7 @@ public class RoomInfo : IDestroy
         {
             hasEnemy = true;
         }
-
+        
         if (!hasEnemy) //没有敌人, 不关门
         {
             IsSeclusion = false;
@@ -434,6 +434,7 @@ public class RoomInfo : IDestroy
     {
         if (FogMask != null && Math.Abs(FogMask.Color.A - 1) > 0.001f)
         {
+            RefreshPreviewFog(1);
             FogMask.TransitionAlpha(1, 0.3f);
         }
     }
@@ -445,7 +446,35 @@ public class RoomInfo : IDestroy
     {
         if (FogMask != null && Math.Abs(FogMask.Color.A - GameConfig.DarkFogAlpha) > 0.001f)
         {
+            RefreshPreviewFog(GameConfig.DarkFogAlpha);
             FogMask.TransitionAlpha(GameConfig.DarkFogAlpha, 0.3f);
+        }
+    }
+
+    /// <summary>
+    /// 刷新房间中的预览迷雾
+    /// </summary>
+    /// <param name="roomFogAlpha">当前房间的迷雾透明度</param>
+    public void RefreshPreviewFog(float roomFogAlpha)
+    {
+        //预览迷雾
+        foreach (var roomDoorInfo in Doors)
+        {
+            var aisleAlpha = roomDoorInfo.FogMask.TargetAlpha;
+            if (roomFogAlpha < 1 && aisleAlpha < 1) //隐藏预览
+            {
+                roomDoorInfo.PreviewFogMask.SetActive(false);
+            }
+            else if (aisleAlpha >= 1) //预览房间
+            {
+                roomDoorInfo.PreviewFogMask.SetActive(true);
+                roomDoorInfo.PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Room);
+            }
+            else if (roomFogAlpha >= 1) //预览过道
+            {
+                roomDoorInfo.PreviewFogMask.SetActive(true);
+                roomDoorInfo.PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Aisle);
+            }
         }
     }
 }

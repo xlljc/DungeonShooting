@@ -8,8 +8,18 @@ using Godot;
 /// </summary>
 public partial class FogMask : PointLight2D, IDestroy
 {
-    public int Width { get; private set; }
-    public int Height { get; private set; }
+    /// <summary>
+    /// 迷雾宽度
+    /// </summary>
+    public int FogWidth { get; private set; }
+    /// <summary>
+    /// 迷雾高度
+    /// </summary>
+    public int FogHeight { get; private set; }
+    /// <summary>
+    /// 迷雾透明度值, 这个值在调用 TransitionAlpha() 时改变, 用于透明度判断
+    /// </summary>
+    public float TargetAlpha { get; private set; }
     
     public bool IsDestroyed { get; private set; }
     private bool _init = false;
@@ -87,9 +97,9 @@ public partial class FogMask : PointLight2D, IDestroy
         );
         
         //创建光纹理
-        Width = (size.X + 2) * GameConfig.TileCellSize;
-        Height = (size.Y + 2) * GameConfig.TileCellSize;
-        var img = Image.Create(Width, Height, false, Image.Format.Rgba8);
+        FogWidth = (size.X + 2) * GameConfig.TileCellSize;
+        FogHeight = (size.Y + 2) * GameConfig.TileCellSize;
+        var img = Image.Create(FogWidth, FogHeight, false, Image.Format.Rgba8);
         img.Fill(Colors.White);
         
         //处理边缘过渡
@@ -108,6 +118,7 @@ public partial class FogMask : PointLight2D, IDestroy
     /// <param name="time">过渡时间</param>
     public void TransitionAlpha(float targetAlpha, float time)
     {
+        TargetAlpha = targetAlpha;
         if (_cid >= 0)
         {
             World.Current.StopCoroutine(_cid);

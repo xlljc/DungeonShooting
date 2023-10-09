@@ -73,6 +73,22 @@ public static class NodeExtend
     {
         return (control.SizeFlagsHorizontal & Control.SizeFlags.Expand) != 0;
     }
+
+    /// <summary>
+    /// 设置是否启用节点
+    /// </summary>
+    public static void SetActive(this Node node, bool value)
+    {
+        if (node is CanvasItem canvasItem)
+        {
+            canvasItem.Visible = value;
+        }
+        node.SetProcess(value);
+        node.SetPhysicsProcess(value);
+        node.SetProcessInput(value);
+        node.SetPhysicsProcessInternal(value);
+        node.SetProcessInput(value);
+    }
     
     /// <summary>
     /// 延时指定时间调用一个回调函数

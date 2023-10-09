@@ -70,6 +70,11 @@ public class RoomDoorInfo : IDestroy
     public AisleFogArea AisleFogArea;
 
     /// <summary>
+    /// 门区域预览迷雾
+    /// </summary>
+    public PreviewFogMask PreviewFogMask;
+
+    /// <summary>
     /// 当前门连接的过道是否探索过
     /// </summary>
     public bool IsExplored { get; private set; } = false;
@@ -252,6 +257,7 @@ public class RoomDoorInfo : IDestroy
         ConnectDoor.IsExplored = true;
         if (FogMask != null && Math.Abs(FogMask.Color.A - 1f) > 0.001f)
         {
+            RefreshPreviewFog(1);
             FogMask.TransitionAlpha(1, 0.3f);
         }
     }
@@ -265,7 +271,48 @@ public class RoomDoorInfo : IDestroy
         ConnectDoor.IsExplored = true;
         if (FogMask != null && Math.Abs(FogMask.Color.A - GameConfig.DarkFogAlpha) > 0.001f)
         {
+            RefreshPreviewFog(GameConfig.DarkFogAlpha);
             FogMask.TransitionAlpha(GameConfig.DarkFogAlpha, 0.3f);
+        }
+    }
+
+    /// <summary>
+    /// 刷新房间中的预览迷雾
+    /// </summary>
+    /// <param name="aisleFogAlpha">过道迷雾透明度</param>
+    public void RefreshPreviewFog(float aisleFogAlpha)
+    {
+        var room1Alpha = RoomInfo.FogMask.TargetAlpha;
+        var room2Alpha = ConnectDoor.RoomInfo.FogMask.TargetAlpha;
+
+        if (aisleFogAlpha < 1 && room1Alpha < 1) //隐藏预览
+        {
+            PreviewFogMask.SetActive(false);
+        }
+        else if (aisleFogAlpha >= 1) //预览房间
+        {
+            PreviewFogMask.SetActive(true);
+            PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Room);
+        }
+        else if (room1Alpha >= 1) //预览过道
+        {
+            PreviewFogMask.SetActive(true);
+            PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Aisle);
+        }
+
+        if (aisleFogAlpha < 1 && room2Alpha < 1) //隐藏预览
+        {
+            ConnectDoor.PreviewFogMask.SetActive(false);
+        }
+        else if (aisleFogAlpha >= 1) //预览房间
+        {
+            ConnectDoor.PreviewFogMask.SetActive(true);
+            ConnectDoor.PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Room);
+        }
+        else if (room2Alpha >= 1) //预览过道
+        {
+            ConnectDoor.PreviewFogMask.SetActive(true);
+            ConnectDoor.PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Aisle);
         }
     }
 }

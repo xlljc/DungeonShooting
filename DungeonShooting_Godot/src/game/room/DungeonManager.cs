@@ -431,7 +431,6 @@ public partial class DungeonManager : Node2D
     private void CreateRoomFogMask(RoomInfo roomInfo)
     {
         var roomFog = new FogMask();
-        //roomFog.BlendMode = Light2D.BlendModeEnum.Add;
         roomFog.Name = "FogMask" + roomFog.IsDestroyed;
         float alpha;
         if (roomInfo.RoomType == DungeonRoomType.Inlet) //起始房间没有迷雾
@@ -451,7 +450,7 @@ public partial class DungeonManager : Node2D
         foreach (var roomDoorInfo in roomInfo.Doors)
         {
             //必须是正向门
-            if (!roomDoorInfo.IsForward)
+            if (roomDoorInfo.IsForward)
             {
                 Rect2I calcRect;
                 Rect2I fogAreaRect;
@@ -515,7 +514,6 @@ public partial class DungeonManager : Node2D
 
                 //过道迷雾遮罩
                 var aisleFog = new FogMask();
-                //aisleFog.BlendMode = Light2D.BlendModeEnum.Add;
                 aisleFog.InitFog(calcRect.Position, calcRect.Size);
                 World.FogMaskRoot.AddChild(aisleFog);
                 roomDoorInfo.FogMask = aisleFog;
@@ -524,36 +522,27 @@ public partial class DungeonManager : Node2D
                 //过道迷雾区域
                 var fogArea = new AisleFogArea();
                 fogArea.Init(roomDoorInfo,
-                    new Rect2I(fogAreaRect.Position * GameConfig.TileCellSize,
-                        fogAreaRect.Size * GameConfig.TileCellSize));
+                    new Rect2I(
+                        fogAreaRect.Position * GameConfig.TileCellSize,
+                        fogAreaRect.Size * GameConfig.TileCellSize
+                    )
+                );
                 roomDoorInfo.AisleFogArea = fogArea;
                 roomDoorInfo.ConnectDoor.AisleFogArea = fogArea;
                 World.AffiliationAreaRoot.AddChild(fogArea);
             }
 
-            if (roomDoorInfo.Direction == DoorDirection.E)
-            {
-                var previewTexture =
-                    ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition_png);
-                var previewFog = new PointLight2D();
-                previewFog.Texture = previewTexture;
-                //previewFog.BlendMode = Light2D.BlendModeEnum.Add;
-                previewFog.GlobalPosition = roomDoorInfo.Door.GlobalPosition + new Vector2(16, 0);
-                previewFog.RotationDegrees = 90;
-                World.FogMaskRoot.AddChild(previewFog);
-            }
-            else if (roomDoorInfo.Direction == DoorDirection.W)
-            {
-                var previewTexture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition2_png);
-                var previewFog = new PointLight2D();
-                previewFog.Texture = previewTexture;
-                //previewFog.BlendMode = Light2D.BlendModeEnum.Add;
-                previewFog.GlobalPosition = roomDoorInfo.Door.GlobalPosition + new Vector2(16, 0);
-                previewFog.RotationDegrees = 90;
-                World.FogMaskRoot.AddChild(previewFog);
-            }
-
+            //预览迷雾区域
+            var previewFog = new PreviewFogMask();
+            roomDoorInfo.PreviewFogMask = previewFog;
+            previewFog.Init(roomDoorInfo);
+            previewFog.SetPreviewFogType(PreviewFogMask.PreviewFogType.Room);
+            previewFog.SetActive(false);
+            World.FogMaskRoot.AddChild(previewFog);
         }
+        
+        //刷新预览迷雾
+        roomInfo.RefreshPreviewFog(alpha);
     }
 
     /// <summary>
