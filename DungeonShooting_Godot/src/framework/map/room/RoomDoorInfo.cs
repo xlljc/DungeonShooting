@@ -62,7 +62,7 @@ public class RoomDoorInfo : IDestroy
     /// <summary>
     /// 过道的迷雾
     /// </summary>
-    public FogMask FogMask;
+    public FogMask AisleFogMask;
 
     /// <summary>
     /// 过道迷雾区域
@@ -70,9 +70,14 @@ public class RoomDoorInfo : IDestroy
     public AisleFogArea AisleFogArea;
 
     /// <summary>
-    /// 门区域预览迷雾
+    /// 门区域预览房间迷雾
     /// </summary>
-    public PreviewFogMask PreviewFogMask;
+    public PreviewFogMask PreviewRoomFogMask;
+    
+    /// <summary>
+    /// 门区域预览过道迷雾
+    /// </summary>
+    public PreviewFogMask PreviewAisleFogMask;
 
     /// <summary>
     /// 当前门连接的过道是否探索过
@@ -237,14 +242,24 @@ public class RoomDoorInfo : IDestroy
         }
 
         IsDestroyed = true;
-        if (FogMask != null)
+        if (AisleFogMask != null)
         {
-            FogMask.Destroy();
+            AisleFogMask.Destroy();
         }
 
         if (AisleFogArea != null)
         {
             AisleFogArea.Destroy();
+        }
+
+        if (PreviewRoomFogMask != null)
+        {
+            PreviewRoomFogMask.Destroy();
+        }
+        
+        if (PreviewAisleFogMask != null)
+        {
+            PreviewAisleFogMask.Destroy();
         }
     }
 
@@ -255,9 +270,9 @@ public class RoomDoorInfo : IDestroy
     {
         IsExplored = true;
         ConnectDoor.IsExplored = true;
-        if (FogMask != null && Math.Abs(FogMask.Color.A - 1f) > 0.001f)
+        if (AisleFogMask != null && Math.Abs(AisleFogMask.Color.A - 1f) > 0.001f)
         {
-            FogMask.TransitionAlpha(1, GameConfig.FogTransitionTime);
+            AisleFogMask.TransitionAlpha(1, GameConfig.FogTransitionTime);
             RefreshPreviewFog(1);
         }
     }
@@ -269,9 +284,9 @@ public class RoomDoorInfo : IDestroy
     {
         IsExplored = true;
         ConnectDoor.IsExplored = true;
-        if (FogMask != null && Math.Abs(FogMask.Color.A - GameConfig.DarkFogAlpha) > 0.001f)
+        if (AisleFogMask != null && Math.Abs(AisleFogMask.Color.A - GameConfig.DarkFogAlpha) > 0.001f)
         {
-            FogMask.TransitionAlpha(GameConfig.DarkFogAlpha, GameConfig.FogTransitionTime);
+            AisleFogMask.TransitionAlpha(GameConfig.DarkFogAlpha, GameConfig.FogTransitionTime);
             RefreshPreviewFog(GameConfig.DarkFogAlpha);
         }
     }
@@ -282,48 +297,50 @@ public class RoomDoorInfo : IDestroy
     /// <param name="aisleFogAlpha">过道迷雾透明度</param>
     public void RefreshPreviewFog(float aisleFogAlpha)
     {
-        var room1Alpha = RoomInfo.FogMask.TargetAlpha;
-        var room2Alpha = ConnectDoor.RoomInfo.FogMask.TargetAlpha;
+        var room1Alpha = RoomInfo.RoomFogMask.TargetAlpha;
+        var room2Alpha = ConnectDoor.RoomInfo.RoomFogMask.TargetAlpha;
         //GD.Print($"aisleFogAlpha: {aisleFogAlpha}, room1Alpha: {room1Alpha}, room2Alpha{room2Alpha}");
 
         if ((aisleFogAlpha < 1 && room1Alpha < 1) || Math.Abs(aisleFogAlpha - room1Alpha) < 0.001f) //隐藏预览
         {
-            PreviewFogMask.TransitionToHide(GameConfig.FogTransitionTime);
+            PreviewRoomFogMask.TransitionToHide(GameConfig.FogTransitionTime);
+            PreviewAisleFogMask.TransitionToHide(GameConfig.FogTransitionTime);
         }
         else if (aisleFogAlpha >= 1) //预览房间
         {
-            PreviewFogMask.SetActive(true);
-            PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Room);
+            PreviewAisleFogMask.TransitionToHide(GameConfig.FogTransitionTime);
+            PreviewRoomFogMask.SetActive(true);
 
             //播放过渡动画
             var targetAlpha = 1 - room1Alpha;
-            PreviewFogMask.Color = new Color(1, 1, 1, 0);
-            PreviewFogMask.TransitionAlpha(targetAlpha, GameConfig.FogTransitionTime);
+            PreviewRoomFogMask.Color = new Color(1, 1, 1, 0);
+            PreviewRoomFogMask.TransitionAlpha(targetAlpha, GameConfig.FogTransitionTime);
         }
         else if (room1Alpha >= 1) //预览过道
         {
-            PreviewFogMask.SetActive(true);
-            PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Aisle);
+            PreviewRoomFogMask.TransitionToHide(GameConfig.FogTransitionTime);
+            PreviewAisleFogMask.SetActive(true);
         }
 
         if ((aisleFogAlpha < 1 && room2Alpha < 1) || Math.Abs(aisleFogAlpha - room2Alpha) < 0.001f) //隐藏预览
         {
-            ConnectDoor.PreviewFogMask.TransitionToHide(GameConfig.FogTransitionTime);
+            ConnectDoor.PreviewAisleFogMask.TransitionToHide(GameConfig.FogTransitionTime);
+            ConnectDoor.PreviewRoomFogMask.TransitionToHide(GameConfig.FogTransitionTime);
         }
         else if (aisleFogAlpha >= 1) //预览房间
         {
-            ConnectDoor.PreviewFogMask.SetActive(true);
-            ConnectDoor.PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Room);
+            ConnectDoor.PreviewAisleFogMask.TransitionToHide(GameConfig.FogTransitionTime);
+            ConnectDoor.PreviewRoomFogMask.SetActive(true);
             
             //播放过渡动画, 这里有问题
             var targetAlpha = 1 - room2Alpha;
-            ConnectDoor.PreviewFogMask.Color = new Color(1, 1, 1, 0);
-            ConnectDoor.PreviewFogMask.TransitionAlpha(targetAlpha, GameConfig.FogTransitionTime);
+            ConnectDoor.PreviewRoomFogMask.Color = new Color(1, 1, 1, 0);
+            ConnectDoor.PreviewRoomFogMask.TransitionAlpha(targetAlpha, GameConfig.FogTransitionTime);
         }
         else if (room2Alpha >= 1) //预览过道
         {
-            ConnectDoor.PreviewFogMask.SetActive(true);
-            ConnectDoor.PreviewFogMask.SetPreviewFogType(PreviewFogMask.PreviewFogType.Aisle);
+            ConnectDoor.PreviewRoomFogMask.TransitionToHide(GameConfig.FogTransitionTime);
+            ConnectDoor.PreviewAisleFogMask.SetActive(true);
         }
     }
 }

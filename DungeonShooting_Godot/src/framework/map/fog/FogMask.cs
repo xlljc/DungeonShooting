@@ -6,7 +6,7 @@ using Godot;
 /// <summary>
 /// 迷雾遮罩
 /// </summary>
-public partial class FogMask : PointLight2D, IDestroy
+public partial class FogMask : FogMaskBase
 {
     /// <summary>
     /// 迷雾宽度
@@ -16,12 +16,7 @@ public partial class FogMask : PointLight2D, IDestroy
     /// 迷雾高度
     /// </summary>
     public int FogHeight { get; private set; }
-    /// <summary>
-    /// 迷雾透明度值, 这个值在调用 TransitionAlpha() 时改变, 用于透明度判断
-    /// </summary>
-    public float TargetAlpha { get; private set; }
     
-    public bool IsDestroyed { get; private set; }
     private bool _init = false;
 
     private static Image _leftTransition;
@@ -40,8 +35,7 @@ public partial class FogMask : PointLight2D, IDestroy
     private static Image _inRightDownTransition;
     
     private static bool _initSprite = false;
-
-    private long _cid = -1;
+    
     private static void InitSprite()
     {
         if (_initSprite)
@@ -111,48 +105,7 @@ public partial class FogMask : PointLight2D, IDestroy
         Color = c;
         TargetAlpha = alpha;
     }
-
-    /// <summary>
-    /// 使颜色的 alpha 通道过渡到指定的值
-    /// </summary>
-    /// <param name="targetAlpha">透明度值</param>
-    /// <param name="time">过渡时间</param>
-    public void TransitionAlpha(float targetAlpha, float time)
-    {
-        TargetAlpha = targetAlpha;
-        if (_cid >= 0)
-        {
-            World.Current.StopCoroutine(_cid);
-        }
-        
-        _cid = World.Current.StartCoroutine(RunTransitionAlpha(targetAlpha, time));
-    }
-
-    private IEnumerator RunTransitionAlpha(float targetAlpha, float time)
-    {
-        var originColor = Color;
-        var a = originColor.A;
-        var delta = Mathf.Abs(a - targetAlpha) / time;
-        while (Math.Abs(a - targetAlpha) > 0.001f)
-        {
-            a = Mathf.MoveToward(a, targetAlpha, delta * (float)World.Current.GetProcessDeltaTime());
-            Color = new Color(1, 1, 1, a);
-            yield return null;
-        }
-        _cid = -1;
-    }
     
-    public void Destroy()
-    {
-        if (IsDestroyed)
-        {
-            return;
-        }
-
-        IsDestroyed = true;
-        QueueFree();
-    }
-
     private void HandlerTransition(Vector2I position, Vector2I size, Image image)
     {
         var tileMap = GameApplication.Instance.World.TileRoot;

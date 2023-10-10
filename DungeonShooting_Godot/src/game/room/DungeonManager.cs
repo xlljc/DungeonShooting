@@ -444,7 +444,7 @@ public partial class DungeonManager : Node2D
         roomFog.InitFog(roomInfo.Position, roomInfo.Size, alpha);
 
         World.FogMaskRoot.AddChild(roomFog);
-        roomInfo.FogMask = roomFog;
+        roomInfo.RoomFogMask = roomFog;
         
         //生成通道迷雾
         foreach (var roomDoorInfo in roomInfo.Doors)
@@ -516,8 +516,8 @@ public partial class DungeonManager : Node2D
                 var aisleFog = new FogMask();
                 aisleFog.InitFog(calcRect.Position, calcRect.Size);
                 World.FogMaskRoot.AddChild(aisleFog);
-                roomDoorInfo.FogMask = aisleFog;
-                roomDoorInfo.ConnectDoor.FogMask = aisleFog;
+                roomDoorInfo.AisleFogMask = aisleFog;
+                roomDoorInfo.ConnectDoor.AisleFogMask = aisleFog;
 
                 //过道迷雾区域
                 var fogArea = new AisleFogArea();
@@ -533,12 +533,17 @@ public partial class DungeonManager : Node2D
             }
 
             //预览迷雾区域
-            var previewFog = new PreviewFogMask();
-            roomDoorInfo.PreviewFogMask = previewFog;
-            previewFog.Init(roomDoorInfo);
-            previewFog.SetPreviewFogType(PreviewFogMask.PreviewFogType.Room);
-            previewFog.SetActive(false);
-            World.FogMaskRoot.AddChild(previewFog);
+            var previewRoomFog = new PreviewFogMask();
+            roomDoorInfo.PreviewRoomFogMask = previewRoomFog;
+            previewRoomFog.Init(roomDoorInfo, PreviewFogMask.PreviewFogType.Room);
+            previewRoomFog.SetActive(false);
+            World.FogMaskRoot.AddChild(previewRoomFog);
+            
+            var previewAisleFog = new PreviewFogMask();
+            roomDoorInfo.PreviewAisleFogMask = previewAisleFog;
+            previewAisleFog.Init(roomDoorInfo, PreviewFogMask.PreviewFogType.Aisle);
+            previewAisleFog.SetActive(false);
+            World.FogMaskRoot.AddChild(previewAisleFog);
         }
         
         //刷新预览迷雾
@@ -583,7 +588,7 @@ public partial class DungeonManager : Node2D
                 if (!_affiliationAreaFlag.IsDestroyed)
                 {
                     //上一个房间变暗
-                    _affiliationAreaFlag.RoomInfo.DarkFog();
+                    _affiliationAreaFlag.RoomInfo.DarkFog(roomInfo);
                 }
             }
             
