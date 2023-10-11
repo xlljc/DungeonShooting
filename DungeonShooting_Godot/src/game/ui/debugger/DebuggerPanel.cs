@@ -41,6 +41,7 @@ public partial class DebuggerPanel : Debugger
 
     private void OnClear()
     {
+        Debug.Clear();
         S_Label.Instance.Text = "";
         _len = 0;
     }
