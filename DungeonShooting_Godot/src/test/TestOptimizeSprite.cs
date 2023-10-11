@@ -46,7 +46,7 @@ public partial class TestOptimizeSprite : Node2D
         //         var centerX = texture.GetWidth() / 2;
         //         var centerY = texture.GetHeight() / 2;
         //         //var angle = Utils.RandomRangeInt(0, 360);
-        //         //GD.Print($"x: {i}, y: {j}, angle: " + angle);
+        //         //Debug.Log($"x: {i}, y: {j}, angle: " + angle);
         //         imageCanvas.DrawImageInCanvas(texture,
         //             10 + i * 10, 10 + j * 10,
         //             angle, centerX, centerY, false

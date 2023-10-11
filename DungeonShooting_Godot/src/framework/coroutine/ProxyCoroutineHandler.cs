@@ -133,7 +133,7 @@ public static class ProxyCoroutineHandler
             }
             catch (Exception e)
             {
-                GD.PrintErr("执行协程发生异常: \n" + e);
+                Debug.LogError("执行协程发生异常: \n" + e);
                 ProxyStopCoroutine(ref coroutineList, item.Id);
             }
         }

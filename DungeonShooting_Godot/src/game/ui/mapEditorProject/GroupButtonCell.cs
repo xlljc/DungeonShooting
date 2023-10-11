@@ -17,7 +17,7 @@ public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, DungeonRoomG
 
     public override void OnRefreshIndex()
     {
-        GD.Print("刷新索引: " + Index);
+        Debug.Log("刷新索引: " + Index);
     }
 
     //选中工程

@@ -121,7 +121,7 @@ public partial class ImageCanvas
     {
         if (!_placeholders.Remove(placeholder))
         {
-            GD.PrintErr("移除 AreaPlaceholder 失败!");
+            Debug.LogError("移除 AreaPlaceholder 失败!");
         }
     }
     
@@ -212,7 +212,7 @@ public partial class ImageCanvas
                     }
                 } while (_drawingQueueItems.Count > 0 && (DateTime.Now - startTime).TotalMilliseconds < step1Time);
 
-                //GD.Print($"当前帧绘制完成数量: {index}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
+                //Debug.Log($"当前帧绘制完成数量: {index}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
             }
 
             //重绘画布
@@ -231,7 +231,7 @@ public partial class ImageCanvas
                     }
                     catch (Exception e)
                     {
-                        GD.PrintErr("在ImageCanvas中调用回调OnDrawingComplete()发生异常: " + e);
+                        Debug.LogError("在ImageCanvas中调用回调OnDrawingComplete()发生异常: " + e);
                     }
                 }
             }
@@ -276,7 +276,7 @@ public partial class ImageCanvas
                 }
             }
             
-            //GD.Print($"当前帧进入绘制绘队列数量: {index}, 待绘制队列数量: {_queueItems.Count}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
+            //Debug.Log($"当前帧进入绘制绘队列数量: {index}, 待绘制队列数量: {_queueItems.Count}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
         }
     }
 

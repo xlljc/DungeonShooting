@@ -66,18 +66,18 @@ public static class ResourcePathGenerator
                         "public class ResourcePath\n" +
                         "{\n";
 
-            GD.Print("更新 ResourcePath...");
+            Debug.Log("更新 ResourcePath...");
 
             var directoryInfo = new DirectoryInfo(System.Environment.CurrentDirectory);
             EachDir(directoryInfo);
 
             resultStr += "}";
             File.WriteAllText(savePath, resultStr);
-            GD.Print("ResourcePath.cs 写出完成!");
+            Debug.Log("ResourcePath.cs 写出完成!");
         }
         catch (Exception e)
         {
-            GD.PrintErr(e.ToString());
+            Debug.LogError(e.ToString());
             return false;
         }
 
@@ -92,7 +92,7 @@ public static class ResourcePathGenerator
             path = path.Replace('\\', '/');
             if (exclude.Contains(path))
             {
-                GD.Print("扫描排除路径: " + path);
+                Debug.Log("扫描排除路径: " + path);
                 return;
             }
         }

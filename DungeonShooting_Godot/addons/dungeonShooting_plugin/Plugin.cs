@@ -89,7 +89,7 @@ namespace Plugin
                     }
                     catch (Exception e)
                     {
-                        GD.PrintErr(e.ToString());
+                        Debug.LogError(e.ToString());
                     }
                 }
             }
@@ -104,7 +104,7 @@ namespace Plugin
             }
             catch (Exception e)
             {
-                GD.PrintErr(e.ToString());
+                Debug.LogError(e.ToString());
             }
 
             try
@@ -113,7 +113,7 @@ namespace Plugin
             }
             catch (Exception e)
             {
-                GD.PrintErr(e.ToString());
+                Debug.LogError(e.ToString());
             }
             
             
@@ -140,7 +140,7 @@ namespace Plugin
                     }
                     catch (Exception e)
                     {
-                        GD.PrintErr(e.ToString());
+                        Debug.LogError(e.ToString());
                     }
                 }
             }
@@ -153,7 +153,7 @@ namespace Plugin
                 }
                 catch (Exception e)
                 {
-                    GD.PrintErr(e.ToString());
+                    Debug.LogError(e.ToString());
                 }
 
                 try
@@ -162,7 +162,7 @@ namespace Plugin
                 }
                 catch (Exception e)
                 {
-                    GD.PrintErr(e.ToString());
+                    Debug.LogError(e.ToString());
                 }
 
                 _editorTools.Free();

@@ -86,7 +86,7 @@ public static class UiGenerator
         }
         catch (Exception e)
         {
-            GD.PrintErr(e.ToString());
+            Debug.LogError(e.ToString());
             return false;
         }
 
@@ -117,7 +117,7 @@ public static class UiGenerator
             
             var uiName = control.Name.ToString();
             var path = GameConfig.UiCodeDir + uiName.FirstToLower() + "/" + uiName + ".cs";
-            GD.Print("重新生成ui代码: " + path);
+            Debug.Log("重新生成ui代码: " + path);
 
             var uiNode = EachNodeFromEditor(control.Name, control);
             var code = GenerateClassCode(uiNode);
@@ -126,7 +126,7 @@ public static class UiGenerator
             {
                 if (pair.Value > 1)
                 {
-                    GD.Print($"检测到同名节点: '{pair.Key}', 使用该名称的节点将无法生成唯一节点属性!");
+                    Debug.Log($"检测到同名节点: '{pair.Key}', 使用该名称的节点将无法生成唯一节点属性!");
                 }
             }
             
@@ -134,7 +134,7 @@ public static class UiGenerator
         }
         catch (Exception e)
         {
-            GD.PrintErr(e.ToString());
+            Debug.LogError(e.ToString());
             return false;
         }
 

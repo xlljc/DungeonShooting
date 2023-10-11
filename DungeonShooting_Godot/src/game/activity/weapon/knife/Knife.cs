@@ -72,7 +72,7 @@ public partial class Knife : Weapon
 
     protected override void OnFire()
     {
-        GD.Print("近战武器攻击! 蓄力时长: " + GetTriggerChargeTime() + ", 扳机按下时长: " + GetTriggerDownTime());
+        Debug.Log("近战武器攻击! 蓄力时长: " + GetTriggerChargeTime() + ", 扳机按下时长: " + GetTriggerDownTime());
         //更新碰撞层级
         _hitArea.CollisionMask = GetAttackLayer() | PhysicsLayer.Bullet;
         //启用碰撞
@@ -123,7 +123,7 @@ public partial class Knife : Weapon
 
     private void OnBodyEntered(Node2D body)
     {
-        //GD.Print("碰到物体: " + body.Name);
+        //Debug.Log("碰到物体: " + body.Name);
         var activityObject = body.AsActivityObject();
         if (activityObject != null)
         {

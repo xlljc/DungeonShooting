@@ -74,7 +74,7 @@ public static class DungeonRoomGenerator
 		}
 		catch (Exception e)
 		{
-			GD.PrintErr(e.ToString());
+			Debug.LogError(e.ToString());
 			return false;
 		}
 		
@@ -86,7 +86,7 @@ public static class DungeonRoomGenerator
 	/// </summary>
     public static bool GenerateRoomConfig()
     {
-	    GD.Print("生成RoomConfig.json流程得改");
+	    Debug.Log("生成RoomConfig.json流程得改");
 	    // try
 	    // {
 		   //  //地图路径
@@ -162,7 +162,7 @@ public static class DungeonRoomGenerator
 				 //    var filePath = tileDataDir + path + ".json";
 				 //    if (File.Exists(filePath))
 				 //    {
-					//     GD.Print($"未找到'{tileDir + path}.tscn', 删除配置文件: {filePath}");
+					//     Debug.Log($"未找到'{tileDir + path}.tscn', 删除配置文件: {filePath}");
 					//     File.Delete(filePath);
 				 //    }
 			  //   }
@@ -218,11 +218,11 @@ public static class DungeonRoomGenerator
 		   //  var text = JsonSerializer.Serialize(roomGroupMap, config);
 		   //  File.WriteAllText(GameConfig.RoomTileConfigFile, text);
 	    //
-		   //  GD.Print("地牢房间配置, 重新打包完成!");
+		   //  Debug.Log("地牢房间配置, 重新打包完成!");
 	    // }
 	    // catch (Exception e)
 	    // {
-		   //  GD.PrintErr(e.ToString());
+		   //  Debug.LogError(e.ToString());
 		   //  return false;
 	    // }
 

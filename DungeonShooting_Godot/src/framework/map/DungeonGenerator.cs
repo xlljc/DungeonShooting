@@ -104,7 +104,7 @@ public class DungeonGenerator
             throw new Exception("当前组'" + config.GroupName + "'" + result.ErrorMessage + ", 不能生成地牢!");
         }
         
-        GD.Print("创建地牢生成器, 随机种子: " + _random.Seed);
+        Debug.Log("创建地牢生成器, 随机种子: " + _random.Seed);
         _roomGroup.InitWeight(_random);
     }
 
@@ -266,22 +266,22 @@ public class DungeonGenerator
                     chainTryCount++;
                 }
                 
-                GD.Print("生成第" + (_count + 1) + "个房间失败! 失败原因: " + errorCode);
+                Debug.Log("生成第" + (_count + 1) + "个房间失败! 失败原因: " + errorCode);
                 if (errorCode == GenerateRoomErrorCode.OutArea)
                 {
                     _failCount++;
-                    GD.Print("超出区域失败次数: " + _failCount);
+                    Debug.Log("超出区域失败次数: " + _failCount);
                     if (_failCount >= _maxFailCount)
                     {
                         _enableLimitRange = false;
-                        GD.Print("生成房间失败次数过多, 关闭区域限制!");
+                        Debug.Log("生成房间失败次数过多, 关闭区域限制!");
                     }
                 }
             }
         }
         
         _roomGrid.Clear();
-        GD.Print("房间总数: " + RoomInfos.Count);
+        Debug.Log("房间总数: " + RoomInfos.Count);
     }
 
     //生成房间
@@ -478,7 +478,7 @@ public class DungeonGenerator
     {
         if (roomInfo.Next.Count > 0)
         {
-            GD.PrintErr("当前房间还有连接的子房间, 不能回滚!");
+            Debug.LogError("当前房间还有连接的子房间, 不能回滚!");
             return false;
         }
         //退掉占用的房间区域和过道占用区域

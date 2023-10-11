@@ -7,6 +7,7 @@ public static partial class UiManager
     public static class UiName
     {
         public const string BottomTips = "BottomTips";
+        public const string Debugger = "Debugger";
         public const string EditorTips = "EditorTips";
         public const string EditorTools = "EditorTools";
         public const string EditorWindow = "EditorWindow";
@@ -74,6 +75,54 @@ public static partial class UiManager
     public static UI.BottomTips.BottomTipsPanel[] Get_BottomTips_Instance()
     {
         return GetUiInstance<UI.BottomTips.BottomTipsPanel>(nameof(UI.BottomTips.BottomTips));
+    }
+
+    /// <summary>
+    /// 创建 Debugger, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.Debugger.DebuggerPanel Create_Debugger()
+    {
+        return CreateUi<UI.Debugger.DebuggerPanel>(UiName.Debugger);
+    }
+
+    /// <summary>
+    /// 打开 Debugger, 并返回UI实例
+    /// </summary>
+    public static UI.Debugger.DebuggerPanel Open_Debugger()
+    {
+        return OpenUi<UI.Debugger.DebuggerPanel>(UiName.Debugger);
+    }
+
+    /// <summary>
+    /// 隐藏 Debugger 的所有实例
+    /// </summary>
+    public static void Hide_Debugger()
+    {
+        var uiInstance = Get_Debugger_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 Debugger 的所有实例
+    /// </summary>
+    public static void Destroy_Debugger()
+    {
+        var uiInstance = Get_Debugger_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 Debugger 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.Debugger.DebuggerPanel[] Get_Debugger_Instance()
+    {
+        return GetUiInstance<UI.Debugger.DebuggerPanel>(nameof(UI.Debugger.Debugger));
     }
 
     /// <summary>

@@ -828,7 +828,7 @@ public abstract partial class Role : ActivityObject
     {
         if (BuffPropPack.Contains(buffProp))
         {
-            GD.PrintErr("被动道具已经在背包中了!");
+            Debug.LogError("被动道具已经在背包中了!");
             return false;
         }
         BuffPropPack.Add(buffProp);
@@ -847,7 +847,7 @@ public abstract partial class Role : ActivityObject
         var index = BuffPropPack.IndexOf(buffProp);
         if (index < 0)
         {
-            GD.PrintErr("当前道具不在角色背包中!");
+            Debug.LogError("当前道具不在角色背包中!");
             return;
         }
         

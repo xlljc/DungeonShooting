@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://df0dfbrbt3ufg"]
+
+[ext_resource type="Script" path="res://src/game/ui/debugger/DebuggerPanel.cs" id="1_awck4"]
+[ext_resource type="Texture2D" uid="uid://dfk7b7gbhsfvx" path="res://addons/dungeonShooting_plugin/Tool.svg" id="2_acjpv"]
+
+[node name="Debugger" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_awck4")
+Layer = 3
+
+[node name="Bg" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.784314)
+
+[node name="Clear" type="Button" parent="Bg"]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 33.0
+offset_right = 174.0
+offset_bottom = 73.0
+text = "清除日志"
+
+[node name="Close" type="Button" parent="Bg"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 33.0
+offset_right = -60.0
+offset_bottom = 73.0
+grow_horizontal = 0
+text = "关闭"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Bg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 101.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="Label" type="Label" parent="Bg/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+
+[node name="HoverButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 169.0
+offset_right = 46.0
+offset_bottom = 193.0
+scale = Vector2(2, 2)
+icon = ExtResource("2_acjpv")
+flat = true
+icon_alignment = 1

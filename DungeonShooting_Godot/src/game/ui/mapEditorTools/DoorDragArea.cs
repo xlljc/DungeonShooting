@@ -185,7 +185,7 @@ public partial class DoorDragArea : Control
     {
         _areaSize = value;
         RefreshArea();
-        //GD.Print("size: " + GetDoorAreaRange());
+        //Debug.Log("size: " + GetDoorAreaRange());
     }
 
     //刷新区域位置
@@ -418,7 +418,7 @@ public partial class DoorDragArea : Control
             var doorAreaRange = GetDoorAreaRange();
             DoorAreaInfo.Start = doorAreaRange.X;
             DoorAreaInfo.End = doorAreaRange.Y;
-            GD.Print("提交修改: " + doorAreaRange);
+            Debug.Log("提交修改: " + doorAreaRange);
             //派发修改数据修改事件
             EventManager.EmitEvent(EventEnum.OnEditorDirty);
         }

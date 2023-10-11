@@ -601,7 +601,7 @@ public partial class DungeonManager : Node2D
                     var flag = ActiveAffiliationArea.ExistEnterItem(
                         activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
                     );
-                    //GD.Print("当前房间存活数量: " + count);
+                    //Debug.Log("当前房间存活数量: " + count);
                     if (!flag)
                     {
                         activeRoom.OnClearRoom();

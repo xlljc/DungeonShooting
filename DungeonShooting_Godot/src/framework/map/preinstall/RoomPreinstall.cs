@@ -146,7 +146,7 @@ public class RoomPreinstall : IDestroy
                 }
                 else
                 {
-                    GD.PrintErr("暂未支持的类型: " + markInfo.SpecialMarkType);
+                    Debug.LogError("暂未支持的类型: " + markInfo.SpecialMarkType);
                     continue;
                 }
 
@@ -250,7 +250,7 @@ public class RoomPreinstall : IDestroy
         {
             if (_currWaveIndex < WaveList.Count)
             {
-                GD.Print($"执行第{_currWaveIndex}波");
+                Debug.Log($"执行第{_currWaveIndex}波");
                 _coroutineId = GameApplication.Instance.World.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
                 _currWaveIndex++;
             }
@@ -267,7 +267,7 @@ public class RoomPreinstall : IDestroy
             return;
         }
         
-        GD.Print($"执行第{_currWaveIndex}波");
+        Debug.Log($"执行第{_currWaveIndex}波");
         _coroutineId = GameApplication.Instance.World.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
         _currWaveIndex++;
     }

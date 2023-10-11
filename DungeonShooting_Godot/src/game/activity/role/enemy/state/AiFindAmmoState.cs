@@ -24,7 +24,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
     {
         if (args.Length == 0)
         {
-            GD.PrintErr("进入 AiStateEnum.AiFindAmmo 状态必须要把目标武器当成参数传过来");
+            Debug.LogError("进入 AiStateEnum.AiFindAmmo 状态必须要把目标武器当成参数传过来");
             ChangeState(prev);
             return;
         }

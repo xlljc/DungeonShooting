@@ -179,7 +179,7 @@ public class DungeonRoomGroup : IClone<DungeonRoomGroup>
     {
         if (!_init)
         {
-            GD.PrintErr("未调用DungeonRoomGroup.InitWeight()来初始化权重!");
+            Debug.LogError("未调用DungeonRoomGroup.InitWeight()来初始化权重!");
             return null;
         }
 

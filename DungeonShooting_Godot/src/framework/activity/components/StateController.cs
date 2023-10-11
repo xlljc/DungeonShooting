@@ -56,7 +56,7 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
     {
         if (GetStateInstance(stateBase.State) != null)
         {
-            GD.PrintErr("当前状态已经在状态机中注册:", stateBase);
+            Debug.LogError("当前状态已经在状态机中注册:", stateBase);
             return;
         }
 
@@ -124,7 +124,7 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
         var newState = GetStateInstance(next);
         if (newState == null)
         {
-            GD.PrintErr("当前状态机未找到相应状态:" + next);
+            Debug.LogError("当前状态机未找到相应状态:" + next);
             return;
         }
 

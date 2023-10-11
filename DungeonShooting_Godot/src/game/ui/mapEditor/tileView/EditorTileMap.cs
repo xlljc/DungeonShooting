@@ -398,13 +398,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         _isGenerateTerrain = false;
         //计算区域
         CalcTileRect(false);
-        GD.Print("开始检测是否可以生成地形...");
+        Debug.Log("开始检测是否可以生成地形...");
         if (CheckTerrain())
         {
-            GD.Print("开始绘制导航网格...");
+            Debug.Log("开始绘制导航网格...");
             if (GenerateNavigation())
             {
-                GD.Print("开始绘制自动贴图...");
+                Debug.Log("开始绘制自动贴图...");
                 GenerateTerrain();
                 _isGenerateTerrain = true;
             }
@@ -450,7 +450,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// </summary>
     public void TriggerSave(RoomErrorType errorType, Action finish)
     {
-        GD.Print("保存地牢房间数据...");
+        Debug.Log("保存地牢房间数据...");
         //执行创建预览图流程
         RunSavePreviewImage(() =>
         {
@@ -768,7 +768,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     }
                     else
                     {
-                        GD.PrintErr($"异常图块: {pos}, 这个图块的图集坐标'{atlasCoords}'不属于'MiddleMapLayer'和'TopMapLayer'!");
+                        Debug.LogError($"异常图块: {pos}, 这个图块的图集坐标'{atlasCoords}'不属于'MiddleMapLayer'和'TopMapLayer'!");
                         continue;
                     }
                     EraseCell(AutoFloorLayer, pos);

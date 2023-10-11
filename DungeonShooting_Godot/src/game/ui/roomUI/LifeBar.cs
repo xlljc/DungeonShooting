@@ -55,7 +55,7 @@ public class LifeBar
         var player = Player.Current;
         if (player.MaxHp % 2 != 0)
         {
-            GD.PrintErr("玩家血量不是偶数!");
+            Debug.LogError("玩家血量不是偶数!");
         }
         
         var list = new List<LifeIconEnum>();

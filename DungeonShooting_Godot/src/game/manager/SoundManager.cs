@@ -52,7 +52,7 @@ public partial class SoundManager
         {
             if (_playingSoundResourceList.Contains(path))
             {
-                GD.Print("重复播放: " + path);
+                Debug.Log("重复播放: " + path);
             }
             else
             {

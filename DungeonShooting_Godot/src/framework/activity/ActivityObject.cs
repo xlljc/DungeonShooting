@@ -1460,7 +1460,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         
         if (AffiliationArea == null)
         {
-            GD.PrintErr($"调用函数: BecomesStaticImage() 失败, 物体{Name}没有归属区域, 无法确定绘制到哪个ImageCanvas上, 直接执行销毁");
+            Debug.LogError($"调用函数: BecomesStaticImage() 失败, 物体{Name}没有归属区域, 无法确定绘制到哪个ImageCanvas上, 直接执行销毁");
             Destroy();
             return;
         }

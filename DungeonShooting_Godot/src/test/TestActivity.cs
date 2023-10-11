@@ -22,26 +22,26 @@ public partial class TestActivity : ActivityObject
 
 	protected override void OnFallToGround()
 	{
-		GD.Print("OnFallToGround");
+		Debug.Log("OnFallToGround");
 	}
 
 	protected override void OnFirstFallToGround()
 	{
-		GD.Print("OnFirstFallToGround");
+		Debug.Log("OnFirstFallToGround");
 	}
 
 	protected override void OnThrowStart()
 	{
-		GD.Print("OnThrowStart");
+		Debug.Log("OnThrowStart");
 	}
 
 	protected override void OnThrowMaxHeight(float height)
 	{
-		GD.Print("OnThrowMaxHeight: " + height);
+		Debug.Log("OnThrowMaxHeight: " + height);
 	}
 
 	protected override void OnThrowOver()
 	{
-		GD.Print("OnThrowOver");
+		Debug.Log("OnThrowOver");
 	}
 }

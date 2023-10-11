@@ -10,7 +10,7 @@ public partial class TestCreateSector : Node2D
     {
         GetNode<Area2D>("Area2D").AreaEntered += area =>
         {
-            GD.Print("areaEnter: " + area.Name);
+            Debug.Log("areaEnter: " + area.Name);
         };
         
         _polygon2D = GetNode<CollisionPolygon2D>("Area2D/CollisionPolygon2D");

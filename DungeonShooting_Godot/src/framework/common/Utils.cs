@@ -13,7 +13,7 @@ public static class Utils
     static Utils()
     {
         Random = new SeedRandom();
-        GD.Print("随机种子为: ", Random.Seed);
+        Debug.Log("随机种子为: ", Random.Seed);
     }
 
     /// <summary>

@@ -73,7 +73,7 @@ public partial class DoorHoverArea : ColorRect
     private void OnSubmitDoorArea(DoorDirection direction, int start, int end)
     {
         IsDrag = false;
-        GD.Print("提交创建: " + direction + ", " + start + ", " + end);
+        Debug.Log("提交创建: " + direction + ", " + start + ", " + end);
         _currToolTemplate.Instance.DoorAreaInfo = MapEditorToolsPanel.EditorMap.Instance.CreateDoorArea(direction, start, end);
         //派发修改数据修改事件
         EventManager.EmitEvent(EventEnum.OnEditorDirty);

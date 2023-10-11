@@ -246,7 +246,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             {
                 if (!_weaponAttributeMap.TryAdd(weaponAttr.WeaponId, weaponAttr))
                 {
-                    GD.PrintErr("发现重复注册的武器属性: " + weaponAttr.Id);
+                    Debug.LogError("发现重复注册的武器属性: " + weaponAttr.Id);
                 }
             }
         }
@@ -287,7 +287,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
             Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
-            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + ItemConfig.Id);
+            Debug.LogError("弹夹的容量不能超过弹药上限, 武器id: " + ItemConfig.Id);
         }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
@@ -495,7 +495,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                     switch (_aloneReloadState)
                     {
                         case 0:
-                            GD.PrintErr("AloneReload状态错误!");
+                            Debug.LogError("AloneReload状态错误!");
                             break;
                         case 1: //装第一颗子弹之前
                         {
@@ -537,7 +537,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                             if (!_playReloadFinishSoundFlag && Attribute.ReloadFinishSound != null && _reloadTimer <= Attribute.ReloadFinishSoundAdvanceTime)
                             {
                                 _playReloadFinishSoundFlag = true;
-                                // GD.Print("播放换弹完成音效.");
+                                // Debug.Log("播放换弹完成音效.");
                                 PlayReloadFinishSound();
                             }
                             
@@ -558,7 +558,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                     if (!_playReloadFinishSoundFlag && Attribute.ReloadFinishSound != null && _reloadTimer <= Attribute.ReloadFinishSoundAdvanceTime)
                     {
                         _playReloadFinishSoundFlag = true;
-                        // GD.Print("播放换弹完成音效.");
+                        // Debug.Log("播放换弹完成音效.");
                         PlayReloadFinishSound();
                     }
 
@@ -1127,7 +1127,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             //播放开始换弹音效
             PlayBeginReloadSound();
             
-            // GD.Print("开始换弹.");
+            // Debug.Log("开始换弹.");
             //抛弹
             if (!Attribute.ContinuousShoot && (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0)
             {
@@ -1299,20 +1299,20 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         PlayReloadSound();
             
         OnReload();
-        // GD.Print("装弹.");
+        // Debug.Log("装弹.");
     }
     
     //换弹完成处理逻辑
     private void ReloadFinishHandler()
     {
-        // GD.Print("装弹完成.");
+        // Debug.Log("装弹完成.");
         OnReloadFinish();
     }
 
     //单独装弹完成
     private void AloneReloadStateFinish()
     {
-        // GD.Print("单独装弹完成.");
+        // Debug.Log("单独装弹完成.");
         OnAloneReloadStateFinish();
     }
 
@@ -1492,7 +1492,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     //帧动画播放结束
     private void OnAnimationFinished()
     {
-        // GD.Print("帧动画播放结束...");
+        // Debug.Log("帧动画播放结束...");
         AnimatedSprite.Play(AnimatorNames.Default);
     }
 

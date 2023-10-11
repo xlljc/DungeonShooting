@@ -667,7 +667,7 @@ public class DungeonTileMap
         {
             _usePoints.Clear();
             _polygonDataList.Clear();
-            GD.Print(e.Message);
+            Debug.Log(e.Message);
             _generateNavigationResult = new GenerateNavigationResult(false, e);
         }
     }
