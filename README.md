@@ -13,7 +13,7 @@
 但本作与市面上常规地牢射击游戏不同的是, 玩家与敌人共用武器资源, 玩家击败敌人便可拾起敌人的武器, 并且更加注重环境互动要素  
 **游戏背景:** 构思中
 
-![gif](DungeonShooting_Document/文档资源/GIF 2023-10-11 20-45-51.gif)
+![gif](DungeonShooting_Document/文档资源/preview_gif.gif)
 
 ---
 
