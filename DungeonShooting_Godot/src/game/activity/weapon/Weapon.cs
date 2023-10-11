@@ -17,6 +17,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// Ai使用该武器的属性
     /// </summary>
     public ExcelConfig.Weapon AiUseAttribute => _aiWeaponAttribute;
+
+    /// <summary>
+    /// 玩家使用该武器的属性
+    /// </summary>
+    public ExcelConfig.Weapon PlayerUseAttribute => _playerWeaponAttribute;
     
     private ExcelConfig.Weapon _weaponAttribute;
     private ExcelConfig.Weapon _playerWeaponAttribute;
@@ -135,6 +140,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     public bool IsAutoPlaySpriteFrames { get; set; } = true;
 
+    /// <summary>
+    /// 在没有所属 Master 的时候是否可以触发扳机
+    /// </summary>
+    public bool NoMasterCanTrigger { get; set; } = true;
+    
     //--------------------------------------------------------------------------------------------
     
     //触发按下扳机的角色
@@ -236,7 +246,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             {
                 if (!_weaponAttributeMap.TryAdd(weaponAttr.WeaponId, weaponAttr))
                 {
-                    GD.PrintErr("发现重复注册的武器属性: " + weaponAttr.Id);
+                    Debug.LogError("发现重复注册的武器属性: " + weaponAttr.Id);
                 }
             }
         }
@@ -277,7 +287,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
             Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
-            GD.PrintErr("弹夹的容量不能超过弹药上限, 武器id: " + ItemConfig.Id);
+            Debug.LogError("弹夹的容量不能超过弹药上限, 武器id: " + ItemConfig.Id);
         }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
@@ -423,7 +433,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         _noAttackTime += delta;
         
         //这把武器被扔在地上, 或者当前武器没有被使用
-        if (Master == null || Master.WeaponPack.ActiveItem != this)
+        //if (Master == null || Master.WeaponPack.ActiveItem != this)
+        if (Master != null && Master.WeaponPack.ActiveItem != this) //在背上
         {
             //_triggerTimer
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
@@ -445,9 +456,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             {
                 _dirtyFlag = false;
                 _aloneReloadState = 0;
-                Reloading = false;
-                _reloadTimer = 0;
-                _reloadUseTime = 0;
+                StopReload();
                 _attackFlag = false;
                 _continuousCount = 0;
                 _delayedTime = 0;
@@ -486,7 +495,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                     switch (_aloneReloadState)
                     {
                         case 0:
-                            GD.PrintErr("AloneReload状态错误!");
+                            Debug.LogError("AloneReload状态错误!");
                             break;
                         case 1: //装第一颗子弹之前
                         {
@@ -510,7 +519,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                                     if (Attribute.AloneReloadFinishIntervalTime <= 0)
                                     {
                                         //换弹完成
-                                        StopReloadState();
+                                        StopReload();
                                         ReloadFinishHandler();
                                     }
                                     else
@@ -528,14 +537,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                             if (!_playReloadFinishSoundFlag && Attribute.ReloadFinishSound != null && _reloadTimer <= Attribute.ReloadFinishSoundAdvanceTime)
                             {
                                 _playReloadFinishSoundFlag = true;
-                                // GD.Print("播放换弹完成音效.");
+                                // Debug.Log("播放换弹完成音效.");
                                 PlayReloadFinishSound();
                             }
                             
                             if (_reloadTimer <= 0)
                             {
                                 //换弹完成
-                                StopReloadState();
+                                StopReload();
                                 ReloadFinishHandler();
                             }
                             _aloneReloadStop = false;
@@ -549,7 +558,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                     if (!_playReloadFinishSoundFlag && Attribute.ReloadFinishSound != null && _reloadTimer <= Attribute.ReloadFinishSoundAdvanceTime)
                     {
                         _playReloadFinishSoundFlag = true;
-                        // GD.Print("播放换弹完成音效.");
+                        // Debug.Log("播放换弹完成音效.");
                         PlayReloadFinishSound();
                     }
 
@@ -569,7 +578,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                     _delayedTime += _attackTimer;
                     _attackTimer = 0;
                     //枪口默认角度
-                    RotationDegrees = -Attribute.DefaultAngle;
+                    if (Master != null)
+                    {
+                        RotationDegrees = -Attribute.DefaultAngle;
+                    }
+
                     //自动上膛
                     if (_beLoadedState == -1)
                     {
@@ -615,7 +628,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             if (!_looseShootFlag && _continuousCount > 0 && _delayedTime <= 0 && _attackTimer <= 0)
             {
                 //连发开火
-                TriggerFire(_attackTrigger);
+                TriggerFire();
                 //连发最后一发打完了
                 if (Attribute.ManualBeLoaded && _continuousCount <= 0)
                 {
@@ -637,13 +650,16 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             //武器身回归
             //Position = Position.MoveToward(Vector2.Zero, Attribute.BacklashRegressionSpeed * delta).Rotated(Rotation);
             _currBacklashLength = Mathf.MoveToward(_currBacklashLength, 0, Attribute.BacklashRegressionSpeed * delta);
-            Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
-            if (_attackTimer > 0)
+            if (Master != null)
             {
-                RotationDegrees = Mathf.Lerp(
-                    _fireAngle, -Attribute.DefaultAngle,
-                    Mathf.Clamp((_fireInterval - _attackTimer) * Attribute.UpliftAngleRestore / _fireInterval, 0, 1)
-                );
+                Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
+                if (_attackTimer > 0)
+                {
+                    RotationDegrees = Mathf.Lerp(
+                        _fireAngle, -Attribute.DefaultAngle,
+                        Mathf.Clamp((_fireInterval - _attackTimer) * Attribute.UpliftAngleRestore / _fireInterval, 0, 1)
+                    );
+                }
             }
         }
     }
@@ -663,6 +679,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <param name="trigger">按下扳机的角色, 如果传 null, 则视为走火</param>
     public void Trigger(Role trigger)
     {
+        //不能触发扳机
+        if (!NoMasterCanTrigger && Master == null) return;
+
         //这一帧已经按过了, 不需要再按下
         if (_triggerFlag) return;
         
@@ -674,7 +693,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         
         if (_beLoadedState == 0 || _beLoadedState == -1)  //需要执行上膛操作
         {
-            if (justDown && !Reloading && Master != null)
+            if (justDown && !Reloading && trigger != null)
             {
                 if (CurrAmmo <= 0)
                 {
@@ -744,7 +763,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                 else if (CurrAmmo <= 0) //子弹不够
                 {
                     fireFlag = false;
-                    if (justDown && Master != null)
+                    if (justDown && trigger != null)
                     {
                         //第一帧按下, 触发换弹
                         Reload();
@@ -779,7 +798,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                         else
                         {
                             //开火
-                            TriggerFire(_attackTrigger);
+                            TriggerFire();
 
                             //非连射模式
                             if (!Attribute.ContinuousShoot && Attribute.ManualBeLoaded && _continuousCount <= 0)
@@ -855,7 +874,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             _looseShootFlag = false;
             if (_chargeTime >= Attribute.MinChargeTime) //判断蓄力是否够了
             {
-                TriggerFire(_attackTrigger);
+                TriggerFire();
                 //非连射模式
                 if (!Attribute.ContinuousShoot && Attribute.ManualBeLoaded && _continuousCount <= 0)
                 {
@@ -876,7 +895,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 触发开火
     /// </summary>
-    private void TriggerFire(Role trigger)
+    private void TriggerFire()
     {
         _noAttackTime = 0;
 
@@ -962,7 +981,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         tempAngle -= Attribute.UpliftAngle;
         _fireAngle = tempAngle;
         
-        if (Master != null) //是否被拾起
+        if (Master != null) //被拾起
         {
             //武器身位置
             var max = Mathf.Abs(Mathf.Max(Utils.GetConfigRangeStart(Attribute.BacklashRange), Utils.GetConfigRangeEnd(Attribute.BacklashRange)));
@@ -973,9 +992,24 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             Position = new Vector2(_currBacklashLength, 0).Rotated(Rotation);
             RotationDegrees = tempAngle;
         }
-        else
+        else //在地上
         {
-            
+            var v = Utils.Random.RandomConfigRange(Attribute.BacklashRange) * 5;
+            var externalForce = MoveController.AddForce(new Vector2(-v, 0).Rotated(Rotation), v * 2);
+            externalForce.RotationSpeed = -Mathf.DegToRad(40);
+            externalForce.RotationResistance = Mathf.DegToRad(80);
+        }
+
+        if (IsInGround())
+        {
+            //在地上弹药打光
+            if (IsTotalAmmoEmpty())
+            {
+                //停止动画
+                AnimationPlayer.Stop();
+                //清除泛白效果
+                SetBlendSchedule(0);
+            }
         }
     }
 
@@ -1093,7 +1127,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             //播放开始换弹音效
             PlayBeginReloadSound();
             
-            // GD.Print("开始换弹.");
+            // Debug.Log("开始换弹.");
             //抛弹
             if (!Attribute.ContinuousShoot && (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0)
             {
@@ -1119,6 +1153,17 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
     }
 
+    /// <summary>
+    /// 强制停止换弹, 或者结束换弹状态
+    /// </summary>
+    public void StopReload()
+    {
+        _aloneReloadState = 0;
+        Reloading = false;
+        _reloadTimer = 0;
+        _reloadUseTime = 0;
+    }
+    
     //播放换弹开始音效
     private void PlayBeginReloadSound()
     {
@@ -1254,20 +1299,20 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         PlayReloadSound();
             
         OnReload();
-        // GD.Print("装弹.");
+        // Debug.Log("装弹.");
     }
     
     //换弹完成处理逻辑
     private void ReloadFinishHandler()
     {
-        // GD.Print("装弹完成.");
+        // Debug.Log("装弹完成.");
         OnReloadFinish();
     }
 
     //单独装弹完成
     private void AloneReloadStateFinish()
     {
-        // GD.Print("单独装弹完成.");
+        // Debug.Log("单独装弹完成.");
         OnAloneReloadStateFinish();
     }
 
@@ -1375,15 +1420,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
     }
 
-    //停止当前的换弹状态
-    private void StopReloadState()
-    {
-        _aloneReloadState = 0;
-        Reloading = false;
-        _reloadTimer = 0;
-        _reloadUseTime = 0;
-    }
-
     /// <summary>
     /// 换弹计时器时间到, 执行换弹操作
     /// </summary>
@@ -1438,7 +1474,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                 ResidueAmmo = 0;
             }
 
-            StopReloadState();
+            StopReload();
             ReloadFinishHandler();
         }
     }
@@ -1456,7 +1492,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     //帧动画播放结束
     private void OnAnimationFinished()
     {
-        // GD.Print("帧动画播放结束...");
+        // Debug.Log("帧动画播放结束...");
         AnimatedSprite.Play(AnimatorNames.Default);
     }
 
@@ -1806,8 +1842,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         var speed = Utils.Random.RandomConfigRange(Attribute.BulletSpeedRange);
         var distance = Utils.Random.RandomConfigRange(Attribute.BulletDistanceRange);
-        var deviationAngle =
-            Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
+        var deviationAngle = Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
         if (Master != null)
         {
             speed = Master.RoleState.CallCalcBulletSpeedEvent(this, speed);
@@ -1827,8 +1862,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             fireRotation + Mathf.DegToRad(deviationAngle),
             attackLayer
         );
-        bullet.MinHarm = Utils.GetConfigRangeStart(Attribute.BulletHarmRange);
-        bullet.MaxHarm = Utils.GetConfigRangeEnd(Attribute.BulletHarmRange);
+        bullet.MinHarm = Utils.GetConfigRangeStart(Attribute.HarmRange);
+        bullet.MaxHarm = Utils.GetConfigRangeEnd(Attribute.HarmRange);
         bullet.PutDown(RoomLayerEnum.YSortLayer);
         return bullet;
     }

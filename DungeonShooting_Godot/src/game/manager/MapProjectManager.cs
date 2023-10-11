@@ -93,7 +93,7 @@ public static class MapProjectManager
         }
         else
         {
-            GD.Print("刷新地图组时未找到配置文件: " + configFile + ", 执行创建文件");
+            Debug.Log("刷新地图组时未找到配置文件: " + configFile + ", 执行创建文件");
             GroupMap = new Dictionary<string, DungeonRoomGroup>();
             File.WriteAllText(configFile, "{}");
         }
@@ -117,7 +117,7 @@ public static class MapProjectManager
     {
         if (GroupMap.ContainsKey(group.GroupName))
         {
-            GD.PrintErr($"已经存在相同的地牢组: {group.GroupName}");
+            Debug.LogError($"已经存在相同的地牢组: {group.GroupName}");
             return;
         }
         GroupMap.Add(group.GroupName, group);
@@ -161,7 +161,7 @@ public static class MapProjectManager
         }
         else
         {
-            GD.PrintErr($"未找到地牢组: {groupName}");
+            Debug.LogError($"未找到地牢组: {groupName}");
         }
     }
 

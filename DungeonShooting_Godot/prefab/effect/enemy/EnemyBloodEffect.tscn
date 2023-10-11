@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://c1chld6lkpgji" path="res://resource/material/SmokeParticleMaterial.tres" id="1_leomh"]
 [ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="2_c2t2e"]
-[ext_resource type="Script" path="res://src/game/effects/AutoDestroyEffect.cs" id="3_i1urq"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroyParticles.cs" id="3_5cpi6"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_emuda"]
 particles_animation = true
@@ -21,5 +21,5 @@ lifetime = 1.2
 one_shot = true
 explosiveness = 1.0
 fixed_fps = 20
-script = ExtResource("3_i1urq")
+script = ExtResource("3_5cpi6")
 DelayTime = 1.5

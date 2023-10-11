@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Godot;
 
 /// <summary>
-/// 归属区域
+/// 房间归属区域
 /// </summary>
 public partial class AffiliationArea : Area2D, IDestroy
 {
@@ -37,7 +37,7 @@ public partial class AffiliationArea : Area2D, IDestroy
     /// <summary>
     /// 根据矩形区域初始化归属区域
     /// </summary>
-    public void Init(RoomInfo roomInfo, Rect2 rect2)
+    public void Init(RoomInfo roomInfo, Rect2I rect2)
     {
         if (_init)
         {
@@ -89,7 +89,7 @@ public partial class AffiliationArea : Area2D, IDestroy
         //如果是玩家
         if (activityObject == Player.Current)
         {
-            OnPlayerEnterRoom();
+            OnPlayerInsertRoom();
         }
     }
 
@@ -251,14 +251,14 @@ public partial class AffiliationArea : Area2D, IDestroy
     }
 
     //玩家进入房间
-    private void OnPlayerEnterRoom()
+    private void OnPlayerInsertRoom()
     {
         if (IsFirstEnterFlag)
         {
             EventManager.EmitEvent(EventEnum.OnPlayerFirstEnterRoom, RoomInfo);
-            IsFirstEnterFlag = false;
         }
         EventManager.EmitEvent(EventEnum.OnPlayerEnterRoom, RoomInfo);
+        IsFirstEnterFlag = false;
     }
 
     

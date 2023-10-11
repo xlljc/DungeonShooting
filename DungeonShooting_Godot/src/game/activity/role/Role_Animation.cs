@@ -13,20 +13,20 @@ public partial class Role
         var r = MountPoint.RotationDegrees;
         //var gp = MountPoint.GlobalPosition;
         var p1 = MountPoint.Position;
-        var p2 = p1 + new Vector2(6, 0).Rotated(Mathf.DegToRad(r - 60));
-        var p3 = p1 + new Vector2(6, 0).Rotated(Mathf.DegToRad(r + 60));
+        var p2 = p1 + new Vector2(6, 0).Rotated(Mathf.DegToRad(r - MeleeAttackAngle / 2f));
+        var p3 = p1 + new Vector2(6, 0).Rotated(Mathf.DegToRad(r + MeleeAttackAngle / 2f));
         
         var tween = CreateTween();
         tween.SetParallel();
         
-        tween.TweenProperty(MountPoint, "rotation_degrees", r - 60, 0.12);
-        tween.TweenProperty(MountPoint, "position", p2, 0.12);
-        tween.TweenProperty(MountPoint, "position", p2, 0.12);
+        tween.TweenProperty(MountPoint, "rotation_degrees", r - MeleeAttackAngle / 2f, 0.1);
+        tween.TweenProperty(MountPoint, "position", p2, 0.1);
+        tween.TweenProperty(MountPoint, "position", p2, 0.1);
         tween.Chain();
 
         tween.TweenCallback(Callable.From(() =>
         {
-            MountPoint.RotationDegrees = r + 60;
+            MountPoint.RotationDegrees = r + MeleeAttackAngle / 2f;
             MountPoint.Position = p3;
             //重新计算武器阴影位置
             var activeItem = WeaponPack.ActiveItem;
@@ -44,14 +44,25 @@ public partial class Role
             }
             //播放特效
             var sprite = ResourceManager.LoadAndInstantiate<AutoDestroySprite>(ResourcePath.prefab_effect_weapon_MeleeAttack1_tscn);
-            var localFirePosition = activeItem.GetLocalFirePosition();
-            localFirePosition.X *= 0.85f;
+            var localFirePosition = activeItem.GetLocalFirePosition() - activeItem.GripPoint.Position;
+            localFirePosition *= 0.9f;
             sprite.Position = p1 + localFirePosition.Rotated(Mathf.DegToRad(r));
             sprite.RotationDegrees = r;
             AddChild(sprite);
+            
+            //启用近战碰撞区域
+            MeleeAttackCollision.Disabled = false;
         }));
         tween.Chain();
         
+        tween.TweenInterval(0.1f);
+        tween.Chain();
+
+        tween.TweenCallback(Callable.From(() =>
+        {
+            //关闭近战碰撞区域
+            MeleeAttackCollision.Disabled = true;
+        }));
         tween.TweenProperty(MountPoint, "rotation_degrees", r, 0.2);
         tween.TweenProperty(MountPoint, "position", p1, 0.2);
         tween.Chain();

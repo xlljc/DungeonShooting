@@ -67,11 +67,11 @@ public partial class ImageCanvas : Sprite2D, IDestroy
         var height = item.SrcImage.GetHeight();
         if (width > 128)
         {
-            GD.PrintErr("警告: 图像宽度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
+            Debug.LogError("警告: 图像宽度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
         }
         if (height > 128)
         {
-            GD.PrintErr("警告: 图像高度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
+            Debug.LogError("警告: 图像高度大于 128, 旋转后像素点可能绘制到画布外导致像素丢失!");
         }
         item.X = Mathf.RoundToInt(x);
         item.Y = Mathf.RoundToInt(y);
@@ -105,7 +105,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
 
         if (item.RenderWidth >= RenderViewportSize.X)
         {
-            GD.PrintErr($"图像旋转后的宽度大于{RenderViewportSize.X}, 不支持绘制到 ImageCanvas 下!");
+            Debug.LogError($"图像旋转后的宽度大于{RenderViewportSize.X}, 不支持绘制到 ImageCanvas 下!");
             item.SrcImage.Dispose();
             return;
         }

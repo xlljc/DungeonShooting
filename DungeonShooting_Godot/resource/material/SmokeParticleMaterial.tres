@@ -1,6 +1,12 @@
-[gd_resource type="ParticleProcessMaterial" load_steps=2 format=3 uid="uid://c1chld6lkpgji"]
+[gd_resource type="ParticleProcessMaterial" load_steps=4 format=3 uid="uid://c1chld6lkpgji"]
 
 [ext_resource type="Texture2D" uid="uid://bs1lan5uwxyfg" path="res://resource/curve/Curve1.tres" id="1_yr5l8"]
+
+[sub_resource type="Gradient" id="Gradient_ryemi"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.537255)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4mhw0"]
+gradient = SubResource("Gradient_ryemi")
 
 [resource]
 particle_flag_disable_z = true
@@ -13,5 +19,5 @@ orbit_velocity_max = 0.0
 scale_min = 0.8
 scale_max = 0.8
 scale_curve = ExtResource("1_yr5l8")
-color = Color(1, 1, 1, 0.533333)
+color_ramp = SubResource("GradientTexture1D_4mhw0")
 anim_offset_max = 1.0

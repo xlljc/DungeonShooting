@@ -12,7 +12,7 @@ config_version=5
 
 config/name="DungeonShooting"
 run/main_scene="res://scene/Main.tscn"
-config/features=PackedStringArray("4.1", "C#")
+config/features=PackedStringArray("4.2", "C#")
 config/icon="res://icon.png"
 
 [debug]
@@ -211,7 +211,9 @@ project/assembly_name="DungeonShooting"
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0.109804, 0.0666667, 0.0901961, 1)
+viewport/hdr_2d=true
 2d/snapping/use_gpu_pixel_snap=true
 environment/default_environment="res://default_env.tres"
 

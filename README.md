@@ -1,5 +1,5 @@
 
-一款由Godot开发的地牢射击类型的游戏, 脚本语言使用的是C#, 当前项目使用的Godot版本: Godot_v4.1
+一款由Godot开发的地牢射击类型的游戏, 脚本语言使用的是C#, 当前项目使用的Godot版本: Godot_v4.2dev
 
 --- 
 ### 游戏定义
@@ -12,6 +12,8 @@
 玩家需要在这些房间中探索, 战斗, 收集掉落的道具和被动, 一步步成长, 击败boss, 进入下一层, 如此往复, 直到击败最后一层boss即可通关. 
 但本作与市面上常规地牢射击游戏不同的是, 玩家与敌人共用武器资源, 玩家击败敌人便可拾起敌人的武器, 并且更加注重环境互动要素  
 **游戏背景:** 构思中
+
+![gif](DungeonShooting_Document/文档资源/preview_gif.gif)
 
 ---
 
@@ -27,4 +29,5 @@ git仓库的目录结构如下
 ### 其他
 **开发日志:** [开发日志.md](DungeonShooting_Document/开发日志.md)  
 **项目看板:** https://trello.com/b/a8UGxnTl/dungeonshooting  
-**哔哩哔哩:** https://space.bilibili.com/259437820
+**哔哩哔哩:** https://space.bilibili.com/259437820  
+**项目Ui插件:** https://github.com/xlljc/Ds_Ui

@@ -1,6 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dr72ij0rwlafo"]
 
-[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/TileSet1.tres" id="1_oisp3"]
+[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/map1/TileSet1.tres" id="1_oisp3"]
+
 
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wsquq"]

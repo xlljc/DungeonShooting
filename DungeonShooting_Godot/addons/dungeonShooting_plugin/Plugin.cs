@@ -42,18 +42,18 @@ namespace Plugin
         //自定义节点
         private CustomTypeInfo[] _customTypeInfos = new CustomTypeInfo[]
         {
-            new CustomTypeInfo(
-                "ActivityMark",
-                "Node2D",
-                "res://src/framework/map/mark/ActivityMark.cs",
-                "res://addons/dungeonShooting_plugin/Mark.svg"
-            ),
-            new CustomTypeInfo(
-                "EnemyMark",
-                "Node2D",
-                "res://src/framework/map/mark/EnemyMark.cs",
-                "res://addons/dungeonShooting_plugin/Mark.svg"
-            ),
+            // new CustomTypeInfo(
+            //     "ActivityMark",
+            //     "Node2D",
+            //     "res://src/framework/map/mark/ActivityMark.cs",
+            //     "res://addons/dungeonShooting_plugin/Mark.svg"
+            // ),
+            // new CustomTypeInfo(
+            //     "EnemyMark",
+            //     "Node2D",
+            //     "res://src/framework/map/mark/EnemyMark.cs",
+            //     "res://addons/dungeonShooting_plugin/Mark.svg"
+            // ),
         };
         
         public override void _Process(double delta)
@@ -89,7 +89,7 @@ namespace Plugin
                     }
                     catch (Exception e)
                     {
-                        GD.PrintErr(e.ToString());
+                        Debug.LogError(e.ToString());
                     }
                 }
             }
@@ -104,7 +104,7 @@ namespace Plugin
             }
             catch (Exception e)
             {
-                GD.PrintErr(e.ToString());
+                Debug.LogError(e.ToString());
             }
 
             try
@@ -113,7 +113,7 @@ namespace Plugin
             }
             catch (Exception e)
             {
-                GD.PrintErr(e.ToString());
+                Debug.LogError(e.ToString());
             }
             
             
@@ -140,7 +140,7 @@ namespace Plugin
                     }
                     catch (Exception e)
                     {
-                        GD.PrintErr(e.ToString());
+                        Debug.LogError(e.ToString());
                     }
                 }
             }
@@ -153,7 +153,7 @@ namespace Plugin
                 }
                 catch (Exception e)
                 {
-                    GD.PrintErr(e.ToString());
+                    Debug.LogError(e.ToString());
                 }
 
                 try
@@ -162,7 +162,7 @@ namespace Plugin
                 }
                 catch (Exception e)
                 {
-                    GD.PrintErr(e.ToString());
+                    Debug.LogError(e.ToString());
                 }
 
                 _editorTools.Free();

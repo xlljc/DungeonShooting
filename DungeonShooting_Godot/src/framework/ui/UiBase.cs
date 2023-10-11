@@ -105,7 +105,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     {
         if (IsDestroyed)
         {
-            GD.PrintErr($"当前Ui: {UiName}已经被销毁!");
+            Debug.LogError($"当前Ui: {UiName}已经被销毁!");
             return;
         }
         if (IsOpen)
@@ -134,7 +134,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     {
         if (IsDestroyed)
         {
-            GD.PrintErr($"当前Ui: {UiName}已经被销毁!");
+            Debug.LogError($"当前Ui: {UiName}已经被销毁!");
             return;
         }
         if (!IsOpen)
@@ -254,7 +254,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         {
             if (uiBase.ParentUi != null && uiBase.ParentUi != this)
             {
-                GD.PrintErr($"子Ui:'{uiBase.UiName}'已经被其他Ui:'{uiBase.ParentUi.UiName}'嵌套打开!");
+                Debug.LogError($"子Ui:'{uiBase.UiName}'已经被其他Ui:'{uiBase.ParentUi.UiName}'嵌套打开!");
                 uiBase.ParentUi.RecordNestedUi(uiBase, node, UiManager.RecordType.Close);
             }
             if (_nestedUiSet == null)
@@ -275,7 +275,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             }
             else
             {
-                GD.PrintErr($"当前Ui:'{UiName}'没有嵌套打开子Ui:'{uiBase.UiName}'!");
+                Debug.LogError($"当前Ui:'{UiName}'没有嵌套打开子Ui:'{uiBase.UiName}'!");
                 return;
             }
             
@@ -343,7 +343,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         Destroy();
         if (PrevUi == null)
         {
-            GD.PrintErr($"Ui: {UiName} 没有记录上一级Ui!");
+            Debug.LogError($"Ui: {UiName} 没有记录上一级Ui!");
         }
         else
         {

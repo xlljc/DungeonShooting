@@ -97,7 +97,7 @@ public static class ResourceManager
             var res = ResourceLoader.Load<T>(path, null, ResourceLoader.CacheMode.Ignore);
             if (res == null)
             {
-                GD.PrintErr("加载资源失败, 未找到资源: " + path);
+                Debug.LogError("加载资源失败, 未找到资源: " + path);
                 return default;
             }
 
@@ -117,7 +117,7 @@ public static class ResourceManager
         }
         else
         {
-            GD.PrintErr("加载资源失败, 未找到资源: " + path);
+            Debug.LogError("加载资源失败, 未找到资源: " + path);
         }
 
         return default;

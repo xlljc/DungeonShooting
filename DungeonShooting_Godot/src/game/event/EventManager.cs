@@ -64,7 +64,7 @@ public static class EventManager
                     }
                     catch (Exception e)
                     {
-                        GD.PrintErr($"EventManager 派发事件: '{eventType}' 发生异常: \n" + e.Message + "\n" + e.StackTrace);
+                        Debug.LogError($"EventManager 派发事件: '{eventType}' 发生异常: \n" + e.Message + "\n" + e.StackTrace);
                     }
                 }
             }

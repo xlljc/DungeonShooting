@@ -53,7 +53,7 @@ public partial class ActivityObject
             instance._InitNode(config, world);
             return instance;
         }
-        GD.PrintErr("创建实例失败, 未找到id为'" + itemId + "'的物体!");
+        Debug.LogError("创建实例失败, 未找到id为'" + itemId + "'的物体!");
         return null;
     }
 

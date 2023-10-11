@@ -24,7 +24,7 @@ public partial class Shell : ActivityObject
             }
             else
             {
-                GD.Print("弹壳投抛到画布外了, 强制消除...");
+                Debug.Log("弹壳投抛到画布外了, 强制消除...");
                 Destroy();
             }
         }

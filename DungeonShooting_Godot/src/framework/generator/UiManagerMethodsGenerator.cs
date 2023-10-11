@@ -108,7 +108,7 @@ public static class UiManagerMethodsGenerator
         }
         catch (Exception e)
         {
-            GD.PrintErr(e.ToString());
+            Debug.LogError(e.ToString());
             return false;
         }
 

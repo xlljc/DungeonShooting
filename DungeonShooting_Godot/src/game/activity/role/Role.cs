@@ -40,7 +40,7 @@ public abstract partial class Role : ActivityObject
     public CampEnum Camp;
 
     /// <summary>
-    /// 攻击目标的碰撞器所属层级, 数据源自于: PhysicsLayer
+    /// 攻击目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
     /// </summary>
     public uint AttackLayer { get; set; } = PhysicsLayer.Wall;
 
@@ -81,6 +81,24 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     [Export, ExportFillNode]
     public CollisionShape2D InteractiveCollision { get; set; }
+    
+    /// <summary>
+    /// 近战碰撞检测区域
+    /// </summary>
+    [Export, ExportFillNode]
+    public Area2D MeleeAttackArea { get; set; }
+    
+    /// <summary>
+    /// 近战碰撞检测区域的碰撞器
+    /// </summary>
+    [Export, ExportFillNode]
+    public CollisionPolygon2D MeleeAttackCollision { get; set; }
+
+    /// <summary>
+    /// 近战攻击时挥动武器的角度
+    /// </summary>
+    [Export]
+    public float MeleeAttackAngle { get; set; } = 120;
 
     /// <summary>
     /// 武器挂载点是否始终指向目标
@@ -398,6 +416,12 @@ public abstract partial class Role : ActivityObject
         //连接互动物体信号
         InteractiveArea.BodyEntered += _OnPropsEnter;
         InteractiveArea.BodyExited += _OnPropsExit;
+        
+        MeleeAttackCollision.Disabled = true;
+        //切换武器回调
+        WeaponPack.ChangeActiveItemEvent += OnChangeActiveItem;
+        //近战区域进入物体
+        MeleeAttackArea.BodyEntered += OnMeleeAttackBodyEntered;
     }
 
     protected override void Process(float delta)
@@ -804,7 +828,7 @@ public abstract partial class Role : ActivityObject
     {
         if (BuffPropPack.Contains(buffProp))
         {
-            GD.PrintErr("被动道具已经在背包中了!");
+            Debug.LogError("被动道具已经在背包中了!");
             return false;
         }
         BuffPropPack.Add(buffProp);
@@ -823,7 +847,7 @@ public abstract partial class Role : ActivityObject
         var index = BuffPropPack.IndexOf(buffProp);
         if (index < 0)
         {
-            GD.PrintErr("当前道具不在角色背包中!");
+            Debug.LogError("当前道具不在角色背包中!");
             return;
         }
         
@@ -957,11 +981,10 @@ public abstract partial class Role : ActivityObject
         else
         {
             damage = RoleState.CallCalcHurtDamageEvent(damage);
-            if (damage < 0)
+            if (damage > 0)
             {
-                return;
+                Hp -= damage;
             }
-            Hp -= damage;
             //播放血液效果
             // var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_Blood_tscn);
             // var blood = packedScene.Instance<Blood>();
@@ -1075,6 +1098,66 @@ public abstract partial class Role : ActivityObject
                 _currentResultData = null;
                 InteractiveItem = null;
                 ChangeInteractiveItem(prev, null);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 切换当前使用的武器的回调
+    /// </summary>
+    private void OnChangeActiveItem(Weapon weapon)
+    {
+        //这里处理近战区域
+        if (weapon != null)
+        {
+            MeleeAttackCollision.Polygon = Utils.CreateSectorPolygon(
+                Utils.ConvertAngle(-MeleeAttackAngle / 2f),
+                (weapon.GetLocalFirePosition() - weapon.GripPoint.Position).Length() * 1.2f,
+                MeleeAttackAngle,
+                6
+            );
+            MeleeAttackArea.CollisionMask = AttackLayer | PhysicsLayer.Bullet;
+        }
+    }
+
+    /// <summary>
+    /// 近战区域碰到敌人
+    /// </summary>
+    private void OnMeleeAttackBodyEntered(Node2D body)
+    {
+        var activeWeapon = WeaponPack.ActiveItem;
+        if (activeWeapon == null)
+        {
+            return;
+        }
+        var activityObject = body.AsActivityObject();
+        if (activityObject != null)
+        {
+            if (activityObject is Role role) //攻击角色
+            {
+                var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
+                damage = RoleState.CallCalcDamageEvent(damage);
+                
+                //击退
+                if (role is not Player) //目标不是玩家才会触发击退
+                {
+                    var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
+                    var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRnage);
+                    var position = role.GlobalPosition - MountPoint.GlobalPosition;
+                    var v2 = position.Normalized() * repel;
+                    role.MoveController.AddForce(v2, repel * 2);
+                }
+                
+                role.CallDeferred(nameof(Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());
+            }
+            else if (activityObject is Bullet bullet) //攻击子弹
+            {
+                var attackLayer = bullet.AttackLayer;
+                if (CollisionWithMask(attackLayer)) //是攻击玩家的子弹
+                {
+                    bullet.PlayDisappearEffect();
+                    bullet.Destroy();
+                }
             }
         }
     }

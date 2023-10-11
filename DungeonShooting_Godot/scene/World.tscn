@@ -1,20 +1,29 @@
 [gd_scene load_steps=3 format=3 uid="uid://bqf2vks5ggnsp"]
 
 [ext_resource type="Script" path="res://src/game/room/World.cs" id="1_kt3mm"]
-[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/TileSet1.tres" id="2_p6iui"]
 
-[node name="World" type="Node2D" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot")]
+[sub_resource type="Environment" id="Environment_g06jj"]
+background_mode = 3
+glow_enabled = true
+glow_normalized = true
+glow_strength = 1.05
+glow_blend_mode = 1
+
+[node name="World" type="CanvasModulate" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot", "FogMaskRoot")]
+color = Color(0, 0, 0, 1)
 script = ExtResource("1_kt3mm")
 NormalLayer = NodePath("NormalLayer")
 YSortLayer = NodePath("YSortLayer")
 TileRoot = NodePath("TileRoot")
 StaticSpriteRoot = NodePath("StaticSpriteRoot")
 AffiliationAreaRoot = NodePath("AffiliationAreaRoot")
+FogMaskRoot = NodePath("FogMaskRoot")
 metadata/_edit_vertical_guides_ = []
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_g06jj")
+
 [node name="TileRoot" type="TileMap" parent="."]
-y_sort_enabled = true
-tile_set = ExtResource("2_p6iui")
 format = 2
 layer_0/name = "Floor"
 layer_0/z_index = -10
@@ -35,7 +44,7 @@ layer_2/tile_data = PackedInt32Array()
 layer_3/name = "AisleFloor"
 layer_3/enabled = true
 layer_3/modulate = Color(1, 1, 1, 1)
-layer_3/y_sort_enabled = true
+layer_3/y_sort_enabled = false
 layer_3/y_sort_origin = 0
 layer_3/z_index = -10
 layer_3/tile_data = PackedInt32Array()
@@ -50,3 +59,5 @@ z_index = -1
 y_sort_enabled = true
 
 [node name="AffiliationAreaRoot" type="Node2D" parent="."]
+
+[node name="FogMaskRoot" type="Node2D" parent="."]

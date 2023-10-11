@@ -1,36 +1,40 @@
 {
   "TestGroup1": {
-    "GroupName": "TestGroup1",
-    "BattleList": [
-      {
-        "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle1"
-      },
-      {
-        "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle2"
-      },
-      {
-        "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle3"
-      }
-    ],
-    "InletList": [
-      {
-        "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/inlet/Start1"
-      }
-    ],
-    "OutletList": [
-      {
-        "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/outlet/End1"
-      }
-    ],
-    "BossList": [],
-    "RewardList": [],
-    "ShopList": [],
-    "EventList": [],
-    "Remark": "\u6D4B\u8BD5\u7EC4"
+	"GroupName": "TestGroup1",
+	"BattleList": [
+	  {
+		"ErrorType": 0,
+		"Path": "resource/map/tileMaps/TestGroup1/battle/Battle1"
+	  },
+	  {
+		"ErrorType": 0,
+		"Path": "resource/map/tileMaps/TestGroup1/battle/Battle2"
+	  },
+	  {
+		"ErrorType": 0,
+		"Path": "resource/map/tileMaps/TestGroup1/battle/Battle3"
+	  }
+	],
+	"InletList": [
+	  {
+		"ErrorType": 0,
+		"Path": "resource/map/tileMaps/TestGroup1/inlet/Start1"
+	  },
+	  {
+		"ErrorType": 0,
+		"Path": "resource/map/tileMaps/TestGroup1/inlet/Start2"
+	  }
+	],
+	"OutletList": [
+	  {
+		"ErrorType": 0,
+		"Path": "resource/map/tileMaps/TestGroup1/outlet/End1"
+	  }
+	],
+	"BossList": [],
+	"RewardList": [],
+	"ShopList": [],
+	"EventList": [],
+	"Remark": "\u6D4B\u8BD5\u7EC4"
   }
 }

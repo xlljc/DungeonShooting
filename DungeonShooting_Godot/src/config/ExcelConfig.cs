@@ -64,7 +64,7 @@ public static partial class ExcelConfig
         }
         catch (Exception e)
         {
-            GD.PrintErr(e.ToString());
+            Debug.LogError(e.ToString());
             throw new Exception("初始化表'ActivityObject'失败!");
         }
     }
@@ -82,7 +82,7 @@ public static partial class ExcelConfig
         }
         catch (Exception e)
         {
-            GD.PrintErr(e.ToString());
+            Debug.LogError(e.ToString());
             throw new Exception("初始化表'Sound'失败!");
         }
     }
@@ -100,7 +100,7 @@ public static partial class ExcelConfig
         }
         catch (Exception e)
         {
-            GD.PrintErr(e.ToString());
+            Debug.LogError(e.ToString());
             throw new Exception("初始化表'Weapon'失败!");
         }
     }
@@ -153,7 +153,7 @@ public static partial class ExcelConfig
             }
             catch (Exception e)
             {
-                GD.PrintErr(e.ToString());
+                Debug.LogError(e.ToString());
                 throw new Exception("初始化'Weapon'引用其他表数据失败, 当前行id: " + item.Id);
             }
         }

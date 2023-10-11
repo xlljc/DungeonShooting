@@ -40,6 +40,7 @@ z_index = -1
 material = SubResource("ShaderMaterial_v77gw")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+modulate = Color(1.6, 1.6, 1.6, 1)
 material = SubResource("ShaderMaterial_p0wfd")
 sprite_frames = ExtResource("3_qvo0u")
 
@@ -54,5 +55,4 @@ position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_c0onq")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_c0onq")

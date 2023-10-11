@@ -9,7 +9,6 @@ public class ResourcePath
     public const string excel_DungeonShooting_ExcelTool_deps_json = "res://excel/DungeonShooting_ExcelTool.deps.json";
     public const string excel_DungeonShooting_ExcelTool_runtimeconfig_json = "res://excel/DungeonShooting_ExcelTool.runtimeconfig.json";
     public const string prefab_Cursor_tscn = "res://prefab/Cursor.tscn";
-    public const string prefab_FanCollisionShape_tscn = "res://prefab/FanCollisionShape.tscn";
     public const string prefab_bullet_Bullet0001_tscn = "res://prefab/bullet/Bullet0001.tscn";
     public const string prefab_bullet_Bullet0002_tscn = "res://prefab/bullet/Bullet0002.tscn";
     public const string prefab_bullet_Bullet0003_tscn = "res://prefab/bullet/Bullet0003.tscn";
@@ -21,6 +20,7 @@ public class ResourcePath
     public const string prefab_effect_weapon_BulletSmoke_tscn = "res://prefab/effect/weapon/BulletSmoke.tscn";
     public const string prefab_effect_weapon_FirePart_tscn = "res://prefab/effect/weapon/FirePart.tscn";
     public const string prefab_effect_weapon_MeleeAttack1_tscn = "res://prefab/effect/weapon/MeleeAttack1.tscn";
+    public const string prefab_effect_weapon_MeleeAttack2_tscn = "res://prefab/effect/weapon/MeleeAttack2.tscn";
     public const string prefab_effect_weapon_ShotFire_tscn = "res://prefab/effect/weapon/ShotFire.tscn";
     public const string prefab_map_RoomDoor_E_tscn = "res://prefab/map/RoomDoor_E.tscn";
     public const string prefab_map_RoomDoor_N_tscn = "res://prefab/map/RoomDoor_N.tscn";
@@ -48,6 +48,7 @@ public class ResourcePath
     public const string prefab_test_MoveComponent_tscn = "res://prefab/test/MoveComponent.tscn";
     public const string prefab_test_TestActivity_tscn = "res://prefab/test/TestActivity.tscn";
     public const string prefab_ui_BottomTips_tscn = "res://prefab/ui/BottomTips.tscn";
+    public const string prefab_ui_Debugger_tscn = "res://prefab/ui/Debugger.tscn";
     public const string prefab_ui_EditorTips_tscn = "res://prefab/ui/EditorTips.tscn";
     public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
     public const string prefab_ui_EditorWindow_tscn = "res://prefab/ui/EditorWindow.tscn";
@@ -63,7 +64,9 @@ public class ResourcePath
     public const string prefab_ui_MapEditorProject_tscn = "res://prefab/ui/MapEditorProject.tscn";
     public const string prefab_ui_MapEditorSelectObject_tscn = "res://prefab/ui/MapEditorSelectObject.tscn";
     public const string prefab_ui_MapEditorTools_tscn = "res://prefab/ui/MapEditorTools.tscn";
+    public const string prefab_ui_PauseMenu_tscn = "res://prefab/ui/PauseMenu.tscn";
     public const string prefab_ui_RoomUI_tscn = "res://prefab/ui/RoomUI.tscn";
+    public const string prefab_ui_Setting_tscn = "res://prefab/ui/Setting.tscn";
     public const string prefab_ui_Settlement_tscn = "res://prefab/ui/Settlement.tscn";
     public const string prefab_weapon_Weapon0001_tscn = "res://prefab/weapon/Weapon0001.tscn";
     public const string prefab_weapon_Weapon0002_tscn = "res://prefab/weapon/Weapon0002.tscn";
@@ -73,7 +76,6 @@ public class ResourcePath
     public const string prefab_weapon_Weapon0006_tscn = "res://prefab/weapon/Weapon0006.tscn";
     public const string prefab_weapon_Weapon0007_tscn = "res://prefab/weapon/Weapon0007.tscn";
     public const string prefab_weapon_WeaponTemplate_tscn = "res://prefab/weapon/WeaponTemplate.tscn";
-    public const string resource_Enviromenent_tres = "res://resource/Enviromenent.tres";
     public const string resource_config_ActivityObject_json = "res://resource/config/ActivityObject.json";
     public const string resource_config_Sound_json = "res://resource/config/Sound.json";
     public const string resource_config_Weapon_json = "res://resource/config/Weapon.json";
@@ -83,8 +85,10 @@ public class ResourcePath
     public const string resource_font_DinkieBitmap9pxItalicDemo_ttf = "res://resource/font/DinkieBitmap-9pxItalicDemo.ttf";
     public const string resource_font_VonwaonBitmap12px_ttf = "res://resource/font/VonwaonBitmap-12px.ttf";
     public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
-    public const string resource_map_tileSet_TileSet1_tres = "res://resource/map/tileSet/TileSet1.tres";
     public const string resource_map_tileSet_TileSet_old_tres = "res://resource/map/tileSet/TileSet_old.tres";
+    public const string resource_map_tileSet_map1_TileSet1_tres = "res://resource/map/tileSet/map1/TileSet1.tres";
+    public const string resource_map_tileSet_map1_website_txt = "res://resource/map/tileSet/map1/website.txt";
+    public const string resource_map_tileSprite_map1_16x16dungeoniiwallreconfigv04spritesheet_png = "res://resource/map/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png";
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";
     public const string resource_material_Blend_tres = "res://resource/material/Blend.tres";
     public const string resource_material_SmokeParticleMaterial_tres = "res://resource/material/SmokeParticleMaterial.tres";
@@ -145,9 +149,12 @@ public class ResourcePath
     public const string resource_sprite_effects_weapon_KnifeHit1_png = "res://resource/sprite/effects/weapon/KnifeHit1.png";
     public const string resource_sprite_effects_weapon_MeleeAttack1_png = "res://resource/sprite/effects/weapon/MeleeAttack1.png";
     public const string resource_sprite_effects_weapon_ShotFire_png = "res://resource/sprite/effects/weapon/ShotFire.png";
-    public const string resource_sprite_map_map1_16x16dungeoniiwallreconfigv04spritesheet_png = "res://resource/sprite/map/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png";
-    public const string resource_sprite_map_map1_door1_down_png = "res://resource/sprite/map/map1/door1_down.png";
-    public const string resource_sprite_map_map1_website_txt = "res://resource/sprite/map/map1/website.txt";
+    public const string resource_sprite_map_door1_down_png = "res://resource/sprite/map/door1_down.png";
+    public const string resource_sprite_map_PreviewTransition_png = "res://resource/sprite/map/PreviewTransition.png";
+    public const string resource_sprite_map_PreviewTransition2_png = "res://resource/sprite/map/PreviewTransition2.png";
+    public const string resource_sprite_map_WallTransition1_png = "res://resource/sprite/map/WallTransition1.png";
+    public const string resource_sprite_map_WallTransition2_png = "res://resource/sprite/map/WallTransition2.png";
+    public const string resource_sprite_map_WallTransition3_png = "res://resource/sprite/map/WallTransition3.png";
     public const string resource_sprite_prop_active_ActiveProp5000_png = "res://resource/sprite/prop/active/ActiveProp5000.png";
     public const string resource_sprite_prop_active_ActiveProp5001_png = "res://resource/sprite/prop/active/ActiveProp5001.png";
     public const string resource_sprite_prop_buff_BuffProp0001_png = "res://resource/sprite/prop/buff/BuffProp0001.png";
@@ -303,6 +310,7 @@ public class ResourcePath
     public const string scene_Main_tscn = "res://scene/Main.tscn";
     public const string scene_World_tscn = "res://scene/World.tscn";
     public const string scene_test_TestCommpont_tscn = "res://scene/test/TestCommpont.tscn";
+    public const string scene_test_TestCreateSector_tscn = "res://scene/test/TestCreateSector.tscn";
     public const string scene_test_TestExpression_tscn = "res://scene/test/TestExpression.tscn";
     public const string scene_test_TestGenerateDungeon_tscn = "res://scene/test/TestGenerateDungeon.tscn";
     public const string scene_test_TestNavigation2_tscn = "res://scene/test/TestNavigation2.tscn";
@@ -311,5 +319,6 @@ public class ResourcePath
     public const string scene_test_TestOptimizeSprite_tscn = "res://scene/test/TestOptimizeSprite.tscn";
     public const string scene_test_TestOutline_tscn = "res://scene/test/TestOutline.tscn";
     public const string scene_test_TestReadExcel_tscn = "res://scene/test/TestReadExcel.tscn";
+    public const string scene_test_TestRoomFog_tscn = "res://scene/test/TestRoomFog.tscn";
     public const string scene_test_TestTileLayer_tscn = "res://scene/test/TestTileLayer.tscn";
 }

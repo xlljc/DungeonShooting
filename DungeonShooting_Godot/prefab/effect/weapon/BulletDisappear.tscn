@@ -1,8 +1,8 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=13 format=3 uid="uid://c6mmikwchwt"]
 
 [ext_resource type="Texture2D" uid="uid://d8ot2wrdoe4j" path="res://resource/sprite/effects/Explosion.png" id="1_qqm6c"]
-[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/Smoke.png" id="1_ybsvf"]
-
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="1_ybsvf"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_l2qlq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tscb3"]
 atlas = ExtResource("1_qqm6c")
@@ -69,63 +69,15 @@ scale_curve = SubResource("CurveTexture_j77i6")
 color = Color(0.909804, 0.909804, 0.909804, 0.380392)
 anim_offset_max = 1.0
 
-[sub_resource type="Animation" id="Animation_jnfgg"]
-resource_name = "Start"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:emitting")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("..")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.3),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"queue_free"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_yr61b"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:emitting")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_1spnw"]
-_data = {
-"RESET": SubResource("Animation_yr61b"),
-"Start": SubResource("Animation_jnfgg")
-}
-
-[node name="BulletDisappear" type="AnimatedSprite2D"]
+[node name="BulletDisappear" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
 modulate = Color(1, 1, 1, 0.784314)
 z_index = -4
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_ub3cw")
 autoplay = "default"
+script = ExtResource("2_l2qlq")
+DelayTime = 0.3
+Particles2D = [NodePath("GPUParticles2D")]
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_4bd3q")
@@ -136,10 +88,3 @@ lifetime = 0.3
 one_shot = true
 explosiveness = 0.9
 fixed_fps = 20
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("../GPUParticles2D")
-autoplay = "Start"
-libraries = {
-"": SubResource("AnimationLibrary_1spnw")
-}

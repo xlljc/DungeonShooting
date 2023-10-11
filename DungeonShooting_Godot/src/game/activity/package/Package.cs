@@ -6,6 +6,11 @@ using System.Collections.Generic;
 /// </summary>
 public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
 {
+    /// <summary>
+    /// 当前使用对象改变时回调
+    /// </summary>
+    public event Action<T> ChangeActiveItemEvent;
+    
     public bool IsDestroyed { get; private set; }
     
     /// <summary>
@@ -16,7 +21,23 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
     /// <summary>
     /// 当前使用的物体对象
     /// </summary>
-    public T ActiveItem { get; private set; }
+    public T ActiveItem
+    {
+        get => _activeItem;
+        set
+        {
+            if (value != _activeItem)
+            {
+                _activeItem = value;
+                if (ChangeActiveItemEvent != null)
+                {
+                    ChangeActiveItemEvent(value);
+                }
+            }
+        }
+    }
+
+    private T _activeItem;
 
     /// <summary>
     /// 当前使用的物体的索引

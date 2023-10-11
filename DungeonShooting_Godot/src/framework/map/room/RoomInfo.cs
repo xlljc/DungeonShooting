@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -80,6 +81,16 @@ public class RoomInfo : IDestroy
     public RoomStaticImageCanvas StaticImageCanvas;
 
     /// <summary>
+    /// 房间迷雾
+    /// </summary>
+    public FogMask RoomFogMask;
+    
+    /// <summary>
+    /// 房间算上连接通道所占用的区域
+    /// </summary>
+    public Rect2I OuterRange { get; private set; }
+
+    /// <summary>
     /// 是否处于闭关状态, 也就是房间门没有主动打开
     /// </summary>
     public bool IsSeclusion { get; private set; } = false;
@@ -93,6 +104,96 @@ public class RoomInfo : IDestroy
     // private int _currWaveNumber = 0;
     //private List<ActivityMark> _currActivityMarks = new List<ActivityMark>();
 
+    /// <summary>
+    /// 重新计算占用的区域
+    /// </summary>
+    public void CalcOuterRange()
+    {
+        var worldPos = GetWorldPosition();
+        var pos = new Vector2I(worldPos.X, worldPos.Y);
+        var minX = pos.X;
+        var minY = pos.Y;
+        var maxX = minX + GetWidth();
+        var maxY = minY + GetHeight();
+
+        //遍历每一个连接的门, 计算计算canvas覆盖范围
+        foreach (var doorInfo in Doors)
+        {
+            var connectDoor = doorInfo.ConnectDoor;
+            switch (connectDoor.Direction)
+            {
+                case DoorDirection.E:
+                case DoorDirection.W:
+                {
+                    var (px1, py1) = connectDoor.GetWorldOriginPosition();
+                    var py2 = py1 + 4 * GameConfig.TileCellSize;
+                    if (px1 < minX)
+                    {
+                        minX = px1;
+                    }
+                    else if (px1 > maxX)
+                    {
+                        maxX = px1;
+                    }
+
+                    if (py1 < minY)
+                    {
+                        minY = py1;
+                    }
+                    else if (py1 > maxY)
+                    {
+                        maxY = py1;
+                    }
+                    
+                    if (py2 < minY)
+                    {
+                        minY = py2;
+                    }
+                    else if (py2 > maxY)
+                    {
+                        maxY = py2;
+                    }
+                }
+                    break;
+                case DoorDirection.S:
+                case DoorDirection.N:
+                {
+                    var (px1, py1) = connectDoor.GetWorldOriginPosition();
+                    var px2 = px1 + 4 * GameConfig.TileCellSize;
+                    if (px1 < minX)
+                    {
+                        minX = px1;
+                    }
+                    else if (px1 > maxX)
+                    {
+                        maxX = px1;
+                    }
+
+                    if (py1 < minY)
+                    {
+                        minY = py1;
+                    }
+                    else if (py1 > maxY)
+                    {
+                        maxY = py1;
+                    }
+                    
+                    if (px2 < minX)
+                    {
+                        minX = px2;
+                    }
+                    else if (px2 > maxX)
+                    {
+                        maxX = px2;
+                    }
+                }
+                    break;
+            }
+        }
+
+        OuterRange = new Rect2I(minX, minY, maxX - minX, maxY - minY);
+    }
+    
     /// <summary>
     /// 获取房间的全局坐标, 单位: 像素
     /// </summary>
@@ -170,22 +271,39 @@ public class RoomInfo : IDestroy
         }
 
         IsDestroyed = true;
+        //递归销毁下一个房间
         foreach (var nextRoom in Next)
         {
             nextRoom.Destroy();
         }
         Next.Clear();
+        
+        //销毁连接的门
+        foreach (var roomDoorInfo in Doors)
+        {
+            roomDoorInfo.Destroy();
+        }
+        
+        //销毁预设
         if (RoomPreinstall != null)
         {
             RoomPreinstall.Destroy();
             RoomPreinstall = null;
         }
         
+        //销毁画布
         if (StaticImageCanvas != null)
         {
             StaticImageCanvas.Destroy();
         }
 
+        //销毁迷雾
+        if (RoomFogMask != null)
+        {
+            RoomFogMask.Destroy();
+        }
+
+        //销毁所属区域对象
         if (AffiliationArea != null)
         {
             AffiliationArea.Destroy();
@@ -222,7 +340,7 @@ public class RoomInfo : IDestroy
         {
             hasEnemy = true;
         }
-
+        
         if (!hasEnemy) //没有敌人, 不关门
         {
             IsSeclusion = false;
@@ -275,6 +393,14 @@ public class RoomInfo : IDestroy
         foreach (var doorInfo in Doors)
         {
             doorInfo.Door.OpenDoor();
+            
+            //过道迷雾
+            doorInfo.AisleFogArea.Monitoring = true;
+            if (doorInfo.AisleFogMask.IsExplored)
+            {
+                //doorInfo.ClearFog();
+                FogMaskHandler.RefreshAisleFog(doorInfo);
+            }
         }
     }
 
@@ -292,6 +418,14 @@ public class RoomInfo : IDestroy
         foreach (var doorInfo in Doors)
         {
             doorInfo.Door.CloseDoor();
+            
+            //过道迷雾
+            doorInfo.AisleFogArea.Monitoring = false;
+            if (doorInfo.AisleFogMask.IsExplored)
+            {
+                //doorInfo.DarkFog();
+                FogMaskHandler.RefreshAisleFog(doorInfo);
+            }
         }
     }
 }

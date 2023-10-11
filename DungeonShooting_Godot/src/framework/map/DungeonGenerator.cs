@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Godot;
 
@@ -27,11 +28,11 @@ public class DungeonGenerator
     /// boss房间
     /// </summary>
     public List<RoomInfo> BossRoom { get; } = new List<RoomInfo>();
-    
+
     /// <summary>
     /// 随机数对象
     /// </summary>
-    public SeedRandom Random { get; }
+    private SeedRandom _random;
 
     //用于标记地图上的坐标是否被占用
     private Grid<bool> _roomGrid { get; } = new Grid<bool>();
@@ -51,10 +52,14 @@ public class DungeonGenerator
     //房间横轴分散程度
     private float _roomHorizontalMinDispersion = 0f;
     private float _roomHorizontalMaxDispersion = 0.5f;
+    // private float _roomHorizontalMinDispersion = 0f;
+    // private float _roomHorizontalMaxDispersion = 2f;
 
     //房间纵轴分散程度
     private float _roomVerticalMinDispersion = 0f;
     private float _roomVerticalMaxDispersion = 0.5f;
+    // private float _roomVerticalMinDispersion = 0f;
+    // private float _roomVerticalMaxDispersion = 2f;
 
     //区域限制
     private bool _enableLimitRange = true;
@@ -86,9 +91,10 @@ public class DungeonGenerator
         // NoProperDoor,
     }
     
-    public DungeonGenerator(DungeonConfig config)
+    public DungeonGenerator(DungeonConfig config, SeedRandom seedRandom)
     {
         _config = config;
+        _random = seedRandom;
         _roomGroup = GameApplication.Instance.RoomConfig[config.GroupName];
 
         //验证该组是否满足生成地牢的条件
@@ -98,9 +104,8 @@ public class DungeonGenerator
             throw new Exception("当前组'" + config.GroupName + "'" + result.ErrorMessage + ", 不能生成地牢!");
         }
         
-        Random = new SeedRandom();
-        GD.Print("创建地牢生成器, 随机种子: " + Random.Seed);
-        _roomGroup.InitWeight(Random);
+        Debug.Log("创建地牢生成器, 随机种子: " + _random.Seed);
+        _roomGroup.InitWeight(_random);
     }
 
     /// <summary>
@@ -122,6 +127,28 @@ public class DungeonGenerator
         foreach (var next in roomInfo.Next)
         {
             EachRoom(next, cb);
+        }
+    }
+    
+    /// <summary>
+    /// 用于协程中的遍历所有房间
+    /// </summary>
+    public IEnumerator EachRoomCoroutine(Action<RoomInfo> cb)
+    {
+        return EachRoomCoroutine(StartRoomInfo, cb);
+    }
+    
+    private IEnumerator EachRoomCoroutine(RoomInfo roomInfo, Action<RoomInfo> cb)
+    {
+        if (roomInfo == null)
+        {
+            yield break;
+        }
+
+        cb(roomInfo);
+        foreach (var next in roomInfo.Next)
+        {
+            yield return EachRoomCoroutine(next, cb);
         }
     }
 
@@ -175,12 +202,12 @@ public class DungeonGenerator
                 }
                 else
                 {
-                    tempPrevRoomInfo = Random.RandomChoose(RoomInfos);
+                    tempPrevRoomInfo = _random.RandomChoose(RoomInfos);
                 }
             }
             else
             {
-                tempPrevRoomInfo = Random.RandomChoose(RoomInfos);
+                tempPrevRoomInfo = _random.RandomChoose(RoomInfos);
             }
             
             //生成下一个房间
@@ -205,7 +232,7 @@ public class DungeonGenerator
                 else if (nextRoomType == DungeonRoomType.Battle)
                 {
                     chainTryCount = 0;
-                    chainMaxTryCount = Random.RandomRangeInt(1, 3);
+                    chainMaxTryCount = _random.RandomRangeInt(1, 3);
                 }
                 prevRoomInfo = nextRoom;
                 CalcNextRoomType(prevRoomInfo);
@@ -239,22 +266,22 @@ public class DungeonGenerator
                     chainTryCount++;
                 }
                 
-                GD.Print("生成第" + (_count + 1) + "个房间失败! 失败原因: " + errorCode);
+                Debug.Log("生成第" + (_count + 1) + "个房间失败! 失败原因: " + errorCode);
                 if (errorCode == GenerateRoomErrorCode.OutArea)
                 {
                     _failCount++;
-                    GD.Print("超出区域失败次数: " + _failCount);
+                    Debug.Log("超出区域失败次数: " + _failCount);
                     if (_failCount >= _maxFailCount)
                     {
                         _enableLimitRange = false;
-                        GD.Print("生成房间失败次数过多, 关闭区域限制!");
+                        Debug.Log("生成房间失败次数过多, 关闭区域限制!");
                     }
                 }
             }
         }
         
         _roomGrid.Clear();
-        GD.Print("房间总数: " + RoomInfos.Count);
+        Debug.Log("房间总数: " + RoomInfos.Count);
     }
 
     //生成房间
@@ -269,7 +296,7 @@ public class DungeonGenerator
         DungeonRoomSplit roomSplit;
         if (_config.HasDesignatedRoom && _config.DesignatedType == roomType) //执行指定了房间
         {
-            roomSplit = Random.RandomChoose(_config.DesignatedRoom);
+            roomSplit = _random.RandomChoose(_config.DesignatedRoom);
         }
         else //没有指定房间
         {
@@ -310,19 +337,19 @@ public class DungeonGenerator
             }
             for (; tryCount < maxTryCount; tryCount++)
             {
-                var direction = Random.RandomRangeInt(0, 3);
+                var direction = _random.RandomRangeInt(0, 3);
                 //房间间隔
-                var space = Random.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
+                var space = _random.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
                 //中心偏移
                 int offset;
                 if (direction == 0 || direction == 2)
                 {
-                    offset = Random.RandomRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
+                    offset = _random.RandomRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
                         (int)(prevRoomInfo.Size.X * _roomVerticalMaxDispersion));
                 }
                 else
                 {
-                    offset = Random.RandomRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
+                    offset = _random.RandomRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
                         (int)(prevRoomInfo.Size.Y * _roomHorizontalMaxDispersion));
                 }
 
@@ -451,7 +478,7 @@ public class DungeonGenerator
     {
         if (roomInfo.Next.Count > 0)
         {
-            GD.PrintErr("当前房间还有连接的子房间, 不能回滚!");
+            Debug.LogError("当前房间还有连接的子房间, 不能回滚!");
             return false;
         }
         //退掉占用的房间区域和过道占用区域
@@ -521,7 +548,7 @@ public class DungeonGenerator
             }
         }
 
-        return Random.RandomChoose(list);
+        return _random.RandomChoose(list);
     }
     
     /// <summary>
@@ -533,6 +560,7 @@ public class DungeonGenerator
         var roomDoor = new RoomDoorInfo();
         var nextRoomDoor = new RoomDoorInfo();
         roomDoor.RoomInfo = roomInfo;
+        roomDoor.IsForward = true;
         nextRoomDoor.RoomInfo = nextRoomInfo;
         roomDoor.ConnectRoom = nextRoomInfo;
         roomDoor.ConnectDoor = nextRoomDoor;
@@ -540,7 +568,7 @@ public class DungeonGenerator
         nextRoomDoor.ConnectDoor = roomDoor;
 
         //先寻找直通门
-        if (Random.RandomBoolean())
+        if (_random.RandomBoolean())
         {
             //直行通道, 优先横轴
             if (TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
@@ -580,8 +608,8 @@ public class DungeonGenerator
             while (rangeList.Count > 0)
             {
                 //找到重叠区域
-                var range = Random.RandomChooseAndRemove(rangeList);
-                var x = Random.RandomRangeInt(range.X, range.Y);
+                var range = _random.RandomChooseAndRemove(rangeList);
+                var x = _random.RandomRangeInt(range.X, range.Y);
                 
                 if (roomInfo.GetVerticalStart() < nextRoomInfo.GetVerticalStart()) //room在上, nextRoom在下
                 {
@@ -632,8 +660,8 @@ public class DungeonGenerator
             while (rangeList.Count > 0)
             {
                 //找到重叠区域
-                var range = Random.RandomChooseAndRemove(rangeList);
-                var y = Random.RandomRangeInt(range.X, range.Y);
+                var range = _random.RandomChooseAndRemove(rangeList);
+                var y = _random.RandomRangeInt(range.X, range.Y);
                 
                 if (roomInfo.GetHorizontalStart() < nextRoomInfo.GetHorizontalStart()) //room在左, nextRoom在右
                 {
@@ -679,7 +707,7 @@ public class DungeonGenerator
         {
             if (roomInfo.GetVerticalStart() > nextRoomInfo.GetVerticalStart())
             {
-                if (Random.RandomBoolean()) //↑ //→
+                if (_random.RandomBoolean()) //↑ //→
                 {
                     if (!TryConnect_NE_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
                         !TryConnect_WS_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
@@ -698,7 +726,7 @@ public class DungeonGenerator
             }
             else
             {
-                if (Random.RandomBoolean()) //↓ //→
+                if (_random.RandomBoolean()) //↓ //→
                 {
                     if (!TryConnect_SE_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
                         !TryConnect_WN_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
@@ -720,7 +748,7 @@ public class DungeonGenerator
         {
             if (roomInfo.GetVerticalStart() > nextRoomInfo.GetVerticalStart()) //→ //↓
             {
-                if (Random.RandomBoolean())
+                if (_random.RandomBoolean())
                 {
                     if (!TryConnect_ES_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
                         !TryConnect_NW_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))
@@ -739,7 +767,7 @@ public class DungeonGenerator
             }
             else
             {
-                if (Random.RandomBoolean()) //→ //↑
+                if (_random.RandomBoolean()) //→ //↑
                 {
                     if (!TryConnect_EN_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
                         !TryConnect_SW_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross))

@@ -19,17 +19,17 @@ public static class ExcelGenerator
         OS.Execute("excel/DungeonShooting_ExcelTool.exe", new string[] { excelPath, jsonPath, codePath }, arr);
         foreach (var message in arr)
         {
-            GD.Print(message);
+            Debug.Log(message);
         }
 
         try
         {
             GeneratorActivityObjectInit();
-            GD.Print("生成'src/framework/activity/ActivityObject_Init.cs'成功!");
+            Debug.Log("生成'src/framework/activity/ActivityObject_Init.cs'成功!");
         }
         catch (Exception e)
         {
-            GD.PrintErr(e.ToString());
+            Debug.LogError(e.ToString());
         }
     }
 

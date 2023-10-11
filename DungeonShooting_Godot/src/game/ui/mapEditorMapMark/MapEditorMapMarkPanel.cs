@@ -462,11 +462,11 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                     S_DynamicTool.Reparent(this);
                     S_DynamicTool.Instance.Visible = false;
                     var markCellIndex = markCell.Index;
-                    var markInfo = waveCell.Data[markCellIndex];
+                    var markInfo = waveCell.MarkGrid.GetData(markCellIndex).MarkInfo;
                     //派发移除标记事件
                     EventManager.EmitEvent(EventEnum.OnDeleteMark, markInfo);
                     waveCell.MarkGrid.RemoveByIndex(markCellIndex);
-                    waveCell.Data.RemoveAt(markCellIndex);
+                    waveCell.Data.Remove(markInfo);
                     //派发数据修改事件
                     EventManager.EmitEvent(EventEnum.OnEditorDirty);
                 }

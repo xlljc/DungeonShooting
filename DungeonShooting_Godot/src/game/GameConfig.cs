@@ -22,7 +22,7 @@ public static class GameConfig
     /// </summary>
     public const int CorridorWidth = 4;
     /// <summary>
-    /// 游戏地图网格大小
+    /// 游戏地图网格大小, 值为 16
     /// </summary>
     public const int TileCellSize = 16;
     /// <summary>
@@ -77,4 +77,14 @@ public static class GameConfig
     /// 预览图大小
     /// </summary>
     public const int PreviewImageSize = 196;
+
+    /// <summary>
+    /// 变暗迷雾的透明度值
+    /// </summary>
+    public const float DarkFogAlpha = 0.2f;
+
+    /// <summary>
+    /// 迷雾过渡时间
+    /// </summary>
+    public const float FogTransitionTime = 0.3f;
 }
