@@ -172,6 +172,9 @@ public partial class DungeonManager : Node2D
                 UiManager.Open_PauseMenu();
             }
             
+            //更新迷雾
+            FogMaskHandler.Update();
+            
             _checkEnemyTimer += (float)delta;
             if (_checkEnemyTimer >= 1)
             {
@@ -297,6 +300,7 @@ public partial class DungeonManager : Node2D
         World = null;
         GameApplication.Instance.DestroyWorld();
         yield return 0;
+        FogMaskHandler.ClearRecordRoom();
         QueueRedraw();
         //鼠标还原
         GameApplication.Instance.Cursor.SetGuiMode(true);
@@ -432,16 +436,7 @@ public partial class DungeonManager : Node2D
     {
         var roomFog = new FogMask();
         roomFog.Name = "FogMask" + roomFog.IsDestroyed;
-        float alpha;
-        if (roomInfo.RoomType == DungeonRoomType.Inlet) //起始房间没有迷雾
-        {
-            alpha = 1;
-        }
-        else
-        {
-            alpha = 0;
-        }
-        roomFog.InitFog(roomInfo.Position, roomInfo.Size, alpha);
+        roomFog.InitFog(roomInfo.Position, roomInfo.Size);
 
         World.FogMaskRoot.AddChild(roomFog);
         roomInfo.RoomFogMask = roomFog;
@@ -545,9 +540,6 @@ public partial class DungeonManager : Node2D
             previewAisleFog.SetActive(false);
             World.FogMaskRoot.AddChild(previewAisleFog);
         }
-        
-        //刷新预览迷雾
-        roomInfo.RefreshPreviewFog(alpha);
     }
 
     /// <summary>
@@ -583,19 +575,10 @@ public partial class DungeonManager : Node2D
         var roomInfo = (RoomInfo)o;
         if (_affiliationAreaFlag != roomInfo.AffiliationArea)
         {
-            if (_affiliationAreaFlag != null)
-            {
-                if (!_affiliationAreaFlag.IsDestroyed)
-                {
-                    //上一个房间变暗
-                    _affiliationAreaFlag.RoomInfo.DarkFog(roomInfo);
-                }
-            }
-            
             if (!roomInfo.AffiliationArea.IsDestroyed)
             {
-                //当前房间变亮
-                roomInfo.ClearFog();
+                //刷新迷雾
+                FogMaskHandler.RefreshRoomFog(roomInfo);
             }
 
             _affiliationAreaFlag = roomInfo.AffiliationArea;

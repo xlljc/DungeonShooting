@@ -10,12 +10,12 @@ public partial class FogMaskBase : PointLight2D, IDestroy
     /// <summary>
     /// 是否探索过迷雾
     /// </summary>
-    public bool IsExplored { get; private set; }
+    public bool IsExplored { get; set; }
     
     /// <summary>
     /// 迷雾透明度值, 这个值在调用 TransitionAlpha() 时改变, 用于透明度判断
     /// </summary>
-    public float TargetAlpha { get; protected set; }
+    public float TargetAlpha { get; set; }
     
     private long _cid = -1;
     
@@ -23,27 +23,49 @@ public partial class FogMaskBase : PointLight2D, IDestroy
     /// 使颜色的 alpha 通道过渡到指定的值
     /// </summary>
     /// <param name="targetAlpha">透明度值</param>
-    /// <param name="time">过渡时间</param>
-    public void TransitionAlpha(float targetAlpha, float time)
+    public void TransitionAlpha(float targetAlpha)
     {
         TargetAlpha = targetAlpha;
-        if (targetAlpha > 0)
-        {
-            IsExplored = true;
-        }
         if (_cid >= 0)
         {
             World.Current.StopCoroutine(_cid);
         }
         
-        _cid = World.Current.StartCoroutine(RunTransitionAlpha(targetAlpha, time, false));
+        _cid = World.Current.StartCoroutine(RunTransitionAlpha(targetAlpha, GameConfig.FogTransitionTime, false));
+    }
+
+    /// <summary>
+    /// 使颜色的 alpha 通道过渡到指定的值
+    /// </summary>
+    /// <param name="tartAlpha">初始透明度</param>
+    /// <param name="targetAlpha">透明度值</param>
+    public void TransitionAlpha(float tartAlpha, float targetAlpha)
+    {
+        Color = new Color(1, 1, 1, tartAlpha);
+        TransitionAlpha(targetAlpha);
+    }
+
+    /// <summary>
+    /// 使颜色的 alpha 通道过渡到 GameConfig.DarkFogAlpha
+    /// </summary>
+    public void TransitionToDark()
+    {
+        TransitionAlpha(GameConfig.DarkFogAlpha);
+    }
+    
+    /// <summary>
+    /// 使颜色的 alpha 通道过渡到 1
+    /// </summary>
+    public void TransitionToLight()
+    {
+        TransitionAlpha(1);
     }
 
     /// <summary>
     /// 使颜色的 alpha 通道过渡到 0, 然后隐藏该 Fog
     /// </summary>
     /// <param name="time">过渡时间</param>
-    public void TransitionToHide(float time)
+    public void TransitionToHide(float time = GameConfig.FogTransitionTime)
     {
         TargetAlpha = 0;
         if (Visible)

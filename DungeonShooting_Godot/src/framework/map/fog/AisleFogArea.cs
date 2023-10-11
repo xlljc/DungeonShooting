@@ -82,7 +82,8 @@ public partial class AisleFogArea : Area2D, IDestroy
     private void InsertItem()
     {
         //GD.Print("玩家进入过道");
-        RoomDoorInfo.ClearFog();
+        //RoomDoorInfo.ClearFog();
+        FogMaskHandler.RefreshAisleFog(RoomDoorInfo);
     }
 
     // private void LeavePlayer()

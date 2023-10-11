@@ -80,11 +80,6 @@ public class RoomDoorInfo : IDestroy
     public PreviewFogMask PreviewAisleFogMask;
 
     /// <summary>
-    /// 当前门连接的过道是否探索过
-    /// </summary>
-    public bool IsExplored { get; private set; } = false;
-
-    /// <summary>
     /// 世界坐标下的原点坐标, 单位: 像素
     /// </summary>
     public Vector2I GetWorldOriginPosition()
@@ -260,87 +255,6 @@ public class RoomDoorInfo : IDestroy
         if (PreviewAisleFogMask != null)
         {
             PreviewAisleFogMask.Destroy();
-        }
-    }
-
-    /// <summary>
-    /// 清除过道迷雾
-    /// </summary>
-    public void ClearFog()
-    {
-        IsExplored = true;
-        ConnectDoor.IsExplored = true;
-        if (AisleFogMask != null && Math.Abs(AisleFogMask.Color.A - 1f) > 0.001f)
-        {
-            AisleFogMask.TransitionAlpha(1, GameConfig.FogTransitionTime);
-            RefreshPreviewFog(1);
-        }
-    }
-
-    /// <summary>
-    /// 将过道迷雾变暗
-    /// </summary>
-    public void DarkFog()
-    {
-        IsExplored = true;
-        ConnectDoor.IsExplored = true;
-        if (AisleFogMask != null && Math.Abs(AisleFogMask.Color.A - GameConfig.DarkFogAlpha) > 0.001f)
-        {
-            AisleFogMask.TransitionAlpha(GameConfig.DarkFogAlpha, GameConfig.FogTransitionTime);
-            RefreshPreviewFog(GameConfig.DarkFogAlpha);
-        }
-    }
-
-    /// <summary>
-    /// 刷新房间中的预览迷雾
-    /// </summary>
-    /// <param name="aisleFogAlpha">过道迷雾透明度</param>
-    public void RefreshPreviewFog(float aisleFogAlpha)
-    {
-        var room1Alpha = RoomInfo.RoomFogMask.TargetAlpha;
-        var room2Alpha = ConnectDoor.RoomInfo.RoomFogMask.TargetAlpha;
-        //GD.Print($"aisleFogAlpha: {aisleFogAlpha}, room1Alpha: {room1Alpha}, room2Alpha{room2Alpha}");
-
-        if ((aisleFogAlpha < 1 && room1Alpha < 1) || Math.Abs(aisleFogAlpha - room1Alpha) < 0.001f) //隐藏预览
-        {
-            PreviewRoomFogMask.TransitionToHide(GameConfig.FogTransitionTime);
-            PreviewAisleFogMask.TransitionToHide(GameConfig.FogTransitionTime);
-        }
-        else if (aisleFogAlpha >= 1) //预览房间
-        {
-            PreviewAisleFogMask.TransitionToHide(GameConfig.FogTransitionTime);
-            PreviewRoomFogMask.SetActive(true);
-
-            //播放过渡动画
-            var targetAlpha = 1 - room1Alpha;
-            PreviewRoomFogMask.Color = new Color(1, 1, 1, 0);
-            PreviewRoomFogMask.TransitionAlpha(targetAlpha, GameConfig.FogTransitionTime);
-        }
-        else if (room1Alpha >= 1) //预览过道
-        {
-            PreviewRoomFogMask.TransitionToHide(GameConfig.FogTransitionTime);
-            PreviewAisleFogMask.SetActive(true);
-        }
-
-        if ((aisleFogAlpha < 1 && room2Alpha < 1) || Math.Abs(aisleFogAlpha - room2Alpha) < 0.001f) //隐藏预览
-        {
-            ConnectDoor.PreviewAisleFogMask.TransitionToHide(GameConfig.FogTransitionTime);
-            ConnectDoor.PreviewRoomFogMask.TransitionToHide(GameConfig.FogTransitionTime);
-        }
-        else if (aisleFogAlpha >= 1) //预览房间
-        {
-            ConnectDoor.PreviewAisleFogMask.TransitionToHide(GameConfig.FogTransitionTime);
-            ConnectDoor.PreviewRoomFogMask.SetActive(true);
-            
-            //播放过渡动画, 这里有问题
-            var targetAlpha = 1 - room2Alpha;
-            ConnectDoor.PreviewRoomFogMask.Color = new Color(1, 1, 1, 0);
-            ConnectDoor.PreviewRoomFogMask.TransitionAlpha(targetAlpha, GameConfig.FogTransitionTime);
-        }
-        else if (room2Alpha >= 1) //预览过道
-        {
-            ConnectDoor.PreviewRoomFogMask.TransitionToHide(GameConfig.FogTransitionTime);
-            ConnectDoor.PreviewAisleFogMask.SetActive(true);
         }
     }
 }
