@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/game/room/RoomDoor.cs" id="1_4c6sw"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_lwx51"]
-[ext_resource type="SpriteFrames" uid="uid://3ps6h2f54qa5" path="res://resource/spriteFrames/other/RoomDoor_EW.tres" id="3_pjvd8"]
+[ext_resource type="SpriteFrames" uid="uid://3ps6h2f54qa5" path="res://resource/spriteFrames/other/RoomDoor_E.tres" id="3_pjvd8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yvwpk"]
 resource_local_to_scene = true
@@ -40,9 +40,8 @@ material = SubResource("ShaderMaterial_yvwpk")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_t4ayq")
-position = Vector2(0, -8)
+position = Vector2(3, -8)
 sprite_frames = ExtResource("3_pjvd8")
-animation = &"closeDoor"
 autoplay = "default"
 
 [node name="Collision" type="CollisionShape2D" parent="."]

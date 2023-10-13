@@ -73,7 +73,11 @@ public partial class RoomDoor : ActivityObject
         switch (Direction)
         {
             case DoorDirection.E:
+                ZIndex = GameConfig.MiddleMapLayer;
+                break;
             case DoorDirection.W:
+                ZIndex = GameConfig.MiddleMapLayer;
+                break;
             case DoorDirection.S:
                 ZIndex = GameConfig.TopMapLayer;
                 break;
@@ -103,6 +107,23 @@ public partial class RoomDoor : ActivityObject
             _door.Navigation.CloseNavigationNode.Visible = false;
         }
         //调整门的层级
-        ZIndex = GameConfig.FloorMapLayer;
+        //ZIndex = GameConfig.FloorMapLayer;
+        
+        //调整门的层级
+        switch (Direction)
+        {
+            case DoorDirection.E:
+                ZIndex = GameConfig.MiddleMapLayer;
+                break;
+            case DoorDirection.W:
+                ZIndex = GameConfig.MiddleMapLayer;
+                break;
+            case DoorDirection.S:
+                ZIndex = GameConfig.TopMapLayer;
+                break;
+            case DoorDirection.N:
+                ZIndex = GameConfig.MiddleMapLayer;
+                break;
+        }
     }
 }
