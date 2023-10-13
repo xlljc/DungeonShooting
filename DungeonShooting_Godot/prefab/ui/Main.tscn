@@ -33,7 +33,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_font_sizes/font_size = 160
-text = "Program dungeon"
+text = "Dungeon Shooting"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -92,3 +92,29 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "v0.01"
 horizontal_alignment = 2
+
+[node name="LinkButton" type="LinkButton" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 23.0
+offset_top = -100.0
+offset_right = 1943.0
+offset_bottom = -68.0
+grow_vertical = 0
+text = "b站:小李xlxl"
+uri = "https://space.bilibili.com/259437820"
+
+[node name="LinkButton2" type="LinkButton" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 23.0
+offset_top = -55.0
+offset_right = 1943.0
+offset_bottom = -23.0
+grow_vertical = 0
+text = "GitHub源码"
+uri = "https://github.com/xlljc/DungeonShooting"

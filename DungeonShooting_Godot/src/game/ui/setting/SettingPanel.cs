@@ -10,15 +10,42 @@ public partial class SettingPanel : Setting
         if (PrevUi != null)
         {
             //返回上一级UI
-            S_Back.Instance.Pressed += () =>
+            L_Back.Instance.Pressed += () =>
             {
                 OpenPrevUi();
             };
         }
         
+        //视频设置
+        S_VideoItem.Instance.Pressed += () =>
+        {
+            S_SettingMenu.Instance.Visible = false;
+            S_VideoSetting.Instance.Visible = true;
+        };
+        //键位设置
+        S_InputItem.Instance.Pressed += () =>
+        {
+            S_SettingMenu.Instance.Visible = false;
+            S_KeySetting.Instance.Visible = true;
+        };
+        //视频设置返回
+        S_VideoSetting.L_Back.Instance.Pressed += () =>
+        {
+            S_SettingMenu.Instance.Visible = true;
+            S_VideoSetting.Instance.Visible = false;
+        };
+        //键位设置返回
+        S_KeySetting.L_Back.Instance.Pressed += () =>
+        {
+            S_SettingMenu.Instance.Visible = true;
+            S_KeySetting.Instance.Visible = false;
+        };
+        
+        //---------------------- 视频设置 -----------------------------
         //全屏属性
         S_FullScreen.L_CheckBox.Instance.ButtonPressed = DisplayServer.WindowGetMode() == DisplayServer.WindowMode.Fullscreen;
         S_FullScreen.L_CheckBox.Instance.Pressed += OnChangeFullScreen;
+        //-----------------------------------------------------------
     }
 
     public override void OnDestroyUi()
