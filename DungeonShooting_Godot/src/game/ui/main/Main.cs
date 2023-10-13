@@ -44,6 +44,32 @@ public abstract partial class Main : UiBase
     }
     private Version _L_Version;
 
+    /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.LinkButton"/>, 节点路径: Main.LinkButton
+    /// </summary>
+    public LinkButton L_LinkButton
+    {
+        get
+        {
+            if (_L_LinkButton == null) _L_LinkButton = new LinkButton((MainPanel)this, GetNode<Godot.LinkButton>("LinkButton"));
+            return _L_LinkButton;
+        }
+    }
+    private LinkButton _L_LinkButton;
+
+    /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.LinkButton"/>, 节点路径: Main.LinkButton2
+    /// </summary>
+    public LinkButton2 L_LinkButton2
+    {
+        get
+        {
+            if (_L_LinkButton2 == null) _L_LinkButton2 = new LinkButton2((MainPanel)this, GetNode<Godot.LinkButton>("LinkButton2"));
+            return _L_LinkButton2;
+        }
+    }
+    private LinkButton2 _L_LinkButton2;
+
 
     public Main() : base(nameof(Main))
     {
@@ -213,6 +239,24 @@ public abstract partial class Main : UiBase
         public override Version Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
+    /// <summary>
+    /// 类型: <see cref="Godot.LinkButton"/>, 路径: Main.LinkButton
+    /// </summary>
+    public class LinkButton : UiNode<MainPanel, Godot.LinkButton, LinkButton>
+    {
+        public LinkButton(MainPanel uiPanel, Godot.LinkButton node) : base(uiPanel, node) {  }
+        public override LinkButton Clone() => new (UiPanel, (Godot.LinkButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.LinkButton"/>, 路径: Main.LinkButton2
+    /// </summary>
+    public class LinkButton2 : UiNode<MainPanel, Godot.LinkButton, LinkButton2>
+    {
+        public LinkButton2(MainPanel uiPanel, Godot.LinkButton node) : base(uiPanel, node) {  }
+        public override LinkButton2 Clone() => new (UiPanel, (Godot.LinkButton)Instance.Duplicate());
+    }
+
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: Main.ColorRect
@@ -258,5 +302,15 @@ public abstract partial class Main : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: Main.Version
     /// </summary>
     public Version S_Version => L_Version;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.LinkButton"/>, 节点路径: Main.LinkButton
+    /// </summary>
+    public LinkButton S_LinkButton => L_LinkButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.LinkButton"/>, 节点路径: Main.LinkButton2
+    /// </summary>
+    public LinkButton2 S_LinkButton2 => L_LinkButton2;
 
 }

@@ -8,6 +8,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_ff0oi")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -39,7 +41,7 @@ text = "游戏设置"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -49,17 +51,259 @@ offset_bottom = -48.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="FullScreen" type="HBoxContainer" parent="VBoxContainer"]
+[node name="SettingMenu" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="VideoItem" type="Button" parent="ScrollContainer/SettingMenu"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "显示设置"
+flat = true
+
+[node name="InputItem" type="Button" parent="ScrollContainer/SettingMenu"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "键位设置"
+flat = true
+
+[node name="VideoSetting" type="VBoxContainer" parent="ScrollContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="FullScreen" type="HBoxContainer" parent="ScrollContainer/VideoSetting"]
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 
-[node name="Name" type="Label" parent="VBoxContainer/FullScreen"]
+[node name="Name" type="Label" parent="ScrollContainer/VideoSetting/FullScreen"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "全屏"
 
-[node name="CheckBox" type="CheckBox" parent="VBoxContainer/FullScreen"]
+[node name="CheckBox" type="CheckBox" parent="ScrollContainer/VideoSetting/FullScreen"]
 layout_mode = 2
 size_flags_horizontal = 10
+
+[node name="Back" type="Button" parent="ScrollContainer/VideoSetting"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "返回"
+flat = true
+
+[node name="KeySetting" type="VBoxContainer" parent="ScrollContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="Tip" type="Label" parent="ScrollContainer/KeySetting"]
+layout_mode = 2
+text = "暂不支持修改键位"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Key" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "上"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key"]
+layout_mode = 2
+text = "W"
+
+[node name="Key2" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "下"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key2"]
+layout_mode = 2
+text = "S"
+
+[node name="Key3" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "左"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key3"]
+layout_mode = 2
+text = "A"
+
+[node name="Key4" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "右"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key4"]
+layout_mode = 2
+text = "D"
+
+[node name="Key5" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "互动/拾取"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key5"]
+layout_mode = 2
+text = "E"
+
+[node name="Key6" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key6"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "切换武器"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key6"]
+layout_mode = 2
+text = "Q"
+
+[node name="Key7" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key7"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "使用道具"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key7"]
+layout_mode = 2
+text = "F"
+
+[node name="Key8" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key8"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "扔掉武器"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key8"]
+layout_mode = 2
+text = "G"
+
+[node name="Key11" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key11"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "扔掉道具"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key11"]
+layout_mode = 2
+text = "X"
+
+[node name="Key9" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key9"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "开火"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key9"]
+layout_mode = 2
+text = "鼠标左键"
+
+[node name="Key10" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key10"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "换弹"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key10"]
+layout_mode = 2
+text = "R"
+
+[node name="Key12" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key12"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "翻滚"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key12"]
+layout_mode = 2
+text = "空格"
+
+[node name="Key13" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key13"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "武器近战"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key13"]
+layout_mode = 2
+text = "鼠标右键"
+
+[node name="Back" type="Button" parent="ScrollContainer/KeySetting"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "返回"
+flat = true
