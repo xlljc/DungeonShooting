@@ -58,6 +58,5 @@ frame = 4
 frame_progress = 1.0
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(0, 4)
 shape = SubResource("RectangleShape2D_2ko2r")
