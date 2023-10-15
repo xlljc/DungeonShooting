@@ -280,10 +280,12 @@ public class ResourcePath
     public const string resource_spriteFrames_bullet_Bullet0002_tres = "res://resource/spriteFrames/bullet/Bullet0002.tres";
     public const string resource_spriteFrames_bullet_Bullet0003_tres = "res://resource/spriteFrames/bullet/Bullet0003.tres";
     public const string resource_spriteFrames_effect_KnifeHit1_tres = "res://resource/spriteFrames/effect/KnifeHit1.tres";
-    public const string resource_spriteFrames_other_RoomDoor_E_tres = "res://resource/spriteFrames/other/RoomDoor_E.tres";
+    public const string resource_spriteFrames_other_RoomDoor_E_Down_tres = "res://resource/spriteFrames/other/RoomDoor_E_Down.tres";
+    public const string resource_spriteFrames_other_RoomDoor_E_Up_tres = "res://resource/spriteFrames/other/RoomDoor_E_Up.tres";
     public const string resource_spriteFrames_other_RoomDoor_N_tres = "res://resource/spriteFrames/other/RoomDoor_N.tres";
     public const string resource_spriteFrames_other_RoomDoor_S_tres = "res://resource/spriteFrames/other/RoomDoor_S.tres";
-    public const string resource_spriteFrames_other_RoomDoor_W_tres = "res://resource/spriteFrames/other/RoomDoor_W.tres";
+    public const string resource_spriteFrames_other_RoomDoor_W_Down_tres = "res://resource/spriteFrames/other/RoomDoor_W_Down.tres";
+    public const string resource_spriteFrames_other_RoomDoor_W_Up_tres = "res://resource/spriteFrames/other/RoomDoor_W_Up.tres";
     public const string resource_spriteFrames_prop_active_ActiveProp5000_tres = "res://resource/spriteFrames/prop/active/ActiveProp5000.tres";
     public const string resource_spriteFrames_prop_active_ActiveProp5001_tres = "res://resource/spriteFrames/prop/active/ActiveProp5001.tres";
     public const string resource_spriteFrames_prop_buff_BuffProp0001_tres = "res://resource/spriteFrames/prop/buff/BuffProp0001.tres";

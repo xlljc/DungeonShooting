@@ -42,11 +42,12 @@ material = SubResource("ShaderMaterial_yvwpk")
 material = SubResource("ShaderMaterial_t4ayq")
 position = Vector2(0, -8)
 sprite_frames = ExtResource("3_hhmd5")
-animation = &"closeDoor"
+animation = &"openDoor"
 autoplay = "default"
 frame = 4
 frame_progress = 1.0
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -3.5)
 shape = SubResource("RectangleShape2D_opsb6")
