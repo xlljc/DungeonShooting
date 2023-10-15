@@ -28,4 +28,17 @@ public partial class Gun : Weapon
     {
         ShootBullet(fireRotation, Attribute.BulletId);
     }
+
+    protected override void OnRemove(Role master)
+    {
+        base.OnRemove(master);
+
+        if (master.IsDie && master.IsEnemyWithPlayer())
+        {
+            this.CallDelay(0, () =>
+            {
+                Trigger(master);
+            });
+        }
+    }
 }

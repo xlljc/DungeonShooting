@@ -145,10 +145,19 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     public bool NoMasterCanTrigger { get; set; } = true;
     
-    //--------------------------------------------------------------------------------------------
+    /// <summary>
+    /// 上一次触发改武器开火的角色是否是Ai
+    /// </summary>
+    public bool TriggerRoleIsAi { get; private set; }
     
-    //触发按下扳机的角色
-    private Role _attackTrigger;
+    /// <summary>
+    /// 上一次触发改武器开火的触发开火攻击的层级, 数据源自于: <see cref="PhysicsLayer"/>
+    /// </summary>
+    public long TriggerRoleAttackLayer { get; private set; }
+    //--------------------------------------------------------------------------------------------
+
+    //用于记录当前角色是否按下过扳机
+    private bool _triggerRoleFlag = false;
     
     //是否按下
     private bool _triggerFlag = false;
@@ -429,12 +438,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
 
     protected override void Process(float delta)
     {
+        
         //未开火时间
         _noAttackTime += delta;
         
         //这把武器被扔在地上, 或者当前武器没有被使用
         //if (Master == null || Master.WeaponPack.ActiveItem != this)
-        if (Master != null && Master.WeaponPack.ActiveItem != this) //在背上
+        if ((Master != null && Master.WeaponPack.ActiveItem != this) || !_triggerRoleFlag) //在背上, 或者被扔出去了
         {
             //_triggerTimer
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
@@ -684,9 +694,22 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
 
         //这一帧已经按过了, 不需要再按下
         if (_triggerFlag) return;
-        
+
+        //更新武器属性信息
         _triggerFlag = true;
-        _attackTrigger = trigger;
+        _triggerRoleFlag = true;
+        if (trigger != null)
+        {
+            TriggerRoleIsAi = trigger.IsAi;
+            TriggerRoleAttackLayer = trigger.AttackLayer;
+            _weaponAttribute = TriggerRoleIsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
+        }
+        else if (Master != null)
+        {
+            TriggerRoleIsAi = Master.IsAi;
+            TriggerRoleAttackLayer = Master.AttackLayer;
+            _weaponAttribute = TriggerRoleIsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
+        }
         
         //是否第一帧按下
         var justDown = _downTimer == 0;
@@ -1027,6 +1050,10 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <returns></returns>
     public uint GetAttackLayer()
     {
+        if (TriggerRoleAttackLayer > 0)
+        {
+            return (uint)TriggerRoleAttackLayer;
+        }
         return Master != null ? Master.AttackLayer : Role.DefaultAttackLayer;
     }
     
@@ -1703,8 +1730,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             _triggerTimer = 0;
         }
         GetParent().RemoveChild(this);
-        CollisionLayer = _tempLayer;
+        _triggerRoleFlag = false;
         _weaponAttribute = _playerWeaponAttribute;
+        CollisionLayer = _tempLayer;
         AnimatedSprite.Position = _tempAnimatedSpritePosition;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
@@ -1714,14 +1742,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public void OnPickUpItem()
     {
         Pickup();
-        if (Master.IsAi)
-        {
-            _weaponAttribute = _aiWeaponAttribute;
-        }
-        else
-        {
-            _weaponAttribute = _playerWeaponAttribute;
-        }
+        _triggerRoleFlag = false;
+        _weaponAttribute = Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
         //停止动画
         AnimationPlayer.Stop();
         //清除泛白效果
@@ -1850,11 +1872,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             deviationAngle = Master.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
         }
 
-        var attackLayer = _attackTrigger != null ? _attackTrigger.AttackLayer : GetAttackLayer();
+        var attackLayer = GetAttackLayer();
         //创建子弹
         var bullet = Create<Bullet>(bulletId);
         bullet.Init(
-            _attackTrigger,
+            TriggerRoleIsAi,
             this,
             speed,
             distance,

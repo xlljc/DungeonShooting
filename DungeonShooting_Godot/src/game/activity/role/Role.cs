@@ -43,6 +43,11 @@ public abstract partial class Role : ActivityObject
     /// 攻击目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
     /// </summary>
     public uint AttackLayer { get; set; } = PhysicsLayer.Wall;
+    
+    /// <summary>
+    /// 该角色敌对目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
+    /// </summary>
+    public uint EnemyLayer { get; set; } = PhysicsLayer.Enemy;
 
     /// <summary>
     /// 携带的被动道具包裹
@@ -1180,5 +1185,21 @@ public abstract partial class Role : ActivityObject
     public void OverRoll()
     {
         _rollCoolingTimer = RoleState.RollTime;
+    }
+
+    /// <summary>
+    /// 返回当前角色是否是玩家
+    /// </summary>
+    public bool IsPlayer()
+    {
+        return this == Player.Current;
+    }
+    
+    /// <summary>
+    /// 是否是玩家的敌人
+    /// </summary>
+    public bool IsEnemyWithPlayer()
+    {
+        return CollisionWithMask(Player.Current.EnemyLayer);
     }
 }

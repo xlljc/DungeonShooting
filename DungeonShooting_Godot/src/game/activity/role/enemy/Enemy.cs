@@ -66,6 +66,7 @@ public partial class Enemy : Role
         StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
 
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Player;
+        EnemyLayer = PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
         RoleState.MoveSpeed = 20;

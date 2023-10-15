@@ -202,7 +202,7 @@ public partial class DungeonManager : Node2D
         World = GameApplication.Instance.CreateNewWorld();
         yield return 0;
         //生成地牢房间
-        var random = new SeedRandom();
+        var random = new SeedRandom(1);
         _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
         _dungeonGenerator.Generate();
         yield return 0;
