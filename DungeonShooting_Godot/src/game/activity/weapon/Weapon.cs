@@ -190,7 +190,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     private float _upTimer = 0;
 
     //连发次数
-    private float _continuousCount = 0;
+    private int _continuousCount = 0;
 
     //连发状态记录
     private bool _continuousShootFlag = false;
@@ -682,12 +682,12 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         return Master == null && GetParent() == GameApplication.Instance.World.NormalLayer;
     }
-
+    
     /// <summary>
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
-    /// <param name="trigger">按下扳机的角色, 如果传 null, 则视为走火</param>
-    public void Trigger(Role trigger)
+    /// <param name="triggerRole">按下扳机的角色, 如果传 null, 则视为走火</param>
+    public void Trigger(Role triggerRole)
     {
         //不能触发扳机
         if (!NoMasterCanTrigger && Master == null) return;
@@ -698,10 +698,10 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         //更新武器属性信息
         _triggerFlag = true;
         _triggerRoleFlag = true;
-        if (trigger != null)
+        if (triggerRole != null)
         {
-            TriggerRoleIsAi = trigger.IsAi;
-            TriggerRoleAttackLayer = trigger.AttackLayer;
+            TriggerRoleIsAi = triggerRole.IsAi;
+            TriggerRoleAttackLayer = triggerRole.AttackLayer;
             _weaponAttribute = TriggerRoleIsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
         }
         else if (Master != null)
@@ -713,10 +713,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         
         //是否第一帧按下
         var justDown = _downTimer == 0;
-        
         if (_beLoadedState == 0 || _beLoadedState == -1)  //需要执行上膛操作
         {
-            if (justDown && !Reloading && trigger != null)
+            if (justDown && !Reloading && triggerRole != null)
             {
                 if (CurrAmmo <= 0)
                 {
@@ -786,7 +785,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                 else if (CurrAmmo <= 0) //子弹不够
                 {
                     fireFlag = false;
-                    if (justDown && trigger != null)
+                    if (justDown && triggerRole != null)
                     {
                         //第一帧按下, 触发换弹
                         Reload();
@@ -831,10 +830,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                             }
                         }
                     }
-
-                    _attackFlag = true;
                 }
-
             }
         }
     }
@@ -870,6 +866,22 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public float GetDelayedAttackTime()
     {
         return _delayedTime;
+    }
+
+    /// <summary>
+    /// 获取当前需要连发弹药的数量, 配置了 ContinuousCountRange 时生效
+    /// </summary>
+    public int GetContinuousCount()
+    {
+        return _continuousCount;
+    }
+
+    /// <summary>
+    /// 返回是否是攻击间隙时间
+    /// </summary>
+    public bool IsAttackIntervalTime()
+    {
+        return _attackTimer > 0 || _triggerTimer > 0;
     }
     
     /// <summary>
@@ -920,6 +932,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     private void TriggerFire()
     {
+        _attackFlag = true;
         _noAttackTime = 0;
 
         //减子弹数量
@@ -1036,13 +1049,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
     }
 
-    /// <summary>
-    /// 触发武器的近战攻击
-    /// </summary>
-    public void TriggerMeleeAttack(Role trigger)
-    {
-        
-    }
+    // /// <summary>
+    // /// 触发武器的近战攻击
+    // /// </summary>
+    // public virtual void TriggerMeleeAttack(Role trigger)
+    // {
+    //     
+    // }
     
     /// <summary>
     /// 获取武器攻击的目标层级
@@ -1892,11 +1905,90 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     
     //-------------------------------- Ai相关 -----------------------------
 
-    /// <summary>
-    /// 获取 Ai 对于该武器的评分, 评分越高, 代表 Ai 会越优先选择该武器, 如果为 -1, 则表示 Ai 不会使用该武器
-    /// </summary>
-    public float GetAiScore()
+    public AiAttackEnum AiTriggerAttack()
     {
-        return 1;
+        AiAttackEnum flag;
+        if (IsTotalAmmoEmpty()) //当前武器弹药打空
+        {
+            //切换到有子弹的武器
+            var index = Master.WeaponPack.FindIndex((we, i) => !we.IsTotalAmmoEmpty());
+            if (index != -1)
+            {
+                flag = AiAttackEnum.ExchangeWeapon;
+                Master.WeaponPack.ExchangeByIndex(index);
+            }
+            else //所有子弹打光
+            {
+                flag = AiAttackEnum.NoAmmo;
+            }
+        }
+        else if (Reloading) //换弹中
+        {
+            flag = AiAttackEnum.TriggerReload;
+        }
+        else if (IsAmmoEmpty()) //弹夹已经打空
+        {
+            flag = AiAttackEnum.Reloading;
+            Reload();
+        }
+        else if (_continuousCount >= 1) //连发中
+        {
+            flag = AiAttackEnum.Attack;
+        }
+        else if (IsAttackIntervalTime()) //开火间隙
+        {
+            flag = AiAttackEnum.AttackInterval;
+        }
+        else
+        {
+            var enemy = (Enemy)Master;
+            if (enemy.GetLockTargetTime() >= Attribute.AiTargetLockingTime) //正常射击
+            {
+                if (GetDelayedAttackTime() > 0)
+                {
+                    flag = AiAttackEnum.Attack;
+                    enemy.Attack();
+                    if (_attackFlag)
+                    {
+                        enemy.SetLockTargetTime(0);
+                    }
+                }
+                else
+                {
+                    if (Attribute.ContinuousShoot) //连发
+                    {
+                        flag = AiAttackEnum.Attack;
+                        enemy.Attack();
+                        if (_attackFlag)
+                        {
+                            enemy.SetLockTargetTime(0);
+                        }
+                    }
+                    else //单发
+                    {
+                        flag = AiAttackEnum.Attack;
+                        enemy.Attack();
+                        if (_attackFlag)
+                        {
+                            enemy.SetLockTargetTime(0);
+                        }
+                    }
+                }
+            }
+            else //锁定时间没到
+            {
+                flag = AiAttackEnum.LockingTime;
+            }
+        }
+
+        return flag;
     }
+
+    // /// <summary>
+    // /// 获取 Ai 对于该武器的评分, 评分越高, 代表 Ai 会越优先选择该武器, 如果为 -1, 则表示 Ai 不会使用该武器
+    // /// </summary>
+    // public float GetAiScore()
+    // {
+    //     return 1;
+    // }
 }

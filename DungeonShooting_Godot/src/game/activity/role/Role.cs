@@ -941,7 +941,7 @@ public abstract partial class Role : ActivityObject
             _meleeAttackTimer = RoleState.MeleeAttackTime;
             MountLookTarget = false;
             
-            WeaponPack.ActiveItem.TriggerMeleeAttack(this);
+            //WeaponPack.ActiveItem.TriggerMeleeAttack(this);
             //播放近战动画
             PlayAnimation_MeleeAttack(() =>
             {

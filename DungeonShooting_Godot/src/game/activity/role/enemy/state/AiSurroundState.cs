@@ -25,6 +25,8 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
     private Vector2 _prevPos;
     //卡在一个位置的时间
     private float _lockTimer;
+    //Ai攻击状态
+    private AiAttackEnum _attackEnum;
 
     public AiSurroundState() : base(AiStateEnum.AiSurround)
     {
@@ -36,6 +38,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         _isMoveOver = true;
         _pauseTimer = 0;
         _moveFlag = false;
+        _attackEnum = AiAttackEnum.None;
     }
 
     public override void Process(float delta)
@@ -120,11 +123,19 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     }
                     else
                     {
-                        //计算移动
-                        var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                        Master.AnimatedSprite.Play(AnimatorNames.Run);
-                        Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
-                                               Master.RoleState.MoveSpeed;
+                        if (_attackEnum != AiAttackEnum.LockingTime && _attackEnum != AiAttackEnum.Attack)
+                        {
+                            //计算移动
+                            var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
+                            Master.AnimatedSprite.Play(AnimatorNames.Run);
+                            Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
+                                                   Master.RoleState.MoveSpeed;
+                        }
+                        else
+                        {
+                            Master.AnimatedSprite.Play(AnimatorNames.Idle);
+                            Master.BasisVelocity = Vector2.Zero;
+                        }
                     }
                     
                     if (_prevPos.DistanceSquaredTo(pos) <= 0.01f)
@@ -147,7 +158,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     else
                     {
                         //发起攻击
-                        Master.EnemyAttack(delta);
+                        _attackEnum = Master.EnemyAttack(delta);
                     }
                 }
             }

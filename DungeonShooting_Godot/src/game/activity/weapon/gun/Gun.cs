@@ -37,6 +37,7 @@ public partial class Gun : Weapon
         {
             this.CallDelay(0, () =>
             {
+                Debug.Log("敌人扔掉武器触发攻击");
                 Trigger(master);
             });
         }
