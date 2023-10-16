@@ -13,6 +13,7 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qhkgc"]
 resource_local_to_scene = true
@@ -23,6 +24,7 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5wvmf"]
 animations = [{
@@ -51,7 +53,6 @@ z_index = -1
 material = SubResource("ShaderMaterial_w5w0i")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-modulate = Color(1.6, 1.6, 1.6, 1)
 material = SubResource("ShaderMaterial_qhkgc")
 sprite_frames = SubResource("SpriteFrames_5wvmf")
 
