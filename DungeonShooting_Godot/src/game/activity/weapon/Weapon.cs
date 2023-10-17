@@ -214,7 +214,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     private float _reloadTimer = 0;
     
     //单独换弹设置下的换弹状态, 0: 未换弹, 1: 装第一颗子弹之前, 2: 单独装弹中, 3: 单独装弹完成
-    private byte _aloneReloadState = 0;
+    private byte _aloneReloadState = 3;
 
     //单独换弹状态下是否强制结束换弹过程
     private bool _aloneReloadStop = false;
@@ -465,7 +465,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             if (_dirtyFlag)
             {
                 _dirtyFlag = false;
-                _aloneReloadState = 0;
+                //_aloneReloadState = 0;
                 StopReload();
                 _attackFlag = false;
                 _continuousCount = 0;
@@ -882,6 +882,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public bool IsAttackIntervalTime()
     {
         return _attackTimer > 0 || _triggerTimer > 0;
+    }
+
+    /// <summary>
+    /// 获取上膛状态,-1: 等待执行自动上膛 , 0: 未上膛, 1: 上膛中, 2: 已经完成上膛
+    /// </summary>
+    public sbyte GetBeLoadedStateState()
+    {
+        return _beLoadedState;
     }
     
     /// <summary>
@@ -1932,6 +1940,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         {
             flag = AiAttackState.Reloading;
         }
+        else if (_beLoadedState == 0 || _beLoadedState == -1) //需要上膛
+        {
+            flag = AiAttackState.AttackInterval;
+        }
+        else if (_beLoadedState == 1) //上膛中
+        {
+            flag = AiAttackState.AttackInterval;
+        }
         else if (_continuousCount >= 1) //连发中
         {
             flag = AiAttackState.Attack;
@@ -1999,6 +2015,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             flag = AiAttackState.Reloading;
             Reload();
         }
+        else if (_beLoadedState == 0 || _beLoadedState == -1) //需要上膛
+        {
+            flag = AiAttackState.AttackInterval;
+            Master.Attack();
+        }
+        else if (_beLoadedState == 1) //上膛中
+        {
+            flag = AiAttackState.AttackInterval;
+        }
         else if (_continuousCount >= 1) //连发中
         {
             flag = AiAttackState.Attack;
@@ -2049,6 +2074,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             }
         }
 
+        Debug.Log("state: " + flag);
         return flag;
     }
 

@@ -1085,7 +1085,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
-    "__AiAttackAttr": "0005"
+    "__AiAttackAttr": "0004"
   },
   {
     "Id": "0013",
@@ -1267,6 +1267,6 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
-    "__AiAttackAttr": "0005"
+    "__AiAttackAttr": "0006"
   }
 ]

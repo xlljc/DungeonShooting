@@ -71,7 +71,10 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         }
 
         //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
-        if (IsInView || Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
+        if (IsInView ||
+            (weapon != null && weapon.Attribute.AiAttackAttr.FiringStand &&
+             (Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
+            ))
         {
             if (_pauseTimer >= 0)
             {
@@ -102,11 +105,11 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                 {
                     _moveFlag = true;
                     //计算移动
-                    var pos = Master.GlobalPosition;
                     var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
                     Master.AnimatedSprite.Play(AnimatorNames.Run);
-                    Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                                           Master.RoleState.MoveSpeed;
+                    Master.BasisVelocity =
+                        (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                        Master.RoleState.MoveSpeed;
                 }
                 else
                 {
@@ -121,7 +124,8 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     }
                     else
                     {
-                        if (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack)
+                        if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
+                            (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack))
                         {
                             //计算移动
                             var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
@@ -135,7 +139,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                             Master.BasisVelocity = Vector2.Zero;
                         }
                     }
-                    
+
                     if (_prevPos.DistanceSquaredTo(pos) <= 0.01f)
                     {
                         _lockTimer += delta;

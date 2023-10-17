@@ -152,7 +152,7 @@ public partial class Enemy : Role
             var weapon = WeaponPack.ActiveItem;
             if (weapon != null)
             {
-                if (!weapon.IsAttackIntervalTime()) //必须在可以开火时记录时间
+                if (weapon.GetBeLoadedStateState() >= 2 && !weapon.IsAttackIntervalTime()) //必须在可以开火时记录时间
                 {
                     _lockTargetTime += delta;
                 }

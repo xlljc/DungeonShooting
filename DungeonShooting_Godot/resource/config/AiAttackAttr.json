@@ -3,7 +3,8 @@
     "Id": "0001",
     "Remark": "",
     "FiringStand": true,
-    "LockingTime": 0.5,
+    "ShowSubline": false,
+    "LockingTime": 1,
     "BulletSpeedScale": 0.35,
     "AmmoConsumptionProbability": 0
   },
@@ -11,6 +12,7 @@
     "Id": "0002",
     "Remark": "",
     "FiringStand": true,
+    "ShowSubline": false,
     "LockingTime": 2,
     "BulletSpeedScale": 0.35,
     "AmmoConsumptionProbability": 0
@@ -19,22 +21,34 @@
     "Id": "0003",
     "Remark": "",
     "FiringStand": true,
+    "ShowSubline": false,
     "LockingTime": 1,
     "BulletSpeedScale": 0.35,
     "AmmoConsumptionProbability": 0
   },
   {
     "Id": "0004",
-    "Remark": "",
-    "FiringStand": true,
+    "Remark": "\u79FB\u52A8\u5C04\u51FB",
+    "FiringStand": false,
+    "ShowSubline": false,
     "LockingTime": 0.7,
     "BulletSpeedScale": 0.35,
     "AmmoConsumptionProbability": 0
   },
   {
     "Id": "0005",
+    "Remark": "\u4F7F\u7528\u8FDC\u8DDD\u79BB\u6B66\u5668",
+    "FiringStand": true,
+    "ShowSubline": true,
+    "LockingTime": 1.5,
+    "BulletSpeedScale": 0.35,
+    "AmmoConsumptionProbability": 0
+  },
+  {
+    "Id": "0006",
     "Remark": "",
     "FiringStand": true,
+    "ShowSubline": false,
     "LockingTime": 1.5,
     "BulletSpeedScale": 0.35,
     "AmmoConsumptionProbability": 0

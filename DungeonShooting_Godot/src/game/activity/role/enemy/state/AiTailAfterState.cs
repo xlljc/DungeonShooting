@@ -63,7 +63,9 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
-            if (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack)
+            var weapon = Master.WeaponPack.ActiveItem;
+            if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
+                (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack))
             {
                 //计算移动
                 var nextPos = Master.NavigationAgent2D.GetNextPathPosition();

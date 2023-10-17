@@ -26,6 +26,12 @@ public static partial class ExcelConfig
         public bool FiringStand;
 
         /// <summary>
+        /// 是否显示射击辅助线
+        /// </summary>
+        [JsonInclude]
+        public bool ShowSubline;
+
+        /// <summary>
         /// Ai属性 <br/>
         /// 目标锁定时间, 也就是瞄准目标多久才会开火, (单位: 秒)
         /// </summary>
@@ -55,6 +61,7 @@ public static partial class ExcelConfig
             inst.Id = Id;
             inst.Remark = Remark;
             inst.FiringStand = FiringStand;
+            inst.ShowSubline = ShowSubline;
             inst.LockingTime = LockingTime;
             inst.BulletSpeedScale = BulletSpeedScale;
             inst.AmmoConsumptionProbability = AmmoConsumptionProbability;
