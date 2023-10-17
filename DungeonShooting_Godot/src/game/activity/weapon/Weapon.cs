@@ -156,7 +156,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public long TriggerRoleAttackLayer { get; private set; }
     //--------------------------------------------------------------------------------------------
 
-    //用于记录当前角色是否按下过扳机
+    //用于记录是否有角色操作过这把武器
     private bool _triggerRoleFlag = false;
     
     //是否按下
@@ -1207,6 +1207,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public void StopReload()
     {
         _aloneReloadState = 0;
+        _beLoadedState = 2;
         Reloading = false;
         _reloadTimer = 0;
         _reloadUseTime = 0;
@@ -1757,13 +1758,18 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         AnimatedSprite.Position = _tempAnimatedSpritePosition;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
+        //停止换弹
+        if (Reloading)
+        {
+            StopReload();
+        }
         OnRemove(Master);
     }
 
     public void OnPickUpItem()
     {
         Pickup();
-        _triggerRoleFlag = false;
+        _triggerRoleFlag = true;
         _weaponAttribute = Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
         //停止动画
         AnimationPlayer.Stop();
@@ -2074,7 +2080,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             }
         }
 
-        Debug.Log("state: " + flag);
         return flag;
     }
 

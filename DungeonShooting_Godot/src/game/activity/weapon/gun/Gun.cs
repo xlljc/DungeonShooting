@@ -29,7 +29,7 @@ public partial class Gun : Weapon
         ShootBullet(fireRotation, Attribute.BulletId);
     }
 
-    // 测试用, 敌人被消灭时触发手上武器开火
+    // //测试用, 敌人被消灭时触发手上武器开火
     // protected override void OnRemove(Role master)
     // {
     //     base.OnRemove(master);
