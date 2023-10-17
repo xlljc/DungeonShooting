@@ -938,7 +938,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         //减子弹数量
         if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
         {
-            if (Utils.Random.RandomRangeFloat(0, 1) < _weaponAttribute.AiAmmoConsumptionProbability) //触发消耗弹药
+            if (Utils.Random.RandomRangeFloat(0, 1) < _weaponAttribute.AiAttackAttr.AmmoConsumptionProbability) //触发消耗弹药
             {
                 CurrAmmo -= UseAmmoCount();
             }
@@ -1905,48 +1905,116 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     
     //-------------------------------- Ai相关 -----------------------------
 
-    public AiAttackEnum AiTriggerAttack()
+    /// <summary>
+    /// Ai 调用, 刷新 Ai 攻击状态并返回, 并不会调用相应的函数
+    /// </summary>
+    public AiAttackState AiRefreshAttackState()
     {
-        AiAttackEnum flag;
+        AiAttackState flag;
         if (IsTotalAmmoEmpty()) //当前武器弹药打空
         {
             //切换到有子弹的武器
             var index = Master.WeaponPack.FindIndex((we, i) => !we.IsTotalAmmoEmpty());
             if (index != -1)
             {
-                flag = AiAttackEnum.ExchangeWeapon;
-                Master.WeaponPack.ExchangeByIndex(index);
+                flag = AiAttackState.ExchangeWeapon;
             }
             else //所有子弹打光
             {
-                flag = AiAttackEnum.NoAmmo;
+                flag = AiAttackState.NoAmmo;
             }
         }
         else if (Reloading) //换弹中
         {
-            flag = AiAttackEnum.TriggerReload;
+            flag = AiAttackState.TriggerReload;
         }
         else if (IsAmmoEmpty()) //弹夹已经打空
         {
-            flag = AiAttackEnum.Reloading;
-            Reload();
+            flag = AiAttackState.Reloading;
         }
         else if (_continuousCount >= 1) //连发中
         {
-            flag = AiAttackEnum.Attack;
+            flag = AiAttackState.Attack;
         }
         else if (IsAttackIntervalTime()) //开火间隙
         {
-            flag = AiAttackEnum.AttackInterval;
+            flag = AiAttackState.AttackInterval;
         }
         else
         {
             var enemy = (Enemy)Master;
-            if (enemy.GetLockTargetTime() >= Attribute.AiTargetLockingTime) //正常射击
+            if (enemy.GetLockTargetTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
             {
                 if (GetDelayedAttackTime() > 0)
                 {
-                    flag = AiAttackEnum.Attack;
+                    flag = AiAttackState.Attack;
+                }
+                else
+                {
+                    if (Attribute.ContinuousShoot) //连发
+                    {
+                        flag = AiAttackState.Attack;
+                    }
+                    else //单发
+                    {
+                        flag = AiAttackState.Attack;
+                    }
+                }
+            }
+            else //锁定时间没到
+            {
+                flag = AiAttackState.LockingTime;
+            }
+        }
+
+        return flag;
+    }
+    
+    /// <summary>
+    /// Ai调用, 触发扣动扳机, 并返回攻击状态
+    /// </summary>
+    public AiAttackState AiTriggerAttackState()
+    {
+        AiAttackState flag;
+        if (IsTotalAmmoEmpty()) //当前武器弹药打空
+        {
+            //切换到有子弹的武器
+            var index = Master.WeaponPack.FindIndex((we, i) => !we.IsTotalAmmoEmpty());
+            if (index != -1)
+            {
+                flag = AiAttackState.ExchangeWeapon;
+                Master.WeaponPack.ExchangeByIndex(index);
+            }
+            else //所有子弹打光
+            {
+                flag = AiAttackState.NoAmmo;
+            }
+        }
+        else if (Reloading) //换弹中
+        {
+            flag = AiAttackState.TriggerReload;
+        }
+        else if (IsAmmoEmpty()) //弹夹已经打空
+        {
+            flag = AiAttackState.Reloading;
+            Reload();
+        }
+        else if (_continuousCount >= 1) //连发中
+        {
+            flag = AiAttackState.Attack;
+        }
+        else if (IsAttackIntervalTime()) //开火间隙
+        {
+            flag = AiAttackState.AttackInterval;
+        }
+        else
+        {
+            var enemy = (Enemy)Master;
+            if (enemy.GetLockTargetTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
+            {
+                if (GetDelayedAttackTime() > 0)
+                {
+                    flag = AiAttackState.Attack;
                     enemy.Attack();
                     if (_attackFlag)
                     {
@@ -1957,7 +2025,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                 {
                     if (Attribute.ContinuousShoot) //连发
                     {
-                        flag = AiAttackEnum.Attack;
+                        flag = AiAttackState.Attack;
                         enemy.Attack();
                         if (_attackFlag)
                         {
@@ -1966,7 +2034,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                     }
                     else //单发
                     {
-                        flag = AiAttackEnum.Attack;
+                        flag = AiAttackState.Attack;
                         enemy.Attack();
                         if (_attackFlag)
                         {
@@ -1977,7 +2045,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             }
             else //锁定时间没到
             {
-                flag = AiAttackEnum.LockingTime;
+                flag = AiAttackState.LockingTime;
             }
         }
 

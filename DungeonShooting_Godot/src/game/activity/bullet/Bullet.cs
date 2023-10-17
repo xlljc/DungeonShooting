@@ -80,7 +80,7 @@ public partial class Bullet : ActivityObject
         }
         else
         {
-            FlySpeed = speed * weapon.AiUseAttribute.AiBulletSpeedScale;
+            FlySpeed = speed * weapon.AiUseAttribute.AiAttackAttr.BulletSpeedScale;
         }
         MaxDistance = maxDistance;
         Position = position;

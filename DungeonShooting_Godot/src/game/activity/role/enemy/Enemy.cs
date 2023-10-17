@@ -53,7 +53,12 @@ public partial class Enemy : Role
     /// 导航代理中点
     /// </summary>
     public Marker2D NavigationPoint { get; private set; }
-    
+
+    /// <summary>
+    /// Ai攻击状态, 调用 EnemyAttack() 函数后会刷新
+    /// </summary>
+    public AiAttackState AttackState { get; private set; }
+
     //锁定目标时间
     private float _lockTargetTime = 0;
 
@@ -292,22 +297,19 @@ public partial class Enemy : Role
     }
 
     /// <summary>
-    /// Ai触发的攻击, 返回是否成功触发 Attack() 函数
+    /// Ai触发的攻击
     /// </summary>
-    public AiAttackEnum EnemyAttack(float delta)
+    public void EnemyAttack()
     {
-        AiAttackEnum flag;
         var weapon = WeaponPack.ActiveItem;
         if (weapon != null)
         {
-            flag = weapon.AiTriggerAttack();
+            AttackState = weapon.AiTriggerAttackState();
         }
         else //没有武器
         {
-            flag = AiAttackEnum.NoWeapon;
+            AttackState = AiAttackState.NoWeapon;
         }
-
-        return flag;
     }
 
     /// <summary>

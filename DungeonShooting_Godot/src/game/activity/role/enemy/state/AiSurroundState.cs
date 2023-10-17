@@ -25,8 +25,6 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
     private Vector2 _prevPos;
     //卡在一个位置的时间
     private float _lockTimer;
-    //Ai攻击状态
-    private AiAttackEnum _attackEnum;
 
     public AiSurroundState() : base(AiStateEnum.AiSurround)
     {
@@ -38,7 +36,6 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         _isMoveOver = true;
         _pauseTimer = 0;
         _moveFlag = false;
-        _attackEnum = AiAttackEnum.None;
     }
 
     public override void Process(float delta)
@@ -73,7 +70,8 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
             IsInView = false;
         }
 
-        if (IsInView)
+        //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
+        if (IsInView || Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
         {
             if (_pauseTimer >= 0)
             {
@@ -123,7 +121,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     }
                     else
                     {
-                        if (_attackEnum != AiAttackEnum.LockingTime && _attackEnum != AiAttackEnum.Attack)
+                        if (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack)
                         {
                             //计算移动
                             var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
@@ -158,7 +156,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     else
                     {
                         //发起攻击
-                        _attackEnum = Master.EnemyAttack(delta);
+                        Master.EnemyAttack();
                     }
                 }
             }

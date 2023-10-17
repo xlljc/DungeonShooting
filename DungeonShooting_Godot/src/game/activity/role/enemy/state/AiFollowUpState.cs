@@ -15,8 +15,6 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
-    //Ai攻击状态
-    private AiAttackEnum _attackEnum;
 
     public AiFollowUpState() : base(AiStateEnum.AiFollowUp)
     {
@@ -77,7 +75,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
-            if (_attackEnum != AiAttackEnum.LockingTime && _attackEnum != AiAttackEnum.Attack)
+            if (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack)
             {
                 //计算移动
                 var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
@@ -108,12 +106,13 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             IsInView = false;
         }
 
-        if (IsInView)
+        //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
+        if (IsInView || Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
         {
             if (inAttackRange) //在攻击范围内
             {
                 //发起攻击
-                _attackEnum = Master.EnemyAttack(delta);
+                Master.EnemyAttack();
                 
                 //距离够近, 可以切换到环绕模式
                 if (Master.GlobalPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(Utils.GetConfigRangeStart(weapon.Attribute.BulletDistanceRange), 2) * 0.7f)
@@ -122,7 +121,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
                 }
             }
         }
-        else
+        else //不在视野中
         {
             ChangeState(AiStateEnum.AiTailAfter);
         }

@@ -29,17 +29,18 @@ public partial class Gun : Weapon
         ShootBullet(fireRotation, Attribute.BulletId);
     }
 
-    protected override void OnRemove(Role master)
-    {
-        base.OnRemove(master);
-
-        if (master.IsDie && master.IsEnemyWithPlayer())
-        {
-            this.CallDelay(0, () =>
-            {
-                Debug.Log("敌人扔掉武器触发攻击");
-                Trigger(master);
-            });
-        }
-    }
+    // 测试用, 敌人被消灭时触发手上武器开火
+    // protected override void OnRemove(Role master)
+    // {
+    //     base.OnRemove(master);
+    //
+    //     if (master.IsDie && master.IsEnemyWithPlayer())
+    //     {
+    //         this.CallDelay(0, () =>
+    //         {
+    //             Debug.Log("敌人扔掉武器触发攻击");
+    //             Trigger(master);
+    //         });
+    //     }
+    // }
 }
