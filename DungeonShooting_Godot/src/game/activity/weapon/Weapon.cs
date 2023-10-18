@@ -154,6 +154,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// 上一次触发改武器开火的触发开火攻击的层级, 数据源自于: <see cref="PhysicsLayer"/>
     /// </summary>
     public long TriggerRoleAttackLayer { get; private set; }
+    
     //--------------------------------------------------------------------------------------------
 
     //用于记录是否有角色操作过这把武器
@@ -438,7 +439,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
 
     protected override void Process(float delta)
     {
-        
         //未开火时间
         _noAttackTime += delta;
         
@@ -1918,7 +1918,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     }
     
     //-------------------------------- Ai相关 -----------------------------
-
+    
     /// <summary>
     /// Ai 调用, 刷新 Ai 攻击状态并返回, 并不会调用相应的函数
     /// </summary>

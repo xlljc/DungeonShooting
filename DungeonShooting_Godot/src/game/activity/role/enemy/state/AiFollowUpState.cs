@@ -6,12 +6,6 @@ using Godot;
 /// </summary>
 public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
 {
-
-    /// <summary>
-    /// 目标是否在视野内
-    /// </summary>
-    public bool IsInView;
-
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
@@ -23,7 +17,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
     public override void Enter(AiStateEnum prev, params object[] args)
     {
         _navigationUpdateTimer = 0;
-        IsInView = true;
+        Master.TargetInView = true;
     }
 
     public override void Process(float delta)
@@ -98,17 +92,17 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         //检测玩家是否在视野内
         if (Master.IsInTailAfterViewRange(playerPos))
         {
-            IsInView = !Master.TestViewRayCast(playerPos);
+            Master.TargetInView = !Master.TestViewRayCast(playerPos);
             //关闭射线检测
             Master.TestViewRayCastOver();
         }
         else
         {
-            IsInView = false;
+            Master.TargetInView = false;
         }
 
         //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
-        if (IsInView || Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
+        if (Master.TargetInView || Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
         {
             if (inAttackRange) //在攻击范围内
             {

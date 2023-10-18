@@ -20,6 +20,11 @@ using Godot;
 public partial class Enemy : Role
 {
     /// <summary>
+    /// 目标是否在视野内
+    /// </summary>
+    public bool TargetInView { get; set; } = true;
+    
+    /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
     public StateController<Enemy, AiStateEnum> StateController { get; private set; }
@@ -59,6 +64,11 @@ public partial class Enemy : Role
     /// </summary>
     public AiAttackState AttackState { get; private set; }
 
+    /// <summary>
+    /// Ai瞄准辅助线
+    /// </summary>
+    public Line2D SubLine { get; private set; }
+    
     //锁定目标时间
     private float _lockTargetTime = 0;
 
@@ -95,6 +105,47 @@ public partial class Enemy : Role
         
         //默认状态
         StateController.ChangeStateInstant(AiStateEnum.AiNormal);
+
+        InitSubLine();
+    }
+    
+    /// <summary>
+    /// 初始化瞄准辅助线
+    /// </summary>
+    public void InitSubLine()
+    {
+        if (SubLine != null)
+        {
+            return;
+        }
+        SubLine = new Line2D();
+        SubLine.Width = 1;
+        SubLine.DefaultColor = Colors.Red;
+        AddChild(SubLine);
+    }
+
+    /// <summary>
+    /// 更新瞄准辅助线信息, length 为辅助线长度
+    /// </summary>
+    private void UpdateSubLine(float length)
+    {
+        var weapon = WeaponPack.ActiveItem;
+        var position = SubLine.ToLocal(weapon.FirePoint.GlobalPosition);
+        Vector2 position2;
+        if (Face == FaceDirection.Right)
+        {
+            position2 = Vector2.FromAngle(MountPoint.RealRotation) * length;
+        }
+        else
+        {
+            position2 = Vector2.FromAngle(Mathf.Pi - MountPoint.RealRotation) * length;
+        }
+
+        SubLine.Points = new Vector2[]
+        {
+            position,
+            position + position2
+        };
     }
 
     public override void EnterTree()
@@ -160,6 +211,26 @@ public partial class Enemy : Role
                 {
                     _lockTargetTime = 0;
                 }
+                
+                //更新瞄准辅助线
+                if (AttackState == AiAttackState.LockingTime)
+                {
+                    SubLine.Visible = true;
+                    float len;
+                    if (!TargetInView)
+                    {
+                        len = GlobalPosition.DistanceTo(ViewRay.GetCollisionPoint());
+                    }
+                    else
+                    {
+                        len = 200;
+                    }
+                    UpdateSubLine(len);
+                }
+                else
+                {
+                    SubLine.Visible = false;
+                }
             }
             else
             {
@@ -171,7 +242,13 @@ public partial class Enemy : Role
             _lockTargetTime = 0;
         }
 
+        //拾起武器操作
         EnemyPickUpWeapon();
+        // //更新瞄准辅助线
+        // if (SubLine != null && SubLine.Visible && WeaponPack.ActiveItem != null)
+        // {
+        //     UpdateSubLine();
+        // }
     }
 
     protected override void OnHit(int damage, bool realHarm)

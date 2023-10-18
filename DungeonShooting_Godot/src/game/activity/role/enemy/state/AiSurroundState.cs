@@ -6,11 +6,6 @@ using Godot;
 /// </summary>
 public class AiSurroundState : StateBase<Enemy, AiStateEnum>
 {
-    /// <summary>
-    /// 目标是否在视野内
-    /// </summary>
-    public bool IsInView = true;
-
     //是否移动结束
     private bool _isMoveOver;
 
@@ -32,7 +27,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
 
     public override void Enter(AiStateEnum prev, params object[] args)
     {
-        IsInView = true;
+        Master.TargetInView = true;
         _isMoveOver = true;
         _pauseTimer = 0;
         _moveFlag = false;
@@ -61,17 +56,17 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
         //检测玩家是否在视野内
         if (Master.IsInTailAfterViewRange(playerPos))
         {
-            IsInView = !Master.TestViewRayCast(playerPos);
+            Master.TargetInView = !Master.TestViewRayCast(playerPos);
             //关闭射线检测
             Master.TestViewRayCastOver();
         }
         else
         {
-            IsInView = false;
+            Master.TargetInView = false;
         }
 
         //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
-        if (IsInView ||
+        if (Master.TargetInView ||
             (weapon != null && weapon.Attribute.AiAttackAttr.FiringStand &&
              (Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
             ))
@@ -124,16 +119,17 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                     }
                     else
                     {
+                        //判断开火状态, 进行移动
                         if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
                             (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack))
-                        {
+                        { //正常移动
                             //计算移动
                             var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
                             Master.AnimatedSprite.Play(AnimatorNames.Run);
                             Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
                                                    Master.RoleState.MoveSpeed;
                         }
-                        else
+                        else //站立不动
                         {
                             Master.AnimatedSprite.Play(AnimatorNames.Idle);
                             Master.BasisVelocity = Vector2.Zero;
