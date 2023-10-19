@@ -126,6 +126,10 @@ public abstract class Component : IProcess, IDestroy, ICoroutine
     /// 挂载物体的碰撞器节点
     /// </summary>
     public CollisionShape2D Collision => Master.Collision;
+    /// <summary>
+    /// 移动控制器
+    /// </summary>
+    public MoveController MoveController => Master.MoveController;
 
     /// <summary>
     /// 是否启用当前组件, 如果禁用, 则不会调用 Process 和 PhysicsProcess
@@ -289,6 +293,11 @@ public abstract class Component : IProcess, IDestroy, ICoroutine
     public T GetParent<T>() where T : class
     {
         return Master.GetParent<T>();
+    }
+
+    public void Reparent(Node node)
+    {
+        Master.Reparent(node);
     }
     
     public long StartCoroutine(IEnumerator able)

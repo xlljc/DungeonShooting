@@ -89,22 +89,15 @@ public class SubLine : Component<Role>
             length = _range;
         }
 
+        var r = master.ConvertRotation(master.MountPoint.RealRotation);
         //更新 Ray 的位置角度
-        _rayCast2D.GlobalPosition = weapon.FirePoint.GlobalPosition;
+        _rayCast2D.GlobalPosition = firePointGlobalPosition;
         _rayCast2D.TargetPosition = new Vector2(_range, 0);
-        _rayCast2D.Rotation = master.ConvertRotation(master.MountPoint.RealRotation);
+        _rayCast2D.Rotation = r;
 
         //计算 line2D 的点
         var position = _line2D.ToLocal(firePointGlobalPosition);
-        Vector2 position2;
-        if (master.Face == FaceDirection.Right)
-        {
-            position2 = Vector2.FromAngle(master.MountPoint.RealRotation) * length;
-        }
-        else
-        {
-            position2 = Vector2.FromAngle(Mathf.Pi - master.MountPoint.RealRotation) * length;
-        }
+        Vector2 position2 = Vector2.FromAngle(r) * length;
 
         _line2D.Points = new Vector2[]
         {
