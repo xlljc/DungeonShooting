@@ -60,7 +60,7 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
             return;
         }
 
-        stateBase.Master = ActivityInstance as T;
+        stateBase.Master = Master as T;
         stateBase.StateController = this;
         _states.Add(stateBase.State, stateBase);
     }

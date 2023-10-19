@@ -4,19 +4,12 @@ using System.Collections.Generic;
 /// <summary>
 /// 物体背包类
 /// </summary>
-public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
+public class Package<T> : Component<Role> where T : ActivityObject, IPackageItem
 {
     /// <summary>
     /// 当前使用对象改变时回调
     /// </summary>
     public event Action<T> ChangeActiveItemEvent;
-    
-    public bool IsDestroyed { get; private set; }
-    
-    /// <summary>
-    /// 归属者
-    /// </summary>
-    public Role Master { get; private set; }
 
     /// <summary>
     /// 当前使用的物体对象
@@ -53,12 +46,6 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
     /// 物体插槽
     /// </summary>
     public T[] ItemSlot { get; private set; }
-
-    public Package(Role master, int capacity)
-    {
-        Master = master;
-        SetCapacity(capacity);
-    }
 
     /// <summary>
     /// 修改物体背包容量
@@ -466,14 +453,8 @@ public class Package<T> : IDestroy where T : ActivityObject, IPackageItem
         return null;
     }
     
-    public void Destroy()
+    public override void OnDestroy()
     {
-        if (IsDestroyed)
-        {
-            return;
-        }
-
-        IsDestroyed = true;
         for (var i = 0; i < ItemSlot.Length; i++)
         {
             var activityObject = ItemSlot[i];

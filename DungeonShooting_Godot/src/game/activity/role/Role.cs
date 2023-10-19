@@ -50,7 +50,7 @@ public abstract partial class Role : ActivityObject
     public uint EnemyLayer { get; set; } = PhysicsLayer.Enemy;
 
     /// <summary>
-    /// 携带的被动道具包裹
+    /// 携带的被动道具列表
     /// </summary>
     public List<BuffProp> BuffPropPack { get; } = new List<BuffProp>();
 
@@ -259,6 +259,11 @@ public abstract partial class Role : ActivityObject
     /// 是否处于近战攻击中
     /// </summary>
     public bool IsMeleeAttack { get; private set; }
+
+    /// <summary>
+    /// 瞄准辅助线, 需要手动调用 InitSubLine() 初始化
+    /// </summary>
+    public SubLine SubLine { get; private set; }
     
     //翻滚冷却计时器
     private float _rollCoolingTimer = 0;
@@ -407,8 +412,11 @@ public abstract partial class Role : ActivityObject
 
     public override void OnInit()
     {
-        ActivePropsPack = new Package<ActiveProp>(this, 1);
-        WeaponPack = new Package<Weapon>(this, 4);
+        ActivePropsPack = AddComponent<Package<ActiveProp>>();
+        ActivePropsPack.SetCapacity(1);
+        WeaponPack = AddComponent<Package<Weapon>>();
+        WeaponPack.SetCapacity(4);
+
         _startScale = Scale;
         MountPoint.Master = this;
         
@@ -568,6 +576,19 @@ public abstract partial class Role : ActivityObject
         }
     }
 
+    /// <summary>
+    /// 初始化瞄准辅助线
+    /// </summary>
+    public void InitSubLine()
+    {
+        if (SubLine != null)
+        {
+            return;
+        }
+
+        SubLine = AddComponent<SubLine>();
+    }
+    
     /// <summary>
     /// 当武器放到后背时调用, 用于设置武器位置和角度
     /// </summary>
@@ -1201,5 +1222,20 @@ public abstract partial class Role : ActivityObject
     public bool IsEnemyWithPlayer()
     {
         return CollisionWithMask(Player.Current.EnemyLayer);
+    }
+
+    /// <summary>
+    /// 将 Role 子节点的旋转角度转换为正常的旋转角度<br/>
+    /// 因为 Role 受到 Face 影响, 会出现转向动作, 所以需要该函数来转换旋转角度
+    /// </summary>
+    /// <param name="rotation">角度, 弧度制</param>
+    public float ConvertRotation(float rotation)
+    {
+        if (Face == FaceDirection.Right)
+        {
+            return rotation;
+        }
+
+        return Mathf.Pi - rotation;
     }
 }

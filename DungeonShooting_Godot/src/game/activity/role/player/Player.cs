@@ -63,6 +63,8 @@ public partial class Player : Role
         StateController.Register(new PlayerRollState());
         //默认状态
         StateController.ChangeStateInstant(PlayerStateEnum.Idle);
+
+        //InitSubLine();
     }
 
     protected override void Process(float delta)

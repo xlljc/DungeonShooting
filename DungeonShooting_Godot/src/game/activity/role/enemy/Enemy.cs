@@ -11,6 +11,7 @@
 #endregion
 
 
+using System;
 using Godot;
 
 /// <summary>
@@ -63,11 +64,6 @@ public partial class Enemy : Role
     /// Ai攻击状态, 调用 EnemyAttack() 函数后会刷新
     /// </summary>
     public AiAttackState AttackState { get; private set; }
-
-    /// <summary>
-    /// Ai瞄准辅助线
-    /// </summary>
-    public Line2D SubLine { get; private set; }
     
     //锁定目标时间
     private float _lockTargetTime = 0;
@@ -105,47 +101,6 @@ public partial class Enemy : Role
         
         //默认状态
         StateController.ChangeStateInstant(AiStateEnum.AiNormal);
-
-        InitSubLine();
-    }
-    
-    /// <summary>
-    /// 初始化瞄准辅助线
-    /// </summary>
-    public void InitSubLine()
-    {
-        if (SubLine != null)
-        {
-            return;
-        }
-        SubLine = new Line2D();
-        SubLine.Width = 1;
-        SubLine.DefaultColor = Colors.Red;
-        AddChild(SubLine);
-    }
-
-    /// <summary>
-    /// 更新瞄准辅助线信息, length 为辅助线长度
-    /// </summary>
-    private void UpdateSubLine(float length)
-    {
-        var weapon = WeaponPack.ActiveItem;
-        var position = SubLine.ToLocal(weapon.FirePoint.GlobalPosition);
-        Vector2 position2;
-        if (Face == FaceDirection.Right)
-        {
-            position2 = Vector2.FromAngle(MountPoint.RealRotation) * length;
-        }
-        else
-        {
-            position2 = Vector2.FromAngle(Mathf.Pi - MountPoint.RealRotation) * length;
-        }
-
-        SubLine.Points = new Vector2[]
-        {
-            position,
-            position + position2
-        };
     }
 
     public override void EnterTree()
@@ -215,21 +170,18 @@ public partial class Enemy : Role
                 //更新瞄准辅助线
                 if (AttackState == AiAttackState.LockingTime)
                 {
-                    SubLine.Visible = true;
-                    float len;
-                    if (!TargetInView)
+                    if (SubLine == null)
                     {
-                        len = GlobalPosition.DistanceTo(ViewRay.GetCollisionPoint());
+                        InitSubLine();
                     }
                     else
                     {
-                        len = 200;
+                        SubLine.Enable = true;
                     }
-                    UpdateSubLine(len);
                 }
-                else
+                else if (SubLine != null)
                 {
-                    SubLine.Visible = false;
+                    SubLine.Enable = false;
                 }
             }
             else
