@@ -299,6 +299,26 @@ public abstract class Component : IProcess, IDestroy, ICoroutine
     {
         Master.Reparent(node);
     }
+
+    public float GetProcessDeltaTime()
+    {
+        return (float)Master.GetProcessDeltaTime();
+    }
+    
+    public float GetPhysicsProcessDeltaTime()
+    {
+        return (float)Master.GetPhysicsProcessDeltaTime();
+    }
+    
+    public Vector2 GetGlobalMousePosition()
+    {
+        return Master.GetGlobalMousePosition();
+    }
+    
+    public Vector2 GetLocalMousePosition()
+    {
+        return Master.GetLocalMousePosition();
+    }
     
     public long StartCoroutine(IEnumerator able)
     {

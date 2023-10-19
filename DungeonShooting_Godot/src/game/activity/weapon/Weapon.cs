@@ -164,7 +164,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     private bool _triggerFlag = false;
 
     //扳机计时器
-    private float _triggerTimer = 0;
+    public float _triggerTimer = 0;
 
     //开火前延时时间
     private float _delayedTime = 0;
@@ -176,7 +176,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     private float _fireAngle = 0;
 
     //攻击冷却计时
-    private float _attackTimer = 0;
+    public float _attackTimer = 0;
 
     //攻击状态
     private bool _attackFlag = false;
@@ -1965,7 +1965,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         else
         {
             var enemy = (Enemy)Master;
-            if (enemy.GetLockTargetTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
+            if (enemy.GetLockTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
             {
                 if (GetDelayedAttackTime() > 0)
                 {
@@ -2024,7 +2024,10 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         else if (_beLoadedState == 0 || _beLoadedState == -1) //需要上膛
         {
             flag = AiAttackState.AttackInterval;
-            Master.Attack();
+            if (_attackTimer <= 0)
+            {
+                Master.Attack();
+            }
         }
         else if (_beLoadedState == 1) //上膛中
         {
@@ -2041,7 +2044,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         else
         {
             var enemy = (Enemy)Master;
-            if (enemy.GetLockTargetTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
+            if (enemy.GetLockTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
             {
                 if (GetDelayedAttackTime() > 0)
                 {
@@ -2081,6 +2084,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
 
         return flag;
+    }
+
+    /// <summary>
+    /// 获取Ai锁定目标的剩余时间
+    /// </summary>
+    /// <returns></returns>
+    public float GetAiLockRemainderTime()
+    {
+        return Attribute.AiAttackAttr.LockingTime - ((Enemy)Master).GetLockTime();
     }
 
     // /// <summary>

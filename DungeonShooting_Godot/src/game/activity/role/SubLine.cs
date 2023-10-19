@@ -1,4 +1,5 @@
 ﻿
+using System.Collections;
 using Godot;
 
 public class SubLine : Component<Role>
@@ -8,18 +9,18 @@ public class SubLine : Component<Role>
 
     private bool _enableSubLine;
     private float _range;
+    private long _cid;
     
     public override void Ready()
     {
         //初始化瞄准辅助线
         _line2D = new Line2D();
         _line2D.Width = 1;
-        _line2D.DefaultColor = Colors.Red;
+        _line2D.DefaultColor = Colors.Orange;
         AddChild(_line2D);
 
         _rayCast2D = new RayCast2D();
         _rayCast2D.CollisionMask = PhysicsLayer.Wall;
-        //_rayCast2D.Position = Master.MountPoint.Position;
         AddChild(_rayCast2D);
 
         Master.WeaponPack.ChangeActiveItemEvent += OnChangeWeapon;
@@ -32,8 +33,38 @@ public class SubLine : Component<Role>
     
     public override void OnDisable()
     {
+        _enableSubLine = false;
         _line2D.Visible = false;
         _rayCast2D.Enabled = false;
+        if (_cid > 0)
+        {
+            StopCoroutine(_cid);
+        }
+    }
+
+    public void SetColor(Color color)
+    {
+        _line2D.DefaultColor = color;
+    }
+
+    public void PlayWarnAnimation(float time)
+    {
+        if (_cid > 0)
+        {
+            StopCoroutine(_cid);
+        }
+
+        _cid = StartCoroutine(RunWarnAnimation(time));
+    }
+
+    private IEnumerator RunWarnAnimation(float time)
+    {
+        var now = 0f;
+        while (now < time)
+        {
+            now += GetProcessDeltaTime();
+            yield return null;
+        }
     }
 
     //切换武器
@@ -50,6 +81,10 @@ public class SubLine : Component<Role>
         else
         {
             _enableSubLine = true;
+            if (_cid > 0)
+            {
+                StopCoroutine(_cid);
+            }
             _range = Utils.GetConfigRangeEnd(weapon.Attribute.BulletDistanceRange);
         }
     }
@@ -71,6 +106,8 @@ public class SubLine : Component<Role>
 
     public override void OnDestroy()
     {
+        _line2D.QueueFree();
+        _rayCast2D.QueueFree();
         Master.WeaponPack.ChangeActiveItemEvent -= OnChangeWeapon;
     }
 

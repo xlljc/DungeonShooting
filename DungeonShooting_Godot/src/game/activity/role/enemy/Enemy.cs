@@ -178,6 +178,15 @@ public partial class Enemy : Role
                     {
                         SubLine.Enable = true;
                     }
+
+                    if (weapon.GetAiLockRemainderTime() > 0.4f)
+                    {
+                        SubLine.SetColor(Colors.Orange);
+                    }
+                    else
+                    {
+                        SubLine.SetColor(Colors.Red);
+                    }
                 }
                 else if (SubLine != null)
                 {
@@ -196,11 +205,6 @@ public partial class Enemy : Role
 
         //拾起武器操作
         EnemyPickUpWeapon();
-        // //更新瞄准辅助线
-        // if (SubLine != null && SubLine.Visible && WeaponPack.ActiveItem != null)
-        // {
-        //     UpdateSubLine();
-        // }
     }
 
     protected override void OnHit(int damage, bool realHarm)
@@ -324,7 +328,7 @@ public partial class Enemy : Role
         
         return false;
     }
-
+    
     /// <summary>
     /// Ai触发的攻击
     /// </summary>
@@ -468,7 +472,7 @@ public partial class Enemy : Role
     /// <summary>
     /// 获取锁定目标的时间
     /// </summary>
-    public float GetLockTargetTime()
+    public float GetLockTime()
     {
         return _lockTargetTime;
     }
