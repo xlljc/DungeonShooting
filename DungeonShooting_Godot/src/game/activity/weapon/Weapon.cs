@@ -1207,7 +1207,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public void StopReload()
     {
         _aloneReloadState = 0;
-        _beLoadedState = 2;
+        if (_beLoadedState == -1)
+        {
+            _beLoadedState = 0;
+        }
+        else if (_beLoadedState == 1)
+        {
+            _beLoadedState = 2;
+        }
+
         Reloading = false;
         _reloadTimer = 0;
         _reloadUseTime = 0;
