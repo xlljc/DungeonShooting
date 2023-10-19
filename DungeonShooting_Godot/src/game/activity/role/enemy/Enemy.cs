@@ -168,7 +168,7 @@ public partial class Enemy : Role
                 }
                 
                 //更新瞄准辅助线
-                if (AttackState == AiAttackState.LockingTime)
+                if (weapon.Attribute.AiAttackAttr.ShowSubline && AttackState == AiAttackState.LockingTime)
                 {
                     if (SubLine == null)
                     {
@@ -179,13 +179,10 @@ public partial class Enemy : Role
                         SubLine.Enable = true;
                     }
 
-                    if (weapon.GetAiLockRemainderTime() > 0.4f)
+                    //播放警告删掉动画
+                    if (!SubLine.IsPlayWarnAnimation && weapon.GetAiLockRemainderTime() <= 0.5f)
                     {
-                        SubLine.SetColor(Colors.Orange);
-                    }
-                    else
-                    {
-                        SubLine.SetColor(Colors.Red);
+                        SubLine.PlayWarnAnimation(0.5f);
                     }
                 }
                 else if (SubLine != null)

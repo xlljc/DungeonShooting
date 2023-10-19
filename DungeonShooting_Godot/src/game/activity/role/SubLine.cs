@@ -2,27 +2,35 @@
 using System.Collections;
 using Godot;
 
+/// <summary>
+/// 瞄准辅助线
+/// </summary>
 public class SubLine : Component<Role>
 {
+    /// <summary>
+    /// 是否正在播放警告闪烁动画
+    /// </summary>
+    public bool IsPlayWarnAnimation => _cid > 0;
+    
     private Line2D _line2D;
     private RayCast2D _rayCast2D;
 
     private bool _enableSubLine;
     private float _range;
     private long _cid;
+    private Color _color = Colors.Orange;
     
     public override void Ready()
     {
         //初始化瞄准辅助线
         _line2D = new Line2D();
         _line2D.Width = 1;
-        _line2D.DefaultColor = Colors.Orange;
         AddChild(_line2D);
 
         _rayCast2D = new RayCast2D();
         _rayCast2D.CollisionMask = PhysicsLayer.Wall;
         AddChild(_rayCast2D);
-
+        
         Master.WeaponPack.ChangeActiveItemEvent += OnChangeWeapon;
     }
 
@@ -42,29 +50,50 @@ public class SubLine : Component<Role>
         }
     }
 
+    /// <summary>
+    /// 设置线条颜色
+    /// </summary>
     public void SetColor(Color color)
     {
+        _color = color;
         _line2D.DefaultColor = color;
     }
 
+    /// <summary>
+    /// 播放闪烁警告动画
+    /// </summary>
+    /// <param name="time">持续时间</param>
     public void PlayWarnAnimation(float time)
     {
         if (_cid > 0)
         {
             StopCoroutine(_cid);
         }
-
+        
         _cid = StartCoroutine(RunWarnAnimation(time));
     }
 
     private IEnumerator RunWarnAnimation(float time)
     {
         var now = 0f;
+        var t = 0f;
+        var b = false;
         while (now < time)
         {
-            now += GetProcessDeltaTime();
+            var delta = GetProcessDeltaTime();
+            now += delta;
+            t += delta;
+            if (t >= 0.08f)
+            {
+                t %= 0.08f;
+                _line2D.DefaultColor = b ? Colors.Orange : Colors.Red;
+                b = !b;
+            }
             yield return null;
         }
+
+        _line2D.DefaultColor = _color;
+        _cid = 0;
     }
 
     //切换武器
@@ -84,8 +113,10 @@ public class SubLine : Component<Role>
             if (_cid > 0)
             {
                 StopCoroutine(_cid);
+                _cid = 0;
             }
             _range = Utils.GetConfigRangeEnd(weapon.Attribute.BulletDistanceRange);
+            _line2D.DefaultColor = _color;
         }
     }
 

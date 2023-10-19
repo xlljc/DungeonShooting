@@ -141,14 +141,14 @@ public abstract class Component : IProcess, IDestroy, ICoroutine
         {
             if (!_enable && value)
             {
+                _enable = true;
                 OnEnable();
             }
             else if (_enable && !value)
             {
+                _enable = false;
                 OnDisable();
             }
-
-            _enable = value;
         }
     }
 
