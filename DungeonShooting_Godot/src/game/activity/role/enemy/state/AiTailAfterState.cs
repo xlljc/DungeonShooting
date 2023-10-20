@@ -63,11 +63,21 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
-            //计算移动
-            var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-            Master.AnimatedSprite.Play(AnimatorNames.Run);
-            Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                              Master.RoleState.MoveSpeed;
+            var weapon = Master.WeaponPack.ActiveItem;
+            if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
+                (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack))
+            {
+                //计算移动
+                var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
+                Master.AnimatedSprite.Play(AnimatorNames.Run);
+                Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
+                                       Master.RoleState.MoveSpeed;
+            }
+            else
+            {
+                Master.AnimatedSprite.Play(AnimatorNames.Idle);
+                Master.BasisVelocity = Vector2.Zero;
+            }
         }
         else
         {

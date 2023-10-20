@@ -11,6 +11,7 @@
 #endregion
 
 
+using System;
 using Godot;
 
 /// <summary>
@@ -19,6 +20,11 @@ using Godot;
 [Tool]
 public partial class Enemy : Role
 {
+    /// <summary>
+    /// 目标是否在视野内
+    /// </summary>
+    public bool TargetInView { get; set; } = true;
+    
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
@@ -54,10 +60,13 @@ public partial class Enemy : Role
     /// </summary>
     public Marker2D NavigationPoint { get; private set; }
 
-    //开火间隙时间
-    private float _enemyAttackTimer = 0;
-    //目标在视野内的时间
-    private float _targetInViewTime = 0;
+    /// <summary>
+    /// Ai攻击状态, 调用 EnemyAttack() 函数后会刷新
+    /// </summary>
+    public AiAttackState AttackState { get; private set; }
+    
+    //锁定目标时间
+    private float _lockTargetTime = 0;
 
     public override void OnInit()
     {
@@ -66,6 +75,7 @@ public partial class Enemy : Role
         StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
 
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Player;
+        EnemyLayer = PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
         RoleState.MoveSpeed = 20;
@@ -140,19 +150,85 @@ public partial class Enemy : Role
     protected override void Process(float delta)
     {
         base.Process(delta);
-        _enemyAttackTimer -= delta;
 
         //目标在视野内的时间
         var currState = StateController.CurrState;
         if (currState == AiStateEnum.AiSurround || currState == AiStateEnum.AiFollowUp)
         {
-            _targetInViewTime += delta;
+            var weapon = WeaponPack.ActiveItem;
+            if (weapon != null)
+            {
+                if (weapon.GetBeLoadedStateState() >= 2 && !weapon.IsAttackIntervalTime()) //必须在可以开火时记录时间
+                {
+                    _lockTargetTime += delta;
+                }
+                else
+                {
+                    _lockTargetTime = 0;
+                }
+                
+                if (AttackState == AiAttackState.LockingTime) //锁定玩家状态
+                {
+                    var aiLockRemainderTime = weapon.GetAiLockRemainderTime();
+                    MountLookTarget = aiLockRemainderTime >= weapon.Attribute.AiAttackAttr.LockAngleTime;
+                    //更新瞄准辅助线
+                    if (weapon.Attribute.AiAttackAttr.ShowSubline)
+                    {
+                        if (SubLine == null)
+                        {
+                            InitSubLine();
+                        }
+                        else
+                        {
+                            SubLine.Enable = true;
+                        }
+
+                        //播放警告删掉动画
+                        if (!SubLine.IsPlayWarnAnimation && aiLockRemainderTime <= 0.5f)
+                        {
+                            SubLine.PlayWarnAnimation(0.5f);
+                        }
+                    }
+                }
+                else
+                {
+                    //关闭辅助线
+                    if (SubLine != null)
+                    {
+                        SubLine.Enable = false;
+                    }
+                    
+                    if (AttackState == AiAttackState.Attack || AttackState == AiAttackState.AttackInterval)
+                    {
+                        if (weapon.Attribute.AiAttackAttr.AttackLockAngle) //开火时锁定枪口角度
+                        {
+                            //连发状态锁定角度
+                            MountLookTarget = !(weapon.GetContinuousCount() > 0 || weapon.GetAttackTimer() > 0);
+                        }
+                        else
+                        {
+                            MountLookTarget = true;
+                        }
+                    }
+                    else
+                    {
+                        MountLookTarget = true;
+                    }
+                }
+            }
+            else
+            {
+                MountLookTarget = true;
+                _lockTargetTime = 0;
+            }
         }
         else
         {
-            _targetInViewTime = 0;
+            MountLookTarget = true;
+            _lockTargetTime = 0;
         }
 
+        //拾起武器操作
         EnemyPickUpWeapon();
     }
 
@@ -277,58 +353,20 @@ public partial class Enemy : Role
         
         return false;
     }
-
+    
     /// <summary>
     /// Ai触发的攻击
     /// </summary>
-    public void EnemyAttack(float delta)
+    public void EnemyAttack()
     {
         var weapon = WeaponPack.ActiveItem;
         if (weapon != null)
         {
-            if (weapon.IsTotalAmmoEmpty()) //当前武器弹药打空
-            {
-                //切换到有子弹的武器
-                var index = WeaponPack.FindIndex((we, i) => !we.IsTotalAmmoEmpty());
-                if (index != -1)
-                {
-                    WeaponPack.ExchangeByIndex(index);
-                }
-                else //所有子弹打光
-                {
-                    
-                }
-            }
-            else if (weapon.Reloading) //换弹中
-            {
-
-            }
-            else if (weapon.IsAmmoEmpty()) //弹夹已经打空
-            {
-                Reload();
-            }
-            else if (_targetInViewTime >= weapon.Attribute.AiTargetLockingTime) //正常射击
-            {
-                if (weapon.GetDelayedAttackTime() > 0)
-                {
-                    Attack();
-                }
-                else
-                {
-                    if (weapon.Attribute.ContinuousShoot) //连发
-                    {
-                        Attack();
-                    }
-                    else //单发
-                    {
-                        if (_enemyAttackTimer <= 0)
-                        {
-                            _enemyAttackTimer = 60f / weapon.Attribute.StartFiringSpeed;
-                            Attack();
-                        }
-                    }
-                }
-            }
+            AttackState = weapon.AiTriggerAttackState();
+        }
+        else //没有武器
+        {
+            AttackState = AiAttackState.NoWeapon;
         }
     }
 
@@ -454,6 +492,22 @@ public partial class Enemy : Role
             //     return;
             // }
         }
+    }
+
+    /// <summary>
+    /// 获取锁定目标的时间
+    /// </summary>
+    public float GetLockTime()
+    {
+        return _lockTargetTime;
+    }
+
+    /// <summary>
+    /// 强制设置锁定目标时间
+    /// </summary>
+    public void SetLockTargetTime(float time)
+    {
+        _lockTargetTime = time;
     }
 
 }

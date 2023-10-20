@@ -251,7 +251,7 @@ public class RoomPreinstall : IDestroy
             if (_currWaveIndex < WaveList.Count)
             {
                 Debug.Log($"执行第{_currWaveIndex}波");
-                _coroutineId = GameApplication.Instance.World.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
+                _coroutineId = World.Current.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
                 _currWaveIndex++;
             }
         }
@@ -268,7 +268,7 @@ public class RoomPreinstall : IDestroy
         }
         
         Debug.Log($"执行第{_currWaveIndex}波");
-        _coroutineId = GameApplication.Instance.World.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
+        _coroutineId = World.Current.StartCoroutine(RunMark(WaveList[_currWaveIndex]));
         _currWaveIndex++;
     }
 
@@ -347,7 +347,7 @@ public class RoomPreinstall : IDestroy
     /// </summary>
     public bool IsCurrWaveOver()
     {
-        return _coroutineId < 0 || GameApplication.Instance.IsCoroutineOver(_coroutineId);
+        return _coroutineId < 0 || World.Current.IsCoroutineOver(_coroutineId);
     }
     
     //创建物体
@@ -396,7 +396,7 @@ public class RoomPreinstall : IDestroy
         IsDestroyed = true;
         if (_coroutineId >= 0)
         {
-            GameApplication.Instance.StopCoroutine(_coroutineId);
+            World.Current.StopCoroutine(_coroutineId);
         }
 
         WaveList.Clear();

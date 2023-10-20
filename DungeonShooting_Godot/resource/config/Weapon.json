@@ -88,9 +88,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "0002",
-    "AiTargetLockingTime": 0,
-    "AiBulletSpeedScale": 0,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": ""
   },
   {
     "Id": "0002",
@@ -181,9 +179,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
-    "AiTargetLockingTime": 0.5,
-    "AiBulletSpeedScale": 0.5,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": "0001"
   },
   {
     "Id": "0003",
@@ -275,9 +271,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "0004",
-    "AiTargetLockingTime": 0,
-    "AiBulletSpeedScale": 0,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": ""
   },
   {
     "Id": "0004",
@@ -369,9 +363,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
-    "AiTargetLockingTime": 0.4,
-    "AiBulletSpeedScale": 0.5,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": "0002"
   },
   {
     "Id": "0005",
@@ -462,9 +454,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "0006",
-    "AiTargetLockingTime": 0,
-    "AiBulletSpeedScale": 0,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": ""
   },
   {
     "Id": "0006",
@@ -555,9 +545,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
-    "AiTargetLockingTime": 1,
-    "AiBulletSpeedScale": 0.5,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": "0003"
   },
   {
     "Id": "0007",
@@ -645,9 +633,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "0008",
-    "AiTargetLockingTime": 0,
-    "AiBulletSpeedScale": 0,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": ""
   },
   {
     "Id": "0008",
@@ -735,9 +721,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
-    "AiTargetLockingTime": 0.7,
-    "AiBulletSpeedScale": 0.5,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": "0004"
   },
   {
     "Id": "0009",
@@ -828,9 +812,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "0010",
-    "AiTargetLockingTime": 0,
-    "AiBulletSpeedScale": 0,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": ""
   },
   {
     "Id": "0010",
@@ -921,9 +903,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
-    "AiTargetLockingTime": 1.5,
-    "AiBulletSpeedScale": 0.5,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": "0005"
   },
   {
     "Id": "0011",
@@ -1014,9 +994,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "0012",
-    "AiTargetLockingTime": 0,
-    "AiBulletSpeedScale": 0,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": ""
   },
   {
     "Id": "0012",
@@ -1107,9 +1085,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
-    "AiTargetLockingTime": 0.5,
-    "AiBulletSpeedScale": 0.5,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": "0004"
   },
   {
     "Id": "0013",
@@ -1200,9 +1176,7 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "0014",
-    "AiTargetLockingTime": 0,
-    "AiBulletSpeedScale": 0,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": ""
   },
   {
     "Id": "0014",
@@ -1293,8 +1267,6 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
-    "AiTargetLockingTime": 0.5,
-    "AiBulletSpeedScale": 0.5,
-    "AiAmmoConsumptionProbability": 0
+    "__AiAttackAttr": "0006"
   }
 ]

@@ -285,7 +285,7 @@ text = "翻滚"
 
 [node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key12"]
 layout_mode = 2
-text = "空格"
+text = "鼠标右键"
 
 [node name="Key13" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
 custom_minimum_size = Vector2(600, 0)
@@ -300,7 +300,7 @@ text = "武器近战"
 
 [node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key13"]
 layout_mode = 2
-text = "鼠标右键"
+text = "空格"
 
 [node name="Back" type="Button" parent="ScrollContainer/KeySetting"]
 layout_mode = 2

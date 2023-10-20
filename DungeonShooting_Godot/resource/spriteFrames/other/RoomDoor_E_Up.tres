@@ -1,0 +1,98 @@
+[gd_resource type="SpriteFrames" load_steps=13 format=3 uid="uid://3ps6h2f54qa5"]
+
+[ext_resource type="Texture2D" uid="uid://f7d7qsdxqx28" path="res://resource/sprite/map/door.png" id="2_u3fum"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8f67t"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(128, 52, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qlja2"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(96, 52, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_glno6"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(64, 52, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_frnbt"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(32, 52, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ytfc"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(0, 52, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oyi3c"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(128, 52, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e68us"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(0, 52, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e7wqp"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(32, 52, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qcket"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(64, 52, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_genp5"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(96, 52, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_krdph"]
+atlas = ExtResource("2_u3fum")
+region = Rect2(128, 52, 32, 52)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8f67t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qlja2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_glno6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_frnbt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ytfc")
+}],
+"loop": false,
+"name": &"closeDoor",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oyi3c")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e68us")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e7wqp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qcket")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_genp5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_krdph")
+}],
+"loop": false,
+"name": &"openDoor",
+"speed": 10.0
+}]

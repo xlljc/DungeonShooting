@@ -578,9 +578,20 @@ public static class ExcelGenerator
             return false;
         }
 
-        return cell.BooleanCellValue;
+        if (cell.CellType == CellType.Boolean)
+        {
+            return cell.BooleanCellValue;
+        }
+
+        var value = cell.StringCellValue;
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        return bool.Parse(value);
     }
-    
+
     private static MappingData ConvertToType(string str, int depth = 0)
     {
         if (Regex.IsMatch(str, "^\\w+$"))

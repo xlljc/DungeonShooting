@@ -43,9 +43,9 @@ public partial class Bullet : ActivityObject
     public int MaxHarm { get; set; } = 4;
     
     /// <summary>
-    /// 发射该子弹的角色
+    /// 发射该子弹的角色是否是Ai
     /// </summary>
-    public Role Trigger { get; private set; }
+    public bool TriggerRoleIsAi { get; set; }
 
     // 最大飞行距离
     private float MaxDistance;
@@ -59,28 +59,28 @@ public partial class Bullet : ActivityObject
     /// <summary>
     /// 初始化子弹属性
     /// </summary>
-    /// <param name="trigger">触发开火的角色</param>
+    /// <param name="triggerIsAi">触发开火的角色</param>
     /// <param name="weapon">射出该子弹的武器</param>
     /// <param name="speed">速度</param>
     /// <param name="maxDistance">最大飞行距离</param>
     /// <param name="position">位置</param>
     /// <param name="rotation">角度</param>
     /// <param name="targetLayer">攻击目标层级</param>
-    public void Init(Role trigger, Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
+    public void Init(bool triggerIsAi, Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
-        Trigger = trigger;
+        TriggerRoleIsAi = triggerIsAi;
         Weapon = weapon;
         Role = weapon.Master;
         AttackLayer = targetLayer;
         CollisionArea.AreaEntered += OnArea2dEntered;
         
-        if (trigger != null && !trigger.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
+        if (!triggerIsAi) //只有玩家使用该武器才能获得正常速度的子弹
         {
             FlySpeed = speed;
         }
         else
         {
-            FlySpeed = speed * weapon.AiUseAttribute.AiBulletSpeedScale;
+            FlySpeed = speed * weapon.AiUseAttribute.AiAttackAttr.BulletSpeedScale;
         }
         MaxDistance = maxDistance;
         Position = position;
@@ -163,7 +163,7 @@ public partial class Bullet : ActivityObject
             //击退
             if (role is not Player) //目标不是玩家才会触发击退
             {
-                var attr = Trigger != null && !Trigger.IsAi ? Weapon.PlayerUseAttribute : Weapon.AiUseAttribute;
+                var attr = TriggerRoleIsAi ? Weapon.AiUseAttribute : Weapon.PlayerUseAttribute;
                 var repel = Utils.Random.RandomConfigRange(attr.RepelRnage);
                 role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel, repel * 2);
             }
