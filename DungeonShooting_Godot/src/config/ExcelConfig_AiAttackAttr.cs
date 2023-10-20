@@ -39,6 +39,21 @@ public static partial class ExcelConfig
         public float LockingTime;
 
         /// <summary>
+        /// 从锁定目标到开火前有多少时间不能够改变枪口角度 <br/>
+        /// 这个值必须小于LockingTime <br/>
+        /// 如果为0, 则不会锁定开火角度 <br/>
+        /// (单位: 秒)
+        /// </summary>
+        [JsonInclude]
+        public float LockAngleTime;
+
+        /// <summary>
+        /// 开火时是否锁定枪口角度
+        /// </summary>
+        [JsonInclude]
+        public bool AttackLockAngle;
+
+        /// <summary>
         /// Ai属性 <br/>
         /// Ai使用该武器发射的子弹速度缩放比
         /// </summary>
@@ -63,6 +78,8 @@ public static partial class ExcelConfig
             inst.FiringStand = FiringStand;
             inst.ShowSubline = ShowSubline;
             inst.LockingTime = LockingTime;
+            inst.LockAngleTime = LockAngleTime;
+            inst.AttackLockAngle = AttackLockAngle;
             inst.BulletSpeedScale = BulletSpeedScale;
             inst.AmmoConsumptionProbability = AmmoConsumptionProbability;
             return inst;

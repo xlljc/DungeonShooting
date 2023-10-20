@@ -450,7 +450,7 @@ public abstract partial class Role : ActivityObject
         }
         
         //看向目标
-        if (LookTarget != null)
+        if (LookTarget != null && MountLookTarget)
         {
             Vector2 pos = LookTarget.GlobalPosition;
             //脸的朝向
@@ -463,12 +463,8 @@ public abstract partial class Role : ActivityObject
             {
                 Face = FaceDirection.Left;
             }
-
-            if (MountLookTarget)
-            {
-                //枪口跟随目标
-                MountPoint.SetLookAt(pos);
-            }
+            //枪口跟随目标
+            MountPoint.SetLookAt(pos);
         }
         
         //检查可互动的物体
@@ -656,19 +652,18 @@ public abstract partial class Role : ActivityObject
     public void LookTargetPosition(Vector2 pos)
     {
         LookTarget = null;
-        //脸的朝向
-        var gPos = GlobalPosition;
-        if (pos.X > gPos.X && Face == FaceDirection.Left)
-        {
-            Face = FaceDirection.Right;
-        }
-        else if (pos.X < gPos.X && Face == FaceDirection.Right)
-        {
-            Face = FaceDirection.Left;
-        }
-
         if (MountLookTarget)
         {
+            //脸的朝向
+            var gPos = GlobalPosition;
+            if (pos.X > gPos.X && Face == FaceDirection.Left)
+            {
+                Face = FaceDirection.Right;
+            }
+            else if (pos.X < gPos.X && Face == FaceDirection.Right)
+            {
+                Face = FaceDirection.Left;
+            }
             //枪口跟随目标
             MountPoint.SetLookAt(pos);
         }

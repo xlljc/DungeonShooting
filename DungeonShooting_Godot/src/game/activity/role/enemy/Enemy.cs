@@ -167,36 +167,64 @@ public partial class Enemy : Role
                     _lockTargetTime = 0;
                 }
                 
-                //更新瞄准辅助线
-                if (weapon.Attribute.AiAttackAttr.ShowSubline && AttackState == AiAttackState.LockingTime)
+                if (AttackState == AiAttackState.LockingTime) //锁定玩家状态
                 {
-                    if (SubLine == null)
+                    var aiLockRemainderTime = weapon.GetAiLockRemainderTime();
+                    MountLookTarget = aiLockRemainderTime >= weapon.Attribute.AiAttackAttr.LockAngleTime;
+                    //更新瞄准辅助线
+                    if (weapon.Attribute.AiAttackAttr.ShowSubline)
                     {
-                        InitSubLine();
+                        if (SubLine == null)
+                        {
+                            InitSubLine();
+                        }
+                        else
+                        {
+                            SubLine.Enable = true;
+                        }
+
+                        //播放警告删掉动画
+                        if (!SubLine.IsPlayWarnAnimation && aiLockRemainderTime <= 0.5f)
+                        {
+                            SubLine.PlayWarnAnimation(0.5f);
+                        }
+                    }
+                }
+                else
+                {
+                    //关闭辅助线
+                    if (SubLine != null)
+                    {
+                        SubLine.Enable = false;
+                    }
+                    
+                    if (AttackState == AiAttackState.Attack || AttackState == AiAttackState.AttackInterval)
+                    {
+                        if (weapon.Attribute.AiAttackAttr.AttackLockAngle) //开火时锁定枪口角度
+                        {
+                            //连发状态锁定角度
+                            MountLookTarget = !(weapon.GetContinuousCount() > 0 || weapon.GetAttackTimer() > 0);
+                        }
+                        else
+                        {
+                            MountLookTarget = true;
+                        }
                     }
                     else
                     {
-                        SubLine.Enable = true;
+                        MountLookTarget = true;
                     }
-
-                    //播放警告删掉动画
-                    if (!SubLine.IsPlayWarnAnimation && weapon.GetAiLockRemainderTime() <= 0.5f)
-                    {
-                        SubLine.PlayWarnAnimation(0.5f);
-                    }
-                }
-                else if (SubLine != null)
-                {
-                    SubLine.Enable = false;
                 }
             }
             else
             {
+                MountLookTarget = true;
                 _lockTargetTime = 0;
             }
         }
         else
         {
+            MountLookTarget = true;
             _lockTargetTime = 0;
         }
 

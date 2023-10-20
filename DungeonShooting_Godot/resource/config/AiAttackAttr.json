@@ -5,7 +5,9 @@
     "FiringStand": true,
     "ShowSubline": false,
     "LockingTime": 1,
-    "BulletSpeedScale": 0.35,
+    "LockAngleTime": 0,
+    "AttackLockAngle": true,
+    "BulletSpeedScale": 0.4,
     "AmmoConsumptionProbability": 0
   },
   {
@@ -14,6 +16,8 @@
     "FiringStand": true,
     "ShowSubline": false,
     "LockingTime": 2,
+    "LockAngleTime": 0,
+    "AttackLockAngle": false,
     "BulletSpeedScale": 0.35,
     "AmmoConsumptionProbability": 0
   },
@@ -23,6 +27,8 @@
     "FiringStand": true,
     "ShowSubline": false,
     "LockingTime": 1,
+    "LockAngleTime": 0,
+    "AttackLockAngle": false,
     "BulletSpeedScale": 0.35,
     "AmmoConsumptionProbability": 0
   },
@@ -32,6 +38,8 @@
     "FiringStand": false,
     "ShowSubline": false,
     "LockingTime": 0.7,
+    "LockAngleTime": 0,
+    "AttackLockAngle": true,
     "BulletSpeedScale": 0.35,
     "AmmoConsumptionProbability": 0
   },
@@ -41,7 +49,9 @@
     "FiringStand": true,
     "ShowSubline": true,
     "LockingTime": 1.5,
-    "BulletSpeedScale": 0.35,
+    "LockAngleTime": 0.5,
+    "AttackLockAngle": true,
+    "BulletSpeedScale": 0.5,
     "AmmoConsumptionProbability": 0
   },
   {
@@ -49,7 +59,9 @@
     "Remark": "",
     "FiringStand": true,
     "ShowSubline": false,
-    "LockingTime": 1.5,
+    "LockingTime": 0.5,
+    "LockAngleTime": 0.5,
+    "AttackLockAngle": false,
     "BulletSpeedScale": 0.35,
     "AmmoConsumptionProbability": 0
   }

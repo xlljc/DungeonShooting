@@ -164,7 +164,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     private bool _triggerFlag = false;
 
     //扳机计时器
-    public float _triggerTimer = 0;
+    private float _triggerTimer = 0;
 
     //开火前延时时间
     private float _delayedTime = 0;
@@ -176,7 +176,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     private float _fireAngle = 0;
 
     //攻击冷却计时
-    public float _attackTimer = 0;
+    private float _attackTimer = 0;
 
     //攻击状态
     private bool _attackFlag = false;
@@ -874,6 +874,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public int GetContinuousCount()
     {
         return _continuousCount;
+    }
+
+    /// <summary>
+    /// 获取攻击冷却计时时间, 等于 0 表示冷却完成
+    /// </summary>
+    public float GetAttackTimer()
+    {
+        return _attackTimer;
     }
 
     /// <summary>
