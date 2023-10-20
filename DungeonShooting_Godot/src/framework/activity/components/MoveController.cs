@@ -18,7 +18,7 @@ public class MoveController : Component
     /// 这个速度就是物体当前物理帧移动的真实速率, 该速度由物理帧循环计算, 并不会马上更新
     /// 该速度就是 BasisVelocity + 外力总和
     /// </summary>
-    public Vector2 Velocity => ActivityInstance.Velocity;
+    public Vector2 Velocity => Master.Velocity;
 
     /// <summary>
     /// 物体的基础移动速率
@@ -267,7 +267,7 @@ public class MoveController : Component
     {
         if (_basisVelocity == Vector2.Zero && _forceList.Count == 0)
         {
-            ActivityInstance.Velocity = Vector2.Zero;
+            Master.Velocity = Vector2.Zero;
             return;
         }
 
@@ -304,13 +304,13 @@ public class MoveController : Component
         //处理旋转
         if (rotationSpeed != 0)
         {
-            ActivityInstance.Rotation += rotationSpeed * delta;
+            Master.Rotation += rotationSpeed * delta;
         }
         //衰减旋转速率
         for (var i = 0; i < _forceList.Count; i++)
         {
             var force = _forceList[i];
-            if (force.RotationResistance != 0 && (force.EnableResistanceInTheAir || !ActivityInstance.IsThrowing))
+            if (force.RotationResistance != 0 && (force.EnableResistanceInTheAir || !Master.IsThrowing))
             {
                 force.RotationSpeed = Mathf.MoveToward(force.RotationSpeed, 0, force.RotationResistance * delta);
             }
@@ -322,10 +322,10 @@ public class MoveController : Component
         if (finallyVelocity != Vector2.Zero)
         {
             //计算移动
-            ActivityInstance.Velocity = finallyVelocity;
-            ActivityInstance.MoveAndSlide();
+            Master.Velocity = finallyVelocity;
+            Master.MoveAndSlide();
             //新速度
-            var newVelocity = ActivityInstance.Velocity;
+            var newVelocity = Master.Velocity;
             
             if (newVelocity.X == 0f && _basisVelocity.X * finallyVelocity.X > 0)
             {
@@ -338,13 +338,13 @@ public class MoveController : Component
             }
             
             //是否撞到物体
-            var collision = ActivityInstance.GetLastSlideCollision();
+            var collision = Master.GetLastSlideCollision();
             if (collision != null) //执行反弹操作
             {
                 var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
                 newVelocity = (finallyVelocity - _basisVelocity).Reflect(no);
                 var length = _forceList.Count;
-                var v = newVelocity / (length / ActivityInstance.BounceStrength);
+                var v = newVelocity / (length / Master.BounceStrength);
                 for (var i = 0; i < _forceList.Count; i++)
                 {
                     _forceList[i].Velocity = v;
@@ -365,7 +365,7 @@ public class MoveController : Component
                         );
 
                         //力速度衰减
-                        if (force.VelocityResistance != 0 && (force.EnableResistanceInTheAir || !ActivityInstance.IsThrowing))
+                        if (force.VelocityResistance != 0 && (force.EnableResistanceInTheAir || !Master.IsThrowing))
                         {
                             force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.VelocityResistance * delta);
                         }
@@ -375,7 +375,7 @@ public class MoveController : Component
         }
         else
         {
-            ActivityInstance.Velocity = Vector2.Zero;
+            Master.Velocity = Vector2.Zero;
         }
     }
 
@@ -389,33 +389,33 @@ public class MoveController : Component
     {
         //绘制力大小和方向
         
-        if (ActivityInstance is Bullet) //不绘制子弹的力
+        if (Master is Bullet) //不绘制子弹的力
         {
             return;
         }
         
         var globalRotation = GlobalRotation;
-        var flag = ActivityInstance.Scale.Y < 0;
+        var flag = Master.Scale.Y < 0;
         if (flag)
         {
-            ActivityInstance.DrawLine(Vector2.Zero, (BasisVelocity * new Vector2(1, -1)).Rotated(-globalRotation),
+            Master.DrawLine(Vector2.Zero, (BasisVelocity * new Vector2(1, -1)).Rotated(-globalRotation),
                 Colors.Yellow);
         }
         else
         {
-            ActivityInstance.DrawLine(Vector2.Zero, BasisVelocity.Rotated(-globalRotation), Colors.Yellow);
+            Master.DrawLine(Vector2.Zero, BasisVelocity.Rotated(-globalRotation), Colors.Yellow);
         }
 
         foreach (var force in _forceList)
         {
             if (flag)
             {
-                ActivityInstance.DrawLine(Vector2.Zero, (force.Velocity * new Vector2(1, -1)).Rotated(globalRotation),
+                Master.DrawLine(Vector2.Zero, (force.Velocity * new Vector2(1, -1)).Rotated(globalRotation),
                     Colors.YellowGreen);
             }
             else
             {
-                ActivityInstance.DrawLine(Vector2.Zero, force.Velocity.Rotated(-globalRotation), Colors.YellowGreen);
+                Master.DrawLine(Vector2.Zero, force.Velocity.Rotated(-globalRotation), Colors.YellowGreen);
             }
         }
     }

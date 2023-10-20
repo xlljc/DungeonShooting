@@ -17,6 +17,15 @@ public static partial class ExcelConfig
     public static Dictionary<string, ActivityObject> ActivityObject_Map { get; private set; }
 
     /// <summary>
+    /// AiAttackAttr.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// </summary>
+    public static List<AiAttackAttr> AiAttackAttr_List { get; private set; }
+    /// <summary>
+    /// AiAttackAttr.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// </summary>
+    public static Dictionary<string, AiAttackAttr> AiAttackAttr_Map { get; private set; }
+
+    /// <summary>
     /// Sound.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
     public static List<Sound> Sound_List { get; private set; }
@@ -45,6 +54,7 @@ public static partial class ExcelConfig
         _init = true;
 
         _InitActivityObjectConfig();
+        _InitAiAttackAttrConfig();
         _InitSoundConfig();
         _InitWeaponConfig();
 
@@ -64,8 +74,26 @@ public static partial class ExcelConfig
         }
         catch (Exception e)
         {
-            Debug.LogError(e.ToString());
+            GD.PrintErr(e.ToString());
             throw new Exception("初始化表'ActivityObject'失败!");
+        }
+    }
+    private static void _InitAiAttackAttrConfig()
+    {
+        try
+        {
+            var text = _ReadConfigAsText("res://resource/config/AiAttackAttr.json");
+            AiAttackAttr_List = JsonSerializer.Deserialize<List<AiAttackAttr>>(text);
+            AiAttackAttr_Map = new Dictionary<string, AiAttackAttr>();
+            foreach (var item in AiAttackAttr_List)
+            {
+                AiAttackAttr_Map.Add(item.Id, item);
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            throw new Exception("初始化表'AiAttackAttr'失败!");
         }
     }
     private static void _InitSoundConfig()
@@ -82,7 +110,7 @@ public static partial class ExcelConfig
         }
         catch (Exception e)
         {
-            Debug.LogError(e.ToString());
+            GD.PrintErr(e.ToString());
             throw new Exception("初始化表'Sound'失败!");
         }
     }
@@ -100,7 +128,7 @@ public static partial class ExcelConfig
         }
         catch (Exception e)
         {
-            Debug.LogError(e.ToString());
+            GD.PrintErr(e.ToString());
             throw new Exception("初始化表'Weapon'失败!");
         }
     }
@@ -150,10 +178,15 @@ public static partial class ExcelConfig
                     item.AiUseAttribute = Weapon_Map[item.__AiUseAttribute];
                 }
 
+                if (!string.IsNullOrEmpty(item.__AiAttackAttr))
+                {
+                    item.AiAttackAttr = AiAttackAttr_Map[item.__AiAttackAttr];
+                }
+
             }
             catch (Exception e)
             {
-                Debug.LogError(e.ToString());
+                GD.PrintErr(e.ToString());
                 throw new Exception("初始化'Weapon'引用其他表数据失败, 当前行id: " + item.Id);
             }
         }

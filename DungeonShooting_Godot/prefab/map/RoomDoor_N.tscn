@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" path="res://src/game/room/RoomDoor.cs" id="1_220be"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_h5ru6"]
-[ext_resource type="SpriteFrames" uid="uid://xs72aopsgpg6" path="res://resource/spriteFrames/other/RoomDoor_NS.tres" id="3_apluc"]
+[ext_resource type="SpriteFrames" uid="uid://xs72aopsgpg6" path="res://resource/spriteFrames/other/RoomDoor_N.tres" id="3_apluc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yvwpk"]
 resource_local_to_scene = true
 shader = ExtResource("2_h5ru6")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
-shader_parameter/alpha = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
@@ -19,7 +19,7 @@ resource_local_to_scene = true
 shader = ExtResource("2_h5ru6")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
-shader_parameter/alpha = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
@@ -42,8 +42,10 @@ material = SubResource("ShaderMaterial_yvwpk")
 material = SubResource("ShaderMaterial_t4ayq")
 position = Vector2(0, -8)
 sprite_frames = ExtResource("3_apluc")
-animation = &"openDoor"
+animation = &"closeDoor"
 autoplay = "default"
+frame = 4
+frame_progress = 1.0
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -3.5)

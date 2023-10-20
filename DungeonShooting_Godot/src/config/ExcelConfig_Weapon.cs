@@ -392,25 +392,10 @@ public static partial class ExcelConfig
         public Weapon AiUseAttribute;
 
         /// <summary>
-        /// Ai属性 <br/>
-        /// 目标锁定时间, 也就是瞄准目标多久才会开火, (单位: 秒)
+        /// Ai使用该武器开火时的一些额外配置属性 <br/>
+        /// 玩家使用的武器不需要填写该字段
         /// </summary>
-        [JsonInclude]
-        public float AiTargetLockingTime;
-
-        /// <summary>
-        /// Ai属性 <br/>
-        /// Ai使用该武器发射的子弹速度缩放比
-        /// </summary>
-        [JsonInclude]
-        public float AiBulletSpeedScale;
-
-        /// <summary>
-        /// Ai属性 <br/>
-        /// Ai使用该武器消耗弹药的概率, (0 - 1)
-        /// </summary>
-        [JsonInclude]
-        public float AiAmmoConsumptionProbability;
+        public AiAttackAttr AiAttackAttr;
 
         /// <summary>
         /// 返回浅拷贝出的新对象
@@ -480,9 +465,7 @@ public static partial class ExcelConfig
             inst.BeLoadedSoundDelayTime = BeLoadedSoundDelayTime;
             inst.OtherSoundMap = OtherSoundMap;
             inst.AiUseAttribute = AiUseAttribute;
-            inst.AiTargetLockingTime = AiTargetLockingTime;
-            inst.AiBulletSpeedScale = AiBulletSpeedScale;
-            inst.AiAmmoConsumptionProbability = AiAmmoConsumptionProbability;
+            inst.AiAttackAttr = AiAttackAttr;
             return inst;
         }
     }
@@ -508,6 +491,9 @@ public static partial class ExcelConfig
 
         [JsonInclude]
         public string __AiUseAttribute;
+
+        [JsonInclude]
+        public string __AiAttackAttr;
 
     }
 }

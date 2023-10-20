@@ -40,6 +40,7 @@ public partial class Player : Role
         IsAi = false;
         StateController = AddComponent<StateController<Player, PlayerStateEnum>>();
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Enemy;
+        EnemyLayer = EnemyLayer = PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 
         MaxHp = 6;
@@ -62,6 +63,8 @@ public partial class Player : Role
         StateController.Register(new PlayerRollState());
         //默认状态
         StateController.ChangeStateInstant(PlayerStateEnum.Idle);
+
+        //InitSubLine();
     }
 
     protected override void Process(float delta)
@@ -142,6 +145,7 @@ public partial class Player : Role
             if (StateController.CurrState != PlayerStateEnum.Roll) //不能是翻滚状态
             {
                 Attack();
+                // //测试用,触发房间内地上的武器开火
                 // var weaponArray = AffiliationArea.FindEnterItems(o => o is Weapon);
                 // foreach (Weapon activityObject in weaponArray)
                 // {

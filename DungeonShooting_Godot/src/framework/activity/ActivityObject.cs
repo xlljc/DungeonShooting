@@ -753,7 +753,22 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     {
         var component = new T();
         _components.Add(new KeyValuePair<Type, Component>(typeof(T), component));
-        component.ActivityInstance = this;
+        component.Master = this;
+        component.Ready();
+        component.OnEnable();
+        return component;
+    }
+
+    /// <summary>
+    /// 往当前物体上挂载一个组件
+    /// </summary>
+    public Component AddComponent(Type type)
+    {
+        var component = (Component)Activator.CreateInstance(type);
+        _components.Add(new KeyValuePair<Type, Component>(type, component));
+        component.Master = this;
+        component.Ready();
+        component.OnEnable();
         return component;
     }
 
@@ -877,14 +892,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                 {
                     if (IsDestroyed) return;
                     var temp = arr[i].Value;
-                    if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                    if (temp != null && temp.Master == this && temp.Enable)
                     {
-                        if (!temp.IsReady)
-                        {
-                            temp.Ready();
-                            temp.IsReady = true;
-                        }
-
                         temp.Process(newDelta);
                     }
                 }
@@ -893,12 +902,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             {
                 if (MoveController.Enable)
                 {
-                    if (!MoveController.IsReady)
-                    {
-                        MoveController.Ready();
-                        MoveController.IsReady = true;
-                    }
-
                     MoveController.Process(newDelta);
                 }
             }
@@ -1089,14 +1092,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                 {
                     if (IsDestroyed) return;
                     var temp = arr[i].Value;
-                    if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                    if (temp != null && temp.Master == this && temp.Enable)
                     {
-                        if (!temp.IsReady)
-                        {
-                            temp.Ready();
-                            temp.IsReady = true;
-                        }
-
                         temp.PhysicsProcess(newDelta);
                     }
                 }
@@ -1105,12 +1102,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             {
                 if (MoveController.Enable)
                 {
-                    if (!MoveController.IsReady)
-                    {
-                        MoveController.Ready();
-                        MoveController.IsReady = true;
-                    }
-
                     MoveController.PhysicsProcess(newDelta);
                 }
             }
@@ -1140,7 +1131,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                 {
                     if (IsDestroyed) return;
                     var temp = arr[i].Value;
-                    if (temp != null && temp.ActivityInstance == this && temp.Enable)
+                    if (temp != null && temp.Master == this && temp.Enable)
                     {
                         temp.DebugDraw();
                     }

@@ -1,0 +1,98 @@
+[gd_resource type="SpriteFrames" load_steps=13 format=3 uid="uid://qq3h0mh4r12i"]
+
+[ext_resource type="Texture2D" uid="uid://f7d7qsdxqx28" path="res://resource/sprite/map/door.png" id="1_b4js3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_526no"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(288, 104, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_84kmd"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(256, 104, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_km4i6"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(224, 104, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wtul1"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(192, 104, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vbu5n"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(160, 104, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yxx5v"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(288, 104, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ncdo"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(160, 104, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bxfu1"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(192, 104, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8082a"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(224, 104, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mjuqg"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(256, 104, 32, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rc634"]
+atlas = ExtResource("1_b4js3")
+region = Rect2(288, 104, 32, 52)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_526no")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_84kmd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_km4i6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wtul1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vbu5n")
+}],
+"loop": false,
+"name": &"closeDoor",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yxx5v")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ncdo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bxfu1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8082a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mjuqg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rc634")
+}],
+"loop": false,
+"name": &"openDoor",
+"speed": 10.0
+}]

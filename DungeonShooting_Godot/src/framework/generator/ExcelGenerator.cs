@@ -56,9 +56,7 @@ public static class ExcelGenerator
         }
         
         var str = $"using Config;\n\n";
-        str += $"/// <summary>\n";
-        str += $"/// 根据配置表注册物体, 该类是自动生成的, 请不要手动编辑!\n";
-        str += $"/// </summary>\n";
+        str += $"// 根据配置表注册物体, 该类是自动生成的, 请不要手动编辑!\n";
         str += $"public partial class ActivityObject\n";
         str += $"{{\n";
         

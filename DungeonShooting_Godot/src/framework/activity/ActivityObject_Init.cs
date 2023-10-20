@@ -1,8 +1,6 @@
 using Config;
 
-/// <summary>
-/// 根据配置表注册物体, 该类是自动生成的, 请不要手动编辑!
-/// </summary>
+// 根据配置表注册物体, 该类是自动生成的, 请不要手动编辑!
 public partial class ActivityObject
 {
     /// <summary>

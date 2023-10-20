@@ -43,9 +43,14 @@ public abstract partial class Role : ActivityObject
     /// 攻击目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
     /// </summary>
     public uint AttackLayer { get; set; } = PhysicsLayer.Wall;
+    
+    /// <summary>
+    /// 该角色敌对目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
+    /// </summary>
+    public uint EnemyLayer { get; set; } = PhysicsLayer.Enemy;
 
     /// <summary>
-    /// 携带的被动道具包裹
+    /// 携带的被动道具列表
     /// </summary>
     public List<BuffProp> BuffPropPack { get; } = new List<BuffProp>();
 
@@ -254,6 +259,11 @@ public abstract partial class Role : ActivityObject
     /// 是否处于近战攻击中
     /// </summary>
     public bool IsMeleeAttack { get; private set; }
+
+    /// <summary>
+    /// 瞄准辅助线, 需要手动调用 InitSubLine() 初始化
+    /// </summary>
+    public SubLine SubLine { get; private set; }
     
     //翻滚冷却计时器
     private float _rollCoolingTimer = 0;
@@ -402,8 +412,11 @@ public abstract partial class Role : ActivityObject
 
     public override void OnInit()
     {
-        ActivePropsPack = new Package<ActiveProp>(this, 1);
-        WeaponPack = new Package<Weapon>(this, 4);
+        ActivePropsPack = AddComponent<Package<ActiveProp>>();
+        ActivePropsPack.SetCapacity(1);
+        WeaponPack = AddComponent<Package<Weapon>>();
+        WeaponPack.SetCapacity(4);
+
         _startScale = Scale;
         MountPoint.Master = this;
         
@@ -437,7 +450,7 @@ public abstract partial class Role : ActivityObject
         }
         
         //看向目标
-        if (LookTarget != null)
+        if (LookTarget != null && MountLookTarget)
         {
             Vector2 pos = LookTarget.GlobalPosition;
             //脸的朝向
@@ -450,12 +463,8 @@ public abstract partial class Role : ActivityObject
             {
                 Face = FaceDirection.Left;
             }
-
-            if (MountLookTarget)
-            {
-                //枪口跟随目标
-                MountPoint.SetLookAt(pos);
-            }
+            //枪口跟随目标
+            MountPoint.SetLookAt(pos);
         }
         
         //检查可互动的物体
@@ -564,6 +573,19 @@ public abstract partial class Role : ActivityObject
     }
 
     /// <summary>
+    /// 初始化瞄准辅助线
+    /// </summary>
+    public void InitSubLine()
+    {
+        if (SubLine != null)
+        {
+            return;
+        }
+
+        SubLine = AddComponent<SubLine>();
+    }
+    
+    /// <summary>
     /// 当武器放到后背时调用, 用于设置武器位置和角度
     /// </summary>
     /// <param name="weapon">武器实例</param>
@@ -630,19 +652,18 @@ public abstract partial class Role : ActivityObject
     public void LookTargetPosition(Vector2 pos)
     {
         LookTarget = null;
-        //脸的朝向
-        var gPos = GlobalPosition;
-        if (pos.X > gPos.X && Face == FaceDirection.Left)
-        {
-            Face = FaceDirection.Right;
-        }
-        else if (pos.X < gPos.X && Face == FaceDirection.Right)
-        {
-            Face = FaceDirection.Left;
-        }
-
         if (MountLookTarget)
         {
+            //脸的朝向
+            var gPos = GlobalPosition;
+            if (pos.X > gPos.X && Face == FaceDirection.Left)
+            {
+                Face = FaceDirection.Right;
+            }
+            else if (pos.X < gPos.X && Face == FaceDirection.Right)
+            {
+                Face = FaceDirection.Left;
+            }
             //枪口跟随目标
             MountPoint.SetLookAt(pos);
         }
@@ -936,7 +957,7 @@ public abstract partial class Role : ActivityObject
             _meleeAttackTimer = RoleState.MeleeAttackTime;
             MountLookTarget = false;
             
-            WeaponPack.ActiveItem.TriggerMeleeAttack(this);
+            //WeaponPack.ActiveItem.TriggerMeleeAttack(this);
             //播放近战动画
             PlayAnimation_MeleeAttack(() =>
             {
@@ -1180,5 +1201,36 @@ public abstract partial class Role : ActivityObject
     public void OverRoll()
     {
         _rollCoolingTimer = RoleState.RollTime;
+    }
+
+    /// <summary>
+    /// 返回当前角色是否是玩家
+    /// </summary>
+    public bool IsPlayer()
+    {
+        return this == Player.Current;
+    }
+    
+    /// <summary>
+    /// 是否是玩家的敌人
+    /// </summary>
+    public bool IsEnemyWithPlayer()
+    {
+        return CollisionWithMask(Player.Current.EnemyLayer);
+    }
+
+    /// <summary>
+    /// 将 Role 子节点的旋转角度转换为正常的旋转角度<br/>
+    /// 因为 Role 受到 Face 影响, 会出现转向动作, 所以需要该函数来转换旋转角度
+    /// </summary>
+    /// <param name="rotation">角度, 弧度制</param>
+    public float ConvertRotation(float rotation)
+    {
+        if (Face == FaceDirection.Right)
+        {
+            return rotation;
+        }
+
+        return Mathf.Pi - rotation;
     }
 }
