@@ -261,4 +261,12 @@ public static class Utils
         
         return point;
     }
+
+    /// <summary>
+    /// 将 point 位置限制在 anchor 的周围, 最大距离为 distance, 并返回新的位置
+    /// </summary>
+    public static Vector2 ConstrainDistance(Vector2 point, Vector2 anchor, float distance)
+    {
+        return (point - anchor).Normalized() * distance + anchor;
+    }
 }

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnt6y33q15xfq"]
+
+[ext_resource type="Script" path="res://src/test/TestMask.cs" id="1_0yip6"]
+
+[node name="TestMask" type="Node2D"]
+script = ExtResource("1_0yip6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+centered = false

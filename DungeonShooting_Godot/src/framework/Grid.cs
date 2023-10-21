@@ -11,7 +11,7 @@ public class Grid<T>
     /// 遍历网格数据回调
     /// </summary>
     public delegate void EachGridCallback(int x, int y, T data);
-    
+
     private readonly Dictionary<int, Dictionary<int, T>> _map = new Dictionary<int, Dictionary<int, T>>();
 
     /// <summary>
