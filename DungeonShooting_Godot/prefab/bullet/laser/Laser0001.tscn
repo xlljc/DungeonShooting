@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1q8jjtgi2wpu"]
+
+[ext_resource type="Script" path="res://src/game/activity/bullet/laser/Laser.cs" id="1_d486x"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l4vuk"]
+resource_local_to_scene = true
+
+[node name="Laser0001" type="Area2D"]
+collision_layer = 2
+monitorable = false
+script = ExtResource("1_d486x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_l4vuk")
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 0, 0)
+width = 0.0
+default_color = Color(0, 1.27, 1.4, 1)

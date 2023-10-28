@@ -146,9 +146,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public bool NoMasterCanTrigger { get; set; } = true;
     
     /// <summary>
-    /// 上一次触发改武器开火的角色是否是Ai
+    /// 上一次触发改武器开火的角色
     /// </summary>
-    public bool TriggerRoleIsAi { get; private set; }
+    public Role TriggerRole { get; private set; }
     
     /// <summary>
     /// 上一次触发改武器开火的触发开火攻击的层级, 数据源自于: <see cref="PhysicsLayer"/>
@@ -700,15 +700,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         _triggerRoleFlag = true;
         if (triggerRole != null)
         {
-            TriggerRoleIsAi = triggerRole.IsAi;
+            TriggerRole = triggerRole;
             TriggerRoleAttackLayer = triggerRole.AttackLayer;
-            _weaponAttribute = TriggerRoleIsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
+            _weaponAttribute = triggerRole.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
         }
         else if (Master != null)
         {
-            TriggerRoleIsAi = Master.IsAi;
+            TriggerRole = Master;
             TriggerRoleAttackLayer = Master.AttackLayer;
-            _weaponAttribute = TriggerRoleIsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
+            _weaponAttribute = Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
         }
         
         //是否第一帧按下
@@ -1072,6 +1072,19 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     // {
     //     
     // }
+
+    /// <summary>
+    /// 根据触扳机的角色对象判断该角色使用的武器数据
+    /// </summary>
+    public ExcelConfig.Weapon GetUseAttribute(Role triggerRole)
+    {
+        if (triggerRole == null || !triggerRole.IsAi)
+        {
+            return PlayerUseAttribute;
+        }
+
+        return AiUseAttribute;
+    }
     
     /// <summary>
     /// 获取武器攻击的目标层级
@@ -1919,7 +1932,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         //创建子弹
         var bullet = Create<Bullet>(bulletId);
         bullet.Init(
-            TriggerRoleIsAi,
             this,
             speed,
             distance,

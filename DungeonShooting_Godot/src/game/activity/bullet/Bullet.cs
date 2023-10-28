@@ -5,7 +5,7 @@ using Godot;
 /// 子弹类
 /// </summary>
 [Tool]
-public partial class Bullet : ActivityObject
+public partial class Bullet : ActivityObject, IBullet
 {
     /// <summary>
     /// 碰撞区域
@@ -26,11 +26,6 @@ public partial class Bullet : ActivityObject
     /// 发射该子弹的武器
     /// </summary>
     public Weapon Weapon { get; private set; }
-    
-    /// <summary>
-    /// 发射该子弹的角色
-    /// </summary>
-    public Role Role { get; private set; }
 
     /// <summary>
     /// 最小伤害
@@ -43,9 +38,9 @@ public partial class Bullet : ActivityObject
     public int MaxHarm { get; set; } = 4;
     
     /// <summary>
-    /// 发射该子弹的角色是否是Ai
+    /// 发射该子弹的角色
     /// </summary>
-    public bool TriggerRoleIsAi { get; set; }
+    public Role TriggerRole { get; private set; }
 
     // 最大飞行距离
     private float MaxDistance;
@@ -56,25 +51,28 @@ public partial class Bullet : ActivityObject
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
 
+    public void Init(Weapon weapon, uint targetLayer)
+    {
+        TriggerRole = weapon.TriggerRole;
+        Weapon = weapon;
+        AttackLayer = targetLayer;
+    }
+    
     /// <summary>
     /// 初始化子弹属性
     /// </summary>
-    /// <param name="triggerIsAi">触发开火的角色</param>
     /// <param name="weapon">射出该子弹的武器</param>
     /// <param name="speed">速度</param>
     /// <param name="maxDistance">最大飞行距离</param>
     /// <param name="position">位置</param>
     /// <param name="rotation">角度</param>
     /// <param name="targetLayer">攻击目标层级</param>
-    public void Init(bool triggerIsAi, Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
+    public void Init(Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
-        TriggerRoleIsAi = triggerIsAi;
-        Weapon = weapon;
-        Role = weapon.Master;
-        AttackLayer = targetLayer;
+        Init(weapon, targetLayer);
         CollisionArea.AreaEntered += OnArea2dEntered;
         
-        if (!triggerIsAi) //只有玩家使用该武器才能获得正常速度的子弹
+        if (TriggerRole == null || !TriggerRole.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
         {
             FlySpeed = speed;
         }
@@ -155,15 +153,15 @@ public partial class Bullet : ActivityObject
 
             //计算子弹造成的伤害
             var damage = Utils.Random.RandomRangeInt(MinHarm, MaxHarm);
-            if (Role != null)
+            if (TriggerRole != null)
             {
-                damage = Role.RoleState.CallCalcDamageEvent(damage);
+                damage = TriggerRole.RoleState.CallCalcDamageEvent(damage);
             }
 
             //击退
             if (role is not Player) //目标不是玩家才会触发击退
             {
-                var attr = TriggerRoleIsAi ? Weapon.AiUseAttribute : Weapon.PlayerUseAttribute;
+                var attr = Weapon.GetUseAttribute(TriggerRole);
                 var repel = Utils.Random.RandomConfigRange(attr.RepelRnage);
                 role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel, repel * 2);
             }

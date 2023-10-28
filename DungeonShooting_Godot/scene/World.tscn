@@ -10,7 +10,6 @@ glow_strength = 1.05
 glow_blend_mode = 1
 
 [node name="World" type="CanvasModulate" node_paths=PackedStringArray("NormalLayer", "YSortLayer", "TileRoot", "StaticSpriteRoot", "AffiliationAreaRoot", "FogMaskRoot")]
-color = Color(0, 0, 0, 1)
 script = ExtResource("1_kt3mm")
 NormalLayer = NodePath("NormalLayer")
 YSortLayer = NodePath("YSortLayer")
@@ -33,6 +32,7 @@ layer_1/modulate = Color(1, 1, 1, 1)
 layer_1/y_sort_enabled = false
 layer_1/y_sort_origin = 0
 layer_1/z_index = 0
+layer_1/navigation_enabled = true
 layer_1/tile_data = PackedInt32Array()
 layer_2/name = "Top"
 layer_2/enabled = true
@@ -40,6 +40,7 @@ layer_2/modulate = Color(1, 1, 1, 1)
 layer_2/y_sort_enabled = false
 layer_2/y_sort_origin = 0
 layer_2/z_index = 10
+layer_2/navigation_enabled = true
 layer_2/tile_data = PackedInt32Array()
 layer_3/name = "AisleFloor"
 layer_3/enabled = true
@@ -47,6 +48,7 @@ layer_3/modulate = Color(1, 1, 1, 1)
 layer_3/y_sort_enabled = false
 layer_3/y_sort_origin = 0
 layer_3/z_index = -10
+layer_3/navigation_enabled = true
 layer_3/tile_data = PackedInt32Array()
 
 [node name="StaticSpriteRoot" type="Node2D" parent="."]

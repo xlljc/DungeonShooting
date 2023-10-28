@@ -12,6 +12,7 @@ public class ResourcePath
     public const string prefab_bullet_Bullet0001_tscn = "res://prefab/bullet/Bullet0001.tscn";
     public const string prefab_bullet_Bullet0002_tscn = "res://prefab/bullet/Bullet0002.tscn";
     public const string prefab_bullet_Bullet0003_tscn = "res://prefab/bullet/Bullet0003.tscn";
+    public const string prefab_bullet_laser_Laser0001_tscn = "res://prefab/bullet/laser/Laser0001.tscn";
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
     public const string prefab_effect_common_Effect1_tscn = "res://prefab/effect/common/Effect1.tscn";
     public const string prefab_effect_enemy_Effect0001_tscn = "res://prefab/effect/enemy/Effect0001.tscn";
@@ -77,6 +78,7 @@ public class ResourcePath
     public const string prefab_weapon_Weapon0007_tscn = "res://prefab/weapon/Weapon0007.tscn";
     public const string prefab_weapon_WeaponTemplate_tscn = "res://prefab/weapon/WeaponTemplate.tscn";
     public const string resource_config_ActivityObject_json = "res://resource/config/ActivityObject.json";
+    public const string resource_config_AiAttackAttr_json = "res://resource/config/AiAttackAttr.json";
     public const string resource_config_Sound_json = "res://resource/config/Sound.json";
     public const string resource_config_Weapon_json = "res://resource/config/Weapon.json";
     public const string resource_curve_Curve1_tres = "res://resource/curve/Curve1.tres";

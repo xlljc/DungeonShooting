@@ -15,7 +15,7 @@ public static class ProxyCoroutineHandler
     /// </summary>
     public static void ProxyUpdateCoroutine(ref List<CoroutineData> coroutineList, float delta)
     {
-        if (coroutineList.Count == 0)
+        if (coroutineList == null || coroutineList.Count == 0)
         {
             return;
         }

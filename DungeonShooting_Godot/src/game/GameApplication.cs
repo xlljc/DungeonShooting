@@ -145,10 +145,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		SoundManager.Update(newDelta);
 		
 		//协程更新
-		if (_coroutineList != null)
-		{
-			ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
-		}
+		ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
 	}
 
 	/// <summary>

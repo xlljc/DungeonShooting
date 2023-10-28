@@ -1051,10 +1051,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         }
         
         //协程更新
-        if (_coroutineList != null)
-        {
-            ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
-        }
+        ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
 
         ProcessOver(newDelta);
         
