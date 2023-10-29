@@ -5,7 +5,7 @@ using Godot;
 /// 子弹类
 /// </summary>
 [Tool]
-public partial class Bullet : ActivityObject, IBullet
+public partial class Bullet : ActivityObject, IAmmo
 {
     /// <summary>
     /// 碰撞区域

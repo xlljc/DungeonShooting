@@ -1,5 +1,5 @@
 ﻿
-public interface IBullet : IDestroy, ICoroutine
+public interface IAmmo : IDestroy, ICoroutine
 {
     /// <summary>
     /// 攻击的层级

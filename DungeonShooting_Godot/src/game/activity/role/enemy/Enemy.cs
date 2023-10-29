@@ -74,7 +74,7 @@ public partial class Enemy : Role
         IsAi = true;
         StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
 
-        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Player;
+        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Player;
         EnemyLayer = PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
@@ -510,4 +510,10 @@ public partial class Enemy : Role
         _lockTargetTime = time;
     }
 
+    protected override void DebugDraw()
+    {
+        base.DebugDraw();
+        
+        DrawString(ResourceManager.DefaultFont12Px, new Vector2(0, 7), Hp.ToString(), HorizontalAlignment.Center);
+    }
 }

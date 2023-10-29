@@ -39,7 +39,7 @@ public partial class Player : Role
 
         IsAi = false;
         StateController = AddComponent<StateController<Player, PlayerStateEnum>>();
-        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Enemy;
+        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Enemy;
         EnemyLayer = EnemyLayer = PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 

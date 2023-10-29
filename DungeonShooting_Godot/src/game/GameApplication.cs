@@ -118,7 +118,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		GetWindow().SizeChanged += OnWindowSizeChanged;
 		
 		ImageCanvas.Init(GetTree().CurrentScene);
-        
+		
 		//初始化ui
 		UiManager.Init();
 		//调试Ui

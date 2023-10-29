@@ -20,7 +20,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 默认攻击对象层级
     /// </summary>
-    public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Wall | PhysicsLayer.Prop;
+    public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Wall;
     
     /// <summary>
     /// 伤害区域

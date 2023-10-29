@@ -5,25 +5,35 @@ using Godot;
 /// <summary>
 /// 激光子弹
 /// </summary>
-public partial class Laser : Area2D, IBullet
+public partial class Laser : Area2D, IAmmo
 {
     public CollisionShape2D Collision { get; private set; }
-    public Line2D Line { get; private set; }
+    public Sprite2D LineSprite { get; private set; }
     public RectangleShape2D Shape { get; private set; }
-    
-    public uint AttackLayer { get; set; }
+
+    public uint AttackLayer
+    {
+        get => CollisionMask;
+        set => CollisionMask = value;
+    }
     public Weapon Weapon { get; private set; }
     public Role TriggerRole { get; private set; }
     
     public bool IsDestroyed { get; private set; }
     //开启的协程
     private List<CoroutineData> _coroutineList;
+    private float _pixelScale;
+    private float _speed = 1200;
 
     public override void _Ready()
     {
         Collision = GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
+        Collision.Disabled = true;
         Shape = Collision.Shape as RectangleShape2D;
-        Line = GetNodeOrNull<Line2D>("Line2D");
+        LineSprite = GetNodeOrNull<Sprite2D>("LineSprite");
+        _pixelScale = 1f / LineSprite.Texture.GetHeight();
+
+        AreaEntered += OnArea2dEntered;
     }
 
     public void Init(Weapon weapon, uint targetLayer)
@@ -48,20 +58,30 @@ public partial class Laser : Area2D, IBullet
             var point = (Vector2)result["position"];
             distance = position.DistanceTo(point);
         }
-        
-        Collision.Position = new Vector2(distance * 0.5f, 0);
-        Shape.Size = new Vector2(distance, width);
 
+        
+        Collision.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
+        Collision.Position = Vector2.Zero;
+        Shape.Size = Vector2.Zero;;
+        LineSprite.Scale = new Vector2(0, width * _pixelScale);
+
+        //激光飞行时间
+        var time = distance / _speed;
 
         var tween = CreateTween();
         tween.SetParallel();
-        tween.TweenProperty(Line, "width", width, 0.3);
-        tween.TweenMethod(Callable.From((float v) =>
-        {
-            Line.SetPointPosition(1, new Vector2(v, 0));
-        }), 0, distance, 0.1);
+        tween.TweenProperty(LineSprite, "scale", new Vector2(distance, width * _pixelScale), time);
+        tween.TweenProperty(Collision, "position", new Vector2(distance * 0.5f, 0), time);
+        tween.TweenProperty(Shape, "size", new Vector2(distance, width), time);
         tween.Chain();
-        tween.TweenInterval(1.5);
+        tween.TweenInterval(0.2f);
+        tween.Chain();
+        tween.TweenCallback(Callable.From(() =>
+        {
+            Collision.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
+        }));
+        tween.Chain();
+        tween.TweenProperty(LineSprite, "scale", new Vector2(distance, 0), 0.3f);
         tween.Chain();
         tween.TweenCallback(Callable.From(() =>
         {
@@ -83,6 +103,16 @@ public partial class Laser : Area2D, IBullet
         }
         
         QueueFree();
+    }
+    
+    private void OnArea2dEntered(Area2D other)
+    {
+        var role = other.AsActivityObject<Role>();
+        if (role != null)
+        {
+            //造成伤害
+            role.CallDeferred(nameof(Role.Hurt), 4, Rotation);
+        }
     }
 
     public long StartCoroutine(IEnumerator able)

@@ -12,6 +12,7 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yif6x"]
 resource_local_to_scene = true
@@ -22,6 +23,7 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5pj80"]
 radius = 4.0

@@ -95,7 +95,7 @@
     "Name": "",
     "Intro": "",
     "Details": "",
-    "Prefab": "res://prefab/bullet/Bullet0001.tscn",
+    "Prefab": "res://prefab/ammo/Bullet0001.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
@@ -105,7 +105,7 @@
     "Name": "",
     "Intro": "",
     "Details": "",
-    "Prefab": "res://prefab/bullet/Bullet0002.tscn",
+    "Prefab": "res://prefab/ammo/Bullet0002.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
@@ -115,7 +115,7 @@
     "Name": "",
     "Intro": "",
     "Details": "",
-    "Prefab": "res://prefab/bullet/Bullet0003.tscn",
+    "Prefab": "res://prefab/ammo/Bullet0003.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },

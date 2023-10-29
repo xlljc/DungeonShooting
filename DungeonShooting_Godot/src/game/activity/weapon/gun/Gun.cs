@@ -26,10 +26,8 @@ public partial class Gun : Weapon
 
     protected override void OnShoot(float fireRotation)
     {
-        //ShootBullet(fireRotation, Attribute.BulletId);
-        var laser = ResourceManager.LoadAndInstantiate<Laser>(ResourcePath.prefab_bullet_laser_Laser0001_tscn);
-        laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-        laser.Init(this, GetAttackLayer(), FirePoint.GlobalPosition, fireRotation, 3, 600);
+        ShootBullet(fireRotation, Attribute.BulletId);
+        //ShootLaser(fireRotation);
     }
 
     // //测试用, 敌人被消灭时触发手上武器开火

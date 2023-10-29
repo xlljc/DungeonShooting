@@ -1944,7 +1944,29 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         bullet.PutDown(RoomLayerEnum.YSortLayer);
         return bullet;
     }
-    
+
+    protected Laser ShootLaser(float fireRotation)
+    {
+        var laser = ResourceManager.LoadAndInstantiate<Laser>(ResourcePath.prefab_ammo_laser_Laser0001_tscn);
+        laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+
+        var deviationAngle = Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
+        if (Master != null)
+        {
+            deviationAngle = Master.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+        }
+
+        laser.Init(
+            this,
+            GetAttackLayer(),
+            FirePoint.GlobalPosition,
+            fireRotation + Mathf.DegToRad(deviationAngle),
+            3,
+            600
+        );
+        return laser;
+    }
+
     //-------------------------------- Ai相关 -----------------------------
     
     /// <summary>
