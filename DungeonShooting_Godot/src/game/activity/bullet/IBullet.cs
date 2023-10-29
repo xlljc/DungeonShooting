@@ -1,5 +1,5 @@
 ﻿
-public interface IAmmo : IDestroy, ICoroutine
+public interface IBullet : IDestroy, ICoroutine
 {
     /// <summary>
     /// 攻击的层级
@@ -15,6 +15,16 @@ public interface IAmmo : IDestroy, ICoroutine
     /// 发射该子弹的角色
     /// </summary>
     Role TriggerRole { get; }
+    
+    /// <summary>
+    /// 最小伤害
+    /// </summary>
+    int MinHarm { get; set; }
+    
+    /// <summary>
+    /// 最大伤害
+    /// </summary>
+    int MaxHarm { get; set; }
 
     /// <summary>
     /// 初始化子弹数据

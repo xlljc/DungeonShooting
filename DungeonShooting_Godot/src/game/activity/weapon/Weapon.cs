@@ -252,9 +252,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         _init = true;
         foreach (var weaponAttr in ExcelConfig.WeaponBase_List)
         {
-            if (!string.IsNullOrEmpty(weaponAttr.WeaponId))
+            if (!string.IsNullOrEmpty(weaponAttr.ActivityId))
             {
-                if (!_weaponAttributeMap.TryAdd(weaponAttr.WeaponId, weaponAttr))
+                if (!_weaponAttributeMap.TryAdd(weaponAttr.ActivityId, weaponAttr))
                 {
                     Debug.LogError("发现重复注册的武器属性: " + weaponAttr.Id);
                 }
@@ -1914,9 +1914,27 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     }
 
     /// <summary>
+    /// 发射子弹
+    /// </summary>
+    protected IBullet ShootBullet(float fireRotation, string bulletId)
+    {
+        var baseData = ExcelConfig.BulletBase_Map[bulletId];
+        if (baseData.Type == 1) //实体子弹
+        {
+            return ShootSolidBullet(fireRotation, baseData.Prefab);
+        }
+        else if (baseData.Type == 2) //激光子弹
+        {
+            return ShootLaser(fireRotation, baseData.Prefab);
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// 发射子弹的默认实现方式, bulletId为子弹id
     /// </summary>
-    protected Bullet ShootBullet(float fireRotation, string bulletId)
+    private Bullet ShootSolidBullet(float fireRotation, string solidBulletId)
     {
         var speed = Utils.Random.RandomConfigRange(Attribute.BulletSpeedRange);
         var distance = Utils.Random.RandomConfigRange(Attribute.BulletDistanceRange);
@@ -1930,7 +1948,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
 
         var attackLayer = GetAttackLayer();
         //创建子弹
-        var bullet = Create<Bullet>(bulletId);
+        var bullet = Create<Bullet>(solidBulletId);
         bullet.Init(
             this,
             speed,
@@ -1941,13 +1959,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         );
         bullet.MinHarm = Utils.GetConfigRangeStart(Attribute.HarmRange);
         bullet.MaxHarm = Utils.GetConfigRangeEnd(Attribute.HarmRange);
-        bullet.PutDown(RoomLayerEnum.YSortLayer);
         return bullet;
     }
 
-    protected Laser ShootLaser(float fireRotation)
+    /// <summary>
+    /// 发射射线的默认实现方式
+    /// </summary>
+    private Laser ShootLaser(float fireRotation, string prefab)
     {
-        var laser = ResourceManager.LoadAndInstantiate<Laser>(ResourcePath.prefab_ammo_laser_Laser0001_tscn);
+        var laser = ResourceManager.LoadAndInstantiate<Laser>(prefab);
         laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
 
         var deviationAngle = Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
@@ -1964,6 +1984,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             3,
             600
         );
+        laser.MinHarm = Utils.GetConfigRangeStart(Attribute.HarmRange);
+        laser.MaxHarm = Utils.GetConfigRangeEnd(Attribute.HarmRange);
         return laser;
     }
 

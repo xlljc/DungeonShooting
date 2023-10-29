@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using Config;
 using Godot;
 using Array = Godot.Collections.Array;
 
@@ -36,7 +37,7 @@ public static class ExcelGenerator
     //生成初始化 ActivityObject 代码
     private static void GeneratorActivityObjectInit()
     {
-        var text = File.ReadAllText("resource/config/ActivityObject.json");
+        var text = File.ReadAllText($"resource/config/{nameof(ExcelConfig.ActivityBase)}.json");
         var array = JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, System.Object>[]>(text);
         
         var code1 = "";

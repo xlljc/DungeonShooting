@@ -90,12 +90,22 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "weapon0008",
+    "Type": 5,
+    "Name": "\u6FC0\u5149\u624B\u67AA",
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/weapon/Weapon0008.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0008/Weapon0008.png",
+    "ShowInMapEditor": true
+  },
+  {
     "Id": "bullet0001",
     "Type": 6,
     "Name": "",
     "Intro": "",
     "Details": "",
-    "Prefab": "res://prefab/ammo/Bullet0001.tscn",
+    "Prefab": "res://prefab/bullet/Bullet0001.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
@@ -105,7 +115,7 @@
     "Name": "",
     "Intro": "",
     "Details": "",
-    "Prefab": "res://prefab/ammo/Bullet0002.tscn",
+    "Prefab": "res://prefab/bullet/Bullet0002.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
@@ -115,7 +125,7 @@
     "Name": "",
     "Intro": "",
     "Details": "",
-    "Prefab": "res://prefab/ammo/Bullet0003.tscn",
+    "Prefab": "res://prefab/bullet/Bullet0003.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },

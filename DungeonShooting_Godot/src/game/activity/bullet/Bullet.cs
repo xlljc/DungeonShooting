@@ -5,7 +5,7 @@ using Godot;
 /// 子弹类
 /// </summary>
 [Tool]
-public partial class Bullet : ActivityObject, IAmmo
+public partial class Bullet : ActivityObject, IBullet
 {
     /// <summary>
     /// 碰撞区域
@@ -93,6 +93,7 @@ public partial class Bullet : ActivityObject, IAmmo
             OutlineColor = new Color(1, 0, 0);
             StartCoroutine(BorderFlashes());
         }
+        PutDown(RoomLayerEnum.YSortLayer);
     }
     
     private IEnumerator BorderFlashes()
@@ -163,7 +164,10 @@ public partial class Bullet : ActivityObject, IAmmo
             {
                 var attr = Weapon.GetUseAttribute(TriggerRole);
                 var repel = Utils.Random.RandomConfigRange(attr.RepelRnage);
-                role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel, repel * 2);
+                if (repel != 0)
+                {
+                    role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel, repel * 2);
+                }
             }
             
             //造成伤害

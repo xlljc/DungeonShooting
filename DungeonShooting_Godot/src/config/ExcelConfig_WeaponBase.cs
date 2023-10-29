@@ -14,10 +14,10 @@ public static partial class ExcelConfig
         public string Id;
 
         /// <summary>
-        /// 属性绑定武器的Id,如果是Ai使用的数据, 则填空字符串串
+        /// 属性绑定武器的Id，这个id时ActivityBase表Id,如果是Ai使用的数据, 则填空字符串串
         /// </summary>
         [JsonInclude]
-        public string WeaponId;
+        public string ActivityId;
 
         /// <summary>
         /// 备注
@@ -248,7 +248,13 @@ public static partial class ExcelConfig
         public float UpliftAngleRestore;
 
         /// <summary>
-        /// 默认射出的子弹id
+        /// 开火特效
+        /// </summary>
+        [JsonInclude]
+        public string FireEffect;
+
+        /// <summary>
+        /// 默认射出的子弹，BulletBase表Id
         /// </summary>
         [JsonInclude]
         public string BulletId;
@@ -404,7 +410,7 @@ public static partial class ExcelConfig
         {
             var inst = new WeaponBase();
             inst.Id = Id;
-            inst.WeaponId = WeaponId;
+            inst.ActivityId = ActivityId;
             inst.Remark = Remark;
             inst.Weight = Weight;
             inst.WeightType = WeightType;
@@ -442,6 +448,7 @@ public static partial class ExcelConfig
             inst.UpliftAngle = UpliftAngle;
             inst.DefaultAngle = DefaultAngle;
             inst.UpliftAngleRestore = UpliftAngleRestore;
+            inst.FireEffect = FireEffect;
             inst.BulletId = BulletId;
             inst.HarmRange = HarmRange;
             inst.RepelRnage = RepelRnage;

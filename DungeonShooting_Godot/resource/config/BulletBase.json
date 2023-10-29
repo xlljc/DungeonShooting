@@ -1,0 +1,26 @@
+[
+  {
+    "Id": "0001",
+    "Name": "\u5B50\u5F391",
+    "Type": 1,
+    "Prefab": "bullet0001"
+  },
+  {
+    "Id": "0002",
+    "Name": "\u5B50\u5F392",
+    "Type": 1,
+    "Prefab": "bullet0002"
+  },
+  {
+    "Id": "0003",
+    "Name": "\u5B50\u5F393",
+    "Type": 1,
+    "Prefab": "bullet0003"
+  },
+  {
+    "Id": "1001",
+    "Name": "\u6FC0\u51491",
+    "Type": 2,
+    "Prefab": "res://prefab/bullet/laser/Laser0001.tscn"
+  }
+]

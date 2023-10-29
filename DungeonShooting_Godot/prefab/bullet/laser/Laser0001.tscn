@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://d1q8jjtgi2wpu"]
 
-[ext_resource type="Script" path="res://src/game/activity/ammo/laser/Laser.cs" id="1_d486x"]
-[ext_resource type="Texture2D" uid="uid://clfpbq1c1ilp1" path="res://resource/sprite/ammo/Laser0001.png" id="2_xd7mu"]
+[ext_resource type="Script" path="res://src/game/activity/bullet/laser/Laser.cs" id="1_3w0rp"]
+[ext_resource type="Texture2D" uid="uid://clfpbq1c1ilp1" path="res://resource/sprite/bullet/Laser0001.png" id="2_uqalj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l4vuk"]
 resource_local_to_scene = true
@@ -9,14 +9,14 @@ resource_local_to_scene = true
 [node name="Laser0001" type="Area2D"]
 collision_layer = 2
 monitorable = false
-script = ExtResource("1_d486x")
+script = ExtResource("1_3w0rp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_l4vuk")
 
 [node name="LineSprite" type="Sprite2D" parent="."]
-modulate = Color(1.4, 1.4, 1.4, 1)
+modulate = Color(1.5, 1.5, 1.5, 1)
 position = Vector2(0, 1.19209e-07)
-texture = ExtResource("2_xd7mu")
+texture = ExtResource("2_uqalj")
 centered = false
 offset = Vector2(0, -8)

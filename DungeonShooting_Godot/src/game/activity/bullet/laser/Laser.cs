@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 激光子弹
 /// </summary>
-public partial class Laser : Area2D, IAmmo
+public partial class Laser : Area2D, IBullet
 {
     public CollisionShape2D Collision { get; private set; }
     public Sprite2D LineSprite { get; private set; }
@@ -19,11 +19,21 @@ public partial class Laser : Area2D, IAmmo
     public Weapon Weapon { get; private set; }
     public Role TriggerRole { get; private set; }
     
+    /// <summary>
+    /// 最小伤害
+    /// </summary>
+    public int MinHarm { get; set; } = 4;
+    
+    /// <summary>
+    /// 最大伤害
+    /// </summary>
+    public int MaxHarm { get; set; } = 4;
+    
     public bool IsDestroyed { get; private set; }
     //开启的协程
     private List<CoroutineData> _coroutineList;
     private float _pixelScale;
-    private float _speed = 1200;
+    private float _speed = 2000;
 
     public override void _Ready()
     {
@@ -53,12 +63,10 @@ public partial class Laser : Area2D, IAmmo
         var targetPosition = position + Vector2.FromAngle(rotation) * distance;
         var parameters = PhysicsRayQueryParameters2D.Create(position, targetPosition, PhysicsLayer.Wall);
         var result = GetWorld2D().DirectSpaceState.IntersectRay(parameters);
-        if (result != null)
+        if (result != null && result.TryGetValue("position", out var point))
         {
-            var point = (Vector2)result["position"];
-            distance = position.DistanceTo(point);
+            distance = position.DistanceTo((Vector2)point);
         }
-
         
         Collision.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
         Collision.Position = Vector2.Zero;
@@ -110,8 +118,14 @@ public partial class Laser : Area2D, IAmmo
         var role = other.AsActivityObject<Role>();
         if (role != null)
         {
+            //计算子弹造成的伤害
+            var damage = Utils.Random.RandomRangeInt(MinHarm, MaxHarm);
+            if (TriggerRole != null)
+            {
+                damage = TriggerRole.RoleState.CallCalcDamageEvent(damage);
+            }
             //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), 4, Rotation);
+            role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
         }
     }
 

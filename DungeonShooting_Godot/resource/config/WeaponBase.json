@@ -1,7 +1,7 @@
 [
   {
     "Id": "0001",
-    "WeaponId": "weapon0001",
+    "ActivityId": "weapon0001",
     "Remark": "\u6B65\u67AA",
     "Weight": 40,
     "WeightType": 2,
@@ -46,7 +46,8 @@
     "UpliftAngle": 10,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0001",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0001",
     "HarmRange": [
       4
     ],
@@ -92,7 +93,7 @@
   },
   {
     "Id": "0002",
-    "WeaponId": "",
+    "ActivityId": "",
     "Remark": "\u6B65\u67AA",
     "Weight": 40,
     "WeightType": 2,
@@ -137,7 +138,8 @@
     "UpliftAngle": 10,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0001",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0001",
     "HarmRange": [
       4
     ],
@@ -183,7 +185,7 @@
   },
   {
     "Id": "0003",
-    "WeaponId": "weapon0002",
+    "ActivityId": "weapon0002",
     "Remark": "\u9730\u5F39\u67AA",
     "Weight": 40,
     "WeightType": 2,
@@ -228,7 +230,8 @@
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0002",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0002",
     "HarmRange": [
       4
     ],
@@ -275,7 +278,7 @@
   },
   {
     "Id": "0004",
-    "WeaponId": "",
+    "ActivityId": "",
     "Remark": "\u9730\u5F39\u67AA",
     "Weight": 40,
     "WeightType": 2,
@@ -320,7 +323,8 @@
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0002",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0002",
     "HarmRange": [
       4
     ],
@@ -367,7 +371,7 @@
   },
   {
     "Id": "0005",
-    "WeaponId": "weapon0003",
+    "ActivityId": "weapon0003",
     "Remark": "\u624B\u67AA",
     "Weight": 20,
     "WeightType": 1,
@@ -412,7 +416,8 @@
     "UpliftAngle": 20,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0001",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0001",
     "HarmRange": [
       4
     ],
@@ -458,7 +463,7 @@
   },
   {
     "Id": "0006",
-    "WeaponId": "",
+    "ActivityId": "",
     "Remark": "\u624B\u67AA",
     "Weight": 20,
     "WeightType": 1,
@@ -503,7 +508,8 @@
     "UpliftAngle": 20,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0001",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0001",
     "HarmRange": [
       4
     ],
@@ -549,7 +555,7 @@
   },
   {
     "Id": "0007",
-    "WeaponId": "weapon0004",
+    "ActivityId": "weapon0004",
     "Remark": "\u5200",
     "Weight": 40,
     "WeightType": 2,
@@ -593,7 +599,8 @@
     "UpliftAngle": -95,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0001",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0001",
     "HarmRange": [
       25
     ],
@@ -637,7 +644,7 @@
   },
   {
     "Id": "0008",
-    "WeaponId": "",
+    "ActivityId": "",
     "Remark": "\u5200",
     "Weight": 40,
     "WeightType": 2,
@@ -681,7 +688,8 @@
     "UpliftAngle": -95,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0001",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0001",
     "HarmRange": [
       25
     ],
@@ -725,7 +733,7 @@
   },
   {
     "Id": "0009",
-    "WeaponId": "weapon0005",
+    "ActivityId": "weapon0005",
     "Remark": "\u72D9\u51FB\u67AA",
     "Weight": 50,
     "WeightType": 2,
@@ -770,7 +778,8 @@
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0001",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0001",
     "HarmRange": [
       30
     ],
@@ -816,7 +825,7 @@
   },
   {
     "Id": "0010",
-    "WeaponId": "",
+    "ActivityId": "",
     "Remark": "\u72D9\u51FB\u67AA",
     "Weight": 50,
     "WeightType": 2,
@@ -861,7 +870,8 @@
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0001",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0001",
     "HarmRange": [
       30
     ],
@@ -907,7 +917,7 @@
   },
   {
     "Id": "0011",
-    "WeaponId": "weapon0006",
+    "ActivityId": "weapon0006",
     "Remark": "\u51B2\u950B\u67AA",
     "Weight": 30,
     "WeightType": 2,
@@ -952,7 +962,8 @@
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0002",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0002",
     "HarmRange": [
       3
     ],
@@ -998,7 +1009,7 @@
   },
   {
     "Id": "0012",
-    "WeaponId": "",
+    "ActivityId": "",
     "Remark": "\u51B2\u950B\u67AA",
     "Weight": 30,
     "WeightType": 2,
@@ -1043,7 +1054,8 @@
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0002",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0002",
     "HarmRange": [
       3
     ],
@@ -1089,7 +1101,7 @@
   },
   {
     "Id": "0013",
-    "WeaponId": "weapon0007",
+    "ActivityId": "weapon0007",
     "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
     "Weight": 40,
     "WeightType": 2,
@@ -1134,7 +1146,8 @@
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0003",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0003",
     "HarmRange": [
       3
     ],
@@ -1180,7 +1193,7 @@
   },
   {
     "Id": "0014",
-    "WeaponId": "",
+    "ActivityId": "",
     "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
     "Weight": 40,
     "WeightType": 2,
@@ -1225,7 +1238,8 @@
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "BulletId": "bullet0003",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "BulletId": "0003",
     "HarmRange": [
       3
     ],
@@ -1268,5 +1282,97 @@
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
     "__AiAttackAttr": "0006"
+  },
+  {
+    "Id": "0015",
+    "ActivityId": "weapon0008",
+    "Remark": "\u6FC0\u5149\u624B\u67AA",
+    "Weight": 40,
+    "WeightType": 1,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 10,
+    "MaxAmmoCapacity": 240,
+    "StandbyAmmoCapacity": 120,
+    "ReloadTime": 1.8,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 0,
+    "StartFiringSpeed": 300,
+    "FinalFiringSpeed": 300,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 0,
+    "FinalScatteringRange": 20,
+    "ScatteringRangeAddValue": 4,
+    "ScatteringRangeBackSpeed": 40,
+    "ScatteringRangeBackDelayTime": 0.5,
+    "CameraShake": 2,
+    "BacklashRange": [
+      2,
+      3
+    ],
+    "BacklashRegressionSpeed": 25,
+    "UpliftAngle": 13,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "",
+    "BulletId": "1001",
+    "HarmRange": [
+      5
+    ],
+    "RepelRnage": [
+      0
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      300,
+      330
+    ],
+    "BulletDistanceRange": [
+      270,
+      360
+    ],
+    "ShellId": "",
+    "ThrowShellDelayTime": 0,
+    "ThrowCollisionSize": {
+      "X": 20,
+      "Y": 15
+    },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
+    "__ShootSound": "",
+    "__BeginReloadSound": "",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "",
+    "ReloadFinishSoundAdvanceTime": 0,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiUseAttribute": "",
+    "__AiAttackAttr": ""
   }
 ]

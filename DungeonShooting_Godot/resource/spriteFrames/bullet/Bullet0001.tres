@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://baoxep7vami72"]
 
-[ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/ammo/bullet0001.png" id="1_ktu7r"]
+[ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/bullet0001.png" id="1_ktu7r"]
 
 
 

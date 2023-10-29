@@ -218,7 +218,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                 numberBar.L_NumInput.Instance.MinValue = 0;
                 numberBar2.L_NumInput.Instance.MinValue = 0;
                 //武器配置数据
-                var weapon = ExcelConfig.WeaponBase_List.Find(weapon => weapon.WeaponId == activityObject.Id);
+                var weapon = ExcelConfig.WeaponBase_List.Find(weapon => weapon.ActivityId == activityObject.Id);
                 if (weapon != null)
                 {
                     numberBar.L_NumInput.Instance.MaxValue = weapon.AmmoCapacity; //弹夹上限
@@ -276,7 +276,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                     }
                     if (markInfoItem.Attr.TryGetValue("Weapon", out var weaponId)) //武器
                     {
-                        weaponBar.Instance.SelectWeapon(ExcelConfig.WeaponBase_List.Find(w => w.WeaponId == weaponId));
+                        weaponBar.Instance.SelectWeapon(ExcelConfig.WeaponBase_List.Find(w => w.ActivityId == weaponId));
                     }
                     if (markInfoItem.Attr.TryGetValue("CurrAmmon", out var currAmmon)) //弹夹弹药量
                     {

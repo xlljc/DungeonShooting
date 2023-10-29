@@ -136,9 +136,12 @@ public partial class Knife : Weapon
                 {
                     var attr = Master.IsAi ? AiUseAttribute : PlayerUseAttribute;
                     var repel = Utils.Random.RandomConfigRange(attr.RepelRnage);
-                    var position = role.GlobalPosition - Master.MountPoint.GlobalPosition;
-                    var v2 = position.Normalized() * repel;
-                    role.MoveController.AddForce(v2, repel * 2);
+                    if (repel != 0)
+                    {
+                        var position = role.GlobalPosition - Master.MountPoint.GlobalPosition;
+                        var v2 = position.Normalized() * repel;
+                        role.MoveController.AddForce(v2, repel * 2);
+                    }
                 }
                 
                 //造成伤害

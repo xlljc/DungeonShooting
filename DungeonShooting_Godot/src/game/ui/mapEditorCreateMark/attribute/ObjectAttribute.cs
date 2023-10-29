@@ -33,7 +33,7 @@ public partial class ObjectAttribute : AttributeBase
         {
             return null;
         }
-        return _selectWeapon.WeaponId;
+        return _selectWeapon.ActivityId;
     }
 
     //点击编辑按钮
@@ -50,7 +50,7 @@ public partial class ObjectAttribute : AttributeBase
 
     private void OnSelectObject(ExcelConfig.ActivityBase activityObject)
     {
-        var weapon = ExcelConfig.WeaponBase_List.Find(weapon => weapon.WeaponId == activityObject.Id);
+        var weapon = ExcelConfig.WeaponBase_List.Find(weapon => weapon.ActivityId == activityObject.Id);
         if (weapon != null)
         {
             SelectWeapon(weapon);
@@ -76,7 +76,7 @@ public partial class ObjectAttribute : AttributeBase
         {
             _objectBar.L_HBoxContainer.L_DeleteButton.Instance.Visible = true;
             _selectWeapon = weapon;
-            var o = ExcelConfig.ActivityBase_Map[weapon.WeaponId];
+            var o = ExcelConfig.ActivityBase_Map[weapon.ActivityId];
             //显示关联属性
             _currAmmonAttr.Instance.Visible = true;
             _residueAmmoAttr.Instance.Visible = true;

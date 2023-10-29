@@ -26,13 +26,13 @@ public static partial class ExcelConfig
     public static Dictionary<string, AiAttackAttr> AiAttackAttr_Map { get; private set; }
 
     /// <summary>
-    /// AmmoBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// BulletBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
-    public static List<AmmoBase> AmmoBase_List { get; private set; }
+    public static List<BulletBase> BulletBase_List { get; private set; }
     /// <summary>
-    /// AmmoBase.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// BulletBase.xlsx表数据集合, 里 Map 形式存储, key 为 Id
     /// </summary>
-    public static Dictionary<string, AmmoBase> AmmoBase_Map { get; private set; }
+    public static Dictionary<string, BulletBase> BulletBase_Map { get; private set; }
 
     /// <summary>
     /// Sound.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
@@ -64,7 +64,7 @@ public static partial class ExcelConfig
 
         _InitActivityBaseConfig();
         _InitAiAttackAttrConfig();
-        _InitAmmoBaseConfig();
+        _InitBulletBaseConfig();
         _InitSoundConfig();
         _InitWeaponBaseConfig();
 
@@ -106,22 +106,22 @@ public static partial class ExcelConfig
             throw new Exception("初始化表'AiAttackAttr'失败!");
         }
     }
-    private static void _InitAmmoBaseConfig()
+    private static void _InitBulletBaseConfig()
     {
         try
         {
-            var text = _ReadConfigAsText("res://resource/config/AmmoBase.json");
-            AmmoBase_List = JsonSerializer.Deserialize<List<AmmoBase>>(text);
-            AmmoBase_Map = new Dictionary<string, AmmoBase>();
-            foreach (var item in AmmoBase_List)
+            var text = _ReadConfigAsText("res://resource/config/BulletBase.json");
+            BulletBase_List = JsonSerializer.Deserialize<List<BulletBase>>(text);
+            BulletBase_Map = new Dictionary<string, BulletBase>();
+            foreach (var item in BulletBase_List)
             {
-                AmmoBase_Map.Add(item.Id, item);
+                BulletBase_Map.Add(item.Id, item);
             }
         }
         catch (Exception e)
         {
             GD.PrintErr(e.ToString());
-            throw new Exception("初始化表'AmmoBase'失败!");
+            throw new Exception("初始化表'BulletBase'失败!");
         }
     }
     private static void _InitSoundConfig()

@@ -15,19 +15,21 @@ public partial class Gun : Weapon
         }
 
         //创建开火特效
-        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_ShotFire_tscn);
-        var sprite = packedScene.Instantiate<AutoDestroySprite>();
-        // sprite.GlobalPosition = FirePoint.GlobalPosition;
-        // sprite.GlobalRotation = FirePoint.GlobalRotation;
-        // sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-        sprite.Position = GetLocalFirePosition();
-        AddChild(sprite);
+        if (!string.IsNullOrEmpty(Attribute.FireEffect))
+        {
+            var packedScene = ResourceManager.Load<PackedScene>(Attribute.FireEffect);
+            var sprite = packedScene.Instantiate<AutoDestroySprite>();
+            // sprite.GlobalPosition = FirePoint.GlobalPosition;
+            // sprite.GlobalRotation = FirePoint.GlobalRotation;
+            // sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+            sprite.Position = GetLocalFirePosition();
+            AddChild(sprite);
+        }
     }
 
     protected override void OnShoot(float fireRotation)
     {
         ShootBullet(fireRotation, Attribute.BulletId);
-        //ShootLaser(fireRotation);
     }
 
     // //测试用, 敌人被消灭时触发手上武器开火
