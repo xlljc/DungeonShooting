@@ -5,7 +5,7 @@ namespace Config;
 
 public static partial class ExcelConfig
 {
-    public class ActivityObject
+    public class ActivityBase
     {
         /// <summary>
         /// 物体唯一id <br/>
@@ -70,9 +70,9 @@ public static partial class ExcelConfig
         /// <summary>
         /// 返回浅拷贝出的新对象
         /// </summary>
-        public ActivityObject Clone()
+        public ActivityBase Clone()
         {
-            var inst = new ActivityObject();
+            var inst = new ActivityBase();
             inst.Id = Id;
             inst.Type = Type;
             inst.Name = Name;

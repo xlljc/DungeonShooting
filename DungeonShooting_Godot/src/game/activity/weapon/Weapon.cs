@@ -11,21 +11,21 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 武器使用的属性数据, 该属性会根据是否是玩家使用武器, 如果是Ai使用武器, 则会返回 AiUseAttribute 的属性对象
     /// </summary>
-    public ExcelConfig.Weapon Attribute => _weaponAttribute;
+    public ExcelConfig.WeaponBase Attribute => _weaponAttribute;
 
     /// <summary>
     /// Ai使用该武器的属性
     /// </summary>
-    public ExcelConfig.Weapon AiUseAttribute => _aiWeaponAttribute;
+    public ExcelConfig.WeaponBase AiUseAttribute => _aiWeaponAttribute;
 
     /// <summary>
     /// 玩家使用该武器的属性
     /// </summary>
-    public ExcelConfig.Weapon PlayerUseAttribute => _playerWeaponAttribute;
+    public ExcelConfig.WeaponBase PlayerUseAttribute => _playerWeaponAttribute;
     
-    private ExcelConfig.Weapon _weaponAttribute;
-    private ExcelConfig.Weapon _playerWeaponAttribute;
-    private ExcelConfig.Weapon _aiWeaponAttribute;
+    private ExcelConfig.WeaponBase _weaponAttribute;
+    private ExcelConfig.WeaponBase _playerWeaponAttribute;
+    private ExcelConfig.WeaponBase _aiWeaponAttribute;
 
     /// <summary>
     /// 武器攻击的目标阵营
@@ -236,8 +236,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     private uint _tempLayer;
 
     private static bool _init = false;
-    private static Dictionary<string, ExcelConfig.Weapon> _weaponAttributeMap =
-        new Dictionary<string, ExcelConfig.Weapon>();
+    private static Dictionary<string, ExcelConfig.WeaponBase> _weaponAttributeMap =
+        new Dictionary<string, ExcelConfig.WeaponBase>();
 
     /// <summary>
     /// 初始化武器属性数据
@@ -250,7 +250,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
 
         _init = true;
-        foreach (var weaponAttr in ExcelConfig.Weapon_List)
+        foreach (var weaponAttr in ExcelConfig.WeaponBase_List)
         {
             if (!string.IsNullOrEmpty(weaponAttr.WeaponId))
             {
@@ -262,7 +262,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
     }
     
-    private static ExcelConfig.Weapon _GetWeaponAttribute(string itemId)
+    private static ExcelConfig.WeaponBase _GetWeaponAttribute(string itemId)
     {
         if (_weaponAttributeMap.TryGetValue(itemId, out var attr))
         {
@@ -281,7 +281,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 初始化武器属性
     /// </summary>
-    public void InitWeapon(ExcelConfig.Weapon attribute)
+    public void InitWeapon(ExcelConfig.WeaponBase attribute)
     {
         _playerWeaponAttribute = attribute;
         _weaponAttribute = attribute;
@@ -1076,7 +1076,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 根据触扳机的角色对象判断该角色使用的武器数据
     /// </summary>
-    public ExcelConfig.Weapon GetUseAttribute(Role triggerRole)
+    public ExcelConfig.WeaponBase GetUseAttribute(Role triggerRole)
     {
         if (triggerRole == null || !triggerRole.IsAi)
         {

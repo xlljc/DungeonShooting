@@ -5,7 +5,7 @@ namespace Config;
 
 public static partial class ExcelConfig
 {
-    public class Weapon
+    public class WeaponBase
     {
         /// <summary>
         /// 武器属性id
@@ -389,7 +389,7 @@ public static partial class ExcelConfig
         /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性 <br/>
         /// 如果不填则Ai和玩家使用同一种属性
         /// </summary>
-        public Weapon AiUseAttribute;
+        public WeaponBase AiUseAttribute;
 
         /// <summary>
         /// Ai使用该武器开火时的一些额外配置属性 <br/>
@@ -400,9 +400,9 @@ public static partial class ExcelConfig
         /// <summary>
         /// 返回浅拷贝出的新对象
         /// </summary>
-        public Weapon Clone()
+        public WeaponBase Clone()
         {
-            var inst = new Weapon();
+            var inst = new WeaponBase();
             inst.Id = Id;
             inst.WeaponId = WeaponId;
             inst.Remark = Remark;
@@ -469,7 +469,7 @@ public static partial class ExcelConfig
             return inst;
         }
     }
-    private class Ref_Weapon : Weapon
+    private class Ref_WeaponBase : WeaponBase
     {
         [JsonInclude]
         public string __ShootSound;

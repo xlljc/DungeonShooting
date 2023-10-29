@@ -8,14 +8,14 @@ public partial class ActivityObject
 {
     private class RegisterActivityData
     {
-        public RegisterActivityData(string path, ExcelConfig.ActivityObject config)
+        public RegisterActivityData(string path, ExcelConfig.ActivityBase config)
         {
             Path = path;
             Config = config;
         }
 
         public string Path;
-        public ExcelConfig.ActivityObject Config;
+        public ExcelConfig.ActivityBase Config;
     }
     
     //负责存放所有注册对象数据

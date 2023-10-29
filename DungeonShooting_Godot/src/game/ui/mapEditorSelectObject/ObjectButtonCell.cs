@@ -3,14 +3,14 @@ using Godot;
 
 namespace UI.MapEditorSelectObject;
 
-public class ObjectButtonCell : UiCell<MapEditorSelectObject.ObjectButton, ExcelConfig.ActivityObject>
+public class ObjectButtonCell : UiCell<MapEditorSelectObject.ObjectButton, ExcelConfig.ActivityBase>
 {
     public override void OnInit()
     {
         CellNode.L_Select.Instance.Visible = false;
     }
 
-    public override void OnSetData(ExcelConfig.ActivityObject data)
+    public override void OnSetData(ExcelConfig.ActivityBase data)
     {
         CellNode.L_ObjectName.Instance.Text = data.Name;
         if (!string.IsNullOrEmpty(data.Icon))

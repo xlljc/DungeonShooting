@@ -52,7 +52,7 @@ public static class ExcelGenerator
             code1 += $"        /// 简介: {intro.Replace("\n", " <br/>\n        /// ")}\n";
             code1 += $"        /// </summary>\n";
             code1 += $"        public const string Id_{id} = \"{id}\";\n";
-            code2 += $"        _activityRegisterMap.Add(\"{id}\", new RegisterActivityData(\"{item["Prefab"]}\", ExcelConfig.ActivityObject_Map[\"{id}\"]));\n";
+            code2 += $"        _activityRegisterMap.Add(\"{id}\", new RegisterActivityData(\"{item["Prefab"]}\", ExcelConfig.ActivityBase_Map[\"{id}\"]));\n";
         }
         
         var str = $"using Config;\n\n";
