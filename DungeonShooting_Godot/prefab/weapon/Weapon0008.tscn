@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://yt10i80hs3gt"]
+[gd_scene load_steps=11 format=3 uid="uid://yt10i80hs3gt"]
 
 [ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="1_l63x2"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_mhoa7"]
@@ -43,6 +43,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_3piau"]
 resource_name = "floodlight"
@@ -61,10 +73,27 @@ tracks/0/keys = {
 "values": [0, 0, 0.5, 0.5, 0]
 }
 
+[sub_resource type="Animation" id="Animation_8xqs8"]
+resource_name = "reloading"
+length = 1.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.1, 1.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.436332, -0.436332, 0.0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_trkjd"]
 _data = {
 "RESET": SubResource("Animation_x136i"),
-"floodlight": SubResource("Animation_3piau")
+"floodlight": SubResource("Animation_3piau"),
+"reloading": SubResource("Animation_8xqs8")
 }
 
 [node name="Weapon0008" type="CharacterBody2D" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision")]
