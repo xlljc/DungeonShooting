@@ -86,6 +86,7 @@ material = SubResource("ShaderMaterial_cbiyh")
 modulate = Color(1.9, 1.9, 1.9, 1)
 material = SubResource("ShaderMaterial_o36tv")
 sprite_frames = ExtResource("2_s0xbw")
+animation = &"reloading"
 
 [node name="ShellPoint" type="Marker2D" parent="AnimatedSprite"]
 position = Vector2(-2, -3)

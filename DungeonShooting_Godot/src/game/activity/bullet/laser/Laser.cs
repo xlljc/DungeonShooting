@@ -82,8 +82,9 @@ public partial class Laser : Area2D, IBullet
         tween.TweenProperty(Collision, "position", new Vector2(distance * 0.5f, 0), time);
         tween.TweenProperty(Shape, "size", new Vector2(distance, width), time);
         tween.Chain();
-        tween.TweenInterval(0.2f);
-        tween.Chain();
+        //持续时间
+        // tween.TweenInterval(0.2f);
+        // tween.Chain();
         tween.TweenCallback(Callable.From(() =>
         {
             Collision.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);

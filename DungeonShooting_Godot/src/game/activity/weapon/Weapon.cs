@@ -982,6 +982,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         if (IsAutoPlaySpriteFrames)
         {
             PlaySpriteAnimation(AnimatorNames.Fire);
+            PlayAnimationPlayer(AnimatorNames.Fire);
         }
 
         //播放射击音效
@@ -1371,6 +1372,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         if (IsAutoPlaySpriteFrames)
         {
             PlaySpriteAnimation(AnimatorNames.Reloading);
+            PlayAnimationPlayer(AnimatorNames.Reloading);
         }
             
         //播放换弹音效
@@ -1425,10 +1427,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             if (Attribute.BeLoadedSoundDelayTime <= 0)
             {
                 PlaySpriteAnimation(AnimatorNames.BeLoaded);
+                PlayAnimationPlayer(AnimatorNames.BeLoaded);
             }
             else
             {
-                this.CallDelay(Attribute.BeLoadedSoundDelayTime, PlaySpriteAnimation, AnimatorNames.BeLoaded);
+                this.CallDelay(Attribute.BeLoadedSoundDelayTime, () =>
+                {
+                    PlaySpriteAnimation(AnimatorNames.BeLoaded);
+                    PlayAnimationPlayer(AnimatorNames.BeLoaded);
+                });
             }
         }
 
@@ -1564,6 +1571,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         if (spriteFrames != null && spriteFrames.HasAnimation(name))
         {
             AnimatedSprite.Play(name);
+        }
+    }
+
+    //播放动画
+    private void PlayAnimationPlayer(string name)
+    {
+        if (AnimationPlayer != null && AnimationPlayer.HasAnimation(name))
+        {
+            AnimationPlayer.Play(name);
         }
     }
 

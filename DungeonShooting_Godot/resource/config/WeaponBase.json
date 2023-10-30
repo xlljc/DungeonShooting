@@ -1330,7 +1330,7 @@
     "UpliftAngle": 13,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire2.tscn",
     "BulletId": "1001",
     "HarmRange": [
       5
