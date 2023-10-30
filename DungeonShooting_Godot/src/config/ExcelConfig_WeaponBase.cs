@@ -352,7 +352,7 @@ public static partial class ExcelConfig
         public float BeginReloadSoundDelayTime;
 
         /// <summary>
-        /// 换弹音效
+        /// 换弹音效，单独装弹时也会出发
         /// </summary>
         public Sound ReloadSound;
 
