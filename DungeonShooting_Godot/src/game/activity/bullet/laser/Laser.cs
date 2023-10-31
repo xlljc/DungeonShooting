@@ -73,7 +73,7 @@ public partial class Laser : Area2D, IBullet
         Shape.Size = Vector2.Zero;;
         LineSprite.Scale = new Vector2(0, width * _pixelScale);
 
-        //如果子弹会对玩家造成伤害, 则显示红色描边
+        //如果子弹会对玩家造成伤害, 则显示成红色
         if (Player.Current.CollisionWithMask(targetLayer))
         {
             LineSprite.Modulate = new Color(2.5f, 0.5f, 0.5f);

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://d1q8jjtgi2wpu"]
 
 [ext_resource type="Script" path="res://src/game/activity/bullet/laser/Laser.cs" id="1_3w0rp"]
-[ext_resource type="Texture2D" uid="uid://clfpbq1c1ilp1" path="res://resource/sprite/bullet/Laser0001.png" id="2_uqalj"]
+[ext_resource type="Texture2D" uid="uid://clfpbq1c1ilp1" path="res://resource/sprite/bullet/laser/Laser0001.png" id="2_uqalj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l4vuk"]
 resource_local_to_scene = true
