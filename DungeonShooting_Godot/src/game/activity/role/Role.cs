@@ -983,7 +983,7 @@ public abstract partial class Role : ActivityObject
     /// 受到伤害, 如果是在碰撞信号处理函数中调用该函数, 请使用 CallDeferred 来延时调用, 否则很有可能导致报错
     /// </summary>
     /// <param name="damage">伤害的量</param>
-    /// <param name="angle">角度</param>
+    /// <param name="angle">伤害角度（弧度制）</param>
     public virtual void Hurt(int damage, float angle)
     {
         //受伤闪烁, 无敌状态

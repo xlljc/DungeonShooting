@@ -133,10 +133,12 @@ public partial class Bullet : ActivityObject, IBullet
             //击中爆炸，测试用
             if (TriggerRole == null || !TriggerRole.IsAi)
             {
-                var loadAndInstantiate = ResourceManager.LoadAndInstantiate<Explode>(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
-                loadAndInstantiate.Position = Position;
-                loadAndInstantiate.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
-                GetParent().AddChild(loadAndInstantiate);
+                var explode = ObjectManager.GetExplode(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
+                explode.Position = Position;
+                explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
+                explode.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+                explode.Init(AttackLayer, 25, MinHarm, MaxHarm);
+                explode.RunPlay();
             }
             
             Destroy();
@@ -185,10 +187,12 @@ public partial class Bullet : ActivityObject, IBullet
             //击中爆炸，测试用
             if (TriggerRole == null || !TriggerRole.IsAi)
             {
-                var loadAndInstantiate = ResourceManager.LoadAndInstantiate<Explode>(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
-                loadAndInstantiate.Position = Position;
-                loadAndInstantiate.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
-                GetParent().AddChild(loadAndInstantiate);
+                var explode = ObjectManager.GetExplode(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
+                explode.Position = Position;
+                explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
+                explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
+                explode.Init(AttackLayer, 25, MinHarm, MaxHarm);
+                explode.RunPlay();
             }
 
             Destroy();
