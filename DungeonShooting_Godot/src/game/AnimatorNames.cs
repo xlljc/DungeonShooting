@@ -60,4 +60,8 @@ public static class AnimatorNames
     /// 显示动画
     /// </summary>
     public const string Show = "show";
+    /// <summary>
+    /// 播放特效
+    /// </summary>
+    public const string Play = "play";
 }

@@ -7,6 +7,20 @@ using Godot;
 /// </summary>
 public partial class GameCamera : Camera2D
 {
+    private class ShakeData
+    {
+        public Vector2 Value;
+        public bool Decline;
+        public float DataDelta;
+
+        public ShakeData(Vector2 value, bool decline, float dataDelta)
+        {
+            Value = value;
+            Decline = decline;
+            DataDelta = dataDelta;
+        }
+    }
+    
     /// <summary>
     /// 当前场景的相机对象
     /// </summary>
@@ -46,7 +60,7 @@ public partial class GameCamera : Camera2D
     private Vector2 _processDistanceSquared = Vector2.Zero;
     private Vector2 _processDirection = Vector2.Zero;
     //抖动数据
-    private readonly Dictionary<long, Vector2> _shakeMap = new Dictionary<long, Vector2>();
+    private readonly Dictionary<long, ShakeData> _shakeMap = new Dictionary<long, ShakeData>();
     
     private Vector2 _camPos;
     private Vector2 _shakeOffset = Vector2.Zero;
@@ -151,7 +165,7 @@ public partial class GameCamera : Camera2D
     /// <summary>
     /// 创建一个抖动, 并设置抖动时间
     /// </summary>
-    public async void CreateShake(Vector2 value, float time)
+    public async void CreateShake(Vector2 value, float time, bool decline = false)
     {
         if (time > 0)
         {
@@ -159,7 +173,15 @@ public partial class GameCamera : Camera2D
             value.Y = Mathf.Abs(value.Y);
             var tempIndex = _index++;
             var sceneTreeTimer = GetTree().CreateTimer(time);
-            _shakeMap[tempIndex] = value;
+            if (decline)
+            {
+                _shakeMap[tempIndex] = new ShakeData(value, true, value.Length() / time);
+            }
+            else
+            {
+                _shakeMap[tempIndex] = new ShakeData(value, false, 0);
+            }
+
             await ToSignal(sceneTreeTimer, Timer.SignalName.Timeout);
             _shakeMap.Remove(tempIndex);
         }
@@ -178,7 +200,7 @@ public partial class GameCamera : Camera2D
     {
         if (EnableShake)
         {
-            var distance = _CalculateDistanceSquared();
+            var distance = _CalculateDistanceSquared(delta);
             distance = new Vector2(Mathf.Sqrt(distance.X), Mathf.Sqrt(distance.Y));
             _shakeOffset += _processDirection + new Vector2(
                 (float)GD.RandRange(-distance.X, distance.X) - Offset.X,
@@ -194,21 +216,28 @@ public partial class GameCamera : Camera2D
     }
 
     //计算相机需要抖动的值
-    private Vector2 _CalculateDistanceSquared()
+    private Vector2 _CalculateDistanceSquared(float delta)
     {
         var temp = Vector2.Zero;
         float length = 0;
-        
+
         foreach (var keyValuePair in _shakeMap)
         {
-            var tempLenght = keyValuePair.Value.LengthSquared();
+            var shakeData = keyValuePair.Value;
+            var tempLenght = shakeData.Value.LengthSquared();
             if (tempLenght > length)
             {
                 length = tempLenght;
-                temp = keyValuePair.Value;
+                temp = shakeData.Value;
+                if (shakeData.Decline)
+                {
+                    shakeData.Value = shakeData.Value.MoveToward(Vector2.Zero, shakeData.DataDelta * delta);
+                    //Debug.Log("shakeData.Value: " + shakeData.Value + ", _processDistanceSquared: " + _processDistanceSquared);
+                }
             }
         }
-        
+
+        //return temp;
         return _processDistanceSquared.LengthSquared() > length ? _processDistanceSquared : temp;
     }
 }

@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqf2vks5ggnsp"]
+[gd_scene load_steps=4 format=3 uid="uid://bqf2vks5ggnsp"]
 
 [ext_resource type="Script" path="res://src/game/room/World.cs" id="1_kt3mm"]
+[ext_resource type="PackedScene" uid="uid://cw3c600m8rv6t" path="res://prefab/bullet/explode/Explode0001.tscn" id="2_pofgj"]
 
 [sub_resource type="Environment" id="Environment_g06jj"]
 background_mode = 3
@@ -63,3 +64,6 @@ y_sort_enabled = true
 [node name="AffiliationAreaRoot" type="Node2D" parent="."]
 
 [node name="FogMaskRoot" type="Node2D" parent="."]
+
+[node name="Explode0001" parent="." instance=ExtResource("2_pofgj")]
+position = Vector2(56, 43)

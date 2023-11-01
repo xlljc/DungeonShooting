@@ -130,6 +130,15 @@ public partial class Bullet : ActivityObject, IBullet
             smoke.GlobalRotation = lastSlideCollision.GetNormal().Angle();
             smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
 
+            //击中爆炸，测试用
+            if (TriggerRole == null || !TriggerRole.IsAi)
+            {
+                var loadAndInstantiate = ResourceManager.LoadAndInstantiate<Explode>(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
+                loadAndInstantiate.Position = Position;
+                loadAndInstantiate.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
+                GetParent().AddChild(loadAndInstantiate);
+            }
+            
             Destroy();
             return;
         }
@@ -172,6 +181,16 @@ public partial class Bullet : ActivityObject, IBullet
             
             //造成伤害
             role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
+            
+            //击中爆炸，测试用
+            if (TriggerRole == null || !TriggerRole.IsAi)
+            {
+                var loadAndInstantiate = ResourceManager.LoadAndInstantiate<Explode>(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
+                loadAndInstantiate.Position = Position;
+                loadAndInstantiate.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
+                GetParent().AddChild(loadAndInstantiate);
+            }
+
             Destroy();
         }
     }
