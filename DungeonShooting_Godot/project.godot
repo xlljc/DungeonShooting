@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="DungeonShooting"
-run/main_scene="res://scene/test/TestDrawSprite.tscn"
+run/main_scene="res://scene/Main.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://icon.png"
 
@@ -21,8 +21,8 @@ settings/fps/force_fps=60
 
 [display]
 
-window/size/viewport_width=1600
-window/size/viewport_height=900
+window/size/viewport_width=1270
+window/size/viewport_height=720
 window/stretch/aspect="keep_width"
 window/vsync/use_vsync=false
 

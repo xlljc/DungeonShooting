@@ -168,15 +168,15 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// </summary>
 	public void DestroyWorld()
 	{
-		//销毁池中所有物体
-		ObjectPool.DisposeAllItem();
-		
 		//销毁所有物体
 		if (World != null)
 		{
 			ClearWorld();
 			World.QueueFree();
 		}
+		
+		//销毁池中所有物体
+		ObjectPool.DisposeAllItem();
 
 		World = null;
 	}
@@ -297,7 +297,6 @@ public partial class GameApplication : Node2D, ICoroutine
 	//清理世界
 	private void ClearWorld()
 	{
-		
 		var childCount = World.NormalLayer.GetChildCount();
 		for (var i = 0; i < childCount; i++)
 		{

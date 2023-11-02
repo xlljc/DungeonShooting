@@ -307,7 +307,7 @@ public class MoveController : Component
             Master.Rotation += rotationSpeed * delta;
         }
         //衰减旋转速率
-        var friction = Master.GetCurrentFriction();
+        var friction = !Master.IsThrowing ? Master.GetCurrentFriction() : 0;
         for (var i = 0; i < _forceList.Count; i++)
         {
             var force = _forceList[i];

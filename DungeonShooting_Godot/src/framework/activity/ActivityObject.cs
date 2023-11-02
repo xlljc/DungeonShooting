@@ -1459,4 +1459,22 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     {
         return _processingBecomesStaticImage;
     }
+    
+    private ProxySprite _proxySprite;
+    public void Freeze()
+    {
+        if (_proxySprite == null)
+        {
+            _proxySprite = new ProxySprite();
+        }
+    }
+
+    public void Unfreeze()
+    {
+        if (_proxySprite == null)
+        {
+            return;
+        }
+        
+    }
 }

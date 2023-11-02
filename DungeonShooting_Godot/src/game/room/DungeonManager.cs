@@ -417,13 +417,13 @@ public partial class DungeonManager : Node2D
         var worldPos = roomInfo.GetWorldPosition();
         var rect = roomInfo.OuterRange;
 
-        int minX = rect.Position.X - GameConfig.TileCellSize;
-        int minY = rect.Position.Y - GameConfig.TileCellSize;
-        int maxX = rect.End.X + GameConfig.TileCellSize;
-        int maxY = rect.End.Y + GameConfig.TileCellSize;
+        var minX = rect.Position.X - GameConfig.TileCellSize;
+        var minY = rect.Position.Y - GameConfig.TileCellSize;
+        var maxX = rect.End.X + GameConfig.TileCellSize;
+        var maxY = rect.End.Y + GameConfig.TileCellSize;
 
         var staticSpriteCanvas = new RoomStaticImageCanvas(
-            World.StaticSpriteRoot,
+            roomInfo.AffiliationArea.SpriteRoot,
             new Vector2I(minX, minY),
             maxX - minX, maxY - minY
         );

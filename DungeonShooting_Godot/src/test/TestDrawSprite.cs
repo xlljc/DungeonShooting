@@ -12,7 +12,22 @@ public partial class TestDrawSprite : Node2D
 
     public override void _Ready()
     {
-        
+        // for (var i = 0; i < 10000; i++)
+        // {
+        //     var image = Image.Create(50, 50, false, Image.Format.Rgba8);
+        //     image.Fill(new Color(Utils.Random.RandomRangeFloat(0, 1), Utils.Random.RandomRangeFloat(0, 1),
+        //         Utils.Random.RandomRangeFloat(0, 1), Utils.Random.RandomRangeFloat(0, 1)));
+        //     var imageTexture = ImageTexture.CreateFromImage(image);
+        //     var proxySprite = new ProxySprite();
+        //     proxySprite.SetTexture(
+        //         this,
+        //         imageTexture,
+        //         new Vector2(Utils.Random.RandomRangeInt(0, 1600), Utils.Random.RandomRangeInt(0, 900)),
+        //         Utils.Random.RandomRangeFloat(0, Mathf.Pi),
+        //         new Vector2(Utils.Random.RandomRangeFloat(0.2f, 2f), Utils.Random.RandomRangeFloat(0.2f, 2f)),
+        //         new Vector2(0, 5)
+        //     );
+        // }
     }
 
     public override void _Process(double delta)
@@ -21,6 +36,8 @@ public partial class TestDrawSprite : Node2D
         PathFollow2D.Progress += 200 * (float)delta;
     }
 
+    //-------------------------------------------------------------------------------------------------------------------------------
+    
     //使用sprite2d绘制精灵
     // public override void _Ready()
     // {
