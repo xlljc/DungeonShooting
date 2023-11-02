@@ -36,9 +36,9 @@ public class PhysicsLayer
     /// </summary>
     public const uint OnHand = 0b1000000;
     /// <summary>
-    /// 弹壳
+    /// 各种碎屑，包括弹壳，敌人死亡碎片，爆炸碎片等
     /// </summary>
-    public const uint Shell = 0b10000000;
+    public const uint Debris = 0b10000000;
     /// <summary>
     /// 投抛中
     /// </summary>

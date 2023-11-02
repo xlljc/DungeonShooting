@@ -63,7 +63,7 @@ public partial class AffiliationArea : Area2D, IDestroy
         Monitoring = true;
         Monitorable = false;
         CollisionLayer = PhysicsLayer.None;
-        CollisionMask = PhysicsLayer.Prop | PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Shell | PhysicsLayer.Throwing;
+        CollisionMask = PhysicsLayer.Prop | PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Debris | PhysicsLayer.Throwing;
 
         BodyEntered += OnBodyEntered;
         BodyExited += OnBodyExited;

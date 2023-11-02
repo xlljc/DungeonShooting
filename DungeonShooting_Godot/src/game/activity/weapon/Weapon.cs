@@ -1048,7 +1048,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         else //在地上
         {
             var v = Utils.Random.RandomConfigRange(Attribute.BacklashRange) * 5;
-            var externalForce = MoveController.AddForce(new Vector2(-v, 0).Rotated(Rotation), v * 2);
+            var externalForce = MoveController.AddForce(new Vector2(-v, 0).Rotated(Rotation));
             externalForce.RotationSpeed = -Mathf.DegToRad(40);
             externalForce.RotationResistance = Mathf.DegToRad(80);
         }

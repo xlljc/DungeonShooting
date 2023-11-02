@@ -137,7 +137,7 @@ public partial class Bullet : ActivityObject, IBullet
                 explode.Position = Position;
                 explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
                 explode.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-                explode.Init(AttackLayer, 25, MinHarm, MaxHarm);
+                explode.Init(AttackLayer, 25, MinHarm, MaxHarm, 50, 250);
                 explode.RunPlay();
             }
             
@@ -177,7 +177,7 @@ public partial class Bullet : ActivityObject, IBullet
                 var repel = Utils.Random.RandomConfigRange(attr.RepelRnage);
                 if (repel != 0)
                 {
-                    role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel, repel * 2);
+                    role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel);
                 }
             }
             
@@ -191,7 +191,7 @@ public partial class Bullet : ActivityObject, IBullet
                 explode.Position = Position;
                 explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
                 explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
-                explode.Init(AttackLayer, 25, MinHarm, MaxHarm);
+                explode.Init(AttackLayer, 25, MinHarm, MaxHarm, 50, 250);
                 explode.RunPlay();
             }
 

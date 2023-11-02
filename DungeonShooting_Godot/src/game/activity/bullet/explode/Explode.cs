@@ -28,16 +28,14 @@ public partial class Explode : Area2D, IPoolItem
     /// 爆炸攻击的层级
     /// </summary>
     public uint AttackLayer { get; private set; }
-    /// <summary>
-    /// 最小伤害
-    /// </summary>
-    public int MinHarm { get; private set; }
-    /// <summary>
-    /// 最大伤害
-    /// </summary>
-    public int MaxHarm { get; private set; }
+
 
     private bool _init = false;
+    private float _hitRadius;
+    private int _minHarm;
+    private int _maxHarm;
+    private float _repelledRadius;
+    private float _maxRepelled;
     
     public void Destroy()
     {
@@ -50,7 +48,16 @@ public partial class Explode : Area2D, IPoolItem
         QueueFree();
     }
 
-    public void Init(uint attackLayer, float radius, int minHarm, int maxHarm)
+    /// <summary>
+    /// 初始化爆炸数据
+    /// </summary>
+    /// <param name="attackLayer">攻击的层级</param>
+    /// <param name="hitRadius">伤害半径</param>
+    /// <param name="minHarm">最小伤害</param>
+    /// <param name="maxHarm">最大伤害</param>
+    /// <param name="repelledRadius">击退半径</param>
+    /// <param name="maxRepelled">最大击退速度</param>
+    public void Init(uint attackLayer, float hitRadius, int minHarm, int maxHarm, float repelledRadius, float maxRepelled)
     {
         if (!_init)
         {
@@ -63,10 +70,13 @@ public partial class Explode : Area2D, IPoolItem
         }
         
         AttackLayer = attackLayer;
-        MinHarm = minHarm;
-        MaxHarm = maxHarm;
-        CollisionMask = attackLayer;
-        CircleShape.Radius = radius;
+        _hitRadius = hitRadius;
+        _minHarm = minHarm;
+        _maxHarm = maxHarm;
+        _repelledRadius = repelledRadius;
+        _maxRepelled = maxRepelled;
+        CollisionMask = attackLayer | PhysicsLayer.Prop | PhysicsLayer.Throwing | PhysicsLayer.Debris;
+        CircleShape.Radius = Mathf.Max(hitRadius, maxRepelled);
     }
     
     public void RunPlay()
@@ -95,12 +105,27 @@ public partial class Explode : Area2D, IPoolItem
 
     private void OnBodyEntered(Node2D node)
     {
-        var role = node.AsActivityObject<Role>();
-        if (role != null)
+        var o = node.AsActivityObject();
+        if (o != null)
         {
-            var angle = (role.Position - Position).Angle();
-            role.CallDeferred(nameof(role.Hurt), Utils.Random.RandomRangeInt(MinHarm, MaxHarm), angle);
-            role.MoveController.AddForce(Vector2.FromAngle(angle) * 150, 300);
+            var temp = o.Position - Position;
+            var len = temp.Length();
+            var angle = temp.Angle();
+            
+            if (len <= _repelledRadius) //击退半径内
+            {
+                var repelled = (_repelledRadius - len) / _repelledRadius * _maxRepelled;
+                o.MoveController.SetAllVelocity(Vector2.Zero);
+                o.MoveController.AddForce(Vector2.FromAngle(angle) * repelled);
+            }
+
+            if (o is Role role)
+            {
+                if (len <= _hitRadius) //在伤害半径内
+                {
+                    role.CallDeferred(nameof(role.Hurt), Utils.Random.RandomRangeInt(_minHarm, _maxHarm), angle);
+                }
+            }
         }
     }
 }

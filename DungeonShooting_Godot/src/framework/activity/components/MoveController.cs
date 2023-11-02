@@ -307,12 +307,13 @@ public class MoveController : Component
             Master.Rotation += rotationSpeed * delta;
         }
         //衰减旋转速率
+        var friction = Master.GetCurrentFriction();
         for (var i = 0; i < _forceList.Count; i++)
         {
             var force = _forceList[i];
-            if (force.RotationResistance != 0 && (force.EnableResistanceInTheAir || !Master.IsThrowing))
+            if ((friction != 0 || force.RotationResistance != 0) && (force.EnableResistanceInTheAir || !Master.IsThrowing))
             {
-                force.RotationSpeed = Mathf.MoveToward(force.RotationSpeed, 0, force.RotationResistance * delta);
+                force.RotationSpeed = Mathf.MoveToward(force.RotationSpeed, 0, (force.RotationResistance + friction) * delta);
             }
         }
 
@@ -344,7 +345,7 @@ public class MoveController : Component
                 var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
                 newVelocity = (finallyVelocity - _basisVelocity).Reflect(no);
                 var length = _forceList.Count;
-                var v = newVelocity / (length / Master.BounceStrength);
+                var v = newVelocity / (length / Master.ActivityMaterial.BounceStrength);
                 for (var i = 0; i < _forceList.Count; i++)
                 {
                     _forceList[i].Velocity = v;
@@ -365,9 +366,9 @@ public class MoveController : Component
                         );
 
                         //力速度衰减
-                        if (force.VelocityResistance != 0 && (force.EnableResistanceInTheAir || !Master.IsThrowing))
+                        if ((friction != 0 || force.VelocityResistance != 0) && (force.EnableResistanceInTheAir || !Master.IsThrowing))
                         {
-                            force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.VelocityResistance * delta);
+                            force.Velocity = force.Velocity.MoveToward(Vector2.Zero, (friction + force.VelocityResistance) * delta);
                         }
                     }
                 }

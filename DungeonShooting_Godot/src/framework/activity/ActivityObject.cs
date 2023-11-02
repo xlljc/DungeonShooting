@@ -145,26 +145,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     private float _verticalSpeed;
 
     /// <summary>
-    /// 落地之后是否回弹
-    /// </summary>
-    public bool Bounce { get; set; } = true;
-
-    /// <summary>
-    /// 物体下坠回弹的强度
-    /// </summary>
-    public float BounceStrength { get; set; } = 0.5f;
-
-    /// <summary>
-    /// 物体下坠回弹后的运动速度衰减量
-    /// </summary>
-    public float BounceSpeed { get; set; } = 0.75f;
-    
-    /// <summary>
-    /// 物体下坠回弹后的旋转速度衰减量
-    /// </summary>
-    public float BounceRotationSpeed { get; set; } = 0.5f;
-
-    /// <summary>
     /// 投抛状态下物体碰撞器大小, 如果 (x, y) 都小于 0, 则默认使用 AnimatedSprite 的默认动画第一帧的大小
     /// </summary>
     [Export]
@@ -347,6 +327,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             }
         }
 #endif
+        ActivityMaterial = new ActivityMaterial();
         World = world;
         ItemConfig = activityData.Config;
         Name = GetType().Name + (_instanceIndex++);
@@ -957,28 +938,28 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                         {
                             //缩放移动速度
                             //MoveController.ScaleAllForce(BounceSpeed);
-                            _throwForce.Velocity *= BounceSpeed;
+                            _throwForce.Velocity *= ActivityMaterial.BounceSpeed;
                             //缩放旋转速度
                             //MoveController.ScaleAllRotationSpeed(BounceStrength);
-                            _throwForce.RotationSpeed *= BounceRotationSpeed;
+                            _throwForce.RotationSpeed *= ActivityMaterial.BounceRotationSpeed;
                         }
                         //如果落地高度不够低, 再抛一次
-                        if (Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 5))
+                        if (ActivityMaterial.Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 5))
                         {
                             if (!_hasResilienceVerticalSpeed)
                             {
                                 _hasResilienceVerticalSpeed = true;
-                                _resilienceVerticalSpeed = -VerticalSpeed * BounceStrength;
+                                _resilienceVerticalSpeed = -VerticalSpeed * ActivityMaterial.BounceStrength;
                             }
                             else
                             {
                                 if (_resilienceVerticalSpeed < 25)
                                 {
-                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength * 0.4f;
+                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * ActivityMaterial.BounceStrength * 0.4f;
                                 }
                                 else
                                 {
-                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength;
+                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * ActivityMaterial.BounceStrength;
                                 }
                             }
                             _verticalSpeed = _resilienceVerticalSpeed;
@@ -1413,6 +1394,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     {
         _playHit = true;
         _playHitSchedule = 0;
+    }
+
+    /// <summary>
+    /// 获取当前摩擦力
+    /// </summary>
+    public float GetCurrentFriction()
+    {
+        return ActivityMaterial.Friction;
     }
     
     public long StartCoroutine(IEnumerator able)
