@@ -2,11 +2,26 @@
 using System.Collections.Generic;
 using Godot;
 
+/// <summary>
+/// AffiliationArea 中用于存放静态Sprite的功能类
+/// </summary>
 public partial class AffiliationSpriteRoot : Node2D, IDestroy
 {
+    private class SpriteData
+    {
+        public Vector2 Position;
+        public FreezeSprite FreezeSprite;
+    }
+    
     public bool IsDestroyed { get; private set; }
+    
+    private readonly Grid<List<SpriteData>> _grid = new Grid<List<SpriteData>>();
+    private readonly AffiliationArea _affiliationArea;
 
-    private HashSet<FreezeSprite> _freezeSprites = new HashSet<FreezeSprite>();
+    public AffiliationSpriteRoot(AffiliationArea affiliationArea)
+    {
+        _affiliationArea = affiliationArea;
+    }
     
     public void Destroy()
     {
@@ -17,21 +32,37 @@ public partial class AffiliationSpriteRoot : Node2D, IDestroy
 
         IsDestroyed = true;
 
-        foreach (var freezeSprite in _freezeSprites)
+        _grid.ForEach((x, y, data) =>
         {
-            freezeSprite.Destroy();
-        }
-        _freezeSprites.Clear();
+            foreach (var spriteData in data)
+            {
+                spriteData.FreezeSprite.Destroy();
+            }
+            data.Clear();
+        });
+        _grid.Clear();
         QueueFree();
     }
 
-    public bool AddFreezeSprite(FreezeSprite freezeSprite)
+    /// <summary>
+    /// 添加静态精灵
+    /// </summary>
+    public void AddFreezeSprite(FreezeSprite freezeSprite)
     {
-        return _freezeSprites.Add(freezeSprite);
+        
+        // var result = _freezeSprites.Add(freezeSprite);
+        // if (result)
+        // {
+        //     
+        // }
+        // return result;
     }
 
-    public bool RemoveFreezeSprite(FreezeSprite freezeSprite)
+    /// <summary>
+    /// 移除静态精灵
+    /// </summary>
+    public void RemoveFreezeSprite(FreezeSprite freezeSprite)
     {
-        return _freezeSprites.Remove(freezeSprite);
+        //return _freezeSprites.Remove(freezeSprite);
     }
 }

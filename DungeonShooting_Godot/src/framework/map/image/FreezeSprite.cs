@@ -36,6 +36,9 @@ public class FreezeSprite : IDestroy
         _shadowParent = ao.ShadowSprite.GetParent();
     }
 
+    /// <summary>
+    /// 冻结精灵，这样 ActivityObject 多余的节点就会被移出场景树，逻辑也会被暂停，从而优化性能
+    /// </summary>
     public void Freeze()
     {
         if (IsFrozen)
@@ -49,21 +52,22 @@ public class FreezeSprite : IDestroy
             Debug.LogError("物体的 AffiliationArea 属性为空，不能调用 Freeze() 函数！");
             return;
         }
-        
+
         IsFrozen = true;
 
-
-        if (affiliationArea.SpriteRoot.AddFreezeSprite(this))
-        {
-            _spriteIndex = ActivityObject.AnimatedSprite.GetIndex();
-            _shadowIndex = ActivityObject.ShadowSprite.GetIndex();
-            ActivityObject.ShadowSprite.Reparent(affiliationArea.SpriteRoot);
-            ActivityObject.AnimatedSprite.Reparent(affiliationArea.SpriteRoot);
-            _parent = ActivityObject.GetParent();
-            _parent.RemoveChild(ActivityObject);
-        }
+        Position = ActivityObject.Position;
+        affiliationArea.SpriteRoot.AddFreezeSprite(this);
+        _spriteIndex = ActivityObject.AnimatedSprite.GetIndex();
+        _shadowIndex = ActivityObject.ShadowSprite.GetIndex();
+        ActivityObject.ShadowSprite.Reparent(affiliationArea.SpriteRoot);
+        ActivityObject.AnimatedSprite.Reparent(affiliationArea.SpriteRoot);
+        _parent = ActivityObject.GetParent();
+        _parent.RemoveChild(ActivityObject);
     }
 
+    /// <summary>
+    /// 解冻精灵，让 ActivityObject 恢复正常功能
+    /// </summary>
     public void Unfreeze()
     {
         if (!IsFrozen)
@@ -72,26 +76,25 @@ public class FreezeSprite : IDestroy
         }
 
         IsFrozen = false;
-        
-        if (ActivityObject.AffiliationArea.SpriteRoot.AddFreezeSprite(this))
-        {
-            _parent.AddChild(ActivityObject);
-            ActivityObject.ShadowSprite.Reparent(_shadowParent);
-            ActivityObject.AnimatedSprite.Reparent(_spriteParent);
 
-            if (_spriteIndex > _shadowIndex)
-            {
-                _shadowParent.MoveChild(ActivityObject.ShadowSprite, _shadowIndex);
-                _spriteParent.MoveChild(ActivityObject.AnimatedSprite, _spriteIndex);
-            }
-            else
-            {
-                _spriteParent.MoveChild(ActivityObject.AnimatedSprite, _spriteIndex);
-                _shadowParent.MoveChild(ActivityObject.ShadowSprite, _shadowIndex);
-            }
+        ActivityObject.AffiliationArea.SpriteRoot.AddFreezeSprite(this);
+
+        _parent.AddChild(ActivityObject);
+        ActivityObject.ShadowSprite.Reparent(_shadowParent);
+        ActivityObject.AnimatedSprite.Reparent(_spriteParent);
+
+        if (_spriteIndex > _shadowIndex)
+        {
+            _shadowParent.MoveChild(ActivityObject.ShadowSprite, _shadowIndex);
+            _spriteParent.MoveChild(ActivityObject.AnimatedSprite, _spriteIndex);
+        }
+        else
+        {
+            _spriteParent.MoveChild(ActivityObject.AnimatedSprite, _spriteIndex);
+            _shadowParent.MoveChild(ActivityObject.ShadowSprite, _shadowIndex);
         }
     }
-    
+
 
     public void Destroy()
     {

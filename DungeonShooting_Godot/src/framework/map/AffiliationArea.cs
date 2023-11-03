@@ -53,7 +53,7 @@ public partial class AffiliationArea : Area2D, IDestroy
 
         _initSize = rect2.Size;
         RoomInfo = roomInfo;
-        SpriteRoot = new AffiliationSpriteRoot();
+        SpriteRoot = new AffiliationSpriteRoot(this);
         SpriteRoot.Name = "SpriteRoot";
         World.Current.StaticSpriteRoot.AddChild(SpriteRoot);
 
