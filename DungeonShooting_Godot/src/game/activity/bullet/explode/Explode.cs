@@ -31,6 +31,7 @@ public partial class Explode : Area2D, IPoolItem
 
 
     private bool _init = false;
+    private AffiliationArea _affiliationArea;
     private float _hitRadius;
     private int _minHarm;
     private int _maxHarm;
@@ -51,13 +52,14 @@ public partial class Explode : Area2D, IPoolItem
     /// <summary>
     /// 初始化爆炸数据
     /// </summary>
+    /// <param name="affiliationArea">爆炸所在区域</param>
     /// <param name="attackLayer">攻击的层级</param>
     /// <param name="hitRadius">伤害半径</param>
     /// <param name="minHarm">最小伤害</param>
     /// <param name="maxHarm">最大伤害</param>
     /// <param name="repelledRadius">击退半径</param>
     /// <param name="maxRepelled">最大击退速度</param>
-    public void Init(uint attackLayer, float hitRadius, int minHarm, int maxHarm, float repelledRadius, float maxRepelled)
+    public void Init(AffiliationArea affiliationArea, uint attackLayer, float hitRadius, int minHarm, int maxHarm, float repelledRadius, float maxRepelled)
     {
         if (!_init)
         {
@@ -68,7 +70,8 @@ public partial class Explode : Area2D, IPoolItem
             AnimationPlayer.AnimationFinished += OnAnimationFinish;
             BodyEntered += OnBodyEntered;
         }
-        
+
+        _affiliationArea = affiliationArea;
         AttackLayer = attackLayer;
         _hitRadius = hitRadius;
         _minHarm = minHarm;
@@ -77,12 +80,25 @@ public partial class Explode : Area2D, IPoolItem
         _maxRepelled = maxRepelled;
         CollisionMask = attackLayer | PhysicsLayer.Prop | PhysicsLayer.Throwing | PhysicsLayer.Debris;
         CircleShape.Radius = Mathf.Max(hitRadius, maxRepelled);
+
+        Check();
     }
     
     public void RunPlay()
     {
         GameCamera.Main.CreateShake(new Vector2(6, 6), 0.7f, true);
         AnimationPlayer.Play(AnimatorNames.Play);
+    }
+
+    public void Check()
+    {
+        var position = Position;
+        var freezeSprites = _affiliationArea.RoomInfo.StaticSprite.CollisionCircle(position, _repelledRadius, true);
+        foreach (var freezeSprite in freezeSprites)
+        {
+            var temp = freezeSprite.Position - position;
+            freezeSprite.ActivityObject.MoveController.AddForce(temp.Normalized() * _maxRepelled * (_repelledRadius - temp.Length()) / _repelledRadius);
+        }
     }
 
     public void OnReclaim()

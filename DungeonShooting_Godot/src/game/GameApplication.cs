@@ -108,7 +108,6 @@ public partial class GameApplication : Node2D, ICoroutine
 		//固定帧率
 		Engine.MaxFps = 60;
 		//调试绘制开关
-		Debug = true;
 		ActivityObject.IsDebug = Debug;
 		//Engine.TimeScale = 0.2f;
 		
