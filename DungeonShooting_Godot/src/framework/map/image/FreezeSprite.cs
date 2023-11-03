@@ -80,8 +80,10 @@ public class FreezeSprite : IDestroy
         var affiliationArea = ActivityObject.AffiliationArea;
         _spriteIndex = ActivityObject.AnimatedSprite.GetIndex();
         _shadowIndex = ActivityObject.ShadowSprite.GetIndex();
-        ActivityObject.ShadowSprite.Reparent(affiliationArea.RoomInfo.StaticSprite);
-        ActivityObject.AnimatedSprite.Reparent(affiliationArea.RoomInfo.StaticSprite);
+        var staticSprite = affiliationArea.RoomInfo.StaticSprite;
+        ActivityObject.ShadowSprite.Reparent(staticSprite);
+        ActivityObject.AnimatedSprite.Reparent(staticSprite);
+        ActivityObject.ShadowSprite.Rotation = ActivityObject.AnimatedSprite.Rotation;
         _parent = ActivityObject.GetParent();
         _parent.RemoveChild(ActivityObject);
     }
@@ -117,6 +119,8 @@ public class FreezeSprite : IDestroy
         if (IsFrozen)
         {
             ActivityObject.Destroy();
+            ActivityObject.AnimatedSprite.QueueFree();
+            ActivityObject.ShadowSprite.QueueFree();
         }
     }
 }

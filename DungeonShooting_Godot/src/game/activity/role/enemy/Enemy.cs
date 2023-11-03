@@ -512,11 +512,4 @@ public partial class Enemy : Role
     {
         _lockTargetTime = time;
     }
-
-    protected override void DebugDraw()
-    {
-        base.DebugDraw();
-        
-        DrawString(ResourceManager.DefaultFont12Px, new Vector2(0, 7), Hp.ToString(), HorizontalAlignment.Center);
-    }
 }

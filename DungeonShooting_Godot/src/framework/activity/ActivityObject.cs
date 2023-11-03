@@ -941,10 +941,10 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                         {
                             //缩放移动速度
                             //MoveController.ScaleAllForce(BounceSpeed);
-                            _throwForce.Velocity *= ActivityMaterial.BounceSpeed;
+                            _throwForce.Velocity *= ActivityMaterial.FallBounceSpeed;
                             //缩放旋转速度
                             //MoveController.ScaleAllRotationSpeed(BounceStrength);
-                            _throwForce.RotationSpeed *= ActivityMaterial.BounceRotationSpeed;
+                            _throwForce.RotationSpeed *= ActivityMaterial.FallBounceRotation;
                         }
                         //如果落地高度不够低, 再抛一次
                         if (ActivityMaterial.Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 5))

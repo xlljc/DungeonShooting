@@ -10,6 +10,7 @@ public partial class EnemyDebris : ActivityObject
 {
 
     private GpuParticles2D _gpuParticles2D;
+    private bool _playOver = false;
     
     public override void OnInit()
     {
@@ -26,6 +27,15 @@ public partial class EnemyDebris : ActivityObject
         StartCoroutine(EmitParticles());
     }
 
+    protected override void Process(float delta)
+    {
+        if (_playOver && !IsThrowing && MoveController.IsMotionless())
+        {
+            MoveController.SetAllVelocity(Vector2.Zero);
+            Freeze();
+        }
+    }
+
     public IEnumerator EmitParticles()
     {
         var gpuParticles2D = GetNode<GpuParticles2D>("GPUParticles2D");
@@ -33,8 +43,6 @@ public partial class EnemyDebris : ActivityObject
         yield return new WaitForSeconds(Utils.Random.RandomRangeFloat(1f, 2.5f));
         gpuParticles2D.Emitting = false;
         yield return new WaitForSeconds(1);
-        //BecomesStaticImage();
-        MoveController.SetAllVelocity(Vector2.Zero);
-        Freeze();
+        _playOver = true;
     }
 }

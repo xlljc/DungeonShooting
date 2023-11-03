@@ -20,17 +20,17 @@ public class ActivityMaterial
     public bool Bounce { get; set; } = true;
 
     /// <summary>
-    /// 物体下坠回弹的强度
+    /// 物体回弹的强度
     /// </summary>
     public float BounceStrength { get; set; } = 0.5f;
 
     /// <summary>
     /// 物体下坠回弹后的运动速度衰减量
     /// </summary>
-    public float BounceSpeed { get; set; } = 0.75f;
+    public float FallBounceSpeed { get; set; } = 0.75f;
     
     /// <summary>
     /// 物体下坠回弹后的旋转速度衰减量
     /// </summary>
-    public float BounceRotationSpeed { get; set; } = 0.5f;
+    public float FallBounceRotation { get; set; } = 0.5f;
 }

@@ -178,19 +178,19 @@ public partial class Player : Role
                 ((Enemy)enemy).Hurt(1000, 0);
             }
         }
-        //测试用
-        if (InputManager.Roll) //鼠标处触发互动物体
-        {
-            var now = DateTime.Now;
-            var mousePosition = GetGlobalMousePosition();
-            var freezeSprites = AffiliationArea.RoomInfo.StaticSprite.CollisionCircle(mousePosition, 25, true);
-            Debug.Log("检测数量: " + freezeSprites.Count + ", 用时: " + (DateTime.Now - now).TotalMilliseconds);
-            foreach (var freezeSprite in freezeSprites)
-            {
-                var temp = freezeSprite.Position - mousePosition;
-                freezeSprite.ActivityObject.MoveController.AddForce(temp.Normalized() * 300 * (25f - temp.Length()) / 25f);
-            }
-        }
+        // //测试用
+        // if (InputManager.Roll) //鼠标处触发互动物体
+        // {
+        //     var now = DateTime.Now;
+        //     var mousePosition = GetGlobalMousePosition();
+        //     var freezeSprites = AffiliationArea.RoomInfo.StaticSprite.CollisionCircle(mousePosition, 25, true);
+        //     Debug.Log("检测数量: " + freezeSprites.Count + ", 用时: " + (DateTime.Now - now).TotalMilliseconds);
+        //     foreach (var freezeSprite in freezeSprites)
+        //     {
+        //         var temp = freezeSprite.Position - mousePosition;
+        //         freezeSprite.ActivityObject.MoveController.AddForce(temp.Normalized() * 300 * (25f - temp.Length()) / 25f);
+        //     }
+        // }
     }
 
     protected override void OnPickUpWeapon(Weapon weapon)
@@ -321,9 +321,9 @@ public partial class Player : Role
         }
     }
 
-    protected override void DebugDraw()
-    {
-        base.DebugDraw();
-        DrawArc(GetLocalMousePosition(), 25, 0, Mathf.Pi * 2f, 20, Colors.Red, 1);
-    }
+    // protected override void DebugDraw()
+    // {
+    //     base.DebugDraw();
+    //     DrawArc(GetLocalMousePosition(), 25, 0, Mathf.Pi * 2f, 20, Colors.Red, 1);
+    // }
 }

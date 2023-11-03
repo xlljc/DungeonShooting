@@ -9,10 +9,19 @@ public partial class RoomStaticSprite : Node2D, IDestroy
 {
     
     public bool IsDestroyed { get; private set; }
-    
+
+    private readonly List<List<FreezeSprite>> _list = new List<List<FreezeSprite>>();
     private readonly Grid<List<FreezeSprite>> _grid = new Grid<List<FreezeSprite>>();
     private readonly RoomInfo _roomInfo;
+    //网格划分的格子大小
     private readonly Vector2I _step;
+    //当前残骸数量
+    private int _count = 0;
+    //最大残骸数量
+    private int _maxCount = 1000;
+    //每个格子中最大残骸数量
+    private int _stepMaxCount = 25;
+    private int _num = 0;
 
     public RoomStaticSprite(RoomInfo roomInfo)
     {
@@ -52,8 +61,38 @@ public partial class RoomStaticSprite : Node2D, IDestroy
         {
             list = new List<FreezeSprite>();
             _grid.Set(pos, list);
+            _list.Add(list);
         }
         list.Add(freezeSprite);
+        _count++;
+        
+        if (list.Count > _stepMaxCount) //检测单个step中残骸是否超出最大数量
+        {
+            var sprite = list[0];
+            list.RemoveAt(0);
+            sprite.Destroy();
+            _count--;
+        }
+        else if (_count > _maxCount) //检测所有残骸是否超出最大数量
+        {
+            if (_num <= 0 || _list[0].Count == 0)
+            {
+                _num = 5;
+                _list.Sort((l1, l2) => l2.Count - l1.Count);
+            }
+            else
+            {
+                _num--;
+            }
+
+            var tempList = _list[0];
+            if (tempList.Count > 0)
+            {
+                var sprite = Utils.Random.RandomChooseAndRemove(tempList);
+                sprite.Destroy();
+                _count--;
+            }
+        }
     }
 
     /// <summary>
@@ -65,7 +104,10 @@ public partial class RoomStaticSprite : Node2D, IDestroy
         var list = _grid.Get(pos);
         if (list != null)
         {
-            list.Remove(freezeSprite);
+            if (list.Remove(freezeSprite))
+            {
+                _count--;
+            }
         }
     }
 
@@ -92,6 +134,7 @@ public partial class RoomStaticSprite : Node2D, IDestroy
                             {
                                 freezeSprite.HandlerUnfreezeSprite();
                                 data.RemoveAt(i--);
+                                _count--;
                             }
                         }
                     }

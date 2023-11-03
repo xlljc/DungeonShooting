@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://pr88a1phtxgb"]
+[gd_scene load_steps=31 format=3 uid="uid://pr88a1phtxgb"]
 
 [ext_resource type="Script" path="res://src/game/effects/EnemyDebris.cs" id="1_ttosm"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_h62s7"]
@@ -146,6 +146,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_0xl2q"]
+radius = 4.0
+
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_p3lv8"]
 particles_animation = true
 particles_anim_h_frames = 3
@@ -192,6 +195,7 @@ material = SubResource("ShaderMaterial_08fn3")
 sprite_frames = SubResource("SpriteFrames_15g84")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_0xl2q")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_p3lv8")
