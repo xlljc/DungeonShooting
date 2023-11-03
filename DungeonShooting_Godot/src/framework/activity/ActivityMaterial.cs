@@ -7,7 +7,7 @@ public class ActivityMaterial
     /// <summary>
     /// 摩擦力
     /// </summary>
-    public float Friction { get; set; } = 120;
+    public float Friction { get; set; } = 140;
     
     /// <summary>
     /// 落地之后是否回弹

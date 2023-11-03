@@ -18,9 +18,6 @@ public partial class Shell : ActivityObject
         if (AffiliationArea != null)
         {
             Freeze();
-            // var proxySprite = ObjectManager.GetProxySprite();
-            // proxySprite.SetTexture(AffiliationArea.SpriteRoot, this);
-            // this.CallDelay(0.1f, Destroy);
         }
     }
 

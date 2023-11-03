@@ -314,6 +314,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     //描边颜色
     private bool _initOutlineColor = false;
     private Color _outlineColor = new Color(0, 0, 0, 1);
+    
+    //冻结显示的Sprite
+    private FreezeSprite _freezeSprite;
 
     //初始化节点
     private void _InitNode(RegisterActivityData activityData, World world)
@@ -1166,6 +1169,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         QueueFree();
         OnDestroy();
 
+        if (_freezeSprite != null)
+        {
+            _freezeSprite.Destroy();
+        }
+        
         var arr = _components.ToArray();
         for (var i = 0; i < arr.Length; i++)
         {
@@ -1460,21 +1468,21 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         return _processingBecomesStaticImage;
     }
     
-    private ProxySprite _proxySprite;
     public void Freeze()
     {
-        if (_proxySprite == null)
+        if (_freezeSprite == null)
         {
-            _proxySprite = new ProxySprite();
+            _freezeSprite = new FreezeSprite(this);
         }
+        _freezeSprite.Freeze();
     }
 
     public void Unfreeze()
     {
-        if (_proxySprite == null)
+        if (_freezeSprite == null)
         {
             return;
         }
-        
+        _freezeSprite.Unfreeze();
     }
 }

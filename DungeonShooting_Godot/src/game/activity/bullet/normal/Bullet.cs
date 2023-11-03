@@ -137,7 +137,7 @@ public partial class Bullet : ActivityObject, IBullet
                 explode.Position = Position;
                 explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
                 explode.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-                explode.Init(AttackLayer, 25, MinHarm, MaxHarm, 50, 250);
+                explode.Init(AttackLayer, 25, MinHarm, MaxHarm, 50, 150);
                 explode.RunPlay();
             }
             
@@ -191,7 +191,7 @@ public partial class Bullet : ActivityObject, IBullet
                 explode.Position = Position;
                 explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
                 explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
-                explode.Init(AttackLayer, 25, MinHarm, MaxHarm, 50, 250);
+                explode.Init(AttackLayer, 25, MinHarm, MaxHarm, 50, 150);
                 explode.RunPlay();
             }
 
