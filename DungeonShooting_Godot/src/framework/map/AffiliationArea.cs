@@ -30,11 +30,6 @@ public partial class AffiliationArea : Area2D, IDestroy
     /// </summary>
     public bool IsFirstEnterFlag { get; private set; } = true;
 
-    /// <summary>
-    /// 静态渲染精灵根节点, 用于放置sprite
-    /// </summary>
-    public AffiliationSpriteRoot SpriteRoot { get; private set; }
-
     private bool _init = false;
     private Vector2 _initSize;
     private RectangleShape2D _shape;
@@ -53,9 +48,6 @@ public partial class AffiliationArea : Area2D, IDestroy
 
         _initSize = rect2.Size;
         RoomInfo = roomInfo;
-        SpriteRoot = new AffiliationSpriteRoot(this);
-        SpriteRoot.Name = "SpriteRoot";
-        World.Current.StaticSpriteRoot.AddChild(SpriteRoot);
 
         var collisionShape = new CollisionShape2D();
         collisionShape.GlobalPosition = rect2.Position + rect2.Size / 2;
@@ -282,10 +274,6 @@ public partial class AffiliationArea : Area2D, IDestroy
         QueueFree();
         _includeItems.Clear();
         _enterItems.Clear();
-        if (SpriteRoot != null)
-        {
-            SpriteRoot.Destroy();
-        }
     }
 
     /// <summary>

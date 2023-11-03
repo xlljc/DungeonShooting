@@ -150,7 +150,10 @@ public partial class Enemy : Role
     protected override void Process(float delta)
     {
         base.Process(delta);
-
+        if (IsDie)
+        {
+            return;
+        }
         //目标在视野内的时间
         var currState = StateController.CurrState;
         if (currState == AiStateEnum.AiSurround || currState == AiStateEnum.AiFollowUp)

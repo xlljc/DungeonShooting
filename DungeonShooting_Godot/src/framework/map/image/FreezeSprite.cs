@@ -53,16 +53,9 @@ public class FreezeSprite : IDestroy
             return;
         }
 
-        IsFrozen = true;
-
         Position = ActivityObject.Position;
-        affiliationArea.SpriteRoot.AddFreezeSprite(this);
-        _spriteIndex = ActivityObject.AnimatedSprite.GetIndex();
-        _shadowIndex = ActivityObject.ShadowSprite.GetIndex();
-        ActivityObject.ShadowSprite.Reparent(affiliationArea.SpriteRoot);
-        ActivityObject.AnimatedSprite.Reparent(affiliationArea.SpriteRoot);
-        _parent = ActivityObject.GetParent();
-        _parent.RemoveChild(ActivityObject);
+        affiliationArea.RoomInfo.StaticSprite.AddFreezeSprite(this);
+        HandlerFreezeSprite();
     }
 
     /// <summary>
@@ -77,8 +70,25 @@ public class FreezeSprite : IDestroy
 
         IsFrozen = false;
 
-        ActivityObject.AffiliationArea.SpriteRoot.AddFreezeSprite(this);
+        ActivityObject.AffiliationArea.RoomInfo.StaticSprite.RemoveFreezeSprite(this);
+        HandlerUnfreezeSprite();
+    }
 
+    public void HandlerFreezeSprite()
+    {
+        IsFrozen = true;
+        var affiliationArea = ActivityObject.AffiliationArea;
+        _spriteIndex = ActivityObject.AnimatedSprite.GetIndex();
+        _shadowIndex = ActivityObject.ShadowSprite.GetIndex();
+        ActivityObject.ShadowSprite.Reparent(affiliationArea.RoomInfo.StaticSprite);
+        ActivityObject.AnimatedSprite.Reparent(affiliationArea.RoomInfo.StaticSprite);
+        _parent = ActivityObject.GetParent();
+        _parent.RemoveChild(ActivityObject);
+    }
+
+    public void HandlerUnfreezeSprite()
+    {
+        IsFrozen = false;
         _parent.AddChild(ActivityObject);
         ActivityObject.ShadowSprite.Reparent(_shadowParent);
         ActivityObject.AnimatedSprite.Reparent(_spriteParent);
@@ -94,8 +104,8 @@ public class FreezeSprite : IDestroy
             _shadowParent.MoveChild(ActivityObject.ShadowSprite, _shadowIndex);
         }
     }
-
-
+    
+    
     public void Destroy()
     {
         if (IsDestroyed)

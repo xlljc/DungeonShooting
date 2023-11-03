@@ -1412,6 +1412,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         return ActivityMaterial.Friction;
     }
     
+    /// <summary>
+    /// 获取当前旋转摩擦力
+    /// </summary>
+    public float GetCurrentRotationFriction()
+    {
+        return ActivityMaterial.RotationFriction;
+    }
+    
     public long StartCoroutine(IEnumerator able)
     {
         return ProxyCoroutineHandler.ProxyStartCoroutine(ref _coroutineList, able);
@@ -1452,9 +1460,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
 
         _processingBecomesStaticImage = true;
         EnableBehavior = false;
-        var staticImageCanvas = AffiliationArea.RoomInfo.StaticImageCanvas;
-        var position = staticImageCanvas.ToImageCanvasPosition(GlobalPosition);
-        staticImageCanvas.CanvasSprite.DrawActivityObjectInCanvas(this, position.X, position.Y, () =>
+        var roomInfo = AffiliationArea.RoomInfo;
+        var position = roomInfo.ToImageCanvasPosition(GlobalPosition);
+        roomInfo.StaticImageCanvas.DrawActivityObjectInCanvas(this, position.X, position.Y, () =>
         {
             Destroy();
         });

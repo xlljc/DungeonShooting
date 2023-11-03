@@ -10,6 +10,11 @@ public class ActivityMaterial
     public float Friction { get; set; } = 140;
     
     /// <summary>
+    /// 旋转摩擦力
+    /// </summary>
+    public float RotationFriction { get; set; } = 140;
+    
+    /// <summary>
     /// 落地之后是否回弹
     /// </summary>
     public bool Bounce { get; set; } = true;

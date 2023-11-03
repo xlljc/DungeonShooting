@@ -439,6 +439,10 @@ public abstract partial class Role : ActivityObject
 
     protected override void Process(float delta)
     {
+        if (IsDie)
+        {
+            return;
+        }
         if (_rollCoolingTimer > 0)
         {
             _rollCoolingTimer -= delta;
