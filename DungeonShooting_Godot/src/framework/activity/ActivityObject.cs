@@ -1007,8 +1007,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             _prevAnimation = anim;
             _prevAnimationFrame = frame;
 
-            //计算阴影
-            CalcShadowTransform();
+            if (_freezeSprite == null || !_freezeSprite.IsFrozen)
+            {
+                //计算阴影
+                CalcShadowTransform();
+            }
         }
 
         // Hit 动画

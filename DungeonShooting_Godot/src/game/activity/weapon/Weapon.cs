@@ -973,7 +973,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             _continuousCount = _continuousCount > 0 ? _continuousCount - 1 : 0;
         }
 
-        //开火间隙
+        //开火间隙, 这里的60指的是60秒
         _fireInterval = 60 / Attribute.StartFiringSpeed;
         //攻击冷却
         _attackTimer += _fireInterval;

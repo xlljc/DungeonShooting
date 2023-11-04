@@ -83,7 +83,6 @@ public class FreezeSprite : IDestroy
         var staticSprite = affiliationArea.RoomInfo.StaticSprite;
         ActivityObject.ShadowSprite.Reparent(staticSprite);
         ActivityObject.AnimatedSprite.Reparent(staticSprite);
-        ActivityObject.ShadowSprite.Rotation = ActivityObject.AnimatedSprite.Rotation;
         _parent = ActivityObject.GetParent();
         _parent.RemoveChild(ActivityObject);
     }
@@ -91,7 +90,7 @@ public class FreezeSprite : IDestroy
     public void HandlerUnfreezeSprite()
     {
         IsFrozen = false;
-        _parent.AddChild(ActivityObject);
+        _parent.CallDeferred(Node.MethodName.AddChild, ActivityObject);
         ActivityObject.ShadowSprite.Reparent(_shadowParent);
         ActivityObject.AnimatedSprite.Reparent(_spriteParent);
 

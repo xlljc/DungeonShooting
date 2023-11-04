@@ -74,8 +74,9 @@ public partial class GameCamera : Camera2D
     {
         _camPos = GlobalPosition;
     }
-
-    public override void _Process(double delta)
+    
+    //_PhysicsProcess
+    public override void _PhysicsProcess(double delta)
     {
         var newDelta = (float)delta;
         _Shake(newDelta);
@@ -95,23 +96,20 @@ public partial class GameCamera : Camera2D
         {
             var mousePosition = InputManager.CursorPosition;
             var targetPosition = _followTarget.GlobalPosition;
-            Vector2 targetPos;
             //if (targetPosition.DistanceSquaredTo(mousePosition) >= 39999.992F) // >= (60 / 0.3f) * (60 / 0.3f)
             if (targetPosition.DistanceSquaredTo(mousePosition) >= (60 / FollowsMouseAmount) * (60 / FollowsMouseAmount))
             {
-                targetPos = targetPosition.MoveToward(mousePosition, 60);
+                _camPos = targetPosition.MoveToward(mousePosition, 60);
             }
             else
             {
                 //targetPos = targetPosition.Lerp(mousePosition, 0.3f); //这里的0.3就是上面的 (60 / 0.3f) * (60 / 0.3f) 中的 0.3
-                targetPos = targetPosition.Lerp(mousePosition, FollowsMouseAmount);
+                _camPos = targetPosition.Lerp(mousePosition, FollowsMouseAmount);
             }
-            _camPos = _camPos.Lerp(targetPos, 20 * newDelta);
+            //_camPos = _camPos.Lerp(targetPos, 20 * newDelta);
             GlobalPosition = _camPos.Round();
 
             Offset = _shakeOffset.Round();
-        
-            //_temp = _camPos - targetPosition;
 
             //调用相机更新事件
             if (OnPositionUpdateEvent != null)

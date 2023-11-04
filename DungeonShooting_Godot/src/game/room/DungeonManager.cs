@@ -185,7 +185,7 @@ public partial class DungeonManager : Node2D
             
             //更新敌人视野
             UpdateEnemiesView();
-            if (GameApplication.Instance.Debug)
+            if (GameApplication.Instance.IsDebug)
             {
                 QueueRedraw();
             }
@@ -651,7 +651,7 @@ public partial class DungeonManager : Node2D
     
     public override void _Draw()
     {
-        if (GameApplication.Instance.Debug)
+        if (GameApplication.Instance.IsDebug)
         {
             if (_dungeonTileMap != null && _roomStaticNavigationList != null)
             {

@@ -36,8 +36,13 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// 是否开启调试
 	/// </summary>
 	[ExportGroup("Debug")]
-	[Export] public bool Debug;
+	[Export] public bool IsDebug;
 
+	/// <summary>
+	/// 游戏目标帧率
+	/// </summary>
+	public int TargetFps { get; private set; } = 60;
+	
 	/// <summary>
 	/// 鼠标指针
 	/// </summary>
@@ -84,6 +89,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	public GameApplication()
 	{
 		Instance = this;
+		TargetFps = (int)DisplayServer.ScreenGetRefreshRate();
 
 		//初始化配置表
 		ExcelConfig.Init();
@@ -106,11 +112,10 @@ public partial class GameApplication : Node2D, ICoroutine
 		//随机化种子
 		//GD.Randomize();
 		//固定帧率
-		Engine.MaxFps = 60;
+		//Engine.MaxFps = TargetFps;
 		//调试绘制开关
-		ActivityObject.IsDebug = Debug;
+		ActivityObject.IsDebug = IsDebug;
 		//Engine.TimeScale = 0.2f;
-		
 		//调整窗口分辨率
 		OnWindowSizeChanged();
 		RefreshSubViewportSize();
