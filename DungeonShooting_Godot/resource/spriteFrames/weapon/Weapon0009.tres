@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://c0xwj3kpk02ua"]
+
+[ext_resource type="Texture2D" uid="uid://qd7hufitblaf" path="res://resource/sprite/weapon/weapon0009/weapon0009.png" id="1_kidjv"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_kidjv")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]

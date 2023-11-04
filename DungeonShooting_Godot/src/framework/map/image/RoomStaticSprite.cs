@@ -20,7 +20,7 @@ public partial class RoomStaticSprite : Node2D, IDestroy
     //最大残骸数量
     private int _maxCount = 1000;
     //每个格子中最大残骸数量
-    private int _stepMaxCount = 25;
+    private int _stepMaxCount = 30;
     private int _num = 0;
 
     public RoomStaticSprite(RoomInfo roomInfo)
@@ -88,7 +88,8 @@ public partial class RoomStaticSprite : Node2D, IDestroy
             var tempList = _list[0];
             if (tempList.Count > 0)
             {
-                var sprite = Utils.Random.RandomChooseAndRemove(tempList);
+                var sprite = tempList[0];
+                tempList.RemoveAt(0);
                 sprite.Destroy();
                 _count--;
             }

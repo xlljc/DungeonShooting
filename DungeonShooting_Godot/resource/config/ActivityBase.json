@@ -100,6 +100,16 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "weapon0009",
+    "Type": 5,
+    "Name": "\u69B4\u5F39\u53D1\u5C04\u5668",
+    "Intro": "",
+    "Details": "",
+    "Prefab": "res://prefab/weapon/Weapon0009.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0009/Weapon0009.png",
+    "ShowInMapEditor": true
+  },
+  {
     "Id": "bullet0001",
     "Type": 6,
     "Name": "",

@@ -1466,5 +1466,97 @@
     "__OtherSoundMap": null,
     "__AiUseAttribute": "",
     "__AiAttackAttr": "0007"
+  },
+  {
+    "Id": "0017",
+    "ActivityId": "weapon0009",
+    "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668",
+    "Weight": 40,
+    "WeightType": 1,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 10,
+    "MaxAmmoCapacity": 240,
+    "StandbyAmmoCapacity": 120,
+    "ReloadTime": 1.8,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 0,
+    "StartFiringSpeed": 300,
+    "FinalFiringSpeed": 300,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 0,
+    "FinalScatteringRange": 20,
+    "ScatteringRangeAddValue": 4,
+    "ScatteringRangeBackSpeed": 40,
+    "ScatteringRangeBackDelayTime": 0.5,
+    "CameraShake": 2,
+    "BacklashRange": [
+      2,
+      3
+    ],
+    "BacklashRegressionSpeed": 25,
+    "UpliftAngle": 13,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire2.tscn",
+    "BulletId": "1001",
+    "HarmRange": [
+      5
+    ],
+    "RepelRnage": [
+      0
+    ],
+    "BulletDeviationAngleRange": [
+      0
+    ],
+    "BulletSpeedRange": [
+      300,
+      330
+    ],
+    "BulletDistanceRange": [
+      270,
+      360
+    ],
+    "ShellId": "",
+    "ThrowShellDelayTime": 0,
+    "ThrowCollisionSize": {
+      "X": 20,
+      "Y": 15
+    },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
+    "__ShootSound": "shooting0010",
+    "__BeginReloadSound": "reloadBegin0011",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "reloadFinish0003",
+    "ReloadFinishSoundAdvanceTime": 0.8,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiUseAttribute": "0016",
+    "__AiAttackAttr": ""
   }
 ]

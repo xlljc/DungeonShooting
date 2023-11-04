@@ -1,0 +1,107 @@
+[gd_scene load_steps=10 format=3 uid="uid://2lb2h8qunqyu"]
+
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_6fbtx"]
+[ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="1_eprgt"]
+[ext_resource type="SpriteFrames" uid="uid://c0xwj3kpk02ua" path="res://resource/spriteFrames/weapon/Weapon0009.tres" id="2_4kxpd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
+resource_local_to_scene = true
+shader = ExtResource("1_6fbtx")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
+resource_local_to_scene = true
+shader = ExtResource("1_6fbtx")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jbuu3"]
+size = Vector2(18, 6)
+
+[sub_resource type="Animation" id="Animation_x136i"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_3piau"]
+resource_name = "floodlight"
+length = 3.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.3, 2.6, 2.7, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 0, 0.5, 0.5, 0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_trkjd"]
+_data = {
+"RESET": SubResource("Animation_x136i"),
+"floodlight": SubResource("Animation_3piau")
+}
+
+[node name="Weapon0009" type="CharacterBody2D" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision")]
+collision_layer = 4
+script = ExtResource("1_eprgt")
+FirePoint = NodePath("AnimatedSprite/FirePoint")
+ShellPoint = NodePath("AnimatedSprite/ShellPoint")
+GripPoint = NodePath("GripPoint")
+AnimationPlayer = NodePath("AnimationPlayer")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+z_index = -1
+material = SubResource("ShaderMaterial_cbiyh")
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_o36tv")
+sprite_frames = ExtResource("2_4kxpd")
+frame_progress = 1.0
+
+[node name="ShellPoint" type="Marker2D" parent="AnimatedSprite"]
+position = Vector2(-1, -1)
+
+[node name="FirePoint" type="Marker2D" parent="AnimatedSprite"]
+position = Vector2(13, -0.5)
+
+[node name="GripPoint" type="Marker2D" parent="."]
+position = Vector2(-6, 1)
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_jbuu3")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_trkjd")
+}
