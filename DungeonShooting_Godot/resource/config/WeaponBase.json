@@ -645,7 +645,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
-    "__Bullet": "0001",
+    "__Bullet": "0004",
     "__Shell": "shell0003",
     "ThrowShellDelayTime": 0.2,
     "ThrowCollisionSize": {
@@ -720,7 +720,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
-    "__Bullet": "0001",
+    "__Bullet": "0004",
     "__Shell": "shell0003",
     "ThrowShellDelayTime": 0.2,
     "ThrowCollisionSize": {
@@ -1245,7 +1245,7 @@
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
     "FireEffect": "res://prefab/effect/weapon/ShotFire2.tscn",
-    "__Bullet": "0004",
+    "__Bullet": "0005",
     "__Shell": "",
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {

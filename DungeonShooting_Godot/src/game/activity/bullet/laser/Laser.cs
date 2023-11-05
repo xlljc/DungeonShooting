@@ -47,6 +47,7 @@ public partial class Laser : Area2D, IBullet
     
     public void InitData(BulletData data, uint attackLayer, float width)
     {
+        BulletData = data;
         AttackLayer = attackLayer;
         
         Position = data.Position;

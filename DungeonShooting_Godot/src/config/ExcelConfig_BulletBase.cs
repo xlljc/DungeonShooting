@@ -70,6 +70,7 @@ public static partial class ExcelConfig
         /// <summary>
         /// 子弹最大存在时间，单位：秒 <br/>
         /// 如果值小于等于0时子弹无限期存在 <br/>
+        /// 只有Type为1时才需要填写 <br/>
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]

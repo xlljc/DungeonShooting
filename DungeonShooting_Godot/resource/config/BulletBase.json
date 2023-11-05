@@ -83,6 +83,33 @@
   },
   {
     "Id": "0004",
+    "Name": "\u72D9\u51FB\u67AA\u5B50\u5F39",
+    "Type": 1,
+    "Prefab": "bullet0001",
+    "HarmRange": [
+      20
+    ],
+    "RepelRnage": [
+      200
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      600,
+      600
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      600,
+      600
+    ],
+    "UseGravity": false
+  },
+  {
+    "Id": "0005",
     "Name": "\u69B4\u5F39\u70AE",
     "Type": 1,
     "Prefab": "bullet0004",
@@ -130,8 +157,8 @@
       -1
     ],
     "DistanceRange": [
-      270,
-      360
+      600,
+      600
     ],
     "UseGravity": false
   },

@@ -1949,8 +1949,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             Weapon = this,
             BulletBase = bullet,
             TriggerRole = TriggerRole,
-            MinHarm = Utils.GetConfigRangeStart(Attribute.Bullet.HarmRange),
-            MaxHarm = Utils.GetConfigRangeEnd(Attribute.Bullet.HarmRange),
+            MinHarm = Utils.GetConfigRangeStart(bullet.HarmRange),
+            MaxHarm = Utils.GetConfigRangeEnd(bullet.HarmRange),
             MaxDistance = Utils.Random.RandomConfigRange(bullet.DistanceRange),
             FlySpeed = Utils.Random.RandomConfigRange(bullet.SpeedRange),
             Position = FirePoint.GlobalPosition,
@@ -1986,13 +1986,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             Weapon = this,
             BulletBase = bullet,
             TriggerRole = TriggerRole,
-            MinHarm = Utils.GetConfigRangeStart(Attribute.Bullet.HarmRange),
-            MaxHarm = Utils.GetConfigRangeEnd(Attribute.Bullet.HarmRange),
+            MinHarm = Utils.GetConfigRangeStart(bullet.HarmRange),
+            MaxHarm = Utils.GetConfigRangeEnd(bullet.HarmRange),
             MaxDistance = Utils.Random.RandomConfigRange(bullet.DistanceRange),
             Position = FirePoint.GlobalPosition,
         };
 
-        var deviationAngle = Utils.Random.RandomConfigRange(Attribute.Bullet.DeviationAngleRange);
+        var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);
         if (TriggerRole != null)
         {
             deviationAngle = TriggerRole.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
@@ -2002,6 +2002,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         //创建激光
         var laser = ResourceManager.LoadAndInstantiate<Laser>(bullet.Prefab);
         laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+        laser.InitData(data, GetAttackLayer(), 3);
         return laser;
     }
 
