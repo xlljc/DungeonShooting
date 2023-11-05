@@ -17,20 +17,9 @@ public partial class Laser : Area2D, IBullet
         get => CollisionMask;
         set => CollisionMask = value;
     }
-    public Weapon Weapon { get; set; }
-    public ExcelConfig.BulletBase BulletBase { get; set; }
-    public Role TriggerRole { get; set; }
-    
-    /// <summary>
-    /// 最小伤害
-    /// </summary>
-    public int MinHarm { get; set; } = 4;
-    
-    /// <summary>
-    /// 最大伤害
-    /// </summary>
-    public int MaxHarm { get; set; } = 4;
-    
+
+    public BulletData BulletData { get; private set; }
+
     public bool IsDestroyed { get; private set; }
     
     public float Width { get; set; }
@@ -50,23 +39,31 @@ public partial class Laser : Area2D, IBullet
 
         AreaEntered += OnArea2dEntered;
     }
-    
-    public void Init(Weapon weapon, uint attackLayer, Vector2 position, float rotation, float width, float distance)
+
+    public void InitData(BulletData data, uint attackLayer)
     {
-        TriggerRole = weapon.TriggerRole;
-        Weapon = weapon;
+        InitData(data, attackLayer, 5);
+    }
+    
+    public void InitData(BulletData data, uint attackLayer, float width)
+    {
         AttackLayer = attackLayer;
         
-        Position = position;
-        Rotation = rotation;
+        Position = data.Position;
+        Rotation = data.Rotation;
 
         //计算射线最大距离, 也就是撞到墙壁的距离
-        var targetPosition = position + Vector2.FromAngle(rotation) * distance;
-        var parameters = PhysicsRayQueryParameters2D.Create(position, targetPosition, PhysicsLayer.Wall);
+        var targetPosition = data.Position + Vector2.FromAngle(data.Rotation) * data.MaxDistance;
+        var parameters = PhysicsRayQueryParameters2D.Create(data.Position, targetPosition, PhysicsLayer.Wall);
         var result = GetWorld2D().DirectSpaceState.IntersectRay(parameters);
+        float distance;
         if (result != null && result.TryGetValue("position", out var point))
         {
-            distance = position.DistanceTo((Vector2)point);
+            distance = Position.DistanceTo((Vector2)point);
+        }
+        else
+        {
+            distance = data.MaxDistance;
         }
         
         Collision.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
@@ -127,10 +124,10 @@ public partial class Laser : Area2D, IBullet
         if (role != null)
         {
             //计算子弹造成的伤害
-            var damage = Utils.Random.RandomRangeInt(MinHarm, MaxHarm);
-            if (TriggerRole != null)
+            var damage = Utils.Random.RandomRangeInt(BulletData.MinHarm, BulletData.MaxHarm);
+            if (BulletData.TriggerRole != null)
             {
-                damage = TriggerRole.RoleState.CallCalcDamageEvent(damage);
+                damage = BulletData.TriggerRole.RoleState.CallCalcDamageEvent(damage);
             }
             //造成伤害
             role.CallDeferred(nameof(Role.Hurt), damage, Rotation);

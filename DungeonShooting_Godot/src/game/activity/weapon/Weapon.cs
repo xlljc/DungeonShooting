@@ -1944,28 +1944,35 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     private Bullet ShootSolidBullet(float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var speed = Utils.Random.RandomConfigRange(bullet.SpeedRange);
-        var distance = Utils.Random.RandomConfigRange(bullet.DistanceRange);
+        var data = new BulletData()
+        {
+            Weapon = this,
+            BulletBase = bullet,
+            TriggerRole = TriggerRole,
+            MinHarm = Utils.GetConfigRangeStart(Attribute.Bullet.HarmRange),
+            MaxHarm = Utils.GetConfigRangeEnd(Attribute.Bullet.HarmRange),
+            MaxDistance = Utils.Random.RandomConfigRange(bullet.DistanceRange),
+            FlySpeed = Utils.Random.RandomConfigRange(bullet.SpeedRange),
+            Position = FirePoint.GlobalPosition,
+        };
+
         var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);
         if (TriggerRole != null)
         {
-            speed = TriggerRole.RoleState.CallCalcBulletSpeedEvent(this, speed);
-            distance = TriggerRole.RoleState.CallCalcBulletDistanceEvent(this, distance);
+            data.FlySpeed = TriggerRole.RoleState.CallCalcBulletSpeedEvent(this, data.FlySpeed);
+            data.MaxDistance = TriggerRole.RoleState.CallCalcBulletDistanceEvent(this, data.MaxDistance);
             deviationAngle = TriggerRole.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
         }
-        
+
+        if (TriggerRole != null && TriggerRole.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
+        {
+            data.FlySpeed *= AiUseAttribute.AiAttackAttr.BulletSpeedScale;
+        }
+
+        data.Rotation = fireRotation + Mathf.DegToRad(deviationAngle);
         //创建子弹
         var bulletInstance = Create<Bullet>(bullet.Prefab);
-        bulletInstance.Init(
-            this,
-            speed,
-            distance,
-            FirePoint.GlobalPosition,
-            fireRotation + Mathf.DegToRad(deviationAngle),
-            GetAttackLayer()
-        );
-        bulletInstance.MinHarm = Utils.GetConfigRangeStart(Attribute.Bullet.HarmRange);
-        bulletInstance.MaxHarm = Utils.GetConfigRangeEnd(Attribute.Bullet.HarmRange);
+        bulletInstance.InitData(data, GetAttackLayer());
         return bulletInstance;
     }
 
@@ -1974,25 +1981,27 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     private Laser ShootLaser(float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var laser = ResourceManager.LoadAndInstantiate<Laser>(bullet.Prefab);
-        laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+        var data = new BulletData()
+        {
+            Weapon = this,
+            BulletBase = bullet,
+            TriggerRole = TriggerRole,
+            MinHarm = Utils.GetConfigRangeStart(Attribute.Bullet.HarmRange),
+            MaxHarm = Utils.GetConfigRangeEnd(Attribute.Bullet.HarmRange),
+            MaxDistance = Utils.Random.RandomConfigRange(bullet.DistanceRange),
+            Position = FirePoint.GlobalPosition,
+        };
 
         var deviationAngle = Utils.Random.RandomConfigRange(Attribute.Bullet.DeviationAngleRange);
-        if (Master != null)
+        if (TriggerRole != null)
         {
-            deviationAngle = Master.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+            deviationAngle = TriggerRole.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
         }
 
-        laser.Init(
-            this,
-            GetAttackLayer(),
-            FirePoint.GlobalPosition,
-            fireRotation + Mathf.DegToRad(deviationAngle),
-            3,
-            600
-        );
-        laser.MinHarm = Utils.GetConfigRangeStart(Attribute.Bullet.HarmRange);
-        laser.MaxHarm = Utils.GetConfigRangeEnd(Attribute.Bullet.HarmRange);
+        data.Rotation = fireRotation + Mathf.DegToRad(deviationAngle);
+        //创建激光
+        var laser = ResourceManager.LoadAndInstantiate<Laser>(bullet.Prefab);
+        laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         return laser;
     }
 

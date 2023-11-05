@@ -23,35 +23,8 @@ public partial class Bullet : ActivityObject, IBullet
         set => CollisionArea.CollisionMask = value;
     }
 
-    /// <summary>
-    /// 发射该子弹的武器
-    /// </summary>
-    public Weapon Weapon { get; set; }
-    
-    public ExcelConfig.BulletBase BulletBase { get; set; }
+    public BulletData BulletData { get; private set; }
 
-    /// <summary>
-    /// 最小伤害
-    /// </summary>
-    public int MinHarm { get; set; } = 4;
-    
-    /// <summary>
-    /// 最大伤害
-    /// </summary>
-    public int MaxHarm { get; set; } = 4;
-    
-    /// <summary>
-    /// 发射该子弹的角色
-    /// </summary>
-    public Role TriggerRole { get; set; }
-
-    /// <summary>
-    /// 最大飞行距离
-    /// </summary>
-    public float MaxDistance { get; set; }
-
-    // 子弹飞行速度
-    private float FlySpeed;
 
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
@@ -61,37 +34,17 @@ public partial class Bullet : ActivityObject, IBullet
         CollisionArea.AreaEntered += OnArea2dEntered;
     }
     
-    /// <summary>
-    /// 显示红色描边
-    /// </summary>
-    /// <param name="weapon">射出该子弹的武器</param>
-    /// <param name="speed">速度</param>
-    /// <param name="maxDistance">最大飞行距离</param>
-    /// <param name="position">位置</param>
-    /// <param name="rotation">角度</param>
-    /// <param name="targetLayer">攻击目标层级</param>
-    public void Init(Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
+    public void InitData(BulletData data, uint attackLayer)
     {
-        Weapon = weapon;
-        TriggerRole = weapon.TriggerRole;
-        AttackLayer = targetLayer;
-        
-        if (TriggerRole == null || !TriggerRole.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
-        {
-            FlySpeed = speed;
-        }
-        else
-        {
-            FlySpeed = speed * weapon.AiUseAttribute.AiAttackAttr.BulletSpeedScale;
-        }
-        MaxDistance = maxDistance;
-        Position = position;
-        Rotation = rotation;
+        BulletData = data;
+        AttackLayer = attackLayer;
+        Position = data.Position;
+        Rotation = data.Rotation;
         ShadowOffset = new Vector2(0, 5);
-        BasisVelocity = new Vector2(FlySpeed, 0).Rotated(Rotation);
+        BasisVelocity = new Vector2(data.FlySpeed, 0).Rotated(Rotation);
         
         //如果子弹会对玩家造成伤害, 则显示红色描边
-        if (Player.Current.CollisionWithMask(targetLayer))
+        if (Player.Current.CollisionWithMask(attackLayer))
         {
             ShowBorderFlashes();
         }
@@ -147,8 +100,8 @@ public partial class Bullet : ActivityObject, IBullet
             return;
         }
         //距离太大, 自动销毁
-        CurrFlyDistance += FlySpeed * delta;
-        if (CurrFlyDistance >= MaxDistance)
+        CurrFlyDistance += BulletData.FlySpeed * delta;
+        if (CurrFlyDistance >= BulletData.MaxDistance)
         {
             PlayDisappearEffect();
             Destroy();
@@ -166,16 +119,16 @@ public partial class Bullet : ActivityObject, IBullet
             node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
 
             //计算子弹造成的伤害
-            var damage = Utils.Random.RandomRangeInt(MinHarm, MaxHarm);
-            if (TriggerRole != null)
+            var damage = Utils.Random.RandomRangeInt(BulletData.MinHarm, BulletData.MaxHarm);
+            if (BulletData.TriggerRole != null)
             {
-                damage = TriggerRole.RoleState.CallCalcDamageEvent(damage);
+                damage = BulletData.TriggerRole.RoleState.CallCalcDamageEvent(damage);
             }
 
             //击退
             if (role is not Player) //目标不是玩家才会触发击退
             {
-                var attr = Weapon.GetUseAttribute(TriggerRole);
+                var attr = BulletData.Weapon.GetUseAttribute(BulletData.TriggerRole);
                 var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRnage);
                 if (repel != 0)
                 {
@@ -197,13 +150,13 @@ public partial class Bullet : ActivityObject, IBullet
     private void TestBoom()
     {
         //击中爆炸，测试用
-        if (TriggerRole == null || !TriggerRole.IsAi)
+        if (BulletData.TriggerRole == null || !BulletData.TriggerRole.IsAi)
         {
             var explode = ObjectManager.GetExplode(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
             explode.Position = Position;
             explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
             explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
-            explode.Init(TriggerRole.AffiliationArea, AttackLayer, 25, MinHarm, MaxHarm, 50, 150);
+            explode.Init(BulletData.TriggerRole.AffiliationArea, AttackLayer, 25, BulletData.MinHarm, BulletData.MaxHarm, 50, 150);
             explode.RunPlay();
         }
     }
