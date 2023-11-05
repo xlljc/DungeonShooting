@@ -30,6 +30,7 @@ public class MoveController : Component
     }
 
     private Vector2 _basisVelocity = Vector2.Zero;
+    private float _flag = 0;
 
     /// <summary>
     /// 是否是静止状态
@@ -319,10 +320,10 @@ public class MoveController : Component
         //处理旋转
         if (rotationSpeed != 0)
         {
-            Master.Rotation += rotationSpeed * delta;
+            Rotation += rotationSpeed * delta;
         }
-        var friction = !Master.IsThrowing ? Master.GetCurrentFriction() : 0;
-        var rotationFriction = !Master.IsThrowing ? Mathf.DegToRad(Master.GetCurrentRotationFriction()) : 0;
+        var friction = !Master.IsThrowing && Master.Altitude <= 0 ? Master.GetCurrentFriction() : 0;
+        var rotationFriction = !Master.IsThrowing && Master.Altitude <= 0 ? Mathf.DegToRad(Master.GetCurrentRotationFriction()) : 0;
         //衰减旋转速率
         for (var i = 0; i < _forceList.Count; i++)
         {
@@ -346,6 +347,11 @@ public class MoveController : Component
             //新速度
             var newVelocity = Master.Velocity;
             
+            if (!Master.BounceLockRotation) //跟着反弹角度
+            {
+                Rotation = newVelocity.Angle();
+            }
+            
             if (newVelocity.X == 0f && _basisVelocity.X * finallyVelocity.X > 0)
             {
                 _basisVelocity.X = 0;
@@ -357,17 +363,28 @@ public class MoveController : Component
             }
             
             //是否撞到物体
-            var collision = Master.GetLastSlideCollision();
-            if (collision != null) //执行反弹操作
+            KinematicCollision2D collision;
+            _flag -= delta;
+            if (_flag <= 0 && (collision = Master.GetLastSlideCollision()) != null) //执行反弹操作
             {
+                _flag = 0.1f;
                 var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
-                newVelocity = (finallyVelocity - _basisVelocity).Reflect(no);
+                newVelocity = finallyEf.Reflect(no);
+                var rotation = newVelocity.Angle();
+
+                if (!Master.BounceLockRotation) //跟着反弹角度
+                {
+                    Rotation = rotation;
+                }
+                
                 var length = _forceList.Count;
                 var v = newVelocity / (length / Master.ActivityMaterial.BounceStrength);
                 for (var i = 0; i < _forceList.Count; i++)
                 {
                     _forceList[i].Velocity = v;
                 }
+                //调用反弹函数
+                Master.OnBounce(rotation);
             }
             else //没有撞到物体
             {

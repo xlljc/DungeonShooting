@@ -16,7 +16,7 @@ public partial class Shell : ActivityObject
     protected override void Process(float delta)
     {
         //落地静止后将弹壳变为静态贴图
-        if (!IsThrowing && MoveController.IsMotionless())
+        if (!IsThrowing && Altitude <= 0 && MoveController.IsMotionless())
         {
             if (AffiliationArea != null)
             {

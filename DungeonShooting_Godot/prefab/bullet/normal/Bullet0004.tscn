@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://d0h4xfi1oqf1l"]
 
-[ext_resource type="Script" path="res://src/game/activity/bullet/normal/Bullet.cs" id="1_teoyi"]
+[ext_resource type="Script" path="res://src/game/activity/bullet/normal/BoomBullet.cs" id="1_1jbgr"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_w1qob"]
 [ext_resource type="SpriteFrames" uid="uid://d3vma1qjo478l" path="res://resource/spriteFrames/bullet/Bullet0004.tres" id="3_bttus"]
 
@@ -31,8 +31,8 @@ size = Vector2(4, 4)
 
 [node name="Bullet0003" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
-script = ExtResource("1_teoyi")
-CollisionArea = NodePath("CollisionArea")
+script = ExtResource("1_1jbgr")
+CollisionArea = NodePath("AnimatedSprite/CollisionArea")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
@@ -45,14 +45,14 @@ material = SubResource("ShaderMaterial_v77gw")
 material = SubResource("ShaderMaterial_p0wfd")
 sprite_frames = ExtResource("3_bttus")
 animation = &"move"
-frame_progress = 0.167868
+frame_progress = 0.57852
 
-[node name="CollisionArea" type="Area2D" parent="."]
+[node name="CollisionArea" type="Area2D" parent="AnimatedSprite"]
 collision_layer = 0
 collision_mask = 0
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite/CollisionArea"]
 position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_c0onq")
 

@@ -24,7 +24,14 @@
       300,
       400
     ],
-    "UseGravity": false
+    "UseGravity": false,
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "StrikeDestroy": true
   },
   {
     "Id": "0002",
@@ -52,7 +59,14 @@
       200,
       250
     ],
-    "UseGravity": false
+    "UseGravity": false,
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "StrikeDestroy": true
   },
   {
     "Id": "0003",
@@ -79,7 +93,14 @@
       300,
       400
     ],
-    "UseGravity": false
+    "UseGravity": false,
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "StrikeDestroy": true
   },
   {
     "Id": "0004",
@@ -106,7 +127,14 @@
       600,
       600
     ],
-    "UseGravity": false
+    "UseGravity": false,
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "StrikeDestroy": true
   },
   {
     "Id": "0005",
@@ -123,8 +151,8 @@
       0
     ],
     "SpeedRange": [
-      30,
-      30
+      180,
+      180
     ],
     "LifeTimeRange": [
       -1
@@ -133,7 +161,14 @@
       270,
       360
     ],
-    "UseGravity": false
+    "UseGravity": true,
+    "VerticalSpeed": [
+      70
+    ],
+    "BounceCount": [
+      999
+    ],
+    "StrikeDestroy": true
   },
   {
     "Id": "1001",
@@ -160,7 +195,12 @@
       600,
       600
     ],
-    "UseGravity": false
+    "UseGravity": false,
+    "VerticalSpeed": null,
+    "BounceCount": [
+      0
+    ],
+    "StrikeDestroy": false
   },
   {
     "Id": "2001",
@@ -185,6 +225,9 @@
     "DistanceRange": [
       35
     ],
-    "UseGravity": false
+    "UseGravity": false,
+    "VerticalSpeed": null,
+    "BounceCount": null,
+    "StrikeDestroy": false
   }
 ]

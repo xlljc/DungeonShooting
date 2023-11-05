@@ -25,8 +25,17 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <summary>
     /// 是否是静态物体, 如果为true, 则会禁用移动处理
     /// </summary>
-    [Export]
-    public bool IsStatic { get; set; }
+    public bool IsStatic
+    {
+        get => MoveController != null ? !MoveController.Enable : true;
+        set
+        {
+            if (MoveController != null)
+            {
+                MoveController.Enable = !value;
+            }
+        }
+    }
 
     /// <summary>
     /// 是否显示阴影
@@ -156,6 +165,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public bool EnableVerticalMotion { get; set; } = true;
 
     /// <summary>
+    /// 撞到墙壁反弹时是否锁定旋转角度, 如果为 false, 则反弹后将直接修改旋转角度
+    /// </summary>
+    public bool BounceLockRotation { get; set; } = true;
+    
+    /// <summary>
     /// 是否启用物体更新行为, 默认 true, 如果禁用, 则会停止当前物体的 Process(), PhysicsProcess() 调用, 并且禁用 Collision 节点, 禁用后所有组件也同样被禁用行为
     /// </summary>
     public bool EnableBehavior
@@ -189,7 +203,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <summary>
     /// 物体材质数据
     /// </summary>
-    public ActivityMaterial ActivityMaterial { get; private set; }
+    public ExcelConfig.ActivityMaterial ActivityMaterial { get; private set; }
     
     /// <summary>
     /// 所在的 World 对象
@@ -252,7 +266,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     // --------------------------------------------------------------------------------
 
     //组件集合
-    private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
+    private readonly List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
     //上一帧动画名称
     private string _prevAnimation;
     //上一帧动画
@@ -267,7 +281,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     private ShaderMaterial _shadowBlendShaderMaterial;
     
     //存储投抛该物体时所产生的数据
-    private ActivityFallData _fallData = new ActivityFallData();
+    private readonly ActivityFallData _fallData = new ActivityFallData();
     
     //所在层级
     private RoomLayerEnum _currLayer;
@@ -330,7 +344,15 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             }
         }
 #endif
-        ActivityMaterial = new ActivityMaterial();
+        if (config.Material == null)
+        {
+            ActivityMaterial = ExcelConfig.ActivityMaterial_List[0];
+        }
+        else
+        {
+            ActivityMaterial = config.Material;
+        }
+        
         World = world;
         ItemConfig = config;
         Name = GetType().Name + (_instanceIndex++);
@@ -349,7 +371,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         ShadowSprite.Visible = false;
         MotionMode = MotionModeEnum.Floating;
         MoveController = AddComponent<MoveController>();
-        MoveController.Enable = !IsStatic;
+        IsStatic = config.IsStatic;
         OnInit();
     }
 
@@ -590,6 +612,13 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     /// <param name="prevArea">上一个区域, 注意可能为空</param>
     protected virtual void OnAffiliationChange(AffiliationArea prevArea)
+    {
+    }
+
+    /// <summary>
+    /// 撞到墙壁反弹时调用该函数, 参数为反弹的角度, 弧度制
+    /// </summary>
+    public virtual void OnBounce(float rotation)
     {
     }
 
@@ -891,6 +920,52 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             }
         }
 
+        // 更新下坠处理逻辑
+        UpdateFall(newDelta);
+
+        //阴影
+        UpdateShadowSprite(newDelta);
+        
+        // Hit 动画
+        if (_playHit)
+        {
+            if (_playHitSchedule < 0.05f)
+            {
+                _blendShaderMaterial.SetShaderParameter("schedule", 1);
+            }
+            else if (_playHitSchedule < 0.15f)
+            {
+                _blendShaderMaterial.SetShaderParameter("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
+            }
+            if (_playHitSchedule >= 0.15f)
+            {
+                _blendShaderMaterial.SetShaderParameter("schedule", 0);
+                _playHitSchedule = 0;
+                _playHit = false;
+            }
+            else
+            {
+                _playHitSchedule += newDelta;
+            }
+        }
+        
+        //协程更新
+        ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
+
+        ProcessOver(newDelta);
+        
+        //调试绘制
+        if (IsDebug)
+        {
+            QueueRedraw();
+        }
+    }
+
+    /// <summary>
+    /// 更新下坠处理逻辑
+    /// </summary>
+    public void UpdateFall(float delta)
+    {
         // 下坠判定
         if (Altitude > 0 || VerticalSpeed != 0)
         {
@@ -906,8 +981,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
 
                     var ysp = VerticalSpeed;
 
-                    _altitude += VerticalSpeed * newDelta;
-                    _verticalSpeed -= GameConfig.G * newDelta;
+                    _altitude += VerticalSpeed * delta;
+                    _verticalSpeed -= GameConfig.G * delta;
 
                     //当高度大于16时, 显示在所有物体上
                     if (Altitude >= 16)
@@ -952,17 +1027,17 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                             if (!_hasResilienceVerticalSpeed)
                             {
                                 _hasResilienceVerticalSpeed = true;
-                                _resilienceVerticalSpeed = -VerticalSpeed * ActivityMaterial.BounceStrength;
+                                _resilienceVerticalSpeed = -VerticalSpeed * ActivityMaterial.FallBounceStrength;
                             }
                             else
                             {
                                 if (_resilienceVerticalSpeed < 25)
                                 {
-                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * ActivityMaterial.BounceStrength * 0.4f;
+                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * ActivityMaterial.FallBounceStrength * 0.4f;
                                 }
                                 else
                                 {
-                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * ActivityMaterial.BounceStrength;
+                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * ActivityMaterial.FallBounceStrength;
                                 }
                             }
                             _verticalSpeed = _resilienceVerticalSpeed;
@@ -992,7 +1067,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             }
         }
 
-        //阴影
+    }
+
+    /// <summary>
+    /// 更新阴影逻辑
+    /// </summary>
+    public void UpdateShadowSprite(float delta)
+    {
+        // 阴影
         if (ShadowSprite.Visible)
         {
             //更新阴影贴图, 使其和动画一致
@@ -1014,41 +1096,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             }
         }
 
-        // Hit 动画
-        if (_playHit)
-        {
-            if (_playHitSchedule < 0.05f)
-            {
-                _blendShaderMaterial.SetShaderParameter("schedule", 1);
-            }
-            else if (_playHitSchedule < 0.15f)
-            {
-                _blendShaderMaterial.SetShaderParameter("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
-            }
-            if (_playHitSchedule >= 0.15f)
-            {
-                _blendShaderMaterial.SetShaderParameter("schedule", 0);
-                _playHitSchedule = 0;
-                _playHit = false;
-            }
-            else
-            {
-                _playHitSchedule += newDelta;
-            }
-        }
-        
-        //协程更新
-        ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
-
-        ProcessOver(newDelta);
-        
-        //调试绘制
-        if (IsDebug)
-        {
-            QueueRedraw();
-        }
     }
-
+    
     /// <summary>
     /// 每物理帧调用一次, 为了防止子类覆盖 _PhysicsProcess(), 给 _PhysicsProcess() 加上了 sealed, 子类需要帧循环函数请重写 PhysicsProcess() 函数
     /// </summary>
@@ -1182,6 +1231,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         {
             arr[i].Value?.Destroy();
         }
+
+        _components.Clear();
     }
 
     /// <summary>

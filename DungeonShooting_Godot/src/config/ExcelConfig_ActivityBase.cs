@@ -55,6 +55,12 @@ public static partial class ExcelConfig
         public bool IsStatic;
 
         /// <summary>
+        /// 物体使用交互材质 <br/>
+        /// 如果不填，则默认使用id为0001的材质
+        /// </summary>
+        public ActivityMaterial Material;
+
+        /// <summary>
         /// 物体预制场景路径, 场景根节点必须是ActivityObject子类
         /// </summary>
         [JsonInclude]
@@ -85,10 +91,17 @@ public static partial class ExcelConfig
             inst.Intro = Intro;
             inst.Details = Details;
             inst.IsStatic = IsStatic;
+            inst.Material = Material;
             inst.Prefab = Prefab;
             inst.Icon = Icon;
             inst.ShowInMapEditor = ShowInMapEditor;
             return inst;
         }
+    }
+    private class Ref_ActivityBase : ActivityBase
+    {
+        [JsonInclude]
+        public string __Material;
+
     }
 }

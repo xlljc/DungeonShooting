@@ -31,7 +31,6 @@ public partial class Explode : Area2D, IPoolItem
 
 
     private bool _init = false;
-    private AffiliationArea _affiliationArea;
     private float _hitRadius;
     private int _minHarm;
     private int _maxHarm;
@@ -70,8 +69,7 @@ public partial class Explode : Area2D, IPoolItem
             AnimationPlayer.AnimationFinished += OnAnimationFinish;
             BodyEntered += OnBodyEntered;
         }
-
-        _affiliationArea = affiliationArea;
+        
         AttackLayer = attackLayer;
         _hitRadius = hitRadius;
         _minHarm = minHarm;
@@ -81,7 +79,11 @@ public partial class Explode : Area2D, IPoolItem
         CollisionMask = attackLayer | PhysicsLayer.Prop | PhysicsLayer.Throwing | PhysicsLayer.Debris;
         CircleShape.Radius = Mathf.Max(hitRadius, maxRepelled);
 
-        Check();
+        //冲击波
+        if (affiliationArea != null)
+        {
+            ShockWave(affiliationArea);
+        }
     }
     
     public void RunPlay()
@@ -90,10 +92,11 @@ public partial class Explode : Area2D, IPoolItem
         AnimationPlayer.Play(AnimatorNames.Play);
     }
 
-    public void Check()
+    //爆炸冲击波
+    private void ShockWave(AffiliationArea affiliationArea)
     {
         var position = Position;
-        var freezeSprites = _affiliationArea.RoomInfo.StaticSprite.CollisionCircle(position, _repelledRadius, true);
+        var freezeSprites = affiliationArea.RoomInfo.StaticSprite.CollisionCircle(position, _repelledRadius, true);
         foreach (var freezeSprite in freezeSprites)
         {
             var temp = freezeSprite.Position - position;
@@ -127,20 +130,29 @@ public partial class Explode : Area2D, IPoolItem
             var temp = o.Position - Position;
             var len = temp.Length();
             var angle = temp.Angle();
+
+            if (len <= _hitRadius) //在伤害半径内
+            {
+                if (o is Role role) //是角色
+                {
+                    role.CallDeferred(nameof(role.Hurt), Utils.Random.RandomRangeInt(_minHarm, _maxHarm), angle);
+                }
+                else if (o is Bullet bullet) //是子弹
+                {
+                    if (bullet is BoomBullet boomBullet) //如果是爆炸子弹, 则直接销毁
+                    {
+                        boomBullet.PlayBoom();
+                    }
+                    bullet.Destroy();
+                    return;
+                }
+            }
             
             if (len <= _repelledRadius) //击退半径内
             {
                 var repelled = (_repelledRadius - len) / _repelledRadius * _maxRepelled;
-                o.MoveController.SetAllVelocity(Vector2.Zero);
+                //o.MoveController.SetAllVelocity(Vector2.Zero);
                 o.MoveController.AddForce(Vector2.FromAngle(angle) * repelled);
-            }
-
-            if (o is Role role)
-            {
-                if (len <= _hitRadius) //在伤害半径内
-                {
-                    role.CallDeferred(nameof(role.Hurt), Utils.Random.RandomRangeInt(_minHarm, _maxHarm), angle);
-                }
             }
         }
     }

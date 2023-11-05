@@ -43,7 +43,7 @@ size = Vector2(9, 4)
 [node name="Bullet0001" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
 script = ExtResource("1_3d3df")
-CollisionArea = NodePath("CollisionArea")
+CollisionArea = NodePath("AnimatedSprite/CollisionArea")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
@@ -57,13 +57,12 @@ modulate = Color(1.6, 1.6, 1.6, 1)
 material = SubResource("ShaderMaterial_qhkgc")
 sprite_frames = SubResource("SpriteFrames_5wvmf")
 
-[node name="CollisionArea" type="Area2D" parent="."]
-visible = false
+[node name="CollisionArea" type="Area2D" parent="AnimatedSprite"]
 collision_layer = 0
 collision_mask = 0
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite/CollisionArea"]
 position = Vector2(2.93353, 0)
 shape = SubResource("RectangleShape2D_lcqb8")
 

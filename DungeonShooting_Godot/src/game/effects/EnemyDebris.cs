@@ -29,7 +29,7 @@ public partial class EnemyDebris : ActivityObject
 
     protected override void Process(float delta)
     {
-        if (_playOver && !IsThrowing && MoveController.IsMotionless())
+        if (_playOver && !IsThrowing && Altitude <= 0 && MoveController.IsMotionless())
         {
             MoveController.SetAllVelocity(Vector2.Zero);
             Freeze();

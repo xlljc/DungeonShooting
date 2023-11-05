@@ -1,5 +1,4 @@
 using System.Collections;
-using Config;
 using Godot;
 
 /// <summary>
@@ -24,24 +23,51 @@ public partial class Bullet : ActivityObject, IBullet
     }
 
     public BulletData BulletData { get; private set; }
-
-
+    
+    /// <summary>
+    /// 当前反弹次数
+    /// </summary>
+    public int CurrentBounce { get; set; } = 0;
+    
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
-
+    //上一次碰撞物体
+    //private Rid _prevCollObject;
+    private float _flag = 0;
+    
     public override void OnInit()
     {
+        BounceLockRotation = false;
         CollisionArea.AreaEntered += OnArea2dEntered;
     }
     
-    public void InitData(BulletData data, uint attackLayer)
+    public virtual void InitData(BulletData data, uint attackLayer)
     {
         BulletData = data;
         AttackLayer = attackLayer;
-        Position = data.Position;
         Rotation = data.Rotation;
-        ShadowOffset = new Vector2(0, 5);
-        BasisVelocity = new Vector2(data.FlySpeed, 0).Rotated(Rotation);
+
+        float altitude;
+        var triggerRole = data.TriggerRole;
+        if (triggerRole != null)
+        {
+            altitude = -triggerRole.MountPoint.Position.Y;
+        }
+        else
+        {
+            altitude = 8;
+        }
+        
+        Position = data.Position + new Vector2(0, altitude);
+        Altitude = altitude;
+        if (data.VerticalSpeed != 0)
+        {
+            VerticalSpeed = data.VerticalSpeed;
+        }
+        EnableVerticalMotion = data.BulletBase.UseGravity;
+
+        //BasisVelocity = new Vector2(data.FlySpeed, 0).Rotated(Rotation);
+        MoveController.AddForce(new Vector2(data.FlySpeed, 0).Rotated(Rotation));
         
         //如果子弹会对玩家造成伤害, 则显示红色描边
         if (Player.Current.CollisionWithMask(attackLayer))
@@ -51,6 +77,85 @@ public partial class Bullet : ActivityObject, IBullet
         PutDown(RoomLayerEnum.YSortLayer);
         //播放子弹移动动画
         PlaySpriteAnimation(AnimatorNames.Move);
+        //强制更新下坠逻辑处理
+        UpdateFall((float)GetProcessDeltaTime());
+        
+        //过期销毁
+        if (data.LifeTime > 0)
+        {
+            this.CallDelay(data.LifeTime, OnLimeOver);
+        }
+    }
+    
+    
+    /// <summary>
+    /// 碰到墙壁
+    /// </summary>
+    public virtual void OnCollisionWall(KinematicCollision2D lastSlideCollision)
+    {
+        if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
+        {
+            //创建粒子特效
+            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletSmoke_tscn);
+            var smoke = packedScene.Instantiate<GpuParticles2D>();
+            var rotated = AnimatedSprite.Position.Rotated(Rotation);
+            smoke.GlobalPosition = lastSlideCollision.GetPosition() + new Vector2(0, rotated.Y);
+            smoke.GlobalRotation = lastSlideCollision.GetNormal().Angle();
+            smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+            Destroy();
+        }
+    }
+    
+    /// <summary>
+    /// 碰到目标
+    /// </summary>
+    public virtual void OnCollisionTarget(ActivityObject o)
+    {
+        if (o is Role role)
+        {
+            PlayDisappearEffect();
+
+            //计算子弹造成的伤害
+            var damage = Utils.Random.RandomRangeInt(BulletData.MinHarm, BulletData.MaxHarm);
+            if (BulletData.TriggerRole != null)
+            {
+                damage = BulletData.TriggerRole.RoleState.CallCalcDamageEvent(damage);
+            }
+
+            //击退
+            if (role is not Player) //目标不是玩家才会触发击退
+            {
+                var attr = BulletData.Weapon.GetUseAttribute(BulletData.TriggerRole);
+                var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRnage);
+                if (repel != 0)
+                {
+                    //role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel);
+                    role.MoveController.AddForce(Vector2.FromAngle(Velocity.Angle()) * repel);
+                }
+            }
+            
+            //造成伤害
+            role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
+            Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 到达最大运行距离
+    /// </summary>
+    public virtual void OnMaxDistance()
+    {
+        PlayDisappearEffect();
+        Destroy();
+    }
+    
+    /// <summary>
+    /// 子弹生命周期结束
+    /// </summary>
+    public virtual void OnLimeOver()
+    {
+        PlayDisappearEffect();
+        Destroy();
     }
     
     /// <summary>
@@ -79,85 +184,41 @@ public partial class Bullet : ActivityObject, IBullet
     {
         var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletDisappear_tscn);
         var node = packedScene.Instantiate<Node2D>();
-        node.GlobalPosition = GlobalPosition;
+        node.GlobalPosition = AnimatedSprite.GlobalPosition;
         node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
     }
     
-    protected override void PhysicsProcessOver(float delta)
+    protected override void PhysicsProcess(float delta)
     {
         //移动
-        var lastSlideCollision = GetLastSlideCollision();
+        KinematicCollision2D lastSlideCollision;
         //撞到墙
-        if (lastSlideCollision != null)
+        _flag -= delta;
+        if (_flag <= 0 && (lastSlideCollision = GetLastSlideCollision()) != null)
         {
-            //创建粒子特效
-            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletSmoke_tscn);
-            var smoke = packedScene.Instantiate<GpuParticles2D>();
-            smoke.GlobalPosition = lastSlideCollision.GetPosition();
-            smoke.GlobalRotation = lastSlideCollision.GetNormal().Angle();
-            smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-            Destroy();
-            return;
+            _flag = 0.1f;
+            CurrentBounce++;
+            //撞墙
+            OnCollisionWall(lastSlideCollision);
         }
-        //距离太大, 自动销毁
-        CurrFlyDistance += BulletData.FlySpeed * delta;
-        if (CurrFlyDistance >= BulletData.MaxDistance)
+        else
         {
-            PlayDisappearEffect();
-            Destroy();
+            //距离太大, 自动销毁
+            CurrFlyDistance += BulletData.FlySpeed * delta;
+            if (CurrFlyDistance >= BulletData.MaxDistance)
+            {
+                OnMaxDistance();
+            }
         }
     }
     
     private void OnArea2dEntered(Area2D other)
     {
-        var role = other.AsActivityObject<Role>();
-        if (role != null)
+        if (IsDestroyed)
         {
-            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletDisappear_tscn);
-            var node = packedScene.Instantiate<Node2D>();
-            node.GlobalPosition = GlobalPosition;
-            node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-
-            //计算子弹造成的伤害
-            var damage = Utils.Random.RandomRangeInt(BulletData.MinHarm, BulletData.MaxHarm);
-            if (BulletData.TriggerRole != null)
-            {
-                damage = BulletData.TriggerRole.RoleState.CallCalcDamageEvent(damage);
-            }
-
-            //击退
-            if (role is not Player) //目标不是玩家才会触发击退
-            {
-                var attr = BulletData.Weapon.GetUseAttribute(BulletData.TriggerRole);
-                var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRnage);
-                if (repel != 0)
-                {
-                    role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel);
-                }
-            }
-            
-            //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
-            Destroy();
+            return;
         }
-    }
-
-    protected override void OnDestroy()
-    {
-        StopAllCoroutine();
-    }
-
-    private void TestBoom()
-    {
-        //击中爆炸，测试用
-        if (BulletData.TriggerRole == null || !BulletData.TriggerRole.IsAi)
-        {
-            var explode = ObjectManager.GetExplode(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
-            explode.Position = Position;
-            explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
-            explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
-            explode.Init(BulletData.TriggerRole.AffiliationArea, AttackLayer, 25, BulletData.MinHarm, BulletData.MaxHarm, 50, 150);
-            explode.RunPlay();
-        }
+        var activityObject = other.AsActivityObject();
+        OnCollisionTarget(activityObject);
     }
 }

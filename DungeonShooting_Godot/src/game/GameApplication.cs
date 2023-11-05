@@ -112,6 +112,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		//固定帧率
 		//Engine.MaxFps = TargetFps;
 		//调试绘制开关
+		//IsDebug = true;
 		ActivityObject.IsDebug = IsDebug;
 		//Engine.TimeScale = 0.2f;
 		//调整窗口分辨率
@@ -119,7 +120,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		RefreshSubViewportSize();
 		//窗体大小改变
 		GetWindow().SizeChanged += OnWindowSizeChanged;
-		
+
 		ImageCanvas.Init(GetTree().CurrentScene);
 		
 		//初始化ui

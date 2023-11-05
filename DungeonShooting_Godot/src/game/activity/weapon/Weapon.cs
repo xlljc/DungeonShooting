@@ -1953,6 +1953,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             MaxHarm = Utils.GetConfigRangeEnd(bullet.HarmRange),
             MaxDistance = Utils.Random.RandomConfigRange(bullet.DistanceRange),
             FlySpeed = Utils.Random.RandomConfigRange(bullet.SpeedRange),
+            VerticalSpeed = Utils.Random.RandomConfigRange(bullet.VerticalSpeed),
+            BounceCount = Utils.Random.RandomConfigRange(bullet.BounceCount),
             Position = FirePoint.GlobalPosition,
         };
 
@@ -1989,6 +1991,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             MinHarm = Utils.GetConfigRangeStart(bullet.HarmRange),
             MaxHarm = Utils.GetConfigRangeEnd(bullet.HarmRange),
             MaxDistance = Utils.Random.RandomConfigRange(bullet.DistanceRange),
+            BounceCount = Utils.Random.RandomConfigRange(bullet.BounceCount),
+            LifeTime = Utils.Random.RandomConfigRange(bullet.LifeTimeRange),
             Position = FirePoint.GlobalPosition,
         };
 

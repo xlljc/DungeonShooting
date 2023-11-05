@@ -17,6 +17,15 @@ public static partial class ExcelConfig
     public static Dictionary<string, ActivityBase> ActivityBase_Map { get; private set; }
 
     /// <summary>
+    /// ActivityMaterial.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// </summary>
+    public static List<ActivityMaterial> ActivityMaterial_List { get; private set; }
+    /// <summary>
+    /// ActivityMaterial.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// </summary>
+    public static Dictionary<string, ActivityMaterial> ActivityMaterial_Map { get; private set; }
+
+    /// <summary>
     /// AiAttackAttr.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
     public static List<AiAttackAttr> AiAttackAttr_List { get; private set; }
@@ -63,11 +72,13 @@ public static partial class ExcelConfig
         _init = true;
 
         _InitActivityBaseConfig();
+        _InitActivityMaterialConfig();
         _InitAiAttackAttrConfig();
         _InitBulletBaseConfig();
         _InitSoundConfig();
         _InitWeaponBaseConfig();
 
+        _InitActivityBaseRef();
         _InitWeaponBaseRef();
     }
     private static void _InitActivityBaseConfig()
@@ -75,7 +86,7 @@ public static partial class ExcelConfig
         try
         {
             var text = _ReadConfigAsText("res://resource/config/ActivityBase.json");
-            ActivityBase_List = JsonSerializer.Deserialize<List<ActivityBase>>(text);
+            ActivityBase_List = new List<ActivityBase>(JsonSerializer.Deserialize<List<Ref_ActivityBase>>(text));
             ActivityBase_Map = new Dictionary<string, ActivityBase>();
             foreach (var item in ActivityBase_List)
             {
@@ -86,6 +97,24 @@ public static partial class ExcelConfig
         {
             GD.PrintErr(e.ToString());
             throw new Exception("初始化表'ActivityBase'失败!");
+        }
+    }
+    private static void _InitActivityMaterialConfig()
+    {
+        try
+        {
+            var text = _ReadConfigAsText("res://resource/config/ActivityMaterial.json");
+            ActivityMaterial_List = JsonSerializer.Deserialize<List<ActivityMaterial>>(text);
+            ActivityMaterial_Map = new Dictionary<string, ActivityMaterial>();
+            foreach (var item in ActivityMaterial_List)
+            {
+                ActivityMaterial_Map.Add(item.Id, item);
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            throw new Exception("初始化表'ActivityMaterial'失败!");
         }
     }
     private static void _InitAiAttackAttrConfig()
@@ -161,6 +190,25 @@ public static partial class ExcelConfig
         }
     }
 
+    private static void _InitActivityBaseRef()
+    {
+        foreach (Ref_ActivityBase item in ActivityBase_List)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(item.__Material))
+                {
+                    item.Material = ActivityMaterial_Map[item.__Material];
+                }
+
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
+                throw new Exception("初始化'ActivityBase'引用其他表数据失败, 当前行id: " + item.Id);
+            }
+        }
+    }
     private static void _InitWeaponBaseRef()
     {
         foreach (Ref_WeaponBase item in WeaponBase_List)

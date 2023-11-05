@@ -43,6 +43,21 @@ public class BulletData
     public float FlySpeed;
 
     /// <summary>
+    /// 纵轴速度
+    /// </summary>
+    public float VerticalSpeed;
+    
+    /// <summary>
+    /// 反弹次数
+    /// </summary>
+    public int BounceCount;
+
+    /// <summary>
+    /// 子弹最大存在时间
+    /// </summary>
+    public float LifeTime;
+
+    /// <summary>
     /// 坐标
     /// </summary>
     public Vector2 Position;
