@@ -95,8 +95,6 @@ public partial class GameApplication : Node2D, ICoroutine
 		ExcelConfig.Init();
 		//初始化房间配置数据
 		InitRoomConfig();
-		//初始化 ActivityObject
-		ActivityObject.InitActivity();
 		//初始化武器数据
 		Weapon.InitWeaponAttribute();
 		

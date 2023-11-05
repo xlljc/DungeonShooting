@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Config;
 using Godot;
 
 /// <summary>
@@ -16,8 +17,9 @@ public partial class Laser : Area2D, IBullet
         get => CollisionMask;
         set => CollisionMask = value;
     }
-    public Weapon Weapon { get; private set; }
-    public Role TriggerRole { get; private set; }
+    public Weapon Weapon { get; set; }
+    public ExcelConfig.BulletBase BulletBase { get; set; }
+    public Role TriggerRole { get; set; }
     
     /// <summary>
     /// 最小伤害
@@ -30,6 +32,9 @@ public partial class Laser : Area2D, IBullet
     public int MaxHarm { get; set; } = 4;
     
     public bool IsDestroyed { get; private set; }
+    
+    public float Width { get; set; }
+    
     //开启的协程
     private List<CoroutineData> _coroutineList;
     private float _pixelScale;
@@ -45,17 +50,13 @@ public partial class Laser : Area2D, IBullet
 
         AreaEntered += OnArea2dEntered;
     }
-
-    public void Init(Weapon weapon, uint targetLayer)
+    
+    public void Init(Weapon weapon, uint attackLayer, Vector2 position, float rotation, float width, float distance)
     {
         TriggerRole = weapon.TriggerRole;
         Weapon = weapon;
-        AttackLayer = targetLayer;
-    }
-
-    public void Init(Weapon weapon, uint targetLayer, Vector2 position, float rotation, float width, float distance)
-    {
-        Init(weapon, targetLayer);
+        AttackLayer = attackLayer;
+        
         Position = position;
         Rotation = rotation;
 
@@ -74,7 +75,7 @@ public partial class Laser : Area2D, IBullet
         LineSprite.Scale = new Vector2(0, width * _pixelScale);
 
         //如果子弹会对玩家造成伤害, 则显示成红色
-        if (Player.Current.CollisionWithMask(targetLayer))
+        if (Player.Current.CollisionWithMask(attackLayer))
         {
             LineSprite.Modulate = new Color(2.5f, 0.5f, 0.5f);
         }

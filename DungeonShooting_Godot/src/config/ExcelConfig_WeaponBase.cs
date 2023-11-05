@@ -16,8 +16,7 @@ public static partial class ExcelConfig
         /// <summary>
         /// 属性绑定武器的Id，这个id时ActivityBase表Id,如果是Ai使用的数据, 则填空字符串串
         /// </summary>
-        [JsonInclude]
-        public string ActivityId;
+        public ActivityBase Activity;
 
         /// <summary>
         /// 备注
@@ -254,57 +253,18 @@ public static partial class ExcelConfig
         public string FireEffect;
 
         /// <summary>
-        /// 默认射出的子弹，BulletBase表Id
+        /// 默认射出的子弹
         /// </summary>
-        [JsonInclude]
-        public string BulletId;
-
-        /// <summary>
-        /// 造成的伤害区间 <br/>
-        /// 格式为[value]或者[min,max]
-        /// </summary>
-        [JsonInclude]
-        public int[] HarmRange;
-
-        /// <summary>
-        /// 造成伤害后击退值区间 <br/>
-        /// 如果发射子弹,则按每发子弹算击退 <br/>
-        /// 格式为[value]或者[min,max]
-        /// </summary>
-        [JsonInclude]
-        public float[] RepelRnage;
-
-        /// <summary>
-        /// 子弹偏移角度区间 <br/>
-        /// 用于设置子弹偏移朝向, 该属性和射半径效果类似, 但与其不同的是, 散射半径是用来控制枪口朝向的, 而该属性是控制子弹朝向的, 可用于制作霰弹枪子弹效果 <br/>
-        /// 格式为[value]或者[min,max]
-        /// </summary>
-        [JsonInclude]
-        public float[] BulletDeviationAngleRange;
-
-        /// <summary>
-        /// 子弹初速度区间 <br/>
-        /// 格式为[value]或者[min,max]
-        /// </summary>
-        [JsonInclude]
-        public float[] BulletSpeedRange;
-
-        /// <summary>
-        /// 子弹飞行距离区间 <br/>
-        /// 格式为[value]或者[min,max]
-        /// </summary>
-        [JsonInclude]
-        public float[] BulletDistanceRange;
+        public BulletBase Bullet;
 
         /// <summary>
         /// 默认抛出的弹壳
         /// </summary>
-        [JsonInclude]
-        public string ShellId;
+        public ActivityBase Shell;
 
         /// <summary>
         /// 投抛弹壳的延时时间, 在射击或者上膛后会触发抛弹壳效果 <br/>
-        /// 如果为负数, 则不自动抛弹
+        /// 如果为0, 则不自动抛弹
         /// </summary>
         [JsonInclude]
         public float ThrowShellDelayTime;
@@ -410,7 +370,7 @@ public static partial class ExcelConfig
         {
             var inst = new WeaponBase();
             inst.Id = Id;
-            inst.ActivityId = ActivityId;
+            inst.Activity = Activity;
             inst.Remark = Remark;
             inst.Weight = Weight;
             inst.WeightType = WeightType;
@@ -449,13 +409,8 @@ public static partial class ExcelConfig
             inst.DefaultAngle = DefaultAngle;
             inst.UpliftAngleRestore = UpliftAngleRestore;
             inst.FireEffect = FireEffect;
-            inst.BulletId = BulletId;
-            inst.HarmRange = HarmRange;
-            inst.RepelRnage = RepelRnage;
-            inst.BulletDeviationAngleRange = BulletDeviationAngleRange;
-            inst.BulletSpeedRange = BulletSpeedRange;
-            inst.BulletDistanceRange = BulletDistanceRange;
-            inst.ShellId = ShellId;
+            inst.Bullet = Bullet;
+            inst.Shell = Shell;
             inst.ThrowShellDelayTime = ThrowShellDelayTime;
             inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.CanMeleeAttack = CanMeleeAttack;
@@ -478,6 +433,15 @@ public static partial class ExcelConfig
     }
     private class Ref_WeaponBase : WeaponBase
     {
+        [JsonInclude]
+        public string __Activity;
+
+        [JsonInclude]
+        public string __Bullet;
+
+        [JsonInclude]
+        public string __Shell;
+
         [JsonInclude]
         public string __ShootSound;
 

@@ -252,9 +252,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         _init = true;
         foreach (var weaponAttr in ExcelConfig.WeaponBase_List)
         {
-            if (!string.IsNullOrEmpty(weaponAttr.ActivityId))
+            if (weaponAttr.Activity != null)
             {
-                if (!_weaponAttributeMap.TryAdd(weaponAttr.ActivityId, weaponAttr))
+                if (!_weaponAttributeMap.TryAdd(weaponAttr.Activity.Id, weaponAttr))
                 {
                     Debug.LogError("发现重复注册的武器属性: " + weaponAttr.Id);
                 }
@@ -262,11 +262,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
     }
     
-    private static ExcelConfig.WeaponBase _GetWeaponAttribute(string itemId)
+    /// <summary>
+    /// 根据 ActivityBase.Id 获取对应武器的属性数据
+    /// </summary>
+    public static ExcelConfig.WeaponBase GetWeaponAttribute(string itemId)
     {
         if (_weaponAttributeMap.TryGetValue(itemId, out var attr))
         {
-            return attr.Clone();
+            return attr;
         }
 
         throw new Exception($"武器'{itemId}'没有在 Weapon 表中配置属性数据!");
@@ -274,7 +277,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     
     public override void OnInit()
     {
-        InitWeapon(_GetWeaponAttribute(ItemConfig.Id));
+        InitWeapon(GetWeaponAttribute(ItemConfig.Id).Clone());
         AnimatedSprite.AnimationFinished += OnAnimationFinished;
     }
 
@@ -1446,18 +1449,18 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     //抛弹逻辑
     private void ThrowShellHandler(float speedScale)
     {
-        if (string.IsNullOrEmpty(Attribute.ShellId))
+        if (Attribute.Shell == null)
         {
             return;
         }
         //创建一个弹壳
         if (Attribute.ThrowShellDelayTime > 0)
         {
-            this.CallDelay(Attribute.ThrowShellDelayTime, () => ThrowShell(Attribute.ShellId, speedScale));
+            this.CallDelay(Attribute.ThrowShellDelayTime, () => ThrowShell(Attribute.Shell, speedScale));
         }
         else if (Attribute.ThrowShellDelayTime == 0)
         {
-            ThrowShell(Attribute.ShellId, speedScale);
+            ThrowShell(Attribute.Shell, speedScale);
         }
     }
 
@@ -1561,16 +1564,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
 
             StopReload();
             ReloadFinishHandler();
-        }
-    }
-    
-    //播放动画
-    private void PlaySpriteAnimation(string name)
-    {
-        var spriteFrames = AnimatedSprite.SpriteFrames;
-        if (spriteFrames != null && spriteFrames.HasAnimation(name))
-        {
-            AnimatedSprite.Play(name);
         }
     }
 
@@ -1894,7 +1887,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 投抛弹壳的默认实现方式, shellId为弹壳id
     /// </summary>
-    protected ActivityObject ThrowShell(string shellId, float speedScale = 1)
+    protected ActivityObject ThrowShell(ExcelConfig.ActivityBase shell, float speedScale = 1)
     {
         var startPos = ShellPoint.GlobalPosition;
         float startHeight;
@@ -1913,80 +1906,78 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         var verticalSpeed = Utils.Random.RandomRangeInt((int)(60 * speedScale), (int)(120 * speedScale));
         var velocity = new Vector2(Utils.Random.RandomRangeInt((int)(20 * speedScale), (int)(60 * speedScale)), 0).Rotated(direction * Mathf.Pi / 180);
         var rotate = Utils.Random.RandomRangeInt((int)(-720 * speedScale), (int)(720 * speedScale));
-        var shell = Create(shellId);
-        shell.Rotation = (Master != null ? Master.MountPoint.RealRotation : Rotation);
-        shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
-        shell.InheritVelocity(Master != null ? Master : this);
+        var shellInstance = Create(shell);
+        shellInstance.Rotation = (Master != null ? Master.MountPoint.RealRotation : Rotation);
+        shellInstance.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
+        shellInstance.InheritVelocity(Master != null ? Master : this);
         if (Master == null)
         {
-            AffiliationArea.InsertItem(shell);
+            AffiliationArea.InsertItem(shellInstance);
         }
         else
         {
-            Master.AffiliationArea.InsertItem(shell);
+            Master.AffiliationArea.InsertItem(shellInstance);
         }
         
-        return shell;
+        return shellInstance;
     }
 
     /// <summary>
     /// 发射子弹
     /// </summary>
-    protected IBullet ShootBullet(float fireRotation, string bulletId)
+    protected IBullet ShootBullet(float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var baseData = ExcelConfig.BulletBase_Map[bulletId];
-        if (baseData.Type == 1) //实体子弹
+        if (bullet.Type == 1) //实体子弹
         {
-            return ShootSolidBullet(fireRotation, baseData.Prefab);
+            return ShootSolidBullet(fireRotation, bullet);
         }
-        else if (baseData.Type == 2) //激光子弹
+        else if (bullet.Type == 2) //激光子弹
         {
-            return ShootLaser(fireRotation, baseData.Prefab);
+            return ShootLaser(fireRotation, bullet);
         }
 
         return null;
     }
 
     /// <summary>
-    /// 发射子弹的默认实现方式, bulletId为子弹id
+    /// 发射子弹的默认实现方式
     /// </summary>
-    private Bullet ShootSolidBullet(float fireRotation, string solidBulletId)
+    private Bullet ShootSolidBullet(float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var speed = Utils.Random.RandomConfigRange(Attribute.BulletSpeedRange);
-        var distance = Utils.Random.RandomConfigRange(Attribute.BulletDistanceRange);
-        var deviationAngle = Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
-        if (Master != null)
+        var speed = Utils.Random.RandomConfigRange(bullet.SpeedRange);
+        var distance = Utils.Random.RandomConfigRange(bullet.DistanceRange);
+        var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);
+        if (TriggerRole != null)
         {
-            speed = Master.RoleState.CallCalcBulletSpeedEvent(this, speed);
-            distance = Master.RoleState.CallCalcBulletDistanceEvent(this, distance);
-            deviationAngle = Master.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+            speed = TriggerRole.RoleState.CallCalcBulletSpeedEvent(this, speed);
+            distance = TriggerRole.RoleState.CallCalcBulletDistanceEvent(this, distance);
+            deviationAngle = TriggerRole.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
         }
-
-        var attackLayer = GetAttackLayer();
+        
         //创建子弹
-        var bullet = Create<Bullet>(solidBulletId);
-        bullet.Init(
+        var bulletInstance = Create<Bullet>(bullet.Prefab);
+        bulletInstance.Init(
             this,
             speed,
             distance,
             FirePoint.GlobalPosition,
             fireRotation + Mathf.DegToRad(deviationAngle),
-            attackLayer
+            GetAttackLayer()
         );
-        bullet.MinHarm = Utils.GetConfigRangeStart(Attribute.HarmRange);
-        bullet.MaxHarm = Utils.GetConfigRangeEnd(Attribute.HarmRange);
-        return bullet;
+        bulletInstance.MinHarm = Utils.GetConfigRangeStart(Attribute.Bullet.HarmRange);
+        bulletInstance.MaxHarm = Utils.GetConfigRangeEnd(Attribute.Bullet.HarmRange);
+        return bulletInstance;
     }
 
     /// <summary>
     /// 发射射线的默认实现方式
     /// </summary>
-    private Laser ShootLaser(float fireRotation, string prefab)
+    private Laser ShootLaser(float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var laser = ResourceManager.LoadAndInstantiate<Laser>(prefab);
+        var laser = ResourceManager.LoadAndInstantiate<Laser>(bullet.Prefab);
         laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
 
-        var deviationAngle = Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
+        var deviationAngle = Utils.Random.RandomConfigRange(Attribute.Bullet.DeviationAngleRange);
         if (Master != null)
         {
             deviationAngle = Master.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
@@ -2000,8 +1991,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             3,
             600
         );
-        laser.MinHarm = Utils.GetConfigRangeStart(Attribute.HarmRange);
-        laser.MaxHarm = Utils.GetConfigRangeEnd(Attribute.HarmRange);
+        laser.MinHarm = Utils.GetConfigRangeStart(Attribute.Bullet.HarmRange);
+        laser.MaxHarm = Utils.GetConfigRangeEnd(Attribute.Bullet.HarmRange);
         return laser;
     }
 

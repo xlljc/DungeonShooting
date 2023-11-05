@@ -1,4 +1,5 @@
 using System.Collections;
+using Config;
 using Godot;
 
 /// <summary>
@@ -25,7 +26,9 @@ public partial class Bullet : ActivityObject, IBullet
     /// <summary>
     /// 发射该子弹的武器
     /// </summary>
-    public Weapon Weapon { get; private set; }
+    public Weapon Weapon { get; set; }
+    
+    public ExcelConfig.BulletBase BulletBase { get; set; }
 
     /// <summary>
     /// 最小伤害
@@ -40,10 +43,12 @@ public partial class Bullet : ActivityObject, IBullet
     /// <summary>
     /// 发射该子弹的角色
     /// </summary>
-    public Role TriggerRole { get; private set; }
+    public Role TriggerRole { get; set; }
 
-    // 最大飞行距离
-    private float MaxDistance;
+    /// <summary>
+    /// 最大飞行距离
+    /// </summary>
+    public float MaxDistance { get; set; }
 
     // 子弹飞行速度
     private float FlySpeed;
@@ -51,15 +56,13 @@ public partial class Bullet : ActivityObject, IBullet
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
 
-    public void Init(Weapon weapon, uint targetLayer)
+    public override void OnInit()
     {
-        TriggerRole = weapon.TriggerRole;
-        Weapon = weapon;
-        AttackLayer = targetLayer;
+        CollisionArea.AreaEntered += OnArea2dEntered;
     }
     
     /// <summary>
-    /// 初始化子弹属性
+    /// 显示红色描边
     /// </summary>
     /// <param name="weapon">射出该子弹的武器</param>
     /// <param name="speed">速度</param>
@@ -69,8 +72,9 @@ public partial class Bullet : ActivityObject, IBullet
     /// <param name="targetLayer">攻击目标层级</param>
     public void Init(Weapon weapon, float speed, float maxDistance, Vector2 position, float rotation, uint targetLayer)
     {
-        Init(weapon, targetLayer);
-        CollisionArea.AreaEntered += OnArea2dEntered;
+        Weapon = weapon;
+        TriggerRole = weapon.TriggerRole;
+        AttackLayer = targetLayer;
         
         if (TriggerRole == null || !TriggerRole.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
         {
@@ -89,11 +93,21 @@ public partial class Bullet : ActivityObject, IBullet
         //如果子弹会对玩家造成伤害, 则显示红色描边
         if (Player.Current.CollisionWithMask(targetLayer))
         {
-            ShowOutline = true;
-            OutlineColor = new Color(1, 0, 0);
-            StartCoroutine(BorderFlashes());
+            ShowBorderFlashes();
         }
         PutDown(RoomLayerEnum.YSortLayer);
+        //播放子弹移动动画
+        PlaySpriteAnimation(AnimatorNames.Move);
+    }
+    
+    /// <summary>
+    /// 显示红色描边
+    /// </summary>
+    public void ShowBorderFlashes()
+    {
+        ShowOutline = true;
+        OutlineColor = new Color(1, 0, 0);
+        StartCoroutine(BorderFlashes());
     }
     
     private IEnumerator BorderFlashes()
@@ -129,18 +143,6 @@ public partial class Bullet : ActivityObject, IBullet
             smoke.GlobalPosition = lastSlideCollision.GetPosition();
             smoke.GlobalRotation = lastSlideCollision.GetNormal().Angle();
             smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-
-            //击中爆炸，测试用
-            if (TriggerRole == null || !TriggerRole.IsAi)
-            {
-                var explode = ObjectManager.GetExplode(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
-                explode.Position = Position;
-                explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
-                explode.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-                explode.Init(TriggerRole.AffiliationArea, AttackLayer, 25, MinHarm, MaxHarm, 50, 150);
-                explode.RunPlay();
-            }
-            
             Destroy();
             return;
         }
@@ -174,7 +176,7 @@ public partial class Bullet : ActivityObject, IBullet
             if (role is not Player) //目标不是玩家才会触发击退
             {
                 var attr = Weapon.GetUseAttribute(TriggerRole);
-                var repel = Utils.Random.RandomConfigRange(attr.RepelRnage);
+                var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRnage);
                 if (repel != 0)
                 {
                     role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel);
@@ -183,18 +185,6 @@ public partial class Bullet : ActivityObject, IBullet
             
             //造成伤害
             role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
-            
-            //击中爆炸，测试用
-            if (TriggerRole == null || !TriggerRole.IsAi)
-            {
-                var explode = ObjectManager.GetExplode(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
-                explode.Position = Position;
-                explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
-                explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
-                explode.Init(TriggerRole.AffiliationArea, AttackLayer, 25, MinHarm, MaxHarm, 50, 150);
-                explode.RunPlay();
-            }
-
             Destroy();
         }
     }
@@ -202,5 +192,19 @@ public partial class Bullet : ActivityObject, IBullet
     protected override void OnDestroy()
     {
         StopAllCoroutine();
+    }
+
+    private void TestBoom()
+    {
+        //击中爆炸，测试用
+        if (TriggerRole == null || !TriggerRole.IsAi)
+        {
+            var explode = ObjectManager.GetExplode(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
+            explode.Position = Position;
+            explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
+            explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
+            explode.Init(TriggerRole.AffiliationArea, AttackLayer, 25, MinHarm, MaxHarm, 50, 150);
+            explode.RunPlay();
+        }
     }
 }

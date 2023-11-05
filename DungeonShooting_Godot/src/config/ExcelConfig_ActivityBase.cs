@@ -49,6 +49,12 @@ public static partial class ExcelConfig
         public string Details;
 
         /// <summary>
+        /// 是否是静态物体
+        /// </summary>
+        [JsonInclude]
+        public bool IsStatic;
+
+        /// <summary>
         /// 物体预制场景路径, 场景根节点必须是ActivityObject子类
         /// </summary>
         [JsonInclude]
@@ -78,6 +84,7 @@ public static partial class ExcelConfig
             inst.Name = Name;
             inst.Intro = Intro;
             inst.Details = Details;
+            inst.IsStatic = IsStatic;
             inst.Prefab = Prefab;
             inst.Icon = Icon;
             inst.ShowInMapEditor = ShowInMapEditor;

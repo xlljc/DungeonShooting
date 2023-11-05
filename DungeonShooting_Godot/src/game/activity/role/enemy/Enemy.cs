@@ -382,7 +382,7 @@ public partial class Enemy : Role
         if (WeaponPack.ActiveItem != null)
         {
             var attribute = WeaponPack.ActiveItem.Attribute;
-            return Mathf.Lerp(Utils.GetConfigRangeStart(attribute.BulletDistanceRange), Utils.GetConfigRangeEnd(attribute.BulletDistanceRange), weight);
+            return Mathf.Lerp(Utils.GetConfigRangeStart(attribute.Bullet.DistanceRange), Utils.GetConfigRangeEnd(attribute.Bullet.DistanceRange), weight);
         }
 
         return 0;

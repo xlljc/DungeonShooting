@@ -319,7 +319,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     private FreezeSprite _freezeSprite;
 
     //初始化节点
-    private void _InitNode(RegisterActivityData activityData, World world)
+    private void _InitNode(ExcelConfig.ActivityBase config, World world)
     {
 #if TOOLS
         if (!Engine.IsEditorHint())
@@ -332,7 +332,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
 #endif
         ActivityMaterial = new ActivityMaterial();
         World = world;
-        ItemConfig = activityData.Config;
+        ItemConfig = config;
         Name = GetType().Name + (_instanceIndex++);
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
         _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
@@ -1442,6 +1442,19 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     {
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
     }
+    
+    /// <summary>
+    /// 播放 AnimatedSprite 上的动画, 如果没有这个动画, 则什么也不会发生
+    /// </summary>
+    /// <param name="name">动画名称</param>
+    public void PlaySpriteAnimation(string name)
+    {
+        var spriteFrames = AnimatedSprite.SpriteFrames;
+        if (spriteFrames != null && spriteFrames.HasAnimation(name))
+        {
+            AnimatedSprite.Play(name);
+        }
+    }
 
     /// <summary>
     /// 将当前 ActivityObject 变成静态图像绘制到地面上, 用于优化渲染大量物体<br/>
@@ -1479,6 +1492,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         return _processingBecomesStaticImage;
     }
     
+    /// <summary>
+    /// 冻结物体，多余的节点就会被移出场景树，逻辑也会被暂停，用于优化性能
+    /// </summary>
     public void Freeze()
     {
         if (_freezeSprite == null)
@@ -1488,6 +1504,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         _freezeSprite.Freeze();
     }
 
+    /// <summary>
+    /// 解冻物体, 恢复正常逻辑
+    /// </summary>
     public void Unfreeze()
     {
         if (_freezeSprite == null)

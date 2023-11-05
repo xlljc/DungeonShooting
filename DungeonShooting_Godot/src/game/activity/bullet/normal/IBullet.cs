@@ -1,4 +1,6 @@
 ﻿
+using Config;
+
 public interface IBullet : IDestroy, ICoroutine
 {
     /// <summary>
@@ -9,12 +11,17 @@ public interface IBullet : IDestroy, ICoroutine
     /// <summary>
     /// 发射该子弹的武器
     /// </summary>
-    Weapon Weapon { get; }
+    Weapon Weapon { get; set; }
+    
+    /// <summary>
+    /// 使用的配置数据
+    /// </summary>
+    ExcelConfig.BulletBase BulletBase { get; set; }
     
     /// <summary>
     /// 发射该子弹的角色
     /// </summary>
-    Role TriggerRole { get; }
+    Role TriggerRole { get; set; }
     
     /// <summary>
     /// 最小伤害
@@ -25,11 +32,4 @@ public interface IBullet : IDestroy, ICoroutine
     /// 最大伤害
     /// </summary>
     int MaxHarm { get; set; }
-
-    /// <summary>
-    /// 初始化子弹数据
-    /// </summary>
-    /// <param name="weapon">发射该子弹的武器</param>
-    /// <param name="attackLayer">攻击的层级</param>
-    void Init(Weapon weapon, uint attackLayer);
 }

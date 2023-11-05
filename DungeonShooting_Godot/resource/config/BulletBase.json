@@ -3,24 +3,161 @@
     "Id": "0001",
     "Name": "\u5B50\u5F391",
     "Type": 1,
-    "Prefab": "bullet0001"
+    "Prefab": "bullet0001",
+    "HarmRange": [
+      4
+    ],
+    "RepelRnage": [
+      20
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      320,
+      350
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      300,
+      400
+    ],
+    "UseGravity": false
   },
   {
     "Id": "0002",
     "Name": "\u5B50\u5F392",
     "Type": 1,
-    "Prefab": "bullet0002"
+    "Prefab": "bullet0002",
+    "HarmRange": [
+      4
+    ],
+    "RepelRnage": [
+      30
+    ],
+    "DeviationAngleRange": [
+      -10,
+      10
+    ],
+    "SpeedRange": [
+      280,
+      380
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      200,
+      250
+    ],
+    "UseGravity": false
   },
   {
     "Id": "0003",
     "Name": "\u5B50\u5F393",
     "Type": 1,
-    "Prefab": "bullet0003"
+    "Prefab": "bullet0003",
+    "HarmRange": [
+      3
+    ],
+    "RepelRnage": [
+      10
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      320,
+      340
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      300,
+      400
+    ],
+    "UseGravity": false
+  },
+  {
+    "Id": "0004",
+    "Name": "\u69B4\u5F39\u70AE",
+    "Type": 1,
+    "Prefab": "bullet0004",
+    "HarmRange": [
+      5
+    ],
+    "RepelRnage": [
+      0
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      30,
+      30
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      270,
+      360
+    ],
+    "UseGravity": false
   },
   {
     "Id": "1001",
     "Name": "\u6FC0\u51491",
     "Type": 2,
-    "Prefab": "res://prefab/bullet/laser/Laser0001.tscn"
+    "Prefab": "res://prefab/bullet/laser/Laser0001.tscn",
+    "HarmRange": [
+      5
+    ],
+    "RepelRnage": [
+      0
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      300,
+      330
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      270,
+      360
+    ],
+    "UseGravity": false
+  },
+  {
+    "Id": "2001",
+    "Name": "\u5200\u4F24\u5BB3",
+    "Type": 3,
+    "Prefab": "",
+    "HarmRange": [
+      25
+    ],
+    "RepelRnage": [
+      150
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      350
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      35
+    ],
+    "UseGravity": false
   }
 ]

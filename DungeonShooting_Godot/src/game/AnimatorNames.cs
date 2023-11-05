@@ -64,4 +64,8 @@ public static class AnimatorNames
     /// 播放特效
     /// </summary>
     public const string Play = "play";
+    /// <summary>
+    /// 物体移动
+    /// </summary>
+    public const string Move = "move";
 }

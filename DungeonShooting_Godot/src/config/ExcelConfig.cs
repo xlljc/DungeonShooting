@@ -167,6 +167,21 @@ public static partial class ExcelConfig
         {
             try
             {
+                if (!string.IsNullOrEmpty(item.__Activity))
+                {
+                    item.Activity = ActivityBase_Map[item.__Activity];
+                }
+
+                if (!string.IsNullOrEmpty(item.__Bullet))
+                {
+                    item.Bullet = BulletBase_Map[item.__Bullet];
+                }
+
+                if (!string.IsNullOrEmpty(item.__Shell))
+                {
+                    item.Shell = ActivityBase_Map[item.__Shell];
+                }
+
                 if (!string.IsNullOrEmpty(item.__ShootSound))
                 {
                     item.ShootSound = Sound_Map[item.__ShootSound];
