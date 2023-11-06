@@ -616,7 +616,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     }
 
     /// <summary>
-    /// 撞到墙壁反弹时调用该函数, 参数为反弹的角度, 弧度制
+    /// 移动并碰撞到物体时调用该函数, 参数为碰撞数据, 该函数由 MoveController 调用
+    /// </summary>
+    public virtual void OnMoveCollision(KinematicCollision2D collision)
+    {
+    }
+
+    /// <summary>
+    /// 撞到墙壁反弹时调用该函数, 参数为反弹的角度, 弧度制, 该函数由 MoveController 调用
     /// </summary>
     public virtual void OnBounce(float rotation)
     {

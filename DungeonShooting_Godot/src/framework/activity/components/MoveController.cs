@@ -367,6 +367,13 @@ public class MoveController : Component
             _flag -= delta;
             if (_flag <= 0 && (collision = Master.GetLastSlideCollision()) != null) //执行反弹操作
             {
+                //调用移动碰撞函数
+                Master.OnMoveCollision(collision);
+                if (Master.IsDestroyed)
+                {
+                    return;
+                }
+                //0.1秒内不能再触发第二次碰撞检测
                 _flag = 0.1f;
                 var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
                 newVelocity = finallyEf.Reflect(no);

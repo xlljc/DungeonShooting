@@ -25,8 +25,9 @@ public partial class BoomBullet : Bullet
         Destroy();
     }
 
-    public override void OnCollisionWall(KinematicCollision2D lastSlideCollision)
+    public override void OnMoveCollision(KinematicCollision2D lastSlideCollision)
     {
+        CurrentBounce++;
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
             PlayBoom();

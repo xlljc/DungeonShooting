@@ -27,13 +27,10 @@ public partial class Bullet : ActivityObject, IBullet
     /// <summary>
     /// 当前反弹次数
     /// </summary>
-    public int CurrentBounce { get; set; } = 0;
+    public int CurrentBounce { get; protected set; } = 0;
     
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
-    //上一次碰撞物体
-    //private Rid _prevCollObject;
-    private float _flag = 0;
     
     public override void OnInit()
     {
@@ -87,25 +84,23 @@ public partial class Bullet : ActivityObject, IBullet
         }
     }
     
-    
-    /// <summary>
-    /// 碰到墙壁
-    /// </summary>
-    public virtual void OnCollisionWall(KinematicCollision2D lastSlideCollision)
+
+    public override void OnMoveCollision(KinematicCollision2D collision)
     {
+        CurrentBounce++;
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
             //创建粒子特效
             var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletSmoke_tscn);
             var smoke = packedScene.Instantiate<GpuParticles2D>();
             var rotated = AnimatedSprite.Position.Rotated(Rotation);
-            smoke.GlobalPosition = lastSlideCollision.GetPosition() + new Vector2(0, rotated.Y);
-            smoke.GlobalRotation = lastSlideCollision.GetNormal().Angle();
+            smoke.GlobalPosition = collision.GetPosition() + new Vector2(0, rotated.Y);
+            smoke.GlobalRotation = collision.GetNormal().Angle();
             smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
             Destroy();
         }
     }
-    
+
     /// <summary>
     /// 碰到目标
     /// </summary>
@@ -188,27 +183,13 @@ public partial class Bullet : ActivityObject, IBullet
         node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
     }
     
-    protected override void PhysicsProcess(float delta)
+    protected override void Process(float delta)
     {
-        //移动
-        KinematicCollision2D lastSlideCollision;
-        //撞到墙
-        _flag -= delta;
-        if (_flag <= 0 && (lastSlideCollision = GetLastSlideCollision()) != null)
+        //距离太大, 自动销毁
+        CurrFlyDistance += BulletData.FlySpeed * delta;
+        if (CurrFlyDistance >= BulletData.MaxDistance)
         {
-            _flag = 0.1f;
-            CurrentBounce++;
-            //撞墙
-            OnCollisionWall(lastSlideCollision);
-        }
-        else
-        {
-            //距离太大, 自动销毁
-            CurrFlyDistance += BulletData.FlySpeed * delta;
-            if (CurrFlyDistance >= BulletData.MaxDistance)
-            {
-                OnMaxDistance();
-            }
+            OnMaxDistance();
         }
     }
     

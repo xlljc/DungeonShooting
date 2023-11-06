@@ -45,7 +45,7 @@ material = SubResource("ShaderMaterial_v77gw")
 material = SubResource("ShaderMaterial_p0wfd")
 sprite_frames = ExtResource("3_bttus")
 animation = &"move"
-frame_progress = 0.57852
+frame_progress = 0.273277
 
 [node name="CollisionArea" type="Area2D" parent="AnimatedSprite"]
 collision_layer = 0
