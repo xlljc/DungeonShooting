@@ -263,6 +263,13 @@ public static partial class ExcelConfig
         public ActivityBase Shell;
 
         /// <summary>
+        /// 是否在换弹时才抛壳 <br/>
+        /// 
+        /// </summary>
+        [JsonInclude]
+        public bool ReloadThrowShell;
+
+        /// <summary>
         /// 投抛弹壳的延时时间, 在射击或者上膛后会触发抛弹壳效果 <br/>
         /// 如果为0, 则不自动抛弹
         /// </summary>
@@ -411,6 +418,7 @@ public static partial class ExcelConfig
             inst.FireEffect = FireEffect;
             inst.Bullet = Bullet;
             inst.Shell = Shell;
+            inst.ReloadThrowShell = ReloadThrowShell;
             inst.ThrowShellDelayTime = ThrowShellDelayTime;
             inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.CanMeleeAttack = CanMeleeAttack;

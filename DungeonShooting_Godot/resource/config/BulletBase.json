@@ -142,7 +142,7 @@
     "Type": 1,
     "Prefab": "bullet0004",
     "HarmRange": [
-      5
+      30
     ],
     "RepelRnage": [
       0

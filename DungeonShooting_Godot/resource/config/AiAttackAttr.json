@@ -75,5 +75,16 @@
     "AttackLockAngle": true,
     "BulletSpeedScale": 1,
     "AmmoConsumptionProbability": 0
+  },
+  {
+    "Id": "0008",
+    "Remark": "\u69B4\u5F39\u70AE",
+    "FiringStand": true,
+    "ShowSubline": true,
+    "LockingTime": 1.5,
+    "LockAngleTime": 0.5,
+    "AttackLockAngle": true,
+    "BulletSpeedScale": 0.85,
+    "AmmoConsumptionProbability": 0
   }
 ]

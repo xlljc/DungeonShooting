@@ -49,6 +49,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0001",
     "__Shell": "shell0001",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -124,6 +125,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0001",
     "__Shell": "shell0001",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -199,6 +201,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0002",
     "__Shell": "shell0002",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0.2,
     "ThrowCollisionSize": {
       "X": 20,
@@ -274,6 +277,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0002",
     "__Shell": "shell0002",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0.2,
     "ThrowCollisionSize": {
       "X": 20,
@@ -349,6 +353,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0001",
     "__Shell": "shell0001",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -424,6 +429,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0001",
     "__Shell": "shell0001",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -498,6 +504,7 @@
     "FireEffect": "",
     "__Bullet": "2001",
     "__Shell": "",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -572,6 +579,7 @@
     "FireEffect": "",
     "__Bullet": "2001",
     "__Shell": "",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -647,6 +655,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0004",
     "__Shell": "shell0003",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0.2,
     "ThrowCollisionSize": {
       "X": 20,
@@ -722,6 +731,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0004",
     "__Shell": "shell0003",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0.2,
     "ThrowCollisionSize": {
       "X": 20,
@@ -797,6 +807,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0002",
     "__Shell": "shell0001",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -872,6 +883,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0002",
     "__Shell": "shell0001",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -947,6 +959,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0003",
     "__Shell": "shell0001",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -1022,6 +1035,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0003",
     "__Shell": "shell0001",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -1097,6 +1111,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire2.tscn",
     "__Bullet": "1001",
     "__Shell": "",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -1172,6 +1187,7 @@
     "FireEffect": "res://prefab/effect/weapon/ShotFire2.tscn",
     "__Bullet": "1001",
     "__Shell": "",
+    "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -1204,10 +1220,10 @@
     "Weight": 40,
     "WeightType": 1,
     "ContinuousShoot": false,
-    "AmmoCapacity": 10,
-    "MaxAmmoCapacity": 240,
-    "StandbyAmmoCapacity": 120,
-    "ReloadTime": 1.8,
+    "AmmoCapacity": 1,
+    "MaxAmmoCapacity": 50,
+    "StandbyAmmoCapacity": 25,
+    "ReloadTime": 2.5,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -1222,17 +1238,17 @@
       1
     ],
     "TriggerInterval": 0,
-    "StartFiringSpeed": 300,
-    "FinalFiringSpeed": 300,
+    "StartFiringSpeed": 60,
+    "FinalFiringSpeed": 60,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
     "FireBulletCountRange": [
       1
     ],
     "DelayedTime": 0,
-    "StartScatteringRange": 0,
-    "FinalScatteringRange": 20,
-    "ScatteringRangeAddValue": 4,
+    "StartScatteringRange": 3,
+    "FinalScatteringRange": 8,
+    "ScatteringRangeAddValue": 5,
     "ScatteringRangeBackSpeed": 40,
     "ScatteringRangeBackDelayTime": 0.5,
     "CameraShake": 2,
@@ -1240,13 +1256,14 @@
       2,
       3
     ],
-    "BacklashRegressionSpeed": 25,
-    "UpliftAngle": 13,
+    "BacklashRegressionSpeed": 20,
+    "UpliftAngle": 16,
     "DefaultAngle": 0,
-    "UpliftAngleRestore": 1,
+    "UpliftAngleRestore": 3,
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0005",
-    "__Shell": "",
+    "__Shell": "shell0001",
+    "ReloadThrowShell": true,
     "ThrowShellDelayTime": 0,
     "ThrowCollisionSize": {
       "X": 20,
@@ -1259,17 +1276,93 @@
     "MeleeAttackRepelRnage": [
       100
     ],
-    "__ShootSound": "shooting0010",
-    "__BeginReloadSound": "reloadBegin0011",
+    "__ShootSound": "",
+    "__BeginReloadSound": "",
     "BeginReloadSoundDelayTime": 0,
     "__ReloadSound": "",
     "ReloadSoundDelayTime": 0,
-    "__ReloadFinishSound": "reloadFinish0003",
-    "ReloadFinishSoundAdvanceTime": 0.8,
+    "__ReloadFinishSound": "",
+    "ReloadFinishSoundAdvanceTime": 0,
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0016",
+    "__AiUseAttribute": "0018",
     "__AiAttackAttr": ""
+  },
+  {
+    "Id": "0018",
+    "__Activity": "",
+    "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668",
+    "Weight": 40,
+    "WeightType": 1,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 1,
+    "MaxAmmoCapacity": 50,
+    "StandbyAmmoCapacity": 25,
+    "ReloadTime": 2.5,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 5,
+    "StartFiringSpeed": 60,
+    "FinalFiringSpeed": 60,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 3,
+    "FinalScatteringRange": 8,
+    "ScatteringRangeAddValue": 5,
+    "ScatteringRangeBackSpeed": 40,
+    "ScatteringRangeBackDelayTime": 0.5,
+    "CameraShake": 2,
+    "BacklashRange": [
+      2,
+      3
+    ],
+    "BacklashRegressionSpeed": 20,
+    "UpliftAngle": 16,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 3,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "__Bullet": "0005",
+    "__Shell": "shell0001",
+    "ReloadThrowShell": true,
+    "ThrowShellDelayTime": 0,
+    "ThrowCollisionSize": {
+      "X": 20,
+      "Y": 15
+    },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRnage": [
+      100
+    ],
+    "__ShootSound": "",
+    "__BeginReloadSound": "",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "",
+    "ReloadFinishSoundAdvanceTime": 0,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiUseAttribute": "",
+    "__AiAttackAttr": "0008"
   }
 ]
