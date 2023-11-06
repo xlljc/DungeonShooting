@@ -32,6 +32,17 @@ public partial class BoomBullet : Bullet
         {
             PlayBoom();
         }
+        else
+        {
+            //播放撞击音效
+            SoundManager.PlaySoundByConfig("collision0001", Position, BulletData.TriggerRole);
+        }
+    }
+
+    protected override void OnFallToGround()
+    {
+        //播放撞击音效
+        SoundManager.PlaySoundByConfig("collision0001", Position, BulletData.TriggerRole);
     }
 
     /// <summary>
@@ -45,7 +56,7 @@ public partial class BoomBullet : Bullet
         explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
         explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
         explode.Init(BulletData.TriggerRole?.AffiliationArea, AttackLayer, 25, BulletData.MinHarm, BulletData.MaxHarm, 50, 150);
-        explode.RunPlay();
+        explode.RunPlay(BulletData.TriggerRole);
         if (AffiliationArea != null)
         {
             var texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_effects_explode_Explode_pit0001_png);

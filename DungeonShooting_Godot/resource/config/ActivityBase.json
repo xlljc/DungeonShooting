@@ -216,6 +216,18 @@
     "ShowInMapEditor": false
   },
   {
+    "Id": "shell0004",
+    "Type": 7,
+    "Name": "",
+    "Intro": "",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/shell/Shell0004.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
     "Id": "effect0001",
     "Type": 8,
     "Name": "",
@@ -377,7 +389,7 @@
     "Name": "",
     "Intro": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u4E1C\u4FA7)",
     "Details": "",
-    "IsStatic": false,
+    "IsStatic": true,
     "__Material": "",
     "Prefab": "res://prefab/map/RoomDoor_E.tscn",
     "Icon": "",

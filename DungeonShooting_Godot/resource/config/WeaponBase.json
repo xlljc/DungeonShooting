@@ -1223,7 +1223,7 @@
     "AmmoCapacity": 1,
     "MaxAmmoCapacity": 50,
     "StandbyAmmoCapacity": 25,
-    "ReloadTime": 2.5,
+    "ReloadTime": 1.5,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -1262,9 +1262,9 @@
     "UpliftAngleRestore": 3,
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0005",
-    "__Shell": "shell0001",
+    "__Shell": "shell0004",
     "ReloadThrowShell": true,
-    "ThrowShellDelayTime": 0,
+    "ThrowShellDelayTime": 0.46,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
@@ -1276,7 +1276,7 @@
     "MeleeAttackRepelRnage": [
       100
     ],
-    "__ShootSound": "",
+    "__ShootSound": "shooting0011",
     "__BeginReloadSound": "",
     "BeginReloadSoundDelayTime": 0,
     "__ReloadSound": "",
@@ -1299,7 +1299,7 @@
     "AmmoCapacity": 1,
     "MaxAmmoCapacity": 50,
     "StandbyAmmoCapacity": 25,
-    "ReloadTime": 2.5,
+    "ReloadTime": 1.5,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -1338,9 +1338,9 @@
     "UpliftAngleRestore": 3,
     "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
     "__Bullet": "0005",
-    "__Shell": "shell0001",
+    "__Shell": "shell0004",
     "ReloadThrowShell": true,
-    "ThrowShellDelayTime": 0,
+    "ThrowShellDelayTime": 0.46,
     "ThrowCollisionSize": {
       "X": 20,
       "Y": 15
@@ -1352,7 +1352,7 @@
     "MeleeAttackRepelRnage": [
       100
     ],
-    "__ShootSound": "",
+    "__ShootSound": "shooting0011",
     "__BeginReloadSound": "",
     "BeginReloadSoundDelayTime": 0,
     "__ReloadSound": "",

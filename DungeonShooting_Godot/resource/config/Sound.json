@@ -14,7 +14,7 @@
   {
     "Id": "shooting0003",
     "Path": "res://resource/sound/sfx/shooting/Shooting0003.ogg",
-    "Volume": 0.8,
+    "Volume": 0.7,
     "Remark": "\u9730\u5F39\u67AA"
   },
   {
@@ -58,6 +58,12 @@
     "Path": "res://resource/sound/sfx/shooting/Shooting0010.ogg",
     "Volume": 1.2,
     "Remark": "\u6FC0\u5149\u6B66\u5668"
+  },
+  {
+    "Id": "shooting0011",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0011.ogg",
+    "Volume": 1.8,
+    "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668"
   },
   {
     "Id": "reloading0001",
@@ -232,5 +238,29 @@
     "Path": "res://resource/sound/sfx/beLoaded/BeLoaded0017.ogg",
     "Volume": 1,
     "Remark": ""
+  },
+  {
+    "Id": "explosion0001",
+    "Path": "res://resource/sound/sfx/explosion/Explosion0001.ogg",
+    "Volume": 1.2,
+    "Remark": "\u7206\u70B8"
+  },
+  {
+    "Id": "explosion0002",
+    "Path": "res://resource/sound/sfx/explosion/Explosion0002.ogg",
+    "Volume": 1.2,
+    "Remark": "\u7206\u70B8"
+  },
+  {
+    "Id": "explosion0003",
+    "Path": "res://resource/sound/sfx/explosion/Explosion0003.ogg",
+    "Volume": 1.2,
+    "Remark": "\u7206\u70B8"
+  },
+  {
+    "Id": "collision0001",
+    "Path": "res://resource/sound/sfx/collision/Collision0001.ogg",
+    "Volume": 0.7,
+    "Remark": "\u78B0\u649E"
   }
 ]

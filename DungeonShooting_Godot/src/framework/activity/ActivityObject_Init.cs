@@ -100,6 +100,11 @@ public partial class ActivityObject
         public const string Id_shell0003 = "shell0003";
         /// <summary>
         /// 名称:  <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_shell0004 = "shell0004";
+        /// <summary>
+        /// 名称:  <br/>
         /// 简介: 敌人死亡碎片
         /// </summary>
         public const string Id_effect0001 = "effect0001";

@@ -1,4 +1,5 @@
 ﻿
+using Config;
 using Godot;
 
 /// <summary>
@@ -86,10 +87,15 @@ public partial class Explode : Area2D, IPoolItem
         }
     }
     
-    public void RunPlay()
+    /// <summary>
+    /// 播放爆炸, triggerRole 为触发该爆炸的角色
+    /// </summary>
+    public void RunPlay(Role triggerRole = null)
     {
         GameCamera.Main.CreateShake(new Vector2(6, 6), 0.7f, true);
         AnimationPlayer.Play(AnimatorNames.Play);
+        //播放爆炸音效
+        SoundManager.PlaySoundByConfig("explosion0002", Position, triggerRole);
     }
 
     //爆炸冲击波

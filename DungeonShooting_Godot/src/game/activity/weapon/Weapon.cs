@@ -232,6 +232,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     //上膛计时器
     private float _beLoadedStateTimer = -1;
 
+    //换弹投抛弹壳记录
+    private bool _reloadShellFlag = false;
+
     // ----------------------------------------------
     private uint _tempLayer;
 
@@ -962,13 +965,16 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         _attackFlag = true;
         _noAttackTime = 0;
+        _reloadShellFlag = false;
 
         //减子弹数量
         if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
         {
-            if (Utils.Random.RandomRangeFloat(0, 1) < _weaponAttribute.AiAttackAttr.AmmoConsumptionProbability) //触发消耗弹药
+            var count = UseAmmoCount();
+            CurrAmmo -= count;
+            if (Utils.Random.RandomRangeFloat(0, 1) >= _weaponAttribute.AiAttackAttr.AmmoConsumptionProbability) //不消耗弹药
             {
-                CurrAmmo -= UseAmmoCount();
+                ResidueAmmo += count;
             }
         }
         else
@@ -1261,15 +1267,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (Attribute.BeginReloadSound != null)
         {
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            var volume = SoundManager.CalcRoleVolume(Attribute.BeginReloadSound.Volume, Master);
             if (Attribute.BeginReloadSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.BeginReloadSound.Path, position, volume);
+                SoundManager.PlaySoundByConfig(Attribute.BeginReloadSound, GlobalPosition, TriggerRole);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSoundDelayTime, volume);
+                SoundManager.PlaySoundByConfigDelay(Attribute.BeginReloadSound, GlobalPosition, Attribute.BeginReloadSoundDelayTime, TriggerRole);
             }
         }
     }
@@ -1279,15 +1283,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (Attribute.ReloadSound != null)
         {
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            var volume = SoundManager.CalcRoleVolume(Attribute.ReloadSound.Volume, Master);
             if (Attribute.ReloadSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound.Path, position, volume);
+                SoundManager.PlaySoundByConfig(Attribute.ReloadSound, GlobalPosition, TriggerRole);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound.Path, position, Attribute.ReloadSoundDelayTime, volume);
+                SoundManager.PlaySoundByConfigDelay(Attribute.ReloadSound, GlobalPosition, Attribute.ReloadSoundDelayTime, TriggerRole);
             }
         }
     }
@@ -1297,9 +1299,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (Attribute.ReloadFinishSound != null)
         {
-            var volume = SoundManager.CalcRoleVolume(Attribute.ReloadFinishSound.Volume, Master);
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            SoundManager.PlaySoundEffectPosition(Attribute.ReloadFinishSound.Path, position, volume);
+            SoundManager.PlaySoundByConfig(Attribute.ReloadFinishSound, GlobalPosition, TriggerRole);
         }
     }
 
@@ -1308,9 +1308,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (Attribute.ShootSound != null)
         {
-            var volume = SoundManager.CalcRoleVolume(Attribute.ShootSound.Volume, Master);
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, volume);
+            SoundManager.PlaySoundByConfig(Attribute.ShootSound, GlobalPosition, TriggerRole);
         }
     }
 
@@ -1319,15 +1317,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (Attribute.BeLoadedSound != null)
         {
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            var volume = SoundManager.CalcRoleVolume(Attribute.BeLoadedSound.Volume, Master);
             if (Attribute.BeLoadedSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.BeLoadedSound.Path, position, volume);
+                SoundManager.PlaySoundByConfig(Attribute.BeLoadedSound, GlobalPosition, TriggerRole);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeLoadedSound.Path, position, Attribute.BeLoadedSoundDelayTime, volume);
+                SoundManager.PlaySoundByConfigDelay(Attribute.BeLoadedSound, GlobalPosition, Attribute.BeLoadedSoundDelayTime, TriggerRole);
             }
         }
     }
@@ -1392,7 +1388,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         PlayReloadSound();
         
         //抛出弹壳
-        if (Attribute.ReloadThrowShell)
+        if (Attribute.ReloadThrowShell && !_reloadShellFlag)
         {
             ThrowShellHandler(0.6f);
         }
@@ -1472,10 +1468,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         //创建一个弹壳
         if (Attribute.ThrowShellDelayTime > 0)
         {
-            this.CallDelay(Attribute.ThrowShellDelayTime, () => ThrowShell(Attribute.Shell, speedScale));
+            this.CallDelay(Attribute.ThrowShellDelayTime, () =>
+            {
+                _reloadShellFlag = true;
+                ThrowShell(Attribute.Shell, speedScale);
+            });
         }
         else if (Attribute.ThrowShellDelayTime == 0)
         {
+            _reloadShellFlag = true;
             ThrowShell(Attribute.Shell, speedScale);
         }
     }
