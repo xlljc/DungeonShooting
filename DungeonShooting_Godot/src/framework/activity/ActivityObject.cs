@@ -265,8 +265,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
 
     // --------------------------------------------------------------------------------
 
+    //是否正在调用组件 Update 函数
+    private bool _updatingComp = false;
     //组件集合
     private readonly List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
+    //修改的组件集合, value 为 true 表示添加组件, false 表示移除组件
+    private readonly List<KeyValuePair<Component, bool>> _changeComponents = new List<KeyValuePair<Component, bool>>();
     //上一帧动画名称
     private string _prevAnimation;
     //上一帧动画
@@ -580,23 +584,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     }
     
     /// <summary>
-    /// 每帧调用一次, ProcessOver() 会在组件的 Process() 之后调用
-    /// </summary>
-    protected virtual void ProcessOver(float delta)
-    {
-    }
-    
-    /// <summary>
     /// 每物理帧调用一次, 物体的 PhysicsProcess() 会在组件的 PhysicsProcess() 之前调用
     /// </summary>
     protected virtual void PhysicsProcess(float delta)
-    {
-    }
-    
-    /// <summary>
-    /// 每物理帧调用一次, PhysicsProcessOver() 会在组件的 PhysicsProcess() 之后调用
-    /// </summary>
-    protected virtual void PhysicsProcessOver(float delta)
     {
     }
     
@@ -772,7 +762,15 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public T AddComponent<T>() where T : Component, new()
     {
         var component = new T();
-        _components.Add(new KeyValuePair<Type, Component>(typeof(T), component));
+        if (_updatingComp)
+        {
+            _changeComponents.Add(new KeyValuePair<Component, bool>(component, true));
+        }
+        else
+        {
+            _components.Add(new KeyValuePair<Type, Component>(typeof(T), component));
+        }
+
         component.Master = this;
         component.Ready();
         component.OnEnable();
@@ -785,7 +783,15 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public Component AddComponent(Type type)
     {
         var component = (Component)Activator.CreateInstance(type);
-        _components.Add(new KeyValuePair<Type, Component>(type, component));
+        if (_updatingComp)
+        {
+            _changeComponents.Add(new KeyValuePair<Component, bool>(component, true));
+        }
+        else
+        {
+            _components.Add(new KeyValuePair<Type, Component>(type, component));
+        }
+        
         component.Master = this;
         component.Ready();
         component.OnEnable();
@@ -798,13 +804,26 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <param name="component">组件对象</param>
     public void RemoveComponent(Component component)
     {
-        for (int i = 0; i < _components.Count; i++)
+        if (component.IsDestroyed)
         {
-            if (_components[i].Value == component)
+            return;
+        }
+
+        if (_updatingComp)
+        {
+            _changeComponents.Add(new KeyValuePair<Component, bool>(component, false));
+            component.Destroy();
+        }
+        else
+        {
+            for (var i = 0; i < _components.Count; i++)
             {
-                _components.RemoveAt(i);
-                component.Destroy();
-                return;
+                if (_components[i].Value == component)
+                {
+                    _components.RemoveAt(i);
+                    component.Destroy();
+                    return;
+                }
             }
         }
     }
@@ -820,6 +839,18 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             if (temp.Key == type)
             {
                 return temp.Value;
+            }
+        }
+
+        if (_updatingComp)
+        {
+            for (var i = 0; i < _changeComponents.Count; i++)
+            {
+                var temp = _components[i];
+                if (temp.Value.GetType() == type)
+                {
+                    return temp.Value;
+                }
             }
         }
 
@@ -905,14 +936,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         //更新组件
         if (_components.Count > 0)
         {
+            _updatingComp = true;
             if (EnableCustomBehavior) //启用所有组件
             {
-                var arr = _components.ToArray();
-                for (int i = 0; i < arr.Length; i++)
+                for (int i = 0; i < _components.Count; i++)
                 {
                     if (IsDestroyed) return;
-                    var temp = arr[i].Value;
-                    if (temp != null && temp.Master == this && temp.Enable)
+                    var temp = _components[i].Value;
+                    if (temp != null && temp.Enable)
                     {
                         temp.Process(newDelta);
                     }
@@ -924,6 +955,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                 {
                     MoveController.Process(newDelta);
                 }
+            }
+            _updatingComp = false;
+            
+            if (_changeComponents.Count > 0)
+            {
+                RefreshComponent();
             }
         }
 
@@ -958,8 +995,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         
         //协程更新
         ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
-
-        ProcessOver(newDelta);
         
         //调试绘制
         if (IsDebug)
@@ -1125,14 +1160,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         //更新组件
         if (_components.Count > 0)
         {
+            _updatingComp = true;
             if (EnableCustomBehavior) //启用所有组件
             {
-                var arr = _components.ToArray();
-                for (int i = 0; i < arr.Length; i++)
+                for (int i = 0; i < _components.Count; i++)
                 {
                     if (IsDestroyed) return;
-                    var temp = arr[i].Value;
-                    if (temp != null && temp.Master == this && temp.Enable)
+                    var temp = _components[i].Value;
+                    if (temp != null && temp.Enable)
                     {
                         temp.PhysicsProcess(newDelta);
                     }
@@ -1145,9 +1180,37 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                     MoveController.PhysicsProcess(newDelta);
                 }
             }
-        }
+            _updatingComp = false;
 
-        PhysicsProcessOver(newDelta);
+            if (_changeComponents.Count > 0)
+            {
+                RefreshComponent();
+            }
+        }
+    }
+
+    //更新新增/移除的组件
+    private void RefreshComponent()
+    {
+        for (var i = 0; i < _changeComponents.Count; i++)
+        {
+            var item = _changeComponents[i];
+            if (item.Value) //添加组件
+            {
+                _components.Add(new KeyValuePair<Type, Component>(item.Key.GetType(), item.Key));
+            }
+            else //移除组件
+            {
+                for (var j = 0; j < _components.Count; j++)
+                {
+                    if (_components[i].Value == item.Key)
+                    {
+                        _components.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>

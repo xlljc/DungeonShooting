@@ -1001,7 +1001,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         PlayShootSound();
         
         //抛弹
-        if ((Attribute.ContinuousShoot || !Attribute.ManualBeLoaded))
+        if (!Attribute.ReloadThrowShell && (Attribute.ContinuousShoot || !Attribute.ManualBeLoaded))
         {
             ThrowShellHandler(1f);
         }
@@ -1211,7 +1211,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             
             // Debug.Log("开始换弹.");
             //抛弹
-            if (!Attribute.ContinuousShoot && (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0)
+            if (!Attribute.ReloadThrowShell && !Attribute.ContinuousShoot &&
+                (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0)
             {
                 ThrowShellHandler(0.6f);
             }
@@ -1389,7 +1390,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             
         //播放换弹音效
         PlayReloadSound();
-            
+        
+        //抛出弹壳
+        if (Attribute.ReloadThrowShell)
+        {
+            ThrowShellHandler(0.6f);
+        }
+        
         OnReload();
         // Debug.Log("装弹.");
     }
@@ -1412,7 +1419,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     private void BeLoadedHandler()
     {
         //上膛抛弹
-        if (!Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
+        if (!Attribute.ReloadThrowShell && !Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
         {
             ThrowShellHandler(0.6f);
         }

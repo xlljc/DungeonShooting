@@ -131,7 +131,7 @@ public abstract partial class ActiveProp : Prop, IPackageItem
     {
     }
 
-    protected override void ProcessOver(float delta)
+    protected override void Process(float delta)
     {
         RunUpdate(delta);
     }

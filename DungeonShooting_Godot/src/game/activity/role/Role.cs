@@ -566,12 +566,16 @@ public abstract partial class Role : ActivityObject
         }
         
         //主动道具调用更新
-        var props = (Prop[])ActivePropsPack.ItemSlot.Clone();
-        foreach (var prop in props)
+        var props = ActivePropsPack.ItemSlot;
+        if (props.Length > 0)
         {
-            if (prop != null && !prop.IsDestroyed)
+            props = (ActiveProp[])props.Clone();
+            foreach (var prop in props)
             {
-                prop.PackProcess(delta);
+                if (prop != null && !prop.IsDestroyed)
+                {
+                    prop.PackProcess(delta);
+                }
             }
         }
     }
