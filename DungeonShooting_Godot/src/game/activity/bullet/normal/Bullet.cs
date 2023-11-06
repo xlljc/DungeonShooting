@@ -49,6 +49,10 @@ public partial class Bullet : ActivityObject, IBullet
         if (triggerRole != null)
         {
             altitude = -triggerRole.MountPoint.Position.Y;
+            if (triggerRole.AffiliationArea != null) //设置所属区域
+            {
+                triggerRole.AffiliationArea.InsertItem(this);
+            }
         }
         else
         {

@@ -40,10 +40,20 @@ public partial class BoomBullet : Bullet
     public void PlayBoom()
     {
         var explode = ObjectManager.GetExplode(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
-        explode.Position = Position;
+        var pos = Position;
+        explode.Position = pos;
         explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
         explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
         explode.Init(BulletData.TriggerRole?.AffiliationArea, AttackLayer, 25, BulletData.MinHarm, BulletData.MaxHarm, 50, 150);
         explode.RunPlay();
+        if (AffiliationArea != null)
+        {
+            var texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_effects_explode_Explode_pit0001_png);
+            var tempPos = AffiliationArea.RoomInfo.ToImageCanvasPosition(pos);
+            AffiliationArea.RoomInfo.StaticImageCanvas.DrawImageInCanvas(
+                texture, null, tempPos.X, tempPos.Y, Utils.Random.RandomRangeInt(0, 360),
+                texture.GetWidth() / 2, texture.GetHeight() / 2, false
+            );
+        }
     }
 }

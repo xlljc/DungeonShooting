@@ -14,6 +14,7 @@ public class ResourcePath
     public const string prefab_bullet_normal_Bullet0001_tscn = "res://prefab/bullet/normal/Bullet0001.tscn";
     public const string prefab_bullet_normal_Bullet0002_tscn = "res://prefab/bullet/normal/Bullet0002.tscn";
     public const string prefab_bullet_normal_Bullet0003_tscn = "res://prefab/bullet/normal/Bullet0003.tscn";
+    public const string prefab_bullet_normal_Bullet0004_tscn = "res://prefab/bullet/normal/Bullet0004.tscn";
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
     public const string prefab_effect_common_Effect1_tscn = "res://prefab/effect/common/Effect1.tscn";
     public const string prefab_effect_enemy_Effect0001_tscn = "res://prefab/effect/enemy/Effect0001.tscn";
@@ -82,6 +83,7 @@ public class ResourcePath
     public const string prefab_weapon_Weapon0009_tscn = "res://prefab/weapon/Weapon0009.tscn";
     public const string prefab_weapon_WeaponTemplate_tscn = "res://prefab/weapon/WeaponTemplate.tscn";
     public const string resource_config_ActivityBase_json = "res://resource/config/ActivityBase.json";
+    public const string resource_config_ActivityMaterial_json = "res://resource/config/ActivityMaterial.json";
     public const string resource_config_AiAttackAttr_json = "res://resource/config/AiAttackAttr.json";
     public const string resource_config_BulletBase_json = "res://resource/config/BulletBase.json";
     public const string resource_config_Sound_json = "res://resource/config/Sound.json";
@@ -151,6 +153,7 @@ public class ResourcePath
     public const string resource_sprite_bullet_normal_bullet0001_png = "res://resource/sprite/bullet/normal/bullet0001.png";
     public const string resource_sprite_bullet_normal_bullet0002_png = "res://resource/sprite/bullet/normal/bullet0002.png";
     public const string resource_sprite_bullet_normal_bullet0003_png = "res://resource/sprite/bullet/normal/bullet0003.png";
+    public const string resource_sprite_bullet_normal_bullet0004_png = "res://resource/sprite/bullet/normal/bullet0004.png";
     public const string resource_sprite_bullet_normal_bullet2_png = "res://resource/sprite/bullet/normal/bullet2.png";
     public const string resource_sprite_effects_Circle_png = "res://resource/sprite/effects/Circle.png";
     public const string resource_sprite_effects_Circle2_png = "res://resource/sprite/effects/Circle2.png";
@@ -161,6 +164,7 @@ public class ResourcePath
     public const string resource_sprite_effects_common_Smoke2_png = "res://resource/sprite/effects/common/Smoke2.png";
     public const string resource_sprite_effects_explode_Explode_circle0001_png = "res://resource/sprite/effects/explode/Explode_circle0001.png";
     public const string resource_sprite_effects_explode_Explode_line0001_png = "res://resource/sprite/effects/explode/Explode_line0001.png";
+    public const string resource_sprite_effects_explode_Explode_pit0001_png = "res://resource/sprite/effects/explode/Explode_pit0001.png";
     public const string resource_sprite_effects_weapon_Collision1_png = "res://resource/sprite/effects/weapon/Collision1.png";
     public const string resource_sprite_effects_weapon_KnifeHit1_png = "res://resource/sprite/effects/weapon/KnifeHit1.png";
     public const string resource_sprite_effects_weapon_MeleeAttack1_png = "res://resource/sprite/effects/weapon/MeleeAttack1.png";
@@ -299,6 +303,7 @@ public class ResourcePath
     public const string resource_spriteFrames_bullet_Bullet0001_tres = "res://resource/spriteFrames/bullet/Bullet0001.tres";
     public const string resource_spriteFrames_bullet_Bullet0002_tres = "res://resource/spriteFrames/bullet/Bullet0002.tres";
     public const string resource_spriteFrames_bullet_Bullet0003_tres = "res://resource/spriteFrames/bullet/Bullet0003.tres";
+    public const string resource_spriteFrames_bullet_Bullet0004_tres = "res://resource/spriteFrames/bullet/Bullet0004.tres";
     public const string resource_spriteFrames_effect_KnifeHit1_tres = "res://resource/spriteFrames/effect/KnifeHit1.tres";
     public const string resource_spriteFrames_other_RoomDoor_E_Down_tres = "res://resource/spriteFrames/other/RoomDoor_E_Down.tres";
     public const string resource_spriteFrames_other_RoomDoor_E_Up_tres = "res://resource/spriteFrames/other/RoomDoor_E_Up.tres";

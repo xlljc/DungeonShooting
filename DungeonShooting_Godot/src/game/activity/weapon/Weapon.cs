@@ -685,7 +685,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         return Master == null && GetParent() == GameApplication.Instance.World.NormalLayer;
     }
-    
+
     /// <summary>
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
@@ -713,10 +713,10 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             TriggerRoleAttackLayer = Master.AttackLayer;
             _weaponAttribute = Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
         }
-        
+
         //是否第一帧按下
         var justDown = _downTimer == 0;
-        if (_beLoadedState == 0 || _beLoadedState == -1)  //需要执行上膛操作
+        if (_beLoadedState == 0 || _beLoadedState == -1) //需要执行上膛操作
         {
             if (justDown && !Reloading && triggerRole != null)
             {
@@ -732,9 +732,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                 }
             }
         }
-        else if (_beLoadedState == 1)  //上膛中
+        else if (_beLoadedState == 1) //上膛中
         {
-            
+
         }
         else //上膛完成
         {
@@ -804,6 +804,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                         {
                             _delayedTime = Attribute.DelayedTime;
                         }
+
                         //扳机按下间隔
                         _triggerTimer = Attribute.TriggerInterval;
                         //连发数量
@@ -833,6 +834,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                             }
                         }
                     }
+                }
+            }
+            else //不能开火
+            {
+                if (CurrAmmo <= 0 && justDown && triggerRole != null) //子弹不够
+                {
+                    //第一帧按下, 触发换弹
+                    Reload();
                 }
             }
         }
