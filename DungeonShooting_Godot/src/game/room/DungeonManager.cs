@@ -185,7 +185,7 @@ public partial class DungeonManager : Node2D
             
             //更新敌人视野
             UpdateEnemiesView();
-            if (GameApplication.Instance.Debug)
+            if (GameApplication.Instance.IsDebug)
             {
                 QueueRedraw();
             }
@@ -325,6 +325,8 @@ public partial class DungeonManager : Node2D
         CreateDoor(roomInfo);
         //创建房间归属区域
         CreateRoomAffiliation(roomInfo);
+        //创建 RoomStaticSprite
+        CreateRoomStaticSprite(roomInfo);
         //创建静态精灵画布
         CreateRoomStaticSpriteCanvas(roomInfo);
         //创建迷雾遮罩
@@ -411,24 +413,31 @@ public partial class DungeonManager : Node2D
         World.AffiliationAreaRoot.AddChild(affiliation);
     }
 
+    //创建 RoomStaticSprite
+    private void CreateRoomStaticSprite(RoomInfo roomInfo)
+    {
+        var spriteRoot = new RoomStaticSprite(roomInfo);
+        spriteRoot.Name = "SpriteRoot";
+        World.Current.StaticSpriteRoot.AddChild(spriteRoot);
+        roomInfo.StaticSprite = spriteRoot;
+    }
+
     //创建静态精灵画布
     private void CreateRoomStaticSpriteCanvas(RoomInfo roomInfo)
     {
         var worldPos = roomInfo.GetWorldPosition();
         var rect = roomInfo.OuterRange;
 
-        int minX = rect.Position.X - GameConfig.TileCellSize;
-        int minY = rect.Position.Y - GameConfig.TileCellSize;
-        int maxX = rect.End.X + GameConfig.TileCellSize;
-        int maxY = rect.End.Y + GameConfig.TileCellSize;
+        var minX = rect.Position.X - GameConfig.TileCellSize;
+        var minY = rect.Position.Y - GameConfig.TileCellSize;
+        var maxX = rect.End.X + GameConfig.TileCellSize;
+        var maxY = rect.End.Y + GameConfig.TileCellSize;
 
-        var staticSpriteCanvas = new RoomStaticImageCanvas(
-            World.StaticSpriteRoot,
-            new Vector2I(minX, minY),
-            maxX - minX, maxY - minY
-        );
-        staticSpriteCanvas.RoomOffset = new Vector2I(worldPos.X - minX, worldPos.Y - minY);
-        roomInfo.StaticImageCanvas = staticSpriteCanvas;
+        var canvasSprite = new ImageCanvas(maxX - minX, maxY - minY);
+        canvasSprite.Position = new Vector2I(minX, minY);
+        roomInfo.RoomOffset = new Vector2I(worldPos.X - minX, worldPos.Y - minY);
+        roomInfo.StaticImageCanvas = canvasSprite;
+        roomInfo.StaticSprite.AddChild(canvasSprite);
     }
 
     //创建迷雾遮罩
@@ -642,9 +651,9 @@ public partial class DungeonManager : Node2D
     
     public override void _Draw()
     {
-        if (GameApplication.Instance.Debug)
+        if (GameApplication.Instance.IsDebug)
         {
-            if (_dungeonTileMap != null)
+            if (_dungeonTileMap != null && _roomStaticNavigationList != null)
             {
                 //绘制ai寻路区域
                 Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());

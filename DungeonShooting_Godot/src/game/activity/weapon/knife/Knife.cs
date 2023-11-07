@@ -129,16 +129,19 @@ public partial class Knife : Weapon
         {
             if (activityObject is Role role) //碰到角色
             {
-                var damage = Utils.Random.RandomConfigRange(Attribute.HarmRange);
+                var damage = Utils.Random.RandomConfigRange(Attribute.Bullet.HarmRange);
                 damage = Master.RoleState.CallCalcDamageEvent(damage);
                 //击退
                 if (role is not Player) //目标不是玩家才会触发击退
                 {
                     var attr = Master.IsAi ? AiUseAttribute : PlayerUseAttribute;
-                    var repel = Utils.Random.RandomConfigRange(attr.RepelRnage);
-                    var position = role.GlobalPosition - Master.MountPoint.GlobalPosition;
-                    var v2 = position.Normalized() * repel;
-                    role.MoveController.AddForce(v2, repel * 2);
+                    var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRnage);
+                    if (repel != 0)
+                    {
+                        var position = role.GlobalPosition - Master.MountPoint.GlobalPosition;
+                        var v2 = position.Normalized() * repel;
+                        role.MoveController.AddForce(v2);
+                    }
                 }
                 
                 //造成伤害

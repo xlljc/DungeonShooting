@@ -29,7 +29,7 @@ public partial class AffiliationArea : Area2D, IDestroy
     /// 玩家是否是第一次进入
     /// </summary>
     public bool IsFirstEnterFlag { get; private set; } = true;
-    
+
     private bool _init = false;
     private Vector2 _initSize;
     private RectangleShape2D _shape;
@@ -48,6 +48,7 @@ public partial class AffiliationArea : Area2D, IDestroy
 
         _initSize = rect2.Size;
         RoomInfo = roomInfo;
+
         var collisionShape = new CollisionShape2D();
         collisionShape.GlobalPosition = rect2.Position + rect2.Size / 2;
         var shape = new RectangleShape2D();
@@ -63,7 +64,7 @@ public partial class AffiliationArea : Area2D, IDestroy
         Monitoring = true;
         Monitorable = false;
         CollisionLayer = PhysicsLayer.None;
-        CollisionMask = PhysicsLayer.Prop | PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Shell | PhysicsLayer.Throwing;
+        CollisionMask = PhysicsLayer.Prop | PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Debris | PhysicsLayer.Throwing;
 
         BodyEntered += OnBodyEntered;
         BodyExited += OnBodyExited;

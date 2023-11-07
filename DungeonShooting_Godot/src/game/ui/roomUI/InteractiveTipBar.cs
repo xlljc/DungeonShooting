@@ -46,7 +46,7 @@ public class InteractiveTipBar
     /// <param name="icon">显示图标</param>
     public void ShowBar(ActivityObject target, string showText, Texture2D icon)
     {
-        _interactiveTipBar.Instance.GlobalPosition = target.GlobalPosition;
+        _interactiveTipBar.Instance.GlobalPosition = GameApplication.Instance.ViewToGlobalPosition(_interactiveTarget.GlobalPosition);
         _interactiveTipBar.L_Icon.Instance.Texture = icon;
         _interactiveTipBar.Instance.Visible = true;
         _interactiveTipBar.L_NameLabel.Instance.Text = showText;

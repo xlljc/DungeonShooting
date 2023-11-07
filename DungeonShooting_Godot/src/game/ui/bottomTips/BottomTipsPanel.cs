@@ -69,7 +69,7 @@ public partial class BottomTipsPanel : BottomTips
         yield return 0;
 
         //向上移动
-        var frame = 60 * _animationTime;
+        var frame = GameApplication.Instance.TargetFps * _animationTime;
         var stepPixel = _movePixel / frame;
         for (var i = 0; i < frame; i++)
         {

@@ -11,21 +11,21 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 武器使用的属性数据, 该属性会根据是否是玩家使用武器, 如果是Ai使用武器, 则会返回 AiUseAttribute 的属性对象
     /// </summary>
-    public ExcelConfig.Weapon Attribute => _weaponAttribute;
+    public ExcelConfig.WeaponBase Attribute => _weaponAttribute;
 
     /// <summary>
     /// Ai使用该武器的属性
     /// </summary>
-    public ExcelConfig.Weapon AiUseAttribute => _aiWeaponAttribute;
+    public ExcelConfig.WeaponBase AiUseAttribute => _aiWeaponAttribute;
 
     /// <summary>
     /// 玩家使用该武器的属性
     /// </summary>
-    public ExcelConfig.Weapon PlayerUseAttribute => _playerWeaponAttribute;
+    public ExcelConfig.WeaponBase PlayerUseAttribute => _playerWeaponAttribute;
     
-    private ExcelConfig.Weapon _weaponAttribute;
-    private ExcelConfig.Weapon _playerWeaponAttribute;
-    private ExcelConfig.Weapon _aiWeaponAttribute;
+    private ExcelConfig.WeaponBase _weaponAttribute;
+    private ExcelConfig.WeaponBase _playerWeaponAttribute;
+    private ExcelConfig.WeaponBase _aiWeaponAttribute;
 
     /// <summary>
     /// 武器攻击的目标阵营
@@ -146,9 +146,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public bool NoMasterCanTrigger { get; set; } = true;
     
     /// <summary>
-    /// 上一次触发改武器开火的角色是否是Ai
+    /// 上一次触发改武器开火的角色
     /// </summary>
-    public bool TriggerRoleIsAi { get; private set; }
+    public Role TriggerRole { get; private set; }
     
     /// <summary>
     /// 上一次触发改武器开火的触发开火攻击的层级, 数据源自于: <see cref="PhysicsLayer"/>
@@ -232,12 +232,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     //上膛计时器
     private float _beLoadedStateTimer = -1;
 
+    //换弹投抛弹壳记录
+    private bool _reloadShellFlag = false;
+
     // ----------------------------------------------
     private uint _tempLayer;
 
     private static bool _init = false;
-    private static Dictionary<string, ExcelConfig.Weapon> _weaponAttributeMap =
-        new Dictionary<string, ExcelConfig.Weapon>();
+    private static Dictionary<string, ExcelConfig.WeaponBase> _weaponAttributeMap =
+        new Dictionary<string, ExcelConfig.WeaponBase>();
 
     /// <summary>
     /// 初始化武器属性数据
@@ -250,11 +253,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
 
         _init = true;
-        foreach (var weaponAttr in ExcelConfig.Weapon_List)
+        foreach (var weaponAttr in ExcelConfig.WeaponBase_List)
         {
-            if (!string.IsNullOrEmpty(weaponAttr.WeaponId))
+            if (weaponAttr.Activity != null)
             {
-                if (!_weaponAttributeMap.TryAdd(weaponAttr.WeaponId, weaponAttr))
+                if (!_weaponAttributeMap.TryAdd(weaponAttr.Activity.Id, weaponAttr))
                 {
                     Debug.LogError("发现重复注册的武器属性: " + weaponAttr.Id);
                 }
@@ -262,11 +265,18 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
     }
     
-    private static ExcelConfig.Weapon _GetWeaponAttribute(string itemId)
+    /// <summary>
+    /// 根据 ActivityBase.Id 获取对应武器的属性数据
+    /// </summary>
+    public static ExcelConfig.WeaponBase GetWeaponAttribute(string itemId)
     {
+        if (itemId == null)
+        {
+            return null;
+        }
         if (_weaponAttributeMap.TryGetValue(itemId, out var attr))
         {
-            return attr.Clone();
+            return attr;
         }
 
         throw new Exception($"武器'{itemId}'没有在 Weapon 表中配置属性数据!");
@@ -274,14 +284,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     
     public override void OnInit()
     {
-        InitWeapon(_GetWeaponAttribute(ItemConfig.Id));
+        InitWeapon(GetWeaponAttribute(ItemConfig.Id).Clone());
         AnimatedSprite.AnimationFinished += OnAnimationFinished;
     }
 
     /// <summary>
     /// 初始化武器属性
     /// </summary>
-    public void InitWeapon(ExcelConfig.Weapon attribute)
+    public void InitWeapon(ExcelConfig.WeaponBase attribute)
     {
         _playerWeaponAttribute = attribute;
         _weaponAttribute = attribute;
@@ -682,7 +692,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         return Master == null && GetParent() == GameApplication.Instance.World.NormalLayer;
     }
-    
+
     /// <summary>
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
@@ -700,20 +710,20 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         _triggerRoleFlag = true;
         if (triggerRole != null)
         {
-            TriggerRoleIsAi = triggerRole.IsAi;
+            TriggerRole = triggerRole;
             TriggerRoleAttackLayer = triggerRole.AttackLayer;
-            _weaponAttribute = TriggerRoleIsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
+            _weaponAttribute = triggerRole.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
         }
         else if (Master != null)
         {
-            TriggerRoleIsAi = Master.IsAi;
+            TriggerRole = Master;
             TriggerRoleAttackLayer = Master.AttackLayer;
-            _weaponAttribute = TriggerRoleIsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
+            _weaponAttribute = Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
         }
-        
+
         //是否第一帧按下
         var justDown = _downTimer == 0;
-        if (_beLoadedState == 0 || _beLoadedState == -1)  //需要执行上膛操作
+        if (_beLoadedState == 0 || _beLoadedState == -1) //需要执行上膛操作
         {
             if (justDown && !Reloading && triggerRole != null)
             {
@@ -729,9 +739,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                 }
             }
         }
-        else if (_beLoadedState == 1)  //上膛中
+        else if (_beLoadedState == 1) //上膛中
         {
-            
+
         }
         else //上膛完成
         {
@@ -801,6 +811,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                         {
                             _delayedTime = Attribute.DelayedTime;
                         }
+
                         //扳机按下间隔
                         _triggerTimer = Attribute.TriggerInterval;
                         //连发数量
@@ -830,6 +841,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
                             }
                         }
                     }
+                }
+            }
+            else //不能开火
+            {
+                if (CurrAmmo <= 0 && justDown && triggerRole != null) //子弹不够
+                {
+                    //第一帧按下, 触发换弹
+                    Reload();
                 }
             }
         }
@@ -950,13 +969,16 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         _attackFlag = true;
         _noAttackTime = 0;
+        _reloadShellFlag = false;
 
         //减子弹数量
         if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
         {
-            if (Utils.Random.RandomRangeFloat(0, 1) < _weaponAttribute.AiAttackAttr.AmmoConsumptionProbability) //触发消耗弹药
+            var count = UseAmmoCount();
+            CurrAmmo -= count;
+            if (Utils.Random.RandomRangeFloat(0, 1) >= _weaponAttribute.AiAttackAttr.AmmoConsumptionProbability) //不消耗弹药
             {
-                CurrAmmo -= UseAmmoCount();
+                ResidueAmmo += count;
             }
         }
         else
@@ -973,7 +995,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             _continuousCount = _continuousCount > 0 ? _continuousCount - 1 : 0;
         }
 
-        //开火间隙
+        //开火间隙, 这里的60指的是60秒
         _fireInterval = 60 / Attribute.StartFiringSpeed;
         //攻击冷却
         _attackTimer += _fireInterval;
@@ -982,13 +1004,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         if (IsAutoPlaySpriteFrames)
         {
             PlaySpriteAnimation(AnimatorNames.Fire);
+            PlayAnimationPlayer(AnimatorNames.Fire);
         }
 
         //播放射击音效
         PlayShootSound();
         
         //抛弹
-        if ((Attribute.ContinuousShoot || !Attribute.ManualBeLoaded))
+        if (!Attribute.ReloadThrowShell && (Attribute.ContinuousShoot || !Attribute.ManualBeLoaded))
         {
             ThrowShellHandler(1f);
         }
@@ -1047,7 +1070,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         else //在地上
         {
             var v = Utils.Random.RandomConfigRange(Attribute.BacklashRange) * 5;
-            var externalForce = MoveController.AddForce(new Vector2(-v, 0).Rotated(Rotation), v * 2);
+            var externalForce = MoveController.AddForce(new Vector2(-v, 0).Rotated(Rotation));
             externalForce.RotationSpeed = -Mathf.DegToRad(40);
             externalForce.RotationResistance = Mathf.DegToRad(80);
         }
@@ -1072,6 +1095,19 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     // {
     //     
     // }
+
+    /// <summary>
+    /// 根据触扳机的角色对象判断该角色使用的武器数据
+    /// </summary>
+    public ExcelConfig.WeaponBase GetUseAttribute(Role triggerRole)
+    {
+        if (triggerRole == null || !triggerRole.IsAi)
+        {
+            return PlayerUseAttribute;
+        }
+
+        return AiUseAttribute;
+    }
     
     /// <summary>
     /// 获取武器攻击的目标层级
@@ -1185,7 +1221,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             
             // Debug.Log("开始换弹.");
             //抛弹
-            if (!Attribute.ContinuousShoot && (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0)
+            if (!Attribute.ReloadThrowShell && !Attribute.ContinuousShoot &&
+                (_beLoadedState == 0 || _beLoadedState == -1) && Attribute.BeLoadedTime > 0)
             {
                 ThrowShellHandler(0.6f);
             }
@@ -1234,15 +1271,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (Attribute.BeginReloadSound != null)
         {
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            var volume = SoundManager.CalcRoleVolume(Attribute.BeginReloadSound.Volume, Master);
             if (Attribute.BeginReloadSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.BeginReloadSound.Path, position, volume);
+                SoundManager.PlaySoundByConfig(Attribute.BeginReloadSound, GlobalPosition, TriggerRole);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeginReloadSound.Path, position, Attribute.BeginReloadSoundDelayTime, volume);
+                SoundManager.PlaySoundByConfigDelay(Attribute.BeginReloadSound, GlobalPosition, Attribute.BeginReloadSoundDelayTime, TriggerRole);
             }
         }
     }
@@ -1252,15 +1287,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (Attribute.ReloadSound != null)
         {
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            var volume = SoundManager.CalcRoleVolume(Attribute.ReloadSound.Volume, Master);
             if (Attribute.ReloadSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.ReloadSound.Path, position, volume);
+                SoundManager.PlaySoundByConfig(Attribute.ReloadSound, GlobalPosition, TriggerRole);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.ReloadSound.Path, position, Attribute.ReloadSoundDelayTime, volume);
+                SoundManager.PlaySoundByConfigDelay(Attribute.ReloadSound, GlobalPosition, Attribute.ReloadSoundDelayTime, TriggerRole);
             }
         }
     }
@@ -1270,9 +1303,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (Attribute.ReloadFinishSound != null)
         {
-            var volume = SoundManager.CalcRoleVolume(Attribute.ReloadFinishSound.Volume, Master);
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            SoundManager.PlaySoundEffectPosition(Attribute.ReloadFinishSound.Path, position, volume);
+            SoundManager.PlaySoundByConfig(Attribute.ReloadFinishSound, GlobalPosition, TriggerRole);
         }
     }
 
@@ -1281,9 +1312,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (Attribute.ShootSound != null)
         {
-            var volume = SoundManager.CalcRoleVolume(Attribute.ShootSound.Volume, Master);
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            SoundManager.PlaySoundEffectPosition(Attribute.ShootSound.Path, position, volume);
+            SoundManager.PlaySoundByConfig(Attribute.ShootSound, GlobalPosition, TriggerRole);
         }
     }
 
@@ -1292,15 +1321,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         if (Attribute.BeLoadedSound != null)
         {
-            var position = GameApplication.Instance.ViewToGlobalPosition(GlobalPosition);
-            var volume = SoundManager.CalcRoleVolume(Attribute.BeLoadedSound.Volume, Master);
             if (Attribute.BeLoadedSoundDelayTime <= 0)
             {
-                SoundManager.PlaySoundEffectPosition(Attribute.BeLoadedSound.Path, position, volume);
+                SoundManager.PlaySoundByConfig(Attribute.BeLoadedSound, GlobalPosition, TriggerRole);
             }
             else
             {
-                SoundManager.PlaySoundEffectPositionDelay(Attribute.BeLoadedSound.Path, position, Attribute.BeLoadedSoundDelayTime, volume);
+                SoundManager.PlaySoundByConfigDelay(Attribute.BeLoadedSound, GlobalPosition, Attribute.BeLoadedSoundDelayTime, TriggerRole);
             }
         }
     }
@@ -1358,11 +1385,18 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         if (IsAutoPlaySpriteFrames)
         {
             PlaySpriteAnimation(AnimatorNames.Reloading);
+            PlayAnimationPlayer(AnimatorNames.Reloading);
         }
             
         //播放换弹音效
         PlayReloadSound();
-            
+        
+        //抛出弹壳
+        if (Attribute.ReloadThrowShell && !_reloadShellFlag)
+        {
+            ThrowShellHandler(0.6f);
+        }
+        
         OnReload();
         // Debug.Log("装弹.");
     }
@@ -1385,7 +1419,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     private void BeLoadedHandler()
     {
         //上膛抛弹
-        if (!Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
+        if (!Attribute.ReloadThrowShell && !Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
         {
             ThrowShellHandler(0.6f);
         }
@@ -1412,10 +1446,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             if (Attribute.BeLoadedSoundDelayTime <= 0)
             {
                 PlaySpriteAnimation(AnimatorNames.BeLoaded);
+                PlayAnimationPlayer(AnimatorNames.BeLoaded);
             }
             else
             {
-                this.CallDelay(Attribute.BeLoadedSoundDelayTime, PlaySpriteAnimation, AnimatorNames.BeLoaded);
+                this.CallDelay(Attribute.BeLoadedSoundDelayTime, () =>
+                {
+                    PlaySpriteAnimation(AnimatorNames.BeLoaded);
+                    PlayAnimationPlayer(AnimatorNames.BeLoaded);
+                });
             }
         }
 
@@ -1426,18 +1465,23 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     //抛弹逻辑
     private void ThrowShellHandler(float speedScale)
     {
-        if (string.IsNullOrEmpty(Attribute.ShellId))
+        if (Attribute.Shell == null)
         {
             return;
         }
         //创建一个弹壳
         if (Attribute.ThrowShellDelayTime > 0)
         {
-            this.CallDelay(Attribute.ThrowShellDelayTime, () => ThrowShell(Attribute.ShellId, speedScale));
+            this.CallDelay(Attribute.ThrowShellDelayTime, () =>
+            {
+                _reloadShellFlag = true;
+                ThrowShell(Attribute.Shell, speedScale);
+            });
         }
         else if (Attribute.ThrowShellDelayTime == 0)
         {
-            ThrowShell(Attribute.ShellId, speedScale);
+            _reloadShellFlag = true;
+            ThrowShell(Attribute.Shell, speedScale);
         }
     }
 
@@ -1543,14 +1587,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
             ReloadFinishHandler();
         }
     }
-    
+
     //播放动画
-    private void PlaySpriteAnimation(string name)
+    private void PlayAnimationPlayer(string name)
     {
-        var spriteFrames = AnimatedSprite.SpriteFrames;
-        if (spriteFrames != null && spriteFrames.HasAnimation(name))
+        if (AnimationPlayer != null && AnimationPlayer.HasAnimation(name))
         {
-            AnimatedSprite.Play(name);
+            AnimationPlayer.Play(name);
         }
     }
 
@@ -1865,7 +1908,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 投抛弹壳的默认实现方式, shellId为弹壳id
     /// </summary>
-    protected ActivityObject ThrowShell(string shellId, float speedScale = 1)
+    protected ActivityObject ThrowShell(ExcelConfig.ActivityBase shell, float speedScale = 1)
     {
         var startPos = ShellPoint.GlobalPosition;
         float startHeight;
@@ -1884,55 +1927,110 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         var verticalSpeed = Utils.Random.RandomRangeInt((int)(60 * speedScale), (int)(120 * speedScale));
         var velocity = new Vector2(Utils.Random.RandomRangeInt((int)(20 * speedScale), (int)(60 * speedScale)), 0).Rotated(direction * Mathf.Pi / 180);
         var rotate = Utils.Random.RandomRangeInt((int)(-720 * speedScale), (int)(720 * speedScale));
-        var shell = Create(shellId);
-        shell.Rotation = (Master != null ? Master.MountPoint.RealRotation : Rotation);
-        shell.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
-        shell.InheritVelocity(Master != null ? Master : this);
+        var shellInstance = Create(shell);
+        shellInstance.Rotation = (Master != null ? Master.MountPoint.RealRotation : Rotation);
+        shellInstance.Throw(startPos, startHeight, verticalSpeed, velocity, rotate);
+        shellInstance.InheritVelocity(Master != null ? Master : this);
         if (Master == null)
         {
-            AffiliationArea.InsertItem(shell);
+            AffiliationArea.InsertItem(shellInstance);
         }
         else
         {
-            Master.AffiliationArea.InsertItem(shell);
+            Master.AffiliationArea.InsertItem(shellInstance);
         }
         
-        return shell;
+        return shellInstance;
     }
 
     /// <summary>
-    /// 发射子弹的默认实现方式, bulletId为子弹id
+    /// 发射子弹
     /// </summary>
-    protected Bullet ShootBullet(float fireRotation, string bulletId)
+    protected IBullet ShootBullet(float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var speed = Utils.Random.RandomConfigRange(Attribute.BulletSpeedRange);
-        var distance = Utils.Random.RandomConfigRange(Attribute.BulletDistanceRange);
-        var deviationAngle = Utils.Random.RandomConfigRange(Attribute.BulletDeviationAngleRange);
-        if (Master != null)
+        if (bullet.Type == 1) //实体子弹
         {
-            speed = Master.RoleState.CallCalcBulletSpeedEvent(this, speed);
-            distance = Master.RoleState.CallCalcBulletDistanceEvent(this, distance);
-            deviationAngle = Master.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+            return ShootSolidBullet(fireRotation, bullet);
+        }
+        else if (bullet.Type == 2) //激光子弹
+        {
+            return ShootLaser(fireRotation, bullet);
         }
 
-        var attackLayer = GetAttackLayer();
-        //创建子弹
-        var bullet = Create<Bullet>(bulletId);
-        bullet.Init(
-            TriggerRoleIsAi,
-            this,
-            speed,
-            distance,
-            FirePoint.GlobalPosition,
-            fireRotation + Mathf.DegToRad(deviationAngle),
-            attackLayer
-        );
-        bullet.MinHarm = Utils.GetConfigRangeStart(Attribute.HarmRange);
-        bullet.MaxHarm = Utils.GetConfigRangeEnd(Attribute.HarmRange);
-        bullet.PutDown(RoomLayerEnum.YSortLayer);
-        return bullet;
+        return null;
     }
-    
+
+    /// <summary>
+    /// 发射子弹的默认实现方式
+    /// </summary>
+    private Bullet ShootSolidBullet(float fireRotation, ExcelConfig.BulletBase bullet)
+    {
+        var data = new BulletData()
+        {
+            Weapon = this,
+            BulletBase = bullet,
+            TriggerRole = TriggerRole,
+            MinHarm = Utils.GetConfigRangeStart(bullet.HarmRange),
+            MaxHarm = Utils.GetConfigRangeEnd(bullet.HarmRange),
+            MaxDistance = Utils.Random.RandomConfigRange(bullet.DistanceRange),
+            FlySpeed = Utils.Random.RandomConfigRange(bullet.SpeedRange),
+            VerticalSpeed = Utils.Random.RandomConfigRange(bullet.VerticalSpeed),
+            BounceCount = Utils.Random.RandomConfigRange(bullet.BounceCount),
+            Position = FirePoint.GlobalPosition,
+        };
+
+        var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);
+        if (TriggerRole != null)
+        {
+            data.FlySpeed = TriggerRole.RoleState.CallCalcBulletSpeedEvent(this, data.FlySpeed);
+            data.MaxDistance = TriggerRole.RoleState.CallCalcBulletDistanceEvent(this, data.MaxDistance);
+            deviationAngle = TriggerRole.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+        }
+
+        if (TriggerRole != null && TriggerRole.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
+        {
+            data.FlySpeed *= AiUseAttribute.AiAttackAttr.BulletSpeedScale;
+        }
+
+        data.Rotation = fireRotation + Mathf.DegToRad(deviationAngle);
+        //创建子弹
+        var bulletInstance = Create<Bullet>(bullet.Prefab);
+        bulletInstance.InitData(data, GetAttackLayer());
+        return bulletInstance;
+    }
+
+    /// <summary>
+    /// 发射射线的默认实现方式
+    /// </summary>
+    private Laser ShootLaser(float fireRotation, ExcelConfig.BulletBase bullet)
+    {
+        var data = new BulletData()
+        {
+            Weapon = this,
+            BulletBase = bullet,
+            TriggerRole = TriggerRole,
+            MinHarm = Utils.GetConfigRangeStart(bullet.HarmRange),
+            MaxHarm = Utils.GetConfigRangeEnd(bullet.HarmRange),
+            MaxDistance = Utils.Random.RandomConfigRange(bullet.DistanceRange),
+            BounceCount = Utils.Random.RandomConfigRange(bullet.BounceCount),
+            LifeTime = Utils.Random.RandomConfigRange(bullet.LifeTimeRange),
+            Position = FirePoint.GlobalPosition,
+        };
+
+        var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);
+        if (TriggerRole != null)
+        {
+            deviationAngle = TriggerRole.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+        }
+
+        data.Rotation = fireRotation + Mathf.DegToRad(deviationAngle);
+        //创建激光
+        var laser = ResourceManager.LoadAndInstantiate<Laser>(bullet.Prefab);
+        laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+        laser.InitData(data, GetAttackLayer(), 3);
+        return laser;
+    }
+
     //-------------------------------- Ai相关 -----------------------------
     
     /// <summary>

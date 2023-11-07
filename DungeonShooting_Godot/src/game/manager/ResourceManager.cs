@@ -29,6 +29,8 @@ public static class ResourceManager
     }
 
     private static ShaderMaterial _shadowMaterial;
+    
+    public static ShaderMaterial NewBlendMaterial => Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
 
     /// <summary>
     /// 颜色混合Shader

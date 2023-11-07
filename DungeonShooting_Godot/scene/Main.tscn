@@ -47,8 +47,6 @@ render_target_update_mode = 4
 [node name="SceneRoot" type="Node2D" parent="ViewCanvas/SubViewportContainer/SubViewport"]
 
 [node name="Camera2D" type="Camera2D" parent="ViewCanvas/SubViewportContainer/SubViewport"]
-process_callback = 0
-limit_smoothed = true
 editor_draw_drag_margin = true
 script = ExtResource("2_2j367")
 

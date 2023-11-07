@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 
@@ -16,11 +17,6 @@ public partial class Player : Role
     /// 玩家身上的状态机控制器
     /// </summary>
     public StateController<Player, PlayerStateEnum> StateController { get; private set; }
-    
-    /// <summary>
-    /// 是否翻滚中
-    /// </summary>
-    public bool IsRolling { get; private set; }
 
     /// <summary>
     /// 设置当前操作的玩家对象
@@ -39,7 +35,7 @@ public partial class Player : Role
 
         IsAi = false;
         StateController = AddComponent<StateController<Player, PlayerStateEnum>>();
-        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Enemy;
+        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Enemy;
         EnemyLayer = EnemyLayer = PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 
@@ -56,6 +52,11 @@ public partial class Player : Role
         // CollisionMask = 0;
         //GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
         //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        // this.CallDelay(0.5f, () =>
+        // {
+        //     var weapon = Create<Weapon>(Ids.Id_weapon0009);
+        //     PickUpWeapon(weapon);
+        // });
         
         //注册状态机
         StateController.Register(new PlayerIdleState());
@@ -69,11 +70,11 @@ public partial class Player : Role
 
     protected override void Process(float delta)
     {
+        base.Process(delta);
         if (IsDie)
         {
             return;
         }
-        base.Process(delta);
         //脸的朝向
         if (LookTarget == null)
         {
@@ -177,21 +178,20 @@ public partial class Player : Role
                 ((Enemy)enemy).Hurt(1000, 0);
             }
         }
+        // //测试用
+        // if (InputManager.Roll) //鼠标处触发互动物体
+        // {
+        //     var now = DateTime.Now;
+        //     var mousePosition = GetGlobalMousePosition();
+        //     var freezeSprites = AffiliationArea.RoomInfo.StaticSprite.CollisionCircle(mousePosition, 25, true);
+        //     Debug.Log("检测数量: " + freezeSprites.Count + ", 用时: " + (DateTime.Now - now).TotalMilliseconds);
+        //     foreach (var freezeSprite in freezeSprites)
+        //     {
+        //         var temp = freezeSprite.Position - mousePosition;
+        //         freezeSprite.ActivityObject.MoveController.AddForce(temp.Normalized() * 300 * (25f - temp.Length()) / 25f);
+        //     }
+        // }
     }
-
-    // protected override void PhysicsProcess(float delta)
-    // {
-    //     if (IsDie)
-    //     {
-    //         return;
-    //     }
-    //
-    //     base.PhysicsProcess(delta);
-    //     //处理移动
-    //     HandleMoveInput(delta);
-    //     //播放动画
-    //     PlayAnim();
-    // }
 
     protected override void OnPickUpWeapon(Weapon weapon)
     {
@@ -321,9 +321,9 @@ public partial class Player : Role
         }
     }
 
-    protected override void DebugDraw()
-    {
-        base.DebugDraw();
-        DrawArc(new Vector2(0, -8), 50, 0, Mathf.Pi * 2f, 20, Colors.Red, 1);
-    }
+    // protected override void DebugDraw()
+    // {
+    //     base.DebugDraw();
+    //     DrawArc(GetLocalMousePosition(), 25, 0, Mathf.Pi * 2f, 20, Colors.Red, 1);
+    // }
 }

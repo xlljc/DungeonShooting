@@ -20,7 +20,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 默认攻击对象层级
     /// </summary>
-    public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Wall | PhysicsLayer.Prop;
+    public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Wall;
     
     /// <summary>
     /// 伤害区域
@@ -439,6 +439,10 @@ public abstract partial class Role : ActivityObject
 
     protected override void Process(float delta)
     {
+        if (IsDie)
+        {
+            return;
+        }
         if (_rollCoolingTimer > 0)
         {
             _rollCoolingTimer -= delta;
@@ -562,12 +566,16 @@ public abstract partial class Role : ActivityObject
         }
         
         //主动道具调用更新
-        var props = (Prop[])ActivePropsPack.ItemSlot.Clone();
-        foreach (var prop in props)
+        var props = ActivePropsPack.ItemSlot;
+        if (props.Length > 0)
         {
-            if (prop != null && !prop.IsDestroyed)
+            props = (ActiveProp[])props.Clone();
+            foreach (var prop in props)
             {
-                prop.PackProcess(delta);
+                if (prop != null && !prop.IsDestroyed)
+                {
+                    prop.PackProcess(delta);
+                }
             }
         }
     }
@@ -983,7 +991,7 @@ public abstract partial class Role : ActivityObject
     /// 受到伤害, 如果是在碰撞信号处理函数中调用该函数, 请使用 CallDeferred 来延时调用, 否则很有可能导致报错
     /// </summary>
     /// <param name="damage">伤害的量</param>
-    /// <param name="angle">角度</param>
+    /// <param name="angle">伤害角度（弧度制）</param>
     public virtual void Hurt(int damage, float angle)
     {
         //受伤闪烁, 无敌状态
@@ -1166,7 +1174,7 @@ public abstract partial class Role : ActivityObject
                     var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRnage);
                     var position = role.GlobalPosition - MountPoint.GlobalPosition;
                     var v2 = position.Normalized() * repel;
-                    role.MoveController.AddForce(v2, repel * 2);
+                    role.MoveController.AddForce(v2);
                 }
                 
                 role.CallDeferred(nameof(Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());

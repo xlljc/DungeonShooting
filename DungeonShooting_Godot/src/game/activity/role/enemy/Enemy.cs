@@ -74,7 +74,7 @@ public partial class Enemy : Role
         IsAi = true;
         StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
 
-        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Prop | PhysicsLayer.Player;
+        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Player;
         EnemyLayer = PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
@@ -150,7 +150,10 @@ public partial class Enemy : Role
     protected override void Process(float delta)
     {
         base.Process(delta);
-
+        if (IsDie)
+        {
+            return;
+        }
         //目标在视野内的时间
         var currState = StateController.CurrState;
         if (currState == AiStateEnum.AiSurround || currState == AiStateEnum.AiFollowUp)
@@ -379,7 +382,7 @@ public partial class Enemy : Role
         if (WeaponPack.ActiveItem != null)
         {
             var attribute = WeaponPack.ActiveItem.Attribute;
-            return Mathf.Lerp(Utils.GetConfigRangeStart(attribute.BulletDistanceRange), Utils.GetConfigRangeEnd(attribute.BulletDistanceRange), weight);
+            return Mathf.Lerp(Utils.GetConfigRangeStart(attribute.Bullet.DistanceRange), Utils.GetConfigRangeEnd(attribute.Bullet.DistanceRange), weight);
         }
 
         return 0;
@@ -509,5 +512,4 @@ public partial class Enemy : Role
     {
         _lockTargetTime = time;
     }
-
 }

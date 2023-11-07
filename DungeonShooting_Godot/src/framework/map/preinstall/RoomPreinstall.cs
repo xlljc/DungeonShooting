@@ -120,7 +120,7 @@ public class RoomPreinstall : IDestroy
                     mark.DerivedAttr = new Dictionary<string, string>();
                     mark.VerticalSpeed = markInfoItem.VerticalSpeed;
                     mark.Altitude = markInfoItem.Altitude;
-                    mark.ActivityType = (ActivityType)ExcelConfig.ActivityObject_Map[markInfoItem.Id].Type;
+                    mark.ActivityType = (ActivityType)ExcelConfig.ActivityBase_Map[markInfoItem.Id].Type;
 
                     if (mark.ActivityType == ActivityType.Enemy) //敌人类型
                     {

@@ -31,6 +31,19 @@ public abstract partial class Debugger : UiBase
     }
     private HoverButton _L_HoverButton;
 
+    /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: Debugger.Fps
+    /// </summary>
+    public Fps L_Fps
+    {
+        get
+        {
+            if (_L_Fps == null) _L_Fps = new Fps((DebuggerPanel)this, GetNode<Godot.Label>("Fps"));
+            return _L_Fps;
+        }
+    }
+    private Fps _L_Fps;
+
 
     public Debugger() : base(nameof(Debugger))
     {
@@ -147,6 +160,15 @@ public abstract partial class Debugger : UiBase
         public override HoverButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
     }
 
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: Debugger.Fps
+    /// </summary>
+    public class Fps : UiNode<DebuggerPanel, Godot.Label, Fps>
+    {
+        public Fps(DebuggerPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Fps Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: Debugger.Bg.Clear
@@ -177,5 +199,10 @@ public abstract partial class Debugger : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: Debugger.HoverButton
     /// </summary>
     public HoverButton S_HoverButton => L_HoverButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: Debugger.Fps
+    /// </summary>
+    public Fps S_Fps => L_Fps;
 
 }

@@ -30,6 +30,21 @@ public class MoveController : Component
     }
 
     private Vector2 _basisVelocity = Vector2.Zero;
+    private float _flag = 0;
+
+    /// <summary>
+    /// 是否是静止状态
+    /// </summary>
+    public bool IsMotionless()
+    {
+        var v = Velocity;
+        foreach (var externalForce in _forceList)
+        {
+            v += externalForce.Velocity;
+        }
+
+        return v == Vector2.Zero;
+    }
 
     /// <summary>
     /// 缩放所有外力对象的速率, 包括基础速率
@@ -172,6 +187,7 @@ public class MoveController : Component
     public ExternalForce AddForce(Vector2 velocity)
     {
         var force = AddForce("_anonymity_" + _index++);
+        force.AutoDestroy = true;
         force.Velocity = velocity;
         return force;
     }
@@ -304,15 +320,19 @@ public class MoveController : Component
         //处理旋转
         if (rotationSpeed != 0)
         {
-            Master.Rotation += rotationSpeed * delta;
+            Rotation += rotationSpeed * delta;
         }
+        var friction = !Master.IsThrowing && Master.Altitude <= 0 ? Master.GetCurrentFriction() : 0;
+        var rotationFriction = !Master.IsThrowing && Master.Altitude <= 0 ? Mathf.DegToRad(Master.GetCurrentRotationFriction()) : 0;
         //衰减旋转速率
         for (var i = 0; i < _forceList.Count; i++)
         {
             var force = _forceList[i];
-            if (force.RotationResistance != 0 && (force.EnableResistanceInTheAir || !Master.IsThrowing))
+            var num = (force.EnableResistanceInTheAir || !Master.IsThrowing) ? force.RotationResistance : 0;
+            num += rotationFriction;
+            if (num != 0)
             {
-                force.RotationSpeed = Mathf.MoveToward(force.RotationSpeed, 0, force.RotationResistance * delta);
+                force.RotationSpeed = Mathf.MoveToward(force.RotationSpeed, 0, num * delta);
             }
         }
 
@@ -327,6 +347,11 @@ public class MoveController : Component
             //新速度
             var newVelocity = Master.Velocity;
             
+            if (!Master.BounceLockRotation) //跟着反弹角度
+            {
+                Rotation = newVelocity.Angle();
+            }
+            
             if (newVelocity.X == 0f && _basisVelocity.X * finallyVelocity.X > 0)
             {
                 _basisVelocity.X = 0;
@@ -338,17 +363,35 @@ public class MoveController : Component
             }
             
             //是否撞到物体
-            var collision = Master.GetLastSlideCollision();
-            if (collision != null) //执行反弹操作
+            KinematicCollision2D collision;
+            _flag -= delta;
+            if (_flag <= 0 && (collision = Master.GetLastSlideCollision()) != null) //执行反弹操作
             {
+                //调用移动碰撞函数
+                Master.OnMoveCollision(collision);
+                if (Master.IsDestroyed)
+                {
+                    return;
+                }
+                //0.1秒内不能再触发第二次碰撞检测
+                _flag = 0.1f;
                 var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
-                newVelocity = (finallyVelocity - _basisVelocity).Reflect(no);
+                newVelocity = finallyEf.Reflect(no);
+                var rotation = newVelocity.Angle();
+
+                if (!Master.BounceLockRotation) //跟着反弹角度
+                {
+                    Rotation = rotation;
+                }
+                
                 var length = _forceList.Count;
-                var v = newVelocity / (length / Master.BounceStrength);
+                var v = newVelocity / (length / Master.ActivityMaterial.BounceStrength);
                 for (var i = 0; i < _forceList.Count; i++)
                 {
                     _forceList[i].Velocity = v;
                 }
+                //调用反弹函数
+                Master.OnBounce(rotation);
             }
             else //没有撞到物体
             {
@@ -365,9 +408,11 @@ public class MoveController : Component
                         );
 
                         //力速度衰减
-                        if (force.VelocityResistance != 0 && (force.EnableResistanceInTheAir || !Master.IsThrowing))
+                        var num = (force.EnableResistanceInTheAir || !Master.IsThrowing) ? force.VelocityResistance : 0;
+                        num += friction;
+                        if (num != 0)
                         {
-                            force.Velocity = force.Velocity.MoveToward(Vector2.Zero, force.VelocityResistance * delta);
+                            force.Velocity = force.Velocity.MoveToward(Vector2.Zero, num * delta);
                         }
                     }
                 }

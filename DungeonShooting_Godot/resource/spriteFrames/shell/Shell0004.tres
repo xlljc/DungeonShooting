@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://b8b0ye3iv1vwp"]
+
+[ext_resource type="Texture2D" uid="uid://17htwakoupb2" path="res://resource/sprite/shell/Shell0004.png" id="1_mpyi3"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_mpyi3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
