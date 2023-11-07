@@ -17,6 +17,10 @@
       {
         "ErrorType": 0,
         "Path": "resource/map/tileMaps/TestGroup1/battle/Battle4"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle5"
       }
     ],
     "InletList": [

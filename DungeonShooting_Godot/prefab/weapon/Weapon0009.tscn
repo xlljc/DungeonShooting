@@ -108,7 +108,7 @@ tracks/0/path = NodePath(".:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.34, 0.4, 1.04, 1.1, 1.26, 1.5),
+"times": PackedFloat32Array(0, 0.14, 0.2, 1.14, 1.2, 1.36, 1.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [0.0, -0.523599, 0.0, 0.0, -0.349066, -0.349066, 0.0]
@@ -132,7 +132,7 @@ tracks/2/path = NodePath("AnimatedSprite:frame")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.42, 0.44, 1.12, 1.14),
+"times": PackedFloat32Array(0, 0.22, 0.24, 1.22, 1.24),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4]

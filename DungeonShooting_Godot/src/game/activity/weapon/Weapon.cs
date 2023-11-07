@@ -270,6 +270,10 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     public static ExcelConfig.WeaponBase GetWeaponAttribute(string itemId)
     {
+        if (itemId == null)
+        {
+            return null;
+        }
         if (_weaponAttributeMap.TryGetValue(itemId, out var attr))
         {
             return attr;
