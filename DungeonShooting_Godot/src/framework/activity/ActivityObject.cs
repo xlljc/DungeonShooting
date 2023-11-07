@@ -1385,7 +1385,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
             CollisionMask = 1;
-            CollisionLayer = PhysicsLayer.Throwing;
+            CollisionLayer = _fallData.OriginCollisionLayer | PhysicsLayer.Throwing;
             _fallData.UseOrigin = false;
         }
     }

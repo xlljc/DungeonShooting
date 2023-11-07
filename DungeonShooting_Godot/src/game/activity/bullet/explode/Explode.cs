@@ -77,7 +77,7 @@ public partial class Explode : Area2D, IPoolItem
         _maxHarm = maxHarm;
         _repelledRadius = repelledRadius;
         _maxRepelled = maxRepelled;
-        CollisionMask = attackLayer | PhysicsLayer.Prop | PhysicsLayer.Throwing | PhysicsLayer.Debris;
+        CollisionMask = attackLayer | PhysicsLayer.Prop | PhysicsLayer.Debris;
         CircleShape.Radius = Mathf.Max(hitRadius, maxRepelled);
 
         //冲击波

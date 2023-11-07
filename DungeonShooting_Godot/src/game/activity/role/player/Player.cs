@@ -52,11 +52,11 @@ public partial class Player : Role
         // CollisionMask = 0;
         //GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
         //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
-        this.CallDelay(0.5f, () =>
-        {
-            var weapon = Create<Weapon>(Ids.Id_weapon0009);
-            PickUpWeapon(weapon);
-        });
+        // this.CallDelay(0.5f, () =>
+        // {
+        //     var weapon = Create<Weapon>(Ids.Id_weapon0009);
+        //     PickUpWeapon(weapon);
+        // });
         
         //注册状态机
         StateController.Register(new PlayerIdleState());
