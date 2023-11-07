@@ -1009,7 +1009,7 @@ public abstract partial class Role : ActivityObject
         }
         else
         {
-            damage = RoleState.CallCalcHurtDamageEvent(damage);
+            damage = RoleState.CalcHurtDamage(damage);
             if (damage > 0)
             {
                 Hp -= damage;
@@ -1165,13 +1165,13 @@ public abstract partial class Role : ActivityObject
             if (activityObject is Role role) //攻击角色
             {
                 var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
-                damage = RoleState.CallCalcDamageEvent(damage);
+                damage = RoleState.CalcDamage(damage);
                 
                 //击退
                 if (role is not Player) //目标不是玩家才会触发击退
                 {
                     var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
-                    var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRnage);
+                    var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRange);
                     var position = role.GlobalPosition - MountPoint.GlobalPosition;
                     var v2 = position.Normalized() * repel;
                     role.MoveController.AddForce(v2);

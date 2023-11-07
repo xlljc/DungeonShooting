@@ -7,7 +7,7 @@
     "HarmRange": [
       4
     ],
-    "RepelRnage": [
+    "RepelRange": [
       20
     ],
     "DeviationAngleRange": [
@@ -41,7 +41,7 @@
     "HarmRange": [
       4
     ],
-    "RepelRnage": [
+    "RepelRange": [
       30
     ],
     "DeviationAngleRange": [
@@ -76,7 +76,7 @@
     "HarmRange": [
       3
     ],
-    "RepelRnage": [
+    "RepelRange": [
       10
     ],
     "DeviationAngleRange": [
@@ -110,7 +110,7 @@
     "HarmRange": [
       20
     ],
-    "RepelRnage": [
+    "RepelRange": [
       200
     ],
     "DeviationAngleRange": [
@@ -144,7 +144,7 @@
     "HarmRange": [
       30
     ],
-    "RepelRnage": [
+    "RepelRange": [
       0
     ],
     "DeviationAngleRange": [
@@ -178,7 +178,7 @@
     "HarmRange": [
       5
     ],
-    "RepelRnage": [
+    "RepelRange": [
       0
     ],
     "DeviationAngleRange": [
@@ -210,7 +210,7 @@
     "HarmRange": [
       25
     ],
-    "RepelRnage": [
+    "RepelRange": [
       150
     ],
     "DeviationAngleRange": [

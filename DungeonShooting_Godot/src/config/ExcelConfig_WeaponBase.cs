@@ -40,6 +40,12 @@ public static partial class ExcelConfig
         public byte WeightType;
 
         /// <summary>
+        /// 标记是否是近战武器
+        /// </summary>
+        [JsonInclude]
+        public bool IsMelee;
+
+        /// <summary>
         /// 是否连续发射, 如果为false, 则每次发射都需要扣动扳机
         /// </summary>
         [JsonInclude]
@@ -298,7 +304,7 @@ public static partial class ExcelConfig
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public float[] MeleeAttackRepelRnage;
+        public float[] MeleeAttackRepelRange;
 
         /// <summary>
         /// 射击音效
@@ -379,6 +385,7 @@ public static partial class ExcelConfig
             inst.Remark = Remark;
             inst.Weight = Weight;
             inst.WeightType = WeightType;
+            inst.IsMelee = IsMelee;
             inst.ContinuousShoot = ContinuousShoot;
             inst.AmmoCapacity = AmmoCapacity;
             inst.MaxAmmoCapacity = MaxAmmoCapacity;
@@ -421,7 +428,7 @@ public static partial class ExcelConfig
             inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.CanMeleeAttack = CanMeleeAttack;
             inst.MeleeAttackHarmRange = MeleeAttackHarmRange;
-            inst.MeleeAttackRepelRnage = MeleeAttackRepelRnage;
+            inst.MeleeAttackRepelRange = MeleeAttackRepelRange;
             inst.ShootSound = ShootSound;
             inst.BeginReloadSound = BeginReloadSound;
             inst.BeginReloadSoundDelayTime = BeginReloadSoundDelayTime;

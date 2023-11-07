@@ -5,6 +5,7 @@
     "Remark": "\u6B65\u67AA",
     "Weight": 40,
     "WeightType": 2,
+    "IsMelee": false,
     "ContinuousShoot": true,
     "AmmoCapacity": 30,
     "MaxAmmoCapacity": 420,
@@ -59,7 +60,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0005",
@@ -81,6 +82,7 @@
     "Remark": "\u6B65\u67AA",
     "Weight": 40,
     "WeightType": 2,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 30,
     "MaxAmmoCapacity": 420,
@@ -135,7 +137,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0005",
@@ -157,6 +159,7 @@
     "Remark": "\u9730\u5F39\u67AA",
     "Weight": 40,
     "WeightType": 2,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 7,
     "MaxAmmoCapacity": 140,
@@ -211,7 +214,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0003",
@@ -233,6 +236,7 @@
     "Remark": "\u9730\u5F39\u67AA",
     "Weight": 40,
     "WeightType": 2,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 7,
     "MaxAmmoCapacity": 140,
@@ -287,7 +291,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0003",
@@ -309,6 +313,7 @@
     "Remark": "\u624B\u67AA",
     "Weight": 20,
     "WeightType": 1,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 12,
     "MaxAmmoCapacity": 180,
@@ -363,7 +368,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0004",
@@ -385,6 +390,7 @@
     "Remark": "\u624B\u67AA",
     "Weight": 20,
     "WeightType": 1,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 12,
     "MaxAmmoCapacity": 180,
@@ -439,7 +445,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0004",
@@ -461,6 +467,7 @@
     "Remark": "\u5200",
     "Weight": 40,
     "WeightType": 2,
+    "IsMelee": true,
     "ContinuousShoot": false,
     "AmmoCapacity": 180,
     "MaxAmmoCapacity": 180,
@@ -514,7 +521,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "",
@@ -536,6 +543,7 @@
     "Remark": "\u5200",
     "Weight": 40,
     "WeightType": 2,
+    "IsMelee": true,
     "ContinuousShoot": false,
     "AmmoCapacity": 180,
     "MaxAmmoCapacity": 180,
@@ -589,7 +597,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "",
@@ -611,6 +619,7 @@
     "Remark": "\u72D9\u51FB\u67AA",
     "Weight": 50,
     "WeightType": 2,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 10,
     "MaxAmmoCapacity": 80,
@@ -665,7 +674,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0008",
@@ -687,6 +696,7 @@
     "Remark": "\u72D9\u51FB\u67AA",
     "Weight": 50,
     "WeightType": 2,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 10,
     "MaxAmmoCapacity": 80,
@@ -741,7 +751,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0008",
@@ -763,6 +773,7 @@
     "Remark": "\u51B2\u950B\u67AA",
     "Weight": 30,
     "WeightType": 2,
+    "IsMelee": false,
     "ContinuousShoot": true,
     "AmmoCapacity": 20,
     "MaxAmmoCapacity": 600,
@@ -817,7 +828,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0002",
@@ -839,6 +850,7 @@
     "Remark": "\u51B2\u950B\u67AA",
     "Weight": 30,
     "WeightType": 2,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 20,
     "MaxAmmoCapacity": 600,
@@ -893,7 +905,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0002",
@@ -915,6 +927,7 @@
     "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
     "Weight": 40,
     "WeightType": 2,
+    "IsMelee": false,
     "ContinuousShoot": true,
     "AmmoCapacity": 60,
     "MaxAmmoCapacity": 600,
@@ -969,7 +982,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0007",
@@ -991,6 +1004,7 @@
     "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
     "Weight": 40,
     "WeightType": 2,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 60,
     "MaxAmmoCapacity": 600,
@@ -1045,7 +1059,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0007",
@@ -1067,6 +1081,7 @@
     "Remark": "\u6FC0\u5149\u624B\u67AA",
     "Weight": 40,
     "WeightType": 1,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 10,
     "MaxAmmoCapacity": 240,
@@ -1121,7 +1136,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0010",
@@ -1143,6 +1158,7 @@
     "Remark": "\u6FC0\u5149\u624B\u67AA",
     "Weight": 40,
     "WeightType": 1,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 10,
     "MaxAmmoCapacity": 240,
@@ -1197,7 +1213,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0010",
@@ -1219,6 +1235,7 @@
     "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668",
     "Weight": 40,
     "WeightType": 1,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 1,
     "MaxAmmoCapacity": 50,
@@ -1273,7 +1290,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0011",
@@ -1295,6 +1312,7 @@
     "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668",
     "Weight": 40,
     "WeightType": 1,
+    "IsMelee": false,
     "ContinuousShoot": false,
     "AmmoCapacity": 1,
     "MaxAmmoCapacity": 50,
@@ -1349,7 +1367,7 @@
     "MeleeAttackHarmRange": [
       10
     ],
-    "MeleeAttackRepelRnage": [
+    "MeleeAttackRepelRange": [
       100
     ],
     "__ShootSound": "shooting0011",

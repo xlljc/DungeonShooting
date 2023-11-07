@@ -128,7 +128,7 @@ public partial class Laser : Area2D, IBullet
             var damage = Utils.Random.RandomRangeInt(BulletData.MinHarm, BulletData.MaxHarm);
             if (BulletData.TriggerRole != null)
             {
-                damage = BulletData.TriggerRole.RoleState.CallCalcDamageEvent(damage);
+                damage = BulletData.TriggerRole.RoleState.CalcDamage(damage);
             }
             //造成伤害
             role.CallDeferred(nameof(Role.Hurt), damage, Rotation);

@@ -146,7 +146,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     public bool NoMasterCanTrigger { get; set; } = true;
     
     /// <summary>
-    /// 上一次触发改武器开火的角色
+    /// 上一次触发改武器开火的角色, 可能为 null
     /// </summary>
     public Role TriggerRole { get; private set; }
     
@@ -1034,7 +1034,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         var bulletCount = Utils.Random.RandomConfigRange(Attribute.FireBulletCountRange);
         if (Master != null)
         {
-            bulletCount = Master.RoleState.CallCalcBulletCountEvent(this, bulletCount);
+            bulletCount = Master.RoleState.CalcBulletCount(this, bulletCount);
             fireRotation += Master.MountPoint.RealRotation;
         }
         else
@@ -1492,8 +1492,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         var finalScatteringRange = Attribute.FinalScatteringRange;
         if (Master != null)
         {
-            startScatteringRange = Master.RoleState.CallCalcStartScatteringEvent(this, startScatteringRange);
-            finalScatteringRange = Master.RoleState.CallCalcFinalScatteringEvent(this, finalScatteringRange);
+            startScatteringRange = Master.RoleState.CalcStartScattering(this, startScatteringRange);
+            finalScatteringRange = Master.RoleState.CalcFinalScattering(this, finalScatteringRange);
         }
         if (startScatteringRange <= finalScatteringRange)
         {
@@ -1514,8 +1514,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         var finalScatteringRange = Attribute.FinalScatteringRange;
         if (Master != null)
         {
-            startScatteringRange = Master.RoleState.CallCalcStartScatteringEvent(this, startScatteringRange);
-            finalScatteringRange = Master.RoleState.CallCalcFinalScatteringEvent(this, finalScatteringRange);
+            startScatteringRange = Master.RoleState.CalcStartScattering(this, startScatteringRange);
+            finalScatteringRange = Master.RoleState.CalcFinalScattering(this, finalScatteringRange);
         }
         if (startScatteringRange <= finalScatteringRange)
         {
@@ -1982,9 +1982,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);
         if (TriggerRole != null)
         {
-            data.FlySpeed = TriggerRole.RoleState.CallCalcBulletSpeedEvent(this, data.FlySpeed);
-            data.MaxDistance = TriggerRole.RoleState.CallCalcBulletDistanceEvent(this, data.MaxDistance);
-            deviationAngle = TriggerRole.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+            data.FlySpeed = TriggerRole.RoleState.CalcBulletSpeed(this, data.FlySpeed);
+            data.MaxDistance = TriggerRole.RoleState.CalcBulletDistance(this, data.MaxDistance);
+            deviationAngle = TriggerRole.RoleState.CalcBulletDeviationAngle(this, deviationAngle);
         }
 
         if (TriggerRole != null && TriggerRole.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
@@ -2020,7 +2020,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);
         if (TriggerRole != null)
         {
-            deviationAngle = TriggerRole.RoleState.CallCalcBulletDeviationAngleEvent(this, deviationAngle);
+            deviationAngle = TriggerRole.RoleState.CalcBulletDeviationAngle(this, deviationAngle);
         }
 
         data.Rotation = fireRotation + Mathf.DegToRad(deviationAngle);

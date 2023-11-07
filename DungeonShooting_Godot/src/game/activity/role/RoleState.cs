@@ -55,7 +55,7 @@ public class RoleState
     /// 攻击/发射后计算伤害
     /// </summary>
     public event Action<int, RefValue<int>> CalcDamageEvent;
-    public int CallCalcDamageEvent(int damage)
+    public int CalcDamage(int damage)
     {
         if (CalcDamageEvent != null)
         {
@@ -71,7 +71,7 @@ public class RoleState
     /// 受伤后计算受到的伤害
     /// </summary>
     public event Action<int, RefValue<int>> CalcHurtDamageEvent;
-    public int CallCalcHurtDamageEvent(int damage)
+    public int CalcHurtDamage(int damage)
     {
         if (CalcHurtDamageEvent != null)
         {
@@ -87,7 +87,7 @@ public class RoleState
     /// 武器初始散射值增量
     /// </summary>
     public event Action<Weapon, float, RefValue<float>> CalcStartScatteringEvent;
-    public float CallCalcStartScatteringEvent(Weapon weapon, float value)
+    public float CalcStartScattering(Weapon weapon, float value)
     {
         if (CalcStartScatteringEvent != null)
         {
@@ -103,7 +103,7 @@ public class RoleState
     /// 武器最终散射值增量
     /// </summary>
     public event Action<Weapon, float, RefValue<float>> CalcFinalScatteringEvent;
-    public float CallCalcFinalScatteringEvent(Weapon weapon, float value)
+    public float CalcFinalScattering(Weapon weapon, float value)
     {
         if (CalcFinalScatteringEvent != null)
         {
@@ -119,7 +119,7 @@ public class RoleState
     /// 武器开火发射子弹数量
     /// </summary>
     public event Action<Weapon, int, RefValue<int>> CalcBulletCountEvent;
-    public int CallCalcBulletCountEvent(Weapon weapon, int count)
+    public int CalcBulletCount(Weapon weapon, int count)
     {
         if (CalcBulletCountEvent != null)
         {
@@ -135,7 +135,7 @@ public class RoleState
     /// 子弹偏移角度, 角度制
     /// </summary>
     public event Action<Weapon, float, RefValue<float>> CalcBulletDeviationAngleEvent;
-    public float CallCalcBulletDeviationAngleEvent(Weapon weapon, float angle)
+    public float CalcBulletDeviationAngle(Weapon weapon, float angle)
     {
         if (CalcBulletDeviationAngleEvent != null)
         {
@@ -151,7 +151,7 @@ public class RoleState
     /// 子弹速度
     /// </summary>
     public event Action<Weapon, float, RefValue<float>> CalcBulletSpeedEvent;
-    public float CallCalcBulletSpeedEvent(Weapon weapon, float speed)
+    public float CalcBulletSpeed(Weapon weapon, float speed)
     {
         if (CalcBulletSpeedEvent != null)
         {
@@ -167,12 +167,28 @@ public class RoleState
     /// 子弹射程
     /// </summary>
     public event Action<Weapon, float, RefValue<float>> CalcBulletDistanceEvent;
-    public float CallCalcBulletDistanceEvent(Weapon weapon, float distance)
+    public float CalcBulletDistance(Weapon weapon, float distance)
     {
         if (CalcBulletDistanceEvent != null)
         {
             var result = new RefValue<float>(distance);
             CalcBulletDistanceEvent(weapon, distance, result);
+            return result.Value;
+        }
+
+        return distance;
+    }
+
+    /// <summary>
+    /// 子弹击退
+    /// </summary>
+    public event Action<Weapon, float, RefValue<float>> CalcBulletRepelEvent;
+    public float CalcBulletRepel(Weapon weapon, float distance)
+    {
+        if (CalcBulletRepelEvent != null)
+        {
+            var result = new RefValue<float>(distance);
+            CalcBulletRepelEvent(weapon, distance, result);
             return result.Value;
         }
 

@@ -50,7 +50,7 @@ public static partial class ExcelConfig
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public float[] RepelRnage;
+        public float[] RepelRange;
 
         /// <summary>
         /// 子弹偏移角度区间 <br/>
@@ -123,7 +123,7 @@ public static partial class ExcelConfig
             inst.Type = Type;
             inst.Prefab = Prefab;
             inst.HarmRange = HarmRange;
-            inst.RepelRnage = RepelRnage;
+            inst.RepelRange = RepelRange;
             inst.DeviationAngleRange = DeviationAngleRange;
             inst.SpeedRange = SpeedRange;
             inst.LifeTimeRange = LifeTimeRange;

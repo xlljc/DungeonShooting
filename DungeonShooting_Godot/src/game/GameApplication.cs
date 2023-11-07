@@ -33,21 +33,15 @@ public partial class GameApplication : Node2D, ICoroutine
 	[Export] public Node2D GlobalNodeRoot;
 
 	/// <summary>
-	/// 是否开启调试
-	/// </summary>
-	[ExportGroup("Debug")]
-	[Export] public bool IsDebug;
-
-	/// <summary>
 	/// 游戏目标帧率
 	/// </summary>
-	public int TargetFps { get; private set; } = 60;
+	public int TargetFps { get; private set; }
 	
 	/// <summary>
 	/// 鼠标指针
 	/// </summary>
 	public Cursor Cursor { get; private set; }
-	
+
 	/// <summary>
 	/// 游戏世界
 	/// </summary>
@@ -113,7 +107,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		//Engine.MaxFps = TargetFps;
 		//调试绘制开关
 		//IsDebug = true;
-		ActivityObject.IsDebug = IsDebug;
+		ActivityObject.IsDebug = false;
 		//Engine.TimeScale = 0.2f;
 		//调整窗口分辨率
 		OnWindowSizeChanged();

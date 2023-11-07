@@ -118,14 +118,19 @@ public partial class Bullet : ActivityObject, IBullet
             var damage = Utils.Random.RandomRangeInt(BulletData.MinHarm, BulletData.MaxHarm);
             if (BulletData.TriggerRole != null)
             {
-                damage = BulletData.TriggerRole.RoleState.CallCalcDamageEvent(damage);
+                damage = BulletData.TriggerRole.RoleState.CalcDamage(damage);
             }
 
             //击退
             if (role is not Player) //目标不是玩家才会触发击退
             {
                 var attr = BulletData.Weapon.GetUseAttribute(BulletData.TriggerRole);
-                var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRnage);
+                //计算子弹造成的击退
+                var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRange);
+                if (BulletData.TriggerRole != null)
+                {
+                    repel = BulletData.TriggerRole.RoleState.CalcBulletRepel(BulletData.Weapon, repel);
+                }
                 if (repel != 0)
                 {
                     //role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel);
