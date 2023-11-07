@@ -30,7 +30,7 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
                     str += "，";
                 }
 
-                str += ExcelConfig.ActivityObject_Map[markInfoItem.Id].Name;
+                str += ExcelConfig.ActivityBase_Map[markInfoItem.Id].Name;
             }
             text += str;
         }

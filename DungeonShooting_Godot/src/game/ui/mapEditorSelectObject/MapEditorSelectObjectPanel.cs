@@ -10,7 +10,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
     /// <summary>
     /// 双击选中物体事件
     /// </summary>
-    public event Action<ExcelConfig.ActivityObject> SelectObjectEvent;
+    public event Action<ExcelConfig.ActivityBase> SelectObjectEvent;
     
     public class TypeButtonData
     {
@@ -32,7 +32,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
     //类型网格组件
     private UiGrid<TypeButton, TypeButtonData> _typeGrid;
     //物体网格组件
-    private UiGrid<ObjectButton, ExcelConfig.ActivityObject> _objectGrid;
+    private UiGrid<ObjectButton, ExcelConfig.ActivityBase> _objectGrid;
     //允许出现在该面板中的物体类型
     private int[] _typeArray = new[] { 4, 5, 9 };
     
@@ -45,7 +45,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
         _typeGrid.SetHorizontalExpand(true);
         _typeGrid.SetCellOffset(new Vector2I(0, 5));
         
-        _objectGrid = new UiGrid<ObjectButton, ExcelConfig.ActivityObject>(S_ObjectButton, typeof(ObjectButtonCell));
+        _objectGrid = new UiGrid<ObjectButton, ExcelConfig.ActivityBase>(S_ObjectButton, typeof(ObjectButtonCell));
         _objectGrid.SetAutoColumns(true);
         _objectGrid.SetHorizontalExpand(true);
         _objectGrid.SetCellOffset(new Vector2I(10, 10));
@@ -97,7 +97,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
         }
 
         //搜索结果
-        var arr = ExcelConfig.ActivityObject_List.Where(
+        var arr = ExcelConfig.ActivityBase_List.Where(
             o =>
             {
                 return o.ShowInMapEditor &&
@@ -111,7 +111,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
     /// <summary>
     /// 选中对象
     /// </summary>
-    public void SelectCell(ExcelConfig.ActivityObject activityObject)
+    public void SelectCell(ExcelConfig.ActivityBase activityObject)
     {
         if (SelectObjectEvent != null)
         {
@@ -122,7 +122,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
     /// <summary>
     /// 获取选中的数据
     /// </summary>
-    public ExcelConfig.ActivityObject GetSelectData()
+    public ExcelConfig.ActivityBase GetSelectData()
     {
         return _objectGrid.SelectData;
     }

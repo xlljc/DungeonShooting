@@ -332,7 +332,7 @@ public static class EditorWindowManager
     /// <param name="findType">查找的类型, 如果为 none, 则查找所有类型数据</param>
     /// <param name="onSelectObject">选中物体时回调</param>
     /// <param name="parentUi">所属父级Ui</param>
-    public static void ShowSelectObject(ActivityType findType, Action<ExcelConfig.ActivityObject> onSelectObject, UiBase parentUi = null)
+    public static void ShowSelectObject(ActivityType findType, Action<ExcelConfig.ActivityBase> onSelectObject, UiBase parentUi = null)
     {
         var window = CreateWindowInstance(parentUi);
         window.S_Window.Instance.Size = new Vector2I(1000, 700);

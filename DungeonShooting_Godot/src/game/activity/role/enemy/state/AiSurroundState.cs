@@ -170,7 +170,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
     private void RunOver(Vector2 targetPos)
     {
         var weapon = Master.WeaponPack.ActiveItem;
-        var distance = (int)(weapon == null ? 150 : (Utils.GetConfigRangeStart(weapon.Attribute.BulletDistanceRange) * 0.7f));
+        var distance = (int)(weapon == null ? 150 : (Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange) * 0.7f));
         _nextPosition = new Vector2(
             targetPos.X + Utils.Random.RandomRangeInt(-distance, distance),
             targetPos.Y + Utils.Random.RandomRangeInt(-distance, distance)

@@ -68,3 +68,14 @@ scale = Vector2(2, 2)
 icon = ExtResource("2_acjpv")
 flat = true
 icon_alignment = 1
+
+[node name="Fps" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -4.5
+offset_right = 4.5
+offset_bottom = 40.0
+grow_horizontal = 2
+text = "FPS:60"

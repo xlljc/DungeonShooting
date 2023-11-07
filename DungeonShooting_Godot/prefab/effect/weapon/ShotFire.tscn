@@ -39,10 +39,11 @@ animations = [{
 "speed": 20.0
 }]
 
-[node name="ShotFire" type="AnimatedSprite2D"]
+[node name="ShotFire" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
 modulate = Color(1.6, 1.6, 1.6, 1)
 sprite_frames = SubResource("SpriteFrames_73j16")
 autoplay = "default"
 offset = Vector2(8, 0)
 script = ExtResource("2_lnwju")
 DelayTime = 0.2
+Particles2D = []

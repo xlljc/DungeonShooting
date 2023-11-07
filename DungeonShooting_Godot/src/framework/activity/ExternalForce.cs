@@ -19,8 +19,8 @@ public class ExternalForce
     /// <summary>
     /// 是否在空中也会受到阻力
     /// </summary>
-    public bool EnableResistanceInTheAir { get; set; } = true;
-    
+    public bool EnableResistanceInTheAir { get; set; } = false;
+
     /// <summary>
     /// 当速度( Velocity 和 RotationSpeed )到达 0 后是否自动销毁, 默认 true
     /// </summary>

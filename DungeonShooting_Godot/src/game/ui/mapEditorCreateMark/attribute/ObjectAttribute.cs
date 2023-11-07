@@ -10,7 +10,7 @@ public partial class ObjectAttribute : AttributeBase
     public ActivityType ActivityType { get; set; }
     private MapEditorCreateMark.ObjectBar _objectBar;
     //选择的武器数据
-    private ExcelConfig.Weapon _selectWeapon;
+    private ExcelConfig.WeaponBase _selectWeapon;
     //关联属性
     private MapEditorCreateMark.NumberBar _currAmmonAttr;
     private MapEditorCreateMark.NumberBar _residueAmmoAttr;
@@ -33,7 +33,7 @@ public partial class ObjectAttribute : AttributeBase
         {
             return null;
         }
-        return _selectWeapon.WeaponId;
+        return _selectWeapon.Activity.Id;
     }
 
     //点击编辑按钮
@@ -48,9 +48,9 @@ public partial class ObjectAttribute : AttributeBase
         SelectWeapon(null);
     }
 
-    private void OnSelectObject(ExcelConfig.ActivityObject activityObject)
+    private void OnSelectObject(ExcelConfig.ActivityBase activityObject)
     {
-        var weapon = ExcelConfig.Weapon_List.Find(weapon => weapon.WeaponId == activityObject.Id);
+        var weapon = Weapon.GetWeaponAttribute(activityObject.Id);
         if (weapon != null)
         {
             SelectWeapon(weapon);
@@ -60,7 +60,7 @@ public partial class ObjectAttribute : AttributeBase
     /// <summary>
     /// 设置选择的武器物体
     /// </summary>
-    public void SelectWeapon(ExcelConfig.Weapon weapon)
+    public void SelectWeapon(ExcelConfig.WeaponBase weapon)
     {
         if (weapon == null)
         {
@@ -76,7 +76,7 @@ public partial class ObjectAttribute : AttributeBase
         {
             _objectBar.L_HBoxContainer.L_DeleteButton.Instance.Visible = true;
             _selectWeapon = weapon;
-            var o = ExcelConfig.ActivityObject_Map[weapon.WeaponId];
+            var o = weapon.Activity;
             //显示关联属性
             _currAmmonAttr.Instance.Visible = true;
             _residueAmmoAttr.Instance.Visible = true;

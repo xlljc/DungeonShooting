@@ -20,13 +20,22 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <summary>
     /// 当前物体对应的配置数据, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemConfig 为 null
     /// </summary>
-    public ExcelConfig.ActivityObject ItemConfig { get; private set; }
+    public ExcelConfig.ActivityBase ItemConfig { get; private set; }
 
     /// <summary>
     /// 是否是静态物体, 如果为true, 则会禁用移动处理
     /// </summary>
-    [Export]
-    public bool IsStatic { get; set; }
+    public bool IsStatic
+    {
+        get => MoveController != null ? !MoveController.Enable : true;
+        set
+        {
+            if (MoveController != null)
+            {
+                MoveController.Enable = !value;
+            }
+        }
+    }
 
     /// <summary>
     /// 是否显示阴影
@@ -145,26 +154,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     private float _verticalSpeed;
 
     /// <summary>
-    /// 落地之后是否回弹
-    /// </summary>
-    public bool Bounce { get; set; } = true;
-
-    /// <summary>
-    /// 物体下坠回弹的强度
-    /// </summary>
-    public float BounceStrength { get; set; } = 0.5f;
-
-    /// <summary>
-    /// 物体下坠回弹后的运动速度衰减量
-    /// </summary>
-    public float BounceSpeed { get; set; } = 0.75f;
-    
-    /// <summary>
-    /// 物体下坠回弹后的旋转速度衰减量
-    /// </summary>
-    public float BounceRotationSpeed { get; set; } = 0.5f;
-
-    /// <summary>
     /// 投抛状态下物体碰撞器大小, 如果 (x, y) 都小于 0, 则默认使用 AnimatedSprite 的默认动画第一帧的大小
     /// </summary>
     [Export]
@@ -175,6 +164,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public bool EnableVerticalMotion { get; set; } = true;
 
+    /// <summary>
+    /// 撞到墙壁反弹时是否锁定旋转角度, 如果为 false, 则反弹后将直接修改旋转角度
+    /// </summary>
+    public bool BounceLockRotation { get; set; } = true;
+    
     /// <summary>
     /// 是否启用物体更新行为, 默认 true, 如果禁用, 则会停止当前物体的 Process(), PhysicsProcess() 调用, 并且禁用 Collision 节点, 禁用后所有组件也同样被禁用行为
     /// </summary>
@@ -209,7 +203,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <summary>
     /// 物体材质数据
     /// </summary>
-    public ActivityMaterial ActivityMaterial { get; private set; }
+    public ExcelConfig.ActivityMaterial ActivityMaterial { get; private set; }
     
     /// <summary>
     /// 所在的 World 对象
@@ -271,8 +265,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
 
     // --------------------------------------------------------------------------------
 
+    //是否正在调用组件 Update 函数
+    private bool _updatingComp = false;
     //组件集合
-    private List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
+    private readonly List<KeyValuePair<Type, Component>> _components = new List<KeyValuePair<Type, Component>>();
+    //修改的组件集合, value 为 true 表示添加组件, false 表示移除组件
+    private readonly List<KeyValuePair<Component, bool>> _changeComponents = new List<KeyValuePair<Component, bool>>();
     //上一帧动画名称
     private string _prevAnimation;
     //上一帧动画
@@ -287,7 +285,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     private ShaderMaterial _shadowBlendShaderMaterial;
     
     //存储投抛该物体时所产生的数据
-    private ActivityFallData _fallData = new ActivityFallData();
+    private readonly ActivityFallData _fallData = new ActivityFallData();
     
     //所在层级
     private RoomLayerEnum _currLayer;
@@ -334,9 +332,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     //描边颜色
     private bool _initOutlineColor = false;
     private Color _outlineColor = new Color(0, 0, 0, 1);
+    
+    //冻结显示的Sprite
+    private FreezeSprite _freezeSprite;
 
     //初始化节点
-    private void _InitNode(RegisterActivityData activityData, World world)
+    private void _InitNode(ExcelConfig.ActivityBase config, World world)
     {
 #if TOOLS
         if (!Engine.IsEditorHint())
@@ -347,8 +348,17 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             }
         }
 #endif
+        if (config.Material == null)
+        {
+            ActivityMaterial = ExcelConfig.ActivityMaterial_List[0];
+        }
+        else
+        {
+            ActivityMaterial = config.Material;
+        }
+        
         World = world;
-        ItemConfig = activityData.Config;
+        ItemConfig = config;
         Name = GetType().Name + (_instanceIndex++);
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
         _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
@@ -365,7 +375,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         ShadowSprite.Visible = false;
         MotionMode = MotionModeEnum.Floating;
         MoveController = AddComponent<MoveController>();
-        MoveController.Enable = !IsStatic;
+        IsStatic = config.IsStatic;
         OnInit();
     }
 
@@ -574,23 +584,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     }
     
     /// <summary>
-    /// 每帧调用一次, ProcessOver() 会在组件的 Process() 之后调用
-    /// </summary>
-    protected virtual void ProcessOver(float delta)
-    {
-    }
-    
-    /// <summary>
     /// 每物理帧调用一次, 物体的 PhysicsProcess() 会在组件的 PhysicsProcess() 之前调用
     /// </summary>
     protected virtual void PhysicsProcess(float delta)
-    {
-    }
-    
-    /// <summary>
-    /// 每物理帧调用一次, PhysicsProcessOver() 会在组件的 PhysicsProcess() 之后调用
-    /// </summary>
-    protected virtual void PhysicsProcessOver(float delta)
     {
     }
     
@@ -606,6 +602,20 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     /// <param name="prevArea">上一个区域, 注意可能为空</param>
     protected virtual void OnAffiliationChange(AffiliationArea prevArea)
+    {
+    }
+
+    /// <summary>
+    /// 移动并碰撞到物体时调用该函数, 参数为碰撞数据, 该函数由 MoveController 调用
+    /// </summary>
+    public virtual void OnMoveCollision(KinematicCollision2D collision)
+    {
+    }
+
+    /// <summary>
+    /// 撞到墙壁反弹时调用该函数, 参数为反弹的角度, 弧度制, 该函数由 MoveController 调用
+    /// </summary>
+    public virtual void OnBounce(float rotation)
     {
     }
 
@@ -752,7 +762,15 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public T AddComponent<T>() where T : Component, new()
     {
         var component = new T();
-        _components.Add(new KeyValuePair<Type, Component>(typeof(T), component));
+        if (_updatingComp)
+        {
+            _changeComponents.Add(new KeyValuePair<Component, bool>(component, true));
+        }
+        else
+        {
+            _components.Add(new KeyValuePair<Type, Component>(typeof(T), component));
+        }
+
         component.Master = this;
         component.Ready();
         component.OnEnable();
@@ -765,7 +783,15 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public Component AddComponent(Type type)
     {
         var component = (Component)Activator.CreateInstance(type);
-        _components.Add(new KeyValuePair<Type, Component>(type, component));
+        if (_updatingComp)
+        {
+            _changeComponents.Add(new KeyValuePair<Component, bool>(component, true));
+        }
+        else
+        {
+            _components.Add(new KeyValuePair<Type, Component>(type, component));
+        }
+        
         component.Master = this;
         component.Ready();
         component.OnEnable();
@@ -778,13 +804,26 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <param name="component">组件对象</param>
     public void RemoveComponent(Component component)
     {
-        for (int i = 0; i < _components.Count; i++)
+        if (component.IsDestroyed)
         {
-            if (_components[i].Value == component)
+            return;
+        }
+
+        if (_updatingComp)
+        {
+            _changeComponents.Add(new KeyValuePair<Component, bool>(component, false));
+            component.Destroy();
+        }
+        else
+        {
+            for (var i = 0; i < _components.Count; i++)
             {
-                _components.RemoveAt(i);
-                component.Destroy();
-                return;
+                if (_components[i].Value == component)
+                {
+                    _components.RemoveAt(i);
+                    component.Destroy();
+                    return;
+                }
             }
         }
     }
@@ -800,6 +839,18 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             if (temp.Key == type)
             {
                 return temp.Value;
+            }
+        }
+
+        if (_updatingComp)
+        {
+            for (var i = 0; i < _changeComponents.Count; i++)
+            {
+                var temp = _components[i];
+                if (temp.Value.GetType() == type)
+                {
+                    return temp.Value;
+                }
             }
         }
 
@@ -885,14 +936,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         //更新组件
         if (_components.Count > 0)
         {
+            _updatingComp = true;
             if (EnableCustomBehavior) //启用所有组件
             {
-                var arr = _components.ToArray();
-                for (int i = 0; i < arr.Length; i++)
+                for (int i = 0; i < _components.Count; i++)
                 {
                     if (IsDestroyed) return;
-                    var temp = arr[i].Value;
-                    if (temp != null && temp.Master == this && temp.Enable)
+                    var temp = _components[i].Value;
+                    if (temp != null && temp.Enable)
                     {
                         temp.Process(newDelta);
                     }
@@ -905,8 +956,58 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                     MoveController.Process(newDelta);
                 }
             }
+            _updatingComp = false;
+            
+            if (_changeComponents.Count > 0)
+            {
+                RefreshComponent();
+            }
         }
 
+        // 更新下坠处理逻辑
+        UpdateFall(newDelta);
+
+        //阴影
+        UpdateShadowSprite(newDelta);
+        
+        // Hit 动画
+        if (_playHit)
+        {
+            if (_playHitSchedule < 0.05f)
+            {
+                _blendShaderMaterial.SetShaderParameter("schedule", 1);
+            }
+            else if (_playHitSchedule < 0.15f)
+            {
+                _blendShaderMaterial.SetShaderParameter("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
+            }
+            if (_playHitSchedule >= 0.15f)
+            {
+                _blendShaderMaterial.SetShaderParameter("schedule", 0);
+                _playHitSchedule = 0;
+                _playHit = false;
+            }
+            else
+            {
+                _playHitSchedule += newDelta;
+            }
+        }
+        
+        //协程更新
+        ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
+        
+        //调试绘制
+        if (IsDebug)
+        {
+            QueueRedraw();
+        }
+    }
+
+    /// <summary>
+    /// 更新下坠处理逻辑
+    /// </summary>
+    public void UpdateFall(float delta)
+    {
         // 下坠判定
         if (Altitude > 0 || VerticalSpeed != 0)
         {
@@ -922,8 +1023,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
 
                     var ysp = VerticalSpeed;
 
-                    _altitude += VerticalSpeed * newDelta;
-                    _verticalSpeed -= GameConfig.G * newDelta;
+                    _altitude += VerticalSpeed * delta;
+                    _verticalSpeed -= GameConfig.G * delta;
 
                     //当高度大于16时, 显示在所有物体上
                     if (Altitude >= 16)
@@ -957,28 +1058,28 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                         {
                             //缩放移动速度
                             //MoveController.ScaleAllForce(BounceSpeed);
-                            _throwForce.Velocity *= BounceSpeed;
+                            _throwForce.Velocity *= ActivityMaterial.FallBounceSpeed;
                             //缩放旋转速度
                             //MoveController.ScaleAllRotationSpeed(BounceStrength);
-                            _throwForce.RotationSpeed *= BounceRotationSpeed;
+                            _throwForce.RotationSpeed *= ActivityMaterial.FallBounceRotation;
                         }
                         //如果落地高度不够低, 再抛一次
-                        if (Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 5))
+                        if (ActivityMaterial.Bounce && (!_hasResilienceVerticalSpeed || _resilienceVerticalSpeed > 5))
                         {
                             if (!_hasResilienceVerticalSpeed)
                             {
                                 _hasResilienceVerticalSpeed = true;
-                                _resilienceVerticalSpeed = -VerticalSpeed * BounceStrength;
+                                _resilienceVerticalSpeed = -VerticalSpeed * ActivityMaterial.FallBounceStrength;
                             }
                             else
                             {
                                 if (_resilienceVerticalSpeed < 25)
                                 {
-                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength * 0.4f;
+                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * ActivityMaterial.FallBounceStrength * 0.4f;
                                 }
                                 else
                                 {
-                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * BounceStrength;
+                                    _resilienceVerticalSpeed = _resilienceVerticalSpeed * ActivityMaterial.FallBounceStrength;
                                 }
                             }
                             _verticalSpeed = _resilienceVerticalSpeed;
@@ -1008,7 +1109,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             }
         }
 
-        //阴影
+    }
+
+    /// <summary>
+    /// 更新阴影逻辑
+    /// </summary>
+    public void UpdateShadowSprite(float delta)
+    {
+        // 阴影
         if (ShadowSprite.Visible)
         {
             //更新阴影贴图, 使其和动画一致
@@ -1023,48 +1131,15 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             _prevAnimation = anim;
             _prevAnimationFrame = frame;
 
-            //计算阴影
-            CalcShadowTransform();
+            if (_freezeSprite == null || !_freezeSprite.IsFrozen)
+            {
+                //计算阴影
+                CalcShadowTransform();
+            }
         }
 
-        // Hit 动画
-        if (_playHit)
-        {
-            if (_playHitSchedule < 0.05f)
-            {
-                _blendShaderMaterial.SetShaderParameter("schedule", 1);
-            }
-            else if (_playHitSchedule < 0.15f)
-            {
-                _blendShaderMaterial.SetShaderParameter("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
-            }
-            if (_playHitSchedule >= 0.15f)
-            {
-                _blendShaderMaterial.SetShaderParameter("schedule", 0);
-                _playHitSchedule = 0;
-                _playHit = false;
-            }
-            else
-            {
-                _playHitSchedule += newDelta;
-            }
-        }
-        
-        //协程更新
-        if (_coroutineList != null)
-        {
-            ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
-        }
-
-        ProcessOver(newDelta);
-        
-        //调试绘制
-        if (IsDebug)
-        {
-            QueueRedraw();
-        }
     }
-
+    
     /// <summary>
     /// 每物理帧调用一次, 为了防止子类覆盖 _PhysicsProcess(), 给 _PhysicsProcess() 加上了 sealed, 子类需要帧循环函数请重写 PhysicsProcess() 函数
     /// </summary>
@@ -1085,14 +1160,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         //更新组件
         if (_components.Count > 0)
         {
+            _updatingComp = true;
             if (EnableCustomBehavior) //启用所有组件
             {
-                var arr = _components.ToArray();
-                for (int i = 0; i < arr.Length; i++)
+                for (int i = 0; i < _components.Count; i++)
                 {
                     if (IsDestroyed) return;
-                    var temp = arr[i].Value;
-                    if (temp != null && temp.Master == this && temp.Enable)
+                    var temp = _components[i].Value;
+                    if (temp != null && temp.Enable)
                     {
                         temp.PhysicsProcess(newDelta);
                     }
@@ -1105,9 +1180,37 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                     MoveController.PhysicsProcess(newDelta);
                 }
             }
-        }
+            _updatingComp = false;
 
-        PhysicsProcessOver(newDelta);
+            if (_changeComponents.Count > 0)
+            {
+                RefreshComponent();
+            }
+        }
+    }
+
+    //更新新增/移除的组件
+    private void RefreshComponent()
+    {
+        for (var i = 0; i < _changeComponents.Count; i++)
+        {
+            var item = _changeComponents[i];
+            if (item.Value) //添加组件
+            {
+                _components.Add(new KeyValuePair<Type, Component>(item.Key.GetType(), item.Key));
+            }
+            else //移除组件
+            {
+                for (var j = 0; j < _components.Count; j++)
+                {
+                    if (_components[i].Value == item.Key)
+                    {
+                        _components.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -1188,11 +1291,18 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         QueueFree();
         OnDestroy();
 
+        if (_freezeSprite != null)
+        {
+            _freezeSprite.Destroy();
+        }
+        
         var arr = _components.ToArray();
         for (var i = 0; i < arr.Length; i++)
         {
             arr[i].Value?.Destroy();
         }
+
+        _components.Clear();
     }
 
     /// <summary>
@@ -1275,7 +1385,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
             CollisionMask = 1;
-            CollisionLayer = PhysicsLayer.Throwing;
+            CollisionLayer = _fallData.OriginCollisionLayer | PhysicsLayer.Throwing;
             _fallData.UseOrigin = false;
         }
     }
@@ -1417,6 +1527,22 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         _playHit = true;
         _playHitSchedule = 0;
     }
+
+    /// <summary>
+    /// 获取当前摩擦力
+    /// </summary>
+    public float GetCurrentFriction()
+    {
+        return ActivityMaterial.Friction;
+    }
+    
+    /// <summary>
+    /// 获取当前旋转摩擦力
+    /// </summary>
+    public float GetCurrentRotationFriction()
+    {
+        return ActivityMaterial.RotationFriction;
+    }
     
     public long StartCoroutine(IEnumerator able)
     {
@@ -1436,6 +1562,19 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public void StopAllCoroutine()
     {
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
+    }
+    
+    /// <summary>
+    /// 播放 AnimatedSprite 上的动画, 如果没有这个动画, 则什么也不会发生
+    /// </summary>
+    /// <param name="name">动画名称</param>
+    public void PlaySpriteAnimation(string name)
+    {
+        var spriteFrames = AnimatedSprite.SpriteFrames;
+        if (spriteFrames != null && spriteFrames.HasAnimation(name))
+        {
+            AnimatedSprite.Play(name);
+        }
     }
 
     /// <summary>
@@ -1458,9 +1597,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
 
         _processingBecomesStaticImage = true;
         EnableBehavior = false;
-        var staticImageCanvas = AffiliationArea.RoomInfo.StaticImageCanvas;
-        var position = staticImageCanvas.ToImageCanvasPosition(GlobalPosition);
-        staticImageCanvas.CanvasSprite.DrawActivityObjectInCanvas(this, position.X, position.Y, () =>
+        var roomInfo = AffiliationArea.RoomInfo;
+        var position = roomInfo.ToImageCanvasPosition(GlobalPosition);
+        roomInfo.StaticImageCanvas.DrawActivityObjectInCanvas(this, position.X, position.Y, () =>
         {
             Destroy();
         });
@@ -1472,5 +1611,29 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public bool IsProcessingBecomesStaticImage()
     {
         return _processingBecomesStaticImage;
+    }
+    
+    /// <summary>
+    /// 冻结物体，多余的节点就会被移出场景树，逻辑也会被暂停，用于优化性能
+    /// </summary>
+    public void Freeze()
+    {
+        if (_freezeSprite == null)
+        {
+            _freezeSprite = new FreezeSprite(this);
+        }
+        _freezeSprite.Freeze();
+    }
+
+    /// <summary>
+    /// 解冻物体, 恢复正常逻辑
+    /// </summary>
+    public void Unfreeze()
+    {
+        if (_freezeSprite == null)
+        {
+            return;
+        }
+        _freezeSprite.Unfreeze();
     }
 }

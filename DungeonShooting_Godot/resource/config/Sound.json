@@ -14,7 +14,7 @@
   {
     "Id": "shooting0003",
     "Path": "res://resource/sound/sfx/shooting/Shooting0003.ogg",
-    "Volume": 0.8,
+    "Volume": 0.7,
     "Remark": "\u9730\u5F39\u67AA"
   },
   {
@@ -48,6 +48,24 @@
     "Remark": "\u72D9\u51FB\u67AA"
   },
   {
+    "Id": "shooting0009",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0009.ogg",
+    "Volume": 1,
+    "Remark": "\u6FC0\u5149\u6B66\u5668"
+  },
+  {
+    "Id": "shooting0010",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0010.ogg",
+    "Volume": 1.2,
+    "Remark": "\u6FC0\u5149\u6B66\u5668"
+  },
+  {
+    "Id": "shooting0011",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0011.ogg",
+    "Volume": 1.8,
+    "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668"
+  },
+  {
     "Id": "reloading0001",
     "Path": "res://resource/sound/sfx/reloading/Reloading0001.ogg",
     "Volume": 1,
@@ -58,6 +76,12 @@
     "Path": "res://resource/sound/sfx/reloading/Reloading0002.ogg",
     "Volume": 1,
     "Remark": "\u9730\u5F39\u67AA\u5355\u72EC\u88C5\u5F39"
+  },
+  {
+    "Id": "reloading0003",
+    "Path": "res://resource/sound/sfx/reloading/Reloading0003.ogg",
+    "Volume": 1.2,
+    "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668\u88C5\u5F39"
   },
   {
     "Id": "reloadBegin0002",
@@ -102,10 +126,34 @@
     "Remark": ""
   },
   {
+    "Id": "reloadBegin0011",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0011.ogg",
+    "Volume": 1,
+    "Remark": "\u6FC0\u5149\u6B66\u5668"
+  },
+  {
+    "Id": "reloadBegin0012",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0012.ogg",
+    "Volume": 1.2,
+    "Remark": ""
+  },
+  {
     "Id": "reloadFinish0002",
     "Path": "res://resource/sound/sfx/reloading/Reloading_finish0002.ogg",
     "Volume": 1,
     "Remark": "\u9730\u5F39\u67AA"
+  },
+  {
+    "Id": "reloadFinish0003",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_finish0003.ogg",
+    "Volume": 1,
+    "Remark": "\u6FC0\u5149\u6B66\u5668"
+  },
+  {
+    "Id": "reloadFinish0004",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_finish0004.ogg",
+    "Volume": 1.2,
+    "Remark": ""
   },
   {
     "Id": "beLoaded0001",
@@ -208,5 +256,29 @@
     "Path": "res://resource/sound/sfx/beLoaded/BeLoaded0017.ogg",
     "Volume": 1,
     "Remark": ""
+  },
+  {
+    "Id": "explosion0001",
+    "Path": "res://resource/sound/sfx/explosion/Explosion0001.ogg",
+    "Volume": 1.2,
+    "Remark": "\u7206\u70B8"
+  },
+  {
+    "Id": "explosion0002",
+    "Path": "res://resource/sound/sfx/explosion/Explosion0002.ogg",
+    "Volume": 1.2,
+    "Remark": "\u7206\u70B8"
+  },
+  {
+    "Id": "explosion0003",
+    "Path": "res://resource/sound/sfx/explosion/Explosion0003.ogg",
+    "Volume": 1.2,
+    "Remark": "\u7206\u70B8"
+  },
+  {
+    "Id": "collision0001",
+    "Path": "res://resource/sound/sfx/collision/Collision0001.ogg",
+    "Volume": 0.7,
+    "Remark": "\u78B0\u649E"
   }
 ]

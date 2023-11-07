@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://gby5bfwuu4kx"]
+
+[ext_resource type="Script" path="res://src/test/TestDrawSprite.cs" id="1_tplub"]
+
+[sub_resource type="Curve2D" id="Curve2D_ft6ap"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 29, 41, 0, 0, 0, 0, 1547, 34, 0, 0, 0, 0, 1544, 863, 0, 0, 0, 0, 39, 848, 0, 0, 0, 0, 828, 387, 0, 0, 0, 0, 42, 54)
+}
+point_count = 6
+
+[node name="TestDrawSprite" type="Node2D" node_paths=PackedStringArray("FpsLabel", "PathFollow2D")]
+script = ExtResource("1_tplub")
+FpsLabel = NodePath("CanvasLayer/Fps")
+PathFollow2D = NodePath("Path2D/PathFollow2D")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Fps" type="Label" parent="CanvasLayer"]
+offset_left = 34.0
+offset_top = 31.0
+offset_right = 43.0
+offset_bottom = 71.0
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_ft6ap")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2(29, 41)
+rotation = -0.0046113
+
+[node name="Camera2D" type="Camera2D" parent="Path2D/PathFollow2D"]

@@ -210,10 +210,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         Process(newDelta);
         
         //协程更新
-        if (_coroutineList != null)
-        {
-            ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
-        }
+        ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
     }
 
     /// <summary>

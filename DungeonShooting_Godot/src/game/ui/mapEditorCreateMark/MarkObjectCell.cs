@@ -11,7 +11,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
     private MapEditorCreateMark.ExpandPanel _expandPanel;
     //自定义额外属性
     private List<AttributeBase> _attributeBases;
-    private ExcelConfig.ActivityObject _activityObject;
+    private ExcelConfig.ActivityBase _activityObject;
 
     private MapEditorCreateMark.NumberBar _altitude;
     private MapEditorCreateMark.NumberBar _vSpeed;
@@ -25,7 +25,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
     public override void OnSetData(MarkInfoItem data)
     {
         //记得判断随机对象, 后面再做
-        _activityObject = ExcelConfig.ActivityObject_Map[data.Id];
+        _activityObject = ExcelConfig.ActivityBase_Map[data.Id];
         //图标
         if (string.IsNullOrEmpty(_activityObject.Icon))
         {
@@ -161,7 +161,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         }
     }
 
-    private void CreateExpandPanel(ExcelConfig.ActivityObject activityObject, MarkInfoItem markInfoItem)
+    private void CreateExpandPanel(ExcelConfig.ActivityBase activityObject, MarkInfoItem markInfoItem)
     {
         if (_expandPanel != null)
         {
@@ -218,7 +218,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                 numberBar.L_NumInput.Instance.MinValue = 0;
                 numberBar2.L_NumInput.Instance.MinValue = 0;
                 //武器配置数据
-                var weapon = ExcelConfig.Weapon_List.Find(weapon => weapon.WeaponId == activityObject.Id);
+                var weapon = Weapon.GetWeaponAttribute(activityObject.Id);
                 if (weapon != null)
                 {
                     numberBar.L_NumInput.Instance.MaxValue = weapon.AmmoCapacity; //弹夹上限
@@ -276,7 +276,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                     }
                     if (markInfoItem.Attr.TryGetValue("Weapon", out var weaponId)) //武器
                     {
-                        weaponBar.Instance.SelectWeapon(ExcelConfig.Weapon_List.Find(w => w.WeaponId == weaponId));
+                        weaponBar.Instance.SelectWeapon(Weapon.GetWeaponAttribute(weaponId));
                     }
                     if (markInfoItem.Attr.TryGetValue("CurrAmmon", out var currAmmon)) //弹夹弹药量
                     {

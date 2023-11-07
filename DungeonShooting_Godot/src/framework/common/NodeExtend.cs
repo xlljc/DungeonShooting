@@ -50,6 +50,16 @@ public static class NodeExtend
     {
         GameApplication.Instance.World.GetRoomLayer(layer).AddChild(node);
     }
+    
+    /// <summary>
+    /// 将节点插入的房间物体根节点，延时调用
+    /// </summary>
+    /// <param name="node">实例</param>
+    /// <param name="layer">放入的层</param>
+    public static void AddToActivityRootDeferred(this Node2D node, RoomLayerEnum layer)
+    {
+        GameApplication.Instance.World.GetRoomLayer(layer).CallDeferred(Node.MethodName.AddChild, node);
+    }
 
     /// <summary>
     /// 设置Ui布局方式是否横向扩展, 如果为 true, 则 GridContainer 的宽度会撑满父物体
