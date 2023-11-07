@@ -103,18 +103,16 @@ public partial class Enemy : Role
         StateController.ChangeStateInstant(AiStateEnum.AiNormal);
     }
 
-    public override void EnterTree()
+    public override void _EnterTree()
     {
-        base.EnterTree();
         if (!World.Enemy_InstanceList.Contains(this))
         {
             World.Enemy_InstanceList.Add(this);
         }
     }
 
-    public override void ExitTree()
+    public override void _ExitTree()
     {
-        base.ExitTree();
         World.Enemy_InstanceList.Remove(this);
     }
 

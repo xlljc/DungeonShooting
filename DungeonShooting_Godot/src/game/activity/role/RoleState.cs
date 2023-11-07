@@ -194,4 +194,20 @@ public class RoleState
 
         return distance;
     }
+
+    /// <summary>
+    /// 子弹反弹次数
+    /// </summary>
+    public event Action<Weapon, int, RefValue<int>> CalcBulletBounceCountEvent;
+    public int CalcBulletBounceCount(Weapon weapon, int distance)
+    {
+        if (CalcBulletBounceCountEvent != null)
+        {
+            var result = new RefValue<int>(distance);
+            CalcBulletBounceCountEvent(weapon, distance, result);
+            return result.Value;
+        }
+
+        return distance;
+    }
 }

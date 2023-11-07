@@ -351,12 +351,24 @@
     "Id": "prop0010",
     "Type": 9,
     "Name": "\u5206\u88C2\u5B50\u5F39",
-    "Intro": "\u5B50\u5F39\u6570\u91CF\u7FFB\u500D, \u4F46\u662F\u7CBE\u51C6\u5EA6\u548C\u4F24\u5BB3\u964D\u4F4E",
+    "Intro": "\u5B50\u5F39\u6570\u91CF\u7FFB\u500D, \u4F46\u662F\u7CBE\u51C6\u5EA6, \u51FB\u9000\u548C\u4F24\u5BB3\u964D\u4F4E",
     "Details": "",
     "IsStatic": false,
     "__Material": "",
     "Prefab": "res://prefab/prop/buff/BuffProp0010.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0010.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "prop0011",
+    "Type": 9,
+    "Name": "\u5F39\u5C04\u5B50\u5F39",
+    "Intro": "\u5B50\u5F39\u53CD\u5F39\u6B21\u6570 \u002B2",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0011.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0011.png",
     "ShowInMapEditor": true
   },
   {

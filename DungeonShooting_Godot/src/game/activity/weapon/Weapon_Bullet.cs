@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Config;
 using Godot;
 
@@ -89,6 +90,7 @@ public partial class Weapon
             data.Repel = roleState.CalcBulletRepel(this, data.Repel);
             data.FlySpeed = roleState.CalcBulletSpeed(this, data.FlySpeed);
             data.MaxDistance = roleState.CalcBulletDistance(this, data.MaxDistance);
+            data.BounceCount = roleState.CalcBulletBounceCount(this, data.BounceCount);
             deviationAngle = roleState.CalcBulletDeviationAngle(this, deviationAngle);
             
             if (TriggerRole.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
@@ -96,7 +98,6 @@ public partial class Weapon
                 data.FlySpeed *= AiUseAttribute.AiAttackAttr.BulletSpeedScale;
             }
         }
-
 
         data.Rotation = fireRotation + Mathf.DegToRad(deviationAngle);
         //创建子弹
@@ -129,6 +130,7 @@ public partial class Weapon
             var roleState = TriggerRole.RoleState;
             data.Harm = roleState.CalcDamage(data.Harm);
             data.Repel = roleState.CalcBulletRepel(this, data.Repel);
+            data.BounceCount = roleState.CalcBulletBounceCount(this, data.BounceCount);
             deviationAngle = roleState.CalcBulletDeviationAngle(this, deviationAngle);
         }
 

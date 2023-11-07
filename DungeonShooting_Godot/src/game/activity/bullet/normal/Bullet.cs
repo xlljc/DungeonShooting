@@ -1,3 +1,4 @@
+
 using System.Collections;
 using Godot;
 
@@ -83,9 +84,9 @@ public partial class Bullet : ActivityObject, IBullet
         PutDown(RoomLayerEnum.YSortLayer);
         //播放子弹移动动画
         PlaySpriteAnimation(AnimatorNames.Move);
-        //强制更新下坠逻辑处理
         UpdateFall((float)GetProcessDeltaTime());
-        
+        //强制更新下坠逻辑处理
+
         //过期销毁
         if (data.LifeTime > 0)
         {

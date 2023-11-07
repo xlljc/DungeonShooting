@@ -155,9 +155,14 @@ public partial class ActivityObject
         public const string Id_prop0009 = "prop0009";
         /// <summary>
         /// 名称: 分裂子弹 <br/>
-        /// 简介: 子弹数量翻倍, 但是精准度和伤害降低
+        /// 简介: 子弹数量翻倍, 但是精准度, 击退和伤害降低
         /// </summary>
         public const string Id_prop0010 = "prop0010";
+        /// <summary>
+        /// 名称: 弹射子弹 <br/>
+        /// 简介: 子弹反弹次数 +2
+        /// </summary>
+        public const string Id_prop0011 = "prop0011";
         /// <summary>
         /// 名称: 医药箱 <br/>
         /// 简介: 使用后回复一颗红心

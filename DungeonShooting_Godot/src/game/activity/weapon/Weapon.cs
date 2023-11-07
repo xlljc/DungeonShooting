@@ -431,9 +431,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         return 1;
     }
 
-    public override void EnterTree()
+    public override void _EnterTree()
     {
-        base.EnterTree();
         //收集落在地上的武器
         if (IsInGround())
         {
@@ -441,9 +440,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         }
     }
 
-    public override void ExitTree()
+    public override void _ExitTree()
     {
-        base.ExitTree();
         World.Weapon_UnclaimedWeapons.Remove(this);
     }
 
@@ -1041,7 +1039,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         {
             fireRotation += GlobalRotation;
         }
-        
+
         //创建子弹
         for (var i = 0; i < bulletCount; i++)
         {
