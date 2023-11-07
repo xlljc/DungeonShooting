@@ -23,14 +23,14 @@ public class BulletData
     public Role TriggerRole;
     
     /// <summary>
-    /// 最小伤害
+    /// 造成的伤害
     /// </summary>
-    public int MinHarm;
-    
+    public int Harm;
+
     /// <summary>
-    /// 最大伤害
+    /// 击退值
     /// </summary>
-    public  int MaxHarm;
+    public float Repel;
 
     /// <summary>
     /// 最大飞行距离
@@ -51,6 +51,11 @@ public class BulletData
     /// 反弹次数
     /// </summary>
     public int BounceCount;
+
+    /// <summary>
+    /// 子弹最大穿透次数
+    /// </summary>
+    public float Penetration;
 
     /// <summary>
     /// 子弹最大存在时间

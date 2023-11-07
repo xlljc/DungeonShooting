@@ -138,7 +138,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0003",
     "Prefab": "res://prefab/bullet/normal/Bullet0001.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -150,7 +150,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0003",
     "Prefab": "res://prefab/bullet/normal/Bullet0002.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -162,7 +162,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0003",
     "Prefab": "res://prefab/bullet/normal/Bullet0003.tscn",
     "Icon": "",
     "ShowInMapEditor": false

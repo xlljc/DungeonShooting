@@ -107,10 +107,12 @@ public static partial class ExcelConfig
         public int[] BounceCount;
 
         /// <summary>
-        /// 在还有剩余反弹次数时撞到玩家时是否销毁子弹
+        /// 子弹穿透次数区间 <br/>
+        /// 只有Type为1时有效 <br/>
+        /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public bool StrikeDestroy;
+        public int[] Penetration;
 
         /// <summary>
         /// 返回浅拷贝出的新对象
@@ -131,7 +133,7 @@ public static partial class ExcelConfig
             inst.UseGravity = UseGravity;
             inst.VerticalSpeed = VerticalSpeed;
             inst.BounceCount = BounceCount;
-            inst.StrikeDestroy = StrikeDestroy;
+            inst.Penetration = Penetration;
             return inst;
         }
     }

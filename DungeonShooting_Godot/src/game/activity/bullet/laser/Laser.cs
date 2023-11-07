@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Config;
 using Godot;
 
 /// <summary>
@@ -124,14 +123,13 @@ public partial class Laser : Area2D, IBullet
         var role = other.AsActivityObject<Role>();
         if (role != null)
         {
-            //计算子弹造成的伤害
-            var damage = Utils.Random.RandomRangeInt(BulletData.MinHarm, BulletData.MaxHarm);
-            if (BulletData.TriggerRole != null)
+            //击退
+            if (BulletData.Repel != 0)
             {
-                damage = BulletData.TriggerRole.RoleState.CalcDamage(damage);
+                role.MoveController.AddForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
             }
             //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
+            role.CallDeferred(nameof(Role.Hurt), BulletData.Harm, Rotation);
         }
     }
 

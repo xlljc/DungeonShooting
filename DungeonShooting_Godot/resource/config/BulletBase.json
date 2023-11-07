@@ -31,7 +31,9 @@
     "BounceCount": [
       0
     ],
-    "StrikeDestroy": true
+    "Penetration": [
+      0
+    ]
   },
   {
     "Id": "0002",
@@ -66,7 +68,9 @@
     "BounceCount": [
       0
     ],
-    "StrikeDestroy": true
+    "Penetration": [
+      0
+    ]
   },
   {
     "Id": "0003",
@@ -100,7 +104,9 @@
     "BounceCount": [
       0
     ],
-    "StrikeDestroy": true
+    "Penetration": [
+      0
+    ]
   },
   {
     "Id": "0004",
@@ -134,7 +140,9 @@
     "BounceCount": [
       0
     ],
-    "StrikeDestroy": true
+    "Penetration": [
+      0
+    ]
   },
   {
     "Id": "0005",
@@ -145,7 +153,7 @@
       30
     ],
     "RepelRange": [
-      0
+      150
     ],
     "DeviationAngleRange": [
       0
@@ -168,7 +176,9 @@
     "BounceCount": [
       999
     ],
-    "StrikeDestroy": true
+    "Penetration": [
+      1
+    ]
   },
   {
     "Id": "1001",
@@ -179,7 +189,7 @@
       5
     ],
     "RepelRange": [
-      0
+      40
     ],
     "DeviationAngleRange": [
       0
@@ -200,7 +210,7 @@
     "BounceCount": [
       0
     ],
-    "StrikeDestroy": false
+    "Penetration": null
   },
   {
     "Id": "2001",
@@ -228,6 +238,6 @@
     "UseGravity": false,
     "VerticalSpeed": null,
     "BounceCount": null,
-    "StrikeDestroy": false
+    "Penetration": null
   }
 ]

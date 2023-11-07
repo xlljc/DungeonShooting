@@ -364,7 +364,7 @@ public class MoveController : Component
             
             //是否撞到物体
             KinematicCollision2D collision;
-            _flag -= delta;
+            _flag--;
             if (_flag <= 0 && (collision = Master.GetLastSlideCollision()) != null) //执行反弹操作
             {
                 //调用移动碰撞函数
@@ -373,8 +373,8 @@ public class MoveController : Component
                 {
                     return;
                 }
-                //0.1秒内不能再触发第二次碰撞检测
-                _flag = 0.1f;
+                //2帧内不能再触发第二次碰撞检测
+                _flag = 2;
                 var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
                 newVelocity = finallyEf.Reflect(no);
                 var rotation = newVelocity.Angle();

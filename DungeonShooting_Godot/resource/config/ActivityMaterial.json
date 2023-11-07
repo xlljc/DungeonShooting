@@ -20,5 +20,16 @@
     "FallBounceStrength": 0.7,
     "FallBounceSpeed": 0.85,
     "FallBounceRotation": 0.85
+  },
+  {
+    "Id": "0003",
+    "Remark": "\u5B50\u5F39,\u53CD\u5F39\u6D88\u8017\u4F4E",
+    "Friction": 140,
+    "RotationFriction": 140,
+    "Bounce": true,
+    "BounceStrength": 1,
+    "FallBounceStrength": 0.5,
+    "FallBounceSpeed": 0.75,
+    "FallBounceRotation": 0.5
   }
 ]

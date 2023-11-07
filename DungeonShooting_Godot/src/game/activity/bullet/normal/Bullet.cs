@@ -28,6 +28,11 @@ public partial class Bullet : ActivityObject, IBullet
     /// 当前反弹次数
     /// </summary>
     public int CurrentBounce { get; protected set; } = 0;
+
+    /// <summary>
+    /// 当前穿透次数
+    /// </summary>
+    public int CurrentPenetration { get; protected set; } = 0;
     
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
@@ -114,33 +119,24 @@ public partial class Bullet : ActivityObject, IBullet
         {
             PlayDisappearEffect();
 
-            //计算子弹造成的伤害
-            var damage = Utils.Random.RandomRangeInt(BulletData.MinHarm, BulletData.MaxHarm);
-            if (BulletData.TriggerRole != null)
-            {
-                damage = BulletData.TriggerRole.RoleState.CalcDamage(damage);
-            }
-
             //击退
             if (role is not Player) //目标不是玩家才会触发击退
             {
-                var attr = BulletData.Weapon.GetUseAttribute(BulletData.TriggerRole);
-                //计算子弹造成的击退
-                var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRange);
-                if (BulletData.TriggerRole != null)
+                if (BulletData.Repel != 0)
                 {
-                    repel = BulletData.TriggerRole.RoleState.CalcBulletRepel(BulletData.Weapon, repel);
-                }
-                if (repel != 0)
-                {
-                    //role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel);
-                    role.MoveController.AddForce(Vector2.FromAngle(Velocity.Angle()) * repel);
+                    role.MoveController.AddForce(Velocity.Normalized() * BulletData.Repel);
                 }
             }
             
             //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
-            Destroy();
+            role.CallDeferred(nameof(Role.Hurt), BulletData.Harm, Rotation);
+
+            //穿透次数
+            CurrentPenetration++;
+            if (CurrentPenetration > BulletData.Penetration)
+            {
+                Destroy();
+            }
         }
     }
 

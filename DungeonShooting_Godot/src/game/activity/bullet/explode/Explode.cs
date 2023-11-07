@@ -33,8 +33,7 @@ public partial class Explode : Area2D, IPoolItem
 
     private bool _init = false;
     private float _hitRadius;
-    private int _minHarm;
-    private int _maxHarm;
+    private int _harm;
     private float _repelledRadius;
     private float _maxRepelled;
     
@@ -55,11 +54,10 @@ public partial class Explode : Area2D, IPoolItem
     /// <param name="affiliationArea">爆炸所在区域</param>
     /// <param name="attackLayer">攻击的层级</param>
     /// <param name="hitRadius">伤害半径</param>
-    /// <param name="minHarm">最小伤害</param>
-    /// <param name="maxHarm">最大伤害</param>
+    /// <param name="harm">造成的伤害</param>
     /// <param name="repelledRadius">击退半径</param>
     /// <param name="maxRepelled">最大击退速度</param>
-    public void Init(AffiliationArea affiliationArea, uint attackLayer, float hitRadius, int minHarm, int maxHarm, float repelledRadius, float maxRepelled)
+    public void Init(AffiliationArea affiliationArea, uint attackLayer, float hitRadius, int harm, float repelledRadius, float maxRepelled)
     {
         if (!_init)
         {
@@ -73,8 +71,7 @@ public partial class Explode : Area2D, IPoolItem
         
         AttackLayer = attackLayer;
         _hitRadius = hitRadius;
-        _minHarm = minHarm;
-        _maxHarm = maxHarm;
+        _harm = harm;
         _repelledRadius = repelledRadius;
         _maxRepelled = maxRepelled;
         CollisionMask = attackLayer | PhysicsLayer.Prop | PhysicsLayer.Debris;
@@ -141,7 +138,7 @@ public partial class Explode : Area2D, IPoolItem
             {
                 if (o is Role role) //是角色
                 {
-                    role.CallDeferred(nameof(role.Hurt), Utils.Random.RandomRangeInt(_minHarm, _maxHarm), angle);
+                    role.CallDeferred(nameof(role.Hurt), _harm, angle);
                 }
                 else if (o is Bullet bullet) //是子弹
                 {
