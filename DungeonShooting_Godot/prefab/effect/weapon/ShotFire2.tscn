@@ -42,7 +42,6 @@ animations = [{
 [node name="ShotFire2" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
 modulate = Color(1.6, 1.6, 1.6, 1)
 sprite_frames = SubResource("SpriteFrames_rry1m")
-autoplay = "default"
 offset = Vector2(5.5, 0)
 script = ExtResource("2_4ecjw")
 DelayTime = 0.2

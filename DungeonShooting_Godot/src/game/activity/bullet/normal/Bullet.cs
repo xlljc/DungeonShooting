@@ -115,12 +115,13 @@ public partial class Bullet : ActivityObject, IBullet
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
             //创建粒子特效
-            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletSmoke_tscn);
-            var smoke = packedScene.Instantiate<GpuParticles2D>();
+            var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_BulletSmoke_tscn);
+            var smoke = (Node2D)effect;
             var rotated = AnimatedSprite.Position.Rotated(Rotation);
             smoke.GlobalPosition = collision.GetPosition() + new Vector2(0, rotated.Y);
             smoke.GlobalRotation = collision.GetNormal().Angle();
             smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+            effect.PlayEffect();
             DoReclaim();
         }
     }
@@ -197,10 +198,11 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void PlayDisappearEffect()
     {
-        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletDisappear_tscn);
-        var node = packedScene.Instantiate<Node2D>();
+        var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_BulletDisappear_tscn);
+        var node = (Node2D)effect;
         node.GlobalPosition = AnimatedSprite.GlobalPosition;
         node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+        effect.PlayEffect();
     }
     
     protected override void Process(float delta)

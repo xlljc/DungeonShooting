@@ -1,9 +1,10 @@
 [gd_scene load_steps=31 format=3 uid="uid://pr88a1phtxgb"]
 
-[ext_resource type="Script" path="res://src/game/effects/EnemyDebris.cs" id="1_ttosm"]
+[ext_resource type="Script" path="res://src/game/effects/enemy/EnemyDebris.cs" id="1_ttosm"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_h62s7"]
 [ext_resource type="Texture2D" uid="uid://cn64eauvwx1uj" path="res://resource/sprite/role/enemy0001/enemy0001_Debris.png" id="3_6ewaj"]
 [ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="4_wu0t6"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s1mj2"]
 resource_local_to_scene = true

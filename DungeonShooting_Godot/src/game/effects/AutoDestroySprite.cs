@@ -7,11 +7,17 @@ using Godot.Collections;
 public partial class AutoDestroySprite : AnimatedSprite2D, IEffect
 {
     /// <summary>
+    /// 播放的动画名称
+    /// </summary>
+    [Export]
+    public string AnimationName { get; set; } = "default";
+    
+    /// <summary>
     /// 延时销毁时间
     /// </summary>
     [Export]
     public float DelayTime { get; set; } = 1f;
-    
+
     /// <summary>
     /// 子节点包含的例子特效, 在创建完成后自动播放
     /// </summary>
@@ -36,6 +42,7 @@ public partial class AutoDestroySprite : AnimatedSprite2D, IEffect
         }
         _timer = 0;
         _isPlay = true;
+        Play(AnimationName);
     }
     
     public override void _Process(double delta)

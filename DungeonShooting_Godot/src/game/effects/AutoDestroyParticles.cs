@@ -1,5 +1,6 @@
 ﻿
 using Godot;
+using Godot.Collections;
 
 /// <summary>
 /// 到期自动销毁的粒子特效
@@ -12,6 +13,12 @@ public partial class AutoDestroyParticles : GpuParticles2D, IEffect
     [Export]
     public float DelayTime { get; set; } = 1f;
     
+    /// <summary>
+    /// 子节点包含的例子特效, 在创建完成后自动播放
+    /// </summary>
+    [Export]
+    public Array<GpuParticles2D> Particles2D { get; set; }
+    
     public bool IsDestroyed { get; private set; }
     public bool IsRecycled { get; set; }
     public string Logotype { get; set; }
@@ -22,6 +29,13 @@ public partial class AutoDestroyParticles : GpuParticles2D, IEffect
     public virtual void PlayEffect()
     {
         Emitting = true;
+        if (Particles2D != null)
+        {
+            foreach (var gpuParticles2D in Particles2D)
+            {
+                gpuParticles2D.Emitting = true;
+            }
+        }
         _timer = 0;
         _isPlay = true;
     }
@@ -36,6 +50,13 @@ public partial class AutoDestroyParticles : GpuParticles2D, IEffect
         if (_timer >= DelayTime)
         {
             Emitting = false;
+            if (Particles2D != null)
+            {
+                foreach (var gpuParticles2D in Particles2D)
+                {
+                    gpuParticles2D.Emitting = false;
+                }
+            }
             _isPlay = false;
             ObjectPool.Reclaim(this);
         }
