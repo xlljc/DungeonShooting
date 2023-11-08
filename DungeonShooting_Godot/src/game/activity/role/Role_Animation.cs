@@ -43,13 +43,15 @@ public partial class Role
                 GameCamera.Main.DirectionalShake(Vector2.FromAngle(Mathf.DegToRad(-r)) * 6);
             }
             //播放特效
-            var sprite = ResourceManager.LoadAndInstantiate<AutoDestroySprite>(ResourcePath.prefab_effect_weapon_MeleeAttack1_tscn);
+            var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_MeleeAttack1_tscn);
+            var sprite = (Node2D)effect;
             var localFirePosition = activeItem.GetLocalFirePosition() - activeItem.GripPoint.Position;
             localFirePosition *= 0.9f;
             sprite.Position = p1 + localFirePosition.Rotated(Mathf.DegToRad(r));
             sprite.RotationDegrees = r;
             AddChild(sprite);
-            
+            effect.PlayEffect();
+
             //启用近战碰撞区域
             MeleeAttackCollision.Disabled = false;
         }));

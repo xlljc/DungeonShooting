@@ -50,7 +50,7 @@ public partial class BoomBullet : Bullet
     /// </summary>
     public void PlayBoom()
     {
-        var explode = ObjectManager.GetExplode(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
+        var explode = ObjectManager.GetPoolItem<Explode>(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
         var pos = Position;
         explode.Position = pos;
         explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);

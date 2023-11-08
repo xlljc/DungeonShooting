@@ -21,7 +21,6 @@ public class ResourcePath
     public const string prefab_effect_enemy_EnemyBloodEffect_tscn = "res://prefab/effect/enemy/EnemyBloodEffect.tscn";
     public const string prefab_effect_weapon_BulletDisappear_tscn = "res://prefab/effect/weapon/BulletDisappear.tscn";
     public const string prefab_effect_weapon_BulletSmoke_tscn = "res://prefab/effect/weapon/BulletSmoke.tscn";
-    public const string prefab_effect_weapon_FirePart_tscn = "res://prefab/effect/weapon/FirePart.tscn";
     public const string prefab_effect_weapon_MeleeAttack1_tscn = "res://prefab/effect/weapon/MeleeAttack1.tscn";
     public const string prefab_effect_weapon_MeleeAttack2_tscn = "res://prefab/effect/weapon/MeleeAttack2.tscn";
     public const string prefab_effect_weapon_ShotFire_tscn = "res://prefab/effect/weapon/ShotFire.tscn";
@@ -43,12 +42,14 @@ public class ResourcePath
     public const string prefab_prop_buff_BuffProp0008_tscn = "res://prefab/prop/buff/BuffProp0008.tscn";
     public const string prefab_prop_buff_BuffProp0009_tscn = "res://prefab/prop/buff/BuffProp0009.tscn";
     public const string prefab_prop_buff_BuffProp0010_tscn = "res://prefab/prop/buff/BuffProp0010.tscn";
+    public const string prefab_prop_buff_BuffProp0011_tscn = "res://prefab/prop/buff/BuffProp0011.tscn";
     public const string prefab_role_Enemy0001_tscn = "res://prefab/role/Enemy0001.tscn";
     public const string prefab_role_Role0001_tscn = "res://prefab/role/Role0001.tscn";
     public const string prefab_role_RoleTemplate_tscn = "res://prefab/role/RoleTemplate.tscn";
     public const string prefab_shell_Shell0001_tscn = "res://prefab/shell/Shell0001.tscn";
     public const string prefab_shell_Shell0002_tscn = "res://prefab/shell/Shell0002.tscn";
     public const string prefab_shell_Shell0003_tscn = "res://prefab/shell/Shell0003.tscn";
+    public const string prefab_shell_Shell0004_tscn = "res://prefab/shell/Shell0004.tscn";
     public const string prefab_test_MoveComponent_tscn = "res://prefab/test/MoveComponent.tscn";
     public const string prefab_test_TestActivity_tscn = "res://prefab/test/TestActivity.tscn";
     public const string prefab_ui_BottomTips_tscn = "res://prefab/ui/BottomTips.tscn";
@@ -119,11 +120,13 @@ public class ResourcePath
     public const string resource_sound_sfx_beLoaded_BeLoaded0015_ogg = "res://resource/sound/sfx/beLoaded/BeLoaded0015.ogg";
     public const string resource_sound_sfx_beLoaded_BeLoaded0016_ogg = "res://resource/sound/sfx/beLoaded/BeLoaded0016.ogg";
     public const string resource_sound_sfx_beLoaded_BeLoaded0017_ogg = "res://resource/sound/sfx/beLoaded/BeLoaded0017.ogg";
+    public const string resource_sound_sfx_collision_Collision0001_ogg = "res://resource/sound/sfx/collision/Collision0001.ogg";
     public const string resource_sound_sfx_explosion_Explosion0001_ogg = "res://resource/sound/sfx/explosion/Explosion0001.ogg";
     public const string resource_sound_sfx_explosion_Explosion0002_ogg = "res://resource/sound/sfx/explosion/Explosion0002.ogg";
     public const string resource_sound_sfx_explosion_Explosion0003_ogg = "res://resource/sound/sfx/explosion/Explosion0003.ogg";
     public const string resource_sound_sfx_reloading_Reloading0001_ogg = "res://resource/sound/sfx/reloading/Reloading0001.ogg";
     public const string resource_sound_sfx_reloading_Reloading0002_ogg = "res://resource/sound/sfx/reloading/Reloading0002.ogg";
+    public const string resource_sound_sfx_reloading_Reloading0003_ogg = "res://resource/sound/sfx/reloading/Reloading0003.ogg";
     public const string resource_sound_sfx_reloading_Reloading_begin0001_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0001.ogg";
     public const string resource_sound_sfx_reloading_Reloading_begin0002_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0002.ogg";
     public const string resource_sound_sfx_reloading_Reloading_begin0003_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0003.ogg";
@@ -135,9 +138,11 @@ public class ResourcePath
     public const string resource_sound_sfx_reloading_Reloading_begin0009_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0009.ogg";
     public const string resource_sound_sfx_reloading_Reloading_begin0010_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0010.ogg";
     public const string resource_sound_sfx_reloading_Reloading_begin0011_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0011.ogg";
+    public const string resource_sound_sfx_reloading_Reloading_begin0012_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0012.ogg";
     public const string resource_sound_sfx_reloading_Reloading_finish0001_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0001.ogg";
     public const string resource_sound_sfx_reloading_Reloading_finish0002_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0002.ogg";
     public const string resource_sound_sfx_reloading_Reloading_finish0003_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0003.ogg";
+    public const string resource_sound_sfx_reloading_Reloading_finish0004_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0004.ogg";
     public const string resource_sound_sfx_shooting_Shooting0001_ogg = "res://resource/sound/sfx/shooting/Shooting0001.ogg";
     public const string resource_sound_sfx_shooting_Shooting0002_ogg = "res://resource/sound/sfx/shooting/Shooting0002.ogg";
     public const string resource_sound_sfx_shooting_Shooting0003_ogg = "res://resource/sound/sfx/shooting/Shooting0003.ogg";
@@ -148,6 +153,7 @@ public class ResourcePath
     public const string resource_sound_sfx_shooting_Shooting0008_ogg = "res://resource/sound/sfx/shooting/Shooting0008.ogg";
     public const string resource_sound_sfx_shooting_Shooting0009_ogg = "res://resource/sound/sfx/shooting/Shooting0009.ogg";
     public const string resource_sound_sfx_shooting_Shooting0010_ogg = "res://resource/sound/sfx/shooting/Shooting0010.ogg";
+    public const string resource_sound_sfx_shooting_Shooting0011_ogg = "res://resource/sound/sfx/shooting/Shooting0011.ogg";
     public const string resource_sprite_bullet_laser_Laser0001_png = "res://resource/sprite/bullet/laser/Laser0001.png";
     public const string resource_sprite_bullet_normal_arrow_png = "res://resource/sprite/bullet/normal/arrow.png";
     public const string resource_sprite_bullet_normal_bullet0001_png = "res://resource/sprite/bullet/normal/bullet0001.png";
@@ -189,6 +195,7 @@ public class ResourcePath
     public const string resource_sprite_prop_buff_BuffProp0008_png = "res://resource/sprite/prop/buff/BuffProp0008.png";
     public const string resource_sprite_prop_buff_BuffProp0009_png = "res://resource/sprite/prop/buff/BuffProp0009.png";
     public const string resource_sprite_prop_buff_BuffProp0010_png = "res://resource/sprite/prop/buff/BuffProp0010.png";
+    public const string resource_sprite_prop_buff_BuffProp0011_png = "res://resource/sprite/prop/buff/BuffProp0011.png";
     public const string resource_sprite_role_role10_png = "res://resource/sprite/role/role10.png";
     public const string resource_sprite_role_role3_png = "res://resource/sprite/role/role3.png";
     public const string resource_sprite_role_role4_png = "res://resource/sprite/role/role4.png";
@@ -200,6 +207,7 @@ public class ResourcePath
     public const string resource_sprite_role_enemy0001_enemy0001_png = "res://resource/sprite/role/enemy0001/enemy0001.png";
     public const string resource_sprite_role_enemy0001_enemy0001_Debris_png = "res://resource/sprite/role/enemy0001/enemy0001_Debris.png";
     public const string resource_sprite_role_enemy0001_enemy0001_Icon_png = "res://resource/sprite/role/enemy0001/enemy0001_Icon.png";
+    public const string resource_sprite_role_enemy0002_Enemy0002_png = "res://resource/sprite/role/enemy0002/Enemy0002.png";
     public const string resource_sprite_role_role0001_Role0001_png = "res://resource/sprite/role/role0001/Role0001.png";
     public const string resource_sprite_role_role0001_Role0001_Icon_png = "res://resource/sprite/role/role0001/Role0001_Icon.png";
     public const string resource_sprite_role_role0001_idle_Sprite0002_png = "res://resource/sprite/role/role0001/idle/Sprite-0002.png";
@@ -228,6 +236,7 @@ public class ResourcePath
     public const string resource_sprite_shell_Shell0001_png = "res://resource/sprite/shell/Shell0001.png";
     public const string resource_sprite_shell_Shell0002_png = "res://resource/sprite/shell/Shell0002.png";
     public const string resource_sprite_shell_Shell0003_png = "res://resource/sprite/shell/Shell0003.png";
+    public const string resource_sprite_shell_Shell0004_png = "res://resource/sprite/shell/Shell0004.png";
     public const string resource_sprite_ui_font_bg_png = "res://resource/sprite/ui/font_bg.png";
     public const string resource_sprite_ui_GUI_png = "res://resource/sprite/ui/GUI.png";
     public const string resource_sprite_ui_commonIcon_Add_png = "res://resource/sprite/ui/commonIcon/Add.png";
@@ -300,6 +309,7 @@ public class ResourcePath
     public const string resource_sprite_weapon_weapon0008_Weapon0008_png = "res://resource/sprite/weapon/weapon0008/Weapon0008.png";
     public const string resource_sprite_weapon_weapon0008_Weapon0008_reloading_png = "res://resource/sprite/weapon/weapon0008/Weapon0008_reloading.png";
     public const string resource_sprite_weapon_weapon0009_weapon0009_png = "res://resource/sprite/weapon/weapon0009/weapon0009.png";
+    public const string resource_sprite_weapon_weapon0009_Weapon0009_reload_png = "res://resource/sprite/weapon/weapon0009/Weapon0009_reload.png";
     public const string resource_spriteFrames_bullet_Bullet0001_tres = "res://resource/spriteFrames/bullet/Bullet0001.tres";
     public const string resource_spriteFrames_bullet_Bullet0002_tres = "res://resource/spriteFrames/bullet/Bullet0002.tres";
     public const string resource_spriteFrames_bullet_Bullet0003_tres = "res://resource/spriteFrames/bullet/Bullet0003.tres";
@@ -323,11 +333,14 @@ public class ResourcePath
     public const string resource_spriteFrames_prop_buff_BuffProp0008_tres = "res://resource/spriteFrames/prop/buff/BuffProp0008.tres";
     public const string resource_spriteFrames_prop_buff_BuffProp0009_tres = "res://resource/spriteFrames/prop/buff/BuffProp0009.tres";
     public const string resource_spriteFrames_prop_buff_BuffProp0010_tres = "res://resource/spriteFrames/prop/buff/BuffProp0010.tres";
+    public const string resource_spriteFrames_prop_buff_BuffProp0011_tres = "res://resource/spriteFrames/prop/buff/BuffProp0011.tres";
+    public const string resource_spriteFrames_role_Enemy0001_tres = "res://resource/spriteFrames/role/Enemy0001.tres";
+    public const string resource_spriteFrames_role_Enemy0002_tres = "res://resource/spriteFrames/role/Enemy0002.tres";
     public const string resource_spriteFrames_role_Role0001_tres = "res://resource/spriteFrames/role/Role0001.tres";
-    public const string resource_spriteFrames_role_Role1001_tres = "res://resource/spriteFrames/role/Role1001.tres";
     public const string resource_spriteFrames_shell_Shell0001_tres = "res://resource/spriteFrames/shell/Shell0001.tres";
     public const string resource_spriteFrames_shell_Shell0002_tres = "res://resource/spriteFrames/shell/Shell0002.tres";
     public const string resource_spriteFrames_shell_Shell0003_tres = "res://resource/spriteFrames/shell/Shell0003.tres";
+    public const string resource_spriteFrames_shell_Shell0004_tres = "res://resource/spriteFrames/shell/Shell0004.tres";
     public const string resource_spriteFrames_weapon_Weapon0001_tres = "res://resource/spriteFrames/weapon/Weapon0001.tres";
     public const string resource_spriteFrames_weapon_Weapon0002_tres = "res://resource/spriteFrames/weapon/Weapon0002.tres";
     public const string resource_spriteFrames_weapon_Weapon0003_tres = "res://resource/spriteFrames/weapon/Weapon0003.tres";

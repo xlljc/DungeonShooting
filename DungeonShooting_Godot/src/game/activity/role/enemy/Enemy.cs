@@ -127,10 +127,11 @@ public partial class Enemy : Role
 
         var effPos = Position + new Vector2(0, -Altitude);
         //血液特效
-        var blood = ResourceManager.LoadAndInstantiate<AutoDestroyParticles>(ResourcePath.prefab_effect_enemy_EnemyBloodEffect_tscn);
+        var blood = ObjectManager.GetPoolItem<AutoDestroyParticles>(ResourcePath.prefab_effect_enemy_EnemyBloodEffect_tscn);
         blood.Position = effPos - new Vector2(0, 12);
         blood.AddToActivityRoot(RoomLayerEnum.NormalLayer);
-        
+        blood.PlayEffect();
+
         //创建敌人碎片
         var count = Utils.Random.RandomRangeInt(3, 6);
         for (var i = 0; i < count; i++)

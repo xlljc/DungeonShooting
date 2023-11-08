@@ -298,9 +298,10 @@ public class RoomPreinstall : IDestroy
                     activityObject.StartCoroutine(OnActivityObjectBirth(activityObject));
                     activityObject.PutDown(GetDefaultLayer(activityMark));
                     
-                    var effect1 = ResourceManager.LoadAndInstantiate<Effect1>(ResourcePath.prefab_effect_common_Effect1_tscn);
+                    var effect1 = ObjectPool.GetItem<Effect1>(ResourcePath.prefab_effect_common_Effect1_tscn);
                     effect1.Position = activityObject.Position + new Vector2(0, -activityMark.Altitude);
                     effect1.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+                    effect1.PlayEffect();
                 }
                 
                 i++;
