@@ -312,5 +312,6 @@ public abstract partial class ActiveProp : Prop, IPackageItem
 
     public virtual void OnOverflowItem()
     {
+        Master.ThrowActiveProp(PackageIndex);
     }
 }

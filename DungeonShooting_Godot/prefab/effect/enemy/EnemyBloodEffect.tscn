@@ -10,7 +10,7 @@ particles_anim_h_frames = 3
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
-[node name="EnemyBloodEffect" type="GPUParticles2D"]
+[node name="EnemyBloodEffect" type="GPUParticles2D" node_paths=PackedStringArray("Particles2D")]
 modulate = Color(0.811765, 0.0980392, 0.0980392, 0.627451)
 material = SubResource("CanvasItemMaterial_emuda")
 emitting = false
@@ -22,4 +22,5 @@ one_shot = true
 explosiveness = 1.0
 fixed_fps = 20
 script = ExtResource("3_5cpi6")
-DelayTime = 1.5
+DelayTime = 2.0
+Particles2D = []

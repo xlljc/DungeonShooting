@@ -159,6 +159,10 @@ public partial class Player : Role
         {
             UseActiveProp();
         }
+        else if (InputManager.ExchangeProp) //切换道具
+        {
+            ExchangeNextActiveProp();
+        }
         else if (InputManager.RemoveProp) //扔掉道具
         {
             ThrowActiveProp();

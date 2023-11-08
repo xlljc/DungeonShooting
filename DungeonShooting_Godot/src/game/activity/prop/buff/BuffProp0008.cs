@@ -5,7 +5,7 @@ using Godot;
 /// 眼镜, 提高武器50%精准度
 /// </summary>
 [Tool]
-public partial class BuffPropProp0008 : BuffProp
+public partial class BuffProp0008 : BuffProp
 {
     public override void OnPickUpItem()
     {

@@ -7,6 +7,21 @@ using Godot;
 [Tool]
 public partial class BoomBullet : Bullet
 {
+    /// <summary>
+    /// 轨迹粒子
+    /// </summary>
+    [Export]
+    public GpuParticles2D Particles;
+
+    public override void InitData(BulletData data, uint attackLayer)
+    {
+        base.InitData(data, attackLayer);
+        if (Particles != null)
+        {
+            Particles.Restart();
+        }
+    }
+
     public override void OnLimeOver()
     {
         PlayBoom();

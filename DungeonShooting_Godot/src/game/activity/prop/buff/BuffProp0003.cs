@@ -5,7 +5,7 @@ using Godot;
 /// 护盾上限buff, 护盾 + 1
 /// </summary>
 [Tool]
-public partial class BuffPropProp0003 : BuffProp
+public partial class BuffProp0003 : BuffProp
 {
     public override void OnPickUpItem()
     {

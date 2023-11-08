@@ -160,9 +160,24 @@ public partial class ActivityObject
         public const string Id_prop0010 = "prop0010";
         /// <summary>
         /// 名称: 弹射子弹 <br/>
-        /// 简介: 子弹反弹次数 +2
+        /// 简介: 子弹反弹次数+2
         /// </summary>
         public const string Id_prop0011 = "prop0011";
+        /// <summary>
+        /// 名称: 穿透子弹 <br/>
+        /// 简介: 子弹穿透+1
+        /// </summary>
+        public const string Id_prop0012 = "prop0012";
+        /// <summary>
+        /// 名称: 武器背包 <br/>
+        /// 简介: 武器容量+1
+        /// </summary>
+        public const string Id_prop0013 = "prop0013";
+        /// <summary>
+        /// 名称: 道具背包 <br/>
+        /// 简介: 道具容量+1
+        /// </summary>
+        public const string Id_prop0014 = "prop0014";
         /// <summary>
         /// 名称: 医药箱 <br/>
         /// 简介: 使用后回复一颗红心

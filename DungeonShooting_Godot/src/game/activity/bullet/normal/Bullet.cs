@@ -225,7 +225,7 @@ public partial class Bullet : ActivityObject, IBullet
         OnCollisionTarget(activityObject);
     }
     
-    public void DoReclaim()
+    public virtual void DoReclaim()
     {
         ObjectPool.Reclaim(this);
     }

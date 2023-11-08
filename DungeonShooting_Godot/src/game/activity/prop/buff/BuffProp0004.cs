@@ -5,7 +5,7 @@ using Godot;
 /// 护盾恢复时间buff, 恢复时间 - 2.5s
 /// </summary>
 [Tool]
-public partial class BuffPropProp0004 : BuffProp
+public partial class BuffProp0004 : BuffProp
 {
     public override void OnPickUpItem()
     {

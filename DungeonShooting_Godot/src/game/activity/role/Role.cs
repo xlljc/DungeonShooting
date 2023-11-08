@@ -480,7 +480,7 @@ public abstract partial class Role : ActivityObject
             {
                 _interactiveItemList.RemoveAt(i--);
             }
-            else
+            else if (!item.IsThrowing)
             {
                 //找到可互动的物体了
                 if (!findFlag)

@@ -46,22 +46,16 @@ public partial class EditorToolsPanel : EditorTools
         L_Confirm.Instance.Canceled += OnCanceled;
         L_Confirm.Instance.CloseRequested += OnCanceled;
         L_Confirm.Instance.Confirmed += OnConfirm;
-        
-        InitSelectOptions();
 
         var container = L_ScrollContainer.L_MarginContainer.L_VBoxContainer;
         //重新生成 ResourcePath
         container.L_HBoxContainer.L_Button.Instance.Pressed += GenerateResourcePath;
-        //重新打包房间配置
-        container.L_HBoxContainer2.L_Button.Instance.Pressed += GenerateRoomConfig;
         //重新生成ui代码
         container.L_HBoxContainer4.L_Button.Instance.Pressed += OnGenerateCurrentUiCode;
         //创建ui
         container.L_HBoxContainer3.L_Button.Instance.Pressed += OnCreateUI;
         //重新生成UiManagerMethods.cs代码
         container.L_HBoxContainer5.L_Button.Instance.Pressed += GenerateUiManagerMethods;
-        //创建地牢房间
-        container.L_HBoxContainer6.L_Button.Instance.Pressed += GenerateDungeonRoom;
         //导出excel表
         container.L_HBoxContainer7.L_Button.Instance.Pressed += ExportExcel;
     }
@@ -78,50 +72,10 @@ public partial class EditorToolsPanel : EditorTools
         
         var container = L_ScrollContainer.L_MarginContainer.L_VBoxContainer;
         container.L_HBoxContainer.L_Button.Instance.Pressed -= GenerateResourcePath;
-        container.L_HBoxContainer2.L_Button.Instance.Pressed -= GenerateRoomConfig;
         container.L_HBoxContainer4.L_Button.Instance.Pressed -= OnGenerateCurrentUiCode;
         container.L_HBoxContainer3.L_Button.Instance.Pressed -= OnCreateUI;
         container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
-        container.L_HBoxContainer6.L_Button.Instance.Pressed -= GenerateDungeonRoom;
         container.L_HBoxContainer7.L_Button.Instance.Pressed -= ExportExcel;
-    }
-
-    public override void Process(float delta)
-    {
-        if (_createRoomGroupValueMap == null || _createRoomTypeValueMap == null)
-        {
-            InitSelectOptions();
-        }
-    }
-
-    //创建ui的下拉框数据
-    private void InitSelectOptions()
-    {
-        _createRoomGroupValueMap = new Dictionary<int, string>();
-        _createRoomTypeValueMap = new Dictionary<int, string>();
-        var container = L_ScrollContainer.L_MarginContainer.L_VBoxContainer;
-        var select1 = container.L_HBoxContainer6.L_RoomGroupSelect.Instance;
-        select1.Clear();
-        var directoryInfo = new DirectoryInfo(GameConfig.RoomTileDir);
-        var directoryInfoArray = directoryInfo.GetDirectories();
-        for (var i = 0; i < directoryInfoArray.Length; i++)
-        {
-            var text = directoryInfoArray[i].Name;
-            select1.AddItem(text, i);
-            _createRoomGroupValueMap.Add(i, text);
-        }
-
-        var select2 = container.L_HBoxContainer6.L_RoomTypeSelect.Instance;
-        select2.Clear();
-        var dungeonRoomTypes = Enum.GetValues<DungeonRoomType>();
-        for (var i = 0; i < dungeonRoomTypes.Length; i++)
-        {
-            var typeName = DungeonManager.DungeonRoomTypeToString(dungeonRoomTypes[i]);
-            var text = typeName + " (" +
-                       DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomTypes[i]) + ")";
-            select2.AddItem(text, i);
-            _createRoomTypeValueMap.Add(i, typeName);
-        }
     }
 
     /// <summary>
@@ -315,22 +269,7 @@ public partial class EditorToolsPanel : EditorTools
             ShowTips("错误", "ResourcePath.cs生成失败! 前往控制台查看错误日志!");
         }
     }
-
-    /// <summary>
-    /// 重新打包房间配置
-    /// </summary>
-    private void GenerateRoomConfig()
-    {
-        if (DungeonRoomGenerator.GenerateRoomConfig())
-        {
-            ShowTips("提示", "打包地牢房间配置执行完成!");
-        }
-        else
-        {
-            ShowTips("错误", "打包地牢房间配置执行失败! 前往控制台查看错误日志!");
-        }
-    }
-
+    
     /// <summary>
     /// 重新生成UiManagerMethods.cs代码
     /// </summary>
@@ -345,52 +284,7 @@ public partial class EditorToolsPanel : EditorTools
             ShowTips("错误", "生成UiManagerMethods.cs代码执行失败! 前往控制台查看错误日志!");
         }
     }
-
-    /// <summary>
-    /// 创建地牢房间
-    /// </summary>
-    private void GenerateDungeonRoom()
-    {
-        var node = L_ScrollContainer.L_MarginContainer.L_VBoxContainer.L_HBoxContainer6;
-        var group = _createRoomGroupValueMap[node.L_RoomGroupSelect.Instance.Selected];
-        var type = _createRoomTypeValueMap[node.L_RoomTypeSelect.Instance.Selected];
-        var roomName = node.L_RoomNameInput.Instance.Text;
-
-        var pathName = group + "/" + type + "/" + roomName;
-        
-        ShowConfirm("提示", "是否创建房间：" + pathName, (result) =>
-        {
-            if (result)
-            {
-                //检查名称是否合规
-                if (!Regex.IsMatch(roomName, "^\\w+$"))
-                {
-                    ShowTips("错误", "房间名称'" + roomName + "'不符合名称约束, 房间名称只允许包含大写字母和数字!");
-                    return;
-                }
-
-                //检查是否有同名的Ui
-                var path = GameConfig.RoomTileDir + pathName + ".tscn";
-                if (File.Exists(path))
-                {
-                    ShowTips("错误", "已经存在相同名称'" + pathName + "'的房间了, 不能重复创建!");
-                    return;
-                }
-                
-                //执行创建操作
-                if (DungeonRoomGenerator.CreateDungeonRoom(group, type, roomName, true))
-                {
-                    ShowTips("提示", "创建房间成功!");
-                }
-                else
-                {
-                    ShowTips("错误", "创建房间失败! 前往控制台查看错误日志!");
-                }
-                
-            }
-        });
-    }
-
+    
     /// <summary>
     /// 导出excel表
     /// </summary>

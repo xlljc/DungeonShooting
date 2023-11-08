@@ -1,8 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://tdc6flkvlfbd"]
 
-[ext_resource type="Script" path="res://src/game/activity/prop/buff/BuffPropProp0001.cs" id="1_exxhd"]
+[ext_resource type="Script" path="res://src/game/activity/prop/buff/BuffProp0001.cs" id="1_exxhd"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_x6ey2"]
 [ext_resource type="SpriteFrames" uid="uid://wtvfyprel72y" path="res://resource/spriteFrames/prop/buff/BuffProp0001.tres" id="3_hfyao"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mrkt4"]
 resource_local_to_scene = true
