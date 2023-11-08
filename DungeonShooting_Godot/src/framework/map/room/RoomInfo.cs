@@ -225,6 +225,14 @@ public class RoomInfo : IDestroy
     }
     
     /// <summary>
+    /// 将房间配置中的坐标转为全局坐标, 单位: 像素
+    /// </summary>
+    public Vector2 ToGlobalPosition(Vector2 pos)
+    {
+        return GetWorldPosition() + pos - GetOffsetPosition();
+    }
+    
+    /// <summary>
     /// 获取房间横轴结束位置, 单位: 格
     /// </summary>
     public int GetHorizontalEnd()

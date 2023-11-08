@@ -261,4 +261,25 @@ public static class Utils
         
         return point;
     }
+    
+    /// <summary>
+    /// 返回一个点是否在 Polygon 内部
+    /// </summary>
+    /// <param name="polygon">多边形顶点</param>
+    /// <param name="point">目标点</param>
+    public static bool IsPointInPolygon(Vector2[] polygon, Vector2 point)
+    {
+        var isInside = false;
+        for (int i = 0, j = polygon.Length - 1; i < polygon.Length; j = i++)
+        {
+            if ((polygon[i].Y > point.Y) != (polygon[j].Y > point.Y) &&
+                point.X < (polygon[j].X - polygon[i].X) * (point.Y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) +
+                polygon[i].X)
+            {
+                isInside = !isInside;
+            }
+        }
+
+        return isInside;
+    }
 }

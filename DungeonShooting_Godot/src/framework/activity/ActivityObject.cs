@@ -842,6 +842,66 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     }
 
     /// <summary>
+    /// 根据类型获取所有相同类型的组件
+    /// </summary>
+    public Component[] GetComponents(Type type)
+    {
+        var list = new List<Component>();
+        for (int i = 0; i < _components.Count; i++)
+        {
+            var temp = _components[i];
+            if (temp.Key.IsAssignableTo(type))
+            {
+                list.Add(temp.Value);
+            }
+        }
+
+        if (_updatingComp)
+        {
+            for (var i = 0; i < _changeComponents.Count; i++)
+            {
+                var temp = _components[i];
+                if (temp.Value.GetType().IsAssignableTo(type))
+                {
+                    list.Add(temp.Value);
+                }
+            }
+        }
+
+        return list.ToArray();
+    }
+    
+    /// <summary>
+    /// 根据类型获取所有相同类型的组件
+    /// </summary>
+    public T[] GetComponents<T>() where T : Component
+    {
+        var list = new List<T>();
+        for (int i = 0; i < _components.Count; i++)
+        {
+            var temp = _components[i];
+            if (temp.Value is T component)
+            {
+                list.Add(component);
+            }
+        }
+
+        if (_updatingComp)
+        {
+            for (var i = 0; i < _changeComponents.Count; i++)
+            {
+                var temp = _components[i];
+                if (temp.Value is T component)
+                {
+                    list.Add(component);
+                }
+            }
+        }
+
+        return list.ToArray();
+    }
+    
+    /// <summary>
     /// 设置混色材质的颜色
     /// </summary>
     public void SetBlendColor(Color color)

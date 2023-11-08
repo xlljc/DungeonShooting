@@ -161,7 +161,8 @@ public class RoomPreinstall : IDestroy
                 );
                 var offset = RoomInfo.GetOffsetPosition();
                 //var offset = RoomInfo.RoomSplit.RoomInfo.Position.AsVector2I();
-                mark.Position = RoomInfo.GetWorldPosition() + (tempPos - offset);
+                //mark.Position = RoomInfo.GetWorldPosition() + tempPos - offset;
+                mark.Position = RoomInfo.ToGlobalPosition(tempPos);
                 wave.Add(mark);
             }
 
