@@ -386,6 +386,37 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     {
 
     }
+    
+    /// <summary>
+    /// 子类需要重写 _EnterTree() 函数, 请重写 EnterTree()
+    /// </summary>
+    public sealed override void _EnterTree()
+    {
+#if TOOLS
+        // 在工具模式下创建的 template 节点自动创建对应的必要子节点
+        if (Engine.IsEditorHint())
+        {
+            _InitNodeInEditor();
+            return;
+        }
+#endif
+        EnterTree();
+    }
+    
+    /// <summary>
+    /// 子类需要重写 _ExitTree() 函数, 请重写 ExitTree()
+    /// </summary>
+    public sealed override void _ExitTree()
+    {
+#if TOOLS
+        // 在工具模式下创建的 template 节点自动创建对应的必要子节点
+        if (Engine.IsEditorHint())
+        {
+            return;
+        }
+#endif
+        ExitTree();
+    }
 
     /// <summary>
     /// 显示并更新阴影
@@ -467,6 +498,20 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// 物体初始化时调用
     /// </summary>
     public virtual void OnInit()
+    {
+    }
+    
+    /// <summary>
+    /// 进入场景树时调用
+    /// </summary>
+    public virtual void EnterTree()
+    {
+    }
+
+    /// <summary>
+    /// 离开场景树时调用
+    /// </summary>
+    public virtual void ExitTree()
     {
     }
     

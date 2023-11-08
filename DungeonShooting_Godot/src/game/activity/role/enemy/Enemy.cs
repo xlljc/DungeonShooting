@@ -103,7 +103,7 @@ public partial class Enemy : Role
         StateController.ChangeStateInstant(AiStateEnum.AiNormal);
     }
 
-    public override void _EnterTree()
+    public override void EnterTree()
     {
         if (!World.Enemy_InstanceList.Contains(this))
         {
@@ -111,7 +111,7 @@ public partial class Enemy : Role
         }
     }
 
-    public override void _ExitTree()
+    public override void ExitTree()
     {
         World.Enemy_InstanceList.Remove(this);
     }
