@@ -55,7 +55,7 @@ public class BulletData
     /// <summary>
     /// 子弹最大穿透次数
     /// </summary>
-    public float Penetration;
+    public int Penetration;
 
     /// <summary>
     /// 子弹最大存在时间

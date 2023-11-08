@@ -210,4 +210,20 @@ public class RoleState
 
         return distance;
     }
+    
+    /// <summary>
+    /// 子弹穿透次数
+    /// </summary>
+    public event Action<Weapon, int, RefValue<int>> CalcBulletPenetrationEvent;
+    public int CalcBulletPenetration(Weapon weapon, int distance)
+    {
+        if (CalcBulletPenetrationEvent != null)
+        {
+            var result = new RefValue<int>(distance);
+            CalcBulletPenetrationEvent(weapon, distance, result);
+            return result.Value;
+        }
+
+        return distance;
+    }
 }

@@ -91,6 +91,7 @@ public partial class Weapon
             data.FlySpeed = roleState.CalcBulletSpeed(this, data.FlySpeed);
             data.MaxDistance = roleState.CalcBulletDistance(this, data.MaxDistance);
             data.BounceCount = roleState.CalcBulletBounceCount(this, data.BounceCount);
+            data.Penetration = roleState.CalcBulletPenetration(this, data.Penetration);
             deviationAngle = roleState.CalcBulletDeviationAngle(this, deviationAngle);
             
             if (TriggerRole.IsAi) //只有玩家使用该武器才能获得正常速度的子弹

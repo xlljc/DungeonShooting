@@ -159,7 +159,6 @@ public class RoomPreinstall : IDestroy
                     random.RandomRangeInt((int)(pos.X - birthRect.X / 2), (int)(pos.X + birthRect.X / 2)),
                     random.RandomRangeInt((int)(pos.Y - birthRect.Y / 2), (int)(pos.Y + birthRect.Y / 2))
                 );
-                var offset = RoomInfo.GetOffsetPosition();
                 //var offset = RoomInfo.RoomSplit.RoomInfo.Position.AsVector2I();
                 //mark.Position = RoomInfo.GetWorldPosition() + tempPos - offset;
                 mark.Position = RoomInfo.ToGlobalPosition(tempPos);
