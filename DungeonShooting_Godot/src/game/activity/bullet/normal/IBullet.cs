@@ -1,8 +1,18 @@
 ﻿
+using System;
 using Config;
 
-public interface IBullet : IDestroy, ICoroutine
+public interface IBullet : ICoroutine, IPoolItem
 {
+    /// <summary>
+    /// 当物体被回收时的事件
+    /// </summary>
+    event Action OnReclaimEvent;
+    /// <summary>
+    /// 离开对象池时的事件
+    /// </summary>
+    event Action OnLeavePoolEvent;
+    
     /// <summary>
     /// 攻击的层级
     /// </summary>
@@ -15,4 +25,8 @@ public interface IBullet : IDestroy, ICoroutine
     /// 初始化子弹数据
     /// </summary>
     void InitData(BulletData data, uint attackLayer);
+    /// <summary>
+    /// 执行子弹回收操作
+    /// </summary>
+    void DoReclaim();
 }

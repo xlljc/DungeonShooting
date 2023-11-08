@@ -369,7 +369,7 @@ public class MoveController : Component
             {
                 //调用移动碰撞函数
                 Master.OnMoveCollision(collision);
-                if (Master.IsDestroyed)
+                if (Master.IsDestroyed || (Master is IPoolItem poolItem && poolItem.IsRecycled))
                 {
                     return;
                 }
@@ -385,11 +385,15 @@ public class MoveController : Component
                 }
                 
                 var length = _forceList.Count;
-                var v = newVelocity / (length / Master.ActivityMaterial.BounceStrength);
-                for (var i = 0; i < _forceList.Count; i++)
+                if (length != 0)
                 {
-                    _forceList[i].Velocity = v;
+                    var v = newVelocity / (length / Master.ActivityMaterial.BounceStrength);
+                    for (var i = 0; i < _forceList.Count; i++)
+                    {
+                        _forceList[i].Velocity = v;
+                    }
                 }
+
                 //调用反弹函数
                 Master.OnBounce(rotation);
             }

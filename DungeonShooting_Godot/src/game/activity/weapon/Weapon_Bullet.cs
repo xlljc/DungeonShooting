@@ -101,7 +101,7 @@ public partial class Weapon
 
         data.Rotation = fireRotation + Mathf.DegToRad(deviationAngle);
         //创建子弹
-        var bulletInstance = Create<Bullet>(bullet.Prefab);
+        var bulletInstance = ObjectManager.GetBullet(bullet.Prefab);
         bulletInstance.InitData(data, GetAttackLayer());
         return bulletInstance;
     }
@@ -136,7 +136,7 @@ public partial class Weapon
 
         data.Rotation = fireRotation + Mathf.DegToRad(deviationAngle);
         //创建激光
-        var laser = ResourceManager.LoadAndInstantiate<Laser>(bullet.Prefab);
+        var laser = ObjectManager.GetLaser(bullet.Prefab);
         laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         laser.InitData(data, GetAttackLayer(), 3);
         return laser;

@@ -109,7 +109,7 @@ public partial class Explode : Area2D, IPoolItem
 
     public void OnReclaim()
     {
-        GetParent().RemoveChild(this);
+        GetParent().CallDeferred(Node.MethodName.RemoveChild, this);
     }
 
     public void OnLeavePool()

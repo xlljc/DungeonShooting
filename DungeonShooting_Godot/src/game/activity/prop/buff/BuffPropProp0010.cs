@@ -27,7 +27,7 @@ public partial class BuffPropProp0010 : BuffProp
     
     private void CalcBulletCountEvent(Weapon weapon, int originCount, RefValue<int> refValue)
     {
-        refValue.Value += originCount;
+        refValue.Value += originCount * 10;
     }
 
     private void CalcBulletDeviationAngleEvent(Weapon weapon, float originAngle, RefValue<float> refValue)

@@ -791,7 +791,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         for (int i = 0; i < _components.Count; i++)
         {
             var temp = _components[i];
-            if (temp.Key == type)
+            if (temp.Key.IsAssignableTo(type))
             {
                 return temp.Value;
             }
@@ -802,7 +802,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             for (var i = 0; i < _changeComponents.Count; i++)
             {
                 var temp = _components[i];
-                if (temp.Value.GetType() == type)
+                if (temp.Value.GetType().IsAssignableTo(type))
                 {
                     return temp.Value;
                 }
@@ -817,9 +817,28 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public T GetComponent<T>() where T : Component
     {
-        var component = GetComponent(typeof(T));
-        if (component == null) return null;
-        return (T)component;
+        for (int i = 0; i < _components.Count; i++)
+        {
+            var temp = _components[i];
+            if (temp.Value is T component)
+            {
+                return component;
+            }
+        }
+
+        if (_updatingComp)
+        {
+            for (var i = 0; i < _changeComponents.Count; i++)
+            {
+                var temp = _components[i];
+                if (temp.Value is T component)
+                {
+                    return component;
+                }
+            }
+        }
+
+        return null;
     }
 
     /// <summary>

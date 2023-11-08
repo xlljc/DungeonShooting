@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections;
 using Godot;
 
@@ -8,6 +9,12 @@ using Godot;
 [Tool]
 public partial class Bullet : ActivityObject, IBullet
 {
+    public event Action OnReclaimEvent;
+    public event Action OnLeavePoolEvent;
+    
+    public bool IsRecycled { get; set; }
+    public string Logotype { get; set; }
+    
     /// <summary>
     /// 碰撞区域
     /// </summary>
@@ -37,15 +44,22 @@ public partial class Bullet : ActivityObject, IBullet
     
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
-    
-    public override void OnInit()
-    {
-        BounceLockRotation = false;
-        CollisionArea.AreaEntered += OnArea2dEntered;
-    }
+
+    private bool _init = false;
     
     public virtual void InitData(BulletData data, uint attackLayer)
     {
+        if (!_init)
+        {
+            CollisionArea.AreaEntered += OnArea2dEntered;
+            _init = true;
+        }
+
+        CurrentBounce = 0;
+        CurrentPenetration = 0;
+        CurrFlyDistance = 0;
+        
+        BounceLockRotation = false;
         BulletData = data;
         AttackLayer = attackLayer;
         Rotation = data.Rotation;
@@ -84,8 +98,8 @@ public partial class Bullet : ActivityObject, IBullet
         PutDown(RoomLayerEnum.YSortLayer);
         //播放子弹移动动画
         PlaySpriteAnimation(AnimatorNames.Move);
-        UpdateFall((float)GetProcessDeltaTime());
         //强制更新下坠逻辑处理
+        UpdateFall((float)GetProcessDeltaTime());
 
         //过期销毁
         if (data.LifeTime > 0)
@@ -107,7 +121,7 @@ public partial class Bullet : ActivityObject, IBullet
             smoke.GlobalPosition = collision.GetPosition() + new Vector2(0, rotated.Y);
             smoke.GlobalRotation = collision.GetNormal().Angle();
             smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-            Destroy();
+            DoReclaim();
         }
     }
 
@@ -136,7 +150,7 @@ public partial class Bullet : ActivityObject, IBullet
             CurrentPenetration++;
             if (CurrentPenetration > BulletData.Penetration)
             {
-                Destroy();
+                DoReclaim();
             }
         }
     }
@@ -147,7 +161,7 @@ public partial class Bullet : ActivityObject, IBullet
     public virtual void OnMaxDistance()
     {
         PlayDisappearEffect();
-        Destroy();
+        DoReclaim();
     }
     
     /// <summary>
@@ -156,7 +170,7 @@ public partial class Bullet : ActivityObject, IBullet
     public virtual void OnLimeOver()
     {
         PlayDisappearEffect();
-        Destroy();
+        DoReclaim();
     }
     
     /// <summary>
@@ -207,5 +221,34 @@ public partial class Bullet : ActivityObject, IBullet
         }
         var activityObject = other.AsActivityObject();
         OnCollisionTarget(activityObject);
+    }
+    
+    public void DoReclaim()
+    {
+        ObjectPool.Reclaim(this);
+    }
+    
+    public virtual void OnReclaim()
+    {
+        if (OnReclaimEvent != null)
+        {
+            OnReclaimEvent();
+        }
+        if (AffiliationArea != null)
+        {
+            AffiliationArea.RemoveItem(this);
+        }
+        ShowOutline = false;
+        GetParent().CallDeferred(Node.MethodName.RemoveChild, this);
+    }
+
+    public virtual void OnLeavePool()
+    {
+        MoveController.ClearForce();
+        StopAllCoroutine();
+        if (OnLeavePoolEvent != null)
+        {
+            OnLeavePoolEvent();
+        }
     }
 }

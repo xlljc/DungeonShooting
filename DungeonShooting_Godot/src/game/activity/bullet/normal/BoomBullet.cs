@@ -10,19 +10,19 @@ public partial class BoomBullet : Bullet
     public override void OnLimeOver()
     {
         PlayBoom();
-        Destroy();
+        DoReclaim();
     }
 
     public override void OnMaxDistance()
     {
         PlayBoom();
-        Destroy();
+        DoReclaim();
     }
 
     public override void OnCollisionTarget(ActivityObject o)
     {
         PlayBoom();
-        Destroy();
+        DoReclaim();
     }
 
     public override void OnMoveCollision(KinematicCollision2D lastSlideCollision)
