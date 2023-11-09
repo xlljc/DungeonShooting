@@ -29,7 +29,7 @@ script = ExtResource("2_r547d")
 Particles2D = [NodePath("GpuParticles2D")]
 
 [node name="GpuParticles2D" type="GPUParticles2D" parent="."]
-z_index = -1
+show_behind_parent = true
 material = SubResource("1")
 emitting = false
 process_material = SubResource("ParticleProcessMaterial_gpp81")

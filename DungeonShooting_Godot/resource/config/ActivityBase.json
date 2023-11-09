@@ -24,6 +24,18 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "enemy0002",
+    "Type": 4,
+    "Name": "\u654C\u4EBA2",
+    "Intro": "\u654C\u4EBA2",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/role/Enemy0002.tscn",
+    "Icon": "res://resource/sprite/role/enemy0002/Enemy0002.png",
+    "ShowInMapEditor": true
+  },
+  {
     "Id": "weapon0001",
     "Type": 5,
     "Name": "\u6B65\u67AA",
