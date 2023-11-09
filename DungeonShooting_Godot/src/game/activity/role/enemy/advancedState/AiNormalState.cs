@@ -1,10 +1,12 @@
 
 using Godot;
 
+namespace AdvancedState;
+
 /// <summary>
 /// AI 正常状态
 /// </summary>
-public class AiNormalState : StateBase<Enemy, AiStateEnum>
+public class AiNormalState : StateBase<AdvancedEnemy, AiStateEnum>
 {
     //是否发现玩家
     private bool _isFindPlayer;

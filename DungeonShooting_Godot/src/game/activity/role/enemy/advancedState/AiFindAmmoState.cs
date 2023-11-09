@@ -1,10 +1,12 @@
 
 using Godot;
 
+namespace AdvancedState;
+
 /// <summary>
 /// Ai 寻找弹药, 进入该状态需要在参数中传入目标武器对象
 /// </summary>
-public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
+public class AiFindAmmoState : StateBase<AdvancedEnemy, AiStateEnum>
 {
 
     private Weapon _target;

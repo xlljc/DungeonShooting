@@ -136,7 +136,7 @@ public partial class Laser : Area2D, IBullet
     
     private void OnArea2dEntered(Area2D other)
     {
-        var role = other.AsActivityObject<AdvancedRole>();
+        var role = other.AsActivityObject<Role>();
         if (role != null)
         {
             //击退
@@ -145,7 +145,7 @@ public partial class Laser : Area2D, IBullet
                 role.MoveController.AddForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
             }
             //造成伤害
-            role.CallDeferred(nameof(AdvancedRole.Hurt), BulletData.Harm, Rotation);
+            role.CallDeferred(nameof(Role.Hurt), BulletData.Harm, Rotation);
         }
     }
 

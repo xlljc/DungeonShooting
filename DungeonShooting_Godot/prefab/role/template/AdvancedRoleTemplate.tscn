@@ -34,7 +34,8 @@ size = Vector2(12, 18)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n68nu"]
 size = Vector2(10, 16.5)
 
-[node name="RoleTemplate" type="CharacterBody2D"]
+[node name="AdvancedRoleTemplate" type="CharacterBody2D"]
+collision_layer = 0
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1

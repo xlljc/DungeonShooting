@@ -136,7 +136,7 @@ public partial class Explode : Area2D, IPoolItem
 
             if (len <= _hitRadius) //在伤害半径内
             {
-                if (o is AdvancedRole role) //是角色
+                if (o is Role role) //是角色
                 {
                     role.CallDeferred(nameof(role.Hurt), _harm, angle);
                 }

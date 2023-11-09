@@ -62,7 +62,7 @@ public partial class World : CanvasModulate, ICoroutine
     /// <summary>
     /// 记录所有存活的敌人
     /// </summary>
-    public List<Enemy> Enemy_InstanceList  { get; } = new List<Enemy>();
+    public List<Role> Enemy_InstanceList  { get; } = new List<Role>();
     
     /// <summary>
     /// 公共属性, 敌人是否找到目标, 如果找到目标, 则与目标同房间的所有敌人都会知道目标的位置

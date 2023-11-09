@@ -567,9 +567,23 @@ public partial class DungeonManager : Node2D
                 //不与玩家处于同一个房间
                 if (enemy.AffiliationArea != playerAffiliationArea)
                 {
-                    if (enemy.StateController.CurrState != AiStateEnum.AiNormal)
+                    if (enemy is Enemy e)
                     {
-                        enemy.StateController.ChangeState(AiStateEnum.AiNormal);
+                        if (e.StateController.CurrState != AiStateEnum.AiNormal)
+                        {
+                            e.StateController.ChangeState(AiStateEnum.AiNormal);
+                        }
+                    }
+                    else if (enemy is AdvancedEnemy ae)
+                    {
+                        if (ae.StateController.CurrState != AiStateEnum.AiNormal)
+                        {
+                            ae.StateController.ChangeState(AiStateEnum.AiNormal);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("World.Enemy_InstanceList 混入了非 Enemy 和 AdvancedEnemy 类型的对象!");
                     }
                 }
             }
@@ -630,7 +644,19 @@ public partial class DungeonManager : Node2D
         for (var i = 0; i < World.Enemy_InstanceList.Count; i++)
         {
             var enemy = World.Enemy_InstanceList[i];
-            var state = enemy.StateController.CurrState;
+            AiStateEnum state;
+            if (enemy is Enemy e)
+            {
+                state = e.StateController.CurrState;
+            }
+            else if (enemy is AdvancedEnemy ae)
+            {
+                state = ae.StateController.CurrState;
+            }
+            else
+            {
+                throw new Exception("World.Enemy_InstanceList 混入了非 Enemy 和 AdvancedEnemy 类型的对象!");
+            }
             if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
             {
                 if (!World.Enemy_IsFindTarget)

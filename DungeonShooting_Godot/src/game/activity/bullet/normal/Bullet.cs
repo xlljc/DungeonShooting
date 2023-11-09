@@ -131,7 +131,7 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void OnCollisionTarget(ActivityObject o)
     {
-        if (o is AdvancedRole role)
+        if (o is Role role)
         {
             PlayDisappearEffect();
 

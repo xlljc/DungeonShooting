@@ -1948,7 +1948,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         }
         else
         {
-            var enemy = (Enemy)Master;
+            var enemy = (AdvancedEnemy)Master;
             if (enemy.GetLockTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
             {
                 if (GetDelayedAttackTime() > 0)
@@ -2027,7 +2027,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         }
         else
         {
-            var enemy = (Enemy)Master;
+            var enemy = (AdvancedEnemy)Master;
             if (enemy.GetLockTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
             {
                 if (GetDelayedAttackTime() > 0)
@@ -2073,10 +2073,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// <summary>
     /// 获取Ai锁定目标的剩余时间
     /// </summary>
-    /// <returns></returns>
     public float GetAiLockRemainderTime()
     {
-        return Attribute.AiAttackAttr.LockingTime - ((Enemy)Master).GetLockTime();
+        if (Master is AdvancedEnemy enemy)
+        {
+            return Attribute.AiAttackAttr.LockingTime - enemy.GetLockTime();
+        }
+
+        return 0;
     }
 
     // /// <summary>

@@ -1,10 +1,12 @@
 
 using Godot;
 
+namespace AdvancedState;
+
 /// <summary>
 /// 距离目标足够近, 在目标附近随机移动, 并开火
 /// </summary>
-public class AiSurroundState : StateBase<Enemy, AiStateEnum>
+public class AiSurroundState : StateBase<AdvancedEnemy, AiStateEnum>
 {
     //是否移动结束
     private bool _isMoveOver;

@@ -430,8 +430,8 @@ public class RoomPreinstall : IDestroy
         }
         else if (activityMark.ActivityType == ActivityType.Enemy) //敌人类型
         {
-            var enemy = (Enemy)activityObject;
-            if (activityMark.Attr.TryGetValue("Weapon", out var weaponId)) //使用的武器
+            var role = (Role)activityObject;
+            if (role is AdvancedEnemy enemy && activityMark.Attr.TryGetValue("Weapon", out var weaponId)) //使用的武器
             {
                 if (!string.IsNullOrEmpty(weaponId))
                 {
@@ -451,7 +451,7 @@ public class RoomPreinstall : IDestroy
             if (activityMark.DerivedAttr.TryGetValue("Face", out var face)) //脸朝向, 应该只有 -1 和 1
             {
                 var faceDir = int.Parse(face);
-                enemy.Face = (FaceDirection)faceDir;
+                role.Face = (FaceDirection)faceDir;
             }
         }
     }

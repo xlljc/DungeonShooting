@@ -83,6 +83,12 @@ public partial class Player : AdvancedRole
         {
             return;
         }
+
+        if (_rollCoolingTimer > 0)
+        {
+            _rollCoolingTimer -= delta;
+        }
+        
         //脸的朝向
         if (LookTarget == null)
         {
@@ -187,7 +193,7 @@ public partial class Player : AdvancedRole
             var enemyList = AffiliationArea.FindIncludeItems(o => o.CollisionWithMask(PhysicsLayer.Enemy));
             foreach (var enemy in enemyList)
             {
-                ((Enemy)enemy).Hurt(1000, 0);
+                ((AdvancedEnemy)enemy).Hurt(1000, 0);
             }
         }
         // //测试用

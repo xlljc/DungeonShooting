@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public enum EventEnum
 {
     /// <summary>
-    /// 敌人死亡, 参数为死亡的敌人的实例, 参数类型为<see cref="Enemy"/>
+    /// 敌人死亡, 参数为死亡的敌人的实例, 参数类型为<see cref="AdvancedEnemy"/>
     /// </summary>
     OnEnemyDie,
     /// <summary>

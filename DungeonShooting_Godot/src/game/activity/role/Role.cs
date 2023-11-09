@@ -364,8 +364,8 @@ public abstract partial class Role : ActivityObject
     }
 
     protected override void Process(float delta)
-    {
-                //检查可互动的物体
+    { 
+        //检查可互动的物体
         bool findFlag = false;
         for (int i = 0; i < InteractiveItemList.Count; i++)
         {
