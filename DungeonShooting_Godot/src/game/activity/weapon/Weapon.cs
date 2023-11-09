@@ -6,7 +6,7 @@ using Config;
 /// <summary>
 /// 武器的基类
 /// </summary>
-public abstract partial class Weapon : ActivityObject, IPackageItem
+public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole>
 {
     /// <summary>
     /// 武器使用的属性数据, 该属性会根据是否是玩家使用武器, 如果是Ai使用武器, 则会返回 AiUseAttribute 的属性对象
@@ -32,7 +32,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     public CampEnum TargetCamp { get; set; }
 
-    public Role Master { get; set; }
+    public AdvancedRole Master { get; set; }
 
     public int PackageIndex { get; set; } = -1;
 
@@ -148,7 +148,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 上一次触发改武器开火的角色, 可能为 null
     /// </summary>
-    public Role TriggerRole { get; private set; }
+    public AdvancedRole TriggerRole { get; private set; }
     
     /// <summary>
     /// 上一次触发改武器开火的触发开火攻击的层级, 数据源自于: <see cref="PhysicsLayer"/>
@@ -397,7 +397,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// 当武器被拾起时调用
     /// </summary>
     /// <param name="master">拾起该武器的角色</param>
-    protected virtual void OnPickUp(Role master)
+    protected virtual void OnPickUp(AdvancedRole master)
     {
     }
 
@@ -405,7 +405,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// 当武器从武器背包中移除时调用
     /// </summary>
     /// <param name="master">移除该武器的角色</param>
-    protected virtual void OnRemove(Role master)
+    protected virtual void OnRemove(AdvancedRole master)
     {
     }
 
@@ -695,7 +695,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
     /// <param name="triggerRole">按下扳机的角色, 如果传 null, 则视为走火</param>
-    public void Trigger(Role triggerRole)
+    public void Trigger(AdvancedRole triggerRole)
     {
         //不能触发扳机
         if (!NoMasterCanTrigger && Master == null) return;
@@ -1097,7 +1097,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// <summary>
     /// 根据触扳机的角色对象判断该角色使用的武器数据
     /// </summary>
-    public ExcelConfig.WeaponBase GetUseAttribute(Role triggerRole)
+    public ExcelConfig.WeaponBase GetUseAttribute(AdvancedRole triggerRole)
     {
         if (triggerRole == null || !triggerRole.IsAi)
         {
@@ -1117,7 +1117,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
         {
             return (uint)TriggerRoleAttackLayer;
         }
-        return Master != null ? Master.AttackLayer : Role.DefaultAttackLayer;
+        return Master != null ? Master.AttackLayer : AdvancedRole.DefaultAttackLayer;
     }
     
     /// <summary>
@@ -1606,7 +1606,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     {
         var result = new CheckInteractiveResult(this);
 
-        if (master is Role roleMaster) //碰到角色
+        if (master is AdvancedRole roleMaster) //碰到角色
         {
             if (Master == null)
             {
@@ -1652,7 +1652,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
 
     public override void Interactive(ActivityObject master)
     {
-        if (master is Role roleMaster) //与role互动
+        if (master is AdvancedRole roleMaster) //与role互动
         {
             var holster = roleMaster.WeaponPack;
             //查找是否有同类型武器
@@ -1727,7 +1727,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// 触发扔掉武器时抛出的效果, 并不会管武器是否在武器背包中
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
-    public void ThrowWeapon(Role master)
+    public void ThrowWeapon(AdvancedRole master)
     {
         ThrowWeapon(master, master.GlobalPosition);
     }
@@ -1737,7 +1737,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
     /// <param name="startPosition">投抛起始位置</param>
-    public void ThrowWeapon(Role master, Vector2 startPosition)
+    public void ThrowWeapon(AdvancedRole master, Vector2 startPosition)
     {
         //阴影偏移
         ShadowOffset = new Vector2(0, 2);

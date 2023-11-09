@@ -6,7 +6,7 @@ using Godot;
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
 [Tool]
-public partial class Player : Role
+public partial class Player : AdvancedRole
 {
     /// <summary>
     /// 获取当前操作的角色
@@ -18,6 +18,14 @@ public partial class Player : Role
     /// </summary>
     public StateController<Player, PlayerStateEnum> StateController { get; private set; }
 
+    /// <summary>
+    /// 是否可以翻滚
+    /// </summary>
+    public bool CanRoll => _rollCoolingTimer <= 0;
+    
+    //翻滚冷却计时器
+    private float _rollCoolingTimer = 0;
+    
     /// <summary>
     /// 设置当前操作的玩家对象
     /// </summary>
@@ -325,6 +333,14 @@ public partial class Player : Role
         }
     }
 
+    /// <summary>
+    /// 翻滚结束
+    /// </summary>
+    public void OverRoll()
+    {
+        _rollCoolingTimer = RoleState.RollTime;
+    }
+    
     // protected override void DebugDraw()
     // {
     //     base.DebugDraw();

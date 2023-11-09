@@ -131,7 +131,7 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void OnCollisionTarget(ActivityObject o)
     {
-        if (o is Role role)
+        if (o is AdvancedRole role)
         {
             PlayDisappearEffect();
 
@@ -145,7 +145,7 @@ public partial class Bullet : ActivityObject, IBullet
             }
             
             //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), BulletData.Harm, Rotation);
+            role.CallDeferred(nameof(AdvancedRole.Hurt), BulletData.Harm, Rotation);
 
             //穿透次数
             CurrentPenetration++;

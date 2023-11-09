@@ -27,18 +27,18 @@ shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
 
-[node name="Enemy0001" node_paths=PackedStringArray("HurtArea", "HurtCollision", "MountPoint", "BackMountPoint", "InteractiveArea", "InteractiveCollision", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_rncjb")]
+[node name="Enemy0001" node_paths=PackedStringArray("MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_rncjb")]
 collision_layer = 16
 collision_mask = 25
 script = ExtResource("2_wjtfl")
-HurtArea = NodePath("HurtArea")
-HurtCollision = NodePath("HurtArea/HurtCollision")
 MountPoint = NodePath("MountPoint")
 BackMountPoint = NodePath("BackMountPoint")
-InteractiveArea = NodePath("InteractiveArea")
-InteractiveCollision = NodePath("InteractiveArea/InteractiveCollision")
 MeleeAttackArea = NodePath("MountPoint/MeleeAttackArea")
 MeleeAttackCollision = NodePath("MountPoint/MeleeAttackArea/MeleeAttackCollision")
+HurtArea = NodePath("HurtArea")
+HurtCollision = NodePath("HurtArea/HurtCollision")
+InteractiveArea = NodePath("InteractiveArea")
+InteractiveCollision = NodePath("InteractiveArea/InteractiveCollision")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")

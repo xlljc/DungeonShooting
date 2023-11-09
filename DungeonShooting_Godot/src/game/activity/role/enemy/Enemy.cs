@@ -18,7 +18,7 @@ using Godot;
 /// 基础敌人
 /// </summary>
 [Tool]
-public partial class Enemy : Role
+public partial class Enemy : AdvancedRole
 {
     /// <summary>
     /// 目标是否在视野内

@@ -50,7 +50,7 @@ public partial class GameCamera : Camera2D
     /// <summary>
     /// 相机跟随目标
     /// </summary>
-    private Role _followTarget;
+    private AdvancedRole _followTarget;
     
     // 3.5
     //public Vector2 SubPixelPosition { get; private set; }
@@ -122,7 +122,7 @@ public partial class GameCamera : Camera2D
     /// <summary>
     /// 设置相机跟随目标
     /// </summary>
-    public void SetFollowTarget(Role target)
+    public void SetFollowTarget(AdvancedRole target)
     {
         _followTarget = target;
         if (target != null)
@@ -135,7 +135,7 @@ public partial class GameCamera : Camera2D
     /// <summary>
     /// 获取相机跟随目标
     /// </summary>
-    public Role GetFollowTarget()
+    public AdvancedRole GetFollowTarget()
     {
         return _followTarget;
     }

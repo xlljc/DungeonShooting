@@ -110,7 +110,7 @@ public class AiSurroundState : StateBase<Enemy, AiStateEnum>
                 {
                     var pos = Master.GlobalPosition;
                     var lastSlideCollision = Master.GetLastSlideCollision();
-                    if (lastSlideCollision != null && lastSlideCollision.GetCollider() is Role) //碰到其他角色
+                    if (lastSlideCollision != null && lastSlideCollision.GetCollider() is AdvancedRole) //碰到其他角色
                     {
                         _pauseTimer = Utils.Random.RandomRangeFloat(0f, 0.3f);
                         _isMoveOver = true;

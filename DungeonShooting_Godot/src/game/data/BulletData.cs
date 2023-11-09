@@ -20,7 +20,7 @@ public class BulletData
     /// <summary>
     /// 发射该子弹的角色
     /// </summary>
-    public Role TriggerRole;
+    public AdvancedRole TriggerRole;
     
     /// <summary>
     /// 造成的伤害

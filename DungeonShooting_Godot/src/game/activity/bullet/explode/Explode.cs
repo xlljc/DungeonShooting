@@ -87,7 +87,7 @@ public partial class Explode : Area2D, IPoolItem
     /// <summary>
     /// 播放爆炸, triggerRole 为触发该爆炸的角色
     /// </summary>
-    public void RunPlay(Role triggerRole = null)
+    public void RunPlay(AdvancedRole triggerRole = null)
     {
         GameCamera.Main.CreateShake(new Vector2(6, 6), 0.7f, true);
         AnimationPlayer.Play(AnimatorNames.Play);
@@ -136,7 +136,7 @@ public partial class Explode : Area2D, IPoolItem
 
             if (len <= _hitRadius) //在伤害半径内
             {
-                if (o is Role role) //是角色
+                if (o is AdvancedRole role) //是角色
                 {
                     role.CallDeferred(nameof(role.Hurt), _harm, angle);
                 }

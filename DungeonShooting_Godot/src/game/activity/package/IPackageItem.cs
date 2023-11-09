@@ -1,13 +1,13 @@
 
 /// <summary>
-/// 可放入背包中的物体接口
+/// 可放入背包中的物体接口，泛型T表示所属角色对象类型
 /// </summary>
-public interface IPackageItem
+public interface IPackageItem<T> where T : Role
 {
     /// <summary>
     /// 物体所属角色
     /// </summary>
-    Role Master { get; set; }
+    T Master { get; set; }
 
     /// <summary>
     /// 物体在背包中的索引, 如果不在背包中则为 -1
