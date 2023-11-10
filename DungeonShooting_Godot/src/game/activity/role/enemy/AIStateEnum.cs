@@ -10,6 +10,10 @@ public enum AiStateEnum
     // /// </summary>
     // AiProbe,
     /// <summary>
+    /// 找到玩家，准备通知其他敌人
+    /// </summary>
+    AiFind,
+    /// <summary>
     /// 收到其他敌人通知, 前往发现目标的位置
     /// </summary>
     AiLeaveFor,

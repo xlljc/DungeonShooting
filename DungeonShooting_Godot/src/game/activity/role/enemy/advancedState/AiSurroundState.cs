@@ -158,7 +158,7 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AiStateEnum>
                     else
                     {
                         //发起攻击
-                        Master.EnemyAttack();
+                        Master.Attack();
                     }
                 }
             }

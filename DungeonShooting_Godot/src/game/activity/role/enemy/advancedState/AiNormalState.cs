@@ -11,7 +11,7 @@ public class AiNormalState : StateBase<AdvancedEnemy, AiStateEnum>
     //是否发现玩家
     private bool _isFindPlayer;
 
-    //下一个运动的角度
+    //下一个运动的坐标
     private Vector2 _nextPos;
 
     //是否移动结束

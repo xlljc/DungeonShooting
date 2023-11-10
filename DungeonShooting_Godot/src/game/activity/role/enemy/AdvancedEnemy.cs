@@ -65,7 +65,7 @@ public partial class AdvancedEnemy : AdvancedRole
     public Marker2D NavigationPoint { get; private set; }
 
     /// <summary>
-    /// Ai攻击状态, 调用 EnemyAttack() 函数后会刷新
+    /// Ai攻击状态, 调用 Attack() 函数后会刷新
     /// </summary>
     public AiAttackState AttackState { get; private set; }
     
@@ -354,10 +354,7 @@ public partial class AdvancedEnemy : AdvancedRole
         return false;
     }
     
-    /// <summary>
-    /// Ai触发的攻击
-    /// </summary>
-    public void EnemyAttack()
+    public override void Attack()
     {
         var weapon = WeaponPack.ActiveItem;
         if (weapon != null)
