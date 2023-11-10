@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 主动使用道具
 /// </summary>
-public abstract partial class ActiveProp : Prop, IPackageItem
+public abstract partial class ActiveProp : Prop, IPackageItem<Role>
 {
     public int PackageIndex { get; set; }
     
@@ -131,7 +131,7 @@ public abstract partial class ActiveProp : Prop, IPackageItem
     {
     }
 
-    protected override void ProcessOver(float delta)
+    protected override void Process(float delta)
     {
         RunUpdate(delta);
     }
@@ -312,5 +312,6 @@ public abstract partial class ActiveProp : Prop, IPackageItem
 
     public virtual void OnOverflowItem()
     {
+        Master.ThrowActiveProp(PackageIndex);
     }
 }

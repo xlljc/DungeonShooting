@@ -1,6 +1,6 @@
-[gd_scene load_steps=30 format=3 uid="uid://pr88a1phtxgb"]
+[gd_scene load_steps=31 format=3 uid="uid://pr88a1phtxgb"]
 
-[ext_resource type="Script" path="res://src/game/effects/EnemyDebris.cs" id="1_ttosm"]
+[ext_resource type="Script" path="res://src/game/effects/enemy/EnemyDebris.cs" id="1_ttosm"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_h62s7"]
 [ext_resource type="Texture2D" uid="uid://cn64eauvwx1uj" path="res://resource/sprite/role/enemy0001/enemy0001_Debris.png" id="3_6ewaj"]
 [ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="4_wu0t6"]
@@ -14,6 +14,7 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_08fn3"]
 shader = ExtResource("2_h62s7")
@@ -23,6 +24,7 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cldwb"]
 atlas = ExtResource("3_6ewaj")
@@ -144,6 +146,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_0xl2q"]
+radius = 4.0
+
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_p3lv8"]
 particles_animation = true
 particles_anim_h_frames = 3
@@ -165,10 +170,8 @@ curve = SubResource("Curve_21dxk")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ku1mm"]
 particle_flag_disable_z = true
-gravity = Vector3(0, 0, 0)
-orbit_velocity_min = 0.0
-orbit_velocity_max = 0.0
 angle_max = 360.0
+gravity = Vector3(0, 0, 0)
 scale_min = 0.4
 scale_max = 1.5
 scale_curve = SubResource("CurveTexture_rutlp")
@@ -177,6 +180,7 @@ color_ramp = SubResource("GradientTexture1D_orgu0")
 anim_offset_max = 1.0
 
 [node name="Effect0001" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
+collision_layer = 128
 script = ExtResource("1_ttosm")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
@@ -191,6 +195,7 @@ material = SubResource("ShaderMaterial_08fn3")
 sprite_frames = SubResource("SpriteFrames_15g84")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_0xl2q")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_p3lv8")

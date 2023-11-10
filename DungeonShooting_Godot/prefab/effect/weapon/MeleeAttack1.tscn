@@ -39,8 +39,8 @@ animations = [{
 "speed": 20.0
 }]
 
-[node name="MeleeAttack1" type="AnimatedSprite2D"]
+[node name="MeleeAttack1" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
 sprite_frames = SubResource("SpriteFrames_hkcv6")
-autoplay = "default"
 script = ExtResource("2_bjagc")
 DelayTime = 0.2
+Particles2D = []

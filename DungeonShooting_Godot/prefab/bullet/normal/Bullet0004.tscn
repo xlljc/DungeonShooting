@@ -1,0 +1,97 @@
+[gd_scene load_steps=12 format=3 uid="uid://d0h4xfi1oqf1l"]
+
+[ext_resource type="Script" path="res://src/game/activity/bullet/normal/BoomBullet.cs" id="1_1jbgr"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_w1qob"]
+[ext_resource type="SpriteFrames" uid="uid://d3vma1qjo478l" path="res://resource/spriteFrames/bullet/Bullet0004.tres" id="3_bttus"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="3_ofn8c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
+resource_local_to_scene = true
+shader = ExtResource("2_w1qob")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p0wfd"]
+resource_local_to_scene = true
+shader = ExtResource("2_w1qob")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c0onq"]
+size = Vector2(4, 4)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_chi2i"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_dt320"]
+_data = [Vector2(0, 0.730415), 0.0, 0.0, 0, 0, Vector2(0.245238, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0235023), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_uftx4"]
+curve = SubResource("Curve_dt320")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kelfq"]
+lifetime_randomness = 0.7
+particle_flag_disable_z = true
+angle_max = 360.0
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 15.0
+angular_velocity_max = 45.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.15
+scale_max = 0.6
+scale_curve = SubResource("CurveTexture_uftx4")
+color = Color(0.619608, 0.619608, 0.619608, 1)
+anim_offset_max = 1.0
+
+[node name="Bullet0003" type="CharacterBody2D" node_paths=PackedStringArray("Particles", "CollisionArea", "ShadowSprite", "AnimatedSprite", "Collision")]
+collision_layer = 2
+script = ExtResource("1_1jbgr")
+Particles = NodePath("AnimatedSprite/GPUParticles2D")
+CollisionArea = NodePath("AnimatedSprite/CollisionArea")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+z_index = -1
+material = SubResource("ShaderMaterial_v77gw")
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_p0wfd")
+sprite_frames = ExtResource("3_bttus")
+animation = &"move"
+frame_progress = 0.0471243
+
+[node name="CollisionArea" type="Area2D" parent="AnimatedSprite"]
+collision_layer = 0
+collision_mask = 0
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite/CollisionArea"]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_c0onq")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="AnimatedSprite"]
+material = SubResource("CanvasItemMaterial_chi2i")
+amount = 10
+process_material = SubResource("ParticleProcessMaterial_kelfq")
+texture = ExtResource("3_ofn8c")
+lifetime = 0.5
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_c0onq")

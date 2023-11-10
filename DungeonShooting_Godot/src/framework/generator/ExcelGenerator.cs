@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using Config;
 using Godot;
 using Array = Godot.Collections.Array;
 
@@ -36,11 +37,10 @@ public static class ExcelGenerator
     //生成初始化 ActivityObject 代码
     private static void GeneratorActivityObjectInit()
     {
-        var text = File.ReadAllText("resource/config/ActivityObject.json");
-        var array = JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, System.Object>[]>(text);
+        var text = File.ReadAllText($"resource/config/{nameof(ExcelConfig.ActivityBase)}.json");
+        var array = JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, object>[]>(text);
         
         var code1 = "";
-        var code2 = "";
 
         foreach (var item in array)
         {
@@ -52,7 +52,6 @@ public static class ExcelGenerator
             code1 += $"        /// 简介: {intro.Replace("\n", " <br/>\n        /// ")}\n";
             code1 += $"        /// </summary>\n";
             code1 += $"        public const string Id_{id} = \"{id}\";\n";
-            code2 += $"        _activityRegisterMap.Add(\"{id}\", new RegisterActivityData(\"{item["Prefab"]}\", ExcelConfig.ActivityObject_Map[\"{id}\"]));\n";
         }
         
         var str = $"using Config;\n\n";
@@ -68,10 +67,6 @@ public static class ExcelGenerator
         str += code1;
         str += $"    }}\n";
         
-        str += $"    private static void _InitRegister()\n";
-        str += $"    {{\n";
-        str += code2;
-        str += $"    }}\n";
         str += $"}}\n";
         
         File.WriteAllText("src/framework/activity/ActivityObject_Init.cs", str);

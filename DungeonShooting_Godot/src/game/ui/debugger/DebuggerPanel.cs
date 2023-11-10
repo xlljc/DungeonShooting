@@ -51,6 +51,8 @@ public partial class DebuggerPanel : Debugger
                 }
             }
         }
+
+        S_Fps.Instance.Text = "FPS:" + Engine.GetFramesPerSecond();
     }
 
     private void OnMouseDown()

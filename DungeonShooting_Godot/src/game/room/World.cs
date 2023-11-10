@@ -62,7 +62,7 @@ public partial class World : CanvasModulate, ICoroutine
     /// <summary>
     /// 记录所有存活的敌人
     /// </summary>
-    public List<Enemy> Enemy_InstanceList  { get; } = new List<Enemy>();
+    public List<Role> Enemy_InstanceList  { get; } = new List<Role>();
     
     /// <summary>
     /// 公共属性, 敌人是否找到目标, 如果找到目标, 则与目标同房间的所有敌人都会知道目标的位置
@@ -84,6 +84,8 @@ public partial class World : CanvasModulate, ICoroutine
 
     public override void _Ready()
     {
+        Color = Colors.Black;
+        
         //临时处理, 加载TileSet
         var tileSet = ResourceManager.Load<TileSet>(ResourcePath.resource_map_tileSet_map1_TileSet1_tres);
         var tileSetAtlasSource = (TileSetAtlasSource)tileSet.GetSource(0);
@@ -95,10 +97,7 @@ public partial class World : CanvasModulate, ICoroutine
     public override void _Process(double delta)
     {
         //协程更新
-        if (_coroutineList != null)
-        {
-            ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, (float)delta);
-        }
+        ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, (float)delta);
     }
 
     /// <summary>

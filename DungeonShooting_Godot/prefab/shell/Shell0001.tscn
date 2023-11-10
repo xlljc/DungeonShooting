@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bj4yr6ru8nhwr"]
+[gd_scene load_steps=7 format=3 uid="uid://bj4yr6ru8nhwr"]
 
 [ext_resource type="Script" path="res://src/game/activity/shell/Shell.cs" id="1_2g70c"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_tdny6"]
@@ -9,20 +9,25 @@ resource_local_to_scene = true
 shader = ExtResource("2_tdny6")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
-shader_parameter/alpha = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7e6fo"]
 resource_local_to_scene = true
 shader = ExtResource("2_tdny6")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
-shader_parameter/alpha = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fidao"]
+size = Vector2(3.75, 1.25)
 
 [node name="Shell0001" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 128
@@ -40,3 +45,4 @@ material = SubResource("ShaderMaterial_7e6fo")
 sprite_frames = ExtResource("3_ujn5y")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_fidao")

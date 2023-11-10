@@ -11,11 +11,9 @@ gradient = SubResource("Gradient_ryemi")
 [resource]
 particle_flag_disable_z = true
 spread = 180.0
-gravity = Vector3(0, 0, 0)
 initial_velocity_min = 5.0
 initial_velocity_max = 35.0
-orbit_velocity_min = 0.0
-orbit_velocity_max = 0.0
+gravity = Vector3(0, 0, 0)
 scale_min = 0.8
 scale_max = 0.8
 scale_curve = ExtResource("1_yr5l8")

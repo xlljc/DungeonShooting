@@ -76,9 +76,19 @@ public class RoomInfo : IDestroy
     public AffiliationArea AffiliationArea;
 
     /// <summary>
+    /// 静态渲染精灵根节点, 用于放置sprite
+    /// </summary>
+    public RoomStaticSprite StaticSprite;
+    
+    /// <summary>
     /// 静态精灵绘制画布
     /// </summary>
-    public RoomStaticImageCanvas StaticImageCanvas;
+    public ImageCanvas StaticImageCanvas;
+
+    /// <summary>
+    /// 房间坐标相对于画布坐标偏移量, 单位: 像素
+    /// </summary>
+    public Vector2I RoomOffset;
 
     /// <summary>
     /// 房间迷雾
@@ -215,6 +225,14 @@ public class RoomInfo : IDestroy
     }
     
     /// <summary>
+    /// 将房间配置中的坐标转为全局坐标, 单位: 像素
+    /// </summary>
+    public Vector2 ToGlobalPosition(Vector2 pos)
+    {
+        return GetWorldPosition() + pos - GetOffsetPosition();
+    }
+    
+    /// <summary>
     /// 获取房间横轴结束位置, 单位: 格
     /// </summary>
     public int GetHorizontalEnd()
@@ -263,6 +281,14 @@ public class RoomInfo : IDestroy
         return Size.Y * GameConfig.TileCellSize;
     }
     
+    /// <summary>
+    /// 将世界坐标转为画布下的坐标
+    /// </summary>
+    public Vector2 ToImageCanvasPosition(Vector2 pos)
+    {
+        return pos - StaticImageCanvas.Position;
+    }
+    
     public void Destroy()
     {
         if (IsDestroyed)
@@ -295,6 +321,12 @@ public class RoomInfo : IDestroy
         if (StaticImageCanvas != null)
         {
             StaticImageCanvas.Destroy();
+        }
+        
+        //
+        if (StaticSprite != null)
+        {
+            StaticSprite.Destroy();
         }
 
         //销毁迷雾

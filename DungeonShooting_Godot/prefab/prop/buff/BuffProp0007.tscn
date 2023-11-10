@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cwfuv68ijkmfg"]
 
-[ext_resource type="Script" path="res://src/game/activity/prop/buff/BuffPropProp0007.cs" id="1_71c3m"]
+[ext_resource type="Script" path="res://src/game/activity/prop/buff/BuffProp0007.cs" id="1_71c3m"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_ofs5v"]
 [ext_resource type="SpriteFrames" uid="uid://et840sb4d1g3" path="res://resource/spriteFrames/prop/buff/BuffProp0007.tres" id="3_xxla0"]
 
@@ -9,20 +9,22 @@ resource_local_to_scene = true
 shader = ExtResource("1_ofs5v")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
-shader_parameter/alpha = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b6ii6"]
 resource_local_to_scene = true
 shader = ExtResource("1_ofs5v")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
-shader_parameter/alpha = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpqup"]
 size = Vector2(12, 10)

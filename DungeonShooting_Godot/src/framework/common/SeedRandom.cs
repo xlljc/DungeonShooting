@@ -188,4 +188,81 @@ public class SeedRandom
 
         return RandomRangeInt(0, weightList.Length - 1);
     }
+    
+    /// <summary>
+    /// 返回指定区域内的随机坐标点, 该函数比较慢, 请谨慎调用
+    /// </summary>
+    /// <param name="polygonDataList">碰撞区域数据</param>
+    /// <param name="count">需要随机点的数量</param>
+    public Vector2[] GetRandomPositionInPolygon(List<NavigationPolygonData> polygonDataList, int count)
+    {
+        var minX = int.MaxValue;
+        var maxX = int.MinValue;
+        var minY = int.MaxValue;
+        var maxY = int.MinValue;
+        
+        var outCount = 0;
+
+        // 遍历多边形的顶点，找到最小和最大的x、y坐标
+        foreach (var navigationPolygonData in polygonDataList)
+        {
+            if (navigationPolygonData.Type == NavigationPolygonType.Out)
+            {
+                outCount++;
+            }
+            foreach (var vertex in navigationPolygonData.GetPoints())
+            {
+                if (vertex.X < minX)
+                {
+                    minX = Mathf.CeilToInt(vertex.X);
+                }
+                else if (vertex.X > maxX)
+                {
+                    maxX = Mathf.FloorToInt(vertex.X);
+                }
+                if (vertex.Y < minY)
+                {
+                    minY = Mathf.CeilToInt(vertex.Y);
+                }
+                else if (vertex.Y > maxY)
+                {
+                    maxY = Mathf.FloorToInt(vertex.Y);
+                }
+            }
+        }
+
+        var list = new List<Vector2>();
+        while (true)
+        {
+            var flag = outCount == 0;
+            var point = new Vector2(RandomRangeInt(minX, maxX), RandomRangeInt(minY, maxY));
+            
+            foreach (var navigationPolygonData in polygonDataList)
+            {
+                if (navigationPolygonData.Type == NavigationPolygonType.Out)
+                {
+                    if (!flag && Utils.IsPointInPolygon(navigationPolygonData.GetPoints(), point))
+                    {
+                        flag = true;
+                    }
+                }
+                else
+                {
+                    if (flag && Utils.IsPointInPolygon(navigationPolygonData.GetPoints(), point))
+                    {
+                        flag = false;
+                    }
+                }
+            }
+
+            if (flag)
+            {
+                list.Add(point);
+                if (list.Count >= count)
+                {
+                    return list.ToArray();
+                }
+            }
+        }
+    }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// 物体背包类
 /// </summary>
-public class Package<T> : Component<Role> where T : ActivityObject, IPackageItem
+public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem<S> where S : Role
 {
     /// <summary>
     /// 当前使用对象改变时回调

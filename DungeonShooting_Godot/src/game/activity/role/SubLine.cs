@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 瞄准辅助线
 /// </summary>
-public class SubLine : Component<Role>
+public class SubLine : Component<AdvancedRole>
 {
     /// <summary>
     /// 是否正在播放警告闪烁动画
@@ -115,7 +115,7 @@ public class SubLine : Component<Role>
                 StopCoroutine(_cid);
                 _cid = 0;
             }
-            _range = Utils.GetConfigRangeEnd(weapon.Attribute.BulletDistanceRange);
+            _range = Utils.GetConfigRangeEnd(weapon.Attribute.Bullet.DistanceRange);
             _line2D.DefaultColor = _color;
         }
     }

@@ -245,6 +245,16 @@ public abstract class Component : IProcess, IDestroy, ICoroutine
         return Master.GetComponent(type);
     }
 
+    public T[] GetComponents<T>() where T : Component, new()
+    {
+        return Master.GetComponents<T>();
+    }
+    
+    public Component[] GetComponents(Type type)
+    {
+        return Master.GetComponents(type);
+    }
+    
     public void RemoveComponent(Component component)
     {
         Master.RemoveComponent(component);

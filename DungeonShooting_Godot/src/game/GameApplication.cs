@@ -33,16 +33,15 @@ public partial class GameApplication : Node2D, ICoroutine
 	[Export] public Node2D GlobalNodeRoot;
 
 	/// <summary>
-	/// 是否开启调试
+	/// 游戏目标帧率
 	/// </summary>
-	[ExportGroup("Debug")]
-	[Export] public bool Debug;
-
+	public int TargetFps { get; private set; }
+	
 	/// <summary>
 	/// 鼠标指针
 	/// </summary>
 	public Cursor Cursor { get; private set; }
-	
+
 	/// <summary>
 	/// 游戏世界
 	/// </summary>
@@ -84,13 +83,12 @@ public partial class GameApplication : Node2D, ICoroutine
 	public GameApplication()
 	{
 		Instance = this;
+		TargetFps = (int)DisplayServer.ScreenGetRefreshRate();
 
 		//初始化配置表
 		ExcelConfig.Init();
 		//初始化房间配置数据
 		InitRoomConfig();
-		//初始化 ActivityObject
-		ActivityObject.InitActivity();
 		//初始化武器数据
 		Weapon.InitWeaponAttribute();
 		
@@ -106,19 +104,19 @@ public partial class GameApplication : Node2D, ICoroutine
 		//随机化种子
 		//GD.Randomize();
 		//固定帧率
-		Engine.MaxFps = 60;
+		//Engine.MaxFps = TargetFps;
 		//调试绘制开关
-		ActivityObject.IsDebug = Debug;
+		//IsDebug = true;
+		ActivityObject.IsDebug = false;
 		//Engine.TimeScale = 0.2f;
-		
 		//调整窗口分辨率
 		OnWindowSizeChanged();
 		RefreshSubViewportSize();
 		//窗体大小改变
 		GetWindow().SizeChanged += OnWindowSizeChanged;
-		
+
 		ImageCanvas.Init(GetTree().CurrentScene);
-        
+		
 		//初始化ui
 		UiManager.Init();
 		//调试Ui
@@ -145,10 +143,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		SoundManager.Update(newDelta);
 		
 		//协程更新
-		if (_coroutineList != null)
-		{
-			ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
-		}
+		ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
 	}
 
 	/// <summary>
@@ -171,11 +166,15 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// </summary>
 	public void DestroyWorld()
 	{
+		//销毁所有物体
 		if (World != null)
 		{
 			ClearWorld();
 			World.QueueFree();
 		}
+		
+		//销毁池中所有物体
+		ObjectPool.DisposeAllItem();
 
 		World = null;
 	}
@@ -296,7 +295,6 @@ public partial class GameApplication : Node2D, ICoroutine
 	//清理世界
 	private void ClearWorld()
 	{
-		
 		var childCount = World.NormalLayer.GetChildCount();
 		for (var i = 0; i < childCount; i++)
 		{

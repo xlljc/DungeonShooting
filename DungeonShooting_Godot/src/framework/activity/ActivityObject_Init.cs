@@ -19,6 +19,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_enemy0001 = "enemy0001";
         /// <summary>
+        /// 名称: 敌人2 <br/>
+        /// 简介: 敌人2
+        /// </summary>
+        public const string Id_enemy0002 = "enemy0002";
+        /// <summary>
         /// 名称: 步枪 <br/>
         /// 简介: 
         /// </summary>
@@ -54,6 +59,16 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_weapon0007 = "weapon0007";
         /// <summary>
+        /// 名称: 激光手枪 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_weapon0008 = "weapon0008";
+        /// <summary>
+        /// 名称: 榴弹发射器 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_weapon0009 = "weapon0009";
+        /// <summary>
         /// 名称:  <br/>
         /// 简介: 
         /// </summary>
@@ -69,6 +84,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_bullet0003 = "bullet0003";
         /// <summary>
+        /// 名称: 榴弹炮 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_bullet0004 = "bullet0004";
+        /// <summary>
         /// 名称:  <br/>
         /// 简介: 
         /// </summary>
@@ -83,6 +103,11 @@ public partial class ActivityObject
         /// 简介: 
         /// </summary>
         public const string Id_shell0003 = "shell0003";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_shell0004 = "shell0004";
         /// <summary>
         /// 名称:  <br/>
         /// 简介: 敌人死亡碎片
@@ -135,9 +160,29 @@ public partial class ActivityObject
         public const string Id_prop0009 = "prop0009";
         /// <summary>
         /// 名称: 分裂子弹 <br/>
-        /// 简介: 子弹数量翻倍, 但是精准度和伤害降低
+        /// 简介: 子弹数量翻倍, 但是精准度, 击退和伤害降低
         /// </summary>
         public const string Id_prop0010 = "prop0010";
+        /// <summary>
+        /// 名称: 弹射子弹 <br/>
+        /// 简介: 子弹反弹次数+2
+        /// </summary>
+        public const string Id_prop0011 = "prop0011";
+        /// <summary>
+        /// 名称: 穿透子弹 <br/>
+        /// 简介: 子弹穿透+1
+        /// </summary>
+        public const string Id_prop0012 = "prop0012";
+        /// <summary>
+        /// 名称: 武器背包 <br/>
+        /// 简介: 武器容量+1
+        /// </summary>
+        public const string Id_prop0013 = "prop0013";
+        /// <summary>
+        /// 名称: 道具背包 <br/>
+        /// 简介: 道具容量+1
+        /// </summary>
+        public const string Id_prop0014 = "prop0014";
         /// <summary>
         /// 名称: 医药箱 <br/>
         /// 简介: 使用后回复一颗红心
@@ -168,40 +213,5 @@ public partial class ActivityObject
         /// 简介: 地牢房间的门(北侧)
         /// </summary>
         public const string Id_other_door_n = "other_door_n";
-    }
-    private static void _InitRegister()
-    {
-        _activityRegisterMap.Add("role0001", new RegisterActivityData("res://prefab/role/Role0001.tscn", ExcelConfig.ActivityObject_Map["role0001"]));
-        _activityRegisterMap.Add("enemy0001", new RegisterActivityData("res://prefab/role/Enemy0001.tscn", ExcelConfig.ActivityObject_Map["enemy0001"]));
-        _activityRegisterMap.Add("weapon0001", new RegisterActivityData("res://prefab/weapon/Weapon0001.tscn", ExcelConfig.ActivityObject_Map["weapon0001"]));
-        _activityRegisterMap.Add("weapon0002", new RegisterActivityData("res://prefab/weapon/Weapon0002.tscn", ExcelConfig.ActivityObject_Map["weapon0002"]));
-        _activityRegisterMap.Add("weapon0003", new RegisterActivityData("res://prefab/weapon/Weapon0003.tscn", ExcelConfig.ActivityObject_Map["weapon0003"]));
-        _activityRegisterMap.Add("weapon0004", new RegisterActivityData("res://prefab/weapon/Weapon0004.tscn", ExcelConfig.ActivityObject_Map["weapon0004"]));
-        _activityRegisterMap.Add("weapon0005", new RegisterActivityData("res://prefab/weapon/Weapon0005.tscn", ExcelConfig.ActivityObject_Map["weapon0005"]));
-        _activityRegisterMap.Add("weapon0006", new RegisterActivityData("res://prefab/weapon/Weapon0006.tscn", ExcelConfig.ActivityObject_Map["weapon0006"]));
-        _activityRegisterMap.Add("weapon0007", new RegisterActivityData("res://prefab/weapon/Weapon0007.tscn", ExcelConfig.ActivityObject_Map["weapon0007"]));
-        _activityRegisterMap.Add("bullet0001", new RegisterActivityData("res://prefab/bullet/Bullet0001.tscn", ExcelConfig.ActivityObject_Map["bullet0001"]));
-        _activityRegisterMap.Add("bullet0002", new RegisterActivityData("res://prefab/bullet/Bullet0002.tscn", ExcelConfig.ActivityObject_Map["bullet0002"]));
-        _activityRegisterMap.Add("bullet0003", new RegisterActivityData("res://prefab/bullet/Bullet0003.tscn", ExcelConfig.ActivityObject_Map["bullet0003"]));
-        _activityRegisterMap.Add("shell0001", new RegisterActivityData("res://prefab/shell/Shell0001.tscn", ExcelConfig.ActivityObject_Map["shell0001"]));
-        _activityRegisterMap.Add("shell0002", new RegisterActivityData("res://prefab/shell/Shell0002.tscn", ExcelConfig.ActivityObject_Map["shell0002"]));
-        _activityRegisterMap.Add("shell0003", new RegisterActivityData("res://prefab/shell/Shell0003.tscn", ExcelConfig.ActivityObject_Map["shell0003"]));
-        _activityRegisterMap.Add("effect0001", new RegisterActivityData("res://prefab/effect/enemy/Effect0001.tscn", ExcelConfig.ActivityObject_Map["effect0001"]));
-        _activityRegisterMap.Add("prop0001", new RegisterActivityData("res://prefab/effect/enemy/Effect0001.tscn", ExcelConfig.ActivityObject_Map["prop0001"]));
-        _activityRegisterMap.Add("prop0002", new RegisterActivityData("res://prefab/prop/buff/BuffProp0002.tscn", ExcelConfig.ActivityObject_Map["prop0002"]));
-        _activityRegisterMap.Add("prop0003", new RegisterActivityData("res://prefab/prop/buff/BuffProp0003.tscn", ExcelConfig.ActivityObject_Map["prop0003"]));
-        _activityRegisterMap.Add("prop0004", new RegisterActivityData("res://prefab/prop/buff/BuffProp0004.tscn", ExcelConfig.ActivityObject_Map["prop0004"]));
-        _activityRegisterMap.Add("prop0005", new RegisterActivityData("res://prefab/prop/buff/BuffProp0005.tscn", ExcelConfig.ActivityObject_Map["prop0005"]));
-        _activityRegisterMap.Add("prop0006", new RegisterActivityData("res://prefab/prop/buff/BuffProp0006.tscn", ExcelConfig.ActivityObject_Map["prop0006"]));
-        _activityRegisterMap.Add("prop0007", new RegisterActivityData("res://prefab/prop/buff/BuffProp0007.tscn", ExcelConfig.ActivityObject_Map["prop0007"]));
-        _activityRegisterMap.Add("prop0008", new RegisterActivityData("res://prefab/prop/buff/BuffProp0008.tscn", ExcelConfig.ActivityObject_Map["prop0008"]));
-        _activityRegisterMap.Add("prop0009", new RegisterActivityData("res://prefab/prop/buff/BuffProp0009.tscn", ExcelConfig.ActivityObject_Map["prop0009"]));
-        _activityRegisterMap.Add("prop0010", new RegisterActivityData("res://prefab/prop/buff/BuffProp0010.tscn", ExcelConfig.ActivityObject_Map["prop0010"]));
-        _activityRegisterMap.Add("prop5000", new RegisterActivityData("res://prefab/prop/active/ActiveProp5000.tscn", ExcelConfig.ActivityObject_Map["prop5000"]));
-        _activityRegisterMap.Add("prop5001", new RegisterActivityData("res://prefab/prop/active/ActiveProp5001.tscn", ExcelConfig.ActivityObject_Map["prop5001"]));
-        _activityRegisterMap.Add("other_door_e", new RegisterActivityData("res://prefab/map/RoomDoor_E.tscn", ExcelConfig.ActivityObject_Map["other_door_e"]));
-        _activityRegisterMap.Add("other_door_w", new RegisterActivityData("res://prefab/map/RoomDoor_W.tscn", ExcelConfig.ActivityObject_Map["other_door_w"]));
-        _activityRegisterMap.Add("other_door_s", new RegisterActivityData("res://prefab/map/RoomDoor_S.tscn", ExcelConfig.ActivityObject_Map["other_door_s"]));
-        _activityRegisterMap.Add("other_door_n", new RegisterActivityData("res://prefab/map/RoomDoor_N.tscn", ExcelConfig.ActivityObject_Map["other_door_n"]));
     }
 }

@@ -1,0 +1,35 @@
+[
+  {
+    "Id": "0001",
+    "Remark": "\u9ED8\u8BA4\u6750\u8D28\u5C5E\u6027",
+    "Friction": 140,
+    "RotationFriction": 140,
+    "Bounce": true,
+    "BounceStrength": 0.5,
+    "FallBounceStrength": 0.5,
+    "FallBounceSpeed": 0.75,
+    "FallBounceRotation": 0.5
+  },
+  {
+    "Id": "0002",
+    "Remark": "\u7403\u4F53\u6750\u8D28\uFF0C\u6469\u64E6\u529B\u8F83\u4F4E",
+    "Friction": 40,
+    "RotationFriction": 40,
+    "Bounce": true,
+    "BounceStrength": 0.7,
+    "FallBounceStrength": 0.7,
+    "FallBounceSpeed": 0.85,
+    "FallBounceRotation": 0.85
+  },
+  {
+    "Id": "0003",
+    "Remark": "\u5B50\u5F39,\u53CD\u5F39\u6D88\u8017\u4F4E",
+    "Friction": 140,
+    "RotationFriction": 140,
+    "Bounce": true,
+    "BounceStrength": 1,
+    "FallBounceStrength": 0.5,
+    "FallBounceSpeed": 0.75,
+    "FallBounceRotation": 0.5
+  }
+]

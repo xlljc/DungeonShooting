@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Config;
 using Godot;
 
 /// <summary>
@@ -190,6 +191,63 @@ public partial class SoundManager
         soundNode.PlaySoundByResource(soundName, delayTime);
         return soundNode;
     }
+    
+    /// <summary>
+    /// 根据音效配置表Id播放音效
+    /// </summary>
+    /// <param name="id">音效Id</param>
+    /// <param name="viewPosition">播放音效的位置, 该位置为 SubViewport 下的坐标, 也就是 <see cref="ActivityObject"/> 使用的坐标</param>
+    /// <param name="triggerRole">触发播放音效的角色, 因为 Npc 产生的音效声音更小, 可以传 null</param>
+    public static GameAudioPlayer2D PlaySoundByConfig(string id, Vector2 viewPosition, AdvancedRole triggerRole = null)
+    {
+        var sound = ExcelConfig.Sound_Map[id];
+        return PlaySoundByConfig(sound, viewPosition, triggerRole);
+    }
+
+    /// <summary>
+    /// 根据音效配置播放音效
+    /// </summary>
+    /// <param name="sound">音效数据</param>
+    /// <param name="viewPosition">播放音效的位置, 该位置为 SubViewport 下的坐标, 也就是 <see cref="ActivityObject"/> 使用的坐标</param>
+    /// <param name="triggerRole">触发播放音效的角色, 因为 Npc 产生的音效声音更小, 可以传 null</param>
+    public static GameAudioPlayer2D PlaySoundByConfig(ExcelConfig.Sound sound, Vector2 viewPosition, AdvancedRole triggerRole = null)
+    {
+        return PlaySoundEffectPosition(
+            sound.Path,
+            GameApplication.Instance.ViewToGlobalPosition(viewPosition),
+            CalcRoleVolume(sound.Volume, triggerRole)
+        );
+    }
+
+    /// <summary>
+    /// 根据音效配置表Id延时播放音效
+    /// </summary>
+    /// <param name="id">音效Id</param>
+    /// <param name="viewPosition">播放音效的位置, 该位置为 SubViewport 下的坐标, 也就是 <see cref="ActivityObject"/> 使用的坐标</param>
+    /// <param name="delayTime">延时时间</param>
+    /// <param name="triggerRole">触发播放音效的角色, 因为 Npc 产生的音效声音更小, 可以传 null</param>
+    public static GameAudioPlayer2D PlaySoundByConfigDelay(string id, Vector2 viewPosition, float delayTime, AdvancedRole triggerRole = null)
+    {
+        var sound = ExcelConfig.Sound_Map[id];
+        return PlaySoundByConfigDelay(sound, viewPosition, delayTime, triggerRole);
+    }
+    
+    /// <summary>
+    /// 根据音效配置延时播放音效
+    /// </summary>
+    /// <param name="sound">音效数据</param>
+    /// <param name="viewPosition">播放音效的位置, 该位置为 SubViewport 下的坐标, 也就是 <see cref="ActivityObject"/> 使用的坐标</param>
+    /// <param name="delayTime">延时时间</param>
+    /// <param name="triggerRole">触发播放音效的角色, 因为 Npc 产生的音效声音更小, 可以传 null</param>
+    public static GameAudioPlayer2D PlaySoundByConfigDelay(ExcelConfig.Sound sound, Vector2 viewPosition, float delayTime, AdvancedRole triggerRole = null)
+    {
+        return PlaySoundEffectPositionDelay(
+            sound.Path,
+            GameApplication.Instance.ViewToGlobalPosition(viewPosition),
+            delayTime,
+            CalcRoleVolume(sound.Volume, triggerRole)
+        );
+    }
 
     /// <summary>
     /// 获取2D音频播放节点
@@ -245,7 +303,7 @@ public partial class SoundManager
     /// <summary>
     /// 计算指定角色播放音效使用的音量
     /// </summary>
-    public static float CalcRoleVolume(float volume, Role role)
+    public static float CalcRoleVolume(float volume, AdvancedRole role)
     {
         if (role is not Player)
         {

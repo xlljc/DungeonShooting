@@ -1,0 +1,243 @@
+[
+  {
+    "Id": "0001",
+    "Name": "\u5B50\u5F391",
+    "Type": 1,
+    "Prefab": "bullet0001",
+    "HarmRange": [
+      4
+    ],
+    "RepelRange": [
+      20
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      320,
+      350
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      300,
+      400
+    ],
+    "UseGravity": false,
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "Penetration": [
+      0
+    ]
+  },
+  {
+    "Id": "0002",
+    "Name": "\u5B50\u5F392",
+    "Type": 1,
+    "Prefab": "bullet0002",
+    "HarmRange": [
+      4
+    ],
+    "RepelRange": [
+      30
+    ],
+    "DeviationAngleRange": [
+      -10,
+      10
+    ],
+    "SpeedRange": [
+      280,
+      380
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      200,
+      250
+    ],
+    "UseGravity": false,
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "Penetration": [
+      0
+    ]
+  },
+  {
+    "Id": "0003",
+    "Name": "\u5B50\u5F393",
+    "Type": 1,
+    "Prefab": "bullet0003",
+    "HarmRange": [
+      3
+    ],
+    "RepelRange": [
+      10
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      320,
+      340
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      300,
+      400
+    ],
+    "UseGravity": false,
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "Penetration": [
+      0
+    ]
+  },
+  {
+    "Id": "0004",
+    "Name": "\u72D9\u51FB\u67AA\u5B50\u5F39",
+    "Type": 1,
+    "Prefab": "bullet0001",
+    "HarmRange": [
+      20
+    ],
+    "RepelRange": [
+      200
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      600,
+      600
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      600,
+      600
+    ],
+    "UseGravity": false,
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "Penetration": [
+      0
+    ]
+  },
+  {
+    "Id": "0005",
+    "Name": "\u69B4\u5F39\u70AE",
+    "Type": 1,
+    "Prefab": "bullet0004",
+    "HarmRange": [
+      30
+    ],
+    "RepelRange": [
+      150
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      180,
+      180
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      270,
+      360
+    ],
+    "UseGravity": true,
+    "VerticalSpeed": [
+      70
+    ],
+    "BounceCount": [
+      999
+    ],
+    "Penetration": [
+      1
+    ]
+  },
+  {
+    "Id": "1001",
+    "Name": "\u6FC0\u51491",
+    "Type": 2,
+    "Prefab": "res://prefab/bullet/laser/Laser0001.tscn",
+    "HarmRange": [
+      5
+    ],
+    "RepelRange": [
+      40
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      300,
+      330
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      600,
+      600
+    ],
+    "UseGravity": false,
+    "VerticalSpeed": null,
+    "BounceCount": [
+      0
+    ],
+    "Penetration": null
+  },
+  {
+    "Id": "2001",
+    "Name": "\u5200\u4F24\u5BB3",
+    "Type": 3,
+    "Prefab": "",
+    "HarmRange": [
+      25
+    ],
+    "RepelRange": [
+      150
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      350
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      35
+    ],
+    "UseGravity": false,
+    "VerticalSpeed": null,
+    "BounceCount": null,
+    "Penetration": null
+  }
+]

@@ -201,7 +201,7 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
     }
 
     //选中物体回调, 创建标记数据
-    private void OnSelectObject(ExcelConfig.ActivityObject activityObject)
+    private void OnSelectObject(ExcelConfig.ActivityBase activityObject)
     {
         _grid.Add(new MarkInfoItem()
         {
