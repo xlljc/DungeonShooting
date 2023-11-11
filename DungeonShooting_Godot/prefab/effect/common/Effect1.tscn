@@ -36,6 +36,7 @@ one_shot = true
 explosiveness = 1.0
 fixed_fps = 20
 script = ExtResource("3_2tlhx")
+DelayTime = 2.0
 Particles2D = [NodePath("GPUParticles2D")]
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
