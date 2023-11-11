@@ -81,9 +81,13 @@ public static class InputManager
     /// </summary>
     public static void Update(float delta)
     {
-        var application = GameApplication.Instance;
         MoveAxis = Input.GetVector("move_left", "move_right", "move_up", "move_down");
-        CursorPosition = application.GlobalToViewPosition(application.GetGlobalMousePosition());
+        var application = GameApplication.Instance;
+        if (application != null)
+        {
+            CursorPosition = application.GlobalToViewPosition(application.GetGlobalMousePosition());
+        }
+
         ExchangeWeapon = Input.IsActionJustPressed("exchangeWeapon");
         ThrowWeapon = Input.IsActionJustPressed("throwWeapon");
         Interactive = Input.IsActionJustPressed("interactive");

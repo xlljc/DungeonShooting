@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="DungeonShooting"
-run/main_scene="res://scene/Main.tscn"
+run/main_scene="res://scene/test/TestPerfectPixel.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://icon.png"
 
@@ -24,7 +24,7 @@ settings/fps/force_fps=60
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/aspect="keep_width"
-window/vsync/use_vsync=false
+window/vsync/vsync_mode=0
 
 [dotnet]
 
