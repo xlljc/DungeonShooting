@@ -170,7 +170,7 @@ public partial class AdvancedEnemy : AdvancedRole
                 
                 if (AttackState == AiAttackState.LockingTime) //锁定玩家状态
                 {
-                    var aiLockRemainderTime = weapon.GetAiLockRemainderTime();
+                    var aiLockRemainderTime = GetLockRemainderTime();
                     MountLookTarget = aiLockRemainderTime >= weapon.Attribute.AiAttackAttr.LockAngleTime;
                     //更新瞄准辅助线
                     if (weapon.Attribute.AiAttackAttr.ShowSubline)
@@ -354,7 +354,10 @@ public partial class AdvancedEnemy : AdvancedRole
         return false;
     }
     
-    public override void Attack()
+    /// <summary>
+    /// 敌人发动攻击
+    /// </summary>
+    public virtual void EnemyAttack()
     {
         var weapon = WeaponPack.ActiveItem;
         if (weapon != null)
@@ -497,6 +500,19 @@ public partial class AdvancedEnemy : AdvancedRole
     public float GetLockTime()
     {
         return _lockTargetTime;
+    }
+    
+    /// <summary>
+    /// 获取锁定目标的剩余时间
+    /// </summary>
+    public float GetLockRemainderTime()
+    {
+        var weapon = WeaponPack.ActiveItem;
+        if (weapon == null)
+        {
+            return 0;
+        }
+        return weapon.Attribute.AiAttackAttr.LockingTime - _lockTargetTime;
     }
 
     /// <summary>

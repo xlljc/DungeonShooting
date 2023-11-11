@@ -55,9 +55,21 @@ public partial class Enemy : Role
     /// Ai攻击状态, 调用 Attack() 函数后会刷新
     /// </summary>
     public AiAttackState AttackState { get; private set; }
+
+    /// <summary>
+    /// 攻击时间间隔
+    /// </summary>
+    public float AttackInterval { get; set; } = 3;
+
+    /// <summary>
+    /// 锁定目标时间
+    /// </summary>
+    public float LockingTime { get; set; } = 2;
     
     //锁定目标时间
     private float _lockTargetTime = 0;
+    //攻击冷却计时器
+    private float _attackTimer = 0;
 
     public override void OnInit()
     {
@@ -95,7 +107,60 @@ public partial class Enemy : Role
 
     public override void Attack()
     {
+        if (_attackTimer > 0) //开火间隙
+        {
+            AttackState = AiAttackState.AttackInterval;
+        }
+        else if (GetLockRemainderTime() > 0) //锁定目标时间
+        {
+            AttackState = AiAttackState.LockingTime;
+        }
+        else //正常攻击
+        {
+            AttackState = AiAttackState.Attack;
+            _attackTimer = AttackInterval;
+            EnemyAttack();
+        }
+    }
+
+    /// <summary>
+    /// 敌人发动攻击
+    /// </summary>
+    public virtual void EnemyAttack()
+    {
         Debug.Log("触发攻击");
+        
+    }
+
+    protected override void Process(float delta)
+    {
+        base.Process(delta);
+        if (IsDie)
+        {
+            return;
+        }
+
+        if (_attackTimer > 0)
+        {
+            _attackTimer -= delta;
+        }
+        //目标在视野内的时间
+        var currState = StateController.CurrState;
+        if (currState == AiStateEnum.AiSurround || currState == AiStateEnum.AiFollowUp)
+        {
+            if (_attackTimer <= 0) //必须在可以开火时记录时间
+            {
+                _lockTargetTime += delta;
+            }
+            else
+            {
+                _lockTargetTime = 0;
+            }
+        }
+        else
+        {
+            _lockTargetTime = 0;
+        }
     }
 
     protected override void OnHit(int damage, bool realHarm)
@@ -212,6 +277,14 @@ public partial class Enemy : Role
         return _lockTargetTime;
     }
 
+    /// <summary>
+    /// 获取锁定目标的剩余时间
+    /// </summary>
+    public float GetLockRemainderTime()
+    {
+        return LockingTime - _lockTargetTime;
+    }
+    
     /// <summary>
     /// 强制设置锁定目标时间
     /// </summary>

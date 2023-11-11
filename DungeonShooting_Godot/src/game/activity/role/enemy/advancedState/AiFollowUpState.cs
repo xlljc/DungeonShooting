@@ -109,7 +109,7 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AiStateEnum>
             if (inAttackRange) //在攻击范围内
             {
                 //发起攻击
-                Master.Attack();
+                Master.EnemyAttack();
                 
                 //距离够近, 可以切换到环绕模式
                 if (Master.GlobalPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange), 2) * 0.7f)

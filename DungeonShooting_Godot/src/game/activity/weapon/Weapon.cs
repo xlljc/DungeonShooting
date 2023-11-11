@@ -2070,19 +2070,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         return flag;
     }
 
-    /// <summary>
-    /// 获取Ai锁定目标的剩余时间
-    /// </summary>
-    public float GetAiLockRemainderTime()
-    {
-        if (Master is AdvancedEnemy enemy)
-        {
-            return Attribute.AiAttackAttr.LockingTime - enemy.GetLockTime();
-        }
-
-        return 0;
-    }
-
     // /// <summary>
     // /// 获取 Ai 对于该武器的评分, 评分越高, 代表 Ai 会越优先选择该武器, 如果为 -1, 则表示 Ai 不会使用该武器
     // /// </summary>
