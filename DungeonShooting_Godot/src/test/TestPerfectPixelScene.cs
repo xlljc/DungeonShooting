@@ -5,9 +5,13 @@ public partial class TestPerfectPixelScene : Node2D
 {
     public enum HandlerType
     {
-        Normal,
-        UseHandler
+        UnHandler,
+        NormalHandler,
+        OffsetHandler
     }
+
+    [Export]
+    public CharacterBody2D Player;
 
     [Export]
     public Label FpsLabel;
@@ -17,6 +21,9 @@ public partial class TestPerfectPixelScene : Node2D
 
     [Export]
     public float Speed = 50;
+
+    [Export]
+    public float CameraRecoveryScale = 5;
 
     [Export]
     public SubViewportContainer SubViewportContainer;
@@ -37,19 +44,30 @@ public partial class TestPerfectPixelScene : Node2D
 
     public override void _Process(double delta)
     {
-        FpsLabel.Text = "FPS: " + Engine.GetFramesPerSecond();
         InputManager.Update((float)delta);
-        var dir = InputManager.MoveAxis;
-        if (dir != Vector2.Zero)
-        {
-            _cameraPos += dir * Speed * (float)delta;
-        }
 
-        if (Type == HandlerType.Normal)
+        
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        FpsLabel.Text = "FPS: " + Engine.GetFramesPerSecond();
+        Player.Velocity = InputManager.MoveAxis * Speed;
+        Player.MoveAndSlide();
+
+        var playerPos = Player.GlobalPosition;
+        //_cameraPos = playerPos;
+        _cameraPos = _cameraPos.MoveToward(playerPos, playerPos.DistanceTo(_cameraPos) * (float)delta * CameraRecoveryScale);
+
+        if (Type == HandlerType.UnHandler)
+        {
+            Camera2D.GlobalPosition = _cameraPos;
+        }
+        else if (Type == HandlerType.NormalHandler)
         {
             Camera2D.GlobalPosition = _cameraPos.Round();
         }
-        else if (Type == HandlerType.UseHandler)
+        else if (Type == HandlerType.OffsetHandler)
         {
             if (_shaderMaterial != null)
             {
@@ -59,6 +77,5 @@ public partial class TestPerfectPixelScene : Node2D
                 Camera2D.GlobalPosition = cameraPosition.Round();
             }
         }
-        //Debug.Log("CameraPos: " + cameraPosition);
     }
 }

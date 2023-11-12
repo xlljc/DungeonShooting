@@ -1,15 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://b3ybffxcq0kkb"]
+[gd_scene load_steps=6 format=3 uid="uid://b3ybffxcq0kkb"]
 
 [ext_resource type="Script" path="res://src/test/TestPerfectPixelScene.cs" id="1_u6ihh"]
 [ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/map1/TileSet1.tres" id="1_wc2ux"]
 [ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/Shell0001.png" id="3_kc4l0"]
+[ext_resource type="SpriteFrames" uid="uid://n11thtali6es" path="res://resource/spriteFrames/role/Role0001.tres" id="4_6nerw"]
 
-[node name="TestPerfectPixelScene" type="Node2D" node_paths=PackedStringArray("FpsLabel", "Camera2D")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tmsub"]
+
+[node name="TestPerfectPixelScene" type="Node2D" node_paths=PackedStringArray("Player", "FpsLabel", "Camera2D")]
 script = ExtResource("1_u6ihh")
+Player = NodePath("Root/Player")
 FpsLabel = NodePath("CanvasLayer/FPS")
 Camera2D = NodePath("Camera2D")
 Speed = 150.0
-Type = 1
+CameraRecoveryScale = 7.0
+Type = 2
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("1_wc2ux")
@@ -19,6 +24,7 @@ layer_0/tile_data = PackedInt32Array(1900589, 0, 8, 1835053, 0, 8, 1769517, 0, 8
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -1)
 rotation = 0.798384
+process_callback = 0
 
 [node name="Root" type="Node2D" parent="."]
 
@@ -55,6 +61,16 @@ texture = ExtResource("3_kc4l0")
 [node name="Shell7" type="Sprite2D" parent="Root"]
 position = Vector2(169.315, 56.36)
 texture = ExtResource("3_kc4l0")
+
+[node name="Player" type="CharacterBody2D" parent="Root"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Root/Player"]
+shape = SubResource("RectangleShape2D_tmsub")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Root/Player"]
+sprite_frames = ExtResource("4_6nerw")
+animation = &"idle"
+autoplay = "idle"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

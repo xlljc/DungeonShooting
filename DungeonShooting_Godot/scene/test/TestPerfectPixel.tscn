@@ -30,4 +30,3 @@ render_target_update_mode = 4
 
 [node name="TestPerfectPixelScene" parent="SubViewport" node_paths=PackedStringArray("SubViewportContainer") instance=ExtResource("1_l3du1")]
 SubViewportContainer = NodePath("../..")
-Type = 1
