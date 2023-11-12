@@ -31,7 +31,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// 全局根节点
 	/// </summary>
 	[Export] public Node2D GlobalNodeRoot;
-
+	
 	/// <summary>
 	/// 游戏目标帧率
 	/// </summary>
@@ -111,7 +111,6 @@ public partial class GameApplication : Node2D, ICoroutine
 		//Engine.TimeScale = 0.2f;
 		//调整窗口分辨率
 		OnWindowSizeChanged();
-		RefreshSubViewportSize();
 		//窗体大小改变
 		GetWindow().SizeChanged += OnWindowSizeChanged;
 
@@ -274,11 +273,12 @@ public partial class GameApplication : Node2D, ICoroutine
 	private void RefreshSubViewportSize()
 	{
 		var s = new Vector2I((int)ViewportSize.X, (int)ViewportSize.Y);
-		s.X = s.X / 2 * 2;
-		s.Y = s.Y / 2 * 2;
+		s.X = s.X / 2 * 2 + 2;
+		s.Y = s.Y / 2 * 2 + 2;
 		SubViewport.Size = s;
 		SubViewportContainer.Scale = new Vector2(PixelScale, PixelScale);
 		SubViewportContainer.Size = s;
+		SubViewportContainer.Position = new Vector2(-PixelScale, -PixelScale);
 	}
 
 	//初始化鼠标
