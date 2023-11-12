@@ -16,7 +16,7 @@ public partial class AutoDestroySprite : AnimatedSprite2D, IEffect
     /// 延时销毁时间
     /// </summary>
     [Export]
-    public float DelayTime { get; set; } = 1f;
+    public float DelayTime { get; set; } = 2f;
 
     /// <summary>
     /// 子节点包含的例子特效, 在创建完成后自动播放

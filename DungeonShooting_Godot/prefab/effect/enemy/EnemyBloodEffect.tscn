@@ -22,5 +22,4 @@ one_shot = true
 explosiveness = 1.0
 fixed_fps = 20
 script = ExtResource("3_5cpi6")
-DelayTime = 2.0
 Particles2D = []

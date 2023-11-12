@@ -33,6 +33,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qi1pq")
+}, {
+"duration": 1.0,
+"texture": null
 }],
 "loop": false,
 "name": &"default",
@@ -44,5 +47,5 @@ modulate = Color(1.6, 1.6, 1.6, 1)
 sprite_frames = SubResource("SpriteFrames_73j16")
 offset = Vector2(8, 0)
 script = ExtResource("2_lnwju")
-DelayTime = 0.2
+DelayTime = 0.5
 Particles2D = []
