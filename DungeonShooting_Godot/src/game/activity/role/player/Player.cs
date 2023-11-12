@@ -346,7 +346,7 @@ public partial class Player : AdvancedRole
     {
         _rollCoolingTimer = RoleState.RollTime;
     }
-    
+
     // protected override void DebugDraw()
     // {
     //     base.DebugDraw();

@@ -106,7 +106,6 @@ public partial class GameApplication : Node2D, ICoroutine
 		//固定帧率
 		//Engine.MaxFps = TargetFps;
 		//调试绘制开关
-		//IsDebug = true;
 		ActivityObject.IsDebug = false;
 		//Engine.TimeScale = 0.2f;
 		//调整窗口分辨率
@@ -183,8 +182,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// </summary>
 	public Vector2 GlobalToViewPosition(Vector2 globalPos)
 	{
-		//return globalPos;
-		return globalPos / PixelScale - (ViewportSize / 2) + GameCamera.Main.GlobalPosition;
+		return globalPos / PixelScale - (ViewportSize / 2) + GameCamera.Main.GlobalPosition - GameCamera.Main.PixelOffset;
 	}
 
 	/// <summary>
@@ -192,9 +190,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// </summary>
 	public Vector2 ViewToGlobalPosition(Vector2 viewPos)
 	{
-		// 3.5写法
-		//return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
-		return (viewPos - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (ViewportSize / 2)) * PixelScale;
+		return (viewPos + GameCamera.Main.PixelOffset - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (ViewportSize / 2)) * PixelScale;
 	}
 	
 	public long StartCoroutine(IEnumerator able)

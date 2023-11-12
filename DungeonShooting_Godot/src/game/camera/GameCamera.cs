@@ -20,7 +20,7 @@ public partial class GameCamera : Camera2D
             DataDelta = dataDelta;
         }
     }
-    
+
     /// <summary>
     /// 当前场景的相机对象
     /// </summary>
@@ -34,9 +34,8 @@ public partial class GameCamera : Camera2D
     /// <summary>
     /// 恢复系数
     /// </summary>
-    [Export]
-    public float RecoveryCoefficient = 25f;
-    
+    [Export] public float RecoveryCoefficient = 25f;
+
     /// <summary>
     /// 抖动开关
     /// </summary>
@@ -46,14 +45,17 @@ public partial class GameCamera : Camera2D
     /// 镜头跟随鼠标进度 (0 - 1)
     /// </summary>
     public float FollowsMouseAmount = 0.15f;
-    
+
     /// <summary>
     /// 相机跟随目标
     /// </summary>
     private AdvancedRole _followTarget;
-    
-    // 3.5
-    //public Vector2 SubPixelPosition { get; private set; }
+
+    /// <summary>
+    /// SubViewportContainer 中的像素偏移, 因为游戏开启了完美像素, SubViewport 节点下的相机运动会造成非常大的抖动,
+    /// 为了解决这个问题, 在 SubViewport 父节点中对 SubViewport 进行整体偏移, 以抵消相机造成的巨大抖动
+    /// </summary>
+    public Vector2 PixelOffset { get; private set; }
 
     private long _index = 0;
     
@@ -99,10 +101,9 @@ public partial class GameCamera : Camera2D
             }
 
             var cameraPosition = _camPos;
-            //var cameraPosition = _camPos + _shakeOffset;
             var roundPos = cameraPosition.Round();
-            var offset = roundPos - cameraPosition;
-            _offsetShader.SetShaderParameter("offset", offset);
+            PixelOffset = roundPos - cameraPosition;
+            _offsetShader.SetShaderParameter("offset", PixelOffset);
             GlobalPosition = roundPos;
             
             Offset = _shakeOffset.Round();
