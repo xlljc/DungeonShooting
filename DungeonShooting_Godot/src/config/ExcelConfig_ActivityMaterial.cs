@@ -26,6 +26,12 @@ public static partial class ExcelConfig
         public float Friction;
 
         /// <summary>
+        /// 重力缩放,如果为0则会关闭重力
+        /// </summary>
+        [JsonInclude]
+        public float GravityScale;
+
+        /// <summary>
         /// 旋转摩擦力
         /// </summary>
         [JsonInclude]
@@ -70,6 +76,7 @@ public static partial class ExcelConfig
             inst.Id = Id;
             inst.Remark = Remark;
             inst.Friction = Friction;
+            inst.GravityScale = GravityScale;
             inst.RotationFriction = RotationFriction;
             inst.Bounce = Bounce;
             inst.BounceStrength = BounceStrength;

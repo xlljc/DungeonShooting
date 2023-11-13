@@ -84,13 +84,6 @@ public static partial class ExcelConfig
         public float[] DistanceRange;
 
         /// <summary>
-        /// 是否开启重力下坠 <br/>
-        /// 只有Type为1时有效
-        /// </summary>
-        [JsonInclude]
-        public bool UseGravity;
-
-        /// <summary>
         /// 初始纵轴速度区间 <br/>
         /// 只有Type为1时有效 <br/>
         /// 格式为[value]或者[min,max]
@@ -130,7 +123,6 @@ public static partial class ExcelConfig
             inst.SpeedRange = SpeedRange;
             inst.LifeTimeRange = LifeTimeRange;
             inst.DistanceRange = DistanceRange;
-            inst.UseGravity = UseGravity;
             inst.VerticalSpeed = VerticalSpeed;
             inst.BounceCount = BounceCount;
             inst.Penetration = Penetration;

@@ -55,6 +55,8 @@ public partial class Bullet : ActivityObject, IBullet
             _init = true;
         }
 
+        Debug.Log("g: " + ActivityMaterial.GravityScale + ", " + EnableVerticalMotion + ", " + VerticalSpeed);
+        
         CurrentBounce = 0;
         CurrentPenetration = 0;
         CurrFlyDistance = 0;
@@ -79,7 +81,10 @@ public partial class Bullet : ActivityObject, IBullet
         {
             VerticalSpeed = data.VerticalSpeed;
         }
-        EnableVerticalMotion = data.BulletBase.UseGravity;
+        else
+        {
+            VerticalSpeed = 0;
+        }
 
         //BasisVelocity = new Vector2(data.FlySpeed, 0).Rotated(Rotation);
         MoveController.AddForce(new Vector2(data.FlySpeed, 0).Rotated(Rotation));
@@ -164,6 +169,13 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void OnLimeOver()
     {
+        PlayDisappearEffect();
+        DoReclaim();
+    }
+    
+    protected override void OnFallToGround()
+    {
+        //落地销毁
         PlayDisappearEffect();
         DoReclaim();
     }

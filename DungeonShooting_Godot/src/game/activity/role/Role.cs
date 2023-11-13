@@ -217,6 +217,11 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public List<ActivityObject> InteractiveItemList { get; } = new List<ActivityObject>();
     
+    /// <summary>
+    /// 角色看向的坐标
+    /// </summary>
+    public Vector2 LookPosition { get; protected set; }
+    
     //初始缩放
     private Vector2 _startScale;
     //当前可互动的物体
@@ -510,8 +515,9 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void LookTargetPosition(Vector2 pos)
     {
+        LookPosition = pos;
         //脸的朝向
-        var gPos = GlobalPosition;
+        var gPos = Position;
         if (pos.X > gPos.X && Face == FaceDirection.Left)
         {
             Face = FaceDirection.Right;

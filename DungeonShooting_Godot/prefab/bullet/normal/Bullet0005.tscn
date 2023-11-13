@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3 uid="uid://cjgnw37tqiqh7"]
+
+[ext_resource type="Script" path="res://src/game/activity/bullet/normal/Bullet.cs" id="1_vpnof"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_v0al6"]
+[ext_resource type="SpriteFrames" uid="uid://bcnhyin0aufl1" path="res://resource/spriteFrames/bullet/Bullet0003.tres" id="3_8mltb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
+resource_local_to_scene = true
+shader = ExtResource("2_v0al6")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p0wfd"]
+resource_local_to_scene = true
+shader = ExtResource("2_v0al6")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c0onq"]
+size = Vector2(6, 3.125)
+
+[node name="Bullet0005" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "ShadowSprite", "AnimatedSprite", "Collision")]
+collision_layer = 2
+script = ExtResource("1_vpnof")
+CollisionArea = NodePath("AnimatedSprite/CollisionArea")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+z_index = -1
+material = SubResource("ShaderMaterial_v77gw")
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+modulate = Color(1.6, 1.6, 1.6, 1)
+material = SubResource("ShaderMaterial_p0wfd")
+sprite_frames = ExtResource("3_8mltb")
+
+[node name="CollisionArea" type="Area2D" parent="AnimatedSprite"]
+visible = false
+collision_layer = 0
+collision_mask = 0
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite/CollisionArea"]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_c0onq")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_c0onq")

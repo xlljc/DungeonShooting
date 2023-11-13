@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Config;
 using Godot;
 using NnormalState;
@@ -69,9 +70,14 @@ public partial class Enemy : Role
     public float AttackInterval { get; set; } = 3;
 
     /// <summary>
-    /// 锁定目标时间
+    /// 锁定目标需要消耗的时间
     /// </summary>
     public float LockingTime { get; set; } = 2;
+    
+    /// <summary>
+    /// 当前敌人所看向的对象, 也就是枪口指向的对象
+    /// </summary>
+    public ActivityObject LookTarget { get; set; }
     
     //锁定目标时间
     private float _lockTargetTime = 0;
@@ -136,7 +142,11 @@ public partial class Enemy : Role
     public virtual void EnemyAttack()
     {
         Debug.Log("触发攻击");
-        FireManager.ShootBullet(this, ConvertRotation(0), ExcelConfig.BulletBase_List[0]);
+        FireManager.ShootBullet(this, ConvertRotation(Position.AngleTo(LookPosition)), ExcelConfig.BulletBase_Map["0006"]);
+        // for (int i = 0; i < 100; i++)
+        // {
+        //     FireManager.ShootBullet(this, ConvertRotation(Mathf.DegToRad(i * 3.6f)), ExcelConfig.BulletBase_List[0]);
+        // }
     }
 
     protected override void Process(float delta)
@@ -145,6 +155,23 @@ public partial class Enemy : Role
         if (IsDie)
         {
             return;
+        }
+        
+        //看向目标
+        if (LookTarget != null)
+        {
+            var pos = LookTarget.Position;
+            LookPosition = pos;
+            //脸的朝向
+            var gPos = Position;
+            if (pos.X > gPos.X && Face == FaceDirection.Left)
+            {
+                Face = FaceDirection.Right;
+            }
+            else if (pos.X < gPos.X && Face == FaceDirection.Right)
+            {
+                Face = FaceDirection.Left;
+            }
         }
 
         if (_attackTimer > 0)
@@ -312,5 +339,11 @@ public partial class Enemy : Role
     public override float GetFirePointAltitude()
     {
         return -AnimatedSprite.Position.Y - FirePoint.Position.Y;
+    }
+
+    public override void LookTargetPosition(Vector2 pos)
+    {
+        LookTarget = null;
+        base.LookTargetPosition(pos);
     }
 }

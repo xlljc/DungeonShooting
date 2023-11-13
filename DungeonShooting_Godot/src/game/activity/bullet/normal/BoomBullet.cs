@@ -58,6 +58,7 @@ public partial class BoomBullet : Bullet
     {
         //播放撞击音效
         SoundManager.PlaySoundByConfig("collision0001", Position, BulletData.TriggerRole);
+        //这里不调用父类的 OnFallToGround() 函数, 因为这种子弹落地不需要销毁
     }
 
     /// <summary>

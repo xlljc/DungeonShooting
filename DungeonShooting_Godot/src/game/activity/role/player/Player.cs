@@ -72,7 +72,7 @@ public partial class Player : AdvancedRole
         StateController.Register(new PlayerRollState());
         //默认状态
         StateController.ChangeStateInstant(PlayerStateEnum.Idle);
-
+        
         //InitSubLine();
     }
 
@@ -90,24 +90,21 @@ public partial class Player : AdvancedRole
         }
         
         //脸的朝向
-        if (LookTarget == null)
+        var gPos = Position;
+        Vector2 mousePos = InputManager.CursorPosition;
+        if (mousePos.X > gPos.X && Face == FaceDirection.Left)
         {
-            var gPos = GlobalPosition;
-            Vector2 mousePos = InputManager.CursorPosition;
-            if (mousePos.X > gPos.X && Face == FaceDirection.Left)
-            {
-                Face = FaceDirection.Right;
-            }
-            else if (mousePos.X < gPos.X && Face == FaceDirection.Right)
-            {
-                Face = FaceDirection.Left;
-            }
+            Face = FaceDirection.Right;
+        }
+        else if (mousePos.X < gPos.X && Face == FaceDirection.Right)
+        {
+            Face = FaceDirection.Left;
+        }
 
-            if (MountLookTarget)
-            {
-                //枪口跟随鼠标
-                MountPoint.SetLookAt(mousePos);
-            }
+        if (MountLookTarget)
+        {
+            //枪口跟随鼠标
+            MountPoint.SetLookAt(mousePos);
         }
 
         if (InputManager.ExchangeWeapon) //切换武器

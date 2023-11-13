@@ -192,6 +192,18 @@
     "ShowInMapEditor": false
   },
   {
+    "Id": "bullet0005",
+    "Type": 6,
+    "Name": "\u654C\u65B9\u4E13\u7528\u5B50\u5F39",
+    "Intro": "",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "0004",
+    "Prefab": "res://prefab/bullet/normal/Bullet0005.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
     "Id": "shell0001",
     "Type": 7,
     "Name": "",

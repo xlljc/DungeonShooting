@@ -69,6 +69,11 @@ public partial class AdvancedEnemy : AdvancedRole
     /// </summary>
     public AiAttackState AttackState { get; private set; }
     
+    /// <summary>
+    /// 当前敌人所看向的对象, 也就是枪口指向的对象
+    /// </summary>
+    public ActivityObject LookTarget { get; set; }
+    
     //锁定目标时间
     private float _lockTargetTime = 0;
 
@@ -152,6 +157,26 @@ public partial class AdvancedEnemy : AdvancedRole
         {
             return;
         }
+        
+        //看向目标
+        if (LookTarget != null && MountLookTarget)
+        {
+            var pos = LookTarget.Position;
+            LookPosition = pos;
+            //脸的朝向
+            var gPos = Position;
+            if (pos.X > gPos.X && Face == FaceDirection.Left)
+            {
+                Face = FaceDirection.Right;
+            }
+            else if (pos.X < gPos.X && Face == FaceDirection.Right)
+            {
+                Face = FaceDirection.Left;
+            }
+            //枪口跟随目标
+            MountPoint.SetLookAt(pos);
+        }
+        
         //目标在视野内的时间
         var currState = StateController.CurrState;
         if (currState == AiStateEnum.AiSurround || currState == AiStateEnum.AiFollowUp)
@@ -521,5 +546,11 @@ public partial class AdvancedEnemy : AdvancedRole
     public void SetLockTargetTime(float time)
     {
         _lockTargetTime = time;
+    }
+
+    public override void LookTargetPosition(Vector2 pos)
+    {
+        LookTarget = null;
+        base.LookTargetPosition(pos);
     }
 }

@@ -356,6 +356,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         {
             ActivityMaterial = config.Material;
         }
+
+        //GravityScale 为 0 时关闭重力
+        if (ActivityMaterial.GravityScale == 0)
+        {
+            EnableVerticalMotion = false;
+        }
         
         World = world;
         ItemConfig = config;
@@ -1103,7 +1109,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                     var ysp = VerticalSpeed;
 
                     _altitude += VerticalSpeed * delta;
-                    _verticalSpeed -= GameConfig.G * delta;
+                    _verticalSpeed -= GameConfig.G * ActivityMaterial.GravityScale * delta;
 
                     //当高度大于16时, 显示在所有物体上
                     if (Altitude >= 16)

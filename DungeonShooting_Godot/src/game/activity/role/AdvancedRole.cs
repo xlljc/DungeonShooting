@@ -49,11 +49,6 @@ public abstract partial class AdvancedRole : Role
     /// </summary>
     public bool IsMeleeAttack { get; private set; }
     
-    /// <summary>
-    /// 当前角色所看向的对象, 也就是枪口指向的对象
-    /// </summary>
-    public ActivityObject LookTarget { get; set; }
-    
     //近战计时器
     private float _meleeAttackTimer = 0;
 
@@ -103,24 +98,6 @@ public abstract partial class AdvancedRole : Role
         if (_meleeAttackTimer > 0)
         {
             _meleeAttackTimer -= delta;
-        }
-        
-        //看向目标
-        if (LookTarget != null && MountLookTarget)
-        {
-            var pos = LookTarget.Position;
-            //脸的朝向
-            var gPos = Position;
-            if (pos.X > gPos.X && Face == FaceDirection.Left)
-            {
-                Face = FaceDirection.Right;
-            }
-            else if (pos.X < gPos.X && Face == FaceDirection.Right)
-            {
-                Face = FaceDirection.Left;
-            }
-            //枪口跟随目标
-            MountPoint.SetLookAt(pos);
         }
         
         base.Process(delta);
@@ -177,11 +154,11 @@ public abstract partial class AdvancedRole : Role
     
     public override void LookTargetPosition(Vector2 pos)
     {
-        LookTarget = null;
+        LookPosition = pos;
         if (MountLookTarget)
         {
             //脸的朝向
-            var gPos = GlobalPosition;
+            var gPos = Position;
             if (pos.X > gPos.X && Face == FaceDirection.Left)
             {
                 Face = FaceDirection.Right;
