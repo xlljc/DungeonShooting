@@ -66,18 +66,14 @@ public static class FireManager
     }
 
     /// <summary>
-    /// 
+    /// 通 Role 对象直接发射子弹
     /// </summary>
-    /// <param name="trigger"></param>
-    /// <param name="fireRotation"></param>
-    /// <param name="bullet"></param>
-    /// <returns></returns>
     public static IBullet ShootBullet(Role trigger, float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        // if (bullet.Type == 1) //实体子弹
-        // {
-        //     return ShootSolidBullet(trigger, fireRotation, bullet);
-        // }
+        if (bullet.Type == 1) //实体子弹
+        {
+            return ShootSolidBullet(trigger, fireRotation, bullet);
+        }
 
         return null;
     }
@@ -108,12 +104,12 @@ public static class FireManager
             data.Altitude = weapon.TriggerRole.GetFirePointAltitude();
             var roleState = weapon.TriggerRole.RoleState;
             data.Harm = roleState.CalcDamage(data.Harm);
-            data.Repel = roleState.CalcBulletRepel(weapon, data.Repel);
-            data.FlySpeed = roleState.CalcBulletSpeed(weapon, data.FlySpeed);
-            data.MaxDistance = roleState.CalcBulletDistance(weapon, data.MaxDistance);
-            data.BounceCount = roleState.CalcBulletBounceCount(weapon, data.BounceCount);
-            data.Penetration = roleState.CalcBulletPenetration(weapon, data.Penetration);
-            deviationAngle = roleState.CalcBulletDeviationAngle(weapon, deviationAngle);
+            data.Repel = roleState.CalcBulletRepel(data.Repel);
+            data.FlySpeed = roleState.CalcBulletSpeed(data.FlySpeed);
+            data.MaxDistance = roleState.CalcBulletDistance(data.MaxDistance);
+            data.BounceCount = roleState.CalcBulletBounceCount(data.BounceCount);
+            data.Penetration = roleState.CalcBulletPenetration(data.Penetration);
+            deviationAngle = roleState.CalcBulletDeviationAngle(deviationAngle);
             
             if (weapon.TriggerRole.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
             {
@@ -156,9 +152,9 @@ public static class FireManager
             data.Altitude = weapon.TriggerRole.GetFirePointAltitude();
             var roleState = weapon.TriggerRole.RoleState;
             data.Harm = roleState.CalcDamage(data.Harm);
-            data.Repel = roleState.CalcBulletRepel(weapon, data.Repel);
-            data.BounceCount = roleState.CalcBulletBounceCount(weapon, data.BounceCount);
-            deviationAngle = roleState.CalcBulletDeviationAngle(weapon, deviationAngle);
+            data.Repel = roleState.CalcBulletRepel(data.Repel);
+            data.BounceCount = roleState.CalcBulletBounceCount(data.BounceCount);
+            deviationAngle = roleState.CalcBulletDeviationAngle(deviationAngle);
         }
         else
         {
@@ -174,5 +170,60 @@ public static class FireManager
     }
     
     //-----------------------------------------------------------------------------------
+    
+    /// <summary>
+    /// 发射子弹的默认实现方式
+    /// </summary>
+    private static Bullet ShootSolidBullet(Role role, float fireRotation, ExcelConfig.BulletBase bullet)
+    {
+        var data = new BulletData()
+        {
+            Weapon = null,
+            BulletBase = bullet,
+            TriggerRole = role,
+            Harm = Utils.Random.RandomConfigRange(bullet.HarmRange),
+            Repel = Utils.Random.RandomConfigRange(bullet.RepelRange),
+            MaxDistance = Utils.Random.RandomConfigRange(bullet.DistanceRange),
+            FlySpeed = Utils.Random.RandomConfigRange(bullet.SpeedRange),
+            VerticalSpeed = Utils.Random.RandomConfigRange(bullet.VerticalSpeed),
+            BounceCount = Utils.Random.RandomConfigRange(bullet.BounceCount),
+            Penetration = Utils.Random.RandomConfigRange(bullet.Penetration),
+        };
+
+        if (role is AdvancedRole advancedRole)
+        {
+            data.Position = advancedRole.MountPoint.GlobalPosition;
+        }
+        else if (role is Enemy enemy)
+        {
+            data.Position = enemy.FirePoint.GlobalPosition;
+        }
+        else
+        {
+            data.Position = role.AnimatedSprite.GlobalPosition;
+        }
+        
+        var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);
+        data.Altitude = role.GetFirePointAltitude();
+        var roleState = role.RoleState;
+        data.Harm = roleState.CalcDamage(data.Harm);
+        data.Repel = roleState.CalcBulletRepel(data.Repel);
+        data.FlySpeed = roleState.CalcBulletSpeed(data.FlySpeed);
+        data.MaxDistance = roleState.CalcBulletDistance(data.MaxDistance);
+        data.BounceCount = roleState.CalcBulletBounceCount(data.BounceCount);
+        data.Penetration = roleState.CalcBulletPenetration(data.Penetration);
+        deviationAngle = roleState.CalcBulletDeviationAngle(deviationAngle);
+        
+        // if (role.IsAi) //只有玩家使用该武器才能获得正常速度的子弹
+        // {
+        //     data.FlySpeed *= weapon.AiUseAttribute.AiAttackAttr.BulletSpeedScale;
+        // }
+
+        data.Rotation = fireRotation + Mathf.DegToRad(deviationAngle);
+        //创建子弹
+        var bulletInstance = ObjectManager.GetBullet(bullet.Prefab);
+        bulletInstance.InitData(data, role.AttackLayer);
+        return bulletInstance;
+    }
     
 }

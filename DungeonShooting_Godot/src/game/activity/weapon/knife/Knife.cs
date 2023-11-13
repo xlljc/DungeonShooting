@@ -141,7 +141,7 @@ public partial class Knife : Weapon
                 //计算击退
                 if (TriggerRole != null)
                 {
-                    repel = TriggerRole.RoleState.CalcBulletRepel(this, repel);
+                    repel = TriggerRole.RoleState.CalcBulletRepel(repel);
                 }
                 if (repel != 0)
                 {

@@ -1032,7 +1032,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         var bulletCount = Utils.Random.RandomConfigRange(Attribute.FireBulletCountRange);
         if (Master != null)
         {
-            bulletCount = Master.RoleState.CalcBulletCount(this, bulletCount);
+            bulletCount = Master.RoleState.CalcBulletCount(bulletCount);
             fireRotation += Master.MountPoint.RealRotation;
         }
         else
@@ -1490,8 +1490,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         var finalScatteringRange = Attribute.FinalScatteringRange;
         if (Master != null)
         {
-            startScatteringRange = Master.RoleState.CalcStartScattering(this, startScatteringRange);
-            finalScatteringRange = Master.RoleState.CalcFinalScattering(this, finalScatteringRange);
+            startScatteringRange = Master.RoleState.CalcStartScattering(startScatteringRange);
+            finalScatteringRange = Master.RoleState.CalcFinalScattering(finalScatteringRange);
         }
         if (startScatteringRange <= finalScatteringRange)
         {
@@ -1512,8 +1512,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         var finalScatteringRange = Attribute.FinalScatteringRange;
         if (Master != null)
         {
-            startScatteringRange = Master.RoleState.CalcStartScattering(this, startScatteringRange);
-            finalScatteringRange = Master.RoleState.CalcFinalScattering(this, finalScatteringRange);
+            startScatteringRange = Master.RoleState.CalcStartScattering(startScatteringRange);
+            finalScatteringRange = Master.RoleState.CalcFinalScattering(finalScatteringRange);
         }
         if (startScatteringRange <= finalScatteringRange)
         {

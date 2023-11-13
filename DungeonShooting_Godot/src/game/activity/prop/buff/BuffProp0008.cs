@@ -19,12 +19,12 @@ public partial class BuffProp0008 : BuffProp
         Master.RoleState.CalcFinalScatteringEvent -= CalcFinalScatteringEvent;
     }
 
-    private void CalcStartScatteringEvent(Weapon weapon, float originValue, RefValue<float> refValue)
+    private void CalcStartScatteringEvent(float originValue, RefValue<float> refValue)
     {
         refValue.Value *= 0.5f;
     }
     
-    private void CalcFinalScatteringEvent(Weapon weapon, float originValue, RefValue<float> refValue)
+    private void CalcFinalScatteringEvent(float originValue, RefValue<float> refValue)
     {
         refValue.Value *= 0.5f;
     }

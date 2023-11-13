@@ -1,4 +1,5 @@
 ﻿
+using Config;
 using Godot;
 using NnormalState;
 
@@ -135,7 +136,7 @@ public partial class Enemy : Role
     public virtual void EnemyAttack()
     {
         Debug.Log("触发攻击");
-        
+        FireManager.ShootBullet(this, ConvertRotation(0), ExcelConfig.BulletBase_List[0]);
     }
 
     protected override void Process(float delta)
