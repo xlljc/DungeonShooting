@@ -50,6 +50,12 @@ public partial class Enemy : Role
     /// </summary>
     [Export, ExportFillNode]
     public Marker2D NavigationPoint { get; private set; }
+    
+    /// <summary>
+    /// 开火位置
+    /// </summary>
+    [Export, ExportFillNode]
+    public Marker2D FirePoint { get; private set; }
 
     /// <summary>
     /// Ai攻击状态, 调用 Attack() 函数后会刷新
@@ -300,5 +306,10 @@ public partial class Enemy : Role
     public float GetAttackRange(float weight = 0.5f)
     {
         return 200;
+    }
+
+    public override float GetFirePointAltitude()
+    {
+        return -AnimatedSprite.Position.Y - FirePoint.Position.Y;
     }
 }

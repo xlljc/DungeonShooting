@@ -1473,13 +1473,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
             this.CallDelay(Attribute.ThrowShellDelayTime, () =>
             {
                 _reloadShellFlag = true;
-                ThrowShell(Attribute.Shell, speedScale);
+                FireManager.ThrowShell(this, Attribute.Shell, speedScale);
             });
         }
         else if (Attribute.ThrowShellDelayTime == 0)
         {
             _reloadShellFlag = true;
-            ThrowShell(Attribute.Shell, speedScale);
+            FireManager.ThrowShell(this, Attribute.Shell, speedScale);
         }
     }
 

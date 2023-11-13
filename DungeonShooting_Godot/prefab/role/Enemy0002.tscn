@@ -47,3 +47,6 @@ material = SubResource("ShaderMaterial_7theg")
 material = SubResource("ShaderMaterial_ntjmx")
 position = Vector2(0, -10)
 sprite_frames = ExtResource("4_ehtyi")
+
+[node name="FirePoint" type="Marker2D" parent="AnimatedSprite" index="0"]
+position = Vector2(9, 4)

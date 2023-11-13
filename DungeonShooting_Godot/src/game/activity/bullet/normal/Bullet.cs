@@ -63,24 +63,18 @@ public partial class Bullet : ActivityObject, IBullet
         BulletData = data;
         AttackLayer = attackLayer;
         Rotation = data.Rotation;
-
-        float altitude;
+        
         var triggerRole = data.TriggerRole;
-        if (triggerRole != null)
+        if (data.TriggerRole != null && data.TriggerRole.AffiliationArea != null) //设置所属区域
         {
-            altitude = -triggerRole.MountPoint.Position.Y;
-            if (triggerRole.AffiliationArea != null) //设置所属区域
+            if (triggerRole.AffiliationArea != null) 
             {
                 triggerRole.AffiliationArea.InsertItem(this);
             }
         }
-        else
-        {
-            altitude = 8;
-        }
         
-        Position = data.Position + new Vector2(0, altitude);
-        Altitude = altitude;
+        Position = data.Position + new Vector2(0, data.Altitude);
+        Altitude = data.Altitude;
         if (data.VerticalSpeed != 0)
         {
             VerticalSpeed = data.VerticalSpeed;

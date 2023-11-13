@@ -87,7 +87,7 @@ public partial class Explode : Area2D, IPoolItem
     /// <summary>
     /// 播放爆炸, triggerRole 为触发该爆炸的角色
     /// </summary>
-    public void RunPlay(AdvancedRole triggerRole = null)
+    public void RunPlay(Role triggerRole = null)
     {
         GameCamera.Main.CreateShake(new Vector2(6, 6), 0.7f, true);
         AnimationPlayer.Play(AnimatorNames.Play);

@@ -842,6 +842,14 @@ public abstract partial class Role : ActivityObject
         return Mathf.Pi - rotation;
     }
 
+    /// <summary>
+    /// 获取开火点高度
+    /// </summary>
+    public virtual float GetFirePointAltitude()
+    {
+        return -AnimatedSprite.Position.Y;
+    }
+    
     protected override void OnDestroy()
     {
         //销毁道具

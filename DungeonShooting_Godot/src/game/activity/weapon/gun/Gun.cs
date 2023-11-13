@@ -30,7 +30,7 @@ public partial class Gun : Weapon
 
     protected override void OnShoot(float fireRotation)
     {
-        ShootBullet(fireRotation, Attribute.Bullet);
+        FireManager.ShootBullet(this, fireRotation, Attribute.Bullet);
     }
 
     // //测试用, 敌人被消灭时触发手上武器开火

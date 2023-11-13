@@ -422,6 +422,11 @@ public abstract partial class AdvancedRole : Role
         }
     }
 
+    public override float GetFirePointAltitude()
+    {
+        return -MountPoint.Position.Y;
+    }
+
     protected override void OnDestroy()
     {
         base.OnDestroy();
