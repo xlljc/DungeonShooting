@@ -18,7 +18,7 @@ public partial class Enemy : Role
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
-    public StateController<Enemy, AiStateEnum> StateController { get; private set; }
+    public StateController<Enemy, AINormalStateEnum> StateController { get; private set; }
 
     /// <summary>
     /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
@@ -34,6 +34,16 @@ public partial class Enemy : Role
     /// 背后的视野半径, 单位像素
     /// </summary>
     public float BackViewRange { get; set; } = 50;
+
+    /// <summary>
+    /// 攻击范围
+    /// </summary>
+    public float AttackRange { get; set; } = 200;
+
+    /// <summary>
+    /// 开火时是否站立不动
+    /// </summary>
+    public bool FiringStand { get; set; } = true;
 
     /// <summary>
     /// 视野检测射线, 朝玩家打射线, 检测是否碰到墙
@@ -88,7 +98,7 @@ public partial class Enemy : Role
     {
         base.OnInit();
         IsAi = true;
-        StateController = AddComponent<StateController<Enemy, AiStateEnum>>();
+        StateController = AddComponent<StateController<Enemy, AINormalStateEnum>>();
 
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Player;
         EnemyLayer = PhysicsLayer.Player;
@@ -102,7 +112,8 @@ public partial class Enemy : Role
         StateController.Register(new AiNormalState());
         StateController.Register(new AiTailAfterState());
         StateController.Register(new AiFollowUpState());
-        StateController.ChangeState(AiStateEnum.AiNormal);
+        StateController.Register(new AiSurroundState());
+        StateController.ChangeState(AINormalStateEnum.AiNormal);
     }
 
     public override void EnterTree()
@@ -132,14 +143,14 @@ public partial class Enemy : Role
         {
             AttackState = AiAttackState.Attack;
             _attackTimer = AttackInterval;
-            EnemyAttack();
+            OnAttack();
         }
     }
 
     /// <summary>
     /// 敌人发动攻击
     /// </summary>
-    public virtual void EnemyAttack()
+    protected virtual void OnAttack()
     {
         Debug.Log("触发攻击");
         var bulletData = FireManager.GetBulletData(this, ConvertRotation(Position.AngleTo(LookPosition)), ExcelConfig.BulletBase_Map["0006"]);
@@ -177,7 +188,7 @@ public partial class Enemy : Role
         }
         //目标在视野内的时间
         var currState = StateController.CurrState;
-        if (currState == AiStateEnum.AiSurround || currState == AiStateEnum.AiFollowUp)
+        if (currState == AINormalStateEnum.AiSurround || currState == AINormalStateEnum.AiFollowUp)
         {
             if (_attackTimer <= 0) //必须在可以开火时记录时间
             {
@@ -198,9 +209,9 @@ public partial class Enemy : Role
     {
         //受到伤害
         var state = StateController.CurrState;
-        if (state == AiStateEnum.AiNormal || state == AiStateEnum.AiLeaveFor) //|| state == AiStateEnum.AiProbe
+        if (state == AINormalStateEnum.AiNormal || state == AINormalStateEnum.AiLeaveFor) //|| state == AiStateEnum.AiProbe
         {
-            StateController.ChangeState(AiStateEnum.AiTailAfter);
+            StateController.ChangeState(AINormalStateEnum.AiTailAfter);
         }
     }
     
@@ -238,7 +249,7 @@ public partial class Enemy : Role
         }
 
         var currState = StateController.CurrState;
-        if (currState == AiStateEnum.AiNormal)// || currState == AiStateEnum.AiProbe)
+        if (currState == AINormalStateEnum.AiNormal)// || currState == AiStateEnum.AiProbe)
         {
             //判断是否在同一个房间内
             return World.Enemy_FindTargetAffiliationSet.Contains(AffiliationArea);
@@ -327,10 +338,9 @@ public partial class Enemy : Role
     /// <summary>
     /// 获取攻击范围
     /// </summary>
-    /// <param name="weight">从最小到最大距离的过渡量, 0 - 1, 默认 0.5</param>
-    public float GetAttackRange(float weight = 0.5f)
+    public float GetAttackRange()
     {
-        return 200;
+        return AttackRange;
     }
 
     public override float GetFirePointAltitude()

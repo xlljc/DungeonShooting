@@ -6,17 +6,17 @@ namespace AdvancedState;
 /// <summary>
 /// 目标在视野内, 跟进目标, 如果距离在子弹有效射程内, 则开火
 /// </summary>
-public class AiFollowUpState : StateBase<AdvancedEnemy, AiStateEnum>
+public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 {
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
 
-    public AiFollowUpState() : base(AiStateEnum.AiFollowUp)
+    public AiFollowUpState() : base(AIAdvancedStateEnum.AiFollowUp)
     {
     }
 
-    public override void Enter(AiStateEnum prev, params object[] args)
+    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
     {
         _navigationUpdateTimer = 0;
         Master.TargetInView = true;
@@ -31,13 +31,13 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AiStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                ChangeState(AiStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AIAdvancedStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
             else
             {
                 //切换到随机移动状态
-                ChangeState(AiStateEnum.AiSurround);
+                ChangeState(AIAdvancedStateEnum.AiSurround);
             }
         }
 
@@ -61,9 +61,10 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AiStateEnum>
         var inAttackRange = false;
 
         var weapon = Master.WeaponPack.ActiveItem;
+        var distanceSquared = masterPosition.DistanceSquaredTo(playerPos);
         if (weapon != null)
         {
-            inAttackRange = masterPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(Master.GetWeaponRange(0.7f), 2);
+            inAttackRange = distanceSquared <= Mathf.Pow(Master.GetWeaponRange(0.7f), 2);
         }
 
         //枪口指向玩家
@@ -112,15 +113,15 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AiStateEnum>
                 Master.EnemyAttack();
                 
                 //距离够近, 可以切换到环绕模式
-                if (Master.GlobalPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange), 2) * 0.7f)
+                if (distanceSquared <= Mathf.Pow(Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange), 2) * 0.7f)
                 {
-                    ChangeState(AiStateEnum.AiSurround);
+                    ChangeState(AIAdvancedStateEnum.AiSurround);
                 }
             }
         }
         else //不在视野中
         {
-            ChangeState(AiStateEnum.AiTailAfter);
+            ChangeState(AIAdvancedStateEnum.AiTailAfter);
         }
     }
 

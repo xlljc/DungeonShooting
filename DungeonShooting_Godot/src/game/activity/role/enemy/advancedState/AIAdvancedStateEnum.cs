@@ -1,5 +1,5 @@
 
-public enum AiStateEnum
+public enum AIAdvancedStateEnum
 {
     /// <summary>
     /// Ai 状态, 正常, 未发现目标

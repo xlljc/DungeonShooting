@@ -6,7 +6,7 @@ namespace NnormalState;
 /// <summary>
 /// AI 发现玩家, 跟随玩家
 /// </summary>
-public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
+public class AiTailAfterState : StateBase<Enemy, AINormalStateEnum>
 {
     /// <summary>
     /// 目标是否在视野半径内
@@ -20,11 +20,11 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
     //目标从视野消失时已经过去的时间
     private float _viewTimer;
 
-    public AiTailAfterState() : base(AiStateEnum.AiTailAfter)
+    public AiTailAfterState() : base(AINormalStateEnum.AiTailAfter)
     {
     }
 
-    public override void Enter(AiStateEnum prev, params object[] args)
+    public override void Enter(AINormalStateEnum prev, params object[] args)
     {
         _isInViewRange = true;
         _navigationUpdateTimer = 0;
@@ -80,7 +80,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
                 //关闭射线检测
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
-                ChangeState(AiStateEnum.AiFollowUp);
+                ChangeState(AINormalStateEnum.AiFollowUp);
                 return;
             }
             else
@@ -100,7 +100,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
         {
             if (_viewTimer > 10) //10秒
             {
-                ChangeState(AiStateEnum.AiNormal);
+                ChangeState(AINormalStateEnum.AiNormal);
             }
             else
             {

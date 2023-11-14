@@ -6,7 +6,7 @@ namespace AdvancedState;
 /// <summary>
 /// AI 正常状态
 /// </summary>
-public class AiNormalState : StateBase<AdvancedEnemy, AiStateEnum>
+public class AiNormalState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 {
     //是否发现玩家
     private bool _isFindPlayer;
@@ -32,11 +32,11 @@ public class AiNormalState : StateBase<AdvancedEnemy, AiStateEnum>
     //卡在一个位置的时间
     private float _lockTimer;
 
-    public AiNormalState() : base(AiStateEnum.AiNormal)
+    public AiNormalState() : base(AIAdvancedStateEnum.AiNormal)
     {
     }
 
-    public override void Enter(AiStateEnum prev, params object[] args)
+    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
     {
         _isFindPlayer = false;
         _isMoveOver = true;
@@ -51,14 +51,14 @@ public class AiNormalState : StateBase<AdvancedEnemy, AiStateEnum>
         //其他敌人发现玩家
         if (Master.CanChangeLeaveFor())
         {
-            ChangeState(AiStateEnum.AiLeaveFor);
+            ChangeState(AIAdvancedStateEnum.AiLeaveFor);
             return;
         }
 
         if (_isFindPlayer) //已经找到玩家了
         {
             //现临时处理, 直接切换状态
-            ChangeState(AiStateEnum.AiTailAfter);
+            ChangeState(AIAdvancedStateEnum.AiTailAfter);
         }
         else //没有找到玩家
         {

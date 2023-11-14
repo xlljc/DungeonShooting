@@ -29,7 +29,7 @@ public partial class AdvancedEnemy : AdvancedRole
     /// <summary>
     /// 敌人身上的状态机控制器
     /// </summary>
-    public StateController<AdvancedEnemy, AiStateEnum> StateController { get; private set; }
+    public StateController<AdvancedEnemy, AIAdvancedStateEnum> StateController { get; private set; }
 
     /// <summary>
     /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
@@ -81,7 +81,7 @@ public partial class AdvancedEnemy : AdvancedRole
     {
         base.OnInit();
         IsAi = true;
-        StateController = AddComponent<StateController<AdvancedEnemy, AiStateEnum>>();
+        StateController = AddComponent<StateController<AdvancedEnemy, AIAdvancedStateEnum>>();
 
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Player;
         EnemyLayer = PhysicsLayer.Player;
@@ -104,7 +104,7 @@ public partial class AdvancedEnemy : AdvancedRole
         StateController.Register(new AiFindAmmoState());
         
         //默认状态
-        StateController.ChangeStateInstant(AiStateEnum.AiNormal);
+        StateController.ChangeStateInstant(AIAdvancedStateEnum.AiNormal);
     }
 
     public override void EnterTree()
@@ -179,7 +179,7 @@ public partial class AdvancedEnemy : AdvancedRole
         
         //目标在视野内的时间
         var currState = StateController.CurrState;
-        if (currState == AiStateEnum.AiSurround || currState == AiStateEnum.AiFollowUp)
+        if (currState == AIAdvancedStateEnum.AiSurround || currState == AIAdvancedStateEnum.AiFollowUp)
         {
             var weapon = WeaponPack.ActiveItem;
             if (weapon != null)
@@ -262,9 +262,9 @@ public partial class AdvancedEnemy : AdvancedRole
     {
         //受到伤害
         var state = StateController.CurrState;
-        if (state == AiStateEnum.AiNormal || state == AiStateEnum.AiLeaveFor) //|| state == AiStateEnum.AiProbe
+        if (state == AIAdvancedStateEnum.AiNormal || state == AIAdvancedStateEnum.AiLeaveFor) //|| state == AiStateEnum.AiProbe
         {
-            StateController.ChangeState(AiStateEnum.AiTailAfter);
+            StateController.ChangeState(AIAdvancedStateEnum.AiTailAfter);
         }
     }
 
@@ -370,7 +370,7 @@ public partial class AdvancedEnemy : AdvancedRole
         }
 
         var currState = StateController.CurrState;
-        if (currState == AiStateEnum.AiNormal)// || currState == AiStateEnum.AiProbe)
+        if (currState == AIAdvancedStateEnum.AiNormal)// || currState == AiStateEnum.AiProbe)
         {
             //判断是否在同一个房间内
             return World.Enemy_FindTargetAffiliationSet.Contains(AffiliationArea);
@@ -470,7 +470,7 @@ public partial class AdvancedEnemy : AdvancedRole
     {
         //这几个状态不需要主动拾起武器操作
         var state = StateController.CurrState;
-        if (state == AiStateEnum.AiNormal)
+        if (state == AIAdvancedStateEnum.AiNormal)
         {
             return;
         }

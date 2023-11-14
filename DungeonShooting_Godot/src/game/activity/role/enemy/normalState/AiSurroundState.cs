@@ -1,12 +1,12 @@
 
 using Godot;
 
-namespace AdvancedState;
+namespace NnormalState;
 
 /// <summary>
 /// 距离目标足够近, 在目标附近随机移动, 并开火
 /// </summary>
-public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
+public class AiSurroundState : StateBase<Enemy, AINormalStateEnum>
 {
     //是否移动结束
     private bool _isMoveOver;
@@ -23,11 +23,11 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
     //卡在一个位置的时间
     private float _lockTimer;
 
-    public AiSurroundState() : base(AIAdvancedStateEnum.AiSurround)
+    public AiSurroundState() : base(AINormalStateEnum.AiSurround)
     {
     }
 
-    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
+    public override void Enter(AINormalStateEnum prev, params object[] args)
     {
         Master.TargetInView = true;
         _isMoveOver = true;
@@ -37,20 +37,7 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
     public override void Process(float delta)
     {
-        //先检查弹药是否打光
-        if (Master.IsAllWeaponTotalAmmoEmpty())
-        {
-            //再寻找是否有可用的武器
-            var targetWeapon = Master.FindTargetWeapon();
-            if (targetWeapon != null)
-            {
-                ChangeState(AIAdvancedStateEnum.AiFindAmmo, targetWeapon);
-                return;
-            }
-        }
-
         var playerPos = Player.Current.GetCenterPosition();
-        var weapon = Master.WeaponPack.ActiveItem;
 
         //枪口指向玩家
         Master.LookTargetPosition(playerPos);
@@ -69,7 +56,7 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
         //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
         if (Master.TargetInView ||
-            (weapon != null && weapon.Attribute.AiAttackAttr.FiringStand &&
+            (Master.FiringStand &&
              (Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
             ))
         {
@@ -123,7 +110,7 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                     else
                     {
                         //判断开火状态, 进行移动
-                        if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
+                        if (!Master.FiringStand ||
                             (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack))
                         { //正常移动
                             //计算移动
@@ -148,31 +135,27 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                         _prevPos = pos;
                     }
                 }
-
-                if (weapon != null)
+                
+                if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.GetAttackRange() * 0.7f, 2)) //玩家离开正常射击范围
                 {
-                    if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.GetWeaponRange(0.7f), 2)) //玩家离开正常射击范围
-                    {
-                        ChangeState(AIAdvancedStateEnum.AiFollowUp);
-                    }
-                    else
-                    {
-                        //发起攻击
-                        Master.EnemyAttack();
-                    }
+                    ChangeState(AINormalStateEnum.AiFollowUp);
+                }
+                else
+                {
+                    //发起攻击
+                    Master.Attack();
                 }
             }
         }
         else //目标离开视野
         {
-            ChangeState(AIAdvancedStateEnum.AiTailAfter);
+            ChangeState(AINormalStateEnum.AiTailAfter);
         }
     }
 
     private void RunOver(Vector2 targetPos)
     {
-        var weapon = Master.WeaponPack.ActiveItem;
-        var distance = (int)(weapon == null ? 150 : (Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange) * 0.7f));
+        var distance = (int)(Master.GetAttackRange() * 0.7f);
         _nextPosition = new Vector2(
             targetPos.X + Utils.Random.RandomRangeInt(-distance, distance),
             targetPos.Y + Utils.Random.RandomRangeInt(-distance, distance)

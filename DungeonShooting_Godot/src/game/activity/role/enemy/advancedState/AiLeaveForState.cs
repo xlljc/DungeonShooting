@@ -6,17 +6,17 @@ namespace AdvancedState;
 /// <summary>
 /// 收到其他敌人通知, 前往发现目标的位置
 /// </summary>
-public class AiLeaveForState : StateBase<AdvancedEnemy, AiStateEnum>
+public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 {
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
 
-    public AiLeaveForState() : base(AiStateEnum.AiLeaveFor)
+    public AiLeaveForState() : base(AIAdvancedStateEnum.AiLeaveFor)
     {
     }
 
-    public override void Enter(AiStateEnum prev, params object[] args)
+    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
     {
         if (Master.World.Enemy_IsFindTarget)
         {
@@ -35,7 +35,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AiStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                ChangeState(AiStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AIAdvancedStateEnum.AiFindAmmo, targetWeapon);
             }
         }
     }
@@ -79,7 +79,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AiStateEnum>
                 //关闭射线检测
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
-                ChangeState(AiStateEnum.AiFollowUp);
+                ChangeState(AIAdvancedStateEnum.AiFollowUp);
                 return;
             }
             else
@@ -92,7 +92,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AiStateEnum>
         //移动到目标掉了, 还没发现目标
         if (Master.NavigationAgent2D.IsNavigationFinished())
         {
-            ChangeState(AiStateEnum.AiNormal);
+            ChangeState(AIAdvancedStateEnum.AiNormal);
         }
     }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Godot;
+using NnormalState;
 
 /// <summary>
 /// 地牢管理器
@@ -569,16 +570,16 @@ public partial class DungeonManager : Node2D
                 {
                     if (enemy is Enemy e)
                     {
-                        if (e.StateController.CurrState != AiStateEnum.AiNormal)
+                        if (e.StateController.CurrState != AINormalStateEnum.AiNormal)
                         {
-                            e.StateController.ChangeState(AiStateEnum.AiNormal);
+                            e.StateController.ChangeState(AINormalStateEnum.AiNormal);
                         }
                     }
                     else if (enemy is AdvancedEnemy ae)
                     {
-                        if (ae.StateController.CurrState != AiStateEnum.AiNormal)
+                        if (ae.StateController.CurrState != AIAdvancedStateEnum.AiNormal)
                         {
-                            ae.StateController.ChangeState(AiStateEnum.AiNormal);
+                            ae.StateController.ChangeState(AIAdvancedStateEnum.AiNormal);
                         }
                     }
                     else
@@ -644,29 +645,39 @@ public partial class DungeonManager : Node2D
         for (var i = 0; i < World.Enemy_InstanceList.Count; i++)
         {
             var enemy = World.Enemy_InstanceList[i];
-            AiStateEnum state;
             if (enemy is Enemy e)
             {
-                state = e.StateController.CurrState;
+                var state = e.StateController.CurrState;
+                if (state == AINormalStateEnum.AiFollowUp || state == AINormalStateEnum.AiSurround) //目标在视野内
+                {
+                    if (!World.Enemy_IsFindTarget)
+                    {
+                        World.Enemy_IsFindTarget = true;
+                        World.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
+                        World.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
+                    }
+                    World.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
+                }
             }
             else if (enemy is AdvancedEnemy ae)
             {
-                state = ae.StateController.CurrState;
+                var state = ae.StateController.CurrState;
+                if (state == AIAdvancedStateEnum.AiFollowUp || state == AIAdvancedStateEnum.AiSurround) //目标在视野内
+                {
+                    if (!World.Enemy_IsFindTarget)
+                    {
+                        World.Enemy_IsFindTarget = true;
+                        World.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
+                        World.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
+                    }
+                    World.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
+                }
             }
             else
             {
                 throw new Exception("World.Enemy_InstanceList 混入了非 Enemy 和 AdvancedEnemy 类型的对象!");
             }
-            if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
-            {
-                if (!World.Enemy_IsFindTarget)
-                {
-                    World.Enemy_IsFindTarget = true;
-                    World.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
-                    World.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
-                }
-                World.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
-            }
+            
         }
     }
 

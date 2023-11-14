@@ -6,7 +6,7 @@ namespace AdvancedState;
 /// <summary>
 /// Ai 寻找弹药, 进入该状态需要在参数中传入目标武器对象
 /// </summary>
-public class AiFindAmmoState : StateBase<AdvancedEnemy, AiStateEnum>
+public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 {
 
     private Weapon _target;
@@ -18,11 +18,11 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AiStateEnum>
     private bool _isInTailAfterRange = false;
     private float _tailAfterTimer = 0;
 
-    public AiFindAmmoState() : base(AiStateEnum.AiFindAmmo)
+    public AiFindAmmoState() : base(AIAdvancedStateEnum.AiFindAmmo)
     {
     }
 
-    public override void Enter(AiStateEnum prev, params object[] args)
+    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
     {
         if (args.Length == 0)
         {
@@ -119,9 +119,9 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AiStateEnum>
         }
     }
 
-    private AiStateEnum GetNextState()
+    private AIAdvancedStateEnum GetNextState()
     {
-        return _tailAfterTimer > 10 ? AiStateEnum.AiNormal : AiStateEnum.AiTailAfter;
+        return _tailAfterTimer > 10 ? AIAdvancedStateEnum.AiNormal : AIAdvancedStateEnum.AiTailAfter;
     }
 
     private void SetTargetWeapon(Weapon weapon)

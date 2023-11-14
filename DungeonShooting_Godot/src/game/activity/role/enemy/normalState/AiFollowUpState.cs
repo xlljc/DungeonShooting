@@ -6,17 +6,17 @@ namespace NnormalState;
 /// <summary>
 /// 目标在视野内, 跟进目标, 如果距离在子弹有效射程内, 则开火
 /// </summary>
-public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
+public class AiFollowUpState : StateBase<Enemy, AINormalStateEnum>
 {
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
 
-    public AiFollowUpState() : base(AiStateEnum.AiFollowUp)
+    public AiFollowUpState() : base(AINormalStateEnum.AiFollowUp)
     {
     }
 
-    public override void Enter(AiStateEnum prev, params object[] args)
+    public override void Enter(AINormalStateEnum prev, params object[] args)
     {
         _navigationUpdateTimer = 0;
         Master.TargetInView = true;
@@ -39,9 +39,9 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
         }
 
         var masterPosition = Master.GlobalPosition;
-
+        var distanceSquared = masterPosition.DistanceSquaredTo(playerPos);
         //是否在攻击范围内
-        var inAttackRange = masterPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(Master.GetAttackRange(0.7f), 2);
+        var inAttackRange = distanceSquared <= Mathf.Pow(Master.GetAttackRange(), 2);
 
         //枪口指向玩家
         Master.LookTargetPosition(playerPos);
@@ -89,15 +89,15 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
                 Master.Attack();
                 
                 //距离够近, 可以切换到环绕模式
-                // if (Master.GlobalPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange), 2) * 0.7f)
-                // {
-                //     ChangeState(AiStateEnum.AiSurround);
-                // }
+                if (distanceSquared <= Mathf.Pow(Master.GetAttackRange() * 0.7f, 2) * 0.7f)
+                {
+                    ChangeState(AINormalStateEnum.AiSurround);
+                }
             }
         }
         else //不在视野中
         {
-            ChangeState(AiStateEnum.AiTailAfter);
+            ChangeState(AINormalStateEnum.AiTailAfter);
         }
     }
 
