@@ -1,4 +1,6 @@
 
+using Godot;
+
 /// <summary>
 /// 预制动画名称
 /// </summary>
@@ -68,4 +70,8 @@ public static class AnimatorNames
     /// 物体移动
     /// </summary>
     public const string Move = "move";
+    /// <summary>
+    /// 攻击
+    /// </summary>
+    public const string Attack = "attack";
 }

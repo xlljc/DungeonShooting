@@ -85,6 +85,7 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             if (inAttackRange) //在攻击范围内
             {
                 //发起攻击
+                //Master.AnimatedSprite.Play(AnimatorNames.Attack);
                 Master.Attack();
                 
                 //距离够近, 可以切换到环绕模式

@@ -142,13 +142,10 @@ public partial class Enemy : Role
     public virtual void EnemyAttack()
     {
         Debug.Log("触发攻击");
-        FireManager.ShootBullet(this, ConvertRotation(Position.AngleTo(LookPosition)), ExcelConfig.BulletBase_Map["0006"]);
-        // for (int i = 0; i < 100; i++)
-        // {
-        //     FireManager.ShootBullet(this, ConvertRotation(Mathf.DegToRad(i * 3.6f)), ExcelConfig.BulletBase_List[0]);
-        // }
+        var bulletData = FireManager.GetBulletData(this, ConvertRotation(Position.AngleTo(LookPosition)), ExcelConfig.BulletBase_Map["0006"]);
+        FireManager.ShootBullet(bulletData, AttackLayer);
     }
-
+    
     protected override void Process(float delta)
     {
         base.Process(delta);

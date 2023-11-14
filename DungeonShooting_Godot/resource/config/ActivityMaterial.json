@@ -54,5 +54,19 @@
     "FallBounceSpeed": 0.75,
     "FallBounceRotation": 0.5,
     "DynamicCollision": true
+  },
+  {
+    "Id": "0005",
+    "Remark": "\u7403\u4F53\u5B50\u5F39\uFF0C\u6469\u64E6\u529B\u8F83\u4F4E",
+    "Friction": 40,
+    "GravityScale": 1,
+    "RotationType": 1,
+    "RotationFriction": 40,
+    "Bounce": true,
+    "BounceStrength": 0.7,
+    "FallBounceStrength": 0.7,
+    "FallBounceSpeed": 0.85,
+    "FallBounceRotation": 0.85,
+    "DynamicCollision": false
   }
 ]

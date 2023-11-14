@@ -97,5 +97,6 @@ public static class InputManager
         Roll = Input.IsActionJustPressed("roll");
         UseActiveProp = Input.IsActionJustPressed("useActiveProp");
         RemoveProp = Input.IsActionJustPressed("removeProp");
+        ExchangeProp = Input.IsActionJustPressed("exchangeProp");
     }
 }

@@ -47,7 +47,7 @@ public abstract partial class Prop : ActivityObject
         //阴影偏移
         ShadowOffset = new Vector2(0, 2);
         GlobalRotation = 0;
-        var startHeight = -master.GetCenterPosition().Y;
+        var startHeight = 8;
         Throw(startPosition, startHeight, 0, Vector2.Zero, 0);
 
         //继承role的移动速度

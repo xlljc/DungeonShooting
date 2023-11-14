@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://b5r3hd8kv2wmd"]
+[gd_scene load_steps=10 format=3 uid="uid://b5r3hd8kv2wmd"]
 
 [ext_resource type="PackedScene" uid="uid://dxeqcssparqoo" path="res://prefab/role/template/EnemyTemplate.tscn" id="1_rikvp"]
 [ext_resource type="Script" path="res://src/game/activity/role/enemy/Enemy.cs" id="2_wjtfl"]
@@ -27,12 +27,88 @@ shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
 
-[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_rikvp")]
+[sub_resource type="Animation" id="Animation_wn6ao"]
+resource_name = "attack"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [&"attack", &"idle"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 7]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"ShootBullet"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_0iqth"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"attack"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wxs4x"]
+_data = {
+"RESET": SubResource("Animation_0iqth"),
+"attack": SubResource("Animation_wn6ao")
+}
+
+[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "AnimationPlayer", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_rikvp")]
 script = ExtResource("2_wjtfl")
 ViewRay = NodePath("ViewRay")
 NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
 NavigationPoint = NodePath("NavigationPoint")
 FirePoint = NodePath("AnimatedSprite/FirePoint")
+AnimationPlayer = NodePath("AnimationPlayer")
 HurtArea = NodePath("HurtArea")
 HurtCollision = NodePath("HurtArea/HurtCollision")
 InteractiveArea = NodePath("InteractiveArea")
@@ -48,6 +124,13 @@ material = SubResource("ShaderMaterial_7theg")
 material = SubResource("ShaderMaterial_ntjmx")
 position = Vector2(0, -10)
 sprite_frames = ExtResource("4_ehtyi")
+animation = &"attack"
+frame = 5
 
 [node name="FirePoint" type="Marker2D" parent="AnimatedSprite" index="0"]
 position = Vector2(9, 4)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="7"]
+libraries = {
+"": SubResource("AnimationLibrary_wxs4x")
+}
