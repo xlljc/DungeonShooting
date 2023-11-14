@@ -16,10 +16,16 @@ public partial class Bullet : ActivityObject, IBullet
     public string Logotype { get; set; }
     
     /// <summary>
-    /// 碰撞区域
+    /// 子弹伤害碰撞区域
     /// </summary>
     [Export, ExportFillNode]
     public Area2D CollisionArea { get; set; }
+    
+    /// <summary>
+    /// 子弹伤害碰撞检测形状
+    /// </summary>
+    [Export, ExportFillNode]
+    public CollisionShape2D CollisionShape2D { get; set; }
 
     /// <summary>
     /// 攻击的层级
@@ -54,14 +60,11 @@ public partial class Bullet : ActivityObject, IBullet
             CollisionArea.AreaEntered += OnArea2dEntered;
             _init = true;
         }
-
-        Debug.Log("g: " + ActivityMaterial.GravityScale + ", " + EnableVerticalMotion + ", " + VerticalSpeed);
         
         CurrentBounce = 0;
         CurrentPenetration = 0;
         CurrFlyDistance = 0;
         
-        BounceLockRotation = false;
         BulletData = data;
         AttackLayer = attackLayer;
         Rotation = data.Rotation;
@@ -106,7 +109,6 @@ public partial class Bullet : ActivityObject, IBullet
             this.CallDelay(data.LifeTime, OnLimeOver);
         }
     }
-    
 
     public override void OnMoveCollision(KinematicCollision2D collision)
     {
@@ -213,6 +215,11 @@ public partial class Bullet : ActivityObject, IBullet
     
     protected override void Process(float delta)
     {
+        if (ActivityMaterial.DynamicCollision)
+        {
+            //子弹高度大于 16 关闭碰撞检测
+            CollisionShape2D.Disabled = Altitude >= 16;
+        }
         //距离太大, 自动销毁
         CurrFlyDistance += BulletData.FlySpeed * delta;
         if (CurrFlyDistance >= BulletData.MaxDistance)

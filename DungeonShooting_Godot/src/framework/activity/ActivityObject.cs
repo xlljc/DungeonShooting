@@ -20,7 +20,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <summary>
     /// 当前物体对应的配置数据, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemConfig 为 null
     /// </summary>
-    public ExcelConfig.ActivityBase ItemConfig { get; private set; }
+    public ExcelConfig.ActivityBase ActivityBase { get; private set; }
 
     /// <summary>
     /// 是否是静态物体, 如果为true, 则会禁用移动处理
@@ -163,11 +163,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// 是否启用垂直方向上的运动模拟, 默认开启, 如果禁用, 那么下落和投抛效果, 同样 Throw() 函数也将失效
     /// </summary>
     public bool EnableVerticalMotion { get; set; } = true;
-
-    /// <summary>
-    /// 撞到墙壁反弹时是否锁定旋转角度, 如果为 false, 则反弹后将直接修改旋转角度
-    /// </summary>
-    public bool BounceLockRotation { get; set; } = true;
     
     /// <summary>
     /// 是否启用物体更新行为, 默认 true, 如果禁用, 则会停止当前物体的 Process(), PhysicsProcess() 调用, 并且禁用 Collision 节点, 禁用后所有组件也同样被禁用行为
@@ -364,7 +359,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         }
         
         World = world;
-        ItemConfig = config;
+        ActivityBase = config;
         Name = GetType().Name + (_instanceIndex++);
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
         _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
@@ -1111,7 +1106,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                     _altitude += VerticalSpeed * delta;
                     _verticalSpeed -= GameConfig.G * ActivityMaterial.GravityScale * delta;
 
-                    //当高度大于16时, 显示在所有物体上
+                    //当高度大于16时, 显示在所有物体上, 并且关闭碰撞
                     if (Altitude >= 16)
                     {
                         AnimatedSprite.ZIndex = 20;
@@ -1119,6 +1114,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                     else
                     {
                         AnimatedSprite.ZIndex = 0;
+                    }
+                    //动态开关碰撞器
+                    if (ActivityMaterial.DynamicCollision)
+                    {
+                        Collision.Disabled = Altitude >= 16;
                     }
                 
                     //达到最高点

@@ -490,7 +490,7 @@ public partial class AdvancedEnemy : AdvancedRole
                 return;
             }
             
-            var index = WeaponPack.FindIndex((we, i) => we.ItemConfig.Id == weapon.ItemConfig.Id);
+            var index = WeaponPack.FindIndex((we, i) => we.ActivityBase.Id == weapon.ActivityBase.Id);
             if (index != -1) //与武器背包中武器类型相同, 补充子弹
             {
                 if (!WeaponPack.GetItem(index).IsAmmoFull())

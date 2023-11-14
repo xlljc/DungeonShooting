@@ -90,7 +90,7 @@ public partial class AffiliationArea : Area2D, IDestroy
         //如果是玩家
         if (activityObject == Player.Current)
         {
-            OnPlayerInsertRoom();
+            CallDeferred(nameof(OnPlayerInsertRoom));
         }
     }
 
@@ -238,8 +238,7 @@ public partial class AffiliationArea : Area2D, IDestroy
         if (body is ActivityObject activityObject)
         {
             _enterItems.Add(activityObject);
-            //注意需要延时调用
-            CallDeferred(nameof(InsertItem), activityObject);
+            InsertItem(activityObject);
         }
     }
     

@@ -230,7 +230,7 @@ public abstract partial class ActiveProp : Prop, IPackageItem<Role>
     {
         if (master is Player player)
         {
-            var item = player.ActivePropsPack.GetItemById(ItemConfig.Id);
+            var item = player.ActivePropsPack.GetItemById(ActivityBase.Id);
             if (item == null) //没有同类型物体
             {
                 if (!player.ActivePropsPack.HasVacancy()) //没有空位置, 扔掉当前道具
@@ -269,7 +269,7 @@ public abstract partial class ActiveProp : Prop, IPackageItem<Role>
         if (master is Player player)
         {
             //查找相同类型的道具
-            var item = player.ActivePropsPack.GetItemById(ItemConfig.Id);
+            var item = player.ActivePropsPack.GetItemById(ActivityBase.Id);
             if (item == null) //没有同类型物体
             {
                 if (player.ActivePropsPack.HasVacancy()) //还有空位, 拾起道具

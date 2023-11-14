@@ -284,7 +284,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     
     public override void OnInit()
     {
-        InitWeapon(GetWeaponAttribute(ItemConfig.Id).Clone());
+        InitWeapon(GetWeaponAttribute(ActivityBase.Id).Clone());
         AnimatedSprite.AnimationFinished += OnAnimationFinished;
     }
 
@@ -307,7 +307,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
             Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
-            Debug.LogError("弹夹的容量不能超过弹药上限, 武器id: " + ItemConfig.Id);
+            Debug.LogError("弹夹的容量不能超过弹药上限, 武器id: " + ActivityBase.Id);
         }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
@@ -1612,7 +1612,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
             {
                 var masterWeapon = roleMaster.WeaponPack.ActiveItem;
                 //查找是否有同类型武器
-                var index = roleMaster.WeaponPack.FindIndex(ItemConfig.Id);
+                var index = roleMaster.WeaponPack.FindIndex(ActivityBase.Id);
                 if (index != -1) //如果有这个武器
                 {
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
@@ -1656,7 +1656,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         {
             var holster = roleMaster.WeaponPack;
             //查找是否有同类型武器
-            var index = holster.FindIndex(ItemConfig.Id);
+            var index = holster.FindIndex(ActivityBase.Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了

@@ -153,7 +153,7 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
         for (var i = 0; i < ItemSlot.Length; i++)
         {
             var item = ItemSlot[i];
-            if (item != null && item.ItemConfig.Id == id)
+            if (item != null && item.ActivityBase.Id == id)
             {
                 return i;
             }
@@ -422,7 +422,7 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
         for (var i = 0; i < ItemSlot.Length; i++)
         {
             var packageItem = ItemSlot[i];
-            if (packageItem != null && packageItem.ItemConfig.Id == itemId)
+            if (packageItem != null && packageItem.ActivityBase.Id == itemId)
             {
                 return i;
             }
@@ -444,7 +444,7 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
         for (var i = 0; i < ItemSlot.Length; i++)
         {
             var packageItem = ItemSlot[i];
-            if (packageItem != null && packageItem.ItemConfig.Id == itemId)
+            if (packageItem != null && packageItem.ActivityBase.Id == itemId)
             {
                 return packageItem;
             }
