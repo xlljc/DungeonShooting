@@ -910,6 +910,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     }
 
     /// <summary>
+    /// 是否可以按下扳机并发射了
+    /// </summary>
+    public bool TriggerIsReady()
+    {
+        return GetBeLoadedStateState() >= 2 && !IsAttackIntervalTime();
+    }
+
+    /// <summary>
     /// 获取上膛状态,-1: 等待执行自动上膛 , 0: 未上膛, 1: 上膛中, 2: 已经完成上膛
     /// </summary>
     public sbyte GetBeLoadedStateState()
@@ -1904,79 +1912,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     //-------------------------------- Ai相关 -----------------------------
     
     /// <summary>
-    /// Ai 调用, 刷新 Ai 攻击状态并返回, 并不会调用相应的函数
-    /// </summary>
-    public AiAttackEnum AiRefreshAttackState()
-    {
-        AiAttackEnum flag;
-        if (IsTotalAmmoEmpty()) //当前武器弹药打空
-        {
-            //切换到有子弹的武器
-            var index = Master.WeaponPack.FindIndex((we, i) => !we.IsTotalAmmoEmpty());
-            if (index != -1)
-            {
-                flag = AiAttackEnum.ExchangeWeapon;
-            }
-            else //所有子弹打光
-            {
-                flag = AiAttackEnum.NoAmmo;
-            }
-        }
-        else if (Reloading) //换弹中
-        {
-            flag = AiAttackEnum.TriggerReload;
-        }
-        else if (IsAmmoEmpty()) //弹夹已经打空
-        {
-            flag = AiAttackEnum.Reloading;
-        }
-        else if (_beLoadedState == 0 || _beLoadedState == -1) //需要上膛
-        {
-            flag = AiAttackEnum.AttackInterval;
-        }
-        else if (_beLoadedState == 1) //上膛中
-        {
-            flag = AiAttackEnum.AttackInterval;
-        }
-        else if (_continuousCount >= 1) //连发中
-        {
-            flag = AiAttackEnum.Attack;
-        }
-        else if (IsAttackIntervalTime()) //开火间隙
-        {
-            flag = AiAttackEnum.AttackInterval;
-        }
-        else
-        {
-            var enemy = (AdvancedEnemy)Master;
-            if (enemy.GetLockTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
-            {
-                if (GetDelayedAttackTime() > 0)
-                {
-                    flag = AiAttackEnum.Attack;
-                }
-                else
-                {
-                    if (Attribute.ContinuousShoot) //连发
-                    {
-                        flag = AiAttackEnum.Attack;
-                    }
-                    else //单发
-                    {
-                        flag = AiAttackEnum.Attack;
-                    }
-                }
-            }
-            else //锁定时间没到
-            {
-                flag = AiAttackEnum.LockingTime;
-            }
-        }
-
-        return flag;
-    }
-    
-    /// <summary>
     /// Ai调用, 触发扣动扳机, 并返回攻击状态
     /// </summary>
     public AiAttackEnum AiTriggerAttackState()
@@ -2028,7 +1963,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         else
         {
             var enemy = (AdvancedEnemy)Master;
-            if (enemy.GetLockTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
+            if (enemy.LockTargetTime >= Attribute.AiAttackAttr.LockingTime) //正常射击
             {
                 if (GetDelayedAttackTime() > 0)
                 {

@@ -30,7 +30,12 @@ public class AiTailAfterState : StateBase<Enemy, AINormalStateEnum>
         _navigationUpdateTimer = 0;
         _viewTimer = 0;
     }
-    
+
+    public override void Exit(AINormalStateEnum next)
+    {
+        Master.LookTarget = null;
+    }
+
     public override void Process(float delta)
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
@@ -50,7 +55,7 @@ public class AiTailAfterState : StateBase<Enemy, AINormalStateEnum>
         }
         
         //枪口指向玩家
-        Master.LookTargetPosition(playerPos);
+        Master.LookTarget = Player.Current;
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {

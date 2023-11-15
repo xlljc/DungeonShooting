@@ -40,6 +40,11 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         _target.SetSign(SignNames.AiFindWeaponSign, Master);
     }
 
+    public override void Exit(AIAdvancedStateEnum next)
+    {
+        Master.LookTarget = null;
+    }
+
     public override void Process(float delta)
     {
         if (!Master.IsAllWeaponTotalAmmoEmpty()) //已经有弹药了
@@ -60,10 +65,9 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         {
             _navigationUpdateTimer -= delta;
         }
-
-        var playerPos = Player.Current.GetCenterPosition();
+        
         //枪口指向玩家
-        Master.LookTargetPosition(playerPos);
+        Master.LookTarget = Player.Current;
 
         if (_target.IsDestroyed || _target.IsTotalAmmoEmpty()) //已经被销毁, 或者弹药已经被其他角色捡走
         {
@@ -92,7 +96,7 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         else
         {
             //检测目标没有超出跟随视野距离
-            _isInTailAfterRange = Master.IsInTailAfterViewRange(playerPos);
+            _isInTailAfterRange = Master.IsInTailAfterViewRange(Player.Current.GetCenterPosition());
             if (_isInTailAfterRange)
             {
                 _tailAfterTimer = 0;
@@ -105,16 +109,13 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             //向武器移动
             if (!Master.NavigationAgent2D.IsNavigationFinished())
             {
-                //计算移动
-                var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                Master.AnimatedSprite.Play(AnimatorNames.Run);
-                Master.BasisVelocity =
-                    (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                    Master.RoleState.MoveSpeed;
+                //移动
+                Master.DoMove();
             }
             else
             {
-                Master.BasisVelocity = Vector2.Zero;
+                //站立
+                Master.DoIdle();
             }
         }
     }

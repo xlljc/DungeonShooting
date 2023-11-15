@@ -35,6 +35,11 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         _moveFlag = false;
     }
 
+    public override void Exit(AIAdvancedStateEnum next)
+    {
+        Master.LookTarget = null;
+    }
+
     public override void Process(float delta)
     {
         //先检查弹药是否打光
@@ -53,7 +58,7 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         var weapon = Master.WeaponPack.ActiveItem;
 
         //枪口指向玩家
-        Master.LookTargetPosition(playerPos);
+        Master.LookTarget = Player.Current;
 
         //检测玩家是否在视野内
         if (Master.IsInTailAfterViewRange(playerPos))
@@ -67,11 +72,8 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             Master.TargetInView = false;
         }
 
-        //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
-        if (Master.TargetInView ||
-            (weapon != null && weapon.Attribute.AiAttackAttr.FiringStand &&
-             (Master.AttackState == AiAttackEnum.LockingTime || Master.AttackState == AiAttackEnum.Attack)
-            ))
+        //在视野中
+        if (Master.TargetInView)
         {
             if (_pauseTimer >= 0)
             {
@@ -85,7 +87,7 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             }
             else
             {
-                var masterPosition = Master.GlobalPosition;
+                var masterPosition = Master.Position;
                 if (_lockTimer >= 1) //卡在一个点超过一秒
                 {
                     RunOver(playerPos);
@@ -97,17 +99,14 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                     _pauseTimer = Utils.Random.RandomRangeFloat(0f, 0.5f);
                     _isMoveOver = true;
                     _moveFlag = false;
-                    Master.BasisVelocity = Vector2.Zero;
+                    //站立
+                    Master.DoIdle();
                 }
                 else if (!_moveFlag)
                 {
                     _moveFlag = true;
-                    //计算移动
-                    var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                    Master.AnimatedSprite.Play(AnimatorNames.Run);
-                    Master.BasisVelocity =
-                        (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
-                        Master.RoleState.MoveSpeed;
+                    //移动
+                    Master.DoMove();
                 }
                 else
                 {
@@ -117,25 +116,13 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                         _pauseTimer = Utils.Random.RandomRangeFloat(0f, 0.3f);
                         _isMoveOver = true;
                         _moveFlag = false;
-                        Master.BasisVelocity = Vector2.Zero;
+                        //站立
+                        Master.DoIdle();
                     }
                     else
                     {
-                        //判断开火状态, 进行移动
-                        if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
-                            (Master.AttackState != AiAttackEnum.LockingTime && Master.AttackState != AiAttackEnum.Attack))
-                        { //正常移动
-                            //计算移动
-                            var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                            Master.AnimatedSprite.Play(AnimatorNames.Run);
-                            Master.BasisVelocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
-                                                   Master.RoleState.MoveSpeed;
-                        }
-                        else //站立不动
-                        {
-                            Master.AnimatedSprite.Play(AnimatorNames.Idle);
-                            Master.BasisVelocity = Vector2.Zero;
-                        }
+                        //移动
+                        Master.DoMove();
                     }
 
                     if (_prevPos.DistanceSquaredTo(masterPosition) <= 1 * delta)
@@ -155,10 +142,10 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                     {
                         ChangeState(AIAdvancedStateEnum.AiFollowUp);
                     }
-                    else
+                    else if (weapon.TriggerIsReady()) //可以攻击
                     {
                         //发起攻击
-                        Master.EnemyAttack();
+                        ChangeState(AIAdvancedStateEnum.AiAttack);
                     }
                 }
             }

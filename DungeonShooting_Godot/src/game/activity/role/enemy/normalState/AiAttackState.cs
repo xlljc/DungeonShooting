@@ -19,6 +19,7 @@ public class AiAttackState : StateBase<Enemy, AINormalStateEnum>
         {
             Debug.LogError("攻击冷却还未完成就进入了 AINormalStateEnum.AiAttack 状态!");
             ChangeState(prev);
+            return;
         }
         _attackStep = 0;
         PrevState = prev;

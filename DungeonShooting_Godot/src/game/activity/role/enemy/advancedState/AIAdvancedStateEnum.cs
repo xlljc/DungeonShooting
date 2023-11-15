@@ -33,4 +33,8 @@ public enum AIAdvancedStateEnum
     /// Ai 寻找弹药
     /// </summary>
     AiFindAmmo,
+    /// <summary>
+    /// Ai攻击
+    /// </summary>
+    AiAttack,
 }

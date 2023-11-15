@@ -41,7 +41,12 @@ public class AiTailAfterState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             }
         }
     }
-    
+
+    public override void Exit(AIAdvancedStateEnum next)
+    {
+        Master.LookTarget = null;
+    }
+
     public override void Process(float delta)
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
@@ -61,29 +66,17 @@ public class AiTailAfterState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         }
         
         //枪口指向玩家
-        Master.LookTargetPosition(playerPos);
+        Master.LookTarget = Player.Current;
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
-            var weapon = Master.WeaponPack.ActiveItem;
-            if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
-                (Master.AttackState != AiAttackEnum.LockingTime && Master.AttackState != AiAttackEnum.Attack))
-            {
-                //计算移动
-                var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                Master.AnimatedSprite.Play(AnimatorNames.Run);
-                Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                                       Master.RoleState.MoveSpeed;
-            }
-            else
-            {
-                Master.AnimatedSprite.Play(AnimatorNames.Idle);
-                Master.BasisVelocity = Vector2.Zero;
-            }
+            //移动
+            Master.DoMove();
         }
         else
         {
-            Master.BasisVelocity = Vector2.Zero;
+            //站立
+            Master.DoIdle();
         }
         //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
         if (Master.IsInTailAfterViewRange(playerPos))

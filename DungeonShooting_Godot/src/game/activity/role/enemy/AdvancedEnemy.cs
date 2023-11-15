@@ -63,19 +63,16 @@ public partial class AdvancedEnemy : AdvancedRole
     /// </summary>
     [Export, ExportFillNode]
     public Marker2D NavigationPoint { get; private set; }
-
-    /// <summary>
-    /// Ai攻击状态, 调用 Attack() 函数后会刷新
-    /// </summary>
-    public AiAttackEnum AttackState { get; private set; }
     
     /// <summary>
     /// 当前敌人所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
     
-    //锁定目标时间
-    private float _lockTargetTime = 0;
+    /// <summary>
+    /// 锁定目标已经走过的时间
+    /// </summary>
+    public float LockTargetTime { get; set; } = 0;
 
     public override void OnInit()
     {
@@ -102,6 +99,7 @@ public partial class AdvancedEnemy : AdvancedRole
         StateController.Register(new AiLeaveForState());
         StateController.Register(new AiSurroundState());
         StateController.Register(new AiFindAmmoState());
+        StateController.Register(new AiAttackState());
         
         //默认状态
         StateController.ChangeStateInstant(AIAdvancedStateEnum.AiNormal);
@@ -175,83 +173,6 @@ public partial class AdvancedEnemy : AdvancedRole
             }
             //枪口跟随目标
             MountPoint.SetLookAt(pos);
-        }
-        
-        //目标在视野内的时间
-        var currState = StateController.CurrState;
-        if (currState == AIAdvancedStateEnum.AiSurround || currState == AIAdvancedStateEnum.AiFollowUp)
-        {
-            var weapon = WeaponPack.ActiveItem;
-            if (weapon != null)
-            {
-                if (weapon.GetBeLoadedStateState() >= 2 && !weapon.IsAttackIntervalTime()) //必须在可以开火时记录时间
-                {
-                    _lockTargetTime += delta;
-                }
-                else
-                {
-                    _lockTargetTime = 0;
-                }
-                
-                if (AttackState == AiAttackEnum.LockingTime) //锁定玩家状态
-                {
-                    var aiLockRemainderTime = GetLockRemainderTime();
-                    MountLookTarget = aiLockRemainderTime >= weapon.Attribute.AiAttackAttr.LockAngleTime;
-                    //更新瞄准辅助线
-                    if (weapon.Attribute.AiAttackAttr.ShowSubline)
-                    {
-                        if (SubLine == null)
-                        {
-                            InitSubLine();
-                        }
-                        else
-                        {
-                            SubLine.Enable = true;
-                        }
-
-                        //播放警告删掉动画
-                        if (!SubLine.IsPlayWarnAnimation && aiLockRemainderTime <= 0.5f)
-                        {
-                            SubLine.PlayWarnAnimation(0.5f);
-                        }
-                    }
-                }
-                else
-                {
-                    //关闭辅助线
-                    if (SubLine != null)
-                    {
-                        SubLine.Enable = false;
-                    }
-                    
-                    if (AttackState == AiAttackEnum.Attack || AttackState == AiAttackEnum.AttackInterval)
-                    {
-                        if (weapon.Attribute.AiAttackAttr.AttackLockAngle) //开火时锁定枪口角度
-                        {
-                            //连发状态锁定角度
-                            MountLookTarget = !(weapon.GetContinuousCount() > 0 || weapon.GetAttackTimer() > 0);
-                        }
-                        else
-                        {
-                            MountLookTarget = true;
-                        }
-                    }
-                    else
-                    {
-                        MountLookTarget = true;
-                    }
-                }
-            }
-            else
-            {
-                MountLookTarget = true;
-                _lockTargetTime = 0;
-            }
-        }
-        else
-        {
-            MountLookTarget = true;
-            _lockTargetTime = 0;
         }
 
         //拾起武器操作
@@ -378,22 +299,6 @@ public partial class AdvancedEnemy : AdvancedRole
         
         return false;
     }
-    
-    /// <summary>
-    /// 敌人发动攻击
-    /// </summary>
-    public virtual void EnemyAttack()
-    {
-        var weapon = WeaponPack.ActiveItem;
-        if (weapon != null)
-        {
-            AttackState = weapon.AiTriggerAttackState();
-        }
-        else //没有武器
-        {
-            AttackState = AiAttackEnum.NoWeapon;
-        }
-    }
 
     /// <summary>
     /// 获取武器攻击范围 (最大距离值与最小距离的中间值)
@@ -518,14 +423,6 @@ public partial class AdvancedEnemy : AdvancedRole
             // }
         }
     }
-
-    /// <summary>
-    /// 获取锁定目标的时间
-    /// </summary>
-    public float GetLockTime()
-    {
-        return _lockTargetTime;
-    }
     
     /// <summary>
     /// 获取锁定目标的剩余时间
@@ -537,7 +434,7 @@ public partial class AdvancedEnemy : AdvancedRole
         {
             return 0;
         }
-        return weapon.Attribute.AiAttackAttr.LockingTime - _lockTargetTime;
+        return weapon.Attribute.AiAttackAttr.LockingTime - LockTargetTime;
     }
 
     /// <summary>
@@ -545,12 +442,32 @@ public partial class AdvancedEnemy : AdvancedRole
     /// </summary>
     public void SetLockTargetTime(float time)
     {
-        _lockTargetTime = time;
+        LockTargetTime = time;
     }
 
     public override void LookTargetPosition(Vector2 pos)
     {
         LookTarget = null;
         base.LookTargetPosition(pos);
+    }
+    
+    /// <summary>
+    /// 执行移动操作
+    /// </summary>
+    public void DoMove()
+    {
+        AnimatedSprite.Play(AnimatorNames.Run);
+        //计算移动
+        var nextPos = NavigationAgent2D.GetNextPathPosition();
+        BasisVelocity = (nextPos - Position - NavigationPoint.Position).Normalized() * RoleState.MoveSpeed;
+    }
+
+    /// <summary>
+    /// 执行站立操作
+    /// </summary>
+    public void DoIdle()
+    {
+        AnimatedSprite.Play(AnimatorNames.Idle);
+        BasisVelocity = Vector2.Zero;
     }
 }

@@ -35,12 +35,17 @@ public class AiSurroundState : StateBase<Enemy, AINormalStateEnum>
         _moveFlag = false;
     }
 
+    public override void Exit(AINormalStateEnum next)
+    {
+        Master.LookTarget = null;
+    }
+
     public override void Process(float delta)
     {
         var playerPos = Player.Current.GetCenterPosition();
 
         //枪口指向玩家
-        Master.LookTargetPosition(playerPos);
+        Master.LookTarget = Player.Current;
 
         //检测玩家是否在视野内
         if (Master.IsInTailAfterViewRange(playerPos))

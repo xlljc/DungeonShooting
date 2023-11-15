@@ -22,6 +22,11 @@ public class AiFollowUpState : StateBase<Enemy, AINormalStateEnum>
         Master.TargetInView = true;
     }
 
+    public override void Exit(AINormalStateEnum next)
+    {
+        Master.LookTarget = null;
+    }
+
     public override void Process(float delta)
     {
         var playerPos = Player.Current.GetCenterPosition();
@@ -43,7 +48,7 @@ public class AiFollowUpState : StateBase<Enemy, AINormalStateEnum>
         var inAttackRange = distanceSquared <= Mathf.Pow(Master.GetAttackRange(), 2);
 
         //枪口指向玩家
-        Master.LookTargetPosition(playerPos);
+        Master.LookTarget = Player.Current;
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {

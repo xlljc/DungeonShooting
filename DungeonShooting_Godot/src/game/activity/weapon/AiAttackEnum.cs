@@ -1,11 +1,11 @@
 ﻿
 /// <summary>
-/// 调用 Enemy.EnemyAttack() 函数返回的结果
+/// 调用 Weapon.AiTriggerAttackState() 函数返回的结果
 /// </summary>
 public enum AiAttackEnum
 {
     /// <summary>
-    /// 未触发 EnemyAttack()
+    /// 未触发 AiTriggerAttackState()
     /// </summary>
     None,
     /// <summary>

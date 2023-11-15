@@ -58,16 +58,14 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
-            //计算移动
-            var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
             Master.LookTargetPosition(Master.World.Enemy_FindTargetPosition);
-            Master.AnimatedSprite.Play(AnimatorNames.Run);
-            Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                              Master.RoleState.MoveSpeed;
+            //移动
+            Master.DoMove();
         }
         else
         {
-            Master.BasisVelocity = Vector2.Zero;
+            //站立
+            Master.DoIdle();
         }
 
         var playerPos = Player.Current.GetCenterPosition();
