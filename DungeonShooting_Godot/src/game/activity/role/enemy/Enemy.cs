@@ -41,11 +41,6 @@ public partial class Enemy : Role
     public float AttackRange { get; set; } = 200;
 
     /// <summary>
-    /// 开火时是否站立不动
-    /// </summary>
-    public bool FiringStand { get; set; } = true;
-
-    /// <summary>
     /// 视野检测射线, 朝玩家打射线, 检测是否碰到墙
     /// </summary>
     [Export, ExportFillNode]
@@ -70,24 +65,19 @@ public partial class Enemy : Role
     public Marker2D FirePoint { get; private set; }
 
     /// <summary>
-    /// Ai攻击状态, 调用 Attack() 函数后会刷新
-    /// </summary>
-    public AiAttackState AttackState { get; private set; }
-
-    /// <summary>
     /// 攻击时间间隔
     /// </summary>
-    public float AttackInterval { get; set; } = 3;
-
-    /// <summary>
-    /// 锁定目标需要消耗的时间
-    /// </summary>
-    public float LockingTime { get; set; } = 2;
+    public float AttackInterval { get; set; } = 5;
     
     /// <summary>
     /// 当前敌人所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
+    
+    /// <summary>
+    /// Ai 攻击属性
+    /// </summary>
+    public ExcelConfig.AiAttackAttr AttackAttribute { get; private set; }
     
     //锁定目标时间
     private float _lockTargetTime = 0;
@@ -97,6 +87,7 @@ public partial class Enemy : Role
     public override void OnInit()
     {
         base.OnInit();
+        AttackAttribute = ExcelConfig.AiAttackAttr_Map["0001"];
         IsAi = true;
         StateController = AddComponent<StateController<Enemy, AINormalStateEnum>>();
 
@@ -113,6 +104,8 @@ public partial class Enemy : Role
         StateController.Register(new AiTailAfterState());
         StateController.Register(new AiFollowUpState());
         StateController.Register(new AiSurroundState());
+        StateController.Register(new AiLeaveForState());
+        StateController.Register(new AiAttackState());
         StateController.ChangeState(AINormalStateEnum.AiNormal);
     }
 
@@ -131,20 +124,8 @@ public partial class Enemy : Role
 
     public override void Attack()
     {
-        if (_attackTimer > 0) //开火间隙
-        {
-            AttackState = AiAttackState.AttackInterval;
-        }
-        else if (GetLockRemainderTime() > 0) //锁定目标时间
-        {
-            AttackState = AiAttackState.LockingTime;
-        }
-        else //正常攻击
-        {
-            AttackState = AiAttackState.Attack;
-            _attackTimer = AttackInterval;
-            OnAttack();
-        }
+        _attackTimer = AttackInterval;
+        OnAttack();
     }
 
     /// <summary>
@@ -188,16 +169,9 @@ public partial class Enemy : Role
         }
         //目标在视野内的时间
         var currState = StateController.CurrState;
-        if (currState == AINormalStateEnum.AiSurround || currState == AINormalStateEnum.AiFollowUp)
+        if (currState == AINormalStateEnum.AiAttack && _attackTimer <= 0) //必须在可以开火时记录时间
         {
-            if (_attackTimer <= 0) //必须在可以开火时记录时间
-            {
-                _lockTargetTime += delta;
-            }
-            else
-            {
-                _lockTargetTime = 0;
-            }
+            _lockTargetTime += delta;
         }
         else
         {
@@ -324,7 +298,7 @@ public partial class Enemy : Role
     /// </summary>
     public float GetLockRemainderTime()
     {
-        return LockingTime - _lockTargetTime;
+        return AttackAttribute.LockingTime - _lockTargetTime;
     }
     
     /// <summary>
@@ -352,5 +326,33 @@ public partial class Enemy : Role
     {
         LookTarget = null;
         base.LookTargetPosition(pos);
+    }
+    
+    /// <summary>
+    /// 获取攻击冷却计时时间, 小于等于 0 表示冷却完成
+    /// </summary>
+    public float GetAttackTimer()
+    {
+        return _attackTimer;
+    }
+    
+    /// <summary>
+    /// 执行移动操作
+    /// </summary>
+    public void DoMove()
+    {
+        AnimatedSprite.Play(AnimatorNames.Run);
+        //计算移动
+        var nextPos = NavigationAgent2D.GetNextPathPosition();
+        BasisVelocity = (nextPos - Position - NavigationPoint.Position).Normalized() * RoleState.MoveSpeed;
+    }
+
+    /// <summary>
+    /// 执行站立操作
+    /// </summary>
+    public void DoIdle()
+    {
+        AnimatedSprite.Play(AnimatorNames.Idle);
+        BasisVelocity = Vector2.Zero;
     }
 }

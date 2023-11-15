@@ -94,37 +94,31 @@ public class AiNormalState : StateBase<Enemy, AINormalStateEnum>
                     _pauseTimer = Utils.Random.RandomRangeFloat(0.3f, 2f);
                     _isMoveOver = true;
                     _moveFlag = false;
-                    Master.BasisVelocity = Vector2.Zero;
+                    Master.DoIdle();
                 }
                 else if (!_moveFlag)
                 {
                     _moveFlag = true;
-                    var pos = Master.GlobalPosition;
-                    //计算移动
-                    var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                    Master.AnimatedSprite.Play(AnimatorNames.Run);
-                    Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
-                                           Master.RoleState.MoveSpeed;
+                    var pos = Master.Position;
+                    //移动
+                    Master.DoMove();
                     _prevPos = pos;
                 }
                 else
                 {
-                    var pos = Master.GlobalPosition;
+                    var pos = Master.Position;
                     var lastSlideCollision = Master.GetLastSlideCollision();
                     if (lastSlideCollision != null && lastSlideCollision.GetCollider() is AdvancedRole) //碰到其他角色
                     {
                         _pauseTimer = Utils.Random.RandomRangeFloat(0.1f, 0.5f);
                         _isMoveOver = true;
                         _moveFlag = false;
-                        Master.BasisVelocity = Vector2.Zero;
+                        Master.DoIdle();
                     }
                     else
                     {
                         //计算移动
-                        var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                        Master.AnimatedSprite.Play(AnimatorNames.Run);
-                        Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
-                                               Master.RoleState.MoveSpeed;
+                        Master.DoMove();
                     }
 
                     if (_prevPos.DistanceSquaredTo(pos) <= 0.01f)

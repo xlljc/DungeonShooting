@@ -894,7 +894,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     }
 
     /// <summary>
-    /// 获取攻击冷却计时时间, 等于 0 表示冷却完成
+    /// 获取攻击冷却计时时间, 小于等于 0 表示冷却完成
     /// </summary>
     public float GetAttackTimer()
     {
@@ -1906,45 +1906,45 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// <summary>
     /// Ai 调用, 刷新 Ai 攻击状态并返回, 并不会调用相应的函数
     /// </summary>
-    public AiAttackState AiRefreshAttackState()
+    public AiAttackEnum AiRefreshAttackState()
     {
-        AiAttackState flag;
+        AiAttackEnum flag;
         if (IsTotalAmmoEmpty()) //当前武器弹药打空
         {
             //切换到有子弹的武器
             var index = Master.WeaponPack.FindIndex((we, i) => !we.IsTotalAmmoEmpty());
             if (index != -1)
             {
-                flag = AiAttackState.ExchangeWeapon;
+                flag = AiAttackEnum.ExchangeWeapon;
             }
             else //所有子弹打光
             {
-                flag = AiAttackState.NoAmmo;
+                flag = AiAttackEnum.NoAmmo;
             }
         }
         else if (Reloading) //换弹中
         {
-            flag = AiAttackState.TriggerReload;
+            flag = AiAttackEnum.TriggerReload;
         }
         else if (IsAmmoEmpty()) //弹夹已经打空
         {
-            flag = AiAttackState.Reloading;
+            flag = AiAttackEnum.Reloading;
         }
         else if (_beLoadedState == 0 || _beLoadedState == -1) //需要上膛
         {
-            flag = AiAttackState.AttackInterval;
+            flag = AiAttackEnum.AttackInterval;
         }
         else if (_beLoadedState == 1) //上膛中
         {
-            flag = AiAttackState.AttackInterval;
+            flag = AiAttackEnum.AttackInterval;
         }
         else if (_continuousCount >= 1) //连发中
         {
-            flag = AiAttackState.Attack;
+            flag = AiAttackEnum.Attack;
         }
         else if (IsAttackIntervalTime()) //开火间隙
         {
-            flag = AiAttackState.AttackInterval;
+            flag = AiAttackEnum.AttackInterval;
         }
         else
         {
@@ -1953,23 +1953,23 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
             {
                 if (GetDelayedAttackTime() > 0)
                 {
-                    flag = AiAttackState.Attack;
+                    flag = AiAttackEnum.Attack;
                 }
                 else
                 {
                     if (Attribute.ContinuousShoot) //连发
                     {
-                        flag = AiAttackState.Attack;
+                        flag = AiAttackEnum.Attack;
                     }
                     else //单发
                     {
-                        flag = AiAttackState.Attack;
+                        flag = AiAttackEnum.Attack;
                     }
                 }
             }
             else //锁定时间没到
             {
-                flag = AiAttackState.LockingTime;
+                flag = AiAttackEnum.LockingTime;
             }
         }
 
@@ -1979,35 +1979,35 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// <summary>
     /// Ai调用, 触发扣动扳机, 并返回攻击状态
     /// </summary>
-    public AiAttackState AiTriggerAttackState()
+    public AiAttackEnum AiTriggerAttackState()
     {
-        AiAttackState flag;
+        AiAttackEnum flag;
         if (IsTotalAmmoEmpty()) //当前武器弹药打空
         {
             //切换到有子弹的武器
             var index = Master.WeaponPack.FindIndex((we, i) => !we.IsTotalAmmoEmpty());
             if (index != -1)
             {
-                flag = AiAttackState.ExchangeWeapon;
+                flag = AiAttackEnum.ExchangeWeapon;
                 Master.WeaponPack.ExchangeByIndex(index);
             }
             else //所有子弹打光
             {
-                flag = AiAttackState.NoAmmo;
+                flag = AiAttackEnum.NoAmmo;
             }
         }
         else if (Reloading) //换弹中
         {
-            flag = AiAttackState.TriggerReload;
+            flag = AiAttackEnum.TriggerReload;
         }
         else if (IsAmmoEmpty()) //弹夹已经打空
         {
-            flag = AiAttackState.Reloading;
+            flag = AiAttackEnum.Reloading;
             Reload();
         }
         else if (_beLoadedState == 0 || _beLoadedState == -1) //需要上膛
         {
-            flag = AiAttackState.AttackInterval;
+            flag = AiAttackEnum.AttackInterval;
             if (_attackTimer <= 0)
             {
                 Master.Attack();
@@ -2015,15 +2015,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         }
         else if (_beLoadedState == 1) //上膛中
         {
-            flag = AiAttackState.AttackInterval;
+            flag = AiAttackEnum.AttackInterval;
         }
         else if (_continuousCount >= 1) //连发中
         {
-            flag = AiAttackState.Attack;
+            flag = AiAttackEnum.Attack;
         }
         else if (IsAttackIntervalTime()) //开火间隙
         {
-            flag = AiAttackState.AttackInterval;
+            flag = AiAttackEnum.AttackInterval;
         }
         else
         {
@@ -2032,7 +2032,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
             {
                 if (GetDelayedAttackTime() > 0)
                 {
-                    flag = AiAttackState.Attack;
+                    flag = AiAttackEnum.Attack;
                     enemy.Attack();
                     if (_attackFlag)
                     {
@@ -2043,7 +2043,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
                 {
                     if (Attribute.ContinuousShoot) //连发
                     {
-                        flag = AiAttackState.Attack;
+                        flag = AiAttackEnum.Attack;
                         enemy.Attack();
                         if (_attackFlag)
                         {
@@ -2052,7 +2052,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
                     }
                     else //单发
                     {
-                        flag = AiAttackState.Attack;
+                        flag = AiAttackEnum.Attack;
                         enemy.Attack();
                         if (_attackFlag)
                         {
@@ -2063,7 +2063,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
             }
             else //锁定时间没到
             {
-                flag = AiAttackState.LockingTime;
+                flag = AiAttackEnum.LockingTime;
             }
         }
 

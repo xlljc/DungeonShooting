@@ -2,7 +2,7 @@
 /// <summary>
 /// 调用 Enemy.EnemyAttack() 函数返回的结果
 /// </summary>
-public enum AiAttackState
+public enum AiAttackEnum
 {
     /// <summary>
     /// 未触发 EnemyAttack()

@@ -67,7 +67,7 @@ public partial class AdvancedEnemy : AdvancedRole
     /// <summary>
     /// Ai攻击状态, 调用 Attack() 函数后会刷新
     /// </summary>
-    public AiAttackState AttackState { get; private set; }
+    public AiAttackEnum AttackState { get; private set; }
     
     /// <summary>
     /// 当前敌人所看向的对象, 也就是枪口指向的对象
@@ -193,7 +193,7 @@ public partial class AdvancedEnemy : AdvancedRole
                     _lockTargetTime = 0;
                 }
                 
-                if (AttackState == AiAttackState.LockingTime) //锁定玩家状态
+                if (AttackState == AiAttackEnum.LockingTime) //锁定玩家状态
                 {
                     var aiLockRemainderTime = GetLockRemainderTime();
                     MountLookTarget = aiLockRemainderTime >= weapon.Attribute.AiAttackAttr.LockAngleTime;
@@ -224,7 +224,7 @@ public partial class AdvancedEnemy : AdvancedRole
                         SubLine.Enable = false;
                     }
                     
-                    if (AttackState == AiAttackState.Attack || AttackState == AiAttackState.AttackInterval)
+                    if (AttackState == AiAttackEnum.Attack || AttackState == AiAttackEnum.AttackInterval)
                     {
                         if (weapon.Attribute.AiAttackAttr.AttackLockAngle) //开火时锁定枪口角度
                         {
@@ -391,7 +391,7 @@ public partial class AdvancedEnemy : AdvancedRole
         }
         else //没有武器
         {
-            AttackState = AiAttackState.NoWeapon;
+            AttackState = AiAttackEnum.NoWeapon;
         }
     }
 

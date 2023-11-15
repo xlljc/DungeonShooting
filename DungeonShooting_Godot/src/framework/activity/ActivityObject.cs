@@ -59,6 +59,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     [Export, ExportFillNode]
     public CollisionShape2D Collision { get; set; }
+    
+    /// <summary>
+    /// 动画播放器
+    /// </summary>
+    [Export, ExportFillNode]
+    public AnimationPlayer AnimationPlayer { get; set; }
 
     /// <summary>
     /// 是否调用过 Destroy() 函数

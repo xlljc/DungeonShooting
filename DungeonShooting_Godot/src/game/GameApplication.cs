@@ -104,7 +104,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		//随机化种子
 		//GD.Randomize();
 		//固定帧率
-		//Engine.MaxFps = TargetFps;
+		Engine.MaxFps = TargetFps;
 		//调试绘制开关
 		ActivityObject.IsDebug = true;
 		//Engine.TimeScale = 0.2f;

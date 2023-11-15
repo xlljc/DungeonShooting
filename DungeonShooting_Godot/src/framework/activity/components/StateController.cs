@@ -135,6 +135,7 @@ public class StateController<T, S> : Component<T> where T : ActivityObject where
         }
         else if (CurrStateBase.CanChangeState(next))
         {
+            // Debug.Log($"changeState: {CurrState} => {next}");
             _isChangeState = !late;
             var prev = CurrStateBase.State;
             CurrStateBase.Exit(next);

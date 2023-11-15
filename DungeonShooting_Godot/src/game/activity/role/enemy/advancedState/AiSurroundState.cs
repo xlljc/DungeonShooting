@@ -70,7 +70,7 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
         if (Master.TargetInView ||
             (weapon != null && weapon.Attribute.AiAttackAttr.FiringStand &&
-             (Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
+             (Master.AttackState == AiAttackEnum.LockingTime || Master.AttackState == AiAttackEnum.Attack)
             ))
         {
             if (_pauseTimer >= 0)
@@ -111,7 +111,6 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                 }
                 else
                 {
-                    var pos = masterPosition;
                     var lastSlideCollision = Master.GetLastSlideCollision();
                     if (lastSlideCollision != null && lastSlideCollision.GetCollider() is AdvancedRole) //碰到其他角色
                     {
@@ -124,12 +123,12 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                     {
                         //判断开火状态, 进行移动
                         if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
-                            (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack))
+                            (Master.AttackState != AiAttackEnum.LockingTime && Master.AttackState != AiAttackEnum.Attack))
                         { //正常移动
                             //计算移动
                             var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
                             Master.AnimatedSprite.Play(AnimatorNames.Run);
-                            Master.BasisVelocity = (nextPos - pos - Master.NavigationPoint.Position).Normalized() *
+                            Master.BasisVelocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
                                                    Master.RoleState.MoveSpeed;
                         }
                         else //站立不动
@@ -139,13 +138,14 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                         }
                     }
 
-                    if (_prevPos.DistanceSquaredTo(pos) <= 1 * delta)
+                    if (_prevPos.DistanceSquaredTo(masterPosition) <= 1 * delta)
                     {
                         _lockTimer += delta;
                     }
                     else
                     {
-                        _prevPos = pos;
+                        _lockTimer = 0;
+                        _prevPos = masterPosition;
                     }
                 }
 

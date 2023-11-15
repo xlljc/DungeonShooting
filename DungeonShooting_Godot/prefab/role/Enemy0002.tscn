@@ -27,7 +27,7 @@ shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
 
-[sub_resource type="Animation" id="Animation_wn6ao"]
+[sub_resource type="Animation" id="Animation_g3he5"]
 resource_name = "attack"
 length = 0.6
 tracks/0/type = "value"
@@ -37,10 +37,10 @@ tracks/0/path = NodePath("AnimatedSprite:animation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [&"attack", &"idle"]
+"values": [&"attack"]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -65,11 +65,11 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"ShootBullet"
+"method": &"Attack"
 }]
 }
 
-[sub_resource type="Animation" id="Animation_0iqth"]
+[sub_resource type="Animation" id="Animation_4j2gl"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -93,22 +93,21 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [5]
+"values": [0]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_wxs4x"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oris7"]
 _data = {
-"RESET": SubResource("Animation_0iqth"),
-"attack": SubResource("Animation_wn6ao")
+"RESET": SubResource("Animation_4j2gl"),
+"attack": SubResource("Animation_g3he5")
 }
 
-[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "AnimationPlayer", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_rikvp")]
+[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "ShadowSprite", "AnimatedSprite", "Collision", "AnimationPlayer") instance=ExtResource("1_rikvp")]
 script = ExtResource("2_wjtfl")
 ViewRay = NodePath("ViewRay")
 NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
 NavigationPoint = NodePath("NavigationPoint")
 FirePoint = NodePath("AnimatedSprite/FirePoint")
-AnimationPlayer = NodePath("AnimationPlayer")
 HurtArea = NodePath("HurtArea")
 HurtCollision = NodePath("HurtArea/HurtCollision")
 InteractiveArea = NodePath("InteractiveArea")
@@ -116,6 +115,7 @@ InteractiveCollision = NodePath("InteractiveArea/InteractiveCollision")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
+AnimationPlayer = NodePath("AnimationPlayer")
 
 [node name="ShadowSprite" parent="." index="0"]
 material = SubResource("ShaderMaterial_7theg")
@@ -125,12 +125,11 @@ material = SubResource("ShaderMaterial_ntjmx")
 position = Vector2(0, -10)
 sprite_frames = ExtResource("4_ehtyi")
 animation = &"attack"
-frame = 5
 
 [node name="FirePoint" type="Marker2D" parent="AnimatedSprite" index="0"]
 position = Vector2(9, 4)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="7"]
 libraries = {
-"": SubResource("AnimationLibrary_wxs4x")
+"": SubResource("AnimationLibrary_oris7")
 }

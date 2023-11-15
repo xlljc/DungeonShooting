@@ -6,10 +6,6 @@ public enum AINormalStateEnum
     /// Ai 状态, 正常, 未发现目标
     /// </summary>
     AiNormal,
-    // /// <summary>
-    // /// 发现目标, 但不知道在哪
-    // /// </summary>
-    // AiProbe,
     /// <summary>
     /// 找到玩家，准备通知其他敌人
     /// </summary>
@@ -30,4 +26,8 @@ public enum AINormalStateEnum
     /// 距离足够近, 在目标附近随机移动
     /// </summary>
     AiSurround,
+    /// <summary>
+    /// 攻击状态
+    /// </summary>
+    AiAttack,
 }

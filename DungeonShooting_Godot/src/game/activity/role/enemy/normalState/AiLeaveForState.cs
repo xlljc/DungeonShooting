@@ -4,63 +4,59 @@ using Godot;
 namespace NnormalState;
 
 /// <summary>
-/// AI 发现玩家, 跟随玩家
+/// 收到其他敌人通知, 前往发现目标的位置
 /// </summary>
-public class AiTailAfterState : StateBase<Enemy, AINormalStateEnum>
+public class AiLeaveForState : StateBase<Enemy, AINormalStateEnum>
 {
-    /// <summary>
-    /// 目标是否在视野半径内
-    /// </summary>
-    private bool _isInViewRange;
-
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
 
-    //目标从视野消失时已经过去的时间
-    private float _viewTimer;
-
-    public AiTailAfterState() : base(AINormalStateEnum.AiTailAfter)
+    public AiLeaveForState() : base(AINormalStateEnum.AiLeaveFor)
     {
     }
 
     public override void Enter(AINormalStateEnum prev, params object[] args)
     {
-        _isInViewRange = true;
-        _navigationUpdateTimer = 0;
-        _viewTimer = 0;
+        if (Master.World.Enemy_IsFindTarget)
+        {
+            Master.NavigationAgent2D.TargetPosition = Master.World.Enemy_FindTargetPosition;
+        }
+        else
+        {
+            ChangeState(prev);
+        }
     }
-    
+
     public override void Process(float delta)
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
-        
-        var playerPos = Player.Current.GetCenterPosition();
         
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            Master.NavigationAgent2D.TargetPosition = playerPos;
+            Master.NavigationAgent2D.TargetPosition = Master.World.Enemy_FindTargetPosition;
         }
         else
         {
             _navigationUpdateTimer -= delta;
         }
-        
-        //枪口指向玩家
-        Master.LookTargetPosition(playerPos);
-        
+
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
+            Master.LookTargetPosition(Master.World.Enemy_FindTargetPosition);
             //移动
             Master.DoMove();
         }
         else
         {
+            //站立
             Master.DoIdle();
         }
+
+        var playerPos = Player.Current.GetCenterPosition();
         //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
         if (Master.IsInTailAfterViewRange(playerPos))
         {
@@ -78,36 +74,16 @@ public class AiTailAfterState : StateBase<Enemy, AINormalStateEnum>
                 Master.TestViewRayCastOver();
             }
         }
-        
-        //检测玩家是否在穿墙视野范围内, 直接检测距离即可
-        _isInViewRange = Master.IsInViewRange(playerPos);
-        if (_isInViewRange)
+
+        //移动到目标掉了, 还没发现目标
+        if (Master.NavigationAgent2D.IsNavigationFinished())
         {
-            _viewTimer = 0;
-        }
-        else //超出视野
-        {
-            if (_viewTimer > 10) //10秒
-            {
-                ChangeState(AINormalStateEnum.AiNormal);
-            }
-            else
-            {
-                _viewTimer += delta;
-            }
+            ChangeState(AINormalStateEnum.AiNormal);
         }
     }
 
     public override void DebugDraw()
     {
-        var playerPos = Player.Current.GetCenterPosition();
-        if (_isInViewRange)
-        {
-            Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Orange);
-        }
-        else
-        {
-            Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Blue);
-        }
+        Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.NavigationAgent2D.TargetPosition), Colors.Yellow);
     }
 }

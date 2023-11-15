@@ -73,7 +73,7 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
             if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
-                (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack))
+                (Master.AttackState != AiAttackEnum.LockingTime && Master.AttackState != AiAttackEnum.Attack))
             {
                 //计算移动
                 var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
@@ -105,7 +105,7 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         }
 
         //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
-        if (Master.TargetInView || Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
+        if (Master.TargetInView || Master.AttackState == AiAttackEnum.LockingTime || Master.AttackState == AiAttackEnum.Attack)
         {
             if (inAttackRange) //在攻击范围内
             {

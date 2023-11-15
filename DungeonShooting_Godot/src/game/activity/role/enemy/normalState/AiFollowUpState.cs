@@ -37,9 +37,8 @@ public class AiFollowUpState : StateBase<Enemy, AINormalStateEnum>
         {
             _navigationUpdateTimer -= delta;
         }
-
-        var masterPosition = Master.GlobalPosition;
-        var distanceSquared = masterPosition.DistanceSquaredTo(playerPos);
+        
+        var distanceSquared = Master.GlobalPosition.DistanceSquaredTo(playerPos);
         //是否在攻击范围内
         var inAttackRange = distanceSquared <= Mathf.Pow(Master.GetAttackRange(), 2);
 
@@ -48,23 +47,13 @@ public class AiFollowUpState : StateBase<Enemy, AINormalStateEnum>
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
-            if (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack)
-            {
-                //计算移动
-                var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                Master.AnimatedSprite.Play(AnimatorNames.Run);
-                Master.BasisVelocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
-                                       Master.RoleState.MoveSpeed;
-            }
-            else
-            {
-                Master.AnimatedSprite.Play(AnimatorNames.Idle);
-                Master.BasisVelocity = Vector2.Zero;
-            }
+            //移动
+            Master.DoMove();
         }
         else
         {
-            Master.BasisVelocity = Vector2.Zero;
+            //站立
+            Master.DoIdle();
         }
 
         //检测玩家是否在视野内
@@ -79,19 +68,19 @@ public class AiFollowUpState : StateBase<Enemy, AINormalStateEnum>
             Master.TargetInView = false;
         }
 
-        //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
-        if (Master.TargetInView || Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
+        //在视野中
+        if (Master.TargetInView)
         {
             if (inAttackRange) //在攻击范围内
             {
-                //发起攻击
-                //Master.AnimatedSprite.Play(AnimatorNames.Attack);
-                Master.Attack();
-                
                 //距离够近, 可以切换到环绕模式
                 if (distanceSquared <= Mathf.Pow(Master.GetAttackRange() * 0.7f, 2) * 0.7f)
                 {
                     ChangeState(AINormalStateEnum.AiSurround);
+                }
+                else if (Master.GetAttackTimer() <= 0) //攻击
+                {
+                    ChangeState(AINormalStateEnum.AiAttack);
                 }
             }
         }
