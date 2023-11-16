@@ -114,7 +114,7 @@ public partial class AffiliationArea : Area2D, IDestroy
     {
         return _includeItems.Count;
     }
-
+    
     /// <summary>
     /// 统计符合条件的数量
     /// </summary>
@@ -224,6 +224,37 @@ public partial class AffiliationArea : Area2D, IDestroy
 
         return false;
     }
+    
+    /// <summary>
+    /// 遍历该该区域的物体
+    /// </summary>
+    /// <param name="handler">操作函数, 返回 false 表示跳出循环</param>
+    public void ForEachIncludeItems(Func<ActivityObject, bool> handler)
+    {
+        foreach (var activityObject in _includeItems)
+        {
+            if (!activityObject.IsDestroyed && handler(activityObject))
+            {
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 遍历该进入该区域的物体
+    /// </summary>
+    /// <param name="handler">操作函数, 返回 false 表示跳出循环</param>
+    public void ForEachEnterItems(Func<ActivityObject, bool> handler)
+    {
+        foreach (var activityObject in _enterItems)
+        {
+            if (!activityObject.IsDestroyed && handler(activityObject))
+            {
+                return;
+            }
+        }
+    }
+
 
     /// <summary>
     /// 返回物体是否进入了该区域

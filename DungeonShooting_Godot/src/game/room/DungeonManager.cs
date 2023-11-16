@@ -662,7 +662,7 @@ public partial class DungeonManager : Node2D
             else if (enemy is AdvancedEnemy ae)
             {
                 var state = ae.StateController.CurrState;
-                if (state == AIAdvancedStateEnum.AiFollowUp || state == AIAdvancedStateEnum.AiSurround) //目标在视野内
+                if (state == AIAdvancedStateEnum.AiFollowUp || state == AIAdvancedStateEnum.AiSurround || state == AIAdvancedStateEnum.AiFindAmmo) //目标在视野内
                 {
                     if (!World.Enemy_IsFindTarget)
                     {
