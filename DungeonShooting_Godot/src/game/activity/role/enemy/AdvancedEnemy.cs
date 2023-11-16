@@ -350,7 +350,7 @@ public partial class AdvancedEnemy : AdvancedRole
     }
 
     /// <summary>
-    /// 调用视野检测, 如果被墙壁和其它物体遮挡, 则返回被挡住视野的物体对象, 视野无阻则返回 null
+    /// 调用视野检测, 如果被墙壁和其它物体遮挡, 则返回true
     /// </summary>
     public bool TestViewRayCast(Vector2 target)
     {

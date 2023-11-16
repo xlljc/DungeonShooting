@@ -604,7 +604,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
                     //自动上膛
                     if (_beLoadedState == -1)
                     {
-                        BeLoadedHandler();
+                        BeLoaded();
                     }
                 }
             }
@@ -733,7 +733,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
                 else if (_attackTimer <= 0)
                 {
                     //触发上膛操作
-                    BeLoadedHandler();
+                    BeLoaded();
                 }
             }
         }
@@ -1217,7 +1217,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// </summary>
     public void Reload()
     {
-        if (CurrAmmo < Attribute.AmmoCapacity && ResidueAmmo > 0 && !Reloading && _beLoadedState != 1)
+        if (!Reloading && CurrAmmo < Attribute.AmmoCapacity && ResidueAmmo > 0 && _beLoadedState != 1)
         {
             Reloading = true;
             _playReloadFinishSoundFlag = false;
@@ -1270,6 +1270,59 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         Reloading = false;
         _reloadTimer = 0;
         _reloadUseTime = 0;
+    }
+
+    /// <summary>
+    /// 触发上膛
+    /// </summary>
+    public void BeLoaded()
+    {
+        if (_beLoadedState > 0)
+        {
+            return;
+        }
+        //上膛抛弹
+        if (!Attribute.ReloadThrowShell && !Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
+        {
+            ThrowShellHandler(0.6f);
+        }
+
+        //开始上膛
+        OnBeginBeLoaded();
+
+        //上膛时间为0, 直接结束上膛
+        if (Attribute.BeLoadedTime <= 0)
+        {
+            //直接上膛完成
+            _beLoadedState = 2;
+            OnBeLoadedFinish();
+            return;
+        }
+        
+        //上膛中
+        _beLoadedState = 1;
+        _beLoadedStateTimer = Attribute.BeLoadedTime;
+        
+        //播放上膛动画
+        if (IsAutoPlaySpriteFrames)
+        {
+            if (Attribute.BeLoadedSoundDelayTime <= 0)
+            {
+                PlaySpriteAnimation(AnimatorNames.BeLoaded);
+                PlayAnimationPlayer(AnimatorNames.BeLoaded);
+            }
+            else
+            {
+                this.CallDelay(Attribute.BeLoadedSoundDelayTime, () =>
+                {
+                    PlaySpriteAnimation(AnimatorNames.BeLoaded);
+                    PlayAnimationPlayer(AnimatorNames.BeLoaded);
+                });
+            }
+        }
+
+        //播放上膛音效
+        PlayBeLoadedSound();
     }
     
     //播放换弹开始音效
@@ -1346,7 +1399,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
             if (_attackTimer <= 0)
             {
                 //执行自动上膛
-                BeLoadedHandler();
+                BeLoaded();
             }
             else if (CurrAmmo > 0)
             {
@@ -1419,53 +1472,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     {
         // Debug.Log("单独装弹完成.");
         OnAloneReloadStateFinish();
-    }
-
-    //上膛处理
-    private void BeLoadedHandler()
-    {
-        //上膛抛弹
-        if (!Attribute.ReloadThrowShell && !Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
-        {
-            ThrowShellHandler(0.6f);
-        }
-
-        //开始上膛
-        OnBeginBeLoaded();
-
-        //上膛时间为0, 直接结束上膛
-        if (Attribute.BeLoadedTime <= 0)
-        {
-            //直接上膛完成
-            _beLoadedState = 2;
-            OnBeLoadedFinish();
-            return;
-        }
-        
-        //上膛中
-        _beLoadedState = 1;
-        _beLoadedStateTimer = Attribute.BeLoadedTime;
-        
-        //播放上膛动画
-        if (IsAutoPlaySpriteFrames)
-        {
-            if (Attribute.BeLoadedSoundDelayTime <= 0)
-            {
-                PlaySpriteAnimation(AnimatorNames.BeLoaded);
-                PlayAnimationPlayer(AnimatorNames.BeLoaded);
-            }
-            else
-            {
-                this.CallDelay(Attribute.BeLoadedSoundDelayTime, () =>
-                {
-                    PlaySpriteAnimation(AnimatorNames.BeLoaded);
-                    PlayAnimationPlayer(AnimatorNames.BeLoaded);
-                });
-            }
-        }
-
-        //播放上膛音效
-        PlayBeLoadedSound();
     }
 
     //抛弹逻辑
@@ -1945,7 +1951,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
             flag = AiAttackEnum.AttackInterval;
             if (_attackTimer <= 0)
             {
-                Master.Attack();
+                BeLoaded();
             }
         }
         else if (_beLoadedState == 1) //上膛中

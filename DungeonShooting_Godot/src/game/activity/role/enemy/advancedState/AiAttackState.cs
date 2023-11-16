@@ -16,6 +16,21 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
     /// 攻击状态
     /// </summary>
     public AiAttackEnum AttackState;
+
+    //是否移动结束
+    private bool _isMoveOver;
+
+    //移动停顿计时器
+    private float _pauseTimer;
+    private bool _moveFlag;
+    
+    //下一个移动点
+    private Vector2 _nextPosition;
+    
+    //上一帧位置
+    private Vector2 _prevPos;
+    //卡在一个位置的时间
+    private float _lockTimer;
     
     public AiAttackState() : base(AIAdvancedStateEnum.AiAttack)
     {
@@ -42,6 +57,10 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         AttackState = AiAttackEnum.None;
         Master.LockTargetTime = 0;
         PrevState = prev;
+        
+        _isMoveOver = true;
+        _pauseTimer = 0;
+        _moveFlag = false;
     }
 
     public override void Exit(AIAdvancedStateEnum next)
@@ -53,18 +72,43 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
     public override void Process(float delta)
     {
+        Master.LookTarget = Player.Current;
+
         var weapon = Master.WeaponPack.ActiveItem;
-        if (weapon == null || (weapon.GetAttackTimer() > 0 && weapon.GetContinuousCount() <= 0)) //攻击完成, 可以切换状态了
+        if (weapon == null)
         {
-            //这里要做换弹判断, 还有上膛判断
-            
+            //攻击结束
             ChangeState(PrevState);
+        }
+        else if (AttackState == AiAttackEnum.AttackInterval) //攻击完成
+        {
+            if (weapon.GetAttackTimer() <= 0) //攻击冷却完成
+            {
+                //这里要做换弹判断, 还有上膛判断
+                if (weapon.CurrAmmo <= 0) //换弹判断
+                {
+                    if (!weapon.Reloading)
+                    {
+                        weapon.Reload();
+                    }
+                }
+                else if (weapon.GetBeLoadedStateState() != 2) //上膛
+                {
+                    if (weapon.GetBeLoadedStateState() == 0)
+                    {
+                        weapon.BeLoaded();
+                    }
+                }
+                else
+                {
+                    //攻击结束
+                    ChangeState(PrevState);
+                }
+            }
+            MoveHandler(delta);
         }
         else //攻击状态
         {
-            //这里还要做是否在视野内的判断
-            
-            Master.LookTarget = Player.Current;
             //触发扳机
             AttackState = Master.WeaponPack.ActiveItem.AiTriggerAttackState();
             
@@ -99,7 +143,7 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                 }
                 else //正常移动
                 {
-                    Master.DoMove();
+                    MoveHandler(delta);
                 }
             }
             else
@@ -134,9 +178,87 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                 }
                 else //正常移动
                 {
-                    Master.DoMove();
+                    MoveHandler(delta);
                 }
             }
         }
     }
+
+    private void MoveHandler(float delta)
+    {
+
+        if (_pauseTimer >= 0)
+        {
+            Master.AnimatedSprite.Play(AnimatorNames.Idle);
+            _pauseTimer -= delta;
+        }
+        else if (_isMoveOver) //移动已经完成
+        {
+            RunOver(Player.Current.Position);
+            _isMoveOver = false;
+        }
+        else
+        {
+            var masterPosition = Master.Position;
+            if (_lockTimer >= 1) //卡在一个点超过一秒
+            {
+                RunOver(Player.Current.Position);
+                _isMoveOver = false;
+                _lockTimer = 0;
+            }
+            else if (Master.NavigationAgent2D.IsNavigationFinished()) //到达终点
+            {
+                _pauseTimer = Utils.Random.RandomRangeFloat(0f, 0.5f);
+                _isMoveOver = true;
+                _moveFlag = false;
+                //站立
+                Master.DoIdle();
+            }
+            else if (!_moveFlag)
+            {
+                _moveFlag = true;
+                //移动
+                Master.DoMove();
+            }
+            else
+            {
+                var lastSlideCollision = Master.GetLastSlideCollision();
+                if (lastSlideCollision != null && lastSlideCollision.GetCollider() is AdvancedRole) //碰到其他角色
+                {
+                    _pauseTimer = Utils.Random.RandomRangeFloat(0f, 0.3f);
+                    _isMoveOver = true;
+                    _moveFlag = false;
+                    //站立
+                    Master.DoIdle();
+                }
+                else
+                {
+                    //移动
+                    Master.DoMove();
+                }
+
+                if (_prevPos.DistanceSquaredTo(masterPosition) <= 1 * delta)
+                {
+                    _lockTimer += delta;
+                }
+                else
+                {
+                    _lockTimer = 0;
+                    _prevPos = masterPosition;
+                }
+            }
+        }
+    }
+
+    private void RunOver(Vector2 targetPos)
+    {
+        var weapon = Master.WeaponPack.ActiveItem;
+        var distance = (int)(weapon == null ? 150 : (Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange) * 0.7f));
+        _nextPosition = new Vector2(
+            targetPos.X + Utils.Random.RandomRangeInt(-distance, distance),
+            targetPos.Y + Utils.Random.RandomRangeInt(-distance, distance)
+        );
+        Master.NavigationAgent2D.TargetPosition = _nextPosition;
+    }    
+    
 }
