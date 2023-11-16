@@ -30,6 +30,10 @@ public partial class Explode : Area2D, IPoolItem
     /// </summary>
     public uint AttackLayer { get; private set; }
 
+    /// <summary>
+    /// 产生爆炸的子弹数据
+    /// </summary>
+    public BulletData BulletData { get; private set; }
 
     private bool _init = false;
     private float _hitRadius;
@@ -51,13 +55,13 @@ public partial class Explode : Area2D, IPoolItem
     /// <summary>
     /// 初始化爆炸数据
     /// </summary>
-    /// <param name="affiliationArea">爆炸所在区域</param>
+    /// <param name="bulletData">产生爆炸的子弹数据</param>
     /// <param name="attackLayer">攻击的层级</param>
     /// <param name="hitRadius">伤害半径</param>
     /// <param name="harm">造成的伤害</param>
     /// <param name="repelledRadius">击退半径</param>
     /// <param name="maxRepelled">最大击退速度</param>
-    public void Init(AffiliationArea affiliationArea, uint attackLayer, float hitRadius, int harm, float repelledRadius, float maxRepelled)
+    public void Init(BulletData bulletData, uint attackLayer, float hitRadius, int harm, float repelledRadius, float maxRepelled)
     {
         if (!_init)
         {
@@ -68,7 +72,8 @@ public partial class Explode : Area2D, IPoolItem
             AnimationPlayer.AnimationFinished += OnAnimationFinish;
             BodyEntered += OnBodyEntered;
         }
-        
+
+        BulletData = bulletData;
         AttackLayer = attackLayer;
         _hitRadius = hitRadius;
         _harm = harm;
@@ -78,6 +83,7 @@ public partial class Explode : Area2D, IPoolItem
         CircleShape.Radius = Mathf.Max(hitRadius, maxRepelled);
 
         //冲击波
+        var affiliationArea = bulletData.TriggerRole?.AffiliationArea;
         if (affiliationArea != null)
         {
             ShockWave(affiliationArea);
@@ -138,7 +144,7 @@ public partial class Explode : Area2D, IPoolItem
             {
                 if (o is Role role) //是角色
                 {
-                    role.CallDeferred(nameof(role.Hurt), _harm, angle);
+                    role.CallDeferred(nameof(role.Hurt), BulletData.TriggerRole, _harm, angle);
                 }
                 else if (o is Bullet bullet) //是子弹
                 {

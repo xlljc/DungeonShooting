@@ -133,7 +133,7 @@ public class StateController<T, S> : Component<T> where T : ActivityObject where
             CurrStateBase = newState;
             newState.Enter(default, arg);
         }
-        else if (CurrStateBase.CanChangeState(next))
+        else
         {
             // Debug.Log($"changeState: {CurrState} => {next}");
             _isChangeState = !late;

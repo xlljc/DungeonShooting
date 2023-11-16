@@ -1,10 +1,11 @@
 
+using System;
 using Godot;
 
 namespace AdvancedState;
 
 /// <summary>
-/// AI 发现玩家, 跟随玩家
+/// AI 发现玩家, 跟随玩家, 但是不在视野范围内
 /// </summary>
 public class AiTailAfterState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 {
@@ -26,6 +27,11 @@ public class AiTailAfterState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
     public override void Enter(AIAdvancedStateEnum prev, params object[] args)
     {
+        if (Master.LookTarget == null)
+        {
+            throw new Exception("进入 AIAdvancedStateEnum.AiTailAfter 状态时角色没有攻击目标!");
+        }
+        
         _isInViewRange = true;
         _navigationUpdateTimer = 0;
         _viewTimer = 0;
@@ -42,16 +48,11 @@ public class AiTailAfterState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         }
     }
 
-    public override void Exit(AIAdvancedStateEnum next)
-    {
-        Master.LookTarget = null;
-    }
-
     public override void Process(float delta)
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
         
-        var playerPos = Player.Current.GetCenterPosition();
+        var playerPos = Master.LookTarget.GetCenterPosition();
         
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
@@ -64,9 +65,6 @@ public class AiTailAfterState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         {
             _navigationUpdateTimer -= delta;
         }
-        
-        //枪口指向玩家
-        Master.LookTarget = Player.Current;
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
@@ -117,7 +115,7 @@ public class AiTailAfterState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
     public override void DebugDraw()
     {
-        var playerPos = Player.Current.GetCenterPosition();
+        var playerPos = Master.LookTarget.GetCenterPosition();
         if (_isInViewRange)
         {
             Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Orange);

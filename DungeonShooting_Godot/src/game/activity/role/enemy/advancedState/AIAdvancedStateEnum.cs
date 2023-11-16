@@ -8,7 +8,7 @@ public enum AIAdvancedStateEnum
     /// <summary>
     /// 找到玩家，准备通知其他敌人
     /// </summary>
-    AiFind,
+    AiNotify,
     /// <summary>
     /// 惊讶状态
     /// </summary>

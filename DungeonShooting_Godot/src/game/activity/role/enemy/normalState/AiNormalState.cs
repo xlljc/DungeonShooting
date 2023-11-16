@@ -47,13 +47,6 @@ public class AiNormalState : StateBase<Enemy, AINormalStateEnum>
 
     public override void Process(float delta)
     {
-        //其他敌人发现玩家
-        if (Master.CanChangeLeaveFor())
-        {
-            ChangeState(AINormalStateEnum.AiLeaveFor);
-            return;
-        }
-
         if (_isFindPlayer) //已经找到玩家了
         {
             //现临时处理, 直接切换状态

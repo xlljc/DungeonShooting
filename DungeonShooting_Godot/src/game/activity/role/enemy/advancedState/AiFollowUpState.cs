@@ -1,4 +1,5 @@
 
+using System;
 using Godot;
 
 namespace AdvancedState;
@@ -18,13 +19,13 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
     public override void Enter(AIAdvancedStateEnum prev, params object[] args)
     {
+        if (Master.LookTarget == null)
+        {
+            throw new Exception("进入 AIAdvancedStateEnum.AiFollowUp 状态时角色没有攻击目标!");
+        }
+        
         _navigationUpdateTimer = 0;
         Master.TargetInView = true;
-    }
-
-    public override void Exit(AIAdvancedStateEnum next)
-    {
-        Master.LookTarget = null;
     }
 
     public override void Process(float delta)
@@ -46,7 +47,7 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             }
         }
 
-        var playerPos = Player.Current.GetCenterPosition();
+        var playerPos = Master.LookTarget.GetCenterPosition();
 
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
@@ -69,9 +70,6 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         {
             inAttackRange = distanceSquared <= Mathf.Pow(Master.GetWeaponRange(0.7f), 2);
         }
-
-        //枪口指向玩家
-        Master.LookTarget = Player.Current;
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
@@ -121,7 +119,7 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
     public override void DebugDraw()
     {
-        var playerPos = Player.Current.GetCenterPosition();
+        var playerPos = Master.LookTarget.GetCenterPosition();
         Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Red);
     }
 }

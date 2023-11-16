@@ -179,13 +179,14 @@ public partial class Enemy : Role
         }
     }
 
-    protected override void OnHit(int damage, bool realHarm)
+    protected override void OnHit(ActivityObject target, int damage, bool realHarm)
     {
         //受到伤害
         var state = StateController.CurrState;
         if (state == AINormalStateEnum.AiNormal || state == AINormalStateEnum.AiLeaveFor) //|| state == AiStateEnum.AiProbe
         {
-            StateController.ChangeState(AINormalStateEnum.AiTailAfter);
+            LookTarget = target;
+            StateController.ChangeState(AINormalStateEnum.AiTailAfter, target);
         }
     }
     
@@ -210,26 +211,6 @@ public partial class Enemy : Role
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
         Destroy();
-    }
-    
-    /// <summary>
-    /// 检查是否能切换到 AiStateEnum.AiLeaveFor 状态
-    /// </summary>
-    public bool CanChangeLeaveFor()
-    {
-        if (!World.Enemy_IsFindTarget)
-        {
-            return false;
-        }
-
-        var currState = StateController.CurrState;
-        if (currState == AINormalStateEnum.AiNormal)// || currState == AiStateEnum.AiProbe)
-        {
-            //判断是否在同一个房间内
-            return World.Enemy_FindTargetAffiliationSet.Contains(AffiliationArea);
-        }
-        
-        return false;
     }
     
     /// <summary>

@@ -18,68 +18,68 @@ public class AiLeaveForState : StateBase<Enemy, AINormalStateEnum>
 
     public override void Enter(AINormalStateEnum prev, params object[] args)
     {
-        if (Master.World.Enemy_IsFindTarget)
-        {
-            Master.NavigationAgent2D.TargetPosition = Master.World.Enemy_FindTargetPosition;
-        }
-        else
-        {
-            ChangeState(prev);
-        }
+        // if (Master.World.Enemy_IsFindTarget)
+        // {
+        //     Master.NavigationAgent2D.TargetPosition = Master.World.Enemy_FindTargetPosition;
+        // }
+        // else
+        // {
+        //     ChangeState(prev);
+        // }
     }
 
     public override void Process(float delta)
     {
-        //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
-        
-        //更新玩家位置
-        if (_navigationUpdateTimer <= 0)
-        {
-            //每隔一段时间秒更改目标位置
-            _navigationUpdateTimer = _navigationInterval;
-            Master.NavigationAgent2D.TargetPosition = Master.World.Enemy_FindTargetPosition;
-        }
-        else
-        {
-            _navigationUpdateTimer -= delta;
-        }
-
-        if (!Master.NavigationAgent2D.IsNavigationFinished())
-        {
-            Master.LookTargetPosition(Master.World.Enemy_FindTargetPosition);
-            //移动
-            Master.DoMove();
-        }
-        else
-        {
-            //站立
-            Master.DoIdle();
-        }
-
-        var playerPos = Player.Current.GetCenterPosition();
-        //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
-        if (Master.IsInTailAfterViewRange(playerPos))
-        {
-            if (!Master.TestViewRayCast(playerPos)) //看到玩家
-            {
-                //关闭射线检测
-                Master.TestViewRayCastOver();
-                //切换成发现目标状态
-                ChangeState(AINormalStateEnum.AiFollowUp);
-                return;
-            }
-            else
-            {
-                //关闭射线检测
-                Master.TestViewRayCastOver();
-            }
-        }
-
-        //移动到目标掉了, 还没发现目标
-        if (Master.NavigationAgent2D.IsNavigationFinished())
-        {
-            ChangeState(AINormalStateEnum.AiNormal);
-        }
+        // //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
+        //
+        // //更新玩家位置
+        // if (_navigationUpdateTimer <= 0)
+        // {
+        //     //每隔一段时间秒更改目标位置
+        //     _navigationUpdateTimer = _navigationInterval;
+        //     Master.NavigationAgent2D.TargetPosition = Master.World.Enemy_FindTargetPosition;
+        // }
+        // else
+        // {
+        //     _navigationUpdateTimer -= delta;
+        // }
+        //
+        // if (!Master.NavigationAgent2D.IsNavigationFinished())
+        // {
+        //     Master.LookTargetPosition(Master.World.Enemy_FindTargetPosition);
+        //     //移动
+        //     Master.DoMove();
+        // }
+        // else
+        // {
+        //     //站立
+        //     Master.DoIdle();
+        // }
+        //
+        // var playerPos = Player.Current.GetCenterPosition();
+        // //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
+        // if (Master.IsInTailAfterViewRange(playerPos))
+        // {
+        //     if (!Master.TestViewRayCast(playerPos)) //看到玩家
+        //     {
+        //         //关闭射线检测
+        //         Master.TestViewRayCastOver();
+        //         //切换成发现目标状态
+        //         ChangeState(AINormalStateEnum.AiFollowUp);
+        //         return;
+        //     }
+        //     else
+        //     {
+        //         //关闭射线检测
+        //         Master.TestViewRayCastOver();
+        //     }
+        // }
+        //
+        // //移动到目标掉了, 还没发现目标
+        // if (Master.NavigationAgent2D.IsNavigationFinished())
+        // {
+        //     ChangeState(AINormalStateEnum.AiNormal);
+        // }
     }
 
     public override void DebugDraw()

@@ -147,11 +147,6 @@ public abstract partial class AdvancedRole : Role
         });
     }
     
-    public override Vector2 GetCenterPosition()
-    {
-        return MountPoint.GlobalPosition;
-    }
-    
     public override void LookTargetPosition(Vector2 pos)
     {
         LookPosition = pos;
@@ -385,7 +380,7 @@ public abstract partial class AdvancedRole : Role
                     role.MoveController.AddForce(v2);
                 }
                 
-                role.CallDeferred(nameof(Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());
+                role.CallDeferred(nameof(Hurt), this, damage, (role.GetCenterPosition() - GlobalPosition).Angle());
             }
             else if (activityObject is Bullet bullet) //攻击子弹
             {

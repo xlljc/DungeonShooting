@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 
 namespace AdvancedState;
 
@@ -38,19 +39,21 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
     public override void Enter(AIAdvancedStateEnum prev, params object[] args)
     {
+        if (Master.LookTarget == null)
+        {
+            throw new Exception("进入 AIAdvancedStateEnum.AiAttack 状态时角色没有攻击目标!");
+        }
+        
         var weapon = Master.WeaponPack.ActiveItem;
         if (weapon == null)
         {
-            Debug.LogError("进入 AIAdvancedStateEnum.AiAttack 状态时角色没有武器!");
-            ChangeState(prev);
-            return;
+            throw new Exception("进入 AIAdvancedStateEnum.AiAttack 状态时角色没有武器!");
+
         }
 
         if (!weapon.TriggerIsReady())
         {
-            Debug.LogError("进入 AIAdvancedStateEnum.AiAttack 状态时角色武器还玩法触动扳机!");
-            ChangeState(prev);
-            return;
+            throw new Exception("进入 AIAdvancedStateEnum.AiAttack 状态时角色武器还玩法触动扳机!");
         }
         
         Master.BasisVelocity = Vector2.Zero;
@@ -67,13 +70,10 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
     {
         Master.MountLookTarget = true;
         Master.LockTargetTime = 0;
-        Master.LookTarget = null;
     }
 
     public override void Process(float delta)
     {
-        Master.LookTarget = Player.Current;
-
         var weapon = Master.WeaponPack.ActiveItem;
         if (weapon == null)
         {
@@ -84,6 +84,7 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         {
             if (weapon.GetAttackTimer() <= 0) //攻击冷却完成
             {
+                Master.MountLookTarget = true;
                 //这里要做换弹判断, 还有上膛判断
                 if (weapon.CurrAmmo <= 0) //换弹判断
                 {
@@ -194,7 +195,7 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         }
         else if (_isMoveOver) //移动已经完成
         {
-            RunOver(Player.Current.Position);
+            RunOver(Master.LookTarget.Position);
             _isMoveOver = false;
         }
         else
@@ -202,7 +203,7 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             var masterPosition = Master.Position;
             if (_lockTimer >= 1) //卡在一个点超过一秒
             {
-                RunOver(Player.Current.Position);
+                RunOver(Master.LookTarget.Position);
                 _isMoveOver = false;
                 _lockTimer = 0;
             }

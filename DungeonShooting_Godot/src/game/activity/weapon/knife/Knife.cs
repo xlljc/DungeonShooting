@@ -159,7 +159,7 @@ public partial class Knife : Weapon
                 }
                 
                 //造成伤害
-                role.CallDeferred(nameof(AdvancedRole.Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());
+                role.CallDeferred(nameof(AdvancedRole.Hurt), TriggerRole, damage, (role.GetCenterPosition() - GlobalPosition).Angle());
             }
             else if (activityObject is Bullet bullet) //攻击子弹
             {

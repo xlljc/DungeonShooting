@@ -73,7 +73,7 @@ public partial class AdvancedEnemy : AdvancedRole
     /// 锁定目标已经走过的时间
     /// </summary>
     public float LockTargetTime { get; set; } = 0;
-
+    
     public override void OnInit()
     {
         base.OnInit();
@@ -100,6 +100,8 @@ public partial class AdvancedEnemy : AdvancedRole
         StateController.Register(new AiSurroundState());
         StateController.Register(new AiFindAmmoState());
         StateController.Register(new AiAttackState());
+        StateController.Register(new AiAstonishedState());
+        StateController.Register(new AiNotifyState());
         
         //默认状态
         StateController.ChangeStateInstant(AIAdvancedStateEnum.AiNormal);
@@ -179,12 +181,13 @@ public partial class AdvancedEnemy : AdvancedRole
         EnemyPickUpWeapon();
     }
 
-    protected override void OnHit(int damage, bool realHarm)
+    protected override void OnHit(ActivityObject target, int damage, bool realHarm)
     {
         //受到伤害
         var state = StateController.CurrState;
         if (state == AIAdvancedStateEnum.AiNormal || state == AIAdvancedStateEnum.AiLeaveFor) //|| state == AiStateEnum.AiProbe
         {
+            LookTarget = target;
             StateController.ChangeState(AIAdvancedStateEnum.AiTailAfter);
         }
     }
@@ -278,26 +281,6 @@ public partial class AdvancedEnemy : AdvancedRole
         }
 
         return target;
-    }
-
-    /// <summary>
-    /// 检查是否能切换到 AiStateEnum.AiLeaveFor 状态
-    /// </summary>
-    public bool CanChangeLeaveFor()
-    {
-        if (!World.Enemy_IsFindTarget)
-        {
-            return false;
-        }
-
-        var currState = StateController.CurrState;
-        if (currState == AIAdvancedStateEnum.AiNormal)// || currState == AiStateEnum.AiProbe)
-        {
-            //判断是否在同一个房间内
-            return World.Enemy_FindTargetAffiliationSet.Contains(AffiliationArea);
-        }
-        
-        return false;
     }
 
     /// <summary>

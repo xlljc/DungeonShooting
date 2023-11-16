@@ -1,4 +1,5 @@
 
+using System;
 using Godot;
 
 namespace AdvancedState;
@@ -12,22 +13,26 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
 
+    //目标
+    private ActivityObject _target;
+    //目标点
+    private Vector2 _targetPosition;
+
     public AiLeaveForState() : base(AIAdvancedStateEnum.AiLeaveFor)
     {
     }
 
     public override void Enter(AIAdvancedStateEnum prev, params object[] args)
     {
-        if (Master.World.Enemy_IsFindTarget)
+        if (args.Length == 0)
         {
-            Master.NavigationAgent2D.TargetPosition = Master.World.Enemy_FindTargetPosition;
-        }
-        else
-        {
-            ChangeState(prev);
-            return;
+            throw new Exception("进入 AINormalStateEnum.AiLeaveFor 状态必须带上目标对象");
         }
 
+        _target = (ActivityObject)args[0];
+        _targetPosition = _target.GetCenterPosition();
+        Master.LookTargetPosition(_targetPosition);
+        
         //先检查弹药是否打光
         if (Master.IsAllWeaponTotalAmmoEmpty())
         {
@@ -40,6 +45,16 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         }
     }
 
+    /// <summary>
+    /// 设置移动目标位置
+    /// </summary>
+    public void SetTargetPosition(Vector2 target)
+    {
+        _targetPosition = target;
+        _navigationUpdateTimer = _navigationInterval;
+        Master.NavigationAgent2D.TargetPosition = target;
+    }
+
     public override void Process(float delta)
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
@@ -49,7 +64,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            Master.NavigationAgent2D.TargetPosition = Master.World.Enemy_FindTargetPosition;
+            Master.NavigationAgent2D.TargetPosition = _targetPosition;
         }
         else
         {
@@ -58,7 +73,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
-            Master.LookTargetPosition(Master.World.Enemy_FindTargetPosition);
+            Master.LookTargetPosition(_targetPosition);
             //移动
             Master.DoMove();
         }
@@ -77,6 +92,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                 //关闭射线检测
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
+                Master.LookTarget = Player.Current;
                 ChangeState(AIAdvancedStateEnum.AiFollowUp);
                 return;
             }

@@ -1727,4 +1727,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         }
         _freezeSprite.Unfreeze();
     }
+
+    /// <summary>
+    /// 获取中心点坐标
+    /// </summary>
+    public Vector2 GetCenterPosition()
+    {
+        return AnimatedSprite.Position + Position;
+    }
 }

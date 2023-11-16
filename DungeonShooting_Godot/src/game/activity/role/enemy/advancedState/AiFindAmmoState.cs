@@ -1,4 +1,5 @@
 
+using System;
 using Godot;
 
 namespace AdvancedState;
@@ -24,11 +25,14 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
     public override void Enter(AIAdvancedStateEnum prev, params object[] args)
     {
+        if (Master.LookTarget == null)
+        {
+            throw new Exception("进入 AIAdvancedStateEnum.AiFindAmmo 状态时角色没有攻击目标!");
+        }
+        
         if (args.Length == 0)
         {
-            Debug.LogError("进入 AiStateEnum.AiFindAmmo 状态必须要把目标武器当成参数传过来");
-            ChangeState(prev);
-            return;
+            throw new Exception("进入 AiStateEnum.AiFindAmmo 状态必须要把目标武器当成参数传过来");
         }
 
         SetTargetWeapon((Weapon)args[0]);
@@ -38,11 +42,6 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
         //标记武器
         _target.SetSign(SignNames.AiFindWeaponSign, Master);
-    }
-
-    public override void Exit(AIAdvancedStateEnum next)
-    {
-        Master.LookTarget = null;
     }
 
     public override void Process(float delta)
@@ -65,9 +64,6 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         {
             _navigationUpdateTimer -= delta;
         }
-        
-        //枪口指向玩家
-        Master.LookTarget = Player.Current;
 
         if (_target.IsDestroyed || _target.IsTotalAmmoEmpty()) //已经被销毁, 或者弹药已经被其他角色捡走
         {
@@ -96,7 +92,7 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         else
         {
             //检测目标没有超出跟随视野距离
-            _isInTailAfterRange = Master.IsInTailAfterViewRange(Player.Current.GetCenterPosition());
+            _isInTailAfterRange = Master.IsInTailAfterViewRange(Master.LookTarget.GetCenterPosition());
             if (_isInTailAfterRange)
             {
                 _tailAfterTimer = 0;
@@ -143,11 +139,11 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
             if (_tailAfterTimer <= 0)
             {
-                Master.DrawLine(Vector2.Zero, Master.ToLocal(Player.Current.GetCenterPosition()), Colors.Orange);
+                Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.LookTarget.GetCenterPosition()), Colors.Orange);
             }
             else if (_tailAfterTimer <= 10)
             {
-                Master.DrawLine(Vector2.Zero, Master.ToLocal(Player.Current.GetCenterPosition()), Colors.Blue);
+                Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.LookTarget.GetCenterPosition()), Colors.Blue);
             }
             
         }

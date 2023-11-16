@@ -183,14 +183,14 @@ public partial class Player : AdvancedRole
         {
             //Hurt(1000, 0);
             Hp = 0;
-            Hurt(1000, 0);
+            Hurt(this, 1000, 0);
         }
         else if (Input.IsKeyPressed(Key.O)) //测试用, 消灭房间内所有敌人
         {
             var enemyList = AffiliationArea.FindIncludeItems(o => o.CollisionWithMask(PhysicsLayer.Enemy));
             foreach (var enemy in enemyList)
             {
-                ((AdvancedEnemy)enemy).Hurt(1000, 0);
+                ((AdvancedEnemy)enemy).Hurt(this, 1000, 0);
             }
         }
         // //测试用
@@ -224,7 +224,7 @@ public partial class Player : AdvancedRole
         return 1;
     }
 
-    protected override void OnHit(int damage, bool realHarm)
+    protected override void OnHit(ActivityObject target, int damage, bool realHarm)
     {
         //进入无敌状态
         if (realHarm) //真实伤害

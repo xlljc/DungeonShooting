@@ -146,7 +146,7 @@ public partial class Bullet : ActivityObject, IBullet
             }
             
             //造成伤害
-            role.CallDeferred(nameof(AdvancedRole.Hurt), BulletData.Harm, Rotation);
+            role.CallDeferred(nameof(AdvancedRole.Hurt), BulletData.TriggerRole, BulletData.Harm, Rotation);
 
             //穿透次数
             CurrentPenetration++;

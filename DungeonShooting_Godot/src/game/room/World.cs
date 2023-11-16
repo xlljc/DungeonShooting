@@ -65,21 +65,6 @@ public partial class World : CanvasModulate, ICoroutine
     /// </summary>
     public List<Role> Enemy_InstanceList  { get; } = new List<Role>();
     
-    // /// <summary>
-    // /// 公共属性, 敌人是否找到目标, 如果找到目标, 则与目标同房间的所有敌人都会知道目标的位置
-    // /// </summary>
-    // public bool Enemy_IsFindTarget { get; set; }
-    //
-    // /// <summary>
-    // /// 公共属性, 敌人在哪个区域找到的目标, 所有该区域下的敌人都会知道目标的位置
-    // /// </summary>
-    // public HashSet<AffiliationArea> Enemy_FindTargetAffiliationSet { get; } = new HashSet<AffiliationArea>();
-    //
-    // /// <summary>
-    // /// 公共属性, 敌人找到的目标的位置, 如果目标在视野内, 则一直更新
-    // /// </summary>
-    // public Vector2 Enemy_FindTargetPosition { get; set; }
-    
     private bool _pause = false;
     private List<CoroutineData> _coroutineList;
 
@@ -131,9 +116,10 @@ public partial class World : CanvasModulate, ICoroutine
                 if (role is AdvancedEnemy advancedEnemy)
                 {
                     //将未发现目标的敌人状态置为惊讶状态
-                    if (advancedEnemy.StateController.CurrState == AIAdvancedStateEnum.AiNormal)
+                    var controller = advancedEnemy.StateController;
+                    if (controller.CurrState == AIAdvancedStateEnum.AiNormal)
                     {
-                        advancedEnemy.StateController.ChangeState(AIAdvancedStateEnum.AiAstonished);
+                        controller.ChangeState(AIAdvancedStateEnum.AiAstonished, AIAdvancedStateEnum.AiLeaveFor, target);
                     }
                 }
             }

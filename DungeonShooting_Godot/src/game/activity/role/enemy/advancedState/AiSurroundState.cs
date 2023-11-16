@@ -1,4 +1,5 @@
 
+using System;
 using Godot;
 
 namespace AdvancedState;
@@ -29,15 +30,15 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
     public override void Enter(AIAdvancedStateEnum prev, params object[] args)
     {
+        if (Master.LookTarget == null)
+        {
+            throw new Exception("进入 AIAdvancedStateEnum.AiSurround 状态时角色没有攻击目标!");
+        }
+        
         Master.TargetInView = true;
         _isMoveOver = true;
         _pauseTimer = 0;
         _moveFlag = false;
-    }
-
-    public override void Exit(AIAdvancedStateEnum next)
-    {
-        Master.LookTarget = null;
     }
 
     public override void Process(float delta)
@@ -54,11 +55,8 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             }
         }
 
-        var playerPos = Player.Current.GetCenterPosition();
+        var playerPos = Master.LookTarget.GetCenterPosition();
         var weapon = Master.WeaponPack.ActiveItem;
-
-        //枪口指向玩家
-        Master.LookTarget = Player.Current;
 
         //检测玩家是否在视野内
         if (Master.IsInTailAfterViewRange(playerPos))

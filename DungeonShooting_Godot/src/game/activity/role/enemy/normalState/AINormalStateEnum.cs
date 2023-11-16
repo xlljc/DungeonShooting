@@ -9,7 +9,11 @@ public enum AINormalStateEnum
     /// <summary>
     /// 找到玩家，准备通知其他敌人
     /// </summary>
-    AiFind,
+    AiNotify,
+    /// <summary>
+    /// 发现目标, 惊讶状态
+    /// </summary>
+    AiAstonished,
     /// <summary>
     /// 收到其他敌人通知, 前往发现目标的位置
     /// </summary>

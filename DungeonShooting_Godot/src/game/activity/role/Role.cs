@@ -275,9 +275,10 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 当受伤时调用
     /// </summary>
+    /// <param name="target">谁触发的伤害</param>
     /// <param name="damage">受到的伤害</param>
     /// <param name="realHarm">是否受到真实伤害, 如果为false, 则表示该伤害被互动格挡掉了</param>
-    protected virtual void OnHit(int damage, bool realHarm)
+    protected virtual void OnHit(ActivityObject target, int damage, bool realHarm)
     {
     }
 
@@ -503,14 +504,6 @@ public abstract partial class Role : ActivityObject
     }
     
     /// <summary>
-    /// 获取当前角色的中心点坐标
-    /// </summary>
-    public virtual Vector2 GetCenterPosition()
-    {
-        return AnimatedSprite.GlobalPosition;
-    }
-    
-    /// <summary>
     /// 使角色看向指定的坐标的方向
     /// </summary>
     public virtual void LookTargetPosition(Vector2 pos)
@@ -675,9 +668,10 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 受到伤害, 如果是在碰撞信号处理函数中调用该函数, 请使用 CallDeferred 来延时调用, 否则很有可能导致报错
     /// </summary>
+    /// <param name="target">谁触发的伤害</param>
     /// <param name="damage">伤害的量</param>
     /// <param name="angle">伤害角度（弧度制）</param>
-    public virtual void Hurt(int damage, float angle)
+    public virtual void Hurt(ActivityObject target, int damage, float angle)
     {
         //受伤闪烁, 无敌状态
         if (Invincible)
@@ -706,7 +700,7 @@ public abstract partial class Role : ActivityObject
             // blood.Rotation = angle;
             // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
-        OnHit(damage, !flag);
+        OnHit(target, damage, !flag);
 
         //受伤特效
         PlayHitAnimation();
