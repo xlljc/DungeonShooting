@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Godot;
+using NnormalState;
 
 /// <summary>
 /// 游戏世界
@@ -64,20 +65,20 @@ public partial class World : CanvasModulate, ICoroutine
     /// </summary>
     public List<Role> Enemy_InstanceList  { get; } = new List<Role>();
     
-    /// <summary>
-    /// 公共属性, 敌人是否找到目标, 如果找到目标, 则与目标同房间的所有敌人都会知道目标的位置
-    /// </summary>
-    public bool Enemy_IsFindTarget { get; set; }
-
-    /// <summary>
-    /// 公共属性, 敌人在哪个区域找到的目标, 所有该区域下的敌人都会知道目标的位置
-    /// </summary>
-    public HashSet<AffiliationArea> Enemy_FindTargetAffiliationSet { get; } = new HashSet<AffiliationArea>();
-    
-    /// <summary>
-    /// 公共属性, 敌人找到的目标的位置, 如果目标在视野内, 则一直更新
-    /// </summary>
-    public Vector2 Enemy_FindTargetPosition { get; set; }
+    // /// <summary>
+    // /// 公共属性, 敌人是否找到目标, 如果找到目标, 则与目标同房间的所有敌人都会知道目标的位置
+    // /// </summary>
+    // public bool Enemy_IsFindTarget { get; set; }
+    //
+    // /// <summary>
+    // /// 公共属性, 敌人在哪个区域找到的目标, 所有该区域下的敌人都会知道目标的位置
+    // /// </summary>
+    // public HashSet<AffiliationArea> Enemy_FindTargetAffiliationSet { get; } = new HashSet<AffiliationArea>();
+    //
+    // /// <summary>
+    // /// 公共属性, 敌人找到的目标的位置, 如果目标在视野内, 则一直更新
+    // /// </summary>
+    // public Vector2 Enemy_FindTargetPosition { get; set; }
     
     private bool _pause = false;
     private List<CoroutineData> _coroutineList;
@@ -114,6 +115,29 @@ public partial class World : CanvasModulate, ICoroutine
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// 通知其他敌人发现目标了
+    /// </summary>
+    /// <param name="self">发送通知的角色</param>
+    /// <param name="target">目标</param>
+    public void NotifyEnemyTarget(Role self, ActivityObject target)
+    {
+        foreach (var role in Enemy_InstanceList)
+        {
+            if (role != self && role.AffiliationArea == self.AffiliationArea)
+            {
+                if (role is AdvancedEnemy advancedEnemy)
+                {
+                    //将未发现目标的敌人状态置为惊讶状态
+                    if (advancedEnemy.StateController.CurrState == AIAdvancedStateEnum.AiNormal)
+                    {
+                        advancedEnemy.StateController.ChangeState(AIAdvancedStateEnum.AiAstonished);
+                    }
+                }
+            }
+        }
     }
     
     public long StartCoroutine(IEnumerator able)

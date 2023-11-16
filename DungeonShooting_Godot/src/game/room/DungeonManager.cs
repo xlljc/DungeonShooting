@@ -184,8 +184,6 @@ public partial class DungeonManager : Node2D
                 OnCheckEnemy();
             }
             
-            //更新敌人视野
-            UpdateEnemiesView();
             if (ActivityObject.IsDebug)
             {
                 QueueRedraw();
@@ -632,52 +630,6 @@ public partial class DungeonManager : Node2D
                     }
                 }
             }
-        }
-    }
-
-    /// <summary>
-    /// 更新敌人视野
-    /// </summary>
-    private void UpdateEnemiesView()
-    {
-        World.Enemy_IsFindTarget = false;
-        World.Enemy_FindTargetAffiliationSet.Clear();
-        for (var i = 0; i < World.Enemy_InstanceList.Count; i++)
-        {
-            var enemy = World.Enemy_InstanceList[i];
-            if (enemy is Enemy e)
-            {
-                var state = e.StateController.CurrState;
-                if (state == AINormalStateEnum.AiFollowUp || state == AINormalStateEnum.AiSurround) //目标在视野内
-                {
-                    if (!World.Enemy_IsFindTarget)
-                    {
-                        World.Enemy_IsFindTarget = true;
-                        World.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
-                        World.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
-                    }
-                    World.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
-                }
-            }
-            else if (enemy is AdvancedEnemy ae)
-            {
-                var state = ae.StateController.CurrState;
-                if (state == AIAdvancedStateEnum.AiFollowUp || state == AIAdvancedStateEnum.AiSurround || state == AIAdvancedStateEnum.AiFindAmmo) //目标在视野内
-                {
-                    if (!World.Enemy_IsFindTarget)
-                    {
-                        World.Enemy_IsFindTarget = true;
-                        World.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
-                        World.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
-                    }
-                    World.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
-                }
-            }
-            else
-            {
-                throw new Exception("World.Enemy_InstanceList 混入了非 Enemy 和 AdvancedEnemy 类型的对象!");
-            }
-            
         }
     }
 
