@@ -206,6 +206,15 @@ public partial class Player : AdvancedRole
         //         freezeSprite.ActivityObject.MoveController.AddForce(temp.Normalized() * 300 * (25f - temp.Length()) / 25f);
         //     }
         // }
+        
+        if (Face == FaceDirection.Right)
+        {
+            TipRoot.Scale = Vector2.One;
+        }
+        else
+        {
+            TipRoot.Scale = new Vector2(-1, 1);
+        }
     }
 
     protected override void OnPickUpWeapon(Weapon weapon)

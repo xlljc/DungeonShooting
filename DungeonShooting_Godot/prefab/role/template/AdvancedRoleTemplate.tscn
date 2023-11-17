@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cyrcv2jdgr8cf"]
+[gd_scene load_steps=9 format=3 uid="uid://cyrcv2jdgr8cf"]
 
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_xk5yk"]
 [ext_resource type="Script" path="res://src/game/activity/role/MountRotation.cs" id="2_5ddpw"]
+[ext_resource type="SpriteFrames" uid="uid://c8h5svp76h3kw" path="res://resource/spriteFrames/role/Role_tip.tres" id="3_bo78w"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v2kfw"]
 resource_local_to_scene = true
@@ -81,5 +82,12 @@ collision_mask = 0
 monitorable = false
 
 [node name="MeleeAttackCollision" type="CollisionPolygon2D" parent="MountPoint/MeleeAttackArea"]
+
+[node name="TipRoot" type="Node2D" parent="."]
+
+[node name="TipSprite" type="AnimatedSprite2D" parent="TipRoot"]
+visible = false
+position = Vector2(0, -22)
+sprite_frames = ExtResource("3_bo78w")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

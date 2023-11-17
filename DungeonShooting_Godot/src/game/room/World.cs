@@ -119,7 +119,7 @@ public partial class World : CanvasModulate, ICoroutine
                     var controller = advancedEnemy.StateController;
                     if (controller.CurrState == AIAdvancedStateEnum.AiNormal)
                     {
-                        controller.ChangeState(AIAdvancedStateEnum.AiAstonished, AIAdvancedStateEnum.AiLeaveFor, target);
+                        controller.ChangeState(AIAdvancedStateEnum.AiLeaveFor, target);
                     }
                 }
             }

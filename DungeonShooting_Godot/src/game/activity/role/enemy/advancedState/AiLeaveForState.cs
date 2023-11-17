@@ -13,6 +13,8 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
 
+    private float _idleTimer = 0;
+    
     //目标
     private ActivityObject _target;
     //目标点
@@ -30,8 +32,6 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         }
 
         _target = (ActivityObject)args[0];
-        _targetPosition = _target.GetCenterPosition();
-        Master.LookTargetPosition(_targetPosition);
         
         //先检查弹药是否打光
         if (Master.IsAllWeaponTotalAmmoEmpty())
@@ -42,12 +42,28 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             {
                 Master.LookTarget = _target;
                 ChangeState(AIAdvancedStateEnum.AiFindAmmo, targetWeapon);
+                return;
             }
         }
+
+        _idleTimer = 1;
+        _targetPosition = _target.GetCenterPosition();
+        Master.LookTargetPosition(_targetPosition);
+        Master.AnimationPlayer.Play(AnimatorNames.Query);
+    }
+
+    public override void Exit(AIAdvancedStateEnum next)
+    {
+        Master.AnimationPlayer.Play(AnimatorNames.Reset);
     }
 
     public override void Process(float delta)
     {
+        if (_idleTimer > 0)
+        {
+            _idleTimer -= delta;
+            return;
+        }
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
         
         //更新玩家位置

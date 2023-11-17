@@ -82,4 +82,12 @@ public static class AnimatorNames
     /// 通知动作
     /// </summary>
     public const string Notify = "notify";
+    /// <summary>
+    /// 疑惑动作
+    /// </summary>
+    public const string Query = "query";
+    /// <summary>
+    /// 重置动画
+    /// </summary>
+    public const string Reset = "RESET";
 }

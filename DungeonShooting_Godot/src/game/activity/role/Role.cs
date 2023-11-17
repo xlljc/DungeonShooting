@@ -73,6 +73,18 @@ public abstract partial class Role : ActivityObject
     public CollisionShape2D InteractiveCollision { get; set; }
     
     /// <summary>
+    /// 用于提示状态的根节点
+    /// </summary>
+    [Export, ExportFillNode]
+    public Node2D TipRoot { get; set; }
+    
+    /// <summary>
+    /// 用于提示当前敌人状态
+    /// </summary>
+    [Export, ExportFillNode]
+    public AnimatedSprite2D TipSprite { get; set; }
+    
+    /// <summary>
     /// 动画播放器
     /// </summary>
     [Export, ExportFillNode]
@@ -242,6 +254,16 @@ public abstract partial class Role : ActivityObject
     //护盾恢复计时器
     private float _shieldRecoveryTimer = 0;
 
+    protected override void OnExamineExportFillNode(string propertyName, Node node, bool isJustCreated)
+    {
+        base.OnExamineExportFillNode(propertyName, node, isJustCreated);
+        if (propertyName == nameof(TipSprite))
+        {
+            var sprite = (AnimatedSprite2D)node;
+            sprite.SpriteFrames =
+                ResourceManager.Load<SpriteFrames>(ResourcePath.resource_spriteFrames_role_Role_tip_tres);
+        }
+    }
     
     /// <summary>
     /// 当血量改变时调用
@@ -486,6 +508,14 @@ public abstract partial class Role : ActivityObject
             }
         }
         
+        if (Face == FaceDirection.Right)
+        {
+            TipRoot.Scale = Vector2.One;
+        }
+        else
+        {
+            TipRoot.Scale = new Vector2(-1, 1);
+        }
     }
     
     /// <summary>

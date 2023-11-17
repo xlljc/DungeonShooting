@@ -27,7 +27,7 @@ shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
 
-[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_rikvp")]
+[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_rikvp")]
 script = ExtResource("2_wjtfl")
 ViewRay = NodePath("ViewRay")
 NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
@@ -37,6 +37,8 @@ HurtArea = NodePath("HurtArea")
 HurtCollision = NodePath("HurtArea/HurtCollision")
 InteractiveArea = NodePath("InteractiveArea")
 InteractiveCollision = NodePath("InteractiveArea/InteractiveCollision")
+TipRoot = NodePath("TipRoot")
+TipSprite = NodePath("TipRoot/TipSprite")
 AnimationPlayer = NodePath("AnimationPlayer")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")

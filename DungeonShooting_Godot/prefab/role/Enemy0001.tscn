@@ -1,11 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://b8s1dgu63fddf"]
+[gd_scene load_steps=12 format=3 uid="uid://b8s1dgu63fddf"]
 
 [ext_resource type="PackedScene" uid="uid://dbrig6dq441wo" path="res://prefab/role/template/AdvancedEnemyTemplate.tscn" id="1_2vqwe"]
 [ext_resource type="Script" path="res://src/game/activity/role/enemy/AdvancedEnemy.cs" id="2_thbey"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_x8agd"]
 [ext_resource type="SpriteFrames" uid="uid://cnctpyrn02rhd" path="res://resource/spriteFrames/role/Enemy0001.tres" id="4_qv8w5"]
-[ext_resource type="Texture2D" uid="uid://b75k7hefqy3tm" path="res://resource/sprite/role/common/Role_astonished.png" id="5_0p4q8"]
-[ext_resource type="Texture2D" uid="uid://6jka6itu76x7" path="res://resource/sprite/role/common/Role_notify.png" id="6_70bey"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_f7y56"]
 resource_local_to_scene = true
@@ -29,125 +27,60 @@ shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
 
-[sub_resource type="Animation" id="Animation_nb4pe"]
-resource_name = "astonished"
-length = 0.6
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("TipSprite:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("TipSprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("5_0p4q8")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AnimatedSprite:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.15, 0.25, 0.35, 0.45),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(0.8, 0.8), Vector2(1.2, 1.2), Vector2(0.9, 0.9), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("TipSprite:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("TipSprite:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.45, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0, -22), Vector2(0, -28), Vector2(0, -28), Vector2(0, -35)]
-}
-
 [sub_resource type="Animation" id="Animation_0l5k0"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("TipSprite:visible")
+tracks/0/path = NodePath("AnimatedSprite:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector2(1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("TipSprite:texture")
+tracks/1/path = NodePath("TipRoot/TipSprite:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("5_0p4q8")]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("AnimatedSprite:scale")
+tracks/2/path = NodePath("TipRoot/TipSprite:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
+"update": 1,
+"values": [false]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("TipSprite:modulate")
+tracks/3/path = NodePath("TipRoot/TipSprite:animation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
+"update": 1,
+"values": [&"default"]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("TipSprite:position")
+tracks/4/path = NodePath("TipRoot/TipSprite:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -157,47 +90,190 @@ tracks/4/keys = {
 "values": [Vector2(0, -22)]
 }
 
-[sub_resource type="Animation" id="Animation_5mflw"]
-resource_name = "notify"
+[sub_resource type="Animation" id="Animation_nb4pe"]
+resource_name = "astonished"
 length = 0.6
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("TipSprite:texture")
+tracks/0/path = NodePath("AnimatedSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.15, 0.25, 0.35, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 0.8), Vector2(0.8, 1.2), Vector2(1.1, 0.9), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TipRoot/TipSprite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TipRoot/TipSprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TipRoot/TipSprite:animation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"astonished"]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("TipRoot/TipSprite:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.45, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -20), Vector2(0, -25), Vector2(0, -25), Vector2(0, -30)]
+}
+
+[sub_resource type="Animation" id="Animation_5mflw"]
+resource_name = "notify"
+length = 0.6
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TipRoot/TipSprite:animation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("6_70bey")]
+"values": [&"notify"]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("TipSprite:visible")
+tracks/1/path = NodePath("TipRoot/TipSprite:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TipRoot/TipSprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true, false]
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_usfrh"]
+resource_name = "query"
+length = 0.45
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.15, 0.25, 0.35, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 0.8), Vector2(0.8, 1.2), Vector2(1.1, 0.9), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TipRoot/TipSprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TipRoot/TipSprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TipRoot/TipSprite:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -20), Vector2(0, -25)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("TipRoot/TipSprite:animation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"query"]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ur1ug"]
 _data = {
 "RESET": SubResource("Animation_0l5k0"),
 "astonished": SubResource("Animation_nb4pe"),
-"notify": SubResource("Animation_5mflw")
+"notify": SubResource("Animation_5mflw"),
+"query": SubResource("Animation_usfrh")
 }
 
-[node name="Enemy0001" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "TipSprite", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_2vqwe")]
+[node name="Enemy0001" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_2vqwe")]
 script = ExtResource("2_thbey")
 ViewRay = NodePath("ViewRay")
 NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
 NavigationPoint = NodePath("NavigationPoint")
-TipSprite = NodePath("TipSprite")
 MountPoint = NodePath("MountPoint")
 BackMountPoint = NodePath("BackMountPoint")
 MeleeAttackArea = NodePath("MountPoint/MeleeAttackArea")
@@ -206,6 +282,8 @@ HurtArea = NodePath("HurtArea")
 HurtCollision = NodePath("HurtArea/HurtCollision")
 InteractiveArea = NodePath("InteractiveArea")
 InteractiveCollision = NodePath("InteractiveArea/InteractiveCollision")
+TipRoot = NodePath("TipRoot")
+TipSprite = NodePath("TipRoot/TipSprite")
 AnimationPlayer = NodePath("AnimationPlayer")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
@@ -217,10 +295,6 @@ material = SubResource("ShaderMaterial_f7y56")
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_2kup1")
 sprite_frames = ExtResource("4_qv8w5")
-
-[node name="TipSprite" parent="." index="9"]
-modulate = Color(1, 1, 1, 0)
-position = Vector2(0, -22)
 
 [node name="AnimationPlayer" parent="." index="10"]
 libraries = {

@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://0uc4naitjprl"]
+[gd_scene load_steps=8 format=3 uid="uid://0uc4naitjprl"]
 
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_xk5yk"]
+[ext_resource type="SpriteFrames" uid="uid://c8h5svp76h3kw" path="res://resource/spriteFrames/role/Role_tip.tres" id="2_1udon"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v2kfw"]
 resource_local_to_scene = true
@@ -68,3 +69,8 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_n68nu")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="TipRoot" type="Node2D" parent="."]
+
+[node name="TipSprite" type="AnimatedSprite2D" parent="TipRoot"]
+sprite_frames = ExtResource("2_1udon")

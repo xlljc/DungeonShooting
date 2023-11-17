@@ -65,12 +65,6 @@ public partial class AdvancedEnemy : AdvancedRole
     public Marker2D NavigationPoint { get; private set; }
     
     /// <summary>
-    /// 用于提示当前敌人状态
-    /// </summary>
-    [Export, ExportFillNode]
-    public Sprite2D TipSprite { get; set; }
-    
-    /// <summary>
     /// 当前敌人所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
@@ -79,7 +73,7 @@ public partial class AdvancedEnemy : AdvancedRole
     /// 锁定目标已经走过的时间
     /// </summary>
     public float LockTargetTime { get; set; } = 0;
-    
+
     public override void OnInit()
     {
         base.OnInit();

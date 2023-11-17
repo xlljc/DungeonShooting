@@ -1,0 +1,37 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://c8h5svp76h3kw"]
+
+[ext_resource type="Texture2D" uid="uid://b75k7hefqy3tm" path="res://resource/sprite/role/common/Role_astonished.png" id="1_tbb6m"]
+[ext_resource type="Texture2D" uid="uid://6jka6itu76x7" path="res://resource/sprite/role/common/Role_notify.png" id="2_0e3tg"]
+[ext_resource type="Texture2D" uid="uid://bda63puujv425" path="res://resource/sprite/role/common/Role_query.png" id="2_70ucj"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_tbb6m")
+}],
+"loop": false,
+"name": &"astonished",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_0e3tg")
+}],
+"loop": true,
+"name": &"notify",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_70ucj")
+}],
+"loop": false,
+"name": &"query",
+"speed": 5.0
+}]
