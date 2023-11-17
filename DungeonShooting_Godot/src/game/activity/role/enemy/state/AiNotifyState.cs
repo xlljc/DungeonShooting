@@ -1,19 +1,19 @@
 using System;
 
-namespace AdvancedState;
+namespace EnemyState;
 
 /// <summary>
 /// 发现目标, 通知其它敌人
 /// </summary>
-public class AiNotifyState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
+public class AiNotifyState : StateBase<Enemy, AIStateEnum>
 {
     private float _timer;
     
-    public AiNotifyState() : base(AIAdvancedStateEnum.AiNotify)
+    public AiNotifyState() : base(AIStateEnum.AiNotify)
     {
     }
 
-    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
         if (Master.LookTarget == null)
         {
@@ -31,7 +31,7 @@ public class AiNotifyState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         _timer -= delta;
         if (_timer <= 0)
         {
-            ChangeState(AIAdvancedStateEnum.AiTailAfter);
+            ChangeState(AIStateEnum.AiTailAfter);
         }
     }
 }

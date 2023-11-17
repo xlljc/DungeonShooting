@@ -218,18 +218,7 @@ public static class FireManager
             Penetration = Utils.Random.RandomConfigRange(bullet.Penetration),
         };
 
-        if (role is AdvancedRole advancedRole)
-        {
-            data.Position = advancedRole.MountPoint.GlobalPosition;
-        }
-        else if (role is Enemy enemy)
-        {
-            data.Position = enemy.FirePoint.GlobalPosition;
-        }
-        else
-        {
-            data.Position = role.AnimatedSprite.GlobalPosition;
-        }
+        data.Position = role.MountPoint.GlobalPosition;
         
         var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);
         data.Altitude = role.GetFirePointAltitude();

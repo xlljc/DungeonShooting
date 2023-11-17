@@ -49,7 +49,7 @@ public partial class GameCamera : Camera2D
     /// <summary>
     /// 相机跟随目标
     /// </summary>
-    private AdvancedRole _followTarget;
+    private Role _followTarget;
 
     /// <summary>
     /// SubViewportContainer 中的像素偏移, 因为游戏开启了完美像素, SubViewport 节点下的相机运动会造成非常大的抖动,
@@ -119,7 +119,7 @@ public partial class GameCamera : Camera2D
     /// <summary>
     /// 设置相机跟随目标
     /// </summary>
-    public void SetFollowTarget(AdvancedRole target)
+    public void SetFollowTarget(Role target)
     {
         _followTarget = target;
         if (target != null)
@@ -132,7 +132,7 @@ public partial class GameCamera : Camera2D
     /// <summary>
     /// 获取相机跟随目标
     /// </summary>
-    public AdvancedRole GetFollowTarget()
+    public Role GetFollowTarget()
     {
         return _followTarget;
     }

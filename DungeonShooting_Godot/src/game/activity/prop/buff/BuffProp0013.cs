@@ -8,17 +8,11 @@ public partial class BuffProp0013 : BuffProp
 {
     public override void OnPickUpItem()
     {
-        if (Master is AdvancedRole advancedRole)
-        {
-            advancedRole.WeaponPack.SetCapacity(advancedRole.WeaponPack.Capacity + 1);
-        }
+        Master.WeaponPack.SetCapacity(Master.WeaponPack.Capacity + 1);
     }
 
     public override void OnRemoveItem()
     {
-        if (Master is AdvancedRole advancedRole)
-        {
-            advancedRole.WeaponPack.SetCapacity(advancedRole.WeaponPack.Capacity - 1);
-        }
+        Master.WeaponPack.SetCapacity(Master.WeaponPack.Capacity - 1);
     }
 }

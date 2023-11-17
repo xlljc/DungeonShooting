@@ -1,12 +1,12 @@
 
 using Godot;
 
-namespace AdvancedState;
+namespace EnemyState;
 
 /// <summary>
 /// AI 正常状态
 /// </summary>
-public class AiNormalState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
+public class AiNormalState : StateBase<Enemy, AIStateEnum>
 {
     //下一个运动的坐标
     private Vector2 _nextPos;
@@ -29,11 +29,11 @@ public class AiNormalState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
     //卡在一个位置的时间
     private float _lockTimer;
 
-    public AiNormalState() : base(AIAdvancedStateEnum.AiNormal)
+    public AiNormalState() : base(AIStateEnum.AiNormal)
     {
     }
 
-    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
         _isMoveOver = true;
         _againstWall = false;
@@ -55,7 +55,7 @@ public class AiNormalState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             //发现玩家
             Master.LookTarget = player;
             //进入惊讶状态, 然后再进入通知状态
-            ChangeState(AIAdvancedStateEnum.AiAstonished, AIAdvancedStateEnum.AiNotify);
+            ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiNotify);
             return;
         }
         else if (_pauseTimer >= 0)
@@ -96,7 +96,7 @@ public class AiNormalState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             {
                 var pos = Master.Position;
                 var lastSlideCollision = Master.GetLastSlideCollision();
-                if (lastSlideCollision != null && lastSlideCollision.GetCollider() is AdvancedRole) //碰到其他角色
+                if (lastSlideCollision != null && lastSlideCollision.GetCollider() is Role) //碰到其他角色
                 {
                     _pauseTimer = Utils.Random.RandomRangeFloat(0.1f, 0.5f);
                     _isMoveOver = true;

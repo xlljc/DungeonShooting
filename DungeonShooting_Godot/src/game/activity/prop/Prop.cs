@@ -32,7 +32,7 @@ public abstract partial class Prop : ActivityObject
     /// 触发扔掉道具效果, 并不会管道具是否在道具背包中
     /// </summary>
     /// <param name="master">触发扔掉该道具的的角色</param>
-    public void ThrowProp(AdvancedRole master)
+    public void ThrowProp(Role master)
     {
         ThrowProp(master, master.GlobalPosition);
     }

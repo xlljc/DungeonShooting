@@ -127,7 +127,7 @@ public partial class Knife : Weapon
         var activityObject = body.AsActivityObject();
         if (activityObject != null)
         {
-            if (activityObject is AdvancedRole role) //碰到角色
+            if (activityObject is Role role) //碰到角色
             {
                 var damage = Utils.Random.RandomConfigRange(Attribute.Bullet.HarmRange);
                 //计算子弹造成的伤害
@@ -159,7 +159,7 @@ public partial class Knife : Weapon
                 }
                 
                 //造成伤害
-                role.CallDeferred(nameof(AdvancedRole.Hurt), TriggerRole, damage, (role.GetCenterPosition() - GlobalPosition).Angle());
+                role.CallDeferred(nameof(Role.Hurt), TriggerRole, damage, (role.GetCenterPosition() - GlobalPosition).Angle());
             }
             else if (activityObject is Bullet bullet) //攻击子弹
             {

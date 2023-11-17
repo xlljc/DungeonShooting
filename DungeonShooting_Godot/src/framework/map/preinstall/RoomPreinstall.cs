@@ -431,7 +431,7 @@ public class RoomPreinstall : IDestroy
         else if (activityMark.ActivityType == ActivityType.Enemy) //敌人类型
         {
             var role = (Role)activityObject;
-            if (role is AdvancedEnemy enemy && activityMark.Attr.TryGetValue("Weapon", out var weaponId)) //使用的武器
+            if (role is Enemy enemy && activityMark.Attr.TryGetValue("Weapon", out var weaponId)) //使用的武器
             {
                 if (!string.IsNullOrEmpty(weaponId))
                 {

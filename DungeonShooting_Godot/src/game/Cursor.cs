@@ -13,7 +13,7 @@ public partial class Cursor : Node2D
     /// <summary>
     /// 非GUI模式下鼠标指针所挂载的角色
     /// </summary>
-    private AdvancedRole _mountRole;
+    private Role _mountRole;
 
     private Sprite2D center;
     private Sprite2D lt;
@@ -88,7 +88,7 @@ public partial class Cursor : Node2D
     /// <summary>
     /// 设置非GUI模式下鼠标指针所挂载的角色
     /// </summary>
-    public void SetMountRole(AdvancedRole role)
+    public void SetMountRole(Role role)
     {
         _mountRole = role;
     }
@@ -96,7 +96,7 @@ public partial class Cursor : Node2D
     /// <summary>
     /// 获取非GUI模式下鼠标指针所挂载的角色
     /// </summary>
-    public AdvancedRole GetMountRole()
+    public Role GetMountRole()
     {
         return _mountRole;
     }

@@ -52,9 +52,8 @@ public partial class BuffProp0010 : BuffProp
     
     private void CalcBulletRepelEvent(float originRepel, RefValue<float> repel)
     {
-        if (repel.Value < 0 || (Master is AdvancedRole advancedRole &&
-                                advancedRole.WeaponPack.ActiveItem != null &&
-                                advancedRole.WeaponPack.ActiveItem.Attribute.IsMelee))
+        if (repel.Value < 0 || (Master.WeaponPack.ActiveItem != null &&
+                                Master.WeaponPack.ActiveItem.Attribute.IsMelee))
         {
             return;
         }

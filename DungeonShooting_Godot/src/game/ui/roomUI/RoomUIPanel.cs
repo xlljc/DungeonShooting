@@ -71,10 +71,10 @@ public partial class RoomUIPanel : RoomUI
     {
         foreach (var role in World.Current.Enemy_InstanceList)
         {
-            if (!role.IsDestroyed && role is AdvancedEnemy advancedEnemy)
+            if (!role.IsDestroyed)
             {
-                var position = GameApplication.Instance.ViewToGlobalPosition(advancedEnemy.Position);
-                DrawString(ResourceManager.DefaultFont16Px, position, advancedEnemy.StateController.CurrState.ToString());
+                var position = GameApplication.Instance.ViewToGlobalPosition(role.Position);
+                DrawString(ResourceManager.DefaultFont16Px, position, role.StateController.CurrState.ToString());
             }
         }
     }

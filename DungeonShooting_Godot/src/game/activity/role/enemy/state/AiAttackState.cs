@@ -1,17 +1,17 @@
 ﻿using System;
 using Godot;
 
-namespace AdvancedState;
+namespace EnemyState;
 
 /// <summary>
 /// ai 攻击状态
 /// </summary>
-public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
+public class AiAttackState : StateBase<Enemy, AIStateEnum>
 {
     /// <summary>
     /// 上一个状态
     /// </summary>
-    public AIAdvancedStateEnum PrevState;
+    public AIStateEnum PrevState;
 
     /// <summary>
     /// 攻击状态
@@ -33,11 +33,11 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
     //卡在一个位置的时间
     private float _lockTimer;
     
-    public AiAttackState() : base(AIAdvancedStateEnum.AiAttack)
+    public AiAttackState() : base(AIStateEnum.AiAttack)
     {
     }
 
-    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
         if (Master.LookTarget == null)
         {
@@ -66,7 +66,7 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         _moveFlag = false;
     }
 
-    public override void Exit(AIAdvancedStateEnum next)
+    public override void Exit(AIStateEnum next)
     {
         Master.MountLookTarget = true;
         Master.LockTargetTime = 0;
@@ -227,7 +227,7 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             else
             {
                 var lastSlideCollision = Master.GetLastSlideCollision();
-                if (lastSlideCollision != null && lastSlideCollision.GetCollider() is AdvancedRole) //碰到其他角色
+                if (lastSlideCollision != null && lastSlideCollision.GetCollider() is Role) //碰到其他角色
                 {
                     _pauseTimer = Utils.Random.RandomRangeFloat(0f, 0.3f);
                     _isMoveOver = true;

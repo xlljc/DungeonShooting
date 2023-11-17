@@ -16,24 +16,16 @@ public partial class ActiveProp5001 : ActiveProp
 
     public override bool OnCheckUse()
     {
-        if (Master is AdvancedRole advancedRole)
-        {
-            return advancedRole.WeaponPack.ActiveItem != null && !advancedRole.WeaponPack.ActiveItem.IsAmmoFull();
-        }
-
-        return false;
+        return Master.WeaponPack.ActiveItem != null && !Master.WeaponPack.ActiveItem.IsAmmoFull();
     }
 
     protected override int OnUse()
     {
-        if (Master is AdvancedRole advancedRole)
+        var weapon = Master.WeaponPack.ActiveItem;
+        if (weapon != null)
         {
-            var weapon = advancedRole.WeaponPack.ActiveItem;
-            if (weapon != null)
-            {
-                weapon.SetTotalAmmo(weapon.Attribute.MaxAmmoCapacity);
-                return 1;
-            }
+            weapon.SetTotalAmmo(weapon.Attribute.MaxAmmoCapacity);
+            return 1;
         }
 
         return 0;

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Godot;
-using NnormalState;
 
 /// <summary>
 /// 游戏世界
@@ -63,7 +62,7 @@ public partial class World : CanvasModulate, ICoroutine
     /// <summary>
     /// 记录所有存活的敌人
     /// </summary>
-    public List<Role> Enemy_InstanceList  { get; } = new List<Role>();
+    public List<Enemy> Enemy_InstanceList  { get; } = new List<Enemy>();
     
     private bool _pause = false;
     private List<CoroutineData> _coroutineList;
@@ -113,14 +112,11 @@ public partial class World : CanvasModulate, ICoroutine
         {
             if (role != self && !role.IsDestroyed && role.AffiliationArea == self.AffiliationArea)
             {
-                if (role is AdvancedEnemy advancedEnemy)
+                //将未发现目标的敌人状态置为惊讶状态
+                var controller = role.StateController;
+                if (controller.CurrState == AIStateEnum.AiNormal)
                 {
-                    //将未发现目标的敌人状态置为惊讶状态
-                    var controller = advancedEnemy.StateController;
-                    if (controller.CurrState == AIAdvancedStateEnum.AiNormal)
-                    {
-                        controller.ChangeState(AIAdvancedStateEnum.AiLeaveFor, target);
-                    }
+                    controller.ChangeState(AIStateEnum.AiLeaveFor, target);
                 }
             }
         }

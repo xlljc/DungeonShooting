@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://b8s1dgu63fddf"]
 
-[ext_resource type="PackedScene" uid="uid://dbrig6dq441wo" path="res://prefab/role/template/AdvancedEnemyTemplate.tscn" id="1_2vqwe"]
-[ext_resource type="Script" path="res://src/game/activity/role/enemy/AdvancedEnemy.cs" id="2_thbey"]
+[ext_resource type="PackedScene" uid="uid://dbrig6dq441wo" path="res://prefab/role/template/EnemyTemplate.tscn" id="1_2vqwe"]
+[ext_resource type="Script" path="res://src/game/activity/role/enemy/Enemy.cs" id="2_0pcq3"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_x8agd"]
 [ext_resource type="SpriteFrames" uid="uid://cnctpyrn02rhd" path="res://resource/spriteFrames/role/Enemy0001.tres" id="4_qv8w5"]
 
@@ -269,15 +269,11 @@ _data = {
 "query": SubResource("Animation_usfrh")
 }
 
-[node name="Enemy0001" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_2vqwe")]
-script = ExtResource("2_thbey")
+[node name="Enemy0001" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_2vqwe")]
+script = ExtResource("2_0pcq3")
 ViewRay = NodePath("ViewRay")
 NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
 NavigationPoint = NodePath("NavigationPoint")
-MountPoint = NodePath("MountPoint")
-BackMountPoint = NodePath("BackMountPoint")
-MeleeAttackArea = NodePath("MountPoint/MeleeAttackArea")
-MeleeAttackCollision = NodePath("MountPoint/MeleeAttackArea/MeleeAttackCollision")
 HurtArea = NodePath("HurtArea")
 HurtCollision = NodePath("HurtArea/HurtCollision")
 InteractiveArea = NodePath("InteractiveArea")
@@ -285,6 +281,10 @@ InteractiveCollision = NodePath("InteractiveArea/InteractiveCollision")
 TipRoot = NodePath("TipRoot")
 TipSprite = NodePath("TipRoot/TipSprite")
 AnimationPlayer = NodePath("AnimationPlayer")
+MountPoint = NodePath("MountPoint")
+BackMountPoint = NodePath("BackMountPoint")
+MeleeAttackArea = NodePath("MountPoint/MeleeAttackArea")
+MeleeAttackCollision = NodePath("MountPoint/MeleeAttackArea/MeleeAttackCollision")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")

@@ -1,25 +1,25 @@
 using Godot;
 
-namespace AdvancedState;
+namespace EnemyState;
 
 /// <summary>
 /// 发现目标时的惊讶状态
 /// </summary>
-public class AiAstonishedState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
+public class AiAstonishedState : StateBase<Enemy, AIStateEnum>
 {
     /// <summary>
     /// 下一个状态
     /// </summary>
-    public AIAdvancedStateEnum NextState;
+    public AIStateEnum NextState;
 
     private object[] _args;
     private float _timer;
     
-    public AiAstonishedState() : base(AIAdvancedStateEnum.AiAstonished)
+    public AiAstonishedState() : base(AIStateEnum.AiAstonished)
     {
     }
 
-    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
         if (args.Length == 0)
         {
@@ -28,11 +28,11 @@ public class AiAstonishedState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             return;
         }
 
-        NextState = (AIAdvancedStateEnum)args[0];
+        NextState = (AIStateEnum)args[0];
         _args = args;
         _timer = 0.6f;
 
-        if (NextState == AIAdvancedStateEnum.AiLeaveFor)
+        if (NextState == AIStateEnum.AiLeaveFor)
         {
             var target = (ActivityObject)args[1];
             Master.LookTargetPosition(target.GetCenterPosition());

@@ -2,12 +2,12 @@
 using System;
 using Godot;
 
-namespace AdvancedState;
+namespace EnemyState;
 
 /// <summary>
 /// 距离目标足够近, 在目标附近随机移动, 并开火
 /// </summary>
-public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
+public class AiSurroundState : StateBase<Enemy, AIStateEnum>
 {
     //是否移动结束
     private bool _isMoveOver;
@@ -24,11 +24,11 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
     //卡在一个位置的时间
     private float _lockTimer;
 
-    public AiSurroundState() : base(AIAdvancedStateEnum.AiSurround)
+    public AiSurroundState() : base(AIStateEnum.AiSurround)
     {
     }
 
-    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
         if (Master.LookTarget == null)
         {
@@ -50,7 +50,7 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                ChangeState(AIAdvancedStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AIStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
         }
@@ -112,7 +112,7 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                 else
                 {
                     var lastSlideCollision = Master.GetLastSlideCollision();
-                    if (lastSlideCollision != null && lastSlideCollision.GetCollider() is AdvancedRole) //碰到其他角色
+                    if (lastSlideCollision != null && lastSlideCollision.GetCollider() is Role) //碰到其他角色
                     {
                         _pauseTimer = Utils.Random.RandomRangeFloat(0f, 0.3f);
                         _isMoveOver = true;
@@ -141,19 +141,19 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                 {
                     if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.GetWeaponRange(0.7f), 2)) //玩家离开正常射击范围
                     {
-                        ChangeState(AIAdvancedStateEnum.AiFollowUp);
+                        ChangeState(AIStateEnum.AiFollowUp);
                     }
                     else if (weapon.TriggerIsReady()) //可以攻击
                     {
                         //发起攻击
-                        ChangeState(AIAdvancedStateEnum.AiAttack);
+                        ChangeState(AIStateEnum.AiAttack);
                     }
                 }
             }
         }
         else //目标离开视野
         {
-            ChangeState(AIAdvancedStateEnum.AiTailAfter);
+            ChangeState(AIStateEnum.AiTailAfter);
         }
     }
 

@@ -3,7 +3,7 @@ using System;
 using Godot;
 using Vector2 = Godot.Vector2;
 
-public partial class AdvancedRole
+public partial class Role
 {
     /// <summary>
     /// 播放近战攻击动画

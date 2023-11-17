@@ -2,12 +2,12 @@
 using System;
 using Godot;
 
-namespace AdvancedState;
+namespace EnemyState;
 
 /// <summary>
 /// Ai 寻找弹药, 进入该状态需要在参数中传入目标武器对象
 /// </summary>
-public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
+public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
 {
 
     private Weapon _target;
@@ -19,11 +19,11 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
     private bool _isInTailAfterRange = false;
     private float _tailAfterTimer = 0;
 
-    public AiFindAmmoState() : base(AIAdvancedStateEnum.AiFindAmmo)
+    public AiFindAmmoState() : base(AIStateEnum.AiFindAmmo)
     {
     }
 
-    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
         if (Master.LookTarget == null)
         {
@@ -116,9 +116,9 @@ public class AiFindAmmoState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         }
     }
 
-    private AIAdvancedStateEnum GetNextState()
+    private AIStateEnum GetNextState()
     {
-        return _tailAfterTimer > 10 ? AIAdvancedStateEnum.AiNormal : AIAdvancedStateEnum.AiTailAfter;
+        return _tailAfterTimer > 10 ? AIStateEnum.AiNormal : AIStateEnum.AiTailAfter;
     }
 
     private void SetTargetWeapon(Weapon weapon)

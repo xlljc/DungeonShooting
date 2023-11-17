@@ -6,7 +6,7 @@ using Godot;
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
 [Tool]
-public partial class Player : AdvancedRole
+public partial class Player : Role
 {
     /// <summary>
     /// 获取当前操作的角色
@@ -190,7 +190,7 @@ public partial class Player : AdvancedRole
             var enemyList = AffiliationArea.FindIncludeItems(o => o.CollisionWithMask(PhysicsLayer.Enemy));
             foreach (var enemy in enemyList)
             {
-                ((AdvancedEnemy)enemy).Hurt(this, 1000, 0);
+                ((Enemy)enemy).Hurt(this, 1000, 0);
             }
         }
         // //测试用

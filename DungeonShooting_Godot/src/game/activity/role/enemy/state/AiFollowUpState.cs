@@ -2,22 +2,22 @@
 using System;
 using Godot;
 
-namespace AdvancedState;
+namespace EnemyState;
 
 /// <summary>
 /// 目标在视野内, 跟进目标, 如果距离在子弹有效射程内, 则开火
 /// </summary>
-public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
+public class AiFollowUpState : StateBase<Enemy, AIStateEnum>
 {
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
 
-    public AiFollowUpState() : base(AIAdvancedStateEnum.AiFollowUp)
+    public AiFollowUpState() : base(AIStateEnum.AiFollowUp)
     {
     }
 
-    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
         if (Master.LookTarget == null)
         {
@@ -37,13 +37,13 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                ChangeState(AIAdvancedStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AIStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
             else
             {
                 //切换到随机移动状态
-                ChangeState(AIAdvancedStateEnum.AiSurround);
+                ChangeState(AIStateEnum.AiSurround);
             }
         }
 
@@ -104,18 +104,18 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                 //距离够近, 可以切换到环绕模式
                 if (distanceSquared <= Mathf.Pow(Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange), 2) * 0.7f)
                 {
-                    ChangeState(AIAdvancedStateEnum.AiSurround);
+                    ChangeState(AIStateEnum.AiSurround);
                 }
                 else if (weapon.TriggerIsReady()) //可以攻击
                 {
                     //攻击状态
-                    ChangeState(AIAdvancedStateEnum.AiAttack);
+                    ChangeState(AIStateEnum.AiAttack);
                 }
             }
         }
         else //不在视野中
         {
-            ChangeState(AIAdvancedStateEnum.AiTailAfter);
+            ChangeState(AIStateEnum.AiTailAfter);
         }
     }
 

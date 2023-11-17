@@ -2,12 +2,12 @@
 using System;
 using Godot;
 
-namespace AdvancedState;
+namespace EnemyState;
 
 /// <summary>
 /// 收到其他敌人通知, 前往发现目标的位置
 /// </summary>
-public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
+public class AiLeaveForState : StateBase<Enemy, AIStateEnum>
 {
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
@@ -20,11 +20,11 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
     //目标点
     private Vector2 _targetPosition;
 
-    public AiLeaveForState() : base(AIAdvancedStateEnum.AiLeaveFor)
+    public AiLeaveForState() : base(AIStateEnum.AiLeaveFor)
     {
     }
 
-    public override void Enter(AIAdvancedStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
         if (args.Length == 0)
         {
@@ -41,7 +41,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             if (targetWeapon != null)
             {
                 Master.LookTarget = _target;
-                ChangeState(AIAdvancedStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AIStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
         }
@@ -52,7 +52,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         Master.AnimationPlayer.Play(AnimatorNames.Query);
     }
 
-    public override void Exit(AIAdvancedStateEnum next)
+    public override void Exit(AIStateEnum next)
     {
         Master.AnimationPlayer.Play(AnimatorNames.Reset);
     }
@@ -104,7 +104,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
                 Master.LookTarget = Player.Current;
-                ChangeState(AIAdvancedStateEnum.AiFollowUp);
+                ChangeState(AIStateEnum.AiFollowUp);
                 return;
             }
             else
@@ -117,7 +117,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         //移动到目标掉了, 还没发现目标
         if (Master.NavigationAgent2D.IsNavigationFinished())
         {
-            ChangeState(AIAdvancedStateEnum.AiNormal);
+            ChangeState(AIStateEnum.AiNormal);
         }
     }
 
