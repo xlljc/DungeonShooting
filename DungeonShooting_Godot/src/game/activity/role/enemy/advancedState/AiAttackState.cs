@@ -74,6 +74,9 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
 
     public override void Process(float delta)
     {
+        //更新标记位置
+        Master.UpdateMarkTargetPosition();
+        
         var weapon = Master.WeaponPack.ActiveItem;
         if (weapon == null)
         {
@@ -116,7 +119,7 @@ public class AiAttackState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             if (AttackState == AiAttackEnum.LockingTime) //锁定玩家状态
             {
                 Master.LockTargetTime += delta;
-                
+
                 var aiLockRemainderTime = Master.GetLockRemainderTime();
                 Master.MountLookTarget = aiLockRemainderTime >= weapon.Attribute.AiAttackAttr.LockAngleTime;
                 //更新瞄准辅助线

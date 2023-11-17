@@ -459,4 +459,15 @@ public partial class AdvancedEnemy : AdvancedRole
         AnimatedSprite.Play(AnimatorNames.Idle);
         BasisVelocity = Vector2.Zero;
     }
+    
+    /// <summary>
+    /// 更新房间中标记的目标位置
+    /// </summary>
+    public void UpdateMarkTargetPosition()
+    {
+        if (LookTarget != null)
+        {
+            AffiliationArea.RoomInfo.MarkTargetPosition[LookTarget.Id] = LookTarget.Position;
+        }
+    }
 }

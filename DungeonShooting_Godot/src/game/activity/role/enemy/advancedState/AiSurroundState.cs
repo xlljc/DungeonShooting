@@ -73,6 +73,9 @@ public class AiSurroundState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         //在视野中
         if (Master.TargetInView)
         {
+            //更新标记位置
+            Master.UpdateMarkTargetPosition();
+            
             if (_pauseTimer >= 0)
             {
                 Master.AnimatedSprite.Play(AnimatorNames.Idle);

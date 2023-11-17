@@ -35,6 +35,8 @@ material = SubResource("ShaderMaterial_8vxx6")
 
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_k8mt5")
+position = Vector2(0, 0)
+offset = Vector2(0, -12)
 
 [node name="ViewRay" type="RayCast2D" parent="." index="6"]
 position = Vector2(0, -8)

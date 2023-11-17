@@ -42,7 +42,7 @@ material = SubResource("ShaderMaterial_v2kfw")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_yif6x")
-position = Vector2(0, -12)
+offset = Vector2(0, -12)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)

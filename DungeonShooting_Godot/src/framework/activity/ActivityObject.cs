@@ -18,6 +18,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public static bool IsDebug { get; set; }
 
     /// <summary>
+    /// 实例唯一 Id
+    /// </summary>
+    public long Id { get; set; }
+    
+    /// <summary>
     /// 当前物体对应的配置数据, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemConfig 为 null
     /// </summary>
     public ExcelConfig.ActivityBase ActivityBase { get; private set; }
@@ -361,6 +366,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         World = world;
         ActivityBase = config;
         Name = GetType().Name + (_instanceIndex++);
+        Id = _instanceIndex;
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
         _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
         if (_blendShaderMaterial != null)
@@ -1333,6 +1339,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public void CalcShadowTransform()
     {
+        //偏移
+        ShadowSprite.Offset = AnimatedSprite.Offset;
         //缩放
         ShadowSprite.Scale = AnimatedSprite.Scale;
         //阴影角度

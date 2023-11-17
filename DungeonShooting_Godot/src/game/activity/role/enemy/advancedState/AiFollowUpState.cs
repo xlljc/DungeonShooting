@@ -97,6 +97,8 @@ public class AiFollowUpState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         //在视野中
         if (Master.TargetInView)
         {
+            //更新标记位置
+            Master.UpdateMarkTargetPosition();
             if (inAttackRange) //在攻击范围内
             {
                 //距离够近, 可以切换到环绕模式

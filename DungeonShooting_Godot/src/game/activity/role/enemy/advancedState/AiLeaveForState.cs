@@ -46,16 +46,6 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         }
     }
 
-    /// <summary>
-    /// 设置移动目标位置
-    /// </summary>
-    public void SetTargetPosition(Vector2 target)
-    {
-        _targetPosition = target;
-        _navigationUpdateTimer = _navigationInterval;
-        Master.NavigationAgent2D.TargetPosition = target;
-    }
-
     public override void Process(float delta)
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
@@ -65,6 +55,10 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
+            if (Master.AffiliationArea.RoomInfo.MarkTargetPosition.TryGetValue(_target.Id, out var pos))
+            {
+                _targetPosition = pos;
+            }
             Master.NavigationAgent2D.TargetPosition = _targetPosition;
         }
         else
