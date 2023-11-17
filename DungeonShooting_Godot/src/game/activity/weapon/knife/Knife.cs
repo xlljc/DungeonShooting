@@ -50,7 +50,7 @@ public partial class Knife : Weapon
         if (IsActive)
         {
             //让碰撞节点与武器挂载节点位置保持一致, 而不跟着武器走
-            _hitArea.GlobalPosition = Master.MountPoint.GlobalPosition;
+            _hitArea.GlobalPosition = Master.GetMountPosition();
         }
     }
 
@@ -85,8 +85,8 @@ public partial class Knife : Weapon
             SpecialEffectManager.Play(
                 Master,
                 ResourcePath.resource_spriteFrames_effect_KnifeHit1_tres, "default",
-                Master.MountPoint.Position,
-                Master.MountPoint.Rotation + Mathf.DegToRad(Attribute.UpliftAngle + 60),
+                Master.GetMountPosition(),
+                Master.GetAttackRotation() + Mathf.DegToRad(Attribute.UpliftAngle + 60),
                 AnimatedSprite.Scale,
                 new Vector2(17, 4), 1
             );
@@ -95,7 +95,7 @@ public partial class Knife : Weapon
 
         if (Master == Player.Current)
         {
-            var r = Master.MountPoint.RotationDegrees;
+            var r = Mathf.RadToDeg(Master.GetAttackRotation());
             //创建屏幕抖动
             if (Master.Face == FaceDirection.Right)
             {
@@ -148,7 +148,7 @@ public partial class Knife : Weapon
                     Vector2 position;
                     if (TriggerRole != null)
                     {
-                        position = role.GlobalPosition - TriggerRole.MountPoint.GlobalPosition;
+                        position = role.GlobalPosition - TriggerRole.GetMountPosition();
                     }
                     else
                     {

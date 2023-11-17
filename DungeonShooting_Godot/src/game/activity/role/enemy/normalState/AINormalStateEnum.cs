@@ -11,7 +11,7 @@ public enum AINormalStateEnum
     /// </summary>
     AiNotify,
     /// <summary>
-    /// 发现目标, 惊讶状态
+    /// 惊讶状态
     /// </summary>
     AiAstonished,
     /// <summary>
@@ -31,7 +31,11 @@ public enum AINormalStateEnum
     /// </summary>
     AiSurround,
     /// <summary>
-    /// 攻击状态
+    /// Ai 寻找弹药
+    /// </summary>
+    AiFindAmmo,
+    /// <summary>
+    /// Ai攻击
     /// </summary>
     AiAttack,
 }

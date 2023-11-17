@@ -566,23 +566,9 @@ public partial class DungeonManager : Node2D
                 //不与玩家处于同一个房间
                 if (!enemy.IsDestroyed && enemy.AffiliationArea != playerAffiliationArea)
                 {
-                    if (enemy is Enemy e)
+                    if (enemy.StateController.CurrState != AINormalStateEnum.AiNormal)
                     {
-                        if (e.StateController.CurrState != AINormalStateEnum.AiNormal)
-                        {
-                            e.StateController.ChangeState(AINormalStateEnum.AiNormal);
-                        }
-                    }
-                    else if (enemy is AdvancedEnemy ae)
-                    {
-                        if (ae.StateController.CurrState != AIAdvancedStateEnum.AiNormal)
-                        {
-                            ae.StateController.ChangeState(AIAdvancedStateEnum.AiNormal);
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception("World.Enemy_InstanceList 混入了非 Enemy 和 AdvancedEnemy 类型的对象!");
+                        enemy.StateController.ChangeState(AINormalStateEnum.AiNormal);
                     }
                 }
             }

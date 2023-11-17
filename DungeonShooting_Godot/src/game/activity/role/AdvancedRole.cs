@@ -326,7 +326,7 @@ public abstract partial class AdvancedRole : Role
             
             //WeaponPack.ActiveItem.TriggerMeleeAttack(this);
             //播放近战动画
-            PlayAnimation_MeleeAttack(() =>
+            this.PlayAnimation_MeleeAttack(() =>
             {
                 MountLookTarget = true;
                 IsMeleeAttack = false;
@@ -399,6 +399,21 @@ public abstract partial class AdvancedRole : Role
         return -MountPoint.Position.Y;
     }
 
+    public override float GetAttackRotation()
+    {
+        return MountPoint.RealRotation;
+    }
+    
+    public override Vector2 GetMountPosition()
+    {
+        return MountPoint.GlobalPosition;
+    }
+
+    public override Node2D GetMountNode()
+    {
+        return MountPoint;
+    }
+    
     protected override void OnDestroy()
     {
         base.OnDestroy();
