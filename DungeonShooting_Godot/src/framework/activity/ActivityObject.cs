@@ -1735,6 +1735,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public Vector2 GetCenterPosition()
     {
-        return AnimatedSprite.GlobalPosition + AnimatedSprite.Offset;
+        return AnimatedSprite.Position + Position;
     }
 }

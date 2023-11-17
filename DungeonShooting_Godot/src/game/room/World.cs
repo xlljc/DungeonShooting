@@ -63,7 +63,7 @@ public partial class World : CanvasModulate, ICoroutine
     /// <summary>
     /// 记录所有存活的敌人
     /// </summary>
-    public List<Enemy> Enemy_InstanceList  { get; } = new List<Enemy>();
+    public List<Role> Enemy_InstanceList  { get; } = new List<Role>();
     
     private bool _pause = false;
     private List<CoroutineData> _coroutineList;

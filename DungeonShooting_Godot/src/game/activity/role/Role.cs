@@ -737,15 +737,7 @@ public abstract partial class Role : ActivityObject
             // blood.Rotation = angle;
             // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
-
-        if (target == null || target.IsDestroyed)
-        {
-            OnHit(null, damage, angle, !flag);
-        }
-        else
-        {
-            OnHit(target, damage, angle, !flag);
-        }
+        OnHit(target, damage, angle, !flag);
 
         //受伤特效
         PlayHitAnimation();
@@ -893,30 +885,6 @@ public abstract partial class Role : ActivityObject
     public virtual float GetFirePointAltitude()
     {
         return -AnimatedSprite.Position.Y;
-    }
-
-    /// <summary>
-    /// 获取攻击标角度, 弧度制
-    /// </summary>
-    public virtual float GetAttackRotation()
-    {
-        return GetCenterPosition().AngleTo(LookPosition);
-    }
-
-    /// <summary>
-    /// 获取物品挂载点
-    /// </summary>
-    public virtual Vector2 GetMountPosition()
-    {
-        return AnimatedSprite.Position;
-    }
-
-    /// <summary>
-    /// 获取物品挂载节点对象
-    /// </summary>
-    public virtual Node2D GetMountNode()
-    {
-        return AnimatedSprite;
     }
     
     protected override void OnDestroy()

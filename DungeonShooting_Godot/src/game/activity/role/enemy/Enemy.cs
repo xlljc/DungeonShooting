@@ -75,15 +75,12 @@ public partial class Enemy : Role
     public ActivityObject LookTarget { get; set; }
     
     /// <summary>
-    /// 锁定目标已经走过的时间
-    /// </summary>
-    public float LockTargetTime { get; set; } = 0;
-    
-    /// <summary>
     /// Ai 攻击属性
     /// </summary>
     public ExcelConfig.AiAttackAttr AttackAttribute { get; private set; }
     
+    //锁定目标时间
+    private float _lockTargetTime = 0;
     //攻击冷却计时器
     private float _attackTimer = 0;
 
@@ -174,11 +171,11 @@ public partial class Enemy : Role
         var currState = StateController.CurrState;
         if (currState == AINormalStateEnum.AiAttack && _attackTimer <= 0) //必须在可以开火时记录时间
         {
-            LockTargetTime += delta;
+            _lockTargetTime += delta;
         }
         else
         {
-            LockTargetTime = 0;
+            _lockTargetTime = 0;
         }
     }
 
@@ -186,11 +183,14 @@ public partial class Enemy : Role
     {
         //受到伤害
         var state = StateController.CurrState;
-        if (target != null && state == AINormalStateEnum.AiNormal || state == AINormalStateEnum.AiLeaveFor) //|| state == AiStateEnum.AiProbe
-        {
-            LookTarget = target;
-            StateController.ChangeState(AINormalStateEnum.AiTailAfter);
-        }
+        // if (state == AINormalStateEnum.AiNormal)
+        // {
+        //     StateController.ChangeState(AINormalStateEnum.AiLeaveFor, target);
+        // }
+        // else if (state == AINormalStateEnum.AiLeaveFor)
+        // {
+        //
+        // }
     }
 
     protected override void OnDie()
@@ -268,13 +268,29 @@ public partial class Enemy : Role
     {
         ViewRay.Enabled = false;
     }
+    
+    /// <summary>
+    /// 获取锁定目标的时间
+    /// </summary>
+    public float GetLockTime()
+    {
+        return _lockTargetTime;
+    }
 
     /// <summary>
     /// 获取锁定目标的剩余时间
     /// </summary>
-    public virtual float GetLockRemainderTime()
+    public float GetLockRemainderTime()
     {
-        return AttackAttribute.LockingTime - LockTargetTime;
+        return AttackAttribute.LockingTime - _lockTargetTime;
+    }
+    
+    /// <summary>
+    /// 强制设置锁定目标时间
+    /// </summary>
+    public void SetLockTargetTime(float time)
+    {
+        _lockTargetTime = time;
     }
     
     /// <summary>
@@ -302,17 +318,6 @@ public partial class Enemy : Role
     public float GetAttackTimer()
     {
         return _attackTimer;
-    }
-    
-    /// <summary>
-    /// 更新房间中标记的目标位置
-    /// </summary>
-    public void UpdateMarkTargetPosition()
-    {
-        if (LookTarget != null)
-        {
-            AffiliationArea.RoomInfo.MarkTargetPosition[LookTarget.Id] = LookTarget.Position;
-        }
     }
     
     /// <summary>
