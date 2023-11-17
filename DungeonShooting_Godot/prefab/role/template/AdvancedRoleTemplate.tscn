@@ -81,3 +81,5 @@ collision_mask = 0
 monitorable = false
 
 [node name="MeleeAttackCollision" type="CollisionPolygon2D" parent="MountPoint/MeleeAttackArea"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

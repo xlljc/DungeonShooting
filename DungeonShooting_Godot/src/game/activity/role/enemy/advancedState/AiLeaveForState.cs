@@ -40,6 +40,7 @@ public class AiLeaveForState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
+                Master.LookTarget = _target;
                 ChangeState(AIAdvancedStateEnum.AiFindAmmo, targetWeapon);
             }
         }

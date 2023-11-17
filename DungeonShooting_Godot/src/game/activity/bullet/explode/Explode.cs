@@ -144,7 +144,7 @@ public partial class Explode : Area2D, IPoolItem
             {
                 if (o is Role role) //是角色
                 {
-                    role.CallDeferred(nameof(role.Hurt), BulletData.TriggerRole, _harm, angle);
+                    role.CallDeferred(nameof(role.Hurt), BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, _harm, angle);
                 }
                 else if (o is Bullet bullet) //是子弹
                 {

@@ -179,17 +179,20 @@ public partial class Enemy : Role
         }
     }
 
-    protected override void OnHit(ActivityObject target, int damage, bool realHarm)
+    protected override void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
     {
         //受到伤害
         var state = StateController.CurrState;
-        if (state == AINormalStateEnum.AiNormal || state == AINormalStateEnum.AiLeaveFor) //|| state == AiStateEnum.AiProbe
-        {
-            LookTarget = target;
-            StateController.ChangeState(AINormalStateEnum.AiTailAfter, target);
-        }
+        // if (state == AINormalStateEnum.AiNormal)
+        // {
+        //     StateController.ChangeState(AINormalStateEnum.AiLeaveFor, target);
+        // }
+        // else if (state == AINormalStateEnum.AiLeaveFor)
+        // {
+        //
+        // }
     }
-    
+
     protected override void OnDie()
     {
         var effPos = Position + new Vector2(0, -Altitude);

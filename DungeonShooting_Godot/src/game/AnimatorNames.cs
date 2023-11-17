@@ -74,4 +74,12 @@ public static class AnimatorNames
     /// 攻击
     /// </summary>
     public const string Attack = "attack";
+    /// <summary>
+    /// 惊讶动作
+    /// </summary>
+    public const string Astonished = "astonished";
+    /// <summary>
+    /// 通知动作
+    /// </summary>
+    public const string Notify = "notify";
 }

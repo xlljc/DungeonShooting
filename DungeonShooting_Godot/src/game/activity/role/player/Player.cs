@@ -224,7 +224,7 @@ public partial class Player : AdvancedRole
         return 1;
     }
 
-    protected override void OnHit(ActivityObject target, int damage, bool realHarm)
+    protected override void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
     {
         //进入无敌状态
         if (realHarm) //真实伤害

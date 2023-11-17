@@ -65,6 +65,12 @@ public partial class AdvancedEnemy : AdvancedRole
     public Marker2D NavigationPoint { get; private set; }
     
     /// <summary>
+    /// 用于提示当前敌人状态
+    /// </summary>
+    [Export, ExportFillNode]
+    public Sprite2D TipSprite { get; set; }
+    
+    /// <summary>
     /// 当前敌人所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
@@ -181,7 +187,7 @@ public partial class AdvancedEnemy : AdvancedRole
         EnemyPickUpWeapon();
     }
 
-    protected override void OnHit(ActivityObject target, int damage, bool realHarm)
+    protected override void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
     {
         //受到伤害
         var state = StateController.CurrState;

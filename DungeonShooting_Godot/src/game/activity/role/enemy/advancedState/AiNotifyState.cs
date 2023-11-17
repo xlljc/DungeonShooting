@@ -22,6 +22,7 @@ public class AiNotifyState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
         _timer = 0.6f;
         //通知其它角色
         Master.World.NotifyEnemyTarget(Master, Master.LookTarget);
+        Master.AnimationPlayer.Play(AnimatorNames.Notify);
     }
 
     public override void Process(float delta)

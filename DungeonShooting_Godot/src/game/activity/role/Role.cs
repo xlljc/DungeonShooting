@@ -72,7 +72,13 @@ public abstract partial class Role : ActivityObject
     [Export, ExportFillNode]
     public CollisionShape2D InteractiveCollision { get; set; }
     
-        /// <summary>
+    /// <summary>
+    /// 动画播放器
+    /// </summary>
+    [Export, ExportFillNode]
+    public AnimationPlayer AnimationPlayer { get; set; }
+    
+    /// <summary>
     /// 脸的朝向
     /// </summary>
     public FaceDirection Face { get => _face; set => SetFace(value); }
@@ -275,10 +281,11 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 当受伤时调用
     /// </summary>
-    /// <param name="target">谁触发的伤害</param>
+    /// <param name="target">触发伤害的对象, 为 null 表示不存在对象或者对象已经被销毁</param>
     /// <param name="damage">受到的伤害</param>
+    /// <param name="angle">伤害角度（弧度制）</param>
     /// <param name="realHarm">是否受到真实伤害, 如果为false, 则表示该伤害被互动格挡掉了</param>
-    protected virtual void OnHit(ActivityObject target, int damage, bool realHarm)
+    protected virtual void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
     {
     }
 
@@ -668,7 +675,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 受到伤害, 如果是在碰撞信号处理函数中调用该函数, 请使用 CallDeferred 来延时调用, 否则很有可能导致报错
     /// </summary>
-    /// <param name="target">谁触发的伤害</param>
+    /// <param name="target">触发伤害的对象, 为 null 表示不存在对象或者对象已经被销毁</param>
     /// <param name="damage">伤害的量</param>
     /// <param name="angle">伤害角度（弧度制）</param>
     public virtual void Hurt(ActivityObject target, int damage, float angle)
@@ -700,7 +707,7 @@ public abstract partial class Role : ActivityObject
             // blood.Rotation = angle;
             // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
-        OnHit(target, damage, !flag);
+        OnHit(target, damage, angle, !flag);
 
         //受伤特效
         PlayHitAnimation();

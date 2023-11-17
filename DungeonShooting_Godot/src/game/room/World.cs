@@ -111,7 +111,7 @@ public partial class World : CanvasModulate, ICoroutine
     {
         foreach (var role in Enemy_InstanceList)
         {
-            if (role != self && role.AffiliationArea == self.AffiliationArea)
+            if (role != self && !role.IsDestroyed && role.AffiliationArea == self.AffiliationArea)
             {
                 if (role is AdvancedEnemy advancedEnemy)
                 {

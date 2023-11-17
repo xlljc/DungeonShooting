@@ -37,13 +37,14 @@ public class AiAstonishedState : StateBase<AdvancedEnemy, AIAdvancedStateEnum>
             var target = (ActivityObject)args[1];
             Master.LookTargetPosition(target.GetCenterPosition());
         }
+        
+        //播放惊讶表情
+        Master.AnimationPlayer.Play(AnimatorNames.Astonished);
     }
 
     public override void Process(float delta)
     {
         Master.DoIdle();
-        //播放惊讶表情
-        
         _timer -= delta;
         if (_timer <= 0)
         {

@@ -564,7 +564,7 @@ public partial class DungeonManager : Node2D
             foreach (var enemy in World.Enemy_InstanceList)
             {
                 //不与玩家处于同一个房间
-                if (enemy.AffiliationArea != playerAffiliationArea)
+                if (!enemy.IsDestroyed && enemy.AffiliationArea != playerAffiliationArea)
                 {
                     if (enemy is Enemy e)
                     {
