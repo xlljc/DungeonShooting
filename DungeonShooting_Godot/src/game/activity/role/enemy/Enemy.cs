@@ -36,7 +36,7 @@ public partial class Enemy : Role
     public float ViewRange { get; set; } = 250;
 
     /// <summary>
-    /// 发现玩家后的视野半径
+    /// 发现玩家后跟随玩家的视野半径
     /// </summary>
     public float TailAfterViewRange { get; set; } = 400;
 
@@ -46,27 +46,38 @@ public partial class Enemy : Role
     public float BackViewRange { get; set; } = 50;
 
     /// <summary>
+    /// 是否可以拾起武器
+    /// </summary>
+    [Export]
+    public bool CanPickUpWeapon { get; set; } = true;
+    
+    /// <summary>
     /// 视野检测射线, 朝玩家打射线, 检测是否碰到墙
     /// </summary>
     [Export, ExportFillNode]
-    public RayCast2D ViewRay { get; private set; }
+    public RayCast2D ViewRay { get; set; }
 
     /// <summary>
     /// 导航代理
     /// </summary>
     [Export, ExportFillNode]
-    public NavigationAgent2D NavigationAgent2D { get; private set; }
+    public NavigationAgent2D NavigationAgent2D { get; set; }
 
     /// <summary>
     /// 导航代理中点
     /// </summary>
     [Export, ExportFillNode]
-    public Marker2D NavigationPoint { get; private set; }
+    public Marker2D NavigationPoint { get; set; }
     
     /// <summary>
     /// 当前敌人所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
+
+    /// <summary>
+    /// 攻击锁定目标时间
+    /// </summary>
+    public float LockingTime { get; set; } = 1f;
     
     /// <summary>
     /// 锁定目标已经走过的时间
@@ -77,6 +88,12 @@ public partial class Enemy : Role
     {
         base.OnInit();
         IsAi = true;
+
+        if (!CanPickUpWeapon)
+        {
+            WeaponPack.SetCapacity(0);
+        }
+        
         StateController = AddComponent<StateController<Enemy, AIStateEnum>>();
 
         AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Player;
@@ -88,11 +105,8 @@ public partial class Enemy : Role
         MaxHp = 20;
         Hp = 20;
 
-        //PathSign = new PathSign(this, PathSignLength, GameApplication.Instance.Node3D.Player);
-
         //注册Ai状态机
         StateController.Register(new AiNormalState());
-        //StateController.Register(new AiProbeState());
         StateController.Register(new AiTailAfterState());
         StateController.Register(new AiFollowUpState());
         StateController.Register(new AiLeaveForState());
@@ -178,6 +192,15 @@ public partial class Enemy : Role
 
         //拾起武器操作
         EnemyPickUpWeapon();
+    }
+
+    public override bool IsAllWeaponTotalAmmoEmpty()
+    {
+        if (!CanPickUpWeapon)
+        {
+            return false;
+        }
+        return base.IsAllWeaponTotalAmmoEmpty();
     }
 
     protected override void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
@@ -357,7 +380,7 @@ public partial class Enemy : Role
     {
         //这几个状态不需要主动拾起武器操作
         var state = StateController.CurrState;
-        if (state == AIStateEnum.AiNormal)
+        if (state == AIStateEnum.AiNormal || state == AIStateEnum.AiNotify || state == AIStateEnum.AiAstonished || state == AIStateEnum.AiAttack)
         {
             return;
         }
@@ -414,17 +437,9 @@ public partial class Enemy : Role
         var weapon = WeaponPack.ActiveItem;
         if (weapon == null)
         {
-            return 0;
+            return LockingTime - LockTargetTime;
         }
         return weapon.Attribute.AiAttackAttr.LockingTime - LockTargetTime;
-    }
-
-    /// <summary>
-    /// 强制设置锁定目标时间
-    /// </summary>
-    public void SetLockTargetTime(float time)
-    {
-        LockTargetTime = time;
     }
 
     public override void LookTargetPosition(Vector2 pos)

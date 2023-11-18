@@ -32,6 +32,8 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
     private Vector2 _prevPos;
     //卡在一个位置的时间
     private float _lockTimer;
+    //进入状态的时候是否有武器
+    private bool _hasWeapon = true;
     
     public AiAttackState() : base(AIStateEnum.AiAttack)
     {
@@ -45,15 +47,22 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
         }
         
         var weapon = Master.WeaponPack.ActiveItem;
-        if (weapon == null)
-        {
-            throw new Exception("进入 AIAdvancedStateEnum.AiAttack 状态时角色没有武器!");
 
+        if (weapon != null)
+        {
+            _hasWeapon = true;
+            if (!weapon.TriggerIsReady())
+            {
+                throw new Exception("进入 AIAdvancedStateEnum.AiAttack 状态时角色武器还无法触动扳机!");
+            }
         }
-
-        if (!weapon.TriggerIsReady())
+        else
         {
-            throw new Exception("进入 AIAdvancedStateEnum.AiAttack 状态时角色武器还玩法触动扳机!");
+            _hasWeapon = false;
+            if (Master.IsAttack)
+            {
+                throw new Exception("进入 AIAdvancedStateEnum.AiAttack 状态时角色攻击状态还没准备好");
+            }
         }
         
         Master.BasisVelocity = Vector2.Zero;
@@ -76,7 +85,20 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
     {
         //更新标记位置
         Master.UpdateMarkTargetPosition();
-        
+
+        if (_hasWeapon)
+        {
+            WeaponRoleProcess(delta);
+        }
+        else
+        {
+            NoWeaponRoleProcess(delta);
+        }
+    }
+
+    //有武器的敌人更新逻辑
+    private void WeaponRoleProcess(float delta)
+    {
         var weapon = Master.WeaponPack.ActiveItem;
         if (weapon == null)
         {
@@ -114,8 +136,8 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
         else //攻击状态
         {
             //触发扳机
-            AttackState = Master.WeaponPack.ActiveItem.AiTriggerAttackState();
-            
+            AttackState = weapon.AiTriggerAttackState();
+
             if (AttackState == AiAttackEnum.LockingTime) //锁定玩家状态
             {
                 Master.LockTargetTime += delta;
@@ -188,6 +210,25 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
         }
     }
 
+    //没有武器的敌人攻击逻辑
+    private void NoWeaponRoleProcess(float delta)
+    {
+        var weapon = Master.WeaponPack.ActiveItem;
+        if (weapon != null)
+        {
+            //找到武器了, 攻击结束
+            ChangeState(PrevState);
+        }
+        else if (AttackState == AiAttackEnum.AttackInterval) //攻击结束
+        {
+            
+        }
+        else //攻击状态
+        {
+            Master.Attack();
+        }
+    }
+    
     private void MoveHandler(float delta)
     {
 

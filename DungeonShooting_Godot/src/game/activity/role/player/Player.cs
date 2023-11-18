@@ -52,6 +52,8 @@ public partial class Player : Role
         MaxShield = 0;
         Shield = 0;
 
+        WeaponPack.SetCapacity(4);
+        
         // debug用
         // RoleState.Acceleration = 3000;
         // RoleState.Friction = 3000;

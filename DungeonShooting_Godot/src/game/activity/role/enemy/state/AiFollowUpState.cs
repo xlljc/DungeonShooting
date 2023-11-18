@@ -70,6 +70,10 @@ public class AiFollowUpState : StateBase<Enemy, AIStateEnum>
         {
             inAttackRange = distanceSquared <= Mathf.Pow(Master.GetWeaponRange(0.7f), 2);
         }
+        else
+        {
+            inAttackRange = distanceSquared <= Mathf.Pow(Master.ViewRange * 0.7f, 2);
+        }
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
@@ -101,15 +105,31 @@ public class AiFollowUpState : StateBase<Enemy, AIStateEnum>
             Master.UpdateMarkTargetPosition();
             if (inAttackRange) //在攻击范围内
             {
-                //距离够近, 可以切换到环绕模式
-                if (distanceSquared <= Mathf.Pow(Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange), 2) * 0.7f)
+                if (weapon != null)
                 {
-                    ChangeState(AIStateEnum.AiSurround);
+                    //距离够近, 可以切换到环绕模式
+                    if (distanceSquared <= Mathf.Pow(Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange) * 0.7f, 2))
+                    {
+                        ChangeState(AIStateEnum.AiSurround);
+                    }
+                    else if (weapon.TriggerIsReady()) //可以攻击
+                    {
+                        //攻击状态
+                        ChangeState(AIStateEnum.AiAttack);
+                    }
                 }
-                else if (weapon.TriggerIsReady()) //可以攻击
+                else
                 {
-                    //攻击状态
-                    ChangeState(AIStateEnum.AiAttack);
+                    //距离够近, 可以切换到环绕模式
+                    if (distanceSquared <= Mathf.Pow(Master.ViewRange * 0.7f, 2))
+                    {
+                        ChangeState(AIStateEnum.AiSurround);
+                    }
+                    else if (!Master.IsAttack) //可以攻击
+                    {
+                        //攻击状态
+                        ChangeState(AIStateEnum.AiAttack);
+                    }
                 }
             }
         }

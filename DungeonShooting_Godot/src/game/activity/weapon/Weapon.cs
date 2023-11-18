@@ -1977,7 +1977,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                     enemy.Attack();
                     if (_attackFlag)
                     {
-                        enemy.SetLockTargetTime(0);
+                        enemy.LockingTime = 0;
                     }
                 }
                 else
@@ -1988,7 +1988,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                         enemy.Attack();
                         if (_attackFlag)
                         {
-                            enemy.SetLockTargetTime(0);
+                            enemy.LockingTime = 0;
                         }
                     }
                     else //单发
@@ -1997,7 +1997,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                         enemy.Attack();
                         if (_attackFlag)
                         {
-                            enemy.SetLockTargetTime(0);
+                            enemy.LockingTime = 0;
                         }
                     }
                 }

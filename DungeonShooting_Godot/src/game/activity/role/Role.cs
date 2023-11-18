@@ -137,12 +137,14 @@ public abstract partial class Role : ActivityObject
     public bool MountLookTarget { get; set; } = true;
 
     /// <summary>
-    /// 是否处于近战攻击中
+    /// 是否处于攻击中, 近战攻击远程攻击都算
     /// </summary>
-    public bool IsMeleeAttack { get; private set; }
-    
-    //近战计时器
-    private float _meleeAttackTimer = 0;
+    public bool IsAttack => AttackTimer > 0;
+
+    /// <summary>
+    /// 攻击计时器
+    /// </summary>
+    public float AttackTimer { get; set; }
 
     /// <summary>
     /// 是否死亡
@@ -440,7 +442,7 @@ public abstract partial class Role : ActivityObject
         //------------------------
         
         WeaponPack = AddComponent<Package<Weapon, Role>>();
-        WeaponPack.SetCapacity(4);
+        WeaponPack.SetCapacity(2);
         
         MountPoint.Master = this;
         
@@ -458,9 +460,9 @@ public abstract partial class Role : ActivityObject
             return;
         }
 
-        if (_meleeAttackTimer > 0)
+        if (AttackTimer > 0)
         {
-            _meleeAttackTimer -= delta;
+            AttackTimer -= delta;
         }
         
         //检查可互动的物体
@@ -1020,7 +1022,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 返回所有武器是否弹药都打光了
     /// </summary>
-    public bool IsAllWeaponTotalAmmoEmpty()
+    public virtual bool IsAllWeaponTotalAmmoEmpty()
     {
         foreach (var weapon in WeaponPack.ItemSlot)
         {
@@ -1155,7 +1157,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void Attack()
     {
-        if (!IsMeleeAttack && WeaponPack.ActiveItem != null)
+        if (!IsAttack && WeaponPack.ActiveItem != null)
         {
             WeaponPack.ActiveItem.Trigger(this);
         }
@@ -1166,23 +1168,20 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void MeleeAttack()
     {
-        if (IsMeleeAttack || _meleeAttackTimer > 0)
+        if (IsAttack || AttackTimer > 0)
         {
             return;
         }
 
         if (WeaponPack.ActiveItem != null && WeaponPack.ActiveItem.Attribute.CanMeleeAttack)
         {
-            IsMeleeAttack = true;
-            _meleeAttackTimer = RoleState.MeleeAttackTime;
+            AttackTimer = RoleState.MeleeAttackTime;
             MountLookTarget = false;
             
-            //WeaponPack.ActiveItem.TriggerMeleeAttack(this);
             //播放近战动画
             PlayAnimation_MeleeAttack(() =>
             {
                 MountLookTarget = true;
-                IsMeleeAttack = false;
             });
         }
     }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b8s1dgu63fddf"]
+[gd_scene load_steps=13 format=3 uid="uid://b8s1dgu63fddf"]
 
 [ext_resource type="PackedScene" uid="uid://dbrig6dq441wo" path="res://prefab/role/template/EnemyTemplate.tscn" id="1_2vqwe"]
 [ext_resource type="Script" path="res://src/game/activity/role/enemy/Enemy.cs" id="2_0pcq3"]
@@ -26,6 +26,9 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rkrey"]
+size = Vector2(12, 18)
 
 [sub_resource type="Animation" id="Animation_0l5k0"]
 length = 0.001
@@ -295,6 +298,9 @@ material = SubResource("ShaderMaterial_f7y56")
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_2kup1")
 sprite_frames = ExtResource("4_qv8w5")
+
+[node name="HurtCollision" parent="HurtArea" index="0"]
+shape = SubResource("RectangleShape2D_rkrey")
 
 [node name="AnimationPlayer" parent="." index="10"]
 libraries = {

@@ -56,7 +56,6 @@ public class AiSurroundState : StateBase<Enemy, AIStateEnum>
         }
 
         var playerPos = Master.LookTarget.GetCenterPosition();
-        var weapon = Master.WeaponPack.ActiveItem;
 
         //检测玩家是否在视野内
         if (Master.IsInTailAfterViewRange(playerPos))
@@ -137,6 +136,7 @@ public class AiSurroundState : StateBase<Enemy, AIStateEnum>
                     }
                 }
 
+                var weapon = Master.WeaponPack.ActiveItem;
                 if (weapon != null)
                 {
                     if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.GetWeaponRange(0.7f), 2)) //玩家离开正常射击范围
@@ -146,6 +146,18 @@ public class AiSurroundState : StateBase<Enemy, AIStateEnum>
                     else if (weapon.TriggerIsReady()) //可以攻击
                     {
                         //发起攻击
+                        ChangeState(AIStateEnum.AiAttack);
+                    }
+                }
+                else
+                {
+                    if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.ViewRange * 0.7f, 2)) //玩家离开正常射击范围
+                    {
+                        ChangeState(AIStateEnum.AiFollowUp);
+                    }
+                    else if (!Master.IsAttack) //可以攻击
+                    {
+                        //攻击状态
                         ChangeState(AIStateEnum.AiAttack);
                     }
                 }

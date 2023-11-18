@@ -7,5 +7,8 @@ using Godot;
 [Tool]
 public partial class NoWeaponEnemy : Enemy
 {
-
+    public override void Attack()
+    {
+        Debug.Log("attack...");
+    }
 }

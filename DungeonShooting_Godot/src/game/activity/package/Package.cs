@@ -76,9 +76,8 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
                 {
                     newArray[i] = packageItem;
                 }
-                else
+                else if (packageItem != null) //溢出的item
                 {
-                    //溢出的item
                     packageItem.OnOverflowItem();
                     packageItem.Master = null;
                     packageItem.PackageIndex = -1;

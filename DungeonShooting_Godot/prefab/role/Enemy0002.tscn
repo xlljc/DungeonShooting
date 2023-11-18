@@ -1,0 +1,80 @@
+[gd_scene load_steps=7 format=3 uid="uid://qqktspyolb34"]
+
+[ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/template/RoleTemplate.tscn" id="1_coayb"]
+[ext_resource type="Script" path="res://src/game/activity/role/enemy/NoWeaponEnemy.cs" id="2_3an4s"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_yunbp"]
+[ext_resource type="SpriteFrames" uid="uid://ctpkpxgcwb583" path="res://resource/spriteFrames/role/Enemy0002.tres" id="3_hbsqi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8vxx6"]
+resource_local_to_scene = true
+shader = ExtResource("2_yunbp")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k8mt5"]
+resource_local_to_scene = true
+shader = ExtResource("2_yunbp")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+
+[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_coayb")]
+collision_layer = 16
+collision_mask = 25
+script = ExtResource("2_3an4s")
+CanPickUpWeapon = false
+ViewRay = NodePath("ViewRay")
+NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
+NavigationPoint = NodePath("NavigationPoint")
+HurtArea = NodePath("HurtArea")
+HurtCollision = NodePath("HurtArea/HurtCollision")
+InteractiveArea = NodePath("InteractiveArea")
+InteractiveCollision = NodePath("InteractiveArea/InteractiveCollision")
+TipRoot = NodePath("TipRoot")
+TipSprite = NodePath("TipRoot/TipSprite")
+AnimationPlayer = NodePath("AnimationPlayer")
+MountPoint = NodePath("MountPoint")
+BackMountPoint = NodePath("BackMountPoint")
+MeleeAttackArea = NodePath("MountPoint/MeleeAttackArea")
+MeleeAttackCollision = NodePath("MountPoint/MeleeAttackArea/MeleeAttackCollision")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" parent="." index="0"]
+material = SubResource("ShaderMaterial_8vxx6")
+
+[node name="BackMountPoint" parent="." index="1"]
+position = Vector2(-2, -7)
+
+[node name="AnimatedSprite" parent="." index="2"]
+material = SubResource("ShaderMaterial_k8mt5")
+sprite_frames = ExtResource("3_hbsqi")
+offset = Vector2(0, -10)
+
+[node name="HurtCollision" parent="HurtArea" index="0"]
+position = Vector2(-0.5, -7)
+
+[node name="ViewRay" type="RayCast2D" parent="." index="6"]
+position = Vector2(0, -8)
+enabled = false
+
+[node name="MountPoint" parent="." index="7"]
+position = Vector2(6, -8)
+
+[node name="NavigationPoint" type="Marker2D" parent="." index="8"]
+position = Vector2(0, -5)
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="NavigationPoint" index="0"]
+path_desired_distance = 3.0
+target_desired_distance = 3.0
+radius = 20.0
