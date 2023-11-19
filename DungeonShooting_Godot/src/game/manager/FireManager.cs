@@ -218,8 +218,15 @@ public static class FireManager
             Penetration = Utils.Random.RandomConfigRange(bullet.Penetration),
         };
 
-        data.Position = role.MountPoint.GlobalPosition;
-        
+        if (role is Enemy enemy)
+        {
+            data.Position = enemy.FirePoint.GlobalPosition;
+        }
+        else
+        {
+            data.Position = role.MountPoint.GlobalPosition;
+        }
+
         var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);
         data.Altitude = role.GetFirePointAltitude();
         var roleState = role.RoleState;

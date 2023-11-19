@@ -68,6 +68,12 @@ public partial class Enemy : Role
     /// </summary>
     [Export, ExportFillNode]
     public Marker2D NavigationPoint { get; set; }
+
+    /// <summary>
+    /// 不通过武发射子弹的开火点
+    /// </summary>
+    [Export, ExportFillNode]
+    public Marker2D FirePoint { get; set; }
     
     /// <summary>
     /// 当前敌人所看向的对象, 也就是枪口指向的对象

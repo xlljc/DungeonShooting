@@ -272,11 +272,12 @@ _data = {
 "query": SubResource("Animation_usfrh")
 }
 
-[node name="Enemy0001" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_2vqwe")]
+[node name="Enemy0001" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_2vqwe")]
 script = ExtResource("2_0pcq3")
 ViewRay = NodePath("ViewRay")
 NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
 NavigationPoint = NodePath("NavigationPoint")
+FirePoint = NodePath("FirePoint")
 HurtArea = NodePath("HurtArea")
 HurtCollision = NodePath("HurtArea/HurtCollision")
 InteractiveArea = NodePath("InteractiveArea")
@@ -302,7 +303,10 @@ sprite_frames = ExtResource("4_qv8w5")
 [node name="HurtCollision" parent="HurtArea" index="0"]
 shape = SubResource("RectangleShape2D_rkrey")
 
-[node name="AnimationPlayer" parent="." index="10"]
+[node name="FirePoint" parent="." index="8"]
+position = Vector2(2, -9)
+
+[node name="AnimationPlayer" parent="." index="11"]
 libraries = {
 "": SubResource("AnimationLibrary_ur1ug")
 }

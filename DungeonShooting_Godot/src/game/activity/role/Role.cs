@@ -139,12 +139,32 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 是否处于攻击中, 近战攻击远程攻击都算
     /// </summary>
-    public bool IsAttack => AttackTimer > 0;
+    public bool IsAttack
+    {
+        get
+        {
+            if (AttackTimer > 0 || MeleeAttackTimer > 0)
+            {
+                return true;
+            }
+            var weapon = WeaponPack.ActiveItem;
+            if (weapon != null)
+            {
+                return weapon.GetAttackTimer() > 0 || weapon.GetContinuousCount() > 0;
+            }
+            return false;
+        }
+    }
 
     /// <summary>
     /// 攻击计时器
     /// </summary>
     public float AttackTimer { get; set; }
+    
+    /// <summary>
+    /// 近战计时器
+    /// </summary>
+    public float MeleeAttackTimer { get; set; }
 
     /// <summary>
     /// 是否死亡
@@ -463,6 +483,11 @@ public abstract partial class Role : ActivityObject
         if (AttackTimer > 0)
         {
             AttackTimer -= delta;
+        }
+
+        if (MeleeAttackTimer > 0)
+        {
+            MeleeAttackTimer -= delta;
         }
         
         //检查可互动的物体
@@ -1157,7 +1182,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void Attack()
     {
-        if (!IsAttack && WeaponPack.ActiveItem != null)
+        if (MeleeAttackTimer <= 0 && WeaponPack.ActiveItem != null)
         {
             WeaponPack.ActiveItem.Trigger(this);
         }
@@ -1168,14 +1193,14 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void MeleeAttack()
     {
-        if (IsAttack || AttackTimer > 0)
+        if (IsAttack)
         {
             return;
         }
 
         if (WeaponPack.ActiveItem != null && WeaponPack.ActiveItem.Attribute.CanMeleeAttack)
         {
-            AttackTimer = RoleState.MeleeAttackTime;
+            MeleeAttackTimer = RoleState.MeleeAttackTime;
             MountLookTarget = false;
             
             //播放近战动画

@@ -14,7 +14,7 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
     public AIStateEnum PrevState;
 
     /// <summary>
-    /// 攻击状态
+    /// 武器攻击状态
     /// </summary>
     public AiAttackEnum AttackState;
 
@@ -219,9 +219,9 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
             //找到武器了, 攻击结束
             ChangeState(PrevState);
         }
-        else if (AttackState == AiAttackEnum.AttackInterval) //攻击结束
+        else if (Master.AttackTimer > 0 || Master.MeleeAttackTimer > 0) //攻击结束
         {
-            
+            ChangeState(PrevState);
         }
         else //攻击状态
         {
