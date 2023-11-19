@@ -78,6 +78,15 @@ public static class FireManager
         return null;
     }
 
+    public static void SetParabolaTarget(BulletData bulletData, Vector2 targetPosition)
+    {
+        var distance = bulletData.Position.DistanceTo(targetPosition);
+        var height = bulletData.Altitude;
+        var time = distance / bulletData.FlySpeed;
+        bulletData.VerticalSpeed = -(height - 0.5f * GameConfig.G * time * time) / time;
+        bulletData.Rotation = bulletData.Position.AngleToPoint(targetPosition);
+    }
+
     /// <summary>
     /// 通过武器发射子弹
     /// </summary>

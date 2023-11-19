@@ -119,7 +119,7 @@ material = SubResource("ShaderMaterial_5rnql")
 material = SubResource("ShaderMaterial_4qvs8")
 sprite_frames = ExtResource("3_hbsqi")
 animation = &"attack"
-offset = Vector2(0, -10)
+offset = Vector2(0, -9)
 
 [node name="HurtCollision" parent="HurtArea" index="0"]
 position = Vector2(0, -7)
