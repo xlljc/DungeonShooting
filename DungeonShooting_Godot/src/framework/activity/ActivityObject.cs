@@ -10,7 +10,8 @@ using Godot;
 /// 该类提供基础物体运动模拟, 互动接口, 自定义组件, 协程等功能<br/>
 /// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [Tool], 并在 ActivityObject.xlsx 配置文件中注册物体, 导出配置表后使用 ActivityObject.Create(id) 来创建实例.<br/>
 /// </summary>
-public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
+[Tool]
+public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
 {
     /// <summary>
     /// 是否是调试模式

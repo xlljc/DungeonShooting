@@ -18,8 +18,8 @@ public class ResourcePath
     public const string prefab_bullet_normal_Bullet0005_tscn = "res://prefab/bullet/normal/Bullet0005.tscn";
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
     public const string prefab_effect_common_Effect1_tscn = "res://prefab/effect/common/Effect1.tscn";
-    public const string prefab_effect_enemy_Effect0001_tscn = "res://prefab/effect/enemy/Effect0001.tscn";
-    public const string prefab_effect_enemy_EnemyBloodEffect_tscn = "res://prefab/effect/enemy/EnemyBloodEffect.tscn";
+    public const string prefab_effect_enemy_EbenyDead0001_tscn = "res://prefab/effect/enemy/EbenyDead0001.tscn";
+    public const string prefab_effect_enemy_EnemyBlood0001_tscn = "res://prefab/effect/enemy/EnemyBlood0001.tscn";
     public const string prefab_effect_weapon_BulletDisappear_tscn = "res://prefab/effect/weapon/BulletDisappear.tscn";
     public const string prefab_effect_weapon_BulletSmoke_tscn = "res://prefab/effect/weapon/BulletSmoke.tscn";
     public const string prefab_effect_weapon_MeleeAttack1_tscn = "res://prefab/effect/weapon/MeleeAttack1.tscn";
@@ -48,6 +48,7 @@ public class ResourcePath
     public const string prefab_prop_buff_BuffProp0013_tscn = "res://prefab/prop/buff/BuffProp0013.tscn";
     public const string prefab_prop_buff_BuffProp0014_tscn = "res://prefab/prop/buff/BuffProp0014.tscn";
     public const string prefab_role_Enemy0001_tscn = "res://prefab/role/Enemy0001.tscn";
+    public const string prefab_role_Enemy0002_tscn = "res://prefab/role/Enemy0002.tscn";
     public const string prefab_role_Role0001_tscn = "res://prefab/role/Role0001.tscn";
     public const string prefab_role_template_EnemyTemplate_tscn = "res://prefab/role/template/EnemyTemplate.tscn";
     public const string prefab_role_template_RoleTemplate_tscn = "res://prefab/role/template/RoleTemplate.tscn";

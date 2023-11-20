@@ -252,14 +252,26 @@
     "ShowInMapEditor": false
   },
   {
-    "Id": "effect0001",
+    "Id": "enemy_dead0001",
     "Type": 8,
     "Name": "",
-    "Intro": "\u654C\u4EBA\u6B7B\u4EA1\u788E\u7247",
+    "Intro": "\u654C\u4EBA1\u6B7B\u4EA1\u788E\u7247",
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/effect/enemy/Effect0001.tscn",
+    "Prefab": "res://prefab/effect/enemy/EbenyDead0001.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "enemy_dead0002",
+    "Type": 8,
+    "Name": "",
+    "Intro": "\u654C\u4EBA2\u6B7B\u4EA1",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/effect/enemy/EbenyDead0002.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },

@@ -115,9 +115,14 @@ public partial class ActivityObject
         public const string Id_shell0004 = "shell0004";
         /// <summary>
         /// 名称:  <br/>
-        /// 简介: 敌人死亡碎片
+        /// 简介: 敌人1死亡碎片
         /// </summary>
-        public const string Id_effect0001 = "effect0001";
+        public const string Id_enemy_dead0001 = "enemy_dead0001";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 简介: 敌人2死亡
+        /// </summary>
+        public const string Id_enemy_dead0002 = "enemy_dead0002";
         /// <summary>
         /// 名称: 鞋子 <br/>
         /// 简介: 提高移动速度

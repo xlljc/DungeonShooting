@@ -35,6 +35,18 @@ public partial class NoWeaponEnemy : Enemy
         }
     }
 
+    protected override void OnDie()
+    {
+        var effPos = Position;
+        var debris = Create(Ids.Id_enemy_dead0002);
+        debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
+        debris.InheritVelocity(this);
+        
+        //派发敌人死亡信号
+        EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
+        Destroy();
+    }
+
     private void OnAnimationFinished(StringName name)
     {
         if (name == AnimatorNames.Attack)

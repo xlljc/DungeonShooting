@@ -150,7 +150,7 @@ public partial class Enemy : Role
 
         var effPos = Position + new Vector2(0, -Altitude);
         //血液特效
-        var blood = ObjectManager.GetPoolItem<AutoDestroyParticles>(ResourcePath.prefab_effect_enemy_EnemyBloodEffect_tscn);
+        var blood = ObjectManager.GetPoolItem<AutoDestroyParticles>(ResourcePath.prefab_effect_enemy_EnemyBlood0001_tscn);
         blood.Position = effPos - new Vector2(0, 12);
         blood.AddToActivityRoot(RoomLayerEnum.NormalLayer);
         blood.PlayEffect();
@@ -159,7 +159,7 @@ public partial class Enemy : Role
         var count = Utils.Random.RandomRangeInt(3, 6);
         for (var i = 0; i < count; i++)
         {
-            var debris = Create(Ids.Id_effect0001);
+            var debris = Create(Ids.Id_enemy_dead0001);
             debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
             debris.InheritVelocity(this);
         }

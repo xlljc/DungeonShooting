@@ -6,7 +6,7 @@ using Godot;
 /// 敌人死亡碎片
 /// </summary>
 [Tool]
-public partial class EnemyDebris : ActivityObject
+public partial class EnemyDead0001 : ActivityObject
 {
 
     private GpuParticles2D _gpuParticles2D;
