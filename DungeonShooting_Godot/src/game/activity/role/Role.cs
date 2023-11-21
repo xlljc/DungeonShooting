@@ -310,6 +310,11 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public Vector2 LookPosition { get; protected set; }
     
+    /// <summary>
+    /// 是否可以在没有武器时发动攻击
+    /// </summary>
+    public bool NoWeaponAttack { get; set; }
+    
     //初始缩放
     private Vector2 _startScale;
     //当前可互动的物体

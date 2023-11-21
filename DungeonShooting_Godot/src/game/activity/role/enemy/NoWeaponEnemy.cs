@@ -11,6 +11,7 @@ public partial class NoWeaponEnemy : Enemy
     public override void OnInit()
     {
         base.OnInit();
+        NoWeaponAttack = true;
         AnimationPlayer.AnimationFinished += OnAnimationFinished;
     }
 

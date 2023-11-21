@@ -155,7 +155,7 @@ public class AiSurroundState : StateBase<Enemy, AIStateEnum>
                     {
                         ChangeState(AIStateEnum.AiFollowUp);
                     }
-                    else if (!Master.IsAttack) //可以攻击
+                    else if (!Master.IsAttack && Master.NoWeaponAttack) //可以在没有武器时发起攻击
                     {
                         //攻击状态
                         ChangeState(AIStateEnum.AiAttack);
