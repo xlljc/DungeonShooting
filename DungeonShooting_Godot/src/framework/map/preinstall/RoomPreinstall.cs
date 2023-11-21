@@ -297,6 +297,13 @@ public class RoomPreinstall : IDestroy
                     //播放出生动画
                     activityObject.StartCoroutine(OnActivityObjectBirth(activityObject));
                     activityObject.PutDown(GetDefaultLayer(activityMark));
+                    activityObject.UpdateFall((float)GameApplication.Instance.GetProcessDeltaTime());
+
+                    if (activityObject is Enemy enemy)
+                    {
+                        //出生调用
+                        enemy.OnBornFromMark();
+                    }
                     
                     var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_common_Effect1_tscn);
                     var node = (Node2D)effect;

@@ -5,7 +5,7 @@
 public enum SpecialMarkType
 {
     /// <summary>
-    /// 正常类型
+    /// 普通标记
     /// </summary>
     Normal,
     /// <summary>

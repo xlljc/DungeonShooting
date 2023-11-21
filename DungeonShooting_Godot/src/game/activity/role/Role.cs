@@ -1203,7 +1203,7 @@ public abstract partial class Role : ActivityObject
             return;
         }
 
-        if (WeaponPack.ActiveItem != null && WeaponPack.ActiveItem.Attribute.CanMeleeAttack)
+        if (WeaponPack.ActiveItem != null && !WeaponPack.ActiveItem.Reloading && WeaponPack.ActiveItem.Attribute.CanMeleeAttack)
         {
             MeleeAttackTimer = RoleState.MeleeAttackTime;
             MountLookTarget = false;

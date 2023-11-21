@@ -1,9 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://daqsdld5gnwwr"]
+[gd_scene load_steps=13 format=3 uid="uid://daqsdld5gnwwr"]
 
 [ext_resource type="PackedScene" uid="uid://dbrig6dq441wo" path="res://prefab/role/template/EnemyTemplate.tscn" id="1_fanet"]
 [ext_resource type="Script" path="res://src/game/activity/role/enemy/NoWeaponEnemy.cs" id="2_3an4s"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_yunbp"]
 [ext_resource type="SpriteFrames" uid="uid://ctpkpxgcwb583" path="res://resource/spriteFrames/role/Enemy0002.tres" id="3_hbsqi"]
+[ext_resource type="Animation" uid="uid://gvkkxspcdwrp" path="res://resource/animation/enemy/Enemy_astonished.res" id="5_p7gwr"]
+[ext_resource type="Animation" uid="uid://b4mgiysicdk2b" path="res://resource/animation/enemy/Enemy_reset.res" id="6_pt7v0"]
+[ext_resource type="Animation" uid="uid://cmje7jsgrhgmx" path="res://resource/animation/enemy/Enemy_query.res" id="7_h4cls"]
+[ext_resource type="Animation" uid="uid://16rxpnsgj5tl" path="res://resource/animation/enemy/Enemy_notify.res" id="8_0688j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5rnql"]
 resource_local_to_scene = true
@@ -15,6 +19,7 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4qvs8"]
 resource_local_to_scene = true
@@ -26,21 +31,7 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
-
-[sub_resource type="Animation" id="Animation_343jg"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
+shader_parameter/grey = 0.0
 
 [sub_resource type="Animation" id="Animation_bn678"]
 resource_name = "attack"
@@ -86,8 +77,11 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3ge8m"]
 _data = {
-"RESET": SubResource("Animation_343jg"),
-"attack": SubResource("Animation_bn678")
+"RESET": ExtResource("6_pt7v0"),
+"astonished": ExtResource("5_p7gwr"),
+"attack": SubResource("Animation_bn678"),
+"notify": ExtResource("8_0688j"),
+"query": ExtResource("7_h4cls")
 }
 
 [node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_fanet")]

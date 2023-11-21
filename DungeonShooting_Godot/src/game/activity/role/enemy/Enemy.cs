@@ -484,4 +484,14 @@ public partial class Enemy : Role
             AffiliationArea.RoomInfo.MarkTargetPosition[LookTarget.Id] = LookTarget.Position;
         }
     }
+
+    /// <summary>
+    /// 从标记出生时调用, 预加载波不会调用
+    /// </summary>
+    public virtual void OnBornFromMark()
+    {
+        //罚站 0.7 秒
+        StateController.Enable = false;
+        this.CallDelay(0.7f, () => StateController.Enable = true);
+    }
 }
