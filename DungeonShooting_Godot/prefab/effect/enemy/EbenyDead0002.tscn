@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=3 uid="uid://nfx3lhkdhv6a"]
 
-[ext_resource type="Script" path="res://src/framework/activity/ActivityObject.cs" id="1_5vjr8"]
+[ext_resource type="Script" path="res://src/game/activity/common/AutoFreezeObject.cs" id="1_iop26"]
 [ext_resource type="Texture2D" uid="uid://x3tjqgdgp43n" path="res://resource/sprite/role/enemy0002/Enemy0002_dead.png" id="2_3cyjy"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_4hojo"]
 [ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="4_m7xko"]
@@ -15,6 +15,7 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_08fn3"]
 resource_local_to_scene = true
@@ -22,10 +23,11 @@ shader = ExtResource("2_4hojo")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
-shader_parameter/show_outline = false
+shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ag5h2"]
 atlas = ExtResource("2_3cyjy")
@@ -59,7 +61,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_lx5fo")
 }],
 "loop": false,
-"name": &"default",
+"name": &"dead",
 "speed": 5.0
 }]
 
@@ -98,10 +100,13 @@ anim_offset_max = 1.0
 
 [node name="Effect0002" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 128
-script = ExtResource("1_5vjr8")
+script = ExtResource("1_iop26")
+AnimationName = "dead"
+AutoToGrey = true
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
+ThrowCollisionSize = Vector2(14, 14)
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1
@@ -110,7 +115,7 @@ material = SubResource("ShaderMaterial_s1mj2")
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_08fn3")
 sprite_frames = SubResource("SpriteFrames_vhsqr")
-autoplay = "default"
+animation = &"dead"
 offset = Vector2(0, -9)
 
 [node name="Collision" type="CollisionShape2D" parent="."]

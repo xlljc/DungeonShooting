@@ -41,6 +41,7 @@ public partial class NoWeaponEnemy : Enemy
         var debris = Create(Ids.Id_enemy_dead0002);
         debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
         debris.InheritVelocity(this);
+        debris.SetFace(Face);
         
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);

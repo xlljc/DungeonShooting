@@ -15,6 +15,8 @@ uniform vec4 outline_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
 uniform bool outline_rainbow = false;
 //轮廓是否使用 blend
 uniform bool outline_use_blend = true;
+//灰度
+uniform float grey : hint_range(0.0, 1.0, 0.01) = 0.0;
 
 //彩虹轮廓变化周期
 const float frequency = 0.25;
@@ -46,13 +48,16 @@ void fragment() {
 				a = outline_color.a;
 			}
 		}
+		
 		if (outline_use_blend) {
 			COLOR = mix(COLOR, blend, schedule);
 		}
 	} else { //非轮廓
 		COLOR = mix(COLOR, blend, schedule);
+		//灰度
+		float grayColor = dot(COLOR.rgb, vec3(0.299, 0.587, 0.114));
+		COLOR.rgb = mix(COLOR.rgb, vec3(grayColor), grey);
 	}
-	
 	COLOR.a *= a;
 	COLOR *= modulate;
 }

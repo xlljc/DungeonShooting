@@ -19,6 +19,7 @@ public class ResourcePath
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
     public const string prefab_effect_common_Effect1_tscn = "res://prefab/effect/common/Effect1.tscn";
     public const string prefab_effect_enemy_EbenyDead0001_tscn = "res://prefab/effect/enemy/EbenyDead0001.tscn";
+    public const string prefab_effect_enemy_EbenyDead0002_tscn = "res://prefab/effect/enemy/EbenyDead0002.tscn";
     public const string prefab_effect_enemy_EnemyBlood0001_tscn = "res://prefab/effect/enemy/EnemyBlood0001.tscn";
     public const string prefab_effect_weapon_BulletDisappear_tscn = "res://prefab/effect/weapon/BulletDisappear.tscn";
     public const string prefab_effect_weapon_BulletSmoke_tscn = "res://prefab/effect/weapon/BulletSmoke.tscn";

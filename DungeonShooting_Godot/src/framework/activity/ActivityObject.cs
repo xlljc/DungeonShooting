@@ -74,6 +74,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 阴影偏移
     /// </summary>
+    [Export]
     public Vector2 ShadowOffset { get; protected set; } = new Vector2(0, 2);
     
     /// <summary>
@@ -216,21 +217,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public bool ShowOutline
     {
-        get => _showOutline;
+        get => _blendShaderMaterial.GetShaderParameter(_shader_show_outline).AsBool();
         set
         {
-            if (_blendShaderMaterial != null)
-            {
-                if (value != _showOutline)
-                {
-                    _blendShaderMaterial.SetShaderParameter("show_outline", value);
-                    if (_shadowBlendShaderMaterial != null)
-                    {
-                        _shadowBlendShaderMaterial.SetShaderParameter("show_outline", value);
-                    }
-                    _showOutline = value;
-                }
-            }
+            _blendShaderMaterial.SetShaderParameter(_shader_show_outline, value);
+            _shadowBlendShaderMaterial.SetShaderParameter(_shader_show_outline, value);
         }
     }
 
@@ -239,32 +230,24 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public Color OutlineColor
     {
-        get
-        {
-            if (!_initOutlineColor)
-            {
-                _initOutlineColor = true;
-                if (_blendShaderMaterial != null)
-                {
-                    _outlineColor = _blendShaderMaterial.GetShaderParameter("outline_color").AsColor();
-                }
-            }
+        get => _blendShaderMaterial.GetShaderParameter(_shader_outline_color).AsColor();
+        set => _blendShaderMaterial.SetShaderParameter(_shader_outline_color, value);
+    }
 
-            return _outlineColor;
-        }
-        set
-        {
-            _initOutlineColor = true;
-            if (value != _outlineColor)
-            {
-                _blendShaderMaterial.SetShaderParameter("outline_color", value);
-            }
-
-            _outlineColor = value;
-        }
+    /// <summary>
+    /// 灰度
+    /// </summary>
+    public float Grey
+    {
+        get => _blendShaderMaterial.GetShaderParameter(_shader_grey).AsSingle();
+        set => _blendShaderMaterial.SetShaderParameter(_shader_grey, value);
     }
 
     // --------------------------------------------------------------------------------
+
+    private static readonly StringName _shader_grey = "grey";
+    private static readonly StringName _shader_outline_color = "outline_color";
+    private static readonly StringName _shader_show_outline = "show_outline";
 
     //是否正在调用组件 Update 函数
     private bool _updatingComp = false;
@@ -326,13 +309,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     
     //实例索引
     private static long _instanceIndex = 0;
-
-    //是否启用描边
-    private bool _showOutline = false;
-    
-    //描边颜色
-    private bool _initOutlineColor = false;
-    private Color _outlineColor = new Color(0, 0, 0, 1);
     
     //冻结显示的Sprite
     private FreezeSprite _freezeSprite;
@@ -370,14 +346,12 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         Id = _instanceIndex;
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
         _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
-        if (_blendShaderMaterial != null)
-        {
-            _showOutline = _blendShaderMaterial.GetShaderParameter("show_outline").AsBool();
-        }
 
-        if (_shadowBlendShaderMaterial != null)
+
+        if (_shadowBlendShaderMaterial != null && _blendShaderMaterial != null)
         {
-            _shadowBlendShaderMaterial.SetShaderParameter("show_outline", _showOutline);
+            var value = _blendShaderMaterial.GetShaderParameter(_shader_show_outline);
+            _shadowBlendShaderMaterial.SetShaderParameter(_shader_show_outline, value);
         }
 
         ShadowSprite.Visible = false;
@@ -1737,5 +1711,16 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     public Vector2 GetCenterPosition()
     {
         return AnimatedSprite.Position + Position;
+    }
+
+    /// <summary>
+    /// 设置物体朝向
+    /// </summary>
+    public void SetFace(FaceDirection face)
+    {
+        if ((face == FaceDirection.Left && Scale.X > 0) || (face == FaceDirection.Right && Scale.X < 0))
+        {
+            Scale *= new Vector2(-1, 1);
+        }
     }
 }
