@@ -210,6 +210,7 @@ public class MoveController : Component
     public T AddForce<T>(T force) where T : ExternalForce
     {
         RemoveForce(force.Name);
+        force.MoveController = this;
         _forceList.Add(force);
         return force;
     }
@@ -223,6 +224,7 @@ public class MoveController : Component
         {
             if (_forceList[i].Name == name)
             {
+                _forceList[i].MoveController = null;
                 _forceList.RemoveAt(i);
                 return;
             }
@@ -276,6 +278,11 @@ public class MoveController : Component
     /// </summary>
     public void ClearForce()
     {
+        foreach (var force in _forceList)
+        {
+            force.MoveController = null;
+        }
+
         _forceList.Clear();
     }
 
@@ -305,6 +312,7 @@ public class MoveController : Component
                     //自动销毁
                     if (CheckAutoDestroy(force))
                     {
+                        force.MoveController = null;
                         _forceList.Remove(force);
                         externalForces[i] = null;
                     }

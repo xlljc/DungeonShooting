@@ -161,7 +161,7 @@ public partial class Explode : Area2D, IPoolItem
             {
                 var repelled = (_repelledRadius - len) / _repelledRadius * _maxRepelled;
                 //o.MoveController.SetAllVelocity(Vector2.Zero);
-                o.MoveController.AddForce(Vector2.FromAngle(angle) * repelled);
+                o.AddRepelForce(Vector2.FromAngle(angle) * repelled);
             }
         }
     }

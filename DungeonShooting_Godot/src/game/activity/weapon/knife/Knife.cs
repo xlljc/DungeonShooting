@@ -155,7 +155,7 @@ public partial class Knife : Weapon
                         position = role.GlobalPosition - GlobalPosition;
                     }
                     var v2 = position.Normalized() * repel;
-                    role.MoveController.AddForce(v2);
+                    role.AddRepelForce(v2);
                 }
                 
                 //造成伤害

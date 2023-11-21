@@ -141,7 +141,7 @@ public partial class Bullet : ActivityObject, IBullet
             {
                 if (BulletData.Repel != 0)
                 {
-                    role.MoveController.AddForce(Velocity.Normalized() * BulletData.Repel);
+                    role.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
                 }
             }
             

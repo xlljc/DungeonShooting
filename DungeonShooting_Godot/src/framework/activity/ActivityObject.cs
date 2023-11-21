@@ -305,6 +305,9 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
 
     private bool _processingBecomesStaticImage = false;
 
+    //击退外力
+    private ExternalForce _repelForce;
+
     // --------------------------------------------------------------------------------
     
     //实例索引
@@ -1722,5 +1725,40 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         {
             Scale *= new Vector2(-1, 1);
         }
+    }
+    
+    /// <summary>
+    /// 添加一个击退力
+    /// </summary>
+    public void AddRepelForce(Vector2 velocity)
+    {
+        if (_repelForce == null)
+        {
+            _repelForce = new ExternalForce(ForceNames.Repel);
+        }
+
+        //不在 MoveController 中
+        if (_repelForce.MoveController == null)
+        {
+            _repelForce.Velocity = velocity;
+            MoveController.AddForce(_repelForce);
+        }
+        else
+        {
+            _repelForce.Velocity += velocity;
+        }
+    }
+
+    /// <summary>
+    /// 获取击退力
+    /// </summary>
+    public Vector2 GetRepelForce()
+    {
+        if (_repelForce == null || _repelForce.MoveController == null)
+        {
+            return Vector2.Zero;
+        }
+
+        return _repelForce.Velocity;
     }
 }

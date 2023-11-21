@@ -1259,7 +1259,7 @@ public abstract partial class Role : ActivityObject
                     var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRange);
                     var position = role.GlobalPosition - MountPoint.GlobalPosition;
                     var v2 = position.Normalized() * repel;
-                    role.MoveController.AddForce(v2);
+                    role.AddRepelForce(v2);
                 }
                 
                 role.CallDeferred(nameof(Hurt), this, damage, (role.GetCenterPosition() - GlobalPosition).Angle());
