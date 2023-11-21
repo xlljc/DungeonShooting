@@ -23,7 +23,7 @@ public static class ProxyCoroutineHandler
         for (var i = 0; i < pairs.Length; i++)
         {
             var item = pairs[i];
-            try
+            //try
             {
                 var canNext = true;
 
@@ -131,11 +131,11 @@ public static class ProxyCoroutineHandler
                     }
                 }
             }
-            catch (Exception e)
-            {
-                Debug.LogError("执行协程发生异常: \n" + e);
-                ProxyStopCoroutine(ref coroutineList, item.Id);
-            }
+            // catch (Exception e)
+            // {
+            //     Debug.LogError("执行协程发生异常: \n" + e);
+            //     ProxyStopCoroutine(ref coroutineList, item.Id);
+            // }
         }
     }
     

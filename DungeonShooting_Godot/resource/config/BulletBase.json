@@ -43,7 +43,7 @@
       4
     ],
     "RepelRange": [
-      30
+      15
     ],
     "DeviationAngleRange": [
       -10,
@@ -79,7 +79,7 @@
       3
     ],
     "RepelRange": [
-      10
+      15
     ],
     "DeviationAngleRange": [
       0
@@ -114,7 +114,7 @@
       20
     ],
     "RepelRange": [
-      200
+      75
     ],
     "DeviationAngleRange": [
       0
@@ -149,7 +149,7 @@
       30
     ],
     "RepelRange": [
-      150
+      85
     ],
     "DeviationAngleRange": [
       0
@@ -219,7 +219,7 @@
       5
     ],
     "RepelRange": [
-      40
+      35
     ],
     "DeviationAngleRange": [
       0
@@ -250,7 +250,7 @@
       25
     ],
     "RepelRange": [
-      150
+      70
     ],
     "DeviationAngleRange": [
       0

@@ -1141,6 +1141,18 @@ public abstract partial class Role : ActivityObject
         //播放抛出效果
         weapon.ThrowWeapon(this, GlobalPosition);
     }
+
+    /// <summary>
+    /// 扔掉所有武器
+    /// </summary>
+    public void ThrowAllWeapon()
+    {
+        var weapons = WeaponPack.GetAndClearItem();
+        for (var i = 0; i < weapons.Length; i++)
+        {
+            weapons[i].ThrowWeapon(this);
+        }
+    }
     
     /// <summary>
     /// 切换到下一个武器

@@ -210,7 +210,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0006",
     "Prefab": "res://prefab/shell/Shell0001.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -222,7 +222,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0006",
     "Prefab": "res://prefab/shell/Shell0002.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -234,7 +234,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0006",
     "Prefab": "res://prefab/shell/Shell0003.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -246,7 +246,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0006",
     "Prefab": "res://prefab/shell/Shell0004.tscn",
     "Icon": "",
     "ShowInMapEditor": false

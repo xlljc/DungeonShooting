@@ -142,11 +142,7 @@ public partial class Enemy : Role
     protected override void OnDie()
     {
         //扔掉所有武器
-        var weapons = WeaponPack.GetAndClearItem();
-        for (var i = 0; i < weapons.Length; i++)
-        {
-            weapons[i].ThrowWeapon(this);
-        }
+        ThrowAllWeapon();
 
         var effPos = Position + new Vector2(0, -Altitude);
         //血液特效
@@ -155,13 +151,14 @@ public partial class Enemy : Role
         blood.AddToActivityRoot(RoomLayerEnum.NormalLayer);
         blood.PlayEffect();
 
+        var realVelocity = GetRealVelocity();
         //创建敌人碎片
         var count = Utils.Random.RandomRangeInt(3, 6);
         for (var i = 0; i < count; i++)
         {
             var debris = Create(Ids.Id_enemy_dead0001);
             debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
-            debris.InheritVelocity(this);
+            debris.MoveController.AddForce(Velocity + realVelocity);
         }
         
         //派发敌人死亡信号

@@ -38,10 +38,11 @@ public partial class NoWeaponEnemy : Enemy
 
     protected override void OnDie()
     {
+        var realVelocity = GetRealVelocity();
         var effPos = Position;
         var debris = Create(Ids.Id_enemy_dead0002);
         debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
-        debris.InheritVelocity(this);
+        debris.MoveController.AddForce(Velocity + realVelocity);
         debris.SetFace(Face);
         
         //派发敌人死亡信号
