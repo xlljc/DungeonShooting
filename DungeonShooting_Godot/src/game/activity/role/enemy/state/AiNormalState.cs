@@ -52,6 +52,8 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
 
         if (Master.IsInViewRange(playerPos) && !Master.TestViewRayCast(playerPos)) //发现玩家
         {
+            //关闭射线检测
+            Master.TestViewRayCastOver();
             //发现玩家
             Master.LookTarget = player;
             //进入惊讶状态, 然后再进入通知状态

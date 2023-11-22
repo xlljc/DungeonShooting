@@ -15,9 +15,12 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 1f;
-
-    private bool _isInTailAfterRange = false;
+    
     private float _tailAfterTimer = 0;
+    private ActivityObject _attackTarget;
+
+    private float _idleTimer = 0;
+    private bool _playAnimFlag = false;
 
     public AiFindAmmoState() : base(AIStateEnum.AiFindAmmo)
     {
@@ -25,31 +28,63 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
 
     public override void Enter(AIStateEnum prev, params object[] args)
     {
-        if (Master.LookTarget == null)
-        {
-            throw new Exception("进入 AIAdvancedStateEnum.AiFindAmmo 状态时角色没有攻击目标!");
-        }
-        
         if (args.Length == 0)
         {
             throw new Exception("进入 AiStateEnum.AiFindAmmo 状态必须要把目标武器当成参数传过来");
         }
 
+        if (args.Length >= 2)
+        {
+            _attackTarget = (ActivityObject)args[1];
+        }
+        else
+        {
+            _attackTarget = null;
+        }
+        
         SetTargetWeapon((Weapon)args[0]);
-        _navigationUpdateTimer = 0;
-        _isInTailAfterRange = false;
+        _navigationUpdateTimer = _navigationInterval;
         _tailAfterTimer = 0;
 
         //标记武器
         _target.SetSign(SignNames.AiFindWeaponSign, Master);
+        
+        _playAnimFlag = prev == AIStateEnum.AiLeaveFor;
+        if (_playAnimFlag)
+        {
+            Master.AnimationPlayer.Play(AnimatorNames.Query);
+        }
     }
 
     public override void Process(float delta)
     {
+        if (_playAnimFlag && _idleTimer > 0)
+        {
+            _idleTimer -= delta;
+            return;
+        }
+        
         if (!Master.IsAllWeaponTotalAmmoEmpty()) //已经有弹药了
         {
-            ChangeState(GetNextState());
+            RunNextState();
             return;
+        }
+
+        if (Master.LookTarget == null) //没有目标
+        {
+            //临时处理
+            var player = Player.Current;
+            var playerPos = player.GetCenterPosition();
+            if (Master.IsInViewRange(playerPos) && !Master.TestViewRayCast(playerPos)) //发现玩家
+            {
+                //关闭射线检测
+                Master.TestViewRayCastOver();
+                //发现玩家
+                Master.LookTarget = player;
+                //进入惊讶状态, 然后再进入通知状态
+                ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFindAmmo, _target);
+                return;
+            }
         }
 
         //更新目标位置
@@ -72,12 +107,12 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
 
             if (_target == null) //也没有其他可用的武器了
             {
-                ChangeState(GetNextState());
+                RunNextState();
             }
         }
         else if (_target.Master == Master) //已经被自己拾起
         {
-            ChangeState(GetNextState());
+            RunNextState();
         }
         else if (_target.Master != null) //武器已经被其他角色拾起!
         {
@@ -86,20 +121,23 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
 
             if (_target == null) //也没有其他可用的武器了
             {
-                ChangeState(GetNextState());
+                RunNextState();
             }
         }
         else
         {
-            //检测目标没有超出跟随视野距离
-            _isInTailAfterRange = Master.IsInTailAfterViewRange(Master.LookTarget.GetCenterPosition());
-            if (_isInTailAfterRange)
+            if (Master.LookTarget != null)
             {
-                _tailAfterTimer = 0;
-            }
-            else
-            {
-                _tailAfterTimer += delta;
+                //检测目标没有超出跟随视野距离
+                var isInTailAfterRange = Master.IsInTailAfterViewRange(Master.LookTarget.GetCenterPosition());
+                if (isInTailAfterRange)
+                {
+                    _tailAfterTimer = 0;
+                }
+                else
+                {
+                    _tailAfterTimer += delta;
+                }
             }
 
             //向武器移动
@@ -116,17 +154,28 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
         }
     }
 
-    private AIStateEnum GetNextState()
+    private void RunNextState()
     {
-        return _tailAfterTimer > 10 ? AIStateEnum.AiNormal : AIStateEnum.AiTailAfter;
+        if (_attackTarget != null)
+        {
+            ChangeState(AIStateEnum.AiLeaveFor, _attackTarget);
+        }
+        else if (Master.LookTarget != null)
+        {
+            ChangeState(_tailAfterTimer > 10 ? AIStateEnum.AiNormal : AIStateEnum.AiTailAfter);
+        }
+        else
+        {
+            ChangeState(AIStateEnum.AiNormal);
+        }
     }
 
     private void SetTargetWeapon(Weapon weapon)
     {
         _target = weapon;
-        //设置目标点
-        if (_target != null)
+        if (weapon != null)
         {
+            //设置目标点
             Master.NavigationAgent2D.TargetPosition = _target.GlobalPosition;
         }
     }
@@ -137,15 +186,17 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
         {
             Master.DrawLine(Vector2.Zero, Master.ToLocal(_target.GlobalPosition), Colors.Purple);
 
-            if (_tailAfterTimer <= 0)
+            if (Master.LookTarget != null)
             {
-                Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.LookTarget.GetCenterPosition()), Colors.Orange);
+                if (_tailAfterTimer <= 0)
+                {
+                    Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.LookTarget.GetCenterPosition()), Colors.Orange);
+                }
+                else if (_tailAfterTimer <= 10)
+                {
+                    Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.LookTarget.GetCenterPosition()), Colors.Blue);
+                }
             }
-            else if (_tailAfterTimer <= 10)
-            {
-                Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.LookTarget.GetCenterPosition()), Colors.Blue);
-            }
-            
         }
     }
 }

@@ -12,13 +12,14 @@ public class AiLeaveForState : StateBase<Enemy, AIStateEnum>
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
-
-    private float _idleTimer = 0;
     
     //目标
     private ActivityObject _target;
     //目标点
     private Vector2 _targetPosition;
+
+    private float _idleTimer = 0;
+    private bool _playAnimFlag = false;
 
     public AiLeaveForState() : base(AIStateEnum.AiLeaveFor)
     {
@@ -30,7 +31,7 @@ public class AiLeaveForState : StateBase<Enemy, AIStateEnum>
         {
             throw new Exception("进入 AINormalStateEnum.AiLeaveFor 状态必须带上目标对象");
         }
-
+        
         _target = (ActivityObject)args[0];
         
         //先检查弹药是否打光
@@ -40,8 +41,7 @@ public class AiLeaveForState : StateBase<Enemy, AIStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                Master.LookTarget = _target;
-                ChangeState(AIStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AIStateEnum.AiFindAmmo, targetWeapon, _target);
                 return;
             }
         }
@@ -49,7 +49,12 @@ public class AiLeaveForState : StateBase<Enemy, AIStateEnum>
         _idleTimer = 1;
         _targetPosition = _target.GetCenterPosition();
         Master.LookTargetPosition(_targetPosition);
-        Master.AnimationPlayer.Play(AnimatorNames.Query);
+        
+        _playAnimFlag = prev != AIStateEnum.AiFindAmmo;
+        if (_playAnimFlag)
+        {
+            Master.AnimationPlayer.Play(AnimatorNames.Query);
+        }
     }
 
     public override void Exit(AIStateEnum next)
@@ -59,7 +64,7 @@ public class AiLeaveForState : StateBase<Enemy, AIStateEnum>
 
     public override void Process(float delta)
     {
-        if (_idleTimer > 0)
+        if (_playAnimFlag && _idleTimer > 0)
         {
             _idleTimer -= delta;
             return;
@@ -104,7 +109,7 @@ public class AiLeaveForState : StateBase<Enemy, AIStateEnum>
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
                 Master.LookTarget = Player.Current;
-                ChangeState(AIStateEnum.AiFollowUp);
+                ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFollowUp);
                 return;
             }
             else
