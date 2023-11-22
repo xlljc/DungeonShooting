@@ -55,6 +55,9 @@ public class AiLeaveForState : StateBase<Enemy, AIStateEnum>
         {
             Master.AnimationPlayer.Play(AnimatorNames.Query);
         }
+        
+        //看向目标位置
+        Master.LookTargetPosition(_target.GetCenterPosition());
     }
 
     public override void Exit(AIStateEnum next)

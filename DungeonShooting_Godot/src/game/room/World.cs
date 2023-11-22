@@ -114,10 +114,14 @@ public partial class World : CanvasModulate, ICoroutine
             {
                 //将未发现目标的敌人状态置为惊讶状态
                 var controller = role.StateController;
-                if (controller.CurrState == AIStateEnum.AiNormal)
+                //延时通知效果
+                role.CallDelay(Utils.Random.RandomRangeFloat(0.2f, 1f), () =>
                 {
-                    controller.ChangeState(AIStateEnum.AiLeaveFor, target);
-                }
+                    if (controller.CurrState == AIStateEnum.AiNormal)
+                    {
+                        controller.ChangeState(AIStateEnum.AiLeaveFor, target);
+                    }
+                });
             }
         }
     }

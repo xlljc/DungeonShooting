@@ -1,4 +1,5 @@
 
+using System.Linq;
 using Godot;
 
 namespace EnemyState;
@@ -56,8 +57,19 @@ public class AiNormalState : StateBase<Enemy, AIStateEnum>
             Master.TestViewRayCastOver();
             //发现玩家
             Master.LookTarget = player;
-            //进入惊讶状态, 然后再进入通知状态
-            ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiNotify);
+            //判断是否进入通知状态
+            if (Master.World.Enemy_InstanceList.FindIndex(enemy =>
+                    enemy != Master && !enemy.IsDie && enemy.AffiliationArea == Master.AffiliationArea &&
+                    enemy.StateController.CurrState == AIStateEnum.AiNormal) != -1)
+            {
+                //进入惊讶状态, 然后再进入通知状态
+                ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiNotify);
+            }
+            else
+            {
+                //进入惊讶状态, 然后再进入跟随状态
+                ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiTailAfter);
+            }
             return;
         }
         else if (_pauseTimer >= 0)

@@ -11,8 +11,7 @@ public class AiAstonishedState : StateBase<Enemy, AIStateEnum>
     /// 下一个状态
     /// </summary>
     public AIStateEnum NextState;
-
-    private object[] _args;
+    
     private float _timer;
     
     public AiAstonishedState() : base(AIStateEnum.AiAstonished)
@@ -29,14 +28,7 @@ public class AiAstonishedState : StateBase<Enemy, AIStateEnum>
         }
 
         NextState = (AIStateEnum)args[0];
-        _args = args;
         _timer = 0.6f;
-
-        if (NextState == AIStateEnum.AiLeaveFor)
-        {
-            var target = (ActivityObject)args[1];
-            Master.LookTargetPosition(target.GetCenterPosition());
-        }
         
         //播放惊讶表情
         Master.AnimationPlayer.Play(AnimatorNames.Astonished);
@@ -48,18 +40,7 @@ public class AiAstonishedState : StateBase<Enemy, AIStateEnum>
         _timer -= delta;
         if (_timer <= 0)
         {
-            if (_args.Length == 1)
-            {
-                ChangeState(NextState);
-            }
-            else if (_args.Length == 2)
-            {
-                ChangeState(NextState, _args[1]);
-            }
-            else if (_args.Length == 3)
-            {
-                ChangeState(NextState, _args[1], _args[2]);
-            }
+            ChangeState(NextState);
         }
     }
 }

@@ -19,7 +19,7 @@ public class AiNotifyState : StateBase<Enemy, AIStateEnum>
         {
             throw new Exception("进入 AIAdvancedStateEnum.AiNotify 没有攻击目标!");
         }
-        _timer = 0.6f;
+        _timer = 1.2f;
         //通知其它角色
         Master.World.NotifyEnemyTarget(Master, Master.LookTarget);
         Master.AnimationPlayer.Play(AnimatorNames.Notify);
