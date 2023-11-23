@@ -217,11 +217,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public bool ShowOutline
     {
-        get => _blendShaderMaterial.GetShaderParameter(_shader_show_outline).AsBool();
+        get => _blendShaderMaterial == null ? false : _blendShaderMaterial.GetShaderParameter(_shader_show_outline).AsBool();
         set
         {
-            _blendShaderMaterial.SetShaderParameter(_shader_show_outline, value);
-            _shadowBlendShaderMaterial.SetShaderParameter(_shader_show_outline, value);
+            _blendShaderMaterial?.SetShaderParameter(_shader_show_outline, value);
+            _shadowBlendShaderMaterial?.SetShaderParameter(_shader_show_outline, value);
         }
     }
 
@@ -230,8 +230,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public Color OutlineColor
     {
-        get => _blendShaderMaterial.GetShaderParameter(_shader_outline_color).AsColor();
-        set => _blendShaderMaterial.SetShaderParameter(_shader_outline_color, value);
+        get => _blendShaderMaterial == null ? Colors.Black : _blendShaderMaterial.GetShaderParameter(_shader_outline_color).AsColor();
+        set => _blendShaderMaterial?.SetShaderParameter(_shader_outline_color, value);
     }
 
     /// <summary>
@@ -239,8 +239,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public float Grey
     {
-        get => _blendShaderMaterial.GetShaderParameter(_shader_grey).AsSingle();
-        set => _blendShaderMaterial.SetShaderParameter(_shader_grey, value);
+        get => _blendShaderMaterial == null ? 0 : _blendShaderMaterial.GetShaderParameter(_shader_grey).AsSingle();
+        set => _blendShaderMaterial?.SetShaderParameter(_shader_grey, value);
     }
 
     // --------------------------------------------------------------------------------

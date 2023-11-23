@@ -29,6 +29,7 @@ public partial class ActivityObject
                 {
                     var material =
                         ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
+                    material.ResourceLocalToScene = true;
                     material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
                     material.SetShaderParameter("schedule", 1);
                     material.SetShaderParameter("modulate", new Color(1, 1, 1, 1));
@@ -43,6 +44,7 @@ public partial class ActivityObject
                 {
                     var material =
                         ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
+                    material.ResourceLocalToScene = true;
                     material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
                     material.SetShaderParameter("schedule", 0);
                     material.SetShaderParameter("modulate", new Color(1, 1, 1, 1));
