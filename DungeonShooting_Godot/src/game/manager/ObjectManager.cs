@@ -35,6 +35,22 @@ public static class ObjectManager
         return item;
     }
 
+    /// <summary>
+    /// 根据类型直接获取实例对象
+    /// </summary>
+    public static T GetPoolItemByClass<T>() where T : IPoolItem, new()
+    {
+        var name = typeof(T).FullName;
+        var item = ObjectPool.GetItem<T>(name);
+        if (item == null)
+        {
+            item = new T();
+            item.Logotype = name;
+        }
+
+        return item;
+    }
+
     public static Bullet GetBullet(string id)
     {
         var bullet = ObjectPool.GetItem<Bullet>(id);

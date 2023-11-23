@@ -58,6 +58,7 @@ public partial class BoomBullet : Bullet
     {
         //播放撞击音效
         SoundManager.PlaySoundByConfig("collision0001", Position, BulletData.TriggerRole);
+        //这里不调用父类的 OnFallToGround() 函数, 因为这种子弹落地不需要销毁
     }
 
     /// <summary>
@@ -70,7 +71,7 @@ public partial class BoomBullet : Bullet
         explode.Position = pos;
         explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
         explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
-        explode.Init(BulletData.TriggerRole?.AffiliationArea, AttackLayer, 25, BulletData.Harm, 50, BulletData.Repel);
+        explode.Init(BulletData, AttackLayer, 25, BulletData.Harm, 50, BulletData.Repel);
         explode.RunPlay(BulletData.TriggerRole);
         if (AffiliationArea != null)
         {

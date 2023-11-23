@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 瞄准辅助线
 /// </summary>
-public class SubLine : Component<AdvancedRole>
+public class SubLine : Component<Role>
 {
     /// <summary>
     /// 是否正在播放警告闪烁动画

@@ -20,6 +20,12 @@ public static partial class ExcelConfig
         public string Remark;
 
         /// <summary>
+        /// 锁定目标时是否站立不动
+        /// </summary>
+        [JsonInclude]
+        public bool LockingStand;
+
+        /// <summary>
         /// 开火时是否站立不动
         /// </summary>
         [JsonInclude]
@@ -75,6 +81,7 @@ public static partial class ExcelConfig
             var inst = new AiAttackAttr();
             inst.Id = Id;
             inst.Remark = Remark;
+            inst.LockingStand = LockingStand;
             inst.FiringStand = FiringStand;
             inst.ShowSubline = ShowSubline;
             inst.LockingTime = LockingTime;

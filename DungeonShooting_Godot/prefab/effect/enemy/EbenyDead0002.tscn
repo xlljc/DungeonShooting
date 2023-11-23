@@ -1,0 +1,129 @@
+[gd_scene load_steps=19 format=3 uid="uid://nfx3lhkdhv6a"]
+
+[ext_resource type="Script" path="res://src/game/activity/common/AutoFreezeObject.cs" id="1_iop26"]
+[ext_resource type="Texture2D" uid="uid://x3tjqgdgp43n" path="res://resource/sprite/role/enemy0002/Enemy0002_dead.png" id="2_3cyjy"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_4hojo"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="4_m7xko"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s1mj2"]
+resource_local_to_scene = true
+shader = ExtResource("2_4hojo")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_08fn3"]
+resource_local_to_scene = true
+shader = ExtResource("2_4hojo")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ag5h2"]
+atlas = ExtResource("2_3cyjy")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_toly3"]
+atlas = ExtResource("2_3cyjy")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bqash"]
+atlas = ExtResource("2_3cyjy")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lx5fo"]
+atlas = ExtResource("2_3cyjy")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vhsqr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ag5h2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_toly3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bqash")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lx5fo")
+}],
+"loop": false,
+"name": &"dead",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0xl2q"]
+radius = 4.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_p3lv8"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_ryemi"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.537255)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_orgu0"]
+gradient = SubResource("Gradient_ryemi")
+
+[sub_resource type="Curve" id="Curve_21dxk"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.177419, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0272727), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_rutlp"]
+curve = SubResource("Curve_21dxk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ku1mm"]
+particle_flag_disable_z = true
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.4
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_rutlp")
+color = Color(0.811765, 0.0980392, 0.0980392, 0.627451)
+color_ramp = SubResource("GradientTexture1D_orgu0")
+anim_offset_max = 1.0
+
+[node name="Effect0002" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
+collision_layer = 128
+script = ExtResource("1_iop26")
+AnimationName = "dead"
+AutoToGrey = true
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+ThrowCollisionSize = Vector2(14, 14)
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+z_index = -1
+material = SubResource("ShaderMaterial_s1mj2")
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_08fn3")
+sprite_frames = SubResource("SpriteFrames_vhsqr")
+animation = &"dead"
+offset = Vector2(0, -9)
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_0xl2q")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_p3lv8")
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_ku1mm")
+texture = ExtResource("4_m7xko")
+fixed_fps = 20

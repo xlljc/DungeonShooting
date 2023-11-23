@@ -24,6 +24,8 @@ anim_offset_max = 1.0
 
 [node name="BulletSmoke" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
 sprite_frames = ExtResource("1_r62v8")
+frame = 4
+frame_progress = 1.0
 offset = Vector2(8, 0)
 script = ExtResource("2_r547d")
 Particles2D = [NodePath("GpuParticles2D")]

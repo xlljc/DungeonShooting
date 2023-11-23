@@ -32,7 +32,7 @@ public abstract partial class Prop : ActivityObject
     /// 触发扔掉道具效果, 并不会管道具是否在道具背包中
     /// </summary>
     /// <param name="master">触发扔掉该道具的的角色</param>
-    public void ThrowProp(AdvancedRole master)
+    public void ThrowProp(Role master)
     {
         ThrowProp(master, master.GlobalPosition);
     }
@@ -47,7 +47,7 @@ public abstract partial class Prop : ActivityObject
         //阴影偏移
         ShadowOffset = new Vector2(0, 2);
         GlobalRotation = 0;
-        var startHeight = -master.GetCenterPosition().Y;
+        var startHeight = 8;
         Throw(startPosition, startHeight, 0, Vector2.Zero, 0);
 
         //继承role的移动速度

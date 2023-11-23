@@ -19,12 +19,12 @@ public partial class BuffProp0009 : BuffProp
         Master.RoleState.CalcBulletDistanceEvent -= CalcBulletDistanceEvent;
     }
     
-    private void CalcBulletSpeedEvent(Weapon weapon, float originSpeed, RefValue<float> speed)
+    private void CalcBulletSpeedEvent(float originSpeed, RefValue<float> speed)
     {
         speed.Value += originSpeed * 0.25f;
     }
     
-    private void CalcBulletDistanceEvent(Weapon weapon, float originDistance, RefValue<float> distance)
+    private void CalcBulletDistanceEvent(float originDistance, RefValue<float> distance)
     {
         distance.Value += originDistance * 0.25f;
     }

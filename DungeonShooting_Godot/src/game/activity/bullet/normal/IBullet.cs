@@ -12,7 +12,7 @@ public interface IBullet : ICoroutine, IPoolItem
     /// 离开对象池时的事件
     /// </summary>
     event Action OnLeavePoolEvent;
-    
+
     /// <summary>
     /// 攻击的层级
     /// </summary>

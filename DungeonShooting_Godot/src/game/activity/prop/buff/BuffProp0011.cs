@@ -17,7 +17,7 @@ public partial class BuffProp0011 : BuffProp
         Master.RoleState.CalcBulletBounceCountEvent -= CalcBulletBounceCountEvent;
     }
     
-    private void CalcBulletBounceCountEvent(Weapon weapon, int originBounce, RefValue<int> bounce)
+    private void CalcBulletBounceCountEvent(int originBounce, RefValue<int> bounce)
     {
         bounce.Value += 2;
     }

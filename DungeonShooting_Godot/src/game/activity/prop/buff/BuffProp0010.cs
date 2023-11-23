@@ -25,12 +25,12 @@ public partial class BuffProp0010 : BuffProp
         Master.RoleState.CalcBulletRepelEvent -= CalcBulletRepelEvent;
     }
     
-    private void CalcBulletCountEvent(Weapon weapon, int originCount, RefValue<int> refValue)
+    private void CalcBulletCountEvent(int originCount, RefValue<int> refValue)
     {
         refValue.Value += originCount;
     }
 
-    private void CalcBulletDeviationAngleEvent(Weapon weapon, float originAngle, RefValue<float> refValue)
+    private void CalcBulletDeviationAngleEvent(float originAngle, RefValue<float> refValue)
     {
         refValue.Value += Utils.Random.RandomRangeFloat(-8, 8);
     }
@@ -45,14 +45,15 @@ public partial class BuffProp0010 : BuffProp
         refValue.Value = Mathf.Max(1, refValue.Value - Mathf.FloorToInt(refValue.Value * 0.35f));
     }
     
-    private void CalcBulletSpeedEvent(Weapon weapon, float originSpeed, RefValue<float> speed)
+    private void CalcBulletSpeedEvent(float originSpeed, RefValue<float> speed)
     {
         speed.Value += originSpeed * Utils.Random.RandomRangeFloat(-0.05f, 0.05f);
     }
     
-    private void CalcBulletRepelEvent(Weapon weapon, float originRepel, RefValue<float> repel)
+    private void CalcBulletRepelEvent(float originRepel, RefValue<float> repel)
     {
-        if (weapon.Attribute.IsMelee || repel.Value < 0)
+        if (repel.Value < 0 || (Master.WeaponPack.ActiveItem != null &&
+                                Master.WeaponPack.ActiveItem.Attribute.IsMelee))
         {
             return;
         }

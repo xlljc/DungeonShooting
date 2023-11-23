@@ -56,15 +56,14 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
         {
             capacity = 0;
         }
-
-        if (capacity == Capacity)
-        {
-            return;
-        }
-
+        
         if (ItemSlot == null)
         {
             ItemSlot = new T[capacity];
+        }
+        else if (capacity == Capacity)
+        {
+            return;
         }
         else if (ItemSlot.Length > capacity) //删减格子
         {
@@ -76,9 +75,8 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
                 {
                     newArray[i] = packageItem;
                 }
-                else
+                else if (packageItem != null) //溢出的item
                 {
-                    //溢出的item
                     packageItem.OnOverflowItem();
                     packageItem.Master = null;
                     packageItem.PackageIndex = -1;
@@ -97,7 +95,6 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
             ItemSlot = newArray;
         }
         Capacity = capacity;
-        
     }
 
     /// <summary>
@@ -153,7 +150,7 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
         for (var i = 0; i < ItemSlot.Length; i++)
         {
             var item = ItemSlot[i];
-            if (item != null && item.ItemConfig.Id == id)
+            if (item != null && item.ActivityBase.Id == id)
             {
                 return i;
             }
@@ -422,7 +419,7 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
         for (var i = 0; i < ItemSlot.Length; i++)
         {
             var packageItem = ItemSlot[i];
-            if (packageItem != null && packageItem.ItemConfig.Id == itemId)
+            if (packageItem != null && packageItem.ActivityBase.Id == itemId)
             {
                 return i;
             }
@@ -444,7 +441,7 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
         for (var i = 0; i < ItemSlot.Length; i++)
         {
             var packageItem = ItemSlot[i];
-            if (packageItem != null && packageItem.ItemConfig.Id == itemId)
+            if (packageItem != null && packageItem.ActivityBase.Id == itemId)
             {
                 return packageItem;
             }

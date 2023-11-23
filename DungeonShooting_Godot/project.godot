@@ -24,7 +24,7 @@ settings/fps/force_fps=60
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/aspect="keep_width"
-window/vsync/use_vsync=false
+window/vsync/vsync_mode=0
 
 [dotnet]
 
@@ -180,6 +180,11 @@ useActiveProp={
 removeProp={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":88,"key_label":0,"unicode":120,"echo":false,"script":null)
+]
+}
+exchangeProp={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":90,"key_label":0,"unicode":122,"echo":false,"script":null)
 ]
 }
 

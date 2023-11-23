@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://m0s0k5nw7nbi"]
+
+[ext_resource type="Material" uid="uid://c1chld6lkpgji" path="res://resource/material/SmokeParticleMaterial.tres" id="1_leomh"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="2_c2t2e"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroyParticles.cs" id="3_5cpi6"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_emuda"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[node name="EnemyBloodEffect" type="GPUParticles2D" node_paths=PackedStringArray("Particles2D")]
+modulate = Color(0.811765, 0.0980392, 0.0980392, 0.627451)
+material = SubResource("CanvasItemMaterial_emuda")
+emitting = false
+amount = 10
+process_material = ExtResource("1_leomh")
+texture = ExtResource("2_c2t2e")
+lifetime = 1.2
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 20
+script = ExtResource("3_5cpi6")
+Particles2D = []

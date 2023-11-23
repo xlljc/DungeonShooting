@@ -16,10 +16,16 @@ public partial class Bullet : ActivityObject, IBullet
     public string Logotype { get; set; }
     
     /// <summary>
-    /// 碰撞区域
+    /// 子弹伤害碰撞区域
     /// </summary>
     [Export, ExportFillNode]
     public Area2D CollisionArea { get; set; }
+    
+    /// <summary>
+    /// 子弹伤害碰撞检测形状
+    /// </summary>
+    [Export, ExportFillNode]
+    public CollisionShape2D CollisionShape2D { get; set; }
 
     /// <summary>
     /// 攻击的层级
@@ -54,38 +60,34 @@ public partial class Bullet : ActivityObject, IBullet
             CollisionArea.AreaEntered += OnArea2dEntered;
             _init = true;
         }
-
+        
         CurrentBounce = 0;
         CurrentPenetration = 0;
         CurrFlyDistance = 0;
         
-        BounceLockRotation = false;
         BulletData = data;
         AttackLayer = attackLayer;
         Rotation = data.Rotation;
-
-        float altitude;
+        
         var triggerRole = data.TriggerRole;
-        if (triggerRole != null)
+        if (data.TriggerRole != null && data.TriggerRole.AffiliationArea != null) //设置所属区域
         {
-            altitude = -triggerRole.MountPoint.Position.Y;
-            if (triggerRole.AffiliationArea != null) //设置所属区域
+            if (triggerRole.AffiliationArea != null) 
             {
                 triggerRole.AffiliationArea.InsertItem(this);
             }
         }
-        else
-        {
-            altitude = 8;
-        }
         
-        Position = data.Position + new Vector2(0, altitude);
-        Altitude = altitude;
+        Position = data.Position + new Vector2(0, data.Altitude);
+        Altitude = data.Altitude;
         if (data.VerticalSpeed != 0)
         {
             VerticalSpeed = data.VerticalSpeed;
         }
-        EnableVerticalMotion = data.BulletBase.UseGravity;
+        else
+        {
+            VerticalSpeed = 0;
+        }
 
         //BasisVelocity = new Vector2(data.FlySpeed, 0).Rotated(Rotation);
         MoveController.AddForce(new Vector2(data.FlySpeed, 0).Rotated(Rotation));
@@ -107,7 +109,6 @@ public partial class Bullet : ActivityObject, IBullet
             this.CallDelay(data.LifeTime, OnLimeOver);
         }
     }
-    
 
     public override void OnMoveCollision(KinematicCollision2D collision)
     {
@@ -140,12 +141,12 @@ public partial class Bullet : ActivityObject, IBullet
             {
                 if (BulletData.Repel != 0)
                 {
-                    role.MoveController.AddForce(Velocity.Normalized() * BulletData.Repel);
+                    role.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
                 }
             }
             
             //造成伤害
-            role.CallDeferred(nameof(AdvancedRole.Hurt), BulletData.Harm, Rotation);
+            role.CallDeferred(nameof(Role.Hurt), BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
 
             //穿透次数
             CurrentPenetration++;
@@ -170,6 +171,13 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void OnLimeOver()
     {
+        PlayDisappearEffect();
+        DoReclaim();
+    }
+    
+    protected override void OnFallToGround()
+    {
+        //落地销毁
         PlayDisappearEffect();
         DoReclaim();
     }
@@ -207,6 +215,11 @@ public partial class Bullet : ActivityObject, IBullet
     
     protected override void Process(float delta)
     {
+        if (ActivityMaterial.DynamicCollision)
+        {
+            //子弹高度大于 16 关闭碰撞检测
+            CollisionShape2D.Disabled = Altitude >= 16;
+        }
         //距离太大, 自动销毁
         CurrFlyDistance += BulletData.FlySpeed * delta;
         if (CurrFlyDistance >= BulletData.MaxDistance)

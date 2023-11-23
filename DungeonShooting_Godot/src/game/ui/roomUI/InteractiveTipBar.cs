@@ -70,7 +70,7 @@ public class InteractiveTipBar
             {
                 _interactiveTarget = interactiveItem;
                 //显示互动提示
-                ShowBar(result.Target, result.Target.ItemConfig.Name, icon);
+                ShowBar(result.Target, result.Target.ActivityBase.Name, icon);
             }
             else
             {

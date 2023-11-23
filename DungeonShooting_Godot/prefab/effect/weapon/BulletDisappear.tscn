@@ -34,6 +34,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_41eg5")
+}, {
+"duration": 1.0,
+"texture": null
 }],
 "loop": false,
 "name": &"default",
@@ -73,7 +76,7 @@ z_index = -4
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_ub3cw")
 script = ExtResource("2_l2qlq")
-DelayTime = 0.3
+DelayTime = 0.5
 Particles2D = [NodePath("GPUParticles2D")]
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]

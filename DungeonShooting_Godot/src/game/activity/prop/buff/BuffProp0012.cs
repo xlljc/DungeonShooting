@@ -17,7 +17,7 @@ public partial class BuffProp0012 : BuffProp
         Master.RoleState.CalcBulletPenetrationEvent -= CalcBulletPenetrationEvent;
     }
     
-    private void CalcBulletPenetrationEvent(Weapon weapon, int origin, RefValue<int> penetration)
+    private void CalcBulletPenetrationEvent(int origin, RefValue<int> penetration)
     {
         penetration.Value += 1;
     }

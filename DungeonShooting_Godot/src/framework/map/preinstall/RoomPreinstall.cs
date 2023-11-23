@@ -297,6 +297,13 @@ public class RoomPreinstall : IDestroy
                     //播放出生动画
                     activityObject.StartCoroutine(OnActivityObjectBirth(activityObject));
                     activityObject.PutDown(GetDefaultLayer(activityMark));
+                    activityObject.UpdateFall((float)GameApplication.Instance.GetProcessDeltaTime());
+
+                    if (activityObject is Enemy enemy)
+                    {
+                        //出生调用
+                        enemy.OnBornFromMark();
+                    }
                     
                     var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_common_Effect1_tscn);
                     var node = (Node2D)effect;
@@ -431,7 +438,7 @@ public class RoomPreinstall : IDestroy
         else if (activityMark.ActivityType == ActivityType.Enemy) //敌人类型
         {
             var role = (Role)activityObject;
-            if (role is AdvancedEnemy enemy && activityMark.Attr.TryGetValue("Weapon", out var weaponId)) //使用的武器
+            if (role is Enemy enemy && activityMark.Attr.TryGetValue("Weapon", out var weaponId)) //使用的武器
             {
                 if (!string.IsNullOrEmpty(weaponId))
                 {

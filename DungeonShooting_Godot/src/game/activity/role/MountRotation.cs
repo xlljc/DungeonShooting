@@ -15,7 +15,7 @@ public partial class MountRotation : Marker2D
     /// <summary>
     /// 所在的角色
     /// </summary>
-    public AdvancedRole Master { get; set; }
+    public Role Master { get; set; }
 
     /// <summary>
     /// 当前节点真实的旋转角度, 角度制

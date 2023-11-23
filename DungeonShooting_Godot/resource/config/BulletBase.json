@@ -24,7 +24,6 @@
       300,
       400
     ],
-    "UseGravity": false,
     "VerticalSpeed": [
       0
     ],
@@ -44,7 +43,7 @@
       4
     ],
     "RepelRange": [
-      30
+      15
     ],
     "DeviationAngleRange": [
       -10,
@@ -61,7 +60,6 @@
       200,
       250
     ],
-    "UseGravity": false,
     "VerticalSpeed": [
       0
     ],
@@ -81,7 +79,7 @@
       3
     ],
     "RepelRange": [
-      10
+      15
     ],
     "DeviationAngleRange": [
       0
@@ -97,7 +95,6 @@
       300,
       400
     ],
-    "UseGravity": false,
     "VerticalSpeed": [
       0
     ],
@@ -117,7 +114,7 @@
       20
     ],
     "RepelRange": [
-      200
+      75
     ],
     "DeviationAngleRange": [
       0
@@ -133,7 +130,6 @@
       600,
       600
     ],
-    "UseGravity": false,
     "VerticalSpeed": [
       0
     ],
@@ -153,7 +149,7 @@
       30
     ],
     "RepelRange": [
-      150
+      85
     ],
     "DeviationAngleRange": [
       0
@@ -169,7 +165,6 @@
       270,
       360
     ],
-    "UseGravity": true,
     "VerticalSpeed": [
       70
     ],
@@ -177,7 +172,42 @@
       999
     ],
     "Penetration": [
-      1
+      0
+    ]
+  },
+  {
+    "Id": "0006",
+    "Name": "\u654C\u65B9\u4E13\u7528\u5B50\u5F39",
+    "Type": 1,
+    "Prefab": "bullet0005",
+    "HarmRange": [
+      5
+    ],
+    "RepelRange": [
+      30
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      100,
+      100
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      270,
+      360
+    ],
+    "VerticalSpeed": [
+      170
+    ],
+    "BounceCount": [
+      0
+    ],
+    "Penetration": [
+      0
     ]
   },
   {
@@ -189,7 +219,7 @@
       5
     ],
     "RepelRange": [
-      40
+      35
     ],
     "DeviationAngleRange": [
       0
@@ -205,7 +235,6 @@
       600,
       600
     ],
-    "UseGravity": false,
     "VerticalSpeed": null,
     "BounceCount": [
       0
@@ -221,7 +250,7 @@
       25
     ],
     "RepelRange": [
-      150
+      70
     ],
     "DeviationAngleRange": [
       0
@@ -235,7 +264,6 @@
     "DistanceRange": [
       35
     ],
-    "UseGravity": false,
     "VerticalSpeed": null,
     "BounceCount": null,
     "Penetration": null

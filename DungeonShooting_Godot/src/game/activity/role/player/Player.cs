@@ -6,7 +6,7 @@ using Godot;
 /// 玩家角色基类, 所有角色都必须继承该类
 /// </summary>
 [Tool]
-public partial class Player : AdvancedRole
+public partial class Player : Role
 {
     /// <summary>
     /// 获取当前操作的角色
@@ -18,6 +18,8 @@ public partial class Player : AdvancedRole
     /// </summary>
     public StateController<Player, PlayerStateEnum> StateController { get; private set; }
 
+    public PlayerRoleState PlayerRoleState { get; private set; }
+    
     /// <summary>
     /// 是否可以翻滚
     /// </summary>
@@ -52,6 +54,8 @@ public partial class Player : AdvancedRole
         MaxShield = 0;
         Shield = 0;
 
+        WeaponPack.SetCapacity(4);
+        
         // debug用
         // RoleState.Acceleration = 3000;
         // RoleState.Friction = 3000;
@@ -72,8 +76,15 @@ public partial class Player : AdvancedRole
         StateController.Register(new PlayerRollState());
         //默认状态
         StateController.ChangeStateInstant(PlayerStateEnum.Idle);
-
+        
         //InitSubLine();
+    }
+
+    protected override RoleState OnCreateRoleState()
+    {
+        var roleState = new PlayerRoleState();
+        PlayerRoleState = roleState;
+        return roleState;
     }
 
     protected override void Process(float delta)
@@ -90,24 +101,21 @@ public partial class Player : AdvancedRole
         }
         
         //脸的朝向
-        if (LookTarget == null)
+        var gPos = Position;
+        Vector2 mousePos = InputManager.CursorPosition;
+        if (mousePos.X > gPos.X && Face == FaceDirection.Left)
         {
-            var gPos = GlobalPosition;
-            Vector2 mousePos = InputManager.CursorPosition;
-            if (mousePos.X > gPos.X && Face == FaceDirection.Left)
-            {
-                Face = FaceDirection.Right;
-            }
-            else if (mousePos.X < gPos.X && Face == FaceDirection.Right)
-            {
-                Face = FaceDirection.Left;
-            }
+            Face = FaceDirection.Right;
+        }
+        else if (mousePos.X < gPos.X && Face == FaceDirection.Right)
+        {
+            Face = FaceDirection.Left;
+        }
 
-            if (MountLookTarget)
-            {
-                //枪口跟随鼠标
-                MountPoint.SetLookAt(mousePos);
-            }
+        if (MountLookTarget)
+        {
+            //枪口跟随鼠标
+            MountPoint.SetLookAt(mousePos);
         }
 
         if (InputManager.ExchangeWeapon) //切换武器
@@ -186,14 +194,14 @@ public partial class Player : AdvancedRole
         {
             //Hurt(1000, 0);
             Hp = 0;
-            Hurt(1000, 0);
+            Hurt(this, 1000, 0);
         }
         else if (Input.IsKeyPressed(Key.O)) //测试用, 消灭房间内所有敌人
         {
             var enemyList = AffiliationArea.FindIncludeItems(o => o.CollisionWithMask(PhysicsLayer.Enemy));
             foreach (var enemy in enemyList)
             {
-                ((AdvancedEnemy)enemy).Hurt(1000, 0);
+                ((Enemy)enemy).Hurt(this, 1000, 0);
             }
         }
         // //测试用
@@ -209,6 +217,15 @@ public partial class Player : AdvancedRole
         //         freezeSprite.ActivityObject.MoveController.AddForce(temp.Normalized() * 300 * (25f - temp.Length()) / 25f);
         //     }
         // }
+        
+        if (Face == FaceDirection.Right)
+        {
+            TipRoot.Scale = Vector2.One;
+        }
+        else
+        {
+            TipRoot.Scale = new Vector2(-1, 1);
+        }
     }
 
     protected override void OnPickUpWeapon(Weapon weapon)
@@ -227,7 +244,7 @@ public partial class Player : AdvancedRole
         return 1;
     }
 
-    protected override void OnHit(int damage, bool realHarm)
+    protected override void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
     {
         //进入无敌状态
         if (realHarm) //真实伤害
@@ -344,9 +361,9 @@ public partial class Player : AdvancedRole
     /// </summary>
     public void OverRoll()
     {
-        _rollCoolingTimer = RoleState.RollTime;
+        _rollCoolingTimer = PlayerRoleState.RollCoolingTime;
     }
-    
+
     // protected override void DebugDraw()
     // {
     //     base.DebugDraw();

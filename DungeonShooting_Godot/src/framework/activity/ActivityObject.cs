@@ -10,7 +10,8 @@ using Godot;
 /// 该类提供基础物体运动模拟, 互动接口, 自定义组件, 协程等功能<br/>
 /// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [Tool], 并在 ActivityObject.xlsx 配置文件中注册物体, 导出配置表后使用 ActivityObject.Create(id) 来创建实例.<br/>
 /// </summary>
-public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
+[Tool]
+public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
 {
     /// <summary>
     /// 是否是调试模式
@@ -18,9 +19,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public static bool IsDebug { get; set; }
 
     /// <summary>
+    /// 实例唯一 Id
+    /// </summary>
+    public long Id { get; set; }
+    
+    /// <summary>
     /// 当前物体对应的配置数据, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemConfig 为 null
     /// </summary>
-    public ExcelConfig.ActivityBase ItemConfig { get; private set; }
+    public ExcelConfig.ActivityBase ActivityBase { get; private set; }
 
     /// <summary>
     /// 是否是静态物体, 如果为true, 则会禁用移动处理
@@ -68,6 +74,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <summary>
     /// 阴影偏移
     /// </summary>
+    [Export]
     public Vector2 ShadowOffset { get; protected set; } = new Vector2(0, 2);
     
     /// <summary>
@@ -163,11 +170,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// 是否启用垂直方向上的运动模拟, 默认开启, 如果禁用, 那么下落和投抛效果, 同样 Throw() 函数也将失效
     /// </summary>
     public bool EnableVerticalMotion { get; set; } = true;
-
-    /// <summary>
-    /// 撞到墙壁反弹时是否锁定旋转角度, 如果为 false, 则反弹后将直接修改旋转角度
-    /// </summary>
-    public bool BounceLockRotation { get; set; } = true;
     
     /// <summary>
     /// 是否启用物体更新行为, 默认 true, 如果禁用, 则会停止当前物体的 Process(), PhysicsProcess() 调用, 并且禁用 Collision 节点, 禁用后所有组件也同样被禁用行为
@@ -215,21 +217,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public bool ShowOutline
     {
-        get => _showOutline;
+        get => _blendShaderMaterial == null ? false : _blendShaderMaterial.GetShaderParameter(_shader_show_outline).AsBool();
         set
         {
-            if (_blendShaderMaterial != null)
-            {
-                if (value != _showOutline)
-                {
-                    _blendShaderMaterial.SetShaderParameter("show_outline", value);
-                    if (_shadowBlendShaderMaterial != null)
-                    {
-                        _shadowBlendShaderMaterial.SetShaderParameter("show_outline", value);
-                    }
-                    _showOutline = value;
-                }
-            }
+            _blendShaderMaterial?.SetShaderParameter(_shader_show_outline, value);
+            _shadowBlendShaderMaterial?.SetShaderParameter(_shader_show_outline, value);
         }
     }
 
@@ -238,32 +230,24 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public Color OutlineColor
     {
-        get
-        {
-            if (!_initOutlineColor)
-            {
-                _initOutlineColor = true;
-                if (_blendShaderMaterial != null)
-                {
-                    _outlineColor = _blendShaderMaterial.GetShaderParameter("outline_color").AsColor();
-                }
-            }
+        get => _blendShaderMaterial == null ? Colors.Black : _blendShaderMaterial.GetShaderParameter(_shader_outline_color).AsColor();
+        set => _blendShaderMaterial?.SetShaderParameter(_shader_outline_color, value);
+    }
 
-            return _outlineColor;
-        }
-        set
-        {
-            _initOutlineColor = true;
-            if (value != _outlineColor)
-            {
-                _blendShaderMaterial.SetShaderParameter("outline_color", value);
-            }
-
-            _outlineColor = value;
-        }
+    /// <summary>
+    /// 灰度
+    /// </summary>
+    public float Grey
+    {
+        get => _blendShaderMaterial == null ? 0 : _blendShaderMaterial.GetShaderParameter(_shader_grey).AsSingle();
+        set => _blendShaderMaterial?.SetShaderParameter(_shader_grey, value);
     }
 
     // --------------------------------------------------------------------------------
+
+    private static readonly StringName _shader_grey = "grey";
+    private static readonly StringName _shader_outline_color = "outline_color";
+    private static readonly StringName _shader_show_outline = "show_outline";
 
     //是否正在调用组件 Update 函数
     private bool _updatingComp = false;
@@ -321,17 +305,13 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
 
     private bool _processingBecomesStaticImage = false;
 
+    //击退外力
+    private ExternalForce _repelForce;
+
     // --------------------------------------------------------------------------------
     
     //实例索引
     private static long _instanceIndex = 0;
-
-    //是否启用描边
-    private bool _showOutline = false;
-    
-    //描边颜色
-    private bool _initOutlineColor = false;
-    private Color _outlineColor = new Color(0, 0, 0, 1);
     
     //冻结显示的Sprite
     private FreezeSprite _freezeSprite;
@@ -356,20 +336,25 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         {
             ActivityMaterial = config.Material;
         }
+
+        //GravityScale 为 0 时关闭重力
+        if (ActivityMaterial.GravityScale == 0)
+        {
+            EnableVerticalMotion = false;
+        }
         
         World = world;
-        ItemConfig = config;
+        ActivityBase = config;
         Name = GetType().Name + (_instanceIndex++);
+        Id = _instanceIndex;
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
         _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
-        if (_blendShaderMaterial != null)
-        {
-            _showOutline = _blendShaderMaterial.GetShaderParameter("show_outline").AsBool();
-        }
 
-        if (_shadowBlendShaderMaterial != null)
+
+        if (_shadowBlendShaderMaterial != null && _blendShaderMaterial != null)
         {
-            _shadowBlendShaderMaterial.SetShaderParameter("show_outline", _showOutline);
+            var value = _blendShaderMaterial.GetShaderParameter(_shader_show_outline);
+            _shadowBlendShaderMaterial.SetShaderParameter(_shader_show_outline, value);
         }
 
         ShadowSprite.Visible = false;
@@ -1103,9 +1088,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                     var ysp = VerticalSpeed;
 
                     _altitude += VerticalSpeed * delta;
-                    _verticalSpeed -= GameConfig.G * delta;
+                    _verticalSpeed -= GameConfig.G * ActivityMaterial.GravityScale * delta;
 
-                    //当高度大于16时, 显示在所有物体上
+                    //当高度大于16时, 显示在所有物体上, 并且关闭碰撞
                     if (Altitude >= 16)
                     {
                         AnimatedSprite.ZIndex = 20;
@@ -1113,6 +1098,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                     else
                     {
                         AnimatedSprite.ZIndex = 0;
+                    }
+                    //动态开关碰撞器
+                    if (ActivityMaterial.DynamicCollision)
+                    {
+                        Collision.Disabled = Altitude >= 16;
                     }
                 
                     //达到最高点
@@ -1327,6 +1317,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public void CalcShadowTransform()
     {
+        //偏移
+        ShadowSprite.Offset = AnimatedSprite.Offset;
         //缩放
         ShadowSprite.Scale = AnimatedSprite.Scale;
         //阴影角度
@@ -1714,5 +1706,59 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             return;
         }
         _freezeSprite.Unfreeze();
+    }
+
+    /// <summary>
+    /// 获取中心点坐标
+    /// </summary>
+    public Vector2 GetCenterPosition()
+    {
+        return AnimatedSprite.Position + Position;
+    }
+
+    /// <summary>
+    /// 设置物体朝向
+    /// </summary>
+    public void SetFace(FaceDirection face)
+    {
+        if ((face == FaceDirection.Left && Scale.X > 0) || (face == FaceDirection.Right && Scale.X < 0))
+        {
+            Scale *= new Vector2(-1, 1);
+        }
+    }
+    
+    /// <summary>
+    /// 添加一个击退力
+    /// </summary>
+    public void AddRepelForce(Vector2 velocity)
+    {
+        if (_repelForce == null)
+        {
+            _repelForce = new ExternalForce(ForceNames.Repel);
+        }
+
+        //不在 MoveController 中
+        if (_repelForce.MoveController == null)
+        {
+            _repelForce.Velocity = velocity;
+            MoveController.AddForce(_repelForce);
+        }
+        else
+        {
+            _repelForce.Velocity += velocity;
+        }
+    }
+
+    /// <summary>
+    /// 获取击退力
+    /// </summary>
+    public Vector2 GetRepelForce()
+    {
+        if (_repelForce == null || _repelForce.MoveController == null)
+        {
+            return Vector2.Zero;
+        }
+
+        return _repelForce.Velocity;
     }
 }

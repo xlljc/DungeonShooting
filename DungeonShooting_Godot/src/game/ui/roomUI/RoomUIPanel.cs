@@ -1,4 +1,5 @@
 
+using Godot;
 using UI.BottomTips;
 
 namespace UI.RoomUI;
@@ -54,13 +55,27 @@ public partial class RoomUIPanel : RoomUI
         _weaponBar.Process(delta);
         _activePropBar.Process(delta);
         _lifeBar.Process(delta);
+        
+        QueueRedraw();
     }
 
     //玩家拾起道具, 弹出提示
     private void OnPlayerPickUpProp(object propObj)
     {
         var prop = (Prop)propObj;
-        var message = $"{prop.ItemConfig.Name}\n{prop.ItemConfig.Intro}";
+        var message = $"{prop.ActivityBase.Name}\n{prop.ActivityBase.Intro}";
         BottomTipsPanel.ShowTips(prop.GetDefaultTexture(), message);
+    }
+
+    public override void _Draw()
+    {
+        foreach (var role in World.Current.Enemy_InstanceList)
+        {
+            if (!role.IsDestroyed)
+            {
+                var position = GameApplication.Instance.ViewToGlobalPosition(role.Position);
+                DrawString(ResourceManager.DefaultFont16Px, position, role.StateController.CurrState.ToString());
+            }
+        }
     }
 }

@@ -104,6 +104,11 @@ public class RoomInfo : IDestroy
     /// 是否处于闭关状态, 也就是房间门没有主动打开
     /// </summary>
     public bool IsSeclusion { get; private set; } = false;
+
+    /// <summary>
+    /// 用于标记攻击目标位置
+    /// </summary>
+    public Dictionary<long, Vector2> MarkTargetPosition { get; private set; } = new Dictionary<long, Vector2>();
     
     public bool IsDestroyed { get; private set; }
     private bool _openDoorFlag = true;
@@ -340,6 +345,8 @@ public class RoomInfo : IDestroy
         {
             AffiliationArea.Destroy();
         }
+        
+        MarkTargetPosition.Clear();
     }
     
     /// <summary>

@@ -5,10 +5,10 @@ using Godot;
 /// <summary>
 /// 子弹数据
 /// </summary>
-public class BulletData
+public class BulletData : IClone<BulletData>
 {
     /// <summary>
-    /// 发射该子弹的武器
+    /// 发射该子弹的武器, 可能为null
     /// </summary>
     public Weapon Weapon;
     
@@ -18,9 +18,9 @@ public class BulletData
     public ExcelConfig.BulletBase BulletBase;
     
     /// <summary>
-    /// 发射该子弹的角色
+    /// 发射该子弹的角色, 可能为null
     /// </summary>
-    public AdvancedRole TriggerRole;
+    public Role TriggerRole;
     
     /// <summary>
     /// 造成的伤害
@@ -42,6 +42,11 @@ public class BulletData
     /// </summary>
     public float FlySpeed;
 
+    /// <summary>
+    /// 初始离地高度
+    /// </summary>
+    public float Altitude;
+    
     /// <summary>
     /// 纵轴速度
     /// </summary>
@@ -71,4 +76,25 @@ public class BulletData
     /// 旋转角度
     /// </summary>
     public float Rotation;
+    
+    public BulletData Clone()
+    {
+        return new BulletData
+        {
+            Weapon = Weapon,
+            BulletBase = BulletBase,
+            TriggerRole = TriggerRole,
+            Harm = Harm,
+            Repel = Repel,
+            MaxDistance = MaxDistance,
+            FlySpeed = FlySpeed,
+            Altitude = Altitude,
+            VerticalSpeed = VerticalSpeed,
+            BounceCount = BounceCount,
+            Penetration = Penetration,
+            LifeTime = LifeTime,
+            Position = Position,
+            Rotation = Rotation
+        };
+    }
 }

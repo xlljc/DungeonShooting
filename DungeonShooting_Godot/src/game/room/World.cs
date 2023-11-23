@@ -62,22 +62,7 @@ public partial class World : CanvasModulate, ICoroutine
     /// <summary>
     /// 记录所有存活的敌人
     /// </summary>
-    public List<Role> Enemy_InstanceList  { get; } = new List<Role>();
-    
-    /// <summary>
-    /// 公共属性, 敌人是否找到目标, 如果找到目标, 则与目标同房间的所有敌人都会知道目标的位置
-    /// </summary>
-    public bool Enemy_IsFindTarget { get; set; }
-
-    /// <summary>
-    /// 公共属性, 敌人在哪个区域找到的目标, 所有该区域下的敌人都会知道目标的位置
-    /// </summary>
-    public HashSet<AffiliationArea> Enemy_FindTargetAffiliationSet { get; } = new HashSet<AffiliationArea>();
-    
-    /// <summary>
-    /// 公共属性, 敌人找到的目标的位置, 如果目标在视野内, 则一直更新
-    /// </summary>
-    public Vector2 Enemy_FindTargetPosition { get; set; }
+    public List<Enemy> Enemy_InstanceList  { get; } = new List<Enemy>();
     
     private bool _pause = false;
     private List<CoroutineData> _coroutineList;
@@ -114,6 +99,31 @@ public partial class World : CanvasModulate, ICoroutine
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// 通知其他敌人发现目标了
+    /// </summary>
+    /// <param name="self">发送通知的角色</param>
+    /// <param name="target">目标</param>
+    public void NotifyEnemyTarget(Role self, ActivityObject target)
+    {
+        foreach (var role in Enemy_InstanceList)
+        {
+            if (role != self && !role.IsDestroyed && role.AffiliationArea == self.AffiliationArea)
+            {
+                //将未发现目标的敌人状态置为惊讶状态
+                var controller = role.StateController;
+                //延时通知效果
+                role.CallDelay(Utils.Random.RandomRangeFloat(0.2f, 1f), () =>
+                {
+                    if (controller.CurrState == AIStateEnum.AiNormal)
+                    {
+                        controller.ChangeState(AIStateEnum.AiLeaveFor, target);
+                    }
+                });
+            }
+        }
     }
     
     public long StartCoroutine(IEnumerator able)

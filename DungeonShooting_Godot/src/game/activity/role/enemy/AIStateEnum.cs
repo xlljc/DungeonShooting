@@ -1,18 +1,18 @@
 
-public enum AiStateEnum
+public enum AIStateEnum
 {
     /// <summary>
     /// Ai 状态, 正常, 未发现目标
     /// </summary>
     AiNormal,
-    // /// <summary>
-    // /// 发现目标, 但不知道在哪
-    // /// </summary>
-    // AiProbe,
     /// <summary>
     /// 找到玩家，准备通知其他敌人
     /// </summary>
-    AiFind,
+    AiNotify,
+    /// <summary>
+    /// 惊讶状态
+    /// </summary>
+    AiAstonished,
     /// <summary>
     /// 收到其他敌人通知, 前往发现目标的位置
     /// </summary>
@@ -33,4 +33,8 @@ public enum AiStateEnum
     /// Ai 寻找弹药
     /// </summary>
     AiFindAmmo,
+    /// <summary>
+    /// Ai攻击
+    /// </summary>
+    AiAttack,
 }

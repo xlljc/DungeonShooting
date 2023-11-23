@@ -2,22 +2,10 @@
 
 [ext_resource type="Script" path="res://src/game/GameApplication.cs" id="1_mh1cq"]
 [ext_resource type="Script" path="res://src/game/camera/GameCamera.cs" id="2_2j367"]
+[ext_resource type="Shader" path="res://resource/material/OffsetVertex.gdshader" id="2_fxoum"]
 
-[sub_resource type="Shader" id="1"]
-code = "shader_type canvas_item;
-
-uniform vec2 offset = vec2(0.0 , 0.0);
-
-void vertex() {
-	
-	VERTEX += offset;
-	
-}
-
-"
-
-[sub_resource type="ShaderMaterial" id="2"]
-shader = SubResource("1")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pjtkw"]
+shader = ExtResource("2_fxoum")
 shader_parameter/offset = Vector2(0, 0)
 
 [node name="Main" type="Node2D" node_paths=PackedStringArray("SubViewport", "SubViewportContainer", "SceneRoot", "GlobalNodeRoot")]
@@ -32,12 +20,13 @@ metadata/_edit_vertical_guides_ = []
 layer = -1
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="ViewCanvas"]
-material = SubResource("2")
+material = SubResource("ShaderMaterial_pjtkw")
 offset_right = 480.0
 offset_bottom = 270.0
 scale = Vector2(4, 4)
 
 [node name="SubViewport" type="SubViewport" parent="ViewCanvas/SubViewportContainer"]
+disable_3d = true
 handle_input_locally = false
 use_hdr_2d = true
 canvas_item_default_texture_filter = 0
@@ -47,6 +36,7 @@ render_target_update_mode = 4
 [node name="SceneRoot" type="Node2D" parent="ViewCanvas/SubViewportContainer/SubViewport"]
 
 [node name="Camera2D" type="Camera2D" parent="ViewCanvas/SubViewportContainer/SubViewport"]
+process_callback = 0
 editor_draw_drag_margin = true
 script = ExtResource("2_2j367")
 

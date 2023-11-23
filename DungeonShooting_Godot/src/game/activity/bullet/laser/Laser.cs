@@ -142,10 +142,10 @@ public partial class Laser : Area2D, IBullet
             //击退
             if (BulletData.Repel != 0)
             {
-                role.MoveController.AddForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
+                role.AddRepelForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
             }
             //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), BulletData.Harm, Rotation);
+            role.CallDeferred(nameof(Role.Hurt), BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
         }
     }
 

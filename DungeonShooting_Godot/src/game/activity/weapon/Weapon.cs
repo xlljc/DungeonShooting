@@ -6,7 +6,7 @@ using Config;
 /// <summary>
 /// 武器的基类
 /// </summary>
-public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole>
+public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
 {
     /// <summary>
     /// 武器使用的属性数据, 该属性会根据是否是玩家使用武器, 如果是Ai使用武器, 则会返回 AiUseAttribute 的属性对象
@@ -32,7 +32,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// </summary>
     public CampEnum TargetCamp { get; set; }
 
-    public AdvancedRole Master { get; set; }
+    public Role Master { get; set; }
 
     public int PackageIndex { get; set; } = -1;
 
@@ -148,7 +148,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// <summary>
     /// 上一次触发改武器开火的角色, 可能为 null
     /// </summary>
-    public AdvancedRole TriggerRole { get; private set; }
+    public Role TriggerRole { get; private set; }
     
     /// <summary>
     /// 上一次触发改武器开火的触发开火攻击的层级, 数据源自于: <see cref="PhysicsLayer"/>
@@ -279,19 +279,19 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
             return attr;
         }
 
-        throw new Exception($"武器'{itemId}'没有在 Weapon 表中配置属性数据!");
+        throw new Exception($"武器'{itemId}'没有在 WeaponBase 表中配置属性数据!");
     }
     
     public override void OnInit()
     {
-        InitWeapon(GetWeaponAttribute(ItemConfig.Id).Clone());
+        InitWeapon(GetWeaponAttribute(ActivityBase.Id).Clone());
         AnimatedSprite.AnimationFinished += OnAnimationFinished;
     }
 
     /// <summary>
     /// 初始化武器属性
     /// </summary>
-    public void InitWeapon(ExcelConfig.WeaponBase attribute)
+    private void InitWeapon(ExcelConfig.WeaponBase attribute)
     {
         _playerWeaponAttribute = attribute;
         _weaponAttribute = attribute;
@@ -307,7 +307,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         if (Attribute.AmmoCapacity > Attribute.MaxAmmoCapacity)
         {
             Attribute.AmmoCapacity = Attribute.MaxAmmoCapacity;
-            Debug.LogError("弹夹的容量不能超过弹药上限, 武器id: " + ItemConfig.Id);
+            Debug.LogError("弹夹的容量不能超过弹药上限, 武器id: " + ActivityBase.Id);
         }
         //弹药量
         CurrAmmo = Attribute.AmmoCapacity;
@@ -397,7 +397,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// 当武器被拾起时调用
     /// </summary>
     /// <param name="master">拾起该武器的角色</param>
-    protected virtual void OnPickUp(AdvancedRole master)
+    protected virtual void OnPickUp(Role master)
     {
     }
 
@@ -405,7 +405,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// 当武器从武器背包中移除时调用
     /// </summary>
     /// <param name="master">移除该武器的角色</param>
-    protected virtual void OnRemove(AdvancedRole master)
+    protected virtual void OnRemove(Role master)
     {
     }
 
@@ -604,7 +604,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
                     //自动上膛
                     if (_beLoadedState == -1)
                     {
-                        BeLoadedHandler();
+                        BeLoaded();
                     }
                 }
             }
@@ -695,7 +695,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
     /// <param name="triggerRole">按下扳机的角色, 如果传 null, 则视为走火</param>
-    public void Trigger(AdvancedRole triggerRole)
+    public void Trigger(Role triggerRole)
     {
         //不能触发扳机
         if (!NoMasterCanTrigger && Master == null) return;
@@ -733,7 +733,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
                 else if (_attackTimer <= 0)
                 {
                     //触发上膛操作
-                    BeLoadedHandler();
+                    BeLoaded();
                 }
             }
         }
@@ -894,7 +894,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     }
 
     /// <summary>
-    /// 获取攻击冷却计时时间, 等于 0 表示冷却完成
+    /// 获取攻击冷却计时时间, 小于等于 0 表示冷却完成
     /// </summary>
     public float GetAttackTimer()
     {
@@ -907,6 +907,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     public bool IsAttackIntervalTime()
     {
         return _attackTimer > 0 || _triggerTimer > 0;
+    }
+
+    /// <summary>
+    /// 是否可以按下扳机并发射了
+    /// </summary>
+    public bool TriggerIsReady()
+    {
+        return GetBeLoadedStateState() >= 2 && !IsAttackIntervalTime();
     }
 
     /// <summary>
@@ -1032,7 +1040,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         var bulletCount = Utils.Random.RandomConfigRange(Attribute.FireBulletCountRange);
         if (Master != null)
         {
-            bulletCount = Master.RoleState.CalcBulletCount(this, bulletCount);
+            bulletCount = Master.RoleState.CalcBulletCount(bulletCount);
             fireRotation += Master.MountPoint.RealRotation;
         }
         else
@@ -1097,7 +1105,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// <summary>
     /// 根据触扳机的角色对象判断该角色使用的武器数据
     /// </summary>
-    public ExcelConfig.WeaponBase GetUseAttribute(AdvancedRole triggerRole)
+    public ExcelConfig.WeaponBase GetUseAttribute(Role triggerRole)
     {
         if (triggerRole == null || !triggerRole.IsAi)
         {
@@ -1117,7 +1125,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         {
             return (uint)TriggerRoleAttackLayer;
         }
-        return Master != null ? Master.AttackLayer : AdvancedRole.DefaultAttackLayer;
+        return Master != null ? Master.AttackLayer : Role.DefaultAttackLayer;
     }
     
     /// <summary>
@@ -1209,7 +1217,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// </summary>
     public void Reload()
     {
-        if (CurrAmmo < Attribute.AmmoCapacity && ResidueAmmo > 0 && !Reloading && _beLoadedState != 1)
+        if (!Reloading && CurrAmmo < Attribute.AmmoCapacity && ResidueAmmo > 0 && _beLoadedState != 1)
         {
             Reloading = true;
             _playReloadFinishSoundFlag = false;
@@ -1262,6 +1270,59 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         Reloading = false;
         _reloadTimer = 0;
         _reloadUseTime = 0;
+    }
+
+    /// <summary>
+    /// 触发上膛
+    /// </summary>
+    public void BeLoaded()
+    {
+        if (_beLoadedState > 0)
+        {
+            return;
+        }
+        //上膛抛弹
+        if (!Attribute.ReloadThrowShell && !Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
+        {
+            ThrowShellHandler(0.6f);
+        }
+
+        //开始上膛
+        OnBeginBeLoaded();
+
+        //上膛时间为0, 直接结束上膛
+        if (Attribute.BeLoadedTime <= 0)
+        {
+            //直接上膛完成
+            _beLoadedState = 2;
+            OnBeLoadedFinish();
+            return;
+        }
+        
+        //上膛中
+        _beLoadedState = 1;
+        _beLoadedStateTimer = Attribute.BeLoadedTime;
+        
+        //播放上膛动画
+        if (IsAutoPlaySpriteFrames)
+        {
+            if (Attribute.BeLoadedSoundDelayTime <= 0)
+            {
+                PlaySpriteAnimation(AnimatorNames.BeLoaded);
+                PlayAnimationPlayer(AnimatorNames.BeLoaded);
+            }
+            else
+            {
+                this.CallDelay(Attribute.BeLoadedSoundDelayTime, () =>
+                {
+                    PlaySpriteAnimation(AnimatorNames.BeLoaded);
+                    PlayAnimationPlayer(AnimatorNames.BeLoaded);
+                });
+            }
+        }
+
+        //播放上膛音效
+        PlayBeLoadedSound();
     }
     
     //播放换弹开始音效
@@ -1338,7 +1399,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
             if (_attackTimer <= 0)
             {
                 //执行自动上膛
-                BeLoadedHandler();
+                BeLoaded();
             }
             else if (CurrAmmo > 0)
             {
@@ -1413,53 +1474,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         OnAloneReloadStateFinish();
     }
 
-    //上膛处理
-    private void BeLoadedHandler()
-    {
-        //上膛抛弹
-        if (!Attribute.ReloadThrowShell && !Attribute.ContinuousShoot && Attribute.BeLoadedTime > 0)
-        {
-            ThrowShellHandler(0.6f);
-        }
-
-        //开始上膛
-        OnBeginBeLoaded();
-
-        //上膛时间为0, 直接结束上膛
-        if (Attribute.BeLoadedTime <= 0)
-        {
-            //直接上膛完成
-            _beLoadedState = 2;
-            OnBeLoadedFinish();
-            return;
-        }
-        
-        //上膛中
-        _beLoadedState = 1;
-        _beLoadedStateTimer = Attribute.BeLoadedTime;
-        
-        //播放上膛动画
-        if (IsAutoPlaySpriteFrames)
-        {
-            if (Attribute.BeLoadedSoundDelayTime <= 0)
-            {
-                PlaySpriteAnimation(AnimatorNames.BeLoaded);
-                PlayAnimationPlayer(AnimatorNames.BeLoaded);
-            }
-            else
-            {
-                this.CallDelay(Attribute.BeLoadedSoundDelayTime, () =>
-                {
-                    PlaySpriteAnimation(AnimatorNames.BeLoaded);
-                    PlayAnimationPlayer(AnimatorNames.BeLoaded);
-                });
-            }
-        }
-
-        //播放上膛音效
-        PlayBeLoadedSound();
-    }
-
     //抛弹逻辑
     private void ThrowShellHandler(float speedScale)
     {
@@ -1473,13 +1487,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
             this.CallDelay(Attribute.ThrowShellDelayTime, () =>
             {
                 _reloadShellFlag = true;
-                ThrowShell(Attribute.Shell, speedScale);
+                FireManager.ThrowShell(this, Attribute.Shell, speedScale);
             });
         }
         else if (Attribute.ThrowShellDelayTime == 0)
         {
             _reloadShellFlag = true;
-            ThrowShell(Attribute.Shell, speedScale);
+            FireManager.ThrowShell(this, Attribute.Shell, speedScale);
         }
     }
 
@@ -1490,8 +1504,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         var finalScatteringRange = Attribute.FinalScatteringRange;
         if (Master != null)
         {
-            startScatteringRange = Master.RoleState.CalcStartScattering(this, startScatteringRange);
-            finalScatteringRange = Master.RoleState.CalcFinalScattering(this, finalScatteringRange);
+            startScatteringRange = Master.RoleState.CalcStartScattering(startScatteringRange);
+            finalScatteringRange = Master.RoleState.CalcFinalScattering(finalScatteringRange);
         }
         if (startScatteringRange <= finalScatteringRange)
         {
@@ -1512,8 +1526,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
         var finalScatteringRange = Attribute.FinalScatteringRange;
         if (Master != null)
         {
-            startScatteringRange = Master.RoleState.CalcStartScattering(this, startScatteringRange);
-            finalScatteringRange = Master.RoleState.CalcFinalScattering(this, finalScatteringRange);
+            startScatteringRange = Master.RoleState.CalcStartScattering(startScatteringRange);
+            finalScatteringRange = Master.RoleState.CalcFinalScattering(finalScatteringRange);
         }
         if (startScatteringRange <= finalScatteringRange)
         {
@@ -1606,13 +1620,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     {
         var result = new CheckInteractiveResult(this);
 
-        if (master is AdvancedRole roleMaster) //碰到角色
+        if (master is Role roleMaster) //碰到角色
         {
             if (Master == null)
             {
                 var masterWeapon = roleMaster.WeaponPack.ActiveItem;
                 //查找是否有同类型武器
-                var index = roleMaster.WeaponPack.FindIndex(ItemConfig.Id);
+                var index = roleMaster.WeaponPack.FindIndex(ActivityBase.Id);
                 if (index != -1) //如果有这个武器
                 {
                     if (CurrAmmo + ResidueAmmo != 0) //子弹不为空
@@ -1652,11 +1666,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
 
     public override void Interactive(ActivityObject master)
     {
-        if (master is AdvancedRole roleMaster) //与role互动
+        if (master is Role roleMaster) //与role互动
         {
             var holster = roleMaster.WeaponPack;
             //查找是否有同类型武器
-            var index = holster.FindIndex(ItemConfig.Id);
+            var index = holster.FindIndex(ActivityBase.Id);
             if (index != -1) //如果有这个武器
             {
                 if (CurrAmmo + ResidueAmmo == 0) //没有子弹了
@@ -1727,7 +1741,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// 触发扔掉武器时抛出的效果, 并不会管武器是否在武器背包中
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
-    public void ThrowWeapon(AdvancedRole master)
+    public void ThrowWeapon(Role master)
     {
         ThrowWeapon(master, master.GlobalPosition);
     }
@@ -1737,7 +1751,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     /// </summary>
     /// <param name="master">触发扔掉该武器的的角色</param>
     /// <param name="startPosition">投抛起始位置</param>
-    public void ThrowWeapon(AdvancedRole master, Vector2 startPosition)
+    public void ThrowWeapon(Role master, Vector2 startPosition)
     {
         //阴影偏移
         ShadowOffset = new Vector2(0, 2);
@@ -1904,183 +1918,97 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<AdvancedRole
     //-------------------------------- Ai相关 -----------------------------
     
     /// <summary>
-    /// Ai 调用, 刷新 Ai 攻击状态并返回, 并不会调用相应的函数
-    /// </summary>
-    public AiAttackState AiRefreshAttackState()
-    {
-        AiAttackState flag;
-        if (IsTotalAmmoEmpty()) //当前武器弹药打空
-        {
-            //切换到有子弹的武器
-            var index = Master.WeaponPack.FindIndex((we, i) => !we.IsTotalAmmoEmpty());
-            if (index != -1)
-            {
-                flag = AiAttackState.ExchangeWeapon;
-            }
-            else //所有子弹打光
-            {
-                flag = AiAttackState.NoAmmo;
-            }
-        }
-        else if (Reloading) //换弹中
-        {
-            flag = AiAttackState.TriggerReload;
-        }
-        else if (IsAmmoEmpty()) //弹夹已经打空
-        {
-            flag = AiAttackState.Reloading;
-        }
-        else if (_beLoadedState == 0 || _beLoadedState == -1) //需要上膛
-        {
-            flag = AiAttackState.AttackInterval;
-        }
-        else if (_beLoadedState == 1) //上膛中
-        {
-            flag = AiAttackState.AttackInterval;
-        }
-        else if (_continuousCount >= 1) //连发中
-        {
-            flag = AiAttackState.Attack;
-        }
-        else if (IsAttackIntervalTime()) //开火间隙
-        {
-            flag = AiAttackState.AttackInterval;
-        }
-        else
-        {
-            var enemy = (AdvancedEnemy)Master;
-            if (enemy.GetLockTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
-            {
-                if (GetDelayedAttackTime() > 0)
-                {
-                    flag = AiAttackState.Attack;
-                }
-                else
-                {
-                    if (Attribute.ContinuousShoot) //连发
-                    {
-                        flag = AiAttackState.Attack;
-                    }
-                    else //单发
-                    {
-                        flag = AiAttackState.Attack;
-                    }
-                }
-            }
-            else //锁定时间没到
-            {
-                flag = AiAttackState.LockingTime;
-            }
-        }
-
-        return flag;
-    }
-    
-    /// <summary>
     /// Ai调用, 触发扣动扳机, 并返回攻击状态
     /// </summary>
-    public AiAttackState AiTriggerAttackState()
+    public AiAttackEnum AiTriggerAttackState()
     {
-        AiAttackState flag;
+        AiAttackEnum flag;
         if (IsTotalAmmoEmpty()) //当前武器弹药打空
         {
             //切换到有子弹的武器
             var index = Master.WeaponPack.FindIndex((we, i) => !we.IsTotalAmmoEmpty());
             if (index != -1)
             {
-                flag = AiAttackState.ExchangeWeapon;
+                flag = AiAttackEnum.ExchangeWeapon;
                 Master.WeaponPack.ExchangeByIndex(index);
             }
             else //所有子弹打光
             {
-                flag = AiAttackState.NoAmmo;
+                flag = AiAttackEnum.NoAmmo;
             }
         }
         else if (Reloading) //换弹中
         {
-            flag = AiAttackState.TriggerReload;
+            flag = AiAttackEnum.TriggerReload;
         }
         else if (IsAmmoEmpty()) //弹夹已经打空
         {
-            flag = AiAttackState.Reloading;
+            flag = AiAttackEnum.Reloading;
             Reload();
         }
         else if (_beLoadedState == 0 || _beLoadedState == -1) //需要上膛
         {
-            flag = AiAttackState.AttackInterval;
+            flag = AiAttackEnum.AttackInterval;
             if (_attackTimer <= 0)
             {
-                Master.Attack();
+                BeLoaded();
             }
         }
         else if (_beLoadedState == 1) //上膛中
         {
-            flag = AiAttackState.AttackInterval;
+            flag = AiAttackEnum.AttackInterval;
         }
         else if (_continuousCount >= 1) //连发中
         {
-            flag = AiAttackState.Attack;
+            flag = AiAttackEnum.Attack;
         }
         else if (IsAttackIntervalTime()) //开火间隙
         {
-            flag = AiAttackState.AttackInterval;
+            flag = AiAttackEnum.AttackInterval;
         }
         else
         {
-            var enemy = (AdvancedEnemy)Master;
-            if (enemy.GetLockTime() >= Attribute.AiAttackAttr.LockingTime) //正常射击
+            var enemy = (Enemy)Master;
+            if (enemy.LockTargetTime >= Attribute.AiAttackAttr.LockingTime) //正常射击
             {
                 if (GetDelayedAttackTime() > 0)
                 {
-                    flag = AiAttackState.Attack;
+                    flag = AiAttackEnum.Attack;
                     enemy.Attack();
                     if (_attackFlag)
                     {
-                        enemy.SetLockTargetTime(0);
+                        enemy.LockingTime = 0;
                     }
                 }
                 else
                 {
                     if (Attribute.ContinuousShoot) //连发
                     {
-                        flag = AiAttackState.Attack;
+                        flag = AiAttackEnum.Attack;
                         enemy.Attack();
                         if (_attackFlag)
                         {
-                            enemy.SetLockTargetTime(0);
+                            enemy.LockingTime = 0;
                         }
                     }
                     else //单发
                     {
-                        flag = AiAttackState.Attack;
+                        flag = AiAttackEnum.Attack;
                         enemy.Attack();
                         if (_attackFlag)
                         {
-                            enemy.SetLockTargetTime(0);
+                            enemy.LockingTime = 0;
                         }
                     }
                 }
             }
             else //锁定时间没到
             {
-                flag = AiAttackState.LockingTime;
+                flag = AiAttackEnum.LockingTime;
             }
         }
 
         return flag;
-    }
-
-    /// <summary>
-    /// 获取Ai锁定目标的剩余时间
-    /// </summary>
-    public float GetAiLockRemainderTime()
-    {
-        if (Master is AdvancedEnemy enemy)
-        {
-            return Attribute.AiAttackAttr.LockingTime - enemy.GetLockTime();
-        }
-
-        return 0;
     }
 
     // /// <summary>
