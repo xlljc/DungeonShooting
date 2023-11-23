@@ -2,9 +2,8 @@
 
 [ext_resource type="Script" path="res://src/test/TestMask.cs" id="1_0yip6"]
 
-[node name="TestMask" type="Node2D"]
+[node name="TestMask" type="Node2D" node_paths=PackedStringArray("PolygonNode")]
 script = ExtResource("1_0yip6")
+PolygonNode = NodePath("Polygon2D")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(0, 0, 0, 1)
-centered = false
+[node name="Polygon2D" type="Polygon2D" parent="."]
