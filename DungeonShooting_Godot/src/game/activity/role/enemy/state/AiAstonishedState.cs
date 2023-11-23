@@ -13,6 +13,7 @@ public class AiAstonishedState : StateBase<Enemy, AIStateEnum>
     public AIStateEnum NextState;
     
     private float _timer;
+    private object[] _args;
     
     public AiAstonishedState() : base(AIStateEnum.AiAstonished)
     {
@@ -27,6 +28,8 @@ public class AiAstonishedState : StateBase<Enemy, AIStateEnum>
             return;
         }
 
+        _args = args;
+        
         NextState = (AIStateEnum)args[0];
         _timer = 0.6f;
         
@@ -40,7 +43,14 @@ public class AiAstonishedState : StateBase<Enemy, AIStateEnum>
         _timer -= delta;
         if (_timer <= 0)
         {
-            ChangeState(NextState);
+            if (_args.Length == 1)
+            {
+                ChangeState(NextState);
+            }
+            else if (_args.Length == 2)
+            {
+                ChangeState(NextState, _args[1]);
+            }
         }
     }
 }

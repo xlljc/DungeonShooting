@@ -352,7 +352,7 @@ public partial class Player : Role
     /// </summary>
     public void OverRoll()
     {
-        _rollCoolingTimer = RoleState.RollTime;
+        _rollCoolingTimer = RoleState.RollCoolingTime;
     }
 
     // protected override void DebugDraw()

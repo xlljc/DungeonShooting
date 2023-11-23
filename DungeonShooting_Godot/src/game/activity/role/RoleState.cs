@@ -24,12 +24,17 @@ public class RoleState
     /// <summary>
     /// 翻滚速度
     /// </summary>
-    public float RollSpeed = 180f;
+    public float RollSpeed = 400f;
 
+    /// <summary>
+    /// 翻滚持续时间
+    /// </summary>
+    public float RollTime = 0.15f;
+    
     /// <summary>
     /// 翻滚冷却时间
     /// </summary>
-    public float RollTime = 0.5f;
+    public float RollCoolingTime = 0.5f;
     
     /// <summary>
     /// 单格护盾恢复时间, 单位: 秒

@@ -22,11 +22,10 @@ public class PlayerRollState : StateBase<Player, PlayerStateEnum>
         }
 
         _coroutineId = Master.StartCoroutine(RunRoll());
-        Master.AnimatedSprite.Play(AnimatorNames.Roll);
 
-        //隐藏武器
-        Master.BackMountPoint.Visible = false;
-        Master.MountPoint.Visible = false;
+        // //隐藏武器
+        // Master.BackMountPoint.Visible = false;
+        // Master.MountPoint.Visible = false;
         //禁用伤害碰撞
         Master.HurtCollision.Disabled = true;
         
@@ -37,11 +36,12 @@ public class PlayerRollState : StateBase<Player, PlayerStateEnum>
 
     public override void Exit(PlayerStateEnum next)
     {
-        //显示武器
-        Master.BackMountPoint.Visible = true;
-        Master.MountPoint.Visible = true;
+        // //显示武器
+        // Master.BackMountPoint.Visible = true;
+        // Master.MountPoint.Visible = true;
         //启用伤害碰撞
         Master.HurtCollision.Disabled = false;
+        Master.BasisVelocity = Master.BasisVelocity.LimitLength(Master.RoleState.MoveSpeed);
     }
 
     public override void Process(float delta)
@@ -52,7 +52,29 @@ public class PlayerRollState : StateBase<Player, PlayerStateEnum>
     //翻滚逻辑处理
     private IEnumerator RunRoll()
     {
-        yield return Master.AnimatedSprite.ToSignal(Master.AnimatedSprite, AnimatedSprite2D.SignalName.AnimationFinished);
+        Master.AnimationPlayer.Play(AnimatorNames.Roll);
+        var time = 0f;
+        var time2 = 0f;
+        while (time < Master.RoleState.RollTime)
+        {
+            var delta = (float)Master.GetProcessDeltaTime();
+            time += delta;
+            time2 += delta;
+            if (time2 >= 0.02f)
+            {
+                time2 %= 0.02f;
+                //拖尾效果
+                var staticSprite = ObjectManager.GetPoolItemByClass<SmearingSprite>();
+                staticSprite.FromActivityObject(Master);
+                staticSprite.SetShowTimeout(0.2f);
+                staticSprite.ZIndex = 1;
+                var roomLayer = Master.World.GetRoomLayer(RoomLayerEnum.NormalLayer);
+                roomLayer.AddChild(staticSprite);
+                //roomLayer.MoveChild(staticSprite, Master.GetIndex());
+            }
+
+            yield return null;
+        }
         _coroutineId = -1;
         Master.OverRoll();
         if (InputManager.MoveAxis != Vector2.Zero) //切换到移动状态
