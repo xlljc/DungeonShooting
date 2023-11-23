@@ -151,7 +151,7 @@ public class AiSurroundState : StateBase<Enemy, AIStateEnum>
                 }
                 else
                 {
-                    if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.ViewRange * 0.7f, 2)) //玩家离开正常射击范围
+                    if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.EnemyRoleState.ViewRange * 0.7f, 2)) //玩家离开正常射击范围
                     {
                         ChangeState(AIStateEnum.AiFollowUp);
                     }

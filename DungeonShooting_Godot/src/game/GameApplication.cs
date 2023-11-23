@@ -91,6 +91,8 @@ public partial class GameApplication : Node2D, ICoroutine
 		InitRoomConfig();
 		//初始化武器数据
 		Weapon.InitWeaponAttribute();
+		//初始化敌人数据
+		Enemy.InitEnemyAttribute();
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = RoomConfig.FirstOrDefault().Key;

@@ -279,7 +279,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
             return attr;
         }
 
-        throw new Exception($"武器'{itemId}'没有在 Weapon 表中配置属性数据!");
+        throw new Exception($"武器'{itemId}'没有在 WeaponBase 表中配置属性数据!");
     }
     
     public override void OnInit()
@@ -291,7 +291,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// <summary>
     /// 初始化武器属性
     /// </summary>
-    public void InitWeapon(ExcelConfig.WeaponBase attribute)
+    private void InitWeapon(ExcelConfig.WeaponBase attribute)
     {
         _playerWeaponAttribute = attribute;
         _weaponAttribute = attribute;

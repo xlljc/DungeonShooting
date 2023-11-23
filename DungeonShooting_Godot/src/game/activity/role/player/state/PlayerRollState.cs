@@ -31,7 +31,7 @@ public class PlayerRollState : StateBase<Player, PlayerStateEnum>
         
         //翻滚移动方向
         _moveDir = InputManager.MoveAxis;
-        Master.BasisVelocity = _moveDir * Master.RoleState.RollSpeed;
+        Master.BasisVelocity = _moveDir * Master.PlayerRoleState.RollSpeed;
     }
 
     public override void Exit(PlayerStateEnum next)
@@ -46,7 +46,7 @@ public class PlayerRollState : StateBase<Player, PlayerStateEnum>
 
     public override void Process(float delta)
     {
-        Master.BasisVelocity = _moveDir * Master.RoleState.RollSpeed;
+        Master.BasisVelocity = _moveDir * Master.PlayerRoleState.RollSpeed;
     }
 
     //翻滚逻辑处理
@@ -55,7 +55,7 @@ public class PlayerRollState : StateBase<Player, PlayerStateEnum>
         Master.AnimationPlayer.Play(AnimatorNames.Roll);
         var time = 0f;
         var time2 = 0f;
-        while (time < Master.RoleState.RollTime)
+        while (time < Master.PlayerRoleState.RollTime)
         {
             var delta = (float)Master.GetProcessDeltaTime();
             time += delta;

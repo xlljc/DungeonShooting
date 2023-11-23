@@ -18,6 +18,8 @@ public partial class Player : Role
     /// </summary>
     public StateController<Player, PlayerStateEnum> StateController { get; private set; }
 
+    public PlayerRoleState PlayerRoleState { get; private set; }
+    
     /// <summary>
     /// 是否可以翻滚
     /// </summary>
@@ -76,6 +78,13 @@ public partial class Player : Role
         StateController.ChangeStateInstant(PlayerStateEnum.Idle);
         
         //InitSubLine();
+    }
+
+    protected override RoleState OnCreateRoleState()
+    {
+        var roleState = new PlayerRoleState();
+        PlayerRoleState = roleState;
+        return roleState;
     }
 
     protected override void Process(float delta)
@@ -352,7 +361,7 @@ public partial class Player : Role
     /// </summary>
     public void OverRoll()
     {
-        _rollCoolingTimer = RoleState.RollCoolingTime;
+        _rollCoolingTimer = PlayerRoleState.RollCoolingTime;
     }
 
     // protected override void DebugDraw()

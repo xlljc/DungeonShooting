@@ -72,7 +72,7 @@ public class AiFollowUpState : StateBase<Enemy, AIStateEnum>
         }
         else
         {
-            inAttackRange = distanceSquared <= Mathf.Pow(Master.ViewRange * 0.7f, 2);
+            inAttackRange = distanceSquared <= Mathf.Pow(Master.EnemyRoleState.ViewRange * 0.7f, 2);
         }
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
@@ -121,7 +121,7 @@ public class AiFollowUpState : StateBase<Enemy, AIStateEnum>
                 else
                 {
                     //距离够近, 可以切换到环绕模式
-                    if (distanceSquared <= Mathf.Pow(Master.ViewRange * 0.7f, 2))
+                    if (distanceSquared <= Mathf.Pow(Master.EnemyRoleState.ViewRange * 0.7f, 2))
                     {
                         ChangeState(AIStateEnum.AiSurround);
                     }

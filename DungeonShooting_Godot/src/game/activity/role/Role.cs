@@ -16,7 +16,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 角色属性
     /// </summary>
-    public RoleState RoleState { get; } = new RoleState();
+    public RoleState RoleState { get; private set; }
     
     /// <summary>
     /// 默认攻击对象层级
@@ -339,6 +339,14 @@ public abstract partial class Role : ActivityObject
                 ResourceManager.Load<SpriteFrames>(ResourcePath.resource_spriteFrames_role_Role_tip_tres);
         }
     }
+
+    /// <summary>
+    /// 创建角色的 RoleState 对象
+    /// </summary>
+    protected virtual RoleState OnCreateRoleState()
+    {
+        return new RoleState();
+    }
     
     /// <summary>
     /// 当血量改变时调用
@@ -449,8 +457,9 @@ public abstract partial class Role : ActivityObject
     
     public override void OnInit()
     {
+        RoleState = OnCreateRoleState();
         ActivePropsPack = AddComponent<Package<ActiveProp, Role>>();
-        ActivePropsPack.SetCapacity(1);
+        ActivePropsPack.SetCapacity(RoleState.CanPickUpWeapon ? 1 : 0);
         
         _startScale = Scale;
         

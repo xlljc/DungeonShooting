@@ -11,6 +11,9 @@
 #endregion
 
 
+using System;
+using System.Collections.Generic;
+using Config;
 using EnemyState;
 using Godot;
 
@@ -29,27 +32,6 @@ public partial class Enemy : Role
     /// 敌人身上的状态机控制器
     /// </summary>
     public StateController<Enemy, AIStateEnum> StateController { get; private set; }
-
-    /// <summary>
-    /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
-    /// </summary>
-    public float ViewRange { get; set; } = 250;
-
-    /// <summary>
-    /// 发现玩家后跟随玩家的视野半径
-    /// </summary>
-    public float TailAfterViewRange { get; set; } = 400;
-
-    /// <summary>
-    /// 背后的视野半径, 单位像素
-    /// </summary>
-    public float BackViewRange { get; set; } = 50;
-
-    /// <summary>
-    /// 是否可以拾起武器
-    /// </summary>
-    [Export]
-    public bool CanPickUpWeapon { get; set; } = true;
     
     /// <summary>
     /// 视野检测射线, 朝玩家打射线, 检测是否碰到墙
@@ -89,16 +71,66 @@ public partial class Enemy : Role
     /// 锁定目标已经走过的时间
     /// </summary>
     public float LockTargetTime { get; set; } = 0;
+    
+    /// <summary>
+    /// 敌人属性
+    /// </summary>
+    public EnemyRoleState EnemyRoleState { get; private set; }
 
+    /// <summary>
+    /// 敌人属性
+    /// </summary>
+    private ExcelConfig.EnemyBase _enemyAttribute;
+
+    private static bool _init = false;
+    private static Dictionary<string, ExcelConfig.EnemyBase> _enemyAttributeMap =
+        new Dictionary<string, ExcelConfig.EnemyBase>();
+    
+    /// <summary>
+    /// 初始化敌人属性数据
+    /// </summary>
+    public static void InitEnemyAttribute()
+    {
+        if (_init)
+        {
+            return;
+        }
+
+        _init = true;
+        foreach (var enemyAttr in ExcelConfig.EnemyBase_List)
+        {
+            if (enemyAttr.Activity != null)
+            {
+                if (!_enemyAttributeMap.TryAdd(enemyAttr.Activity.Id, enemyAttr))
+                {
+                    Debug.LogError("发现重复注册的敌人属性: " + enemyAttr.Id);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 根据 ActivityBase.Id 获取对应敌人的属性数据
+    /// </summary>
+    public static ExcelConfig.EnemyBase GetEnemyAttribute(string itemId)
+    {
+        if (itemId == null)
+        {
+            return null;
+        }
+        if (_enemyAttributeMap.TryGetValue(itemId, out var attr))
+        {
+            return attr;
+        }
+
+        throw new Exception($"敌人'{itemId}'没有在 EnemyBase 表中配置属性数据!");
+    }
+    
     public override void OnInit()
     {
         base.OnInit();
+        
         IsAi = true;
-
-        if (!CanPickUpWeapon)
-        {
-            WeaponPack.SetCapacity(0);
-        }
         
         StateController = AddComponent<StateController<Enemy, AIStateEnum>>();
 
@@ -124,6 +156,23 @@ public partial class Enemy : Role
         
         //默认状态
         StateController.ChangeStateInstant(AIStateEnum.AiNormal);
+    }
+
+    protected override RoleState OnCreateRoleState()
+    {
+        var roleState = new EnemyRoleState();
+        EnemyRoleState = roleState;
+        var enemyBase = GetEnemyAttribute(ActivityBase.Id).Clone();
+        _enemyAttribute = enemyBase;
+
+        roleState.CanPickUpWeapon = enemyBase.CanPickUpWeapon;
+        roleState.MoveSpeed = enemyBase.MoveSpeed;
+        roleState.Acceleration = enemyBase.Acceleration;
+        roleState.Friction = enemyBase.Friction;
+        roleState.ViewRange = enemyBase.ViewRange;
+        roleState.TailAfterViewRange = enemyBase.TailAfterViewRange;
+        roleState.BackViewRange = enemyBase.BackViewRange;
+        return roleState;
     }
 
     public override void EnterTree()
@@ -199,7 +248,7 @@ public partial class Enemy : Role
 
     public override bool IsAllWeaponTotalAmmoEmpty()
     {
-        if (!CanPickUpWeapon)
+        if (!_enemyAttribute.CanPickUpWeapon)
         {
             return false;
         }
@@ -348,7 +397,7 @@ public partial class Enemy : Role
         var isForward = IsPositionInForward(target);
         if (isForward)
         {
-            if (GlobalPosition.DistanceSquaredTo(target) <= ViewRange * ViewRange) //没有超出视野半径
+            if (GlobalPosition.DistanceSquaredTo(target) <= EnemyRoleState.ViewRange * EnemyRoleState.ViewRange) //没有超出视野半径
             {
                 return true;
             }
@@ -365,7 +414,7 @@ public partial class Enemy : Role
         var isForward = IsPositionInForward(target);
         if (isForward)
         {
-            if (GlobalPosition.DistanceSquaredTo(target) <= TailAfterViewRange * TailAfterViewRange) //没有超出视野半径
+            if (GlobalPosition.DistanceSquaredTo(target) <= EnemyRoleState.TailAfterViewRange * EnemyRoleState.TailAfterViewRange) //没有超出视野半径
             {
                 return true;
             }

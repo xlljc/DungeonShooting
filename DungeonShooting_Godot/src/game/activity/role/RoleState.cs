@@ -7,6 +7,11 @@ using System;
 public class RoleState
 {
     /// <summary>
+    /// 是否可以拾起武器
+    /// </summary>
+    public bool CanPickUpWeapon = false;
+
+    /// <summary>
     /// 移动速度
     /// </summary>
     public float MoveSpeed = 120f;
@@ -20,21 +25,6 @@ public class RoleState
     /// 移动摩擦力, 仅用于人物基础移动
     /// </summary>
     public float Friction = 900f;
-    
-    /// <summary>
-    /// 翻滚速度
-    /// </summary>
-    public float RollSpeed = 400f;
-
-    /// <summary>
-    /// 翻滚持续时间
-    /// </summary>
-    public float RollTime = 0.15f;
-    
-    /// <summary>
-    /// 翻滚冷却时间
-    /// </summary>
-    public float RollCoolingTime = 0.5f;
     
     /// <summary>
     /// 单格护盾恢复时间, 单位: 秒

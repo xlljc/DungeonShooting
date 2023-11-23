@@ -56,15 +56,14 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
         {
             capacity = 0;
         }
-
-        if (capacity == Capacity)
-        {
-            return;
-        }
-
+        
         if (ItemSlot == null)
         {
             ItemSlot = new T[capacity];
+        }
+        else if (capacity == Capacity)
+        {
+            return;
         }
         else if (ItemSlot.Length > capacity) //删减格子
         {
@@ -96,7 +95,6 @@ public class Package<T, S> : Component<S> where T : ActivityObject, IPackageItem
             ItemSlot = newArray;
         }
         Capacity = capacity;
-        
     }
 
     /// <summary>
