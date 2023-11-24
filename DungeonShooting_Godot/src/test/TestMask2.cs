@@ -1,8 +1,50 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class TestMask2 : SubViewportContainer
 {
+    public class ImageData
+    {
+        public int Width;
+        public int Height;
+        public PixelData[] Pixels;
+        
+        public ImageData(Image image)
+        {
+            var list = new List<PixelData>();
+            var width = image.GetWidth();
+            var height = image.GetHeight();
+            for (var x = 0; x < width; x++)
+            {
+                for (var y = 0; y < height; y++)
+                {
+                    var pixel = image.GetPixel(x, y);
+                    if (pixel.A > 0)
+                    {
+                        list.Add(new PixelData()
+                        {
+                            X = x,
+                            Y = y,
+                            Color = pixel
+                        });
+                    }
+                }
+            }
+
+            Pixels = list.ToArray();
+            Width = width;
+            Height = height;
+        }
+    }
+    
+    public class PixelData
+    {
+        public int X;
+        public int Y;
+        public Color Color;
+    }
+    
     [Export]
     public Sprite2D Canvas;
 
@@ -13,15 +55,15 @@ public partial class TestMask2 : SubViewportContainer
     
     private Grid<byte> _grid = new Grid<byte>();
 
-    private Image _brushImage1;
-    private Image _brushImage2;
+    private ImageData _brushData1;
+    private ImageData _brushData2;
     private Image _image;
     private ImageTexture _texture;
 
     public override void _Ready()
     {
-        _brushImage1 = Brush1.GetImage();
-        _brushImage2 = Brush2.GetImage();
+        _brushData1 = new ImageData(Brush1.GetImage());
+        _brushData2 = new ImageData(Brush2.GetImage());
         _image = Image.Create(480, 270, false, Image.Format.Rgba8);
         _texture = ImageTexture.CreateFromImage(_image);
         Canvas.Texture = _texture;
@@ -32,25 +74,22 @@ public partial class TestMask2 : SubViewportContainer
         if (Input.IsActionPressed("fire"))
         {
             var time = DateTime.Now;
-            RunTest(_brushImage1);
+            RunTest(_brushData1);
             Debug.Log("用时: " + (DateTime.Now - time).TotalMilliseconds);
         }
         else if (Input.IsActionPressed("roll"))
         {
             var time = DateTime.Now;
-            RunTest(_brushImage2);
+            RunTest(_brushData2);
             Debug.Log("用时: " + (DateTime.Now - time).TotalMilliseconds);
         }
 
         if (Input.IsActionJustPressed("meleeAttack"))
         {
-            var time = DateTime.Now;
             var mousePosition = GetGlobalMousePosition();
-            for (int i = 0; i < 10; i++)
-            {
-                var pixel = _image.GetPixel((int)mousePosition.X / 4 + i, (int)mousePosition.Y / 4);
-            }
-            Debug.Log("用时: " + (DateTime.Now - time).TotalMilliseconds);
+            var time = DateTime.Now;
+            var pixel = _image.GetPixel((int)mousePosition.X / 4, (int)mousePosition.Y / 4);
+            Debug.Log("用时: " + (DateTime.Now - time).TotalMilliseconds + ", 是否碰撞: " + (pixel.A > 0));
         }
         
         if (Input.IsActionJustPressed("exchangeWeapon"))
@@ -58,17 +97,22 @@ public partial class TestMask2 : SubViewportContainer
             _image.Fill(new Color(1, 1, 1, 0));
             _texture.Update(_image);
         }
-        
-        
     }
 
-    private void RunTest(Image brushImage)
+    private void RunTest(ImageData brush)
     {
-        //_image.BlitRect();
-        _image.BlendRect(brushImage,
-            new Rect2I(Vector2I.Zero, brushImage.GetWidth(), brushImage.GetHeight()),
-            (GetGlobalMousePosition() / 4 - brushImage.GetSize() / 2).AsVector2I()
-        );
+        var pos = (GetGlobalMousePosition() / 4 - new Vector2I(brush.Width, brush.Height) / 2).AsVector2I();
+        var canvasWidth = _texture.GetWidth();
+        var canvasHeight = _texture.GetHeight();
+        foreach (var brushPixel in brush.Pixels)
+        {
+            var x = pos.X + brushPixel.X;
+            var y = pos.Y + brushPixel.Y;
+            if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight)
+            {
+                _image.SetPixel(x, y, brushPixel.Color);
+            }
+        }
         _texture.Update(_image);
     }
 }
