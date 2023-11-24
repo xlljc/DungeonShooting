@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://d2b8jufx70mkl"]
+
+[ext_resource type="Script" path="res://src/test/TestMask2.cs" id="1_rtexh"]
+[ext_resource type="Texture2D" uid="uid://b1qqkdbgeiptt" path="res://resource/test/Brush1.png" id="2_bgpg8"]
+[ext_resource type="Texture2D" uid="uid://diehy0xukqgxk" path="res://resource/test/Brush2.png" id="3_207p4"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_cj25g"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="4_ywq1f"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fisy8"]
+shader = ExtResource("3_cj25g")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 0.392157)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(1, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = false
+shader_parameter/grey = 0.0
+
+[node name="TestMask2" type="SubViewportContainer" node_paths=PackedStringArray("Canvas")]
+offset_right = 480.0
+offset_bottom = 270.0
+scale = Vector2(4, 4)
+script = ExtResource("1_rtexh")
+Canvas = NodePath("SubViewport/Canvas")
+Brush1 = ExtResource("2_bgpg8")
+Brush2 = ExtResource("3_207p4")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+handle_input_locally = false
+use_hdr_2d = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(480, 270)
+render_target_update_mode = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="SubViewport"]
+scale = Vector2(8, 8)
+texture = ExtResource("4_ywq1f")
+centered = false
+
+[node name="Canvas" type="Sprite2D" parent="SubViewport"]
+material = SubResource("ShaderMaterial_fisy8")
+texture = ExtResource("4_ywq1f")
+centered = false
