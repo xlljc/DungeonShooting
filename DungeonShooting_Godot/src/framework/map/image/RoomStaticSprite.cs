@@ -11,7 +11,7 @@ public partial class RoomStaticSprite : Node2D, IDestroy
     public bool IsDestroyed { get; private set; }
 
     private readonly List<List<FreezeSprite>> _list = new List<List<FreezeSprite>>();
-    private readonly Grid<List<FreezeSprite>> _grid = new Grid<List<FreezeSprite>>();
+    private readonly InfiniteGrid<List<FreezeSprite>> _grid = new InfiniteGrid<List<FreezeSprite>>();
     private readonly RoomInfo _roomInfo;
     //网格划分的格子大小
     private readonly Vector2I _step;

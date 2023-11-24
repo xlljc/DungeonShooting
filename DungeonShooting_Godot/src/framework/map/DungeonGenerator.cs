@@ -35,7 +35,7 @@ public class DungeonGenerator
     private SeedRandom _random;
 
     //用于标记地图上的坐标是否被占用
-    private Grid<bool> _roomGrid { get; } = new Grid<bool>();
+    private InfiniteGrid<bool> _roomGrid { get; } = new InfiniteGrid<bool>();
     
     //当前房间数量
     private int _count = 0;

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Godot;
 
 /// <summary>
-/// 网格数据结构, 通过 x 和 y 存储数据
+/// 无限大的网格数据结构, 通过 x 和 y 存储数据
 /// </summary>
-public class Grid<T>
+public class InfiniteGrid<T>
 {
     /// <summary>
     /// 遍历网格数据回调
