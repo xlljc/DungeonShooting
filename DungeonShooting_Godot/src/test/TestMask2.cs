@@ -74,6 +74,7 @@ public partial class TestMask2 : SubViewportContainer
     private List<ImagePixel> _cacheImagePixels = new List<ImagePixel>();
     private float _runTime = 0;
     private int _executeIndex = -1;
+    private Vector2I? _prevPosition = null;
 
     //程序每帧最多等待执行时间, 超过这个时间的像素点将交到下一帧执行, 单位: 毫秒
     private float _maxWaitTime = 1f;
@@ -154,11 +155,17 @@ public partial class TestMask2 : SubViewportContainer
         var pos = (GetGlobalMousePosition() / 4).AsVector2I();
         if (Input.IsMouseButtonPressed(MouseButton.Left)) //绘制画笔1
         {
-            DrawBrush(_brushData1, pos, 5f, 3);
+            DrawBrush(_brushData1, _prevPosition, pos, Mathf.DegToRad(0), 5f, 3);
+            _prevPosition = pos;
         }
-        else  if (Input.IsMouseButtonPressed(MouseButton.Right))  //绘制画笔2
+        else if (Input.IsMouseButtonPressed(MouseButton.Right))  //绘制画笔2
         {
-            DrawBrush(_brushData2, pos, 5f, 3);
+            DrawBrush(_brushData2, _prevPosition, pos, Mathf.DegToRad(45), 5f, 3);
+            _prevPosition = pos;
+        }
+        else
+        {
+            _prevPosition = null;
         }
 
         //碰撞检测
@@ -202,15 +209,17 @@ public partial class TestMask2 : SubViewportContainer
         return false;
     }
 
-    private void DrawBrush(ImageData brush, Vector2I position, float duration, float writeOffTime)
+    private void DrawBrush(ImageData brush, Vector2I? prevPosition, Vector2I position, float rotation, float duration, float writeOffTime)
     {
-        var pos = position - new Vector2I(brush.Width, brush.Height) / 2;
+        var center = new Vector2I(brush.Width, brush.Height) / 2;
+        var pos = position - center;
         var canvasWidth = _texture.GetWidth();
         var canvasHeight = _texture.GetHeight();
         foreach (var brushPixel in brush.Pixels)
         {
-            var x = pos.X + brushPixel.X;
-            var y = pos.Y + brushPixel.Y;
+            var brushPos = RotatePixels(brushPixel.X, brushPixel.Y, center.X, center.Y, rotation);
+            var x = pos.X + brushPos.X;
+            var y = pos.Y + brushPos.Y;
             if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight)
             {
                 _image.SetPixel(x, y, brushPixel.Color);
@@ -246,5 +255,24 @@ public partial class TestMask2 : SubViewportContainer
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// 根据 rotation 旋转像素点坐标, 并返回旋转后的坐标, rotation 为弧度制角度, 旋转中心点为 centerX, centerY
+    /// </summary>
+    private Vector2I RotatePixels(int x, int y, int centerX, int centerY, float rotation)
+    {
+        if (rotation == 0)
+        {
+            return new Vector2I(x, y);
+        }
+        
+        x -= centerX;
+        y -= centerY;
+        var newX = Mathf.RoundToInt(x * Math.Cos(rotation) - y * Math.Sin(rotation));
+        var newY = Mathf.RoundToInt(x * Math.Sin(rotation) + y * Math.Cos(rotation));
+        newX += centerX;
+        newY += centerY;
+        return new Vector2I(newX, newY);
     }
 }
