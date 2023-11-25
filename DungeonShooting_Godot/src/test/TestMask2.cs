@@ -18,9 +18,12 @@ public partial class TestMask2 : SubViewportContainer
 
         public int PixelWidth;
         public int PixelHeight;
+
+        public float Ffm;
         
-        public ImageData(Image image)
+        public ImageData(Image image, float ffm)
         {
+            Ffm = ffm;
             var list = new List<PixelData>();
             var width = image.GetWidth();
             var height = image.GetHeight();
@@ -112,13 +115,14 @@ public partial class TestMask2 : SubViewportContainer
     private Vector2I? _prevPosition = null;
 
     //程序每帧最多等待执行时间, 超过这个时间的像素点将交到下一帧执行, 单位: 毫秒
-    private float _maxWaitTime = 1f;
+    private float _maxWaitTime = 2f;
     
     public override void _Ready()
     {
         Engine.MaxFps = (int)DisplayServer.ScreenGetRefreshRate();
-        _brushData1 = new ImageData(Brush1.GetImage());
-        _brushData2 = new ImageData(Brush2.GetImage());
+        //Engine.MaxFps = 5;
+        _brushData1 = new ImageData(Brush1.GetImage(), 0.5f);
+        _brushData2 = new ImageData(Brush2.GetImage(), 0.8f);
         _image = Image.Create(480, 270, false, Image.Format.Rgba8);
         _texture = ImageTexture.CreateFromImage(_image);
         Canvas.Texture = _texture;
@@ -128,7 +132,6 @@ public partial class TestMask2 : SubViewportContainer
 
     public override void _Process(double delta)
     {
-        //var time = DateTime.UtcNow;
         //更新消除逻辑
         if (_cacheImagePixels.Count > 0)
         {
@@ -192,13 +195,17 @@ public partial class TestMask2 : SubViewportContainer
         var pos = (GetGlobalMousePosition() / 4).AsVector2I();
         if (Input.IsMouseButtonPressed(MouseButton.Left)) //绘制画笔1
         {
+            var time = DateTime.UtcNow;
             DrawBrush(_brushData1, _prevPosition, pos, Mathf.DegToRad(0), 5f, 3);
             _prevPosition = pos;
+            Debug.Log("用时: " + (DateTime.UtcNow - time).TotalMilliseconds);
         }
         else if (Input.IsMouseButtonPressed(MouseButton.Right))  //绘制画笔2
         {
-            DrawBrush(_brushData2, _prevPosition, pos, Mathf.DegToRad(45), 5f, 3);
+            var time = DateTime.UtcNow;
+            DrawBrush(_brushData2, _prevPosition, pos, Mathf.DegToRad(0), 5f, 3);
             _prevPosition = pos;
+            Debug.Log("用时: " + (DateTime.UtcNow - time).TotalMilliseconds);
         }
         else
         {
@@ -215,7 +222,6 @@ public partial class TestMask2 : SubViewportContainer
         
         _texture.Update(_image);
         _runTime += (float)delta;
-        //Debug.Log("用时: " + (DateTime.UtcNow - time).TotalMilliseconds);
     }
 
     private bool UpdateImagePixel(ImagePixel imagePixel)
@@ -252,18 +258,42 @@ public partial class TestMask2 : SubViewportContainer
         var pos = position - center;
         var canvasWidth = _texture.GetWidth();
         var canvasHeight = _texture.GetHeight();
+        //存在上一次记录的点
         if (prevPosition != null)
         {
-            var temp = new Vector2(position.X - prevPosition.Value.X, position.Y - prevPosition.Value.Y);
-            var maxL = Mathf.Lerp(brush.PixelHeight, brush.PixelWidth, Mathf.Abs(Mathf.Sin(temp.Angle() - rotation + Mathf.Pi * 0.5f)));
-            var len = temp.Length();
+            var offset = new Vector2(position.X - prevPosition.Value.X, position.Y - prevPosition.Value.Y);
+            var maxL = Mathf.Lerp(
+                brush.PixelHeight,
+                brush.PixelWidth,
+                Mathf.Abs(Mathf.Sin(offset.Angle() - rotation + Mathf.Pi * 0.5f))
+            ) * brush.Ffm;
+            var len = offset.Length();
             if (len > maxL) //距离太大了, 需要补间
             {
-                Debug.Log("距离太大了");
+                Debug.Log($"距离太大了, 启用补间: len: {len}, maxL: {maxL}");
+                var count = Mathf.CeilToInt(len / maxL);
+                var step = new Vector2(offset.X / count, offset.Y / count);
+                var prevPos = prevPosition.Value - center;
+                
+                
+                for (int i = 1; i <= count; i++)
+                {
+                    foreach (var brushPixel in brush.Pixels)
+                    {
+                        var brushPos = RotatePixels(brushPixel.X, brushPixel.Y, center.X, center.Y, rotation);
+                        var x = (int)(prevPos.X + step.X * i + brushPos.X);
+                        var y = (int)(prevPos.Y + step.Y * i + brushPos.Y);
+                        if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight)
+                        {
+                            _image.SetPixel(x, y, brushPixel.Color);
+                            SetPixelData(x, y, brushPixel.Color, duration, writeOffTime);
+                        }
+                    }
+                }
+                
             }
-            Debug.Log("最大允许距离: " + maxL + ", 两点距离: " + len + ", 笔刷角度: " + Mathf.RadToDeg(temp.Angle() + rotation - Mathf.Pi * 0.5f) + ", 值: " + temp);
         }
-        
+
         foreach (var brushPixel in brush.Pixels)
         {
             var brushPos = RotatePixels(brushPixel.X, brushPixel.Y, center.X, center.Y, rotation);
@@ -272,36 +302,41 @@ public partial class TestMask2 : SubViewportContainer
             if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight)
             {
                 _image.SetPixel(x, y, brushPixel.Color);
-                var temp = _imagePixels[x, y];
-                if (temp == null)
-                {
-                    temp = new ImagePixel()
-                    {
-                        X = x,
-                        Y = y,
-                        Color = brushPixel.Color,
-                        Type = 0,
-                        Timer = duration,
-                        Speed = brushPixel.Color.A / writeOffTime,
-                    };
-                    _imagePixels[x, y] = temp;
+                SetPixelData(x, y, brushPixel.Color, duration, writeOffTime);
+            }
+        }
+    }
+
+    private void SetPixelData(int x, int y, Color color, float duration, float writeOffTime)
+    {
+        var temp = _imagePixels[x, y];
+        if (temp == null)
+        {
+            temp = new ImagePixel()
+            {
+                X = x,
+                Y = y,
+                Color = color,
+                Type = 0,
+                Timer = duration,
+                Speed = color.A / writeOffTime,
+            };
+            _imagePixels[x, y] = temp;
                     
-                    _cacheImagePixels.Add(temp);
-                    temp.IsRun = true;
-                    temp.TempTime = _runTime;
-                }
-                else
-                {
-                    temp.Color = brushPixel.Color;
-                    temp.Speed = brushPixel.Color.A / writeOffTime;
-                    temp.Timer = duration;
-                    if (!temp.IsRun)
-                    {
-                        _cacheImagePixels.Add(temp);
-                        temp.IsRun = true;
-                        temp.TempTime = _runTime;
-                    }
-                }
+            _cacheImagePixels.Add(temp);
+            temp.IsRun = true;
+            temp.TempTime = _runTime;
+        }
+        else
+        {
+            temp.Color = color;
+            temp.Speed = color.A / writeOffTime;
+            temp.Timer = duration;
+            if (!temp.IsRun)
+            {
+                _cacheImagePixels.Add(temp);
+                temp.IsRun = true;
+                temp.TempTime = _runTime;
             }
         }
     }
