@@ -9,12 +9,22 @@ public partial class TestMask2 : SubViewportContainer
         public int Width;
         public int Height;
         public PixelData[] Pixels;
+
+        //有效像素范围
+        public int PixelMinX = int.MaxValue;
+        public int PixelMinY = int .MaxValue;
+        public int PixelMaxX;
+        public int PixelMaxY;
+
+        public int PixelWidth;
+        public int PixelHeight;
         
         public ImageData(Image image)
         {
             var list = new List<PixelData>();
             var width = image.GetWidth();
             var height = image.GetHeight();
+            var flag = false;
             for (var x = 0; x < width; x++)
             {
                 for (var y = 0; y < height; y++)
@@ -22,19 +32,44 @@ public partial class TestMask2 : SubViewportContainer
                     var pixel = image.GetPixel(x, y);
                     if (pixel.A > 0)
                     {
+                        flag = true;
                         list.Add(new PixelData()
                         {
                             X = x,
                             Y = y,
                             Color = pixel
                         });
+                        if (x < PixelMinX)
+                        {
+                            PixelMinX = x;
+                        }
+                        else if (x > PixelMaxX)
+                        {
+                            PixelMaxX = x;
+                        }
+                        if (y < PixelMinY)
+                        {
+                            PixelMinY = y;
+                        }
+                        else if (y > PixelMaxY)
+                        {
+                            PixelMaxY = y;
+                        }
                     }
                 }
             }
 
+            if (!flag)
+            {
+                throw new Exception("不能使用完全透明的图片作为笔刷!");
+            }
+            
             Pixels = list.ToArray();
             Width = width;
             Height = height;
+
+            PixelWidth = PixelMaxX - PixelMinX;
+            PixelHeight = PixelMaxY - PixelMinY;
         }
     }
     
@@ -81,17 +116,19 @@ public partial class TestMask2 : SubViewportContainer
     
     public override void _Ready()
     {
+        Engine.MaxFps = (int)DisplayServer.ScreenGetRefreshRate();
         _brushData1 = new ImageData(Brush1.GetImage());
         _brushData2 = new ImageData(Brush2.GetImage());
         _image = Image.Create(480, 270, false, Image.Format.Rgba8);
         _texture = ImageTexture.CreateFromImage(_image);
         Canvas.Texture = _texture;
         _imagePixels = new ImagePixel[480, 270];
+        Debug.Log("width: : " + _brushData2.PixelWidth + ", height: " + _brushData2.PixelHeight);
     }
 
     public override void _Process(double delta)
     {
-        var time = DateTime.UtcNow;
+        //var time = DateTime.UtcNow;
         //更新消除逻辑
         if (_cacheImagePixels.Count > 0)
         {
@@ -178,7 +215,7 @@ public partial class TestMask2 : SubViewportContainer
         
         _texture.Update(_image);
         _runTime += (float)delta;
-        Debug.Log("用时: " + (DateTime.UtcNow - time).TotalMilliseconds);
+        //Debug.Log("用时: " + (DateTime.UtcNow - time).TotalMilliseconds);
     }
 
     private bool UpdateImagePixel(ImagePixel imagePixel)
@@ -215,6 +252,18 @@ public partial class TestMask2 : SubViewportContainer
         var pos = position - center;
         var canvasWidth = _texture.GetWidth();
         var canvasHeight = _texture.GetHeight();
+        if (prevPosition != null)
+        {
+            var temp = new Vector2(position.X - prevPosition.Value.X, position.Y - prevPosition.Value.Y);
+            var maxL = Mathf.Lerp(brush.PixelHeight, brush.PixelWidth, Mathf.Abs(Mathf.Sin(temp.Angle() - rotation + Mathf.Pi * 0.5f)));
+            var len = temp.Length();
+            if (len > maxL) //距离太大了, 需要补间
+            {
+                Debug.Log("距离太大了");
+            }
+            Debug.Log("最大允许距离: " + maxL + ", 两点距离: " + len + ", 笔刷角度: " + Mathf.RadToDeg(temp.Angle() + rotation - Mathf.Pi * 0.5f) + ", 值: " + temp);
+        }
+        
         foreach (var brushPixel in brush.Pixels)
         {
             var brushPos = RotatePixels(brushPixel.X, brushPixel.Y, center.X, center.Y, rotation);
@@ -269,8 +318,8 @@ public partial class TestMask2 : SubViewportContainer
         
         x -= centerX;
         y -= centerY;
-        var newX = Mathf.RoundToInt(x * Math.Cos(rotation) - y * Math.Sin(rotation));
-        var newY = Mathf.RoundToInt(x * Math.Sin(rotation) + y * Math.Cos(rotation));
+        var newX = Mathf.RoundToInt(x * Mathf.Cos(rotation) - y * Mathf.Sin(rotation));
+        var newY = Mathf.RoundToInt(x * Mathf.Sin(rotation) + y * Mathf.Cos(rotation));
         newX += centerX;
         newY += centerY;
         return new Vector2I(newX, newY);
