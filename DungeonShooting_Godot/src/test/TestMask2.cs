@@ -122,6 +122,7 @@ public partial class TestMask2 : SubViewportContainer
     private int _executeIndex = -1;
     private Vector2I? _prevPosition = null;
     private List<ImagePixel> _tempList = new List<ImagePixel>();
+    private int PixelScale;
 
     //程序每帧最多等待执行时间, 超过这个时间的像素点将交到下一帧执行, 单位: 毫秒
     private float _maxWaitTime = 4f;
@@ -131,11 +132,15 @@ public partial class TestMask2 : SubViewportContainer
         Engine.MaxFps = (int)DisplayServer.ScreenGetRefreshRate();
         //Engine.MaxFps = 5;
         _brushData1 = new ImageData(Brush1.GetImage(), 1, 0.5f, 5, 0.1f);
-        _brushData2 = new ImageData(Brush2.GetImage(), 2, 0.8f, 5, 0.1f);
-        _image = Image.Create(480, 270, false, Image.Format.Rgba8);
+        _brushData2 = new ImageData(Brush2.GetImage(), 2, 0.5f, 5, 0.05f);
+        var canvasScale = 4;
+        var width = (int)(Size.X / canvasScale);
+        var height = (int)(Size.Y / canvasScale);
+        PixelScale = (int)(Scale.X * canvasScale);
+        _image = Image.Create(width, height, false, Image.Format.Rgba8);
         _texture = ImageTexture.CreateFromImage(_image);
         Canvas.Texture = _texture;
-        _imagePixels = new ImagePixel[480, 270];
+        _imagePixels = new ImagePixel[width, height];
         Debug.Log("width: : " + _brushData2.PixelWidth + ", height: " + _brushData2.PixelHeight);
     }
 
@@ -201,15 +206,15 @@ public partial class TestMask2 : SubViewportContainer
             }
         }
        
-        var pos = (GetGlobalMousePosition() / 4).AsVector2I();
+        var pos = (GetGlobalMousePosition() / PixelScale).AsVector2I();
         if (Input.IsMouseButtonPressed(MouseButton.Left)) //绘制画笔1
         {
             var time = DateTime.UtcNow;
-            if (_prevPosition != null)
-            {
-                DrawBrush(_brushData1, _prevPosition, pos, new Vector2(pos.X - _prevPosition.Value.X, pos.Y - _prevPosition.Value.Y).Angle());
-            }
-            else
+            // if (_prevPosition != null)
+            // {
+            //     DrawBrush(_brushData1, _prevPosition, pos, new Vector2(pos.X - _prevPosition.Value.X, pos.Y - _prevPosition.Value.Y).Angle());
+            // }
+            // else
             {
                 DrawBrush(_brushData1, _prevPosition, pos, 0);
             }
@@ -219,11 +224,11 @@ public partial class TestMask2 : SubViewportContainer
         else if (Input.IsMouseButtonPressed(MouseButton.Right))  //绘制画笔2
         {
             var time = DateTime.UtcNow;
-            if (_prevPosition != null)
-            {
-                DrawBrush(_brushData2, _prevPosition, pos, new Vector2(pos.X - _prevPosition.Value.X, pos.Y - _prevPosition.Value.Y).Angle());
-            }
-            else
+            // if (_prevPosition != null)
+            // {
+            //     DrawBrush(_brushData2, _prevPosition, pos, new Vector2(pos.X - _prevPosition.Value.X, pos.Y - _prevPosition.Value.Y).Angle());
+            // }
+            // else
             {
                 DrawBrush(_brushData2, _prevPosition, pos, 0);
             }
@@ -239,7 +244,7 @@ public partial class TestMask2 : SubViewportContainer
         if (Input.IsKeyPressed(Key.Space))
         {
             var mousePosition = GetGlobalMousePosition();
-            var pixel = _image.GetPixel((int)mousePosition.X / 4, (int)mousePosition.Y / 4);
+            var pixel = _image.GetPixel((int)mousePosition.X / PixelScale, (int)mousePosition.Y / PixelScale);
             Debug.Log("是否碰撞: " + (pixel.A > 0));
         }
         
@@ -259,14 +264,16 @@ public partial class TestMask2 : SubViewportContainer
             else
             {
                 imagePixel.Color.A -= imagePixel.Speed * (_runTime - imagePixel.TempTime);
-                _image.SetPixel(imagePixel.X, imagePixel.Y, imagePixel.Color);
+                
                 if (imagePixel.Color.A <= 0)
                 {
+                    _image.SetPixel(imagePixel.X, imagePixel.Y, new Color(0, 0, 0, 0));
                     imagePixel.IsRun = false;
                     return true;
                 }
                 else
                 {
+                    _image.SetPixel(imagePixel.X, imagePixel.Y, imagePixel.Color);
                     imagePixel.TempTime = _runTime;
                 }
             }
@@ -412,11 +419,13 @@ public partial class TestMask2 : SubViewportContainer
         {
             return new Vector2I(x, y);
         }
-        
+
         x -= centerX;
         y -= centerY;
-        var newX = Mathf.RoundToInt(x * Mathf.Cos(rotation) - y * Mathf.Sin(rotation));
-        var newY = Mathf.RoundToInt(x * Mathf.Sin(rotation) + y * Mathf.Cos(rotation));
+        var sv = Mathf.Sin(rotation);
+        var cv = Mathf.Cos(rotation);
+        var newX = Mathf.RoundToInt(x * cv - y * sv);
+        var newY = Mathf.RoundToInt(x * sv + y * cv);
         newX += centerX;
         newY += centerY;
         return new Vector2I(newX, newY);
