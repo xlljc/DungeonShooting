@@ -19,9 +19,10 @@ public partial class TestMask2 : SubViewportContainer
         public int PixelWidth;
         public int PixelHeight;
 
+        //补帧间距倍率
         public float Ffm;
         
-        public ImageData(Image image, float ffm)
+        public ImageData(Image image, byte type, float ffm, float duration, float writeOffSpeed)
         {
             Ffm = ffm;
             var list = new List<PixelData>();
@@ -40,7 +41,10 @@ public partial class TestMask2 : SubViewportContainer
                         {
                             X = x,
                             Y = y,
-                            Color = pixel
+                            Color = pixel,
+                            Type = type,
+                            Duration = duration,
+                            WriteOffSpeed = writeOffSpeed
                         });
                         if (x < PixelMinX)
                         {
@@ -81,6 +85,9 @@ public partial class TestMask2 : SubViewportContainer
         public int X;
         public int Y;
         public Color Color;
+        public byte Type;
+        public float Duration;
+        public float WriteOffSpeed;
     }
 
     public class ImagePixel
@@ -93,6 +100,7 @@ public partial class TestMask2 : SubViewportContainer
         public float Speed;
         public bool IsRun;
         public float TempTime;
+        public bool TempFlag;
     }
     
     [Export]
@@ -113,16 +121,17 @@ public partial class TestMask2 : SubViewportContainer
     private float _runTime = 0;
     private int _executeIndex = -1;
     private Vector2I? _prevPosition = null;
+    private List<ImagePixel> _tempList = new List<ImagePixel>();
 
     //程序每帧最多等待执行时间, 超过这个时间的像素点将交到下一帧执行, 单位: 毫秒
-    private float _maxWaitTime = 2f;
+    private float _maxWaitTime = 4f;
     
     public override void _Ready()
     {
         Engine.MaxFps = (int)DisplayServer.ScreenGetRefreshRate();
         //Engine.MaxFps = 5;
-        _brushData1 = new ImageData(Brush1.GetImage(), 0.5f);
-        _brushData2 = new ImageData(Brush2.GetImage(), 0.8f);
+        _brushData1 = new ImageData(Brush1.GetImage(), 1, 0.5f, 5, 0.1f);
+        _brushData2 = new ImageData(Brush2.GetImage(), 2, 0.8f, 5, 0.1f);
         _image = Image.Create(480, 270, false, Image.Format.Rgba8);
         _texture = ImageTexture.CreateFromImage(_image);
         Canvas.Texture = _texture;
@@ -196,14 +205,28 @@ public partial class TestMask2 : SubViewportContainer
         if (Input.IsMouseButtonPressed(MouseButton.Left)) //绘制画笔1
         {
             var time = DateTime.UtcNow;
-            DrawBrush(_brushData1, _prevPosition, pos, Mathf.DegToRad(0), 5f, 3);
+            if (_prevPosition != null)
+            {
+                DrawBrush(_brushData1, _prevPosition, pos, new Vector2(pos.X - _prevPosition.Value.X, pos.Y - _prevPosition.Value.Y).Angle());
+            }
+            else
+            {
+                DrawBrush(_brushData1, _prevPosition, pos, 0);
+            }
             _prevPosition = pos;
             Debug.Log("用时: " + (DateTime.UtcNow - time).TotalMilliseconds);
         }
         else if (Input.IsMouseButtonPressed(MouseButton.Right))  //绘制画笔2
         {
             var time = DateTime.UtcNow;
-            DrawBrush(_brushData2, _prevPosition, pos, Mathf.DegToRad(0), 5f, 3);
+            if (_prevPosition != null)
+            {
+                DrawBrush(_brushData2, _prevPosition, pos, new Vector2(pos.X - _prevPosition.Value.X, pos.Y - _prevPosition.Value.Y).Angle());
+            }
+            else
+            {
+                DrawBrush(_brushData2, _prevPosition, pos, 0);
+            }
             _prevPosition = pos;
             Debug.Log("用时: " + (DateTime.UtcNow - time).TotalMilliseconds);
         }
@@ -252,7 +275,7 @@ public partial class TestMask2 : SubViewportContainer
         return false;
     }
 
-    private void DrawBrush(ImageData brush, Vector2I? prevPosition, Vector2I position, float rotation, float duration, float writeOffTime)
+    private void DrawBrush(ImageData brush, Vector2I? prevPosition, Vector2I position, float rotation)
     {
         var center = new Vector2I(brush.Width, brush.Height) / 2;
         var pos = position - center;
@@ -275,8 +298,7 @@ public partial class TestMask2 : SubViewportContainer
                 var step = new Vector2(offset.X / count, offset.Y / count);
                 var prevPos = prevPosition.Value - center;
                 
-                
-                for (int i = 1; i <= count; i++)
+                for (var i = 1; i <= count; i++)
                 {
                     foreach (var brushPixel in brush.Pixels)
                     {
@@ -285,12 +307,40 @@ public partial class TestMask2 : SubViewportContainer
                         var y = (int)(prevPos.Y + step.Y * i + brushPos.Y);
                         if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight)
                         {
-                            _image.SetPixel(x, y, brushPixel.Color);
-                            SetPixelData(x, y, brushPixel.Color, duration, writeOffTime);
+                            var temp = SetPixelData(x, y, brushPixel);
+                            if (!temp.TempFlag)
+                            {
+                                temp.TempFlag = true;
+                                _tempList.Add(temp);
+                            }
                         }
                     }
                 }
                 
+                foreach (var brushPixel in brush.Pixels)
+                {
+                    var brushPos = RotatePixels(brushPixel.X, brushPixel.Y, center.X, center.Y, rotation);
+                    var x = pos.X + brushPos.X;
+                    var y = pos.Y + brushPos.Y;
+                    if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight)
+                    {
+                        var temp = SetPixelData(x, y, brushPixel);
+                        if (!temp.TempFlag)
+                        {
+                            temp.TempFlag = true;
+                            _tempList.Add(temp);
+                        }
+                    }
+                }
+
+                foreach (var imagePixel in _tempList)
+                {
+                    _image.SetPixel(imagePixel.X, imagePixel.Y, imagePixel.Color);
+                    imagePixel.TempFlag = false;
+                }
+
+                _tempList.Clear();
+                return;
             }
         }
 
@@ -301,13 +351,13 @@ public partial class TestMask2 : SubViewportContainer
             var y = pos.Y + brushPos.Y;
             if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight)
             {
-                _image.SetPixel(x, y, brushPixel.Color);
-                SetPixelData(x, y, brushPixel.Color, duration, writeOffTime);
+                var temp = SetPixelData(x, y, brushPixel);
+                _image.SetPixel(x, y, temp.Color);
             }
         }
     }
 
-    private void SetPixelData(int x, int y, Color color, float duration, float writeOffTime)
+    private ImagePixel SetPixelData(int x, int y, PixelData pixelData)
     {
         var temp = _imagePixels[x, y];
         if (temp == null)
@@ -316,10 +366,10 @@ public partial class TestMask2 : SubViewportContainer
             {
                 X = x,
                 Y = y,
-                Color = color,
-                Type = 0,
-                Timer = duration,
-                Speed = color.A / writeOffTime,
+                Color = pixelData.Color,
+                Type = pixelData.Type,
+                Timer = pixelData.Duration,
+                Speed = pixelData.WriteOffSpeed,
             };
             _imagePixels[x, y] = temp;
                     
@@ -329,9 +379,19 @@ public partial class TestMask2 : SubViewportContainer
         }
         else
         {
-            temp.Color = color;
-            temp.Speed = color.A / writeOffTime;
-            temp.Timer = duration;
+            if (temp.Type != pixelData.Type)
+            {
+                temp.Color = pixelData.Color;
+                temp.Type = pixelData.Type;
+            }
+            else
+            {
+                var tempColor = pixelData.Color;
+                temp.Color = new Color(tempColor.R, tempColor.G, tempColor.B, Mathf.Max(temp.Color.A, tempColor.A));
+            }
+            
+            temp.Speed = pixelData.WriteOffSpeed;
+            temp.Timer = pixelData.Duration;
             if (!temp.IsRun)
             {
                 _cacheImagePixels.Add(temp);
@@ -339,6 +399,8 @@ public partial class TestMask2 : SubViewportContainer
                 temp.TempTime = _runTime;
             }
         }
+
+        return temp;
     }
 
     /// <summary>
