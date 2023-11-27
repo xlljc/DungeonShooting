@@ -102,6 +102,12 @@ public partial class TestMask2 : SubViewportContainer
         public float TempTime;
         public bool TempFlag;
     }
+
+    [Export]
+    public Label Message;
+    
+    [Export]
+    public Node2D Player;
     
     [Export]
     public Sprite2D Canvas;
@@ -123,6 +129,7 @@ public partial class TestMask2 : SubViewportContainer
     private Vector2I? _prevPosition = null;
     private List<ImagePixel> _tempList = new List<ImagePixel>();
     private int PixelScale;
+    private int CanvasScale = 4;
 
     //程序每帧最多等待执行时间, 超过这个时间的像素点将交到下一帧执行, 单位: 毫秒
     private float _maxWaitTime = 4f;
@@ -133,10 +140,9 @@ public partial class TestMask2 : SubViewportContainer
         //Engine.MaxFps = 5;
         _brushData1 = new ImageData(Brush1.GetImage(), 1, 0.5f, 5, 0.1f);
         _brushData2 = new ImageData(Brush2.GetImage(), 2, 0.5f, 5, 0.05f);
-        var canvasScale = 4;
-        var width = (int)(Size.X / canvasScale);
-        var height = (int)(Size.Y / canvasScale);
-        PixelScale = (int)(Scale.X * canvasScale);
+        var width = (int)(Size.X / CanvasScale);
+        var height = (int)(Size.Y / CanvasScale);
+        PixelScale = (int)(Scale.X * CanvasScale);
         _image = Image.Create(width, height, false, Image.Format.Rgba8);
         _texture = ImageTexture.CreateFromImage(_image);
         Canvas.Texture = _texture;
@@ -146,6 +152,7 @@ public partial class TestMask2 : SubViewportContainer
 
     public override void _Process(double delta)
     {
+        InputManager.Update((float)delta);
         //更新消除逻辑
         if (_cacheImagePixels.Count > 0)
         {
@@ -206,46 +213,31 @@ public partial class TestMask2 : SubViewportContainer
             }
         }
        
-        var pos = (GetGlobalMousePosition() / PixelScale).AsVector2I();
-        if (Input.IsMouseButtonPressed(MouseButton.Left)) //绘制画笔1
+        //玩家移动
+        Player.Position += InputManager.MoveAxis * 120 * (float)delta;
+        var pos = (Player.Position / CanvasScale).AsVector2I();
+        if (_prevPosition != null)
         {
-            var time = DateTime.UtcNow;
-            // if (_prevPosition != null)
-            // {
-            //     DrawBrush(_brushData1, _prevPosition, pos, new Vector2(pos.X - _prevPosition.Value.X, pos.Y - _prevPosition.Value.Y).Angle());
-            // }
-            // else
-            {
-                DrawBrush(_brushData1, _prevPosition, pos, 0);
-            }
-            _prevPosition = pos;
-            Debug.Log("用时: " + (DateTime.UtcNow - time).TotalMilliseconds);
-        }
-        else if (Input.IsMouseButtonPressed(MouseButton.Right))  //绘制画笔2
-        {
-            var time = DateTime.UtcNow;
-            // if (_prevPosition != null)
-            // {
-            //     DrawBrush(_brushData2, _prevPosition, pos, new Vector2(pos.X - _prevPosition.Value.X, pos.Y - _prevPosition.Value.Y).Angle());
-            // }
-            // else
-            {
-                DrawBrush(_brushData2, _prevPosition, pos, 0);
-            }
-            _prevPosition = pos;
-            Debug.Log("用时: " + (DateTime.UtcNow - time).TotalMilliseconds);
+            DrawBrush(_brushData2, _prevPosition, pos, new Vector2(pos.X - _prevPosition.Value.X, pos.Y - _prevPosition.Value.Y).Angle());
         }
         else
         {
-            _prevPosition = null;
+            DrawBrush(_brushData2, _prevPosition, pos, 0);
         }
-
+        
         //碰撞检测
-        if (Input.IsKeyPressed(Key.Space))
+        //if (Input.IsKeyPressed(Key.Space))
         {
-            var mousePosition = GetGlobalMousePosition();
-            var pixel = _image.GetPixel((int)mousePosition.X / PixelScale, (int)mousePosition.Y / PixelScale);
-            Debug.Log("是否碰撞: " + (pixel.A > 0));
+            var mousePosition = (GetGlobalMousePosition() / PixelScale).AsVector2I();
+            if (mousePosition.X >= 0 && mousePosition.X < _imagePixels.GetLength(0) && mousePosition.Y >= 0 && mousePosition.Y < _imagePixels.GetLength(1))
+            {
+                var pixel = _imagePixels[mousePosition.X, mousePosition.Y];
+                Message.Text = "鼠标是否碰到毒液: " + (pixel != null && pixel.Color.A > 0);
+            }
+            else
+            {
+                Message.Text = "鼠标是否碰到毒液: " + false;
+            }
         }
         
         _texture.Update(_image);
