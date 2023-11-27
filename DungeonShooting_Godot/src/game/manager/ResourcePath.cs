@@ -94,6 +94,7 @@ public class ResourcePath
     public const string resource_config_ActivityMaterial_json = "res://resource/config/ActivityMaterial.json";
     public const string resource_config_AiAttackAttr_json = "res://resource/config/AiAttackAttr.json";
     public const string resource_config_BulletBase_json = "res://resource/config/BulletBase.json";
+    public const string resource_config_EnemyBase_json = "res://resource/config/EnemyBase.json";
     public const string resource_config_Sound_json = "res://resource/config/Sound.json";
     public const string resource_config_WeaponBase_json = "res://resource/config/WeaponBase.json";
     public const string resource_curve_Curve1_tres = "res://resource/curve/Curve1.tres";
@@ -108,7 +109,10 @@ public class ResourcePath
     public const string resource_map_tileSprite_map1_16x16dungeoniiwallreconfigv04spritesheet_png = "res://resource/map/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png";
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";
     public const string resource_material_Blend_tres = "res://resource/material/Blend.tres";
+    public const string resource_material_Mask_gdshader = "res://resource/material/Mask.gdshader";
     public const string resource_material_OffsetVertex_gdshader = "res://resource/material/OffsetVertex.gdshader";
+    public const string resource_material_Sawtooth_gdshader = "res://resource/material/Sawtooth.gdshader";
+    public const string resource_material_Sawtooth_tres = "res://resource/material/Sawtooth.tres";
     public const string resource_material_SmokeParticleMaterial_tres = "res://resource/material/SmokeParticleMaterial.tres";
     public const string resource_sound_bgm_Intro_ogg = "res://resource/sound/bgm/Intro.ogg";
     public const string resource_sound_sfx_beLoaded_BeLoaded0001_ogg = "res://resource/sound/sfx/beLoaded/BeLoaded0001.ogg";
@@ -235,15 +239,8 @@ public class ResourcePath
     public const string resource_sprite_role_role0001_idle_Sprite0006_png = "res://resource/sprite/role/role0001/idle/Sprite-0006.png";
     public const string resource_sprite_role_role0001_idle_Sprite0007_png = "res://resource/sprite/role/role0001/idle/Sprite-0007.png";
     public const string resource_sprite_role_role0001_idle_Sprite0008_png = "res://resource/sprite/role/role0001/idle/Sprite-0008.png";
-    public const string resource_sprite_role_role0001_roll_Sprite0002_png = "res://resource/sprite/role/role0001/roll/Sprite-0002.png";
-    public const string resource_sprite_role_role0001_roll_Sprite0003_png = "res://resource/sprite/role/role0001/roll/Sprite-0003.png";
-    public const string resource_sprite_role_role0001_roll_Sprite0004_png = "res://resource/sprite/role/role0001/roll/Sprite-0004.png";
-    public const string resource_sprite_role_role0001_roll_Sprite0005_png = "res://resource/sprite/role/role0001/roll/Sprite-0005.png";
-    public const string resource_sprite_role_role0001_roll_Sprite0006_png = "res://resource/sprite/role/role0001/roll/Sprite-0006.png";
-    public const string resource_sprite_role_role0001_roll_Sprite0007_png = "res://resource/sprite/role/role0001/roll/Sprite-0007.png";
     public const string resource_sprite_role_role0001_roll_Sprite0008_png = "res://resource/sprite/role/role0001/roll/Sprite-0008.png";
     public const string resource_sprite_role_role0001_roll_Sprite0009_png = "res://resource/sprite/role/role0001/roll/Sprite-0009.png";
-    public const string resource_sprite_role_role0001_roll_Sprite0010_png = "res://resource/sprite/role/role0001/roll/Sprite-0010.png";
     public const string resource_sprite_role_role0001_run_Sprite0002_png = "res://resource/sprite/role/role0001/run/Sprite-0002.png";
     public const string resource_sprite_role_role0001_run_Sprite0003_png = "res://resource/sprite/role/role0001/run/Sprite-0003.png";
     public const string resource_sprite_role_role0001_run_Sprite0004_png = "res://resource/sprite/role/role0001/run/Sprite-0004.png";
@@ -373,6 +370,8 @@ public class ResourcePath
     public const string resource_spriteFrames_weapon_Weapon0007_tres = "res://resource/spriteFrames/weapon/Weapon0007.tres";
     public const string resource_spriteFrames_weapon_Weapon0008_tres = "res://resource/spriteFrames/weapon/Weapon0008.tres";
     public const string resource_spriteFrames_weapon_Weapon0009_tres = "res://resource/spriteFrames/weapon/Weapon0009.tres";
+    public const string resource_test_Brush1_png = "res://resource/test/Brush1.png";
+    public const string resource_test_Brush2_png = "res://resource/test/Brush2.png";
     public const string resource_theme_mainTheme_tres = "res://resource/theme/mainTheme.tres";
     public const string resource_theme_theme1_tres = "res://resource/theme/theme1.tres";
     public const string scene_Main_tscn = "res://scene/Main.tscn";
@@ -380,6 +379,8 @@ public class ResourcePath
     public const string scene_test_TestCreateSector_tscn = "res://scene/test/TestCreateSector.tscn";
     public const string scene_test_TestDrawSprite_tscn = "res://scene/test/TestDrawSprite.tscn";
     public const string scene_test_TestGridData_tscn = "res://scene/test/TestGridData.tscn";
+    public const string scene_test_TestMask_tscn = "res://scene/test/TestMask.tscn";
+    public const string scene_test_TestMask2_tscn = "res://scene/test/TestMask2.tscn";
     public const string scene_test_TestNavigation2_tscn = "res://scene/test/TestNavigation2.tscn";
     public const string scene_test_TestNavigationPolygon_tscn = "res://scene/test/TestNavigationPolygon.tscn";
     public const string scene_test_TestNewTileMap_tscn = "res://scene/test/TestNewTileMap.tscn";

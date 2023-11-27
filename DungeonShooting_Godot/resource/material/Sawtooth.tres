@@ -1,0 +1,6 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cca0ka64xmrrd"]
+
+[ext_resource type="Shader" path="res://resource/material/Sawtooth.gdshader" id="1_nrhtr"]
+
+[resource]
+shader = ExtResource("1_nrhtr")
