@@ -8,11 +8,28 @@ using Godot;
 [Tool]
 public partial class NoWeaponEnemy : Enemy
 {
+    private Vector2I? _prevPosition = null;
+    private BrushImageData _brushData3;
+    
     public override void OnInit()
     {
         base.OnInit();
         NoWeaponAttack = true;
         AnimationPlayer.AnimationFinished += OnAnimationFinished;
+        
+        _brushData3 = new BrushImageData(ResourceManager.LoadTexture2D(ResourcePath.resource_test_Brush3_png).GetImage(), 3, 0.7f, 4, 0.2f);
+    }
+
+    protected override void Process(float delta)
+    {
+        base.Process(delta);
+
+        if (AffiliationArea != null)
+        {
+            var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
+            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData3, _prevPosition, pos, 0);
+            _prevPosition = pos;
+        }
     }
 
     public override void Attack()

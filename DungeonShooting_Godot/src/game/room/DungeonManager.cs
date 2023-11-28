@@ -316,7 +316,7 @@ public partial class DungeonManager : Node2D
     // 初始化房间
     private void InitRoom(RoomInfo roomInfo)
     {
-        roomInfo.CalcOuterRange();
+        roomInfo.CalcRange();
         //挂载房间导航区域
         MountNavFromRoomInfo(roomInfo);
         //创建门
@@ -325,8 +325,10 @@ public partial class DungeonManager : Node2D
         CreateRoomAffiliation(roomInfo);
         //创建 RoomStaticSprite
         CreateRoomStaticSprite(roomInfo);
+        //创建液体区域
+        CreateRoomLiquidCanvas(roomInfo);
         //创建静态精灵画布
-        CreateRoomStaticSpriteCanvas(roomInfo);
+        CreateRoomStaticImageCanvas(roomInfo);
         //创建迷雾遮罩
         CreateRoomFogMask(roomInfo);
     }
@@ -419,21 +421,26 @@ public partial class DungeonManager : Node2D
         World.Current.StaticSpriteRoot.AddChild(spriteRoot);
         roomInfo.StaticSprite = spriteRoot;
     }
-
-    //创建静态精灵画布
-    private void CreateRoomStaticSpriteCanvas(RoomInfo roomInfo)
+    
+    
+    //创建液体画布
+    private void CreateRoomLiquidCanvas(RoomInfo roomInfo)
     {
-        var worldPos = roomInfo.GetWorldPosition();
-        var rect = roomInfo.OuterRange;
+        var rect = roomInfo.CanvasRect;
 
-        var minX = rect.Position.X - GameConfig.TileCellSize;
-        var minY = rect.Position.Y - GameConfig.TileCellSize;
-        var maxX = rect.End.X + GameConfig.TileCellSize;
-        var maxY = rect.End.Y + GameConfig.TileCellSize;
+        var liquidCanvas = new LiquidCanvas(roomInfo, rect.Size.X, rect.Size.Y);
+        liquidCanvas.Position = rect.Position;
+        roomInfo.LiquidCanvas = liquidCanvas;
+        roomInfo.StaticSprite.AddChild(liquidCanvas);
+    }
 
-        var canvasSprite = new ImageCanvas(maxX - minX, maxY - minY);
-        canvasSprite.Position = new Vector2I(minX, minY);
-        roomInfo.RoomOffset = new Vector2I(worldPos.X - minX, worldPos.Y - minY);
+    //创建静态图像画布
+    private void CreateRoomStaticImageCanvas(RoomInfo roomInfo)
+    {
+        var rect = roomInfo.CanvasRect;
+
+        var canvasSprite = new ImageCanvas(rect.Size.X, rect.Size.Y);
+        canvasSprite.Position = rect.Position;
         roomInfo.StaticImageCanvas = canvasSprite;
         roomInfo.StaticSprite.AddChild(canvasSprite);
     }

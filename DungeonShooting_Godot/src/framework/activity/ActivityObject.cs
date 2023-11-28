@@ -1669,7 +1669,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         _processingBecomesStaticImage = true;
         EnableBehavior = false;
         var roomInfo = AffiliationArea.RoomInfo;
-        var position = roomInfo.ToImageCanvasPosition(GlobalPosition);
+        var position = roomInfo.ToCanvasPosition(GlobalPosition);
         roomInfo.StaticImageCanvas.DrawActivityObjectInCanvas(this, position.X, position.Y, () =>
         {
             Destroy();

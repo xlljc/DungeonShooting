@@ -86,9 +86,9 @@ public class RoomInfo : IDestroy
     public ImageCanvas StaticImageCanvas;
 
     /// <summary>
-    /// 房间坐标相对于画布坐标偏移量, 单位: 像素
+    /// 液体画布
     /// </summary>
-    public Vector2I RoomOffset;
+    public LiquidCanvas LiquidCanvas;
 
     /// <summary>
     /// 房间迷雾
@@ -96,9 +96,19 @@ public class RoomInfo : IDestroy
     public FogMask RoomFogMask;
     
     /// <summary>
+    /// 房间坐标相对于画布坐标偏移量, 单位: 像素
+    /// </summary>
+    public Vector2I RoomOffset { get; private set; }
+    
+    /// <summary>
     /// 房间算上连接通道所占用的区域
     /// </summary>
-    public Rect2I OuterRange { get; private set; }
+    public Rect2I OuterRect { get; private set; }
+    
+    /// <summary>
+    /// 画布占用区域
+    /// </summary>
+    public Rect2I CanvasRect { get; private set; }
 
     /// <summary>
     /// 是否处于闭关状态, 也就是房间门没有主动打开
@@ -122,7 +132,7 @@ public class RoomInfo : IDestroy
     /// <summary>
     /// 重新计算占用的区域
     /// </summary>
-    public void CalcOuterRange()
+    public void CalcRange()
     {
         var worldPos = GetWorldPosition();
         var pos = new Vector2I(worldPos.X, worldPos.Y);
@@ -205,8 +215,16 @@ public class RoomInfo : IDestroy
                     break;
             }
         }
+        
+        OuterRect = new Rect2I(minX, minY, maxX - minX, maxY - minY);
+        
+        var cMinX = minX - GameConfig.TileCellSize;
+        var cMinY = minY - GameConfig.TileCellSize;
+        var cMaxX = maxX + GameConfig.TileCellSize;
+        var cMaxY = maxY + GameConfig.TileCellSize;
+        CanvasRect = new Rect2I(cMinX, cMinY, cMaxX - cMinX, cMaxY - cMinY);
 
-        OuterRange = new Rect2I(minX, minY, maxX - minX, maxY - minY);
+        RoomOffset = new Vector2I(worldPos.X - cMinX, worldPos.Y - cMinY);
     }
     
     /// <summary>
@@ -289,9 +307,9 @@ public class RoomInfo : IDestroy
     /// <summary>
     /// 将世界坐标转为画布下的坐标
     /// </summary>
-    public Vector2 ToImageCanvasPosition(Vector2 pos)
+    public Vector2 ToCanvasPosition(Vector2 pos)
     {
-        return pos - StaticImageCanvas.Position;
+        return pos - CanvasRect.Position;
     }
     
     public void Destroy()
@@ -327,8 +345,14 @@ public class RoomInfo : IDestroy
         {
             StaticImageCanvas.Destroy();
         }
+
+        //销毁液体画布
+        if (LiquidCanvas != null)
+        {
+            LiquidCanvas.Destroy();
+        }
         
-        //
+        //销毁静态精灵节点
         if (StaticSprite != null)
         {
             StaticSprite.Destroy();

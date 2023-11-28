@@ -29,9 +29,8 @@ public partial class TestMask2 : SubViewportContainer
         //Engine.MaxFps = 5;
         _brushData1 = new BrushImageData(Brush1.GetImage(), 1, 0.5f, 5, 0.1f);
         _brushData2 = new BrushImageData(Brush2.GetImage(), 2, 0.5f, 5, 0.2f);
-        _liquidCanvas = new LiquidCanvas();
+        _liquidCanvas = new LiquidCanvas(null, (int)(Size.X / LiquidCanvas.CanvasScale), (int)(Size.X / LiquidCanvas.CanvasScale));
         GetNode("SubViewport").AddChild(_liquidCanvas);
-        _liquidCanvas.Init((int)(Size.X / LiquidCanvas.CanvasScale), (int)(Size.X / LiquidCanvas.CanvasScale));
     }
 
     public override void _Process(double delta)

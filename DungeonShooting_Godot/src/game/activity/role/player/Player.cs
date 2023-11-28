@@ -28,6 +28,9 @@ public partial class Player : Role
     //翻滚冷却计时器
     private float _rollCoolingTimer = 0;
     
+    private Vector2I? _prevPosition = null;
+    private BrushImageData _brushData2;
+    
     /// <summary>
     /// 设置当前操作的玩家对象
     /// </summary>
@@ -78,6 +81,8 @@ public partial class Player : Role
         StateController.ChangeStateInstant(PlayerStateEnum.Idle);
         
         //InitSubLine();
+        
+        _brushData2 = new BrushImageData(ResourceManager.LoadTexture2D(ResourcePath.resource_test_Brush2_png).GetImage(), 2, 0.5f, 5, 0.2f);
     }
 
     protected override RoleState OnCreateRoleState()
@@ -226,6 +231,19 @@ public partial class Player : Role
         {
             TipRoot.Scale = new Vector2(-1, 1);
         }
+
+        if (AffiliationArea != null)
+        {
+            var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
+            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData2, _prevPosition, pos, 0);
+            _prevPosition = pos;
+        }
+    }
+
+    protected override void OnAffiliationChange(AffiliationArea prevArea)
+    {
+        _prevPosition = null;
+        base.OnAffiliationChange(prevArea);
     }
 
     protected override void OnPickUpWeapon(Weapon weapon)

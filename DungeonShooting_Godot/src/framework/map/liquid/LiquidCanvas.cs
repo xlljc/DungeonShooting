@@ -31,9 +31,14 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
     private int _executeIndex = -1;
     //用于记录补间操作下有变动的像素点
     private List<LiquidPixel> _tempList = new List<LiquidPixel>();
+    //记录是否有像素点发生变动
+    private bool _changeFlag = false;
+    //所属房间
+    private RoomInfo _roomInfo;
 
-    public void Init(int width, int height)
+    public LiquidCanvas(RoomInfo roomInfo, int width, int height)
     {
+        _roomInfo = roomInfo;
         Centered = false;
         Material = ResourceManager.Load<Material>(ResourcePath.resource_material_Sawtooth_tres);
         
@@ -58,6 +63,8 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
 
     public override void _Process(double delta)
     {
+        //这里待优化, 应该每次绘制都将像素点放入 _tempList 中, 然后帧结束再统一提交
+
         //更新消除逻辑
         if (_cacheImagePixels.Count > 0)
         {
@@ -117,13 +124,26 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
                 }
             }
         }
-        
-        _texture.Update(_image);
+
+        if (_changeFlag)
+        {
+            _texture.Update(_image);
+            _changeFlag = false;
+        }
+
         _runTime += (float)delta;
+    }
+
+    /// <summary>
+    /// 将画布外的坐标转为画布内的坐标
+    /// </summary>
+    public Vector2I ToLiquidCanvasPosition(Vector2 position)
+    {
+        return (_roomInfo.ToCanvasPosition(position) / CanvasScale).AsVector2I();
     }
     
     /// <summary>
-    /// 根据画笔数据在画布上绘制液体
+    /// 根据画笔数据在画布上绘制液体, 转换坐标请调用 ToLiquidCanvasPosition() 函数
     /// </summary>
     /// <param name="brush">画笔数据</param>
     /// <param name="prevPosition">上一帧坐标, 相对于画布坐标, 改参数用于两点距离较大时执行补间操作, 如果传 null, 则不会进行补间</param>
@@ -189,6 +209,7 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
 
                 foreach (var imagePixel in _tempList)
                 {
+                    _changeFlag = true;
                     _image.SetPixel(imagePixel.X, imagePixel.Y, imagePixel.Color);
                     imagePixel.TempFlag = false;
                 }
@@ -197,7 +218,7 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
                 return;
             }
         }
-
+        
         foreach (var brushPixel in brush.Pixels)
         {
             var brushPos = RotatePixels(brushPixel.X, brushPixel.Y, center.X, center.Y, rotation);
@@ -205,6 +226,7 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
             var y = pos.Y + brushPos.Y;
             if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight)
             {
+                _changeFlag = true;
                 var temp = SetPixelData(x, y, brushPixel);
                 _image.SetPixel(x, y, temp.Color);
             }
@@ -262,12 +284,14 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
                 
                 if (imagePixel.Color.A <= 0) //完全透明了
                 {
+                    _changeFlag = true;
                     _image.SetPixel(imagePixel.X, imagePixel.Y, new Color(0, 0, 0, 0));
                     imagePixel.IsRun = false;
                     return true;
                 }
                 else
                 {
+                    _changeFlag = true;
                     _image.SetPixel(imagePixel.X, imagePixel.Y, imagePixel.Color);
                     imagePixel.TempTime = _runTime;
                 }

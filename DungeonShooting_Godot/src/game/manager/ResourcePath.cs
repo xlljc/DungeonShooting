@@ -372,6 +372,7 @@ public class ResourcePath
     public const string resource_spriteFrames_weapon_Weapon0009_tres = "res://resource/spriteFrames/weapon/Weapon0009.tres";
     public const string resource_test_Brush1_png = "res://resource/test/Brush1.png";
     public const string resource_test_Brush2_png = "res://resource/test/Brush2.png";
+    public const string resource_test_Brush3_png = "res://resource/test/Brush3.png";
     public const string resource_theme_mainTheme_tres = "res://resource/theme/mainTheme.tres";
     public const string resource_theme_theme1_tres = "res://resource/theme/theme1.tres";
     public const string scene_Main_tscn = "res://scene/Main.tscn";
