@@ -3,7 +3,7 @@ shader_type canvas_item;
 //混合颜色
 uniform vec4 blend : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 //混合度
-uniform float schedule : hint_range(0.0, 1.0) = 0.0;
+uniform float schedule : hint_range(0.0, 1.0, 0.01) = 0.0;
 //
 uniform vec4 modulate : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 

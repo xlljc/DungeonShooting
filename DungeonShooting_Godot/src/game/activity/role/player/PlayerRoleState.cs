@@ -4,7 +4,7 @@ public class PlayerRoleState : RoleState
     /// <summary>
     /// 翻滚速度
     /// </summary>
-    public float RollSpeed = 400f;
+    public float RollSpeed = 200f;
 
     /// <summary>
     /// 翻滚持续时间

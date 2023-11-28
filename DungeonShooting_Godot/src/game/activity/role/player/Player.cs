@@ -106,20 +106,20 @@ public partial class Player : Role
             _rollCoolingTimer -= delta;
         }
         
-        //脸的朝向
-        var gPos = Position;
-        Vector2 mousePos = InputManager.CursorPosition;
-        if (mousePos.X > gPos.X && Face == FaceDirection.Left)
+        if (MountLookTarget) //看向目标
         {
-            Face = FaceDirection.Right;
-        }
-        else if (mousePos.X < gPos.X && Face == FaceDirection.Right)
-        {
-            Face = FaceDirection.Left;
-        }
-
-        if (MountLookTarget)
-        {
+            //脸的朝向
+            var gPos = Position;
+            Vector2 mousePos = InputManager.CursorPosition;
+            if (mousePos.X > gPos.X && Face == FaceDirection.Left)
+            {
+                Face = FaceDirection.Right;
+            }
+            else if (mousePos.X < gPos.X && Face == FaceDirection.Right)
+            {
+                Face = FaceDirection.Left;
+            }
+            
             //枪口跟随鼠标
             MountPoint.SetLookAt(mousePos);
         }

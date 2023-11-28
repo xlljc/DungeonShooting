@@ -12,6 +12,7 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
 resource_local_to_scene = true
@@ -23,6 +24,7 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="Animation" id="Animation_x136i"]
 length = 0.001
@@ -36,10 +38,10 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0]
+"values": [0.0]
 }
 
-[sub_resource type="Animation" id="Animation_3piau"]
+[sub_resource type="Animation" id="Animation_1y7bx"]
 resource_name = "floodlight"
 length = 3.0
 loop_mode = 1
@@ -53,13 +55,13 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 2.3, 2.6, 2.7, 3),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [0, 0, 0.5, 0.5, 0]
+"values": [0.0, 0.0, 0.8, 0.8, 0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_trkjd"]
 _data = {
 "RESET": SubResource("Animation_x136i"),
-"floodlight": SubResource("Animation_3piau")
+"floodlight": SubResource("Animation_1y7bx")
 }
 
 [node name="WeaponTemplate" type="CharacterBody2D"]
