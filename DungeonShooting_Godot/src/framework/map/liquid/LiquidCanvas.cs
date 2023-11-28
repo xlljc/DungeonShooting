@@ -25,7 +25,8 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
     
     //画布上的像素点
     private LiquidPixel[,] _imagePixels;
-    private List<LiquidPixel> _cacheImagePixels = new List<LiquidPixel>();
+    //需要执行更新的像素点
+    private List<LiquidPixel> _updateImagePixels = new List<LiquidPixel>();
     //画布已经运行的时间
     private float _runTime = 0;
     private int _executeIndex = -1;
@@ -66,12 +67,12 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
         //这里待优化, 应该每次绘制都将像素点放入 _tempList 中, 然后帧结束再统一提交
 
         //更新消除逻辑
-        if (_cacheImagePixels.Count > 0)
+        if (_updateImagePixels.Count > 0)
         {
             var startIndex = _executeIndex;
-            if (_executeIndex < 0 || _executeIndex >= _cacheImagePixels.Count)
+            if (_executeIndex < 0 || _executeIndex >= _updateImagePixels.Count)
             {
-                _executeIndex = _cacheImagePixels.Count - 1;
+                _executeIndex = _updateImagePixels.Count - 1;
             }
 
             var startTime = DateTime.UtcNow;
@@ -80,10 +81,10 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
             for (; _executeIndex >= 0; _executeIndex--)
             {
                 index++;
-                var imagePixel = _cacheImagePixels[_executeIndex];
+                var imagePixel = _updateImagePixels[_executeIndex];
                 if (UpdateImagePixel(imagePixel)) //移除
                 {
-                    _cacheImagePixels.RemoveAt(_executeIndex);
+                    _updateImagePixels.RemoveAt(_executeIndex);
                     if (_executeIndex < startIndex)
                     {
                         startIndex--;
@@ -103,14 +104,14 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
 
             if (!isOver && startIndex >= 0 && _executeIndex < 0)
             {
-                _executeIndex = _cacheImagePixels.Count - 1;
+                _executeIndex = _updateImagePixels.Count - 1;
                 for (; _executeIndex >= startIndex; _executeIndex--)
                 {
                     index++;
-                    var imagePixel = _cacheImagePixels[_executeIndex];
+                    var imagePixel = _updateImagePixels[_executeIndex];
                     if (UpdateImagePixel(imagePixel)) //移除
                     {
-                        _cacheImagePixels.RemoveAt(_executeIndex);
+                        _updateImagePixels.RemoveAt(_executeIndex);
                     }
                     
                     if (index > 200)
@@ -141,6 +142,27 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
     {
         return (_roomInfo.ToCanvasPosition(position) / CanvasScale).AsVector2I();
     }
+
+    /// <summary>
+    /// 根据画笔数据在画布上绘制液体, 转换坐标请调用 ToLiquidCanvasPosition() 函数
+    /// </summary>
+    /// <param name="brush">画笔数据</param>
+    /// <param name="position">绘制坐标, 相对于画布坐标</param>
+    public void DrawBrush(BrushImageData brush, Vector2I position)
+    {
+        DrawBrush(brush, null, position, 0);
+    }
+    
+    /// <summary>
+    /// 根据画笔数据在画布上绘制液体, 转换坐标请调用 ToLiquidCanvasPosition() 函数
+    /// </summary>
+    /// <param name="brush">画笔数据</param>
+    /// <param name="position">绘制坐标, 相对于画布坐标</param>
+    /// <param name="rotation">旋转角度, 弧度制</param>
+    public void DrawBrush(BrushImageData brush, Vector2I position, float rotation)
+    {
+        DrawBrush(brush, null, position, rotation);
+    }
     
     /// <summary>
     /// 根据画笔数据在画布上绘制液体, 转换坐标请调用 ToLiquidCanvasPosition() 函数
@@ -159,11 +181,11 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
         if (prevPosition != null)
         {
             var offset = new Vector2(position.X - prevPosition.Value.X, position.Y - prevPosition.Value.Y);
-            var maxL = Mathf.Lerp(
+            var maxL = brush.Material.Ffm * Mathf.Lerp(
                 brush.PixelHeight,
                 brush.PixelWidth,
                 Mathf.Abs(Mathf.Sin(offset.Angle() - rotation + Mathf.Pi * 0.5f))
-            ) * brush.Ffm;
+            );
             var len = offset.Length();
             if (len > maxL) //距离太大了, 需要补间
             {
@@ -267,7 +289,7 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
     }
     
     /// <summary>
-    /// 更新像素点数据逻辑
+    /// 更新像素点数据逻辑, 返回是否擦除
     /// </summary>
     private bool UpdateImagePixel(LiquidPixel imagePixel)
     {
@@ -280,13 +302,14 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
             }
             else
             {
-                imagePixel.Color.A -= imagePixel.WriteOffSpeed * (_runTime - imagePixel.TempTime);
+                imagePixel.Color.A -= imagePixel.Material.WriteOffSpeed * (_runTime - imagePixel.TempTime);
                 
                 if (imagePixel.Color.A <= 0) //完全透明了
                 {
                     _changeFlag = true;
                     _image.SetPixel(imagePixel.X, imagePixel.Y, new Color(0, 0, 0, 0));
                     imagePixel.IsRun = false;
+                    imagePixel.IsUpdate = false;
                     return true;
                 }
                 else
@@ -312,22 +335,25 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
                 X = x,
                 Y = y,
                 Color = pixelData.Color,
-                Type = pixelData.Type,
-                Timer = pixelData.Duration,
-                WriteOffSpeed = pixelData.WriteOffSpeed,
+                Material = pixelData.Material,
+                Timer = pixelData.Material.Duration,
             };
             _imagePixels[x, y] = temp;
-                    
-            _cacheImagePixels.Add(temp);
+
             temp.IsRun = true;
+            temp.IsUpdate = temp.Material.Duration >= 0;
+            if (temp.IsUpdate)
+            {
+                _updateImagePixels.Add(temp);
+            }
             temp.TempTime = _runTime;
         }
         else
         {
-            if (temp.Type != pixelData.Type)
+            if (temp.Material != pixelData.Material)
             {
                 temp.Color = pixelData.Color;
-                temp.Type = pixelData.Type;
+                temp.Material = pixelData.Material;
             }
             else
             {
@@ -335,14 +361,21 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
                 temp.Color = new Color(tempColor.R, tempColor.G, tempColor.B, Mathf.Max(temp.Color.A, tempColor.A));
             }
             
-            temp.WriteOffSpeed = pixelData.WriteOffSpeed;
-            temp.Timer = pixelData.Duration;
-            if (!temp.IsRun)
+            temp.Timer = pixelData.Material.Duration;
+            
+            var prevUpdate = temp.IsUpdate;
+            temp.IsUpdate = temp.Material.Duration >= 0;
+            if (!prevUpdate && temp.IsUpdate)
             {
-                _cacheImagePixels.Add(temp);
-                temp.IsRun = true;
-                temp.TempTime = _runTime;
+                _updateImagePixels.Add(temp);
             }
+            else if (prevUpdate && !temp.IsUpdate)
+            {
+                _updateImagePixels.Remove(temp);
+            }
+            
+            temp.IsRun = true;
+            temp.TempTime = _runTime;
         }
 
         return temp;

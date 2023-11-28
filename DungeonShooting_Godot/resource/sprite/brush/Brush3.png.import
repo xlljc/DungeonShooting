@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://jnx4wfn5hu3u"
-path="res://.godot/imported/Brush3.png-c626025ee33281acc6b1ad59b29276c7.ctex"
+path="res://.godot/imported/Brush3.png-1030dd2952f08d45fe719009951c0ba1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/test/Brush3.png"
-dest_files=["res://.godot/imported/Brush3.png-c626025ee33281acc6b1ad59b29276c7.ctex"]
+source_file="res://resource/sprite/brush/Brush3.png"
+dest_files=["res://.godot/imported/Brush3.png-1030dd2952f08d45fe719009951c0ba1.ctex"]
 
 [params]
 

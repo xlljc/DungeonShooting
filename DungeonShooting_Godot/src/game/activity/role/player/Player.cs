@@ -1,4 +1,5 @@
 using System;
+using Config;
 using Godot;
 
 
@@ -82,7 +83,7 @@ public partial class Player : Role
         
         //InitSubLine();
         
-        _brushData2 = new BrushImageData(ResourceManager.LoadTexture2D(ResourcePath.resource_test_Brush2_png).GetImage(), 2, 0.5f, 5, 0.2f);
+        _brushData2 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0001"]);
     }
 
     protected override RoleState OnCreateRoleState()

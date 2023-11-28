@@ -166,6 +166,9 @@ public class ResourcePath
     public const string resource_sound_sfx_shooting_Shooting0009_ogg = "res://resource/sound/sfx/shooting/Shooting0009.ogg";
     public const string resource_sound_sfx_shooting_Shooting0010_ogg = "res://resource/sound/sfx/shooting/Shooting0010.ogg";
     public const string resource_sound_sfx_shooting_Shooting0011_ogg = "res://resource/sound/sfx/shooting/Shooting0011.ogg";
+    public const string resource_sprite_brush_Brush1_png = "res://resource/sprite/brush/Brush1.png";
+    public const string resource_sprite_brush_Brush2_png = "res://resource/sprite/brush/Brush2.png";
+    public const string resource_sprite_brush_Brush3_png = "res://resource/sprite/brush/Brush3.png";
     public const string resource_sprite_bullet_laser_Laser0001_png = "res://resource/sprite/bullet/laser/Laser0001.png";
     public const string resource_sprite_bullet_normal_arrow_png = "res://resource/sprite/bullet/normal/arrow.png";
     public const string resource_sprite_bullet_normal_bullet0001_png = "res://resource/sprite/bullet/normal/bullet0001.png";
@@ -370,9 +373,6 @@ public class ResourcePath
     public const string resource_spriteFrames_weapon_Weapon0007_tres = "res://resource/spriteFrames/weapon/Weapon0007.tres";
     public const string resource_spriteFrames_weapon_Weapon0008_tres = "res://resource/spriteFrames/weapon/Weapon0008.tres";
     public const string resource_spriteFrames_weapon_Weapon0009_tres = "res://resource/spriteFrames/weapon/Weapon0009.tres";
-    public const string resource_test_Brush1_png = "res://resource/test/Brush1.png";
-    public const string resource_test_Brush2_png = "res://resource/test/Brush2.png";
-    public const string resource_test_Brush3_png = "res://resource/test/Brush3.png";
     public const string resource_theme_mainTheme_tres = "res://resource/theme/mainTheme.tres";
     public const string resource_theme_theme1_tres = "res://resource/theme/theme1.tres";
     public const string scene_Main_tscn = "res://scene/Main.tscn";

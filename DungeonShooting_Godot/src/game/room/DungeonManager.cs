@@ -299,6 +299,7 @@ public partial class DungeonManager : Node2D
         GameApplication.Instance.DestroyWorld();
         yield return 0;
         FogMaskHandler.ClearRecordRoom();
+        BrushImageData.ClearBrushData();
         QueueRedraw();
         //鼠标还原
         GameApplication.Instance.Cursor.SetGuiMode(true);
@@ -325,10 +326,10 @@ public partial class DungeonManager : Node2D
         CreateRoomAffiliation(roomInfo);
         //创建 RoomStaticSprite
         CreateRoomStaticSprite(roomInfo);
-        //创建液体区域
-        CreateRoomLiquidCanvas(roomInfo);
         //创建静态精灵画布
         CreateRoomStaticImageCanvas(roomInfo);
+        //创建液体区域
+        CreateRoomLiquidCanvas(roomInfo);
         //创建迷雾遮罩
         CreateRoomFogMask(roomInfo);
     }

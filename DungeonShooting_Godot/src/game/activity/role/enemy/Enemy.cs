@@ -242,8 +242,11 @@ public partial class Enemy : Role
             MountPoint.SetLookAt(pos);
         }
 
-        //拾起武器操作
-        EnemyPickUpWeapon();
+        if (EnemyRoleState.CanPickUpWeapon)
+        {
+            //拾起武器操作
+            EnemyPickUpWeapon();
+        }
     }
 
     public override bool IsAllWeaponTotalAmmoEmpty()

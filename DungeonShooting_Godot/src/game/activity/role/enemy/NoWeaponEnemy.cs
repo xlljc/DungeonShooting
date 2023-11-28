@@ -17,7 +17,7 @@ public partial class NoWeaponEnemy : Enemy
         NoWeaponAttack = true;
         AnimationPlayer.AnimationFinished += OnAnimationFinished;
         
-        _brushData3 = new BrushImageData(ResourceManager.LoadTexture2D(ResourcePath.resource_test_Brush3_png).GetImage(), 3, 0.7f, 4, 0.2f);
+        _brushData3 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0002"]);
     }
 
     protected override void Process(float delta)

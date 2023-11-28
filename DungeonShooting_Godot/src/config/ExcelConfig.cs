@@ -53,6 +53,15 @@ public static partial class ExcelConfig
     public static Dictionary<string, EnemyBase> EnemyBase_Map { get; private set; }
 
     /// <summary>
+    /// LiquidMaterial.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// </summary>
+    public static List<LiquidMaterial> LiquidMaterial_List { get; private set; }
+    /// <summary>
+    /// LiquidMaterial.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// </summary>
+    public static Dictionary<string, LiquidMaterial> LiquidMaterial_Map { get; private set; }
+
+    /// <summary>
     /// Sound.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
     public static List<Sound> Sound_List { get; private set; }
@@ -85,6 +94,7 @@ public static partial class ExcelConfig
         _InitAiAttackAttrConfig();
         _InitBulletBaseConfig();
         _InitEnemyBaseConfig();
+        _InitLiquidMaterialConfig();
         _InitSoundConfig();
         _InitWeaponBaseConfig();
 
@@ -180,6 +190,24 @@ public static partial class ExcelConfig
         {
             GD.PrintErr(e.ToString());
             throw new Exception("初始化表'EnemyBase'失败!");
+        }
+    }
+    private static void _InitLiquidMaterialConfig()
+    {
+        try
+        {
+            var text = _ReadConfigAsText("res://resource/config/LiquidMaterial.json");
+            LiquidMaterial_List = JsonSerializer.Deserialize<List<LiquidMaterial>>(text);
+            LiquidMaterial_Map = new Dictionary<string, LiquidMaterial>();
+            foreach (var item in LiquidMaterial_List)
+            {
+                LiquidMaterial_Map.Add(item.Id, item);
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            throw new Exception("初始化表'LiquidMaterial'失败!");
         }
     }
     private static void _InitSoundConfig()

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using Config;
 
 public partial class TestMask2 : SubViewportContainer
 {
@@ -27,8 +28,8 @@ public partial class TestMask2 : SubViewportContainer
     {
         Engine.MaxFps = (int)DisplayServer.ScreenGetRefreshRate();
         //Engine.MaxFps = 5;
-        _brushData1 = new BrushImageData(Brush1.GetImage(), 1, 0.5f, 5, 0.1f);
-        _brushData2 = new BrushImageData(Brush2.GetImage(), 2, 0.5f, 5, 0.2f);
+        _brushData1 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0001"]);
+        _brushData2 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0002"]);
         _liquidCanvas = new LiquidCanvas(null, (int)(Size.X / LiquidCanvas.CanvasScale), (int)(Size.X / LiquidCanvas.CanvasScale));
         GetNode("SubViewport").AddChild(_liquidCanvas);
     }

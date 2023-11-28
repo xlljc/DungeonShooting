@@ -1,5 +1,6 @@
 ﻿
 
+using Config;
 using Godot;
 
 /// <summary>
@@ -20,21 +21,21 @@ public class LiquidPixel
     /// </summary>
     public Color Color;
     /// <summary>
-    /// 材质类型
+    /// 材质液体材质
     /// </summary>
-    public byte Type;
+    public ExcelConfig.LiquidMaterial Material;
     /// <summary>
     /// 开始销退像素点的计时器
     /// </summary>
     public float Timer;
     /// <summary>
-    /// 消退速度, 也就是 Alpha 值每秒变化的速度
-    /// </summary>
-    public float WriteOffSpeed;
-    /// <summary>
     /// 记录是否正在画布上显示
     /// </summary>
     public bool IsRun;
+    /// <summary>
+    /// 是否执行更新逻辑
+    /// </summary>
+    public bool IsUpdate;
     /// <summary>
     /// 上一次操作 Alpha的 时间, 用该时间和画布的 RunTime 相减可以计算出 delta
     /// </summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using Godot;
 using System.Collections.Generic;
+using Config;
 
 /// <summary>
 /// 液体笔刷数据
@@ -8,11 +9,16 @@ using System.Collections.Generic;
 public class BrushImageData
 {
     /// <summary>
-    /// 
+    /// 笔刷宽度
     /// </summary>
     public int Width;
-
+    /// <summary>
+    /// 笔刷高度
+    /// </summary>
     public int Height;
+    /// <summary>
+    /// 笔刷所有有效像素点
+    /// </summary>
     public BrushPixelData[] Pixels;
 
     //有效像素范围
@@ -20,16 +26,26 @@ public class BrushImageData
     public int PixelMinY = int.MaxValue;
     public int PixelMaxX;
     public int PixelMaxY;
-
+    
+    /// <summary>
+    /// 有效像素宽度
+    /// </summary>
     public int PixelWidth;
+    /// <summary>
+    /// 有效像素高度
+    /// </summary>
     public int PixelHeight;
+    /// <summary>
+    /// 笔刷材质
+    /// </summary>
+    public ExcelConfig.LiquidMaterial Material;
 
-    //补帧间距倍率
-    public float Ffm;
+    private static readonly Dictionary<string, Image> _imageData = new Dictionary<string, Image>();
 
-    public BrushImageData(Image image, byte type, float ffm, float duration, float writeOffSpeed)
+    public BrushImageData(ExcelConfig.LiquidMaterial material)
     {
-        Ffm = ffm;
+        Material = material;
+        var image = GetImageData(material.BurshTexture);
         var list = new List<BrushPixelData>();
         var width = image.GetWidth();
         var height = image.GetHeight();
@@ -47,9 +63,7 @@ public class BrushImageData
                         X = x,
                         Y = y,
                         Color = pixel,
-                        Type = type,
-                        Duration = duration,
-                        WriteOffSpeed = writeOffSpeed
+                        Material = material
                     });
                     if (x < PixelMinX)
                     {
@@ -83,5 +97,28 @@ public class BrushImageData
 
         PixelWidth = PixelMaxX - PixelMinX;
         PixelHeight = PixelMaxY - PixelMinY;
+    }
+
+    private static Image GetImageData(string path)
+    {
+        if (!_imageData.TryGetValue(path, out var image))
+        {
+            var texture = ResourceManager.LoadTexture2D(path);
+            image = texture.GetImage();
+        }
+
+        return image;
+    }
+
+    /// <summary>
+    /// 清除笔刷缓存数据
+    /// </summary>
+    public static void ClearBrushData()
+    {
+        foreach (var keyValuePair in _imageData)
+        {
+            keyValuePair.Value.Dispose();
+        }
+        _imageData.Clear();
     }
 }
