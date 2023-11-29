@@ -242,6 +242,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         get => _blendShaderMaterial == null ? 0 : _blendShaderMaterial.GetShaderParameter(_shader_grey).AsSingle();
         set => _blendShaderMaterial?.SetShaderParameter(_shader_grey, value);
     }
+    
+    /// <summary>
+    /// 是否是自定义阴影纹理
+    /// </summary>
+    public bool IsCustomShadowSprite { get; private set; }
 
     // --------------------------------------------------------------------------------
 
@@ -256,7 +261,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     //修改的组件集合, value 为 true 表示添加组件, false 表示移除组件
     private readonly List<KeyValuePair<Component, bool>> _changeComponents = new List<KeyValuePair<Component, bool>>();
     //上一帧动画名称
-    private string _prevAnimation;
+    private StringName _prevAnimation;
     //上一帧动画
     private int _prevAnimationFrame;
 
@@ -347,17 +352,21 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         ActivityBase = config;
         Name = GetType().Name + (_instanceIndex++);
         Id = _instanceIndex;
+        
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
-        _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
-
-
-        if (_shadowBlendShaderMaterial != null && _blendShaderMaterial != null)
+        IsCustomShadowSprite = ShadowSprite.Texture != null;
+        if (!IsCustomShadowSprite) //没有自定义阴影纹理
         {
-            var value = _blendShaderMaterial.GetShaderParameter(_shader_show_outline);
-            _shadowBlendShaderMaterial.SetShaderParameter(_shader_show_outline, value);
+            _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
+            if (_shadowBlendShaderMaterial != null && _blendShaderMaterial != null)
+            {
+                var value = _blendShaderMaterial.GetShaderParameter(_shader_show_outline);
+                _shadowBlendShaderMaterial.SetShaderParameter(_shader_show_outline, value);
+            }
+            
+            ShadowSprite.Visible = false;
         }
 
-        ShadowSprite.Visible = false;
         MotionMode = MotionModeEnum.Floating;
         MoveController = AddComponent<MoveController>();
         IsStatic = config.IsStatic;
@@ -408,21 +417,24 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public void ShowShadowSprite()
     {
-        var anim = AnimatedSprite.Animation;
-        
-        var frame = AnimatedSprite.Frame;
-        if (_prevAnimation != anim || _prevAnimationFrame != frame)
+        if (!IsCustomShadowSprite)
         {
-            var frames = AnimatedSprite.SpriteFrames;
-            if (frames != null && frames.HasAnimation(anim))
+            var anim = AnimatedSprite.Animation;
+        
+            var frame = AnimatedSprite.Frame;
+            if (_prevAnimation != anim || _prevAnimationFrame != frame)
             {
-                //切换阴影动画
-                ShadowSprite.Texture = frames.GetFrameTexture(anim, frame);
+                var frames = AnimatedSprite.SpriteFrames;
+                if (frames != null && frames.HasAnimation(anim))
+                {
+                    //切换阴影动画
+                    ShadowSprite.Texture = frames.GetFrameTexture(anim, frame);
+                }
             }
-        }
 
-        _prevAnimation = anim;
-        _prevAnimationFrame = frame;
+            _prevAnimation = anim;
+            _prevAnimationFrame = frame;
+        }
 
         IsShowShadow = true;
         CalcShadowTransform();
@@ -936,7 +948,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public void SetBlendColor(Color color)
     {
-        _blendShaderMaterial.SetShaderParameter("blend", color);
+        _blendShaderMaterial?.SetShaderParameter("blend", color);
     }
 
     /// <summary>
@@ -944,6 +956,10 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public Color GetBlendColor()
     {
+        if (_blendShaderMaterial == null)
+        {
+            return Colors.White;
+        }
         return _blendShaderMaterial.GetShaderParameter("blend").AsColor();
     }
     
@@ -952,7 +968,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public void SetBlendSchedule(float value)
     {
-        _blendShaderMaterial.SetShaderParameter("schedule", value);
+        _blendShaderMaterial?.SetShaderParameter("schedule", value);
     }
 
     /// <summary>
@@ -960,6 +976,10 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public float GetBlendSchedule()
     {
+        if (_blendShaderMaterial == null)
+        {
+            return default;
+        }
         return _blendShaderMaterial.GetShaderParameter("schedule").AsSingle();
     }
 
@@ -968,8 +988,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public void SetBlendModulate(Color color)
     {
-        _blendShaderMaterial.SetShaderParameter("modulate", color);
-        _shadowBlendShaderMaterial.SetShaderParameter("modulate", color);
+        _blendShaderMaterial?.SetShaderParameter("modulate", color);
+        _shadowBlendShaderMaterial?.SetShaderParameter("modulate", color);
     }
     
     /// <summary>
@@ -977,6 +997,10 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public Color SetBlendModulate()
     {
+        if (_blendShaderMaterial == null)
+        {
+            return Colors.White;
+        }
         return _blendShaderMaterial.GetShaderParameter("modulate").AsColor();
     }
     
@@ -1039,15 +1063,15 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         {
             if (_playHitSchedule < 0.05f)
             {
-                _blendShaderMaterial.SetShaderParameter("schedule", 1);
+                _blendShaderMaterial?.SetShaderParameter("schedule", 1);
             }
             else if (_playHitSchedule < 0.15f)
             {
-                _blendShaderMaterial.SetShaderParameter("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
+                _blendShaderMaterial?.SetShaderParameter("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
             }
             if (_playHitSchedule >= 0.15f)
             {
-                _blendShaderMaterial.SetShaderParameter("schedule", 0);
+                _blendShaderMaterial?.SetShaderParameter("schedule", 0);
                 _playHitSchedule = 0;
                 _playHit = false;
             }
@@ -1188,17 +1212,20 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         // 阴影
         if (ShadowSprite.Visible)
         {
-            //更新阴影贴图, 使其和动画一致
-            var anim = AnimatedSprite.Animation;
-            var frame = AnimatedSprite.Frame;
-            if (_prevAnimation != anim || _prevAnimationFrame != frame)
+            if (!IsCustomShadowSprite)
             {
-                //切换阴影动画
-                ShadowSprite.Texture = AnimatedSprite.SpriteFrames.GetFrameTexture(anim, AnimatedSprite.Frame);
-            }
+                //更新阴影贴图, 使其和动画一致
+                var anim = AnimatedSprite.Animation;
+                var frame = AnimatedSprite.Frame;
+                if (_prevAnimation != anim || _prevAnimationFrame != frame)
+                {
+                    //切换阴影动画
+                    ShadowSprite.Texture = AnimatedSprite.SpriteFrames.GetFrameTexture(anim, AnimatedSprite.Frame);
+                }
 
-            _prevAnimation = anim;
-            _prevAnimationFrame = frame;
+                _prevAnimation = anim;
+                _prevAnimationFrame = frame;
+            }
 
             if (_freezeSprite == null || !_freezeSprite.IsFrozen)
             {

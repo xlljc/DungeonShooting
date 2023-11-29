@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=24 format=3 uid="uid://n11thtali6es"]
+[gd_resource type="SpriteFrames" load_steps=26 format=3 uid="uid://n11thtali6es"]
 
 [ext_resource type="Texture2D" uid="uid://ekas4lqprrml" path="res://resource/sprite/role/role0001/idle/Sprite-0002.png" id="1_le6bk"]
 [ext_resource type="Texture2D" uid="uid://b81k08ofpf2oo" path="res://resource/sprite/role/role0001/idle/Sprite-0003.png" id="2_whsc2"]
@@ -23,6 +23,8 @@
 [ext_resource type="Texture2D" uid="uid://vs7ip3v274e2" path="res://resource/sprite/role/role0001/roll/Sprite-0015.png" id="22_aoq4g"]
 [ext_resource type="Texture2D" uid="uid://bmoh16y1r2h1w" path="res://resource/sprite/role/role0001/roll/Sprite-0009.png" id="22_yc5ek"]
 [ext_resource type="Texture2D" uid="uid://b7yrbkcy1g56a" path="res://resource/sprite/role/role0001/roll/Sprite-0016.png" id="23_8xesy"]
+[ext_resource type="Texture2D" uid="uid://b7s4yf5ic37cd" path="res://resource/sprite/role/role0001/roll/Sprite-0017.png" id="24_83arr"]
+[ext_resource type="Texture2D" uid="uid://c0ik1lwfjlr7y" path="res://resource/sprite/role/role0001/roll/Sprite-0018.png" id="25_6hy4b"]
 
 [resource]
 animations = [{
@@ -113,6 +115,12 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("23_8xesy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_83arr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_6hy4b")
 }],
 "loop": false,
 "name": &"roll",

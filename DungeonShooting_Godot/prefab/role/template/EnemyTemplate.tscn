@@ -1,18 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dbrig6dq441wo"]
+[gd_scene load_steps=4 format=3 uid="uid://dbrig6dq441wo"]
 
 [ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/template/RoleTemplate.tscn" id="1_5po38"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_x8agd"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8vxx6"]
-resource_local_to_scene = true
-shader = ExtResource("3_x8agd")
-shader_parameter/blend = Color(0, 0, 0, 0.470588)
-shader_parameter/schedule = 1.0
-shader_parameter/modulate = Color(1, 1, 1, 1)
-shader_parameter/show_outline = true
-shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/outline_rainbow = false
-shader_parameter/outline_use_blend = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k8mt5"]
 resource_local_to_scene = true
@@ -24,13 +13,11 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [node name="EnemyTemplate" instance=ExtResource("1_5po38")]
 collision_layer = 16
 collision_mask = 25
-
-[node name="ShadowSprite" parent="." index="0"]
-material = SubResource("ShaderMaterial_8vxx6")
 
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_k8mt5")

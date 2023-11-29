@@ -95,6 +95,7 @@ public class ResourcePath
     public const string resource_config_AiAttackAttr_json = "res://resource/config/AiAttackAttr.json";
     public const string resource_config_BulletBase_json = "res://resource/config/BulletBase.json";
     public const string resource_config_EnemyBase_json = "res://resource/config/EnemyBase.json";
+    public const string resource_config_LiquidMaterial_json = "res://resource/config/LiquidMaterial.json";
     public const string resource_config_Sound_json = "res://resource/config/Sound.json";
     public const string resource_config_WeaponBase_json = "res://resource/config/WeaponBase.json";
     public const string resource_curve_Curve1_tres = "res://resource/curve/Curve1.tres";
@@ -225,6 +226,7 @@ public class ResourcePath
     public const string resource_sprite_role_common_Role_astonished_png = "res://resource/sprite/role/common/Role_astonished.png";
     public const string resource_sprite_role_common_Role_notify_png = "res://resource/sprite/role/common/Role_notify.png";
     public const string resource_sprite_role_common_Role_query_png = "res://resource/sprite/role/common/Role_query.png";
+    public const string resource_sprite_role_common_Role_shadow1_png = "res://resource/sprite/role/common/Role_shadow1.png";
     public const string resource_sprite_role_enemy0001_enemy0001_png = "res://resource/sprite/role/enemy0001/enemy0001.png";
     public const string resource_sprite_role_enemy0001_enemy0001_Debris_png = "res://resource/sprite/role/enemy0001/enemy0001_Debris.png";
     public const string resource_sprite_role_enemy0001_enemy0001_Icon_png = "res://resource/sprite/role/enemy0001/enemy0001_Icon.png";
@@ -244,6 +246,15 @@ public class ResourcePath
     public const string resource_sprite_role_role0001_idle_Sprite0008_png = "res://resource/sprite/role/role0001/idle/Sprite-0008.png";
     public const string resource_sprite_role_role0001_roll_Sprite0008_png = "res://resource/sprite/role/role0001/roll/Sprite-0008.png";
     public const string resource_sprite_role_role0001_roll_Sprite0009_png = "res://resource/sprite/role/role0001/roll/Sprite-0009.png";
+    public const string resource_sprite_role_role0001_roll_Sprite0010_png = "res://resource/sprite/role/role0001/roll/Sprite-0010.png";
+    public const string resource_sprite_role_role0001_roll_Sprite0011_png = "res://resource/sprite/role/role0001/roll/Sprite-0011.png";
+    public const string resource_sprite_role_role0001_roll_Sprite0012_png = "res://resource/sprite/role/role0001/roll/Sprite-0012.png";
+    public const string resource_sprite_role_role0001_roll_Sprite0013_png = "res://resource/sprite/role/role0001/roll/Sprite-0013.png";
+    public const string resource_sprite_role_role0001_roll_Sprite0014_png = "res://resource/sprite/role/role0001/roll/Sprite-0014.png";
+    public const string resource_sprite_role_role0001_roll_Sprite0015_png = "res://resource/sprite/role/role0001/roll/Sprite-0015.png";
+    public const string resource_sprite_role_role0001_roll_Sprite0016_png = "res://resource/sprite/role/role0001/roll/Sprite-0016.png";
+    public const string resource_sprite_role_role0001_roll_Sprite0017_png = "res://resource/sprite/role/role0001/roll/Sprite-0017.png";
+    public const string resource_sprite_role_role0001_roll_Sprite0018_png = "res://resource/sprite/role/role0001/roll/Sprite-0018.png";
     public const string resource_sprite_role_role0001_run_Sprite0002_png = "res://resource/sprite/role/role0001/run/Sprite-0002.png";
     public const string resource_sprite_role_role0001_run_Sprite0003_png = "res://resource/sprite/role/role0001/run/Sprite-0003.png";
     public const string resource_sprite_role_role0001_run_Sprite0004_png = "res://resource/sprite/role/role0001/run/Sprite-0004.png";

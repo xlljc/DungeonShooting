@@ -1,30 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxltmhhp4rbyk"]
-
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_3p8rg"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
-resource_local_to_scene = true
-shader = ExtResource("1_3p8rg")
-shader_parameter/blend = Color(0, 0, 0, 0.470588)
-shader_parameter/schedule = 1.0
-shader_parameter/modulate = Color(1, 1, 1, 1)
-shader_parameter/show_outline = true
-shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/outline_rainbow = false
-shader_parameter/outline_use_blend = true
-shader_parameter/grey = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
-resource_local_to_scene = true
-shader = ExtResource("1_3p8rg")
-shader_parameter/blend = Color(1, 1, 1, 1)
-shader_parameter/schedule = 0.0
-shader_parameter/modulate = Color(1, 1, 1, 1)
-shader_parameter/show_outline = true
-shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/outline_rainbow = false
-shader_parameter/outline_use_blend = true
-shader_parameter/grey = 0.0
+[gd_scene load_steps=4 format=3 uid="uid://cxltmhhp4rbyk"]
 
 [sub_resource type="Animation" id="Animation_x136i"]
 length = 0.001
@@ -69,10 +43,8 @@ collision_layer = 4
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1
-material = SubResource("ShaderMaterial_cbiyh")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-material = SubResource("ShaderMaterial_o36tv")
 
 [node name="ShellPoint" type="Marker2D" parent="AnimatedSprite"]
 position = Vector2(0, -2)

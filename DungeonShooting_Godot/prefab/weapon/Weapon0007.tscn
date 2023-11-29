@@ -15,6 +15,7 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_277ni"]
 resource_local_to_scene = true
@@ -26,6 +27,7 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4pn1i"]
 size = Vector2(20, 6)

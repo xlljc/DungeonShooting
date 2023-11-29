@@ -1,19 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cyrcv2jdgr8cf"]
+[gd_scene load_steps=8 format=3 uid="uid://cyrcv2jdgr8cf"]
 
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_xk5yk"]
 [ext_resource type="Script" path="res://src/game/activity/role/MountRotation.cs" id="2_5ddpw"]
 [ext_resource type="SpriteFrames" uid="uid://c8h5svp76h3kw" path="res://resource/spriteFrames/role/Role_tip.tres" id="3_bo78w"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v2kfw"]
-resource_local_to_scene = true
-shader = ExtResource("1_xk5yk")
-shader_parameter/blend = Color(0, 0, 0, 0.470588)
-shader_parameter/schedule = 0.0
-shader_parameter/modulate = Color(1, 1, 1, 1)
-shader_parameter/show_outline = true
-shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/outline_rainbow = false
-shader_parameter/outline_use_blend = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yif6x"]
 resource_local_to_scene = true
@@ -25,6 +14,7 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5pj80"]
 radius = 4.0
@@ -40,7 +30,6 @@ collision_layer = 0
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1
-material = SubResource("ShaderMaterial_v2kfw")
 
 [node name="BackMountPoint" type="Marker2D" parent="."]
 position = Vector2(0, -12)
