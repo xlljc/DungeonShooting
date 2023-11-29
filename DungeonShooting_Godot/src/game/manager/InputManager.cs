@@ -98,5 +98,6 @@ public static class InputManager
         UseActiveProp = Input.IsActionJustPressed("useActiveProp");
         RemoveProp = Input.IsActionJustPressed("removeProp");
         ExchangeProp = Input.IsActionJustPressed("exchangeProp");
+        Map = Input.IsActionJustPressed("map");
     }
 }

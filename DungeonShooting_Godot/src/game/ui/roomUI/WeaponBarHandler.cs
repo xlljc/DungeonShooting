@@ -2,14 +2,14 @@
 
 namespace UI.RoomUI;
 
-public class WeaponBar
+public class WeaponBarHandler
 {
-    private RoomUI.RoomUI_WeaponBar _weaponBar;
+    private RoomUI.WeaponBar _weaponBar;
 
     private int _prevAmmo = -1;
     private int _prevResidue = -1;
     
-    public WeaponBar(RoomUI.RoomUI_WeaponBar weaponBar)
+    public WeaponBarHandler(RoomUI.WeaponBar weaponBar)
     {
         _weaponBar = weaponBar;
         SetWeaponTexture(null);

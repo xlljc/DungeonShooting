@@ -9,21 +9,21 @@ namespace UI.RoomUI;
 /// </summary>
 public partial class RoomUIPanel : RoomUI
 {
-    private ReloadBar _reloadBar;
-    private InteractiveTipBar _interactiveTipBar;
-    private WeaponBar _weaponBar;
-    private ActivePropBar _activePropBar;
-    private LifeBar _lifeBar;
+    private ReloadBarHandler _reloadBar;
+    private InteractiveTipBarHandler _interactiveTipBar;
+    private WeaponBarHandler _weaponBar;
+    private ActivePropBarHandler _activePropBar;
+    private LifeBarHandler _lifeBar;
     
     private EventFactory _factory;
 
     public override void OnCreateUi()
     {
-        _reloadBar = new ReloadBar(L_ReloadBar);
-        _interactiveTipBar = new InteractiveTipBar(L_InteractiveTipBar);
-        _weaponBar = new WeaponBar(L_Control.L_WeaponBar);
-        _activePropBar = new ActivePropBar(L_Control.L_ActivePropBar);
-        _lifeBar = new LifeBar(L_Control.L_LifeBar);
+        _reloadBar = new ReloadBarHandler(L_ReloadBar);
+        _interactiveTipBar = new InteractiveTipBarHandler(L_InteractiveTipBar);
+        _weaponBar = new WeaponBarHandler(L_Control.L_WeaponBar);
+        _activePropBar = new ActivePropBarHandler(L_Control.L_ActivePropBar);
+        _lifeBar = new LifeBarHandler(L_Control.L_LifeBar);
     }
 
     public override void OnShowUi()

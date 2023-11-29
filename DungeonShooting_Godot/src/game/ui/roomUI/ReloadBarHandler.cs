@@ -5,13 +5,13 @@ namespace UI.RoomUI;
 /// <summary>
 /// 换弹进度组件
 /// </summary>
-public class ReloadBar
+public class ReloadBarHandler
 {
-    private RoomUI.RoomUI_ReloadBar _reloadBar;
+    private RoomUI.ReloadBar _reloadBar;
     private int width;
     private float startX = 1;
 
-    public ReloadBar(RoomUI.RoomUI_ReloadBar reloadBar)
+    public ReloadBarHandler(RoomUI.ReloadBar reloadBar)
     {
         reloadBar.Instance.Visible = false;
         _reloadBar = reloadBar;

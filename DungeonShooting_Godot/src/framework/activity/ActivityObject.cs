@@ -1345,7 +1345,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     public void CalcShadowTransform()
     {
         //偏移
-        ShadowSprite.Offset = AnimatedSprite.Offset;
+        if (!IsCustomShadowSprite)
+        {
+            ShadowSprite.Offset = AnimatedSprite.Offset;
+        }
+
         //缩放
         ShadowSprite.Scale = AnimatedSprite.Scale;
         //阴影角度

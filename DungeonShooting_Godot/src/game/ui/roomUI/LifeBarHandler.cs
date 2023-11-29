@@ -3,20 +3,20 @@ using Godot;
 
 namespace UI.RoomUI;
 
-public class LifeBar
+public class LifeBarHandler
 {
 
-    private RoomUI.RoomUI_LifeBar _bar;
-    private UiGrid<RoomUI.RoomUI_Life, LifeIconEnum> _grid;
+    private RoomUI.LifeBar _bar;
+    private UiGrid<RoomUI.Life, LifeIconEnum> _grid;
     private EventFactory _eventFactory;
     private bool _refreshFlag = false;
 
-    public LifeBar(RoomUI.RoomUI_LifeBar lifeBar)
+    public LifeBarHandler(RoomUI.LifeBar lifeBar)
     {
         _bar = lifeBar;
         var uiNodeLife = lifeBar.L_Life;
 
-        _grid = new UiGrid<RoomUI.RoomUI_Life, LifeIconEnum>(uiNodeLife, typeof(LifeCell));
+        _grid = new UiGrid<RoomUI.Life, LifeIconEnum>(uiNodeLife, typeof(LifeCell));
         _grid.SetColumns(20);
         _grid.SetCellOffset(new Vector2I(1, 2));
     }

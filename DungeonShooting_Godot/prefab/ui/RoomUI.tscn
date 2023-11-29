@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bvpmtfupny8iu"]
+[gd_scene load_steps=21 format=3 uid="uid://bvpmtfupny8iu"]
 
 [ext_resource type="Script" path="res://src/game/ui/roomUI/RoomUIPanel.cs" id="1_tfcrp"]
 [ext_resource type="Texture2D" uid="uid://b67i86mtqrn32" path="res://resource/sprite/ui/roomUI/icon_bullet.png" id="2_ruc0p"]
@@ -15,6 +15,7 @@
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="12_fgyob"]
 [ext_resource type="Texture2D" uid="uid://dwysndc5ffski" path="res://resource/sprite/ui/roomUI/ChargeProgressBar.png" id="13_6w7qi"]
 [ext_resource type="Texture2D" uid="uid://ck0w7at3oat5" path="res://resource/sprite/ui/roomUI/ChargeProgress.png" id="13_vuglj"]
+[ext_resource type="PackedScene" uid="uid://dqajn31a4b0f8" path="res://prefab/ui/RoomMap.tscn" id="16_rp3sg"]
 
 [sub_resource type="Gradient" id="1"]
 colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
@@ -33,6 +34,8 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0.941176, 0.941176, 0.941176, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7pkeh"]
 resource_local_to_scene = true
@@ -43,6 +46,8 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0.941176, 0.941176, 0.941176, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [node name="RoomUI" type="Control"]
 layout_mode = 3
@@ -332,3 +337,8 @@ scale = Vector2(0.25, 0.25)
 text = "30/90"
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="RoomMap" parent="." instance=ExtResource("16_rp3sg")]
+layout_mode = 1
+grow_horizontal = 2
+grow_vertical = 2

@@ -5,13 +5,13 @@ namespace UI.RoomUI;
 /// <summary>
 /// 互动提示文本
 /// </summary>
-public class InteractiveTipBar
+public class InteractiveTipBarHandler
 {
-    private RoomUI.RoomUI_InteractiveTipBar _interactiveTipBar;
+    private RoomUI.InteractiveTipBar _interactiveTipBar;
     private EventBinder _binder;
     private ActivityObject _interactiveTarget;
     
-    public InteractiveTipBar(RoomUI.RoomUI_InteractiveTipBar interactiveTipBar)
+    public InteractiveTipBarHandler(RoomUI.InteractiveTipBar interactiveTipBar)
     {
         interactiveTipBar.Instance.Visible = false;
         _interactiveTipBar = interactiveTipBar;

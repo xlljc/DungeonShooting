@@ -2,9 +2,9 @@
 
 namespace UI.RoomUI;
 
-public class ActivePropBar
+public class ActivePropBarHandler
 {
-    private RoomUI.RoomUI_ActivePropBar _activePropBar;
+    private RoomUI.ActivePropBar _activePropBar;
     private ShaderMaterial _shaderMaterial;
     private Vector2 _startCooldownPos;
     private Vector2 _startCooldownSize;
@@ -13,7 +13,7 @@ public class ActivePropBar
 
     private bool _initCooldown = false;
 
-    public ActivePropBar(RoomUI.RoomUI_ActivePropBar activePropBar)
+    public ActivePropBarHandler(RoomUI.ActivePropBar activePropBar)
     {
         _activePropBar = activePropBar;
         _shaderMaterial = (ShaderMaterial)_activePropBar.L_ActivePropSprite.Instance.Material;
