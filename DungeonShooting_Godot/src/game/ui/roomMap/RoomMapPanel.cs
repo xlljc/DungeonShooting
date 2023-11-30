@@ -29,7 +29,8 @@ public partial class RoomMapPanel : RoomMap
         //     World.Current.Pause = false;
         // }
         
-        S_Root.Instance.Position = S_DrawContainer.Instance.Size / 2 - Player.Current.Position / 12;
+        S_Root.Instance.Position = S_DrawContainer.Instance.Size / 2 - Player.Current.Position / 16;
+        //S_Root.Instance.Position = S_DrawContainer.Instance.Size / 2 - Player.Current.Position / 12;
     }
     
     private void DrawRoom()
@@ -37,40 +38,45 @@ public partial class RoomMapPanel : RoomMap
         var startRoom = GameApplication.Instance.DungeonManager.StartRoomInfo;
         startRoom.EachRoom(roomInfo =>
         {
-            //房间区域
-            var navigationPolygonData = roomInfo.RoomSplit.TileInfo.NavigationList[0];
-            var points = navigationPolygonData.GetPoints();
-            var newPoints = new Vector2[points.Length];
-            for (var i = 0; i < points.Length; i++)
-            {
-                newPoints[i] = roomInfo.ToGlobalPosition(points[i]);
-            }
-
-            var outline = new PolygonOutline();
-            outline.SetPoints(newPoints);
-            S_Root.AddChild(outline);
-            
-            //过道
-            if (roomInfo.Doors != null)
-            {
-                foreach (var doorInfo in roomInfo.Doors)
-                {
-                    if (doorInfo.IsForward)
-                    {
-                        var aislePoints = doorInfo.AisleNavigation.GetPoints();
-                        // var newAislePoints = new Vector2[aislePoints.Length];
-                        // for (var i = 0; i < aislePoints.Length; i++)
-                        // {
-                        //     newAislePoints[i] = roomInfo.ToGlobalPosition(aislePoints[i]);
-                        // }
-
-                        var aisleOutline = new PolygonOutline();
-                        aisleOutline.SetPoints(aislePoints);
-                        S_Root.AddChild(aisleOutline);
-                    }
-                }
-            }
-            //roomInfo.Doors[0].Navigation.OpenNavigationData
+            var sprite = new Sprite2D();
+            sprite.Texture = roomInfo.PreviewTexture;
+            sprite.Offset = roomInfo.PreviewOffset;
+            sprite.Position = roomInfo.Position;
+            S_Root.AddChild(sprite);
+            // //房间区域
+            // var navigationPolygonData = roomInfo.RoomSplit.TileInfo.NavigationList[0];
+            // var points = navigationPolygonData.GetPoints();
+            // var newPoints = new Vector2[points.Length];
+            // for (var i = 0; i < points.Length; i++)
+            // {
+            //     newPoints[i] = roomInfo.ToGlobalPosition(points[i]);
+            // }
+            //
+            // var outline = new PolygonOutline();
+            // outline.SetPoints(newPoints);
+            // S_Root.AddChild(outline);
+            //
+            // //过道
+            // if (roomInfo.Doors != null)
+            // {
+            //     foreach (var doorInfo in roomInfo.Doors)
+            //     {
+            //         if (doorInfo.IsForward)
+            //         {
+            //             var aislePoints = doorInfo.AisleNavigation.GetPoints();
+            //             // var newAislePoints = new Vector2[aislePoints.Length];
+            //             // for (var i = 0; i < aislePoints.Length; i++)
+            //             // {
+            //             //     newAislePoints[i] = roomInfo.ToGlobalPosition(aislePoints[i]);
+            //             // }
+            //
+            //             var aisleOutline = new PolygonOutline();
+            //             aisleOutline.SetPoints(aislePoints);
+            //             S_Root.AddChild(aisleOutline);
+            //         }
+            //     }
+            // }
+            // //roomInfo.Doors[0].Navigation.OpenNavigationData
         });
 
     }

@@ -119,8 +119,19 @@ public class RoomInfo : IDestroy
     /// 用于标记攻击目标位置
     /// </summary>
     public Dictionary<long, Vector2> MarkTargetPosition { get; private set; } = new Dictionary<long, Vector2>();
+
+    /// <summary>
+    /// 房间预览图, 用于小地图
+    /// </summary>
+    public ImageTexture PreviewTexture { get; set; }
+    
+    /// <summary>
+    /// 预览图偏移, 单位: 格
+    /// </summary>
+    public Vector2 PreviewOffset { get; set; }
     
     public bool IsDestroyed { get; private set; }
+
     private bool _openDoorFlag = true;
     
     // private bool _beReady = false;
@@ -368,6 +379,12 @@ public class RoomInfo : IDestroy
         if (AffiliationArea != null)
         {
             AffiliationArea.Destroy();
+        }
+
+        //销毁预览图
+        if (PreviewTexture != null)
+        {
+            PreviewTexture.Dispose();
         }
         
         MarkTargetPosition.Clear();

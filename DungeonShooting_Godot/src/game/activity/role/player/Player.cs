@@ -61,13 +61,13 @@ public partial class Player : Role
         WeaponPack.SetCapacity(4);
         
         // debug用
-        // RoleState.Acceleration = 3000;
-        // RoleState.Friction = 3000;
-        // RoleState.MoveSpeed = 500;
-        // CollisionLayer = 0;
-        // CollisionMask = 0;
+        RoleState.Acceleration = 3000;
+        RoleState.Friction = 3000;
+        RoleState.MoveSpeed = 500;
+        CollisionLayer = 0;
+        CollisionMask = 0;
         //GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
-        //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
         // this.CallDelay(0.5f, () =>
         // {
         //     var weapon = Create<Weapon>(Ids.Id_weapon0009);
