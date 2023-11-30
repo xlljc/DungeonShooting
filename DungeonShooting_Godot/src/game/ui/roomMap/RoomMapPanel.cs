@@ -29,8 +29,7 @@ public partial class RoomMapPanel : RoomMap
         //     World.Current.Pause = false;
         // }
         
-        S_Root.Instance.Position = S_DrawContainer.Instance.Size / 2 - Player.Current.Position / 16;
-        //S_Root.Instance.Position = S_DrawContainer.Instance.Size / 2 - Player.Current.Position / 12;
+        S_Root.Instance.Position = S_DrawContainer.Instance.Size / 2 - Player.Current.Position / 16 * S_Root.Instance.Scale;
     }
     
     private void DrawRoom()
@@ -39,9 +38,13 @@ public partial class RoomMapPanel : RoomMap
         startRoom.EachRoom(roomInfo =>
         {
             var sprite = new Sprite2D();
+            sprite.Centered = false;
             sprite.Texture = roomInfo.PreviewTexture;
-            sprite.Offset = roomInfo.PreviewOffset;
             sprite.Position = roomInfo.Position;
+            var material = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres);
+            material.SetShaderParameter("outline_color", new Color(1, 1, 1, 0.9f));
+            material.SetShaderParameter("scale", 0.5f);
+            sprite.Material = material;
             S_Root.AddChild(sprite);
             // //房间区域
             // var navigationPolygonData = roomInfo.RoomSplit.TileInfo.NavigationList[0];

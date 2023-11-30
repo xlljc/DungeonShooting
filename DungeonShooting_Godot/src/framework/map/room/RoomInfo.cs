@@ -124,12 +124,7 @@ public class RoomInfo : IDestroy
     /// 房间预览图, 用于小地图
     /// </summary>
     public ImageTexture PreviewTexture { get; set; }
-    
-    /// <summary>
-    /// 预览图偏移, 单位: 格
-    /// </summary>
-    public Vector2 PreviewOffset { get; set; }
-    
+
     public bool IsDestroyed { get; private set; }
 
     private bool _openDoorFlag = true;

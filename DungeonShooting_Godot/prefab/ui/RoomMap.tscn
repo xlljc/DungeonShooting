@@ -42,6 +42,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 
 [node name="DrawContainer" type="TextureRect" parent="MapBar"]
+clip_children = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,6 +57,7 @@ texture = ExtResource("3_el2ne")
 expand_mode = 1
 
 [node name="Root" type="Node2D" parent="MapBar/DrawContainer"]
+scale = Vector2(1.5, 1.5)
 
 [node name="Mark" type="Sprite2D" parent="MapBar/DrawContainer"]
 modulate = Color(0.219608, 1, 0, 1)

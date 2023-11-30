@@ -113,6 +113,10 @@ public class ResourcePath
     public const string resource_material_Blend_tres = "res://resource/material/Blend.tres";
     public const string resource_material_Mask_gdshader = "res://resource/material/Mask.gdshader";
     public const string resource_material_OffsetVertex_gdshader = "res://resource/material/OffsetVertex.gdshader";
+    public const string resource_material_Outline_gdshader = "res://resource/material/Outline.gdshader";
+    public const string resource_material_Outline_tres = "res://resource/material/Outline.tres";
+    public const string resource_material_Outline2_gdshader = "res://resource/material/Outline2.gdshader";
+    public const string resource_material_Outline2_tres = "res://resource/material/Outline2.tres";
     public const string resource_material_Sawtooth_gdshader = "res://resource/material/Sawtooth.gdshader";
     public const string resource_material_Sawtooth_tres = "res://resource/material/Sawtooth.tres";
     public const string resource_material_SmokeParticleMaterial_tres = "res://resource/material/SmokeParticleMaterial.tres";
@@ -272,6 +276,7 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_Add_png = "res://resource/sprite/ui/commonIcon/Add.png";
     public const string resource_sprite_ui_commonIcon_AreaTool_png = "res://resource/sprite/ui/commonIcon/AreaTool.png";
     public const string resource_sprite_ui_commonIcon_Back_png = "res://resource/sprite/ui/commonIcon/Back.png";
+    public const string resource_sprite_ui_commonIcon_Block_png = "res://resource/sprite/ui/commonIcon/Block.png";
     public const string resource_sprite_ui_commonIcon_CenterTool_png = "res://resource/sprite/ui/commonIcon/CenterTool.png";
     public const string resource_sprite_ui_commonIcon_Delete_png = "res://resource/sprite/ui/commonIcon/Delete.png";
     public const string resource_sprite_ui_commonIcon_DoorTool_png = "res://resource/sprite/ui/commonIcon/DoorTool.png";
@@ -295,7 +300,6 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_Visible_png = "res://resource/sprite/ui/commonIcon/Visible.png";
     public const string resource_sprite_ui_commonIcon_WaveCell_png = "res://resource/sprite/ui/commonIcon/WaveCell.png";
     public const string resource_sprite_ui_keyboard_e_png = "res://resource/sprite/ui/keyboard/e.png";
-    public const string resource_sprite_ui_mapEditor_ErrorCell_png = "res://resource/sprite/ui/mapEditor/ErrorCell.png";
     public const string resource_sprite_ui_mapEditorProject_CellBg_png = "res://resource/sprite/ui/mapEditorProject/CellBg.png";
     public const string resource_sprite_ui_mapEditorTools_DoorDragButton_png = "res://resource/sprite/ui/mapEditorTools/DoorDragButton.png";
     public const string resource_sprite_ui_mapEditorTools_DoorDragButton_down_png = "res://resource/sprite/ui/mapEditorTools/DoorDragButton_down.png";

@@ -93,21 +93,18 @@ public class DungeonTileMap
                 y2 = Mathf.Max(y2, posY);
             }
             //创建image, 这里留两个像素宽高用于描边
-            var image = Image.Create(x2 - x + 2, y2 - y + 2, false, Image.Format.Rgba8);
-            image.Fill(Colors.Green);
+            var image = Image.Create(x2 - x + 3, y2 - y + 3, false, Image.Format.Rgba8);
+            //image.Fill(Colors.Green);
             //填充像素点
             for (var i = 0; i < tileInfo.Floor.Count; i += 5)
             {
                 var posX = tileInfo.Floor[i] - x + 1;
                 var posY = tileInfo.Floor[i + 1] - y + 1;
-                image.SetPixel(posX, posY, new Color(1, 0, 0, 0.5882353F));
-                //image.SetPixel(posX, posY, new Color(0, 0, 0, 0.5882353F));
+                image.SetPixel(posX, posY, new Color(0, 0, 0, 0.5882353F));
             }
-            image.SetPixel(0, 0, Colors.Blue);
             //创建texture
             var imageTexture = ImageTexture.CreateFromImage(image);
             roomInfo.PreviewTexture = imageTexture;
-            roomInfo.PreviewOffset = new Vector2(-x, -y);
 
             //---------------------- 填充tile操作 ----------------------
             //底层

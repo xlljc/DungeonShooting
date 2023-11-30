@@ -63,8 +63,8 @@ public class DungeonGenerator
 
     //区域限制
     private bool _enableLimitRange = true;
-    private int _rangeX = 200;
-    private int _rangeY = 200;
+    private int _rangeX = 150;
+    private int _rangeY = 150;
     
     //找房间失败次数, 过大则会关闭区域限制
     private int _maxFailCount = 10;
@@ -273,8 +273,11 @@ public class DungeonGenerator
                     Debug.Log("超出区域失败次数: " + _failCount);
                     if (_failCount >= _maxFailCount)
                     {
-                        _enableLimitRange = false;
-                        Debug.Log("生成房间失败次数过多, 关闭区域限制!");
+                        //_enableLimitRange = false;
+                        _failCount = 0;
+                        _rangeX += 50;
+                        _rangeY += 50;
+                        Debug.Log("生成房间失败次数过多, 增大区域");
                     }
                 }
             }
