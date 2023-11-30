@@ -1,15 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://dqajn31a4b0f8"]
+[gd_scene load_steps=5 format=3 uid="uid://bmj3p25gwpqpn"]
 
 [ext_resource type="Script" path="res://src/game/ui/roomMap/RoomMapPanel.cs" id="1_ng7b3"]
+[ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/roomUI/MapBar.png" id="2_m52os"]
+[ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/commonIcon/Block.png" id="3_el2ne"]
+[ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="5_4sud2"]
 
 [node name="RoomMap" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_ng7b3")
 
 [node name="Bg" type="ColorRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,3 +23,44 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.196078)
+
+[node name="MapBar" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -257.0
+offset_top = 20.0
+offset_right = -198.0
+offset_bottom = 79.0
+grow_horizontal = 0
+scale = Vector2(4, 4)
+texture = ExtResource("2_m52os")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="DrawContainer" type="TextureRect" parent="MapBar"]
+clip_children = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_el2ne")
+expand_mode = 1
+
+[node name="Root" type="Node2D" parent="MapBar/DrawContainer"]
+scale = Vector2(0.083, 0.083)
+
+[node name="Mark" type="Sprite2D" parent="MapBar/DrawContainer"]
+modulate = Color(0.219608, 1, 0, 1)
+position = Vector2(28, 28)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("5_4sud2")

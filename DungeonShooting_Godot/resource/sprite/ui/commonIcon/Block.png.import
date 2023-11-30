@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://0878uloew5jo"
-path="res://.godot/imported/ErrorCell.png-adb91a4f9cc859a7b631f14ff0f58d18.ctex"
+path="res://.godot/imported/Block.png-4258899b4697128b8bd3fbca1e9d2093.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/ui/mapEditor/ErrorCell.png"
-dest_files=["res://.godot/imported/ErrorCell.png-adb91a4f9cc859a7b631f14ff0f58d18.ctex"]
+source_file="res://resource/sprite/ui/commonIcon/Block.png"
+dest_files=["res://.godot/imported/Block.png-4258899b4697128b8bd3fbca1e9d2093.ctex"]
 
 [params]
 

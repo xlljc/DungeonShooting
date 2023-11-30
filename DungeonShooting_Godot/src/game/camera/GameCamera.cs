@@ -27,7 +27,7 @@ public partial class GameCamera : Camera2D
     public static GameCamera Main { get; private set; }
 
     /// <summary>
-    /// 相机坐标更新完成事件
+    /// 相机坐标更新完成事件, 参数为 delta
     /// </summary>
     public event Action<float> OnPositionUpdateEvent;
 

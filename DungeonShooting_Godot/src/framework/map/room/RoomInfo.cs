@@ -491,4 +491,19 @@ public class RoomInfo : IDestroy
             }
         }
     }
+    
+    /// <summary>
+    /// 遍历房间以及后面的房间
+    /// </summary>
+    public void EachRoom(Action<RoomInfo> callback)
+    {
+        callback(this);
+        if (Next != null)
+        {
+            foreach (var room in Next)
+            {
+                room.EachRoom(callback);
+            }
+        }
+    }
 }

@@ -254,15 +254,6 @@ public abstract partial class RoomUI : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.MapBar
-    /// </summary>
-    public class MapBar : UiNode<RoomUIPanel, Godot.TextureRect, MapBar>
-    {
-        public MapBar(RoomUIPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
-        public override MapBar Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
-    }
-
-    /// <summary>
     /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomUI.Control.ActivePropBar.ActivePropBg
     /// </summary>
     public class ActivePropBg : UiNode<RoomUIPanel, Godot.NinePatchRect, ActivePropBg>
@@ -519,19 +510,6 @@ public abstract partial class RoomUI : UiBase
         private LifeBar _L_LifeBar;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.MapBar
-        /// </summary>
-        public MapBar L_MapBar
-        {
-            get
-            {
-                if (_L_MapBar == null) _L_MapBar = new MapBar(UiPanel, Instance.GetNode<Godot.TextureRect>("MapBar"));
-                return _L_MapBar;
-            }
-        }
-        private MapBar _L_MapBar;
-
-        /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.ActivePropBar
         /// </summary>
         public ActivePropBar L_ActivePropBar
@@ -627,11 +605,6 @@ public abstract partial class RoomUI : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.Control.LifeBar
     /// </summary>
     public LifeBar S_LifeBar => L_Control.L_LifeBar;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.MapBar
-    /// </summary>
-    public MapBar S_MapBar => L_Control.L_MapBar;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomUI.Control.ActivePropBar.ActivePropBg

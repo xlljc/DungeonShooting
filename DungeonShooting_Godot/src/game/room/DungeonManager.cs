@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -214,6 +215,9 @@ public partial class DungeonManager : Node2D
         //生成寻路网格， 这一步操作只生成过道的导航
         _dungeonTileMap.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
         yield return 0;
+        //将导航网格绑定到 DoorInfo 上
+        BindAisleNavigation(StartRoomInfo, _dungeonTileMap.GetPolygonData());
+        yield return 0;
         //挂载过道导航区域
         _dungeonTileMap.MountNavigationPolygon(World.TileRoot);
         yield return 0;
@@ -312,6 +316,44 @@ public partial class DungeonManager : Node2D
         {
             finish();
         }
+    }
+
+    //将导航网格绑定到 DoorInfo 上
+    private void BindAisleNavigation(RoomInfo startRoom, NavigationPolygonData[] polygonDatas)
+    {
+        var list = polygonDatas.ToList();
+        startRoom.EachRoom(roomInfo =>
+        {
+            if (roomInfo.Doors != null)
+            {
+                foreach (var roomInfoDoor in roomInfo.Doors)
+                {
+                    if (roomInfoDoor.IsForward)
+                    {
+                        var flag = false;
+                        var doorPosition = roomInfoDoor.GetWorldOriginPosition();
+                        for (var i = 0; i < list.Count; i++)
+                        {
+                            var data = list[i];
+                            var points = data.GetPoints();
+                            foreach (var point in points)
+                            {
+                                if (point.DistanceSquaredTo(doorPosition) <= 32 * 32)
+                                {
+                                    roomInfoDoor.AisleNavigation = data;
+                                    roomInfoDoor.ConnectDoor.AisleNavigation = data;
+
+                                    flag = true;
+                                    list.RemoveAt(i);
+                                }
+                            }
+                        }
+
+                        Debug.Log(roomInfo.Id + ", 是否找到连接过道: " + flag);
+                    }
+                }
+            }
+        });
     }
     
     // 初始化房间
@@ -640,6 +682,16 @@ public partial class DungeonManager : Node2D
                 //绘制ai寻路区域
                 Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());
             }
+            StartRoomInfo?.EachRoom(info =>
+            {
+                foreach (var roomDoorInfo in info.Doors)
+                {
+                    if (roomDoorInfo.IsForward)
+                    {
+                        DrawLine(roomDoorInfo.GetWorldOriginPosition(), roomDoorInfo.AisleNavigation.GetPoints()[0], Colors.Red, 2f);
+                    }
+                }
+            });
             //绘制房间区域
             // if (_dungeonGenerator != null)
             // {

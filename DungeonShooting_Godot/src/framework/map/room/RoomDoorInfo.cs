@@ -55,6 +55,11 @@ public class RoomDoorInfo : IDestroy
     public DoorNavigationInfo Navigation;
 
     /// <summary>
+    /// 连接的过使用的导航网格
+    /// </summary>
+    public NavigationPolygonData AisleNavigation;
+
+    /// <summary>
     /// 门实例
     /// </summary>
     public RoomDoor Door;
