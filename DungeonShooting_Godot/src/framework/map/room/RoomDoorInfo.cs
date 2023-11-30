@@ -96,6 +96,23 @@ public class RoomDoorInfo : IDestroy
     }
 
     /// <summary>
+    /// 世界坐标下的终点坐标, 单位: 像素
+    /// </summary>
+    public Vector2I GetWorldEndPosition()
+    {
+        if (Direction == DoorDirection.E || Direction == DoorDirection.W)
+        {
+            return GetWorldOriginPosition() + new Vector2I(0, 4 * GameConfig.TileCellSize);
+        }
+        else if (Direction == DoorDirection.N || Direction == DoorDirection.S)
+        {
+            return GetWorldOriginPosition() + new Vector2I(4 * GameConfig.TileCellSize, 0);
+        }
+
+        return default;
+    }
+
+    /// <summary>
     /// 获取直连门过道区域数据, 单位: 格, 如果当前门连接区域带交叉点, 则报错
     /// </summary>
     public Rect2I GetAisleRect()

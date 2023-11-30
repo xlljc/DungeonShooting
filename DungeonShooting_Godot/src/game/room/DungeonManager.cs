@@ -336,16 +336,13 @@ public partial class DungeonManager : Node2D
                         {
                             var data = list[i];
                             var points = data.GetPoints();
-                            foreach (var point in points)
+                            if (InLength(points, doorPosition, 32) && InLength(points, roomInfoDoor.GetWorldEndPosition(), 32))
                             {
-                                if (point.DistanceSquaredTo(doorPosition) <= 32 * 32)
-                                {
-                                    roomInfoDoor.AisleNavigation = data;
-                                    roomInfoDoor.ConnectDoor.AisleNavigation = data;
+                                roomInfoDoor.AisleNavigation = data;
+                                roomInfoDoor.ConnectDoor.AisleNavigation = data;
 
-                                    flag = true;
-                                    list.RemoveAt(i);
-                                }
+                                flag = true;
+                                list.RemoveAt(i);
                             }
                         }
 
@@ -355,7 +352,20 @@ public partial class DungeonManager : Node2D
             }
         });
     }
-    
+
+    private bool InLength(Vector2[] points, Vector2 targetPoint, float len)
+    {
+        foreach (var point in points)
+        {
+            if (point.DistanceSquaredTo(targetPoint) <= len * len)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // 初始化房间
     private void InitRoom(RoomInfo roomInfo)
     {
