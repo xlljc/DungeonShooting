@@ -37,6 +37,7 @@ public partial class RoomMapPanel : RoomMap
         var startRoom = GameApplication.Instance.DungeonManager.StartRoomInfo;
         startRoom.EachRoom(roomInfo =>
         {
+            //房间区域
             var sprite = new Sprite2D();
             sprite.Centered = false;
             sprite.Texture = roomInfo.PreviewTexture;
@@ -46,40 +47,102 @@ public partial class RoomMapPanel : RoomMap
             material.SetShaderParameter("scale", 0.5f);
             sprite.Material = material;
             S_Root.AddChild(sprite);
-            // //房间区域
-            // var navigationPolygonData = roomInfo.RoomSplit.TileInfo.NavigationList[0];
-            // var points = navigationPolygonData.GetPoints();
-            // var newPoints = new Vector2[points.Length];
-            // for (var i = 0; i < points.Length; i++)
-            // {
-            //     newPoints[i] = roomInfo.ToGlobalPosition(points[i]);
-            // }
-            //
-            // var outline = new PolygonOutline();
-            // outline.SetPoints(newPoints);
-            // S_Root.AddChild(outline);
-            //
-            // //过道
-            // if (roomInfo.Doors != null)
-            // {
-            //     foreach (var doorInfo in roomInfo.Doors)
-            //     {
-            //         if (doorInfo.IsForward)
-            //         {
-            //             var aislePoints = doorInfo.AisleNavigation.GetPoints();
-            //             // var newAislePoints = new Vector2[aislePoints.Length];
-            //             // for (var i = 0; i < aislePoints.Length; i++)
-            //             // {
-            //             //     newAislePoints[i] = roomInfo.ToGlobalPosition(aislePoints[i]);
-            //             // }
-            //
-            //             var aisleOutline = new PolygonOutline();
-            //             aisleOutline.SetPoints(aislePoints);
-            //             S_Root.AddChild(aisleOutline);
-            //         }
-            //     }
-            // }
-            // //roomInfo.Doors[0].Navigation.OpenNavigationData
+            
+            //过道
+            if (roomInfo.Doors != null)
+            {
+                foreach (var doorInfo in roomInfo.Doors)
+                {
+                    if (doorInfo.IsForward)
+                    {
+                        var aisleSprite = new Sprite2D();
+                        aisleSprite.Centered = false;
+                        aisleSprite.Texture = doorInfo.AislePreviewTexture;
+                        //调整过道预览位置
+                        
+                        if (!doorInfo.HasCross) //不含交叉点
+                        {
+                            if (doorInfo.Direction == DoorDirection.N)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, doorInfo.AislePreviewTexture.GetHeight() - 1);
+                            }
+                            else if (doorInfo.Direction == DoorDirection.S)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, 1);
+                            }
+                            else if (doorInfo.Direction == DoorDirection.E)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, 0);
+                            }
+                            else if (doorInfo.Direction == DoorDirection.W)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 1, 0);
+                            }
+                        }
+                        else //包含交叉点
+                        {
+                            if (doorInfo.Direction == DoorDirection.S)
+                            {
+                                if (doorInfo.ConnectDoor.Direction == DoorDirection.E)
+                                {
+                                    aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 4, 1);
+                                }
+                                else if (doorInfo.ConnectDoor.Direction == DoorDirection.W)
+                                {
+                                    aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, 1);
+                                }
+                                else
+                                {
+                                    aisleSprite.Position = doorInfo.OriginPosition;
+                                }
+                            }
+                            else if (doorInfo.Direction == DoorDirection.N)
+                            {
+                                if (doorInfo.ConnectDoor.Direction == DoorDirection.W)
+                                {
+                                    aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, doorInfo.AislePreviewTexture.GetHeight() - 1);
+                                }
+                                else
+                                {
+                                    aisleSprite.Position = doorInfo.OriginPosition;
+                                }
+                            }
+                            else if (doorInfo.Direction == DoorDirection.W)
+                            {
+                                if (doorInfo.ConnectDoor.Direction == DoorDirection.N)
+                                {
+                                    aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 1, 0);
+                                }
+                                else
+                                {
+                                    aisleSprite.Position = doorInfo.OriginPosition;
+                                }
+                            }
+                            else if (doorInfo.Direction == DoorDirection.E)
+                            {
+                                if (doorInfo.ConnectDoor.Direction == DoorDirection.S)
+                                {
+                                    aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, doorInfo.AislePreviewTexture.GetHeight() - 4);
+                                }
+                                else if (doorInfo.ConnectDoor.Direction == DoorDirection.N)
+                                {
+                                    aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, 0);
+                                }
+                                else
+                                {
+                                    aisleSprite.Position = doorInfo.OriginPosition;
+                                }
+                            }
+                        }
+
+                        var aisleSpriteMaterial = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres);
+                        aisleSpriteMaterial.SetShaderParameter("outline_color", new Color(1, 1, 1, 0.9f));
+                        aisleSpriteMaterial.SetShaderParameter("scale", 0.5f);
+                        aisleSprite.Material = aisleSpriteMaterial;
+                        S_Root.AddChild(aisleSprite);
+                    }
+                }
+            }
         });
 
     }

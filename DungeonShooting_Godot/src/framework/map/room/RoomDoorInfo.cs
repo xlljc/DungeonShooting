@@ -55,9 +55,14 @@ public class RoomDoorInfo : IDestroy
     public DoorNavigationInfo Navigation;
 
     /// <summary>
-    /// 连接的过使用的导航网格
+    /// 连接过道使用的导航网格
     /// </summary>
     public NavigationPolygonData AisleNavigation;
+
+    /// <summary>
+    /// 连接过道使用预览纹理
+    /// </summary>
+    public ImageTexture AislePreviewTexture;
 
     /// <summary>
     /// 门实例
@@ -277,6 +282,11 @@ public class RoomDoorInfo : IDestroy
         if (PreviewAisleFogMask != null)
         {
             PreviewAisleFogMask.Destroy();
+        }
+
+        if (AislePreviewTexture != null)
+        {
+            AislePreviewTexture.Dispose();
         }
     }
 }

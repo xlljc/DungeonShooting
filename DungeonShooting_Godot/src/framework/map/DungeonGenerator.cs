@@ -63,8 +63,8 @@ public class DungeonGenerator
 
     //区域限制
     private bool _enableLimitRange = true;
-    private int _rangeX = 150;
-    private int _rangeY = 150;
+    private int _rangeX = 120;
+    private int _rangeY = 120;
     
     //找房间失败次数, 过大则会关闭区域限制
     private int _maxFailCount = 10;
