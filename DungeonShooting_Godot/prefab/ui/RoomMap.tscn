@@ -29,10 +29,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -257.0
+offset_left = -275.0
 offset_top = 20.0
-offset_right = -198.0
-offset_bottom = 79.0
+offset_right = -211.0
+offset_bottom = 84.0
 grow_horizontal = 0
 scale = Vector2(4, 4)
 texture = ExtResource("2_m52os")
@@ -57,8 +57,9 @@ texture = ExtResource("3_el2ne")
 expand_mode = 1
 
 [node name="Root" type="Node2D" parent="MapBar/DrawContainer"]
+scale = Vector2(1.5, 1.5)
 
 [node name="Mark" type="Sprite2D" parent="MapBar/DrawContainer"]
-position = Vector2(28, 28)
+position = Vector2(32, 32)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("4_6wquw")

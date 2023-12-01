@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="1_l63x2"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_mhoa7"]
 [ext_resource type="SpriteFrames" uid="uid://b2wpy40adyjs6" path="res://resource/spriteFrames/weapon/Weapon0008.tres" id="2_s0xbw"]
+[ext_resource type="Animation" uid="uid://v3dltmdstqad" path="res://resource/animation/weapon/Weapon_floodlight.res" id="4_p833u"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
 resource_local_to_scene = true
@@ -16,7 +17,7 @@ shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
 shader_parameter/grey = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o36tv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6odx4"]
 resource_local_to_scene = true
 shader = ExtResource("1_mhoa7")
 shader_parameter/blend = Color(1, 1, 1, 1)
@@ -36,19 +37,19 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
+tracks/0/path = NodePath(".:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0]
+"values": [0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
+tracks/1/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -56,23 +57,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0]
-}
-
-[sub_resource type="Animation" id="Animation_3piau"]
-resource_name = "floodlight"
-length = 3.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 2.3, 2.6, 2.7, 3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [0, 0, 0.5, 0.5, 0]
 }
 
 [sub_resource type="Animation" id="Animation_8xqs8"]
@@ -94,7 +78,7 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_trkjd"]
 _data = {
 "RESET": SubResource("Animation_x136i"),
-"floodlight": SubResource("Animation_3piau"),
+"floodlight": ExtResource("4_p833u"),
 "reloading": SubResource("Animation_8xqs8")
 }
 
@@ -115,7 +99,7 @@ material = SubResource("ShaderMaterial_cbiyh")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 modulate = Color(1.9, 1.9, 1.9, 1)
-material = SubResource("ShaderMaterial_o36tv")
+material = SubResource("ShaderMaterial_6odx4")
 sprite_frames = ExtResource("2_s0xbw")
 animation = &"reloading"
 

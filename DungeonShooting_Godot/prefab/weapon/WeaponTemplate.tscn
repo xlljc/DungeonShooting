@@ -1,5 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cxltmhhp4rbyk"]
 
+[ext_resource type="Animation" uid="uid://v3dltmdstqad" path="res://resource/animation/weapon/Weapon_floodlight.res" id="1_eorlf"]
+
 [sub_resource type="Animation" id="Animation_x136i"]
 length = 0.001
 tracks/0/type = "value"
@@ -15,27 +17,10 @@ tracks/0/keys = {
 "values": [0.0]
 }
 
-[sub_resource type="Animation" id="Animation_1y7bx"]
-resource_name = "floodlight"
-length = 3.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 2.3, 2.6, 2.7, 3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [0.0, 0.0, 0.8, 0.8, 0.0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_trkjd"]
 _data = {
 "RESET": SubResource("Animation_x136i"),
-"floodlight": SubResource("Animation_1y7bx")
+"floodlight": ExtResource("1_eorlf")
 }
 
 [node name="WeaponTemplate" type="CharacterBody2D"]

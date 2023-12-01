@@ -8,7 +8,7 @@ public partial class RoomMapPanel : RoomMap
 {
     private EventFactory _factory = EventManager.CreateEventFactory();
     private List<RoomDoorInfo> _needRefresh = new List<RoomDoorInfo>();
-    private List<Sprite2D> _enemyList = new List<Sprite2D>();
+    private List<Sprite2D> _enemySpriteList = new List<Sprite2D>();
     private Stack<Sprite2D> _spriteStack = new Stack<Sprite2D>();
     
     public override void OnCreateUi()
@@ -41,11 +41,58 @@ public partial class RoomMapPanel : RoomMap
         //更新敌人位置
         if (World.Current != null)
         {
-            foreach (var enemy in World.Current.Enemy_InstanceList)
+            var enemyList = World.Current.Enemy_InstanceList;
+            if (enemyList.Count == 0) //没有敌人
             {
-                if (!enemy.IsDestroyed && !enemy.IsDie)
+                foreach (var sprite in _enemySpriteList)
                 {
-                    
+                    S_Root.RemoveChild(sprite);
+                    _spriteStack.Push(sprite);
+                }
+                _enemySpriteList.Clear();
+            }
+            else //更新位置
+            {
+                var count = 0; //绘制数量
+                for (var i = 0; i < enemyList.Count; i++)
+                {
+                    var enemy = enemyList[i];
+                    if (!enemy.IsDestroyed && !enemy.IsDie && enemy.AffiliationArea != null && enemy.AffiliationArea.RoomInfo.RoomFogMask.IsExplored)
+                    {
+                        count++;
+                        Sprite2D sprite;
+                        if (i >= _enemySpriteList.Count)
+                        {
+                            if (_spriteStack.Count > 0)
+                            {
+                                sprite = _spriteStack.Pop();
+                            }
+                            else
+                            {
+                                sprite = new Sprite2D();
+                                sprite.Texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Block_png);
+                                sprite.Modulate = new Color(1, 0, 0);
+                            }
+                            _enemySpriteList.Add(sprite);
+                            S_Root.AddChild(sprite);
+                        }
+                        else
+                        {
+                            sprite = _enemySpriteList[i];
+                        }
+                        //更新标记位置
+                        sprite.Position = enemy.Position / 16;
+                    }
+                }
+                
+                //回收多余的标记
+                while (_enemySpriteList.Count > count)
+                {
+                    var index = _enemySpriteList.Count - 1;
+                    var sprite = _enemySpriteList[index];
+                    S_Root.RemoveChild(sprite);
+                    _spriteStack.Push(sprite);
+                    _enemySpriteList.RemoveAt(index);
                 }
             }
         }
