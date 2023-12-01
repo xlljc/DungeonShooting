@@ -1624,6 +1624,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         {
             if (Master == null)
             {
+                if (roleMaster.WeaponPack.Capacity == 0)
+                {
+                    //容量为0
+                    return result;
+                }
                 var masterWeapon = roleMaster.WeaponPack.ActiveItem;
                 //查找是否有同类型武器
                 var index = roleMaster.WeaponPack.FindIndex(ActivityBase.Id);
@@ -1668,6 +1673,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     {
         if (master is Role roleMaster) //与role互动
         {
+            if (roleMaster.WeaponPack.Capacity == 0)
+            {
+                //容量为0
+                return;
+            }
             var holster = roleMaster.WeaponPack;
             //查找是否有同类型武器
             var index = holster.FindIndex(ActivityBase.Id);

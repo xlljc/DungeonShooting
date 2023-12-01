@@ -59,6 +59,7 @@ public partial class Player : Role
         Shield = 0;
 
         WeaponPack.SetCapacity(4);
+        ActivePropsPack.SetCapacity(1);
         
         // debug用
         // RoleState.Acceleration = 3000;
@@ -233,12 +234,13 @@ public partial class Player : Role
             TipRoot.Scale = new Vector2(-1, 1);
         }
 
-        if (AffiliationArea != null)
-        {
-            var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
-            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData2, _prevPosition, pos, 0);
-            _prevPosition = pos;
-        }
+        //测试刷地
+        // if (AffiliationArea != null)
+        // {
+        //     var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
+        //     AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData2, _prevPosition, pos, 0);
+        //     _prevPosition = pos;
+        // }
     }
 
     protected override void OnAffiliationChange(AffiliationArea prevArea)
