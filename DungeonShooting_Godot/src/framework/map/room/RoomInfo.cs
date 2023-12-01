@@ -121,9 +121,14 @@ public class RoomInfo : IDestroy
     public Dictionary<long, Vector2> MarkTargetPosition { get; private set; } = new Dictionary<long, Vector2>();
 
     /// <summary>
-    /// 房间预览图, 用于小地图
+    /// 房间预览纹理, 用于小地图
     /// </summary>
     public ImageTexture PreviewTexture { get; set; }
+
+    /// <summary>
+    /// 房间预览图, 用于小地图
+    /// </summary>
+    public Sprite2D PreviewSprite { get; set; }
 
     public bool IsDestroyed { get; private set; }
 
@@ -380,6 +385,11 @@ public class RoomInfo : IDestroy
         if (PreviewTexture != null)
         {
             PreviewTexture.Dispose();
+        }
+
+        if (PreviewSprite != null)
+        {
+            PreviewSprite.QueueFree();
         }
         
         MarkTargetPosition.Clear();

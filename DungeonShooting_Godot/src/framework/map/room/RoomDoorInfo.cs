@@ -60,9 +60,14 @@ public class RoomDoorInfo : IDestroy
     public NavigationPolygonData AisleNavigation;
 
     /// <summary>
-    /// 连接过道使用预览纹理
+    /// 连接过道使用预览纹理, 用于小地图
     /// </summary>
     public ImageTexture AislePreviewTexture;
+
+    /// <summary>
+    /// 连接过道使用预览图, 用于小地图
+    /// </summary>
+    public Sprite2D AislePreviewSprite;
 
     /// <summary>
     /// 门实例
@@ -287,6 +292,11 @@ public class RoomDoorInfo : IDestroy
         if (AislePreviewTexture != null)
         {
             AislePreviewTexture.Dispose();
+        }
+
+        if (AislePreviewSprite != null)
+        {
+            AislePreviewSprite.QueueFree();
         }
     }
 }

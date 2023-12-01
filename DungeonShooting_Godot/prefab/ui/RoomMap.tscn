@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/game/ui/roomMap/RoomMapPanel.cs" id="1_ng7b3"]
 [ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/roomUI/MapBar.png" id="2_m52os"]
 [ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/commonIcon/Block.png" id="3_el2ne"]
-[ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="5_4sud2"]
+[ext_resource type="Texture2D" uid="uid://cw702ostmv2am" path="res://resource/sprite/role/role0001/Role0001_head.png" id="4_6wquw"]
 
 [node name="RoomMap" type="Control"]
 layout_mode = 3
@@ -60,7 +60,6 @@ expand_mode = 1
 scale = Vector2(1.5, 1.5)
 
 [node name="Mark" type="Sprite2D" parent="MapBar/DrawContainer"]
-modulate = Color(0.219608, 1, 0, 1)
 position = Vector2(28, 28)
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("5_4sud2")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_6wquw")

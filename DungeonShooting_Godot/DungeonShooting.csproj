@@ -8,4 +8,10 @@
   <ItemGroup>
     <Folder Include="src\game\ui\editorTools" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="android\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="android\**" />
+  </ItemGroup>
 </Project>

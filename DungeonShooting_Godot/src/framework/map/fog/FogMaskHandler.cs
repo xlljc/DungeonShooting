@@ -96,6 +96,9 @@ public static class FogMaskHandler
             fogMask.IsExplored = true;
             fogMask.TransitionAlpha(0, 1);
             
+            //小地图亮起该房间
+            roomInfo.PreviewSprite.Visible = true;
+
             //刷新预览区域
             foreach (var roomInfoDoor in roomInfo.Doors)
             {
@@ -142,6 +145,9 @@ public static class FogMaskHandler
         var connectDoor = doorInfo.ConnectDoor;
         if (!fogMask.IsExplored) //未探索该区域
         {
+            //小地图亮起该过道
+            doorInfo.AislePreviewSprite.Visible = true;
+            
             fogMask.IsExplored = true;
             doorInfo.PreviewAisleFogMask.IsExplored = true;
             doorInfo.PreviewRoomFogMask.IsExplored = true;

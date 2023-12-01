@@ -384,6 +384,8 @@ public partial class DungeonManager : Node2D
         CreateRoomLiquidCanvas(roomInfo);
         //创建迷雾遮罩
         CreateRoomFogMask(roomInfo);
+        //创建房间/过道预览sprite
+        CreatePreviewSprite(roomInfo);
     }
     
     //挂载房间导航区域
@@ -609,6 +611,117 @@ public partial class DungeonManager : Node2D
         }
     }
 
+    private void CreatePreviewSprite(RoomInfo roomInfo)
+    {
+        //房间区域
+        var sprite = new Sprite2D();
+        sprite.Centered = false;
+        sprite.Texture = roomInfo.PreviewTexture;
+        sprite.Position = roomInfo.Position;
+        var material = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres);
+        material.SetShaderParameter("outline_color", new Color(1, 1, 1, 0.9f));
+        material.SetShaderParameter("scale", 0.5f);
+        sprite.Material = material;
+        roomInfo.PreviewSprite = sprite;
+        
+        //过道
+        if (roomInfo.Doors != null)
+        {
+            foreach (var doorInfo in roomInfo.Doors)
+            {
+                if (doorInfo.IsForward)
+                {
+                    var aisleSprite = new Sprite2D();
+                    aisleSprite.Centered = false;
+                    aisleSprite.Texture = doorInfo.AislePreviewTexture;
+                    //调整过道预览位置
+                    
+                    if (!doorInfo.HasCross) //不含交叉点
+                    {
+                        if (doorInfo.Direction == DoorDirection.N)
+                        {
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, doorInfo.AislePreviewTexture.GetHeight() - 1);
+                        }
+                        else if (doorInfo.Direction == DoorDirection.S)
+                        {
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, 1);
+                        }
+                        else if (doorInfo.Direction == DoorDirection.E)
+                        {
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, 0);
+                        }
+                        else if (doorInfo.Direction == DoorDirection.W)
+                        {
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 1, 0);
+                        }
+                    }
+                    else //包含交叉点
+                    {
+                        if (doorInfo.Direction == DoorDirection.S)
+                        {
+                            if (doorInfo.ConnectDoor.Direction == DoorDirection.E)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 4, 1);
+                            }
+                            else if (doorInfo.ConnectDoor.Direction == DoorDirection.W)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, 1);
+                            }
+                            else
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition;
+                            }
+                        }
+                        else if (doorInfo.Direction == DoorDirection.N)
+                        {
+                            if (doorInfo.ConnectDoor.Direction == DoorDirection.W)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, doorInfo.AislePreviewTexture.GetHeight() - 1);
+                            }
+                            else
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition;
+                            }
+                        }
+                        else if (doorInfo.Direction == DoorDirection.W)
+                        {
+                            if (doorInfo.ConnectDoor.Direction == DoorDirection.N)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 1, 0);
+                            }
+                            else
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition;
+                            }
+                        }
+                        else if (doorInfo.Direction == DoorDirection.E)
+                        {
+                            if (doorInfo.ConnectDoor.Direction == DoorDirection.S)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, doorInfo.AislePreviewTexture.GetHeight() - 4);
+                            }
+                            else if (doorInfo.ConnectDoor.Direction == DoorDirection.N)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, 0);
+                            }
+                            else
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition;
+                            }
+                        }
+                    }
+
+                    var aisleSpriteMaterial = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres);
+                    aisleSpriteMaterial.SetShaderParameter("outline_color", new Color(1, 1, 1, 0.9f));
+                    aisleSpriteMaterial.SetShaderParameter("scale", 0.5f);
+                    aisleSprite.Material = aisleSpriteMaterial;
+                    doorInfo.AislePreviewSprite = aisleSprite;
+                    doorInfo.ConnectDoor.AislePreviewSprite = aisleSprite;
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// 玩家第一次进入某个房间回调
     /// </summary>
