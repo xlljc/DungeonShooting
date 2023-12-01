@@ -248,22 +248,7 @@ public partial class DungeonManager : Node2D
         player.Name = "Player";
         player.PutDown(RoomLayerEnum.YSortLayer);
         Player.SetCurrentPlayer(player);
-        yield return 0;
-
-        //玩家手上添加武器
-        //player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
-        // var weapon = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001);
-        // weapon.PutDown(player.Position, RoomLayerEnum.NormalLayer);
-        // var weapon2 = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0002);
-        // weapon2.PutDown(player.Position, RoomLayerEnum.NormalLayer);
-        // var weapon3 = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0003);
-        // weapon3.PutDown(player.Position, RoomLayerEnum.NormalLayer);
-        // var weapon4 = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0004);
-        // weapon4.PutDown(player.Position, RoomLayerEnum.NormalLayer);
-
         GameApplication.Instance.Cursor.SetGuiMode(false);
-        yield return 0;
-        
         //打开游戏中的ui
         UiManager.Open_RoomUI();
         //派发进入地牢事件

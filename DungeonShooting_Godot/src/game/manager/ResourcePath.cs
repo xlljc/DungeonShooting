@@ -241,6 +241,7 @@ public class ResourcePath
     public const string resource_sprite_role_enemy0002_Enemy0002_idle_png = "res://resource/sprite/role/enemy0002/Enemy0002_idle.png";
     public const string resource_sprite_role_enemy0002_Enemy0002_run_png = "res://resource/sprite/role/enemy0002/Enemy0002_run.png";
     public const string resource_sprite_role_role0001_Role0001_png = "res://resource/sprite/role/role0001/Role0001.png";
+    public const string resource_sprite_role_role0001_Role0001_head_png = "res://resource/sprite/role/role0001/Role0001_head.png";
     public const string resource_sprite_role_role0001_Role0001_Icon_png = "res://resource/sprite/role/role0001/Role0001_Icon.png";
     public const string resource_sprite_role_role0001_idle_Sprite0002_png = "res://resource/sprite/role/role0001/idle/Sprite-0002.png";
     public const string resource_sprite_role_role0001_idle_Sprite0003_png = "res://resource/sprite/role/role0001/idle/Sprite-0003.png";
@@ -296,6 +297,7 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_Select_png = "res://resource/sprite/ui/commonIcon/Select.png";
     public const string resource_sprite_ui_commonIcon_Select2_png = "res://resource/sprite/ui/commonIcon/Select2.png";
     public const string resource_sprite_ui_commonIcon_Setting_png = "res://resource/sprite/ui/commonIcon/Setting.png";
+    public const string resource_sprite_ui_commonIcon_Unknown_png = "res://resource/sprite/ui/commonIcon/Unknown.png";
     public const string resource_sprite_ui_commonIcon_Unlock_png = "res://resource/sprite/ui/commonIcon/Unlock.png";
     public const string resource_sprite_ui_commonIcon_Visible_png = "res://resource/sprite/ui/commonIcon/Visible.png";
     public const string resource_sprite_ui_commonIcon_WaveCell_png = "res://resource/sprite/ui/commonIcon/WaveCell.png";

@@ -350,7 +350,9 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         
         World = world;
         ActivityBase = config;
+#if TOOLS
         Name = GetType().Name + (_instanceIndex++);
+#endif
         Id = _instanceIndex;
         
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;

@@ -291,7 +291,6 @@ public partial class AffiliationArea : Area2D, IDestroy
         EventManager.EmitEvent(EventEnum.OnPlayerEnterRoom, RoomInfo);
         IsFirstEnterFlag = false;
     }
-
     
     public void Destroy()
     {

@@ -95,6 +95,11 @@ public class RoomDoorInfo : IDestroy
     public PreviewFogMask PreviewAisleFogMask;
 
     /// <summary>
+    /// 未探索的区域显示的问号
+    /// </summary>
+    public Sprite2D UnknownSprite;
+
+    /// <summary>
     /// 世界坐标下的原点坐标, 单位: 像素
     /// </summary>
     public Vector2I GetWorldOriginPosition()
@@ -105,6 +110,23 @@ public class RoomDoorInfo : IDestroy
         );
     }
 
+    /// <summary>
+    /// 终点坐标, 单位: 格
+    /// </summary>
+    public Vector2I GetEndPosition()
+    {
+        if (Direction == DoorDirection.E || Direction == DoorDirection.W)
+        {
+            return OriginPosition + new Vector2I(0, 4);
+        }
+        else if (Direction == DoorDirection.N || Direction == DoorDirection.S)
+        {
+            return OriginPosition + new Vector2I(4, 0);
+        }
+
+        return default;
+    }
+    
     /// <summary>
     /// 世界坐标下的终点坐标, 单位: 像素
     /// </summary>

@@ -57,7 +57,6 @@ texture = ExtResource("3_el2ne")
 expand_mode = 1
 
 [node name="Root" type="Node2D" parent="MapBar/DrawContainer"]
-scale = Vector2(1.5, 1.5)
 
 [node name="Mark" type="Sprite2D" parent="MapBar/DrawContainer"]
 position = Vector2(28, 28)

@@ -19,6 +19,14 @@ public enum EventEnum
     /// </summary>
     OnPlayerFirstEnterRoom,
     /// <summary>
+    /// 玩家进入过道时调用, 参数类型为进入该过道的门<see cref="RoomDoorInfo"/>
+    /// </summary>
+    OnPlayerEnterAisle,
+    /// <summary>
+    /// 玩家首次进入过道时调用, 参数类型为进入该过道的门<see cref="RoomDoorInfo"/>
+    /// </summary>
+    OnPlayerFirstEnterAisle,
+    /// <summary>
     /// 玩家可互动对象改变, 参数类型为<see cref="CheckInteractiveResult"/>
     /// </summary>
     OnPlayerChangeInteractiveItem,
