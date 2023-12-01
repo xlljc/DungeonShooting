@@ -6,9 +6,10 @@ namespace UI.RoomMap;
 
 public partial class RoomMapPanel : RoomMap
 {
-
     private EventFactory _factory = EventManager.CreateEventFactory();
     private List<RoomDoorInfo> _needRefresh = new List<RoomDoorInfo>();
+    private List<Sprite2D> _enemyList = new List<Sprite2D>();
+    private Stack<Sprite2D> _spriteStack = new Stack<Sprite2D>();
     
     public override void OnCreateUi()
     {
@@ -36,7 +37,20 @@ public partial class RoomMapPanel : RoomMap
         //     S_RoomMap.Instance.HideUi();
         //     World.Current.Pause = false;
         // }
-
+        
+        //更新敌人位置
+        if (World.Current != null)
+        {
+            foreach (var enemy in World.Current.Enemy_InstanceList)
+            {
+                if (!enemy.IsDestroyed && !enemy.IsDie)
+                {
+                    
+                }
+            }
+        }
+        
+        //更新预览图标
         if (_needRefresh.Count > 0)
         {
             foreach (var roomDoorInfo in _needRefresh)
@@ -46,7 +60,8 @@ public partial class RoomMapPanel : RoomMap
             _needRefresh.Clear();
         }
 
-        S_Root.Instance.Position = S_DrawContainer.Instance.Size / 2 - Player.Current.Position / 16 * S_Root.Instance.Scale;
+        //更新地图中心点位置
+        S_Root.Instance.Position = CalcRootPosition(Player.Current.Position);
     }
     
     //初始化小地图
@@ -155,6 +170,11 @@ public partial class RoomMapPanel : RoomMap
         roomInfoDoor.UnknownSprite = unknownSprite;
         S_Root.AddChild(unknownSprite);
         return unknownSprite;
+    }
+
+    private Vector2 CalcRootPosition(Vector2 pos)
+    {
+        return S_DrawContainer.Instance.Size / 2 - pos / 16 * S_Root.Instance.Scale;
     }
 
 }
