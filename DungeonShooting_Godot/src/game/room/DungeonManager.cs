@@ -164,7 +164,7 @@ public partial class DungeonManager : Node2D
             }
             
             //暂停游戏
-            if (Input.IsActionJustPressed("ui_cancel"))
+            if (InputManager.Menu)
             {
                 World.Pause = true;
                 //鼠标改为Ui鼠标
@@ -599,11 +599,11 @@ public partial class DungeonManager : Node2D
     private void CreatePreviewSprite(RoomInfo roomInfo)
     {
         //房间区域
-        var sprite = new Sprite2D();
-        sprite.Centered = false;
+        var sprite = new TextureRect();
+        //sprite.Centered = false;
         sprite.Texture = roomInfo.PreviewTexture;
         sprite.Position = roomInfo.Position;
-        var material = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres);
+        var material = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres, false);
         material.SetShaderParameter("outline_color", new Color(1, 1, 1, 0.9f));
         material.SetShaderParameter("scale", 0.5f);
         sprite.Material = material;
@@ -616,8 +616,8 @@ public partial class DungeonManager : Node2D
             {
                 if (doorInfo.IsForward)
                 {
-                    var aisleSprite = new Sprite2D();
-                    aisleSprite.Centered = false;
+                    var aisleSprite = new TextureRect();
+                    //aisleSprite.Centered = false;
                     aisleSprite.Texture = doorInfo.AislePreviewTexture;
                     //调整过道预览位置
                     
@@ -696,7 +696,7 @@ public partial class DungeonManager : Node2D
                         }
                     }
 
-                    var aisleSpriteMaterial = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres);
+                    var aisleSpriteMaterial = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres, false);
                     aisleSpriteMaterial.SetShaderParameter("outline_color", new Color(1, 1, 1, 0.9f));
                     aisleSpriteMaterial.SetShaderParameter("scale", 0.5f);
                     aisleSprite.Material = aisleSpriteMaterial;

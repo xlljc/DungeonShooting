@@ -18,7 +18,13 @@ public partial class RoomMapPanel : RoomMap
     private Stack<Sprite2D> _spriteStack = new Stack<Sprite2D>();
     //是否放大地图
     private bool _isMagnifyMap = false;
+
     private DragBinder _dragBinder;
+    //放大地图后拖拽的偏移
+    private Vector2 _mapOffset;
+    //放大地图后鼠标悬停的房间
+    private RoomInfo _mouseHoverRoom;
+    private Color _originOutlineColor;
     
     public override void OnCreateUi()
     {
@@ -48,9 +54,12 @@ public partial class RoomMapPanel : RoomMap
         //按下地图按键
         if (InputManager.Map && !_isMagnifyMap)
         {
-            World.Current.Pause = true;
-            _isMagnifyMap = true;
-            MagnifyMap();
+            if (UiManager.GetUiInstanceCount(UiManager.UiName.PauseMenu) == 0)
+            {
+                World.Current.Pause = true;
+                _isMagnifyMap = true;
+                MagnifyMap();
+            }
         }
         else if (!InputManager.Map && _isMagnifyMap)
         {
@@ -129,7 +138,15 @@ public partial class RoomMapPanel : RoomMap
         }
 
         //更新地图中心点位置
-        S_Root.Instance.Position = CalcRootPosition(Player.Current.Position);
+        if (!_isMagnifyMap)
+        {
+            S_Root.Instance.Position = CalcRootPosition(Player.Current.Position);
+        }
+        else
+        {
+            S_Root.Instance.Position = CalcRootPosition(Player.Current.Position) + _mapOffset;
+            S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2 + _mapOffset;
+        }
     }
 
     private void OnDrawContainerResized()
@@ -140,31 +157,46 @@ public partial class RoomMapPanel : RoomMap
     //放大小地图
     private void MagnifyMap()
     {
+        GameApplication.Instance.Cursor.SetGuiMode(true);
         S_DrawContainer.Reparent(S_MagnifyMapBar);
         S_DrawContainer.Instance.Position = new Vector2(1, 1);
         S_Bg.Instance.Visible = true;
         S_MagnifyMapBar.Instance.Visible = true;
         S_MapBar.Instance.Visible = false;
-
+        _mapOffset = Vector2.Zero;
+        
         _dragBinder = DragUiManager.BindDrag(S_DrawContainer.Instance, (state, delta) =>
         {
-            //S_DrawContainer.Instance.Position += delta;
-            Debug.Log($"state: {state}, delta: {delta}");
+            if (state == DragState.DragMove)
+            {
+                _mapOffset += delta;
+            }
         });
     }
 
     //还原小地图
     private void ResetMap()
     {
+        GameApplication.Instance.Cursor.SetGuiMode(false);
         S_DrawContainer.Reparent(S_MapBar);
         S_DrawContainer.Instance.Position = new Vector2(1, 1);
         S_Bg.Instance.Visible = false;
         S_MagnifyMapBar.Instance.Visible = false;
         S_MapBar.Instance.Visible = true;
+        ResetOutlineColor();
 
         if (_dragBinder != null)
         {
             _dragBinder.UnBind();
+        }
+    }
+
+    private void ResetOutlineColor()
+    {
+        if (_mouseHoverRoom != null)
+        {
+            ((ShaderMaterial)_mouseHoverRoom.PreviewSprite.Material).SetShaderParameter("outline_color", _originOutlineColor);
+            _mouseHoverRoom = null;
         }
     }
     
@@ -174,9 +206,21 @@ public partial class RoomMapPanel : RoomMap
         var startRoom = GameApplication.Instance.DungeonManager.StartRoomInfo;
         startRoom.EachRoom(roomInfo =>
         {
+            //房间
             roomInfo.PreviewSprite.Visible = false;
             S_Root.AddChild(roomInfo.PreviewSprite);
 
+            roomInfo.PreviewSprite.MouseEntered += () =>
+            {
+                ResetOutlineColor();
+                _mouseHoverRoom = roomInfo;
+                var shaderMaterial = (ShaderMaterial)roomInfo.PreviewSprite.Material;
+                _originOutlineColor = shaderMaterial.GetShaderParameter("outline_color").AsColor();
+                shaderMaterial.SetShaderParameter("outline_color", new Color(0, 1, 0, 0.9f));
+            };
+            roomInfo.PreviewSprite.MouseExited += ResetOutlineColor;
+            
+            //过道
             if (roomInfo.Doors != null)
             {
                 foreach (var roomInfoDoor in roomInfo.Doors)

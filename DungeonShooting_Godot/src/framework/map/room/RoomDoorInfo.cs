@@ -67,7 +67,7 @@ public class RoomDoorInfo : IDestroy
     /// <summary>
     /// 连接过道使用预览图, 用于小地图
     /// </summary>
-    public Sprite2D AislePreviewSprite;
+    public TextureRect AislePreviewSprite;
 
     /// <summary>
     /// 门实例

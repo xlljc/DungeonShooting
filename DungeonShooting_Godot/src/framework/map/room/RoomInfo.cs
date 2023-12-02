@@ -128,7 +128,7 @@ public class RoomInfo : IDestroy
     /// <summary>
     /// 房间预览图, 用于小地图
     /// </summary>
-    public Sprite2D PreviewSprite { get; set; }
+    public TextureRect PreviewSprite { get; set; }
 
     public bool IsDestroyed { get; private set; }
 

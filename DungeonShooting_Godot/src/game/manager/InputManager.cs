@@ -75,6 +75,11 @@ public static class InputManager
     /// 是否按下打开地图按钮, 键鼠: 键盘Ctrl
     /// </summary>
     public static bool Map { get; private set; }
+    
+    /// <summary>
+    /// 菜单键, 键鼠: esc
+    /// </summary>
+    public static bool Menu { get; private set; }
 
     /// <summary>
     /// 更新输入管理器
@@ -99,5 +104,6 @@ public static class InputManager
         RemoveProp = Input.IsActionJustPressed("removeProp");
         ExchangeProp = Input.IsActionJustPressed("exchangeProp");
         Map = Input.IsActionPressed("map");
+        Menu = Input.IsActionJustPressed("menu");
     }
 }
