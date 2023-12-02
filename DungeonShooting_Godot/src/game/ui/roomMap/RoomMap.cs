@@ -31,6 +31,19 @@ public abstract partial class RoomMap : UiBase
     }
     private MapBar _L_MapBar;
 
+    /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomMap.MagnifyMapBar
+    /// </summary>
+    public MagnifyMapBar L_MagnifyMapBar
+    {
+        get
+        {
+            if (_L_MagnifyMapBar == null) _L_MagnifyMapBar = new MagnifyMapBar((RoomMapPanel)this, GetNode<Godot.NinePatchRect>("MagnifyMapBar"));
+            return _L_MagnifyMapBar;
+        }
+    }
+    private MagnifyMapBar _L_MagnifyMapBar;
+
 
     public RoomMap() : base(nameof(RoomMap))
     {
@@ -125,6 +138,15 @@ public abstract partial class RoomMap : UiBase
         public override MapBar Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
     }
 
+    /// <summary>
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: RoomMap.MagnifyMapBar
+    /// </summary>
+    public class MagnifyMapBar : UiNode<RoomMapPanel, Godot.NinePatchRect, MagnifyMapBar>
+    {
+        public MagnifyMapBar(RoomMapPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override MagnifyMapBar Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
+    }
+
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: RoomMap.Bg
@@ -150,5 +172,10 @@ public abstract partial class RoomMap : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomMap.MapBar
     /// </summary>
     public MapBar S_MapBar => L_MapBar;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: RoomMap.MagnifyMapBar
+    /// </summary>
+    public MagnifyMapBar S_MagnifyMapBar => L_MagnifyMapBar;
 
 }

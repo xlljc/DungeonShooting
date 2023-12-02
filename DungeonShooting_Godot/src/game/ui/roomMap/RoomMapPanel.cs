@@ -4,39 +4,60 @@ using Godot;
 
 namespace UI.RoomMap;
 
+/// <summary>
+/// 房间的小地图
+/// </summary>
 public partial class RoomMapPanel : RoomMap
 {
     private EventFactory _factory = EventManager.CreateEventFactory();
+    //需要刷新的问号的房间队列
     private List<RoomDoorInfo> _needRefresh = new List<RoomDoorInfo>();
+    //正在使用的敌人标记列表
     private List<Sprite2D> _enemySpriteList = new List<Sprite2D>();
+    //已经回收的敌人标记
     private Stack<Sprite2D> _spriteStack = new Stack<Sprite2D>();
+    //是否放大地图
+    private bool _isMagnifyMap = false;
+    private DragBinder _dragBinder;
     
     public override void OnCreateUi()
     {
+        _ = S_Mark;
+        S_Bg.Instance.Visible = false;
+        S_MagnifyMapBar.Instance.Visible = false;
         InitMap();
         _factory.AddEventListener(EventEnum.OnPlayerFirstEnterRoom, OnPlayerFirstEnterRoom);
         _factory.AddEventListener(EventEnum.OnPlayerFirstEnterAisle, OnPlayerFirstEnterAisle);
+
+        S_DrawContainer.Instance.Resized += OnDrawContainerResized;
     }
 
 
     public override void OnDestroyUi()
     {
         _factory.RemoveAllEventListener();
+        
+        if (_dragBinder != null)
+        {
+            _dragBinder.UnBind();
+        }
     }
 
     public override void Process(float delta)
     {
-        // //按下地图按键
-        // if (InputManager.Map && !S_RoomMap.Instance.IsOpen)
-        // {
-        //     World.Current.Pause = true;
-        //     S_RoomMap.Instance.ShowUi();
-        // }
-        // else if (!InputManager.Map && S_RoomMap.Instance.IsOpen)
-        // {
-        //     S_RoomMap.Instance.HideUi();
-        //     World.Current.Pause = false;
-        // }
+        //按下地图按键
+        if (InputManager.Map && !_isMagnifyMap)
+        {
+            World.Current.Pause = true;
+            _isMagnifyMap = true;
+            MagnifyMap();
+        }
+        else if (!InputManager.Map && _isMagnifyMap)
+        {
+            ResetMap();
+            _isMagnifyMap = false;
+            World.Current.Pause = false;
+        }
         
         //更新敌人位置
         if (World.Current != null)
@@ -110,6 +131,42 @@ public partial class RoomMapPanel : RoomMap
         //更新地图中心点位置
         S_Root.Instance.Position = CalcRootPosition(Player.Current.Position);
     }
+
+    private void OnDrawContainerResized()
+    {
+        S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2;
+    }
+
+    //放大小地图
+    private void MagnifyMap()
+    {
+        S_DrawContainer.Reparent(S_MagnifyMapBar);
+        S_DrawContainer.Instance.Position = new Vector2(1, 1);
+        S_Bg.Instance.Visible = true;
+        S_MagnifyMapBar.Instance.Visible = true;
+        S_MapBar.Instance.Visible = false;
+
+        _dragBinder = DragUiManager.BindDrag(S_DrawContainer.Instance, (state, delta) =>
+        {
+            //S_DrawContainer.Instance.Position += delta;
+            Debug.Log($"state: {state}, delta: {delta}");
+        });
+    }
+
+    //还原小地图
+    private void ResetMap()
+    {
+        S_DrawContainer.Reparent(S_MapBar);
+        S_DrawContainer.Instance.Position = new Vector2(1, 1);
+        S_Bg.Instance.Visible = false;
+        S_MagnifyMapBar.Instance.Visible = false;
+        S_MapBar.Instance.Visible = true;
+
+        if (_dragBinder != null)
+        {
+            _dragBinder.UnBind();
+        }
+    }
     
     //初始化小地图
     private void InitMap()
@@ -157,6 +214,7 @@ public partial class RoomMapPanel : RoomMap
         RefreshUnknownSprite(roomDoorInfo.ConnectDoor);
     }
 
+    //进入刷新问号队列
     private void RefreshUnknownSprite(RoomDoorInfo roomDoorInfo)
     {
         if (!_needRefresh.Contains(roomDoorInfo))
@@ -165,6 +223,7 @@ public partial class RoomMapPanel : RoomMap
         }
     }
 
+    //刷新问号
     private void HandlerRefreshUnknownSprite(RoomDoorInfo roomDoorInfo)
     {
         //是否探索房间
