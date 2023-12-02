@@ -57,6 +57,19 @@ public abstract partial class RoomUI : UiBase
     }
     private RoomMap _L_RoomMap;
 
+    /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: RoomUI.Mask
+    /// </summary>
+    public Mask L_Mask
+    {
+        get
+        {
+            if (_L_Mask == null) _L_Mask = new Mask((RoomUIPanel)this, GetNode<Godot.ColorRect>("Mask"));
+            return _L_Mask;
+        }
+    }
+    private Mask _L_Mask;
+
 
     public RoomUI() : base(nameof(RoomUI))
     {
@@ -555,6 +568,15 @@ public abstract partial class RoomUI : UiBase
         }
     }
 
+    /// <summary>
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: RoomUI.Mask
+    /// </summary>
+    public class Mask : UiNode<RoomUIPanel, Godot.ColorRect, Mask>
+    {
+        public Mask(RoomUIPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override Mask Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
+    }
+
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.InteractiveTipBar.Icon
@@ -675,5 +697,10 @@ public abstract partial class RoomUI : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.RoomMap.RoomMapPanel"/>, 节点路径: RoomUI.RoomMap
     /// </summary>
     public RoomMap S_RoomMap => L_RoomMap;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: RoomUI.Mask
+    /// </summary>
+    public Mask S_Mask => L_Mask;
 
 }

@@ -216,8 +216,8 @@ public partial class DungeonManager : Node2D
         _dungeonTileMap.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
         yield return 0;
         //将导航网格绑定到 DoorInfo 上
-        BindAisleNavigation(StartRoomInfo, _dungeonTileMap.GetPolygonData());
-        yield return 0;
+        //BindAisleNavigation(StartRoomInfo, _dungeonTileMap.GetPolygonData());
+        //yield return 0;
         //挂载过道导航区域
         _dungeonTileMap.MountNavigationPolygon(World.TileRoot);
         yield return 0;
@@ -331,7 +331,7 @@ public partial class DungeonManager : Node2D
                             }
                         }
 
-                        Debug.Log(roomInfo.Id + ", 是否找到连接过道: " + flag);
+                        //Debug.Log(roomInfo.Id + ", 是否找到连接过道: " + flag);
                     }
                 }
             }
@@ -790,16 +790,10 @@ public partial class DungeonManager : Node2D
                 //绘制ai寻路区域
                 Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());
             }
-            StartRoomInfo?.EachRoom(info =>
-            {
-                foreach (var roomDoorInfo in info.Doors)
-                {
-                    if (roomDoorInfo.IsForward)
-                    {
-                        DrawLine(roomDoorInfo.GetWorldOriginPosition(), roomDoorInfo.AisleNavigation.GetPoints()[0], Colors.Red, 2f);
-                    }
-                }
-            });
+            // StartRoomInfo?.EachRoom(info =>
+            // {
+            //     DrawRect(new Rect2(info.Waypoints * GameConfig.TileCellSize, new Vector2(16, 16)), Colors.Red);
+            // });
             //绘制房间区域
             // if (_dungeonGenerator != null)
             // {

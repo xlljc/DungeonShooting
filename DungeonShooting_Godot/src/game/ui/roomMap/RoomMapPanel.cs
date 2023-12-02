@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
+using UI.RoomUI;
 
 namespace UI.RoomMap;
 
@@ -25,6 +25,8 @@ public partial class RoomMapPanel : RoomMap
     //放大地图后鼠标悬停的房间
     private RoomInfo _mouseHoverRoom;
     private Color _originOutlineColor;
+    private bool _pressMapFlag = false;
+    private Tween _transmissionTween;
     
     public override void OnCreateUi()
     {
@@ -47,29 +49,41 @@ public partial class RoomMapPanel : RoomMap
         {
             _dragBinder.UnBind();
         }
+
+        if (_transmissionTween != null)
+        {
+            _transmissionTween.Dispose();
+        }
     }
 
     public override void Process(float delta)
     {
-        //按下地图按键
-        if (InputManager.Map && !_isMagnifyMap)
+        if (_transmissionTween == null) //不在传送过程中
         {
-            if (UiManager.GetUiInstanceCount(UiManager.UiName.PauseMenu) == 0)
+            if (!InputManager.Map)
             {
-                World.Current.Pause = true;
-                _isMagnifyMap = true;
-                MagnifyMap();
+                _pressMapFlag = false;
             }
-        }
-        else if (!InputManager.Map && _isMagnifyMap)
-        {
-            ResetMap();
-            _isMagnifyMap = false;
-            World.Current.Pause = false;
+            //按下地图按键
+            if (InputManager.Map && !_isMagnifyMap && !_pressMapFlag)
+            {
+                if (UiManager.GetUiInstanceCount(UiManager.UiName.PauseMenu) == 0)
+                {
+                    World.Current.Pause = true;
+                    _pressMapFlag = true;
+                    _isMagnifyMap = true;
+                    MagnifyMap();
+                }
+            }
+            else if (!InputManager.Map && _isMagnifyMap)
+            {
+                ResetMap();
+                _isMagnifyMap = false;
+                World.Current.Pause = false;
+            }
         }
         
         //更新敌人位置
-        if (World.Current != null)
         {
             var enemyList = World.Current.Enemy_InstanceList;
             if (enemyList.Count == 0) //没有敌人
@@ -147,6 +161,18 @@ public partial class RoomMapPanel : RoomMap
             S_Root.Instance.Position = CalcRootPosition(Player.Current.Position) + _mapOffset;
             S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2 + _mapOffset;
         }
+
+        //传送
+        if (_pressMapFlag && _mouseHoverRoom != null &&
+            !Player.Current.AffiliationArea.RoomInfo.IsSeclusion &&
+            Input.IsMouseButtonPressed(MouseButton.Right))
+        {
+            //执行传送操作
+            DoTransmission(_mouseHoverRoom.Waypoints * GameConfig.TileCellSize);
+            ResetMap();
+            _isMagnifyMap = false;
+            World.Current.Pause = false;
+        }
     }
 
     private void OnDrawContainerResized()
@@ -216,7 +242,16 @@ public partial class RoomMapPanel : RoomMap
                 _mouseHoverRoom = roomInfo;
                 var shaderMaterial = (ShaderMaterial)roomInfo.PreviewSprite.Material;
                 _originOutlineColor = shaderMaterial.GetShaderParameter("outline_color").AsColor();
-                shaderMaterial.SetShaderParameter("outline_color", new Color(0, 1, 0, 0.9f));
+                //玩家所在的房间门是否打开
+                var isOpen = !Player.Current.AffiliationArea.RoomInfo.IsSeclusion;
+                if (isOpen)
+                {
+                    shaderMaterial.SetShaderParameter("outline_color", new Color(0, 1, 0, 0.9f));
+                }
+                else
+                {
+                    shaderMaterial.SetShaderParameter("outline_color", new Color(1, 0, 0, 0.9f));
+                }
             };
             roomInfo.PreviewSprite.MouseExited += ResetOutlineColor;
             
@@ -326,5 +361,24 @@ public partial class RoomMapPanel : RoomMap
     {
         return S_DrawContainer.Instance.Size / 2 - pos / 16 * S_Root.Instance.Scale;
     }
-
+    
+    private void DoTransmission(Vector2 position)
+    {
+        var roomUI = (RoomUIPanel)ParentUi;
+        roomUI.S_Mask.Instance.Visible = true;
+        roomUI.S_Mask.Instance.Color = new Color(0, 0, 0, 0);
+        _transmissionTween = CreateTween();
+        _transmissionTween.TweenProperty(roomUI.S_Mask.Instance, "color", new Color(0, 0, 0), 0.3f);
+        _transmissionTween.TweenCallback(Callable.From(() =>
+        {
+            Player.Current.Position = position;
+        }));
+        _transmissionTween.TweenInterval(0.2f);
+        _transmissionTween.TweenProperty(roomUI.S_Mask.Instance, "color", new Color(0, 0, 0, 0), 0.3f);
+        _transmissionTween.TweenCallback(Callable.From(() =>
+        {
+            _transmissionTween = null;
+        }));
+        _transmissionTween.Play();
+    }
 }

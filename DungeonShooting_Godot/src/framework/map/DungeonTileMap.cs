@@ -143,6 +143,19 @@ public class DungeonTileMap
                 _tileRoot.SetCell(GameConfig.TopMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
             }
             
+            //寻找可用传送点
+            var maxCount = (roomInfo.Size.X - 2) * (roomInfo.Size.Y - 2);
+            var startPosition = roomInfo.Position + roomInfo.Size / 2;
+            for (int i = 0; i < maxCount; i++)
+            {
+                var pos = SpiralUtil.Screw(i) + startPosition;
+                if (IsWayTile(GameConfig.FloorMapLayer, pos.X, pos.Y))
+                {
+                    roomInfo.Waypoints = pos;
+                    break;
+                }
+            }
+            
             //---------------------- 随机选择预设 ----------------------
             RoomPreinstallInfo preinstallInfo;
             if (EditorPlayManager.IsPlay && roomInfo.RoomType == GameApplication.Instance.DungeonManager.CurrConfig.DesignatedType) //编辑器模式, 指定预设

@@ -129,6 +129,11 @@ public class RoomInfo : IDestroy
     /// 房间预览图, 用于小地图
     /// </summary>
     public TextureRect PreviewSprite { get; set; }
+    
+    /// <summary>
+    /// 房间内的传送点, 单位: 格
+    /// </summary>
+    public Vector2I Waypoints { get; set; }
 
     public bool IsDestroyed { get; private set; }
 

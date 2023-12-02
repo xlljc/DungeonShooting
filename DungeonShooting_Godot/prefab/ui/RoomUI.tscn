@@ -328,3 +328,14 @@ vertical_alignment = 1
 [node name="RoomMap" parent="." instance=ExtResource("16_rp3sg")]
 layout_mode = 1
 metadata/_edit_lock_ = true
+
+[node name="Mask" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

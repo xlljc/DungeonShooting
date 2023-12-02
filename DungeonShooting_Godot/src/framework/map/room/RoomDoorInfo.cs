@@ -55,7 +55,7 @@ public class RoomDoorInfo : IDestroy
     public DoorNavigationInfo Navigation;
 
     /// <summary>
-    /// 连接过道使用的导航网格
+    /// 连接过道使用的导航网格 (暂未用到)
     /// </summary>
     public NavigationPolygonData AisleNavigation;
 
