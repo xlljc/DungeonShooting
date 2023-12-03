@@ -9,7 +9,7 @@ using Godot;
 public partial class NoWeaponEnemy : Enemy
 {
     private Vector2I? _prevPosition = null;
-    private BrushImageData _brushData3;
+    private BrushImageData _brushData;
     
     public override void OnInit()
     {
@@ -17,17 +17,18 @@ public partial class NoWeaponEnemy : Enemy
         NoWeaponAttack = true;
         AnimationPlayer.AnimationFinished += OnAnimationFinished;
         
-        _brushData3 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0002"]);
+        _brushData = LiquidBrushManager.GetBrush("0002");
     }
 
     protected override void Process(float delta)
     {
         base.Process(delta);
 
+        //测试笔刷
         if (AffiliationArea != null)
         {
             var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
-            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData3, _prevPosition, pos, 0);
+            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData, _prevPosition, pos, 0);
             _prevPosition = pos;
         }
     }
@@ -47,7 +48,7 @@ public partial class NoWeaponEnemy : Enemy
         for (var i = 0; i < 8; i++)
         {
             var data = bulletData.Clone();
-            var tempPos = new Vector2(targetPosition.X + Utils.Random.RandomRangeInt(-30, 30), targetPosition.Y +  + Utils.Random.RandomRangeInt(-30, 30));
+            var tempPos = new Vector2(targetPosition.X + Utils.Random.RandomRangeInt(-30, 30), targetPosition.Y + Utils.Random.RandomRangeInt(-30, 30));
             FireManager.SetParabolaTarget(data, tempPos);
             FireManager.ShootBullet(data, AttackLayer);
         }
@@ -57,10 +58,11 @@ public partial class NoWeaponEnemy : Enemy
     {
         var realVelocity = GetRealVelocity();
         var effPos = Position;
-        var debris = Create(Ids.Id_enemy_dead0002);
+        var debris = Create<EnemyDead0002>(Ids.Id_enemy_dead0002);
         debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
         debris.MoveController.AddForce(Velocity + realVelocity);
         debris.SetFace(Face);
+        debris.PrevPosition = _prevPosition;
         
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);

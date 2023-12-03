@@ -8,9 +8,15 @@ using Godot;
 [Tool]
 public partial class EnemyDead0001 : ActivityObject
 {
-
+    /// <summary>
+    /// 上一帧笔刷坐标
+    /// </summary>
+    public Vector2I? PrevPosition = null;
+    private BrushImageData _brushData;
+    
     private GpuParticles2D _gpuParticles2D;
     private bool _playOver = false;
+    private bool _runBrush = true;
     
     public override void OnInit()
     {
@@ -25,6 +31,7 @@ public partial class EnemyDead0001 : ActivityObject
         );
 
         StartCoroutine(EmitParticles());
+        _brushData = LiquidBrushManager.GetBrush("0003");
     }
 
     protected override void Process(float delta)
@@ -33,6 +40,13 @@ public partial class EnemyDead0001 : ActivityObject
         {
             MoveController.SetAllVelocity(Vector2.Zero);
             Freeze();
+            _runBrush = false;
+        }
+        else if (_runBrush && AffiliationArea != null && Altitude <= 1f) //测试笔刷
+        {
+            var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
+            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData, PrevPosition, pos, 0);
+            PrevPosition = pos;
         }
     }
 

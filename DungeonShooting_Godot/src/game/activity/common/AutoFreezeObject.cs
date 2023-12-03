@@ -19,9 +19,21 @@ public partial class AutoFreezeObject : ActivityObject
     [Export]
     public bool AutoToGrey { get; set; }
 
+    /// <summary>
+    /// 冻结次数
+    /// </summary>
+    public int FreezeCount { get; private set; }
+    
     private bool _playFlag = false;
     private float _grey = 0;
 
+    /// <summary>
+    /// 冻结时调用
+    /// </summary>
+    protected virtual void OnFreeze()
+    {
+    }
+    
     public override void OnInit()
     {
         if (!string.IsNullOrEmpty(AnimationName))
@@ -46,7 +58,9 @@ public partial class AutoFreezeObject : ActivityObject
             }
             if (AffiliationArea != null)
             {
+                OnFreeze();
                 Freeze();
+                FreezeCount++;
             }
             else
             {

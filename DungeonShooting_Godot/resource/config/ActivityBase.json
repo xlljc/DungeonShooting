@@ -259,7 +259,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/effect/enemy/EbenyDead0001.tscn",
+    "Prefab": "res://prefab/effect/enemy/EnemyDead0001.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
@@ -271,7 +271,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/effect/enemy/EbenyDead0002.tscn",
+    "Prefab": "res://prefab/effect/enemy/EnemyDead0002.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },

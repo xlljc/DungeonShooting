@@ -288,6 +288,7 @@ public partial class DungeonManager : Node2D
         GameApplication.Instance.DestroyWorld();
         yield return 0;
         FogMaskHandler.ClearRecordRoom();
+        LiquidBrushManager.ClearData();
         BrushImageData.ClearBrushData();
         QueueRedraw();
         //鼠标还原

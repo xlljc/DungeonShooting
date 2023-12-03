@@ -14,5 +14,13 @@
     "Ffm": 0.7,
     "Duration": 4,
     "WriteOffSpeed": 0.2
+  },
+  {
+    "Id": "0003",
+    "Remark": "\u8840\u6DB2",
+    "BurshTexture": "res://resource/sprite/brush/Brush4.png",
+    "Ffm": 0.5,
+    "Duration": 6,
+    "WriteOffSpeed": 0.2
   }
 ]
