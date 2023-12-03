@@ -111,7 +111,7 @@ public static class FogMaskHandler
                     //显示预览过道
                     roomInfoDoor.PreviewRoomFogMask.SetActive(false);
                     roomInfoDoor.PreviewAisleFogMask.SetActive(true);
-                    roomInfoDoor.PreviewAisleFogMask.TransitionAlpha(1);
+                    roomInfoDoor.PreviewAisleFogMask.TransitionAlpha(0, 1);
                 }
             }
         }

@@ -41,7 +41,7 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
         }
         else
         {
-            _attackTarget = Master.LookTarget;
+            _attackTarget = null;
         }
         
         SetTargetWeapon((Weapon)args[0]);

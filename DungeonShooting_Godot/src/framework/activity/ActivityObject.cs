@@ -128,7 +128,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 是否正在投抛过程中
     /// </summary>
-    public bool IsThrowing => _throwForce != null && !_isFallOver;
+    public bool IsThrowing => VerticalSpeed != 0 && !_isFallOver;
 
     /// <summary>
     /// 当前物体的海拔高度, 如果大于0, 则会做自由落体运动, 也就是执行投抛逻辑

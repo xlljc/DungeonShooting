@@ -25,6 +25,7 @@ public partial class RoomMapPanel : RoomMap
     //放大地图后鼠标悬停的房间
     private RoomInfo _mouseHoverRoom;
     private Color _originOutlineColor;
+    //是否展开地图
     private bool _pressMapFlag = false;
     private Tween _transmissionTween;
     
@@ -65,7 +66,7 @@ public partial class RoomMapPanel : RoomMap
                 _pressMapFlag = false;
             }
             //按下地图按键
-            if (InputManager.Map && !_isMagnifyMap && !_pressMapFlag)
+            if (InputManager.Map && !_isMagnifyMap && !_pressMapFlag) //展开小地图
             {
                 if (UiManager.GetUiInstanceCount(UiManager.UiName.PauseMenu) == 0)
                 {
@@ -75,7 +76,7 @@ public partial class RoomMapPanel : RoomMap
                     MagnifyMap();
                 }
             }
-            else if (!InputManager.Map && _isMagnifyMap)
+            else if (!InputManager.Map && _isMagnifyMap) //还原小地图
             {
                 ResetMap();
                 _isMagnifyMap = false;
@@ -238,6 +239,10 @@ public partial class RoomMapPanel : RoomMap
 
             roomInfo.PreviewSprite.MouseEntered += () =>
             {
+                if (!_pressMapFlag)
+                {
+                    return;
+                }
                 ResetOutlineColor();
                 _mouseHoverRoom = roomInfo;
                 var shaderMaterial = (ShaderMaterial)roomInfo.PreviewSprite.Material;
@@ -253,7 +258,14 @@ public partial class RoomMapPanel : RoomMap
                     shaderMaterial.SetShaderParameter("outline_color", new Color(1, 0, 0, 0.9f));
                 }
             };
-            roomInfo.PreviewSprite.MouseExited += ResetOutlineColor;
+            roomInfo.PreviewSprite.MouseExited += () =>
+            {
+                if (!_pressMapFlag)
+                {
+                    return;
+                }
+                ResetOutlineColor();
+            };
             
             //过道
             if (roomInfo.Doors != null)
