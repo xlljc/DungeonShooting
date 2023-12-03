@@ -1,5 +1,4 @@
 
-using Godot;
 using UI.BottomTips;
 
 namespace UI.RoomUI;

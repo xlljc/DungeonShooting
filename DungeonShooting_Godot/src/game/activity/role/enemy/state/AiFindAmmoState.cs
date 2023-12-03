@@ -9,8 +9,10 @@ namespace EnemyState;
 /// </summary>
 public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
 {
-
-    private Weapon _target;
+    /// <summary>
+    /// 目标武器
+    /// </summary>
+    public Weapon TargetWeapon;
 
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
@@ -39,7 +41,7 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
         }
         else
         {
-            _attackTarget = null;
+            _attackTarget = Master.LookTarget;
         }
         
         SetTargetWeapon((Weapon)args[0]);
@@ -47,7 +49,7 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
         _tailAfterTimer = 0;
 
         //标记武器
-        _target.SetSign(SignNames.AiFindWeaponSign, Master);
+        TargetWeapon.SetSign(SignNames.AiFindWeaponSign, Master);
         
         _playAnimFlag = prev == AIStateEnum.AiLeaveFor;
         if (_playAnimFlag)
@@ -82,7 +84,7 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
                 //发现玩家
                 Master.LookTarget = player;
                 //进入惊讶状态, 然后再进入通知状态
-                ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFindAmmo, _target);
+                ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFindAmmo, TargetWeapon);
                 return;
             }
         }
@@ -92,7 +94,7 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            var position = _target.GlobalPosition;
+            var position = TargetWeapon.GlobalPosition;
             Master.NavigationAgent2D.TargetPosition = position;
         }
         else
@@ -100,26 +102,26 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
             _navigationUpdateTimer -= delta;
         }
 
-        if (_target.IsDestroyed || _target.IsTotalAmmoEmpty()) //已经被销毁, 或者弹药已经被其他角色捡走
+        if (TargetWeapon.IsDestroyed || TargetWeapon.IsTotalAmmoEmpty()) //已经被销毁, 或者弹药已经被其他角色捡走
         {
             //再去寻找其他武器
             SetTargetWeapon(Master.FindTargetWeapon());
 
-            if (_target == null) //也没有其他可用的武器了
+            if (TargetWeapon == null) //也没有其他可用的武器了
             {
                 RunNextState();
             }
         }
-        else if (_target.Master == Master) //已经被自己拾起
+        else if (TargetWeapon.Master == Master) //已经被自己拾起
         {
             RunNextState();
         }
-        else if (_target.Master != null) //武器已经被其他角色拾起!
+        else if (TargetWeapon.Master != null) //武器已经被其他角色拾起!
         {
             //再去寻找其他武器
             SetTargetWeapon(Master.FindTargetWeapon());
 
-            if (_target == null) //也没有其他可用的武器了
+            if (TargetWeapon == null) //也没有其他可用的武器了
             {
                 RunNextState();
             }
@@ -172,19 +174,19 @@ public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
 
     private void SetTargetWeapon(Weapon weapon)
     {
-        _target = weapon;
+        TargetWeapon = weapon;
         if (weapon != null)
         {
             //设置目标点
-            Master.NavigationAgent2D.TargetPosition = _target.GlobalPosition;
+            Master.NavigationAgent2D.TargetPosition = TargetWeapon.GlobalPosition;
         }
     }
     
     public override void DebugDraw()
     {
-        if (_target != null)
+        if (TargetWeapon != null)
         {
-            Master.DrawLine(Vector2.Zero, Master.ToLocal(_target.GlobalPosition), Colors.Purple);
+            Master.DrawLine(Vector2.Zero, Master.ToLocal(TargetWeapon.GlobalPosition), Colors.Purple);
 
             if (Master.LookTarget != null)
             {

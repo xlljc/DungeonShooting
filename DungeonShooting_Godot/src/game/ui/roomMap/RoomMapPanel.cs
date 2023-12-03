@@ -168,7 +168,7 @@ public partial class RoomMapPanel : RoomMap
             Input.IsMouseButtonPressed(MouseButton.Right))
         {
             //执行传送操作
-            DoTransmission(_mouseHoverRoom.Waypoints * GameConfig.TileCellSize);
+            DoTransmission((_mouseHoverRoom.Waypoints + new Vector2(0.5f, 0.5f)) * GameConfig.TileCellSize);
             ResetMap();
             _isMagnifyMap = false;
             World.Current.Pause = false;

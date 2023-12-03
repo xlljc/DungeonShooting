@@ -284,6 +284,15 @@ public partial class Enemy : Role
             LookTarget = target;
             StateController.ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiTailAfter);
         }
+        else if (state == AIStateEnum.AiFindAmmo)
+        {
+            if (LookTarget == null)
+            {
+                LookTarget = target;
+                var findAmmo = (AiFindAmmoState)StateController.CurrStateBase;
+                StateController.ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFindAmmo, findAmmo.TargetWeapon);
+            }
+        }
     }
 
     /// <summary>

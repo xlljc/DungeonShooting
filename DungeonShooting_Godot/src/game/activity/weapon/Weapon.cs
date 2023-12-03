@@ -285,7 +285,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     public override void OnInit()
     {
         InitWeapon(GetWeaponAttribute(ActivityBase.Id).Clone());
-        AnimatedSprite.AnimationFinished += OnAnimationFinished;
+        AnimatedSprite.AnimationFinished += OnAnimatedSpriteFinished;
+        AnimationPlayer.AnimationFinished += OnAnimationPlayerFinished;
     }
 
     /// <summary>
@@ -1610,10 +1611,19 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     }
 
     //帧动画播放结束
-    private void OnAnimationFinished()
+    private void OnAnimatedSpriteFinished()
     {
         // Debug.Log("帧动画播放结束...");
         AnimatedSprite.Play(AnimatorNames.Default);
+    }
+
+    //动画播放器播放结束
+    private void OnAnimationPlayerFinished(StringName name)
+    {
+        if (Master != null && !IsActive)
+        {
+            Master.OnPutBackMount(this, PackageIndex);
+        }
     }
 
     public override CheckInteractiveResult CheckInteractive(ActivityObject master)
@@ -1821,6 +1831,12 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// </summary>
     private void Conceal()
     {
+        //停止换弹动画
+        if (AnimationPlayer.CurrentAnimation == AnimatorNames.Reloading && AnimationPlayer.IsPlaying())
+        {
+            AnimationPlayer.Play(AnimatorNames.Reset);
+        }
+        
         HideShadowSprite();
         OnConceal();
     }
@@ -1843,6 +1859,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         if (Reloading)
         {
             StopReload();
+        }
+        //停止换弹动画
+        if (AnimationPlayer.CurrentAnimation == AnimatorNames.Reloading && AnimationPlayer.IsPlaying())
+        {
+            AnimationPlayer.Play(AnimatorNames.Reset);
         }
         OnRemove(Master);
     }
