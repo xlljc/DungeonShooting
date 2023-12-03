@@ -1247,7 +1247,7 @@ public abstract partial class Role : ActivityObject
         {
             MeleeAttackCollision.Polygon = Utils.CreateSectorPolygon(
                 Utils.ConvertAngle(-MeleeAttackAngle / 2f),
-                (weapon.GetLocalFirePosition() - weapon.GripPoint.Position).Length() * 1.2f,
+                (weapon.GetLocalFirePosition() - weapon.GetGripPosition()).Length() * 1.2f,
                 MeleeAttackAngle,
                 6
             );

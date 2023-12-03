@@ -131,12 +131,11 @@ _data = {
 "reloading": SubResource("Animation_juv2q")
 }
 
-[node name="Weapon0009" type="CharacterBody2D" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="Weapon0009" type="CharacterBody2D" node_paths=PackedStringArray("FirePoint", "ShellPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 4
 script = ExtResource("1_eprgt")
 FirePoint = NodePath("AnimatedSprite/FirePoint")
 ShellPoint = NodePath("AnimatedSprite/ShellPoint")
-GripPoint = NodePath("GripPoint")
 AnimationPlayer = NodePath("AnimationPlayer")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
@@ -149,6 +148,7 @@ material = SubResource("ShaderMaterial_cbiyh")
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_o36tv")
 sprite_frames = ExtResource("2_4kxpd")
+offset = Vector2(6, -1)
 
 [node name="ShellPoint" type="Marker2D" parent="AnimatedSprite"]
 position = Vector2(-2, -2)
@@ -156,12 +156,8 @@ position = Vector2(-2, -2)
 [node name="FirePoint" type="Marker2D" parent="AnimatedSprite"]
 position = Vector2(13, -0.5)
 
-[node name="GripPoint" type="Marker2D" parent="."]
-position = Vector2(-6, 1)
-
 [node name="Collision" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(0, 1)
+position = Vector2(6, 0)
 shape = SubResource("RectangleShape2D_jbuu3")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -57,12 +57,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// </summary>
     [Export, ExportFillNode]
     public Marker2D ShellPoint { get; set; }
-
-    /// <summary>
-    /// 武器握把位置
-    /// </summary>
-    [Export, ExportFillNode]
-    public Marker2D GripPoint { get; set; }
     
     /// <summary>
     /// 武器的当前散射半径
@@ -208,8 +202,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     //当前后坐力导致的偏移长度
     private float _currBacklashLength = 0;
 
-    //临时存放动画精灵位置
-    private Vector2 _tempAnimatedSpritePosition;
+    //握把位置
+    private Vector2 _gripPoint;
+
+    //持握时 Sprite 偏移
+    private Vector2 _gripOffset;
+
+    //碰撞器位置
+    private Vector2 _collPoint;
 
     //换弹计时器
     private float _reloadTimer = 0;
@@ -287,6 +287,12 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         InitWeapon(GetWeaponAttribute(ActivityBase.Id).Clone());
         AnimatedSprite.AnimationFinished += OnAnimatedSpriteFinished;
         AnimationPlayer.AnimationFinished += OnAnimationPlayerFinished;
+        _gripPoint = AnimatedSprite.Position;
+        _gripOffset = AnimatedSprite.Offset;
+        _collPoint = Collision.Position;
+        AnimatedSprite.Position = Vector2.Zero;
+        AnimatedSprite.Offset = Vector2.Zero;
+        Collision.Position = Vector2.Zero;
     }
 
     /// <summary>
@@ -1784,7 +1790,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         var rotation = master.MountPoint.GlobalRotation;
         GlobalRotation = rotation;
 
-        startPosition -= GripPoint.Position.Rotated(rotation);
+        if (master.Face == FaceDirection.Right)
+        {
+            startPosition += _gripPoint.Rotated(rotation);
+        }
+        else
+        {
+            startPosition += new Vector2(_gripPoint.X, -_gripPoint.Y).Rotated(rotation);
+        }
+
         var startHeight = -master.MountPoint.Position.Y;
         var velocity = new Vector2(20, 0).Rotated(rotation);
         var yf = Utils.Random.RandomRangeInt(50, 70);
@@ -1819,7 +1833,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     {
         //调整阴影
         //ShadowOffset = new Vector2(0, Master.GlobalPosition.Y - GlobalPosition.Y);
-        ShadowOffset = new Vector2(0, -Master.MountPoint.Position.Y);
+        ShadowOffset = new Vector2(0, -Master.MountPoint.Position.Y + 2);
         //枪口默认抬起角度
         RotationDegrees = -Attribute.DefaultAngle;
         ShowShadowSprite();
@@ -1852,7 +1866,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         _triggerRoleFlag = false;
         _weaponAttribute = _playerWeaponAttribute;
         CollisionLayer = _tempLayer;
-        AnimatedSprite.Position = _tempAnimatedSpritePosition;
+
+        //精灵位置, 旋转中心点
+        AnimatedSprite.Position = Vector2.Zero;
+        AnimatedSprite.Offset = Vector2.Zero;
+        Collision.Position = Vector2.Zero;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         //停止换弹
@@ -1880,10 +1898,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         ZIndex = 0;
         //禁用碰撞
         //Collision.Disabled = true;
-        //精灵位置
-        _tempAnimatedSpritePosition = AnimatedSprite.Position;
-        var position = GripPoint.Position;
-        AnimatedSprite.Position = new Vector2(-position.X, -position.Y);
+        AnimatedSprite.Position = _gripPoint;
+        AnimatedSprite.Offset = _gripOffset;
+        Collision.Position = _collPoint;
         //修改层级
         _tempLayer = CollisionLayer;
         CollisionLayer = PhysicsLayer.OnHand;
@@ -1946,6 +1963,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         return AnimatedSprite.Position + ShellPoint.Position;
     }
 
+    /// <summary>
+    /// 获取握把位置, 相当于武器的原点坐标
+    /// </summary>
+    public Vector2 GetGripPosition()
+    {
+        return _gripPoint + _gripOffset;
+    }
+    
     //-------------------------------- Ai相关 -----------------------------
     
     /// <summary>

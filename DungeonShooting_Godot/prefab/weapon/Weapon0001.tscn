@@ -32,11 +32,10 @@ shader_parameter/grey = 0.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7i6da"]
 size = Vector2(22, 8.25)
 
-[node name="Weapon0001" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_ykl0r")]
+[node name="Weapon0001" node_paths=PackedStringArray("FirePoint", "ShellPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_ykl0r")]
 script = ExtResource("2_t56pk")
 FirePoint = NodePath("AnimatedSprite/FirePoint")
 ShellPoint = NodePath("AnimatedSprite/ShellPoint")
-GripPoint = NodePath("GripPoint")
 AnimationPlayer = NodePath("AnimationPlayer")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
@@ -47,6 +46,7 @@ material = SubResource("ShaderMaterial_5bfqf")
 
 [node name="AnimatedSprite" parent="." index="1"]
 material = SubResource("ShaderMaterial_bj7y3")
+position = Vector2(5, 1)
 sprite_frames = ExtResource("4_d5c81")
 
 [node name="ShellPoint" parent="AnimatedSprite" index="0"]
@@ -55,9 +55,7 @@ position = Vector2(1.5, -3.5)
 [node name="FirePoint" parent="AnimatedSprite" index="1"]
 position = Vector2(15, -2)
 
-[node name="GripPoint" parent="." index="2"]
-position = Vector2(-5, -1)
-
-[node name="Collision" parent="." index="3"]
-position = Vector2(0, -0.875)
+[node name="Collision" parent="." index="2"]
+visible = true
+position = Vector2(5, 1)
 shape = SubResource("RectangleShape2D_7i6da")

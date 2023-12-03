@@ -37,8 +37,6 @@ position = Vector2(0, -2)
 [node name="FirePoint" type="Marker2D" parent="AnimatedSprite"]
 position = Vector2(10, -2)
 
-[node name="GripPoint" type="Marker2D" parent="."]
-
 [node name="Collision" type="CollisionShape2D" parent="."]
 visible = false
 

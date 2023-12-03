@@ -45,13 +45,15 @@ Collision = NodePath("Collision")
 texture = ExtResource("3_vx7tr")
 
 [node name="AnimatedSprite" parent="." index="2"]
-visible = false
 material = SubResource("ShaderMaterial_8hgu2")
 sprite_frames = ExtResource("4_galcc")
 animation = &"roll"
 
 [node name="HurtCollision" parent="HurtArea" index="0"]
 shape = SubResource("RectangleShape2D_ve262")
+
+[node name="InteractiveArea" parent="." index="5"]
+visible = true
 
 [node name="AnimationPlayer" parent="." index="8"]
 libraries = {

@@ -45,7 +45,7 @@ public partial class Role
             //播放特效
             var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_MeleeAttack1_tscn);
             var sprite = (Node2D)effect;
-            var localFirePosition = activeItem.GetLocalFirePosition() - activeItem.GripPoint.Position;
+            var localFirePosition = activeItem.GetLocalFirePosition() - activeItem.Position;
             localFirePosition *= 0.9f;
             sprite.Position = p1 + localFirePosition.Rotated(Mathf.DegToRad(r));
             sprite.RotationDegrees = r;
