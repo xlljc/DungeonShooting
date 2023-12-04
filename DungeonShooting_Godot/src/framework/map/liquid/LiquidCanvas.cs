@@ -17,6 +17,11 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
     /// 画布缩放
     /// </summary>
     public static int CanvasScale { get; } = 4;
+
+    /// <summary>
+    /// 画布每秒更新频率
+    /// </summary>
+    public static int UpdateFps { get; set; } = 30;
     
     public bool IsDestroyed { get; private set; }
     
@@ -36,6 +41,7 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
     private bool _changeFlag = false;
     //所属房间
     private RoomInfo _roomInfo;
+    private double _processTimer;
 
     public LiquidCanvas(RoomInfo roomInfo, int width, int height)
     {
@@ -66,6 +72,15 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
     {
         //这里待优化, 应该每次绘制都将像素点放入 _tempList 中, 然后帧结束再统一提交
 
+        _processTimer += delta;
+        if (_processTimer < 1d / UpdateFps)
+        {
+            return;
+        }
+
+        var newDelta = _processTimer;
+        _processTimer %= 1d / UpdateFps;
+        
         //更新消除逻辑
         if (_updateImagePixels.Count > 0)
         {
@@ -132,7 +147,7 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
             _changeFlag = false;
         }
 
-        _runTime += (float)delta;
+        _runTime += (float)newDelta;
     }
 
     /// <summary>

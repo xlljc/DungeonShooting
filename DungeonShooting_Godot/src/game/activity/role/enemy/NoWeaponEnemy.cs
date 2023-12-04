@@ -8,7 +8,6 @@ using Godot;
 [Tool]
 public partial class NoWeaponEnemy : Enemy
 {
-    private Vector2I? _prevPosition = null;
     private BrushImageData _brushData;
     
     public override void OnInit()
@@ -25,12 +24,7 @@ public partial class NoWeaponEnemy : Enemy
         base.Process(delta);
 
         //测试笔刷
-        if (AffiliationArea != null)
-        {
-            var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
-            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData, _prevPosition, pos, 0);
-            _prevPosition = pos;
-        }
+        DrawLiquid(_brushData);
     }
 
     public override void Attack()
@@ -62,7 +56,7 @@ public partial class NoWeaponEnemy : Enemy
         debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
         debris.MoveController.AddForce(Velocity + realVelocity);
         debris.SetFace(Face);
-        debris.PrevPosition = _prevPosition;
+        debris.BrushPrevPosition =  BrushPrevPosition;
         
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);

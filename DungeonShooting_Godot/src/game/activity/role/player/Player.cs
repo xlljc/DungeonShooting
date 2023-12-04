@@ -29,7 +29,6 @@ public partial class Player : Role
     //翻滚冷却计时器
     private float _rollCoolingTimer = 0;
     
-    private Vector2I? _prevPosition = null;
     private BrushImageData _brushData2;
     
     /// <summary>
@@ -235,17 +234,12 @@ public partial class Player : Role
         }
 
         //测试刷地
-        // if (AffiliationArea != null)
-        // {
-        //     var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
-        //     AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData2, _prevPosition, pos, 0);
-        //     _prevPosition = pos;
-        // }
+        //DrawLiquid(_brushData2);
     }
 
     protected override void OnAffiliationChange(AffiliationArea prevArea)
     {
-        _prevPosition = null;
+        //BrushPrevPosition = null;
         base.OnAffiliationChange(prevArea);
     }
 

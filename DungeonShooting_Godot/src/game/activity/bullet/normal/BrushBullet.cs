@@ -20,7 +20,6 @@ public partial class BrushBullet : Bullet
     public float EffectiveAltitude { get; set; } = -1;
 
     private BrushImageData _brushData;
-    private Vector2I? _prevPosition;
 
     public override void OnInit()
     {
@@ -32,17 +31,19 @@ public partial class BrushBullet : Bullet
     {
         base.Process(delta);
         //测试笔刷
-        if ((EffectiveAltitude < 0 || Altitude <= EffectiveAltitude)&& AffiliationArea != null)
+        if ((EffectiveAltitude < 0 || Altitude <= EffectiveAltitude))
         {
-            var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
-            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData, _prevPosition, pos, 0);
-            _prevPosition = pos;
+            DrawLiquid(_brushData);
+        }
+        else
+        {
+            BrushPrevPosition = null;
         }
     }
 
     public override void OnLeavePool()
     {
         base.OnLeavePool();
-        _prevPosition = null;
+        BrushPrevPosition = null;
     }
 }

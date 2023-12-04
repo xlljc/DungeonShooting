@@ -248,6 +248,12 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public bool IsCustomShadowSprite { get; private set; }
 
+    /// <summary>
+    /// 记录绘制液体的笔刷上一次绘制的位置<br/>
+    /// 每次调用 DrawLiquid() 后都会记录这一次绘制的位置, 记录这个位置用作执行补间操作, 但是一旦停止绘制了, 需要手动清理记录的位置, 也就是将 BrushPrevPosition 置为 null
+    /// </summary>
+    public Vector2I? BrushPrevPosition { get; set; }
+    
     // --------------------------------------------------------------------------------
 
     private static readonly StringName _shader_grey = "grey";
@@ -1793,5 +1799,53 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
 
         return _repelForce.Velocity;
+    }
+
+    /// <summary>
+    /// 根据笔刷 id 在该物体位置绘制液体, 该 id 为 LiquidMaterial 表的 id
+    /// </summary>
+    public void DrawLiquid(string brushId)
+    {
+        if (AffiliationArea != null)
+        {
+            DrawLiquid(LiquidBrushManager.GetBrush(brushId));
+        }
+    }
+    
+    /// <summary>
+    /// 根据笔刷数据在该物体位置绘制液体
+    /// </summary>
+    public void DrawLiquid(BrushImageData brush)
+    {
+        if (AffiliationArea != null)
+        {
+            var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
+            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(brush, BrushPrevPosition, pos, 0);
+            BrushPrevPosition = pos;
+        }
+    }
+    
+    /// <summary>
+    /// 根据笔刷 id 在该物体位置绘制液体, 该 id 为 LiquidMaterial 表的 id
+    /// </summary>
+    public void DrawLiquid(string brushId, Vector2I offset)
+    {
+        if (AffiliationArea != null)
+        {
+            DrawLiquid(LiquidBrushManager.GetBrush(brushId), offset);
+        }
+    }
+    
+    /// <summary>
+    /// 根据笔刷数据在该物体位置绘制液体
+    /// </summary>
+    public void DrawLiquid(BrushImageData brush, Vector2I offset)
+    {
+        if (AffiliationArea != null)
+        {
+            var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position) + offset;
+            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(brush, BrushPrevPosition, pos, 0);
+            BrushPrevPosition = pos;
+        }
     }
 }
