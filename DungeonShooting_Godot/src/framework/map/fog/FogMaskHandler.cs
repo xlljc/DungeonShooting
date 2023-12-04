@@ -51,7 +51,7 @@ public static class FogMaskHandler
     {
         if (_prevRoomInfo != roomInfo)
         {
-            Debug.Log($"切换房间: {_prevRoomInfo?.Id} => {roomInfo.Id}");
+            //Debug.Log($"切换房间: {_prevRoomInfo?.Id} => {roomInfo.Id}");
             if (_prevRoomInfo != null)
             {
                 //房间变暗
@@ -88,7 +88,7 @@ public static class FogMaskHandler
 
             _prevRoomInfo = roomInfo;
         }
-        Debug.Log("RefreshRoomFog: " + roomInfo.Id);
+        //Debug.Log("RefreshRoomFog: " + roomInfo.Id);
         var fogMask = roomInfo.RoomFogMask;
         
         if (!fogMask.IsExplored) //未探索该区域
@@ -139,7 +139,7 @@ public static class FogMaskHandler
 
     private static void _RefreshAisleFog(RoomDoorInfo doorInfo)
     {
-        Debug.Log("RefreshAisleFog: " + doorInfo.RoomInfo.Id + doorInfo.Direction);
+        //Debug.Log("RefreshAisleFog: " + doorInfo.RoomInfo.Id + doorInfo.Direction);
         var fogMask = doorInfo.AisleFogMask;
 
         var connectDoor = doorInfo.ConnectDoor;

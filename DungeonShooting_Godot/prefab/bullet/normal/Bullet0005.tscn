@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://cjgnw37tqiqh7"]
 
-[ext_resource type="Script" path="res://src/game/activity/bullet/normal/Bullet.cs" id="1_vpnof"]
+[ext_resource type="Script" path="res://src/game/activity/bullet/normal/BrushBullet.cs" id="1_13wdl"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_v0al6"]
-[ext_resource type="SpriteFrames" uid="uid://bcnhyin0aufl1" path="res://resource/spriteFrames/bullet/Bullet0003.tres" id="3_8mltb"]
+[ext_resource type="SpriteFrames" uid="uid://jj8oh76pi53j" path="res://resource/spriteFrames/bullet/Bullet0005.tres" id="3_mmvqn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
 resource_local_to_scene = true
@@ -14,6 +14,7 @@ shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p0wfd"]
 resource_local_to_scene = true
@@ -25,13 +26,16 @@ shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c0onq"]
-size = Vector2(6, 3.125)
+size = Vector2(6, 3.5625)
 
 [node name="Bullet0005" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
-script = ExtResource("1_vpnof")
+script = ExtResource("1_13wdl")
+BrushId = "0004"
+EffectiveAltitude = 1.0
 CollisionArea = NodePath("AnimatedSprite/CollisionArea")
 CollisionShape2D = NodePath("AnimatedSprite/CollisionArea/CollisionShape2D")
 ShadowSprite = NodePath("ShadowSprite")
@@ -43,9 +47,8 @@ z_index = -1
 material = SubResource("ShaderMaterial_v77gw")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-modulate = Color(1.6, 1.6, 1.6, 1)
 material = SubResource("ShaderMaterial_p0wfd")
-sprite_frames = ExtResource("3_8mltb")
+sprite_frames = ExtResource("3_mmvqn")
 
 [node name="CollisionArea" type="Area2D" parent="AnimatedSprite"]
 visible = false

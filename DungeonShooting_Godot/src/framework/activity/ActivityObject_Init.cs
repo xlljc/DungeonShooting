@@ -89,7 +89,7 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_bullet0004 = "bullet0004";
         /// <summary>
-        /// 名称: 敌方专用子弹 <br/>
+        /// 名称: 抛物线粘液子弹 <br/>
         /// 简介: 
         /// </summary>
         public const string Id_bullet0005 = "bullet0005";

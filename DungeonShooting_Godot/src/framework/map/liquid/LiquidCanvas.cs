@@ -189,7 +189,7 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
             var len = offset.Length();
             if (len > maxL) //距离太大了, 需要补间
             {
-                Debug.Log($"距离太大了, 启用补间: len: {len}, maxL: {maxL}");
+                //Debug.Log($"距离太大了, 启用补间: len: {len}, maxL: {maxL}");
                 var count = Mathf.CeilToInt(len / maxL);
                 var step = new Vector2(offset.X / count, offset.Y / count);
                 var prevPos = prevPosition.Value - center;

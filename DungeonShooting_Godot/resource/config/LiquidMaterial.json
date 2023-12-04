@@ -17,10 +17,18 @@
   },
   {
     "Id": "0003",
-    "Remark": "\u8840\u6DB2",
+    "Remark": "\u8840\u6DB2(\u6700\u5C0F\u7B14\u5237)",
     "BurshTexture": "res://resource/sprite/brush/Brush4.png",
     "Ffm": 0.5,
-    "Duration": 6,
+    "Duration": 12,
+    "WriteOffSpeed": 0.2
+  },
+  {
+    "Id": "0004",
+    "Remark": "\u7C98\u6DB2(\u6700\u5C0F\u7B14\u5237)",
+    "BurshTexture": "res://resource/sprite/brush/Brush5.png",
+    "Ffm": 0.5,
+    "Duration": 5,
     "WriteOffSpeed": 0.2
   }
 ]
