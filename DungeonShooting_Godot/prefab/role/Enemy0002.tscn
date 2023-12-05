@@ -35,7 +35,7 @@ shader_parameter/grey = 0.0
 
 [sub_resource type="Animation" id="Animation_bn678"]
 resource_name = "attack"
-length = 0.6
+length = 1.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -55,10 +55,10 @@ tracks/1/path = NodePath("AnimatedSprite:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 1.7),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0, 7]
+"values": [0, 12]
 }
 tracks/2/type = "method"
 tracks/2/imported = false
@@ -67,11 +67,11 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.3),
+"times": PackedFloat32Array(1.3),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"ShootBullet"
+"method": &"OnAttack"
 }]
 }
 
@@ -111,7 +111,6 @@ material = SubResource("ShaderMaterial_y5nia")
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_4qvs8")
 sprite_frames = ExtResource("3_hbsqi")
-animation = &"attack"
 offset = Vector2(0, -9)
 
 [node name="HurtCollision" parent="HurtArea" index="0"]

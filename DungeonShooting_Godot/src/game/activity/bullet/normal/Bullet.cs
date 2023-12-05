@@ -130,13 +130,7 @@ public partial class Bullet : ActivityObject, IBullet
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
             //创建粒子特效
-            var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_bullet_BulletSmoke0001_tscn);
-            var smoke = (Node2D)effect;
-            var rotated = AnimatedSprite.Position.Rotated(Rotation);
-            smoke.GlobalPosition = collision.GetPosition() + new Vector2(0, rotated.Y);
-            smoke.GlobalRotation = collision.GetNormal().Angle();
-            smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-            effect.PlayEffect();
+            OnPlayCollisionEffect(collision);
             DoReclaim();
         }
     }
@@ -224,6 +218,14 @@ public partial class Bullet : ActivityObject, IBullet
     }
 
     /// <summary>
+    /// 播放撞墙特效
+    /// </summary>
+    public virtual void OnPlayCollisionEffect(KinematicCollision2D collision)
+    {
+        PlayCollisionEffect(collision, ResourcePath.prefab_effect_bullet_BulletSmoke0001_tscn);
+    }
+
+    /// <summary>
     /// 播放子弹消失特效
     /// </summary>
     public void PlayDisappearEffect(string path)
@@ -232,6 +234,21 @@ public partial class Bullet : ActivityObject, IBullet
         var node = (Node2D)effect;
         node.GlobalPosition = AnimatedSprite.GlobalPosition;
         node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+        effect.PlayEffect();
+    }
+    
+    
+    /// <summary>
+    /// 播放子弹消失特效
+    /// </summary>
+    public void PlayCollisionEffect(KinematicCollision2D collision, string path)
+    {
+        var effect = ObjectManager.GetPoolItem<IEffect>(path);
+        var smoke = (Node2D)effect;
+        var rotated = AnimatedSprite.Position.Rotated(Rotation);
+        smoke.GlobalPosition = collision.GetPosition() + new Vector2(0, rotated.Y);
+        smoke.GlobalRotation = collision.GetNormal().Angle();
+        smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         effect.PlayEffect();
     }
     
@@ -267,6 +284,7 @@ public partial class Bullet : ActivityObject, IBullet
     
     public virtual void OnReclaim()
     {
+        Visible = false;
         if (Particles2D != null)
         {
             foreach (var particles2D in Particles2D)
@@ -288,6 +306,7 @@ public partial class Bullet : ActivityObject, IBullet
 
     public virtual void OnLeavePool()
     {
+        Visible = true;
         MoveController.ClearForce();
         StopAllCoroutine();
         if (OnLeavePoolEvent != null)

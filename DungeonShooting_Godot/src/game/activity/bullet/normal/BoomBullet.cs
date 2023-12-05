@@ -60,7 +60,7 @@ public partial class BoomBullet : Bullet
         explode.RunPlay(BulletData.TriggerRole);
         if (AffiliationArea != null)
         {
-            var texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_effects_explode_Explode_pit0001_png);
+            var texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_explode_Explode_pit0001_png);
             var tempPos = AffiliationArea.RoomInfo.ToCanvasPosition(pos);
             AffiliationArea.RoomInfo.StaticImageCanvas.DrawImageInCanvas(
                 texture, null, tempPos.X, tempPos.Y, Utils.Random.RandomRangeInt(0, 360),

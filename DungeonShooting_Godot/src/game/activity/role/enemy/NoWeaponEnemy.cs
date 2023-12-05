@@ -34,9 +34,20 @@ public partial class NoWeaponEnemy : Enemy
             AnimationPlayer.Play(AnimatorNames.Attack);
         }
     }
-
-    public void ShootBullet()
+    
+    /// <summary>
+    /// 开始执行攻击逻辑
+    /// </summary>
+    public virtual void OnAttack()
     {
+        //攻击特效
+        var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_ShotFire3_tscn);
+        var node = (Node2D)effect;
+        node.GlobalPosition = FirePoint.GlobalPosition;
+        node.Rotation = MountPoint.Rotation;
+        node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+        effect.PlayEffect();
+        
         var targetPosition = LookTarget.GetCenterPosition();
         var bulletData = FireManager.GetBulletData(this, 0, ExcelConfig.BulletBase_Map["0006"]);
         for (var i = 0; i < 8; i++)
@@ -67,7 +78,7 @@ public partial class NoWeaponEnemy : Enemy
     {
         if (name == AnimatorNames.Attack)
         {
-            AttackTimer = 2f;
+            AttackTimer = 3f;
         }
     }
 }

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/game/activity/bullet/normal/BrushBullet.cs" id="1_13wdl"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_v0al6"]
 [ext_resource type="SpriteFrames" uid="uid://jj8oh76pi53j" path="res://resource/spriteFrames/bullet/Bullet0005.tres" id="3_mmvqn"]
-[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="4_esjg6"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/common/Smoke.png" id="4_esjg6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
 resource_local_to_scene = true

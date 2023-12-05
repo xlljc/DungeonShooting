@@ -1,8 +1,8 @@
 [gd_scene load_steps=16 format=3 uid="uid://7fjw62ymmrl7"]
 
-[ext_resource type="Texture2D" uid="uid://cusp3s5t7qbuy" path="res://resource/sprite/effects/explode/Explode_circle0002.png" id="1_xuqre"]
+[ext_resource type="Texture2D" uid="uid://cusp3s5t7qbuy" path="res://resource/sprite/explode/Explode_circle0002.png" id="1_xuqre"]
 [ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_eeot2"]
-[ext_resource type="Texture2D" uid="uid://du0f3km5jhxlg" path="res://resource/sprite/effects/common/Smoke4.png" id="3_yow4l"]
+[ext_resource type="Texture2D" uid="uid://du0f3km5jhxlg" path="res://resource/sprite/common/Smoke4.png" id="3_yow4l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w7xvw"]
 atlas = ExtResource("1_xuqre")
@@ -99,7 +99,6 @@ sprite_frames = SubResource("SpriteFrames_ub3cw")
 frame = 7
 frame_progress = 1.0
 script = ExtResource("2_eeot2")
-DelayTime = 1.5
 Particles2D = [NodePath("GPUParticles2D")]
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]

@@ -1,6 +1,7 @@
 [gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://k2tktysa7j86"]
 
-[ext_resource type="Texture2D" uid="uid://bxhbsq0wb2yo1" path="res://resource/sprite/weapon/knife1.png" id="1_jb24v"]
+[ext_resource type="Texture2D" uid="uid://bxhbsq0wb2yo1" path="res://resource/sprite/weapon/weapon0004/Weapon0004.png" id="1_jb24v"]
+
 
 [resource]
 animations = [{

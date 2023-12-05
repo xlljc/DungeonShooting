@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dx07ta0asnmuw"
-path="res://.godot/imported/KnifeHit1.png-2f433b2240ee3b74ce7f49e4905f3ded.ctex"
+path="res://.godot/imported/KnifeHit1.png-80077e3967f264ba53464cfdd643f301.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/effects/weapon/KnifeHit1.png"
-dest_files=["res://.godot/imported/KnifeHit1.png-2f433b2240ee3b74ce7f49e4905f3ded.ctex"]
+source_file="res://resource/sprite/weapon/weapon0004/KnifeHit1.png"
+dest_files=["res://.godot/imported/KnifeHit1.png-80077e3967f264ba53464cfdd643f301.ctex"]
 
 [params]
 

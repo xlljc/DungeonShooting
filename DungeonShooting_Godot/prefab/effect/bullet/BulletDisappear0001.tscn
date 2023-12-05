@@ -1,8 +1,8 @@
 [gd_scene load_steps=13 format=3 uid="uid://c6mmikwchwt"]
 
-[ext_resource type="Texture2D" uid="uid://4be6mi1egtiy" path="res://resource/sprite/effects/explode/Explode_circle0003.png" id="1_nag6e"]
+[ext_resource type="Texture2D" uid="uid://4be6mi1egtiy" path="res://resource/sprite/explode/Explode_circle0003.png" id="1_nag6e"]
 [ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_db7di"]
-[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="3_2w51u"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/common/Smoke.png" id="3_2w51u"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tscb3"]
 atlas = ExtResource("1_nag6e")

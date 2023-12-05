@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://y47kp0t5uqu0"]
+
+[ext_resource type="SpriteFrames" uid="uid://dkqd4513sog3f" path="res://resource/spriteFrames/bullet/Collision0002.tres" id="1_0qscf"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_p27g6"]
+[ext_resource type="Texture2D" uid="uid://du0f3km5jhxlg" path="res://resource/sprite/common/Smoke4.png" id="4_d8v0n"]
+
+[sub_resource type="CanvasItemMaterial" id="1"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_r4o86"]
+_data = [Vector2(0.0107527, 1), 0.0, 0.0, 0, 0, Vector2(0.512545, 0.8), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_thj4e"]
+curve = SubResource("Curve_r4o86")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gpp81"]
+lifetime_randomness = 0.4
+particle_flag_disable_z = true
+angle_max = 360.0
+spread = 25.0
+initial_velocity_min = 10.0
+initial_velocity_max = 60.0
+gravity = Vector3(0, 90, 0)
+scale_min = 0.9
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_thj4e")
+color = Color(0.75, 0.75, 0.75, 0.588235)
+anim_offset_max = 1.0
+
+[node name="BulletSmoke0002" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
+modulate = Color(0.95, 0.70965, 0.6365, 0.588235)
+sprite_frames = ExtResource("1_0qscf")
+offset = Vector2(8, 0)
+script = ExtResource("2_p27g6")
+Particles2D = [NodePath("GpuParticles2D")]
+
+[node name="GpuParticles2D" type="GPUParticles2D" parent="."]
+show_behind_parent = true
+material = SubResource("1")
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_gpp81")
+texture = ExtResource("4_d8v0n")
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.9
+randomness = 0.5
+fixed_fps = 20

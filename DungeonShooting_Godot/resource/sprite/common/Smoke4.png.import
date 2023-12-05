@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7jhe2mmctmr1"
-path="res://.godot/imported/MeleeAttack1.png-fcea1547355ce99fe204cf5180b8c02d.ctex"
+uid="uid://du0f3km5jhxlg"
+path="res://.godot/imported/Smoke4.png-b921bc0b8f3badacae30b598d888a3be.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/effects/weapon/MeleeAttack1.png"
-dest_files=["res://.godot/imported/MeleeAttack1.png-fcea1547355ce99fe204cf5180b8c02d.ctex"]
+source_file="res://resource/sprite/common/Smoke4.png"
+dest_files=["res://.godot/imported/Smoke4.png-b921bc0b8f3badacae30b598d888a3be.ctex"]
 
 [params]
 

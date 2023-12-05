@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cj8gb5dxnk8ov"
-path="res://.godot/imported/ShotFire2.png-859bcfe4ad8b11b7eb348b8c54ee9e64.ctex"
+uid="uid://4be6mi1egtiy"
+path="res://.godot/imported/Explode_circle0003.png-4321be8a4dc1201188548c1bf9ff88ee.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/effects/weapon/ShotFire2.png"
-dest_files=["res://.godot/imported/ShotFire2.png-859bcfe4ad8b11b7eb348b8c54ee9e64.ctex"]
+source_file="res://resource/sprite/explode/Explode_circle0003.png"
+dest_files=["res://.godot/imported/Explode_circle0003.png-4321be8a4dc1201188548c1bf9ff88ee.ctex"]
 
 [params]
 

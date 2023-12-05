@@ -80,7 +80,7 @@
     "IsStatic": false,
     "__Material": "",
     "Prefab": "res://prefab/weapon/Weapon0004.tscn",
-    "Icon": "res://resource/sprite/weapon/knife1.png",
+    "Icon": "res://resource/sprite/weapon/weapon0004/Weapon0004.png",
     "ShowInMapEditor": true
   },
   {

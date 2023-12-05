@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ccdflg560oub6"
-path="res://.godot/imported/Explode_circle0001.png-226d2b77cea80f656d4eb2869ee47062.ctex"
+uid="uid://7jhe2mmctmr1"
+path="res://.godot/imported/MeleeAttack1.png-8ffb69b4c92f5e98ed14834a32b5312e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/effects/explode/Explode_circle0001.png"
-dest_files=["res://.godot/imported/Explode_circle0001.png-226d2b77cea80f656d4eb2869ee47062.ctex"]
+source_file="res://resource/sprite/common/MeleeAttack1.png"
+dest_files=["res://.godot/imported/MeleeAttack1.png-8ffb69b4c92f5e98ed14834a32b5312e.ctex"]
 
 [params]
 

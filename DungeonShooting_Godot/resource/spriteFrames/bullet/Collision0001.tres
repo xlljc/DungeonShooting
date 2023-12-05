@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://pwg2tx7dmcvp"]
 
-[ext_resource type="Texture2D" uid="uid://dwa4chrugc6b1" path="res://resource/sprite/effects/weapon/Collision1.png" id="1_fwdya"]
+[ext_resource type="Texture2D" uid="uid://dwa4chrugc6b1" path="res://resource/sprite/bullet/collision/Collision0001.png" id="1_fwdya"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_howuv"]
 atlas = ExtResource("1_fwdya")

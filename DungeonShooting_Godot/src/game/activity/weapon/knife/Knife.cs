@@ -84,7 +84,7 @@ public partial class Knife : Weapon
             //播放挥刀特效
             SpecialEffectManager.Play(
                 Master,
-                ResourcePath.resource_spriteFrames_effect_KnifeHit1_tres, "default",
+                ResourcePath.resource_sprite_weapon_weapon0004_KnifeHit1_png, "default",
                 Master.MountPoint.Position,
                 Master.MountPoint.Rotation + Mathf.DegToRad(Attribute.UpliftAngle + 60),
                 AnimatedSprite.Scale,

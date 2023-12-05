@@ -31,7 +31,7 @@ public partial class BrushBullet : Bullet
     {
         base.Process(delta);
         //测试笔刷
-        if ((EffectiveAltitude < 0 || Altitude <= EffectiveAltitude))
+        if (EffectiveAltitude < 0 || Altitude <= EffectiveAltitude)
         {
             DrawLiquid(_brushData);
         }
@@ -44,6 +44,13 @@ public partial class BrushBullet : Bullet
     public override void OnPlayDisappearEffect()
     {
         PlayDisappearEffect(ResourcePath.prefab_effect_bullet_BulletDisappear0002_tscn);
+    }
+
+    public override void OnPlayCollisionEffect(KinematicCollision2D collision)
+    {
+        //测试笔刷
+        DrawLiquid(_brushData);
+        PlayCollisionEffect(collision, ResourcePath.prefab_effect_bullet_BulletSmoke0002_tscn);
     }
 
     public override void OnLeavePool()

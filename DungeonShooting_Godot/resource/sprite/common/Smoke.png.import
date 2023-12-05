@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0jsyrbk4bydt"
-path="res://.godot/imported/ShotFire.png-c837a3bb80e273a615c459f36fadc870.ctex"
+uid="uid://h7hkgbwj1li"
+path="res://.godot/imported/Smoke.png-6be33f9e163b005a6c8b78ac10d1eda3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/effects/weapon/ShotFire.png"
-dest_files=["res://.godot/imported/ShotFire.png-c837a3bb80e273a615c459f36fadc870.ctex"]
+source_file="res://resource/sprite/common/Smoke.png"
+dest_files=["res://.godot/imported/Smoke.png-6be33f9e163b005a6c8b78ac10d1eda3.ctex"]
 
 [params]
 
