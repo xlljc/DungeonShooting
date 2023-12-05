@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using Godot;
+using Godot.Collections;
 
 /// <summary>
 /// 子弹类
@@ -11,7 +12,6 @@ public partial class Bullet : ActivityObject, IBullet
 {
     public event Action OnReclaimEvent;
     public event Action OnLeavePoolEvent;
-    
     public bool IsRecycled { get; set; }
     public string Logotype { get; set; }
     
@@ -26,6 +26,12 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     [Export, ExportFillNode]
     public CollisionShape2D CollisionShape2D { get; set; }
+    
+    /// <summary>
+    /// 子节点包含的例子特效, 在创建完成后自动播放
+    /// </summary>
+    [Export]
+    public Array<GpuParticles2D> Particles2D { get; set; }
 
     /// <summary>
     /// 攻击的层级
@@ -107,6 +113,14 @@ public partial class Bullet : ActivityObject, IBullet
         if (data.LifeTime > 0)
         {
             this.CallDelay(data.LifeTime, OnLimeOver);
+        }
+        
+        if (Particles2D != null)
+        {
+            foreach (var particles2D in Particles2D)
+            {
+                particles2D.Restart();
+            }
         }
     }
 
@@ -253,6 +267,13 @@ public partial class Bullet : ActivityObject, IBullet
     
     public virtual void OnReclaim()
     {
+        if (Particles2D != null)
+        {
+            foreach (var particles2D in Particles2D)
+            {
+                particles2D.Emitting = false;
+            }
+        }
         if (OnReclaimEvent != null)
         {
             OnReclaimEvent();

@@ -60,12 +60,12 @@ scale_curve = SubResource("CurveTexture_ie2e7")
 color = Color(0.619608, 0.619608, 0.619608, 1)
 anim_offset_max = 1.0
 
-[node name="Bullet0003" type="CharacterBody2D" node_paths=PackedStringArray("Particles", "CollisionArea", "CollisionShape2D", "ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="Bullet0003" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
 script = ExtResource("1_1jbgr")
-Particles = NodePath("AnimatedSprite/GPUParticles2D")
 CollisionArea = NodePath("AnimatedSprite/CollisionArea")
 CollisionShape2D = NodePath("AnimatedSprite/CollisionArea/CollisionShape2D")
+Particles2D = [NodePath("AnimatedSprite/GPUParticles2D")]
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")

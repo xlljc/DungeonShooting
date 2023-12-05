@@ -60,13 +60,14 @@ scale_curve = SubResource("CurveTexture_uftx4")
 color = Color(0.95, 0.70965, 0.6365, 0.392157)
 anim_offset_max = 1.0
 
-[node name="Bullet0005" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="Bullet0005" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
 script = ExtResource("1_13wdl")
 BrushId = "0004"
 EffectiveAltitude = 1.0
 CollisionArea = NodePath("AnimatedSprite/CollisionArea")
 CollisionShape2D = NodePath("AnimatedSprite/CollisionArea/CollisionShape2D")
+Particles2D = [NodePath("AnimatedSprite/GPUParticles2D")]
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")

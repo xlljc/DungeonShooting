@@ -2,12 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Godot;
+using Godot.Collections;
 
 /// <summary>
 /// 激光子弹
 /// </summary>
 public partial class Laser : Area2D, IBullet
 {
+    /// <summary>
+    /// 子节点包含的例子特效, 在创建完成后自动播放
+    /// </summary>
+    [Export]
+    public Array<GpuParticles2D> Particles2D { get; set; }
+    
     public CollisionShape2D Collision { get; private set; }
     public Sprite2D LineSprite { get; private set; }
     public RectangleShape2D Shape { get; private set; }
@@ -117,6 +124,14 @@ public partial class Laser : Area2D, IBullet
             DoReclaim();
         }));
         _tween.Play();
+        
+        if (Particles2D != null)
+        {
+            foreach (var particles2D in Particles2D)
+            {
+                particles2D.Restart();
+            }
+        }
     }
 
     public override void _Process(double delta)
@@ -176,6 +191,13 @@ public partial class Laser : Area2D, IBullet
     
     public virtual void OnReclaim()
     {
+        if (Particles2D != null)
+        {
+            foreach (var particles2D in Particles2D)
+            {
+                particles2D.Emitting = false;
+            }
+        }
         if (OnReclaimEvent != null)
         {
             OnReclaimEvent();
