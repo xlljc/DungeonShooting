@@ -1,0 +1,114 @@
+[gd_scene load_steps=16 format=3 uid="uid://7fjw62ymmrl7"]
+
+[ext_resource type="Texture2D" uid="uid://cusp3s5t7qbuy" path="res://resource/sprite/effects/explode/Explode_circle0002.png" id="1_xuqre"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_eeot2"]
+[ext_resource type="Texture2D" uid="uid://du0f3km5jhxlg" path="res://resource/sprite/effects/common/Smoke4.png" id="3_yow4l"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w7xvw"]
+atlas = ExtResource("1_xuqre")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tt7yd"]
+atlas = ExtResource("1_xuqre")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5yu76"]
+atlas = ExtResource("1_xuqre")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_obu2v"]
+atlas = ExtResource("1_xuqre")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5nbmq"]
+atlas = ExtResource("1_xuqre")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tiuph"]
+atlas = ExtResource("1_xuqre")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n3apl"]
+atlas = ExtResource("1_xuqre")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ub3cw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w7xvw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tt7yd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5yu76")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_obu2v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5nbmq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tiuph")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n3apl")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"default",
+"speed": 18.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4bd3q"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_86ye5"]
+_data = [Vector2(0.0215054, 1), 0.0, 0.0, 0, 0, Vector2(0.512545, 0.882353), 0.0, 0.0, 0, 0, Vector2(1, 0.152941), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_j77i6"]
+curve = SubResource("Curve_86ye5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8k30u"]
+lifetime_randomness = 0.3
+particle_flag_disable_z = true
+angle_max = 360.0
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 70.0
+initial_velocity_max = 90.0
+gravity = Vector3(0, 150, 0)
+scale_min = 0.9
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_j77i6")
+color = Color(1, 1, 1, 0.392157)
+anim_offset_max = 1.0
+
+[node name="BulletDisappear0002" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
+modulate = Color(0.952941, 0.709804, 0.635294, 1)
+z_index = -4
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_ub3cw")
+frame = 7
+frame_progress = 1.0
+script = ExtResource("2_eeot2")
+DelayTime = 1.5
+Particles2D = [NodePath("GPUParticles2D")]
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_4bd3q")
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_8k30u")
+texture = ExtResource("3_yow4l")
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.9
+randomness = 0.5
+fixed_fps = 20

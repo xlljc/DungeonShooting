@@ -41,6 +41,11 @@ public partial class BrushBullet : Bullet
         }
     }
 
+    public override void OnPlayDisappearEffect()
+    {
+        PlayDisappearEffect(ResourcePath.prefab_effect_bullet_BulletDisappear0002_tscn);
+    }
+
     public override void OnLeavePool()
     {
         base.OnLeavePool();

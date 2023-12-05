@@ -167,7 +167,7 @@ public partial class Knife : Weapon
                 if (TriggerRole != null && TriggerRole.CollisionWithMask(attackLayer)) //是攻击玩家的子弹
                 {
                     //反弹子弹
-                    bullet.PlayDisappearEffect();
+                    bullet.OnPlayDisappearEffect();
                     bullet.MoveController.ScaleAllVelocity(-1);
                     bullet.Rotation += Mathf.Pi;
                     bullet.AttackLayer = TriggerRole.AttackLayer;

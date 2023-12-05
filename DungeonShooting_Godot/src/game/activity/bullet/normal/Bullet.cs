@@ -116,7 +116,7 @@ public partial class Bullet : ActivityObject, IBullet
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
             //创建粒子特效
-            var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_BulletSmoke_tscn);
+            var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_bullet_BulletSmoke0001_tscn);
             var smoke = (Node2D)effect;
             var rotated = AnimatedSprite.Position.Rotated(Rotation);
             smoke.GlobalPosition = collision.GetPosition() + new Vector2(0, rotated.Y);
@@ -134,7 +134,7 @@ public partial class Bullet : ActivityObject, IBullet
     {
         if (o is Role role)
         {
-            PlayDisappearEffect();
+            OnPlayDisappearEffect();
 
             //击退
             if (role is not Player) //目标不是玩家才会触发击退
@@ -162,7 +162,7 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void OnMaxDistance()
     {
-        PlayDisappearEffect();
+        OnPlayDisappearEffect();
         DoReclaim();
     }
     
@@ -171,14 +171,14 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void OnLimeOver()
     {
-        PlayDisappearEffect();
+        OnPlayDisappearEffect();
         DoReclaim();
     }
     
     protected override void OnFallToGround()
     {
         //落地销毁
-        PlayDisappearEffect();
+        OnPlayDisappearEffect();
         DoReclaim();
     }
     
@@ -204,9 +204,17 @@ public partial class Bullet : ActivityObject, IBullet
     /// <summary>
     /// 播放子弹消失的特效
     /// </summary>
-    public virtual void PlayDisappearEffect()
+    public virtual void OnPlayDisappearEffect()
     {
-        var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_BulletDisappear_tscn);
+        PlayDisappearEffect(ResourcePath.prefab_effect_bullet_BulletDisappear0001_tscn);
+    }
+
+    /// <summary>
+    /// 播放子弹消失特效
+    /// </summary>
+    public void PlayDisappearEffect(string path)
+    {
+        var effect = ObjectManager.GetPoolItem<IEffect>(path);
         var node = (Node2D)effect;
         node.GlobalPosition = AnimatedSprite.GlobalPosition;
         node.AddToActivityRoot(RoomLayerEnum.YSortLayer);

@@ -1290,7 +1290,7 @@ public abstract partial class Role : ActivityObject
                 var attackLayer = bullet.AttackLayer;
                 if (CollisionWithMask(attackLayer)) //是攻击玩家的子弹
                 {
-                    bullet.PlayDisappearEffect();
+                    bullet.OnPlayDisappearEffect();
                     bullet.Destroy();
                 }
             }

@@ -1802,7 +1802,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
-    /// 根据笔刷 id 在该物体位置绘制液体, 该 id 为 LiquidMaterial 表的 id
+    /// 根据笔刷 id 在该物体位置绘制液体, 该 id 为 LiquidMaterial 表的 id<br/>
+    /// 需要清除记录的点就请将 BrushPrevPosition 置为 null
     /// </summary>
     public void DrawLiquid(string brushId)
     {
@@ -1813,7 +1814,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
     
     /// <summary>
-    /// 根据笔刷数据在该物体位置绘制液体
+    /// 根据笔刷数据在该物体位置绘制液体<br/>
+    /// 需要清除记录的点就请将 BrushPrevPosition 置为 null
     /// </summary>
     public void DrawLiquid(BrushImageData brush)
     {
@@ -1826,7 +1828,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
     
     /// <summary>
-    /// 根据笔刷 id 在该物体位置绘制液体, 该 id 为 LiquidMaterial 表的 id
+    /// 根据笔刷 id 在该物体位置绘制液体, 该 id 为 LiquidMaterial 表的 id<br/>
+    /// 需要清除记录的点就请将 BrushPrevPosition 置为 null
     /// </summary>
     public void DrawLiquid(string brushId, Vector2I offset)
     {
@@ -1837,7 +1840,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
     
     /// <summary>
-    /// 根据笔刷数据在该物体位置绘制液体
+    /// 根据笔刷数据在该物体位置绘制液体<br/>
+    /// 需要清除记录的点就请将 BrushPrevPosition 置为 null
     /// </summary>
     public void DrawLiquid(BrushImageData brush, Vector2I offset)
     {

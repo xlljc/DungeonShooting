@@ -22,7 +22,7 @@ scale_curve = ExtResource("1_8pe88")
 color = Color(0.75, 0.75, 0.75, 0.470588)
 anim_offset_max = 1.0
 
-[node name="BulletSmoke" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
+[node name="BulletSmoke0001" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
 sprite_frames = ExtResource("1_r62v8")
 frame = 4
 frame_progress = 1.0
