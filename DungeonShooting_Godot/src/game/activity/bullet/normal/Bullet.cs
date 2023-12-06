@@ -58,7 +58,15 @@ public partial class Bullet : ActivityObject, IBullet
     private float CurrFlyDistance = 0;
 
     private bool _init = false;
-    
+    private bool _isEnemyBullet = false;
+
+    public override void OnInit()
+    {
+        base.OnInit();
+        OutlineColor = new Color(2.5f, 0, 0);
+        SetBlendColor(new Color(2.0f, 2.0f, 2.0f));
+    }
+
     public virtual void InitData(BulletData data, uint attackLayer)
     {
         if (!_init)
@@ -101,8 +109,20 @@ public partial class Bullet : ActivityObject, IBullet
         //如果子弹会对玩家造成伤害, 则显示红色描边
         if (Player.Current.CollisionWithMask(attackLayer))
         {
-            ShowBorderFlashes();
+            if (!_isEnemyBullet)
+            {
+                _isEnemyBullet = true;
+                ShowOutline = true;
+                SetBlendSchedule(1);
+            }
         }
+        else if (_isEnemyBullet)
+        {
+            _isEnemyBullet = false;
+            ShowOutline = false;
+            SetBlendSchedule(0);
+        }
+        
         PutDown(RoomLayerEnum.YSortLayer);
         //播放子弹移动动画
         PlaySpriteAnimation(AnimatorNames.Move);
@@ -300,7 +320,6 @@ public partial class Bullet : ActivityObject, IBullet
         {
             AffiliationArea.RemoveItem(this);
         }
-        ShowOutline = false;
         GetParent().CallDeferred(Node.MethodName.RemoveChild, this);
     }
 

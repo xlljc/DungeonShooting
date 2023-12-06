@@ -5,7 +5,6 @@
 [ext_resource type="SpriteFrames" uid="uid://d3vma1qjo478l" path="res://resource/spriteFrames/bullet/Bullet0004.tres" id="3_bttus"]
 [ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/common/Smoke.png" id="3_ofn8c"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
 resource_local_to_scene = true
 shader = ExtResource("2_w1qob")
@@ -27,7 +26,7 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
-shader_parameter/outline_use_blend = true
+shader_parameter/outline_use_blend = false
 shader_parameter/grey = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c0onq"]

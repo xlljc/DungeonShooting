@@ -14,6 +14,7 @@ shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p0wfd"]
 resource_local_to_scene = true
@@ -24,7 +25,8 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
-shader_parameter/outline_use_blend = true
+shader_parameter/outline_use_blend = false
+shader_parameter/grey = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0vxfv"]
 radius = 3.0
@@ -32,11 +34,12 @@ radius = 3.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_e2yn3"]
 radius = 3.0
 
-[node name="Bullet0002" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="Bullet0002" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
 script = ExtResource("1_hepay")
 CollisionArea = NodePath("AnimatedSprite/CollisionArea")
 CollisionShape2D = NodePath("AnimatedSprite/CollisionArea/CollisionShape2D")
+Particles2D = []
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
