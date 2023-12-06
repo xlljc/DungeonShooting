@@ -78,6 +78,9 @@ public static class FireManager
         return null;
     }
 
+    /// <summary>
+    /// 计算进行抛物线运动的子弹击中目标所需要的速度等数据, 并设置
+    /// </summary>
     public static void SetParabolaTarget(BulletData bulletData, Vector2 targetPosition)
     {
         var distance = bulletData.Position.DistanceTo(targetPosition);
@@ -161,7 +164,7 @@ public static class FireManager
         //创建激光
         var laser = ObjectManager.GetLaser(bulletData.BulletBase.Prefab);
         laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-        laser.InitData(bulletData, attackLayer, 3);
+        laser.InitData(bulletData, attackLayer, Laser.LaserDefaultWidth);
         return laser;
     }
     

@@ -10,6 +10,11 @@ using Godot.Collections;
 public partial class Laser : Area2D, IBullet
 {
     /// <summary>
+    /// 激光默认宽度
+    /// </summary>
+    public const float LaserDefaultWidth = 3f;
+    
+    /// <summary>
     /// 子节点包含的例子特效, 在创建完成后自动播放
     /// </summary>
     [Export]
@@ -46,7 +51,7 @@ public partial class Laser : Area2D, IBullet
 
     public void InitData(BulletData data, uint attackLayer)
     {
-        InitData(data, attackLayer, 5);
+        InitData(data, attackLayer, LaserDefaultWidth);
     }
     
     public void InitData(BulletData data, uint attackLayer, float width)
@@ -75,11 +80,17 @@ public partial class Laser : Area2D, IBullet
         var parameters = PhysicsRayQueryParameters2D.Create(data.Position, targetPosition, PhysicsLayer.Wall);
         var result = GetWorld2D().DirectSpaceState.IntersectRay(parameters);
         float distance;
-        if (result != null && result.TryGetValue("position", out var point))
+        var doRebound = false; //是否需要执行反弹
+        Vector2? reboundPosition = null;
+        Vector2? reboundNormal = null;
+        if (result != null && result.TryGetValue("position", out var point)) //撞到墙壁
         {
-            distance = Position.DistanceTo((Vector2)point);
+            doRebound = true;
+            reboundPosition = (Vector2)point;
+            reboundNormal = (Vector2)result["normal"];
+            distance = Position.DistanceTo(reboundPosition.Value);
         }
-        else
+        else //没撞到墙壁
         {
             distance = data.MaxDistance;
         }
@@ -113,6 +124,11 @@ public partial class Laser : Area2D, IBullet
         // tween.Chain();
         _tween.TweenCallback(Callable.From(() =>
         {
+            //执行反弹
+            if (doRebound)
+            {
+                OnRebound(reboundPosition.Value, reboundNormal.Value);
+            }
             Collision.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
         }));
         _tween.Chain();
@@ -147,6 +163,34 @@ public partial class Laser : Area2D, IBullet
         }
         
         QueueFree();
+    }
+
+    //激光撞墙反弹逻辑
+    private void OnRebound(Vector2 position, Vector2 normal)
+    {
+        if (BulletData.BounceCount > 0)
+        {
+            var newDistance = BulletData.MaxDistance - BulletData.Position.DistanceTo(position);
+            if (newDistance > 0)
+            {
+                float rotation;
+                if (normal.X == 0 && normal.Y == 0)
+                {
+                    rotation = (BulletData.Rotation + Mathf.Pi) % (Mathf.Pi * 2);
+                }
+                else
+                {
+                    rotation = Utils.ReflectByNormal(BulletData.Rotation, normal);
+                }
+                
+                var bulletData = BulletData.Clone();
+                bulletData.Position = position;
+                bulletData.BounceCount -= 1;
+                bulletData.MaxDistance = newDistance;
+                bulletData.Rotation = rotation;
+                FireManager.ShootBullet(bulletData, AttackLayer);
+            }
+        }
     }
     
     private void OnArea2dEntered(Area2D other)

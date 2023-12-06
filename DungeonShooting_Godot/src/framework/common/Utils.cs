@@ -290,4 +290,20 @@ public static class Utils
 
         return isInside;
     }
+
+    /// <summary>
+    /// 根据法线翻转向量
+    /// </summary>
+    public static Vector2 ReflectByNormal(Vector2 vector, Vector2 normal)
+    {
+        return vector.Reflect(normal.Rotated(Mathf.Pi * 0.5f));
+    }
+    
+    /// <summary>
+    /// 根据法线翻转角度, 弧度制
+    /// </summary>
+    public static float ReflectByNormal(float rotation, Vector2 normal)
+    {
+        return ReflectByNormal(Vector2.FromAngle(rotation), normal).Angle();
+    }
 }
