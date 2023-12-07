@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://drcvbo0xam6q"]
 
-[ext_resource type="Texture2D" uid="uid://cj8gb5dxnk8ov" path="res://resource/sprite/effects/weapon/ShotFire2.png" id="1_ljjfn"]
+[ext_resource type="Texture2D" uid="uid://cj8gb5dxnk8ov" path="res://resource/sprite/shootFire/ShotFire0002.png" id="1_ljjfn"]
 [ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_4ecjw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2nk6j"]
@@ -33,6 +33,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ud7n7")
+}, {
+"duration": 1.0,
+"texture": null
 }],
 "loop": false,
 "name": &"default",
@@ -42,8 +45,7 @@ animations = [{
 [node name="ShotFire2" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
 modulate = Color(1.6, 1.6, 1.6, 1)
 sprite_frames = SubResource("SpriteFrames_rry1m")
-autoplay = "default"
 offset = Vector2(5.5, 0)
 script = ExtResource("2_4ecjw")
-DelayTime = 0.2
+DelayTime = 0.5
 Particles2D = []

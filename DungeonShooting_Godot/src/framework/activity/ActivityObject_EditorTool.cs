@@ -1,4 +1,5 @@
 
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -25,12 +26,13 @@ public partial class ActivityObject
                     sprite.ZIndex = -1;
                 }
 
-                if (sprite.Material == null)
+                if (sprite.Texture == null && sprite.Material == null) //没有自定义纹理的情况下自动补全阴影材质
                 {
                     var material =
                         ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
+                    material.ResourceLocalToScene = true;
                     material.SetShaderParameter("blend", new Color(0, 0, 0, 0.47058824F));
-                    material.SetShaderParameter("schedule", 1);
+                    material.SetShaderParameter("schedule", 1f);
                     material.SetShaderParameter("modulate", new Color(1, 1, 1, 1));
                     sprite.Material = material;
                 }
@@ -43,6 +45,7 @@ public partial class ActivityObject
                 {
                     var material =
                         ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Blend_tres, false);
+                    material.ResourceLocalToScene = true;
                     material.SetShaderParameter("blend", new Color(1, 1, 1, 1));
                     material.SetShaderParameter("schedule", 0);
                     material.SetShaderParameter("modulate", new Color(1, 1, 1, 1));

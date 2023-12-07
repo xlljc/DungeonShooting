@@ -1,0 +1,42 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dkqd4513sog3f"]
+
+[ext_resource type="Texture2D" uid="uid://c6fw4bjkoeyxj" path="res://resource/sprite/bullet/collision/Collision0002.png" id="1_t062x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s52rj"]
+atlas = ExtResource("1_t062x")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1edgh"]
+atlas = ExtResource("1_t062x")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sxvt"]
+atlas = ExtResource("1_t062x")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eske5"]
+atlas = ExtResource("1_t062x")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s52rj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1edgh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7sxvt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eske5")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"default",
+"speed": 25.0
+}]

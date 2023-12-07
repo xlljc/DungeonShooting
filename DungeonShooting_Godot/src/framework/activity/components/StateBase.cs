@@ -49,15 +49,6 @@ public abstract class StateBase<T, S> where T : ActivityObject where S : Enum
     }
 
     /// <summary>
-    /// 是否允许切换至下一个状态, 该函数由状态机控制器调用, 不需要手动调用
-    /// </summary>
-    /// <param name="next">下一个状态类型</param>
-    public virtual bool CanChangeState(S next)
-    {
-        return true;
-    }
-
-    /// <summary>
     /// 从当前状态退出时调用
     /// </summary>
     /// <param name="next">下一个状态类型</param>

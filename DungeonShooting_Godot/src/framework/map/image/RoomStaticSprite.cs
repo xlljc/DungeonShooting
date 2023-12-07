@@ -11,7 +11,7 @@ public partial class RoomStaticSprite : Node2D, IDestroy
     public bool IsDestroyed { get; private set; }
 
     private readonly List<List<FreezeSprite>> _list = new List<List<FreezeSprite>>();
-    private readonly Grid<List<FreezeSprite>> _grid = new Grid<List<FreezeSprite>>();
+    private readonly InfiniteGrid<List<FreezeSprite>> _grid = new InfiniteGrid<List<FreezeSprite>>();
     private readonly RoomInfo _roomInfo;
     //网格划分的格子大小
     private readonly Vector2I _step;
@@ -112,6 +112,12 @@ public partial class RoomStaticSprite : Node2D, IDestroy
         }
     }
 
+    /// <summary>
+    /// 获取指定圆形范围内所有已经被冻结的物体
+    /// </summary>
+    /// <param name="position">圆形中心点坐标</param>
+    /// <param name="radius">圆形半径</param>
+    /// <param name="unfreeze">是否解冻物体</param>
     public List<FreezeSprite> CollisionCircle(Vector2 position, float radius, bool unfreeze = false)
     {
         var len = radius * radius;

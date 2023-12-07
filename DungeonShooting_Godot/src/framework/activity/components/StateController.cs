@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// 对象状态机控制器
 /// </summary>
-public class StateController<T, S> : Component where T : ActivityObject where S : Enum
+public class StateController<T, S> : Component<T> where T : ActivityObject where S : Enum
 {
     /// <summary>
     /// 获取当前状态
@@ -60,7 +60,7 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
             return;
         }
 
-        stateBase.Master = Master as T;
+        stateBase.Master = Master;
         stateBase.StateController = this;
         _states.Add(stateBase.State, stateBase);
     }
@@ -133,8 +133,9 @@ public class StateController<T, S> : Component where T : ActivityObject where S 
             CurrStateBase = newState;
             newState.Enter(default, arg);
         }
-        else if (CurrStateBase.CanChangeState(next))
+        else
         {
+            // Debug.Log($"changeState: {CurrState} => {next}");
             _isChangeState = !late;
             var prev = CurrStateBase.State;
             CurrStateBase.Exit(next);

@@ -210,6 +210,7 @@ public class MoveController : Component
     public T AddForce<T>(T force) where T : ExternalForce
     {
         RemoveForce(force.Name);
+        force.MoveController = this;
         _forceList.Add(force);
         return force;
     }
@@ -223,6 +224,7 @@ public class MoveController : Component
         {
             if (_forceList[i].Name == name)
             {
+                _forceList[i].MoveController = null;
                 _forceList.RemoveAt(i);
                 return;
             }
@@ -276,6 +278,11 @@ public class MoveController : Component
     /// </summary>
     public void ClearForce()
     {
+        foreach (var force in _forceList)
+        {
+            force.MoveController = null;
+        }
+
         _forceList.Clear();
     }
 
@@ -305,6 +312,7 @@ public class MoveController : Component
                     //自动销毁
                     if (CheckAutoDestroy(force))
                     {
+                        force.MoveController = null;
                         _forceList.Remove(force);
                         externalForces[i] = null;
                     }
@@ -347,54 +355,69 @@ public class MoveController : Component
             //新速度
             var newVelocity = Master.Velocity;
             
-            if (!Master.BounceLockRotation) //跟着反弹角度
-            {
-                Rotation = newVelocity.Angle();
-            }
             
-            if (newVelocity.X == 0f && _basisVelocity.X * finallyVelocity.X > 0)
-            {
-                _basisVelocity.X = 0;
-            }
-
-            if (newVelocity.Y == 0f && _basisVelocity.Y * finallyVelocity.Y > 0)
-            {
-                _basisVelocity.Y = 0;
-            }
+            // if (newVelocity.X == 0f && _basisVelocity.X * finallyVelocity.X > 0)
+            // {
+            //     _basisVelocity.X = 0;
+            // }
+            //
+            // if (newVelocity.Y == 0f && _basisVelocity.Y * finallyVelocity.Y > 0)
+            // {
+            //     _basisVelocity.Y = 0;
+            // }
             
             //是否撞到物体
             KinematicCollision2D collision;
-            _flag -= delta;
+            _flag--;
             if (_flag <= 0 && (collision = Master.GetLastSlideCollision()) != null) //执行反弹操作
             {
                 //调用移动碰撞函数
                 Master.OnMoveCollision(collision);
-                if (Master.IsDestroyed)
+                if (Master.IsDestroyed || (Master is IPoolItem poolItem && poolItem.IsRecycled))
                 {
                     return;
                 }
-                //0.1秒内不能再触发第二次碰撞检测
-                _flag = 0.1f;
+                //2帧内不能再触发第二次碰撞检测
+                _flag = 2;
                 var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
                 newVelocity = finallyEf.Reflect(no);
                 var rotation = newVelocity.Angle();
 
-                if (!Master.BounceLockRotation) //跟着反弹角度
+                if (Master.ActivityMaterial.RotationType == 1) //跟着反弹角度
                 {
                     Rotation = rotation;
                 }
+                else if (Master.ActivityMaterial.RotationType == 2) //跟着反弹角度, 带垂直角度
+                {
+                    Rotation = rotation;
+                    AnimatedSprite.Rotation = new Vector2(newVelocity.X, newVelocity.Y - Master.VerticalSpeed).Angle() - rotation;
+                }
                 
                 var length = _forceList.Count;
-                var v = newVelocity / (length / Master.ActivityMaterial.BounceStrength);
-                for (var i = 0; i < _forceList.Count; i++)
+                if (length != 0)
                 {
-                    _forceList[i].Velocity = v;
+                    var v = newVelocity / (length / Master.ActivityMaterial.BounceStrength);
+                    for (var i = 0; i < _forceList.Count; i++)
+                    {
+                        _forceList[i].Velocity = v;
+                    }
                 }
+
                 //调用反弹函数
                 Master.OnBounce(rotation);
             }
             else //没有撞到物体
             {
+                if (Master.ActivityMaterial.RotationType == 1) //跟着反弹角度
+                {
+                    Rotation = newVelocity.Angle();
+                }
+                else if (Master.ActivityMaterial.RotationType == 2) //跟着反弹角度, 带垂直角度
+                {
+                    var rotation = Rotation = newVelocity.Angle();
+                    AnimatedSprite.Rotation = new Vector2(newVelocity.X, newVelocity.Y - Master.VerticalSpeed).Angle() - rotation;
+                }
+                
                 //调整外力速率
                 for (var i = 0; i < _forceList.Count; i++)
                 {

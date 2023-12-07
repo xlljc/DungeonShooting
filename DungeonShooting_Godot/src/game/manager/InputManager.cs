@@ -75,15 +75,24 @@ public static class InputManager
     /// 是否按下打开地图按钮, 键鼠: 键盘Ctrl
     /// </summary>
     public static bool Map { get; private set; }
+    
+    /// <summary>
+    /// 菜单键, 键鼠: esc
+    /// </summary>
+    public static bool Menu { get; private set; }
 
     /// <summary>
     /// 更新输入管理器
     /// </summary>
     public static void Update(float delta)
     {
-        var application = GameApplication.Instance;
         MoveAxis = Input.GetVector("move_left", "move_right", "move_up", "move_down");
-        CursorPosition = application.GlobalToViewPosition(application.GetGlobalMousePosition());
+        var application = GameApplication.Instance;
+        if (application != null)
+        {
+            CursorPosition = application.GlobalToViewPosition(application.GetGlobalMousePosition());
+        }
+
         ExchangeWeapon = Input.IsActionJustPressed("exchangeWeapon");
         ThrowWeapon = Input.IsActionJustPressed("throwWeapon");
         Interactive = Input.IsActionJustPressed("interactive");
@@ -93,5 +102,8 @@ public static class InputManager
         Roll = Input.IsActionJustPressed("roll");
         UseActiveProp = Input.IsActionJustPressed("useActiveProp");
         RemoveProp = Input.IsActionJustPressed("removeProp");
+        ExchangeProp = Input.IsActionJustPressed("exchangeProp");
+        Map = Input.IsActionPressed("map");
+        Menu = Input.IsActionJustPressed("menu");
     }
 }

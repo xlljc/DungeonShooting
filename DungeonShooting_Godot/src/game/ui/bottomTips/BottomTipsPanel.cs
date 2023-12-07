@@ -69,24 +69,27 @@ public partial class BottomTipsPanel : BottomTips
         yield return 0;
 
         //向上移动
-        var frame = GameApplication.Instance.TargetFps * _animationTime;
-        var stepPixel = _movePixel / frame;
-        for (var i = 0; i < frame; i++)
+        var time = 0f;
+        while (time < _animationTime)
         {
-            pos.X = L_Panel.Instance.Position.X;
-            pos.Y -= stepPixel;
-            L_Panel.Instance.Position = pos;
+            L_Panel.Instance.Position = new Vector2(
+                pos.X,
+                pos.Y - Mathf.Lerp(0, _movePixel, Mathf.Min(time / _animationTime, 1))
+            );
+            time += (float)GetProcessDeltaTime();
             yield return 0;
         }
 
         yield return new WaitForSeconds(3.5f);
         
         //向下移动
-        for (var i = 0; i < frame; i++)
+        while (time > 0)
         {
-            pos.X = L_Panel.Instance.Position.X;
-            pos.Y += stepPixel;
-            L_Panel.Instance.Position = pos;
+            L_Panel.Instance.Position = new Vector2(
+                pos.X,
+                pos.Y - Mathf.Lerp(0, _movePixel, Mathf.Max(time / _animationTime, 0))
+            );
+            time -= (float)GetProcessDeltaTime();
             yield return 0;
         }
 

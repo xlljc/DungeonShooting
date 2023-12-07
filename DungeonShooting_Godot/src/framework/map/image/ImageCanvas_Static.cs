@@ -176,7 +176,7 @@ public partial class ImageCanvas
             List<ImageRenderData> callDrawingCompleteList = null;
             using (var image = _viewportTexture.GetImage())
             {
-                var startTime = DateTime.Now;
+                var startTime = DateTime.UtcNow;
                 //File.WriteAllBytes("d:/image.png", image.SavePngToBuffer());
                 //绘制完成需要调用回调的列表
                 do
@@ -210,9 +210,9 @@ public partial class ImageCanvas
                         ReclaimRenderSprite(item.RenderSprite);
                         item.RenderSprite = null;
                     }
-                } while (_drawingQueueItems.Count > 0 && (DateTime.Now - startTime).TotalMilliseconds < step1Time);
+                } while (_drawingQueueItems.Count > 0 && (DateTime.UtcNow - startTime).TotalMilliseconds < step1Time);
 
-                //Debug.Log($"当前帧绘制完成数量: {index}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
+                //Debug.Log($"当前帧绘制完成数量: {index}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.UtcNow - startTime).TotalMilliseconds}毫秒");
             }
 
             //重绘画布
@@ -240,7 +240,7 @@ public partial class ImageCanvas
         //处理下一批image
         if (_queueItems.Count > 0)
         {
-            var startTime = DateTime.Now;
+            var startTime = DateTime.UtcNow;
             var hasFail = false;
             //执行绘制操作
             for (var i = 0; i < _queueItems.Count; i++)
@@ -270,13 +270,13 @@ public partial class ImageCanvas
                 }
                 
                 //计算超时
-                if ((DateTime.Now - startTime).TotalMilliseconds >= step2Time)
+                if ((DateTime.UtcNow - startTime).TotalMilliseconds >= step2Time)
                 {
                     break;
                 }
             }
             
-            //Debug.Log($"当前帧进入绘制绘队列数量: {index}, 待绘制队列数量: {_queueItems.Count}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.Now - startTime).TotalMilliseconds}毫秒");
+            //Debug.Log($"当前帧进入绘制绘队列数量: {index}, 待绘制队列数量: {_queueItems.Count}, 绘制队列数量: {_drawingQueueItems.Count}, 用时: {(DateTime.UtcNow - startTime).TotalMilliseconds}毫秒");
         }
     }
 

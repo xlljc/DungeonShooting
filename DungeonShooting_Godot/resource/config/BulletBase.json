@@ -7,7 +7,7 @@
     "HarmRange": [
       4
     ],
-    "RepelRnage": [
+    "RepelRange": [
       20
     ],
     "DeviationAngleRange": [
@@ -24,14 +24,15 @@
       300,
       400
     ],
-    "UseGravity": false,
     "VerticalSpeed": [
       0
     ],
     "BounceCount": [
       0
     ],
-    "StrikeDestroy": true
+    "Penetration": [
+      0
+    ]
   },
   {
     "Id": "0002",
@@ -41,8 +42,8 @@
     "HarmRange": [
       4
     ],
-    "RepelRnage": [
-      30
+    "RepelRange": [
+      15
     ],
     "DeviationAngleRange": [
       -10,
@@ -59,14 +60,15 @@
       200,
       250
     ],
-    "UseGravity": false,
     "VerticalSpeed": [
       0
     ],
     "BounceCount": [
       0
     ],
-    "StrikeDestroy": true
+    "Penetration": [
+      0
+    ]
   },
   {
     "Id": "0003",
@@ -76,8 +78,8 @@
     "HarmRange": [
       3
     ],
-    "RepelRnage": [
-      10
+    "RepelRange": [
+      15
     ],
     "DeviationAngleRange": [
       0
@@ -93,14 +95,15 @@
       300,
       400
     ],
-    "UseGravity": false,
     "VerticalSpeed": [
       0
     ],
     "BounceCount": [
       0
     ],
-    "StrikeDestroy": true
+    "Penetration": [
+      0
+    ]
   },
   {
     "Id": "0004",
@@ -110,8 +113,8 @@
     "HarmRange": [
       20
     ],
-    "RepelRnage": [
-      200
+    "RepelRange": [
+      75
     ],
     "DeviationAngleRange": [
       0
@@ -127,14 +130,15 @@
       600,
       600
     ],
-    "UseGravity": false,
     "VerticalSpeed": [
       0
     ],
     "BounceCount": [
       0
     ],
-    "StrikeDestroy": true
+    "Penetration": [
+      0
+    ]
   },
   {
     "Id": "0005",
@@ -144,8 +148,8 @@
     "HarmRange": [
       30
     ],
-    "RepelRnage": [
-      0
+    "RepelRange": [
+      85
     ],
     "DeviationAngleRange": [
       0
@@ -161,14 +165,50 @@
       270,
       360
     ],
-    "UseGravity": true,
     "VerticalSpeed": [
       70
     ],
     "BounceCount": [
-      999
+      4
     ],
-    "StrikeDestroy": true
+    "Penetration": [
+      0
+    ]
+  },
+  {
+    "Id": "0006",
+    "Name": "\u629B\u7269\u7EBF\u7C98\u6DB2\u5B50\u5F39",
+    "Type": 1,
+    "Prefab": "bullet0005",
+    "HarmRange": [
+      5
+    ],
+    "RepelRange": [
+      30
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      100,
+      100
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      270,
+      360
+    ],
+    "VerticalSpeed": [
+      170
+    ],
+    "BounceCount": [
+      0
+    ],
+    "Penetration": [
+      0
+    ]
   },
   {
     "Id": "1001",
@@ -178,8 +218,8 @@
     "HarmRange": [
       5
     ],
-    "RepelRnage": [
-      0
+    "RepelRange": [
+      35
     ],
     "DeviationAngleRange": [
       0
@@ -195,12 +235,11 @@
       600,
       600
     ],
-    "UseGravity": false,
     "VerticalSpeed": null,
     "BounceCount": [
       0
     ],
-    "StrikeDestroy": false
+    "Penetration": null
   },
   {
     "Id": "2001",
@@ -210,8 +249,8 @@
     "HarmRange": [
       25
     ],
-    "RepelRnage": [
-      150
+    "RepelRange": [
+      70
     ],
     "DeviationAngleRange": [
       0
@@ -225,9 +264,8 @@
     "DistanceRange": [
       35
     ],
-    "UseGravity": false,
     "VerticalSpeed": null,
     "BounceCount": null,
-    "StrikeDestroy": false
+    "Penetration": null
   }
 ]

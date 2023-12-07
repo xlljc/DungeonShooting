@@ -66,29 +66,18 @@ public partial class AisleFogArea : Area2D, IDestroy
         if (body == Player.Current)
         {
             //注意需要延时调用
-            CallDeferred(nameof(InsertItem));
+            CallDeferred(nameof(InsertPlayer));
         }
     }
-    
-    // private void OnBodyExited(Node2D body)
-    // {
-    //     if (body == Player.Current)
-    //     {
-    //         //注意需要延时调用
-    //         CallDeferred(nameof(LeavePlayer));
-    //     }
-    // }
 
-    private void InsertItem()
+    private void InsertPlayer()
     {
         //Debug.Log("玩家进入过道");
-        //RoomDoorInfo.ClearFog();
+        if (!RoomDoorInfo.AisleFogMask.IsExplored)
+        {
+            EventManager.EmitEvent(EventEnum.OnPlayerFirstEnterAisle, RoomDoorInfo);
+        }
+        EventManager.EmitEvent(EventEnum.OnPlayerEnterAisle, RoomDoorInfo);
         FogMaskHandler.RefreshAisleFog(RoomDoorInfo);
     }
-
-    // private void LeavePlayer()
-    // {
-    //     //Debug.Log("玩家离开过道");
-    //     //RoomDoorInfo.DarkFog();
-    // }
 }

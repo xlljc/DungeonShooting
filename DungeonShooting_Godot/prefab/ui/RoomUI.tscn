@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://cukrx5yyqw86o" path="res://resource/sprite/ui/roomUI/ReloadBar.png" id="4_hy44s"]
 [ext_resource type="Texture2D" uid="uid://cx3i1nkcc4307" path="res://resource/sprite/ui/roomUI/ReloadBarBlock.png" id="5_w3lq2"]
 [ext_resource type="Texture2D" uid="uid://blywnftxn1cfd" path="res://resource/sprite/ui/roomUI/Life_full.png" id="6_ggviq"]
-[ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/roomUI/MapBar.png" id="7_p6pvs"]
 [ext_resource type="Texture2D" uid="uid://cu0wlvrbntvyd" path="res://resource/sprite/prop/active/ActiveProp5000.png" id="10_5d4np"]
 [ext_resource type="Texture2D" uid="uid://b8u6s5n37157" path="res://resource/sprite/ui/roomUI/Panel2.png" id="10_eokvx"]
 [ext_resource type="Texture2D" uid="uid://0swkya4hn82c" path="res://resource/sprite/ui/roomUI/Panel.png" id="10_q3fs8"]
@@ -15,6 +14,7 @@
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="12_fgyob"]
 [ext_resource type="Texture2D" uid="uid://dwysndc5ffski" path="res://resource/sprite/ui/roomUI/ChargeProgressBar.png" id="13_6w7qi"]
 [ext_resource type="Texture2D" uid="uid://ck0w7at3oat5" path="res://resource/sprite/ui/roomUI/ChargeProgress.png" id="13_vuglj"]
+[ext_resource type="PackedScene" uid="uid://bmj3p25gwpqpn" path="res://prefab/ui/RoomMap.tscn" id="16_rp3sg"]
 
 [sub_resource type="Gradient" id="1"]
 colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
@@ -33,6 +33,8 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0.941176, 0.941176, 0.941176, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7pkeh"]
 resource_local_to_scene = true
@@ -43,6 +45,8 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0.941176, 0.941176, 0.941176, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [node name="RoomUI" type="Control"]
 layout_mode = 3
@@ -166,18 +170,6 @@ layout_mode = 2
 offset_right = 12.0
 offset_bottom = 10.0
 texture = ExtResource("6_ggviq")
-
-[node name="MapBar" type="TextureRect" parent="Control"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -176.0
-offset_right = -132.0
-offset_bottom = 44.0
-grow_horizontal = 0
-scale = Vector2(4, 4)
-texture = ExtResource("7_p6pvs")
 
 [node name="ActivePropBar" type="Control" parent="Control"]
 layout_mode = 1
@@ -332,3 +324,18 @@ scale = Vector2(0.25, 0.25)
 text = "30/90"
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="RoomMap" parent="." instance=ExtResource("16_rp3sg")]
+layout_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="Mask" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

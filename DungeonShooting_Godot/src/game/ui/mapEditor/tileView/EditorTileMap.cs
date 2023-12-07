@@ -97,7 +97,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //绘制填充区域
     private bool _drawFullRect = false;
     //负责存储自动图块数据
-    private Grid<bool> _autoCellLayerGrid = new Grid<bool>();
+    private InfiniteGrid<bool> _autoCellLayerGrid = new InfiniteGrid<bool>();
     //用于生成导航网格
     private DungeonTileMap _dungeonTileMap;
     //停止绘制多久后开始执行生成操作

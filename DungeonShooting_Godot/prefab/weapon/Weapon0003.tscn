@@ -14,6 +14,8 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kp0pp"]
 resource_local_to_scene = true
@@ -24,15 +26,16 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tlu5a"]
 size = Vector2(12, 7)
 
-[node name="Weapon0003" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_c17wt")]
+[node name="Weapon0003" node_paths=PackedStringArray("FirePoint", "ShellPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_c17wt")]
 script = ExtResource("1_aeolk")
 FirePoint = NodePath("AnimatedSprite/FirePoint")
 ShellPoint = NodePath("AnimatedSprite/ShellPoint")
-GripPoint = NodePath("GripPoint")
 AnimationPlayer = NodePath("AnimationPlayer")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
@@ -43,6 +46,7 @@ material = SubResource("ShaderMaterial_c6pgc")
 
 [node name="AnimatedSprite" parent="." index="1"]
 material = SubResource("ShaderMaterial_kp0pp")
+position = Vector2(4, 0)
 sprite_frames = ExtResource("3_upkjt")
 
 [node name="ShellPoint" parent="AnimatedSprite" index="0"]
@@ -51,9 +55,7 @@ position = Vector2(0, -3)
 [node name="FirePoint" parent="AnimatedSprite" index="1"]
 position = Vector2(8, -2)
 
-[node name="GripPoint" parent="." index="2"]
-position = Vector2(-4, 0)
-
-[node name="Collision" parent="." index="3"]
-position = Vector2(-1, 0)
+[node name="Collision" parent="." index="2"]
+visible = true
+position = Vector2(4, 0)
 shape = SubResource("RectangleShape2D_tlu5a")

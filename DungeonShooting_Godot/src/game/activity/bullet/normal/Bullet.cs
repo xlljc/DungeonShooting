@@ -1,5 +1,8 @@
+
+using System;
 using System.Collections;
 using Godot;
+using Godot.Collections;
 
 /// <summary>
 /// 子弹类
@@ -7,11 +10,28 @@ using Godot;
 [Tool]
 public partial class Bullet : ActivityObject, IBullet
 {
+    public event Action OnReclaimEvent;
+    public event Action OnLeavePoolEvent;
+    public bool IsRecycled { get; set; }
+    public string Logotype { get; set; }
+    
     /// <summary>
-    /// 碰撞区域
+    /// 子弹伤害碰撞区域
     /// </summary>
     [Export, ExportFillNode]
     public Area2D CollisionArea { get; set; }
+    
+    /// <summary>
+    /// 子弹伤害碰撞检测形状
+    /// </summary>
+    [Export, ExportFillNode]
+    public CollisionShape2D CollisionShape2D { get; set; }
+    
+    /// <summary>
+    /// 子节点包含的例子特效, 在创建完成后自动播放
+    /// </summary>
+    [Export]
+    public Array<GpuParticles2D> Particles2D { get; set; }
 
     /// <summary>
     /// 攻击的层级
@@ -28,44 +48,60 @@ public partial class Bullet : ActivityObject, IBullet
     /// 当前反弹次数
     /// </summary>
     public int CurrentBounce { get; protected set; } = 0;
+
+    /// <summary>
+    /// 当前穿透次数
+    /// </summary>
+    public int CurrentPenetration { get; protected set; } = 0;
     
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
-    
+
+    private bool _init = false;
+    private bool _isEnemyBullet = false;
+
     public override void OnInit()
     {
-        BounceLockRotation = false;
-        CollisionArea.AreaEntered += OnArea2dEntered;
+        base.OnInit();
+        OutlineColor = new Color(2.5f, 0, 0);
+        SetBlendColor(new Color(2.0f, 2.0f, 2.0f));
     }
-    
+
     public virtual void InitData(BulletData data, uint attackLayer)
     {
+        if (!_init)
+        {
+            CollisionArea.AreaEntered += OnArea2dEntered;
+            _init = true;
+        }
+        
+        CurrentBounce = 0;
+        CurrentPenetration = 0;
+        CurrFlyDistance = 0;
+        
         BulletData = data;
         AttackLayer = attackLayer;
         Rotation = data.Rotation;
-
-        float altitude;
+        
         var triggerRole = data.TriggerRole;
-        if (triggerRole != null)
+        if (data.TriggerRole != null && data.TriggerRole.AffiliationArea != null) //设置所属区域
         {
-            altitude = -triggerRole.MountPoint.Position.Y;
-            if (triggerRole.AffiliationArea != null) //设置所属区域
+            if (triggerRole.AffiliationArea != null) 
             {
                 triggerRole.AffiliationArea.InsertItem(this);
             }
         }
-        else
-        {
-            altitude = 8;
-        }
         
-        Position = data.Position + new Vector2(0, altitude);
-        Altitude = altitude;
+        Position = data.Position + new Vector2(0, data.Altitude);
+        Altitude = data.Altitude;
         if (data.VerticalSpeed != 0)
         {
             VerticalSpeed = data.VerticalSpeed;
         }
-        EnableVerticalMotion = data.BulletBase.UseGravity;
+        else
+        {
+            VerticalSpeed = 0;
+        }
 
         //BasisVelocity = new Vector2(data.FlySpeed, 0).Rotated(Rotation);
         MoveController.AddForce(new Vector2(data.FlySpeed, 0).Rotated(Rotation));
@@ -73,21 +109,40 @@ public partial class Bullet : ActivityObject, IBullet
         //如果子弹会对玩家造成伤害, 则显示红色描边
         if (Player.Current.CollisionWithMask(attackLayer))
         {
-            ShowBorderFlashes();
+            if (!_isEnemyBullet)
+            {
+                _isEnemyBullet = true;
+                ShowOutline = true;
+                SetBlendSchedule(1);
+            }
         }
+        else if (_isEnemyBullet)
+        {
+            _isEnemyBullet = false;
+            ShowOutline = false;
+            SetBlendSchedule(0);
+        }
+        
         PutDown(RoomLayerEnum.YSortLayer);
         //播放子弹移动动画
         PlaySpriteAnimation(AnimatorNames.Move);
         //强制更新下坠逻辑处理
         UpdateFall((float)GetProcessDeltaTime());
-        
+
         //过期销毁
         if (data.LifeTime > 0)
         {
             this.CallDelay(data.LifeTime, OnLimeOver);
         }
+        
+        if (Particles2D != null)
+        {
+            foreach (var particles2D in Particles2D)
+            {
+                particles2D.Restart();
+            }
+        }
     }
-    
 
     public override void OnMoveCollision(KinematicCollision2D collision)
     {
@@ -95,13 +150,8 @@ public partial class Bullet : ActivityObject, IBullet
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
             //创建粒子特效
-            var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletSmoke_tscn);
-            var smoke = packedScene.Instantiate<GpuParticles2D>();
-            var rotated = AnimatedSprite.Position.Rotated(Rotation);
-            smoke.GlobalPosition = collision.GetPosition() + new Vector2(0, rotated.Y);
-            smoke.GlobalRotation = collision.GetNormal().Angle();
-            smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-            Destroy();
+            OnPlayCollisionEffect(collision);
+            DoReclaim();
         }
     }
 
@@ -112,30 +162,26 @@ public partial class Bullet : ActivityObject, IBullet
     {
         if (o is Role role)
         {
-            PlayDisappearEffect();
-
-            //计算子弹造成的伤害
-            var damage = Utils.Random.RandomRangeInt(BulletData.MinHarm, BulletData.MaxHarm);
-            if (BulletData.TriggerRole != null)
-            {
-                damage = BulletData.TriggerRole.RoleState.CallCalcDamageEvent(damage);
-            }
+            OnPlayDisappearEffect();
 
             //击退
             if (role is not Player) //目标不是玩家才会触发击退
             {
-                var attr = BulletData.Weapon.GetUseAttribute(BulletData.TriggerRole);
-                var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRnage);
-                if (repel != 0)
+                if (BulletData.Repel != 0)
                 {
-                    //role.MoveController.AddForce(Vector2.FromAngle(BasisVelocity.Angle()) * repel);
-                    role.MoveController.AddForce(Vector2.FromAngle(Velocity.Angle()) * repel);
+                    role.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
                 }
             }
             
             //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), damage, Rotation);
-            Destroy();
+            role.CallDeferred(nameof(Role.Hurt), BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
+
+            //穿透次数
+            CurrentPenetration++;
+            if (CurrentPenetration > BulletData.Penetration)
+            {
+                DoReclaim();
+            }
         }
     }
 
@@ -144,8 +190,8 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void OnMaxDistance()
     {
-        PlayDisappearEffect();
-        Destroy();
+        OnPlayDisappearEffect();
+        DoReclaim();
     }
     
     /// <summary>
@@ -153,8 +199,15 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void OnLimeOver()
     {
-        PlayDisappearEffect();
-        Destroy();
+        OnPlayDisappearEffect();
+        DoReclaim();
+    }
+    
+    protected override void OnFallToGround()
+    {
+        //落地销毁
+        OnPlayDisappearEffect();
+        DoReclaim();
     }
     
     /// <summary>
@@ -179,16 +232,53 @@ public partial class Bullet : ActivityObject, IBullet
     /// <summary>
     /// 播放子弹消失的特效
     /// </summary>
-    public virtual void PlayDisappearEffect()
+    public virtual void OnPlayDisappearEffect()
     {
-        var packedScene = ResourceManager.Load<PackedScene>(ResourcePath.prefab_effect_weapon_BulletDisappear_tscn);
-        var node = packedScene.Instantiate<Node2D>();
+        PlayDisappearEffect(ResourcePath.prefab_effect_bullet_BulletDisappear0001_tscn);
+    }
+
+    /// <summary>
+    /// 播放撞墙特效
+    /// </summary>
+    public virtual void OnPlayCollisionEffect(KinematicCollision2D collision)
+    {
+        PlayCollisionEffect(collision, ResourcePath.prefab_effect_bullet_BulletSmoke0001_tscn);
+    }
+
+    /// <summary>
+    /// 播放子弹消失特效
+    /// </summary>
+    public void PlayDisappearEffect(string path)
+    {
+        var effect = ObjectManager.GetPoolItem<IEffect>(path);
+        var node = (Node2D)effect;
         node.GlobalPosition = AnimatedSprite.GlobalPosition;
         node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+        effect.PlayEffect();
+    }
+    
+    
+    /// <summary>
+    /// 播放子弹消失特效
+    /// </summary>
+    public void PlayCollisionEffect(KinematicCollision2D collision, string path)
+    {
+        var effect = ObjectManager.GetPoolItem<IEffect>(path);
+        var smoke = (Node2D)effect;
+        var rotated = AnimatedSprite.Position.Rotated(Rotation);
+        smoke.GlobalPosition = collision.GetPosition() + new Vector2(0, rotated.Y);
+        smoke.GlobalRotation = collision.GetNormal().Angle();
+        smoke.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+        effect.PlayEffect();
     }
     
     protected override void Process(float delta)
     {
+        if (ActivityMaterial.DynamicCollision)
+        {
+            //子弹高度大于 16 关闭碰撞检测
+            CollisionShape2D.Disabled = Altitude >= 16;
+        }
         //距离太大, 自动销毁
         CurrFlyDistance += BulletData.FlySpeed * delta;
         if (CurrFlyDistance >= BulletData.MaxDistance)
@@ -205,5 +295,42 @@ public partial class Bullet : ActivityObject, IBullet
         }
         var activityObject = other.AsActivityObject();
         OnCollisionTarget(activityObject);
+    }
+    
+    public virtual void DoReclaim()
+    {
+        ObjectPool.Reclaim(this);
+    }
+    
+    public virtual void OnReclaim()
+    {
+        Visible = false;
+        if (Particles2D != null)
+        {
+            foreach (var particles2D in Particles2D)
+            {
+                particles2D.Emitting = false;
+            }
+        }
+        if (OnReclaimEvent != null)
+        {
+            OnReclaimEvent();
+        }
+        if (AffiliationArea != null)
+        {
+            AffiliationArea.RemoveItem(this);
+        }
+        GetParent().CallDeferred(Node.MethodName.RemoveChild, this);
+    }
+
+    public virtual void OnLeavePool()
+    {
+        Visible = true;
+        MoveController.ClearForce();
+        StopAllCoroutine();
+        if (OnLeavePoolEvent != null)
+        {
+            OnLeavePoolEvent();
+        }
     }
 }

@@ -169,7 +169,6 @@ public abstract class Component : IProcess, IDestroy, ICoroutine
     /// <summary>
     /// 如果启用了组件, 则每帧会调用一次 Process
     /// </summary>
-    /// <param name="delta"></param>
     public virtual void Process(float delta)
     {
     }
@@ -177,7 +176,6 @@ public abstract class Component : IProcess, IDestroy, ICoroutine
     /// <summary>
     /// 如果启用了组件, 则每物理帧会调用一次 PhysicsProcess
     /// </summary>
-    /// <param name="delta"></param>
     public virtual void PhysicsProcess(float delta)
     {
     }
@@ -245,6 +243,16 @@ public abstract class Component : IProcess, IDestroy, ICoroutine
         return Master.GetComponent(type);
     }
 
+    public T[] GetComponents<T>() where T : Component, new()
+    {
+        return Master.GetComponents<T>();
+    }
+    
+    public Component[] GetComponents(Type type)
+    {
+        return Master.GetComponents(type);
+    }
+    
     public void RemoveComponent(Component component)
     {
         Master.RemoveComponent(component);

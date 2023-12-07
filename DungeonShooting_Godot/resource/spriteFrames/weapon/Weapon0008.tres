@@ -148,6 +148,6 @@ animations = [{
 "texture": SubResource("AtlasTexture_ol1l8")
 }],
 "loop": false,
-"name": &"reloading",
+"name": &"reloading_frame",
 "speed": 11.0
 }]

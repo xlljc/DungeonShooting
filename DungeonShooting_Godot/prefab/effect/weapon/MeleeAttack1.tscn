@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://cylm455bsio3g"]
 
-[ext_resource type="Texture2D" uid="uid://7jhe2mmctmr1" path="res://resource/sprite/effects/weapon/MeleeAttack1.png" id="1_bjxle"]
+[ext_resource type="Texture2D" uid="uid://7jhe2mmctmr1" path="res://resource/sprite/common/MeleeAttack1.png" id="1_bjxle"]
 [ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_bjagc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_36t2o"]
@@ -39,8 +39,8 @@ animations = [{
 "speed": 20.0
 }]
 
-[node name="MeleeAttack1" type="AnimatedSprite2D"]
+[node name="MeleeAttack1" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
 sprite_frames = SubResource("SpriteFrames_hkcv6")
-autoplay = "default"
 script = ExtResource("2_bjagc")
 DelayTime = 0.2
+Particles2D = []

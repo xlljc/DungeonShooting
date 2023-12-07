@@ -19,6 +19,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_enemy0001 = "enemy0001";
         /// <summary>
+        /// 名称: 敌人2 <br/>
+        /// 简介: 敌人2
+        /// </summary>
+        public const string Id_enemy0002 = "enemy0002";
+        /// <summary>
         /// 名称: 步枪 <br/>
         /// 简介: 
         /// </summary>
@@ -84,6 +89,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_bullet0004 = "bullet0004";
         /// <summary>
+        /// 名称: 抛物线粘液子弹 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_bullet0005 = "bullet0005";
+        /// <summary>
         /// 名称:  <br/>
         /// 简介: 
         /// </summary>
@@ -105,9 +115,14 @@ public partial class ActivityObject
         public const string Id_shell0004 = "shell0004";
         /// <summary>
         /// 名称:  <br/>
-        /// 简介: 敌人死亡碎片
+        /// 简介: 敌人1死亡碎片
         /// </summary>
-        public const string Id_effect0001 = "effect0001";
+        public const string Id_enemy_dead0001 = "enemy_dead0001";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 简介: 敌人2死亡
+        /// </summary>
+        public const string Id_enemy_dead0002 = "enemy_dead0002";
         /// <summary>
         /// 名称: 鞋子 <br/>
         /// 简介: 提高移动速度
@@ -155,9 +170,29 @@ public partial class ActivityObject
         public const string Id_prop0009 = "prop0009";
         /// <summary>
         /// 名称: 分裂子弹 <br/>
-        /// 简介: 子弹数量翻倍, 但是精准度和伤害降低
+        /// 简介: 子弹数量翻倍, 但是精准度, 击退和伤害降低
         /// </summary>
         public const string Id_prop0010 = "prop0010";
+        /// <summary>
+        /// 名称: 弹射子弹 <br/>
+        /// 简介: 子弹反弹次数+2
+        /// </summary>
+        public const string Id_prop0011 = "prop0011";
+        /// <summary>
+        /// 名称: 穿透子弹 <br/>
+        /// 简介: 子弹穿透+1
+        /// </summary>
+        public const string Id_prop0012 = "prop0012";
+        /// <summary>
+        /// 名称: 武器背包 <br/>
+        /// 简介: 武器容量+1
+        /// </summary>
+        public const string Id_prop0013 = "prop0013";
+        /// <summary>
+        /// 名称: 道具背包 <br/>
+        /// 简介: 道具容量+1
+        /// </summary>
+        public const string Id_prop0014 = "prop0014";
         /// <summary>
         /// 名称: 医药箱 <br/>
         /// 简介: 使用后回复一颗红心

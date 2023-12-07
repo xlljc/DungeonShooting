@@ -7,6 +7,11 @@ using Godot;
 public class ExternalForce
 {
     /// <summary>
+    /// 所在的移动控制器
+    /// </summary>
+    public MoveController MoveController { get; set; }
+    
+    /// <summary>
     /// 当前力的名称
     /// </summary>
     public string Name { get; }

@@ -24,6 +24,7 @@ public static partial class UiManager
         public const string MapEditorSelectObject = "MapEditorSelectObject";
         public const string MapEditorTools = "MapEditorTools";
         public const string PauseMenu = "PauseMenu";
+        public const string RoomMap = "RoomMap";
         public const string RoomUI = "RoomUI";
         public const string Setting = "Setting";
         public const string Settlement = "Settlement";
@@ -891,6 +892,54 @@ public static partial class UiManager
     public static UI.PauseMenu.PauseMenuPanel[] Get_PauseMenu_Instance()
     {
         return GetUiInstance<UI.PauseMenu.PauseMenuPanel>(nameof(UI.PauseMenu.PauseMenu));
+    }
+
+    /// <summary>
+    /// 创建 RoomMap, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.RoomMap.RoomMapPanel Create_RoomMap()
+    {
+        return CreateUi<UI.RoomMap.RoomMapPanel>(UiName.RoomMap);
+    }
+
+    /// <summary>
+    /// 打开 RoomMap, 并返回UI实例
+    /// </summary>
+    public static UI.RoomMap.RoomMapPanel Open_RoomMap()
+    {
+        return OpenUi<UI.RoomMap.RoomMapPanel>(UiName.RoomMap);
+    }
+
+    /// <summary>
+    /// 隐藏 RoomMap 的所有实例
+    /// </summary>
+    public static void Hide_RoomMap()
+    {
+        var uiInstance = Get_RoomMap_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 RoomMap 的所有实例
+    /// </summary>
+    public static void Destroy_RoomMap()
+    {
+        var uiInstance = Get_RoomMap_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 RoomMap 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.RoomMap.RoomMapPanel[] Get_RoomMap_Instance()
+    {
+        return GetUiInstance<UI.RoomMap.RoomMapPanel>(nameof(UI.RoomMap.RoomMap));
     }
 
     /// <summary>

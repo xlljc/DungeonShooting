@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -163,7 +164,7 @@ public partial class DungeonManager : Node2D
             }
             
             //暂停游戏
-            if (Input.IsActionJustPressed("ui_cancel"))
+            if (InputManager.Menu)
             {
                 World.Pause = true;
                 //鼠标改为Ui鼠标
@@ -183,9 +184,7 @@ public partial class DungeonManager : Node2D
                 OnCheckEnemy();
             }
             
-            //更新敌人视野
-            UpdateEnemiesView();
-            if (GameApplication.Instance.IsDebug)
+            if (ActivityObject.IsDebug)
             {
                 QueueRedraw();
             }
@@ -216,6 +215,9 @@ public partial class DungeonManager : Node2D
         //生成寻路网格， 这一步操作只生成过道的导航
         _dungeonTileMap.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
         yield return 0;
+        //将导航网格绑定到 DoorInfo 上
+        //BindAisleNavigation(StartRoomInfo, _dungeonTileMap.GetPolygonData());
+        //yield return 0;
         //挂载过道导航区域
         _dungeonTileMap.MountNavigationPolygon(World.TileRoot);
         yield return 0;
@@ -246,22 +248,7 @@ public partial class DungeonManager : Node2D
         player.Name = "Player";
         player.PutDown(RoomLayerEnum.YSortLayer);
         Player.SetCurrentPlayer(player);
-        yield return 0;
-
-        //玩家手上添加武器
-        //player.PickUpWeapon(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
-        // var weapon = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001);
-        // weapon.PutDown(player.Position, RoomLayerEnum.NormalLayer);
-        // var weapon2 = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0002);
-        // weapon2.PutDown(player.Position, RoomLayerEnum.NormalLayer);
-        // var weapon3 = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0003);
-        // weapon3.PutDown(player.Position, RoomLayerEnum.NormalLayer);
-        // var weapon4 = ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0004);
-        // weapon4.PutDown(player.Position, RoomLayerEnum.NormalLayer);
-
         GameApplication.Instance.Cursor.SetGuiMode(false);
-        yield return 0;
-        
         //打开游戏中的ui
         UiManager.Open_RoomUI();
         //派发进入地牢事件
@@ -301,6 +288,8 @@ public partial class DungeonManager : Node2D
         GameApplication.Instance.DestroyWorld();
         yield return 0;
         FogMaskHandler.ClearRecordRoom();
+        LiquidBrushManager.ClearData();
+        BrushImageData.ClearBrushData();
         QueueRedraw();
         //鼠标还原
         GameApplication.Instance.Cursor.SetGuiMode(true);
@@ -314,11 +303,59 @@ public partial class DungeonManager : Node2D
             finish();
         }
     }
-    
+
+    //将导航网格绑定到 DoorInfo 上
+    private void BindAisleNavigation(RoomInfo startRoom, NavigationPolygonData[] polygonDatas)
+    {
+        var list = polygonDatas.ToList();
+        startRoom.EachRoom(roomInfo =>
+        {
+            if (roomInfo.Doors != null)
+            {
+                foreach (var roomInfoDoor in roomInfo.Doors)
+                {
+                    if (roomInfoDoor.IsForward)
+                    {
+                        var flag = false;
+                        var doorPosition = roomInfoDoor.GetWorldOriginPosition();
+                        for (var i = 0; i < list.Count; i++)
+                        {
+                            var data = list[i];
+                            var points = data.GetPoints();
+                            if (InLength(points, doorPosition, 32) && InLength(points, roomInfoDoor.GetWorldEndPosition(), 32))
+                            {
+                                roomInfoDoor.AisleNavigation = data;
+                                roomInfoDoor.ConnectDoor.AisleNavigation = data;
+
+                                flag = true;
+                                list.RemoveAt(i);
+                            }
+                        }
+
+                        //Debug.Log(roomInfo.Id + ", 是否找到连接过道: " + flag);
+                    }
+                }
+            }
+        });
+    }
+
+    private bool InLength(Vector2[] points, Vector2 targetPoint, float len)
+    {
+        foreach (var point in points)
+        {
+            if (point.DistanceSquaredTo(targetPoint) <= len * len)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // 初始化房间
     private void InitRoom(RoomInfo roomInfo)
     {
-        roomInfo.CalcOuterRange();
+        roomInfo.CalcRange();
         //挂载房间导航区域
         MountNavFromRoomInfo(roomInfo);
         //创建门
@@ -328,9 +365,13 @@ public partial class DungeonManager : Node2D
         //创建 RoomStaticSprite
         CreateRoomStaticSprite(roomInfo);
         //创建静态精灵画布
-        CreateRoomStaticSpriteCanvas(roomInfo);
+        CreateRoomStaticImageCanvas(roomInfo);
+        //创建液体区域
+        CreateRoomLiquidCanvas(roomInfo);
         //创建迷雾遮罩
         CreateRoomFogMask(roomInfo);
+        //创建房间/过道预览sprite
+        CreatePreviewSprite(roomInfo);
     }
     
     //挂载房间导航区域
@@ -421,21 +462,26 @@ public partial class DungeonManager : Node2D
         World.Current.StaticSpriteRoot.AddChild(spriteRoot);
         roomInfo.StaticSprite = spriteRoot;
     }
-
-    //创建静态精灵画布
-    private void CreateRoomStaticSpriteCanvas(RoomInfo roomInfo)
+    
+    
+    //创建液体画布
+    private void CreateRoomLiquidCanvas(RoomInfo roomInfo)
     {
-        var worldPos = roomInfo.GetWorldPosition();
-        var rect = roomInfo.OuterRange;
+        var rect = roomInfo.CanvasRect;
 
-        var minX = rect.Position.X - GameConfig.TileCellSize;
-        var minY = rect.Position.Y - GameConfig.TileCellSize;
-        var maxX = rect.End.X + GameConfig.TileCellSize;
-        var maxY = rect.End.Y + GameConfig.TileCellSize;
+        var liquidCanvas = new LiquidCanvas(roomInfo, rect.Size.X, rect.Size.Y);
+        liquidCanvas.Position = rect.Position;
+        roomInfo.LiquidCanvas = liquidCanvas;
+        roomInfo.StaticSprite.AddChild(liquidCanvas);
+    }
 
-        var canvasSprite = new ImageCanvas(maxX - minX, maxY - minY);
-        canvasSprite.Position = new Vector2I(minX, minY);
-        roomInfo.RoomOffset = new Vector2I(worldPos.X - minX, worldPos.Y - minY);
+    //创建静态图像画布
+    private void CreateRoomStaticImageCanvas(RoomInfo roomInfo)
+    {
+        var rect = roomInfo.CanvasRect;
+
+        var canvasSprite = new ImageCanvas(rect.Size.X, rect.Size.Y);
+        canvasSprite.Position = rect.Position;
         roomInfo.StaticImageCanvas = canvasSprite;
         roomInfo.StaticSprite.AddChild(canvasSprite);
     }
@@ -551,6 +597,117 @@ public partial class DungeonManager : Node2D
         }
     }
 
+    private void CreatePreviewSprite(RoomInfo roomInfo)
+    {
+        //房间区域
+        var sprite = new TextureRect();
+        //sprite.Centered = false;
+        sprite.Texture = roomInfo.PreviewTexture;
+        sprite.Position = roomInfo.Position;
+        var material = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres, false);
+        material.SetShaderParameter("outline_color", new Color(1, 1, 1, 0.9f));
+        material.SetShaderParameter("scale", 0.5f);
+        sprite.Material = material;
+        roomInfo.PreviewSprite = sprite;
+        
+        //过道
+        if (roomInfo.Doors != null)
+        {
+            foreach (var doorInfo in roomInfo.Doors)
+            {
+                if (doorInfo.IsForward)
+                {
+                    var aisleSprite = new TextureRect();
+                    //aisleSprite.Centered = false;
+                    aisleSprite.Texture = doorInfo.AislePreviewTexture;
+                    //调整过道预览位置
+                    
+                    if (!doorInfo.HasCross) //不含交叉点
+                    {
+                        if (doorInfo.Direction == DoorDirection.N)
+                        {
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, doorInfo.AislePreviewTexture.GetHeight() - 1);
+                        }
+                        else if (doorInfo.Direction == DoorDirection.S)
+                        {
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, 1);
+                        }
+                        else if (doorInfo.Direction == DoorDirection.E)
+                        {
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, 0);
+                        }
+                        else if (doorInfo.Direction == DoorDirection.W)
+                        {
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 1, 0);
+                        }
+                    }
+                    else //包含交叉点
+                    {
+                        if (doorInfo.Direction == DoorDirection.S)
+                        {
+                            if (doorInfo.ConnectDoor.Direction == DoorDirection.E)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 4, 1);
+                            }
+                            else if (doorInfo.ConnectDoor.Direction == DoorDirection.W)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, 1);
+                            }
+                            else
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition;
+                            }
+                        }
+                        else if (doorInfo.Direction == DoorDirection.N)
+                        {
+                            if (doorInfo.ConnectDoor.Direction == DoorDirection.W)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, doorInfo.AislePreviewTexture.GetHeight() - 1);
+                            }
+                            else
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition;
+                            }
+                        }
+                        else if (doorInfo.Direction == DoorDirection.W)
+                        {
+                            if (doorInfo.ConnectDoor.Direction == DoorDirection.N)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 1, 0);
+                            }
+                            else
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition;
+                            }
+                        }
+                        else if (doorInfo.Direction == DoorDirection.E)
+                        {
+                            if (doorInfo.ConnectDoor.Direction == DoorDirection.S)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, doorInfo.AislePreviewTexture.GetHeight() - 4);
+                            }
+                            else if (doorInfo.ConnectDoor.Direction == DoorDirection.N)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, 0);
+                            }
+                            else
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition;
+                            }
+                        }
+                    }
+
+                    var aisleSpriteMaterial = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres, false);
+                    aisleSpriteMaterial.SetShaderParameter("outline_color", new Color(1, 1, 1, 0.9f));
+                    aisleSpriteMaterial.SetShaderParameter("scale", 0.5f);
+                    aisleSprite.Material = aisleSpriteMaterial;
+                    doorInfo.AislePreviewSprite = aisleSprite;
+                    doorInfo.ConnectDoor.AislePreviewSprite = aisleSprite;
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// 玩家第一次进入某个房间回调
     /// </summary>
@@ -565,11 +722,11 @@ public partial class DungeonManager : Node2D
             foreach (var enemy in World.Enemy_InstanceList)
             {
                 //不与玩家处于同一个房间
-                if (enemy.AffiliationArea != playerAffiliationArea)
+                if (!enemy.IsDestroyed && enemy.AffiliationArea != playerAffiliationArea)
                 {
-                    if (enemy.StateController.CurrState != AiStateEnum.AiNormal)
+                    if (enemy.StateController.CurrState != AIStateEnum.AiNormal)
                     {
-                        enemy.StateController.ChangeState(AiStateEnum.AiNormal);
+                        enemy.StateController.ChangeState(AIStateEnum.AiNormal);
                     }
                 }
             }
@@ -620,30 +777,6 @@ public partial class DungeonManager : Node2D
         }
     }
 
-    /// <summary>
-    /// 更新敌人视野
-    /// </summary>
-    private void UpdateEnemiesView()
-    {
-        World.Enemy_IsFindTarget = false;
-        World.Enemy_FindTargetAffiliationSet.Clear();
-        for (var i = 0; i < World.Enemy_InstanceList.Count; i++)
-        {
-            var enemy = World.Enemy_InstanceList[i];
-            var state = enemy.StateController.CurrState;
-            if (state == AiStateEnum.AiFollowUp || state == AiStateEnum.AiSurround) //目标在视野内
-            {
-                if (!World.Enemy_IsFindTarget)
-                {
-                    World.Enemy_IsFindTarget = true;
-                    World.Enemy_FindTargetPosition = Player.Current.GetCenterPosition();
-                    World.Enemy_FindTargetAffiliationSet.Add(Player.Current.AffiliationArea);
-                }
-                World.Enemy_FindTargetAffiliationSet.Add(enemy.AffiliationArea);
-            }
-        }
-    }
-
     private void DisposeRoomInfo(RoomInfo roomInfo)
     {
         roomInfo.Destroy();
@@ -651,13 +784,17 @@ public partial class DungeonManager : Node2D
     
     public override void _Draw()
     {
-        if (GameApplication.Instance.IsDebug)
+        if (ActivityObject.IsDebug)
         {
             if (_dungeonTileMap != null && _roomStaticNavigationList != null)
             {
                 //绘制ai寻路区域
                 Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());
             }
+            // StartRoomInfo?.EachRoom(info =>
+            // {
+            //     DrawRect(new Rect2(info.Waypoints * GameConfig.TileCellSize, new Vector2(16, 16)), Colors.Red);
+            // });
             //绘制房间区域
             // if (_dungeonGenerator != null)
             // {

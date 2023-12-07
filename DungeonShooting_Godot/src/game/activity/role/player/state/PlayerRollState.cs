@@ -22,7 +22,6 @@ public class PlayerRollState : StateBase<Player, PlayerStateEnum>
         }
 
         _coroutineId = Master.StartCoroutine(RunRoll());
-        Master.AnimatedSprite.Play(AnimatorNames.Roll);
 
         //隐藏武器
         Master.BackMountPoint.Visible = false;
@@ -32,7 +31,7 @@ public class PlayerRollState : StateBase<Player, PlayerStateEnum>
         
         //翻滚移动方向
         _moveDir = InputManager.MoveAxis;
-        Master.BasisVelocity = _moveDir * Master.RoleState.RollSpeed;
+        Master.BasisVelocity = _moveDir * Master.PlayerRoleState.RollSpeed;
     }
 
     public override void Exit(PlayerStateEnum next)
@@ -42,18 +41,36 @@ public class PlayerRollState : StateBase<Player, PlayerStateEnum>
         Master.MountPoint.Visible = true;
         //启用伤害碰撞
         Master.HurtCollision.Disabled = false;
+        Master.BasisVelocity = Master.BasisVelocity.LimitLength(Master.RoleState.MoveSpeed);
     }
 
     public override void Process(float delta)
     {
-        Master.BasisVelocity = _moveDir * Master.RoleState.RollSpeed;
+        Master.BasisVelocity = _moveDir * Master.PlayerRoleState.RollSpeed;
     }
 
     //翻滚逻辑处理
     private IEnumerator RunRoll()
     {
+        Master.AnimatedSprite.Play(AnimatorNames.Roll);
+
+        Master.MountLookTarget = false;
+        var face = Master.Face;
+        var velocity = Master.BasisVelocity;
+        if (velocity.X > 0 && face == FaceDirection.Left)
+        {
+            Master.Face = FaceDirection.Right;
+        }
+        else if (velocity.X < 0 && face == FaceDirection.Right)
+        {
+            Master.Face = FaceDirection.Left;
+        }
+        
         yield return Master.AnimatedSprite.ToSignal(Master.AnimatedSprite, AnimatedSprite2D.SignalName.AnimationFinished);
         _coroutineId = -1;
+        
+        Master.MountLookTarget = true;
+        Master.Face = face;
         Master.OverRoll();
         if (InputManager.MoveAxis != Vector2.Zero) //切换到移动状态
         {

@@ -24,6 +24,18 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "enemy0002",
+    "Type": 4,
+    "Name": "\u654C\u4EBA2",
+    "Intro": "\u654C\u4EBA2",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/role/Enemy0002.tscn",
+    "Icon": "res://resource/sprite/role/enemy0002/Enemy0002.png",
+    "ShowInMapEditor": true
+  },
+  {
     "Id": "weapon0001",
     "Type": 5,
     "Name": "\u6B65\u67AA",
@@ -68,7 +80,7 @@
     "IsStatic": false,
     "__Material": "",
     "Prefab": "res://prefab/weapon/Weapon0004.tscn",
-    "Icon": "res://resource/sprite/weapon/knife1.png",
+    "Icon": "res://resource/sprite/weapon/weapon0004/Weapon0004.png",
     "ShowInMapEditor": true
   },
   {
@@ -138,7 +150,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0003",
     "Prefab": "res://prefab/bullet/normal/Bullet0001.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -150,7 +162,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0003",
     "Prefab": "res://prefab/bullet/normal/Bullet0002.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -162,7 +174,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0003",
     "Prefab": "res://prefab/bullet/normal/Bullet0003.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -174,8 +186,20 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "0002",
+    "__Material": "0005",
     "Prefab": "res://prefab/bullet/normal/Bullet0004.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "bullet0005",
+    "Type": 6,
+    "Name": "\u629B\u7269\u7EBF\u7C98\u6DB2\u5B50\u5F39",
+    "Intro": "",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "0004",
+    "Prefab": "res://prefab/bullet/normal/Bullet0005.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
@@ -186,7 +210,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0006",
     "Prefab": "res://prefab/shell/Shell0001.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -198,7 +222,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0006",
     "Prefab": "res://prefab/shell/Shell0002.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -210,7 +234,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0006",
     "Prefab": "res://prefab/shell/Shell0003.tscn",
     "Icon": "",
     "ShowInMapEditor": false
@@ -222,20 +246,32 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "",
+    "__Material": "0006",
     "Prefab": "res://prefab/shell/Shell0004.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
   {
-    "Id": "effect0001",
+    "Id": "enemy_dead0001",
     "Type": 8,
     "Name": "",
-    "Intro": "\u654C\u4EBA\u6B7B\u4EA1\u788E\u7247",
+    "Intro": "\u654C\u4EBA1\u6B7B\u4EA1\u788E\u7247",
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/effect/enemy/Effect0001.tscn",
+    "Prefab": "res://prefab/effect/enemy/EnemyDead0001.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "enemy_dead0002",
+    "Type": 8,
+    "Name": "",
+    "Intro": "\u654C\u4EBA2\u6B7B\u4EA1",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/effect/enemy/EnemyDead0002.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
@@ -351,12 +387,60 @@
     "Id": "prop0010",
     "Type": 9,
     "Name": "\u5206\u88C2\u5B50\u5F39",
-    "Intro": "\u5B50\u5F39\u6570\u91CF\u7FFB\u500D, \u4F46\u662F\u7CBE\u51C6\u5EA6\u548C\u4F24\u5BB3\u964D\u4F4E",
+    "Intro": "\u5B50\u5F39\u6570\u91CF\u7FFB\u500D, \u4F46\u662F\u7CBE\u51C6\u5EA6, \u51FB\u9000\u548C\u4F24\u5BB3\u964D\u4F4E",
     "Details": "",
     "IsStatic": false,
     "__Material": "",
     "Prefab": "res://prefab/prop/buff/BuffProp0010.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0010.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "prop0011",
+    "Type": 9,
+    "Name": "\u5F39\u5C04\u5B50\u5F39",
+    "Intro": "\u5B50\u5F39\u53CD\u5F39\u6B21\u6570\u002B2",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0011.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0011.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "prop0012",
+    "Type": 9,
+    "Name": "\u7A7F\u900F\u5B50\u5F39",
+    "Intro": "\u5B50\u5F39\u7A7F\u900F\u002B1",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0012.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0012.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "prop0013",
+    "Type": 9,
+    "Name": "\u6B66\u5668\u80CC\u5305",
+    "Intro": "\u6B66\u5668\u5BB9\u91CF\u002B1",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0013.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0013.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "prop0014",
+    "Type": 9,
+    "Name": "\u9053\u5177\u80CC\u5305",
+    "Intro": "\u9053\u5177\u5BB9\u91CF\u002B1",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/prop/buff/BuffProp0014.tscn",
+    "Icon": "res://resource/sprite/prop/buff/BuffProp0014.png",
     "ShowInMapEditor": true
   },
   {

@@ -57,7 +57,7 @@ public partial class TestGridData : Node2D
         Debug.Log("TestGrid设置值用时： " + (DateTime.Now - time).Milliseconds);
 
         time = DateTime.Now;
-        var testGrid2 = new Grid<int>();
+        var testGrid2 = new InfiniteGrid<int>();
         for (int i = 0; i < 1000; i++)
         {
             for (int j = 0; j < 1000; j++)

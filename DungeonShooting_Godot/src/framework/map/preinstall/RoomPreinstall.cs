@@ -159,9 +159,9 @@ public class RoomPreinstall : IDestroy
                     random.RandomRangeInt((int)(pos.X - birthRect.X / 2), (int)(pos.X + birthRect.X / 2)),
                     random.RandomRangeInt((int)(pos.Y - birthRect.Y / 2), (int)(pos.Y + birthRect.Y / 2))
                 );
-                var offset = RoomInfo.GetOffsetPosition();
                 //var offset = RoomInfo.RoomSplit.RoomInfo.Position.AsVector2I();
-                mark.Position = RoomInfo.GetWorldPosition() + (tempPos - offset);
+                //mark.Position = RoomInfo.GetWorldPosition() + tempPos - offset;
+                mark.Position = RoomInfo.ToGlobalPosition(tempPos);
                 wave.Add(mark);
             }
 
@@ -297,10 +297,19 @@ public class RoomPreinstall : IDestroy
                     //播放出生动画
                     activityObject.StartCoroutine(OnActivityObjectBirth(activityObject));
                     activityObject.PutDown(GetDefaultLayer(activityMark));
+                    activityObject.UpdateFall((float)GameApplication.Instance.GetProcessDeltaTime());
+
+                    if (activityObject is Enemy enemy)
+                    {
+                        //出生调用
+                        enemy.OnBornFromMark();
+                    }
                     
-                    var effect1 = ResourceManager.LoadAndInstantiate<Effect1>(ResourcePath.prefab_effect_common_Effect1_tscn);
-                    effect1.Position = activityObject.Position + new Vector2(0, -activityMark.Altitude);
-                    effect1.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+                    var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_common_Effect1_tscn);
+                    var node = (Node2D)effect;
+                    node.Position = activityObject.Position + new Vector2(0, -activityMark.Altitude);
+                    node.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+                    effect.PlayEffect();
                 }
                 
                 i++;
@@ -428,8 +437,8 @@ public class RoomPreinstall : IDestroy
         }
         else if (activityMark.ActivityType == ActivityType.Enemy) //敌人类型
         {
-            var enemy = (Enemy)activityObject;
-            if (activityMark.Attr.TryGetValue("Weapon", out var weaponId)) //使用的武器
+            var role = (Role)activityObject;
+            if (role is Enemy enemy && activityMark.Attr.TryGetValue("Weapon", out var weaponId)) //使用的武器
             {
                 if (!string.IsNullOrEmpty(weaponId))
                 {
@@ -449,7 +458,7 @@ public class RoomPreinstall : IDestroy
             if (activityMark.DerivedAttr.TryGetValue("Face", out var face)) //脸朝向, 应该只有 -1 和 1
             {
                 var faceDir = int.Parse(face);
-                enemy.Face = (FaceDirection)faceDir;
+                role.Face = (FaceDirection)faceDir;
             }
         }
     }

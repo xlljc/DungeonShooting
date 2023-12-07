@@ -31,23 +31,17 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// 全局根节点
 	/// </summary>
 	[Export] public Node2D GlobalNodeRoot;
-
-	/// <summary>
-	/// 是否开启调试
-	/// </summary>
-	[ExportGroup("Debug")]
-	[Export] public bool IsDebug;
-
+	
 	/// <summary>
 	/// 游戏目标帧率
 	/// </summary>
-	public int TargetFps { get; private set; } = 60;
+	public int TargetFps { get; private set; }
 	
 	/// <summary>
 	/// 鼠标指针
 	/// </summary>
 	public Cursor Cursor { get; private set; }
-	
+
 	/// <summary>
 	/// 游戏世界
 	/// </summary>
@@ -97,6 +91,8 @@ public partial class GameApplication : Node2D, ICoroutine
 		InitRoomConfig();
 		//初始化武器数据
 		Weapon.InitWeaponAttribute();
+		//初始化敌人数据
+		Enemy.InitEnemyAttribute();
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = RoomConfig.FirstOrDefault().Key;
@@ -112,12 +108,10 @@ public partial class GameApplication : Node2D, ICoroutine
 		//固定帧率
 		//Engine.MaxFps = TargetFps;
 		//调试绘制开关
-		//IsDebug = true;
-		ActivityObject.IsDebug = IsDebug;
+		ActivityObject.IsDebug = false;
 		//Engine.TimeScale = 0.2f;
 		//调整窗口分辨率
 		OnWindowSizeChanged();
-		RefreshSubViewportSize();
 		//窗体大小改变
 		GetWindow().SizeChanged += OnWindowSizeChanged;
 
@@ -147,6 +141,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		var newDelta = (float)delta;
 		InputManager.Update(newDelta);
 		SoundManager.Update(newDelta);
+		DragUiManager.Update(newDelta);
 		
 		//协程更新
 		ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
@@ -190,8 +185,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// </summary>
 	public Vector2 GlobalToViewPosition(Vector2 globalPos)
 	{
-		//return globalPos;
-		return globalPos / PixelScale - (ViewportSize / 2) + GameCamera.Main.GlobalPosition;
+		return globalPos / PixelScale - (ViewportSize / 2) + GameCamera.Main.GlobalPosition - GameCamera.Main.PixelOffset;
 	}
 
 	/// <summary>
@@ -199,9 +193,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// </summary>
 	public Vector2 ViewToGlobalPosition(Vector2 viewPos)
 	{
-		// 3.5写法
-		//return (viewPos - GameCamera.Main.GlobalPosition + (GameConfig.ViewportSize / 2)) * GameConfig.WindowScale - GameCamera.Main.SubPixelPosition;
-		return (viewPos - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (ViewportSize / 2)) * PixelScale;
+		return (viewPos + GameCamera.Main.PixelOffset - (GameCamera.Main.GlobalPosition + GameCamera.Main.Offset) + (ViewportSize / 2)) * PixelScale;
 	}
 	
 	public long StartCoroutine(IEnumerator able)
@@ -280,11 +272,12 @@ public partial class GameApplication : Node2D, ICoroutine
 	private void RefreshSubViewportSize()
 	{
 		var s = new Vector2I((int)ViewportSize.X, (int)ViewportSize.Y);
-		s.X = s.X / 2 * 2;
-		s.Y = s.Y / 2 * 2;
+		s.X = s.X / 2 * 2 + 2;
+		s.Y = s.Y / 2 * 2 + 2;
 		SubViewport.Size = s;
 		SubViewportContainer.Scale = new Vector2(PixelScale, PixelScale);
 		SubViewportContainer.Size = s;
+		SubViewportContainer.Position = new Vector2(-PixelScale, -PixelScale);
 	}
 
 	//初始化鼠标

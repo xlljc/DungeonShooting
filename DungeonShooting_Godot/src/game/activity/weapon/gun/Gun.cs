@@ -17,19 +17,20 @@ public partial class Gun : Weapon
         //创建开火特效
         if (!string.IsNullOrEmpty(Attribute.FireEffect))
         {
-            var packedScene = ResourceManager.Load<PackedScene>(Attribute.FireEffect);
-            var sprite = packedScene.Instantiate<AutoDestroySprite>();
+            var effect = ObjectManager.GetPoolItem<IEffect>(Attribute.FireEffect);
+            var sprite = (Node2D)effect;
             // sprite.GlobalPosition = FirePoint.GlobalPosition;
             // sprite.GlobalRotation = FirePoint.GlobalRotation;
             // sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
             sprite.Position = GetLocalFirePosition();
             AddChild(sprite);
+            effect.PlayEffect();
         }
     }
 
     protected override void OnShoot(float fireRotation)
     {
-        ShootBullet(fireRotation, Attribute.Bullet);
+        FireManager.ShootBullet(this, fireRotation, Attribute.Bullet);
     }
 
     // //测试用, 敌人被消灭时触发手上武器开火

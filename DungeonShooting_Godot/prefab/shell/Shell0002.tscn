@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cdhinm8rnppxt"]
 
-[ext_resource type="Script" path="res://src/game/activity/shell/Shell.cs" id="1_qi64y"]
+[ext_resource type="Script" path="res://src/game/activity/common/AutoFreezeObject.cs" id="1_qi64y"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_s28nu"]
 [ext_resource type="SpriteFrames" uid="uid://cj8psdl2pova6" path="res://resource/spriteFrames/shell/Shell0002.tres" id="3_r560h"]
 
@@ -35,6 +35,8 @@ script = ExtResource("1_qi64y")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
+ShadowOffset = Vector2(0, 1)
+ThrowCollisionSize = Vector2(5, 5)
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 z_index = -1

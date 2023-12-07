@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnt6y33q15xfq"]
+
+[ext_resource type="Script" path="res://src/test/TestMask.cs" id="1_0yip6"]
+
+[node name="TestMask" type="Node2D" node_paths=PackedStringArray("PolygonNode")]
+script = ExtResource("1_0yip6")
+PolygonNode = NodePath("Polygon2D")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
