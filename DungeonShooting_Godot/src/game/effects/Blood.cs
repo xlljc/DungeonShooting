@@ -1,7 +1,7 @@
 using Godot;
 
 /// <summary>
-/// 血液溅射效果
+/// 血液溅射效果, 暂未用到
 /// </summary>
 public partial class Blood : CpuParticles2D
 {

@@ -51,7 +51,7 @@ public static class FogMaskHandler
     {
         if (_prevRoomInfo != roomInfo)
         {
-            Debug.Log($"切换房间: {_prevRoomInfo?.Id} => {roomInfo.Id}");
+            //Debug.Log($"切换房间: {_prevRoomInfo?.Id} => {roomInfo.Id}");
             if (_prevRoomInfo != null)
             {
                 //房间变暗
@@ -88,7 +88,7 @@ public static class FogMaskHandler
 
             _prevRoomInfo = roomInfo;
         }
-        Debug.Log("RefreshRoomFog: " + roomInfo.Id);
+        //Debug.Log("RefreshRoomFog: " + roomInfo.Id);
         var fogMask = roomInfo.RoomFogMask;
         
         if (!fogMask.IsExplored) //未探索该区域
@@ -96,6 +96,9 @@ public static class FogMaskHandler
             fogMask.IsExplored = true;
             fogMask.TransitionAlpha(0, 1);
             
+            //小地图亮起该房间
+            roomInfo.PreviewSprite.Visible = true;
+
             //刷新预览区域
             foreach (var roomInfoDoor in roomInfo.Doors)
             {
@@ -108,7 +111,7 @@ public static class FogMaskHandler
                     //显示预览过道
                     roomInfoDoor.PreviewRoomFogMask.SetActive(false);
                     roomInfoDoor.PreviewAisleFogMask.SetActive(true);
-                    roomInfoDoor.PreviewAisleFogMask.TransitionAlpha(1);
+                    roomInfoDoor.PreviewAisleFogMask.TransitionAlpha(0, 1);
                 }
             }
         }
@@ -136,12 +139,15 @@ public static class FogMaskHandler
 
     private static void _RefreshAisleFog(RoomDoorInfo doorInfo)
     {
-        Debug.Log("RefreshAisleFog: " + doorInfo.RoomInfo.Id + doorInfo.Direction);
+        //Debug.Log("RefreshAisleFog: " + doorInfo.RoomInfo.Id + doorInfo.Direction);
         var fogMask = doorInfo.AisleFogMask;
 
         var connectDoor = doorInfo.ConnectDoor;
         if (!fogMask.IsExplored) //未探索该区域
         {
+            //小地图亮起该过道
+            doorInfo.AislePreviewSprite.Visible = true;
+            
             fogMask.IsExplored = true;
             doorInfo.PreviewAisleFogMask.IsExplored = true;
             doorInfo.PreviewRoomFogMask.IsExplored = true;

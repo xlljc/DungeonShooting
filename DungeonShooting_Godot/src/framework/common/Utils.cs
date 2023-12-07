@@ -261,4 +261,49 @@ public static class Utils
         
         return point;
     }
+
+    /// <summary>
+    /// 将 point 位置限制在 anchor 的周围, 最大距离为 distance, 并返回新的位置
+    /// </summary>
+    public static Vector2 ConstrainDistance(Vector2 point, Vector2 anchor, float distance)
+    {
+        return (point - anchor).Normalized() * distance + anchor;
+    }
+    
+    /// <summary>
+    /// 返回一个点是否在 Polygon 内部
+    /// </summary>
+    /// <param name="polygon">多边形顶点</param>
+    /// <param name="point">目标点</param>
+    public static bool IsPointInPolygon(Vector2[] polygon, Vector2 point)
+    {
+        var isInside = false;
+        for (int i = 0, j = polygon.Length - 1; i < polygon.Length; j = i++)
+        {
+            if ((polygon[i].Y > point.Y) != (polygon[j].Y > point.Y) &&
+                point.X < (polygon[j].X - polygon[i].X) * (point.Y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) +
+                polygon[i].X)
+            {
+                isInside = !isInside;
+            }
+        }
+
+        return isInside;
+    }
+
+    /// <summary>
+    /// 根据法线翻转向量
+    /// </summary>
+    public static Vector2 ReflectByNormal(Vector2 vector, Vector2 normal)
+    {
+        return vector.Reflect(normal.Rotated(Mathf.Pi * 0.5f));
+    }
+    
+    /// <summary>
+    /// 根据法线翻转角度, 弧度制
+    /// </summary>
+    public static float ReflectByNormal(float rotation, Vector2 normal)
+    {
+        return ReflectByNormal(Vector2.FromAngle(rotation), normal).Angle();
+    }
 }

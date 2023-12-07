@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://b8ogu2l8pa70y"]
+
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/common/Smoke.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bs1lan5uwxyfg" path="res://resource/curve/Curve1.tres" id="1_8pe88"]
+[ext_resource type="SpriteFrames" uid="uid://pwg2tx7dmcvp" path="res://resource/spriteFrames/bullet/Collision0001.tres" id="1_r62v8"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_r547d"]
+
+[sub_resource type="CanvasItemMaterial" id="1"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gpp81"]
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+angle_max = 360.0
+spread = 25.0
+initial_velocity_max = 90.0
+gravity = Vector3(0, 0, 0)
+scale_curve = ExtResource("1_8pe88")
+color = Color(0.75, 0.75, 0.75, 0.470588)
+anim_offset_max = 1.0
+
+[node name="BulletSmoke0001" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
+sprite_frames = ExtResource("1_r62v8")
+frame = 4
+frame_progress = 1.0
+offset = Vector2(8, 0)
+script = ExtResource("2_r547d")
+Particles2D = [NodePath("GpuParticles2D")]
+
+[node name="GpuParticles2D" type="GPUParticles2D" parent="."]
+show_behind_parent = true
+material = SubResource("1")
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_gpp81")
+texture = ExtResource("1")
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 20

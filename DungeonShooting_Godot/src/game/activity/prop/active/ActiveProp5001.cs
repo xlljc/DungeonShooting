@@ -27,6 +27,7 @@ public partial class ActiveProp5001 : ActiveProp
             weapon.SetTotalAmmo(weapon.Attribute.MaxAmmoCapacity);
             return 1;
         }
+
         return 0;
     }
 }

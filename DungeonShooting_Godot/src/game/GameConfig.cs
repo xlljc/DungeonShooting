@@ -52,7 +52,7 @@ public static class GameConfig
     public const string UiCodeDir = "src/game/ui/";
     
     /// <summary>
-    /// TileMap 底板的层级
+    /// TileMap 地板的层级
     /// </summary>
     public const int FloorMapLayer = 0;
     /// <summary>

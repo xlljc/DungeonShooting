@@ -20,23 +20,22 @@ public partial class GameCamera : Camera2D
             DataDelta = dataDelta;
         }
     }
-    
+
     /// <summary>
     /// 当前场景的相机对象
     /// </summary>
     public static GameCamera Main { get; private set; }
 
     /// <summary>
-    /// 相机坐标更新完成事件
+    /// 相机坐标更新完成事件, 参数为 delta
     /// </summary>
     public event Action<float> OnPositionUpdateEvent;
 
     /// <summary>
     /// 恢复系数
     /// </summary>
-    [Export]
-    public float RecoveryCoefficient = 25f;
-    
+    [Export] public float RecoveryCoefficient = 25f;
+
     /// <summary>
     /// 抖动开关
     /// </summary>
@@ -46,14 +45,17 @@ public partial class GameCamera : Camera2D
     /// 镜头跟随鼠标进度 (0 - 1)
     /// </summary>
     public float FollowsMouseAmount = 0.15f;
-    
+
     /// <summary>
     /// 相机跟随目标
     /// </summary>
     private Role _followTarget;
-    
-    // 3.5
-    //public Vector2 SubPixelPosition { get; private set; }
+
+    /// <summary>
+    /// SubViewportContainer 中的像素偏移, 因为游戏开启了完美像素, SubViewport 节点下的相机运动会造成非常大的抖动,
+    /// 为了解决这个问题, 在 SubViewport 父节点中对 SubViewport 进行整体偏移, 以抵消相机造成的巨大抖动
+    /// </summary>
+    public Vector2 PixelOffset { get; private set; }
 
     private long _index = 0;
     
@@ -64,6 +66,8 @@ public partial class GameCamera : Camera2D
     
     private Vector2 _camPos;
     private Vector2 _shakeOffset = Vector2.Zero;
+    
+    public ShaderMaterial _offsetShader;
 
     public GameCamera()
     {
@@ -72,6 +76,7 @@ public partial class GameCamera : Camera2D
     
     public override void _Ready()
     {
+        _offsetShader = (ShaderMaterial)GameApplication.Instance.SubViewportContainer.Material;
         _camPos = GlobalPosition;
     }
     
@@ -81,36 +86,28 @@ public partial class GameCamera : Camera2D
         var newDelta = (float)delta;
         _Shake(newDelta);
         
-        // 3.5 写法
-        // var player = GameApplication.Instance.RoomManager.Player;
-        // var viewportContainer = GameApplication.Instance.SubViewportContainer;
-        // var camPos = player.GlobalPosition;
-        // _camPos = _camPos.Lerp(camPos, Mathf.Min(6 * newDelta, 1)) + _shakeOffset;
-        // SubPixelPosition = _camPos.Round() - _camPos;
-        // (viewportContainer.Material as ShaderMaterial)?.SetShaderParameter("offset", SubPixelPosition);
-        // GlobalPosition = _camPos.Round();
-
-
         var world = GameApplication.Instance.World;
         if (world != null && !world.Pause && _followTarget != null)
         {
             var mousePosition = InputManager.CursorPosition;
             var targetPosition = _followTarget.GlobalPosition;
-            //if (targetPosition.DistanceSquaredTo(mousePosition) >= 39999.992F) // >= (60 / 0.3f) * (60 / 0.3f)
             if (targetPosition.DistanceSquaredTo(mousePosition) >= (60 / FollowsMouseAmount) * (60 / FollowsMouseAmount))
             {
                 _camPos = targetPosition.MoveToward(mousePosition, 60);
             }
             else
             {
-                //targetPos = targetPosition.Lerp(mousePosition, 0.3f); //这里的0.3就是上面的 (60 / 0.3f) * (60 / 0.3f) 中的 0.3
                 _camPos = targetPosition.Lerp(mousePosition, FollowsMouseAmount);
             }
-            //_camPos = _camPos.Lerp(targetPos, 20 * newDelta);
-            GlobalPosition = _camPos.Round();
 
+            var cameraPosition = _camPos;
+            var roundPos = cameraPosition.Round();
+            PixelOffset = roundPos - cameraPosition;
+            _offsetShader.SetShaderParameter("offset", PixelOffset);
+            GlobalPosition = roundPos;
+            
             Offset = _shakeOffset.Round();
-
+            
             //调用相机更新事件
             if (OnPositionUpdateEvent != null)
             {
@@ -200,9 +197,10 @@ public partial class GameCamera : Camera2D
         {
             var distance = _CalculateDistanceSquared(delta);
             distance = new Vector2(Mathf.Sqrt(distance.X), Mathf.Sqrt(distance.Y));
+            var offset = Offset;
             _shakeOffset += _processDirection + new Vector2(
-                (float)GD.RandRange(-distance.X, distance.X) - Offset.X,
-                (float)GD.RandRange(-distance.Y, distance.Y) - Offset.Y
+                (float)GD.RandRange(-distance.X, distance.X) - offset.X,
+                (float)GD.RandRange(-distance.Y, distance.Y) - offset.Y
             );
             _processDistanceSquared = Vector2.Zero;
             _processDirection = _processDirection.Lerp(Vector2.Zero, RecoveryCoefficient * delta);

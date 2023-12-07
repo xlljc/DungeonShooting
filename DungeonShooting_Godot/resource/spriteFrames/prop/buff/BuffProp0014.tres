@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://ux70kddi6wwy"]
+
+[ext_resource type="Texture2D" uid="uid://ddkno2rlclys0" path="res://resource/sprite/prop/buff/BuffProp0014.png" id="1_0n30r"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0n30r")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

@@ -1,49 +1,92 @@
 
+using System;
 using Godot;
+
+namespace EnemyState;
 
 /// <summary>
 /// Ai 寻找弹药, 进入该状态需要在参数中传入目标武器对象
 /// </summary>
-public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
+public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
 {
-
-    private Weapon _target;
+    /// <summary>
+    /// 目标武器
+    /// </summary>
+    public Weapon TargetWeapon;
 
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 1f;
-
-    private bool _isInTailAfterRange = false;
+    
     private float _tailAfterTimer = 0;
+    private ActivityObject _attackTarget;
 
-    public AiFindAmmoState() : base(AiStateEnum.AiFindAmmo)
+    private float _idleTimer = 0;
+    private bool _playAnimFlag = false;
+
+    public AiFindAmmoState() : base(AIStateEnum.AiFindAmmo)
     {
     }
 
-    public override void Enter(AiStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
         if (args.Length == 0)
         {
-            Debug.LogError("进入 AiStateEnum.AiFindAmmo 状态必须要把目标武器当成参数传过来");
-            ChangeState(prev);
-            return;
+            throw new Exception("进入 AiStateEnum.AiFindAmmo 状态必须要把目标武器当成参数传过来");
         }
 
+        if (args.Length >= 2)
+        {
+            _attackTarget = (ActivityObject)args[1];
+        }
+        else
+        {
+            _attackTarget = null;
+        }
+        
         SetTargetWeapon((Weapon)args[0]);
-        _navigationUpdateTimer = 0;
-        _isInTailAfterRange = false;
+        _navigationUpdateTimer = _navigationInterval;
         _tailAfterTimer = 0;
 
         //标记武器
-        _target.SetSign(SignNames.AiFindWeaponSign, Master);
+        TargetWeapon.SetSign(SignNames.AiFindWeaponSign, Master);
+        
+        _playAnimFlag = prev == AIStateEnum.AiLeaveFor;
+        if (_playAnimFlag)
+        {
+            Master.AnimationPlayer.Play(AnimatorNames.Query);
+        }
     }
 
     public override void Process(float delta)
     {
+        if (_playAnimFlag && _idleTimer > 0)
+        {
+            _idleTimer -= delta;
+            return;
+        }
+        
         if (!Master.IsAllWeaponTotalAmmoEmpty()) //已经有弹药了
         {
-            ChangeState(GetNextState());
+            RunNextState();
             return;
+        }
+
+        if (Master.LookTarget == null) //没有目标
+        {
+            //临时处理
+            var player = Player.Current;
+            var playerPos = player.GetCenterPosition();
+            if (Master.IsInViewRange(playerPos) && !Master.TestViewRayCast(playerPos)) //发现玩家
+            {
+                //关闭射线检测
+                Master.TestViewRayCastOver();
+                //发现玩家
+                Master.LookTarget = player;
+                //进入惊讶状态, 然后再进入通知状态
+                ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFindAmmo, TargetWeapon);
+                return;
+            }
         }
 
         //更新目标位置
@@ -51,7 +94,7 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
         {
             //每隔一段时间秒更改目标位置
             _navigationUpdateTimer = _navigationInterval;
-            var position = _target.GlobalPosition;
+            var position = TargetWeapon.GlobalPosition;
             Master.NavigationAgent2D.TargetPosition = position;
         }
         else
@@ -59,94 +102,103 @@ public class AiFindAmmoState : StateBase<Enemy, AiStateEnum>
             _navigationUpdateTimer -= delta;
         }
 
-        var playerPos = Player.Current.GetCenterPosition();
-        //枪口指向玩家
-        Master.LookTargetPosition(playerPos);
-
-        if (_target.IsDestroyed || _target.IsTotalAmmoEmpty()) //已经被销毁, 或者弹药已经被其他角色捡走
+        if (TargetWeapon.IsDestroyed || TargetWeapon.IsTotalAmmoEmpty()) //已经被销毁, 或者弹药已经被其他角色捡走
         {
             //再去寻找其他武器
             SetTargetWeapon(Master.FindTargetWeapon());
 
-            if (_target == null) //也没有其他可用的武器了
+            if (TargetWeapon == null) //也没有其他可用的武器了
             {
-                ChangeState(GetNextState());
+                RunNextState();
             }
         }
-        else if (_target.Master == Master) //已经被自己拾起
+        else if (TargetWeapon.Master == Master) //已经被自己拾起
         {
-            ChangeState(GetNextState());
+            RunNextState();
         }
-        else if (_target.Master != null) //武器已经被其他角色拾起!
+        else if (TargetWeapon.Master != null) //武器已经被其他角色拾起!
         {
             //再去寻找其他武器
             SetTargetWeapon(Master.FindTargetWeapon());
 
-            if (_target == null) //也没有其他可用的武器了
+            if (TargetWeapon == null) //也没有其他可用的武器了
             {
-                ChangeState(GetNextState());
+                RunNextState();
             }
         }
         else
         {
-            //检测目标没有超出跟随视野距离
-            _isInTailAfterRange = Master.IsInTailAfterViewRange(playerPos);
-            if (_isInTailAfterRange)
+            if (Master.LookTarget != null)
             {
-                _tailAfterTimer = 0;
-            }
-            else
-            {
-                _tailAfterTimer += delta;
+                //检测目标没有超出跟随视野距离
+                var isInTailAfterRange = Master.IsInTailAfterViewRange(Master.LookTarget.GetCenterPosition());
+                if (isInTailAfterRange)
+                {
+                    _tailAfterTimer = 0;
+                }
+                else
+                {
+                    _tailAfterTimer += delta;
+                }
             }
 
             //向武器移动
             if (!Master.NavigationAgent2D.IsNavigationFinished())
             {
-                //计算移动
-                var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                Master.AnimatedSprite.Play(AnimatorNames.Run);
-                Master.BasisVelocity =
-                    (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                    Master.RoleState.MoveSpeed;
+                //移动
+                Master.DoMove();
             }
             else
             {
-                Master.BasisVelocity = Vector2.Zero;
+                //站立
+                Master.DoIdle();
             }
         }
     }
 
-    private AiStateEnum GetNextState()
+    private void RunNextState()
     {
-        return _tailAfterTimer > 10 ? AiStateEnum.AiNormal : AiStateEnum.AiTailAfter;
+        if (_attackTarget != null)
+        {
+            ChangeState(AIStateEnum.AiLeaveFor, _attackTarget);
+        }
+        else if (Master.LookTarget != null)
+        {
+            ChangeState(_tailAfterTimer > 10 ? AIStateEnum.AiNormal : AIStateEnum.AiTailAfter);
+        }
+        else
+        {
+            ChangeState(AIStateEnum.AiNormal);
+        }
     }
 
     private void SetTargetWeapon(Weapon weapon)
     {
-        _target = weapon;
-        //设置目标点
-        if (_target != null)
+        TargetWeapon = weapon;
+        if (weapon != null)
         {
-            Master.NavigationAgent2D.TargetPosition = _target.GlobalPosition;
+            //设置目标点
+            Master.NavigationAgent2D.TargetPosition = TargetWeapon.GlobalPosition;
         }
     }
     
     public override void DebugDraw()
     {
-        if (_target != null)
+        if (TargetWeapon != null)
         {
-            Master.DrawLine(Vector2.Zero, Master.ToLocal(_target.GlobalPosition), Colors.Purple);
+            Master.DrawLine(Vector2.Zero, Master.ToLocal(TargetWeapon.GlobalPosition), Colors.Purple);
 
-            if (_tailAfterTimer <= 0)
+            if (Master.LookTarget != null)
             {
-                Master.DrawLine(Vector2.Zero, Master.ToLocal(Player.Current.GetCenterPosition()), Colors.Orange);
+                if (_tailAfterTimer <= 0)
+                {
+                    Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.LookTarget.GetCenterPosition()), Colors.Orange);
+                }
+                else if (_tailAfterTimer <= 10)
+                {
+                    Master.DrawLine(Vector2.Zero, Master.ToLocal(Master.LookTarget.GetCenterPosition()), Colors.Blue);
+                }
             }
-            else if (_tailAfterTimer <= 10)
-            {
-                Master.DrawLine(Vector2.Zero, Master.ToLocal(Player.Current.GetCenterPosition()), Colors.Blue);
-            }
-            
         }
     }
 }

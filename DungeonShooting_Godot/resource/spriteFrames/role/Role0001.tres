@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=21 format=3 uid="uid://n11thtali6es"]
+[gd_resource type="SpriteFrames" load_steps=26 format=3 uid="uid://n11thtali6es"]
 
 [ext_resource type="Texture2D" uid="uid://ekas4lqprrml" path="res://resource/sprite/role/role0001/idle/Sprite-0002.png" id="1_le6bk"]
 [ext_resource type="Texture2D" uid="uid://b81k08ofpf2oo" path="res://resource/sprite/role/role0001/idle/Sprite-0003.png" id="2_whsc2"]
@@ -14,12 +14,17 @@
 [ext_resource type="Texture2D" uid="uid://d32g0f5vk68sj" path="res://resource/sprite/role/role0001/run/Sprite-0004.png" id="12_cbabh"]
 [ext_resource type="Texture2D" uid="uid://cw83liyy6gnln" path="res://resource/sprite/role/role0001/run/Sprite-0003.png" id="13_u0cmp"]
 [ext_resource type="Texture2D" uid="uid://b1gh481w2xvsl" path="res://resource/sprite/role/role0001/run/Sprite-0002.png" id="14_nlfq5"]
-[ext_resource type="Texture2D" uid="uid://sknj4eflhbvc" path="res://resource/sprite/role/role0001/roll/Sprite-0004.png" id="17_xnddk"]
-[ext_resource type="Texture2D" uid="uid://c8ijooj30lvpw" path="res://resource/sprite/role/role0001/roll/Sprite-0005.png" id="18_1doii"]
-[ext_resource type="Texture2D" uid="uid://blqx76rvx6c34" path="res://resource/sprite/role/role0001/roll/Sprite-0006.png" id="19_ilt25"]
-[ext_resource type="Texture2D" uid="uid://48qebkjqggub" path="res://resource/sprite/role/role0001/roll/Sprite-0007.png" id="20_tp03g"]
-[ext_resource type="Texture2D" uid="uid://dvrxriqd6dk1d" path="res://resource/sprite/role/role0001/roll/Sprite-0008.png" id="21_oocqa"]
-[ext_resource type="Texture2D" uid="uid://ceqi6d4vhbpt" path="res://resource/sprite/role/role0001/roll/Sprite-0009.png" id="22_yc5ek"]
+[ext_resource type="Texture2D" uid="uid://do6ybmo0r04pp" path="res://resource/sprite/role/role0001/roll/Sprite-0010.png" id="17_e31g7"]
+[ext_resource type="Texture2D" uid="uid://b3itgraiw7mns" path="res://resource/sprite/role/role0001/roll/Sprite-0011.png" id="18_g0o3y"]
+[ext_resource type="Texture2D" uid="uid://cisayo3amq6sv" path="res://resource/sprite/role/role0001/roll/Sprite-0012.png" id="19_s6xfs"]
+[ext_resource type="Texture2D" uid="uid://dtndan40ql7ou" path="res://resource/sprite/role/role0001/roll/Sprite-0013.png" id="20_rclf1"]
+[ext_resource type="Texture2D" uid="uid://dj30rfk3rndmm" path="res://resource/sprite/role/role0001/roll/Sprite-0014.png" id="21_eyvqg"]
+[ext_resource type="Texture2D" uid="uid://b2hdk7nca5rda" path="res://resource/sprite/role/role0001/roll/Sprite-0008.png" id="21_oocqa"]
+[ext_resource type="Texture2D" uid="uid://vs7ip3v274e2" path="res://resource/sprite/role/role0001/roll/Sprite-0015.png" id="22_aoq4g"]
+[ext_resource type="Texture2D" uid="uid://bmoh16y1r2h1w" path="res://resource/sprite/role/role0001/roll/Sprite-0009.png" id="22_yc5ek"]
+[ext_resource type="Texture2D" uid="uid://b7yrbkcy1g56a" path="res://resource/sprite/role/role0001/roll/Sprite-0016.png" id="23_8xesy"]
+[ext_resource type="Texture2D" uid="uid://b7s4yf5ic37cd" path="res://resource/sprite/role/role0001/roll/Sprite-0017.png" id="24_83arr"]
+[ext_resource type="Texture2D" uid="uid://c0ik1lwfjlr7y" path="res://resource/sprite/role/role0001/roll/Sprite-0018.png" id="25_6hy4b"]
 
 [resource]
 animations = [{
@@ -85,26 +90,41 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("17_xnddk")
-}, {
-"duration": 1.0,
-"texture": ExtResource("18_1doii")
-}, {
-"duration": 1.0,
-"texture": ExtResource("19_ilt25")
-}, {
-"duration": 1.0,
-"texture": ExtResource("20_tp03g")
-}, {
-"duration": 1.0,
 "texture": ExtResource("21_oocqa")
 }, {
 "duration": 1.0,
 "texture": ExtResource("22_yc5ek")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_e31g7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_g0o3y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_s6xfs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_rclf1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_eyvqg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_aoq4g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_8xesy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_83arr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_6hy4b")
 }],
 "loop": false,
 "name": &"roll",
-"speed": 15.0
+"speed": 18.0
 }, {
 "frames": [{
 "duration": 1.0,

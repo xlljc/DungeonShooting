@@ -8,4 +8,8 @@ public class ForceNames
     /// 投抛外力
     /// </summary>
     public const string Throw = "throw";
+    /// <summary>
+    /// 击退外力
+    /// </summary>
+    public const string Repel = "repel";
 }

@@ -15,6 +15,7 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_277ni"]
 resource_local_to_scene = true
@@ -26,15 +27,15 @@ shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4pn1i"]
 size = Vector2(20, 6)
 
-[node name="Weapon0007" node_paths=PackedStringArray("FirePoint", "ShellPoint", "GripPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_5xnlm")]
+[node name="Weapon0007" node_paths=PackedStringArray("FirePoint", "ShellPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_5xnlm")]
 script = ExtResource("1_exwbu")
 FirePoint = NodePath("AnimatedSprite/FirePoint")
 ShellPoint = NodePath("AnimatedSprite/ShellPoint")
-GripPoint = NodePath("GripPoint")
 AnimationPlayer = NodePath("AnimationPlayer")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
@@ -45,6 +46,7 @@ material = SubResource("ShaderMaterial_sy2aq")
 
 [node name="AnimatedSprite" parent="." index="1"]
 material = SubResource("ShaderMaterial_277ni")
+position = Vector2(4, 0)
 sprite_frames = ExtResource("3_ms2gs")
 
 [node name="ShellPoint" parent="AnimatedSprite" index="0"]
@@ -53,8 +55,7 @@ position = Vector2(-2, -3)
 [node name="FirePoint" parent="AnimatedSprite" index="1"]
 position = Vector2(13, -3)
 
-[node name="GripPoint" parent="." index="2"]
-position = Vector2(-6, 0)
-
-[node name="Collision" parent="." index="3"]
+[node name="Collision" parent="." index="2"]
+visible = true
+position = Vector2(4, 0)
 shape = SubResource("RectangleShape2D_4pn1i")

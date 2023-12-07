@@ -13,6 +13,10 @@ public static class ObjectPool
     /// </summary>
     public static void Reclaim(IPoolItem poolItem)
     {
+        if (poolItem.IsRecycled)
+        {
+            return;
+        }
         var logotype = poolItem.Logotype;
         if (!_pool.TryGetValue(logotype, out var poolItems))
         {

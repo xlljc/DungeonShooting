@@ -1,10 +1,13 @@
 
+using System;
 using Godot;
 
+namespace EnemyState;
+
 /// <summary>
-/// AI 发现玩家, 跟随玩家
+/// AI 发现玩家, 跟随玩家, 但是不在视野范围内
 /// </summary>
-public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
+public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
 {
     /// <summary>
     /// 目标是否在视野半径内
@@ -18,12 +21,17 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
     //目标从视野消失时已经过去的时间
     private float _viewTimer;
 
-    public AiTailAfterState() : base(AiStateEnum.AiTailAfter)
+    public AiTailAfterState() : base(AIStateEnum.AiTailAfter)
     {
     }
 
-    public override void Enter(AiStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
+        if (Master.LookTarget == null)
+        {
+            throw new Exception("进入 AIAdvancedStateEnum.AiTailAfter 状态时角色没有攻击目标!");
+        }
+        
         _isInViewRange = true;
         _navigationUpdateTimer = 0;
         _viewTimer = 0;
@@ -35,16 +43,16 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                ChangeState(AiStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AIStateEnum.AiFindAmmo, targetWeapon);
             }
         }
     }
-    
+
     public override void Process(float delta)
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
         
-        var playerPos = Player.Current.GetCenterPosition();
+        var playerPos = Master.LookTarget.GetCenterPosition();
         
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
@@ -58,30 +66,15 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
             _navigationUpdateTimer -= delta;
         }
         
-        //枪口指向玩家
-        Master.LookTargetPosition(playerPos);
-        
         if (!Master.NavigationAgent2D.IsNavigationFinished())
         {
-            var weapon = Master.WeaponPack.ActiveItem;
-            if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
-                (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack))
-            {
-                //计算移动
-                var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                Master.AnimatedSprite.Play(AnimatorNames.Run);
-                Master.BasisVelocity = (nextPos - Master.GlobalPosition - Master.NavigationPoint.Position).Normalized() *
-                                       Master.RoleState.MoveSpeed;
-            }
-            else
-            {
-                Master.AnimatedSprite.Play(AnimatorNames.Idle);
-                Master.BasisVelocity = Vector2.Zero;
-            }
+            //移动
+            Master.DoMove();
         }
         else
         {
-            Master.BasisVelocity = Vector2.Zero;
+            //站立
+            Master.DoIdle();
         }
         //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
         if (Master.IsInTailAfterViewRange(playerPos))
@@ -91,7 +84,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
                 //关闭射线检测
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
-                ChangeState(AiStateEnum.AiFollowUp);
+                ChangeState(AIStateEnum.AiFollowUp);
                 return;
             }
             else
@@ -111,7 +104,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
         {
             if (_viewTimer > 10) //10秒
             {
-                ChangeState(AiStateEnum.AiNormal);
+                ChangeState(AIStateEnum.AiNormal);
             }
             else
             {
@@ -122,7 +115,7 @@ public class AiTailAfterState : StateBase<Enemy, AiStateEnum>
 
     public override void DebugDraw()
     {
-        var playerPos = Player.Current.GetCenterPosition();
+        var playerPos = Master.LookTarget.GetCenterPosition();
         if (_isInViewRange)
         {
             Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Orange);

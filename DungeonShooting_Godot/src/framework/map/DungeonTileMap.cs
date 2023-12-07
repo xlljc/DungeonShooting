@@ -28,6 +28,8 @@ public class DungeonTileMap
     //生成导航的结果
     private GenerateNavigationResult _generateNavigationResult;
 
+    private InfiniteGrid<bool> _tempAisleFloorGrid = new InfiniteGrid<bool>();
+
     public DungeonTileMap(TileMap tileRoot)
     {
         _tileRoot = tileRoot;
@@ -74,12 +76,39 @@ public class DungeonTileMap
         }
         else
         {
-            //var rectSize = roomInfo.RoomSplit.RoomInfo.Size;
             var rectPos = roomInfo.RoomSplit.RoomInfo.Position.AsVector2I();
-            //var offset = roomInfo.GetOffsetPosition() / GameConfig.TileCellSizeVector2I;
-            
-            //填充tile操作
             var tileInfo = roomInfo.RoomSplit.TileInfo;
+            
+            //---------------------- 生成房间小地图预览 ----------------------
+            //先计算范围
+            var x = int.MaxValue;
+            var y = int.MaxValue;
+            var x2 = int.MinValue;
+            var y2 = int.MinValue;
+            for (var i = 0; i < tileInfo.Floor.Count; i += 5)
+            {
+                var posX = tileInfo.Floor[i];
+                var posY = tileInfo.Floor[i + 1];
+                x = Mathf.Min(x, posX);
+                x2 = Mathf.Max(x2, posX);
+                y = Mathf.Min(y, posY);
+                y2 = Mathf.Max(y2, posY);
+            }
+            //创建image, 这里留两个像素宽高用于描边
+            var image = Image.Create(x2 - x + 3, y2 - y + 3, false, Image.Format.Rgba8);
+            //image.Fill(Colors.Green);
+            //填充像素点
+            for (var i = 0; i < tileInfo.Floor.Count; i += 5)
+            {
+                var posX = tileInfo.Floor[i] - x + 1;
+                var posY = tileInfo.Floor[i + 1] - y + 1;
+                image.SetPixel(posX, posY, new Color(0, 0, 0, 0.5882353F));
+            }
+            //创建texture
+            var imageTexture = ImageTexture.CreateFromImage(image);
+            roomInfo.PreviewTexture = imageTexture;
+
+            //---------------------- 填充tile操作 ----------------------
             //底层
             for (var i = 0; i < tileInfo.Floor.Count; i += 5)
             {
@@ -114,7 +143,20 @@ public class DungeonTileMap
                 _tileRoot.SetCell(GameConfig.TopMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
             }
             
-            //随机选择预设
+            //寻找可用传送点
+            var maxCount = (roomInfo.Size.X - 2) * (roomInfo.Size.Y - 2);
+            var startPosition = roomInfo.Position + roomInfo.Size / 2;
+            for (int i = 0; i < maxCount; i++)
+            {
+                var pos = SpiralUtil.Screw(i) + startPosition;
+                if (IsWayTile(GameConfig.FloorMapLayer, pos.X, pos.Y))
+                {
+                    roomInfo.Waypoints = pos;
+                    break;
+                }
+            }
+            
+            //---------------------- 随机选择预设 ----------------------
             RoomPreinstallInfo preinstallInfo;
             if (EditorPlayManager.IsPlay && roomInfo.RoomType == GameApplication.Instance.DungeonManager.CurrConfig.DesignatedType) //编辑器模式, 指定预设
             {
@@ -133,8 +175,7 @@ public class DungeonTileMap
                     preinstallInfo = roomInfo.RoomSplit.Preinstall[index];
                 }
             }
-
-
+            
             var roomPreinstall = new RoomPreinstall(roomInfo, preinstallInfo);
             roomInfo.RoomPreinstall = roomPreinstall;
             //执行预处理操作
@@ -149,6 +190,7 @@ public class DungeonTileMap
             {
                 continue;
             }
+            
             //普通的直线连接
             var doorDir1 = doorInfo.Direction;
             var doorDir2 = doorInfo.ConnectDoor.Direction;
@@ -340,6 +382,34 @@ public class DungeonTileMap
                         break;
                 }
             }
+            
+            //先计算范围
+            var x = int.MaxValue;
+            var y = int.MaxValue;
+            var x2 = int.MinValue;
+            var y2 = int.MinValue;
+            _tempAisleFloorGrid.ForEach((gx, gy, data) =>
+            {
+                x = Mathf.Min(x, gx);
+                x2 = Mathf.Max(x2, gx);
+                y = Mathf.Min(y, gy);
+                y2 = Mathf.Max(y2, gy);
+            });
+            //创建image, 这里留两个像素宽高用于描边
+            var image = Image.Create(x2 - x + 3, y2 - y + 3, false, Image.Format.Rgba8);
+            //填充像素点
+            _tempAisleFloorGrid.ForEach((gx, gy, data) =>
+            {
+                var posX = gx - x + 1;
+                var posY = gy - y + 1;
+                image.SetPixel(posX, posY, new Color(0, 0, 0, 0.5882353F));
+            });
+            //创建texture
+            var imageTexture = ImageTexture.CreateFromImage(image);
+            doorInfo.AislePreviewTexture = imageTexture;
+            doorInfo.ConnectDoor.AislePreviewTexture = imageTexture;
+            
+            _tempAisleFloorGrid.Clear();
         }
     }
 
@@ -427,7 +497,12 @@ public class DungeonTileMap
         {
             for (int j = 0; j < size.Y; j++)
             {
-                _tileRoot.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), 0, info.AutoTileCoord);
+                var p = new Vector2I((int)pos.X + i, (int)pos.Y + j);
+                if (layer == GameConfig.AisleFloorMapLayer)
+                {
+                    _tempAisleFloorGrid.Set(p, true);
+                }
+                _tileRoot.SetCell(layer, p, 0, info.AutoTileCoord);
             }
         }
     }
@@ -439,7 +514,12 @@ public class DungeonTileMap
         {
             for (int j = 0; j < size.Y; j++)
             {
-                _tileRoot.SetCell(layer, new Vector2I((int)pos.X + i, (int)pos.Y + j), 0);
+                var p = new Vector2I((int)pos.X + i, (int)pos.Y + j);
+                if (layer == GameConfig.AisleFloorMapLayer)
+                {
+                    _tempAisleFloorGrid.Remove(p.X, p.Y);
+                }
+                _tileRoot.SetCell(layer, p, 0);
             }
         }
     }

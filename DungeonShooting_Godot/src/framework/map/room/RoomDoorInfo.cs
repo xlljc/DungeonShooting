@@ -55,6 +55,21 @@ public class RoomDoorInfo : IDestroy
     public DoorNavigationInfo Navigation;
 
     /// <summary>
+    /// 连接过道使用的导航网格 (暂未用到)
+    /// </summary>
+    public NavigationPolygonData AisleNavigation;
+
+    /// <summary>
+    /// 连接过道使用预览纹理, 用于小地图
+    /// </summary>
+    public ImageTexture AislePreviewTexture;
+
+    /// <summary>
+    /// 连接过道使用预览图, 用于小地图
+    /// </summary>
+    public TextureRect AislePreviewSprite;
+
+    /// <summary>
     /// 门实例
     /// </summary>
     public RoomDoor Door;
@@ -80,6 +95,11 @@ public class RoomDoorInfo : IDestroy
     public PreviewFogMask PreviewAisleFogMask;
 
     /// <summary>
+    /// 未探索的区域显示的问号
+    /// </summary>
+    public Sprite2D UnknownSprite;
+
+    /// <summary>
     /// 世界坐标下的原点坐标, 单位: 像素
     /// </summary>
     public Vector2I GetWorldOriginPosition()
@@ -88,6 +108,40 @@ public class RoomDoorInfo : IDestroy
             OriginPosition.X * GameConfig.TileCellSize,
             OriginPosition.Y * GameConfig.TileCellSize
         );
+    }
+
+    /// <summary>
+    /// 终点坐标, 单位: 格
+    /// </summary>
+    public Vector2I GetEndPosition()
+    {
+        if (Direction == DoorDirection.E || Direction == DoorDirection.W)
+        {
+            return OriginPosition + new Vector2I(0, 4);
+        }
+        else if (Direction == DoorDirection.N || Direction == DoorDirection.S)
+        {
+            return OriginPosition + new Vector2I(4, 0);
+        }
+
+        return default;
+    }
+    
+    /// <summary>
+    /// 世界坐标下的终点坐标, 单位: 像素
+    /// </summary>
+    public Vector2I GetWorldEndPosition()
+    {
+        if (Direction == DoorDirection.E || Direction == DoorDirection.W)
+        {
+            return GetWorldOriginPosition() + new Vector2I(0, 4 * GameConfig.TileCellSize);
+        }
+        else if (Direction == DoorDirection.N || Direction == DoorDirection.S)
+        {
+            return GetWorldOriginPosition() + new Vector2I(4 * GameConfig.TileCellSize, 0);
+        }
+
+        return default;
     }
 
     /// <summary>
@@ -255,6 +309,16 @@ public class RoomDoorInfo : IDestroy
         if (PreviewAisleFogMask != null)
         {
             PreviewAisleFogMask.Destroy();
+        }
+
+        if (AislePreviewTexture != null)
+        {
+            AislePreviewTexture.Dispose();
+        }
+
+        if (AislePreviewSprite != null)
+        {
+            AislePreviewSprite.QueueFree();
         }
     }
 }

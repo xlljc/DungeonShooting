@@ -1,0 +1,80 @@
+[gd_scene load_steps=5 format=3 uid="uid://bmj3p25gwpqpn"]
+
+[ext_resource type="Script" path="res://src/game/ui/roomMap/RoomMapPanel.cs" id="1_ng7b3"]
+[ext_resource type="Texture2D" uid="uid://k621mhhkg65f" path="res://resource/sprite/ui/roomMap/MapBar.png" id="2_m52os"]
+[ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/commonIcon/Block.png" id="3_el2ne"]
+[ext_resource type="Texture2D" uid="uid://cw702ostmv2am" path="res://resource/sprite/role/role0001/Role0001_head.png" id="4_6wquw"]
+
+[node name="RoomMap" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ng7b3")
+
+[node name="Bg" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.588235)
+
+[node name="MapBar" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -275.0
+offset_top = 20.0
+offset_right = -19.0
+offset_bottom = 276.0
+grow_horizontal = 0
+texture = ExtResource("2_m52os")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="DrawContainer" type="TextureRect" parent="MapBar"]
+clip_children = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_el2ne")
+expand_mode = 1
+
+[node name="Root" type="Node2D" parent="MapBar/DrawContainer"]
+scale = Vector2(6, 6)
+
+[node name="Mark" type="Sprite2D" parent="MapBar/DrawContainer"]
+position = Vector2(128, 128)
+scale = Vector2(2, 2)
+texture = ExtResource("4_6wquw")
+
+[node name="MagnifyMapBar" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 390.0
+offset_top = 131.0
+offset_right = -390.0
+offset_bottom = -131.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_m52os")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4

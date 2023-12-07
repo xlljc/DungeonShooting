@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/game/activity/bullet/normal/BoomBullet.cs" id="1_1jbgr"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_w1qob"]
 [ext_resource type="SpriteFrames" uid="uid://d3vma1qjo478l" path="res://resource/spriteFrames/bullet/Bullet0004.tres" id="3_bttus"]
-[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="3_ofn8c"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/common/Smoke.png" id="3_ofn8c"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
 resource_local_to_scene = true
@@ -15,6 +15,7 @@ shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p0wfd"]
 resource_local_to_scene = true
@@ -25,7 +26,8 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
-shader_parameter/outline_use_blend = true
+shader_parameter/outline_use_blend = false
+shader_parameter/grey = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c0onq"]
 size = Vector2(4, 4)
@@ -40,7 +42,7 @@ particles_anim_loop = false
 _data = [Vector2(0, 0.730415), 0.0, 0.0, 0, 0, Vector2(0.245238, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0235023), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_uftx4"]
+[sub_resource type="CurveTexture" id="CurveTexture_ie2e7"]
 curve = SubResource("Curve_dt320")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kelfq"]
@@ -54,14 +56,16 @@ angular_velocity_max = 45.0
 gravity = Vector3(0, 0, 0)
 scale_min = 0.15
 scale_max = 0.6
-scale_curve = SubResource("CurveTexture_uftx4")
+scale_curve = SubResource("CurveTexture_ie2e7")
 color = Color(0.619608, 0.619608, 0.619608, 1)
 anim_offset_max = 1.0
 
-[node name="Bullet0003" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="Bullet0003" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
 script = ExtResource("1_1jbgr")
 CollisionArea = NodePath("AnimatedSprite/CollisionArea")
+CollisionShape2D = NodePath("AnimatedSprite/CollisionArea/CollisionShape2D")
+Particles2D = [NodePath("AnimatedSprite/GPUParticles2D")]
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")

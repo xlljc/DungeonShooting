@@ -1,3 +1,4 @@
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using Godot;
@@ -15,7 +16,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 角色属性
     /// </summary>
-    public RoleState RoleState { get; } = new RoleState();
+    public RoleState RoleState { get; private set; }
     
     /// <summary>
     /// 默认攻击对象层级
@@ -57,24 +58,8 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 携带的主动道具包裹
     /// </summary>
-    public Package<ActiveProp> ActivePropsPack { get; private set; }
-
-    /// <summary>
-    /// 角色携带的武器背包
-    /// </summary>
-    public Package<Weapon> WeaponPack { get; private set; }
-
-    /// <summary>
-    /// 武器挂载点
-    /// </summary>
-    [Export, ExportFillNode]
-    public MountRotation MountPoint { get; set; }
-    /// <summary>
-    /// 背后武器的挂载点
-    /// </summary>
-    [Export, ExportFillNode]
-    public Marker2D BackMountPoint { get; set; }
-
+    public Package<ActiveProp, Role> ActivePropsPack { get; private set; }
+    
     /// <summary>
     /// 互动碰撞区域
     /// </summary>
@@ -87,6 +72,47 @@ public abstract partial class Role : ActivityObject
     [Export, ExportFillNode]
     public CollisionShape2D InteractiveCollision { get; set; }
     
+    /// <summary>
+    /// 用于提示状态的根节点
+    /// </summary>
+    [Export, ExportFillNode]
+    public Node2D TipRoot { get; set; }
+    
+    /// <summary>
+    /// 用于提示当前敌人状态
+    /// </summary>
+    [Export, ExportFillNode]
+    public AnimatedSprite2D TipSprite { get; set; }
+    
+    /// <summary>
+    /// 动画播放器
+    /// </summary>
+    [Export, ExportFillNode]
+    public AnimationPlayer AnimationPlayer { get; set; }
+    
+    /// <summary>
+    /// 脸的朝向
+    /// </summary>
+    public FaceDirection Face { get => _face; set => SetFace(value); }
+    private FaceDirection _face;
+    
+    /// <summary>
+    /// 角色携带的武器背包
+    /// </summary>
+    public Package<Weapon, Role> WeaponPack { get; private set; }
+
+    /// <summary>
+    /// 武器挂载点
+    /// </summary>
+    [Export, ExportFillNode]
+    public MountRotation MountPoint { get; set; }
+
+    /// <summary>
+    /// 背后武器的挂载点
+    /// </summary>
+    [Export, ExportFillNode]
+    public Marker2D BackMountPoint { get; set; }
+
     /// <summary>
     /// 近战碰撞检测区域
     /// </summary>
@@ -109,12 +135,36 @@ public abstract partial class Role : ActivityObject
     /// 武器挂载点是否始终指向目标
     /// </summary>
     public bool MountLookTarget { get; set; } = true;
+
+    /// <summary>
+    /// 是否处于攻击中, 近战攻击远程攻击都算
+    /// </summary>
+    public bool IsAttack
+    {
+        get
+        {
+            if (AttackTimer > 0 || MeleeAttackTimer > 0)
+            {
+                return true;
+            }
+            var weapon = WeaponPack.ActiveItem;
+            if (weapon != null)
+            {
+                return weapon.GetAttackTimer() > 0 || weapon.GetContinuousCount() > 0;
+            }
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 攻击计时器
+    /// </summary>
+    public float AttackTimer { get; set; }
     
     /// <summary>
-    /// 脸的朝向
+    /// 近战计时器
     /// </summary>
-    public FaceDirection Face { get => _face; set => SetFace(value); }
-    private FaceDirection _face;
+    public float MeleeAttackTimer { get; set; }
 
     /// <summary>
     /// 是否死亡
@@ -241,36 +291,32 @@ public abstract partial class Role : ActivityObject
     private bool _invincible = false;
     
     /// <summary>
-    /// 当前角色所看向的对象, 也就是枪口指向的对象
-    /// </summary>
-    public ActivityObject LookTarget { get; set; }
-    
-    /// <summary>
     /// 当前可以互动的物体
     /// </summary>
     public ActivityObject InteractiveItem { get; private set; }
-
-    /// <summary>
-    /// 是否可以翻滚
-    /// </summary>
-    public bool CanRoll => _rollCoolingTimer <= 0;
-
-    /// <summary>
-    /// 是否处于近战攻击中
-    /// </summary>
-    public bool IsMeleeAttack { get; private set; }
-
+    
     /// <summary>
     /// 瞄准辅助线, 需要手动调用 InitSubLine() 初始化
     /// </summary>
     public SubLine SubLine { get; private set; }
     
-    //翻滚冷却计时器
-    private float _rollCoolingTimer = 0;
+    /// <summary>
+    /// 所有角色碰撞的物体
+    /// </summary>
+    public List<ActivityObject> InteractiveItemList { get; } = new List<ActivityObject>();
+    
+    /// <summary>
+    /// 角色看向的坐标
+    /// </summary>
+    public Vector2 LookPosition { get; protected set; }
+    
+    /// <summary>
+    /// 是否可以在没有武器时发动攻击
+    /// </summary>
+    public bool NoWeaponAttack { get; set; }
+    
     //初始缩放
     private Vector2 _startScale;
-    //所有角色碰撞的物体
-    private readonly List<ActivityObject> _interactiveItemList = new List<ActivityObject>();
     //当前可互动的物体
     private CheckInteractiveResult _currentResultData;
     private uint _currentLayer;
@@ -282,9 +328,26 @@ public abstract partial class Role : ActivityObject
     private long _invincibleFlashingId = -1;
     //护盾恢复计时器
     private float _shieldRecoveryTimer = 0;
-    //近战计时器
-    private float _meleeAttackTimer = 0;
 
+    protected override void OnExamineExportFillNode(string propertyName, Node node, bool isJustCreated)
+    {
+        base.OnExamineExportFillNode(propertyName, node, isJustCreated);
+        if (propertyName == nameof(TipSprite))
+        {
+            var sprite = (AnimatedSprite2D)node;
+            sprite.SpriteFrames =
+                ResourceManager.Load<SpriteFrames>(ResourcePath.resource_spriteFrames_role_Role_tip_tres);
+        }
+    }
+
+    /// <summary>
+    /// 创建角色的 RoleState 对象
+    /// </summary>
+    protected virtual RoleState OnCreateRoleState()
+    {
+        return new RoleState();
+    }
+    
     /// <summary>
     /// 当血量改变时调用
     /// </summary>
@@ -323,9 +386,11 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 当受伤时调用
     /// </summary>
+    /// <param name="target">触发伤害的对象, 为 null 表示不存在对象或者对象已经被销毁</param>
     /// <param name="damage">受到的伤害</param>
+    /// <param name="angle">伤害角度（弧度制）</param>
     /// <param name="realHarm">是否受到真实伤害, 如果为false, 则表示该伤害被互动格挡掉了</param>
-    protected virtual void OnHit(int damage, bool realHarm)
+    protected virtual void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
     {
     }
 
@@ -353,28 +418,8 @@ public abstract partial class Role : ActivityObject
     protected virtual void OnDie()
     {
     }
-
-    /// <summary>
-    /// 当拾起某个武器时调用
-    /// </summary>
-    protected virtual void OnPickUpWeapon(Weapon weapon)
-    {
-    }
     
-    /// <summary>
-    /// 当扔掉某个武器时调用
-    /// </summary>
-    protected virtual void OnThrowWeapon(Weapon weapon)
-    {
-    }
-
-    /// <summary>
-    /// 当切换到某个武器时调用
-    /// </summary>
-    protected virtual void OnExchangeWeapon(Weapon weapon)
-    {
-    }
-
+    
     /// <summary>
     /// 当拾起某个主动道具时调用
     /// </summary>
@@ -409,16 +454,14 @@ public abstract partial class Role : ActivityObject
     protected virtual void OnRemoveBuffProp(BuffProp buffProp)
     {
     }
-
+    
     public override void OnInit()
     {
-        ActivePropsPack = AddComponent<Package<ActiveProp>>();
-        ActivePropsPack.SetCapacity(1);
-        WeaponPack = AddComponent<Package<Weapon>>();
-        WeaponPack.SetCapacity(4);
-
+        RoleState = OnCreateRoleState();
+        ActivePropsPack = AddComponent<Package<ActiveProp, Role>>();
+        ActivePropsPack.SetCapacity(RoleState.CanPickUpWeapon ? 1 : 0);
+        
         _startScale = Scale;
-        MountPoint.Master = this;
         
         HurtArea.CollisionLayer = CollisionLayer;
         HurtArea.CollisionMask = 0;
@@ -429,6 +472,13 @@ public abstract partial class Role : ActivityObject
         //连接互动物体信号
         InteractiveArea.BodyEntered += _OnPropsEnter;
         InteractiveArea.BodyExited += _OnPropsExit;
+        
+        //------------------------
+        
+        WeaponPack = AddComponent<Package<Weapon, Role>>();
+        WeaponPack.SetCapacity(2);
+        
+        MountPoint.Master = this;
         
         MeleeAttackCollision.Disabled = true;
         //切换武器回调
@@ -443,44 +493,27 @@ public abstract partial class Role : ActivityObject
         {
             return;
         }
-        if (_rollCoolingTimer > 0)
+
+        if (AttackTimer > 0)
         {
-            _rollCoolingTimer -= delta;
+            AttackTimer -= delta;
         }
 
-        if (_meleeAttackTimer > 0)
+        if (MeleeAttackTimer > 0)
         {
-            _meleeAttackTimer -= delta;
-        }
-        
-        //看向目标
-        if (LookTarget != null && MountLookTarget)
-        {
-            Vector2 pos = LookTarget.GlobalPosition;
-            //脸的朝向
-            var gPos = GlobalPosition;
-            if (pos.X > gPos.X && Face == FaceDirection.Left)
-            {
-                Face = FaceDirection.Right;
-            }
-            else if (pos.X < gPos.X && Face == FaceDirection.Right)
-            {
-                Face = FaceDirection.Left;
-            }
-            //枪口跟随目标
-            MountPoint.SetLookAt(pos);
+            MeleeAttackTimer -= delta;
         }
         
         //检查可互动的物体
         bool findFlag = false;
-        for (int i = 0; i < _interactiveItemList.Count; i++)
+        for (int i = 0; i < InteractiveItemList.Count; i++)
         {
-            var item = _interactiveItemList[i];
+            var item = InteractiveItemList[i];
             if (item == null || item.IsDestroyed)
             {
-                _interactiveItemList.RemoveAt(i--);
+                InteractiveItemList.RemoveAt(i--);
             }
-            else
+            else if (!item.IsThrowing)
             {
                 //找到可互动的物体了
                 if (!findFlag)
@@ -578,8 +611,17 @@ public abstract partial class Role : ActivityObject
                 }
             }
         }
+        
+        if (Face == FaceDirection.Right)
+        {
+            TipRoot.Scale = Vector2.One;
+        }
+        else
+        {
+            TipRoot.Scale = new Vector2(-1, 1);
+        }
     }
-
+    
     /// <summary>
     /// 初始化瞄准辅助线
     /// </summary>
@@ -593,88 +635,13 @@ public abstract partial class Role : ActivityObject
         SubLine = AddComponent<SubLine>();
     }
     
-    /// <summary>
-    /// 当武器放到后背时调用, 用于设置武器位置和角度
-    /// </summary>
-    /// <param name="weapon">武器实例</param>
-    /// <param name="index">放入武器背包的位置</param>
-    public virtual void OnPutBackMount(Weapon weapon, int index)
-    {
-        if (index < 8)
-        {
-            if (index % 2 == 0)
-            {
-                weapon.Position = new Vector2(-4, 3);
-                weapon.RotationDegrees = 90 - (index / 2f) * 20;
-                weapon.Scale = new Vector2(-1, 1);
-            }
-            else
-            {
-                weapon.Position = new Vector2(4, 3);
-                weapon.RotationDegrees = 270 + (index - 1) / 2f * 20;
-                weapon.Scale = new Vector2(1, 1);
-            }
-        }
-        else
-        {
-            weapon.Visible = false;
-        }
-    }
     
-    protected override void OnAffiliationChange(AffiliationArea prevArea)
-    {
-        //身上的武器的所属区域也得跟着变
-        WeaponPack.ForEach((weapon, i) =>
-        {
-            if (AffiliationArea != null)
-            {
-                AffiliationArea.InsertItem(weapon);
-            }
-            else if (weapon.AffiliationArea != null)
-            {
-                weapon.AffiliationArea.RemoveItem(weapon);
-            }
-        });
-    }
-
     /// <summary>
     /// 是否是满血
     /// </summary>
     public bool IsHpFull()
     {
         return Hp >= MaxHp;
-    }
-    
-    /// <summary>
-    /// 获取当前角色的中心点坐标
-    /// </summary>
-    public Vector2 GetCenterPosition()
-    {
-        return MountPoint.GlobalPosition;
-    }
-
-    /// <summary>
-    /// 使角色看向指定的坐标,
-    /// 注意, 调用该函数会清空 LookTarget, 因为拥有 LookTarget 时也会每帧更新玩家视野位置
-    /// </summary>
-    public void LookTargetPosition(Vector2 pos)
-    {
-        LookTarget = null;
-        if (MountLookTarget)
-        {
-            //脸的朝向
-            var gPos = GlobalPosition;
-            if (pos.X > gPos.X && Face == FaceDirection.Left)
-            {
-                Face = FaceDirection.Right;
-            }
-            else if (pos.X < gPos.X && Face == FaceDirection.Right)
-            {
-                Face = FaceDirection.Left;
-            }
-            //枪口跟随目标
-            MountPoint.SetLookAt(pos);
-        }
     }
     
     /// <summary>
@@ -686,100 +653,8 @@ public abstract partial class Role : ActivityObject
         return (Face == FaceDirection.Left && pos.X <= gps.X) ||
                (Face == FaceDirection.Right && pos.X >= gps.X);
     }
-
-    /// <summary>
-    /// 返回所有武器是否弹药都打光了
-    /// </summary>
-    public bool IsAllWeaponTotalAmmoEmpty()
-    {
-        foreach (var weapon in WeaponPack.ItemSlot)
-        {
-            if (weapon != null && !weapon.IsTotalAmmoEmpty())
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
     
-    //-------------------------------------------------------------------------------------
     
-    /// <summary>
-    /// 拾起一个武器, 返回是否成功拾起, 如果不想立刻切换到该武器, exchange 请传 false
-    /// </summary>
-    /// <param name="weapon">武器对象</param>
-    /// <param name="exchange">是否立即切换到该武器, 默认 true </param>
-    public bool PickUpWeapon(Weapon weapon, bool exchange = true)
-    {
-        if (WeaponPack.PickupItem(weapon, exchange) != -1)
-        {
-            //从可互动队列中移除
-            _interactiveItemList.Remove(weapon);
-            OnPickUpWeapon(weapon);
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// 切换到下一个武器
-    /// </summary>
-    public void ExchangeNextWeapon()
-    {
-        var weapon = WeaponPack.ActiveItem;
-        WeaponPack.ExchangeNext();
-        if (WeaponPack.ActiveItem != weapon)
-        {
-            OnExchangeWeapon(WeaponPack.ActiveItem);
-        }
-    }
-
-    /// <summary>
-    /// 切换到上一个武器
-    /// </summary>
-    public void ExchangePrevWeapon()
-    {
-        var weapon = WeaponPack.ActiveItem;
-        WeaponPack.ExchangePrev();
-        if (WeaponPack.ActiveItem != weapon)
-        {
-            OnExchangeWeapon(WeaponPack.ActiveItem);
-        }
-    }
-
-    /// <summary>
-    /// 扔掉当前使用的武器, 切换到上一个武器
-    /// </summary>
-    public void ThrowWeapon()
-    {
-        ThrowWeapon(WeaponPack.ActiveIndex);
-    }
-
-    /// <summary>
-    /// 扔掉指定位置的武器
-    /// </summary>
-    /// <param name="index">武器在武器背包中的位置</param>
-    public void ThrowWeapon(int index)
-    {
-        var weapon = WeaponPack.GetItem(index);
-        if (weapon == null)
-        {
-            return;
-        }
-
-        var temp = weapon.AnimatedSprite.Position;
-        if (Face == FaceDirection.Left)
-        {
-            temp.Y = -temp.Y;
-        }
-        //var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
-        WeaponPack.RemoveItem(index);
-        //播放抛出效果
-        weapon.ThrowWeapon(this, GlobalPosition);
-    }
-
     /// <summary>
     /// 拾起主动道具, 返回是否成功拾起, 如果不想立刻切换到该道具, exchange 请传 false
     /// </summary>
@@ -790,38 +665,12 @@ public abstract partial class Role : ActivityObject
         if (ActivePropsPack.PickupItem(activeProp, exchange) != -1)
         {
             //从可互动队列中移除
-            _interactiveItemList.Remove(activeProp);
+            InteractiveItemList.Remove(activeProp);
             OnPickUpActiveProp(activeProp);
             return true;
         }
 
         return false;
-    }
-    
-    /// <summary>
-    /// 切换到下一个武器
-    /// </summary>
-    public void ExchangeNextActiveProp()
-    {
-        var prop = ActivePropsPack.ActiveItem;
-        ActivePropsPack.ExchangeNext();
-        if (prop != ActivePropsPack.ActiveItem)
-        {
-            OnExchangeActiveProp(ActivePropsPack.ActiveItem);
-        }
-    }
-
-    /// <summary>
-    /// 切换到上一个武器
-    /// </summary>
-    public void ExchangePrevActiveProp()
-    {
-        var prop = ActivePropsPack.ActiveItem;
-        ActivePropsPack.ExchangePrev();
-        if (prop != ActivePropsPack.ActiveItem)
-        {
-            OnExchangeActiveProp(ActivePropsPack.ActiveItem);
-        }
     }
     
     /// <summary>
@@ -901,8 +750,7 @@ public abstract partial class Role : ActivityObject
         //播放抛出效果
         buffProp.ThrowProp(this, GlobalPosition);
     }
-
-    //-------------------------------------------------------------------------------------
+    
     
     /// <summary>
     /// 返回是否存在可互动的物体
@@ -926,55 +774,8 @@ public abstract partial class Role : ActivityObject
 
         return null;
     }
-
-    /// <summary>
-    /// 触发换弹
-    /// </summary>
-    public virtual void Reload()
-    {
-        if (WeaponPack.ActiveItem != null)
-        {
-            WeaponPack.ActiveItem.Reload();
-        }
-    }
-
-    /// <summary>
-    /// 触发攻击
-    /// </summary>
-    public virtual void Attack()
-    {
-        if (!IsMeleeAttack && WeaponPack.ActiveItem != null)
-        {
-            WeaponPack.ActiveItem.Trigger(this);
-        }
-    }
-
-    /// <summary>
-    /// 触发近战攻击
-    /// </summary>
-    public virtual void MeleeAttack()
-    {
-        if (IsMeleeAttack || _meleeAttackTimer > 0)
-        {
-            return;
-        }
-
-        if (WeaponPack.ActiveItem != null && WeaponPack.ActiveItem.Attribute.CanMeleeAttack)
-        {
-            IsMeleeAttack = true;
-            _meleeAttackTimer = RoleState.MeleeAttackTime;
-            MountLookTarget = false;
-            
-            //WeaponPack.ActiveItem.TriggerMeleeAttack(this);
-            //播放近战动画
-            PlayAnimation_MeleeAttack(() =>
-            {
-                MountLookTarget = true;
-                IsMeleeAttack = false;
-            });
-        }
-    }
-
+    
+    
     /// <summary>
     /// 触发使用道具
     /// </summary>
@@ -990,9 +791,10 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 受到伤害, 如果是在碰撞信号处理函数中调用该函数, 请使用 CallDeferred 来延时调用, 否则很有可能导致报错
     /// </summary>
+    /// <param name="target">触发伤害的对象, 为 null 表示不存在对象或者对象已经被销毁</param>
     /// <param name="damage">伤害的量</param>
     /// <param name="angle">伤害角度（弧度制）</param>
-    public virtual void Hurt(int damage, float angle)
+    public virtual void Hurt(ActivityObject target, int damage, float angle)
     {
         //受伤闪烁, 无敌状态
         if (Invincible)
@@ -1009,7 +811,7 @@ public abstract partial class Role : ActivityObject
         }
         else
         {
-            damage = RoleState.CallCalcHurtDamageEvent(damage);
+            damage = RoleState.CalcHurtDamage(damage);
             if (damage > 0)
             {
                 Hp -= damage;
@@ -1021,7 +823,7 @@ public abstract partial class Role : ActivityObject
             // blood.Rotation = angle;
             // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
-        OnHit(damage, !flag);
+        OnHit(target, damage, angle, !flag);
 
         //受伤特效
         PlayHitAnimation();
@@ -1102,9 +904,9 @@ public abstract partial class Role : ActivityObject
     {
         if (other is ActivityObject propObject && !propObject.CollisionWithMask(PhysicsLayer.OnHand))
         {
-            if (!_interactiveItemList.Contains(propObject))
+            if (!InteractiveItemList.Contains(propObject))
             {
-                _interactiveItemList.Add(propObject);
+                InteractiveItemList.Add(propObject);
             }
         }
     }
@@ -1117,9 +919,9 @@ public abstract partial class Role : ActivityObject
     {
         if (other is ActivityObject propObject)
         {
-            if (_interactiveItemList.Contains(propObject))
+            if (InteractiveItemList.Contains(propObject))
             {
-                _interactiveItemList.Remove(propObject);
+                InteractiveItemList.Remove(propObject);
             }
             if (InteractiveItem == propObject)
             {
@@ -1130,87 +932,8 @@ public abstract partial class Role : ActivityObject
             }
         }
     }
-
-    /// <summary>
-    /// 切换当前使用的武器的回调
-    /// </summary>
-    private void OnChangeActiveItem(Weapon weapon)
-    {
-        //这里处理近战区域
-        if (weapon != null)
-        {
-            MeleeAttackCollision.Polygon = Utils.CreateSectorPolygon(
-                Utils.ConvertAngle(-MeleeAttackAngle / 2f),
-                (weapon.GetLocalFirePosition() - weapon.GripPoint.Position).Length() * 1.2f,
-                MeleeAttackAngle,
-                6
-            );
-            MeleeAttackArea.CollisionMask = AttackLayer | PhysicsLayer.Bullet;
-        }
-    }
-
-    /// <summary>
-    /// 近战区域碰到敌人
-    /// </summary>
-    private void OnMeleeAttackBodyEntered(Node2D body)
-    {
-        var activeWeapon = WeaponPack.ActiveItem;
-        if (activeWeapon == null)
-        {
-            return;
-        }
-        var activityObject = body.AsActivityObject();
-        if (activityObject != null)
-        {
-            if (activityObject is Role role) //攻击角色
-            {
-                var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
-                damage = RoleState.CallCalcDamageEvent(damage);
-                
-                //击退
-                if (role is not Player) //目标不是玩家才会触发击退
-                {
-                    var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
-                    var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRnage);
-                    var position = role.GlobalPosition - MountPoint.GlobalPosition;
-                    var v2 = position.Normalized() * repel;
-                    role.MoveController.AddForce(v2);
-                }
-                
-                role.CallDeferred(nameof(Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());
-            }
-            else if (activityObject is Bullet bullet) //攻击子弹
-            {
-                var attackLayer = bullet.AttackLayer;
-                if (CollisionWithMask(attackLayer)) //是攻击玩家的子弹
-                {
-                    bullet.PlayDisappearEffect();
-                    bullet.Destroy();
-                }
-            }
-        }
-    }
-
-    protected override void OnDestroy()
-    {
-        //销毁道具
-        foreach (var buffProp in BuffPropPack)
-        {
-            buffProp.Destroy();
-        }
-        BuffPropPack.Clear();
-        ActivePropsPack.Destroy();
-        WeaponPack.Destroy();
-    }
-
-    /// <summary>
-    /// 翻滚结束
-    /// </summary>
-    public void OverRoll()
-    {
-        _rollCoolingTimer = RoleState.RollTime;
-    }
-
+    
+    
     /// <summary>
     /// 返回当前角色是否是玩家
     /// </summary>
@@ -1240,5 +963,350 @@ public abstract partial class Role : ActivityObject
         }
 
         return Mathf.Pi - rotation;
+    }
+
+    /// <summary>
+    /// 获取开火点高度
+    /// </summary>
+    public virtual float GetFirePointAltitude()
+    {
+        return -MountPoint.Position.Y;
+    }
+    
+    /// <summary>
+    /// 当拾起某个武器时调用
+    /// </summary>
+    protected virtual void OnPickUpWeapon(Weapon weapon)
+    {
+    }
+    
+    /// <summary>
+    /// 当扔掉某个武器时调用
+    /// </summary>
+    protected virtual void OnThrowWeapon(Weapon weapon)
+    {
+    }
+
+    /// <summary>
+    /// 当切换到某个武器时调用
+    /// </summary>
+    protected virtual void OnExchangeWeapon(Weapon weapon)
+    {
+    }
+    
+    /// <summary>
+    /// 当武器放到后背时调用, 用于设置武器位置和角度
+    /// </summary>
+    /// <param name="weapon">武器实例</param>
+    /// <param name="index">放入武器背包的位置</param>
+    public virtual void OnPutBackMount(Weapon weapon, int index)
+    {
+        if (index < 8)
+        {
+            if (index % 2 == 0)
+            {
+                weapon.Position = new Vector2(-4, 3);
+                weapon.RotationDegrees = 90 - (index / 2f) * 20;
+                weapon.Scale = new Vector2(-1, 1);
+            }
+            else
+            {
+                weapon.Position = new Vector2(4, 3);
+                weapon.RotationDegrees = 270 + (index - 1) / 2f * 20;
+                weapon.Scale = new Vector2(1, 1);
+            }
+        }
+        else
+        {
+            weapon.Visible = false;
+        }
+    }
+    
+    protected override void OnAffiliationChange(AffiliationArea prevArea)
+    {
+        //身上的武器的所属区域也得跟着变
+        WeaponPack.ForEach((weapon, i) =>
+        {
+            if (AffiliationArea != null)
+            {
+                AffiliationArea.InsertItem(weapon);
+            }
+            else if (weapon.AffiliationArea != null)
+            {
+                weapon.AffiliationArea.RemoveItem(weapon);
+            }
+        });
+    }
+    
+    public virtual void LookTargetPosition(Vector2 pos)
+    {
+        LookPosition = pos;
+        if (MountLookTarget)
+        {
+            //脸的朝向
+            var gPos = Position;
+            if (pos.X > gPos.X && Face == FaceDirection.Left)
+            {
+                Face = FaceDirection.Right;
+            }
+            else if (pos.X < gPos.X && Face == FaceDirection.Right)
+            {
+                Face = FaceDirection.Left;
+            }
+            //枪口跟随目标
+            MountPoint.SetLookAt(pos);
+        }
+    }
+
+    /// <summary>
+    /// 返回所有武器是否弹药都打光了
+    /// </summary>
+    public virtual bool IsAllWeaponTotalAmmoEmpty()
+    {
+        foreach (var weapon in WeaponPack.ItemSlot)
+        {
+            if (weapon != null && !weapon.IsTotalAmmoEmpty())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    //-------------------------------------------------------------------------------------
+    
+    /// <summary>
+    /// 拾起一个武器, 返回是否成功拾起, 如果不想立刻切换到该武器, exchange 请传 false
+    /// </summary>
+    /// <param name="weapon">武器对象</param>
+    /// <param name="exchange">是否立即切换到该武器, 默认 true </param>
+    public bool PickUpWeapon(Weapon weapon, bool exchange = true)
+    {
+        if (WeaponPack.PickupItem(weapon, exchange) != -1)
+        {
+            //从可互动队列中移除
+            InteractiveItemList.Remove(weapon);
+            OnPickUpWeapon(weapon);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 切换到下一个武器
+    /// </summary>
+    public void ExchangeNextWeapon()
+    {
+        var weapon = WeaponPack.ActiveItem;
+        WeaponPack.ExchangeNext();
+        if (WeaponPack.ActiveItem != weapon)
+        {
+            OnExchangeWeapon(WeaponPack.ActiveItem);
+        }
+    }
+
+    /// <summary>
+    /// 切换到上一个武器
+    /// </summary>
+    public void ExchangePrevWeapon()
+    {
+        var weapon = WeaponPack.ActiveItem;
+        WeaponPack.ExchangePrev();
+        if (WeaponPack.ActiveItem != weapon)
+        {
+            OnExchangeWeapon(WeaponPack.ActiveItem);
+        }
+    }
+
+    /// <summary>
+    /// 扔掉当前使用的武器, 切换到上一个武器
+    /// </summary>
+    public void ThrowWeapon()
+    {
+        ThrowWeapon(WeaponPack.ActiveIndex);
+    }
+
+    /// <summary>
+    /// 扔掉指定位置的武器
+    /// </summary>
+    /// <param name="index">武器在武器背包中的位置</param>
+    public void ThrowWeapon(int index)
+    {
+        var weapon = WeaponPack.GetItem(index);
+        if (weapon == null)
+        {
+            return;
+        }
+
+        var temp = weapon.AnimatedSprite.Position;
+        if (Face == FaceDirection.Left)
+        {
+            temp.Y = -temp.Y;
+        }
+        //var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
+        WeaponPack.RemoveItem(index);
+        //播放抛出效果
+        weapon.ThrowWeapon(this, GlobalPosition);
+    }
+
+    /// <summary>
+    /// 扔掉所有武器
+    /// </summary>
+    public void ThrowAllWeapon()
+    {
+        var weapons = WeaponPack.GetAndClearItem();
+        for (var i = 0; i < weapons.Length; i++)
+        {
+            weapons[i].ThrowWeapon(this);
+        }
+    }
+    
+    /// <summary>
+    /// 切换到下一个武器
+    /// </summary>
+    public void ExchangeNextActiveProp()
+    {
+        var prop = ActivePropsPack.ActiveItem;
+        ActivePropsPack.ExchangeNext();
+        if (prop != ActivePropsPack.ActiveItem)
+        {
+            OnExchangeActiveProp(ActivePropsPack.ActiveItem);
+        }
+    }
+
+    /// <summary>
+    /// 切换到上一个武器
+    /// </summary>
+    public void ExchangePrevActiveProp()
+    {
+        var prop = ActivePropsPack.ActiveItem;
+        ActivePropsPack.ExchangePrev();
+        if (prop != ActivePropsPack.ActiveItem)
+        {
+            OnExchangeActiveProp(ActivePropsPack.ActiveItem);
+        }
+    }
+
+    //-------------------------------------------------------------------------------------
+    
+
+    /// <summary>
+    /// 触发换弹
+    /// </summary>
+    public virtual void Reload()
+    {
+        if (WeaponPack.ActiveItem != null)
+        {
+            WeaponPack.ActiveItem.Reload();
+        }
+    }
+    
+    /// <summary>
+    /// 攻击函数
+    /// </summary>
+    public virtual void Attack()
+    {
+        if (MeleeAttackTimer <= 0 && WeaponPack.ActiveItem != null)
+        {
+            WeaponPack.ActiveItem.Trigger(this);
+        }
+    }
+
+    /// <summary>
+    /// 触发近战攻击
+    /// </summary>
+    public virtual void MeleeAttack()
+    {
+        if (IsAttack)
+        {
+            return;
+        }
+
+        if (WeaponPack.ActiveItem != null && !WeaponPack.ActiveItem.Reloading && WeaponPack.ActiveItem.Attribute.CanMeleeAttack)
+        {
+            MeleeAttackTimer = RoleState.MeleeAttackTime;
+            MountLookTarget = false;
+            
+            //播放近战动画
+            PlayAnimation_MeleeAttack(() =>
+            {
+                MountLookTarget = true;
+            });
+        }
+    }
+
+    /// <summary>
+    /// 切换当前使用的武器的回调
+    /// </summary>
+    private void OnChangeActiveItem(Weapon weapon)
+    {
+        //这里处理近战区域
+        if (weapon != null)
+        {
+            MeleeAttackCollision.Polygon = Utils.CreateSectorPolygon(
+                Utils.ConvertAngle(-MeleeAttackAngle / 2f),
+                (weapon.GetLocalFirePosition() + weapon.GetGripPosition()).Length() * 1.1f,
+                MeleeAttackAngle,
+                6
+            );
+            MeleeAttackArea.CollisionMask = AttackLayer | PhysicsLayer.Bullet;
+        }
+    }
+
+    /// <summary>
+    /// 近战区域碰到敌人
+    /// </summary>
+    private void OnMeleeAttackBodyEntered(Node2D body)
+    {
+        var activeWeapon = WeaponPack.ActiveItem;
+        if (activeWeapon == null)
+        {
+            return;
+        }
+        var activityObject = body.AsActivityObject();
+        if (activityObject != null)
+        {
+            if (activityObject is Role role) //攻击角色
+            {
+                var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
+                damage = RoleState.CalcDamage(damage);
+                
+                //击退
+                if (role is not Player) //目标不是玩家才会触发击退
+                {
+                    var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
+                    var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRange);
+                    var position = role.GlobalPosition - MountPoint.GlobalPosition;
+                    var v2 = position.Normalized() * repel;
+                    role.AddRepelForce(v2);
+                }
+                
+                role.CallDeferred(nameof(Hurt), this, damage, (role.GetCenterPosition() - GlobalPosition).Angle());
+            }
+            else if (activityObject is Bullet bullet) //攻击子弹
+            {
+                var attackLayer = bullet.AttackLayer;
+                if (CollisionWithMask(attackLayer)) //是攻击玩家的子弹
+                {
+                    bullet.OnPlayDisappearEffect();
+                    bullet.Destroy();
+                }
+            }
+        }
+    }
+    
+    protected override void OnDestroy()
+    {
+        //销毁道具
+        foreach (var buffProp in BuffPropPack)
+        {
+            buffProp.Destroy();
+        }
+        BuffPropPack.Clear();
+        ActivePropsPack.Destroy();
+        
+        WeaponPack.Destroy();
     }
 }

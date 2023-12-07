@@ -130,6 +130,17 @@ public static class ResourceManager
     /// </summary>
     /// <param name="path">场景路径</param>
     /// <param name="useCache">是否使用缓存中的资源</param>
+    public static Node LoadAndInstantiate(string path, bool useCache = true)
+    {
+        var packedScene = Load<PackedScene>(path, useCache);
+        return packedScene.Instantiate();
+    }
+    
+    /// <summary>
+    /// 加载并且实例化场景, 并返回
+    /// </summary>
+    /// <param name="path">场景路径</param>
+    /// <param name="useCache">是否使用缓存中的资源</param>
     public static T LoadAndInstantiate<T>(string path, bool useCache = true) where T : Node
     {
         var packedScene = Load<PackedScene>(path, useCache);

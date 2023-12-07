@@ -14,15 +14,15 @@ public static partial class ExcelConfig
         public string Id;
 
         /// <summary>
-        /// 属性绑定武器的Id，这个id时ActivityBase表Id,如果是Ai使用的数据, 则填空字符串串
-        /// </summary>
-        public ActivityBase Activity;
-
-        /// <summary>
         /// 备注
         /// </summary>
         [JsonInclude]
         public string Remark;
+
+        /// <summary>
+        /// 属性绑定武器的Id，这个id时ActivityBase表Id,如果是Ai使用的数据, 则填空字符串串
+        /// </summary>
+        public ActivityBase Activity;
 
         /// <summary>
         /// 重量
@@ -38,6 +38,12 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public byte WeightType;
+
+        /// <summary>
+        /// 标记是否是近战武器
+        /// </summary>
+        [JsonInclude]
+        public bool IsMelee;
 
         /// <summary>
         /// 是否连续发射, 如果为false, 则每次发射都需要扣动扳机
@@ -165,6 +171,12 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public float FiringSpeedBackSpeed;
+
+        /// <summary>
+        /// 松开扳机后射速消散开始时间, 单位: 秒
+        /// </summary>
+        [JsonInclude]
+        public float FiringSpeedBackTime;
 
         /// <summary>
         /// 单次开火发射子弹数量区间 <br/>
@@ -298,7 +310,7 @@ public static partial class ExcelConfig
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public float[] MeleeAttackRepelRnage;
+        public float[] MeleeAttackRepelRange;
 
         /// <summary>
         /// 射击音效
@@ -375,10 +387,11 @@ public static partial class ExcelConfig
         {
             var inst = new WeaponBase();
             inst.Id = Id;
-            inst.Activity = Activity;
             inst.Remark = Remark;
+            inst.Activity = Activity;
             inst.Weight = Weight;
             inst.WeightType = WeightType;
+            inst.IsMelee = IsMelee;
             inst.ContinuousShoot = ContinuousShoot;
             inst.AmmoCapacity = AmmoCapacity;
             inst.MaxAmmoCapacity = MaxAmmoCapacity;
@@ -400,6 +413,7 @@ public static partial class ExcelConfig
             inst.FinalFiringSpeed = FinalFiringSpeed;
             inst.FiringSpeedAddSpeed = FiringSpeedAddSpeed;
             inst.FiringSpeedBackSpeed = FiringSpeedBackSpeed;
+            inst.FiringSpeedBackTime = FiringSpeedBackTime;
             inst.FireBulletCountRange = FireBulletCountRange;
             inst.DelayedTime = DelayedTime;
             inst.StartScatteringRange = StartScatteringRange;
@@ -421,7 +435,7 @@ public static partial class ExcelConfig
             inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.CanMeleeAttack = CanMeleeAttack;
             inst.MeleeAttackHarmRange = MeleeAttackHarmRange;
-            inst.MeleeAttackRepelRnage = MeleeAttackRepelRnage;
+            inst.MeleeAttackRepelRange = MeleeAttackRepelRange;
             inst.ShootSound = ShootSound;
             inst.BeginReloadSound = BeginReloadSound;
             inst.BeginReloadSoundDelayTime = BeginReloadSoundDelayTime;

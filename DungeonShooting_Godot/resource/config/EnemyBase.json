@@ -1,0 +1,26 @@
+[
+  {
+    "Id": "0001",
+    "__Activity": "enemy0001",
+    "Remark": "\u654C\u4EBA1",
+    "MoveSpeed": 120,
+    "Acceleration": 1500,
+    "Friction": 900,
+    "CanPickUpWeapon": true,
+    "ViewRange": 250,
+    "TailAfterViewRange": 400,
+    "BackViewRange": 50
+  },
+  {
+    "Id": "0002",
+    "__Activity": "enemy0002",
+    "Remark": "\u654C\u4EBA2",
+    "MoveSpeed": 120,
+    "Acceleration": 1500,
+    "Friction": 900,
+    "CanPickUpWeapon": false,
+    "ViewRange": 250,
+    "TailAfterViewRange": 400,
+    "BackViewRange": 50
+  }
+]

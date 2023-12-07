@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public enum EventEnum
 {
     /// <summary>
-    /// 敌人死亡, 参数为死亡的敌人的实例, 参数类型为<see cref="Enemy"/>
+    /// 敌人死亡, 参数为死亡的敌人的实例, 参数类型为<see cref="Role"/>
     /// </summary>
     OnEnemyDie,
     /// <summary>
@@ -18,6 +18,14 @@ public enum EventEnum
     /// 玩家第一次进入某个房间，参数类型为<see cref="RoomInfo"/>
     /// </summary>
     OnPlayerFirstEnterRoom,
+    /// <summary>
+    /// 玩家进入过道时调用, 参数类型为进入该过道的门<see cref="RoomDoorInfo"/>
+    /// </summary>
+    OnPlayerEnterAisle,
+    /// <summary>
+    /// 玩家首次进入过道时调用, 参数类型为进入该过道的门<see cref="RoomDoorInfo"/>
+    /// </summary>
+    OnPlayerFirstEnterAisle,
     /// <summary>
     /// 玩家可互动对象改变, 参数类型为<see cref="CheckInteractiveResult"/>
     /// </summary>

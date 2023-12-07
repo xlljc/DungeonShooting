@@ -1,21 +1,29 @@
 
+using System;
 using Godot;
+
+namespace EnemyState;
 
 /// <summary>
 /// 目标在视野内, 跟进目标, 如果距离在子弹有效射程内, 则开火
 /// </summary>
-public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
+public class AiFollowUpState : StateBase<Enemy, AIStateEnum>
 {
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
     private float _navigationInterval = 0.3f;
 
-    public AiFollowUpState() : base(AiStateEnum.AiFollowUp)
+    public AiFollowUpState() : base(AIStateEnum.AiFollowUp)
     {
     }
 
-    public override void Enter(AiStateEnum prev, params object[] args)
+    public override void Enter(AIStateEnum prev, params object[] args)
     {
+        if (Master.LookTarget == null)
+        {
+            throw new Exception("进入 AIAdvancedStateEnum.AiFollowUp 状态时角色没有攻击目标!");
+        }
+        
         _navigationUpdateTimer = 0;
         Master.TargetInView = true;
     }
@@ -29,17 +37,17 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             var targetWeapon = Master.FindTargetWeapon();
             if (targetWeapon != null)
             {
-                ChangeState(AiStateEnum.AiFindAmmo, targetWeapon);
+                ChangeState(AIStateEnum.AiFindAmmo, targetWeapon);
                 return;
             }
             else
             {
                 //切换到随机移动状态
-                ChangeState(AiStateEnum.AiSurround);
+                ChangeState(AIStateEnum.AiSurround);
             }
         }
 
-        var playerPos = Player.Current.GetCenterPosition();
+        var playerPos = Master.LookTarget.GetCenterPosition();
 
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)
@@ -53,40 +61,29 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             _navigationUpdateTimer -= delta;
         }
 
-        var masterPosition = Master.GlobalPosition;
-
         //是否在攻击范围内
         var inAttackRange = false;
 
         var weapon = Master.WeaponPack.ActiveItem;
+        var distanceSquared = Master.Position.DistanceSquaredTo(playerPos);
         if (weapon != null)
         {
-            inAttackRange = masterPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(Master.GetWeaponRange(0.7f), 2);
-        }
-
-        //枪口指向玩家
-        Master.LookTargetPosition(playerPos);
-        
-        if (!Master.NavigationAgent2D.IsNavigationFinished())
-        {
-            if (weapon == null || !weapon.Attribute.AiAttackAttr.FiringStand ||
-                (Master.AttackState != AiAttackState.LockingTime && Master.AttackState != AiAttackState.Attack))
-            {
-                //计算移动
-                var nextPos = Master.NavigationAgent2D.GetNextPathPosition();
-                Master.AnimatedSprite.Play(AnimatorNames.Run);
-                Master.BasisVelocity = (nextPos - masterPosition - Master.NavigationPoint.Position).Normalized() *
-                                       Master.RoleState.MoveSpeed;
-            }
-            else
-            {
-                Master.AnimatedSprite.Play(AnimatorNames.Idle);
-                Master.BasisVelocity = Vector2.Zero;
-            }
+            inAttackRange = distanceSquared <= Mathf.Pow(Master.GetWeaponRange(0.7f), 2);
         }
         else
         {
-            Master.BasisVelocity = Vector2.Zero;
+            inAttackRange = distanceSquared <= Mathf.Pow(Master.EnemyRoleState.ViewRange * 0.7f, 2);
+        }
+        
+        if (!Master.NavigationAgent2D.IsNavigationFinished())
+        {
+            //移动
+            Master.DoMove();
+        }
+        else
+        {
+            //站立
+            Master.DoIdle();
         }
 
         //检测玩家是否在视野内
@@ -101,30 +98,50 @@ public class AiFollowUpState : StateBase<Enemy, AiStateEnum>
             Master.TargetInView = false;
         }
 
-        //在视野中, 或者锁敌状态下, 或者攻击状态下, 继续保持原本逻辑
-        if (Master.TargetInView || Master.AttackState == AiAttackState.LockingTime || Master.AttackState == AiAttackState.Attack)
+        //在视野中
+        if (Master.TargetInView)
         {
+            //更新标记位置
+            Master.UpdateMarkTargetPosition();
             if (inAttackRange) //在攻击范围内
             {
-                //发起攻击
-                Master.EnemyAttack();
-                
-                //距离够近, 可以切换到环绕模式
-                if (Master.GlobalPosition.DistanceSquaredTo(playerPos) <= Mathf.Pow(Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange), 2) * 0.7f)
+                if (weapon != null)
                 {
-                    ChangeState(AiStateEnum.AiSurround);
+                    //距离够近, 可以切换到环绕模式
+                    if (distanceSquared <= Mathf.Pow(Utils.GetConfigRangeStart(weapon.Attribute.Bullet.DistanceRange) * 0.7f, 2))
+                    {
+                        ChangeState(AIStateEnum.AiSurround);
+                    }
+                    else if (weapon.TriggerIsReady()) //可以攻击
+                    {
+                        //攻击状态
+                        ChangeState(AIStateEnum.AiAttack);
+                    }
+                }
+                else
+                {
+                    //距离够近, 可以切换到环绕模式
+                    if (distanceSquared <= Mathf.Pow(Master.EnemyRoleState.ViewRange * 0.7f, 2))
+                    {
+                        ChangeState(AIStateEnum.AiSurround);
+                    }
+                    else if (!Master.IsAttack && Master.NoWeaponAttack) //可以在没有武器时发起攻击
+                    {
+                        //攻击状态
+                        ChangeState(AIStateEnum.AiAttack);
+                    }
                 }
             }
         }
         else //不在视野中
         {
-            ChangeState(AiStateEnum.AiTailAfter);
+            ChangeState(AIStateEnum.AiTailAfter);
         }
     }
 
     public override void DebugDraw()
     {
-        var playerPos = Player.Current.GetCenterPosition();
+        var playerPos = Master.LookTarget.GetCenterPosition();
         Master.DrawLine(new Vector2(0, -8), Master.ToLocal(playerPos), Colors.Red);
     }
 }

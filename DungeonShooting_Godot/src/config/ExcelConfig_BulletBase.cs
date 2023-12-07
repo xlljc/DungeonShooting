@@ -50,7 +50,7 @@ public static partial class ExcelConfig
         /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public float[] RepelRnage;
+        public float[] RepelRange;
 
         /// <summary>
         /// 子弹偏移角度区间 <br/>
@@ -84,13 +84,6 @@ public static partial class ExcelConfig
         public float[] DistanceRange;
 
         /// <summary>
-        /// 是否开启重力下坠 <br/>
-        /// 只有Type为1时有效
-        /// </summary>
-        [JsonInclude]
-        public bool UseGravity;
-
-        /// <summary>
         /// 初始纵轴速度区间 <br/>
         /// 只有Type为1时有效 <br/>
         /// 格式为[value]或者[min,max]
@@ -107,10 +100,12 @@ public static partial class ExcelConfig
         public int[] BounceCount;
 
         /// <summary>
-        /// 在还有剩余反弹次数时撞到玩家时是否销毁子弹
+        /// 子弹穿透次数区间 <br/>
+        /// 只有Type为1时有效 <br/>
+        /// 格式为[value]或者[min,max]
         /// </summary>
         [JsonInclude]
-        public bool StrikeDestroy;
+        public int[] Penetration;
 
         /// <summary>
         /// 返回浅拷贝出的新对象
@@ -123,15 +118,14 @@ public static partial class ExcelConfig
             inst.Type = Type;
             inst.Prefab = Prefab;
             inst.HarmRange = HarmRange;
-            inst.RepelRnage = RepelRnage;
+            inst.RepelRange = RepelRange;
             inst.DeviationAngleRange = DeviationAngleRange;
             inst.SpeedRange = SpeedRange;
             inst.LifeTimeRange = LifeTimeRange;
             inst.DistanceRange = DistanceRange;
-            inst.UseGravity = UseGravity;
             inst.VerticalSpeed = VerticalSpeed;
             inst.BounceCount = BounceCount;
-            inst.StrikeDestroy = StrikeDestroy;
+            inst.Penetration = Penetration;
             return inst;
         }
     }

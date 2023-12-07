@@ -1,4 +1,5 @@
 using System;
+using Config;
 using Godot;
 
 
@@ -18,6 +19,18 @@ public partial class Player : Role
     /// </summary>
     public StateController<Player, PlayerStateEnum> StateController { get; private set; }
 
+    public PlayerRoleState PlayerRoleState { get; private set; }
+    
+    /// <summary>
+    /// 是否可以翻滚
+    /// </summary>
+    public bool CanRoll => _rollCoolingTimer <= 0;
+    
+    //翻滚冷却计时器
+    private float _rollCoolingTimer = 0;
+    
+    private BrushImageData _brushData2;
+    
     /// <summary>
     /// 设置当前操作的玩家对象
     /// </summary>
@@ -44,14 +57,17 @@ public partial class Player : Role
         MaxShield = 0;
         Shield = 0;
 
+        WeaponPack.SetCapacity(4);
+        ActivePropsPack.SetCapacity(1);
+        
         // debug用
         // RoleState.Acceleration = 3000;
         // RoleState.Friction = 3000;
         // RoleState.MoveSpeed = 500;
         // CollisionLayer = 0;
         // CollisionMask = 0;
+        // GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
         //GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
-        //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
         // this.CallDelay(0.5f, () =>
         // {
         //     var weapon = Create<Weapon>(Ids.Id_weapon0009);
@@ -64,8 +80,17 @@ public partial class Player : Role
         StateController.Register(new PlayerRollState());
         //默认状态
         StateController.ChangeStateInstant(PlayerStateEnum.Idle);
-
+        
         //InitSubLine();
+        
+        _brushData2 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0001"]);
+    }
+
+    protected override RoleState OnCreateRoleState()
+    {
+        var roleState = new PlayerRoleState();
+        PlayerRoleState = roleState;
+        return roleState;
     }
 
     protected override void Process(float delta)
@@ -75,10 +100,16 @@ public partial class Player : Role
         {
             return;
         }
-        //脸的朝向
-        if (LookTarget == null)
+
+        if (_rollCoolingTimer > 0)
         {
-            var gPos = GlobalPosition;
+            _rollCoolingTimer -= delta;
+        }
+        
+        if (MountLookTarget) //看向目标
+        {
+            //脸的朝向
+            var gPos = Position;
             Vector2 mousePos = InputManager.CursorPosition;
             if (mousePos.X > gPos.X && Face == FaceDirection.Left)
             {
@@ -88,12 +119,9 @@ public partial class Player : Role
             {
                 Face = FaceDirection.Left;
             }
-
-            if (MountLookTarget)
-            {
-                //枪口跟随鼠标
-                MountPoint.SetLookAt(mousePos);
-            }
+            
+            //枪口跟随鼠标
+            MountPoint.SetLookAt(mousePos);
         }
 
         if (InputManager.ExchangeWeapon) //切换武器
@@ -159,6 +187,10 @@ public partial class Player : Role
         {
             UseActiveProp();
         }
+        else if (InputManager.ExchangeProp) //切换道具
+        {
+            ExchangeNextActiveProp();
+        }
         else if (InputManager.RemoveProp) //扔掉道具
         {
             ThrowActiveProp();
@@ -168,14 +200,14 @@ public partial class Player : Role
         {
             //Hurt(1000, 0);
             Hp = 0;
-            Hurt(1000, 0);
+            Hurt(this, 1000, 0);
         }
         else if (Input.IsKeyPressed(Key.O)) //测试用, 消灭房间内所有敌人
         {
             var enemyList = AffiliationArea.FindIncludeItems(o => o.CollisionWithMask(PhysicsLayer.Enemy));
             foreach (var enemy in enemyList)
             {
-                ((Enemy)enemy).Hurt(1000, 0);
+                ((Enemy)enemy).Hurt(this, 1000, 0);
             }
         }
         // //测试用
@@ -191,6 +223,24 @@ public partial class Player : Role
         //         freezeSprite.ActivityObject.MoveController.AddForce(temp.Normalized() * 300 * (25f - temp.Length()) / 25f);
         //     }
         // }
+        
+        if (Face == FaceDirection.Right)
+        {
+            TipRoot.Scale = Vector2.One;
+        }
+        else
+        {
+            TipRoot.Scale = new Vector2(-1, 1);
+        }
+
+        //测试刷地
+        //DrawLiquid(_brushData2);
+    }
+
+    protected override void OnAffiliationChange(AffiliationArea prevArea)
+    {
+        //BrushPrevPosition = null;
+        base.OnAffiliationChange(prevArea);
     }
 
     protected override void OnPickUpWeapon(Weapon weapon)
@@ -209,7 +259,7 @@ public partial class Player : Role
         return 1;
     }
 
-    protected override void OnHit(int damage, bool realHarm)
+    protected override void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
     {
         //进入无敌状态
         if (realHarm) //真实伤害
@@ -319,6 +369,14 @@ public partial class Player : Role
         {
             BasisVelocity = new Vector2(BasisVelocity.X, Mathf.MoveToward(BasisVelocity.Y, dir.Y * RoleState.MoveSpeed, RoleState.Acceleration * delta));
         }
+    }
+
+    /// <summary>
+    /// 翻滚结束
+    /// </summary>
+    public void OverRoll()
+    {
+        _rollCoolingTimer = PlayerRoleState.RollCoolingTime;
     }
 
     // protected override void DebugDraw()

@@ -10,7 +10,8 @@ using Godot;
 /// 该类提供基础物体运动模拟, 互动接口, 自定义组件, 协程等功能<br/>
 /// ActivityObject 子类实例化请不要直接使用 new, 而用该在类上标上 [Tool], 并在 ActivityObject.xlsx 配置文件中注册物体, 导出配置表后使用 ActivityObject.Create(id) 来创建实例.<br/>
 /// </summary>
-public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
+[Tool]
+public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
 {
     /// <summary>
     /// 是否是调试模式
@@ -18,9 +19,14 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public static bool IsDebug { get; set; }
 
     /// <summary>
+    /// 实例唯一 Id
+    /// </summary>
+    public long Id { get; set; }
+    
+    /// <summary>
     /// 当前物体对应的配置数据, 如果不是通过 ActivityObject.Create() 函数创建出来的对象那么 ItemConfig 为 null
     /// </summary>
-    public ExcelConfig.ActivityBase ItemConfig { get; private set; }
+    public ExcelConfig.ActivityBase ActivityBase { get; private set; }
 
     /// <summary>
     /// 是否是静态物体, 如果为true, 则会禁用移动处理
@@ -68,6 +74,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <summary>
     /// 阴影偏移
     /// </summary>
+    [Export]
     public Vector2 ShadowOffset { get; protected set; } = new Vector2(0, 2);
     
     /// <summary>
@@ -121,7 +128,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// <summary>
     /// 是否正在投抛过程中
     /// </summary>
-    public bool IsThrowing => _throwForce != null && !_isFallOver;
+    public bool IsThrowing => VerticalSpeed != 0 && !_isFallOver;
 
     /// <summary>
     /// 当前物体的海拔高度, 如果大于0, 则会做自由落体运动, 也就是执行投抛逻辑
@@ -163,11 +170,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// 是否启用垂直方向上的运动模拟, 默认开启, 如果禁用, 那么下落和投抛效果, 同样 Throw() 函数也将失效
     /// </summary>
     public bool EnableVerticalMotion { get; set; } = true;
-
-    /// <summary>
-    /// 撞到墙壁反弹时是否锁定旋转角度, 如果为 false, 则反弹后将直接修改旋转角度
-    /// </summary>
-    public bool BounceLockRotation { get; set; } = true;
     
     /// <summary>
     /// 是否启用物体更新行为, 默认 true, 如果禁用, 则会停止当前物体的 Process(), PhysicsProcess() 调用, 并且禁用 Collision 节点, 禁用后所有组件也同样被禁用行为
@@ -215,21 +217,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public bool ShowOutline
     {
-        get => _showOutline;
+        get => _blendShaderMaterial == null ? false : _blendShaderMaterial.GetShaderParameter(_shader_show_outline).AsBool();
         set
         {
-            if (_blendShaderMaterial != null)
-            {
-                if (value != _showOutline)
-                {
-                    _blendShaderMaterial.SetShaderParameter("show_outline", value);
-                    if (_shadowBlendShaderMaterial != null)
-                    {
-                        _shadowBlendShaderMaterial.SetShaderParameter("show_outline", value);
-                    }
-                    _showOutline = value;
-                }
-            }
+            _blendShaderMaterial?.SetShaderParameter(_shader_show_outline, value);
+            _shadowBlendShaderMaterial?.SetShaderParameter(_shader_show_outline, value);
         }
     }
 
@@ -238,32 +230,35 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public Color OutlineColor
     {
-        get
-        {
-            if (!_initOutlineColor)
-            {
-                _initOutlineColor = true;
-                if (_blendShaderMaterial != null)
-                {
-                    _outlineColor = _blendShaderMaterial.GetShaderParameter("outline_color").AsColor();
-                }
-            }
-
-            return _outlineColor;
-        }
-        set
-        {
-            _initOutlineColor = true;
-            if (value != _outlineColor)
-            {
-                _blendShaderMaterial.SetShaderParameter("outline_color", value);
-            }
-
-            _outlineColor = value;
-        }
+        get => _blendShaderMaterial == null ? Colors.Black : _blendShaderMaterial.GetShaderParameter(_shader_outline_color).AsColor();
+        set => _blendShaderMaterial?.SetShaderParameter(_shader_outline_color, value);
     }
 
+    /// <summary>
+    /// 灰度
+    /// </summary>
+    public float Grey
+    {
+        get => _blendShaderMaterial == null ? 0 : _blendShaderMaterial.GetShaderParameter(_shader_grey).AsSingle();
+        set => _blendShaderMaterial?.SetShaderParameter(_shader_grey, value);
+    }
+    
+    /// <summary>
+    /// 是否是自定义阴影纹理
+    /// </summary>
+    public bool IsCustomShadowSprite { get; private set; }
+
+    /// <summary>
+    /// 记录绘制液体的笔刷上一次绘制的位置<br/>
+    /// 每次调用 DrawLiquid() 后都会记录这一次绘制的位置, 记录这个位置用作执行补间操作, 但是一旦停止绘制了, 需要手动清理记录的位置, 也就是将 BrushPrevPosition 置为 null
+    /// </summary>
+    public Vector2I? BrushPrevPosition { get; set; }
+    
     // --------------------------------------------------------------------------------
+
+    private static readonly StringName _shader_grey = "grey";
+    private static readonly StringName _shader_outline_color = "outline_color";
+    private static readonly StringName _shader_show_outline = "show_outline";
 
     //是否正在调用组件 Update 函数
     private bool _updatingComp = false;
@@ -272,7 +267,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     //修改的组件集合, value 为 true 表示添加组件, false 表示移除组件
     private readonly List<KeyValuePair<Component, bool>> _changeComponents = new List<KeyValuePair<Component, bool>>();
     //上一帧动画名称
-    private string _prevAnimation;
+    private StringName _prevAnimation;
     //上一帧动画
     private int _prevAnimationFrame;
 
@@ -321,17 +316,13 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
 
     private bool _processingBecomesStaticImage = false;
 
+    //击退外力
+    private ExternalForce _repelForce;
+
     // --------------------------------------------------------------------------------
     
     //实例索引
     private static long _instanceIndex = 0;
-
-    //是否启用描边
-    private bool _showOutline = false;
-    
-    //描边颜色
-    private bool _initOutlineColor = false;
-    private Color _outlineColor = new Color(0, 0, 0, 1);
     
     //冻结显示的Sprite
     private FreezeSprite _freezeSprite;
@@ -356,23 +347,34 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         {
             ActivityMaterial = config.Material;
         }
+
+        //GravityScale 为 0 时关闭重力
+        if (ActivityMaterial.GravityScale == 0)
+        {
+            EnableVerticalMotion = false;
+        }
         
         World = world;
-        ItemConfig = config;
+        ActivityBase = config;
+#if TOOLS
         Name = GetType().Name + (_instanceIndex++);
+#endif
+        Id = _instanceIndex;
+        
         _blendShaderMaterial = AnimatedSprite.Material as ShaderMaterial;
-        _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
-        if (_blendShaderMaterial != null)
+        IsCustomShadowSprite = ShadowSprite.Texture != null;
+        if (!IsCustomShadowSprite) //没有自定义阴影纹理
         {
-            _showOutline = _blendShaderMaterial.GetShaderParameter("show_outline").AsBool();
+            _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
+            if (_shadowBlendShaderMaterial != null && _blendShaderMaterial != null)
+            {
+                var value = _blendShaderMaterial.GetShaderParameter(_shader_show_outline);
+                _shadowBlendShaderMaterial.SetShaderParameter(_shader_show_outline, value);
+            }
+            
+            ShadowSprite.Visible = false;
         }
 
-        if (_shadowBlendShaderMaterial != null)
-        {
-            _shadowBlendShaderMaterial.SetShaderParameter("show_outline", _showOutline);
-        }
-
-        ShadowSprite.Visible = false;
         MotionMode = MotionModeEnum.Floating;
         MoveController = AddComponent<MoveController>();
         IsStatic = config.IsStatic;
@@ -386,7 +388,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     {
 
     }
-
+    
     /// <summary>
     /// 子类需要重写 _EnterTree() 函数, 请重写 EnterTree()
     /// </summary>
@@ -423,21 +425,24 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public void ShowShadowSprite()
     {
-        var anim = AnimatedSprite.Animation;
-        
-        var frame = AnimatedSprite.Frame;
-        if (_prevAnimation != anim || _prevAnimationFrame != frame)
+        if (!IsCustomShadowSprite)
         {
-            var frames = AnimatedSprite.SpriteFrames;
-            if (frames != null && frames.HasAnimation(anim))
+            var anim = AnimatedSprite.Animation;
+        
+            var frame = AnimatedSprite.Frame;
+            if (_prevAnimation != anim || _prevAnimationFrame != frame)
             {
-                //切换阴影动画
-                ShadowSprite.Texture = frames.GetFrameTexture(anim, frame);
+                var frames = AnimatedSprite.SpriteFrames;
+                if (frames != null && frames.HasAnimation(anim))
+                {
+                    //切换阴影动画
+                    ShadowSprite.Texture = frames.GetFrameTexture(anim, frame);
+                }
             }
-        }
 
-        _prevAnimation = anim;
-        _prevAnimationFrame = frame;
+            _prevAnimation = anim;
+            _prevAnimationFrame = frame;
+        }
 
         IsShowShadow = true;
         CalcShadowTransform();
@@ -500,13 +505,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     public virtual void OnInit()
     {
     }
-
+    
     /// <summary>
     /// 进入场景树时调用
     /// </summary>
     public virtual void EnterTree()
     {
-        
     }
 
     /// <summary>
@@ -514,7 +518,6 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public virtual void ExitTree()
     {
-        
     }
     
     /// <summary>
@@ -658,10 +661,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         {
             if (parent != null)
             {
-                parent.RemoveChild(this);
+                Reparent(root);
             }
-
-            this.AddToActivityRoot(layer);
+            else
+            {
+                root.AddChild(this);
+            }
         }
 
         if (showShadow)
@@ -836,7 +841,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         for (int i = 0; i < _components.Count; i++)
         {
             var temp = _components[i];
-            if (temp.Key == type)
+            if (temp.Key.IsAssignableTo(type))
             {
                 return temp.Value;
             }
@@ -847,7 +852,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             for (var i = 0; i < _changeComponents.Count; i++)
             {
                 var temp = _components[i];
-                if (temp.Value.GetType() == type)
+                if (temp.Value.GetType().IsAssignableTo(type))
                 {
                     return temp.Value;
                 }
@@ -862,17 +867,96 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public T GetComponent<T>() where T : Component
     {
-        var component = GetComponent(typeof(T));
-        if (component == null) return null;
-        return (T)component;
+        for (int i = 0; i < _components.Count; i++)
+        {
+            var temp = _components[i];
+            if (temp.Value is T component)
+            {
+                return component;
+            }
+        }
+
+        if (_updatingComp)
+        {
+            for (var i = 0; i < _changeComponents.Count; i++)
+            {
+                var temp = _components[i];
+                if (temp.Value is T component)
+                {
+                    return component;
+                }
+            }
+        }
+
+        return null;
     }
 
+    /// <summary>
+    /// 根据类型获取所有相同类型的组件
+    /// </summary>
+    public Component[] GetComponents(Type type)
+    {
+        var list = new List<Component>();
+        for (int i = 0; i < _components.Count; i++)
+        {
+            var temp = _components[i];
+            if (temp.Key.IsAssignableTo(type))
+            {
+                list.Add(temp.Value);
+            }
+        }
+
+        if (_updatingComp)
+        {
+            for (var i = 0; i < _changeComponents.Count; i++)
+            {
+                var temp = _components[i];
+                if (temp.Value.GetType().IsAssignableTo(type))
+                {
+                    list.Add(temp.Value);
+                }
+            }
+        }
+
+        return list.ToArray();
+    }
+    
+    /// <summary>
+    /// 根据类型获取所有相同类型的组件
+    /// </summary>
+    public T[] GetComponents<T>() where T : Component
+    {
+        var list = new List<T>();
+        for (int i = 0; i < _components.Count; i++)
+        {
+            var temp = _components[i];
+            if (temp.Value is T component)
+            {
+                list.Add(component);
+            }
+        }
+
+        if (_updatingComp)
+        {
+            for (var i = 0; i < _changeComponents.Count; i++)
+            {
+                var temp = _components[i];
+                if (temp.Value is T component)
+                {
+                    list.Add(component);
+                }
+            }
+        }
+
+        return list.ToArray();
+    }
+    
     /// <summary>
     /// 设置混色材质的颜色
     /// </summary>
     public void SetBlendColor(Color color)
     {
-        _blendShaderMaterial.SetShaderParameter("blend", color);
+        _blendShaderMaterial?.SetShaderParameter("blend", color);
     }
 
     /// <summary>
@@ -880,6 +964,10 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public Color GetBlendColor()
     {
+        if (_blendShaderMaterial == null)
+        {
+            return Colors.White;
+        }
         return _blendShaderMaterial.GetShaderParameter("blend").AsColor();
     }
     
@@ -888,7 +976,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public void SetBlendSchedule(float value)
     {
-        _blendShaderMaterial.SetShaderParameter("schedule", value);
+        _blendShaderMaterial?.SetShaderParameter("schedule", value);
     }
 
     /// <summary>
@@ -896,6 +984,10 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public float GetBlendSchedule()
     {
+        if (_blendShaderMaterial == null)
+        {
+            return default;
+        }
         return _blendShaderMaterial.GetShaderParameter("schedule").AsSingle();
     }
 
@@ -904,8 +996,8 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public void SetBlendModulate(Color color)
     {
-        _blendShaderMaterial.SetShaderParameter("modulate", color);
-        _shadowBlendShaderMaterial.SetShaderParameter("modulate", color);
+        _blendShaderMaterial?.SetShaderParameter("modulate", color);
+        _shadowBlendShaderMaterial?.SetShaderParameter("modulate", color);
     }
     
     /// <summary>
@@ -913,6 +1005,10 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public Color SetBlendModulate()
     {
+        if (_blendShaderMaterial == null)
+        {
+            return Colors.White;
+        }
         return _blendShaderMaterial.GetShaderParameter("modulate").AsColor();
     }
     
@@ -975,15 +1071,15 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         {
             if (_playHitSchedule < 0.05f)
             {
-                _blendShaderMaterial.SetShaderParameter("schedule", 1);
+                _blendShaderMaterial?.SetShaderParameter("schedule", 1);
             }
             else if (_playHitSchedule < 0.15f)
             {
-                _blendShaderMaterial.SetShaderParameter("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
+                _blendShaderMaterial?.SetShaderParameter("schedule", Mathf.Lerp(1, 0, (_playHitSchedule - 0.05f) / 0.1f));
             }
             if (_playHitSchedule >= 0.15f)
             {
-                _blendShaderMaterial.SetShaderParameter("schedule", 0);
+                _blendShaderMaterial?.SetShaderParameter("schedule", 0);
                 _playHitSchedule = 0;
                 _playHit = false;
             }
@@ -1024,9 +1120,9 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                     var ysp = VerticalSpeed;
 
                     _altitude += VerticalSpeed * delta;
-                    _verticalSpeed -= GameConfig.G * delta;
+                    _verticalSpeed -= GameConfig.G * ActivityMaterial.GravityScale * delta;
 
-                    //当高度大于16时, 显示在所有物体上
+                    //当高度大于16时, 显示在所有物体上, 并且关闭碰撞
                     if (Altitude >= 16)
                     {
                         AnimatedSprite.ZIndex = 20;
@@ -1034,6 +1130,11 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
                     else
                     {
                         AnimatedSprite.ZIndex = 0;
+                    }
+                    //动态开关碰撞器
+                    if (ActivityMaterial.DynamicCollision)
+                    {
+                        Collision.Disabled = Altitude >= 16;
                     }
                 
                     //达到最高点
@@ -1119,17 +1220,20 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         // 阴影
         if (ShadowSprite.Visible)
         {
-            //更新阴影贴图, 使其和动画一致
-            var anim = AnimatedSprite.Animation;
-            var frame = AnimatedSprite.Frame;
-            if (_prevAnimation != anim || _prevAnimationFrame != frame)
+            if (!IsCustomShadowSprite)
             {
-                //切换阴影动画
-                ShadowSprite.Texture = AnimatedSprite.SpriteFrames.GetFrameTexture(anim, AnimatedSprite.Frame);
-            }
+                //更新阴影贴图, 使其和动画一致
+                var anim = AnimatedSprite.Animation;
+                var frame = AnimatedSprite.Frame;
+                if (_prevAnimation != anim || _prevAnimationFrame != frame)
+                {
+                    //切换阴影动画
+                    ShadowSprite.Texture = AnimatedSprite.SpriteFrames.GetFrameTexture(anim, AnimatedSprite.Frame);
+                }
 
-            _prevAnimation = anim;
-            _prevAnimationFrame = frame;
+                _prevAnimation = anim;
+                _prevAnimationFrame = frame;
+            }
 
             if (_freezeSprite == null || !_freezeSprite.IsFrozen)
             {
@@ -1248,6 +1352,12 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
     /// </summary>
     public void CalcShadowTransform()
     {
+        //偏移
+        if (!IsCustomShadowSprite)
+        {
+            ShadowSprite.Offset = AnimatedSprite.Offset;
+        }
+
         //缩放
         ShadowSprite.Scale = AnimatedSprite.Scale;
         //阴影角度
@@ -1598,7 +1708,7 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
         _processingBecomesStaticImage = true;
         EnableBehavior = false;
         var roomInfo = AffiliationArea.RoomInfo;
-        var position = roomInfo.ToImageCanvasPosition(GlobalPosition);
+        var position = roomInfo.ToCanvasPosition(GlobalPosition);
         roomInfo.StaticImageCanvas.DrawActivityObjectInCanvas(this, position.X, position.Y, () =>
         {
             Destroy();
@@ -1635,5 +1745,111 @@ public abstract partial class ActivityObject : CharacterBody2D, IDestroy, ICorou
             return;
         }
         _freezeSprite.Unfreeze();
+    }
+
+    /// <summary>
+    /// 获取中心点坐标
+    /// </summary>
+    public Vector2 GetCenterPosition()
+    {
+        return AnimatedSprite.Position + Position;
+    }
+
+    /// <summary>
+    /// 设置物体朝向
+    /// </summary>
+    public void SetFace(FaceDirection face)
+    {
+        if ((face == FaceDirection.Left && Scale.X > 0) || (face == FaceDirection.Right && Scale.X < 0))
+        {
+            Scale *= new Vector2(-1, 1);
+        }
+    }
+    
+    /// <summary>
+    /// 添加一个击退力
+    /// </summary>
+    public void AddRepelForce(Vector2 velocity)
+    {
+        if (_repelForce == null)
+        {
+            _repelForce = new ExternalForce(ForceNames.Repel);
+        }
+
+        //不在 MoveController 中
+        if (_repelForce.MoveController == null)
+        {
+            _repelForce.Velocity = velocity;
+            MoveController.AddForce(_repelForce);
+        }
+        else
+        {
+            _repelForce.Velocity += velocity;
+        }
+    }
+
+    /// <summary>
+    /// 获取击退力
+    /// </summary>
+    public Vector2 GetRepelForce()
+    {
+        if (_repelForce == null || _repelForce.MoveController == null)
+        {
+            return Vector2.Zero;
+        }
+
+        return _repelForce.Velocity;
+    }
+
+    /// <summary>
+    /// 根据笔刷 id 在该物体位置绘制液体, 该 id 为 LiquidMaterial 表的 id<br/>
+    /// 需要清除记录的点就请将 BrushPrevPosition 置为 null
+    /// </summary>
+    public void DrawLiquid(string brushId)
+    {
+        if (AffiliationArea != null)
+        {
+            DrawLiquid(LiquidBrushManager.GetBrush(brushId));
+        }
+    }
+    
+    /// <summary>
+    /// 根据笔刷数据在该物体位置绘制液体<br/>
+    /// 需要清除记录的点就请将 BrushPrevPosition 置为 null
+    /// </summary>
+    public void DrawLiquid(BrushImageData brush)
+    {
+        if (AffiliationArea != null)
+        {
+            var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
+            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(brush, BrushPrevPosition, pos, 0);
+            BrushPrevPosition = pos;
+        }
+    }
+    
+    /// <summary>
+    /// 根据笔刷 id 在该物体位置绘制液体, 该 id 为 LiquidMaterial 表的 id<br/>
+    /// 需要清除记录的点就请将 BrushPrevPosition 置为 null
+    /// </summary>
+    public void DrawLiquid(string brushId, Vector2I offset)
+    {
+        if (AffiliationArea != null)
+        {
+            DrawLiquid(LiquidBrushManager.GetBrush(brushId), offset);
+        }
+    }
+    
+    /// <summary>
+    /// 根据笔刷数据在该物体位置绘制液体<br/>
+    /// 需要清除记录的点就请将 BrushPrevPosition 置为 null
+    /// </summary>
+    public void DrawLiquid(BrushImageData brush, Vector2I offset)
+    {
+        if (AffiliationArea != null)
+        {
+            var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position) + offset;
+            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(brush, BrushPrevPosition, pos, 0);
+            BrushPrevPosition = pos;
+        }
     }
 }

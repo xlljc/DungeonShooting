@@ -44,7 +44,7 @@ public class NavigationPolygonData
     }
 
     /// <summary>
-    /// 读取所有的坐标点
+    /// 读取所有的坐标点, 单位: 像素
     /// </summary>
     public Vector2[] GetPoints()
     {

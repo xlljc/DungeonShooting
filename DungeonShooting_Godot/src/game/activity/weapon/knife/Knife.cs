@@ -84,7 +84,7 @@ public partial class Knife : Weapon
             //播放挥刀特效
             SpecialEffectManager.Play(
                 Master,
-                ResourcePath.resource_spriteFrames_effect_KnifeHit1_tres, "default",
+                ResourcePath.resource_sprite_weapon_weapon0004_KnifeHit1_png, "default",
                 Master.MountPoint.Position,
                 Master.MountPoint.Rotation + Mathf.DegToRad(Attribute.UpliftAngle + 60),
                 AnimatedSprite.Scale,
@@ -130,32 +130,47 @@ public partial class Knife : Weapon
             if (activityObject is Role role) //碰到角色
             {
                 var damage = Utils.Random.RandomConfigRange(Attribute.Bullet.HarmRange);
-                damage = Master.RoleState.CallCalcDamageEvent(damage);
-                //击退
-                if (role is not Player) //目标不是玩家才会触发击退
+                //计算子弹造成的伤害
+                if (TriggerRole != null)
                 {
-                    var attr = Master.IsAi ? AiUseAttribute : PlayerUseAttribute;
-                    var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRnage);
-                    if (repel != 0)
+                    damage = TriggerRole.RoleState.CalcDamage(damage);
+                }
+                //击退
+                var attr = GetUseAttribute(TriggerRole);
+                var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRange);
+                //计算击退
+                if (TriggerRole != null)
+                {
+                    repel = TriggerRole.RoleState.CalcBulletRepel(repel);
+                }
+                if (repel != 0)
+                {
+                    Vector2 position;
+                    if (TriggerRole != null)
                     {
-                        var position = role.GlobalPosition - Master.MountPoint.GlobalPosition;
-                        var v2 = position.Normalized() * repel;
-                        role.MoveController.AddForce(v2);
+                        position = role.GlobalPosition - TriggerRole.MountPoint.GlobalPosition;
                     }
+                    else
+                    {
+                        position = role.GlobalPosition - GlobalPosition;
+                    }
+                    var v2 = position.Normalized() * repel;
+                    role.AddRepelForce(v2);
                 }
                 
                 //造成伤害
-                role.CallDeferred(nameof(Role.Hurt), damage, (role.GetCenterPosition() - GlobalPosition).Angle());
+                role.CallDeferred(nameof(Role.Hurt), TriggerRole, damage, (role.GetCenterPosition() - GlobalPosition).Angle());
             }
             else if (activityObject is Bullet bullet) //攻击子弹
             {
                 var attackLayer = bullet.AttackLayer;
-                if (Master.CollisionWithMask(attackLayer)) //是攻击玩家的子弹
+                if (TriggerRole != null && TriggerRole.CollisionWithMask(attackLayer)) //是攻击玩家的子弹
                 {
-                    bullet.PlayDisappearEffect();
-                    bullet.BasisVelocity = bullet.BasisVelocity.Rotated(Mathf.Pi);
+                    //反弹子弹
+                    bullet.OnPlayDisappearEffect();
+                    bullet.MoveController.ScaleAllVelocity(-1);
                     bullet.Rotation += Mathf.Pi;
-                    bullet.AttackLayer = Master.AttackLayer;
+                    bullet.AttackLayer = TriggerRole.AttackLayer;
                 }
             }
         }
