@@ -45,7 +45,7 @@ public class BrushImageData
     public BrushImageData(ExcelConfig.LiquidMaterial material)
     {
         Material = material;
-        var image = GetImageData(material.BurshTexture);
+        var image = GetImageData(material.BrushTexture);
         var list = new List<BrushPixelData>();
         var width = image.GetWidth();
         var height = image.GetHeight();

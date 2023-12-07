@@ -23,7 +23,7 @@ public static partial class ExcelConfig
         /// 笔刷贴图
         /// </summary>
         [JsonInclude]
-        public string BurshTexture;
+        public string BrushTexture;
 
         /// <summary>
         /// 补帧间距倍率(0-1)
@@ -52,7 +52,7 @@ public static partial class ExcelConfig
             var inst = new LiquidMaterial();
             inst.Id = Id;
             inst.Remark = Remark;
-            inst.BurshTexture = BurshTexture;
+            inst.BrushTexture = BrushTexture;
             inst.Ffm = Ffm;
             inst.Duration = Duration;
             inst.WriteOffSpeed = WriteOffSpeed;
