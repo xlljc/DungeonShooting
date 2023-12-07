@@ -1877,7 +1877,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     {
         //调整阴影
         //ShadowOffset = new Vector2(0, Master.GlobalPosition.Y - GlobalPosition.Y);
-        ShadowOffset = new Vector2(0, -Master.MountPoint.Position.Y + 2);
+        //ShadowOffset = new Vector2(0, -Master.MountPoint.Position.Y + 2);
+        ShadowOffset = new Vector2(0, -Master.MountPoint.Position.Y);
         //枪口默认抬起角度
         RotationDegrees = -Attribute.DefaultAngle;
         ShowShadowSprite();
