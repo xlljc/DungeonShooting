@@ -306,7 +306,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     private void InitWeapon(ExcelConfig.WeaponBase attribute)
     {
         _playerWeaponAttribute = attribute;
-        _weaponAttribute = attribute;
+        SetCurrentWeaponAttribute(attribute);
         if (attribute.AiUseAttribute != null)
         {
             _aiWeaponAttribute = attribute.AiUseAttribute;
@@ -733,13 +733,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         {
             TriggerRole = triggerRole;
             TriggerRoleAttackLayer = triggerRole.AttackLayer;
-            _weaponAttribute = triggerRole.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
+            SetCurrentWeaponAttribute(triggerRole.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute);
         }
         else if (Master != null)
         {
             TriggerRole = Master;
             TriggerRoleAttackLayer = Master.AttackLayer;
-            _weaponAttribute = Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
+            SetCurrentWeaponAttribute(Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute);
         }
 
         //是否第一帧按下
@@ -1908,7 +1908,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         }
         GetParent().RemoveChild(this);
         _triggerRoleFlag = false;
-        _weaponAttribute = _playerWeaponAttribute;
+        SetCurrentWeaponAttribute(_playerWeaponAttribute);
         CollisionLayer = _tempLayer;
 
         //精灵位置, 旋转中心点
@@ -1934,7 +1934,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     {
         Pickup();
         _triggerRoleFlag = true;
-        _weaponAttribute = Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute;
+        SetCurrentWeaponAttribute(Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute);
         //停止动画
         AnimationPlayer.Stop();
         //清除泛白效果
@@ -2014,7 +2014,18 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     {
         return _gripPoint + _gripOffset;
     }
-    
+
+    //设置当前使用的武器属性
+    private void SetCurrentWeaponAttribute(ExcelConfig.WeaponBase attr)
+    {
+        if (attr != _weaponAttribute)
+        {
+            _weaponAttribute = attr;
+            //重置开火速率
+            CurrentFiringSpeed = _weaponAttribute.StartFiringSpeed;
+        }
+    }
+
     //-------------------------------- Ai相关 -----------------------------
     
     /// <summary>
