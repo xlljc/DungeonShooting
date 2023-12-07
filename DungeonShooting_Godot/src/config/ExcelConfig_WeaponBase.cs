@@ -14,15 +14,15 @@ public static partial class ExcelConfig
         public string Id;
 
         /// <summary>
-        /// 属性绑定武器的Id，这个id时ActivityBase表Id,如果是Ai使用的数据, 则填空字符串串
-        /// </summary>
-        public ActivityBase Activity;
-
-        /// <summary>
         /// 备注
         /// </summary>
         [JsonInclude]
         public string Remark;
+
+        /// <summary>
+        /// 属性绑定武器的Id，这个id时ActivityBase表Id,如果是Ai使用的数据, 则填空字符串串
+        /// </summary>
+        public ActivityBase Activity;
 
         /// <summary>
         /// 重量
@@ -171,6 +171,12 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public float FiringSpeedBackSpeed;
+
+        /// <summary>
+        /// 松开扳机后射速消散开始时间, 单位: 秒
+        /// </summary>
+        [JsonInclude]
+        public float FiringSpeedBackTime;
 
         /// <summary>
         /// 单次开火发射子弹数量区间 <br/>
@@ -381,8 +387,8 @@ public static partial class ExcelConfig
         {
             var inst = new WeaponBase();
             inst.Id = Id;
-            inst.Activity = Activity;
             inst.Remark = Remark;
+            inst.Activity = Activity;
             inst.Weight = Weight;
             inst.WeightType = WeightType;
             inst.IsMelee = IsMelee;
@@ -407,6 +413,7 @@ public static partial class ExcelConfig
             inst.FinalFiringSpeed = FinalFiringSpeed;
             inst.FiringSpeedAddSpeed = FiringSpeedAddSpeed;
             inst.FiringSpeedBackSpeed = FiringSpeedBackSpeed;
+            inst.FiringSpeedBackTime = FiringSpeedBackTime;
             inst.FireBulletCountRange = FireBulletCountRange;
             inst.DelayedTime = DelayedTime;
             inst.StartScatteringRange = StartScatteringRange;

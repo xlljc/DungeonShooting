@@ -1,8 +1,8 @@
 [
   {
     "Id": "0001",
-    "__Activity": "weapon0001",
     "Remark": "\u6B65\u67AA",
+    "__Activity": "weapon0001",
     "Weight": 40,
     "WeightType": 2,
     "IsMelee": false,
@@ -29,6 +29,7 @@
     "FinalFiringSpeed": 480,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -78,8 +79,8 @@
   },
   {
     "Id": "0002",
-    "__Activity": "",
     "Remark": "\u6B65\u67AA",
+    "__Activity": "",
     "Weight": 40,
     "WeightType": 2,
     "IsMelee": false,
@@ -106,6 +107,7 @@
     "FinalFiringSpeed": 480,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -155,8 +157,8 @@
   },
   {
     "Id": "0003",
-    "__Activity": "weapon0002",
     "Remark": "\u9730\u5F39\u67AA",
+    "__Activity": "weapon0002",
     "Weight": 40,
     "WeightType": 2,
     "IsMelee": false,
@@ -183,6 +185,7 @@
     "FinalFiringSpeed": 120,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       5
     ],
@@ -232,8 +235,8 @@
   },
   {
     "Id": "0004",
-    "__Activity": "",
     "Remark": "\u9730\u5F39\u67AA",
+    "__Activity": "",
     "Weight": 40,
     "WeightType": 2,
     "IsMelee": false,
@@ -260,6 +263,7 @@
     "FinalFiringSpeed": 120,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       5
     ],
@@ -309,8 +313,8 @@
   },
   {
     "Id": "0005",
-    "__Activity": "weapon0003",
     "Remark": "\u624B\u67AA",
+    "__Activity": "weapon0003",
     "Weight": 20,
     "WeightType": 1,
     "IsMelee": false,
@@ -337,6 +341,7 @@
     "FinalFiringSpeed": 460,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -386,8 +391,8 @@
   },
   {
     "Id": "0006",
-    "__Activity": "",
     "Remark": "\u624B\u67AA",
+    "__Activity": "",
     "Weight": 20,
     "WeightType": 1,
     "IsMelee": false,
@@ -414,6 +419,7 @@
     "FinalFiringSpeed": 300,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -463,8 +469,8 @@
   },
   {
     "Id": "0007",
-    "__Activity": "weapon0004",
     "Remark": "\u5200",
+    "__Activity": "weapon0004",
     "Weight": 40,
     "WeightType": 2,
     "IsMelee": true,
@@ -491,6 +497,7 @@
     "FinalFiringSpeed": 180,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -539,8 +546,8 @@
   },
   {
     "Id": "0008",
-    "__Activity": "",
     "Remark": "\u5200",
+    "__Activity": "",
     "Weight": 40,
     "WeightType": 2,
     "IsMelee": true,
@@ -567,6 +574,7 @@
     "FinalFiringSpeed": 180,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -615,8 +623,8 @@
   },
   {
     "Id": "0009",
-    "__Activity": "weapon0005",
     "Remark": "\u72D9\u51FB\u67AA",
+    "__Activity": "weapon0005",
     "Weight": 50,
     "WeightType": 2,
     "IsMelee": false,
@@ -643,6 +651,7 @@
     "FinalFiringSpeed": 150,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -692,8 +701,8 @@
   },
   {
     "Id": "0010",
-    "__Activity": "",
     "Remark": "\u72D9\u51FB\u67AA",
+    "__Activity": "",
     "Weight": 50,
     "WeightType": 2,
     "IsMelee": false,
@@ -720,6 +729,7 @@
     "FinalFiringSpeed": 150,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -769,8 +779,8 @@
   },
   {
     "Id": "0011",
-    "__Activity": "weapon0006",
     "Remark": "\u51B2\u950B\u67AA",
+    "__Activity": "weapon0006",
     "Weight": 30,
     "WeightType": 2,
     "IsMelee": false,
@@ -797,6 +807,7 @@
     "FinalFiringSpeed": 700,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -846,8 +857,8 @@
   },
   {
     "Id": "0012",
-    "__Activity": "",
     "Remark": "\u51B2\u950B\u67AA",
+    "__Activity": "",
     "Weight": 30,
     "WeightType": 2,
     "IsMelee": false,
@@ -874,6 +885,7 @@
     "FinalFiringSpeed": 700,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -923,8 +935,8 @@
   },
   {
     "Id": "0013",
-    "__Activity": "weapon0007",
     "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
+    "__Activity": "weapon0007",
     "Weight": 40,
     "WeightType": 2,
     "IsMelee": false,
@@ -951,6 +963,7 @@
     "FinalFiringSpeed": 700,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0.5,
     "FireBulletCountRange": [
       1
     ],
@@ -1000,8 +1013,8 @@
   },
   {
     "Id": "0014",
-    "__Activity": "",
     "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
+    "__Activity": "",
     "Weight": 40,
     "WeightType": 2,
     "IsMelee": false,
@@ -1028,6 +1041,7 @@
     "FinalFiringSpeed": 200,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -1077,8 +1091,8 @@
   },
   {
     "Id": "0015",
-    "__Activity": "weapon0008",
     "Remark": "\u6FC0\u5149\u624B\u67AA",
+    "__Activity": "weapon0008",
     "Weight": 40,
     "WeightType": 1,
     "IsMelee": false,
@@ -1105,14 +1119,15 @@
     "FinalFiringSpeed": 300,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
     "DelayedTime": 0,
     "StartScatteringRange": 0,
-    "FinalScatteringRange": 20,
-    "ScatteringRangeAddValue": 4,
-    "ScatteringRangeBackSpeed": 40,
+    "FinalScatteringRange": 8,
+    "ScatteringRangeAddValue": 3,
+    "ScatteringRangeBackSpeed": 20,
     "ScatteringRangeBackDelayTime": 0.5,
     "CameraShake": 2,
     "BacklashRange": [
@@ -1154,8 +1169,8 @@
   },
   {
     "Id": "0016",
-    "__Activity": "",
     "Remark": "\u6FC0\u5149\u624B\u67AA",
+    "__Activity": "",
     "Weight": 40,
     "WeightType": 1,
     "IsMelee": false,
@@ -1182,14 +1197,15 @@
     "FinalFiringSpeed": 300,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
     "DelayedTime": 0,
     "StartScatteringRange": 0,
-    "FinalScatteringRange": 20,
-    "ScatteringRangeAddValue": 4,
-    "ScatteringRangeBackSpeed": 40,
+    "FinalScatteringRange": 8,
+    "ScatteringRangeAddValue": 3,
+    "ScatteringRangeBackSpeed": 20,
     "ScatteringRangeBackDelayTime": 0.5,
     "CameraShake": 2,
     "BacklashRange": [
@@ -1231,8 +1247,8 @@
   },
   {
     "Id": "0017",
-    "__Activity": "weapon0009",
     "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668",
+    "__Activity": "weapon0009",
     "Weight": 40,
     "WeightType": 1,
     "IsMelee": false,
@@ -1259,6 +1275,7 @@
     "FinalFiringSpeed": 60,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],
@@ -1308,8 +1325,8 @@
   },
   {
     "Id": "0018",
-    "__Activity": "",
     "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668",
+    "__Activity": "",
     "Weight": 40,
     "WeightType": 1,
     "IsMelee": false,
@@ -1336,6 +1353,7 @@
     "FinalFiringSpeed": 60,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
     "FireBulletCountRange": [
       1
     ],

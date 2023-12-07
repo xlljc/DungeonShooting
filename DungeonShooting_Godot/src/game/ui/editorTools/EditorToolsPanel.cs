@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using Godot;
+using Environment = System.Environment;
 
 #if TOOLS
 using Generator;
@@ -58,6 +59,8 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer5.L_Button.Instance.Pressed += GenerateUiManagerMethods;
         //导出excel表
         container.L_HBoxContainer7.L_Button.Instance.Pressed += ExportExcel;
+        //打开excel表文件夹
+        container.L_HBoxContainer8.L_Button.Instance.Pressed += OpenExportExcelFolder;
     }
 
     public override void OnHideUi()
@@ -76,6 +79,7 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer3.L_Button.Instance.Pressed -= OnCreateUI;
         container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
         container.L_HBoxContainer7.L_Button.Instance.Pressed -= ExportExcel;
+        container.L_HBoxContainer8.L_Button.Instance.Pressed -= OpenExportExcelFolder;
     }
 
     /// <summary>
@@ -292,6 +296,15 @@ public partial class EditorToolsPanel : EditorTools
     {
         ExcelGenerator.ExportExcel();
         ShowTips("提示", "已启动导表程序, 注意查看控制台信息!");
+    }
+
+    /// <summary>
+    /// 使用资源管理器打开excel表文件夹
+    /// </summary>
+    private void OpenExportExcelFolder()
+    {
+        var path = Environment.CurrentDirectory + "\\excel\\excelFile";
+        System.Diagnostics.Process.Start("explorer.exe", path);
     }
     
     /// <summary>

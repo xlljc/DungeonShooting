@@ -31,6 +31,7 @@ public partial class BoomBullet : Bullet
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
             PlayBoom();
+            DoReclaim();
         }
         else
         {

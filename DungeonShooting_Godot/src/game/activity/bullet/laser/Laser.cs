@@ -127,7 +127,7 @@ public partial class Laser : Area2D, IBullet
             //执行反弹
             if (doRebound)
             {
-                OnRebound(reboundPosition.Value, reboundNormal.Value);
+                CallDeferred(nameof(OnRebound), reboundPosition.Value, reboundNormal.Value);
             }
             Collision.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
         }));

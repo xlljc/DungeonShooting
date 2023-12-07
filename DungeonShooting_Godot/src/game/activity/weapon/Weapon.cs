@@ -149,6 +149,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// </summary>
     public long TriggerRoleAttackLayer { get; private set; }
     
+    /// <summary>
+    /// 武器当前射速
+    /// </summary>
+    public float CurrentFiringSpeed { get; private set; }
+    
     //--------------------------------------------------------------------------------------------
 
     //用于记录是否有角色操作过这把武器
@@ -467,6 +472,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
             _attackTimer = _attackTimer > 0 ? _attackTimer - delta : 0;
             //武器的当前散射半径
             ScatteringRangeBackHandler(delta);
+            //武器当前射速
+            FiringSpeedBackHandler(delta);
             //松开扳机
             if (_triggerFlag || _downTimer > 0)
             {
@@ -662,10 +669,19 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                 }
             }
 
-            //散射值销退
+            //散射值消退
             if (_noAttackTime >= Attribute.ScatteringRangeBackDelayTime)
             {
                 ScatteringRangeBackHandler(delta);
+            }
+
+            if (_triggerFlag) //射速增加
+            {
+                FiringSpeedAddHandler(delta);
+            }
+            else if (_noAttackTime >= Attribute.FiringSpeedBackTime) //射速消退
+            {
+                FiringSpeedBackHandler(delta);
             }
 
             _triggerTimer = _triggerTimer > 0 ? _triggerTimer - delta : 0;
@@ -1009,7 +1025,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         }
 
         //开火间隙, 这里的60指的是60秒
-        _fireInterval = 60 / Attribute.StartFiringSpeed;
+        _fireInterval = 60 / CurrentFiringSpeed;
         //攻击冷却
         _attackTimer += _fireInterval;
 
@@ -1545,6 +1561,34 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         {
             CurrScatteringRange = Mathf.Min(CurrScatteringRange - Attribute.ScatteringRangeAddValue,
                 finalScatteringRange);
+        }
+    }
+
+    //射速增加处理
+    private void FiringSpeedAddHandler(float delta)
+    {
+        if (Attribute.ContinuousShoot)
+        {
+            CurrentFiringSpeed = Mathf.MoveToward(CurrentFiringSpeed, Attribute.FinalFiringSpeed,
+                Attribute.FiringSpeedAddSpeed * delta);
+        }
+        else
+        {
+            CurrentFiringSpeed = Attribute.StartFiringSpeed;
+        }
+    }
+    
+    //射速衰减处理
+    private void FiringSpeedBackHandler(float delta)
+    {
+        if (Attribute.ContinuousShoot)
+        {
+            CurrentFiringSpeed = Mathf.MoveToward(CurrentFiringSpeed, Attribute.StartFiringSpeed, 
+                Attribute.FiringSpeedBackSpeed * delta);
+        }
+        else
+        {
+            CurrentFiringSpeed = Attribute.StartFiringSpeed;
         }
     }
 

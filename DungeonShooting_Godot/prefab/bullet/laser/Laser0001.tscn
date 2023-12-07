@@ -6,10 +6,11 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l4vuk"]
 resource_local_to_scene = true
 
-[node name="Laser0001" type="Area2D"]
+[node name="Laser0001" type="Area2D" node_paths=PackedStringArray("Particles2D")]
 collision_layer = 2
 monitorable = false
 script = ExtResource("1_3w0rp")
+Particles2D = []
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_l4vuk")
