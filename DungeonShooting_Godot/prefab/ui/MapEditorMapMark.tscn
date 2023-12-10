@@ -1,13 +1,26 @@
-[gd_scene load_steps=9 format=3 uid="uid://peo0n8bl15y5"]
+[gd_scene load_steps=11 format=3 uid="uid://peo0n8bl15y5"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorMapMark/MapEditorMapMarkPanel.cs" id="1_dudey"]
 [ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="2_osya0"]
 [ext_resource type="Texture2D" uid="uid://dggb6p4sdmfry" path="res://resource/sprite/ui/commonIcon/Edit.png" id="3_wwaki"]
 [ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="4_urq7y"]
 [ext_resource type="Texture2D" uid="uid://d4gduco55dqpk" path="res://resource/sprite/ui/commonIcon/Down.png" id="5_x5dpw"]
-[ext_resource type="Texture2D" uid="uid://cgtmjuiks7mot" path="res://resource/sprite/ui/commonIcon/WaveCell.png" id="6_eod5i"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="6_jpt3y"]
-[ext_resource type="Texture2D" uid="uid://bylf0kxccwgdw" path="res://resource/sprite/ui/commonIcon/MarkCell.png" id="8_xyhe6"]
+[ext_resource type="Texture2D" uid="uid://dqvg18aacx6db" path="res://resource/sprite/ui/commonIcon/Visible.png" id="6_qiemx"]
+[ext_resource type="Texture2D" uid="uid://btetxb0hqoifk" path="res://resource/sprite/ui/commonIcon/MarkCell_placeholder.png" id="8_p8o70"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="9_vr0bo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xxv8l"]
+resource_local_to_scene = true
+shader = ExtResource("9_vr0bo")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [node name="MapEditorMapMark" type="Control"]
 layout_mode = 3
@@ -83,6 +96,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="WaveContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem"]
+custom_minimum_size = Vector2(0, 68)
 layout_mode = 2
 
 [node name="TextureButton" type="TextureButton" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/WaveContainer"]
@@ -95,7 +109,6 @@ stretch_mode = 3
 layout_mode = 2
 size_flags_horizontal = 3
 text = "第1波"
-icon = ExtResource("6_eod5i")
 alignment = 0
 
 [node name="Select" type="NinePatchRect" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/WaveContainer/WaveButton"]
@@ -111,6 +124,11 @@ patch_margin_left = 3
 patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
+
+[node name="WaveVisibleButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/WaveContainer"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+icon = ExtResource("6_qiemx")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem"]
 layout_mode = 2
@@ -132,9 +150,22 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1001"
-icon = ExtResource("8_xyhe6")
+icon = ExtResource("8_p8o70")
 alignment = 0
 text_overrun_behavior = 3
+
+[node name="MarkIcon" type="TextureRect" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/MarkContainer/MarkItem/MarkButton"]
+material = SubResource("ShaderMaterial_xxv8l")
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 69.0
+offset_bottom = -3.0
+grow_vertical = 2
+expand_mode = 2
+stretch_mode = 5
 
 [node name="Select" type="NinePatchRect" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/MarkContainer/MarkItem/MarkButton"]
 visible = false

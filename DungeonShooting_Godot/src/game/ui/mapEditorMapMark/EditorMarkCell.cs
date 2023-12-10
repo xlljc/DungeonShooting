@@ -1,5 +1,6 @@
 ﻿using System;
 using Config;
+using Godot;
 using UI.MapEditor;
 
 namespace UI.MapEditorMapMark;
@@ -17,6 +18,7 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
 
     public override void OnSetData(MapEditorMapMarkPanel.MarkCellData data)
     {
+        var textureRect = CellNode.L_MarkButton.L_MarkIcon.Instance;
         var text = "";
         //物体名称
         if (data.MarkInfo.MarkList != null && data.MarkInfo.MarkList.Count > 0)
@@ -33,16 +35,21 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
                 str += ExcelConfig.ActivityBase_Map[markInfoItem.Id].Name;
             }
             text += str;
+            //显示图标
+            var markInfo = data.MarkInfo.MarkList[0];
+            textureRect.Texture = ResourceManager.GetActivityIcon(markInfo.Id);
         }
         else
         {
             if (data.MarkInfo.SpecialMarkType == SpecialMarkType.BirthPoint)
             {
                 text = "出生标记";
+                textureRect.Texture = ResourceManager.GetActivityIcon(null);
             }
             else
             {
                 text += "空";
+                textureRect.Texture = null;
             }
         }
 
@@ -56,6 +63,7 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
             text += "\n" + data.MarkInfo.DelayTime + "秒";
         }
         
+        //显示文本
         CellNode.L_MarkButton.Instance.Text = text;
     }
 

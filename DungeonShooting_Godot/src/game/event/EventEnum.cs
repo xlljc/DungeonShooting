@@ -143,4 +143,8 @@ public enum EventEnum
     /// 删除标记, 参数<see cref="MarkInfo"/>
     /// </summary>
     OnDeleteMark,
+    /// <summary>
+    /// 设置标记显示状态, 参数<see cref="MarkInfoVisibleData"/>
+    /// </summary>
+    OnSetMarkVisible,
 }

@@ -12,7 +12,7 @@ public abstract partial class MapEditorMapMark : UiBase
     {
         get
         {
-            if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer((MapEditorMapMarkPanel)this, GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+            if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer((MapEditorMapMarkPanel)this, GetNode<Godot.VBoxContainer>("VBoxContainer"));
             return _L_VBoxContainer;
         }
     }
@@ -25,6 +25,7 @@ public abstract partial class MapEditorMapMark : UiBase
 
     public sealed override void OnInitNestedUi()
     {
+
     }
 
     /// <summary>
@@ -84,7 +85,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_PreinstallOption == null) _L_PreinstallOption = new PreinstallOption(UiPanel, Instance.GetNodeOrNull<Godot.OptionButton>("PreinstallOption"));
+                if (_L_PreinstallOption == null) _L_PreinstallOption = new PreinstallOption(UiPanel, Instance.GetNode<Godot.OptionButton>("PreinstallOption"));
                 return _L_PreinstallOption;
             }
         }
@@ -97,7 +98,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_AddPreinstall == null) _L_AddPreinstall = new AddPreinstall(UiPanel, Instance.GetNodeOrNull<Godot.Button>("AddPreinstall"));
+                if (_L_AddPreinstall == null) _L_AddPreinstall = new AddPreinstall(UiPanel, Instance.GetNode<Godot.Button>("AddPreinstall"));
                 return _L_AddPreinstall;
             }
         }
@@ -110,7 +111,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_EditPreinstall == null) _L_EditPreinstall = new EditPreinstall(UiPanel, Instance.GetNodeOrNull<Godot.Button>("EditPreinstall"));
+                if (_L_EditPreinstall == null) _L_EditPreinstall = new EditPreinstall(UiPanel, Instance.GetNode<Godot.Button>("EditPreinstall"));
                 return _L_EditPreinstall;
             }
         }
@@ -123,7 +124,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_DeletePreinstall == null) _L_DeletePreinstall = new DeletePreinstall(UiPanel, Instance.GetNodeOrNull<Godot.Button>("DeletePreinstall"));
+                if (_L_DeletePreinstall == null) _L_DeletePreinstall = new DeletePreinstall(UiPanel, Instance.GetNode<Godot.Button>("DeletePreinstall"));
                 return _L_DeletePreinstall;
             }
         }
@@ -172,7 +173,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_EditButton == null) _L_EditButton = new EditButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("EditButton"));
+                if (_L_EditButton == null) _L_EditButton = new EditButton(UiPanel, Instance.GetNode<Godot.Button>("EditButton"));
                 return _L_EditButton;
             }
         }
@@ -185,7 +186,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_DeleteButton == null) _L_DeleteButton = new DeleteButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("DeleteButton"));
+                if (_L_DeleteButton == null) _L_DeleteButton = new DeleteButton(UiPanel, Instance.GetNode<Godot.Button>("DeleteButton"));
                 return _L_DeleteButton;
             }
         }
@@ -234,7 +235,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_Select == null) _L_Select = new Select(UiPanel, Instance.GetNodeOrNull<Godot.NinePatchRect>("Select"));
+                if (_L_Select == null) _L_Select = new Select(UiPanel, Instance.GetNode<Godot.NinePatchRect>("Select"));
                 return _L_Select;
             }
         }
@@ -242,6 +243,15 @@ public abstract partial class MapEditorMapMark : UiBase
 
         public WaveButton(MapEditorMapMarkPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
         public override WaveButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.WaveItem.WaveContainer.WaveVisibleButton
+    /// </summary>
+    public class WaveVisibleButton : UiNode<MapEditorMapMarkPanel, Godot.Button, WaveVisibleButton>
+    {
+        public WaveVisibleButton(MapEditorMapMarkPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override WaveVisibleButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
     }
 
     /// <summary>
@@ -256,7 +266,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_TextureButton == null) _L_TextureButton = new TextureButton(UiPanel, Instance.GetNodeOrNull<Godot.TextureButton>("TextureButton"));
+                if (_L_TextureButton == null) _L_TextureButton = new TextureButton(UiPanel, Instance.GetNode<Godot.TextureButton>("TextureButton"));
                 return _L_TextureButton;
             }
         }
@@ -269,11 +279,24 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_WaveButton == null) _L_WaveButton = new WaveButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("WaveButton"));
+                if (_L_WaveButton == null) _L_WaveButton = new WaveButton(UiPanel, Instance.GetNode<Godot.Button>("WaveButton"));
                 return _L_WaveButton;
             }
         }
         private WaveButton _L_WaveButton;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.WaveItem.WaveVisibleButton
+        /// </summary>
+        public WaveVisibleButton L_WaveVisibleButton
+        {
+            get
+            {
+                if (_L_WaveVisibleButton == null) _L_WaveVisibleButton = new WaveVisibleButton(UiPanel, Instance.GetNode<Godot.Button>("WaveVisibleButton"));
+                return _L_WaveVisibleButton;
+            }
+        }
+        private WaveVisibleButton _L_WaveVisibleButton;
 
         public WaveContainer(MapEditorMapMarkPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
         public override WaveContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
@@ -300,7 +323,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_AddMarkButton == null) _L_AddMarkButton = new AddMarkButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("AddMarkButton"));
+                if (_L_AddMarkButton == null) _L_AddMarkButton = new AddMarkButton(UiPanel, Instance.GetNode<Godot.Button>("AddMarkButton"));
                 return _L_AddMarkButton;
             }
         }
@@ -308,6 +331,15 @@ public abstract partial class MapEditorMapMark : UiBase
 
         public MarginContainer(MapEditorMapMarkPanel uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
         public override MarginContainer Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.WaveItem.MarkContainer.MarkItem.MarkButton.MarkIcon
+    /// </summary>
+    public class MarkIcon : UiNode<MapEditorMapMarkPanel, Godot.TextureRect, MarkIcon>
+    {
+        public MarkIcon(MapEditorMapMarkPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override MarkIcon Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
@@ -325,13 +357,26 @@ public abstract partial class MapEditorMapMark : UiBase
     public class MarkButton : UiNode<MapEditorMapMarkPanel, Godot.Button, MarkButton>
     {
         /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.WaveItem.MarkContainer.MarkItem.MarkIcon
+        /// </summary>
+        public MarkIcon L_MarkIcon
+        {
+            get
+            {
+                if (_L_MarkIcon == null) _L_MarkIcon = new MarkIcon(UiPanel, Instance.GetNode<Godot.TextureRect>("MarkIcon"));
+                return _L_MarkIcon;
+            }
+        }
+        private MarkIcon _L_MarkIcon;
+
+        /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.WaveItem.MarkContainer.MarkItem.Select
         /// </summary>
         public Select_1 L_Select
         {
             get
             {
-                if (_L_Select == null) _L_Select = new Select_1(UiPanel, Instance.GetNodeOrNull<Godot.NinePatchRect>("Select"));
+                if (_L_Select == null) _L_Select = new Select_1(UiPanel, Instance.GetNode<Godot.NinePatchRect>("Select"));
                 return _L_Select;
             }
         }
@@ -353,7 +398,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_MarkButton == null) _L_MarkButton = new MarkButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("MarkButton"));
+                if (_L_MarkButton == null) _L_MarkButton = new MarkButton(UiPanel, Instance.GetNode<Godot.Button>("MarkButton"));
                 return _L_MarkButton;
             }
         }
@@ -375,7 +420,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_MarkItem == null) _L_MarkItem = new MarkItem(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("MarkItem"));
+                if (_L_MarkItem == null) _L_MarkItem = new MarkItem(UiPanel, Instance.GetNode<Godot.HBoxContainer>("MarkItem"));
                 return _L_MarkItem;
             }
         }
@@ -397,7 +442,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_WaveContainer == null) _L_WaveContainer = new WaveContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("WaveContainer"));
+                if (_L_WaveContainer == null) _L_WaveContainer = new WaveContainer(UiPanel, Instance.GetNode<Godot.HBoxContainer>("WaveContainer"));
                 return _L_WaveContainer;
             }
         }
@@ -410,7 +455,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
+                if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer(UiPanel, Instance.GetNode<Godot.MarginContainer>("MarginContainer"));
                 return _L_MarginContainer;
             }
         }
@@ -423,7 +468,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_MarkContainer == null) _L_MarkContainer = new MarkContainer(UiPanel, Instance.GetNodeOrNull<Godot.MarginContainer>("MarkContainer"));
+                if (_L_MarkContainer == null) _L_MarkContainer = new MarkContainer(UiPanel, Instance.GetNode<Godot.MarginContainer>("MarkContainer"));
                 return _L_MarkContainer;
             }
         }
@@ -445,7 +490,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_AddWaveButton == null) _L_AddWaveButton = new AddWaveButton(UiPanel, Instance.GetNodeOrNull<Godot.Button>("AddWaveButton"));
+                if (_L_AddWaveButton == null) _L_AddWaveButton = new AddWaveButton(UiPanel, Instance.GetNode<Godot.Button>("AddWaveButton"));
                 return _L_AddWaveButton;
             }
         }
@@ -458,7 +503,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_WaveItem == null) _L_WaveItem = new WaveItem(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("WaveItem"));
+                if (_L_WaveItem == null) _L_WaveItem = new WaveItem(UiPanel, Instance.GetNode<Godot.VBoxContainer>("WaveItem"));
                 return _L_WaveItem;
             }
         }
@@ -480,7 +525,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_1(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer_1(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
@@ -502,7 +547,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_MarkLabel == null) _L_MarkLabel = new MarkLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("MarkLabel"));
+                if (_L_MarkLabel == null) _L_MarkLabel = new MarkLabel(UiPanel, Instance.GetNode<Godot.Label>("MarkLabel"));
                 return _L_MarkLabel;
             }
         }
@@ -515,7 +560,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
@@ -528,7 +573,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_MarkLabel2 == null) _L_MarkLabel2 = new MarkLabel2(UiPanel, Instance.GetNodeOrNull<Godot.Label>("MarkLabel2"));
+                if (_L_MarkLabel2 == null) _L_MarkLabel2 = new MarkLabel2(UiPanel, Instance.GetNode<Godot.Label>("MarkLabel2"));
                 return _L_MarkLabel2;
             }
         }
@@ -541,7 +586,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_DynamicTool == null) _L_DynamicTool = new DynamicTool(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("DynamicTool"));
+                if (_L_DynamicTool == null) _L_DynamicTool = new DynamicTool(UiPanel, Instance.GetNode<Godot.HBoxContainer>("DynamicTool"));
                 return _L_DynamicTool;
             }
         }
@@ -554,7 +599,7 @@ public abstract partial class MapEditorMapMark : UiBase
         {
             get
             {
-                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer(UiPanel, Instance.GetNodeOrNull<Godot.ScrollContainer>("ScrollContainer"));
+                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer(UiPanel, Instance.GetNode<Godot.ScrollContainer>("ScrollContainer"));
                 return _L_ScrollContainer;
             }
         }
@@ -631,6 +676,11 @@ public abstract partial class MapEditorMapMark : UiBase
     public WaveButton S_WaveButton => L_VBoxContainer.L_ScrollContainer.L_VBoxContainer.L_WaveItem.L_WaveContainer.L_WaveButton;
 
     /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.WaveItem.WaveContainer.WaveVisibleButton
+    /// </summary>
+    public WaveVisibleButton S_WaveVisibleButton => L_VBoxContainer.L_ScrollContainer.L_VBoxContainer.L_WaveItem.L_WaveContainer.L_WaveVisibleButton;
+
+    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.WaveItem.WaveContainer
     /// </summary>
     public WaveContainer S_WaveContainer => L_VBoxContainer.L_ScrollContainer.L_VBoxContainer.L_WaveItem.L_WaveContainer;
@@ -644,6 +694,11 @@ public abstract partial class MapEditorMapMark : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.WaveItem.MarginContainer
     /// </summary>
     public MarginContainer S_MarginContainer => L_VBoxContainer.L_ScrollContainer.L_VBoxContainer.L_WaveItem.L_MarginContainer;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.WaveItem.MarkContainer.MarkItem.MarkButton.MarkIcon
+    /// </summary>
+    public MarkIcon S_MarkIcon => L_VBoxContainer.L_ScrollContainer.L_VBoxContainer.L_WaveItem.L_MarkContainer.L_MarkItem.L_MarkButton.L_MarkIcon;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.WaveItem.MarkContainer.MarkItem.MarkButton

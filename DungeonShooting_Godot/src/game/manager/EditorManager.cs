@@ -84,6 +84,10 @@ public static class EditorManager
         }
     }
 
+    /// <summary>
+    /// 选中预设
+    /// </summary>
+    /// <param name="index">预设索引</param>
     public static void SetSelectPreinstallIndex(int index)
     {
         if (SelectRoom == null)
@@ -108,7 +112,11 @@ public static class EditorManager
             EventManager.EmitEvent(EventEnum.OnSelectPreinstall, SelectPreinstall);
         }
     }
-
+    
+    /// <summary>
+    /// 选中波数
+    /// </summary>
+    /// <param name="index">波数索引</param>
     public static void SetSelectWaveIndex(int index)
     {
         if (SelectPreinstall == null)
@@ -140,6 +148,9 @@ public static class EditorManager
         }
     }
 
+    /// <summary>
+    /// 选中某个标记
+    /// </summary>
     public static void SetSelectMark(MarkInfo markInfo)
     {
         if (SelectMark != markInfo)

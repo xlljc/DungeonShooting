@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Config;
 using Godot;
 
 /// <summary>
@@ -168,6 +169,19 @@ public static class ResourceManager
     public static Texture2D LoadTexture2D(string path, bool useCache = true)
     {
         return Load<Texture2D>(path, useCache);
+    }
+
+    /// <summary>
+    /// 根据 ActivityBase 表 Id 获取物体图标
+    /// </summary>
+    public static Texture2D GetActivityIcon(string id)
+    {
+        if (id != null && ExcelConfig.ActivityBase_Map.TryGetValue(id, out var activityBase))
+        {
+            return LoadTexture2D(activityBase.Icon);
+        }
+
+        return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_UnknownActivity_png);
     }
     
     /// <summary>

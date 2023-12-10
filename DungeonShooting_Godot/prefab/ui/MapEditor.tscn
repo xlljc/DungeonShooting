@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_gkcw7"]
 [ext_resource type="Texture2D" uid="uid://cat35d7ueu7gu" path="res://resource/sprite/ui/commonIcon/Save.png" id="3_qq8k4"]
 [ext_resource type="Texture2D" uid="uid://7l7aqhsaexoh" path="res://resource/sprite/ui/commonIcon/Play.png" id="4_2imnr"]
-[ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/mapEditor/ErrorCell.png" id="4_465u2"]
+[ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/commonIcon/Block.png" id="4_465u2"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/tileView/EditorTileMap.cs" id="4_mhy1a"]
 [ext_resource type="Texture2D" uid="uid://bpbfjyj6258da" path="res://resource/sprite/ui/commonIcon/Setting.png" id="5_ubl8b"]
 [ext_resource type="PackedScene" uid="uid://b4u66mxndxbrg" path="res://prefab/ui/MapEditorTools.tscn" id="6_7pvgu"]
