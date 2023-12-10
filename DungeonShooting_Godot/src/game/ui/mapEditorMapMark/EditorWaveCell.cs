@@ -20,6 +20,8 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         MarkGrid.SetColumns(1);
         MarkGrid.SetHorizontalExpand(true);
         MarkGrid.SetCellOffset(new Vector2I(0, 5));
+
+        CellNode.Instance.CustomMinimumSize = Vector2.Zero;
     }
 
     public override void OnSetData(List<MarkInfo> data)
