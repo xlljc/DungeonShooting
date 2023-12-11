@@ -172,15 +172,33 @@ public static class ResourceManager
     }
 
     /// <summary>
-    /// 根据 ActivityBase 表 Id 获取物体图标
+    /// 根据标记数据获取标记图标
     /// </summary>
-    public static Texture2D GetActivityIcon(string id)
+    public static Texture2D GetMarkIcon(MarkInfo markInfo)
     {
-        if (id != null && ExcelConfig.ActivityBase_Map.TryGetValue(id, out var activityBase))
+        if (markInfo != null)
         {
-            return LoadTexture2D(activityBase.Icon);
+            if (markInfo.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
+            {
+                return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
+            }
+            else if (markInfo.MarkList != null) //普通标记
+            {
+                if (markInfo.MarkList.Count > 1) //多个物体
+                {
+                    return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_PackageMark_png);
+                }
+                else if (markInfo.MarkList.Count == 1) //单个物体
+                {
+                    var id = markInfo.MarkList[0].Id;
+                    if (id != null && ExcelConfig.ActivityBase_Map.TryGetValue(id, out var activityBase))
+                    {
+                        return LoadTexture2D(activityBase.Icon);
+                    }
+                }
+            }
         }
-
+        //未知物体
         return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_UnknownActivity_png);
     }
     

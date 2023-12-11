@@ -84,6 +84,11 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         MarkGrid.Click(MarkGrid.Count - 1);
         //执行排序操作
         MarkGrid.Sort();
+        //如果当前波数隐藏, 则隐藏标记
+        if (!MarkVisible)
+        {
+            EventManager.EmitEvent(EventEnum.OnSetMarkVisible, new MarkInfoVisibleData(markInfo, false));
+        }
         //派发数据修改事件
         EventManager.EmitEvent(EventEnum.OnEditorDirty);
     }
@@ -134,11 +139,13 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
         {
             CellNode.L_WaveContainer.L_WaveVisibleButton.Instance.Icon =
                 ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Visible_png);
+            CellNode.L_MarkContainer.Instance.Modulate = new Color(1, 1, 1);
         }
         else
         {
             CellNode.L_WaveContainer.L_WaveVisibleButton.Instance.Icon =
                 ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Hide_png);
+            CellNode.L_MarkContainer.Instance.Modulate = new Color(1, 1, 1, 0.3f);
         }
     }
 

@@ -255,8 +255,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
         {
             if (_currMarkToolsMap.TryGetValue(markInfo, out var markTemplate))
             {
-                //更新坐标
-                markTemplate.Instance.Position = markInfo.Position.AsVector2();
+                //刷新数据
+                markTemplate.Instance.RefreshData();
             }
         }
     }

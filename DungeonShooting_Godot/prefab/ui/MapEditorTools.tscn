@@ -20,7 +20,7 @@ shader_parameter/modulate = Color(1, 1, 1, 1)
 shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
-shader_parameter/outline_use_blend = true
+shader_parameter/outline_use_blend = false
 shader_parameter/grey = 0.0
 
 [node name="MapEditorTools" type="Control"]

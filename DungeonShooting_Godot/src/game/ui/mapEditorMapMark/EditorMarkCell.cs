@@ -35,21 +35,16 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
                 str += ExcelConfig.ActivityBase_Map[markInfoItem.Id].Name;
             }
             text += str;
-            //显示图标
-            var markInfo = data.MarkInfo.MarkList[0];
-            textureRect.Texture = ResourceManager.GetActivityIcon(markInfo.Id);
         }
         else
         {
             if (data.MarkInfo.SpecialMarkType == SpecialMarkType.BirthPoint)
             {
                 text = "出生标记";
-                textureRect.Texture = ResourceManager.GetActivityIcon(null);
             }
             else
             {
                 text += "空";
-                textureRect.Texture = null;
             }
         }
 
@@ -65,6 +60,8 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
         
         //显示文本
         CellNode.L_MarkButton.Instance.Text = text;
+        //显示图标
+        textureRect.Texture = ResourceManager.GetMarkIcon(data.MarkInfo);
     }
 
     public void OnClickHandler()
