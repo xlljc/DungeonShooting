@@ -52,7 +52,7 @@ public partial class DebuggerPanel : Debugger
             }
         }
 
-        S_Fps.Instance.Text = "FPS:" + Engine.GetFramesPerSecond();
+        S_Fps.Instance.Text = "FPS:" + Mathf.RoundToInt(Engine.GetFramesPerSecond());
     }
 
     private void OnMouseDown()

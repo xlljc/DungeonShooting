@@ -42,12 +42,12 @@ public partial class MainPanel : Main
     //点击开发者工具
     private void OnToolsClick()
     {
-        OpenNextUi(UiManager.UiName.MapEditorProject);
+        OpenNextUi(UiManager.UiNames.MapEditorProject);
     }
 
     //点击设置按钮
     private void OnSettingClick()
     {
-        OpenNextUi(UiManager.UiName.Setting);
+        OpenNextUi(UiManager.UiNames.Setting);
     }
 }

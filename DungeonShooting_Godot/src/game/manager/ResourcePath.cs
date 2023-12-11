@@ -77,6 +77,7 @@ public class ResourcePath
     public const string prefab_ui_MapEditorMapMark_tscn = "res://prefab/ui/MapEditorMapMark.tscn";
     public const string prefab_ui_MapEditorProject_tscn = "res://prefab/ui/MapEditorProject.tscn";
     public const string prefab_ui_MapEditorSelectObject_tscn = "res://prefab/ui/MapEditorSelectObject.tscn";
+    public const string prefab_ui_MapEditorTileSet_tscn = "res://prefab/ui/MapEditorTileSet.tscn";
     public const string prefab_ui_MapEditorTools_tscn = "res://prefab/ui/MapEditorTools.tscn";
     public const string prefab_ui_PauseMenu_tscn = "res://prefab/ui/PauseMenu.tscn";
     public const string prefab_ui_RoomMap_tscn = "res://prefab/ui/RoomMap.tscn";

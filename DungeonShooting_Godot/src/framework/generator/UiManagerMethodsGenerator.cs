@@ -30,14 +30,12 @@ public static class UiManagerMethodsGenerator
             var directoryInfo = new DirectoryInfo(GameConfig.UiPrefabDir);
             var fileInfos = directoryInfo.GetFiles();
 
-            var code = $"/**\n" +
-                       $" * 该类为自动生成的, 请不要手动编辑, 以免造成代码丢失\n" +
-                       $" */\n" +
+            var code = $"\n// 该类为自动生成的, 请不要手动编辑, 以免造成代码丢失\n" +
                        $"public static partial class UiManager\n" +
                        $"{{\n" +
                        $"\n";
 
-            var uiNameClass = $"    public static class UiName\n" +
+            var uiNameClass = $"    public static class UiNames\n" +
                               $"    {{\n";
             var methodClass = "";
 
@@ -53,7 +51,7 @@ public static class UiManagerMethodsGenerator
                                    $"    /// </summary>\n" +
                                    $"    public static UI.{uiName}.{uiName}Panel Create_{uiName}()\n" +
                                    $"    {{\n" +
-                                   $"        return CreateUi<UI.{uiName}.{uiName}Panel>(UiName.{uiName});\n" +
+                                   $"        return CreateUi<UI.{uiName}.{uiName}Panel>(UiNames.{uiName});\n" +
                                    $"    }}\n" +
                                    $"\n" +
                                    $"    /// <summary>\n" +
@@ -61,7 +59,7 @@ public static class UiManagerMethodsGenerator
                                    $"    /// </summary>\n" +
                                    $"    public static UI.{uiName}.{uiName}Panel Open_{uiName}()\n" +
                                    $"    {{\n" +
-                                   $"        return OpenUi<UI.{uiName}.{uiName}Panel>(UiName.{uiName});\n" +
+                                   $"        return OpenUi<UI.{uiName}.{uiName}Panel>(UiNames.{uiName});\n" +
                                    $"    }}\n" +
                                    $"\n" +
                                    $"    /// <summary>\n" +
