@@ -31,6 +31,8 @@ public static partial class UiManager
         public const string TileSetEditor = "TileSetEditor";
         public const string TileSetEditorImport = "TileSetEditorImport";
         public const string TileSetEditorProject = "TileSetEditorProject";
+        public const string TileSetEditorSegment = "TileSetEditorSegment";
+        public const string TileSetEditorTerrain = "TileSetEditorTerrain";
     }
 
     /// <summary>
@@ -1279,6 +1281,102 @@ public static partial class UiManager
     public static UI.TileSetEditorProject.TileSetEditorProjectPanel[] Get_TileSetEditorProject_Instance()
     {
         return GetUiInstance<UI.TileSetEditorProject.TileSetEditorProjectPanel>(nameof(UI.TileSetEditorProject.TileSetEditorProject));
+    }
+
+    /// <summary>
+    /// 创建 TileSetEditorSegment, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.TileSetEditorSegment.TileSetEditorSegmentPanel Create_TileSetEditorSegment()
+    {
+        return CreateUi<UI.TileSetEditorSegment.TileSetEditorSegmentPanel>(UiNames.TileSetEditorSegment);
+    }
+
+    /// <summary>
+    /// 打开 TileSetEditorSegment, 并返回UI实例
+    /// </summary>
+    public static UI.TileSetEditorSegment.TileSetEditorSegmentPanel Open_TileSetEditorSegment()
+    {
+        return OpenUi<UI.TileSetEditorSegment.TileSetEditorSegmentPanel>(UiNames.TileSetEditorSegment);
+    }
+
+    /// <summary>
+    /// 隐藏 TileSetEditorSegment 的所有实例
+    /// </summary>
+    public static void Hide_TileSetEditorSegment()
+    {
+        var uiInstance = Get_TileSetEditorSegment_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 TileSetEditorSegment 的所有实例
+    /// </summary>
+    public static void Destroy_TileSetEditorSegment()
+    {
+        var uiInstance = Get_TileSetEditorSegment_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 TileSetEditorSegment 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.TileSetEditorSegment.TileSetEditorSegmentPanel[] Get_TileSetEditorSegment_Instance()
+    {
+        return GetUiInstance<UI.TileSetEditorSegment.TileSetEditorSegmentPanel>(nameof(UI.TileSetEditorSegment.TileSetEditorSegment));
+    }
+
+    /// <summary>
+    /// 创建 TileSetEditorTerrain, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.TileSetEditorTerrain.TileSetEditorTerrainPanel Create_TileSetEditorTerrain()
+    {
+        return CreateUi<UI.TileSetEditorTerrain.TileSetEditorTerrainPanel>(UiNames.TileSetEditorTerrain);
+    }
+
+    /// <summary>
+    /// 打开 TileSetEditorTerrain, 并返回UI实例
+    /// </summary>
+    public static UI.TileSetEditorTerrain.TileSetEditorTerrainPanel Open_TileSetEditorTerrain()
+    {
+        return OpenUi<UI.TileSetEditorTerrain.TileSetEditorTerrainPanel>(UiNames.TileSetEditorTerrain);
+    }
+
+    /// <summary>
+    /// 隐藏 TileSetEditorTerrain 的所有实例
+    /// </summary>
+    public static void Hide_TileSetEditorTerrain()
+    {
+        var uiInstance = Get_TileSetEditorTerrain_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 TileSetEditorTerrain 的所有实例
+    /// </summary>
+    public static void Destroy_TileSetEditorTerrain()
+    {
+        var uiInstance = Get_TileSetEditorTerrain_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 TileSetEditorTerrain 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.TileSetEditorTerrain.TileSetEditorTerrainPanel[] Get_TileSetEditorTerrain_Instance()
+    {
+        return GetUiInstance<UI.TileSetEditorTerrain.TileSetEditorTerrainPanel>(nameof(UI.TileSetEditorTerrain.TileSetEditorTerrain));
     }
 
 }

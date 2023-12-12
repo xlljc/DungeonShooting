@@ -87,6 +87,8 @@ public class ResourcePath
     public const string prefab_ui_TileSetEditor_tscn = "res://prefab/ui/TileSetEditor.tscn";
     public const string prefab_ui_TileSetEditorImport_tscn = "res://prefab/ui/TileSetEditorImport.tscn";
     public const string prefab_ui_TileSetEditorProject_tscn = "res://prefab/ui/TileSetEditorProject.tscn";
+    public const string prefab_ui_TileSetEditorSegment_tscn = "res://prefab/ui/TileSetEditorSegment.tscn";
+    public const string prefab_ui_TileSetEditorTerrain_tscn = "res://prefab/ui/TileSetEditorTerrain.tscn";
     public const string prefab_weapon_Weapon0001_tscn = "res://prefab/weapon/Weapon0001.tscn";
     public const string prefab_weapon_Weapon0002_tscn = "res://prefab/weapon/Weapon0002.tscn";
     public const string prefab_weapon_Weapon0003_tscn = "res://prefab/weapon/Weapon0003.tscn";

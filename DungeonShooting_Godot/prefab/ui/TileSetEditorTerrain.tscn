@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfqb73y4br8yd"]
+
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/TileSetEditorTerrainPanel.cs" id="1_6jjk7"]
+
+[node name="TileSetEditorTerrain" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_6jjk7")

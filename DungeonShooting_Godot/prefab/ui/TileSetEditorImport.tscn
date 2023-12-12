@@ -8,6 +8,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_rkxih")
 
 [node name="ImportPreviewBg" type="ColorRect" parent="."]
@@ -17,7 +19,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 color = Color(0.278431, 0.278431, 0.278431, 1)
 
 [node name="ImportButton" type="Button" parent="."]
@@ -73,6 +74,7 @@ offset_right = 0.5
 offset_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="ImportPreview" type="Sprite2D" parent="Control"]
 

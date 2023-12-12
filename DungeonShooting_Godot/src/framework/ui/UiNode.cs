@@ -43,6 +43,7 @@ public abstract class UiNode<TUi, TNodeType, TCloneType>
     {
         var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
+        uiBase.Visible = false;
         uiBase.PrevUi = prevUi;
         Instance.AddChild(uiBase);
         UiPanel.RecordNestedUi(uiBase, this, UiManager.RecordType.Open);

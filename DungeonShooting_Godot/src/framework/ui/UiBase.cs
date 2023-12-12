@@ -42,10 +42,17 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     /// </summary>
     public IUiNode ParentNode { get; private set; }
 
+    /// <summary>
+    /// 是否是嵌套的子 Ui
+    /// </summary>
+    public bool IsNestedUi => ParentUi != null;
+    
     //开启的协程
     private List<CoroutineData> _coroutineList;
     //嵌套打开的Ui列表
     private HashSet<UiBase> _nestedUiSet;
+    //嵌套模式下是否打开Ui
+    private bool _nestedOpen;
     //当前Ui包含的 IUiNodeScript 接口, 关闭Ui是需要调用 IUiNodeScript.OnDestroy()
     private HashSet<IUiNodeScript> _nodeScripts;
 
@@ -113,6 +120,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             return;
         }
 
+        _nestedOpen = true;
         IsOpen = true;
         Visible = true;
         OnShowUi();
@@ -122,7 +130,10 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         {
             foreach (var uiBase in _nestedUiSet)
             {
-                uiBase.ShowUi();
+                if (uiBase._nestedOpen || uiBase.Visible)
+                {
+                    uiBase.ShowUi();
+                }
             }
         }
     }
@@ -142,6 +153,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             return;
         }
 
+        _nestedOpen = false;
         IsOpen = false;
         Visible = false;
         OnHideUi();
@@ -151,7 +163,11 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         {
             foreach (var uiBase in _nestedUiSet)
             {
-                uiBase.HideUi();
+                if (uiBase._nestedOpen)
+                {
+                    uiBase.HideUi();
+                    uiBase._nestedOpen = true;
+                }
             }
         }
     }
@@ -220,6 +236,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     {
         var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
+        uiBase.Visible = false;
         uiBase.PrevUi = prevUi;
         AddChild(uiBase);
         RecordNestedUi(uiBase, null, UiManager.RecordType.Open);

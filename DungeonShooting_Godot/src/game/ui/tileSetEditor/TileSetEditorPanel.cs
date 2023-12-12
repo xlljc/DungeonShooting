@@ -14,19 +14,45 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// </summary>
     public Texture Texture;
 
-    private UiGrid<Tab, TileSetEditorTabData> _tabGrid;
+    /// <summary>
+    /// 背景颜色
+    /// </summary>
+    public Color BgColor;
+
+    /// <summary>
+    /// 页签对象
+    /// </summary>
+    public UiGrid<Tab, TileSetEditorTabData> TabGrid { get; private set; }
 
     public override void OnCreateUi()
     {
         S_Back.Instance.Visible = PrevUi != null;
         S_Back.Instance.Pressed += OnBackClick;
 
-        _tabGrid = new UiGrid<Tab, TileSetEditorTabData>(S_Tab, typeof(object));
+        TabGrid = new UiGrid<Tab, TileSetEditorTabData>(S_Tab, typeof(TileSetEditorTabCell));
+        TabGrid.SetHorizontalExpand(true);
+        TabGrid.SetCellOffset(new Vector2I(0, 5));
+        TabGrid.Add(new TileSetEditorTabData()
+        {
+            Text = "纹理",
+            UiName = UiManager.UiNames.TileSetEditorImport,
+        });
+        TabGrid.Add(new TileSetEditorTabData()
+        {
+            Text = "图块",
+            UiName = UiManager.UiNames.TileSetEditorSegment,
+        });
+        TabGrid.Add(new TileSetEditorTabData()
+        {
+            Text = "地形",
+            UiName = UiManager.UiNames.TileSetEditorTerrain,
+        });
+        TabGrid.SelectIndex = 0;
     }
 
     public override void OnDestroyUi()
     {
-        _tabGrid.Destroy();
+        TabGrid.Destroy();
     }
 
     public void InitData(TileSetInfo tileSetInfo)

@@ -14,7 +14,10 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     public override void OnCreateUi()
     {
         _tileSetEditor = (TileSetEditor.TileSetEditorPanel)ParentUi;
-        _dragBinder = DragUiManager.BindDrag(S_ImportButton.Instance, OnDragCallback);
+        _tileSetEditor.BgColor = S_ImportPreviewBg.Instance.Color;
+        
+        _dragBinder = DragUiManager.BindDrag(S_ImportPreviewBg.Instance, OnDragCallback);
+        
         GetTree().Root.FilesDropped += OnFilesDropped;
         S_ImportButton.Instance.Pressed += OnImportButtonClick;
         S_ReimportButton.Instance.Pressed += OnReimportButtonClick;
@@ -89,7 +92,11 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
                 S_ImportColorPicker.Instance.GlobalPosition,
                 S_ImportPreviewBg.Instance.Color,
                 //设置颜色
-                color => { S_ImportPreviewBg.Instance.Color = color; },
+                color =>
+                {
+                    S_ImportPreviewBg.Instance.Color = color;
+                    _tileSetEditor.BgColor = color;
+                },
                 //关闭窗口
                 () => { _isOpenColorPicker = false; }
             );
@@ -152,6 +159,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         //隐藏导入文本和icon
         S_ImportLabel.Instance.Visible = false;
         S_ImportIcon.Instance.Visible = false;
+        S_ImportButton.Instance.Visible = false;
     }
     
 }

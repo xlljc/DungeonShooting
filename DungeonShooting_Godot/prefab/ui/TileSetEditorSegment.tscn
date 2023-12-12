@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3 uid="uid://daias2tkvj20c"]
+
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileSetEditorSegmentPanel.cs" id="1_to1lc"]
+
+[node name="TileSetEditorSegment" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_to1lc")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Left" type="Panel" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 70.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Left"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="LeftBg" type="ColorRect" parent="HSplitContainer/Left/MarginContainer"]
+layout_mode = 2
+color = Color(0.203922, 0.203922, 0.203922, 1)
+
+[node name="TileTexture" type="TextureRect" parent="HSplitContainer/Left/MarginContainer/LeftBg"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -667.0
+offset_top = -538.0
+offset_right = 667.0
+offset_bottom = 538.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+
+[node name="Right" type="Panel" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 30.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Right"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
