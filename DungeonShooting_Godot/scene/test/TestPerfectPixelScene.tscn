@@ -1,9 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://b3ybffxcq0kkb"]
 
 [ext_resource type="Script" path="res://src/test/TestPerfectPixelScene.cs" id="1_u6ihh"]
-[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/map1/TileSet1.tres" id="1_wc2ux"]
+[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/tileSet/map1/TileSet1.tres" id="1_wc2ux"]
 [ext_resource type="Texture2D" uid="uid://dto03bc2qbhnj" path="res://resource/sprite/shell/Shell0001.png" id="3_kc4l0"]
 [ext_resource type="SpriteFrames" uid="uid://n11thtali6es" path="res://resource/spriteFrames/role/Role0001.tres" id="4_6nerw"]
+
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tmsub"]
 

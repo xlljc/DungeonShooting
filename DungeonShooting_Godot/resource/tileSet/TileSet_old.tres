@@ -1,7 +1,6 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bn21mn0gu6jel"]
 
-[ext_resource type="Texture2D" uid="uid://dj8nrd5od4fcl" path="res://resource/map/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png" id="1_vqd0o"]
-
+[ext_resource type="Texture2D" uid="uid://dj8nrd5od4fcl" path="res://resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png" id="1_vqd0o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rkmbu"]
 texture = ExtResource("1_vqd0o")

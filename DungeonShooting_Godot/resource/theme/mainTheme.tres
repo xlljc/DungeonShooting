@@ -13,7 +13,6 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.117647, 0.431373, 0.905882, 1)
-corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="3"]
 content_margin_left = 6.0

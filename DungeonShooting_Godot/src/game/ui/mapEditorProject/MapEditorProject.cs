@@ -38,6 +38,24 @@ public abstract partial class MapEditorProject : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorProject.Bg.VBoxContainer.Head.TileSetBtn
+    /// </summary>
+    public class TileSetBtn : UiNode<MapEditorProjectPanel, Godot.Button, TileSetBtn>
+    {
+        public TileSetBtn(MapEditorProjectPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override TileSetBtn Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorProject.Bg.VBoxContainer.Head.Title
+    /// </summary>
+    public class Title : UiNode<MapEditorProjectPanel, Godot.Label, Title>
+    {
+        public Title(MapEditorProjectPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Title Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Panel"/>, 路径: MapEditorProject.Bg.VBoxContainer.Head
     /// </summary>
     public class Head : UiNode<MapEditorProjectPanel, Godot.Panel, Head>
@@ -54,6 +72,32 @@ public abstract partial class MapEditorProject : UiBase
             }
         }
         private Back _L_Back;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.TileSetBtn
+        /// </summary>
+        public TileSetBtn L_TileSetBtn
+        {
+            get
+            {
+                if (_L_TileSetBtn == null) _L_TileSetBtn = new TileSetBtn(UiPanel, Instance.GetNode<Godot.Button>("TileSetBtn"));
+                return _L_TileSetBtn;
+            }
+        }
+        private TileSetBtn _L_TileSetBtn;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.Title
+        /// </summary>
+        public Title L_Title
+        {
+            get
+            {
+                if (_L_Title == null) _L_Title = new Title(UiPanel, Instance.GetNode<Godot.Label>("Title"));
+                return _L_Title;
+            }
+        }
+        private Title _L_Title;
 
         public Head(MapEditorProjectPanel uiPanel, Godot.Panel node) : base(uiPanel, node) {  }
         public override Head Clone() => new (UiPanel, (Godot.Panel)Instance.Duplicate());
@@ -724,6 +768,16 @@ public abstract partial class MapEditorProject : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.Head.Back
     /// </summary>
     public Back S_Back => L_Bg.L_VBoxContainer.L_Head.L_Back;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.Head.TileSetBtn
+    /// </summary>
+    public TileSetBtn S_TileSetBtn => L_Bg.L_VBoxContainer.L_Head.L_TileSetBtn;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.Head.Title
+    /// </summary>
+    public Title S_Title => L_Bg.L_VBoxContainer.L_Head.L_Title;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditorProject.Bg.VBoxContainer.Head

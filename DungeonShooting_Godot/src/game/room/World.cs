@@ -72,9 +72,9 @@ public partial class World : CanvasModulate, ICoroutine
         Color = Colors.Black;
         
         //临时处理, 加载TileSet
-        var tileSet = ResourceManager.Load<TileSet>(ResourcePath.resource_map_tileSet_map1_TileSet1_tres);
+        var tileSet = ResourceManager.Load<TileSet>(ResourcePath.resource_tileSet_map1_TileSet1_tres);
         var tileSetAtlasSource = (TileSetAtlasSource)tileSet.GetSource(0);
-        tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile("resource/map/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
+        tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
         TileRoot.TileSet = tileSet;
         TileRoot.YSortEnabled = false;
     }

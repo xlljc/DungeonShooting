@@ -54,7 +54,7 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme = ExtResource("2_bbd6i")
 theme_override_font_sizes/font_size = 32
-text = "开发者工具"
+text = "地图编辑器"
 
 [node name="Setting" type="Button" parent="VBoxContainer/ButtonList"]
 custom_minimum_size = Vector2(0, 50)

@@ -34,14 +34,14 @@ public static class DragUiManager
         {
             foreach (var dragBinder in _list)
             {
-                if (dragBinder.Dragging && !Input.IsMouseButtonPressed(MouseButton.Left)) //松开鼠标, 结束拖拽
+                if (dragBinder.Dragging && !Input.IsActionPressed("mouse_left")) //松开鼠标, 结束拖拽
                 {
                     dragBinder.Dragging = false;
                     dragBinder.Callback(DragState.DragEnd, Vector2.Zero);
                 }
                 else if (!dragBinder.Dragging) //开始拖拽
                 {
-                    if (dragBinder.MouseEntered && Input.IsMouseButtonPressed(MouseButton.Left))
+                    if (dragBinder.MouseEntered && Input.IsActionJustPressed("mouse_left"))
                     {
                         dragBinder.Dragging = true;
                         dragBinder.PrevPosition = dragBinder.Control.GetGlobalMousePosition();
@@ -66,7 +66,7 @@ public static class DragUiManager
         {
             foreach (var binder in _removeList)
             {
-                if (_list.Remove(binder))
+                if (_list.Remove(binder) && GodotObject.IsInstanceValid(binder.Control))
                 {
                     binder.Control.MouseEntered -= binder.OnMouseEntered;
                     binder.Control.MouseExited -= binder.OnMouseExited;

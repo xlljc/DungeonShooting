@@ -1,0 +1,156 @@
+[gd_scene load_steps=6 format=3 uid="uid://bxrpxwsvveq8i"]
+
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorProject/TileSetEditorProjectPanel.cs" id="1_rklha"]
+[ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_4prd2"]
+[ext_resource type="Texture2D" uid="uid://blfvsup876agh" path="res://resource/sprite/ui/commonIcon/Search.png" id="3_htmoo"]
+[ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="4_6incc"]
+[ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="5_l4lwx"]
+
+[node name="TileSetEditorProject" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rklha")
+
+[node name="Bg" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Bg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Head" type="Panel" parent="Bg/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="Back" type="Button" parent="Bg/VBoxContainer/Head"]
+layout_mode = 2
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 62.0
+offset_bottom = 68.0
+size_flags_horizontal = 0
+icon = ExtResource("2_4prd2")
+icon_alignment = 1
+
+[node name="Title" type="Label" parent="Bg/VBoxContainer/Head"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.5
+offset_top = -20.0
+offset_right = 4.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "图块集管理器"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Bg/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Panel" type="Panel" parent="Bg/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+
+[node name="TileSearchInput" type="LineEdit" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+placeholder_text = "搜索"
+
+[node name="TileSearchButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("3_htmoo")
+
+[node name="TileAddButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("4_6incc")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TileButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(200, 239)
+layout_mode = 2
+
+[node name="PreviewImage" type="TextureRect" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer/TileButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -41.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch_mode = 5
+
+[node name="TileName" type="Label" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer/TileButton"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -46.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Name"
+horizontal_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="SelectTexture" type="NinePatchRect" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer/TileButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_l4lwx")
+region_rect = Rect2(0, 0, 36, 36)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3

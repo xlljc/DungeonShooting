@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://csbxfkdupsckv"]
+[gd_scene load_steps=14 format=3 uid="uid://csbxfkdupsckv"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/MapEditorPanel.cs" id="1_5s7a0"]
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_gkcw7"]
@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://b4u66mxndxbrg" path="res://prefab/ui/MapEditorTools.tscn" id="6_7pvgu"]
 [ext_resource type="PackedScene" uid="uid://bb2ekkpxifd7g" path="res://prefab/ui/MapEditorMapLayer.tscn" id="7_ychtn"]
 [ext_resource type="PackedScene" uid="uid://peo0n8bl15y5" path="res://prefab/ui/MapEditorMapMark.tscn" id="8_8tgeu"]
-[ext_resource type="PackedScene" uid="uid://dhtfat7tr8ujw" path="res://prefab/ui/MapEditorTileSet.tscn" id="11_7yaoy"]
 
 [sub_resource type="Animation" id="Animation_o3btm"]
 length = 0.001
@@ -259,12 +258,4 @@ layout_mode = 2
 theme_override_constants/margin_top = 10
 
 [node name="MapEditorMapLayer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer" instance=ExtResource("7_ychtn")]
-layout_mode = 2
-
-[node name="MapTileSet" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_top = 10
-
-[node name="MapEditorTileSet" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapTileSet" instance=ExtResource("11_7yaoy")]
 layout_mode = 2
