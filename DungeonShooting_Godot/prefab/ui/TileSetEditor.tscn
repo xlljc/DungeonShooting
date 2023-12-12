@@ -96,7 +96,7 @@ size_flags_horizontal = 3
 [node name="ImportTab" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/GridContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
-text = "导入纹理"
+text = "纹理"
 
 [node name="TileCellTab" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/GridContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
@@ -177,6 +177,16 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("6_4ra02")
 
+[node name="ImportPreviewBg" type="ColorRect" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.278431, 0.278431, 0.278431, 1)
+
 [node name="Control" type="Control" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
 layout_mode = 1
 anchors_preset = 8
@@ -192,3 +202,27 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ImportPreview" type="Sprite2D" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot/Control"]
+
+[node name="ImportColorPicker" type="Button" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -238.0
+offset_top = 25.0
+offset_right = -34.0
+offset_bottom = 82.0
+grow_horizontal = 0
+text = "背景颜色"
+
+[node name="ReimportButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -238.0
+offset_top = 106.0
+offset_right = -34.0
+offset_bottom = 163.0
+grow_horizontal = 0
+text = "重新导入"

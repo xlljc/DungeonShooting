@@ -7,6 +7,7 @@ public static partial class UiManager
     {
         public const string BottomTips = "BottomTips";
         public const string Debugger = "Debugger";
+        public const string EditorColorPicker = "EditorColorPicker";
         public const string EditorTips = "EditorTips";
         public const string EditorTools = "EditorTools";
         public const string EditorWindow = "EditorWindow";
@@ -125,6 +126,54 @@ public static partial class UiManager
     public static UI.Debugger.DebuggerPanel[] Get_Debugger_Instance()
     {
         return GetUiInstance<UI.Debugger.DebuggerPanel>(nameof(UI.Debugger.Debugger));
+    }
+
+    /// <summary>
+    /// 创建 EditorColorPicker, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorColorPicker.EditorColorPickerPanel Create_EditorColorPicker()
+    {
+        return CreateUi<UI.EditorColorPicker.EditorColorPickerPanel>(UiNames.EditorColorPicker);
+    }
+
+    /// <summary>
+    /// 打开 EditorColorPicker, 并返回UI实例
+    /// </summary>
+    public static UI.EditorColorPicker.EditorColorPickerPanel Open_EditorColorPicker()
+    {
+        return OpenUi<UI.EditorColorPicker.EditorColorPickerPanel>(UiNames.EditorColorPicker);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorColorPicker 的所有实例
+    /// </summary>
+    public static void Hide_EditorColorPicker()
+    {
+        var uiInstance = Get_EditorColorPicker_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorColorPicker 的所有实例
+    /// </summary>
+    public static void Destroy_EditorColorPicker()
+    {
+        var uiInstance = Get_EditorColorPicker_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorColorPicker 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorColorPicker.EditorColorPickerPanel[] Get_EditorColorPicker_Instance()
+    {
+        return GetUiInstance<UI.EditorColorPicker.EditorColorPickerPanel>(nameof(UI.EditorColorPicker.EditorColorPicker));
     }
 
     /// <summary>

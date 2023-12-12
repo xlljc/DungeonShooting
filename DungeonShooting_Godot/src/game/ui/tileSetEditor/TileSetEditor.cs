@@ -339,6 +339,15 @@ public abstract partial class TileSetEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportRoot.ImportPreviewBg
+    /// </summary>
+    public class ImportPreviewBg : UiNode<TileSetEditorPanel, Godot.ColorRect, ImportPreviewBg>
+    {
+        public ImportPreviewBg(TileSetEditorPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override ImportPreviewBg Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Sprite2D"/>, 路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportRoot.Control.ImportPreview
     /// </summary>
     public class ImportPreview : UiNode<TileSetEditorPanel, Godot.Sprite2D, ImportPreview>
@@ -367,6 +376,24 @@ public abstract partial class TileSetEditor : UiBase
 
         public Control(TileSetEditorPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override Control Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportRoot.ImportColorPicker
+    /// </summary>
+    public class ImportColorPicker : UiNode<TileSetEditorPanel, Godot.Button, ImportColorPicker>
+    {
+        public ImportColorPicker(TileSetEditorPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override ImportColorPicker Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportRoot.ReimportButton
+    /// </summary>
+    public class ReimportButton : UiNode<TileSetEditorPanel, Godot.Button, ReimportButton>
+    {
+        public ReimportButton(TileSetEditorPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override ReimportButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
     }
 
     /// <summary>
@@ -414,6 +441,19 @@ public abstract partial class TileSetEditor : UiBase
         private ImportIcon _L_ImportIcon;
 
         /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportPreviewBg
+        /// </summary>
+        public ImportPreviewBg L_ImportPreviewBg
+        {
+            get
+            {
+                if (_L_ImportPreviewBg == null) _L_ImportPreviewBg = new ImportPreviewBg(UiPanel, Instance.GetNode<Godot.ColorRect>("ImportPreviewBg"));
+                return _L_ImportPreviewBg;
+            }
+        }
+        private ImportPreviewBg _L_ImportPreviewBg;
+
+        /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.Control
         /// </summary>
         public Control L_Control
@@ -425,6 +465,32 @@ public abstract partial class TileSetEditor : UiBase
             }
         }
         private Control _L_Control;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportColorPicker
+        /// </summary>
+        public ImportColorPicker L_ImportColorPicker
+        {
+            get
+            {
+                if (_L_ImportColorPicker == null) _L_ImportColorPicker = new ImportColorPicker(UiPanel, Instance.GetNode<Godot.Button>("ImportColorPicker"));
+                return _L_ImportColorPicker;
+            }
+        }
+        private ImportColorPicker _L_ImportColorPicker;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ReimportButton
+        /// </summary>
+        public ReimportButton L_ReimportButton
+        {
+            get
+            {
+                if (_L_ReimportButton == null) _L_ReimportButton = new ReimportButton(UiPanel, Instance.GetNode<Godot.Button>("ReimportButton"));
+                return _L_ReimportButton;
+            }
+        }
+        private ReimportButton _L_ReimportButton;
 
         public ImportRoot(TileSetEditorPanel uiPanel, UI.TileSetEditor.TileSetEditorImportRoot node) : base(uiPanel, node) {  }
         public override ImportRoot Clone() => new (UiPanel, (UI.TileSetEditor.TileSetEditorImportRoot)Instance.Duplicate());
@@ -626,6 +692,11 @@ public abstract partial class TileSetEditor : UiBase
     public ImportIcon S_ImportIcon => L_Bg.L_VBoxContainer.L_HBoxContainer.L_RightRoot.L_ImportRoot.L_ImportIcon;
 
     /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportRoot.ImportPreviewBg
+    /// </summary>
+    public ImportPreviewBg S_ImportPreviewBg => L_Bg.L_VBoxContainer.L_HBoxContainer.L_RightRoot.L_ImportRoot.L_ImportPreviewBg;
+
+    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportRoot.Control.ImportPreview
     /// </summary>
     public ImportPreview S_ImportPreview => L_Bg.L_VBoxContainer.L_HBoxContainer.L_RightRoot.L_ImportRoot.L_Control.L_ImportPreview;
@@ -634,6 +705,16 @@ public abstract partial class TileSetEditor : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportRoot.Control
     /// </summary>
     public Control S_Control => L_Bg.L_VBoxContainer.L_HBoxContainer.L_RightRoot.L_ImportRoot.L_Control;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportRoot.ImportColorPicker
+    /// </summary>
+    public ImportColorPicker S_ImportColorPicker => L_Bg.L_VBoxContainer.L_HBoxContainer.L_RightRoot.L_ImportRoot.L_ImportColorPicker;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportRoot.ReimportButton
+    /// </summary>
+    public ReimportButton S_ReimportButton => L_Bg.L_VBoxContainer.L_HBoxContainer.L_RightRoot.L_ImportRoot.L_ReimportButton;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditor.TileSetEditorImportRoot"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.RightRoot.ImportRoot

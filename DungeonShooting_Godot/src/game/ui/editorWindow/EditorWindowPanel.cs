@@ -102,6 +102,10 @@ public partial class EditorWindowPanel : EditorWindow
     /// <param name="triggerEvent">是否派发关闭窗口的事件</param>
     public void CloseWindow(bool triggerEvent = true)
     {
+        if (IsDestroyed)
+        {
+            return;
+        }
         if (triggerEvent && CloseEvent != null)
         {
             CloseEvent();

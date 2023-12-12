@@ -4,6 +4,16 @@ namespace UI.TileSetEditor;
 
 public partial class TileSetEditorPanel : TileSetEditor
 {
+    /// <summary>
+    /// 纹理路径
+    /// </summary>
+    public string TexturePath;
+
+    /// <summary>
+    /// 纹理
+    /// </summary>
+    public Texture Texture;
+
     public override void OnCreateUi()
     {
         S_Back.Instance.Visible = PrevUi != null;

@@ -63,6 +63,8 @@ public class ResourcePath
     public const string prefab_test_MoveComponent_tscn = "res://prefab/test/MoveComponent.tscn";
     public const string prefab_ui_BottomTips_tscn = "res://prefab/ui/BottomTips.tscn";
     public const string prefab_ui_Debugger_tscn = "res://prefab/ui/Debugger.tscn";
+    public const string prefab_ui_EditorColorPicker_tscn = "res://prefab/ui/EditorColorPicker.tscn";
+    public const string prefab_ui_EditorFileDialog_tscn = "res://prefab/ui/EditorFileDialog.tscn";
     public const string prefab_ui_EditorTips_tscn = "res://prefab/ui/EditorTips.tscn";
     public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
     public const string prefab_ui_EditorWindow_tscn = "res://prefab/ui/EditorWindow.tscn";
@@ -293,6 +295,7 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_Edit_png = "res://resource/sprite/ui/commonIcon/Edit.png";
     public const string resource_sprite_ui_commonIcon_Error_mini_png = "res://resource/sprite/ui/commonIcon/Error_mini.png";
     public const string resource_sprite_ui_commonIcon_Hide_png = "res://resource/sprite/ui/commonIcon/Hide.png";
+    public const string resource_sprite_ui_commonIcon_Import_png = "res://resource/sprite/ui/commonIcon/Import.png";
     public const string resource_sprite_ui_commonIcon_Lock_png = "res://resource/sprite/ui/commonIcon/Lock.png";
     public const string resource_sprite_ui_commonIcon_Mark_png = "res://resource/sprite/ui/commonIcon/Mark.png";
     public const string resource_sprite_ui_commonIcon_MarkCell_png = "res://resource/sprite/ui/commonIcon/MarkCell.png";

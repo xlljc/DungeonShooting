@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Config;
 using Godot;
+using UI.EditorColorPicker;
 using UI.EditorTips;
 using UI.EditorWindow;
 using UI.MapEditorCreateGroup;
@@ -11,8 +12,66 @@ using UI.MapEditorCreatePreinstall;
 using UI.MapEditorCreateRoom;
 using UI.MapEditorSelectObject;
 
+/// <summary>
+/// 通用弹窗管理类
+/// </summary>
 public static class EditorWindowManager
 {
+    /// <summary>
+    /// 打开颜色选择器弹窗
+    /// </summary>
+    /// <param name="position">位置</param>
+    /// <param name="color">当前选中的颜色</param>
+    /// <param name="onChangeColor">颜色改变时回调</param>
+    /// <param name="onClose">关闭时回调</param>
+    public static void ShowColorPicker(Vector2 position, Color color, ColorPicker.ColorChangedEventHandler onChangeColor, Action onClose = null)
+    {
+        var window = CreateWindowInstance();
+        var colorPickerPanel = window.OpenBody<EditorColorPickerPanel>(UiManager.UiNames.EditorColorPicker);
+        window.SetWindowTitle("颜色选择器");
+        window.SetWindowSize(new Vector2I(298, 720));
+        window.S_Window.Instance.Position = new Vector2I((int)(position.X - 298f * 0.5f), (int)(position.Y + 80));
+        colorPickerPanel.S_ColorPicker.Instance.Color = color;
+        colorPickerPanel.S_ColorPicker.Instance.ColorChanged += onChangeColor;
+        if (onClose != null)
+        {
+            window.CloseEvent += onClose;
+        }
+    }
+
+    /// <summary>
+    /// 显示打开文件窗口
+    /// </summary>
+    /// <param name="filters">过滤文件后缀</param>
+    /// <param name="onClose">关闭回调, 回调参数为选择的文件路径, 如果选择文件, 则回调参数为null</param>
+    public static void ShowOpenFileDialog(string[] filters, Action<string> onClose)
+    {
+        //UiManager.Open_EditorFileDialog();
+        var fileDialog = new FileDialog();
+        fileDialog.UseNativeDialog = true;
+        fileDialog.ModeOverridesTitle = false;
+        fileDialog.FileMode = FileDialog.FileModeEnum.OpenFile;
+        fileDialog.Access = FileDialog.AccessEnum.Filesystem;
+        fileDialog.Filters = filters;
+        fileDialog.FileSelected += (path) =>
+        {
+            onClose(path);
+            fileDialog.QueueFree();
+        };
+        fileDialog.Canceled += () =>
+        {
+            onClose(null);
+            fileDialog.QueueFree();
+        };
+        fileDialog.Confirmed += () =>
+        {
+            onClose(null);
+            fileDialog.QueueFree();
+        };
+        UiManager.GetUiLayer(UiLayer.Pop).AddChild(fileDialog);
+        fileDialog.Popup();
+    }
+    
     /// <summary>
     /// 弹出通用提示面板
     /// </summary>
@@ -367,7 +426,7 @@ public static class EditorWindowManager
         };
     }
 
-    private static EditorWindowPanel CreateWindowInstance(UiBase parentUi)
+    private static EditorWindowPanel CreateWindowInstance(UiBase parentUi = null)
     {
         if (parentUi != null)
         {
