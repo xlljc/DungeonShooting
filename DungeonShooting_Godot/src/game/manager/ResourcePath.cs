@@ -64,7 +64,6 @@ public class ResourcePath
     public const string prefab_ui_BottomTips_tscn = "res://prefab/ui/BottomTips.tscn";
     public const string prefab_ui_Debugger_tscn = "res://prefab/ui/Debugger.tscn";
     public const string prefab_ui_EditorColorPicker_tscn = "res://prefab/ui/EditorColorPicker.tscn";
-    public const string prefab_ui_EditorFileDialog_tscn = "res://prefab/ui/EditorFileDialog.tscn";
     public const string prefab_ui_EditorTips_tscn = "res://prefab/ui/EditorTips.tscn";
     public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
     public const string prefab_ui_EditorWindow_tscn = "res://prefab/ui/EditorWindow.tscn";
@@ -86,6 +85,7 @@ public class ResourcePath
     public const string prefab_ui_Setting_tscn = "res://prefab/ui/Setting.tscn";
     public const string prefab_ui_Settlement_tscn = "res://prefab/ui/Settlement.tscn";
     public const string prefab_ui_TileSetEditor_tscn = "res://prefab/ui/TileSetEditor.tscn";
+    public const string prefab_ui_TileSetEditorImport_tscn = "res://prefab/ui/TileSetEditorImport.tscn";
     public const string prefab_ui_TileSetEditorProject_tscn = "res://prefab/ui/TileSetEditorProject.tscn";
     public const string prefab_weapon_Weapon0001_tscn = "res://prefab/weapon/Weapon0001.tscn";
     public const string prefab_weapon_Weapon0002_tscn = "res://prefab/weapon/Weapon0002.tscn";

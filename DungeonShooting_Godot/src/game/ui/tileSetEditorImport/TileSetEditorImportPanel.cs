@@ -1,39 +1,41 @@
-﻿using System.IO;
+using System.IO;
 using Godot;
 
-namespace UI.TileSetEditor;
+namespace UI.TileSetEditorImport;
 
-public partial class TileSetEditorImportRoot : TextureRect, IUiNodeScript
+public partial class TileSetEditorImportPanel : TileSetEditorImport
 {
-    private TileSetEditor.ImportRoot _importRoot;
     private DragBinder _dragBinder;
     //是否打开了颜色选择器
     private bool _isOpenColorPicker;
 
-    public void SetUiNode(IUiNode uiNode)
+    private TileSetEditor.TileSetEditorPanel _tileSetEditor;
+
+    public override void OnCreateUi()
     {
-        _importRoot = (TileSetEditor.ImportRoot)uiNode;
-        _dragBinder = DragUiManager.BindDrag(_importRoot.L_ImportButton.Instance, OnDragCallback);
+        _tileSetEditor = (TileSetEditor.TileSetEditorPanel)ParentUi;
+        _dragBinder = DragUiManager.BindDrag(S_ImportButton.Instance, OnDragCallback);
         GetTree().Root.FilesDropped += OnFilesDropped;
-        _importRoot.L_ImportButton.Instance.Pressed += OnImportButtonClick;
-        _importRoot.L_ReimportButton.Instance.Pressed += OnReimportButtonClick;
-        _importRoot.L_ImportColorPicker.Instance.Pressed += OnColorPickerClick;
+        S_ImportButton.Instance.Pressed += OnImportButtonClick;
+        S_ReimportButton.Instance.Pressed += OnReimportButtonClick;
+        S_ImportColorPicker.Instance.Pressed += OnColorPickerClick;
         
-        _importRoot.L_ImportPreviewBg.Instance.Visible = false;
-        _importRoot.L_ReimportButton.Instance.Visible = false;
+        S_ImportPreviewBg.Instance.Visible = false;
+        S_ReimportButton.Instance.Visible = false;
     }
 
-    public void OnDestroy()
+    public override void OnDestroyUi()
     {
         GetTree().Root.FilesDropped -= OnFilesDropped;
         _dragBinder.UnBind();
     }
 
+    
     public override void _Input(InputEvent @event)
     {
         if (@event is InputEventMouseButton mouseButton)
         {
-            var textureRect = _importRoot.L_Control.L_ImportPreview.Instance;
+            var textureRect = S_Control.L_ImportPreview.Instance;
             if (textureRect.Visible)
             {
                 if (mouseButton.ButtonIndex == MouseButton.WheelDown)
@@ -57,7 +59,7 @@ public partial class TileSetEditorImportRoot : TextureRect, IUiNodeScript
     //点击导入按钮
     private void OnImportButtonClick()
     {
-        if (_importRoot.UiPanel.Texture != null)
+        if (_tileSetEditor.Texture != null)
         {
             return;
         }
@@ -84,10 +86,10 @@ public partial class TileSetEditorImportRoot : TextureRect, IUiNodeScript
         {
             _isOpenColorPicker = true;
             EditorWindowManager.ShowColorPicker(
-                _importRoot.L_ImportColorPicker.Instance.GlobalPosition,
-                _importRoot.L_ImportPreviewBg.Instance.Color,
+                S_ImportColorPicker.Instance.GlobalPosition,
+                S_ImportPreviewBg.Instance.Color,
                 //设置颜色
-                color => { _importRoot.L_ImportPreviewBg.Instance.Color = color; },
+                color => { S_ImportPreviewBg.Instance.Color = color; },
                 //关闭窗口
                 () => { _isOpenColorPicker = false; }
             );
@@ -97,7 +99,7 @@ public partial class TileSetEditorImportRoot : TextureRect, IUiNodeScript
     //拖拽区域回调
     private void OnDragCallback(DragState state, Vector2 position)
     {
-        var sprite2D = _importRoot.L_Control.L_ImportPreview.Instance;
+        var sprite2D = S_Control.L_ImportPreview.Instance;
         if (state == DragState.DragMove && sprite2D.Visible)
         {
             sprite2D.Position += position;
@@ -134,21 +136,22 @@ public partial class TileSetEditorImportRoot : TextureRect, IUiNodeScript
     {
         Debug.Log("导入文件: " + file);
         var imageTexture = ImageTexture.CreateFromImage(Image.LoadFromFile(file));
-        _importRoot.UiPanel.TexturePath = file;
-        _importRoot.UiPanel.Texture = imageTexture;
+        _tileSetEditor.TexturePath = file;
+        _tileSetEditor.Texture = imageTexture;
         
-        var textureRect = _importRoot.L_Control.L_ImportPreview.Instance;
+        var textureRect = S_Control.L_ImportPreview.Instance;
         if (textureRect.Texture != null)
         {
             textureRect.Texture.Dispose();
         }
 
         textureRect.Texture = imageTexture;
-        _importRoot.L_ImportPreviewBg.Instance.Visible = true;
-        _importRoot.L_ReimportButton.Instance.Visible = true;    
+        S_ImportPreviewBg.Instance.Visible = true;
+        S_ReimportButton.Instance.Visible = true;    
         
         //隐藏导入文本和icon
-        _importRoot.L_ImportLabel.Instance.Visible = false;
-        _importRoot.L_ImportIcon.Instance.Visible = false;
+        S_ImportLabel.Instance.Visible = false;
+        S_ImportIcon.Instance.Visible = false;
     }
+    
 }

@@ -29,6 +29,7 @@ public static partial class UiManager
         public const string Setting = "Setting";
         public const string Settlement = "Settlement";
         public const string TileSetEditor = "TileSetEditor";
+        public const string TileSetEditorImport = "TileSetEditorImport";
         public const string TileSetEditorProject = "TileSetEditorProject";
     }
 
@@ -1182,6 +1183,54 @@ public static partial class UiManager
     public static UI.TileSetEditor.TileSetEditorPanel[] Get_TileSetEditor_Instance()
     {
         return GetUiInstance<UI.TileSetEditor.TileSetEditorPanel>(nameof(UI.TileSetEditor.TileSetEditor));
+    }
+
+    /// <summary>
+    /// 创建 TileSetEditorImport, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.TileSetEditorImport.TileSetEditorImportPanel Create_TileSetEditorImport()
+    {
+        return CreateUi<UI.TileSetEditorImport.TileSetEditorImportPanel>(UiNames.TileSetEditorImport);
+    }
+
+    /// <summary>
+    /// 打开 TileSetEditorImport, 并返回UI实例
+    /// </summary>
+    public static UI.TileSetEditorImport.TileSetEditorImportPanel Open_TileSetEditorImport()
+    {
+        return OpenUi<UI.TileSetEditorImport.TileSetEditorImportPanel>(UiNames.TileSetEditorImport);
+    }
+
+    /// <summary>
+    /// 隐藏 TileSetEditorImport 的所有实例
+    /// </summary>
+    public static void Hide_TileSetEditorImport()
+    {
+        var uiInstance = Get_TileSetEditorImport_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 TileSetEditorImport 的所有实例
+    /// </summary>
+    public static void Destroy_TileSetEditorImport()
+    {
+        var uiInstance = Get_TileSetEditorImport_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 TileSetEditorImport 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.TileSetEditorImport.TileSetEditorImportPanel[] Get_TileSetEditorImport_Instance()
+    {
+        return GetUiInstance<UI.TileSetEditorImport.TileSetEditorImportPanel>(nameof(UI.TileSetEditorImport.TileSetEditorImport));
     }
 
     /// <summary>

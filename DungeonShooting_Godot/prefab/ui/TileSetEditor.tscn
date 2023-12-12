@@ -1,11 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dn5brsxa6w3l6"]
+[gd_scene load_steps=4 format=3 uid="uid://dn5brsxa6w3l6"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditor/TileSetEditorPanel.cs" id="1_rgx4n"]
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_naycu"]
 [ext_resource type="Texture2D" uid="uid://cat35d7ueu7gu" path="res://resource/sprite/ui/commonIcon/Save.png" id="3_bcuxk"]
-[ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/commonIcon/Block.png" id="4_g67x4"]
-[ext_resource type="Script" path="res://src/game/ui/tileSetEditor/TileSetEditorImportRoot.cs" id="4_ua8n7"]
-[ext_resource type="Texture2D" uid="uid://duos2p6if4kcp" path="res://resource/sprite/ui/commonIcon/Import.png" id="6_4ra02"]
 
 [node name="TileSetEditor" type="Control"]
 layout_mode = 3
@@ -93,136 +90,12 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ImportTab" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/GridContainer/VBoxContainer"]
+[node name="Tab" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/GridContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 text = "纹理"
-
-[node name="TileCellTab" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/GridContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-text = "图块"
-
-[node name="TerrainTab" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/GridContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-text = "地形"
-
-[node name="PatternTab" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/GridContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-text = "组合"
-
-[node name="ObjectTab" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/GridContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-text = "物体"
-
-[node name="TrapBtn" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/GridContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-text = "陷阱"
 
 [node name="RightRoot" type="Panel" parent="Bg/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 8.0
-
-[node name="ImportRoot" type="TextureRect" parent="Bg/VBoxContainer/HBoxContainer/RightRoot"]
-clip_children = 1
-layout_mode = 2
-offset_right = 1707.0
-offset_bottom = 1010.0
-size_flags_vertical = 3
-texture = ExtResource("4_g67x4")
-script = ExtResource("4_ua8n7")
-
-[node name="ImportButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-flat = true
-
-[node name="ImportLabel" type="Label" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -276.0
-offset_top = 61.0
-offset_right = 276.0
-offset_bottom = 101.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "点击导入纹理或者将纹理拖拽到该区域, 格式为'.png'"
-
-[node name="ImportIcon" type="TextureRect" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("6_4ra02")
-
-[node name="ImportPreviewBg" type="ColorRect" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.278431, 0.278431, 0.278431, 1)
-
-[node name="Control" type="Control" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -0.5
-offset_top = -0.5
-offset_right = 0.5
-offset_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ImportPreview" type="Sprite2D" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot/Control"]
-
-[node name="ImportColorPicker" type="Button" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -238.0
-offset_top = 25.0
-offset_right = -34.0
-offset_bottom = 82.0
-grow_horizontal = 0
-text = "背景颜色"
-
-[node name="ReimportButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/RightRoot/ImportRoot"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -238.0
-offset_top = 106.0
-offset_right = -34.0
-offset_bottom = 163.0
-grow_horizontal = 0
-text = "重新导入"

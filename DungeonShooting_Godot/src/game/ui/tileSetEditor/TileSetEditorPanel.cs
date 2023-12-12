@@ -14,10 +14,19 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// </summary>
     public Texture Texture;
 
+    private UiGrid<Tab, TileSetEditorTabData> _tabGrid;
+
     public override void OnCreateUi()
     {
         S_Back.Instance.Visible = PrevUi != null;
         S_Back.Instance.Pressed += OnBackClick;
+
+        _tabGrid = new UiGrid<Tab, TileSetEditorTabData>(S_Tab, typeof(object));
+    }
+
+    public override void OnDestroyUi()
+    {
+        _tabGrid.Destroy();
     }
 
     public void InitData(TileSetInfo tileSetInfo)
