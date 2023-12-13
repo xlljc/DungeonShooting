@@ -30,10 +30,32 @@ public abstract partial class TileSetEditorSegment : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture.Brush
+    /// </summary>
+    public class Brush : UiNode<TileSetEditorSegmentPanel, Godot.Control, Brush>
+    {
+        public Brush(TileSetEditorSegmentPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override Brush Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture
     /// </summary>
     public class TileTexture : UiNode<TileSetEditorSegmentPanel, Godot.TextureRect, TileTexture>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.Brush
+        /// </summary>
+        public Brush L_Brush
+        {
+            get
+            {
+                if (_L_Brush == null) _L_Brush = new Brush(UiPanel, Instance.GetNode<Godot.Control>("Brush"));
+                return _L_Brush;
+            }
+        }
+        private Brush _L_Brush;
+
         public TileTexture(TileSetEditorSegmentPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
         public override TileTexture Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
@@ -192,6 +214,11 @@ public abstract partial class TileSetEditorSegment : UiBase
         public override HSplitContainer Clone() => new (UiPanel, (Godot.HSplitContainer)Instance.Duplicate());
     }
 
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture.Brush
+    /// </summary>
+    public Brush S_Brush => L_HSplitContainer.L_Left.L_MarginContainer.L_LeftBg.L_TileTexture.L_Brush;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture

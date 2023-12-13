@@ -12,6 +12,7 @@ public class DragBinder
     public bool Dragging;
     public Vector2 PrevPosition;
     public Action<DragState, Vector2> Callback;
+    public StringName InputAction;
 
     public void OnMouseEntered()
     {

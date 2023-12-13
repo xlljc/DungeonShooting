@@ -11,15 +11,24 @@ public static class DragUiManager
     /// <summary>
     /// 绑定拖拽事件
     /// </summary>
-    public static DragBinder BindDrag(Control control, Action<DragState, Vector2> callback)
+    public static DragBinder BindDrag(Control control, StringName inputAction, Action<DragState, Vector2> callback)
     {
         var binder = new DragBinder();
         binder.Control = control;
         control.MouseEntered += binder.OnMouseEntered;
         control.MouseExited += binder.OnMouseExited;
         binder.Callback = callback;
+        binder.InputAction = inputAction;
         _addList.Add(binder);
         return binder;
+    }
+    
+    /// <summary>
+    /// 绑定拖拽事件
+    /// </summary>
+    public static DragBinder BindDrag(Control control, Action<DragState, Vector2> callback)
+    {
+        return BindDrag(control, "mouse_left", callback);
     }
 
     /// <summary>
@@ -40,14 +49,14 @@ public static class DragUiManager
         {
             foreach (var dragBinder in _list)
             {
-                if (dragBinder.Dragging && !Input.IsActionPressed("mouse_left")) //松开鼠标, 结束拖拽
+                if (dragBinder.Dragging && !Input.IsActionPressed(dragBinder.InputAction)) //松开鼠标, 结束拖拽
                 {
                     dragBinder.Dragging = false;
                     dragBinder.Callback(DragState.DragEnd, Vector2.Zero);
                 }
                 else if (!dragBinder.Dragging) //开始拖拽
                 {
-                    if (dragBinder.MouseEntered && Input.IsActionJustPressed("mouse_left"))
+                    if (dragBinder.MouseEntered && Input.IsActionJustPressed(dragBinder.InputAction))
                     {
                         dragBinder.Dragging = true;
                         dragBinder.PrevPosition = dragBinder.Control.GetGlobalMousePosition();
