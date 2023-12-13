@@ -18,6 +18,22 @@ public static class ShaderParamNames
     /// 是否显示轮廓
     /// </summary>
     public static readonly StringName ShowOutline = "show_outline";
+    /// <summary>
+    /// 纹理大小
+    /// </summary>
+    public static readonly StringName Size = "size";
+    /// <summary>
+    /// 线段宽度
+    /// </summary>
+    public static readonly StringName LineWidth = "line_width";
+    /// <summary>
+    /// 偏移
+    /// </summary>
+    public static readonly StringName Offset = "offset";
+    /// <summary>
+    /// 网格大小
+    /// </summary>
+    public static readonly StringName GridSize = "grid_size";
 
     /// <summary>
     /// 快速设置一个材质的 shader 材质参数

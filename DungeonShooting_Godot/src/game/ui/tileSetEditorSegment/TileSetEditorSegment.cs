@@ -25,38 +25,61 @@ public abstract partial class TileSetEditorSegment : UiBase
 
     public sealed override void OnInitNestedUi()
     {
+        _ = L_HSplitContainer.L_Left.L_MarginContainer.L_LeftBg;
 
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture
     /// </summary>
-    public class TileTexture : UiNode<TileSetEditorSegmentPanel, Godot.TextureRect, TileTexture>
+    public class TileTexture : UiNode<TileSetEditorSegmentPanel, Godot.Sprite2D, TileTexture>
     {
-        public TileTexture(TileSetEditorSegmentPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
-        public override TileTexture Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+        public TileTexture(TileSetEditorSegmentPanel uiPanel, Godot.Sprite2D node) : base(uiPanel, node) {  }
+        public override TileTexture Clone() => new (UiPanel, (Godot.Sprite2D)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.ColorRect"/>, 路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.Grid
     /// </summary>
-    public class LeftBg : UiNode<TileSetEditorSegmentPanel, Godot.ColorRect, LeftBg>
+    public class Grid : UiNode<TileSetEditorSegmentPanel, Godot.ColorRect, Grid>
+    {
+        public Grid(TileSetEditorSegmentPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override Grid Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="UI.TileSetEditorSegment.TileSetEditorSegmentLeftBg"/>, 路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg
+    /// </summary>
+    public class LeftBg : UiNode<TileSetEditorSegmentPanel, UI.TileSetEditorSegment.TileSetEditorSegmentLeftBg, LeftBg>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.TileTexture
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.TileTexture
         /// </summary>
         public TileTexture L_TileTexture
         {
             get
             {
-                if (_L_TileTexture == null) _L_TileTexture = new TileTexture(UiPanel, Instance.GetNode<Godot.TextureRect>("TileTexture"));
+                if (_L_TileTexture == null) _L_TileTexture = new TileTexture(UiPanel, Instance.GetNode<Godot.Sprite2D>("TileTexture"));
                 return _L_TileTexture;
             }
         }
         private TileTexture _L_TileTexture;
 
-        public LeftBg(TileSetEditorSegmentPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
-        public override LeftBg Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.Grid
+        /// </summary>
+        public Grid L_Grid
+        {
+            get
+            {
+                if (_L_Grid == null) _L_Grid = new Grid(UiPanel, Instance.GetNode<Godot.ColorRect>("Grid"));
+                return _L_Grid;
+            }
+        }
+        private Grid _L_Grid;
+
+        public LeftBg(TileSetEditorSegmentPanel uiPanel, UI.TileSetEditorSegment.TileSetEditorSegmentLeftBg node) : base(uiPanel, node) {  }
+        public override LeftBg Clone() => new (UiPanel, (UI.TileSetEditorSegment.TileSetEditorSegmentLeftBg)Instance.Duplicate());
     }
 
     /// <summary>
@@ -65,13 +88,13 @@ public abstract partial class TileSetEditorSegment : UiBase
     public class MarginContainer : UiNode<TileSetEditorSegmentPanel, Godot.MarginContainer, MarginContainer>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.LeftBg
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorSegment.TileSetEditorSegmentLeftBg"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.LeftBg
         /// </summary>
         public LeftBg L_LeftBg
         {
             get
             {
-                if (_L_LeftBg == null) _L_LeftBg = new LeftBg(UiPanel, Instance.GetNode<Godot.ColorRect>("LeftBg"));
+                if (_L_LeftBg == null) _L_LeftBg = new LeftBg(UiPanel, Instance.GetNode<UI.TileSetEditorSegment.TileSetEditorSegmentLeftBg>("LeftBg"));
                 return _L_LeftBg;
             }
         }
@@ -171,12 +194,17 @@ public abstract partial class TileSetEditorSegment : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture
     /// </summary>
     public TileTexture S_TileTexture => L_HSplitContainer.L_Left.L_MarginContainer.L_LeftBg.L_TileTexture;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.Grid
+    /// </summary>
+    public Grid S_Grid => L_HSplitContainer.L_Left.L_MarginContainer.L_LeftBg.L_Grid;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorSegment.TileSetEditorSegmentLeftBg"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg
     /// </summary>
     public LeftBg S_LeftBg => L_HSplitContainer.L_Left.L_MarginContainer.L_LeftBg;
 

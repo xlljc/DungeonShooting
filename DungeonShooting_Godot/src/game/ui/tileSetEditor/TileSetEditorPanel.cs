@@ -12,7 +12,7 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// <summary>
     /// 纹理
     /// </summary>
-    public Texture Texture;
+    public Texture2D Texture;
 
     /// <summary>
     /// 背景颜色

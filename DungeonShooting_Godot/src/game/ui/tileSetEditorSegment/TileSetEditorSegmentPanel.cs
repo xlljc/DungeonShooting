@@ -5,30 +5,31 @@ namespace UI.TileSetEditorSegment;
 
 public partial class TileSetEditorSegmentPanel : TileSetEditorSegment
 {
-
-    private TileSetEditorPanel _editorPanel;
+    /// <summary>
+    /// 父Ui
+    /// </summary>
+    public TileSetEditorPanel EditorPanel;
     
     public override void OnCreateUi()
     {
-        _editorPanel = (TileSetEditorPanel)ParentUi;
+        EditorPanel = (TileSetEditorPanel)ParentUi;
     }
 
     public override void OnShowUi()
     {
-        if (_editorPanel.Texture == null)
+        if (EditorPanel.Texture == null)
         {
             EditorWindowManager.ShowTips("警告", "请先导入纹理！", () =>
             {
-                _editorPanel.TabGrid.SelectIndex = 0;
+                EditorPanel.TabGrid.SelectIndex = 0;
             });
         }
 
-        S_LeftBg.Instance.Color = _editorPanel.BgColor;
+        S_LeftBg.Instance.OnShow();
     }
 
     public override void OnDestroyUi()
     {
         
     }
-
 }

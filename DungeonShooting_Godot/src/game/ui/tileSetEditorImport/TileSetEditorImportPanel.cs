@@ -43,17 +43,23 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
             {
                 if (mouseButton.ButtonIndex == MouseButton.WheelDown)
                 {
-                    //缩小
-                    var scale = textureRect.Scale;
-                    scale = new Vector2(Mathf.Max(0.1f, scale.X / 1.1f), Mathf.Max(0.1f, scale.Y / 1.1f));
-                    textureRect.Scale = scale;
+                    if (GetGlobalRect().HasPoint(mouseButton.GlobalPosition))
+                    {
+                        //缩小
+                        var scale = textureRect.Scale;
+                        scale = new Vector2(Mathf.Max(0.1f, scale.X / 1.1f), Mathf.Max(0.1f, scale.Y / 1.1f));
+                        textureRect.Scale = scale;
+                    }
                 }
                 else if (mouseButton.ButtonIndex == MouseButton.WheelUp)
                 {
-                    //放大
-                    var scale = textureRect.Scale;
-                    scale = new Vector2(Mathf.Min(20f, scale.X * 1.1f), Mathf.Min(20f, scale.Y * 1.1f));
-                    textureRect.Scale = scale;
+                    if (GetGlobalRect().HasPoint(mouseButton.GlobalPosition))
+                    {
+                        //放大
+                        var scale = textureRect.Scale;
+                        scale = new Vector2(Mathf.Min(20f, scale.X * 1.1f), Mathf.Min(20f, scale.Y * 1.1f));
+                        textureRect.Scale = scale;
+                    }
                 }
             }
         }

@@ -8,6 +8,9 @@ public static class DragUiManager
     private static readonly List<DragBinder> _removeList = new List<DragBinder>();
     private static readonly List<DragBinder> _addList = new List<DragBinder>();
     
+    /// <summary>
+    /// 绑定拖拽事件
+    /// </summary>
     public static DragBinder BindDrag(Control control, Action<DragState, Vector2> callback)
     {
         var binder = new DragBinder();
@@ -19,6 +22,9 @@ public static class DragUiManager
         return binder;
     }
 
+    /// <summary>
+    /// 解绑拖拽事件
+    /// </summary>
     public static void UnBindDrag(DragBinder binder)
     {
         if (!_removeList.Contains(binder))

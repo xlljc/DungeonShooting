@@ -1,6 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://daias2tkvj20c"]
+[gd_scene load_steps=6 format=3 uid="uid://daias2tkvj20c"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileSetEditorSegmentPanel.cs" id="1_to1lc"]
+[ext_resource type="Shader" path="res://resource/material/Grid.gdshader" id="2_t1p2n"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_wr143"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileSetEditorSegmentLeftBg.cs" id="3_dnmr6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u3xqn"]
+shader = ExtResource("2_t1p2n")
+shader_parameter/color = Color(0.529412, 0.529412, 0.529412, 0.0431373)
+shader_parameter/size = Vector2(1334, 1076)
+shader_parameter/line_width = 2
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/grid_size = 16.0
 
 [node name="TileSetEditorSegment" type="Control"]
 layout_mode = 3
@@ -37,21 +48,21 @@ theme_override_constants/margin_bottom = 2
 [node name="LeftBg" type="ColorRect" parent="HSplitContainer/Left/MarginContainer"]
 layout_mode = 2
 color = Color(0.203922, 0.203922, 0.203922, 1)
+script = ExtResource("3_dnmr6")
 
-[node name="TileTexture" type="TextureRect" parent="HSplitContainer/Left/MarginContainer/LeftBg"]
+[node name="TileTexture" type="Sprite2D" parent="HSplitContainer/Left/MarginContainer/LeftBg"]
+position = Vector2(547, 493)
+texture = ExtResource("2_wr143")
+
+[node name="Grid" type="ColorRect" parent="HSplitContainer/Left/MarginContainer/LeftBg"]
+material = SubResource("ShaderMaterial_u3xqn")
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -667.0
-offset_top = -538.0
-offset_right = 667.0
-offset_bottom = 538.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 4
+mouse_filter = 2
 
 [node name="Right" type="Panel" parent="HSplitContainer"]
 layout_mode = 2
