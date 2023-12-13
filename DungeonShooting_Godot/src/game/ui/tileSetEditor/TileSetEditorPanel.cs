@@ -47,7 +47,6 @@ public partial class TileSetEditorPanel : TileSetEditor
             Text = "地形",
             UiName = UiManager.UiNames.TileSetEditorTerrain,
         });
-        TabGrid.SelectIndex = 0;
     }
 
     public override void OnDestroyUi()
@@ -58,6 +57,11 @@ public partial class TileSetEditorPanel : TileSetEditor
     public void InitData(TileSetInfo tileSetInfo)
     {
         S_Title.Instance.Text = "正在编辑：" + tileSetInfo.Name;
+        
+        TexturePath = "icon.png";
+        Texture = ImageTexture.CreateFromImage(Image.LoadFromFile(TexturePath));
+        
+        TabGrid.SelectIndex = 0;
     }
 
     //返回上一级按钮点击

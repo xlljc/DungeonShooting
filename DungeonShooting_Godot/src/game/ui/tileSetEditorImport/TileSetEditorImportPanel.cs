@@ -10,6 +10,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     private bool _isOpenColorPicker;
 
     private TileSetEditor.TileSetEditorPanel _tileSetEditor;
+    private bool _initTexture = false;
 
     public override void OnCreateUi()
     {
@@ -33,7 +34,14 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         _dragBinder.UnBind();
     }
 
-    
+    public override void OnShowUi()
+    {
+        if (!_initTexture && _tileSetEditor.Texture != null)
+        {
+            SetTexture(_tileSetEditor.Texture);
+        }
+    }
+
     public override void _Input(InputEvent @event)
     {
         if (@event is InputEventMouseButton mouseButton)
@@ -138,7 +146,6 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
 
             SetImportTexture(file);
         }
-        
     }
 
     /// <summary>
@@ -151,7 +158,15 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         var imageTexture = ImageTexture.CreateFromImage(Image.LoadFromFile(file));
         _tileSetEditor.TexturePath = file;
         _tileSetEditor.Texture = imageTexture;
-        
+        SetTexture(imageTexture);
+    }
+
+    /// <summary>
+    /// 设置纹理
+    /// </summary>
+    public void SetTexture(Texture2D imageTexture)
+    {
+        _initTexture = true;
         var textureRect = S_Control.L_ImportPreview.Instance;
         if (textureRect.Texture != null)
         {
@@ -167,5 +182,4 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         S_ImportIcon.Instance.Visible = false;
         S_ImportButton.Instance.Visible = false;
     }
-    
 }

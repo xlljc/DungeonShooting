@@ -30,12 +30,12 @@ public abstract partial class TileSetEditorSegment : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture
     /// </summary>
-    public class TileTexture : UiNode<TileSetEditorSegmentPanel, Godot.Sprite2D, TileTexture>
+    public class TileTexture : UiNode<TileSetEditorSegmentPanel, Godot.TextureRect, TileTexture>
     {
-        public TileTexture(TileSetEditorSegmentPanel uiPanel, Godot.Sprite2D node) : base(uiPanel, node) {  }
-        public override TileTexture Clone() => new (UiPanel, (Godot.Sprite2D)Instance.Duplicate());
+        public TileTexture(TileSetEditorSegmentPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override TileTexture Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
@@ -53,13 +53,13 @@ public abstract partial class TileSetEditorSegment : UiBase
     public class LeftBg : UiNode<TileSetEditorSegmentPanel, UI.TileSetEditorSegment.TileSetEditorSegmentLeftBg, LeftBg>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.TileTexture
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.TileTexture
         /// </summary>
         public TileTexture L_TileTexture
         {
             get
             {
-                if (_L_TileTexture == null) _L_TileTexture = new TileTexture(UiPanel, Instance.GetNode<Godot.Sprite2D>("TileTexture"));
+                if (_L_TileTexture == null) _L_TileTexture = new TileTexture(UiPanel, Instance.GetNode<Godot.TextureRect>("TileTexture"));
                 return _L_TileTexture;
             }
         }
@@ -194,7 +194,7 @@ public abstract partial class TileSetEditorSegment : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left.MarginContainer.LeftBg.TileTexture
     /// </summary>
     public TileTexture S_TileTexture => L_HSplitContainer.L_Left.L_MarginContainer.L_LeftBg.L_TileTexture;
 
