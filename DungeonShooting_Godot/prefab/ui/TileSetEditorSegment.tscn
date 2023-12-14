@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://daias2tkvj20c"]
+[gd_scene load_steps=7 format=3 uid="uid://daias2tkvj20c"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileSetEditorSegmentPanel.cs" id="1_to1lc"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileEditArea.cs" id="2_h43yx"]
 [ext_resource type="Shader" path="res://resource/material/Grid.gdshader" id="2_t1p2n"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_wr143"]
-[ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileSetEditorSegmentLeftBg.cs" id="3_dnmr6"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/MaskBrush.cs" id="4_ytys0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u3xqn"]
 shader = ExtResource("2_t1p2n")
@@ -52,7 +53,7 @@ clip_children = 2
 z_index = 1
 layout_mode = 2
 color = Color(0.203922, 0.203922, 0.203922, 1)
-script = ExtResource("3_dnmr6")
+script = ExtResource("2_h43yx")
 
 [node name="TileTexture" type="TextureRect" parent="HSplitContainer/Left/MarginContainer/LeftBg"]
 layout_mode = 1
@@ -70,7 +71,7 @@ grow_vertical = 2
 scale = Vector2(2, 2)
 texture = ExtResource("2_wr143")
 
-[node name="Brush" type="Control" parent="HSplitContainer/Left/MarginContainer/LeftBg/TileTexture"]
+[node name="MaskRoot" type="Control" parent="HSplitContainer/Left/MarginContainer/LeftBg/TileTexture"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,6 +79,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="MaskRect" type="ColorRect" parent="HSplitContainer/Left/MarginContainer/LeftBg/TileTexture/MaskRoot"]
+layout_mode = 1
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.588235)
+
+[node name="MaskBrush" type="Control" parent="HSplitContainer/Left/MarginContainer/LeftBg/TileTexture"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_ytys0")
 
 [node name="Grid" type="ColorRect" parent="HSplitContainer/Left/MarginContainer/LeftBg"]
 material = SubResource("ShaderMaterial_u3xqn")

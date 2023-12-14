@@ -2,27 +2,38 @@
 
 namespace UI.TileSetEditorSegment;
 
-public partial class TileSetEditorSegmentLeftBg : ColorRect, IUiNodeScript
+public partial class TileEditArea : ColorRect, IUiNodeScript
 {
     private TileSetEditorSegment.LeftBg _leftBg;
     private DragBinder _dragBinder;
+    private UiGrid<TileSetEditorSegment.MaskRect, bool> _maskGrid;
+
+    /// <summary>
+    /// 网格横轴数量
+    /// </summary>
+    public int CellHorizontal { get; private set; }
+    /// <summary>
+    /// 网格纵轴数量
+    /// </summary>
+    public int CellVertical { get; private set; }
     
     public void SetUiNode(IUiNode uiNode)
     {
         _leftBg = (TileSetEditorSegment.LeftBg)uiNode;
-        _leftBg.L_TileTexture.L_Brush.Instance.Draw += OnBrushDraw;
+        var maskBrush = _leftBg.L_TileTexture.L_MaskBrush.Instance;
+        maskBrush.TileTexture = _leftBg.L_TileTexture.Instance;
+        maskBrush.TileEditArea = this;
+
         _dragBinder = DragUiManager.BindDrag(this, "mouse_middle", OnDrag);
         Resized += OnLeftBgResize;
+
+        _maskGrid = new UiGrid<TileSetEditorSegment.MaskRect, bool>(_leftBg.L_TileTexture.L_MaskRoot.L_MaskRect, typeof(MaskRectCell));
+        _maskGrid.SetCellOffset(Vector2I.Zero);
     }
 
     public void OnDestroy()
     {
         _dragBinder.UnBind();
-    }
-
-    public override void _Process(double delta)
-    {
-        _leftBg.L_TileTexture.L_Brush.Instance.QueueRedraw();
     }
 
     private void OnDrag(DragState state, Vector2 pos)
@@ -59,7 +70,21 @@ public partial class TileSetEditorSegmentLeftBg : ColorRect, IUiNodeScript
             }
         }
     }
-    
+
+    public override void _Process(double delta)
+    {
+        if (Input.IsMouseButtonPressed(MouseButton.Left))
+        {
+            if (IsMouseInTexture())
+            {
+                var cellPos = GetMouseCellPosition();
+                var index = CellPositionToIndex(cellPos);
+                Debug.Log($"cellPos: {cellPos}, index: {index}");
+                _maskGrid.UpdateByIndex(index, true);
+            }
+        }
+    }
+
     //缩小
     private void Shrink()
     {
@@ -105,11 +130,31 @@ public partial class TileSetEditorSegmentLeftBg : ColorRect, IUiNodeScript
     private void OnLeftBgResize()
     {
         var sprite = _leftBg.L_TileTexture.Instance;
-        sprite.Texture = _leftBg.UiPanel.EditorPanel.Texture;
+        if (sprite.Texture != _leftBg.UiPanel.EditorPanel.Texture)
+        {
+            sprite.Texture = _leftBg.UiPanel.EditorPanel.Texture;
+            OnChangeTileSetTexture(_leftBg.UiPanel.EditorPanel.Texture);
+        }
         
         var colorRect = _leftBg.L_Grid.Instance;
         colorRect.Material.SetShaderMaterialParameter(ShaderParamNames.Size, Size);
         SetGridTransform(sprite.Position, sprite.Scale.X);
+    }
+    
+    //改变TileSet纹理
+    private void OnChangeTileSetTexture(Texture2D texture)
+    {
+        var width = texture.GetWidth() / GameConfig.TileCellSize;
+        var height = texture.GetHeight() / GameConfig.TileCellSize;
+        _maskGrid.RemoveAll();
+        _maskGrid.SetColumns(width);
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                _maskGrid.Add(false);
+            }
+        }
     }
     
     //设置网格位置和缩放
@@ -120,32 +165,10 @@ public partial class TileSetEditorSegmentLeftBg : ColorRect, IUiNodeScript
         colorRect.Material.SetShaderMaterialParameter(ShaderParamNames.Offset, -pos);
     }
     
-    private void OnBrushDraw()
-    {
-        //绘制texture区域
-        var textureRect = _leftBg.L_TileTexture.Instance;
-        var brush = _leftBg.L_TileTexture.L_Brush;
-        if (textureRect.Texture != null)
-        {
-            brush.Instance.DrawRect(new Rect2(Vector2.Zero, textureRect.Size),
-                new Color(1, 1, 0, 0.5f), false,
-                2f / textureRect.Scale.X);
-        }
-
-        //绘制鼠标悬停区域
-        if (IsMouseInTexture())
-        {
-            var pos = textureRect.GetLocalMousePosition() / GameConfig.TileCellSize;
-            pos = new Vector2((int)pos.X * GameConfig.TileCellSize, (int)pos.Y * GameConfig.TileCellSize);
-            brush.Instance.DrawRect(
-                new Rect2(pos,GameConfig.TileCellSizeVector2I),
-                Colors.Green, false, 3f / textureRect.Scale.X
-            );
-        }
-    }
-
-    //返回鼠标是否在texture区域内
-    private bool IsMouseInTexture()
+    /// <summary>
+    /// 返回鼠标是否在texture区域内
+    /// </summary>
+    public bool IsMouseInTexture()
     {
         var textureRect = _leftBg.L_TileTexture.Instance;
         var pos = textureRect.GetLocalMousePosition();
@@ -156,5 +179,24 @@ public partial class TileSetEditorSegmentLeftBg : ColorRect, IUiNodeScript
 
         var size = textureRect.Size;
         return pos.X <= size.X && pos.Y <= size.Y;
+    }
+
+    /// <summary>
+    /// 返回鼠标所在的单元格位置, 相对于纹理左上角
+    /// </summary>
+    public Vector2I GetMouseCellPosition()
+    {
+        var textureRect = _leftBg.L_TileTexture.Instance;
+        var pos = textureRect.GetLocalMousePosition() / GameConfig.TileCellSize;
+        return pos.AsVector2I();
+    }
+
+    /// <summary>
+    /// 将二维位置转换为索引的函数
+    /// </summary>
+    public int CellPositionToIndex(Vector2I pos)
+    {
+        var gridWidth = _maskGrid.GetColumns();
+        return pos.Y * gridWidth + pos.X;
     }
 }
