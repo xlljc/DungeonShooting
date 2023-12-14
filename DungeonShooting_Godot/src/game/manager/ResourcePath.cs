@@ -115,6 +115,7 @@ public class ResourcePath
     public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";
     public const string resource_material_Blend_tres = "res://resource/material/Blend.tres";
+    public const string resource_material_Grid_gdshader = "res://resource/material/Grid.gdshader";
     public const string resource_material_Mask_gdshader = "res://resource/material/Mask.gdshader";
     public const string resource_material_OffsetVertex_gdshader = "res://resource/material/OffsetVertex.gdshader";
     public const string resource_material_Outline_gdshader = "res://resource/material/Outline.gdshader";

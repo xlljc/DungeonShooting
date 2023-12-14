@@ -26,6 +26,7 @@ public abstract partial class TileSetEditorSegment : UiBase
     public sealed override void OnInitNestedUi()
     {
         _ = L_HSplitContainer.L_Left.L_MarginContainer.L_LeftBg;
+        _ = L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg;
 
     }
 
@@ -193,10 +194,164 @@ public abstract partial class TileSetEditorSegment : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.Label
+    /// </summary>
+    public class Label : UiNode<TileSetEditorSegmentPanel, Godot.Label, Label>
+    {
+        public Label(TileSetEditorSegmentPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.PreviewImage
+    /// </summary>
+    public class PreviewImage : UiNode<TileSetEditorSegmentPanel, Godot.TextureRect, PreviewImage>
+    {
+        public PreviewImage(TileSetEditorSegmentPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override PreviewImage Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.CellId
+    /// </summary>
+    public class CellId : UiNode<TileSetEditorSegmentPanel, Godot.Label, CellId>
+    {
+        public CellId(TileSetEditorSegmentPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override CellId Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.SelectTexture
+    /// </summary>
+    public class SelectTexture : UiNode<TileSetEditorSegmentPanel, Godot.NinePatchRect, SelectTexture>
+    {
+        public SelectTexture(TileSetEditorSegmentPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override SelectTexture Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton
+    /// </summary>
+    public class CellButton : UiNode<TileSetEditorSegmentPanel, Godot.Button, CellButton>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.PreviewImage
+        /// </summary>
+        public PreviewImage L_PreviewImage
+        {
+            get
+            {
+                if (_L_PreviewImage == null) _L_PreviewImage = new PreviewImage(UiPanel, Instance.GetNode<Godot.TextureRect>("PreviewImage"));
+                return _L_PreviewImage;
+            }
+        }
+        private PreviewImage _L_PreviewImage;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellId
+        /// </summary>
+        public CellId L_CellId
+        {
+            get
+            {
+                if (_L_CellId == null) _L_CellId = new CellId(UiPanel, Instance.GetNode<Godot.Label>("CellId"));
+                return _L_CellId;
+            }
+        }
+        private CellId _L_CellId;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.SelectTexture
+        /// </summary>
+        public SelectTexture L_SelectTexture
+        {
+            get
+            {
+                if (_L_SelectTexture == null) _L_SelectTexture = new SelectTexture(UiPanel, Instance.GetNode<Godot.NinePatchRect>("SelectTexture"));
+                return _L_SelectTexture;
+            }
+        }
+        private SelectTexture _L_SelectTexture;
+
+        public CellButton(TileSetEditorSegmentPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override CellButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.ScrollContainer"/>, 路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer
+    /// </summary>
+    public class ScrollContainer : UiNode<TileSetEditorSegmentPanel, Godot.ScrollContainer, ScrollContainer>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.CellButton
+        /// </summary>
+        public CellButton L_CellButton
+        {
+            get
+            {
+                if (_L_CellButton == null) _L_CellButton = new CellButton(UiPanel, Instance.GetNode<Godot.Button>("CellButton"));
+                return _L_CellButton;
+            }
+        }
+        private CellButton _L_CellButton;
+
+        public ScrollContainer(TileSetEditorSegmentPanel uiPanel, Godot.ScrollContainer node) : base(uiPanel, node) {  }
+        public override ScrollContainer Clone() => new (UiPanel, (Godot.ScrollContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="UI.TileSetEditorSegment.TileSelectedCell"/>, 路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg
+    /// </summary>
+    public class RightBg : UiNode<TileSetEditorSegmentPanel, UI.TileSetEditorSegment.TileSelectedCell, RightBg>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.Label
+        /// </summary>
+        public Label L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label(UiPanel, Instance.GetNode<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label _L_Label;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.ScrollContainer
+        /// </summary>
+        public ScrollContainer L_ScrollContainer
+        {
+            get
+            {
+                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer(UiPanel, Instance.GetNode<Godot.ScrollContainer>("ScrollContainer"));
+                return _L_ScrollContainer;
+            }
+        }
+        private ScrollContainer _L_ScrollContainer;
+
+        public RightBg(TileSetEditorSegmentPanel uiPanel, UI.TileSetEditorSegment.TileSelectedCell node) : base(uiPanel, node) {  }
+        public override RightBg Clone() => new (UiPanel, (UI.TileSetEditorSegment.TileSelectedCell)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.MarginContainer"/>, 路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer
     /// </summary>
     public class MarginContainer_1 : UiNode<TileSetEditorSegmentPanel, Godot.MarginContainer, MarginContainer_1>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorSegment.TileSelectedCell"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.RightBg
+        /// </summary>
+        public RightBg L_RightBg
+        {
+            get
+            {
+                if (_L_RightBg == null) _L_RightBg = new RightBg(UiPanel, Instance.GetNode<UI.TileSetEditorSegment.TileSelectedCell>("RightBg"));
+                return _L_RightBg;
+            }
+        }
+        private RightBg _L_RightBg;
+
         public MarginContainer_1(TileSetEditorSegmentPanel uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
         public override MarginContainer_1 Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
     }
@@ -293,6 +448,41 @@ public abstract partial class TileSetEditorSegment : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Left
     /// </summary>
     public Left S_Left => L_HSplitContainer.L_Left;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.Label
+    /// </summary>
+    public Label S_Label => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg.L_Label;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.PreviewImage
+    /// </summary>
+    public PreviewImage S_PreviewImage => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg.L_ScrollContainer.L_CellButton.L_PreviewImage;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.CellId
+    /// </summary>
+    public CellId S_CellId => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg.L_ScrollContainer.L_CellButton.L_CellId;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.SelectTexture
+    /// </summary>
+    public SelectTexture S_SelectTexture => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg.L_ScrollContainer.L_CellButton.L_SelectTexture;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton
+    /// </summary>
+    public CellButton S_CellButton => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg.L_ScrollContainer.L_CellButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer
+    /// </summary>
+    public ScrollContainer S_ScrollContainer => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg.L_ScrollContainer;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorSegment.TileSelectedCell"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg
+    /// </summary>
+    public RightBg S_RightBg => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right

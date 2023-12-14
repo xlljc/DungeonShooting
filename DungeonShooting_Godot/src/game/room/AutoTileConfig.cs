@@ -7,22 +7,22 @@ using Godot;
 /// </summary>
 public class AutoTileConfig
 {
-    public TileCellInfo IN_LT = new TileCellInfo(0, new Vector2I(3, 3));
-    public TileCellInfo IN_LB = new TileCellInfo(0, new Vector2I(11, 2));
-    public TileCellInfo IN_RT = new TileCellInfo(0, new Vector2I(1, 3));
-    public TileCellInfo IN_RB = new TileCellInfo(0, new Vector2I(13, 2));
-    public TileCellInfo R = new TileCellInfo(0, new Vector2I(1, 3));
-    public TileCellInfo L = new TileCellInfo(0, new Vector2I(3, 3));
-    public TileCellInfo T = new TileCellInfo(0, new Vector2I(2, 7));
-    public TileCellInfo B = new TileCellInfo(0, new Vector2I(2, 2));
-    public TileCellInfo Floor = new TileCellInfo(0, new Vector2I(0, 8));
+    public TileCellData IN_LT = new TileCellData(0, new Vector2I(3, 3));
+    public TileCellData IN_LB = new TileCellData(0, new Vector2I(11, 2));
+    public TileCellData IN_RT = new TileCellData(0, new Vector2I(1, 3));
+    public TileCellData IN_RB = new TileCellData(0, new Vector2I(13, 2));
+    public TileCellData R = new TileCellData(0, new Vector2I(1, 3));
+    public TileCellData L = new TileCellData(0, new Vector2I(3, 3));
+    public TileCellData T = new TileCellData(0, new Vector2I(2, 7));
+    public TileCellData B = new TileCellData(0, new Vector2I(2, 2));
+    public TileCellData Floor = new TileCellData(0, new Vector2I(0, 8));
     
-    public TileCellInfo OUT_LT = new TileCellInfo(0, new Vector2I(1, 2));
-    public TileCellInfo OUT_LB = new TileCellInfo(0, new Vector2I(1, 7));
-    public TileCellInfo OUT_RT = new TileCellInfo(0, new Vector2I(3, 2));
-    public TileCellInfo OUT_RB = new TileCellInfo(0, new Vector2I(3, 7));
+    public TileCellData OUT_LT = new TileCellData(0, new Vector2I(1, 2));
+    public TileCellData OUT_LB = new TileCellData(0, new Vector2I(1, 7));
+    public TileCellData OUT_RT = new TileCellData(0, new Vector2I(3, 2));
+    public TileCellData OUT_RB = new TileCellData(0, new Vector2I(3, 7));
     
-    public TileCellInfo WALL_BLOCK = new TileCellInfo(0, new Vector2I(2, 3));
+    public TileCellData WALL_BLOCK = new TileCellData(0, new Vector2I(2, 3));
     
     private List<Vector2I> _middleLayerAtlasCoords = new List<Vector2I>()
     {

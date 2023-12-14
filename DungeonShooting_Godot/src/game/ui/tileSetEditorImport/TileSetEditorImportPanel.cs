@@ -15,7 +15,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     public override void OnCreateUi()
     {
         _tileSetEditor = (TileSetEditor.TileSetEditorPanel)ParentUi;
-        _tileSetEditor.BgColor = S_ImportPreviewBg.Instance.Color;
+        _tileSetEditor.SetBgColor(S_ImportPreviewBg.Instance.Color);
         
         _dragBinder = DragUiManager.BindDrag(S_ImportPreviewBg.Instance, OnDragCallback);
         
@@ -109,7 +109,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
                 color =>
                 {
                     S_ImportPreviewBg.Instance.Color = color;
-                    _tileSetEditor.BgColor = color;
+                    _tileSetEditor.SetBgColor(color);
                 },
                 //关闭窗口
                 () => { _isOpenColorPicker = false; }
@@ -156,8 +156,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     {
         Debug.Log("导入文件: " + file);
         var imageTexture = ImageTexture.CreateFromImage(Image.LoadFromFile(file));
-        _tileSetEditor.TexturePath = file;
-        _tileSetEditor.Texture = imageTexture;
+        _tileSetEditor.SetTexture(imageTexture);
         SetTexture(imageTexture);
     }
 

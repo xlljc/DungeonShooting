@@ -4,9 +4,9 @@ using Godot;
 /// <summary>
 /// 地图cell属性信息
 /// </summary>
-public class TileCellInfo
+public class TileCellData
 {
-    public TileCellInfo(int id, Vector2I autoTileCoord)
+    public TileCellData(int id, Vector2I autoTileCoord)
     {
         Id = id;
         AutoTileCoord = autoTileCoord;

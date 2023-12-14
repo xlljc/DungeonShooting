@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://daias2tkvj20c"]
+[gd_scene load_steps=9 format=3 uid="uid://daias2tkvj20c"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileSetEditorSegmentPanel.cs" id="1_to1lc"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileEditArea.cs" id="2_h43yx"]
 [ext_resource type="Shader" path="res://resource/material/Grid.gdshader" id="2_t1p2n"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_wr143"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/MaskBrush.cs" id="4_ytys0"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileSelectedCell.cs" id="6_ebs5u"]
+[ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="6_g5ey6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u3xqn"]
 shader = ExtResource("2_t1p2n")
@@ -34,7 +36,7 @@ grow_vertical = 2
 [node name="Left" type="Panel" parent="HSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 70.0
+size_flags_stretch_ratio = 68.0
 
 [node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Left"]
 layout_mode = 1
@@ -110,7 +112,7 @@ mouse_filter = 2
 [node name="Right" type="Panel" parent="HSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 30.0
+size_flags_stretch_ratio = 31.0
 
 [node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Right"]
 layout_mode = 1
@@ -123,3 +125,64 @@ theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
+
+[node name="RightBg" type="VBoxContainer" parent="HSplitContainer/Right/MarginContainer"]
+layout_mode = 2
+script = ExtResource("6_ebs5u")
+
+[node name="Label" type="Label" parent="HSplitContainer/Right/MarginContainer/RightBg"]
+layout_mode = 2
+text = "已经导入的图块（右键移除）："
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/Right/MarginContainer/RightBg"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CellButton" type="Button" parent="HSplitContainer/Right/MarginContainer/RightBg/ScrollContainer"]
+custom_minimum_size = Vector2(120, 145)
+layout_mode = 2
+
+[node name="PreviewImage" type="TextureRect" parent="HSplitContainer/Right/MarginContainer/RightBg/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch_mode = 5
+
+[node name="CellId" type="Label" parent="HSplitContainer/Right/MarginContainer/RightBg/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -27.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 16
+text = "(0,0)"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 1
+
+[node name="SelectTexture" type="NinePatchRect" parent="HSplitContainer/Right/MarginContainer/RightBg/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_g5ey6")
+region_rect = Rect2(0, 0, 36, 36)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3

@@ -240,6 +240,22 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
 
         return _cellList[index];
     }
+    
+    /// <summary>
+    /// 根据自定义回调查询数据
+    /// </summary>
+    public UiCell<TUiCellNode, TData> Find(Func<UiCell<TUiCellNode, TData>, bool> func)
+    {
+        foreach (var uiCell in _cellList)
+        {
+            if (func(uiCell))
+            {
+                return uiCell;
+            }
+        }
+
+        return null;
+    }
 
     /// <summary>
     /// 设置当前网格组件中的所有 Cell 数据, 性能较低

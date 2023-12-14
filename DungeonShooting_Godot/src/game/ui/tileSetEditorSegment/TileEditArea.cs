@@ -7,15 +7,6 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
     private TileSetEditorSegment.LeftBg _leftBg;
     private DragBinder _dragBinder;
     private UiGrid<TileSetEditorSegment.MaskRect, bool> _maskGrid;
-
-    /// <summary>
-    /// 网格横轴数量
-    /// </summary>
-    public int CellHorizontal { get; private set; }
-    /// <summary>
-    /// 网格纵轴数量
-    /// </summary>
-    public int CellVertical { get; private set; }
     
     public void SetUiNode(IUiNode uiNode)
     {
@@ -34,6 +25,7 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
     public void OnDestroy()
     {
         _dragBinder.UnBind();
+        _maskGrid.Destroy();
     }
 
     private void OnDrag(DragState state, Vector2 pos)
@@ -73,18 +65,52 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
 
     public override void _Process(double delta)
     {
-        if (Input.IsMouseButtonPressed(MouseButton.Left))
+        if (Input.IsMouseButtonPressed(MouseButton.Left)) //左键导入
         {
             if (IsMouseInTexture())
             {
-                var cellPos = GetMouseCellPosition();
-                var index = CellPositionToIndex(cellPos);
-                Debug.Log($"cellPos: {cellPos}, index: {index}");
-                _maskGrid.UpdateByIndex(index, true);
+                ImportCell(GetMouseCellPosition());
+            }
+        }
+        else if (Input.IsMouseButtonPressed(MouseButton.Right)) //右键移除
+        {
+            if (IsMouseInTexture())
+            {
+                RemoveCell(GetMouseCellPosition());
             }
         }
     }
 
+    /// <summary>
+    /// 导入选中的Cell图块
+    /// </summary>
+    /// <param name="cell">cell位置, 从图块左上角开始</param>
+    public void ImportCell(Vector2I cell)
+    {
+        var cellIndex = _leftBg.UiPanel.EditorPanel.CellPositionToIndex(cell);
+        var uiCell = _maskGrid.GetCell(cellIndex);
+        if (!uiCell.Data)
+        {
+            uiCell.SetData(true);
+            _leftBg.UiPanel.S_RightBg.Instance.ImportCell(cell);
+        }
+    }
+
+    /// <summary>
+    /// 移除选中的Cell图块
+    /// </summary>
+    /// <param name="cell">cell位置, 从图块左上角开始</param>
+    public void RemoveCell(Vector2I cell)
+    {
+        var cellIndex = _leftBg.UiPanel.EditorPanel.CellPositionToIndex(cell);
+        var uiCell = _maskGrid.GetCell(cellIndex);
+        if (uiCell.Data)
+        {
+            uiCell.SetData(false);
+            _leftBg.UiPanel.S_RightBg.Instance.RemoveCell(cell);
+        }
+    }
+    
     //缩小
     private void Shrink()
     {
@@ -144,8 +170,8 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
     //改变TileSet纹理
     private void OnChangeTileSetTexture(Texture2D texture)
     {
-        var width = texture.GetWidth() / GameConfig.TileCellSize;
-        var height = texture.GetHeight() / GameConfig.TileCellSize;
+        var width = _leftBg.UiPanel.EditorPanel.CellHorizontal;
+        var height = _leftBg.UiPanel.EditorPanel.CellVertical;
         _maskGrid.RemoveAll();
         _maskGrid.SetColumns(width);
         for (int i = 0; i < width; i++)
@@ -189,14 +215,5 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
         var textureRect = _leftBg.L_TileTexture.Instance;
         var pos = textureRect.GetLocalMousePosition() / GameConfig.TileCellSize;
         return pos.AsVector2I();
-    }
-
-    /// <summary>
-    /// 将二维位置转换为索引的函数
-    /// </summary>
-    public int CellPositionToIndex(Vector2I pos)
-    {
-        var gridWidth = _maskGrid.GetColumns();
-        return pos.Y * gridWidth + pos.X;
     }
 }
