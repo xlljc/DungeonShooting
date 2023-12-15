@@ -24,6 +24,12 @@ public class TileCell : UiCell<TileSetEditorSegment.CellButton, Vector2I>
         CellNode.L_CellId.Instance.Text = data.ToString();
     }
 
+    public override void OnDoubleClick()
+    {
+        //双击移除Cell数据
+        EventManager.EmitEvent(EventEnum.OnRemoveTileCell, Data);
+    }
+
     public override void OnDestroy()
     {
         _previewTexture.Dispose();

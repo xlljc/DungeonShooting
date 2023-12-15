@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System.Collections.Generic;
+using Godot;
 
 namespace UI.TileSetEditorSegment;
 
@@ -7,6 +8,7 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
     private TileSetEditorSegment.LeftBg _leftBg;
     private DragBinder _dragBinder;
     private UiGrid<TileSetEditorSegment.MaskRect, bool> _maskGrid;
+    private readonly HashSet<Vector2I> _useMask = new HashSet<Vector2I>();
     
     public void SetUiNode(IUiNode uiNode)
     {
@@ -20,6 +22,9 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
 
         _maskGrid = new UiGrid<TileSetEditorSegment.MaskRect, bool>(_leftBg.L_TileTexture.L_MaskRoot.L_MaskRect, typeof(MaskRectCell));
         _maskGrid.SetCellOffset(Vector2I.Zero);
+        
+        _leftBg.UiPanel.AddEventListener(EventEnum.OnImportTileCell, OnImportCell);
+        _leftBg.UiPanel.AddEventListener(EventEnum.OnRemoveTileCell, OnRemoveCell);
     }
 
     public void OnDestroy()
@@ -39,6 +44,11 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
 
     public override void _Input(InputEvent @event)
     {
+        //Ui未打开
+        if (!_leftBg.UiPanel.IsOpen)
+        {
+            return;
+        }
         if (@event is InputEventMouseButton mouseButton)
         {
             if (_leftBg.UiPanel.IsOpen)
@@ -65,18 +75,32 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
 
     public override void _Process(double delta)
     {
+        //Ui未打开
+        if (!_leftBg.UiPanel.IsOpen)
+        {
+            return;
+        }
+
         if (Input.IsMouseButtonPressed(MouseButton.Left)) //左键导入
         {
-            if (IsMouseInTexture())
+            if (_leftBg.L_TileTexture.Instance.IsMouseInRect() && this.IsMouseInRect())
             {
-                ImportCell(GetMouseCellPosition());
+                var cellPosition = GetMouseCellPosition();
+                if (!_useMask.Contains(cellPosition))
+                {
+                    EventManager.EmitEvent(EventEnum.OnImportTileCell, cellPosition);
+                }
             }
         }
         else if (Input.IsMouseButtonPressed(MouseButton.Right)) //右键移除
         {
-            if (IsMouseInTexture())
+            if (_leftBg.L_TileTexture.Instance.IsMouseInRect() && this.IsMouseInRect())
             {
-                RemoveCell(GetMouseCellPosition());
+                var cellPosition = GetMouseCellPosition();
+                if (_useMask.Contains(cellPosition))
+                {
+                    EventManager.EmitEvent(EventEnum.OnRemoveTileCell, cellPosition);
+                }
             }
         }
     }
@@ -84,33 +108,37 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
     /// <summary>
     /// 导入选中的Cell图块
     /// </summary>
-    /// <param name="cell">cell位置, 从图块左上角开始</param>
-    public void ImportCell(Vector2I cell)
+    private void OnImportCell(object arg)
     {
-        var cellIndex = _leftBg.UiPanel.EditorPanel.CellPositionToIndex(cell);
-        var uiCell = _maskGrid.GetCell(cellIndex);
-        if (!uiCell.Data)
+        if (arg is Vector2I cell)
         {
-            uiCell.SetData(true);
-            _leftBg.UiPanel.S_RightBg.Instance.ImportCell(cell);
+            var cellIndex = _leftBg.UiPanel.EditorPanel.CellPositionToIndex(cell);
+            var uiCell = _maskGrid.GetCell(cellIndex);
+            if (uiCell != null && !uiCell.Data)
+            {
+                _useMask.Add(cell);
+                uiCell.SetData(true);
+            }
         }
     }
 
     /// <summary>
     /// 移除选中的Cell图块
     /// </summary>
-    /// <param name="cell">cell位置, 从图块左上角开始</param>
-    public void RemoveCell(Vector2I cell)
+    private void OnRemoveCell(object arg)
     {
-        var cellIndex = _leftBg.UiPanel.EditorPanel.CellPositionToIndex(cell);
-        var uiCell = _maskGrid.GetCell(cellIndex);
-        if (uiCell.Data)
+        if (arg is Vector2I cell)
         {
-            uiCell.SetData(false);
-            _leftBg.UiPanel.S_RightBg.Instance.RemoveCell(cell);
+            var cellIndex = _leftBg.UiPanel.EditorPanel.CellPositionToIndex(cell);
+            var uiCell = _maskGrid.GetCell(cellIndex);
+            if (uiCell != null && uiCell.Data)
+            {
+                _useMask.Remove(cell);
+                uiCell.SetData(false);
+            }
         }
     }
-    
+
     //缩小
     private void Shrink()
     {
@@ -147,8 +175,6 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
     /// </summary>
     public void OnShow()
     {
-        //背景颜色
-        Color = _leftBg.UiPanel.EditorPanel.BgColor;
         OnLeftBgResize();
     }
 
@@ -156,33 +182,31 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
     private void OnLeftBgResize()
     {
         var sprite = _leftBg.L_TileTexture.Instance;
-        if (sprite.Texture != _leftBg.UiPanel.EditorPanel.Texture)
-        {
-            sprite.Texture = _leftBg.UiPanel.EditorPanel.Texture;
-            OnChangeTileSetTexture(_leftBg.UiPanel.EditorPanel.Texture);
-        }
-        
         var colorRect = _leftBg.L_Grid.Instance;
         colorRect.Material.SetShaderMaterialParameter(ShaderParamNames.Size, Size);
         SetGridTransform(sprite.Position, sprite.Scale.X);
     }
-    
-    //改变TileSet纹理
-    private void OnChangeTileSetTexture(Texture2D texture)
+
+    /// <summary>
+    /// 改变TileSet纹理
+    /// </summary>
+    public void OnChangeTileSetTexture(Texture2D texture)
     {
+        _leftBg.L_TileTexture.Instance.Texture = texture;
         var width = _leftBg.UiPanel.EditorPanel.CellHorizontal;
         var height = _leftBg.UiPanel.EditorPanel.CellVertical;
         _maskGrid.RemoveAll();
+        _useMask.Clear();
         _maskGrid.SetColumns(width);
-        for (int i = 0; i < width; i++)
+        for (var i = 0; i < width; i++)
         {
-            for (int j = 0; j < height; j++)
+            for (var j = 0; j < height; j++)
             {
                 _maskGrid.Add(false);
             }
         }
     }
-    
+
     //设置网格位置和缩放
     private void SetGridTransform(Vector2 pos, float scale)
     {
@@ -191,22 +215,6 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
         colorRect.Material.SetShaderMaterialParameter(ShaderParamNames.Offset, -pos);
     }
     
-    /// <summary>
-    /// 返回鼠标是否在texture区域内
-    /// </summary>
-    public bool IsMouseInTexture()
-    {
-        var textureRect = _leftBg.L_TileTexture.Instance;
-        var pos = textureRect.GetLocalMousePosition();
-        if (pos.X < 0 || pos.Y < 0)
-        {
-            return false;
-        }
-
-        var size = textureRect.Size;
-        return pos.X <= size.X && pos.Y <= size.Y;
-    }
-
     /// <summary>
     /// 返回鼠标所在的单元格位置, 相对于纹理左上角
     /// </summary>

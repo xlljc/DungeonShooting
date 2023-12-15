@@ -10,7 +10,6 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     private bool _isOpenColorPicker;
 
     private TileSetEditor.TileSetEditorPanel _tileSetEditor;
-    private bool _initTexture = false;
 
     public override void OnCreateUi()
     {
@@ -26,6 +25,11 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         
         S_ImportPreviewBg.Instance.Visible = false;
         S_ReimportButton.Instance.Visible = false;
+        
+        //监听TileSet纹理改变
+        AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
+        //监听TileSet背景颜色改变
+        AddEventListener(EventEnum.OnSetTileSetBgColor, OnSetTileSetBgColor);
     }
 
     public override void OnDestroyUi()
@@ -34,11 +38,33 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         _dragBinder.UnBind();
     }
 
-    public override void OnShowUi()
+    //TileSet纹理改变
+    private void OnSetTileTexture(object arg)
     {
-        if (!_initTexture && _tileSetEditor.Texture != null)
+        //判断是否已经初始化好纹理了
+        if (arg is Texture2D texture)
         {
-            SetTexture(_tileSetEditor.Texture);
+            var sprite2D = S_ImportPreview.Instance;
+            if (sprite2D.Texture != texture)
+            {
+                sprite2D.Texture = texture;
+                S_ImportPreviewBg.Instance.Visible = true;
+                S_ReimportButton.Instance.Visible = true;    
+        
+                //隐藏导入文本和icon
+                S_ImportLabel.Instance.Visible = false;
+                S_ImportIcon.Instance.Visible = false;
+                S_ImportButton.Instance.Visible = false;
+            }
+        }
+    }
+
+    //背景颜色改变
+    private void OnSetTileSetBgColor(object arg)
+    {
+        if (arg is Color color)
+        {
+            S_ImportPreviewBg.Instance.Color = color;
         }
     }
 
@@ -108,7 +134,6 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
                 //设置颜色
                 color =>
                 {
-                    S_ImportPreviewBg.Instance.Color = color;
                     _tileSetEditor.SetBgColor(color);
                 },
                 //关闭窗口
@@ -157,28 +182,5 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         Debug.Log("导入文件: " + file);
         var imageTexture = ImageTexture.CreateFromImage(Image.LoadFromFile(file));
         _tileSetEditor.SetTexture(imageTexture);
-        SetTexture(imageTexture);
-    }
-
-    /// <summary>
-    /// 设置纹理
-    /// </summary>
-    public void SetTexture(Texture2D imageTexture)
-    {
-        _initTexture = true;
-        var textureRect = S_Control.L_ImportPreview.Instance;
-        if (textureRect.Texture != null)
-        {
-            textureRect.Texture.Dispose();
-        }
-
-        textureRect.Texture = imageTexture;
-        S_ImportPreviewBg.Instance.Visible = true;
-        S_ReimportButton.Instance.Visible = true;    
-        
-        //隐藏导入文本和icon
-        S_ImportLabel.Instance.Visible = false;
-        S_ImportIcon.Instance.Visible = false;
-        S_ImportButton.Instance.Visible = false;
     }
 }

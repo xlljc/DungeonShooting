@@ -5,8 +5,8 @@
 [ext_resource type="Shader" path="res://resource/material/Grid.gdshader" id="2_t1p2n"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_wr143"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/MaskBrush.cs" id="4_ytys0"]
-[ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileSelectedCell.cs" id="6_ebs5u"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="6_g5ey6"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorSegment/TileSelected.cs" id="6_gql80"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u3xqn"]
 shader = ExtResource("2_t1p2n")
@@ -128,11 +128,11 @@ theme_override_constants/margin_bottom = 2
 
 [node name="RightBg" type="VBoxContainer" parent="HSplitContainer/Right/MarginContainer"]
 layout_mode = 2
-script = ExtResource("6_ebs5u")
+script = ExtResource("6_gql80")
 
 [node name="Label" type="Label" parent="HSplitContainer/Right/MarginContainer/RightBg"]
 layout_mode = 2
-text = "已经导入的图块（右键移除）："
+text = "已经导入的图块（双击移除）："
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/Right/MarginContainer/RightBg"]
 layout_mode = 2

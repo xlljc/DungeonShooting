@@ -26,7 +26,6 @@ public abstract partial class TileSetEditorSegment : UiBase
     public sealed override void OnInitNestedUi()
     {
         _ = L_HSplitContainer.L_Left.L_MarginContainer.L_LeftBg;
-        _ = L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg;
 
     }
 
@@ -300,9 +299,9 @@ public abstract partial class TileSetEditorSegment : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.TileSetEditorSegment.TileSelectedCell"/>, 路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg
+    /// 类型: <see cref="UI.TileSetEditorSegment.TileSelected"/>, 路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg
     /// </summary>
-    public class RightBg : UiNode<TileSetEditorSegmentPanel, UI.TileSetEditorSegment.TileSelectedCell, RightBg>
+    public class RightBg : UiNode<TileSetEditorSegmentPanel, UI.TileSetEditorSegment.TileSelected, RightBg>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.Label
@@ -330,8 +329,8 @@ public abstract partial class TileSetEditorSegment : UiBase
         }
         private ScrollContainer _L_ScrollContainer;
 
-        public RightBg(TileSetEditorSegmentPanel uiPanel, UI.TileSetEditorSegment.TileSelectedCell node) : base(uiPanel, node) {  }
-        public override RightBg Clone() => new (UiPanel, (UI.TileSetEditorSegment.TileSelectedCell)Instance.Duplicate());
+        public RightBg(TileSetEditorSegmentPanel uiPanel, UI.TileSetEditorSegment.TileSelected node) : base(uiPanel, node) {  }
+        public override RightBg Clone() => new (UiPanel, (UI.TileSetEditorSegment.TileSelected)Instance.Duplicate());
     }
 
     /// <summary>
@@ -340,13 +339,13 @@ public abstract partial class TileSetEditorSegment : UiBase
     public class MarginContainer_1 : UiNode<TileSetEditorSegmentPanel, Godot.MarginContainer, MarginContainer_1>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorSegment.TileSelectedCell"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.RightBg
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorSegment.TileSelected"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.RightBg
         /// </summary>
         public RightBg L_RightBg
         {
             get
             {
-                if (_L_RightBg == null) _L_RightBg = new RightBg(UiPanel, Instance.GetNode<UI.TileSetEditorSegment.TileSelectedCell>("RightBg"));
+                if (_L_RightBg == null) _L_RightBg = new RightBg(UiPanel, Instance.GetNode<UI.TileSetEditorSegment.TileSelected>("RightBg"));
                 return _L_RightBg;
             }
         }
@@ -480,7 +479,7 @@ public abstract partial class TileSetEditorSegment : UiBase
     public ScrollContainer S_ScrollContainer => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg.L_ScrollContainer;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorSegment.TileSelectedCell"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorSegment.TileSelected"/>, 节点路径: TileSetEditorSegment.HSplitContainer.Right.MarginContainer.RightBg
     /// </summary>
     public RightBg S_RightBg => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg;
 

@@ -147,4 +147,21 @@ public enum EventEnum
     /// 设置标记显示状态, 参数<see cref="MarkInfoVisibleData"/>
     /// </summary>
     OnSetMarkVisible,
+    
+    /// <summary>
+    /// 设置TileSet纹理, 参数<see cref="Godot.Texture2D"/>
+    /// </summary>
+    OnSetTileTexture,
+    /// <summary>
+    /// 设置TileSet编辑器的背景颜色, 参数为<see cref="Godot.Color"/>
+    /// </summary>
+    OnSetTileSetBgColor,
+    /// <summary>
+    /// 导入选中的Cell图块, 参数为<see cref="Godot.Vector2I"/>
+    /// </summary>
+    OnImportTileCell,
+    /// <summary>
+    /// 移除选中的Cell图块, 参数为<see cref="Godot.Vector2I"/>
+    /// </summary>
+    OnRemoveTileCell,
 }

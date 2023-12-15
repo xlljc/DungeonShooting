@@ -83,6 +83,21 @@ public static class NodeExtend
     {
         return (control.SizeFlagsHorizontal & Control.SizeFlags.Expand) != 0;
     }
+    
+    /// <summary>
+    /// 返回鼠标是否在Ui矩形内
+    /// </summary>
+    public static bool IsMouseInRect(this Control control)
+    {
+        var pos = control.GetLocalMousePosition();
+        if (pos.X < 0 || pos.Y < 0)
+        {
+            return false;
+        }
+
+        var size = control.Size;
+        return pos.X <= size.X && pos.Y <= size.Y;
+    }
 
     /// <summary>
     /// 设置是否启用节点

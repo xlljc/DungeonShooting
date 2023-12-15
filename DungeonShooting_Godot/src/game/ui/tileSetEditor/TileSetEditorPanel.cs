@@ -97,6 +97,9 @@ public partial class TileSetEditorPanel : TileSetEditor
         TextureImage = texture.GetImage();
         CellHorizontal = texture.GetWidth() / GameConfig.TileCellSize;
         CellVertical = texture.GetHeight() / GameConfig.TileCellSize;
+        
+        //派发事件
+        EventManager.EmitEvent(EventEnum.OnSetTileTexture, texture);
     }
 
     /// <summary>
@@ -105,6 +108,9 @@ public partial class TileSetEditorPanel : TileSetEditor
     public void SetBgColor(Color color)
     {
         BgColor = color;
+        
+        //派发事件
+        EventManager.EmitEvent(EventEnum.OnSetTileTexture, color);
     }
     
     /// <summary>

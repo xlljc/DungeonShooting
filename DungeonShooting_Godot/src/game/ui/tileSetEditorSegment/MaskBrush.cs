@@ -32,7 +32,7 @@ public partial class MaskBrush : Control
         }
 
         //绘制鼠标悬停区域
-        if (TileEditArea.IsMouseInTexture())
+        if (TileTexture.IsMouseInRect())
         {
             var pos = TileEditArea.GetMouseCellPosition() * GameConfig.TileCellSize;
             DrawRect(
