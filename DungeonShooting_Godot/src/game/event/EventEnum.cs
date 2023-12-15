@@ -157,11 +157,11 @@ public enum EventEnum
     /// </summary>
     OnSetTileSetBgColor,
     /// <summary>
-    /// 导入选中的Cell图块, 参数为<see cref="Godot.Vector2I"/>
+    /// 选中组合模式下的Cell图块, 参数为<see cref="Godot.Vector2I"/>
     /// </summary>
-    OnImportTileCell,
+    OnSelectContainerCell,
     /// <summary>
-    /// 移除选中的Cell图块, 参数为<see cref="Godot.Vector2I"/>
+    /// 清除组合模式下的Cell图块
     /// </summary>
-    OnRemoveTileCell,
+    OnClearContainerCell,
 }

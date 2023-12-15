@@ -1,9 +1,9 @@
 using Godot;
 using UI.TileSetEditor;
 
-namespace UI.TileSetEditorSegment;
+namespace UI.TileSetEditorCombination;
 
-public partial class TileSetEditorSegmentPanel : TileSetEditorSegment
+public partial class TileSetEditorCombinationPanel : TileSetEditorCombination
 {
     /// <summary>
     /// 父Ui
@@ -30,7 +30,8 @@ public partial class TileSetEditorSegmentPanel : TileSetEditorSegment
             });
         }
 
-        S_LeftBg.Instance.OnShow();
+        S_LeftTopBg.Instance.OnShow();
+        S_LeftBottomBg.Instance.OnShow();
     }
 
     public override void OnDestroyUi()
@@ -43,7 +44,7 @@ public partial class TileSetEditorSegmentPanel : TileSetEditorSegment
     {
         if (arg is Texture2D texture)
         {
-            S_LeftBg.Instance.OnChangeTileSetTexture(texture);
+            S_LeftBottomBg.Instance.OnChangeTileSetTexture(texture);
             S_RightBg.Instance.OnChangeTileSetTexture(texture);
         }
     }
@@ -54,7 +55,7 @@ public partial class TileSetEditorSegmentPanel : TileSetEditorSegment
         //背景颜色
         if (arg is Color color)
         {
-            S_LeftBg.Instance.Color = color;
+            S_LeftTopBg.Instance.Color = color;
         }
     }
 }

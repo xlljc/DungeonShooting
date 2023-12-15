@@ -1,8 +1,8 @@
 ﻿using Godot;
 
-namespace UI.TileSetEditorSegment;
+namespace UI.TileSetEditorCombination;
 
-public class MaskRectCell : UiCell<TileSetEditorSegment.MaskRect, bool>
+public class MaskRectCell : UiCell<TileSetEditorCombination.MaskRect, bool>
 {
     public override void OnInit()
     {

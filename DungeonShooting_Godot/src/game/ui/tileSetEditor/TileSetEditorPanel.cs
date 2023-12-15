@@ -49,13 +49,13 @@ public partial class TileSetEditorPanel : TileSetEditor
         });
         TabGrid.Add(new TileSetEditorTabData()
         {
-            Text = "图块",
-            UiName = UiManager.UiNames.TileSetEditorSegment,
+            Text = "地形",
+            UiName = UiManager.UiNames.TileSetEditorTerrain,
         });
         TabGrid.Add(new TileSetEditorTabData()
         {
-            Text = "地形",
-            UiName = UiManager.UiNames.TileSetEditorTerrain,
+            Text = "组合",
+            UiName = UiManager.UiNames.TileSetEditorCombination,
         });
     }
 

@@ -1,8 +1,8 @@
 ﻿using Godot;
 
-namespace UI.TileSetEditorSegment;
+namespace UI.TileSetEditorCombination;
 
-public class TileCell : UiCell<TileSetEditorSegment.CellButton, Vector2I>
+public class TileCell : UiCell<TileSetEditorCombination.CellButton, Vector2I>
 {
     private Image _image;
     private ImageTexture _previewTexture;
@@ -27,7 +27,7 @@ public class TileCell : UiCell<TileSetEditorSegment.CellButton, Vector2I>
     public override void OnDoubleClick()
     {
         //双击移除Cell数据
-        EventManager.EmitEvent(EventEnum.OnRemoveTileCell, Data);
+        //EventManager.EmitEvent(EventEnum.OnRemoveTileCell, Data);
     }
 
     public override void OnDestroy()
@@ -45,7 +45,7 @@ public class TileCell : UiCell<TileSetEditorSegment.CellButton, Vector2I>
         CellNode.L_SelectTexture.Instance.Visible = false;
     }
 
-    public override int OnSort(UiCell<TileSetEditorSegment.CellButton, Vector2I> other)
+    public override int OnSort(UiCell<TileSetEditorCombination.CellButton, Vector2I> other)
     {
         if (Data.Y != other.Data.Y)
         {

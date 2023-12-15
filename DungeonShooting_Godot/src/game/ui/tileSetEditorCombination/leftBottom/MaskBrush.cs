@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-namespace UI.TileSetEditorSegment;
+namespace UI.TileSetEditorCombination;
 
 public partial class MaskBrush : Control
 {
