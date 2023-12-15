@@ -4,11 +4,6 @@ namespace UI.TileSetEditor;
 
 public partial class TileSetEditorPanel : TileSetEditor
 {
-    // /// <summary>
-    // /// 纹理路径
-    // /// </summary>
-    // public string TexturePath { get; private set; }
-
     /// <summary>
     /// 纹理
     /// </summary>
@@ -119,6 +114,14 @@ public partial class TileSetEditorPanel : TileSetEditor
     public int CellPositionToIndex(Vector2I pos)
     {
         return pos.Y * CellHorizontal + pos.X;
+    }
+    
+    /// <summary>
+    /// 返回Cell的坐标是否在纹理区域内
+    /// </summary>
+    public bool IsCellPositionInTexture(Vector2I cell)
+    {
+        return cell.X >= 0 && cell.Y >= 0 && cell.X < CellHorizontal && cell.Y < CellVertical;
     }
 
     //返回上一级按钮点击

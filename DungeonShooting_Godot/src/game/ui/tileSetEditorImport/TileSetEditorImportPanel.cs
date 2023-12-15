@@ -155,7 +155,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     //拖拽文件进入区域
     private void OnFilesDropped(string[] files)
     {
-        if (files.Length == 0)
+        if (files.Length == 0 || !IsOpen)
         {
             return;
         }

@@ -22,9 +22,11 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
 
         _maskGrid = new UiGrid<TileSetEditorSegment.MaskRect, bool>(_leftBg.L_TileTexture.L_MaskRoot.L_MaskRect, typeof(MaskRectCell));
         _maskGrid.SetCellOffset(Vector2I.Zero);
+        _maskGrid.GridContainer.MouseFilter = MouseFilterEnum.Ignore;
         
         _leftBg.UiPanel.AddEventListener(EventEnum.OnImportTileCell, OnImportCell);
         _leftBg.UiPanel.AddEventListener(EventEnum.OnRemoveTileCell, OnRemoveCell);
+
     }
 
     public void OnDestroy()
@@ -83,10 +85,10 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
 
         if (Input.IsMouseButtonPressed(MouseButton.Left)) //左键导入
         {
-            if (_leftBg.L_TileTexture.Instance.IsMouseInRect() && this.IsMouseInRect())
+            if (this.IsMouseInRect())
             {
                 var cellPosition = GetMouseCellPosition();
-                if (!_useMask.Contains(cellPosition))
+                if (_leftBg.UiPanel.EditorPanel.IsCellPositionInTexture(cellPosition) && !_useMask.Contains(cellPosition))
                 {
                     EventManager.EmitEvent(EventEnum.OnImportTileCell, cellPosition);
                 }
@@ -94,10 +96,10 @@ public partial class TileEditArea : ColorRect, IUiNodeScript
         }
         else if (Input.IsMouseButtonPressed(MouseButton.Right)) //右键移除
         {
-            if (_leftBg.L_TileTexture.Instance.IsMouseInRect() && this.IsMouseInRect())
+            if (this.IsMouseInRect())
             {
                 var cellPosition = GetMouseCellPosition();
-                if (_useMask.Contains(cellPosition))
+                if (_leftBg.UiPanel.EditorPanel.IsCellPositionInTexture(cellPosition) && _useMask.Contains(cellPosition))
                 {
                     EventManager.EmitEvent(EventEnum.OnRemoveTileCell, cellPosition);
                 }
