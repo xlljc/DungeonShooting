@@ -32,6 +32,15 @@ public abstract partial class TileSetEditorCombination : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Node2D"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot.CanvasRoot
+    /// </summary>
+    public class CanvasRoot : UiNode<TileSetEditorCombinationPanel, Godot.Node2D, CanvasRoot>
+    {
+        public CanvasRoot(TileSetEditorCombinationPanel uiPanel, Godot.Node2D node) : base(uiPanel, node) {  }
+        public override CanvasRoot Clone() => new (UiPanel, (Godot.Node2D)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Node2D"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot.BrushRoot
     /// </summary>
     public class BrushRoot : UiNode<TileSetEditorCombinationPanel, Godot.Node2D, BrushRoot>
@@ -41,10 +50,32 @@ public abstract partial class TileSetEditorCombination : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="UI.TileSetEditorCombination.RectBrush"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot.RectBrush
+    /// </summary>
+    public class RectBrush : UiNode<TileSetEditorCombinationPanel, UI.TileSetEditorCombination.RectBrush, RectBrush>
+    {
+        public RectBrush(TileSetEditorCombinationPanel uiPanel, UI.TileSetEditorCombination.RectBrush node) : base(uiPanel, node) {  }
+        public override RectBrush Clone() => new (UiPanel, (UI.TileSetEditorCombination.RectBrush)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot
     /// </summary>
     public class CombinationRoot : UiNode<TileSetEditorCombinationPanel, Godot.Control, CombinationRoot>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CanvasRoot
+        /// </summary>
+        public CanvasRoot L_CanvasRoot
+        {
+            get
+            {
+                if (_L_CanvasRoot == null) _L_CanvasRoot = new CanvasRoot(UiPanel, Instance.GetNode<Godot.Node2D>("CanvasRoot"));
+                return _L_CanvasRoot;
+            }
+        }
+        private CanvasRoot _L_CanvasRoot;
+
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.BrushRoot
         /// </summary>
@@ -58,6 +89,19 @@ public abstract partial class TileSetEditorCombination : UiBase
         }
         private BrushRoot _L_BrushRoot;
 
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorCombination.RectBrush"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.RectBrush
+        /// </summary>
+        public RectBrush L_RectBrush
+        {
+            get
+            {
+                if (_L_RectBrush == null) _L_RectBrush = new RectBrush(UiPanel, Instance.GetNode<UI.TileSetEditorCombination.RectBrush>("RectBrush"));
+                return _L_RectBrush;
+            }
+        }
+        private RectBrush _L_RectBrush;
+
         public CombinationRoot(TileSetEditorCombinationPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override CombinationRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
@@ -69,6 +113,33 @@ public abstract partial class TileSetEditorCombination : UiBase
     {
         public Grid(TileSetEditorCombinationPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
         public override Grid Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.FocusBtn
+    /// </summary>
+    public class FocusBtn : UiNode<TileSetEditorCombinationPanel, Godot.TextureButton, FocusBtn>
+    {
+        public FocusBtn(TileSetEditorCombinationPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override FocusBtn Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.DeleteBtn
+    /// </summary>
+    public class DeleteBtn : UiNode<TileSetEditorCombinationPanel, Godot.TextureButton, DeleteBtn>
+    {
+        public DeleteBtn(TileSetEditorCombinationPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override DeleteBtn Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.ImportBtn
+    /// </summary>
+    public class ImportBtn : UiNode<TileSetEditorCombinationPanel, Godot.Button, ImportBtn>
+    {
+        public ImportBtn(TileSetEditorCombinationPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override ImportBtn Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
     }
 
     /// <summary>
@@ -101,6 +172,45 @@ public abstract partial class TileSetEditorCombination : UiBase
             }
         }
         private Grid _L_Grid;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.FocusBtn
+        /// </summary>
+        public FocusBtn L_FocusBtn
+        {
+            get
+            {
+                if (_L_FocusBtn == null) _L_FocusBtn = new FocusBtn(UiPanel, Instance.GetNode<Godot.TextureButton>("FocusBtn"));
+                return _L_FocusBtn;
+            }
+        }
+        private FocusBtn _L_FocusBtn;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.DeleteBtn
+        /// </summary>
+        public DeleteBtn L_DeleteBtn
+        {
+            get
+            {
+                if (_L_DeleteBtn == null) _L_DeleteBtn = new DeleteBtn(UiPanel, Instance.GetNode<Godot.TextureButton>("DeleteBtn"));
+                return _L_DeleteBtn;
+            }
+        }
+        private DeleteBtn _L_DeleteBtn;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.ImportBtn
+        /// </summary>
+        public ImportBtn L_ImportBtn
+        {
+            get
+            {
+                if (_L_ImportBtn == null) _L_ImportBtn = new ImportBtn(UiPanel, Instance.GetNode<Godot.Button>("ImportBtn"));
+                return _L_ImportBtn;
+            }
+        }
+        private ImportBtn _L_ImportBtn;
 
         public LeftTopBg(TileSetEditorCombinationPanel uiPanel, UI.TileSetEditorCombination.TileEditCombination node) : base(uiPanel, node) {  }
         public override LeftTopBg Clone() => new (UiPanel, (UI.TileSetEditorCombination.TileEditCombination)Instance.Duplicate());
@@ -235,6 +345,15 @@ public abstract partial class TileSetEditorCombination : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftBottom.MarginContainer.LeftBottomBg.FocusBtn
+    /// </summary>
+    public class FocusBtn_1 : UiNode<TileSetEditorCombinationPanel, Godot.TextureButton, FocusBtn_1>
+    {
+        public FocusBtn_1(TileSetEditorCombinationPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override FocusBtn_1 Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="UI.TileSetEditorCombination.TileEditArea"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftBottom.MarginContainer.LeftBottomBg
     /// </summary>
     public class LeftBottomBg : UiNode<TileSetEditorCombinationPanel, UI.TileSetEditorCombination.TileEditArea, LeftBottomBg>
@@ -264,6 +383,19 @@ public abstract partial class TileSetEditorCombination : UiBase
             }
         }
         private Grid_1 _L_Grid;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftBottom.MarginContainer.FocusBtn
+        /// </summary>
+        public FocusBtn_1 L_FocusBtn
+        {
+            get
+            {
+                if (_L_FocusBtn == null) _L_FocusBtn = new FocusBtn_1(UiPanel, Instance.GetNode<Godot.TextureButton>("FocusBtn"));
+                return _L_FocusBtn;
+            }
+        }
+        private FocusBtn_1 _L_FocusBtn;
 
         public LeftBottomBg(TileSetEditorCombinationPanel uiPanel, UI.TileSetEditorCombination.TileEditArea node) : base(uiPanel, node) {  }
         public override LeftBottomBg Clone() => new (UiPanel, (UI.TileSetEditorCombination.TileEditArea)Instance.Duplicate());
@@ -570,14 +702,34 @@ public abstract partial class TileSetEditorCombination : UiBase
 
 
     /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot.CanvasRoot
+    /// </summary>
+    public CanvasRoot S_CanvasRoot => L_HSplitContainer.L_VSplitContainer.L_LeftTop.L_MarginContainer.L_LeftTopBg.L_CombinationRoot.L_CanvasRoot;
+
+    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot.BrushRoot
     /// </summary>
     public BrushRoot S_BrushRoot => L_HSplitContainer.L_VSplitContainer.L_LeftTop.L_MarginContainer.L_LeftTopBg.L_CombinationRoot.L_BrushRoot;
 
     /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorCombination.RectBrush"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot.RectBrush
+    /// </summary>
+    public RectBrush S_RectBrush => L_HSplitContainer.L_VSplitContainer.L_LeftTop.L_MarginContainer.L_LeftTopBg.L_CombinationRoot.L_RectBrush;
+
+    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot
     /// </summary>
     public CombinationRoot S_CombinationRoot => L_HSplitContainer.L_VSplitContainer.L_LeftTop.L_MarginContainer.L_LeftTopBg.L_CombinationRoot;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.DeleteBtn
+    /// </summary>
+    public DeleteBtn S_DeleteBtn => L_HSplitContainer.L_VSplitContainer.L_LeftTop.L_MarginContainer.L_LeftTopBg.L_DeleteBtn;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.ImportBtn
+    /// </summary>
+    public ImportBtn S_ImportBtn => L_HSplitContainer.L_VSplitContainer.L_LeftTop.L_MarginContainer.L_LeftTopBg.L_ImportBtn;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorCombination.TileEditCombination"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg

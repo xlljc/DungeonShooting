@@ -21,6 +21,9 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
         _maskGrid = new UiGrid<TileSetEditorCombination.MaskRect, bool>(UiNode.L_TileTexture.L_MaskRoot.L_MaskRect, typeof(MaskRectCell));
         _maskGrid.SetCellOffset(Vector2I.Zero);
         _maskGrid.GridContainer.MouseFilter = MouseFilterEnum.Ignore;
+
+        //聚焦按钮点击
+        UiNode.L_FocusBtn.Instance.Pressed += OnFocusClick;
     }
 
     public override void OnDestroy()
@@ -29,29 +32,50 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
         _maskGrid.Destroy();
     }
 
-    public override void _Process(double delta)
+    public override void _GuiInput(InputEvent @event)
     {
-        //Ui未打开
-        if (!UiNode.UiPanel.IsOpen)
+        base._GuiInput(@event);
+        if (@event is InputEventMouse)
         {
-            return;
-        }
-
-        if (Input.IsMouseButtonPressed(MouseButton.Left)) //左键选中
-        {
-            if (this.IsMouseInRect())
+            AcceptEvent();
+            if (Input.IsMouseButtonPressed(MouseButton.Left)) //左键选中
             {
                 var cellPosition = GetMouseCellPosition();
                 if (UiNode.UiPanel.EditorPanel.IsCellPositionInTexture(cellPosition))
                 {
                     if (Input.IsActionJustPressed("mouse_left")) //刚按下, 清除之前的选中
                     {
-                        OnRemoveCell();
+                        OnClearCell();
                     }
                     OnSelectCell(cellPosition);
                 }
             }
+            else if (Input.IsMouseButtonPressed(MouseButton.Right)) //右键键擦除
+            {
+                var cellPosition = GetMouseCellPosition();
+                if (UiNode.UiPanel.EditorPanel.IsCellPositionInTexture(cellPosition))
+                {
+                    OnRemoveCell(cellPosition);
+                }
+            }
         }
+    }
+
+    //聚焦按钮点击
+    private void OnFocusClick()
+    {
+        var pos = Size / 2;
+        var texture = UiNode.L_TileTexture.Instance.Texture;
+        if (texture != null)
+        {
+            ContainerRoot.Position = pos - texture.GetSize() * 0.5f * ContainerRoot.Scale;
+        }
+        else
+        {
+            ContainerRoot.Position = pos;
+        }
+
+        RefreshGridTrans();
     }
 
     /// <summary>
@@ -74,9 +98,28 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
     }
 
     /// <summary>
-    /// 移除选中的Cell图块
+    /// 移除指定的Cell图块
     /// </summary>
-    private void OnRemoveCell()
+    private void OnRemoveCell(Vector2I cell)
+    {
+        if (_useMask.Contains(cell))
+        {
+            var cellIndex = UiNode.UiPanel.EditorPanel.CellPositionToIndex(cell);
+            var uiCell = _maskGrid.GetCell(cellIndex);
+            if (uiCell != null && uiCell.Data)
+            {
+                _useMask.Remove(cell);
+                uiCell.SetData(false);
+                
+                EventManager.EmitEvent(EventEnum.OnRemoveCombinationCell, cell);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 移除所有选中的Cell图块
+    /// </summary>
+    private void OnClearCell()
     {
         _useMask.Clear();
         var count = _maskGrid.Count;
@@ -110,6 +153,8 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
                 _maskGrid.Add(false);
             }
         }
+
+        OnFocusClick();
     }
     
     /// <summary>

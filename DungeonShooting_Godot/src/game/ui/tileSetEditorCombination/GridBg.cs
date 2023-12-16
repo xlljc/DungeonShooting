@@ -14,7 +14,7 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
     {
         UiNode = (T)uiNode;
         _dragBinder = DragUiManager.BindDrag(this, "mouse_middle", OnDrag);
-        Resized += OnLeftBgResize;
+        Resized += RefreshGridTrans;
     }
 
     public virtual void OnDestroy()
@@ -27,36 +27,28 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
     /// </summary>
     public void OnShow()
     {
-        OnLeftBgResize();
+        RefreshGridTrans();
     }
 
-    public override void _UnhandledInput(InputEvent @event)
+    public override void _GuiInput(InputEvent @event)
     {
-        //Ui未打开
-        var uiPanel = UiNode.GetUiPanel();
-        if (!uiPanel.IsOpen)
-        {
-            return;
-        }
         if (@event is InputEventMouseButton mouseButton)
         {
-            if (uiPanel.IsOpen)
+            AcceptEvent();
+            if (mouseButton.ButtonIndex == MouseButton.WheelDown)
             {
-                if (mouseButton.ButtonIndex == MouseButton.WheelDown)
+                if (GetGlobalRect().HasPoint(mouseButton.GlobalPosition))
                 {
-                    if (GetGlobalRect().HasPoint(mouseButton.GlobalPosition))
-                    {
-                        //缩小
-                        Shrink();
-                    }
+                    //缩小
+                    Shrink();
                 }
-                else if (mouseButton.ButtonIndex == MouseButton.WheelUp)
+            }
+            else if (mouseButton.ButtonIndex == MouseButton.WheelUp)
+            {
+                if (GetGlobalRect().HasPoint(mouseButton.GlobalPosition))
                 {
-                    if (GetGlobalRect().HasPoint(mouseButton.GlobalPosition))
-                    {
-                        //放大
-                        Magnify();
-                    }
+                    //放大
+                    Magnify();
                 }
             }
         }
@@ -97,13 +89,15 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
         if (state == DragState.DragMove)
         {
             ContainerRoot.Position += pos;
-            OnLeftBgResize();
+            RefreshGridTrans();
         }
     }
     
     
-    //背景宽度变化
-    private void OnLeftBgResize()
+    /// <summary>
+    /// 刷新背景网格位置和缩放
+    /// </summary>
+    public void RefreshGridTrans()
     {
         Grid.Material.SetShaderMaterialParameter(ShaderParamNames.Size, Size);
         SetGridTransform(ContainerRoot.Position, ContainerRoot.Scale.X);
