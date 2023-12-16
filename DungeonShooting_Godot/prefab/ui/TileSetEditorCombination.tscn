@@ -89,6 +89,8 @@ grow_vertical = 2
 scale = Vector2(3, 3)
 mouse_filter = 2
 
+[node name="BrushRoot" type="Node2D" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer/LeftTopBg/CombinationRoot"]
+
 [node name="Grid" type="ColorRect" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer/LeftTopBg"]
 material = SubResource("ShaderMaterial_df7va")
 layout_mode = 1

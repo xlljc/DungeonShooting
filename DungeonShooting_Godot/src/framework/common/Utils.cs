@@ -96,7 +96,7 @@ public static class Utils
     /// </summary>
     /// <param name="value">原数值</param>
     /// <param name="step">吸附步长</param>
-    public static float Adsorption(float value, float step)
+    public static float Adsorption(this float value, float step)
     {
         var f = Mathf.Round(value / step);
         return f * step;
@@ -107,7 +107,7 @@ public static class Utils
     /// </summary>
     /// <param name="value">原数值</param>
     /// <param name="step">吸附步长</param>
-    public static int Adsorption(float value, int step)
+    public static int Adsorption(this float value, int step)
     {
         var f = Mathf.RoundToInt(value / step);
         return f * step;
@@ -118,7 +118,7 @@ public static class Utils
     /// </summary>
     /// <param name="value">原数值</param>
     /// <param name="step">吸附步长</param>
-    public static Vector2 Adsorption(Vector2 value, Vector2 step)
+    public static Vector2 Adsorption(this Vector2 value, Vector2 step)
     {
         var x = Mathf.Round(value.X / step.X);
         var y = Mathf.Round(value.Y / step.Y);
@@ -130,10 +130,56 @@ public static class Utils
     /// </summary>
     /// <param name="value">原数值</param>
     /// <param name="step">吸附步长</param>
-    public static Vector2I Adsorption(Vector2 value, Vector2I step)
+    public static Vector2I Adsorption(this Vector2 value, Vector2I step)
     {
         var x = Mathf.RoundToInt(value.X / step.X);
         var y = Mathf.RoundToInt(value.Y / step.Y);
+        return new Vector2I(x * step.X, y * step.Y);
+    }
+    
+    /// <summary>
+    /// 根据步长按照 Floor() 函数吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static float FloorAdsorption(this float value, float step)
+    {
+        var f = Mathf.Floor(value / step);
+        return f * step;
+    }
+    
+    /// <summary>
+    /// 根据步长按照 Floor() 函数吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static int FloorAdsorption(this float value, int step)
+    {
+        var f = Mathf.FloorToInt(value / step);
+        return f * step;
+    }
+
+    /// <summary>
+    /// 根据步长按照 Floor() 函数吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static Vector2 FloorAdsorption(this Vector2 value, Vector2 step)
+    {
+        var x = Mathf.Floor(value.X / step.X);
+        var y = Mathf.Floor(value.Y / step.Y);
+        return new Vector2(x * step.X, y * step.Y);
+    }
+    
+    /// <summary>
+    /// 根据步长按照 Floor() 函数吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static Vector2I FloorAdsorption(this Vector2 value, Vector2I step)
+    {
+        var x = Mathf.FloorToInt(value.X / step.X);
+        var y = Mathf.FloorToInt(value.Y / step.Y);
         return new Vector2I(x * step.X, y * step.Y);
     }
 

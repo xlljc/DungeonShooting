@@ -32,10 +32,32 @@ public abstract partial class TileSetEditorCombination : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Node2D"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot.BrushRoot
+    /// </summary>
+    public class BrushRoot : UiNode<TileSetEditorCombinationPanel, Godot.Node2D, BrushRoot>
+    {
+        public BrushRoot(TileSetEditorCombinationPanel uiPanel, Godot.Node2D node) : base(uiPanel, node) {  }
+        public override BrushRoot Clone() => new (UiPanel, (Godot.Node2D)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot
     /// </summary>
     public class CombinationRoot : UiNode<TileSetEditorCombinationPanel, Godot.Control, CombinationRoot>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.BrushRoot
+        /// </summary>
+        public BrushRoot L_BrushRoot
+        {
+            get
+            {
+                if (_L_BrushRoot == null) _L_BrushRoot = new BrushRoot(UiPanel, Instance.GetNode<Godot.Node2D>("BrushRoot"));
+                return _L_BrushRoot;
+            }
+        }
+        private BrushRoot _L_BrushRoot;
+
         public CombinationRoot(TileSetEditorCombinationPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override CombinationRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
@@ -546,6 +568,11 @@ public abstract partial class TileSetEditorCombination : UiBase
         public override HSplitContainer Clone() => new (UiPanel, (Godot.HSplitContainer)Instance.Duplicate());
     }
 
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Node2D"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot.BrushRoot
+    /// </summary>
+    public BrushRoot S_BrushRoot => L_HSplitContainer.L_VSplitContainer.L_LeftTop.L_MarginContainer.L_LeftTopBg.L_CombinationRoot.L_BrushRoot;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftTop.MarginContainer.LeftTopBg.CombinationRoot
