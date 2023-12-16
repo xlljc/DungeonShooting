@@ -159,9 +159,9 @@ public enum EventEnum
     /// <summary>
     /// 选中组合模式下的Cell图块, 参数为<see cref="Godot.Vector2I"/>
     /// </summary>
-    OnSelectContainerCell,
+    OnSelectCombinationCell,
     /// <summary>
     /// 清除组合模式下的Cell图块
     /// </summary>
-    OnClearContainerCell,
+    OnClearCombinationCell,
 }

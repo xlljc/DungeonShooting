@@ -18,4 +18,13 @@ public partial class CombinationCell : Sprite2D
         Texture = texture;
         RegionRect = new Rect2(texturePos * GameConfig.TileCellSize, GameConfig.TileCellSizeVector2I);
     }
+
+    /// <summary>
+    /// 从指定的组合单元克隆数据
+    /// </summary>
+    public void CloneFrom(CombinationCell combinationCell)
+    {
+        Texture = combinationCell.Texture;
+        RegionRect = combinationCell.RegionRect;
+    }
 }

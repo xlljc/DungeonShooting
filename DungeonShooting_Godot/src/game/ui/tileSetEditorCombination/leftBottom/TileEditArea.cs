@@ -68,7 +68,7 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
                 _useMask.Add(cell);
                 uiCell.SetData(true);
                 
-                EventManager.EmitEvent(EventEnum.OnSelectContainerCell, cell);
+                EventManager.EmitEvent(EventEnum.OnSelectCombinationCell, cell);
             }
         }
     }
@@ -89,7 +89,7 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
             }
         }
         
-        EventManager.EmitEvent(EventEnum.OnClearContainerCell);
+        EventManager.EmitEvent(EventEnum.OnClearCombinationCell);
     }
 
     /// <summary>
