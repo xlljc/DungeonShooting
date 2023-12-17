@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>12</LangVersion>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <None Include="excel/**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="version">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Remove="publish\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="Aspose.Cells" Version="23.12.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Compile Remove="publish\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <EmbeddedResource Remove="publish\**" />
+    </ItemGroup>
+
+</Project>

@@ -294,8 +294,14 @@ public partial class EditorToolsPanel : EditorTools
     /// </summary>
     private void ExportExcel()
     {
-        ExcelGenerator.ExportExcel();
-        ShowTips("提示", "已启动导表程序, 注意查看控制台信息!");
+        if (ExcelGenerator.ExportExcel())
+        {
+            ShowTips("提示", "导出Excel表成功！");
+        }
+        else
+        {
+            ShowTips("错误", "导出Excel表失败，请查看控制台日志！");
+        }
     }
 
     /// <summary>

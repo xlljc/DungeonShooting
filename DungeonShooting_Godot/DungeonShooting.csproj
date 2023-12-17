@@ -10,11 +10,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="android\**" />
+    <Compile Remove="excelTool\**" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="android\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NPOI" Version="2.6.2" />
+    <EmbeddedResource Remove="excelTool\**" />
   </ItemGroup>
 </Project>
