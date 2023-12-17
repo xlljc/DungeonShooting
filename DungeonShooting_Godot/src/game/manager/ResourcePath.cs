@@ -6,8 +6,6 @@ public class ResourcePath
     public const string default_bus_layout_tres = "res://default_bus_layout.tres";
     public const string default_env_tres = "res://default_env.tres";
     public const string icon_png = "res://icon.png";
-    public const string excel_DungeonShooting_ExcelTool_deps_json = "res://excel/DungeonShooting_ExcelTool.deps.json";
-    public const string excel_DungeonShooting_ExcelTool_runtimeconfig_json = "res://excel/DungeonShooting_ExcelTool.runtimeconfig.json";
     public const string prefab_Cursor_tscn = "res://prefab/Cursor.tscn";
     public const string prefab_bullet_explode_Explode0001_tscn = "res://prefab/bullet/explode/Explode0001.tscn";
     public const string prefab_bullet_laser_Laser0001_tscn = "res://prefab/bullet/laser/Laser0001.tscn";
@@ -64,6 +62,7 @@ public class ResourcePath
     public const string prefab_ui_BottomTips_tscn = "res://prefab/ui/BottomTips.tscn";
     public const string prefab_ui_Debugger_tscn = "res://prefab/ui/Debugger.tscn";
     public const string prefab_ui_EditorColorPicker_tscn = "res://prefab/ui/EditorColorPicker.tscn";
+    public const string prefab_ui_EditorImportCombination_tscn = "res://prefab/ui/EditorImportCombination.tscn";
     public const string prefab_ui_EditorTips_tscn = "res://prefab/ui/EditorTips.tscn";
     public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
     public const string prefab_ui_EditorWindow_tscn = "res://prefab/ui/EditorWindow.tscn";
@@ -292,6 +291,7 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_Block_png = "res://resource/sprite/ui/commonIcon/Block.png";
     public const string resource_sprite_ui_commonIcon_CenterTool_png = "res://resource/sprite/ui/commonIcon/CenterTool.png";
     public const string resource_sprite_ui_commonIcon_Delete_png = "res://resource/sprite/ui/commonIcon/Delete.png";
+    public const string resource_sprite_ui_commonIcon_Delete2_png = "res://resource/sprite/ui/commonIcon/Delete2.png";
     public const string resource_sprite_ui_commonIcon_DoorTool_png = "res://resource/sprite/ui/commonIcon/DoorTool.png";
     public const string resource_sprite_ui_commonIcon_Down_png = "res://resource/sprite/ui/commonIcon/Down.png";
     public const string resource_sprite_ui_commonIcon_DragTool_png = "res://resource/sprite/ui/commonIcon/DragTool.png";

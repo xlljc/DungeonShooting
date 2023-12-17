@@ -5,19 +5,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Config;
-using Godot;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
-using Array = Godot.Collections.Array;
+// using NPOI.SS.UserModel;
+// using NPOI.XSSF.UserModel;
 using Environment = System.Environment;
 
 namespace Generator;
 
 public static class ExcelGenerator
 {
-    private static HashSet<string> _excelNames = new HashSet<string>();
-    
     private enum CollectionsType
     {
         None,
@@ -83,7 +78,7 @@ public static class ExcelGenerator
     /// <param name="codeOutPath">代码输出路径</param>
     public static bool ExportExcel(string excelFilePath, string jsonOutPath, string codeOutPath)
     {
-        _excelNames.Clear();
+        var excelNames = new HashSet<string>();
         Debug.Log("当前路径: " + Environment.CurrentDirectory);
         Debug.Log("excel路径: " + excelFilePath);
         Debug.Log("json输出路径: " + jsonOutPath);
@@ -100,7 +95,7 @@ public static class ExcelGenerator
                 foreach (var fileInfo in fileInfos)
                 {
                     var fileName = Path.GetFileNameWithoutExtension(fileInfo.Name).FirstToUpper();
-                    _excelNames.Add(fileName);
+                    excelNames.Add(fileName);
                 }
                 //读取配置文件
                 foreach (var fileInfo in fileInfos)
@@ -112,7 +107,7 @@ public static class ExcelGenerator
                             throw new Exception("excel表文件名称不允许叫'ExcelConfig.xlsx'!");
                         }
                         Debug.Log("excel表: " + fileInfo.FullName);
-                        excelDataList.Add(ReadExcel(fileInfo.FullName));
+                        excelDataList.Add(ReadExcel(excelNames, fileInfo.FullName));
                     }
                 }
             }
@@ -319,7 +314,7 @@ public static class ExcelGenerator
         return code;
     }
     
-    private static ExcelData ReadExcel(string excelPath)
+    private static ExcelData ReadExcel(HashSet<string> excelNames, string excelPath)
     {
         var excelData = new ExcelData();
         //文件名称
@@ -403,7 +398,7 @@ public static class ExcelGenerator
                 MappingData mappingData;
                 try
                 {
-                    mappingData = ConvertToType(typeString.Replace(" ", ""));
+                    mappingData = ConvertToType(excelNames, typeString.Replace(" ", ""));
                 }
                 catch (Exception e)
                 {
@@ -615,7 +610,7 @@ public static class ExcelGenerator
         return bool.Parse(value);
     }
 
-    private static MappingData ConvertToType(string str, int depth = 0)
+    private static MappingData ConvertToType(HashSet<string> excelNames, string str, int depth = 0)
     {
         if (Regex.IsMatch(str, "^\\w+$"))
         {
@@ -626,7 +621,7 @@ public static class ExcelGenerator
         else if (Regex.IsMatch(str, "^\\$\\w+$")) //引用其他表
         {
             var realName = str.Substring(1);
-            if (!_excelNames.Contains(realName))
+            if (!excelNames.Contains(realName))
             {
                 throw new Exception($"引用表数据失败, 未找到表: {realName}!");
             }
@@ -653,8 +648,8 @@ public static class ExcelGenerator
                 throw new Exception($"字典key类型必须是基础类型!");
             }
 
-            var type1 = ConvertToType(keyStr, depth + 1);
-            var type2 = ConvertToType(tempStr.Substring(index + 1), depth + 1);
+            var type1 = ConvertToType(excelNames, keyStr, depth + 1);
+            var type2 = ConvertToType(excelNames, tempStr.Substring(index + 1), depth + 1);
 
             var typeStr = $"Dictionary<{type1.TypeStr}, {type2.TypeStr}>";
             var typeName = $"System.Collections.Generic.Dictionary`2[[{type1.TypeName}],[{type2.TypeName}]]";
@@ -670,7 +665,7 @@ public static class ExcelGenerator
         else if (str.StartsWith('[')) //数组
         {
             var tempStr = str.Substring(1, str.Length - 2);
-            var typeData = ConvertToType(tempStr, depth + 1);
+            var typeData = ConvertToType(excelNames, tempStr, depth + 1);
             var typeStr = typeData.TypeStr + "[]";
             var typeName = typeData.TypeName + "[]";
 

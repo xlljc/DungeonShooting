@@ -426,6 +426,33 @@ public static class EditorWindowManager
         };
     }
 
+    public static void ShowImportCombination(string showName, Action<string> onSelectObject, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.S_Window.Instance.Size = new Vector2I(600, 500);
+        window.SetWindowTitle("导入组合");
+        var body = window.OpenBody<MapEditorSelectObjectPanel>(UiManager.UiNames.EditorImportCombination);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                var selectObject = body.GetSelectData();
+                if (selectObject == null)
+                {
+                    ShowTips("提示", "您未选择任何物体");
+                }
+                else
+                {
+                    window.CloseWindow();
+                    onSelectObject("");
+                }
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+    
     private static EditorWindowPanel CreateWindowInstance(UiBase parentUi = null)
     {
         if (parentUi != null)

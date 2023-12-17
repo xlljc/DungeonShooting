@@ -29,7 +29,6 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
     private bool _canvasDirty = false;
     // -----------------------------------------------------------------------
 
-
     public override void SetUiNode(IUiNode uiNode)
     {
         base.SetUiNode(uiNode);
@@ -170,11 +169,14 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
         if (size == Vector2.Zero)
         {
             EditorWindowManager.ShowTips("警告", "请先绘制组合图块！");
+            return;
         }
         else if (size == GameConfig.TileCellSizeVector2I)
         {
             EditorWindowManager.ShowTips("警告", "导入一格大小的组合图块没有任何意义！");
+            return;
         }
+        
     }
     
     //绘制笔刷
