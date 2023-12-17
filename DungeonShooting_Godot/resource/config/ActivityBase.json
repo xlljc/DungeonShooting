@@ -140,7 +140,7 @@
     "IsStatic": false,
     "__Material": "",
     "Prefab": "res://prefab/weapon/Weapon0009.tscn",
-    "Icon": "res://resource/sprite/weapon/weapon0009/Weapon0009.png",
+    "Icon": "res://resource/sprite/weapon/weapon0009/weapon0009.png",
     "ShowInMapEditor": true
   },
   {

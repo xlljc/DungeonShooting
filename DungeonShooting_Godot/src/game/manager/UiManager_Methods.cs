@@ -1,10 +1,9 @@
-/**
- * 该类为自动生成的, 请不要手动编辑, 以免造成代码丢失
- */
+
+// 该类为自动生成的, 请不要手动编辑, 以免造成代码丢失
 public static partial class UiManager
 {
 
-    public static class UiName
+    public static class UiNames
     {
         public const string BottomTips = "BottomTips";
         public const string Debugger = "Debugger";
@@ -22,6 +21,7 @@ public static partial class UiManager
         public const string MapEditorMapMark = "MapEditorMapMark";
         public const string MapEditorProject = "MapEditorProject";
         public const string MapEditorSelectObject = "MapEditorSelectObject";
+        public const string MapEditorTileSet = "MapEditorTileSet";
         public const string MapEditorTools = "MapEditorTools";
         public const string PauseMenu = "PauseMenu";
         public const string RoomMap = "RoomMap";
@@ -35,7 +35,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.BottomTips.BottomTipsPanel Create_BottomTips()
     {
-        return CreateUi<UI.BottomTips.BottomTipsPanel>(UiName.BottomTips);
+        return CreateUi<UI.BottomTips.BottomTipsPanel>(UiNames.BottomTips);
     }
 
     /// <summary>
@@ -43,7 +43,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.BottomTips.BottomTipsPanel Open_BottomTips()
     {
-        return OpenUi<UI.BottomTips.BottomTipsPanel>(UiName.BottomTips);
+        return OpenUi<UI.BottomTips.BottomTipsPanel>(UiNames.BottomTips);
     }
 
     /// <summary>
@@ -83,7 +83,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.Debugger.DebuggerPanel Create_Debugger()
     {
-        return CreateUi<UI.Debugger.DebuggerPanel>(UiName.Debugger);
+        return CreateUi<UI.Debugger.DebuggerPanel>(UiNames.Debugger);
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.Debugger.DebuggerPanel Open_Debugger()
     {
-        return OpenUi<UI.Debugger.DebuggerPanel>(UiName.Debugger);
+        return OpenUi<UI.Debugger.DebuggerPanel>(UiNames.Debugger);
     }
 
     /// <summary>
@@ -131,7 +131,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.EditorTips.EditorTipsPanel Create_EditorTips()
     {
-        return CreateUi<UI.EditorTips.EditorTipsPanel>(UiName.EditorTips);
+        return CreateUi<UI.EditorTips.EditorTipsPanel>(UiNames.EditorTips);
     }
 
     /// <summary>
@@ -139,7 +139,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.EditorTips.EditorTipsPanel Open_EditorTips()
     {
-        return OpenUi<UI.EditorTips.EditorTipsPanel>(UiName.EditorTips);
+        return OpenUi<UI.EditorTips.EditorTipsPanel>(UiNames.EditorTips);
     }
 
     /// <summary>
@@ -179,7 +179,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.EditorTools.EditorToolsPanel Create_EditorTools()
     {
-        return CreateUi<UI.EditorTools.EditorToolsPanel>(UiName.EditorTools);
+        return CreateUi<UI.EditorTools.EditorToolsPanel>(UiNames.EditorTools);
     }
 
     /// <summary>
@@ -187,7 +187,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.EditorTools.EditorToolsPanel Open_EditorTools()
     {
-        return OpenUi<UI.EditorTools.EditorToolsPanel>(UiName.EditorTools);
+        return OpenUi<UI.EditorTools.EditorToolsPanel>(UiNames.EditorTools);
     }
 
     /// <summary>
@@ -227,7 +227,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.EditorWindow.EditorWindowPanel Create_EditorWindow()
     {
-        return CreateUi<UI.EditorWindow.EditorWindowPanel>(UiName.EditorWindow);
+        return CreateUi<UI.EditorWindow.EditorWindowPanel>(UiNames.EditorWindow);
     }
 
     /// <summary>
@@ -235,7 +235,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.EditorWindow.EditorWindowPanel Open_EditorWindow()
     {
-        return OpenUi<UI.EditorWindow.EditorWindowPanel>(UiName.EditorWindow);
+        return OpenUi<UI.EditorWindow.EditorWindowPanel>(UiNames.EditorWindow);
     }
 
     /// <summary>
@@ -275,7 +275,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.Loading.LoadingPanel Create_Loading()
     {
-        return CreateUi<UI.Loading.LoadingPanel>(UiName.Loading);
+        return CreateUi<UI.Loading.LoadingPanel>(UiNames.Loading);
     }
 
     /// <summary>
@@ -283,7 +283,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.Loading.LoadingPanel Open_Loading()
     {
-        return OpenUi<UI.Loading.LoadingPanel>(UiName.Loading);
+        return OpenUi<UI.Loading.LoadingPanel>(UiNames.Loading);
     }
 
     /// <summary>
@@ -323,7 +323,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.Main.MainPanel Create_Main()
     {
-        return CreateUi<UI.Main.MainPanel>(UiName.Main);
+        return CreateUi<UI.Main.MainPanel>(UiNames.Main);
     }
 
     /// <summary>
@@ -331,7 +331,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.Main.MainPanel Open_Main()
     {
-        return OpenUi<UI.Main.MainPanel>(UiName.Main);
+        return OpenUi<UI.Main.MainPanel>(UiNames.Main);
     }
 
     /// <summary>
@@ -371,7 +371,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditor.MapEditorPanel Create_MapEditor()
     {
-        return CreateUi<UI.MapEditor.MapEditorPanel>(UiName.MapEditor);
+        return CreateUi<UI.MapEditor.MapEditorPanel>(UiNames.MapEditor);
     }
 
     /// <summary>
@@ -379,7 +379,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditor.MapEditorPanel Open_MapEditor()
     {
-        return OpenUi<UI.MapEditor.MapEditorPanel>(UiName.MapEditor);
+        return OpenUi<UI.MapEditor.MapEditorPanel>(UiNames.MapEditor);
     }
 
     /// <summary>
@@ -419,7 +419,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel Create_MapEditorCreateGroup()
     {
-        return CreateUi<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(UiName.MapEditorCreateGroup);
+        return CreateUi<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(UiNames.MapEditorCreateGroup);
     }
 
     /// <summary>
@@ -427,7 +427,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel Open_MapEditorCreateGroup()
     {
-        return OpenUi<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(UiName.MapEditorCreateGroup);
+        return OpenUi<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(UiNames.MapEditorCreateGroup);
     }
 
     /// <summary>
@@ -467,7 +467,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorCreateMark.MapEditorCreateMarkPanel Create_MapEditorCreateMark()
     {
-        return CreateUi<UI.MapEditorCreateMark.MapEditorCreateMarkPanel>(UiName.MapEditorCreateMark);
+        return CreateUi<UI.MapEditorCreateMark.MapEditorCreateMarkPanel>(UiNames.MapEditorCreateMark);
     }
 
     /// <summary>
@@ -475,7 +475,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorCreateMark.MapEditorCreateMarkPanel Open_MapEditorCreateMark()
     {
-        return OpenUi<UI.MapEditorCreateMark.MapEditorCreateMarkPanel>(UiName.MapEditorCreateMark);
+        return OpenUi<UI.MapEditorCreateMark.MapEditorCreateMarkPanel>(UiNames.MapEditorCreateMark);
     }
 
     /// <summary>
@@ -515,7 +515,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel Create_MapEditorCreatePreinstall()
     {
-        return CreateUi<UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel>(UiName.MapEditorCreatePreinstall);
+        return CreateUi<UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel>(UiNames.MapEditorCreatePreinstall);
     }
 
     /// <summary>
@@ -523,7 +523,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel Open_MapEditorCreatePreinstall()
     {
-        return OpenUi<UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel>(UiName.MapEditorCreatePreinstall);
+        return OpenUi<UI.MapEditorCreatePreinstall.MapEditorCreatePreinstallPanel>(UiNames.MapEditorCreatePreinstall);
     }
 
     /// <summary>
@@ -563,7 +563,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorCreateRoom.MapEditorCreateRoomPanel Create_MapEditorCreateRoom()
     {
-        return CreateUi<UI.MapEditorCreateRoom.MapEditorCreateRoomPanel>(UiName.MapEditorCreateRoom);
+        return CreateUi<UI.MapEditorCreateRoom.MapEditorCreateRoomPanel>(UiNames.MapEditorCreateRoom);
     }
 
     /// <summary>
@@ -571,7 +571,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorCreateRoom.MapEditorCreateRoomPanel Open_MapEditorCreateRoom()
     {
-        return OpenUi<UI.MapEditorCreateRoom.MapEditorCreateRoomPanel>(UiName.MapEditorCreateRoom);
+        return OpenUi<UI.MapEditorCreateRoom.MapEditorCreateRoomPanel>(UiNames.MapEditorCreateRoom);
     }
 
     /// <summary>
@@ -611,7 +611,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorMapLayer.MapEditorMapLayerPanel Create_MapEditorMapLayer()
     {
-        return CreateUi<UI.MapEditorMapLayer.MapEditorMapLayerPanel>(UiName.MapEditorMapLayer);
+        return CreateUi<UI.MapEditorMapLayer.MapEditorMapLayerPanel>(UiNames.MapEditorMapLayer);
     }
 
     /// <summary>
@@ -619,7 +619,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorMapLayer.MapEditorMapLayerPanel Open_MapEditorMapLayer()
     {
-        return OpenUi<UI.MapEditorMapLayer.MapEditorMapLayerPanel>(UiName.MapEditorMapLayer);
+        return OpenUi<UI.MapEditorMapLayer.MapEditorMapLayerPanel>(UiNames.MapEditorMapLayer);
     }
 
     /// <summary>
@@ -659,7 +659,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorMapMark.MapEditorMapMarkPanel Create_MapEditorMapMark()
     {
-        return CreateUi<UI.MapEditorMapMark.MapEditorMapMarkPanel>(UiName.MapEditorMapMark);
+        return CreateUi<UI.MapEditorMapMark.MapEditorMapMarkPanel>(UiNames.MapEditorMapMark);
     }
 
     /// <summary>
@@ -667,7 +667,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorMapMark.MapEditorMapMarkPanel Open_MapEditorMapMark()
     {
-        return OpenUi<UI.MapEditorMapMark.MapEditorMapMarkPanel>(UiName.MapEditorMapMark);
+        return OpenUi<UI.MapEditorMapMark.MapEditorMapMarkPanel>(UiNames.MapEditorMapMark);
     }
 
     /// <summary>
@@ -707,7 +707,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorProject.MapEditorProjectPanel Create_MapEditorProject()
     {
-        return CreateUi<UI.MapEditorProject.MapEditorProjectPanel>(UiName.MapEditorProject);
+        return CreateUi<UI.MapEditorProject.MapEditorProjectPanel>(UiNames.MapEditorProject);
     }
 
     /// <summary>
@@ -715,7 +715,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorProject.MapEditorProjectPanel Open_MapEditorProject()
     {
-        return OpenUi<UI.MapEditorProject.MapEditorProjectPanel>(UiName.MapEditorProject);
+        return OpenUi<UI.MapEditorProject.MapEditorProjectPanel>(UiNames.MapEditorProject);
     }
 
     /// <summary>
@@ -755,7 +755,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorSelectObject.MapEditorSelectObjectPanel Create_MapEditorSelectObject()
     {
-        return CreateUi<UI.MapEditorSelectObject.MapEditorSelectObjectPanel>(UiName.MapEditorSelectObject);
+        return CreateUi<UI.MapEditorSelectObject.MapEditorSelectObjectPanel>(UiNames.MapEditorSelectObject);
     }
 
     /// <summary>
@@ -763,7 +763,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorSelectObject.MapEditorSelectObjectPanel Open_MapEditorSelectObject()
     {
-        return OpenUi<UI.MapEditorSelectObject.MapEditorSelectObjectPanel>(UiName.MapEditorSelectObject);
+        return OpenUi<UI.MapEditorSelectObject.MapEditorSelectObjectPanel>(UiNames.MapEditorSelectObject);
     }
 
     /// <summary>
@@ -799,11 +799,59 @@ public static partial class UiManager
     }
 
     /// <summary>
+    /// 创建 MapEditorTileSet, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorTileSet.MapEditorTileSetPanel Create_MapEditorTileSet()
+    {
+        return CreateUi<UI.MapEditorTileSet.MapEditorTileSetPanel>(UiNames.MapEditorTileSet);
+    }
+
+    /// <summary>
+    /// 打开 MapEditorTileSet, 并返回UI实例
+    /// </summary>
+    public static UI.MapEditorTileSet.MapEditorTileSetPanel Open_MapEditorTileSet()
+    {
+        return OpenUi<UI.MapEditorTileSet.MapEditorTileSetPanel>(UiNames.MapEditorTileSet);
+    }
+
+    /// <summary>
+    /// 隐藏 MapEditorTileSet 的所有实例
+    /// </summary>
+    public static void Hide_MapEditorTileSet()
+    {
+        var uiInstance = Get_MapEditorTileSet_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 MapEditorTileSet 的所有实例
+    /// </summary>
+    public static void Destroy_MapEditorTileSet()
+    {
+        var uiInstance = Get_MapEditorTileSet_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 MapEditorTileSet 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.MapEditorTileSet.MapEditorTileSetPanel[] Get_MapEditorTileSet_Instance()
+    {
+        return GetUiInstance<UI.MapEditorTileSet.MapEditorTileSetPanel>(nameof(UI.MapEditorTileSet.MapEditorTileSet));
+    }
+
+    /// <summary>
     /// 创建 MapEditorTools, 并返回UI实例, 该函数不会打开 Ui
     /// </summary>
     public static UI.MapEditorTools.MapEditorToolsPanel Create_MapEditorTools()
     {
-        return CreateUi<UI.MapEditorTools.MapEditorToolsPanel>(UiName.MapEditorTools);
+        return CreateUi<UI.MapEditorTools.MapEditorToolsPanel>(UiNames.MapEditorTools);
     }
 
     /// <summary>
@@ -811,7 +859,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.MapEditorTools.MapEditorToolsPanel Open_MapEditorTools()
     {
-        return OpenUi<UI.MapEditorTools.MapEditorToolsPanel>(UiName.MapEditorTools);
+        return OpenUi<UI.MapEditorTools.MapEditorToolsPanel>(UiNames.MapEditorTools);
     }
 
     /// <summary>
@@ -851,7 +899,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.PauseMenu.PauseMenuPanel Create_PauseMenu()
     {
-        return CreateUi<UI.PauseMenu.PauseMenuPanel>(UiName.PauseMenu);
+        return CreateUi<UI.PauseMenu.PauseMenuPanel>(UiNames.PauseMenu);
     }
 
     /// <summary>
@@ -859,7 +907,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.PauseMenu.PauseMenuPanel Open_PauseMenu()
     {
-        return OpenUi<UI.PauseMenu.PauseMenuPanel>(UiName.PauseMenu);
+        return OpenUi<UI.PauseMenu.PauseMenuPanel>(UiNames.PauseMenu);
     }
 
     /// <summary>
@@ -899,7 +947,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.RoomMap.RoomMapPanel Create_RoomMap()
     {
-        return CreateUi<UI.RoomMap.RoomMapPanel>(UiName.RoomMap);
+        return CreateUi<UI.RoomMap.RoomMapPanel>(UiNames.RoomMap);
     }
 
     /// <summary>
@@ -907,7 +955,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.RoomMap.RoomMapPanel Open_RoomMap()
     {
-        return OpenUi<UI.RoomMap.RoomMapPanel>(UiName.RoomMap);
+        return OpenUi<UI.RoomMap.RoomMapPanel>(UiNames.RoomMap);
     }
 
     /// <summary>
@@ -947,7 +995,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.RoomUI.RoomUIPanel Create_RoomUI()
     {
-        return CreateUi<UI.RoomUI.RoomUIPanel>(UiName.RoomUI);
+        return CreateUi<UI.RoomUI.RoomUIPanel>(UiNames.RoomUI);
     }
 
     /// <summary>
@@ -955,7 +1003,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.RoomUI.RoomUIPanel Open_RoomUI()
     {
-        return OpenUi<UI.RoomUI.RoomUIPanel>(UiName.RoomUI);
+        return OpenUi<UI.RoomUI.RoomUIPanel>(UiNames.RoomUI);
     }
 
     /// <summary>
@@ -995,7 +1043,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.Setting.SettingPanel Create_Setting()
     {
-        return CreateUi<UI.Setting.SettingPanel>(UiName.Setting);
+        return CreateUi<UI.Setting.SettingPanel>(UiNames.Setting);
     }
 
     /// <summary>
@@ -1003,7 +1051,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.Setting.SettingPanel Open_Setting()
     {
-        return OpenUi<UI.Setting.SettingPanel>(UiName.Setting);
+        return OpenUi<UI.Setting.SettingPanel>(UiNames.Setting);
     }
 
     /// <summary>
@@ -1043,7 +1091,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.Settlement.SettlementPanel Create_Settlement()
     {
-        return CreateUi<UI.Settlement.SettlementPanel>(UiName.Settlement);
+        return CreateUi<UI.Settlement.SettlementPanel>(UiNames.Settlement);
     }
 
     /// <summary>
@@ -1051,7 +1099,7 @@ public static partial class UiManager
     /// </summary>
     public static UI.Settlement.SettlementPanel Open_Settlement()
     {
-        return OpenUi<UI.Settlement.SettlementPanel>(UiName.Settlement);
+        return OpenUi<UI.Settlement.SettlementPanel>(UiNames.Settlement);
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using Config;
+using Godot;
 using UI.MapEditor;
 
 namespace UI.MapEditorMapMark;
@@ -17,6 +18,7 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
 
     public override void OnSetData(MapEditorMapMarkPanel.MarkCellData data)
     {
+        var textureRect = CellNode.L_MarkButton.L_MarkIcon.Instance;
         var text = "";
         //物体名称
         if (data.MarkInfo.MarkList != null && data.MarkInfo.MarkList.Count > 0)
@@ -56,7 +58,10 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
             text += "\n" + data.MarkInfo.DelayTime + "秒";
         }
         
+        //显示文本
         CellNode.L_MarkButton.Instance.Text = text;
+        //显示图标
+        textureRect.Texture = ResourceManager.GetMarkIcon(data.MarkInfo);
     }
 
     public void OnClickHandler()

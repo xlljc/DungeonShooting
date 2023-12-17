@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bnwweusrc44xy"]
 
 [ext_resource type="Script" path="res://src/game/ui/setting/SettingPanel.cs" id="1_ff0oi"]
-[ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_vgl60"]
+[ext_resource type="Texture2D" uid="uid://bd0kpqji660ta" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_vgl60"]
 
 [node name="Setting" type="Control"]
 layout_mode = 3
@@ -301,6 +301,21 @@ text = "武器近战"
 [node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key13"]
 layout_mode = 2
 text = "空格"
+
+[node name="Key14" type="HBoxContainer" parent="ScrollContainer/KeySetting"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="ScrollContainer/KeySetting/Key14"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "展开小地图"
+
+[node name="Value" type="Label" parent="ScrollContainer/KeySetting/Key14"]
+layout_mode = 2
+text = "Ctrl"
 
 [node name="Back" type="Button" parent="ScrollContainer/KeySetting"]
 layout_mode = 2

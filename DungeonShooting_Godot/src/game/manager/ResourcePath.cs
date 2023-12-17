@@ -77,6 +77,7 @@ public class ResourcePath
     public const string prefab_ui_MapEditorMapMark_tscn = "res://prefab/ui/MapEditorMapMark.tscn";
     public const string prefab_ui_MapEditorProject_tscn = "res://prefab/ui/MapEditorProject.tscn";
     public const string prefab_ui_MapEditorSelectObject_tscn = "res://prefab/ui/MapEditorSelectObject.tscn";
+    public const string prefab_ui_MapEditorTileSet_tscn = "res://prefab/ui/MapEditorTileSet.tscn";
     public const string prefab_ui_MapEditorTools_tscn = "res://prefab/ui/MapEditorTools.tscn";
     public const string prefab_ui_PauseMenu_tscn = "res://prefab/ui/PauseMenu.tscn";
     public const string prefab_ui_RoomMap_tscn = "res://prefab/ui/RoomMap.tscn";
@@ -285,6 +286,7 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_Add_png = "res://resource/sprite/ui/commonIcon/Add.png";
     public const string resource_sprite_ui_commonIcon_AreaTool_png = "res://resource/sprite/ui/commonIcon/AreaTool.png";
     public const string resource_sprite_ui_commonIcon_Back_png = "res://resource/sprite/ui/commonIcon/Back.png";
+    public const string resource_sprite_ui_commonIcon_BirthMark_png = "res://resource/sprite/ui/commonIcon/BirthMark.png";
     public const string resource_sprite_ui_commonIcon_Block_png = "res://resource/sprite/ui/commonIcon/Block.png";
     public const string resource_sprite_ui_commonIcon_CenterTool_png = "res://resource/sprite/ui/commonIcon/CenterTool.png";
     public const string resource_sprite_ui_commonIcon_Delete_png = "res://resource/sprite/ui/commonIcon/Delete.png";
@@ -297,6 +299,8 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_Lock_png = "res://resource/sprite/ui/commonIcon/Lock.png";
     public const string resource_sprite_ui_commonIcon_Mark_png = "res://resource/sprite/ui/commonIcon/Mark.png";
     public const string resource_sprite_ui_commonIcon_MarkCell_png = "res://resource/sprite/ui/commonIcon/MarkCell.png";
+    public const string resource_sprite_ui_commonIcon_MarkCell_placeholder_png = "res://resource/sprite/ui/commonIcon/MarkCell_placeholder.png";
+    public const string resource_sprite_ui_commonIcon_PackageMark_png = "res://resource/sprite/ui/commonIcon/PackageMark.png";
     public const string resource_sprite_ui_commonIcon_PenTool_png = "res://resource/sprite/ui/commonIcon/PenTool.png";
     public const string resource_sprite_ui_commonIcon_Play_png = "res://resource/sprite/ui/commonIcon/Play.png";
     public const string resource_sprite_ui_commonIcon_Right_png = "res://resource/sprite/ui/commonIcon/Right.png";
@@ -306,6 +310,7 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_Select2_png = "res://resource/sprite/ui/commonIcon/Select2.png";
     public const string resource_sprite_ui_commonIcon_Setting_png = "res://resource/sprite/ui/commonIcon/Setting.png";
     public const string resource_sprite_ui_commonIcon_Unknown_png = "res://resource/sprite/ui/commonIcon/Unknown.png";
+    public const string resource_sprite_ui_commonIcon_UnknownActivity_png = "res://resource/sprite/ui/commonIcon/UnknownActivity.png";
     public const string resource_sprite_ui_commonIcon_Unlock_png = "res://resource/sprite/ui/commonIcon/Unlock.png";
     public const string resource_sprite_ui_commonIcon_Visible_png = "res://resource/sprite/ui/commonIcon/Visible.png";
     public const string resource_sprite_ui_commonIcon_WaveCell_png = "res://resource/sprite/ui/commonIcon/WaveCell.png";

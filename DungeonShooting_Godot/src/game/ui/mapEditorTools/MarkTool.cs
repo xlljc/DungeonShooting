@@ -117,6 +117,19 @@ public partial class MarkTool : TextureRect, IUiNodeScript
         Position = markInfo.Position.AsVector2() - (Size / 2).Ceil();
         _startPos = GlobalPosition;
         MarkAreaTool.InitData(_toolNode.UiPanel.S_ToolRoot, this);
+        //显示图标
+        Texture = ResourceManager.GetMarkIcon(markInfo);
+    }
+
+    /// <summary>
+    /// 刷新标记数据
+    /// </summary>
+    public void RefreshData()
+    {
+        //更新坐标
+        Position = MarkInfo.Position.AsVector2();
+        //更新icon
+        Texture = ResourceManager.GetMarkIcon(MarkInfo);
     }
     
     private void OnMouseEntered()

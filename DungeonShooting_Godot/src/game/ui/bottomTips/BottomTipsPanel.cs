@@ -100,7 +100,7 @@ public partial class BottomTipsPanel : BottomTips
     private static BottomTipsPanel _instance;
     public static void Init()
     {
-        _instance = UiManager.CreateUi<BottomTipsPanel>(UiManager.UiName.BottomTips);
+        _instance = UiManager.CreateUi<BottomTipsPanel>(UiManager.UiNames.BottomTips);
     }
 
     /// <summary>

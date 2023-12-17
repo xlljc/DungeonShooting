@@ -34,7 +34,7 @@ public static class EditorWindowManager
                 window.CloseWindow();
             })
         );
-        var body = window.OpenBody<EditorTipsPanel>(UiManager.UiName.EditorTips);
+        var body = window.OpenBody<EditorTipsPanel>(UiManager.UiNames.EditorTips);
         body.SetMessage(message);
     }
 
@@ -64,7 +64,7 @@ public static class EditorWindowManager
                 window.CloseWindow();
             })
         );
-        var body = window.OpenBody<EditorTipsPanel>(UiManager.UiName.EditorTips);
+        var body = window.OpenBody<EditorTipsPanel>(UiManager.UiNames.EditorTips);
         body.SetMessage(message);
     }
     
@@ -103,7 +103,7 @@ public static class EditorWindowManager
                 onClose(2);
             })
         );
-        var body = window.OpenBody<EditorTipsPanel>(UiManager.UiName.EditorTips);
+        var body = window.OpenBody<EditorTipsPanel>(UiManager.UiNames.EditorTips);
         body.SetMessage(message);
     }
 
@@ -117,7 +117,7 @@ public static class EditorWindowManager
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("创建地牢组");
         window.SetWindowSize(new Vector2I(700, 500));
-        var body = window.OpenBody<MapEditorCreateGroupPanel>(UiManager.UiName.MapEditorCreateGroup);
+        var body = window.OpenBody<MapEditorCreateGroupPanel>(UiManager.UiNames.MapEditorCreateGroup);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
@@ -147,7 +147,7 @@ public static class EditorWindowManager
         var window = UiManager.Open_EditorWindow();
         window.SetWindowTitle("创建地牢房间");
         window.SetWindowSize(new Vector2I(700, 600));
-        var body = window.OpenBody<MapEditorCreateRoomPanel>(UiManager.UiName.MapEditorCreateRoom);
+        var body = window.OpenBody<MapEditorCreateRoomPanel>(UiManager.UiNames.MapEditorCreateRoom);
         if (groupName != null)
         {
             body.SetSelectGroup(groupName);
@@ -182,7 +182,7 @@ public static class EditorWindowManager
         var window = UiManager.Open_EditorWindow();
         window.SetWindowTitle("编辑地牢房间");
         window.SetWindowSize(new Vector2I(700, 600));
-        var body = window.OpenBody<MapEditorCreateRoomPanel>(UiManager.UiName.MapEditorCreateRoom);
+        var body = window.OpenBody<MapEditorCreateRoomPanel>(UiManager.UiNames.MapEditorCreateRoom);
         body.InitEditData(roomSplit);
         
         window.SetButtonList(
@@ -214,7 +214,7 @@ public static class EditorWindowManager
         var window = UiManager.Open_EditorWindow();
         window.SetWindowTitle("创建房间预设");
         window.SetWindowSize(new Vector2I(700, 600));
-        var body = window.OpenBody<MapEditorCreatePreinstallPanel>(UiManager.UiName.MapEditorCreatePreinstall);
+        var body = window.OpenBody<MapEditorCreatePreinstallPanel>(UiManager.UiNames.MapEditorCreatePreinstall);
         body.InitData(roomType);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
@@ -245,7 +245,7 @@ public static class EditorWindowManager
         var window = UiManager.Open_EditorWindow();
         window.SetWindowTitle("创建房间预设");
         window.SetWindowSize(new Vector2I(700, 600));
-        var body = window.OpenBody<MapEditorCreatePreinstallPanel>(UiManager.UiName.MapEditorCreatePreinstall);
+        var body = window.OpenBody<MapEditorCreatePreinstallPanel>(UiManager.UiNames.MapEditorCreatePreinstall);
         body.InitData(roomType, preinstallInfo);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
@@ -276,7 +276,7 @@ public static class EditorWindowManager
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("创建标记");
         window.SetWindowSize(new Vector2I(1400, 900));
-        var body = window.OpenBody<MapEditorCreateMarkPanel>(UiManager.UiName.MapEditorCreateMark);
+        var body = window.OpenBody<MapEditorCreateMarkPanel>(UiManager.UiNames.MapEditorCreateMark);
         body.InitData(position, preloading);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
@@ -307,7 +307,7 @@ public static class EditorWindowManager
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("编辑标记");
         window.SetWindowSize(new Vector2I(1400, 900));
-        var body = window.OpenBody<MapEditorCreateMarkPanel>(UiManager.UiName.MapEditorCreateMark);
+        var body = window.OpenBody<MapEditorCreateMarkPanel>(UiManager.UiNames.MapEditorCreateMark);
         body.InitData(data, preloading);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
@@ -337,7 +337,7 @@ public static class EditorWindowManager
         var window = CreateWindowInstance(parentUi);
         window.S_Window.Instance.Size = new Vector2I(1000, 700);
         window.SetWindowTitle("选择物体");
-        var body = window.OpenBody<MapEditorSelectObjectPanel>(UiManager.UiName.MapEditorSelectObject);
+        var body = window.OpenBody<MapEditorSelectObjectPanel>(UiManager.UiNames.MapEditorSelectObject);
         //设置显示的物体类型
         body.SetShowType(findType);
         window.SetButtonList(
@@ -371,7 +371,7 @@ public static class EditorWindowManager
     {
         if (parentUi != null)
         {
-            return parentUi.OpenNestedUi<EditorWindowPanel>(UiManager.UiName.EditorWindow);
+            return parentUi.OpenNestedUi<EditorWindowPanel>(UiManager.UiNames.EditorWindow);
         }
 
         return UiManager.Open_EditorWindow();

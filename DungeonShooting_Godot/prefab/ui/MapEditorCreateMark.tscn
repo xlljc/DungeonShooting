@@ -1,14 +1,27 @@
-[gd_scene load_steps=10 format=3 uid="uid://bt4xo2lb4h4rx"]
+[gd_scene load_steps=12 format=3 uid="uid://bt4xo2lb4h4rx"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorCreateMark/MapEditorCreateMarkPanel.cs" id="1_cjivg"]
 [ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="2_pxemo"]
 [ext_resource type="Material" uid="uid://cces3bhds7jyi" path="res://resource/material/Blend.tres" id="2_xb40b"]
 [ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="3_7xihk"]
 [ext_resource type="Texture2D" uid="uid://dligpyhp72sg7" path="res://resource/sprite/ui/commonIcon/Right.png" id="3_v5clf"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="4_7uegb"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorCreateMark/attribute/NumberAttribute.cs" id="6_1ym7l"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorCreateMark/attribute/ObjectAttribute.cs" id="7_516p2"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorCreateMark/attribute/OptionAttribute.cs" id="7_o1tg2"]
 [ext_resource type="Texture2D" uid="uid://dggb6p4sdmfry" path="res://resource/sprite/ui/commonIcon/Edit.png" id="7_yeuy4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ywcv8"]
+resource_local_to_scene = true
+shader = ExtResource("4_7uegb")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [node name="MapEditorCreateMark" type="Control"]
 layout_mode = 3
@@ -260,7 +273,7 @@ flat = true
 icon_alignment = 1
 
 [node name="Icon" type="TextureRect" parent="MarginContainer/VBoxContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer/MarkObject/VBoxContainer/HBoxContainer"]
-material = ExtResource("2_xb40b")
+material = SubResource("ShaderMaterial_ywcv8")
 custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 stretch_mode = 5

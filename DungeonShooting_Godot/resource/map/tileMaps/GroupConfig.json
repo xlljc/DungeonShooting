@@ -21,6 +21,10 @@
       {
         "ErrorType": 0,
         "Path": "resource/map/tileMaps/TestGroup1/battle/Battle5"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle6"
       }
     ],
     "InletList": [
@@ -39,6 +43,10 @@
       {
         "ErrorType": 0,
         "Path": "resource/map/tileMaps/TestGroup1/inlet/Start4"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/TestGroup1/inlet/Start5"
       }
     ],
     "OutletList": [

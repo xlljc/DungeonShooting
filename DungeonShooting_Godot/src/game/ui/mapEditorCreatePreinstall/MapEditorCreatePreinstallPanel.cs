@@ -77,24 +77,9 @@ public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
             data.Weight = (int)S_WeightInput.Instance.Value;
             //预加载波
             data.InitWaveList();
-            CreateSpecialMark(data.WaveList);
+            //初始化特殊标记
+            data.InitSpecialMark(_roomType);
         }
         return data;
-    }
-
-    //创建特殊标记
-    private void CreateSpecialMark(List<List<MarkInfo>> dataWaveList)
-    {
-        if (_roomType == DungeonRoomType.Inlet) //初始房间
-        {
-            var preloading = dataWaveList[0];
-            //玩家标记
-            var markInfo = new MarkInfo();
-            markInfo.Position = new SerializeVector2();
-            markInfo.Size = new SerializeVector2();
-            markInfo.SpecialMarkType = SpecialMarkType.BirthPoint;
-            markInfo.MarkList = new List<MarkInfoItem>();
-            preloading.Add(markInfo);
-        }
     }
 }

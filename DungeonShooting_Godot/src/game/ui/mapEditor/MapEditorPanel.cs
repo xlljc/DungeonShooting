@@ -32,8 +32,9 @@ public partial class MapEditorPanel : MapEditor
         tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile("resource/map/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
         S_TileMap.Instance.TileSet = tileSet;
         
-        S_TabContainer.Instance.SetTabTitle(0, "地图");
-        S_TabContainer.Instance.SetTabTitle(1, "对象");
+        S_TabContainer.Instance.SetTabTitle(0, "对象");
+        S_TabContainer.Instance.SetTabTitle(1, "图层");
+        S_TabContainer.Instance.SetTabTitle(2, "图块");
         //S_MapLayer.Instance.Init(S_MapLayer);
         S_Left.Instance.Resized += OnMapViewResized;
         S_Back.Instance.Pressed += OnBackClick;

@@ -1,0 +1,1 @@
+[{"Name":"Preinstall1","Weight":100,"Remark":"","WaveList":[[{"Position":{"X":160,"Y":-164},"Size":{"X":0,"Y":0},"SpecialMarkType":1,"DelayTime":0,"MarkList":[]}],[{"Position":{"X":160,"Y":-140},"Size":{"X":16,"Y":16},"SpecialMarkType":0,"DelayTime":0,"MarkList":[{"Id":"weapon0003","Weight":100,"Attr":{"CurrAmmon":"12","ResidueAmmo":"90"},"Altitude":8,"VerticalSpeed":0}]}]]}]

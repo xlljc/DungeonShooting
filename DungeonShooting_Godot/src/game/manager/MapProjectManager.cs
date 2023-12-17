@@ -144,6 +144,15 @@ public static class MapProjectManager
             {
                 Directory.CreateDirectory(configPath);
             }
+            
+            //给房间添加默认预设
+            var preinstallInfo = new RoomPreinstallInfo();
+            preinstallInfo.Name = "Preinstall1";
+            preinstallInfo.Weight = 100;
+            preinstallInfo.Remark = "";
+            preinstallInfo.InitWaveList();
+            preinstallInfo.InitSpecialMark(roomSplit.RoomInfo.RoomType);
+            roomSplit.Preinstall.Add(preinstallInfo);
 
             //将组数据保存为json
             var options = new JsonSerializerOptions();

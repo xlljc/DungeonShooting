@@ -1,15 +1,16 @@
-[gd_scene load_steps=14 format=3 uid="uid://csbxfkdupsckv"]
+[gd_scene load_steps=15 format=3 uid="uid://csbxfkdupsckv"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/MapEditorPanel.cs" id="1_5s7a0"]
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_gkcw7"]
 [ext_resource type="Texture2D" uid="uid://cat35d7ueu7gu" path="res://resource/sprite/ui/commonIcon/Save.png" id="3_qq8k4"]
 [ext_resource type="Texture2D" uid="uid://7l7aqhsaexoh" path="res://resource/sprite/ui/commonIcon/Play.png" id="4_2imnr"]
-[ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/mapEditor/ErrorCell.png" id="4_465u2"]
+[ext_resource type="Texture2D" uid="uid://0878uloew5jo" path="res://resource/sprite/ui/commonIcon/Block.png" id="4_465u2"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/tileView/EditorTileMap.cs" id="4_mhy1a"]
 [ext_resource type="Texture2D" uid="uid://bpbfjyj6258da" path="res://resource/sprite/ui/commonIcon/Setting.png" id="5_ubl8b"]
 [ext_resource type="PackedScene" uid="uid://b4u66mxndxbrg" path="res://prefab/ui/MapEditorTools.tscn" id="6_7pvgu"]
 [ext_resource type="PackedScene" uid="uid://bb2ekkpxifd7g" path="res://prefab/ui/MapEditorMapLayer.tscn" id="7_ychtn"]
 [ext_resource type="PackedScene" uid="uid://peo0n8bl15y5" path="res://prefab/ui/MapEditorMapMark.tscn" id="8_8tgeu"]
+[ext_resource type="PackedScene" uid="uid://dhtfat7tr8ujw" path="res://prefab/ui/MapEditorTileSet.tscn" id="11_7yaoy"]
 
 [sub_resource type="Animation" id="Animation_o3btm"]
 length = 0.001
@@ -245,17 +246,25 @@ theme_override_constants/margin_bottom = 2
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="MapMark" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="MapEditorMapMark" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapMark" instance=ExtResource("8_8tgeu")]
+layout_mode = 2
+
 [node name="MapLayer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_top = 10
 
 [node name="MapEditorMapLayer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer" instance=ExtResource("7_ychtn")]
 layout_mode = 2
 
-[node name="MapMark" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
+[node name="MapTileSet" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_top = 10
 
-[node name="MapEditorMapMark" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapMark" instance=ExtResource("8_8tgeu")]
+[node name="MapEditorTileSet" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapTileSet" instance=ExtResource("11_7yaoy")]
 layout_mode = 2

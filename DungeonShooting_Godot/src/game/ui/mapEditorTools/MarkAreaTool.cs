@@ -4,6 +4,9 @@ using Color = Godot.Color;
 
 namespace UI.MapEditorTools;
 
+/// <summary>
+/// 标记区域工具
+/// </summary>
 public partial class MarkAreaTool : Node2D
 {
     //鼠标悬停颜色
