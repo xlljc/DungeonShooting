@@ -217,11 +217,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public bool ShowOutline
     {
-        get => _blendShaderMaterial == null ? false : _blendShaderMaterial.GetShaderParameter(_shader_show_outline).AsBool();
+        get => _blendShaderMaterial == null ? false : _blendShaderMaterial.GetShaderParameter(ShaderParamNames.ShowOutline).AsBool();
         set
         {
-            _blendShaderMaterial?.SetShaderParameter(_shader_show_outline, value);
-            _shadowBlendShaderMaterial?.SetShaderParameter(_shader_show_outline, value);
+            _blendShaderMaterial?.SetShaderParameter(ShaderParamNames.ShowOutline, value);
+            _shadowBlendShaderMaterial?.SetShaderParameter(ShaderParamNames.ShowOutline, value);
         }
     }
 
@@ -230,8 +230,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public Color OutlineColor
     {
-        get => _blendShaderMaterial == null ? Colors.Black : _blendShaderMaterial.GetShaderParameter(_shader_outline_color).AsColor();
-        set => _blendShaderMaterial?.SetShaderParameter(_shader_outline_color, value);
+        get => _blendShaderMaterial == null ? Colors.Black : _blendShaderMaterial.GetShaderParameter(ShaderParamNames.OutlineColor).AsColor();
+        set => _blendShaderMaterial?.SetShaderParameter(ShaderParamNames.OutlineColor, value);
     }
 
     /// <summary>
@@ -239,8 +239,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public float Grey
     {
-        get => _blendShaderMaterial == null ? 0 : _blendShaderMaterial.GetShaderParameter(_shader_grey).AsSingle();
-        set => _blendShaderMaterial?.SetShaderParameter(_shader_grey, value);
+        get => _blendShaderMaterial == null ? 0 : _blendShaderMaterial.GetShaderParameter(ShaderParamNames.Grey).AsSingle();
+        set => _blendShaderMaterial?.SetShaderParameter(ShaderParamNames.Grey, value);
     }
     
     /// <summary>
@@ -255,10 +255,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     public Vector2I? BrushPrevPosition { get; set; }
     
     // --------------------------------------------------------------------------------
-
-    private static readonly StringName _shader_grey = "grey";
-    private static readonly StringName _shader_outline_color = "outline_color";
-    private static readonly StringName _shader_show_outline = "show_outline";
 
     //是否正在调用组件 Update 函数
     private bool _updatingComp = false;
@@ -368,8 +364,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             _shadowBlendShaderMaterial = ShadowSprite.Material as ShaderMaterial;
             if (_shadowBlendShaderMaterial != null && _blendShaderMaterial != null)
             {
-                var value = _blendShaderMaterial.GetShaderParameter(_shader_show_outline);
-                _shadowBlendShaderMaterial.SetShaderParameter(_shader_show_outline, value);
+                var value = _blendShaderMaterial.GetShaderParameter(ShaderParamNames.ShowOutline);
+                _shadowBlendShaderMaterial.SetShaderParameter(ShaderParamNames.ShowOutline, value);
             }
             
             ShadowSprite.Visible = false;

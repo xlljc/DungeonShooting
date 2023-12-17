@@ -32,15 +32,20 @@ public abstract partial class MapEditor : UiBase
         inst1.L_MapEditorTools.Instance.OnCreateUi();
         inst1.L_MapEditorTools.Instance.OnInitNestedUi();
 
-        var inst2 = L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer;
-        RecordNestedUi(inst2.L_MapEditorMapLayer.Instance, inst2, UiManager.RecordType.Open);
-        inst2.L_MapEditorMapLayer.Instance.OnCreateUi();
-        inst2.L_MapEditorMapLayer.Instance.OnInitNestedUi();
+        var inst2 = L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapMark;
+        RecordNestedUi(inst2.L_MapEditorMapMark.Instance, inst2, UiManager.RecordType.Open);
+        inst2.L_MapEditorMapMark.Instance.OnCreateUi();
+        inst2.L_MapEditorMapMark.Instance.OnInitNestedUi();
 
-        var inst3 = L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapMark;
-        RecordNestedUi(inst3.L_MapEditorMapMark.Instance, inst3, UiManager.RecordType.Open);
-        inst3.L_MapEditorMapMark.Instance.OnCreateUi();
-        inst3.L_MapEditorMapMark.Instance.OnInitNestedUi();
+        var inst3 = L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer;
+        RecordNestedUi(inst3.L_MapEditorMapLayer.Instance, inst3, UiManager.RecordType.Open);
+        inst3.L_MapEditorMapLayer.Instance.OnCreateUi();
+        inst3.L_MapEditorMapLayer.Instance.OnInitNestedUi();
+
+        var inst4 = L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapTileSet;
+        RecordNestedUi(inst4.L_MapEditorTileSet.Instance, inst4, UiManager.RecordType.Open);
+        inst4.L_MapEditorTileSet.Instance.OnCreateUi();
+        inst4.L_MapEditorTileSet.Instance.OnInitNestedUi();
 
     }
 
@@ -400,44 +405,6 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.MapEditorMapLayer.MapEditorMapLayerPanel"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.MapEditorMapLayer
-    /// </summary>
-    public class MapEditorMapLayer : UiNode<MapEditorPanel, UI.MapEditorMapLayer.MapEditorMapLayerPanel, MapEditorMapLayer>
-    {
-        public MapEditorMapLayer(MapEditorPanel uiPanel, UI.MapEditorMapLayer.MapEditorMapLayerPanel node) : base(uiPanel, node) {  }
-        public override MapEditorMapLayer Clone()
-        {
-            var uiNode = new MapEditorMapLayer(UiPanel, (UI.MapEditorMapLayer.MapEditorMapLayerPanel)Instance.Duplicate());
-            UiPanel.RecordNestedUi(uiNode.Instance, this, UiManager.RecordType.Open);
-            uiNode.Instance.OnCreateUi();
-            uiNode.Instance.OnInitNestedUi();
-            return uiNode;
-        }
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.MarginContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer
-    /// </summary>
-    public class MapLayer : UiNode<MapEditorPanel, Godot.MarginContainer, MapLayer>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorMapLayer.MapEditorMapLayerPanel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapEditorMapLayer
-        /// </summary>
-        public MapEditorMapLayer L_MapEditorMapLayer
-        {
-            get
-            {
-                if (_L_MapEditorMapLayer == null) _L_MapEditorMapLayer = new MapEditorMapLayer(UiPanel, Instance.GetNode<UI.MapEditorMapLayer.MapEditorMapLayerPanel>("MapEditorMapLayer"));
-                return _L_MapEditorMapLayer;
-            }
-        }
-        private MapEditorMapLayer _L_MapEditorMapLayer;
-
-        public MapLayer(MapEditorPanel uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
-        public override MapLayer Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
-    }
-
-    /// <summary>
     /// 类型: <see cref="UI.MapEditorMapMark.MapEditorMapMarkPanel"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapMark.MapEditorMapMark
     /// </summary>
     public class MapEditorMapMark : UiNode<MapEditorPanel, UI.MapEditorMapMark.MapEditorMapMarkPanel, MapEditorMapMark>
@@ -476,10 +443,99 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="UI.MapEditorMapLayer.MapEditorMapLayerPanel"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.MapEditorMapLayer
+    /// </summary>
+    public class MapEditorMapLayer : UiNode<MapEditorPanel, UI.MapEditorMapLayer.MapEditorMapLayerPanel, MapEditorMapLayer>
+    {
+        public MapEditorMapLayer(MapEditorPanel uiPanel, UI.MapEditorMapLayer.MapEditorMapLayerPanel node) : base(uiPanel, node) {  }
+        public override MapEditorMapLayer Clone()
+        {
+            var uiNode = new MapEditorMapLayer(UiPanel, (UI.MapEditorMapLayer.MapEditorMapLayerPanel)Instance.Duplicate());
+            UiPanel.RecordNestedUi(uiNode.Instance, this, UiManager.RecordType.Open);
+            uiNode.Instance.OnCreateUi();
+            uiNode.Instance.OnInitNestedUi();
+            return uiNode;
+        }
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.MarginContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer
+    /// </summary>
+    public class MapLayer : UiNode<MapEditorPanel, Godot.MarginContainer, MapLayer>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorMapLayer.MapEditorMapLayerPanel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapEditorMapLayer
+        /// </summary>
+        public MapEditorMapLayer L_MapEditorMapLayer
+        {
+            get
+            {
+                if (_L_MapEditorMapLayer == null) _L_MapEditorMapLayer = new MapEditorMapLayer(UiPanel, Instance.GetNode<UI.MapEditorMapLayer.MapEditorMapLayerPanel>("MapEditorMapLayer"));
+                return _L_MapEditorMapLayer;
+            }
+        }
+        private MapEditorMapLayer _L_MapEditorMapLayer;
+
+        public MapLayer(MapEditorPanel uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
+        public override MapLayer Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="UI.MapEditorTileSet.MapEditorTileSetPanel"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapTileSet.MapEditorTileSet
+    /// </summary>
+    public class MapEditorTileSet : UiNode<MapEditorPanel, UI.MapEditorTileSet.MapEditorTileSetPanel, MapEditorTileSet>
+    {
+        public MapEditorTileSet(MapEditorPanel uiPanel, UI.MapEditorTileSet.MapEditorTileSetPanel node) : base(uiPanel, node) {  }
+        public override MapEditorTileSet Clone()
+        {
+            var uiNode = new MapEditorTileSet(UiPanel, (UI.MapEditorTileSet.MapEditorTileSetPanel)Instance.Duplicate());
+            UiPanel.RecordNestedUi(uiNode.Instance, this, UiManager.RecordType.Open);
+            uiNode.Instance.OnCreateUi();
+            uiNode.Instance.OnInitNestedUi();
+            return uiNode;
+        }
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.MarginContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapTileSet
+    /// </summary>
+    public class MapTileSet : UiNode<MapEditorPanel, Godot.MarginContainer, MapTileSet>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorTileSet.MapEditorTileSetPanel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapEditorTileSet
+        /// </summary>
+        public MapEditorTileSet L_MapEditorTileSet
+        {
+            get
+            {
+                if (_L_MapEditorTileSet == null) _L_MapEditorTileSet = new MapEditorTileSet(UiPanel, Instance.GetNode<UI.MapEditorTileSet.MapEditorTileSetPanel>("MapEditorTileSet"));
+                return _L_MapEditorTileSet;
+            }
+        }
+        private MapEditorTileSet _L_MapEditorTileSet;
+
+        public MapTileSet(MapEditorPanel uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
+        public override MapTileSet Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.TabContainer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer
     /// </summary>
     public class TabContainer : UiNode<MapEditorPanel, Godot.TabContainer, TabContainer>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.MapMark
+        /// </summary>
+        public MapMark L_MapMark
+        {
+            get
+            {
+                if (_L_MapMark == null) _L_MapMark = new MapMark(UiPanel, Instance.GetNode<Godot.MarginContainer>("MapMark"));
+                return _L_MapMark;
+            }
+        }
+        private MapMark _L_MapMark;
+
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.MapLayer
         /// </summary>
@@ -494,17 +550,17 @@ public abstract partial class MapEditor : UiBase
         private MapLayer _L_MapLayer;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.MapMark
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.MapTileSet
         /// </summary>
-        public MapMark L_MapMark
+        public MapTileSet L_MapTileSet
         {
             get
             {
-                if (_L_MapMark == null) _L_MapMark = new MapMark(UiPanel, Instance.GetNode<Godot.MarginContainer>("MapMark"));
-                return _L_MapMark;
+                if (_L_MapTileSet == null) _L_MapTileSet = new MapTileSet(UiPanel, Instance.GetNode<Godot.MarginContainer>("MapTileSet"));
+                return _L_MapTileSet;
             }
         }
-        private MapMark _L_MapMark;
+        private MapTileSet _L_MapTileSet;
 
         public TabContainer(MapEditorPanel uiPanel, Godot.TabContainer node) : base(uiPanel, node) {  }
         public override TabContainer Clone() => new (UiPanel, (Godot.TabContainer)Instance.Duplicate());
@@ -728,6 +784,16 @@ public abstract partial class MapEditor : UiBase
     public Left S_Left => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left;
 
     /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorMapMark.MapEditorMapMarkPanel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapMark.MapEditorMapMark
+    /// </summary>
+    public MapEditorMapMark S_MapEditorMapMark => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapMark.L_MapEditorMapMark;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapMark
+    /// </summary>
+    public MapMark S_MapMark => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapMark;
+
+    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorMapLayer.MapEditorMapLayerPanel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapLayer.MapEditorMapLayer
     /// </summary>
     public MapEditorMapLayer S_MapEditorMapLayer => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer.L_MapEditorMapLayer;
@@ -738,14 +804,14 @@ public abstract partial class MapEditor : UiBase
     public MapLayer S_MapLayer => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapLayer;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorMapMark.MapEditorMapMarkPanel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapMark.MapEditorMapMark
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorTileSet.MapEditorTileSetPanel"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapTileSet.MapEditorTileSet
     /// </summary>
-    public MapEditorMapMark S_MapEditorMapMark => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapMark.L_MapEditorMapMark;
+    public MapEditorTileSet S_MapEditorTileSet => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapTileSet.L_MapEditorTileSet;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapMark
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer.MapTileSet
     /// </summary>
-    public MapMark S_MapMark => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapMark;
+    public MapTileSet S_MapTileSet => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Right.L_MarginContainer.L_TabContainer.L_MapTileSet;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TabContainer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Right.MarginContainer.TabContainer

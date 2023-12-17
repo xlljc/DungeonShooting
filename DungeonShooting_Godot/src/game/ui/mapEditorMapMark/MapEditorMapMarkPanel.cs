@@ -85,6 +85,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         _eventFactory.RemoveAllEventListener();
         _eventFactory = null;
         _grid.Destroy();
+        S_DynamicTool.QueueFree();
     }
 
     //选中标记回调
@@ -165,8 +166,9 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     {
         //清除选中项
         RemoveSelectCell();
-        EditorManager.SetSelectWaveIndex(-1);
         //记录选中波数
+        EditorManager.SetSelectWaveIndex(-1);
+        //记录选中的预设
         EditorManager.SetSelectPreinstallIndex((int)index);
         var preinstall = EditorManager.SelectRoom.Preinstall;
         if (index >= 0 && index <= preinstall.Count)

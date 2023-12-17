@@ -97,6 +97,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         _eventFactory.AddEventListener(EventEnum.OnCreateMark, OnCreateMarkTool);
         _eventFactory.AddEventListener(EventEnum.OnSelectMark, OnSelectMarkTool);
         _eventFactory.AddEventListener(EventEnum.OnDeleteMark, OnDeleteMarkTool);
+        _eventFactory.AddEventListener(EventEnum.OnSetMarkVisible, OnSetMarkVisible);
         _eventFactory.AddEventListener(EventEnum.OnEditMark, OnEditMarkTool);
         _eventFactory.AddEventListener(EventEnum.OnSelectPreinstall, RefreshMark);
     }
@@ -121,7 +122,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
             S_ToolRoot.Instance.Modulate = new Color(1, 1, 1, 0.4f);
         }
 
-        IsOpenPopUps = UiManager.GetUiInstanceCount(UiManager.UiName.EditorWindow) > 0;
+        IsOpenPopUps = UiManager.GetUiInstanceCount(UiManager.UiNames.EditorWindow) > 0;
     }
 
     //刷新标记
@@ -237,6 +238,16 @@ public partial class MapEditorToolsPanel : MapEditorTools
         }
     }
 
+    //设置标记显示状态
+    private void OnSetMarkVisible(object arg)
+    {
+        var data = (MarkInfoVisibleData)arg;
+        if (_currMarkToolsMap.TryGetValue(data.MarkInfo, out var markTemplate))
+        {
+            markTemplate.Instance.Visible = data.Visible;
+        }
+    }
+    
     //编辑标记
     private void OnEditMarkTool(object arg)
     {
@@ -244,8 +255,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
         {
             if (_currMarkToolsMap.TryGetValue(markInfo, out var markTemplate))
             {
-                //更新坐标
-                markTemplate.Instance.Position = markInfo.Position.AsVector2();
+                //刷新数据
+                markTemplate.Instance.RefreshData();
             }
         }
     }

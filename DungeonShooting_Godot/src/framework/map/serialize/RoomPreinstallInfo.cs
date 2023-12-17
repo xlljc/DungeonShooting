@@ -41,4 +41,22 @@ public class RoomPreinstallInfo
             new List<MarkInfo>()
         };
     }
+    
+    /// <summary>
+    /// 初始化特殊标记
+    /// </summary>
+    public void InitSpecialMark(DungeonRoomType roomType)
+    {
+        if (roomType == DungeonRoomType.Inlet) //初始房间
+        {
+            var preloading = WaveList[0];
+            //玩家标记
+            var markInfo = new MarkInfo();
+            markInfo.Position = new SerializeVector2();
+            markInfo.Size = new SerializeVector2();
+            markInfo.SpecialMarkType = SpecialMarkType.BirthPoint;
+            markInfo.MarkList = new List<MarkInfoItem>();
+            preloading.Add(markInfo);
+        }
+    }
 }

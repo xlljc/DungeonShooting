@@ -31,6 +31,10 @@ public static class Debug
 
         GD.Print(str);
         AllLogMessage = str + "\n" + AllLogMessage;
+        if (AllLogMessage.Length > 10000)
+        {
+            AllLogMessage = AllLogMessage.Substring(0, 9500);
+        }
     }
     
     /// <summary>
@@ -53,6 +57,10 @@ public static class Debug
 
         GD.PrintErr(str);
         AllLogMessage = str + "\n" + AllLogMessage;
+        if (AllLogMessage.Length > 10000)
+        {
+            AllLogMessage = AllLogMessage.Substring(0, 9500);
+        }
     }
 
     /// <summary>

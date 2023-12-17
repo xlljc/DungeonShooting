@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b4u66mxndxbrg"]
+[gd_scene load_steps=12 format=3 uid="uid://b4u66mxndxbrg"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/MapEditorToolsPanel.cs" id="1_mqp1c"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorHoverArea.cs" id="2_6qfy3"]
@@ -6,9 +6,22 @@
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorDragArea.cs" id="3_3w0w6"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/DoorDragButton.cs" id="3_45muq"]
 [ext_resource type="Texture2D" uid="uid://4wupcp53rrpi" path="res://resource/sprite/ui/mapEditorTools/DoorDragButton.png" id="3_trbb5"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="6_krtnu"]
 [ext_resource type="Texture2D" uid="uid://dnty1a2tcawos" path="res://resource/sprite/ui/commonIcon/Mark.png" id="6_n7h3g"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorTools/MarkTool.cs" id="7_ekxcj"]
 [ext_resource type="Texture2D" uid="uid://cuntr7hec044f" path="res://resource/sprite/ui/commonIcon/Select.png" id="7_mqmd6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wxp5t"]
+resource_local_to_scene = true
+shader = ExtResource("6_krtnu")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = false
+shader_parameter/grey = 0.0
 
 [node name="MapEditorTools" type="Control"]
 layout_mode = 3
@@ -151,10 +164,13 @@ stretch_mode = 0
 script = ExtResource("3_45muq")
 
 [node name="MarkTemplate" type="TextureRect" parent="ToolRoot"]
+material = SubResource("ShaderMaterial_wxp5t")
 layout_mode = 0
-offset_right = 7.0
-offset_bottom = 7.0
+offset_right = 16.0
+offset_bottom = 16.0
 texture = ExtResource("6_n7h3g")
+expand_mode = 2
+stretch_mode = 5
 script = ExtResource("7_ekxcj")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
