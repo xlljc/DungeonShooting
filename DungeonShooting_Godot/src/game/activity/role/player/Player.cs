@@ -239,7 +239,7 @@ public partial class Player : Role
 
     protected override void OnAffiliationChange(AffiliationArea prevArea)
     {
-        //BrushPrevPosition = null;
+        BrushPrevPosition = null;
         base.OnAffiliationChange(prevArea);
     }
 

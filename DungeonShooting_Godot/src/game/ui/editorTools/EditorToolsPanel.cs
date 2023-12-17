@@ -303,7 +303,7 @@ public partial class EditorToolsPanel : EditorTools
     /// </summary>
     private void OpenExportExcelFolder()
     {
-        var path = Environment.CurrentDirectory + "\\excel\\excelFile";
+        var path = Environment.CurrentDirectory + "\\excel";
         System.Diagnostics.Process.Start("explorer.exe", path);
     }
     

@@ -943,6 +943,59 @@ public abstract partial class Setting : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: Setting.ScrollContainer.KeySetting.Key14.Name
+    /// </summary>
+    public class Name_14 : UiNode<SettingPanel, Godot.Label, Name_14>
+    {
+        public Name_14(SettingPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Name_14 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: Setting.ScrollContainer.KeySetting.Key14.Value
+    /// </summary>
+    public class Value_13 : UiNode<SettingPanel, Godot.Label, Value_13>
+    {
+        public Value_13(SettingPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Value_13 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: Setting.ScrollContainer.KeySetting.Key14
+    /// </summary>
+    public class Key14 : UiNode<SettingPanel, Godot.HBoxContainer, Key14>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: Setting.ScrollContainer.KeySetting.Name
+        /// </summary>
+        public Name_14 L_Name
+        {
+            get
+            {
+                if (_L_Name == null) _L_Name = new Name_14(UiPanel, Instance.GetNode<Godot.Label>("Name"));
+                return _L_Name;
+            }
+        }
+        private Name_14 _L_Name;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: Setting.ScrollContainer.KeySetting.Value
+        /// </summary>
+        public Value_13 L_Value
+        {
+            get
+            {
+                if (_L_Value == null) _L_Value = new Value_13(UiPanel, Instance.GetNode<Godot.Label>("Value"));
+                return _L_Value;
+            }
+        }
+        private Value_13 _L_Value;
+
+        public Key14(SettingPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override Key14 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: Setting.ScrollContainer.KeySetting.Back
     /// </summary>
     public class Back_2 : UiNode<SettingPanel, Godot.Button, Back_2>
@@ -1139,6 +1192,19 @@ public abstract partial class Setting : UiBase
         private Key13 _L_Key13;
 
         /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: Setting.ScrollContainer.Key14
+        /// </summary>
+        public Key14 L_Key14
+        {
+            get
+            {
+                if (_L_Key14 == null) _L_Key14 = new Key14(UiPanel, Instance.GetNode<Godot.HBoxContainer>("Key14"));
+                return _L_Key14;
+            }
+        }
+        private Key14 _L_Key14;
+
+        /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: Setting.ScrollContainer.Back
         /// </summary>
         public Back_2 L_Back
@@ -1313,6 +1379,11 @@ public abstract partial class Setting : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: Setting.ScrollContainer.KeySetting.Key13
     /// </summary>
     public Key13 S_Key13 => L_ScrollContainer.L_KeySetting.L_Key13;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: Setting.ScrollContainer.KeySetting.Key14
+    /// </summary>
+    public Key14 S_Key14 => L_ScrollContainer.L_KeySetting.L_Key14;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Setting.ScrollContainer.KeySetting
