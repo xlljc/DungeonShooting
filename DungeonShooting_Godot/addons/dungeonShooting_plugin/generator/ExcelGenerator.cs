@@ -1,16 +1,22 @@
-﻿using System.Text.Json;
+﻿#if TOOLS
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 using System.Text.RegularExpressions;
+using Config;
+using Godot;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Array = Godot.Collections.Array;
+using Environment = System.Environment;
+
+namespace Generator;
 
 public static class ExcelGenerator
 {
-    private const string CodeOutPath = "src/config/";
-    private const string JsonOutPath = "resource/config/";
-    private const string ExcelFilePath = "excelFile";
-
     private static HashSet<string> _excelNames = new HashSet<string>();
-
     
     private enum CollectionsType
     {
@@ -21,7 +27,6 @@ public static class ExcelGenerator
     
     private class MappingData
     {
-
         public string TypeStr;
         public string TypeName;
         public CollectionsType CollectionsType;
@@ -58,18 +63,31 @@ public static class ExcelGenerator
         public Dictionary<string, Type> ColumnType = new Dictionary<string, Type>();
         public List<Dictionary<string, object>> DataList = new List<Dictionary<string, object>>();
     }
-
-    public static bool ExportExcel()
+    
+    /// <summary>
+    /// 导出 Excel 表
+    /// </summary>
+    public static void ExportExcel()
     {
-        return ExportExcel(ExcelFilePath, JsonOutPath, CodeOutPath);
+        var excelPath = "excel/";
+        var jsonPath = "resource/config/";
+        var codePath = "src/config/";
+        ExportExcel(excelPath, jsonPath, codePath);
     }
     
+    /// <summary>
+    /// 导出 Excel 表
+    /// </summary>
+    /// <param name="excelFilePath">excel文件路径</param>
+    /// <param name="jsonOutPath">json配置输出路径</param>
+    /// <param name="codeOutPath">代码输出路径</param>
     public static bool ExportExcel(string excelFilePath, string jsonOutPath, string codeOutPath)
     {
-        Console.WriteLine("当前路径: " + Environment.CurrentDirectory);
-        Console.WriteLine("excel路径: " + excelFilePath);
-        Console.WriteLine("json输出路径: " + jsonOutPath);
-        Console.WriteLine("cs代码输出路径: " + codeOutPath);
+        _excelNames.Clear();
+        Debug.Log("当前路径: " + Environment.CurrentDirectory);
+        Debug.Log("excel路径: " + excelFilePath);
+        Debug.Log("json输出路径: " + jsonOutPath);
+        Debug.Log("cs代码输出路径: " + codeOutPath);
         try
         {
             var excelDataList = new List<ExcelData>();
@@ -93,13 +111,13 @@ public static class ExcelGenerator
                         {
                             throw new Exception("excel表文件名称不允许叫'ExcelConfig.xlsx'!");
                         }
-                        Console.WriteLine("excel表: " + fileInfo.FullName);
+                        Debug.Log("excel表: " + fileInfo.FullName);
                         excelDataList.Add(ReadExcel(fileInfo.FullName));
                     }
                 }
             }
 
-            Console.WriteLine($"一共检测到excel表共{excelDataList.Count}张.");
+            Debug.Log($"一共检测到excel表共{excelDataList.Count}张.");
             if (excelDataList.Count == 0)
             {
                 return true;
@@ -119,6 +137,11 @@ public static class ExcelGenerator
             //保存配置和代码
             foreach (var excelData in excelDataList)
             {
+                if (excelData.TableName == "ActivityBase")
+                {
+                    //生成初始化 ActivityObject 代码
+                    GeneratorActivityObjectInit(excelData);
+                }
                 File.WriteAllText(codeOutPath + "ExcelConfig_" + excelData.TableName + ".cs", excelData.OutCode);
                 var config = new JsonSerializerOptions();
                 config.WriteIndented = true;
@@ -725,24 +748,42 @@ public static class ExcelGenerator
     
     private static void PrintError(string message)
     {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(message);
-        Console.ResetColor();
+        Debug.LogError(message);
     }
     
-    /// <summary>
-    /// 字符串首字母小写
-    /// </summary>
-    public static string FirstToLower(this string str)
+    //生成 ActivityObject.Ids 代码
+    private static void GeneratorActivityObjectInit(ExcelData activityExcelData)
     {
-        return str.Substring(0, 1).ToLower() + str.Substring(1);
-    }
-    
-    /// <summary>
-    /// 字符串首字母大写
-    /// </summary>
-    public static string FirstToUpper(this string str)
-    {
-        return str.Substring(0, 1).ToUpper() + str.Substring(1);
+        var code1 = "";
+        foreach (var item in activityExcelData.DataList)
+        {
+            var id = item["Id"];
+            var name = item["Name"] + "";
+            var intro = item["Intro"] + "";
+            code1 += $"        /// <summary>\n";
+            code1 += $"        /// 名称: {name} <br/>\n";
+            code1 += $"        /// 简介: {intro.Replace("\n", " <br/>\n        /// ")}\n";
+            code1 += $"        /// </summary>\n";
+            code1 += $"        public const string Id_{id} = \"{id}\";\n";
+        }
+        
+        var str = $"using Config;\n\n";
+        str += $"// 根据配置表注册物体, 该类是自动生成的, 请不要手动编辑!\n";
+        str += $"public partial class ActivityObject\n";
+        str += $"{{\n";
+        
+        str += $"    /// <summary>\n";
+        str += $"    /// 存放所有在表中注册的物体的id\n";
+        str += $"    /// </summary>\n";
+        str += $"    public static class Ids\n";
+        str += $"    {{\n";
+        str += code1;
+        str += $"    }}\n";
+        
+        str += $"}}\n";
+        
+        File.WriteAllText("src/framework/activity/ActivityObject_Init.cs", str);
     }
 }
+
+#endif
