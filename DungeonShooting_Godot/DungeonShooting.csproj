@@ -14,4 +14,7 @@
   <ItemGroup>
     <EmbeddedResource Remove="android\**" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NPOI" Version="2.6.2" />
+  </ItemGroup>
 </Project>

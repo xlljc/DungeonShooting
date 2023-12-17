@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=61 format=3 uid="uid://ds668te2rph30"]
 
-[ext_resource type="FontFile" uid="uid://l2h5n3elepgp" path="res://resource/font/VonwaonBitmap-16px.ttf" id="1_1e6k7"]
+[ext_resource type="FontFile" uid="uid://cad0in7dtweo5" path="res://resource/font/VonwaonBitmap-16px.ttf" id="1_1e6k7"]
 
 [sub_resource type="StyleBoxFlat" id="2"]
 content_margin_left = 6.0
