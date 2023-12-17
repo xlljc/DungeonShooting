@@ -10,8 +10,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="android\**" />
+    <Compile Remove="excelTool\**" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="android\**" />
+    <EmbeddedResource Remove="excelTool\**" />
   </ItemGroup>
 </Project>

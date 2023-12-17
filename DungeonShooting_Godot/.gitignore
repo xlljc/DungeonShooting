@@ -4,3 +4,11 @@
 /.vs
 /.godot
 /build
+/excelTool/bin
+/excelTool/obj
+/excelTool/excel
+/excelTool/.idea
+/excelTool/.vs
+/excelTool/.vscode
+/excelTool/publish
+/excelTool/Folder.DotSettings.user
