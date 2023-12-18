@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Config;
 using Godot;
 using UI.EditorColorPicker;
+using UI.EditorImportCombination;
 using UI.EditorTips;
 using UI.EditorWindow;
 using UI.MapEditorCreateGroup;
@@ -426,28 +427,35 @@ public static class EditorWindowManager
         };
     }
 
-    public static void ShowImportCombination(string showName, Action<string> onSelectObject, UiBase parentUi = null)
+    /// <summary>
+    /// 显示导入组合确认弹窗
+    /// </summary>
+    /// <param name="showName">组合名称</param>
+    /// <param name="texture">显示纹理</param>
+    /// <param name="onAccept">确定时回调</param>
+    /// <param name="onCancel">取消时回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowImportCombination(string showName, Texture2D texture, Action<string> onAccept, Action onCancel, UiBase parentUi = null)
     {
         var window = CreateWindowInstance(parentUi);
         window.S_Window.Instance.Size = new Vector2I(600, 500);
         window.SetWindowTitle("导入组合");
-        var body = window.OpenBody<MapEditorSelectObjectPanel>(UiManager.UiNames.EditorImportCombination);
+        var body = window.OpenBody<EditorImportCombinationPanel>(UiManager.UiNames.EditorImportCombination);
+        body.InitData(showName, texture);
+        
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
-                var selectObject = body.GetSelectData();
-                if (selectObject == null)
-                {
-                    ShowTips("提示", "您未选择任何物体");
-                }
-                else
-                {
-                    window.CloseWindow();
-                    onSelectObject("");
-                }
+                var selectObject = body.GetName();
+                window.CloseWindow();
+                onAccept(selectObject);
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {
+                if (onCancel != null)
+                {
+                    window.CloseEvent += onCancel;
+                }
                 window.CloseWindow();
             })
         );

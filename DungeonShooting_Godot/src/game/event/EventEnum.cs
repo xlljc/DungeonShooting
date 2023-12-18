@@ -168,4 +168,8 @@ public enum EventEnum
     /// 清除组合模式下的Cell图块
     /// </summary>
     OnClearCombinationCell,
+    /// <summary>
+    /// 导入组合, 参数为<see cref="ImportCombinationData"/>
+    /// </summary>
+    OnImportCombination,
 }

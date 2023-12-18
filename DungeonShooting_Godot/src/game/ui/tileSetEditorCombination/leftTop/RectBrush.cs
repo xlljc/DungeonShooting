@@ -41,7 +41,15 @@ public partial class RectBrush : Node2D
     }
 
     /// <summary>
-    /// 获取中心点坐标
+    /// 获取原点坐标, 单位: 像素
+    /// </summary>
+    public Vector2I GetOriginPosition()
+    {
+        return new Vector2I(_x, _y);
+    }
+
+    /// <summary>
+    /// 获取中心点坐标, 单位: 像素
     /// </summary>
     public Vector2I GetCenterPosition()
     {
@@ -53,7 +61,7 @@ public partial class RectBrush : Node2D
     }
 
     /// <summary>
-    /// 获取绘制的矩形大小
+    /// 获取绘制的矩形大小, 单位: 像素
     /// </summary>
     public Vector2I GetRectSize()
     {

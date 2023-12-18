@@ -176,7 +176,20 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
             EditorWindowManager.ShowTips("警告", "导入一格大小的组合图块没有任何意义！");
             return;
         }
-        
+
+        var texture = GetCombinationPreviewTexture();
+        EditorWindowManager.ShowImportCombination("组合名称", texture, (name) =>
+        {
+            //派发导入组合图块事件
+            EventManager.EmitEvent(EventEnum.OnImportCombination, new ImportCombinationData()
+            {
+                Name = name,
+                PreviewTexture = texture
+            });
+        }, () => //取消添加组件
+        {
+            texture.Dispose();
+        });
     }
     
     //绘制笔刷
@@ -267,5 +280,25 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
         _yStart = int.MaxValue;
         _xEnd = int.MinValue;
         _yEnd = int.MinValue;
+    }
+    
+    /// <summary>
+    /// 获取组合的预览图
+    /// </summary>
+    private Texture2D GetCombinationPreviewTexture()
+    {
+        var rectBrush = UiNode.L_CombinationRoot.L_RectBrush.Instance;
+        var src = UiNode.UiPanel.EditorPanel.TextureImage;
+        var rectSize = rectBrush.GetRectSize();
+        var originPos = rectBrush.GetOriginPosition();
+        var image = Image.Create(rectSize.X, rectSize.Y, false, Image.Format.Rgba8);
+        image.Fill(Colors.Gray);
+        foreach (var keyValuePair in _canvas)
+        {
+            var pos = keyValuePair.Key;
+            var srcRect = keyValuePair.Value.RegionRect;
+            image.BlendRect(src, new Rect2I(srcRect.Position.AsVector2I(), srcRect.Size.AsVector2I()), pos - originPos);
+        }
+        return ImageTexture.CreateFromImage(image);
     }
 }
