@@ -15,6 +15,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     {
         _tileSetEditor = (TileSetEditor.TileSetEditorPanel)ParentUi;
         _tileSetEditor.SetBgColor(S_ImportPreviewBg.Instance.Color);
+        S_ImportPreview.Instance.Texture = _tileSetEditor.Texture;
         
         _dragBinder = DragUiManager.BindDrag(S_ImportPreviewBg.Instance, OnDragCallback);
         
@@ -25,7 +26,8 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         
         S_ImportPreviewBg.Instance.Visible = false;
         S_ReimportButton.Instance.Visible = false;
-        
+        S_ImportColorPicker.Instance.Visible = false;
+
         //监听TileSet纹理改变
         AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
         //监听TileSet背景颜色改变
@@ -42,20 +44,16 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     private void OnSetTileTexture(object arg)
     {
         //判断是否已经初始化好纹理了
-        if (arg is Texture2D texture)
+        if (_tileSetEditor.InitTexture)
         {
-            var sprite2D = S_ImportPreview.Instance;
-            if (sprite2D.Texture != texture)
-            {
-                sprite2D.Texture = texture;
-                S_ImportPreviewBg.Instance.Visible = true;
-                S_ReimportButton.Instance.Visible = true;    
-        
-                //隐藏导入文本和icon
-                S_ImportLabel.Instance.Visible = false;
-                S_ImportIcon.Instance.Visible = false;
-                S_ImportButton.Instance.Visible = false;
-            }
+            S_ImportPreviewBg.Instance.Visible = true;
+            S_ReimportButton.Instance.Visible = true;
+            S_ImportColorPicker.Instance.Visible = true;
+    
+            //隐藏导入文本和icon
+            S_ImportLabel.Instance.Visible = false;
+            S_ImportIcon.Instance.Visible = false;
+            S_ImportButton.Instance.Visible = false;
         }
     }
 
@@ -102,7 +100,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     //点击导入按钮
     private void OnImportButtonClick()
     {
-        if (_tileSetEditor.Texture != null)
+        if (_tileSetEditor.InitTexture)
         {
             return;
         }
@@ -180,7 +178,6 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     private void SetImportTexture(string file)
     {
         Debug.Log("导入文件: " + file);
-        var imageTexture = ImageTexture.CreateFromImage(Image.LoadFromFile(file));
-        _tileSetEditor.SetTexture(imageTexture);
+        _tileSetEditor.SetTextureData(Image.LoadFromFile(file));
     }
 }

@@ -24,8 +24,9 @@ public partial class MaskBrush : Control
         //绘制texture区域
         if (TileTexture.Texture != null)
         {
+            var editorPanel = TileEditArea.UiNode.UiPanel.EditorPanel;
             DrawRect(
-                new Rect2(Vector2.Zero, TileTexture.Size),
+                new Rect2(Vector2.Zero, editorPanel.CellHorizontal * GameConfig.TileCellSize, editorPanel.CellVertical * GameConfig.TileCellSize),
                 new Color(1, 1, 0, 0.5f), false,
                 2f / TileTexture.Scale.X
             );

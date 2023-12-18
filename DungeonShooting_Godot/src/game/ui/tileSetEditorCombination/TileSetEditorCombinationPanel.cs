@@ -18,8 +18,6 @@ public partial class TileSetEditorCombinationPanel : TileSetEditorCombination
         AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
         //改变背景颜色事件
         AddEventListener(EventEnum.OnSetTileSetBgColor, OnSetTileSetBgColor);
-        
-        
     }
 
     public override void OnShowUi()
@@ -44,11 +42,8 @@ public partial class TileSetEditorCombinationPanel : TileSetEditorCombination
     //改变TileSet纹理
     private void OnSetTileTexture(object arg)
     {
-        if (arg is Texture2D texture)
-        {
-            S_LeftBottomBg.Instance.OnChangeTileSetTexture(texture);
-            S_RightBg.Instance.OnChangeTileSetTexture(texture);
-        }
+        S_LeftBottomBg.Instance.OnChangeTileSetTexture();
+        S_RightBg.Instance.OnChangeTileSetTexture();
     }
     
     //改变TileSet背景颜色
@@ -58,6 +53,7 @@ public partial class TileSetEditorCombinationPanel : TileSetEditorCombination
         if (arg is Color color)
         {
             S_LeftTopBg.Instance.Color = color;
+            S_LeftBottomBg.Instance.Color = color;
         }
     }
 }

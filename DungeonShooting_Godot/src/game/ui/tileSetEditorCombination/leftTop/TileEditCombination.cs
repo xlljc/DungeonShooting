@@ -291,13 +291,14 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
         var src = UiNode.UiPanel.EditorPanel.TextureImage;
         var rectSize = rectBrush.GetRectSize();
         var originPos = rectBrush.GetOriginPosition();
-        var image = Image.Create(rectSize.X, rectSize.Y, false, Image.Format.Rgba8);
+        var image = Image.Create(rectSize.X + 4, rectSize.Y + 4, false, Image.Format.Rgba8);
         image.Fill(Colors.Gray);
         foreach (var keyValuePair in _canvas)
         {
             var pos = keyValuePair.Key;
             var srcRect = keyValuePair.Value.RegionRect;
-            image.BlendRect(src, new Rect2I(srcRect.Position.AsVector2I(), srcRect.Size.AsVector2I()), pos - originPos);
+            image.BlendRect(src, new Rect2I(srcRect.Position.AsVector2I(), srcRect.Size.AsVector2I()),
+                pos - originPos + new Vector2I(2, 2));
         }
         return ImageTexture.CreateFromImage(image);
     }

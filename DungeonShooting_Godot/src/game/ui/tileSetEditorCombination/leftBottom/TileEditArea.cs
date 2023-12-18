@@ -13,6 +13,7 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
         base.SetUiNode(uiNode);
         Grid = UiNode.L_Grid.Instance;
         ContainerRoot = UiNode.L_TileTexture.Instance;
+        UiNode.L_TileTexture.Instance.Texture = UiNode.UiPanel.EditorPanel.Texture;
         
         var maskBrush = UiNode.L_TileTexture.L_MaskBrush.Instance;
         maskBrush.TileTexture = UiNode.L_TileTexture.Instance;
@@ -138,11 +139,11 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
     /// <summary>
     /// 改变TileSet纹理
     /// </summary>
-    public void OnChangeTileSetTexture(Texture2D texture)
+    public void OnChangeTileSetTexture()
     {
-        UiNode.L_TileTexture.Instance.Texture = texture;
         var width = UiNode.UiPanel.EditorPanel.CellHorizontal;
         var height = UiNode.UiPanel.EditorPanel.CellVertical;
+        UiNode.L_TileTexture.Instance.Size = UiNode.L_TileTexture.Instance.Texture.GetSize();
         _maskGrid.RemoveAll();
         _useMask.Clear();
         _maskGrid.SetColumns(width);

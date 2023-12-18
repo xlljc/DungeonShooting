@@ -56,7 +56,7 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
     /// <summary>
     /// 改变TileSet纹理
     /// </summary>
-    public void OnChangeTileSetTexture(Texture2D texture)
+    public void OnChangeTileSetTexture()
     {
         _grid.RemoveAll();
     }

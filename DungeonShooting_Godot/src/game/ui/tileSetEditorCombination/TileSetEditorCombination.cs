@@ -499,12 +499,12 @@ public abstract partial class TileSetEditorCombination : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: TileSetEditorCombination.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.CellId
+    /// 类型: <see cref="Godot.Label"/>, 路径: TileSetEditorCombination.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.CellName
     /// </summary>
-    public class CellId : UiNode<TileSetEditorCombinationPanel, Godot.Label, CellId>
+    public class CellName : UiNode<TileSetEditorCombinationPanel, Godot.Label, CellName>
     {
-        public CellId(TileSetEditorCombinationPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
-        public override CellId Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+        public CellName(TileSetEditorCombinationPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override CellName Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
     /// <summary>
@@ -535,17 +535,17 @@ public abstract partial class TileSetEditorCombination : UiBase
         private PreviewImage _L_PreviewImage;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorCombination.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellId
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorCombination.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellName
         /// </summary>
-        public CellId L_CellId
+        public CellName L_CellName
         {
             get
             {
-                if (_L_CellId == null) _L_CellId = new CellId(UiPanel, Instance.GetNode<Godot.Label>("CellId"));
-                return _L_CellId;
+                if (_L_CellName == null) _L_CellName = new CellName(UiPanel, Instance.GetNode<Godot.Label>("CellName"));
+                return _L_CellName;
             }
         }
-        private CellId _L_CellId;
+        private CellName _L_CellName;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditorCombination.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.SelectTexture
@@ -787,9 +787,9 @@ public abstract partial class TileSetEditorCombination : UiBase
     public PreviewImage S_PreviewImage => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg.L_ScrollContainer.L_CellButton.L_PreviewImage;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorCombination.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.CellId
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorCombination.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.CellName
     /// </summary>
-    public CellId S_CellId => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg.L_ScrollContainer.L_CellButton.L_CellId;
+    public CellName S_CellName => L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg.L_ScrollContainer.L_CellButton.L_CellName;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditorCombination.HSplitContainer.Right.MarginContainer.RightBg.ScrollContainer.CellButton.SelectTexture

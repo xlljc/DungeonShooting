@@ -5,9 +5,14 @@ namespace UI.TileSetEditor;
 public partial class TileSetEditorPanel : TileSetEditor
 {
     /// <summary>
+    /// 是否初始化过纹理
+    /// </summary>
+    public bool InitTexture { get; private set; }
+    
+    /// <summary>
     /// 纹理
     /// </summary>
-    public Texture2D Texture { get; private set; }
+    public ImageTexture Texture { get; private set; }
     
     /// <summary>
     /// 纹理的Image对象
@@ -36,6 +41,7 @@ public partial class TileSetEditorPanel : TileSetEditor
 
     public override void OnCreateUi()
     {
+        Texture = new ImageTexture();
         S_Back.Instance.Visible = PrevUi != null;
         S_Back.Instance.Pressed += OnBackClick;
 
@@ -62,6 +68,11 @@ public partial class TileSetEditorPanel : TileSetEditor
     public override void OnDestroyUi()
     {
         TabGrid.Destroy();
+        if (Texture != null)
+        {
+            Texture.Dispose();
+        }
+
         if (TextureImage != null)
         {
             TextureImage.Dispose();
@@ -75,26 +86,27 @@ public partial class TileSetEditorPanel : TileSetEditor
     {
         S_Title.Instance.Text = "正在编辑：" + tileSetInfo.Name;
         
-        SetTexture(ImageTexture.CreateFromImage(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png")));
+        //SetTexture(ImageTexture.CreateFromImage(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png")));
         TabGrid.SelectIndex = 0;
     }
 
     /// <summary>
     /// 设置纹理
     /// </summary>
-    public void SetTexture(Texture2D texture)
+    public void SetTextureData(Image image)
     {
-        Texture = texture;
+        InitTexture = true;
+        Texture.SetImage(image);
         if (TextureImage != null)
         {
             TextureImage.Dispose();
         }
-        TextureImage = texture.GetImage();
-        CellHorizontal = texture.GetWidth() / GameConfig.TileCellSize;
-        CellVertical = texture.GetHeight() / GameConfig.TileCellSize;
+        TextureImage = image;
+        CellHorizontal = image.GetWidth() / GameConfig.TileCellSize;
+        CellVertical = image.GetHeight() / GameConfig.TileCellSize;
         
         //派发事件
-        EventManager.EmitEvent(EventEnum.OnSetTileTexture, texture);
+        EventManager.EmitEvent(EventEnum.OnSetTileTexture, Texture);
     }
 
     /// <summary>
@@ -105,7 +117,7 @@ public partial class TileSetEditorPanel : TileSetEditor
         BgColor = color;
         
         //派发事件
-        EventManager.EmitEvent(EventEnum.OnSetTileTexture, color);
+        EventManager.EmitEvent(EventEnum.OnSetTileSetBgColor, color);
     }
     
     /// <summary>

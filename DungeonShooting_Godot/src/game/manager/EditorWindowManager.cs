@@ -442,20 +442,25 @@ public static class EditorWindowManager
         window.SetWindowTitle("导入组合");
         var body = window.OpenBody<EditorImportCombinationPanel>(UiManager.UiNames.EditorImportCombination);
         body.InitData(showName, texture);
-        
+        var accept = false;
+        if (onCancel != null)
+        {
+            window.CloseEvent += () =>
+            {
+                if (!accept) onCancel();
+            };
+        }
+
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
+                accept = true;
                 var selectObject = body.GetName();
                 window.CloseWindow();
                 onAccept(selectObject);
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {
-                if (onCancel != null)
-                {
-                    window.CloseEvent += onCancel;
-                }
                 window.CloseWindow();
             })
         );
