@@ -11,7 +11,7 @@ public class TileCell : UiCell<TileSetEditorCombination.CellButton, ImportCombin
     
     public override void OnSetData(ImportCombinationData data)
     {
-        CellNode.L_CellName.Instance.Text = data.Name;
+        CellNode.L_CellName.Instance.Text = data.CombinationInfo.Name;
         CellNode.L_PreviewImage.Instance.Texture = data.PreviewTexture;
     }
 

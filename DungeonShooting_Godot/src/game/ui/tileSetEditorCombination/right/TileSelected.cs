@@ -58,6 +58,11 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
     /// </summary>
     public void OnChangeTileSetTexture()
     {
-        _grid.RemoveAll();
+        //_grid.RemoveAll();
+        //刷新预览图
+        _grid.ForEach(cell =>
+        {
+            cell.Data.UpdatePreviewTexture(_rightBg.UiPanel.EditorPanel.TextureImage);
+        });
     }
 }

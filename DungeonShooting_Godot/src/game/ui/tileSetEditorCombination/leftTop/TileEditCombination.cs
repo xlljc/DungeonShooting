@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace UI.TileSetEditorCombination;
@@ -64,26 +65,12 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
             _canvasDirty = false;
             if (_canvas.Count > 0)
             {
-                //单位: 像素
-                var canvasXStart = int.MaxValue;
-                var canvasYStart = int.MaxValue;
-                var canvasXEnd = int.MinValue;
-                var canvasYEnd = int.MinValue;
-
-                foreach (var keyValuePair in _canvas)
-                {
-                    var pos = keyValuePair.Key;
-                    canvasXStart = Mathf.Min(pos.X, canvasXStart);
-                    canvasYStart = Mathf.Min(pos.Y, canvasYStart);
-                    canvasXEnd = Mathf.Max(pos.X + GameConfig.TileCellSize, canvasXEnd);
-                    canvasYEnd = Mathf.Max(pos.Y + GameConfig.TileCellSize, canvasYEnd);
-                }
-                
+                var rect = Utils.CalcTileRect(_canvas.Keys);
                 UiNode.L_CombinationRoot.L_RectBrush.Instance.SetDrawRect(
-                    canvasXStart,
-                    canvasYStart,
-                    canvasXEnd - canvasXStart,
-                    canvasYEnd - canvasYStart
+                    rect.Position.X,
+                    rect.Position.Y,
+                    rect.Size.X,
+                    rect.Size.Y
                 );
             }
             else
@@ -176,18 +163,37 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
             EditorWindowManager.ShowTips("警告", "导入一格大小的组合图块没有任何意义！");
             return;
         }
+        
+        var originPos = UiNode.L_CombinationRoot.L_RectBrush.Instance.GetOriginPosition();
+        var tempCell = new List<SerializeVector2>();
+        var tempPos = new List<SerializeVector2>();
+        foreach (var keyValuePair in _canvas)
+        {
+            var pos = keyValuePair.Key;
+            var srcRect = keyValuePair.Value.RegionRect;
+            tempCell.Add(new SerializeVector2(srcRect.Position.AsVector2I()));
+            tempPos.Add(new SerializeVector2(pos - originPos));
+        }
 
-        var texture = GetCombinationPreviewTexture();
+        var cells = tempCell.ToArray();
+        var positions = tempPos.ToArray();
+        
+        var src = UiNode.UiPanel.EditorPanel.TextureImage;
+        var image = ImportCombinationData.GetPreviewTexture(src, cells, positions);
+        var texture = ImageTexture.CreateFromImage(image);
         EditorWindowManager.ShowImportCombination("组合名称", texture, (name) =>
         {
+            var combinationInfo = new TileCombinationInfo();
+            combinationInfo.Id = "1";
+            combinationInfo.Name = name;
+            combinationInfo.Cells = cells;
+            combinationInfo.Positions = positions;
+            var data = new ImportCombinationData(texture, combinationInfo);
             //派发导入组合图块事件
-            EventManager.EmitEvent(EventEnum.OnImportCombination, new ImportCombinationData()
-            {
-                Name = name,
-                PreviewTexture = texture
-            });
+            EventManager.EmitEvent(EventEnum.OnImportCombination, data);
         }, () => //取消添加组件
         {
+            image.Dispose();
             texture.Dispose();
         });
     }
@@ -280,26 +286,5 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
         _yStart = int.MaxValue;
         _xEnd = int.MinValue;
         _yEnd = int.MinValue;
-    }
-    
-    /// <summary>
-    /// 获取组合的预览图
-    /// </summary>
-    private Texture2D GetCombinationPreviewTexture()
-    {
-        var rectBrush = UiNode.L_CombinationRoot.L_RectBrush.Instance;
-        var src = UiNode.UiPanel.EditorPanel.TextureImage;
-        var rectSize = rectBrush.GetRectSize();
-        var originPos = rectBrush.GetOriginPosition();
-        var image = Image.Create(rectSize.X + 4, rectSize.Y + 4, false, Image.Format.Rgba8);
-        image.Fill(Colors.Gray);
-        foreach (var keyValuePair in _canvas)
-        {
-            var pos = keyValuePair.Key;
-            var srcRect = keyValuePair.Value.RegionRect;
-            image.BlendRect(src, new Rect2I(srcRect.Position.AsVector2I(), srcRect.Size.AsVector2I()),
-                pos - originPos + new Vector2I(2, 2));
-        }
-        return ImageTexture.CreateFromImage(image);
     }
 }

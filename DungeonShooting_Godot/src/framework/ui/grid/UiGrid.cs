@@ -256,6 +256,17 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
 
         return null;
     }
+    
+    /// <summary>
+    /// 遍历所有 Cell
+    /// </summary>
+    public void ForEach(Action<UiCell<TUiCellNode, TData>> callback)
+    {
+        foreach (var uiCell in _cellList)
+        {
+            callback(uiCell);
+        }
+    }
 
     /// <summary>
     /// 设置当前网格组件中的所有 Cell 数据, 性能较低
