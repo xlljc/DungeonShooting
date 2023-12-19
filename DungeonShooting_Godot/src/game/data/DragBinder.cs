@@ -12,7 +12,7 @@ public class DragBinder
     public bool Dragging;
     public Vector2 PrevPosition;
     public Action<DragState, Vector2> Callback;
-    public StringName InputAction;
+    public StringName[] InputAction;
 
     public void OnMouseEntered()
     {
@@ -26,6 +26,6 @@ public class DragBinder
     
     public void UnBind()
     {
-        DragUiManager.UnBindDrag(this);
+        UiDragManager.UnBindDrag(this);
     }
 }

@@ -86,24 +86,24 @@ public static class InputManager
     /// </summary>
     public static void Update(float delta)
     {
-        MoveAxis = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+        MoveAxis = Input.GetVector(InputAction.MoveLeft, InputAction.MoveRight, InputAction.MoveUp, InputAction.MoveDown);
         var application = GameApplication.Instance;
         if (application != null)
         {
             CursorPosition = application.GlobalToViewPosition(application.GetGlobalMousePosition());
         }
 
-        ExchangeWeapon = Input.IsActionJustPressed("exchangeWeapon");
-        ThrowWeapon = Input.IsActionJustPressed("throwWeapon");
-        Interactive = Input.IsActionJustPressed("interactive");
-        Reload = Input.IsActionJustPressed("reload");
-        Fire = Input.IsActionPressed("fire");
-        MeleeAttack = Input.IsActionJustPressed("meleeAttack");
-        Roll = Input.IsActionJustPressed("roll");
-        UseActiveProp = Input.IsActionJustPressed("useActiveProp");
-        RemoveProp = Input.IsActionJustPressed("removeProp");
-        ExchangeProp = Input.IsActionJustPressed("exchangeProp");
-        Map = Input.IsActionPressed("map");
-        Menu = Input.IsActionJustPressed("menu");
+        ExchangeWeapon = Input.IsActionJustPressed(InputAction.ExchangeWeapon);
+        ThrowWeapon = Input.IsActionJustPressed(InputAction.ThrowWeapon);
+        Interactive = Input.IsActionJustPressed(InputAction.Interactive);
+        Reload = Input.IsActionJustPressed(InputAction.Reload);
+        Fire = Input.IsActionPressed(InputAction.Fire);
+        MeleeAttack = Input.IsActionJustPressed(InputAction.MeleeAttack);
+        Roll = Input.IsActionJustPressed(InputAction.Roll);
+        UseActiveProp = Input.IsActionJustPressed(InputAction.UseActiveProp);
+        RemoveProp = Input.IsActionJustPressed(InputAction.RemoveProp);
+        ExchangeProp = Input.IsActionJustPressed(InputAction.ExchangeProp);
+        Map = Input.IsActionPressed(InputAction.Map);
+        Menu = Input.IsActionJustPressed(InputAction.Menu);
     }
 }

@@ -192,7 +192,7 @@ public partial class RoomMapPanel : RoomMap
         S_MapBar.Instance.Visible = false;
         _mapOffset = Vector2.Zero;
         
-        _dragBinder = DragUiManager.BindDrag(S_DrawContainer.Instance, (state, delta) =>
+        _dragBinder = UiDragManager.BindDrag(S_DrawContainer.Instance, (state, delta) =>
         {
             if (state == DragState.DragMove)
             {

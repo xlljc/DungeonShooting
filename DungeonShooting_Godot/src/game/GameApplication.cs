@@ -141,7 +141,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		var newDelta = (float)delta;
 		InputManager.Update(newDelta);
 		SoundManager.Update(newDelta);
-		DragUiManager.Update(newDelta);
+		UiDragManager.Update(newDelta);
 		
 		//协程更新
 		ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);

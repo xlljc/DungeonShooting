@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using Godot;
 
-public static class DragUiManager
+public static class UiDragManager
 {
+
+    
     private static readonly List<DragBinder> _list = new List<DragBinder>();
     private static readonly List<DragBinder> _removeList = new List<DragBinder>();
     private static readonly List<DragBinder> _addList = new List<DragBinder>();
@@ -11,7 +13,7 @@ public static class DragUiManager
     /// <summary>
     /// 绑定拖拽事件
     /// </summary>
-    public static DragBinder BindDrag(Control control, StringName inputAction, Action<DragState, Vector2> callback)
+    public static DragBinder BindDrag(Control control, StringName[] inputAction, Action<DragState, Vector2> callback)
     {
         var binder = new DragBinder();
         binder.Control = control;
@@ -28,7 +30,7 @@ public static class DragUiManager
     /// </summary>
     public static DragBinder BindDrag(Control control, Action<DragState, Vector2> callback)
     {
-        return BindDrag(control, "mouse_left", callback);
+        return BindDrag(control, new [] { InputAction.MouseLeft }, callback);
     }
 
     /// <summary>
@@ -49,14 +51,14 @@ public static class DragUiManager
         {
             foreach (var dragBinder in _list)
             {
-                if (dragBinder.Dragging && !Input.IsActionPressed(dragBinder.InputAction)) //松开鼠标, 结束拖拽
+                if (dragBinder.Dragging && !CheckActionPressed(dragBinder.InputAction)) //松开鼠标, 结束拖拽
                 {
                     dragBinder.Dragging = false;
                     dragBinder.Callback(DragState.DragEnd, Vector2.Zero);
                 }
                 else if (!dragBinder.Dragging) //开始拖拽
                 {
-                    if (dragBinder.MouseEntered && Input.IsActionJustPressed(dragBinder.InputAction))
+                    if (dragBinder.MouseEntered && ActionJustPressed(dragBinder.InputAction))
                     {
                         dragBinder.Dragging = true;
                         dragBinder.PrevPosition = dragBinder.Control.GetGlobalMousePosition();
@@ -96,5 +98,31 @@ public static class DragUiManager
             _list.AddRange(_addList);
             _addList.Clear();
         }
+    }
+
+    private static bool CheckActionPressed(StringName[] array)
+    {
+        foreach (var stringName in array)
+        {
+            if (Input.IsActionPressed(stringName))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool ActionJustPressed(StringName[] array)
+    {
+        foreach (var stringName in array)
+        {
+            if (Input.IsActionJustPressed(stringName))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

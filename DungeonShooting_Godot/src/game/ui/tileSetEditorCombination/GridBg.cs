@@ -13,7 +13,7 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
     public virtual void SetUiNode(IUiNode uiNode)
     {
         UiNode = (T)uiNode;
-        _dragBinder = DragUiManager.BindDrag(this, "mouse_middle", OnDrag);
+        _dragBinder = UiDragManager.BindDrag(this, new[] { InputAction.mouseMiddle }, OnDrag);
         Resized += RefreshGridTrans;
     }
 

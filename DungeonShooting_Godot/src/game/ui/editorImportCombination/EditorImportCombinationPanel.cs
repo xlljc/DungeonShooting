@@ -7,7 +7,7 @@ public partial class EditorImportCombinationPanel : EditorImportCombination
     private DragBinder _dragBinder;
     public override void OnShowUi()
     {
-        _dragBinder = DragUiManager.BindDrag(S_PreviewBg.Instance, (state, delta) =>
+        _dragBinder = UiDragManager.BindDrag(S_PreviewBg.Instance, (state, delta) =>
         {
             if (state == DragState.DragMove)
             {

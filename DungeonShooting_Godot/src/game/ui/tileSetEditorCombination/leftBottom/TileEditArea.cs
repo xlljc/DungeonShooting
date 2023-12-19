@@ -44,7 +44,7 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
                 var cellPosition = GetMouseCellPosition();
                 if (UiNode.UiPanel.EditorPanel.IsCellPositionInTexture(cellPosition))
                 {
-                    if (Input.IsActionJustPressed("mouse_left")) //刚按下, 清除之前的选中
+                    if (Input.IsActionJustPressed(InputAction.MouseLeft)) //刚按下, 清除之前的选中
                     {
                         OnClearCell();
                     }

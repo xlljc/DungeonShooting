@@ -17,7 +17,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         _tileSetEditor.SetBgColor(S_ImportPreviewBg.Instance.Color);
         S_ImportPreview.Instance.Texture = _tileSetEditor.Texture;
         
-        _dragBinder = DragUiManager.BindDrag(S_ImportPreviewBg.Instance, OnDragCallback);
+        _dragBinder = UiDragManager.BindDrag(S_ImportPreviewBg.Instance, OnDragCallback);
         
         GetTree().Root.FilesDropped += OnFilesDropped;
         S_ImportButton.Instance.Pressed += OnImportButtonClick;
