@@ -11,7 +11,7 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
     public virtual void SetUiNode(IUiNode uiNode)
     {
         UiNode = (T)uiNode;
-        this.AddDragEventListener(DragButtonEnum.Middle, OnDrag);
+        this.AddDragListener(DragButtonEnum.Middle, OnDrag);
         Resized += RefreshGridTrans;
     }
 
@@ -49,29 +49,17 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
     //缩小
     private void Shrink()
     {
-        var offset = ContainerRoot.GetLocalMousePosition();
-        var prevScale = ContainerRoot.Scale;
-        var newScale = prevScale / 1.1f;
-        if (newScale.LengthSquared() >= 0.5f)
+        if (Utils.DoShrinkByMousePosition(ContainerRoot, 0.2f))
         {
-            ContainerRoot.Scale = newScale;
-            var position = ContainerRoot.Position + offset * 0.1f * newScale;
-            ContainerRoot.Position = position;
-            SetGridTransform(position, newScale.X);
+            SetGridTransform(ContainerRoot.Position, ContainerRoot.Scale.X);
         }
     }
     //放大
     private void Magnify()
     {
-        var offset = ContainerRoot.GetLocalMousePosition();
-        var prevScale = ContainerRoot.Scale;
-        var newScale = prevScale * 1.1f;
-        if (newScale.LengthSquared() <= 2000)
+        if (Utils.DoMagnifyByMousePosition(ContainerRoot, 20))
         {
-            ContainerRoot.Scale = newScale;
-            var position = ContainerRoot.Position - offset * 0.1f * prevScale;
-            ContainerRoot.Position = position;
-            SetGridTransform(position, newScale.X);
+            SetGridTransform(ContainerRoot.Position, ContainerRoot.Scale.X);
         }
     }
     

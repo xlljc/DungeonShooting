@@ -409,4 +409,41 @@ public static class Utils
         );
     }
 
+    /// <summary>
+    /// 根据鼠标位置执行单步放大逻辑
+    /// </summary>
+    public static bool DoMagnifyByMousePosition(Control control, float maxXScale)
+    {
+        var offset = control.GetLocalMousePosition();
+        var prevScale = control.Scale;
+        var newScale = prevScale * 1.1f;
+        if (newScale.X <= maxXScale)
+        {
+            control.Scale = newScale;
+            var position = control.Position - offset * 0.1f * prevScale;
+            control.Position = position;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 根据鼠标位置执行单步缩小逻辑
+    /// </summary>
+    public static bool DoShrinkByMousePosition(Control control, float minXScale)
+    {
+        var offset = control.GetLocalMousePosition();
+        var prevScale = control.Scale;
+        var newScale = prevScale / 1.1f;
+        if (newScale.X >= minXScale)
+        {
+            control.Scale = newScale;
+            var position = control.Position + offset * 0.1f * newScale;
+            control.Position = position;
+            return true;
+        }
+
+        return false;
+    }
 }

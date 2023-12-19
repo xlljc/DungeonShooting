@@ -2,15 +2,15 @@
 using Godot;
 
 /// <summary>
-/// 拖拽绑定数据对象, 通过 NodeExtend.AddDragEventListener 创建
+/// Ui事件绑定数据对象
 /// </summary>
-public class DragBinder
+public class UiEventBinder
 {
     
     private Control Control;
     private Control.GuiInputEventHandler Callback;
 
-    public DragBinder(Control control, Control.GuiInputEventHandler callback)
+    public UiEventBinder(Control control, Control.GuiInputEventHandler callback)
     {
         Control = control;
         Callback = callback;

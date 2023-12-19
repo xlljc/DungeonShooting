@@ -6,7 +6,7 @@ public partial class EditorImportCombinationPanel : EditorImportCombination
 {
     public override void OnShowUi()
     {
-        S_PreviewBg.Instance.AddDragEventListener(DragButtonEnum.Left | DragButtonEnum.Right | DragButtonEnum.Middle, OnDragPreview);
+        S_PreviewBg.Instance.AddDragListener(DragButtonEnum.Left | DragButtonEnum.Right | DragButtonEnum.Middle, OnDragPreview);
     }
 
     private void OnDragPreview(DragState state, Vector2 delta)

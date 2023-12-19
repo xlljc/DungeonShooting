@@ -208,11 +208,11 @@ public static class NodeExtend
     /// <summary>
     /// 给Ui节点添加拖拽事件
     /// </summary>
-    /// <param name="control">需要绑定拖拽的节点对象</param>
+    /// <param name="control">需要绑定事件的节点对象</param>
     /// <param name="callback">拖拽回调函数</param>
-    public static DragBinder AddDragEventListener(this Control control, Action<DragState, Vector2> callback)
+    public static UiEventBinder AddDragListener(this Control control, Action<DragState, Vector2> callback)
     {
-        return AddDragEventListener(control, DragButtonEnum.Left, callback);
+        return AddDragListener(control, DragButtonEnum.Left, callback);
     }
 
     /// <summary>
@@ -221,7 +221,7 @@ public static class NodeExtend
     /// <param name="control">需要绑定拖拽的节点对象</param>
     /// <param name="triggerButton">可触发拖拽的按钮</param>
     /// <param name="callback">拖拽回调函数</param>
-    public static DragBinder AddDragEventListener(this Control control, DragButtonEnum triggerButton, Action<DragState, Vector2> callback)
+    public static UiEventBinder AddDragListener(this Control control, DragButtonEnum triggerButton, Action<DragState, Vector2> callback)
     {
         var dragFlag = false;
         Control.GuiInputEventHandler handler = (ev) =>
@@ -258,7 +258,7 @@ public static class NodeExtend
             }
         };
         control.GuiInput += handler;
-        return new DragBinder(control, handler);
+        return new UiEventBinder(control, handler);
     }
 
     private static bool CheckDragButton(MouseButton button, DragButtonEnum triggerButton)
@@ -279,5 +279,32 @@ public static class NodeExtend
         }
 
         return (buttonEnum & triggerButton) != 0;
+    }
+
+    /// <summary>
+    /// 给Ui节点添加鼠标滚轮事件
+    /// </summary>
+    /// <param name="control">需要绑定事件的节点对象</param>
+    /// <param name="callback">滚轮回调, 参数 -1 表示滚轮向下滚动, 1 表示滚轮向上滚动</param>
+    public static UiEventBinder AddMouseWheelListener(this Control control, Action<int> callback)
+    {
+        Control.GuiInputEventHandler handler = (ev) =>
+        {
+            if (ev is InputEventMouseButton mouseButton)
+            {
+                if (mouseButton.ButtonIndex == MouseButton.WheelDown)
+                {
+                    control.AcceptEvent();
+                    callback(-1);
+                }
+                else if (mouseButton.ButtonIndex == MouseButton.WheelUp)
+                {
+                    control.AcceptEvent();
+                    callback(1);
+                }
+            }
+        };
+        control.GuiInput += handler;
+        return new UiEventBinder(control, handler);
     }
 }

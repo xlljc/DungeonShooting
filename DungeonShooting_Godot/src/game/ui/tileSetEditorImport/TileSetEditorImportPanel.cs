@@ -15,7 +15,6 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         _tileSetEditor = (TileSetEditor.TileSetEditorPanel)ParentUi;
         _tileSetEditor.SetBgColor(S_ImportPreviewBg.Instance.Color);
         S_ImportPreview.Instance.Texture = _tileSetEditor.Texture;
-        S_ImportPreviewBg.Instance.AddDragEventListener(DragButtonEnum.Left | DragButtonEnum.Middle | DragButtonEnum.Right, OnDragCallback);
         
         GetTree().Root.FilesDropped += OnFilesDropped;
         S_ImportButton.Instance.Pressed += OnImportButtonClick;
@@ -30,7 +29,10 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
         //监听TileSet背景颜色改变
         AddEventListener(EventEnum.OnSetTileSetBgColor, OnSetTileSetBgColor);
-        
+        //监听拖拽
+        S_ImportPreviewBg.Instance.AddDragListener(DragButtonEnum.Left | DragButtonEnum.Middle | DragButtonEnum.Right, OnDragCallback);
+        //监听鼠标滚轮
+        S_ImportPreviewBg.Instance.AddMouseWheelListener(OnMouseCallback);
     }
 
     public override void OnDestroyUi()
@@ -61,33 +63,6 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         if (arg is Color color)
         {
             S_ImportPreviewBg.Instance.Color = color;
-        }
-    }
-
-    private static int index = 0;
-    public override void _GuiInput(InputEvent @event)
-    {
-        if (@event is InputEventMouseButton mouseButton)
-        {
-            AcceptEvent();
-            var textureRect = S_Control.L_ImportPreview.Instance;
-            if (textureRect.Visible)
-            {
-                if (mouseButton.ButtonIndex == MouseButton.WheelDown)
-                {
-                    //缩小
-                    var scale = textureRect.Scale;
-                    scale = new Vector2(Mathf.Max(0.1f, scale.X / 1.1f), Mathf.Max(0.1f, scale.Y / 1.1f));
-                    textureRect.Scale = scale;
-                }
-                else if (mouseButton.ButtonIndex == MouseButton.WheelUp)
-                {
-                    //放大
-                    var scale = textureRect.Scale;
-                    scale = new Vector2(Mathf.Min(20f, scale.X * 1.1f), Mathf.Min(20f, scale.Y * 1.1f));
-                    textureRect.Scale = scale;
-                }
-            }
         }
     }
 
@@ -141,6 +116,30 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         if (state == DragState.DragMove && sprite2D.Visible)
         {
             sprite2D.Position += position;
+        }
+    }
+    
+    //鼠标滚轮
+    private void OnMouseCallback(int v)
+    {
+        if (!_tileSetEditor.InitTexture)
+        {
+            return;
+        }
+        var textureRect = S_Control.L_ImportPreview.Instance;
+        if (v < 0)
+        {
+            //缩小
+            var scale = textureRect.Scale;
+            scale = new Vector2(Mathf.Max(0.1f, scale.X / 1.1f), Mathf.Max(0.1f, scale.Y / 1.1f));
+            textureRect.Scale = scale;
+        }
+        else
+        {
+            //放大
+            var scale = textureRect.Scale;
+            scale = new Vector2(Mathf.Min(20f, scale.X * 1.1f), Mathf.Min(20f, scale.Y * 1.1f));
+            textureRect.Scale = scale;
         }
     }
     

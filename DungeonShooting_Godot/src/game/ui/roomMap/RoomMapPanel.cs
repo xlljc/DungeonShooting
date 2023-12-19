@@ -19,7 +19,7 @@ public partial class RoomMapPanel : RoomMap
     //是否放大地图
     private bool _isMagnifyMap = false;
 
-    private DragBinder _dragBinder;
+    private UiEventBinder _dragBinder;
     //放大地图后拖拽的偏移
     private Vector2 _mapOffset;
     //放大地图后鼠标悬停的房间
@@ -187,7 +187,7 @@ public partial class RoomMapPanel : RoomMap
         S_MapBar.Instance.Visible = false;
         _mapOffset = Vector2.Zero;
 
-        _dragBinder = S_DrawContainer.Instance.AddDragEventListener((state, delta) =>
+        _dragBinder = S_DrawContainer.Instance.AddDragListener((state, delta) =>
         {
             if (state == DragState.DragMove)
             {
