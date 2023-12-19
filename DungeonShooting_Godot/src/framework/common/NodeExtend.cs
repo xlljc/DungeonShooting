@@ -204,4 +204,80 @@ public static class NodeExtend
         yield return new WaitForSeconds(delayTime);
         cb(arg1,arg2, arg3);
     }
+
+    /// <summary>
+    /// 给Ui节点添加拖拽事件
+    /// </summary>
+    /// <param name="control">需要绑定拖拽的节点对象</param>
+    /// <param name="callback">拖拽回调函数</param>
+    public static DragBinder AddDragEventListener(this Control control, Action<DragState, Vector2> callback)
+    {
+        return AddDragEventListener(control, DragButtonEnum.Left, callback);
+    }
+
+    /// <summary>
+    /// 给Ui节点添加拖拽事件
+    /// </summary>
+    /// <param name="control">需要绑定拖拽的节点对象</param>
+    /// <param name="triggerButton">可触发拖拽的按钮</param>
+    /// <param name="callback">拖拽回调函数</param>
+    public static DragBinder AddDragEventListener(this Control control, DragButtonEnum triggerButton, Action<DragState, Vector2> callback)
+    {
+        var dragFlag = false;
+        Control.GuiInputEventHandler handler = (ev) =>
+        {
+            if (!dragFlag) //未开始拖拽
+            {
+                if (ev is InputEventMouseButton mouseButton && mouseButton.Pressed &&
+                    CheckDragButton(mouseButton.ButtonIndex, triggerButton)) //按下按钮
+                {
+                    control.AcceptEvent();
+                    dragFlag = true;
+                    callback(DragState.DragStart, Vector2.Zero);
+                }
+            }
+            else //拖拽中
+            {
+                if (ev is InputEventMouseButton mouseButton)
+                {
+                    if (!mouseButton.Pressed && CheckDragButton(mouseButton.ButtonIndex, triggerButton)) //松开按钮
+                    {
+                        control.AcceptEvent();
+                        dragFlag = false;
+                        callback(DragState.DragEnd, Vector2.Zero);
+                    }
+                } else if (ev is InputEventMouseMotion mouseMotion) //拖拽中
+                {
+                    control.AcceptEvent();
+                    var delta = mouseMotion.Relative;
+                    if (delta != Vector2.Zero)
+                    {
+                        callback(DragState.DragMove, mouseMotion.Relative);
+                    }
+                }
+            }
+        };
+        control.GuiInput += handler;
+        return new DragBinder(control, handler);
+    }
+
+    private static bool CheckDragButton(MouseButton button, DragButtonEnum triggerButton)
+    {
+        DragButtonEnum buttonEnum;
+        switch (button)
+        {
+            case MouseButton.Left:
+                buttonEnum = DragButtonEnum.Left;
+                break;
+            case MouseButton.Right:
+                buttonEnum = DragButtonEnum.Right;
+                break;
+            case MouseButton.Middle:
+                buttonEnum = DragButtonEnum.Middle;
+                break;
+            default: return false;
+        }
+
+        return (buttonEnum & triggerButton) != 0;
+    }
 }

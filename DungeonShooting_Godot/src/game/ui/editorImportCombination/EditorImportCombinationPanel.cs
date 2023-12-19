@@ -4,23 +4,19 @@ namespace UI.EditorImportCombination;
 
 public partial class EditorImportCombinationPanel : EditorImportCombination
 {
-    private DragBinder _dragBinder;
     public override void OnShowUi()
     {
-        _dragBinder = UiDragManager.BindDrag(S_PreviewBg.Instance, (state, delta) =>
-        {
-            if (state == DragState.DragMove)
-            {
-                S_PreviewTexture.Instance.Position += delta;
-            }
-        });
+        S_PreviewBg.Instance.AddDragEventListener(DragButtonEnum.Left | DragButtonEnum.Right | DragButtonEnum.Middle, OnDragPreview);
     }
 
-    public override void OnDestroyUi()
+    private void OnDragPreview(DragState state, Vector2 delta)
     {
-        _dragBinder.UnBind();
+        if (state == DragState.DragMove)
+        {
+            S_PreviewTexture.Instance.Position += delta;
+        }
     }
-
+    
     /// <summary>
     /// 初始化页面数据
     /// </summary>

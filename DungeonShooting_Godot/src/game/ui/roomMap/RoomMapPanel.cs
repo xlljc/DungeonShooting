@@ -45,11 +45,6 @@ public partial class RoomMapPanel : RoomMap
     public override void OnDestroyUi()
     {
         _factory.RemoveAllEventListener();
-        
-        if (_dragBinder != null)
-        {
-            _dragBinder.UnBind();
-        }
 
         if (_transmissionTween != null)
         {
@@ -191,8 +186,8 @@ public partial class RoomMapPanel : RoomMap
         S_MagnifyMapBar.Instance.Visible = true;
         S_MapBar.Instance.Visible = false;
         _mapOffset = Vector2.Zero;
-        
-        _dragBinder = UiDragManager.BindDrag(S_DrawContainer.Instance, (state, delta) =>
+
+        _dragBinder = S_DrawContainer.Instance.AddDragEventListener((state, delta) =>
         {
             if (state == DragState.DragMove)
             {
@@ -215,6 +210,7 @@ public partial class RoomMapPanel : RoomMap
         if (_dragBinder != null)
         {
             _dragBinder.UnBind();
+            _dragBinder = null;
         }
     }
 

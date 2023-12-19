@@ -5,7 +5,6 @@ namespace UI.TileSetEditorImport;
 
 public partial class TileSetEditorImportPanel : TileSetEditorImport
 {
-    private DragBinder _dragBinder;
     //是否打开了颜色选择器
     private bool _isOpenColorPicker;
 
@@ -16,8 +15,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         _tileSetEditor = (TileSetEditor.TileSetEditorPanel)ParentUi;
         _tileSetEditor.SetBgColor(S_ImportPreviewBg.Instance.Color);
         S_ImportPreview.Instance.Texture = _tileSetEditor.Texture;
-        
-        _dragBinder = UiDragManager.BindDrag(S_ImportPreviewBg.Instance, OnDragCallback);
+        S_ImportPreviewBg.Instance.AddDragEventListener(DragButtonEnum.Left | DragButtonEnum.Middle | DragButtonEnum.Right, OnDragCallback);
         
         GetTree().Root.FilesDropped += OnFilesDropped;
         S_ImportButton.Instance.Pressed += OnImportButtonClick;
@@ -32,12 +30,12 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
         //监听TileSet背景颜色改变
         AddEventListener(EventEnum.OnSetTileSetBgColor, OnSetTileSetBgColor);
+        
     }
 
     public override void OnDestroyUi()
     {
         GetTree().Root.FilesDropped -= OnFilesDropped;
-        _dragBinder.UnBind();
     }
 
     //TileSet纹理改变
@@ -66,32 +64,28 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         }
     }
 
-    public override void _Input(InputEvent @event)
+    private static int index = 0;
+    public override void _GuiInput(InputEvent @event)
     {
         if (@event is InputEventMouseButton mouseButton)
         {
+            AcceptEvent();
             var textureRect = S_Control.L_ImportPreview.Instance;
             if (textureRect.Visible)
             {
                 if (mouseButton.ButtonIndex == MouseButton.WheelDown)
                 {
-                    if (GetGlobalRect().HasPoint(mouseButton.GlobalPosition))
-                    {
-                        //缩小
-                        var scale = textureRect.Scale;
-                        scale = new Vector2(Mathf.Max(0.1f, scale.X / 1.1f), Mathf.Max(0.1f, scale.Y / 1.1f));
-                        textureRect.Scale = scale;
-                    }
+                    //缩小
+                    var scale = textureRect.Scale;
+                    scale = new Vector2(Mathf.Max(0.1f, scale.X / 1.1f), Mathf.Max(0.1f, scale.Y / 1.1f));
+                    textureRect.Scale = scale;
                 }
                 else if (mouseButton.ButtonIndex == MouseButton.WheelUp)
                 {
-                    if (GetGlobalRect().HasPoint(mouseButton.GlobalPosition))
-                    {
-                        //放大
-                        var scale = textureRect.Scale;
-                        scale = new Vector2(Mathf.Min(20f, scale.X * 1.1f), Mathf.Min(20f, scale.Y * 1.1f));
-                        textureRect.Scale = scale;
-                    }
+                    //放大
+                    var scale = textureRect.Scale;
+                    scale = new Vector2(Mathf.Min(20f, scale.X * 1.1f), Mathf.Min(20f, scale.Y * 1.1f));
+                    textureRect.Scale = scale;
                 }
             }
         }

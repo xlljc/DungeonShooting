@@ -8,18 +8,16 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
     public Control ContainerRoot { get; protected set; }
     public T UiNode { get; private set; }
     
-    private DragBinder _dragBinder;
-    
     public virtual void SetUiNode(IUiNode uiNode)
     {
         UiNode = (T)uiNode;
-        _dragBinder = UiDragManager.BindDrag(this, new[] { InputAction.mouseMiddle }, OnDrag);
+        this.AddDragEventListener(DragButtonEnum.Middle, OnDrag);
         Resized += RefreshGridTrans;
     }
 
     public virtual void OnDestroy()
     {
-        _dragBinder.UnBind();
+        
     }
     
     /// <summary>
