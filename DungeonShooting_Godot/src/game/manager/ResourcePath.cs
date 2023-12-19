@@ -303,6 +303,7 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_Mark_png = "res://resource/sprite/ui/commonIcon/Mark.png";
     public const string resource_sprite_ui_commonIcon_MarkCell_png = "res://resource/sprite/ui/commonIcon/MarkCell.png";
     public const string resource_sprite_ui_commonIcon_MarkCell_placeholder_png = "res://resource/sprite/ui/commonIcon/MarkCell_placeholder.png";
+    public const string resource_sprite_ui_commonIcon_Missing_png = "res://resource/sprite/ui/commonIcon/Missing.png";
     public const string resource_sprite_ui_commonIcon_PackageMark_png = "res://resource/sprite/ui/commonIcon/PackageMark.png";
     public const string resource_sprite_ui_commonIcon_PenTool_png = "res://resource/sprite/ui/commonIcon/PenTool.png";
     public const string resource_sprite_ui_commonIcon_Play_png = "res://resource/sprite/ui/commonIcon/Play.png";

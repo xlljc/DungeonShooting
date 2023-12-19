@@ -172,4 +172,12 @@ public enum EventEnum
     /// 导入组合, 参数为<see cref="ImportCombinationData"/>
     /// </summary>
     OnImportCombination,
+    /// <summary>
+    /// 移除组合, 参数为<see cref="ImportCombinationData"/>
+    /// </summary>
+    OnRemoveCombination,
+    /// <summary>
+    /// 修改组合名称, 参数为<see cref="ImportCombinationData"/>
+    /// </summary>
+    OnUpdateCombination,
 }

@@ -86,7 +86,7 @@ public partial class TileSetEditorPanel : TileSetEditor
     {
         S_Title.Instance.Text = "正在编辑：" + tileSetInfo.Name;
         
-        SetTextureData(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
+        //SetTextureData(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
         TabGrid.SelectIndex = 0;
     }
 

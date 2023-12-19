@@ -1,4 +1,5 @@
 
+using System.IO;
 using Godot;
 
 /// <summary>
@@ -14,6 +15,8 @@ public class ImportCombinationData
     /// 组合图块数据
     /// </summary>
     public TileCombinationInfo CombinationInfo { get; set; }
+
+    private static Image MissingImage;
 
     public ImportCombinationData(ImageTexture previewTexture, TileCombinationInfo combinationInfo)
     {
@@ -40,14 +43,28 @@ public class ImportCombinationData
     /// <param name="positions">图块位置</param>
     public static Image GetPreviewTexture(Image src, SerializeVector2[] cells, SerializeVector2[] positions)
     {
+        var srcSize = src.GetSize();
         var rect = Utils.CalcTileRect(positions);
         var rectSize = rect.Size;
         var image = Image.Create(rectSize.X + 4, rectSize.Y + 4, false, Image.Format.Rgba8);
         for (var i = 0; i < cells.Length; i++)
         {
-            var cell = cells[i];
-            var pos = positions[i];
-            image.BlendRect(src, new Rect2I(cell.AsVector2I(), GameConfig.TileCellSizeVector2I), pos.AsVector2I() + new Vector2I(2, 2));
+            var cell = cells[i].AsVector2I();
+            var pos = positions[i].AsVector2I();
+            //判断是否超出纹理范围
+            if (cell.X + GameConfig.TileCellSize > srcSize.X || cell.Y + GameConfig.TileCellSize > srcSize.Y) //超出范围
+            {
+                if (MissingImage == null)
+                {
+                    MissingImage = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Missing_png).GetImage();
+                    MissingImage.Convert(Image.Format.Rgba8);
+                }
+                image.BlendRect(MissingImage, new Rect2I(Vector2I.Zero, GameConfig.TileCellSizeVector2I), pos + new Vector2I(2, 2));
+            }
+            else
+            {
+                image.BlendRect(src, new Rect2I(cell, GameConfig.TileCellSizeVector2I), pos + new Vector2I(2, 2));
+            }
         }
         return image;
     }

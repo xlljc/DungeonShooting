@@ -6,14 +6,31 @@ public partial class EditorImportCombinationPanel : EditorImportCombination
 {
     public override void OnShowUi()
     {
+        //监听拖拽
         S_PreviewBg.Instance.AddDragListener(DragButtonEnum.Left | DragButtonEnum.Right | DragButtonEnum.Middle, OnDragPreview);
+        //监听鼠标滚轮
+        S_PreviewBg.Instance.AddMouseWheelListener(OnMouseCallback);
     }
-
+    
+    //拖拽纹理
     private void OnDragPreview(DragState state, Vector2 delta)
     {
         if (state == DragState.DragMove)
         {
             S_PreviewTexture.Instance.Position += delta;
+        }
+    }
+
+    //缩放/放大纹理
+    private void OnMouseCallback(int value)
+    {
+        if (value < 0) //缩小
+        {
+            Utils.DoShrinkByMousePosition(S_PreviewTexture.Instance, 0.2f);
+        }
+        else //放大
+        {
+            Utils.DoMagnifyByMousePosition(S_PreviewTexture.Instance, 20);
         }
     }
     

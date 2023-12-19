@@ -143,9 +143,7 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
     //点击聚焦按钮
     private void OnFocusClick()
     {
-        var pos = Size / 2;
-        var center = UiNode.L_CombinationRoot.L_RectBrush.Instance.GetCenterPosition();
-        ContainerRoot.Position = pos - center * ContainerRoot.Scale;
+        Utils.DoFocusNode(ContainerRoot, Size, UiNode.L_CombinationRoot.L_RectBrush.Instance.GetCenterPosition() * 2);
         RefreshGridTrans();
     }
     
@@ -182,10 +180,10 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
         var src = UiNode.UiPanel.EditorPanel.TextureImage;
         var image = ImportCombinationData.GetPreviewTexture(src, cells, positions);
         var texture = ImageTexture.CreateFromImage(image);
-        EditorWindowManager.ShowImportCombination("组合名称", color, texture, (name) =>
+        EditorWindowManager.ShowImportCombination("组合", color, texture, (name) =>
         {
             var combinationInfo = new TileCombinationInfo();
-            combinationInfo.Id = "1";
+            combinationInfo.Id = DateTime.UtcNow.Ticks.ToString();
             combinationInfo.Name = name;
             combinationInfo.Cells = cells;
             combinationInfo.Positions = positions;

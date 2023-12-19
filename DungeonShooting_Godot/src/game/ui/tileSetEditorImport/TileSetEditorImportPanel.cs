@@ -20,10 +20,12 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         S_ImportButton.Instance.Pressed += OnImportButtonClick;
         S_ReimportButton.Instance.Pressed += OnReimportButtonClick;
         S_ImportColorPicker.Instance.Pressed += OnColorPickerClick;
+        S_FocusBtn.Instance.Pressed += OnFocusClick;
         
         S_ImportPreviewBg.Instance.Visible = false;
         S_ReimportButton.Instance.Visible = false;
         S_ImportColorPicker.Instance.Visible = false;
+        S_FocusBtn.Instance.Visible = false;
 
         //监听TileSet纹理改变
         AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
@@ -49,6 +51,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
             S_ImportPreviewBg.Instance.Visible = true;
             S_ReimportButton.Instance.Visible = true;
             S_ImportColorPicker.Instance.Visible = true;
+            S_FocusBtn.Instance.Visible = true;
     
             //隐藏导入文本和icon
             S_ImportLabel.Instance.Visible = false;
@@ -108,11 +111,17 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
             );
         }
     }
+
+    //聚焦
+    private void OnFocusClick()
+    {
+        S_ImportPreview.Instance.Position = Vector2.Zero;
+    }
     
     //拖拽区域回调
     private void OnDragCallback(DragState state, Vector2 position)
     {
-        var sprite2D = S_Control.L_ImportPreview.Instance;
+        var sprite2D = S_ImportPreview.Instance;
         if (state == DragState.DragMove && sprite2D.Visible)
         {
             sprite2D.Position += position;
@@ -126,20 +135,16 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         {
             return;
         }
-        var textureRect = S_Control.L_ImportPreview.Instance;
+
         if (v < 0)
         {
             //缩小
-            var scale = textureRect.Scale;
-            scale = new Vector2(Mathf.Max(0.1f, scale.X / 1.1f), Mathf.Max(0.1f, scale.Y / 1.1f));
-            textureRect.Scale = scale;
+            Utils.DoShrinkByMousePosition(S_Control.L_ImportPreview.Instance, 0.4f);
         }
         else
         {
             //放大
-            var scale = textureRect.Scale;
-            scale = new Vector2(Mathf.Min(20f, scale.X * 1.1f), Mathf.Min(20f, scale.Y * 1.1f));
-            textureRect.Scale = scale;
+            Utils.DoMagnifyByMousePosition(S_Control.L_ImportPreview.Instance, 20);
         }
     }
     

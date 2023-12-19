@@ -36,30 +36,19 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
             if (mouseButton.ButtonIndex == MouseButton.WheelDown)
             {
                 //缩小
-                Shrink();
+                if (Utils.DoShrinkByMousePosition(ContainerRoot, 0.4f))
+                {
+                    SetGridTransform(ContainerRoot.Position, ContainerRoot.Scale.X);
+                }
             }
             else if (mouseButton.ButtonIndex == MouseButton.WheelUp)
             {
                 //放大
-                Magnify();
+                if (Utils.DoMagnifyByMousePosition(ContainerRoot, 20))
+                {
+                    SetGridTransform(ContainerRoot.Position, ContainerRoot.Scale.X);
+                }
             }
-        }
-    }
-    
-    //缩小
-    private void Shrink()
-    {
-        if (Utils.DoShrinkByMousePosition(ContainerRoot, 0.2f))
-        {
-            SetGridTransform(ContainerRoot.Position, ContainerRoot.Scale.X);
-        }
-    }
-    //放大
-    private void Magnify()
-    {
-        if (Utils.DoMagnifyByMousePosition(ContainerRoot, 20))
-        {
-            SetGridTransform(ContainerRoot.Position, ContainerRoot.Scale.X);
         }
     }
     

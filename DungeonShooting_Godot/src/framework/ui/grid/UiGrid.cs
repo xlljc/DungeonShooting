@@ -466,7 +466,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
         }
 
         //调用 cell 更新
-        var uiCells = _cellPool.ToArray();
+        var uiCells = _cellList.ToArray();
         for (var i = 0; i < uiCells.Length; i++)
         {
             var item = uiCells[i];

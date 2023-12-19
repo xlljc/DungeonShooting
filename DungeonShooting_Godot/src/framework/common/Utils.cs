@@ -427,6 +427,25 @@ public static class Utils
 
         return false;
     }
+    
+    /// <summary>
+    /// 根据鼠标位置执行单步放大逻辑
+    /// </summary>
+    public static bool DoMagnifyByMousePosition(Node2D node, float maxXScale)
+    {
+        var offset = node.GetLocalMousePosition();
+        var prevScale = node.Scale;
+        var newScale = prevScale * 1.1f;
+        if (newScale.X <= maxXScale)
+        {
+            node.Scale = newScale;
+            var position = node.Position - offset * 0.1f * prevScale;
+            node.Position = position;
+            return true;
+        }
+
+        return false;
+    }
 
     /// <summary>
     /// 根据鼠标位置执行单步缩小逻辑
@@ -446,4 +465,35 @@ public static class Utils
 
         return false;
     }
+    
+    /// <summary>
+    /// 根据鼠标位置执行单步缩小逻辑
+    /// </summary>
+    public static bool DoShrinkByMousePosition(Node2D node, float minXScale)
+    {
+        var offset = node.GetLocalMousePosition();
+        var prevScale = node.Scale;
+        var newScale = prevScale / 1.1f;
+        if (newScale.X >= minXScale)
+        {
+            node.Scale = newScale;
+            var position = node.Position + offset * 0.1f * newScale;
+            node.Position = position;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 聚焦Ui节点
+    /// </summary>
+    /// <param name="control">需要聚焦的节点</param>
+    /// <param name="parentSize">父节点容器大小</param>
+    /// <param name="selfSize">当前节点容器大小</param>
+    public static void DoFocusNode(Control control, Vector2 parentSize, Vector2 selfSize)
+    {
+        control.Position = parentSize / 2 - selfSize * 0.5f * control.Scale;
+    }
+
 }

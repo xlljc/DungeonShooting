@@ -17,7 +17,10 @@ public class MaskRectCell : UiCell<TileSetEditorCombination.MaskRect, bool>
 
     public override void Process(float delta)
     {
-        CellNode.Instance.QueueRedraw();
+        if (Data)
+        {
+            CellNode.Instance.QueueRedraw();
+        }
     }
 
     private void OnDraw()
@@ -27,7 +30,7 @@ public class MaskRectCell : UiCell<TileSetEditorCombination.MaskRect, bool>
             //选中时绘制轮廓
             CellNode.Instance.DrawRect(
                 new Rect2(Vector2.Zero, CellNode.Instance.Size),
-                new Color(0, 1, 1), false, 2 / CellNode.UiPanel.S_TileTexture.Instance.Scale.X
+                new Color(0, 1, 1), false, 2f / CellNode.UiPanel.S_TileTexture.Instance.Scale.X
             );
         }
     }

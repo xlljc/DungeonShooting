@@ -65,15 +65,14 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
     //聚焦按钮点击
     private void OnFocusClick()
     {
-        var pos = Size / 2;
         var texture = UiNode.L_TileTexture.Instance.Texture;
         if (texture != null)
         {
-            ContainerRoot.Position = pos - texture.GetSize() * 0.5f * ContainerRoot.Scale;
+            Utils.DoFocusNode(ContainerRoot, Size, texture.GetSize());
         }
         else
         {
-            ContainerRoot.Position = pos;
+            Utils.DoFocusNode(ContainerRoot, Size, Vector2.Zero);
         }
 
         RefreshGridTrans();

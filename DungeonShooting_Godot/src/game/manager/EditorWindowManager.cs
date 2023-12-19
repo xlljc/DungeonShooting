@@ -467,6 +467,47 @@ public static class EditorWindowManager
         );
     }
     
+    /// <summary>
+    /// 显示编辑组合弹窗
+    /// </summary>
+    /// <param name="showName">组合名称</param>
+    /// <param name="color">预览纹理背景颜色</param>
+    /// <param name="texture">显示纹理</param>
+    /// <param name="onAccept">确定时回调</param>
+    /// <param name="onDelete">删除时回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowEditCombination(string showName, Color color, Texture2D texture, Action<string> onAccept, Action onDelete, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.S_Window.Instance.Size = new Vector2I(750, 650);
+        window.SetWindowTitle("编辑组合");
+        var body = window.OpenBody<EditorImportCombinationPanel>(UiManager.UiNames.EditorImportCombination);
+        body.InitData(showName, color, texture);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("删除", () =>
+            {
+                ShowConfirm("提示", "您确定要删除该组合吗，该操作不能取消！", (flag) =>
+                {
+                    if (flag)
+                    {
+                        window.CloseWindow();
+                        onDelete();
+                    }
+                }, window);
+            }),
+            new EditorWindowPanel.ButtonData("保存", () =>
+            {
+                var selectObject = body.GetName();
+                window.CloseWindow();
+                onAccept(selectObject);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+    
     private static EditorWindowPanel CreateWindowInstance(UiBase parentUi = null)
     {
         if (parentUi != null)

@@ -17,7 +17,8 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
         _grid.SetHorizontalExpand(true);
         
         _rightBg.UiPanel.AddEventListener(EventEnum.OnImportCombination, OnImportCombination);
-        // _rightBg.UiPanel.AddEventListener(EventEnum.OnRemoveTileCell, OnRemoveCell);
+        _rightBg.UiPanel.AddEventListener(EventEnum.OnRemoveCombination, OnRemoveCombination);
+        _rightBg.UiPanel.AddEventListener(EventEnum.OnUpdateCombination, OnUpdateCombination);
     }
 
     /// <summary>
@@ -33,18 +34,33 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
     }
     
     /// <summary>
-    /// 移除选中的Cell图块
+    /// 移除组合图块
     /// </summary>
-    private void OnRemoveCell(object obj)
+    private void OnRemoveCombination(object obj)
     {
-        // if (obj is ImportCombinationData data)
-        // {
-        //     var uiCell = _grid.Find(c => c.Data == data);
-        //     if (uiCell != null)
-        //     {
-        //         _grid.RemoveByIndex(uiCell.Index);
-        //     }
-        // }
+        if (obj is ImportCombinationData data)
+        {
+            var uiCell = _grid.Find(c => c.Data.CombinationInfo.Id == data.CombinationInfo.Id);
+            if (uiCell != null)
+            {
+                _grid.RemoveByIndex(uiCell.Index);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 修改组合图块
+    /// </summary>
+    private void OnUpdateCombination(object obj)
+    {
+        if (obj is ImportCombinationData data)
+        {
+            var uiCell = _grid.Find(c => c.Data.CombinationInfo.Id == data.CombinationInfo.Id);
+            if (uiCell != null)
+            {
+                uiCell.SetData(data);
+            }
+        }
     }
 
     public void OnDestroy()

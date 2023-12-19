@@ -96,6 +96,19 @@ public abstract partial class TileSetEditorImport : UiBase
     }
     private ReimportButton _L_ReimportButton;
 
+    /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: TileSetEditorImport.FocusBtn
+    /// </summary>
+    public FocusBtn L_FocusBtn
+    {
+        get
+        {
+            if (_L_FocusBtn == null) _L_FocusBtn = new FocusBtn((TileSetEditorImportPanel)this, GetNode<Godot.TextureButton>("FocusBtn"));
+            return _L_FocusBtn;
+        }
+    }
+    private FocusBtn _L_FocusBtn;
+
 
     public TileSetEditorImport() : base(nameof(TileSetEditorImport))
     {
@@ -191,6 +204,15 @@ public abstract partial class TileSetEditorImport : UiBase
         public override ReimportButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
     }
 
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: TileSetEditorImport.FocusBtn
+    /// </summary>
+    public class FocusBtn : UiNode<TileSetEditorImportPanel, Godot.TextureButton, FocusBtn>
+    {
+        public FocusBtn(TileSetEditorImportPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override FocusBtn Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorImport.ImportPreviewBg
@@ -231,5 +253,10 @@ public abstract partial class TileSetEditorImport : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorImport.ReimportButton
     /// </summary>
     public ReimportButton S_ReimportButton => L_ReimportButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: TileSetEditorImport.FocusBtn
+    /// </summary>
+    public FocusBtn S_FocusBtn => L_FocusBtn;
 
 }
