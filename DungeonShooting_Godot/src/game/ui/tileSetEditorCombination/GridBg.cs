@@ -37,19 +37,13 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
             AcceptEvent();
             if (mouseButton.ButtonIndex == MouseButton.WheelDown)
             {
-                if (GetGlobalRect().HasPoint(mouseButton.GlobalPosition))
-                {
-                    //缩小
-                    Shrink();
-                }
+                //缩小
+                Shrink();
             }
             else if (mouseButton.ButtonIndex == MouseButton.WheelUp)
             {
-                if (GetGlobalRect().HasPoint(mouseButton.GlobalPosition))
-                {
-                    //放大
-                    Magnify();
-                }
+                //放大
+                Magnify();
             }
         }
     }

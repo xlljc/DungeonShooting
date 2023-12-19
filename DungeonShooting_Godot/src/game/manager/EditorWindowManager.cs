@@ -431,17 +431,18 @@ public static class EditorWindowManager
     /// 显示导入组合确认弹窗
     /// </summary>
     /// <param name="showName">组合名称</param>
+    /// <param name="color">预览纹理背景颜色</param>
     /// <param name="texture">显示纹理</param>
     /// <param name="onAccept">确定时回调</param>
     /// <param name="onCancel">取消时回调</param>
     /// <param name="parentUi">所属父级Ui</param>
-    public static void ShowImportCombination(string showName, Texture2D texture, Action<string> onAccept, Action onCancel, UiBase parentUi = null)
+    public static void ShowImportCombination(string showName, Color color, Texture2D texture, Action<string> onAccept, Action onCancel, UiBase parentUi = null)
     {
         var window = CreateWindowInstance(parentUi);
-        window.S_Window.Instance.Size = new Vector2I(600, 500);
+        window.S_Window.Instance.Size = new Vector2I(750, 650);
         window.SetWindowTitle("导入组合");
         var body = window.OpenBody<EditorImportCombinationPanel>(UiManager.UiNames.EditorImportCombination);
-        body.InitData(showName, texture);
+        body.InitData(showName, color, texture);
         var accept = false;
         if (onCancel != null)
         {

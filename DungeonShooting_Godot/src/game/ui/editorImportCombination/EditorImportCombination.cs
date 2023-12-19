@@ -91,12 +91,34 @@ public abstract partial class EditorImportCombination : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: EditorImportCombination.MarginContainer.VBoxContainer.HBoxContainer2.PreviewTexture
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: EditorImportCombination.MarginContainer.VBoxContainer.HBoxContainer2.PreviewBg.PreviewTexture
     /// </summary>
     public class PreviewTexture : UiNode<EditorImportCombinationPanel, Godot.TextureRect, PreviewTexture>
     {
         public PreviewTexture(EditorImportCombinationPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
         public override PreviewTexture Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: EditorImportCombination.MarginContainer.VBoxContainer.HBoxContainer2.PreviewBg
+    /// </summary>
+    public class PreviewBg : UiNode<EditorImportCombinationPanel, Godot.ColorRect, PreviewBg>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: EditorImportCombination.MarginContainer.VBoxContainer.HBoxContainer2.PreviewTexture
+        /// </summary>
+        public PreviewTexture L_PreviewTexture
+        {
+            get
+            {
+                if (_L_PreviewTexture == null) _L_PreviewTexture = new PreviewTexture(UiPanel, Instance.GetNode<Godot.TextureRect>("PreviewTexture"));
+                return _L_PreviewTexture;
+            }
+        }
+        private PreviewTexture _L_PreviewTexture;
+
+        public PreviewBg(EditorImportCombinationPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override PreviewBg Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
     }
 
     /// <summary>
@@ -118,17 +140,17 @@ public abstract partial class EditorImportCombination : UiBase
         private PreviewLabel _L_PreviewLabel;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: EditorImportCombination.MarginContainer.VBoxContainer.PreviewTexture
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: EditorImportCombination.MarginContainer.VBoxContainer.PreviewBg
         /// </summary>
-        public PreviewTexture L_PreviewTexture
+        public PreviewBg L_PreviewBg
         {
             get
             {
-                if (_L_PreviewTexture == null) _L_PreviewTexture = new PreviewTexture(UiPanel, Instance.GetNode<Godot.TextureRect>("PreviewTexture"));
-                return _L_PreviewTexture;
+                if (_L_PreviewBg == null) _L_PreviewBg = new PreviewBg(UiPanel, Instance.GetNode<Godot.ColorRect>("PreviewBg"));
+                return _L_PreviewBg;
             }
         }
-        private PreviewTexture _L_PreviewTexture;
+        private PreviewBg _L_PreviewBg;
 
         public HBoxContainer2(EditorImportCombinationPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
         public override HBoxContainer2 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
@@ -213,9 +235,14 @@ public abstract partial class EditorImportCombination : UiBase
     public PreviewLabel S_PreviewLabel => L_MarginContainer.L_VBoxContainer.L_HBoxContainer2.L_PreviewLabel;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: EditorImportCombination.MarginContainer.VBoxContainer.HBoxContainer2.PreviewTexture
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: EditorImportCombination.MarginContainer.VBoxContainer.HBoxContainer2.PreviewBg.PreviewTexture
     /// </summary>
-    public PreviewTexture S_PreviewTexture => L_MarginContainer.L_VBoxContainer.L_HBoxContainer2.L_PreviewTexture;
+    public PreviewTexture S_PreviewTexture => L_MarginContainer.L_VBoxContainer.L_HBoxContainer2.L_PreviewBg.L_PreviewTexture;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: EditorImportCombination.MarginContainer.VBoxContainer.HBoxContainer2.PreviewBg
+    /// </summary>
+    public PreviewBg S_PreviewBg => L_MarginContainer.L_VBoxContainer.L_HBoxContainer2.L_PreviewBg;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: EditorImportCombination.MarginContainer.VBoxContainer.HBoxContainer2

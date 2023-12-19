@@ -388,24 +388,24 @@ public static class Utils
     public static Rect2I CalcTileRect(IEnumerable<SerializeVector2> cells)
     {
         //单位: 像素
-        var canvasXStart = int.MaxValue;
-        var canvasYStart = int.MaxValue;
-        var canvasXEnd = int.MinValue;
-        var canvasYEnd = int.MinValue;
+        var canvasXStart = float.MaxValue;
+        var canvasYStart = float.MaxValue;
+        var canvasXEnd = float.MinValue;
+        var canvasYEnd = float.MinValue;
 
         foreach (var pos in cells)
         {
-            canvasXStart = (int)Mathf.Min(pos.X, canvasXStart);
-            canvasYStart = (int)Mathf.Min(pos.Y, canvasYStart);
-            canvasXEnd = (int)Mathf.Max(pos.X + GameConfig.TileCellSize, canvasXEnd);
-            canvasYEnd = (int)Mathf.Max(pos.Y + GameConfig.TileCellSize, canvasYEnd);
+            canvasXStart = Mathf.Min(pos.X, canvasXStart);
+            canvasYStart = Mathf.Min(pos.Y, canvasYStart);
+            canvasXEnd = Mathf.Max(pos.X + GameConfig.TileCellSize, canvasXEnd);
+            canvasYEnd = Mathf.Max(pos.Y + GameConfig.TileCellSize, canvasYEnd);
         }
 
         return new Rect2I(
-            canvasXStart,
-            canvasYStart,
-            canvasXEnd - canvasXStart,
-            canvasYEnd - canvasYStart
+            (int)canvasXStart,
+            (int)canvasYStart,
+            (int)(canvasXEnd - canvasXStart),
+            (int)(canvasYEnd - canvasYStart)
         );
     }
 

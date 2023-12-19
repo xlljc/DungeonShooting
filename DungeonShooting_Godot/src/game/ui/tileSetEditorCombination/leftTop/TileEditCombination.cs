@@ -177,11 +177,12 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
 
         var cells = tempCell.ToArray();
         var positions = tempPos.ToArray();
-        
+
+        var color = UiNode.UiPanel.EditorPanel.BgColor;
         var src = UiNode.UiPanel.EditorPanel.TextureImage;
         var image = ImportCombinationData.GetPreviewTexture(src, cells, positions);
         var texture = ImageTexture.CreateFromImage(image);
-        EditorWindowManager.ShowImportCombination("组合名称", texture, (name) =>
+        EditorWindowManager.ShowImportCombination("组合名称", color, texture, (name) =>
         {
             var combinationInfo = new TileCombinationInfo();
             combinationInfo.Id = "1";
