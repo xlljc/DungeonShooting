@@ -29,9 +29,6 @@ public partial class TileSetEditorCombinationPanel : TileSetEditorCombination
                 EditorPanel.TabGrid.SelectIndex = 0;
             });
         }
-
-        S_LeftTopBg.Instance.OnShow();
-        S_LeftBottomBg.Instance.OnShow();
     }
 
     public override void OnDestroyUi()

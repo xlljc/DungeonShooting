@@ -30,12 +30,12 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.MaskBrush
+    /// 类型: <see cref="EditorMaskBrush"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.MaskBrush
     /// </summary>
-    public class MaskBrush : UiNode<TileSetEditorTerrainPanel, Godot.Control, MaskBrush>
+    public class MaskBrush : UiNode<TileSetEditorTerrainPanel, EditorMaskBrush, MaskBrush>
     {
-        public MaskBrush(TileSetEditorTerrainPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
-        public override MaskBrush Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+        public MaskBrush(TileSetEditorTerrainPanel uiPanel, EditorMaskBrush node) : base(uiPanel, node) {  }
+        public override MaskBrush Clone() => new (UiPanel, (EditorMaskBrush)Instance.Duplicate());
     }
 
     /// <summary>
@@ -44,13 +44,13 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public class TileTexture : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, TileTexture>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.MaskBrush
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="EditorMaskBrush"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.MaskBrush
         /// </summary>
         public MaskBrush L_MaskBrush
         {
             get
             {
-                if (_L_MaskBrush == null) _L_MaskBrush = new MaskBrush(UiPanel, Instance.GetNode<Godot.Control>("MaskBrush"));
+                if (_L_MaskBrush == null) _L_MaskBrush = new MaskBrush(UiPanel, Instance.GetNode<EditorMaskBrush>("MaskBrush"));
                 return _L_MaskBrush;
             }
         }
@@ -304,7 +304,7 @@ public abstract partial class TileSetEditorTerrain : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.MaskBrush
+    /// 场景中唯一名称的节点, 节点类型: <see cref="EditorMaskBrush"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.MaskBrush
     /// </summary>
     public MaskBrush S_MaskBrush => L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg.L_TileTexture.L_MaskBrush;
 

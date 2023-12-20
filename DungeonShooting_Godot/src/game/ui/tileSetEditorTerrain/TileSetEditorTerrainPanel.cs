@@ -22,11 +22,6 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     {
         
     }
-
-    public override void OnShowUi()
-    {
-        S_LeftBg.Instance.OnShow();
-    }
     
     //改变TileSet纹理
     private void OnSetTileTexture(object arg)

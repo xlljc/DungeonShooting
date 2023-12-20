@@ -27,7 +27,6 @@ public abstract partial class TileSetEditorCombination : UiBase
     {
         _ = L_HSplitContainer.L_VSplitContainer.L_LeftTop.L_MarginContainer.L_LeftTopBg;
         _ = L_HSplitContainer.L_VSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBottomBg;
-        _ = L_HSplitContainer.L_VSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBottomBg.L_TileTexture.L_MaskBrush;
         _ = L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg;
 
     }
@@ -293,12 +292,12 @@ public abstract partial class TileSetEditorCombination : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.TileSetEditorCombination.MaskBrush"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftBottom.MarginContainer.LeftBottomBg.TileTexture.MaskBrush
+    /// 类型: <see cref="EditorMaskBrush"/>, 路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftBottom.MarginContainer.LeftBottomBg.TileTexture.MaskBrush
     /// </summary>
-    public class MaskBrush : UiNode<TileSetEditorCombinationPanel, UI.TileSetEditorCombination.MaskBrush, MaskBrush>
+    public class MaskBrush : UiNode<TileSetEditorCombinationPanel, EditorMaskBrush, MaskBrush>
     {
-        public MaskBrush(TileSetEditorCombinationPanel uiPanel, UI.TileSetEditorCombination.MaskBrush node) : base(uiPanel, node) {  }
-        public override MaskBrush Clone() => new (UiPanel, (UI.TileSetEditorCombination.MaskBrush)Instance.Duplicate());
+        public MaskBrush(TileSetEditorCombinationPanel uiPanel, EditorMaskBrush node) : base(uiPanel, node) {  }
+        public override MaskBrush Clone() => new (UiPanel, (EditorMaskBrush)Instance.Duplicate());
     }
 
     /// <summary>
@@ -320,13 +319,13 @@ public abstract partial class TileSetEditorCombination : UiBase
         private MaskRoot _L_MaskRoot;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorCombination.MaskBrush"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftBottom.MarginContainer.LeftBottomBg.MaskBrush
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="EditorMaskBrush"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftBottom.MarginContainer.LeftBottomBg.MaskBrush
         /// </summary>
         public MaskBrush L_MaskBrush
         {
             get
             {
-                if (_L_MaskBrush == null) _L_MaskBrush = new MaskBrush(UiPanel, Instance.GetNode<UI.TileSetEditorCombination.MaskBrush>("MaskBrush"));
+                if (_L_MaskBrush == null) _L_MaskBrush = new MaskBrush(UiPanel, Instance.GetNode<EditorMaskBrush>("MaskBrush"));
                 return _L_MaskBrush;
             }
         }
@@ -753,7 +752,7 @@ public abstract partial class TileSetEditorCombination : UiBase
     public MaskRoot S_MaskRoot => L_HSplitContainer.L_VSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBottomBg.L_TileTexture.L_MaskRoot;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorCombination.MaskBrush"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftBottom.MarginContainer.LeftBottomBg.TileTexture.MaskBrush
+    /// 场景中唯一名称的节点, 节点类型: <see cref="EditorMaskBrush"/>, 节点路径: TileSetEditorCombination.HSplitContainer.VSplitContainer.LeftBottom.MarginContainer.LeftBottomBg.TileTexture.MaskBrush
     /// </summary>
     public MaskBrush S_MaskBrush => L_HSplitContainer.L_VSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBottomBg.L_TileTexture.L_MaskBrush;
 

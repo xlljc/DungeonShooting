@@ -3,7 +3,7 @@
 /// <summary>
 /// 通用Ui网格背景组件, 包含可拖拽的容器根节点
 /// </summary>
-public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUiNode
+public abstract partial class EditorGridBg<T> : ColorRect, IUiNodeScript where T : IUiNode
 {
     /// <summary>
     /// 可拖拽容器根节点
@@ -39,19 +39,13 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
         UiNode = (T)uiNode;
         this.AddDragListener(DragButtonEnum.Middle, OnDrag);
         Resized += RefreshGridTrans;
+        //打开Ui时刷新网格
+        UiNode.GetUiPanel().OnShowUiEvent += RefreshGridTrans;
     }
 
     public virtual void OnDestroy()
     {
         
-    }
-    
-    /// <summary>
-    /// 当前Ui被显示出来时调用
-    /// </summary>
-    public void OnShow()
-    {
-        RefreshGridTrans();
     }
 
     public override void _GuiInput(InputEvent @event)

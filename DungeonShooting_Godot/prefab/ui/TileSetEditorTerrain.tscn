@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dfqb73y4br8yd"]
+[gd_scene load_steps=5 format=3 uid="uid://dfqb73y4br8yd"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/TileSetEditorTerrainPanel.cs" id="1_6jjk7"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/left/TileEditArea.cs" id="2_ynf0r"]
+[ext_resource type="Script" path="res://src/game/common/ui/EditorMaskBrush.cs" id="3_gydh0"]
 [ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="5_08bc4"]
 
 [node name="TileSetEditorTerrain" type="Control"]
@@ -67,6 +68,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("3_gydh0")
 
 [node name="Grid" type="ColorRect" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg"]
 layout_mode = 1

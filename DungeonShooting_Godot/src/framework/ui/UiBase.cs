@@ -9,6 +9,19 @@ using Godot;
 public abstract partial class UiBase : Control, IDestroy, ICoroutine
 {
     /// <summary>
+    /// Ui显示事件
+    /// </summary>
+    public event Action OnShowUiEvent;
+    /// <summary>
+    /// Ui隐藏事件
+    /// </summary>
+    public event Action OnHideUiEvent;
+    /// <summary>
+    /// Ui销毁事件
+    /// </summary>
+    public event Action OnDestroyUiEvent;
+    
+    /// <summary>
     /// 当前 UI 所属层级
     /// </summary>
     [Export]
@@ -127,6 +140,10 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         IsOpen = true;
         Visible = true;
         OnShowUi();
+        if (OnShowUiEvent != null)
+        {
+            OnShowUiEvent();
+        }
         
         //子Ui调用显示
         if (_nestedUiSet != null)
@@ -160,6 +177,10 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         IsOpen = false;
         Visible = false;
         OnHideUi();
+        if (OnHideUiEvent != null)
+        {
+            OnHideUiEvent();
+        }
         
         //子Ui调用隐藏
         if (_nestedUiSet != null)
@@ -189,6 +210,10 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         HideUi();
         IsDestroyed = true;
         OnDestroyUi();
+        if (OnDestroyUiEvent != null)
+        {
+            OnDestroyUiEvent();
+        }
         
         //子Ui调用销毁
         if (_nestedUiSet != null)

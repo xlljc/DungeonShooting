@@ -496,4 +496,13 @@ public static class Utils
         control.Position = parentSize / 2 - selfSize * 0.5f * control.Scale;
     }
 
+    /// <summary>
+    /// 返回鼠标所在的单元格位置, 相对于Ui节点左上角
+    /// </summary>
+    public static Vector2I GetMouseCellPosition(Control control)
+    {
+        var pos = control.GetLocalMousePosition() / GameConfig.TileCellSize;
+        return pos.AsVector2I();
+    }
+
 }

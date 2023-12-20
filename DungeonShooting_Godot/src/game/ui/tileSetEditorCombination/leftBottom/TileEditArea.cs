@@ -3,7 +3,7 @@ using Godot;
 
 namespace UI.TileSetEditorCombination;
 
-public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg>
+public partial class TileEditArea : EditorGridBg<TileSetEditorCombination.LeftBottomBg>
 {
     private UiGrid<TileSetEditorCombination.MaskRect, bool> _maskGrid;
     private readonly HashSet<Vector2I> _useMask = new HashSet<Vector2I>();
@@ -13,6 +13,8 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
         base.SetUiNode(uiNode);
         InitNode(UiNode.L_TileTexture.Instance, UiNode.L_Grid.Instance);
         UiNode.L_TileTexture.Instance.Texture = UiNode.UiPanel.EditorPanel.Texture;
+        var maskBrush = UiNode.L_TileTexture.L_MaskBrush.Instance;
+        maskBrush.Init(UiNode.L_TileTexture.Instance, UiNode.UiPanel.EditorPanel);
 
         _maskGrid = new UiGrid<TileSetEditorCombination.MaskRect, bool>(UiNode.L_TileTexture.L_MaskRoot.L_MaskRect, typeof(MaskRectCell));
         _maskGrid.SetCellOffset(Vector2I.Zero);
@@ -149,8 +151,6 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
     /// </summary>
     public Vector2I GetMouseCellPosition()
     {
-        var textureRect = UiNode.L_TileTexture.Instance;
-        var pos = textureRect.GetLocalMousePosition() / GameConfig.TileCellSize;
-        return pos.AsVector2I();
+        return Utils.GetMouseCellPosition(UiNode.L_TileTexture.Instance);
     }
 }

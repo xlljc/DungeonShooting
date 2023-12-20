@@ -2,12 +2,14 @@
 
 namespace UI.TileSetEditorTerrain;
 
-public partial class TileEditArea : GridBg<TileSetEditorTerrain.LeftBg>
+public partial class TileEditArea : EditorGridBg<TileSetEditorTerrain.LeftBg>
 {
     public override void SetUiNode(IUiNode uiNode)
     {
         base.SetUiNode(uiNode);
         InitNode(UiNode.L_TileTexture.Instance, UiNode.L_Grid.Instance);
+        UiNode.L_TileTexture.L_MaskBrush.Instance.Init(UiNode.L_TileTexture.Instance, UiNode.UiPanel.EditorPanel);
+        
         UiNode.L_TileTexture.Instance.Texture = UiNode.UiPanel.EditorPanel.Texture;
         
         //聚焦按钮点击

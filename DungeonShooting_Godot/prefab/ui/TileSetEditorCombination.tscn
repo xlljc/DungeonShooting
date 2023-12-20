@@ -3,12 +3,12 @@
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/TileSetEditorCombinationPanel.cs" id="1_to1lc"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/leftBottom/TileEditArea.cs" id="2_h43yx"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/leftTop/RectBrush.cs" id="3_avikb"]
-[ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/leftBottom/MaskBrush.cs" id="4_ytys0"]
 [ext_resource type="Texture2D" uid="uid://fkg21rtph51d" path="res://resource/sprite/ui/commonIcon/Delete2.png" id="5_6jqro"]
 [ext_resource type="Texture2D" uid="uid://7l7aqhsaexoh" path="res://resource/sprite/ui/commonIcon/Play.png" id="6_75xjp"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/leftTop/TileEditCombination.cs" id="6_bb3jf"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="6_g5ey6"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/right/TileSelected.cs" id="6_gql80"]
+[ext_resource type="Script" path="res://src/game/common/ui/EditorMaskBrush.cs" id="7_k0dkc"]
 [ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="7_mbnpy"]
 
 [node name="TileSetEditorCombination" type="Control"]
@@ -197,7 +197,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("4_ytys0")
+script = ExtResource("7_k0dkc")
 
 [node name="Grid" type="ColorRect" parent="HSplitContainer/VSplitContainer/LeftBottom/MarginContainer/LeftBottomBg"]
 layout_mode = 1

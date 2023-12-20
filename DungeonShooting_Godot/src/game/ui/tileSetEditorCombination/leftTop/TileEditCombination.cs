@@ -5,7 +5,7 @@ using Godot;
 
 namespace UI.TileSetEditorCombination;
 
-public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftTopBg>
+public partial class TileEditCombination : EditorGridBg<TileSetEditorCombination.LeftTopBg>
 {
     // ------------------------------- 笔刷相关 -------------------------------
     //笔刷数据, kay: 代表原图中的坐标, 单位: 格
