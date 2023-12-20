@@ -1,12 +1,38 @@
 ﻿using Godot;
 
-namespace UI.TileSetEditorCombination;
-
+/// <summary>
+/// 通用Ui网格背景组件, 包含可拖拽的容器根节点
+/// </summary>
 public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUiNode
 {
-    public ColorRect Grid { get; protected set; }
-    public Control ContainerRoot { get; protected set; }
+    /// <summary>
+    /// 可拖拽容器根节点
+    /// </summary>
+    public Control ContainerRoot { get; private set; }
+    /// <summary>
+    /// 显示网格的节点
+    /// </summary>
+    public ColorRect Grid { get; private set; }
+    /// <summary>
+    /// 当前对象绑定的Ui节点
+    /// </summary>
     public T UiNode { get; private set; }
+    
+    private ShaderMaterial _gridMaterial;
+    
+    /// <summary>
+    /// 初始化节点数据
+    /// </summary>
+    /// <param name="containerRoot">可拖拽容器根节点</param>
+    /// <param name="grid">当前对象绑定的Ui节点</param>
+    public void InitNode(Control containerRoot, ColorRect grid)
+    {
+        ContainerRoot = containerRoot;
+        Grid = grid;
+        grid.MouseFilter = MouseFilterEnum.Ignore;
+        _gridMaterial = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Grid_tres, false);
+        grid.Material = _gridMaterial;
+    }
     
     public virtual void SetUiNode(IUiNode uiNode)
     {
@@ -68,15 +94,15 @@ public abstract partial class GridBg<T> : ColorRect, IUiNodeScript where T : IUi
     /// </summary>
     public void RefreshGridTrans()
     {
-        Grid.Material.SetShaderMaterialParameter(ShaderParamNames.Size, Size);
+        _gridMaterial.SetShaderMaterialParameter(ShaderParamNames.Size, Size);
         SetGridTransform(ContainerRoot.Position, ContainerRoot.Scale.X);
     }
     
     //设置网格位置和缩放
     private void SetGridTransform(Vector2 pos, float scale)
     {
-        Grid.Material.SetShaderMaterialParameter(ShaderParamNames.GridSize, GameConfig.TileCellSize * scale);
-        Grid.Material.SetShaderMaterialParameter(ShaderParamNames.Offset, -pos);
+        _gridMaterial.SetShaderMaterialParameter(ShaderParamNames.GridSize, GameConfig.TileCellSize * scale);
+        _gridMaterial.SetShaderMaterialParameter(ShaderParamNames.Offset, -pos);
     }
     
 }

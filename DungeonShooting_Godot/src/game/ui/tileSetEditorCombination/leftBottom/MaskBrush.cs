@@ -2,18 +2,19 @@
 
 namespace UI.TileSetEditorCombination;
 
-public partial class MaskBrush : Control
+public partial class MaskBrush : Control, IUiNodeScript
 {
     /// <summary>
     /// 绑定的地图纹理节点
     /// </summary>
-    public TextureRect TileTexture { get; set; }
+    public TextureRect TileTexture { get; private set; }
     
     /// <summary>
     /// 绑定的TileSet编辑区域节点
     /// </summary>
-    public TileEditArea TileEditArea { get; set; }
-
+    public TileEditArea TileEditArea { get; private set; }
+    
+    private TileSetEditorCombination.MaskBrush _maskBrush;
     public override void _Process(double delta)
     {
         QueueRedraw();
@@ -41,5 +42,17 @@ public partial class MaskBrush : Control
                 Colors.Green, false, 3f / TileTexture.Scale.X
             );
         }
+    }
+
+    public void SetUiNode(IUiNode uiNode)
+    {
+        _maskBrush = (TileSetEditorCombination.MaskBrush)uiNode;
+        TileTexture = _maskBrush.UiPanel.S_TileTexture.Instance;
+        TileEditArea = _maskBrush.UiPanel.S_LeftBottomBg.Instance;
+    }
+
+    public void OnDestroy()
+    {
+        
     }
 }

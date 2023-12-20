@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://chcpnatun8hlf"]
+
+[ext_resource type="Shader" path="res://resource/material/Grid.gdshader" id="1_xhgfe"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_xhgfe")
+shader_parameter/color = Color(0.529412, 0.529412, 0.529412, 0.0431373)
+shader_parameter/size = Vector2(1280, 720)
+shader_parameter/line_width = 2
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/grid_size = 16.0

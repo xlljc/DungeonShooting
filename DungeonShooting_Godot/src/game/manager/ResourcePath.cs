@@ -6,6 +6,14 @@ public class ResourcePath
     public const string default_bus_layout_tres = "res://default_bus_layout.tres";
     public const string default_env_tres = "res://default_env.tres";
     public const string icon_png = "res://icon.png";
+    public const string excelTool_bin_Release_net8_0_winx64_ExcelTool_deps_json = "res://excelTool/bin/Release/net8.0/win-x64/ExcelTool.deps.json";
+    public const string excelTool_bin_Release_net8_0_winx64_ExcelTool_runtimeconfig_json = "res://excelTool/bin/Release/net8.0/win-x64/ExcelTool.runtimeconfig.json";
+    public const string excelTool_obj_ExcelTool_csproj_nuget_dgspec_json = "res://excelTool/obj/ExcelTool.csproj.nuget.dgspec.json";
+    public const string excelTool_obj_project_assets_json = "res://excelTool/obj/project.assets.json";
+    public const string excelTool_obj_Release_net8_0_winx64_ExcelTool_csproj_FileListAbsolute_txt = "res://excelTool/obj/Release/net8.0/win-x64/ExcelTool.csproj.FileListAbsolute.txt";
+    public const string excelTool_obj_Release_net8_0_winx64_PublishOutputs_a0fcfe3642_txt = "res://excelTool/obj/Release/net8.0/win-x64/PublishOutputs.a0fcfe3642.txt";
+    public const string excelTool_publish_winx64_ExcelTool_deps_json = "res://excelTool/publish/win-x64/ExcelTool.deps.json";
+    public const string excelTool_publish_winx64_ExcelTool_runtimeconfig_json = "res://excelTool/publish/win-x64/ExcelTool.runtimeconfig.json";
     public const string prefab_Cursor_tscn = "res://prefab/Cursor.tscn";
     public const string prefab_bullet_explode_Explode0001_tscn = "res://prefab/bullet/explode/Explode0001.tscn";
     public const string prefab_bullet_laser_Laser0001_tscn = "res://prefab/bullet/laser/Laser0001.tscn";
@@ -115,6 +123,7 @@ public class ResourcePath
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";
     public const string resource_material_Blend_tres = "res://resource/material/Blend.tres";
     public const string resource_material_Grid_gdshader = "res://resource/material/Grid.gdshader";
+    public const string resource_material_Grid_tres = "res://resource/material/Grid.tres";
     public const string resource_material_Mask_gdshader = "res://resource/material/Mask.gdshader";
     public const string resource_material_OffsetVertex_gdshader = "res://resource/material/OffsetVertex.gdshader";
     public const string resource_material_Outline_gdshader = "res://resource/material/Outline.gdshader";

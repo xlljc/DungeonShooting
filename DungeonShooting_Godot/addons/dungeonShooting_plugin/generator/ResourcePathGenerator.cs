@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Godot;
 
 namespace Generator;
 
@@ -65,18 +66,18 @@ public static class ResourcePathGenerator
                         "public class ResourcePath\n" +
                         "{\n";
 
-            Debug.Log("更新 ResourcePath...");
+            GD.Print("更新 ResourcePath...");
 
             var directoryInfo = new DirectoryInfo(System.Environment.CurrentDirectory);
             EachDir(directoryInfo);
 
             resultStr += "}";
             File.WriteAllText(savePath, resultStr);
-            Debug.Log("ResourcePath.cs 写出完成!");
+            GD.Print("ResourcePath.cs 写出完成!");
         }
         catch (Exception e)
         {
-            Debug.LogError(e.ToString());
+            GD.PrintErr(e.ToString());
             return false;
         }
 
@@ -91,7 +92,7 @@ public static class ResourcePathGenerator
             path = path.Replace('\\', '/');
             if (exclude.Contains(path))
             {
-                Debug.Log("扫描排除路径: " + path);
+                GD.Print("扫描排除路径: " + path);
                 return;
             }
         }

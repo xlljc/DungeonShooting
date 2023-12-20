@@ -11,13 +11,8 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
     public override void SetUiNode(IUiNode uiNode)
     {
         base.SetUiNode(uiNode);
-        Grid = UiNode.L_Grid.Instance;
-        ContainerRoot = UiNode.L_TileTexture.Instance;
+        InitNode(UiNode.L_TileTexture.Instance, UiNode.L_Grid.Instance);
         UiNode.L_TileTexture.Instance.Texture = UiNode.UiPanel.EditorPanel.Texture;
-        
-        var maskBrush = UiNode.L_TileTexture.L_MaskBrush.Instance;
-        maskBrush.TileTexture = UiNode.L_TileTexture.Instance;
-        maskBrush.TileEditArea = this;
 
         _maskGrid = new UiGrid<TileSetEditorCombination.MaskRect, bool>(UiNode.L_TileTexture.L_MaskRoot.L_MaskRect, typeof(MaskRectCell));
         _maskGrid.SetCellOffset(Vector2I.Zero);
@@ -66,15 +61,7 @@ public partial class TileEditArea : GridBg<TileSetEditorCombination.LeftBottomBg
     private void OnFocusClick()
     {
         var texture = UiNode.L_TileTexture.Instance.Texture;
-        if (texture != null)
-        {
-            Utils.DoFocusNode(ContainerRoot, Size, texture.GetSize());
-        }
-        else
-        {
-            Utils.DoFocusNode(ContainerRoot, Size, Vector2.Zero);
-        }
-
+        Utils.DoFocusNode(ContainerRoot, Size, texture != null ? texture.GetSize() : Vector2.Zero);
         RefreshGridTrans();
     }
 

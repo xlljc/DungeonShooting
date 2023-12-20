@@ -27,6 +27,7 @@ public abstract partial class TileSetEditorCombination : UiBase
     {
         _ = L_HSplitContainer.L_VSplitContainer.L_LeftTop.L_MarginContainer.L_LeftTopBg;
         _ = L_HSplitContainer.L_VSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBottomBg;
+        _ = L_HSplitContainer.L_VSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBottomBg.L_TileTexture.L_MaskBrush;
         _ = L_HSplitContainer.L_Right.L_MarginContainer.L_RightBg;
 
     }

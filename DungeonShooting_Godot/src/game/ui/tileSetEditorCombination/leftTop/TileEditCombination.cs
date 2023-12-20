@@ -34,8 +34,7 @@ public partial class TileEditCombination : GridBg<TileSetEditorCombination.LeftT
     {
         base.SetUiNode(uiNode);
         UiNode.L_CombinationRoot.L_RectBrush.Instance.Root = UiNode.L_CombinationRoot.Instance;
-        Grid = UiNode.L_Grid.Instance;
-        ContainerRoot = UiNode.L_CombinationRoot.Instance;
+        InitNode(UiNode.L_CombinationRoot.Instance, UiNode.L_Grid.Instance);
 
         UiNode.UiPanel.AddEventListener(EventEnum.OnSelectCombinationCell, OnSelectCombinationCell);
         UiNode.UiPanel.AddEventListener(EventEnum.OnRemoveCombinationCell, OnRemoveCombinationCell);

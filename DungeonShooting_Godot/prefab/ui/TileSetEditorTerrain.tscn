@@ -1,10 +1,143 @@
-[gd_scene load_steps=2 format=3 uid="uid://dfqb73y4br8yd"]
+[gd_scene load_steps=4 format=3 uid="uid://dfqb73y4br8yd"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/TileSetEditorTerrainPanel.cs" id="1_6jjk7"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/left/TileEditArea.cs" id="2_ynf0r"]
+[ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="5_08bc4"]
 
 [node name="TileSetEditorTerrain" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_6jjk7")
+Layer = null
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftBottom" type="Panel" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 50.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/LeftBottom"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="LeftBg" type="ColorRect" parent="HSplitContainer/LeftBottom/MarginContainer"]
+clip_children = 2
+z_index = 1
+layout_mode = 2
+color = Color(0.203922, 0.203922, 0.203922, 1)
+script = ExtResource("2_ynf0r")
+
+[node name="TileTexture" type="TextureRect" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+mouse_filter = 2
+
+[node name="MaskBrush" type="Control" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg/TileTexture"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Grid" type="ColorRect" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="FocusBtn" type="TextureButton" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -79.0
+offset_top = 14.0
+offset_right = -15.0
+offset_bottom = 78.0
+grow_horizontal = 0
+tooltip_text = "聚焦"
+texture_normal = ExtResource("5_08bc4")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="LeftBottom2" type="Panel" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 50.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/LeftBottom2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="LeftBottomBg" type="ColorRect" parent="HSplitContainer/LeftBottom2/MarginContainer"]
+clip_children = 2
+z_index = 1
+layout_mode = 2
+color = Color(0.203922, 0.203922, 0.203922, 1)
+
+[node name="Grid" type="ColorRect" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="FocusBtn" type="TextureButton" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -79.0
+offset_top = 14.0
+offset_right = -15.0
+offset_bottom = 78.0
+grow_horizontal = 0
+tooltip_text = "聚焦"
+texture_normal = ExtResource("5_08bc4")
+ignore_texture_size = true
+stretch_mode = 5
