@@ -66,7 +66,7 @@ public partial class NoWeaponEnemy : Enemy
         var debris = Create<EnemyDead0002>(Ids.Id_enemy_dead0002);
         debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
         debris.MoveController.AddForce(Velocity + realVelocity);
-        debris.SetFace(Face);
+        debris.SetForwardDirection(Face);
         debris.BrushPrevPosition =  BrushPrevPosition;
         
         //派发敌人死亡信号

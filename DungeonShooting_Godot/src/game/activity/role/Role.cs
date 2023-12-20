@@ -93,7 +93,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 脸的朝向
     /// </summary>
-    public FaceDirection Face { get => _face; set => SetFace(value); }
+    public FaceDirection Face { get => _face; set => _SetFace(value); }
     private FaceDirection _face;
     
     /// <summary>
@@ -878,7 +878,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 设置脸的朝向
     /// </summary>
-    private void SetFace(FaceDirection face)
+    private  void _SetFace(FaceDirection face)
     {
         if (_face != face)
         {

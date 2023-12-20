@@ -1754,7 +1754,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 设置物体朝向
     /// </summary>
-    public void SetFace(FaceDirection face)
+    public void SetForwardDirection(FaceDirection face)
     {
         if ((face == FaceDirection.Left && Scale.X > 0) || (face == FaceDirection.Right && Scale.X < 0))
         {
