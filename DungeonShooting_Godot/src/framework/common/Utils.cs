@@ -10,9 +10,12 @@ public static class Utils
     /// <summary>
     /// 默认随机数对象
     /// </summary>
-    public static SeedRandom Random { get; }
+    public static SeedRandom Random { get; private set; }
     
-    static Utils()
+    /// <summary>
+    /// 初始化随机种子
+    /// </summary>
+    public static void InitRandom()
     {
         Random = new SeedRandom();
         Debug.Log("随机种子为: ", Random.Seed);
