@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://dfqb73y4br8yd"]
+[gd_scene load_steps=9 format=3 uid="uid://dfqb73y4br8yd"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/TileSetEditorTerrainPanel.cs" id="1_6jjk7"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/left/TileEditArea.cs" id="2_ynf0r"]
 [ext_resource type="Script" path="res://src/game/common/ui/EditorMaskBrush.cs" id="3_gydh0"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/right/TileEditTerrain.cs" id="5_0x7yx"]
 [ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="5_08bc4"]
+[ext_resource type="Texture2D" uid="uid://18dira1me63t" path="res://resource/sprite/map/PreviewMap.png" id="5_m0oxr"]
+[ext_resource type="Texture2D" uid="uid://bqdrgtiyilkma" path="res://resource/sprite/map/PreviewMapShadow.png" id="7_68ntx"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/right/TerrainBrush.cs" id="7_lmu64"]
 
 [node name="TileSetEditorTerrain" type="Control"]
 layout_mode = 3
@@ -13,6 +17,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6jjk7")
+Layer = null
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 1
@@ -116,7 +121,42 @@ theme_override_constants/margin_bottom = 2
 clip_children = 2
 z_index = 1
 layout_mode = 2
-color = Color(0.203922, 0.203922, 0.203922, 1)
+color = Color(0, 0, 0, 1)
+script = ExtResource("5_0x7yx")
+
+[node name="TileTexture" type="TextureRect" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -72.0
+offset_right = 64.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_m0oxr")
+stretch_mode = 2
+
+[node name="TileShadow" type="TextureRect" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TileTexture"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_68ntx")
+stretch_mode = 2
+
+[node name="Brush" type="Control" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TileTexture"]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 1.0
+offset_bottom = 1.0
+script = ExtResource("7_lmu64")
 
 [node name="Grid" type="ColorRect" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg"]
 layout_mode = 1

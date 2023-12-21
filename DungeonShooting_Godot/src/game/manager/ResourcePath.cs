@@ -216,6 +216,8 @@ public class ResourcePath
     public const string resource_sprite_explode_Explode_pit0001_png = "res://resource/sprite/explode/Explode_pit0001.png";
     public const string resource_sprite_map_door_png = "res://resource/sprite/map/door.png";
     public const string resource_sprite_map_door1_down_png = "res://resource/sprite/map/door1_down.png";
+    public const string resource_sprite_map_PreviewMap_png = "res://resource/sprite/map/PreviewMap.png";
+    public const string resource_sprite_map_PreviewMapShadow_png = "res://resource/sprite/map/PreviewMapShadow.png";
     public const string resource_sprite_map_PreviewTransition_png = "res://resource/sprite/map/PreviewTransition.png";
     public const string resource_sprite_map_PreviewTransition2_png = "res://resource/sprite/map/PreviewTransition2.png";
     public const string resource_sprite_map_WallTransition1_png = "res://resource/sprite/map/WallTransition1.png";

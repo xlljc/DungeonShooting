@@ -26,6 +26,8 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public sealed override void OnInitNestedUi()
     {
         _ = L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg;
+        _ = L_HSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg;
+        _ = L_HSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TileTexture.L_Brush;
 
     }
 
@@ -171,6 +173,59 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.TileShadow
+    /// </summary>
+    public class TileShadow : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, TileShadow>
+    {
+        public TileShadow(TileSetEditorTerrainPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override TileShadow Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="UI.TileSetEditorTerrain.TerrainBrush"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.Brush
+    /// </summary>
+    public class Brush : UiNode<TileSetEditorTerrainPanel, UI.TileSetEditorTerrain.TerrainBrush, Brush>
+    {
+        public Brush(TileSetEditorTerrainPanel uiPanel, UI.TileSetEditorTerrain.TerrainBrush node) : base(uiPanel, node) {  }
+        public override Brush Clone() => new (UiPanel, (UI.TileSetEditorTerrain.TerrainBrush)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture
+    /// </summary>
+    public class TileTexture_1 : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, TileTexture_1>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileShadow
+        /// </summary>
+        public TileShadow L_TileShadow
+        {
+            get
+            {
+                if (_L_TileShadow == null) _L_TileShadow = new TileShadow(UiPanel, Instance.GetNode<Godot.TextureRect>("TileShadow"));
+                return _L_TileShadow;
+            }
+        }
+        private TileShadow _L_TileShadow;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainBrush"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.Brush
+        /// </summary>
+        public Brush L_Brush
+        {
+            get
+            {
+                if (_L_Brush == null) _L_Brush = new Brush(UiPanel, Instance.GetNode<UI.TileSetEditorTerrain.TerrainBrush>("Brush"));
+                return _L_Brush;
+            }
+        }
+        private Brush _L_Brush;
+
+        public TileTexture_1(TileSetEditorTerrainPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override TileTexture_1 Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.ColorRect"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.Grid
     /// </summary>
     public class Grid_1 : UiNode<TileSetEditorTerrainPanel, Godot.ColorRect, Grid_1>
@@ -189,10 +244,23 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.ColorRect"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg
+    /// 类型: <see cref="UI.TileSetEditorTerrain.TileEditTerrain"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg
     /// </summary>
-    public class LeftBottomBg : UiNode<TileSetEditorTerrainPanel, Godot.ColorRect, LeftBottomBg>
+    public class LeftBottomBg : UiNode<TileSetEditorTerrainPanel, UI.TileSetEditorTerrain.TileEditTerrain, LeftBottomBg>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.TileTexture
+        /// </summary>
+        public TileTexture_1 L_TileTexture
+        {
+            get
+            {
+                if (_L_TileTexture == null) _L_TileTexture = new TileTexture_1(UiPanel, Instance.GetNode<Godot.TextureRect>("TileTexture"));
+                return _L_TileTexture;
+            }
+        }
+        private TileTexture_1 _L_TileTexture;
+
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.Grid
         /// </summary>
@@ -219,8 +287,8 @@ public abstract partial class TileSetEditorTerrain : UiBase
         }
         private FocusBtn_1 _L_FocusBtn;
 
-        public LeftBottomBg(TileSetEditorTerrainPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
-        public override LeftBottomBg Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
+        public LeftBottomBg(TileSetEditorTerrainPanel uiPanel, UI.TileSetEditorTerrain.TileEditTerrain node) : base(uiPanel, node) {  }
+        public override LeftBottomBg Clone() => new (UiPanel, (UI.TileSetEditorTerrain.TileEditTerrain)Instance.Duplicate());
     }
 
     /// <summary>
@@ -229,13 +297,13 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public class MarginContainer_1 : UiNode<TileSetEditorTerrainPanel, Godot.MarginContainer, MarginContainer_1>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.LeftBottomBg
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TileEditTerrain"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.LeftBottomBg
         /// </summary>
         public LeftBottomBg L_LeftBottomBg
         {
             get
             {
-                if (_L_LeftBottomBg == null) _L_LeftBottomBg = new LeftBottomBg(UiPanel, Instance.GetNode<Godot.ColorRect>("LeftBottomBg"));
+                if (_L_LeftBottomBg == null) _L_LeftBottomBg = new LeftBottomBg(UiPanel, Instance.GetNode<UI.TileSetEditorTerrain.TileEditTerrain>("LeftBottomBg"));
                 return _L_LeftBottomBg;
             }
         }
@@ -309,11 +377,6 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public MaskBrush S_MaskBrush => L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg.L_TileTexture.L_MaskBrush;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture
-    /// </summary>
-    public TileTexture S_TileTexture => L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg.L_TileTexture;
-
-    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TileEditArea"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg
     /// </summary>
     public LeftBg S_LeftBg => L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg;
@@ -324,7 +387,17 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public LeftBottom S_LeftBottom => L_HSplitContainer.L_LeftBottom;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.TileShadow
+    /// </summary>
+    public TileShadow S_TileShadow => L_HSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TileTexture.L_TileShadow;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainBrush"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.Brush
+    /// </summary>
+    public Brush S_Brush => L_HSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TileTexture.L_Brush;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TileEditTerrain"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg
     /// </summary>
     public LeftBottomBg S_LeftBottomBg => L_HSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg;
 
