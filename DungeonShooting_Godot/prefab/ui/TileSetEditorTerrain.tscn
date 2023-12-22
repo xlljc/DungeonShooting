@@ -17,7 +17,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6jjk7")
-Layer = null
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 1
@@ -63,6 +62,18 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
 mouse_filter = 2
+
+[node name="CellRoot" type="Control" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg/TileTexture"]
+anchors_preset = 0
+offset_right = 1.0
+offset_bottom = 1.0
+mouse_filter = 2
+
+[node name="Cell" type="TextureButton" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg/TileTexture/CellRoot"]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 1
 
 [node name="MaskBrush" type="Control" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg/TileTexture"]
 layout_mode = 1

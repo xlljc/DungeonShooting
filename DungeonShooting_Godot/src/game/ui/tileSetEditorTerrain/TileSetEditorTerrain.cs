@@ -32,6 +32,37 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.CellRoot.Cell
+    /// </summary>
+    public class Cell : UiNode<TileSetEditorTerrainPanel, Godot.TextureButton, Cell>
+    {
+        public Cell(TileSetEditorTerrainPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override Cell Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.CellRoot
+    /// </summary>
+    public class CellRoot : UiNode<TileSetEditorTerrainPanel, Godot.Control, CellRoot>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.Cell
+        /// </summary>
+        public Cell L_Cell
+        {
+            get
+            {
+                if (_L_Cell == null) _L_Cell = new Cell(UiPanel, Instance.GetNode<Godot.TextureButton>("Cell"));
+                return _L_Cell;
+            }
+        }
+        private Cell _L_Cell;
+
+        public CellRoot(TileSetEditorTerrainPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override CellRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="EditorMaskBrush"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.MaskBrush
     /// </summary>
     public class MaskBrush : UiNode<TileSetEditorTerrainPanel, EditorMaskBrush, MaskBrush>
@@ -45,6 +76,19 @@ public abstract partial class TileSetEditorTerrain : UiBase
     /// </summary>
     public class TileTexture : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, TileTexture>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.CellRoot
+        /// </summary>
+        public CellRoot L_CellRoot
+        {
+            get
+            {
+                if (_L_CellRoot == null) _L_CellRoot = new CellRoot(UiPanel, Instance.GetNode<Godot.Control>("CellRoot"));
+                return _L_CellRoot;
+            }
+        }
+        private CellRoot _L_CellRoot;
+
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="EditorMaskBrush"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.MaskBrush
         /// </summary>
@@ -370,6 +414,16 @@ public abstract partial class TileSetEditorTerrain : UiBase
         public override HSplitContainer Clone() => new (UiPanel, (Godot.HSplitContainer)Instance.Duplicate());
     }
 
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.CellRoot.Cell
+    /// </summary>
+    public Cell S_Cell => L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg.L_TileTexture.L_CellRoot.L_Cell;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.CellRoot
+    /// </summary>
+    public CellRoot S_CellRoot => L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg.L_TileTexture.L_CellRoot;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="EditorMaskBrush"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.MaskBrush
