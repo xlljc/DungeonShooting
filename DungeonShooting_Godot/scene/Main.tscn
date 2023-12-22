@@ -39,5 +39,6 @@ render_target_update_mode = 4
 process_callback = 0
 editor_draw_drag_margin = true
 script = ExtResource("2_2j367")
+RecoveryCoefficient = null
 
 [node name="GlobalNodeRoot" type="Node2D" parent="."]

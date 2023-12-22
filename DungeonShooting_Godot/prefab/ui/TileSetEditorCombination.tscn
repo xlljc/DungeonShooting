@@ -19,6 +19,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_to1lc")
+Layer = null
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 1

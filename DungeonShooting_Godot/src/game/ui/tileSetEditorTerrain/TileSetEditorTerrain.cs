@@ -27,17 +27,16 @@ public abstract partial class TileSetEditorTerrain : UiBase
     {
         _ = L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg;
         _ = L_HSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg;
-        _ = L_HSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TileTexture.L_Brush;
 
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDragHandler"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.CellRoot.Cell
+    /// 类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDragHandler"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.CellRoot.LeftCell
     /// </summary>
-    public class Cell : UiNode<TileSetEditorTerrainPanel, UI.TileSetEditorTerrain.TerrainCellDragHandler, Cell>
+    public class LeftCell : UiNode<TileSetEditorTerrainPanel, UI.TileSetEditorTerrain.TerrainCellDragHandler, LeftCell>
     {
-        public Cell(TileSetEditorTerrainPanel uiPanel, UI.TileSetEditorTerrain.TerrainCellDragHandler node) : base(uiPanel, node) {  }
-        public override Cell Clone() => new (UiPanel, (UI.TileSetEditorTerrain.TerrainCellDragHandler)Instance.Duplicate());
+        public LeftCell(TileSetEditorTerrainPanel uiPanel, UI.TileSetEditorTerrain.TerrainCellDragHandler node) : base(uiPanel, node) {  }
+        public override LeftCell Clone() => new (UiPanel, (UI.TileSetEditorTerrain.TerrainCellDragHandler)Instance.Duplicate());
     }
 
     /// <summary>
@@ -46,17 +45,17 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public class CellRoot : UiNode<TileSetEditorTerrainPanel, Godot.Control, CellRoot>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDragHandler"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.Cell
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDragHandler"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.LeftCell
         /// </summary>
-        public Cell L_Cell
+        public LeftCell L_LeftCell
         {
             get
             {
-                if (_L_Cell == null) _L_Cell = new Cell(UiPanel, Instance.GetNode<UI.TileSetEditorTerrain.TerrainCellDragHandler>("Cell"));
-                return _L_Cell;
+                if (_L_LeftCell == null) _L_LeftCell = new LeftCell(UiPanel, Instance.GetNode<UI.TileSetEditorTerrain.TerrainCellDragHandler>("LeftCell"));
+                return _L_LeftCell;
             }
         }
-        private Cell _L_Cell;
+        private LeftCell _L_LeftCell;
 
         public CellRoot(TileSetEditorTerrainPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override CellRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
@@ -217,6 +216,59 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.CellRoot.RightCell.CellTexture
+    /// </summary>
+    public class CellTexture : UiNode<TileSetEditorTerrainPanel, Godot.Sprite2D, CellTexture>
+    {
+        public CellTexture(TileSetEditorTerrainPanel uiPanel, Godot.Sprite2D node) : base(uiPanel, node) {  }
+        public override CellTexture Clone() => new (UiPanel, (Godot.Sprite2D)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.CellRoot.RightCell
+    /// </summary>
+    public class RightCell : UiNode<TileSetEditorTerrainPanel, UI.TileSetEditorTerrain.TerrainCellDropHandler, RightCell>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.CellRoot.CellTexture
+        /// </summary>
+        public CellTexture L_CellTexture
+        {
+            get
+            {
+                if (_L_CellTexture == null) _L_CellTexture = new CellTexture(UiPanel, Instance.GetNode<Godot.Sprite2D>("CellTexture"));
+                return _L_CellTexture;
+            }
+        }
+        private CellTexture _L_CellTexture;
+
+        public RightCell(TileSetEditorTerrainPanel uiPanel, UI.TileSetEditorTerrain.TerrainCellDropHandler node) : base(uiPanel, node) {  }
+        public override RightCell Clone() => new (UiPanel, (UI.TileSetEditorTerrain.TerrainCellDropHandler)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.CellRoot
+    /// </summary>
+    public class CellRoot_1 : UiNode<TileSetEditorTerrainPanel, Godot.Control, CellRoot_1>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.RightCell
+        /// </summary>
+        public RightCell L_RightCell
+        {
+            get
+            {
+                if (_L_RightCell == null) _L_RightCell = new RightCell(UiPanel, Instance.GetNode<UI.TileSetEditorTerrain.TerrainCellDropHandler>("RightCell"));
+                return _L_RightCell;
+            }
+        }
+        private RightCell _L_RightCell;
+
+        public CellRoot_1(TileSetEditorTerrainPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override CellRoot_1 Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.TileShadow
     /// </summary>
     public class TileShadow : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, TileShadow>
@@ -239,6 +291,19 @@ public abstract partial class TileSetEditorTerrain : UiBase
     /// </summary>
     public class TileTexture_1 : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, TileTexture_1>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.CellRoot
+        /// </summary>
+        public CellRoot_1 L_CellRoot
+        {
+            get
+            {
+                if (_L_CellRoot == null) _L_CellRoot = new CellRoot_1(UiPanel, Instance.GetNode<Godot.Control>("CellRoot"));
+                return _L_CellRoot;
+            }
+        }
+        private CellRoot_1 _L_CellRoot;
+
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileShadow
         /// </summary>
@@ -416,14 +481,9 @@ public abstract partial class TileSetEditorTerrain : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDragHandler"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.CellRoot.Cell
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDragHandler"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.CellRoot.LeftCell
     /// </summary>
-    public Cell S_Cell => L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg.L_TileTexture.L_CellRoot.L_Cell;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.CellRoot
-    /// </summary>
-    public CellRoot S_CellRoot => L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg.L_TileTexture.L_CellRoot;
+    public LeftCell S_LeftCell => L_HSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg.L_TileTexture.L_CellRoot.L_LeftCell;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="EditorMaskBrush"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom.MarginContainer.LeftBg.TileTexture.MaskBrush
@@ -439,6 +499,16 @@ public abstract partial class TileSetEditorTerrain : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom
     /// </summary>
     public LeftBottom S_LeftBottom => L_HSplitContainer.L_LeftBottom;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.CellRoot.RightCell.CellTexture
+    /// </summary>
+    public CellTexture S_CellTexture => L_HSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TileTexture.L_CellRoot.L_RightCell.L_CellTexture;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.CellRoot.RightCell
+    /// </summary>
+    public RightCell S_RightCell => L_HSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TileTexture.L_CellRoot.L_RightCell;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.HSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TileTexture.TileShadow

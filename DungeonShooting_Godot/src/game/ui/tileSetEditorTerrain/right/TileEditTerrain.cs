@@ -7,8 +7,9 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.LeftBot
     public override void SetUiNode(IUiNode uiNode)
     {
         base.SetUiNode(uiNode);
-        InitNode(UiNode.L_TileTexture.Instance, UiNode.L_Grid.Instance);
-        UiNode.L_TileTexture.L_Brush.Instance.TileTexture = UiNode.L_TileTexture;
+        var tileTexture = UiNode.L_TileTexture;
+        InitNode(tileTexture.Instance, UiNode.L_Grid.Instance);
+        tileTexture.L_Brush.Instance.TileTexture = tileTexture.Instance;
         
         //聚焦按钮点击
         UiNode.L_FocusBtn.Instance.Pressed += OnFocusClick;

@@ -32,6 +32,10 @@ public partial class EditorMaskBrush : Control
 
     public override void _Draw()
     {
+        if (TileTexture == null)
+        {
+            return;
+        }
         //绘制texture区域
         if (TileTexture.Texture != null)
         {

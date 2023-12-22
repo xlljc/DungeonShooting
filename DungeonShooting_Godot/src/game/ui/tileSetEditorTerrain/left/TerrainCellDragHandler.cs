@@ -12,11 +12,15 @@ public partial class TerrainCellDragHandler : TextureButton
     private TextureRect _textureRect;
     private Texture2D _texture;
     private Rect2I _rect2I;
+    private MaskCell _maskCell;
+    private TileSetEditorTerrainPanel _panel;
     
-    public void InitTexture(TextureRect textureRect)
+    public void Init(MaskCell maskCell)
     {
-        _textureRect = textureRect;
-        _texture = textureRect.Texture;
+        _maskCell = maskCell;
+        _panel = maskCell.CellNode.UiPanel;
+        _textureRect = _panel.S_LeftBg.L_TileTexture.Instance;
+        _texture = _textureRect.Texture;
     }
 
     public void SetRect(Rect2I rect)
@@ -26,14 +30,20 @@ public partial class TerrainCellDragHandler : TextureButton
 
     public override void _Process(double delta)
     {
-        if (DragOutline)
+        QueueRedraw();
+        if (_maskCell.Grid.SelectIndex == _maskCell.Index && _panel.IsDraggingCell)
         {
-            QueueRedraw();
+            if (!Input.IsActionPressed(InputAction.MouseLeft))
+            {
+                _panel.IsDraggingCell = false;
+            }
         }
     }
 
     public override Variant _GetDragData(Vector2 atPosition)
     {
+        _panel.IsDraggingCell = true;
+        _maskCell.Grid.SelectIndex = _maskCell.Index;
         var sprite = new Sprite2D();
         sprite.Texture = _texture;
         sprite.RegionEnabled = true;
@@ -41,9 +51,9 @@ public partial class TerrainCellDragHandler : TextureButton
         var control = new Control();
         control.AddChild(sprite);
         control.ZIndex = 10;
-        control.Scale = _textureRect.Scale;
+        control.Scale = _panel.S_LeftBottomBg.L_TileTexture.Instance.Scale;
         SetDragPreview(control);
-        return "";
+        return _rect2I;
     }
 
     public override void _Draw()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dfqb73y4br8yd"]
+[gd_scene load_steps=11 format=3 uid="uid://dfqb73y4br8yd"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/TileSetEditorTerrainPanel.cs" id="1_6jjk7"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/left/TileEditArea.cs" id="2_ynf0r"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://18dira1me63t" path="res://resource/sprite/map/PreviewMap.png" id="5_m0oxr"]
 [ext_resource type="Texture2D" uid="uid://bqdrgtiyilkma" path="res://resource/sprite/map/PreviewMapShadow.png" id="7_68ntx"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/right/TerrainBrush.cs" id="7_lmu64"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/right/TerrainCellDropHandler.cs" id="8_7xxcq"]
 
 [node name="TileSetEditorTerrain" type="Control"]
 layout_mode = 3
@@ -18,6 +19,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6jjk7")
+Layer = null
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 1
@@ -70,7 +72,7 @@ offset_right = 1.0
 offset_bottom = 1.0
 mouse_filter = 2
 
-[node name="Cell" type="TextureButton" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg/TileTexture/CellRoot"]
+[node name="LeftCell" type="TextureButton" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg/TileTexture/CellRoot"]
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
@@ -134,35 +136,56 @@ theme_override_constants/margin_bottom = 2
 clip_children = 2
 z_index = 1
 layout_mode = 2
-color = Color(0, 0, 0, 1)
+color = Color(0.496094, 0.496094, 0.496094, 1)
 script = ExtResource("5_0x7yx")
 
 [node name="TileTexture" type="TextureRect" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg"]
+self_modulate = Color(1, 1, 1, 0.470588)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -64.0
-offset_top = -72.0
-offset_right = 64.0
-offset_bottom = 72.0
+offset_left = -237.0
+offset_top = -270.0
+offset_right = -77.0
+offset_bottom = -94.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(3, 3)
 mouse_filter = 2
 texture = ExtResource("5_m0oxr")
 stretch_mode = 2
 
 [node name="TileShadow" type="TextureRect" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TileTexture"]
+modulate = Color(0.498039, 0.498039, 0.498039, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("7_68ntx")
 stretch_mode = 2
+
+[node name="CellRoot" type="Control" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TileTexture"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1.0
+offset_bottom = 1.0
+mouse_filter = 2
+
+[node name="RightCell" type="Control" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TileTexture/CellRoot"]
+anchors_preset = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 1
+script = ExtResource("8_7xxcq")
+
+[node name="CellTexture" type="Sprite2D" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TileTexture/CellRoot/RightCell"]
+centered = false
 
 [node name="Brush" type="Control" parent="HSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TileTexture"]
 layout_mode = 1

@@ -15,7 +15,8 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     /// </summary>
     public bool IsDraggingCell { get; set; }
 
-    private UiGrid<Cell, Rect2I> _grid;
+    private UiGrid<LeftCell, Rect2I> _leftGrid;
+    private UiGrid<RightCell, bool> _rightGrid;
     
     public override void OnCreateUi()
     {
@@ -23,36 +24,69 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         
         //改变纹理事件
         AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
+        //背景颜色改变
+        AddEventListener(EventEnum.OnSetTileSetBgColor, OnChangeTileSetBgColor);
+        
+        _leftGrid = CreateUiGrid<LeftCell, Rect2I, MaskCell>(S_LeftCell);
+        _leftGrid.SetCellOffset(Vector2I.Zero);
 
-        _grid = CreateUiGrid<Cell, Rect2I, MaskCell>(S_Cell);
-        _grid.SetCellOffset(Vector2I.Zero);
+        var sRightCell = S_RightCell;
+        var tileShadowSize = S_TileShadow.Instance.Texture.GetSize().AsVector2I();
+        tileShadowSize = tileShadowSize / GameConfig.TileCellSize - new Vector2I(2, 2);
+        Debug.Log("tileShadowSize: " + tileShadowSize);
+        sRightCell.Instance.Position = GameConfig.TileCellSizeVector2I;
+        _rightGrid = CreateUiGrid<RightCell, bool, TerrainCell>(sRightCell);
+        _rightGrid.SetCellOffset(Vector2I.Zero);
+        _rightGrid.SetColumns(tileShadowSize.X);
+        for (var y = 0; y < tileShadowSize.Y; y++)
+        {
+            for (var x = 0; x < tileShadowSize.X; x++)
+            {
+                _rightGrid.Add(false);
+            }
+        }
+
         OnSetTileTexture(EditorPanel.Texture);
+        OnChangeTileSetBgColor(EditorPanel.BgColor);
     }
 
     public override void OnDestroyUi()
     {
         
     }
-    
+
+    public override void Process(float delta)
+    {
+        S_MaskBrush.Instance.Visible = !IsDraggingCell;
+    }
+
     //改变TileSet纹理
     private void OnSetTileTexture(object arg)
     {
         S_LeftBg.Instance.OnChangeTileSetTexture();
 
-        _grid.RemoveAll();
+        _leftGrid.RemoveAll();
         var cellHorizontal = EditorPanel.CellHorizontal;
         if (cellHorizontal <= 0)
         {
             return;
         }
         var cellVertical = EditorPanel.CellVertical;
-        _grid.SetColumns(cellHorizontal);
+        _leftGrid.SetColumns(cellHorizontal);
         for (var y = 0; y < cellVertical; y++)
         {
             for (var x = 0; x < cellHorizontal; x++)
             {
-                _grid.Add(new Rect2I(x * GameConfig.TileCellSize, y * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize));
+                _leftGrid.Add(new Rect2I(x * GameConfig.TileCellSize, y * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize));
             }
         }
+    }
+    
+    //更改背景颜色
+    private void OnChangeTileSetBgColor(object obj)
+    {
+        S_LeftBg.Instance.Color = EditorPanel.BgColor;
+        S_LeftBottomBg.Instance.Color = EditorPanel.BgColor;
+        S_TileShadow.Instance.Modulate = EditorPanel.BgColor;
     }
 }

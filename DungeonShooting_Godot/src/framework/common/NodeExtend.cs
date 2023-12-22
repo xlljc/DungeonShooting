@@ -87,16 +87,16 @@ public static class NodeExtend
     /// <summary>
     /// 返回鼠标是否在Ui矩形内
     /// </summary>
-    public static bool IsMouseInRect(this Control control)
+    public static bool IsMouseInRect(this Control control, float border = 0)
     {
         var pos = control.GetLocalMousePosition();
-        if (pos.X < 0 || pos.Y < 0)
+        if (pos.X < border || pos.Y < border)
         {
             return false;
         }
 
         var size = control.Size;
-        return pos.X <= size.X && pos.Y <= size.Y;
+        return pos.X <= size.X - border && pos.Y <= size.Y - border;
     }
 
     /// <summary>
