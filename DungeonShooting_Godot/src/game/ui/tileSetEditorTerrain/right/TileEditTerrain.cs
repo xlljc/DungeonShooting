@@ -16,9 +16,9 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.LeftBot
 
     public override void _Process(double delta)
     {
-        var isMouseInRect = UiNode.L_TileTexture.Instance.IsMouseInRect();
-        UiNode.L_Grid.Instance.Visible = isMouseInRect;
-        UiNode.L_TileTexture.L_Brush.Instance.Visible = isMouseInRect;
+        var flag = UiNode.UiPanel.IsDraggingCell;
+        UiNode.L_Grid.Instance.Visible = flag;
+        UiNode.L_TileTexture.L_Brush.Instance.Visible = flag;
     }
 
     /// <summary>

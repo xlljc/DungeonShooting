@@ -6,8 +6,14 @@ public class MaskCell : UiCell<TileSetEditorTerrain.Cell, Rect2I>
 {
     public override void OnInit()
     {
-        CellNode.Instance.Draw += OnDraw;
+        CellNode.Instance.DragOutline = false;
+        CellNode.Instance.InitTexture(CellNode.UiPanel.S_LeftBg.L_TileTexture.Instance);
         CellNode.Instance.AddDragListener(OnDrag);
+    }
+
+    public override void OnSetData(Rect2I data)
+    {
+        CellNode.Instance.SetRect(data);
     }
 
     public override void Process(float delta)
@@ -19,20 +25,23 @@ public class MaskCell : UiCell<TileSetEditorTerrain.Cell, Rect2I>
     {
         if (state == DragState.DragStart)
         {
+            CellNode.UiPanel.IsDraggingCell = true;
             Grid.SelectIndex = Index;
+            Debug.Log($"data: {Data}");
         }
-        Debug.Log($"state: {state}, delta: {delta}");
-    }
-    
-    private void OnDraw()
-    {
-        if (Grid.SelectIndex == Index)
+        else if (state == DragState.DragEnd)
         {
-            //选中时绘制轮廓
-            CellNode.Instance.DrawRect(
-                new Rect2(Vector2.Zero, CellNode.Instance.Size),
-                new Color(0, 1, 1), false, 2f / CellNode.UiPanel.S_LeftBg.L_TileTexture.Instance.Scale.X
-            );
+            CellNode.UiPanel.IsDraggingCell = false;
         }
+    }
+
+    public override void OnSelect()
+    {
+        CellNode.Instance.DragOutline = true;
+    }
+
+    public override void OnUnSelect()
+    {
+        CellNode.Instance.DragOutline = false;
     }
 }

@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://dfqb73y4br8yd"]
+[gd_scene load_steps=10 format=3 uid="uid://dfqb73y4br8yd"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/TileSetEditorTerrainPanel.cs" id="1_6jjk7"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/left/TileEditArea.cs" id="2_ynf0r"]
 [ext_resource type="Script" path="res://src/game/common/ui/EditorMaskBrush.cs" id="3_gydh0"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/left/TerrainCellDragHandler.cs" id="3_ssd86"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/right/TileEditTerrain.cs" id="5_0x7yx"]
 [ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="5_08bc4"]
 [ext_resource type="Texture2D" uid="uid://18dira1me63t" path="res://resource/sprite/map/PreviewMap.png" id="5_m0oxr"]
@@ -74,6 +75,7 @@ layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 mouse_filter = 1
+script = ExtResource("3_ssd86")
 
 [node name="MaskBrush" type="Control" parent="HSplitContainer/LeftBottom/MarginContainer/LeftBg/TileTexture"]
 layout_mode = 1

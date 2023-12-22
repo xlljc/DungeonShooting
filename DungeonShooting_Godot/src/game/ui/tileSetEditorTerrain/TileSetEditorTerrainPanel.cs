@@ -9,6 +9,11 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     /// 父Ui
     /// </summary>
     public TileSetEditorPanel EditorPanel;
+    
+    /// <summary>
+    /// 是否正在拖拽图块
+    /// </summary>
+    public bool IsDraggingCell { get; set; }
 
     private UiGrid<Cell, Rect2I> _grid;
     
@@ -42,11 +47,11 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         }
         var cellVertical = EditorPanel.CellVertical;
         _grid.SetColumns(cellHorizontal);
-        for (var i = 0; i < cellVertical; i++)
+        for (var y = 0; y < cellVertical; y++)
         {
-            for (var j = 0; j < cellHorizontal; j++)
+            for (var x = 0; x < cellHorizontal; x++)
             {
-                _grid.Add(default);
+                _grid.Add(new Rect2I(x * GameConfig.TileCellSize, y * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize));
             }
         }
     }
