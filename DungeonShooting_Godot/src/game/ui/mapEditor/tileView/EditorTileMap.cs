@@ -732,6 +732,23 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         var arr = new Array<Vector2I>(list);
         //绘制自动图块
         SetCellsTerrainConnect(AutoFloorLayer, arr, _terrainSet, _terrain, false);
+        //---- 测试代码
+        // var usedRect = GetUsedRect();
+        // var endX = usedRect.End.X;
+        // var endY = usedRect.End.X;
+        // for (var x = usedRect.Position.X; x < endX; x++)
+        // {
+        //     for (int y = usedRect.Position.Y; y < endY; y++)
+        //     {
+        //         var temp = GetCellAtlasCoords(AutoFloorLayer, new Vector2I(x, y));
+        //         var flag = temp == _autoTileConfig.T.AutoTileCoord || temp == _autoTileConfig.OUT_LT.AutoTileCoord || temp == _autoTileConfig.OUT_RT.AutoTileCoord;
+        //         if (flag)
+        //         {
+        //             SetCell(AutoFloorLayer, new Vector2I(x, y - 1), _sourceId, _autoTileConfig.T.AutoTileCoord);
+        //             break;
+        //         }
+        //     }
+        // }
         //计算区域
         CalcTileRect(true);
         //将墙壁移动到指定层

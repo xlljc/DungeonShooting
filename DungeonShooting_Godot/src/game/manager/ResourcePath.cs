@@ -428,6 +428,7 @@ public class ResourcePath
     public const string resource_tileSet_map1_TileSet1_tres = "res://resource/tileSet/map1/TileSet1.tres";
     public const string resource_tileSet_map1_website_txt = "res://resource/tileSet/map1/website.txt";
     public const string resource_tileSprite_map1_16x16dungeoniiwallreconfigv04spritesheet_png = "res://resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png";
+    public const string resource_tileSprite_map2_DungeonTilesetSpikes_png = "res://resource/tileSprite/map2/Dungeon Tileset + Spikes.png";
     public const string scene_Main_tscn = "res://scene/Main.tscn";
     public const string scene_World_tscn = "res://scene/World.tscn";
     public const string scene_test_TestCreateSector_tscn = "res://scene/test/TestCreateSector.tscn";
