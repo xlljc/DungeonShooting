@@ -1024,8 +1024,17 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //存入本地
         var roomInfo = CurrRoomSplit.RoomInfo;
         
-        roomInfo.Size = new SerializeVector2(CurrRoomSize);
-        roomInfo.Position = new SerializeVector2(CurrRoomPosition);
+        if (!HasTerrainError) //没有绘制错误
+        {
+            roomInfo.Size = new SerializeVector2(CurrRoomSize);
+            roomInfo.Position = new SerializeVector2(CurrRoomPosition);
+        }
+        else
+        {
+            roomInfo.Position = new SerializeVector2(CurrRoomPosition - Vector2I.One);
+            roomInfo.Size = new SerializeVector2(CurrRoomSize + new Vector2I(2, 2));
+        }
+
         roomInfo.DoorAreaInfos.Clear();
         roomInfo.DoorAreaInfos.AddRange(CurrDoorConfigs);
         roomInfo.ClearCompletionDoorArea();

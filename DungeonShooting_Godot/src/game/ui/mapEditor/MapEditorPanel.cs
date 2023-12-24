@@ -217,6 +217,10 @@ public partial class MapEditorPanel : MapEditor
         {
             return new CheckResult(true, RoomErrorType.Empty);
         }
+        else if (editorTileMap.HasTerrainError) //地图绘制错误
+        {
+            return new CheckResult(true, RoomErrorType.TileError);
+        }
 
         if (editorTileMap.CurrDoorConfigs.Count > 0)
         {
