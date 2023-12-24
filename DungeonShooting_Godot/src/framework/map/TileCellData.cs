@@ -6,19 +6,19 @@ using Godot;
 /// </summary>
 public class TileCellData
 {
-    public TileCellData(int id, Vector2I autoTileCoord)
+    public TileCellData(int sourceId, Vector2I autoTileCoords)
     {
-        Id = id;
-        AutoTileCoord = autoTileCoord;
+        SourceId = sourceId;
+        AutoTileCoords = autoTileCoords;
     }
 
     /// <summary>
     /// 在TileSet中的图块id, 也就是sourceId
     /// </summary>
-    public int Id;
+    public int SourceId;
     
     /// <summary>
     /// 如果是图块集, 该属性就表示在图块集的位置
     /// </summary>
-    public Vector2I AutoTileCoord;
+    public Vector2I AutoTileCoords;
 }

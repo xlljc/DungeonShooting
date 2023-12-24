@@ -394,6 +394,7 @@ public class DungeonTileMap
                 x2 = Mathf.Max(x2, gx);
                 y = Mathf.Min(y, gy);
                 y2 = Mathf.Max(y2, gy);
+                return true;
             });
             //创建image, 这里留两个像素宽高用于描边
             var image = Image.Create(x2 - x + 3, y2 - y + 3, false, Image.Format.Rgba8);
@@ -403,6 +404,7 @@ public class DungeonTileMap
                 var posX = gx - x + 1;
                 var posY = gy - y + 1;
                 image.SetPixel(posX, posY, new Color(0, 0, 0, 0.5882353F));
+                return true;
             });
             //创建texture
             var imageTexture = ImageTexture.CreateFromImage(image);
@@ -436,7 +438,7 @@ public class DungeonTileMap
                 var flag1 = _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, pos) != -1 ||
                             _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, pos) != -1 ||
                             _tileRoot.GetCellSourceId(GameConfig.AisleFloorMapLayer, pos) != -1 ||
-                            (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, pos) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, pos) != tileCellData.AutoTileCoord);
+                            (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, pos) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, pos) != tileCellData.AutoTileCoords);
                 if (!flag1) //空地
                 {
                     var posDown = new Vector2I(pos.X, pos.Y + 1);
@@ -451,39 +453,39 @@ public class DungeonTileMap
                     
                     var flag2 = _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posDown) != -1 ||
                                 _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posDown) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posDown) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posDown) != tileCellData.AutoTileCoord) ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posDown) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posDown) != tileCellData.AutoTileCoords) ||
 
                                 _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posTop) != -1 ||
                                 _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posTop) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posTop) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posTop) != tileCellData.AutoTileCoord) ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posTop) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posTop) != tileCellData.AutoTileCoords) ||
 
                                 _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posLeft) != -1 ||
                                 _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posLeft) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLeft) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLeft) != tileCellData.AutoTileCoord) ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLeft) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLeft) != tileCellData.AutoTileCoords) ||
 
                                 _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posRight) != -1 ||
                                 _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posRight) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRight) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRight) != tileCellData.AutoTileCoord) ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRight) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRight) != tileCellData.AutoTileCoords) ||
                                 //
                                 _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posLD) != -1 ||
                                 _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posLD) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLD) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLD) != tileCellData.AutoTileCoord) ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLD) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLD) != tileCellData.AutoTileCoords) ||
 
                                 _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posLT) != -1 ||
                                 _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posLT) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLT) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLT) != tileCellData.AutoTileCoord) ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLT) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLT) != tileCellData.AutoTileCoords) ||
 
                                 _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posRD) != -1 ||
                                 _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posRD) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRD) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRD) != tileCellData.AutoTileCoord) ||
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRD) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRD) != tileCellData.AutoTileCoords) ||
 
                                 _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posRT) != -1 ||
                                 _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posRT) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRT) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRT) != tileCellData.AutoTileCoord);
+                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRT) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRT) != tileCellData.AutoTileCoords);
                     
                     if (flag2) //非空地, 那么说明这个点需要填充 WALL_BLOCK
                     {
-                        _tileRoot.SetCell(GameConfig.TopMapLayer, pos, tileCellData.Id, tileCellData.AutoTileCoord);
+                        _tileRoot.SetCell(GameConfig.TopMapLayer, pos, tileCellData.SourceId, tileCellData.AutoTileCoords);
                     }
                 }
             }
@@ -502,7 +504,7 @@ public class DungeonTileMap
                 {
                     _tempAisleFloorGrid.Set(p, true);
                 }
-                _tileRoot.SetCell(layer, p, 0, data.AutoTileCoord);
+                _tileRoot.SetCell(layer, p, 0, data.AutoTileCoords);
             }
         }
     }

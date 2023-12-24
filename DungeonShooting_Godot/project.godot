@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="DungeonShooting"
-run/main_scene="res://scene/test/TestNewTerrain.tscn"
+run/main_scene="res://scene/Main.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://icon.png"
 
@@ -234,6 +234,7 @@ project/assembly_name="DungeonShooting"
 
 [navigation]
 
+2d/default_cell_size=4.0
 2d/default_edge_connection_margin=4
 
 [physics]

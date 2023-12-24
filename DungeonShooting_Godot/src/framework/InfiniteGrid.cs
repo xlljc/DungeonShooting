@@ -10,7 +10,7 @@ public class InfiniteGrid<T>
     /// <summary>
     /// 遍历网格数据回调
     /// </summary>
-    public delegate void EachGridCallback(int x, int y, T data);
+    public delegate bool EachGridCallback(int x, int y, T data);
 
     private readonly Dictionary<int, Dictionary<int, T>> _map = new Dictionary<int, Dictionary<int, T>>();
 
@@ -191,7 +191,7 @@ public class InfiniteGrid<T>
     }
 
     /// <summary>
-    /// 遍历网格数据
+    /// 遍历网格数据, 回调返回 false 则停止遍历
     /// </summary>
     public void ForEach(EachGridCallback cb)
     {
@@ -199,7 +199,10 @@ public class InfiniteGrid<T>
         {
             foreach (var pair2 in pair1.Value)
             {
-                cb(pair1.Key, pair2.Key, pair2.Value);
+                if (!cb(pair1.Key, pair2.Key, pair2.Value))
+                {
+                    return;
+                }
             }
         }
     }

@@ -164,6 +164,15 @@ public abstract partial class MapEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.NavigationRegion2D"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.TileMap.NavigationRegion
+    /// </summary>
+    public class NavigationRegion : UiNode<MapEditorPanel, Godot.NavigationRegion2D, NavigationRegion>
+    {
+        public NavigationRegion(MapEditorPanel uiPanel, Godot.NavigationRegion2D node) : base(uiPanel, node) {  }
+        public override NavigationRegion Clone() => new (UiPanel, (Godot.NavigationRegion2D)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.AnimationPlayer"/>, 路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.TileMap.ErrorCell.ErrorCellAnimationPlayer
     /// </summary>
     public class ErrorCellAnimationPlayer : UiNode<MapEditorPanel, Godot.AnimationPlayer, ErrorCellAnimationPlayer>
@@ -208,6 +217,19 @@ public abstract partial class MapEditor : UiBase
     /// </summary>
     public class TileMap : UiNode<MapEditorPanel, UI.MapEditor.EditorTileMap, TileMap>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NavigationRegion2D"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.NavigationRegion
+        /// </summary>
+        public NavigationRegion L_NavigationRegion
+        {
+            get
+            {
+                if (_L_NavigationRegion == null) _L_NavigationRegion = new NavigationRegion(UiPanel, Instance.GetNode<Godot.NavigationRegion2D>("NavigationRegion"));
+                return _L_NavigationRegion;
+            }
+        }
+        private NavigationRegion _L_NavigationRegion;
+
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.ErrorCell
         /// </summary>
@@ -676,6 +698,11 @@ public abstract partial class MapEditor : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: MapEditor.Bg.VBoxContainer.Head
     /// </summary>
     public Head S_Head => L_Bg.L_VBoxContainer.L_Head;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NavigationRegion2D"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.TileMap.NavigationRegion
+    /// </summary>
+    public NavigationRegion S_NavigationRegion => L_Bg.L_VBoxContainer.L_HSplitContainer.L_Left.L_MarginContainer.L_MapView.L_SubViewport.L_TileMap.L_NavigationRegion;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.AnimationPlayer"/>, 节点路径: MapEditor.Bg.VBoxContainer.HSplitContainer.Left.MarginContainer.MapView.SubViewport.TileMap.ErrorCell.ErrorCellAnimationPlayer

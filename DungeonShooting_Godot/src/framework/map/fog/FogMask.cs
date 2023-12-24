@@ -110,7 +110,7 @@ public partial class FogMask : FogMaskBase
     {
         var tileMap = GameApplication.Instance.World.TileRoot;
         var autoConfig = GameApplication.Instance.DungeonManager.AutoTileConfig;
-        var wallCoord = autoConfig.WALL_BLOCK.AutoTileCoord;
+        var wallCoord = autoConfig.WALL_BLOCK.AutoTileCoords;
         var (x, y) = position;
         var (width, height) = size;
         x -= 1;

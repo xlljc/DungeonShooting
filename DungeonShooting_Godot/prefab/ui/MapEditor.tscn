@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://csbxfkdupsckv"]
+[gd_scene load_steps=15 format=3 uid="uid://csbxfkdupsckv"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/MapEditorPanel.cs" id="1_5s7a0"]
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_gkcw7"]
@@ -10,6 +10,12 @@
 [ext_resource type="PackedScene" uid="uid://b4u66mxndxbrg" path="res://prefab/ui/MapEditorTools.tscn" id="6_7pvgu"]
 [ext_resource type="PackedScene" uid="uid://bb2ekkpxifd7g" path="res://prefab/ui/MapEditorMapLayer.tscn" id="7_ychtn"]
 [ext_resource type="PackedScene" uid="uid://peo0n8bl15y5" path="res://prefab/ui/MapEditorMapMark.tscn" id="8_8tgeu"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_oidah"]
+resource_local_to_scene = true
+source_geometry_mode = 1
+source_geometry_group_name = &"navigation"
+cell_size = 4.0
 
 [sub_resource type="Animation" id="Animation_o3btm"]
 length = 0.001
@@ -192,11 +198,15 @@ canvas_item_default_texture_filter = 0
 size = Vector2i(1334, 1002)
 render_target_update_mode = 4
 
-[node name="TileMap" type="TileMap" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport"]
+[node name="TileMap" type="TileMap" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport" groups=["navigation"]]
 position = Vector2(500, 540)
 scale = Vector2(4, 4)
 format = 2
 script = ExtResource("4_mhy1a")
+
+[node name="NavigationRegion" type="NavigationRegion2D" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport/TileMap"]
+z_index = 10
+navigation_polygon = SubResource("NavigationPolygon_oidah")
 
 [node name="ErrorCell" type="Sprite2D" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport/TileMap"]
 visible = false

@@ -45,6 +45,7 @@ public partial class RoomStaticSprite : Node2D, IDestroy
                 spriteData.Destroy();
             }
             data.Clear();
+            return true;
         });
         _grid.Clear();
         QueueFree();

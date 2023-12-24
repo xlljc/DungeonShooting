@@ -427,8 +427,11 @@ public class ResourcePath
     public const string resource_tileSet_TileSet_old_tres = "res://resource/tileSet/TileSet_old.tres";
     public const string resource_tileSet_map1_TileSet1_tres = "res://resource/tileSet/map1/TileSet1.tres";
     public const string resource_tileSet_map1_website_txt = "res://resource/tileSet/map1/website.txt";
+    public const string resource_tileSet_map2_TileSet2_tres = "res://resource/tileSet/map2/TileSet2.tres";
+    public const string resource_tileSprite_TerrainMask_png = "res://resource/tileSprite/TerrainMask.png";
     public const string resource_tileSprite_map1_16x16dungeoniiwallreconfigv04spritesheet_png = "res://resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png";
     public const string resource_tileSprite_map2_DungeonTilesetSpikes_png = "res://resource/tileSprite/map2/Dungeon Tileset + Spikes.png";
+    public const string resource_tileSprite_map2_DungeonTileset_png = "res://resource/tileSprite/map2/Dungeon Tileset.png";
     public const string scene_Main_tscn = "res://scene/Main.tscn";
     public const string scene_World_tscn = "res://scene/World.tscn";
     public const string scene_test_TestCreateSector_tscn = "res://scene/test/TestCreateSector.tscn";
@@ -438,6 +441,7 @@ public class ResourcePath
     public const string scene_test_TestMask2_tscn = "res://scene/test/TestMask2.tscn";
     public const string scene_test_TestNavigation2_tscn = "res://scene/test/TestNavigation2.tscn";
     public const string scene_test_TestNavigationPolygon_tscn = "res://scene/test/TestNavigationPolygon.tscn";
+    public const string scene_test_TestNewTerrain_tscn = "res://scene/test/TestNewTerrain.tscn";
     public const string scene_test_TestNewTileMap_tscn = "res://scene/test/TestNewTileMap.tscn";
     public const string scene_test_TestOptimizeSprite_tscn = "res://scene/test/TestOptimizeSprite.tscn";
     public const string scene_test_TestOutline_tscn = "res://scene/test/TestOutline.tscn";

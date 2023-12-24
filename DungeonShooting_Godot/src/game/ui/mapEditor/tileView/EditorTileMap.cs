@@ -98,8 +98,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private bool _drawFullRect = false;
     //负责存储自动图块数据
     private InfiniteGrid<bool> _autoCellLayerGrid = new InfiniteGrid<bool>();
-    //用于生成导航网格
-    private DungeonTileMap _dungeonTileMap;
     //停止绘制多久后开始执行生成操作
     private float _generateInterval = 3f;
     //生成自动图块和导航网格的计时器
@@ -110,6 +108,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private Vector2I _checkTerrainErrorPosition = Vector2I.Zero;
     //是否执行生成地形成功
     private bool _isGenerateTerrain = true;
+    //导航网格数据
+    private Vector2[][] _polygonData;
     private bool _initLayer = false;
 
     //--------- 配置数据 -------------
@@ -167,6 +167,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         _eventFactory.AddEventListener(EventEnum.OnEditorDirty, OnEditorDirty);
 
         RenderingServer.FramePostDraw += OnFramePostDraw;
+        var navigationRegion = _editorTileMap.L_NavigationRegion.Instance;
+        navigationRegion.NavigationPolygon.AgentRadius = GameConfig.NavigationAgentRadius;
+        navigationRegion.BakeFinished += OnBakeFinished;
     }
 
     public void OnDestroy()
@@ -277,15 +280,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             canvasItem.DrawRect(new Rect2(CurrRoomPosition * size, CurrRoomSize * size),
                 Colors.Aqua, false, 5f / Scale.X);
         }
-        
-        if (_checkTerrainFlag) //已经通过地形检测
+
+        //绘制导航网格
+        if (_checkTerrainFlag && _isGenerateTerrain && _polygonData != null)
         {
-            //绘制导航网格
-            var result = _dungeonTileMap.GetGenerateNavigationResult();
-            if (result != null && result.Success)
+            foreach (var vector2s in _polygonData)
             {
-                var polygonData = _dungeonTileMap.GetPolygonData();
-                Utils.DrawNavigationPolygon(canvasItem, polygonData, 3f / Scale.X);
+                canvasItem.DrawPolygon(vector2s, new Color(0,1,1, 0.3f).MakeArray(vector2s.Length));
             }
         }
 
@@ -401,13 +402,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         Debug.Log("开始检测是否可以生成地形...");
         if (CheckTerrain())
         {
-            Debug.Log("开始绘制导航网格...");
-            if (GenerateNavigation())
-            {
-                Debug.Log("开始绘制自动贴图...");
-                GenerateTerrain();
-                _isGenerateTerrain = true;
-            }
+            Debug.Log("开始绘制自动贴图...");
+            GenerateTerrain();
+            _isGenerateTerrain = true;
         }
         else
         {
@@ -499,9 +496,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         SetLayerDataFromList(AutoFloorLayer, tileInfo.Floor);
         SetLayerDataFromList(AutoMiddleLayer, tileInfo.Middle);
         SetLayerDataFromList(AutoTopLayer, tileInfo.Top);
-        
-        //导航网格数据
-        _dungeonTileMap.SetPolygonData(tileInfo.NavigationList);
 
         //如果有图块错误, 则找出错误的点位
         if (roomSplit.ErrorType == RoomErrorType.TileError)
@@ -542,9 +536,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         SetLayerZIndex(AutoTopLayer, AutoTopLayer);
         AddLayer(CustomTopLayer);
         SetLayerZIndex(CustomTopLayer, CustomTopLayer);
-
-        _dungeonTileMap = new DungeonTileMap(this);
-        _dungeonTileMap.SetFloorAtlasCoords(new List<Vector2I>(new []{ _autoTileConfig.Floor.AutoTileCoord }));
     }
 
     //缩小
@@ -574,7 +565,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //绘制单个自动贴图
     private void SetSingleAutoCell(Vector2I position)
     {
-        SetCell(GetFloorLayer(), position, _sourceId, _autoTileConfig.Floor.AutoTileCoord);
+        var tileCellData = _autoTileConfig.Floor2;
+        SetCell(GetFloorLayer(), position, tileCellData.SourceId, tileCellData.AutoTileCoords);
+        //SetCell(GetFloorLayer(), position, _sourceId, _autoTileConfig.Floor.AutoTileCoords);
         if (!_autoCellLayerGrid.Contains(position.X, position.Y))
         {
             ResetGenerateTimer();
@@ -606,7 +599,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         {
             for (var j = 0; j < height; j++)
             {
-                SetCell(GetFloorLayer(), new Vector2I(start.X + i, start.Y + j), _sourceId, _autoTileConfig.Floor.AutoTileCoord);
+                var tileCellData = _autoTileConfig.Floor2;
+                SetCell(GetFloorLayer(), new Vector2I(start.X + i, start.Y + j), tileCellData.SourceId, tileCellData.AutoTileCoords);
             }
         }
 
@@ -658,9 +652,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         _generateTimer = _generateInterval;
         _isGenerateTerrain = false;
-        _dungeonTileMap.ClearPolygonData();
+        _editorTileMap.L_NavigationRegion.Instance.Visible = false;
         ClearLayer(AutoTopLayer);
         ClearLayer(AutoMiddleLayer);
+        CloseErrorCell();
         //标记有修改数据
         EventManager.EmitEvent(EventEnum.OnEditorDirty);
     }
@@ -676,81 +671,130 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //检测是否有不合规的图块, 返回true表示图块正常
     private bool CheckTerrain()
     {
-        var x = CurrRoomPosition.X;
-        var y = CurrRoomPosition.Y;
-        var w = CurrRoomSize.X;
-        var h = CurrRoomSize.Y;
-
-        for (var i = 0; i < w; i++)
+        _checkTerrainFlag = true;   
+        _autoCellLayerGrid.ForEach((x, y, flag) =>
         {
-            for (var j = 0; j < h; j++)
+            if (flag)
             {
-                var pos = new Vector2I(x + i, y + j);
-                if (GetCellSourceId(AutoFloorLayer, pos) == -1)
+                if (!_autoCellLayerGrid.Contains(x, y + 1) && _autoCellLayerGrid.Contains(x, y + 2))
                 {
-                    //先检测对边是否有地板
-                    if ((_autoCellLayerGrid.Get(pos.X - 1, pos.Y) && _autoCellLayerGrid.Get(pos.X + 1, pos.Y)) //left & right
-                        || (_autoCellLayerGrid.Get(pos.X, pos.Y + 1) && _autoCellLayerGrid.Get(pos.X, pos.Y - 1))) //top & down
-                    {
-                        _checkTerrainFlag = false;
-                        _checkTerrainErrorPosition = pos;
-                        return false;
-                    }
-                    
-                    //再检测对角是否有地板
-                    var topLeft = _autoCellLayerGrid.Get(pos.X - 1, pos.Y + 1); //top-left
-                    var downRight = _autoCellLayerGrid.Get(pos.X + 1, pos.Y - 1); //down-right
-                    var downLeft = _autoCellLayerGrid.Get(pos.X - 1, pos.Y - 1); //down-left
-                    var topRight = _autoCellLayerGrid.Get(pos.X + 1, pos.Y + 1); //top-right
-                    if ((topLeft && downRight && !downLeft && !topRight) || (!topLeft && !downRight && downLeft && topRight))
-                    {
-                        _checkTerrainFlag = false;
-                        _checkTerrainErrorPosition = pos;
-                        return false;
-                    }
+                    _checkTerrainFlag = false;
+                    _checkTerrainErrorPosition = new Vector2I(x, y + 1);
+                    return false;
                 }
             }
-        }
 
-        _checkTerrainFlag = true;
-        return true;
+            return true;
+        });
+        return _checkTerrainFlag;
     }
     
     //生成自动图块 (地形)
     private void GenerateTerrain()
     {
-        ClearLayer(AutoFloorLayer);
-        
+        //ClearLayer(AutoFloorLayer);
         var list = new List<Vector2I>();
-        _autoCellLayerGrid.ForEach((x, y, data) =>
+        var xStart = int.MaxValue;
+        var yStart = int.MaxValue;
+        var xEnd = int.MinValue;
+        var yEnd = int.MinValue;
+        
+        _autoCellLayerGrid.ForEach((x, y, flag) =>
         {
-            if (data)
+            if (flag)
             {
-                list.Add(new Vector2I(x, y));
+                //计算范围
+                if (x < xStart)
+                    xStart = x;
+                else if (x > xEnd)
+                    xEnd = x;
+
+                if (y < yStart)
+                    yStart = y;
+                else if (y > yEnd)
+                    yEnd = y;
+                
+                //填充墙壁
+                if (!_autoCellLayerGrid.Contains(x, y - 1))
+                {
+                    var left = _autoCellLayerGrid.Contains(x - 1, y - 1);
+                    var right = _autoCellLayerGrid.Contains(x + 1, y - 1);
+                    TileCellData tileCellData;
+                    if (left && right)
+                    {
+                        tileCellData = _autoTileConfig.WallSingle;
+                    }
+                    else if (left)
+                    {
+                        tileCellData = _autoTileConfig.WallLeft;
+                    }
+                    else if (right)
+                    {
+                        tileCellData = _autoTileConfig.WallRight;
+                    }
+                    else
+                    {
+                        tileCellData = _autoTileConfig.WallCenter;
+                    }
+                    SetCell(GetFloorLayer(), new Vector2I(x, y - 1), tileCellData.SourceId, tileCellData.AutoTileCoords);
+                }
             }
+
+            return true;
         });
+        
+        //绘制临时边界
+        var pos = new List<Vector2I>();
+        for (var x = xStart - 2; x <= xEnd + 2; x++)
+        {
+            var p1 = new Vector2I(x, yStart - 3);
+            var p2 = new Vector2I(x, yEnd + 2);
+            pos.Add(p1);
+            pos.Add(p2);
+            //上横
+            SetCell(GetFloorLayer(), p1, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
+            //下横
+            SetCell(GetFloorLayer(), p2, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
+        }
+        for (var y = yStart - 3; y <= yEnd + 2; y++)
+        {
+            var p1 = new Vector2I(xStart - 2, y);
+            var p2 = new Vector2I(xEnd + 2, y);
+            pos.Add(p1);
+            pos.Add(p2);
+            //左竖
+            SetCell(GetFloorLayer(), p1, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
+            //右竖
+            SetCell(GetFloorLayer(), p2, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
+        }
+        
+        //计算需要绘制的图块
+        for (var x = xStart - 1; x <= xEnd + 1; x++)
+        {
+            for (var y = yStart - 2; y <= yEnd + 1; y++)
+            {
+                if (!_autoCellLayerGrid.Contains(x, y) && !_autoCellLayerGrid.Contains(x, y + 1))
+                {
+                    list.Add(new Vector2I(x, y));
+                }
+            }
+        }
         var arr = new Array<Vector2I>(list);
         //绘制自动图块
         SetCellsTerrainConnect(AutoFloorLayer, arr, _terrainSet, _terrain, false);
-        //---- 测试代码
-        // var usedRect = GetUsedRect();
-        // var endX = usedRect.End.X;
-        // var endY = usedRect.End.X;
-        // for (var x = usedRect.Position.X; x < endX; x++)
-        // {
-        //     for (int y = usedRect.Position.Y; y < endY; y++)
-        //     {
-        //         var temp = GetCellAtlasCoords(AutoFloorLayer, new Vector2I(x, y));
-        //         var flag = temp == _autoTileConfig.T.AutoTileCoord || temp == _autoTileConfig.OUT_LT.AutoTileCoord || temp == _autoTileConfig.OUT_RT.AutoTileCoord;
-        //         if (flag)
-        //         {
-        //             SetCell(AutoFloorLayer, new Vector2I(x, y - 1), _sourceId, _autoTileConfig.T.AutoTileCoord);
-        //             break;
-        //         }
-        //     }
-        // }
+        
+        //擦除临时边界
+        for (var i = 0; i < pos.Count; i++)
+        {
+            EraseCell(GetFloorLayer(), pos[i]);
+        }
+
         //计算区域
         CalcTileRect(true);
+        
+        //开始绘制导航网格
+        GenerateNavigation();
+
         //将墙壁移动到指定层
         MoveTerrainCell();
     }
@@ -774,7 +818,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 if (!_autoCellLayerGrid.Contains(pos) && GetCellSourceId(AutoFloorLayer, pos) != -1)
                 {
                     var atlasCoords = GetCellAtlasCoords(AutoFloorLayer, pos);
-                    var layer = _autoTileConfig.GetLayer(atlasCoords);
+                    var layer = _autoTileConfig.GetLayer2(atlasCoords);
                     if (layer == GameConfig.MiddleMapLayer)
                     {
                         layer = AutoMiddleLayer;
@@ -796,20 +840,23 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     }
 
     //生成导航网格
-    private bool GenerateNavigation()
+    private void GenerateNavigation()
     {
-        _dungeonTileMap.GenerateNavigationPolygon(AutoFloorLayer);
-        var result = _dungeonTileMap.GetGenerateNavigationResult();
-        if (result.Success)
+        var navigationRegion = _editorTileMap.L_NavigationRegion.Instance;
+        var navigationPolygon = navigationRegion.NavigationPolygon;
+        navigationPolygon.Clear();
+        navigationPolygon.ClearPolygons();
+        navigationPolygon.ClearOutlines();
+        var endPos = CurrRoomPosition + CurrRoomSize;
+        navigationPolygon.AddOutline(new []
         {
-            CloseErrorCell();
-        }
-        else
-        {
-            SetErrorCell(result.Exception.Point);
-        }
-
-        return result.Success;
+            CurrRoomPosition * GameConfig.TileCellSize,
+            new Vector2(endPos.X, CurrRoomPosition.Y) * GameConfig.TileCellSize,
+            endPos * GameConfig.TileCellSize,
+            new Vector2(CurrRoomPosition.X, endPos.Y) * GameConfig.TileCellSize
+        });
+        navigationRegion.BakeNavigationPolygon(false);
+        navigationRegion.Visible = true;
     }
 
     //设置显示的错误cell, 会标记上红色的闪烁动画
@@ -977,17 +1024,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //存入本地
         var roomInfo = CurrRoomSplit.RoomInfo;
         
-        if (!HasTerrainError) //没有绘制错误
-        {
-            roomInfo.Size = new SerializeVector2(CurrRoomSize);
-            roomInfo.Position = new SerializeVector2(CurrRoomPosition);
-        }
-        else
-        {
-            roomInfo.Position = new SerializeVector2(CurrRoomPosition - Vector2I.One);
-            roomInfo.Size = new SerializeVector2(CurrRoomSize + new Vector2I(2, 2));
-        }
-
+        roomInfo.Size = new SerializeVector2(CurrRoomSize);
+        roomInfo.Position = new SerializeVector2(CurrRoomPosition);
         roomInfo.DoorAreaInfos.Clear();
         roomInfo.DoorAreaInfos.AddRange(CurrDoorConfigs);
         roomInfo.ClearCompletionDoorArea();
@@ -1000,7 +1038,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //存入本地
         var tileInfo = CurrRoomSplit.TileInfo;
         tileInfo.NavigationList.Clear();
-        tileInfo.NavigationList.AddRange(_dungeonTileMap.GetPolygonData());
+        Debug.LogError("存入导航网格数据");
+        //tileInfo.NavigationList.AddRange(_dungeonTileMap.GetPolygonData());
         tileInfo.Floor.Clear();
         tileInfo.Middle.Clear();
         tileInfo.Top.Clear();
@@ -1174,6 +1213,24 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 _previewFinish();
                 _hasPreviewImage = false;
             }
+        }
+    }
+    
+    private void OnBakeFinished()
+    {
+        var polygonData = _editorTileMap.L_NavigationRegion.Instance.NavigationPolygon;
+        var polygons = polygonData.Polygons;
+        var vertices = polygonData.Vertices;
+        _polygonData = new Vector2[polygons.Count][];
+        for (var i = 0; i < polygons.Count; i++)
+        {
+            var polygon = polygons[i];
+            var v2Array = new Vector2[polygon.Length];
+            for (var j = 0; j < polygon.Length; j++)
+            {
+                v2Array[j] = vertices[polygon[j]];
+            }
+            _polygonData[i] = v2Array;
         }
     }
 }

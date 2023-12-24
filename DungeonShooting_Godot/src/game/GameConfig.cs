@@ -87,4 +87,9 @@ public static class GameConfig
     /// 迷雾过渡时间
     /// </summary>
     public const float FogTransitionTime = 0.3f;
+
+    /// <summary>
+    /// 导航网格代理收缩半径
+    /// </summary>
+    public const float NavigationAgentRadius = 6f;
 }

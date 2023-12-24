@@ -14,7 +14,7 @@ public partial class TestNewTerrain : Node2D
     public override void _Ready()
     {
         _tileMap = GetNode<TileMap>("TileMap2");
-        _navigationRegion = GetNode<NavigationRegion2D>("NavigationRegion2D");
+        _navigationRegion = GetNode<NavigationRegion2D>("TileMap2/NavigationRegion2D");
         _navigationRegion.BakeFinished += BakeFinished;
         RunTest();
     }
@@ -33,7 +33,6 @@ public partial class TestNewTerrain : Node2D
             {
                 v2Array[j] = vertices[polygon[j]];
             }
-            Debug.Log($"IsPolygonClockwise: {Geometry2D.IsPolygonClockwise(v2Array)}");
             _polygonData[i] = v2Array;
         }
     }
@@ -61,6 +60,7 @@ public partial class TestNewTerrain : Node2D
         var data = new NavigationPolygon();
         data.SourceGeometryMode = NavigationPolygon.SourceGeometryModeEnum.GroupsWithChildren;
         data.SourceGeometryGroupName = "navigation";
+        data.CellSize = 4;
         data.AgentRadius = 6.5f;
         data.AddOutline(new []
         {

@@ -61,4 +61,18 @@ public class AutoTileConfig
 
         return layer;
     }
+    
+    //-----------------------------------------------------------
+
+    public TileCellData Floor2 = new TileCellData(0, new Vector2I(0, 4));
+    public TileCellData TopMask = new TileCellData(0, new Vector2I(9, 2));
+    public TileCellData WallLeft = new TileCellData(0, new Vector2I(1, 4));
+    public TileCellData WallCenter = new TileCellData(0, new Vector2I(2, 4));
+    public TileCellData WallRight = new TileCellData(0, new Vector2I(3, 4));
+    public TileCellData WallSingle = new TileCellData(0, new Vector2I(4, 4));
+
+    public int GetLayer2(Vector2I atlasCoords)
+    {
+        return atlasCoords == Floor2.AutoTileCoords ? GameConfig.FloorMapLayer : GameConfig.TopMapLayer;
+    }
 }
