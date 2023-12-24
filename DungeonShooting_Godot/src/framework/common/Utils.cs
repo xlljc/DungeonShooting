@@ -67,15 +67,15 @@ public static class Utils
                 {
                     array[j] = points[j];
                 }
-
+                
                 array[array.Length - 1] = points[0];
                 if (item.Type == NavigationPolygonType.In)
                 {
-                    canvasItem.DrawPolyline(array, Colors.Orange, width);
+                    canvasItem.DrawPolyline(points, Colors.Orange, width);
                 }
                 else
                 {
-                    canvasItem.DrawPolyline(array, Colors.Orange, width);
+                    canvasItem.DrawPolyline(points, Colors.Orange, width);
                 }
             }
         }
@@ -508,4 +508,16 @@ public static class Utils
         return pos.AsVector2I();
     }
 
+    /// <summary>
+    /// 创建一个数组, 并填充该对象
+    /// </summary>
+    public static T[] MakeArray<T>(this T data, int len)
+    {
+        var arr = new T[len];
+        for (var i = 0; i < len; i++)
+        {
+            arr[i] = data;
+        }
+        return arr;
+    }
 }
