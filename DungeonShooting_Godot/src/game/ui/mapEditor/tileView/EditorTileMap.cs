@@ -760,13 +760,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         });
         
         //绘制临时边界
-        var pos = new List<Vector2I>();
+        var temp1 = new List<Vector2I>();
         for (var x = xStart - 3; x <= xEnd + 3; x++)
         {
             var p1 = new Vector2I(x, yStart - 4);
             var p2 = new Vector2I(x, yEnd + 3);
-            pos.Add(p1);
-            pos.Add(p2);
+            temp1.Add(p1);
+            temp1.Add(p2);
             //上横
             SetCell(GetFloorLayer(), p1, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
             //下横
@@ -776,8 +776,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         {
             var p1 = new Vector2I(xStart - 3, y);
             var p2 = new Vector2I(xEnd + 3, y);
-            pos.Add(p1);
-            pos.Add(p2);
+            temp1.Add(p1);
+            temp1.Add(p2);
             //左竖
             SetCell(GetFloorLayer(), p1, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
             //右竖
@@ -785,6 +785,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         
         //计算需要绘制的图块
+        var temp2 = new List<Vector2I>();
         for (var x = xStart - 2; x <= xEnd + 2; x++)
         {
             for (var y = yStart - 3; y <= yEnd + 2; y++)
@@ -792,6 +793,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 if (!_autoCellLayerGrid.Contains(x, y) && !_autoCellLayerGrid.Contains(x, y + 1))
                 {
                     list.Add(new Vector2I(x, y));
+                    if (!IsMaskCollisionGround(_autoCellLayerGrid, x, y))
+                    {
+                        temp2.Add(new Vector2I(x, y));
+                    }
                 }
             }
         }
@@ -800,9 +805,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         SetCellsTerrainConnect(AutoFloorLayer, arr, _terrainSet, _terrain, false);
         
         //擦除临时边界
-        for (var i = 0; i < pos.Count; i++)
+        for (var i = 0; i < temp1.Count; i++)
         {
-            EraseCell(GetFloorLayer(), pos[i]);
+            EraseCell(GetFloorLayer(), temp1[i]);
         }
 
         //计算区域
@@ -811,10 +816,32 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //开始绘制导航网格
         GenerateNavigation();
 
+        //擦除临时边界2
+        for (var i = 0; i < temp2.Count; i++)
+        {
+            EraseCell(GetFloorLayer(), temp2[i]);
+        }
+        
         //将墙壁移动到指定层
         MoveTerrainCell();
     }
 
+    private bool IsMaskCollisionGround(InfiniteGrid<bool> autoCellLayerGrid, int x, int y)
+    {
+        for (var i = -2; i <= 2; i++)
+        {
+            for (var j = -2; j <= 3; j++)
+            {
+                if (autoCellLayerGrid.Contains(x + i, y + j))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    
     //将自动生成的图块从 AutoFloorLayer 移动到指定图层中
     private void MoveTerrainCell()
     {
