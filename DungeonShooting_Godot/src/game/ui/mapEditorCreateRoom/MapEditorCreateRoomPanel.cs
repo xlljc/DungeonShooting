@@ -144,7 +144,8 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
             roomSplit.RoomInfo = roomInfo;
 
             var tileInfo = new DungeonTileInfo();
-            tileInfo.NavigationList = new List<NavigationPolygonData>();
+            tileInfo.NavigationVertices = new List<SerializeVector2>();
+            tileInfo.NavigationPolygon = new List<int[]>();
             tileInfo.Floor = new List<int>();
             tileInfo.Middle = new List<int>();
             tileInfo.Top = new List<int>();

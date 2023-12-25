@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Godot.Collections;
 using UI.MapEditorTools;
@@ -168,6 +169,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
         RenderingServer.FramePostDraw += OnFramePostDraw;
         var navigationRegion = _editorTileMap.L_NavigationRegion.Instance;
+        navigationRegion.Visible = false;
         navigationRegion.NavigationPolygon.AgentRadius = GameConfig.NavigationAgentRadius;
         navigationRegion.BakeFinished += OnBakeFinished;
     }
@@ -502,6 +504,21 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         {
             RunCheckHandler();
         }
+        else
+        {
+            //导航网格
+            if (tileInfo.NavigationPolygon != null && tileInfo.NavigationVertices != null)
+            {
+                var polygon = _editorTileMap.L_NavigationRegion.Instance.NavigationPolygon;
+                polygon.Vertices = tileInfo.NavigationVertices.Select(v => v.AsVector2()).ToArray();
+                foreach (var p in tileInfo.NavigationPolygon)
+                {
+                    polygon.AddPolygon(p);
+                }
+
+                OnBakeFinished();
+            }
+        }
         //聚焦
         //MapEditorPanel.CallDelay(0.1f, OnClickCenterTool);
         //CallDeferred(nameof(OnClickCenterTool), null);
@@ -652,7 +669,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         _generateTimer = _generateInterval;
         _isGenerateTerrain = false;
-        _editorTileMap.L_NavigationRegion.Instance.Visible = false;
         ClearLayer(AutoTopLayer);
         ClearLayer(AutoMiddleLayer);
         CloseErrorCell();
@@ -856,7 +872,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             new Vector2(CurrRoomPosition.X, endPos.Y) * GameConfig.TileCellSize
         });
         navigationRegion.BakeNavigationPolygon(false);
-        navigationRegion.Visible = true;
     }
 
     //设置显示的错误cell, 会标记上红色的闪烁动画
@@ -1046,9 +1061,25 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         //存入本地
         var tileInfo = CurrRoomSplit.TileInfo;
-        tileInfo.NavigationList.Clear();
-        Debug.LogError("存入导航网格数据");
-        //tileInfo.NavigationList.AddRange(_dungeonTileMap.GetPolygonData());
+        if (tileInfo.NavigationPolygon == null)
+        {
+            tileInfo.NavigationPolygon = new List<int[]>();
+        }
+        else
+        {
+            tileInfo.NavigationPolygon.Clear();
+        }
+        if (tileInfo.NavigationVertices == null)
+        {
+            tileInfo.NavigationVertices = new List<SerializeVector2>();
+        }
+        else
+        {
+            tileInfo.NavigationVertices.Clear();
+        }
+        var polygon = _editorTileMap.L_NavigationRegion.Instance.NavigationPolygon;
+        tileInfo.NavigationPolygon.AddRange(polygon.Polygons);
+        tileInfo.NavigationVertices.AddRange(polygon.Vertices.Select(v => new SerializeVector2(v)));
         tileInfo.Floor.Clear();
         tileInfo.Middle.Clear();
         tileInfo.Top.Clear();

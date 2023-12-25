@@ -377,31 +377,32 @@ public partial class DungeonManager : Node2D
     //挂载房间导航区域
     private void MountNavFromRoomInfo(RoomInfo roomInfo)
     {
-        var polygonArray = roomInfo.RoomSplit.TileInfo.NavigationList;
-        var polygon = new NavigationPolygon();
-        var offset = roomInfo.GetOffsetPosition();
-        for (var i = 0; i < polygonArray.Count; i++)
-        {
-            var navigationPolygonData = polygonArray[i];
-            var tempPosArray = navigationPolygonData.GetPoints();
-            var polygonPointArray = new Vector2[tempPosArray.Length];
-            //这里的位置需要加上房间位置
-            for (var j = 0; j < tempPosArray.Length; j++)
-            {
-                polygonPointArray[j] = tempPosArray[j] + roomInfo.GetWorldPosition() - offset;
-            }
-            polygon.AddOutline(polygonPointArray);
-
-            //存入汇总列表
-            var polygonData = new NavigationPolygonData(navigationPolygonData.Type);
-            polygonData.SetPoints(polygonPointArray);
-            _roomStaticNavigationList.Add(polygonData);
-        }
-        polygon.MakePolygonsFromOutlines();
-        var navigationPolygon = new NavigationRegion2D();
-        navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
-        navigationPolygon.NavigationPolygon = polygon;
-        World.TileRoot.AddChild(navigationPolygon);
+        throw new NotImplementedException();
+        // var polygonArray = roomInfo.RoomSplit.TileInfo.NavigationList;
+        // var polygon = new NavigationPolygon();
+        // var offset = roomInfo.GetOffsetPosition();
+        // for (var i = 0; i < polygonArray.Count; i++)
+        // {
+        //     var navigationPolygonData = polygonArray[i];
+        //     var tempPosArray = navigationPolygonData.GetPoints();
+        //     var polygonPointArray = new Vector2[tempPosArray.Length];
+        //     //这里的位置需要加上房间位置
+        //     for (var j = 0; j < tempPosArray.Length; j++)
+        //     {
+        //         polygonPointArray[j] = tempPosArray[j] + roomInfo.GetWorldPosition() - offset;
+        //     }
+        //     polygon.AddOutline(polygonPointArray);
+        //
+        //     //存入汇总列表
+        //     var polygonData = new NavigationPolygonData(navigationPolygonData.Type);
+        //     polygonData.SetPoints(polygonPointArray);
+        //     _roomStaticNavigationList.Add(polygonData);
+        // }
+        // polygon.MakePolygonsFromOutlines();
+        // var navigationPolygon = new NavigationRegion2D();
+        // navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
+        // navigationPolygon.NavigationPolygon = polygon;
+        // World.TileRoot.AddChild(navigationPolygon);
     }
 
     //创建门
