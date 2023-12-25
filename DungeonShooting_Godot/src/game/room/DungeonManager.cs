@@ -53,8 +53,6 @@ public partial class DungeonManager : Node2D
     private UiBase _prevUi;
     private DungeonTileMap _dungeonTileMap;
     private DungeonGenerator _dungeonGenerator;
-    //房间内所有静态导航网格数据
-    private List<NavigationPolygonData> _roomStaticNavigationList;
     
     //用于检查房间敌人的计时器
     private float _checkEnemyTimer = 0;
@@ -221,12 +219,6 @@ public partial class DungeonManager : Node2D
         //挂载过道导航区域
         _dungeonTileMap.MountNavigationPolygon(World.TileRoot);
         yield return 0;
-        //过道导航区域数据
-        _roomStaticNavigationList = new List<NavigationPolygonData>();
-        _roomStaticNavigationList.AddRange(_dungeonTileMap.GetPolygonData());
-        yield return 0;
-        //门导航区域数据
-        _roomStaticNavigationList.AddRange(_dungeonTileMap.GetConnectDoorPolygonData());
         //初始化所有房间
         yield return _dungeonGenerator.EachRoomCoroutine(InitRoom);
 
@@ -278,8 +270,6 @@ public partial class DungeonManager : Node2D
         _dungeonTileMap = null;
         AutoTileConfig = null;
         _dungeonGenerator = null;
-        _roomStaticNavigationList.Clear();
-        _roomStaticNavigationList = null;
         
         UiManager.Hide_RoomUI();
         yield return 0;
@@ -377,32 +367,21 @@ public partial class DungeonManager : Node2D
     //挂载房间导航区域
     private void MountNavFromRoomInfo(RoomInfo roomInfo)
     {
-        throw new NotImplementedException();
-        // var polygonArray = roomInfo.RoomSplit.TileInfo.NavigationList;
-        // var polygon = new NavigationPolygon();
-        // var offset = roomInfo.GetOffsetPosition();
-        // for (var i = 0; i < polygonArray.Count; i++)
-        // {
-        //     var navigationPolygonData = polygonArray[i];
-        //     var tempPosArray = navigationPolygonData.GetPoints();
-        //     var polygonPointArray = new Vector2[tempPosArray.Length];
-        //     //这里的位置需要加上房间位置
-        //     for (var j = 0; j < tempPosArray.Length; j++)
-        //     {
-        //         polygonPointArray[j] = tempPosArray[j] + roomInfo.GetWorldPosition() - offset;
-        //     }
-        //     polygon.AddOutline(polygonPointArray);
-        //
-        //     //存入汇总列表
-        //     var polygonData = new NavigationPolygonData(navigationPolygonData.Type);
-        //     polygonData.SetPoints(polygonPointArray);
-        //     _roomStaticNavigationList.Add(polygonData);
-        // }
-        // polygon.MakePolygonsFromOutlines();
-        // var navigationPolygon = new NavigationRegion2D();
-        // navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
-        // navigationPolygon.NavigationPolygon = polygon;
-        // World.TileRoot.AddChild(navigationPolygon);
+        var offset = roomInfo.GetOffsetPosition();
+        var worldPosition = roomInfo.GetWorldPosition() - offset;
+        var polygon = roomInfo.RoomSplit.TileInfo.NavigationPolygon;
+        var vertices = roomInfo.RoomSplit.TileInfo.NavigationVertices;
+        var polygonData = new NavigationPolygon();
+        //这里的位置需要加上房间位置
+        polygonData.Vertices = vertices.Select(v => v.AsVector2() + worldPosition).ToArray();
+        for (var i = 0; i < polygon.Count; i++)
+        {
+            polygonData.AddPolygon(polygon[i]);
+        }
+        var navigationPolygon = new NavigationRegion2D();
+        navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
+        navigationPolygon.NavigationPolygon = polygonData;
+        World.TileRoot.AddChild(navigationPolygon);
     }
 
     //创建门
@@ -787,11 +766,6 @@ public partial class DungeonManager : Node2D
     {
         if (ActivityObject.IsDebug)
         {
-            if (_dungeonTileMap != null && _roomStaticNavigationList != null)
-            {
-                //绘制ai寻路区域
-                Utils.DrawNavigationPolygon(this, _roomStaticNavigationList.ToArray());
-            }
             // StartRoomInfo?.EachRoom(info =>
             // {
             //     DrawRect(new Rect2(info.Waypoints * GameConfig.TileCellSize, new Vector2(16, 16)), Colors.Red);
