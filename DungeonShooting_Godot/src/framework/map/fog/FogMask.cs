@@ -110,7 +110,7 @@ public partial class FogMask : FogMaskBase
     {
         var tileMap = GameApplication.Instance.World.TileRoot;
         var autoConfig = GameApplication.Instance.DungeonManager.AutoTileConfig;
-        var wallCoord = autoConfig.WALL_BLOCK.AutoTileCoords;
+        var wallCoords = autoConfig.TopMask.AutoTileCoords;
         var (x, y) = position;
         var (width, height) = size;
         x -= 1;
@@ -123,7 +123,7 @@ public partial class FogMask : FogMaskBase
             {
                 var pos = new Vector2I(i + x, j + y);
                 //说明是外层墙壁
-                if (tileMap.GetCellAtlasCoords(GameConfig.TopMapLayer, pos) == wallCoord)
+                if (tileMap.GetCellAtlasCoords(GameConfig.TopMapLayer, pos) == wallCoords)
                 {
                     var left = IsEmptyCell(tileMap, new Vector2I(pos.X - 1, pos.Y));
                     var right = IsEmptyCell(tileMap, new Vector2I(pos.X + 1, pos.Y));

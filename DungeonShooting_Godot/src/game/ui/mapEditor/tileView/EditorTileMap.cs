@@ -761,10 +761,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         
         //绘制临时边界
         var pos = new List<Vector2I>();
-        for (var x = xStart - 2; x <= xEnd + 2; x++)
+        for (var x = xStart - 3; x <= xEnd + 3; x++)
         {
-            var p1 = new Vector2I(x, yStart - 3);
-            var p2 = new Vector2I(x, yEnd + 2);
+            var p1 = new Vector2I(x, yStart - 4);
+            var p2 = new Vector2I(x, yEnd + 3);
             pos.Add(p1);
             pos.Add(p2);
             //上横
@@ -772,10 +772,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             //下横
             SetCell(GetFloorLayer(), p2, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
         }
-        for (var y = yStart - 3; y <= yEnd + 2; y++)
+        for (var y = yStart - 4; y <= yEnd + 3; y++)
         {
-            var p1 = new Vector2I(xStart - 2, y);
-            var p2 = new Vector2I(xEnd + 2, y);
+            var p1 = new Vector2I(xStart - 3, y);
+            var p2 = new Vector2I(xEnd + 3, y);
             pos.Add(p1);
             pos.Add(p2);
             //左竖
@@ -785,9 +785,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         
         //计算需要绘制的图块
-        for (var x = xStart - 1; x <= xEnd + 1; x++)
+        for (var x = xStart - 2; x <= xEnd + 2; x++)
         {
-            for (var y = yStart - 2; y <= yEnd + 1; y++)
+            for (var y = yStart - 3; y <= yEnd + 2; y++)
             {
                 if (!_autoCellLayerGrid.Contains(x, y) && !_autoCellLayerGrid.Contains(x, y + 1))
                 {

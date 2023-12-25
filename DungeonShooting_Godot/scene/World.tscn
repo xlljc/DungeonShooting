@@ -22,7 +22,7 @@ metadata/_edit_vertical_guides_ = []
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_g06jj")
 
-[node name="TileRoot" type="TileMap" parent="."]
+[node name="TileRoot" type="TileMap" parent="." groups=["navigation"]]
 format = 2
 layer_0/name = "Floor"
 layer_0/z_index = -10

@@ -208,14 +208,14 @@ public partial class DungeonManager : Node2D
         AutoTileConfig = new AutoTileConfig();
         _dungeonTileMap = new DungeonTileMap(World.TileRoot);
         yield return _dungeonTileMap.AutoFillRoomTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, random);
-        yield return _dungeonTileMap.AddOutlineTile(AutoTileConfig.WALL_BLOCK);
+        //yield return _dungeonTileMap.AddOutlineTile(AutoTileConfig.WALL_BLOCK);
         
         //生成寻路网格， 这一步操作只生成过道的导航
         _dungeonTileMap.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
         yield return 0;
         //将导航网格绑定到 DoorInfo 上
-        //BindAisleNavigation(StartRoomInfo, _dungeonTileMap.GetPolygonData());
-        //yield return 0;
+        BindAisleNavigation(StartRoomInfo, _dungeonTileMap.GetPolygonData());
+        yield return 0;
         //挂载过道导航区域
         _dungeonTileMap.MountNavigationPolygon(World.TileRoot);
         yield return 0;
@@ -306,7 +306,6 @@ public partial class DungeonManager : Node2D
                 {
                     if (roomInfoDoor.IsForward)
                     {
-                        var flag = false;
                         var doorPosition = roomInfoDoor.GetWorldOriginPosition();
                         for (var i = 0; i < list.Count; i++)
                         {
@@ -317,7 +316,6 @@ public partial class DungeonManager : Node2D
                                 roomInfoDoor.AisleNavigation = data;
                                 roomInfoDoor.ConnectDoor.AisleNavigation = data;
 
-                                flag = true;
                                 list.RemoveAt(i);
                             }
                         }
