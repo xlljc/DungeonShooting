@@ -47,6 +47,9 @@ public static class TerrainPeering
     /// </summary>
     public const uint RightBottom = 0b100000000;
 
+    /// <summary>
+    /// 获取地形掩码值
+    /// </summary>
     public static uint GetTerrainPeeringValue(this TileData tileData)
     {
         if (tileData.Terrain != -1 && tileData.TerrainSet != -1)

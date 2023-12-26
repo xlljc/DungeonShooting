@@ -755,19 +755,19 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     TileCellData tileCellData;
                     if (left && right)
                     {
-                        tileCellData = _autoTileConfig.WallSingle;
+                        tileCellData = _autoTileConfig.WallVertical_Single;
                     }
                     else if (left)
                     {
-                        tileCellData = _autoTileConfig.WallLeft;
+                        tileCellData = _autoTileConfig.WallVertical_Left;
                     }
                     else if (right)
                     {
-                        tileCellData = _autoTileConfig.WallRight;
+                        tileCellData = _autoTileConfig.WallVertical_Right;
                     }
                     else
                     {
-                        tileCellData = _autoTileConfig.WallCenter;
+                        tileCellData = _autoTileConfig.WallVertical_Center;
                     }
                     SetCell(GetFloorLayer(), new Vector2I(x, y - 1), tileCellData.SourceId, tileCellData.AutoTileCoords);
                 }

@@ -11,17 +11,6 @@ public class AutoTileConfig
     public TileCellData IN_LB = new TileCellData(0, new Vector2I(11, 2));
     public TileCellData IN_RT = new TileCellData(0, new Vector2I(1, 3));
     public TileCellData IN_RB = new TileCellData(0, new Vector2I(13, 2));
-    public TileCellData R = new TileCellData(0, new Vector2I(1, 3));
-    public TileCellData L = new TileCellData(0, new Vector2I(3, 3));
-    public TileCellData T = new TileCellData(0, new Vector2I(2, 7));
-    public TileCellData B = new TileCellData(0, new Vector2I(2, 2));
-    
-    public TileCellData OUT_LT = new TileCellData(0, new Vector2I(1, 2));
-    public TileCellData OUT_LB = new TileCellData(0, new Vector2I(1, 7));
-    public TileCellData OUT_RT = new TileCellData(0, new Vector2I(3, 2));
-    public TileCellData OUT_RB = new TileCellData(0, new Vector2I(3, 7));
-    
-    public TileCellData WALL_BLOCK = new TileCellData(0, new Vector2I(2, 3));
     
     private List<Vector2I> _middleLayerAtlasCoords = new List<Vector2I>()
     {
@@ -45,30 +34,25 @@ public class AutoTileConfig
         new Vector2I(11, 2),
         new Vector2I(13, 2),
     };
-
-    public int GetLayer(Vector2I atlasCoords)
-    {
-        var layer = GameConfig.FloorMapLayer;
-        if (_middleLayerAtlasCoords.Contains(atlasCoords))
-        {
-            layer = GameConfig.MiddleMapLayer;
-        }
-        else if (_topLayerAtlasCoords.Contains(atlasCoords))
-        {
-            layer = GameConfig.TopMapLayer;
-        }
-
-        return layer;
-    }
     
     //-----------------------------------------------------------
 
     public TileCellData Floor = new TileCellData(0, new Vector2I(0, 4));
-    public TileCellData TopMask = new TileCellData(0, new Vector2I(9, 2));
-    public TileCellData WallLeft = new TileCellData(0, new Vector2I(1, 4));
-    public TileCellData WallCenter = new TileCellData(0, new Vector2I(2, 4));
-    public TileCellData WallRight = new TileCellData(0, new Vector2I(3, 4));
-    public TileCellData WallSingle = new TileCellData(0, new Vector2I(4, 4));
+    public TileCellData TopMask;
+    public TileCellData Wall_Bottom;
+    public TileCellData Wall_Left;
+    public TileCellData Wall_Right;
+    public TileCellData Wall_Top;
+    public TileCellData Wall_Out_LB;
+    public TileCellData Wall_Out_LT;
+    public TileCellData Wall_Out_RB;
+    public TileCellData Wall_Out_RT;
+    
+    
+    public TileCellData WallVertical_Left = new TileCellData(0, new Vector2I(1, 4));
+    public TileCellData WallVertical_Center = new TileCellData(0, new Vector2I(2, 4));
+    public TileCellData WallVertical_Right = new TileCellData(0, new Vector2I(3, 4));
+    public TileCellData WallVertical_Single = new TileCellData(0, new Vector2I(4, 4));
     
     //----------------------------- 所有自动图块数据 -----------------------------
     //----------------------------- 命名规则: Auto_ + LT + T + RT + _ + L + C + R + _ + LB + B + RB
@@ -112,6 +96,26 @@ public class AutoTileConfig
     public TileCellData Auto_010_110_110;
     public TileCellData Auto_110_110_010;
     public TileCellData Auto_010_111_011;
+    //第九列
+    public TileCellData Auto_000_011_011;
+    public TileCellData Auto_011_011_011;
+    public TileCellData Auto_011_111_011;
+    public TileCellData Auto_011_011_000;
+    //第十列
+    public TileCellData Auto_010_111_111;
+    public TileCellData Auto_110_111_011;
+    public TileCellData Auto_111_111_111;
+    public TileCellData Auto_111_111_000;
+    //第十一列
+    public TileCellData Auto_000_111_111;
+    public TileCellData Auto_011_111_110;
+    public TileCellData Auto_111_111_010;
+    //第十二列
+    public TileCellData Auto_000_110_110;
+    public TileCellData Auto_110_111_110;
+    public TileCellData Auto_110_110_110;
+    public TileCellData Auto_110_110_000;
+    
     //------------------------------------------------------------------------- 
 
     public AutoTileConfig(int sourceId, TileSetAtlasSource atlasSource)
@@ -121,11 +125,21 @@ public class AutoTileConfig
         {
             var pos = atlasSource.GetTileId(i);
             var tileData = atlasSource.GetTileData(pos, 0);
-            if (tileData.Terrain != -1 && tileData.TerrainSet != -1) //判断是否使用掩码
+            if (tileData != null && tileData.Terrain != -1 && tileData.TerrainSet != -1) //判断是否使用掩码
             {
                 HandlerTileData(tileData.GetTerrainPeeringValue(), sourceId, pos);
             }
         }
+
+        TopMask = Auto_111_111_111;
+        Wall_Bottom = Auto_000_111_111;
+        Wall_Left = Auto_110_110_110;
+        Wall_Right = Auto_011_011_011;
+        Wall_Top = Auto_111_111_000;
+        Wall_Out_LB = Auto_011_011_000;
+        Wall_Out_LT = Auto_000_011_011;
+        Wall_Out_RB = Auto_110_110_000;
+        Wall_Out_RT = Auto_000_110_110;
     }
     
     public int GetLayer2(Vector2I atlasCoords)
@@ -135,7 +149,7 @@ public class AutoTileConfig
 
     private void HandlerTileData(uint peeringValue, int sourceId, Vector2I pos)
     {
-        var temp = new TileCellData(sourceId, pos);
+        var temp = new TileCellData(sourceId, pos, peeringValue);
         switch (peeringValue)
         {
             case TerrainPeering.Center | TerrainPeering.Bottom:
@@ -150,7 +164,6 @@ public class AutoTileConfig
             case TerrainPeering.Center:
                 Auto_000_010_000 = temp;
                 break;
-            
             case TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom:
                 Auto_000_011_010 = temp;
                 break;
@@ -163,11 +176,11 @@ public class AutoTileConfig
             case TerrainPeering.Center | TerrainPeering.Right:
                 Auto_000_011_000 = temp;
                 break;
-            
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom:
                 Auto_000_111_010 = temp;
                 break;
-            case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom:
+            case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
+                 TerrainPeering.Bottom:
                 Auto_010_111_010 = temp;
                 break;
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right:
@@ -176,7 +189,6 @@ public class AutoTileConfig
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right:
                 Auto_000_111_000 = temp;
                 break;
-            
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom:
                 Auto_000_110_010 = temp;
                 break;
@@ -189,7 +201,128 @@ public class AutoTileConfig
             case TerrainPeering.Left | TerrainPeering.Center:
                 Auto_000_110_000 = temp;
                 break;
-            
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Right | TerrainPeering.Bottom:
+                Auto_110_111_010 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom |
+                 TerrainPeering.RightBottom:
+                Auto_010_011_011 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right |
+                 TerrainPeering.Bottom:
+                Auto_011_011_010 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
+                 TerrainPeering.LeftBottom | TerrainPeering.Bottom:
+                Auto_010_111_110 = temp;
+                break;
+            case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom |
+                 TerrainPeering.RightBottom:
+                Auto_000_111_011 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom:
+                Auto_011_111_111 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
+                 TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom:
+                Auto_111_111_011 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Right:
+                Auto_011_111_000 = temp;
+                break;
+            case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom |
+                 TerrainPeering.Bottom:
+                Auto_000_111_110 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom:
+                Auto_110_111_111 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
+                 TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom:
+                Auto_111_111_110 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Right:
+                Auto_110_111_000 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Right | TerrainPeering.Bottom:
+                Auto_011_111_010 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom |
+                 TerrainPeering.Bottom:
+                Auto_010_110_110 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Bottom:
+                Auto_110_110_010 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
+                 TerrainPeering.Bottom | TerrainPeering.RightBottom:
+                Auto_010_111_011 = temp;
+                break;
+            case TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom:
+                Auto_000_011_011 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right |
+                 TerrainPeering.Bottom | TerrainPeering.RightBottom:
+                Auto_011_011_011 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom:
+                Auto_011_111_011 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right:
+                Auto_011_011_000 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
+                 TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom:
+                Auto_010_111_111 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom:
+                Auto_110_111_011 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
+                 TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom |
+                 TerrainPeering.RightBottom:
+                Auto_111_111_111 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
+                 TerrainPeering.Center | TerrainPeering.Right:
+                Auto_111_111_000 = temp;
+                break;
+            case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom |
+                 TerrainPeering.Bottom | TerrainPeering.RightBottom:
+                Auto_000_111_111 = temp;
+                break;
+            case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom:
+                Auto_011_111_110 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
+                 TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom:
+                Auto_111_111_010 = temp;
+                break;
+            case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom:
+                Auto_000_110_110 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom:
+                Auto_110_111_110 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
+                 TerrainPeering.LeftBottom | TerrainPeering.Bottom:
+                Auto_110_110_110 = temp;
+                break;
+            case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center:
+                Auto_110_110_000 = temp;
+                break;
+
             default:
                 Debug.LogError("未知PeeringValue: " + peeringValue);
                 break;
