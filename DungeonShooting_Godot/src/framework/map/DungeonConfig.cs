@@ -14,7 +14,7 @@ public class DungeonConfig
     /// <summary>
     /// 房间数量
     /// </summary>
-    public int RoomCount = 20;
+    public int RoomCount = 3;
 
     /// <summary>
     /// 是否指定了房间

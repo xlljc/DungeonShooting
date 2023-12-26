@@ -278,9 +278,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //绘制房间区域
         if (CurrRoomSize.X != 0 && CurrRoomSize.Y != 0)
         {
-            var size = TileSet.TileSize;
-            canvasItem.DrawRect(new Rect2(CurrRoomPosition * size, CurrRoomSize * size),
-                Colors.Aqua, false, 5f / Scale.X);
+            canvasItem.DrawRect(
+                new Rect2(
+                    (CurrRoomPosition + new Vector2I(1, 2)) * GameConfig.TileCellSize,
+                    (CurrRoomSize - new Vector2I(2, 3)) * GameConfig.TileCellSize
+                ),
+                Colors.Aqua, false, 5f / Scale.X
+            );
         }
 
         //绘制导航网格
@@ -1213,12 +1217,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         else //聚焦地图中心点
         {
-            var tempPos = new Vector2(CurrRoomSize.X + 2, CurrRoomSize.Y + 2);
+            var tempPos = new Vector2(CurrRoomSize.X, CurrRoomSize.Y);
+            //var tempPos = new Vector2(CurrRoomSize.X + 2, CurrRoomSize.Y + 2);
             var mapSize = tempPos * TileSet.TileSize;
             var axis = Mathf.Max(mapSize.X, mapSize.Y);
             var targetScale = GameConfig.PreviewImageSize / axis;
             Scale = new Vector2(targetScale, targetScale);
-            Position = pos - (CurrRoomPosition + tempPos / 2f - Vector2.One) * TileSet.TileSize * targetScale;
+            Position = pos - (CurrRoomPosition + tempPos / 2f) * TileSet.TileSize * targetScale;
         }
         
         //隐藏工具栏

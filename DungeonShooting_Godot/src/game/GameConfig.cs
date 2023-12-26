@@ -92,4 +92,9 @@ public static class GameConfig
     /// 导航网格代理收缩半径
     /// </summary>
     public const float NavigationAgentRadius = 6f;
+
+    /// <summary>
+    /// 寻路导航单格步长
+    /// </summary>
+    public const float NavigationCellSize = 4;
 }

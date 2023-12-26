@@ -29,6 +29,7 @@ layer_0/z_index = -10
 layer_1/name = "Middle"
 layer_1/tile_data = PackedInt32Array()
 layer_2/name = "Top"
+layer_2/modulate = Color(1, 1, 1, 0.196078)
 layer_2/z_index = 10
 layer_2/tile_data = PackedInt32Array()
 layer_3/name = "AisleFloor"

@@ -199,7 +199,7 @@ public partial class DungeonManager : Node2D
         World = GameApplication.Instance.CreateNewWorld();
         yield return 0;
         //生成地牢房间
-        var random = new SeedRandom(205371406);
+        var random = new SeedRandom();
         _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
         _dungeonGenerator.Generate();
         yield return 0;
@@ -370,6 +370,7 @@ public partial class DungeonManager : Node2D
         var polygon = roomInfo.RoomSplit.TileInfo.NavigationPolygon;
         var vertices = roomInfo.RoomSplit.TileInfo.NavigationVertices;
         var polygonData = new NavigationPolygon();
+        polygonData.CellSize = GameConfig.NavigationCellSize;
         //这里的位置需要加上房间位置
         polygonData.Vertices = vertices.Select(v => v.AsVector2() + worldPosition).ToArray();
         for (var i = 0; i < polygon.Count; i++)

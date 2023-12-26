@@ -68,10 +68,10 @@ public class DungeonRoomInfo
             _completionDoorArea = new List<DoorAreaInfo>(DoorAreaInfos);
             if (_completionDoorArea.Count == 0)
             {
-                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize, ((int)Size.X - 1) * GameConfig.TileCellSize));
-                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize, ((int)Size.X - 1) * GameConfig.TileCellSize));
-                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize, ((int)Size.Y - 1) * GameConfig.TileCellSize));
-                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize, ((int)Size.Y - 1) * GameConfig.TileCellSize));
+                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.N, GameConfig.TileCellSize * 2, ((int)Size.X - 4) * GameConfig.TileCellSize));
+                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.S, GameConfig.TileCellSize * 2, ((int)Size.X - 4) * GameConfig.TileCellSize));
+                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.W, GameConfig.TileCellSize * 2, ((int)Size.Y - 4) * GameConfig.TileCellSize));
+                _completionDoorArea.Add(new DoorAreaInfo(DoorDirection.E, GameConfig.TileCellSize * 2, ((int)Size.Y - 4) * GameConfig.TileCellSize));
             }
         }
         

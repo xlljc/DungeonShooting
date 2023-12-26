@@ -302,6 +302,38 @@ public class RoomInfo : IDestroy
     {
         return Position.Y;
     }
+    
+    /// <summary>
+    /// 获取房间门横轴结束位置, 单位: 格
+    /// </summary>
+    public int GetHorizontalDoorEnd()
+    {
+        return Position.X + Size.X - 1;
+    }
+
+    /// <summary>
+    /// 获取房间门纵轴结束位置, 单位: 格
+    /// </summary>
+    public int GetVerticalDoorEnd()
+    {
+        return Position.Y + Size.Y - 1;
+    }
+    
+    /// <summary>
+    /// 获取房间门横轴开始位置, 单位: 格
+    /// </summary>
+    public int GetHorizontalDoorStart()
+    {
+        return Position.X + 1;
+    }
+
+    /// <summary>
+    /// 获取房间门纵轴开始位置, 单位: 格
+    /// </summary>
+    public int GetVerticalDoorStart()
+    {
+        return Position.Y + 2;
+    }
 
     /// <summary>
     /// 获取房间宽度, 单位: 像素
