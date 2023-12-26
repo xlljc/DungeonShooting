@@ -54,7 +54,7 @@ public class DungeonTileMap
         //铺房间
         if (roomInfo.RoomSplit == null) //自动填充的矩形房间, 现已经弃用
         {
-            FillRect(GameConfig.FloorMapLayer, config.Floor2, roomInfo.Position + Vector2.One,
+            FillRect(GameConfig.FloorMapLayer, config.Floor, roomInfo.Position + Vector2.One,
                 roomInfo.Size - new Vector2(2, 2));
 
             FillRect(GameConfig.TopMapLayer, config.IN_LT, roomInfo.Position, Vector2.One);
@@ -262,7 +262,7 @@ public class DungeonTileMap
                 }
     
                 //填充交叉点
-                FillRect(GameConfig.AisleFloorMapLayer, config.Floor2, aisleRect.Cross.Position, aisleRect.Cross.Size);
+                FillRect(GameConfig.AisleFloorMapLayer, config.Floor, aisleRect.Cross.Position, aisleRect.Cross.Size);
 
                 //墙壁, 0横向, 1纵向
                 if (dir1 == 0)
@@ -529,7 +529,7 @@ public class DungeonTileMap
     //横向过道
     private void FullHorizontalAisle(AutoTileConfig config, Rect2 rect)
     {
-        FillRect(GameConfig.AisleFloorMapLayer, config.Floor2, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
+        FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
         FillRect(GameConfig.MiddleMapLayer, config.T, rect.Position, new Vector2(rect.Size.X, 1));
         FillRect(GameConfig.TopMapLayer, config.B, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
     }
@@ -537,7 +537,7 @@ public class DungeonTileMap
     //纵向过道
     private void FullVerticalAisle(AutoTileConfig config, Rect2 rect)
     {
-        FillRect(GameConfig.AisleFloorMapLayer, config.Floor2, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
+        FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
         FillRect(GameConfig.TopMapLayer, config.L, rect.Position, new Vector2(1, rect.Size.Y));
         FillRect(GameConfig.TopMapLayer, config.R, rect.Position + new Vector2(rect.Size.X - 1, 0), new Vector2(1, rect.Size.Y));
     }
@@ -549,7 +549,7 @@ public class DungeonTileMap
         ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
         if (doorInfo == null)
         {
-            FillRect(GameConfig.AisleFloorMapLayer, config.Floor2, rect.Position + new Vector2(-1, 1),
+            FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1),
                 new Vector2(1, rect.Size.Y - 2));
         }
         else
@@ -558,7 +558,7 @@ public class DungeonTileMap
             FillRect(GameConfig.MiddleMapLayer, config.OUT_LB, rect.Position + new Vector2(-1, 0), Vector2.One);
             FillRect(GameConfig.TopMapLayer, config.OUT_LT, rect.Position + new Vector2(-1, 3), Vector2.One);
             
-            FillRect(GameConfig.FloorMapLayer, config.Floor2, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+            FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;
@@ -584,7 +584,7 @@ public class DungeonTileMap
         ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
         if (doorInfo == null)
         {
-            FillRect(GameConfig.AisleFloorMapLayer, config.Floor2, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+            FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
         }
         else
         {
@@ -592,7 +592,7 @@ public class DungeonTileMap
             FillRect(GameConfig.MiddleMapLayer, config.OUT_RB, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
             FillRect(GameConfig.TopMapLayer, config.OUT_RT, rect.Position + new Vector2(rect.Size.X, 3), Vector2.One);
             
-            FillRect(GameConfig.FloorMapLayer, config.Floor2, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+            FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;
@@ -618,7 +618,7 @@ public class DungeonTileMap
         ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
         if (doorInfo == null)
         {
-            FillRect(GameConfig.AisleFloorMapLayer, config.Floor2, rect.Position + new Vector2(1, -1),
+            FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1),
                 new Vector2(rect.Size.X - 2, 1));
         }
         else
@@ -626,7 +626,7 @@ public class DungeonTileMap
             FillRect(GameConfig.TopMapLayer, config.OUT_RT, rect.Position + new Vector2(0, -1), Vector2.One);
             FillRect(GameConfig.TopMapLayer, config.OUT_LT, rect.Position + new Vector2(3, -1), Vector2.One);
             
-            FillRect(GameConfig.FloorMapLayer, config.Floor2, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+            FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;
@@ -652,14 +652,14 @@ public class DungeonTileMap
         ClearRect(GameConfig.MiddleMapLayer, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
         if (doorInfo == null)
         {
-            FillRect(GameConfig.AisleFloorMapLayer, config.Floor2, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+            FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
         }
         else
         {
             FillRect(GameConfig.MiddleMapLayer, config.OUT_RB, rect.Position + new Vector2(0, rect.Size.Y), Vector2.One);
             FillRect(GameConfig.MiddleMapLayer, config.OUT_LB, rect.Position + new Vector2(3, rect.Size.Y), Vector2.One);
             
-            FillRect(GameConfig.FloorMapLayer, config.Floor2, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+            FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;

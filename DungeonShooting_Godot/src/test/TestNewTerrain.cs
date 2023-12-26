@@ -6,17 +6,65 @@ using System;
 /// </summary>
 public partial class TestNewTerrain : Node2D
 {
-    
     private TileMap _tileMap;
     private Vector2[][] _polygonData;
     private NavigationRegion2D _navigationRegion;
     
     public override void _Ready()
     {
+        Visible = false;
         _tileMap = GetNode<TileMap>("TileMap2");
         _navigationRegion = GetNode<NavigationRegion2D>("TileMap2/NavigationRegion2D");
         _navigationRegion.BakeFinished += BakeFinished;
         RunTest();
+        
+
+        var tileSet = _tileMap.TileSet;
+        
+        var terrainSetsCount = tileSet.GetTerrainSetsCount();
+        Debug.Log($"terrainSetsCount: {terrainSetsCount}");
+        for (var i = 0; i < terrainSetsCount; i++)
+        {
+            Debug.Log("----------------------------------------------------");
+            var count = tileSet.GetTerrainsCount(i);
+            Debug.Log($"terrainSet: {i} - {count} - {tileSet.GetTerrainSetMode(i)}");
+            for (int j = 0; j < count; j++)
+            {
+                var terrainName = tileSet.GetTerrainName(i, j);
+                Debug.Log($"terrainName: {terrainName}");
+            }
+        }
+        
+        var tileSetSource = tileSet.GetSource(0);
+        if (tileSetSource is TileSetAtlasSource atlasSource)
+        {
+            var tilesCount = tileSetSource.GetTilesCount();
+            for (int i = 0; i < tilesCount; i++)
+            {
+                var pos = tileSetSource.GetTileId(i);
+                var tileData = atlasSource.GetTileData(pos, 0);
+                Debug.Log($"pos: {pos}, terrain: {tileData.Terrain}, terrainSet: {tileData.TerrainSet}, peering: {tileData.GetTerrainPeeringValue() & TerrainPeering.Top}");
+                if (tileData.Terrain != -1 && tileData.TerrainSet != -1)
+                {
+                    var str = "";
+                    str += (tileData.GetTerrainPeeringBit(TileSet.CellNeighbor.TopLeftCorner) + 1).ToString();
+                    str += (tileData.GetTerrainPeeringBit(TileSet.CellNeighbor.TopSide) + 1).ToString();
+                    str += (tileData.GetTerrainPeeringBit(TileSet.CellNeighbor.TopRightCorner) + 1).ToString() + "\n";
+                    str += (tileData.GetTerrainPeeringBit(TileSet.CellNeighbor.LeftSide) + 1).ToString();
+                    str += "1";
+                    str += (tileData.GetTerrainPeeringBit(TileSet.CellNeighbor.RightSide) + 1).ToString() + "\n";
+                    str += (tileData.GetTerrainPeeringBit(TileSet.CellNeighbor.BottomLeftCorner) + 1).ToString();
+                    str += (tileData.GetTerrainPeeringBit(TileSet.CellNeighbor.BottomSide) + 1).ToString();
+                    str += (tileData.GetTerrainPeeringBit(TileSet.CellNeighbor.BottomRightCorner) + 1).ToString();
+                    GD.Print(str);
+                }
+                else
+                {
+                    GD.Print("000\n000\n000");
+                }
+            }
+        }
+
     }
 
     private void BakeFinished()

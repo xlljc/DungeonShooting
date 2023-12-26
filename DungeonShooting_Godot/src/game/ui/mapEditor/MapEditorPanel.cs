@@ -31,8 +31,8 @@ public partial class MapEditorPanel : MapEditor
         //var tileSet = ResourceManager.Load<TileSet>(ResourcePath.resource_tileSet_map1_TileSet1_tres);
         //var tileSetAtlasSource = (TileSetAtlasSource)tileSet.GetSource(0);
         //tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
-        S_TileMap.Instance.TileSet = tileSet;
-        
+        S_TileMap.Instance.InitTileSet(tileSet);
+
         S_TabContainer.Instance.SetTabTitle(0, "对象");
         S_TabContainer.Instance.SetTabTitle(1, "图层");
         //S_MapLayer.Instance.Init(S_MapLayer);

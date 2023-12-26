@@ -117,7 +117,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private int _sourceId = 0;
     private int _terrainSet = 0;
     private int _terrain = 0;
-    private AutoTileConfig _autoTileConfig = new AutoTileConfig();
+    private AutoTileConfig _autoTileConfig;
 
     /// <summary>
     /// 正在编辑的房间数据
@@ -151,7 +151,20 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //-------------------------------
     private MapEditor.TileMap _editorTileMap;
     private EventFactory _eventFactory;
+    
+    /// <summary>
+    /// 初始化图块集。
+    /// </summary>
+    /// <param name="tileSet">要初始化的图块集</param>
+    public void InitTileSet(TileSet tileSet)
+    {
+        TileSet = tileSet;
 
+        // 创建AutoTileConfig对象
+        // 使用第一个图块集源作为参数
+        _autoTileConfig = new AutoTileConfig(0, tileSet.GetSource(0) as TileSetAtlasSource);
+    }
+    
     public void SetUiNode(IUiNode uiNode)
     {
         _editorTileMap = (MapEditor.TileMap)uiNode;
@@ -586,7 +599,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //绘制单个自动贴图
     private void SetSingleAutoCell(Vector2I position)
     {
-        var tileCellData = _autoTileConfig.Floor2;
+        var tileCellData = _autoTileConfig.Floor;
         SetCell(GetFloorLayer(), position, tileCellData.SourceId, tileCellData.AutoTileCoords);
         //SetCell(GetFloorLayer(), position, _sourceId, _autoTileConfig.Floor.AutoTileCoords);
         if (!_autoCellLayerGrid.Contains(position.X, position.Y))
@@ -620,7 +633,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         {
             for (var j = 0; j < height; j++)
             {
-                var tileCellData = _autoTileConfig.Floor2;
+                var tileCellData = _autoTileConfig.Floor;
                 SetCell(GetFloorLayer(), new Vector2I(start.X + i, start.Y + j), tileCellData.SourceId, tileCellData.AutoTileCoords);
             }
         }
