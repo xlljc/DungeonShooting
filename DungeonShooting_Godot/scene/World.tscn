@@ -23,10 +23,13 @@ metadata/_edit_vertical_guides_ = []
 environment = SubResource("Environment_g06jj")
 
 [node name="TileRoot" type="TileMap" parent="." groups=["navigation"]]
+y_sort_enabled = true
 format = 2
 layer_0/name = "Floor"
 layer_0/z_index = -10
 layer_1/name = "Middle"
+layer_1/y_sort_enabled = true
+layer_1/y_sort_origin = 7
 layer_1/tile_data = PackedInt32Array()
 layer_2/name = "Top"
 layer_2/modulate = Color(1, 1, 1, 0.784314)
