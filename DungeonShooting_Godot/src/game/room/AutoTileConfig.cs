@@ -17,10 +17,10 @@ public class AutoTileConfig
     public TileCellData Wall_Out_LT;
     public TileCellData Wall_Out_RB;
     public TileCellData Wall_Out_RT;
-    public TileCellData Wall_IN_LT;
-    public TileCellData Wall_IN_LB;
-    public TileCellData Wall_IN_RT;
-    public TileCellData Wall_IN_RB;
+    public TileCellData Wall_In_LT;
+    public TileCellData Wall_In_LB;
+    public TileCellData Wall_In_RT;
+    public TileCellData Wall_In_RB;
     
     public TileCellData Wall_Vertical_Left = new TileCellData(0, new Vector2I(1, 4), TerrainPeering.None, GameConfig.MiddleMapLayer);
     public TileCellData Wall_Vertical_Center = new TileCellData(0, new Vector2I(2, 4), TerrainPeering.None, GameConfig.MiddleMapLayer);
@@ -117,10 +117,10 @@ public class AutoTileConfig
         Wall_Out_RB = Auto_110_110_000;
         Wall_Out_RT = Auto_000_110_110;
 
-        Wall_IN_LT = Auto_111_111_110;
-        Wall_IN_LB = Auto_110_111_111;
-        Wall_IN_RT = Auto_111_111_011;
-        Wall_IN_RB = Auto_011_111_111;
+        Wall_In_LT = Auto_111_111_110;
+        Wall_In_LB = Auto_110_111_111;
+        Wall_In_RT = Auto_111_111_011;
+        Wall_In_RB = Auto_011_111_111;
 
         HandlerMapping();
         HandlerOtherCellMapping();

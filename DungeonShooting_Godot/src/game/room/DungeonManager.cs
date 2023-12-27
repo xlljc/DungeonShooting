@@ -217,7 +217,7 @@ public partial class DungeonManager : Node2D
         BindAisleNavigation(StartRoomInfo, _dungeonTileMap.GetPolygonData());
         yield return 0;
         //挂载过道导航区域
-        _dungeonTileMap.MountNavigationPolygon(World.TileRoot);
+        _dungeonTileMap.MountNavigationPolygon(World.NavigationRoot);
         yield return 0;
         //初始化所有房间
         yield return _dungeonGenerator.EachRoomCoroutine(InitRoom);
@@ -380,7 +380,7 @@ public partial class DungeonManager : Node2D
         var navigationPolygon = new NavigationRegion2D();
         navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
         navigationPolygon.NavigationPolygon = polygonData;
-        World.TileRoot.AddChild(navigationPolygon);
+        World.NavigationRoot.AddChild(navigationPolygon);
     }
 
     //创建门

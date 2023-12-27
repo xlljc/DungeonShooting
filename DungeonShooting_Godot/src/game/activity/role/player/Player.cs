@@ -70,8 +70,10 @@ public partial class Player : Role
         //GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
         // this.CallDelay(0.5f, () =>
         // {
-        //     var weapon = Create<Weapon>(Ids.Id_weapon0009);
-        //     PickUpWeapon(weapon);
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0009));
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0008));
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0007));
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0006));
         // });
         
         //注册状态机

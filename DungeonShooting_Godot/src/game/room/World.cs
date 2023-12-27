@@ -30,6 +30,7 @@ public partial class World : CanvasModulate, ICoroutine
     [Export] public Node2D StaticSpriteRoot;
     [Export] public Node2D AffiliationAreaRoot;
     [Export] public Node2D FogMaskRoot;
+    [Export] public Node2D NavigationRoot;
     
     /// <summary>
     /// 是否暂停
@@ -77,7 +78,7 @@ public partial class World : CanvasModulate, ICoroutine
         //var tileSetAtlasSource = (TileSetAtlasSource)tileSet.GetSource(0);
         //tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
         TileRoot.TileSet = tileSet;
-        TileRoot.YSortEnabled = false;
+        //TileRoot.YSortEnabled = false;
     }
 
     public override void _Process(double delta)

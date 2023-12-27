@@ -57,19 +57,19 @@ public class DungeonTileMap
             FillRect(GameConfig.FloorMapLayer, config.Floor, roomInfo.Position + Vector2.One,
                 roomInfo.Size - new Vector2(2, 2));
 
-            FillRect(GameConfig.TopMapLayer, config.Wall_IN_LT, roomInfo.Position, Vector2.One);
+            FillRect(GameConfig.TopMapLayer, config.Wall_In_LT, roomInfo.Position, Vector2.One);
             FillRect(GameConfig.TopMapLayer, config.Wall_Left, roomInfo.Position + new Vector2(0, 1),
                 new Vector2(1, roomInfo.Size.Y - 2));
-            FillRect(GameConfig.TopMapLayer, config.Wall_IN_LB, roomInfo.Position + new Vector2(0, roomInfo.Size.Y - 1),
+            FillRect(GameConfig.TopMapLayer, config.Wall_In_LB, roomInfo.Position + new Vector2(0, roomInfo.Size.Y - 1),
                 new Vector2(1, 1));
             FillRect(GameConfig.TopMapLayer, config.Wall_Bottom, roomInfo.Position + new Vector2(1, roomInfo.Size.Y - 1),
                 new Vector2(roomInfo.Size.X - 2, 1));
-            FillRect(GameConfig.TopMapLayer, config.Wall_IN_RB,
+            FillRect(GameConfig.TopMapLayer, config.Wall_In_RB,
                 roomInfo.Position + new Vector2(roomInfo.Size.X - 1, roomInfo.Size.Y - 1),
                 Vector2.One);
             FillRect(GameConfig.TopMapLayer, config.Wall_Right, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 1),
                 new Vector2(1, roomInfo.Size.Y - 2));
-            FillRect(GameConfig.TopMapLayer, config.Wall_IN_RT, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 0),
+            FillRect(GameConfig.TopMapLayer, config.Wall_In_RT, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 0),
                 Vector2.One);
             FillRect(GameConfig.MiddleMapLayer, config.Wall_Top, roomInfo.Position + Vector2.Right,
                 new Vector2(roomInfo.Size.X - 2, 1));
@@ -274,8 +274,8 @@ public class DungeonTileMap
                 else
                 {
                     FullVerticalAisle(config, rect);
-                    FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
-                    FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
+                    FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
+                    FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
                 }
     
                 if (dir2 == 0)
@@ -287,8 +287,8 @@ public class DungeonTileMap
                 else
                 {
                     FullVerticalAisle(config, rect2);
-                    FullVerticalAisleUp(config, rect2, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
-                    FullVerticalAisleDown(config, rect2, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
+                    FullVerticalAisleDown(config, rect2, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
+                    FullVerticalAisleUp(config, rect2, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
                 }
     
                 if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
@@ -297,7 +297,7 @@ public class DungeonTileMap
                     FillRect(GameConfig.TopMapLayer, config.Wall_Out_RT,
                         doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
                         Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_IN_RT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0),
+                    FillRect(GameConfig.TopMapLayer, config.Wall_In_RT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0),
                         Vector2.One);
                     FillRect(GameConfig.MiddleMapLayer, config.Wall_Top, doorInfo.Cross, new Vector2(GameConfig.CorridorWidth - 1, 1));
                     FillRect(GameConfig.TopMapLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 1),
@@ -306,22 +306,18 @@ public class DungeonTileMap
                 else if ((doorDir1 == DoorDirection.E && doorDir2 == DoorDirection.S) || //→↓
                          (doorDir2 == DoorDirection.E && doorDir1 == DoorDirection.S))
                 {
-                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_RB, doorInfo.Cross, Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_IN_RB,
-                        doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1,
-                            GameConfig.CorridorWidth - 1),
-                        Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0),
-                        new Vector2(1, GameConfig.CorridorWidth - 1));
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
-                        new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_RB, doorInfo.Cross + new Vector2I(0, -1), Vector2.One);
+                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Right, doorInfo.Cross, Vector2.One);
+                    FillRect(GameConfig.TopMapLayer, config.Wall_In_RB, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, GameConfig.CorridorWidth - 1), Vector2.One);
+                    FillRect(GameConfig.TopMapLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), new Vector2(1, GameConfig.CorridorWidth));
+                    FillRect(GameConfig.TopMapLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), new Vector2(GameConfig.CorridorWidth - 1, 1));
                 }
                 else if ((doorDir1 == DoorDirection.S && doorDir2 == DoorDirection.W) || //↓←
                          (doorDir2 == DoorDirection.S && doorDir1 == DoorDirection.W))
                 {
                     FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_LB,
                         doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_IN_LB, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
+                    FillRect(GameConfig.TopMapLayer, config.Wall_In_LB, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1),
                         Vector2.One);
                     FillRect(GameConfig.TopMapLayer, config.Wall_Left, doorInfo.Cross, new Vector2(1, GameConfig.CorridorWidth - 1));
                     FillRect(GameConfig.TopMapLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(1, GameConfig.CorridorWidth - 1),
@@ -330,57 +326,53 @@ public class DungeonTileMap
                 else if ((doorDir1 == DoorDirection.W && doorDir2 == DoorDirection.N) || //←↑
                          (doorDir2 == DoorDirection.W && doorDir1 == DoorDirection.N))
                 {
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Out_LT,
-                        doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1,
-                            GameConfig.CorridorWidth - 1),
-                        Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_IN_LT, doorInfo.Cross, Vector2.One);
-                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Top, doorInfo.Cross + new Vector2(1, 0),
-                        new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Left, doorInfo.Cross + new Vector2(0, 1),
-                        new Vector2(1, GameConfig.CorridorWidth - 1));
+                    FillRect(GameConfig.TopMapLayer, config.Wall_Out_LT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, GameConfig.CorridorWidth - 1), Vector2.One);
+                    FillRect(GameConfig.TopMapLayer, config.Wall_In_LT, doorInfo.Cross + new Vector2I(0, -1), Vector2.One);
+                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Top, doorInfo.Cross + new Vector2(1, -1), new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Center, doorInfo.Cross + new Vector2(1, 0), new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(GameConfig.TopMapLayer, config.Wall_Left, doorInfo.Cross + new Vector2(0, 0), new Vector2(1, GameConfig.CorridorWidth));
                 }
     
-                //在房间墙上开洞
-                switch (doorDir1)
-                {
-                    case DoorDirection.E: //→
-                        ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(-1, 1),
-                            new Vector2(1, rect.Size.Y - 2));
-                        break;
-                    case DoorDirection.W: //←
-                        ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(0, 1),
-                            new Vector2(1, rect.Size.Y - 2));
-                        break;
-                    case DoorDirection.S: //↓
-                        ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(1, -1),
-                            new Vector2(rect.Size.X - 2, 1));
-                        break;
-                    case DoorDirection.N: //↑
-                        ClearRect(GameConfig.MiddleMapLayer, doorInfo.OriginPosition + new Vector2(1, 2),
-                            new Vector2(rect.Size.X - 2, 1));
-                        break;
-                }
-    
-                switch (doorDir2)
-                {
-                    case DoorDirection.E: //→
-                        ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1),
-                            new Vector2(1, rect2.Size.Y - 2));
-                        break;
-                    case DoorDirection.W: //←
-                        ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1),
-                            new Vector2(1, rect2.Size.Y - 2));
-                        break;
-                    case DoorDirection.S: //↓
-                        ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1),
-                            new Vector2(rect2.Size.X - 2, 1));
-                        break;
-                    case DoorDirection.N: //↑
-                        ClearRect(GameConfig.MiddleMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0),
-                            new Vector2(rect2.Size.X - 2, 1));
-                        break;
-                }
+                // //在房间墙上开洞
+                // switch (doorDir1)
+                // {
+                //     case DoorDirection.E: //→
+                //         ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(-1, 1),
+                //             new Vector2(1, rect.Size.Y - 2));
+                //         break;
+                //     case DoorDirection.W: //←
+                //         ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(0, 1),
+                //             new Vector2(1, rect.Size.Y - 2));
+                //         break;
+                //     case DoorDirection.S: //↓
+                //         ClearRect(GameConfig.TopMapLayer, doorInfo.OriginPosition + new Vector2(1, -1),
+                //             new Vector2(rect.Size.X - 2, 1));
+                //         break;
+                //     case DoorDirection.N: //↑
+                //         ClearRect(GameConfig.MiddleMapLayer, doorInfo.OriginPosition + new Vector2(1, 2),
+                //             new Vector2(rect.Size.X - 2, 1));
+                //         break;
+                // }
+                //
+                // switch (doorDir2)
+                // {
+                //     case DoorDirection.E: //→
+                //         ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(-1, 1),
+                //             new Vector2(1, rect2.Size.Y - 2));
+                //         break;
+                //     case DoorDirection.W: //←
+                //         ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(0, 1),
+                //             new Vector2(1, rect2.Size.Y - 2));
+                //         break;
+                //     case DoorDirection.S: //↓
+                //         ClearRect(GameConfig.TopMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, -1),
+                //             new Vector2(rect2.Size.X - 2, 1));
+                //         break;
+                //     case DoorDirection.N: //↑
+                //         ClearRect(GameConfig.MiddleMapLayer, doorInfo.ConnectDoor.OriginPosition + new Vector2(1, 0),
+                //             new Vector2(rect2.Size.X - 2, 1));
+                //         break;
+                // }
             }
             
             //先计算范围
@@ -652,12 +644,16 @@ public class DungeonTileMap
         }
         else
         {
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_RT, rect.Position + new Vector2(0, -1), Vector2.One);
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_LT, rect.Position + new Vector2(3, -1), Vector2.One);
+            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, rect.Size.Y - 2), new Vector2(2, 2));
+            ClearRect(GameConfig.MiddleMapLayer, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(4, 2));
+            
+            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_RB, rect.Position + new Vector2(0, rect.Size.Y - 1), Vector2.One);
+            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(0, rect.Size.Y), Vector2.One);
+            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_LB, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y - 1), Vector2.One);
+            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Left, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y), Vector2.One);
             
             FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
-            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, rect.Size.Y - 2), new Vector2(2, 2));
-            ClearRect(GameConfig.MiddleMapLayer, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(2, 1));
+
             
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
@@ -688,13 +684,11 @@ public class DungeonTileMap
         }
         else
         {
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_RB, rect.Position + new Vector2(0, rect.Size.Y - 1), Vector2.One);
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_LB, rect.Position + new Vector2(3, rect.Size.Y - 1), Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(0, rect.Size.Y), Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Left, rect.Position + new Vector2(3, rect.Size.Y), Vector2.One);
+            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, 0), new Vector2(2, 2));
+            FillRect(GameConfig.TopMapLayer, config.Wall_Out_RT, rect.Position + new Vector2(0, -1), Vector2.One);
+            FillRect(GameConfig.TopMapLayer, config.Wall_Out_LT, rect.Position + new Vector2(3, -1), Vector2.One);
             
             FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
-            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, 0), new Vector2(2, 2));
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;
