@@ -6,17 +6,12 @@ using Godot;
 /// </summary>
 public class TileCellData
 {
-    public TileCellData(int sourceId, Vector2I autoTileCoords)
-    {
-        SourceId = sourceId;
-        AutoTileCoords = autoTileCoords;
-    }
-    
-    public TileCellData(int sourceId, Vector2I autoTileCoords, uint terrainPeering)
+    public TileCellData(int sourceId, Vector2I autoTileCoords, uint terrainPeering, int defaultLayer)
     {
         SourceId = sourceId;
         AutoTileCoords = autoTileCoords;
         TerrainPeering = terrainPeering;
+        DefaultLayer = defaultLayer;
     }
 
     /// <summary>
@@ -37,5 +32,5 @@ public class TileCellData
     /// <summary>
     /// 默认存放层级
     /// </summary>
-    public int DefaultLayer = GameConfig.FloorMapLayer;
+    public int DefaultLayer;
 }

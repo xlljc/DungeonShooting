@@ -878,7 +878,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 if (!_autoCellLayerGrid.Contains(pos) && GetCellSourceId(AutoFloorLayer, pos) != -1)
                 {
                     var atlasCoords = GetCellAtlasCoords(AutoFloorLayer, pos);
-                    var layer = _autoTileConfig.GetLayer2(atlasCoords);
+                    var layer = _autoTileConfig.GetLayer(atlasCoords);
                     if (layer == GameConfig.MiddleMapLayer)
                     {
                         layer = AutoMiddleLayer;
