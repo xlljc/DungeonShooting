@@ -34,7 +34,6 @@ layer_1/y_sort_enabled = true
 layer_1/navigation_enabled = false
 layer_1/tile_data = PackedInt32Array()
 layer_2/name = "Top"
-layer_2/modulate = Color(1, 1, 1, 0.784314)
 layer_2/z_index = 10
 layer_2/navigation_enabled = false
 layer_2/tile_data = PackedInt32Array()

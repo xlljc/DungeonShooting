@@ -70,7 +70,7 @@ public partial class World : CanvasModulate, ICoroutine
 
     public override void _Ready()
     {
-        //Color = Colors.Black;
+        Color = Colors.Black;
         
         //临时处理, 加载TileSet
         var tileSet = ResourceManager.Load<TileSet>(ResourcePath.resource_tileSet_map2_TileSet2_tres);

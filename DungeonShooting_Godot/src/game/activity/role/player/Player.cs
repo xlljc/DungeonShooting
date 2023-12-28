@@ -61,20 +61,20 @@ public partial class Player : Role
         ActivePropsPack.SetCapacity(1);
         
         // debug用
-        RoleState.Acceleration = 3000;
-        RoleState.Friction = 3000;
-        RoleState.MoveSpeed = 500;
-        CollisionLayer = 0;
-        CollisionMask = 0;
+        // RoleState.Acceleration = 3000;
+        // RoleState.Friction = 3000;
+        // RoleState.MoveSpeed = 500;
+        // CollisionLayer = 0;
+        // CollisionMask = 0;
         //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
         //GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
-        // this.CallDelay(0.5f, () =>
-        // {
-        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0009));
-        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0008));
-        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0007));
-        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0006));
-        // });
+        this.CallDelay(0.5f, () =>
+        {
+            PickUpWeapon(Create<Weapon>(Ids.Id_weapon0009));
+            PickUpWeapon(Create<Weapon>(Ids.Id_weapon0008));
+            PickUpWeapon(Create<Weapon>(Ids.Id_weapon0007));
+            PickUpWeapon(Create<Weapon>(Ids.Id_weapon0006));
+        });
         
         //注册状态机
         StateController.Register(new PlayerIdleState());
