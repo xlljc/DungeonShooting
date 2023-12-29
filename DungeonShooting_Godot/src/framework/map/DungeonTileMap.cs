@@ -182,6 +182,7 @@ public class DungeonTileMap
             roomPreinstall.Pretreatment(random);
         }
 
+        // yield break;
         //铺过道
         foreach (var doorInfo in roomInfo.Doors)
         {

@@ -6,7 +6,7 @@ public static class EditorPlayManager
     /// <summary>
     /// 是否正在播放
     /// </summary>
-    public static bool IsPlay { get; private set; }
+    public static bool IsPlay { get; set; }
 
     private static DungeonConfig _config;
     

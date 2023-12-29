@@ -195,13 +195,35 @@ public partial class DungeonManager : Node2D
         //打开 loading UI
         UiManager.Open_Loading();
         yield return 0;
-        //创建世界场景
-        World = GameApplication.Instance.CreateNewWorld();
-        yield return 0;
         //生成地牢房间
         var random = new SeedRandom(1);
         _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
-        _dungeonGenerator.Generate();
+        if (!_dungeonGenerator.Generate()) //生成房间失败
+        {
+            _dungeonGenerator.EachRoom(DisposeRoomInfo);
+            _dungeonGenerator = null;
+            UiManager.Hide_Loading();
+            
+            if (IsEditorMode) //在编辑器模式下打开的Ui
+            {
+                EditorPlayManager.IsPlay = false;
+                IsEditorMode = false;
+                //显示上一个Ui
+                if (_prevUi != null)
+                {
+                    _prevUi.ShowUi();
+                }
+            }
+            else //正常关闭Ui
+            {
+                UiManager.Open_Main();
+            }
+            EditorWindowManager.ShowTips("错误", "生成房间尝试次数过多，生成地牢房间失败，请加大房间门连接区域！");
+            yield break;
+        }
+        yield return 0;
+        //创建世界场景
+        World = GameApplication.Instance.CreateNewWorld();
         yield return 0;
         
         //填充地牢

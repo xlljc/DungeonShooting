@@ -155,9 +155,9 @@ public class DungeonGenerator
     /// <summary>
     /// 生成房间
     /// </summary>
-    public void Generate()
+    public bool Generate()
     {
-        if (StartRoomInfo != null) return;
+        if (StartRoomInfo != null) return false;
         
         CalcNextRoomType(null);
         //用于排除上一级房间
@@ -167,6 +167,12 @@ public class DungeonGenerator
         
         var chainTryCount = 0;
         var chainMaxTryCount = 3;
+        
+        //最大尝试次数
+        var maxTryCount = 500;
+
+        //当前尝试次数
+        var currTryCount = 0;
 
         //如果房间数量不够, 就一直生成
         while (_count < _config.RoomCount || EndRoomInfo == null)
@@ -280,11 +286,18 @@ public class DungeonGenerator
                         Debug.Log("生成房间失败次数过多, 增大区域");
                     }
                 }
+                currTryCount++;
+                if (currTryCount >= maxTryCount)
+                {
+                    return false;
+                }
             }
         }
         
         _roomGrid.Clear();
         Debug.Log("房间总数: " + RoomInfos.Count);
+
+        return true;
     }
 
     //生成房间
@@ -397,7 +410,7 @@ public class DungeonGenerator
                     continue;
                     //return GenerateRoomErrorCode.HasCollision;
                 }
-
+                
                 _roomGrid.SetRect(room.Position, room.Size, true);
 
                 //找门, 与上一个房间是否能连通
@@ -850,8 +863,8 @@ public class DungeonGenerator
         if (areaInfo.Direction == DoorDirection.N || areaInfo.Direction == DoorDirection.S) //纵向门
         {
             var num = room1.GetHorizontalStart();
-            var p1 = num + areaInfo.Start / GameConfig.TileCellSize;
-            var p2 = num + areaInfo.End / GameConfig.TileCellSize;
+            var p1 = num + GetDoorAreaInfoStart(areaInfo) / GameConfig.TileCellSize;
+            var p2 = num + GetDoorAreaInfoEnd(areaInfo) / GameConfig.TileCellSize;
 
             if (room1.Position.X > room2.Position.X)
             {
@@ -893,8 +906,8 @@ public class DungeonGenerator
         else //横向门
         {
             var num = room1.GetVerticalStart();
-            var p1 = num + areaInfo.Start / GameConfig.TileCellSize;
-            var p2 = num + areaInfo.End / GameConfig.TileCellSize;
+            var p1 = num + GetDoorAreaInfoStart(areaInfo) / GameConfig.TileCellSize;
+            var p2 = num + GetDoorAreaInfoEnd(areaInfo) / GameConfig.TileCellSize;
 
             if (room1.Position.Y > room2.Position.Y)
             {
@@ -1117,15 +1130,15 @@ public class DungeonGenerator
                         if (direction == DoorDirection.E || direction == DoorDirection.W) //第二个门向← 或者 第二个门向→
                         {
                             range = CalcOverlapRange(
-                                roomInfo.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo1.Start, roomInfo.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo1.End,
-                                nextRoomInfo.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo2.Start, nextRoomInfo.GetVerticalStart() * GameConfig.TileCellSize + doorAreaInfo2.End
+                                roomInfo.GetVerticalStart() * GameConfig.TileCellSize + GetDoorAreaInfoStart(doorAreaInfo1), roomInfo.GetVerticalStart() * GameConfig.TileCellSize + GetDoorAreaInfoEnd(doorAreaInfo1),
+                                nextRoomInfo.GetVerticalStart() * GameConfig.TileCellSize + GetDoorAreaInfoStart(doorAreaInfo2), nextRoomInfo.GetVerticalStart() * GameConfig.TileCellSize + GetDoorAreaInfoEnd(doorAreaInfo2)
                             );
                         }
                         else //第二个门向↑ 或者 第二个门向↓
                         {
                             range = CalcOverlapRange(
-                                roomInfo.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo1.Start, roomInfo.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo1.End,
-                                nextRoomInfo.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo2.Start, nextRoomInfo.GetHorizontalStart() * GameConfig.TileCellSize + doorAreaInfo2.End
+                                roomInfo.GetHorizontalStart() * GameConfig.TileCellSize + GetDoorAreaInfoStart(doorAreaInfo1), roomInfo.GetHorizontalStart() * GameConfig.TileCellSize + GetDoorAreaInfoEnd(doorAreaInfo1),
+                                nextRoomInfo.GetHorizontalStart() * GameConfig.TileCellSize + GetDoorAreaInfoStart(doorAreaInfo2), nextRoomInfo.GetHorizontalStart() * GameConfig.TileCellSize + GetDoorAreaInfoEnd(doorAreaInfo2)
                             );
                         }
                         //交集范围够生成门
@@ -1321,5 +1334,15 @@ public class DungeonGenerator
         _roomGrid.SetRect(pos1, size1, true);
         _roomGrid.SetRect(pos2, size2, true);
         return true;
+    }
+
+    private int GetDoorAreaInfoStart(DoorAreaInfo areaInfo)
+    {
+        return areaInfo.Start;
+    }
+
+    private int GetDoorAreaInfoEnd(DoorAreaInfo areaInfo)
+    {
+        return areaInfo.End;
     }
 }
