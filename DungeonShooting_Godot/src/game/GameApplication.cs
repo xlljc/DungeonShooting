@@ -97,8 +97,8 @@ public partial class GameApplication : Node2D, ICoroutine
 		Enemy.InitEnemyAttribute();
 		
 		DungeonConfig = new DungeonConfig();
-		DungeonConfig.GroupName = RoomConfig.FirstOrDefault().Key;
-		DungeonConfig.RoomCount = 20;
+		DungeonConfig.GroupName = "TestGroup2";
+		DungeonConfig.RoomCount = 15;
 	}
 	
 	public override void _EnterTree()
