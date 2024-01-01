@@ -1,1 +1,1 @@
-[{"Name":"Preinstall1","Weight":100,"Remark":"","WaveList":[[{"Position":{"X":29,"Y":13},"Size":{"X":21,"Y":14},"SpecialMarkType":1,"DelayTime":0,"MarkList":[]}]]}]
+[{"Name":"Preinstall1","Weight":100,"Remark":"","WaveList":[[{"Position":{"X":29,"Y":13},"Size":{"X":21,"Y":14},"SpecialMarkType":1,"DelayTime":0,"MarkList":[]},{"Position":{"X":33,"Y":33},"Size":{"X":16,"Y":16},"SpecialMarkType":0,"DelayTime":0,"MarkList":[{"Id":"weapon0002","Weight":100,"Attr":{"CurrAmmon":"7","ResidueAmmo":"70"},"Altitude":8,"VerticalSpeed":0}]}]]}]

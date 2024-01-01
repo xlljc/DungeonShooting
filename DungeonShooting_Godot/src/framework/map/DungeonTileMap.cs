@@ -520,7 +520,7 @@ public class DungeonTileMap
         {
             ClearRect(GameConfig.TopMapLayer, rect.Position - new Vector2(1, 1), new Vector2(2, 4));
             FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Left, rect.Position - new Vector2(1, 0), Vector2.One);
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_LB, rect.Position - new Vector2(1, 1), Vector2.One);
+            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_LB, rect.Position - new Vector2(1, 1), Vector2.One);
             FillRect(GameConfig.TopMapLayer, config.Wall_Out_LT, rect.Position + new Vector2(-1, 3), Vector2.One);
             
             FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
@@ -555,7 +555,7 @@ public class DungeonTileMap
         {
             ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(rect.Size.X - 1,  -1), new Vector2(2, 4));
             FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_RB, rect.Position + new Vector2(rect.Size.X, -1), Vector2.One);
+            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_RB, rect.Position + new Vector2(rect.Size.X, -1), Vector2.One);
             FillRect(GameConfig.TopMapLayer, config.Wall_Out_RT, rect.Position + new Vector2(rect.Size.X, 3), Vector2.One);
             
             FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));

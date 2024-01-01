@@ -448,8 +448,8 @@ public partial class DungeonManager : Node2D
         var affiliation = new AffiliationArea();
         affiliation.Name = "AffiliationArea" + roomInfo.Id;
         affiliation.Init(roomInfo, new Rect2I(
-            roomInfo.GetWorldPosition() + GameConfig.TileCellSizeVector2I,
-            (roomInfo.Size - new Vector2I(2, 2)) * GameConfig.TileCellSize));
+            roomInfo.GetWorldPosition() + new Vector2I(GameConfig.TileCellSize * 2, GameConfig.TileCellSize * 3),
+            (roomInfo.Size - new Vector2I(4, 5)) * GameConfig.TileCellSize));
         
         roomInfo.AffiliationArea = affiliation;
         World.AffiliationAreaRoot.AddChild(affiliation);
@@ -492,7 +492,7 @@ public partial class DungeonManager : Node2D
     {
         var roomFog = new FogMask();
         roomFog.Name = "FogMask" + roomFog.IsDestroyed;
-        roomFog.InitFog(roomInfo.Position, roomInfo.Size);
+        roomFog.InitFog(roomInfo.Position + new Vector2I(1, 1), roomInfo.Size - new Vector2I(2, 2));
 
         World.FogMaskRoot.AddChild(roomFog);
         roomInfo.RoomFogMask = roomFog;
@@ -565,7 +565,19 @@ public partial class DungeonManager : Node2D
 
                 //过道迷雾遮罩
                 var aisleFog = new FogMask();
-                aisleFog.InitFog(calcRect.Position, calcRect.Size);
+                var calcRectSize = calcRect.Size;
+                var calcRectPosition = calcRect.Position;
+                if (roomDoorInfo.Direction == DoorDirection.N || roomDoorInfo.Direction == DoorDirection.S)
+                {
+                    calcRectSize.Y -= 1;
+                }
+                else
+                {
+                    calcRectPosition.Y -= 1;
+                    calcRectSize.Y += 1;
+                }
+
+                aisleFog.InitFog(calcRectPosition, calcRectSize);
                 World.FogMaskRoot.AddChild(aisleFog);
                 roomDoorInfo.AisleFogMask = aisleFog;
                 roomDoorInfo.ConnectDoor.AisleFogMask = aisleFog;

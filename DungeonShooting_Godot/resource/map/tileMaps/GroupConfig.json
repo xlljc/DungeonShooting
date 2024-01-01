@@ -81,12 +81,7 @@
         "Path": "resource/map/tileMaps/TestGroup2/outlet/End1"
       }
     ],
-    "BossList": [
-      {
-        "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup2/boss/Boss1"
-      }
-    ],
+    "BossList": [],
     "RewardList": [],
     "ShopList": [],
     "EventList": [],

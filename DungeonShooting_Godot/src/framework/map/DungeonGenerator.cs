@@ -46,8 +46,8 @@ public class DungeonGenerator
     private DungeonRoomType _nextRoomType = DungeonRoomType.Battle;
     
     //间隔
-    private int _roomMinInterval = 1;
-    private int _roomMaxInterval = 3;
+    private int _roomMinInterval = 2;
+    private int _roomMaxInterval = 5;
 
     //房间横轴分散程度
     private float _roomHorizontalMinDispersion = 0f;
@@ -404,7 +404,7 @@ public class DungeonGenerator
                 }
 
                 //是否碰到其他房间或者过道
-                if (_roomGrid.RectCollision(room.Position, room.Size))
+                if (_roomGrid.RectCollision(room.Position - Vector2I.One, room.Size + new Vector2I(2, 2)))
                 {
                     //碰到其他墙壁, 再一次尝试
                     continue;
@@ -417,7 +417,7 @@ public class DungeonGenerator
                 if (!ConnectDoor(prevRoomInfo, room))
                 {
                     _roomGrid.RemoveRect(room.Position, room.Size);
-                    Debug.Log("链接通道失败");
+                    //Debug.Log("链接通道失败");
                     //房间过道没有连接上, 再一次尝试
                     continue;
                     //return GenerateRoomErrorCode.NoProperDoor;

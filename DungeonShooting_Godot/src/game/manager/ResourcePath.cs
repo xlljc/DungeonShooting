@@ -220,6 +220,9 @@ public class ResourcePath
     public const string resource_sprite_map_PreviewMapShadow_png = "res://resource/sprite/map/PreviewMapShadow.png";
     public const string resource_sprite_map_PreviewTransition_png = "res://resource/sprite/map/PreviewTransition.png";
     public const string resource_sprite_map_PreviewTransition2_png = "res://resource/sprite/map/PreviewTransition2.png";
+    public const string resource_sprite_map_PreviewTransition3_png = "res://resource/sprite/map/PreviewTransition3.png";
+    public const string resource_sprite_map_PreviewTransition4_png = "res://resource/sprite/map/PreviewTransition4.png";
+    public const string resource_sprite_map_PreviewTransition5_png = "res://resource/sprite/map/PreviewTransition5.png";
     public const string resource_sprite_map_WallTransition1_png = "res://resource/sprite/map/WallTransition1.png";
     public const string resource_sprite_map_WallTransition2_png = "res://resource/sprite/map/WallTransition2.png";
     public const string resource_sprite_map_WallTransition3_png = "res://resource/sprite/map/WallTransition3.png";
