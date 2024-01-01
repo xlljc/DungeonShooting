@@ -196,7 +196,7 @@ public partial class DungeonManager : Node2D
         UiManager.Open_Loading();
         yield return 0;
         //生成地牢房间
-        var random = new SeedRandom(1);
+        var random = new SeedRandom();
         _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
         if (!_dungeonGenerator.Generate()) //生成房间失败
         {
@@ -787,17 +787,17 @@ public partial class DungeonManager : Node2D
     {
         if (ActivityObject.IsDebug)
         {
-            // StartRoomInfo?.EachRoom(info =>
-            // {
-            //     DrawRect(new Rect2(info.Waypoints * GameConfig.TileCellSize, new Vector2(16, 16)), Colors.Red);
-            // });
+            StartRoomInfo?.EachRoom(info =>
+            {
+                DrawRect(new Rect2(info.Waypoints * GameConfig.TileCellSize, new Vector2(16, 16)), Colors.Red);
+            });
             //绘制房间区域
-            // if (_dungeonGenerator != null)
-            // {
-            //     DrawRoomInfo(StartRoom);
-            // }
+            if (_dungeonGenerator != null)
+            {
+                DrawRoomInfo(StartRoomInfo);
+            }
             //绘制边缘线
-            
+
         }
     }
     

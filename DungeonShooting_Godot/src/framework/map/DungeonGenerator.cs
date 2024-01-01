@@ -46,20 +46,16 @@ public class DungeonGenerator
     private DungeonRoomType _nextRoomType = DungeonRoomType.Battle;
     
     //间隔
-    private int _roomMinInterval = 5;
-    private int _roomMaxInterval = 6;
+    private int _roomMinInterval = 1;
+    private int _roomMaxInterval = 3;
 
     //房间横轴分散程度
     private float _roomHorizontalMinDispersion = 0f;
     private float _roomHorizontalMaxDispersion = 0.5f;
-    // private float _roomHorizontalMinDispersion = 0f;
-    // private float _roomHorizontalMaxDispersion = 2f;
 
     //房间纵轴分散程度
     private float _roomVerticalMinDispersion = 0f;
     private float _roomVerticalMaxDispersion = 0.5f;
-    // private float _roomVerticalMinDispersion = 0f;
-    // private float _roomVerticalMaxDispersion = 2f;
 
     //区域限制
     private bool _enableLimitRange = true;
@@ -169,7 +165,7 @@ public class DungeonGenerator
         var chainMaxTryCount = 3;
         
         //最大尝试次数
-        var maxTryCount = 500;
+        var maxTryCount = 1000;
 
         //当前尝试次数
         var currTryCount = 0;
@@ -272,7 +268,7 @@ public class DungeonGenerator
                     chainTryCount++;
                 }
                 
-                Debug.Log("生成第" + (_count + 1) + "个房间失败! 失败原因: " + errorCode);
+                //Debug.Log("生成第" + (_count + 1) + "个房间失败! 失败原因: " + errorCode);
                 if (errorCode == GenerateRoomErrorCode.OutArea)
                 {
                     _failCount++;
@@ -356,6 +352,10 @@ public class DungeonGenerator
                 var direction = _random.RandomRangeInt(0, 3);
                 //房间间隔
                 var space = _random.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
+                if (direction == 0 || direction == 2)
+                {
+                    space += 1;
+                }
                 //中心偏移
                 int offset;
                 if (direction == 0 || direction == 2)
@@ -404,7 +404,7 @@ public class DungeonGenerator
                 }
 
                 //是否碰到其他房间或者过道
-                if (_roomGrid.RectCollision(room.Position - new Vector2I(GameConfig.RoomSpace, GameConfig.RoomSpace), room.Size + new Vector2I(GameConfig.RoomSpace * 2, GameConfig.RoomSpace * 2)))
+                if (_roomGrid.RectCollision(room.Position, room.Size))
                 {
                     //碰到其他墙壁, 再一次尝试
                     continue;
@@ -417,6 +417,7 @@ public class DungeonGenerator
                 if (!ConnectDoor(prevRoomInfo, room))
                 {
                     _roomGrid.RemoveRect(room.Position, room.Size);
+                    Debug.Log("链接通道失败");
                     //房间过道没有连接上, 再一次尝试
                     continue;
                     //return GenerateRoomErrorCode.NoProperDoor;
@@ -625,7 +626,7 @@ public class DungeonGenerator
             {
                 //找到重叠区域
                 var range = _random.RandomChooseAndRemove(rangeList);
-                var x = _random.RandomRangeInt(range.X, range.Y);
+                var x = _random.RandomRangeInt(range.X, range.Y) + 2;
                 
                 if (roomInfo.GetVerticalStart() < nextRoomInfo.GetVerticalStart()) //room在上, nextRoom在下
                 {
@@ -677,7 +678,7 @@ public class DungeonGenerator
             {
                 //找到重叠区域
                 var range = _random.RandomChooseAndRemove(rangeList);
-                var y = _random.RandomRangeInt(range.X, range.Y);
+                var y = _random.RandomRangeInt(range.X, range.Y) + 3;
                 
                 if (roomInfo.GetHorizontalStart() < nextRoomInfo.GetHorizontalStart()) //room在左, nextRoom在右
                 {
@@ -959,7 +960,9 @@ public class DungeonGenerator
         {
             return false;
         }
-                    
+
+        offset1 += 1;
+        offset2 += 1;
         roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalDoorStart() + offset1, roomInfo.GetVerticalDoorStart());
         nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalDoorEnd(),
             nextRoomInfo.GetVerticalDoorStart() + offset2);
@@ -979,7 +982,9 @@ public class DungeonGenerator
         {
             return false;
         }
-                    
+
+        offset1 += 1;
+        offset2 += 1;
         roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalDoorStart(), roomInfo.GetVerticalDoorStart() + offset1);
         nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalDoorStart() + offset2, nextRoomInfo.GetVerticalDoorEnd());
         cross = new Vector2I(nextRoomDoor.OriginPosition.X, roomDoor.OriginPosition.Y);
@@ -998,6 +1003,8 @@ public class DungeonGenerator
             return false;
         }
 
+        offset1 += 1;
+        offset2 += 1;
         roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalDoorStart() + offset1, roomInfo.GetVerticalDoorEnd());
         nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalDoorEnd(),
             nextRoomInfo.GetVerticalDoorStart() + offset2);
@@ -1017,6 +1024,8 @@ public class DungeonGenerator
             return false;
         }
 
+        offset1 += 1;
+        offset2 += 1;
         roomDoor.OriginPosition =
             new Vector2I(roomInfo.GetHorizontalDoorStart(), roomInfo.GetVerticalDoorStart() + offset1); //
         nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalDoorStart() + offset2,
@@ -1036,7 +1045,9 @@ public class DungeonGenerator
         {
             return false;
         }
-                    
+
+        offset1 += 1;
+        offset2 += 1;
         roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalDoorEnd(), roomInfo.GetVerticalDoorStart() + offset1);
         nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalDoorStart() + offset2,
             nextRoomInfo.GetVerticalDoorEnd());
@@ -1055,7 +1066,9 @@ public class DungeonGenerator
         {
             return false;
         }
-                    
+
+        offset1 += 1;
+        offset2 += 1;
         roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalDoorStart() + offset1, roomInfo.GetVerticalDoorStart());
         nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalDoorStart(),
             nextRoomInfo.GetVerticalDoorStart() + offset2);
@@ -1074,7 +1087,9 @@ public class DungeonGenerator
         {
             return false;
         }
-                    
+        
+        offset1 += 1;
+        offset2 += 2;
         roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalDoorEnd(),
             roomInfo.GetVerticalDoorStart() + offset1);
         nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalStart() + offset2, nextRoomInfo.GetVerticalDoorStart());
@@ -1093,7 +1108,9 @@ public class DungeonGenerator
         {
             return false;
         }
-                    
+
+        offset1 += 1;
+        offset2 += 1;
         roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalDoorStart() + offset1,
             roomInfo.GetVerticalDoorEnd());
         nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalDoorStart(), nextRoomInfo.GetVerticalDoorStart() + offset2);
@@ -1244,6 +1261,11 @@ public class DungeonGenerator
     //将两个门间的过道占用数据存入RoomGrid, 该重载加入拐角点
     private bool AddCorridorToGridRange(RoomDoorInfo door1, RoomDoorInfo door2, Vector2I cross)
     {
+        if (_roomGrid.RectCollision(cross - new Vector2I(1, 2), new Vector2I(GameConfig.CorridorWidth + 2, GameConfig.CorridorWidth + 3)))
+        {
+            return false;
+        }
+        
         var point1 = door1.OriginPosition;
         var point2 = door2.OriginPosition;
         var pos1 = new Vector2I(Mathf.Min(point1.X, cross.X), Mathf.Min(point1.Y, cross.Y));

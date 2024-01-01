@@ -408,7 +408,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         var ePos1 = S_E_HoverRoot.Instance.Position;
         var sPos1 = S_S_HoverRoot.Instance.Position;
         var wPos1 = S_W_HoverRoot.Instance.Position;
-        var nPos2 = position + GameConfig.TileCellSizeVector2I * 2;
+        var nPos2 = position + new Vector2I(GameConfig.TileCellSize * 2, GameConfig.TileCellSize * 3);
         var ePos2 = new Vector2(position.X + size.X - GameConfig.TileCellSize * 2, position.Y + GameConfig.TileCellSize * 3);
         var sPos2 = new Vector2(position.X + GameConfig.TileCellSize * 2, position.Y + size.Y - GameConfig.TileCellSize * 2);
         var wPos2 = position + new Vector2I(GameConfig.TileCellSize * 2, GameConfig.TileCellSize * 3);
