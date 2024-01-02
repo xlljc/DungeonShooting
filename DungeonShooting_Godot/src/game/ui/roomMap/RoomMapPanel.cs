@@ -121,7 +121,7 @@ public partial class RoomMapPanel : RoomMap
                             sprite = _enemySpriteList[i];
                         }
                         //更新标记位置
-                        sprite.Position = enemy.Position / 16;
+                        sprite.Position = enemy.GetCenterPosition() / 16;
                     }
                 }
                 
@@ -148,13 +148,14 @@ public partial class RoomMapPanel : RoomMap
         }
 
         //更新地图中心点位置
+        var playPosition = Player.Current.GetCenterPosition();
         if (!_isMagnifyMap)
         {
-            S_Root.Instance.Position = CalcRootPosition(Player.Current.Position);
+            S_Root.Instance.Position = CalcRootPosition(playPosition);
         }
         else
         {
-            S_Root.Instance.Position = CalcRootPosition(Player.Current.Position) + _mapOffset;
+            S_Root.Instance.Position = CalcRootPosition(playPosition) + _mapOffset;
             S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2 + _mapOffset;
         }
 
@@ -332,24 +333,24 @@ public partial class RoomMapPanel : RoomMap
             if (!flag2) //偏向过道
             {
                 if (roomDoorInfo.Direction == DoorDirection.N)
-                    pos += new Vector2I(0, -2);
+                    pos += new Vector2I(0, -1);
                 else if (roomDoorInfo.Direction == DoorDirection.S)
-                    pos += new Vector2I(0, 2);
+                    pos += new Vector2I(0, 3);
                 else if (roomDoorInfo.Direction == DoorDirection.E)
-                    pos += new Vector2I(2, 0);
+                    pos += new Vector2I(2, 1);
                 else if (roomDoorInfo.Direction == DoorDirection.W)
-                    pos += new Vector2I(-2, 0);
+                    pos += new Vector2I(-2, 1);
             }
             else //偏向房间
             {
                 if (roomDoorInfo.Direction == DoorDirection.N)
-                    pos -= new Vector2I(0, -2);
+                    pos -= new Vector2I(0, -4);
                 else if (roomDoorInfo.Direction == DoorDirection.S)
-                    pos -= new Vector2I(0, 2);
+                    pos -= new Vector2I(0, 1);
                 else if (roomDoorInfo.Direction == DoorDirection.E)
-                    pos -= new Vector2I(2, 0);
+                    pos -= new Vector2I(3, -1);
                 else if (roomDoorInfo.Direction == DoorDirection.W)
-                    pos -= new Vector2I(-2, 0);
+                    pos -= new Vector2I(-3, -1);
             }
             unknownSprite.Position = pos;
         }

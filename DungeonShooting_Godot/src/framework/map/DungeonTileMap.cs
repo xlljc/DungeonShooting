@@ -226,41 +226,12 @@ public class DungeonTileMap
             else //带交叉点
             {
                 //方向, 0横向, 1纵向
-                var dir1 = 0;
-                var dir2 = 0;
+                var dir1 = (doorDir1 == DoorDirection.S || doorDir1 == DoorDirection.N) ? 1 : 0;
+                var dir2 = (doorDir2 == DoorDirection.S || doorDir2 == DoorDirection.N) ? 1 : 0;
 
                 var aisleRect = doorInfo.GetCrossAisleRect();
                 var rect = aisleRect.Rect1;
                 var rect2 = aisleRect.Rect2;
-    
-                //计算范围
-                switch (doorDir1)
-                {
-                    case DoorDirection.E: //→
-                        break;
-                    case DoorDirection.W: //←
-                        break;
-                    case DoorDirection.S: //↓
-                        dir1 = 1;
-                        break;
-                    case DoorDirection.N: //↑
-                        dir1 = 1;
-                        break;
-                }
-    
-                switch (doorDir2)
-                {
-                    case DoorDirection.E: //→
-                        break;
-                    case DoorDirection.W: //←
-                        break;
-                    case DoorDirection.S: //↓
-                        dir2 = 1;
-                        break;
-                    case DoorDirection.N: //↑
-                        dir2 = 1;
-                        break;
-                }
     
                 //填充交叉点
                 FillRect(GameConfig.AisleFloorMapLayer, config.Floor, aisleRect.Cross.Position, aisleRect.Cross.Size);
@@ -275,10 +246,11 @@ public class DungeonTileMap
                 else
                 {
                     FullVerticalAisle(config, rect);
-                    FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
-                    FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
+                    FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
+                    FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
                 }
     
+                //墙壁, 0横向, 1纵向
                 if (dir2 == 0)
                 {
                     FullHorizontalAisle(config, rect2);
@@ -288,8 +260,8 @@ public class DungeonTileMap
                 else
                 {
                     FullVerticalAisle(config, rect2);
-                    FullVerticalAisleDown(config, rect2, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
-                    FullVerticalAisleUp(config, rect2, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
+                    FullVerticalAisleUp(config, rect2, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
+                    FullVerticalAisleDown(config, rect2, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
                 }
     
                 if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
@@ -357,11 +329,13 @@ public class DungeonTileMap
             });
             //创建image, 这里留两个像素宽高用于描边
             var image = Image.Create(x2 - x + 3, y2 - y + 3, false, Image.Format.Rgba8);
+            //image.Fill(new Color(0, 1, 0, 0.2f));
             //填充像素点
             _tempAisleFloorGrid.ForEach((gx, gy, data) =>
             {
                 var posX = gx - x + 1;
                 var posY = gy - y + 1;
+                //image.SetPixel(posX, posY, new Color(1, 0, 0, 0.5882353F));
                 image.SetPixel(posX, posY, new Color(0, 0, 0, 0.5882353F));
                 return true;
             });
@@ -463,7 +437,7 @@ public class DungeonTileMap
                 {
                     _tempAisleFloorGrid.Set(p, true);
                 }
-                _tileRoot.SetCell(layer, p, 0, data.AutoTileCoords);
+                _tileRoot.SetCell(layer, p, data.SourceId, data.AutoTileCoords);
             }
         }
     }
@@ -584,22 +558,16 @@ public class DungeonTileMap
         ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
         if (doorInfo == null)
         {
-            FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1),
-                new Vector2(rect.Size.X - 2, 1));
+            FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
         }
         else
         {
-            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, rect.Size.Y - 2), new Vector2(2, 2));
-            ClearRect(GameConfig.MiddleMapLayer, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(4, 2));
-            
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_RB, rect.Position + new Vector2(0, rect.Size.Y - 1), Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(0, rect.Size.Y), Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_LB, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y - 1), Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Left, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y), Vector2.One);
+            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, 0), new Vector2(2, 2));
+
+            FillRect(GameConfig.TopMapLayer, config.Wall_Out_RT, rect.Position + new Vector2(0, -1), Vector2.One);
+            FillRect(GameConfig.TopMapLayer, config.Wall_Out_LT, rect.Position + new Vector2(3, -1), Vector2.One);
             
             FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
-
-            
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;
@@ -629,9 +597,13 @@ public class DungeonTileMap
         }
         else
         {
-            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, 0), new Vector2(2, 2));
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_RT, rect.Position + new Vector2(0, -1), Vector2.One);
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_LT, rect.Position + new Vector2(3, -1), Vector2.One);
+            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, rect.Size.Y - 2), new Vector2(2, 2));
+            ClearRect(GameConfig.MiddleMapLayer, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(4, 2));
+
+            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_RB, rect.Position + new Vector2(0, rect.Size.Y - 1), Vector2.One);
+            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(0, rect.Size.Y), Vector2.One);
+            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_LB, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y - 1), Vector2.One);
+            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Left, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y), Vector2.One);
             
             FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域

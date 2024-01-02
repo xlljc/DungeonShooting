@@ -51,11 +51,11 @@ public class DungeonGenerator
 
     //房间横轴分散程度
     private float _roomHorizontalMinDispersion = 0f;
-    private float _roomHorizontalMaxDispersion = 0.5f;
+    private float _roomHorizontalMaxDispersion = 3f;
 
     //房间纵轴分散程度
     private float _roomVerticalMinDispersion = 0f;
-    private float _roomVerticalMaxDispersion = 0.5f;
+    private float _roomVerticalMaxDispersion = 3f;
 
     //区域限制
     private bool _enableLimitRange = true;
@@ -584,25 +584,25 @@ public class DungeonGenerator
         nextRoomDoor.ConnectRoom = roomInfo;
         nextRoomDoor.ConnectDoor = roomDoor;
 
-        //先寻找直通门
-        if (_random.RandomBoolean())
-        {
-            //直行通道, 优先横轴
-            if (TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
-                || TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
-            {
-                return true;
-            }
-        }
-        else
-        {
-            //直行通道, 优先纵轴
-            if (TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
-                || TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
-            {
-                return true;
-            }
-        }
+        // //先寻找直通门
+        // if (_random.RandomBoolean())
+        // {
+        //     //直行通道, 优先横轴
+        //     if (TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
+        //         || TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
+        //     {
+        //         return true;
+        //     }
+        // }
+        // else
+        // {
+        //     //直行通道, 优先纵轴
+        //     if (TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
+        //         || TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
+        //     {
+        //         return true;
+        //     }
+        // }
         
         //包含拐角的通道
         return TryConnectCrossDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor);

@@ -526,40 +526,54 @@ public partial class DungeonManager : Node2D
                     calcRect = aisleRect.CalcAisleRect();
                     fogAreaRect = calcRect;
 
-                    switch (roomDoorInfo.Direction)
+                    if (roomDoorInfo.Direction == DoorDirection.E)
                     {
-                        case DoorDirection.E:
+                        if (roomDoorInfo.ConnectDoor.Direction == DoorDirection.N) //→↑
+                        {
                             calcRect.Position += new Vector2I(2, 0);
-                            calcRect.Size -= new Vector2I(2, 0);
-                            break;
-                        case DoorDirection.W:
-                            calcRect.Size -= new Vector2I(2, 0);
-                            break;
-                        case DoorDirection.S:
-                            calcRect.Position += new Vector2I(0, 2);
-                            calcRect.Size -= new Vector2I(0, 2);
-                            break;
-                        case DoorDirection.N:
-                            calcRect.Size -= new Vector2I(0, 2);
-                            break;
+                            calcRect.Size -= new Vector2I(2, 3);
+                        }
+                        else //→↓
+                        {
+                            calcRect.Position += new Vector2I(2, 3);
+                            calcRect.Size -= new Vector2I(2, 3);
+                        }
                     }
-
-                    switch (roomDoorInfo.ConnectDoor.Direction)
+                    else if (roomDoorInfo.Direction == DoorDirection.W)
                     {
-                        case DoorDirection.E:
-                            calcRect.Position += new Vector2I(2, 0);
-                            calcRect.Size -= new Vector2I(2, 0);
-                            break;
-                        case DoorDirection.W:
-                            calcRect.Size -= new Vector2I(2, 0);
-                            break;
-                        case DoorDirection.S:
+                        if (roomDoorInfo.ConnectDoor.Direction == DoorDirection.N) //←↑
+                        {
+                            calcRect.Size -= new Vector2I(2, 3);
+                        }
+                        else //←↓
+                        {
+                            
+                        }
+                    }
+                    else if (roomDoorInfo.Direction == DoorDirection.N)
+                    {
+                        if (roomDoorInfo.ConnectDoor.Direction == DoorDirection.E) //↑→
+                        {
+                            
+                        }
+                        else //↑←
+                        {
+                            calcRect.Position += new Vector2I(0, -1);
+                            calcRect.Size -= new Vector2I(2, 1);
+                        }
+                    }
+                    else if (roomDoorInfo.Direction == DoorDirection.S)
+                    {
+                        if (roomDoorInfo.ConnectDoor.Direction == DoorDirection.E) //↓→
+                        {
+                            calcRect.Position += new Vector2I(2, 2);
+                            calcRect.Size -= new Vector2I(2, 1);
+                        }
+                        else //↓←
+                        {
                             calcRect.Position += new Vector2I(0, 2);
-                            calcRect.Size -= new Vector2I(0, 2);
-                            break;
-                        case DoorDirection.N:
-                            calcRect.Size -= new Vector2I(0, 2);
-                            break;
+                            calcRect.Size -= new Vector2I(2, 1);
+                        }
                     }
                 }
 
@@ -616,7 +630,7 @@ public partial class DungeonManager : Node2D
         var sprite = new TextureRect();
         //sprite.Centered = false;
         sprite.Texture = roomInfo.PreviewTexture;
-        sprite.Position = roomInfo.Position;
+        sprite.Position = roomInfo.Position + new Vector2I(1, 3);
         var material = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres, false);
         material.SetShaderParameter("outline_color", new Color(1, 1, 1, 0.9f));
         material.SetShaderParameter("scale", 0.5f);
@@ -639,19 +653,19 @@ public partial class DungeonManager : Node2D
                     {
                         if (doorInfo.Direction == DoorDirection.N)
                         {
-                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, doorInfo.AislePreviewTexture.GetHeight() - 1);
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, doorInfo.AislePreviewTexture.GetHeight() - 2);
                         }
                         else if (doorInfo.Direction == DoorDirection.S)
                         {
-                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, 1);
+                            aisleSprite.Position = doorInfo.OriginPosition;
                         }
                         else if (doorInfo.Direction == DoorDirection.E)
                         {
-                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, 0);
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(1, -1);
                         }
                         else if (doorInfo.Direction == DoorDirection.W)
                         {
-                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 1, 0);
+                            aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 1, -1);
                         }
                     }
                     else //包含交叉点
@@ -708,6 +722,8 @@ public partial class DungeonManager : Node2D
                                 aisleSprite.Position = doorInfo.OriginPosition;
                             }
                         }
+
+                        aisleSprite.Position += new Vector2(0, 1);
                     }
 
                     var aisleSpriteMaterial = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres, false);
