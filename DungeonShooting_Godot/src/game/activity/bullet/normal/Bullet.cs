@@ -259,7 +259,7 @@ public partial class Bullet : ActivityObject, IBullet
     
     
     /// <summary>
-    /// 播放子弹消失特效
+    /// 播放子弹撞墙消失特效
     /// </summary>
     public void PlayCollisionEffect(KinematicCollision2D collision, string path)
     {

@@ -68,7 +68,8 @@ public partial class Laser : Area2D, IBullet
             
             _init = true;
         }
-        
+
+        ZIndex = 1;
         BulletData = data;
         AttackLayer = attackLayer;
         
@@ -77,7 +78,7 @@ public partial class Laser : Area2D, IBullet
 
         //计算射线最大距离, 也就是撞到墙壁的距离
         var targetPosition = data.Position + Vector2.FromAngle(data.Rotation) * data.MaxDistance;
-        var parameters = PhysicsRayQueryParameters2D.Create(data.Position, targetPosition, PhysicsLayer.Wall);
+        var parameters = PhysicsRayQueryParameters2D.Create(data.Position + new Vector2(0, data.Altitude), targetPosition + new Vector2(0, data.Altitude), PhysicsLayer.Wall);
         var result = GetWorld2D().DirectSpaceState.IntersectRay(parameters);
         float distance;
         var doRebound = false; //是否需要执行反弹
@@ -86,7 +87,7 @@ public partial class Laser : Area2D, IBullet
         if (result != null && result.TryGetValue("position", out var point)) //撞到墙壁
         {
             doRebound = true;
-            reboundPosition = (Vector2)point;
+            reboundPosition = (Vector2)point - new Vector2(0, data.Altitude);
             reboundNormal = (Vector2)result["normal"];
             distance = Position.DistanceTo(reboundPosition.Value);
         }

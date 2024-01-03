@@ -28,6 +28,7 @@ public partial class AutoDestroyParticles : GpuParticles2D, IEffect
     
     public virtual void PlayEffect()
     {
+        ZIndex = 1;
         Emitting = true;
         Restart();
         if (Particles2D != null)

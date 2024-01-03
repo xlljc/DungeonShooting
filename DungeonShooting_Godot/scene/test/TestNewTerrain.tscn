@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://iwm27vpirfef"]
+[gd_scene load_steps=7 format=3 uid="uid://iwm27vpirfef"]
 
 [ext_resource type="Script" path="res://src/test/TestNewTerrain.cs" id="1_68mbo"]
 [ext_resource type="TileSet" uid="uid://cu80e6kxc3c3x" path="res://resource/tileSet/map2/TileSet2.tres" id="1_ig8lo"]
 [ext_resource type="PackedScene" uid="uid://cxhrcytrx0kcf" path="res://prefab/role/Role0001.tscn" id="3_bo13a"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="4_iy0ux"]
+[ext_resource type="Texture2D" uid="uid://bda63puujv425" path="res://resource/sprite/role/common/Role_query.png" id="5_rv0km"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7va3f"]
 resource_local_to_scene = true
@@ -44,7 +45,7 @@ z_index = -1
 y_sort_enabled = true
 
 [node name="Role0001" parent="TileMap2/NormalLayer" node_paths=PackedStringArray("HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("3_bo13a")]
-position = Vector2(131, 62.5)
+position = Vector2(125.5, 64)
 HurtArea = NodePath("../../YSortLayer/Role0001/HurtArea")
 HurtCollision = NodePath("../../YSortLayer/Role0001/HurtArea/HurtCollision")
 InteractiveArea = NodePath("../../YSortLayer/Role0001/InteractiveArea")
@@ -76,10 +77,9 @@ visible = false
 
 [node name="YSortLayer" type="Node2D" parent="TileMap2"]
 y_sort_enabled = true
-position = Vector2(9, 5)
 
 [node name="Role0001" parent="TileMap2/YSortLayer" instance=ExtResource("3_bo13a")]
-position = Vector2(130, 47.5)
+position = Vector2(145, 55)
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite" parent="TileMap2/YSortLayer/Role0001" index="2"]
@@ -94,6 +94,11 @@ visible = false
 
 [node name="InteractiveArea" parent="TileMap2/YSortLayer/Role0001" index="5"]
 visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMap2/YSortLayer"]
+z_index = 1
+position = Vector2(103, 32.5)
+texture = ExtResource("5_rv0km")
 
 [editable path="TileMap2/NormalLayer/Role0001"]
 [editable path="TileMap2/YSortLayer/Role0001"]
