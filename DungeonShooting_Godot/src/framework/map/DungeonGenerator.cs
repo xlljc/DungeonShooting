@@ -50,11 +50,11 @@ public class DungeonGenerator
     private int _roomMaxInterval = 5;
 
     //房间横轴分散程度
-    private float _roomHorizontalMinDispersion = 0f;
+    private float _roomHorizontalMinDispersion = -3f;
     private float _roomHorizontalMaxDispersion = 3f;
 
     //房间纵轴分散程度
-    private float _roomVerticalMinDispersion = 0f;
+    private float _roomVerticalMinDispersion = -3f;
     private float _roomVerticalMaxDispersion = 3f;
 
     //区域限制
@@ -349,6 +349,7 @@ public class DungeonGenerator
             }
             for (; tryCount < maxTryCount; tryCount++)
             {
+                //下一个房间方向
                 var direction = _random.RandomRangeInt(0, 3);
                 //房间间隔
                 var space = _random.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
@@ -360,12 +361,12 @@ public class DungeonGenerator
                 int offset;
                 if (direction == 0 || direction == 2)
                 {
-                    offset = _random.RandomRangeInt(-(int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
+                    offset = _random.RandomRangeInt((int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
                         (int)(prevRoomInfo.Size.X * _roomVerticalMaxDispersion));
                 }
                 else
                 {
-                    offset = _random.RandomRangeInt(-(int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
+                    offset = _random.RandomRangeInt((int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
                         (int)(prevRoomInfo.Size.Y * _roomHorizontalMaxDispersion));
                 }
 
@@ -743,6 +744,7 @@ public class DungeonGenerator
             }
             else
             {
+                return false;
                 if (_random.RandomBoolean()) //↓ //→
                 {
                     if (!TryConnect_SE_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
@@ -763,6 +765,7 @@ public class DungeonGenerator
         }
         else
         {
+            return false;
             if (roomInfo.GetVerticalStart() > nextRoomInfo.GetVerticalStart()) //→ //↓
             {
                 if (_random.RandomBoolean())

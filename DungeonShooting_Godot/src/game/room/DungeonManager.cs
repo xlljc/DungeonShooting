@@ -547,14 +547,16 @@ public partial class DungeonManager : Node2D
                         }
                         else //←↓
                         {
-                            
+                            calcRect.Position += new Vector2I(0, 3);
+                            calcRect.Size -= new Vector2I(2, 3);
                         }
                     }
                     else if (roomDoorInfo.Direction == DoorDirection.N)
                     {
                         if (roomDoorInfo.ConnectDoor.Direction == DoorDirection.E) //↑→
                         {
-                            
+                            calcRect.Position += new Vector2I(2, -1);
+                            calcRect.Size -= new Vector2I(2, 1);
                         }
                         else //↑←
                         {
