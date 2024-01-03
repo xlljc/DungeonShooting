@@ -693,6 +693,10 @@ public partial class DungeonManager : Node2D
                             {
                                 aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(0, doorInfo.AislePreviewTexture.GetHeight() - 1);
                             }
+                            else if (doorInfo.ConnectDoor.Direction == DoorDirection.E)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 4, doorInfo.AislePreviewTexture.GetHeight() - 1);
+                            }
                             else
                             {
                                 aisleSprite.Position = doorInfo.OriginPosition;
@@ -703,6 +707,10 @@ public partial class DungeonManager : Node2D
                             if (doorInfo.ConnectDoor.Direction == DoorDirection.N)
                             {
                                 aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 1, 0);
+                            }
+                            else if (doorInfo.ConnectDoor.Direction == DoorDirection.S)
+                            {
+                                aisleSprite.Position = doorInfo.OriginPosition - new Vector2I(doorInfo.AislePreviewTexture.GetWidth() - 1, doorInfo.AislePreviewTexture.GetHeight() - 4);
                             }
                             else
                             {

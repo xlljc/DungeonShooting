@@ -50,13 +50,16 @@ public class DungeonGenerator
     private int _roomMaxInterval = 5;
 
     //房间横轴分散程度
-    private float _roomHorizontalMinDispersion = -3f;
-    private float _roomHorizontalMaxDispersion = 3f;
+    private float _roomHorizontalMinDispersion = -0.6f;
+    private float _roomHorizontalMaxDispersion = 0.6f;
 
     //房间纵轴分散程度
-    private float _roomVerticalMinDispersion = -3f;
-    private float _roomVerticalMaxDispersion = 3f;
+    private float _roomVerticalMinDispersion = -0.6f;
+    private float _roomVerticalMaxDispersion = 0.6f;
 
+    //房间最大层级
+    private int _maxLayer = 5;
+    
     //区域限制
     private bool _enableLimitRange = true;
     private int _rangeX = 120;
@@ -193,9 +196,9 @@ public class DungeonGenerator
             {
                 if (chainTryCount < chainMaxTryCount)
                 {
-                    if (prevRoomInfo != null && prevRoomInfo.Layer > 6) //层数太高, 下一个房间生成在低层级
+                    if (prevRoomInfo != null && prevRoomInfo.Layer >= _maxLayer - 1) //层数太高, 下一个房间生成在低层级
                     {
-                        tempPrevRoomInfo = RoundRoomLessThanLayer(3);
+                        tempPrevRoomInfo = RoundRoomLessThanLayer(Mathf.Max(1, _maxLayer / 2));
                     }
                     else
                     {
@@ -585,25 +588,25 @@ public class DungeonGenerator
         nextRoomDoor.ConnectRoom = roomInfo;
         nextRoomDoor.ConnectDoor = roomDoor;
 
-        // //先寻找直通门
-        // if (_random.RandomBoolean())
-        // {
-        //     //直行通道, 优先横轴
-        //     if (TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
-        //         || TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
-        //     {
-        //         return true;
-        //     }
-        // }
-        // else
-        // {
-        //     //直行通道, 优先纵轴
-        //     if (TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
-        //         || TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
-        //     {
-        //         return true;
-        //     }
-        // }
+        //先寻找直通门
+        if (_random.RandomBoolean())
+        {
+            //直行通道, 优先横轴
+            if (TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
+                || TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            //直行通道, 优先纵轴
+            if (TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
+                || TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
+            {
+                return true;
+            }
+        }
         
         //包含拐角的通道
         return TryConnectCrossDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor);
@@ -744,7 +747,6 @@ public class DungeonGenerator
             }
             else
             {
-                return false;
                 if (_random.RandomBoolean()) //↓ //→
                 {
                     if (!TryConnect_SE_Door(roomInfo, nextRoomInfo, roomDoor, nextRoomDoor, ref cross) &&
@@ -765,7 +767,6 @@ public class DungeonGenerator
         }
         else
         {
-            return false;
             if (roomInfo.GetVerticalStart() > nextRoomInfo.GetVerticalStart()) //→ //↓
             {
                 if (_random.RandomBoolean())

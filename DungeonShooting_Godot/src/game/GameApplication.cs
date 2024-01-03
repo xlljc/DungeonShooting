@@ -98,7 +98,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = "TestGroup2";
-		DungeonConfig.RoomCount = 15;
+		DungeonConfig.RoomCount = 20;
 	}
 	
 	public override void _EnterTree()
@@ -110,7 +110,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		//固定帧率
 		Engine.MaxFps = TargetFps;
 		//调试绘制开关
-		ActivityObject.IsDebug = true;
+		ActivityObject.IsDebug = false;
 		//Engine.TimeScale = 0.2f;
 		//调整窗口分辨率
 		OnWindowSizeChanged();
