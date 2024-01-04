@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://iwm27vpirfef"]
+[gd_scene load_steps=10 format=3 uid="uid://iwm27vpirfef"]
 
 [ext_resource type="Script" path="res://src/test/TestNewTerrain.cs" id="1_68mbo"]
 [ext_resource type="TileSet" uid="uid://cu80e6kxc3c3x" path="res://resource/tileSet/map2/TileSet2.tres" id="1_ig8lo"]
 [ext_resource type="PackedScene" uid="uid://cxhrcytrx0kcf" path="res://prefab/role/Role0001.tscn" id="3_bo13a"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="4_iy0ux"]
 [ext_resource type="Texture2D" uid="uid://bda63puujv425" path="res://resource/sprite/role/common/Role_query.png" id="5_rv0km"]
+[ext_resource type="Shader" path="res://resource/material/GodRays.gdshader" id="6_bcjt6"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="7_34lsg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7va3f"]
 resource_local_to_scene = true
@@ -17,6 +19,22 @@ shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
 shader_parameter/grey = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fwac7"]
+shader = ExtResource("6_bcjt6")
+shader_parameter/angle = 0.535
+shader_parameter/position = 0.28
+shader_parameter/spread = 0.5
+shader_parameter/cutoff = 0.1
+shader_parameter/falloff = 0.221
+shader_parameter/edge_fade = 0.15
+shader_parameter/speed = 1.0
+shader_parameter/ray1_density = 8.0
+shader_parameter/ray2_density = 30.0
+shader_parameter/ray2_intensity = 0.3
+shader_parameter/color = Color(1, 0.901961, 0.65098, 0.619608)
+shader_parameter/hdr = false
+shader_parameter/seed = 5.0
 
 [node name="TestNewTerrain" type="Node2D"]
 scale = Vector2(2, 2)
@@ -99,6 +117,12 @@ visible = false
 z_index = 1
 position = Vector2(103, 32.5)
 texture = ExtResource("5_rv0km")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_fwac7")
+position = Vector2(420, 252)
+scale = Vector2(3.09375, 2.65625)
+texture = ExtResource("7_34lsg")
 
 [editable path="TileMap2/NormalLayer/Role0001"]
 [editable path="TileMap2/YSortLayer/Role0001"]

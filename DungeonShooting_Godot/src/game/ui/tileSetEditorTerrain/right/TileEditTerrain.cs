@@ -15,13 +15,6 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.LeftBot
         UiNode.L_FocusBtn.Instance.Pressed += OnFocusClick;
     }
 
-    public override void _Process(double delta)
-    {
-        var flag = UiNode.UiPanel.IsDraggingCell;
-        UiNode.L_Grid.Instance.Visible = flag;
-        UiNode.L_TerrainRoot.L_Brush.Instance.Visible = flag;
-    }
-
     /// <summary>
     /// 改变TileSet纹理
     /// </summary>
