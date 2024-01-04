@@ -2,7 +2,7 @@
 
 namespace UI.TileSetEditorTerrain;
 
-public partial class TileEditArea : EditorGridBg<TileSetEditorTerrain.LeftBg>
+public partial class TileEditArea : EditorGridBg<TileSetEditorTerrain.BottomBg>
 {
     public override void SetUiNode(IUiNode uiNode)
     {

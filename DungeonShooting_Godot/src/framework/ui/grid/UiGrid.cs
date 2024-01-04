@@ -94,6 +94,25 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
     //选中的cell索引
     private int _selectIndex = -1;
 
+    public UiGrid(TUiCellNode template, Node parent, Type cellType)
+    {
+        GridContainer = new UiGridContainer(OnReady, OnProcess);
+        GridContainer.Ready += OnReady;
+        _template = template;
+        _cellType = cellType;
+        parent.AddChild(GridContainer);
+        var uiInstance = _template.GetUiInstance();
+        uiInstance.GetParent()?.RemoveChild(uiInstance);
+        if (uiInstance is Control control)
+        {
+            _size = control.Size;
+            if (control.CustomMinimumSize == Vector2.Zero)
+            {
+                control.CustomMinimumSize = _size;
+            }
+        }
+    }
+    
     public UiGrid(TUiCellNode template, Type cellType)
     {
         GridContainer = new UiGridContainer(OnReady, OnProcess);

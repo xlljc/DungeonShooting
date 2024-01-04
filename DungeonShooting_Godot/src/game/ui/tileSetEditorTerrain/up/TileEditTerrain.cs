@@ -2,14 +2,18 @@
 
 namespace UI.TileSetEditorTerrain;
 
-public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.LeftBottomBg>
+public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
 {
     public override void SetUiNode(IUiNode uiNode)
     {
         base.SetUiNode(uiNode);
         var tileTexture = UiNode.L_TerrainRoot;
         InitNode(tileTexture.Instance, UiNode.L_Grid.Instance);
-        tileTexture.L_Brush.Instance.TerrainRoot = tileTexture.Instance;
+        var terrainBrush = tileTexture.L_Brush.Instance;
+        terrainBrush.Root = tileTexture.Instance;
+        terrainBrush.TerrainTextureList.Add(tileTexture.L_TerrainTexture1.Instance);
+        terrainBrush.TerrainTextureList.Add(tileTexture.L_TerrainTexture2.Instance);
+        terrainBrush.TerrainTextureList.Add(tileTexture.L_TerrainTexture3.Instance);
         
         //聚焦按钮点击
         UiNode.L_FocusBtn.Instance.Pressed += OnFocusClick;

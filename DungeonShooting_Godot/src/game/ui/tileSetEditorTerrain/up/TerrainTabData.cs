@@ -5,11 +5,11 @@ namespace UI.TileSetEditorTerrain;
 public class TerrainTabData
 {
     public string Text;
-    public TileSetEditorTerrain.LeftBottomBg LeftBottomBg;
+    public TileSetEditorTerrain.TopBg TopBg;
 
-    public TerrainTabData(string text, TileSetEditorTerrain.LeftBottomBg leftBottomBg)
+    public TerrainTabData(string text, TileSetEditorTerrain.TopBg topBg)
     {
         Text = text;
-        LeftBottomBg = leftBottomBg;
+        TopBg = topBg;
     }
 }

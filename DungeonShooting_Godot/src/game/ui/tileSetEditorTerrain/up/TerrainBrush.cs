@@ -1,10 +1,12 @@
-﻿using Godot;
+﻿using System.Collections.Generic;
+using Godot;
 
 namespace UI.TileSetEditorTerrain;
 
 public partial class TerrainBrush : Control
 {
-    public Control TerrainRoot { get; set; }
+    public Control Root { get; set; }
+    public List<Control> TerrainTextureList { get; } = new List<Control>();
     
 
     public override void _Process(double delta)
@@ -14,20 +16,29 @@ public partial class TerrainBrush : Control
 
     public override void _Draw()
     {
+        var scale = Root.Scale;
         //绘制区域
-        DrawRect(
-            new Rect2(Vector2.Zero, TerrainRoot.Size.AsVector2I()), new Color(1, 1, 0, 0.5f), false,
-            2f / TerrainRoot.Scale.X
-        );
+        foreach (var control in TerrainTextureList)
+        {
+            DrawRect(
+                new Rect2(control.Position, control.Size.AsVector2I()), new Color(1, 1, 0, 0.5f), false,
+                2f / scale.X
+            );
+        }
+
         
         //绘制鼠标悬停区域
-        if (TerrainRoot.IsMouseInRect())
+        foreach (var control in TerrainTextureList)
         {
-            var pos = Utils.GetMouseCellPosition(TerrainRoot) * GameConfig.TileCellSize;
-            DrawRect(
-                new Rect2(pos,GameConfig.TileCellSizeVector2I),
-                Colors.Green, false, 3f / TerrainRoot.Scale.X
-            );
+            if (control.IsMouseInRect())
+            {
+                var pos = Utils.GetMouseCellPosition(control) * GameConfig.TileCellSize;
+                DrawRect(
+                    new Rect2(pos + control.Position,GameConfig.TileCellSizeVector2I),
+                    Colors.Green, false, 3f / scale.X
+                );
+                break;
+            }
         }
     }
 }

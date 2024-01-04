@@ -2,7 +2,7 @@
 
 namespace UI.TileSetEditorTerrain;
 
-public class MaskCell : UiCell<TileSetEditorTerrain.LeftCell, Rect2I>
+public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
 {
     public override void OnInit()
     {

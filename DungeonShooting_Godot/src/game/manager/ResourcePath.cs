@@ -11,7 +11,7 @@ public class ResourcePath
     public const string excelTool_obj_ExcelTool_csproj_nuget_dgspec_json = "res://excelTool/obj/ExcelTool.csproj.nuget.dgspec.json";
     public const string excelTool_obj_project_assets_json = "res://excelTool/obj/project.assets.json";
     public const string excelTool_obj_Release_net8_0_winx64_ExcelTool_csproj_FileListAbsolute_txt = "res://excelTool/obj/Release/net8.0/win-x64/ExcelTool.csproj.FileListAbsolute.txt";
-    public const string excelTool_obj_Release_net8_0_winx64_PublishOutputs_77891b5d25_txt = "res://excelTool/obj/Release/net8.0/win-x64/PublishOutputs.77891b5d25.txt";
+    public const string excelTool_obj_Release_net8_0_winx64_PublishOutputs_a0fcfe3642_txt = "res://excelTool/obj/Release/net8.0/win-x64/PublishOutputs.a0fcfe3642.txt";
     public const string excelTool_publish_winx64_ExcelTool_deps_json = "res://excelTool/publish/win-x64/ExcelTool.deps.json";
     public const string excelTool_publish_winx64_ExcelTool_runtimeconfig_json = "res://excelTool/publish/win-x64/ExcelTool.runtimeconfig.json";
     public const string prefab_Cursor_tscn = "res://prefab/Cursor.tscn";
@@ -225,6 +225,8 @@ public class ResourcePath
     public const string resource_sprite_map_PreviewTransition4_png = "res://resource/sprite/map/PreviewTransition4.png";
     public const string resource_sprite_map_PreviewTransition5_png = "res://resource/sprite/map/PreviewTransition5.png";
     public const string resource_sprite_map_TerrainMask_png = "res://resource/sprite/map/TerrainMask.png";
+    public const string resource_sprite_map_TerrainMask2_png = "res://resource/sprite/map/TerrainMask2.png";
+    public const string resource_sprite_map_TerrainMask3_png = "res://resource/sprite/map/TerrainMask3.png";
     public const string resource_sprite_map_WallTransition1_png = "res://resource/sprite/map/WallTransition1.png";
     public const string resource_sprite_map_WallTransition2_png = "res://resource/sprite/map/WallTransition2.png";
     public const string resource_sprite_map_WallTransition3_png = "res://resource/sprite/map/WallTransition3.png";

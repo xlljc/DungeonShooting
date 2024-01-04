@@ -298,6 +298,25 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         _uiGrids.Add(uiGrid);
         return uiGrid;
     }
+
+    /// <summary>
+    /// 创建一个UiGrid对象, 该Ui对象会在Ui销毁时自动销毁
+    /// </summary>
+    /// <param name="template">模板对象</param>
+    /// <param name="parent">父节点</param>
+    /// <typeparam name="TNode">模板对象类型</typeparam>
+    /// <typeparam name="TData">存放的数据类型</typeparam>
+    /// <typeparam name="TCell">Cell处理类</typeparam>
+    public UiGrid<TNode, TData> CreateUiGrid<TNode, TData, TCell>(TNode template, Node parent) where TNode : IUiCellNode where TCell : UiCell<TNode, TData>
+    {
+        var uiGrid = new UiGrid<TNode, TData>(template, parent, typeof(TCell));
+        if (_uiGrids == null)
+        {
+            _uiGrids = new List<IUiGrid>();
+        }
+        _uiGrids.Add(uiGrid);
+        return uiGrid;
+    }
     
     public sealed override void _Process(double delta)
     {
