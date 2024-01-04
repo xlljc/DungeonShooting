@@ -11,7 +11,7 @@ public class ResourcePath
     public const string excelTool_obj_ExcelTool_csproj_nuget_dgspec_json = "res://excelTool/obj/ExcelTool.csproj.nuget.dgspec.json";
     public const string excelTool_obj_project_assets_json = "res://excelTool/obj/project.assets.json";
     public const string excelTool_obj_Release_net8_0_winx64_ExcelTool_csproj_FileListAbsolute_txt = "res://excelTool/obj/Release/net8.0/win-x64/ExcelTool.csproj.FileListAbsolute.txt";
-    public const string excelTool_obj_Release_net8_0_winx64_PublishOutputs_a0fcfe3642_txt = "res://excelTool/obj/Release/net8.0/win-x64/PublishOutputs.a0fcfe3642.txt";
+    public const string excelTool_obj_Release_net8_0_winx64_PublishOutputs_77891b5d25_txt = "res://excelTool/obj/Release/net8.0/win-x64/PublishOutputs.77891b5d25.txt";
     public const string excelTool_publish_winx64_ExcelTool_deps_json = "res://excelTool/publish/win-x64/ExcelTool.deps.json";
     public const string excelTool_publish_winx64_ExcelTool_runtimeconfig_json = "res://excelTool/publish/win-x64/ExcelTool.runtimeconfig.json";
     public const string prefab_Cursor_tscn = "res://prefab/Cursor.tscn";
@@ -122,6 +122,7 @@ public class ResourcePath
     public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";
     public const string resource_material_Blend_tres = "res://resource/material/Blend.tres";
+    public const string resource_material_GodRays_gdshader = "res://resource/material/GodRays.gdshader";
     public const string resource_material_Grid_gdshader = "res://resource/material/Grid.gdshader";
     public const string resource_material_Grid_tres = "res://resource/material/Grid.tres";
     public const string resource_material_Mask_gdshader = "res://resource/material/Mask.gdshader";
@@ -223,6 +224,7 @@ public class ResourcePath
     public const string resource_sprite_map_PreviewTransition3_png = "res://resource/sprite/map/PreviewTransition3.png";
     public const string resource_sprite_map_PreviewTransition4_png = "res://resource/sprite/map/PreviewTransition4.png";
     public const string resource_sprite_map_PreviewTransition5_png = "res://resource/sprite/map/PreviewTransition5.png";
+    public const string resource_sprite_map_TerrainMask_png = "res://resource/sprite/map/TerrainMask.png";
     public const string resource_sprite_map_WallTransition1_png = "res://resource/sprite/map/WallTransition1.png";
     public const string resource_sprite_map_WallTransition2_png = "res://resource/sprite/map/WallTransition2.png";
     public const string resource_sprite_map_WallTransition3_png = "res://resource/sprite/map/WallTransition3.png";
@@ -431,7 +433,6 @@ public class ResourcePath
     public const string resource_tileSet_map1_TileSet1_tres = "res://resource/tileSet/map1/TileSet1.tres";
     public const string resource_tileSet_map1_website_txt = "res://resource/tileSet/map1/website.txt";
     public const string resource_tileSet_map2_TileSet2_tres = "res://resource/tileSet/map2/TileSet2.tres";
-    public const string resource_tileSprite_TerrainMask_png = "res://resource/tileSprite/TerrainMask.png";
     public const string resource_tileSprite_map1_16x16dungeoniiwallreconfigv04spritesheet_png = "res://resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png";
     public const string resource_tileSprite_map2_DungeonTilesetSpikes_png = "res://resource/tileSprite/map2/Dungeon Tileset + Spikes.png";
     public const string resource_tileSprite_map2_DungeonTileset_png = "res://resource/tileSprite/map2/Dungeon Tileset.png";

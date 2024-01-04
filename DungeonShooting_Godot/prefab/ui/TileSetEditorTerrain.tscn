@@ -1,15 +1,15 @@
 [gd_scene load_steps=11 format=3 uid="uid://dfqb73y4br8yd"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/TileSetEditorTerrainPanel.cs" id="1_6jjk7"]
-[ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="2_0v4fp"]
-[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/left/TileEditArea.cs" id="2_ynf0r"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/down/TileEditArea.cs" id="2_ynf0r"]
 [ext_resource type="Script" path="res://src/game/common/ui/EditorMaskBrush.cs" id="3_gydh0"]
-[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/left/TerrainCellDragHandler.cs" id="3_ssd86"]
-[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/right/TileEditTerrain.cs" id="5_0x7yx"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/down/TerrainCellDragHandler.cs" id="3_ssd86"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/up/TileEditTerrain.cs" id="5_0x7yx"]
 [ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="5_08bc4"]
+[ext_resource type="Texture2D" uid="uid://bud6ah5xyey37" path="res://resource/sprite/map/TerrainMask2.png" id="5_xabgh"]
 [ext_resource type="Texture2D" uid="uid://cvjj6jnmxgprw" path="res://resource/sprite/map/TerrainMask.png" id="7_g8dxk"]
-[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/right/TerrainBrush.cs" id="7_lmu64"]
-[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/right/TerrainCellDropHandler.cs" id="8_7xxcq"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/up/TerrainBrush.cs" id="7_lmu64"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/up/TerrainCellDropHandler.cs" id="8_7xxcq"]
 
 [node name="TileSetEditorTerrain" type="Control"]
 layout_mode = 3
@@ -46,49 +46,7 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VSplitContainer/LeftBottom2/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Panel" type="Panel" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(250, 0)
-layout_mode = 2
-
-[node name="ScrollContainer" type="ScrollContainer" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = -2.0
-offset_bottom = -2.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/Panel/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="TabButton" type="Button" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/Panel/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "button"
-
-[node name="NinePatchRect" type="NinePatchRect" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/Panel/ScrollContainer/VBoxContainer/TabButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_0v4fp")
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
-
-[node name="LeftBottomBg" type="ColorRect" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer"]
+[node name="LeftBottomBg" type="ColorRect" parent="VSplitContainer/LeftBottom2/MarginContainer"]
 clip_children = 2
 z_index = 1
 layout_mode = 2
@@ -96,7 +54,7 @@ size_flags_horizontal = 3
 color = Color(0.496094, 0.496094, 0.496094, 1)
 script = ExtResource("5_0x7yx")
 
-[node name="TerrainRoot" type="Control" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/LeftBottomBg"]
+[node name="TerrainRoot" type="Control" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -105,42 +63,85 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -291.0
 offset_top = -92.0
-offset_right = -99.0
-offset_bottom = -28.0
+offset_right = -291.0
+offset_bottom = -92.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(3, 3)
 mouse_filter = 2
 
-[node name="CellRoot" type="Control" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/LeftBottomBg/TerrainRoot"]
+[node name="CellRoot" type="Control" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TerrainRoot"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1.0
 offset_bottom = 1.0
 mouse_filter = 2
 
-[node name="RightCell" type="Control" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/LeftBottomBg/TerrainRoot/CellRoot"]
+[node name="RightCell" type="Control" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TerrainRoot/CellRoot"]
 anchors_preset = 0
 offset_right = 16.0
 offset_bottom = 16.0
 mouse_filter = 1
 script = ExtResource("8_7xxcq")
 
-[node name="CellTexture" type="Sprite2D" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/LeftBottomBg/TerrainRoot/CellRoot/RightCell"]
+[node name="CellTexture" type="Sprite2D" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TerrainRoot/CellRoot/RightCell"]
 centered = false
 
-[node name="TerrainTexture" type="TextureRect" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/LeftBottomBg/TerrainRoot"]
+[node name="TerrainTexture1" type="TextureRect" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TerrainRoot"]
 self_modulate = Color(1, 1, 1, 0.27451)
+custom_minimum_size = Vector2(192, 64)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 192.0
+offset_bottom = 64.0
 mouse_filter = 2
 texture = ExtResource("7_g8dxk")
 
-[node name="Brush" type="Control" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/LeftBottomBg/TerrainRoot"]
+[node name="Label" type="Label" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TerrainRoot/TerrainTexture1"]
+layout_mode = 0
+offset_top = -10.0
+offset_right = 136.0
+offset_bottom = 30.0
+scale = Vector2(0.25, 0.25)
+text = "顶部墙壁"
+
+[node name="TerrainTexture2" type="TextureRect" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TerrainRoot"]
+self_modulate = Color(1, 1, 1, 0.27451)
+custom_minimum_size = Vector2(64, 16)
+layout_mode = 1
+offset_top = 80.0
+offset_right = 64.0
+offset_bottom = 96.0
+mouse_filter = 2
+texture = ExtResource("5_xabgh")
+
+[node name="Label" type="Label" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TerrainRoot/TerrainTexture2"]
+layout_mode = 0
+offset_top = -10.0
+offset_right = 136.0
+offset_bottom = 30.0
+scale = Vector2(0.25, 0.25)
+text = "侧方墙壁"
+
+[node name="TerrainTexture3" type="TextureRect" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TerrainRoot"]
+self_modulate = Color(1, 1, 1, 0.27451)
+custom_minimum_size = Vector2(64, 16)
+layout_mode = 1
+offset_left = 80.0
+offset_top = 80.0
+offset_right = 144.0
+offset_bottom = 96.0
+mouse_filter = 2
+texture = ExtResource("5_xabgh")
+
+[node name="Label" type="Label" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TerrainRoot/TerrainTexture3"]
+layout_mode = 0
+offset_top = -10.0
+offset_right = 136.0
+offset_bottom = 30.0
+scale = Vector2(0.25, 0.25)
+text = "地板"
+
+[node name="Brush" type="Control" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg/TerrainRoot"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -150,7 +151,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("7_lmu64")
 
-[node name="Grid" type="ColorRect" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/LeftBottomBg"]
+[node name="Grid" type="ColorRect" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -160,7 +161,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
-[node name="FocusBtn" type="TextureButton" parent="VSplitContainer/LeftBottom2/MarginContainer/HBoxContainer/LeftBottomBg"]
+[node name="FocusBtn" type="TextureButton" parent="VSplitContainer/LeftBottom2/MarginContainer/LeftBottomBg"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

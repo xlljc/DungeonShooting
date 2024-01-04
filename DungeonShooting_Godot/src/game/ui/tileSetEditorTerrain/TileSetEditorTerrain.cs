@@ -25,110 +25,13 @@ public abstract partial class TileSetEditorTerrain : UiBase
 
     public sealed override void OnInitNestedUi()
     {
-        _ = L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_LeftBottomBg;
+        _ = L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg;
         _ = L_VSplitContainer.L_LeftBottom.L_MarginContainer.L_LeftBg;
 
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.ScrollContainer.VBoxContainer.TabButton.NinePatchRect
-    /// </summary>
-    public class NinePatchRect : UiNode<TileSetEditorTerrainPanel, Godot.NinePatchRect, NinePatchRect>
-    {
-        public NinePatchRect(TileSetEditorTerrainPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
-        public override NinePatchRect Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Button"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.ScrollContainer.VBoxContainer.TabButton
-    /// </summary>
-    public class TabButton : UiNode<TileSetEditorTerrainPanel, Godot.Button, TabButton>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.ScrollContainer.VBoxContainer.NinePatchRect
-        /// </summary>
-        public NinePatchRect L_NinePatchRect
-        {
-            get
-            {
-                if (_L_NinePatchRect == null) _L_NinePatchRect = new NinePatchRect(UiPanel, Instance.GetNode<Godot.NinePatchRect>("NinePatchRect"));
-                return _L_NinePatchRect;
-            }
-        }
-        private NinePatchRect _L_NinePatchRect;
-
-        public TabButton(TileSetEditorTerrainPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
-        public override TabButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.ScrollContainer.VBoxContainer
-    /// </summary>
-    public class VBoxContainer : UiNode<TileSetEditorTerrainPanel, Godot.VBoxContainer, VBoxContainer>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.ScrollContainer.TabButton
-        /// </summary>
-        public TabButton L_TabButton
-        {
-            get
-            {
-                if (_L_TabButton == null) _L_TabButton = new TabButton(UiPanel, Instance.GetNode<Godot.Button>("TabButton"));
-                return _L_TabButton;
-            }
-        }
-        private TabButton _L_TabButton;
-
-        public VBoxContainer(TileSetEditorTerrainPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
-        public override VBoxContainer Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.ScrollContainer"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.ScrollContainer
-    /// </summary>
-    public class ScrollContainer : UiNode<TileSetEditorTerrainPanel, Godot.ScrollContainer, ScrollContainer>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.VBoxContainer
-        /// </summary>
-        public VBoxContainer L_VBoxContainer
-        {
-            get
-            {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
-                return _L_VBoxContainer;
-            }
-        }
-        private VBoxContainer _L_VBoxContainer;
-
-        public ScrollContainer(TileSetEditorTerrainPanel uiPanel, Godot.ScrollContainer node) : base(uiPanel, node) {  }
-        public override ScrollContainer Clone() => new (UiPanel, (Godot.ScrollContainer)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Panel"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel
-    /// </summary>
-    public class Panel : UiNode<TileSetEditorTerrainPanel, Godot.Panel, Panel>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.ScrollContainer
-        /// </summary>
-        public ScrollContainer L_ScrollContainer
-        {
-            get
-            {
-                if (_L_ScrollContainer == null) _L_ScrollContainer = new ScrollContainer(UiPanel, Instance.GetNode<Godot.ScrollContainer>("ScrollContainer"));
-                return _L_ScrollContainer;
-            }
-        }
-        private ScrollContainer _L_ScrollContainer;
-
-        public Panel(TileSetEditorTerrainPanel uiPanel, Godot.Panel node) : base(uiPanel, node) {  }
-        public override Panel Clone() => new (UiPanel, (Godot.Panel)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.CellRoot.RightCell.CellTexture
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.CellRoot.RightCell.CellTexture
     /// </summary>
     public class CellTexture : UiNode<TileSetEditorTerrainPanel, Godot.Sprite2D, CellTexture>
     {
@@ -137,12 +40,12 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.CellRoot.RightCell
+    /// 类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.CellRoot.RightCell
     /// </summary>
     public class RightCell : UiNode<TileSetEditorTerrainPanel, UI.TileSetEditorTerrain.TerrainCellDropHandler, RightCell>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.CellRoot.CellTexture
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.CellRoot.CellTexture
         /// </summary>
         public CellTexture L_CellTexture
         {
@@ -159,12 +62,12 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.CellRoot
+    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.CellRoot
     /// </summary>
     public class CellRoot : UiNode<TileSetEditorTerrainPanel, Godot.Control, CellRoot>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.RightCell
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.RightCell
         /// </summary>
         public RightCell L_RightCell
         {
@@ -181,16 +84,100 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.TerrainTexture
+    /// 类型: <see cref="Godot.Label"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.TerrainTexture1.Label
     /// </summary>
-    public class TerrainTexture : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, TerrainTexture>
+    public class Label : UiNode<TileSetEditorTerrainPanel, Godot.Label, Label>
     {
-        public TerrainTexture(TileSetEditorTerrainPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
-        public override TerrainTexture Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+        public Label(TileSetEditorTerrainPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.TileSetEditorTerrain.TerrainBrush"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.Brush
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.TerrainTexture1
+    /// </summary>
+    public class TerrainTexture1 : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, TerrainTexture1>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.Label
+        /// </summary>
+        public Label L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label(UiPanel, Instance.GetNode<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label _L_Label;
+
+        public TerrainTexture1(TileSetEditorTerrainPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override TerrainTexture1 Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.TerrainTexture2.Label
+    /// </summary>
+    public class Label_1 : UiNode<TileSetEditorTerrainPanel, Godot.Label, Label_1>
+    {
+        public Label_1(TileSetEditorTerrainPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label_1 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.TerrainTexture2
+    /// </summary>
+    public class TerrainTexture2 : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, TerrainTexture2>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.Label
+        /// </summary>
+        public Label_1 L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label_1(UiPanel, Instance.GetNode<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label_1 _L_Label;
+
+        public TerrainTexture2(TileSetEditorTerrainPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override TerrainTexture2 Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.TerrainTexture3.Label
+    /// </summary>
+    public class Label_2 : UiNode<TileSetEditorTerrainPanel, Godot.Label, Label_2>
+    {
+        public Label_2(TileSetEditorTerrainPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label_2 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.TerrainTexture3
+    /// </summary>
+    public class TerrainTexture3 : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, TerrainTexture3>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.Label
+        /// </summary>
+        public Label_2 L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label_2(UiPanel, Instance.GetNode<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label_2 _L_Label;
+
+        public TerrainTexture3(TileSetEditorTerrainPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override TerrainTexture3 Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="UI.TileSetEditorTerrain.TerrainBrush"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.Brush
     /// </summary>
     public class Brush : UiNode<TileSetEditorTerrainPanel, UI.TileSetEditorTerrain.TerrainBrush, Brush>
     {
@@ -199,12 +186,12 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot
+    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot
     /// </summary>
     public class TerrainRoot : UiNode<TileSetEditorTerrainPanel, Godot.Control, TerrainRoot>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.CellRoot
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.CellRoot
         /// </summary>
         public CellRoot L_CellRoot
         {
@@ -217,20 +204,46 @@ public abstract partial class TileSetEditorTerrain : UiBase
         private CellRoot _L_CellRoot;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainTexture
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainTexture1
         /// </summary>
-        public TerrainTexture L_TerrainTexture
+        public TerrainTexture1 L_TerrainTexture1
         {
             get
             {
-                if (_L_TerrainTexture == null) _L_TerrainTexture = new TerrainTexture(UiPanel, Instance.GetNode<Godot.TextureRect>("TerrainTexture"));
-                return _L_TerrainTexture;
+                if (_L_TerrainTexture1 == null) _L_TerrainTexture1 = new TerrainTexture1(UiPanel, Instance.GetNode<Godot.TextureRect>("TerrainTexture1"));
+                return _L_TerrainTexture1;
             }
         }
-        private TerrainTexture _L_TerrainTexture;
+        private TerrainTexture1 _L_TerrainTexture1;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainBrush"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.Brush
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainTexture2
+        /// </summary>
+        public TerrainTexture2 L_TerrainTexture2
+        {
+            get
+            {
+                if (_L_TerrainTexture2 == null) _L_TerrainTexture2 = new TerrainTexture2(UiPanel, Instance.GetNode<Godot.TextureRect>("TerrainTexture2"));
+                return _L_TerrainTexture2;
+            }
+        }
+        private TerrainTexture2 _L_TerrainTexture2;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainTexture3
+        /// </summary>
+        public TerrainTexture3 L_TerrainTexture3
+        {
+            get
+            {
+                if (_L_TerrainTexture3 == null) _L_TerrainTexture3 = new TerrainTexture3(UiPanel, Instance.GetNode<Godot.TextureRect>("TerrainTexture3"));
+                return _L_TerrainTexture3;
+            }
+        }
+        private TerrainTexture3 _L_TerrainTexture3;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainBrush"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.Brush
         /// </summary>
         public Brush L_Brush
         {
@@ -247,7 +260,7 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.ColorRect"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.Grid
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.Grid
     /// </summary>
     public class Grid : UiNode<TileSetEditorTerrainPanel, Godot.ColorRect, Grid>
     {
@@ -256,7 +269,7 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureButton"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.FocusBtn
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.FocusBtn
     /// </summary>
     public class FocusBtn : UiNode<TileSetEditorTerrainPanel, Godot.TextureButton, FocusBtn>
     {
@@ -265,12 +278,12 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.TileSetEditorTerrain.TileEditTerrain"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg
+    /// 类型: <see cref="UI.TileSetEditorTerrain.TileEditTerrain"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg
     /// </summary>
     public class LeftBottomBg : UiNode<TileSetEditorTerrainPanel, UI.TileSetEditorTerrain.TileEditTerrain, LeftBottomBg>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.TerrainRoot
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.TerrainRoot
         /// </summary>
         public TerrainRoot L_TerrainRoot
         {
@@ -283,7 +296,7 @@ public abstract partial class TileSetEditorTerrain : UiBase
         private TerrainRoot _L_TerrainRoot;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Grid
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.Grid
         /// </summary>
         public Grid L_Grid
         {
@@ -296,7 +309,7 @@ public abstract partial class TileSetEditorTerrain : UiBase
         private Grid _L_Grid;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.FocusBtn
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.FocusBtn
         /// </summary>
         public FocusBtn L_FocusBtn
         {
@@ -313,25 +326,12 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer
+    /// 类型: <see cref="Godot.MarginContainer"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer
     /// </summary>
-    public class HBoxContainer : UiNode<TileSetEditorTerrainPanel, Godot.HBoxContainer, HBoxContainer>
+    public class MarginContainer : UiNode<TileSetEditorTerrainPanel, Godot.MarginContainer, MarginContainer>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Panel"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.Panel
-        /// </summary>
-        public Panel L_Panel
-        {
-            get
-            {
-                if (_L_Panel == null) _L_Panel = new Panel(UiPanel, Instance.GetNode<Godot.Panel>("Panel"));
-                return _L_Panel;
-            }
-        }
-        private Panel _L_Panel;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TileEditTerrain"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TileEditTerrain"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.LeftBottomBg
         /// </summary>
         public LeftBottomBg L_LeftBottomBg
         {
@@ -342,28 +342,6 @@ public abstract partial class TileSetEditorTerrain : UiBase
             }
         }
         private LeftBottomBg _L_LeftBottomBg;
-
-        public HBoxContainer(TileSetEditorTerrainPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
-        public override HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.MarginContainer"/>, 路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer
-    /// </summary>
-    public class MarginContainer : UiNode<TileSetEditorTerrainPanel, Godot.MarginContainer, MarginContainer>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.HBoxContainer
-        /// </summary>
-        public HBoxContainer L_HBoxContainer
-        {
-            get
-            {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
-                return _L_HBoxContainer;
-            }
-        }
-        private HBoxContainer _L_HBoxContainer;
 
         public MarginContainer(TileSetEditorTerrainPanel uiPanel, Godot.MarginContainer node) : base(uiPanel, node) {  }
         public override MarginContainer Clone() => new (UiPanel, (Godot.MarginContainer)Instance.Duplicate());
@@ -613,64 +591,44 @@ public abstract partial class TileSetEditorTerrain : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.ScrollContainer.VBoxContainer.TabButton.NinePatchRect
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.CellRoot.RightCell.CellTexture
     /// </summary>
-    public NinePatchRect S_NinePatchRect => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_Panel.L_ScrollContainer.L_VBoxContainer.L_TabButton.L_NinePatchRect;
+    public CellTexture S_CellTexture => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TerrainRoot.L_CellRoot.L_RightCell.L_CellTexture;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.ScrollContainer.VBoxContainer.TabButton
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.CellRoot.RightCell
     /// </summary>
-    public TabButton S_TabButton => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_Panel.L_ScrollContainer.L_VBoxContainer.L_TabButton;
+    public RightCell S_RightCell => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TerrainRoot.L_CellRoot.L_RightCell;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.ScrollContainer.VBoxContainer
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.TerrainTexture1
     /// </summary>
-    public VBoxContainer S_VBoxContainer => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_Panel.L_ScrollContainer.L_VBoxContainer;
+    public TerrainTexture1 S_TerrainTexture1 => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TerrainRoot.L_TerrainTexture1;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel.ScrollContainer
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.TerrainTexture2
     /// </summary>
-    public ScrollContainer S_ScrollContainer => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_Panel.L_ScrollContainer;
+    public TerrainTexture2 S_TerrainTexture2 => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TerrainRoot.L_TerrainTexture2;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.Panel
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.TerrainTexture3
     /// </summary>
-    public Panel S_Panel => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_Panel;
+    public TerrainTexture3 S_TerrainTexture3 => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TerrainRoot.L_TerrainTexture3;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.CellRoot.RightCell.CellTexture
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainBrush"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot.Brush
     /// </summary>
-    public CellTexture S_CellTexture => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_LeftBottomBg.L_TerrainRoot.L_CellRoot.L_RightCell.L_CellTexture;
+    public Brush S_Brush => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TerrainRoot.L_Brush;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.CellRoot.RightCell
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg.TerrainRoot
     /// </summary>
-    public RightCell S_RightCell => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_LeftBottomBg.L_TerrainRoot.L_CellRoot.L_RightCell;
+    public TerrainRoot S_TerrainRoot => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg.L_TerrainRoot;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.TerrainTexture
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TileEditTerrain"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.LeftBottomBg
     /// </summary>
-    public TerrainTexture S_TerrainTexture => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_LeftBottomBg.L_TerrainRoot.L_TerrainTexture;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainBrush"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot.Brush
-    /// </summary>
-    public Brush S_Brush => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_LeftBottomBg.L_TerrainRoot.L_Brush;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg.TerrainRoot
-    /// </summary>
-    public TerrainRoot S_TerrainRoot => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_LeftBottomBg.L_TerrainRoot;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TileEditTerrain"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer.LeftBottomBg
-    /// </summary>
-    public LeftBottomBg S_LeftBottomBg => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer.L_LeftBottomBg;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2.MarginContainer.HBoxContainer
-    /// </summary>
-    public HBoxContainer S_HBoxContainer => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_HBoxContainer;
+    public LeftBottomBg S_LeftBottomBg => L_VSplitContainer.L_LeftBottom2.L_MarginContainer.L_LeftBottomBg;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Panel"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.LeftBottom2
