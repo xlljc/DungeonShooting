@@ -51,7 +51,7 @@ public partial class TerrainCellDragHandler : TextureButton
         var control = new Control();
         control.AddChild(sprite);
         control.ZIndex = 10;
-        control.Scale = _panel.S_LeftBottomBg.L_TileTexture.Instance.Scale;
+        control.Scale = _panel.S_LeftBottomBg.L_TerrainRoot.Instance.Scale;
         SetDragPreview(control);
         return _rect2I;
     }

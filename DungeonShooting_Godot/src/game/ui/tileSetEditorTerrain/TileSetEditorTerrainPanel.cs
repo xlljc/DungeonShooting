@@ -31,16 +31,16 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         _leftGrid.SetCellOffset(Vector2I.Zero);
 
         var sRightCell = S_RightCell;
-        var tileShadowSize = S_TileShadow.Instance.Texture.GetSize().AsVector2I();
-        tileShadowSize = tileShadowSize / GameConfig.TileCellSize - new Vector2I(2, 2);
-        Debug.Log("tileShadowSize: " + tileShadowSize);
-        sRightCell.Instance.Position = GameConfig.TileCellSizeVector2I;
+        var terrainSize = S_TerrainRoot.Instance.Size.AsVector2I();
+        terrainSize = terrainSize / GameConfig.TileCellSize;
+        Debug.Log("terrainSize: " + terrainSize);
+        sRightCell.Instance.Position = Vector2.Zero;
         _rightGrid = CreateUiGrid<RightCell, bool, TerrainCell>(sRightCell);
         _rightGrid.SetCellOffset(Vector2I.Zero);
-        _rightGrid.SetColumns(tileShadowSize.X);
-        for (var y = 0; y < tileShadowSize.Y; y++)
+        _rightGrid.SetColumns(terrainSize.X);
+        for (var y = 0; y < terrainSize.Y; y++)
         {
-            for (var x = 0; x < tileShadowSize.X; x++)
+            for (var x = 0; x < terrainSize.X; x++)
             {
                 _rightGrid.Add(false);
             }
@@ -87,6 +87,5 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     {
         S_LeftBg.Instance.Color = EditorPanel.BgColor;
         S_LeftBottomBg.Instance.Color = EditorPanel.BgColor;
-        S_TileShadow.Instance.Modulate = EditorPanel.BgColor;
     }
 }

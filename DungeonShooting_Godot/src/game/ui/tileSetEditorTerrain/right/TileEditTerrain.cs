@@ -7,9 +7,9 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.LeftBot
     public override void SetUiNode(IUiNode uiNode)
     {
         base.SetUiNode(uiNode);
-        var tileTexture = UiNode.L_TileTexture;
+        var tileTexture = UiNode.L_TerrainRoot;
         InitNode(tileTexture.Instance, UiNode.L_Grid.Instance);
-        tileTexture.L_Brush.Instance.TileTexture = tileTexture.Instance;
+        tileTexture.L_Brush.Instance.TerrainRoot = tileTexture.Instance;
         
         //聚焦按钮点击
         UiNode.L_FocusBtn.Instance.Pressed += OnFocusClick;
@@ -19,7 +19,7 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.LeftBot
     {
         var flag = UiNode.UiPanel.IsDraggingCell;
         UiNode.L_Grid.Instance.Visible = flag;
-        UiNode.L_TileTexture.L_Brush.Instance.Visible = flag;
+        UiNode.L_TerrainRoot.L_Brush.Instance.Visible = flag;
     }
 
     /// <summary>
@@ -34,8 +34,8 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.LeftBot
     //聚焦按钮点击
     private void OnFocusClick()
     {
-        var texture = UiNode.L_TileTexture.Instance.Texture;
-        Utils.DoFocusNode(ContainerRoot, Size, texture != null ? texture.GetSize() : Vector2.Zero);
+        var root = UiNode.L_TerrainRoot.Instance;
+        Utils.DoFocusNode(ContainerRoot, Size, root.Size);
         RefreshGridTrans();
     }
 }

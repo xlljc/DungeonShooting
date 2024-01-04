@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cvjj6jnmxgprw"
-path="res://.godot/imported/TerrainMask.png-6b1c9d08c7552e585c640baff529bbff.ctex"
+path="res://.godot/imported/TerrainMask.png-15fc73cf90f6ff1547134db4982b53af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/tileSprite/TerrainMask.png"
-dest_files=["res://.godot/imported/TerrainMask.png-6b1c9d08c7552e585c640baff529bbff.ctex"]
+source_file="res://resource/sprite/map/TerrainMask.png"
+dest_files=["res://.godot/imported/TerrainMask.png-15fc73cf90f6ff1547134db4982b53af.ctex"]
 
 [params]
 
