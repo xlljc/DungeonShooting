@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 
 namespace UI.TileSetEditor;
@@ -155,16 +156,28 @@ public partial class TileSetEditorPanel : TileSetEditor
         OpenPrevUi();
     }
 
+    //删除资源
     private void OnDeleteSourceClick()
     {
         var optionButton = S_OptionButton.Instance;
-        if (optionButton.Selected >= 0)
+        var selectIndex = optionButton.Selected;
+        if (selectIndex >= 0)
         {
             EditorWindowManager.ShowConfirm("提示", "是否需要删除该资源!", v =>
             {
                 if (v)
                 {
-                    Debug.Log("删除资源: ");
+                    var name = optionButton.GetItemText(selectIndex);
+                    var findIndex = TileSetInfo.Sources.FindIndex(info => info.Name == name);
+                    if (findIndex >= 0)
+                    {
+                        TileSetInfo.Sources.RemoveAt(findIndex);
+                    }
+
+                    var index = optionButton.ItemCount - 2;
+                    optionButton.RemoveItem(selectIndex);
+                    optionButton.Selected = index;
+                    OnOptionChange(index);
                 }
             });
         }
@@ -174,20 +187,49 @@ public partial class TileSetEditorPanel : TileSetEditor
         }
     }
 
+    //创建资源
     private void OnAddSourceClick()
     {
-        EditorWindowManager.ShowInput("创建资源", "资源名称：", null, (value, isClose) =>
+        EditorWindowManager.ShowInput("创建资源", "资源名称：", null, (value, isSubmit) =>
         {
-            EventManager.EmitEvent(EventEnum.OnCreateTileSetSource);
-            var optionButton = S_OptionButton.Instance;
-            optionButton.AddItem(value);
-            optionButton.Selected = optionButton.ItemCount - 1;
+            if (isSubmit)
+            {
+                if (TileSetInfo.Sources.FindIndex(info => info.Name == value) >= 0)
+                {
+                    EditorWindowManager.ShowTips("错误", "该资源名称已存在！");
+                    return false;
+                }
+                
+                var source = new TileSetSourceInfo();
+                source.InitData();
+                source.Name = value;
+                TileSetInfo.Sources.Add(source);
+                
+                EventManager.EmitEvent(EventEnum.OnCreateTileSetSource, source);
+                var optionButton = S_OptionButton.Instance;
+                optionButton.AddItem(value);
+                var selectIndex = optionButton.ItemCount - 1;
+                optionButton.Selected = selectIndex;
+                OnOptionChange(selectIndex);
+            }
+
             return true;
         });
     }
 
+    //选中资源
     private void OnOptionChange(long index)
     {
+        if (index >= 0)
+        {
+            TabGrid.Visible = true;
+            TabGrid.SelectIndex = 0;
+        }
+        else
+        {
+            TabGrid.Visible = false;
+            TabGrid.SelectIndex = -1;
+        }
         EventManager.EmitEvent(EventEnum.OnSelectTileSetSource);
     }
 }

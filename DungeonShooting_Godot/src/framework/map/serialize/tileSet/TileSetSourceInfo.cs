@@ -12,6 +12,13 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
     [JsonInclude]
     public string Name;
     
+    /// <summary>
+    /// 初始化默认数据
+    /// </summary>
+    public void InitData()
+    {
+    }
+    
     public TileSetSourceInfo Clone()
     {
         var tileSetSourceInfo = new TileSetSourceInfo();

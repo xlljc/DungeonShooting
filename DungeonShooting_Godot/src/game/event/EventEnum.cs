@@ -153,7 +153,7 @@ public enum EventEnum
     /// </summary>
     OnCreateTileSetSource,
     /// <summary>
-    /// 选中TileSet资源, 参数为<see cref="TileSetSourceInfo"/>
+    /// 选中TileSet资源, 参数为<see cref="TileSetSourceInfo"/>, 参数为 null 表示取消选中
     /// </summary>
     OnSelectTileSetSource,
     /// <summary>
