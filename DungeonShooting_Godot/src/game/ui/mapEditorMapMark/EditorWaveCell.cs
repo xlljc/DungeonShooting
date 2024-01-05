@@ -159,10 +159,10 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
 
     public void OnClickHandler()
     {
-        EditorManager.SetSelectWaveIndex(Index);
+        EditorTileMapManager.SetSelectWaveIndex(Index);
         CellNode.UiPanel.SetSelectCell(this, CellNode.L_WaveContainer.Instance, MapEditorMapMarkPanel.SelectToolType.Wave);
         //清除选中的标记
-        EditorManager.SetSelectMark(null);
+        EditorTileMapManager.SetSelectMark(null);
     }
 
     public override void OnSelect()

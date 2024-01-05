@@ -94,7 +94,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
     /// </summary>
     public void SelectGroup(DungeonRoomGroup group)
     {
-        EditorManager.SetSelectDungeonGroup(group);
+        EditorTileMapManager.SetSelectDungeonGroup(group);
         OnSearchRoomButtonClick();
     }
 
@@ -143,14 +143,14 @@ public partial class MapEditorProjectPanel : MapEditorProject
     //搜索房间按钮点击
     private void OnSearchRoomButtonClick()
     {
-        if (EditorManager.SelectDungeonGroup != null)
+        if (EditorTileMapManager.SelectDungeonGroup != null)
         {
             //输入文本
             var text = S_RoomSearchInput.Instance.Text;
             //房间类型
             var roomType = S_RoomTypeButton.Instance.GetSelectedId();
 
-            IEnumerable<DungeonRoomSplit> result = EditorManager.SelectDungeonGroup.GetAllRoomList();
+            IEnumerable<DungeonRoomSplit> result = EditorTileMapManager.SelectDungeonGroup.GetAllRoomList();
             
             //名称搜索
             if (!string.IsNullOrEmpty(text))
@@ -192,7 +192,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
     //创建地牢房间按钮点击
     private void OnCreateRoomClick()
     {
-        var groupName = EditorManager.SelectDungeonGroup != null ? EditorManager.SelectDungeonGroup.GroupName : null;
+        var groupName = EditorTileMapManager.SelectDungeonGroup != null ? EditorTileMapManager.SelectDungeonGroup.GroupName : null;
         EditorWindowManager.ShowCreateRoom(groupName, Mathf.Max(S_RoomTypeButton.Instance.Selected - 1, 0), CreateRoom);
     }
     
@@ -231,7 +231,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
                 if (result)
                 {
                     //删除房间
-                    if (MapProjectManager.DeleteRoom(EditorManager.SelectDungeonGroup, selectRoom))
+                    if (MapProjectManager.DeleteRoom(EditorTileMapManager.SelectDungeonGroup, selectRoom))
                     {
                         MapProjectManager.SaveGroupMap();
                         OnSearchRoomButtonClick();

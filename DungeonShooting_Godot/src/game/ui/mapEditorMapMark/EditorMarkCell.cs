@@ -66,10 +66,10 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
 
     public void OnClickHandler()
     {
-        EditorManager.SetSelectWaveIndex(Data.ParentCell.Index);
+        EditorTileMapManager.SetSelectWaveIndex(Data.ParentCell.Index);
         CellNode.UiPanel.SetSelectCell(this, CellNode.Instance, MapEditorMapMarkPanel.SelectToolType.Mark);
         //选中标记
-        EditorManager.SetSelectMark(Data.MarkInfo);
+        EditorTileMapManager.SetSelectMark(Data.MarkInfo);
         
         //双击判定
         if (_prevClickTime2 >= 0)
@@ -99,7 +99,7 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
     {
         CellNode.L_MarkButton.L_Select.Instance.Visible = true;
         //选中标记
-        EditorManager.SetSelectMark(Data.MarkInfo);
+        EditorTileMapManager.SetSelectMark(Data.MarkInfo);
     }
 
     public override void OnUnSelect()

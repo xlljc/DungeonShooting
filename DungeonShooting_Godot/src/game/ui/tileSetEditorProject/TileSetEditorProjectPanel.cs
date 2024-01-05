@@ -19,10 +19,11 @@ public partial class TileSetEditorProjectPanel : TileSetEditorProject
         _grid.SetAutoColumns(true);
         _grid.SetCellOffset(new Vector2I(10, 10));
         _grid.SetHorizontalExpand(true);
-        _grid.Add(new TileSetInfo()
-        {
-            Name = "测试数据"
-        });
+        
+        var tileSetInfo = new TileSetInfo();
+        tileSetInfo.InitData();
+        tileSetInfo.Name = "测试数据";
+        _grid.Add(tileSetInfo);
     }
 
     public override void OnDestroyUi()

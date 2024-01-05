@@ -19,10 +19,10 @@ public static class EditorPlayManager
 
         IsPlay = true;
         _config = new DungeonConfig();
-        _config.GroupName = EditorManager.SelectDungeonGroup.GroupName;
-        _config.DesignatedType = EditorManager.SelectRoom.RoomInfo.RoomType;
+        _config.GroupName = EditorTileMapManager.SelectDungeonGroup.GroupName;
+        _config.DesignatedType = EditorTileMapManager.SelectRoom.RoomInfo.RoomType;
         _config.DesignatedRoom = new List<DungeonRoomSplit>();
-        _config.DesignatedRoom.Add(EditorManager.SelectRoom);
+        _config.DesignatedRoom.Add(EditorTileMapManager.SelectRoom);
         GameApplication.Instance.DungeonManager.EditorPlayDungeon(prevUi, _config);
     }
 

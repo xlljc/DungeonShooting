@@ -149,6 +149,18 @@ public enum EventEnum
     OnSetMarkVisible,
     
     /// <summary>
+    /// 创建TileSet资源, 参数为<see cref="TileSetSourceInfo"/>
+    /// </summary>
+    OnCreateTileSetSource,
+    /// <summary>
+    /// 选中TileSet资源, 参数为<see cref="TileSetSourceInfo"/>
+    /// </summary>
+    OnSelectTileSetSource,
+    /// <summary>
+    /// 删除TileSet资源, 参数为<see cref="TileSetSourceInfo"/>
+    /// </summary>
+    OnDeleteTileSetSource,
+    /// <summary>
     /// 设置TileSet纹理, 参数<see cref="Godot.Texture2D"/>
     /// </summary>
     OnSetTileTexture,

@@ -50,11 +50,11 @@ public partial class MapEditorPanel : MapEditor
     public override void OnDestroyUi()
     {
         //清除选中的标记
-        EditorManager.SetSelectMark(null);
+        EditorTileMapManager.SetSelectMark(null);
         //清除选中的波
-        EditorManager.SetSelectWaveIndex(-1);
+        EditorTileMapManager.SetSelectWaveIndex(-1);
         //清除选中的预设
-        EditorManager.SetSelectPreinstallIndex(-1);
+        EditorTileMapManager.SetSelectPreinstallIndex(-1);
     }
 
     //点击播放按钮
@@ -65,13 +65,13 @@ public partial class MapEditorPanel : MapEditor
         //有错误数据
         if (check.HasError)
         {
-            EditorWindowManager.ShowTips("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，不能运行房间！");
+            EditorWindowManager.ShowTips("提示", EditorTileMapManager.GetRoomErrorTypeMessage(check.ErrorType) + "，不能运行房间！");
             return;
         }
         //保存数据
         S_TileMap.Instance.TriggerSave(RoomErrorType.None, () =>
         {
-            var groupName = EditorManager.SelectDungeonGroup.GroupName;
+            var groupName = EditorTileMapManager.SelectDungeonGroup.GroupName;
             var result = DungeonManager.CheckDungeon(groupName);
             if (result.HasError)
             {
@@ -126,7 +126,7 @@ public partial class MapEditorPanel : MapEditor
         //有错误的数据
         if (check.HasError)
         {
-            EditorWindowManager.ShowConfirm("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
+            EditorWindowManager.ShowConfirm("提示", EditorTileMapManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
             {
                 if (v)
                 {
@@ -155,7 +155,7 @@ public partial class MapEditorPanel : MapEditor
                     var check = CheckError();
                     if (check.HasError) //有错误
                     {
-                        EditorWindowManager.ShowConfirm("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
+                        EditorWindowManager.ShowConfirm("提示", EditorTileMapManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
                         {
                             if (v)
                             {
@@ -193,7 +193,7 @@ public partial class MapEditorPanel : MapEditor
             var check = CheckError();
             if (check.HasError) //有错误
             {
-                EditorWindowManager.ShowConfirm("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果不解决错误就退出，运行游戏将不会刷出该房间！\n是否仍要退出？", (v) =>
+                EditorWindowManager.ShowConfirm("提示", EditorTileMapManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果不解决错误就退出，运行游戏将不会刷出该房间！\n是否仍要退出？", (v) =>
                 {
                     if (v)
                     {
@@ -245,7 +245,7 @@ public partial class MapEditorPanel : MapEditor
             }
         }
         
-        if (EditorManager.SelectRoom.Preinstall == null || EditorManager.SelectRoom.Preinstall.Count == 0)
+        if (EditorTileMapManager.SelectRoom.Preinstall == null || EditorTileMapManager.SelectRoom.Preinstall.Count == 0)
         {
             return new CheckResult(true, RoomErrorType.NoPreinstallError);
         }

@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 
-public static class EditorManager
+public static class EditorTileMapManager
 {
     /// <summary>
     /// 当前使用的地牢组

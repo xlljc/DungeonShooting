@@ -136,7 +136,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         }
         _currMarkToolsMap.Clear();
         //添加新的数据
-        var selectPreinstall = EditorManager.SelectPreinstall;
+        var selectPreinstall = EditorTileMapManager.SelectPreinstall;
         if (selectPreinstall != null)
         {
             foreach (var markInfos in selectPreinstall.WaveList)
@@ -158,8 +158,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
             _toolGrid.Click(_editToolIndex);
         }
         
-        var selectIndex = EditorManager.SelectWaveIndex;
-        var waveList = EditorManager.SelectPreinstall.WaveList;
+        var selectIndex = EditorTileMapManager.SelectWaveIndex;
+        var waveList = EditorTileMapManager.SelectPreinstall.WaveList;
         for (var i = 0; i < waveList.Count; i++)
         {
             var wave = waveList[i];
@@ -325,11 +325,11 @@ public partial class MapEditorToolsPanel : MapEditorTools
         if (markTool != null) //选中当前
         {
             ActiveMark.OnSelect();
-            EditorManager.SetSelectMark(markTool.MarkInfo);
+            EditorTileMapManager.SetSelectMark(markTool.MarkInfo);
         }
         else
         {
-            EditorManager.SetSelectMark(null);
+            EditorTileMapManager.SetSelectMark(null);
         }
     }
 

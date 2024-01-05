@@ -5,6 +5,12 @@ namespace UI.TileSetEditor;
 public partial class TileSetEditorPanel : TileSetEditor
 {
     /// <summary>
+    /// 编辑使用的 tileSetInfo 数据
+    /// </summary>
+    public TileSetInfo TileSetInfo { get; private set; }
+    public TileSetInfo OriginTileSetInfo { get; private set; }
+    
+    /// <summary>
     /// 是否初始化过纹理
     /// </summary>
     public bool InitTexture { get; private set; }
@@ -89,7 +95,9 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// </summary>
     public void InitData(TileSetInfo tileSetInfo)
     {
-        S_Title.Instance.Text = "正在编辑：" + tileSetInfo.Name;
+        OriginTileSetInfo = tileSetInfo;
+        TileSetInfo = tileSetInfo.Clone();
+        S_Title.Instance.Text = "正在编辑：" + TileSetInfo.Name;
         
         //SetTextureData(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
         //TabGrid.SelectIndex = 0;
@@ -170,6 +178,7 @@ public partial class TileSetEditorPanel : TileSetEditor
     {
         EditorWindowManager.ShowInput("创建资源", "资源名称：", null, (value, isClose) =>
         {
+            EventManager.EmitEvent(EventEnum.OnCreateTileSetSource);
             var optionButton = S_OptionButton.Instance;
             optionButton.AddItem(value);
             optionButton.Selected = optionButton.ItemCount - 1;
@@ -179,6 +188,6 @@ public partial class TileSetEditorPanel : TileSetEditor
 
     private void OnOptionChange(long index)
     {
-        
+        EventManager.EmitEvent(EventEnum.OnSelectTileSetSource);
     }
 }

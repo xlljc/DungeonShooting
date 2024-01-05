@@ -28,7 +28,7 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
         else
         {
             CellNode.L_ErrorTexture.Instance.Visible = true;
-            tipText += "\n错误: " + EditorManager.GetRoomErrorTypeMessage(data.ErrorType);
+            tipText += "\n错误: " + EditorTileMapManager.GetRoomErrorTypeMessage(data.ErrorType);
         }
         
         if (!string.IsNullOrEmpty(data.RoomInfo.Remark))
@@ -51,7 +51,7 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
     
     public override void OnSelect()
     {
-        EditorManager.SetSelectRoom(Data);
+        EditorTileMapManager.SetSelectRoom(Data);
         CellNode.L_SelectTexture.Instance.Visible = true;
     }
 

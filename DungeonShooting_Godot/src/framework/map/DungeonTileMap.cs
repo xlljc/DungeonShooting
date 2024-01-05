@@ -160,7 +160,7 @@ public class DungeonTileMap
             RoomPreinstallInfo preinstallInfo;
             if (EditorPlayManager.IsPlay && roomInfo.RoomType == GameApplication.Instance.DungeonManager.CurrConfig.DesignatedType) //编辑器模式, 指定预设
             {
-                preinstallInfo = EditorManager.SelectPreinstall;
+                preinstallInfo = EditorTileMapManager.SelectPreinstall;
             }
             else //普通模式
             {
