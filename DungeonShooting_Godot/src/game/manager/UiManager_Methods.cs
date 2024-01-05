@@ -9,6 +9,7 @@ public static partial class UiManager
         public const string Debugger = "Debugger";
         public const string EditorColorPicker = "EditorColorPicker";
         public const string EditorImportCombination = "EditorImportCombination";
+        public const string EditorInput = "EditorInput";
         public const string EditorTips = "EditorTips";
         public const string EditorTools = "EditorTools";
         public const string EditorWindow = "EditorWindow";
@@ -226,6 +227,54 @@ public static partial class UiManager
     public static UI.EditorImportCombination.EditorImportCombinationPanel[] Get_EditorImportCombination_Instance()
     {
         return GetUiInstance<UI.EditorImportCombination.EditorImportCombinationPanel>(nameof(UI.EditorImportCombination.EditorImportCombination));
+    }
+
+    /// <summary>
+    /// 创建 EditorInput, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorInput.EditorInputPanel Create_EditorInput()
+    {
+        return CreateUi<UI.EditorInput.EditorInputPanel>(UiNames.EditorInput);
+    }
+
+    /// <summary>
+    /// 打开 EditorInput, 并返回UI实例
+    /// </summary>
+    public static UI.EditorInput.EditorInputPanel Open_EditorInput()
+    {
+        return OpenUi<UI.EditorInput.EditorInputPanel>(UiNames.EditorInput);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorInput 的所有实例
+    /// </summary>
+    public static void Hide_EditorInput()
+    {
+        var uiInstance = Get_EditorInput_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorInput 的所有实例
+    /// </summary>
+    public static void Destroy_EditorInput()
+    {
+        var uiInstance = Get_EditorInput_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorInput 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorInput.EditorInputPanel[] Get_EditorInput_Instance()
+    {
+        return GetUiInstance<UI.EditorInput.EditorInputPanel>(nameof(UI.EditorInput.EditorInput));
     }
 
     /// <summary>

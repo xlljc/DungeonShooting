@@ -71,6 +71,7 @@ public class ResourcePath
     public const string prefab_ui_Debugger_tscn = "res://prefab/ui/Debugger.tscn";
     public const string prefab_ui_EditorColorPicker_tscn = "res://prefab/ui/EditorColorPicker.tscn";
     public const string prefab_ui_EditorImportCombination_tscn = "res://prefab/ui/EditorImportCombination.tscn";
+    public const string prefab_ui_EditorInput_tscn = "res://prefab/ui/EditorInput.tscn";
     public const string prefab_ui_EditorTips_tscn = "res://prefab/ui/EditorTips.tscn";
     public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
     public const string prefab_ui_EditorWindow_tscn = "res://prefab/ui/EditorWindow.tscn";

@@ -63,6 +63,11 @@ public partial class TileSetEditorPanel : TileSetEditor
             Text = "组合",
             UiName = UiManager.UiNames.TileSetEditorCombination,
         });
+        TabGrid.Visible = false;
+
+        S_DeleteButton.Instance.Pressed += OnDeleteSourceClick;
+        S_AddButton.Instance.Pressed += OnAddSourceClick;
+        S_OptionButton.Instance.ItemSelected += OnOptionChange;
     }
 
     public override void OnDestroyUi()
@@ -87,7 +92,7 @@ public partial class TileSetEditorPanel : TileSetEditor
         S_Title.Instance.Text = "正在编辑：" + tileSetInfo.Name;
         
         //SetTextureData(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
-        TabGrid.SelectIndex = 0;
+        //TabGrid.SelectIndex = 0;
     }
 
     /// <summary>
@@ -140,5 +145,40 @@ public partial class TileSetEditorPanel : TileSetEditor
     private void OnBackClick()
     {
         OpenPrevUi();
+    }
+
+    private void OnDeleteSourceClick()
+    {
+        var optionButton = S_OptionButton.Instance;
+        if (optionButton.Selected >= 0)
+        {
+            EditorWindowManager.ShowConfirm("提示", "是否需要删除该资源!", v =>
+            {
+                if (v)
+                {
+                    Debug.Log("删除资源: ");
+                }
+            });
+        }
+        else
+        {
+            EditorWindowManager.ShowTips("提示", "请选择需要删除的资源！");
+        }
+    }
+
+    private void OnAddSourceClick()
+    {
+        EditorWindowManager.ShowInput("创建资源", "资源名称：", null, (value, isClose) =>
+        {
+            var optionButton = S_OptionButton.Instance;
+            optionButton.AddItem(value);
+            optionButton.Selected = optionButton.ItemCount - 1;
+            return true;
+        });
+    }
+
+    private void OnOptionChange(long index)
+    {
+        
     }
 }

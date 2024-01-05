@@ -5,6 +5,7 @@ using Config;
 using Godot;
 using UI.EditorColorPicker;
 using UI.EditorImportCombination;
+using UI.EditorInput;
 using UI.EditorTips;
 using UI.EditorWindow;
 using UI.MapEditorCreateGroup;
@@ -126,6 +127,39 @@ public static class EditorWindowManager
         );
         var body = window.OpenBody<EditorTipsPanel>(UiManager.UiNames.EditorTips);
         body.SetMessage(message);
+    }
+
+    /// <summary>
+    /// 弹出通用输入框
+    /// </summary>
+    /// <param name="title">标题</param>
+    /// <param name="message">显示内容</param>
+    /// <param name="value">输入框默认值</param>
+    /// <param name="onClose">关闭时回调，参数1为输入框内容，参数2为 true 表示点击了确定，如果点击了确定但是回调函数返回 false 则不会关闭窗口</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowInput(string title, string message, string value, Func<string, bool, bool> onClose, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle(title);
+        var body = window.OpenBody<EditorInputPanel>(UiManager.UiNames.EditorInput);
+        window.CloseEvent += () =>
+        {
+            onClose(body.GetValue(), false);
+        };
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                if (onClose(body.GetValue(), true))
+                {
+                    window.CloseWindow(false);
+                }
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+        body.Init(message, value);
     }
     
     /// <summary>

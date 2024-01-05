@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://dn5brsxa6w3l6"]
+[gd_scene load_steps=7 format=3 uid="uid://dn5brsxa6w3l6"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditor/TileSetEditorPanel.cs" id="1_rgx4n"]
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_naycu"]
 [ext_resource type="Texture2D" uid="uid://cat35d7ueu7gu" path="res://resource/sprite/ui/commonIcon/Save.png" id="3_bcuxk"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="4_t8bqb"]
+[ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="4_u8gg1"]
+[ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="5_gepb1"]
 
 [node name="TileSetEditor" type="Control"]
 layout_mode = 3
@@ -13,7 +15,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_rgx4n")
-Layer = null
 
 [node name="Bg" type="Panel" parent="."]
 layout_mode = 1
@@ -75,30 +76,52 @@ theme_override_constants/separation = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot"]
+layout_mode = 2
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 272.0
+offset_bottom = 1008.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
-[node name="Tab" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/ScrollContainer"]
+[node name="Label" type="Label" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "资源："
+
+[node name="AddButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("4_u8gg1")
+
+[node name="DeleteButton" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("5_gepb1")
+
+[node name="OptionButton" type="OptionButton" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/VBoxContainer"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+color = Color(0.188235, 0.188235, 0.188235, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Tab" type="Button" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/VBoxContainer/ScrollContainer"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "页签"
 flat = true
 
-[node name="Select" type="NinePatchRect" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/MarginContainer/ScrollContainer/Tab"]
+[node name="Select" type="NinePatchRect" parent="Bg/VBoxContainer/HBoxContainer/LeftRoot/VBoxContainer/ScrollContainer/Tab"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -116,4 +139,4 @@ patch_margin_bottom = 3
 clip_children = 2
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 8.0
+size_flags_stretch_ratio = 6.0
