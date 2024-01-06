@@ -141,6 +141,7 @@ public static class EditorWindowManager
     {
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle(title);
+        window.SetWindowSize(new Vector2I(450, 230));
         var body = window.OpenBody<EditorInputPanel>(UiManager.UiNames.EditorInput);
         window.CloseEvent += () =>
         {

@@ -43,7 +43,7 @@ public partial class TileEditArea : EditorGridBg<TileSetEditorCombination.LeftBo
                 {
                     if (Input.IsActionJustPressed(InputAction.MouseLeft)) //刚按下, 清除之前的选中
                     {
-                        OnClearCell();
+                        ClearSelectCell();
                     }
                     OnSelectCell(cellPosition);
                 }
@@ -108,7 +108,7 @@ public partial class TileEditArea : EditorGridBg<TileSetEditorCombination.LeftBo
     /// <summary>
     /// 移除所有选中的Cell图块
     /// </summary>
-    private void OnClearCell()
+    public void ClearSelectCell()
     {
         _useMask.Clear();
         var count = _maskGrid.Count;

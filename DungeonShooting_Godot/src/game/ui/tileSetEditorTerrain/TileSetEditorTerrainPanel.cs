@@ -24,6 +24,8 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     {
         EditorPanel = (TileSetEditorPanel)ParentUi;
         
+        //改变选中的TileSet资源
+        AddEventListener(EventEnum.OnSelectTileSetSource, OnSelectTileSetSource);
         //改变纹理事件
         AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
         //背景颜色改变
@@ -69,6 +71,45 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         return grid;
     }
 
+    //改变选中的TileSet资源
+    private void OnSelectTileSetSource(object obj)
+    {
+        //先清除所有绑定的Terrain
+        _topGrid1.ForEach(cell => cell.CellNode.Instance.ClearCell());
+        _topGrid2.ForEach(cell => cell.CellNode.Instance.ClearCell());
+        _topGrid3.ForEach(cell => cell.CellNode.Instance.ClearCell());
+        
+        //再加载Terrain
+        if (obj != null)
+        {
+            var terrain = ((TileSetSourceInfo)obj).Terrain;
+            _topGrid1.ForEach(cell =>
+            {
+                var ints = EditorTileSetManager.GetTileSetTerrainBit(terrain, cell.Index, cell.Data);
+                if (ints != null)
+                {
+                    cell.CellNode.Instance.SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
+                }
+            });
+            _topGrid2.ForEach(cell =>
+            {
+                var ints = EditorTileSetManager.GetTileSetTerrainBit(terrain, cell.Index, cell.Data);
+                if (ints != null)
+                {
+                    cell.CellNode.Instance.SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
+                }
+            });
+            _topGrid3.ForEach(cell =>
+            {
+                var ints = EditorTileSetManager.GetTileSetTerrainBit(terrain, cell.Index, cell.Data);
+                if (ints != null)
+                {
+                    cell.CellNode.Instance.SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
+                }
+            });
+        }
+    }
+    
     //改变TileSet纹理
     private void OnSetTileTexture(object arg)
     {

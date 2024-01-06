@@ -41,7 +41,7 @@ public partial class TileEditCombination : EditorGridBg<TileSetEditorCombination
         UiNode.UiPanel.AddEventListener(EventEnum.OnClearCombinationCell, OnClearCombinationCell);
 
         //删除按钮点击事件
-        UiNode.L_DeleteBtn.Instance.Pressed += OnDeleteClick;
+        UiNode.L_DeleteBtn.Instance.Pressed += ClearAllCell;
         //聚焦按钮点击事件
         UiNode.L_FocusBtn.Instance.Pressed += OnFocusClick;
         //导入组合按钮点击事件
@@ -127,8 +127,10 @@ public partial class TileEditCombination : EditorGridBg<TileSetEditorCombination
         }
     }
 
-    //删除所有图块
-    private void OnDeleteClick()
+    /// <summary>
+    /// 删除已经绘制的图块
+    /// </summary>
+    public void ClearAllCell()
     {
         foreach (var keyValuePair in _canvas)
         {
@@ -150,7 +152,12 @@ public partial class TileEditCombination : EditorGridBg<TileSetEditorCombination
     private void OnImportClick()
     {
         var size = UiNode.L_CombinationRoot.L_RectBrush.Instance.GetRectSize();
-        if (size == Vector2.Zero)
+        if (UiNode.UiPanel.EditorPanel.TextureImage == null)
+        {
+            EditorWindowManager.ShowTips("警告", "未选择纹理资源！");
+            return;
+        }
+        else if (size == Vector2.Zero)
         {
             EditorWindowManager.ShowTips("警告", "请先绘制组合图块！");
             return;

@@ -90,7 +90,6 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
             tileSetSourceInfo.Combination.Add(combination.Clone());
         }
         tileSetSourceInfo.SourcePath = SourcePath;
-        tileSetSourceInfo._sourceImage = _sourceImage;
         return tileSetSourceInfo;
     }
 

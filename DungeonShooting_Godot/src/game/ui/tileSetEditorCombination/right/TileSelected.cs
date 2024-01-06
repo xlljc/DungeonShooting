@@ -4,24 +4,27 @@ namespace UI.TileSetEditorCombination;
 
 public partial class TileSelected : VBoxContainer, IUiNodeScript
 {
+    /// <summary>
+    /// 存放所有组合数据
+    /// </summary>
+    public UiGrid<TileSetEditorCombination.CellButton, ImportCombinationData> Grid { get; private set; }
+    
     private TileSetEditorCombination.RightBg _rightBg;
-    //存放所有组合数据
-    private UiGrid<TileSetEditorCombination.CellButton, ImportCombinationData> _grid;
     
     public void SetUiNode(IUiNode uiNode)
     {
         _rightBg = (TileSetEditorCombination.RightBg)uiNode;
 
-        _grid = new UiGrid<TileSetEditorCombination.CellButton, ImportCombinationData>(_rightBg.L_ScrollContainer.L_CellButton, typeof(TileCell));
-        _grid.SetCellOffset(new Vector2I(5, 5));
-        _grid.SetAutoColumns(true);
-        _grid.SetHorizontalExpand(true);
+        Grid = new UiGrid<TileSetEditorCombination.CellButton, ImportCombinationData>(_rightBg.L_ScrollContainer.L_CellButton, typeof(TileCell));
+        Grid.SetCellOffset(new Vector2I(5, 5));
+        Grid.SetAutoColumns(true);
+        Grid.SetHorizontalExpand(true);
         
         _rightBg.UiPanel.AddEventListener(EventEnum.OnImportCombination, OnImportCombination);
         _rightBg.UiPanel.AddEventListener(EventEnum.OnRemoveCombination, OnRemoveCombination);
         _rightBg.UiPanel.AddEventListener(EventEnum.OnUpdateCombination, OnUpdateCombination);
     }
-
+    
     /// <summary>
     /// 导入组合图块
     /// </summary>
@@ -30,8 +33,8 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
         if (obj is ImportCombinationData data)
         {
             _rightBg.UiPanel.EditorPanel.TileSetSourceInfo.Combination.Add(data.CombinationInfo);
-            _grid.Add(data);
-            _grid.Sort();
+            Grid.Add(data);
+            Grid.Sort();
         }
     }
     
@@ -42,11 +45,11 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
     {
         if (obj is ImportCombinationData data)
         {
-            var uiCell = _grid.Find(c => c.Data.CombinationInfo.Id == data.CombinationInfo.Id);
+            var uiCell = Grid.Find(c => c.Data.CombinationInfo.Id == data.CombinationInfo.Id);
             _rightBg.UiPanel.EditorPanel.TileSetSourceInfo.Combination.Remove(data.CombinationInfo);
             if (uiCell != null)
             {
-                _grid.RemoveByIndex(uiCell.Index);
+                Grid.RemoveByIndex(uiCell.Index);
             }
         }
     }
@@ -58,7 +61,7 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
     {
         if (obj is ImportCombinationData data)
         {
-            var uiCell = _grid.Find(c => c.Data.CombinationInfo.Id == data.CombinationInfo.Id);
+            var uiCell = Grid.Find(c => c.Data.CombinationInfo.Id == data.CombinationInfo.Id);
             if (uiCell != null)
             {
                 uiCell.SetData(data);
@@ -68,7 +71,7 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
 
     public void OnDestroy()
     {
-        _grid.Destroy();
+        Grid.Destroy();
     }
     
 
@@ -79,7 +82,7 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
     {
         //_grid.RemoveAll();
         //刷新预览图
-        _grid.ForEach(cell =>
+        Grid.ForEach(cell =>
         {
             cell.Data.UpdatePreviewTexture(_rightBg.UiPanel.EditorPanel.TextureImage);
         });

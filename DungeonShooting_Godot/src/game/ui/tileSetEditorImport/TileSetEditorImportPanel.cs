@@ -46,18 +46,16 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     private void OnSetTileTexture(object arg)
     {
         //判断是否已经初始化好纹理了
-        if (_tileSetEditor.InitTexture)
-        {
-            S_ImportPreviewBg.Instance.Visible = true;
-            S_ReimportButton.Instance.Visible = true;
-            S_ImportColorPicker.Instance.Visible = true;
-            S_FocusBtn.Instance.Visible = true;
-    
-            //隐藏导入文本和icon
-            S_ImportLabel.Instance.Visible = false;
-            S_ImportIcon.Instance.Visible = false;
-            S_ImportButton.Instance.Visible = false;
-        }
+        //_tileSetEditor.InitTexture
+        S_ImportPreviewBg.Instance.Visible = _tileSetEditor.InitTexture;
+        S_ReimportButton.Instance.Visible = _tileSetEditor.InitTexture;
+        S_ImportColorPicker.Instance.Visible = _tileSetEditor.InitTexture;
+        S_FocusBtn.Instance.Visible = _tileSetEditor.InitTexture;
+
+        //隐藏导入文本和icon
+        S_ImportLabel.Instance.Visible = !_tileSetEditor.InitTexture;
+        S_ImportIcon.Instance.Visible = !_tileSetEditor.InitTexture;
+        S_ImportButton.Instance.Visible = !_tileSetEditor.InitTexture;
     }
 
     //背景颜色改变
@@ -175,15 +173,16 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     /// <param name="file">纹理路径</param>
     private void SetImportTexture(string file)
     {
-        if (_tileSetEditor.TileSetSourceInfo == null)
+        var tileSetSourceInfo = _tileSetEditor.TileSetSourceInfo;
+        if (tileSetSourceInfo == null)
         {
             return;
         }
 
         Debug.Log("导入文件: " + file);
         var image = Image.LoadFromFile(file);
-        _tileSetEditor.TileSetSourceInfo.SourcePath = file;
-        _tileSetEditor.TileSetSourceInfo.SetSourceImage(image);
+        tileSetSourceInfo.SourcePath = GameConfig.RoomTileSetDir + _tileSetEditor.TileSetInfo.Name + "/" + tileSetSourceInfo.Name + ".png";
+        tileSetSourceInfo.SetSourceImage(image);
         _tileSetEditor.SetTextureData(image);
     }
 }

@@ -169,7 +169,7 @@ public enum EventEnum
     /// </summary>
     OnDeleteTileSetSource,
     /// <summary>
-    /// 设置TileSet纹理, 参数<see cref="Godot.Texture2D"/>, 可能为 null
+    /// 设置TileSet纹理, 参数<see cref="Godot.Texture2D"/>
     /// </summary>
     OnSetTileTexture,
     /// <summary>

@@ -14,12 +14,14 @@ public partial class TileSetEditorCombinationPanel : TileSetEditorCombination
     {
         EditorPanel = (TileSetEditorPanel)ParentUi;
         
+        //改变选中资源事件
+        AddEventListener(EventEnum.OnSelectTileSetSource, OnSelectTileSetSource);
         //改变纹理事件
         AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
         //改变背景颜色事件
         AddEventListener(EventEnum.OnSetTileSetBgColor, OnSetTileSetBgColor);
     }
-
+    
     public override void OnShowUi()
     {
         if (EditorPanel.Texture == null)
@@ -35,12 +37,38 @@ public partial class TileSetEditorCombinationPanel : TileSetEditorCombination
     {
         
     }
+    
+    //改变选中资源事件
+    private void OnSelectTileSetSource(object obj)
+    {
+        //取消选中组合
+        S_LeftBottomBg.Instance.ClearSelectCell();
+        //清除绘制的组合
+        S_LeftTopBg.Instance.ClearAllCell();
+        //清除gird中的组合
+        var grid = S_RightBg.Instance.Grid;
+        grid.RemoveAll();
+        if (obj != null)
+        {
+            //grid加载组合
+            var sourceInfo = (TileSetSourceInfo)obj;
+            foreach (var combinationInfo in sourceInfo.Combination)
+            {
+                var src = EditorPanel.TextureImage;
+                var previewImage = ImportCombinationData.GetPreviewTexture(src, combinationInfo.Cells, combinationInfo.Positions);
+                grid.Add(new ImportCombinationData(ImageTexture.CreateFromImage(previewImage), combinationInfo));
+            }
+        }
+    }
 
     //改变TileSet纹理
     private void OnSetTileTexture(object arg)
     {
         S_LeftBottomBg.Instance.OnChangeTileSetTexture();
-        S_RightBg.Instance.OnChangeTileSetTexture();
+        if (EditorPanel.InitTexture)
+        {
+            S_RightBg.Instance.OnChangeTileSetTexture();
+        }
     }
     
     //改变TileSet背景颜色

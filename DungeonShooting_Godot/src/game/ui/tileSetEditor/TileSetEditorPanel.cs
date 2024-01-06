@@ -54,9 +54,13 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// </summary>
     public UiGrid<Tab, TileSetEditorTabData> TabGrid { get; private set; }
 
+    private Image _emptyImage;
+
     public override void OnCreateUi()
     {
+        _emptyImage = Image.Create(1, 1, false, Image.Format.Rgba8);
         Texture = new ImageTexture();
+        Texture.SetImage(_emptyImage);
         S_Back.Instance.Visible = PrevUi != null;
         S_Back.Instance.Pressed += OnBackClick;
 
@@ -93,7 +97,8 @@ public partial class TileSetEditorPanel : TileSetEditor
         {
             Texture.Dispose();
         }
-
+        
+        _emptyImage.Dispose();
         TextureImage = null;
 
         if (TileSetInfo != null)
@@ -134,6 +139,9 @@ public partial class TileSetEditorPanel : TileSetEditor
         {
             InitTexture = false;
             TextureImage = null;
+            Texture.SetImage(_emptyImage);
+            CellHorizontal = 0;
+            CellVertical = 0;
         }
         else
         {
@@ -200,6 +208,7 @@ public partial class TileSetEditorPanel : TileSetEditor
                     var findIndex = TileSetInfo.Sources.FindIndex(info => info.Name == name);
                     if (findIndex >= 0)
                     {
+                        TileSetInfo.Sources[findIndex].Dispose();
                         TileSetInfo.Sources.RemoveAt(findIndex);
                     }
 
@@ -264,6 +273,7 @@ public partial class TileSetEditorPanel : TileSetEditor
             SetTextureData(null);
         }
         
+        //派发选择资源事件
         EventManager.EmitEvent(EventEnum.OnSelectTileSetSource, TileSetSourceInfo);
     }
 
