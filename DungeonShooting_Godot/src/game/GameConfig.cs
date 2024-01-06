@@ -101,4 +101,17 @@ public static class GameConfig
     /// 寻路导航单格步长
     /// </summary>
     public const float NavigationCellSize = 4;
+    
+    /// <summary>
+    /// 地形掩码纹理大小, 顶部墙壁
+    /// </summary>
+    public static readonly Vector2I TerrainBitSize1 = new Vector2I(12, 4);
+    /// <summary>
+    /// 地形掩码纹理大小, 侧方墙壁
+    /// </summary>
+    public static readonly Vector2I TerrainBitSize2 = new Vector2I(4, 1);
+    /// <summary>
+    /// 地形掩码纹理大小, 地板
+    /// </summary>
+    public static readonly Vector2I TerrainBitSize3 = new Vector2I(1, 1);
 }

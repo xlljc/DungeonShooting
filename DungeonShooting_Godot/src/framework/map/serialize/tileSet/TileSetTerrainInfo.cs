@@ -7,6 +7,19 @@ using Godot;
 /// </summary>
 public class TileSetTerrainInfo
 {
+    //---------------------- 地板 ----------------------
+    
+    [JsonInclude] public int[] _f;
+    
+    //---------------------- 侧方墙壁 --------------------------
+    
+    [JsonInclude] public int[] _vl;
+    [JsonInclude] public int[] _vc;
+    [JsonInclude] public int[] _vr;
+    [JsonInclude] public int[] _vs;
+    
+    //---------------------- 顶部墙壁47格 ----------------------
+    
     //第一列
     [JsonInclude] public int[] _000_010_010;
     [JsonInclude] public int[] _010_010_010;

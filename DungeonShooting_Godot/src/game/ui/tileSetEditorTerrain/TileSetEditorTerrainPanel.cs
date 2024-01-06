@@ -15,9 +15,9 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     /// </summary>
     public bool IsDraggingCell { get; set; }
 
-    private UiGrid<RightCell, bool> _topGrid1;
-    private UiGrid<RightCell, bool> _topGrid2;
-    private UiGrid<RightCell, bool> _topGrid3;
+    private UiGrid<RightCell, byte> _topGrid1;
+    private UiGrid<RightCell, byte> _topGrid2;
+    private UiGrid<RightCell, byte> _topGrid3;
     private UiGrid<BottomCell, Rect2I> _bottomGrid;
     
     public override void OnCreateUi()
@@ -32,9 +32,9 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         _bottomGrid = CreateUiGrid<BottomCell, Rect2I, MaskCell>(S_BottomCell);
         _bottomGrid.SetCellOffset(Vector2I.Zero);
 
-        _topGrid1 = InitTopGrid(S_TerrainRoot.L_TerrainTexture1.Instance);
-        _topGrid2 = InitTopGrid(S_TerrainRoot.L_TerrainTexture2.Instance);
-        _topGrid3 = InitTopGrid(S_TerrainRoot.L_TerrainTexture3.Instance);
+        _topGrid1 = InitTopGrid(S_TerrainRoot.L_TerrainTexture1.Instance, GameConfig.TerrainBitSize1, 1);
+        _topGrid2 = InitTopGrid(S_TerrainRoot.L_TerrainTexture2.Instance, GameConfig.TerrainBitSize2, 2);
+        _topGrid3 = InitTopGrid(S_TerrainRoot.L_TerrainTexture3.Instance, GameConfig.TerrainBitSize3, 3);
 
         OnSetTileTexture(EditorPanel.Texture);
         OnChangeTileSetBgColor(EditorPanel.BgColor);
@@ -50,21 +50,19 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         S_MaskBrush.Instance.Visible = !IsDraggingCell;
     }
 
-    private UiGrid<RightCell, bool> InitTopGrid(Control texture)
+    private UiGrid<RightCell, byte> InitTopGrid(Control texture, Vector2I size, byte type)
     {
         var cellRoot = S_TopBg.L_TerrainRoot.L_CellRoot;
         var sRightCell = cellRoot.L_RightCell;
-        var terrainSize = texture.Size.AsVector2I();
-        terrainSize = terrainSize / GameConfig.TileCellSize;
         sRightCell.Instance.Position = texture.Position;
-        var grid = CreateUiGrid<RightCell, bool, TerrainCell>(sRightCell, cellRoot.Instance);
+        var grid = CreateUiGrid<RightCell, byte, TerrainCell>(sRightCell, cellRoot.Instance);
         grid.SetCellOffset(Vector2I.Zero);
-        grid.SetColumns(terrainSize.X);
-        for (var y = 0; y < terrainSize.Y; y++)
+        grid.SetColumns(size.X);
+        for (var y = 0; y < size.Y; y++)
         {
-            for (var x = 0; x < terrainSize.X; x++)
+            for (var x = 0; x < size.X; x++)
             {
-                grid.Add(false);
+                grid.Add(type);
             }
         }
         
