@@ -41,4 +41,17 @@ public class TileSetInfo : IClone<TileSetInfo>
         }
         return tileSetInfo;
     }
+
+    public void Dispose()
+    {
+        if (Sources != null)
+        {
+            foreach (var tileSetSourceInfo in Sources)
+            {
+                tileSetSourceInfo.Dispose();
+            }
+
+            Sources = null;
+        }
+    }
 }

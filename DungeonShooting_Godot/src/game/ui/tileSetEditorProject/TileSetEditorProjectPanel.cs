@@ -1,3 +1,5 @@
+using System.IO;
+using System.Text.Json;
 using Godot;
 
 namespace UI.TileSetEditorProject;
@@ -19,10 +21,9 @@ public partial class TileSetEditorProjectPanel : TileSetEditorProject
         _grid.SetAutoColumns(true);
         _grid.SetCellOffset(new Vector2I(10, 10));
         _grid.SetHorizontalExpand(true);
-        
-        var tileSetInfo = new TileSetInfo();
-        tileSetInfo.InitData();
-        tileSetInfo.Name = "测试数据";
+
+        var jsonData = File.ReadAllText("resource/map/tileSet/测试数据/TileSet.json");
+        var tileSetInfo = JsonSerializer.Deserialize<TileSetInfo>(jsonData);
         _grid.Add(tileSetInfo);
     }
 

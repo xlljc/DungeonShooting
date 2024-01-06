@@ -94,9 +94,11 @@ public partial class TileSetEditorPanel : TileSetEditor
             Texture.Dispose();
         }
 
-        if (TextureImage != null)
+        TextureImage = null;
+
+        if (TileSetInfo != null)
         {
-            TextureImage.Dispose();
+            TileSetInfo.Dispose();
         }
     }
 
@@ -108,6 +110,19 @@ public partial class TileSetEditorPanel : TileSetEditor
         OriginTileSetInfo = tileSetInfo;
         TileSetInfo = tileSetInfo.Clone();
         S_Title.Instance.Text = "正在编辑：" + TileSetInfo.Name;
+        
+        //初始化下拉框
+        if (TileSetInfo.Sources.Count > 0)
+        {
+            var optionButton = S_OptionButton.Instance;
+            foreach (var tileSetSourceInfo in TileSetInfo.Sources)
+            {
+                optionButton.AddItem(tileSetSourceInfo.Name);
+            }
+
+            optionButton.Selected = 0;
+            OnOptionChange(0);
+        }
     }
 
     /// <summary>
@@ -115,21 +130,24 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// </summary>
     public void SetTextureData(Image image)
     {
-        if (TileSetSourceInfo == null)
+        if (image == null)
         {
-            return;
+            InitTexture = false;
+            TextureImage = null;
         }
-
-        InitTexture = true;
-        Texture.SetImage(image);
-        if (TextureImage != null)
+        else
         {
-            TextureImage.Dispose();
-        }
-        TextureImage = image;
-        CellHorizontal = image.GetWidth() / GameConfig.TileCellSize;
-        CellVertical = image.GetHeight() / GameConfig.TileCellSize;
+            if (TileSetSourceInfo == null)
+            {
+                return;
+            }
         
+            InitTexture = true;
+            Texture.SetImage(image);
+            TextureImage = image;
+            CellHorizontal = image.GetWidth() / GameConfig.TileCellSize;
+            CellVertical = image.GetHeight() / GameConfig.TileCellSize;
+        }
         //派发事件
         EventManager.EmitEvent(EventEnum.OnSetTileTexture, Texture);
     }
@@ -236,14 +254,17 @@ public partial class TileSetEditorPanel : TileSetEditor
             TabGrid.Visible = true;
             TabGrid.SelectIndex = 0;
             TileSetSourceInfo = TileSetInfo.Sources[(int)index];
+            SetTextureData(TileSetSourceInfo.GetSourceImage());
         }
         else
         {
             TabGrid.Visible = false;
             TabGrid.SelectIndex = -1;
             TileSetSourceInfo = null;
+            SetTextureData(null);
         }
-        EventManager.EmitEvent(EventEnum.OnSelectTileSetSource);
+        
+        EventManager.EmitEvent(EventEnum.OnSelectTileSetSource, TileSetSourceInfo);
     }
 
     //保存

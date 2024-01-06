@@ -182,6 +182,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
 
         Debug.Log("导入文件: " + file);
         var image = Image.LoadFromFile(file);
+        _tileSetEditor.TileSetSourceInfo.SourcePath = file;
         _tileSetEditor.TileSetSourceInfo.SetSourceImage(image);
         _tileSetEditor.SetTextureData(image);
     }

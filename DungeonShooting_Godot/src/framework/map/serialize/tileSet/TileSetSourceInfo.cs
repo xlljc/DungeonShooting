@@ -72,6 +72,10 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
     public void SetSourceImage(Image image)
     {
         _overWriteImage = true;
+        if (_sourceImage != null)
+        {
+            _sourceImage.Dispose();
+        }
         _sourceImage = image;
     }
 
@@ -79,10 +83,26 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
     {
         var tileSetSourceInfo = new TileSetSourceInfo();
         tileSetSourceInfo.Name = Name;
-        tileSetSourceInfo.Terrain = Terrain;
-        tileSetSourceInfo.Combination = Combination;
+        tileSetSourceInfo.Terrain = Terrain.Clone();
+        tileSetSourceInfo.Combination = new List<TileCombinationInfo>();
+        foreach (var combination in Combination)
+        {
+            tileSetSourceInfo.Combination.Add(combination.Clone());
+        }
         tileSetSourceInfo.SourcePath = SourcePath;
         tileSetSourceInfo._sourceImage = _sourceImage;
         return tileSetSourceInfo;
+    }
+
+    public void Dispose()
+    {
+        if (_sourceImage != null)
+        {
+            _sourceImage.Dispose();
+            _sourceImage = null;
+        }
+
+        Terrain = null;
+        Combination = null;
     }
 }
