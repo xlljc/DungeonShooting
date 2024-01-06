@@ -175,8 +175,9 @@ public partial class TileEditCombination : EditorGridBg<TileSetEditorCombination
         var cells = tempCell.ToArray();
         var positions = tempPos.ToArray();
 
-        var color = UiNode.UiPanel.EditorPanel.BgColor;
-        var src = UiNode.UiPanel.EditorPanel.TextureImage;
+        var tileSetEditorPanel = UiNode.UiPanel.EditorPanel;
+        var color = tileSetEditorPanel.BgColor;
+        var src = tileSetEditorPanel.TextureImage;
         var image = ImportCombinationData.GetPreviewTexture(src, cells, positions);
         var texture = ImageTexture.CreateFromImage(image);
         EditorWindowManager.ShowImportCombination("组合", color, texture, (name) =>

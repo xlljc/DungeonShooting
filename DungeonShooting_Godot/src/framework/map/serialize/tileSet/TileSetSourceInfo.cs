@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Godot;
 
@@ -24,6 +25,12 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
     /// </summary>
     [JsonInclude]
     public TileSetTerrainInfo Terrain;
+
+    /// <summary>
+    /// 组合数据
+    /// </summary>
+    [JsonInclude]
+    public List<TileCombinationInfo> Combination;
     
     [JsonIgnore]
     private Image _sourceImage;
@@ -36,6 +43,7 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
     public void InitData()
     {
         Terrain = new TileSetTerrainInfo();
+        Combination = new List<TileCombinationInfo>();
     }
 
     /// <summary>
@@ -72,6 +80,7 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
         var tileSetSourceInfo = new TileSetSourceInfo();
         tileSetSourceInfo.Name = Name;
         tileSetSourceInfo.Terrain = Terrain;
+        tileSetSourceInfo.Combination = Combination;
         tileSetSourceInfo.SourcePath = SourcePath;
         tileSetSourceInfo._sourceImage = _sourceImage;
         return tileSetSourceInfo;

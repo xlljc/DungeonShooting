@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Godot;
 
 /// <summary>
-/// 地形配置数据
+/// 地形配置数据, 数据都为 int 数组, 下标0和1分别代表x和y, 单位: 像素
 /// </summary>
 public class TileSetTerrainInfo
 {

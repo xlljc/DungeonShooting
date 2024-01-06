@@ -5,6 +5,7 @@ namespace UI.TileSetEditorCombination;
 public partial class TileSelected : VBoxContainer, IUiNodeScript
 {
     private TileSetEditorCombination.RightBg _rightBg;
+    //存放所有组合数据
     private UiGrid<TileSetEditorCombination.CellButton, ImportCombinationData> _grid;
     
     public void SetUiNode(IUiNode uiNode)
@@ -28,6 +29,7 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
     {
         if (obj is ImportCombinationData data)
         {
+            _rightBg.UiPanel.EditorPanel.TileSetSourceInfo.Combination.Add(data.CombinationInfo);
             _grid.Add(data);
             _grid.Sort();
         }
@@ -41,6 +43,7 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
         if (obj is ImportCombinationData data)
         {
             var uiCell = _grid.Find(c => c.Data.CombinationInfo.Id == data.CombinationInfo.Id);
+            _rightBg.UiPanel.EditorPanel.TileSetSourceInfo.Combination.Remove(data.CombinationInfo);
             if (uiCell != null)
             {
                 _grid.RemoveByIndex(uiCell.Index);
