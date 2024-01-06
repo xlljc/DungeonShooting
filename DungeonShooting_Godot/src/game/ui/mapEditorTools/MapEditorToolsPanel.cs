@@ -380,7 +380,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         }
         toolInstance.Instance.QueueFree();
         //派发修改数据修改事件
-        EventManager.EmitEvent(EventEnum.OnEditorDirty);
+        EventManager.EmitEvent(EventEnum.OnTileMapDirty);
     }
 
     /// <summary>

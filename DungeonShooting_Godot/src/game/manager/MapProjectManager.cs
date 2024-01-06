@@ -33,7 +33,7 @@ public static class MapProjectManager
         CustomMapPath = GameConfig.RoomTileDir;
         //CustomMapPath = "";
 #endif
-        EventManager.AddEventListener(EventEnum.OnEditorSave, OnRoomSave);
+        EventManager.AddEventListener(EventEnum.OnTileMapSave, OnRoomSave);
     }
 
     //房间保存时回调

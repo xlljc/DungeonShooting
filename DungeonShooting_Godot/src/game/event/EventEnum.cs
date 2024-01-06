@@ -86,11 +86,11 @@ public enum EventEnum
     /// <summary>
     /// 标记房间数据脏了, 也就是数据有修改
     /// </summary>
-    OnEditorDirty,
+    OnTileMapDirty,
     /// <summary>
     /// 编辑器触发保存, 参数为<see cref="DungeonRoomSplit"/>>
     /// </summary>
-    OnEditorSave,
+    OnTileMapSave,
     /// <summary>
     /// 选中拖拽工具
     /// </summary>
@@ -148,6 +148,14 @@ public enum EventEnum
     /// </summary>
     OnSetMarkVisible,
     
+    /// <summary>
+    /// 保存TileSet, 参数为<see cref="TileSetInfo"/>
+    /// </summary>
+    OnTileSetSave,
+    /// <summary>
+    /// 标记TileSet脏了, 参数为<see cref="TileSetInfo"/>
+    /// </summary>
+    OnTileSetDirty,
     /// <summary>
     /// 创建TileSet资源, 参数为<see cref="TileSetSourceInfo"/>
     /// </summary>

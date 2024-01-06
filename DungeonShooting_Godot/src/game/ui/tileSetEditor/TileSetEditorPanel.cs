@@ -9,7 +9,15 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// 编辑使用的 tileSetInfo 数据
     /// </summary>
     public TileSetInfo TileSetInfo { get; private set; }
+    /// <summary>
+    /// 原始 tileSetInfo 数据
+    /// </summary>
     public TileSetInfo OriginTileSetInfo { get; private set; }
+    
+    /// <summary>
+    /// 当前正在使用的 TileSetSourceInfo 数据
+    /// </summary>
+    public TileSetSourceInfo TileSetSourceInfo { get; private set; }
     
     /// <summary>
     /// 是否初始化过纹理
@@ -75,6 +83,7 @@ public partial class TileSetEditorPanel : TileSetEditor
         S_DeleteButton.Instance.Pressed += OnDeleteSourceClick;
         S_AddButton.Instance.Pressed += OnAddSourceClick;
         S_OptionButton.Instance.ItemSelected += OnOptionChange;
+        S_Save.Instance.Pressed += OnSaveClick;
     }
 
     public override void OnDestroyUi()
@@ -99,9 +108,6 @@ public partial class TileSetEditorPanel : TileSetEditor
         OriginTileSetInfo = tileSetInfo;
         TileSetInfo = tileSetInfo.Clone();
         S_Title.Instance.Text = "正在编辑：" + TileSetInfo.Name;
-        
-        //SetTextureData(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
-        //TabGrid.SelectIndex = 0;
     }
 
     /// <summary>
@@ -109,6 +115,11 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// </summary>
     public void SetTextureData(Image image)
     {
+        if (TileSetSourceInfo == null)
+        {
+            return;
+        }
+
         InitTexture = true;
         Texture.SetImage(image);
         if (TextureImage != null)
@@ -224,12 +235,20 @@ public partial class TileSetEditorPanel : TileSetEditor
         {
             TabGrid.Visible = true;
             TabGrid.SelectIndex = 0;
+            TileSetSourceInfo = TileSetInfo.Sources[(int)index];
         }
         else
         {
             TabGrid.Visible = false;
             TabGrid.SelectIndex = -1;
+            TileSetSourceInfo = null;
         }
         EventManager.EmitEvent(EventEnum.OnSelectTileSetSource);
+    }
+
+    //保存
+    private void OnSaveClick()
+    {
+        EventManager.EmitEvent(EventEnum.OnTileSetSave, TileSetInfo);
     }
 }

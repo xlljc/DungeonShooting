@@ -178,7 +178,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         _eventFactory.AddEventListener(EventEnum.OnSelectRectTool, OnSelectRectTool);
         _eventFactory.AddEventListener(EventEnum.OnSelectEditTool, OnSelectEditTool);
         _eventFactory.AddEventListener(EventEnum.OnClickCenterTool, OnClickCenterTool);
-        _eventFactory.AddEventListener(EventEnum.OnEditorDirty, OnEditorDirty);
+        _eventFactory.AddEventListener(EventEnum.OnTileMapDirty, OnEditorDirty);
 
         RenderingServer.FramePostDraw += OnFramePostDraw;
         var navigationRegion = _editorTileMap.L_NavigationRegion.Instance;
@@ -478,7 +478,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             IsDirty = false;
             MapEditorPanel.SetTitleDirty(false);
             //派发保存事件
-            EventManager.EmitEvent(EventEnum.OnEditorSave);
+            EventManager.EmitEvent(EventEnum.OnTileMapSave);
             if (finish != null)
             {
                 finish();
@@ -690,7 +690,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         ClearLayer(AutoMiddleLayer);
         CloseErrorCell();
         //标记有修改数据
-        EventManager.EmitEvent(EventEnum.OnEditorDirty);
+        EventManager.EmitEvent(EventEnum.OnTileMapDirty);
     }
 
     //重新计算房间区域

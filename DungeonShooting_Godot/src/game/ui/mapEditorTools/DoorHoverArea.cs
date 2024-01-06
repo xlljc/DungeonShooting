@@ -76,7 +76,7 @@ public partial class DoorHoverArea : ColorRect
         Debug.Log("提交创建: " + direction + ", " + start + ", " + end);
         _currToolTemplate.Instance.DoorAreaInfo = MapEditorToolsPanel.EditorMap.Instance.CreateDoorArea(direction, start, end);
         //派发修改数据修改事件
-        EventManager.EmitEvent(EventEnum.OnEditorDirty);
+        EventManager.EmitEvent(EventEnum.OnTileMapDirty);
     }
 
     //取消提交

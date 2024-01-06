@@ -90,7 +90,7 @@ public class EditorWaveCell : UiCell<MapEditorMapMark.WaveItem, List<MarkInfo>>
             EventManager.EmitEvent(EventEnum.OnSetMarkVisible, new MarkInfoVisibleData(markInfo, false));
         }
         //派发数据修改事件
-        EventManager.EmitEvent(EventEnum.OnEditorDirty);
+        EventManager.EmitEvent(EventEnum.OnTileMapDirty);
     }
 
     /// <summary>

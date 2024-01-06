@@ -132,6 +132,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		SceneRoot.AddChild(DungeonManager);
 
 		MapProjectManager.Init();
+		EditorTileSetManager.Init();
 		BottomTipsPanel.Init();
 		//打开主菜单Ui
 		UiManager.Open_Main();

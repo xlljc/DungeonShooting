@@ -274,7 +274,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             roomSplitPreinstall.Add(preinstall);
             RefreshPreinstallSelect(roomSplitPreinstall.Count - 1);
             //派发数据修改事件
-            EventManager.EmitEvent(EventEnum.OnEditorDirty);
+            EventManager.EmitEvent(EventEnum.OnTileMapDirty);
         });
     }
 
@@ -292,7 +292,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             var optionButton = S_PreinstallOption.Instance;
             optionButton.SetItemText(optionButton.Selected, $"{preinstall.Name} ({preinstall.Weight})");
             //派发数据修改事件
-            EventManager.EmitEvent(EventEnum.OnEditorDirty);
+            EventManager.EmitEvent(EventEnum.OnTileMapDirty);
         });
     }
 
@@ -318,7 +318,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 //刷新选项
                 RefreshPreinstallSelect(EditorTileMapManager.SelectRoom.Preinstall.Count - 1);
                 //派发数据修改事件
-                EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
             }
         });
     }
@@ -346,7 +346,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         item.WaveList.Add(wave);
         _grid.Add(wave);
         //派发数据修改事件
-        EventManager.EmitEvent(EventEnum.OnEditorDirty);
+        EventManager.EmitEvent(EventEnum.OnTileMapDirty);
     }
 
     //工具节点编辑按钮点击
@@ -407,7 +407,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 _grid.RemoveByIndex(index);
                 EditorTileMapManager.SetSelectWaveIndex(-1);
                 //派发数据修改事件
-                EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
             }
         });
     }
@@ -431,7 +431,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 markCell.Grid.Sort();
                 EventManager.EmitEvent(EventEnum.OnEditMark, dataMarkInfo);
                 //派发数据修改事件
-                EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
             });
         }
     }
@@ -470,7 +470,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                     waveCell.MarkGrid.RemoveByIndex(markCellIndex);
                     waveCell.Data.Remove(markInfo);
                     //派发数据修改事件
-                    EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                    EventManager.EmitEvent(EventEnum.OnTileMapDirty);
                 }
             });
         }

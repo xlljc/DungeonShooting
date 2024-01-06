@@ -175,7 +175,14 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     /// <param name="file">纹理路径</param>
     private void SetImportTexture(string file)
     {
+        if (_tileSetEditor.TileSetSourceInfo == null)
+        {
+            return;
+        }
+
         Debug.Log("导入文件: " + file);
-        _tileSetEditor.SetTextureData(Image.LoadFromFile(file));
+        var image = Image.LoadFromFile(file);
+        _tileSetEditor.TileSetSourceInfo.SetSourceImage(image);
+        _tileSetEditor.SetTextureData(image);
     }
 }
