@@ -6,8 +6,11 @@ using Godot;
 /// <summary>
 /// 图集资源数据
 /// </summary>
-public class TileSetSourceInfo : IClone<TileSetSourceInfo>
+public class TileSetSourceInfo : IClone<TileSetSourceInfo>, IDestroy
 {
+    [JsonIgnore]
+    public bool IsDestroyed { get; private set; }
+    
     /// <summary>
     /// 资源名称
     /// </summary>
@@ -86,9 +89,11 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
 
         return tileSetSourceInfo;
     }
-
-    public void Dispose()
+    
+    public void Destroy()
     {
+        if (IsDestroyed) return;
+        IsDestroyed = true;
         if (_sourceImage != null)
         {
             _sourceImage.Dispose();

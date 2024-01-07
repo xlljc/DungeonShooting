@@ -5,8 +5,11 @@ using System.Text.Json.Serialization;
 /// <summary>
 /// 图块集数据
 /// </summary>
-public class TileSetInfo : IClone<TileSetInfo>
+public class TileSetInfo : IClone<TileSetInfo>, IDestroy
 {
+    [JsonIgnore]
+    public bool IsDestroyed { get; private set; }
+    
     /// <summary>
     /// 图块集名称
     /// </summary>
@@ -41,14 +44,17 @@ public class TileSetInfo : IClone<TileSetInfo>
         }
         return tileSetInfo;
     }
-
-    public void Dispose()
+    
+    public void Destroy()
     {
+        if (IsDestroyed) return;
+        IsDestroyed = true;
+
         if (Sources != null)
         {
             foreach (var tileSetSourceInfo in Sources)
             {
-                tileSetSourceInfo.Dispose();
+                tileSetSourceInfo.Destroy();
             }
 
             Sources = null;

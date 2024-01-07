@@ -114,7 +114,7 @@ public partial class TileSetEditorProjectPanel : TileSetEditorProject
                 Directory.Delete(EditorTileSetManager.CustomTileSetPath + tileSetSplit.TileSetInfo.Name, true);
                 GameApplication.Instance.TileSetConfig.Remove(tileSetSplit.TileSetInfo.Name);
                 EditorTileSetManager.SaveTileSetConfig();
-                tileSetSplit.TileSetInfo.Dispose();
+                tileSetSplit.Destroy();
                 //刷新
                 OnSearchClick();
             }

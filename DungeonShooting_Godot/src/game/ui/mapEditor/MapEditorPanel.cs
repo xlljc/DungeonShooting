@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 
 namespace UI.MapEditor;
@@ -27,10 +28,8 @@ public partial class MapEditorPanel : MapEditor
     public override void OnCreateUi()
     {
         //临时处理, 加载TileSet
-        var tileSet = ResourceManager.Load<TileSet>(ResourcePath.resource_tileSet_map2_TileSet2_tres);
-        //var tileSet = ResourceManager.Load<TileSet>(ResourcePath.resource_tileSet_map1_TileSet1_tres);
-        //var tileSetAtlasSource = (TileSetAtlasSource)tileSet.GetSource(0);
-        //tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile("resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
+        var tileSetSplit = GameApplication.Instance.TileSetConfig.First().Value;
+        var tileSet = tileSetSplit.GetTileSet();
         S_TileMap.Instance.InitTileSet(tileSet);
 
         S_TabContainer.Instance.SetTabTitle(0, "对象");

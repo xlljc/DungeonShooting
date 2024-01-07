@@ -76,4 +76,9 @@ public static class TerrainPeering
 
         return None;
     }
+
+    public static void InitTerrain(this TileSetAtlasSource atlasSource, TileSetTerrainInfo terrainInfo)
+    {
+        //terrainInfo._000_110_010
+    }
 }

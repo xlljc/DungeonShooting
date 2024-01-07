@@ -110,7 +110,7 @@ public partial class TileSetEditorPanel : TileSetEditor
 
         if (TileSetInfo != null)
         {
-            TileSetInfo.Dispose();
+            TileSetInfo.Destroy();
         }
     }
 
@@ -251,7 +251,7 @@ public partial class TileSetEditorPanel : TileSetEditor
                     var findIndex = TileSetInfo.Sources.FindIndex(info => info.Name == name);
                     if (findIndex >= 0)
                     {
-                        TileSetInfo.Sources[findIndex].Dispose();
+                        TileSetInfo.Sources[findIndex].Destroy();
                         TileSetInfo.Sources.RemoveAt(findIndex);
                     }
 
@@ -323,7 +323,6 @@ public partial class TileSetEditorPanel : TileSetEditor
     //保存
     private void OnSaveClick()
     {
-        TileSetSplit.TileSetInfo.Dispose();
         TileSetSplit.SetTileSetInfo(TileSetInfo.Clone());
         EventManager.EmitEvent(EventEnum.OnTileSetSave, TileSetSplit);
         IsDirty = false;
