@@ -149,7 +149,7 @@ public enum EventEnum
     OnSetMarkVisible,
     
     /// <summary>
-    /// 保存TileSet, 参数为<see cref="TileSetInfo"/>
+    /// 保存TileSet, 参数为<see cref="TileSetSplit"/>
     /// </summary>
     OnTileSetSave,
     /// <summary>

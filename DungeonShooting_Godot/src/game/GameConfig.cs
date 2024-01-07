@@ -47,6 +47,10 @@ public static class GameConfig
     /// </summary>
     public const string RoomGroupConfigFile = "GroupConfig.json";
     /// <summary>
+    /// TileSet配置文件
+    /// </summary>
+    public const string TileSetConfigFile = "TileSetConfig.json";
+    /// <summary>
     /// ui预制体路径
     /// </summary>
     public const string UiPrefabDir = "prefab/ui/";

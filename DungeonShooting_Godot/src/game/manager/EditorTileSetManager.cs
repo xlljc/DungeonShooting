@@ -211,11 +211,23 @@ public static class EditorTileSetManager
         return null;
     }
 
+    /// <summary>
+    /// 保存TileSetConfig数据
+    /// </summary>
+    public static void SaveTileSetConfig()
+    {
+        var options = new JsonSerializerOptions();
+        options.WriteIndented = true;
+        var jsonText = JsonSerializer.Serialize(GameApplication.Instance.TileSetConfig, options);
+        File.WriteAllText(GameConfig.RoomTileSetDir + GameConfig.TileSetConfigFile, jsonText);
+    }
+    
     //保存图块集
     private static void OnTileSetSave(object o)
     {
-        if (o is TileSetInfo tileSetInfo)
+        if (o is TileSetSplit tileSetSplit)
         {
+            var tileSetInfo = tileSetSplit.TileSetInfo;
             var dir = CustomMapPath + tileSetInfo.Name;
             if (Directory.Exists(dir))
             {
@@ -259,7 +271,10 @@ public static class EditorTileSetManager
                     if (sourceInfo.IsOverWriteImage())
                     {
                         var image = sourceInfo.GetSourceImage();
-                        image.SavePng(dir + "/" + sourceInfo.Name + ".png");
+                        if (image != null)
+                        {
+                            image.SavePng(dir + "/" + sourceInfo.Name + ".png");
+                        }
                     }
                 }
             }

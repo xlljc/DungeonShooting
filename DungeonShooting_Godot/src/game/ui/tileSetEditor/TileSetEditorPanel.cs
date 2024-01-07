@@ -9,15 +9,16 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// 数据是否脏了
     /// </summary>
     public bool IsDirty { get; private set; }
-    
+
+    /// <summary>
+    /// 编辑使用的 tileSetSplit 数据
+    /// </summary>
+    public TileSetSplit TileSetSplit { get; private set; }
+
     /// <summary>
     /// 编辑使用的 tileSetInfo 数据
     /// </summary>
     public TileSetInfo TileSetInfo { get; private set; }
-    /// <summary>
-    /// 原始 tileSetInfo 数据
-    /// </summary>
-    public TileSetInfo OriginTileSetInfo { get; private set; }
     
     /// <summary>
     /// 当前正在使用的 TileSetSourceInfo 数据
@@ -116,11 +117,12 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// <summary>
     /// 初始化数据
     /// </summary>
-    public void InitData(TileSetInfo tileSetInfo)
+    public void InitData(TileSetSplit tileSetSplit)
     {
         IsDirty = false;
-        OriginTileSetInfo = tileSetInfo;
-        TileSetInfo = tileSetInfo.Clone();
+        tileSetSplit.ReloadTileSetInfo();
+        TileSetSplit = tileSetSplit;
+        TileSetInfo = tileSetSplit.TileSetInfo.Clone();
         RefreshTitle();
         
         //初始化下拉框
@@ -321,7 +323,9 @@ public partial class TileSetEditorPanel : TileSetEditor
     //保存
     private void OnSaveClick()
     {
-        EventManager.EmitEvent(EventEnum.OnTileSetSave, TileSetInfo);
+        TileSetSplit.TileSetInfo.Dispose();
+        TileSetSplit.SetTileSetInfo(TileSetInfo.Clone());
+        EventManager.EmitEvent(EventEnum.OnTileSetSave, TileSetSplit);
         IsDirty = false;
         RefreshTitle();
     }

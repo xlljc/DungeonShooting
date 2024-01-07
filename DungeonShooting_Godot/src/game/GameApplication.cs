@@ -57,6 +57,11 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// </summary>
 	public Dictionary<string, DungeonRoomGroup> RoomConfig { get; private set; }
 	
+	/// <summary>
+	/// TileSet配置
+	/// </summary>
+	public Dictionary<string, TileSetSplit> TileSetConfig { get; private set; }
+	
 	// /// <summary>
 	// /// 房间配置数据, key: 模板房间资源路径
 	// /// </summary>
@@ -91,6 +96,8 @@ public partial class GameApplication : Node2D, ICoroutine
 		ExcelConfig.Init();
 		//初始化房间配置数据
 		InitRoomConfig();
+		//初始化TileSet配置数据
+		InitTileSetConfig();
 		//初始化武器数据
 		Weapon.InitWeaponAttribute();
 		//初始化敌人数据
@@ -259,6 +266,20 @@ public partial class GameApplication : Node2D, ICoroutine
 				roomInfos.RemoveAt(i);
 				i--;
 			}
+		}
+	}
+
+	//初始化TileSet配置
+	private void InitTileSetConfig()
+	{
+		//加载房间配置信息
+		var asText = ResourceManager.LoadText("res://" + GameConfig.RoomTileSetDir + GameConfig.TileSetConfigFile);
+		TileSetConfig = JsonSerializer.Deserialize<Dictionary<string, TileSetSplit>>(asText);
+		
+		//加载所有数据
+		foreach (var tileSetSplit in TileSetConfig)
+		{
+			tileSetSplit.Value.ReloadTileSetInfo();
 		}
 	}
 
