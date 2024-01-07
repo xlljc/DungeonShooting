@@ -9,6 +9,7 @@ public static partial class UiManager
         public const string Debugger = "Debugger";
         public const string EditorColorPicker = "EditorColorPicker";
         public const string EditorImportCombination = "EditorImportCombination";
+        public const string EditorInfo = "EditorInfo";
         public const string EditorInput = "EditorInput";
         public const string EditorTips = "EditorTips";
         public const string EditorTools = "EditorTools";
@@ -16,7 +17,6 @@ public static partial class UiManager
         public const string Loading = "Loading";
         public const string Main = "Main";
         public const string MapEditor = "MapEditor";
-        public const string MapEditorCreateGroup = "MapEditorCreateGroup";
         public const string MapEditorCreateMark = "MapEditorCreateMark";
         public const string MapEditorCreatePreinstall = "MapEditorCreatePreinstall";
         public const string MapEditorCreateRoom = "MapEditorCreateRoom";
@@ -227,6 +227,54 @@ public static partial class UiManager
     public static UI.EditorImportCombination.EditorImportCombinationPanel[] Get_EditorImportCombination_Instance()
     {
         return GetUiInstance<UI.EditorImportCombination.EditorImportCombinationPanel>(nameof(UI.EditorImportCombination.EditorImportCombination));
+    }
+
+    /// <summary>
+    /// 创建 EditorInfo, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorInfo.EditorInfoPanel Create_EditorInfo()
+    {
+        return CreateUi<UI.EditorInfo.EditorInfoPanel>(UiNames.EditorInfo);
+    }
+
+    /// <summary>
+    /// 打开 EditorInfo, 并返回UI实例
+    /// </summary>
+    public static UI.EditorInfo.EditorInfoPanel Open_EditorInfo()
+    {
+        return OpenUi<UI.EditorInfo.EditorInfoPanel>(UiNames.EditorInfo);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorInfo 的所有实例
+    /// </summary>
+    public static void Hide_EditorInfo()
+    {
+        var uiInstance = Get_EditorInfo_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorInfo 的所有实例
+    /// </summary>
+    public static void Destroy_EditorInfo()
+    {
+        var uiInstance = Get_EditorInfo_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorInfo 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorInfo.EditorInfoPanel[] Get_EditorInfo_Instance()
+    {
+        return GetUiInstance<UI.EditorInfo.EditorInfoPanel>(nameof(UI.EditorInfo.EditorInfo));
     }
 
     /// <summary>
@@ -563,54 +611,6 @@ public static partial class UiManager
     public static UI.MapEditor.MapEditorPanel[] Get_MapEditor_Instance()
     {
         return GetUiInstance<UI.MapEditor.MapEditorPanel>(nameof(UI.MapEditor.MapEditor));
-    }
-
-    /// <summary>
-    /// 创建 MapEditorCreateGroup, 并返回UI实例, 该函数不会打开 Ui
-    /// </summary>
-    public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel Create_MapEditorCreateGroup()
-    {
-        return CreateUi<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(UiNames.MapEditorCreateGroup);
-    }
-
-    /// <summary>
-    /// 打开 MapEditorCreateGroup, 并返回UI实例
-    /// </summary>
-    public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel Open_MapEditorCreateGroup()
-    {
-        return OpenUi<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(UiNames.MapEditorCreateGroup);
-    }
-
-    /// <summary>
-    /// 隐藏 MapEditorCreateGroup 的所有实例
-    /// </summary>
-    public static void Hide_MapEditorCreateGroup()
-    {
-        var uiInstance = Get_MapEditorCreateGroup_Instance();
-        foreach (var uiPanel in uiInstance)
-        {
-            uiPanel.HideUi();
-        }
-    }
-
-    /// <summary>
-    /// 销毁 MapEditorCreateGroup 的所有实例
-    /// </summary>
-    public static void Destroy_MapEditorCreateGroup()
-    {
-        var uiInstance = Get_MapEditorCreateGroup_Instance();
-        foreach (var uiPanel in uiInstance)
-        {
-            uiPanel.Destroy();
-        }
-    }
-
-    /// <summary>
-    /// 获取所有 MapEditorCreateGroup 的实例, 如果没有实例, 则返回一个空数组
-    /// </summary>
-    public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel[] Get_MapEditorCreateGroup_Instance()
-    {
-        return GetUiInstance<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(nameof(UI.MapEditorCreateGroup.MapEditorCreateGroup));
     }
 
     /// <summary>

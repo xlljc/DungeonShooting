@@ -1,6 +1,7 @@
 {
-  "测试数据": {
+  "TileSet1": {
     "ErrorType": 0,
-    "Path": "resource/map/tileSet/测试数据"
+    "Path": "resource/map/tileSet/TileSet1",
+    "Remark": ""
   }
 }

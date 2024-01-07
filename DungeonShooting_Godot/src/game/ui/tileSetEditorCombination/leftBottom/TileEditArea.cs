@@ -134,7 +134,7 @@ public partial class TileEditArea : EditorGridBg<TileSetEditorCombination.LeftBo
         UiNode.L_TileTexture.Instance.Size = UiNode.L_TileTexture.Instance.Texture.GetSize();
         _maskGrid.RemoveAll();
         _useMask.Clear();
-        _maskGrid.SetColumns(width);
+        _maskGrid.SetColumns(Mathf.Max(1, width));
         for (var i = 0; i < width; i++)
         {
             for (var j = 0; j < height; j++)

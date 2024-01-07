@@ -34,8 +34,6 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
     
     [JsonIgnore]
     private Image _sourceImage;
-    [JsonIgnore]
-    private bool _overWriteImage;
 
     /// <summary>
     /// 初始化默认数据
@@ -44,14 +42,6 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
     {
         Terrain = new TileSetTerrainInfo();
         Combination = new List<TileCombinationInfo>();
-    }
-
-    /// <summary>
-    /// 是否重写过Image
-    /// </summary>
-    public bool IsOverWriteImage()
-    {
-        return _overWriteImage;
     }
     
     /// <summary>
@@ -71,7 +61,6 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
     /// </summary>
     public void SetSourceImage(Image image)
     {
-        _overWriteImage = true;
         if (_sourceImage != null)
         {
             _sourceImage.Dispose();
@@ -90,6 +79,11 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>
             tileSetSourceInfo.Combination.Add(combination.Clone());
         }
         tileSetSourceInfo.SourcePath = SourcePath;
+        if (_sourceImage != null)
+        {
+            tileSetSourceInfo._sourceImage = (Image)_sourceImage.Duplicate();
+        }
+
         return tileSetSourceInfo;
     }
 

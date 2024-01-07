@@ -1,15 +1,15 @@
 [gd_scene load_steps=2 format=3 uid="uid://45krchsjrluh"]
 
-[ext_resource type="Script" path="res://src/game/ui/mapEditorCreateGroup/MapEditorCreateGroupPanel.cs" id="1_qoujx"]
+[ext_resource type="Script" path="res://src/game/ui/editorInfo/EditorInfoPanel.cs" id="1_3800s"]
 
-[node name="MapEditorCreateGroup" type="Control"]
+[node name="EditorInfo" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_qoujx")
+script = ExtResource("1_3800s")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -30,19 +30,19 @@ theme_override_constants/separation = 20
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="GroupNameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 20.0
-text = "组名称："
+text = "名称："
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="GroupNameInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="NameInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 80.0
-placeholder_text = "请输入组名称"
+placeholder_text = "请输入名称"
 
 [node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -52,7 +52,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 size_flags_stretch_ratio = 20.0
-text = "组备注："
+text = "备注："
 horizontal_alignment = 2
 vertical_alignment = 1
 

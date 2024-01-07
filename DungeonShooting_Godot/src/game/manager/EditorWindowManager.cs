@@ -1,14 +1,15 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Config;
 using Godot;
 using UI.EditorColorPicker;
 using UI.EditorImportCombination;
+using UI.EditorInfo;
 using UI.EditorInput;
 using UI.EditorTips;
 using UI.EditorWindow;
-using UI.MapEditorCreateGroup;
 using UI.MapEditorCreateMark;
 using UI.MapEditorCreatePreinstall;
 using UI.MapEditorCreateRoom;
@@ -213,17 +214,36 @@ public static class EditorWindowManager
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("创建地牢组");
         window.SetWindowSize(new Vector2I(700, 500));
-        var body = window.OpenBody<MapEditorCreateGroupPanel>(UiManager.UiNames.MapEditorCreateGroup);
+        var body = window.OpenBody<EditorInfoPanel>(UiManager.UiNames.EditorInfo);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
                 //获取填写的数据, 并创建ui
-                var groupInfo = body.GetGroupInfo();
-                if (groupInfo != null)
+                var infoData = body.GetInfoData();
+                //组名
+                var groupName = infoData.Name;
+        
+                //检查名称是否合规
+                if (string.IsNullOrEmpty(groupName))
                 {
-                    window.CloseWindow();
-                    onCreateGroup(groupInfo);
+                    ShowTips("错误", "组名称不能为空!");
+                    return;
                 }
+        
+                //验证是否有同名组
+                var path = MapProjectManager.CustomMapPath + groupName;
+                var dir = new DirectoryInfo(path);
+                if (dir.Exists && dir.GetDirectories().Length > 0)
+                {
+                    ShowTips("错误", $"已经有相同路径的房间了!");
+                    return;
+                }
+
+                var group = new DungeonRoomGroup();
+                group.GroupName = groupName;
+                group.Remark = infoData.Remark;
+                window.CloseWindow();
+                onCreateGroup(group);
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {
@@ -536,6 +556,84 @@ public static class EditorWindowManager
                 var selectObject = body.GetName();
                 window.CloseWindow();
                 onAccept(selectObject);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
+    /// 显示创建TileSet的面板
+    /// </summary>
+    /// <param name="onCreateTileSet">创建完成回调, 第一个参数为TileSet名称, 第二个参数数据数据</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowCreateTileSet(Action<string, TileSetSplit> onCreateTileSet, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("创建TileSet");
+        window.SetWindowSize(new Vector2I(700, 500));
+        var body = window.OpenBody<EditorInfoPanel>(UiManager.UiNames.EditorInfo);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                //获取填写的数据, 并创建ui
+                var infoData = body.GetInfoData();
+                //名称
+                var name = infoData.Name;
+        
+                //检查名称是否合规
+                if (string.IsNullOrEmpty(name))
+                {
+                    ShowTips("错误", "名称不能为空!");
+                    return;
+                }
+
+                //验证是否有同名组
+                var path = EditorTileSetManager.CustomTileSetPath + name;
+                var dir = new DirectoryInfo(path);
+                if (dir.Exists && dir.GetFiles().Length > 0)
+                {
+                    ShowTips("错误", $"已经有相同名称的TileSet了!");
+                    return;
+                }
+
+                var tileSetSplit = new TileSetSplit();
+                tileSetSplit.Remark = infoData.Remark;
+                tileSetSplit.Path = EditorTileSetManager.CustomTileSetPath + name;
+                window.CloseWindow();
+                onCreateTileSet(infoData.Name, tileSetSplit);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
+    /// 显示编辑TileSet的面板
+    /// </summary>
+    /// <param name="tileSetSplit">原数据</param>
+    /// <param name="onCreateTileSet">创建完成回调, 第一个参数为TileSet名称, 第二个参数数据数据</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowEditTileSet(TileSetSplit tileSetSplit, Action<TileSetSplit> onCreateTileSet, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("编辑TileSet");
+        window.SetWindowSize(new Vector2I(700, 500));
+        var body = window.OpenBody<EditorInfoPanel>(UiManager.UiNames.EditorInfo);
+        body.InitData(new EditorInfoData(tileSetSplit.TileSetInfo.Name, tileSetSplit.Remark));
+        body.SetNameInputEnable(false);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                //获取填写的数据, 并创建ui
+                var infoData = body.GetInfoData();
+                tileSetSplit.Remark = infoData.Remark;
+                window.CloseWindow();
+                onCreateTileSet(tileSetSplit);
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {
