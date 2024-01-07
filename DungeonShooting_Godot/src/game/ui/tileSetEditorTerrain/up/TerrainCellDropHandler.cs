@@ -41,8 +41,12 @@ public partial class TerrainCellDropHandler : Control
         if (@event is InputEventMouseButton mouseEvent && mouseEvent.ButtonIndex == MouseButton.Right && mouseEvent.Pressed)
         {
             AcceptEvent();
+            var flag = IsPutDownTexture;
             ClearCell();
-            SetTerrainBitData(null);
+            if (flag)
+            {
+                SetTerrainBitData(null);
+            }
         }
     }
 
@@ -71,5 +75,6 @@ public partial class TerrainCellDropHandler : Control
     private void SetTerrainBitData(int[] cellData)
     {
         EditorTileSetManager.SetTileSetTerrainBit(_panel.EditorPanel.TileSetSourceInfo.Terrain, _cell.Index, _cell.Data, cellData);
+        EventManager.EmitEvent(EventEnum.OnTileSetDirty);
     }
 }

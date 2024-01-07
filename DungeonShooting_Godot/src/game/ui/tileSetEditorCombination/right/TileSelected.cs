@@ -35,6 +35,7 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
             _rightBg.UiPanel.EditorPanel.TileSetSourceInfo.Combination.Add(data.CombinationInfo);
             Grid.Add(data);
             Grid.Sort();
+            EventManager.EmitEvent(EventEnum.OnTileSetDirty);
         }
     }
     
@@ -51,6 +52,7 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
             {
                 Grid.RemoveByIndex(uiCell.Index);
             }
+            EventManager.EmitEvent(EventEnum.OnTileSetDirty);
         }
     }
 
@@ -66,6 +68,7 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
             {
                 uiCell.SetData(data);
             }
+            EventManager.EmitEvent(EventEnum.OnTileSetDirty);
         }
     }
 

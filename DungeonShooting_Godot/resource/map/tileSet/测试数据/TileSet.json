@@ -5,14 +5,8 @@
       "Name": "Test",
       "SourcePath": "resource/map/tileSet/\u6D4B\u8BD5\u6570\u636E/Test.png",
       "Terrain": {
-        "_f": [
-          0,
-          64
-        ],
-        "_vl": [
-          16,
-          48
-        ],
+        "_f": null,
+        "_vl": null,
         "_vc": null,
         "_vr": null,
         "_vs": null,

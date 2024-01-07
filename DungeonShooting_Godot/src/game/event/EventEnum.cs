@@ -153,7 +153,7 @@ public enum EventEnum
     /// </summary>
     OnTileSetSave,
     /// <summary>
-    /// 标记TileSet脏了, 参数为<see cref="TileSetInfo"/>
+    /// 标记TileSet脏了, 无参数
     /// </summary>
     OnTileSetDirty,
     /// <summary>

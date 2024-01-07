@@ -6,6 +6,11 @@ namespace UI.TileSetEditor;
 public partial class TileSetEditorPanel : TileSetEditor
 {
     /// <summary>
+    /// 数据是否脏了
+    /// </summary>
+    public bool IsDirty { get; private set; }
+    
+    /// <summary>
     /// 编辑使用的 tileSetInfo 数据
     /// </summary>
     public TileSetInfo TileSetInfo { get; private set; }
@@ -88,6 +93,7 @@ public partial class TileSetEditorPanel : TileSetEditor
         S_AddButton.Instance.Pressed += OnAddSourceClick;
         S_OptionButton.Instance.ItemSelected += OnOptionChange;
         S_Save.Instance.Pressed += OnSaveClick;
+        AddEventListener(EventEnum.OnTileSetDirty, OnTileSetDirty);
     }
 
     public override void OnDestroyUi()
@@ -112,9 +118,10 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// </summary>
     public void InitData(TileSetInfo tileSetInfo)
     {
+        IsDirty = false;
         OriginTileSetInfo = tileSetInfo;
         TileSetInfo = tileSetInfo.Clone();
-        S_Title.Instance.Text = "正在编辑：" + TileSetInfo.Name;
+        RefreshTitle();
         
         //初始化下拉框
         if (TileSetInfo.Sources.Count > 0)
@@ -130,8 +137,21 @@ public partial class TileSetEditorPanel : TileSetEditor
         }
     }
 
+    //设置标题显示内容
+    private void RefreshTitle()
+    {
+        if (IsDirty)
+        {
+            S_Title.Instance.Text = "正在编辑：" + TileSetInfo.Name + "*";
+        }
+        else
+        {
+            S_Title.Instance.Text = "正在编辑：" + TileSetInfo.Name;
+        }
+    }
+
     /// <summary>
-    /// 设置纹理
+    /// 设置纹理使用的纹理
     /// </summary>
     public void SetTextureData(Image image)
     {
@@ -190,7 +210,28 @@ public partial class TileSetEditorPanel : TileSetEditor
     //返回上一级按钮点击
     private void OnBackClick()
     {
-        OpenPrevUi();
+        if (IsDirty)
+        {
+            EditorWindowManager.ShowConfirm("提示", "当前TileSet修改的数据还未保存，是否退出编辑？",
+                "保存并退出", "直接退出", "取消"
+                , index =>
+                {
+                    if (index == 0) //保存并退出
+                    {
+                        OnSaveClick();
+                        OpenPrevUi();
+                    }
+                    else if (index == 1) //直接退出
+                    {
+                        OpenPrevUi();
+                    }
+                }
+            );
+        }
+        else
+        {
+            OpenPrevUi();
+        }
     }
 
     //删除资源
@@ -281,5 +322,14 @@ public partial class TileSetEditorPanel : TileSetEditor
     private void OnSaveClick()
     {
         EventManager.EmitEvent(EventEnum.OnTileSetSave, TileSetInfo);
+        IsDirty = false;
+        RefreshTitle();
+    }
+    
+    //数据脏了
+    private void OnTileSetDirty(object obj)
+    {
+        IsDirty = true;
+        RefreshTitle();
     }
 }

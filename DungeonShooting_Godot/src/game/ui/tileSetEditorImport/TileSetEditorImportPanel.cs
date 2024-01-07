@@ -184,5 +184,6 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
         tileSetSourceInfo.SourcePath = GameConfig.RoomTileSetDir + _tileSetEditor.TileSetInfo.Name + "/" + tileSetSourceInfo.Name + ".png";
         tileSetSourceInfo.SetSourceImage(image);
         _tileSetEditor.SetTextureData(image);
+        EventManager.EmitEvent(EventEnum.OnTileSetDirty);
     }
 }
