@@ -74,7 +74,15 @@ public partial class TerrainCellDropHandler : Control
 
     private void SetTerrainBitData(int[] cellData)
     {
-        _panel.EditorPanel.TileSetSourceInfo.Terrain.SetTerrainBit(_cell.Index, _cell.Data, cellData);
+        if (cellData == null)
+        {
+            _panel.EditorPanel.TileSetSourceInfo.Terrain.RemoveTerrainBit(_cell.Index, _cell.Data);
+        }
+        else
+        {
+            _panel.EditorPanel.TileSetSourceInfo.Terrain.SetTerrainBit(_cell.Index, _cell.Data, cellData);
+        }
+
         EventManager.EmitEvent(EventEnum.OnTileSetDirty);
     }
 }

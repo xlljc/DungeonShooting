@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Godot;
@@ -98,11 +99,12 @@ public class TileSetSplit : IDestroy
         {
             //TileSet网格大小
             _tileSet.TileSize = GameConfig.TileCellSizeVector2I;
-            //物理层
+            //物理层 0
             _tileSet.AddPhysicsLayer();
             _tileSet.SetPhysicsLayerCollisionLayer(0, PhysicsLayer.Wall);
-            _tileSet.SetPhysicsLayerCollisionMask(0, PhysicsLayer.None);
-            //地形层
+            _tileSet.SetPhysicsLayerCollisionMask(0, PhysicsLayer.Wall);
+            Debug.Log("GetPhysicsLayersCount: " + _tileSet.GetPhysicsLayersCount());
+            //地形层 0
             _tileSet.AddTerrainSet();
             _tileSet.SetTerrainSetMode(0, TileSet.TerrainMode.CornersAndSides);
             _tileSet.AddTerrain(0);
@@ -129,23 +131,60 @@ public class TileSetSplit : IDestroy
                 //初始化地形
                 tileSetAtlasSource.InitTerrain(terrainInfo, 0, 0);
                 //ySort
-                var index = terrainInfo.TerrainCoordsToIndex(new Vector2I(0, 2));
-                if (terrainInfo.T.TryGetValue(index, out var value))
-                {
-                    var pos = terrainInfo.GetPosition(value);
-                    var tileData = tileSetAtlasSource.GetTileData(pos, 0);
-                    tileData.YSortOrigin = 23;
-                }
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 2), 23);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 2), 23);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 2), 23);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 2), 23);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 3), 23);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 3), 23);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 3), 23);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 3), 23);
+
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 3), 23);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 3), 23);
+
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 3), 23);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 3), 23);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 3), 23);
+                
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(0, 0), 7);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(1, 0), 7);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(2, 0), 7);
+                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(3, 0), 7);
                 
                 //碰撞器
-                
+                var index = terrainInfo.TerrainCoordsToIndex(new Vector2I(0, 0), 1);
+                var cellData = terrainInfo.GetTerrainBit(index, 1);
+                var pos = terrainInfo.GetPosition(cellData);
+                var tileData = tileSetAtlasSource.GetTileData(pos, 0);
+                tileData.AddCollisionPolygon(0);
+                tileData.SetCollisionPolygonPoints(0, 0, new []
+                {
+                    new Vector2(0, 0),
+                    new Vector2(8, 0),
+                    new Vector2(8, 8),
+                    new Vector2(0, 8),
+                });
+
                 _tileSet.AddSource(tileSetAtlasSource);
             }
         }
 
         return _tileSet;
     }
-    
+
+    private static void SetAtlasSourceYSortOrigin(TileSetTerrainInfo terrainInfo, TileSetAtlasSource tileSetAtlasSource, byte type, Vector2I coords, int ySortOrigin)
+    {
+        var index = terrainInfo.TerrainCoordsToIndex(coords, type);
+        var cellData = terrainInfo.GetTerrainBit(index, type);
+        if (cellData != null)
+        {
+            var pos = terrainInfo.GetPosition(cellData);
+            var tileData = tileSetAtlasSource.GetTileData(pos, 0);
+            tileData.YSortOrigin = ySortOrigin;
+        }
+    }
+
     public void Destroy()
     {
         if (IsDestroyed) return;

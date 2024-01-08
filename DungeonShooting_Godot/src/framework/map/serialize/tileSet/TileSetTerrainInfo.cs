@@ -10,14 +10,17 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
 {
     //---------------------- 地板 ----------------------
 
+    //type = 3
     [JsonInclude] public Dictionary<uint, int[]> F;
     
     //---------------------- 侧方墙壁 --------------------------
     
+    //type = 2
     [JsonInclude] public Dictionary<uint, int[]> M;
     
     //---------------------- 顶部墙壁47格 ----------------------
     
+    //type = 1
     [JsonInclude] public Dictionary<uint, int[]> T;
 
     public void InitData()
@@ -35,9 +38,22 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
         return new Vector2I(ints[0] / GameConfig.TileCellSize, ints[1] / GameConfig.TileCellSize);
     }
     
-    public uint TerrainCoordsToIndex(Vector2I coords)
+    public int TerrainCoordsToIndex(Vector2I coords, byte type)
     {
-        return (uint)(coords.Y * GameConfig.TerrainBitSize1.X + coords.X);
+        if (type == 1)
+        {
+            return coords.Y * GameConfig.TerrainBitSize1.X + coords.X;
+        }
+        else if (type == 2)
+        {
+            return coords.Y * GameConfig.TerrainBitSize2.X + coords.X;
+        }
+        else if (type == 3)
+        {
+            return coords.Y * GameConfig.TerrainBitSize3.X + coords.X;
+        }
+
+        return -1;
     }
 
     public TileSetTerrainInfo Clone()
@@ -131,6 +147,81 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
         else if (type == 3) //地板
         {
             F[0] = cellData;
+        }
+    }
+
+    /// <summary>
+    /// 移除地形掩码
+    /// </summary>
+    public void RemoveTerrainBit(int index, byte type)
+    {
+        if (type == 1) //顶部墙壁
+        {
+            switch (index)
+            {
+                case 0: T.Remove(TerrainPeering.Center| TerrainPeering.Bottom); break;
+                case 1: T.Remove(TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
+                case 2: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
+                case 3: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Bottom); break;
+                case 4: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
+                case 5: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 6: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
+                case 7: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
+                case 8: T.Remove(TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 9: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 10: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 11: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
+                case 12: T.Remove(TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Bottom); break;
+                case 13: T.Remove(TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
+                case 14: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;      
+                case 15: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Bottom); break;
+                case 16: T.Remove(TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 17: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 18: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 19: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break; 
+                case 20: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 21: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
+                case 22: break;
+                case 23: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
+                case 24: T.Remove(TerrainPeering.Top| TerrainPeering.Center); break;
+                case 25: T.Remove(TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Right); break;
+                case 26: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right); break;
+                case 27: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center); break;
+                case 28: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;  
+                case 29: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 30: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
+                case 31: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Bottom); break;
+                case 32: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 33: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 34: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 35: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
+                case 36: T.Remove(TerrainPeering.Center); break;
+                case 37: T.Remove(TerrainPeering.Center| TerrainPeering.Right); break;
+                case 38: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right); break;
+                case 39: T.Remove(TerrainPeering.Left| TerrainPeering.Center); break;
+                case 40: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
+                case 41: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right); break;    
+                case 42: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right); break;     
+                case 43: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
+                case 44: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Center| TerrainPeering.Right); break;
+                case 45: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right); break;
+                case 46: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
+                case 47: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center); break;
+            }
+        }
+        else if (type == 2) //侧方墙壁
+        {
+            switch (index)
+            {
+                case 0: M.Remove(0); break;
+                case 1: M.Remove(1); break;
+                case 2: M.Remove(2); break;
+                case 3: M.Remove(3); break;
+            }
+        }
+        else if (type == 3) //地板
+        {
+            F.Remove(0);
         }
     }
     
