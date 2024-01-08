@@ -78,6 +78,12 @@ public class TileSetSplit : IDestroy
     {
         var asText = ResourceManager.LoadText("res://" + TileSetPath);
         _tileSetInfo = JsonSerializer.Deserialize<TileSetInfo>(asText);
+        
+        if (_tileSet != null)
+        {
+            _tileSet.Dispose();
+            _tileSet = null;
+        }
     }
 
     /// <summary>
@@ -102,7 +108,7 @@ public class TileSetSplit : IDestroy
             //物理层 0
             _tileSet.AddPhysicsLayer();
             _tileSet.SetPhysicsLayerCollisionLayer(0, PhysicsLayer.Wall);
-            _tileSet.SetPhysicsLayerCollisionMask(0, PhysicsLayer.Wall);
+            _tileSet.SetPhysicsLayerCollisionMask(0, PhysicsLayer.None);
             Debug.Log("GetPhysicsLayersCount: " + _tileSet.GetPhysicsLayersCount());
             //地形层 0
             _tileSet.AddTerrainSet();
@@ -113,6 +119,7 @@ public class TileSetSplit : IDestroy
             foreach (var tileSetSourceInfo in _tileSetInfo.Sources)
             {
                 var tileSetAtlasSource = new TileSetAtlasSource();
+                _tileSet.AddSource(tileSetAtlasSource);
                 //纹理
                 var image = tileSetSourceInfo.GetSourceImage();
                 tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(image);
@@ -153,35 +160,127 @@ public class TileSetSplit : IDestroy
                 SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(3, 0), 7);
                 
                 //碰撞器
-                var index = terrainInfo.TerrainCoordsToIndex(new Vector2I(0, 0), 1);
-                var cellData = terrainInfo.GetTerrainBit(index, 1);
-                var pos = terrainInfo.GetPosition(cellData);
-                var tileData = tileSetAtlasSource.GetTileData(pos, 0);
-                tileData.AddCollisionPolygon(0);
-                tileData.SetCollisionPolygonPoints(0, 0, new []
-                {
-                    new Vector2(0, 0),
-                    new Vector2(8, 0),
-                    new Vector2(8, 8),
-                    new Vector2(0, 8),
-                });
-
-                _tileSet.AddSource(tileSetAtlasSource);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 0), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 0), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 0), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 0), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 0), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 0), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 0), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 0), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 0), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 0), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 0), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 0), true);
+                
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 1), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 1), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 1), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 1), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 1), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 1), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 1), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 1), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 1), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 1), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 1), false);
+                
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 2), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 2), false);
+                
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 3), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 3), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 3), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 3), true);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 3), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 3), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 3), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 3), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 3), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 3), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 3), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 3), false);
+                                
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 4), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 4), false);
+                
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(0, 0), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(1, 0), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(2, 0), false);
+                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(3, 0), false);
             }
         }
 
         return _tileSet;
     }
 
-    private static void SetAtlasSourceYSortOrigin(TileSetTerrainInfo terrainInfo, TileSetAtlasSource tileSetAtlasSource, byte type, Vector2I coords, int ySortOrigin)
+    /// <summary>
+    /// 设置地图块的 Y 排序原点。
+    /// </summary>
+    private static void SetAtlasSourceYSortOrigin(TileSetTerrainInfo terrainInfo, TileSetAtlasSource tileSetAtlasSource, byte type, Vector2I bitCoords, int ySortOrigin)
     {
-        var index = terrainInfo.TerrainCoordsToIndex(coords, type);
+        var index = terrainInfo.TerrainCoordsToIndex(bitCoords, type);
         var cellData = terrainInfo.GetTerrainBit(index, type);
         if (cellData != null)
         {
             var pos = terrainInfo.GetPosition(cellData);
             var tileData = tileSetAtlasSource.GetTileData(pos, 0);
             tileData.YSortOrigin = ySortOrigin;
+        }
+    }
+
+    /// <summary>
+    /// 设置Atlas源碰撞信息, isHalf: 是否半块
+    /// </summary>
+    private static void SetAtlasSourceCollision(TileSetTerrainInfo terrainInfo, TileSetAtlasSource tileSetAtlasSource, byte type, Vector2I bitCoords, bool isHalf)
+    {
+        var index = terrainInfo.TerrainCoordsToIndex(bitCoords, type);
+        var cellData = terrainInfo.GetTerrainBit(index, type);
+        if (cellData != null)
+        {
+            var pos = terrainInfo.GetPosition(cellData);
+            var tileData = tileSetAtlasSource.GetTileData(pos, 0);
+            tileData.AddCollisionPolygon(0);
+            if (isHalf)
+            {
+                tileData.SetCollisionPolygonPoints(0, 0, new[]
+                {
+                    new Vector2(-8, 0),
+                    new Vector2(8, 0),
+                    new Vector2(8, 8),
+                    new Vector2(-8, 8)
+                });
+            }
+            else
+            {
+                tileData.SetCollisionPolygonPoints(0, 0, new []
+                {
+                    new Vector2(-8, -8),
+                    new Vector2(8, -8),
+                    new Vector2(8, 8),
+                    new Vector2(-8, 8)
+                });
+            }
         }
     }
 

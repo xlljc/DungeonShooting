@@ -154,7 +154,7 @@ offset = Vector2(4, 0)
 position = Vector2(-2, -3)
 
 [node name="FirePoint" type="Marker2D" parent="AnimatedSprite"]
-position = Vector2(7, -1.5)
+position = Vector2(12, -1.5)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(3, 0)

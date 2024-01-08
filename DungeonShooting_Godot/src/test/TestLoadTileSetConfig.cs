@@ -26,7 +26,6 @@ public partial class TestLoadTileSetConfig : Node2D
             new Vector2I(10, 12),
             new Vector2I(11, 12),
         }, 0, 0, false);
-        ResourceSaver.Save(tileSet, "res://" + GameConfig.RoomTileSetDir + "test_tile_set.tres");
     }
     
     //初始化TileSet配置

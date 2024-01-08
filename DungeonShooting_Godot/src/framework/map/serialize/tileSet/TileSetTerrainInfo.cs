@@ -38,19 +38,19 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
         return new Vector2I(ints[0] / GameConfig.TileCellSize, ints[1] / GameConfig.TileCellSize);
     }
     
-    public int TerrainCoordsToIndex(Vector2I coords, byte type)
+    public int TerrainCoordsToIndex(Vector2I bitCoords, byte type)
     {
         if (type == 1)
         {
-            return coords.Y * GameConfig.TerrainBitSize1.X + coords.X;
+            return bitCoords.Y * GameConfig.TerrainBitSize1.X + bitCoords.X;
         }
         else if (type == 2)
         {
-            return coords.Y * GameConfig.TerrainBitSize2.X + coords.X;
+            return bitCoords.Y * GameConfig.TerrainBitSize2.X + bitCoords.X;
         }
         else if (type == 3)
         {
-            return coords.Y * GameConfig.TerrainBitSize3.X + coords.X;
+            return bitCoords.Y * GameConfig.TerrainBitSize3.X + bitCoords.X;
         }
 
         return -1;
