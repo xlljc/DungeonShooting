@@ -44,6 +44,7 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>, IDestroy
     public void InitData()
     {
         Terrain = new TileSetTerrainInfo();
+        Terrain.InitData();
         Combination = new List<TileCombinationInfo>();
     }
     

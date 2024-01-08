@@ -125,8 +125,19 @@ public class TileSetSplit : IDestroy
                     }
                 }
                 
+                var terrainInfo = tileSetSourceInfo.Terrain;
                 //初始化地形
-                tileSetAtlasSource.InitTerrain(tileSetSourceInfo.Terrain);
+                tileSetAtlasSource.InitTerrain(terrainInfo, 0, 0);
+                //ySort
+                var index = terrainInfo.TerrainCoordsToIndex(new Vector2I(0, 2));
+                if (terrainInfo.T.TryGetValue(index, out var value))
+                {
+                    var pos = terrainInfo.GetPosition(value);
+                    var tileData = tileSetAtlasSource.GetTileData(pos, 0);
+                    tileData.YSortOrigin = 23;
+                }
+                
+                //碰撞器
                 
                 _tileSet.AddSource(tileSetAtlasSource);
             }

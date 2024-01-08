@@ -77,8 +77,51 @@ public static class TerrainPeering
         return None;
     }
 
-    public static void InitTerrain(this TileSetAtlasSource atlasSource, TileSetTerrainInfo terrainInfo)
+    /// <summary>
+    /// 将地形掩码数据设置到 TileSetAtlasSource 中
+    /// </summary>
+    public static void InitTerrain(this TileSetAtlasSource atlasSource, TileSetTerrainInfo terrainInfo, int terrainSet, int terrain)
     {
-        //terrainInfo._000_110_010
+        foreach (var keyValuePair in terrainInfo.T)
+        {
+            var pos = terrainInfo.GetPosition(keyValuePair.Value);
+            var tileData = atlasSource.GetTileData(pos, 0);
+            tileData.TerrainSet = terrainSet;
+            tileData.Terrain = terrain;
+            
+            var bit = keyValuePair.Key;
+            if ((bit & LeftTop) != 0)
+            {
+                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopLeftCorner, 0);
+            }
+            if ((bit & Top) != 0)
+            {
+                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopSide, 0);
+            }
+            if ((bit & RightTop) != 0)
+            {
+                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopRightCorner, 0);
+            }
+            if ((bit & Left) != 0)
+            {
+                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.LeftSide, 0);
+            }
+            if ((bit & Right) != 0)
+            {
+                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.RightSide, 0);
+            }
+            if ((bit & LeftBottom) != 0)
+            {
+                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomLeftCorner, 0);
+            }
+            if ((bit & Bottom) != 0)
+            {
+                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomSide, 0);
+            }
+            if ((bit & RightBottom) != 0)
+            {
+                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomRightCorner, 0);
+            }
+        }
     }
 }
