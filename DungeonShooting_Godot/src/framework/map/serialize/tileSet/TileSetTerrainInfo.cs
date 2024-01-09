@@ -8,19 +8,20 @@ using Godot;
 /// </summary>
 public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
 {
-    //---------------------- 地板 ----------------------
-
     //type = 3
+    /// <summary>
+    /// 地板 (1块) type = 3
+    /// </summary>
     [JsonInclude] public Dictionary<uint, int[]> F;
-    
-    //---------------------- 侧方墙壁 --------------------------
-    
-    //type = 2
+
+    /// <summary>
+    /// 侧方墙壁 (4块) type = 2
+    /// </summary>
     [JsonInclude] public Dictionary<uint, int[]> M;
     
-    //---------------------- 顶部墙壁47格 ----------------------
-    
-    //type = 1
+    /// <summary>
+    /// 顶部墙壁47格 (47块) type = 1
+    /// </summary>
     [JsonInclude] public Dictionary<uint, int[]> T;
 
     public void InitData()
@@ -28,6 +29,15 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
         T = new Dictionary<uint, int[]>();
         M = new Dictionary<uint, int[]>();
         F = new Dictionary<uint, int[]>();
+    }
+
+    /// <summary>
+    /// 返回这个TileSet地形是否可以正常使用了
+    /// </summary>
+    /// <returns></returns>
+    public bool CanUse()
+    {
+        return T != null && T.Count == 47 && M != null && M.Count == 4 && F != null && F.Count == 1;
     }
 
     /// <summary>

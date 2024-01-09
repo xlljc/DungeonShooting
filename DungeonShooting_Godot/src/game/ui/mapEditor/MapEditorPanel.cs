@@ -29,8 +29,7 @@ public partial class MapEditorPanel : MapEditor
     {
         //临时处理, 加载TileSet
         var tileSetSplit = GameApplication.Instance.TileSetConfig.First().Value;
-        var tileSet = tileSetSplit.GetTileSet();
-        S_TileMap.Instance.InitTileSet(tileSet);
+        S_TileMap.Instance.InitTileSet(tileSetSplit);
 
         S_TabContainer.Instance.SetTabTitle(0, "对象");
         S_TabContainer.Instance.SetTabTitle(1, "图层");

@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -91,21 +92,50 @@ public class AutoTileConfig
     
     //------------------------------------------------------------------------- 
 
-    private Dictionary<Vector2I, TileCellData> _mapping = new Dictionary<Vector2I, TileCellData>();
+    public TileSetTerrainInfo TerrainInfo { get; private set; }
     
-    public AutoTileConfig(int sourceId, TileSetAtlasSource atlasSource)
+    private Dictionary<Vector2I, TileCellData> _mapping = new Dictionary<Vector2I, TileCellData>();
+
+    public AutoTileConfig(int sourceId, TileSetTerrainInfo terrainInfo)
     {
-        var tilesCount = atlasSource.GetTilesCount();
-        for (var i = 0; i < tilesCount; i++)
+        TerrainInfo = terrainInfo;
+        if (terrainInfo.T != null)
         {
-            var pos = atlasSource.GetTileId(i);
-            var tileData = atlasSource.GetTileData(pos, 0);
-            if (tileData != null && tileData.Terrain != -1 && tileData.TerrainSet != -1) //判断是否使用掩码
+            foreach (var keyValuePair in terrainInfo.T)
             {
-                HandlerTileData(tileData.GetTerrainPeeringValue(), sourceId, pos);
+                HandlerTileData(keyValuePair.Key, sourceId, terrainInfo.GetPosition(keyValuePair.Value));
             }
         }
 
+        if (terrainInfo.M != null)
+        {
+            int[] data;
+            if (terrainInfo.M.TryGetValue(0, out data))
+            {
+                Wall_Vertical_Single = new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, GameConfig.MiddleMapLayer);
+            }
+            if (terrainInfo.M.TryGetValue(1, out data))
+            {
+                Wall_Vertical_Left= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, GameConfig.MiddleMapLayer);
+            }
+            if (terrainInfo.M.TryGetValue(2, out data))
+            {
+                Wall_Vertical_Center= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, GameConfig.MiddleMapLayer);
+            }
+            if (terrainInfo.M.TryGetValue(3, out data))
+            {
+                Wall_Vertical_Right= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, GameConfig.MiddleMapLayer);
+            }
+        }
+        
+        if (terrainInfo.F != null)
+        {
+            if (terrainInfo.F.TryGetValue(0, out var data))
+            {
+                Floor = new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, GameConfig.FloorMapLayer);
+            }
+        }
+        
         TopMask = Auto_111_111_111;
         Wall_Bottom = Auto_000_111_111;
         Wall_Left = Auto_110_110_110;

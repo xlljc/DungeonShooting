@@ -227,7 +227,8 @@ public partial class DungeonManager : Node2D
         yield return 0;
         
         //填充地牢
-        AutoTileConfig = new AutoTileConfig(0, World.TileRoot.TileSet.GetSource(0) as TileSetAtlasSource);
+        var tileSetSplit = GameApplication.Instance.TileSetConfig.First().Value;
+        AutoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain);
         _dungeonTileMap = new DungeonTileMap(World.TileRoot);
         yield return _dungeonTileMap.AutoFillRoomTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, random);
         //yield return _dungeonTileMap.AddOutlineTile(AutoTileConfig.WALL_BLOCK);

@@ -155,14 +155,14 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <summary>
     /// 初始化图块集。
     /// </summary>
-    /// <param name="tileSet">要初始化的图块集</param>
-    public void InitTileSet(TileSet tileSet)
+    /// <param name="tileSetSplit">要初始化的图块集</param>
+    public void InitTileSet(TileSetSplit tileSetSplit)
     {
-        TileSet = tileSet;
+        TileSet = tileSetSplit.GetTileSet();
 
         // 创建AutoTileConfig对象
         // 使用第一个图块集源作为参数
-        _autoTileConfig = new AutoTileConfig(0, tileSet.GetSource(0) as TileSetAtlasSource);
+        _autoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain);
     }
     
     public void SetUiNode(IUiNode uiNode)
