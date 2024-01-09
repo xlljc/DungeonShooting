@@ -8,6 +8,10 @@ using Godot;
 /// </summary>
 public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
 {
+    public const byte FloorLayerType = 3;
+    public const byte MiddleLayerType = 2;
+    public const byte TopLayerType = 1;
+    
     //type = 3
     /// <summary>
     /// 地板 (1块) type = 3
@@ -31,41 +35,6 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
         F = new Dictionary<uint, int[]>();
     }
 
-    /// <summary>
-    /// 返回这个TileSet地形是否可以正常使用了
-    /// </summary>
-    /// <returns></returns>
-    public bool CanUse()
-    {
-        return T != null && T.Count == 47 && M != null && M.Count == 4 && F != null && F.Count == 1;
-    }
-
-    /// <summary>
-    /// 将存储的坐标数据转换成 Vector2I 对象, 返回的 Vector2I 单位: 格
-    /// </summary>
-    public Vector2I GetPosition(int[] ints)
-    {
-        return new Vector2I(ints[0] / GameConfig.TileCellSize, ints[1] / GameConfig.TileCellSize);
-    }
-    
-    public int TerrainCoordsToIndex(Vector2I bitCoords, byte type)
-    {
-        if (type == 1)
-        {
-            return bitCoords.Y * GameConfig.TerrainBitSize1.X + bitCoords.X;
-        }
-        else if (type == 2)
-        {
-            return bitCoords.Y * GameConfig.TerrainBitSize2.X + bitCoords.X;
-        }
-        else if (type == 3)
-        {
-            return bitCoords.Y * GameConfig.TerrainBitSize3.X + bitCoords.X;
-        }
-
-        return -1;
-    }
-
     public TileSetTerrainInfo Clone()
     {
         var terrainInfo = new TileSetTerrainInfo();
@@ -86,62 +55,205 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     }
     
     /// <summary>
-    /// 将地形掩码存入 TileSetTerrainInfo 中
+    /// 返回这个TileSet地形是否可以正常使用了
     /// </summary>
-    public void SetTerrainBit(int index, byte type, int[] cellData)
+    /// <returns></returns>
+    public bool CanUse()
     {
-        if (type == 1) //顶部墙壁
+        return T != null && T.Count == 47 && M != null && M.Count == 4 && F != null && F.Count == 1;
+    }
+
+    /// <summary>
+    /// 将存储的坐标数据转换成 Vector2I 对象, 返回的 Vector2I 单位: 格
+    /// </summary>
+    public Vector2I GetPosition(int[] ints)
+    {
+        return new Vector2I(ints[0] / GameConfig.TileCellSize, ints[1] / GameConfig.TileCellSize);
+    }
+    
+    /// <summary>
+    /// 将地形掩码中的坐标转换为索引。
+    /// </summary>
+    /// <param name="bitCoords">地形坐标</param>
+    /// <param name="type">地形类型</param>
+    public int TerrainCoordsToIndex(Vector2I bitCoords, byte type)
+    {
+        if (type == 1)
+        {
+            return bitCoords.Y * GameConfig.TerrainBitSize1.X + bitCoords.X;
+        }
+        else if (type == 2)
+        {
+            return bitCoords.Y * GameConfig.TerrainBitSize2.X + bitCoords.X;
+        }
+        else if (type == 3)
+        {
+            return bitCoords.Y * GameConfig.TerrainBitSize3.X + bitCoords.X;
+        }
+
+        return -1;
+    }
+
+    /// <summary>
+    /// 将地掩码值转换为索引值
+    /// </summary>
+    /// <param name="bit">地形掩码值</param>
+    /// <param name="type">地形类型</param>
+    public int TerrainBitToIndex(uint bit, byte type)
+    {
+        if (type == TopLayerType) //顶部墙壁
+        {
+            switch (bit)
+            {
+                case TerrainPeering.Center | TerrainPeering.Bottom: return 0;
+                case TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 1;
+                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 2;
+                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom: return 3;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 4; 
+                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 5;
+                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 6;
+                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 7;
+                case TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 8;
+                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 9;
+                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 10;
+                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 11;
+                case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Bottom: return 12;
+                case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 13;
+                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 14;
+                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom: return 15;
+                case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 16;
+                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 17;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 18;
+                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 19;
+                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 20;
+                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 21;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 23;
+                case TerrainPeering.Top | TerrainPeering.Center: return 24;
+                case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right: return 25;
+                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right: return 26;
+                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center: return 27;
+                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 28;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 29;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 30;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom: return 31;
+                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 32;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 33;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 34;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 35; 
+                case TerrainPeering.Center: return 36;
+                case TerrainPeering.Center | TerrainPeering.Right: return 37;
+                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right: return 38;
+                case TerrainPeering.Left | TerrainPeering.Center: return 39;
+                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 40;   
+                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right: return 41;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right: return 42;
+                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 43;  
+                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right: return 44;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right: return 45;    
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 46;
+                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center: return 47;
+            }
+        }
+        else if (type == MiddleLayerType)
+        {
+            if (bit < 4)
+            {
+                return (int)bit;
+            }
+        }
+        else if (type == FloorLayerType)
+        {
+            if (bit == 0)
+            {
+                return 0;
+            }
+        }
+
+        return -1;
+    }
+
+    /// <summary>
+    /// 根据给定的索引和类型计算地形掩码值。
+    /// </summary>
+    /// <param name="index">用于确定地形掩码的索引。</param>
+    /// <param name="type">要计算地形位值的图层类型。</param>
+    /// <returns></returns>
+    public uint IndexToTerrainBit(int index, byte type)
+    {
+        if (type == TopLayerType) //顶部墙壁
         {
             switch (index)
             {
-                case 0: T[TerrainPeering.Center| TerrainPeering.Bottom] = cellData; break;
-                case 1: T[TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom] = cellData; break;
-                case 2: T[TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom] = cellData; break;
-                case 3: T[TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Bottom] = cellData; break;
-                case 4: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom] = cellData; break;
-                case 5: T[TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 6: T[TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom] = cellData; break;
-                case 7: T[TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom] = cellData; break;
-                case 8: T[TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 9: T[TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 10: T[TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 11: T[TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.LeftBottom| TerrainPeering.Bottom] = cellData; break;
-                case 12: T[TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Bottom] = cellData; break;
-                case 13: T[TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom] = cellData; break;
-                case 14: T[TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom] = cellData; break;      
-                case 15: T[TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Bottom] = cellData; break;
-                case 16: T[TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 17: T[TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 18: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 19: T[TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.LeftBottom| TerrainPeering.Bottom] = cellData; break; 
-                case 20: T[TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 21: T[TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom] = cellData; break;
-                case 22: break;
-                case 23: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom] = cellData; break;
-                case 24: T[TerrainPeering.Top| TerrainPeering.Center] = cellData; break;
-                case 25: T[TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Right] = cellData; break;
-                case 26: T[TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right] = cellData; break;
-                case 27: T[TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center] = cellData; break;
-                case 28: T[TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom] = cellData; break;  
-                case 29: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 30: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom] = cellData; break;
-                case 31: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Bottom] = cellData; break;
-                case 32: T[TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 33: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 34: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 35: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.LeftBottom| TerrainPeering.Bottom] = cellData; break;
-                case 36: T[TerrainPeering.Center] = cellData; break;
-                case 37: T[TerrainPeering.Center| TerrainPeering.Right] = cellData; break;
-                case 38: T[TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right] = cellData; break;
-                case 39: T[TerrainPeering.Left| TerrainPeering.Center] = cellData; break;
-                case 40: T[TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom] = cellData; break;
-                case 41: T[TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right] = cellData; break;    
-                case 42: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right] = cellData; break;     
-                case 43: T[TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom] = cellData; break;
-                case 44: T[TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Center| TerrainPeering.Right] = cellData; break;
-                case 45: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right] = cellData; break;
-                case 46: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom] = cellData; break;
-                case 47: T[TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center] = cellData; break;
+                case 0: return TerrainPeering.Center | TerrainPeering.Bottom;
+                case 1: return TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
+                case 2: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
+                case 3: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom;
+                case 4: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom; 
+                case 5: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 6: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
+                case 7: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
+                case 8: return TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 9: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 10: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 11: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
+                case 12: return TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Bottom;
+                case 13: return TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
+                case 14: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
+                case 15: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom;
+                case 16: return TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 17: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 18: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 19: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
+                case 20: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;                case 21: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
+                case 23: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
+                case 24: return TerrainPeering.Top | TerrainPeering.Center;
+                case 25: return TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right;
+                case 26: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right;
+                case 27: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center;
+                case 28: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
+                case 29: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 30: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
+                case 31: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom;
+                case 32: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 33: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 34: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
+                case 35: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom;   
+                case 36: return TerrainPeering.Center;
+                case 37: return TerrainPeering.Center | TerrainPeering.Right;
+                case 38: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right;
+                case 39: return TerrainPeering.Left | TerrainPeering.Center;
+                case 40: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom;     
+                case 41: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right;
+                case 42: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right;
+                case 43: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;    
+                case 44: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right;
+                case 45: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right;      
+                case 46: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
+                case 47: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center;
+            }
+        }
+        else if (type == MiddleLayerType)
+        {
+            if (index >= 0 && index < 4)
+            {
+                return (uint)index;
+            }
+        }
+
+        return TerrainPeering.None;
+    }
+    
+    /// <summary>
+    /// 将地形掩码存入 TileSetTerrainInfo 中
+    /// </summary>
+    public void SetTerrainCell(int index, byte type, int[] cellData)
+    {
+        if (type == 1) //顶部墙壁
+        {
+            var terrainBit = IndexToTerrainBit(index, type);
+            if (terrainBit != TerrainPeering.None)
+            {
+                T[terrainBit] = cellData;
             }
         }
         else if (type == 2) //侧方墙壁
@@ -163,60 +275,14 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     /// <summary>
     /// 移除地形掩码
     /// </summary>
-    public void RemoveTerrainBit(int index, byte type)
+    public void RemoveTerrainCell(int index, byte type)
     {
         if (type == 1) //顶部墙壁
         {
-            switch (index)
+            var terrainBit = IndexToTerrainBit(index, type);
+            if (terrainBit != TerrainPeering.None)
             {
-                case 0: T.Remove(TerrainPeering.Center| TerrainPeering.Bottom); break;
-                case 1: T.Remove(TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
-                case 2: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
-                case 3: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Bottom); break;
-                case 4: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
-                case 5: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 6: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
-                case 7: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
-                case 8: T.Remove(TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 9: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 10: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 11: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
-                case 12: T.Remove(TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Bottom); break;
-                case 13: T.Remove(TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
-                case 14: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;      
-                case 15: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Bottom); break;
-                case 16: T.Remove(TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 17: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 18: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 19: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break; 
-                case 20: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 21: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
-                case 22: break;
-                case 23: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
-                case 24: T.Remove(TerrainPeering.Top| TerrainPeering.Center); break;
-                case 25: T.Remove(TerrainPeering.Top| TerrainPeering.Center| TerrainPeering.Right); break;
-                case 26: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right); break;
-                case 27: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center); break;
-                case 28: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;  
-                case 29: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 30: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
-                case 31: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Bottom); break;
-                case 32: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 33: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 34: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 35: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
-                case 36: T.Remove(TerrainPeering.Center); break;
-                case 37: T.Remove(TerrainPeering.Center| TerrainPeering.Right); break;
-                case 38: T.Remove(TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right); break;
-                case 39: T.Remove(TerrainPeering.Left| TerrainPeering.Center); break;
-                case 40: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.LeftBottom| TerrainPeering.Bottom); break;
-                case 41: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right); break;    
-                case 42: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right); break;     
-                case 43: T.Remove(TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom| TerrainPeering.RightBottom); break;
-                case 44: T.Remove(TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Center| TerrainPeering.Right); break;
-                case 45: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right); break;
-                case 46: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.RightTop| TerrainPeering.Left| TerrainPeering.Center| TerrainPeering.Right| TerrainPeering.Bottom); break;
-                case 47: T.Remove(TerrainPeering.LeftTop| TerrainPeering.Top| TerrainPeering.Left| TerrainPeering.Center); break;
+                T.Remove(terrainBit);
             }
         }
         else if (type == 2) //侧方墙壁
@@ -238,387 +304,17 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     /// <summary>
     /// 获取指定索引的地形掩码存储的数据
     /// </summary>
-    public int[] GetTerrainBit(int index, byte type)
+    public int[] GetTerrainCell(int index, byte type)
     {
         if (type == 1) //顶部墙壁
         {
-            switch (index)
+            var terrainBit = IndexToTerrainBit(index, type);
+            if (terrainBit != TerrainPeering.None)
             {
-                case 0:
+                if (T.TryGetValue(terrainBit, out var cellData))
                 {
-                    if (T.TryGetValue(TerrainPeering.Center | TerrainPeering.Bottom, out var cellData))
-                        return cellData;
+                    return cellData;
                 }
-                    break;
-                case 1:
-                {
-                    if (T.TryGetValue(TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 2:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 3:
-                {
-                    if (T.TryGetValue(TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 4:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Right | TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 5:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom |
-                            TerrainPeering.RightBottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 6:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
-                            TerrainPeering.LeftBottom | TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 7:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Right | TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 8:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom |
-                            TerrainPeering.RightBottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 9:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
-                            TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 10:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
-                            TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 11:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom |
-                            TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 12:
-                {
-                    if (T.TryGetValue(TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Bottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 13:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 14:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
-                            TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 15:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 16:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom |
-                            TerrainPeering.RightBottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 17:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom |
-                            TerrainPeering.RightBottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 18:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom |
-                            TerrainPeering.RightBottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 19:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.LeftBottom | TerrainPeering.Bottom, out var
-                                cellData))
-                        return cellData;
-                }
-                    break;
-                case 20:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center |
-                            TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 21:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 22:
-                    break;
-                case 23:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 24:
-                {
-                    if (T.TryGetValue(TerrainPeering.Top | TerrainPeering.Center, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 25:
-                {
-                    if (T.TryGetValue(TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 26:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 27:
-                {
-                    if (T.TryGetValue(TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 28:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center |
-                            TerrainPeering.Right | TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 29:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop |
-                            TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom |
-                            TerrainPeering.RightBottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 30:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop |
-                            TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
-                            TerrainPeering.LeftBottom | TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 31:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 32:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 33:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop |
-                            TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
-                            TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 34:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 35:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.LeftBottom | TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 36:
-                {
-                    if (T.TryGetValue(TerrainPeering.Center, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 37:
-                {
-                    if (T.TryGetValue(TerrainPeering.Center | TerrainPeering.Right, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 38:
-                {
-                    if (T.TryGetValue(TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 39:
-                {
-                    if (T.TryGetValue(TerrainPeering.Left | TerrainPeering.Center, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 40:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
-                            TerrainPeering.LeftBottom | TerrainPeering.Bottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 41:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Right, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 42:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
-                            TerrainPeering.Right, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 43:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
-                            TerrainPeering.Bottom | TerrainPeering.RightBottom, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 44:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 45:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop |
-                            TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right, out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 46:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop |
-                            TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
-                case 47:
-                {
-                    if (T.TryGetValue(
-                            TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center,
-                            out var cellData))
-                        return cellData;
-                }
-                    break;
             }
         }
         else if (type == 2) //侧方墙壁

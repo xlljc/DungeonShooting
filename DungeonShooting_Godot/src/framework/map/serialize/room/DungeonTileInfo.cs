@@ -18,20 +18,31 @@ public class DungeonTileInfo
     public List<int[]> NavigationPolygon;
 
     /// <summary>
-    /// 底层数据, 五个一组, 分别为: 地图x坐标, 地图y坐标, 资源id, 图集x坐标, 图集y坐标
+    /// 底层数据, 四个一组, 分别是: 地图x坐标, 地图y坐标, Terrain 的 bit, Terrain 的 type
     /// </summary>
     [JsonInclude]
     public List<int> Floor;
     
     /// <summary>
-    /// 中层数据, 五个一组, 分别为: 地图x坐标, 地图y坐标, 资源id, 图集x坐标, 图集y坐标
+    /// 中层数据, 四个一组, 分别是: 地图x坐标, 地图y坐标, Terrain 的 bit, Terrain 的 type
     /// </summary>
     [JsonInclude]
     public List<int> Middle;
     
     /// <summary>
-    /// 顶层数据, 五个一组, 分别为: 地图x坐标, 地图y坐标, 资源id, 图集x坐标, 图集y坐标
+    /// 顶层数据, 四个一组, 分别是: 地图x坐标, 地图y坐标, Terrain 的 bit, Terrain 的 type
     /// </summary>
     [JsonInclude]
     public List<int> Top;
+
+    //自定义层, 数据五个一组, 分别为: 地图x坐标, 地图y坐标, 资源id, 图集x坐标, 图集y坐标
+
+    public void InitData()
+    {
+        NavigationVertices = new List<SerializeVector2>();
+        NavigationPolygon = new List<int[]>();
+        Floor = new List<int>();
+        Middle = new List<int>();
+        Top = new List<int>();
+    }
 }

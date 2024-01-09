@@ -76,11 +76,11 @@ public partial class TerrainCellDropHandler : Control
     {
         if (cellData == null)
         {
-            _panel.EditorPanel.TileSetSourceInfo.Terrain.RemoveTerrainBit(_cell.Index, _cell.Data);
+            _panel.EditorPanel.TileSetSourceInfo.Terrain.RemoveTerrainCell(_cell.Index, _cell.Data);
         }
         else
         {
-            _panel.EditorPanel.TileSetSourceInfo.Terrain.SetTerrainBit(_cell.Index, _cell.Data, cellData);
+            _panel.EditorPanel.TileSetSourceInfo.Terrain.SetTerrainCell(_cell.Index, _cell.Data, cellData);
         }
 
         EventManager.EmitEvent(EventEnum.OnTileSetDirty);

@@ -240,7 +240,7 @@ public class TileSetSplit : IDestroy
     private static void SetAtlasSourceYSortOrigin(TileSetTerrainInfo terrainInfo, TileSetAtlasSource tileSetAtlasSource, byte type, Vector2I bitCoords, int ySortOrigin)
     {
         var index = terrainInfo.TerrainCoordsToIndex(bitCoords, type);
-        var cellData = terrainInfo.GetTerrainBit(index, type);
+        var cellData = terrainInfo.GetTerrainCell(index, type);
         if (cellData != null)
         {
             var pos = terrainInfo.GetPosition(cellData);
@@ -255,7 +255,7 @@ public class TileSetSplit : IDestroy
     private static void SetAtlasSourceCollision(TileSetTerrainInfo terrainInfo, TileSetAtlasSource tileSetAtlasSource, byte type, Vector2I bitCoords, bool isHalf)
     {
         var index = terrainInfo.TerrainCoordsToIndex(bitCoords, type);
-        var cellData = terrainInfo.GetTerrainBit(index, type);
+        var cellData = terrainInfo.GetTerrainCell(index, type);
         if (cellData != null)
         {
             var pos = terrainInfo.GetPosition(cellData);

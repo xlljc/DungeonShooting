@@ -85,7 +85,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             var terrain = ((TileSetSourceInfo)obj).Terrain;
             _topGrid1.ForEach(cell =>
             {
-                var ints = terrain.GetTerrainBit( cell.Index, cell.Data);
+                var ints = terrain.GetTerrainCell( cell.Index, cell.Data);
                 if (ints != null)
                 {
                     cell.CellNode.Instance.SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
@@ -93,7 +93,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             });
             _topGrid2.ForEach(cell =>
             {
-                var ints = terrain.GetTerrainBit(cell.Index, cell.Data);
+                var ints = terrain.GetTerrainCell(cell.Index, cell.Data);
                 if (ints != null)
                 {
                     cell.CellNode.Instance.SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
@@ -101,7 +101,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             });
             _topGrid3.ForEach(cell =>
             {
-                var ints = terrain.GetTerrainBit( cell.Index, cell.Data);
+                var ints = terrain.GetTerrainCell( cell.Index, cell.Data);
                 if (ints != null)
                 {
                     cell.CellNode.Instance.SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));

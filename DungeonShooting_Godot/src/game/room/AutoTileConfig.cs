@@ -8,7 +8,7 @@ using Godot;
 /// </summary>
 public class AutoTileConfig
 {
-    public TileCellData Floor = new TileCellData(0, new Vector2I(0, 4), TerrainPeering.None, GameConfig.FloorMapLayer);
+    public TileCellData Floor;
     public TileCellData TopMask;
     public TileCellData Wall_Bottom;
     public TileCellData Wall_Left;
@@ -23,10 +23,10 @@ public class AutoTileConfig
     public TileCellData Wall_In_RT;
     public TileCellData Wall_In_RB;
     
-    public TileCellData Wall_Vertical_Left = new TileCellData(0, new Vector2I(1, 4), TerrainPeering.None, GameConfig.MiddleMapLayer);
-    public TileCellData Wall_Vertical_Center = new TileCellData(0, new Vector2I(2, 4), TerrainPeering.None, GameConfig.MiddleMapLayer);
-    public TileCellData Wall_Vertical_Right = new TileCellData(0, new Vector2I(3, 4), TerrainPeering.None, GameConfig.MiddleMapLayer);
-    public TileCellData Wall_Vertical_Single = new TileCellData(0, new Vector2I(4, 4), TerrainPeering.None, GameConfig.MiddleMapLayer);
+    public TileCellData Wall_Vertical_Left;
+    public TileCellData Wall_Vertical_Center;
+    public TileCellData Wall_Vertical_Right;
+    public TileCellData Wall_Vertical_Single;
     
     //----------------------------- 所有自动图块数据 -----------------------------
     //----------------------------- 命名规则: Auto_ + LT + T + RT + _ + L + C + R + _ + LB + B + RB
@@ -92,12 +92,21 @@ public class AutoTileConfig
     
     //------------------------------------------------------------------------- 
 
+    /// <summary>
+    /// 所属资源Id
+    /// </summary>
+    public int SourceId { get; private set; }
+    
+    /// <summary>
+    /// 原地形配置数据
+    /// </summary>
     public TileSetTerrainInfo TerrainInfo { get; private set; }
     
     private Dictionary<Vector2I, TileCellData> _mapping = new Dictionary<Vector2I, TileCellData>();
 
     public AutoTileConfig(int sourceId, TileSetTerrainInfo terrainInfo)
     {
+        SourceId = sourceId;
         TerrainInfo = terrainInfo;
         if (terrainInfo.T != null)
         {
@@ -112,19 +121,19 @@ public class AutoTileConfig
             int[] data;
             if (terrainInfo.M.TryGetValue(0, out data))
             {
-                Wall_Vertical_Single = new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, GameConfig.MiddleMapLayer);
+                Wall_Vertical_Single = new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
             }
             if (terrainInfo.M.TryGetValue(1, out data))
             {
-                Wall_Vertical_Left= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, GameConfig.MiddleMapLayer);
+                Wall_Vertical_Left= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
             }
             if (terrainInfo.M.TryGetValue(2, out data))
             {
-                Wall_Vertical_Center= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, GameConfig.MiddleMapLayer);
+                Wall_Vertical_Center= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
             }
             if (terrainInfo.M.TryGetValue(3, out data))
             {
-                Wall_Vertical_Right= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, GameConfig.MiddleMapLayer);
+                Wall_Vertical_Right= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
             }
         }
         
@@ -132,7 +141,7 @@ public class AutoTileConfig
         {
             if (terrainInfo.F.TryGetValue(0, out var data))
             {
-                Floor = new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, GameConfig.FloorMapLayer);
+                Floor = new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, TileSetTerrainInfo.FloorLayerType, GameConfig.FloorMapLayer);
             }
         }
         
@@ -166,191 +175,197 @@ public class AutoTileConfig
         return GameConfig.FloorMapLayer;
     }
 
+    public TileCellData GetCellData(Vector2I atlasCoords)
+    {
+        _mapping.TryGetValue(atlasCoords, out var tile);
+        return tile;
+    }
+
     private void HandlerTileData(uint peeringValue, int sourceId, Vector2I pos)
     {
         switch (peeringValue)
         {
             //第一列
             case TerrainPeering.Center | TerrainPeering.Bottom:
-                Auto_000_010_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_000_010_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Bottom:
-                Auto_010_010_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_010_010_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Center:
-                Auto_010_010_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_010_010_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             case TerrainPeering.Center:
-                Auto_000_010_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_000_010_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             //第二列
             case TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom:
-                Auto_000_011_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_000_011_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom:
-                Auto_010_011_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_010_011_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right:
-                Auto_010_011_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_010_011_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             case TerrainPeering.Center | TerrainPeering.Right:
-                Auto_000_011_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_000_011_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             //第三列
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom:
-                Auto_000_111_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_000_111_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
                  TerrainPeering.Bottom:
-                Auto_010_111_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_010_111_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right:
-                Auto_010_111_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_010_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right:
-                Auto_000_111_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_000_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             //第四列
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom:
-                Auto_000_110_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_000_110_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom:
-                Auto_010_110_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_010_110_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center:
-                Auto_010_110_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_010_110_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             case TerrainPeering.Left | TerrainPeering.Center:
-                Auto_000_110_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_000_110_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             //第五列
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right | TerrainPeering.Bottom:
-                Auto_110_111_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_110_111_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom |
                  TerrainPeering.RightBottom:
-                Auto_010_011_011 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_010_011_011 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right |
                  TerrainPeering.Bottom:
-                Auto_011_011_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_011_011_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
                  TerrainPeering.LeftBottom | TerrainPeering.Bottom:
-                Auto_010_111_110 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_010_111_110 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             //第六列
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom |
                  TerrainPeering.RightBottom:
-                Auto_000_111_011 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_000_111_011 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom:
-                Auto_011_111_111 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_011_111_111 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
                  TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom:
-                Auto_111_111_011 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_111_111_011 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right:
-                Auto_011_111_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_011_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             //第七列
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom |
                  TerrainPeering.Bottom:
-                Auto_000_111_110 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_000_111_110 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom:
-                Auto_110_111_111 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_110_111_111 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
                  TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom:
-                Auto_111_111_110 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_111_111_110 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right:
-                Auto_110_111_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_110_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             //第八列
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right | TerrainPeering.Bottom:
-                Auto_011_111_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_011_111_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom |
                  TerrainPeering.Bottom:
-                Auto_010_110_110 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_010_110_110 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Bottom:
-                Auto_110_110_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_110_110_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
                  TerrainPeering.Bottom | TerrainPeering.RightBottom:
-                Auto_010_111_011 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_010_111_011 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             //第九列
             case TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom:
-                Auto_000_011_011 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_000_011_011 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right |
                  TerrainPeering.Bottom | TerrainPeering.RightBottom:
-                Auto_011_011_011 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_011_011_011 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom:
-                Auto_011_111_011 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_011_111_011 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right:
-                Auto_011_011_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_011_011_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             //第十列
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
                  TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom:
-                Auto_010_111_111 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_010_111_111 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom:
-                Auto_110_111_011 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_110_111_011 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
                  TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom |
                  TerrainPeering.RightBottom:
-                Auto_111_111_111 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_111_111_111 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
                  TerrainPeering.Center | TerrainPeering.Right:
-                Auto_111_111_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_111_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
             //第十一列
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom |
                  TerrainPeering.Bottom | TerrainPeering.RightBottom:
-                Auto_000_111_111 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_000_111_111 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom:
-                Auto_011_111_110 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_011_111_110 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
                  TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom:
-                Auto_111_111_010 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_111_111_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             //第十二列
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom:
-                Auto_000_110_110 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_000_110_110 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom:
-                Auto_110_111_110 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_110_111_110 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.LeftBottom | TerrainPeering.Bottom:
-                Auto_110_110_110 = new TileCellData(sourceId, pos, peeringValue, GameConfig.TopMapLayer);
+                Auto_110_110_110 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.TopMapLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center:
-                Auto_110_110_000 = new TileCellData(sourceId, pos, peeringValue, GameConfig.MiddleMapLayer);
+                Auto_110_110_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TopLayerType, GameConfig.MiddleMapLayer);
                 break;
 
             default:

@@ -6,11 +6,12 @@ using Godot;
 /// </summary>
 public class TileCellData
 {
-    public TileCellData(int sourceId, Vector2I autoTileCoords, uint terrainPeering, int defaultLayer)
+    public TileCellData(int sourceId, Vector2I autoTileCoords, uint terrainPeering, byte terrainType, int defaultLayer)
     {
         SourceId = sourceId;
         AutoTileCoords = autoTileCoords;
         TerrainPeering = terrainPeering;
+        TerrainType = terrainType;
         DefaultLayer = defaultLayer;
     }
 
@@ -33,4 +34,9 @@ public class TileCellData
     /// 默认存放层级
     /// </summary>
     public int DefaultLayer;
+    
+    /// <summary>
+    /// 地形类型
+    /// </summary>
+    public byte TerrainType;
 }

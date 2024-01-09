@@ -89,4 +89,11 @@ public class DungeonRoomInfo
             _completionDoorArea = null;
         }
     }
+
+    public void InitData()
+    {
+        Size = new SerializeVector2();
+        Position = new SerializeVector2();
+        DoorAreaInfos = new List<DoorAreaInfo>();
+    }
 }

@@ -134,9 +134,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
                 return null;
             }
             
-            roomInfo.Size = new SerializeVector2();
-            roomInfo.Position = new SerializeVector2();
-            roomInfo.DoorAreaInfos = new List<DoorAreaInfo>();
+            roomInfo.InitData();
 
             var roomSplit = new DungeonRoomSplit();
             roomSplit.ErrorType = RoomErrorType.Empty;
@@ -144,11 +142,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
             roomSplit.RoomInfo = roomInfo;
 
             var tileInfo = new DungeonTileInfo();
-            tileInfo.NavigationVertices = new List<SerializeVector2>();
-            tileInfo.NavigationPolygon = new List<int[]>();
-            tileInfo.Floor = new List<int>();
-            tileInfo.Middle = new List<int>();
-            tileInfo.Top = new List<int>();
+            tileInfo.InitData();
 
             roomSplit.TileInfo = tileInfo;
             roomSplit.Preinstall = new List<RoomPreinstallInfo>();

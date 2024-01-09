@@ -431,28 +431,37 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
     }
 
-    //将指定层数据存入list中
-    private void PushLayerDataToList(int layer, int sourceId, List<int> list)
+    //将指定自动地形层数据存入list中
+    private void PushAutoLayerDataToList(int layer, int sourceId, List<int> list)
     {
         var layerArray = GetUsedCellsById(layer, sourceId);
         foreach (var pos in layerArray)
         {
             var atlasCoords = GetCellAtlasCoords(layer, pos);
-            list.Add(pos.X);
-            list.Add(pos.Y);
-            list.Add(_sourceId);
-            list.Add(atlasCoords.X);
-            list.Add(atlasCoords.Y);
+            var tileCellData = _autoTileConfig.GetCellData(atlasCoords);
+            if (tileCellData != null)
+            {
+                list.Add(pos.X);
+                list.Add(pos.Y);
+                list.Add((int)tileCellData.TerrainPeering);
+                list.Add(tileCellData.TerrainType);
+            }
         }
     }
 
-    private void SetLayerDataFromList(int layer, List<int> list)
+    //设置自动地形层的数据
+    private void SetAutoLayerDataFromList(int layer, List<int> list)
     {
-        for (var i = 0; i < list.Count; i += 5)
+        var terrainInfo = _autoTileConfig.TerrainInfo;
+        var sourceId = _autoTileConfig.SourceId;
+        for (var i = 0; i < list.Count; i += 4)
         {
             var pos = new Vector2I(list[i], list[i + 1]);
-            var sourceId = list[i + 2];
-            var atlasCoords = new Vector2I(list[i + 3], list[i + 4]);
+            var bit = (uint)list[i + 2];
+            var type = (byte)list[i + 3];
+            var index = terrainInfo.TerrainBitToIndex(bit, type);
+            var terrainCell = terrainInfo.GetTerrainCell(index, type);
+            var atlasCoords = terrainInfo.GetPosition(terrainCell);
             SetCell(layer, pos, sourceId, atlasCoords);
             if (layer == AutoFloorLayer)
             {
@@ -512,9 +521,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         InitLayer();
         
         //地块数据
-        SetLayerDataFromList(AutoFloorLayer, tileInfo.Floor);
-        SetLayerDataFromList(AutoMiddleLayer, tileInfo.Middle);
-        SetLayerDataFromList(AutoTopLayer, tileInfo.Top);
+        SetAutoLayerDataFromList(AutoFloorLayer, tileInfo.Floor);
+        SetAutoLayerDataFromList(AutoMiddleLayer, tileInfo.Middle);
+        SetAutoLayerDataFromList(AutoTopLayer, tileInfo.Top);
 
         //如果有图块错误, 则找出错误的点位
         if (roomSplit.ErrorType == RoomErrorType.TileError)
@@ -1128,9 +1137,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         tileInfo.Middle.Clear();
         tileInfo.Top.Clear();
 
-        PushLayerDataToList(AutoFloorLayer, _sourceId, tileInfo.Floor);
-        PushLayerDataToList(AutoMiddleLayer, _sourceId, tileInfo.Middle);
-        PushLayerDataToList(AutoTopLayer, _sourceId, tileInfo.Top);
+        PushAutoLayerDataToList(AutoFloorLayer, _sourceId, tileInfo.Floor);
+        PushAutoLayerDataToList(AutoMiddleLayer, _sourceId, tileInfo.Middle);
+        PushAutoLayerDataToList(AutoTopLayer, _sourceId, tileInfo.Top);
         MapProjectManager.SaveRoomTileInfo(CurrRoomSplit);
     }
 
