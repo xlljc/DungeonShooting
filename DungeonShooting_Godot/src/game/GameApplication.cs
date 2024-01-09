@@ -104,7 +104,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		Enemy.InitEnemyAttribute();
 		
 		DungeonConfig = new DungeonConfig();
-		DungeonConfig.GroupName = "TestGroup2";
+		DungeonConfig.GroupName = "Test1";
 		DungeonConfig.RoomCount = 20;
 	}
 	

@@ -121,19 +121,19 @@ public class AutoTileConfig
             int[] data;
             if (terrainInfo.M.TryGetValue(0, out data))
             {
-                Wall_Vertical_Single = new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
+                Wall_Vertical_Single = new TileCellData(sourceId, terrainInfo.GetPosition(data), 0, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
             }
             if (terrainInfo.M.TryGetValue(1, out data))
             {
-                Wall_Vertical_Left= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
+                Wall_Vertical_Left= new TileCellData(sourceId, terrainInfo.GetPosition(data), 1, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
             }
             if (terrainInfo.M.TryGetValue(2, out data))
             {
-                Wall_Vertical_Center= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
+                Wall_Vertical_Center= new TileCellData(sourceId, terrainInfo.GetPosition(data), 2, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
             }
             if (terrainInfo.M.TryGetValue(3, out data))
             {
-                Wall_Vertical_Right= new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
+                Wall_Vertical_Right= new TileCellData(sourceId, terrainInfo.GetPosition(data), 3, TileSetTerrainInfo.MiddleLayerType, GameConfig.MiddleMapLayer);
             }
         }
         
@@ -141,7 +141,7 @@ public class AutoTileConfig
         {
             if (terrainInfo.F.TryGetValue(0, out var data))
             {
-                Floor = new TileCellData(sourceId, terrainInfo.GetPosition(data), TerrainPeering.None, TileSetTerrainInfo.FloorLayerType, GameConfig.FloorMapLayer);
+                Floor = new TileCellData(sourceId, terrainInfo.GetPosition(data), 0, TileSetTerrainInfo.FloorLayerType, GameConfig.FloorMapLayer);
             }
         }
         
