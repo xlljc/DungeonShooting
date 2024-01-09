@@ -109,8 +109,7 @@ public class DungeonTileMap
             roomInfo.PreviewTexture = imageTexture;
 
             //---------------------- 填充tile操作 ----------------------
-            var tileConfig = GameApplication.Instance.DungeonManager.AutoTileConfig;
-            var terrainInfo = tileConfig.TerrainInfo;
+            var terrainInfo = config.TerrainInfo;
 
             //底层
             for (var i = 0; i < tileInfo.Floor.Count; i += 4)
@@ -123,7 +122,7 @@ public class DungeonTileMap
                 var index = terrainInfo.TerrainBitToIndex(bit, type);
                 var terrainCell = terrainInfo.GetTerrainCell(index, type);
                 var atlasCoords = terrainInfo.GetPosition(terrainCell);
-                _tileRoot.SetCell(GameConfig.FloorMapLayer, pos, tileConfig.SourceId, atlasCoords);
+                _tileRoot.SetCell(GameConfig.FloorMapLayer, pos, config.SourceId, atlasCoords);
             }
             //中层
             for (var i = 0; i < tileInfo.Middle.Count; i += 4)
@@ -136,7 +135,7 @@ public class DungeonTileMap
                 var index = terrainInfo.TerrainBitToIndex(bit, type);
                 var terrainCell = terrainInfo.GetTerrainCell(index, type);
                 var atlasCoords = terrainInfo.GetPosition(terrainCell);
-                _tileRoot.SetCell(GameConfig.MiddleMapLayer, pos, tileConfig.SourceId, atlasCoords);
+                _tileRoot.SetCell(GameConfig.MiddleMapLayer, pos, config.SourceId, atlasCoords);
             }
             //顶层
             for (var i = 0; i < tileInfo.Top.Count; i += 4)
@@ -149,7 +148,7 @@ public class DungeonTileMap
                 var index = terrainInfo.TerrainBitToIndex(bit, type);
                 var terrainCell = terrainInfo.GetTerrainCell(index, type);
                 var atlasCoords = terrainInfo.GetPosition(terrainCell);
-                _tileRoot.SetCell(GameConfig.TopMapLayer, pos, tileConfig.SourceId, atlasCoords);
+                _tileRoot.SetCell(GameConfig.TopMapLayer, pos, config.SourceId, atlasCoords);
             }
             
             //寻找可用传送点
