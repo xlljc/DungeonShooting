@@ -26,6 +26,11 @@ public partial class TileSetEditorPanel : TileSetEditor
     public TileSetSourceInfo TileSetSourceInfo { get; private set; }
     
     /// <summary>
+    /// 当前正在使用的 TileSetSourceInfo 的索引
+    /// </summary>
+    public int TileSetSourceIndex { get; private set; }
+    
+    /// <summary>
     /// 是否初始化过纹理
     /// </summary>
     public bool InitTexture { get; private set; }
@@ -311,6 +316,7 @@ public partial class TileSetEditorPanel : TileSetEditor
             TabGrid.Visible = true;
             TabGrid.SelectIndex = 0;
             TileSetSourceInfo = TileSetInfo.Sources[(int)index];
+            TileSetSourceIndex = (int)index;
             SetTextureData(TileSetSourceInfo.GetSourceImage());
         }
         else
@@ -318,6 +324,7 @@ public partial class TileSetEditorPanel : TileSetEditor
             TabGrid.Visible = false;
             TabGrid.SelectIndex = -1;
             TileSetSourceInfo = null;
+            TileSetSourceIndex = -1;
             SetTextureData(null);
         }
         

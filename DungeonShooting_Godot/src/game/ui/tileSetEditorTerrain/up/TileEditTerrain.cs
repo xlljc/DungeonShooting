@@ -47,24 +47,28 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
                     cell = tempCell;
                 }
             }
-            if (_panel.S_TerrainTexture2.Instance.IsMouseInRect())
+            //必须选中Main Source
+            if (_panel.EditorPanel.TileSetSourceIndex == 0)
             {
-                var cellPosition = Utils.GetMouseCellPosition(_panel.S_TerrainTexture2.Instance);
-                var index = cellPosition.X + cellPosition.Y * _panel.TopGrid2.GetColumns();
-                var tempCell = (TerrainCell)_panel.TopGrid2.GetCell(index);
-                if (tempCell.ConnectMaskCell != null)
+                if (_panel.S_TerrainTexture2.Instance.IsMouseInRect())
                 {
-                    cell = tempCell;
+                    var cellPosition = Utils.GetMouseCellPosition(_panel.S_TerrainTexture2.Instance);
+                    var index = cellPosition.X + cellPosition.Y * _panel.TopGrid2.GetColumns();
+                    var tempCell = (TerrainCell)_panel.TopGrid2.GetCell(index);
+                    if (tempCell.ConnectMaskCell != null)
+                    {
+                        cell = tempCell;
+                    }
                 }
-            }
-            if (_panel.S_TerrainTexture3.Instance.IsMouseInRect())
-            {
-                var cellPosition = Utils.GetMouseCellPosition(_panel.S_TerrainTexture3.Instance);
-                var index = cellPosition.X + cellPosition.Y * _panel.TopGrid3.GetColumns();
-                var tempCell = (TerrainCell)_panel.TopGrid3.GetCell(index);
-                if (tempCell.ConnectMaskCell != null)
+                if (_panel.S_TerrainTexture3.Instance.IsMouseInRect())
                 {
-                    cell = tempCell;
+                    var cellPosition = Utils.GetMouseCellPosition(_panel.S_TerrainTexture3.Instance);
+                    var index = cellPosition.X + cellPosition.Y * _panel.TopGrid3.GetColumns();
+                    var tempCell = (TerrainCell)_panel.TopGrid3.GetCell(index);
+                    if (tempCell.ConnectMaskCell != null)
+                    {
+                        cell = tempCell;
+                    }
                 }
             }
         }
@@ -95,8 +99,12 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
     //聚焦按钮点击
     private void OnFocusClick()
     {
-        var root = UiNode.L_TerrainRoot.Instance;
-        Utils.DoFocusNode(ContainerRoot, Size, root.Size);
+        var rootSize = UiNode.L_TerrainRoot.Instance.Size;
+        if (UiNode.UiPanel.EditorPanel.TileSetSourceIndex != 0)
+        {
+            rootSize.Y -= 2 * GameConfig.TileCellSize;
+        }
+        Utils.DoFocusNode(ContainerRoot, Size, rootSize);
         RefreshGridTrans();
     }
 }

@@ -39,6 +39,7 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public sealed override void OnInitNestedUi()
     {
         _ = L_VSplitContainer.L_PanelTop.L_MarginContainer.L_TopBg;
+        _ = L_VSplitContainer.L_PanelTop.L_MarginContainer.L_TopBg.L_TerrainRoot.L_Brush;
         _ = L_VSplitContainer.L_PanelBottom.L_MarginContainer.L_BottomBg;
 
     }

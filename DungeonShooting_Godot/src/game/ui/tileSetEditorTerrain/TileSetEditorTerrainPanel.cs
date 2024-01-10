@@ -61,8 +61,11 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
 
             var terrain = EditorPanel.TileSetSourceInfo.Terrain;
             TopGrid1.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
-            TopGrid2.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
-            TopGrid3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+            if (EditorPanel.TileSetSourceIndex == 0) //必须选中Main Source
+            {
+                TopGrid2.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                TopGrid3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+            }
         }
     }
 
@@ -96,12 +99,32 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         S_BottomBg.Instance.SetHoverCell(null);
         
         //再加载Terrain
+        var sourceIndex = EditorPanel.TileSetSourceIndex;
         if (obj != null)
         {
             var terrain = ((TileSetSourceInfo)obj).Terrain;
             TopGrid1.ForEach(cell => SetTerrainCellData(terrain, cell));
-            TopGrid2.ForEach(cell => SetTerrainCellData(terrain, cell));
-            TopGrid3.ForEach(cell => SetTerrainCellData(terrain, cell));
+            if (sourceIndex == 0) //必须选中Main Source
+            {
+                S_TerrainTexture2.Instance.Visible = true;
+                S_TerrainTexture3.Instance.Visible = true;
+                TopGrid2.ForEach(cell => SetTerrainCellData(terrain, cell));
+                TopGrid3.ForEach(cell => SetTerrainCellData(terrain, cell));
+            }
+            else
+            {
+                S_TerrainTexture2.Instance.Visible = false;
+                S_TerrainTexture3.Instance.Visible = false;
+            }
+        }
+        
+        if (sourceIndex == 0)
+        {
+            S_TerrainTexture1.L_Label.Instance.Text = "顶部墙壁";
+        }
+        else
+        {
+            S_TerrainTexture1.L_Label.Instance.Text = "地形";
         }
     }
 
@@ -146,20 +169,23 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             flag = !((TerrainCell)cell).OnDropCell(maskCell);
             return flag;
         });
-        if (flag)
+        if (EditorPanel.TileSetSourceIndex == 0) //必须选中Main Source
         {
-            TopGrid2.ForEach((cell) =>
+            if (flag)
             {
-                flag = !((TerrainCell)cell).OnDropCell(maskCell);
-                return flag;
-            });
-        }
-        if (flag)
-        {
-            TopGrid3.ForEach((cell) =>
+                TopGrid2.ForEach((cell) =>
+                {
+                    flag = !((TerrainCell)cell).OnDropCell(maskCell);
+                    return flag;
+                });
+            }
+            if (flag)
             {
-                return ((TerrainCell)cell).OnDropCell(maskCell);
-            });
+                TopGrid3.ForEach((cell) =>
+                {
+                    return ((TerrainCell)cell).OnDropCell(maskCell);
+                });
+            }
         }
     }
     
