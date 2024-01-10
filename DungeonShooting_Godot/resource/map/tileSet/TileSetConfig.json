@@ -3,5 +3,10 @@
     "ErrorType": 0,
     "Path": "resource/map/tileSet/TileSet1",
     "Remark": ""
+  },
+  "TileSet2": {
+    "ErrorType": 0,
+    "Path": "resource/map/tileSet/TileSet2",
+    "Remark": ""
   }
 }

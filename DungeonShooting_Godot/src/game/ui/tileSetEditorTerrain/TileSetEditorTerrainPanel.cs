@@ -11,9 +11,9 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     public TileSetEditorPanel EditorPanel;
     
     /// <summary>
-    /// 是否正在拖拽图块
+    /// 正在拖拽的图块
     /// </summary>
-    public bool IsDraggingCell { get; set; }
+    public MaskCell DraggingCell { get; set; }
 
     private UiGrid<RightCell, byte> _topGrid1;
     private UiGrid<RightCell, byte> _topGrid2;
@@ -23,6 +23,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     public override void OnCreateUi()
     {
         EditorPanel = (TileSetEditorPanel)ParentUi;
+        S_DragSprite.Instance.Visible = false;
         
         //改变选中的TileSet资源
         AddEventListener(EventEnum.OnSelectTileSetSource, OnSelectTileSetSource);
@@ -49,7 +50,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
 
     public override void Process(float delta)
     {
-        S_MaskBrush.Instance.Visible = !IsDraggingCell;
+        S_MaskBrush.Instance.Visible = DraggingCell == null;
     }
 
     private UiGrid<RightCell, byte> InitTopGrid(Control texture, Vector2I size, byte type)
@@ -75,9 +76,9 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     private void OnSelectTileSetSource(object obj)
     {
         //先清除所有绑定的Terrain
-        _topGrid1.ForEach(cell => cell.CellNode.Instance.ClearCell());
-        _topGrid2.ForEach(cell => cell.CellNode.Instance.ClearCell());
-        _topGrid3.ForEach(cell => cell.CellNode.Instance.ClearCell());
+        _topGrid1.ForEach(cell => ((TerrainCell)cell).ClearCell());
+        _topGrid2.ForEach(cell => ((TerrainCell)cell).ClearCell());
+        _topGrid3.ForEach(cell => ((TerrainCell)cell).ClearCell());
         
         //再加载Terrain
         if (obj != null)
@@ -88,7 +89,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                 var ints = terrain.GetTerrainCell( cell.Index, cell.Data);
                 if (ints != null)
                 {
-                    cell.CellNode.Instance.SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
+                    ((TerrainCell)cell).SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
                 }
             });
             _topGrid2.ForEach(cell =>
@@ -96,7 +97,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                 var ints = terrain.GetTerrainCell(cell.Index, cell.Data);
                 if (ints != null)
                 {
-                    cell.CellNode.Instance.SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
+                    ((TerrainCell)cell).SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
                 }
             });
             _topGrid3.ForEach(cell =>
@@ -104,8 +105,36 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                 var ints = terrain.GetTerrainCell( cell.Index, cell.Data);
                 if (ints != null)
                 {
-                    cell.CellNode.Instance.SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
+                    ((TerrainCell)cell).SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
                 }
+            });
+        }
+    }
+    
+    /// <summary>
+    /// 放置地形Cell纹理
+    /// </summary>
+    public void OnDropCell(MaskCell maskCell)
+    {
+        var flag = true;
+        _topGrid1.ForEach((cell) =>
+        {
+            flag = !((TerrainCell)cell).OnDropCell(maskCell);
+            return flag;
+        });
+        if (flag)
+        {
+            _topGrid2.ForEach((cell) =>
+            {
+                flag = !((TerrainCell)cell).OnDropCell(maskCell);
+                return flag;
+            });
+        }
+        if (flag)
+        {
+            _topGrid3.ForEach((cell) =>
+            {
+                return ((TerrainCell)cell).OnDropCell(maskCell);
             });
         }
     }

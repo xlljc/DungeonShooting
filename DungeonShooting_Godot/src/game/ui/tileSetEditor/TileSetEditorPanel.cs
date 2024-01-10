@@ -241,7 +241,12 @@ public partial class TileSetEditorPanel : TileSetEditor
     {
         var optionButton = S_OptionButton.Instance;
         var selectIndex = optionButton.Selected;
-        if (selectIndex >= 0)
+        if (selectIndex == 0)
+        {
+            EditorWindowManager.ShowTips("警告", "不允许删除 Main Source！");
+            return;
+        }
+        else if (selectIndex > 0)
         {
             EditorWindowManager.ShowConfirm("提示", "是否需要删除该资源!", v =>
             {

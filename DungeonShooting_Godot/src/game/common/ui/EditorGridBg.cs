@@ -19,6 +19,7 @@ public abstract partial class EditorGridBg<T> : ColorRect, IUiNodeScript where T
     public T UiNode { get; private set; }
     
     private ShaderMaterial _gridMaterial;
+    private bool _dragMoveFlag = false;
     
     /// <summary>
     /// 初始化节点数据
@@ -75,10 +76,24 @@ public abstract partial class EditorGridBg<T> : ColorRect, IUiNodeScript where T
     //拖拽回调
     private void OnDrag(DragState state, Vector2 pos)
     {
-        if (state == DragState.DragMove)
+        if (state == DragState.DragStart)
         {
-            ContainerRoot.Position += pos;
-            RefreshGridTrans();
+            if (this.IsMouseInRect())
+            {
+                _dragMoveFlag = true;
+            }
+        }
+        else if (state == DragState.DragMove)
+        {
+            if (_dragMoveFlag)
+            {
+                ContainerRoot.Position += pos;
+                RefreshGridTrans();
+            }
+        }
+        else
+        {
+            _dragMoveFlag = false;
         }
     }
     

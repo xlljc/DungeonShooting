@@ -1,5 +1,4 @@
 using System.IO;
-using System.Text.Json;
 using Godot;
 
 namespace UI.TileSetEditorProject;
@@ -83,6 +82,12 @@ public partial class TileSetEditorProjectPanel : TileSetEditorProject
             var tileSetInfo = new TileSetInfo();
             tileSetInfo.InitData();
             tileSetInfo.Name = name;
+            //默认创建一个Main Source, 该Source不可删除
+            var tileSetSourceInfo = new TileSetSourceInfo();
+            tileSetSourceInfo.InitData();
+            tileSetSourceInfo.Name = "Main";
+            tileSetInfo.Sources.Add(tileSetSourceInfo);
+
             split.SetTileSetInfo(tileSetInfo);
             GameApplication.Instance.TileSetConfig.Add(name, split);
             //保存TileSetInfo 
