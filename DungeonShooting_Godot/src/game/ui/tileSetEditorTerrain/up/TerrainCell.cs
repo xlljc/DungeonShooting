@@ -5,6 +5,16 @@ namespace UI.TileSetEditorTerrain;
 public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
 {
     /// <summary>
+    /// 已经赋值并连接的MaskCell
+    /// </summary>
+    public MaskCell ConnectMaskCell { get; set; }
+    
+    /// <summary>
+    /// 鼠标是否悬停
+    /// </summary>
+    public bool Hover { get; set; }
+    
+    /// <summary>
     /// 是否放置了图块
     /// </summary>
     public bool IsPutDownTexture { get; private set; }
@@ -14,14 +24,20 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
     /// </summary>
     public Vector2I TextureCell { get; private set; }
     
+    private Control _root;
     private TileSetEditorTerrainPanel _panel;
     
     public override void OnInit()
     {
         _panel = CellNode.UiPanel;
+        _root = _panel.S_TopBg.L_TerrainRoot.Instance;
         CellNode.Instance.GuiInput += OnGuiInput;
+        CellNode.Instance.Draw += OnDraw;
     }
 
+    /// <summary>
+    /// 拖拽放置Cell
+    /// </summary>
     public bool OnDropCell(MaskCell maskCell)
     {
         if (CellNode.Instance.IsMouseInRect())
@@ -31,6 +47,11 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
         }
 
         return false;
+    }
+
+    public override void Process(float delta)
+    {
+        CellNode.Instance.QueueRedraw();
     }
 
     private void OnGuiInput(InputEvent @event)
@@ -45,6 +66,10 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
                 if (flag)
                 {
                     SetTerrainBitData(null);
+                    if (ConnectMaskCell != null)
+                    {
+                        ConnectMaskCell.SetConnectTerrainCell(null);
+                    }
                 }
             }
         }
@@ -76,6 +101,14 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
     {
         SetCell(maskCell.Data);
         SetTerrainBitData(new []{ TextureCell.X, TextureCell.Y });
+        if (ConnectMaskCell != maskCell)
+        {
+            if (ConnectMaskCell != null)
+            {
+                ConnectMaskCell.SetConnectTerrainCell(null);
+            }
+            maskCell.SetConnectTerrainCell(this);
+        }
     }
     
     private void SetTerrainBitData(int[] cellData)
@@ -90,5 +123,16 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
         }
 
         EventManager.EmitEvent(EventEnum.OnTileSetDirty);
+    }
+    
+    private void OnDraw()
+    {
+        if (ConnectMaskCell != null && (Hover || ConnectMaskCell.Hover))
+        {
+            CellNode.Instance.DrawRect(
+                new Rect2(Vector2.Zero, CellNode.Instance.Size),
+                new Color(0, 1, 0), false, 3f / _root.Scale.X
+            );
+        }
     }
 }

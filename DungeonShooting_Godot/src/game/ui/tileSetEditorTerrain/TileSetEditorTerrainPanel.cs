@@ -15,11 +15,13 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     /// </summary>
     public MaskCell DraggingCell { get; set; }
 
-    private UiGrid<RightCell, byte> _topGrid1;
-    private UiGrid<RightCell, byte> _topGrid2;
-    private UiGrid<RightCell, byte> _topGrid3;
-    private UiGrid<BottomCell, Rect2I> _bottomGrid;
-    
+    public UiGrid<RightCell, byte> TopGrid1;
+    public UiGrid<RightCell, byte> TopGrid2;
+    public UiGrid<RightCell, byte> TopGrid3;
+    public UiGrid<BottomCell, Rect2I> BottomGrid;
+
+    private bool _refreshGridConnect = false;
+
     public override void OnCreateUi()
     {
         EditorPanel = (TileSetEditorPanel)ParentUi;
@@ -32,12 +34,13 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         //背景颜色改变
         AddEventListener(EventEnum.OnSetTileSetBgColor, OnChangeTileSetBgColor);
         
-        _bottomGrid = CreateUiGrid<BottomCell, Rect2I, MaskCell>(S_BottomCell);
-        _bottomGrid.SetCellOffset(Vector2I.Zero);
+        BottomGrid = CreateUiGrid<BottomCell, Rect2I, MaskCell>(S_BottomCell);
+        BottomGrid.SetCellOffset(Vector2I.Zero);
+        BottomGrid.GridContainer.MouseFilter = MouseFilterEnum.Ignore;
 
-        _topGrid1 = InitTopGrid(S_TerrainRoot.L_TerrainTexture1.Instance, GameConfig.TerrainBitSize1, 1);
-        _topGrid2 = InitTopGrid(S_TerrainRoot.L_TerrainTexture2.Instance, GameConfig.TerrainBitSize2, 2);
-        _topGrid3 = InitTopGrid(S_TerrainRoot.L_TerrainTexture3.Instance, GameConfig.TerrainBitSize3, 3);
+        TopGrid1 = InitTopGrid(S_TerrainRoot.L_TerrainTexture1.Instance, GameConfig.TerrainBitSize1, 1);
+        TopGrid2 = InitTopGrid(S_TerrainRoot.L_TerrainTexture2.Instance, GameConfig.TerrainBitSize2, 2);
+        TopGrid3 = InitTopGrid(S_TerrainRoot.L_TerrainTexture3.Instance, GameConfig.TerrainBitSize3, 3);
 
         OnSetTileTexture(EditorPanel.Texture);
         OnChangeTileSetBgColor(EditorPanel.BgColor);
@@ -51,6 +54,16 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     public override void Process(float delta)
     {
         S_MaskBrush.Instance.Visible = DraggingCell == null;
+
+        if (_refreshGridConnect)
+        {
+            _refreshGridConnect = true;
+
+            var terrain = EditorPanel.TileSetSourceInfo.Terrain;
+            TopGrid1.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+            TopGrid2.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+            TopGrid3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+        }
     }
 
     private UiGrid<RightCell, byte> InitTopGrid(Control texture, Vector2I size, byte type)
@@ -76,55 +89,66 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     private void OnSelectTileSetSource(object obj)
     {
         //先清除所有绑定的Terrain
-        _topGrid1.ForEach(cell => ((TerrainCell)cell).ClearCell());
-        _topGrid2.ForEach(cell => ((TerrainCell)cell).ClearCell());
-        _topGrid3.ForEach(cell => ((TerrainCell)cell).ClearCell());
+        TopGrid1.ForEach(cell => ((TerrainCell)cell).ClearCell());
+        TopGrid2.ForEach(cell => ((TerrainCell)cell).ClearCell());
+        TopGrid3.ForEach(cell => ((TerrainCell)cell).ClearCell());
+        S_TopBg.Instance.SetHoverCell(null);
+        S_BottomBg.Instance.SetHoverCell(null);
         
         //再加载Terrain
         if (obj != null)
         {
             var terrain = ((TileSetSourceInfo)obj).Terrain;
-            _topGrid1.ForEach(cell =>
-            {
-                var ints = terrain.GetTerrainCell( cell.Index, cell.Data);
-                if (ints != null)
-                {
-                    ((TerrainCell)cell).SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
-                }
-            });
-            _topGrid2.ForEach(cell =>
-            {
-                var ints = terrain.GetTerrainCell(cell.Index, cell.Data);
-                if (ints != null)
-                {
-                    ((TerrainCell)cell).SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
-                }
-            });
-            _topGrid3.ForEach(cell =>
-            {
-                var ints = terrain.GetTerrainCell( cell.Index, cell.Data);
-                if (ints != null)
-                {
-                    ((TerrainCell)cell).SetCell(new Rect2I(ints[0], ints[1], GameConfig.TileCellSize, GameConfig.TileCellSize));
-                }
-            });
+            TopGrid1.ForEach(cell => SetTerrainCellData(terrain, cell));
+            TopGrid2.ForEach(cell => SetTerrainCellData(terrain, cell));
+            TopGrid3.ForEach(cell => SetTerrainCellData(terrain, cell));
+        }
+    }
+
+    private void SetTerrainCellData(TileSetTerrainInfo terrain, UiCell<RightCell, byte> cell)
+    {
+        var data = terrain.GetTerrainCell(cell.Index, cell.Data);
+        if (data != null)
+        {
+            var terrainCell = (TerrainCell)cell;
+            var x = data[0];
+            var y = data[1];
+            terrainCell.SetCell(new Rect2I(x, y, GameConfig.TileCellSize, GameConfig.TileCellSize));
         }
     }
     
+    private void RefreshConnectTerrainCell(TileSetTerrainInfo terrain, UiCell<RightCell, byte> cell)
+    {
+        var data = terrain.GetTerrainCell(cell.Index, cell.Data);
+        if (data != null)
+        {
+            var terrainCell = (TerrainCell)cell;
+            var x = data[0];
+            var y = data[1];
+            var index = x / GameConfig.TileCellSize + y / GameConfig.TileCellSize * BottomGrid.GetColumns();
+            var maskCell = (MaskCell)BottomGrid.GetCell(index);
+            if (maskCell != null)
+            {
+                //绑定TerrainCell
+                maskCell.SetConnectTerrainCell(terrainCell);
+            }
+        }
+    }
+
     /// <summary>
     /// 放置地形Cell纹理
     /// </summary>
     public void OnDropCell(MaskCell maskCell)
     {
         var flag = true;
-        _topGrid1.ForEach((cell) =>
+        TopGrid1.ForEach((cell) =>
         {
             flag = !((TerrainCell)cell).OnDropCell(maskCell);
             return flag;
         });
         if (flag)
         {
-            _topGrid2.ForEach((cell) =>
+            TopGrid2.ForEach((cell) =>
             {
                 flag = !((TerrainCell)cell).OnDropCell(maskCell);
                 return flag;
@@ -132,7 +156,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         }
         if (flag)
         {
-            _topGrid3.ForEach((cell) =>
+            TopGrid3.ForEach((cell) =>
             {
                 return ((TerrainCell)cell).OnDropCell(maskCell);
             });
@@ -144,21 +168,23 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     {
         S_BottomBg.Instance.OnChangeTileSetTexture();
 
-        _bottomGrid.RemoveAll();
+        BottomGrid.RemoveAll();
         var cellHorizontal = EditorPanel.CellHorizontal;
         if (cellHorizontal <= 0)
         {
             return;
         }
         var cellVertical = EditorPanel.CellVertical;
-        _bottomGrid.SetColumns(cellHorizontal);
+        BottomGrid.SetColumns(cellHorizontal);
         for (var y = 0; y < cellVertical; y++)
         {
             for (var x = 0; x < cellHorizontal; x++)
             {
-                _bottomGrid.Add(new Rect2I(x * GameConfig.TileCellSize, y * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize));
+                BottomGrid.Add(new Rect2I(x * GameConfig.TileCellSize, y * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize));
             }
         }
+
+        _refreshGridConnect = true;
     }
     
     //更改背景颜色

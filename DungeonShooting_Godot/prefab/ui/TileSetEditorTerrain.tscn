@@ -77,12 +77,14 @@ offset_bottom = 1.0
 mouse_filter = 2
 
 [node name="RightCell" type="Control" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/CellRoot"]
+z_index = 1
 anchors_preset = 0
 offset_right = 16.0
 offset_bottom = 16.0
 mouse_filter = 1
 
 [node name="CellTexture" type="Sprite2D" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/CellRoot/RightCell"]
+z_index = -1
 centered = false
 
 [node name="TerrainTexture1" type="TextureRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
@@ -221,7 +223,7 @@ mouse_filter = 2
 anchors_preset = 0
 offset_right = 16.0
 offset_bottom = 16.0
-mouse_filter = 1
+mouse_filter = 2
 
 [node name="MaskBrush" type="Control" parent="VSplitContainer/PanelBottom/MarginContainer/BottomBg/TileTexture"]
 layout_mode = 1
