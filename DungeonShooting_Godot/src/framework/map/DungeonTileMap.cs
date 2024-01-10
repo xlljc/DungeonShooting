@@ -85,7 +85,7 @@ public class DungeonTileMap
             var y = int.MaxValue;
             var x2 = int.MinValue;
             var y2 = int.MinValue;
-            for (var i = 0; i < tileInfo.Floor.Count; i += 5)
+            for (var i = 0; i < tileInfo.Floor.Count; i += 4)
             {
                 var posX = tileInfo.Floor[i];
                 var posY = tileInfo.Floor[i + 1];
@@ -98,7 +98,7 @@ public class DungeonTileMap
             var image = Image.Create(x2 - x + 3, y2 - y + 3, false, Image.Format.Rgba8);
             //image.Fill(Colors.Green);
             //填充像素点
-            for (var i = 0; i < tileInfo.Floor.Count; i += 5)
+            for (var i = 0; i < tileInfo.Floor.Count; i += 4)
             {
                 var posX = tileInfo.Floor[i] - x + 1;
                 var posY = tileInfo.Floor[i + 1] - y + 1;
@@ -109,38 +109,46 @@ public class DungeonTileMap
             roomInfo.PreviewTexture = imageTexture;
 
             //---------------------- 填充tile操作 ----------------------
+            var terrainInfo = config.TerrainInfo;
+
             //底层
-            for (var i = 0; i < tileInfo.Floor.Count; i += 5)
+            for (var i = 0; i < tileInfo.Floor.Count; i += 4)
             {
                 var posX = tileInfo.Floor[i];
                 var posY = tileInfo.Floor[i + 1];
-                var sourceId = tileInfo.Floor[i + 2];
-                var atlasCoordsX = tileInfo.Floor[i + 3];
-                var atlasCoordsY = tileInfo.Floor[i + 4];
                 var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
-                _tileRoot.SetCell(GameConfig.FloorMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
+                var bit = (uint)tileInfo.Floor[i + 2];
+                var type = (byte)tileInfo.Floor[i + 3];
+                var index = terrainInfo.TerrainBitToIndex(bit, type);
+                var terrainCell = terrainInfo.GetTerrainCell(index, type);
+                var atlasCoords = terrainInfo.GetPosition(terrainCell);
+                _tileRoot.SetCell(GameConfig.FloorMapLayer, pos, config.SourceId, atlasCoords);
             }
             //中层
-            for (var i = 0; i < tileInfo.Middle.Count; i += 5)
+            for (var i = 0; i < tileInfo.Middle.Count; i += 4)
             {
                 var posX = tileInfo.Middle[i];
                 var posY = tileInfo.Middle[i + 1];
-                var sourceId = tileInfo.Middle[i + 2];
-                var atlasCoordsX = tileInfo.Middle[i + 3];
-                var atlasCoordsY = tileInfo.Middle[i + 4];
                 var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
-                _tileRoot.SetCell(GameConfig.MiddleMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
+                var bit = (uint)tileInfo.Middle[i + 2];
+                var type = (byte)tileInfo.Middle[i + 3];
+                var index = terrainInfo.TerrainBitToIndex(bit, type);
+                var terrainCell = terrainInfo.GetTerrainCell(index, type);
+                var atlasCoords = terrainInfo.GetPosition(terrainCell);
+                _tileRoot.SetCell(GameConfig.MiddleMapLayer, pos, config.SourceId, atlasCoords);
             }
             //顶层
-            for (var i = 0; i < tileInfo.Top.Count; i += 5)
+            for (var i = 0; i < tileInfo.Top.Count; i += 4)
             {
                 var posX = tileInfo.Top[i];
                 var posY = tileInfo.Top[i + 1];
-                var sourceId = tileInfo.Top[i + 2];
-                var atlasCoordsX = tileInfo.Top[i + 3];
-                var atlasCoordsY = tileInfo.Top[i + 4];
                 var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
-                _tileRoot.SetCell(GameConfig.TopMapLayer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
+                var bit = (uint)tileInfo.Top[i + 2];
+                var type = (byte)tileInfo.Top[i + 3];
+                var index = terrainInfo.TerrainBitToIndex(bit, type);
+                var terrainCell = terrainInfo.GetTerrainCell(index, type);
+                var atlasCoords = terrainInfo.GetPosition(terrainCell);
+                _tileRoot.SetCell(GameConfig.TopMapLayer, pos, config.SourceId, atlasCoords);
             }
             
             //寻找可用传送点

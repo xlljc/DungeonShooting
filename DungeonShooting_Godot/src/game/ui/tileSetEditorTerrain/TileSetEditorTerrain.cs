@@ -18,6 +18,19 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
     private VSplitContainer _L_VSplitContainer;
 
+    /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.DragSprite
+    /// </summary>
+    public DragSprite L_DragSprite
+    {
+        get
+        {
+            if (_L_DragSprite == null) _L_DragSprite = new DragSprite((TileSetEditorTerrainPanel)this, GetNode<Godot.Sprite2D>("DragSprite"));
+            return _L_DragSprite;
+        }
+    }
+    private DragSprite _L_DragSprite;
+
 
     public TileSetEditorTerrain() : base(nameof(TileSetEditorTerrain))
     {
@@ -40,9 +53,9 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.RightCell
+    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.RightCell
     /// </summary>
-    public class RightCell : UiNode<TileSetEditorTerrainPanel, UI.TileSetEditorTerrain.TerrainCellDropHandler, RightCell>
+    public class RightCell : UiNode<TileSetEditorTerrainPanel, Godot.Control, RightCell>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.CellTexture
@@ -57,8 +70,8 @@ public abstract partial class TileSetEditorTerrain : UiBase
         }
         private CellTexture _L_CellTexture;
 
-        public RightCell(TileSetEditorTerrainPanel uiPanel, UI.TileSetEditorTerrain.TerrainCellDropHandler node) : base(uiPanel, node) {  }
-        public override RightCell Clone() => new (UiPanel, (UI.TileSetEditorTerrain.TerrainCellDropHandler)Instance.Duplicate());
+        public RightCell(TileSetEditorTerrainPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override RightCell Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
@@ -67,13 +80,13 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public class CellRoot : UiNode<TileSetEditorTerrainPanel, Godot.Control, CellRoot>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.RightCell
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.RightCell
         /// </summary>
         public RightCell L_RightCell
         {
             get
             {
-                if (_L_RightCell == null) _L_RightCell = new RightCell(UiPanel, Instance.GetNode<UI.TileSetEditorTerrain.TerrainCellDropHandler>("RightCell"));
+                if (_L_RightCell == null) _L_RightCell = new RightCell(UiPanel, Instance.GetNode<Godot.Control>("RightCell"));
                 return _L_RightCell;
             }
         }
@@ -370,12 +383,12 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDragHandler"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.MarginContainer.BottomBg.TileTexture.CellRoot.BottomCell
+    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.MarginContainer.BottomBg.TileTexture.CellRoot.BottomCell
     /// </summary>
-    public class BottomCell : UiNode<TileSetEditorTerrainPanel, UI.TileSetEditorTerrain.TerrainCellDragHandler, BottomCell>
+    public class BottomCell : UiNode<TileSetEditorTerrainPanel, Godot.Control, BottomCell>
     {
-        public BottomCell(TileSetEditorTerrainPanel uiPanel, UI.TileSetEditorTerrain.TerrainCellDragHandler node) : base(uiPanel, node) {  }
-        public override BottomCell Clone() => new (UiPanel, (UI.TileSetEditorTerrain.TerrainCellDragHandler)Instance.Duplicate());
+        public BottomCell(TileSetEditorTerrainPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override BottomCell Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
@@ -384,13 +397,13 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public class CellRoot_1 : UiNode<TileSetEditorTerrainPanel, Godot.Control, CellRoot_1>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDragHandler"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.MarginContainer.BottomBg.TileTexture.BottomCell
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.MarginContainer.BottomBg.TileTexture.BottomCell
         /// </summary>
         public BottomCell L_BottomCell
         {
             get
             {
-                if (_L_BottomCell == null) _L_BottomCell = new BottomCell(UiPanel, Instance.GetNode<UI.TileSetEditorTerrain.TerrainCellDragHandler>("BottomCell"));
+                if (_L_BottomCell == null) _L_BottomCell = new BottomCell(UiPanel, Instance.GetNode<Godot.Control>("BottomCell"));
                 return _L_BottomCell;
             }
         }
@@ -589,6 +602,15 @@ public abstract partial class TileSetEditorTerrain : UiBase
         public override VSplitContainer Clone() => new (UiPanel, (Godot.VSplitContainer)Instance.Duplicate());
     }
 
+    /// <summary>
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: TileSetEditorTerrain.DragSprite
+    /// </summary>
+    public class DragSprite : UiNode<TileSetEditorTerrainPanel, Godot.Sprite2D, DragSprite>
+    {
+        public DragSprite(TileSetEditorTerrainPanel uiPanel, Godot.Sprite2D node) : base(uiPanel, node) {  }
+        public override DragSprite Clone() => new (UiPanel, (Godot.Sprite2D)Instance.Duplicate());
+    }
+
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.RightCell.CellTexture
@@ -596,7 +618,7 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public CellTexture S_CellTexture => L_VSplitContainer.L_PanelTop.L_MarginContainer.L_TopBg.L_TerrainRoot.L_CellRoot.L_RightCell.L_CellTexture;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDropHandler"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.RightCell
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.RightCell
     /// </summary>
     public RightCell S_RightCell => L_VSplitContainer.L_PanelTop.L_MarginContainer.L_TopBg.L_TerrainRoot.L_CellRoot.L_RightCell;
 
@@ -636,7 +658,7 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public PanelTop S_PanelTop => L_VSplitContainer.L_PanelTop;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.TileSetEditorTerrain.TerrainCellDragHandler"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.MarginContainer.BottomBg.TileTexture.CellRoot.BottomCell
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.MarginContainer.BottomBg.TileTexture.CellRoot.BottomCell
     /// </summary>
     public BottomCell S_BottomCell => L_VSplitContainer.L_PanelBottom.L_MarginContainer.L_BottomBg.L_TileTexture.L_CellRoot.L_BottomCell;
 
@@ -664,5 +686,10 @@ public abstract partial class TileSetEditorTerrain : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VSplitContainer"/>, 节点路径: TileSetEditorTerrain.VSplitContainer
     /// </summary>
     public VSplitContainer S_VSplitContainer => L_VSplitContainer;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.DragSprite
+    /// </summary>
+    public DragSprite S_DragSprite => L_DragSprite;
 
 }
