@@ -109,21 +109,31 @@ public class TileSetSplit : IDestroy
             _tileSet.AddPhysicsLayer();
             _tileSet.SetPhysicsLayerCollisionLayer(0, PhysicsLayer.Wall);
             _tileSet.SetPhysicsLayerCollisionMask(0, PhysicsLayer.None);
-            Debug.Log("GetPhysicsLayersCount: " + _tileSet.GetPhysicsLayersCount());
-            //地形层 0
-            _tileSet.AddTerrainSet();
-            _tileSet.SetTerrainSetMode(0, TileSet.TerrainMode.CornersAndSides);
-            _tileSet.AddTerrain(0);
-            
+
             //Source资源
-            foreach (var tileSetSourceInfo in _tileSetInfo.Sources)
+            for (var sourceIndex = 0; sourceIndex < _tileSetInfo.Sources.Count; sourceIndex++)
             {
+                var tileSetSourceInfo = _tileSetInfo.Sources[sourceIndex];
+                var terrainInfo = tileSetSourceInfo.Terrain;
+                
+                //地形层
+                _tileSet.AddTerrainSet();
+                _tileSet.AddTerrain(sourceIndex);
+                if (terrainInfo.TerrainType == 0) //3x3地形
+                {
+                    _tileSet.SetTerrainSetMode(sourceIndex, TileSet.TerrainMode.CornersAndSides);
+                }
+                else //2x2地形
+                {
+                    _tileSet.SetTerrainSetMode(sourceIndex, TileSet.TerrainMode.Corners);
+                }
+
                 var tileSetAtlasSource = new TileSetAtlasSource();
                 _tileSet.AddSource(tileSetAtlasSource);
                 //纹理
                 var image = tileSetSourceInfo.GetSourceImage();
                 tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(image);
-                
+
                 var size = image.GetSize() / GameConfig.TileCellSize;
                 //创建cell
                 for (var i = 0; i < size.X; i++)
@@ -134,104 +144,111 @@ public class TileSetSplit : IDestroy
                     }
                 }
                 
-                var terrainInfo = tileSetSourceInfo.Terrain;
                 //初始化地形
-                tileSetAtlasSource.InitTerrain(terrainInfo, 0, 0);
-                //ySort
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 2), 23);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 2), 23);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 2), 23);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 2), 23);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 3), 23);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 3), 23);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 3), 23);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 3), 23);
-
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 3), 23);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 3), 23);
-
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 3), 23);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 3), 23);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 3), 23);
-                
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(0, 0), 7);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(1, 0), 7);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(2, 0), 7);
-                SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(3, 0), 7);
-                
-                //碰撞器
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 0), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 0), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 0), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 0), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 0), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 0), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 0), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 0), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 0), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 0), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 0), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 0), true);
-                
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 1), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 1), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 1), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 1), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 1), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 1), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 1), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 1), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 1), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 1), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 1), false);
-                
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 2), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 2), false);
-                
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 3), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 3), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 3), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 3), true);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 3), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 3), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 3), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 3), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 3), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 3), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 3), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 3), false);
-                                
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 4), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 4), false);
-                
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(0, 0), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(1, 0), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(2, 0), false);
-                SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(3, 0), false);
+                tileSetAtlasSource.InitTerrain(terrainInfo, sourceIndex, 0);
+                if (sourceIndex == 0)
+                {
+                    InitMainSourceData(terrainInfo, tileSetAtlasSource);
+                }
             }
         }
 
         return _tileSet;
+    }
+
+    private static void InitMainSourceData(TileSetTerrainInfo terrainInfo, TileSetAtlasSource tileSetAtlasSource)
+    {
+        //ySort
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 2), 23);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 2), 23);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 2), 23);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 2), 23);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 3), 23);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 3), 23);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 3), 23);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 3), 23);
+
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 3), 23);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 3), 23);
+
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 3), 23);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 3), 23);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 3), 23);
+
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(0, 0), 7);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(1, 0), 7);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(2, 0), 7);
+        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(3, 0), 7);
+
+        //碰撞器
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 0), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 0), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 0), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 0), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 0), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 0), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 0), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 0), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 0), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 0), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 0), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 0), true);
+
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 1), false);
+
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 2), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 2), false);
+
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 3), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 3), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 3), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 3), true);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 3), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 3), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 3), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 3), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 3), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 3), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 3), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 3), false);
+
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(4, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(7, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(10, 4), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 4), false);
+
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(0, 0), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(1, 0), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(2, 0), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(3, 0), false);
     }
 
     /// <summary>

@@ -90,37 +90,59 @@ public static class TerrainPeering
             tileData.Terrain = terrain;
             
             var bit = keyValuePair.Key;
-            if ((bit & LeftTop) != 0)
+            if (terrainInfo.TerrainType == 0) //3x3地形
             {
-                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopLeftCorner, 0);
+                if ((bit & LeftTop) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopLeftCorner, 0);
+                }
+                if ((bit & Top) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopSide, 0);
+                }
+                if ((bit & RightTop) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopRightCorner, 0);
+                }
+                if ((bit & Left) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.LeftSide, 0);
+                }
+                if ((bit & Right) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.RightSide, 0);
+                }
+                if ((bit & LeftBottom) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomLeftCorner, 0);
+                }
+                if ((bit & Bottom) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomSide, 0);
+                }
+                if ((bit & RightBottom) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomRightCorner, 0);
+                }
             }
-            if ((bit & Top) != 0)
+            else //2x2地形
             {
-                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopSide, 0);
-            }
-            if ((bit & RightTop) != 0)
-            {
-                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopRightCorner, 0);
-            }
-            if ((bit & Left) != 0)
-            {
-                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.LeftSide, 0);
-            }
-            if ((bit & Right) != 0)
-            {
-                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.RightSide, 0);
-            }
-            if ((bit & LeftBottom) != 0)
-            {
-                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomLeftCorner, 0);
-            }
-            if ((bit & Bottom) != 0)
-            {
-                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomSide, 0);
-            }
-            if ((bit & RightBottom) != 0)
-            {
-                tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomRightCorner, 0);
+                if ((bit & LeftTop) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopLeftCorner, 0);
+                }
+                if ((bit & RightTop) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.TopRightCorner, 0);
+                }
+                if ((bit & LeftBottom) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomLeftCorner, 0);
+                }
+                if ((bit & RightBottom) != 0)
+                {
+                    tileData.SetTerrainPeeringBit(TileSet.CellNeighbor.BottomRightCorner, 0);
+                }
             }
         }
     }

@@ -197,7 +197,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
                     case Center | RightTop | LeftBottom | RightBottom: return 9;
                     //第三排
                     case Center | RightTop: return 10;
-                    case Center | LeftTop | RightBottom: return 11;
+                    case Center | LeftTop | RightTop: return 11;
                     case Center | LeftTop: return 12;
                 }
             }
@@ -301,7 +301,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
                     case 9: return Center | RightTop | LeftBottom | RightBottom;
                     //第三排
                     case 10: return Center | RightTop;
-                    case 11: return Center | LeftTop | RightBottom;
+                    case 11: return Center | LeftTop | RightTop;
                     case 12: return Center | LeftTop;
                 }
             }

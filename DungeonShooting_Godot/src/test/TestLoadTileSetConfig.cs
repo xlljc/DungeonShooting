@@ -14,18 +14,26 @@ public partial class TestLoadTileSetConfig : Node2D
         InitTileSetConfig();
         _tileMap = GetNode<TileMap>("TileMap");
 
-        var tileSetSplit = _tileSetConfig.First().Value;
+        var tileSetSplit = _tileSetConfig["TileSet2"];
         var tileSet = tileSetSplit.GetTileSet();
+        ResourceSaver.Save(tileSet, "test_tileset.tres");
+        
         _tileMap.TileSet = tileSet;
         
-        _tileMap.SetCell(0, new Vector2I(5, 5), 0, new Vector2I(0, 0));
+        _tileMap.SetCell(0, new Vector2I(5, 5), 1, new Vector2I(0, 0));
         _tileMap.SetCellsTerrainConnect(0, new Array<Vector2I>()
         {
             new Vector2I(10, 10),
             new Vector2I(10, 11),
             new Vector2I(10, 12),
+            new Vector2I(11, 10),
+            new Vector2I(11, 11),
             new Vector2I(11, 12),
-        }, 0, 0, false);
+            new Vector2I(12, 10),
+            new Vector2I(12, 11),
+            new Vector2I(13, 10),
+            new Vector2I(13, 11),
+        }, 1, 0, false);
     }
     
     //初始化TileSet配置

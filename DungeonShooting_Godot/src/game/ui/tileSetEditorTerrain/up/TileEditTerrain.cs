@@ -119,13 +119,13 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
         {
             rootSize = UiNode.L_TerrainRoot.Instance.Size;
         }
-        else if (UiNode.L_TerrainTypeButton.Instance.Selected == 1)
+        else if (UiNode.L_TerrainTypeButton.Instance.Selected == 0)
         {
-            rootSize = UiNode.L_TerrainRoot.L_TerrainTexture4.Instance.Size;
+            rootSize = UiNode.L_TerrainRoot.L_TerrainTexture1.Instance.Size;
         }
         else
         {
-            rootSize = UiNode.L_TerrainRoot.L_TerrainTexture1.Instance.Size;
+            rootSize = UiNode.L_TerrainRoot.L_TerrainTexture4.Instance.Size;
         }
         Utils.DoFocusNode(ContainerRoot, Size, rootSize);
         RefreshGridTrans();
@@ -172,33 +172,48 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
 
     private void DoClearCell()
     {
-        UiNode.UiPanel.TerrainGrid3x3.ForEach(cell =>
+        if (UiNode.UiPanel.EditorPanel.TileSetSourceIndex == 0)
         {
-            var terrainCell = (TerrainCell)cell;
-            terrainCell.ClearTerrainBitData();
-            terrainCell.ClearCell();
-        });
-        UiNode.UiPanel.TerrainGridMiddle.ForEach(cell =>
+            UiNode.UiPanel.TerrainGrid3x3.ForEach(cell =>
+            {
+                var terrainCell = (TerrainCell)cell;
+                terrainCell.ClearCell();
+            });
+            UiNode.UiPanel.TerrainGridMiddle.ForEach(cell =>
+            {
+                var terrainCell = (TerrainCell)cell;
+                terrainCell.ClearCell();
+            });
+            UiNode.UiPanel.TerrainGridFloor.ForEach(cell =>
+            {
+                var terrainCell = (TerrainCell)cell;
+                terrainCell.ClearCell();
+            });
+        }
+        else if (UiNode.L_TerrainTypeButton.Instance.Selected == 0)
         {
-            var terrainCell = (TerrainCell)cell;
-            terrainCell.ClearTerrainBitData();
-            terrainCell.ClearCell();
-        });
-        UiNode.UiPanel.TerrainGridFloor.ForEach(cell =>
+            UiNode.UiPanel.TerrainGrid3x3.ForEach(cell =>
+            {
+                var terrainCell = (TerrainCell)cell;
+                terrainCell.ClearCell();
+            });
+        }
+        else
         {
-            var terrainCell = (TerrainCell)cell;
-            terrainCell.ClearTerrainBitData();
-            terrainCell.ClearCell();
-        });
-        UiNode.UiPanel.TerrainGrid2x2.ForEach(cell =>
-        {
-            var terrainCell = (TerrainCell)cell;
-            terrainCell.ClearTerrainBitData();
-            terrainCell.ClearCell();
-        });
+            UiNode.UiPanel.TerrainGrid2x2.ForEach(cell =>
+            {
+                var terrainCell = (TerrainCell)cell;
+                terrainCell.ClearCell();
+            });
+        }
+
         UiNode.UiPanel.MaskGrid.ForEach(cell =>
         {
             ((MaskCell)cell).SetConnectTerrainCell(null);
         });
+        
+        //清除Terrain中的数据
+        var terrainInfo = UiNode.UiPanel.EditorPanel.TileSetSourceInfo.Terrain;
+        terrainInfo.T.Clear();
     }
 }

@@ -115,7 +115,7 @@ texture = ExtResource("1_ivn6d")
 [sub_resource type="TileSet" id="TileSet_ii6g3"]
 terrain_set_0/mode = 1
 terrain_set_0/terrain_0/name = "Terrain 0"
-terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
+terrain_set_0/terrain_0/color = Color(0.501961, 0.345098, 0.25098, 1)
 sources/0 = SubResource("TileSetAtlasSource_23gwl")
 
 [node name="TestTerrain2x2" type="Node2D"]
