@@ -49,11 +49,11 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
                 cell = CalcMouseHoverCell(_panel.S_TerrainTexture1.Instance, _panel.TerrainGrid3x3);
                 if (cell == null)
                 {
-                    CalcMouseHoverCell(_panel.S_TerrainTexture2.Instance, _panel.TerrainGridMiddle);
+                    cell = CalcMouseHoverCell(_panel.S_TerrainTexture2.Instance, _panel.TerrainGridMiddle);
                 }
                 if (cell == null)
                 {
-                    CalcMouseHoverCell(_panel.S_TerrainTexture3.Instance, _panel.TerrainGridFloor);
+                    cell = CalcMouseHoverCell(_panel.S_TerrainTexture3.Instance, _panel.TerrainGridFloor);
                 }
             }
             else if (_panel.S_TerrainTypeButton.Instance.Selected == 0) //选中47个Terrain

@@ -54,7 +54,7 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
 
     private void OnGuiInput(InputEvent @event)
     {
-        if (@event is InputEventMouseButton mouseEvent)
+        if (IsPutDownTexture && @event is InputEventMouseButton mouseEvent)
         {
             if (mouseEvent.ButtonIndex == MouseButton.Right && mouseEvent.Pressed) //右键擦除图块
             {
