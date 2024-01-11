@@ -8,10 +8,11 @@ using Godot;
 /// </summary>
 public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
 {
-    public const byte FloorLayerType = 3;
-    public const byte MiddleLayerType = 2;
     public const byte TopLayerType = 1;
-    
+    public const byte MiddleLayerType = 2;
+    public const byte FloorLayerType = 3;
+    public const byte Terrain2x2Type = 4;
+
     //type = 3
     /// <summary>
     /// 地板 (1块) type = 3

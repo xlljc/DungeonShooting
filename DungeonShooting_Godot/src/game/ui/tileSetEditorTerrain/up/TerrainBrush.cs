@@ -28,32 +28,25 @@ public partial class TerrainBrush : Control, IUiNodeScript
     public override void _Draw()
     {
         var scale = Root.Scale;
-        var sourceIndex = _uiNode.UiPanel.EditorPanel.TileSetSourceIndex;
 
         //绘制区域
         for (var i = 0; i < TerrainTextureList.Count; i++)
         {
-            if (sourceIndex != 0 && i > 0)
-            {
-                break;
-            }
             var control = TerrainTextureList[i];
-            DrawRect(
-                new Rect2(control.Position, control.Size.AsVector2I()), new Color(1, 1, 0, 0.5f), false,
-                2f / scale.X
-            );
+            if (control.Visible)
+            {
+                DrawRect(
+                    new Rect2(control.Position, control.Size.AsVector2I()), new Color(1, 1, 0, 0.5f), false,
+                    2f / scale.X
+                );
+            }
         }
-
-
+        
         //绘制鼠标悬停区域
         for (var i = 0; i < TerrainTextureList.Count; i++)
         {
-            if (sourceIndex != 0 && i > 0)
-            {
-                break;
-            }
             var control = TerrainTextureList[i];
-            if (control.IsMouseInRect())
+            if (control.Visible && control.IsMouseInRect())
             {
                 var pos = Utils.GetMouseCellPosition(control) * GameConfig.TileCellSize;
                 DrawRect(

@@ -107,7 +107,7 @@ public static class GameConfig
     public const float NavigationCellSize = 4;
     
     /// <summary>
-    /// 地形掩码纹理大小, 顶部墙壁
+    /// 地形掩码纹理大小, 顶部墙壁/47格地形
     /// </summary>
     public static readonly Vector2I TerrainBitSize1 = new Vector2I(12, 4);
     /// <summary>
@@ -118,4 +118,8 @@ public static class GameConfig
     /// 地形掩码纹理大小, 地板
     /// </summary>
     public static readonly Vector2I TerrainBitSize3 = new Vector2I(1, 1);
+    /// <summary>
+    /// 地形掩码纹理大小, 13格地形
+    /// </summary>
+    public static readonly Vector2I TerrainBitSize4 = new Vector2I(5, 3);
 }

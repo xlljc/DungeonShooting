@@ -6,6 +6,7 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
 {
     private bool _dragMoveFlag = false;
     private TerrainCell _hoverCell = null;
+    private int _currentTerrainType = 0;
     
     public override void SetUiNode(IUiNode uiNode)
     {
@@ -17,9 +18,12 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
         terrainBrush.TerrainTextureList.Add(tileTexture.L_TerrainTexture1.Instance);
         terrainBrush.TerrainTextureList.Add(tileTexture.L_TerrainTexture2.Instance);
         terrainBrush.TerrainTextureList.Add(tileTexture.L_TerrainTexture3.Instance);
+        terrainBrush.TerrainTextureList.Add(tileTexture.L_TerrainTexture4.Instance);
         
         //聚焦按钮点击
         UiNode.L_FocusBtn.Instance.Pressed += OnFocusClick;
+        //切换TerrainType按钮点击
+        UiNode.L_TerrainTypeButton.Instance.ItemSelected += ChangeTerrainType;
     }
 
     /// <summary>
@@ -99,12 +103,57 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
     //聚焦按钮点击
     private void OnFocusClick()
     {
-        var rootSize = UiNode.L_TerrainRoot.Instance.Size;
-        if (UiNode.UiPanel.EditorPanel.TileSetSourceIndex != 0)
+        Vector2 rootSize;
+        if (UiNode.UiPanel.EditorPanel.TileSetSourceIndex == 0)
         {
-            rootSize.Y -= 2 * GameConfig.TileCellSize;
+            rootSize = UiNode.L_TerrainRoot.Instance.Size;
+        }
+        else if (UiNode.L_TerrainTypeButton.Instance.Selected == 1)
+        {
+            rootSize = UiNode.L_TerrainRoot.L_TerrainTexture4.Instance.Size;
+        }
+        else
+        {
+            rootSize = UiNode.L_TerrainRoot.L_TerrainTexture1.Instance.Size;
         }
         Utils.DoFocusNode(ContainerRoot, Size, rootSize);
         RefreshGridTrans();
+    }
+
+    /// <summary>
+    /// 切换Terrain类型
+    /// </summary>
+    public void ChangeTerrainType(long index)
+    {
+        if (_currentTerrainType == index)
+        {
+            return;
+        }
+        if (UiNode.UiPanel.EditorPanel.TileSetSourceIndex == 0) //选中 Main Source 时不需要询问
+        {
+            _currentTerrainType = (int)index;
+            DoChangeTerrainType(index);
+            return;
+        }
+        EditorWindowManager.ShowConfirm("提示", "确定要切换Terrain类型吗？\n该操作将清除所有已经配置好的地形数据!", (v) =>
+        {
+            if (v)
+            {
+                _currentTerrainType = (int)index;
+                DoChangeTerrainType(index);
+            }
+            else
+            {
+                UiNode.L_TerrainTypeButton.Instance.Selected = _currentTerrainType;
+            }
+        });
+    }
+
+    private void DoChangeTerrainType(long index)
+    {
+        UiNode.L_TerrainRoot.L_TerrainTexture1.Instance.Visible = index == 0;
+        UiNode.UiPanel.TopGrid1.Visible = index == 0;
+        UiNode.L_TerrainRoot.L_TerrainTexture4.Instance.Visible = index != 0;
+        UiNode.UiPanel.TopGrid4.Visible = index != 0;
     }
 }

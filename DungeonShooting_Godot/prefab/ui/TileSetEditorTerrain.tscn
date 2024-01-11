@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dfqb73y4br8yd"]
+[gd_scene load_steps=11 format=3 uid="uid://dfqb73y4br8yd"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/TileSetEditorTerrainPanel.cs" id="1_6jjk7"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/down/TileEditArea.cs" id="2_ynf0r"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/up/TileEditTerrain.cs" id="5_0x7yx"]
 [ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="5_08bc4"]
 [ext_resource type="Texture2D" uid="uid://bud6ah5xyey37" path="res://resource/sprite/map/TerrainMask2.png" id="5_xabgh"]
+[ext_resource type="Texture2D" uid="uid://dyshwhf3101em" path="res://resource/sprite/map/TerrainMask4.png" id="6_vbhca"]
 [ext_resource type="Texture2D" uid="uid://chisfq2alcq16" path="res://resource/sprite/map/TerrainMask3.png" id="6_vmj5y"]
 [ext_resource type="Texture2D" uid="uid://cvjj6jnmxgprw" path="res://resource/sprite/map/TerrainMask.png" id="7_g8dxk"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/up/TerrainBrush.cs" id="7_lmu64"]
@@ -87,6 +88,20 @@ mouse_filter = 1
 z_index = -1
 centered = false
 
+[node name="ColorRect" type="ColorRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/CellRoot/RightCell"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
 [node name="TerrainTexture1" type="TextureRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
 self_modulate = Color(1, 1, 1, 0.27451)
 custom_minimum_size = Vector2(192, 64)
@@ -141,6 +156,24 @@ offset_bottom = 30.0
 scale = Vector2(0.25, 0.25)
 text = "地板"
 
+[node name="TerrainTexture4" type="TextureRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
+visible = false
+self_modulate = Color(1, 1, 1, 0.27451)
+custom_minimum_size = Vector2(80, 48)
+layout_mode = 1
+offset_right = 80.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("6_vbhca")
+
+[node name="Label" type="Label" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/TerrainTexture4"]
+layout_mode = 0
+offset_top = -10.0
+offset_right = 136.0
+offset_bottom = 30.0
+scale = Vector2(0.25, 0.25)
+text = "地形"
+
 [node name="Brush" type="Control" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
 layout_mode = 1
 anchors_preset = 15
@@ -175,6 +208,23 @@ tooltip_text = "聚焦"
 texture_normal = ExtResource("5_08bc4")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="TerrainTypeButton" type="OptionButton" parent="VSplitContainer/PanelTop/MarginContainer/TopBg"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -330.0
+offset_top = 14.0
+offset_right = -94.0
+offset_bottom = 69.0
+grow_horizontal = 0
+item_count = 2
+selected = 0
+popup/item_0/text = "47格（3*3）"
+popup/item_0/id = 0
+popup/item_1/text = "13格（2*2））"
+popup/item_1/id = 1
 
 [node name="PanelBottom" type="Panel" parent="VSplitContainer"]
 layout_mode = 2
