@@ -60,10 +60,10 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
         {
             CellNode.Instance.DrawRect(
                 new Rect2(Vector2.Zero, CellNode.Instance.Size),
-                new Color(0, 1, 0), false, 3f / _textureRect.Scale.X
+                new Color(0, 1, 0, 0.3f)
             );
         }
-        else if (ConnectTerrainCell != null)
+        if (ConnectTerrainCell != null)
         {
             //选中时绘制轮廓
             CellNode.Instance.DrawRect(

@@ -109,17 +109,17 @@ public static class GameConfig
     /// <summary>
     /// 地形掩码纹理大小, 顶部墙壁/47格地形
     /// </summary>
-    public static readonly Vector2I TerrainBitSize1 = new Vector2I(12, 4);
-    /// <summary>
-    /// 地形掩码纹理大小, 侧方墙壁
-    /// </summary>
-    public static readonly Vector2I TerrainBitSize2 = new Vector2I(4, 1);
-    /// <summary>
-    /// 地形掩码纹理大小, 地板
-    /// </summary>
-    public static readonly Vector2I TerrainBitSize3 = new Vector2I(1, 1);
+    public static readonly Vector2I TerrainBit3x3 = new Vector2I(12, 4);
     /// <summary>
     /// 地形掩码纹理大小, 13格地形
     /// </summary>
-    public static readonly Vector2I TerrainBitSize4 = new Vector2I(5, 3);
+    public static readonly Vector2I TerrainBit2x2 = new Vector2I(5, 3);
+    /// <summary>
+    /// 地形掩码纹理大小, 侧方墙壁
+    /// </summary>
+    public static readonly Vector2I TerrainBitMiddle = new Vector2I(4, 1);
+    /// <summary>
+    /// 地形掩码纹理大小, 地板
+    /// </summary>
+    public static readonly Vector2I TerrainBitFloor = new Vector2I(1, 1);
 }

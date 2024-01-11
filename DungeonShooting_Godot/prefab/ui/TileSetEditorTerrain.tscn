@@ -88,20 +88,6 @@ mouse_filter = 1
 z_index = -1
 centered = false
 
-[node name="ColorRect" type="ColorRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/CellRoot/RightCell"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 0.6)
-
 [node name="TerrainTexture1" type="TextureRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
 self_modulate = Color(1, 1, 1, 0.27451)
 custom_minimum_size = Vector2(192, 64)
@@ -223,7 +209,7 @@ item_count = 2
 selected = 0
 popup/item_0/text = "47格（3*3）"
 popup/item_0/id = 0
-popup/item_1/text = "13格（2*2））"
+popup/item_1/text = "13格（2*2）"
 popup/item_1/id = 1
 
 [node name="PanelBottom" type="Panel" parent="VSplitContainer"]

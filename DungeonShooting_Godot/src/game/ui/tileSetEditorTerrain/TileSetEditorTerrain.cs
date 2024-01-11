@@ -54,15 +54,6 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.ColorRect"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.RightCell.ColorRect
-    /// </summary>
-    public class ColorRect : UiNode<TileSetEditorTerrainPanel, Godot.ColorRect, ColorRect>
-    {
-        public ColorRect(TileSetEditorTerrainPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
-        public override ColorRect Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
-    }
-
-    /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.RightCell
     /// </summary>
     public class RightCell : UiNode<TileSetEditorTerrainPanel, Godot.Control, RightCell>
@@ -79,19 +70,6 @@ public abstract partial class TileSetEditorTerrain : UiBase
             }
         }
         private CellTexture _L_CellTexture;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.ColorRect
-        /// </summary>
-        public ColorRect L_ColorRect
-        {
-            get
-            {
-                if (_L_ColorRect == null) _L_ColorRect = new ColorRect(UiPanel, Instance.GetNode<Godot.ColorRect>("ColorRect"));
-                return _L_ColorRect;
-            }
-        }
-        private ColorRect _L_ColorRect;
 
         public RightCell(TileSetEditorTerrainPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override RightCell Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
@@ -705,11 +683,6 @@ public abstract partial class TileSetEditorTerrain : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.RightCell.CellTexture
     /// </summary>
     public CellTexture S_CellTexture => L_VSplitContainer.L_PanelTop.L_MarginContainer.L_TopBg.L_TerrainRoot.L_CellRoot.L_RightCell.L_CellTexture;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.RightCell.ColorRect
-    /// </summary>
-    public ColorRect S_ColorRect => L_VSplitContainer.L_PanelTop.L_MarginContainer.L_TopBg.L_TerrainRoot.L_CellRoot.L_RightCell.L_ColorRect;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.MarginContainer.TopBg.TerrainRoot.CellRoot.RightCell

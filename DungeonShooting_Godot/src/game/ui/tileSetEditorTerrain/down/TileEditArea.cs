@@ -29,8 +29,8 @@ public partial class TileEditArea : EditorGridBg<TileSetEditorTerrain.BottomBg>
         if (_panel.S_BottomBg.Instance.IsMouseInRect() && _panel.S_TileTexture.Instance.IsMouseInRect())
         {
             var cellPosition = Utils.GetMouseCellPosition(_panel.S_TileTexture.Instance);
-            var index = cellPosition.X + cellPosition.Y * _panel.BottomGrid.GetColumns();
-            var tempCell = (MaskCell)_panel.BottomGrid.GetCell(index);
+            var index = cellPosition.X + cellPosition.Y * _panel.MaskGrid.GetColumns();
+            var tempCell = (MaskCell)_panel.MaskGrid.GetCell(index);
             if (tempCell.ConnectTerrainCell != null)
             {
                 cell = tempCell;
@@ -71,12 +71,12 @@ public partial class TileEditArea : EditorGridBg<TileSetEditorTerrain.BottomBg>
             if (_panel.S_BottomBg.Instance.IsMouseInRect() && _panel.S_TileTexture.Instance.IsMouseInRect())
             {
                 var cellPosition = Utils.GetMouseCellPosition(_panel.S_TileTexture.Instance);
-                var index = cellPosition.X + cellPosition.Y * _panel.BottomGrid.GetColumns();
-                var cell = (MaskCell)_panel.BottomGrid.GetCell(index);
+                var index = cellPosition.X + cellPosition.Y * _panel.MaskGrid.GetColumns();
+                var cell = (MaskCell)_panel.MaskGrid.GetCell(index);
                 if (cell.ConnectTerrainCell == null) //必须要没有使用的Cell
                 {
                     _panel.DraggingCell = cell;
-                    _panel.BottomGrid.SelectIndex = index;
+                    _panel.MaskGrid.SelectIndex = index;
                     _dragMoveFlag = false;
                 }
             }

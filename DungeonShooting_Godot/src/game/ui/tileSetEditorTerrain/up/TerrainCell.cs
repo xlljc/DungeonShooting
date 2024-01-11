@@ -24,13 +24,11 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
     /// </summary>
     public Vector2I TextureCell { get; private set; }
     
-    private Control _root;
     private TileSetEditorTerrainPanel _panel;
     
     public override void OnInit()
     {
         _panel = CellNode.UiPanel;
-        _root = _panel.S_TopBg.L_TerrainRoot.Instance;
         CellNode.Instance.GuiInput += OnGuiInput;
         CellNode.Instance.Draw += OnDraw;
     }
@@ -65,7 +63,7 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
                 ClearCell();
                 if (flag)
                 {
-                    SetTerrainBitData(null);
+                    ClearTerrainBitData();
                     if (ConnectMaskCell != null)
                     {
                         ConnectMaskCell.SetConnectTerrainCell(null);
@@ -95,6 +93,14 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
     {
         CellNode.L_CellTexture.Instance.Texture = null;
         IsPutDownTexture = false;
+    }
+
+    /// <summary>
+    /// 清除存储的地形掩码数据
+    /// </summary>
+    public void ClearTerrainBitData()
+    {
+        SetTerrainBitData(null);
     }
 
     private void OnDropData(MaskCell maskCell)
@@ -131,7 +137,7 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
         {
             CellNode.Instance.DrawRect(
                 new Rect2(Vector2.Zero, CellNode.Instance.Size),
-                new Color(0, 1, 0), false, 3f / _root.Scale.X
+                new Color(0, 1, 0, 0.2f)
             );
         }
     }

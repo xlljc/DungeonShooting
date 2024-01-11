@@ -23,7 +23,10 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
         //聚焦按钮点击
         UiNode.L_FocusBtn.Instance.Pressed += OnFocusClick;
         //切换TerrainType按钮点击
-        UiNode.L_TerrainTypeButton.Instance.ItemSelected += ChangeTerrainType;
+        UiNode.L_TerrainTypeButton.Instance.ItemSelected += (index) =>
+        {
+            ChangeTerrainType(index, true);
+        };
     }
 
     /// <summary>
@@ -41,42 +44,50 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
         var _panel = UiNode.UiPanel;
         if (_panel.S_TopBg.Instance.IsMouseInRect())
         {
-            if (_panel.S_TerrainTexture1.Instance.IsMouseInRect())
+            if (_panel.EditorPanel.TileSetSourceIndex == 0) //选中Main Source
             {
-                var cellPosition = Utils.GetMouseCellPosition(_panel.S_TerrainTexture1.Instance);
-                var index = cellPosition.X + cellPosition.Y * _panel.TopGrid1.GetColumns();
-                var tempCell = (TerrainCell)_panel.TopGrid1.GetCell(index);
-                if (tempCell.ConnectMaskCell != null)
+                cell = CalcMouseHoverCell(_panel.S_TerrainTexture1.Instance, _panel.TerrainGrid3x3);
+                if (cell == null)
                 {
-                    cell = tempCell;
+                    CalcMouseHoverCell(_panel.S_TerrainTexture2.Instance, _panel.TerrainGridMiddle);
+                }
+                if (cell == null)
+                {
+                    CalcMouseHoverCell(_panel.S_TerrainTexture3.Instance, _panel.TerrainGridFloor);
                 }
             }
-            //必须选中Main Source
-            if (_panel.EditorPanel.TileSetSourceIndex == 0)
+            else if (_panel.S_TerrainTypeButton.Instance.Selected == 0) //选中47个Terrain
             {
-                if (_panel.S_TerrainTexture2.Instance.IsMouseInRect())
-                {
-                    var cellPosition = Utils.GetMouseCellPosition(_panel.S_TerrainTexture2.Instance);
-                    var index = cellPosition.X + cellPosition.Y * _panel.TopGrid2.GetColumns();
-                    var tempCell = (TerrainCell)_panel.TopGrid2.GetCell(index);
-                    if (tempCell.ConnectMaskCell != null)
-                    {
-                        cell = tempCell;
-                    }
-                }
-                if (_panel.S_TerrainTexture3.Instance.IsMouseInRect())
-                {
-                    var cellPosition = Utils.GetMouseCellPosition(_panel.S_TerrainTexture3.Instance);
-                    var index = cellPosition.X + cellPosition.Y * _panel.TopGrid3.GetColumns();
-                    var tempCell = (TerrainCell)_panel.TopGrid3.GetCell(index);
-                    if (tempCell.ConnectMaskCell != null)
-                    {
-                        cell = tempCell;
-                    }
-                }
+                cell = CalcMouseHoverCell(_panel.S_TerrainTexture1.Instance, _panel.TerrainGrid3x3);
+            }
+            else //选中13格Terrain
+            {
+                cell = CalcMouseHoverCell(_panel.S_TerrainTexture4.Instance, _panel.TerrainGrid2x2);
             }
         }
         SetHoverCell(cell);
+    }
+
+    /// <summary>
+    /// 计算鼠标悬停在的地形单元。
+    /// </summary>
+    /// <param name="rectControl">矩形控件。</param>
+    /// <param name="grid">网格。</param>
+    /// <returns>鼠标悬停在的地形单元，如果鼠标不在矩形控件内或单元无效则返回null。</returns>
+    private TerrainCell CalcMouseHoverCell(Control rectControl, UiGrid<TileSetEditorTerrain.RightCell, byte> grid)
+    {
+        if (rectControl.IsMouseInRect())
+        {
+            var cellPosition = Utils.GetMouseCellPosition(rectControl);
+            var index = cellPosition.X + cellPosition.Y * grid.GetColumns();
+            var tempCell = (TerrainCell)grid.GetCell(index);
+            if (tempCell != null && tempCell.ConnectMaskCell != null)
+            {
+                return tempCell;
+            }
+        }
+
+        return null;
     }
     
     /// <summary>
@@ -123,13 +134,13 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
     /// <summary>
     /// 切换Terrain类型
     /// </summary>
-    public void ChangeTerrainType(long index)
+    public void ChangeTerrainType(long index, bool initiative)
     {
         if (_currentTerrainType == index)
         {
             return;
         }
-        if (UiNode.UiPanel.EditorPanel.TileSetSourceIndex == 0) //选中 Main Source 时不需要询问
+        if (!initiative)
         {
             _currentTerrainType = (int)index;
             DoChangeTerrainType(index);
@@ -140,7 +151,9 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
             if (v)
             {
                 _currentTerrainType = (int)index;
+                UiNode.UiPanel.EditorPanel.TileSetSourceInfo.Terrain.TerrainType = (byte)_currentTerrainType;
                 DoChangeTerrainType(index);
+                DoClearCell();
             }
             else
             {
@@ -152,8 +165,40 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
     private void DoChangeTerrainType(long index)
     {
         UiNode.L_TerrainRoot.L_TerrainTexture1.Instance.Visible = index == 0;
-        UiNode.UiPanel.TopGrid1.Visible = index == 0;
+        UiNode.UiPanel.TerrainGrid3x3.Visible = index == 0;
         UiNode.L_TerrainRoot.L_TerrainTexture4.Instance.Visible = index != 0;
-        UiNode.UiPanel.TopGrid4.Visible = index != 0;
+        UiNode.UiPanel.TerrainGrid2x2.Visible = index != 0;
+    }
+
+    private void DoClearCell()
+    {
+        UiNode.UiPanel.TerrainGrid3x3.ForEach(cell =>
+        {
+            var terrainCell = (TerrainCell)cell;
+            terrainCell.ClearTerrainBitData();
+            terrainCell.ClearCell();
+        });
+        UiNode.UiPanel.TerrainGridMiddle.ForEach(cell =>
+        {
+            var terrainCell = (TerrainCell)cell;
+            terrainCell.ClearTerrainBitData();
+            terrainCell.ClearCell();
+        });
+        UiNode.UiPanel.TerrainGridFloor.ForEach(cell =>
+        {
+            var terrainCell = (TerrainCell)cell;
+            terrainCell.ClearTerrainBitData();
+            terrainCell.ClearCell();
+        });
+        UiNode.UiPanel.TerrainGrid2x2.ForEach(cell =>
+        {
+            var terrainCell = (TerrainCell)cell;
+            terrainCell.ClearTerrainBitData();
+            terrainCell.ClearCell();
+        });
+        UiNode.UiPanel.MaskGrid.ForEach(cell =>
+        {
+            ((MaskCell)cell).SetConnectTerrainCell(null);
+        });
     }
 }

@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Godot;
+using static TerrainPeering;
 
 /// <summary>
 /// 地形配置数据, 数据都为 int 数组, 下标0和1分别代表x和y, 单位: 像素
 /// </summary>
 public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
 {
-    public const byte TopLayerType = 1;
+    public const byte TerrainLayerType = 1;
     public const byte MiddleLayerType = 2;
     public const byte FloorLayerType = 3;
-    public const byte Terrain2x2Type = 4;
 
     //type = 3
     /// <summary>
@@ -25,15 +25,22 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     [JsonInclude] public Dictionary<uint, int[]> M;
     
     /// <summary>
-    /// 顶部墙壁47格 (47块) type = 1
+    /// 自动平铺地形 (47块/13块) type = 1
     /// </summary>
     [JsonInclude] public Dictionary<uint, int[]> T;
 
+    /// <summary>
+    /// 地形类型, 0: 3x3地形, 1: 2x2地形
+    /// </summary>
+    [JsonInclude]
+    public byte TerrainType;
+
     public void InitData()
     {
-        T = new Dictionary<uint, int[]>();
-        M = new Dictionary<uint, int[]>();
+        TerrainType = 0;
         F = new Dictionary<uint, int[]>();
+        M = new Dictionary<uint, int[]>();
+        T = new Dictionary<uint, int[]>();
     }
 
     public TileSetTerrainInfo Clone()
@@ -52,16 +59,32 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
         {
             terrainInfo.F.Add(pair.Key, new []{ pair.Value[0], pair.Value[1] });
         }
+        terrainInfo.TerrainType = TerrainType;
         return terrainInfo;
     }
-    
+
     /// <summary>
     /// 返回这个TileSet地形是否可以正常使用了
     /// </summary>
     /// <returns></returns>
     public bool CanUse()
     {
-        return T != null && T.Count == 47 && M != null && M.Count == 4 && F != null && F.Count == 1;
+        if (TerrainType == 0)
+        {
+            if (T == null || T.Count != 47)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (T == null || T.Count != 13)
+            {
+                return false;
+            }
+        }
+
+        return M != null && M.Count == 4 && F != null && F.Count == 1;
     }
 
     /// <summary>
@@ -79,19 +102,18 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     /// <param name="type">地形类型</param>
     public int TerrainCoordsToIndex(Vector2I bitCoords, byte type)
     {
-        if (type == 1)
+        if (type == TerrainLayerType)
         {
-            return bitCoords.Y * GameConfig.TerrainBitSize1.X + bitCoords.X;
+            return bitCoords.Y * GameConfig.TerrainBit3x3.X + bitCoords.X;
         }
-        else if (type == 2)
+        else if (type == MiddleLayerType)
         {
-            return bitCoords.Y * GameConfig.TerrainBitSize2.X + bitCoords.X;
+            return bitCoords.Y * GameConfig.TerrainBitMiddle.X + bitCoords.X;
         }
-        else if (type == 3)
+        else if (type == FloorLayerType)
         {
-            return bitCoords.Y * GameConfig.TerrainBitSize3.X + bitCoords.X;
+            return bitCoords.Y * GameConfig.TerrainBitFloor.X + bitCoords.X;
         }
-
         return -1;
     }
 
@@ -102,57 +124,82 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     /// <param name="type">地形类型</param>
     public int TerrainBitToIndex(uint bit, byte type)
     {
-        if (type == TopLayerType) //顶部墙壁
+        if (type == TerrainLayerType) //顶部墙壁
         {
-            switch (bit)
+            if (TerrainType == 0) //47格
             {
-                case TerrainPeering.Center | TerrainPeering.Bottom: return 0;
-                case TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 1;
-                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 2;
-                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom: return 3;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 4; 
-                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 5;
-                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 6;
-                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 7;
-                case TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 8;
-                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 9;
-                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 10;
-                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 11;
-                case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Bottom: return 12;
-                case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 13;
-                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 14;
-                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom: return 15;
-                case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 16;
-                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 17;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 18;
-                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 19;
-                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 20;
-                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 21;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 23;
-                case TerrainPeering.Top | TerrainPeering.Center: return 24;
-                case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right: return 25;
-                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right: return 26;
-                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center: return 27;
-                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 28;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 29;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 30;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom: return 31;
-                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 32;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 33;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 34;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 35; 
-                case TerrainPeering.Center: return 36;
-                case TerrainPeering.Center | TerrainPeering.Right: return 37;
-                case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right: return 38;
-                case TerrainPeering.Left | TerrainPeering.Center: return 39;
-                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom: return 40;   
-                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right: return 41;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right: return 42;
-                case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom: return 43;  
-                case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right: return 44;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right: return 45;    
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom: return 46;
-                case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center: return 47;
+                switch (bit)
+                {
+                    case Center | Bottom: return 0;
+                    case Center | Right | Bottom: return 1;
+                    case Left | Center | Right | Bottom: return 2;
+                    case Left | Center | Bottom: return 3;
+                    case LeftTop | Top | Left | Center | Right | Bottom: return 4; 
+                    case Left | Center | Right | Bottom | RightBottom: return 5;
+                    case Left | Center | Right | LeftBottom | Bottom: return 6;
+                    case Top | RightTop | Left | Center | Right | Bottom: return 7;
+                    case Center | Right | Bottom | RightBottom: return 8;
+                    case Top | Left | Center | Right | LeftBottom | Bottom | RightBottom: return 9;
+                    case Left | Center | Right | LeftBottom | Bottom | RightBottom: return 10;
+                    case Left | Center | LeftBottom | Bottom: return 11;
+                    case Top | Center | Bottom: return 12;
+                    case Top | Center | Right | Bottom: return 13;
+                    case Top | Left | Center | Right | Bottom: return 14;
+                    case Top | Left | Center | Bottom: return 15;
+                    case Top | Center | Right | Bottom | RightBottom: return 16;
+                    case Top | RightTop | Left | Center | Right | LeftBottom | Bottom | RightBottom: return 17;
+                    case LeftTop | Top | Left | Center | Right | LeftBottom | Bottom | RightBottom: return 18;
+                    case Top | Left | Center | LeftBottom | Bottom: return 19;
+                    case Top | RightTop | Center | Right | Bottom | RightBottom: return 20;
+                    case Top | RightTop | Left | Center | Right | LeftBottom | Bottom: return 21;
+                    case LeftTop | Top | Left | Center | Right | LeftBottom | Bottom: return 23;
+                    case Top | Center: return 24;
+                    case Top | Center | Right: return 25;
+                    case Top | Left | Center | Right: return 26;
+                    case Top | Left | Center: return 27;
+                    case Top | RightTop | Center | Right | Bottom: return 28;
+                    case LeftTop | Top | RightTop | Left | Center | Right | Bottom | RightBottom: return 29;
+                    case LeftTop | Top | RightTop | Left | Center | Right | LeftBottom | Bottom: return 30;
+                    case LeftTop | Top | Left | Center | Bottom: return 31;
+                    case Top | RightTop | Left | Center | Right | Bottom | RightBottom: return 32;
+                    case LeftTop | Top | RightTop | Left | Center | Right | LeftBottom | Bottom | RightBottom: return 33;
+                    case LeftTop | Top | Left | Center | Right | Bottom | RightBottom: return 34;
+                    case LeftTop | Top | Left | Center | LeftBottom | Bottom: return 35; 
+                    case Center: return 36;
+                    case Center | Right: return 37;
+                    case Left | Center | Right: return 38;
+                    case Left | Center: return 39;
+                    case Top | Left | Center | Right | LeftBottom | Bottom: return 40;   
+                    case Top | RightTop | Left | Center | Right: return 41;
+                    case LeftTop | Top | Left | Center | Right: return 42;
+                    case Top | Left | Center | Right | Bottom | RightBottom: return 43;  
+                    case Top | RightTop | Center | Right: return 44;
+                    case LeftTop | Top | RightTop | Left | Center | Right: return 45;    
+                    case LeftTop | Top | RightTop | Left | Center | Right | Bottom: return 46;
+                    case LeftTop | Top | Left | Center: return 47;
+                }
+            }
+            else if (TerrainType == 1) //13格
+            {
+                switch (bit)
+                {
+                    //第一排
+                    case Center | RightBottom: return 0;
+                    case Center | RightBottom | LeftBottom: return 1;
+                    case Center | LeftBottom: return 2;
+                    case Center | LeftTop | RightTop | LeftBottom: return 3;
+                    case Center | LeftTop | RightTop | RightBottom: return 4;
+                    //第二排
+                    case Center | RightTop | RightBottom: return 5;
+                    case Center | LeftTop | LeftBottom | RightTop | RightBottom: return 6;
+                    case Center | LeftTop | LeftBottom: return 7;
+                    case Center | LeftTop | LeftBottom | RightBottom: return 8;
+                    case Center | RightTop | LeftBottom | RightBottom: return 9;
+                    //第三排
+                    case Center | RightTop: return 10;
+                    case Center | LeftTop | RightBottom: return 11;
+                    case Center | LeftTop: return 12;
+                }
             }
         }
         else if (type == MiddleLayerType)
@@ -181,56 +228,82 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     /// <returns></returns>
     public uint IndexToTerrainBit(int index, byte type)
     {
-        if (type == TopLayerType) //顶部墙壁
+        if (type == TerrainLayerType) //顶部墙壁
         {
-            switch (index)
+            if (TerrainType == 0) //47格
             {
-                case 0: return TerrainPeering.Center | TerrainPeering.Bottom;
-                case 1: return TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
-                case 2: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
-                case 3: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom;
-                case 4: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom; 
-                case 5: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 6: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
-                case 7: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
-                case 8: return TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 9: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 10: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 11: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
-                case 12: return TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Bottom;
-                case 13: return TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
-                case 14: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
-                case 15: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom;
-                case 16: return TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 17: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 18: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 19: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
-                case 20: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;                case 21: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
-                case 23: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
-                case 24: return TerrainPeering.Top | TerrainPeering.Center;
-                case 25: return TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right;
-                case 26: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right;
-                case 27: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center;
-                case 28: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
-                case 29: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 30: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom;
-                case 31: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom;
-                case 32: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 33: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 34: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;
-                case 35: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.LeftBottom | TerrainPeering.Bottom;   
-                case 36: return TerrainPeering.Center;
-                case 37: return TerrainPeering.Center | TerrainPeering.Right;
-                case 38: return TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right;
-                case 39: return TerrainPeering.Left | TerrainPeering.Center;
-                case 40: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom | TerrainPeering.Bottom;     
-                case 41: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right;
-                case 42: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right;
-                case 43: return TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom | TerrainPeering.RightBottom;    
-                case 44: return TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right;
-                case 45: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right;      
-                case 46: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom;
-                case 47: return TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center;
+                switch (index)
+                {
+                    case 0: return Center | Bottom;
+                    case 1: return Center | Right | Bottom;
+                    case 2: return Left | Center | Right | Bottom;
+                    case 3: return Left | Center | Bottom;
+                    case 4: return LeftTop | Top | Left | Center | Right | Bottom; 
+                    case 5: return Left | Center | Right | Bottom | RightBottom;
+                    case 6: return Left | Center | Right | LeftBottom | Bottom;
+                    case 7: return Top | RightTop | Left | Center | Right | Bottom;
+                    case 8: return Center | Right | Bottom | RightBottom;
+                    case 9: return Top | Left | Center | Right | LeftBottom | Bottom | RightBottom;
+                    case 10: return Left | Center | Right | LeftBottom | Bottom | RightBottom;
+                    case 11: return Left | Center | LeftBottom | Bottom;
+                    case 12: return Top | Center | Bottom;
+                    case 13: return Top | Center | Right | Bottom;
+                    case 14: return Top | Left | Center | Right | Bottom;
+                    case 15: return Top | Left | Center | Bottom;
+                    case 16: return Top | Center | Right | Bottom | RightBottom;
+                    case 17: return Top | RightTop | Left | Center | Right | LeftBottom | Bottom | RightBottom;
+                    case 18: return LeftTop | Top | Left | Center | Right | LeftBottom | Bottom | RightBottom;
+                    case 19: return Top | Left | Center | LeftBottom | Bottom;
+                    case 20: return Top | RightTop | Center | Right | Bottom | RightBottom;
+                    case 21: return Top | RightTop | Left | Center | Right | LeftBottom | Bottom;
+                    case 23: return LeftTop | Top | Left | Center | Right | LeftBottom | Bottom;
+                    case 24: return Top | Center;
+                    case 25: return Top | Center | Right;
+                    case 26: return Top | Left | Center | Right;
+                    case 27: return Top | Left | Center;
+                    case 28: return Top | RightTop | Center | Right | Bottom;
+                    case 29: return LeftTop | Top | RightTop | Left | Center | Right | Bottom | RightBottom;
+                    case 30: return LeftTop | Top | RightTop | Left | Center | Right | LeftBottom | Bottom;
+                    case 31: return LeftTop | Top | Left | Center | Bottom;
+                    case 32: return Top | RightTop | Left | Center | Right | Bottom | RightBottom;
+                    case 33: return LeftTop | Top | RightTop | Left | Center | Right | LeftBottom | Bottom | RightBottom;
+                    case 34: return LeftTop | Top | Left | Center | Right | Bottom | RightBottom;
+                    case 35: return LeftTop | Top | Left | Center | LeftBottom | Bottom;   
+                    case 36: return Center;
+                    case 37: return Center | Right;
+                    case 38: return Left | Center | Right;
+                    case 39: return Left | Center;
+                    case 40: return Top | Left | Center | Right | LeftBottom | Bottom;     
+                    case 41: return Top | RightTop | Left | Center | Right;
+                    case 42: return LeftTop | Top | Left | Center | Right;
+                    case 43: return Top | Left | Center | Right | Bottom | RightBottom;    
+                    case 44: return Top | RightTop | Center | Right;
+                    case 45: return LeftTop | Top | RightTop | Left | Center | Right;      
+                    case 46: return LeftTop | Top | RightTop | Left | Center | Right | Bottom;
+                    case 47: return LeftTop | Top | Left | Center;
+                }
+            }
+            else if (TerrainType == 1) //13格
+            {
+                switch (index)
+                {
+                    //第一排
+                    case 0: return Center | RightBottom;
+                    case 1: return Center | RightBottom | LeftBottom;
+                    case 2: return Center | LeftBottom;
+                    case 3: return Center | LeftTop | RightTop | LeftBottom;
+                    case 4: return Center | LeftTop | RightTop | RightBottom;
+                    //第二排
+                    case 5: return Center | RightTop | RightBottom;
+                    case 6: return Center | LeftTop | LeftBottom | RightTop | RightBottom;
+                    case 7: return Center | LeftTop | LeftBottom;
+                    case 8: return Center | LeftTop | LeftBottom | RightBottom;
+                    case 9: return Center | RightTop | LeftBottom | RightBottom;
+                    //第三排
+                    case 10: return Center | RightTop;
+                    case 11: return Center | LeftTop | RightBottom;
+                    case 12: return Center | LeftTop;
+                }
             }
         }
         else if (type == MiddleLayerType)
@@ -241,7 +314,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
             }
         }
 
-        return TerrainPeering.None;
+        return None;
     }
     
     /// <summary>
@@ -249,15 +322,15 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     /// </summary>
     public void SetTerrainCell(int index, byte type, int[] cellData)
     {
-        if (type == 1) //顶部墙壁
+        if (type == TerrainLayerType) //顶部墙壁
         {
             var terrainBit = IndexToTerrainBit(index, type);
-            if (terrainBit != TerrainPeering.None)
+            if (terrainBit != None)
             {
                 T[terrainBit] = cellData;
             }
         }
-        else if (type == 2) //侧方墙壁
+        else if (type == MiddleLayerType) //侧方墙壁
         {
             switch (index)
             {
@@ -267,7 +340,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
                 case 3: M[3] = cellData; break;
             }
         }
-        else if (type == 3) //地板
+        else if (type == FloorLayerType) //地板
         {
             F[0] = cellData;
         }
@@ -278,15 +351,15 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     /// </summary>
     public void RemoveTerrainCell(int index, byte type)
     {
-        if (type == 1) //顶部墙壁
+        if (type == TerrainLayerType) //顶部墙壁
         {
             var terrainBit = IndexToTerrainBit(index, type);
-            if (terrainBit != TerrainPeering.None)
+            if (terrainBit != None)
             {
                 T.Remove(terrainBit);
             }
         }
-        else if (type == 2) //侧方墙壁
+        else if (type == MiddleLayerType) //侧方墙壁
         {
             switch (index)
             {
@@ -296,7 +369,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
                 case 3: M.Remove(3); break;
             }
         }
-        else if (type == 3) //地板
+        else if (type == FloorLayerType) //地板
         {
             F.Remove(0);
         }
@@ -307,10 +380,10 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     /// </summary>
     public int[] GetTerrainCell(int index, byte type)
     {
-        if (type == 1) //顶部墙壁
+        if (type == TerrainLayerType) //顶部墙壁
         {
             var terrainBit = IndexToTerrainBit(index, type);
-            if (terrainBit != TerrainPeering.None)
+            if (terrainBit != None)
             {
                 if (T.TryGetValue(terrainBit, out var cellData))
                 {
@@ -318,7 +391,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
                 }
             }
         }
-        else if (type == 2) //侧方墙壁
+        else if (type == MiddleLayerType) //侧方墙壁
         {
             switch (index)
             {
@@ -344,7 +417,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
                     break;
             }
         }
-        else if (type == 3) //地板
+        else if (type == FloorLayerType) //地板
         {
             if (F.TryGetValue(0, out var cellData)) return cellData;
         }
