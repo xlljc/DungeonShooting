@@ -218,7 +218,8 @@
             32,
             16
           ]
-        }
+        },
+        "TerrainType": 0
       },
       "Combination": []
     }

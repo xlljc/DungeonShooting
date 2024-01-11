@@ -207,9 +207,9 @@ offset_bottom = 69.0
 grow_horizontal = 0
 item_count = 2
 selected = 0
-popup/item_0/text = "47格（3*3）"
+popup/item_0/text = "3x3（47格）"
 popup/item_0/id = 0
-popup/item_1/text = "13格（2*2）"
+popup/item_1/text = "2x2（13格）"
 popup/item_1/id = 1
 
 [node name="PanelBottom" type="Panel" parent="VSplitContainer"]

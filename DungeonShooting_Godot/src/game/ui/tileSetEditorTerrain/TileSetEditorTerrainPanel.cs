@@ -46,6 +46,8 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
 
         OnSetTileTexture(EditorPanel.Texture);
         OnChangeTileSetBgColor(EditorPanel.BgColor);
+        
+        S_TopBg.Instance.ChangeTerrainType(0, false);
     }
 
     public override void OnDestroyUi()
@@ -62,11 +64,19 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             _refreshGridConnect = false;
 
             var terrain = EditorPanel.TileSetSourceInfo.Terrain;
-            TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
-            if (EditorPanel.TileSetSourceIndex == 0) //必须选中Main Source
+            if (EditorPanel.TileSetSourceIndex == 0) //选中Main Source
             {
+                TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
                 TerrainGridMiddle.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
                 TerrainGridFloor.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+            }
+            else if (terrain.TerrainType == 0) //选中47格Terrain
+            {
+                TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+            }
+            else //选中13格Terrain
+            {
+                TerrainGrid2x2.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
             }
         }
     }

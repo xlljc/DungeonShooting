@@ -26,12 +26,12 @@ public partial class TileEditArea : EditorGridBg<TileSetEditorTerrain.BottomBg>
     {
         MaskCell cell = null;
         var _panel = UiNode.UiPanel;
-        if (_panel.S_BottomBg.Instance.IsMouseInRect() && _panel.S_TileTexture.Instance.IsMouseInRect())
+        if (!_panel.MaskGrid.IsDestroyed && _panel.S_BottomBg.Instance.IsMouseInRect() && _panel.S_TileTexture.Instance.IsMouseInRect())
         {
             var cellPosition = Utils.GetMouseCellPosition(_panel.S_TileTexture.Instance);
             var index = cellPosition.X + cellPosition.Y * _panel.MaskGrid.GetColumns();
             var tempCell = (MaskCell)_panel.MaskGrid.GetCell(index);
-            if (tempCell.ConnectTerrainCell != null)
+            if (tempCell != null && tempCell.ConnectTerrainCell != null)
             {
                 cell = tempCell;
             }
@@ -73,7 +73,7 @@ public partial class TileEditArea : EditorGridBg<TileSetEditorTerrain.BottomBg>
                 var cellPosition = Utils.GetMouseCellPosition(_panel.S_TileTexture.Instance);
                 var index = cellPosition.X + cellPosition.Y * _panel.MaskGrid.GetColumns();
                 var cell = (MaskCell)_panel.MaskGrid.GetCell(index);
-                if (cell.ConnectTerrainCell == null) //必须要没有使用的Cell
+                if (cell != null && cell.ConnectTerrainCell == null) //必须要没有使用的Cell
                 {
                     _panel.DraggingCell = cell;
                     _panel.MaskGrid.SelectIndex = index;

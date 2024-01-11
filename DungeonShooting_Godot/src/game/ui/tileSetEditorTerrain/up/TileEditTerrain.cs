@@ -6,7 +6,7 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
 {
     private bool _dragMoveFlag = false;
     private TerrainCell _hoverCell = null;
-    private int _currentTerrainType = 0;
+    private int _currentTerrainType = -1;
     
     public override void SetUiNode(IUiNode uiNode)
     {
