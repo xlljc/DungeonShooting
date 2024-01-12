@@ -72,10 +72,16 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         TerrainGridMiddle = InitTopGrid(S_TerrainRoot.L_TerrainTexture2.Instance, GameConfig.TerrainBitMiddle, TileSetTerrainInfo.MiddleLayerType);
         TerrainGridFloor = InitTopGrid(S_TerrainRoot.L_TerrainTexture3.Instance, GameConfig.TerrainBitFloor, TileSetTerrainInfo.FloorLayerType);
 
+        //删除地形按钮
+        S_DeleteButton.Instance.Pressed += OnDeleteTerrainClick;
+        //添加地形按钮
+        S_AddButton.Instance.Pressed += OnAddTerrainClick;
+        
         OnSetTileTexture(EditorPanel.Texture);
         OnChangeTileSetBgColor(EditorPanel.BgColor);
         
         OnChangeTerrainType(-1);
+        //改变选中的地形
         TerrainTabGrid.SelectEvent += OnChangeTerrain;
     }
 
@@ -266,7 +272,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         if (terrain.TerrainType == 0) //选中47个Terrain
         {
             TerrainGrid3x3.ForEach(cell => SetTerrainCellData(terrain, cell));
-            if (EditorPanel.TileSetSourceIndex == 0) //选中Main Source
+            if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
             {
                 TerrainGridMiddle.ForEach(cell => SetTerrainCellData(terrain, cell));
                 TerrainGridFloor.ForEach(cell => SetTerrainCellData(terrain, cell));
@@ -292,7 +298,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     /// </summary>
     private void OnChangeTerrainType(long index)
     {
-        if (EditorPanel.TileSetSourceIndex == 0) //选中 Main Source
+        if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中 Main Source
         {
             S_TerrainTexture2.Instance.Visible = true;
             S_TerrainTexture3.Instance.Visible = true;
@@ -330,5 +336,33 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             S_TerrainRoot.L_TerrainTexture4.Instance.Visible = false;
             TerrainGrid2x2.Visible = false;
         }
+    }
+
+    //删除地形
+    private void OnDeleteTerrainClick()
+    {
+        if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //不能删除 Main Terrain
+        {
+            EditorWindowManager.ShowTips("警告", "不允许删 Main Terrain！");
+            return;
+        }
+
+        var terrain = CurrTerrain;
+        if (terrain != null)
+        {
+            EditorWindowManager.ShowConfirm("提示", $"是否删除地形'{terrain.Name}'？", (v) =>
+            {
+                if (v)
+                {
+                    //执行删除操作
+                }
+            });
+        }
+    }
+
+    //创建地形
+    private void OnAddTerrainClick()
+    {
+        
     }
 }

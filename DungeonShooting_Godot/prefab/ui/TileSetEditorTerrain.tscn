@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://dfqb73y4br8yd"]
+[gd_scene load_steps=15 format=3 uid="uid://dfqb73y4br8yd"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/TileSetEditorTerrainPanel.cs" id="1_6jjk7"]
 [ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="2_ns54l"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/down/TileEditArea.cs" id="2_ynf0r"]
 [ext_resource type="Script" path="res://src/game/common/ui/EditorMaskBrush.cs" id="3_gydh0"]
 [ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="3_jn1bd"]
+[ext_resource type="Texture2D" uid="uid://dggb6p4sdmfry" path="res://resource/sprite/ui/commonIcon/Edit.png" id="3_xmuhh"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="4_ka47m"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/up/TileEditTerrain.cs" id="5_0x7yx"]
 [ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="5_08bc4"]
@@ -50,7 +51,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TopTab" type="Panel" parent="VSplitContainer/PanelTop/HSplitContainer"]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(270, 0)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab"]
@@ -77,6 +78,10 @@ text = "地形："
 [node name="AddButton" type="Button" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 icon = ExtResource("2_ns54l")
+
+[node name="EditButton" type="Button" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("3_xmuhh")
 
 [node name="DeleteButton" type="Button" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab/VBoxContainer/HBoxContainer"]
 layout_mode = 2

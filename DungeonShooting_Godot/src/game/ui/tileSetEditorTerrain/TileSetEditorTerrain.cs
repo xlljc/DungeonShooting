@@ -63,6 +63,15 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.HBoxContainer.EditButton
+    /// </summary>
+    public class EditButton : UiNode<TileSetEditorTerrainPanel, Godot.Button, EditButton>
+    {
+        public EditButton(TileSetEditorTerrainPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override EditButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.HBoxContainer.DeleteButton
     /// </summary>
     public class DeleteButton : UiNode<TileSetEditorTerrainPanel, Godot.Button, DeleteButton>
@@ -101,6 +110,19 @@ public abstract partial class TileSetEditorTerrain : UiBase
             }
         }
         private AddButton _L_AddButton;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.EditButton
+        /// </summary>
+        public EditButton L_EditButton
+        {
+            get
+            {
+                if (_L_EditButton == null) _L_EditButton = new EditButton(UiPanel, Instance.GetNode<Godot.Button>("EditButton"));
+                return _L_EditButton;
+            }
+        }
+        private EditButton _L_EditButton;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.DeleteButton
@@ -837,6 +859,11 @@ public abstract partial class TileSetEditorTerrain : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.HBoxContainer.AddButton
     /// </summary>
     public AddButton S_AddButton => L_VSplitContainer.L_PanelTop.L_HSplitContainer.L_TopTab.L_VBoxContainer.L_HBoxContainer.L_AddButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.HBoxContainer.EditButton
+    /// </summary>
+    public EditButton S_EditButton => L_VSplitContainer.L_PanelTop.L_HSplitContainer.L_TopTab.L_VBoxContainer.L_HBoxContainer.L_EditButton;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.HBoxContainer.DeleteButton
