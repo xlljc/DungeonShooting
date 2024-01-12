@@ -27,7 +27,7 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>, IDestroy
     /// 地形配置数据
     /// </summary>
     [JsonInclude]
-    public TileSetTerrainInfo Terrain;
+    public List<TileSetTerrainInfo> Terrain;
 
     /// <summary>
     /// 组合数据
@@ -43,8 +43,7 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>, IDestroy
     /// </summary>
     public void InitData()
     {
-        Terrain = new TileSetTerrainInfo();
-        Terrain.InitData();
+        Terrain = new List<TileSetTerrainInfo>();
         Combination = new List<TileCombinationInfo>();
     }
     
@@ -76,7 +75,11 @@ public class TileSetSourceInfo : IClone<TileSetSourceInfo>, IDestroy
     {
         var tileSetSourceInfo = new TileSetSourceInfo();
         tileSetSourceInfo.Name = Name;
-        tileSetSourceInfo.Terrain = Terrain.Clone();
+        tileSetSourceInfo.Terrain = new List<TileSetTerrainInfo>();
+        foreach (var item in Terrain)
+        {
+            tileSetSourceInfo.Terrain.Add(item.Clone());
+        }
         tileSetSourceInfo.Combination = new List<TileCombinationInfo>();
         foreach (var combination in Combination)
         {

@@ -162,7 +162,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
         // 创建AutoTileConfig对象
         // 使用第一个图块集源作为参数
-        _autoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain);
+        _autoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain[0]);
     }
     
     public void SetUiNode(IUiNode uiNode)

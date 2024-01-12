@@ -13,6 +13,12 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     public const byte MiddleLayerType = 2;
     public const byte FloorLayerType = 3;
 
+    /// <summary>
+    /// 地形名称
+    /// </summary>
+    [JsonInclude]
+    public string Name;
+    
     //type = 3
     /// <summary>
     /// 地板 (1块) type = 3
@@ -47,6 +53,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     {
         var terrainInfo = new TileSetTerrainInfo();
         terrainInfo.InitData();
+        terrainInfo.Name = Name;
         foreach (var pair in T)
         {
             terrainInfo.T.Add(pair.Key, new []{ pair.Value[0], pair.Value[1] });

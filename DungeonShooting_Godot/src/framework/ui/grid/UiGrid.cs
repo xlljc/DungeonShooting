@@ -11,6 +11,11 @@ using Godot;
 /// <typeparam name="TData">传给Cell的数据类型</typeparam>
 public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNode
 {
+    /// <summary>
+    /// 选中Cell的时的回调, 参数为 Cell 索引
+    /// </summary>
+    public event Action<int> SelectEvent;
+    
     public bool IsDestroyed { get; private set; }
 
     public int SelectIndex
@@ -47,6 +52,10 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
                 {
                     var uiCell = _cellList[newIndex];
                     uiCell.OnSelect();
+                    if (SelectEvent != null)
+                    {
+                        SelectEvent(newIndex);
+                    }
                 }
             }
         }

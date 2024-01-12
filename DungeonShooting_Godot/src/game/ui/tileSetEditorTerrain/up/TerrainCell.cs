@@ -121,11 +121,11 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
     {
         if (cellData == null)
         {
-            _panel.EditorPanel.TileSetSourceInfo.Terrain.RemoveTerrainCell(Index, Data);
+            _panel.CurrTerrain.RemoveTerrainCell(Index, Data);
         }
         else
         {
-            _panel.EditorPanel.TileSetSourceInfo.Terrain.SetTerrainCell(Index, Data, cellData);
+            _panel.CurrTerrain.SetTerrainCell(Index, Data, cellData);
         }
 
         EventManager.EmitEvent(EventEnum.OnTileSetDirty);

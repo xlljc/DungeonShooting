@@ -1,8 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://dfqb73y4br8yd"]
+[gd_scene load_steps=14 format=3 uid="uid://dfqb73y4br8yd"]
 
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/TileSetEditorTerrainPanel.cs" id="1_6jjk7"]
+[ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="2_ns54l"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/down/TileEditArea.cs" id="2_ynf0r"]
 [ext_resource type="Script" path="res://src/game/common/ui/EditorMaskBrush.cs" id="3_gydh0"]
+[ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="3_jn1bd"]
+[ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="4_ka47m"]
 [ext_resource type="Script" path="res://src/game/ui/tileSetEditorTerrain/up/TileEditTerrain.cs" id="5_0x7yx"]
 [ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="5_08bc4"]
 [ext_resource type="Texture2D" uid="uid://bud6ah5xyey37" path="res://resource/sprite/map/TerrainMask2.png" id="5_xabgh"]
@@ -34,19 +37,76 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 50.0
 
-[node name="MarginContainer" type="MarginContainer" parent="VSplitContainer/PanelTop"]
+[node name="HSplitContainer" type="HSplitContainer" parent="VSplitContainer/PanelTop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopTab" type="Panel" parent="VSplitContainer/PanelTop/HSplitContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "地形："
+
+[node name="AddButton" type="Button" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("2_ns54l")
+
+[node name="DeleteButton" type="Button" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("3_jn1bd")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TerrainTab" type="Button" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "name"
+text_overrun_behavior = 3
+
+[node name="SelectTexture" type="NinePatchRect" parent="VSplitContainer/PanelTop/HSplitContainer/TopTab/VBoxContainer/ScrollContainer/TerrainTab"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
+texture = ExtResource("4_ka47m")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
 
-[node name="TopBg" type="ColorRect" parent="VSplitContainer/PanelTop/MarginContainer"]
+[node name="TopBg" type="ColorRect" parent="VSplitContainer/PanelTop/HSplitContainer"]
 clip_children = 2
 z_index = 1
 layout_mode = 2
@@ -54,7 +114,7 @@ size_flags_horizontal = 3
 color = Color(0.496094, 0.496094, 0.496094, 1)
 script = ExtResource("5_0x7yx")
 
-[node name="TerrainRoot" type="Control" parent="VSplitContainer/PanelTop/MarginContainer/TopBg"]
+[node name="TerrainRoot" type="Control" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -70,25 +130,25 @@ grow_vertical = 2
 scale = Vector2(3, 3)
 mouse_filter = 2
 
-[node name="CellRoot" type="Control" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
+[node name="CellRoot" type="Control" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1.0
 offset_bottom = 1.0
 mouse_filter = 2
 
-[node name="RightCell" type="Control" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/CellRoot"]
+[node name="RightCell" type="Control" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot/CellRoot"]
 z_index = 1
 anchors_preset = 0
 offset_right = 16.0
 offset_bottom = 16.0
 mouse_filter = 1
 
-[node name="CellTexture" type="Sprite2D" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/CellRoot/RightCell"]
+[node name="CellTexture" type="Sprite2D" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot/CellRoot/RightCell"]
 z_index = -1
 centered = false
 
-[node name="TerrainTexture1" type="TextureRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
+[node name="TerrainTexture1" type="TextureRect" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot"]
 self_modulate = Color(1, 1, 1, 0.27451)
 custom_minimum_size = Vector2(192, 64)
 layout_mode = 1
@@ -97,7 +157,7 @@ offset_bottom = 64.0
 mouse_filter = 2
 texture = ExtResource("7_g8dxk")
 
-[node name="Label" type="Label" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/TerrainTexture1"]
+[node name="Label" type="Label" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot/TerrainTexture1"]
 layout_mode = 0
 offset_top = -10.0
 offset_right = 136.0
@@ -105,7 +165,7 @@ offset_bottom = 30.0
 scale = Vector2(0.25, 0.25)
 text = "顶部墙壁"
 
-[node name="TerrainTexture2" type="TextureRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
+[node name="TerrainTexture2" type="TextureRect" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot"]
 self_modulate = Color(1, 1, 1, 0.27451)
 custom_minimum_size = Vector2(64, 16)
 layout_mode = 1
@@ -115,7 +175,7 @@ offset_bottom = 96.0
 mouse_filter = 2
 texture = ExtResource("5_xabgh")
 
-[node name="Label" type="Label" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/TerrainTexture2"]
+[node name="Label" type="Label" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot/TerrainTexture2"]
 layout_mode = 0
 offset_top = -10.0
 offset_right = 136.0
@@ -123,7 +183,7 @@ offset_bottom = 30.0
 scale = Vector2(0.25, 0.25)
 text = "侧方墙壁"
 
-[node name="TerrainTexture3" type="TextureRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
+[node name="TerrainTexture3" type="TextureRect" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot"]
 self_modulate = Color(1, 1, 1, 0.27451)
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 1
@@ -134,7 +194,7 @@ offset_bottom = 96.0
 mouse_filter = 2
 texture = ExtResource("6_vmj5y")
 
-[node name="Label" type="Label" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/TerrainTexture3"]
+[node name="Label" type="Label" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot/TerrainTexture3"]
 layout_mode = 0
 offset_top = -10.0
 offset_right = 136.0
@@ -142,7 +202,7 @@ offset_bottom = 30.0
 scale = Vector2(0.25, 0.25)
 text = "地板"
 
-[node name="TerrainTexture4" type="TextureRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
+[node name="TerrainTexture4" type="TextureRect" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot"]
 visible = false
 self_modulate = Color(1, 1, 1, 0.27451)
 custom_minimum_size = Vector2(80, 48)
@@ -152,7 +212,7 @@ offset_bottom = 48.0
 mouse_filter = 2
 texture = ExtResource("6_vbhca")
 
-[node name="Label" type="Label" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot/TerrainTexture4"]
+[node name="Label" type="Label" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot/TerrainTexture4"]
 layout_mode = 0
 offset_top = -10.0
 offset_right = 136.0
@@ -160,7 +220,7 @@ offset_bottom = 30.0
 scale = Vector2(0.25, 0.25)
 text = "地形"
 
-[node name="Brush" type="Control" parent="VSplitContainer/PanelTop/MarginContainer/TopBg/TerrainRoot"]
+[node name="Brush" type="Control" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -170,7 +230,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("7_lmu64")
 
-[node name="Grid" type="ColorRect" parent="VSplitContainer/PanelTop/MarginContainer/TopBg"]
+[node name="Grid" type="ColorRect" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -180,7 +240,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
-[node name="FocusBtn" type="TextureButton" parent="VSplitContainer/PanelTop/MarginContainer/TopBg"]
+[node name="FocusBtn" type="TextureButton" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -195,49 +255,29 @@ texture_normal = ExtResource("5_08bc4")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="TerrainTypeButton" type="OptionButton" parent="VSplitContainer/PanelTop/MarginContainer/TopBg"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -330.0
-offset_top = 14.0
-offset_right = -94.0
-offset_bottom = 69.0
-grow_horizontal = 0
-item_count = 2
-selected = 0
-popup/item_0/text = "3x3（47格）"
-popup/item_0/id = 0
-popup/item_1/text = "2x2（13格）"
-popup/item_1/id = 1
-
 [node name="PanelBottom" type="Panel" parent="VSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 50.0
 
-[node name="MarginContainer" type="MarginContainer" parent="VSplitContainer/PanelBottom"]
+[node name="BottomBg" type="ColorRect" parent="VSplitContainer/PanelBottom"]
+clip_children = 2
+z_index = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
-
-[node name="BottomBg" type="ColorRect" parent="VSplitContainer/PanelBottom/MarginContainer"]
-clip_children = 2
-z_index = 1
-layout_mode = 2
 color = Color(0.203922, 0.203922, 0.203922, 1)
 script = ExtResource("2_ynf0r")
 
-[node name="TileTexture" type="TextureRect" parent="VSplitContainer/PanelBottom/MarginContainer/BottomBg"]
+[node name="TileTexture" type="TextureRect" parent="VSplitContainer/PanelBottom/BottomBg"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -249,19 +289,19 @@ grow_vertical = 2
 scale = Vector2(2, 2)
 mouse_filter = 2
 
-[node name="CellRoot" type="Control" parent="VSplitContainer/PanelBottom/MarginContainer/BottomBg/TileTexture"]
+[node name="CellRoot" type="Control" parent="VSplitContainer/PanelBottom/BottomBg/TileTexture"]
 anchors_preset = 0
 offset_right = 1.0
 offset_bottom = 1.0
 mouse_filter = 2
 
-[node name="BottomCell" type="Control" parent="VSplitContainer/PanelBottom/MarginContainer/BottomBg/TileTexture/CellRoot"]
+[node name="BottomCell" type="Control" parent="VSplitContainer/PanelBottom/BottomBg/TileTexture/CellRoot"]
 anchors_preset = 0
 offset_right = 16.0
 offset_bottom = 16.0
 mouse_filter = 2
 
-[node name="MaskBrush" type="Control" parent="VSplitContainer/PanelBottom/MarginContainer/BottomBg/TileTexture"]
+[node name="MaskBrush" type="Control" parent="VSplitContainer/PanelBottom/BottomBg/TileTexture"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -271,7 +311,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("3_gydh0")
 
-[node name="Grid" type="ColorRect" parent="VSplitContainer/PanelBottom/MarginContainer/BottomBg"]
+[node name="Grid" type="ColorRect" parent="VSplitContainer/PanelBottom/BottomBg"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -281,7 +321,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
-[node name="FocusBtn" type="TextureButton" parent="VSplitContainer/PanelBottom/MarginContainer/BottomBg"]
+[node name="FocusBtn" type="TextureButton" parent="VSplitContainer/PanelBottom/BottomBg"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

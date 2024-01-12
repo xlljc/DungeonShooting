@@ -9,12 +9,34 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     /// 父Ui
     /// </summary>
     public TileSetEditorPanel EditorPanel;
+
+    /// <summary>
+    /// 当前选中的地形索引
+    /// </summary>
+    public int CurrTerrainIndex { get; set; } = -1;
+
+    /// <summary>
+    /// 当前选中的地形
+    /// </summary>
+    public TileSetTerrainInfo CurrTerrain
+    {
+        get
+        {
+            var terrain = EditorPanel.TileSetSourceInfo.Terrain;
+            if (CurrTerrainIndex < 0 || CurrTerrainIndex >= terrain.Count)
+            {
+                return null;
+            }
+            return terrain[CurrTerrainIndex];
+        }
+    }
     
     /// <summary>
     /// 正在拖拽的图块
     /// </summary>
     public MaskCell DraggingCell { get; set; }
 
+    public UiGrid<TerrainTab, TileSetTerrainInfo> TerrainTabGrid;
     public UiGrid<RightCell, byte> TerrainGrid3x3;
     public UiGrid<RightCell, byte> TerrainGrid2x2;
     public UiGrid<RightCell, byte> TerrainGridMiddle;
@@ -34,7 +56,13 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
         //背景颜色改变
         AddEventListener(EventEnum.OnSetTileSetBgColor, OnChangeTileSetBgColor);
-        
+
+        //地形页签
+        TerrainTabGrid = CreateUiGrid<TerrainTab, TileSetTerrainInfo, TerrainTabCell>(S_TerrainTab);
+        TerrainTabGrid.SetCellOffset(Vector2I.Zero);
+        TerrainTabGrid.SetColumns(1);
+        TerrainTabGrid.SetHorizontalExpand(true);
+
         MaskGrid = CreateUiGrid<BottomCell, Rect2I, MaskCell>(S_BottomCell);
         MaskGrid.SetCellOffset(Vector2I.Zero);
         MaskGrid.GridContainer.MouseFilter = MouseFilterEnum.Ignore;
@@ -47,7 +75,8 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         OnSetTileTexture(EditorPanel.Texture);
         OnChangeTileSetBgColor(EditorPanel.BgColor);
         
-        S_TopBg.Instance.ChangeTerrainType(0, false);
+        OnChangeTerrainType(-1);
+        TerrainTabGrid.SelectEvent += OnChangeTerrain;
     }
 
     public override void OnDestroyUi()
@@ -63,16 +92,15 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         {
             _refreshGridConnect = false;
 
-            var terrain = EditorPanel.TileSetSourceInfo.Terrain;
-            if (EditorPanel.TileSetSourceIndex == 0) //选中Main Source
+            var terrain = CurrTerrain;
+            if (terrain.TerrainType == 0) //选中47格Terrain
             {
                 TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
-                TerrainGridMiddle.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
-                TerrainGridFloor.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
-            }
-            else if (terrain.TerrainType == 0) //选中47格Terrain
-            {
-                TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
+                {
+                    TerrainGridMiddle.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                    TerrainGridFloor.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                }
             }
             else //选中13格Terrain
             {
@@ -103,56 +131,15 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     //改变选中的TileSet资源
     private void OnSelectTileSetSource(object obj)
     {
-        //清除所有绑定的Terrain
-        TerrainGrid3x3.ForEach(cell => ((TerrainCell)cell).ClearCell());
-        TerrainGridMiddle.ForEach(cell => ((TerrainCell)cell).ClearCell());
-        TerrainGridFloor.ForEach(cell => ((TerrainCell)cell).ClearCell());
-        TerrainGrid2x2.ForEach(cell => ((TerrainCell)cell).ClearCell());
-        S_TopBg.Instance.SetHoverCell(null);
-        S_BottomBg.Instance.SetHoverCell(null);
-
-        var sourceIndex = EditorPanel.TileSetSourceIndex;
-        if (sourceIndex == 0) //选中Main Source时就只能使用 47 Terrain
-        {
-            S_TerrainTexture2.Instance.Visible = true;
-            S_TerrainTexture3.Instance.Visible = true;
-            TerrainGridMiddle.Visible = true;
-            TerrainGridFloor.Visible = true;
-            S_TerrainTexture1.L_Label.Instance.Text = "顶部墙壁";
-            S_TerrainTypeButton.Instance.Visible = false;
-            S_TerrainTypeButton.Instance.Selected = 0;
-            S_TopBg.Instance.ChangeTerrainType(0, false);
-        }
-        else
-        {
-            S_TerrainTexture2.Instance.Visible = false;
-            S_TerrainTexture3.Instance.Visible = false;
-            TerrainGridMiddle.Visible = false;
-            TerrainGridFloor.Visible = false;
-            S_TerrainTexture1.L_Label.Instance.Text = "地形";
-            S_TerrainTypeButton.Instance.Visible = true;
-            var selectIndex = EditorPanel.TileSetSourceInfo.Terrain.TerrainType;
-            S_TerrainTypeButton.Instance.Selected = selectIndex;
-            S_TopBg.Instance.ChangeTerrainType(selectIndex, false);
-        }
-        
-        //再加载Terrain
+        TerrainTabGrid.RemoveAll();
+        //加载Terrain
         if (obj != null)
         {
-            var terrain = ((TileSetSourceInfo)obj).Terrain;
-            if (sourceIndex == 0) //选中Main Source
+            var terrainList = ((TileSetSourceInfo)obj).Terrain;
+            if (terrainList.Count > 0)
             {
-                TerrainGrid3x3.ForEach(cell => SetTerrainCellData(terrain, cell));
-                TerrainGridMiddle.ForEach(cell => SetTerrainCellData(terrain, cell));
-                TerrainGridFloor.ForEach(cell => SetTerrainCellData(terrain, cell));
-            }
-            else if (S_TerrainTypeButton.Instance.Selected == 0) //选中47个Terrain
-            {
-                TerrainGrid3x3.ForEach(cell => SetTerrainCellData(terrain, cell));
-            }
-            else //选中13格Terrain
-            {
-                TerrainGrid2x2.ForEach(cell => SetTerrainCellData(terrain, cell));
+                TerrainTabGrid.SetDataList(terrainList.ToArray());
+                TerrainTabGrid.SelectIndex = 0;
             }
         }
     }
@@ -192,7 +179,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     /// </summary>
     public void OnDropCell(MaskCell maskCell)
     {
-        if (EditorPanel.TileSetSourceIndex == 0) //选中Main Source
+        if (CurrTerrain.TerrainType == 0) //选中47个Terrain
         {
             var flag = true;
             TerrainGrid3x3.ForEach((cell) =>
@@ -200,28 +187,24 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                 flag = !((TerrainCell)cell).OnDropCell(maskCell);
                 return flag;
             });
-            if (flag)
+            if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
             {
-                TerrainGridMiddle.ForEach((cell) =>
+                if (flag)
                 {
-                    flag = !((TerrainCell)cell).OnDropCell(maskCell);
-                    return flag;
-                });
-            }
-            if (flag)
-            {
-                TerrainGridFloor.ForEach((cell) =>
+                    TerrainGridMiddle.ForEach((cell) =>
+                    {
+                        flag = !((TerrainCell)cell).OnDropCell(maskCell);
+                        return flag;
+                    });
+                }
+                if (flag)
                 {
-                    return ((TerrainCell)cell).OnDropCell(maskCell);
-                });
+                    TerrainGridFloor.ForEach((cell) =>
+                    {
+                        return ((TerrainCell)cell).OnDropCell(maskCell);
+                    });
+                }
             }
-        }
-        else if (S_TerrainTypeButton.Instance.Selected == 0) //选中47个Terrain
-        {
-            TerrainGrid3x3.ForEach((cell) =>
-            {
-                return !((TerrainCell)cell).OnDropCell(maskCell);
-            });
         }
         else //选中13格Terrain
         {
@@ -261,5 +244,91 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     {
         S_BottomBg.Instance.Color = EditorPanel.BgColor;
         S_TopBg.Instance.Color = EditorPanel.BgColor;
+    }
+
+    //切换选中的地形
+    private void OnChangeTerrain(int index)
+    {
+        CurrTerrainIndex = index;
+        
+        //清除所有绑定的Terrain
+        if (index >= 0)
+        {
+            TerrainGrid3x3.ForEach(cell => ((TerrainCell)cell).ClearCell());
+            TerrainGridMiddle.ForEach(cell => ((TerrainCell)cell).ClearCell());
+            TerrainGridFloor.ForEach(cell => ((TerrainCell)cell).ClearCell());
+            TerrainGrid2x2.ForEach(cell => ((TerrainCell)cell).ClearCell());
+        }
+        S_TopBg.Instance.SetHoverCell(null);
+        S_BottomBg.Instance.SetHoverCell(null);
+        
+        var terrain = CurrTerrain;
+        if (terrain.TerrainType == 0) //选中47个Terrain
+        {
+            TerrainGrid3x3.ForEach(cell => SetTerrainCellData(terrain, cell));
+            if (EditorPanel.TileSetSourceIndex == 0) //选中Main Source
+            {
+                TerrainGridMiddle.ForEach(cell => SetTerrainCellData(terrain, cell));
+                TerrainGridFloor.ForEach(cell => SetTerrainCellData(terrain, cell));
+            }
+        }
+        else //选中13格Terrain
+        {
+            TerrainGrid2x2.ForEach(cell => SetTerrainCellData(terrain, cell));
+        }
+        
+        if (index >= 0)
+        {
+            OnChangeTerrainType(TerrainTabGrid.GetCell(index).Data.TerrainType);
+        }
+        else
+        {
+            OnChangeTerrainType(-1);
+        }
+    }
+    
+    /// <summary>
+    /// 切换Terrain类型
+    /// </summary>
+    private void OnChangeTerrainType(long index)
+    {
+        if (EditorPanel.TileSetSourceIndex == 0) //选中 Main Source
+        {
+            S_TerrainTexture2.Instance.Visible = true;
+            S_TerrainTexture3.Instance.Visible = true;
+            TerrainGridMiddle.Visible = true;
+            TerrainGridFloor.Visible = true;
+            S_TerrainTexture1.L_Label.Instance.Text = "顶部墙壁";
+        }
+        else
+        {
+            S_TerrainTexture2.Instance.Visible = false;
+            S_TerrainTexture3.Instance.Visible = false;
+            TerrainGridMiddle.Visible = false;
+            TerrainGridFloor.Visible = false;
+            S_TerrainTexture1.L_Label.Instance.Text = "地形";
+        }
+        
+        if (index == 0) //47 格子
+        {
+            S_TerrainRoot.L_TerrainTexture1.Instance.Visible = true;
+            TerrainGrid3x3.Visible = true;
+            S_TerrainRoot.L_TerrainTexture4.Instance.Visible = false;
+            TerrainGrid2x2.Visible = false;
+        }
+        else if (index == 1) //13 格子
+        {
+            S_TerrainRoot.L_TerrainTexture1.Instance.Visible = false;
+            TerrainGrid3x3.Visible = false;
+            S_TerrainRoot.L_TerrainTexture4.Instance.Visible = true;
+            TerrainGrid2x2.Visible = true;
+        }
+        else
+        {
+            S_TerrainRoot.L_TerrainTexture1.Instance.Visible = false;
+            TerrainGrid3x3.Visible = false;
+            S_TerrainRoot.L_TerrainTexture4.Instance.Visible = false;
+            TerrainGrid2x2.Visible = false;
+        }
     }
 }
