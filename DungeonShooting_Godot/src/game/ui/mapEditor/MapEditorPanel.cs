@@ -31,8 +31,9 @@ public partial class MapEditorPanel : MapEditor
         var tileSetSplit = GameApplication.Instance.TileSetConfig.First().Value;
         S_TileMap.Instance.InitTileSet(tileSetSplit);
 
-        S_TabContainer.Instance.SetTabTitle(0, "对象");
-        S_TabContainer.Instance.SetTabTitle(1, "图层");
+        S_TabContainer.Instance.SetTabTitle(0, "图层");
+        S_TabContainer.Instance.SetTabTitle(1, "图块");
+        S_TabContainer.Instance.SetTabTitle(2, "对象");
         //S_MapLayer.Instance.Init(S_MapLayer);
         S_Left.Instance.Resized += OnMapViewResized;
         S_Back.Instance.Pressed += OnBackClick;

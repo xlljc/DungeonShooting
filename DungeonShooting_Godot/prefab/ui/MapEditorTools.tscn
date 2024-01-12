@@ -32,6 +32,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_mqp1c")
+metadata/_edit_vertical_guides_ = [1900.0]
 
 [node name="ToolRoot" type="Control" parent="."]
 anchors_preset = 0
@@ -201,3 +202,15 @@ patch_margin_left = 12
 patch_margin_top = 12
 patch_margin_right = 12
 patch_margin_bottom = 12
+
+[node name="CurrLayer" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 103.0
+offset_right = -20.0
+offset_bottom = 143.0
+grow_horizontal = 0
+text = "当前图层:地板"

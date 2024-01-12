@@ -147,6 +147,10 @@ public enum EventEnum
     /// 设置标记显示状态, 参数<see cref="MarkInfoVisibleData"/>
     /// </summary>
     OnSetMarkVisible,
+    /// <summary>
+    /// 选中TileMap编辑器中的层级, 参数为选择的层级索引, 参数<see cref="int"/>
+    /// </summary>
+    OnSelectTileLayer,
     
     /// <summary>
     /// 保存TileSet, 参数为<see cref="TileSetSplit"/>

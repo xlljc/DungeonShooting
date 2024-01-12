@@ -36,13 +36,11 @@ public partial class MapEditorMapLayerPanel : MapEditorMapLayer
         _grid.SetCellOffset(new Vector2I(0, 2));
         _grid.SetHorizontalExpand(true);
         
-        _grid.Add(new LayerButtonData("地面", false, EditorTileMap.AutoFloorLayer));
-        _grid.Add(new LayerButtonData("自定义底层", false, EditorTileMap.CustomFloorLayer));
-        _grid.Add(new LayerButtonData("中层自动图块", true, EditorTileMap.AutoMiddleLayer));
-        _grid.Add(new LayerButtonData("自定义中层", false, EditorTileMap.CustomMiddleLayer));
-        _grid.Add(new LayerButtonData("高层自动图块", true, EditorTileMap.AutoTopLayer));
-        _grid.Add(new LayerButtonData("自定义高层", false, EditorTileMap.CustomTopLayer));
+        _grid.Add(new LayerButtonData("地板", false, EditorTileMap.AutoFloorLayer));
+        _grid.Add(new LayerButtonData("侧方墙壁", true, EditorTileMap.AutoMiddleLayer));
+        _grid.Add(new LayerButtonData("顶部墙壁", true, EditorTileMap.AutoTopLayer));
         _grid.Add(new LayerButtonData("标记数据层", false, EditorTileMap.MarkLayer));
+        _grid.SelectIndex = 0;
     }
 
     public override void OnDestroyUi()

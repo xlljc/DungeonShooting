@@ -255,17 +255,22 @@ theme_override_constants/margin_bottom = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MapMark" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
-layout_mode = 2
-theme_override_constants/margin_top = 10
-
-[node name="MapEditorMapMark" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapMark" instance=ExtResource("8_8tgeu")]
-layout_mode = 2
-
 [node name="MapLayer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_top = 10
 
 [node name="MapEditorMapLayer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer" instance=ExtResource("7_ychtn")]
+layout_mode = 2
+
+[node name="MapTile" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="MapMark" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="MapEditorMapMark" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapMark" instance=ExtResource("8_8tgeu")]
 layout_mode = 2

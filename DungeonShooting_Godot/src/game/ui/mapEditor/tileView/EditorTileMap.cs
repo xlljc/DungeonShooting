@@ -38,30 +38,30 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// 自动图块地板层
     /// </summary>
     public const int AutoFloorLayer = 0;
-    /// <summary>
-    /// 自定义图块地板层
-    /// </summary>
-    public const int CustomFloorLayer = 1;
+    // /// <summary>
+    // /// 自定义图块地板层
+    // /// </summary>
+    // public const int CustomFloorLayer = 1;
     /// <summary>
     /// 自动图块中间层
     /// </summary>
-    public const int AutoMiddleLayer = 2;
-    /// <summary>
-    /// 自定义图块中间层
-    /// </summary>
-    public const int CustomMiddleLayer = 3;
+    public const int AutoMiddleLayer = 1;
+    // /// <summary>
+    // /// 自定义图块中间层
+    // /// </summary>
+    // public const int CustomMiddleLayer = 3;
     /// <summary>
     /// 自动图块顶层
     /// </summary>
-    public const int AutoTopLayer = 4;
-    /// <summary>
-    /// 自定义图块顶层
-    /// </summary>
-    public const int CustomTopLayer = 5;
+    public const int AutoTopLayer = 2;
+    // /// <summary>
+    // /// 自定义图块顶层
+    // /// </summary>
+    // public const int CustomTopLayer = 5;
     /// <summary>
     /// 标记数据层
     /// </summary>
-    public const int MarkLayer = 10;
+    public const int MarkLayer = 999;
     
     /// <summary>
     /// 所属地图编辑器UI
@@ -569,16 +569,16 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
         _initLayer = true;
         //初始化层级数据
-        AddLayer(CustomFloorLayer);
-        SetLayerZIndex(CustomFloorLayer, CustomFloorLayer);
+        // AddLayer(CustomFloorLayer);
+        // SetLayerZIndex(CustomFloorLayer, CustomFloorLayer);
         AddLayer(AutoMiddleLayer);
         SetLayerZIndex(AutoMiddleLayer, AutoMiddleLayer);
-        AddLayer(CustomMiddleLayer);
-        SetLayerZIndex(CustomMiddleLayer, CustomMiddleLayer);
+        // AddLayer(CustomMiddleLayer);
+        // SetLayerZIndex(CustomMiddleLayer, CustomMiddleLayer);
         AddLayer(AutoTopLayer);
         SetLayerZIndex(AutoTopLayer, AutoTopLayer);
-        AddLayer(CustomTopLayer);
-        SetLayerZIndex(CustomTopLayer, CustomTopLayer);
+        // AddLayer(CustomTopLayer);
+        // SetLayerZIndex(CustomTopLayer, CustomTopLayer);
     }
 
     //缩小
@@ -1252,18 +1252,18 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         MapEditorToolsPanel.Visible = false;
         //显示所有层级
         _tempAutoFloorLayer = IsLayerEnabled(AutoFloorLayer);
-        _tempCustomFloorLayer = IsLayerEnabled(CustomFloorLayer);
+        //_tempCustomFloorLayer = IsLayerEnabled(CustomFloorLayer);
         _tempAutoMiddleLayer = IsLayerEnabled(AutoMiddleLayer);
-        _tempCustomMiddleLayer = IsLayerEnabled(CustomMiddleLayer);
+        //_tempCustomMiddleLayer = IsLayerEnabled(CustomMiddleLayer);
         _tempAutoTopLayer = IsLayerEnabled(AutoTopLayer);
-        _tempCustomTopLayer = IsLayerEnabled(CustomTopLayer);
+        //_tempCustomTopLayer = IsLayerEnabled(CustomTopLayer);
 
         SetLayerEnabled(AutoFloorLayer, true);
-        SetLayerEnabled(CustomFloorLayer, true);
+        //SetLayerEnabled(CustomFloorLayer, true);
         SetLayerEnabled(AutoMiddleLayer, true);
-        SetLayerEnabled(CustomMiddleLayer, true);
+        //SetLayerEnabled(CustomMiddleLayer, true);
         SetLayerEnabled(AutoTopLayer, true);
-        SetLayerEnabled(CustomTopLayer, true);
+        //SetLayerEnabled(CustomTopLayer, true);
     }
 
     private void OnFramePostDraw()
@@ -1283,11 +1283,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 MapEditorToolsPanel.Visible = true;
                 //还原层级显示
                 SetLayerEnabled(AutoFloorLayer, _tempAutoFloorLayer);
-                SetLayerEnabled(CustomFloorLayer, _tempCustomFloorLayer);
+                //SetLayerEnabled(CustomFloorLayer, _tempCustomFloorLayer);
                 SetLayerEnabled(AutoMiddleLayer, _tempAutoMiddleLayer);
-                SetLayerEnabled(CustomMiddleLayer, _tempCustomMiddleLayer);
+                //SetLayerEnabled(CustomMiddleLayer, _tempCustomMiddleLayer);
                 SetLayerEnabled(AutoTopLayer, _tempAutoTopLayer);
-                SetLayerEnabled(CustomTopLayer, _tempCustomTopLayer);
+                //SetLayerEnabled(CustomTopLayer, _tempCustomTopLayer);
 
                 //保存预览图
                 var subViewport = MapEditorPanel.S_SubViewport.Instance;

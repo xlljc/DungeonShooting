@@ -9,6 +9,7 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, MapEditorMa
     public override void OnInit()
     {
         CellNode.L_VisibleButton.Instance.Pressed += OnVisibleButtonClick;
+        CellNode.L_SelectTexture.Instance.Visible = false;
     }
 
     public override void OnSetData(MapEditorMapLayerPanel.LayerButtonData data)
@@ -66,5 +67,15 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, MapEditorMa
         {
             CellNode.L_VisibleButton.Instance.TextureNormal = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Hide_png);
         }
+    }
+
+    public override void OnSelect()
+    {
+        CellNode.L_SelectTexture.Instance.Visible = true;
+    }
+
+    public override void OnUnSelect()
+    {
+        CellNode.L_SelectTexture.Instance.Visible = false;
     }
 }
