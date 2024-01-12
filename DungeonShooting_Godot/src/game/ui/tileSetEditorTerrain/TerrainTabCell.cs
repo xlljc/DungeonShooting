@@ -9,7 +9,15 @@ public class TerrainTabCell : UiCell<TileSetEditorTerrain.TerrainTab, TileSetTer
 
     public override void OnSetData(TileSetTerrainInfo data)
     {
-        CellNode.Instance.Text = data.Name;
+        RefreshData();
+    }
+
+    /// <summary>
+    /// 刷新数据
+    /// </summary>
+    public void RefreshData()
+    {
+        CellNode.Instance.Text = Data.Name;
     }
 
     public override void OnSelect()

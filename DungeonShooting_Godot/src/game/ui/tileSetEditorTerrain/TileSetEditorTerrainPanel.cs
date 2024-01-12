@@ -13,7 +13,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     /// <summary>
     /// 当前选中的地形索引
     /// </summary>
-    public int CurrTerrainIndex { get; set; } = -1;
+    public int CurrTerrainIndex => TerrainTabGrid.SelectIndex;
 
     /// <summary>
     /// 当前选中的地形
@@ -71,11 +71,13 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         TerrainGrid2x2 = InitTopGrid(S_TerrainRoot.L_TerrainTexture4.Instance, GameConfig.TerrainBit2x2, TileSetTerrainInfo.TerrainLayerType);
         TerrainGridMiddle = InitTopGrid(S_TerrainRoot.L_TerrainTexture2.Instance, GameConfig.TerrainBitMiddle, TileSetTerrainInfo.MiddleLayerType);
         TerrainGridFloor = InitTopGrid(S_TerrainRoot.L_TerrainTexture3.Instance, GameConfig.TerrainBitFloor, TileSetTerrainInfo.FloorLayerType);
-
+        
         //删除地形按钮
         S_DeleteButton.Instance.Pressed += OnDeleteTerrainClick;
         //添加地形按钮
         S_AddButton.Instance.Pressed += OnAddTerrainClick;
+        //编辑地形
+        S_EditButton.Instance.Pressed += OnEditTerrainClick;
         
         OnSetTileTexture(EditorPanel.Texture);
         OnChangeTileSetBgColor(EditorPanel.BgColor);
@@ -99,18 +101,21 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             _refreshGridConnect = false;
 
             var terrain = CurrTerrain;
-            if (terrain.TerrainType == 0) //选中47格Terrain
+            if (terrain != null)
             {
-                TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
-                if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
+                if (terrain.TerrainType == 0) //选中47格Terrain
                 {
-                    TerrainGridMiddle.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
-                    TerrainGridFloor.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                    TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                    if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
+                    {
+                        TerrainGridMiddle.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                        TerrainGridFloor.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                    }
                 }
-            }
-            else //选中13格Terrain
-            {
-                TerrainGrid2x2.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                else //选中13格Terrain
+                {
+                    TerrainGrid2x2.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                }
             }
         }
     }
@@ -185,7 +190,12 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     /// </summary>
     public void OnDropCell(MaskCell maskCell)
     {
-        if (CurrTerrain.TerrainType == 0) //选中47个Terrain
+        var terrain = CurrTerrain;
+        if (terrain == null)
+        {
+            return;
+        }
+        if (terrain.TerrainType == 0) //选中47个Terrain
         {
             var flag = true;
             TerrainGrid3x3.ForEach((cell) =>
@@ -255,8 +265,6 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     //切换选中的地形
     private void OnChangeTerrain(int index)
     {
-        CurrTerrainIndex = index;
-        
         //清除所有绑定的Terrain
         if (index >= 0)
         {
@@ -269,18 +277,21 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         S_BottomBg.Instance.SetHoverCell(null);
         
         var terrain = CurrTerrain;
-        if (terrain.TerrainType == 0) //选中47个Terrain
+        if (terrain != null)
         {
-            TerrainGrid3x3.ForEach(cell => SetTerrainCellData(terrain, cell));
-            if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
+            if (terrain.TerrainType == 0) //选中47个Terrain
             {
-                TerrainGridMiddle.ForEach(cell => SetTerrainCellData(terrain, cell));
-                TerrainGridFloor.ForEach(cell => SetTerrainCellData(terrain, cell));
+                TerrainGrid3x3.ForEach(cell => SetTerrainCellData(terrain, cell));
+                if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
+                {
+                    TerrainGridMiddle.ForEach(cell => SetTerrainCellData(terrain, cell));
+                    TerrainGridFloor.ForEach(cell => SetTerrainCellData(terrain, cell));
+                }
             }
-        }
-        else //选中13格Terrain
-        {
-            TerrainGrid2x2.ForEach(cell => SetTerrainCellData(terrain, cell));
+            else //选中13格Terrain
+            {
+                TerrainGrid2x2.ForEach(cell => SetTerrainCellData(terrain, cell));
+            }
         }
         
         if (index >= 0)
@@ -343,7 +354,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     {
         if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //不能删除 Main Terrain
         {
-            EditorWindowManager.ShowTips("警告", "不允许删 Main Terrain！");
+            EditorWindowManager.ShowTips("警告", "不允许删除 Main Terrain！");
             return;
         }
 
@@ -354,15 +365,75 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             {
                 if (v)
                 {
+                    var index = TerrainTabGrid.SelectIndex;
                     //执行删除操作
+                    EditorPanel.TileSetSourceInfo.Terrain.Remove(terrain);
+                    TerrainTabGrid.RemoveByIndex(index);
+                    if (index == TerrainTabGrid.Count)
+                    {
+                        TerrainTabGrid.SelectIndex = TerrainTabGrid.Count - 1;
+                    }
+                    else
+                    {
+                        TerrainTabGrid.SelectIndex = index;
+                    }
+                    EventManager.EmitEvent(EventEnum.OnTileMapDirty);
                 }
             });
+        }
+        else
+        {
+            EditorWindowManager.ShowTips("提示", "清选择一个Terrain！");
         }
     }
 
     //创建地形
     private void OnAddTerrainClick()
     {
+        EditorWindowManager.ShowCreateTerrain(EditorPanel.TileSetSourceInfo, terrainInfo =>
+        {
+            //执行添加操作
+            EditorPanel.TileSetSourceInfo.Terrain.Add(terrainInfo);
+            TerrainTabGrid.Add(terrainInfo, true);
+            EventManager.EmitEvent(EventEnum.OnTileMapDirty);
+        });
+    }
+    
+    //编辑地形(重命名)
+    private void OnEditTerrainClick()
+    {
+        if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //不能删除 Main Terrain
+        {
+            EditorWindowManager.ShowTips("警告", "不允许重命名 Main Terrain！");
+            return;
+        }
         
+        var terrain = CurrTerrain;
+        if (terrain != null)
+        {
+            EditorWindowManager.ShowInput("提示", $"是否删除地形'{terrain.Name}'？", terrain.Name, (v, isClose) =>
+            {
+                if (string.IsNullOrEmpty(v))
+                {
+                    EditorWindowManager.ShowTips("错误", $"名称不允许为空！");
+                    return false;
+                }
+                if (terrain.Name != v && EditorPanel.TileSetSourceInfo.Terrain.FindIndex(info => info.Name == v) >= 0)
+                {
+                    EditorWindowManager.ShowTips("错误", $"已经有相同名称的Terrain了！");
+                    return false;
+                }
+
+                terrain.Name = v;
+                //刷新页签
+                ((TerrainTabCell)TerrainTabGrid.GetCell(CurrTerrainIndex)).RefreshData();
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
+                return true;
+            });
+        }
+        else
+        {
+            EditorWindowManager.ShowTips("提示", "清选择一个Terrain！");
+        }
     }
 }

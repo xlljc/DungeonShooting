@@ -5,6 +5,7 @@ using System.IO;
 using Config;
 using Godot;
 using UI.EditorColorPicker;
+using UI.EditorForm;
 using UI.EditorImportCombination;
 using UI.EditorInfo;
 using UI.EditorInput;
@@ -226,7 +227,7 @@ public static class EditorWindowManager
                 //检查名称是否合规
                 if (string.IsNullOrEmpty(groupName))
                 {
-                    ShowTips("错误", "组名称不能为空!");
+                    ShowTips("错误", "组名称不能为空！");
                     return;
                 }
         
@@ -235,7 +236,7 @@ public static class EditorWindowManager
                 var dir = new DirectoryInfo(path);
                 if (dir.Exists && dir.GetDirectories().Length > 0)
                 {
-                    ShowTips("错误", $"已经有相同路径的房间了!");
+                    ShowTips("错误", $"已经有相同路径的房间了！");
                     return;
                 }
 
@@ -586,7 +587,7 @@ public static class EditorWindowManager
                 //检查名称是否合规
                 if (string.IsNullOrEmpty(name))
                 {
-                    ShowTips("错误", "名称不能为空!");
+                    ShowTips("错误", "名称不能为空！");
                     return;
                 }
 
@@ -595,7 +596,7 @@ public static class EditorWindowManager
                 var dir = new DirectoryInfo(path);
                 if (dir.Exists && dir.GetFiles().Length > 0)
                 {
-                    ShowTips("错误", $"已经有相同名称的TileSet了!");
+                    ShowTips("错误", $"已经有相同名称的TileSet了！");
                     return;
                 }
 
@@ -634,6 +635,116 @@ public static class EditorWindowManager
                 tileSetSplit.Remark = infoData.Remark;
                 window.CloseWindow();
                 onCreateTileSet(tileSetSplit);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
+    /// 显示创建地形的面板
+    /// </summary>
+    /// <param name="sourceInfo">创建地形时所在的TileSource</param>
+    /// <param name="onCreate">创建完成回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowCreateTerrain(TileSetSourceInfo sourceInfo, Action<TileSetTerrainInfo> onCreate, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("创建Terrain");
+        window.SetWindowSize(new Vector2I(600, 350));
+        var body = window.OpenBody<EditorFormPanel>(UiManager.UiNames.EditorForm);
+        
+        //第一项
+        var item1 = new FormItemData<LineEdit>("地形名称", new LineEdit()
+        {
+            PlaceholderText = "请输入名称"
+        });
+        //第二项
+        var option = new OptionButton();
+        option.AddItem("3x3掩码（47格）");
+        option.AddItem("2x2掩码（13格）");
+        option.Selected = 0;
+        var item2 = new FormItemData<OptionButton>("掩码类型", option);
+        
+        body.AddItem(item1);
+        body.AddItem(item2);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                var text = item1.UiNode.Text;
+                if (string.IsNullOrEmpty(text))
+                {
+                    ShowTips("错误", $"名称不允许为空！");
+                    return;
+                }
+                
+                if (sourceInfo.Terrain.FindIndex(info => info.Name == text) >= 0)
+                {
+                    ShowTips("错误", $"已经有相同名称的Terrain了！");
+                    return;
+                }
+
+                var terrainInfo = new TileSetTerrainInfo();
+                terrainInfo.InitData();
+                terrainInfo.Name = text;
+                terrainInfo.TerrainType = (byte)option.Selected;
+                
+                window.CloseWindow();
+                onCreate(terrainInfo);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+    
+    /// <summary>
+    /// 显示编辑地形的MainBu
+    /// </summary>
+    /// <param name="sourceInfo">创建地形时所在的TileSource</param>
+    /// <param name="onCreate">创建完成回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowEditTerrain(TileSetSourceInfo sourceInfo, Action<TileSetTerrainInfo> onCreate, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("创建Terrain");
+        window.SetWindowSize(new Vector2I(600, 350));
+        var body = window.OpenBody<EditorFormPanel>(UiManager.UiNames.EditorForm);
+        
+        //第一项
+        var item1 = new FormItemData<LineEdit>("地形名称", new LineEdit()
+        {
+            PlaceholderText = "请输入名称"
+        });
+        //第二项
+        var option = new OptionButton();
+        option.AddItem("3x3掩码（47格）");
+        option.AddItem("2x2掩码（13格）");
+        option.Selected = 0;
+        var item2 = new FormItemData<OptionButton>("掩码类型", option);
+        
+        body.AddItem(item1);
+        body.AddItem(item2);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                var text = item1.UiNode.Text;
+                if (sourceInfo.Terrain.FindIndex(info => info.Name == text) >= 0)
+                {
+                    ShowTips("错误", $"已经有相同名称的Terrain了！");
+                    return;
+                }
+
+                var terrainInfo = new TileSetTerrainInfo();
+                terrainInfo.InitData();
+                terrainInfo.Name = text;
+                terrainInfo.TerrainType = (byte)option.Selected;
+                
+                window.CloseWindow();
+                onCreate(terrainInfo);
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {

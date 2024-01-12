@@ -8,6 +8,7 @@ public static partial class UiManager
         public const string BottomTips = "BottomTips";
         public const string Debugger = "Debugger";
         public const string EditorColorPicker = "EditorColorPicker";
+        public const string EditorForm = "EditorForm";
         public const string EditorImportCombination = "EditorImportCombination";
         public const string EditorInfo = "EditorInfo";
         public const string EditorInput = "EditorInput";
@@ -179,6 +180,54 @@ public static partial class UiManager
     public static UI.EditorColorPicker.EditorColorPickerPanel[] Get_EditorColorPicker_Instance()
     {
         return GetUiInstance<UI.EditorColorPicker.EditorColorPickerPanel>(nameof(UI.EditorColorPicker.EditorColorPicker));
+    }
+
+    /// <summary>
+    /// 创建 EditorForm, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorForm.EditorFormPanel Create_EditorForm()
+    {
+        return CreateUi<UI.EditorForm.EditorFormPanel>(UiNames.EditorForm);
+    }
+
+    /// <summary>
+    /// 打开 EditorForm, 并返回UI实例
+    /// </summary>
+    public static UI.EditorForm.EditorFormPanel Open_EditorForm()
+    {
+        return OpenUi<UI.EditorForm.EditorFormPanel>(UiNames.EditorForm);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorForm 的所有实例
+    /// </summary>
+    public static void Hide_EditorForm()
+    {
+        var uiInstance = Get_EditorForm_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorForm 的所有实例
+    /// </summary>
+    public static void Destroy_EditorForm()
+    {
+        var uiInstance = Get_EditorForm_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorForm 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorForm.EditorFormPanel[] Get_EditorForm_Instance()
+    {
+        return GetUiInstance<UI.EditorForm.EditorFormPanel>(nameof(UI.EditorForm.EditorForm));
     }
 
     /// <summary>

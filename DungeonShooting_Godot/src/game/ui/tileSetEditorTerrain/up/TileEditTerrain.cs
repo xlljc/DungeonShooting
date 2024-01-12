@@ -36,9 +36,10 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
     {
         TerrainCell cell = null;
         var _panel = UiNode.UiPanel;
-        if (_panel.S_TopBg.Instance.IsMouseInRect())
+        var terrain = _panel.CurrTerrain;
+        if (terrain != null && _panel.S_TopBg.Instance.IsMouseInRect())
         {
-            if (_panel.CurrTerrain.TerrainType == 0) //选中47个Terrain
+            if (terrain.TerrainType == 0) //选中47个Terrain
             {
                 cell = CalcMouseHoverCell(_panel.S_TerrainTexture1.Instance, _panel.TerrainGrid3x3);
                 if (_panel.EditorPanel.TileSetSourceIndex == 0 && _panel.CurrTerrainIndex == 0) //选中Main Source
@@ -113,14 +114,22 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
         {
             rootSize = UiNode.L_TerrainRoot.Instance.Size;
         }
-        else if (panel.CurrTerrain.TerrainType == 0) //选中 47 格 Terrain
+        else if (panel.CurrTerrain != null)
         {
-            rootSize = UiNode.L_TerrainRoot.L_TerrainTexture1.Instance.Size;
+            if (panel.CurrTerrain.TerrainType == 0) //选中 47 格 Terrain
+            {
+                rootSize = UiNode.L_TerrainRoot.L_TerrainTexture1.Instance.Size;
+            }
+            else //13 格 Terrain
+            {
+                rootSize = UiNode.L_TerrainRoot.L_TerrainTexture4.Instance.Size;
+            }
         }
-        else //13 格 Terrain
+        else
         {
-            rootSize = UiNode.L_TerrainRoot.L_TerrainTexture4.Instance.Size;
+            rootSize = Vector2.One;
         }
+
         Utils.DoFocusNode(ContainerRoot, Size, rootSize);
         RefreshGridTrans();
     }

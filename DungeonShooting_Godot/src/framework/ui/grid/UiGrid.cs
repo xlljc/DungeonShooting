@@ -52,10 +52,11 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
                 {
                     var uiCell = _cellList[newIndex];
                     uiCell.OnSelect();
-                    if (SelectEvent != null)
-                    {
-                        SelectEvent(newIndex);
-                    }
+                }
+                
+                if (SelectEvent != null)
+                {
+                    SelectEvent(newIndex);
                 }
             }
         }
@@ -343,15 +344,17 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
     }
 
     /// <summary>
-    /// 添加单条 Cell 数据
+    /// 添加单条 Cell 数据, select 为是否立即选中
     /// </summary>
-    public void Add(TData data)
+    public void Add(TData data, bool select = false)
     {
-        //取消选中
-        SelectIndex = -1;
         var cell = GetCellInstance();
         GridContainer.AddChild(cell.CellNode.GetUiInstance());
         cell.SetData(data);
+        if (select)
+        {
+            SelectIndex = Count - 1;
+        }
     }
 
     /// <summary>

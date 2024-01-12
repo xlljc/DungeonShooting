@@ -70,7 +70,9 @@ public class ResourcePath
     public const string prefab_ui_BottomTips_tscn = "res://prefab/ui/BottomTips.tscn";
     public const string prefab_ui_Debugger_tscn = "res://prefab/ui/Debugger.tscn";
     public const string prefab_ui_EditorColorPicker_tscn = "res://prefab/ui/EditorColorPicker.tscn";
+    public const string prefab_ui_EditorForm_tscn = "res://prefab/ui/EditorForm.tscn";
     public const string prefab_ui_EditorImportCombination_tscn = "res://prefab/ui/EditorImportCombination.tscn";
+    public const string prefab_ui_EditorInfo_tscn = "res://prefab/ui/EditorInfo.tscn";
     public const string prefab_ui_EditorInput_tscn = "res://prefab/ui/EditorInput.tscn";
     public const string prefab_ui_EditorTips_tscn = "res://prefab/ui/EditorTips.tscn";
     public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
@@ -78,7 +80,6 @@ public class ResourcePath
     public const string prefab_ui_Loading_tscn = "res://prefab/ui/Loading.tscn";
     public const string prefab_ui_Main_tscn = "res://prefab/ui/Main.tscn";
     public const string prefab_ui_MapEditor_tscn = "res://prefab/ui/MapEditor.tscn";
-    public const string prefab_ui_MapEditorCreateGroup_tscn = "res://prefab/ui/MapEditorCreateGroup.tscn";
     public const string prefab_ui_MapEditorCreateMark_tscn = "res://prefab/ui/MapEditorCreateMark.tscn";
     public const string prefab_ui_MapEditorCreatePreinstall_tscn = "res://prefab/ui/MapEditorCreatePreinstall.tscn";
     public const string prefab_ui_MapEditorCreateRoom_tscn = "res://prefab/ui/MapEditorCreateRoom.tscn";
@@ -121,6 +122,12 @@ public class ResourcePath
     public const string resource_font_DinkieBitmap9pxItalicDemo_ttf = "res://resource/font/DinkieBitmap-9pxItalicDemo.ttf";
     public const string resource_font_VonwaonBitmap12px_ttf = "res://resource/font/VonwaonBitmap-12px.ttf";
     public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
+    public const string resource_map_tileSet_TileSetConfig_json = "res://resource/map/tileSet/TileSetConfig.json";
+    public const string resource_map_tileSet_TileSet1_Main_png = "res://resource/map/tileSet/TileSet1/Main.png";
+    public const string resource_map_tileSet_TileSet1_TileSet_json = "res://resource/map/tileSet/TileSet1/TileSet.json";
+    public const string resource_map_tileSet_TileSet2_Main_png = "res://resource/map/tileSet/TileSet2/Main.png";
+    public const string resource_map_tileSet_TileSet2_Test2_png = "res://resource/map/tileSet/TileSet2/Test2.png";
+    public const string resource_map_tileSet_TileSet2_TileSet_json = "res://resource/map/tileSet/TileSet2/TileSet.json";
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";
     public const string resource_material_Blend_tres = "res://resource/material/Blend.tres";
     public const string resource_material_GodRays_gdshader = "res://resource/material/GodRays.gdshader";
@@ -228,6 +235,7 @@ public class ResourcePath
     public const string resource_sprite_map_TerrainMask_png = "res://resource/sprite/map/TerrainMask.png";
     public const string resource_sprite_map_TerrainMask2_png = "res://resource/sprite/map/TerrainMask2.png";
     public const string resource_sprite_map_TerrainMask3_png = "res://resource/sprite/map/TerrainMask3.png";
+    public const string resource_sprite_map_TerrainMask4_png = "res://resource/sprite/map/TerrainMask4.png";
     public const string resource_sprite_map_WallTransition1_png = "res://resource/sprite/map/WallTransition1.png";
     public const string resource_sprite_map_WallTransition2_png = "res://resource/sprite/map/WallTransition2.png";
     public const string resource_sprite_map_WallTransition3_png = "res://resource/sprite/map/WallTransition3.png";
@@ -332,6 +340,7 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_Select_png = "res://resource/sprite/ui/commonIcon/Select.png";
     public const string resource_sprite_ui_commonIcon_Select2_png = "res://resource/sprite/ui/commonIcon/Select2.png";
     public const string resource_sprite_ui_commonIcon_Setting_png = "res://resource/sprite/ui/commonIcon/Setting.png";
+    public const string resource_sprite_ui_commonIcon_Success_mini_png = "res://resource/sprite/ui/commonIcon/Success_mini.png";
     public const string resource_sprite_ui_commonIcon_Unknown_png = "res://resource/sprite/ui/commonIcon/Unknown.png";
     public const string resource_sprite_ui_commonIcon_UnknownActivity_png = "res://resource/sprite/ui/commonIcon/UnknownActivity.png";
     public const string resource_sprite_ui_commonIcon_Unlock_png = "res://resource/sprite/ui/commonIcon/Unlock.png";
@@ -444,6 +453,7 @@ public class ResourcePath
     public const string scene_test_TestCreateSector_tscn = "res://scene/test/TestCreateSector.tscn";
     public const string scene_test_TestDrawSprite_tscn = "res://scene/test/TestDrawSprite.tscn";
     public const string scene_test_TestGridData_tscn = "res://scene/test/TestGridData.tscn";
+    public const string scene_test_TestLoadTileSetConfig_tscn = "res://scene/test/TestLoadTileSetConfig.tscn";
     public const string scene_test_TestMask_tscn = "res://scene/test/TestMask.tscn";
     public const string scene_test_TestMask2_tscn = "res://scene/test/TestMask2.tscn";
     public const string scene_test_TestNavigation2_tscn = "res://scene/test/TestNavigation2.tscn";
@@ -455,5 +465,6 @@ public class ResourcePath
     public const string scene_test_TestPerfectPixel_tscn = "res://scene/test/TestPerfectPixel.tscn";
     public const string scene_test_TestPerfectPixelScene_tscn = "res://scene/test/TestPerfectPixelScene.tscn";
     public const string scene_test_TestRoomFog_tscn = "res://scene/test/TestRoomFog.tscn";
+    public const string scene_test_TestTerrain2x2_tscn = "res://scene/test/TestTerrain2x2.tscn";
     public const string scene_test_TestTileLayer_tscn = "res://scene/test/TestTileLayer.tscn";
 }

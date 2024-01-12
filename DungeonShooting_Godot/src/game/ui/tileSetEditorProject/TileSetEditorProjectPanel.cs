@@ -87,6 +87,11 @@ public partial class TileSetEditorProjectPanel : TileSetEditorProject
             tileSetSourceInfo.InitData();
             tileSetSourceInfo.Name = "Main";
             tileSetInfo.Sources.Add(tileSetSourceInfo);
+            //默认创建一个Main Terrain, 该Terrain不可删除
+            var tileSetTerrainInfo = new TileSetTerrainInfo();
+            tileSetTerrainInfo.InitData();
+            tileSetTerrainInfo.Name = "Main";
+            tileSetSourceInfo.Terrain.Add(tileSetTerrainInfo);
 
             split.SetTileSetInfo(tileSetInfo);
             GameApplication.Instance.TileSetConfig.Add(name, split);
