@@ -133,7 +133,7 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
     
     private void OnDraw()
     {
-        if (ConnectMaskCell != null && (Hover || ConnectMaskCell.Hover))
+        if (ConnectMaskCell != null && (Hover || (ConnectMaskCell.Hover && CellNode.UiPanel.CurrTerrainIndex == ConnectMaskCell.ConnectTerrainIndex)))
         {
             CellNode.Instance.DrawRect(
                 new Rect2(Vector2.Zero, CellNode.Instance.Size),

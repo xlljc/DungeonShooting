@@ -63,7 +63,7 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
 
     private void Draw()
     {
-        if (Hover || (ConnectTerrainCell != null && ConnectTerrainCell.Hover))
+        if (Hover || (ConnectTerrainCell != null && ConnectTerrainCell.Hover && CellNode.UiPanel.CurrTerrainIndex == ConnectTerrainIndex))
         {
             CellNode.Instance.DrawRect(
                 new Rect2(Vector2.Zero, CellNode.Instance.Size),
