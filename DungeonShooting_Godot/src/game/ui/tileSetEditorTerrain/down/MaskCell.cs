@@ -10,9 +10,9 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
     public TerrainCell ConnectTerrainCell { get; private set; }
     
     /// <summary>
-    /// 已经赋值并连接的Terrain所以
+    /// 是否使用
     /// </summary>
-    public int ConnectTerrainIndex { get; private set; }
+    public bool UseFlag { get; private set; }
     
     /// <summary>
     /// 鼠标是否悬停
@@ -21,9 +21,11 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
     
     private TextureRect _textureRect;
     private TileSetEditorTerrainPanel _panel;
+    private float _startA;
 
     public override void OnInit()
     {
+        _startA = CellNode.Instance.Color.A;
         _panel = CellNode.UiPanel;
         _textureRect = _panel.S_BottomBg.L_TileTexture.Instance;
         CellNode.Instance.Draw += Draw;
@@ -31,7 +33,8 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
 
     public override void OnDisable()
     {
-        SetConnectTerrainCell(null, -1);
+        SetUseFlag(false);
+        SetConnectTerrainCell(null);
     }
 
     public override void Process(float delta)
@@ -42,7 +45,7 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
     /// <summary>
     /// 设置连接的Cell
     /// </summary>
-    public void SetConnectTerrainCell(TerrainCell terrainCell, int terrainIndex)
+    public void SetConnectTerrainCell(TerrainCell terrainCell)
     {
         if (terrainCell == null)
         {
@@ -57,26 +60,42 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
             ConnectTerrainCell = terrainCell;
             terrainCell.ConnectMaskCell = this;
         }
-
-        ConnectTerrainIndex = terrainIndex;
+    }
+    
+    /// <summary>
+    /// 设置是否使用
+    /// </summary>
+    public void SetUseFlag(bool flag)
+    {
+        UseFlag = flag;
+        CellNode.Instance.Color = new Color(0, 0, 0, flag ? 0 : _startA);
     }
 
     private void Draw()
     {
-        if (Hover || (ConnectTerrainCell != null && ConnectTerrainCell.Hover && CellNode.UiPanel.CurrTerrainIndex == ConnectTerrainIndex))
+        if (Hover || (ConnectTerrainCell != null && ConnectTerrainCell.Hover))
         {
             CellNode.Instance.DrawRect(
                 new Rect2(Vector2.Zero, CellNode.Instance.Size),
                 new Color(0, 1, 0, 0.3f)
             );
         }
-        if (ConnectTerrainCell != null)
+        
+        //选中时绘制轮廓
+        if (ConnectTerrainCell != null) //存在连接的Cell
         {
-            var color = CellNode.UiPanel.CurrTerrainIndex == ConnectTerrainIndex ? new Color(0, 1, 0) : new Color(1, 1, 1);
-            //选中时绘制轮廓
+            var width = 2f / _textureRect.Scale.X;
             CellNode.Instance.DrawRect(
-                new Rect2(Vector2.Zero, CellNode.Instance.Size),
-                color, false, 2f / _textureRect.Scale.X
+                new Rect2(Vector2.Zero + new Vector2(width / 2f, width / 2f), CellNode.Instance.Size - new Vector2(width, width)),
+                new Color(0, 1, 0, 0.6f), false, width
+            );
+        }
+        else if (UseFlag)
+        {
+            var width = 2f / _textureRect.Scale.X;
+            CellNode.Instance.DrawRect(
+                new Rect2(Vector2.Zero + new Vector2(width / 2f, width / 2f), CellNode.Instance.Size - new Vector2(width, width)),
+                new Color(1, 1, 1, 0.6f), false, width
             );
         }
     }

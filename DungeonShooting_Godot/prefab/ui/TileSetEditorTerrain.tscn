@@ -300,11 +300,12 @@ offset_right = 1.0
 offset_bottom = 1.0
 mouse_filter = 2
 
-[node name="BottomCell" type="Control" parent="VSplitContainer/PanelBottom/BottomBg/TileTexture/CellRoot"]
-anchors_preset = 0
+[node name="BottomCell" type="ColorRect" parent="VSplitContainer/PanelBottom/BottomBg/TileTexture/CellRoot"]
+layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 mouse_filter = 2
+color = Color(0, 0, 0, 0.588235)
 
 [node name="MaskBrush" type="Control" parent="VSplitContainer/PanelBottom/BottomBg/TileTexture"]
 layout_mode = 1

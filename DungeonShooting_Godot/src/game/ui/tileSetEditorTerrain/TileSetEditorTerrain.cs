@@ -648,12 +648,12 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.BottomBg.TileTexture.CellRoot.BottomCell
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.BottomBg.TileTexture.CellRoot.BottomCell
     /// </summary>
-    public class BottomCell : UiNode<TileSetEditorTerrainPanel, Godot.Control, BottomCell>
+    public class BottomCell : UiNode<TileSetEditorTerrainPanel, Godot.ColorRect, BottomCell>
     {
-        public BottomCell(TileSetEditorTerrainPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
-        public override BottomCell Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+        public BottomCell(TileSetEditorTerrainPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override BottomCell Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
     }
 
     /// <summary>
@@ -662,13 +662,13 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public class CellRoot_1 : UiNode<TileSetEditorTerrainPanel, Godot.Control, CellRoot_1>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.BottomBg.TileTexture.BottomCell
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.BottomBg.TileTexture.BottomCell
         /// </summary>
         public BottomCell L_BottomCell
         {
             get
             {
-                if (_L_BottomCell == null) _L_BottomCell = new BottomCell(UiPanel, Instance.GetNode<Godot.Control>("BottomCell"));
+                if (_L_BottomCell == null) _L_BottomCell = new BottomCell(UiPanel, Instance.GetNode<Godot.ColorRect>("BottomCell"));
                 return _L_BottomCell;
             }
         }
@@ -956,7 +956,7 @@ public abstract partial class TileSetEditorTerrain : UiBase
     public PanelTop S_PanelTop => L_VSplitContainer.L_PanelTop;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.BottomBg.TileTexture.CellRoot.BottomCell
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelBottom.BottomBg.TileTexture.CellRoot.BottomCell
     /// </summary>
     public BottomCell S_BottomCell => L_VSplitContainer.L_PanelBottom.L_BottomBg.L_TileTexture.L_CellRoot.L_BottomCell;
 

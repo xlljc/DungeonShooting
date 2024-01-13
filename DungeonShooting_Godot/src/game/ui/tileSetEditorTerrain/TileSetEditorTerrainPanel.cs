@@ -100,24 +100,24 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         {
             _refreshGridConnect = false;
 
-            // var terrainList = EditorPanel.TileSetSourceInfo.Terrain;
-            // for (var i = 0; i < terrainList.Count; i++)
-            // {
-            //     var terrain = terrainList[i];
-            //     if (terrain.TerrainType == 0) //选中47格Terrain
-            //     {
-            //         TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(i, terrain, cell));
-            //         if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
-            //         {
-            //             TerrainGridMiddle.ForEach(cell => RefreshConnectTerrainCell(i, terrain, cell));
-            //             TerrainGridFloor.ForEach(cell => RefreshConnectTerrainCell(i, terrain, cell));
-            //         }
-            //     }
-            //     else //选中13格Terrain
-            //     {
-            //         TerrainGrid2x2.ForEach(cell => RefreshConnectTerrainCell(i, terrain, cell));
-            //     }
-            // }
+            var terrainList = EditorPanel.TileSetSourceInfo.Terrain;
+            for (var i = 0; i < terrainList.Count; i++)
+            {
+                var terrain = terrainList[i];
+                if (terrain.TerrainType == 0) //选中47格Terrain
+                {
+                    TerrainGrid3x3.ForEach(cell => RefreshTerrainCellUseFlag(terrain, cell));
+                    if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
+                    {
+                        TerrainGridMiddle.ForEach(cell => RefreshTerrainCellUseFlag(terrain, cell));
+                        TerrainGridFloor.ForEach(cell => RefreshTerrainCellUseFlag(terrain, cell));
+                    }
+                }
+                else //选中13格Terrain
+                {
+                    TerrainGrid2x2.ForEach(cell => RefreshTerrainCellUseFlag(terrain, cell));
+                }
+            }
         }
     }
 
@@ -168,7 +168,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         }
     }
     
-    private void RefreshConnectTerrainCell(int terrainIndex, TileSetTerrainInfo terrain, UiCell<RightCell, byte> cell)
+    private void RefreshConnectTerrainCell(TileSetTerrainInfo terrain, UiCell<RightCell, byte> cell)
     {
         var data = terrain.GetTerrainCell(cell.Index, cell.Data);
         if (data != null)
@@ -181,7 +181,23 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             if (maskCell != null)
             {
                 //绑定TerrainCell
-                maskCell.SetConnectTerrainCell(terrainCell, terrainIndex);
+                maskCell.SetConnectTerrainCell(terrainCell);
+            }
+        }
+    }
+    
+    private void RefreshTerrainCellUseFlag(TileSetTerrainInfo terrain, UiCell<RightCell, byte> cell)
+    {
+        var data = terrain.GetTerrainCell(cell.Index, cell.Data);
+        if (data != null)
+        {
+            var x = data[0];
+            var y = data[1];
+            var index = x / GameConfig.TileCellSize + y / GameConfig.TileCellSize * MaskGrid.GetColumns();
+            var maskCell = (MaskCell)MaskGrid.GetCell(index);
+            if (maskCell != null)
+            {
+                maskCell.SetUseFlag(true);
             }
         }
     }
@@ -279,7 +295,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         
         MaskGrid.ForEach(cell =>
         {
-            ((MaskCell)cell).SetConnectTerrainCell(null, -1);
+            ((MaskCell)cell).SetConnectTerrainCell(null);
         });
         
         var terrain = CurrTerrain;
@@ -287,35 +303,32 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         {
             if (terrain.TerrainType == 0) //选中47个Terrain
             {
-                TerrainGrid3x3.ForEach(cell => SetTerrainCellData(terrain, cell));
+                TerrainGrid3x3.ForEach(cell =>
+                {
+                    SetTerrainCellData(terrain, cell);
+                    RefreshConnectTerrainCell(terrain, cell);
+                });
                 if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
                 {
-                    TerrainGridMiddle.ForEach(cell => SetTerrainCellData(terrain, cell));
-                    TerrainGridFloor.ForEach(cell => SetTerrainCellData(terrain, cell));
+                    TerrainGridMiddle.ForEach(cell =>
+                    {
+                        SetTerrainCellData(terrain, cell);
+                        RefreshConnectTerrainCell(terrain, cell);
+                    });
+                    TerrainGridFloor.ForEach(cell =>
+                    {
+                        SetTerrainCellData(terrain, cell);
+                        RefreshConnectTerrainCell(terrain, cell);
+                    });
                 }
             }
             else //选中13格Terrain
             {
-                TerrainGrid2x2.ForEach(cell => SetTerrainCellData(terrain, cell));
-            }
-            
-            var terrainList = EditorPanel.TileSetSourceInfo.Terrain;
-            for (var i = 0; i < terrainList.Count; i++)
-            {
-                var terrainInfo = terrainList[i];
-                if (terrainInfo.TerrainType == 0) //选中47格Terrain
+                TerrainGrid2x2.ForEach(cell =>
                 {
-                    TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(i, terrainInfo, cell));
-                    if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
-                    {
-                        TerrainGridMiddle.ForEach(cell => RefreshConnectTerrainCell(i, terrainInfo, cell));
-                        TerrainGridFloor.ForEach(cell => RefreshConnectTerrainCell(i, terrainInfo, cell));
-                    }
-                }
-                else //选中13格Terrain
-                {
-                    TerrainGrid2x2.ForEach(cell => RefreshConnectTerrainCell(i, terrainInfo, cell));
-                }
+                    SetTerrainCellData(terrain, cell);
+                    RefreshConnectTerrainCell(terrain, cell);
+                });
             }
         }
         
@@ -402,7 +415,8 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                             terrainCell.ClearCell();
                             if (terrainCell.ConnectMaskCell != null)
                             {
-                                terrainCell.ConnectMaskCell.SetConnectTerrainCell(null, -1);
+                                terrainCell.ConnectMaskCell.SetUseFlag(false);
+                                terrainCell.ConnectMaskCell.SetConnectTerrainCell(null);
                             }
                         });
                     }
@@ -414,7 +428,8 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                             terrainCell.ClearCell();
                             if (terrainCell.ConnectMaskCell != null)
                             {
-                                terrainCell.ConnectMaskCell.SetConnectTerrainCell(null, -1);
+                                terrainCell.ConnectMaskCell.SetUseFlag(false);
+                                terrainCell.ConnectMaskCell.SetConnectTerrainCell(null);
                             }
                         });
                     }

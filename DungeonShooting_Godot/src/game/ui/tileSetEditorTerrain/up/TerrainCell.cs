@@ -66,7 +66,8 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
                     ClearTerrainBitData();
                     if (ConnectMaskCell != null)
                     {
-                        ConnectMaskCell.SetConnectTerrainCell(null, -1);
+                        ConnectMaskCell.SetUseFlag(false);
+                        ConnectMaskCell.SetConnectTerrainCell(null);
                     }
                 }
             }
@@ -111,9 +112,11 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
         {
             if (ConnectMaskCell != null)
             {
-                ConnectMaskCell.SetConnectTerrainCell(null, -1);
+                ConnectMaskCell.SetUseFlag(false);
+                ConnectMaskCell.SetConnectTerrainCell(null);
             }
-            maskCell.SetConnectTerrainCell(this, CellNode.UiPanel.CurrTerrainIndex);
+            maskCell.SetConnectTerrainCell(this);
+            maskCell.SetUseFlag(true);
         }
     }
     
@@ -133,7 +136,7 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
     
     private void OnDraw()
     {
-        if (ConnectMaskCell != null && (Hover || (ConnectMaskCell.Hover && CellNode.UiPanel.CurrTerrainIndex == ConnectMaskCell.ConnectTerrainIndex)))
+        if (ConnectMaskCell != null && (Hover || ConnectMaskCell.Hover))
         {
             CellNode.Instance.DrawRect(
                 new Rect2(Vector2.Zero, CellNode.Instance.Size),
