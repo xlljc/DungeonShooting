@@ -16,7 +16,7 @@ public partial class TestLoadTileSetConfig : Node2D
 
         var tileSetSplit = _tileSetConfig["TileSet2"];
         var tileSet = tileSetSplit.GetTileSet();
-        ResourceSaver.Save(tileSet, "test_tileset.tres");
+        //ResourceSaver.Save(tileSet, "test_tileset.tres");
         
         _tileMap.TileSet = tileSet;
         
@@ -33,6 +33,20 @@ public partial class TestLoadTileSetConfig : Node2D
             new Vector2I(12, 11),
             new Vector2I(13, 10),
             new Vector2I(13, 11),
+        }, 2, 0, false);
+        
+        _tileMap.SetCellsTerrainConnect(0, new Array<Vector2I>()
+        {
+            new Vector2I(10 + 10, 10),
+            new Vector2I(10 + 10, 11),
+            new Vector2I(10 + 10, 12),
+            new Vector2I(11 + 10, 10),
+            new Vector2I(11 + 10, 11),
+            new Vector2I(11 + 10, 12),
+            new Vector2I(12 + 10, 10),
+            new Vector2I(12 + 10, 11),
+            new Vector2I(13 + 10, 10),
+            new Vector2I(13 + 10, 11),
         }, 1, 0, false);
     }
     

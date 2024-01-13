@@ -110,51 +110,57 @@ public class TileSetSplit : IDestroy
             _tileSet.SetPhysicsLayerCollisionLayer(0, PhysicsLayer.Wall);
             _tileSet.SetPhysicsLayerCollisionMask(0, PhysicsLayer.None);
 
+            var terrainSetIndex = 0;
+            
             //Source资源
             for (var sourceIndex = 0; sourceIndex < _tileSetInfo.Sources.Count; sourceIndex++)
             {
                 var tileSetSourceInfo = _tileSetInfo.Sources[sourceIndex];
                 var terrainList = tileSetSourceInfo.Terrain;
                 
-                //地形层
-                _tileSet.AddTerrainSet();
+                var tileSetAtlasSource = new TileSetAtlasSource();
+                _tileSet.AddSource(tileSetAtlasSource);
                 
-                for (var terrainIndex = 0; terrainIndex < terrainList.Count; terrainIndex++)
+                //纹理
+                var image = tileSetSourceInfo.GetSourceImage();
+                tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(image);
+
+                var size = image.GetSize() / GameConfig.TileCellSize;
+                //创建cell
+                for (var i = 0; i < size.X; i++)
                 {
-                    _tileSet.AddTerrain(sourceIndex);
+                    for (var j = 0; j < size.Y; j++)
+                    {
+                        tileSetAtlasSource.CreateTile(new Vector2I(i, j));
+                    }
+                }
+                
+                
+                for (var i = 0; i < terrainList.Count; i++)
+                {
+                    var terrainInfo = terrainList[i];
+                    //地形层
+                    _tileSet.AddTerrainSet();
+                    _tileSet.AddTerrain(terrainSetIndex);
+                    //_tileSet.SetTerrainName(terrainSetIndex, 0, terrainInfo.Name);
                     
-                    var terrainInfo = terrainList[terrainIndex];
                     if (terrainInfo.TerrainType == 0) //3x3地形
                     {
-                        _tileSet.SetTerrainSetMode(sourceIndex, TileSet.TerrainMode.CornersAndSides);
+                        _tileSet.SetTerrainSetMode(terrainSetIndex, TileSet.TerrainMode.CornersAndSides);
                     }
                     else //2x2地形
                     {
-                        _tileSet.SetTerrainSetMode(sourceIndex, TileSet.TerrainMode.Corners);
-                    }
-
-                    var tileSetAtlasSource = new TileSetAtlasSource();
-                    _tileSet.AddSource(tileSetAtlasSource);
-                    //纹理
-                    var image = tileSetSourceInfo.GetSourceImage();
-                    tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(image);
-
-                    var size = image.GetSize() / GameConfig.TileCellSize;
-                    //创建cell
-                    for (var i = 0; i < size.X; i++)
-                    {
-                        for (var j = 0; j < size.Y; j++)
-                        {
-                            tileSetAtlasSource.CreateTile(new Vector2I(i, j));
-                        }
+                        _tileSet.SetTerrainSetMode(terrainSetIndex, TileSet.TerrainMode.Corners);
                     }
                 
                     //初始化地形
-                    tileSetAtlasSource.InitTerrain(terrainInfo, sourceIndex, terrainIndex);
-                    if (sourceIndex == 0)
+                    tileSetAtlasSource.InitTerrain(terrainInfo, terrainSetIndex, 0);
+                    if (sourceIndex == 0 && i == 0)
                     {
                         InitMainSourceData(terrainInfo, tileSetAtlasSource);
                     }
+
+                    terrainSetIndex++;
                 }
             }
         }
