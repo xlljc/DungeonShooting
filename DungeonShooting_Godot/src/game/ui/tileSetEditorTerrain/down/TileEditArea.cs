@@ -31,7 +31,7 @@ public partial class TileEditArea : EditorGridBg<TileSetEditorTerrain.BottomBg>
             var cellPosition = Utils.GetMouseCellPosition(_panel.S_TileTexture.Instance);
             var index = cellPosition.X + cellPosition.Y * _panel.MaskGrid.GetColumns();
             var tempCell = (MaskCell)_panel.MaskGrid.GetCell(index);
-            if (tempCell != null && tempCell.ConnectTerrainCell != null)
+            if (tempCell != null && tempCell.ConnectTerrainCell != null && tempCell.ConnectTerrainIndex == _panel.CurrTerrainIndex)
             {
                 cell = tempCell;
             }

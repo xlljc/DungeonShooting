@@ -10,6 +10,11 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
     public TerrainCell ConnectTerrainCell { get; private set; }
     
     /// <summary>
+    /// 已经赋值并连接的Terrain所以
+    /// </summary>
+    public int ConnectTerrainIndex { get; private set; }
+    
+    /// <summary>
     /// 鼠标是否悬停
     /// </summary>
     public bool Hover { get; set; }
@@ -26,7 +31,7 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
 
     public override void OnDisable()
     {
-        SetConnectTerrainCell(null);
+        SetConnectTerrainCell(null, -1);
     }
 
     public override void Process(float delta)
@@ -37,7 +42,7 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
     /// <summary>
     /// 设置连接的Cell
     /// </summary>
-    public void SetConnectTerrainCell(TerrainCell terrainCell)
+    public void SetConnectTerrainCell(TerrainCell terrainCell, int terrainIndex)
     {
         if (terrainCell == null)
         {
@@ -52,6 +57,8 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
             ConnectTerrainCell = terrainCell;
             terrainCell.ConnectMaskCell = this;
         }
+
+        ConnectTerrainIndex = terrainIndex;
     }
 
     private void Draw()
@@ -65,10 +72,11 @@ public class MaskCell : UiCell<TileSetEditorTerrain.BottomCell, Rect2I>
         }
         if (ConnectTerrainCell != null)
         {
+            var color = CellNode.UiPanel.CurrTerrainIndex == ConnectTerrainIndex ? new Color(0, 1, 0) : new Color(1, 1, 1);
             //选中时绘制轮廓
             CellNode.Instance.DrawRect(
                 new Rect2(Vector2.Zero, CellNode.Instance.Size),
-                new Color(0, 1, 1), false, 2f / _textureRect.Scale.X
+                color, false, 2f / _textureRect.Scale.X
             );
         }
     }

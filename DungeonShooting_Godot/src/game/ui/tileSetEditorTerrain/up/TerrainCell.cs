@@ -66,7 +66,7 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
                     ClearTerrainBitData();
                     if (ConnectMaskCell != null)
                     {
-                        ConnectMaskCell.SetConnectTerrainCell(null);
+                        ConnectMaskCell.SetConnectTerrainCell(null, -1);
                     }
                 }
             }
@@ -111,9 +111,9 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
         {
             if (ConnectMaskCell != null)
             {
-                ConnectMaskCell.SetConnectTerrainCell(null);
+                ConnectMaskCell.SetConnectTerrainCell(null, -1);
             }
-            maskCell.SetConnectTerrainCell(this);
+            maskCell.SetConnectTerrainCell(this, CellNode.UiPanel.CurrTerrainIndex);
         }
     }
     

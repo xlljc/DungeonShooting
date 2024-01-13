@@ -100,21 +100,22 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         {
             _refreshGridConnect = false;
 
-            var terrain = CurrTerrain;
-            if (terrain != null)
+            var terrainList = EditorPanel.TileSetSourceInfo.Terrain;
+            for (var i = 0; i < terrainList.Count; i++)
             {
+                var terrain = terrainList[i];
                 if (terrain.TerrainType == 0) //选中47格Terrain
                 {
-                    TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                    TerrainGrid3x3.ForEach(cell => RefreshConnectTerrainCell(i, terrain, cell));
                     if (EditorPanel.TileSetSourceIndex == 0 && CurrTerrainIndex == 0) //选中Main Source
                     {
-                        TerrainGridMiddle.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
-                        TerrainGridFloor.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                        TerrainGridMiddle.ForEach(cell => RefreshConnectTerrainCell(i, terrain, cell));
+                        TerrainGridFloor.ForEach(cell => RefreshConnectTerrainCell(i, terrain, cell));
                     }
                 }
                 else //选中13格Terrain
                 {
-                    TerrainGrid2x2.ForEach(cell => RefreshConnectTerrainCell(terrain, cell));
+                    TerrainGrid2x2.ForEach(cell => RefreshConnectTerrainCell(i, terrain, cell));
                 }
             }
         }
@@ -167,7 +168,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         }
     }
     
-    private void RefreshConnectTerrainCell(TileSetTerrainInfo terrain, UiCell<RightCell, byte> cell)
+    private void RefreshConnectTerrainCell(int terrainIndex, TileSetTerrainInfo terrain, UiCell<RightCell, byte> cell)
     {
         var data = terrain.GetTerrainCell(cell.Index, cell.Data);
         if (data != null)
@@ -180,7 +181,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             if (maskCell != null)
             {
                 //绑定TerrainCell
-                maskCell.SetConnectTerrainCell(terrainCell);
+                maskCell.SetConnectTerrainCell(terrainCell, terrainIndex);
             }
         }
     }
@@ -367,8 +368,36 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                 {
                     var index = TerrainTabGrid.SelectIndex;
                     //执行删除操作
+                    
+                    //清除Mask
+                    if (terrain.TerrainType == 0) //47格
+                    {
+                        TerrainGrid3x3.ForEach(cell =>
+                        {
+                            var terrainCell = (TerrainCell)cell;
+                            terrainCell.ClearCell();
+                            if (terrainCell.ConnectMaskCell != null)
+                            {
+                                terrainCell.ConnectMaskCell.SetConnectTerrainCell(null, -1);
+                            }
+                        });
+                    }
+                    else //13格
+                    {
+                        TerrainGrid2x2.ForEach(cell =>
+                        {
+                            var terrainCell = (TerrainCell)cell;
+                            terrainCell.ClearCell();
+                            if (terrainCell.ConnectMaskCell != null)
+                            {
+                                terrainCell.ConnectMaskCell.SetConnectTerrainCell(null, -1);
+                            }
+                        });
+                    }
+                    
                     EditorPanel.TileSetSourceInfo.Terrain.Remove(terrain);
                     TerrainTabGrid.RemoveByIndex(index);
+                    
                     if (index == TerrainTabGrid.Count)
                     {
                         TerrainTabGrid.SelectIndex = TerrainTabGrid.Count - 1;
