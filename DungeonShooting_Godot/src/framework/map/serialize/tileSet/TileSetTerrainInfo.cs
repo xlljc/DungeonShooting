@@ -41,6 +41,12 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     [JsonInclude]
     public byte TerrainType;
 
+    /// <summary>
+    /// 地形是否准备好了, 调用 RefreshReady() 刷新
+    /// </summary>
+    [JsonInclude]
+    public bool Ready;
+
     public void InitData()
     {
         TerrainType = 0;
@@ -54,6 +60,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
         var terrainInfo = new TileSetTerrainInfo();
         terrainInfo.InitData();
         terrainInfo.Name = Name;
+        terrainInfo.Ready = Ready;
         foreach (var pair in T)
         {
             terrainInfo.T.Add(pair.Key, new []{ pair.Value[0], pair.Value[1] });
@@ -71,27 +78,25 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     }
 
     /// <summary>
-    /// 返回这个TileSet地形是否可以正常使用了
+    /// 刷新这个TileSet地形是否可以正常使用了
     /// </summary>
-    /// <returns></returns>
-    public bool CanUse()
+    public void RefreshReady(int terrainIndex)
     {
         if (TerrainType == 0)
         {
-            if (T == null || T.Count != 47)
+            if (terrainIndex == 0)
             {
-                return false;
+                Ready = T != null && T.Count == 47 && M != null && M.Count == 4 && F != null && F.Count == 1;
+            }
+            else
+            {
+                Ready = M != null && M.Count == 4 && F != null && F.Count == 1;
             }
         }
         else
         {
-            if (T == null || T.Count != 13)
-            {
-                return false;
-            }
+            Ready = T != null && T.Count == 13;
         }
-
-        return M != null && M.Count == 4 && F != null && F.Count == 1;
     }
 
     /// <summary>

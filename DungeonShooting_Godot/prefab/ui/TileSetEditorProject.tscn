@@ -141,6 +141,7 @@ offset_top = 6.0
 offset_right = 54.0
 offset_bottom = -6.0
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("5_d0rev")
 
 [node name="TileName" type="Label" parent="Bg/VBoxContainer/HBoxContainer/Panel/MarginContainer/HBoxContainer2/VBoxContainer/ScrollContainer/TileButton"]

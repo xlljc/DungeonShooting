@@ -5,11 +5,17 @@ public class TerrainTabCell : UiCell<TileSetEditorTerrain.TerrainTab, TileSetTer
     public override void OnInit()
     {
         CellNode.L_SelectTexture.Instance.Visible = false;
+        CellNode.L_ErrorIcon.Instance.Visible = false;
     }
 
     public override void OnSetData(TileSetTerrainInfo data)
     {
         RefreshData();
+    }
+
+    public override void Process(float delta)
+    {
+        CellNode.L_ErrorIcon.Instance.Visible = !Data.Ready;
     }
 
     /// <summary>

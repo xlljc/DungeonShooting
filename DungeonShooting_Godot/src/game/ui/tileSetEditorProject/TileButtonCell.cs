@@ -14,6 +14,34 @@ public class TileButtonCell : UiCell<TileSetEditorProject.TileButton, TileSetSpl
     public override void OnSetData(TileSetSplit data)
     {
         CellNode.L_TileName.Instance.Text = data.TileSetInfo.Name;
+        //检测是否有错误
+        var hasError = false;
+        foreach (var sourceInfo in data.TileSetInfo.Sources)
+        {
+            if (string.IsNullOrEmpty(sourceInfo.SourcePath))
+            {
+                hasError = true;
+                break;
+            }
+
+            foreach (var terrainInfo in sourceInfo.Terrain)
+            {
+                if (!terrainInfo.Ready)
+                {
+                    hasError = true;
+                    break;
+                }
+            }
+        }
+
+        if (hasError)
+        {
+            CellNode.L_Icon.Instance.Texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Error_mini_png);
+        }
+        else
+        {
+            CellNode.L_Icon.Instance.Texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Success_mini_png);
+        }
     }
 
     public override void OnDoubleClick()

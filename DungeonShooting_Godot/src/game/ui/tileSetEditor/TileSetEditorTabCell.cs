@@ -7,6 +7,7 @@ public class TileSetEditorTabCell : UiCell<TileSetEditor.Tab, TileSetEditorTabDa
     public override void OnInit()
     {
         CellNode.L_Select.Instance.Visible = false;
+        CellNode.L_ErrorIcon.Instance.Visible = false;
     }
 
     public override void OnSetData(TileSetEditorTabData data)

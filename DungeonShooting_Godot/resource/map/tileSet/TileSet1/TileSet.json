@@ -221,7 +221,8 @@
               16
             ]
           },
-          "TerrainType": 0
+          "TerrainType": 0,
+          "Ready": true
         }
       ],
       "Combination": []

@@ -53,7 +53,14 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         //改变选中的TileSet资源
         AddEventListener(EventEnum.OnSelectTileSetSource, OnSelectTileSetSource);
         //改变纹理事件
-        AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
+        AddEventListener(EventEnum.OnSetTileTexture, (data) =>
+        {
+            OnSetTileTexture(data);
+            if (TerrainTabGrid.SelectIndex >= 0)
+            {
+                OnChangeTerrain(TerrainTabGrid.SelectIndex);
+            }
+        });
         //背景颜色改变
         AddEventListener(EventEnum.OnSetTileSetBgColor, OnChangeTileSetBgColor);
 

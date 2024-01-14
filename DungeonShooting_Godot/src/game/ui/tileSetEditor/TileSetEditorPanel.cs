@@ -119,6 +119,27 @@ public partial class TileSetEditorPanel : TileSetEditor
         }
     }
 
+    public override void Process(float delta)
+    {
+        if (TabGrid.Visible && TileSetSourceInfo != null)
+        {
+            //纹理红点
+            ((TileSetEditorTabCell)TabGrid.GetCell(0)).CellNode.L_ErrorIcon.Instance.Visible = !InitTexture;
+            //地形红点
+            var terrainTab = (TileSetEditorTabCell)TabGrid.GetCell(1);
+            var flag = true;
+            foreach (var terrainInfo in TileSetSourceInfo.Terrain)
+            {
+                if (!terrainInfo.Ready)
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            terrainTab.CellNode.L_ErrorIcon.Instance.Visible = !flag;
+        }
+    }
+
     /// <summary>
     /// 初始化数据
     /// </summary>

@@ -100,6 +100,8 @@ public class TileSetSplit : IDestroy
         {
             return null;
         }
+        
+        //检查是否有异常
         _tileSet = new TileSet();
         if (_tileSetInfo.Sources != null)
         {
@@ -123,18 +125,20 @@ public class TileSetSplit : IDestroy
                 
                 //纹理
                 var image = tileSetSourceInfo.GetSourceImage();
-                tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(image);
-
-                var size = image.GetSize() / GameConfig.TileCellSize;
-                //创建cell
-                for (var i = 0; i < size.X; i++)
+                if (image != null)
                 {
-                    for (var j = 0; j < size.Y; j++)
+                    tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(image);
+
+                    var size = image.GetSize() / GameConfig.TileCellSize;
+                    //创建cell
+                    for (var i = 0; i < size.X; i++)
                     {
-                        tileSetAtlasSource.CreateTile(new Vector2I(i, j));
+                        for (var j = 0; j < size.Y; j++)
+                        {
+                            tileSetAtlasSource.CreateTile(new Vector2I(i, j));
+                        }
                     }
                 }
-                
                 
                 for (var i = 0; i < terrainList.Count; i++)
                 {

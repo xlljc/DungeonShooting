@@ -151,6 +151,15 @@ public abstract partial class TileSetEditorTerrain : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.ScrollContainer.TerrainTab.ErrorIcon
+    /// </summary>
+    public class ErrorIcon : UiNode<TileSetEditorTerrainPanel, Godot.TextureRect, ErrorIcon>
+    {
+        public ErrorIcon(TileSetEditorTerrainPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override ErrorIcon Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.ScrollContainer.TerrainTab
     /// </summary>
     public class TerrainTab : UiNode<TileSetEditorTerrainPanel, Godot.Button, TerrainTab>
@@ -167,6 +176,19 @@ public abstract partial class TileSetEditorTerrain : UiBase
             }
         }
         private SelectTexture _L_SelectTexture;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.ScrollContainer.ErrorIcon
+        /// </summary>
+        public ErrorIcon L_ErrorIcon
+        {
+            get
+            {
+                if (_L_ErrorIcon == null) _L_ErrorIcon = new ErrorIcon(UiPanel, Instance.GetNode<Godot.TextureRect>("ErrorIcon"));
+                return _L_ErrorIcon;
+            }
+        }
+        private ErrorIcon _L_ErrorIcon;
 
         public TerrainTab(TileSetEditorTerrainPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
         public override TerrainTab Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
@@ -879,6 +901,11 @@ public abstract partial class TileSetEditorTerrain : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.ScrollContainer.TerrainTab.SelectTexture
     /// </summary>
     public SelectTexture S_SelectTexture => L_VSplitContainer.L_PanelTop.L_HSplitContainer.L_TopTab.L_VBoxContainer.L_ScrollContainer.L_TerrainTab.L_SelectTexture;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.ScrollContainer.TerrainTab.ErrorIcon
+    /// </summary>
+    public ErrorIcon S_ErrorIcon => L_VSplitContainer.L_PanelTop.L_HSplitContainer.L_TopTab.L_VBoxContainer.L_ScrollContainer.L_TerrainTab.L_ErrorIcon;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditorTerrain.VSplitContainer.PanelTop.HSplitContainer.TopTab.VBoxContainer.ScrollContainer.TerrainTab

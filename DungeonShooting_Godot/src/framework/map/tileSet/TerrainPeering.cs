@@ -86,6 +86,10 @@ public static class TerrainPeering
         {
             var pos = terrainInfo.GetPosition(keyValuePair.Value);
             var tileData = atlasSource.GetTileData(pos, 0);
+            if (tileData == null)
+            {
+                continue;
+            }
             tileData.TerrainSet = terrainSet;
             tileData.Terrain = terrain;
             
