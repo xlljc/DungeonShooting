@@ -134,6 +134,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         var sRightCell = cellRoot.L_RightCell;
         sRightCell.Instance.Position = texture.Position;
         var grid = CreateUiGrid<RightCell, byte, TerrainCell>(sRightCell, cellRoot.Instance);
+        grid.GridContainer.MouseFilter = MouseFilterEnum.Ignore;
         grid.SetCellOffset(Vector2I.Zero);
         grid.SetColumns(size.X);
         for (var y = 0; y < size.Y; y++)
@@ -292,10 +293,10 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
         //清除所有绑定的Terrain
         if (index >= 0)
         {
-            TerrainGrid3x3.ForEach(cell => ((TerrainCell)cell).ClearCell());
-            TerrainGridMiddle.ForEach(cell => ((TerrainCell)cell).ClearCell());
-            TerrainGridFloor.ForEach(cell => ((TerrainCell)cell).ClearCell());
-            TerrainGrid2x2.ForEach(cell => ((TerrainCell)cell).ClearCell());
+            TerrainGrid3x3.ForEach(cell => ((TerrainCell)cell).ClearCellTexture());
+            TerrainGridMiddle.ForEach(cell => ((TerrainCell)cell).ClearCellTexture());
+            TerrainGridFloor.ForEach(cell => ((TerrainCell)cell).ClearCellTexture());
+            TerrainGrid2x2.ForEach(cell => ((TerrainCell)cell).ClearCellTexture());
         }
         S_TopBg.Instance.SetHoverCell(null);
         S_BottomBg.Instance.SetHoverCell(null);
@@ -419,7 +420,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                         TerrainGrid3x3.ForEach(cell =>
                         {
                             var terrainCell = (TerrainCell)cell;
-                            terrainCell.ClearCell();
+                            terrainCell.ClearCellTexture();
                             if (terrainCell.ConnectMaskCell != null)
                             {
                                 terrainCell.ConnectMaskCell.SetUseFlag(false);
@@ -432,7 +433,7 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                         TerrainGrid2x2.ForEach(cell =>
                         {
                             var terrainCell = (TerrainCell)cell;
-                            terrainCell.ClearCell();
+                            terrainCell.ClearCellTexture();
                             if (terrainCell.ConnectMaskCell != null)
                             {
                                 terrainCell.ConnectMaskCell.SetUseFlag(false);

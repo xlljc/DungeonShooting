@@ -24,7 +24,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6jjk7")
-Layer = null
 
 [node name="VSplitContainer" type="VSplitContainer" parent="."]
 layout_mode = 1
@@ -166,7 +165,7 @@ z_index = 1
 anchors_preset = 0
 offset_right = 16.0
 offset_bottom = 16.0
-mouse_filter = 1
+mouse_filter = 2
 
 [node name="CellTexture" type="Sprite2D" parent="VSplitContainer/PanelTop/HSplitContainer/TopBg/TerrainRoot/CellRoot/RightCell"]
 z_index = -1

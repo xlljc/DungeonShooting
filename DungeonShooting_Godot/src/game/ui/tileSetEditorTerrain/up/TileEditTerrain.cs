@@ -34,32 +34,42 @@ public partial class TileEditTerrain : EditorGridBg<TileSetEditorTerrain.TopBg>
 
     public override void _Process(double delta)
     {
-        TerrainCell cell = null;
+        //鼠标悬停的图块
+        TerrainCell hover = null;
         var _panel = UiNode.UiPanel;
         var terrain = _panel.CurrTerrain;
         if (terrain != null && _panel.S_TopBg.Instance.IsMouseInRect())
         {
             if (terrain.TerrainType == 0) //选中47个Terrain
             {
-                cell = CalcMouseHoverCell(_panel.S_TerrainTexture1.Instance, _panel.TerrainGrid3x3);
+                hover = CalcMouseHoverCell(_panel.S_TerrainTexture1.Instance, _panel.TerrainGrid3x3);
                 if (_panel.EditorPanel.TileSetSourceIndex == 0 && _panel.CurrTerrainIndex == 0) //选中Main Source
                 {
-                    if (cell == null)
+                    if (hover == null)
                     {
-                        cell = CalcMouseHoverCell(_panel.S_TerrainTexture2.Instance, _panel.TerrainGridMiddle);
+                        hover = CalcMouseHoverCell(_panel.S_TerrainTexture2.Instance, _panel.TerrainGridMiddle);
                     }
-                    if (cell == null)
+                    if (hover == null)
                     {
-                        cell = CalcMouseHoverCell(_panel.S_TerrainTexture3.Instance, _panel.TerrainGridFloor);
+                        hover = CalcMouseHoverCell(_panel.S_TerrainTexture3.Instance, _panel.TerrainGridFloor);
                     }
                 }
             }
             else //选中13格Terrain
             {
-                cell = CalcMouseHoverCell(_panel.S_TerrainTexture4.Instance, _panel.TerrainGrid2x2);
+                hover = CalcMouseHoverCell(_panel.S_TerrainTexture4.Instance, _panel.TerrainGrid2x2);
             }
         }
-        SetHoverCell(cell);
+
+        if (hover != null && Input.IsActionJustPressed(InputAction.MouseRight))
+        {
+            //右键擦除
+            hover.EraseCell();
+        }
+        else
+        {
+            SetHoverCell(hover);
+        }
     }
 
     /// <summary>

@@ -29,7 +29,6 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
     public override void OnInit()
     {
         _panel = CellNode.UiPanel;
-        CellNode.Instance.GuiInput += OnGuiInput;
         CellNode.Instance.Draw += OnDraw;
     }
 
@@ -51,25 +50,21 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
     {
         CellNode.Instance.QueueRedraw();
     }
-
-    private void OnGuiInput(InputEvent @event)
+    
+    /// <summary>
+    /// 擦除当前选择的图块
+    /// </summary>
+    public void EraseCell()
     {
-        if (IsPutDownTexture && @event is InputEventMouseButton mouseEvent)
+        var flag = IsPutDownTexture;
+        ClearCellTexture();
+        if (flag)
         {
-            if (mouseEvent.ButtonIndex == MouseButton.Right && mouseEvent.Pressed) //右键擦除图块
+            ClearTerrainBitData();
+            if (ConnectMaskCell != null)
             {
-                CellNode.Instance.AcceptEvent();
-                var flag = IsPutDownTexture;
-                ClearCell();
-                if (flag)
-                {
-                    ClearTerrainBitData();
-                    if (ConnectMaskCell != null)
-                    {
-                        ConnectMaskCell.SetUseFlag(false);
-                        ConnectMaskCell.SetConnectTerrainCell(null);
-                    }
-                }
+                ConnectMaskCell.SetUseFlag(false);
+                ConnectMaskCell.SetConnectTerrainCell(null);
             }
         }
     }
@@ -90,7 +85,7 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
     /// <summary>
     /// 清除选中的cell
     /// </summary>
-    public void ClearCell()
+    public void ClearCellTexture()
     {
         CellNode.L_CellTexture.Instance.Texture = null;
         IsPutDownTexture = false;
