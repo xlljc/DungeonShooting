@@ -7,7 +7,7 @@ using UI.EditorTools;
 namespace Plugin
 {
     [Tool]
-    public partial class Plugin : EditorPlugin
+    public partial class Plugin : EditorPlugin, ISerializationListener
     {
         /// <summary>
         /// 自定义节点类型数据
@@ -60,7 +60,7 @@ namespace Plugin
         {
             Instance = this;
             
-            if (_uiMonitor != null)
+            if (_uiMonitor != null && Instance == this)
             {
                 _uiMonitor.Process((float) delta);
             }
@@ -75,6 +75,8 @@ namespace Plugin
         public override void _EnterTree()
         {
             Instance = this;
+
+            #region MyRegion
 
             if (_customTypeInfos != null)
             {
@@ -116,15 +118,27 @@ namespace Plugin
                 Debug.LogError(e.ToString());
             }
             
-            
             _MakeVisible(false);
+            
+            #endregion
             
             //场景切换事件
             SceneChanged += OnSceneChanged;
 
             _uiMonitor = new NodeMonitor();
             _uiMonitor.SceneNodeChangeEvent += GenerateUiCode;
+
             OnSceneChanged(GetEditorInterface().GetEditedSceneRoot());
+        }
+        
+        public void OnBeforeSerialize()
+        {
+            SceneChanged -= OnSceneChanged;
+        }
+        
+        public void OnAfterDeserialize()
+        {
+            SceneChanged += OnSceneChanged;
         }
 
         public override void _ExitTree()
@@ -252,7 +266,6 @@ namespace Plugin
                 }
             }
         }
-
     }
 }
 #endif

@@ -101,14 +101,14 @@ public partial class MapEditorProjectPanel : MapEditorProject
     /// <summary>
     /// 选择地图并打开地图编辑器
     /// </summary>
-    public void OpenSelectRoom(DungeonRoomSplit room)
+    public void OpenSelectRoom(DungeonRoomSplit room, TileSetSplit tileSetSplit)
     {
         HideUi();
         //创建地牢Ui
         var mapEditor = UiManager.Create_MapEditor();
         mapEditor.PrevUi = this;
         //加载地牢
-        mapEditor.LoadMap(room);
+        mapEditor.LoadMap(room, tileSetSplit);
         //打开Ui
         mapEditor.ShowUi();
     }

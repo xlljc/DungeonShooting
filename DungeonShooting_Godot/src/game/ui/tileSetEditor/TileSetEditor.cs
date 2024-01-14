@@ -197,15 +197,6 @@ public abstract partial class TileSetEditor : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.Tab.Select
-    /// </summary>
-    public class Select : UiNode<TileSetEditorPanel, Godot.NinePatchRect, Select>
-    {
-        public Select(TileSetEditorPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
-        public override Select Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
-    }
-
-    /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.Tab.ErrorIcon
     /// </summary>
     public class ErrorIcon : UiNode<TileSetEditorPanel, Godot.TextureRect, ErrorIcon>
@@ -215,23 +206,19 @@ public abstract partial class TileSetEditor : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.Tab.Select
+    /// </summary>
+    public class Select : UiNode<TileSetEditorPanel, Godot.NinePatchRect, Select>
+    {
+        public Select(TileSetEditorPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override Select Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.Tab
     /// </summary>
     public class Tab : UiNode<TileSetEditorPanel, Godot.Button, Tab>
     {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.Select
-        /// </summary>
-        public Select L_Select
-        {
-            get
-            {
-                if (_L_Select == null) _L_Select = new Select(UiPanel, Instance.GetNode<Godot.NinePatchRect>("Select"));
-                return _L_Select;
-            }
-        }
-        private Select _L_Select;
-
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.ErrorIcon
         /// </summary>
@@ -244,6 +231,19 @@ public abstract partial class TileSetEditor : UiBase
             }
         }
         private ErrorIcon _L_ErrorIcon;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.Select
+        /// </summary>
+        public Select L_Select
+        {
+            get
+            {
+                if (_L_Select == null) _L_Select = new Select(UiPanel, Instance.GetNode<Godot.NinePatchRect>("Select"));
+                return _L_Select;
+            }
+        }
+        private Select _L_Select;
 
         public Tab(TileSetEditorPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
         public override Tab Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
@@ -502,14 +502,14 @@ public abstract partial class TileSetEditor : UiBase
     public ColorRect S_ColorRect => L_Bg.L_VBoxContainer.L_HBoxContainer.L_LeftRoot.L_VBoxContainer.L_ColorRect;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.Tab.Select
-    /// </summary>
-    public Select S_Select => L_Bg.L_VBoxContainer.L_HBoxContainer.L_LeftRoot.L_VBoxContainer.L_ScrollContainer.L_Tab.L_Select;
-
-    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.Tab.ErrorIcon
     /// </summary>
     public ErrorIcon S_ErrorIcon => L_Bg.L_VBoxContainer.L_HBoxContainer.L_LeftRoot.L_VBoxContainer.L_ScrollContainer.L_Tab.L_ErrorIcon;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.Tab.Select
+    /// </summary>
+    public Select S_Select => L_Bg.L_VBoxContainer.L_HBoxContainer.L_LeftRoot.L_VBoxContainer.L_ScrollContainer.L_Tab.L_Select;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: TileSetEditor.Bg.VBoxContainer.HBoxContainer.LeftRoot.VBoxContainer.ScrollContainer.Tab

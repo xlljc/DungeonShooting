@@ -23,6 +23,7 @@ public static partial class UiManager
         public const string MapEditorCreateRoom = "MapEditorCreateRoom";
         public const string MapEditorMapLayer = "MapEditorMapLayer";
         public const string MapEditorMapMark = "MapEditorMapMark";
+        public const string MapEditorMapTile = "MapEditorMapTile";
         public const string MapEditorProject = "MapEditorProject";
         public const string MapEditorSelectObject = "MapEditorSelectObject";
         public const string MapEditorTools = "MapEditorTools";
@@ -900,6 +901,54 @@ public static partial class UiManager
     public static UI.MapEditorMapMark.MapEditorMapMarkPanel[] Get_MapEditorMapMark_Instance()
     {
         return GetUiInstance<UI.MapEditorMapMark.MapEditorMapMarkPanel>(nameof(UI.MapEditorMapMark.MapEditorMapMark));
+    }
+
+    /// <summary>
+    /// 创建 MapEditorMapTile, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorMapTile.MapEditorMapTilePanel Create_MapEditorMapTile()
+    {
+        return CreateUi<UI.MapEditorMapTile.MapEditorMapTilePanel>(UiNames.MapEditorMapTile);
+    }
+
+    /// <summary>
+    /// 打开 MapEditorMapTile, 并返回UI实例
+    /// </summary>
+    public static UI.MapEditorMapTile.MapEditorMapTilePanel Open_MapEditorMapTile()
+    {
+        return OpenUi<UI.MapEditorMapTile.MapEditorMapTilePanel>(UiNames.MapEditorMapTile);
+    }
+
+    /// <summary>
+    /// 隐藏 MapEditorMapTile 的所有实例
+    /// </summary>
+    public static void Hide_MapEditorMapTile()
+    {
+        var uiInstance = Get_MapEditorMapTile_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 MapEditorMapTile 的所有实例
+    /// </summary>
+    public static void Destroy_MapEditorMapTile()
+    {
+        var uiInstance = Get_MapEditorMapTile_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 MapEditorMapTile 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.MapEditorMapTile.MapEditorMapTilePanel[] Get_MapEditorMapTile_Instance()
+    {
+        return GetUiInstance<UI.MapEditorMapTile.MapEditorMapTilePanel>(nameof(UI.MapEditorMapTile.MapEditorMapTile));
     }
 
     /// <summary>

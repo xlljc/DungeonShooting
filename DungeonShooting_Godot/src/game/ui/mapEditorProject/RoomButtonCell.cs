@@ -1,4 +1,6 @@
+using System.Linq;
 using Godot;
+using UI.TileSetEditor;
 
 namespace UI.MapEditorProject;
 
@@ -45,8 +47,23 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
 
     public override void OnDoubleClick()
     {
-        //打开房间编辑器
-        CellNode.UiPanel.OpenSelectRoom(Data);
+        //打开房间编辑器, 临时处理加载TileSet
+        var tileSetSplit = GameApplication.Instance.TileSetConfig.First().Value;
+        //判断tileSet是否可以使用
+        if (string.IsNullOrEmpty(tileSetSplit.TileSetInfo.Sources[0].SourcePath))
+        {
+            EditorWindowManager.ShowConfirm("错误", "当前房间绑定的 TileSet 中 Main Source 未被赋予纹理数据！\n是否前往编辑 TileSet？", (v) =>
+            {
+                if (v)
+                {
+                    //跳转编辑TileSet页面
+                    var tileSetEditorPanel = CellNode.UiPanel.OpenNextUi<TileSetEditorPanel>(UiManager.UiNames.TileSetEditor);
+                    tileSetEditorPanel.InitData(tileSetSplit);
+                }
+            });
+            return;
+        }
+        CellNode.UiPanel.OpenSelectRoom(Data, tileSetSplit);
     }
     
     public override void OnSelect()

@@ -39,7 +39,7 @@ material = SubResource("ShaderMaterial_yif6x")
 offset = Vector2(0, -12)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(0, -4)
+position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_5pj80")
 
 [node name="HurtArea" type="Area2D" parent="."]

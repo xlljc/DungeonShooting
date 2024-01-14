@@ -223,6 +223,19 @@
           },
           "TerrainType": 0,
           "Ready": true
+        },
+        {
+          "Name": "Test1",
+          "F": {},
+          "M": {},
+          "T": {
+            "341": [
+              80,
+              64
+            ]
+          },
+          "TerrainType": 1,
+          "Ready": false
         }
       ],
       "Combination": []

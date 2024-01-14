@@ -81,7 +81,7 @@ public static class UiGenerator
             if (open)
             {
                 Plugin.Plugin.Instance.GetEditorInterface().OpenSceneFromPath(prefabResPath);
-            }   
+            }
 
         }
         catch (Exception e)

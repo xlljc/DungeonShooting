@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://csbxfkdupsckv"]
+[gd_scene load_steps=16 format=3 uid="uid://csbxfkdupsckv"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditor/MapEditorPanel.cs" id="1_5s7a0"]
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_gkcw7"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b4u66mxndxbrg" path="res://prefab/ui/MapEditorTools.tscn" id="6_7pvgu"]
 [ext_resource type="PackedScene" uid="uid://bb2ekkpxifd7g" path="res://prefab/ui/MapEditorMapLayer.tscn" id="7_ychtn"]
 [ext_resource type="PackedScene" uid="uid://peo0n8bl15y5" path="res://prefab/ui/MapEditorMapMark.tscn" id="8_8tgeu"]
+[ext_resource type="PackedScene" uid="uid://tjbfj67t5akm" path="res://prefab/ui/MapEditorMapTile.tscn" id="10_4fu5v"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_oidah"]
 resource_local_to_scene = true
@@ -172,7 +173,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Left" type="Panel" parent="Bg/VBoxContainer/HSplitContainer"]
-custom_minimum_size = Vector2(1000, 0)
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 7.0
@@ -234,7 +235,7 @@ visible = false
 layout_mode = 2
 
 [node name="Right" type="Panel" parent="Bg/VBoxContainer/HSplitContainer"]
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
@@ -266,6 +267,9 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 theme_override_constants/margin_top = 10
+
+[node name="MapEditorMapTile" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapTile" instance=ExtResource("10_4fu5v")]
+layout_mode = 2
 
 [node name="MapMark" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
 visible = false

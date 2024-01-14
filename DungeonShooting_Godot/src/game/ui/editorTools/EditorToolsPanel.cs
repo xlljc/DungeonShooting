@@ -15,7 +15,7 @@ namespace UI.EditorTools;
 /// Godot编辑器扩展工具
 /// </summary>
 [Tool]
-public partial class EditorToolsPanel : EditorTools
+public partial class EditorToolsPanel : EditorTools, ISerializationListener
 {
     
 #if TOOLS
@@ -80,6 +80,15 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
         container.L_HBoxContainer7.L_Button.Instance.Pressed -= ExportExcel;
         container.L_HBoxContainer8.L_Button.Instance.Pressed -= OpenExportExcelFolder;
+    }
+    
+    public void OnBeforeSerialize()
+    {
+        OnHideUi();
+    }
+    public void OnAfterDeserialize()
+    {
+        OnShowUi();
     }
 
     /// <summary>

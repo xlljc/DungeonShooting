@@ -21,7 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.278431, 0.278431, 0.278431, 1)
+color = Color(0.145098, 0.145098, 0.145098, 1)
 
 [node name="ImportButton" type="Button" parent="."]
 layout_mode = 1

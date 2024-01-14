@@ -27,10 +27,6 @@ public partial class MapEditorPanel : MapEditor
     
     public override void OnCreateUi()
     {
-        //临时处理, 加载TileSet
-        var tileSetSplit = GameApplication.Instance.TileSetConfig.First().Value;
-        S_TileMap.Instance.InitTileSet(tileSetSplit);
-
         S_TabContainer.Instance.SetTabTitle(0, "图层");
         S_TabContainer.Instance.SetTabTitle(1, "图块");
         S_TabContainer.Instance.SetTabTitle(2, "对象");
@@ -87,11 +83,16 @@ public partial class MapEditorPanel : MapEditor
     /// <summary>
     /// 加载地牢, 返回是否加载成功
     /// </summary>
-    public bool LoadMap(DungeonRoomSplit roomSplit)
+    public bool LoadMap(DungeonRoomSplit roomSplit, TileSetSplit tileSetSplit)
     {
         _title = "正在编辑：" + roomSplit.RoomInfo.RoomName;
         S_Title.Instance.Text = _title;
-        var loadMap = S_TileMap.Instance.Load(roomSplit);
+        
+        //加载MapTile面板
+        S_MapEditorMapTile.Instance.InitData(tileSetSplit);
+        
+        //加载Tile
+        var loadMap = S_TileMap.Instance.Load(roomSplit, tileSetSplit);
         S_MapEditorMapMark.Instance.RefreshPreinstallSelect();
         return loadMap;
     }

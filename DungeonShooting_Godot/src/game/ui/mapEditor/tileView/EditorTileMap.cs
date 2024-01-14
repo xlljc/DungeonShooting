@@ -152,19 +152,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private MapEditor.TileMap _editorTileMap;
     private EventFactory _eventFactory;
     
-    /// <summary>
-    /// 初始化图块集。
-    /// </summary>
-    /// <param name="tileSetSplit">要初始化的图块集</param>
-    public void InitTileSet(TileSetSplit tileSetSplit)
-    {
-        TileSet = tileSetSplit.GetTileSet();
-
-        // 创建AutoTileConfig对象
-        // 使用第一个图块集源作为参数
-        _autoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain[0]);
-    }
-    
     public void SetUiNode(IUiNode uiNode)
     {
         _editorTileMap = (MapEditor.TileMap)uiNode;
@@ -498,8 +485,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <summary>
     /// 加载地牢, 返回是否加载成功
     /// </summary>
-    public bool Load(DungeonRoomSplit roomSplit)
+    public bool Load(DungeonRoomSplit roomSplit, TileSetSplit tileSetSplit)
     {
+        InitTileSet(tileSetSplit);
+        
         //重新加载数据
         roomSplit.ReloadRoomInfo();
         roomSplit.ReloadTileInfo();
@@ -558,6 +547,19 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //聚焦
         OnClickCenterTool(null);
         return true;
+    }
+    
+    /// <summary>
+    /// 初始化图块集。
+    /// </summary>
+    /// <param name="tileSetSplit">要初始化的图块集</param>
+    private void InitTileSet(TileSetSplit tileSetSplit)
+    {
+        TileSet = tileSetSplit.GetTileSet();
+
+        // 创建AutoTileConfig对象
+        // 使用第一个图块集源作为参数
+        _autoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain[0]);
     }
 
     private void InitLayer()
@@ -999,7 +1001,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         else //聚焦地图中心点
         {
-            SetMapPosition(pos - (CurrRoomPosition + CurrRoomSize / 2) * TileSet.TileSize * Scale);
+            var roomPos = new Vector2(CurrRoomPosition.X, CurrRoomPosition.Y);
+            var roomSize = new Vector2(CurrRoomSize.X, CurrRoomSize.Y);
+            SetMapPosition(pos - (roomPos + roomSize / 2) * TileSet.TileSize * Scale);
         }
     }
     
