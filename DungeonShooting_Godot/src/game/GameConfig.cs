@@ -75,6 +75,23 @@ public static class GameConfig
     /// 连接房间的过道的地板层级
     /// </summary>
     public const int AisleFloorMapLayer = 3;
+    /// <summary>
+    /// 标记数据层
+    /// </summary>
+    public const int MarkLayer = 9999;
+    
+    /// <summary>
+    /// TileMap 地板的 Zindex
+    /// </summary>
+    public const int FloorMapZIndex = -10;
+    /// <summary>
+    /// TileMap 中层的 Zindex
+    /// </summary>
+    public const int MiddleMapZIndex = 0;
+    /// <summary>
+    /// TileMap 上层的 Zindex
+    /// </summary>
+    public const int TopMapZindex = 10;
 
     /// <summary>
     /// 配置层级的自定义数据名称

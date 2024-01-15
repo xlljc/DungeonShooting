@@ -27,7 +27,7 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, TileMapLaye
         var panel = CellNode.UiPanel.ParentUi as MapEditorPanel;
         if (panel != null)
         {
-            if (Data.Layer == EditorTileMap.MarkLayer) //标记层
+            if (Data.Layer == GameConfig.MarkLayer) //标记层
             {
                 _visible = true;
             }
@@ -45,7 +45,7 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, TileMapLaye
         if (panel != null)
         {
             _visible = !_visible;
-            if (Data.Layer == EditorTileMap.MarkLayer) //隐藏标记层
+            if (Data.Layer == GameConfig.MarkLayer) //隐藏标记层
             {
                 panel.S_MapEditorTools.Instance.S_ToolRoot.Instance.Visible = _visible;
             }
@@ -77,5 +77,15 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, TileMapLaye
     public override void OnUnSelect()
     {
         CellNode.L_SelectTexture.Instance.Visible = false;
+    }
+
+    public override bool CanSelect()
+    {
+        return !Data.IsLock;
+    }
+
+    public override int OnSort(UiCell<MapEditorMapLayer.LayerButton, TileMapLayerData> other)
+    {
+        return Data.ZIndex - other.Data.ZIndex;
     }
 }

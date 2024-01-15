@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Config;
 using Godot;
 using UI.EditorColorPicker;
@@ -753,11 +754,17 @@ public static class EditorWindowManager
         );
     }
 
-    public static void ShowCreateCustomLayer(DungeonTileInfo dungeonTileInfo, Action<CustomLayerInfo> onCreate, UiBase parentUi = null)
+    /// <summary>
+    /// 显示创建
+    /// </summary>
+    /// <param name="customLayerInfos">当前房间所有的层</param>
+    /// <param name="onCreate">创建完成回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowCreateCustomLayer(List<CustomLayerInfo> customLayerInfos, Action<CustomLayerInfo> onCreate, UiBase parentUi = null)
     {
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("创建Layer");
-        window.SetWindowSize(new Vector2I(600, 350));
+        window.SetWindowSize(new Vector2I(400, 350));
         var body = window.OpenBody<EditorFormPanel>(UiManager.UiNames.EditorForm);
         
         //第一项
@@ -766,10 +773,12 @@ public static class EditorWindowManager
             PlaceholderText = "请输入名称"
         });
         //第二项
-        var item2 = new FormItemData<SpinBox>("索引", new SpinBox()
+        var item2 = new FormItemData<SpinBox>("层级", new SpinBox()
         {
             Value = 5,
-            Step = 1
+            Step = 1,
+            MinValue = -100,
+            MaxValue = 100,
         });
         
         body.AddItem(item1);
@@ -783,9 +792,23 @@ public static class EditorWindowManager
                     ShowTips("错误", $"名称不允许为空！");
                     return;
                 }
+
+                foreach (var item in customLayerInfos)
+                {
+                    if (item.Name == text)
+                    {
+                        ShowTips("错误", $"已经有相同的层名了！");
+                        return;
+                    }
+                }
+
+                var terrainInfo = new CustomLayerInfo();
+                terrainInfo.InitData();
+                terrainInfo.Name = text;
+                terrainInfo.ZIndex = (int)item2.UiNode.Value;
                 
-                // window.CloseWindow();
-                // onCreate(terrainInfo);
+                window.CloseWindow();
+                onCreate(terrainInfo);
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {

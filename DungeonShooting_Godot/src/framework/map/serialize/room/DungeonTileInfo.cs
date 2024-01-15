@@ -39,7 +39,7 @@ public class DungeonTileInfo
     /// 自定义层
     /// </summary>
     [JsonInclude]
-    public Dictionary<int, CustomLayerInfo> CustomLayers;
+    public List<CustomLayerInfo> CustomLayers;
 
     public void InitData()
     {
@@ -48,6 +48,6 @@ public class DungeonTileInfo
         Floor = new List<int>();
         Middle = new List<int>();
         Top = new List<int>();
-        CustomLayers = new Dictionary<int, CustomLayerInfo>();
+        CustomLayers = new List<CustomLayerInfo>();
     }
 }
