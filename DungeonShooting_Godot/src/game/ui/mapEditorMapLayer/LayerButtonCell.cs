@@ -2,7 +2,7 @@
 
 namespace UI.MapEditorMapLayer;
 
-public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, MapEditorMapLayerPanel.LayerButtonData>
+public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, TileMapLayerData>
 {
     private bool _visible;
     
@@ -12,7 +12,7 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, MapEditorMa
         CellNode.L_SelectTexture.Instance.Visible = false;
     }
 
-    public override void OnSetData(MapEditorMapLayerPanel.LayerButtonData data)
+    public override void OnSetData(TileMapLayerData data)
     {
         if (data.IsLock)
         {

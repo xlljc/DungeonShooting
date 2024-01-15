@@ -752,6 +752,47 @@ public static class EditorWindowManager
             })
         );
     }
+
+    public static void ShowCreateCustomLayer(DungeonTileInfo dungeonTileInfo, Action<CustomLayerInfo> onCreate, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("创建Layer");
+        window.SetWindowSize(new Vector2I(600, 350));
+        var body = window.OpenBody<EditorFormPanel>(UiManager.UiNames.EditorForm);
+        
+        //第一项
+        var item1 = new FormItemData<LineEdit>("名称", new LineEdit()
+        {
+            PlaceholderText = "请输入名称"
+        });
+        //第二项
+        var item2 = new FormItemData<SpinBox>("索引", new SpinBox()
+        {
+            Value = 5,
+            Step = 1
+        });
+        
+        body.AddItem(item1);
+        body.AddItem(item2);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                var text = item1.UiNode.Text;
+                if (string.IsNullOrEmpty(text))
+                {
+                    ShowTips("错误", $"名称不允许为空！");
+                    return;
+                }
+                
+                // window.CloseWindow();
+                // onCreate(terrainInfo);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
     
     private static EditorWindowPanel CreateWindowInstance(UiBase parentUi = null)
     {
