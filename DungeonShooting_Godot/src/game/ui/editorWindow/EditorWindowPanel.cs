@@ -45,7 +45,7 @@ public partial class EditorWindowPanel : EditorWindow
         if (_uiGrid == null)
         {
             S_CustomButton.Instance.Visible = true;
-            _uiGrid = new UiGrid<CustomButton, ButtonData>(S_CustomButton, typeof(CustomButtonCell));
+            _uiGrid = CreateUiGrid<CustomButton, ButtonData, CustomButtonCell>(S_CustomButton);
             _uiGrid.SetHorizontalExpand(true);
         }
         _uiGrid.SetColumns(buttons.Length);

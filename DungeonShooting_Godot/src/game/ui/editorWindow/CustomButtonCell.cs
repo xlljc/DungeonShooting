@@ -12,11 +12,6 @@ public class CustomButtonCell : UiCell<EditorWindow.CustomButton, EditorWindowPa
         CellNode.L_Button.Instance.Text = data.Text;
     }
 
-    public override void OnDestroy()
-    {
-        CellNode.L_Button.Instance.Pressed -= OnClick;
-    }
-
     public override void OnClick()
     {
         if (Data.Callback != null)
