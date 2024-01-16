@@ -104,6 +104,26 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// 地图是否有绘制错误
     /// </summary>
     public bool HasTerrainError => !_isGenerateTerrain;
+    
+    /// <summary>
+    /// 当前选择的图层
+    /// </summary>
+    public TileMapLayerData CurrLayer { get; private set; }
+    
+    /// <summary>
+    /// 当前正在使用的 TileSetSplit 数据
+    /// </summary>
+    public TileSetSplit CurrentTileSet { get; private set; }
+    
+    /// <summary>
+    /// 当前正在使用的 Source
+    /// </summary>
+    public TileSetSourceInfo CurrSource => CurrentTileSet.TileSetInfo.Sources[_sourceId];
+    
+    /// <summary>
+    /// 当前正在使用的 Source 索引
+    /// </summary>
+    public int CurrSourceIndex { get; private set; }
 
     //变动过的数据
     
@@ -170,7 +190,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             _mouseCellPosition.Y * GameConfig.TileCellSize
         );
         
-        if (!MapEditorToolsPanel.S_HBoxContainer.Instance.IsPositionOver(GetGlobalMousePosition())) //不在Ui节点上
+        if (!MapEditorToolsPanel.S_HBoxContainer.Instance.IsMouseInRect()) //不在Ui节点上
         {
             //左键绘制
             if (_isLeftPressed)
@@ -181,7 +201,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     {
                         _changeFlag = true;
                         _prevMouseCellPosition = _mouseCellPosition;
-                        //绘制自动图块
+                        //绘制图块
                         SetSingleAutoCell(_mouseCellPosition);
                     }
                 }
@@ -356,6 +376,20 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// 设置选择的layer
+    /// </summary>
+    public void SetCurrentLayer(TileMapLayerData layerData)
+    {
+        CurrLayer = layerData;
+        MapEditorToolsPanel.S_CurrLayer.Instance.Text = "当前图层：" + layerData.Title;
+    }
+
+    public void SetCurrentSourceIndex()
+    {
+        
     }
 
     /// <summary>
@@ -561,6 +595,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <param name="tileSetSplit">要初始化的图块集</param>
     private void InitTileSet(TileSetSplit tileSetSplit)
     {
+        CurrentTileSet = tileSetSplit;
         TileSet = tileSetSplit.GetTileSet();
 
         // 创建AutoTileConfig对象
@@ -622,13 +657,19 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //绘制单个自动贴图
     private void SetSingleAutoCell(Vector2I position)
     {
-        var tileCellData = _autoTileConfig.Floor;
-        SetCell(GetFloorLayer(), position, tileCellData.SourceId, tileCellData.AutoTileCoords);
-        //SetCell(GetFloorLayer(), position, _sourceId, _autoTileConfig.Floor.AutoTileCoords);
-        if (!_autoCellLayerGrid.Contains(position.X, position.Y))
+        if (CurrLayer.Layer == MapLayer.AutoFloorLayer) //选择自动地板层, 那么不管笔刷类型, 通通使用 Main Source 中的 Main Terrain
         {
-            ResetGenerateTimer();
-            _autoCellLayerGrid.Set(position.X, position.Y, true);
+            var tileCellData = _autoTileConfig.Floor;
+            SetCell(GetFloorLayer(), position, tileCellData.SourceId, tileCellData.AutoTileCoords);
+            if (!_autoCellLayerGrid.Contains(position.X, position.Y))
+            {
+                ResetGenerateTimer();
+                _autoCellLayerGrid.Set(position.X, position.Y, true);
+            }
+        }
+        else //自定义层
+        {
+            SetCell(CurrLayer.Layer, position, CurrSourceIndex, new Vector2I(0, 0));
         }
     }
     
@@ -664,13 +705,20 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         _autoCellLayerGrid.SetRect(start, new Vector2I(width, height), true);
     }
 
-    //擦除单个自动图块
+    //擦除单个图块
     private void EraseSingleAutoCell(Vector2I position)
     {
-        EraseCell(GetFloorLayer(), position);
-        if (_autoCellLayerGrid.Remove(position.X, position.Y))
+        if (CurrLayer.Layer == MapLayer.AutoFloorLayer) //选择自动地板层, 那么不管笔刷类型, 通通使用 Main Source 中的 Main Terrain
         {
-            ResetGenerateTimer();
+            EraseCell(GetFloorLayer(), position);
+            if (_autoCellLayerGrid.Remove(position.X, position.Y))
+            {
+                ResetGenerateTimer();
+            }
+        }
+        else //自定义层
+        {
+            EraseCell(CurrLayer.Layer, position);
         }
     }
     
@@ -1152,6 +1200,12 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         tileInfo.Floor.Clear();
         tileInfo.Middle.Clear();
         tileInfo.Top.Clear();
+        tileInfo.CustomFloor1.Clear();
+        tileInfo.CustomFloor2.Clear();
+        tileInfo.CustomFloor3.Clear();
+        tileInfo.CustomMiddle1.Clear();
+        tileInfo.CustomMiddle2.Clear();
+        tileInfo.CustomTop.Clear();
 
         //保存图块数据
         PushAutoLayerDataToList(MapLayer.AutoFloorLayer, tileInfo.Floor);

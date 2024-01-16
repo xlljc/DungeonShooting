@@ -213,17 +213,6 @@ public static class Utils
     }
 
     /// <summary>
-    /// 返回指定坐标是否在UI节范围点内
-    /// </summary>
-    public static bool IsPositionOver(this Control control, Vector2 position)
-    {
-        var globalPosition = control.GlobalPosition;
-        var size = control.Size * control.Scale;
-        return position.X >= globalPosition.X && position.X <= (globalPosition.X + size.X) &&
-               position.Y >= globalPosition.Y && position.Y <= (globalPosition.Y + size.Y);
-    }
-
-    /// <summary>
     /// 判断点是否在区域内
     /// </summary>
     public static bool IsPositionInRect(Vector2 pos, Rect2 rect2)
