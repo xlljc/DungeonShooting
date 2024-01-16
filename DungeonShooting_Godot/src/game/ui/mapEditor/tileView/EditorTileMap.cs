@@ -150,11 +150,16 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public TileMapDrawMode CurrBrushType { get; private set; }
 
     /// <summary>
-    /// 当前笔刷使用的 AtlasCoords, key: pos, value: atlasCoords
+    /// 当前笔刷使用的 AtlasCoords, value: atlasCoords, 单位: 格
     /// </summary>
     public List<Vector2I> CurrBrush { get; } = new List<Vector2I>();
+    
+    /// <summary>
+    /// 当前笔刷使用的纹理
+    /// </summary>
+    public Texture2D CurrBrushTexture { get; private set; }
 
-    //笔刷偏移, 单位: 像素
+    //笔刷偏移, 单位: 格
     private Vector2I _brushOffset = Vector2I.Zero;
     
     //--------------------------------------- 变动过的数据 ---------------------------------------
@@ -171,6 +176,12 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// 当前编辑的门数据
     /// </summary>
     public List<DoorAreaInfo> CurrDoorConfigs { get; } = new List<DoorAreaInfo>();
+
+    /// <summary>
+    /// 是否绘制房间中的辅助标记
+    /// </summary>
+    public bool IsDrawMark { get; set; } = true;
+
     //-------------------------------
     private MapEditor.TileMap _editorTileMap;
     private EventFactory _eventFactory;
@@ -297,28 +308,32 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //轴线
         canvasItem.DrawLine(new Vector2(0, 2000), new Vector2(0, -2000), Colors.Green);
         canvasItem.DrawLine(new Vector2(2000, 0), new Vector2( -2000, 0), Colors.Red);
-        
-        //绘制房间区域
-        if (CurrRoomSize.X != 0 && CurrRoomSize.Y != 0)
-        {
-            canvasItem.DrawRect(
-                new Rect2(
-                    (CurrRoomPosition + new Vector2I(1, 2)) * GameConfig.TileCellSize,
-                    (CurrRoomSize - new Vector2I(2, 3)) * GameConfig.TileCellSize
-                ),
-                Colors.Aqua, false, 5f / Scale.X
-            );
-        }
 
-        //绘制导航网格
-        if (_checkTerrainFlag && _isGenerateTerrain && _polygonData != null)
+        if (IsDrawMark)
         {
-            foreach (var vector2s in _polygonData)
+            //绘制房间区域
+            if (CurrRoomSize.X != 0 && CurrRoomSize.Y != 0)
             {
-                canvasItem.DrawPolygon(vector2s, new Color(0,1,1, 0.3f).MakeArray(vector2s.Length));
+                canvasItem.DrawRect(
+                    new Rect2(
+                        (CurrRoomPosition + new Vector2I(1, 2)) * GameConfig.TileCellSize,
+                        (CurrRoomSize - new Vector2I(2, 3)) * GameConfig.TileCellSize
+                    ),
+                    Colors.Aqua, false, 5f / Scale.X
+                );
+            }
+
+            //绘制导航网格
+            if (_checkTerrainFlag && _isGenerateTerrain && _polygonData != null)
+            {
+                foreach (var vector2s in _polygonData)
+                {
+                    canvasItem.DrawPolygon(vector2s, new Color(0,1,1, 0.3f).MakeArray(vector2s.Length));
+                }
             }
         }
 
+        //绘制笔刷
         if (MouseType == MouseButtonType.Pen || MouseType == MouseButtonType.Area)
         {
             if (_drawFullRect) //绘制填充矩形
@@ -342,9 +357,36 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             }
             else //绘制单格
             {
-                canvasItem.DrawRect(new Rect2(_mousePosition, TileSet.TileSize), Colors.White, false, 2f / Scale.X);
+                if (CurrLayer.Layer == MapLayer.AutoFloorLayer) //选择自动地板层
+                {
+                    DrawCellOutline(canvasItem);
+                }
+                else //自定义层
+                {
+                    if (CurrBrushType == TileMapDrawMode.Free)
+                    {
+                        if (_isRightPressed) //按下了左键擦除
+                        {
+                            DrawCellOutline(canvasItem);
+                        }
+                        else //正常绘制
+                        {
+                            foreach (var item in CurrBrush)
+                            {
+                                var rect = new Rect2(_mousePosition + (item + _brushOffset) * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize);
+                                var srcRect = new Rect2(item * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize);
+                                canvasItem.DrawTextureRectRegion(CurrBrushTexture, rect, srcRect, new Color(1, 1, 1, 0.3f));
+                            }
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private void DrawCellOutline(CanvasItem canvasItem)
+    {
+        canvasItem.DrawRect(new Rect2(_mousePosition, TileSet.TileSize), Colors.White, false, 2f / Scale.X);
     }
 
     public override void _Input(InputEvent @event)
@@ -453,14 +495,19 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 xEnd = Mathf.Max(cell.X, xEnd);
                 yEnd = Mathf.Max(cell.Y, yEnd);
             }
-
-            _brushOffset = new Vector2I(xEnd - xStart, yEnd - yStart);
+            
+            _brushOffset = new Vector2I(-(xStart + (xEnd - xStart) / 2), -(yStart + (yEnd - yStart) / 2));
         }
     }
     
     public void ClearCurrBrushAtlasCoords()
     {
         CurrBrush.Clear();
+    }
+
+    public void SetCurrBrushTexture(Texture2D texture)
+    {
+        CurrBrushTexture = texture;
     }
 
     /// <summary>
@@ -744,7 +791,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             {
                 foreach (var item in CurrBrush)
                 {
-                    SetCell(CurrLayer.Layer, position + item - _brushOffset, CurrSourceIndex, item);
+                    SetCell(CurrLayer.Layer, position + item + _brushOffset, CurrSourceIndex, item);
                 }
             }
         }
@@ -1432,11 +1479,14 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 MapEditorToolsPanel.Visible = true;
                 //还原层级显示
                 SetLayerEnabled(MapLayer.AutoFloorLayer, _tempAutoFloorLayer);
-                //SetLayerEnabled(CustomFloorLayer, _tempCustomFloorLayer);
                 SetLayerEnabled(MapLayer.AutoMiddleLayer, _tempAutoMiddleLayer);
-                //SetLayerEnabled(MapLayer.CustomMiddleLayer, _tempCustomMiddleLayer);
                 SetLayerEnabled(MapLayer.AutoTopLayer, _tempAutoTopLayer);
-                //SetLayerEnabled(MapLayer.CustomTopLayer, _tempCustomTopLayer);
+                SetLayerEnabled(MapLayer.CustomFloorLayer1, _tempCustomFloorLayer1);
+                SetLayerEnabled(MapLayer.CustomFloorLayer2, _tempCustomFloorLayer2);
+                SetLayerEnabled(MapLayer.CustomFloorLayer3, _tempCustomFloorLayer3);
+                SetLayerEnabled(MapLayer.CustomMiddleLayer1, _tempCustomMiddleLayer1);
+                SetLayerEnabled(MapLayer.CustomMiddleLayer2, _tempCustomMiddleLayer2);
+                SetLayerEnabled(MapLayer.CustomTopLayer, _tempCustomTopLayer);
 
                 //保存预览图
                 var subViewport = MapEditorPanel.S_SubViewport.Instance;

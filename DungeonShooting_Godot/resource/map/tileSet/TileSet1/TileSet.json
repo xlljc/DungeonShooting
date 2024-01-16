@@ -239,6 +239,12 @@
         }
       ],
       "Combination": []
+    },
+    {
+      "Name": "Test1",
+      "SourcePath": "resource/map/tileSet/TileSet1/Test1.png",
+      "Terrain": [],
+      "Combination": []
     }
   ]
 }

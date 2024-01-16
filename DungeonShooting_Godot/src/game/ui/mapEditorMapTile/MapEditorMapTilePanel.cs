@@ -77,6 +77,8 @@ public partial class MapEditorMapTilePanel : MapEditorMapTile
             var sourceInfo = TileSetSourceInfo;
             //单格页签纹理
             S_Tab1.Instance.SetImage(sourceInfo.GetSourceImage());
+            //触发聚焦
+            S_Tab1.Instance.OnFocusClick();
             //地形页签
             S_Tab2.Instance.RefreshTerrain(sourceInfo);
         }

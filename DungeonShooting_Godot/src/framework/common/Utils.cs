@@ -491,7 +491,7 @@ public static class Utils
     /// <summary>
     /// 返回鼠标所在的单元格位置, 相对于Ui节点左上角
     /// </summary>
-    public static Vector2I GetMouseCellPosition(Control control)
+    public static Vector2I GetMouseCellPosition(CanvasItem control)
     {
         var pos = control.GetLocalMousePosition() / GameConfig.TileCellSize;
         return pos.AsVector2I();

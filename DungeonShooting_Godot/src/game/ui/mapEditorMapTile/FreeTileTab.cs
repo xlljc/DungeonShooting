@@ -25,6 +25,7 @@ public partial class FreeTileTab : EditorGridBg<MapEditorMapTile.Tab1>
         base.SetUiNode(uiNode);
         InitNode(UiNode.L_TabRoot.Instance, UiNode.L_Grid.Instance);
         _texture = new ImageTexture();
+        UiNode.UiPanel.EditorTileMap.SetCurrBrushTexture(_texture);
         _sprite = UiNode.L_TabRoot.L_TileSprite.Instance;
         _sprite.Texture = _texture;
         
@@ -108,8 +109,10 @@ public partial class FreeTileTab : EditorGridBg<MapEditorMapTile.Tab1>
         root.Size = new Vector2(_width, _height);
     }
 
-    //聚焦按钮点击
-    private void OnFocusClick()
+    /// <summary>
+    /// 聚焦
+    /// </summary>
+    public void OnFocusClick()
     {
         Utils.DoFocusNode(ContainerRoot, Size, new Vector2(_width, _height));
         RefreshGridTrans();

@@ -30,6 +30,7 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, TileMapLaye
             if (Data.Layer == MapLayer.MarkLayer) //标记层
             {
                 _visible = true;
+                CellNode.UiPanel.EditorTileMap.IsDrawMark = _visible;
             }
             else
             {
@@ -47,6 +48,7 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, TileMapLaye
             _visible = !_visible;
             if (Data.Layer == MapLayer.MarkLayer) //隐藏标记层
             {
+                CellNode.UiPanel.EditorTileMap.IsDrawMark = _visible;
                 panel.S_MapEditorTools.Instance.S_ToolRoot.Instance.Visible = _visible;
             }
             else //隐藏地图层级

@@ -32,6 +32,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_mqp1c")
+Layer = null
 metadata/_edit_vertical_guides_ = [1900.0]
 
 [node name="ToolRoot" type="Control" parent="."]

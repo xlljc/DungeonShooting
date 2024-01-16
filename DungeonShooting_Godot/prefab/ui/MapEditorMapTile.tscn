@@ -15,6 +15,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gtth6")
+Layer = null
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -97,9 +98,12 @@ mouse_filter = 2
 centered = false
 
 [node name="Brush" type="Control" parent="VBoxContainer/Panel/MarginContainer/Tab1/TabRoot"]
-anchors_preset = 0
-offset_right = 1.0
-offset_bottom = 1.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
 [node name="Grid" type="ColorRect" parent="VBoxContainer/Panel/MarginContainer/Tab1"]

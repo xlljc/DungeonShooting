@@ -231,12 +231,16 @@ public partial class TileEditCombination : EditorGridBg<TileSetEditorCombination
     private void EraseBrush()
     {
         var brushRoot = UiNode.L_CombinationRoot.L_BrushRoot.Instance;
-        var pos = brushRoot.Position.AsVector2I();
-        if (_canvas.TryGetValue(pos, out var canvasCell))
+        foreach (var keyValuePair in _brushData)
         {
-            canvasCell.QueueFree();
-            _canvas.Remove(pos);
-            _canvasDirty = true;
+            var combinationCell = keyValuePair.Value;
+            var pos = (combinationCell.Position + brushRoot.Position).AsVector2I();
+            if (_canvas.TryGetValue(pos, out var canvasCell))
+            {
+                canvasCell.QueueFree();
+                _canvas.Remove(pos);
+                _canvasDirty = true;
+            }
         }
     }
 
