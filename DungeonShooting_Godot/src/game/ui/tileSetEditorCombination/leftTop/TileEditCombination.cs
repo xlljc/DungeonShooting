@@ -227,20 +227,16 @@ public partial class TileEditCombination : EditorGridBg<TileSetEditorCombination
         }
     }
 
-    //擦除笔刷
+    //擦除操作
     private void EraseBrush()
     {
         var brushRoot = UiNode.L_CombinationRoot.L_BrushRoot.Instance;
-        foreach (var keyValuePair in _brushData)
+        var pos = brushRoot.Position.AsVector2I();
+        if (_canvas.TryGetValue(pos, out var canvasCell))
         {
-            var combinationCell = keyValuePair.Value;
-            var pos = (combinationCell.Position + brushRoot.Position).AsVector2I();
-            if (_canvas.TryGetValue(pos, out var canvasCell))
-            {
-                canvasCell.QueueFree();
-                _canvas.Remove(pos);
-                _canvasDirty = true;
-            }
+            canvasCell.QueueFree();
+            _canvas.Remove(pos);
+            _canvasDirty = true;
         }
     }
 

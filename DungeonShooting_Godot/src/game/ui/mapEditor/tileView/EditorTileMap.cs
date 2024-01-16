@@ -33,6 +33,26 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         /// </summary>
         Edit,
     }
+    
+    public enum TileMapDrawMode
+    {
+        /// <summary>
+        /// 无状态
+        /// </summary>
+        None,
+        /// <summary>
+        /// 自由绘制
+        /// </summary>
+        Free,
+        /// <summary>
+        /// 地形绘制
+        /// </summary>
+        Terrain,
+        /// <summary>
+        /// 组合绘制
+        /// </summary>
+        Combination
+    }
 
     /// <summary>
     /// 所属地图编辑器UI
@@ -85,7 +105,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private bool _initLayer = false;
 
     //--------- 配置数据 -------------
-    private int _sourceId = 0;
     private int _terrainSet = 0;
     private int _terrain = 0;
     private AutoTileConfig _autoTileConfig;
@@ -118,14 +137,27 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <summary>
     /// 当前正在使用的 Source
     /// </summary>
-    public TileSetSourceInfo CurrSource => CurrentTileSet.TileSetInfo.Sources[_sourceId];
-    
+    public TileSetSourceInfo CurrSource => CurrentTileSet.TileSetInfo.Sources[CurrSourceIndex];
+
     /// <summary>
     /// 当前正在使用的 Source 索引
     /// </summary>
     public int CurrSourceIndex { get; private set; }
+    
+    /// <summary>
+    /// 当前笔刷类型
+    /// </summary>
+    public TileMapDrawMode CurrBrushType { get; private set; }
 
-    //变动过的数据
+    /// <summary>
+    /// 当前笔刷使用的 AtlasCoords, key: pos, value: atlasCoords
+    /// </summary>
+    public List<Vector2I> CurrBrush { get; } = new List<Vector2I>();
+
+    //笔刷偏移, 单位: 像素
+    private Vector2I _brushOffset = Vector2I.Zero;
+    
+    //--------------------------------------- 变动过的数据 ---------------------------------------
     
     /// <summary>
     /// 地图位置, 单位: 格
@@ -202,7 +234,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                         _changeFlag = true;
                         _prevMouseCellPosition = _mouseCellPosition;
                         //绘制图块
-                        SetSingleAutoCell(_mouseCellPosition);
+                        SetSingleCell(_mouseCellPosition);
                     }
                 }
                 else if (MouseType == MouseButtonType.Area) //绘制区域
@@ -222,7 +254,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     {
                         _changeFlag = true;
                         _prevMouseCellPosition = _mouseCellPosition;
-                        EraseSingleAutoCell(_mouseCellPosition);
+                        EraseSingleCell(_mouseCellPosition);
                     }
                 }
                 else if (MouseType == MouseButtonType.Area) //绘制区域
@@ -331,7 +363,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     _changeFlag = false;
                     if (_drawFullRect) //松开, 提交绘制的矩形区域
                     {
-                        SetRectAutoCell(_mouseStartCellPosition, _mouseCellPosition);
+                        SetRectCell(_mouseStartCellPosition, _mouseCellPosition);
                         _drawFullRect = false;
                     }
                 }
@@ -350,7 +382,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     _changeFlag = false;
                     if (_drawFullRect) //松开, 提交擦除的矩形区域
                     {
-                        EraseRectAutoCell(_mouseStartCellPosition, _mouseCellPosition);
+                        EraseRectCell(_mouseStartCellPosition, _mouseCellPosition);
                         _drawFullRect = false;
                     }
                 }
@@ -387,9 +419,48 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         MapEditorToolsPanel.S_CurrLayer.Instance.Text = "当前图层：" + layerData.Title;
     }
 
-    public void SetCurrentSourceIndex()
+    /// <summary>
+    /// 设置选中的 Source 索引
+    /// </summary>
+    public void SetCurrSourceIndex(int index)
     {
-        
+        CurrSourceIndex = index;
+    }
+
+    /// <summary>
+    /// 设置当前笔刷类型
+    /// </summary>
+    public void SetCurrBrushType(TileMapDrawMode mode)
+    {
+        CurrBrushType = mode;
+    }
+
+    public void AddCurrBrushAtlasCoords(Vector2I atlasCoords)
+    {
+        if (!CurrBrush.Contains(atlasCoords))
+        {
+            CurrBrush.Add(atlasCoords);
+            var xStart = int.MaxValue;
+            var xEnd = int.MinValue;
+            var yStart = int.MaxValue;
+            var yEnd = int.MinValue;
+
+            //计算起始点和终点
+            foreach (var cell in CurrBrush)
+            {
+                xStart = Mathf.Min(cell.X, xStart);
+                yStart = Mathf.Min(cell.Y, yStart);
+                xEnd = Mathf.Max(cell.X, xEnd);
+                yEnd = Mathf.Max(cell.Y, yEnd);
+            }
+
+            _brushOffset = new Vector2I(xEnd - xStart, yEnd - yStart);
+        }
+    }
+    
+    public void ClearCurrBrushAtlasCoords()
+    {
+        CurrBrush.Clear();
     }
 
     /// <summary>
@@ -654,13 +725,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
     }
 
-    //绘制单个自动贴图
-    private void SetSingleAutoCell(Vector2I position)
+    //绘制单个贴图
+    private void SetSingleCell(Vector2I position)
     {
         if (CurrLayer.Layer == MapLayer.AutoFloorLayer) //选择自动地板层, 那么不管笔刷类型, 通通使用 Main Source 中的 Main Terrain
         {
             var tileCellData = _autoTileConfig.Floor;
-            SetCell(GetFloorLayer(), position, tileCellData.SourceId, tileCellData.AutoTileCoords);
+            SetCell(MapLayer.AutoFloorLayer, position, tileCellData.SourceId, tileCellData.AutoTileCoords);
             if (!_autoCellLayerGrid.Contains(position.X, position.Y))
             {
                 ResetGenerateTimer();
@@ -669,12 +740,18 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         else //自定义层
         {
-            SetCell(CurrLayer.Layer, position, CurrSourceIndex, new Vector2I(0, 0));
+            if (CurrBrushType == TileMapDrawMode.Free) //自由绘制
+            {
+                foreach (var item in CurrBrush)
+                {
+                    SetCell(CurrLayer.Layer, position + item - _brushOffset, CurrSourceIndex, item);
+                }
+            }
         }
     }
     
-    //绘制区域自动贴图
-    private void SetRectAutoCell(Vector2I start, Vector2I end)
+    //绘制区域贴图
+    private void SetRectCell(Vector2I start, Vector2I end)
     {
         ResetGenerateTimer();
         
@@ -698,7 +775,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             for (var j = 0; j < height; j++)
             {
                 var tileCellData = _autoTileConfig.Floor;
-                SetCell(GetFloorLayer(), new Vector2I(start.X + i, start.Y + j), tileCellData.SourceId, tileCellData.AutoTileCoords);
+                SetCell(MapLayer.AutoFloorLayer, new Vector2I(start.X + i, start.Y + j), tileCellData.SourceId, tileCellData.AutoTileCoords);
             }
         }
 
@@ -706,11 +783,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     }
 
     //擦除单个图块
-    private void EraseSingleAutoCell(Vector2I position)
+    private void EraseSingleCell(Vector2I position)
     {
         if (CurrLayer.Layer == MapLayer.AutoFloorLayer) //选择自动地板层, 那么不管笔刷类型, 通通使用 Main Source 中的 Main Terrain
         {
-            EraseCell(GetFloorLayer(), position);
+            EraseCell(MapLayer.AutoFloorLayer, position);
             if (_autoCellLayerGrid.Remove(position.X, position.Y))
             {
                 ResetGenerateTimer();
@@ -722,8 +799,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
     }
     
-    //擦除一个区域内的自动贴图
-    private void EraseRectAutoCell(Vector2I start, Vector2I end)
+    //擦除一个区域内的贴图
+    private void EraseRectCell(Vector2I start, Vector2I end)
     {
         ResetGenerateTimer();
         
@@ -746,7 +823,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         {
             for (var j = 0; j < height; j++)
             {
-                EraseCell(GetFloorLayer(), new Vector2I(start.X + i, start.Y + j));
+                EraseCell(MapLayer.AutoFloorLayer, new Vector2I(start.X + i, start.Y + j));
             }
         }
         _autoCellLayerGrid.RemoveRect(start, new Vector2I(width, height));
@@ -767,9 +844,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //重新计算房间区域
     private void CalcTileRect(bool refreshDoorTrans)
     {
-        var rect = GetUsedRect();
-        CurrRoomPosition = rect.Position;
-        SetMapSize(rect.Size, refreshDoorTrans);
+        var rect = _autoCellLayerGrid.GetRect();
+        CurrRoomPosition = rect.Position - new Vector2I(2, 3);
+        SetMapSize(rect.Size + new Vector2I(4, 5), refreshDoorTrans);
     }
     
     //检测是否有不合规的图块, 返回true表示图块正常
@@ -840,7 +917,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     {
                         tileCellData = _autoTileConfig.Wall_Vertical_Center;
                     }
-                    SetCell(GetFloorLayer(), new Vector2I(x, y - 1), tileCellData.SourceId, tileCellData.AutoTileCoords);
+                    SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData.SourceId, tileCellData.AutoTileCoords);
                 }
             }
 
@@ -856,9 +933,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             temp1.Add(p1);
             temp1.Add(p2);
             //上横
-            SetCell(GetFloorLayer(), p1, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
+            SetCell(MapLayer.AutoFloorLayer, p1, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
             //下横
-            SetCell(GetFloorLayer(), p2, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
+            SetCell(MapLayer.AutoFloorLayer, p2, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
         }
         for (var y = yStart - 4; y <= yEnd + 3; y++)
         {
@@ -867,9 +944,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             temp1.Add(p1);
             temp1.Add(p2);
             //左竖
-            SetCell(GetFloorLayer(), p1, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
+            SetCell(MapLayer.AutoFloorLayer, p1, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
             //右竖
-            SetCell(GetFloorLayer(), p2, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
+            SetCell(MapLayer.AutoFloorLayer, p2, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
         }
         
         //计算需要绘制的图块
@@ -895,7 +972,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //擦除临时边界
         for (var i = 0; i < temp1.Count; i++)
         {
-            EraseCell(GetFloorLayer(), temp1[i]);
+            EraseCell(MapLayer.AutoFloorLayer, temp1[i]);
         }
 
         //计算区域
@@ -907,7 +984,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //擦除临时边界2
         for (var i = 0; i < temp2.Count; i++)
         {
-            EraseCell(GetFloorLayer(), temp2[i]);
+            EraseCell(MapLayer.AutoFloorLayer, temp2[i]);
         }
         
         //将墙壁移动到指定层
@@ -964,7 +1041,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                         continue;
                     }
                     EraseCell(MapLayer.AutoFloorLayer, pos);
-                    SetCell(layer, pos, _sourceId, atlasCoords);
+                    SetCell(layer, pos, CurrSourceIndex, atlasCoords);
                 }
             }
         }
@@ -1001,22 +1078,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         MapEditorPanel.S_ErrorCellAnimationPlayer.Instance.Stop();
     }
-
-    private int GetFloorLayer()
-    {
-        return MapLayer.AutoFloorLayer;
-    }
-
-    private int GetMiddleLayer()
-    {
-        return MapLayer.AutoMiddleLayer;
-    }
-
-    private int GetTopLayer()
-    {
-        return MapLayer.AutoTopLayer;
-    }
-
+    
     /// <summary>
     /// 选中拖拽功能
     /// </summary>

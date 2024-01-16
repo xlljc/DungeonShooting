@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://tjbfj67t5akm"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorMapTile/MapEditorMapTilePanel.cs" id="1_gtth6"]
-[ext_resource type="Script" path="res://src/game/ui/mapEditorMapTile/SingleTileTab.cs" id="2_jqu4q"]
+[ext_resource type="Script" path="res://src/game/ui/mapEditorMapTile/FreeTileTab.cs" id="2_5c2no"]
 [ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="3_sibps"]
 [ext_resource type="Script" path="res://src/game/ui/mapEditorMapTile/TerrainTileTab.cs" id="4_jxcal"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="5_f4thw"]
@@ -49,11 +49,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 item_count = 3
 selected = 0
-popup/item_0/text = "单格"
+popup/item_0/text = "自由绘制"
 popup/item_0/id = 0
-popup/item_1/text = "地形"
+popup/item_1/text = "地形绘制"
 popup/item_1/id = 1
-popup/item_2/text = "组合"
+popup/item_2/text = "组合绘制"
 popup/item_2/id = 2
 
 [node name="Panel" type="Panel" parent="VBoxContainer"]
@@ -73,11 +73,10 @@ theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
 [node name="Tab1" type="ColorRect" parent="VBoxContainer/Panel/MarginContainer"]
-visible = false
 clip_children = 2
 layout_mode = 2
 color = Color(0.145098, 0.145098, 0.145098, 1)
-script = ExtResource("2_jqu4q")
+script = ExtResource("2_5c2no")
 
 [node name="TabRoot" type="Control" parent="VBoxContainer/Panel/MarginContainer/Tab1"]
 layout_mode = 1
@@ -96,6 +95,12 @@ mouse_filter = 2
 
 [node name="TileSprite" type="Sprite2D" parent="VBoxContainer/Panel/MarginContainer/Tab1/TabRoot"]
 centered = false
+
+[node name="Brush" type="Control" parent="VBoxContainer/Panel/MarginContainer/Tab1/TabRoot"]
+anchors_preset = 0
+offset_right = 1.0
+offset_bottom = 1.0
+mouse_filter = 2
 
 [node name="Grid" type="ColorRect" parent="VBoxContainer/Panel/MarginContainer/Tab1"]
 layout_mode = 1
@@ -123,6 +128,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="Tab2" type="Control" parent="VBoxContainer/Panel/MarginContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("4_jxcal")
 

@@ -1,4 +1,5 @@
 using Godot;
+using UI.MapEditor;
 
 namespace UI.MapEditorMapTile;
 
@@ -28,9 +29,16 @@ public partial class MapEditorMapTilePanel : MapEditorMapTile
             return TileSetSplit.TileSetInfo.Sources[SourceIndex];
         }
     }
+    
+    /// <summary>
+    /// 编辑器Tile对象
+    /// </summary>
+    public EditorTileMap EditorTileMap { get; private set; }
 
     public override void OnCreateUi()
     {
+        var editorPanel = (MapEditorPanel)ParentUi;
+        EditorTileMap = editorPanel.S_TileMap.Instance;
         //切换资源
         S_SourceOption.Instance.ItemSelected += OnChangeSource;
         //切换笔刷类型
@@ -72,6 +80,7 @@ public partial class MapEditorMapTilePanel : MapEditorMapTile
             //地形页签
             S_Tab2.Instance.RefreshTerrain(sourceInfo);
         }
+        EditorTileMap.SetCurrSourceIndex(SourceIndex);
     }
     
     //切换笔刷类型
@@ -80,17 +89,24 @@ public partial class MapEditorMapTilePanel : MapEditorMapTile
         var v1 = false;
         var v2 = false;
         var v3 = false;
-        if (index == 0) //单格
+        if (index == 0) //自由绘制
         {
             v1 = true;
+            EditorTileMap.SetCurrBrushType(EditorTileMap.TileMapDrawMode.Free);
         }
         else if (index == 1) //地形
         {
             v2 = true;
+            EditorTileMap.SetCurrBrushType(EditorTileMap.TileMapDrawMode.Terrain);
         }
         else if (index == 2) //组合
         {
             v3 = true;
+            EditorTileMap.SetCurrBrushType(EditorTileMap.TileMapDrawMode.Combination);
+        }
+        else
+        {
+            EditorTileMap.SetCurrBrushType(EditorTileMap.TileMapDrawMode.Free);
         }
 
         S_Tab1.Instance.Visible = v1;

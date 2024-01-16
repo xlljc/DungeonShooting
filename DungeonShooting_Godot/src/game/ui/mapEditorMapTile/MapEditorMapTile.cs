@@ -147,6 +147,15 @@ public abstract partial class MapEditorMapTile : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab1.TabRoot.Brush
+    /// </summary>
+    public class Brush : UiNode<MapEditorMapTilePanel, Godot.Control, Brush>
+    {
+        public Brush(MapEditorMapTilePanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override Brush Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab1.TabRoot
     /// </summary>
     public class TabRoot : UiNode<MapEditorMapTilePanel, Godot.Control, TabRoot>
@@ -163,6 +172,19 @@ public abstract partial class MapEditorMapTile : UiBase
             }
         }
         private TileSprite _L_TileSprite;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab1.Brush
+        /// </summary>
+        public Brush L_Brush
+        {
+            get
+            {
+                if (_L_Brush == null) _L_Brush = new Brush(UiPanel, Instance.GetNode<Godot.Control>("Brush"));
+                return _L_Brush;
+            }
+        }
+        private Brush _L_Brush;
 
         public TabRoot(MapEditorMapTilePanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override TabRoot Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
@@ -187,9 +209,9 @@ public abstract partial class MapEditorMapTile : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="UI.MapEditorMapTile.SingleTileTab"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab1
+    /// 类型: <see cref="UI.MapEditorMapTile.FreeTileTab"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab1
     /// </summary>
-    public class Tab1 : UiNode<MapEditorMapTilePanel, UI.MapEditorMapTile.SingleTileTab, Tab1>
+    public class Tab1 : UiNode<MapEditorMapTilePanel, UI.MapEditorMapTile.FreeTileTab, Tab1>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.TabRoot
@@ -230,8 +252,8 @@ public abstract partial class MapEditorMapTile : UiBase
         }
         private FocusBtn _L_FocusBtn;
 
-        public Tab1(MapEditorMapTilePanel uiPanel, UI.MapEditorMapTile.SingleTileTab node) : base(uiPanel, node) {  }
-        public override Tab1 Clone() => new (UiPanel, (UI.MapEditorMapTile.SingleTileTab)Instance.Duplicate());
+        public Tab1(MapEditorMapTilePanel uiPanel, UI.MapEditorMapTile.FreeTileTab node) : base(uiPanel, node) {  }
+        public override Tab1 Clone() => new (UiPanel, (UI.MapEditorMapTile.FreeTileTab)Instance.Duplicate());
     }
 
     /// <summary>
@@ -412,13 +434,13 @@ public abstract partial class MapEditorMapTile : UiBase
     public class MarginContainer : UiNode<MapEditorMapTilePanel, Godot.MarginContainer, MarginContainer>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorMapTile.SingleTileTab"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.Tab1
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.MapEditorMapTile.FreeTileTab"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.Tab1
         /// </summary>
         public Tab1 L_Tab1
         {
             get
             {
-                if (_L_Tab1 == null) _L_Tab1 = new Tab1(UiPanel, Instance.GetNode<UI.MapEditorMapTile.SingleTileTab>("Tab1"));
+                if (_L_Tab1 == null) _L_Tab1 = new Tab1(UiPanel, Instance.GetNode<UI.MapEditorMapTile.FreeTileTab>("Tab1"));
                 return _L_Tab1;
             }
         }
@@ -551,6 +573,11 @@ public abstract partial class MapEditorMapTile : UiBase
     public TileSprite S_TileSprite => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab1.L_TabRoot.L_TileSprite;
 
     /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab1.TabRoot.Brush
+    /// </summary>
+    public Brush S_Brush => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab1.L_TabRoot.L_Brush;
+
+    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab1.TabRoot
     /// </summary>
     public TabRoot S_TabRoot => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab1.L_TabRoot;
@@ -566,7 +593,7 @@ public abstract partial class MapEditorMapTile : UiBase
     public FocusBtn S_FocusBtn => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab1.L_FocusBtn;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorMapTile.SingleTileTab"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab1
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorMapTile.FreeTileTab"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab1
     /// </summary>
     public Tab1 S_Tab1 => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab1;
 

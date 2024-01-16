@@ -206,4 +206,36 @@ public class InfiniteGrid<T>
             }
         }
     }
+
+    /// <summary>
+    /// 获取网格的包围矩形
+    /// </summary>
+    public Rect2I GetRect()
+    {
+        var flag = false;
+        var minX = int.MaxValue;
+        var minY = int.MaxValue;
+        var maxX = int.MinValue;
+        var maxY = int.MinValue;
+        foreach (var pair1 in _map)
+        {
+            var x = pair1.Key;
+            foreach (var pair2 in pair1.Value)
+            {
+                var y = pair2.Key;
+                minX = Mathf.Min(x, minX);
+                minY = Mathf.Min(y, minY);
+                maxX = Mathf.Max(x, maxX);
+                maxY = Mathf.Max(y, maxY);
+                flag = true;
+            }
+        }
+
+        if (!flag)
+        {
+            return new Rect2I();
+        }
+
+        return new Rect2I(minX, minY, maxX - minX + 1, maxY - minY + 1);
+    }
 }
