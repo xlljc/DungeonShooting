@@ -492,6 +492,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
 
         _cellList = null;
         _cellPool = null;
+        _template.GetUiInstance().QueueFree();
         GridContainer.QueueFree();
     }
 
