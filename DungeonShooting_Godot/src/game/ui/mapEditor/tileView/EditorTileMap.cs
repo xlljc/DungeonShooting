@@ -33,7 +33,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         /// </summary>
         Edit,
     }
-    
+
     /// <summary>
     /// 所属地图编辑器UI
     /// </summary>
@@ -390,8 +390,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     }
 
     //将指定自动地形层数据存入list中
-    private void PushAutoLayerDataToList(int layer, int sourceId, List<int> list)
+    private void PushAutoLayerDataToList(int layer, List<int> list)
     {
+        const int sourceId = 0; //这里指定0是因为 Main Source 的 id 为 0
         var layerArray = GetUsedCellsById(layer, sourceId);
         foreach (var pos in layerArray)
         {
@@ -404,6 +405,21 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 list.Add((int)tileCellData.TerrainPeering);
                 list.Add(tileCellData.TerrainType);
             }
+        }
+    }
+    
+    //将指定层数据存入list中
+    private void PushLayerDataToList(int layer, List<int> list)
+    {
+        var layerArray = GetUsedCellsById(layer);
+        foreach (var pos in layerArray)
+        {
+            var atlasCoords = GetCellAtlasCoords(layer, pos);
+            list.Add(pos.X);
+            list.Add(pos.Y);
+            list.Add(GetCellSourceId(layer, pos));
+            list.Add(atlasCoords.X);
+            list.Add(atlasCoords.Y);
         }
     }
 
@@ -421,10 +437,23 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             var terrainCell = terrainInfo.GetTerrainCell(index, type);
             var atlasCoords = terrainInfo.GetPosition(terrainCell);
             SetCell(layer, pos, sourceId, atlasCoords);
-            if (layer == GameConfig.FloorMapLayer)
+            if (layer == MapLayer.AutoFloorLayer)
             {
                 _autoCellLayerGrid.Set(pos, true);
             }
+        }
+    }
+    
+    //设置自定义层的数据
+    private void SetCustomLayerDataFromList(int layer, List<int> list)
+    {
+        //五个一组
+        for (var i = 0; i < list.Count; i += 5)
+        {
+            var pos = new Vector2I(list[i], list[i + 1]);
+            var sourceId = list[i + 2];
+            var atlasCoords = new Vector2I(list[i + 3], list[i + 4]);
+            SetCell(layer, pos, sourceId, atlasCoords);
         }
     }
 
@@ -480,10 +509,16 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //初始化层级数据
         InitLayer();
         
-        //地块数据
-        SetAutoLayerDataFromList(GameConfig.FloorMapLayer, tileInfo.Floor);
-        SetAutoLayerDataFromList(GameConfig.MiddleMapLayer, tileInfo.Middle);
-        SetAutoLayerDataFromList(GameConfig.TopMapLayer, tileInfo.Top);
+        //读取地块数据
+        SetAutoLayerDataFromList(MapLayer.AutoFloorLayer, tileInfo.Floor);
+        SetAutoLayerDataFromList(MapLayer.AutoMiddleLayer, tileInfo.Middle);
+        SetAutoLayerDataFromList(MapLayer.AutoTopLayer, tileInfo.Top);
+        SetCustomLayerDataFromList(MapLayer.CustomFloorLayer1, tileInfo.CustomFloor1);
+        SetCustomLayerDataFromList(MapLayer.CustomFloorLayer2, tileInfo.CustomFloor2);
+        SetCustomLayerDataFromList(MapLayer.CustomFloorLayer3, tileInfo.CustomFloor3);
+        SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer1, tileInfo.CustomMiddle1);
+        SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer2, tileInfo.CustomMiddle2);
+        SetCustomLayerDataFromList(MapLayer.CustomTopLayer, tileInfo.CustomTop);
 
         //如果有图块错误, 则找出错误的点位
         if (roomSplit.ErrorType == RoomErrorType.TileError)
@@ -542,16 +577,22 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
         _initLayer = true;
         //初始化层级数据
-        // AddLayer(CustomFloorLayer);
-        // SetLayerZIndex(CustomFloorLayer, CustomFloorLayer);
-        AddLayer(GameConfig.MiddleMapLayer);
-        SetLayerZIndex(GameConfig.MiddleMapLayer, GameConfig.MiddleMapLayer);
-        // AddLayer(CustomMiddleLayer);
-        // SetLayerZIndex(CustomMiddleLayer, CustomMiddleLayer);
-        AddLayer(GameConfig.TopMapLayer);
-        SetLayerZIndex(GameConfig.TopMapLayer, GameConfig.TopMapLayer);
-        // AddLayer(CustomTopLayer);
-        // SetLayerZIndex(CustomTopLayer, CustomTopLayer);
+        AddLayer(MapLayer.CustomFloorLayer1);
+        SetLayerZIndex(MapLayer.CustomFloorLayer1, MapLayer.CustomFloorLayer1);
+        AddLayer(MapLayer.CustomFloorLayer2);
+        SetLayerZIndex(MapLayer.CustomFloorLayer2, MapLayer.CustomFloorLayer2);
+        AddLayer(MapLayer.CustomFloorLayer3);
+        SetLayerZIndex(MapLayer.CustomFloorLayer3, MapLayer.CustomFloorLayer3);
+        AddLayer(MapLayer.AutoMiddleLayer);
+        SetLayerZIndex(MapLayer.AutoMiddleLayer, MapLayer.AutoMiddleLayer);
+        AddLayer(MapLayer.CustomMiddleLayer1);
+        SetLayerZIndex(MapLayer.CustomMiddleLayer1, MapLayer.CustomMiddleLayer1);
+        AddLayer(MapLayer.CustomMiddleLayer2);
+        SetLayerZIndex(MapLayer.CustomMiddleLayer2, MapLayer.CustomMiddleLayer2);
+        AddLayer(MapLayer.AutoTopLayer);
+        SetLayerZIndex(MapLayer.AutoTopLayer, MapLayer.AutoTopLayer);
+        AddLayer(MapLayer.CustomTopLayer);
+        SetLayerZIndex(MapLayer.CustomTopLayer, MapLayer.CustomTopLayer);
     }
 
     //缩小
@@ -668,8 +709,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         _generateTimer = _generateInterval;
         _isGenerateTerrain = false;
-        ClearLayer(GameConfig.TopMapLayer);
-        ClearLayer(GameConfig.MiddleMapLayer);
+        ClearLayer(MapLayer.AutoTopLayer);
+        ClearLayer(MapLayer.AutoMiddleLayer);
         CloseErrorCell();
         //标记有修改数据
         EventManager.EmitEvent(EventEnum.OnTileMapDirty);
@@ -707,7 +748,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //生成自动图块 (地形)
     private void GenerateTerrain()
     {
-        //ClearLayer(GameConfig.FloorMapLayer);
+        //ClearLayer(MapLayer.AutoFloorLayer);
         var list = new List<Vector2I>();
         var xStart = int.MaxValue;
         var yStart = int.MaxValue;
@@ -801,7 +842,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         var arr = new Array<Vector2I>(list);
         //绘制自动图块
-        SetCellsTerrainConnect(GameConfig.FloorMapLayer, arr, _terrainSet, _terrain, false);
+        SetCellsTerrainConnect(MapLayer.AutoFloorLayer, arr, _terrainSet, _terrain, false);
         
         //擦除临时边界
         for (var i = 0; i < temp1.Count; i++)
@@ -841,11 +882,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         return false;
     }
     
-    //将自动生成的图块从 GameConfig.FloorMapLayer 移动到指定图层中
+    //将自动生成的图块从 MapLayer.AutoFloorLayer 移动到指定图层中
     private void MoveTerrainCell()
     {
-        ClearLayer(GameConfig.TopMapLayer);
-        ClearLayer(GameConfig.MiddleMapLayer);
+        ClearLayer(MapLayer.AutoTopLayer);
+        ClearLayer(MapLayer.AutoMiddleLayer);
         
         var x = CurrRoomPosition.X;
         var y = CurrRoomPosition.Y;
@@ -857,24 +898,24 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             for (var j = 0; j < h; j++)
             {
                 var pos = new Vector2I(x + i, y + j);
-                if (!_autoCellLayerGrid.Contains(pos) && GetCellSourceId(GameConfig.FloorMapLayer, pos) != -1)
+                if (!_autoCellLayerGrid.Contains(pos) && GetCellSourceId(MapLayer.AutoFloorLayer, pos) != -1)
                 {
-                    var atlasCoords = GetCellAtlasCoords(GameConfig.FloorMapLayer, pos);
+                    var atlasCoords = GetCellAtlasCoords(MapLayer.AutoFloorLayer, pos);
                     var layer = _autoTileConfig.GetLayer(atlasCoords);
                     if (layer == GameConfig.MiddleMapLayer)
                     {
-                        layer = GameConfig.MiddleMapLayer;
+                        layer = MapLayer.AutoMiddleLayer;
                     }
                     else if (layer == GameConfig.TopMapLayer)
                     {
-                        layer = GameConfig.TopMapLayer;
+                        layer = MapLayer.AutoTopLayer;
                     }
                     else
                     {
                         Debug.LogError($"异常图块: {pos}, 这个图块的图集坐标'{atlasCoords}'不属于'MiddleMapLayer'和'TopMapLayer'!");
                         continue;
                     }
-                    EraseCell(GameConfig.FloorMapLayer, pos);
+                    EraseCell(MapLayer.AutoFloorLayer, pos);
                     SetCell(layer, pos, _sourceId, atlasCoords);
                 }
             }
@@ -915,17 +956,17 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
     private int GetFloorLayer()
     {
-        return GameConfig.FloorMapLayer;
+        return MapLayer.AutoFloorLayer;
     }
 
     private int GetMiddleLayer()
     {
-        return GameConfig.MiddleMapLayer;
+        return MapLayer.AutoMiddleLayer;
     }
 
     private int GetTopLayer()
     {
-        return GameConfig.TopMapLayer;
+        return MapLayer.AutoTopLayer;
     }
 
     /// <summary>
@@ -1112,9 +1153,17 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         tileInfo.Middle.Clear();
         tileInfo.Top.Clear();
 
-        PushAutoLayerDataToList(GameConfig.FloorMapLayer, _sourceId, tileInfo.Floor);
-        PushAutoLayerDataToList(GameConfig.MiddleMapLayer, _sourceId, tileInfo.Middle);
-        PushAutoLayerDataToList(GameConfig.TopMapLayer, _sourceId, tileInfo.Top);
+        //保存图块数据
+        PushAutoLayerDataToList(MapLayer.AutoFloorLayer, tileInfo.Floor);
+        PushAutoLayerDataToList(MapLayer.AutoMiddleLayer, tileInfo.Middle);
+        PushAutoLayerDataToList(MapLayer.AutoTopLayer, tileInfo.Top);
+        PushLayerDataToList(MapLayer.CustomFloorLayer1, tileInfo.CustomFloor1);
+        PushLayerDataToList(MapLayer.CustomFloorLayer2, tileInfo.CustomFloor2);
+        PushLayerDataToList(MapLayer.CustomFloorLayer3, tileInfo.CustomFloor3);
+        PushLayerDataToList(MapLayer.CustomMiddleLayer1, tileInfo.CustomMiddle1);
+        PushLayerDataToList(MapLayer.CustomMiddleLayer2, tileInfo.CustomMiddle2);
+        PushLayerDataToList(MapLayer.CustomTopLayer, tileInfo.CustomTop);
+        
         MapProjectManager.SaveRoomTileInfo(CurrRoomSplit);
     }
 
@@ -1176,9 +1225,12 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private Vector2 _tempMapPos;
     private Vector2 _tempMapScale;
     private bool _tempAutoFloorLayer;
-    private bool _tempCustomFloorLayer;
+    private bool _tempCustomFloorLayer1;
+    private bool _tempCustomFloorLayer2;
+    private bool _tempCustomFloorLayer3;
     private bool _tempAutoMiddleLayer;
-    private bool _tempCustomMiddleLayer;
+    private bool _tempCustomMiddleLayer1;
+    private bool _tempCustomMiddleLayer2;
     private bool _tempAutoTopLayer;
     private bool _tempCustomTopLayer;
 
@@ -1226,19 +1278,25 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         //隐藏工具栏
         MapEditorToolsPanel.Visible = false;
         //显示所有层级
-        _tempAutoFloorLayer = IsLayerEnabled(GameConfig.FloorMapLayer);
-        //_tempCustomFloorLayer = IsLayerEnabled(CustomFloorLayer);
-        _tempAutoMiddleLayer = IsLayerEnabled(GameConfig.MiddleMapLayer);
-        //_tempCustomMiddleLayer = IsLayerEnabled(CustomMiddleLayer);
-        _tempAutoTopLayer = IsLayerEnabled(GameConfig.TopMapLayer);
-        //_tempCustomTopLayer = IsLayerEnabled(CustomTopLayer);
+        _tempAutoFloorLayer = IsLayerEnabled(MapLayer.AutoFloorLayer);
+        _tempCustomFloorLayer1 = IsLayerEnabled(MapLayer.CustomFloorLayer1);
+        _tempCustomFloorLayer2 = IsLayerEnabled(MapLayer.CustomFloorLayer2);
+        _tempCustomFloorLayer3 = IsLayerEnabled(MapLayer.CustomFloorLayer3);
+        _tempAutoMiddleLayer = IsLayerEnabled(MapLayer.AutoMiddleLayer);
+        _tempCustomMiddleLayer1 = IsLayerEnabled(MapLayer.CustomMiddleLayer1);
+        _tempCustomMiddleLayer2 = IsLayerEnabled(MapLayer.CustomMiddleLayer2);
+        _tempAutoTopLayer = IsLayerEnabled(MapLayer.AutoTopLayer);
+        _tempCustomTopLayer = IsLayerEnabled(MapLayer.CustomTopLayer);
 
-        SetLayerEnabled(GameConfig.FloorMapLayer, true);
-        //SetLayerEnabled(CustomFloorLayer, true);
-        SetLayerEnabled(GameConfig.MiddleMapLayer, true);
-        //SetLayerEnabled(CustomMiddleLayer, true);
-        SetLayerEnabled(GameConfig.TopMapLayer, true);
-        //SetLayerEnabled(CustomTopLayer, true);
+        SetLayerEnabled(MapLayer.AutoFloorLayer, true);
+        SetLayerEnabled(MapLayer.CustomFloorLayer1, true);
+        SetLayerEnabled(MapLayer.CustomFloorLayer2, true);
+        SetLayerEnabled(MapLayer.CustomFloorLayer3, true);
+        SetLayerEnabled(MapLayer.AutoMiddleLayer, true);
+        SetLayerEnabled(MapLayer.CustomMiddleLayer1, true);
+        SetLayerEnabled(MapLayer.CustomMiddleLayer2, true);
+        SetLayerEnabled(MapLayer.AutoTopLayer, true);
+        SetLayerEnabled(MapLayer.CustomTopLayer, true);
     }
 
     private void OnFramePostDraw()
@@ -1257,12 +1315,12 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 //还原工具栏
                 MapEditorToolsPanel.Visible = true;
                 //还原层级显示
-                SetLayerEnabled(GameConfig.FloorMapLayer, _tempAutoFloorLayer);
+                SetLayerEnabled(MapLayer.AutoFloorLayer, _tempAutoFloorLayer);
                 //SetLayerEnabled(CustomFloorLayer, _tempCustomFloorLayer);
-                SetLayerEnabled(GameConfig.MiddleMapLayer, _tempAutoMiddleLayer);
-                //SetLayerEnabled(CustomMiddleLayer, _tempCustomMiddleLayer);
-                SetLayerEnabled(GameConfig.TopMapLayer, _tempAutoTopLayer);
-                //SetLayerEnabled(CustomTopLayer, _tempCustomTopLayer);
+                SetLayerEnabled(MapLayer.AutoMiddleLayer, _tempAutoMiddleLayer);
+                //SetLayerEnabled(MapLayer.CustomMiddleLayer, _tempCustomMiddleLayer);
+                SetLayerEnabled(MapLayer.AutoTopLayer, _tempAutoTopLayer);
+                //SetLayerEnabled(MapLayer.CustomTopLayer, _tempCustomTopLayer);
 
                 //保存预览图
                 var subViewport = MapEditorPanel.S_SubViewport.Instance;

@@ -1,7 +1,6 @@
 ﻿
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using Godot;
 
 public class DungeonTileInfo
 {
@@ -36,11 +35,41 @@ public class DungeonTileInfo
     public List<int> Top;
 
     /// <summary>
-    /// 自定义层
+    /// 自定义底层1, 数据五个一组, 分别为: 地图x坐标, 地图y坐标, 资源id, 图集x坐标, 图集y坐标
     /// </summary>
     [JsonInclude]
-    public List<CustomLayerInfo> CustomLayers;
-
+    public List<int> CustomFloor1;
+    
+    /// <summary>
+    /// 自定义底层2, 数据五个一组, 分别为: 地图x坐标, 地图y坐标, 资源id, 图集x坐标, 图集y坐标
+    /// </summary>
+    [JsonInclude]
+    public List<int> CustomFloor2;
+    
+    /// <summary>
+    /// 自定义底层3, 数据五个一组, 分别为: 地图x坐标, 地图y坐标, 资源id, 图集x坐标, 图集y坐标
+    /// </summary>
+    [JsonInclude]
+    public List<int> CustomFloor3;
+    
+    /// <summary>
+    /// 自定义中层1, 数据五个一组, 分别为: 地图x坐标, 地图y坐标, 资源id, 图集x坐标, 图集y坐标
+    /// </summary>
+    [JsonInclude]
+    public List<int> CustomMiddle1;
+    
+    /// <summary>
+    /// 自定义中层2, 数据五个一组, 分别为: 地图x坐标, 地图y坐标, 资源id, 图集x坐标, 图集y坐标
+    /// </summary>
+    [JsonInclude]
+    public List<int> CustomMiddle2;
+    
+    /// <summary>
+    /// 自定义顶层, 数据五个一组, 分别为: 地图x坐标, 地图y坐标, 资源id, 图集x坐标, 图集y坐标
+    /// </summary>
+    [JsonInclude]
+    public List<int> CustomTop;
+    
     public void InitData()
     {
         NavigationVertices = new List<SerializeVector2>();
@@ -48,6 +77,11 @@ public class DungeonTileInfo
         Floor = new List<int>();
         Middle = new List<int>();
         Top = new List<int>();
-        CustomLayers = new List<CustomLayerInfo>();
+        CustomFloor1 = new List<int>();
+        CustomFloor2 = new List<int>();
+        CustomFloor3 = new List<int>();
+        CustomMiddle1 = new List<int>();
+        CustomMiddle2 = new List<int>();
+        CustomTop = new List<int>();
     }
 }

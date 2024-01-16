@@ -29,100 +29,12 @@ public abstract partial class MapEditorMapLayer : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.LayerLabel
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorMapLayer.VBoxContainer.LayerLabel
     /// </summary>
     public class LayerLabel : UiNode<MapEditorMapLayerPanel, Godot.Label, LayerLabel>
     {
         public LayerLabel(MapEditorMapLayerPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
         public override LayerLabel Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.AddButton
-    /// </summary>
-    public class AddButton : UiNode<MapEditorMapLayerPanel, Godot.Button, AddButton>
-    {
-        public AddButton(MapEditorMapLayerPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
-        public override AddButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.EditButton
-    /// </summary>
-    public class EditButton : UiNode<MapEditorMapLayerPanel, Godot.Button, EditButton>
-    {
-        public EditButton(MapEditorMapLayerPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
-        public override EditButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.DeleteButton
-    /// </summary>
-    public class DeleteButton : UiNode<MapEditorMapLayerPanel, Godot.Button, DeleteButton>
-    {
-        public DeleteButton(MapEditorMapLayerPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
-        public override DeleteButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
-    }
-
-    /// <summary>
-    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorMapLayer.VBoxContainer.HBoxContainer
-    /// </summary>
-    public class HBoxContainer : UiNode<MapEditorMapLayerPanel, Godot.HBoxContainer, HBoxContainer>
-    {
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapLayer.VBoxContainer.LayerLabel
-        /// </summary>
-        public LayerLabel L_LayerLabel
-        {
-            get
-            {
-                if (_L_LayerLabel == null) _L_LayerLabel = new LayerLabel(UiPanel, Instance.GetNode<Godot.Label>("LayerLabel"));
-                return _L_LayerLabel;
-            }
-        }
-        private LayerLabel _L_LayerLabel;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapLayer.VBoxContainer.AddButton
-        /// </summary>
-        public AddButton L_AddButton
-        {
-            get
-            {
-                if (_L_AddButton == null) _L_AddButton = new AddButton(UiPanel, Instance.GetNode<Godot.Button>("AddButton"));
-                return _L_AddButton;
-            }
-        }
-        private AddButton _L_AddButton;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapLayer.VBoxContainer.EditButton
-        /// </summary>
-        public EditButton L_EditButton
-        {
-            get
-            {
-                if (_L_EditButton == null) _L_EditButton = new EditButton(UiPanel, Instance.GetNode<Godot.Button>("EditButton"));
-                return _L_EditButton;
-            }
-        }
-        private EditButton _L_EditButton;
-
-        /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapLayer.VBoxContainer.DeleteButton
-        /// </summary>
-        public DeleteButton L_DeleteButton
-        {
-            get
-            {
-                if (_L_DeleteButton == null) _L_DeleteButton = new DeleteButton(UiPanel, Instance.GetNode<Godot.Button>("DeleteButton"));
-                return _L_DeleteButton;
-            }
-        }
-        private DeleteButton _L_DeleteButton;
-
-        public HBoxContainer(MapEditorMapLayerPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
-        public override HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -206,17 +118,17 @@ public abstract partial class MapEditorMapLayer : UiBase
     public class VBoxContainer : UiNode<MapEditorMapLayerPanel, Godot.VBoxContainer, VBoxContainer>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorMapLayer.HBoxContainer
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapLayer.LayerLabel
         /// </summary>
-        public HBoxContainer L_HBoxContainer
+        public LayerLabel L_LayerLabel
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
-                return _L_HBoxContainer;
+                if (_L_LayerLabel == null) _L_LayerLabel = new LayerLabel(UiPanel, Instance.GetNode<Godot.Label>("LayerLabel"));
+                return _L_LayerLabel;
             }
         }
-        private HBoxContainer _L_HBoxContainer;
+        private LayerLabel _L_LayerLabel;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: MapEditorMapLayer.ScrollContainer
@@ -237,29 +149,9 @@ public abstract partial class MapEditorMapLayer : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.LayerLabel
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapLayer.VBoxContainer.LayerLabel
     /// </summary>
-    public LayerLabel S_LayerLabel => L_VBoxContainer.L_HBoxContainer.L_LayerLabel;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.AddButton
-    /// </summary>
-    public AddButton S_AddButton => L_VBoxContainer.L_HBoxContainer.L_AddButton;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.EditButton
-    /// </summary>
-    public EditButton S_EditButton => L_VBoxContainer.L_HBoxContainer.L_EditButton;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.DeleteButton
-    /// </summary>
-    public DeleteButton S_DeleteButton => L_VBoxContainer.L_HBoxContainer.L_DeleteButton;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorMapLayer.VBoxContainer.HBoxContainer
-    /// </summary>
-    public HBoxContainer S_HBoxContainer => L_VBoxContainer.L_HBoxContainer;
+    public LayerLabel S_LayerLabel => L_VBoxContainer.L_LayerLabel;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorMapLayer.VBoxContainer.ScrollContainer.LayerButton.SelectTexture

@@ -1,12 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://bb2ekkpxifd7g"]
+[gd_scene load_steps=5 format=3 uid="uid://bb2ekkpxifd7g"]
 
 [ext_resource type="Script" path="res://src/game/ui/mapEditorMapLayer/MapEditorMapLayerPanel.cs" id="1_3j05m"]
-[ext_resource type="Texture2D" uid="uid://n4atvj5fkcpg" path="res://resource/sprite/ui/commonIcon/Add.png" id="2_f2gp6"]
 [ext_resource type="Texture2D" uid="uid://dmm8jw06bhffh" path="res://resource/sprite/ui/commonIcon/Lock.png" id="2_pfhyj"]
-[ext_resource type="Texture2D" uid="uid://dggb6p4sdmfry" path="res://resource/sprite/ui/commonIcon/Edit.png" id="3_8g3vb"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="3_k8b5h"]
 [ext_resource type="Texture2D" uid="uid://dqvg18aacx6db" path="res://resource/sprite/ui/commonIcon/Visible.png" id="3_rqjh4"]
-[ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="4_h0gio"]
 
 [node name="MapEditorMapLayer" type="Control"]
 layout_mode = 3
@@ -25,25 +22,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="LayerLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="LayerLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "地图层级："
-
-[node name="AddButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 10
-icon = ExtResource("2_f2gp6")
-
-[node name="EditButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-icon = ExtResource("3_8g3vb")
-
-[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-icon = ExtResource("4_h0gio")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
