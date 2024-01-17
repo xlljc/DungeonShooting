@@ -15,6 +15,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gtth6")
+Layer = null
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -73,6 +74,7 @@ theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
 [node name="Tab1" type="ColorRect" parent="VBoxContainer/Panel/MarginContainer"]
+visible = false
 clip_children = 2
 layout_mode = 2
 color = Color(0.145098, 0.145098, 0.145098, 1)
@@ -188,7 +190,6 @@ expand_mode = 2
 stretch_mode = 5
 
 [node name="Tab3" type="Control" parent="VBoxContainer/Panel/MarginContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("5_ty17f")
 
@@ -200,6 +201,52 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Panel/MarginContainer/Tab3/ScrollContainer"]
+[node name="CellButton" type="Button" parent="VBoxContainer/Panel/MarginContainer/Tab3/ScrollContainer"]
+custom_minimum_size = Vector2(120, 170)
 layout_mode = 2
-text = "组合"
+
+[node name="PreviewImage" type="TextureRect" parent="VBoxContainer/Panel/MarginContainer/Tab3/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CellName" type="Label" parent="VBoxContainer/Panel/MarginContainer/Tab3/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 16
+text = "名称"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+text_overrun_behavior = 2
+
+[node name="SelectTexture" type="NinePatchRect" parent="VBoxContainer/Panel/MarginContainer/Tab3/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_f4thw")
+region_rect = Rect2(0, 0, 36, 36)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3

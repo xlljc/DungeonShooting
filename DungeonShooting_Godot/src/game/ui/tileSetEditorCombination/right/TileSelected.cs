@@ -34,7 +34,6 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
         {
             _rightBg.UiPanel.EditorPanel.TileSetSourceInfo.Combination.Add(data.CombinationInfo);
             Grid.Add(data);
-            Grid.Sort();
             EventManager.EmitEvent(EventEnum.OnTileSetDirty);
         }
     }

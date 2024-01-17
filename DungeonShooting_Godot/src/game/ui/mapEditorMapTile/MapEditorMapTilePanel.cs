@@ -81,6 +81,8 @@ public partial class MapEditorMapTilePanel : MapEditorMapTile
             S_Tab1.Instance.OnFocusClick();
             //地形页签
             S_Tab2.Instance.RefreshTerrain(sourceInfo);
+            //组合页签
+            S_Tab3.Instance.RefreshCombination(sourceInfo);
         }
         EditorTileMap.SetCurrSourceIndex(SourceIndex);
     }

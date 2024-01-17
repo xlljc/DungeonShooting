@@ -376,12 +376,78 @@ public abstract partial class MapEditorMapTile : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.Label
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.CellButton.PreviewImage
     /// </summary>
-    public class Label_2 : UiNode<MapEditorMapTilePanel, Godot.Label, Label_2>
+    public class PreviewImage : UiNode<MapEditorMapTilePanel, Godot.TextureRect, PreviewImage>
     {
-        public Label_2(MapEditorMapTilePanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
-        public override Label_2 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+        public PreviewImage(MapEditorMapTilePanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override PreviewImage Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.CellButton.CellName
+    /// </summary>
+    public class CellName : UiNode<MapEditorMapTilePanel, Godot.Label, CellName>
+    {
+        public CellName(MapEditorMapTilePanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override CellName Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.CellButton.SelectTexture
+    /// </summary>
+    public class SelectTexture : UiNode<MapEditorMapTilePanel, Godot.NinePatchRect, SelectTexture>
+    {
+        public SelectTexture(MapEditorMapTilePanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override SelectTexture Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.CellButton
+    /// </summary>
+    public class CellButton : UiNode<MapEditorMapTilePanel, Godot.Button, CellButton>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.PreviewImage
+        /// </summary>
+        public PreviewImage L_PreviewImage
+        {
+            get
+            {
+                if (_L_PreviewImage == null) _L_PreviewImage = new PreviewImage(UiPanel, Instance.GetNode<Godot.TextureRect>("PreviewImage"));
+                return _L_PreviewImage;
+            }
+        }
+        private PreviewImage _L_PreviewImage;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.CellName
+        /// </summary>
+        public CellName L_CellName
+        {
+            get
+            {
+                if (_L_CellName == null) _L_CellName = new CellName(UiPanel, Instance.GetNode<Godot.Label>("CellName"));
+                return _L_CellName;
+            }
+        }
+        private CellName _L_CellName;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.SelectTexture
+        /// </summary>
+        public SelectTexture L_SelectTexture
+        {
+            get
+            {
+                if (_L_SelectTexture == null) _L_SelectTexture = new SelectTexture(UiPanel, Instance.GetNode<Godot.NinePatchRect>("SelectTexture"));
+                return _L_SelectTexture;
+            }
+        }
+        private SelectTexture _L_SelectTexture;
+
+        public CellButton(MapEditorMapTilePanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override CellButton Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
     }
 
     /// <summary>
@@ -390,17 +456,17 @@ public abstract partial class MapEditorMapTile : UiBase
     public class ScrollContainer_1 : UiNode<MapEditorMapTilePanel, Godot.ScrollContainer, ScrollContainer_1>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.Label
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.CellButton
         /// </summary>
-        public Label_2 L_Label
+        public CellButton L_CellButton
         {
             get
             {
-                if (_L_Label == null) _L_Label = new Label_2(UiPanel, Instance.GetNode<Godot.Label>("Label"));
-                return _L_Label;
+                if (_L_CellButton == null) _L_CellButton = new CellButton(UiPanel, Instance.GetNode<Godot.Button>("CellButton"));
+                return _L_CellButton;
             }
         }
-        private Label_2 _L_Label;
+        private CellButton _L_CellButton;
 
         public ScrollContainer_1(MapEditorMapTilePanel uiPanel, Godot.ScrollContainer node) : base(uiPanel, node) {  }
         public override ScrollContainer_1 Clone() => new (UiPanel, (Godot.ScrollContainer)Instance.Duplicate());
@@ -621,6 +687,26 @@ public abstract partial class MapEditorMapTile : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorMapTile.TerrainTileTab"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab2
     /// </summary>
     public Tab2 S_Tab2 => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab2;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.CellButton.PreviewImage
+    /// </summary>
+    public PreviewImage S_PreviewImage => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab3.L_ScrollContainer.L_CellButton.L_PreviewImage;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.CellButton.CellName
+    /// </summary>
+    public CellName S_CellName => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab3.L_ScrollContainer.L_CellButton.L_CellName;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.CellButton.SelectTexture
+    /// </summary>
+    public SelectTexture S_SelectTexture => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab3.L_ScrollContainer.L_CellButton.L_SelectTexture;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3.ScrollContainer.CellButton
+    /// </summary>
+    public CellButton S_CellButton => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab3.L_ScrollContainer.L_CellButton;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.MapEditorMapTile.CombinationTileTab"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab3
