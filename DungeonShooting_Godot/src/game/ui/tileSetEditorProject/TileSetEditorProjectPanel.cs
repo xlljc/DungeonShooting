@@ -17,11 +17,6 @@ public partial class TileSetEditorProjectPanel : TileSetEditorProject
     
     public override void OnCreateUi()
     {
-        S_Back.Instance.Visible = PrevUi != null;
-        S_Back.Instance.Pressed += () =>
-        {
-            OpenPrevUi();
-        };
         //搜索按钮
         S_TileSearchButton.Instance.Pressed += OnSearchClick;
         //创建按钮

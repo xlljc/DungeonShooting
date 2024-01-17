@@ -33,16 +33,6 @@ public partial class MapEditorProjectPanel : MapEditorProject
         _roomGrid.SetAutoColumns(true);
         _roomGrid.SetCellOffset(new Vector2I(10, 10));
         _roomGrid.SetHorizontalExpand(true);
-
-        if (PrevUi != null)
-        {
-            S_Back.Instance.Visible = true;
-            S_Back.Instance.Pressed += OpenPrevUi;
-        }
-        else
-        {
-            S_Back.Instance.Visible = false;
-        }
         
         S_GroupSearchButton.Instance.Pressed += OnSearchGroupButtonClick;
         S_RoomSearchButton.Instance.Pressed += OnSearchRoomButtonClick;
@@ -50,7 +40,6 @@ public partial class MapEditorProjectPanel : MapEditorProject
         S_RoomEditButton.Instance.Pressed += OnEditRoom;
         S_RoomDeleteButton.Instance.Pressed += OnDeleteRoom;
         S_GroupAddButton.Instance.Pressed += OnCreateGroupClick;
-        S_TileSetBtn.Instance.Pressed += OnTileSetBtnClick;
         
         _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnCreateGroupFinish, OnCreateGroupFinish);
@@ -181,12 +170,6 @@ public partial class MapEditorProjectPanel : MapEditorProject
     private void OnCreateGroupClick()
     {
         EditorWindowManager.ShowCreateGroup(CreateGroup);
-    }
-
-    //点击跳转编辑图块集按钮
-    private void OnTileSetBtnClick()
-    {
-        OpenNextUi(UiManager.UiNames.TileSetEditorProject);
     }
     
     //创建地牢房间按钮点击

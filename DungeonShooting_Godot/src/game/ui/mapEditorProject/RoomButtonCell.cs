@@ -57,7 +57,7 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
                 if (v)
                 {
                     //跳转编辑TileSet页面
-                    var tileSetEditorPanel = CellNode.UiPanel.OpenNextUi<TileSetEditorPanel>(UiManager.UiNames.TileSetEditor);
+                    var tileSetEditorPanel = CellNode.UiPanel.ParentUi.OpenNextUi<TileSetEditorPanel>(UiManager.UiNames.TileSetEditor);
                     tileSetEditorPanel.InitData(tileSetSplit);
                 }
             });

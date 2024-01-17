@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bmm3yekrokqlb"]
+[gd_scene load_steps=5 format=3 uid="uid://bd0jthh4nqnoj"]
 
 [ext_resource type="Script" path="res://src/game/ui/editorManager/EditorManagerPanel.cs" id="1_6qnog"]
 [ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_ykjr7"]
@@ -10,6 +10,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_6qnog")
 
 [node name="Bg" type="Panel" parent="."]
