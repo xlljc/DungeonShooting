@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://bmm3yekrokqlb"]
+
+[ext_resource type="Script" path="res://src/game/ui/editorManager/EditorManagerPanel.cs" id="1_6qnog"]
+[ext_resource type="Texture2D" uid="uid://cajcnlimvoxk" path="res://resource/sprite/ui/commonIcon/Back.png" id="2_ykjr7"]
+[ext_resource type="PackedScene" uid="uid://dh7y03tq6v0a2" path="res://prefab/ui/MapEditorProject.tscn" id="3_hlfkf"]
+[ext_resource type="PackedScene" uid="uid://bxrpxwsvveq8i" path="res://prefab/ui/TileSetEditorProject.tscn" id="4_mejcx"]
+
+[node name="EditorManager" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_6qnog")
+
+[node name="Bg" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Bg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Head" type="Panel" parent="Bg/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="Back" type="Button" parent="Bg/VBoxContainer/Head"]
+layout_mode = 2
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 62.0
+offset_bottom = 68.0
+size_flags_horizontal = 0
+icon = ExtResource("2_ykjr7")
+icon_alignment = 1
+
+[node name="Title" type="Label" parent="Bg/VBoxContainer/Head"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.5
+offset_top = -20.0
+offset_right = 4.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "地图管理器"
+
+[node name="TabContainer" type="TabContainer" parent="Bg/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Map" type="MarginContainer" parent="Bg/VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="MapEditorProject" parent="Bg/VBoxContainer/TabContainer/Map" instance=ExtResource("3_hlfkf")]
+layout_mode = 2
+
+[node name="TileSet" type="MarginContainer" parent="Bg/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="TileSetEditorProject" parent="Bg/VBoxContainer/TabContainer/TileSet" instance=ExtResource("4_mejcx")]
+layout_mode = 2

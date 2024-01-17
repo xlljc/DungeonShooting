@@ -105,8 +105,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private bool _initLayer = false;
 
     //--------- 配置数据 -------------
-    private int _terrainSet = 0;
-    private int _terrain = 0;
+    private int _mainSource = 0;
+    private int _mainTerrainSet = 0;
+    private int _mainTerrain = 0;
     private AutoTileConfig _autoTileConfig;
 
     /// <summary>
@@ -792,6 +793,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 foreach (var item in CurrBrush)
                 {
                     SetCell(CurrLayer.Layer, position + item + _brushOffset, CurrSourceIndex, item);
+                    //标记有修改数据
+                    EventManager.EmitEvent(EventEnum.OnTileMapDirty);
                 }
             }
         }
@@ -843,6 +846,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         else //自定义层
         {
             EraseCell(CurrLayer.Layer, position);
+            //标记有修改数据
+            EventManager.EmitEvent(EventEnum.OnTileMapDirty);
         }
     }
     
@@ -1014,7 +1019,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         var arr = new Array<Vector2I>(list);
         //绘制自动图块
-        SetCellsTerrainConnect(MapLayer.AutoFloorLayer, arr, _terrainSet, _terrain, false);
+        SetCellsTerrainConnect(MapLayer.AutoFloorLayer, arr, _mainTerrainSet, _mainTerrain, false);
         
         //擦除临时边界
         for (var i = 0; i < temp1.Count; i++)
@@ -1088,7 +1093,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                         continue;
                     }
                     EraseCell(MapLayer.AutoFloorLayer, pos);
-                    SetCell(layer, pos, CurrSourceIndex, atlasCoords);
+                    SetCell(layer, pos, _mainSource, atlasCoords);
                 }
             }
         }

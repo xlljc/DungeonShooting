@@ -95,7 +95,7 @@ public static class NodeExtend
             return false;
         }
 
-        var size = control.Size * control.Scale;
+        var size = control.Size;
         return pos.X <= size.X - border && pos.Y <= size.Y - border;
     }
 

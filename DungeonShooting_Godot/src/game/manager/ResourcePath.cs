@@ -74,6 +74,7 @@ public class ResourcePath
     public const string prefab_ui_EditorImportCombination_tscn = "res://prefab/ui/EditorImportCombination.tscn";
     public const string prefab_ui_EditorInfo_tscn = "res://prefab/ui/EditorInfo.tscn";
     public const string prefab_ui_EditorInput_tscn = "res://prefab/ui/EditorInput.tscn";
+    public const string prefab_ui_EditorManager_tscn = "res://prefab/ui/EditorManager.tscn";
     public const string prefab_ui_EditorTips_tscn = "res://prefab/ui/EditorTips.tscn";
     public const string prefab_ui_EditorTools_tscn = "res://prefab/ui/EditorTools.tscn";
     public const string prefab_ui_EditorWindow_tscn = "res://prefab/ui/EditorWindow.tscn";
@@ -125,6 +126,7 @@ public class ResourcePath
     public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
     public const string resource_map_tileSet_TileSetConfig_json = "res://resource/map/tileSet/TileSetConfig.json";
     public const string resource_map_tileSet_TileSet1_Main_png = "res://resource/map/tileSet/TileSet1/Main.png";
+    public const string resource_map_tileSet_TileSet1_Test1_png = "res://resource/map/tileSet/TileSet1/Test1.png";
     public const string resource_map_tileSet_TileSet1_TileSet_json = "res://resource/map/tileSet/TileSet1/TileSet.json";
     public const string resource_map_tileSet_TileSet2_Main_png = "res://resource/map/tileSet/TileSet2/Main.png";
     public const string resource_map_tileSet_TileSet2_Test2_png = "res://resource/map/tileSet/TileSet2/Test2.png";

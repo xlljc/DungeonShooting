@@ -12,6 +12,7 @@ public static partial class UiManager
         public const string EditorImportCombination = "EditorImportCombination";
         public const string EditorInfo = "EditorInfo";
         public const string EditorInput = "EditorInput";
+        public const string EditorManager = "EditorManager";
         public const string EditorTips = "EditorTips";
         public const string EditorTools = "EditorTools";
         public const string EditorWindow = "EditorWindow";
@@ -373,6 +374,54 @@ public static partial class UiManager
     public static UI.EditorInput.EditorInputPanel[] Get_EditorInput_Instance()
     {
         return GetUiInstance<UI.EditorInput.EditorInputPanel>(nameof(UI.EditorInput.EditorInput));
+    }
+
+    /// <summary>
+    /// 创建 EditorManager, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorManager.EditorManagerPanel Create_EditorManager()
+    {
+        return CreateUi<UI.EditorManager.EditorManagerPanel>(UiNames.EditorManager);
+    }
+
+    /// <summary>
+    /// 打开 EditorManager, 并返回UI实例
+    /// </summary>
+    public static UI.EditorManager.EditorManagerPanel Open_EditorManager()
+    {
+        return OpenUi<UI.EditorManager.EditorManagerPanel>(UiNames.EditorManager);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorManager 的所有实例
+    /// </summary>
+    public static void Hide_EditorManager()
+    {
+        var uiInstance = Get_EditorManager_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorManager 的所有实例
+    /// </summary>
+    public static void Destroy_EditorManager()
+    {
+        var uiInstance = Get_EditorManager_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorManager 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorManager.EditorManagerPanel[] Get_EditorManager_Instance()
+    {
+        return GetUiInstance<UI.EditorManager.EditorManagerPanel>(nameof(UI.EditorManager.EditorManager));
     }
 
     /// <summary>

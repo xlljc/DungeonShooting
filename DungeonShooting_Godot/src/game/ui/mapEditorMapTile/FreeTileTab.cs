@@ -55,7 +55,7 @@ public partial class FreeTileTab : EditorGridBg<MapEditorMapTile.Tab1>
 
         if (@event is InputEventMouseButton mouseButton)
         {
-            if (mouseButton.ButtonIndex == MouseButton.Left)
+            if (mouseButton.ButtonIndex == MouseButton.Left && UiNode.L_TabRoot.Instance.IsMouseInRect())
             {
                 _leftPressed = mouseButton.Pressed;
                 if (_leftPressed)
@@ -71,7 +71,7 @@ public partial class FreeTileTab : EditorGridBg<MapEditorMapTile.Tab1>
                 }
             }
         }
-        else if (_leftPressed && @event is InputEventMouseMotion)
+        else if (_leftPressed && @event is InputEventMouseMotion && UiNode.L_TabRoot.Instance.IsMouseInRect())
         {
             //多选格子
             var atlasCoords = Utils.GetMouseCellPosition(UiNode.L_TabRoot.Instance);
