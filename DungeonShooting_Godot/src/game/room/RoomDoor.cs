@@ -89,26 +89,26 @@ public partial class RoomDoor : ActivityObject
         switch (Direction)
         {
             case DoorDirection.E:
-                ZIndex = GameConfig.TopMapLayer;
+                ZIndex = MapLayer.AutoTopLayer;
                 if (_animatedDown != null)
                 {
-                    _animatedDown.ZIndex = GameConfig.TopMapLayer;
+                    _animatedDown.ZIndex = MapLayer.AutoTopLayer;
                 }
 
                 break;
             case DoorDirection.W:
-                ZIndex = GameConfig.TopMapLayer;
+                ZIndex = MapLayer.AutoTopLayer;
                 if (_animatedDown != null)
                 {
-                    _animatedDown.ZIndex = GameConfig.TopMapLayer;
+                    _animatedDown.ZIndex = MapLayer.AutoTopLayer;
                 }
 
                 break;
             case DoorDirection.S:
-                ZIndex = GameConfig.TopMapLayer;
+                ZIndex = MapLayer.AutoTopLayer;
                 break;
             case DoorDirection.N:
-                ZIndex = GameConfig.MiddleMapLayer;
+                ZIndex = MapLayer.AutoMiddleLayer;
                 break;
         }
     }
@@ -133,32 +133,32 @@ public partial class RoomDoor : ActivityObject
             _door.Navigation.CloseNavigationNode.Visible = false;
         }
         //调整门的层级
-        //ZIndex = GameConfig.FloorMapLayer;
+        //ZIndex = MapLayer.AutoFloorLayer;
         
         //调整门的层级
         switch (Direction)
         {
             case DoorDirection.E:
-                ZIndex = GameConfig.MiddleMapLayer;
+                ZIndex = MapLayer.AutoMiddleLayer;
                 if (_animatedDown != null)
                 {
-                    _animatedDown.ZIndex = GameConfig.TopMapLayer;
+                    _animatedDown.ZIndex = MapLayer.AutoTopLayer;
                 }
 
                 break;
             case DoorDirection.W:
-                ZIndex = GameConfig.MiddleMapLayer;
+                ZIndex = MapLayer.AutoMiddleLayer;
                 if (_animatedDown != null)
                 {
-                    _animatedDown.ZIndex = GameConfig.TopMapLayer;
+                    _animatedDown.ZIndex = MapLayer.AutoTopLayer;
                 }
 
                 break;
             case DoorDirection.S:
-                ZIndex = GameConfig.TopMapLayer;
+                ZIndex = MapLayer.AutoTopLayer;
                 break;
             case DoorDirection.N:
-                ZIndex = GameConfig.MiddleMapLayer;
+                ZIndex = MapLayer.AutoMiddleLayer;
                 break;
         }
     }

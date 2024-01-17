@@ -234,7 +234,7 @@ public partial class DungeonManager : Node2D
         //yield return _dungeonTileMap.AddOutlineTile(AutoTileConfig.WALL_BLOCK);
         
         //生成寻路网格， 这一步操作只生成过道的导航
-        _dungeonTileMap.GenerateNavigationPolygon(GameConfig.AisleFloorMapLayer);
+        _dungeonTileMap.GenerateNavigationPolygon(MapLayer.AutoAisleFloorLayer);
         yield return 0;
         //将导航网格绑定到 DoorInfo 上
         BindAisleNavigation(StartRoomInfo, _dungeonTileMap.GetPolygonData());
@@ -417,22 +417,22 @@ public partial class DungeonManager : Node2D
                 case DoorDirection.E:
                     door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_e);
                     door.Position = (doorInfo.OriginPosition + new Vector2(0.5f, 2)) * GameConfig.TileCellSize;
-                    door.ZIndex = GameConfig.TopMapLayer;
+                    door.ZIndex = MapLayer.AutoTopLayer;
                     break;
                 case DoorDirection.W:
                     door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_w);
                     door.Position = (doorInfo.OriginPosition + new Vector2(-0.5f, 2)) * GameConfig.TileCellSize;
-                    door.ZIndex = GameConfig.TopMapLayer;
+                    door.ZIndex = MapLayer.AutoTopLayer;
                     break;
                 case DoorDirection.S:
                     door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_s);
                     door.Position = (doorInfo.OriginPosition + new Vector2(2f, 1.5f)) * GameConfig.TileCellSize;
-                    door.ZIndex = GameConfig.TopMapLayer;
+                    door.ZIndex = MapLayer.AutoTopLayer;
                     break;
                 case DoorDirection.N:
                     door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_n);
                     door.Position = (doorInfo.OriginPosition + new Vector2(2f, -0.5f)) * GameConfig.TileCellSize;
-                    door.ZIndex = GameConfig.MiddleMapLayer;
+                    door.ZIndex = MapLayer.AutoMiddleLayer;
                     break;
                 default:
                     return;

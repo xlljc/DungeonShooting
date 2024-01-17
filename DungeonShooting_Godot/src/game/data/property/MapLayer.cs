@@ -38,7 +38,12 @@ public static class MapLayer
     /// </summary>
     public const int CustomTopLayer = AutoTopLayer + 1;
     /// <summary>
-    /// 标记数据层
+    /// 自动图块过道中的地板层, 该层只会出现在 World 场景中的 TileMap
     /// </summary>
-    public const int MarkLayer = 999;
+    public const int AutoAisleFloorLayer = CustomTopLayer + 1;
+    
+    /// <summary>
+    /// 标记数据层, 特殊层, 不会出现在 TileMap 中
+    /// </summary>
+    public const int MarkLayer = 9999;
 }

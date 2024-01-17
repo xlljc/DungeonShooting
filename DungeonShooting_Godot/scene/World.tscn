@@ -26,21 +26,6 @@ environment = SubResource("Environment_g06jj")
 [node name="TileRoot" type="TileMap" parent="." groups=["navigation"]]
 y_sort_enabled = true
 format = 2
-layer_0/name = "Floor"
-layer_0/z_index = -10
-layer_0/navigation_enabled = false
-layer_1/name = "Middle"
-layer_1/y_sort_enabled = true
-layer_1/navigation_enabled = false
-layer_1/tile_data = PackedInt32Array()
-layer_2/name = "Top"
-layer_2/z_index = 10
-layer_2/navigation_enabled = false
-layer_2/tile_data = PackedInt32Array()
-layer_3/name = "AisleFloor"
-layer_3/z_index = -10
-layer_3/navigation_enabled = false
-layer_3/tile_data = PackedInt32Array()
 
 [node name="NavigationRoot" type="Node2D" parent="TileRoot"]
 z_index = -2

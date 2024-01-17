@@ -162,6 +162,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
     //笔刷偏移, 单位: 格
     private Vector2I _brushOffset = Vector2I.Zero;
+    //淡化其它层级
+    private bool _desaltOtherLayer = false;
     
     //--------------------------------------- 变动过的数据 ---------------------------------------
     
@@ -460,6 +462,15 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         CurrLayer = layerData;
         MapEditorToolsPanel.S_CurrLayer.Instance.Text = "当前图层：" + layerData.Title;
+        SetLayerModulate(MapLayer.AutoFloorLayer, _GetEditorLayerModulate(MapLayer.AutoFloorLayer));
+        SetLayerModulate(MapLayer.AutoMiddleLayer, _GetEditorLayerModulate(MapLayer.AutoMiddleLayer));
+        SetLayerModulate(MapLayer.AutoTopLayer, _GetEditorLayerModulate(MapLayer.AutoTopLayer));
+        SetLayerModulate(MapLayer.CustomFloorLayer1, _GetEditorLayerModulate(MapLayer.CustomFloorLayer1));
+        SetLayerModulate(MapLayer.CustomFloorLayer2, _GetEditorLayerModulate(MapLayer.CustomFloorLayer2));
+        SetLayerModulate(MapLayer.CustomFloorLayer3, _GetEditorLayerModulate(MapLayer.CustomFloorLayer3));
+        SetLayerModulate(MapLayer.CustomMiddleLayer1, _GetEditorLayerModulate(MapLayer.CustomMiddleLayer1));
+        SetLayerModulate(MapLayer.CustomMiddleLayer2, _GetEditorLayerModulate(MapLayer.CustomMiddleLayer2));
+        SetLayerModulate(MapLayer.CustomTopLayer, _GetEditorLayerModulate(MapLayer.CustomTopLayer));
     }
 
     /// <summary>
@@ -509,6 +520,12 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public void SetCurrBrushTexture(Texture2D texture)
     {
         CurrBrushTexture = texture;
+    }
+
+    public void SetDesaltOtherLayer(bool flag)
+    {
+        _desaltOtherLayer = flag;
+        SetCurrentLayer(CurrLayer);
     }
 
     /// <summary>
@@ -731,6 +748,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
         _initLayer = true;
         //初始化层级数据
+        AddLayer(MapLayer.AutoFloorLayer);
+        SetLayerZIndex(MapLayer.AutoFloorLayer, MapLayer.AutoFloorLayer);
         AddLayer(MapLayer.CustomFloorLayer1);
         SetLayerZIndex(MapLayer.CustomFloorLayer1, MapLayer.CustomFloorLayer1);
         AddLayer(MapLayer.CustomFloorLayer2);
@@ -1079,11 +1098,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 {
                     var atlasCoords = GetCellAtlasCoords(MapLayer.AutoFloorLayer, pos);
                     var layer = _autoTileConfig.GetLayer(atlasCoords);
-                    if (layer == GameConfig.MiddleMapLayer)
+                    if (layer == MapLayer.AutoMiddleLayer)
                     {
                         layer = MapLayer.AutoMiddleLayer;
                     }
-                    else if (layer == GameConfig.TopMapLayer)
+                    else if (layer == MapLayer.AutoTopLayer)
                     {
                         layer = MapLayer.AutoTopLayer;
                     }
@@ -1465,6 +1484,16 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         SetLayerEnabled(MapLayer.CustomMiddleLayer2, true);
         SetLayerEnabled(MapLayer.AutoTopLayer, true);
         SetLayerEnabled(MapLayer.CustomTopLayer, true);
+        
+        SetLayerModulate(MapLayer.AutoFloorLayer, Colors.White);
+        SetLayerModulate(MapLayer.CustomFloorLayer1, Colors.White);
+        SetLayerModulate(MapLayer.CustomFloorLayer2, Colors.White);
+        SetLayerModulate(MapLayer.CustomFloorLayer3, Colors.White);
+        SetLayerModulate(MapLayer.AutoMiddleLayer, Colors.White);
+        SetLayerModulate(MapLayer.CustomMiddleLayer1, Colors.White);
+        SetLayerModulate(MapLayer.CustomMiddleLayer2, Colors.White);
+        SetLayerModulate(MapLayer.AutoTopLayer, Colors.White);
+        SetLayerModulate(MapLayer.CustomTopLayer, Colors.White);
     }
 
     private void OnFramePostDraw()
@@ -1492,6 +1521,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 SetLayerEnabled(MapLayer.CustomMiddleLayer1, _tempCustomMiddleLayer1);
                 SetLayerEnabled(MapLayer.CustomMiddleLayer2, _tempCustomMiddleLayer2);
                 SetLayerEnabled(MapLayer.CustomTopLayer, _tempCustomTopLayer);
+                SetCurrentLayer(CurrLayer);
 
                 //保存预览图
                 var subViewport = MapEditorPanel.S_SubViewport.Instance;
@@ -1530,5 +1560,15 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             }
             _polygonData[i] = v2Array;
         }
+    }
+    
+    private Color _GetEditorLayerModulate(int layer)
+    {
+        if (!_desaltOtherLayer)
+        {
+            return Colors.White;
+        }
+
+        return layer == CurrLayer.Layer ? Colors.White : new Color(1, 1, 1, 0.3f);
     }
 }

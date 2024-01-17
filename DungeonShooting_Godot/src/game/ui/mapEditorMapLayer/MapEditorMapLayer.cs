@@ -29,12 +29,56 @@ public abstract partial class MapEditorMapLayer : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorMapLayer.VBoxContainer.LayerLabel
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.Label
     /// </summary>
-    public class LayerLabel : UiNode<MapEditorMapLayerPanel, Godot.Label, LayerLabel>
+    public class Label : UiNode<MapEditorMapLayerPanel, Godot.Label, Label>
     {
-        public LayerLabel(MapEditorMapLayerPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
-        public override LayerLabel Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+        public Label(MapEditorMapLayerPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.CheckButton"/>, 路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.CheckButton
+    /// </summary>
+    public class CheckButton : UiNode<MapEditorMapLayerPanel, Godot.CheckButton, CheckButton>
+    {
+        public CheckButton(MapEditorMapLayerPanel uiPanel, Godot.CheckButton node) : base(uiPanel, node) {  }
+        public override CheckButton Clone() => new (UiPanel, (Godot.CheckButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorMapLayer.VBoxContainer.HBoxContainer
+    /// </summary>
+    public class HBoxContainer : UiNode<MapEditorMapLayerPanel, Godot.HBoxContainer, HBoxContainer>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapLayer.VBoxContainer.Label
+        /// </summary>
+        public Label L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label(UiPanel, Instance.GetNode<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label _L_Label;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.CheckButton"/>, 节点路径: MapEditorMapLayer.VBoxContainer.CheckButton
+        /// </summary>
+        public CheckButton L_CheckButton
+        {
+            get
+            {
+                if (_L_CheckButton == null) _L_CheckButton = new CheckButton(UiPanel, Instance.GetNode<Godot.CheckButton>("CheckButton"));
+                return _L_CheckButton;
+            }
+        }
+        private CheckButton _L_CheckButton;
+
+        public HBoxContainer(MapEditorMapLayerPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -118,17 +162,17 @@ public abstract partial class MapEditorMapLayer : UiBase
     public class VBoxContainer : UiNode<MapEditorMapLayerPanel, Godot.VBoxContainer, VBoxContainer>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapLayer.LayerLabel
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorMapLayer.HBoxContainer
         /// </summary>
-        public LayerLabel L_LayerLabel
+        public HBoxContainer L_HBoxContainer
         {
             get
             {
-                if (_L_LayerLabel == null) _L_LayerLabel = new LayerLabel(UiPanel, Instance.GetNode<Godot.Label>("LayerLabel"));
-                return _L_LayerLabel;
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
+                return _L_HBoxContainer;
             }
         }
-        private LayerLabel _L_LayerLabel;
+        private HBoxContainer _L_HBoxContainer;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ScrollContainer"/>, 节点路径: MapEditorMapLayer.ScrollContainer
@@ -149,9 +193,19 @@ public abstract partial class MapEditorMapLayer : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapLayer.VBoxContainer.LayerLabel
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.Label
     /// </summary>
-    public LayerLabel S_LayerLabel => L_VBoxContainer.L_LayerLabel;
+    public Label S_Label => L_VBoxContainer.L_HBoxContainer.L_Label;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CheckButton"/>, 节点路径: MapEditorMapLayer.VBoxContainer.HBoxContainer.CheckButton
+    /// </summary>
+    public CheckButton S_CheckButton => L_VBoxContainer.L_HBoxContainer.L_CheckButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorMapLayer.VBoxContainer.HBoxContainer
+    /// </summary>
+    public HBoxContainer S_HBoxContainer => L_VBoxContainer.L_HBoxContainer;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: MapEditorMapLayer.VBoxContainer.ScrollContainer.LayerButton.SelectTexture

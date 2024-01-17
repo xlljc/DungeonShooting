@@ -33,5 +33,12 @@ public partial class MapEditorMapLayerPanel : MapEditorMapLayer
         _grid.Add(new TileMapLayerData("顶层", MapLayer.CustomTopLayer, false));
         _grid.Add(new TileMapLayerData("标记数据层", MapLayer.MarkLayer, true));
         _grid.SelectIndex = 0;
+
+        S_CheckButton.Instance.Toggled += OnToggled;
+    }
+
+    private void OnToggled(bool toggledon)
+    {
+        EditorTileMap.SetDesaltOtherLayer(toggledon);
     }
 }

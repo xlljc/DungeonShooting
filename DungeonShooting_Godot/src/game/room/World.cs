@@ -86,6 +86,46 @@ public partial class World : CanvasModulate, ICoroutine
     }
 
     /// <summary>
+    /// 初始化 TileMap 中的层级
+    /// </summary>
+    public void InitLayer()
+    {
+        TileRoot.AddLayer(MapLayer.AutoFloorLayer);
+        TileRoot.SetLayerZIndex(MapLayer.AutoFloorLayer, -10);
+        TileRoot.SetLayerNavigationEnabled(MapLayer.AutoFloorLayer, false);
+        TileRoot.AddLayer(MapLayer.CustomFloorLayer1);
+        TileRoot.SetLayerZIndex(MapLayer.CustomFloorLayer1, -10);
+        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomFloorLayer1, false);
+        TileRoot.AddLayer(MapLayer.CustomFloorLayer2);
+        TileRoot.SetLayerZIndex(MapLayer.CustomFloorLayer2, -10);
+        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomFloorLayer2, false);
+        TileRoot.AddLayer(MapLayer.CustomFloorLayer3);
+        TileRoot.SetLayerZIndex(MapLayer.CustomFloorLayer3, -10);
+        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomFloorLayer3, false);
+        TileRoot.AddLayer(MapLayer.AutoMiddleLayer);
+        TileRoot.SetLayerZIndex(MapLayer.AutoMiddleLayer, 0);
+        TileRoot.SetLayerNavigationEnabled(MapLayer.AutoMiddleLayer, false);
+        TileRoot.SetLayerYSortEnabled(MapLayer.AutoMiddleLayer, true);
+        TileRoot.AddLayer(MapLayer.CustomMiddleLayer1);
+        TileRoot.SetLayerZIndex(MapLayer.CustomMiddleLayer1, 0);
+        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomMiddleLayer1, false);
+        TileRoot.SetLayerYSortEnabled(MapLayer.CustomMiddleLayer1, true);
+        TileRoot.AddLayer(MapLayer.CustomMiddleLayer2);
+        TileRoot.SetLayerZIndex(MapLayer.CustomMiddleLayer2, 0);
+        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomMiddleLayer2, false);
+        TileRoot.SetLayerYSortEnabled(MapLayer.CustomMiddleLayer2, true);
+        TileRoot.AddLayer(MapLayer.AutoTopLayer);
+        TileRoot.SetLayerZIndex(MapLayer.AutoTopLayer, 10);
+        TileRoot.SetLayerNavigationEnabled(MapLayer.AutoTopLayer, false);
+        TileRoot.AddLayer(MapLayer.CustomTopLayer);
+        TileRoot.SetLayerZIndex(MapLayer.CustomTopLayer, 10);
+        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomTopLayer, false);
+        TileRoot.AddLayer(MapLayer.AutoAisleFloorLayer);
+        TileRoot.SetLayerZIndex(MapLayer.AutoAisleFloorLayer, -10);
+        TileRoot.SetLayerNavigationEnabled(MapLayer.AutoAisleFloorLayer, false);
+    }
+
+    /// <summary>
     /// 获取指定层级根节点
     /// </summary>
     public Node2D GetRoomLayer(RoomLayerEnum layerEnum)

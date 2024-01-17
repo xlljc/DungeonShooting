@@ -54,24 +54,24 @@ public class DungeonTileMap
         //铺房间
         if (roomInfo.RoomSplit == null) //自动填充的矩形房间, 现已经弃用
         {
-            FillRect(GameConfig.FloorMapLayer, config.Floor, roomInfo.Position + Vector2.One,
+            FillRect(MapLayer.AutoFloorLayer, config.Floor, roomInfo.Position + Vector2.One,
                 roomInfo.Size - new Vector2(2, 2));
 
-            FillRect(GameConfig.TopMapLayer, config.Wall_In_LT, roomInfo.Position, Vector2.One);
-            FillRect(GameConfig.TopMapLayer, config.Wall_Left, roomInfo.Position + new Vector2(0, 1),
+            FillRect(MapLayer.AutoTopLayer, config.Wall_In_LT, roomInfo.Position, Vector2.One);
+            FillRect(MapLayer.AutoTopLayer, config.Wall_Left, roomInfo.Position + new Vector2(0, 1),
                 new Vector2(1, roomInfo.Size.Y - 2));
-            FillRect(GameConfig.TopMapLayer, config.Wall_In_LB, roomInfo.Position + new Vector2(0, roomInfo.Size.Y - 1),
+            FillRect(MapLayer.AutoTopLayer, config.Wall_In_LB, roomInfo.Position + new Vector2(0, roomInfo.Size.Y - 1),
                 new Vector2(1, 1));
-            FillRect(GameConfig.TopMapLayer, config.Wall_Bottom, roomInfo.Position + new Vector2(1, roomInfo.Size.Y - 1),
+            FillRect(MapLayer.AutoTopLayer, config.Wall_Bottom, roomInfo.Position + new Vector2(1, roomInfo.Size.Y - 1),
                 new Vector2(roomInfo.Size.X - 2, 1));
-            FillRect(GameConfig.TopMapLayer, config.Wall_In_RB,
+            FillRect(MapLayer.AutoTopLayer, config.Wall_In_RB,
                 roomInfo.Position + new Vector2(roomInfo.Size.X - 1, roomInfo.Size.Y - 1),
                 Vector2.One);
-            FillRect(GameConfig.TopMapLayer, config.Wall_Right, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 1),
+            FillRect(MapLayer.AutoTopLayer, config.Wall_Right, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 1),
                 new Vector2(1, roomInfo.Size.Y - 2));
-            FillRect(GameConfig.TopMapLayer, config.Wall_In_RT, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 0),
+            FillRect(MapLayer.AutoTopLayer, config.Wall_In_RT, roomInfo.Position + new Vector2(roomInfo.Size.X - 1, 0),
                 Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Top, roomInfo.Position + Vector2.Right,
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, roomInfo.Position + Vector2.Right,
                 new Vector2(roomInfo.Size.X - 2, 1));
         }
         else
@@ -111,45 +111,21 @@ public class DungeonTileMap
             //---------------------- 填充tile操作 ----------------------
             var terrainInfo = config.TerrainInfo;
 
+            //自动地形层
             //底层
-            for (var i = 0; i < tileInfo.Floor.Count; i += 4)
-            {
-                var posX = tileInfo.Floor[i];
-                var posY = tileInfo.Floor[i + 1];
-                var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
-                var bit = (uint)tileInfo.Floor[i + 2];
-                var type = (byte)tileInfo.Floor[i + 3];
-                var index = terrainInfo.TerrainBitToIndex(bit, type);
-                var terrainCell = terrainInfo.GetTerrainCell(index, type);
-                var atlasCoords = terrainInfo.GetPosition(terrainCell);
-                _tileRoot.SetCell(GameConfig.FloorMapLayer, pos, config.SourceId, atlasCoords);
-            }
+            SetAutoLayerDataFromList(MapLayer.AutoFloorLayer, config.SourceId, roomInfo, tileInfo.Floor, rectPos, terrainInfo);
             //中层
-            for (var i = 0; i < tileInfo.Middle.Count; i += 4)
-            {
-                var posX = tileInfo.Middle[i];
-                var posY = tileInfo.Middle[i + 1];
-                var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
-                var bit = (uint)tileInfo.Middle[i + 2];
-                var type = (byte)tileInfo.Middle[i + 3];
-                var index = terrainInfo.TerrainBitToIndex(bit, type);
-                var terrainCell = terrainInfo.GetTerrainCell(index, type);
-                var atlasCoords = terrainInfo.GetPosition(terrainCell);
-                _tileRoot.SetCell(GameConfig.MiddleMapLayer, pos, config.SourceId, atlasCoords);
-            }
+            SetAutoLayerDataFromList(MapLayer.AutoMiddleLayer, config.SourceId, roomInfo, tileInfo.Middle, rectPos, terrainInfo);
             //顶层
-            for (var i = 0; i < tileInfo.Top.Count; i += 4)
-            {
-                var posX = tileInfo.Top[i];
-                var posY = tileInfo.Top[i + 1];
-                var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
-                var bit = (uint)tileInfo.Top[i + 2];
-                var type = (byte)tileInfo.Top[i + 3];
-                var index = terrainInfo.TerrainBitToIndex(bit, type);
-                var terrainCell = terrainInfo.GetTerrainCell(index, type);
-                var atlasCoords = terrainInfo.GetPosition(terrainCell);
-                _tileRoot.SetCell(GameConfig.TopMapLayer, pos, config.SourceId, atlasCoords);
-            }
+            SetAutoLayerDataFromList(MapLayer.AutoTopLayer, config.SourceId, roomInfo, tileInfo.Top, rectPos, terrainInfo);
+            
+            //自定义数据层
+            SetCustomLayerDataFromList(MapLayer.CustomFloorLayer1, roomInfo, tileInfo.CustomFloor1, rectPos);
+            SetCustomLayerDataFromList(MapLayer.CustomFloorLayer2, roomInfo, tileInfo.CustomFloor2, rectPos);
+            SetCustomLayerDataFromList(MapLayer.CustomFloorLayer3, roomInfo, tileInfo.CustomFloor3, rectPos);
+            SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer1, roomInfo, tileInfo.CustomMiddle1, rectPos);
+            SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer2, roomInfo, tileInfo.CustomMiddle2, rectPos);
+            SetCustomLayerDataFromList(MapLayer.CustomTopLayer, roomInfo, tileInfo.CustomTop, rectPos);
             
             //寻找可用传送点
             var maxCount = (roomInfo.Size.X - 2) * (roomInfo.Size.Y - 2);
@@ -157,7 +133,7 @@ public class DungeonTileMap
             for (int i = 0; i < maxCount; i++)
             {
                 var pos = SpiralUtil.Screw(i) + startPosition;
-                if (IsWayTile(GameConfig.FloorMapLayer, pos.X, pos.Y))
+                if (IsWayTile(MapLayer.AutoFloorLayer, pos.X, pos.Y))
                 {
                     roomInfo.Waypoints = pos;
                     break;
@@ -242,7 +218,7 @@ public class DungeonTileMap
                 var rect2 = aisleRect.Rect2;
     
                 //填充交叉点
-                FillRect(GameConfig.AisleFloorMapLayer, config.Floor, aisleRect.Cross.Position, aisleRect.Cross.Size);
+                FillRect(MapLayer.AutoAisleFloorLayer, config.Floor, aisleRect.Cross.Position, aisleRect.Cross.Size);
 
                 //墙壁, 0横向, 1纵向
                 if (dir1 == 0)
@@ -275,50 +251,50 @@ public class DungeonTileMap
                 if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
                     (doorDir2 == DoorDirection.N && doorDir1 == DoorDirection.E))
                 {
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Out_RT, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_In_RT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), Vector2.One);
-                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Top, doorInfo.Cross + new Vector2I(0, -1), new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Center, doorInfo.Cross, new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), new Vector2(1, GameConfig.CorridorWidth));
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_Out_RT, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), Vector2.One);
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_In_RT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), Vector2.One);
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, doorInfo.Cross + new Vector2I(0, -1), new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Center, doorInfo.Cross, new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), new Vector2(1, GameConfig.CorridorWidth));
                     
-                    FillRect(GameConfig.TopMapLayer, config.TopMask, doorInfo.Cross - new Vector2I(0, 2), new Vector2(GameConfig.CorridorWidth + 1, 1));
-                    FillRect(GameConfig.TopMapLayer, config.TopMask, doorInfo.Cross + new Vector2I(GameConfig.CorridorWidth, -1), new Vector2(1, GameConfig.CorridorWidth + 1));
+                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross - new Vector2I(0, 2), new Vector2(GameConfig.CorridorWidth + 1, 1));
+                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross + new Vector2I(GameConfig.CorridorWidth, -1), new Vector2(1, GameConfig.CorridorWidth + 1));
                 }
                 else if ((doorDir1 == DoorDirection.E && doorDir2 == DoorDirection.S) || //→↓
                          (doorDir2 == DoorDirection.E && doorDir1 == DoorDirection.S))
                 {
-                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_RB, doorInfo.Cross + new Vector2I(0, -1), Vector2.One);
-                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Right, doorInfo.Cross, Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_In_RB, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, GameConfig.CorridorWidth - 1), Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), new Vector2(1, GameConfig.CorridorWidth));
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_RB, doorInfo.Cross + new Vector2I(0, -1), Vector2.One);
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Right, doorInfo.Cross, Vector2.One);
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_In_RB, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, GameConfig.CorridorWidth - 1), Vector2.One);
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), new Vector2(1, GameConfig.CorridorWidth));
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), new Vector2(GameConfig.CorridorWidth - 1, 1));
                     
-                    FillRect(GameConfig.TopMapLayer, config.TopMask, doorInfo.Cross + new Vector2I(GameConfig.CorridorWidth, -1), new Vector2(1, GameConfig.CorridorWidth + 1));
-                    FillRect(GameConfig.TopMapLayer, config.TopMask, doorInfo.Cross + new Vector2I(0, GameConfig.CorridorWidth), new Vector2(GameConfig.CorridorWidth + 1, 1));
+                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross + new Vector2I(GameConfig.CorridorWidth, -1), new Vector2(1, GameConfig.CorridorWidth + 1));
+                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross + new Vector2I(0, GameConfig.CorridorWidth), new Vector2(GameConfig.CorridorWidth + 1, 1));
                 }
                 else if ((doorDir1 == DoorDirection.S && doorDir2 == DoorDirection.W) || //↓←
                          (doorDir2 == DoorDirection.S && doorDir1 == DoorDirection.W))
                 {
-                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_LB, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), Vector2.One);
-                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Left, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_In_LB, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Left, doorInfo.Cross + new Vector2I(0, -1), new Vector2(1, GameConfig.CorridorWidth));
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(1, GameConfig.CorridorWidth - 1), new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_LB, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), Vector2.One);
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Left, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), Vector2.One);
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_In_LB, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), Vector2.One);
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_Left, doorInfo.Cross + new Vector2I(0, -1), new Vector2(1, GameConfig.CorridorWidth));
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(1, GameConfig.CorridorWidth - 1), new Vector2(GameConfig.CorridorWidth - 1, 1));
                     
-                    FillRect(GameConfig.TopMapLayer, config.TopMask, doorInfo.Cross + new Vector2I(-1, -1), new Vector2(1, GameConfig.CorridorWidth + 1));
-                    FillRect(GameConfig.TopMapLayer, config.TopMask, doorInfo.Cross + new Vector2I(-1, GameConfig.CorridorWidth), new Vector2(GameConfig.CorridorWidth + 1, 1));
+                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross + new Vector2I(-1, -1), new Vector2(1, GameConfig.CorridorWidth + 1));
+                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross + new Vector2I(-1, GameConfig.CorridorWidth), new Vector2(GameConfig.CorridorWidth + 1, 1));
                 }
                 else if ((doorDir1 == DoorDirection.W && doorDir2 == DoorDirection.N) || //←↑
                          (doorDir2 == DoorDirection.W && doorDir1 == DoorDirection.N))
                 {
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Out_LT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, GameConfig.CorridorWidth - 1), Vector2.One);
-                    FillRect(GameConfig.TopMapLayer, config.Wall_In_LT, doorInfo.Cross + new Vector2I(0, -1), Vector2.One);
-                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Top, doorInfo.Cross + new Vector2(1, -1), new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Center, doorInfo.Cross + new Vector2(1, 0), new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(GameConfig.TopMapLayer, config.Wall_Left, doorInfo.Cross + new Vector2(0, 0), new Vector2(1, GameConfig.CorridorWidth));
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_Out_LT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, GameConfig.CorridorWidth - 1), Vector2.One);
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_In_LT, doorInfo.Cross + new Vector2I(0, -1), Vector2.One);
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, doorInfo.Cross + new Vector2(1, -1), new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Center, doorInfo.Cross + new Vector2(1, 0), new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(MapLayer.AutoTopLayer, config.Wall_Left, doorInfo.Cross + new Vector2(0, 0), new Vector2(1, GameConfig.CorridorWidth));
                     
-                    FillRect(GameConfig.TopMapLayer, config.TopMask, doorInfo.Cross - new Vector2I(1, 2), new Vector2(GameConfig.CorridorWidth + 1, 1));
-                    FillRect(GameConfig.TopMapLayer, config.TopMask, doorInfo.Cross - new Vector2I(1, 1), new Vector2(1, GameConfig.CorridorWidth + 1));
+                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross - new Vector2I(1, 2), new Vector2(GameConfig.CorridorWidth + 1, 1));
+                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross - new Vector2I(1, 1), new Vector2(1, GameConfig.CorridorWidth + 1));
                 }
             }
             
@@ -356,6 +332,38 @@ public class DungeonTileMap
         }
     }
 
+    //设置自动地形层的数据
+    private void SetAutoLayerDataFromList(int layer, int sourceId, RoomInfo roomInfo, List<int> data, Vector2I rectPos, TileSetTerrainInfo terrainInfo)
+    {
+        for (var i = 0; i < data.Count; i += 4)
+        {
+            var posX = data[i];
+            var posY = data[i + 1];
+            var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
+            var bit = (uint)data[i + 2];
+            var type = (byte)data[i + 3];
+            var index = terrainInfo.TerrainBitToIndex(bit, type);
+            var terrainCell = terrainInfo.GetTerrainCell(index, type);
+            var atlasCoords = terrainInfo.GetPosition(terrainCell);
+            _tileRoot.SetCell(layer, pos, sourceId, atlasCoords);
+        }
+    }
+    
+    //设置自定义层的数据
+    private void SetCustomLayerDataFromList(int layer, RoomInfo roomInfo,  List<int> data, Vector2I rectPos)
+    {
+        for (var i = 0; i < data.Count; i += 5)
+        {
+            var posX = data[i];
+            var posY = data[i + 1];
+            var sourceId = data[i + 2];
+            var atlasCoordsX = data[i + 3];
+            var atlasCoordsY = data[i + 4];
+            var pos = new Vector2I(roomInfo.Position.X + posX - rectPos.X, roomInfo.Position.Y + posY - rectPos.Y);
+            _tileRoot.SetCell(layer, pos, sourceId, new Vector2I(atlasCoordsX, atlasCoordsY));
+        }
+    }
+
     /// <summary>
     /// 给TileMap添加轮廓, 该函数为协程函数
     /// </summary>
@@ -376,10 +384,10 @@ public class DungeonTileMap
                     yield return 0;
                 }
                 var pos = new Vector2I(x, y);
-                var flag1 = _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, pos) != -1 ||
-                            _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, pos) != -1 ||
-                            _tileRoot.GetCellSourceId(GameConfig.AisleFloorMapLayer, pos) != -1 ||
-                            (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, pos) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, pos) != tileCellData.AutoTileCoords);
+                var flag1 = _tileRoot.GetCellSourceId(MapLayer.AutoFloorLayer, pos) != -1 ||
+                            _tileRoot.GetCellSourceId(MapLayer.AutoMiddleLayer, pos) != -1 ||
+                            _tileRoot.GetCellSourceId(MapLayer.AutoAisleFloorLayer, pos) != -1 ||
+                            (_tileRoot.GetCellSourceId(MapLayer.AutoTopLayer, pos) != -1 && _tileRoot.GetCellAtlasCoords(MapLayer.AutoTopLayer, pos) != tileCellData.AutoTileCoords);
                 if (!flag1) //空地
                 {
                     var posDown = new Vector2I(pos.X, pos.Y + 1);
@@ -392,41 +400,41 @@ public class DungeonTileMap
                     var posRD = new Vector2I(pos.X + 1, pos.Y + 1);
                     var posRT = new Vector2I(pos.X + 1, pos.Y - 1);
                     
-                    var flag2 = _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posDown) != -1 ||
-                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posDown) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posDown) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posDown) != tileCellData.AutoTileCoords) ||
+                    var flag2 = _tileRoot.GetCellSourceId(MapLayer.AutoFloorLayer, posDown) != -1 ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoMiddleLayer, posDown) != -1 ||
+                                (_tileRoot.GetCellSourceId(MapLayer.AutoTopLayer, posDown) != -1 && _tileRoot.GetCellAtlasCoords(MapLayer.AutoTopLayer, posDown) != tileCellData.AutoTileCoords) ||
 
-                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posTop) != -1 ||
-                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posTop) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posTop) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posTop) != tileCellData.AutoTileCoords) ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoFloorLayer, posTop) != -1 ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoMiddleLayer, posTop) != -1 ||
+                                (_tileRoot.GetCellSourceId(MapLayer.AutoTopLayer, posTop) != -1 && _tileRoot.GetCellAtlasCoords(MapLayer.AutoTopLayer, posTop) != tileCellData.AutoTileCoords) ||
 
-                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posLeft) != -1 ||
-                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posLeft) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLeft) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLeft) != tileCellData.AutoTileCoords) ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoFloorLayer, posLeft) != -1 ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoMiddleLayer, posLeft) != -1 ||
+                                (_tileRoot.GetCellSourceId(MapLayer.AutoTopLayer, posLeft) != -1 && _tileRoot.GetCellAtlasCoords(MapLayer.AutoTopLayer, posLeft) != tileCellData.AutoTileCoords) ||
 
-                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posRight) != -1 ||
-                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posRight) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRight) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRight) != tileCellData.AutoTileCoords) ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoFloorLayer, posRight) != -1 ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoMiddleLayer, posRight) != -1 ||
+                                (_tileRoot.GetCellSourceId(MapLayer.AutoTopLayer, posRight) != -1 && _tileRoot.GetCellAtlasCoords(MapLayer.AutoTopLayer, posRight) != tileCellData.AutoTileCoords) ||
                                 //
-                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posLD) != -1 ||
-                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posLD) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLD) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLD) != tileCellData.AutoTileCoords) ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoFloorLayer, posLD) != -1 ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoMiddleLayer, posLD) != -1 ||
+                                (_tileRoot.GetCellSourceId(MapLayer.AutoTopLayer, posLD) != -1 && _tileRoot.GetCellAtlasCoords(MapLayer.AutoTopLayer, posLD) != tileCellData.AutoTileCoords) ||
 
-                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posLT) != -1 ||
-                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posLT) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posLT) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posLT) != tileCellData.AutoTileCoords) ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoFloorLayer, posLT) != -1 ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoMiddleLayer, posLT) != -1 ||
+                                (_tileRoot.GetCellSourceId(MapLayer.AutoTopLayer, posLT) != -1 && _tileRoot.GetCellAtlasCoords(MapLayer.AutoTopLayer, posLT) != tileCellData.AutoTileCoords) ||
 
-                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posRD) != -1 ||
-                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posRD) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRD) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRD) != tileCellData.AutoTileCoords) ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoFloorLayer, posRD) != -1 ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoMiddleLayer, posRD) != -1 ||
+                                (_tileRoot.GetCellSourceId(MapLayer.AutoTopLayer, posRD) != -1 && _tileRoot.GetCellAtlasCoords(MapLayer.AutoTopLayer, posRD) != tileCellData.AutoTileCoords) ||
 
-                                _tileRoot.GetCellSourceId(GameConfig.FloorMapLayer, posRT) != -1 ||
-                                _tileRoot.GetCellSourceId(GameConfig.MiddleMapLayer, posRT) != -1 ||
-                                (_tileRoot.GetCellSourceId(GameConfig.TopMapLayer, posRT) != -1 && _tileRoot.GetCellAtlasCoords(GameConfig.TopMapLayer, posRT) != tileCellData.AutoTileCoords);
+                                _tileRoot.GetCellSourceId(MapLayer.AutoFloorLayer, posRT) != -1 ||
+                                _tileRoot.GetCellSourceId(MapLayer.AutoMiddleLayer, posRT) != -1 ||
+                                (_tileRoot.GetCellSourceId(MapLayer.AutoTopLayer, posRT) != -1 && _tileRoot.GetCellAtlasCoords(MapLayer.AutoTopLayer, posRT) != tileCellData.AutoTileCoords);
                     
                     if (flag2) //非空地, 那么说明这个点需要填充 WALL_BLOCK
                     {
-                        _tileRoot.SetCell(GameConfig.TopMapLayer, pos, tileCellData.SourceId, tileCellData.AutoTileCoords);
+                        _tileRoot.SetCell(MapLayer.AutoTopLayer, pos, tileCellData.SourceId, tileCellData.AutoTileCoords);
                     }
                 }
             }
@@ -441,7 +449,7 @@ public class DungeonTileMap
             for (int j = 0; j < size.Y; j++)
             {
                 var p = new Vector2I((int)pos.X + i, (int)pos.Y + j);
-                if (layer == GameConfig.AisleFloorMapLayer)
+                if (layer == MapLayer.AutoAisleFloorLayer)
                 {
                     _tempAisleFloorGrid.Set(p, true);
                 }
@@ -458,7 +466,7 @@ public class DungeonTileMap
             for (int j = 0; j < size.Y; j++)
             {
                 var p = new Vector2I((int)pos.X + i, (int)pos.Y + j);
-                if (layer == GameConfig.AisleFloorMapLayer)
+                if (layer == MapLayer.AutoAisleFloorLayer)
                 {
                     _tempAisleFloorGrid.Remove(p.X, p.Y);
                 }
@@ -470,42 +478,42 @@ public class DungeonTileMap
     //横向过道
     private void FullHorizontalAisle(AutoTileConfig config, Rect2 rect)
     {
-        FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
-        FillRect(GameConfig.TopMapLayer, config.TopMask, rect.Position - new Vector2(0, 2), new Vector2(rect.Size.X, 1));
-        FillRect(GameConfig.TopMapLayer, config.TopMask, rect.Position + new Vector2(0, rect.Size.Y), new Vector2(rect.Size.X, 1));
-        FillRect(GameConfig.MiddleMapLayer, config.Wall_Top, rect.Position - new Vector2(0, 1), new Vector2(rect.Size.X, 1));
-        FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Center, rect.Position, new Vector2(rect.Size.X, 1));
-        FillRect(GameConfig.TopMapLayer, config.Wall_Bottom, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
+        FillRect(MapLayer.AutoAisleFloorLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
+        FillRect(MapLayer.AutoTopLayer, config.TopMask, rect.Position - new Vector2(0, 2), new Vector2(rect.Size.X, 1));
+        FillRect(MapLayer.AutoTopLayer, config.TopMask, rect.Position + new Vector2(0, rect.Size.Y), new Vector2(rect.Size.X, 1));
+        FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, rect.Position - new Vector2(0, 1), new Vector2(rect.Size.X, 1));
+        FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Center, rect.Position, new Vector2(rect.Size.X, 1));
+        FillRect(MapLayer.AutoTopLayer, config.Wall_Bottom, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
     }
 
     //纵向过道
     private void FullVerticalAisle(AutoTileConfig config, Rect2 rect)
     {
-        FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
-        FillRect(GameConfig.TopMapLayer, config.TopMask, rect.Position - new Vector2(1, 0), new Vector2(1, rect.Size.Y - 1));
-        FillRect(GameConfig.TopMapLayer, config.TopMask, rect.Position + new Vector2(rect.Size.X, 0), new Vector2(1, rect.Size.Y - 1));
-        FillRect(GameConfig.TopMapLayer, config.Wall_Left, rect.Position, new Vector2(1, rect.Size.Y - 1));
-        FillRect(GameConfig.TopMapLayer, config.Wall_Right, rect.Position + new Vector2(rect.Size.X - 1, 0), new Vector2(1, rect.Size.Y - 1));
+        FillRect(MapLayer.AutoAisleFloorLayer, config.Floor, rect.Position + new Vector2(1, 0), rect.Size - new Vector2(2, 0));
+        FillRect(MapLayer.AutoTopLayer, config.TopMask, rect.Position - new Vector2(1, 0), new Vector2(1, rect.Size.Y - 1));
+        FillRect(MapLayer.AutoTopLayer, config.TopMask, rect.Position + new Vector2(rect.Size.X, 0), new Vector2(1, rect.Size.Y - 1));
+        FillRect(MapLayer.AutoTopLayer, config.Wall_Left, rect.Position, new Vector2(1, rect.Size.Y - 1));
+        FillRect(MapLayer.AutoTopLayer, config.Wall_Right, rect.Position + new Vector2(rect.Size.X - 1, 0), new Vector2(1, rect.Size.Y - 1));
     }
 
     //横向过道, 门朝右, 连接方向向左
     private void FullHorizontalAisleLeft(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
     {
         //左
-        ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+        ClearRect(MapLayer.AutoTopLayer, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
         if (doorInfo == null)
         {
-            FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1),
+            FillRect(MapLayer.AutoAisleFloorLayer, config.Floor, rect.Position + new Vector2(-1, 1),
                 new Vector2(1, rect.Size.Y - 2));
         }
         else
         {
-            ClearRect(GameConfig.TopMapLayer, rect.Position - new Vector2(1, 1), new Vector2(2, 4));
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Left, rect.Position - new Vector2(1, 0), Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_LB, rect.Position - new Vector2(1, 1), Vector2.One);
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_LT, rect.Position + new Vector2(-1, 3), Vector2.One);
+            ClearRect(MapLayer.AutoTopLayer, rect.Position - new Vector2(1, 1), new Vector2(2, 4));
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Left, rect.Position - new Vector2(1, 0), Vector2.One);
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_LB, rect.Position - new Vector2(1, 1), Vector2.One);
+            FillRect(MapLayer.AutoTopLayer, config.Wall_Out_LT, rect.Position + new Vector2(-1, 3), Vector2.One);
             
-            FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
+            FillRect(MapLayer.AutoFloorLayer, config.Floor, rect.Position + new Vector2(-1, 1), new Vector2(1, rect.Size.Y - 2));
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;
@@ -528,19 +536,19 @@ public class DungeonTileMap
     private void FullHorizontalAisleRight(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
     {
         //右
-        ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+        ClearRect(MapLayer.AutoTopLayer, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
         if (doorInfo == null)
         {
-            FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+            FillRect(MapLayer.AutoAisleFloorLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
         }
         else
         {
-            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(rect.Size.X - 1,  -1), new Vector2(2, 4));
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_RB, rect.Position + new Vector2(rect.Size.X, -1), Vector2.One);
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_RT, rect.Position + new Vector2(rect.Size.X, 3), Vector2.One);
+            ClearRect(MapLayer.AutoTopLayer, rect.Position + new Vector2(rect.Size.X - 1,  -1), new Vector2(2, 4));
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_RB, rect.Position + new Vector2(rect.Size.X, -1), Vector2.One);
+            FillRect(MapLayer.AutoTopLayer, config.Wall_Out_RT, rect.Position + new Vector2(rect.Size.X, 3), Vector2.One);
             
-            FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
+            FillRect(MapLayer.AutoFloorLayer, config.Floor, rect.Position + new Vector2(rect.Size.X, 1), new Vector2(1, rect.Size.Y - 2));
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;
@@ -563,19 +571,19 @@ public class DungeonTileMap
     private void FullVerticalAisleUp(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
     {
         //上
-        ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+        ClearRect(MapLayer.AutoTopLayer, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
         if (doorInfo == null)
         {
-            FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+            FillRect(MapLayer.AutoAisleFloorLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
         }
         else
         {
-            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, 0), new Vector2(2, 2));
+            ClearRect(MapLayer.AutoTopLayer, rect.Position + new Vector2(1, 0), new Vector2(2, 2));
 
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_RT, rect.Position + new Vector2(0, -1), Vector2.One);
-            FillRect(GameConfig.TopMapLayer, config.Wall_Out_LT, rect.Position + new Vector2(3, -1), Vector2.One);
+            FillRect(MapLayer.AutoTopLayer, config.Wall_Out_RT, rect.Position + new Vector2(0, -1), Vector2.One);
+            FillRect(MapLayer.AutoTopLayer, config.Wall_Out_LT, rect.Position + new Vector2(3, -1), Vector2.One);
             
-            FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
+            FillRect(MapLayer.AutoFloorLayer, config.Floor, rect.Position + new Vector2(1, -1), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;
@@ -598,22 +606,22 @@ public class DungeonTileMap
     private void FullVerticalAisleDown(AutoTileConfig config, Rect2 rect, RoomDoorInfo doorInfo = null)
     {
         //下
-        ClearRect(GameConfig.MiddleMapLayer, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+        ClearRect(MapLayer.AutoMiddleLayer, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
         if (doorInfo == null)
         {
-            FillRect(GameConfig.AisleFloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+            FillRect(MapLayer.AutoAisleFloorLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
         }
         else
         {
-            ClearRect(GameConfig.TopMapLayer, rect.Position + new Vector2(1, rect.Size.Y - 2), new Vector2(2, 2));
-            ClearRect(GameConfig.MiddleMapLayer, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(4, 2));
+            ClearRect(MapLayer.AutoTopLayer, rect.Position + new Vector2(1, rect.Size.Y - 2), new Vector2(2, 2));
+            ClearRect(MapLayer.AutoMiddleLayer, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(4, 2));
 
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_RB, rect.Position + new Vector2(0, rect.Size.Y - 1), Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(0, rect.Size.Y), Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Out_LB, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y - 1), Vector2.One);
-            FillRect(GameConfig.MiddleMapLayer, config.Wall_Vertical_Left, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y), Vector2.One);
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_RB, rect.Position + new Vector2(0, rect.Size.Y - 1), Vector2.One);
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(0, rect.Size.Y), Vector2.One);
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_LB, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y - 1), Vector2.One);
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Left, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y), Vector2.One);
             
-            FillRect(GameConfig.FloorMapLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
+            FillRect(MapLayer.AutoFloorLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域
             var x = rect.Position.X * GameConfig.TileCellSize;
             var y = rect.Position.Y * GameConfig.TileCellSize;

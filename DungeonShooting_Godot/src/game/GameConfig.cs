@@ -58,36 +58,6 @@ public static class GameConfig
     /// ui代码根路径
     /// </summary>
     public const string UiCodeDir = "src/game/ui/";
-    
-    /// <summary>
-    /// TileMap 地板的层级
-    /// </summary>
-    public const int FloorMapLayer = 0;
-    /// <summary>
-    /// TileMap 中层的层级
-    /// </summary>
-    public const int MiddleMapLayer = 1;
-    /// <summary>
-    /// TileMap 上层的层级
-    /// </summary>
-    public const int TopMapLayer = 2;
-    /// <summary>
-    /// 连接房间的过道的地板层级
-    /// </summary>
-    public const int AisleFloorMapLayer = 3;
-    
-    /// <summary>
-    /// TileMap 地板的 Zindex
-    /// </summary>
-    public const int FloorMapZIndex = -10;
-    /// <summary>
-    /// TileMap 中层的 Zindex
-    /// </summary>
-    public const int MiddleMapZIndex = 0;
-    /// <summary>
-    /// TileMap 上层的 Zindex
-    /// </summary>
-    public const int TopMapZindex = 10;
 
     /// <summary>
     /// 配置层级的自定义数据名称

@@ -167,6 +167,7 @@ public partial class GameApplication : Node2D, ICoroutine
 			World.QueueFree();
 		}
 		World = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
+		World.InitLayer();
 		SceneRoot.AddChild(World);
 		return World;
 	}
