@@ -1,3 +1,5 @@
+using Godot;
+
 namespace UI.MapEditorMapTile;
 
 public class CombinationCell : UiCell<MapEditorMapTile.CellButton, ImportCombinationData>
@@ -35,6 +37,18 @@ public class CombinationCell : UiCell<MapEditorMapTile.CellButton, ImportCombina
     {
         CellNode.L_SelectTexture.Instance.Visible = true;
         
+        //选中组合, 将组合数据设置到笔刷上
+        var editorTileMap = CellNode.UiPanel.EditorTileMap;
+        editorTileMap.ClearCurrBrushAtlasCoords();
+        var positions = Data.CombinationInfo.Positions;
+        var cells = Data.CombinationInfo.Cells;
+        for (var i = 0; i < cells.Length; i++)
+        {
+            editorTileMap.AddCurrBrushAtlasCoords(
+                positions[i].AsVector2I() / GameConfig.TileCellSize,
+                cells[i].AsVector2I() / GameConfig.TileCellSize
+            );
+        }
     }
 
     public override void OnUnSelect()

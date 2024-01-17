@@ -88,6 +88,10 @@ public partial class MapEditorPanel : MapEditor
         _title = "正在编辑：" + roomSplit.RoomInfo.RoomName;
         S_Title.Instance.Text = _title;
         
+        //初始化 TileMap 层
+        S_TileMap.Instance.InitLayer();
+        //加载层级
+        S_MapEditorMapLayer.Instance.InitData();
         //加载MapTile面板
         S_MapEditorMapTile.Instance.InitData(tileSetSplit);
         

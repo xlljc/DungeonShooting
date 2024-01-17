@@ -12,6 +12,8 @@ public class InfiniteGrid<T>
     /// </summary>
     public delegate bool EachGridCallback(int x, int y, T data);
 
+    private bool _isDirty = false;
+    private Rect2I _rect = new Rect2I();
     private readonly Dictionary<int, Dictionary<int, T>> _map = new Dictionary<int, Dictionary<int, T>>();
 
     /// <summary>
@@ -49,6 +51,7 @@ public class InfiniteGrid<T>
             value = new Dictionary<int, T>();
             value.Add(y, data);
             _map.Add(x, value);
+            _isDirty = true;
         }
     }
 
@@ -91,6 +94,7 @@ public class InfiniteGrid<T>
     {
         if (_map.TryGetValue(x, out var value))
         {
+            _isDirty = true;
             return value.Remove(y);
         }
 
@@ -120,6 +124,7 @@ public class InfiniteGrid<T>
                     value = new Dictionary<int, T>();
                     value.Add(y + j, data);
                     _map.Add(x + i, value);
+                    _isDirty = true;
                 }
             }
         }
@@ -144,6 +149,7 @@ public class InfiniteGrid<T>
                     if (value.Count == 0)
                     {
                         _map.Remove(x + i);
+                        _isDirty = true;
                     }
                 }
             }
@@ -156,6 +162,7 @@ public class InfiniteGrid<T>
     public void Clear()
     {
         _map.Clear();
+        _isDirty = true;
     }
     
     /// <summary>
@@ -212,6 +219,13 @@ public class InfiniteGrid<T>
     /// </summary>
     public Rect2I GetRect()
     {
+        if (!_isDirty)
+        {
+            return _rect;
+        }
+
+        _isDirty = false;
+
         var flag = false;
         var minX = int.MaxValue;
         var minY = int.MaxValue;
@@ -236,6 +250,7 @@ public class InfiniteGrid<T>
             return new Rect2I();
         }
 
-        return new Rect2I(minX, minY, maxX - minX + 1, maxY - minY + 1);
+        _rect = new Rect2I(minX, minY, maxX - minX + 1, maxY - minY + 1);
+        return _rect;
     }
 }

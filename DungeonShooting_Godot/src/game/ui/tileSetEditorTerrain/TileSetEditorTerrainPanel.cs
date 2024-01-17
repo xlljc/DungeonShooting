@@ -453,7 +453,8 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                     {
                         TerrainTabGrid.SelectIndex = index;
                     }
-                    EventManager.EmitEvent(EventEnum.OnTileMapDirty);
+                    //标记数据脏了
+                    EventManager.EmitEvent(EventEnum.OnTileSetDirty);
                 }
             });
         }
@@ -471,7 +472,8 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
             //执行添加操作
             EditorPanel.TileSetSourceInfo.Terrain.Add(terrainInfo);
             TerrainTabGrid.Add(terrainInfo, true);
-            EventManager.EmitEvent(EventEnum.OnTileMapDirty);
+            //标记数据脏了
+            EventManager.EmitEvent(EventEnum.OnTileSetDirty);
         });
     }
     
@@ -503,7 +505,8 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
                 terrain.Name = v;
                 //刷新页签
                 ((TerrainTabCell)TerrainTabGrid.GetCell(CurrTerrainIndex)).RefreshData();
-                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
+                //标记数据脏了
+                EventManager.EmitEvent(EventEnum.OnTileSetDirty);
                 return true;
             });
         }

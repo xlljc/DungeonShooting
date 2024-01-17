@@ -290,6 +290,9 @@ public partial class TileSetEditorPanel : TileSetEditor
                     optionButton.RemoveItem(selectIndex);
                     optionButton.Selected = index;
                     OnOptionChange(index);
+                    
+                    //标记数据脏了
+                    EventManager.EmitEvent(EventEnum.OnTileSetDirty);
                 }
             });
         }

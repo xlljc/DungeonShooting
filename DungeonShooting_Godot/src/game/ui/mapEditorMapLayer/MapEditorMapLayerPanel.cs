@@ -21,7 +21,15 @@ public partial class MapEditorMapLayerPanel : MapEditorMapLayer
         _grid = CreateUiGrid<LayerButton, TileMapLayerData, LayerButtonCell>(S_LayerButton);
         _grid.SetCellOffset(new Vector2I(0, 2));
         _grid.SetHorizontalExpand(true);
-        
+
+        S_CheckButton.Instance.Toggled += OnToggled;
+    }
+
+    /// <summary>
+    /// 初始化层级数据
+    /// </summary>
+    public void InitData()
+    {
         _grid.Add(new TileMapLayerData("地板", MapLayer.AutoFloorLayer, false));
         _grid.Add(new TileMapLayerData("底层1", MapLayer.CustomFloorLayer1, false));
         _grid.Add(new TileMapLayerData("底层2", MapLayer.CustomFloorLayer2, false));
@@ -33,8 +41,6 @@ public partial class MapEditorMapLayerPanel : MapEditorMapLayer
         _grid.Add(new TileMapLayerData("顶层", MapLayer.CustomTopLayer, false));
         _grid.Add(new TileMapLayerData("标记数据层", MapLayer.MarkLayer, true));
         _grid.SelectIndex = 0;
-
-        S_CheckButton.Instance.Toggled += OnToggled;
     }
 
     private void OnToggled(bool toggledon)

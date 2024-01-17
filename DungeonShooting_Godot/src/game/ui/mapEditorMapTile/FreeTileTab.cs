@@ -67,7 +67,7 @@ public partial class FreeTileTab : EditorGridBg<MapEditorMapTile.Tab1>
                     var atlasCoords = Utils.GetMouseCellPosition(UiNode.L_TabRoot.Instance);
                     _prevPos = atlasCoords * GameConfig.TileCellSize;
                     _selectCells.Add(_prevPos);
-                    UiNode.UiPanel.EditorTileMap.AddCurrBrushAtlasCoords(atlasCoords);
+                    UiNode.UiPanel.EditorTileMap.AddCurrBrushAtlasCoords(atlasCoords, atlasCoords);
                 }
             }
         }
@@ -82,7 +82,7 @@ public partial class FreeTileTab : EditorGridBg<MapEditorMapTile.Tab1>
                 if (!_selectCells.Contains(pos))
                 {
                     _selectCells.Add(pos);
-                    UiNode.UiPanel.EditorTileMap.AddCurrBrushAtlasCoords(atlasCoords);
+                    UiNode.UiPanel.EditorTileMap.AddCurrBrushAtlasCoords(atlasCoords, atlasCoords);
                 }
             }
         }

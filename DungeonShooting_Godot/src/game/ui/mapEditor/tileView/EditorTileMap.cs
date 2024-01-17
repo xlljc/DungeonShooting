@@ -151,9 +151,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public TileMapDrawMode CurrBrushType { get; private set; }
 
     /// <summary>
-    /// 当前笔刷使用的 AtlasCoords, value: atlasCoords, 单位: 格
+    /// 当前笔刷使用的 AtlasCoords,, key: position, value: atlasCoords, 单位: 格
     /// </summary>
-    public List<Vector2I> CurrBrush { get; } = new List<Vector2I>();
+    public System.Collections.Generic.Dictionary<Vector2I, Vector2I> CurrBrush { get; } = new System.Collections.Generic.Dictionary<Vector2I, Vector2I>();
     
     /// <summary>
     /// 当前笔刷使用的纹理
@@ -188,6 +188,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //-------------------------------
     private MapEditor.TileMap _editorTileMap;
     private EventFactory _eventFactory;
+    private Vector2I _cacheToolSizeData;
     
     public void SetUiNode(IUiNode uiNode)
     {
@@ -216,14 +217,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         _eventFactory.RemoveAllEventListener();
         RenderingServer.FramePostDraw -= OnFramePostDraw;
     }
-    
-    public override void _Ready()
-    {
-        InitLayer();
-    }
 
     public override void _Process(double delta)
     {
+        if (!_initLayer)
+        {
+            return;
+        }
         //触发绘制辅助线
         _editorTileMap.L_Brush.Instance.QueueRedraw();
         
@@ -366,7 +366,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 }
                 else //自定义层
                 {
-                    if (CurrBrushType == TileMapDrawMode.Free)
+                    if (CurrBrushType == TileMapDrawMode.Free || CurrBrushType == TileMapDrawMode.Combination) //自由绘制 或者 绘制组合
                     {
                         if (_isRightPressed) //按下了左键擦除
                         {
@@ -376,8 +376,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                         {
                             foreach (var item in CurrBrush)
                             {
-                                var rect = new Rect2(_mousePosition + (item + _brushOffset) * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize);
-                                var srcRect = new Rect2(item * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize);
+                                var rect = new Rect2(_mousePosition + (item.Key + _brushOffset) * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize);
+                                var srcRect = new Rect2(item.Value * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize);
                                 canvasItem.DrawTextureRectRegion(CurrBrushTexture, rect, srcRect, new Color(1, 1, 1, 0.3f));
                             }
                         }
@@ -489,19 +489,23 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         CurrBrushType = mode;
     }
 
-    public void AddCurrBrushAtlasCoords(Vector2I atlasCoords)
+    /// <summary>
+    /// 添加笔刷绘制的资源坐标, 单位: 格
+    /// </summary>
+    public void AddCurrBrushAtlasCoords(Vector2I pos, Vector2I atlasCoords)
     {
-        if (!CurrBrush.Contains(atlasCoords))
+        if (!CurrBrush.ContainsKey(pos))
         {
-            CurrBrush.Add(atlasCoords);
+            CurrBrush.Add(pos, atlasCoords);
             var xStart = int.MaxValue;
             var xEnd = int.MinValue;
             var yStart = int.MaxValue;
             var yEnd = int.MinValue;
 
             //计算起始点和终点
-            foreach (var cell in CurrBrush)
+            foreach (var kv in CurrBrush)
             {
+                var cell = kv.Key;
                 xStart = Mathf.Min(cell.X, xStart);
                 yStart = Mathf.Min(cell.Y, yStart);
                 xEnd = Mathf.Max(cell.X, xEnd);
@@ -512,16 +516,25 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
     }
     
+    /// <summary>
+    /// 清除笔刷
+    /// </summary>
     public void ClearCurrBrushAtlasCoords()
     {
         CurrBrush.Clear();
     }
 
+    /// <summary>
+    /// 设置笔刷使用的纹理
+    /// </summary>
     public void SetCurrBrushTexture(Texture2D texture)
     {
         CurrBrushTexture = texture;
     }
 
+    /// <summary>
+    /// 设置选中某个图层时是否淡化其他图层
+    /// </summary>
     public void SetDesaltOtherLayer(bool flag)
     {
         _desaltOtherLayer = flag;
@@ -675,9 +688,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         {
             CurrDoorConfigs.Add(doorAreaInfo.Clone());
         }
-
-        //初始化层级数据
-        InitLayer();
         
         //读取地块数据
         SetAutoLayerDataFromList(MapLayer.AutoFloorLayer, tileInfo.Floor);
@@ -720,8 +730,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             MapEditorToolsPanel.CreateDoorTool(doorAreaInfo);
         }
         
-        //聚焦
-        OnClickCenterTool(null);
+        //聚焦 (需要延时一帧调用)
+        this.CallDelayInNode(0, () => OnClickCenterTool(null));
         return true;
     }
     
@@ -739,7 +749,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         _autoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain[0]);
     }
 
-    private void InitLayer()
+    /// <summary>
+    /// 初始化层数据
+    /// </summary>
+    public void InitLayer()
     {
         if (_initLayer)
         {
@@ -807,11 +820,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         else //自定义层
         {
-            if (CurrBrushType == TileMapDrawMode.Free) //自由绘制
+            if (CurrBrushType == TileMapDrawMode.Free || CurrBrushType == TileMapDrawMode.Combination) //自由绘制 或者 组合
             {
                 foreach (var item in CurrBrush)
                 {
-                    SetCell(CurrLayer.Layer, position + item + _brushOffset, CurrSourceIndex, item);
+                    SetCell(CurrLayer.Layer, position + item.Key + _brushOffset, CurrSourceIndex, item.Value);
                     //标记有修改数据
                     EventManager.EmitEvent(EventEnum.OnTileMapDirty);
                 }
@@ -1394,14 +1407,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //设置地图大小
     private void SetMapSize(Vector2I size, bool refreshDoorTrans)
     {
-        if (CurrRoomSize != size)
+        CurrRoomSize = size;
+        if (refreshDoorTrans && _cacheToolSizeData != size)
         {
-            CurrRoomSize = size;
-
-            if (refreshDoorTrans)
-            {
-                MapEditorToolsPanel.SetDoorHoverToolTransform(CurrRoomPosition, CurrRoomSize);
-            }
+            _cacheToolSizeData = size;
+            MapEditorToolsPanel.SetDoorHoverToolTransform(CurrRoomPosition, CurrRoomSize);
         }
     }
 
@@ -1569,6 +1579,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             return Colors.White;
         }
 
-        return layer == CurrLayer.Layer ? Colors.White : new Color(1, 1, 1, 0.3f);
+        return layer == CurrLayer.Layer ? Colors.White : new Color(1, 1, 1, 0.25f);
     }
 }

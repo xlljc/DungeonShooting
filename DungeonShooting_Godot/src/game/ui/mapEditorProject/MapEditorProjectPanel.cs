@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using UI.MapEditor;
 
 namespace UI.MapEditorProject;
 
@@ -92,14 +93,10 @@ public partial class MapEditorProjectPanel : MapEditorProject
     /// </summary>
     public void OpenSelectRoom(DungeonRoomSplit room, TileSetSplit tileSetSplit)
     {
-        HideUi();
         //创建地牢Ui
-        var mapEditor = UiManager.Create_MapEditor();
-        mapEditor.PrevUi = this;
+        var mapEditor = ParentUi.OpenNextUi<MapEditorPanel>(UiManager.UiNames.MapEditor);
         //加载地牢
         mapEditor.LoadMap(room, tileSetSplit);
-        //打开Ui
-        mapEditor.ShowUi();
     }
     
     //搜索组按钮点击

@@ -275,6 +275,15 @@ public abstract partial class MapEditorMapTile : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab2.ScrollContainer.TerrainItem.ErrorIcon
+    /// </summary>
+    public class ErrorIcon : UiNode<MapEditorMapTilePanel, Godot.TextureRect, ErrorIcon>
+    {
+        public ErrorIcon(MapEditorMapTilePanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override ErrorIcon Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.TextureRect"/>, 路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab2.ScrollContainer.TerrainItem.TerrainPreview
     /// </summary>
     public class TerrainPreview : UiNode<MapEditorMapTilePanel, Godot.TextureRect, TerrainPreview>
@@ -313,6 +322,19 @@ public abstract partial class MapEditorMapTile : UiBase
             }
         }
         private TerrainName _L_TerrainName;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab2.ScrollContainer.ErrorIcon
+        /// </summary>
+        public ErrorIcon L_ErrorIcon
+        {
+            get
+            {
+                if (_L_ErrorIcon == null) _L_ErrorIcon = new ErrorIcon(UiPanel, Instance.GetNode<Godot.TextureRect>("ErrorIcon"));
+                return _L_ErrorIcon;
+            }
+        }
+        private ErrorIcon _L_ErrorIcon;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab2.ScrollContainer.TerrainPreview
@@ -672,6 +694,11 @@ public abstract partial class MapEditorMapTile : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab2.ScrollContainer.TerrainItem.TerrainName
     /// </summary>
     public TerrainName S_TerrainName => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab2.L_ScrollContainer.L_TerrainItem.L_TerrainName;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab2.ScrollContainer.TerrainItem.ErrorIcon
+    /// </summary>
+    public ErrorIcon S_ErrorIcon => L_VBoxContainer.L_Panel.L_MarginContainer.L_Tab2.L_ScrollContainer.L_TerrainItem.L_ErrorIcon;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: MapEditorMapTile.VBoxContainer.Panel.MarginContainer.Tab2.ScrollContainer.TerrainItem.TerrainPreview
