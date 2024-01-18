@@ -27,10 +27,18 @@ public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, int>
     public override void OnSetData(int data)
     {
         TileSetTerrainInfo = CellNode.UiPanel.TileSetSourceInfo.Terrain[data];
-        CellNode.L_TerrainName.Instance.Text = TileSetTerrainInfo.Name;
         
         //是否可以使用
-        CellNode.L_ErrorIcon.Instance.Visible = !TileSetTerrainInfo.Ready;
+        if (!TileSetTerrainInfo.Ready)
+        {
+            CellNode.L_ErrorIcon.Instance.Visible = true;
+            CellNode.Instance.TooltipText = "该地形Bit配置未完成，请在TileSet编辑器中配置！";
+        }
+        else
+        {
+            CellNode.L_ErrorIcon.Instance.Visible = false;
+            CellNode.Instance.TooltipText = "";
+        }
         
         if (_image != null)
         {
@@ -45,22 +53,51 @@ public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, int>
         );
         if (TileSetTerrainInfo.TerrainType == 0) //3x3
         {
-
+            CellNode.L_TerrainName.Instance.Text = TileSetTerrainInfo.Name + "\n3x3";
+            var src = CellNode.UiPanel.TileSetSourceInfo.GetSourceImage();
+            
+            SetImageSrc(src, Center | Right | Bottom | RightBottom, new Vector2I(0, 0));
+            SetImageSrc(src, Center | Left | Right | Bottom | LeftBottom | RightBottom, new Vector2I(GameConfig.TileCellSize, 0));
+            SetImageSrc(src, Center | Left | Bottom | LeftBottom, new Vector2I(GameConfig.TileCellSize * 2, 0));
+            
+            SetImageSrc(src, Center | Right | Top | Bottom | RightTop | RightBottom, new Vector2I(0, GameConfig.TileCellSize));
+            SetImageSrc(src, Center | Left | Right | Bottom | Top | LeftTop | LeftBottom | RightTop | RightBottom, new Vector2I(GameConfig.TileCellSize, GameConfig.TileCellSize));
+            SetImageSrc(src, Center | Left | Top | Bottom | LeftTop | LeftBottom, new Vector2I(GameConfig.TileCellSize * 2, GameConfig.TileCellSize));
+            
+            SetImageSrc(src, Center | Right | Top | RightTop, new Vector2I(0, GameConfig.TileCellSize * 2));
+            SetImageSrc(src, Center | Left | Top | Right | LeftTop | RightTop, new Vector2I(GameConfig.TileCellSize, GameConfig.TileCellSize * 2));
+            SetImageSrc(src, Center | Left | Top | LeftTop, new Vector2I(GameConfig.TileCellSize * 2, GameConfig.TileCellSize * 2));
         }
         else //2x2
         {
+            CellNode.L_TerrainName.Instance.Text = TileSetTerrainInfo.Name + "\n2x2";
             var src = CellNode.UiPanel.TileSetSourceInfo.GetSourceImage();
-            int[] temp;
-            if (TileSetTerrainInfo.T.TryGetValue(Center | RightBottom, out temp))
-            {
-                var pos = TileSetTerrainInfo.GetPosition(temp);
-                _image.BlitRect(src, new Rect2I(pos * GameConfig.TileCellSize, GameConfig.TileCellSizeVector2I), new Vector2I(0, 0));
-            }
+            
+            SetImageSrc(src, Center | RightBottom, new Vector2I(0, 0));
+            SetImageSrc(src, Center | LeftBottom | RightBottom, new Vector2I(GameConfig.TileCellSize, 0));
+            SetImageSrc(src, Center | LeftBottom, new Vector2I(GameConfig.TileCellSize * 2, 0));
+            
+            SetImageSrc(src, Center | RightTop | RightBottom, new Vector2I(0, GameConfig.TileCellSize));
+            SetImageSrc(src, Center | LeftTop | LeftBottom | RightTop | RightBottom, new Vector2I(GameConfig.TileCellSize, GameConfig.TileCellSize));
+            SetImageSrc(src, Center | LeftTop | LeftBottom, new Vector2I(GameConfig.TileCellSize * 2, GameConfig.TileCellSize));
+            
+            SetImageSrc(src, Center | RightTop, new Vector2I(0, GameConfig.TileCellSize * 2));
+            SetImageSrc(src, Center | LeftTop | RightTop, new Vector2I(GameConfig.TileCellSize, GameConfig.TileCellSize * 2));
+            SetImageSrc(src, Center | LeftTop, new Vector2I(GameConfig.TileCellSize * 2, GameConfig.TileCellSize * 2));
         }
         
         _texture.SetImage(_image);
     }
 
+    private void SetImageSrc(Image src, uint bit, Vector2I dst)
+    {
+        if (TileSetTerrainInfo.T.TryGetValue(bit, out var temp))
+        {
+            var pos = TileSetTerrainInfo.GetPosition(temp);
+            _image.BlitRect(src, new Rect2I(pos * GameConfig.TileCellSize, GameConfig.TileCellSizeVector2I), dst);
+        }
+    }
+    
     public override void OnDestroy()
     {
         if (_texture != null)
