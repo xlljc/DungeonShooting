@@ -55,19 +55,32 @@ public partial class FreeTileTab : EditorGridBg<MapEditorMapTile.Tab1>
 
         if (@event is InputEventMouseButton mouseButton)
         {
-            if (mouseButton.ButtonIndex == MouseButton.Left && UiNode.L_TabRoot.Instance.IsMouseInRect())
+            if (mouseButton.ButtonIndex == MouseButton.Left) //左键选中
             {
-                _leftPressed = mouseButton.Pressed;
-                if (_leftPressed)
+                if (UiNode.L_TabRoot.Instance.IsMouseInRect())
                 {
-                    //清理之前的格子
-                    _selectCells.Clear();
-                    UiNode.UiPanel.EditorTileMap.ClearCurrBrushAtlasCoords();
-                    //当前格子
+                    _leftPressed = mouseButton.Pressed;
+                    if (_leftPressed)
+                    {
+                        //清理之前的格子
+                        _selectCells.Clear();
+                        UiNode.UiPanel.EditorTileMap.ClearCurrBrushAtlasCoords();
+                        //当前格子
+                        var atlasCoords = Utils.GetMouseCellPosition(UiNode.L_TabRoot.Instance);
+                        _prevPos = atlasCoords * GameConfig.TileCellSize;
+                        _selectCells.Add(_prevPos);
+                        UiNode.UiPanel.EditorTileMap.AddCurrBrushAtlasCoords(atlasCoords, atlasCoords);
+                    }
+                }
+
+            }
+            else if (!_leftPressed && mouseButton.ButtonIndex == MouseButton.Right) //右键擦除
+            {
+                if (UiNode.L_TabRoot.Instance.IsMouseInRect())
+                {
                     var atlasCoords = Utils.GetMouseCellPosition(UiNode.L_TabRoot.Instance);
-                    _prevPos = atlasCoords * GameConfig.TileCellSize;
-                    _selectCells.Add(_prevPos);
-                    UiNode.UiPanel.EditorTileMap.AddCurrBrushAtlasCoords(atlasCoords, atlasCoords);
+                    _selectCells.Remove(atlasCoords * GameConfig.TileCellSize);
+                    UiNode.UiPanel.EditorTileMap.RemoveCurrBrushAtlasCoords(atlasCoords);
                 }
             }
         }
@@ -93,6 +106,10 @@ public partial class FreeTileTab : EditorGridBg<MapEditorMapTile.Tab1>
     /// </summary>
     public void SetImage(Image image)
     {
+        //清理之前的格子
+        _selectCells.Clear();
+        UiNode.UiPanel.EditorTileMap.ClearCurrBrushAtlasCoords();
+        
         _texture.SetImage(image);
         var texture = UiNode.L_TabRoot.L_TileSprite.Instance.Texture;
         if (texture != null)

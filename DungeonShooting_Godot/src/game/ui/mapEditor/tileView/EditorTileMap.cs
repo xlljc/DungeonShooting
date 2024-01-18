@@ -490,7 +490,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     }
 
     /// <summary>
-    /// 添加笔刷绘制的资源坐标, 单位: 格
+    /// 添加笔刷绘制的数据, 单位: 格
     /// </summary>
     public void AddCurrBrushAtlasCoords(Vector2I pos, Vector2I atlasCoords)
     {
@@ -514,6 +514,14 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             
             _brushOffset = new Vector2I(-(xStart + (xEnd - xStart) / 2), -(yStart + (yEnd - yStart) / 2));
         }
+    }
+    
+    /// <summary>
+    /// 移除笔刷绘制的数据, 单位: 格
+    /// </summary>
+    public void RemoveCurrBrushAtlasCoords(Vector2I pos)
+    {
+        CurrBrush.Remove(pos);
     }
     
     /// <summary>
