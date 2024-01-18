@@ -1,4 +1,7 @@
-﻿namespace UI.MapEditorMapTile;
+﻿using Godot;
+using static TerrainPeering;
+
+namespace UI.MapEditorMapTile;
 
 /// <summary>
 /// 地形选项, Data 为 TileSetTerrainInfo 的 index
@@ -9,9 +12,14 @@ public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, int>
     /// 选中的地形配置数据
     /// </summary>
     public TileSetTerrainInfo TileSetTerrainInfo;
+
+    private Image _image;
+    private ImageTexture _texture;
     
     public override void OnInit()
     {
+        _texture = new ImageTexture();
+        CellNode.L_TerrainPreview.Instance.Texture = _texture;
         CellNode.L_Select.Instance.Visible = false;
         CellNode.L_ErrorIcon.Instance.Visible = false;
     }
@@ -22,14 +30,49 @@ public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, int>
         CellNode.L_TerrainName.Instance.Text = TileSetTerrainInfo.Name;
         
         //是否可以使用
-        if (TileSetTerrainInfo.Ready)
+        CellNode.L_ErrorIcon.Instance.Visible = !TileSetTerrainInfo.Ready;
+        
+        if (_image != null)
         {
-            CellNode.L_ErrorIcon.Instance.Visible = false;
-            
+            _image.Dispose();
         }
-        else
+
+        //创建预览图
+        _image = Image.Create(
+            3 * GameConfig.TileCellSize,
+            3 * GameConfig.TileCellSize,
+            false, Image.Format.Rgba8
+        );
+        if (TileSetTerrainInfo.TerrainType == 0) //3x3
         {
-            CellNode.L_ErrorIcon.Instance.Visible = true;
+
+        }
+        else //2x2
+        {
+            var src = CellNode.UiPanel.TileSetSourceInfo.GetSourceImage();
+            int[] temp;
+            if (TileSetTerrainInfo.T.TryGetValue(Center | RightBottom, out temp))
+            {
+                var pos = TileSetTerrainInfo.GetPosition(temp);
+                _image.BlitRect(src, new Rect2I(pos * GameConfig.TileCellSize, GameConfig.TileCellSizeVector2I), new Vector2I(0, 0));
+            }
+        }
+        
+        _texture.SetImage(_image);
+    }
+
+    public override void OnDestroy()
+    {
+        if (_texture != null)
+        {
+            _texture.Dispose();
+            _texture = null;
+        }
+        
+        if (_image != null)
+        {
+            _image.Dispose();
+            _image = null;
         }
     }
 
