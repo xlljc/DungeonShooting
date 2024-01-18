@@ -4,15 +4,10 @@ using static TerrainPeering;
 namespace UI.MapEditorMapTile;
 
 /// <summary>
-/// 地形选项, Data 为 TileSetTerrainInfo 的 index
+/// 地形选项
 /// </summary>
-public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, int>
+public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, TerrainData>
 {
-    /// <summary>
-    /// 选中的地形配置数据
-    /// </summary>
-    public TileSetTerrainInfo TileSetTerrainInfo;
-
     private Image _image;
     private ImageTexture _texture;
     
@@ -24,12 +19,10 @@ public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, int>
         CellNode.L_ErrorIcon.Instance.Visible = false;
     }
 
-    public override void OnSetData(int data)
+    public override void OnSetData(TerrainData data)
     {
-        TileSetTerrainInfo = CellNode.UiPanel.TileSetSourceInfo.Terrain[data];
-        
         //是否可以使用
-        if (!TileSetTerrainInfo.Ready)
+        if (!data.TerrainInfo.Ready)
         {
             CellNode.L_ErrorIcon.Instance.Visible = true;
             CellNode.Instance.TooltipText = "该地形Bit配置未完成，请在TileSet编辑器中配置！";
@@ -51,9 +44,9 @@ public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, int>
             3 * GameConfig.TileCellSize,
             false, Image.Format.Rgba8
         );
-        if (TileSetTerrainInfo.TerrainType == 0) //3x3
+        if (data.TerrainInfo.TerrainType == 0) //3x3
         {
-            CellNode.L_TerrainName.Instance.Text = TileSetTerrainInfo.Name + "\n3x3";
+            CellNode.L_TerrainName.Instance.Text = data.TerrainInfo.Name + "\n3x3";
             var src = CellNode.UiPanel.TileSetSourceInfo.GetSourceImage();
             
             SetImageSrc(src, Center | Right | Bottom | RightBottom, new Vector2I(0, 0));
@@ -70,7 +63,7 @@ public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, int>
         }
         else //2x2
         {
-            CellNode.L_TerrainName.Instance.Text = TileSetTerrainInfo.Name + "\n2x2";
+            CellNode.L_TerrainName.Instance.Text = data.TerrainInfo.Name + "\n2x2";
             var src = CellNode.UiPanel.TileSetSourceInfo.GetSourceImage();
             
             SetImageSrc(src, Center | RightBottom, new Vector2I(0, 0));
@@ -91,9 +84,9 @@ public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, int>
 
     private void SetImageSrc(Image src, uint bit, Vector2I dst)
     {
-        if (TileSetTerrainInfo.T.TryGetValue(bit, out var temp))
+        if (Data.TerrainInfo.T.TryGetValue(bit, out var temp))
         {
-            var pos = TileSetTerrainInfo.GetPosition(temp);
+            var pos = Data.TerrainInfo.GetPosition(temp);
             _image.BlitRect(src, new Rect2I(pos * GameConfig.TileCellSize, GameConfig.TileCellSizeVector2I), dst);
         }
     }
@@ -116,6 +109,7 @@ public class TerrainCell : UiCell<MapEditorMapTile.TerrainItem, int>
     public override void OnSelect()
     {
         CellNode.L_Select.Instance.Visible = true;
+        CellNode.UiPanel.EditorTileMap.SetCurrTerrain(Data);
     }
 
     public override void OnUnSelect()

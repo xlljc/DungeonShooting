@@ -156,6 +156,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public System.Collections.Generic.Dictionary<Vector2I, Vector2I> CurrBrush { get; } = new System.Collections.Generic.Dictionary<Vector2I, Vector2I>();
     
     /// <summary>
+    /// 当前地形
+    /// </summary>
+    public TerrainData CurrTerrain { get; private set; }
+    
+    /// <summary>
     /// 当前笔刷使用的纹理
     /// </summary>
     public Texture2D CurrBrushTexture { get; private set; }
@@ -382,6 +387,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                             }
                         }
                     }
+                    else if (CurrBrushType == TileMapDrawMode.Terrain) //绘制地形
+                    {
+                        DrawCellOutline(canvasItem);
+                    }
                 }
             }
         }
@@ -559,6 +568,15 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             _generateTimer = -1;
             RunCheckHandler();
         }
+    }
+
+    /// <summary>
+    /// 设置当前地形
+    /// </summary>
+    public void SetCurrTerrain(TerrainData terrainData)
+    {
+        CurrBrushType = TileMapDrawMode.Terrain;
+        CurrTerrain = terrainData;
     }
     
     //执行检测地形操作
@@ -835,6 +853,28 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     SetCell(CurrLayer.Layer, position + item.Key + _brushOffset, CurrSourceIndex, item.Value);
                     //标记有修改数据
                     EventManager.EmitEvent(EventEnum.OnTileMapDirty);
+                }
+            }
+            else if (CurrBrushType == TileMapDrawMode.Terrain) //绘制地形
+            {
+                if (!CurrTerrain.TerrainInfo.Ready) //存在错误就不绘制了
+                {
+                    return;
+                }
+                if (CurrTerrain.TerrainInfo.TerrainType == 0) //3x3地形
+                {
+                    
+                }
+                else if (CurrTerrain.TerrainInfo.TerrainType == 1) //2x2地形
+                {
+                    //这里需要判断周围8格是否是同terrainSet
+                    
+                    var arr = new Array<Vector2I>()
+                    {
+                        position,
+                    };
+                    //绘制自动图块
+                    SetCellsTerrainConnect(CurrLayer.Layer, arr, CurrTerrain.TerrainSetIndex, 0, false);
                 }
             }
         }
