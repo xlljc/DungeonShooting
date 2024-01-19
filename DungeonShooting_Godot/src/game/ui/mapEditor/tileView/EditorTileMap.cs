@@ -389,7 +389,21 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     }
                     else if (CurrBrushType == TileMapDrawMode.Terrain) //绘制地形
                     {
-                        DrawCellOutline(canvasItem);
+                        if (CurrTerrain == null)
+                        {
+                            DrawCellOutline(canvasItem);
+                        }
+                        else if (CurrTerrain.TerrainInfo.TerrainType == 0) //3x3
+                        {
+                            DrawCellOutline(canvasItem);
+                        }
+                        else //2x2
+                        {
+                            DrawCellOutline(canvasItem);
+                            DrawCellOutline(canvasItem, new Vector2I(GameConfig.TileCellSize, 0));
+                            DrawCellOutline(canvasItem, new Vector2I(0, GameConfig.TileCellSize));
+                            DrawCellOutline(canvasItem, new Vector2I(GameConfig.TileCellSize, GameConfig.TileCellSize));
+                        }
                     }
                 }
             }
@@ -399,6 +413,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     private void DrawCellOutline(CanvasItem canvasItem)
     {
         canvasItem.DrawRect(new Rect2(_mousePosition, TileSet.TileSize), Colors.White, false, 2f / Scale.X);
+    }
+    
+    private void DrawCellOutline(CanvasItem canvasItem, Vector2I offset)
+    {
+        canvasItem.DrawRect(new Rect2(_mousePosition + offset, TileSet.TileSize), Colors.White, false, 2f / Scale.X);
     }
 
     public override void _Input(InputEvent @event)
@@ -471,15 +490,15 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         CurrLayer = layerData;
         MapEditorToolsPanel.S_CurrLayer.Instance.Text = "当前图层：" + layerData.Title;
-        SetLayerModulate(MapLayer.AutoFloorLayer, _GetEditorLayerModulate(MapLayer.AutoFloorLayer));
-        SetLayerModulate(MapLayer.AutoMiddleLayer, _GetEditorLayerModulate(MapLayer.AutoMiddleLayer));
-        SetLayerModulate(MapLayer.AutoTopLayer, _GetEditorLayerModulate(MapLayer.AutoTopLayer));
-        SetLayerModulate(MapLayer.CustomFloorLayer1, _GetEditorLayerModulate(MapLayer.CustomFloorLayer1));
-        SetLayerModulate(MapLayer.CustomFloorLayer2, _GetEditorLayerModulate(MapLayer.CustomFloorLayer2));
-        SetLayerModulate(MapLayer.CustomFloorLayer3, _GetEditorLayerModulate(MapLayer.CustomFloorLayer3));
-        SetLayerModulate(MapLayer.CustomMiddleLayer1, _GetEditorLayerModulate(MapLayer.CustomMiddleLayer1));
-        SetLayerModulate(MapLayer.CustomMiddleLayer2, _GetEditorLayerModulate(MapLayer.CustomMiddleLayer2));
-        SetLayerModulate(MapLayer.CustomTopLayer, _GetEditorLayerModulate(MapLayer.CustomTopLayer));
+        SetLayerModulate(MapLayer.AutoFloorLayer, GetEditorLayerModulate(MapLayer.AutoFloorLayer));
+        SetLayerModulate(MapLayer.AutoMiddleLayer, GetEditorLayerModulate(MapLayer.AutoMiddleLayer));
+        SetLayerModulate(MapLayer.AutoTopLayer, GetEditorLayerModulate(MapLayer.AutoTopLayer));
+        SetLayerModulate(MapLayer.CustomFloorLayer1, GetEditorLayerModulate(MapLayer.CustomFloorLayer1));
+        SetLayerModulate(MapLayer.CustomFloorLayer2, GetEditorLayerModulate(MapLayer.CustomFloorLayer2));
+        SetLayerModulate(MapLayer.CustomFloorLayer3, GetEditorLayerModulate(MapLayer.CustomFloorLayer3));
+        SetLayerModulate(MapLayer.CustomMiddleLayer1, GetEditorLayerModulate(MapLayer.CustomMiddleLayer1));
+        SetLayerModulate(MapLayer.CustomMiddleLayer2, GetEditorLayerModulate(MapLayer.CustomMiddleLayer2));
+        SetLayerModulate(MapLayer.CustomTopLayer, GetEditorLayerModulate(MapLayer.CustomTopLayer));
     }
 
     /// <summary>
@@ -846,13 +865,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         else //自定义层
         {
+            var dirty = false;
             if (CurrBrushType == TileMapDrawMode.Free || CurrBrushType == TileMapDrawMode.Combination) //自由绘制 或者 组合
             {
                 foreach (var item in CurrBrush)
                 {
                     SetCell(CurrLayer.Layer, position + item.Key + _brushOffset, CurrSourceIndex, item.Value);
-                    //标记有修改数据
-                    EventManager.EmitEvent(EventEnum.OnTileMapDirty);
+                    dirty = true;
                 }
             }
             else if (CurrBrushType == TileMapDrawMode.Terrain) //绘制地形
@@ -863,19 +882,47 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 }
                 if (CurrTerrain.TerrainInfo.TerrainType == 0) //3x3地形
                 {
-                    
+                    //绘制自动图块
+                    SetCellsTerrainConnect(CurrLayer.Layer, new Array<Vector2I>() { position }, CurrTerrain.TerrainSetIndex, 0);
+                    dirty = true;
                 }
                 else if (CurrTerrain.TerrainInfo.TerrainType == 1) //2x2地形
                 {
-                    //这里需要判断周围8格是否是同terrainSet
                     
                     var arr = new Array<Vector2I>()
                     {
                         position,
+                        position + new Vector2I(0, 1),
+                        position + new Vector2I(1, 1),
+                        position + new Vector2I(1, 0),
                     };
+                    //这里需要判断周围8格是否是同terrainSet
+                    // if (EqualsTerrainSet(position + new Vector2I(-1, -1)))
+                    //     arr.Add(position + new Vector2I(-1, -1));
+                    // if (EqualsTerrainSet(position + new Vector2I(0, -1)))
+                    //     arr.Add(position + new Vector2I(0, -1));
+                    // if (EqualsTerrainSet(position + new Vector2I(1, -1)))
+                    //     arr.Add(position + new Vector2I(1, -1));
+                    // if (EqualsTerrainSet(position + new Vector2I(-1, 0)))
+                    //     arr.Add(position + new Vector2I(-1, 0));
+                    // if (EqualsTerrainSet(position + new Vector2I(1, 0)))
+                    //     arr.Add(position + new Vector2I(1, 0));
+                    // if (EqualsTerrainSet(position + new Vector2I(-1, 1)))
+                    //     arr.Add(position + new Vector2I(-1, 1));
+                    // if (EqualsTerrainSet(position + new Vector2I(0, 1)))
+                    //     arr.Add(position + new Vector2I(0, 1));
+                    // if (EqualsTerrainSet(position + new Vector2I(1, 1)))
+                    //     arr.Add(position + new Vector2I(1, 1));
                     //绘制自动图块
-                    SetCellsTerrainConnect(CurrLayer.Layer, arr, CurrTerrain.TerrainSetIndex, 0, false);
+                    SetCellsTerrainConnect(CurrLayer.Layer, arr, CurrTerrain.TerrainSetIndex, 0);
+                    dirty = true;
                 }
+            }
+
+            if (dirty)
+            {
+                //标记有修改数据
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
             }
         }
     }
@@ -1620,7 +1667,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
     }
     
-    private Color _GetEditorLayerModulate(int layer)
+    private Color GetEditorLayerModulate(int layer)
     {
         if (!_desaltOtherLayer)
         {
@@ -1628,5 +1675,19 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
 
         return layer == CurrLayer.Layer ? Colors.White : new Color(1, 1, 1, 0.25f);
+    }
+
+    private bool EqualsTerrainSet(Vector2I position)
+    {
+        if (GetCellSourceId(CurrLayer.Layer, position) == CurrSourceIndex)
+        {
+            var cellTileData = GetCellTileData(CurrLayer.Layer, position);
+            if (cellTileData != null && cellTileData.TerrainSet == CurrTerrain.TerrainSetIndex)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
