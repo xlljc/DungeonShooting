@@ -120,12 +120,12 @@ public class TerrainCell : UiCell<TileSetEditorTerrain.RightCell, byte>
         if (cellData == null)
         {
             _panel.CurrTerrain?.RemoveTerrainCell(Index, Data);
-            _panel.CurrTerrain?.RefreshReady(_panel.CurrTerrainIndex);
+            _panel.CurrTerrain?.RefreshReady(_panel.EditorPanel.TileSetSourceIndex, _panel.CurrTerrainIndex);
         }
         else
         {
             _panel.CurrTerrain?.SetTerrainCell(Index, Data, cellData);
-            _panel.CurrTerrain?.RefreshReady(_panel.CurrTerrainIndex);
+            _panel.CurrTerrain?.RefreshReady(_panel.EditorPanel.TileSetSourceIndex, _panel.CurrTerrainIndex);
         }
 
         EventManager.EmitEvent(EventEnum.OnTileSetDirty);

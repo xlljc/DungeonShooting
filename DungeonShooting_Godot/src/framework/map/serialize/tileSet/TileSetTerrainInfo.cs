@@ -80,17 +80,17 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     /// <summary>
     /// 刷新这个TileSet地形是否可以正常使用了
     /// </summary>
-    public void RefreshReady(int terrainIndex)
+    public void RefreshReady(int sourceIndex, int terrainIndex)
     {
         if (TerrainType == 0)
         {
-            if (terrainIndex == 0)
+            if (sourceIndex == 0 && terrainIndex == 0)
             {
                 Ready = T != null && T.Count == 47 && M != null && M.Count == 4 && F != null && F.Count == 1;
             }
             else
             {
-                Ready = M != null && M.Count == 4 && F != null && F.Count == 1;
+                Ready = T != null && T.Count == 47;
             }
         }
         else
