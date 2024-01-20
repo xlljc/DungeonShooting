@@ -20,6 +20,7 @@ public partial class TileSetEditorCombinationPanel : TileSetEditorCombination
         AddEventListener(EventEnum.OnSetTileTexture, OnSetTileTexture);
         //改变背景颜色事件
         AddEventListener(EventEnum.OnSetTileSetBgColor, OnSetTileSetBgColor);
+        OnSetTileSetBgColor(EditorPanel.BgColor);
     }
     
     public override void OnShowUi()

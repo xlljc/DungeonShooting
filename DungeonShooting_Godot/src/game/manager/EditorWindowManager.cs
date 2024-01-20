@@ -10,6 +10,7 @@ using UI.EditorForm;
 using UI.EditorImportCombination;
 using UI.EditorInfo;
 using UI.EditorInput;
+using UI.EditorTileImage;
 using UI.EditorTips;
 using UI.EditorWindow;
 using UI.MapEditorCreateMark;
@@ -746,6 +747,25 @@ public static class EditorWindowManager
                 
                 window.CloseWindow();
                 onCreate(terrainInfo);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    public static void ShowImportTileImage(Image image, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("导入纹理");
+        window.SetWindowSize(new Vector2I(1400, 800));
+        var body = window.OpenBody<EditorTileImagePanel>(UiManager.UiNames.EditorTileImage);
+        body.InitData(image);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                window.CloseWindow();
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {

@@ -48,7 +48,7 @@ public partial class TileSetEditorPanel : TileSetEditor
     /// <summary>
     /// 背景颜色
     /// </summary>
-    public Color BgColor { get; private set; }
+    public Color BgColor { get; private set; } = new Color(0.14f, 0.14f, 0.14f, 1);
     
     /// <summary>
     /// Cell 横轴数量

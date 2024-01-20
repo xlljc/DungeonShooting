@@ -26,13 +26,16 @@ public abstract partial class EditorGridBg<T> : ColorRect, IUiNodeScript where T
     /// </summary>
     /// <param name="containerRoot">可拖拽容器根节点</param>
     /// <param name="grid">当前对象绑定的Ui节点</param>
-    public void InitNode(Control containerRoot, ColorRect grid)
+    public void InitNode(Control containerRoot, ColorRect grid = null)
     {
         ContainerRoot = containerRoot;
-        Grid = grid;
-        grid.MouseFilter = MouseFilterEnum.Ignore;
-        _gridMaterial = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Grid_tres, false);
-        grid.Material = _gridMaterial;
+        if (grid != null)
+        {
+            Grid = grid;
+            grid.MouseFilter = MouseFilterEnum.Ignore;
+            _gridMaterial = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Grid_tres, false);
+            grid.Material = _gridMaterial;
+        }
     }
     
     public virtual void SetUiNode(IUiNode uiNode)
@@ -103,15 +106,32 @@ public abstract partial class EditorGridBg<T> : ColorRect, IUiNodeScript where T
     /// </summary>
     public void RefreshGridTrans()
     {
-        _gridMaterial.SetShaderMaterialParameter(ShaderParamNames.Size, Size);
-        SetGridTransform(ContainerRoot.Position, ContainerRoot.Scale.X);
+        if (_gridMaterial != null)
+        {
+            _gridMaterial.SetShaderMaterialParameter(ShaderParamNames.Size, Size);
+            SetGridTransform(ContainerRoot.Position, ContainerRoot.Scale.X);
+        }
     }
     
     //设置网格位置和缩放
     private void SetGridTransform(Vector2 pos, float scale)
     {
-        _gridMaterial.SetShaderMaterialParameter(ShaderParamNames.GridSize, GameConfig.TileCellSize * scale);
-        _gridMaterial.SetShaderMaterialParameter(ShaderParamNames.Offset, -pos);
+        if (_gridMaterial != null)
+        {
+            _gridMaterial.SetShaderMaterialParameter(ShaderParamNames.GridSize, GameConfig.TileCellSize * scale);
+            _gridMaterial.SetShaderMaterialParameter(ShaderParamNames.Offset, -pos);
+        }
+    }
+
+    /// <summary>
+    /// 设置网格颜色
+    /// </summary>
+    public void SetLineColor(Color color)
+    {
+        if (_gridMaterial != null)
+        {
+            _gridMaterial.SetShaderMaterialParameter(ShaderParamNames.Color, color);
+        }
     }
     
 }

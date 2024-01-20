@@ -13,6 +13,7 @@ public static partial class UiManager
         public const string EditorInfo = "EditorInfo";
         public const string EditorInput = "EditorInput";
         public const string EditorManager = "EditorManager";
+        public const string EditorTileImage = "EditorTileImage";
         public const string EditorTips = "EditorTips";
         public const string EditorTools = "EditorTools";
         public const string EditorWindow = "EditorWindow";
@@ -422,6 +423,54 @@ public static partial class UiManager
     public static UI.EditorManager.EditorManagerPanel[] Get_EditorManager_Instance()
     {
         return GetUiInstance<UI.EditorManager.EditorManagerPanel>(nameof(UI.EditorManager.EditorManager));
+    }
+
+    /// <summary>
+    /// 创建 EditorTileImage, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorTileImage.EditorTileImagePanel Create_EditorTileImage()
+    {
+        return CreateUi<UI.EditorTileImage.EditorTileImagePanel>(UiNames.EditorTileImage);
+    }
+
+    /// <summary>
+    /// 打开 EditorTileImage, 并返回UI实例
+    /// </summary>
+    public static UI.EditorTileImage.EditorTileImagePanel Open_EditorTileImage()
+    {
+        return OpenUi<UI.EditorTileImage.EditorTileImagePanel>(UiNames.EditorTileImage);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorTileImage 的所有实例
+    /// </summary>
+    public static void Hide_EditorTileImage()
+    {
+        var uiInstance = Get_EditorTileImage_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorTileImage 的所有实例
+    /// </summary>
+    public static void Destroy_EditorTileImage()
+    {
+        var uiInstance = Get_EditorTileImage_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorTileImage 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorTileImage.EditorTileImagePanel[] Get_EditorTileImage_Instance()
+    {
+        return GetUiInstance<UI.EditorTileImage.EditorTileImagePanel>(nameof(UI.EditorTileImage.EditorTileImage));
     }
 
     /// <summary>

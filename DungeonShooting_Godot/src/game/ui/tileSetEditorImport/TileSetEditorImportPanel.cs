@@ -13,7 +13,7 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
     public override void OnCreateUi()
     {
         _tileSetEditor = (TileSetEditor.TileSetEditorPanel)ParentUi;
-        _tileSetEditor.SetBgColor(S_ImportPreviewBg.Instance.Color);
+        S_ImportPreviewBg.Instance.Color = _tileSetEditor.BgColor;
         S_ImportPreview.Instance.Texture = _tileSetEditor.Texture;
         
         GetTree().Root.FilesDropped += OnFilesDropped;
@@ -181,9 +181,10 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
 
         Debug.Log("导入文件: " + file);
         var image = Image.LoadFromFile(file);
-        tileSetSourceInfo.SourcePath = GameConfig.RoomTileSetDir + _tileSetEditor.TileSetInfo.Name + "/" + tileSetSourceInfo.Name + ".png";
-        tileSetSourceInfo.SetSourceImage(image);
-        _tileSetEditor.SetTextureData(image);
-        EventManager.EmitEvent(EventEnum.OnTileSetDirty);
+        EditorWindowManager.ShowImportTileImage(image, null);
+        // tileSetSourceInfo.SourcePath = GameConfig.RoomTileSetDir + _tileSetEditor.TileSetInfo.Name + "/" + tileSetSourceInfo.Name + ".png";
+        // tileSetSourceInfo.SetSourceImage(image);
+        // _tileSetEditor.SetTextureData(image);
+        // EventManager.EmitEvent(EventEnum.OnTileSetDirty);
     }
 }

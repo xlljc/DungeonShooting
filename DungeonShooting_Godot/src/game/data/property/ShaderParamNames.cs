@@ -34,6 +34,10 @@ public static class ShaderParamNames
     /// 网格大小
     /// </summary>
     public static readonly StringName GridSize = "grid_size";
+    /// <summary>
+    /// 颜色
+    /// </summary>
+    public static readonly StringName Color = "color";
 
     /// <summary>
     /// 快速设置一个材质的 shader 材质参数
