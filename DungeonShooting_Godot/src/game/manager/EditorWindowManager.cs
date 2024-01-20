@@ -755,7 +755,13 @@ public static class EditorWindowManager
         );
     }
 
-    public static void ShowImportTileImage(Image image, UiBase parentUi = null)
+    /// <summary>
+    /// 显示导入纹理的面板
+    /// </summary>
+    /// <param name="image">初始纹理</param>
+    /// <param name="onCreate">点击确定后的回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowImportTileImage(Image image, Action<Image> onCreate, UiBase parentUi = null)
     {
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("导入纹理");
@@ -765,7 +771,9 @@ public static class EditorWindowManager
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
+                var img = body.GetImage();
                 window.CloseWindow();
+                onCreate(img);
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {

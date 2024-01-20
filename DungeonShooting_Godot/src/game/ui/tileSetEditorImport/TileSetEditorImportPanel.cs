@@ -181,10 +181,12 @@ public partial class TileSetEditorImportPanel : TileSetEditorImport
 
         Debug.Log("导入文件: " + file);
         var image = Image.LoadFromFile(file);
-        EditorWindowManager.ShowImportTileImage(image, null);
-        // tileSetSourceInfo.SourcePath = GameConfig.RoomTileSetDir + _tileSetEditor.TileSetInfo.Name + "/" + tileSetSourceInfo.Name + ".png";
-        // tileSetSourceInfo.SetSourceImage(image);
-        // _tileSetEditor.SetTextureData(image);
-        // EventManager.EmitEvent(EventEnum.OnTileSetDirty);
+        EditorWindowManager.ShowImportTileImage(image, (result) =>
+        {
+            tileSetSourceInfo.SourcePath = GameConfig.RoomTileSetDir + _tileSetEditor.TileSetInfo.Name + "/" + tileSetSourceInfo.Name + ".png";
+            tileSetSourceInfo.SetSourceImage(result);
+            _tileSetEditor.SetTextureData(result);
+            EventManager.EmitEvent(EventEnum.OnTileSetDirty);
+        });
     }
 }
