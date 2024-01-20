@@ -165,6 +165,12 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// </summary>
     public Texture2D CurrBrushTexture { get; private set; }
 
+    private int _brushStartX = 0;
+    private int _brushStartY = 0;
+    //笔刷宽度, 单位: 格
+    private int _brushWidth = 0;
+    //笔刷高度, 单位: 格
+    private int _brushHeight = 0;
     //笔刷偏移, 单位: 格
     private Vector2I _brushOffset = Vector2I.Zero;
     //淡化其它层级
@@ -365,8 +371,46 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     temp.Y -= size.Y;
                 }
 
-                var pos = cellPos * size;
-                canvasItem.DrawRect(new Rect2(pos, _mousePosition - pos + temp), Colors.White, false, 2f / Scale.X);
+                var p = cellPos * size;
+                var s = _mousePosition.AsVector2I() - p + temp;
+                
+                if (s.X < 0)
+                {
+                    p.X += s.X;
+                    s.X *= -1;
+                }
+
+                if (s.Y < 0)
+                {
+                    p.Y += s.Y;
+                    s.Y *= -1;
+                }
+                
+                //绘制边框
+                canvasItem.DrawRect(new Rect2(p, s), Colors.White, false, 2f / Scale.X);
+
+                if (CurrLayer.Layer != MapLayer.AutoFloorLayer && (CurrBrushType == TileMapDrawMode.Free || CurrBrushType == TileMapDrawMode.Combination)) //自由绘制 或者 绘制组合
+                {
+                    if (_isLeftPressed) //左键绘制
+                    {
+                        var w = s.X / GameConfig.TileCellSize;
+                        var h = s.Y / GameConfig.TileCellSize;
+                        for (var i = 0; i < w; i++)
+                        {
+                            for (var j = 0; j < h; j++)
+                            {
+                                var x = i % _brushWidth + _brushStartX;
+                                var y = j % _brushHeight + _brushStartY;
+                                if (CurrBrush.TryGetValue(new Vector2I(x, y), out var v))
+                                {
+                                    var rect = new Rect2(p + (new Vector2I(i, j)) * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize);
+                                    var srcRect = new Rect2(v * GameConfig.TileCellSize, GameConfig.TileCellSize, GameConfig.TileCellSize);
+                                    canvasItem.DrawTextureRectRegion(CurrBrushTexture, rect, srcRect, new Color(1, 1, 1, 0.3f));
+                                }
+                            }
+                        }
+                    }
+                }
             }
             else //绘制单格
             {
@@ -547,7 +591,11 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 xEnd = Mathf.Max(cell.X, xEnd);
                 yEnd = Mathf.Max(cell.Y, yEnd);
             }
-            
+
+            _brushStartX = xStart;
+            _brushStartY = yStart;
+            _brushWidth = xEnd - xStart + 1;
+            _brushHeight = yEnd - yStart + 1;
             _brushOffset = new Vector2I(-(xStart + (xEnd - xStart) / 2), -(yStart + (yEnd - yStart) / 2));
         }
     }
@@ -884,11 +932,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             }
             else if (CurrBrushType == TileMapDrawMode.Terrain) //绘制地形
             {
-                if (CurrTerrain == null) //未选择地形
-                {
-                    return;
-                }
-                else if (!CurrTerrain.TerrainInfo.Ready) //存在错误就不绘制了
+                if (CurrTerrain == null || !CurrTerrain.TerrainInfo.Ready) //未选择地形或者存在错误就不绘制了
                 {
                     return;
                 }
@@ -924,8 +968,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //绘制区域贴图
     private void SetRectCell(Vector2I start, Vector2I end)
     {
-        ResetGenerateTimer();
-        
         if (start.X > end.X)
         {
             var temp = end.X;
@@ -941,16 +983,73 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
         var width = end.X - start.X + 1;
         var height = end.Y - start.Y + 1;
-        for (var i = 0; i < width; i++)
+        
+        if (CurrLayer.Layer == MapLayer.AutoFloorLayer) //选择自动地板层, 那么不管笔刷类型, 通通使用 Main Source 中的 Main Terrain
         {
-            for (var j = 0; j < height; j++)
+            ResetGenerateTimer();
+            for (var i = 0; i < width; i++)
             {
-                var tileCellData = _autoTileConfig.Floor;
-                SetCell(MapLayer.AutoFloorLayer, new Vector2I(start.X + i, start.Y + j), tileCellData.SourceId, tileCellData.AutoTileCoords);
+                for (var j = 0; j < height; j++)
+                {
+                    var tileCellData = _autoTileConfig.Floor;
+                    SetCell(MapLayer.AutoFloorLayer, new Vector2I(start.X + i, start.Y + j), tileCellData.SourceId, tileCellData.AutoTileCoords);
+                }
+            }
+
+            _autoCellLayerGrid.SetRect(start, new Vector2I(width, height), true);
+        }
+        else //自定义层
+        {
+            var dirty = false;
+            if (CurrBrushType == TileMapDrawMode.Free || CurrBrushType == TileMapDrawMode.Combination) //自由绘制 或者 组合
+            {
+                dirty = CurrBrush.Count > 0;
+                for (var i = 0; i < width; i++)
+                {
+                    for (var j = 0; j < height; j++)
+                    {
+                        var x = i % _brushWidth + _brushStartX;
+                        var y = j % _brushHeight + _brushStartY;
+                        if (CurrBrush.TryGetValue(new Vector2I(x, y), out var v))
+                        {
+                            SetCell(CurrLayer.Layer, new Vector2I(start.X + i, start.Y + j), CurrSourceIndex, v);
+                        }
+                    }
+                }
+            }
+            else if (CurrBrushType == TileMapDrawMode.Terrain) //绘制地形
+            {
+                if (CurrTerrain == null || !CurrTerrain.TerrainInfo.Ready) //未选择地形或者存在错误就不绘制了
+                {
+                    return;
+                }
+                
+                var arr = new Array<Vector2I>();
+                for (var i = 0; i < width; i++)
+                {
+                    for (var j = 0; j < height; j++)
+                    {
+                        arr.Add(new Vector2I(start.X + i, start.Y + j));
+                    }
+                }
+                
+                if (CurrTerrain.TerrainInfo.TerrainType == 0) //3x3地形
+                {
+                    SetCellsTerrainConnect(CurrLayer.Layer, arr, CurrTerrain.TerrainSetIndex, 0);
+                }
+                else if (CurrTerrain.TerrainInfo.TerrainType == 1) //2x2地形
+                {
+                    SetCellsTerrainConnect(CurrLayer.Layer, arr, CurrTerrain.TerrainSetIndex, 0, false);
+                }
+                dirty = true;
+            }
+
+            if (dirty)
+            {
+                //标记有修改数据
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
             }
         }
-
-        _autoCellLayerGrid.SetRect(start, new Vector2I(width, height), true);
     }
 
     //擦除单个图块
@@ -980,57 +1079,57 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 {
                     EraseCell(CurrLayer.Layer, position);
                     
-                    var arr2 = new Array<Vector2I>();
+                    var arr = new Array<Vector2I>();
                     //这里需要判断周围8格是否是同terrainSet
                     if (EqualsTerrainSet(position + new Vector2I(-1, -1)))
                     {
                         EraseCell(CurrLayer.Layer, position + new Vector2I(-1, -1));
-                        arr2.Add(position + new Vector2I(-1, -1));
+                        arr.Add(position + new Vector2I(-1, -1));
                     }
 
                     if (EqualsTerrainSet(position + new Vector2I(0, -1)))
                     {
                         EraseCell(CurrLayer.Layer, position + new Vector2I(0, -1));
-                        arr2.Add(position + new Vector2I(0, -1));
+                        arr.Add(position + new Vector2I(0, -1));
                     }
 
                     if (EqualsTerrainSet(position + new Vector2I(1, -1)))
                     {
                         EraseCell(CurrLayer.Layer, position + new Vector2I(1, -1));
-                        arr2.Add(position + new Vector2I(1, -1));
+                        arr.Add(position + new Vector2I(1, -1));
                     }
 
                     if (EqualsTerrainSet(position + new Vector2I(-1, 0)))
                     {
                         EraseCell(CurrLayer.Layer, position + new Vector2I(-1, 0));
-                        arr2.Add(position + new Vector2I(-1, 0));
+                        arr.Add(position + new Vector2I(-1, 0));
                     }
 
                     if (EqualsTerrainSet(position + new Vector2I(1, 0)))
                     {
                         EraseCell(CurrLayer.Layer, position + new Vector2I(1, 0));
-                        arr2.Add(position + new Vector2I(1, 0));
+                        arr.Add(position + new Vector2I(1, 0));
                     }
 
                     if (EqualsTerrainSet(position + new Vector2I(-1, 1)))
                     {
                         EraseCell(CurrLayer.Layer, position + new Vector2I(-1, 1));
-                        arr2.Add(position + new Vector2I(-1, 1));
+                        arr.Add(position + new Vector2I(-1, 1));
                     }
 
                     if (EqualsTerrainSet(position + new Vector2I(0, 1)))
                     {
                         EraseCell(CurrLayer.Layer, position + new Vector2I(0, 1));
-                        arr2.Add(position + new Vector2I(0, 1));
+                        arr.Add(position + new Vector2I(0, 1));
                     }
 
                     if (EqualsTerrainSet(position + new Vector2I(1, 1)))
                     {
                         EraseCell(CurrLayer.Layer, position + new Vector2I(1, 1));
-                        arr2.Add(position + new Vector2I(1, 1));
+                        arr.Add(position + new Vector2I(1, 1));
                     }
                     
-                    SetCellsTerrainConnect(CurrLayer.Layer, arr2, CurrTerrain.TerrainSetIndex, 0, false);
+                    SetCellsTerrainConnect(CurrLayer.Layer, arr, CurrTerrain.TerrainSetIndex, 0, false);
                 }
             }
             //标记有修改数据
@@ -1041,8 +1140,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     //擦除一个区域内的贴图
     private void EraseRectCell(Vector2I start, Vector2I end)
     {
-        ResetGenerateTimer();
-        
         if (start.X > end.X)
         {
             var temp = end.X;
@@ -1058,14 +1155,59 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
         var width = end.X - start.X + 1;
         var height = end.Y - start.Y + 1;
-        for (var i = 0; i < width; i++)
+        
+        if (CurrLayer.Layer == MapLayer.AutoFloorLayer) //选择自动地板层
         {
-            for (var j = 0; j < height; j++)
+            ResetGenerateTimer();
+            for (var i = 0; i < width; i++)
             {
-                EraseCell(MapLayer.AutoFloorLayer, new Vector2I(start.X + i, start.Y + j));
+                for (var j = 0; j < height; j++)
+                {
+                    EraseCell(MapLayer.AutoFloorLayer, new Vector2I(start.X + i, start.Y + j));
+                }
             }
+            _autoCellLayerGrid.RemoveRect(start, new Vector2I(width, height));
         }
-        _autoCellLayerGrid.RemoveRect(start, new Vector2I(width, height));
+        else //自定义层
+        {
+            if (CurrBrushType == TileMapDrawMode.Free || CurrBrushType == TileMapDrawMode.Combination ||
+                (CurrBrushType == TileMapDrawMode.Terrain && CurrTerrain == null)) //自由绘制 或者 组合 或者 未选择地形
+            {
+                for (var i = 0; i < width; i++)
+                {
+                    for (var j = 0; j < height; j++)
+                    {
+                        EraseCell(CurrLayer.Layer, new Vector2I(start.X + i, start.Y + j));
+                    }
+                }
+            }
+            else if (CurrBrushType == TileMapDrawMode.Terrain) //绘制地形
+            {
+                var arr = new Array<Vector2I>();
+                //需要检测矩形向外一格的Cell
+                for (var i = -1; i < width + 1; i++)
+                {
+                    for (var j = -1; j < height + 1; j++)
+                    {
+                        var pos = new Vector2I(start.X + i, start.Y + j);
+                        if (i >= 0 && i < width && j >= 0 && j < height)
+                        {
+                            EraseCell(CurrLayer.Layer, pos);
+                        }
+                        else if (EqualsTerrainSet(pos))
+                        {
+                            EraseCell(CurrLayer.Layer, pos);
+                            arr.Add(pos);
+                        }
+                    }
+                }
+                
+                SetCellsTerrainConnect(CurrLayer.Layer, arr, CurrTerrain.TerrainSetIndex, 0, false);
+            }
+            
+            //标记有修改数据
+            EventManager.EmitEvent(EventEnum.OnTileMapDirty);
+        }
     }
 
     //重置计时器
