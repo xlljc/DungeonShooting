@@ -18,6 +18,19 @@ public abstract partial class MapEditorMapTile : UiBase
     }
     private VBoxContainer _L_VBoxContainer;
 
+    /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: MapEditorMapTile.MaskBg
+    /// </summary>
+    public MaskBg L_MaskBg
+    {
+        get
+        {
+            if (_L_MaskBg == null) _L_MaskBg = new MaskBg((MapEditorMapTilePanel)this, GetNode<Godot.ColorRect>("MaskBg"));
+            return _L_MaskBg;
+        }
+    }
+    private MaskBg _L_MaskBg;
+
 
     public MapEditorMapTile() : base(nameof(MapEditorMapTile))
     {
@@ -634,6 +647,37 @@ public abstract partial class MapEditorMapTile : UiBase
         public override VBoxContainer Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
     }
 
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorMapTile.MaskBg.Label
+    /// </summary>
+    public class Label_2 : UiNode<MapEditorMapTilePanel, Godot.Label, Label_2>
+    {
+        public Label_2(MapEditorMapTilePanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label_2 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: MapEditorMapTile.MaskBg
+    /// </summary>
+    public class MaskBg : UiNode<MapEditorMapTilePanel, Godot.ColorRect, MaskBg>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapTile.Label
+        /// </summary>
+        public Label_2 L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label_2(UiPanel, Instance.GetNode<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label_2 _L_Label;
+
+        public MaskBg(MapEditorMapTilePanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override MaskBg Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
+    }
+
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.OptionButton"/>, 节点路径: MapEditorMapTile.VBoxContainer.HBoxContainer.SourceOption
@@ -754,5 +798,10 @@ public abstract partial class MapEditorMapTile : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: MapEditorMapTile.VBoxContainer
     /// </summary>
     public VBoxContainer S_VBoxContainer => L_VBoxContainer;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: MapEditorMapTile.MaskBg
+    /// </summary>
+    public MaskBg S_MaskBg => L_MaskBg;
 
 }

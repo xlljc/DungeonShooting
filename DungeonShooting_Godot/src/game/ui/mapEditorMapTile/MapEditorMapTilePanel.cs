@@ -44,6 +44,9 @@ public partial class MapEditorMapTilePanel : MapEditorMapTile
         //切换笔刷类型
         S_HandleOption.Instance.ItemSelected += OnChangeBrush;
         OnChangeBrush(0);
+        //选择层级
+        AddEventListener(EventEnum.OnSelectTileLayer, OnSelectTileLayer);
+        OnSelectTileLayer(0);
     }
 
     public override void OnDestroyUi()
@@ -66,6 +69,15 @@ public partial class MapEditorMapTilePanel : MapEditorMapTile
 
         optionButton.Selected = 0;
         OnChangeSource(0);
+    }
+    
+    //选中层级
+    private void OnSelectTileLayer(object obj)
+    {
+        if (obj is int v)
+        {
+            S_MaskBg.Instance.Visible = v == 0;
+        }
     }
     
     // 切换选中的资源

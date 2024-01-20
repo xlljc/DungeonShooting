@@ -40,23 +40,31 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, TileMapLaye
         }
     }
 
-    private void OnVisibleButtonClick()
+    /// <summary>
+    /// 设置层级是否显示
+    /// </summary>
+    public void SetLayerVisible(bool visible)
     {
         var panel = CellNode.UiPanel.ParentUi as MapEditorPanel;
         if (panel != null)
         {
-            _visible = !_visible;
+            _visible = visible;
             if (Data.Layer == MapLayer.MarkLayer) //隐藏标记层
             {
-                CellNode.UiPanel.EditorTileMap.IsDrawMark = _visible;
-                panel.S_MapEditorTools.Instance.S_ToolRoot.Instance.Visible = _visible;
+                CellNode.UiPanel.EditorTileMap.IsDrawMark = visible;
+                panel.S_MapEditorTools.Instance.S_ToolRoot.Instance.Visible = visible;
             }
             else //隐藏地图层级
             {
-                panel.S_TileMap.Instance.SetLayerEnabled(Data.Layer, _visible);
+                panel.S_TileMap.Instance.SetLayerEnabled(Data.Layer, visible);
             }
-            SetVisibleIcon(_visible);
+            SetVisibleIcon(visible);
         }
+    }
+
+    private void OnVisibleButtonClick()
+    {
+        SetLayerVisible(!_visible);
     }
 
     private void SetVisibleIcon(bool visible)

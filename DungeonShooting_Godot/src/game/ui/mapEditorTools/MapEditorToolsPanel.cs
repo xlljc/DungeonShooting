@@ -53,7 +53,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
 
     public override void OnCreateUi()
     {
-        EditorMap = ((MapEditorPanel)ParentUi).S_TileMap;
+        var mapEditorPanel = (MapEditorPanel)ParentUi;
+        EditorMap = mapEditorPanel.S_TileMap;
         
         S_N_HoverArea.Instance.Init(this, DoorDirection.N);
         S_S_HoverArea.Instance.Init(this, DoorDirection.S);
@@ -79,10 +80,11 @@ public partial class MapEditorToolsPanel : MapEditorTools
         {
             EventManager.EmitEvent(EventEnum.OnSelectRectTool);
         }));
-        //编辑攻击按钮
+        //编辑工具按钮
         _toolGrid.Add(new ToolBtnData(true, ResourcePath.resource_sprite_ui_commonIcon_DoorTool_png, () =>
         {
             EventManager.EmitEvent(EventEnum.OnSelectEditTool);
+            mapEditorPanel.S_MapEditorMapLayer.Instance.SetLayerVisible(MapLayer.MarkLayer, true);
         }));
         _editToolIndex = _toolGrid.Count - 1;
         //聚焦按钮

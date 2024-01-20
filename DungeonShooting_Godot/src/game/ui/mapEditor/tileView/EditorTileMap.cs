@@ -541,6 +541,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public void SetCurrentLayer(TileMapLayerData layerData)
     {
         CurrLayer = layerData;
+        EventManager.EmitEvent(EventEnum.OnSelectTileLayer, layerData.Layer);
         MapEditorToolsPanel.S_CurrLayer.Instance.Text = "当前图层：" + layerData.Title;
         SetLayerModulate(MapLayer.AutoFloorLayer, GetEditorLayerModulate(MapLayer.AutoFloorLayer));
         SetLayerModulate(MapLayer.AutoMiddleLayer, GetEditorLayerModulate(MapLayer.AutoMiddleLayer));
